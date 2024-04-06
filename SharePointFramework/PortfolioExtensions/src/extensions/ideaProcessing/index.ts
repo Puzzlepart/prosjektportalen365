@@ -13,24 +13,18 @@ import '@pnp/sp/site-groups/web'
 import DialogPrompt from 'components/IdeaApprovalDialog'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import strings from 'PortfolioExtensionsStrings'
-import { IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
+import { Choice, IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
 import { isUserAuthorized } from '../../helpers/isUserAuthorized'
+import _ from 'underscore'
 
 Logger.subscribe(ConsoleListener())
 Logger.activeLogLevel = DEBUG ? LogLevel.Info : LogLevel.Warning
-
-enum RecommendationType {
-  ApprovedSync = 'Godkjent og synkronisert',
-  Approved = 'Godkjent for konseptutredning',
-  Consideration = 'Under vurdering',
-  Rejected = 'Avvist'
-}
 
 export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
   private _userAuthorized: boolean
   private _openCmd: Command
   private _sp: SPFI
-  private _ideaConfig: IdeaConfigurationModel
+  private _config: IdeaConfigurationModel
 
   @override
   public async onInit(): Promise<void> {
@@ -59,15 +53,13 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
         const row = event.selectedRows[0]
 
         dialog.ideaTitle = row.getValueByName('Title')
-        dialog.dialogMessage =
-          this._ideaConfig.description[1] ||
-          strings.SetRecommendationDefaultDescription.split(';')[1]
+        dialog.dialogMessage = this._config.description.processing
         dialog.show().then(() => {
-          if (dialog.comment && dialog.selectedChoice === strings.ApproveChoice) {
+          if (dialog.comment && dialog.selectedChoice === _.find(this._config.processing, { key: Choice.Approve }).choice) {
             this._onSubmit(row, dialog.comment)
-          } else if (dialog.comment && dialog.selectedChoice === strings.ConsiderationChoice) {
+          } else if (dialog.comment && dialog.selectedChoice === _.find(this._config.processing, { key: Choice.Consideration }).choice) {
             this._onSubmitConsideration(row, dialog.comment)
-          } else if (dialog.comment && dialog.selectedChoice === strings.RejectChoice) {
+          } else if (dialog.comment && dialog.selectedChoice === _.find(this._config.processing, { key: Choice.Reject }).choice) {
             this._onSubmitRejected(row, dialog.comment)
           } else {
             Logger.log({ message: 'Rejected', level: LogLevel.Info })
@@ -83,12 +75,12 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
    * Get the idea configuration from the IdeaConfiguration list
    */
   private _getIdeaConfiguration = async (): Promise<IdeaConfigurationModel[]> => {
-    const ideaConfig = await this._sp.web.lists
+    const config = await this._sp.web.lists
       .getByTitle(strings.IdeaConfigurationTitle)
       .select(...new SPIdeaConfigurationItem().fields)
       .items()
 
-    return ideaConfig.map((item) => new IdeaConfigurationModel(item)).filter(Boolean)
+    return config.map((item) => new IdeaConfigurationModel(item)).filter(Boolean)
   }
 
   /**
@@ -101,18 +93,18 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
     })
 
     const listName = this.context.pageContext.list.title
-    const [ideaConfig] = (await this._getIdeaConfiguration()).filter(
+    const [config] = (await this._getIdeaConfiguration()).filter(
       (item) => item.processingList === listName
     )
-    this._ideaConfig = ideaConfig
+    this._config = config
 
-    if (ideaConfig) {
+    if (config) {
       this._openCmd = this.tryGetCommand('OPEN_IDEA_PROCESSING_DIALOG')
       if (this._openCmd) {
         this._openCmd.visible =
           this.context.listView.selectedRows?.length === 1 &&
           this._userAuthorized &&
-          ideaConfig.processingList === listName
+        config.processingList === listName
       }
       this.raiseOnChange()
     }
@@ -127,10 +119,10 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
   private _onSubmitRejected(row: RowAccessor, comment: string) {
     const rowId = row.getValueByName('ID')
     this._sp.web.lists
-      .getByTitle(this._ideaConfig.processingList)
+      .getByTitle(this._config.processingList)
       .items.getById(rowId)
       .update({
-        GtIdeaDecision: RecommendationType.Rejected,
+        GtIdeaDecision: _.find(this._config.processing, { key: Choice.Reject }).recommendation,
         GtIdeaDecisionComment: comment
       })
       .then(() => {
@@ -148,10 +140,10 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
   private _onSubmitConsideration(row: RowAccessor, comment: string) {
     const rowId = row.getValueByName('ID')
     this._sp.web.lists
-      .getByTitle(this._ideaConfig.processingList)
+      .getByTitle(this._config.processingList)
       .items.getById(rowId)
       .update({
-        GtIdeaDecision: RecommendationType.Consideration,
+        GtIdeaDecision: _.find(this._config.processing, { key: Choice.Consideration }).recommendation,
         GtIdeaDecisionComment: comment
       })
       .then(() => {
@@ -169,10 +161,10 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
   private _onSubmit(row: RowAccessor, comment: string) {
     const rowId = row.getValueByName('ID')
     this._sp.web.lists
-      .getByTitle(this._ideaConfig.processingList)
+      .getByTitle(this._config.processingList)
       .items.getById(rowId)
       .update({
-        GtIdeaDecision: RecommendationType.Approved,
+        GtIdeaDecision: _.find(this._config.processing, { key: Choice.Approve }).recommendation,
         GtIdeaDecisionComment: comment
       })
       .then(() => {

@@ -71,6 +71,7 @@ export const IdeaDialog: FC<IIdeaDialogProps> = (props) => {
 export default class ProjectDataDialog extends BaseDialog {
   public ideaTitle: string
   public dialogMessage: string
+  public choices: { key: string; choice: string }[]
   public isBlocked: boolean
   public isApproved: boolean
 
@@ -81,6 +82,7 @@ export default class ProjectDataDialog extends BaseDialog {
         submit={this.submit}
         ideaTitle={this.ideaTitle}
         dialogMessage={this.dialogMessage}
+        choices={this.choices}
         isBlocked={this.isBlocked}
         isApproved={this.isApproved}
       />,

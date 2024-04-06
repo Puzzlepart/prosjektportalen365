@@ -46,9 +46,11 @@ export const IdeaApprovalDialog: FC<IIdeaApprovalDialogProps> = (props) => {
                   onOptionSelect={(_, data) => setState({ choice: data.optionText })}
                   placeholder={strings.ActionLabelPlaceholder}
                 >
-                  <Option value={strings.ApproveChoice}>{strings.ApproveChoice}</Option>
-                  <Option value={strings.ConsiderationChoice}>{strings.ConsiderationChoice}</Option>
-                  <Option value={strings.RejectChoice}>{strings.RejectChoice}</Option>
+                  {props.choices.map((choice) => (
+                    <Option key={choice.key} value={choice.choice}>
+                      {choice.choice}
+                    </Option>
+                  ))}
                 </Combobox>
               </Field>
               <Field label={strings.CommentLabel}>
@@ -86,6 +88,7 @@ export default class RecommendationDialog extends BaseDialog {
   public selectedChoice: string
   public ideaTitle: string
   public dialogMessage: string
+  public choices: { key: string; choice: string }[]
   public comment: string
 
   public render(): void {
@@ -95,6 +98,7 @@ export default class RecommendationDialog extends BaseDialog {
         submit={this._submit}
         ideaTitle={this.ideaTitle}
         dialogMessage={this.dialogMessage}
+        choices={this.choices}
       />,
       this.domElement
     )

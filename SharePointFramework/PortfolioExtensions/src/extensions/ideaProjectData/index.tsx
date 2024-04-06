@@ -14,14 +14,8 @@ import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import IdeaDialog from 'components/IdeaDialog'
 import { isUserAuthorized } from '../../helpers/isUserAuthorized'
 import strings from 'PortfolioExtensionsStrings'
-import { IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
-
-enum RecommendationType {
-  ApprovedSync = 'Godkjent og synkronisert',
-  Approved = 'Godkjent for konseptutredning',
-  Consideration = 'Under vurdering',
-  Rejected = 'Avvist'
-}
+import { Choice, IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
+import _ from 'underscore'
 
 export interface IIdeaProjectDataCommandProperties {
   ideaId: number
@@ -34,7 +28,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
   private _userAuthorized: boolean
   private _openCmd: Command
   private _sp: SPFI
-  private _ideaConfig: IdeaConfigurationModel
+  private _config: IdeaConfigurationModel
 
   @override
   public async onInit(): Promise<void> {
@@ -62,12 +56,11 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
         const dialog: IdeaDialog = new IdeaDialog()
         const row = event.selectedRows[0]
         dialog.ideaTitle = row.getValueByName('Title')
-        dialog.dialogMessage =
-          this._ideaConfig.description[2] ||
-          strings.SetRecommendationDefaultDescription.split(';')[2]
+        dialog.dialogMessage = this._config.description.projectData
         dialog.isApproved =
-          row.getValueByName('GtIdeaDecision') === RecommendationType.Approved ||
-          row.getValueByName('GtIdeaDecision') === RecommendationType.ApprovedSync
+          row.getValueByName('GtIdeaDecision') ===
+            _.find(this._config.processing, { key: Choice.Approve }).recommendation ||
+          row.getValueByName('GtIdeaDecision') === strings.ApprovedSyncText
         dialog.isBlocked = !!row.getValueByName('GtIdeaProjectData')
         dialog.show()
         dialog.submit = this._onSubmit.bind(this, row)
@@ -81,12 +74,12 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
    * Get the idea configuration from the IdeaConfiguration list
    */
   private _getIdeaConfiguration = async (): Promise<IdeaConfigurationModel[]> => {
-    const ideaConfig = await this._sp.web.lists
+    const config = await this._sp.web.lists
       .getByTitle(strings.IdeaConfigurationTitle)
       .select(...new SPIdeaConfigurationItem().fields)
       .items()
 
-    return ideaConfig.map((item) => new IdeaConfigurationModel(item)).filter(Boolean)
+    return config.map((item) => new IdeaConfigurationModel(item)).filter(Boolean)
   }
 
   /**
@@ -99,18 +92,18 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
     })
 
     const listName = this.context.pageContext.list.title
-    const [ideaConfig] = (await this._getIdeaConfiguration()).filter(
+    const [config] = (await this._getIdeaConfiguration()).filter(
       (item) => item.processingList === listName
     )
-    this._ideaConfig = ideaConfig
+    this._config = config
 
-    if (ideaConfig) {
+    if (config) {
       this._openCmd = this.tryGetCommand('OPEN_IDEA_PROJECTDATA_DIALOG')
       if (this._openCmd) {
         this._openCmd.visible =
           this.context.listView.selectedRows?.length === 1 &&
           this._userAuthorized &&
-          ideaConfig.processingList === listName
+          config.processingList === listName
       }
       this.raiseOnChange()
     }
@@ -159,7 +152,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
    * @param item: Item
    */
   public async _updateItem(rowId: number, item: any): Promise<any> {
-    const list = this._sp.web.lists.getByTitle(this._ideaConfig.processingList)
+    const list = this._sp.web.lists.getByTitle(this._config.processingList)
     const itemUpdateResult = await list.items.getById(rowId).update({
       GtIdeaProjectDataId: item.Id
     })

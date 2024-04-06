@@ -17,24 +17,19 @@ import { ClientsideText } from '@pnp/sp/clientside-pages'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import { isUserAuthorized } from '../../helpers/isUserAuthorized'
 import strings from 'PortfolioExtensionsStrings'
-import { IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
+import { Choice, IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
+import _ from 'underscore'
 
 Logger.subscribe(ConsoleListener())
 Logger.activeLogLevel = DEBUG ? LogLevel.Info : LogLevel.Warning
 const LOG_SOURCE: string = 'IdeaRegistrationCommand'
-
-enum RecommendationType {
-  Approved = 'Godkjent for detaljering av idé',
-  Consideration = 'Under vurdering',
-  Rejected = 'Avvist'
-}
 
 export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any> {
   private _userAuthorized: boolean
   private _openCmd: Command
   private _openLinkCmd: Command
   private _sp: SPFI
-  private _ideaConfig: IdeaConfigurationModel
+  private _config: IdeaConfigurationModel
 
   @override
   public async onInit(): Promise<void> {
@@ -67,19 +62,26 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
         const row = event.selectedRows[0]
 
         dialog.ideaTitle = row.getValueByName('Title')
-        dialog.dialogMessage =
-          this._ideaConfig.description[0] ||
-          strings.SetRecommendationDefaultDescription.split(';')[0]
+        dialog.dialogMessage = this._config.description.registration
         await dialog.show()
-        if (dialog.comment && dialog.selectedChoice === strings.ApproveChoice) {
+        if (
+          dialog.comment &&
+          dialog.selectedChoice === _.find(this._config.registration, { key: Choice.Approve }).choice
+        ) {
           this._isIdeaRecommended(row)
             ? Dialog.alert(strings.IdeaAlreadyApproved)
             : this._onSubmit(row, dialog.comment)
-        } else if (dialog.comment && dialog.selectedChoice === strings.ConsiderationChoice) {
+        } else if (
+          dialog.comment &&
+          dialog.selectedChoice === _.find(this._config.registration, { key: Choice.Consideration }).choice
+        ) {
           this._isIdeaRecommended(row)
             ? Dialog.alert(strings.IdeaAlreadyApproved)
             : this._onSubmitConsideration(row, dialog.comment)
-        } else if (dialog.comment && dialog.selectedChoice === strings.RejectChoice) {
+        } else if (
+          dialog.comment &&
+          dialog.selectedChoice === _.find(this._config.registration, { key: Choice.Reject }).choice
+        ) {
           this._isIdeaRecommended(row)
             ? Dialog.alert(strings.IdeaAlreadyApproved)
             : this._onSubmitRejected(row, dialog.comment)
@@ -89,13 +91,13 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
         break
       case this._openLinkCmd.id:
         const listName = this.context.pageContext.list.title
-        const [ideaConfig] = (await this._getIdeaConfiguration()).filter(
+        const [config] = (await this._getIdeaConfiguration()).filter(
           (item) => item.registrationList === listName
         )
-        this._ideaConfig = ideaConfig
+        this._config = config
 
         const baseUrl = this.context.pageContext.web.absoluteUrl
-        const processingList = this._ideaConfig.processingList.replace('é', 'e')
+        const processingList = this._config.processingList.replace('é', 'e')
         const ideaProcessingUrl = baseUrl.concat(`/Lists/${processingList}`)
         window.open(ideaProcessingUrl, '_blank')
       default:
@@ -107,12 +109,12 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
    * Get the idea configuration from the IdeaConfiguration list
    */
   private _getIdeaConfiguration = async (): Promise<IdeaConfigurationModel[]> => {
-    const ideaConfig = await this._sp.web.lists
+    const config = await this._sp.web.lists
       .getByTitle(strings.IdeaConfigurationTitle)
       .select(...new SPIdeaConfigurationItem().fields)
       .items()
 
-    return ideaConfig.map((item) => new IdeaConfigurationModel(item)).filter(Boolean)
+    return config.map((item) => new IdeaConfigurationModel(item)).filter(Boolean)
   }
 
   /**
@@ -125,18 +127,18 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
     })
 
     const listName = this.context.pageContext.list.title
-    const [ideaConfig] = (await this._getIdeaConfiguration()).filter(
+    const [config] = (await this._getIdeaConfiguration()).filter(
       (item) => item.registrationList === listName
     )
-    this._ideaConfig = ideaConfig
+    this._config = config
 
-    if (ideaConfig) {
+    if (config) {
       this._openCmd = this.tryGetCommand('OPEN_IDEA_REGISTRATION_DIALOG')
       if (this._openCmd) {
         this._openCmd.visible =
           this.context.listView.selectedRows?.length === 1 &&
           this._userAuthorized &&
-          ideaConfig.registrationList === listName
+          config.registrationList === listName
       }
       this.raiseOnChange()
     } else {
@@ -157,14 +159,14 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
   private _onSubmitRejected(row: RowAccessor, comment: string) {
     const rowId = row.getValueByName('ID')
     this._sp.web.lists
-      .getByTitle(this._ideaConfig.registrationList)
+      .getByTitle(this._config.registrationList)
       .items.getById(rowId)
       .update({
-        GtIdeaRecommendation: RecommendationType.Rejected,
+        GtIdeaRecommendation: _.find(this._config.registration, { key: Choice.Reject }).recommendation,
         GtIdeaRecommendationComment: comment
       })
       .then(() => {
-        Log.info(LOG_SOURCE, `Updated ${this._ideaConfig.registrationList}: Rejected`)
+        Log.info(LOG_SOURCE, `Updated ${this._config.registrationList}: Rejected`)
         window.location.reload()
       })
   }
@@ -178,14 +180,14 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
   private _onSubmitConsideration(row: RowAccessor, comment: string) {
     const rowId = row.getValueByName('ID')
     this._sp.web.lists
-      .getByTitle(this._ideaConfig.registrationList)
+      .getByTitle(this._config.registrationList)
       .items.getById(rowId)
       .update({
-        GtIdeaRecommendation: RecommendationType.Consideration,
+        GtIdeaRecommendation: _.find(this._config.registration, { key: Choice.Consideration }).recommendation,
         GtIdeaRecommendationComment: comment
       })
       .then(() => {
-        Log.info(LOG_SOURCE, `Updated ${this._ideaConfig.registrationList}: Consideration`)
+        Log.info(LOG_SOURCE, `Updated ${this._config.registrationList}: Consideration`)
         window.location.reload()
       })
   }
@@ -202,14 +204,14 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
     const rowId = row.getValueByName('ID')
     const rowTitle = row.getValueByName('Title')
     this._sp.web.lists
-      .getByTitle(this._ideaConfig.registrationList)
+      .getByTitle(this._config.registrationList)
       .items.getById(rowId)
       .update({
-        GtIdeaRecommendation: RecommendationType.Approved,
+        GtIdeaRecommendation: _.find(this._config.registration, { key: Choice.Approve }).recommendation,
         GtIdeaRecommendationComment: comment
       })
       .then(() => {
-        Log.info(LOG_SOURCE, `Updated ${this._ideaConfig.registrationList}: Approved`)
+        Log.info(LOG_SOURCE, `Updated ${this._config.registrationList}: Approved`)
       })
       .catch((e) => Log.error(LOG_SOURCE, e))
 
@@ -229,7 +231,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
     const ideaUrl = baseUrl.concat('/SitePages/', `KUR-${url}`, '.aspx')
 
     this._sp.web.lists
-      .getByTitle(this._ideaConfig.processingList)
+      .getByTitle(this._config.processingList)
       .items.add({
         Title: rowTitle,
         GtRegistratedIdeaId: rowId,
@@ -348,6 +350,8 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
    * @param row Selected row
    */
   private _isIdeaRecommended(row: RowAccessor): boolean {
-    return row.getValueByName('GtIdeaRecommendation') === RecommendationType.Approved
+    return (
+      row.getValueByName('GtIdeaRecommendation') === _.find(this._config.registration, { key: Choice.Approve }).recommendation
+    )
   }
 }

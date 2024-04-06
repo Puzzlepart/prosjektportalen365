@@ -3,6 +3,7 @@ export interface IIdeaApprovalDialogProps {
   submit: (choice: string, comment: string) => void
   ideaTitle?: string
   dialogMessage?: string
+  choices: { key: string; choice: string }[]
 }
 
 export interface IIdeaApprovalDialogState {
