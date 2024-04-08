@@ -60,6 +60,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
 
         dialog.ideaTitle = row.getValueByName('Title')
         dialog.dialogMessage = this._config.description.registration
+        dialog.choices = this._config.registration
         await dialog.show()
 
         if (dialog.comment) {

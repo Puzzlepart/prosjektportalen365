@@ -55,6 +55,7 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
 
         dialog.ideaTitle = row.getValueByName('Title')
         dialog.dialogMessage = this._config.description.processing
+        dialog.choices = this._config.processing
         dialog.show().then(() => {
           const { comment, selectedChoice } = dialog
           const { processing } = this._config
