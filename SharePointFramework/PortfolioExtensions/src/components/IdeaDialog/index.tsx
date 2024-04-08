@@ -49,13 +49,13 @@ export const IdeaDialog: FC<IIdeaDialogProps> = (props) => {
               />
             </DialogContent>
             <DialogActions>
-              <Button title={strings.CancelLabel} onClick={props.close}>
+              <Button title={strings.CancelLabel} onClick={props.onClose}>
                 {strings.CancelLabel}
               </Button>
               <Button
                 appearance='primary'
                 title={strings.CreateLabel}
-                onClick={props.submit}
+                onClick={props.onSubmit}
                 disabled={props.isBlocked || !props.isApproved}
               >
                 {strings.CreateLabel}
@@ -71,18 +71,16 @@ export const IdeaDialog: FC<IIdeaDialogProps> = (props) => {
 export default class ProjectDataDialog extends BaseDialog {
   public ideaTitle: string
   public dialogMessage: string
-  public choices: { key: string; choice: string }[]
   public isBlocked: boolean
   public isApproved: boolean
 
   public render(): void {
     ReactDOM.render(
       <IdeaDialog
-        close={this.close}
-        submit={this.submit}
+        onClose={this.close}
+        onSubmit={this.submit}
         ideaTitle={this.ideaTitle}
         dialogMessage={this.dialogMessage}
-        choices={this.choices}
         isBlocked={this.isBlocked}
         isApproved={this.isApproved}
       />,

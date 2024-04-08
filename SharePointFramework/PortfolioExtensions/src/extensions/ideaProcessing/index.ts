@@ -1,24 +1,24 @@
 import { override } from '@microsoft/decorators'
+import { Log } from '@microsoft/sp-core-library'
 import {
   BaseListViewCommandSet,
   Command,
   IListViewCommandSetExecuteEventParameters,
   RowAccessor
 } from '@microsoft/sp-listview-extensibility'
+import { Dialog } from '@microsoft/sp-dialog'
 import { SPFI, spfi, SPFx } from '@pnp/sp'
 import '@pnp/sp/webs'
 import '@pnp/sp/lists'
 import '@pnp/sp/items'
 import '@pnp/sp/site-groups/web'
 import DialogPrompt from 'components/IdeaApprovalDialog'
-import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import strings from 'PortfolioExtensionsStrings'
 import { Choice, IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
 import { isUserAuthorized } from '../../helpers/isUserAuthorized'
 import { find } from 'underscore'
 
-Logger.subscribe(ConsoleListener())
-Logger.activeLogLevel = DEBUG ? LogLevel.Info : LogLevel.Warning
+const LOG_SOURCE: string = 'IdeaProcessingCommand'
 
 export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
   private _userAuthorized: boolean
@@ -28,12 +28,7 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
 
   @override
   public async onInit(): Promise<void> {
-    Logger.log({
-      message: '(IdeaProcessCommand) onInit: Initializing...',
-      data: { version: this.context.manifest.version },
-      level: LogLevel.Info
-    })
-
+    Log.info(LOG_SOURCE, 'onInit: Initializing...')
     this._sp = spfi().using(SPFx(this.context))
     this._openCmd = this.tryGetCommand('OPEN_IDEA_PROCESSING_DIALOG')
     this._openCmd.visible = false
@@ -46,8 +41,7 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
     return Promise.resolve()
   }
 
-  @override
-  public onExecute(event: IListViewCommandSetExecuteEventParameters): any {
+  public onExecute = async (event: IListViewCommandSetExecuteEventParameters): Promise<void> => {
     switch (event.itemId) {
       case this._openCmd.id:
         const dialog: DialogPrompt = new DialogPrompt()
@@ -56,29 +50,37 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
         dialog.ideaTitle = row.getValueByName('Title')
         dialog.dialogMessage = this._config.description.processing
         dialog.choices = this._config.processing
-        dialog.show().then(() => {
-          const { comment, selectedChoice } = dialog
-          const { processing } = this._config
+        await dialog.show()
 
-          if (comment && selectedChoice === find(processing, { key: Choice.Approve })?.choice) {
-            this._onSubmit(row, comment)
-          } else if (
-            comment &&
-            selectedChoice === find(processing, { key: Choice.Consideration })?.choice
-          ) {
-            this._onSubmitConsideration(row, comment)
-          } else if (
-            comment &&
-            selectedChoice === find(processing, { key: Choice.Reject })?.choice
-          ) {
-            this._onSubmitRejected(row, comment)
-          } else {
-            Logger.log({ message: 'Rejected', level: LogLevel.Info })
+        if (dialog.comment) {
+          const selectedChoice = find(this._config.processing, {
+            choice: dialog.selectedChoice
+          })?.key
+
+          if (selectedChoice) {
+            if (this._isIdeaRecommended(row)) {
+              Dialog.alert(strings.IdeaAlreadyApproved)
+            } else {
+              switch (selectedChoice) {
+                case Choice.Approve:
+                  this._onSubmit(row, dialog.comment)
+                  break
+                case Choice.Consideration:
+                  this._onSubmitConsideration(row, dialog.comment)
+                  break
+                case Choice.Reject:
+                  this._onSubmitRejected(row, dialog.comment)
+                  break
+                default:
+                  Log.info(LOG_SOURCE, 'Rejected')
+                  break
+              }
+            }
           }
-        })
+        }
         break
       default:
-        throw new Error('Unknown command')
+        throw new Error('Unknown command, unable to execute')
     }
   }
 
@@ -98,10 +100,7 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
    * On ListView state changed, check if the user is authorized to use this command
    */
   private _onListViewStateChanged = async (): Promise<void> => {
-    Logger.log({
-      message: '(IdeaProcessCommand) onListViewStateChanged: ListView state changed',
-      level: LogLevel.Info
-    })
+    Log.info(LOG_SOURCE, 'onListViewStateChanged: ListView state changed')
 
     const listName = this.context.pageContext.list.title
     const [config] = (await this._getIdeaConfiguration()).filter(
@@ -118,6 +117,11 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
           config.processingList === listName
       }
       this.raiseOnChange()
+    } else {
+      Log.info(
+        LOG_SOURCE,
+        'onListViewStateChanged: You are currently not authorized to use this command or the list is not configured for this command'
+      )
     }
   }
 
@@ -127,19 +131,18 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
    * @param row Selected row
    * @param comment Comment
    */
-  private _onSubmitRejected = (row: RowAccessor, comment: string) => {
+  private _onSubmitRejected = async (row: RowAccessor, comment: string): Promise<void> => {
     const rowId = row.getValueByName('ID')
-    this._sp.web.lists
+    await this._sp.web.lists
       .getByTitle(this._config.processingList)
       .items.getById(rowId)
       .update({
         GtIdeaDecision: find(this._config.processing, { key: Choice.Reject })?.recommendation,
         GtIdeaDecisionComment: comment
       })
-      .then(() => {
-        Logger.log({ message: 'Updated Idébehandling', level: LogLevel.Info })
-        window.location.reload()
-      })
+
+    Log.info(LOG_SOURCE, `Updated ${this._config.processingList}: Rejected`)
+    window.location.reload()
   }
   /**
    * On submit and concideration
@@ -147,9 +150,9 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
    * @param row Selected row
    * @param comment Comment
    */
-  private _onSubmitConsideration = (row: RowAccessor, comment: string) => {
+  private _onSubmitConsideration = async (row: RowAccessor, comment: string): Promise<void> => {
     const rowId = row.getValueByName('ID')
-    this._sp.web.lists
+    await this._sp.web.lists
       .getByTitle(this._config.processingList)
       .items.getById(rowId)
       .update({
@@ -157,10 +160,9 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
           ?.recommendation,
         GtIdeaDecisionComment: comment
       })
-      .then(() => {
-        Logger.log({ message: 'Updated Idébehandling', level: LogLevel.Info })
-        window.location.reload()
-      })
+
+    Log.info(LOG_SOURCE, `Updated ${this._config.processingList}: Consideration`)
+    window.location.reload()
   }
 
   /**
@@ -169,18 +171,29 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
    * @param row Selected row
    * @param comment Comment
    */
-  private _onSubmit = (row: RowAccessor, comment: string) => {
+  private _onSubmit = async (row: RowAccessor, comment: string): Promise<void> => {
     const rowId = row.getValueByName('ID')
-    this._sp.web.lists
+    await this._sp.web.lists
       .getByTitle(this._config.processingList)
       .items.getById(rowId)
       .update({
         GtIdeaDecision: find(this._config.processing, { key: Choice.Approve })?.recommendation,
         GtIdeaDecisionComment: comment
       })
-      .then(() => {
-        Logger.log({ message: 'Updated Idébehandling', level: LogLevel.Info })
-        window.location.reload()
-      })
+
+    Log.info(LOG_SOURCE, `Updated ${this._config.processingList}: Approved`)
+    window.location.reload()
+  }
+
+  /**
+   * Returns true if the idea is already recommended
+   *
+   * @param row Selected row
+   */
+  private _isIdeaRecommended = (row: RowAccessor): boolean => {
+    return (
+      row.getValueByName('GtIdeaDecision') ===
+      find(this._config.processing, { key: Choice.Approve })?.recommendation
+    )
   }
 }

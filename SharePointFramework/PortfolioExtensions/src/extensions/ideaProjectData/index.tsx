@@ -1,4 +1,5 @@
 import { override } from '@microsoft/decorators'
+import { Log } from '@microsoft/sp-core-library'
 import {
   BaseListViewCommandSet,
   Command,
@@ -10,7 +11,6 @@ import '@pnp/sp/webs'
 import '@pnp/sp/items'
 import '@pnp/sp/lists'
 import '@pnp/sp/site-groups/web'
-import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import IdeaDialog from 'components/IdeaDialog'
 import { isUserAuthorized } from '../../helpers/isUserAuthorized'
 import strings from 'PortfolioExtensionsStrings'
@@ -21,8 +21,7 @@ export interface IIdeaProjectDataCommandProperties {
   ideaId: number
 }
 
-Logger.subscribe(ConsoleListener())
-Logger.activeLogLevel = LogLevel.Info
+const LOG_SOURCE: string = 'IdeaProjectDataCommand'
 
 export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdeaProjectDataCommandProperties> {
   private _userAuthorized: boolean
@@ -32,11 +31,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
 
   @override
   public async onInit(): Promise<void> {
-    Logger.log({
-      message: '(IdeaProjectDataCommand) onInit: Initializing...',
-      data: { version: this.context.manifest.version },
-      level: LogLevel.Info
-    })
+    Log.info(LOG_SOURCE, 'onInit: Initializing...')
     this._sp = spfi().using(SPFx(this.context))
     this._openCmd = this.tryGetCommand('OPEN_IDEA_PROJECTDATA_DIALOG')
     this._openCmd.visible = false
@@ -50,11 +45,12 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
   }
 
   @override
-  public onExecute(event: IListViewCommandSetExecuteEventParameters): void {
+  public onExecute(event: IListViewCommandSetExecuteEventParameters) {
     switch (event.itemId) {
       case this._openCmd.id:
         const dialog: IdeaDialog = new IdeaDialog()
         const row = event.selectedRows[0]
+
         dialog.ideaTitle = row.getValueByName('Title')
         dialog.dialogMessage = this._config.description.projectData
         dialog.isApproved =
@@ -66,7 +62,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
         dialog.submit = this._onSubmit.bind(this, row)
         break
       default:
-        throw new Error('Unknown command')
+        throw new Error('Unknown command, unable to execute')
     }
   }
 
@@ -86,10 +82,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
    * On ListView state changed, check if the user is authorized to use this command
    */
   private _onListViewStateChanged = async (): Promise<void> => {
-    Logger.log({
-      message: '(IdeaProjectDataCommand) onListViewStateChanged: ListView state changed',
-      level: LogLevel.Info
-    })
+    Log.info(LOG_SOURCE, 'onListViewStateChanged: ListView state changed')
 
     const listName = this.context.pageContext.list.title
     const [config] = (await this._getIdeaConfiguration()).filter(
@@ -106,6 +99,11 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
           config.processingList === listName
       }
       this.raiseOnChange()
+    } else {
+      Log.info(
+        LOG_SOURCE,
+        'onListViewStateChanged: You are currently not authorized to use this command or the list is not configured for this command'
+      )
     }
   }
 
@@ -115,10 +113,10 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
    *
    * @param row Selected row
    */
-  private _onSubmit(row: RowAccessor) {
+  private _onSubmit = async (row: RowAccessor) => {
     const rowId = row.getValueByName('ID')
     const rowTitle = row.getValueByName('Title')
-    this._redirectNewItem(rowId, rowTitle)
+    await this._redirectNewItem(rowId, rowTitle)
   }
 
   /**
@@ -127,18 +125,13 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
    * @param rowId: ID of the selected row
    * @param rowTitle: Title of the selected row
    */
-  private async _redirectNewItem(rowId: number, rowTitle: string) {
+  private _redirectNewItem = async (rowId: number, rowTitle: string): Promise<void> => {
     const properties: Record<string, any> = {
       Title: rowTitle,
       GtProjectFinanceName: rowTitle
     }
 
-    Logger.log({
-      message: '(Item) _redirectNewItem: Created new item',
-      data: { fieldValues: properties },
-      level: LogLevel.Info
-    })
-
+    Log.info(LOG_SOURCE, '_redirectNewItem: Created new item')
     const item = await this._addItem(properties)
     await this._updateItem(rowId, item)
     document.location.hash = ''
@@ -146,16 +139,17 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
   }
 
   /**
-   * Add item
+   * Update item
    *
    * @param rowId: ID of the selected row
    * @param item: Item
    */
-  public async _updateItem(rowId: number, item: any): Promise<any> {
+  public _updateItem = async (rowId: number, item: any): Promise<any> => {
     const list = this._sp.web.lists.getByTitle(this._config.processingList)
     const itemUpdateResult = await list.items.getById(rowId).update({
       GtIdeaProjectDataId: item.Id
     })
+    Log.info(LOG_SOURCE, '_updateItem: Updated item with new GtIdeaProjectDataId')
     return itemUpdateResult.data
   }
 
@@ -164,9 +158,10 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
    *
    * @param properties Properties
    */
-  public async _addItem(properties: Record<string, any>): Promise<any> {
+  public _addItem = async (properties: Record<string, any>): Promise<any> => {
     const list = this._sp.web.lists.getByTitle(strings.IdeaProjectDataTitle)
     const itemAddResult = await list.items.add(properties)
+    Log.info(LOG_SOURCE, '_updateItem: Added item to IdeaProjectData list')
     return itemAddResult.data
   }
 
@@ -175,7 +170,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
    *
    * @param item Item
    */
-  public editFormUrl(item: any) {
+  public editFormUrl = (item: any) => {
     return [
       `${this.context.pageContext.web.absoluteUrl}`,
       `/Lists/${strings.IdeaProjectDataTitle}/EditForm.aspx`,

@@ -14,14 +14,11 @@ import '@pnp/sp/lists'
 import '@pnp/sp/site-groups/web'
 import '@pnp/sp/clientside-pages/web'
 import { ClientsideText } from '@pnp/sp/clientside-pages'
-import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import { isUserAuthorized } from '../../helpers/isUserAuthorized'
 import strings from 'PortfolioExtensionsStrings'
 import { Choice, IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
 import { find } from 'underscore'
 
-Logger.subscribe(ConsoleListener())
-Logger.activeLogLevel = DEBUG ? LogLevel.Info : LogLevel.Warning
 const LOG_SOURCE: string = 'IdeaRegistrationCommand'
 
 export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any> {
@@ -33,11 +30,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
 
   @override
   public async onInit(): Promise<void> {
-    Logger.log({
-      message: '(IdeaRegistrationCommand) onInit: Initializing...',
-      data: { version: this.context.manifest.version },
-      level: LogLevel.Info
-    })
+    Log.info(LOG_SOURCE, 'onInit: Initializing...')
     this._sp = spfi().using(SPFx(this.context))
     this._openCmd = this.tryGetCommand('OPEN_IDEA_REGISTRATION_DIALOG')
     this._openCmd.visible = false
@@ -65,8 +58,8 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
 
         if (dialog.comment) {
           const selectedChoice = find(this._config.registration, {
-            key: dialog.selectedChoice
-          })?.choice
+            choice: dialog.selectedChoice
+          })?.key
 
           if (selectedChoice) {
             if (this._isIdeaRecommended(row)) {
@@ -83,7 +76,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
                   this._onSubmitRejected(row, dialog.comment)
                   break
                 default:
-                  Logger.log({ message: 'Rejected', level: LogLevel.Info })
+                  Log.info(LOG_SOURCE, 'Rejected')
                   break
               }
             }
@@ -125,10 +118,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
    * On ListView state changed, check if the user is authorized to use this command
    */
   private _onListViewStateChanged = async (): Promise<void> => {
-    Logger.log({
-      message: '(IdeaRegistrationCommand) onListViewStateChanged: ListView state changed',
-      level: LogLevel.Info
-    })
+    Log.info(LOG_SOURCE, 'onListViewStateChanged: ListView state changed')
 
     const listName = this.context.pageContext.list.title
     const [config] = (await this._getIdeaConfiguration()).filter(
@@ -146,11 +136,10 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
       }
       this.raiseOnChange()
     } else {
-      Logger.log({
-        message:
-          '(IdeaRegistrationCommand) onListViewStateChanged: You are currently not authorized to use this command or the list is not configured for this command',
-        level: LogLevel.Info
-      })
+      Log.info(
+        LOG_SOURCE,
+        'onListViewStateChanged: You are currently not authorized to use this command or the list is not configured for this command'
+      )
     }
   }
 
@@ -246,6 +235,18 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
   }
 
   /**
+   * Returns true if the idea is already recommended
+   *
+   * @param row Selected row
+   */
+  private _isIdeaRecommended = (row: RowAccessor): boolean => {
+    return (
+      row.getValueByName('GtIdeaRecommendation') ===
+      find(this._config.registration, { key: Choice.Approve })?.recommendation
+    )
+  }
+
+  /**
    * Create a site page with the selected values of the registration list
    *
    * @param row Selected row
@@ -318,17 +319,5 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
     await page.save()
     Log.info(LOG_SOURCE, 'Site created successfully')
     window.location.reload()
-  }
-
-  /**
-   * Returns true if the idea is already recommended
-   *
-   * @param row Selected row
-   */
-  private _isIdeaRecommended = (row: RowAccessor): boolean => {
-    return (
-      row.getValueByName('GtIdeaRecommendation') ===
-      find(this._config.registration, { key: Choice.Approve })?.recommendation
-    )
   }
 }
