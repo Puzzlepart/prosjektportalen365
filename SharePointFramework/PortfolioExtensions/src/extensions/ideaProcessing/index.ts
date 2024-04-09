@@ -72,7 +72,7 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
                   this._onSubmitRejected(row, dialog.comment)
                   break
                 default:
-                  Log.info(LOG_SOURCE, 'Rejected')
+                  this._onSubmitOther(row, dialog.comment, dialog.selectedChoice)
                   break
               }
             }
@@ -144,6 +144,7 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
     Log.info(LOG_SOURCE, `Updated ${this._config.processingList}: Rejected`)
     window.location.reload()
   }
+
   /**
    * On submit and concideration
    *
@@ -182,6 +183,26 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
       })
 
     Log.info(LOG_SOURCE, `Updated ${this._config.processingList}: Approved`)
+    window.location.reload()
+  }
+
+  /**
+   * On submit and other
+   *
+   * @param row Selected row
+   * @param comment Comment
+   */
+  private _onSubmitOther = async (row: RowAccessor, comment: string, selectedChoice: string): Promise<void> => {
+    const rowId = row.getValueByName('ID')
+    await this._sp.web.lists
+      .getByTitle(this._config.processingList)
+      .items.getById(rowId)
+      .update({
+        GtIdeaDecision: find(this._config.processing, { choice: selectedChoice })?.recommendation,
+        GtIdeaDecisionComment: comment
+      })
+
+    Log.info(LOG_SOURCE, `Updated ${this._config.processingList}: Other`)
     window.location.reload()
   }
 

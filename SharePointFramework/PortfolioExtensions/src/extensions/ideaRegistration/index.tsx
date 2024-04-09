@@ -76,7 +76,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
                   this._onSubmitRejected(row, dialog.comment)
                   break
                 default:
-                  Log.info(LOG_SOURCE, 'Rejected')
+                  this._onSubmitOther(row, dialog.comment, dialog.selectedChoice)
                   break
               }
             }
@@ -210,6 +210,29 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
 
     await this._updateProcessingList(rowId, rowTitle)
     await this._createSitePage(row)
+
+    window.location.reload()
+  }
+
+  /**
+   * On submit and 'Other', fields will be updated,
+   *
+   * @param row Selected row
+   * @param comment Comment from the dialog
+   */
+  private _onSubmitOther = async (row: RowAccessor, comment: string, selectedChoice: string): Promise<void> => {
+    const rowId = row.getValueByName('ID')
+
+    await this._sp.web.lists
+      .getByTitle(this._config.registrationList)
+      .items.getById(rowId)
+      .update({
+        GtIdeaRecommendation: find(this._config.registration, { choice: selectedChoice })
+          ?.recommendation,
+        GtIdeaRecommendationComment: comment
+      })
+
+    Log.info(LOG_SOURCE, `Updated ${this._config.registrationList}: Other`)
 
     window.location.reload()
   }
