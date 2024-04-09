@@ -955,6 +955,12 @@
   <data name="SiteFields_GtActionDescription_Description" xml:space="preserve">
     <value>Describe the action</value>
   </data>
+  <data name="SiteFields_GtActionComment_DisplayName" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="SiteFields_GtActionComment_Description" xml:space="preserve">
+    <value>Comment for the action</value>
+  </data>
   <data name="SiteFields_GtActionResponsible_DisplayName" xml:space="preserve">
     <value>Action Responsible</value>
   </data>

@@ -1051,6 +1051,12 @@
   <data name="SiteFields_GtActionDescription_Description" xml:space="preserve">
     <value></value>
   </data>
+  <data name="SiteFields_GtActionComment_DisplayName" xml:space="preserve">
+    <value>Kommentar</value>
+  </data>
+  <data name="SiteFields_GtActionComment_Description" xml:space="preserve">
+    <value>Kommentar til kommunikasjonsaktiviteten</value>
+  </data>
   <data name="SiteFields_GtActionResponsible_DisplayName" xml:space="preserve">
     <value>Tiltaksansvarlig</value>
   </data>
