@@ -220,7 +220,11 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
    * @param row Selected row
    * @param comment Comment from the dialog
    */
-  private _onSubmitOther = async (row: RowAccessor, comment: string, selectedChoice: string): Promise<void> => {
+  private _onSubmitOther = async (
+    row: RowAccessor,
+    comment: string,
+    selectedChoice: string
+  ): Promise<void> => {
     const rowId = row.getValueByName('ID')
 
     await this._sp.web.lists

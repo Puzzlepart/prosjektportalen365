@@ -192,7 +192,11 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
    * @param row Selected row
    * @param comment Comment
    */
-  private _onSubmitOther = async (row: RowAccessor, comment: string, selectedChoice: string): Promise<void> => {
+  private _onSubmitOther = async (
+    row: RowAccessor,
+    comment: string,
+    selectedChoice: string
+  ): Promise<void> => {
     const rowId = row.getValueByName('ID')
     await this._sp.web.lists
       .getByTitle(this._config.processingList)

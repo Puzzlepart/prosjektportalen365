@@ -42,7 +42,7 @@ export const ResponsibleField: FC<IResponsibleFieldProps> = (props) => {
             />
           </Option>
         ))}
-        {(!stringIsNullOrEmpty(value) && matchingUsers.length === 0) && (
+        {!stringIsNullOrEmpty(value) && matchingUsers.length === 0 && (
           <Option key='ResponsibleFieldNoResults' text=''>
             {format(strings.ResponsibleFieldNoResults, value)}
           </Option>
