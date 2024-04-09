@@ -624,6 +624,16 @@
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMaxWidth">120</pnp:DataValue>
         </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 56 -->
+            <pnp:DataValue FieldName="GtSortOrder">640</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Kommentar</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtActionComment</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtActionCommentOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Kommunikasjonsoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
+        </pnp:DataRow>
     </pnp:DataRows>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>

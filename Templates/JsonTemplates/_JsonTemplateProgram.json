@@ -144,6 +144,10 @@
                 {
                     "ID": "2ae541a5-5ecc-481d-afb6-c03a6f1e71b4",
                     "Name": "GtActionResponsible"
+                },
+                {
+                    "ID": "a187c8e3-944c-485a-ad11-c654fda6be66",
+                    "Name": "GtActionComment"
                 }
             ]
         },
@@ -956,7 +960,8 @@
                         "LinkTitle",
                         "GtProjectPhase",
                         "GtActionDate",
-                        "GtActionResponsible"
+                        "GtActionResponsible",
+                        "GtActionComment"
                     ],
                     "AdditionalSettings": {
                         "RowLimit": 10,
