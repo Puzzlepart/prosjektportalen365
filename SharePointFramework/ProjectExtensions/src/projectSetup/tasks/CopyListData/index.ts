@@ -296,7 +296,7 @@ export class CopyListData extends BaseTask {
         return chain.then(() =>
           this.params.web
             .getFolderByServerRelativePath(config.destListProps.RootFolder.ServerRelativeUrl)
-            .folders.addUsingPath(folderServerRelUrl)
+            .folders.addUsingPath(folderServerRelUrl, true)
         )
       }, Promise.resolve())
       return

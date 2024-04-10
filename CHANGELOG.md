@@ -27,6 +27,7 @@ Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detal
 - Rettet et problem hvor 'Tittel' fra `Prosjektkolonner` listen ikke ble angitt som visningsnavn for felter i Prosjektinformasjon [#1458](https://github.com/Puzzlepart/prosjektportalen365/issues/1458)
 - Rettet et problem hvor kolonner var synlige i `Vis eller skjul kolonner` panelet på porteløjeoversikten selv om de skulle vært skjult [#1442](https://github.com/Puzzlepart/prosjektportalen365/issues/1442)
 - Rettet et problem hvor sorteringsindikatorene for kolonner i aggregerte oversikter ikke var riktig sjekket av [#1429](https://github.com/Puzzlepart/prosjektportalen365/issues/1429)
+- Rettet et problem hvor mapper ikke ble provisjonert dersom det eksisterte mapper med samme navn i prosjektet [#1497](https://github.com/Puzzlepart/prosjektportalen365/issues/1497)
 
 ### Forbedringer
 

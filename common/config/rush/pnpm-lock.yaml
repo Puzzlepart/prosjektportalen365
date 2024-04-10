@@ -21155,6 +21155,22 @@ packages:
       '@types/react-dom': '*'
     resolution:
       integrity: sha512-FYoAsGLd0tgrWlxGtls3WOmKkipD45TzahPMYt52NvLG5Vdao5qnz8/6LPDfxiyzjE8K7YmxZ4s04YvDJEaS5g==
+  /sp-js-provisioning/1.2.3_5bb3879ba087c0ef402ac2f0f80f9922:
+    dependencies:
+      '@pnp/core': 3.17.0
+      '@pnp/logging': 3.17.0
+      '@pnp/nodejs': 3.17.0
+      '@pnp/queryable': 3.17.0
+      '@pnp/sp': 3.17.0
+      object.omit: 3.0.0
+      spfx-jsom: 0.6.6_5bb3879ba087c0ef402ac2f0f80f9922
+      xml-js: 1.6.11
+    dev: false
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+    resolution:
+      integrity: sha512-TY/IZ+CaLKMMz9oE/yIGTh/++a2ImPW7f11z6knOfTFeRUAi8U4JFpPtgIG/QJEQr0OaIlAVOAx/Q5VYHclTmA==
   /space-separated-tokens/2.0.2:
     dev: false
     resolution:
@@ -24075,7 +24091,7 @@ packages:
       react-markdown: 8.0.7_4865287ef69aa4f3fc3f709d3560286e
       rehype-raw: 6.1.1
       sp-entityportal-service: 2.3.0
-      sp-js-provisioning: 1.2.2_5bb3879ba087c0ef402ac2f0f80f9922
+      sp-js-provisioning: 1.2.3_5bb3879ba087c0ef402ac2f0f80f9922
       spfx-jsom: 0.6.6_5bb3879ba087c0ef402ac2f0f80f9922
       tslib: 2.3.1
       typescript: 4.5.5
@@ -24086,7 +24102,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectextensions'
     resolution:
-      integrity: sha512-bId+PXu7FDJqDGSDmxXKKKiYeprDozqgJkNDVMBk6pXpF/Beb8ocz4MPYwpEN7y3XQ/KP8GpQg407XzAopsfDw==
+      integrity: sha512-LLRd7JxJ8VplDh/eiv9s9/rVOaECDlW+ImlV5OsADWyQfz4GQXfHvm3ySn/teY8e645D3rY7gQNe4o9bBMq2MA==
       tarball: file:projects/pp365-projectextensions.tgz
     version: 0.0.0
   file:projects/pp365-projectwebparts.tgz:
@@ -24228,7 +24244,7 @@ packages:
       rehype-raw: 6.1.1
       shade-blend-color: 1.0.0
       sp-entityportal-service: 2.3.0
-      sp-js-provisioning: 1.2.2_5bb3879ba087c0ef402ac2f0f80f9922
+      sp-js-provisioning: 1.2.3_5bb3879ba087c0ef402ac2f0f80f9922
       spfx-jsom: 0.6.6_5bb3879ba087c0ef402ac2f0f80f9922
       tslib: 2.3.1
       typescript: 4.5.5
@@ -24241,7 +24257,7 @@ packages:
     peerDependencies:
       interactjs: '*'
     resolution:
-      integrity: sha512-XEjJ+D3uH54Mw3HXoPjbS6AkCYDnj+mTyNOQvW/S4mq7TLJ5KaWjTLBJYZHvAUe+/ZZzmm+As2LjD3dfK+VoUA==
+      integrity: sha512-uUc1QsO/hFcPyEVq9d2hPw/tqYJgQng4wfm2RwD49xWtDutys/Twx2kejfItQF7PeqcvaO7XTCSHgf1aRLjTMQ==
       tarball: file:projects/pp365-shared-library.tgz
     version: 0.0.0
   file:projects/pp365-spfx-tasks.tgz_9c907a7ccd27a2e2d0ee9de5366482d1:
