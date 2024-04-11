@@ -2,6 +2,7 @@ export type ColumnDataType =
   | 'user'
   | 'date'
   | 'currency'
+  | 'number'
   | 'tags'
   | 'boolean'
   | 'url'
