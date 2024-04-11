@@ -1,3 +1,4 @@
+import { CheckboxCheckedFilled, CheckboxCheckedRegular, bundleIcon } from '@fluentui/react-icons'
 import strings from 'ProjectWebPartsStrings'
 import { ListMenuItem } from 'pp365-shared-library'
 import { formatDate } from 'pp365-shared-library/lib/util/formatDate'
@@ -107,7 +108,9 @@ export function useToolbarItems() {
           .setItems(
             state.data.reports.map((report) =>
               new ListMenuItem(formatDate(report.created, true), null)
-                .setIcon(report.published ? 'CheckmarkSquare' : '')
+                .setIcon(
+                  report.published ? bundleIcon(CheckboxCheckedFilled, CheckboxCheckedRegular) : ''
+                )
                 .makeCheckable({
                   name: 'report',
                   value: formatDate(report.created, true)
