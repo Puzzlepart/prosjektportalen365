@@ -25,7 +25,7 @@ export function useChangePhase(delayBeforeReload: number = 1000) {
     try {
       await SPDataAdapter.project.updateProjectPhase(
         context.state.confirmPhase,
-        context.state.data.phaseTextField
+        context.state.data.phaseField
       )
       if (context.props.usePhaseHooks) runPhaseHook()
       if (context.props.useDynamicHomepage) {

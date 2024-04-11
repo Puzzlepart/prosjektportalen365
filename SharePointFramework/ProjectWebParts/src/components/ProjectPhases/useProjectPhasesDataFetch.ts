@@ -69,7 +69,7 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
     return {
       currentPhase,
       phases,
-      phaseTextField: phaseFieldCtx.textField,
+      phaseField: phaseFieldCtx,
       phaseSitePages,
       welcomePage,
       userHasChangePhasePermission
