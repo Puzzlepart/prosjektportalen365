@@ -85,16 +85,18 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
         break
 
       case this._openLinkCmd.id:
-        const listName = this.context.pageContext.list.title
+        const { title } = this.context.pageContext.list
         const [config] = (await this._getIdeaConfiguration()).filter(
-          (item) => item.registrationList === listName
+          (item) => item.registrationList === title
         )
-        this._config = config
-
-        const baseUrl = this.context.pageContext.web.absoluteUrl
-        const processingList = this._config.processingList.replace('é', 'e')
-        const ideaProcessingUrl = `${baseUrl}/Lists/${processingList}`
-        window.open(ideaProcessingUrl, '_blank')
+        try {
+          const processingList = await this._sp.web.lists
+            .getByTitle(config.processingList)
+            .rootFolder.select('ServerRelativeUrl')()
+          window.open(processingList.ServerRelativeUrl, '_blank')
+        } catch (error) {
+          alert(strings.IdeaProcessingListErrorMessage)
+        }
         break
 
       default:

@@ -31,6 +31,7 @@ Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detal
 - Rettet et problem hvor tekstfeltet knyttet til `Fase` ikke ble riktig synkronisert til portefølje [#1492](https://github.com/Puzzlepart/prosjektportalen365/issues/1492)
 - Rettet et problem med visning av tallverdier i aggregerte oversikter hvor det ble lagt på en stor mengde desimaler [#1498](https://github.com/Puzzlepart/prosjektportalen365/issues/1498)
 - Rettet et problem hvor publiseringsikon ikke ble vist i historikk nedtrekksmeny for `Statusrapporter` [#1350](https://github.com/Puzzlepart/prosjektportalen365/issues/1350)
+- Rettet et problem hvor noen Idémodul listekommandoer ikke ble vist dersom andre Idé-lister var definert i `Idékonfigurasjon` [#1430](https://github.com/Puzzlepart/prosjektportalen365/issues/1430)
 
 ### Forbedringer
 

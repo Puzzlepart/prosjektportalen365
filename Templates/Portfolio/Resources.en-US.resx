@@ -2010,7 +2010,7 @@
     <value>Idea registration</value>
   </data>
   <data name="SiteFields_GtIdeaRegistrationList_Description" xml:space="preserve">
-    <value>Which idea registration list should the item be linked to?</value>
+    <value>Which idea registration list should the item be linked to? (Must include registrering)</value>
   </data>
   <data name="SiteFields_GtIdeaProcessingList_DisplayName" xml:space="preserve">
     <value>Idea processing</value>

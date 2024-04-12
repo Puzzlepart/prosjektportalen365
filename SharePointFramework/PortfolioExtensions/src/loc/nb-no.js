@@ -18,6 +18,7 @@ define([], function () {
     HelpContentListName: 'Hjelpeinnhold',
     IdeaAlreadyApproved: 'Denne ideen er allerede godkjent',
     IdeaConfigurationTitle: 'Idékonfigurasjon',
+    IdeaProcessingListErrorMessage: 'Fant ikke en idébehandlingsliste, vennligst sjekk idékonfigurasjonen eller kontakt administrator.',
     IdeaProcessorsSiteGroup: 'Idebehandlere',
     IdeaProjectDataDialogBlockedTitle: 'Prosjektdata element funnet',
     IdeaProjectDataDialogBlockedMessage: 'Det er allerede opprettet og tilknyttet prosjektdata for denne ideen.',

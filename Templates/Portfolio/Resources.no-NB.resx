@@ -2153,7 +2153,7 @@
     <value>Idéregistrering</value>
   </data>
   <data name="SiteFields_GtIdeaRegistrationList_Description" xml:space="preserve">
-    <value>Hvilken idéregisreringsliste skal elementet kobles mot?</value>
+    <value>Hvilken idéregisreringsliste skal elementet kobles mot? (må inneholde registrering)</value>
   </data>
   <data name="SiteFields_GtIdeaProcessingList_DisplayName" xml:space="preserve">
     <value>Idébehandling</value>
