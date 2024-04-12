@@ -88,8 +88,12 @@ declare interface IProjectExtensionsStrings {
   LibraryDropdownLabel: string
   ModifiedLabel: string
   NameLabel: string
+  NoGroupIdErrorMessage: string
+  NoGroupIdErrorStack: string
   NoHubSiteErrorMessage: string
   NoHubSiteErrorStack: string
+  NotSiteAdminErrorMessage: string
+  NotSiteAdminErrorStack: string
   OnGoBackText: string
   OnStartCopyText: string
   OnSubmitSelectionText: string

@@ -52,7 +52,7 @@ export interface IListProps<T extends IColumn = IColumn>
 
   /**
    * Render list in justified layout mode. Manages which columns are visible, tries
-   * to size them according to their min/max rules and drops  off columns that can't
+   * to size them according to their min/max rules and drops off columns that can't
    * fit and have isCollapsible set.
    */
   isListLayoutModeJustified?: boolean
