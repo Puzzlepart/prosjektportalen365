@@ -9,10 +9,6 @@ Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detal
 - Lagt til muligheten for et summeringsfelt i prosjektstatusseksjoner, denne kan summere eller finne gjennomsnitt av verdier basert på en kolonne i en liste- eller usikkerhetsseksjon [#1485](https://github.com/Puzzlepart/prosjektportalen365/issues/1485)
 - Lagt til mulighet for å legge til eller endre valg og verdier for idémodul, dette kan konfigureres med JSON i `Idékonfigurasjon` listen [#1488](https://github.com/Puzzlepart/prosjektportalen365/issues/1488)
 
-### Forbedringer
-
-- Forbedret ytelsen betraktelig og innlasting av store mengder prosjekter i prosjektutlisting webdel på forsiden av porteføljen [#1493](https://github.com/Puzzlepart/prosjektportalen365/pull/1493)
-
 ## 1.9.1 - TBA
 
 ### Feilrettinger
@@ -21,17 +17,18 @@ Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detal
 - Rettet et problem hvor 'Hooks' ikke ble kjørt riktig på grunn av manglende 'body' i `POST` forespørsel [#1479](https://github.com/Puzzlepart/prosjektportalen365/issues/1479)
 - Rettet et problem hvor dynamisk endring av prosjektforside via fasevelger ikke fungerte [#1481](https://github.com/Puzzlepart/prosjektportalen365/issues/1481)
 - Rettet et problem hvor noen underområder ikke var klikkbare i administrasjon av underområder webdel [#1468](https://github.com/Puzzlepart/prosjektportalen365/issues/1468)
-- Rettet et problem hvor URL til KUR-side ble feil ved godkjenning av en idè [#1393](https://github.com/Puzzlepart/prosjektportalen365/issues/1393)
+- Rettet et problem hvor URL til KUR-side ble feil ved godkjenning av en idé [#1393](https://github.com/Puzzlepart/prosjektportalen365/issues/1393)
 - Rettet et problem hvor `Gjør om til overordnet prosjekt` knapp ble igjen etter omgjøringen og at `Administrer underområder` knapp ikke lengre var synlig [#1412](https://github.com/Puzzlepart/prosjektportalen365/issues/1412)
 - Rettet et problem hvor `Vis alle målinger` ikke var synlig i `Gevinster for underområder` (Program/overordnet område) [#1461](https://github.com/Puzzlepart/prosjektportalen365/issues/1461)
 - Rettet et problem hvor 'Tittel' fra `Prosjektkolonner` listen ikke ble angitt som visningsnavn for felter i Prosjektinformasjon [#1458](https://github.com/Puzzlepart/prosjektportalen365/issues/1458)
-- Rettet et problem hvor kolonner var synlige i `Vis eller skjul kolonner` panelet på porteløjeoversikten selv om de skulle vært skjult [#1442](https://github.com/Puzzlepart/prosjektportalen365/issues/1442)
+- Rettet et problem hvor kolonner var synlige i `Vis eller skjul kolonner` panelet på porteføljeoversikten selv om de skulle vært skjult [#1442](https://github.com/Puzzlepart/prosjektportalen365/issues/1442)
 - Rettet et problem hvor sorteringsindikatorene for kolonner i aggregerte oversikter ikke var riktig sjekket av [#1429](https://github.com/Puzzlepart/prosjektportalen365/issues/1429)
 - Rettet et problem hvor mapper ikke ble provisjonert dersom det eksisterte mapper med samme navn i prosjektet [#1497](https://github.com/Puzzlepart/prosjektportalen365/issues/1497)
 - Rettet et problem hvor tekstfeltet knyttet til `Fase` ikke ble riktig synkronisert til portefølje [#1492](https://github.com/Puzzlepart/prosjektportalen365/issues/1492)
 - Rettet et problem med visning av tallverdier i aggregerte oversikter hvor det ble lagt på en stor mengde desimaler [#1498](https://github.com/Puzzlepart/prosjektportalen365/issues/1498)
 - Rettet et problem hvor publiseringsikon ikke ble vist i historikk nedtrekksmeny for `Statusrapporter` [#1350](https://github.com/Puzzlepart/prosjektportalen365/issues/1350)
 - Rettet et problem hvor noen Idémodul listekommandoer ikke ble vist dersom andre Idé-lister var definert i `Idékonfigurasjon` [#1430](https://github.com/Puzzlepart/prosjektportalen365/issues/1430)
+- Rettet et problem hvor avviklede termer ble vist i nedtrekksmenyer for taksonomi felter [1499](https://github.com/Puzzlepart/prosjektportalen365/issues/1499)
 
 ### Forbedringer
 
@@ -39,6 +36,7 @@ Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detal
 - Mulighet for å skru på/av informasjonsmelding for dynamisk hjemmeside, standard av [#1484](https://github.com/Puzzlepart/prosjektportalen365/issues/1484)
 - Tidslinjeliste baserer seg nå på område-id for å hente tidslinjeelementer, dette for å sikre at elementene hentes og vises riktig [#1477](https://github.com/Puzzlepart/prosjektportalen365/issues/1477)
 - Støtte for tallfelt i redigeringspaneler for prosjektstatus, prosjektinformasjon og tidslinje-liste [#1496](https://github.com/Puzzlepart/prosjektportalen365/issues/1496)
+- Forbedret ytelsen betraktelig og innlasting av store mengder prosjekter i prosjektutlisting webdel på forsiden av porteføljen [#1493](https://github.com/Puzzlepart/prosjektportalen365/pull/1493)
 
 ---
 

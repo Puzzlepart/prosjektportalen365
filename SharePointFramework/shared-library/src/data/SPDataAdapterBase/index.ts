@@ -271,16 +271,18 @@ export class SPDataAdapterBase<
     languageTag = 'nb-NO'
   ): Promise<ITag[]> {
     const terms = await this.sp.termStore.sets.getById(termSetId).terms()
-    const tags = terms.map<ITag>((term) => {
-      const label =
-        term.labels.find((label) => label.languageTag === languageTag) ||
-        term.labels.find((label) => label.languageTag === 'en-US')
-      const name = label ? label.name : ''
-      return {
-        key: term.id,
-        name
-      }
-    })
+    const tags = terms
+      .filter((term) => !term.isDeprecated)
+      .map<ITag>((term) => {
+        const label =
+          term.labels.find((label) => label.languageTag === languageTag) ||
+          term.labels.find((label) => label.languageTag === 'en-US')
+        const name = label ? label.name : ''
+        return {
+          key: term.id,
+          name
+        }
+      })
     return tags
       .filter((tag) => tag.name.toLowerCase().indexOf(filter.toLowerCase()) !== -1)
       .filter((tag) => !selectedItems.find((item) => item.name === tag.name))
