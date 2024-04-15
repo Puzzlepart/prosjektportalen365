@@ -28,7 +28,8 @@ Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detal
 - Rettet et problem med visning av tallverdier i aggregerte oversikter hvor det ble lagt på en stor mengde desimaler [#1498](https://github.com/Puzzlepart/prosjektportalen365/issues/1498)
 - Rettet et problem hvor publiseringsikon ikke ble vist i historikk nedtrekksmeny for `Statusrapporter` [#1350](https://github.com/Puzzlepart/prosjektportalen365/issues/1350)
 - Rettet et problem hvor noen Idémodul listekommandoer ikke ble vist dersom andre Idé-lister var definert i `Idékonfigurasjon` [#1430](https://github.com/Puzzlepart/prosjektportalen365/issues/1430)
-- Rettet et problem hvor avviklede termer ble vist i nedtrekksmenyer for taksonomi felter [1499](https://github.com/Puzzlepart/prosjektportalen365/issues/1499)
+- Rettet et problem hvor avviklede termer ble vist i nedtrekksmenyer for taksonomi felter [#1499](https://github.com/Puzzlepart/prosjektportalen365/issues/1499)
+- Rettet et problem hvor antall linjer angitt for et 'multi-linje' felt ikke ble reflektert i det nye redigeringspanelet [#1500](https://github.com/Puzzlepart/prosjektportalen365/issues/1500)
 
 ### Forbedringer
 
