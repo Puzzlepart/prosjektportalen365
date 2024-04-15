@@ -222,9 +222,23 @@ export const createPortfolioAggregationReducer = (
         state.groupBy = null
         state.groups = null
       }
-      state.items = sortArray([...state.items], [payload.column.fieldName], {
-        reverse: !isSortedDescending
-      })
+      if (payload.column.dataType === 'currency') {
+        state.items = state.items.sort((a, b) => {
+          const aValue = parseFloat(a[payload.column.fieldName]?.replace(/[^0-9.-]+/g, '')) || null
+          const bValue = parseFloat(b[payload.column.fieldName]?.replace(/[^0-9.-]+/g, '')) || null
+          if (aValue === bValue)
+            return 0
+          if (aValue === null)
+            return isSortedDescending ? 1 : -1
+          if (bValue === null)
+            return isSortedDescending ? -1 : 1
+          return isSortedDescending ? aValue - bValue : aValue - bValue
+        })
+      } else {
+        state.items = sortArray([...state.items], [payload.column.fieldName], {
+          reverse: !isSortedDescending
+        })
+      }
       state.columns = [...state.columns].map((col) => {
         col.isSorted = col.key === payload.column.key
         col.isSortedDescending = col.isSorted ? isSortedDescending : false
