@@ -31,6 +31,7 @@ Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detal
 - Rettet et problem hvor avviklede termer ble vist i nedtrekksmenyer for taksonomi felter [#1499](https://github.com/Puzzlepart/prosjektportalen365/issues/1499)
 - Rettet et problem hvor antall linjer angitt for et 'multi-linje' felt ikke ble reflektert i det nye redigeringspanelet [#1500](https://github.com/Puzzlepart/prosjektportalen365/issues/1500)
 - Rettet et problem hvor valuta ikke ble riktig sortert på porteføljeoversikt og andre aggregerte oversikter [#1369](https://github.com/Puzzlepart/prosjektportalen365/issues/1369)
+- Rettet et problem hvor eksportering av visninger som inneholdt felttypene 'valuta' og 'nummer' ble vist med masse desimaler [#1395](https://github.com/Puzzlepart/prosjektportalen365/issues/1395)
 
 ### Forbedringer
 

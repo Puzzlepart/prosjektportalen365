@@ -37,7 +37,19 @@ export function useExcelExport(context: IPortfolioAggregationContext) {
                 })
               })
             })
-      ExcelExportService.export(items, columns)
+
+      const filteredItems = items.map((item) => {
+        const filteredItem = { ...item }
+        Object.keys(filteredItem).forEach((key) => {
+          const column = columns.find((c) => c.fieldName === key)
+          if (column && (column.dataType === 'currency' || column.dataType === 'number')) {
+            filteredItem[key] = Math.floor(filteredItem[key])
+          }
+        })
+        return filteredItem
+      })
+
+      ExcelExportService.export(filteredItems, columns)
     } catch (error) {}
   }, [context.state])
 
