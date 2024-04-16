@@ -226,12 +226,9 @@ export const createPortfolioAggregationReducer = (
         state.items = state.items.sort((a, b) => {
           const aValue = parseFloat(a[payload.column.fieldName]?.replace(/[^0-9.-]+/g, '')) || null
           const bValue = parseFloat(b[payload.column.fieldName]?.replace(/[^0-9.-]+/g, '')) || null
-          if (aValue === bValue)
-            return 0
-          if (aValue === null)
-            return isSortedDescending ? 1 : -1
-          if (bValue === null)
-            return isSortedDescending ? -1 : 1
+          if (aValue === bValue) return 0
+          if (aValue === null) return isSortedDescending ? 1 : -1
+          if (bValue === null) return isSortedDescending ? -1 : 1
           return isSortedDescending ? aValue - bValue : aValue - bValue
         })
       } else {
