@@ -387,7 +387,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 33 -->
             <pnp:DataValue FieldName="GtSortOrder">610</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Status</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Status kommunikasjonsaktivitet</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtActionStatus</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtActionStatusOWSCHCS</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
@@ -407,7 +407,7 @@
             <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 35 -->
-            <pnp:DataValue FieldName="GtSortOrder">630</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">280</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Tiltaksansvarlig</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtActionResponsible</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtActionResponsibleOWSUSER</pnp:DataValue>
@@ -626,11 +626,106 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 56 -->
             <pnp:DataValue FieldName="GtSortOrder">640</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Kommentar</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Kommentar, kommunikasjonsaktivitet</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtActionComment</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtActionCommentOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Kommunikasjonsoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 57 -->
+            <pnp:DataValue FieldName="GtSortOrder">700</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Navn</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtResourceUser</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtResourceUser</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Ressursallokering</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 58 -->
+            <pnp:DataValue FieldName="GtSortOrder">710</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Rolle</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtResourceRole</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtResourceRole</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Tags</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Ressursallokering</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+        </pnp:DataRow>
+
+        <pnp:DataRow>            <!-- ID: 59 -->
+            <pnp:DataValue FieldName="GtSortOrder">720</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Startdato</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtStartDate</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtStartDateOWSDATE</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Date</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Ressursallokering</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">120</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 60 -->
+            <pnp:DataValue FieldName="GtSortOrder">730</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Sluttdato</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtEndDate</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtEndDateOWSDATE</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Date</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Ressursallokering</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">120</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 61 -->
+            <pnp:DataValue FieldName="GtSortOrder">740</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Belastning</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtResourceLoad</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtResourceLoadOWSNMBR</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Number</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Ressursallokering</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">160</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 62 -->
+            <pnp:DataValue FieldName="GtSortOrder">750</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Status allokering</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtAllocationStatus</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtAllocationOWSCHCS</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Tags</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Ressursallokering</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">120</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 63 -->
+            <pnp:DataValue FieldName="GtSortOrder">760</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Kommentar, allokering</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtAllocationComment</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtAllocationCommentOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Ressursallokering</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 64 -->
+            <pnp:DataValue FieldName="GtSortOrder">770</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Fravær</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtResourceAbsence</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtResourceAbsenceOWSCHCS</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Tags</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Ressursallokering</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">120</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 65 -->
+            <pnp:DataValue FieldName="GtSortOrder">780</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Kommentar, fravær</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtResourceAbsenceComment</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtResourceAbsenceCommentOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Ressursallokering</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
         </pnp:DataRow>

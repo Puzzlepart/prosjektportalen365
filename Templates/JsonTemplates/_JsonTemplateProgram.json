@@ -478,6 +478,10 @@
                     {
                         "Url": "SitePages/ProgramKommunikasjon.aspx",
                         "Title": "Kommunikasjonsplaner"
+                    },
+                    {
+                        "Url": "SitePages/ProgramRessursallokeringer.aspx",
+                        "Title": "Ressursallokeringer"
                     }
                 ]
             },
@@ -692,6 +696,34 @@
                                         "title": "Kommunikasjonsplaner for underområder",
                                         "dataSource": "Alle kommunikasjonsplaner for underområder",
                                         "dataSourceCategory": "Kommunikasjonsoversikt",
+                                        "showCommandBar": true,
+                                        "showViewSelector": true,
+                                        "showSearchBox": true
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Name": "ProgramRessursallokeringer.aspx",
+            "Title": "Ressursallokeringer",
+            "PageLayoutType": "SingleWebPartAppPage",
+            "CommentsDisabled": true,
+            "Sections": [
+                {
+                    "Columns": [
+                        {
+                            "Factor": 12,
+                            "Controls": [
+                                {
+                                    "Id": "{{ControlId_ProgramAggregationWebPart}}",
+                                    "Properties": {
+                                        "title": "Ressursallokeringer for underområder",
+                                        "dataSource": "Alle ressursallokeringer for underområder",
+                                        "dataSourceCategory": "Ressursallokering",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
                                         "showSearchBox": true

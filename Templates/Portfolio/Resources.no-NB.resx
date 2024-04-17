@@ -902,7 +902,7 @@
     <value>Fravær</value>
   </data>
   <data name="SiteFields_GtResourceAbsenceComment_DisplayName" xml:space="preserve">
-    <value>Kommentar</value>
+    <value>Kommentar, fravær</value>
   </data>
   <data name="SiteFields_GtDescription_DisplayName" xml:space="preserve">
     <value>Beskrivelse</value>
@@ -1022,10 +1022,10 @@
     <value>Prosjektstatus</value>
   </data>
   <data name="SiteFields_GtAllocationStatus_DisplayName" xml:space="preserve">
-    <value>Status</value>
+    <value>Status allokering</value>
   </data>
   <data name="SiteFields_GtAllocationComment_DisplayName" xml:space="preserve">
-    <value>Kommentar</value>
+    <value>Kommentar, allokering</value>
   </data>
   <data name="SiteFields_GtAttachments_DisplayName" xml:space="preserve">
     <value>Vedlegg</value>
@@ -1052,7 +1052,7 @@
     <value></value>
   </data>
   <data name="SiteFields_GtActionComment_DisplayName" xml:space="preserve">
-    <value>Kommentar</value>
+    <value>Kommentar, kommunikasjonsaktivitet</value>
   </data>
   <data name="SiteFields_GtActionComment_Description" xml:space="preserve">
     <value>Kommentar til kommunikasjonsaktiviteten</value>
