@@ -6,6 +6,7 @@ import { GetDataTypeProperties, IColumnDataTypeFieldOption } from './ColumnDataT
 import { BooleanColumn } from './BooleanColumn'
 import { CurrencyColumn } from './CurrencyColumn'
 import { NumberColumn } from './NumberColumn'
+import { PercentageColumn } from './PercentageColumn'
 import { DateColumn } from './DateColumn'
 import { DialogColumn } from './DialogColumn'
 import { FileNameColumn } from './FileNameColumn'
@@ -234,6 +235,7 @@ export function useColumnRenderComponentRegistry() {
       FileNameColumn,
       CurrencyColumn,
       NumberColumn,
+      PercentageColumn,
       ListColumn,
       DialogColumn,
       TagsColumn,
@@ -253,12 +255,6 @@ export function useColumnRenderComponentRegistry() {
       'Note',
       strings.ColumnRenderOptionNote,
       'EditStyle'
-    )
-    ColumnRenderComponentRegistry.registerColumnRenderOption(
-      'percentage',
-      'Percentage',
-      strings.ColumnRenderOptionPercentage,
-      'CalculatorPercentage'
     )
   }, [])
 }

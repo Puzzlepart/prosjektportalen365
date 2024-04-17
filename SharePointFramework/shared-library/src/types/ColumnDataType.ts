@@ -3,6 +3,7 @@ export type ColumnDataType =
   | 'date'
   | 'currency'
   | 'number'
+  | 'percentage'
   | 'tags'
   | 'boolean'
   | 'url'

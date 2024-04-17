@@ -197,10 +197,10 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">fbe4dcc8-ed4c-4c0a-ad52-4247ca90f9b3</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Alle ressursallokeringer for underområder</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSearchQuery">(ContentTypeId:0x010004EAFF7AFCC94C2680042E6881264120* OR ContentTypeId:0x010029F45E75BA9CE340A83EFFB2927E11F4*) DepartmentId:{{sitecollectionid}}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x010004EAFF7AFCC94C2680042E6881264120* DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Ressursallokering</pnp:DataValue>
-            <pnp:DataValue FieldName="GtProjectContentColumns">57,58,59,60,61,62,63,64,65</pnp:DataValue>
-            <pnp:DataValue FieldName="GtProjectContentRefiners">57,58,62,64</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectContentColumns">57,58,59,60,61,62,63</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectContentRefiners">57,58,62</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName">SizeLegacy</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceLevel">Overordnet/Program</pnp:DataValue>
         </pnp:DataRow>
