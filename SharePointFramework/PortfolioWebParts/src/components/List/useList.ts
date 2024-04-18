@@ -19,8 +19,8 @@ export function useList(props: IListProps<any>) {
   const onRenderItemColumn = useOnRenderItemColumn()
   const onRenderDetailsHeader = useOnRenderDetailsHeader(props)
   const columns = useMemo(
-    () => [...props.columns, addColumn].filter((col) => !col?.data?.isHidden),
-    [props.columns]
+    () => [...props.columns, addColumn].filter((col) => !col?.data?.isHidden && !props.hiddenColumns?.includes(col?.internalName)),
+    [props.columns, props.hiddenColumns]
   )
   const layoutMode = props.isListLayoutModeJustified
     ? DetailsListLayoutMode.justified

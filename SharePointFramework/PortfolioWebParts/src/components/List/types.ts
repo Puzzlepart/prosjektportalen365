@@ -69,6 +69,11 @@ export interface IListProps<T extends IColumn = IColumn>
   columns?: T[]
 
   /**
+   * Columns that should be hidden in the list.
+   */
+  hiddenColumns?: T[]
+
+  /**
    * Error to render in the list if the data fetch or something else fails.
    */
   error?: Error

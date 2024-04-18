@@ -691,7 +691,7 @@
             <pnp:DataValue FieldName="GtSortOrder">750</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Status allokering</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtAllocationStatus</pnp:DataValue>
-            <pnp:DataValue FieldName="GtManagedProperty">GtAllocationOWSCHCS</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtAllocationStatusOWSCHCS</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Tags</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Ressursallokering</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">120</pnp:DataValue>

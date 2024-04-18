@@ -175,6 +175,7 @@
                                         "title": "Ressursallokeringer for underområder",
                                         "dataSource": "Alle ressursallokeringer for underområder",
                                         "dataSourceCategory": "Ressursallokering",
+                                        "hiddenColumns": "Title",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
                                         "showSearchBox": true
