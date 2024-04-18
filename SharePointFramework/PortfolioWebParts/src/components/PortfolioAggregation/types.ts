@@ -80,7 +80,7 @@ export interface IPortfolioAggregationConfiguration {
 
 export interface IPortfolioAggregationProps<T = any>
   extends IBaseComponentProps,
-  Pick<IListProps, 'isListLayoutModeJustified' | 'hiddenColumns'> {
+    Pick<IListProps, 'isListLayoutModeJustified' | 'hiddenColumns'> {
   /**
    * Configuration (columns and views etc)
    */

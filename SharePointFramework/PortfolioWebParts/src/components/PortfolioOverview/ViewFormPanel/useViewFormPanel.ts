@@ -1,6 +1,6 @@
 import _ from 'lodash'
-import { SPPortfolioOverviewViewItem } from 'pp365-shared-library'
-import { SET_VIEW_FORM_PANEL } from '../reducer'
+import { PortfolioOverviewView, SPPortfolioOverviewViewItem } from 'pp365-shared-library'
+import { CHANGE_VIEW, SET_VIEW_FORM_PANEL } from '../reducer'
 import { usePortfolioOverviewContext } from '../usePortfolioOverviewContext'
 import { useEditableView } from './useEditableView'
 import { useId } from '@fluentui/react-components'
@@ -54,7 +54,17 @@ export function useViewFormPanel() {
         GtPortfolioGroupById: currentView.groupById,
         GtPortfolioColumnOrder: JSON.stringify(currentView.columnOrder)
       }
-      await context.props.dataAdapter.portalDataService.addItemToList('PORTFOLIO_VIEWS', properties)
+      const view = await context.props.dataAdapter.portalDataService.addItemToList(
+        'PORTFOLIO_VIEWS',
+        properties
+      )
+
+      const newView = new PortfolioOverviewView({
+        ...properties,
+        Id: view.Id
+      }).configure(currentView.columns)
+
+      context.dispatch(CHANGE_VIEW(newView))
     }
     context.dispatch(SET_VIEW_FORM_PANEL({ isOpen: false }))
   }

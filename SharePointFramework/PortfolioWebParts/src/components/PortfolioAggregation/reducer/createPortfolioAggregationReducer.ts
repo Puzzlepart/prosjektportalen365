@@ -365,6 +365,10 @@ export const createPortfolioAggregationReducer = (
       switch (payload.submitAction) {
         case 'add':
           {
+            const obj: IPortfolioAggregationHashState = {}
+            if (state.currentView) obj.viewId = payload.view.id.toString()
+            if (state.groupBy) obj.groupBy = state.groupBy.fieldName
+            setUrlHash(obj)
             state.currentView = payload.view
             state.views = [...state.views, payload.view]
             state.viewForm = { isOpen: false }
