@@ -2,9 +2,9 @@ import { format, MessageBarType } from '@fluentui/react'
 import { createReducer } from '@reduxjs/toolkit'
 import sortArray from 'array-sort'
 import strings from 'PortfolioWebPartsStrings'
-import { ProjectColumn } from 'pp365-shared-library'
+import { ProjectColumn, setUrlHash } from 'pp365-shared-library'
 import _ from 'underscore'
-import { IPortfolioOverviewState } from '../types'
+import { IPortfolioOverviewHashState, IPortfolioOverviewState } from '../types'
 import {
   CHANGE_VIEW,
   COLUMN_DELETED,
@@ -65,6 +65,10 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
       .addCase(DATA_FETCHED, (state, { payload }) => {
         state.items = payload.items
         state.currentView = payload.currentView
+        const obj: IPortfolioOverviewHashState = {}
+        if (state.currentView) obj.viewId = payload.currentView.id.toString()
+        if (state.groupBy) obj.groupBy = state.groupBy.fieldName
+        setUrlHash(obj)
         state.columns = payload.currentView.columns
         state.groupBy = payload.groupBy
         state.managedProperties = payload.managedProperties ?? []
@@ -107,6 +111,10 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
       })
       .addCase(CHANGE_VIEW, (state, { payload }) => {
         state.isChangingView = !!payload
+        const obj: IPortfolioOverviewHashState = {}
+        if (state.currentView) obj.viewId = payload.id.toString()
+        if (state.groupBy) obj.groupBy = state.groupBy.fieldName
+        setUrlHash(obj)
         state.currentView = payload
         state.columns = payload.columns
       })

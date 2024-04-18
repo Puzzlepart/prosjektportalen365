@@ -34,6 +34,7 @@ Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detal
 - Rettet et problem hvor valuta ikke ble riktig sortert på porteføljeoversikt og andre aggregerte oversikter [#1369](https://github.com/Puzzlepart/prosjektportalen365/issues/1369)
 - Rettet et problem hvor eksportering av visninger som inneholdt felttypene 'valuta' og 'nummer' ble vist med masse desimaler [#1395](https://github.com/Puzzlepart/prosjektportalen365/issues/1395)
 - Rettet et problem med visning av 'valuta' felt-verdier i redigeringspaneler for prosjektstatus og prosjektinformasjon [#1503](https://github.com/Puzzlepart/prosjektportalen365/issues/1503)
+- Rettet et problem hvor visnings-id ikke la seg i URL feltet ved innlastning eller bytting av visninger i Porteføljeoversikt [#1355](https://github.com/Puzzlepart/prosjektportalen365/issues/1355)
 
 ### Forbedringer
 
