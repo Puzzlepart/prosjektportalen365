@@ -57,6 +57,11 @@ function Connect-SharePoint {
 
 function UpgradeSite($Url) {
     Connect-SharePoint -Url $Url
+    $ProjectPropertiesList = Get-PnPList -Identity "Prosjektegenskaper" -ErrorAction SilentlyContinue
+    if ($null -eq $ProjectPropertiesList) {
+        Write-Host "`t`tNo Prosjektegenskaper list found - the site is not a qualified Prosjektportalen site. Skipping upgrade of site $Url" -ForegroundColor Yellow
+        return
+    }
     Get-ChildItem $ScriptDir/UpgradeAllSitesToLatest -Filter *.ps1 | ForEach-Object {
         . $_.FullName
     }
