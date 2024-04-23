@@ -51,7 +51,6 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
       </div>
       {state.panel && (
         <CustomEditPanel
-          spfxContext={context.props.spfxContext}
           isOpen={true}
           fields={state.data?.fields}
           hiddenFields={['GtSiteIdLookup']}

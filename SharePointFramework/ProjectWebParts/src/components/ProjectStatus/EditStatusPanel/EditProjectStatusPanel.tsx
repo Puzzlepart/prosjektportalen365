@@ -16,7 +16,6 @@ export const EditStatusPanel: FC = () => {
 
   return (
     <CustomEditPanel
-      spfxContext={context.props.spfxContext}
       isOpen={isOpen}
       headerText={headerText}
       fieldValues={fieldValues}

@@ -1,12 +1,12 @@
-import { ITag, TagPicker } from '@fluentui/react'
 import React from 'react'
 import { FieldContainer } from '../../../FieldContainer'
-import styles from '../CustomEditPanelBody.module.scss'
 import { useCustomEditPanelContext } from '../../context'
 import { FieldElementComponent } from './types'
+import { ModernTaxonomyPicker } from '@pnp/spfx-controls-react'
 
 export const TaxonomyFieldType: FieldElementComponent = ({ field }) => {
   const context = useCustomEditPanelContext()
+  
   return (
     <FieldContainer
       iconName='AppsList'
@@ -14,24 +14,11 @@ export const TaxonomyFieldType: FieldElementComponent = ({ field }) => {
       description={field.description}
       required={field.required}
     >
-      <TagPicker
-        styles={{ text: styles.field }}
-        onResolveSuggestions={async (filter, selectedItems) =>
-          await context.props.dataAdapter.getTerms(
-            field.getProperty('TermSetId'),
-            filter,
-            selectedItems
-          )
-        }
-        onEmptyResolveSuggestions={async (selectedItems) =>
-          await context.props.dataAdapter.getTerms(
-            field.getProperty('TermSetId'),
-            '',
-            selectedItems
-          )
-        }
-        defaultSelectedItems={context.model.get<ITag[]>(field)}
-        itemLimit={1}
+      <ModernTaxonomyPicker
+        context={context.props.dataAdapter.spfxContext as any} // Newest version of the control requires this cast for now, as context type is incompatibale with other types of SPFxContext
+        panelTitle={field.description || field.displayName}
+        label=''
+        termSetId={field.getProperty('TermSetId')}
         onChange={(items) => context.model.set(field, items)}
       />
     </FieldContainer>

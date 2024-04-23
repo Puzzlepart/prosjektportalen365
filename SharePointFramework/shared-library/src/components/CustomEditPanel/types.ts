@@ -33,10 +33,6 @@ export interface ICustomEditPanelSubmitProps extends Pick<ButtonProps, 'disabled
 
 export interface ICustomEditPanelProps extends IBasePanelProps {
   /**
-   * The SPFx context to use for fetching terms.
-   */
-  spfxContext: SPFxContext
-  /**
    * The fields to edit in the panel.
    */
   fields: EditableSPField[]

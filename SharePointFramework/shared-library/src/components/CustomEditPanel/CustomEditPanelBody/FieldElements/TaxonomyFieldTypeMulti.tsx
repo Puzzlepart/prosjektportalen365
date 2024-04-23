@@ -15,8 +15,8 @@ export const TaxonomyFieldTypeMulti: FieldElementComponent = ({ field }) => {
       required={field.required}
     >
       <ModernTaxonomyPicker
-        context={context.props.spfxContext as any} // Newest version of the control requires this cast for now, as context type is incompatibale with other types of SPFxContext
-        panelTitle={field.displayName}
+        context={context.props.dataAdapter.spfxContext as any} // Newest version of the control requires this cast for now, as context type is incompatibale with other types of SPFxContext
+        panelTitle={field.description || field.displayName}
         allowMultipleSelections
         label=''
         termSetId={field.getProperty('TermSetId')}
