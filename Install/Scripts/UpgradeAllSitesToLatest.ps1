@@ -59,7 +59,7 @@ function UpgradeSite($Url) {
     Connect-SharePoint -Url $Url
     $ProjectPropertiesList = Get-PnPList -Identity "Prosjektegenskaper" -ErrorAction SilentlyContinue
     if ($null -eq $ProjectPropertiesList) {
-        Write-Host "`t`tNo Prosjektegenskaper list found - the site is not a qualified Prosjektportalen site. Skipping upgrade of site $Url" -ForegroundColor Yellow
+        Write-Host "`t`tNo Prosjektegenskaper list found - this site is not a qualified Prosjektportalen site. Skipping upgrade of site $Url" -ForegroundColor Yellow
         return
     }
     Get-ChildItem $ScriptDir/UpgradeAllSitesToLatest -Filter *.ps1 | ForEach-Object {
@@ -74,7 +74,7 @@ Start-Transcript -Path "$PSScriptRoot/UpgradeSites_Log-$((Get-Date).ToString('yy
 
 Connect-SharePoint -Url $Url
 $InstallLogEntries = Get-PnPListItem -List "Installasjonslogg" -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>"
-$global:__InstalledVersion = ($InstallLogEntries | Select-Object -First 1).FieldValues["InstallVersion"]
+$global:__InstalledVersion = ($InstallLogEntries | Where-Object {$_.Title -like "PP365 ^(\d+\.)?(\d+\.)?(\*|\w+)$"}| Select-Object -First 1).FieldValues["InstallVersion"]
 $global:__PreviousVersion = ($InstallLogEntries | Select-Object -Skip 1 -First 1).FieldValues["InstallVersion"] 
 
 [System.Uri]$Uri = $Url
