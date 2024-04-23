@@ -74,8 +74,9 @@ Start-Transcript -Path "$PSScriptRoot/UpgradeSites_Log-$((Get-Date).ToString('yy
 
 Connect-SharePoint -Url $Url
 $InstallLogEntries = Get-PnPListItem -List "Installasjonslogg" -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>"
-$global:__InstalledVersion = ($InstallLogEntries | Where-Object {$_.Title -like "PP365 ^(\d+\.)?(\d+\.)?(\*|\w+)$"}| Select-Object -First 1).FieldValues["InstallVersion"]
-$global:__PreviousVersion = ($InstallLogEntries | Select-Object -Skip 1 -First 1).FieldValues["InstallVersion"] 
+$NativeLogEntries = $InstallLogEntries | Where-Object {$_.FieldValues.Title -match "PP365+[\s]+[0-9]+[.][0-9]+[.][0-9]+[.][a-zA-Z0-9]+"}
+$global:__InstalledVersion = ($NativeLogEntries | Select-Object -First 1).FieldValues["InstallVersion"]
+$global:__PreviousVersion = ($NativeLogEntries | Select-Object -Skip 1 -First 1).FieldValues["InstallVersion"]
 
 [System.Uri]$Uri = $Url
 $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
