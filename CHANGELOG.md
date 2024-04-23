@@ -36,6 +36,7 @@ Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detal
 - Rettet et problem med visning av 'valuta' felt-verdier i redigeringspaneler for prosjektstatus og prosjektinformasjon [#1503](https://github.com/Puzzlepart/prosjektportalen365/issues/1503)
 - Rettet et problem hvor visnings-id ikke la seg i URL feltet ved innlastning eller bytting av visninger i Porteføljeoversikt [#1355](https://github.com/Puzzlepart/prosjektportalen365/issues/1355)
 - Rettet et problem hvor visnings-id ikke la seg i URL feltet ved opprettelse av nye visninger, samt oppdatering av visningen (Porteføljeoversikter og andre aggregerte oversikter) [#1441](https://github.com/Puzzlepart/prosjektportalen365/issues/1441)
+- Rettet og forbedret skript for å oppgradere eksisterende prosjektområder [#1471](https://github.com/Puzzlepart/prosjektportalen365/issues/1471) [#1475](https://github.com/Puzzlepart/prosjektportalen365/issues/1475) [#1487](https://github.com/Puzzlepart/prosjektportalen365/issues/1487)
 
 ### Forbedringer
 
