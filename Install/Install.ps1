@@ -561,7 +561,8 @@ if ($Upgrade.IsPresent) {
 else {
     Write-Host "[SUCCESS] Installation completed in $($sw.Elapsed)" -ForegroundColor Green
 }
-Write-Host "[INFO] Consider running .\Install\Scripts\UpgradeAllSitesToLatest.ps1 to upgrade all sites to the latest version of Prosjektportalen 365. This is required after upgrading between minor versions, e.g. from 1.8.x to 1.9.x."
+Write-Host "[INFO] Consider running .\Install\Scripts\UpgradeAllSitesToLatest.ps1 to upgrade all sites to the latest version of Prosjektportalen 365."
+Write-Host "[INFO] This is required after upgrading between minor versions, e.g. from 1.8.x to 1.9.x."
 #endregion
 
 ## Turning off PnP trace logging

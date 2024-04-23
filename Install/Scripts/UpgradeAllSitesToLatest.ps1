@@ -150,7 +150,6 @@ Write-Host "Upgrade of all project sites is complete" -ForegroundColor Green
 
 Stop-Transcript
 
-Write-Host "[INFO] Logging installation entry" 
 Connect-SharePoint -Url $Url
 
 $InstallEntry = @{
