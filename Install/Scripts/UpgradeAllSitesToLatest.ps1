@@ -98,15 +98,21 @@ if (-not $CI_MODE) {
     while ("y", "n" -notcontains $YesOrNo)
 }
 
-if ($YesOrNo -eq "y" -or $CI_MODE) {
-    $ProjectsInHub | ForEach-Object {
+if ($YesOrNo -eq "y" -or $CI_MODE) {    
+    $ProjectsInHub | ForEach-Object -Begin {$ProgressCount = 0} {
+        [Int16]$PercentComplete = (++$ProgressCount)*100/$ProjectsInHub.Count
+        Write-Progress -Activity "Granting access to all sites in the hub" -Status "$PercentComplete% Complete" -PercentComplete $PercentComplete -CurrentOperation "Processing site $_"
+        
         Write-Host "`tGranting access to $_"
         Set-PnPTenantSite -Url $_ -Owners $UserName
     }
 }
 
 Write-Host "Upgrading existing sites from version $global:__PreviousVersion to $global:__InstalledVersion)..."
-$ProjectsInHub | ForEach-Object {
+$ProjectsInHub | ForEach-Object -Begin {$ProgressCount = 0} {    
+    [Int16]$PercentComplete = (++$ProgressCount)*100/$ProjectsInHub.Count
+    Write-Progress -Activity "Upgrading all sites in hub" -Status "$PercentComplete% Complete" -PercentComplete $PercentComplete -CurrentOperation "Processing site $_"
+    
     Write-Host "`tUpgrading site $_"
     UpgradeSite -Url $_
     Write-Host "`t`tDone processing $_" -ForegroundColor Green
@@ -121,13 +127,18 @@ if (-not $CI_MODE) {
 }
 
 if ($YesOrNo -eq "y" -or $CI_MODE) {
-    $ProjectsInHub | ForEach-Object {
+    $ProjectsInHub | ForEach-Object -Begin {$ProgressCount = 0} {    
+        [Int16]$PercentComplete = (++$ProgressCount)*100/$ProjectsInHub.Count
+        Write-Progress -Activity "Removing admin access" -Status "$PercentComplete% Complete" -PercentComplete $PercentComplete -CurrentOperation "Processing site $_"
+        
         Write-Host "`tRemoving access to $_"
         Connect-SharePoint -Url $_
         Remove-PnPSiteCollectionAdmin -Owners $UserName
     }
 }
 
+Write-Progress -Activity "Upgrading all sites in hub" -Status "Completed" -PercentComplete 100 -Completed
+Write-Host "Upgrade of all project sites is complete" -ForegroundColor Green
 
 Stop-Transcript
 $global:__PnPConnection = $null
