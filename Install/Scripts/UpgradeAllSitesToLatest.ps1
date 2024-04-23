@@ -12,6 +12,7 @@ $global:__InstalledVersion = $null
 $global:__PreviousVersion = $null
 $global:__PnPConnection = $null
 $global:__CurrentChannelConfig = $null
+$InstallStartTime = (Get-Date -Format o)
 
 $ScriptDir = (Split-Path -Path $MyInvocation.MyCommand.Definition -Parent)
 
@@ -70,7 +71,8 @@ function UpgradeSite($Url) {
 Write-Host "This script will update all existing sites in a Prosjektportalen installation. This requires you to have the SharePoint admin role"
 
 Set-PnPTraceLog -Off
-Start-Transcript -Path "$PSScriptRoot/UpgradeSites_Log-$((Get-Date).ToString('yyyy-MM-dd-HH-mm')).txt"
+$LogFilePath = "$PSScriptRoot/UpgradeSites_Log-$((Get-Date).ToString('yyyy-MM-dd-HH-mm')).txt"
+Start-Transcript -Path $LogFilePath
 
 Connect-SharePoint -Url $Url
 $InstallLogEntries = Get-PnPListItem -List "Installasjonslogg" -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>"
@@ -147,4 +149,35 @@ Write-Progress -Activity "Upgrading all sites in hub" -Status "Completed" -Perce
 Write-Host "Upgrade of all project sites is complete" -ForegroundColor Green
 
 Stop-Transcript
+
+Write-Host "[INFO] Logging installation entry" 
+Connect-SharePoint -Url $Url
+
+$InstallEntry = @{
+    Title            = "PP365 UpgradeAllSitesToLatest.ps1"
+    InstallStartTime = $InstallStartTime; 
+    InstallEndTime   = (Get-Date -Format o); 
+    InstallVersion   = $global:__InstalledVersion;
+    InstallCommand   = $MyInvocation.Line.Substring(2);
+}
+
+if ($null -ne $UserName) {
+    $InstallEntry.InstallUser = $UserName
+}
+if (-not [string]::IsNullOrEmpty($CI)) {
+    $InstallEntry.InstallCommand = "GitHub CI";
+}
+if ($Channel -ne "main") {
+    $InstallEntry.InstallChannel = $global:__CurrentChannelConfig.Channel
+}
+
+## Logging installation to SharePoint list
+$InstallationEntry = Add-PnPListItem -List "Installasjonslogg" -Values $InstallEntry -ErrorAction SilentlyContinue
+
+## Attempting to attach the log file to installation entry
+if ($null -ne $InstallationEntry) {
+    $AttachmentOutput = Add-PnPListItemAttachment -List "Installasjonslogg" -Identity $InstallationEntry.Id -Path $LogFilePath -ErrorAction SilentlyContinue
+}
+
+
 $global:__PnPConnection = $null
