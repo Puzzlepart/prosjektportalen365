@@ -14,6 +14,7 @@ Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detal
 
 ### Feilrettinger
 
+- Rettet et problem hvor taksonomifelt i redigeringspanel ikke støttet nivåer av termer [#1504](https://github.com/Puzzlepart/prosjektportalen365/issues/1504)
 - Rettet et problem hvor listedata tilhørende tidligere prosjektstatusrapporter ikke ble hentet inn [#1472](https://github.com/Puzzlepart/prosjektportalen365/issues/1472)
 - Rettet et problem hvor 'Hooks' ikke ble kjørt riktig på grunn av manglende 'body' i `POST` forespørsel [#1479](https://github.com/Puzzlepart/prosjektportalen365/issues/1479)
 - Rettet et problem hvor dynamisk endring av prosjektforside via fasevelger ikke fungerte [#1481](https://github.com/Puzzlepart/prosjektportalen365/issues/1481)
