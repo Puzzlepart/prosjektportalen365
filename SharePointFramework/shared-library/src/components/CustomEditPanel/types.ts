@@ -4,7 +4,6 @@ import { ItemFieldValues, EditableSPField } from '../../models'
 import { IBasePanelProps } from '../BasePanel'
 import { UseModelReturnType } from './useModel'
 import { IWeb } from '@pnp/sp/webs'
-import { SPFxContext } from '../../types'
 
 export interface ICustomEditPanelSubmitProps extends Pick<ButtonProps, 'disabled'> {
   /**

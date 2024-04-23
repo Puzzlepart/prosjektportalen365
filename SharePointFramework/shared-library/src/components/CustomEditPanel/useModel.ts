@@ -1,6 +1,6 @@
-import { IPersonaProps, ITag } from '@fluentui/react'
+import { IPersonaProps } from '@fluentui/react'
 import _ from 'lodash'
-import { ITermInfo } from '@pnp/sp/taxonomy';
+import { ITermInfo } from '@pnp/sp/taxonomy'
 import { useState } from 'react'
 import { EditableSPField } from '../../models'
 import { DefaultCaching } from '../../data/cache'

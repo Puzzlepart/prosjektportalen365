@@ -9,10 +9,8 @@ import styles from './ProjectTimeline.module.scss'
 import { TimelineList } from './TimelineList/TimelineList'
 import { IProjectTimelineProps } from './types'
 import { useProjectTimeline } from './useProjectTimeline'
-import { useProjectInformationContext } from 'components/ProjectInformation/context'
 
 export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
-  const context = useProjectInformationContext()
   const { state, setState, onFilterChange, onGroupByChange, defaultTimeframe } =
     useProjectTimeline(props)
 

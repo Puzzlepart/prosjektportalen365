@@ -6,7 +6,7 @@ import { ModernTaxonomyPicker } from '@pnp/spfx-controls-react'
 
 export const TaxonomyFieldType: FieldElementComponent = ({ field }) => {
   const context = useCustomEditPanelContext()
-  
+
   return (
     <FieldContainer
       iconName='AppsList'
