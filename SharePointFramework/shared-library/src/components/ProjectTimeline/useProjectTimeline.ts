@@ -75,7 +75,7 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
   ): IFilterProps[] => {
     const columns = [
       config.find((item) => item?.title === strings.ProjectLabel).timelineFilter && {
-        fieldName: 'project',
+        fieldName: 'data.project',
         name: strings.SiteTitleLabel,
         isCollapsed: true
       },
