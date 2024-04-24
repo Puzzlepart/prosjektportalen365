@@ -32,7 +32,7 @@ foreach ($tmpl in $TemplatesMap.GetEnumerator()) {
 }
 
 Write-Host "[SUCCESS] Post-install action: Ensured default project templates" -ForegroundColor Green
-Write-Host "[INFO] Post-install action: Adding list content to template setup"
+Write-Host "[INFO] Post-install action: Adding default list content to template setup"
 
 $TemplateSetupMap = @{
     "Bygg"     = "Byggprosjekt";
@@ -54,6 +54,10 @@ $ListContentMap = @{
 $ListContent = Get-PnPListItem -List Listeinnhold
 $TemplateOptions = Get-PnPListItem -List Maloppsett
 
+
+$DefaultExists = $TemplateOptions | Where-Object { $_["IsDefaultTemplate"] -eq $True }
+
+
 $Standard = $TemplateOptions | Where-Object { $_["Title"] -eq $TemplateSetupMap["Standard"] }
 if ($Standard) {
     $StandardPlanner = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["PlannerStandard"] }
@@ -63,6 +67,9 @@ if ($Standard) {
     $StandardItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $StandardPlanner.Id }
     $StandardItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $StandardPhaseChecklist.Id }
 
+    if ($null -eq $DefaultExists) {
+        $Standard["IsDefaultTemplate"] = $True
+    }
     $Standard["ListContentConfigLookup"] = $StandardItems
     $Standard.SystemUpdate()
     $Standard.Context.ExecuteQuery()
@@ -102,3 +109,5 @@ if ($Anlegg) {
 else {
     Write-Host "[WARNING] Failed to find Anleggsprosjekt template. Please check the Maloppsett list." -ForegroundColor Yellow
 }
+
+Write-Host "[SUCCESS] Post-install action: Added default list content to template setup" -ForegroundColor Green
