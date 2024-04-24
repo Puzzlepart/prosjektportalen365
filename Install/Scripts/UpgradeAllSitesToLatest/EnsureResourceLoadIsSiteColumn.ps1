@@ -5,7 +5,7 @@ if ($global:__PreviousVersion -lt $TargetVersion) {
     if ($null -ne $ResourceAllocation) {
         $ResourceLoadSiteColumn = Get-PnPField -Identity "GtResourceLoad"
         $ResourceLoadListColumn = Get-PnPField -Identity "GtResourceLoad" -List $ResourceAllocation
-        if ($null -ne $ResourceLoadSiteColumn) {
+        if ($ResourceLoadSiteColumn.Id.Guid -ne $ResourceLoadListColumn.Id.Guid) {
             Write-Host "`t`tReplacing GtResourceLoad field"
             $PreviousValues = Get-PnPListItem -List $ResourceAllocation -Fields "ID", "GtResourceLoad" | ForEach-Object {
                 @{Id = $_.Id; GtResourceLoad = $_.FieldValues["GtResourceLoad"] }
@@ -18,13 +18,13 @@ if ($global:__PreviousVersion -lt $TargetVersion) {
             $ResourceAllocationContentType = Get-PnPContentType -Identity "Ressursallokering" -List "Ressursallokering" -ErrorAction SilentlyContinue
             if ($null -ne $ResourceAllocationContentType) {
                 Write-Host "`t`t`tRemoving old field"
-                Remove-PnPField -Identity $ResourceLoadListColumn -List $ResourceAllocation -Force >$null 2>&1
+                $ResourceOperation = Remove-PnPField -Identity $ResourceLoadListColumn -List $ResourceAllocation -Force
 
                 
                 Write-Host "`t`t`tAdding the site field"
                 $FieldLink = New-Object Microsoft.SharePoint.Client.FieldLinkCreationInformation
                 $FieldLink.Field = $ResourceLoadSiteColumn
-                $ResourceAllocationContentType.FieldLinks.Add($FieldLink) >$null 2>&1
+                $ResourceOperation = $ResourceAllocationContentType.FieldLinks.Add($FieldLink)
                 $ResourceAllocationContentType.Update($false)
                 $ResourceAllocationContentType.Context.ExecuteQuery()
 
@@ -46,7 +46,7 @@ if ($global:__PreviousVersion -lt $TargetVersion) {
                             # Assuming that noone had more than 200% previously
                             $ResourceLoad = ($ResourceLoad / 100) # Convert to percentage if it wasn't previously
                         }
-                        Set-PnPListItem -List $ResourceAllocation -Identity $_.Id -Values @{"GtResourceLoad" = $ResourceLoad } -UpdateType SystemUpdate >$null 2>&1
+                        $ResourceOperation = Set-PnPListItem -List $ResourceAllocation -Identity $_.Id -Values @{"GtResourceLoad" = $ResourceLoad } -UpdateType SystemUpdate
                     }
                 }
 
