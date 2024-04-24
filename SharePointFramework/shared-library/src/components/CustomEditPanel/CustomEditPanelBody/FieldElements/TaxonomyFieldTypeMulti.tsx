@@ -2,18 +2,12 @@ import { ModernTaxonomyPicker } from '@pnp/spfx-controls-react/lib/ModernTaxonom
 import React from 'react'
 import { FieldContainer } from '../../../FieldContainer'
 import { useCustomEditPanelContext } from '../../context'
-import { FieldElementComponent, Term } from './types'
-
-const mapInitialValues = (term: Term) => {
-  if ('id' in term) {
-    return {labels: term.labels, id: term.id}
-  } else {
-    return {labels: [{name: term.name, isDefault: true, languageTag: 'nb-NO'}], id: term.key}
-  }
-}
+import { FieldElementComponent } from './types'
+import { Term, useInitialTaxonomyValues } from './useInitialTaxonomyValues'
 
 export const TaxonomyFieldTypeMulti: FieldElementComponent = ({ field }) => {
   const context = useCustomEditPanelContext()
+  const mapInitialValues = useInitialTaxonomyValues()
   const terms = context.model.get<Term[]>(field)
 
   return (
