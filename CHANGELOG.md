@@ -36,7 +36,7 @@ Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detal
 - Rettet et problem med visning av 'valuta' felt-verdier i redigeringspaneler for prosjektstatus og prosjektinformasjon [#1503](https://github.com/Puzzlepart/prosjektportalen365/issues/1503)
 - Rettet et problem hvor visnings-id ikke la seg i URL feltet ved innlastning eller bytting av visninger i Porteføljeoversikt [#1355](https://github.com/Puzzlepart/prosjektportalen365/issues/1355)
 - Rettet et problem hvor visnings-id ikke la seg i URL feltet ved opprettelse av nye visninger, samt oppdatering av visningen (Porteføljeoversikter og andre aggregerte oversikter) [#1441](https://github.com/Puzzlepart/prosjektportalen365/issues/1441)
-- Rettet og forbedret skript for å oppgradere eksisterende prosjektområder [#1471](https://github.com/Puzzlepart/prosjektportalen365/issues/1471) [#1475](https://github.com/Puzzlepart/prosjektportalen365/issues/1475) [#1487](https://github.com/Puzzlepart/prosjektportalen365/issues/1487)
+- Rettet et problem hvor `Standardmal` ble satt som standard selvom andre maler var angitt som standard [#1471](https://github.com/Puzzlepart/prosjektportalen365/issues/1471)
 
 ### Forbedringer
 
@@ -45,6 +45,7 @@ Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detal
 - Tidslinjeliste baserer seg nå på område-id for å hente tidslinjeelementer, dette for å sikre at elementene hentes og vises riktig [#1477](https://github.com/Puzzlepart/prosjektportalen365/issues/1477)
 - Støtte for tallfelt i redigeringspaneler for prosjektstatus, prosjektinformasjon og tidslinje-liste [#1496](https://github.com/Puzzlepart/prosjektportalen365/issues/1496)
 - Forbedret ytelsen betraktelig og innlasting av store mengder prosjekter i prosjektutlisting webdel på forsiden av porteføljen [#1493](https://github.com/Puzzlepart/prosjektportalen365/pull/1493)
+- Forbedret skript for å oppgradere eksisterende prosjektområder [#1475](https://github.com/Puzzlepart/prosjektportalen365/issues/1475), [#1487](https://github.com/Puzzlepart/prosjektportalen365/issues/1487)
 
 ---
 
