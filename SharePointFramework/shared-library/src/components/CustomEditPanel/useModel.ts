@@ -1,5 +1,6 @@
-import { IPersonaProps, ITag } from '@fluentui/react'
+import { IPersonaProps } from '@fluentui/react'
 import _ from 'lodash'
+import { ITermInfo } from '@pnp/sp/taxonomy'
 import { useState } from 'react'
 import { EditableSPField } from '../../models'
 import { DefaultCaching } from '../../data/cache'
@@ -58,8 +59,13 @@ export function useModel(props: ICustomEditPanelProps) {
             .getById(field.getProperty('TextField'))
             .select('InternalName')
             .using(DefaultCaching)()
+
+          const languageTag = props.dataAdapter.spfxContext.pageContext.cultureInfo.currentUICultureName || 'nb-NO'
           return [
-            (value as ITag[]).map((v) => `-1;#${v.name}|${v.key}`).join(';#'),
+            (value as ITermInfo[]).map((v) => {
+              const label = v.labels.find(l => l.languageTag === languageTag)
+              return `-1;#${label?.name}|${v.id}`
+            }).join(';#'),
             textField.InternalName
           ]
         }
@@ -71,8 +77,13 @@ export function useModel(props: ICustomEditPanelProps) {
             .getById(field.getProperty('TextField'))
             .select('InternalName')
             .using(DefaultCaching)()
+
+          const languageTag = props.dataAdapter.spfxContext.pageContext.cultureInfo.currentUICultureName || 'nb-NO'
           return [
-            (value as ITag[]).map((v) => `-1;#${v.name}|${v.key}`).join(';#'),
+            (value as ITermInfo[]).map((v) => {
+              const label = v.labels.find(l => l.languageTag === languageTag)
+              return `-1;#${label?.name}|${v.id}`
+            }).join(';#'),
             textField.InternalName
           ]
         }
