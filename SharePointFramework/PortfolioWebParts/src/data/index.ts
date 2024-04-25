@@ -366,14 +366,18 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         'GtSiteIdOWSTEXT'
       )
 
-      const data = projects.map(item => {
-        const properties = _.reduce(item, (acc, value, key) => {
-          const column = _.find(configuration.refiners, { fieldName: key })
-          if (column) {
-            acc[column.internalName] = value
-          }
-          return acc
-        }, [])
+      const data = projects.map((item) => {
+        const properties = _.reduce(
+          item,
+          (acc, value, key) => {
+            const column = _.find(configuration.refiners, { fieldName: key })
+            if (column) {
+              acc[column.internalName] = value
+            }
+            return acc
+          },
+          []
+        )
 
         return {
           siteId: item?.['GtSiteIdOWSTEXT'],
@@ -392,7 +396,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       const configElement = _.find(timelineConfig, { title: strings.ProjectLabel })
 
       return { data, reports, configElement, columns: configuration.refiners }
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**

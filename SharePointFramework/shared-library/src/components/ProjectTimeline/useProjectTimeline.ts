@@ -44,15 +44,21 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     const projectId = data.items.find(
       (i) => i.data?.projectUrl === props.pageContext.site.absoluteUrl
     )?.id
-    const topGroup = data.groups.find((i) => i.id === projectId)
-    projectId &&
-      (data.groups = [topGroup, ...data.groups.filter((grp) => grp?.id !== projectId)].filter(
+
+    if (projectId) {
+      const topGroup = data.groups.find((i) => i.id === projectId)
+      data.groups = [topGroup, ...data.groups.filter((grp) => grp?.id !== projectId)].filter(
         (grp) => grp
-      ))
+      )
+    }
 
     if (activeFiltersKeys.length > 0) {
       const items = activeFiltersKeys.reduce(
-        (newItems, key) => newItems.filter((i) => activeFilters[key].indexOf(get(i, key)) !== -1),
+        (newItems, key) =>
+          newItems.filter((i) => {
+            const values = get(i, key)?.includes(';') ? get(i, key)?.split(';') : [get(i, key)]
+            return values.some((value) => activeFilters[key].includes(value))
+          }),
         data.items
       )
       const groups = data.groups.filter((grp) => items.filter((i) => i.group === grp.id).length > 0)
@@ -75,7 +81,6 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     data: ITimelineData,
     refiners: ProjectColumn[]
   ): IFilterProps[] => {
-    console.log('getFilters', config, data)
     const columns = [
       { fieldName: 'data.category', name: strings.CategoryFieldLabel },
       { fieldName: 'data.type', name: strings.TypeLabel },
@@ -96,6 +101,7 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
 
     return columns.map((col) => {
       const uniqueValues = uniq(
+        // eslint-disable-next-line prefer-spread
         [].concat.apply(
           [],
           data.items
@@ -119,9 +125,7 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
         items: items,
         defaultCollapsed: col.isCollapsed
       }
-    }
-
-    )
+    })
   }
 
   /**
