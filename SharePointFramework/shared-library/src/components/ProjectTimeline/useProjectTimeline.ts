@@ -120,11 +120,15 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
           const filter = state.activeFilters[col.fieldName]
           const selected = filter ? filter.indexOf(value) !== -1 : false
 
-          if (col.fieldName.includes('GtIsProgram') || col.fieldName.includes('GtIsParentProject')) {
-            value = value === 'Ja' ? '1' : value === '' ? '0' : value
-          }
-
-          return { name: value, value, selected }
+          const name =
+            col.fieldName.includes('GtIsProgram') || col.fieldName.includes('GtIsParentProject')
+              ? value === '1'
+                ? 'Ja'
+                : value === '0'
+                ? 'Nei'
+                : value
+              : value
+          return { name: name, value, selected }
         })
 
       items = items.sort((a, b) => (a.value > b.value ? 1 : -1))

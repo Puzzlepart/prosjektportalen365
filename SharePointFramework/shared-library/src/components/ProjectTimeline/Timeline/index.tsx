@@ -33,19 +33,17 @@ export const Timeline: FC<ITimelineProps> = (props) => {
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider id={fluentProviderId} className={styles.root} theme={customLightTheme}>
-        {props.title && (
-          <div className={styles.header}>
-            <WebPartTitle
-              title={props.title}
-              description={format(props.infoText, encodeURIComponent(window.location.href))}
-            />
-            <div className={styles.commandBar}>
-              <div>
-                <Toolbar items={menuItems} />
-              </div>
+        <div className={styles.header}>
+          <WebPartTitle
+            title={props.title}
+            description={props.infoText}
+          />
+          <div className={styles.commandBar}>
+            <div>
+              <Toolbar items={menuItems} />
             </div>
           </div>
-        )}
+        </div>
 
         <div className={styles.timeline}>
           <ReactTimeline<ITimelineItem>
@@ -86,6 +84,7 @@ Timeline.defaultProps = {
     [-1, 'months'],
     [1, 'years']
   ],
+  title: strings.ProjectTimelineTitle,
   infoText: strings.ProjectTimelineInfoText
 }
 

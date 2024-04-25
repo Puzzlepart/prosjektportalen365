@@ -202,7 +202,7 @@
                                     "Id": "{{ControlId_ProgramTimelineWebPart}}",
                                     "Properties": {
                                         "title": "Tidslinje for underområder",
-                                        "infoText": "Her listes alle prosjektene med start- og sluttdato i prosjektet. Prosjekttidslinjen støtter også faser, delfaser og milepæler. Tidslinjeelementer til dette prosjektet opprettes i den<A HREF=\"../sitePages/Prosjekttidslinje.aspx\">lokale tidslinjeinnhold listen</A>. Prosjekter vises med rød farge, faser i blått, delfaser blågrønt, og milepæler i gult. For å zoome inn/ut i tidslinje: ALT+Musehjul",
+                                        "infoText": "Her listes alle prosjektene med start- og sluttdato i prosjektet. Prosjekttidslinjen støtter også faser, delfaser og milepæler. For å zoome inn/ut i tidslinje: ALT+Musehjul",
                                         "dataSource": "Prosjekttidslinje"
                                     }
                                 }
