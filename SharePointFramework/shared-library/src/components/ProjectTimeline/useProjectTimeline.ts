@@ -1,14 +1,15 @@
 import { IColumn } from '@fluentui/react/lib/DetailsList'
-import { get } from '@microsoft/sp-lodash-subset'
+import { get, uniq } from '@microsoft/sp-lodash-subset'
 import sortArray from 'array-sort'
 import { IFilterProps } from '../FilterPanel/Filter/types'
 import { IFilterItemProps } from '../FilterPanel/FilterItem/types'
 import strings from 'SharedLibraryStrings'
 import { useState } from 'react'
 import { ITimelineData } from '../../interfaces'
-import { TimelineConfigurationModel } from '../../models'
+import { ProjectColumn, TimelineConfigurationModel } from '../../models'
 import { IProjectTimelineProps, IProjectTimelineState } from './types'
 import { useProjectTimelineDataFetch } from './useProjectTimelineDataFetch'
+import { stringIsNullOrEmpty } from '@pnp/core'
 
 /**
  * Component logic hook for `ProjectTimeline`
@@ -71,33 +72,56 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
    */
   const getFilters = (
     config: TimelineConfigurationModel[],
-    data: ITimelineData
+    data: ITimelineData,
+    refiners: ProjectColumn[]
   ): IFilterProps[] => {
+    console.log('getFilters', config, data)
     const columns = [
+      { fieldName: 'data.category', name: strings.CategoryFieldLabel },
+      { fieldName: 'data.type', name: strings.TypeLabel },
+      { fieldName: 'data.tag', name: strings.TagFieldLabel },
       config.find((item) => item?.title === strings.ProjectLabel).timelineFilter && {
         fieldName: 'data.project',
         name: strings.SiteTitleLabel,
         isCollapsed: true
       },
-      { fieldName: 'data.category', name: strings.CategoryFieldLabel },
-      { fieldName: 'data.type', name: strings.TypeLabel },
-      { fieldName: 'data.tag', name: strings.TagFieldLabel }
+      ...refiners.map((refiner) => ({
+        fieldName: `data.properties.${refiner.internalName}`,
+        name: refiner.name,
+        isCollapsed: true
+      }))
     ]
+
     const hiddenItems = config.filter((item) => !item?.timelineFilter).map((item) => item.title)
 
-    return columns.map((col) => ({
-      column: { key: col.fieldName, minWidth: 0, ...col },
-      items: data.items
-        .filter((item) => !hiddenItems.includes(item.data?.type))
-        .map((i) => get(i, col.fieldName))
-        .filter((value, index, self) => value && self.indexOf(value) === index)
-        .map((name) => {
+    return columns.map((col) => {
+      const uniqueValues = uniq(
+        [].concat.apply(
+          [],
+          data.items
+            .filter((item) => !hiddenItems.includes(item.data?.type))
+            .map((i) => get(i, col.fieldName, '')?.split(';'))
+        )
+      )
+
+      let items: IFilterItemProps[] = uniqueValues
+        .filter((value: string) => !stringIsNullOrEmpty(value))
+        .map((value: string) => {
           const filter = state.activeFilters[col.fieldName]
-          const selected = filter ? filter.indexOf(name) !== -1 : false
-          return { name, value: name, selected }
-        }),
-      defaultCollapsed: col.isCollapsed
-    }))
+          const selected = filter ? filter.indexOf(value) !== -1 : false
+          return { name: value, value, selected }
+        })
+
+      items = items.sort((a, b) => (a.value > b.value ? 1 : -1))
+
+      return {
+        column: { key: col.fieldName, minWidth: 0, ...col },
+        items: items,
+        defaultCollapsed: col.isCollapsed
+      }
+    }
+
+    )
   }
 
   /**
@@ -118,7 +142,7 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     setState({ activeFilters })
     if (state?.data?.items) {
       const filteredData = getFilteredData(state?.data)
-      const filters = getFilters(state?.timelineConfig, state?.data)
+      const filters = getFilters(state?.timelineConfig, state?.data, state?.columns)
       setState({ filteredData, filters })
     }
   }
@@ -126,7 +150,7 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
   useProjectTimelineDataFetch(props, ($) => {
     if ($.error) setState({ error: $.error, loading: false })
     else {
-      const filters = getFilters($.timelineConfig, $.data)
+      const filters = getFilters($.timelineConfig, $.data, $.columns)
       const filteredData = getFilteredData($.data)
       setState({ ...$, filteredData, filters, loading: false })
     }

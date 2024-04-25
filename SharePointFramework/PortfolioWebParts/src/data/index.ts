@@ -357,34 +357,42 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
   public async fetchTimelineProjectData(timelineConfig: TimelineConfigurationModel[]) {
     try {
-      const hubSiteId = this._spfxContext.pageContext.legacyPageContext.hubSiteId
-      const [{ PrimarySearchResults: statusReports }] = await Promise.all([
-        this._sp.search({
-          ...config.DEFAULT_SEARCH_SETTINGS,
-          QueryTemplate: `DepartmentId:{${hubSiteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
-          SelectProperties: [
-            'Title',
-            'GtSiteIdOWSTEXT',
-            'GtCostsTotalOWSCURR',
-            'GtBudgetTotalOWSCURR'
-          ]
-        })
-      ])
+      const configuration = await this.getPortfolioConfig()
 
-      const configElement = _.find(timelineConfig, (col) => col.title === strings.ProjectLabel)
+      const { projects, statusReports } = await this._fetchDataForView(
+        configuration.views[0],
+        configuration,
+        this._spfxContext.pageContext.legacyPageContext.hubSiteId,
+        'GtSiteIdOWSTEXT'
+      )
+
+      const data = projects.map(item => {
+        const properties = _.reduce(item, (acc, value, key) => {
+          const column = _.find(configuration.refiners, { fieldName: key })
+          if (column) {
+            acc[column.internalName] = value
+          }
+          return acc
+        }, [])
+
+        return {
+          siteId: item?.['GtSiteIdOWSTEXT'],
+          properties
+        }
+      })
 
       const reports = statusReports
-        .map((report) => {
-          return {
-            siteId: report && report['GtSiteIdOWSTEXT'],
-            costsTotal: report && report['GtCostsTotalOWSCURR'],
-            budgetTotal: report && report['GtBudgetTotalOWSCURR']
-          }
-        })
-        .filter((p) => p)
+        .map((report) => ({
+          siteId: report?.['GtSiteIdOWSTEXT'],
+          costsTotal: report?.['GtCostsTotalOWSCURR'],
+          budgetTotal: report?.['GtBudgetTotalOWSCURR']
+        }))
+        .filter(Boolean)
 
-      return { reports, configElement }
-    } catch (error) {}
+      const configElement = _.find(timelineConfig, { title: strings.ProjectLabel })
+
+      return { data, reports, configElement, columns: configuration.refiners }
+    } catch (error) { }
   }
 
   /**

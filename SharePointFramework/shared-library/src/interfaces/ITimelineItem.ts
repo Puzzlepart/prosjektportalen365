@@ -21,6 +21,7 @@ export interface ITimelineItemData {
   allocation?: number
   comment?: string
   status?: string
+  properties?: any
 }
 
 export interface ITimelineItem {
