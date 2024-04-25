@@ -24,6 +24,7 @@ export const ResponsibleField: FC<IResponsibleFieldProps> = (props) => {
         freeform
         value={value}
         onOptionSelect={(_e, data) => {
+          setValue(data.optionText)
           props.onChange(data.optionValue)
         }}
         onChange={(e) => {
