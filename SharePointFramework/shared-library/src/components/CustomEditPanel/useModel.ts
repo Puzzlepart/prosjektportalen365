@@ -60,12 +60,15 @@ export function useModel(props: ICustomEditPanelProps) {
             .select('InternalName')
             .using(DefaultCaching)()
 
-          const languageTag = props.dataAdapter.spfxContext.pageContext.cultureInfo.currentUICultureName || 'nb-NO'
+          const languageTag =
+            props.dataAdapter.spfxContext.pageContext.cultureInfo.currentUICultureName || 'nb-NO'
           return [
-            (value as ITermInfo[]).map((v) => {
-              const label = v.labels.find(l => l.languageTag === languageTag)
-              return `-1;#${label?.name}|${v.id}`
-            }).join(';#'),
+            (value as ITermInfo[])
+              .map((v) => {
+                const label = v.labels.find((l) => l.languageTag === languageTag)
+                return `-1;#${label?.name}|${v.id}`
+              })
+              .join(';#'),
             textField.InternalName
           ]
         }
@@ -78,12 +81,15 @@ export function useModel(props: ICustomEditPanelProps) {
             .select('InternalName')
             .using(DefaultCaching)()
 
-          const languageTag = props.dataAdapter.spfxContext.pageContext.cultureInfo.currentUICultureName || 'nb-NO'
+          const languageTag =
+            props.dataAdapter.spfxContext.pageContext.cultureInfo.currentUICultureName || 'nb-NO'
           return [
-            (value as ITermInfo[]).map((v) => {
-              const label = v.labels.find(l => l.languageTag === languageTag)
-              return `-1;#${label?.name}|${v.id}`
-            }).join(';#'),
+            (value as ITermInfo[])
+              .map((v) => {
+                const label = v.labels.find((l) => l.languageTag === languageTag)
+                return `-1;#${label?.name}|${v.id}`
+              })
+              .join(';#'),
             textField.InternalName
           ]
         }

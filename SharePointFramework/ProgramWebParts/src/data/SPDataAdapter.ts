@@ -341,6 +341,37 @@ export class SPDataAdapter
    * @param timelineConfig Timeline configuration
    */
   public async fetchTimelineProjectData(timelineConfig: TimelineConfigurationModel[]) {
+    const configuration = await this.getPortfolioConfig()
+    const siteId = this.spfxContext.pageContext.site.id.toString()
+
+    const { projects } = await this._fetchDataForView(
+      configuration.views[0],
+      configuration,
+      this.spfxContext.pageContext.legacyPageContext.hubSiteIdhubSiteId,
+      'GtSiteIdOWSTEXT'
+    )
+
+    const data = projects
+      .map((item) => {
+        const properties = _.reduce(
+          item,
+          (acc, value, key) => {
+            const column = _.find(configuration.refiners, { fieldName: key })
+            if (column) {
+              acc[column.internalName] = value
+            }
+            return acc
+          },
+          []
+        )
+
+        return {
+          siteId: item?.['GtSiteIdOWSTEXT'],
+          properties
+        }
+      })
+      .filter((item) => item.siteId !== siteId)
+
     const searchQuery =
       'ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert'
     const selectProperties = ['GtSiteIdOWSTEXT', 'GtCostsTotalOWSCURR', 'GtBudgetTotalOWSCURR']
@@ -351,19 +382,18 @@ export class SPDataAdapter
       false,
       'GtSiteIdOWSTEXT'
     )
+
     const reports = statusReports
-      .map((report) => {
-        return {
-          siteId: report && report['GtSiteIdOWSTEXT'],
-          costsTotal: report && report['GtCostsTotalOWSCURR'],
-          budgetTotal: report && report['GtBudgetTotalOWSCURR']
-        }
-      })
-      .filter((p) => p)
+      .map((report) => ({
+        siteId: report?.['GtSiteIdOWSTEXT'],
+        costsTotal: report?.['GtCostsTotalOWSCURR'],
+        budgetTotal: report?.['GtBudgetTotalOWSCURR']
+      }))
+      .filter(Boolean)
 
-    const configElement = _.find(timelineConfig, (col) => col.title === strings.ProjectLabel)
+    const configElement = _.find(timelineConfig, { title: strings.ProjectLabel })
 
-    return { reports, configElement }
+    return { data, reports, configElement, columns: configuration.refiners }
   }
 
   public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationModel[]) {

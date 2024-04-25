@@ -12,7 +12,7 @@ import {
   ITimelineData,
   ITimelineGroup,
   ITimelineItem,
-  TimelineResourceType
+  TimelineGroupType
 } from 'pp365-shared-library/lib/interfaces'
 
 /**
@@ -36,7 +36,7 @@ const transformGroups = (searchResults: IAllocationSearchResult[]): ITimelineGro
     return {
       id: index,
       title,
-      resourceType: type === 'R' ? TimelineResourceType.Role : TimelineResourceType.User
+      type: type === 'R' ? TimelineGroupType.Role : TimelineGroupType.User
     }
   })
   return sortArray(groups, ['type', 'title'])

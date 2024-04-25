@@ -18,6 +18,7 @@ export class TimelineContentModel {
    * @param costsTotal Costs total
    * @param url Url
    * @param phase Phase
+   * @param properties Properties
    */
   constructor(
     public siteId: string,
@@ -31,7 +32,8 @@ export class TimelineContentModel {
     public budgetTotal?: string,
     public costsTotal?: string,
     public url?: string,
-    public phase?: string
+    public phase?: string,
+    public properties?: any
   ) {}
 
   /**
