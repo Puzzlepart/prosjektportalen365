@@ -115,7 +115,13 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
         .map((value: string) => {
           const filter = state.activeFilters[col.fieldName]
           const selected = filter ? filter.indexOf(value) !== -1 : false
-          return { name: value, value, selected }
+          const name =
+            col.fieldName === 'GtIsProgram' || col.fieldName === 'GtIsParentProject'
+              ? value === '1'
+                ? 'Ja'
+                : value
+              : value
+          return { name: name, value, selected }
         })
 
       items = items.sort((a, b) => (a.value > b.value ? 1 : -1))
