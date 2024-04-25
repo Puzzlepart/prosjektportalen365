@@ -84,7 +84,11 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     const columns = [
       { fieldName: 'data.category', name: strings.CategoryFieldLabel },
       { fieldName: 'data.type', name: strings.TypeLabel },
-      { fieldName: 'data.tag', name: strings.TagFieldLabel },
+      {
+        fieldName: 'data.tag',
+        name: strings.TagFieldLabel,
+        isCollapsed: true
+      },
       config.find((item) => item?.title === strings.ProjectLabel).timelineFilter && {
         fieldName: 'data.project',
         name: strings.SiteTitleLabel,
@@ -115,13 +119,12 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
         .map((value: string) => {
           const filter = state.activeFilters[col.fieldName]
           const selected = filter ? filter.indexOf(value) !== -1 : false
-          const name =
-            col.fieldName === 'GtIsProgram' || col.fieldName === 'GtIsParentProject'
-              ? value === '1'
-                ? 'Ja'
-                : value
-              : value
-          return { name: name, value, selected }
+
+          if (col.fieldName.includes('GtIsProgram') || col.fieldName.includes('GtIsParentProject')) {
+            value = value === 'Ja' ? '1' : value === '' ? '0' : value
+          }
+
+          return { name: value, value, selected }
         })
 
       items = items.sort((a, b) => (a.value > b.value ? 1 : -1))
