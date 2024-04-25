@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react'
 import { FluentProvider, IdPrefixProvider, useId } from '@fluentui/react-components'
 import { ITimelineItem } from '../../../interfaces/ITimelineItem'
 import moment from 'moment'
@@ -34,10 +33,7 @@ export const Timeline: FC<ITimelineProps> = (props) => {
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider id={fluentProviderId} className={styles.root} theme={customLightTheme}>
         <div className={styles.header}>
-          <WebPartTitle
-            title={props.title}
-            description={props.infoText}
-          />
+          <WebPartTitle title={props.title} description={props.infoText} />
           <div className={styles.commandBar}>
             <div>
               <Toolbar items={menuItems} />

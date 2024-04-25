@@ -344,14 +344,13 @@ export class SPDataAdapter
     const configuration = await this.getPortfolioConfig()
     const siteId = this.spfxContext.pageContext.site.id.toString()
 
-    const { projects } = await this._fetchDataForView(
+    const { items } = await this.fetchDataForViewBatch(
       configuration.views[0],
       configuration,
-      this.spfxContext.pageContext.legacyPageContext.hubSiteIdhubSiteId,
-      'GtSiteIdOWSTEXT'
+      this.spfxContext.pageContext.legacyPageContext.hubSiteIdhubSiteId
     )
 
-    const data = projects
+    const data = items
       .map((item) => {
         const properties = _.reduce(
           item,
