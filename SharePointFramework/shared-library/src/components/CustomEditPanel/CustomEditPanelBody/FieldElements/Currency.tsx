@@ -17,7 +17,7 @@ export const Currency: FieldElementComponent = ({ field }) => {
       <Input
         type='number'
         defaultValue={context.model.get<string>(field)}
-        onChange={(_, data) => context.model.set(field, data.value)}
+        onChange={(_, data) => context.model.set(field, data.value || null)}
         placeholder={strings.Placeholder.TextField}
       />
     </FieldContainer>
