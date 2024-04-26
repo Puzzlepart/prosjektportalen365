@@ -26,7 +26,8 @@ const createProjectGroups = (projects: ProjectListModel[]): ITimelineGroup[] => 
     return {
       title: project.title,
       siteId: project.siteId,
-      path: project.url
+      path: project.url,
+      isProgram: project.isProgram
     }
   })
 
@@ -36,7 +37,8 @@ const createProjectGroups = (projects: ProjectListModel[]): ITimelineGroup[] => 
       title: project.title,
       type: TimelineGroupType.Project,
       siteId: project.siteId,
-      path: project.path
+      path: project.path,
+      isProgram: project.isProgram
     }
   })
 

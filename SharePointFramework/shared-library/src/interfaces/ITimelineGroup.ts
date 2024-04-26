@@ -12,6 +12,7 @@ export interface ITimelineGroup {
   type?: TimelineGroupType
   siteId?: string
   path?: string
+  isProgram?: boolean
 }
 
 export interface ITimelineGroups {

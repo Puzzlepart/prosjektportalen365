@@ -40,6 +40,7 @@ Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detal
 - Rettet et problem hvor taksonomifelt i redigeringspanel ikke støttet nivåer av termer [#1504](https://github.com/Puzzlepart/prosjektportalen365/issues/1504)
 - Rettet et problem hvor "Ansvarlig"-feltet i administrering av tiltak ikke viste personen som er valgt i feltet [#1506](https://github.com/Puzzlepart/prosjektportalen365/issues/1506)
 - Rettet et problem hvor det ikke var mulig å lagre tom verdi i valuta/tall felt fra redigeringspanel [#1510](https://github.com/Puzzlepart/prosjektportalen365/issues/1510)
+- Rettet et problem hvor lenke til prosjektets tidslinje ikke lenket riktig for program [#1511](https://github.com/Puzzlepart/prosjektportalen365/issues/1511)
 
 ### Forbedringer
 
