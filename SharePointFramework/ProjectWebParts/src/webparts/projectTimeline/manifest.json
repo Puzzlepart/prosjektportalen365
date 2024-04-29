@@ -3,7 +3,7 @@
   "id": "d156652b-9121-47af-89ae-1fe8427c53da",
   "alias": "ProjectTimelineWebPart",
   "componentType": "WebPart",
-  "version": "1.9.0",
+  "version": "1.9.1",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "hiddenFromToolbox": true,

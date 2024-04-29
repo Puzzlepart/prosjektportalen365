@@ -8,7 +8,7 @@
 <br />
 
 
-[![version](https://img.shields.io/badge/version-1.9.0-green.svg)](https://semver.org)
+[![version](https://img.shields.io/badge/version-1.9.1-green.svg)](https://semver.org)
 
 <details>
 <summary>📖 Innholdsfortegnelse</summary>
@@ -21,8 +21,8 @@
 * [➤ Hva er Prosjektportalen for Microsoft 365?](#-hva-er-prosjektportalen-for-microsoft-365)
 * [➤ Installering og oppgradering](#-installering-og-oppgradering)
 * [➤ Kontakt](#-kontakt)
-* [➤ Nettleserstøtte](#-nettleserstøtte)
-* [➤ Bidragsytere](#-bidragsytere)
+* [➤ Nettleserstøtte](#-nettlesersttte)
+* [➤ Contributors](#-contributors)
 * [➤ Utvikling](#-utvikling)
 </details>
 
@@ -83,7 +83,7 @@ Vi gjør vårt beste for å støtte alle nettlesere, men følger retningslinjer 
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#contributors)
 
-## ➤ Bidragsytere
+## ➤ Contributors
 	
 
 | [Tarjei Ormestøyl](undefined)                    | [Ole Martin Pettersen](undefined)                | [Remi Blom-Ohlsen](undefined)                    |

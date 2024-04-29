@@ -3,7 +3,7 @@
   "id": "b8bec0be-2354-443d-a3ca-24b36e8ea7dc",
   "alias": "ProjectInformationWebPart",
   "componentType": "WebPart",
-  "version": "1.9.0",
+  "version": "1.9.1",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "hiddenFromToolbox": true,
