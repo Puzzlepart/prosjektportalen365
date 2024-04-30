@@ -682,7 +682,7 @@
             <pnp:DataValue FieldName="Title">Belastning</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtResourceLoad</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtResourceLoadOWSNMBR</pnp:DataValue>
-            <pnp:DataValue FieldName="GtFieldDataType">Number</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Percentage</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Ressursallokering</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMaxWidth">160</pnp:DataValue>
