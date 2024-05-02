@@ -250,9 +250,9 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
    * @param rowTitle Title of the row in the registration list
    */
   private _updateProcessingList = async (rowId: number, rowTitle: string): Promise<void> => {
-    const url = rowTitle.replace(/ /g, '-').replace(/é/g, 'e')
+    const urlFriendlyTitle = rowTitle.replace(/é/g, 'e').replace(/[^a-zA-Z0-9-_ÆØÅæøå ]/g, '')
     const baseUrl = this.context.pageContext.web.absoluteUrl
-    const ideaUrl = `${baseUrl}/SitePages/KUR-${url}.aspx`
+    const ideaUrl = `${baseUrl}/SitePages/KUR-${urlFriendlyTitle}.aspx`
 
     await this._sp.web.lists.getByTitle(this._config.processingList).items.add({
       Title: rowTitle,
