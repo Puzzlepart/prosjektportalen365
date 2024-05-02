@@ -6,7 +6,12 @@ import sortArray from 'array-sort'
 import _ from 'lodash'
 import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
-import { parseUrlHash, setUrlHash, sortAlphabetically, sortNumerically } from 'pp365-shared-library/lib/util'
+import {
+  parseUrlHash,
+  setUrlHash,
+  sortAlphabetically,
+  sortNumerically
+} from 'pp365-shared-library/lib/util'
 import { getObjectValue as get } from 'pp365-shared-library/lib/util/getObjectValue'
 import {
   IPortfolioAggregationHashState,
