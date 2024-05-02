@@ -42,12 +42,6 @@ export const ListSection: FC = () => {
   return (
     <BaseSection>
       <StatusElement summation={summation} />
-      {summation && summation.result !== null && summation.description && (
-        <div>
-          <strong>{summation.description}</strong>
-          <span>{summation.result}</span>
-        </div>
-      )}
       {shouldRenderList && renderList()}
     </BaseSection>
   )

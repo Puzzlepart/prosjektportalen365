@@ -44,7 +44,7 @@ export const StatusElement: FC<IStatusElementProps> = (props) => {
                 </div>
               </div>
             </div>
-            {props.summation && (
+            {props.summation && props.summation?.result && (
               <div className={styles.summation}>
                 <div className={styles.label}>{props.summation.description}</div>
                 <div className={styles.value}>

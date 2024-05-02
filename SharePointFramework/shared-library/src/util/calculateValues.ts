@@ -25,5 +25,7 @@ export const calculateValues = (sumField: any, items: any) => {
     result = sum / values.length
   }
 
+  if (isNaN(result)) return null
+
   return { result, description, renderAs }
 }

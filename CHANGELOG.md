@@ -41,7 +41,7 @@ Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detal
 - Rettet et problem hvor "Ansvarlig"-feltet i administrering av tiltak ikke viste personen som er valgt i feltet [#1506](https://github.com/Puzzlepart/prosjektportalen365/issues/1506)
 - Rettet et problem hvor det ikke var mulig å lagre tom verdi i valuta/tall felt fra redigeringspanel [#1510](https://github.com/Puzzlepart/prosjektportalen365/issues/1510)
 - Rettet et problem hvor lenke til prosjektets tidslinje ikke lenket riktig for program [#1511](https://github.com/Puzzlepart/prosjektportalen365/issues/1511)
-- Rettet et problem hvor Ja/nei kolonner ikke ble vist som 1/0 i filterpanel [#1522](https://github.com/Puzzlepart/prosjektportalen365/issues/1522)
+- Rettet et problem hvor Ja/Nei kolonner ble vist som 1/0 i filterpanel [#1522](https://github.com/Puzzlepart/prosjektportalen365/issues/1522)
 
 ### Forbedringer
 
