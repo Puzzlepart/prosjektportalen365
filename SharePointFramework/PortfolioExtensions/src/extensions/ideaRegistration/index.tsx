@@ -14,7 +14,7 @@ import '@pnp/sp/lists'
 import '@pnp/sp/folders/list'
 import '@pnp/sp/site-groups/web'
 import '@pnp/sp/clientside-pages/web'
-import { ClientsideText } from '@pnp/sp/clientside-pages'
+import { ClientsideText, IClientsidePage } from '@pnp/sp/clientside-pages'
 import { isUserAuthorized } from '../../helpers/isUserAuthorized'
 import strings from 'PortfolioExtensionsStrings'
 import { Choice, IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
@@ -217,8 +217,8 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
 
     Log.info(LOG_SOURCE, `Updated ${this._config.registrationList}: Approved`)
 
-    await this._updateProcessingList(rowId, rowTitle)
-    await this._createSitePage(row)
+    const pageUrl = await this._createSitePage(row)
+    await this._updateProcessingList(rowId, rowTitle, pageUrl)
 
     window.location.reload()
   }
@@ -256,15 +256,15 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
    * @param rowId Id of the row in the registration list
    * @param rowTitle Title of the row in the registration list
    */
-  private _updateProcessingList = async (rowId: number, rowTitle: string): Promise<void> => {
-    const urlFriendlyTitle = rowTitle.replace(/é/g, 'e').replace(/[^a-zA-Z0-9-_ÆØÅæøå ]/g, '')
-    const baseUrl = this.context.pageContext.web.absoluteUrl
-    const ideaUrl = `${baseUrl}/SitePages/KUR-${urlFriendlyTitle}.aspx`
-
+  private _updateProcessingList = async (
+    rowId: number,
+    rowTitle: string,
+    pageUrl: string
+  ): Promise<void> => {
     await this._sp.web.lists.getByTitle(this._config.processingList).items.add({
       Title: rowTitle,
       GtRegistratedIdeaId: rowId,
-      GtIdeaUrl: ideaUrl
+      GtIdeaUrl: pageUrl
     })
 
     Log.info(LOG_SOURCE, 'Updated work list')
@@ -287,10 +287,10 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
    *
    * @param row Selected row
    */
-  private _createSitePage = async (row: RowAccessor): Promise<void> => {
+  private _createSitePage = async (row: RowAccessor): Promise<string> => {
     const title: string = row.getValueByName('Title')
     const urlFriendlyTitle = title.replace(/é/g, 'e').replace(/[^a-zA-Z0-9-_ÆØÅæøå ]/g, '')
-    const page = await this._sp.web.addClientsidePage(
+    const page: IClientsidePage = await this._sp.web.addClientsidePage(
       `KUR-${urlFriendlyTitle}`,
       `KUR-${urlFriendlyTitle}`,
       'Article'
@@ -351,9 +351,9 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
     )
 
     section.emphasis = 1
+    page.save()
+    const savedPage = await page.load()
 
-    await page.save()
-    Log.info(LOG_SOURCE, 'Site created successfully')
-    window.location.reload()
+    return savedPage['json'].AbsoluteUrl
   }
 }
