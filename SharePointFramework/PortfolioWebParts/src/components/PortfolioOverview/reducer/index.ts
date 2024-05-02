@@ -1,8 +1,7 @@
 import { format, MessageBarType } from '@fluentui/react'
 import { createReducer } from '@reduxjs/toolkit'
-import sortArray from 'array-sort'
 import strings from 'PortfolioWebPartsStrings'
-import { ProjectColumn, setUrlHash } from 'pp365-shared-library'
+import { ProjectColumn, setUrlHash, sortAlphabetically, sortNumerically } from 'pp365-shared-library'
 import _ from 'underscore'
 import { IPortfolioOverviewHashState, IPortfolioOverviewState } from '../types'
 import {
@@ -146,20 +145,17 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
           })
         } else {
           if (payload.column.dataType === 'currency') {
-            state.items = state.items.sort((a, b) => {
-              const aValue =
-                parseFloat(a[payload.column.fieldName]?.replace(/[^0-9.-]+/g, '')) || null
-              const bValue =
-                parseFloat(b[payload.column.fieldName]?.replace(/[^0-9.-]+/g, '')) || null
-              if (aValue === bValue) return 0
-              if (aValue === null) return isSortedDescending ? 1 : -1
-              if (bValue === null) return isSortedDescending ? -1 : 1
-              return isSortedDescending ? aValue - bValue : aValue - bValue
-            })
+            state.items = state.items.sort((a, b) =>
+              sortNumerically(a, b, isSortedDescending, payload.column.fieldName, 'kr ')
+            )
+          } else if (payload.column.dataType === 'number') {
+            state.items = state.items.sort((a, b) =>
+              sortNumerically(a, b, isSortedDescending, payload.column.fieldName)
+            )
           } else {
-            state.items = sortArray(state.items, [payload.column.fieldName], {
-              reverse: !isSortedDescending
-            })
+            state.items.sort((a, b) =>
+              sortAlphabetically(a, b, isSortedDescending, payload.column.fieldName)
+            )
           }
         }
         state.sortBy = _.pick(payload, ['column', 'customSort'])

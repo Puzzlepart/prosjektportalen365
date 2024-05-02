@@ -6,7 +6,7 @@ import sortArray from 'array-sort'
 import _ from 'lodash'
 import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
-import { parseUrlHash, setUrlHash } from 'pp365-shared-library/lib/util'
+import { parseUrlHash, setUrlHash, sortAlphabetically, sortNumerically } from 'pp365-shared-library/lib/util'
 import { getObjectValue as get } from 'pp365-shared-library/lib/util/getObjectValue'
 import {
   IPortfolioAggregationHashState,
@@ -223,18 +223,17 @@ export const createPortfolioAggregationReducer = (
         state.groups = null
       }
       if (payload.column.dataType === 'currency') {
-        state.items = state.items.sort((a, b) => {
-          const aValue = parseFloat(a[payload.column.fieldName]?.replace(/[^0-9.-]+/g, '')) || null
-          const bValue = parseFloat(b[payload.column.fieldName]?.replace(/[^0-9.-]+/g, '')) || null
-          if (aValue === bValue) return 0
-          if (aValue === null) return isSortedDescending ? 1 : -1
-          if (bValue === null) return isSortedDescending ? -1 : 1
-          return isSortedDescending ? aValue - bValue : aValue - bValue
-        })
+        state.items = state.items.sort((a, b) =>
+          sortNumerically(a, b, isSortedDescending, payload.column.fieldName, 'kr ')
+        )
+      } else if (payload.column.dataType === 'number') {
+        state.items = state.items.sort((a, b) =>
+          sortNumerically(a, b, isSortedDescending, payload.column.fieldName)
+        )
       } else {
-        state.items = sortArray([...state.items], [payload.column.fieldName], {
-          reverse: !isSortedDescending
-        })
+        state.items.sort((a, b) =>
+          sortAlphabetically(a, b, isSortedDescending, payload.column.fieldName)
+        )
       }
       state.columns = [...state.columns].map((col) => {
         col.isSorted = col.key === payload.column.key
