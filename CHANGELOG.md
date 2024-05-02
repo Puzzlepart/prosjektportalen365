@@ -53,6 +53,7 @@ Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detal
 - Forbedret skript for å oppgradere eksisterende prosjektområder [#1475](https://github.com/Puzzlepart/prosjektportalen365/issues/1475), [#1487](https://github.com/Puzzlepart/prosjektportalen365/issues/1487)
 - Forbedret filtreringsmuligheter for prosjekttidslinje på Porteføljenivå og Program/overordnet for underområder. Det er nå mulig å filtrere på prosjekter og prosjektinformasjon som er presisert i listen `Prosjektkolonner` [#1489](https://github.com/Puzzlepart/prosjektportalen365/issues/1489)
 - Oppdatert `Fasesider` prosjekttillegg til å støtte den nye vertikale inndeling [#1521](https://github.com/Puzzlepart/prosjektportalen365/issues/1521)
+- Dersom det er angitt et nytt navn til et prosjekt etter opprettelse blir dette nå synkronisert ned til porteføljen [#1518](https://github.com/Puzzlepart/prosjektportalen365/issues/1518)
 
 ---
 
