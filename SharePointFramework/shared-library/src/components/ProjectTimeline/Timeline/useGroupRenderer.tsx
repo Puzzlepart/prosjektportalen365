@@ -16,11 +16,7 @@ export function useGroupRenderer() {
       <div style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
         {group.type === TimelineGroupType.Project ? (
           <Tooltip content={strings.TimelineGroupDescription} relationship='description' withArrow>
-            <Link
-              href={`${group.path}/SitePages/${page}.aspx`}
-              target='_blank'
-              title={group.title}
-            >
+            <Link href={`${group.path}/SitePages/${page}.aspx`} target='_blank' title={group.title}>
               {group.title}
             </Link>
           </Tooltip>
