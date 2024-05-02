@@ -222,7 +222,7 @@ export class DataAdapter extends SPDataAdapterBase {
     itemContext: RiskActionItemContext
   ): Promise<RiskActionItemContext> {
     const tasks = [
-      ...(itemContext.hiddenFieldValues.tasks ?? []),
+      ...(itemContext.hiddenFieldValues?.tasks ?? []),
       ...newTasks.map<RiskActionPlannerTaskReference>((newTask) => ({
         id: newTask.id,
         title: newTask.title,
