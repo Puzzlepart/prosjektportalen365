@@ -11,6 +11,7 @@ import DialogPrompt from 'components/IdeaApprovalDialog'
 import { SPFI, spfi, SPFx } from '@pnp/sp'
 import '@pnp/sp/webs'
 import '@pnp/sp/lists'
+import '@pnp/sp/folders/list'
 import '@pnp/sp/site-groups/web'
 import '@pnp/sp/clientside-pages/web'
 import { ClientsideText } from '@pnp/sp/clientside-pages'
@@ -85,17 +86,12 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
         break
 
       case this._openLinkCmd.id:
-        const { title } = this.context.pageContext.list
-        const [config] = (await this._getIdeaConfiguration()).filter(
-          (item) => item.registrationList === title
-        )
         try {
-          const processingList = await this._sp.web.lists
-            .getByTitle(config.processingList)
-            .rootFolder.select('ServerRelativeUrl')()
-          window.open(processingList.ServerRelativeUrl, '_blank')
+          const ideaProcessingUrl = await this._getIdeaProcessingList()
+          window.open(ideaProcessingUrl, '_blank')
         } catch (error) {
           alert(strings.IdeaProcessingListErrorMessage)
+          throw new Error(error)
         }
         break
 
@@ -114,6 +110,17 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
       .items()
 
     return config.map((item) => new IdeaConfigurationModel(item)).filter(Boolean)
+  }
+
+  /**
+   * Get the IdeaProcessing list url from the IdeaConfiguration list
+   */
+  private _getIdeaProcessingList = async (): Promise<string> => {
+    const [config] = (await this._getIdeaConfiguration()).filter(
+      (item) => item.registrationList === this.context.pageContext.list.title
+    )
+    const processingList = await this._sp.web.lists.getByTitle(config.processingList).rootFolder()
+    return processingList.ServerRelativeUrl
   }
 
   /**
