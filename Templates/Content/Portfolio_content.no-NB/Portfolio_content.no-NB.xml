@@ -9,7 +9,6 @@
                         <pnp:Property Key="Title" Value="Standardmal" />
                         <pnp:Property Key="GtDescription" Value="Dette er standardmalen for prosjekt som følger med Prosjektportalen 365. Blir overskrevet ved en oppgradering." />
                         <pnp:Property Key="IconName" Value="Page" />
-                        <pnp:Property Key="IsDefaultTemplate" Value="1" />
                         <pnp:Property Key="GtIsProgram" Value="0" />
                         <pnp:Property Key="GtIsParentProject" Value="0" />
                     </pnp:Properties>
@@ -21,7 +20,6 @@
                         <pnp:Property Key="IconName" Value="Page" />
                         <pnp:Property Key="GtIsProgram" Value="0" />
                         <pnp:Property Key="GtIsParentProject" Value="1" />
-                        <pnp:Property Key="IsDefaultTemplate" Value="0" />
                     </pnp:Properties>
                 </pnp:File>
                 <pnp:File Src="ProjectTemplates/Programmal.txt" Folder="Prosjektmaler" Level="Published" Overwrite="true">
@@ -31,10 +29,9 @@
                         <pnp:Property Key="IconName" Value="Page" />
                         <pnp:Property Key="GtIsProgram" Value="1" />
                         <pnp:Property Key="GtIsParentProject" Value="0" />
-                        <pnp:Property Key="IsDefaultTemplate" Value="0" />
                     </pnp:Properties>
                 </pnp:File>
-                <pnp:File Src="ProjectExtensions/Fasesider.txt" Folder="Prosjekttillegg" Level="Published" Overwrite="true">
+                <pnp:File Src="ProjectExtensions/Fasesider.txt" Folder="Prosjekttillegg" Level="Published" Overwrite="false">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Fasesider" />
                         <pnp:Property Key="GtDescription" Value="Egne sider for de ulike standardfasene i Prosjektportalen til bruk sammen med dynamisk forside-funksjonaliteten. Dette tillegget inneholder sider for Konsept, Planlegge, Gjennomføre, Avslutte og Realisere." />
