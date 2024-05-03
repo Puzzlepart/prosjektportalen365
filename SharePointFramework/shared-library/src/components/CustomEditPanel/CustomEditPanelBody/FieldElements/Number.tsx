@@ -9,7 +9,7 @@ export const Number: FieldElementComponent = ({ field }) => {
   const context = useCustomEditPanelContext()
   return (
     <FieldContainer
-      iconName='TextNumberFormat'
+      iconName='NumberSymbol'
       label={field.displayName}
       description={field.description}
       required={field.required}
