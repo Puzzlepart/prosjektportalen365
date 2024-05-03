@@ -106,7 +106,10 @@ if ($YesOrNo -eq "y" -or $CI_MODE) {
 }
 
 Write-Host "Upgrading existing sites from version $global:__PreviousVersion to $global:__InstalledVersion)..."
-$ProjectsInHub | ForEach-Object {
+$ProjectsInHub | ForEach-Object -Begin {$ProgressCount = 0} {    
+    [Int16]$PercentComplete = (++$ProgressCount)*100/$ProjectsInHub.Count
+    Write-Progress -Activity "Upgrading all sites in hub" -Status "$PercentComplete% Complete" -PercentComplete $PercentComplete -CurrentOperation "Processing site $_"
+    
     Write-Host "`tUpgrading site $_"
     UpgradeSite -Url $_
     Write-Host "`t`tDone processing $_" -ForegroundColor Green
