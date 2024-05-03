@@ -23,6 +23,7 @@ export class SPField {
   public ShowInEditForm?: boolean
   public ShowInNewForm?: boolean
   public ShowInDisplayForm?: boolean
+  public NumberOfLines?: number = 3
 
   /**
    * Constructs a new `SPField` instance.

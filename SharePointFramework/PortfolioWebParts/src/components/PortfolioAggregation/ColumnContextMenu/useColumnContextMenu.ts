@@ -1,4 +1,5 @@
 import { ContextualMenuItemType, IContextualMenuItem, format } from '@fluentui/react'
+import _ from 'lodash'
 import * as strings from 'PortfolioWebPartsStrings'
 import { indexOf } from 'underscore'
 import { useAddColumn } from '../../List'
@@ -24,8 +25,8 @@ export function useColumnContextMenu() {
   )
   const onOpenChange: MenuProps['onOpenChange'] = (_, data) => setOpen(data.open)
   const [checkedValues, setCheckedValues] = useState<MenuProps['checkedValues']>({})
-  const onCheckedValueChange: MenuProps['onCheckedValueChange'] = (_, data) => {
-    setCheckedValues({ ...checkedValues, [data.name]: data.checkedItems })
+  const onCheckedValueChange: MenuProps['onCheckedValueChange'] = (_event, data) => {
+    setCheckedValues({ ...checkedValues, [data.name]: [_.last(data.checkedItems)].filter(Boolean) })
   }
 
   useEffect(() => {
@@ -68,7 +69,7 @@ export function useColumnContextMenu() {
       {
         key: 'SORT_DESC',
         data: {
-          name: 'sort',
+          name: `${column.key}_sort`,
           value: 'desc'
         },
         text: strings.SortDescLabel,
@@ -80,7 +81,7 @@ export function useColumnContextMenu() {
       {
         key: 'SORT_ASC',
         data: {
-          name: 'sort',
+          name: `${column.key}_sort`,
           value: 'asc'
         },
         text: strings.SortAscLabel,
@@ -143,5 +144,6 @@ export function useColumnContextMenu() {
       }
     ].filter(Boolean) as IContextualMenuItem[]
   }
+
   return columnContextMenu
 }

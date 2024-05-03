@@ -26,6 +26,7 @@ export class SectionModel {
   public customComponent: string
   public statusValue: string
   public statusComment?: string
+  public sumField?: string[]
   public statusProperties?: any
 
   /**
@@ -49,6 +50,7 @@ export class SectionModel {
     this.showAsSection = _item.GtSecShowAsSection
     this.sortOrder = _item.GtSortOrder
     this.customComponent = _item.GtSecCustomComponent
+    this.sumField = _item.GtSecSumField ? _item.GtSecSumField.split(';') : []
     this.statusProperties = {}
   }
 

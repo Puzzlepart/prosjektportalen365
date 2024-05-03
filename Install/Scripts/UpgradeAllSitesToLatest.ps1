@@ -12,6 +12,7 @@ $global:__InstalledVersion = $null
 $global:__PreviousVersion = $null
 $global:__PnPConnection = $null
 $global:__CurrentChannelConfig = $null
+$InstallStartTime = (Get-Date -Format o)
 
 $ScriptDir = (Split-Path -Path $MyInvocation.MyCommand.Definition -Parent)
 
@@ -57,6 +58,11 @@ function Connect-SharePoint {
 
 function UpgradeSite($Url) {
     Connect-SharePoint -Url $Url
+    $ProjectPropertiesList = Get-PnPList -Identity "Prosjektegenskaper" -ErrorAction SilentlyContinue
+    if ($null -eq $ProjectPropertiesList) {
+        Write-Host "`t`tNo Prosjektegenskaper list found - this site is not a qualified Prosjektportalen site. Skipping upgrade of site $Url" -ForegroundColor Yellow
+        return
+    }
     Get-ChildItem $ScriptDir/UpgradeAllSitesToLatest -Filter *.ps1 | ForEach-Object {
         . $_.FullName
     }
@@ -65,12 +71,14 @@ function UpgradeSite($Url) {
 Write-Host "This script will update all existing sites in a Prosjektportalen installation. This requires you to have the SharePoint admin role"
 
 Set-PnPTraceLog -Off
-Start-Transcript -Path "$PSScriptRoot/UpgradeSites_Log-$((Get-Date).ToString('yyyy-MM-dd-HH-mm')).txt"
+$LogFilePath = "$PSScriptRoot/UpgradeSites_Log-$((Get-Date).ToString('yyyy-MM-dd-HH-mm')).txt"
+Start-Transcript -Path $LogFilePath
 
 Connect-SharePoint -Url $Url
 $InstallLogEntries = Get-PnPListItem -List "Installasjonslogg" -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>"
-$global:__InstalledVersion = ($InstallLogEntries | Select-Object -First 1).FieldValues["InstallVersion"]
-$global:__PreviousVersion = ($InstallLogEntries | Select-Object -Skip 1 -First 1).FieldValues["InstallVersion"] 
+$NativeLogEntries = $InstallLogEntries | Where-Object {$_.FieldValues.Title -match "PP365+[\s]+[0-9]+[.][0-9]+[.][0-9]+[.][a-zA-Z0-9]+"}
+$global:__InstalledVersion = ($NativeLogEntries | Select-Object -First 1).FieldValues["InstallVersion"]
+$global:__PreviousVersion = ($NativeLogEntries | Select-Object -Skip 1 -First 1).FieldValues["InstallVersion"]
 
 [System.Uri]$Uri = $Url
 $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
@@ -85,7 +93,7 @@ $UserName = $Context.Web.CurrentUser.LoginName
 
 Write-Host "Retrieving all sites of the Project Portal hub..."
 $ProjectsHub = Get-PnPTenantSite -Identity $Url
-$ProjectsInHub = Get-PnPTenantSite | Where-Object { $_.HubSiteId -eq $ProjectsHub.HubSiteId -and $_.Url -ne $ProjectsHub.Url } | ForEach-Object { return $_.Url }
+$ProjectsInHub = Get-PnPTenantSite -Template "GROUP#0" | Where-Object { $_.HubSiteId -eq $ProjectsHub.HubSiteId -and $_.Url -ne $ProjectsHub.Url } | ForEach-Object { return $_.Url }
 
 Write-Host "The following sites were found to be part of the Project Portal hub:"
 $ProjectsInHub | ForEach-Object { Write-Host "`t$_" }
@@ -98,8 +106,11 @@ if (-not $CI_MODE) {
     while ("y", "n" -notcontains $YesOrNo)
 }
 
-if ($YesOrNo -eq "y" -or $CI_MODE) {
-    $ProjectsInHub | ForEach-Object {
+if ($YesOrNo -eq "y" -or $CI_MODE) {    
+    $ProjectsInHub | ForEach-Object -Begin {$ProgressCount = 0} {
+        [Int16]$PercentComplete = (++$ProgressCount)*100/$ProjectsInHub.Count
+        Write-Progress -Activity "Granting access to all sites in the hub" -Status "$PercentComplete% Complete" -PercentComplete $PercentComplete -CurrentOperation "Processing site $_"
+        
         Write-Host "`tGranting access to $_"
         Set-PnPTenantSite -Url $_ -Owners $UserName
     }
@@ -124,13 +135,48 @@ if (-not $CI_MODE) {
 }
 
 if ($YesOrNo -eq "y" -or $CI_MODE) {
-    $ProjectsInHub | ForEach-Object {
+    $ProjectsInHub | ForEach-Object -Begin {$ProgressCount = 0} {    
+        [Int16]$PercentComplete = (++$ProgressCount)*100/$ProjectsInHub.Count
+        Write-Progress -Activity "Removing admin access" -Status "$PercentComplete% Complete" -PercentComplete $PercentComplete -CurrentOperation "Processing site $_"
+        
         Write-Host "`tRemoving access to $_"
         Connect-SharePoint -Url $_
         Remove-PnPSiteCollectionAdmin -Owners $UserName
     }
 }
 
+Write-Progress -Activity "Upgrading all sites in hub" -Status "Completed" -PercentComplete 100 -Completed
+Write-Host "Upgrade of all project sites is complete" -ForegroundColor Green
 
 Stop-Transcript
+
+Connect-SharePoint -Url $Url
+
+$InstallEntry = @{
+    Title            = "PP365 UpgradeAllSitesToLatest.ps1"
+    InstallStartTime = $InstallStartTime; 
+    InstallEndTime   = (Get-Date -Format o); 
+    InstallVersion   = $global:__InstalledVersion;
+    InstallCommand   = $MyInvocation.Line.Substring(2);
+}
+
+if ($null -ne $UserName) {
+    $InstallEntry.InstallUser = $UserName
+}
+if (-not [string]::IsNullOrEmpty($CI)) {
+    $InstallEntry.InstallCommand = "GitHub CI";
+}
+if ($Channel -ne "main") {
+    $InstallEntry.InstallChannel = $global:__CurrentChannelConfig.Channel
+}
+
+## Logging installation to SharePoint list
+$InstallationEntry = Add-PnPListItem -List "Installasjonslogg" -Values $InstallEntry -ErrorAction SilentlyContinue
+
+## Attempting to attach the log file to installation entry
+if ($null -ne $InstallationEntry) {
+    $AttachmentOutput = Add-PnPListItemAttachment -List "Installasjonslogg" -Identity $InstallationEntry.Id -Path $LogFilePath -ErrorAction SilentlyContinue
+}
+
+
 $global:__PnPConnection = $null

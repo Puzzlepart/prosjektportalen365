@@ -14,6 +14,7 @@ import {
 import { getClassProperties, tryParseJson } from '../../util'
 import {
   ILocalProjectInformationItemContext,
+  IPhaseField,
   IProjectDataServiceParams,
   IProjectInformationData
 } from './types'
@@ -283,10 +284,16 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
    * fallback to updating the entity item if the local property item is not found.
    *
    * @param phase Phase
-   * @param phaseTextField Phase text field
+   * @param phaseField Phase field
    */
-  public async updateProjectPhase(phase: ProjectPhaseModel, phaseTextField: string): Promise<void> {
-    const properties = { [phaseTextField]: phase.toString() }
+  public async updateProjectPhase(
+    phase: ProjectPhaseModel,
+    phaseField: IPhaseField
+  ): Promise<void> {
+    const properties = {
+      [phaseField.textField]: phase.toString(),
+      [`${phaseField.fieldName}Text`]: phase.name
+    }
     try {
       const propertyItemContext = await this._getLocalProjectInformationItemContext()
       if (propertyItemContext) await propertyItemContext.item.update(properties)

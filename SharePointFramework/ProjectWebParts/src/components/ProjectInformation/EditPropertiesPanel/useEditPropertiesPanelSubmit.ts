@@ -38,6 +38,7 @@ export function useEditPropertiesPanelSubmit(): ICustomEditPanelSubmitProps {
         saveProgressText: strings.UpdatingProjectPropertiesStatusText
       })
       try {
+        properties.Title = context.props.webTitle
         data = await SPDataAdapter.project.updateProjectProperties(properties, true)
       } catch (e) {
         setState({

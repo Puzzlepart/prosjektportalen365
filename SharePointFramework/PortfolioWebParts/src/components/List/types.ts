@@ -52,7 +52,7 @@ export interface IListProps<T extends IColumn = IColumn>
 
   /**
    * Render list in justified layout mode. Manages which columns are visible, tries
-   * to size them according to their min/max rules and drops  off columns that can't
+   * to size them according to their min/max rules and drops off columns that can't
    * fit and have isCollapsible set.
    */
   isListLayoutModeJustified?: boolean
@@ -67,6 +67,11 @@ export interface IListProps<T extends IColumn = IColumn>
    * Column definitions. If none are provided, default columns will be an empty array.
    */
   columns?: T[]
+
+  /**
+   * Columns that should be hidden in the list.
+   */
+  hiddenColumns?: T[]
 
   /**
    * Error to render in the list if the data fetch or something else fails.

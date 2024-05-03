@@ -43,11 +43,11 @@ export class StatusReport {
 
   /**
    * Get persisted section data from the report. If no persisted section data is found, null is returned.
-   * If the JSON is invalid, null is returned.
+   * If the JSON is invalid, null is returned. File name to get is `PersistedSectionDataJson.json`.
    */
   public get persistedSectionData(): Record<string, any> {
     const persistedSectionData = this._attachments.find(
-      (a) => a.name?.toLowerCase() === 'persistedsectiondata.json'
+      (a) => a.name?.toLowerCase() === 'persistedsectiondatajson.json'
     )
     try {
       if (persistedSectionData) {

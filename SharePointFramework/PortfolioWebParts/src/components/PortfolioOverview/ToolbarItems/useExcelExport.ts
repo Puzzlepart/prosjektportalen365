@@ -37,11 +37,23 @@ export function useExcelExport(context: IPortfolioOverviewContext) {
                 })
               })
             })
+
+      const filteredItems = items.map((item) => {
+        const filteredItem = { ...item }
+        Object.keys(filteredItem).forEach((key) => {
+          const column = columns.find((c) => c.fieldName === key)
+          if (column && (column.dataType === 'currency' || column.dataType === 'number')) {
+            filteredItem[key] = Math.floor(filteredItem[key])
+          }
+        })
+        return filteredItem
+      })
+
       let fileNamePart: string
       if (includeViewNameInExcelExportFilename) {
         fileNamePart = currentView?.title.replace(/[^a-z0-9]/gi, '-')
       }
-      ExcelExportService.export(items, columns, fileNamePart)
+      ExcelExportService.export(filteredItems, columns, fileNamePart)
       context.dispatch(EXCEL_EXPORT_SUCCESS())
     } catch (error) {
       context.dispatch(EXCEL_EXPORT_ERROR(error))

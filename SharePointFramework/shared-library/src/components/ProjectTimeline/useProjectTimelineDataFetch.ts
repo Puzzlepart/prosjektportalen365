@@ -26,7 +26,8 @@ const createProjectGroups = (projects: ProjectListModel[]): ITimelineGroup[] => 
     return {
       title: project.title,
       siteId: project.siteId,
-      path: project.url
+      path: project.url,
+      isProgram: project.isProgram
     }
   })
 
@@ -36,7 +37,8 @@ const createProjectGroups = (projects: ProjectListModel[]): ITimelineGroup[] => 
       title: project.title,
       type: TimelineGroupType.Project,
       siteId: project.siteId,
-      path: project.path
+      path: project.path,
+      isProgram: project.isProgram
     }
   })
 
@@ -90,7 +92,8 @@ const transformItems = (
         category: item.getConfig('timelineCategory'),
         elementType: item.getConfig('elementType'),
         filter: item.getConfig('timelineFilter'),
-        tag: item.tag
+        tag: item.tag,
+        properties: item.properties
       }
       return {
         id,
@@ -158,9 +161,13 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
 
     let timelineItems = filteredProjects.map<TimelineContentModel>((project) => {
       const config = projectData.configElement
-      const statusReport = projectData?.reports?.find((statusReport) => {
+      const statusReport = projectData?.reports?.find((statusReport: any) => {
         return statusReport.siteId === project.siteId
       })
+      const data = projectData?.data?.find((data: any) => {
+        return data.siteId === project.siteId
+      })
+
       return new TimelineContentModel(
         project.siteId,
         project.title,
@@ -173,20 +180,23 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
         statusReport?.budgetTotal,
         statusReport?.costsTotal,
         project.url,
-        project.phase
+        project.phase,
+        data?.properties
       ).usingConfig(config)
     })
 
     timelineItems = [...timelineItems, ...filteredTimelineItems]
     const groups = createProjectGroups(filteredProjects)
     const items = transformItems(timelineItems, groups)
+    const columns = projectData?.columns ?? []
 
     return {
       data: {
         items,
         groups
       },
-      timelineConfig
+      timelineConfig,
+      columns
     } as Partial<IProjectTimelineState>
   } catch (error) {
     return { error }

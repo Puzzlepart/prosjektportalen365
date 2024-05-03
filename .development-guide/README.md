@@ -16,29 +16,29 @@
 
 ## ➤ Table of Contents
 
-* [➤ Site Design / Site Scripts](#-site-design--site-scripts)
-* [➤ JS Provisjoneringsmal](#-js-provisjoneringsmal)
-* [➤ Maler](#-maler)
-	* [JSON-provisjonmal](#json-provisjonmal)
-		* [Bygging av JSON-maler](#bygging-av-json-maler)
-	* [PnP-maler](#pnp-maler)
-		* [Portefølje](#portefølje)
-		* [Innholdsmaler](#innholdsmaler)
-* [➤ NPM](#-npm)
-* [➤ Bygge en ny utgivelse](#-bygge-en-ny-utgivelse)
-* [➤ Continuous Integration](#-continuous-integration)
-	* [CI (releases/*)](#ci-releases)
-	* [Bygg og installer (dev)](#bygg-og-installer-dev)
-	* [CI (channels/test)](#ci-channelstest)
-	* [Bygg utgivelse (main)](#bygg-utgivelse-main)
-* [➤ Opprettelse av en ny versjon](#-opprettelse-av-en-ny-versjon)
-	* [Patch-utgivelse](#patch-utgivelse)
-	* [Minor-utgivelse](#minor-utgivelse)
-* [➤ Versjonering](#-versjonering)
-* [➤ Installasjonskanaler](#-installasjonskanaler)
-	* [Generere en ny kanalkonfigurasjon](#generere-en-ny-kanalkonfigurasjon)
-	* [Bygge en ny versjon for en kanal](#bygge-en-ny-versjon-for-en-kanal)
-* [➤ README generering](#-readme-generering)
+	* [➤ Site Design / Site Scripts](#-site-design--site-scripts)
+	* [➤ JS Provisjoneringsmal](#-js-provisjoneringsmal)
+	* [➤ Maler](#-maler)
+		* [JSON-provisjonmal](#json-provisjonmal)
+			* [Bygging av JSON-maler](#bygging-av-json-maler)
+		* [PnP-maler](#pnp-maler)
+			* [Portefølje](#porteflje)
+			* [Innholdsmaler](#innholdsmaler)
+	* [➤ NPM](#-npm)
+	* [➤ Bygge en ny utgivelse](#-bygge-en-ny-utgivelse)
+	* [➤ Continuous Integration](#-continuous-integration)
+		* [CI (releases/*)](#ci-releases)
+		* [Bygg og installer (dev)](#bygg-og-installer-dev)
+		* [CI (channels/test)](#ci-channelstest)
+		* [Bygg utgivelse (main)](#bygg-utgivelse-main)
+	* [➤ Opprettelse av en ny versjon](#-opprettelse-av-en-ny-versjon)
+		* [Patch-utgivelse](#patch-utgivelse)
+		* [Minor-utgivelse](#minor-utgivelse)
+	* [➤ Versjonering](#-versjonering)
+	* [➤ Installasjonskanaler](#-installasjonskanaler)
+		* [Generere en ny kanalkonfigurasjon](#generere-en-ny-kanalkonfigurasjon)
+		* [Bygge en ny versjon for en kanal](#bygge-en-ny-versjon-for-en-kanal)
+	* [➤ README generering](#-readme-generering)
 </details>
 
 
@@ -281,7 +281,7 @@ Denne oppgaven, `automatic-versioning.js`, kan også kjøres som en **npm-skript
 npm run sync-version
 ```
 
-Etter at skriptet `sync-version` har blitt kjørt, er det viktig å publisere SharePointFramework-pakkene (@Shared, PortfolioWebParts, osv...) til npm.
+Etter at skriptet `sync-version` har blitt kjørt, er det viktig å publisere SharePointFramework-pakkene (PortfolioWebParts, osv...) til npm.
 
 Dette gjøres for hver pakke ved å kjøre følgende skript:
 

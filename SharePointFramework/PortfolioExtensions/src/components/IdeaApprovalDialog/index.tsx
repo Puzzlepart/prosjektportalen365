@@ -17,7 +17,7 @@ import {
   useId,
   IdPrefixProvider
 } from '@fluentui/react-components'
-import { IIdeaApprovalDialogProps } from './types'
+import { Choice, IIdeaApprovalDialogProps } from './types'
 import { FC, useContext } from 'react'
 import { IDeaApprovalDialogContext } from './context'
 import { useIdeaApprovalDialogState } from './useIdeaApprovalDialogState'
@@ -28,6 +28,16 @@ export const IdeaApprovalDialog: FC<IIdeaApprovalDialogProps> = (props) => {
   const fluentProviderId = useId('fp-approval-dialog')
   const context = useContext(IDeaApprovalDialogContext)
   const { state, setState } = useIdeaApprovalDialogState()
+
+  const handleOptionSelect = (_, data) => {
+    setState({ choice: data.optionText })
+  }
+
+  const handleCommentChange = (_, { value }) => {
+    setState({ comment: value })
+  }
+
+  const isSubmitDisabled = state.comment.length === 0 || state.choice.length === 0
 
   return (
     <IDeaApprovalDialogContext.Provider value={context}>
@@ -43,33 +53,35 @@ export const IdeaApprovalDialog: FC<IIdeaApprovalDialogProps> = (props) => {
               />
               <Field label={strings.ActionLabel}>
                 <Combobox
-                  onOptionSelect={(_, data) => setState({ choice: data.optionText })}
+                  onOptionSelect={handleOptionSelect}
                   placeholder={strings.ActionLabelPlaceholder}
                 >
-                  <Option value={strings.ApproveChoice}>{strings.ApproveChoice}</Option>
-                  <Option value={strings.ConsiderationChoice}>{strings.ConsiderationChoice}</Option>
-                  <Option value={strings.RejectChoice}>{strings.RejectChoice}</Option>
+                  {props.choices?.map((choice) => (
+                    <Option key={choice.key} value={choice.choice}>
+                      {choice.choice}
+                    </Option>
+                  ))}
                 </Combobox>
               </Field>
               <Field label={strings.CommentLabel}>
                 <Textarea
                   rows={3}
                   placeholder={strings.CommentLabelPlaceholder}
-                  onChange={(_, { value }) => setState({ comment: value })}
+                  onChange={handleCommentChange}
                 />
               </Field>
             </DialogContent>
             <DialogActions>
-              <Button title={strings.CancelLabel} onClick={props.close}>
+              <Button title={strings.CancelLabel} onClick={props.onClose}>
                 {strings.CancelLabel}
               </Button>
               <Button
                 appearance='primary'
                 title={strings.SubmitLabel}
                 onClick={() => {
-                  props.submit(state.choice, state.comment)
+                  props.onSubmit(state.choice, state.comment)
                 }}
-                disabled={state.comment.length > 0 && state.choice.length > 0 ? false : true}
+                disabled={isSubmitDisabled}
               >
                 {strings.SubmitLabel}
               </Button>
@@ -86,15 +98,17 @@ export default class RecommendationDialog extends BaseDialog {
   public selectedChoice: string
   public ideaTitle: string
   public dialogMessage: string
+  public choices: Choice[]
   public comment: string
 
   public render(): void {
     ReactDOM.render(
       <IdeaApprovalDialog
-        close={this.close}
-        submit={this._submit}
+        onClose={this.close}
+        onSubmit={this._submit}
         ideaTitle={this.ideaTitle}
         dialogMessage={this.dialogMessage}
+        choices={this.choices}
       />,
       this.domElement
     )

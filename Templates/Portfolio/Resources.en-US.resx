@@ -470,7 +470,7 @@
     <value>Allocation of resources</value>
   </data>
   <data name="ContentTypes_UncertaintySection_Name" xml:space="preserve">
-    <value>Risikoseksjon</value>
+    <value>Usikkerhetseksjon</value>
   </data>
   <data name="ContentTypes_UncertaintySection_Description" xml:space="preserve">
     <value>Uncertainties related to the project</value>
@@ -678,6 +678,9 @@
   </data>
   <data name="SiteFields_GtSecViewFields_DisplayName" xml:space="preserve">
     <value>Fields</value>
+  </data>
+  <data name="SiteFields_GtSecSumField_DisplayName" xml:space="preserve">
+    <value>Summary field</value>
   </data>
   <data name="SiteFields_GtSecIcon_DisplayName" xml:space="preserve">
     <value>Icon</value>
@@ -951,6 +954,12 @@
   </data>
   <data name="SiteFields_GtActionDescription_Description" xml:space="preserve">
     <value>Describe the action</value>
+  </data>
+  <data name="SiteFields_GtActionComment_DisplayName" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="SiteFields_GtActionComment_Description" xml:space="preserve">
+    <value>Comment for the action</value>
   </data>
   <data name="SiteFields_GtActionResponsible_DisplayName" xml:space="preserve">
     <value>Action Responsible</value>
@@ -1523,7 +1532,10 @@
     <value>If the benefits are to be realized in different parts of the organization (or in several businesses), it is recommended to appoint a benefit owner in the different parts of the line organization (or the businesses) that own different parts of the planned benefits. Benefit owners then have a distributed responsibility for their part of the benefits, and play an important role as the benefit responsible's extended arm and local supporter.</value>
   </data>
   <data name="SiteFields_GtSecViewFields_Description" xml:space="preserve">
-      <value>Fields that are to be displayed in the security view.</value>
+      <value>Fields that are to be displayed in the sections view.</value>
+  </data>
+  <data name="SiteFields_GtSecSumField_Description" xml:space="preserve">
+      <value>Fields to be summed, example: 'GtSum;Avg;Average of summation;currency'. Summation types: Add and Avg (Addition and Average). You can also specify to render as currency, defaults to number.</value>
   </data>
   <data name="SiteFields_GtSecIcon_Description" xml:space="preserve">
     <value>Name of icon from UI Fabric. See https://uifabricicons.azurewebsites.net/.</value>
@@ -1998,7 +2010,7 @@
     <value>Idea registration</value>
   </data>
   <data name="SiteFields_GtIdeaRegistrationList_Description" xml:space="preserve">
-    <value>Which idea registration list should the item be linked to?</value>
+    <value>Which idea registration list should the item be linked to? (Must include registrering)</value>
   </data>
   <data name="SiteFields_GtIdeaProcessingList_DisplayName" xml:space="preserve">
     <value>Idea processing</value>
@@ -2095,6 +2107,18 @@
   </data>
   <data name="SiteFields_GtIdeaPriority_Description" xml:space="preserve">
     <value>Priority for the idea</value>
+  </data>
+  <data name="SiteFields_GtIdeaProcessingChoices_DisplayName" xml:space="preserve">
+    <value>Recommendations for processing</value>
+  </data>
+  <data name="SiteFields_GtIdeaProcessingChoices_Description" xml:space="preserve">
+    <value>Recommendations are configured as JSON, multiple choices can be added, note that the key must remain the same for the default choices</value>
+  </data>
+  <data name="SiteFields_GtIdeaRegistrationChoices_DisplayName" xml:space="preserve">
+    <value>Recommendations for registration</value>
+  </data>
+  <data name="SiteFields_GtIdeaRegistrationChoices_Description" xml:space="preserve">
+    <value>Recommendations are configured as JSON, multiple choices can be added, note that the key must remain the same for the default choices</value>
   </data>
   <data name="SiteFields_GtBAEndDateOriginal_DisplayName" xml:space="preserve">
     <value>Original handover date</value>

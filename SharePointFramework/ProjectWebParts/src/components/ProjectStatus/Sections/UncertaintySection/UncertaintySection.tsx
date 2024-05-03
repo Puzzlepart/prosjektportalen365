@@ -16,13 +16,14 @@ import { useUncertaintySection } from './useUncertaintySection'
 
 export const UncertaintySection: FC = () => {
   const context = useProjectStatusContext()
-  const { state, matrixElements, items, columns, shouldRenderContent } = useUncertaintySection()
+  const { state, matrixElements, items, columns, summation, shouldRenderContent } =
+    useUncertaintySection()
 
   /**
    * Render content for the Uncertainty section. Handles potential errors and renders OpportunityMatrix
    * or RiskMatrix based on the content type of the first item in the list.
    */
-  function renderContent() {
+  const renderContent = () => {
     if (state.error)
       return (
         <UserMessage
@@ -68,7 +69,7 @@ export const UncertaintySection: FC = () => {
 
   return (
     <BaseSection>
-      <StatusElement />
+      <StatusElement summation={summation} />
       {shouldRenderContent && renderContent()}
     </BaseSection>
   )

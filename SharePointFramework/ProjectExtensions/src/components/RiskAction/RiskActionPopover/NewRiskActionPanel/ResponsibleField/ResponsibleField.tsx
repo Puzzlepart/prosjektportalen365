@@ -4,6 +4,8 @@ import { FieldContainer } from 'pp365-shared-library'
 import React, { FC, useEffect, useState } from 'react'
 import { useRiskActionFieldCustomizerContext } from '../../../../../riskAction/context'
 import { IResponsibleFieldProps } from './types'
+import { format } from '@fluentui/react'
+import { stringIsNullOrEmpty } from '@pnp/core'
 
 export const ResponsibleField: FC<IResponsibleFieldProps> = (props) => {
   const context = useRiskActionFieldCustomizerContext()
@@ -19,7 +21,10 @@ export const ResponsibleField: FC<IResponsibleFieldProps> = (props) => {
   return (
     <FieldContainer label={strings.ResponsibleFieldLabel} iconName='Person'>
       <Combobox
+        freeform
+        value={value}
         onOptionSelect={(_e, data) => {
+          setValue(data.optionText)
           props.onChange(data.optionValue)
         }}
         onChange={(e) => {
@@ -38,11 +43,11 @@ export const ResponsibleField: FC<IResponsibleFieldProps> = (props) => {
             />
           </Option>
         ))}
-        {matchingUsers.length === 0 ? (
-          <Option key='no-results' text=''>
-            {strings.ResponsibleFieldNoResults}
+        {!stringIsNullOrEmpty(value) && matchingUsers.length === 0 && (
+          <Option key='ResponsibleFieldNoResults' text=''>
+            {format(strings.ResponsibleFieldNoResults, value)}
           </Option>
-        ) : null}
+        )}
       </Combobox>
     </FieldContainer>
   )

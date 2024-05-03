@@ -46,6 +46,11 @@ export class EditableSPField extends SPField {
   public required: boolean
 
   /**
+   * The number of lines for the field.
+   */
+  public numberOfLines?: number
+
+  /**
    * Whether the field is read-only.
    */
   public isReadOnly: boolean
@@ -90,6 +95,7 @@ export class EditableSPField extends SPField {
     this.type = _field.TypeAsString
     this.isReadOnly = _field.SchemaXml ? _field.SchemaXml.indexOf('ReadOnly="TRUE"') !== -1 : false
     this.required = _field.Required
+    this.numberOfLines = _field.NumberOfLines ?? 3
     this._fieldValueMap = createFieldValueMap()
   }
 
@@ -103,6 +109,7 @@ export class EditableSPField extends SPField {
   public init(columns: ProjectColumn[], currentLocale?: string, configurationName?: string) {
     this.column = columns.find((c) => c.internalName === this.internalName)
     this._isExternal = _.isEmpty(columns)
+    this.displayName = this.column?.name ?? this.displayName
     this._initConfiguration(currentLocale, configurationName)
     return this
   }

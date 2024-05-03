@@ -1,21 +1,18 @@
-export enum TimelineResourceType {
-  User,
-  Role
-}
-
 export enum TimelineGroupType {
   Project,
   Category,
-  Type
+  Type,
+  User,
+  Role
 }
 
 export interface ITimelineGroup {
   id: number
   title: string
   type?: TimelineGroupType
-  resourceType?: TimelineResourceType
   siteId?: string
   path?: string
+  isProgram?: boolean
 }
 
 export interface ITimelineGroups {

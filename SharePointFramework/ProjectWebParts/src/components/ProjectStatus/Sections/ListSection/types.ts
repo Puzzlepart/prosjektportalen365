@@ -20,4 +20,11 @@ export interface IListSectionState<T> {
 export interface IListSectionData {
   columns?: IColumn[]
   items?: any[]
+  summation?: ISummation
+}
+
+export interface ISummation {
+  result?: string | number
+  description?: string
+  renderAs?: 'number' | 'currency' | 'percentage'
 }

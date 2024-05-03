@@ -51,6 +51,7 @@ export const createFieldValueMap = (): Map<string, (value: EditableSPFieldValue)
             imageUrl: getUserPhoto(secondaryText)
           })
         )
-    ]
+    ],
+    ['Currency', ({ $ }) => $]
   ])
 }

@@ -100,7 +100,9 @@ import {
   CircleFilled,
   CircleRegular,
   DismissCircleRegular,
-  DismissCircleFilled
+  DismissCircleFilled,
+  NumberSymbolFilled,
+  NumberSymbolRegular
 } from '@fluentui/react-icons'
 
 /**
@@ -178,6 +180,10 @@ export const iconCatalog = {
   TextNumberFormat: {
     regular: TextNumberFormatRegular,
     filled: TextNumberFormatFilled
+  },
+  NumberSymbol: {
+    regular: NumberSymbolRegular,
+    filled: NumberSymbolFilled
   },
   Person: {
     regular: PersonRegular,

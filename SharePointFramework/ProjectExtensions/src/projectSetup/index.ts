@@ -54,13 +54,26 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   @override
   public async onInit(): Promise<void> {
     this.sp = createSpfiInstance(this.context)
-    const { isSiteAdmin, groupId } = this.context.pageContext.legacyPageContext
-    if (!isSiteAdmin || !groupId) return
+
     try {
       this._isSetup = await this._isProjectSetup()
 
       // eslint-disable-next-line default-case
       switch (this._validation) {
+        case ProjectSetupValidation.NotSiteAdmin: {
+          throw new ProjectSetupError(
+            'NotSiteAdmin',
+            strings.NotSiteAdminErrorMessage,
+            strings.NotSiteAdminErrorStack
+          )
+        }
+        case ProjectSetupValidation.NoGroupId: {
+          throw new ProjectSetupError(
+            'NoGroupId',
+            strings.NoGroupIdErrorMessage,
+            strings.NoGroupIdErrorStack
+          )
+        }
         case ProjectSetupValidation.InvalidWebLanguage: {
           await deleteCustomizer(this)
           throw new ProjectSetupError(
@@ -475,16 +488,14 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    * Get validation
    */
   private get _validation(): ProjectSetupValidation {
+    const { isSiteAdmin, groupId, hubSiteId, siteId } = this.context.pageContext.legacyPageContext
+
+    if (!isSiteAdmin) return ProjectSetupValidation.NotSiteAdmin
+    if (!groupId) return ProjectSetupValidation.NoGroupId
     if (this.context.pageContext.web.language !== 1044)
       return ProjectSetupValidation.InvalidWebLanguage
-    if (!this.context.pageContext.legacyPageContext.hubSiteId)
-      return ProjectSetupValidation.NoHubConnection
-    if (
-      this.context.pageContext.legacyPageContext.siteId.includes(
-        this.context.pageContext.legacyPageContext.hubSiteId
-      )
-    )
-      return ProjectSetupValidation.IsHubSite
+    if (!hubSiteId) return ProjectSetupValidation.NoHubConnection
+    if (siteId.includes(hubSiteId)) return ProjectSetupValidation.IsHubSite
     if (this._isSetup) return ProjectSetupValidation.AlreadySetup
     return ProjectSetupValidation.Ready
   }

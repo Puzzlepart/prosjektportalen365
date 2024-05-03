@@ -83,4 +83,15 @@ if ($null -ne $LastInstall) {
         Invoke-PnPSiteTemplate -Path "$TemplatesBasePath/1.8.1.pnp" -ErrorAction Stop
         Write-Host "[SUCCESS] Successfully applied PnP template [1.8.1] to [$Url]" -ForegroundColor Green
     }
+
+    if ($PreviousVersion -lt "1.9.1") {
+        Write-Host "[INFO] Removing deprecated SiteScripts"
+        Remove-PnPSiteScript -Identity "IdeaProcessing - test" -Force -ErrorAction SilentlyContinue
+        Remove-PnPSiteScript -Identity "IdeaProjectData - test" -Force -ErrorAction SilentlyContinue
+        Remove-PnPSiteScript -Identity "IdeaRegistration - test" -Force -ErrorAction SilentlyContinue
+        Remove-PnPSiteScript -Identity "IdeaProcessing" -Force -ErrorAction SilentlyContinue
+        Remove-PnPSiteScript -Identity "IdeaProjectData" -Force -ErrorAction SilentlyContinue
+        Remove-PnPSiteScript -Identity "IdeaRegistration" -Force -ErrorAction SilentlyContinue
+        Write-Host "[SUCCESS] Successfully removed deprecated SiteScripts" -ForegroundColor Green
+    }
 }

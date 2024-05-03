@@ -112,5 +112,15 @@ export enum ProjectSetupValidation {
   /**
    * The site is hubsite
    */
-  IsHubSite
+  IsHubSite,
+
+  /**
+   * The site is not connected to a group
+   */
+  NoGroupId,
+
+  /**
+   * The current user is not site admin
+   */
+  NotSiteAdmin
 }

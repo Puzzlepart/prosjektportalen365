@@ -91,3 +91,9 @@ export interface IProjectDataServiceParams {
    */
   logLevel?: LogLevel
 }
+
+export interface IPhaseField {
+  fieldName?: string
+  termSetId?: string
+  textField?: string
+}

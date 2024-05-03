@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import SPDataAdapter from 'data/SPDataAdapter'
 import _ from 'lodash'
 import {
@@ -25,11 +26,17 @@ export async function fetchTimelineData(
       strings.TimelineContentListName
     )
 
-    const projectDeliveries = (
-      props.showProjectDeliveries
+    let projectDeliveries = []
+
+    try {
+      projectDeliveries = props.showProjectDeliveries
         ? await props.sp.web.lists.getByTitle(props.projectDeliveriesListName).items.getAll()
         : []
-    )
+    } catch (error) {
+      console.error('Failed to fetch project deliveries:', error)
+    }
+
+    projectDeliveries = projectDeliveries
       .map((item) => {
         const config = _.find(timelineConfig, (col) => col.title === props.configItemTitle)
         return new TimelineContentModel(
@@ -83,7 +90,7 @@ export async function fetchTimelineData(
       .getAll()
 
     const timelineListItems = timelineContentItems.filter(
-      (item) => item.GtSiteIdLookup.Title === props.webTitle
+      (item) => item.GtSiteIdLookup?.GtSiteId === props.siteId
     )
 
     const columns = defaultViewFields

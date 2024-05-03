@@ -27,7 +27,18 @@ export function usePortfolioOverviewFilters(context: IPortfolioOverviewContext) 
     )
     let items: IFilterItemProps[] = uniqueValues
       .filter((value: string) => !stringIsNullOrEmpty(value))
-      .map((value: string) => ({ name: value, value }))
+      .map((value: string) => {
+        const name =
+          column.fieldName.includes('GtIsProgram') || column.fieldName.includes('GtIsParentProject')
+            ? value === '1'
+              ? 'Ja'
+              : value === '0'
+              ? 'Nei'
+              : value
+            : value
+
+        return { name: name, value }
+      })
     items = items.sort((a, b) => (a.value > b.value ? 1 : -1))
     return { column, items }
   })

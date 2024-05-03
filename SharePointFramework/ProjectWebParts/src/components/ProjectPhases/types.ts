@@ -43,6 +43,11 @@ export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
   useEndArrow: boolean
 
   /**
+   * Show phase site page message when switching phases if dynamic homepage is used
+   */
+  showPhaseSitePageMessage: boolean
+
+  /**
    * Use dynamic homepage when switching phases
    */
   useDynamicHomepage: boolean
@@ -112,11 +117,15 @@ export interface IProjectPhasesData {
   checklistData?: ChecklistData
 
   /**
-   * Phase text field name. Used to update the phase
+   * Phase field. Used to update the phase
    * of the project. This is the `TextField` that is
    * connected to the term field in SharePoint.
    */
-  phaseTextField?: string
+  phaseField?: {
+    fieldName?: string
+    termSetId?: string
+    textField?: string
+  }
 
   /**
    * Phase site pages

@@ -144,6 +144,10 @@
                 {
                     "ID": "2ae541a5-5ecc-481d-afb6-c03a6f1e71b4",
                     "Name": "GtActionResponsible"
+                },
+                {
+                    "ID": "a187c8e3-944c-485a-ad11-c654fda6be66",
+                    "Name": "GtActionComment"
                 }
             ]
         },
@@ -474,6 +478,10 @@
                     {
                         "Url": "SitePages/ProgramKommunikasjon.aspx",
                         "Title": "Kommunikasjonsplaner"
+                    },
+                    {
+                        "Url": "SitePages/ProgramRessursallokeringer.aspx",
+                        "Title": "Ressursallokeringer"
                     }
                 ]
             },
@@ -700,6 +708,35 @@
             ]
         },
         {
+            "Name": "ProgramRessursallokeringer.aspx",
+            "Title": "Ressursallokeringer",
+            "PageLayoutType": "SingleWebPartAppPage",
+            "CommentsDisabled": true,
+            "Sections": [
+                {
+                    "Columns": [
+                        {
+                            "Factor": 12,
+                            "Controls": [
+                                {
+                                    "Id": "{{ControlId_ProgramAggregationWebPart}}",
+                                    "Properties": {
+                                        "title": "Ressursallokeringer for underområder",
+                                        "dataSource": "Alle ressursallokeringer for underområder",
+                                        "dataSourceCategory": "Ressursallokering",
+                                        "hiddenColumns": "Title",
+                                        "showCommandBar": true,
+                                        "showViewSelector": true,
+                                        "showSearchBox": true
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "Name": "ProgramTidslinje.aspx",
             "Title": "Tidslinje",
             "PageLayoutType": "SingleWebPartAppPage",
@@ -714,7 +751,7 @@
                                     "Id": "{{ControlId_ProgramTimelineWebPart}}",
                                     "Properties": {
                                         "title": "Tidslinje for underområder",
-                                        "infoText": "Her listes alle prosjektene med start- og sluttdato i programmet. Tidslinjen støtter også faser, delfaser og milepæler. Tidslinjeelementer til dette programmet opprettes i den<A HREF=\"../sitePages/Tidslinje.aspx\">lokale tidslinjeinnhold listen</A>. Prosjekter vises med rød farge, faser i blått, delfaser blågrønt, og milepæler i gult. For å zoome inn/ut i tidslinje: ALT+Musehjul",
+                                        "infoText": "Her listes alle prosjektene med start- og sluttdato i prosjektet. Prosjekttidslinjen støtter også faser, delfaser og milepæler. For å zoome inn/ut i tidslinje: ALT+Musehjul",
                                         "dataSource": "Prosjekttidslinje"
                                     }
                                 }
@@ -956,7 +993,8 @@
                         "LinkTitle",
                         "GtProjectPhase",
                         "GtActionDate",
-                        "GtActionResponsible"
+                        "GtActionResponsible",
+                        "GtActionComment"
                     ],
                     "AdditionalSettings": {
                         "RowLimit": 10,

@@ -10,16 +10,13 @@ import strings from 'SharedLibraryStrings'
 export function useGroupRenderer() {
   return ({ group }: ReactCalendarGroupRendererProps<ITimelineGroup>) => {
     const style: React.CSSProperties = { display: 'block', width: '100%' }
+    const page = group.isProgram ? 'Programtidslinje' : 'Prosjekttidslinje'
 
     return (
       <div style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
         {group.type === TimelineGroupType.Project ? (
           <Tooltip content={strings.TimelineGroupDescription} relationship='description' withArrow>
-            <Link
-              href={`${group.path}/SitePages/Prosjekttidslinje.aspx`}
-              target='_blank'
-              title={group.title}
-            >
+            <Link href={`${group.path}/SitePages/${page}.aspx`} target='_blank' title={group.title}>
               {group.title}
             </Link>
           </Tooltip>

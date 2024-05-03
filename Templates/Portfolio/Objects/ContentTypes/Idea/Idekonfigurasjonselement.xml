@@ -5,5 +5,7 @@
         <pnp:FieldRef ID="fb61c88d-33ff-4f00-b3c6-d503a94db8fb" Name="GtIdeaProcessingList" UpdateChildren="true" />
         <pnp:FieldRef ID="aed8b1a9-d0cb-454d-beb8-e18ad9672afa" Name="GtIdeaRegistrationList" UpdateChildren="true" />
         <pnp:FieldRef ID="c3beecea-c0e5-4d18-9b45-3c7d7949bee4" Name="GtDescription" UpdateChildren="true" />
+        <pnp:FieldRef ID="d91273df-e08a-48fa-a02b-42eb639c4dd1" Name="GtIdeaRegistrationChoices" UpdateChildren="true" />
+        <pnp:FieldRef ID="6f6f2f6e-8f2f-4a5d-89fb-ef032578f5b0" Name="GtIdeaProcessingChoices" UpdateChildren="true" />
     </pnp:FieldRefs>
 </pnp:ContentType>

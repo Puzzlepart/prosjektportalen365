@@ -766,6 +766,9 @@
   <data name="SiteFields_GtSecViewFields_DisplayName" xml:space="preserve">
     <value>Felter</value>
   </data>
+  <data name="SiteFields_GtSecSumField_DisplayName" xml:space="preserve">
+    <value>Summeringsfelt</value>
+  </data>
   <data name="SiteFields_GtSecIcon_DisplayName" xml:space="preserve">
     <value>Ikon</value>
   </data>
@@ -899,7 +902,7 @@
     <value>Fravær</value>
   </data>
   <data name="SiteFields_GtResourceAbsenceComment_DisplayName" xml:space="preserve">
-    <value>Kommentar</value>
+    <value>Kommentar, fravær</value>
   </data>
   <data name="SiteFields_GtDescription_DisplayName" xml:space="preserve">
     <value>Beskrivelse</value>
@@ -1019,10 +1022,10 @@
     <value>Prosjektstatus</value>
   </data>
   <data name="SiteFields_GtAllocationStatus_DisplayName" xml:space="preserve">
-    <value>Status</value>
+    <value>Status allokering</value>
   </data>
   <data name="SiteFields_GtAllocationComment_DisplayName" xml:space="preserve">
-    <value>Kommentar</value>
+    <value>Kommentar, allokering</value>
   </data>
   <data name="SiteFields_GtAttachments_DisplayName" xml:space="preserve">
     <value>Vedlegg</value>
@@ -1047,6 +1050,12 @@
   </data>
   <data name="SiteFields_GtActionDescription_Description" xml:space="preserve">
     <value></value>
+  </data>
+  <data name="SiteFields_GtActionComment_DisplayName" xml:space="preserve">
+    <value>Kommentar, kommunikasjonsaktivitet</value>
+  </data>
+  <data name="SiteFields_GtActionComment_Description" xml:space="preserve">
+    <value>Kommentar til kommunikasjonsaktiviteten</value>
   </data>
   <data name="SiteFields_GtActionResponsible_DisplayName" xml:space="preserve">
     <value>Tiltaksansvarlig</value>
@@ -1646,7 +1655,10 @@
     <value>Dersom gevinstene skal realiseres i ulike deler av organisasjonen (eller i flere virksomheter) anbefales det å oppnevne en gevinsteier i de ulike delene av linjeorganisasjonen (eller virksomhetene) som eier ulike deler av de planlagte gevinstene. Gevinsteiere har da et distribuert ansvar for sin del av gevinstene, og har en viktig rolle som den gevinstansvarliges forlengede arm og lokale støttespiller.</value>
   </data>
   <data name="SiteFields_GtSecViewFields_Description" xml:space="preserve">
-      <value>Felt som skal vises i sikkerhetsvisningen.</value>
+      <value>Felt(er) som skal vises i seksjonsvisningen.</value>
+  </data>
+  <data name="SiteFields_GtSecSumField_Description" xml:space="preserve">
+      <value>Felt som skal summeres, eksempel: 'GtSum;Avg;Gjennomsnitt av sum;currency'. Summeringstyper: Add og Avg (Addere og gjennomsnitt). Du kan også spesifisere å vise som valuta, standard er tall.</value>
   </data>
   <data name="SiteFields_GtSecIcon_Description" xml:space="preserve">
     <value>Navn på ikon fra UI Fabric. Se https://uifabricicons.azurewebsites.net/.</value>
@@ -1748,7 +1760,7 @@
     <value>Skal kolonnen være synlig i Prosjektinformasjon på forsiden av prosjektet.</value>
   </data>
   <data name="SiteFields_GtShowFieldPortfolio_Description" xml:space="preserve">
-    <value>Skal kolonnen være synlig i Porteføljeoversikten.</value>
+    <value>Skal kolonnen være synlig i Porteføljeoversikten. Dette betyr at kolonnen blir synlig i sidepaneler og vis eller skjul kolonner panelet.</value>
   </data>
   <data name="SiteFields_GtFieldDataType_Description" xml:space="preserve">
     <value>Datatype for denne kolonnen. Styrer hvordan kolonnen blir vist i Porteføljeoversikten.</value>
@@ -2141,7 +2153,7 @@
     <value>Idéregistrering</value>
   </data>
   <data name="SiteFields_GtIdeaRegistrationList_Description" xml:space="preserve">
-    <value>Hvilken idéregisreringsliste skal elementet kobles mot?</value>
+    <value>Hvilken idéregisreringsliste skal elementet kobles mot? (må inneholde registrering)</value>
   </data>
   <data name="SiteFields_GtIdeaProcessingList_DisplayName" xml:space="preserve">
     <value>Idébehandling</value>
@@ -2238,6 +2250,18 @@
   </data>
   <data name="SiteFields_GtIdeaPriority_Description" xml:space="preserve">
     <value>Prioritering for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaProcessingChoices_DisplayName" xml:space="preserve">
+    <value>Anbefalingsvalg for behandling</value>
+  </data>
+  <data name="SiteFields_GtIdeaProcessingChoices_Description" xml:space="preserve">
+    <value>Anbefalingsvalg settes opp med JSON, her kan flere valg legges til, merk at nøkkel (key) må forbli lik for standardvalgene</value>
+  </data>
+  <data name="SiteFields_GtIdeaRegistrationChoices_DisplayName" xml:space="preserve">
+    <value>Anbefalingsvalg for registrering</value>
+  </data>
+  <data name="SiteFields_GtIdeaRegistrationChoices_Description" xml:space="preserve">
+    <value>Anbefalingsvalg settes opp med JSON, her kan flere valg legges til, merk at nøkkel (key) må forbli lik for standardvalgene</value>
   </data>
   <data name="SiteFields_GtBAEndDateOriginal_DisplayName" xml:space="preserve">
     <value>Opprinnelig overtakelsesdato</value>

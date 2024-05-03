@@ -282,6 +282,11 @@ if ($Channel -ne "main") {
     $SiteDesignThumbnail = "https://publiccdn.sharepointonline.com/prosjektportalen.sharepoint.com/sites/ppassets/Thumbnails/prosjektomrade-test.png"
 }
 
+# Add channel to name for the site design if channel is specified and not main
+if ($Channel -ne "main") {
+    $SiteDesignName += " - $Channel"
+}
+
 if (-not $SkipSiteDesign.IsPresent) {
     $SiteScriptIds = @()
 
@@ -556,10 +561,15 @@ if ($Upgrade.IsPresent) {
 else {
     Write-Host "[SUCCESS] Installation completed in $($sw.Elapsed)" -ForegroundColor Green
 }
+Write-Host "[INFO] Consider running .\Install\Scripts\UpgradeAllSitesToLatest.ps1 to upgrade all sites to the latest version of Prosjektportalen 365."
+Write-Host "[INFO] This is required after upgrading between minor versions, e.g. from 1.8.x to 1.9.x."
 #endregion
 
+## Turning off PnP trace logging
+Set-PnPTraceLog -Off
+
 #region Log installation and send pingback to Azure Function
-Write-Host "[INFO] Logged installation entry" 
+Write-Host "[INFO] Logging installation entry" 
 $InstallEndTime = (Get-Date -Format o)
 
 $InstallEntry = @{
@@ -585,7 +595,7 @@ $InstallationEntry = Add-PnPListItem -List "Installasjonslogg" -Values $InstallE
 
 ## Attempting to attach the log file to installation entry
 if ($null -ne $InstallationEntry) {
-    Add-PnPListItemAttachment -List "Installasjonslogg" -Identity $InstallationEntry.Id -Path $LogFilePath -ErrorAction SilentlyContinue >$null 2>&1 
+    $AttachmentOutput = Add-PnPListItemAttachment -List "Installasjonslogg" -Identity $InstallationEntry.Id -Path $LogFilePath -ErrorAction SilentlyContinue
 }
 
 Disconnect-PnPOnline
@@ -598,8 +608,6 @@ try {
 catch {}
 #endregion
 
-## Turning off PnP trace logging
-Set-PnPTraceLog -Off
-
 ## Clearing cached access tokens
 $global:__InteractiveCachedAccessTokens = $null
+

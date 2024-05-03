@@ -1,4 +1,4 @@
-import { IColumn, IGroup, MessageBarType } from '@fluentui/react'
+import { IGroup, MessageBarType } from '@fluentui/react'
 import { ProjectContentColumn } from 'pp365-shared-library'
 import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
@@ -80,7 +80,7 @@ export interface IPortfolioAggregationConfiguration {
 
 export interface IPortfolioAggregationProps<T = any>
   extends IBaseComponentProps,
-    Pick<IListProps, 'isListLayoutModeJustified'> {
+    Pick<IListProps, 'isListLayoutModeJustified' | 'hiddenColumns'> {
   /**
    * Configuration (columns and views etc)
    */
@@ -140,7 +140,7 @@ export interface IPortfolioAggregationProps<T = any>
   showViewSelector?: boolean
 
   /**
-   * Default view id
+   * Default view id (the SharePoint item ID)
    */
   defaultViewId?: string
 
@@ -214,12 +214,12 @@ export interface IPortfolioAggregationState
   /**
    * Column to group by in the list
    */
-  groupBy?: IColumn
+  groupBy?: ProjectContentColumn
 
   /**
    * Column to sort by in the list
    */
-  sortBy?: IColumn
+  sortBy?: ProjectContentColumn
 
   /**
    * Initial search term that should be

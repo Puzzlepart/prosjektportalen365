@@ -5,6 +5,8 @@ import { useEffect } from 'react'
 import { GetDataTypeProperties, IColumnDataTypeFieldOption } from './ColumnDataTypeField'
 import { BooleanColumn } from './BooleanColumn'
 import { CurrencyColumn } from './CurrencyColumn'
+import { NumberColumn } from './NumberColumn'
+import { PercentageColumn } from './PercentageColumn'
 import { DateColumn } from './DateColumn'
 import { DialogColumn } from './DialogColumn'
 import { FileNameColumn } from './FileNameColumn'
@@ -232,6 +234,8 @@ export function useColumnRenderComponentRegistry() {
       DateColumn,
       FileNameColumn,
       CurrencyColumn,
+      NumberColumn,
+      PercentageColumn,
       ListColumn,
       DialogColumn,
       TagsColumn,
@@ -251,18 +255,6 @@ export function useColumnRenderComponentRegistry() {
       'Note',
       strings.ColumnRenderOptionNote,
       'EditStyle'
-    )
-    ColumnRenderComponentRegistry.registerColumnRenderOption(
-      'number',
-      'Number',
-      strings.ColumnRenderOptionNumber,
-      'NumberField'
-    )
-    ColumnRenderComponentRegistry.registerColumnRenderOption(
-      'percentage',
-      'Percentage',
-      strings.ColumnRenderOptionPercentage,
-      'CalculatorPercentage'
     )
   }, [])
 }

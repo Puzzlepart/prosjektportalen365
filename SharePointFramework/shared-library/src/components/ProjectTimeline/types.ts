@@ -1,7 +1,7 @@
 import * as moment from 'moment'
 import { IFilterProps } from '../../components/FilterPanel/Filter/types'
 import { ITimelineData, ITimelineItem } from '../../interfaces'
-import { ProjectListModel, TimelineConfigurationModel } from '../../models'
+import { ProjectColumn, ProjectListModel, TimelineConfigurationModel } from '../../models'
 import { IBaseComponentProps } from '../types'
 import { ITimelineProps } from './Timeline'
 
@@ -54,6 +54,11 @@ export interface IProjectTimelineState {
    * Projects
    */
   projects?: ProjectListModel[]
+
+  /**
+   * Columns
+   */
+  columns?: ProjectColumn[]
 
   /**
    * Data

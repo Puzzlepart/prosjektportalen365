@@ -203,6 +203,7 @@ define([], function () {
     ShowFieldExternalUsersOffText: 'Ikke synlig for eksterne brukere',
     ShowFilterButtonLabel: 'Vis filterknapp',
     ShowInfoMessageLabel: 'Vis infomelding',
+    ShowPhaseSitePageMessageLabel: 'Vis infomelding (dynamisk hjemmeside)',
     ShowProjectDeliveriesLabel: 'Vis prosjektleveranser',
     ShowSubTextFieldLabel: 'Vis fasetekst',
     ShowTimelineLabel: 'Vis tidslinje',

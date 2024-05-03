@@ -2,7 +2,6 @@ declare interface IPortfolioExtensionsStrings {
   ActionLabel: string
   ActionLabelPlaceholder: string
   AdministratorLabel: string
-  ApproveChoice: string
   ApprovedSyncText: string
   CancelLabel: string
   CloseLabel: string
@@ -10,7 +9,6 @@ declare interface IPortfolioExtensionsStrings {
   CommentLabelPlaceholder: string
   ConfigurationDescription: string
   ConfigurationLabel: string
-  ConsiderationChoice: string
   CreateLabel: string
   HelpContentAvailableDescription: string
   HelpContentAvailableLabel: string
@@ -19,6 +17,7 @@ declare interface IPortfolioExtensionsStrings {
   HelpContentListName: string
   IdeaAlreadyApproved: string
   IdeaConfigurationTitle: string
+  IdeaProcessingListErrorMessage: string
   IdeaProcessorsSiteGroup: string
   IdeaProjectDataDialogBlockedTitle: string
   IdeaProjectDataDialogBlockedMessage: string
@@ -41,9 +40,7 @@ declare interface IPortfolioExtensionsStrings {
   LinksListName: string
   LinksListDescription: string
   LinksListLabel: string
-  RejectChoice: string
   SeeAllInstallationsLinkText: string
-  SetRecommendationDefaultDescription: string
   SetRecommendationSubtitle: string
   SetRecommendationTitle: string
   SiteSettingsDescription: string

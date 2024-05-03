@@ -32,6 +32,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
             enableShimmer={context.state.loading || context.state.isChangingView}
             items={context.items}
             columns={context.columns}
+            hiddenColumns={props.hiddenColumns}
             groups={context.state.groups}
             selection={selection}
             searchBox={searchBox}
@@ -65,5 +66,6 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
 PortfolioAggregation.defaultProps = {
   showCommandBar: true,
   showExcelExportButton: true,
+  showFilters: true,
   lockedColumns: false
 }

@@ -25,7 +25,7 @@ export function useChangePhase(delayBeforeReload: number = 1000) {
     try {
       await SPDataAdapter.project.updateProjectPhase(
         context.state.confirmPhase,
-        context.state.data.phaseTextField
+        context.state.data.phaseField
       )
       if (context.props.usePhaseHooks) runPhaseHook()
       if (context.props.useDynamicHomepage) {
@@ -37,7 +37,8 @@ export function useChangePhase(delayBeforeReload: number = 1000) {
       if (context.props.syncPropertiesAfterPhaseChange) {
         // TODO: Sync phase to hub site item
         setTimeout(() => {
-          window.location.reload()
+          if (context.props.useDynamicHomepage) window.location.href = context.props.webAbsoluteUrl
+          else window.location.reload()
         }, delayBeforeReload)
       }
     } catch (error) {

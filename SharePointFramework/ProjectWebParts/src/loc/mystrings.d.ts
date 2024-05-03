@@ -188,6 +188,7 @@ declare interface IProjectWebPartsStrings {
   ShowFieldExternalUsersOnText: string
   ShowFilterButtonLabel: string
   ShowInfoMessageLabel: string
+  ShowPhaseSitePageMessageLabel: string
   ShowProjectDeliveriesLabel: string
   ShowSubTextFieldLabel: string
   ShowTimelineLabel: string

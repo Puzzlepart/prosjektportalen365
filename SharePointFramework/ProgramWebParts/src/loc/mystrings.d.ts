@@ -121,6 +121,10 @@ declare interface IProgramWebPartsStrings {
   ListViewText: string
   MaxWidthDescription: string
   MaxWidthLabel: string
+  MeasurementAchievementLabel: string
+  MeasurementCommentLabel: string
+  MeasurementDateLabel: string
+  MeasurementValueLabel: string
   MinWidthDescription: string
   MinWidthLabel: string
   MoveLeftLabel: string
@@ -162,6 +166,7 @@ declare interface IProgramWebPartsStrings {
   SearchPropertyLabel: string
   SearchPropertyPlaceholder: string
   SearchQueryLabel: string
+  ShowAllMeasurementsLinkText: string
   ShowCommandBarLabel: string
   ShowExcelExportButtonLabel: string
   ShowFieldFrontpageLabel: string

@@ -1,71 +1,71 @@
 {
-    "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
-    "version": "2.0",
-    "bundles": {
-      "latest-projects-web-part": {
-        "components": [
-          {
-            "entrypoint": "./lib/webparts/latestProjects/index.js",
-            "manifest": "./src/webparts/latestProjects/manifest.json"
-          }
-        ]
-      },
-      "portfolio-insights-web-part": {
-        "components": [
-          {
-            "entrypoint": "./lib/webparts/portfolioInsights/index.js",
-            "manifest": "./src/webparts/portfolioInsights/manifest.json"
-          }
-        ]
-      },
-      "portfolio-overview-web-part": {
-        "components": [
-          {
-            "entrypoint": "./lib/webparts/portfolioOverview/index.js",
-            "manifest": "./src/webparts/portfolioOverview/manifest.json"
-          }
-        ]
-      },
-      "project-list-web-part": {
-        "components": [
-          {
-            "entrypoint": "./lib/webparts/projectList/index.js",
-            "manifest": "./src/webparts/projectList/manifest.json"
-          }
-        ]
-      },
-      "resource-allocation-web-part": {
-        "components": [
-          {
-            "entrypoint": "./lib/webparts/resourceAllocation/index.js",
-            "manifest": "./src/webparts/resourceAllocation/manifest.json"
-          }
-        ]
-      },
-      "project-timeline-web-part": {
-        "components": [
-          {
-            "entrypoint": "./lib/webparts/projectTimeline/index.js",
-            "manifest": "./src/webparts/projectTimeline/manifest.json"
-          }
-        ]
-      },
-      "portfolio-aggregation-web-part": {
-        "components": [
-          {
-            "entrypoint": "./lib/webparts/portfolioAggregation/index.js",
-            "manifest": "./src/webparts/portfolioAggregation/manifest.json"
-          }
-        ]
-      }
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "latest-projects-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/latestProjects/index.js",
+          "manifest": "./src/webparts/latestProjects/manifest.json"
+        }
+      ]
     },
-    "externals": {},
-    "localizedResources": {
-      "ControlStrings": "lib/loc/{locale}.js",
-      "PortfolioWebPartsStrings": "lib/loc/{locale}.js",
-      "PzlSPFxComponentsStrings": "lib/loc/{locale}.js",
-      "PropertyControlStrings": "node_modules/@pnp/spfx-property-controls/lib/loc/{locale}.js",
-      "ProjectWebPartsStrings": "node_modules/pp365-projectwebparts/lib/loc/{locale}.js",
-      "SharedLibraryStrings": "node_modules/pp365-shared-library/lib/loc/{locale}.js"
+    "portfolio-insights-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/portfolioInsights/index.js",
+          "manifest": "./src/webparts/portfolioInsights/manifest.json"
+        }
+      ]
+    },
+    "portfolio-overview-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/portfolioOverview/index.js",
+          "manifest": "./src/webparts/portfolioOverview/manifest.json"
+        }
+      ]
+    },
+    "project-list-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/projectList/index.js",
+          "manifest": "./src/webparts/projectList/manifest.json"
+        }
+      ]
+    },
+    "resource-allocation-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/resourceAllocation/index.js",
+          "manifest": "./src/webparts/resourceAllocation/manifest.json"
+        }
+      ]
+    },
+    "project-timeline-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/projectTimeline/index.js",
+          "manifest": "./src/webparts/projectTimeline/manifest.json"
+        }
+      ]
+    },
+    "portfolio-aggregation-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/portfolioAggregation/index.js",
+          "manifest": "./src/webparts/portfolioAggregation/manifest.json"
+        }
+      ]
     }
+  },
+  "externals": {},
+  "localizedResources": {
+    "ControlStrings": "lib/loc/{locale}.js",
+    "PortfolioWebPartsStrings": "lib/loc/{locale}.js",
+    "PzlSPFxComponentsStrings": "lib/loc/{locale}.js",
+    "PropertyControlStrings": "node_modules/@pnp/spfx-property-controls/lib/loc/{locale}.js",
+    "ProjectWebPartsStrings": "node_modules/pp365-projectwebparts/lib/loc/{locale}.js",
+    "SharedLibraryStrings": "node_modules/pp365-shared-library/lib/loc/{locale}.js"
   }
+}

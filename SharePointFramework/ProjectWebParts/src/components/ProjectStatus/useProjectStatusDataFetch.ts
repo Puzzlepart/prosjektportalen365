@@ -28,7 +28,7 @@ async function getReportFields(contentTypeId = '0x010022252E35737A413FB56A1BA538
 }
 
 /**
- * Fetch data for `ProjectStatus`. Feetches project properties, status report list properties,
+ * Fetch data for `ProjectStatus`. Fetches project properties, status report list properties,
  * status reports, project status sections, project column config, and project status list fields.
  * If the selected report is published, the attachments for the report are also fetched.
  */
@@ -41,6 +41,7 @@ const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async
         logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
       })
     }
+
     const [properties, reportList, reports, sections, columnConfig] = await Promise.all([
       SPDataAdapter.project.getProjectInformationData(),
       SPDataAdapter.portalDataService.getStatusReportListProps(),
@@ -61,6 +62,7 @@ const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async
     const hashState = parseUrlHash()
     const selectedReportUrlParam = getUrlParam('selectedReport')
     const sourceUrl = decodeURIComponent(getUrlParam('Source') ?? '')
+
     if (hashState.has('selectedReport')) {
       initialSelectedReport = _.find(
         sortedReports,
@@ -72,6 +74,7 @@ const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async
         (report) => report.id === parseInt(selectedReportUrlParam, 10)
       )
     }
+
     if (initialSelectedReport?.published) {
       initialSelectedReport = await SPDataAdapter.portalDataService.getStatusReportAttachments(
         initialSelectedReport
@@ -83,6 +86,7 @@ const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async
         return report
       })
     }
+
     return {
       data: {
         properties,

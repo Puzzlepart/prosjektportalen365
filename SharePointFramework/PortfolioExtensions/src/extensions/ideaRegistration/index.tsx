@@ -11,45 +11,32 @@ import DialogPrompt from 'components/IdeaApprovalDialog'
 import { SPFI, spfi, SPFx } from '@pnp/sp'
 import '@pnp/sp/webs'
 import '@pnp/sp/lists'
+import '@pnp/sp/folders/list'
 import '@pnp/sp/site-groups/web'
 import '@pnp/sp/clientside-pages/web'
-import { ClientsideText } from '@pnp/sp/clientside-pages'
-import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
+import { ClientsideText, IClientsidePage } from '@pnp/sp/clientside-pages'
 import { isUserAuthorized } from '../../helpers/isUserAuthorized'
 import strings from 'PortfolioExtensionsStrings'
-import { IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
+import { Choice, IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
+import { find } from 'underscore'
 
-Logger.subscribe(ConsoleListener())
-Logger.activeLogLevel = DEBUG ? LogLevel.Info : LogLevel.Warning
 const LOG_SOURCE: string = 'IdeaRegistrationCommand'
-
-enum RecommendationType {
-  Approved = 'Godkjent for detaljering av idé',
-  Consideration = 'Under vurdering',
-  Rejected = 'Avvist'
-}
 
 export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any> {
   private _userAuthorized: boolean
   private _openCmd: Command
   private _openLinkCmd: Command
   private _sp: SPFI
-  private _ideaConfig: IdeaConfigurationModel
+  private _config: IdeaConfigurationModel
 
   @override
   public async onInit(): Promise<void> {
-    Logger.log({
-      message: '(IdeaRegistrationCommand) onInit: Initializing...',
-      data: { version: this.context.manifest.version },
-      level: LogLevel.Info
-    })
+    Log.info(LOG_SOURCE, 'onInit: Initializing...')
     this._sp = spfi().using(SPFx(this.context))
     this._openCmd = this.tryGetCommand('OPEN_IDEA_REGISTRATION_DIALOG')
     this._openCmd.visible = false
     this._openLinkCmd = this.tryGetCommand('IDEA_PROCESSING_LINK')
     this._openLinkCmd.visible = this.context.pageContext.list.title.includes('registrering')
-      ? true
-      : false
     this._userAuthorized = await isUserAuthorized(
       this._sp,
       strings.IdeaProcessorsSiteGroup,
@@ -59,45 +46,55 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
     return Promise.resolve()
   }
 
-  @override
-  public async onExecute(event: IListViewCommandSetExecuteEventParameters) {
+  public onExecute = async (event: IListViewCommandSetExecuteEventParameters): Promise<void> => {
     switch (event.itemId) {
       case this._openCmd.id:
         const dialog: DialogPrompt = new DialogPrompt()
         const row = event.selectedRows[0]
 
         dialog.ideaTitle = row.getValueByName('Title')
-        dialog.dialogMessage =
-          this._ideaConfig.description[0] ||
-          strings.SetRecommendationDefaultDescription.split(';')[0]
+        dialog.dialogMessage = this._config.description.registration
+        dialog.choices = this._config.registration
         await dialog.show()
-        if (dialog.comment && dialog.selectedChoice === strings.ApproveChoice) {
-          this._isIdeaRecommended(row)
-            ? Dialog.alert(strings.IdeaAlreadyApproved)
-            : this._onSubmit(row, dialog.comment)
-        } else if (dialog.comment && dialog.selectedChoice === strings.ConsiderationChoice) {
-          this._isIdeaRecommended(row)
-            ? Dialog.alert(strings.IdeaAlreadyApproved)
-            : this._onSubmitConsideration(row, dialog.comment)
-        } else if (dialog.comment && dialog.selectedChoice === strings.RejectChoice) {
-          this._isIdeaRecommended(row)
-            ? Dialog.alert(strings.IdeaAlreadyApproved)
-            : this._onSubmitRejected(row, dialog.comment)
-        } else {
-          Logger.log({ message: 'Rejected', level: LogLevel.Info })
+
+        if (dialog.comment) {
+          const selectedChoice = find(this._config.registration, {
+            choice: dialog.selectedChoice
+          })?.key
+
+          if (selectedChoice) {
+            if (this._isIdeaRecommended(row)) {
+              Dialog.alert(strings.IdeaAlreadyApproved)
+            } else {
+              switch (selectedChoice) {
+                case Choice.Approve:
+                  this._onSubmit(row, dialog.comment)
+                  break
+                case Choice.Consideration:
+                  this._onSubmitConsideration(row, dialog.comment)
+                  break
+                case Choice.Reject:
+                  this._onSubmitRejected(row, dialog.comment)
+                  break
+                default:
+                  this._onSubmitOther(row, dialog.comment, dialog.selectedChoice)
+                  break
+              }
+            }
+          }
         }
         break
-      case this._openLinkCmd.id:
-        const listName = this.context.pageContext.list.title
-        const [ideaConfig] = (await this._getIdeaConfiguration()).filter(
-          (item) => item.registrationList === listName
-        )
-        this._ideaConfig = ideaConfig
 
-        const baseUrl = this.context.pageContext.web.absoluteUrl
-        const processingList = this._ideaConfig.processingList.replace('é', 'e')
-        const ideaProcessingUrl = baseUrl.concat(`/Lists/${processingList}`)
-        window.open(ideaProcessingUrl, '_blank')
+      case this._openLinkCmd.id:
+        try {
+          const ideaProcessingUrl = await this._getIdeaProcessingList()
+          window.open(ideaProcessingUrl, '_blank')
+        } catch (error) {
+          alert(strings.IdeaProcessingListErrorMessage)
+          throw new Error(error)
+        }
+        break
+
       default:
         throw new Error('Unknown command, unable to execute')
     }
@@ -107,44 +104,51 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
    * Get the idea configuration from the IdeaConfiguration list
    */
   private _getIdeaConfiguration = async (): Promise<IdeaConfigurationModel[]> => {
-    const ideaConfig = await this._sp.web.lists
+    const config = await this._sp.web.lists
       .getByTitle(strings.IdeaConfigurationTitle)
       .select(...new SPIdeaConfigurationItem().fields)
       .items()
 
-    return ideaConfig.map((item) => new IdeaConfigurationModel(item)).filter(Boolean)
+    return config.map((item) => new IdeaConfigurationModel(item)).filter(Boolean)
+  }
+
+  /**
+   * Get the IdeaProcessing list url from the IdeaConfiguration list
+   */
+  private _getIdeaProcessingList = async (): Promise<string> => {
+    const [config] = (await this._getIdeaConfiguration()).filter(
+      (item) => item.registrationList === this.context.pageContext.list.title
+    )
+    const processingList = await this._sp.web.lists.getByTitle(config.processingList).rootFolder()
+    return processingList.ServerRelativeUrl
   }
 
   /**
    * On ListView state changed, check if the user is authorized to use this command
    */
   private _onListViewStateChanged = async (): Promise<void> => {
-    Logger.log({
-      message: '(IdeaRegistrationCommand) onListViewStateChanged: ListView state changed',
-      level: LogLevel.Info
-    })
+    Log.info(LOG_SOURCE, 'onListViewStateChanged: ListView state changed')
 
     const listName = this.context.pageContext.list.title
-    const [ideaConfig] = (await this._getIdeaConfiguration()).filter(
+    const [config] = (await this._getIdeaConfiguration()).filter(
       (item) => item.registrationList === listName
     )
-    this._ideaConfig = ideaConfig
+    this._config = config
 
-    if (ideaConfig) {
+    if (config) {
       this._openCmd = this.tryGetCommand('OPEN_IDEA_REGISTRATION_DIALOG')
       if (this._openCmd) {
         this._openCmd.visible =
           this.context.listView.selectedRows?.length === 1 &&
           this._userAuthorized &&
-          ideaConfig.registrationList === listName
+          config.registrationList === listName
       }
       this.raiseOnChange()
     } else {
-      Logger.log({
-        message:
-          '(IdeaRegistrationCommand) onListViewStateChanged: You are currently not authorized to use this command or the list is not configured for this command',
-        level: LogLevel.Info
-      })
+      Log.info(
+        LOG_SOURCE,
+        'onListViewStateChanged: You are currently not authorized to use this command or the list is not configured for this command'
+      )
     }
   }
 
@@ -154,19 +158,19 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
    * @param row Selected row
    * @param comment Comment from the dialog
    */
-  private _onSubmitRejected(row: RowAccessor, comment: string) {
+  private _onSubmitRejected = async (row: RowAccessor, comment: string): Promise<void> => {
     const rowId = row.getValueByName('ID')
-    this._sp.web.lists
-      .getByTitle(this._ideaConfig.registrationList)
+    await this._sp.web.lists
+      .getByTitle(this._config.registrationList)
       .items.getById(rowId)
       .update({
-        GtIdeaRecommendation: RecommendationType.Rejected,
+        GtIdeaRecommendation: find(this._config.registration, { key: Choice.Reject })
+          ?.recommendation,
         GtIdeaRecommendationComment: comment
       })
-      .then(() => {
-        Log.info(LOG_SOURCE, `Updated ${this._ideaConfig.registrationList}: Rejected`)
-        window.location.reload()
-      })
+
+    Log.info(LOG_SOURCE, `Updated ${this._config.registrationList}: Rejected`)
+    window.location.reload()
   }
 
   /**
@@ -175,19 +179,19 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
    * @param row Selected row
    * @param comment Comment from the dialog
    */
-  private _onSubmitConsideration(row: RowAccessor, comment: string) {
+  private _onSubmitConsideration = async (row: RowAccessor, comment: string): Promise<void> => {
     const rowId = row.getValueByName('ID')
-    this._sp.web.lists
-      .getByTitle(this._ideaConfig.registrationList)
+    await this._sp.web.lists
+      .getByTitle(this._config.registrationList)
       .items.getById(rowId)
       .update({
-        GtIdeaRecommendation: RecommendationType.Consideration,
+        GtIdeaRecommendation: find(this._config.registration, { key: Choice.Consideration })
+          ?.recommendation,
         GtIdeaRecommendationComment: comment
       })
-      .then(() => {
-        Log.info(LOG_SOURCE, `Updated ${this._ideaConfig.registrationList}: Consideration`)
-        window.location.reload()
-      })
+
+    Log.info(LOG_SOURCE, `Updated ${this._config.registrationList}: Consideration`)
+    window.location.reload()
   }
 
   /**
@@ -198,23 +202,52 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
    * @param row Selected row
    * @param comment Comment from the dialog
    */
-  private _onSubmit(row: RowAccessor, comment: string) {
+  private _onSubmit = async (row: RowAccessor, comment: string): Promise<void> => {
     const rowId = row.getValueByName('ID')
     const rowTitle = row.getValueByName('Title')
-    this._sp.web.lists
-      .getByTitle(this._ideaConfig.registrationList)
+
+    await this._sp.web.lists
+      .getByTitle(this._config.registrationList)
       .items.getById(rowId)
       .update({
-        GtIdeaRecommendation: RecommendationType.Approved,
+        GtIdeaRecommendation: find(this._config.registration, { key: Choice.Approve })
+          ?.recommendation,
         GtIdeaRecommendationComment: comment
       })
-      .then(() => {
-        Log.info(LOG_SOURCE, `Updated ${this._ideaConfig.registrationList}: Approved`)
-      })
-      .catch((e) => Log.error(LOG_SOURCE, e))
 
-    this._updateProcessingList(rowId, rowTitle)
-    this._createSitePage(row)
+    Log.info(LOG_SOURCE, `Updated ${this._config.registrationList}: Approved`)
+
+    const pageUrl = await this._createSitePage(row)
+    await this._updateProcessingList(rowId, rowTitle, pageUrl)
+
+    window.location.reload()
+  }
+
+  /**
+   * On submit and 'Other', fields will be updated,
+   *
+   * @param row Selected row
+   * @param comment Comment from the dialog
+   */
+  private _onSubmitOther = async (
+    row: RowAccessor,
+    comment: string,
+    selectedChoice: string
+  ): Promise<void> => {
+    const rowId = row.getValueByName('ID')
+
+    await this._sp.web.lists
+      .getByTitle(this._config.registrationList)
+      .items.getById(rowId)
+      .update({
+        GtIdeaRecommendation: find(this._config.registration, { choice: selectedChoice })
+          ?.recommendation,
+        GtIdeaRecommendationComment: comment
+      })
+
+    Log.info(LOG_SOURCE, `Updated ${this._config.registrationList}: Other`)
+
+    window.location.reload()
   }
 
   /**
@@ -223,122 +256,18 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
    * @param rowId Id of the row in the registration list
    * @param rowTitle Title of the row in the registration list
    */
-  private _updateProcessingList(rowId: number, rowTitle: string) {
-    const url = rowTitle.replace(/ /g, '-')
-    const baseUrl = this.context.pageContext.web.absoluteUrl
-    const ideaUrl = baseUrl.concat('/SitePages/', `KUR-${url}`, '.aspx')
+  private _updateProcessingList = async (
+    rowId: number,
+    rowTitle: string,
+    pageUrl: string
+  ): Promise<void> => {
+    await this._sp.web.lists.getByTitle(this._config.processingList).items.add({
+      Title: rowTitle,
+      GtRegistratedIdeaId: rowId,
+      GtIdeaUrl: pageUrl
+    })
 
-    this._sp.web.lists
-      .getByTitle(this._ideaConfig.processingList)
-      .items.add({
-        Title: rowTitle,
-        GtRegistratedIdeaId: rowId,
-        GtIdeaUrl: ideaUrl
-      })
-      .then(() => Log.info(LOG_SOURCE, 'Updated work lits'))
-      .catch((e) => Log.error(LOG_SOURCE, e))
-  }
-
-  /**
-   * Create a site page with the selected values of the registration list
-   *
-   * @param row Selected row
-   */
-  private async _createSitePage(row: RowAccessor) {
-    const title: string = row.getValueByName('Title')
-    const page = await this._sp.web.addClientsidePage(
-      `KUR-${title.replace(/[^a-zA-Z0-9-_]/g, '')}`,
-      `KUR-${title.replace(/[^a-zA-Z0-9-_]/g, '')}`,
-      'Article'
-    )
-    const reporter = row.getValueByName('GtIdeaReporter')[0] || ''
-
-    page.layoutType = 'NoImage'
-    page.showTopicHeader = true
-    page.topicHeader = 'Idé'
-    page.description = `Konsept utredningsrapport for: ${title}`
-
-    page
-      .addSection()
-      .addColumn(4)
-      .addControl(
-        new ClientsideText(`
-    <h3>Tittel</h3>
-     ${row.getValueByName('Title')}
-    `)
-      )
-      .addControl(
-        new ClientsideText(`
-      <h3>Bakgrunn</h3>
-      ${row.getValueByName('GtIdeaBackground')}
-      `)
-      )
-      .addControl(
-        new ClientsideText(`
-      <h3>Forslag til løsning</h3>
-      ${row.getValueByName('GtIdeaSolutionProposals')}
-      `)
-      )
-      .addControl(
-        new ClientsideText(`
-      <h3>Overordnet gjennomføringsplan</h3>
-      ${row.getValueByName('GtIdeaExecutionPlan')}
-      `)
-      )
-
-    page.sections[0]
-      .addColumn(4)
-      .addControl(
-        new ClientsideText(`
-          <h3>Innmelder</h3>
-          <a href="mailto:${reporter.email}" target="_blank">${reporter.title}</a>
-          `)
-      )
-      .addControl(
-        new ClientsideText(`
-      <h3>Ressursbehov</h3>
-      ${row.getValueByName('GtIdeaResourceRequirements')}
-      `)
-      )
-      .addControl(
-        new ClientsideText(`
-        <h3>Problemstilling</h3>
-        ${row.getValueByName('GtIdeaIssue')}
-        `)
-      )
-      .addControl(
-        new ClientsideText(`
-          <h3>Mulige gevinster</h3>
-          ${row.getValueByName('GtIdeaPossibleGains')}
-          `)
-      )
-
-    page.sections[0]
-      .addColumn(4)
-      .addControl(
-        new ClientsideText(`
-          <h3>Berørte parter</h3>
-          ${row.getValueByName('GtIdeaAffectedParties')}
-          `)
-      )
-      .addControl(
-        new ClientsideText(`
-              <h3>Kritiske suksessfaktorer</h3>
-              ${row.getValueByName('GtIdeaCriticalSuccessFactors')}
-              `)
-      )
-      .addControl(
-        new ClientsideText(`
-              <h3>Andre kommentarer</h3>
-              ${row.getValueByName('GtIdeaOtherComments')}
-              `)
-      )
-
-    page.sections[0].emphasis = 1
-
-    await page.save()
-    Log.info(LOG_SOURCE, 'Site created successfully')
-    window.location.reload()
+    Log.info(LOG_SOURCE, 'Updated work list')
   }
 
   /**
@@ -346,7 +275,85 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
    *
    * @param row Selected row
    */
-  private _isIdeaRecommended(row: RowAccessor): boolean {
-    return row.getValueByName('GtIdeaRecommendation') === RecommendationType.Approved
+  private _isIdeaRecommended = (row: RowAccessor): boolean => {
+    return (
+      row.getValueByName('GtIdeaRecommendation') ===
+      find(this._config.registration, { key: Choice.Approve })?.recommendation
+    )
+  }
+
+  /**
+   * Create a site page with the selected values of the registration list
+   *
+   * @param row Selected row
+   */
+  private _createSitePage = async (row: RowAccessor): Promise<string> => {
+    const title: string = row.getValueByName('Title')
+    const urlFriendlyTitle = title.replace(/é/g, 'e').replace(/[^a-zA-Z0-9-_ÆØÅæøå ]/g, '')
+    const page: IClientsidePage = await this._sp.web.addClientsidePage(
+      `KUR-${urlFriendlyTitle}`,
+      `KUR-${urlFriendlyTitle}`,
+      'Article'
+    )
+
+    const reporter = row.getValueByName('GtIdeaReporter')[0] || ''
+
+    page.layoutType = 'NoImage'
+    page.showTopicHeader = true
+    page.topicHeader = 'Idé'
+    page.description = `Konsept utredningsrapport for: ${title}`
+
+    const section = page.addSection()
+    const column1 = section.addColumn(4)
+    const column2 = section.addColumn(4)
+    const column3 = section.addColumn(4)
+
+    column1.addControl(new ClientsideText(`<h3>Tittel</h3>${row.getValueByName('Title')}`))
+    column1.addControl(
+      new ClientsideText(`<h3>Bakgrunn</h3>${row.getValueByName('GtIdeaBackground')}`)
+    )
+    column1.addControl(
+      new ClientsideText(
+        `<h3>Forslag til løsning</h3>${row.getValueByName('GtIdeaSolutionProposals')}`
+      )
+    )
+    column1.addControl(
+      new ClientsideText(
+        `<h3>Overordnet gjennomføringsplan</h3>${row.getValueByName('GtIdeaExecutionPlan')}`
+      )
+    )
+
+    column2.addControl(
+      new ClientsideText(
+        `<h3>Innmelder</h3><a href="mailto:${reporter.email}" target="_blank">${reporter.title}</a>`
+      )
+    )
+    column2.addControl(
+      new ClientsideText(`<h3>Ressursbehov</h3>${row.getValueByName('GtIdeaResourceRequirements')}`)
+    )
+    column2.addControl(
+      new ClientsideText(`<h3>Problemstilling</h3>${row.getValueByName('GtIdeaIssue')}`)
+    )
+    column2.addControl(
+      new ClientsideText(`<h3>Mulige gevinster</h3>${row.getValueByName('GtIdeaPossibleGains')}`)
+    )
+
+    column3.addControl(
+      new ClientsideText(`<h3>Berørte parter</h3>${row.getValueByName('GtIdeaAffectedParties')}`)
+    )
+    column3.addControl(
+      new ClientsideText(
+        `<h3>Kritiske suksessfaktorer</h3>${row.getValueByName('GtIdeaCriticalSuccessFactors')}`
+      )
+    )
+    column3.addControl(
+      new ClientsideText(`<h3>Andre kommentarer</h3>${row.getValueByName('GtIdeaOtherComments')}`)
+    )
+
+    section.emphasis = 1
+    page.save()
+    const savedPage = await page.load()
+
+    return savedPage['json'].AbsoluteUrl
   }
 }

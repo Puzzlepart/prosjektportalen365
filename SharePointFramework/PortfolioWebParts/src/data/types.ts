@@ -145,7 +145,7 @@ export interface IPortfolioWebPartsDataAdapter {
    * @param view View configuration
    * @param configuration PortfolioOverviewConfiguration
    * @param siteId Site ID
-   * @param siteIdProperty Site ID property
+   * @param siteIdProperty Site ID property (defaults to **GtSiteIdOWSTEXT**)
    */
   fetchDataForRegularView(
     view: PortfolioOverviewView,

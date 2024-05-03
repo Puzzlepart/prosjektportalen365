@@ -145,7 +145,8 @@ export class DataAdapter extends SPDataAdapterBase {
       await task.details.update(
         {
           description: model.get('description') ?? '',
-          references: itemContext.references
+          references: itemContext.references,
+          previewType: 'noPreview'
         },
         eTag
       )
@@ -221,7 +222,7 @@ export class DataAdapter extends SPDataAdapterBase {
     itemContext: RiskActionItemContext
   ): Promise<RiskActionItemContext> {
     const tasks = [
-      ...(itemContext.hiddenFieldValues.tasks ?? []),
+      ...(itemContext.hiddenFieldValues?.tasks ?? []),
       ...newTasks.map<RiskActionPlannerTaskReference>((newTask) => ({
         id: newTask.id,
         title: newTask.title,

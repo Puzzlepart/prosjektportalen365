@@ -8,18 +8,4 @@ Denne oppgaven, `automatic-versioning.js`, kan også kjøres som en **npm-skript
 npm run sync-version
 ```
 
-Etter at skriptet `sync-version` har blitt kjørt, er det viktig å publisere SharePointFramework-pakkene (PortfolioWebParts, osv...) til npm.
-
-Dette gjøres for hver pakke ved å kjøre følgende skript:
-
-```powershell
-npm install; npm run build; npm publish;
-```
-
-Hvis du må oppdatere og bruke en pakke under utvikling, legg til en midlertidig tag:
-
-```powershell
-npm install; npm run build; npm publish --tag temp;
-```
-
-Obs.: For å kunne publisere må du logge inn med en konto som har tilgang til pakkene på [npmjs](https://www.npmjs.com).
+Sjekk at versjoenene av pakkene som brukes som avhengigheter i `package.json` er oppdatert til den nye versjonen.

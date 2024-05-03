@@ -4,6 +4,6 @@
         <CHOICE>Forespurt</CHOICE>
         <CHOICE>Tildelt</CHOICE>
         <CHOICE>Avvist</CHOICE>
-        <CHOICE>Annet (beskriv i kommentar</CHOICE>
+        <CHOICE>Annet (beskriv i kommentar)</CHOICE>
     </CHOICES>
 </Field>
