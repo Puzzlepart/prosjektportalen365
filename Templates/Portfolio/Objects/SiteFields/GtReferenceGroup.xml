@@ -1,0 +1,1 @@
+<Field Description="{resource:SiteFields_GtReferenceGroup_Description}" DisplayName="{resource:SiteFields_GtReferenceGroup_DisplayName}" ID="{fa0f40c1-4f34-4a90-a545-25c741bc9233}" Name="GtReferenceGroup" StaticName="GtReferenceGroup" Type="UserMulti" Mult="TRUE" Group="{resource:SiteFields_Portfolio_Group}"/>

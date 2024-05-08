@@ -1,0 +1,1 @@
+<Field Description="{resource:SiteFields_GtProjectMembers_Description}" DisplayName="{resource:SiteFields_GtProjectMembers_DisplayName}" ID="{b8a5dca1-4d37-41d4-b5a0-89ab3a5cab41}" Name="GtProjectMembers" StaticName="GtProjectMembers" Type="UserMulti" Mult="TRUE" Group="{resource:SiteFields_Portfolio_Group}"/>

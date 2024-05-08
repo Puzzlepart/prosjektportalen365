@@ -1,0 +1,1 @@
+<Field Description="{resource:SiteFields_GtSteeringGroup_Description}" DisplayName="{resource:SiteFields_GtSteeringGroup_DisplayName}" ID="{4d8c8616-eb19-4ce2-bb27-8fbe0e564f11}" Name="GtSteeringGroup" StaticName="GtSteeringGroup" Type="UserMulti" Mult="TRUE" Group="{resource:SiteFields_Portfolio_Group}"/>
