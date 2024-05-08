@@ -1,8 +1,5 @@
 /* eslint-disable quotes */
-import {
-  IPropertyPaneConfiguration,
-  PropertyPaneTextField,
-} from '@microsoft/sp-property-pane'
+import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-property-pane'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
 import { IProjectProvisionProps, ProjectProvision } from 'components/ProjectProvision'
@@ -35,6 +32,6 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
           ]
         }
       ]
-    };
+    }
   }
 }

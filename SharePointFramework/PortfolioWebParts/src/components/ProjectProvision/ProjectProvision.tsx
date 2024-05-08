@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { IProjectProvisionProps } from './types';
+import { IProjectProvisionProps } from './types'
 
 export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
   return (
