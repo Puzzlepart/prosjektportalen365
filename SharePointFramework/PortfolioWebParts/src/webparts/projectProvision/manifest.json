@@ -1,0 +1,24 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "e88cea29-09a0-4ce4-a38c-e0d74b65f619",
+  "alias": "ProjectProvisionWebPart",
+  "componentType": "WebPart",
+  "version": "1.9.1",
+  "manifestVersion": 2,
+
+  "requiresCustomScript": false,
+  "hiddenFromToolbox": false,
+  "supportedHosts": [
+    "SharePointWebPart"
+  ],
+  "preconfiguredEntries": [{
+    "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+    "group": { "default": "Other" },
+    "title": { "default": "Prosjekt provisjonering" },
+    "description": { "default": "Provisjonering av prosjekter" },
+    "officeFabricIconFontName": "BuildDefinition",
+    "properties": {
+      "description": "ProjectProvision"
+    }
+  }]
+}
