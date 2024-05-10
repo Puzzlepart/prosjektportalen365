@@ -3,9 +3,9 @@ import {
   IdPrefixProvider,
   SelectTabData,
   Tab,
-  TabList
+  TabList,
+  SearchBox
 } from '@fluentui/react-components'
-import { SearchBox } from '@fluentui/react-search-preview'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
 import { ProjectListModel, SiteContext, customLightTheme } from 'pp365-shared-library'

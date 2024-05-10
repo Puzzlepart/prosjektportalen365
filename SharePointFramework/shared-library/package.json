@@ -41,11 +41,10 @@
     "@reduxjs/toolkit": "~1.9.5",
     "@pnp/core": "3.17.0",
     "@pnp/queryable": "3.17.0",
-    "@fluentui/react-components": "~9.42.0",
-    "@fluentui/react-icons": "~2.0.224",
+    "@fluentui/react-components": "~9.50.0",
+    "@fluentui/react-icons": "~2.0.239",
     "sp-js-provisioning": "1.2.3",
-    "@fluentui/react-search-preview": "~0.1.33",
-    "@fluentui/react-datepicker-compat": "~0.4.7",
+    "@fluentui/react-datepicker-compat": "~0.4.36",
     "shade-blend-color": "~1.0.0"
   },
   "devDependencies": {

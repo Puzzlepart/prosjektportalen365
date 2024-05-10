@@ -1,8 +1,7 @@
-import { SearchBoxProps } from '@fluentui/react-search-preview'
 import { useMemo, useState } from 'react'
 import { IProjectListProps } from './types'
 import { useColumns } from './useColumns'
-import { SortDirection, TableColumnSizingOptions } from '@fluentui/react-components'
+import { SearchBoxProps, SortDirection, TableColumnSizingOptions } from '@fluentui/react-components'
 
 export function useProjectList(props: IProjectListProps) {
   const [searchTerm, setSearchTerm] = useState('')

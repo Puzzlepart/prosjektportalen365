@@ -1,6 +1,6 @@
 import { Selection, format } from '@fluentui/react'
 import { useId } from '@fluentui/react-hooks'
-import { SearchBoxProps } from '@fluentui/react-search-preview'
+import { SearchBoxProps } from '@fluentui/react-components'
 import strings from 'PortfolioWebPartsStrings'
 import { IFilterItemProps, IFilterPanelProps, ProjectColumn } from 'pp365-shared-library'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'

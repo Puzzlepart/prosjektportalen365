@@ -1,5 +1,4 @@
-import { DataGridProps } from '@fluentui/react-components'
-import { SearchBoxProps } from '@fluentui/react-search-preview'
+import { DataGridProps, SearchBoxProps } from '@fluentui/react-components'
 
 export interface IProjectListProps {
   items: Record<string, any>[]

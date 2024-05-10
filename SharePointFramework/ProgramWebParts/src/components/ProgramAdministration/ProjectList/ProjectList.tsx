@@ -4,9 +4,9 @@ import {
   DataGridCell,
   DataGridHeader,
   DataGridHeaderCell,
-  DataGridRow
+  DataGridRow,
+  SearchBox
 } from '@fluentui/react-components'
-import { SearchBox } from '@fluentui/react-search-preview'
 import React, { FC, useContext } from 'react'
 import { ProgramAdministrationContext } from '../context'
 import styles from './ProjectList.module.scss'
