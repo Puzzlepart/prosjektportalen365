@@ -9,6 +9,8 @@ declare interface IPortfolioWebPartsStrings {
   },
   Placeholder: {
     TextField: string
+    SiteName: string
+    SiteDescription: string
     Icon: string,
     ChoiceField: string,
     MultiChoiceField: string,
@@ -262,6 +264,10 @@ declare interface IPortfolioWebPartsStrings {
   TimelineContentListName: string
   TitleLabel: string
   TitleDescription: string
+  SiteNameLabel: string
+  SiteNameDescription: string
+  SiteDescriptionLabel: string
+  SiteDescriptionDescription: string
   ToggleColumnFormPanelLabel: string
   ToggleEditViewColumnsLabel: string
   UseChangesButtonText: string

@@ -63,7 +63,8 @@
     "react-error-boundary": "~4.0.11",
     "react-window": "~1.8.10",
     "react-virtualized-auto-sizer": "~1.0.24",
-    "@fluentui/react-datepicker-compat": "~0.4.36"
+    "@fluentui/react-datepicker-compat": "~0.4.36",
+    "@fluentui/react-motion-preview": "~0.5.20"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.17.4",

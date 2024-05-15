@@ -24328,6 +24328,7 @@ packages:
       '@fluentui/react-file-type-icons': 8.11.9_4865287ef69aa4f3fc3f709d3560286e
       '@fluentui/react-hooks': 8.6.27_4865287ef69aa4f3fc3f709d3560286e
       '@fluentui/react-icons': 2.0.239_react@17.0.1
+      '@fluentui/react-motion-preview': 0.5.20_9c907a7ccd27a2e2d0ee9de5366482d1
       '@fluentui/react-search-preview': 0.1.51_9c907a7ccd27a2e2d0ee9de5366482d1
       '@microsoft/decorators': 1.17.4
       '@microsoft/eslint-config-spfx': 1.17.4_eslint@8.25.0+typescript@4.5.5
@@ -24407,7 +24408,7 @@ packages:
     peerDependencies:
       '@pnp/odata': '*'
     resolution:
-      integrity: sha512-1e793QM7JeO99akfW5y6gpOKIyYmYdYW1aobXhzIYizewTQA+vuMkZQQratOURbtvfHXbUt5m2zAEPm7GYWQAQ==
+      integrity: sha512-Mv+sSyIBEo7WeX0VmGOuqyMvWI1h8VAx/zRIdroAuMB+39si6TR3THqKrTKRBS2f7GOzya7rI8ARnk8v8GAyhQ==
       tarball: file:projects/pp365-portfoliowebparts.tgz
     version: 0.0.0
   file:projects/pp365-programwebparts.tgz_@pnp+odata@2.15.0:
