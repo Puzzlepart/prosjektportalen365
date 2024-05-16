@@ -23,7 +23,30 @@ import {
   Textarea,
   Dropdown,
   Option,
-  Divider
+  Divider,
+  TagPicker,
+  TagPickerList,
+  TagPickerInput,
+  TagPickerControl,
+  TagPickerProps,
+  TagPickerOption,
+  TagPickerGroup,
+  useTagPickerFilter,
+  Tag,
+  Avatar,
+  Menu,
+  MenuButtonProps,
+  MenuItem,
+  MenuList,
+  MenuPopover,
+  MenuTrigger,
+  SplitButton,
+  useRestoreFocusTarget,
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogSurface,
+  DialogTitle
 } from '@fluentui/react-components'
 import {
   Dismiss24Regular,
@@ -38,6 +61,7 @@ import { useStyles, useMotionStyles } from './styles'
 import { FieldContainer, getFluentIcon } from 'pp365-shared-library'
 import strings from 'PortfolioWebPartsStrings'
 import styles from './ProjectProvision.module.scss'
+import { ProvisionStatus } from './ProvisionStatus/ProvisionStatus'
 
 export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
   const stylesX = useStyles()
@@ -45,18 +69,58 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
 
   const [isOpen, setIsOpen] = useState(false)
   const [l2, setL2] = useState(false)
-  const [l3, setL3] = useState(false)
 
   const toolbarBackIconMotion = useMotion<HTMLButtonElement>(l2)
   const toolbarCalendarIconMotion = useMotion<HTMLButtonElement>(!l2)
-  const toolbarInfoIconMotion = useMotion<HTMLButtonElement>(!l3)
   const level1Motion = useMotion<HTMLDivElement>(!l2)
   const level2Motion = useMotion<HTMLDivElement>(l2)
-  const level3Motion = useMotion<HTMLDivElement>(l3)
 
   const [siteTemplate, setSiteTemplate] = useState('project')
   const [privacy, setPrivacy] = useState('Privat - Brukere trenger tillatelse for å bli med')
   const [language, setLanguage] = useState('Norsk (Bokmål)')
+
+  const [open, setOpen] = React.useState(false)
+  const restoreFocusTargetAttribute = useRestoreFocusTarget()
+
+  const options = [
+    'John Doe',
+    'Jane Doe',
+    'Max Mustermann',
+    'Erika Mustermann',
+    'Pierre Dupont',
+    'Amelie Dupont',
+    'Mario Rossi',
+    'Maria Rossi'
+  ]
+
+  const [query, setQuery] = React.useState<string>('')
+  const [selectedOptions, setSelectedOptions] = React.useState<string[]>([])
+  const onOptionSelect: TagPickerProps['onOptionSelect'] = (e, data) => {
+    if (data.value === 'no-matches') {
+      return
+    }
+    setSelectedOptions(data.selectedOptions)
+    setQuery('')
+  }
+
+  const children = useTagPickerFilter({
+    query,
+    options,
+    noOptionsElement: <TagPickerOption value='no-matches'>Ingen treff</TagPickerOption>,
+    renderOption: (option) => (
+      <TagPickerOption
+        secondaryContent='Microsoft FTE'
+        key={option}
+        media={<Avatar shape='square' aria-hidden name={option} color='colorful' />}
+        value={option}
+      >
+        {option}
+      </TagPickerOption>
+    ),
+
+    filter: (option) =>
+      !selectedOptions.includes(option) && option.toLowerCase().includes(query.toLowerCase())
+  })
 
   const resolveAsset = (asset: string) => {
     const ASSET_URL =
@@ -65,7 +129,9 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
     return `${ASSET_URL}${asset}`
   }
 
-  const SiteType = (props: CardProps & { title: string; type: string; description: string; logo: string }) => {
+  const SiteType = (
+    props: CardProps & { title: string; type: string; description: string; logo: string }
+  ) => {
     const styles = useStyles()
 
     return (
@@ -82,9 +148,10 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
             alt={`Preview image for ${props.title}`}
           />
         </CardPreview>
-        <CardHeader header={<Text weight='semibold'>{props.title}</Text>} description={
-          <Caption1 className={styles.caption}>{props.description}</Caption1>
-        } />
+        <CardHeader
+          header={<Text weight='semibold'>{props.title}</Text>}
+          description={<Caption1 className={styles.caption}>{props.description}</Caption1>}
+        />
       </Card>
     )
   }
@@ -130,25 +197,12 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
                     onClick={() => setL2(true)}
                   />
                 )}
-                {toolbarInfoIconMotion.canRender && (
-                  <ToolbarButton
-                    ref={toolbarInfoIconMotion.ref}
-                    className={mergeClasses(
-                      motionStyles.toolbarButton,
-                      toolbarInfoIconMotion.active && motionStyles.toolbarButtonVisible
-                    )}
-                    aria-label='Go to calendar'
-                    appearance='subtle'
-                    icon={<Settings24Regular />}
-                    onClick={() => setL3(true)}
-                  />
-                )}
 
-                {/* <ToolbarButton
+                <ToolbarButton
                   aria-label='Settings'
                   appearance='subtle'
                   icon={<Settings24Regular />}
-                /> */}
+                />
                 <ToolbarButton
                   aria-label='Close panel'
                   appearance='subtle'
@@ -179,9 +233,24 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
               <div className={styles.content}>
                 <FieldContainer iconName='AppsList' label={'Områdetype'}>
                   <div className={stylesX.main}>
-                    <SiteType title='Prosjekt' description='Prosjektportalen' logo='office1.png' type='project' />
-                    <SiteType title='Samarbeid' description='Samarbeidsområde' logo='office2.png' type='collab' />
-                    <SiteType title='Kommunikasjon' description='Kommunikasjonsområde' logo='sales_template.png' type='communication' />
+                    <SiteType
+                      title='Prosjekt'
+                      description='Prosjektportalen'
+                      logo='office1.png'
+                      type='project'
+                    />
+                    <SiteType
+                      title='Samarbeid'
+                      description='Samarbeidsområde'
+                      logo='office2.png'
+                      type='collab'
+                    />
+                    <SiteType
+                      title='Kommunikasjon'
+                      description='Kommunikasjonsområde'
+                      logo='sales_template.png'
+                      type='communication'
+                    />
                   </div>
                 </FieldContainer>
                 <FieldContainer
@@ -228,7 +297,7 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
                   />
                 </FieldContainer>
                 <FieldContainer
-                  iconName='TextNumberFormat'
+                  iconName='Link'
                   label='Områdeadresse'
                   description={strings.InternalNameDescription}
                   required={true}
@@ -240,6 +309,65 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
                     contentBefore={<Caption1>https://puzzlepart.sharepoint.com/sites/</Caption1>}
                     placeholder={strings.Placeholder.TextField}
                   />
+                </FieldContainer>
+                <Divider />
+                <FieldContainer
+                  iconName='Person'
+                  label='Eier(e)'
+                  description={strings.InternalNameDescription}
+                  required={true}
+                >
+                  <TagPicker onOptionSelect={onOptionSelect} selectedOptions={selectedOptions}>
+                    <TagPickerControl>
+                      <TagPickerGroup>
+                        {selectedOptions.map((option) => (
+                          <Tag
+                            key={option}
+                            shape='rounded'
+                            media={<Avatar aria-hidden name={option} color='colorful' />}
+                            value={option}
+                          >
+                            {option}
+                          </Tag>
+                        ))}
+                      </TagPickerGroup>
+                      <TagPickerInput
+                        aria-label='Select Employees'
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                      />
+                    </TagPickerControl>
+                    <TagPickerList>{children}</TagPickerList>
+                  </TagPicker>
+                </FieldContainer>
+                <FieldContainer
+                  iconName='Person'
+                  label='Medlem(mer)'
+                  description={strings.InternalNameDescription}
+                  required={true}
+                >
+                  <TagPicker onOptionSelect={onOptionSelect} selectedOptions={selectedOptions}>
+                    <TagPickerControl>
+                      <TagPickerGroup>
+                        {selectedOptions.map((option) => (
+                          <Tag
+                            key={option}
+                            shape='rounded'
+                            media={<Avatar aria-hidden name={option} color='colorful' />}
+                            value={option}
+                          >
+                            {option}
+                          </Tag>
+                        ))}
+                      </TagPickerGroup>
+                      <TagPickerInput
+                        aria-label='Select Employees'
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                      />
+                    </TagPickerControl>
+                    <TagPickerList>{children}</TagPickerList>
+                  </TagPicker>
                 </FieldContainer>
                 <Divider />
                 <FieldContainer
@@ -287,8 +415,8 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
                   />
                 </FieldContainer>
                 <p className={styles.ignoreGap}>
-                  Ditt område vil bli knyttet til en Microsoft 365-gruppe, som gir nettstedet ditt en
-                  delt OneNote-notatblokk, gruppe-e-postadresse og delt kalender.
+                  Ditt område vil bli knyttet til en Microsoft 365-gruppe, som gir nettstedet ditt
+                  en delt OneNote-notatblokk, gruppe-e-postadresse og delt kalender.
                 </p>
               </div>
             </DrawerBody>
@@ -308,50 +436,67 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
               <p>Level 2 innhold</p>
             </DrawerBody>
           )}
-          {level3Motion.canRender && (
-            <DrawerBody
-              ref={level3Motion.ref}
-              className={mergeClasses(
-                stylesX.level,
-                motionStyles.level,
-                motionStyles.level3,
-                level3Motion.active && motionStyles.levelVisible
-              )}
-            >
-              <DrawerHeaderTitle>Prosjektinformasjon</DrawerHeaderTitle>
-              <p>Level 3 innhold</p>
-            </DrawerBody>
-          )}
         </div>
 
         <DrawerFooter className={stylesX.footer}>
-          <Button appearance='subtle' disabled={!l2 || !l3} onClick={() => {
-            if (l2) setL2(false)
-            if (l3) {
-              setL3(false)
-              setL2(true)
-            }
-          }}>
+          <Button appearance='subtle' disabled={!l2} onClick={() => setL2(false)}>
             Forrige
           </Button>
 
-          <Button appearance='primary' disabled={l3} onClick={() => {
-            if (!l2) setL2(true)
-            if (l3) setL3(false)
-          }}>
+          <Button appearance='primary' disabled={l2} onClick={() => setL2(true)}>
             Neste
           </Button>
         </DrawerFooter>
       </OverlayDrawer>
 
-      <Button
-        appearance='primary'
-        size='large'
-        icon={getFluentIcon('Add')}
-        onClick={() => setIsOpen(true)}
+      <Menu positioning='below-end'>
+        <MenuTrigger disableButtonEnhancement>
+          {(triggerProps: MenuButtonProps) => (
+            <SplitButton
+              menuButton={triggerProps}
+              primaryActionButton={{
+                onClick: () => setIsOpen(true)
+              }}
+              icon={getFluentIcon('Add')}
+              appearance='primary'
+              size='large'
+            >
+              Bestill område
+            </SplitButton>
+          )}
+        </MenuTrigger>
+        <MenuPopover>
+          <MenuList>
+            <MenuItem
+              {...restoreFocusTargetAttribute}
+              onClick={() => {
+                // it is the user responsibility to open the dialog
+                setOpen(true)
+              }}
+            >
+              Mine bestillinger
+            </MenuItem>
+            <MenuItem>Opprett idé</MenuItem>
+          </MenuList>
+        </MenuPopover>
+      </Menu>
+
+      <Dialog
+        modalType='non-modal'
+        open={open}
+        onOpenChange={(event, data) => {
+          setOpen(data.open)
+        }}
       >
-        Bestill område
-      </Button>
+        <DialogSurface>
+          <DialogBody>
+            <DialogTitle>Mine bestillinger</DialogTitle>
+            <DialogContent>
+              <ProvisionStatus />
+            </DialogContent>
+          </DialogBody>
+        </DialogSurface>
+      </Dialog>
     </div>
   )
 }

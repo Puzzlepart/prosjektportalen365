@@ -90,8 +90,5 @@ export const useMotionStyles = makeStyles({
   },
   level2: {
     transform: 'translate3D(100%, 0, 0)'
-  },
-  level3: {
-    transform: 'translate3D(100%, 0, 0)'
   }
 })
