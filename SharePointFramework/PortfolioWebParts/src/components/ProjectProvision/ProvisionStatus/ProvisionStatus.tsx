@@ -1,9 +1,13 @@
 import * as React from 'react'
 import {
-  WrenchSettingsRegular,
+  SparkleCircleRegular,
+  LightbulbCircleRegular,
   ApprovalsAppRegular,
   CheckmarkCircleRegular,
-  ErrorCircleRegular
+  ErrorCircleRegular,
+  DeleteRegular,
+  EditRegular,
+  CopyAddRegular
 } from '@fluentui/react-icons'
 import {
   PresenceBadgeStatus,
@@ -21,8 +25,12 @@ import {
   DataGridProps,
   Tag,
   tokens,
-  Link
+  Link,
+  Button,
+  DataGridCellFocusMode,
+  TableColumnId
 } from '@fluentui/react-components'
+import styles from './ProvisionStatus.module.scss'
 
 type OrderDateCell = {
   label: string
@@ -59,9 +67,9 @@ const items: Item[] = [
       icon: <ApprovalsAppRegular />
     },
     status: {
-      label: 'Venter godkjenning',
+      label: 'Ikke startet',
       type: 'info',
-      icon: <ApprovalsAppRegular />
+      icon: <LightbulbCircleRegular />
     }
   },
   {
@@ -76,7 +84,7 @@ const items: Item[] = [
     status: {
       label: 'Konfigurerer',
       type: 'configuring',
-      icon: <WrenchSettingsRegular />
+      icon: <SparkleCircleRegular />
     }
   },
   {
@@ -235,6 +243,21 @@ const columns: TableColumnDefinition<Item>[] = [
         </TableCellLayout>
       )
     }
+  }),
+  createTableColumn<Item>({
+    columnId: 'actions',
+    renderHeaderCell: () => {
+      return 'Actions'
+    },
+    renderCell: () => {
+      return (
+        <div className={styles.actions}>
+          <Button aria-label='Dupliser' icon={<CopyAddRegular />} />
+          <Button aria-label='Rediger' icon={<EditRegular />} />
+          <Button aria-label='Fjern' icon={<DeleteRegular />} />
+        </div>
+      )
+    }
   })
 ]
 
@@ -247,20 +270,27 @@ export const ProvisionStatus = () => {
   const columnSizingOptions = {
     site: {
       minWidth: 120,
-      defaultWidth: 200
+      defaultWidth: 240
     },
     orderDate: {
       minWidth: 80,
-      defaultWidth: 100
+      defaultWidth: 120
     },
     approver: {
-      defaultWidth: 160,
-      minWidth: 120,
-      idealWidth: 180
+      defaultWidth: 180,
+      minWidth: 120
     },
     approveStatus: {
       minWidth: 80,
-      defaultWidth: 100
+      defaultWidth: 120
+    },
+    status: {
+      minWidth: 80,
+      defaultWidth: 120
+    },
+    actions: {
+      minWidth: 120,
+      defaultWidth: 120
     }
   }
 
@@ -268,6 +298,15 @@ export const ProvisionStatus = () => {
     () => ({ sortColumn: 'orderDate', sortDirection: 'ascending' }),
     []
   )
+
+  const getCellFocusMode = (columnId: TableColumnId): DataGridCellFocusMode => {
+    switch (columnId) {
+      case 'actions':
+        return 'group'
+      default:
+        return 'cell'
+    }
+  }
 
   return (
     <DataGrid
@@ -301,7 +340,9 @@ export const ProvisionStatus = () => {
               checkboxIndicator: { 'aria-label': 'Select row' }
             }}
           >
-            {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
+            {({ renderCell, columnId }) => (
+              <DataGridCell focusMode={getCellFocusMode(columnId)}>{renderCell(item)}</DataGridCell>
+            )}
           </DataGridRow>
         )}
       </DataGridBody>

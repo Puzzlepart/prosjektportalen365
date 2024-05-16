@@ -46,7 +46,8 @@ import {
   DialogBody,
   DialogContent,
   DialogSurface,
-  DialogTitle
+  DialogTitle,
+  DialogTrigger
 } from '@fluentui/react-components'
 import {
   Dismiss24Regular,
@@ -476,13 +477,13 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
             >
               Mine bestillinger
             </MenuItem>
-            <MenuItem>Opprett idé</MenuItem>
+            <MenuItem>Registrer idé</MenuItem>
           </MenuList>
         </MenuPopover>
       </Menu>
 
       <Dialog
-        modalType='non-modal'
+        modalType='modal'
         open={open}
         onOpenChange={(event, data) => {
           setOpen(data.open)
@@ -490,8 +491,21 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
       >
         <DialogSurface>
           <DialogBody>
-            <DialogTitle>Mine bestillinger</DialogTitle>
+            <DialogTitle
+              action={
+                <DialogTrigger action='close'>
+                  <Button appearance='subtle' aria-label='close' icon={<Dismiss24Regular />} />
+                </DialogTrigger>
+              }
+            >
+              Mine bestillinger
+            </DialogTitle>
             <DialogContent>
+              <p>
+                Her kan du se status på dine bestillinger, hvem som er godkjenner og
+                godkjenningsstatus. Dersom en bestilling blir avslått, kan du velge å bestille på
+                nytt basert på en tidligere bestilling eller fjerne bestillingen fra listen.
+              </p>
               <ProvisionStatus />
             </DialogContent>
           </DialogBody>
