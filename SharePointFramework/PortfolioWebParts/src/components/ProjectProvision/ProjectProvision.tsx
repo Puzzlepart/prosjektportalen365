@@ -51,7 +51,7 @@ import {
 } from '@fluentui/react-components'
 import {
   Dismiss24Regular,
-  Calendar24Regular,
+  DataUsage24Regular,
   Settings24Regular,
   ArrowLeft24Regular
 } from '@fluentui/react-icons'
@@ -76,6 +76,8 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
   const level1Motion = useMotion<HTMLDivElement>(!l2)
   const level2Motion = useMotion<HTMLDivElement>(l2)
 
+  const [siteType, setSiteType] = useState('project')
+  const [siteTitle, setSiteTitle] = useState('')
   const [siteTemplate, setSiteTemplate] = useState('project')
   const [privacy, setPrivacy] = useState('Privat - Brukere trenger tillatelse for å bli med')
   const [language, setLanguage] = useState('Norsk (Bokmål)')
@@ -138,6 +140,33 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
     return (
       <Card
         className={styles.card}
+        selected={siteType === props.type}
+        onSelectionChange={() => setSiteType(props.type)}
+        floatingAction={<Checkbox shape='circular' checked={siteType === props.type} />}
+      >
+        <CardPreview className={styles.grayBackground}>
+          <img
+            className={styles.smallRadius}
+            src={resolveAsset(props.logo)}
+            alt={`Preview image for ${props.title}`}
+          />
+        </CardPreview>
+        <CardHeader
+          header={<Text weight='semibold'>{props.title}</Text>}
+          description={<Caption1 className={styles.caption}>{props.description}</Caption1>}
+        />
+      </Card>
+    )
+  }
+
+  const SiteTemplate = (
+    props: CardProps & { title: string; type: string; description: string; logo: string }
+  ) => {
+    const styles = useStyles()
+
+    return (
+      <Card
+        className={styles.card}
         selected={siteTemplate === props.type}
         onSelectionChange={() => setSiteTemplate(props.type)}
         floatingAction={<Checkbox shape='circular' checked={siteTemplate === props.type} />}
@@ -160,6 +189,7 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
   return (
     <div>
       <OverlayDrawer
+        role='panel'
         position='end'
         open={isOpen}
         size='medium'
@@ -194,7 +224,7 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
                     )}
                     aria-label='Go to calendar'
                     appearance='subtle'
-                    icon={<Calendar24Regular />}
+                    icon={<DataUsage24Regular />}
                     onClick={() => setL2(true)}
                   />
                 )}
@@ -263,9 +293,9 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
                   validationMessage='Navnet er ledig'
                 >
                   <Input
-                    prefix='PZL-'
+                    // contentBefore={<Caption1>pzl-</Caption1>}
                     onChange={(_, data) =>
-                      console.log("setColumn('internalName', data.value)", data)
+                      setSiteTitle(data.value)
                     }
                     placeholder={strings.Placeholder.SiteName}
                   />
@@ -279,17 +309,32 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
                     onChange={(_, data) =>
                       console.log("setColumn('searchQuery', data.value)", data)
                     }
-                    rows={3}
+                    rows={2}
+                    placeholder={strings.Placeholder.SiteDescription}
+                  />
+                </FieldContainer>
+                <FieldContainer
+                  iconName='TextAlignLeft'
+                  label='Forretningsmessig begrunnelse'
+                  description='Beskriv hvorfor du trenger dette området.'
+                  required={true}
+                >
+                  <Textarea
+                    onChange={(_, data) =>
+                      console.log("setColumn('searchQuery', data.value)", data)
+                    }
+                    rows={2}
                     placeholder={strings.Placeholder.SiteDescription}
                   />
                 </FieldContainer>
                 <FieldContainer
                   iconName='TextNumberFormat'
                   label='Alias/navn'
-                  description={strings.InternalNameDescription}
+                  description='Velg et unikt alias som følger organisasjonens navngivningsstandarder.'
                   required={true}
                 >
                   <Input
+                    value={siteTitle}
                     onChange={(_, data) =>
                       console.log("setColumn('internalName', data.value)", data)
                     }
@@ -300,10 +345,11 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
                 <FieldContainer
                   iconName='Link'
                   label='Områdeadresse'
-                  description={strings.InternalNameDescription}
+                  description='Områdeadressen er en del av URL-en til området.'
                   required={true}
                 >
                   <Input
+                    value={siteTitle}
                     onChange={(_, data) =>
                       console.log("setColumn('internalName', data.value)", data)
                     }
@@ -315,7 +361,7 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
                 <FieldContainer
                   iconName='Person'
                   label='Eier(e)'
-                  description={strings.InternalNameDescription}
+                  description='Eier(e) har full tilgang til området og kan legge til og fjerne medlemmer. Du kan legge til flere eiere senere.'
                   required={true}
                 >
                   <TagPicker onOptionSelect={onOptionSelect} selectedOptions={selectedOptions}>
@@ -342,11 +388,11 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
                   </TagPicker>
                 </FieldContainer>
                 <FieldContainer
-                  iconName='Person'
+                  iconName='People'
                   label='Medlem(mer)'
-                  description={strings.InternalNameDescription}
-                  required={true}
+                  description='Medlem(mer) har tilgang til området basert på tillatelsene som er satt. Du kan legge til flere medlemmer senere.'
                 >
+                  {/* Members can not be the same as the owner */}
                   <TagPicker onOptionSelect={onOptionSelect} selectedOptions={selectedOptions}>
                     <TagPickerControl>
                       <TagPickerGroup>
@@ -370,11 +416,31 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
                     <TagPickerList>{children}</TagPickerList>
                   </TagPicker>
                 </FieldContainer>
-                <Divider />
+
+              </div>
+            </DrawerBody>
+          )}
+
+          {level2Motion.canRender && (
+            <DrawerBody
+              ref={level2Motion.ref}
+              className={mergeClasses(
+                stylesX.level,
+                motionStyles.level,
+                motionStyles.level2,
+                level2Motion.active && motionStyles.levelVisible
+              )}
+            >
+              <DrawerHeaderTitle>Klassifisering</DrawerHeaderTitle>
+              <p>
+                Her kan du velge klassifisering for området. Angi språk, tilgangsinnstillinger og
+                hubtilknytning.
+              </p>
+              <div className={styles.content}>
                 <FieldContainer
-                  iconName='TextNumberFormat'
+                  iconName='Eye'
                   label='Tilgangsinnstillinger'
-                  description={strings.InternalNameDescription}
+                  description='Velg om området skal være privat eller offentlig.'
                 >
                   <Dropdown
                     defaultValue={privacy}
@@ -390,7 +456,29 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
                   </Dropdown>
                 </FieldContainer>
                 <FieldContainer
-                  iconName='TextNumberFormat'
+                  iconName='Guest'
+                  label='Tillat eksterne gjester'
+                  description='Dersom denne er aktivert, vil man kunne invitere inn og dele enkeltfiler, mapper, bibliotek o.l. med eksterne gjestebrukere. NB! Invitasjon av eksterne gjestebrukere vil først være mulig etter at gruppen/området er opprettet.'
+                >
+                  <Switch
+                    onChange={(_, data) =>
+                      console.log("setColumn('isGroupable', data.checked)", data)
+                    }
+                  />
+                </FieldContainer>
+                <FieldContainer
+                  iconName='BoxToolbox'
+                  label='Konfidensielle/sensitive data'
+                  description='Vil konfidensielle eller sensitive data bli lagret i dette rommet? Dersom ja, må du sørge for at du har satt riktige tillatelser.'
+                >
+                  <Switch
+                    onChange={(_, data) =>
+                      console.log("setColumn('isGroupable', data.checked)", data)
+                    }
+                  />
+                </FieldContainer>
+                <FieldContainer
+                  iconName='LocalLanguage'
                   label='Velg et språk'
                   description='Velg standard språk for området. Dette kan ikke endres senere.'
                 >
@@ -405,36 +493,36 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
                   </Dropdown>
                 </FieldContainer>
                 <FieldContainer
-                  iconName='GroupList'
-                  label='Tillat eksterne gjester i gruppe/område'
-                  description='Dersom denne er aktivert, vil man kunne invitere inn og dele enkeltfiler, mapper, bibliotek o.l. med eksterne gjestebrukere.' //  NB! Invitasjon av eksterne gjestebrukere vil først være mulig etter at gruppen/området er opprettet.
+                  iconName='Clock'
+                  label='Tidsssone'
+                  description='Velg tidssone for området.'
                 >
-                  <Switch
-                    onChange={(_, data) =>
-                      console.log("setColumn('isGroupable', data.checked)", data)
-                    }
-                  />
+                  <Dropdown
+                    defaultValue={'(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna'}
+                    defaultSelectedOptions={['(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna']}
+                    disabled
+                  >
+                    <Option value='(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna'>(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna</Option>
+                  </Dropdown>
+                </FieldContainer>
+                <FieldContainer
+                  iconName='Database'
+                  label='Hubtilknytning'
+                  description='Velg hvilken hub dette området skal tilknyttes.'
+                >
+                  <Dropdown
+                    defaultValue={'Prosjektportalen 365'}
+                    defaultSelectedOptions={['Prosjektportalen 365']}
+                    disabled
+                  >
+                    <Option value='Prosjektportalen 365'>Prosjektportalen 365</Option>
+                  </Dropdown>
                 </FieldContainer>
                 <p className={styles.ignoreGap}>
                   Ditt område vil bli knyttet til en Microsoft 365-gruppe, som gir nettstedet ditt
                   en delt OneNote-notatblokk, gruppe-e-postadresse og delt kalender.
                 </p>
               </div>
-            </DrawerBody>
-          )}
-
-          {level2Motion.canRender && (
-            <DrawerBody
-              ref={level2Motion.ref}
-              className={mergeClasses(
-                stylesX.level,
-                motionStyles.level,
-                motionStyles.level2,
-                level2Motion.active && motionStyles.levelVisible
-              )}
-            >
-              <DrawerHeaderTitle>Prosjektinformasjon</DrawerHeaderTitle>
-              <p>Level 2 innhold</p>
             </DrawerBody>
           )}
         </div>
@@ -444,9 +532,14 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
             Forrige
           </Button>
 
-          <Button appearance='primary' disabled={l2} onClick={() => setL2(true)}>
-            Neste
+          <Button appearance='primary' onClick={() => {
+            l2 ? console.log('big orda todai!') : setL2(true)
+          }}>
+            {l2 ? 'Bestill område' : 'Neste'}
           </Button>
+          {/* <Button appearance='primary' disabled={l2} onClick={() => setL2(true)}>
+            Neste
+          </Button> */}
         </DrawerFooter>
       </OverlayDrawer>
 
