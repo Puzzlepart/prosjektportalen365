@@ -1,18 +1,6 @@
-import { makeStyles, shorthands, tokens } from '@fluentui/react-components'
+import { makeStyles, tokens } from '@fluentui/react-components'
 
 export const useStyles = makeStyles({
-  toolbar: {
-    justifyContent: 'space-between'
-  },
-
-  body: {
-    ...shorthands.flex(1),
-
-    width: '100%',
-    maxWidth: '100%',
-    position: 'relative'
-  },
-
   level: {
     position: 'absolute',
     top: 0,
@@ -27,35 +15,6 @@ export const useStyles = makeStyles({
     ':last-child': {
       paddingBottom: 0
     }
-  },
-
-  footer: {
-    justifyContent: 'space-between'
-  },
-
-  main: {
-    ...shorthands.gap('12px'),
-    display: 'flex',
-    flexWrap: 'wrap'
-  },
-
-  card: {
-    width: '168px',
-    maxWidth: '100%',
-    height: 'fit-content'
-  },
-
-  caption: {
-    color: tokens.colorNeutralForeground3
-  },
-
-  smallRadius: {
-    ...shorthands.borderRadius(tokens.borderRadiusSmall),
-    maxHeight: '82px'
-  },
-
-  grayBackground: {
-    backgroundColor: tokens.colorNeutralBackground3
   }
 })
 

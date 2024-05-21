@@ -10,7 +10,7 @@
       "yargs": "17.7.2",
       "glob": "10.2.6",
       "colors": "1.4.0",
-      "@fluentui/react-components": "~9.50.0",
+      "@fluentui/react-components": "~9.52.0",
       "@fluentui/react-icons": "~2.0.240"
     },
     "devDependencies": {
