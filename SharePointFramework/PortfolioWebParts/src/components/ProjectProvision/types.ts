@@ -6,4 +6,8 @@ export interface IProjectProvisionProps extends IBaseComponentProps {
 
 export interface IProjectProvisionState {
   siteType: string
+  showProvisionDrawer: boolean
+  showProvisionStatus: boolean
+  title: string
+  privacy: string
 }

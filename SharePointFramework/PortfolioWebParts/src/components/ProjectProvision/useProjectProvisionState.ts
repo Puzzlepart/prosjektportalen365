@@ -9,7 +9,11 @@ import { IProjectProvisionState, IProjectProvisionProps } from './types'
  */
 export function useProjectProvisionState(props: IProjectProvisionProps) {
   const [state, $setState] = useState<IProjectProvisionState>({
-    siteType: 'project'
+    siteType: 'project',
+    showProvisionDrawer: false,
+    showProvisionStatus: false,
+    title: '',
+    privacy: 'Privat - Brukere trenger tillatelse for å bli med'
   })
 
   /**

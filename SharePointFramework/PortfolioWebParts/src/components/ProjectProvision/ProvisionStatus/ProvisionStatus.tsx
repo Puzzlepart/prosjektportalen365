@@ -7,7 +7,8 @@ import {
   ErrorCircleRegular,
   DeleteRegular,
   EditRegular,
-  CopyAddRegular
+  CopyAddRegular,
+  Dismiss24Regular
 } from '@fluentui/react-icons'
 import {
   PresenceBadgeStatus,
@@ -28,9 +29,17 @@ import {
   Link,
   Button,
   DataGridCellFocusMode,
-  TableColumnId
+  TableColumnId,
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogSurface,
+  DialogTitle,
+  DialogTrigger
 } from '@fluentui/react-components'
 import styles from './ProvisionStatus.module.scss'
+import { useContext } from 'react'
+import { ProjectProvisionContext } from '../context'
 
 type OrderDateCell = {
   label: string
@@ -202,10 +211,10 @@ const columns: TableColumnDefinition<Item>[] = [
                 item.approveStatus.type === 'success'
                   ? tokens.colorStatusSuccessBackground2
                   : item.approveStatus.type === 'denied'
-                  ? tokens.colorStatusDangerBackground2
-                  : item.approveStatus.type === 'configuring'
-                  ? tokens.colorStatusWarningBackground2
-                  : tokens.colorNeutralBackground6
+                    ? tokens.colorStatusDangerBackground2
+                    : item.approveStatus.type === 'configuring'
+                      ? tokens.colorStatusWarningBackground2
+                      : tokens.colorNeutralBackground6
             }}
           >
             {item.approveStatus.label}
@@ -232,10 +241,10 @@ const columns: TableColumnDefinition<Item>[] = [
                 item.status.type === 'success'
                   ? tokens.colorStatusSuccessBackground2
                   : item.status.type === 'denied'
-                  ? tokens.colorStatusDangerBackground2
-                  : item.status.type === 'configuring'
-                  ? tokens.colorStatusWarningBackground2
-                  : tokens.colorNeutralBackground6
+                    ? tokens.colorStatusDangerBackground2
+                    : item.status.type === 'configuring'
+                      ? tokens.colorStatusWarningBackground2
+                      : tokens.colorNeutralBackground6
             }}
           >
             {item.status.label}
@@ -262,6 +271,8 @@ const columns: TableColumnDefinition<Item>[] = [
 ]
 
 export const ProvisionStatus = () => {
+  const context = useContext(ProjectProvisionContext)
+
   const [selectedRows, setSelectedRows] = React.useState(new Set<TableRowId>([]))
   const onSelectionChange: DataGridProps['onSelectionChange'] = (e, data) => {
     setSelectedRows(data.selectedItems)
@@ -309,43 +320,75 @@ export const ProvisionStatus = () => {
   }
 
   return (
-    <DataGrid
-      items={items}
-      columns={columns}
-      selectionMode='multiselect'
-      selectedItems={selectedRows}
-      onSelectionChange={onSelectionChange}
-      defaultSortState={defaultSortState}
-      sortable
-      resizableColumns
-      columnSizingOptions={columnSizingOptions}
-      resizableColumnsOptions={{
-        autoFitColumns: false
+    <Dialog
+      modalType='modal'
+      open={context.state.showProvisionStatus}
+      onOpenChange={(_, data) => {
+        context.setState({ showProvisionStatus: data.open })
       }}
     >
-      <DataGridHeader>
-        <DataGridRow
-          selectionCell={{
-            checkboxIndicator: { 'aria-label': 'Select all rows' }
-          }}
-        >
-          {({ renderHeaderCell }) => <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>}
-        </DataGridRow>
-      </DataGridHeader>
-      <DataGridBody<Item>>
-        {({ item, rowId }) => (
-          <DataGridRow<Item>
-            key={rowId}
-            selectionCell={{
-              checkboxIndicator: { 'aria-label': 'Select row' }
-            }}
+      <DialogSurface>
+        <DialogBody>
+          <DialogTitle
+            action={
+              <DialogTrigger action='close'>
+                <Button appearance='subtle' aria-label='close' icon={<Dismiss24Regular />} />
+              </DialogTrigger>
+            }
           >
-            {({ renderCell, columnId }) => (
-              <DataGridCell focusMode={getCellFocusMode(columnId)}>{renderCell(item)}</DataGridCell>
-            )}
-          </DataGridRow>
-        )}
-      </DataGridBody>
-    </DataGrid>
+            Mine bestillinger
+          </DialogTitle>
+          <DialogContent>
+            <p>
+              Her kan du se status på dine bestillinger, hvem som er godkjenner og
+              godkjenningsstatus. Dersom en bestilling blir avslått, kan du velge å bestille på nytt
+              basert på en tidligere bestilling eller fjerne bestillingen fra listen.
+            </p>
+            <DataGrid
+              items={items}
+              columns={columns}
+              selectionMode='multiselect'
+              selectedItems={selectedRows}
+              onSelectionChange={onSelectionChange}
+              defaultSortState={defaultSortState}
+              sortable
+              resizableColumns
+              columnSizingOptions={columnSizingOptions}
+              resizableColumnsOptions={{
+                autoFitColumns: false
+              }}
+            >
+              <DataGridHeader>
+                <DataGridRow
+                  selectionCell={{
+                    checkboxIndicator: { 'aria-label': 'Select all rows' }
+                  }}
+                >
+                  {({ renderHeaderCell }) => (
+                    <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
+                  )}
+                </DataGridRow>
+              </DataGridHeader>
+              <DataGridBody<Item>>
+                {({ item, rowId }) => (
+                  <DataGridRow<Item>
+                    key={rowId}
+                    selectionCell={{
+                      checkboxIndicator: { 'aria-label': 'Select row' }
+                    }}
+                  >
+                    {({ renderCell, columnId }) => (
+                      <DataGridCell focusMode={getCellFocusMode(columnId)}>
+                        {renderCell(item)}
+                      </DataGridCell>
+                    )}
+                  </DataGridRow>
+                )}
+              </DataGridBody>
+            </DataGrid>
+          </DialogContent>
+        </DialogBody>
+      </DialogSurface>
+    </Dialog>
   )
 }
