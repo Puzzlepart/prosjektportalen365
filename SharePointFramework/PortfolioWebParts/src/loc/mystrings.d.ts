@@ -277,6 +277,9 @@ declare interface IPortfolioWebPartsStrings {
   ViewMoreText: string
   ViewNotFoundMessage: string
   ViewsListNameLabel: string
+  ProvisionButtonLabel: string
+  ProvisionStatusMenuLabel: string
+  RegisterIdeaMenuLabel: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

@@ -211,10 +211,10 @@ const columns: TableColumnDefinition<Item>[] = [
                 item.approveStatus.type === 'success'
                   ? tokens.colorStatusSuccessBackground2
                   : item.approveStatus.type === 'denied'
-                    ? tokens.colorStatusDangerBackground2
-                    : item.approveStatus.type === 'configuring'
-                      ? tokens.colorStatusWarningBackground2
-                      : tokens.colorNeutralBackground6
+                  ? tokens.colorStatusDangerBackground2
+                  : item.approveStatus.type === 'configuring'
+                  ? tokens.colorStatusWarningBackground2
+                  : tokens.colorNeutralBackground6
             }}
           >
             {item.approveStatus.label}
@@ -241,10 +241,10 @@ const columns: TableColumnDefinition<Item>[] = [
                 item.status.type === 'success'
                   ? tokens.colorStatusSuccessBackground2
                   : item.status.type === 'denied'
-                    ? tokens.colorStatusDangerBackground2
-                    : item.status.type === 'configuring'
-                      ? tokens.colorStatusWarningBackground2
-                      : tokens.colorNeutralBackground6
+                  ? tokens.colorStatusDangerBackground2
+                  : item.status.type === 'configuring'
+                  ? tokens.colorStatusWarningBackground2
+                  : tokens.colorNeutralBackground6
             }}
           >
             {item.status.label}

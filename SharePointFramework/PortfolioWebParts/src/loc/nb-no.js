@@ -278,6 +278,9 @@ define([], function () {
     ViewLessText: 'Vis færre',
     ViewMoreText: 'Vis flere',
     ViewNotFoundMessage: 'Finner ikke angitt visning.',
-    ViewsListNameLabel: 'Visninger'
+    ViewsListNameLabel: 'Visninger',
+    ProvisionButtonLabel: 'Bestill område',
+    ProvisionStatusMenuLabel: 'Mine bestillinger',
+    RegisterIdeaMenuLabel: 'Registrer ide',
   }
 })

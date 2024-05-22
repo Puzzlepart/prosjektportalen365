@@ -1,0 +1,18 @@
+.card {
+  width: 168px;
+  max-width: 100%;
+  height: fit-content;
+}
+
+.caption {
+  color: var(--colorNeutralForeground3);
+}
+
+.smallRadius {
+  border-radius: var(--borderRadiusSmall);
+  max-height: 82px;
+}
+
+.grayBackground {
+  background-color: var(--colorNeutralBackground3);
+}

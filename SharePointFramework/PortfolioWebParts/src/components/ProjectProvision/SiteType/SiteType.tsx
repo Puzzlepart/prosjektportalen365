@@ -12,33 +12,12 @@ import {
 } from '@fluentui/react-components'
 import React, { useContext } from 'react'
 import { ProjectProvisionContext } from '../context'
-
-export const useStyles = makeStyles({
-  card: {
-    width: '168px',
-    maxWidth: '100%',
-    height: 'fit-content'
-  },
-
-  caption: {
-    color: tokens.colorNeutralForeground3
-  },
-
-  smallRadius: {
-    ...shorthands.borderRadius(tokens.borderRadiusSmall),
-    maxHeight: '82px'
-  },
-
-  grayBackground: {
-    backgroundColor: tokens.colorNeutralBackground3
-  }
-})
+import styles from './SiteType.module.scss';
 
 export const SiteType = (
   props: CardProps & { title: string; type: string; description: string; logo: string }
 ) => {
   const context = useContext(ProjectProvisionContext)
-  const styles = useStyles()
 
   const resolveAsset = (asset: string) => {
     const ASSET_URL =
