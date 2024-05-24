@@ -1,8 +1,8 @@
-import strings from 'PortfolioExtensionsStrings';
-import React, { FC, useContext } from 'react';
-import { FooterContext } from '../context';
-import { Button, Tooltip } from '@fluentui/react-components';
-import { getFluentIcon } from 'pp365-shared-library';
+import strings from 'PortfolioExtensionsStrings'
+import React, { FC, useContext } from 'react'
+import { FooterContext } from '../context'
+import { Button, Tooltip } from '@fluentui/react-components'
+import { getFluentIcon } from 'pp365-shared-library'
 
 
 export const Configuration: FC = () => {
@@ -21,5 +21,5 @@ export const Configuration: FC = () => {
         {strings.ConfigurationLabel}
       </Button>
     </Tooltip>
-  );
-};
+  )
+}
