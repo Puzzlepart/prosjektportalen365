@@ -22,8 +22,7 @@ export const Footer: FC<IFooterProps> = (props) => {
           <div className={styles.footer}>
             <section className={styles.left}>
               {props.pageContext.legacyPageContext.isSiteAdmin && <SiteSettings />}
-              {props.pageContext.legacyPageContext.isSiteAdmin &&
-                props.pageContext.legacyPageContext.isHubSite && <Configuration />}
+              <Configuration />
               <PromotedLinks />
             </section>
             <section className={styles.right}>
