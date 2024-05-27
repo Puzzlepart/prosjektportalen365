@@ -8,6 +8,7 @@ export interface IProjectProvisionState {
   siteType: string
   showProvisionDrawer: boolean
   showProvisionStatus: boolean
+  properties: Record<string, any>
   title: string
   privacy: string
 }

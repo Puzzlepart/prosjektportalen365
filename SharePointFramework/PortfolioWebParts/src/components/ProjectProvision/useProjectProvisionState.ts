@@ -12,6 +12,7 @@ export function useProjectProvisionState(props: IProjectProvisionProps) {
     siteType: 'project',
     showProvisionDrawer: false,
     showProvisionStatus: false,
+    properties: {},
     title: '',
     privacy: 'Privat - Brukere trenger tillatelse for å bli med'
   })

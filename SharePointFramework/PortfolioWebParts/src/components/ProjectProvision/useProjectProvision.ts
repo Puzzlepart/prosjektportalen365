@@ -2,6 +2,7 @@
 import { useProjectProvisionState } from './useProjectProvisionState'
 import { useProjectProvisionDataFetch } from './useProjectProvisionDataFetch'
 import { IProjectProvisionProps } from './types'
+import { useModel } from 'pp365-shared-library/lib/components/CustomEditPanel/useModel'
 
 /**
  * Component logic hook for `ProjectProvision`. This hook is responsible for

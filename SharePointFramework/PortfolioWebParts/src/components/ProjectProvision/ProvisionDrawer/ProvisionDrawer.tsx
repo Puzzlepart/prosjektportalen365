@@ -44,6 +44,7 @@ import { FieldContainer } from 'pp365-shared-library'
 import { SiteType } from '../SiteType'
 import { useProvisionDrawer } from './useProvisionDrawer'
 import styles from './ProvisionDrawer.module.scss'
+import { DebugModel } from './DebugModel'
 
 export const ProvisionDrawer = () => {
   const context = useContext(ProjectProvisionContext)
@@ -54,7 +55,10 @@ export const ProvisionDrawer = () => {
     toolbarBackIconMotion,
     toolbarCalendarIconMotion,
     level1Motion,
-    level2Motion
+    level2Motion,
+    column,
+    setColumn,
+    isSaveDisabled
   } = useProvisionDrawer()
 
   const options = ['John Doe', 'Maria Rossi']
@@ -114,7 +118,6 @@ export const ProvisionDrawer = () => {
                 />
               )}
             </ToolbarGroup>
-
             <ToolbarGroup>
               {toolbarCalendarIconMotion.canRender && (
                 <ToolbarButton
@@ -163,6 +166,7 @@ export const ProvisionDrawer = () => {
               informasjonen for området.
             </p>
             <div className={styles.content}>
+              {DEBUG && <DebugModel />}
               <FieldContainer iconName='AppsList' label={'Områdetype'}>
                 <div className={styles.sitetypes}>
                   <SiteType
@@ -194,8 +198,8 @@ export const ProvisionDrawer = () => {
                 validationMessage='Navnet er ledig'
               >
                 <Input
-                  // contentBefore={<Caption1>pzl-</Caption1>}
-                  onChange={(_, data) => context.setState({ title: data.value })}
+                  value={column.get('name')}
+                  onChange={(_, data) => setColumn('name', data.value)}
                   placeholder={strings.Placeholder.SiteName}
                 />
               </FieldContainer>
@@ -205,7 +209,8 @@ export const ProvisionDrawer = () => {
                 description={strings.SiteDescriptionDescription}
               >
                 <Textarea
-                  onChange={(_, data) => console.log("setColumn('searchQuery', data.value)", data)}
+                  value={column.get('description')}
+                  onChange={(_, data) => setColumn('description', data.value)}
                   rows={2}
                   placeholder={strings.Placeholder.SiteDescription}
                 />
@@ -217,7 +222,8 @@ export const ProvisionDrawer = () => {
                 required={true}
               >
                 <Textarea
-                  onChange={(_, data) => console.log("setColumn('searchQuery', data.value)", data)}
+                  value={column.get('justification')}
+                  onChange={(_, data) => setColumn('justification', data.value)}
                   rows={2}
                   placeholder={strings.Placeholder.SiteDescription}
                 />
@@ -229,8 +235,8 @@ export const ProvisionDrawer = () => {
                 required={true}
               >
                 <Input
-                  value={context.state.title}
-                  onChange={(_, data) => console.log("setColumn('internalName', data.value)", data)}
+                  value={column.get('siteName')}
+                  onChange={(_, data) => setColumn('alias', data.value)}
                   contentAfter={<Caption1>@puzzlepart.onmicrosoft.com</Caption1>}
                   placeholder={strings.Placeholder.TextField}
                 />
@@ -242,8 +248,8 @@ export const ProvisionDrawer = () => {
                 required={true}
               >
                 <Input
-                  value={context.state.title}
-                  onChange={(_, data) => console.log("setColumn('internalName', data.value)", data)}
+                  value={column.get('siteName')}
+                  onChange={(_, data) => setColumn('url', data.value)}
                   contentBefore={<Caption1>https://puzzlepart.sharepoint.com/sites/</Caption1>}
                   placeholder={strings.Placeholder.TextField}
                 />
@@ -328,6 +334,17 @@ export const ProvisionDrawer = () => {
             </p>
             <div className={styles.content}>
               <FieldContainer
+                iconName='BoxToolbox'
+                label='Konfidensielle/sensitive data'
+                description='Vil konfidensielle eller sensitive data bli lagret i dette rommet? Dersom ja, må du sørge for at du har satt riktige tillatelser.'
+              >
+                <Switch
+                  onChange={(_, data) =>
+                    console.log("setColumn('isGroupable', data.checked)", data)
+                  }
+                />
+              </FieldContainer>
+              <FieldContainer
                 iconName='Eye'
                 label='Tilgangsinnstillinger'
                 description='Velg om området skal være privat eller offentlig.'
@@ -357,15 +374,32 @@ export const ProvisionDrawer = () => {
                 />
               </FieldContainer>
               <FieldContainer
-                iconName='BoxToolbox'
-                label='Konfidensielle/sensitive data'
-                description='Vil konfidensielle eller sensitive data bli lagret i dette rommet? Dersom ja, må du sørge for at du har satt riktige tillatelser.'
+                iconName='People'
+                label='Gjest(er)'
+                description='Her kan du legge til eksterne gjester.'
               >
-                <Switch
-                  onChange={(_, data) =>
-                    console.log("setColumn('isGroupable', data.checked)", data)
-                  }
-                />
+                <TagPicker onOptionSelect={onOptionSelect} selectedOptions={selectedOptions}>
+                  <TagPickerControl>
+                    <TagPickerGroup>
+                      {selectedOptions.map((option) => (
+                        <Tag
+                          key={option}
+                          shape='rounded'
+                          media={<Avatar aria-hidden name={option} color='colorful' />}
+                          value={option}
+                        >
+                          {option}
+                        </Tag>
+                      ))}
+                    </TagPickerGroup>
+                    <TagPickerInput
+                      aria-label='Select Employees'
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                    />
+                  </TagPickerControl>
+                  <TagPickerList>{children}</TagPickerList>
+                </TagPicker>
               </FieldContainer>
               <FieldContainer
                 iconName='LocalLanguage'
@@ -418,6 +452,7 @@ export const ProvisionDrawer = () => {
 
         <Button
           appearance='primary'
+          disabled={l2 && isSaveDisabled}
           onClick={() => {
             l2 ? console.log('big orda todai!') : setL2(true)
           }}
