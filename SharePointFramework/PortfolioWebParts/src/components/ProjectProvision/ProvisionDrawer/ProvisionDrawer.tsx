@@ -315,7 +315,7 @@ export const ProvisionDrawer = () => {
               <FieldContainer
                 iconName='People'
                 label='Gjest(er)'
-                description='Her kan du legge til eksterne gjester.'
+                description='Her kan du legge til eksterne gjester. Vennligst skriv inn en gyldig e-postadresse.'
                 hidden={!context.column.get('allowGuests')}
               >
                 <Guest />

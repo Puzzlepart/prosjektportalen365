@@ -25,7 +25,7 @@ export const Guest = (props: { disabled?: boolean }) => {
       return
     }
 
-    if (!data.value.includes('@')) {
+    if (query && (!query.includes('@') || !query.includes('.'))) {
       return
     }
 
@@ -66,31 +66,33 @@ export const Guest = (props: { disabled?: boolean }) => {
   })
 
   return (
-    <TagPicker
-      onOptionSelect={onOptionSelect}
-      selectedOptions={selectedGuests}
-      disabled={props.disabled}
-    >
-      <TagPickerControl>
-        <TagPickerGroup>
-          {selectedGuests.map((guest) => (
-            <Tag
-              key={guest}
-              shape='rounded'
-              media={<Avatar aria-hidden name={guest} color='colorful' />}
-              value={guest}
-            >
-              {guest}
-            </Tag>
-          ))}
-        </TagPickerGroup>
-        <TagPickerInput
-          aria-label='Angi gjester'
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-      </TagPickerControl>
-      <TagPickerList>{children}</TagPickerList>
-    </TagPicker>
+    <div>
+      <TagPicker
+        onOptionSelect={onOptionSelect}
+        selectedOptions={selectedGuests}
+        disabled={props.disabled}
+      >
+        <TagPickerControl>
+          <TagPickerGroup>
+            {selectedGuests.map((guest) => (
+              <Tag
+                key={guest}
+                shape='rounded'
+                media={<Avatar aria-hidden name={guest} color='colorful' />}
+                value={guest}
+              >
+                {guest}
+              </Tag>
+            ))}
+          </TagPickerGroup>
+          <TagPickerInput
+            aria-label='Angi gjester'
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        </TagPickerControl>
+        <TagPickerList>{children}</TagPickerList>
+      </TagPicker>
+    </div>
   )
 }
