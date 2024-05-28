@@ -15,6 +15,7 @@ import {
   TimelineContentModel
 } from 'pp365-shared-library'
 import { IPortfolioAggregationConfiguration, IPortfolioOverviewConfiguration } from '../components'
+import { IPersonaSharedProps } from '@fluentui/react'
 
 export interface IFetchDataForViewItemResult extends ISearchResult {
   SiteId: string
@@ -288,4 +289,17 @@ export interface IPortfolioWebPartsDataAdapter {
     properties: SPProjectContentColumnItem,
     dataSource: DataSource
   ): Promise<boolean>
+
+  /**
+   * Search for users using `_sp.profiles.clientPeoplePickerSearchUser`.
+   *
+   * @param queryString Query string
+   * @param selectedItems Selected items that should be excluded from the result
+   * @param maximumEntitySuggestions Maximum entity suggestions
+   */
+  clientPeoplePickerSearchUser?(
+    queryString: string,
+    selectedItems: any[],
+    maximumEntitySuggestions?: number
+  ): Promise<IPersonaSharedProps[]>
 }

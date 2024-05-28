@@ -1,13 +1,6 @@
 /* eslint-disable no-console */
-
 import * as React from 'react'
-import { useContext } from 'react'
-import { ProjectProvisionContext } from '../context'
 import {
-  TagPickerProps,
-  useTagPickerFilter,
-  TagPickerOption,
-  Avatar,
   OverlayDrawer,
   DrawerHeader,
   DrawerHeaderNavigation,
@@ -18,17 +11,10 @@ import {
   DrawerHeaderTitle,
   Input,
   Textarea,
-  Caption1,
   Divider,
-  TagPickerControl,
-  TagPickerGroup,
-  Tag,
-  TagPickerInput,
-  TagPickerList,
   Switch,
   DrawerFooter,
   Toolbar,
-  TagPicker,
   Dropdown,
   Option,
   Button
@@ -45,52 +31,24 @@ import { SiteType } from '../SiteType'
 import { useProvisionDrawer } from './useProvisionDrawer'
 import styles from './ProvisionDrawer.module.scss'
 import { DebugModel } from './DebugModel'
+import { User } from './User'
+import { Guest } from './Guest'
 
 export const ProvisionDrawer = () => {
-  const context = useContext(ProjectProvisionContext)
   const {
     motionStyles,
-    l2,
-    setL2,
+    level2,
+    setLevel2,
     toolbarBackIconMotion,
     toolbarCalendarIconMotion,
     level1Motion,
     level2Motion,
-    column,
-    setColumn,
+    context,
     isSaveDisabled
   } = useProvisionDrawer()
 
-  const options = ['John Doe', 'Maria Rossi']
-
-  const [query, setQuery] = React.useState<string>('')
-  const [selectedOptions, setSelectedOptions] = React.useState<string[]>([])
-  const onOptionSelect: TagPickerProps['onOptionSelect'] = (e, data) => {
-    if (data.value === 'no-matches') {
-      return
-    }
-    setSelectedOptions(data.selectedOptions)
-    setQuery('')
-  }
-
-  const children = useTagPickerFilter({
-    query,
-    options,
-    noOptionsElement: <TagPickerOption value='no-matches'>Ingen treff</TagPickerOption>,
-    renderOption: (option) => (
-      <TagPickerOption
-        secondaryContent='Microsoft FTE'
-        key={option}
-        media={<Avatar shape='square' aria-hidden name={option} color='colorful' />}
-        value={option}
-      >
-        {option}
-      </TagPickerOption>
-    ),
-
-    filter: (option) =>
-      !selectedOptions.includes(option) && option.toLowerCase().includes(query.toLowerCase())
-  })
+  const aliasSuffix = '@puzzlepart.onmicrosoft.com'
+  const urlPrefix = 'https://puzzlepart.sharepoint.com/sites/'
 
   return (
     <OverlayDrawer
@@ -114,7 +72,7 @@ export const ProvisionDrawer = () => {
                   aria-label='Back'
                   appearance='subtle'
                   icon={<ArrowLeft24Regular />}
-                  onClick={() => setL2(false)}
+                  onClick={() => setLevel2(false)}
                 />
               )}
             </ToolbarGroup>
@@ -129,7 +87,7 @@ export const ProvisionDrawer = () => {
                   aria-label='Go to calendar'
                   appearance='subtle'
                   icon={<DataUsage24Regular />}
-                  onClick={() => setL2(true)}
+                  onClick={() => setLevel2(true)}
                 />
               )}
 
@@ -198,8 +156,10 @@ export const ProvisionDrawer = () => {
                 validationMessage='Navnet er ledig'
               >
                 <Input
-                  value={column.get('name')}
-                  onChange={(_, data) => setColumn('name', data.value)}
+                  value={context.column.get('name')}
+                  onChange={(_, data) => {
+                    context.setColumn('name', data.value)
+                  }}
                   placeholder={strings.Placeholder.SiteName}
                 />
               </FieldContainer>
@@ -209,8 +169,8 @@ export const ProvisionDrawer = () => {
                 description={strings.SiteDescriptionDescription}
               >
                 <Textarea
-                  value={column.get('description')}
-                  onChange={(_, data) => setColumn('description', data.value)}
+                  value={context.column.get('description')}
+                  onChange={(_, data) => context.setColumn('description', data.value)}
                   rows={2}
                   placeholder={strings.Placeholder.SiteDescription}
                 />
@@ -222,22 +182,22 @@ export const ProvisionDrawer = () => {
                 required={true}
               >
                 <Textarea
-                  value={column.get('justification')}
-                  onChange={(_, data) => setColumn('justification', data.value)}
+                  value={context.column.get('justification')}
+                  onChange={(_, data) => context.setColumn('justification', data.value)}
                   rows={2}
                   placeholder={strings.Placeholder.SiteDescription}
                 />
               </FieldContainer>
-              <FieldContainer
+              {/* <FieldContainer
                 iconName='TextNumberFormat'
                 label='Alias/navn'
                 description='Velg et unikt alias som følger organisasjonens navngivningsstandarder.'
                 required={true}
               >
                 <Input
-                  value={column.get('siteName')}
-                  onChange={(_, data) => setColumn('alias', data.value)}
-                  contentAfter={<Caption1>@puzzlepart.onmicrosoft.com</Caption1>}
+                  value={context.column.get('siteName')}
+                  onChange={(_, data) => context.setColumn('alias', data.value)}
+                  contentAfter={<Caption1>{aliasSuffix}</Caption1>}
                   placeholder={strings.Placeholder.TextField}
                 />
               </FieldContainer>
@@ -248,12 +208,12 @@ export const ProvisionDrawer = () => {
                 required={true}
               >
                 <Input
-                  value={column.get('siteName')}
-                  onChange={(_, data) => setColumn('url', data.value)}
-                  contentBefore={<Caption1>https://puzzlepart.sharepoint.com/sites/</Caption1>}
+                  value={context.column.get('siteName')}
+                  onChange={(_, data) => context.setColumn('url', data.value)}
+                  contentBefore={<Caption1>{urlPrefix}</Caption1>}
                   placeholder={strings.Placeholder.TextField}
                 />
-              </FieldContainer>
+              </FieldContainer> */}
               <Divider />
               <FieldContainer
                 iconName='Person'
@@ -261,28 +221,7 @@ export const ProvisionDrawer = () => {
                 description='Eier(e) har full tilgang til området og kan legge til og fjerne medlemmer. Du kan legge til flere eiere senere.'
                 required={true}
               >
-                <TagPicker onOptionSelect={onOptionSelect} selectedOptions={selectedOptions}>
-                  <TagPickerControl>
-                    <TagPickerGroup>
-                      {selectedOptions.map((option) => (
-                        <Tag
-                          key={option}
-                          shape='rounded'
-                          media={<Avatar aria-hidden name={option} color='colorful' />}
-                          value={option}
-                        >
-                          {option}
-                        </Tag>
-                      ))}
-                    </TagPickerGroup>
-                    <TagPickerInput
-                      aria-label='Select Employees'
-                      value={query}
-                      onChange={(e) => setQuery(e.target.value)}
-                    />
-                  </TagPickerControl>
-                  <TagPickerList>{children}</TagPickerList>
-                </TagPicker>
+                <User type='owner' />
               </FieldContainer>
               <FieldContainer
                 iconName='People'
@@ -290,28 +229,7 @@ export const ProvisionDrawer = () => {
                 description='Medlem(mer) har tilgang til området basert på tillatelsene som er satt. Du kan legge til flere medlemmer senere.'
               >
                 {/* Members can not be the same as the owner */}
-                <TagPicker onOptionSelect={onOptionSelect} selectedOptions={selectedOptions}>
-                  <TagPickerControl>
-                    <TagPickerGroup>
-                      {selectedOptions.map((option) => (
-                        <Tag
-                          key={option}
-                          shape='rounded'
-                          media={<Avatar aria-hidden name={option} color='colorful' />}
-                          value={option}
-                        >
-                          {option}
-                        </Tag>
-                      ))}
-                    </TagPickerGroup>
-                    <TagPickerInput
-                      aria-label='Select Employees'
-                      value={query}
-                      onChange={(e) => setQuery(e.target.value)}
-                    />
-                  </TagPickerControl>
-                  <TagPickerList>{children}</TagPickerList>
-                </TagPicker>
+                <User type='member' />
               </FieldContainer>
             </div>
           </DrawerBody>
@@ -333,15 +251,25 @@ export const ProvisionDrawer = () => {
               hubtilknytning.
             </p>
             <div className={styles.content}>
+              {DEBUG && <DebugModel />}
               <FieldContainer
                 iconName='BoxToolbox'
                 label='Konfidensielle/sensitive data'
                 description='Vil konfidensielle eller sensitive data bli lagret i dette rommet? Dersom ja, må du sørge for at du har satt riktige tillatelser.'
               >
                 <Switch
-                  onChange={(_, data) =>
-                    console.log("setColumn('isGroupable', data.checked)", data)
-                  }
+                  checked={context.column.get('isConfidential')}
+                  value={context.column.get('isConfidential')}
+                  onChange={(_, data) => {
+                    context.setColumn('isConfidential', data.checked)
+
+                    if (data.checked) {
+                      context.setColumn(
+                        'privacy',
+                        'Privat - Brukere trenger tillatelse for å bli med'
+                      )
+                    }
+                  }}
                 />
               </FieldContainer>
               <FieldContainer
@@ -350,9 +278,14 @@ export const ProvisionDrawer = () => {
                 description='Velg om området skal være privat eller offentlig.'
               >
                 <Dropdown
-                  defaultValue={context.state.privacy}
-                  defaultSelectedOptions={[context.state.privacy]}
-                  onOptionSelect={(_, data) => context.setState({ privacy: data.optionValue })}
+                  defaultValue={context.column.get('privacy')}
+                  selectedOptions={[context.column.get('privacy')]}
+                  value={context.column.get('privacy')}
+                  defaultSelectedOptions={[context.column.get('privacy')]}
+                  onOptionSelect={(_, data) => {
+                    context.setColumn('privacy', data.optionValue)
+                  }}
+                  disabled={context.column.get('isConfidential')}
                 >
                   <Option value='Privat - Brukere trenger tillatelse for å bli med'>
                     Privat - Brukere trenger tillatelse for å bli med
@@ -368,38 +301,24 @@ export const ProvisionDrawer = () => {
                 description='Dersom denne er aktivert, vil man kunne invitere inn og dele enkeltfiler, mapper, bibliotek o.l. med eksterne gjestebrukere. NB! Invitasjon av eksterne gjestebrukere vil først være mulig etter at gruppen/området er opprettet.'
               >
                 <Switch
-                  onChange={(_, data) =>
-                    console.log("setColumn('isGroupable', data.checked)", data)
-                  }
+                  checked={context.column.get('allowGuests')}
+                  value={context.column.get('allowGuests')}
+                  onChange={(_, data) => {
+                    context.setColumn('allowGuests', data.checked)
+
+                    if (!data.checked) {
+                      context.setColumn('guest', [])
+                    }
+                  }}
                 />
               </FieldContainer>
               <FieldContainer
                 iconName='People'
                 label='Gjest(er)'
                 description='Her kan du legge til eksterne gjester.'
+                hidden={!context.column.get('allowGuests')}
               >
-                <TagPicker onOptionSelect={onOptionSelect} selectedOptions={selectedOptions}>
-                  <TagPickerControl>
-                    <TagPickerGroup>
-                      {selectedOptions.map((option) => (
-                        <Tag
-                          key={option}
-                          shape='rounded'
-                          media={<Avatar aria-hidden name={option} color='colorful' />}
-                          value={option}
-                        >
-                          {option}
-                        </Tag>
-                      ))}
-                    </TagPickerGroup>
-                    <TagPickerInput
-                      aria-label='Select Employees'
-                      value={query}
-                      onChange={(e) => setQuery(e.target.value)}
-                    />
-                  </TagPickerControl>
-                  <TagPickerList>{children}</TagPickerList>
-                </TagPicker>
+                <Guest />
               </FieldContainer>
               <FieldContainer
                 iconName='LocalLanguage'
@@ -407,8 +326,8 @@ export const ProvisionDrawer = () => {
                 description='Velg standard språk for området. Dette kan ikke endres senere.'
               >
                 <Dropdown
-                  defaultValue='Norsk (bokmål)'
-                  defaultSelectedOptions={['Norsk (bokmål)']}
+                  defaultValue={context.column.get('language')}
+                  defaultSelectedOptions={[context.column.get('language')]}
                   disabled
                 />
               </FieldContainer>
@@ -418,10 +337,8 @@ export const ProvisionDrawer = () => {
                 description='Velg tidssone for området.'
               >
                 <Dropdown
-                  defaultValue={'(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna'}
-                  defaultSelectedOptions={[
-                    '(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna'
-                  ]}
+                  defaultValue={context.column.get('timeZone')}
+                  defaultSelectedOptions={[context.column.get('timeZone')]}
                   disabled
                 />
               </FieldContainer>
@@ -431,8 +348,8 @@ export const ProvisionDrawer = () => {
                 description='Velg hvilken hub dette området skal tilknyttes.'
               >
                 <Dropdown
-                  defaultValue={'Prosjektportalen 365'}
-                  defaultSelectedOptions={['Prosjektportalen 365']}
+                  defaultValue={context.column.get('hubSite')}
+                  defaultSelectedOptions={[context.column.get('hubSite')]}
                   disabled
                 />
               </FieldContainer>
@@ -446,20 +363,20 @@ export const ProvisionDrawer = () => {
       </div>
 
       <DrawerFooter className={styles.footer}>
-        <Button appearance='subtle' disabled={!l2} onClick={() => setL2(false)}>
+        <Button appearance='subtle' disabled={!level2} onClick={() => setLevel2(false)}>
           Forrige
         </Button>
 
         <Button
           appearance='primary'
-          disabled={l2 && isSaveDisabled}
+          disabled={level2 && isSaveDisabled}
           onClick={() => {
-            l2 ? console.log('big orda todai!') : setL2(true)
+            level2 ? console.log('big orda todai!') : setLevel2(true)
           }}
         >
-          {l2 ? 'Bestill område' : 'Neste'}
+          {level2 ? 'Bestill område' : 'Neste'}
         </Button>
-        {/* <Button appearance='primary' disabled={l2} onClick={() => setL2(true)}>
+        {/* <Button appearance='primary' disabled={level2} onClick={() => setLevel2(true)}>
             Neste
           </Button> */}
       </DrawerFooter>

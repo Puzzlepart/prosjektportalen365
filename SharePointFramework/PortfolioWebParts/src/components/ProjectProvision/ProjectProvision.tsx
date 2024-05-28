@@ -18,11 +18,11 @@ import { ProvisionDrawer } from './ProvisionDrawer'
 import strings from 'PortfolioWebPartsStrings'
 
 export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
-  const { state, setState } = useProjectProvision(props)
+  const { state, setState, column, setColumn } = useProjectProvision(props)
   const restoreFocusTargetAttribute = useRestoreFocusTarget()
 
   return (
-    <ProjectProvisionContext.Provider value={{ props, state, setState }}>
+    <ProjectProvisionContext.Provider value={{ props, state, setState, column, setColumn }}>
       <ProvisionDrawer />
       <Menu positioning='below-end'>
         <MenuTrigger disableButtonEnhancement>

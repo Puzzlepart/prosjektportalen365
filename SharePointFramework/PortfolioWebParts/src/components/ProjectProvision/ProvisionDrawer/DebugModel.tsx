@@ -13,7 +13,8 @@ export const DebugModel: FC = () => {
           whiteSpace: 'pre-wrap',
           wordWrap: 'break-word',
           background: 'rgba(0,0,0,0.1)',
-          padding: 10
+          padding: 10,
+          borderRadius: 5
         }}
       >
         {JSON.stringify(context.state.properties, null, 2)}

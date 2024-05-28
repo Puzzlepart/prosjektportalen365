@@ -5,14 +5,11 @@ import {
   CardHeader,
   CardPreview,
   CardProps,
-  Checkbox,
-  makeStyles,
-  shorthands,
-  tokens
+  Checkbox
 } from '@fluentui/react-components'
 import React, { useContext } from 'react'
 import { ProjectProvisionContext } from '../context'
-import styles from './SiteType.module.scss';
+import styles from './SiteType.module.scss'
 
 export const SiteType = (
   props: CardProps & { title: string; type: string; description: string; logo: string }
@@ -29,9 +26,11 @@ export const SiteType = (
   return (
     <Card
       className={styles.card}
-      selected={context.state.siteType === props.type}
-      onSelectionChange={() => context.setState({ siteType: props.type })}
-      floatingAction={<Checkbox shape='circular' checked={context.state.siteType === props.type} />}
+      selected={context.column.get('type') === props.type}
+      onSelectionChange={() => context.setColumn('type', props.type)}
+      floatingAction={
+        <Checkbox shape='circular' checked={context.column.get('type') === props.type} />
+      }
     >
       <CardPreview className={styles.grayBackground}>
         <img

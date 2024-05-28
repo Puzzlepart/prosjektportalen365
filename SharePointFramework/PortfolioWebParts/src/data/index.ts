@@ -48,6 +48,7 @@ import {
   IPortfolioWebPartsDataAdapter,
   IProjectsData
 } from './types'
+import { IPersonaSharedProps } from '@fluentui/react'
 
 /**
  * Data adapter for Portfolio Web Parts.
@@ -780,6 +781,29 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     } catch (error) {
       throw new Error(format(strings.DataSourceCategoryError, category))
     }
+  }
+
+  public async clientPeoplePickerSearchUser(
+    queryString: string,
+    selectedItems: any[],
+    maximumEntitySuggestions = 50
+  ): Promise<IPersonaSharedProps[]> {
+    const profiles = await this._sp.profiles.clientPeoplePickerSearchUser({
+      QueryString: queryString,
+      MaximumEntitySuggestions: maximumEntitySuggestions,
+      AllowEmailAddresses: true,
+      PrincipalSource: 15,
+      PrincipalType: 1
+    })
+    const items = profiles.map((profile) => ({
+      text: profile.DisplayText,
+      secondaryText: profile.EntityData.Email,
+      tertiaryText: profile.EntityData.Title,
+      optionalText: profile.EntityData.Department,
+      imageUrl: `/_layouts/15/userphoto.aspx?AccountName=${profile.EntityData.Email}&size=L`,
+      id: profile.Key
+    }))
+    return items.filter(({ secondaryText }) => !_.findWhere(selectedItems, { secondaryText }))
   }
 }
 
