@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useCallback } from 'react'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
 import { IPortfolioAggregationContext } from '../context'
