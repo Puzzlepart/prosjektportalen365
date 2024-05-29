@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import SPDataAdapter from 'data/SPDataAdapter'
 import _ from 'lodash'
 import {
@@ -32,9 +31,7 @@ export async function fetchTimelineData(
       projectDeliveries = props.showProjectDeliveries
         ? await props.sp.web.lists.getByTitle(props.projectDeliveriesListName).items.getAll()
         : []
-    } catch (error) {
-      console.error('Failed to fetch project deliveries:', error)
-    }
+    } catch (error) {}
 
     projectDeliveries = projectDeliveries
       .map((item) => {
