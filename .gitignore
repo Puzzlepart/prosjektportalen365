@@ -25,4 +25,5 @@ common/temp
 **/package-lock.json
 .vscode/launch.json*
 SharePointFramework/**/.vscode/chrome-debug-user-data
-SharePointFramework/ProjectExtensions/.gitmoji.json
+SharePointFramework/**/.gitmoji.json
+SharePointFramework/**/environments.json
