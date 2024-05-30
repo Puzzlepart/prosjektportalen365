@@ -14,6 +14,7 @@ Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detal
 
 - Rettet et problem hvor planneroppgaver ikke ble provisjonert i riktig rekkefølge [#1530](https://github.com/Puzzlepart/prosjektportalen365/issues/1530)
 - Rettet et problem med eksport til Excel for aggregerte oversikter [#1519](https://github.com/Puzzlepart/prosjektportalen365/issues/1519)
+- Rettet et problem med visningskolonner i aggregerte oversikter [#1447](https://github.com/Puzzlepart/prosjektportalen365/issues/1447)
 
 ---
 
