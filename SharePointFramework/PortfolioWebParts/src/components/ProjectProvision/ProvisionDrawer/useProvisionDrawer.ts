@@ -4,9 +4,7 @@ import { useContext, useState } from 'react'
 import { useMotion } from '@fluentui/react-motion-preview'
 import { useMotionStyles } from './styles'
 import { ProjectProvisionContext } from '../context'
-import { ProvisionRequest, SPProvisionRequestItem } from 'models/ProvisionRequest'
-import _ from 'lodash'
-import { IPersonaProps } from '@fluentui/react'
+import { SPProvisionRequestItem } from 'models/ProvisionRequest'
 import { getGUID } from '@pnp/core'
 
 /**
@@ -28,9 +26,10 @@ export const useProvisionDrawer = () => {
    */
   const onSave = async () => {
     const namingConvention = context.state.settings.get('NamingConvention')
-    const url = context.props.webAbsoluteUrl.split('sites')[0] + 'sites/' + context.column.get('name')
-    const alias = context.column.get('name').replace(/[^a-zA-Z0-9-_ÆØÅæøå ]/g, '')
-    const aliasSuffix = '@' + context.props.pageContext.user.loginName.split('@')[1]
+    const baseUrl = `${context.props.webAbsoluteUrl.split('sites')[0]}sites/`
+
+    const siteName = context.column.get('name')
+    const alias = siteName.replace(/[^a-zA-Z0-9-_ÆØÅæøå ]/g, '')
 
     const requestItem: SPProvisionRequestItem = {
       Title: context.column.get('name'),
@@ -38,7 +37,7 @@ export const useProvisionDrawer = () => {
       Description: context.column.get('description'),
       BusinessJustification: context.column.get('justification'),
       SpaceType: 'Prosjektområde',
-      SpaceTypeInternal: 'Project',
+      SpaceTypeInternal: context.column.get('type'),
       OwnersId: context.state.properties.owner,
       MembersId: context.state.properties.member,
       Visibility: context.state.properties.privacy,
@@ -46,8 +45,8 @@ export const useProvisionDrawer = () => {
       ExternalSharingRequired: context.column.get('externalSharing'),
       Guests: context.column.get('guest')?.join(';'),
       SiteURL: {
-        Description: url,
-        Url: url
+        Description: `${baseUrl}${context.column.get('name')}`,
+        Url: `${baseUrl}${context.column.get('name')}`
       },
       SiteAlias: alias,
       MailboxAlias: alias,
@@ -58,14 +57,13 @@ export const useProvisionDrawer = () => {
       HubSite: context.props.pageContext.legacyPageContext.hubSiteId,
       Prefix: namingConvention.prefixText,
       Suffix: namingConvention.suffixText,
+      Status: 'Submitted',
       Stage: 'Submitted',
-      RequestKey: getGUID(),
+      RequestKey: getGUID()
     }
 
     await context.props.dataAdapter.addProvisionRequests(requestItem, context.props.provisionUrl)
   }
-
-
 
   /**
    * Save is disabled if the column name or field name is less than 2 characters.

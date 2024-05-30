@@ -298,21 +298,25 @@ export interface IPortfolioWebPartsDataAdapter {
   ): Promise<IPersonaSharedProps[]>
 
   /**
-   * Retrieves the provision request settings from the "Provisioning Request Settings
+   * Retrieves the provision request settings from the "Provisioning Request Settings" list
    *
    * @returns A Promise that resolves to a Map containing the settings.
    */
   getProvisionRequestSettings?(provisionUrl: string): Promise<Map<string, string>>
 
   /**
+   * Retrieves the provision types from the "Provisioning Types" list
+   *
+   * @returns A Promise that resolves to a Map containing the types.
+   */
+  getProvisionTypes?(provisionUrl: string): Promise<Record<string, any>>
+
+  /**
    * Ensure users in the provision site and return their IDs.
    *
    * @param user User
    */
-  getProvisionUsers(
-    users: any[],
-    provisionUrl: string
-  ): Promise<Promise<number | null>[]>
+  getProvisionUsers(users: any[], provisionUrl: string): Promise<Promise<number | null>[]>
 
   /**
    * Adds a new provision request to the provisioning requests list

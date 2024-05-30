@@ -27,6 +27,7 @@ export class SPProvisionRequestItem {
   public JoinHub?: boolean = true
   public HubSiteTitle?: string = ''
   public HubSite?: string = ''
+  public Status?: string = 'Submitted'
   public Stage?: string = 'Submitted'
   public RequestKey?: string = ''
 }

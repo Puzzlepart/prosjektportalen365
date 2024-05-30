@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { IProjectProvisionProps, IProjectProvisionState } from './types'
-import { IPersonaProps } from '@fluentui/react'
 import _ from 'lodash'
 
 /**
@@ -13,7 +12,7 @@ export function useEditableColumn(
   setState: (newState: Partial<IProjectProvisionState>) => void
 ) {
   const initialColumn = new Map<string, any>([
-    ['type', 'project'],
+    ['type', 'Project'],
     ['name', ''],
     ['description', ''],
     ['justification', ''],
@@ -89,7 +88,6 @@ export function useEditableColumn(
     }
     return value
   }
-
 
   /**
    * Sets a property of the column.

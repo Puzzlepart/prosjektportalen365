@@ -13,8 +13,9 @@ export function useProjectProvisionState(props: IProjectProvisionProps) {
     showProvisionDrawer: false,
     showProvisionStatus: false,
     settings: new Map<string, any>(),
+    types: {},
     properties: {
-      type: 'project',
+      type: 'Project',
       hubSite: props.pageContext.legacyPageContext.hubSiteId
     }
   })

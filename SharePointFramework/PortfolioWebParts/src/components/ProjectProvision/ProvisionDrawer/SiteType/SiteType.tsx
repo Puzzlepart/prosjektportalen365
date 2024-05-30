@@ -8,20 +8,13 @@ import {
   Checkbox
 } from '@fluentui/react-components'
 import React, { useContext } from 'react'
-import { ProjectProvisionContext } from '../context'
+import { ProjectProvisionContext } from '../../context'
 import styles from './SiteType.module.scss'
 
 export const SiteType = (
-  props: CardProps & { title: string; type: string; description: string; logo: string }
+  props: CardProps & { title: string; type: string; description: string; image: string }
 ) => {
   const context = useContext(ProjectProvisionContext)
-
-  const resolveAsset = (asset: string) => {
-    const ASSET_URL =
-      'https://raw.githubusercontent.com/microsoft/fluentui/master/packages/react-components/react-card/stories/assets/'
-
-    return `${ASSET_URL}${asset}`
-  }
 
   return (
     <Card
@@ -33,11 +26,7 @@ export const SiteType = (
       }
     >
       <CardPreview className={styles.grayBackground}>
-        <img
-          className={styles.smallRadius}
-          src={resolveAsset(props.logo)}
-          alt={`Preview image for ${props.title}`}
-        />
+        <img className={styles.smallRadius} src={props.image} alt={`Bilde for ${props.title}`} />
       </CardPreview>
       <CardHeader
         header={<Text weight='semibold'>{props.title}</Text>}

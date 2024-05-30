@@ -10,7 +10,9 @@
 
 .smallRadius {
   border-radius: var(--borderRadiusSmall);
-  max-height: 82px;
+  object-fit: cover;
+  transform: translate3d(0, 0, 1px);
+  max-height: 116px;
 }
 
 .grayBackground {

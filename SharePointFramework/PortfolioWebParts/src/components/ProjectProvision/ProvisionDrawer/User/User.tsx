@@ -16,11 +16,11 @@ import React, { useEffect, useState } from 'react'
 
 export const User = (props: { type: string; disabled?: boolean }) => {
   const context = useProjectProvisionContext()
-
   const [query, setQuery] = useState<string>('')
-  const [selectedOptions, setSelectedOptions] = useState<string[]>(
+  const [selectedUsers, setSelectedUsers] = useState<string[]>(
     context.column.get(props.type)?.map((user) => user?.text) || []
   )
+
   const onOptionSelect: TagPickerProps['onOptionSelect'] = (e, data) => {
     if (data.value === 'no-matches') {
       return
@@ -42,7 +42,7 @@ export const User = (props: { type: string; disabled?: boolean }) => {
       context.setColumn(props.type, [])
     }
 
-    setSelectedOptions(data.selectedOptions)
+    setSelectedUsers(data.selectedOptions)
     setQuery('')
   }
 
@@ -80,21 +80,20 @@ export const User = (props: { type: string; disabled?: boolean }) => {
       )
     },
     filter: (option) =>
-      !selectedOptions.includes(option) && option.toLowerCase().includes(query.toLowerCase())
+      !selectedUsers.includes(option) && option.toLowerCase().includes(query.toLowerCase())
   })
 
   return (
     <TagPicker
       onOptionSelect={onOptionSelect}
-      selectedOptions={selectedOptions}
+      selectedOptions={selectedUsers}
       disabled={props.disabled}
     >
       <TagPickerControl>
         <TagPickerGroup>
-          {selectedOptions.map((option) => (
+          {selectedUsers.map((option) => (
             <Tag
               key={option}
-              shape='rounded'
               media={
                 <Avatar
                   aria-hidden
@@ -113,11 +112,7 @@ export const User = (props: { type: string; disabled?: boolean }) => {
             </Tag>
           ))}
         </TagPickerGroup>
-        <TagPickerInput
-          aria-label='Select Employees'
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
+        <TagPickerInput value={query} onChange={(e) => setQuery(e.target.value)} />
       </TagPickerControl>
       <TagPickerList>{children}</TagPickerList>
     </TagPicker>

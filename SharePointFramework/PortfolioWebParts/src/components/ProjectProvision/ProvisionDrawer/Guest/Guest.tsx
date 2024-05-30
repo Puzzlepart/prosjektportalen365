@@ -15,12 +15,11 @@ import React, { useState } from 'react'
 
 export const Guest = (props: { disabled?: boolean }) => {
   const context = useProjectProvisionContext()
-
   const [query, setQuery] = useState<string>('')
+  const [selectedGuests, setSelectedGuests] = useState<string[]>(context.column.get('guest') || [])
   const options = [query]
 
-  const [selectedGuests, setSelectedGuests] = useState<string[]>(context.column.get('guest') || [])
-  const onOptionSelect: TagPickerProps['onOptionSelect'] = (e, data) => {
+  const onOptionSelect: TagPickerProps['onOptionSelect'] = (_, data) => {
     if (data.value === 'no-matches') {
       return
     }
@@ -77,7 +76,6 @@ export const Guest = (props: { disabled?: boolean }) => {
             {selectedGuests.map((guest) => (
               <Tag
                 key={guest}
-                shape='rounded'
                 media={<Avatar aria-hidden name={guest} color='colorful' />}
                 value={guest}
               >

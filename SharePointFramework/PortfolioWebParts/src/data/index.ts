@@ -856,18 +856,40 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
+  public async getProvisionTypes(provisionUrl: string): Promise<Record<string, any>> {
+    try {
+      const provisionSite = Web([this._sp.web, provisionUrl])
+      const typesList = provisionSite.lists.getByTitle('Provisioning Types')
+      const spItems = await typesList.items
+        .select('Id', 'Title', 'Order0', 'Description', 'Allowed', 'Image', 'InternalTitle')
+        .using(DefaultCaching)()
+      return spItems
+        .filter((item) => item.Allowed)
+        .sort((a, b) => (a.Order0 > b.Order0 ? 1 : -1))
+
+        .map((item) => {
+          return {
+            title: item.Title,
+            order: item.Order0,
+            description: item.Description,
+            image: item.Image,
+            type: item.InternalTitle
+          }
+        })
+    } catch (error) {
+      return []
+    }
+  }
+
   public async getProvisionUsers(
     users: any[],
     provisionUrl: string
   ): Promise<Promise<number | null>[]> {
     try {
       const provisionSite = Web([this._sp.web, provisionUrl])
-        return users.map(
-          async (val: IPersonaProps) =>
-            (
-              await provisionSite.ensureUser(val.secondaryText)
-            ).data.Id
-        )
+      return users.map(
+        async (val: IPersonaProps) => (await provisionSite.ensureUser(val.secondaryText)).data.Id
+      )
     } catch {
       return null
     }

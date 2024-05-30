@@ -29,12 +29,12 @@ import {
 } from '@fluentui/react-icons'
 import strings from 'PortfolioWebPartsStrings'
 import { FieldContainer } from 'pp365-shared-library'
-import { SiteType } from '../SiteType'
+import { SiteType } from './SiteType'
 import { useProvisionDrawer } from './useProvisionDrawer'
 import styles from './ProvisionDrawer.module.scss'
-import { DebugModel } from './DebugModel'
 import { User } from './User'
 import { Guest } from './Guest'
+import { DebugModel } from './DebugModel'
 
 export const ProvisionDrawer = () => {
   const {
@@ -51,6 +51,7 @@ export const ProvisionDrawer = () => {
   } = useProvisionDrawer()
 
   const namingConvention = context.state.settings.get('NamingConvention')
+  const aliasSuffix = '@' + context.props.pageContext.user.loginName.split('@')[1]
 
   return (
     <OverlayDrawer
@@ -129,24 +130,21 @@ export const ProvisionDrawer = () => {
               {DEBUG && <DebugModel />}
               <FieldContainer iconName='AppsList' label={'Områdetype'}>
                 <div className={styles.sitetypes}>
-                  <SiteType
+                  {context.state.types.map((type) => (
+                    <SiteType
+                      key={type.title}
+                      title={type.title}
+                      description={type.description}
+                      image={type.image?.Url}
+                      type={type.type}
+                    />
+                  ))}
+                  {/* <SiteType
                     title='Prosjekt'
                     description='Prosjektportalen'
                     logo='office1.png'
-                    type='project'
-                  />
-                  <SiteType
-                    title='Samarbeid'
-                    description='Samarbeidsområde'
-                    logo='office2.png'
-                    type='collab'
-                  />
-                  <SiteType
-                    title='Kommunikasjon'
-                    description='Kommunikasjonsområde'
-                    logo='sales_template.png'
-                    type='communication'
-                  />
+                    type='Project'
+                  />*/}
                 </div>
               </FieldContainer>
               <FieldContainer
@@ -163,22 +161,26 @@ export const ProvisionDrawer = () => {
                     context.setColumn('name', data.value)
                   }}
                   contentBefore={
-                    <Tooltip
-                      withArrow
-                      content='Dette er den angitte prefiksen for områdenavnet.'
-                      relationship='label'
-                    >
-                      <Tag size='small'>{namingConvention.prefixText}</Tag>
-                    </Tooltip>
+                    namingConvention.prefixText && (
+                      <Tooltip
+                        withArrow
+                        content='Dette er den angitte prefiksen for områdenavnet.'
+                        relationship='label'
+                      >
+                        <Tag size='small'>{namingConvention.prefixText}</Tag>
+                      </Tooltip>
+                    )
                   }
                   contentAfter={
-                    <Tooltip
-                      withArrow
-                      content='Dette er den angitte suffiksen for områdenavnet.'
-                      relationship='label'
-                    >
-                      <Tag size='small'>{namingConvention.suffixText}</Tag>
-                    </Tooltip>
+                    namingConvention.suffixText && (
+                      <Tooltip
+                        withArrow
+                        content='Dette er den angitte suffiksen for områdenavnet.'
+                        relationship='label'
+                      >
+                        <Tag size='small'>{namingConvention.suffixText}</Tag>
+                      </Tooltip>
+                    )
                   }
                   placeholder={strings.Placeholder.SiteName}
                 />

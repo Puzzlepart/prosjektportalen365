@@ -8,6 +8,7 @@ export interface IProjectProvisionState {
   loading: boolean
   showProvisionDrawer: boolean
   showProvisionStatus: boolean
-  properties: Record<string, any>
   settings: Map<string, any>
+  types?: Record<string, any>
+  properties: Record<string, any>
 }
