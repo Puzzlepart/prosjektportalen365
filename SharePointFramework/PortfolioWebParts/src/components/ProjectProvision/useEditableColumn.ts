@@ -69,12 +69,7 @@ export function useEditableColumn(
         'owner',
         async () => {
           const values = await Promise.all(
-            value.map(
-              async (val: IPersonaProps) =>
-                (
-                  await props.dataAdapter.sp.web.ensureUser(val.secondaryText)
-                ).data.Id
-            )
+            await props.dataAdapter.getProvisionUsers(value, props.provisionUrl)
           )
           return _.flatten(values)
         }
@@ -83,14 +78,9 @@ export function useEditableColumn(
         'member',
         async () => {
           const values = await Promise.all(
-            value.map(
-              async (val: IPersonaProps) =>
-                (
-                  await props.dataAdapter.sp.web.ensureUser(val.secondaryText)
-                ).data.Id
-            )
+            await props.dataAdapter.getProvisionUsers(value, props.provisionUrl)
           )
-          return [_.flatten(values)]
+          return _.flatten(values)
         }
       ]
     ])

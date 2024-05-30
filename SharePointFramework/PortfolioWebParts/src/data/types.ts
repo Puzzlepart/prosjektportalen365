@@ -305,6 +305,16 @@ export interface IPortfolioWebPartsDataAdapter {
   getProvisionRequestSettings?(provisionUrl: string): Promise<Map<string, string>>
 
   /**
+   * Ensure users in the provision site and return their IDs.
+   *
+   * @param user User
+   */
+  getProvisionUsers(
+    users: any[],
+    provisionUrl: string
+  ): Promise<Promise<number | null>[]>
+
+  /**
    * Adds a new provision request to the provisioning requests list
    *
    * @param properties Properties for the new provision request (`Id` will be omitted)

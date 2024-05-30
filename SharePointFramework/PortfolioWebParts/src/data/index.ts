@@ -50,7 +50,7 @@ import {
   IPortfolioWebPartsDataAdapter,
   IProjectsData
 } from './types'
-import { IPersonaSharedProps } from '@fluentui/react'
+import { IPersonaProps, IPersonaSharedProps } from '@fluentui/react'
 import { SPProvisionRequestItem } from 'models/ProvisionRequest'
 
 /**
@@ -853,6 +853,23 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       }, intialMap)
     } catch (error) {
       return intialMap
+    }
+  }
+
+  public async getProvisionUsers(
+    users: any[],
+    provisionUrl: string
+  ): Promise<Promise<number | null>[]> {
+    try {
+      const provisionSite = Web([this._sp.web, provisionUrl])
+        return users.map(
+          async (val: IPersonaProps) =>
+            (
+              await provisionSite.ensureUser(val.secondaryText)
+            ).data.Id
+        )
+    } catch {
+      return null
     }
   }
 

@@ -38,16 +38,16 @@ export const useProvisionDrawer = () => {
       BusinessJustification: context.column.get('justification'),
       SpaceType: 'Prosjektområde',
       SpaceTypeInternal: 'Project',
-      // OwnersId: context.state.properties.owner,
-      // MembersId: context.state.properties.member,
+      OwnersId: context.state.properties.owner,
+      MembersId: context.state.properties.member,
       Visibility: context.state.properties.privacy,
       ConfidentialData: context.column.get('isConfidential'),
       ExternalSharingRequired: context.column.get('externalSharing'),
       Guests: context.column.get('guest')?.join(';'),
-      // SiteURL: {
-      //   Description: url,
-      //   Url: url
-      // },
+      SiteURL: {
+        Description: url,
+        Url: url
+      },
       SiteAlias: alias,
       TimeZoneId: 4,
       LCID: 1044,
