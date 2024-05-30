@@ -136,7 +136,7 @@ export class CopyListData extends BaseTask {
             .split('|')
             .map((str) => new TaskAttachment(str))
             .filter((attachment) => !stringIsNullOrEmpty(attachment.url))
-        } catch (error) { }
+        } catch (error) {}
       }
       if (!stringIsNullOrEmpty(item.GtPlannerPreviewType)) {
         let m: RegExpExecArray
@@ -287,8 +287,9 @@ export class CopyListData extends BaseTask {
   ): Promise<void> {
     try {
       await folders.sort().reduce((chain: Promise<any>, folder, index: number) => {
-        const folderServerRelUrl = `${config.destListProps.RootFolder.ServerRelativeUrl
-          }/${folder.replace(config.sourceListProps.RootFolder.ServerRelativeUrl, '')}`
+        const folderServerRelUrl = `${
+          config.destListProps.RootFolder.ServerRelativeUrl
+        }/${folder.replace(config.sourceListProps.RootFolder.ServerRelativeUrl, '')}`
         this.onProgress(
           progressText,
           format(strings.ProcessFolderText, index + 1, folders.length),
@@ -340,8 +341,9 @@ export class CopyListData extends BaseTask {
       const filesCopied = []
       for (let i = 0; i < filesWithContents.length; i++) {
         const file = filesWithContents[i]
-        const destFolderUrl = `${config.destListProps.RootFolder.ServerRelativeUrl
-          }${file.FileDirRef.replace(config.sourceListProps.RootFolder.ServerRelativeUrl, '')}`
+        const destFolderUrl = `${
+          config.destListProps.RootFolder.ServerRelativeUrl
+        }${file.FileDirRef.replace(config.sourceListProps.RootFolder.ServerRelativeUrl, '')}`
         try {
           this.logInformation(`Copying file ${file.LinkFilename}`)
           this.onProgress(
@@ -355,7 +357,7 @@ export class CopyListData extends BaseTask {
             .files.addUsingPath(filename, file.Blob, { Overwrite: true })
           filesCopied.push(fileAddResult)
           this.logInformation(`Successfully copied file ${file.LinkFilename}`)
-        } catch (err) { }
+        } catch (err) {}
       }
       return filesCopied
     } catch (error) {

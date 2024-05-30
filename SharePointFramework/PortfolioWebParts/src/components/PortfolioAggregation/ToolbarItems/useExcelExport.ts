@@ -24,10 +24,9 @@ export function useExcelExport(context: IPortfolioAggregationContext) {
         return
       }
 
-      const items =
-        !_.isEmpty(context.state.selectedItems)
-          ? context.state.selectedItems
-          : context.state.items.filter((item) => {
+      const items = !_.isEmpty(context.state.selectedItems)
+        ? context.state.selectedItems
+        : context.state.items.filter((item) => {
             if (Object.keys(context.state.activeFilters).length === 0) {
               return true
             }

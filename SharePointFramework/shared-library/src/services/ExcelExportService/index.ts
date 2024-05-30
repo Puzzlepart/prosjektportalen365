@@ -34,7 +34,12 @@ class ExcelExportService {
    * @param fileNamePart Optional file name part to add after the name and before the date
    * @param sheetNamePrefix Optional prefix for the sheet name
    */
-  public export(items: Record<string, any>[], columns: IColumn[], fileNamePart?: string, sheetNamePrefix: string = 'Sheet') {
+  public export(
+    items: Record<string, any>[],
+    columns: IColumn[],
+    fileNamePart?: string,
+    sheetNamePrefix: string = 'Sheet'
+  ) {
     const fileNameFormat = fileNamePart ? '{0}-{1}-{2}.xlsx' : '{0}-{1}.xlsx'
     try {
       const sheets = []
@@ -43,16 +48,18 @@ class ExcelExportService {
         name: this.configuration.sheetName,
         data: [
           _columns.map((column) => column.name),
-          ...items.map((item) => _columns.map((column) => {
-            switch ((column as any).dataType) {
-              case 'date': {
-                return getDateValue(item, column.fieldName)
+          ...items.map((item) =>
+            _columns.map((column) => {
+              switch ((column as any).dataType) {
+                case 'date': {
+                  return getDateValue(item, column.fieldName)
+                }
+                default: {
+                  return get(item, column.fieldName, null)
+                }
               }
-              default: {
-                return get(item, column.fieldName, null)
-              }
-            }
-          }))
+            })
+          )
         ]
       })
       const workBook = XLSX.utils.book_new()

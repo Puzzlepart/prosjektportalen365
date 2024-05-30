@@ -4,7 +4,8 @@ import {
   EditFilled,
   EditRegular,
   FormNewFilled,
-  FormNewRegular, bundleIcon
+  FormNewRegular,
+  bundleIcon
 } from '@fluentui/react-icons'
 
 /**

@@ -1,6 +1,4 @@
-import {
-  AppsListRegular,
-  TextBulletListLtrRegular} from '@fluentui/react-icons'
+import { AppsListRegular, TextBulletListLtrRegular } from '@fluentui/react-icons'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ListMenuItem, ListMenuItemDivider } from 'pp365-shared-library'
 import { useMemo } from 'react'

@@ -1,6 +1,6 @@
 /**
  * Get date value from item.
- * 
+ *
  * @param item Item/record to get date value from.
  * @param fieldName The field name of the date value.
  */
