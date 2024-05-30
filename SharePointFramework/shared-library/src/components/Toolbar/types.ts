@@ -68,6 +68,11 @@ export class ListMenuItem {
   disabled?: boolean
 
   /**
+   * Hidden state.
+   */
+  hidden?: boolean
+
+  /**
    * Checked state.
    */
   checkedValues?: Record<string, string[]>
@@ -93,7 +98,8 @@ export class ListMenuItem {
   items?: ListMenuItem[]
 
   /**
-   * Creates a new instance of ListMenuItem.
+   * Creates a new instance of `ListMenuItem`. Use the Fluent API pattern
+   * to set properties on the instance.
    *
    * @param text The text to display in the menu item (optional)
    * @param description The text to display in the tooltip for the menu item (optional)
@@ -136,6 +142,18 @@ export class ListMenuItem {
    */
   public setDisabled(disabled: ListMenuItem['disabled']) {
     this.disabled = disabled
+    return this
+  }
+
+  /**
+   * Sets the hidden state for the `ListMenuItem`.
+   * 
+   * @param hidden The hidden state to set.
+   * 
+   * @returns The updated `ListMenuItem` instance.
+   */
+  public setHidden(hidden: ListMenuItem['hidden']) {
+    this.hidden = hidden
     return this
   }
 
@@ -206,14 +224,17 @@ export class ListMenuItem {
 
   /**
    * Sets the condition for the `ListMenuItem`.
-   * If the condition is false, the `ListMenuItem` will not be rendered.
-   * If the condition is true, the `ListMenuItem` will be rendered.
+   * - If the condition is false, the `ListMenuItem` will not be rendered.
+   * - If the condition is true, the `ListMenuItem` will be rendered.
+   * 
+   * @remarks Ensure this method is called last in the chain, as it will return
+   * `null` if the condition is false. 
    *
    * @param condition The condition to set.
    */
   public makeConditional(condition: boolean) {
-    if (!condition) return null
-    return this
+    if (condition) return this
+    return null
   }
 }
 

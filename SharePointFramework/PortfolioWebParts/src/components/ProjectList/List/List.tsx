@@ -13,6 +13,7 @@ import styles from './List.module.scss'
 import { ListContext } from './context'
 import { useList } from './useList'
 
+
 export const List = () => {
   const context = useContext(ListContext)
   const { columnSizingOptions, columns, defaultSortState } = useList()

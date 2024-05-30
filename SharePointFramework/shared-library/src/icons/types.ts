@@ -29,4 +29,9 @@ export type GetFluentIconOptions = {
    * Whether the icon should be filled or not.
    */
   filled?: boolean
+
+  /**
+   * Whether to return the icon as a JSX element or not.
+   */
+  jsx?: boolean
 }
