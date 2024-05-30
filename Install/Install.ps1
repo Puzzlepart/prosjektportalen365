@@ -340,10 +340,16 @@ if (-not $SkipSiteDesign.IsPresent) {
 }
 if (-not $SkipDefaultSiteDesignAssociation.IsPresent) {
     StartAction("Setting default site design for hub $($Uri.AbsoluteUri) to $SiteDesignName")
-    Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
-    $SiteDesign = Get-PnPSiteDesign -Identity $SiteDesignName 
-    Set-PnPHubSite -Identity $Uri.AbsoluteUri -SiteDesignId $SiteDesign.Id.Guid
-    Disconnect-PnPOnline
+    try {
+        Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
+        $SiteDesign = Get-PnPSiteDesign -Identity $SiteDesignName 
+        Set-PnPHubSite -Identity $Uri.AbsoluteUri -SiteDesignId $SiteDesign.Id.Guid
+        Disconnect-PnPOnline
+    }
+    catch {
+        Write-Host "[WARNING] Failed to set default site design: $($_.Exception.Message)" -ForegroundColor Red
+        exit 0
+    }
     EndAction
 }
 #endregion
