@@ -21,13 +21,12 @@ import {
   PanelRightContractRegular,
   bundleIcon
 } from '@fluentui/react-icons'
-import { ProjectMenu } from 'components/ProjectList/ProjectMenu'
+import { ProjectMenu } from 'components/ProjectList/ProjectMenu/ProjectMenu'
 
 export const ProjectCardFooter: FC = () => {
   const context = useContext(ProjectCardContext)
   const { owner, manager } = useProjectCardFooter()
   const PanelRight = bundleIcon(PanelRightContractFilled, PanelRightContractRegular)
-
   let templateIcon = bundleIcon(BoxFilled, BoxRegular)
   let templateText = context.project.template
 
@@ -66,11 +65,9 @@ export const ProjectCardFooter: FC = () => {
       <div className={styles.persona}>
         <div hidden={!context.shouldDisplay('ProjectOwner')}>
           <Tooltip
-            content={
-              <>
-                <strong>{owner.role}</strong>: {owner.name || strings.NotSet}
-              </>
-            }
+            content={<>
+              <strong>{owner.role}</strong>: {owner.name || strings.NotSet}
+            </>}
             relationship='description'
             withArrow
           >
@@ -79,11 +76,9 @@ export const ProjectCardFooter: FC = () => {
         </div>
         <div hidden={!context.shouldDisplay('ProjectManager')}>
           <Tooltip
-            content={
-              <>
-                <strong>{manager.role}</strong>: {manager.name || strings.NotSet}
-              </>
-            }
+            content={<>
+              <strong>{manager.role}</strong>: {manager.name || strings.NotSet}
+            </>}
             relationship='description'
             withArrow
           >
@@ -97,32 +92,27 @@ export const ProjectCardFooter: FC = () => {
   return (
     <CardFooter
       className={styles.footer}
-      action={context.actions.map((action) => {
-        return (
-          <Tooltip
-            key={action.id}
-            content={<>{strings.ProjectInformationPanelButton}</>}
-            relationship='description'
-            withArrow
-          >
-            <Button
-              className={styles.action}
-              appearance='subtle'
-              icon={<PanelRight />}
-              {...action}
-            />
-          </Tooltip>
-        )
-      })}
+      action={context.actions.map((action) => (
+        <Tooltip
+          key={action.id}
+          content={<>{strings.ProjectInformationPanelButton}</>}
+          relationship='description'
+          withArrow
+        >
+          <Button
+            className={styles.action}
+            appearance='subtle'
+            icon={<PanelRight />}
+            {...action} />
+        </Tooltip>
+      ))}
     >
       <Persona />
       <div className={styles.buttons}>
         <Tooltip
-          content={
-            <>
-              <strong>{templateText}</strong> ({context.project.template})
-            </>
-          }
+          content={<>
+            <strong>{templateText}</strong> ({context.project.template})
+          </>}
           relationship='description'
           withArrow
         >
@@ -130,8 +120,7 @@ export const ProjectCardFooter: FC = () => {
             className={styles.templateTag}
             appearance='subtle'
             icon={<Icon />}
-            title={context.project.template}
-          />
+            title={context.project.template} />
         </Tooltip>
         <ProjectMenu project={context.project} context={context} appearance='subtle' />
       </div>

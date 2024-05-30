@@ -32,5 +32,5 @@ export function useProjectCardContent() {
           type: 'Prosjekttype'
         }
       })
-  } as const
+  }
 }

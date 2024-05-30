@@ -1,24 +1,25 @@
-import { CardPreview, Link, Text } from '@fluentui/react-components'
-import React, { FC, useCallback, useContext } from 'react'
-import { ProjectCardContext } from '../context'
-import styles from './ProjectCardHeader.module.scss'
-import { useProjectCardHeader } from './useProjectCardHeader'
-import { IProjectCardHeaderProps } from './types'
-import { ProjectLogo } from 'pp365-shared-library'
+import { CardPreview, Link, Text } from '@fluentui/react-components';
+import React, { FC, useCallback, useContext } from 'react';
+import { ProjectCardContext } from '../context';
+import styles from './ProjectCardHeader.module.scss';
+import { useProjectCardHeader } from './useProjectCardHeader';
+import { IProjectCardHeaderProps } from './types';
+import { ProjectLogo } from 'pp365-shared-library';
+
 
 export const ProjectCardHeader: FC<IProjectCardHeaderProps> = (props) => {
-  const context = useContext(ProjectCardContext)
-  const { showCustomImage, setShowCustomImage, colors, headerProps } = useProjectCardHeader()
+  const context = useContext(ProjectCardContext);
+  const { showCustomImage, setShowCustomImage, colors, headerProps } = useProjectCardHeader();
 
   /**
    * Callback function to set the showCustomImage state.
    */
   const customImageCallback = useCallback(
     (value: boolean) => {
-      setShowCustomImage(value)
+      setShowCustomImage(value);
     },
     [context.showProjectLogo, showCustomImage]
-  )
+  );
 
   return (
     <>
@@ -57,14 +58,13 @@ export const ProjectCardHeader: FC<IProjectCardHeaderProps> = (props) => {
                 url={context.project.url}
                 renderMode='card'
                 onImageLoad={(value) => {
-                  props.onImageLoad
-                  customImageCallback(value)
-                }}
-              />
+                  props.onImageLoad;
+                  customImageCallback(value);
+                }} />
             </Link>
           </div>
         )}
       </CardPreview>
     </>
-  )
-}
+  );
+};
