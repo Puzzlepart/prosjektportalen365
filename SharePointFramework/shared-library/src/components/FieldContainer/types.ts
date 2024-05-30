@@ -15,10 +15,10 @@ export interface IFieldContainerProps extends FieldProps {
   /**
    * The validation state of the field.
    */
-  validationState?: 'error' | 'warning' | 'success' | 'none';
+  validationState?: 'error' | 'warning' | 'success' | 'none'
 
   /**
    * The validation message associated with the field.
    */
-  validationMessage?: Slot<'div'>;
+  validationMessage?: Slot<'div'>
 }

@@ -1,5 +1,4 @@
 /* eslint-disable prefer-spread */
-/* eslint-disable no-console */
 import { useContext, useState } from 'react'
 import { useMotion } from '@fluentui/react-motion-preview'
 import { useMotionStyles } from './styles'
@@ -24,7 +23,7 @@ export const useProvisionDrawer = () => {
   /**
    * Saves the request to the Provision Requests list.
    */
-  const onSave = async () => {
+  const onSave = async (): Promise<boolean> => {
     const namingConvention = context.state.settings.get('NamingConvention')
     const baseUrl = `${context.props.webAbsoluteUrl.split('sites')[0]}sites/`
 
@@ -62,14 +61,19 @@ export const useProvisionDrawer = () => {
       RequestKey: getGUID()
     }
 
-    await context.props.dataAdapter.addProvisionRequests(requestItem, context.props.provisionUrl)
+    return await context.props.dataAdapter.addProvisionRequests(
+      requestItem,
+      context.props.provisionUrl
+    )
   }
 
   /**
    * Save is disabled if the column name or field name is less than 2 characters.
    */
   const isSaveDisabled =
-    context.column.get('name')?.length < 2 || context.column.get('justification')?.length < 2
+    context.column.get('name')?.length < 2 ||
+    context.column.get('justification')?.length < 2 ||
+    context.column.get('owner')?.length < 1
 
   return {
     level2,

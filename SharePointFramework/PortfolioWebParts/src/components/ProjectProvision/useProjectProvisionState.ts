@@ -15,8 +15,7 @@ export function useProjectProvisionState(props: IProjectProvisionProps) {
     settings: new Map<string, any>(),
     types: {},
     properties: {
-      type: 'Project',
-      hubSite: props.pageContext.legacyPageContext.hubSiteId
+      type: 'Project'
     }
   })
 

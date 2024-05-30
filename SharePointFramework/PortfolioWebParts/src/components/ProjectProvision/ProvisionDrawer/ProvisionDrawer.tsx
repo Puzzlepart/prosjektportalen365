@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import * as React from 'react'
 import {
   OverlayDrawer,
@@ -19,7 +18,10 @@ import {
   Option,
   Button,
   Tag,
-  Tooltip
+  Tooltip,
+  Toast,
+  ToastBody,
+  ToastTitle
 } from '@fluentui/react-components'
 import {
   ArrowLeft24Regular,
@@ -36,7 +38,7 @@ import { User } from './User'
 import { Guest } from './Guest'
 import { DebugModel } from './DebugModel'
 
-export const ProvisionDrawer = () => {
+export const ProvisionDrawer = (props: { toast: any }) => {
   const {
     motionStyles,
     level2,
@@ -139,12 +141,6 @@ export const ProvisionDrawer = () => {
                       type={type.type}
                     />
                   ))}
-                  {/* <SiteType
-                    title='Prosjekt'
-                    description='Prosjektportalen'
-                    logo='office1.png'
-                    type='Project'
-                  />*/}
                 </div>
               </FieldContainer>
               <FieldContainer
@@ -369,24 +365,43 @@ export const ProvisionDrawer = () => {
           </DrawerBody>
         )}
       </div>
-
       <DrawerFooter className={styles.footer}>
         <Button appearance='subtle' disabled={!level2} onClick={() => setLevel2(false)}>
           Forrige
         </Button>
-
         <Button
           appearance='primary'
           disabled={level2 && isSaveDisabled}
           onClick={() => {
-            level2 ? onSave() : setLevel2(true)
+            level2
+              ? onSave().then((response) => {
+                  if (response) {
+                    props.toast(
+                      <Toast>
+                        <ToastTitle>Bestilling sendt</ToastTitle>
+                        <ToastBody>Bestillingen er nå sendt til behandling.</ToastBody>
+                      </Toast>,
+                      { intent: 'success' }
+                    )
+                    context.setState({ showProvisionDrawer: false, properties: {} })
+                  } else {
+                    props.toast(
+                      <Toast>
+                        <ToastTitle>Feil</ToastTitle>
+                        <ToastBody>
+                          Det oppstod en feil under bestillingen. Vennligst prøv igjen, eller
+                          kontakt administrator.
+                        </ToastBody>
+                      </Toast>,
+                      { intent: 'error' }
+                    )
+                  }
+                })
+              : setLevel2(true)
           }}
         >
           {level2 ? 'Bestill område' : 'Neste'}
         </Button>
-        {/* <Button appearance='primary' disabled={level2} onClick={() => setLevel2(true)}>
-            Neste
-          </Button> */}
       </DrawerFooter>
     </OverlayDrawer>
   )

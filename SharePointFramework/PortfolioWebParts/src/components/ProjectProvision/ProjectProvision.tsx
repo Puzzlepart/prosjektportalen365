@@ -8,7 +8,10 @@ import {
   Skeleton,
   SkeletonItem,
   SplitButton,
-  useRestoreFocusTarget
+  Toaster,
+  useId,
+  useRestoreFocusTarget,
+  useToastController
 } from '@fluentui/react-components'
 import React, { FC } from 'react'
 import { IProjectProvisionProps } from './types'
@@ -22,6 +25,8 @@ import strings from 'PortfolioWebPartsStrings'
 export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
   const { state, setState, column, setColumn } = useProjectProvision(props)
   const restoreFocusTargetAttribute = useRestoreFocusTarget()
+  const toasterId = useId('saveToaster')
+  const { dispatchToast } = useToastController(toasterId)
 
   if (state.loading) {
     return (
@@ -33,7 +38,7 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
 
   return (
     <ProjectProvisionContext.Provider value={{ props, state, setState, column, setColumn }}>
-      <ProvisionDrawer />
+      <ProvisionDrawer toast={dispatchToast} />
       <Menu positioning='below-end'>
         <MenuTrigger disableButtonEnhancement>
           {(triggerProps: MenuButtonProps) => (
@@ -65,6 +70,7 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
         </MenuPopover>
       </Menu>
       <ProvisionStatus />
+      <Toaster toasterId={toasterId} />
     </ProjectProvisionContext.Provider>
   )
 }

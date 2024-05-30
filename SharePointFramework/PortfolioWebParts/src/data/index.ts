@@ -902,8 +902,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     try {
       const provisionSite = Web([this._sp.web, provisionUrl])
       const provisionRequestsList = provisionSite.lists.getByTitle('Provisioning Requests')
-      const listProps = await provisionRequestsList.select('Title')()
-      const request = await provisionRequestsList.items.add(properties)
+      await provisionRequestsList.items.add(properties)
       return true
     } catch (error) {
       return false
