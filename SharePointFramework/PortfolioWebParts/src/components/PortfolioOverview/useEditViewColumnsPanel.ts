@@ -2,7 +2,10 @@ import strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
 import { ProjectColumn } from 'pp365-shared-library'
 import { useMemo } from 'react'
-import { EditViewColumnsPanelSortMode, IEditViewColumnsPanelProps } from '../EditViewColumnsPanel/types'
+import {
+  EditViewColumnsPanelSortMode,
+  IEditViewColumnsPanelProps
+} from '../EditViewColumnsPanel/types'
 import { IPortfolioOverviewContext } from './context'
 import { TOGGLE_EDIT_VIEW_COLUMNS_PANEL } from './reducer'
 

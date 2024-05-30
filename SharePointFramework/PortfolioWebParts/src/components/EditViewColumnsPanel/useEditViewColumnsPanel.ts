@@ -13,12 +13,8 @@ import { useId } from '@fluentui/react-components'
  * @returns An object containing the necessary functions and state for the component.
  */
 export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
-  const {
-    selectableColumns,
-    selectedColumns,
-    selectColumn,
-    moveColumn
-  } = useSelectableColumns(props)
+  const { selectableColumns, selectedColumns, selectColumn, moveColumn } =
+    useSelectableColumns(props)
 
   /**
    * On save event handler.

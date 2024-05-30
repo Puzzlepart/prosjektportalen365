@@ -27,7 +27,9 @@ function sortColumns({ columns, customColumnOrder, sortMode }: IEditViewColumnsP
       } else if (customColumnOrderIndexB !== -1) {
         return 1
       } else {
-        return sortMode === EditViewColumnsPanelSortMode.CustomSelectedOnTop ? a['sortOrder'] - b['sortOrder'] : 0
+        return sortMode === EditViewColumnsPanelSortMode.CustomSelectedOnTop
+          ? a['sortOrder'] - b['sortOrder']
+          : 0
       }
     })
 }

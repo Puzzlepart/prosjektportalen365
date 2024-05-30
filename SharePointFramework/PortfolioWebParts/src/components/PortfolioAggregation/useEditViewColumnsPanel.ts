@@ -1,5 +1,8 @@
 import { ProjectContentColumn, SPDataSourceItem } from 'pp365-shared-library'
-import { EditViewColumnsPanelSortMode, IEditViewColumnsPanelProps } from '../EditViewColumnsPanel/types'
+import {
+  EditViewColumnsPanelSortMode,
+  IEditViewColumnsPanelProps
+} from '../EditViewColumnsPanel/types'
 import { IPortfolioAggregationContext } from './context'
 import { TOGGLE_EDIT_VIEW_COLUMNS_PANEL } from './reducer'
 import { useMemo } from 'react'
