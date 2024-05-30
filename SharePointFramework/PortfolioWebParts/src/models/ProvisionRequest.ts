@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 
 export class SPProvisionRequestItem {
-  public Title: string = ''
+  public Title?: string = ''
   public SpaceDisplayName?: string = ''
   public Description?: string = ''
   public BusinessJustification?: string = ''
@@ -27,6 +27,8 @@ export class SPProvisionRequestItem {
   public JoinHub?: boolean = true
   public HubSiteTitle?: string = ''
   public HubSite?: string = ''
+  public Stage?: string = 'Submitted'
+  public RequestKey?: string = ''
 }
 
 export class ProvisionRequest {

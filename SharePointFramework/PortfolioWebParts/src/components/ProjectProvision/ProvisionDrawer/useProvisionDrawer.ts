@@ -4,9 +4,10 @@ import { useContext, useState } from 'react'
 import { useMotion } from '@fluentui/react-motion-preview'
 import { useMotionStyles } from './styles'
 import { ProjectProvisionContext } from '../context'
-import { SPProvisionRequestItem } from 'models/ProvisionRequest'
+import { ProvisionRequest, SPProvisionRequestItem } from 'models/ProvisionRequest'
 import _ from 'lodash'
 import { IPersonaProps } from '@fluentui/react'
+import { getGUID } from '@pnp/core'
 
 /**
  * Component logic hook for `ProvisionDrawer`. This hook is responsible for
@@ -49,11 +50,16 @@ export const useProvisionDrawer = () => {
         Url: url
       },
       SiteAlias: alias,
+      MailboxAlias: alias,
       TimeZoneId: 4,
       LCID: 1044,
       JoinHub: true,
       HubSiteTitle: context.props.pageContext.legacyPageContext.hubSiteId,
-      HubSite: context.props.pageContext.web.title
+      HubSite: context.props.pageContext.web.title,
+      Prefix: namingConvention.prefixText,
+      Suffix: namingConvention.suffixText,
+      Stage: 'Submitted',
+      RequestKey: getGUID(),
     }
 
     await context.props.dataAdapter.addProvisionRequests(requestItem, context.props.provisionUrl)
