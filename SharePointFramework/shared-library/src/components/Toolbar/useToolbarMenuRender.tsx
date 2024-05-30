@@ -34,15 +34,17 @@ export function useToolbarMenuRender() {
     labelStyle: CSSProperties = {}
   ) {
     return (
-      <ToolbarButton
-        icon={createIcon(item)}
-        title={item.text}
-        style={createStyle(item, buttonStyle)}
-        onClick={item.onClick}
-        disabled={item.disabled}
-      >
-        {item.text && <span style={labelStyle}>{item.text}</span>}
-      </ToolbarButton>
+      <div hidden={item.hidden}>
+        <ToolbarButton
+          icon={createIcon(item)}
+          title={item.text}
+          style={createStyle(item, buttonStyle)}
+          onClick={item.onClick}
+          disabled={item.disabled}
+        >
+          {item.text && <span style={labelStyle}>{item.text}</span>}
+        </ToolbarButton>
+      </div>
     )
   }
 
@@ -63,9 +65,26 @@ export function useToolbarMenuRender() {
 
     if (item.value) {
       return (
-        <MenuItemCheckbox
-          name={item.name}
-          value={item.value}
+        <div hidden={item.hidden}>
+          <MenuItemCheckbox
+            name={item.name}
+            value={item.value}
+            content={item.text}
+            icon={createIcon(item)}
+            style={createStyle(item)}
+            disabled={item.disabled}
+            onClick={(e) => {
+              item.onClick(e)
+              closeMenu && closeMenu()
+            }}
+          />
+        </div>
+      )
+    }
+    if (item.items) return renderMenu(item)
+    return (
+      <div hidden={item.hidden}>
+        <MenuItem
           content={item.text}
           icon={createIcon(item)}
           style={createStyle(item)}
@@ -75,20 +94,7 @@ export function useToolbarMenuRender() {
             closeMenu && closeMenu()
           }}
         />
-      )
-    }
-    if (item.items) return renderMenu(item)
-    return (
-      <MenuItem
-        content={item.text}
-        icon={createIcon(item)}
-        style={createStyle(item)}
-        disabled={item.disabled}
-        onClick={(e) => {
-          item.onClick(e)
-          closeMenu && closeMenu()
-        }}
-      />
+      </div>
     )
   }
 
@@ -100,9 +106,8 @@ export function useToolbarMenuRender() {
    * @returns The rendered menu.
    */
   function renderMenu(item: ListMenuItem) {
-    const { items } = item
-    const hasCheckmarks = items.some((i) => i.value)
-    const hasIcons = items.some((i) => i.icon)
+    const hasCheckmarks = item.items.some((i) => i.value)
+    const hasIcons = item.items.some((i) => i.icon)
     const [open, setOpen] = useState(false)
     const onOpenChange: MenuProps['onOpenChange'] = (_, data) => {
       setOpen(data.open)
@@ -128,7 +133,7 @@ export function useToolbarMenuRender() {
             hasIcons={hasIcons}
             checkedValues={item.checkedValues}
           >
-            {items.map((menuItem) => renderMenuItem(menuItem, () => setOpen(false)))}
+            {item.items.map((menuItem) => renderMenuItem(menuItem, () => setOpen(false)))}
           </MenuList>
         </MenuPopover>
       </Menu>

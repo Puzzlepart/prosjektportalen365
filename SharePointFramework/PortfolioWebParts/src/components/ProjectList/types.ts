@@ -159,7 +159,10 @@ export interface IProjectListState extends Pick<IShimmerProps, 'isDataLoaded'> {
   showProjectInfo?: ProjectListModel
 
   /**
-   * How the projects should be rendered. `tiles` or `list`
+   * How the projects should be rendered. The available options are:
+   * - `tiles`: Render projects as tiles
+   * - `list`: Render projects as a list
+   * - `compactList`: Render projects as a compact list
    */
   renderMode?: ProjectListRenderMode
 
@@ -169,7 +172,7 @@ export interface IProjectListState extends Pick<IShimmerProps, 'isDataLoaded'> {
   selectedVertical?: IProjectListVertical
 
   /**
-   * Is the current user in the PortfolioManagerGroup?
+   * Is the current user in the `PortfolioManagerGroup`?
    */
   isUserInPortfolioManagerGroup?: boolean
 

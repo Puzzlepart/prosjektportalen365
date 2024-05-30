@@ -1,11 +1,10 @@
 import { format } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
-import { ListMenuItem } from 'pp365-shared-library'
+import { ListMenuItem, getFluentIcon } from 'pp365-shared-library'
 import { useContext, useMemo } from 'react'
 import { ProjectListContext } from '../context'
 import { ProjectListRenderMode } from '../types'
-import { Icons } from './icons'
 import { renderModes } from './renderModes'
 
 /**
@@ -22,7 +21,7 @@ export function useCommands() {
     context.props.showSortBy && context.state.renderMode === 'tiles'
     , [context.props.showSortBy, context.state.renderMode])
 
-  const menuItems = [
+  const toolbarItems = [
     new ListMenuItem(selectedRenderMode?.text, null)
       .setHidden(!context.props.showRenderModeSelector)
       .setIcon(selectedRenderMode?.icon)
@@ -38,7 +37,7 @@ export function useCommands() {
             .setIcon(icon)
             .makeCheckable({
               name: 'renderMode',
-              value,
+              value
             })
             .setOnClick(() => {
               context.setState({
@@ -51,7 +50,9 @@ export function useCommands() {
     new ListMenuItem(null, format(strings.SortCardsByLabel, context.props.sortBy))
       .setHidden(!showSortBy)
       .setIcon(
-        context.state.sort?.isSortedDescending ? Icons.TextSortAscending : Icons.TextSortDescending
+        context.state.sort?.isSortedDescending
+          ? getFluentIcon('TextSortAscending', { jsx: false })
+          : getFluentIcon('TextSortDescending', { jsx: false })
       )
       .setOnClick(() => {
         context.setState({
@@ -67,5 +68,5 @@ export function useCommands() {
     ? ''
     : format(context.state.selectedVertical.searchBoxPlaceholder, context.projects.length)
 
-  return { menuItems, searchBoxPlaceholder }
+  return { toolbarItems, searchBoxPlaceholder }
 }

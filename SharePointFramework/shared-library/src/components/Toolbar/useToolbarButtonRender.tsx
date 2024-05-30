@@ -22,21 +22,23 @@ export function useToolbarButtonRender() {
     labelStyle: CSSProperties = {}
   ) {
     return (
-      <Tooltip
-        content={item.description}
-        relationship={Boolean(item.text) ? 'description' : 'label'}
-        withArrow
-      >
-        <ToolbarButton
-          icon={createIcon(item)}
-          title={item.text}
-          style={createStyle(item, buttonStyle)}
-          onClick={item.onClick}
-          disabled={item.disabled}
+      <div hidden={item.hidden}>
+        <Tooltip
+          content={item.description}
+          relationship={Boolean(item.text) ? 'description' : 'label'}
+          withArrow
         >
-          {item.text && <span style={labelStyle}>{item.text}</span>}
-        </ToolbarButton>
-      </Tooltip>
+          <ToolbarButton
+            icon={createIcon(item)}
+            title={item.text}
+            style={createStyle(item, buttonStyle)}
+            onClick={item.onClick}
+            disabled={item.disabled}
+          >
+            {item.text && <span style={labelStyle}>{item.text}</span>}
+          </ToolbarButton>
+        </Tooltip>
+      </div>
     )
   }
 

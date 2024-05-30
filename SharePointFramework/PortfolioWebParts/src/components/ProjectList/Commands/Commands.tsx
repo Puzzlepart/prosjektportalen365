@@ -8,12 +8,9 @@ import { useCommands } from './useCommands'
 
 export const Commands: FC = () => {
     const context = useContext(ProjectListContext)
-    const { menuItems, searchBoxPlaceholder } = useCommands()
+    const { toolbarItems, searchBoxPlaceholder } = useCommands()
     return (
-        <div
-            className={styles.commands}
-            hidden={!context.props.showSearchBox && !context.props.showRenderModeSelector}
-        >
+        <div className={styles.commands}>
             <div className={styles.search} hidden={!context.props.showSearchBox}>
                 <SearchBox
                     className={styles.searchBox}
@@ -29,9 +26,7 @@ export const Commands: FC = () => {
                     }}
                     appearance='filled-lighter' />
             </div>
-            {context.props.showSortBy && (
-                <Toolbar items={menuItems} />
-            )}
+            <Toolbar items={toolbarItems} />
         </div>
     )
 }
