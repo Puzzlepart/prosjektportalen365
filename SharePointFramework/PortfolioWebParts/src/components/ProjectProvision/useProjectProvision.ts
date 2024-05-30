@@ -12,7 +12,7 @@ import { useEditableColumn } from './useEditableColumn'
  */
 export const useProjectProvision = (props: IProjectProvisionProps) => {
   const { state, setState } = useProjectProvisionState(props)
-  const { column, setColumn } = useEditableColumn(state, setState)
+  const { column, setColumn } = useEditableColumn(props, state, setState)
 
   useProjectProvisionDataFetch(props, setState)
 

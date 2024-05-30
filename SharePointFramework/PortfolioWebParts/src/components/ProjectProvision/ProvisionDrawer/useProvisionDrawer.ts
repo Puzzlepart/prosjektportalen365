@@ -1,8 +1,12 @@
 /* eslint-disable prefer-spread */
+/* eslint-disable no-console */
 import { useContext, useState } from 'react'
 import { useMotion } from '@fluentui/react-motion-preview'
 import { useMotionStyles } from './styles'
 import { ProjectProvisionContext } from '../context'
+import { SPProvisionRequestItem } from 'models/ProvisionRequest'
+import _ from 'lodash'
+import { IPersonaProps } from '@fluentui/react'
 
 /**
  * Component logic hook for `ProvisionDrawer`. This hook is responsible for
@@ -19,6 +23,45 @@ export const useProvisionDrawer = () => {
   const level2Motion = useMotion<HTMLDivElement>(level2)
 
   /**
+   * Saves the request to the Provision Requests list.
+   */
+  const onSave = async () => {
+    const namingConvention = context.state.settings.get('NamingConvention')
+    const url = context.props.webAbsoluteUrl.split('sites')[0] + 'sites/' + context.column.get('name')
+    const alias = context.column.get('name').replace(/[^a-zA-Z0-9-_ÆØÅæøå ]/g, '')
+    const aliasSuffix = '@' + context.props.pageContext.user.loginName.split('@')[1]
+
+    const requestItem: SPProvisionRequestItem = {
+      Title: context.column.get('name'),
+      SpaceDisplayName: context.column.get('name'),
+      Description: context.column.get('description'),
+      BusinessJustification: context.column.get('justification'),
+      SpaceType: 'Prosjektområde',
+      SpaceTypeInternal: 'Project',
+      // OwnersId: context.state.properties.owner,
+      // MembersId: context.state.properties.member,
+      Visibility: context.state.properties.privacy,
+      ConfidentialData: context.column.get('isConfidential'),
+      ExternalSharingRequired: context.column.get('externalSharing'),
+      Guests: context.column.get('guest')?.join(';'),
+      // SiteURL: {
+      //   Description: url,
+      //   Url: url
+      // },
+      SiteAlias: alias,
+      TimeZoneId: 4,
+      LCID: 1044,
+      JoinHub: true,
+      HubSiteTitle: context.props.pageContext.legacyPageContext.hubSiteId,
+      HubSite: context.props.pageContext.web.title
+    }
+
+    await context.props.dataAdapter.addProvisionRequests(requestItem, context.props.provisionUrl)
+  }
+
+
+
+  /**
    * Save is disabled if the column name or field name is less than 2 characters.
    */
   const isSaveDisabled =
@@ -32,7 +75,8 @@ export const useProvisionDrawer = () => {
     toolbarCalendarIconMotion,
     level1Motion,
     level2Motion,
-    isSaveDisabled,
-    context
+    context,
+    onSave,
+    isSaveDisabled
   }
 }

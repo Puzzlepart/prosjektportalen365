@@ -347,7 +347,7 @@ export class SPDataAdapter
     const { items } = await this.fetchDataForViewBatch(
       configuration.views[0],
       configuration,
-      this.spfxContext.pageContext.legacyPageContext.hubSiteIdhubSiteId
+      this.spfxContext.pageContext.legacyPageContext.hubSiteId
     )
 
     const data = items

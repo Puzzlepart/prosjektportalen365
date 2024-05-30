@@ -9,10 +9,13 @@ import { IProjectProvisionState, IProjectProvisionProps } from './types'
  */
 export function useProjectProvisionState(props: IProjectProvisionProps) {
   const [state, $setState] = useState<IProjectProvisionState>({
+    loading: true,
     showProvisionDrawer: false,
     showProvisionStatus: false,
+    settings: new Map<string, any>(),
     properties: {
-      type: 'project'
+      type: 'project',
+      hubSite: props.pageContext.legacyPageContext.hubSiteId
     }
   })
 

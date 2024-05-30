@@ -14,6 +14,13 @@ export function useProjectProvisionDataFetch(
   setState: (newState: Partial<IProjectProvisionState>) => void
 ) {
   useEffect(() => {
-    // Fetch stuff
+    Promise.all([props.dataAdapter.getProvisionRequestSettings(props.provisionUrl)]).then(
+      ([settings]) => {
+        setState({
+          settings,
+          loading: false
+        })
+      }
+    )
   }, [])
 }

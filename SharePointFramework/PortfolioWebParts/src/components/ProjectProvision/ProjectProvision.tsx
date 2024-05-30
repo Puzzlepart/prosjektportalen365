@@ -5,6 +5,8 @@ import {
   MenuList,
   MenuPopover,
   MenuTrigger,
+  Skeleton,
+  SkeletonItem,
   SplitButton,
   useRestoreFocusTarget
 } from '@fluentui/react-components'
@@ -20,6 +22,14 @@ import strings from 'PortfolioWebPartsStrings'
 export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
   const { state, setState, column, setColumn } = useProjectProvision(props)
   const restoreFocusTargetAttribute = useRestoreFocusTarget()
+
+  if (state.loading) {
+    return (
+      <Skeleton>
+        <SkeletonItem style={{ width: '192px', height: '40px' }} />
+      </Skeleton>
+    )
+  }
 
   return (
     <ProjectProvisionContext.Provider value={{ props, state, setState, column, setColumn }}>

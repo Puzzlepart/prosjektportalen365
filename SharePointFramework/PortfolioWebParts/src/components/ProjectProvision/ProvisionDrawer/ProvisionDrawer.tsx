@@ -17,7 +17,9 @@ import {
   Toolbar,
   Dropdown,
   Option,
-  Button
+  Button,
+  Tag,
+  Tooltip
 } from '@fluentui/react-components'
 import {
   ArrowLeft24Regular,
@@ -44,11 +46,11 @@ export const ProvisionDrawer = () => {
     level1Motion,
     level2Motion,
     context,
+    onSave,
     isSaveDisabled
   } = useProvisionDrawer()
 
-  const aliasSuffix = '@puzzlepart.onmicrosoft.com'
-  const urlPrefix = 'https://puzzlepart.sharepoint.com/sites/'
+  const namingConvention = context.state.settings.get('NamingConvention')
 
   return (
     <OverlayDrawer
@@ -160,6 +162,24 @@ export const ProvisionDrawer = () => {
                   onChange={(_, data) => {
                     context.setColumn('name', data.value)
                   }}
+                  contentBefore={
+                    <Tooltip
+                      withArrow
+                      content='Dette er den angitte prefiksen for områdenavnet.'
+                      relationship='label'
+                    >
+                      <Tag size='small'>{namingConvention.prefixText}</Tag>
+                    </Tooltip>
+                  }
+                  contentAfter={
+                    <Tooltip
+                      withArrow
+                      content='Dette er den angitte suffiksen for områdenavnet.'
+                      relationship='label'
+                    >
+                      <Tag size='small'>{namingConvention.suffixText}</Tag>
+                    </Tooltip>
+                  }
                   placeholder={strings.Placeholder.SiteName}
                 />
               </FieldContainer>
@@ -192,26 +212,24 @@ export const ProvisionDrawer = () => {
                 iconName='TextNumberFormat'
                 label='Alias/navn'
                 description='Velg et unikt alias som følger organisasjonens navngivningsstandarder.'
-                required={true}
               >
                 <Input
-                  value={context.column.get('siteName')}
+                  disabled
+                  value={context.state.properties.alias}
                   onChange={(_, data) => context.setColumn('alias', data.value)}
                   contentAfter={<Caption1>{aliasSuffix}</Caption1>}
-                  placeholder={strings.Placeholder.TextField}
                 />
               </FieldContainer>
               <FieldContainer
                 iconName='Link'
                 label='Områdeadresse'
                 description='Områdeadressen er en del av URL-en til området.'
-                required={true}
               >
                 <Input
-                  value={context.column.get('siteName')}
+                  disabled
+                  value={context.state.properties.url}
                   onChange={(_, data) => context.setColumn('url', data.value)}
                   contentBefore={<Caption1>{urlPrefix}</Caption1>}
-                  placeholder={strings.Placeholder.TextField}
                 />
               </FieldContainer> */}
               <Divider />
@@ -301,10 +319,10 @@ export const ProvisionDrawer = () => {
                 description='Dersom denne er aktivert, vil man kunne invitere inn og dele enkeltfiler, mapper, bibliotek o.l. med eksterne gjestebrukere. NB! Invitasjon av eksterne gjestebrukere vil først være mulig etter at gruppen/området er opprettet.'
               >
                 <Switch
-                  checked={context.column.get('allowGuests')}
-                  value={context.column.get('allowGuests')}
+                  checked={context.column.get('externalSharing')}
+                  value={context.column.get('externalSharing')}
                   onChange={(_, data) => {
-                    context.setColumn('allowGuests', data.checked)
+                    context.setColumn('externalSharing', data.checked)
 
                     if (!data.checked) {
                       context.setColumn('guest', [])
@@ -316,40 +334,28 @@ export const ProvisionDrawer = () => {
                 iconName='People'
                 label='Gjest(er)'
                 description='Her kan du legge til eksterne gjester. Vennligst skriv inn en gyldig e-postadresse.'
-                hidden={!context.column.get('allowGuests')}
+                hidden={!context.column.get('externalSharing')}
               >
                 <Guest />
               </FieldContainer>
-              <FieldContainer
-                iconName='LocalLanguage'
-                label='Velg et språk'
-                description='Velg standard språk for området. Dette kan ikke endres senere.'
-              >
+              <FieldContainer iconName='LocalLanguage' label='Språk'>
                 <Dropdown
                   defaultValue={context.column.get('language')}
                   defaultSelectedOptions={[context.column.get('language')]}
                   disabled
                 />
               </FieldContainer>
-              <FieldContainer
-                iconName='Clock'
-                label='Tidsssone'
-                description='Velg tidssone for området.'
-              >
+              <FieldContainer iconName='Clock' label='Tidsssone'>
                 <Dropdown
                   defaultValue={context.column.get('timeZone')}
                   defaultSelectedOptions={[context.column.get('timeZone')]}
                   disabled
                 />
               </FieldContainer>
-              <FieldContainer
-                iconName='Database'
-                label='Hubtilknytning'
-                description='Velg hvilken hub dette området skal tilknyttes.'
-              >
+              <FieldContainer iconName='Database' label='Hubtilknytning'>
                 <Dropdown
-                  defaultValue={context.column.get('hubSite')}
-                  defaultSelectedOptions={[context.column.get('hubSite')]}
+                  defaultValue={context.column.get('hubSiteTitle')}
+                  defaultSelectedOptions={[context.column.get('hubSiteTitle')]}
                   disabled
                 />
               </FieldContainer>
@@ -371,7 +377,7 @@ export const ProvisionDrawer = () => {
           appearance='primary'
           disabled={level2 && isSaveDisabled}
           onClick={() => {
-            level2 ? console.log('big orda todai!') : setLevel2(true)
+            level2 ? onSave() : setLevel2(true)
           }}
         >
           {level2 ? 'Bestill område' : 'Neste'}

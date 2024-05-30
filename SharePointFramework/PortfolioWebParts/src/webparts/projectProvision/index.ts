@@ -18,14 +18,15 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
       pages: [
         {
           header: {
-            description: 'Test web part description'
+            description: 'Områdebestilling'
           },
           groups: [
             {
               groupName: strings.GeneralGroupName,
               groupFields: [
-                PropertyPaneTextField('description', {
-                  label: strings.TitleDescription
+                PropertyPaneTextField('provisionUrl', {
+                  label: 'Provisjoneringsområde',
+                  description: 'URL til området som håndterer bestillinger'
                 })
               ]
             }
