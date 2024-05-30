@@ -1,6 +1,7 @@
 /* eslint-disable prefer-spread */
 import { format, IColumn } from '@fluentui/react'
 import { ButtonProps, SearchBoxProps, useId } from '@fluentui/react-components'
+import strings from 'PortfolioWebPartsStrings'
 import { ProjectListModel } from 'pp365-shared-library/lib/models'
 import { sortAlphabetically } from 'pp365-shared-library/lib/util/sortAlphabetically'
 import _ from 'underscore'
@@ -8,8 +9,6 @@ import { IProjectCardContext } from './ProjectCard/context'
 import { IProjectListProps } from './types'
 import { useProjectListDataFetch } from './useProjectListDataFetch'
 import { useProjectListState } from './useProjectListState'
-import strings from 'PortfolioWebPartsStrings'
-import { useToolbarItems } from './ToolbarItems/useToolbarItems'
 
 /**
  * Component logic hook for `ProjectList`. This hook is responsible for
@@ -18,25 +17,13 @@ import { useToolbarItems } from './ToolbarItems/useToolbarItems'
  * @param props Props
  */
 export const useProjectList = (props: IProjectListProps) => {
+  const fluentProviderId = useId('fp-project-list')
+  const verticals = props.verticals.filter(
+    (vertical) => !props.hideVerticals.includes(vertical.key.toString())
+  )
   const { state, setState } = useProjectListState(props)
+  useProjectListDataFetch(props, verticals, setState)
 
-  /**
-   * Sorting on column header click
-   *
-   * @param _evt - Event
-   * @param column - Column
-   */
-  function onListSort(_evt: React.MouseEvent<any>, column: IColumn): void {
-    if (column.key !== 'logo') {
-      let isSortedDescending = column.isSortedDescending
-      if (column.isSorted) {
-        isSortedDescending = !isSortedDescending
-      }
-      const newSort = { fieldName: column.fieldName, isSortedDescending }
-      setState({ sort: newSort })
-    }
-    return
-  }
 
   /**
    * Get card actions. For now only `showProjectInfo` is handled.
@@ -80,7 +67,7 @@ export const useProjectList = (props: IProjectListProps) => {
       .filter((project) => state.selectedVertical.filter(project, state))
       .filter((project) =>
         _.any(Object.keys(project), (key) => {
-          let value
+          let value = null
           if (Array.isArray(project[key]) && project[key].length > 0) {
             value = project[key]?.join(', ')
           } else if (typeof project[key] === 'object' && project[key] !== null) {
@@ -106,22 +93,7 @@ export const useProjectList = (props: IProjectListProps) => {
       )
   }
 
-  /**
-   * On search callback handler
-   *
-   * @param _ - React change event
-   * @param searchTerm - Search term
-   */
-  const onSearch: SearchBoxProps['onChange'] = (_, data) => {
-    setState({ searchTerm: data?.value })
-  }
-
   const projects = state.isDataLoaded ? filterProjects(state.projects) : state.projects
-  const verticals = props.verticals.filter(
-    (vertical) => !props.hideVerticals.includes(vertical.key.toString())
-  )
-
-  useProjectListDataFetch(props, verticals, setState)
 
   /**
    * Create card context for the provided project.
@@ -139,22 +111,12 @@ export const useProjectList = (props: IProjectListProps) => {
     }
   }
 
-  const menuItems = useToolbarItems(state, setState, props)
-
-  const fluentProviderId = useId('fp-project-list')
-
   return {
+    props,
     state,
     setState,
-    menuItems,
     projects,
     verticals,
-    searchBoxPlaceholder:
-      !state.isDataLoaded || _.isEmpty(state.projects)
-        ? ''
-        : format(state.selectedVertical.searchBoxPlaceholder, projects.length),
-    onListSort,
-    onSearch,
     createCardContext,
     fluentProviderId
   }

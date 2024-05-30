@@ -1,6 +1,6 @@
 @import "~@fluentui/react/dist/sass/References.scss";
 
-.root {
+.projectList {
   .tabs {
     align-items: flex-start;
     display: flex;
@@ -9,28 +9,6 @@
     padding: 15px 0px;
     row-gap: 20px;
     flex-direction: row;
-  }
-
-  .commandBar {
-    display: flex;
-    flex-direction: row;
-    max-width: 1024px;
-    gap: 15px;
-
-    .search {
-      width: 100%;
-      max-width: 100%;
-
-      .searchBox {
-        box-shadow: var(--shadow2);
-        width: inherit;
-        max-width: inherit;
-      }
-    }
-
-    .sortBy {
-      box-shadow: var(--shadow2);
-    }
   }
 
   .emptyMessage {

@@ -164,11 +164,6 @@ export interface IProjectListState extends Pick<IShimmerProps, 'isDataLoaded'> {
   renderMode?: ProjectListRenderMode
 
   /**
-   * Current selected render mode
-   */
-  selectedRenderMode?: IRenderMode
-
-  /**
    * Current selected vertical
    */
   selectedVertical?: IProjectListVertical

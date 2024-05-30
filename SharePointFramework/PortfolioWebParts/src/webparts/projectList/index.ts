@@ -5,21 +5,20 @@ import {
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import { CalloutTriggers } from '@pnp/spfx-property-controls/lib/PropertyFieldHeader'
 import {
   PropertyFieldDropdownWithCallout,
   PropertyFieldMultiSelect,
   PropertyFieldToggleWithCallout
 } from '@pnp/spfx-property-controls'
 import {
-  PropertyFieldCollectionData,
-  CustomCollectionFieldType
+  CustomCollectionFieldType,
+  PropertyFieldCollectionData
 } from '@pnp/spfx-property-controls/lib/PropertyFieldCollectionData'
-import { IProjectListProps, ProjectList } from 'components/ProjectList'
-import { ProjectListVerticals } from 'components/ProjectList/ProjectListVerticals'
+import { CalloutTriggers } from '@pnp/spfx-property-controls/lib/PropertyFieldHeader'
 import * as strings from 'PortfolioWebPartsStrings'
-import { BasePortfolioWebPart } from '../basePortfolioWebPart'
+import { IProjectListProps, ProjectList, ProjectListVerticals } from 'components/ProjectList'
 import React from 'react'
+import { BasePortfolioWebPart } from '../basePortfolioWebPart'
 
 export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectListProps> {
   public render(): void {

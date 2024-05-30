@@ -32,5 +32,5 @@ export function useProjectListState(props: IProjectListProps) {
   const setState = (newState: Partial<IProjectListState>) =>
     $setState((currentState) => ({ ...currentState, ...newState }))
 
-  return { state, setState } as const
+  return { state, setState }
 }

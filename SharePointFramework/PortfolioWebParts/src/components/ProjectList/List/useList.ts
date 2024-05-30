@@ -22,5 +22,9 @@ export function useList() {
 
   const defaultSortState = { sortColumn: 'title', sortDirection: 'ascending' as SortDirection }
 
-  return { columnSizingOptions, columns, defaultSortState } as const
+  return {
+    columnSizingOptions,
+    columns,
+    defaultSortState
+  }
 }
