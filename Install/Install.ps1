@@ -282,11 +282,6 @@ if ($Channel -ne "main") {
     $SiteDesignThumbnail = "https://publiccdn.sharepointonline.com/prosjektportalen.sharepoint.com/sites/ppassets/Thumbnails/prosjektomrade-test.png"
 }
 
-# Add channel to name for the site design if channel is specified and not main
-if ($Channel -ne "main") {
-    $SiteDesignName += " - $Channel"
-}
-
 if (-not $SkipSiteDesign.IsPresent) {
     $SiteScriptIds = @()
 
