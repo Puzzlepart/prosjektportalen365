@@ -347,8 +347,8 @@ if (-not $SkipDefaultSiteDesignAssociation.IsPresent) {
         Disconnect-PnPOnline
     }
     catch {
-        Write-Host "[WARNING] Failed to set default site design: $($_.Exception.Message)" -ForegroundColor Red
-        exit 0
+        Write-Host ""
+        Write-Host "[WARNING] Failed to set default site design: $($_.Exception.Message)" -ForegroundColor Yellow
     }
     EndAction
 }
