@@ -13,8 +13,12 @@ import { useId } from '@fluentui/react-components'
  * @returns An object containing the necessary functions and state for the component.
  */
 export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
-  const { selectableColumns, selectedColumns, selectColumn, moveColumn } =
-    useSelectableColumns(props)
+  const {
+    selectableColumns,
+    selectedColumns,
+    selectColumn,
+    moveColumn
+  } = useSelectableColumns(props)
 
   /**
    * On save event handler.
@@ -32,8 +36,8 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
    * @param col Column item
    * @param isSelected Selected state
    */
-  const onChange = (col: IColumn, isSelected: boolean, idx: number) => {
-    selectColumn(col, isSelected, idx)
+  const onChange = (col: IColumn, isSelected: boolean) => {
+    selectColumn(col, isSelected)
   }
 
   /**
