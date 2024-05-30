@@ -13,7 +13,10 @@ import { FluentIconName, GetFluentIconOptions } from './types'
  * @returns The specified Fluent icon with the specified options, or null if the icon is not found
  * in the catalog.
  */
-export function getFluentIcon<T = JSX.Element>(name: FluentIconName, options?: GetFluentIconOptions): T {
+export function getFluentIcon<T = JSX.Element>(
+  name: FluentIconName,
+  options?: GetFluentIconOptions
+): T {
   if (!iconCatalog[name]) return null
   const bundle = options?.bundle ?? true
   const color = options?.color
@@ -22,7 +25,7 @@ export function getFluentIcon<T = JSX.Element>(name: FluentIconName, options?: G
   const jsx = options?.jsx ?? true
   const icon = iconCatalog[name]
   const Icon = bundle ? bundleIcon(icon.filled, icon.regular) : icon.regular
-  if(!jsx) return Icon as unknown as T
+  if (!jsx) return Icon as unknown as T
   const props: { style?: CSSProperties } = {}
   if (color) props.style = { color }
   if (size) {
@@ -32,7 +35,7 @@ export function getFluentIcon<T = JSX.Element>(name: FluentIconName, options?: G
       height: size
     }
   }
-  return <Icon {...props} filled={filled} /> as unknown as T
+  return (<Icon {...props} filled={filled} />) as unknown as T
 }
 
 /**

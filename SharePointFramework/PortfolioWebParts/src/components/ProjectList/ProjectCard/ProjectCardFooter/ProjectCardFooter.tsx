@@ -65,9 +65,11 @@ export const ProjectCardFooter: FC = () => {
       <div className={styles.persona}>
         <div hidden={!context.shouldDisplay('ProjectOwner')}>
           <Tooltip
-            content={<>
-              <strong>{owner.role}</strong>: {owner.name || strings.NotSet}
-            </>}
+            content={
+              <>
+                <strong>{owner.role}</strong>: {owner.name || strings.NotSet}
+              </>
+            }
             relationship='description'
             withArrow
           >
@@ -76,9 +78,11 @@ export const ProjectCardFooter: FC = () => {
         </div>
         <div hidden={!context.shouldDisplay('ProjectManager')}>
           <Tooltip
-            content={<>
-              <strong>{manager.role}</strong>: {manager.name || strings.NotSet}
-            </>}
+            content={
+              <>
+                <strong>{manager.role}</strong>: {manager.name || strings.NotSet}
+              </>
+            }
             relationship='description'
             withArrow
           >
@@ -99,20 +103,18 @@ export const ProjectCardFooter: FC = () => {
           relationship='description'
           withArrow
         >
-          <Button
-            className={styles.action}
-            appearance='subtle'
-            icon={<PanelRight />}
-            {...action} />
+          <Button className={styles.action} appearance='subtle' icon={<PanelRight />} {...action} />
         </Tooltip>
       ))}
     >
       <Persona />
       <div className={styles.buttons}>
         <Tooltip
-          content={<>
-            <strong>{templateText}</strong> ({context.project.template})
-          </>}
+          content={
+            <>
+              <strong>{templateText}</strong> ({context.project.template})
+            </>
+          }
           relationship='description'
           withArrow
         >
@@ -120,7 +122,8 @@ export const ProjectCardFooter: FC = () => {
             className={styles.templateTag}
             appearance='subtle'
             icon={<Icon />}
-            title={context.project.template} />
+            title={context.project.template}
+          />
         </Tooltip>
         <ProjectMenu project={context.project} context={context} appearance='subtle' />
       </div>

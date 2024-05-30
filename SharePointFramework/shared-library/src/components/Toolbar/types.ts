@@ -147,9 +147,9 @@ export class ListMenuItem {
 
   /**
    * Sets the hidden state for the `ListMenuItem`.
-   * 
+   *
    * @param hidden The hidden state to set.
-   * 
+   *
    * @returns The updated `ListMenuItem` instance.
    */
   public setHidden(hidden: ListMenuItem['hidden']) {
@@ -226,9 +226,9 @@ export class ListMenuItem {
    * Sets the condition for the `ListMenuItem`.
    * - If the condition is false, the `ListMenuItem` will not be rendered.
    * - If the condition is true, the `ListMenuItem` will be rendered.
-   * 
+   *
    * @remarks Ensure this method is called last in the chain, as it will return
-   * `null` if the condition is false. 
+   * `null` if the condition is false.
    *
    * @param condition The condition to set.
    */

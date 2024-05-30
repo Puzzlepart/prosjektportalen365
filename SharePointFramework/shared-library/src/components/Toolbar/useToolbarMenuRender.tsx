@@ -15,7 +15,6 @@ import { createIcon } from './createIcon'
 import { createStyle } from './createStyle'
 import { ListMenuItem } from './types'
 
-
 export function useToolbarMenuRender() {
   /**
    * Renders a toolbar button based on the provided list menu item.

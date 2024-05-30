@@ -17,9 +17,10 @@ export function useCommands() {
     () => renderModes.find((renderMode) => renderMode.value === context.state.renderMode),
     [context.state.renderMode]
   )
-  const showSortBy = useMemo(() =>
-    context.props.showSortBy && context.state.renderMode === 'tiles'
-    , [context.props.showSortBy, context.state.renderMode])
+  const showSortBy = useMemo(
+    () => context.props.showSortBy && context.state.renderMode === 'tiles',
+    [context.props.showSortBy, context.state.renderMode]
+  )
 
   const toolbarItems = [
     new ListMenuItem(selectedRenderMode?.text, null)
@@ -28,11 +29,7 @@ export function useCommands() {
       .setWidth('fit-content')
       .setStyle({ minWidth: '145px' })
       .setItems(
-        renderModes.map(({
-          value,
-          text,
-          icon
-        }) =>
+        renderModes.map(({ value, text, icon }) =>
           new ListMenuItem(text, null)
             .setIcon(icon)
             .makeCheckable({
@@ -64,9 +61,10 @@ export function useCommands() {
       })
   ]
 
-  const searchBoxPlaceholder = !context.state.isDataLoaded || _.isEmpty(context.state.projects)
-    ? ''
-    : format(context.state.selectedVertical.searchBoxPlaceholder, context.projects.length)
+  const searchBoxPlaceholder =
+    !context.state.isDataLoaded || _.isEmpty(context.state.projects)
+      ? ''
+      : format(context.state.selectedVertical.searchBoxPlaceholder, context.projects.length)
 
   return { toolbarItems, searchBoxPlaceholder }
 }

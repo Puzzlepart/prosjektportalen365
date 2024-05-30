@@ -4,7 +4,6 @@ import { GlobeLocationFilled, TagMultipleFilled } from '@fluentui/react-icons'
 import { ProjectCardContext } from '../context'
 import { OverflowTagMenu } from 'pp365-shared-library'
 
-
 export const ProjectCardContent: FC = () => {
   const context = useContext(ProjectCardContext)
 
@@ -14,12 +13,14 @@ export const ProjectCardContent: FC = () => {
         text='Tjenesteområde'
         tags={context.project.serviceArea}
         icon={GlobeLocationFilled}
-        hidden={!context.shouldDisplay('ProjectServiceArea')} />
+        hidden={!context.shouldDisplay('ProjectServiceArea')}
+      />
       <OverflowTagMenu
         text='Prosjekttype'
         tags={context.project.type}
         icon={TagMultipleFilled}
-        hidden={!context.shouldDisplay('ProjectType')} />
+        hidden={!context.shouldDisplay('ProjectType')}
+      />
     </div>
   )
 }

@@ -1,6 +1,5 @@
 /* eslint-disable prefer-spread */
-import { format, IColumn } from '@fluentui/react'
-import { ButtonProps, SearchBoxProps, useId } from '@fluentui/react-components'
+import { ButtonProps, useId } from '@fluentui/react-components'
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectListModel } from 'pp365-shared-library/lib/models'
 import { sortAlphabetically } from 'pp365-shared-library/lib/util/sortAlphabetically'
@@ -23,7 +22,6 @@ export const useProjectList = (props: IProjectListProps) => {
   )
   const { state, setState } = useProjectListState(props)
   useProjectListDataFetch(props, verticals, setState)
-
 
   /**
    * Get card actions. For now only `showProjectInfo` is handled.
