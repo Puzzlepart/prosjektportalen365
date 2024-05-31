@@ -15,7 +15,7 @@ import {
 } from 'pp365-shared-library'
 import { IPortfolioAggregationConfiguration, IPortfolioOverviewConfiguration } from '../components'
 import { IPersonaSharedProps } from '@fluentui/react'
-import { SPProvisionRequestItem } from 'models/ProvisionRequest'
+import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
 
 export interface IFetchDataForViewItemResult extends ISearchResult {
   SiteId: string
@@ -325,7 +325,7 @@ export interface IPortfolioWebPartsDataAdapter {
    * @param provisionUrl Url for the provisioning site
    *
    */
-  addProvisionRequests?(properties: SPProvisionRequestItem, provisionUrl: string): Promise<boolean>
+  addProvisionRequests?(properties: IProvisionRequestItem, provisionUrl: string): Promise<boolean>
 
   /**
    * Fetch provision requests from the provision requests list and their status

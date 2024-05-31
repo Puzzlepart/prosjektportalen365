@@ -1,13 +1,13 @@
 /* eslint-disable prefer-spread */
 import { useState } from 'react'
-import { IProjectProvisionState, IProjectProvisionProps } from './types'
+import { IProjectProvisionState } from './types'
 
 /**
  * Component state hook for `ProjectProvision`.
  *
  * @param props Props
  */
-export function useProjectProvisionState(props: IProjectProvisionProps) {
+export function useProjectProvisionState() {
   const [state, $setState] = useState<IProjectProvisionState>({
     loading: true,
     showProvisionDrawer: false,

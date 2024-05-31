@@ -49,11 +49,11 @@ export const ProvisionDrawer = (props: { toast: any }) => {
     level2Motion,
     context,
     onSave,
-    isSaveDisabled
+    isSaveDisabled,
+    namingConvention,
+    urlPrefix,
+    aliasSuffix
   } = useProvisionDrawer()
-
-  const namingConvention = context.state.settings.get('NamingConvention')
-  const aliasSuffix = '@' + context.props.pageContext.user.loginName.split('@')[1]
 
   return (
     <OverlayDrawer
@@ -74,7 +74,7 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                     motionStyles.toolbarButton,
                     toolbarBackIconMotion.active && motionStyles.toolbarButtonVisible
                   )}
-                  aria-label={strings.Aria.Back}
+                  title={strings.Aria.Back}
                   appearance='subtle'
                   icon={<ArrowLeft24Regular />}
                   onClick={() => setLevel2(false)}
@@ -95,9 +95,13 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                 />
               )}
 
-              <ToolbarButton appearance='subtle' icon={<Settings24Regular />} />
               <ToolbarButton
-                aria-label={strings.Aria.Close}
+                appearance='subtle'
+                title={strings.Aria.Settings}
+                icon={<Settings24Regular />}
+              />
+              <ToolbarButton
+                title={strings.Aria.Close}
                 appearance='subtle'
                 icon={<Dismiss24Regular />}
                 onClick={() => context.setState({ showProvisionDrawer: false })}
@@ -106,7 +110,6 @@ export const ProvisionDrawer = (props: { toast: any }) => {
           </Toolbar>
         </DrawerHeaderNavigation>
       </DrawerHeader>
-
       <div className={styles.body}>
         {level1Motion.canRender && (
           <DrawerBody
@@ -121,7 +124,7 @@ export const ProvisionDrawer = (props: { toast: any }) => {
             <DrawerHeaderTitle>{strings.Provision.DrawerLevel1HeaderText}</DrawerHeaderTitle>
             <p>{strings.Provision.DrawerLevel1DescriptionText}</p>
             <div className={styles.content}>
-              {DEBUG && <DebugModel />}
+              {/* {DEBUG && <DebugModel />} */}
               <FieldContainer iconName='AppsList' label={strings.Provision.SiteTypeFieldLabel}>
                 <div className={styles.sitetypes}>
                   {context.state.types.map((type) => (
@@ -198,30 +201,6 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                   placeholder={strings.Placeholder.BusinessJustificationField}
                 />
               </FieldContainer>
-              {/* <FieldContainer
-                iconName='TextNumberFormat'
-                label='Alias/navn'
-                description='Velg et unikt alias som følger organisasjonens navngivningsstandarder.'
-              >
-                <Input
-                  disabled
-                  value={context.state.properties.alias}
-                  onChange={(_, data) => context.setColumn('alias', data.value)}
-                  contentAfter={<Caption1>{aliasSuffix}</Caption1>}
-                />
-              </FieldContainer>
-              <FieldContainer
-                iconName='Link'
-                label='Områdeadresse'
-                description='Områdeadressen er en del av URL-en til området.'
-              >
-                <Input
-                  disabled
-                  value={context.state.properties.url}
-                  onChange={(_, data) => context.setColumn('url', data.value)}
-                  contentBefore={<Caption1>{urlPrefix}</Caption1>}
-                />
-              </FieldContainer> */}
               <Divider />
               <FieldContainer
                 iconName='Person'
@@ -238,6 +217,21 @@ export const ProvisionDrawer = (props: { toast: any }) => {
               >
                 {/* Members can not be the same as the owner */}
                 <User type='member' />
+              </FieldContainer>
+              <Divider />
+              <FieldContainer iconName='TextNumberFormat' label={strings.Provision.AliasFieldLabel}>
+                <Input
+                  disabled
+                  value={context.column.get('alias')}
+                  contentAfter={<Tag size='small'>{aliasSuffix}</Tag>}
+                />
+              </FieldContainer>
+              <FieldContainer iconName='Link' label={strings.Provision.UrlFieldLabel}>
+                <Input
+                  disabled
+                  value={context.column.get('alias')}
+                  contentBefore={<Tag size='small'>{urlPrefix}</Tag>}
+                />
               </FieldContainer>
             </div>
           </DrawerBody>

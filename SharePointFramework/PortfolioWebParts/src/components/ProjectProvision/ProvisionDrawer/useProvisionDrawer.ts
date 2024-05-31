@@ -1,10 +1,10 @@
 /* eslint-disable prefer-spread */
 import { useContext, useState } from 'react'
 import { useMotion } from '@fluentui/react-motion-preview'
-import { useMotionStyles } from './styles'
+import { useMotionStyles } from './motionStyles'
 import { ProjectProvisionContext } from '../context'
-import { SPProvisionRequestItem } from 'models/ProvisionRequest'
 import { getGUID } from '@pnp/core'
+import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
 
 /**
  * Component logic hook for `ProvisionDrawer`. This hook is responsible for
@@ -27,10 +27,7 @@ export const useProvisionDrawer = () => {
     const namingConvention = context.state.settings.get('NamingConvention')
     const baseUrl = `${context.props.webAbsoluteUrl.split('sites')[0]}sites/`
 
-    const siteName = context.column.get('name')
-    const alias = siteName.replace(/[^a-zA-Z0-9-_ÆØÅæøå ]/g, '')
-
-    const requestItem: SPProvisionRequestItem = {
+    const requestItem: IProvisionRequestItem = {
       Title: context.column.get('name'),
       SpaceDisplayName: context.column.get('name'),
       Description: context.column.get('description'),
@@ -44,11 +41,11 @@ export const useProvisionDrawer = () => {
       ExternalSharingRequired: context.column.get('externalSharing'),
       Guests: context.column.get('guest')?.join(';'),
       SiteURL: {
-        Description: `${baseUrl}${context.column.get('name')}`,
-        Url: `${baseUrl}${context.column.get('name')}`
+        Description: `${baseUrl}${context.column.get('alias')}`,
+        Url: `${baseUrl}${context.column.get('alias')}`
       },
-      SiteAlias: alias,
-      MailboxAlias: alias,
+      SiteAlias: context.column.get('alias'),
+      MailboxAlias: context.column.get('alias'),
       TimeZoneId: 4,
       LCID: 1044,
       JoinHub: true,
@@ -75,6 +72,10 @@ export const useProvisionDrawer = () => {
     context.column.get('justification')?.length < 2 ||
     context.column.get('owner')?.length < 1
 
+  const namingConvention = context.state.settings.get('NamingConvention')
+  const urlPrefix = `${context.props.webAbsoluteUrl.split('sites')[0]}sites/`
+  const aliasSuffix = '@' + context.props.pageContext.user.loginName.split('@')[1]
+
   return {
     level2,
     setLevel2,
@@ -85,6 +86,9 @@ export const useProvisionDrawer = () => {
     level2Motion,
     context,
     onSave,
-    isSaveDisabled
+    isSaveDisabled,
+    namingConvention,
+    urlPrefix,
+    aliasSuffix
   }
 }

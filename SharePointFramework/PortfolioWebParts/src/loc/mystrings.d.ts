@@ -7,6 +7,7 @@ declare interface IPortfolioWebPartsStrings {
     MoveDown: string
     MoveDownDisabled: string
     Back: string
+    Settings: string
     Close: string
   },
   Placeholder: {
@@ -32,6 +33,8 @@ declare interface IPortfolioWebPartsStrings {
     SiteDescriptionFieldDescription: string,
     BusinessJustificationFieldLabel: string,
     BusinessJustificationFieldDescription: string,
+    AliasFieldLabel: string
+    UrlFieldLabel: string
     OwnerFieldLabel: string,
     OwnerFieldDescription: string,
     OwnerFieldNoOptionsText: string,

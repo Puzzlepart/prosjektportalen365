@@ -11,7 +11,7 @@ import { useEditableColumn } from './useEditableColumn'
  * @param props Props
  */
 export const useProjectProvision = (props: IProjectProvisionProps) => {
-  const { state, setState } = useProjectProvisionState(props)
+  const { state, setState } = useProjectProvisionState()
   const { column, setColumn } = useEditableColumn(props, state, setState)
 
   useProjectProvisionDataFetch(props, setState)

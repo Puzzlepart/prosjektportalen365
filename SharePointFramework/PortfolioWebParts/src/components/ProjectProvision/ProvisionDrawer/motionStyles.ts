@@ -9,12 +9,10 @@ export const useMotionStyles = makeStyles({
     transitionProperty: 'opacity, transform',
     willChange: 'opacity, transform'
   },
-
   toolbarButtonVisible: {
     opacity: 1,
     transform: 'translate3D(0, 0, 0) scale(1)'
   },
-
   level: {
     opacity: 0,
     transitionDuration: tokens.durationNormal,

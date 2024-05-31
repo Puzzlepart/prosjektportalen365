@@ -8,6 +8,7 @@ define([], function () {
       MoveDown: 'Flytt ned',
       MoveDownDisabled: 'Kan ikke flytte ned, nederste element',
       Back: 'Tilbake',
+      Settings: 'Innstillinger',
       Close: 'Lukk'
     },
     Placeholder: {
@@ -33,6 +34,8 @@ define([], function () {
       SiteDescriptionFieldDescription: 'Beskrivelsen er valgfri, men nyttig for at folk skal forstå hva området ditt er for.',
       BusinessJustificationFieldLabel: 'Forretningsmessig begrunnelse',
       BusinessJustificationFieldDescription: 'Beskriv hvorfor du har behov for dette området? Hva er formålet?',
+      AliasFieldLabel: 'Alias/navn',
+      UrlFieldLabel: 'Områdeadresse',
       OwnerFieldLabel: 'Eier(e)',
       OwnerFieldDescription: 'Eier(e) har full tilgang til området og kan legge til og fjerne medlemmer. Du kan legge til flere eiere senere.',
       OwnerFieldNoOptionsText: 'Ingen treff...',

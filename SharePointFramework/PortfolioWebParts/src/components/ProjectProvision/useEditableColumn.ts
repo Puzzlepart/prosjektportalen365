@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { IProjectProvisionProps, IProjectProvisionState } from './types'
 import _ from 'lodash'
+import strings from 'PortfolioWebPartsStrings'
 
 /**
  * Intial column with default values.
  */
-
 export function useEditableColumn(
   props: IProjectProvisionProps,
   state: IProjectProvisionState,
@@ -21,7 +21,7 @@ export function useEditableColumn(
     ['owner', []],
     ['member', []],
     ['isConfidential', false],
-    ['privacy', 'Privat - Brukere trenger tillatelse for å bli med'],
+    ['privacy', strings.Provision.PrivacyFieldOptionPrivate],
     ['externalSharing', false],
     ['guest', []],
     ['language', 'Norsk (bokmål)'],
@@ -37,19 +37,19 @@ export function useEditableColumn(
   }, [])
 
   /**
-   * Transform value for the field returning the internal name of the field and the transformed value.
+   * Transform value for the field returning the transformed value.
    *
    * @param value Value to be transformed
    * @param field Field to transform the value for
    *
-   * @returns The transformed value and the internal name of the field (might be different from the field's internal name)
+   * @returns The transformed value
    */
   const transformValue = async (value: any, field: string) => {
     const valueMap = new Map<string, () => Promise<any[]> | any[] | string>([
       [
         'privacy',
         () => {
-          if (value === 'Privat - Brukere trenger tillatelse for å bli med') {
+          if (value === strings.Provision.PrivacyFieldOptionPrivate) {
             return 'Private'
           }
           return 'Public'
@@ -98,6 +98,15 @@ export function useEditableColumn(
   const setColumn = async (key: string, value: any) => {
     const transformedValue = await transformValue(value, key)
 
+    if (key === 'name') {
+      const alias = value.replace(/[^a-zA-Z0-9-_ÆØÅæøå ]/g, '')
+      $setColumn((prev) => {
+        const newColumn = new Map(prev)
+        newColumn.set('alias', alias)
+        return newColumn
+      })
+    }
+
     $setColumn((prev) => {
       const newColumn = new Map(prev)
       newColumn.set(key, value)
@@ -107,7 +116,7 @@ export function useEditableColumn(
   }
 
   /**
-   * Reset the model and properties.
+   * Reset the properties.
    */
   const reset = () => {
     setState({ properties: {} })

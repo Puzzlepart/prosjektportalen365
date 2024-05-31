@@ -1,19 +1,10 @@
-import {
-  Text,
-  Caption1,
-  Card,
-  CardHeader,
-  CardPreview,
-  CardProps,
-  Checkbox
-} from '@fluentui/react-components'
-import React, { useContext } from 'react'
+import { Text, Caption1, Card, CardHeader, CardPreview, Checkbox } from '@fluentui/react-components'
+import React, { FC, useContext } from 'react'
 import { ProjectProvisionContext } from '../../context'
 import styles from './SiteType.module.scss'
+import { ISiteType } from './types'
 
-export const SiteType = (
-  props: CardProps & { title: string; type: string; description: string; image: string }
-) => {
+export const SiteType: FC<ISiteType> = (props) => {
   const context = useContext(ProjectProvisionContext)
 
   return (

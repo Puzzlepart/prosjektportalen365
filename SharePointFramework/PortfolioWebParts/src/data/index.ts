@@ -51,7 +51,7 @@ import {
   IProjectsData
 } from './types'
 import { IPersonaProps, IPersonaSharedProps } from '@fluentui/react'
-import { SPProvisionRequestItem } from 'models/ProvisionRequest'
+import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
 
 /**
  * Data adapter for Portfolio Web Parts.
@@ -895,7 +895,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   }
 
   public async addProvisionRequests(
-    properties: SPProvisionRequestItem,
+    properties: IProvisionRequestItem,
     provisionUrl: string
   ): Promise<boolean> {
     try {
