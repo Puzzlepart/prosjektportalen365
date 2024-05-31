@@ -10,8 +10,8 @@ export class SPProvisionRequestItem {
   public SiteTemplate?: string = ''
   public OwnersId?: any = []
   public MembersId?: any = []
-  public Visibility?: string = 'Private'
   public ConfidentialData?: boolean = false
+  public Visibility?: string = 'Private'
   public ExternalSharingRequired?: boolean = false
   public Guests?: any = []
   public SiteURL?: {

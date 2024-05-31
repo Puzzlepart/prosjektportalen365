@@ -10,6 +10,7 @@ import {
   TagPickerInput,
   TagPickerList
 } from '@fluentui/react-components'
+import strings from 'PortfolioWebPartsStrings'
 import { useProjectProvisionContext } from 'components/ProjectProvision/context'
 import React, { useState } from 'react'
 
@@ -48,7 +49,11 @@ export const Guest = (props: { disabled?: boolean }) => {
   const children = useTagPickerFilter({
     query,
     options,
-    noOptionsElement: <TagPickerOption value='no-matches'>Kan ikke legge til...</TagPickerOption>,
+    noOptionsElement: (
+      <TagPickerOption value='no-matches'>
+        {strings.Provision.GuestFieldNoOptionsText}
+      </TagPickerOption>
+    ),
     renderOption: (guest) => {
       return (
         <TagPickerOption
@@ -84,9 +89,9 @@ export const Guest = (props: { disabled?: boolean }) => {
             ))}
           </TagPickerGroup>
           <TagPickerInput
-            aria-label='Angi gjester'
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            placeholder={strings.Placeholder.GuestField}
           />
         </TagPickerControl>
         <TagPickerList>{children}</TagPickerList>

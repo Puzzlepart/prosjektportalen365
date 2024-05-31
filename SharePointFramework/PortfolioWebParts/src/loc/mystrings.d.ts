@@ -6,6 +6,8 @@ declare interface IPortfolioWebPartsStrings {
     MoveUpDisabled: string
     MoveDown: string
     MoveDownDisabled: string
+    Back: string
+    Close: string
   },
   Placeholder: {
     TextField: string
@@ -14,6 +16,53 @@ declare interface IPortfolioWebPartsStrings {
     Icon: string,
     ChoiceField: string,
     MultiChoiceField: string,
+    GuestField: string,
+    UserField: string,
+    BusinessJustificationField: string
+  },
+  Provision: {
+    DrawerLevel1HeaderText: string,
+    DrawerLevel1DescriptionText: string,
+    SiteTypeFieldLabel: string,
+    SiteNameFieldLabel: string,
+    SiteNameFieldDescription: string,
+    SiteNamePrefixTooltipText: string,
+    SiteNameSuffixTooltipText: string,
+    SiteDescriptionFieldLabel: string,
+    SiteDescriptionFieldDescription: string,
+    BusinessJustificationFieldLabel: string,
+    BusinessJustificationFieldDescription: string,
+    OwnerFieldLabel: string,
+    OwnerFieldDescription: string,
+    OwnerFieldNoOptionsText: string,
+    MemberFieldLabel: string,
+    MemberFieldDescription: string,
+    DrawerLevel2HeaderText: string,
+    DrawerLevel2DescriptionText: string,
+    ConfidentialFieldLabel: string,
+    ConfidentialFieldDescription: string,
+    PrivacyFieldLabel: string,
+    PrivacyFieldDescription: string,
+    PrivacyFieldOptionPrivate: string,
+    PrivacyFieldOptionPublic: string,
+    ExternalSharingFieldLabel: string,
+    ExternalSharingFieldDescription: string,
+    GuestFieldLabel: string,
+    GuestFieldDescription: string,
+    GuestFieldNoOptionsText: string,
+    LanguageFieldLabel: string,
+    TimeZoneFieldLabel: string,
+    HubSiteFieldLabel: string,
+    DrawerFooterDescriptionText: string,
+    PreviousButtonLabel: string,
+    NextButtonLabel: string,
+    ProvisionButtonLabel: string
+    ToastCreatedTitle: string
+    ToastCreatedBody: string
+    ToastCreatedErrorTitle: string
+    ToastCreatedErrorBody: string
+    StatusMenuLabel: string
+    IdeaMenuLabel: string
   },
   AddColumnLabel: string
   AllProjectsHeaderText: string
@@ -264,10 +313,6 @@ declare interface IPortfolioWebPartsStrings {
   TimelineContentListName: string
   TitleLabel: string
   TitleDescription: string
-  SiteNameLabel: string
-  SiteNameDescription: string
-  SiteDescriptionLabel: string
-  SiteDescriptionDescription: string
   ToggleColumnFormPanelLabel: string
   ToggleEditViewColumnsLabel: string
   UseChangesButtonText: string
@@ -277,9 +322,6 @@ declare interface IPortfolioWebPartsStrings {
   ViewMoreText: string
   ViewNotFoundMessage: string
   ViewsListNameLabel: string
-  ProvisionButtonLabel: string
-  ProvisionStatusMenuLabel: string
-  RegisterIdeaMenuLabel: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

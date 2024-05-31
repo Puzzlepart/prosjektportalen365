@@ -26,7 +26,7 @@ export const SiteType = (
       }
     >
       <CardPreview className={styles.grayBackground}>
-        <img className={styles.smallRadius} src={props.image} alt={`Bilde for ${props.title}`} />
+        <img className={styles.smallRadius} src={props.image} alt={props.title} />
       </CardPreview>
       <CardHeader
         header={<Text weight='semibold'>{props.title}</Text>}

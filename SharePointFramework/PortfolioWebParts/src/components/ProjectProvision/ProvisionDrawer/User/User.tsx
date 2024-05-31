@@ -11,6 +11,7 @@ import {
   TagPickerInput,
   TagPickerList
 } from '@fluentui/react-components'
+import strings from 'PortfolioWebPartsStrings'
 import { useProjectProvisionContext } from 'components/ProjectProvision/context'
 import React, { useEffect, useState } from 'react'
 
@@ -61,7 +62,11 @@ export const User = (props: { type: string; disabled?: boolean }) => {
   const children = useTagPickerFilter({
     query,
     options: matchingUsers.map((user) => user.text),
-    noOptionsElement: <TagPickerOption value='no-matches'>Ingen treff</TagPickerOption>,
+    noOptionsElement: (
+      <TagPickerOption value='no-matches'>
+        {strings.Provision.OwnerFieldNoOptionsText}
+      </TagPickerOption>
+    ),
     renderOption: (user) => {
       const secondaryText = matchingUsers.find((u) => u.text === user)?.secondaryText
 
@@ -112,7 +117,11 @@ export const User = (props: { type: string; disabled?: boolean }) => {
             </Tag>
           ))}
         </TagPickerGroup>
-        <TagPickerInput value={query} onChange={(e) => setQuery(e.target.value)} />
+        <TagPickerInput
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder={strings.Placeholder.UserField}
+        />
       </TagPickerControl>
       <TagPickerList>{children}</TagPickerList>
     </TagPicker>

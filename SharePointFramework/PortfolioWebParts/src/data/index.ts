@@ -861,16 +861,15 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       const provisionSite = Web([this._sp.web, provisionUrl])
       const typesList = provisionSite.lists.getByTitle('Provisioning Types')
       const spItems = await typesList.items
-        .select('Id', 'Title', 'Order0', 'Description', 'Allowed', 'Image', 'InternalTitle')
+        .select('Id', 'Title', 'SortOrder', 'Description', 'Allowed', 'Image', 'InternalTitle')
         .using(DefaultCaching)()
       return spItems
         .filter((item) => item.Allowed)
-        .sort((a, b) => (a.Order0 > b.Order0 ? 1 : -1))
-
+        .sort((a, b) => (a.SortOrder > b.SortOrder ? 1 : -1))
         .map((item) => {
           return {
             title: item.Title,
-            order: item.Order0,
+            order: item.SortOrder,
             description: item.Description,
             image: item.Image,
             type: item.InternalTitle

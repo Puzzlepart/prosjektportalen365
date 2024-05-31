@@ -74,7 +74,7 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                     motionStyles.toolbarButton,
                     toolbarBackIconMotion.active && motionStyles.toolbarButtonVisible
                   )}
-                  aria-label='Back'
+                  aria-label={strings.Aria.Back}
                   appearance='subtle'
                   icon={<ArrowLeft24Regular />}
                   onClick={() => setLevel2(false)}
@@ -89,20 +89,15 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                     motionStyles.toolbarButton,
                     toolbarCalendarIconMotion.active && motionStyles.toolbarButtonVisible
                   )}
-                  aria-label='Go to calendar'
                   appearance='subtle'
                   icon={<DataUsage24Regular />}
                   onClick={() => setLevel2(true)}
                 />
               )}
 
+              <ToolbarButton appearance='subtle' icon={<Settings24Regular />} />
               <ToolbarButton
-                aria-label='Settings'
-                appearance='subtle'
-                icon={<Settings24Regular />}
-              />
-              <ToolbarButton
-                aria-label='Close panel'
+                aria-label={strings.Aria.Close}
                 appearance='subtle'
                 icon={<Dismiss24Regular />}
                 onClick={() => context.setState({ showProvisionDrawer: false })}
@@ -123,14 +118,11 @@ export const ProvisionDrawer = (props: { toast: any }) => {
               level1Motion.active && motionStyles.levelVisible
             )}
           >
-            <DrawerHeaderTitle>Bestill område</DrawerHeaderTitle>
-            <p>
-              Her kan du bestille et nytt område. Velg en av områdetypene under, og fyll ut
-              informasjonen for området.
-            </p>
+            <DrawerHeaderTitle>{strings.Provision.DrawerLevel1HeaderText}</DrawerHeaderTitle>
+            <p>{strings.Provision.DrawerLevel1DescriptionText}</p>
             <div className={styles.content}>
               {DEBUG && <DebugModel />}
-              <FieldContainer iconName='AppsList' label={'Områdetype'}>
+              <FieldContainer iconName='AppsList' label={strings.Provision.SiteTypeFieldLabel}>
                 <div className={styles.sitetypes}>
                   {context.state.types.map((type) => (
                     <SiteType
@@ -145,11 +137,11 @@ export const ProvisionDrawer = (props: { toast: any }) => {
               </FieldContainer>
               <FieldContainer
                 iconName='TextNumberFormat'
-                label={strings.SiteNameLabel}
-                description='Velg et unikt navn som følger organisasjonens navngivningsstandarder.'
+                label={strings.Provision.SiteNameFieldLabel}
+                description={strings.Provision.SiteNameFieldDescription}
                 required={true}
-                validationState='success'
-                validationMessage='Navnet er ledig'
+                // validationState='success'
+                // validationMessage='Navnet er ledig'
               >
                 <Input
                   value={context.column.get('name')}
@@ -160,7 +152,7 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                     namingConvention.prefixText && (
                       <Tooltip
                         withArrow
-                        content='Dette er den angitte prefiksen for områdenavnet.'
+                        content={strings.Provision.SiteNamePrefixTooltipText}
                         relationship='label'
                       >
                         <Tag size='small'>{namingConvention.prefixText}</Tag>
@@ -171,7 +163,7 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                     namingConvention.suffixText && (
                       <Tooltip
                         withArrow
-                        content='Dette er den angitte suffiksen for områdenavnet.'
+                        content={strings.Provision.SiteNameSuffixTooltipText}
                         relationship='label'
                       >
                         <Tag size='small'>{namingConvention.suffixText}</Tag>
@@ -183,8 +175,8 @@ export const ProvisionDrawer = (props: { toast: any }) => {
               </FieldContainer>
               <FieldContainer
                 iconName='TextAlignLeft'
-                label={strings.SiteDescriptionLabel}
-                description={strings.SiteDescriptionDescription}
+                label={strings.Provision.SiteDescriptionFieldLabel}
+                description={strings.Provision.SiteDescriptionFieldDescription}
               >
                 <Textarea
                   value={context.column.get('description')}
@@ -195,15 +187,15 @@ export const ProvisionDrawer = (props: { toast: any }) => {
               </FieldContainer>
               <FieldContainer
                 iconName='TextAlignLeft'
-                label='Forretningsmessig begrunnelse'
-                description='Beskriv hvorfor du trenger dette området.'
+                label={strings.Provision.BusinessJustificationFieldLabel}
+                description={strings.Provision.BusinessJustificationFieldDescription}
                 required={true}
               >
                 <Textarea
                   value={context.column.get('justification')}
                   onChange={(_, data) => context.setColumn('justification', data.value)}
                   rows={2}
-                  placeholder={strings.Placeholder.SiteDescription}
+                  placeholder={strings.Placeholder.BusinessJustificationField}
                 />
               </FieldContainer>
               {/* <FieldContainer
@@ -233,16 +225,16 @@ export const ProvisionDrawer = (props: { toast: any }) => {
               <Divider />
               <FieldContainer
                 iconName='Person'
-                label='Eier(e)'
-                description='Eier(e) har full tilgang til området og kan legge til og fjerne medlemmer. Du kan legge til flere eiere senere.'
+                label={strings.Provision.OwnerFieldLabel}
+                description={strings.Provision.OwnerFieldDescription}
                 required={true}
               >
                 <User type='owner' />
               </FieldContainer>
               <FieldContainer
                 iconName='People'
-                label='Medlem(mer)'
-                description='Medlem(mer) har tilgang til området basert på tillatelsene som er satt. Du kan legge til flere medlemmer senere.'
+                label={strings.Provision.MemberFieldLabel}
+                description={strings.Provision.MemberFieldDescription}
               >
                 {/* Members can not be the same as the owner */}
                 <User type='member' />
@@ -261,17 +253,14 @@ export const ProvisionDrawer = (props: { toast: any }) => {
               level2Motion.active && motionStyles.levelVisible
             )}
           >
-            <DrawerHeaderTitle>Klassifisering</DrawerHeaderTitle>
-            <p>
-              Her kan du velge klassifisering for området. Angi språk, tilgangsinnstillinger og
-              hubtilknytning.
-            </p>
+            <DrawerHeaderTitle>{strings.Provision.DrawerLevel2HeaderText}</DrawerHeaderTitle>
+            <p>{strings.Provision.DrawerLevel2DescriptionText}</p>
             <div className={styles.content}>
               {DEBUG && <DebugModel />}
               <FieldContainer
                 iconName='BoxToolbox'
-                label='Konfidensielle/sensitive data'
-                description='Vil konfidensielle eller sensitive data bli lagret i dette rommet? Dersom ja, må du sørge for at du har satt riktige tillatelser.'
+                label={strings.Provision.ConfidentialFieldLabel}
+                description={strings.Provision.ConfidentialFieldDescription}
               >
                 <Switch
                   checked={context.column.get('isConfidential')}
@@ -280,18 +269,15 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                     context.setColumn('isConfidential', data.checked)
 
                     if (data.checked) {
-                      context.setColumn(
-                        'privacy',
-                        'Privat - Brukere trenger tillatelse for å bli med'
-                      )
+                      context.setColumn('privacy', strings.Provision.PrivacyFieldOptionPrivate)
                     }
                   }}
                 />
               </FieldContainer>
               <FieldContainer
                 iconName='Eye'
-                label='Tilgangsinnstillinger'
-                description='Velg om området skal være privat eller offentlig.'
+                label={strings.Provision.PrivacyFieldLabel}
+                description={strings.Provision.PrivacyFieldDescription}
               >
                 <Dropdown
                   defaultValue={context.column.get('privacy')}
@@ -303,18 +289,18 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                   }}
                   disabled={context.column.get('isConfidential')}
                 >
-                  <Option value='Privat - Brukere trenger tillatelse for å bli med'>
-                    Privat - Brukere trenger tillatelse for å bli med
+                  <Option value={strings.Provision.PrivacyFieldOptionPrivate}>
+                    {strings.Provision.PrivacyFieldOptionPrivate}
                   </Option>
-                  <Option value='Offentlig - Alle i organisasjonen kan bli med'>
-                    Offentlig - Alle i organisasjonen kan bli med
+                  <Option value={strings.Provision.PrivacyFieldOptionPublic}>
+                    {strings.Provision.PrivacyFieldOptionPublic}
                   </Option>
                 </Dropdown>
               </FieldContainer>
               <FieldContainer
                 iconName='Guest'
-                label='Tillat eksterne gjester'
-                description='Dersom denne er aktivert, vil man kunne invitere inn og dele enkeltfiler, mapper, bibliotek o.l. med eksterne gjestebrukere. NB! Invitasjon av eksterne gjestebrukere vil først være mulig etter at gruppen/området er opprettet.'
+                label={strings.Provision.ExternalSharingFieldLabel}
+                description={strings.Provision.ExternalSharingFieldDescription}
               >
                 <Switch
                   checked={context.column.get('externalSharing')}
@@ -330,44 +316,41 @@ export const ProvisionDrawer = (props: { toast: any }) => {
               </FieldContainer>
               <FieldContainer
                 iconName='People'
-                label='Gjest(er)'
-                description='Her kan du legge til eksterne gjester. Vennligst skriv inn en gyldig e-postadresse.'
+                label={strings.Provision.GuestFieldLabel}
+                description={strings.Provision.GuestFieldDescription}
                 hidden={!context.column.get('externalSharing')}
               >
                 <Guest />
               </FieldContainer>
-              <FieldContainer iconName='LocalLanguage' label='Språk'>
+              <FieldContainer iconName='LocalLanguage' label={strings.Provision.LanguageFieldLabel}>
                 <Dropdown
                   defaultValue={context.column.get('language')}
                   defaultSelectedOptions={[context.column.get('language')]}
                   disabled
                 />
               </FieldContainer>
-              <FieldContainer iconName='Clock' label='Tidsssone'>
+              <FieldContainer iconName='Clock' label={strings.Provision.TimeZoneFieldLabel}>
                 <Dropdown
                   defaultValue={context.column.get('timeZone')}
                   defaultSelectedOptions={[context.column.get('timeZone')]}
                   disabled
                 />
               </FieldContainer>
-              <FieldContainer iconName='Database' label='Hubtilknytning'>
+              <FieldContainer iconName='Database' label={strings.Provision.HubSiteFieldLabel}>
                 <Dropdown
                   defaultValue={context.column.get('hubSiteTitle')}
                   defaultSelectedOptions={[context.column.get('hubSiteTitle')]}
                   disabled
                 />
               </FieldContainer>
-              <p className={styles.ignoreGap}>
-                Ditt område vil bli knyttet til en Microsoft 365-gruppe, som gir nettstedet ditt en
-                delt OneNote-notatblokk, gruppe-e-postadresse og delt kalender.
-              </p>
+              <p className={styles.ignoreGap}>{strings.Provision.DrawerFooterDescriptionText}</p>
             </div>
           </DrawerBody>
         )}
       </div>
       <DrawerFooter className={styles.footer}>
         <Button appearance='subtle' disabled={!level2} onClick={() => setLevel2(false)}>
-          Forrige
+          {strings.Provision.PreviousButtonLabel}
         </Button>
         <Button
           appearance='primary'
@@ -378,8 +361,8 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                   if (response) {
                     props.toast(
                       <Toast>
-                        <ToastTitle>Bestilling sendt</ToastTitle>
-                        <ToastBody>Bestillingen er nå sendt til behandling.</ToastBody>
+                        <ToastTitle>{strings.Provision.ToastCreatedTitle}</ToastTitle>
+                        <ToastBody>{strings.Provision.ToastCreatedBody}</ToastBody>
                       </Toast>,
                       { intent: 'success' }
                     )
@@ -387,11 +370,8 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                   } else {
                     props.toast(
                       <Toast>
-                        <ToastTitle>Feil</ToastTitle>
-                        <ToastBody>
-                          Det oppstod en feil under bestillingen. Vennligst prøv igjen, eller
-                          kontakt administrator.
-                        </ToastBody>
+                        <ToastTitle>{strings.Provision.ToastCreatedErrorTitle}</ToastTitle>
+                        <ToastBody>{strings.Provision.ToastCreatedErrorBody}</ToastBody>
                       </Toast>,
                       { intent: 'error' }
                     )
@@ -400,7 +380,7 @@ export const ProvisionDrawer = (props: { toast: any }) => {
               : setLevel2(true)
           }}
         >
-          {level2 ? 'Bestill område' : 'Neste'}
+          {level2 ? strings.Provision.ProvisionButtonLabel : strings.Provision.NextButtonLabel}
         </Button>
       </DrawerFooter>
     </OverlayDrawer>

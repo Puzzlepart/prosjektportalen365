@@ -51,7 +51,7 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
               appearance='primary'
               size='large'
             >
-              {strings.ProvisionButtonLabel}
+              {strings.Provision.ProvisionButtonLabel}
             </SplitButton>
           )}
         </MenuTrigger>
@@ -63,9 +63,9 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
                 setState({ showProvisionStatus: true })
               }}
             >
-              {strings.ProvisionStatusMenuLabel}
+              {strings.Provision.StatusMenuLabel}
             </MenuItem>
-            <MenuItem>{strings.RegisterIdeaMenuLabel}</MenuItem>
+            <MenuItem>{strings.Provision.IdeaMenuLabel}</MenuItem>
           </MenuList>
         </MenuPopover>
       </Menu>
