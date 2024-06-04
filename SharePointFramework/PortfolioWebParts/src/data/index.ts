@@ -335,14 +335,14 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       ]),
       this._fetchItems(
         `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
-        [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
+        [...configuration.columns.map((f) => f.fieldName), siteIdProperty, 'ListItemId'],
         500,
         { Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',') }
       )
     ])
     projects = projects.map((item) => cleanDeep({ ...item }))
     sites = sites.map((item) => cleanDeep({ ...item }))
-    statusReports = statusReports.map((item) => cleanDeep({ ...item }))
+    statusReports = statusReports.sort((a, b) => b['ListItemId'] - a['ListItemId']).map((item) => cleanDeep({ ...item }))
     sites = sites.filter(
       (site) => projects.filter((res) => res[siteIdProperty] === site['SiteId']).length === 1
     )
