@@ -252,6 +252,19 @@ export const ProvisionDrawer = (props: { toast: any }) => {
             <div className={styles.content}>
               {DEBUG && <DebugModel />}
               <FieldContainer
+                iconName='PeopleTeam'
+                label={strings.Provision.TeamifyFieldLabel}
+                description={strings.Provision.TeamifyFieldDescription}
+              >
+                <Switch
+                  checked={context.column.get('teamify')}
+                  value={context.column.get('teamify')}
+                  onChange={(_, data) => {
+                    context.setColumn('teamify', data.checked)
+                  }}
+                />
+              </FieldContainer>
+              <FieldContainer
                 iconName='BoxToolbox'
                 label={strings.Provision.ConfidentialFieldLabel}
                 description={strings.Provision.ConfidentialFieldDescription}

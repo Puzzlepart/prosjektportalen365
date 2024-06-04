@@ -20,6 +20,7 @@ export function useEditableColumn(
     ['url', ''],
     ['owner', []],
     ['member', []],
+    ['teamify', false],
     ['isConfidential', false],
     ['privacy', strings.Provision.PrivacyFieldOptionPrivate],
     ['externalSharing', false],

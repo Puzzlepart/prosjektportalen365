@@ -316,7 +316,7 @@ export interface IPortfolioWebPartsDataAdapter {
    *
    * @param user User
    */
-  getProvisionUsers(users: any[], provisionUrl: string): Promise<Promise<number | null>[]>
+  getProvisionUsers?(users: any[], provisionUrl: string): Promise<Promise<number | null>[]>
 
   /**
    * Adds a new provision request to the provisioning requests list

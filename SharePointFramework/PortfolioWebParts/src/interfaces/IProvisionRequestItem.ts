@@ -5,6 +5,7 @@ export interface IProvisionRequestItem {
   BusinessJustification?: string
   SpaceType?: string
   SpaceTypeInternal?: string
+  Teamify?: boolean
   OwnersId?: any
   MembersId?: any
   ConfidentialData?: boolean
