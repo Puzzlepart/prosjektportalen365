@@ -261,10 +261,7 @@ export const createPortfolioAggregationReducer = (
           (v) => v.id.toString() === props.defaultViewId?.toString()
         )
       } else if (props.dataSource) {
-        currentView = _.find(
-          state.views,
-          (v) => v.title === props.dataSource
-        )
+        currentView = _.find(state.views, (v) => v.title === props.dataSource)
       } else {
         currentView = _.find(state.views, (v) => v.isDefault)
       }
