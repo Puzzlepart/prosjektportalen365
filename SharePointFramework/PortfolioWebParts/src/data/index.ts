@@ -342,7 +342,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     ])
     projects = projects.map((item) => cleanDeep({ ...item }))
     sites = sites.map((item) => cleanDeep({ ...item }))
-    statusReports = statusReports.sort((a, b) => b['ListItemId'] - a['ListItemId']).map((item) => cleanDeep({ ...item }))
+    statusReports = statusReports
+      .sort((a, b) => b['ListItemId'] - a['ListItemId'])
+      .map((item) => cleanDeep({ ...item }))
     sites = sites.filter(
       (site) => projects.filter((res) => res[siteIdProperty] === site['SiteId']).length === 1
     )
