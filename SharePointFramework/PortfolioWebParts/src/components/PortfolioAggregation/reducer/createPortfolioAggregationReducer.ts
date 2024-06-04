@@ -255,15 +255,20 @@ export const createPortfolioAggregationReducer = (
         currentView = _.find(state.views, (v) => v.id.toString() === viewIdUrlParam)
       } else if (hashState.has('viewId')) {
         currentView = _.find(state.views, (v) => v.id === hashState.get('viewId'))
-      } else if (props.dataSource || props.defaultViewId) {
+      } else if (props.defaultViewId) {
         currentView = _.find(
           state.views,
-          (v) => v.title === props.dataSource || v.id.toString() === props.defaultViewId?.toString()
+          (v) => v.id.toString() === props.defaultViewId?.toString()
+        )
+      } else if (props.dataSource) {
+        currentView = _.find(
+          state.views,
+          (v) => v.title === props.dataSource
         )
       } else {
         currentView = _.find(state.views, (v) => v.isDefault)
       }
-      if (!currentView && state.views.length > 0) {
+      if (!currentView && !_.isEmpty(state.views)) {
         currentView = _.first(state.views)
       }
       if (!currentView) {
