@@ -1,4 +1,4 @@
-import { FieldProps } from '@fluentui/react-components'
+import { FieldProps, Slot } from '@fluentui/react-components'
 import { FluentIconName } from '../../icons/types'
 
 export interface IFieldContainerProps extends FieldProps {
@@ -11,4 +11,14 @@ export interface IFieldContainerProps extends FieldProps {
    * Description of the field.
    */
   description?: string
+
+  /**
+   * The validation state of the field.
+   */
+  validationState?: 'error' | 'warning' | 'success' | 'none'
+
+  /**
+   * The validation message associated with the field.
+   */
+  validationMessage?: Slot<'div'>
 }

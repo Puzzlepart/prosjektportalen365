@@ -38,8 +38,8 @@
     "underscore": "~1.13.6",
     "@pnp/queryable": "3.17.0",
     "sp-entityportal-service": "2.3.0",
-    "@fluentui/react-components": "~9.50.0",
-    "@fluentui/react-icons": "~2.0.239"
+    "@fluentui/react-components": "~9.52.0",
+    "@fluentui/react-icons": "~2.0.240"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.17.4",

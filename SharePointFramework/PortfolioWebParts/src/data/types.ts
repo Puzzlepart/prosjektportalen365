@@ -1,5 +1,5 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { ISiteUserInfo } from '@pnp/sp/presets/all'
+import { ISiteUserInfo, SPFI } from '@pnp/sp/presets/all'
 import { ISearchResult, SortDirection } from '@pnp/sp/search'
 import {
   DataSource,
@@ -9,12 +9,13 @@ import {
   PortfolioOverviewView,
   ProjectContentColumn,
   ProjectListModel,
-  SPProjectContentColumnItem,
   SPProjectItem,
   TimelineConfigurationModel,
   TimelineContentModel
 } from 'pp365-shared-library'
 import { IPortfolioAggregationConfiguration, IPortfolioOverviewConfiguration } from '../components'
+import { IPersonaSharedProps } from '@fluentui/react'
+import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
 
 export interface IFetchDataForViewItemResult extends ISearchResult {
   SiteId: string
@@ -58,6 +59,11 @@ export interface IPortfolioWebPartsDataAdapter {
    * An optional instance of the data source service.
    */
   dataSourceService?: DataSourceService
+
+  /**
+   * An optional instance of the SPFI service.
+   */
+  sp?: SPFI
 
   /**
    * Fetch data sources by category and optional level.
@@ -279,13 +285,62 @@ export interface IPortfolioWebPartsDataAdapter {
   ): Promise<any[]>
 
   /**
-   * Adds a new column to the project content columns list and adds the column to the specified data source.
+   * Search for users using `_sp.profiles.clientPeoplePickerSearchUser`.
    *
-   * @param properties Properties for the new column (`Id` will be omitted)
-   * @param dataSource The data source to add the column to
+   * @param queryString Query string
+   * @param selectedItems Selected items that should be excluded from the result
+   * @param maximumEntitySuggestions Maximum entity suggestions
    */
-  addColumnToDataSource?(
-    properties: SPProjectContentColumnItem,
-    dataSource: DataSource
-  ): Promise<boolean>
+  clientPeoplePickerSearchUser?(
+    queryString: string,
+    selectedItems: any[],
+    maximumEntitySuggestions?: number
+  ): Promise<IPersonaSharedProps[]>
+
+  /**
+   * Retrieves the provision request settings from the "Provisioning Request Settings" list
+   *
+   * @returns A Promise that resolves to a Map containing the settings.
+   */
+  getProvisionRequestSettings?(provisionUrl: string): Promise<Map<string, string>>
+
+  /**
+   * Retrieves the provision types from the "Provisioning Types" list
+   *
+   * @returns A Promise that resolves to a Map containing the types.
+   */
+  getProvisionTypes?(provisionUrl: string): Promise<Record<string, any>>
+
+  /**
+   * Ensure users in the provision site and return their IDs.
+   *
+   * @param user User
+   */
+  getProvisionUsers?(users: any[], provisionUrl: string): Promise<Promise<number | null>[]>
+
+  /**
+   * Adds a new provision request to the provisioning requests list
+   *
+   * @param properties Properties for the new provision request (`Id` will be omitted)
+   * @param provisionUrl Url for the provisioning site
+   *
+   */
+  addProvisionRequests?(properties: IProvisionRequestItem, provisionUrl: string): Promise<boolean>
+
+  /**
+   * Fetch provision requests from the provision requests list and their status
+   * Uses `this._sp.search` using the specified `{queryTemplate}` and `{selectProperties}`.
+   * Uses a `while` loop to fetch all items in batches of `{batchSize}`.
+   *
+   * @param queryTemplate Query template
+   * @param selectProperties Select properties
+   * @param batchSize Batch size (default: 500)
+   * @param additionalQuery Additional query parameters
+   */
+  fetchProvisionRequests?(
+    queryTemplate: string,
+    selectProperties: string[],
+    batchSize: number,
+    additionalQuery: Record<string, any>
+  ): Promise<any[]>
 }

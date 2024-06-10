@@ -58,10 +58,10 @@
     "@pnp/core": "3.17.0",
     "@pnp/queryable": "3.17.0",
     "react-error-boundary": "~4.0.10",
-    "@fluentui/react-components": "~9.50.0",
-    "@fluentui/react-icons": "~2.0.239",
+    "@fluentui/react-components": "~9.52.0",
+    "@fluentui/react-icons": "~2.0.240",
     "usehooks-ts": "~2.9.1",
-    "@fluentui/react-datepicker-compat": "~0.4.36",
+    "@fluentui/react-datepicker-compat": "~0.4.38",
     "smoothscroll-polyfill": "~0.4.4"
   },
   "devDependencies": {
