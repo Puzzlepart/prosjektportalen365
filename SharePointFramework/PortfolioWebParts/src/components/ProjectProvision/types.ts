@@ -10,5 +10,6 @@ export interface IProjectProvisionState {
   showProvisionStatus: boolean
   settings: Map<string, any>
   types?: Record<string, any>
+  requests?: Record<string, any>
   properties: Record<string, any>
 }

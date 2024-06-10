@@ -626,7 +626,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   }
 
   /**
-   * Checks if the current is in the specified SharePoint group.
+   * Checks if the current user is in the specified SharePoint group.
    *
    * @param groupName Group name
    */
@@ -909,26 +909,48 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   }
 
   public async fetchProvisionRequests(
-    queryTemplate: string,
-    selectProperties: string[],
-    batchSize = 500,
-    additionalQuery: Record<string, any> = {}
-  ): Promise<ISearchResult[]> {
-    const query: SearchQueryInit = {
-      QueryTemplate: `${queryTemplate}`,
-      Querytext: '*',
-      RowLimit: batchSize,
-      TrimDuplicates: false,
-      SelectProperties: [...selectProperties, 'Title'],
-      ...additionalQuery
+    user: string,
+    provisionUrl: string
+  ): Promise<Record<string, any>> {
+    try {
+      const provisionSite = Web([this._sp.web, provisionUrl])
+      const provisionRequestsList = provisionSite.lists.getByTitle('Provisioning Requests')
+      const spItems = await provisionRequestsList.items
+        .select(
+          'Id',
+          'Title',
+          'SpaceDisplayName',
+          'SpaceType',
+          'SiteURL',
+          'Status',
+          'Stage',
+          'Comments',
+          'ApprovedDate',
+          'Created',
+          'Author/EMail'
+        )
+        .expand('Author')
+        .getAll()
+      return spItems
+        .filter((item) => item.Author?.EMail === user)
+        .sort((a, b) => (a.Created > b.Created ? 1 : -1))
+        .map((item) => {
+          return {
+            title: item.Title,
+            spaceDisplayName: item.SpaceDisplayName,
+            spaceType: item.SpaceType,
+            siteUrl: item.SiteURL?.Url,
+            status: item.Status,
+            stage: item.Stage,
+            comments: item.Comments,
+            approvedDate: item.ApprovedDate,
+            created: item.Created,
+            author: item.Author?.EMail
+          }
+        })
+    } catch (error) {
+      return []
     }
-    const { PrimarySearchResults, TotalRows } = await this._sp.search(query)
-    const results = [...PrimarySearchResults]
-    while (results.length < TotalRows) {
-      const response = await this._sp.search({ ...query, StartRow: results.length })
-      results.push(...response.PrimarySearchResults)
-    }
-    return results
   }
 }
 

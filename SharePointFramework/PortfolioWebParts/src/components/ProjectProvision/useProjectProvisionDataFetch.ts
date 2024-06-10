@@ -16,11 +16,13 @@ export function useProjectProvisionDataFetch(
   useEffect(() => {
     Promise.all([
       props.dataAdapter.getProvisionRequestSettings(props.provisionUrl),
-      props.dataAdapter.getProvisionTypes(props.provisionUrl)
-    ]).then(([settings, types]) => {
+      props.dataAdapter.getProvisionTypes(props.provisionUrl),
+      props.dataAdapter.fetchProvisionRequests(props.pageContext.user.email, props.provisionUrl)
+    ]).then(([settings, types, requests]) => {
       setState({
         settings,
         types,
+        requests,
         loading: false
       })
     })

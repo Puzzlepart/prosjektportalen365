@@ -314,7 +314,7 @@ export interface IPortfolioWebPartsDataAdapter {
   /**
    * Ensure users in the provision site and return their IDs.
    *
-   * @param user User
+   * @param users Users to ensure
    */
   getProvisionUsers?(users: any[], provisionUrl: string): Promise<Promise<number | null>[]>
 
@@ -328,19 +328,12 @@ export interface IPortfolioWebPartsDataAdapter {
   addProvisionRequests?(properties: IProvisionRequestItem, provisionUrl: string): Promise<boolean>
 
   /**
-   * Fetch provision requests from the provision requests list and their status
-   * Uses `this._sp.search` using the specified `{queryTemplate}` and `{selectProperties}`.
-   * Uses a `while` loop to fetch all items in batches of `{batchSize}`.
+   * Retrieves the provision types from the "Provisioning Requests" list
    *
-   * @param queryTemplate Query template
-   * @param selectProperties Select properties
-   * @param batchSize Batch size (default: 500)
-   * @param additionalQuery Additional query parameters
+   * @param user User to fetch the provision requests for
+   * @param provisionUrl Url for the provisioning site
+   *
+   * @returns A Promise that resolves to a Map containing the requests.
    */
-  fetchProvisionRequests?(
-    queryTemplate: string,
-    selectProperties: string[],
-    batchSize: number,
-    additionalQuery: Record<string, any>
-  ): Promise<any[]>
+  fetchProvisionRequests?(user: any, provisionUrl: string): Promise<Record<string, any>>
 }
