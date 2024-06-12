@@ -908,10 +908,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
-  public async fetchProvisionRequests(
-    user: string,
-    provisionUrl: string
-  ): Promise<Record<string, any>> {
+  public async fetchProvisionRequests(user: string, provisionUrl: string): Promise<any[]> {
     try {
       const provisionSite = Web([this._sp.web, provisionUrl])
       const provisionRequestsList = provisionSite.lists.getByTitle('Provisioning Requests')
@@ -938,7 +935,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           return {
             title: item.Title,
             spaceDisplayName: item.SpaceDisplayName,
-            spaceType: item.SpaceType,
+            type: item.SpaceType,
             siteUrl: item.SiteURL?.Url,
             status: item.Status,
             stage: item.Stage,

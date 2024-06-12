@@ -335,5 +335,5 @@ export interface IPortfolioWebPartsDataAdapter {
    *
    * @returns A Promise that resolves to a Map containing the requests.
    */
-  fetchProvisionRequests?(user: any, provisionUrl: string): Promise<Record<string, any>>
+  fetchProvisionRequests?(user: any, provisionUrl: string): Promise<any[]>
 }

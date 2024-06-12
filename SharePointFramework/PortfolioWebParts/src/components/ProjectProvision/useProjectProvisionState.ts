@@ -14,10 +14,11 @@ export function useProjectProvisionState() {
     showProvisionStatus: false,
     settings: new Map<string, any>(),
     types: {},
-    requests: {},
+    requests: [],
     properties: {
       type: 'Project'
-    }
+    },
+    selectedRequests: []
   })
 
   /**
