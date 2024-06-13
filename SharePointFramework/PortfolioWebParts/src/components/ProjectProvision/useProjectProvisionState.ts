@@ -18,7 +18,7 @@ export function useProjectProvisionState() {
     properties: {
       type: 'Project'
     },
-    selectedRequests: []
+    refetch: new Date().getTime()
   })
 
   /**

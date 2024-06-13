@@ -328,6 +328,15 @@ export interface IPortfolioWebPartsDataAdapter {
   addProvisionRequests?(properties: IProvisionRequestItem, provisionUrl: string): Promise<boolean>
 
   /**
+   * Deletes a provision request item from the provisioning requests list
+   *
+   * @param requestId Id of the request to delete
+   * @param provisionUrl Url for the provisioning site
+   *
+   */
+  deleteProvisionRequest?(requestId: number, provisionUrl: string): Promise<boolean>
+
+  /**
    * Retrieves the provision types from the "Provisioning Requests" list
    *
    * @param user User to fetch the provision requests for

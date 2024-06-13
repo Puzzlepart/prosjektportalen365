@@ -12,5 +12,5 @@ export interface IProjectProvisionState {
   types?: Record<string, any>
   requests?: any[]
   properties: Record<string, any>
-  selectedRequests?: any[]
+  refetch?: number
 }

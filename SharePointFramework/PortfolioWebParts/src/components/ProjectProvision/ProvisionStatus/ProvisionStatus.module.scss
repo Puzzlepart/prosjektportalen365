@@ -3,6 +3,14 @@
   gap: 8px;
 }
 
+.deletePopover {
+  display: flex;
+  gap: 8px;
+  max-width: 110px;
+  flex-direction: column;
+  align-items: center;
+}
+
 div[role="dialog"] {
   min-width: 1140px;
 }

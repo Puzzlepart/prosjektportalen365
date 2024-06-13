@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import {
   Button,
   Link,
@@ -6,21 +7,28 @@ import {
   Tag,
   createTableColumn,
   tokens,
-  Text
+  Text,
+  Popover,
+  PopoverSurface,
+  PopoverTrigger,
+  Toast,
+  ToastTitle,
+  ToastBody
 } from '@fluentui/react-components'
 import React, { useContext } from 'react'
 import {
   SparkleCircleRegular,
   LightbulbCircleRegular,
   CheckmarkCircleRegular,
-  ErrorCircleRegular,
-  DeleteRegular
+  ErrorCircleRegular
 } from '@fluentui/react-icons'
 import styles from './ProvisionStatus.module.scss'
 import { ProjectProvisionContext } from '../context'
-import { formatDate } from 'pp365-shared-library'
+import { formatDate, getFluentIcon } from 'pp365-shared-library'
 
 type RequestItem = {
+  id: number
+  displayName: string
   title: string
   siteUrl: string
   created: Date
@@ -28,17 +36,16 @@ type RequestItem = {
   type: string
 }
 
-export const useColumns = (): TableColumnDefinition<RequestItem>[] => {
+export const useColumns = (toast: any): TableColumnDefinition<RequestItem>[] => {
   const context = useContext(ProjectProvisionContext)
-
   return [
     createTableColumn<RequestItem>({
-      columnId: 'title',
+      columnId: 'displayName',
       compare: (a, b) => {
-        return a.title.localeCompare(b.title)
+        return a.displayName.localeCompare(b.displayName)
       },
       renderHeaderCell: () => {
-        return 'Bestilling'
+        return 'Områdetittel'
       },
       renderCell: (request) => {
         return (
@@ -51,12 +58,12 @@ export const useColumns = (): TableColumnDefinition<RequestItem>[] => {
                 }}
               >
                 <Text truncate wrap={true}>
-                  {request.title}
+                  {request.displayName}
                 </Text>
               </Link>
             ) : (
               <Text truncate wrap={true}>
-                {request.title}
+                {request.displayName}
               </Text>
             )}
           </TableCellLayout>
@@ -69,7 +76,7 @@ export const useColumns = (): TableColumnDefinition<RequestItem>[] => {
         return a.type.localeCompare(b.type)
       },
       renderHeaderCell: () => {
-        return 'Type'
+        return 'Områdetype'
       },
       renderCell: (request) => {
         return (
@@ -134,7 +141,7 @@ export const useColumns = (): TableColumnDefinition<RequestItem>[] => {
             statusText = 'Område opprettes'
             break
           case 'Space Created':
-            statusIcon = <CheckmarkCircleRegular />
+            statusIcon = getFluentIcon('CheckmarkCircle')
             statusColor = tokens.colorStatusSuccessBackground2
             statusText = 'Område opprettet'
             break
@@ -175,10 +182,79 @@ export const useColumns = (): TableColumnDefinition<RequestItem>[] => {
       columnId: 'actions',
       renderHeaderCell: () => null,
       renderCell: (request) => {
+        const canEdit = request.status === 'Not Submitted'
+        const canDelete =
+          request.status === 'Not Submitted' ||
+          request.status === 'Space Creation Failed' ||
+          request.status === 'Space Already Exists'
+
         return (
           <div className={styles.actions}>
-            {/* <Button title='Rediger' icon={<EditRegular />} /> */}
-            {request.status === 'Not Submitted' && <Button title='Fjern' icon={<DeleteRegular />} />}
+            {canEdit && (
+              <Button
+                appearance='subtle'
+                onClick={() => console.log(`edit request ${request.id}`)}
+                title='Rediger'
+                icon={getFluentIcon('Edit')}
+              />
+            )}
+            {canDelete && (
+              <Popover>
+                <PopoverTrigger disableButtonEnhancement>
+                  <Button
+                    appearance='subtle'
+                    title='Slett bestilling'
+                    icon={getFluentIcon('Delete')}
+                  />
+                </PopoverTrigger>
+                <PopoverSurface tabIndex={-1}>
+                  <div className={styles.deletePopover}>
+                    <div>Er du sikker på at du ønsker å slette bestillingen?</div>
+                    <div>
+                      <Button
+                        appearance='subtle'
+                        onClick={() => {
+                          context.props.dataAdapter
+                            .deleteProvisionRequest(request.id, context.props.provisionUrl)
+                            .then((response) => {
+                              if (response) {
+                                context.setState({
+                                  refetch: new Date().getTime()
+                                })
+                                toast(
+                                  <Toast appearance='inverted'>
+                                    <ToastTitle>Slettet bestilling</ToastTitle>
+                                    <ToastBody>
+                                      {`Bestillingen '${request.displayName}', ble slettet.`}
+                                    </ToastBody>
+                                  </Toast>,
+                                  { intent: 'success' }
+                                )
+                                context.setState({ showProvisionDrawer: false, properties: {} })
+                              } else {
+                                toast(
+                                  <Toast appearance='inverted'>
+                                    <ToastTitle>Feil ved sletting</ToastTitle>
+                                    <ToastBody>
+                                      Det oppstod en feil ved sletting av bestillingen. Vennligst
+                                      prøv igjen, eller kontakt administrator.
+                                    </ToastBody>
+                                  </Toast>,
+                                  { intent: 'error' }
+                                )
+                              }
+                            })
+                        }}
+                        title='Slett bestilling'
+                        icon={getFluentIcon('Delete')}
+                      >
+                        Slett
+                      </Button>
+                    </div>
+                  </div>
+                </PopoverSurface>
+              </Popover>
+            )}
           </div>
         )
       }

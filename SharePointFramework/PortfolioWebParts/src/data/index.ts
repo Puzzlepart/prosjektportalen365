@@ -908,6 +908,17 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
+  public async deleteProvisionRequest(requestId: number, provisionUrl: string): Promise<boolean> {
+    try {
+      const provisionSite = Web([this._sp.web, provisionUrl])
+      const provisionRequestsList = provisionSite.lists.getByTitle('Provisioning Requests')
+      await provisionRequestsList.items.getById(requestId).delete()
+      return true
+    } catch (error) {
+      return false
+    }
+  }
+
   public async fetchProvisionRequests(user: string, provisionUrl: string): Promise<any[]> {
     try {
       const provisionSite = Web([this._sp.web, provisionUrl])
@@ -933,8 +944,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         .sort((a, b) => (a.Created > b.Created ? 1 : -1))
         .map((item) => {
           return {
+            id: item.Id,
             title: item.Title,
-            spaceDisplayName: item.SpaceDisplayName,
+            displayName: item.SpaceDisplayName,
             type: item.SpaceType,
             siteUrl: item.SiteURL?.Url,
             status: item.Status,

@@ -5,6 +5,7 @@ import { useMotionStyles } from './motionStyles'
 import { ProjectProvisionContext } from '../context'
 import { getGUID } from '@pnp/core'
 import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
+import { useId } from '@fluentui/react-components'
 
 /**
  * Component logic hook for `ProvisionDrawer`. This hook is responsible for
@@ -12,7 +13,6 @@ import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
  */
 export const useProvisionDrawer = () => {
   const context = useContext(ProjectProvisionContext)
-
   const [level2, setLevel2] = useState(false)
   const motionStyles = useMotionStyles()
   const toolbarBackIconMotion = useMotion<HTMLButtonElement>(level2)
@@ -20,9 +20,6 @@ export const useProvisionDrawer = () => {
   const level1Motion = useMotion<HTMLDivElement>(!level2)
   const level2Motion = useMotion<HTMLDivElement>(level2)
 
-  /**
-   * Saves the request to the Provision Requests list.
-   */
   const onSave = async (): Promise<boolean> => {
     const namingConvention = context.state.settings.get('NamingConvention')
     const baseUrl = `${context.props.webAbsoluteUrl.split('sites')[0]}sites/`
@@ -65,9 +62,6 @@ export const useProvisionDrawer = () => {
     )
   }
 
-  /**
-   * Save is disabled if the column name or field name is less than 2 characters.
-   */
   const isSaveDisabled =
     context.column.get('name')?.length < 2 ||
     context.column.get('justification')?.length < 2 ||
@@ -76,6 +70,8 @@ export const useProvisionDrawer = () => {
   const namingConvention = context.state.settings.get('NamingConvention')
   const urlPrefix = `${context.props.webAbsoluteUrl.split('sites')[0]}sites/`
   const aliasSuffix = '@' + context.props.pageContext.user.loginName.split('@')[1]
+
+  const fluentProviderId = useId('fp-provision-drawer')
 
   return {
     level2,
@@ -90,6 +86,7 @@ export const useProvisionDrawer = () => {
     isSaveDisabled,
     namingConvention,
     urlPrefix,
-    aliasSuffix
+    aliasSuffix,
+    fluentProviderId
   }
 }

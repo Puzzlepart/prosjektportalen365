@@ -6,11 +6,12 @@ import { IProjectProvisionProps, IProjectProvisionState } from './types'
  * fetching data and setting state.
  *
  * @param props Props
- * @param verticals Verticals
+ * @param refetch Timestamp for refetch. Changes to this variable refetches the data in `useEffect`
  * @param setState Set state callback
  */
 export function useProjectProvisionDataFetch(
   props: IProjectProvisionProps,
+  refetch: number,
   setState: (newState: Partial<IProjectProvisionState>) => void
 ) {
   useEffect(() => {
@@ -26,5 +27,5 @@ export function useProjectProvisionDataFetch(
         loading: false
       })
     })
-  }, [])
+  }, [refetch])
 }

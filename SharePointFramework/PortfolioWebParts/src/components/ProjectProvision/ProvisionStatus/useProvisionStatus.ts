@@ -1,19 +1,19 @@
-import { DataGridCellFocusMode, SortDirection, TableColumnId } from '@fluentui/react-components'
+import {
+  DataGridCellFocusMode,
+  SortDirection,
+  TableColumnId,
+  useId
+} from '@fluentui/react-components'
 import { useContext } from 'react'
 import { ProjectProvisionContext } from '../context'
 import { useColumns } from './useColumns'
 
-export function useProvisionStatus() {
+export function useProvisionStatus(toast: any) {
   const context = useContext(ProjectProvisionContext)
-  const columns = useColumns()
-
-  const onSelection = (_: any, data: any) => {
-    const selectedItemIds = Array.from(data.selectedItems)
-    context.setState({ selectedRequests: selectedItemIds })
-  }
+  const columns = useColumns(toast)
 
   const columnSizingOptions = {
-    title: {
+    displayName: {
       minWidth: 220,
       defaultWidth: 340
     },
@@ -30,8 +30,8 @@ export function useProvisionStatus() {
       defaultWidth: 180
     },
     actions: {
-      minWidth: 40,
-      defaultWidth: 40
+      minWidth: 60,
+      defaultWidth: 60
     }
   }
 
@@ -46,12 +46,14 @@ export function useProvisionStatus() {
     }
   }
 
+  const fluentProviderId = useId('fp-provision-status')
+
   return {
     context,
     columns,
     columnSizingOptions,
     defaultSortState,
-    onSelection,
-    getCellFocusMode
+    getCellFocusMode,
+    fluentProviderId
   }
 }

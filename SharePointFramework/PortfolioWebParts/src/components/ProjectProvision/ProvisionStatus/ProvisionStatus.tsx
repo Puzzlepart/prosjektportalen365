@@ -13,84 +13,85 @@ import {
   DialogContent,
   DialogSurface,
   DialogTitle,
-  DialogTrigger
+  DialogTrigger,
+  FluentProvider,
+  IdPrefixProvider
 } from '@fluentui/react-components'
 import { useProvisionStatus } from './useProvisionStatus'
+import { customLightTheme } from 'pp365-shared-library'
 
-export const ProvisionStatus = () => {
-  const { context, columns, columnSizingOptions, defaultSortState, onSelection, getCellFocusMode } =
-    useProvisionStatus()
+export const ProvisionStatus = (props: { toast: any }) => {
+  const {
+    context,
+    columns,
+    columnSizingOptions,
+    defaultSortState,
+    getCellFocusMode,
+    fluentProviderId
+  } = useProvisionStatus(props.toast)
 
   return (
-    <Dialog
-      modalType='modal'
-      open={context.state.showProvisionStatus}
-      onOpenChange={(_, data) => {
-        context.setState({ showProvisionStatus: data.open })
-      }}
-    >
-      <DialogSurface>
-        <DialogBody>
-          <DialogTitle
-            action={
-              <DialogTrigger action='close'>
-                <Button appearance='subtle' title='Lukk' icon={<Dismiss24Regular />} />
-              </DialogTrigger>
-            }
-          >
-            Mine bestillinger
-          </DialogTitle>
-          <DialogContent>
-            <p>
-              Her kan du se status på dine bestillinger, hvem som er godkjenner og
-              godkjenningsstatus. Dersom en bestilling blir avslått, kan du velge å bestille på nytt
-              basert på en tidligere bestilling eller fjerne bestillingen fra listen.
-            </p>
-            <DataGrid
-              items={context.state.requests}
-              columns={columns}
-              selectionMode='multiselect'
-              selectedItems={context.state.selectedRequests}
-              onSelectionChange={onSelection}
-              defaultSortState={defaultSortState}
-              sortable
-              resizableColumns
-              columnSizingOptions={columnSizingOptions}
-              resizableColumnsOptions={{
-                autoFitColumns: false
-              }}
-            >
-              <DataGridHeader>
-                <DataGridRow
-                  selectionCell={{
-                    checkboxIndicator: { 'aria-label': 'Velg alle rader' }
+    <IdPrefixProvider value={fluentProviderId}>
+      <FluentProvider theme={customLightTheme}>
+        <Dialog
+          modalType='modal'
+          open={context.state.showProvisionStatus}
+          onOpenChange={(_, data) => {
+            context.setState({ showProvisionStatus: data.open })
+          }}
+        >
+          <DialogSurface>
+            <DialogBody>
+              <DialogTitle
+                action={
+                  <DialogTrigger action='close'>
+                    <Button appearance='subtle' title='Lukk' icon={<Dismiss24Regular />} />
+                  </DialogTrigger>
+                }
+              >
+                Mine bestillinger
+              </DialogTitle>
+              <DialogContent>
+                <p>
+                  Her kan du se status på dine bestillinger, hvilke områdetype, status og dato for
+                  bestillingen. Det er også mulig å redigere og slette bestillinger som ikke er
+                  sendt inn.
+                </p>
+                <DataGrid
+                  items={context.state.requests}
+                  columns={columns}
+                  defaultSortState={defaultSortState}
+                  sortable
+                  resizableColumns
+                  columnSizingOptions={columnSizingOptions}
+                  resizableColumnsOptions={{
+                    autoFitColumns: false
                   }}
                 >
-                  {({ renderHeaderCell }) => (
-                    <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-                  )}
-                </DataGridRow>
-              </DataGridHeader>
-              <DataGridBody>
-                {({ item, rowId }) => (
-                  <DataGridRow
-                    key={rowId}
-                    selectionCell={{
-                      checkboxIndicator: { 'aria-label': 'Velg rad' }
-                    }}
-                  >
-                    {({ renderCell, columnId }) => (
-                      <DataGridCell focusMode={getCellFocusMode(columnId)}>
-                        {renderCell(item)}
-                      </DataGridCell>
+                  <DataGridHeader>
+                    <DataGridRow>
+                      {({ renderHeaderCell }) => (
+                        <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
+                      )}
+                    </DataGridRow>
+                  </DataGridHeader>
+                  <DataGridBody>
+                    {({ item, rowId }) => (
+                      <DataGridRow key={rowId}>
+                        {({ renderCell, columnId }) => (
+                          <DataGridCell focusMode={getCellFocusMode(columnId)}>
+                            {renderCell(item)}
+                          </DataGridCell>
+                        )}
+                      </DataGridRow>
                     )}
-                  </DataGridRow>
-                )}
-              </DataGridBody>
-            </DataGrid>
-          </DialogContent>
-        </DialogBody>
-      </DialogSurface>
-    </Dialog>
+                  </DataGridBody>
+                </DataGrid>
+              </DialogContent>
+            </DialogBody>
+          </DialogSurface>
+        </Dialog>
+      </FluentProvider>
+    </IdPrefixProvider>
   )
 }
