@@ -25,21 +25,13 @@ import {
 import styles from './ProvisionStatus.module.scss'
 import { ProjectProvisionContext } from '../context'
 import { formatDate, getFluentIcon } from 'pp365-shared-library'
+import { IRequestItem, Status } from './types'
 
-type RequestItem = {
-  id: number
-  displayName: string
-  title: string
-  siteUrl: string
-  created: Date
-  status: string
-  type: string
-}
 
-export const useColumns = (toast: any): TableColumnDefinition<RequestItem>[] => {
+export const useColumns = (toast: any): TableColumnDefinition<IRequestItem>[] => {
   const context = useContext(ProjectProvisionContext)
   return [
-    createTableColumn<RequestItem>({
+    createTableColumn<IRequestItem>({
       columnId: 'displayName',
       compare: (a, b) => {
         return a.displayName.localeCompare(b.displayName)
@@ -50,7 +42,7 @@ export const useColumns = (toast: any): TableColumnDefinition<RequestItem>[] => 
       renderCell: (request) => {
         return (
           <TableCellLayout style={{ overflow: 'hidden' }}>
-            {request.status === 'Space Created' ? (
+            {request.status === Status.SpaceCreated ? (
               <Link
                 href={request.siteUrl}
                 onClick={() => {
@@ -70,7 +62,7 @@ export const useColumns = (toast: any): TableColumnDefinition<RequestItem>[] => 
         )
       }
     }),
-    createTableColumn<RequestItem>({
+    createTableColumn<IRequestItem>({
       columnId: 'type',
       compare: (a, b) => {
         return a.type.localeCompare(b.type)
@@ -88,7 +80,7 @@ export const useColumns = (toast: any): TableColumnDefinition<RequestItem>[] => 
         )
       }
     }),
-    createTableColumn<RequestItem>({
+    createTableColumn<IRequestItem>({
       columnId: 'status',
       compare: (a, b) => {
         return a.status.localeCompare(b.status)
@@ -100,47 +92,47 @@ export const useColumns = (toast: any): TableColumnDefinition<RequestItem>[] => 
         let statusIcon, statusColor, statusText
 
         switch (request.status) {
-          case 'Submitted':
+          case Status.Submitted:
             statusIcon = <SparkleCircleRegular />
             statusColor = tokens.colorStatusWarningBackground2
             statusText = 'Sendt inn'
             break
-          case 'Approved':
+          case Status.Approved:
             statusIcon = <CheckmarkCircleRegular />
             statusColor = tokens.colorStatusSuccessBackground2
             statusText = 'Godkjent'
             break
-          case 'Rejected':
+          case Status.Rejected:
             statusIcon = <ErrorCircleRegular />
             statusColor = tokens.colorStatusDangerBackground2
             statusText = 'Avslått'
             break
-          case 'Pending Approval':
+          case Status.PendingApproval:
             statusIcon = <SparkleCircleRegular />
             statusColor = tokens.colorStatusWarningBackground2
             statusText = 'Venter på godkjenning'
             break
-          case 'Space Creation Failed':
+          case Status.SpaceCreationFailed:
             statusIcon = <ErrorCircleRegular />
             statusColor = tokens.colorStatusDangerBackground2
             statusText = 'Område opprettelse feilet'
             break
-          case 'Space Already Exists':
+          case Status.SpaceAlreadyExists:
             statusIcon = <ErrorCircleRegular />
             statusColor = tokens.colorStatusDangerBackground2
             statusText = 'Området eksisterer allerede'
             break
-          case 'Team Requested':
+          case Status.TeamRequested:
             statusIcon = <SparkleCircleRegular />
             statusColor = tokens.colorStatusWarningBackground2
             statusText = 'Team forespurt'
             break
-          case 'Space Creation':
+          case Status.SpaceCreation:
             statusIcon = <SparkleCircleRegular />
             statusColor = tokens.colorStatusWarningBackground2
             statusText = 'Område opprettes'
             break
-          case 'Space Created':
+          case Status.SpaceCreated:
             statusIcon = getFluentIcon('CheckmarkCircle')
             statusColor = tokens.colorStatusSuccessBackground2
             statusText = 'Område opprettet'
@@ -166,27 +158,27 @@ export const useColumns = (toast: any): TableColumnDefinition<RequestItem>[] => 
         )
       }
     }),
-    createTableColumn<RequestItem>({
+    createTableColumn<IRequestItem>({
       columnId: 'created',
       compare: (a, b) => {
         return new Date(a.created).getTime() - new Date(b.created).getTime()
       },
       renderHeaderCell: () => {
-        return 'Dato'
+        return 'Bestillingsdato'
       },
       renderCell: (request) => {
         return formatDate(request.created)
       }
     }),
-    createTableColumn<RequestItem>({
+    createTableColumn<IRequestItem>({
       columnId: 'actions',
       renderHeaderCell: () => null,
       renderCell: (request) => {
-        const canEdit = request.status === 'Not Submitted'
+        const canEdit = request.status === Status.NotSubmitted
         const canDelete =
-          request.status === 'Not Submitted' ||
-          request.status === 'Space Creation Failed' ||
-          request.status === 'Space Already Exists'
+          request.status === Status.NotSubmitted ||
+          request.status === Status.SpaceCreationFailed ||
+          request.status === Status.SpaceAlreadyExists
 
         return (
           <div className={styles.actions}>
