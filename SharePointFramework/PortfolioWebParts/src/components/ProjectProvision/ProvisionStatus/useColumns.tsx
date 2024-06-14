@@ -20,7 +20,11 @@ import {
   SparkleCircleRegular,
   LightbulbCircleRegular,
   CheckmarkCircleRegular,
-  ErrorCircleRegular
+  ErrorCircleRegular,
+  PeopleTeamRegular,
+  ArrowClockwiseDashesRegular,
+  ApprovalsAppRegular,
+  HourglassHalfRegular
 } from '@fluentui/react-icons'
 import styles from './ProvisionStatus.module.scss'
 import { ProjectProvisionContext } from '../context'
@@ -100,7 +104,7 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestItem>[] =>
             statusText = 'Sendt inn'
             break
           case Status.Approved:
-            statusIcon = <CheckmarkCircleRegular />
+            statusIcon = <ApprovalsAppRegular />
             statusColor = tokens.colorStatusSuccessBackground2
             statusText = 'Godkjent'
             break
@@ -110,7 +114,7 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestItem>[] =>
             statusText = 'Avslått'
             break
           case Status.PendingApproval:
-            statusIcon = <SparkleCircleRegular />
+            statusIcon = <ArrowClockwiseDashesRegular />
             statusColor = tokens.colorStatusWarningBackground2
             statusText = 'Venter på godkjenning'
             break
@@ -125,17 +129,17 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestItem>[] =>
             statusText = 'Området eksisterer allerede'
             break
           case Status.TeamRequested:
-            statusIcon = <SparkleCircleRegular />
+            statusIcon = <PeopleTeamRegular />
             statusColor = tokens.colorStatusWarningBackground2
             statusText = 'Team forespurt'
             break
           case Status.SpaceCreation:
-            statusIcon = <SparkleCircleRegular />
+            statusIcon = <HourglassHalfRegular />
             statusColor = tokens.colorStatusWarningBackground2
             statusText = 'Område opprettes'
             break
           case Status.SpaceCreated:
-            statusIcon = getFluentIcon('CheckmarkCircle')
+            statusIcon = <CheckmarkCircleRegular />
             statusColor = tokens.colorStatusSuccessBackground2
             statusText = 'Område opprettet'
             break
