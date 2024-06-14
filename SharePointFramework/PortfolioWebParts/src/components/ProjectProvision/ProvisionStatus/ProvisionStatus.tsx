@@ -19,10 +19,13 @@ import {
 } from '@fluentui/react-components'
 import { useProvisionStatus } from './useProvisionStatus'
 import { customLightTheme } from 'pp365-shared-library'
+import { Commands } from './Commands'
+import styles from './ProvisionStatus.module.scss'
 
 export const ProvisionStatus = (props: { toast: any }) => {
   const {
     context,
+    requests,
     columns,
     columnSizingOptions,
     defaultSortState,
@@ -51,14 +54,15 @@ export const ProvisionStatus = (props: { toast: any }) => {
               >
                 Mine bestillinger
               </DialogTitle>
-              <DialogContent>
-                <p>
+              <DialogContent className={styles.content}>
+                <div>
                   Her kan du se status på dine bestillinger, hvilke områdetype, status og dato for
                   bestillingen. Det er også mulig å redigere og slette bestillinger som ikke er
                   sendt inn.
-                </p>
+                </div>
+                <Commands />
                 <DataGrid
-                  items={context.state.requests}
+                  items={requests}
                   columns={columns}
                   defaultSortState={defaultSortState}
                   sortable

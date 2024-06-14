@@ -5,8 +5,9 @@ import {
   useId
 } from '@fluentui/react-components'
 import { useContext } from 'react'
-import { ProjectProvisionContext } from '../context'
 import { useColumns } from './useColumns'
+import _ from 'underscore'
+import { ProjectProvisionContext } from '../context'
 
 export function useProvisionStatus(toast: any) {
   const context = useContext(ProjectProvisionContext)
@@ -46,10 +47,39 @@ export function useProvisionStatus(toast: any) {
     }
   }
 
+  /**
+   * Filter requests based on the `filter` function from the `selectedVertical`
+   * and the `searchTerm`. Then sort the requests based on the `sort` state.
+   *
+   * @param requests - requests
+   */
+  function filterRequests(requests: any[]) {
+    return requests.filter((request) =>
+      _.any(Object.values(request), (value) => {
+        if (Array.isArray(value) && value.length > 0) {
+          return value.join(', ').toLowerCase().includes(context.state.searchTerm.toLowerCase())
+        } else if (typeof value === 'object' && value !== null) {
+          return Object.values(value)
+            .join(', ')
+            .toLowerCase()
+            .includes(context.state.searchTerm.toLowerCase())
+        } else if (typeof value === 'string') {
+          return value.toLowerCase().includes(context.state.searchTerm.toLowerCase())
+        }
+        return false
+      })
+    )
+  }
+
+  const requests = !context.state.loading
+    ? filterRequests(context.state.requests)
+    : context.state.requests
+
   const fluentProviderId = useId('fp-provision-status')
 
   return {
     context,
+    requests,
     columns,
     columnSizingOptions,
     defaultSortState,

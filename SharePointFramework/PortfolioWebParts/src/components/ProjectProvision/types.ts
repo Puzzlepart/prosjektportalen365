@@ -13,4 +13,5 @@ export interface IProjectProvisionState {
   requests?: any[]
   properties: Record<string, any>
   refetch?: number
+  searchTerm?: string
 }
