@@ -15,7 +15,8 @@ import {
   DialogTitle,
   DialogTrigger,
   FluentProvider,
-  IdPrefixProvider
+  IdPrefixProvider,
+  Spinner
 } from '@fluentui/react-components'
 import { useProvisionStatus } from './useProvisionStatus'
 import { customLightTheme } from 'pp365-shared-library'
@@ -60,7 +61,15 @@ export const ProvisionStatus = (props: { toast: any }) => {
                   bestillingen. Det er også mulig å redigere og slette bestillinger som ikke er
                   sendt inn.
                 </div>
-                <Commands />
+                {context.state.isRefetching ? (
+                  <Spinner
+                    size='extra-tiny'
+                    label='Oppdaterer og henter bestillinger...'
+                    style={{ padding: 10 }}
+                  />
+                ) : (
+                  <Commands />
+                )}
                 <DataGrid
                   items={requests}
                   columns={columns}

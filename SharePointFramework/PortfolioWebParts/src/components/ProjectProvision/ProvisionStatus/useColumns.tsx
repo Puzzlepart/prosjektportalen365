@@ -33,7 +33,10 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestItem>[] =>
     createTableColumn<IRequestItem>({
       columnId: 'displayName',
       compare: (a, b) => {
-        return a.displayName.localeCompare(b.displayName)
+        if (a.displayName) {
+          return a.displayName.localeCompare(b.displayName)
+        }
+        return null
       },
       renderHeaderCell: () => {
         return 'Områdetittel'
@@ -210,6 +213,7 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestItem>[] =>
                             .then((response) => {
                               if (response) {
                                 context.setState({
+                                  isRefetching: true,
                                   refetch: new Date().getTime()
                                 })
                                 toast(

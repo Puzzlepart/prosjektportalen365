@@ -19,7 +19,8 @@ export function useProjectProvisionState() {
       type: 'Project'
     },
     refetch: new Date().getTime(),
-    searchTerm: ''
+    searchTerm: '',
+    isRefetching: false
   })
 
   /**

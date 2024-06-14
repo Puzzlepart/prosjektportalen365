@@ -24,7 +24,8 @@ export function useProjectProvisionDataFetch(
         settings,
         types,
         requests,
-        loading: false
+        loading: false,
+        isRefetching: false
       })
     })
   }, [refetch])
