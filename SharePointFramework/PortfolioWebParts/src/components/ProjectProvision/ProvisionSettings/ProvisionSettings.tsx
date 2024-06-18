@@ -18,30 +18,30 @@ import {
   IdPrefixProvider,
   Spinner
 } from '@fluentui/react-components'
-import { useProvisionStatus } from './useProvisionStatus'
+import { useProvisionSettings } from './useProvisionSettings'
 import { customLightTheme } from 'pp365-shared-library'
 import { Commands } from './Commands'
-import styles from './ProvisionStatus.module.scss'
+import styles from './ProvisionSettings.module.scss'
 
-export const ProvisionStatus = (props: { toast: any }) => {
+export const ProvisionSettings = (props: { toast: any }) => {
   const {
     context,
-    requests,
+    settings,
     columns,
     columnSizingOptions,
     defaultSortState,
     getCellFocusMode,
     fluentProviderId
-  } = useProvisionStatus(props.toast)
+  } = useProvisionSettings(props.toast)
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme}>
         <Dialog
           modalType='modal'
-          open={context.state.showProvisionStatus}
+          open={context.state.showProvisionSettings}
           onOpenChange={(_, data) => {
-            context.setState({ showProvisionStatus: data.open })
+            context.setState({ showProvisionSettings: data.open })
           }}
         >
           <DialogSurface>
@@ -53,25 +53,24 @@ export const ProvisionStatus = (props: { toast: any }) => {
                   </DialogTrigger>
                 }
               >
-                Mine bestillinger
+                Innstillinger for Bestillingsportalen
               </DialogTitle>
               <DialogContent className={styles.content}>
                 <div>
-                  Her kan du se status på dine bestillinger, hvilke områdetype, status og dato for
-                  bestillingen. Det er også mulig å redigere og slette bestillinger som ikke er
-                  sendt inn.
+                  Her har du en oversikt over alle innstillinger for Bestillingsportalen. Du kan
+                  endre innstillinger ved å klikke på redigeringsknappen til høyre for hver rad.
                 </div>
                 {context.state.isRefetching ? (
                   <Spinner
                     size='extra-tiny'
-                    label='Oppdaterer og henter bestillinger...'
+                    label='Oppdaterer og henter innstillinger...'
                     style={{ padding: 10 }}
                   />
                 ) : (
                   <Commands />
                 )}
                 <DataGrid
-                  items={requests}
+                  items={settings}
                   columns={columns}
                   defaultSortState={defaultSortState}
                   sortable
@@ -88,15 +87,15 @@ export const ProvisionStatus = (props: { toast: any }) => {
                       )}
                     </DataGridRow>
                   </DataGridHeader>
-                  {requests.length === 0 ? (
+                  {settings.length === 0 ? (
                     <>
                       {context.state.searchTerm ? (
                         <div className={styles.message}>
-                          Ingen bestillinger samsvarer med søket.
+                          Ingen innstillinger samsvarer med søket.
                         </div>
                       ) : (
                         <div className={styles.message}>
-                          Du har ingen bestillinger, opprett en ny bestilling for å se status her.
+                          Det finnes ingen innstillinger for Bestillingsportalen.
                         </div>
                       )}
                     </>

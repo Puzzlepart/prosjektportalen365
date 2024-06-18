@@ -810,8 +810,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     return items.filter(({ secondaryText }) => !_.findWhere(selectedItems, { secondaryText }))
   }
 
-  public async getProvisionRequestSettings(provisionUrl: string): Promise<Map<string, string>> {
-    const intialMap = new Map<string, string>()
+  public async getProvisionRequestSettings(provisionUrl: string): Promise<any[]> {
     try {
       const provisionSite = Web([this._sp.web, provisionUrl])
       const settingsList = provisionSite.lists.getByTitle('Provisioning Request Settings')
@@ -830,7 +829,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           'ExternalSharingSetting'
         )
         .using(DefaultCaching)()
-      return spItems.reduce((acc, item) => {
+
+      return spItems.map((item) => {
         let value = item.Value
         if (item.Title === 'NamingConvention') {
           value = {
@@ -848,11 +848,15 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
             externalSharingSetting: item.ExternalSharingSetting
           }
         }
-        acc.set(item.Title, value)
-        return acc
-      }, intialMap)
+
+        return {
+          title: item.Title,
+          value,
+          description: item.Description
+        }
+      })
     } catch (error) {
-      return intialMap
+      return []
     }
   }
 

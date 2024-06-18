@@ -157,24 +157,24 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                         context.setColumn('name', data.value)
                       }}
                       contentBefore={
-                        namingConvention.prefixText && (
+                        namingConvention?.prefixText && (
                           <Tooltip
                             withArrow
                             content={strings.Provision.SiteNamePrefixTooltipText}
                             relationship='label'
                           >
-                            <Tag size='small'>{namingConvention.prefixText}</Tag>
+                            <Tag size='small'>{namingConvention?.prefixText}</Tag>
                           </Tooltip>
                         )
                       }
                       contentAfter={
-                        namingConvention.suffixText && (
+                        namingConvention?.suffixText && (
                           <Tooltip
                             withArrow
                             content={strings.Provision.SiteNameSuffixTooltipText}
                             relationship='label'
                           >
-                            <Tag size='small'>{namingConvention.suffixText}</Tag>
+                            <Tag size='small'>{namingConvention?.suffixText}</Tag>
                           </Tooltip>
                         )
                       }

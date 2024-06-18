@@ -1,0 +1,29 @@
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.deletePopover {
+  display: flex;
+  gap: 8px;
+  max-width: 110px;
+  flex-direction: column;
+  align-items: center;
+}
+
+div[role="dialog"] {
+  min-width: 1140px;
+  min-height: 420px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .message {
+    display: flex;
+    justify-content: center;
+    padding: 60px;
+  }
+}

@@ -300,9 +300,9 @@ export interface IPortfolioWebPartsDataAdapter {
   /**
    * Retrieves the provision request settings from the "Provisioning Request Settings" list
    *
-   * @returns A Promise that resolves to a Map containing the settings.
+   * @returns A Promise that resolves to an array containing the provision request settings.
    */
-  getProvisionRequestSettings?(provisionUrl: string): Promise<Map<string, string>>
+  getProvisionRequestSettings?(provisionUrl: string): Promise<any[]>
 
   /**
    * Retrieves the provision types from the "Provisioning Types" list
@@ -342,7 +342,7 @@ export interface IPortfolioWebPartsDataAdapter {
    * @param user User to fetch the provision requests for
    * @param provisionUrl Url for the provisioning site
    *
-   * @returns A Promise that resolves to a Map containing the requests.
+   * @returns A Promise that resolves to an array of containing provision requests.
    */
   fetchProvisionRequests?(user: any, provisionUrl: string): Promise<any[]>
 }

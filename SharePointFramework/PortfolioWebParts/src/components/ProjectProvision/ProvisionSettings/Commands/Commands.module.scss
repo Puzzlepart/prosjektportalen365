@@ -1,0 +1,16 @@
+.commands {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+
+  .search {
+    width: 100%;
+    max-width: 100%;
+
+    .searchBox {
+      box-shadow: var(--shadow2);
+      width: inherit;
+      max-width: inherit;
+    }
+  }
+}

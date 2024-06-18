@@ -22,6 +22,7 @@ import { useProjectProvision } from './useProjectProvision'
 import { ProjectProvisionContext } from './context'
 import { ProvisionDrawer } from './ProvisionDrawer'
 import strings from 'PortfolioWebPartsStrings'
+import { ProvisionSettings } from './ProvisionSettings'
 
 export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
   const { state, setState, column, setColumn, toasterId, fluentProviderId } =
@@ -68,11 +69,20 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
                 >
                   {strings.Provision.StatusMenuLabel}
                 </MenuItem>
+                <MenuItem
+                  {...restoreFocusTargetAttribute}
+                  onClick={() => {
+                    setState({ showProvisionSettings: true })
+                  }}
+                >
+                  Innstillinger
+                </MenuItem>
                 <MenuItem>{strings.Provision.IdeaMenuLabel}</MenuItem>
               </MenuList>
             </MenuPopover>
           </Menu>
           <ProvisionStatus toast={dispatchToast} />
+          <ProvisionSettings toast={dispatchToast} />
           <Toaster toasterId={toasterId} />
         </FluentProvider>
       </IdPrefixProvider>

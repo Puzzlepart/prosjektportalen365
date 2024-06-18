@@ -21,7 +21,7 @@ export const useProvisionDrawer = () => {
   const level2Motion = useMotion<HTMLDivElement>(level2)
 
   const onSave = async (): Promise<boolean> => {
-    const namingConvention = context.state.settings.get('NamingConvention')
+    const namingConvention = context.state.settings['NamingConvention']
     const baseUrl = `${context.props.webAbsoluteUrl.split('sites')[0]}sites/`
 
     const requestItem: IProvisionRequestItem = {
@@ -49,8 +49,8 @@ export const useProvisionDrawer = () => {
       JoinHub: true,
       HubSiteTitle: context.props.pageContext.web.title,
       HubSite: context.props.pageContext.legacyPageContext.hubSiteId,
-      Prefix: namingConvention.prefixText,
-      Suffix: namingConvention.suffixText,
+      Prefix: namingConvention?.prefixText,
+      Suffix: namingConvention?.suffixText,
       Status: 'Submitted',
       Stage: 'Submitted',
       RequestKey: getGUID()
@@ -67,7 +67,7 @@ export const useProvisionDrawer = () => {
     context.column.get('justification')?.length < 2 ||
     context.column.get('owner')?.length < 1
 
-  const namingConvention = context.state.settings.get('NamingConvention')
+  const namingConvention = context.state.settings['NamingConvention']
   const urlPrefix = `${context.props.webAbsoluteUrl.split('sites')[0]}sites/`
   const aliasSuffix = '@' + context.props.pageContext.user.loginName.split('@')[1]
 

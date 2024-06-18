@@ -12,7 +12,8 @@ export function useProjectProvisionState() {
     loading: true,
     showProvisionDrawer: false,
     showProvisionStatus: false,
-    settings: new Map<string, any>(),
+    showProvisionSettings: false,
+    settings: [],
     types: {},
     requests: [],
     properties: {
