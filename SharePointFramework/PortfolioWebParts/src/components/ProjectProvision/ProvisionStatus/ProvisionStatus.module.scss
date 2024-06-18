@@ -20,4 +20,10 @@ div[role="dialog"] {
   display: flex;
   flex-direction: column;
   gap: 16px;
+
+  .message {
+    display: flex;
+    justify-content: center;
+    padding: 60px;
+  }
 }

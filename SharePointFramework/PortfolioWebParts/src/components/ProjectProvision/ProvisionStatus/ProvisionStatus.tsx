@@ -16,7 +16,8 @@ import {
   DialogTrigger,
   FluentProvider,
   IdPrefixProvider,
-  Spinner
+  Spinner,
+  Text
 } from '@fluentui/react-components'
 import { useProvisionStatus } from './useProvisionStatus'
 import { customLightTheme } from 'pp365-shared-library'
@@ -88,17 +89,29 @@ export const ProvisionStatus = (props: { toast: any }) => {
                       )}
                     </DataGridRow>
                   </DataGridHeader>
-                  <DataGridBody>
-                    {({ item, rowId }) => (
-                      <DataGridRow key={rowId}>
-                        {({ renderCell, columnId }) => (
-                          <DataGridCell focusMode={getCellFocusMode(columnId)}>
-                            {renderCell(item)}
-                          </DataGridCell>
-                        )}
-                      </DataGridRow>
-                    )}
-                  </DataGridBody>
+                  {requests.length === 0 ? (
+                    <>
+                      {context.state.searchTerm ? (
+                        <div className={styles.message}>Ingen bestillinger samsvarer med søket.</div>
+                      ) : (
+                        <div className={styles.message}>
+                          Du har ingen bestillinger, opprett en ny bestilling for å se status her.
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <DataGridBody>
+                      {({ item, rowId }) => (
+                        <DataGridRow key={rowId}>
+                          {({ renderCell, columnId }) => (
+                            <DataGridCell focusMode={getCellFocusMode(columnId)}>
+                              {renderCell(item)}
+                            </DataGridCell>
+                          )}
+                        </DataGridRow>
+                      )}
+                    </DataGridBody>
+                  )}
                 </DataGrid>
               </DialogContent>
             </DialogBody>
