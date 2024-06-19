@@ -14,6 +14,7 @@ export const ProjectSetupCustomAction: Record<string, any> = {
     forceTemplate: 'Overordnet mal',
     progressDialogContentProps: {
       title: 'Setter opp overordnet prosjekt'
-    }
+    },
+    skipUpdateTemplateParameters: true
   })
 }
