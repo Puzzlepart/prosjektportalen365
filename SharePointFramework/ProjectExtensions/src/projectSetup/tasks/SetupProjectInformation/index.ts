@@ -88,7 +88,7 @@ export class SetupProjectInformation extends BaseTask {
         ...ideaDataProperties,
         TemplateParameters: JSON.stringify(this._templateParameters)
       })
-      if(this.params.properties.skipUpdateTemplateParameters) {
+      if (this.params.properties.skipUpdateTemplateParameters) {
         properties = _.omit(properties, 'TemplateParameters')
       }
       const propertyItems = await list.items()
