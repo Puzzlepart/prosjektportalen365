@@ -69,6 +69,6 @@
     "@microsoft/sp-module-interfaces": "1.17.4",
     "@types/lodash": "~4.14.195",
     "@types/shade-blend-color": "~1.0.3",
-    "pzl-spfx-tasks": "~0.5.10-1"
+    "pzl-spfx-tasks": "~0.5.10-2"
   }
 }

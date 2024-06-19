@@ -799,7 +799,7 @@ packages:
     dependencies:
       '@fluentui/react': 8.118.6_9c907a7ccd27a2e2d0ee9de5366482d1
       '@fluentui/set-version': 8.2.21
-      tslib: 2.6.0
+      tslib: 2.6.3
     dev: false
     peerDependencies:
       '@types/react': '*'
@@ -883,7 +883,7 @@ packages:
   /@fluentui/merge-styles/8.5.12:
     dependencies:
       '@fluentui/set-version': 8.2.21
-      tslib: 2.6.0
+      tslib: 2.6.3
     dev: false
     resolution:
       integrity: sha512-ZnUo0YuMP7AYi68dkknFqVxopIAgbrUnqR/MZlemmRvBYyy1SMj1WQeHcoiLFA8mF8YKn7B+jxQgJbN2bfcrRw==
@@ -1391,7 +1391,7 @@ packages:
       '@uifabric/utilities': 7.38.2_9c907a7ccd27a2e2d0ee9de5366482d1
       classnames: 2.5.1
       react: 17.0.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -1708,7 +1708,7 @@ packages:
       '@uifabric/utilities': 7.38.2_9f7147fa6acafed13e71b068ea0d74dc
       react: 16.8.5
       react-dom: 16.8.5_react@16.8.5
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '*'
@@ -2423,7 +2423,7 @@ packages:
       '@types/react': 17.0.45
       '@uifabric/set-version': 7.0.24
       react: 17.0.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -2684,7 +2684,7 @@ packages:
       '@uifabric/utilities': 7.38.2_9c907a7ccd27a2e2d0ee9de5366482d1
       classnames: 2.5.1
       react: 17.0.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -2916,7 +2916,7 @@ packages:
       office-ui-fabric-react: 7.204.0_9c907a7ccd27a2e2d0ee9de5366482d1
       react: 17.0.1
       react-dom: 17.0.1_react@17.0.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -2930,7 +2930,7 @@ packages:
       '@fluentui/date-time-utilities': 8.6.7
       '@fluentui/font-icons-mdl2': 8.5.42_4865287ef69aa4f3fc3f709d3560286e
       '@fluentui/foundation-legacy': 8.4.8_4865287ef69aa4f3fc3f709d3560286e
-      '@fluentui/merge-styles': 8.5.12
+      '@fluentui/merge-styles': 8.6.8
       '@fluentui/react-focus': 8.9.5_4865287ef69aa4f3fc3f709d3560286e
       '@fluentui/react-hooks': 8.8.5_4865287ef69aa4f3fc3f709d3560286e
       '@fluentui/react-portal-compat-context': 9.0.11_4865287ef69aa4f3fc3f709d3560286e
@@ -2944,7 +2944,7 @@ packages:
       '@types/react-dom': 17.0.17
       react: 17.0.1
       react-dom: 17.0.1_react@17.0.1
-      tslib: 2.6.0
+      tslib: 2.6.3
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <19.0.0'
@@ -3000,7 +3000,7 @@ packages:
       '@types/react-dom': 17.0.17
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
-      tslib: 2.6.0
+      tslib: 2.6.3
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -3041,7 +3041,7 @@ packages:
     dependencies:
       '@fluentui/set-version': 8.2.21
       '@fluentui/theme': 2.6.51_4865287ef69aa4f3fc3f709d3560286e
-      tslib: 2.6.0
+      tslib: 2.6.3
     dev: false
     peerDependencies:
       '@types/react': '*'
@@ -4124,7 +4124,7 @@ packages:
     dependencies:
       es6-promise: 4.2.8
       isomorphic-fetch: 3.0.0
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     resolution:
       integrity: sha512-BQN50r3tohWYOaQ0de7LJ5eCRjI6eg4RQqLhGDlgRmZIZhWzH0bhR6QBMmmxtYtwKWifhPhJSxYDW+cP67TJVw==
@@ -4132,7 +4132,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.24.6
       msal: 1.4.18
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     resolution:
       integrity: sha512-fbDN3UJ+jtSP9llAejqmslMcv498YuIrS3OS/Luivb8OSjdUESZKdP0gcUunnuNIayePVT0/bGYSJTzAIptJQQ==
@@ -6452,7 +6452,7 @@ packages:
     dependencies:
       '@fluentui/merge-styles': 8.5.12
       '@fluentui/react': 8.106.4_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@fluentui/react-components': 9.52.0_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@fluentui/react-components': 9.53.0_9c907a7ccd27a2e2d0ee9de5366482d1
       '@fluentui/react-file-type-icons': 8.11.13_4865287ef69aa4f3fc3f709d3560286e
       '@fluentui/react-hooks': 8.8.5_4865287ef69aa4f3fc3f709d3560286e
       '@fluentui/react-icons': 2.0.242_react@17.0.1
@@ -7511,7 +7511,7 @@ packages:
       integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==
   /@types/lodash.isequal/4.5.8:
     dependencies:
-      '@types/lodash': 4.14.202
+      '@types/lodash': 4.17.4
     dev: false
     resolution:
       integrity: sha512-uput6pg4E/tj2LGxCZo9+y27JNyB2OZuuI/T5F+ylVDYuqICLG2/ktjxx0v6GvVntAf8TvEzeQLcV0ffRirXuA==
@@ -8508,7 +8508,7 @@ packages:
       '@uifabric/set-version': 7.0.24
       '@uifabric/styling': 7.25.1_33901b67539af63c7f13e5aa326a1a9a
       '@uifabric/utilities': 7.38.2_33901b67539af63c7f13e5aa326a1a9a
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '*'
@@ -8522,7 +8522,7 @@ packages:
       '@uifabric/set-version': 7.0.24
       '@uifabric/styling': 7.25.1_9c907a7ccd27a2e2d0ee9de5366482d1
       '@uifabric/utilities': 7.38.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '*'
@@ -8536,7 +8536,7 @@ packages:
       '@uifabric/set-version': 7.0.24
       '@uifabric/styling': 7.25.1_9f7147fa6acafed13e71b068ea0d74dc
       '@uifabric/utilities': 7.38.2_9f7147fa6acafed13e71b068ea0d74dc
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '*'
@@ -10526,7 +10526,7 @@ packages:
   /chart.js/2.9.4:
     dependencies:
       chartjs-color: 2.4.1
-      moment: 2.29.4
+      moment: 2.30.1
     dev: false
     resolution:
       integrity: sha512-B07aAzxcrikjAPyV+01j7BmOpxtQETxTSlQ26BEYJ+3iUkbNKaOJ/nDbT6JjyqYxseM0ON12COHYdU2cTIjC7A==
@@ -17752,7 +17752,7 @@ packages:
       integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
   /msal/1.4.12:
     dependencies:
-      tslib: 1.10.0
+      tslib: 1.14.1
     deprecated: This package is no longer supported. Please use @azure/msal-browser instead.
     dev: false
     engines:
@@ -18390,7 +18390,7 @@ packages:
       prop-types: 15.8.1
       react: 16.8.5
       react-dom: 16.8.5_react@16.8.5
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <17.0.0'
@@ -18473,7 +18473,7 @@ packages:
       prop-types: 15.8.1
       react: 17.0.1
       react-dom: 17.0.1_react@17.0.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -19836,6 +19836,21 @@ packages:
     dev: false
     resolution:
       integrity: sha512-7AEYi982iFwiD8gMv2MVDAoVxQWZSZuR4YOXRxPSHExE7hOW7LCrKSF5unOe+Mnhwx8iozuyW/mT1kyrbdKbFA==
+  /pzl-spfx-tasks/0.5.10-2:
+    dependencies:
+      colors: 1.4.0
+      concurrently: 6.5.1
+      dotenv: 16.1.3
+      glob: 10.2.6
+      inquirer: 8.2.6
+      livereload: 0.9.3
+      lodash: 4.17.21
+      quicktype-core: 23.0.105
+      uuid: 9.0.1
+      yargs: 17.7.2
+    dev: false
+    resolution:
+      integrity: sha512-KOhH9GSOHa3BCJECw6w4/oyip3lqyMY6uD186YgxurqzN17PizBwNpF7rkTFRXXnuT3qROevV/eL3ChOSPoHhA==
   /qs/6.10.3:
     dependencies:
       side-channel: 1.0.6
@@ -22221,7 +22236,7 @@ packages:
       integrity: sha512-bhtUjWd/z6ltJiQwg0dUfxEJ+W+jdqQd8TbWLWyeIJHlnsqmGLRFFd8e5mA0AZi/zx90smXRlN66YMTcaSFifg==
   /substyle/9.4.1_react@17.0.1:
     dependencies:
-      '@babel/runtime': 7.4.5
+      '@babel/runtime': 7.24.6
       invariant: 2.2.4
       react: 17.0.1
     dev: false
@@ -24441,7 +24456,7 @@ packages:
       gulp: 4.0.2
       livereload: 0.9.3
       prettier: 2.7.1
-      pzl-spfx-tasks: 0.5.10-1
+      pzl-spfx-tasks: 0.5.10-2
       react: 17.0.1
       react-dom: 17.0.1_react@17.0.1
       react-markdown: 8.0.7_4865287ef69aa4f3fc3f709d3560286e
@@ -24454,7 +24469,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-portfolioextensions'
     resolution:
-      integrity: sha512-P7JdicOrLvegz0qUVuVinvr25ZT/S+DlNA9xJpAk5mfEYMHQpG31AcxPlhLL0yWKXI/TQ5e0hfiUOay1v/PEBA==
+      integrity: sha512-o8uhidwTYs2sQLKg4Wog0YqS068NH4kri+yuoMOVQLV3W6lH7UiseKd+S1t4UXfkpyPh/BzPxBrSsjRwtsMhrw==
       tarball: file:projects/pp365-portfolioextensions.tgz
     version: 0.0.0
   file:projects/pp365-portfoliowebparts.tgz_@pnp+odata@2.15.0:
@@ -24522,7 +24537,7 @@ packages:
       object-assign: 4.1.1
       prettier: 2.7.1
       pzl-react-reusable-components: 0.3.1_5bb3879ba087c0ef402ac2f0f80f9922
-      pzl-spfx-tasks: 0.5.10-1
+      pzl-spfx-tasks: 0.5.10-2
       react: 17.0.1
       react-beautiful-dnd: 13.1.1_react-dom@17.0.1+react@17.0.1
       react-calendar-timeline: 0.27.0_5037b5fb8d56c2b0cc07428f64c324c4
@@ -24543,7 +24558,7 @@ packages:
     peerDependencies:
       '@pnp/odata': '*'
     resolution:
-      integrity: sha512-rZuil7WSuaHv/C6no9gJJB5z/ymHPROFl5/6i+0OjVYVQMnBfGUlS4M3UkA7FvquY4mX2OopvwaMGE7y5zH54Q==
+      integrity: sha512-xRhB9hfMRR2oohyxR2PxL9n7awY2V9X/T/HTa+gWGDgUXke9t2NU+z2UVBCI+R09kkDe483AwepqWXozMJU9hw==
       tarball: file:projects/pp365-portfoliowebparts.tgz
     version: 0.0.0
   file:projects/pp365-programwebparts.tgz_@pnp+odata@2.15.0:
@@ -24605,7 +24620,7 @@ packages:
       object-assign: 4.1.1
       prettier: 2.7.1
       pzl-react-reusable-components: 0.0.14_5bb3879ba087c0ef402ac2f0f80f9922
-      pzl-spfx-tasks: 0.5.10-1
+      pzl-spfx-tasks: 0.5.10-2
       react: 17.0.1
       react-calendar-timeline: 0.27.0_5037b5fb8d56c2b0cc07428f64c324c4
       react-dom: 17.0.1_react@17.0.1
@@ -24622,7 +24637,7 @@ packages:
     peerDependencies:
       '@pnp/odata': '*'
     resolution:
-      integrity: sha512-BanfDka79PWtqdmKuIb7TXnwYiNgACyPB93ti+vAlEQtVKnvLtN/LC2dWE9EVJmkZCfNkN3rQUJ9eTKeTdPoUw==
+      integrity: sha512-ueiQMA7ZPeSvLP5g62DIq1JTj5phgjR+lWfFzAgpP+n4L6KXiG1oF24fy9AHJDJ08fWTR9pbWL9J1WrAZ+YFng==
       tarball: file:projects/pp365-programwebparts.tgz
     version: 0.0.0
   file:projects/pp365-projectextensions.tgz:
@@ -24676,7 +24691,7 @@ packages:
       lodash: 4.17.21
       msgraph-helper: 0.8.3_9c907a7ccd27a2e2d0ee9de5366482d1
       prettier: 2.7.1
-      pzl-spfx-tasks: 0.5.10-1
+      pzl-spfx-tasks: 0.5.10-2
       react: 17.0.1
       react-autocomplete: 1.8.1_react-dom@17.0.1+react@17.0.1
       react-dom: 17.0.1_react@17.0.1
@@ -24694,7 +24709,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectextensions'
     resolution:
-      integrity: sha512-sNTM9rQHHEyQ0G95nObFQGRoyJCU1NkhOzEnkG2SfXn62L8XoY8S9UQpS5Ii5oKL1wv+Tf8rdPJM0Y00l3o8TA==
+      integrity: sha512-4pX2SX9axEZUxtACkpasuU/a6sHiyJ2/aDWqeFaTpnXhWE1GRlnSuQ9H2YjCvEyprI2YPRmVy4kojaKMg/P77A==
       tarball: file:projects/pp365-projectextensions.tgz
     version: 0.0.0
   file:projects/pp365-projectwebparts.tgz:
@@ -24759,7 +24774,7 @@ packages:
       msgraph-helper: 0.8.3_9c907a7ccd27a2e2d0ee9de5366482d1
       prettier: 2.7.1
       pzl-spfx-components: 0.0.11
-      pzl-spfx-tasks: 0.5.10-1
+      pzl-spfx-tasks: 0.5.10-2
       react: 17.0.1
       react-calendar-timeline: 0.27.0_5037b5fb8d56c2b0cc07428f64c324c4
       react-dom: 17.0.1_react@17.0.1
@@ -24779,7 +24794,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectwebparts'
     resolution:
-      integrity: sha512-KqX7tZvbKrylzeDXmq2cux/CbeyXXQodJ6RvW556d8dZNpWWXfovpAkfhd4ceY7ziE6tCS1tnTWbCo55MaVqMw==
+      integrity: sha512-q6OxW3ck2PYENK3A+BoQggTI41AAoB4bQdoiKoqjnBL74PY2y3QBd/3RPhixYgyoQ/AOArVdV0gitznORoapSw==
       tarball: file:projects/pp365-projectwebparts.tgz
     version: 0.0.0
   file:projects/pp365-shared-library.tgz_interactjs@1.6.2:
@@ -24826,7 +24841,7 @@ packages:
       lodash: 4.17.21
       moment: 2.29.4
       prettier: 2.7.1
-      pzl-spfx-tasks: 0.5.10-1
+      pzl-spfx-tasks: 0.5.10-2
       react: 17.0.1
       react-calendar-timeline: 0.28.0_586826e183845169eac7b28ba5d10805
       react-dom: 17.0.1_react@17.0.1
@@ -24847,7 +24862,7 @@ packages:
     peerDependencies:
       interactjs: '*'
     resolution:
-      integrity: sha512-vePdqyur2oZkJKZAKmOq7CAo57auvzrHPd3tLTmpRxoDB34h0XAxWAONlcEmV99jNX50YYzONvTKVJ1FttrmAQ==
+      integrity: sha512-yFcZg23ymP8gqgDPJke2nRNhYMFIVDFFBKusYgk0di8MrBQbv6EKJ9SBGAceRHjZCzzeb1FCb4WNeay00RZT4Q==
       tarball: file:projects/pp365-shared-library.tgz
     version: 0.0.0
   file:projects/pp365-spfx-tasks.tgz_9c907a7ccd27a2e2d0ee9de5366482d1:
@@ -24859,7 +24874,7 @@ packages:
       colors: 1.4.0
       dotenv: 16.1.3
       glob: 10.2.6
-      pzl-spfx-tasks: 0.5.10-1
+      pzl-spfx-tasks: 0.5.10-2
       yargs: 17.7.2
     dev: false
     id: file:projects/pp365-spfx-tasks.tgz
@@ -24870,7 +24885,7 @@ packages:
       react: '*'
       react-dom: '*'
     resolution:
-      integrity: sha512-R5bpgnEGEBCGcuUGZRIPmWQWYWCZUVpRdGMXKwn/vgCIyljt1J0PJG/k/O1QB9UlLznz2iWBCEhMu+HW1oQLIg==
+      integrity: sha512-hnL6XBw6aFS6dMrbnv9FX+D0hn1TGeCjGruuJhPpsZWGhtwKwp1oY2gDcPYaP13hopzCAPoceodexsEFr5owfQ==
       tarball: file:projects/pp365-spfx-tasks.tgz
     version: 0.0.0
   file:projects/pp365-templates.tgz_9c907a7ccd27a2e2d0ee9de5366482d1:
@@ -24881,7 +24896,7 @@ packages:
       '@types/lodash': 4.14.202
       chokidar-cli: 2.1.0
       dotenv: 16.1.4
-      pzl-spfx-tasks: 0.5.10-1
+      pzl-spfx-tasks: 0.5.10-2
       replace: 1.2.2
       resx-json-typescript-converter: 1.0.4
     dev: false
@@ -24893,7 +24908,7 @@ packages:
       react: '*'
       react-dom: '*'
     resolution:
-      integrity: sha512-Dr556Wj5XQZ7RjCnVKa56wl8dJFoaMR8dyA9mKiiNTR+LHVal6qhCRw2dM+qD1f600vf3NJn3cxQzxOp1cgjjA==
+      integrity: sha512-JZItbYNCKKqWQnGrd65Cojy+AuF2VxyIVqTqWFqRMjW9SOecCKhUIoWHNHr3vqX1X1zOUN/4+SD+kYuDkVivBg==
       tarball: file:projects/pp365-templates.tgz
     version: 0.0.0
 specifiers:
