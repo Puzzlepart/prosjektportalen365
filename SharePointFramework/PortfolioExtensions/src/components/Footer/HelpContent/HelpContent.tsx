@@ -5,7 +5,6 @@ import { FooterContext } from '../context'
 import { Button, Tooltip } from '@fluentui/react-components'
 import { getFluentIcon } from 'pp365-shared-library'
 
-
 export const HelpContent: FC = () => {
   const context = useContext(FooterContext)
   const isUnavailable = context.props.helpContent.length === 0
@@ -15,9 +14,11 @@ export const HelpContent: FC = () => {
       <Tooltip
         relationship='description'
         withArrow
-        content={isUnavailable
-          ? strings.HelpContentUnavailableDescription
-          : strings.HelpContentAvailableDescription}
+        content={
+          isUnavailable
+            ? strings.HelpContentUnavailableDescription
+            : strings.HelpContentAvailableDescription
+        }
       >
         <Button
           size='small'
