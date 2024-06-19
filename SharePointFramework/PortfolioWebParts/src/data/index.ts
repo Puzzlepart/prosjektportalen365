@@ -6,7 +6,8 @@ import {
   QueryPropertyValueType,
   SearchQueryInit,
   SortDirection,
-  SPFI
+  SPFI,
+  Web
 } from '@pnp/sp/presets/all'
 import * as cleanDeep from 'clean-deep'
 import msGraph from 'msgraph-helper'
@@ -14,6 +15,7 @@ import * as strings from 'PortfolioWebPartsStrings'
 import {
   DataSource,
   DataSourceService,
+  DefaultCaching,
   getUserPhoto,
   IGraphGroup,
   PortalDataService,
@@ -48,6 +50,8 @@ import {
   IPortfolioWebPartsDataAdapter,
   IProjectsData
 } from './types'
+import { IPersonaProps, IPersonaSharedProps } from '@fluentui/react'
+import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
 
 /**
  * Data adapter for Portfolio Web Parts.
@@ -55,6 +59,7 @@ import {
 export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   public portalDataService: PortalDataService
   public dataSourceService: DataSourceService
+  public sp: SPFI = this._sp
 
   /**
    * Constructs the `DataAdapter` class
@@ -335,14 +340,16 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       ]),
       this._fetchItems(
         `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
-        [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
+        [...configuration.columns.map((f) => f.fieldName), siteIdProperty, 'ListItemId'],
         500,
         { Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',') }
       )
     ])
     projects = projects.map((item) => cleanDeep({ ...item }))
     sites = sites.map((item) => cleanDeep({ ...item }))
-    statusReports = statusReports.map((item) => cleanDeep({ ...item }))
+    statusReports = statusReports
+      .sort((a, b) => b['ListItemId'] - a['ListItemId'])
+      .map((item) => cleanDeep({ ...item }))
     sites = sites.filter(
       (site) => projects.filter((res) => res[siteIdProperty] === site['SiteId']).length === 1
     )
@@ -778,6 +785,150 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     } catch (error) {
       throw new Error(format(strings.DataSourceCategoryError, category))
     }
+  }
+
+  public async clientPeoplePickerSearchUser(
+    queryString: string,
+    selectedItems: any[],
+    maximumEntitySuggestions = 50
+  ): Promise<IPersonaSharedProps[]> {
+    const profiles = await this._sp.profiles.clientPeoplePickerSearchUser({
+      QueryString: queryString,
+      MaximumEntitySuggestions: maximumEntitySuggestions,
+      AllowEmailAddresses: true,
+      PrincipalSource: 15,
+      PrincipalType: 1
+    })
+    const items = profiles.map((profile) => ({
+      text: profile.DisplayText,
+      secondaryText: profile.EntityData.Email,
+      tertiaryText: profile.EntityData.Title,
+      optionalText: profile.EntityData.Department,
+      imageUrl: `/_layouts/15/userphoto.aspx?AccountName=${profile.EntityData.Email}&size=L`,
+      id: profile.Key
+    }))
+    return items.filter(({ secondaryText }) => !_.findWhere(selectedItems, { secondaryText }))
+  }
+
+  public async getProvisionRequestSettings(provisionUrl: string): Promise<Map<string, string>> {
+    const intialMap = new Map<string, string>()
+    try {
+      const provisionSite = Web([this._sp.web, provisionUrl])
+      const settingsList = provisionSite.lists.getByTitle('Provisioning Request Settings')
+      const spItems = await settingsList.items
+        .select(
+          'Id',
+          'Title',
+          'Description',
+          'Value',
+          'PrefixText',
+          'PrefixUseAttribute',
+          'PrefixAttribute',
+          'SuffixText',
+          'SuffixUseAttribute',
+          'SuffixAttribute',
+          'ExternalSharingSetting'
+        )
+        .using(DefaultCaching)()
+      return spItems.reduce((acc, item) => {
+        let value = item.Value
+        if (item.Title === 'NamingConvention') {
+          value = {
+            value: item.Value,
+            prefixText: item.PrefixText,
+            prefixUseAttribute: item.PrefixUseAttribute,
+            prefixAttribute: item.PrefixAttribute,
+            suffixText: item.SuffixText,
+            suffixUseAttribute: item.SuffixUseAttribute,
+            suffixAttribute: item.SuffixAttribute
+          }
+        } else if (item.Title === 'DefaultExternalSharingSetting') {
+          value = {
+            value: item.Value,
+            externalSharingSetting: item.ExternalSharingSetting
+          }
+        }
+        acc.set(item.Title, value)
+        return acc
+      }, intialMap)
+    } catch (error) {
+      return intialMap
+    }
+  }
+
+  public async getProvisionTypes(provisionUrl: string): Promise<Record<string, any>> {
+    try {
+      const provisionSite = Web([this._sp.web, provisionUrl])
+      const typesList = provisionSite.lists.getByTitle('Provisioning Types')
+      const spItems = await typesList.items
+        .select('Id', 'Title', 'SortOrder', 'Description', 'Allowed', 'Image', 'InternalTitle')
+        .using(DefaultCaching)()
+      return spItems
+        .filter((item) => item.Allowed)
+        .sort((a, b) => (a.SortOrder > b.SortOrder ? 1 : -1))
+        .map((item) => {
+          return {
+            title: item.Title,
+            order: item.SortOrder,
+            description: item.Description,
+            image: item.Image,
+            type: item.InternalTitle
+          }
+        })
+    } catch (error) {
+      return []
+    }
+  }
+
+  public async getProvisionUsers(
+    users: any[],
+    provisionUrl: string
+  ): Promise<Promise<number | null>[]> {
+    try {
+      const provisionSite = Web([this._sp.web, provisionUrl])
+      return users.map(
+        async (val: IPersonaProps) => (await provisionSite.ensureUser(val.secondaryText)).data.Id
+      )
+    } catch {
+      return null
+    }
+  }
+
+  public async addProvisionRequests(
+    properties: IProvisionRequestItem,
+    provisionUrl: string
+  ): Promise<boolean> {
+    try {
+      const provisionSite = Web([this._sp.web, provisionUrl])
+      const provisionRequestsList = provisionSite.lists.getByTitle('Provisioning Requests')
+      await provisionRequestsList.items.add(properties)
+      return true
+    } catch (error) {
+      return false
+    }
+  }
+
+  public async fetchProvisionRequests(
+    queryTemplate: string,
+    selectProperties: string[],
+    batchSize = 500,
+    additionalQuery: Record<string, any> = {}
+  ): Promise<ISearchResult[]> {
+    const query: SearchQueryInit = {
+      QueryTemplate: `${queryTemplate}`,
+      Querytext: '*',
+      RowLimit: batchSize,
+      TrimDuplicates: false,
+      SelectProperties: [...selectProperties, 'Title'],
+      ...additionalQuery
+    }
+    const { PrimarySearchResults, TotalRows } = await this._sp.search(query)
+    const results = [...PrimarySearchResults]
+    while (results.length < TotalRows) {
+      const response = await this._sp.search({ ...query, StartRow: results.length })
+      results.push(...response.PrimarySearchResults)
+    }
+    return results
   }
 }
 

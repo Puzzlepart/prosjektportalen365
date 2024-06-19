@@ -1,0 +1,4 @@
+{
+    "$schema": "./node_modules/pzl-spfx-tasks/environments.schema.json",
+    "environments": []
+}

@@ -32,8 +32,14 @@ class ExcelExportService {
    * @param items Items
    * @param columns Columns
    * @param fileNamePart Optional file name part to add after the name and before the date
+   * @param sheetNamePrefix Optional prefix for the sheet name
    */
-  public export(items: Record<string, any>[], columns: IColumn[], fileNamePart?: string) {
+  public export(
+    items: Record<string, any>[],
+    columns: IColumn[],
+    fileNamePart?: string,
+    sheetNamePrefix: string = 'Sheet'
+  ) {
     const fileNameFormat = fileNamePart ? '{0}-{1}-{2}.xlsx' : '{0}-{1}.xlsx'
     try {
       const sheets = []
@@ -44,9 +50,14 @@ class ExcelExportService {
           _columns.map((column) => column.name),
           ...items.map((item) =>
             _columns.map((column) => {
-              return (column as any).dataType === 'date'
-                ? getDateValue(item, column.fieldName)
-                : get<string>(item, column.fieldName, null)
+              switch ((column as any).dataType) {
+                case 'date': {
+                  return getDateValue(item, column.fieldName)
+                }
+                default: {
+                  return get(item, column.fieldName, null)
+                }
+              }
             })
           )
         ]
@@ -54,7 +65,7 @@ class ExcelExportService {
       const workBook = XLSX.utils.book_new()
       sheets.forEach((s, index) => {
         const sheet = XLSX.utils.aoa_to_sheet(s.data)
-        XLSX.utils.book_append_sheet(workBook, sheet, s.name ?? `Sheet${index + 1}`)
+        XLSX.utils.book_append_sheet(workBook, sheet, s.name ?? `${sheetNamePrefix}${index + 1}`)
       })
       const wbout = XLSX.write(workBook, this.configuration.options)
       const fileName = fileNamePart

@@ -57,6 +57,14 @@
           "manifest": "./src/webparts/portfolioAggregation/manifest.json"
         }
       ]
+    },
+    "project-provision-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/projectProvision/index.js",
+          "manifest": "./src/webparts/projectProvision/manifest.json"
+        }
+      ]
     }
   },
   "externals": {},

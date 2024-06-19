@@ -1,14 +1,10 @@
-import { Avatar, Link, TableCellLayout, TableColumnDefinition } from '@fluentui/react-components'
+import { Avatar, Link, TableCellLayout } from '@fluentui/react-components'
 import * as strings from 'PortfolioWebPartsStrings'
-import { ProjectListModel, ProjectLogo } from 'pp365-shared-library'
+import { ProjectLogo } from 'pp365-shared-library'
 import React, { useContext } from 'react'
 import { ProjectMenu } from '../ProjectMenu'
 import { ListContext } from './context'
-
-export interface IListColumn extends TableColumnDefinition<ProjectListModel> {
-  minWidth?: number
-  defaultWidth?: number
-}
+import { IListColumn } from './types'
 
 export const useColumns = (): IListColumn[] => {
   const context = useContext(ListContext)
@@ -17,12 +13,8 @@ export const useColumns = (): IListColumn[] => {
       columnId: 'logo',
       defaultWidth: 48,
       minWidth: 48,
-      compare: () => {
-        return null
-      },
-      renderHeaderCell: () => {
-        return null
-      },
+      compare: () => null,
+      renderHeaderCell: () => null,
       renderCell: (item) => {
         return (
           <ProjectLogo

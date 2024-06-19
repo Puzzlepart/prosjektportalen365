@@ -35,13 +35,13 @@ export function useAddColumn(
    *
    * @param onToggleColumnFormPanel On toggle column form panel callback
    * @param onToggleEditViewColumnsPanel On toggle edit view columns panel callback
-   * @param isToggleColumnFormPanelDisabled Is toggle column form panel disabled
+   * @param _isToggleColumnFormPanelDisabled Is toggle column form panel disabled
    * @param isToggleEditViewColumnsPanelDisabled Is toggle edit view columns panel disabled
    */
   const createContextualMenuItems = (
     onToggleColumnFormPanel: () => void,
     onToggleEditViewColumnsPanel: () => void,
-    isToggleColumnFormPanelDisabled = true,
+    _isToggleColumnFormPanelDisabled = true,
     isToggleEditViewColumnsPanelDisabled = false
   ): IContextualMenuItem[] => [
     {

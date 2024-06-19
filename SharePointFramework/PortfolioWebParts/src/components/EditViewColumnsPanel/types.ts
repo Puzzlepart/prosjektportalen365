@@ -43,9 +43,14 @@ export interface IEditViewColumnsPanelProps extends IPanelProps {
   /**
    * Sort mode for the columns.
    *
-   * - `selectedOnTop`: Selected columns will be on top, the rest will be based on the columns order in the provided
+   * - `SelectedOnTop`: Selected columns will be on top, the rest will be based on the columns order in the provided
    * `columns` property.
-   * - `customSelectedOnTop`: Selected columns will be on top, the rest will be based on `sortOrder` and `customColumnOrder`.
+   * - `CustomSelectedOnTop`: Selected columns will be on top, the rest will be based on `sortOrder` and `customColumnOrder`.
    */
-  sortMode: 'selectedOnTop' | 'customSelectedOnTop'
+  sortMode: EditViewColumnsPanelSortMode
+}
+
+export enum EditViewColumnsPanelSortMode {
+  SelectedOnTop = 'selectedOnTop',
+  CustomSelectedOnTop = 'customSelectedOnTop'
 }

@@ -1,5 +1,8 @@
 import { ProjectContentColumn, SPDataSourceItem } from 'pp365-shared-library'
-import { IEditViewColumnsPanelProps } from '../EditViewColumnsPanel/types'
+import {
+  EditViewColumnsPanelSortMode,
+  IEditViewColumnsPanelProps
+} from '../EditViewColumnsPanel/types'
 import { IPortfolioAggregationContext } from './context'
 import { TOGGLE_EDIT_VIEW_COLUMNS_PANEL } from './reducer'
 import { useMemo } from 'react'
@@ -37,7 +40,7 @@ export function useEditViewColumnsPanel(
       columns: context.state.allColumnsForCategory,
       onSave: onSaveViewColumns,
       onDismiss,
-      sortMode: 'selectedOnTop',
+      sortMode: EditViewColumnsPanelSortMode.SelectedOnTop,
       customColumnOrder: context.state.columns.map((c) => c.id)
     }),
     [

@@ -1,5 +1,5 @@
-import * as React from 'react'
 import {
+  Link,
   Menu,
   MenuButton,
   MenuItem,
@@ -7,13 +7,14 @@ import {
   MenuPopover,
   MenuTrigger,
   Tooltip,
-  Link,
   makeStyles
 } from '@fluentui/react-components'
-import { FC } from 'react'
 import { CalendarMonthFilled, CalendarMonthRegular, bundleIcon } from '@fluentui/react-icons'
 import strings from 'PortfolioWebPartsStrings'
+import * as React from 'react'
+import { FC } from 'react'
 import { IProjectMenu } from './types'
+const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular)
 
 const useStyles = makeStyles({
   menuButton: {
@@ -25,7 +26,6 @@ const useStyles = makeStyles({
 })
 
 export const ProjectMenu: FC<IProjectMenu> = (props) => {
-  const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular)
   const styles = useStyles()
 
   return (

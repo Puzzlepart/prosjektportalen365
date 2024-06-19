@@ -22,7 +22,13 @@ export const ProjectCard: FC = (props) => {
       customElementsGroup={
         <div className={styles.shimmerGroup}>
           <ShimmerElementsGroup
-            shimmerElements={[{ type: ShimmerElementType.line, width: '100%', height: 274 }]}
+            shimmerElements={[
+              {
+                type: ShimmerElementType.line,
+                width: '100%',
+                height: 274
+              }
+            ]}
           />
         </div>
       }

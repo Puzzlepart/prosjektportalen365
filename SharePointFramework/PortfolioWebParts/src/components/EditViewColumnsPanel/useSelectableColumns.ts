@@ -1,8 +1,7 @@
 import { IColumn } from '@fluentui/react'
-import { useEffect, useMemo, useState } from 'react'
-import { IEditViewColumnsPanelProps } from './types'
 import { arrayMove } from 'pp365-shared-library'
-import _ from 'lodash'
+import { useEffect, useMemo, useState } from 'react'
+import { EditViewColumnsPanelSortMode, IEditViewColumnsPanelProps } from './types'
 
 /**
  * Sorts columns based on `props.customColumnOrder` if set. The selected columns
@@ -28,7 +27,9 @@ function sortColumns({ columns, customColumnOrder, sortMode }: IEditViewColumnsP
       } else if (customColumnOrderIndexB !== -1) {
         return 1
       } else {
-        return sortMode === 'customSelectedOnTop' ? a['sortOrder'] - b['sortOrder'] : 0
+        return sortMode === EditViewColumnsPanelSortMode.CustomSelectedOnTop
+          ? a['sortOrder'] - b['sortOrder']
+          : 0
       }
     })
 }
@@ -42,7 +43,7 @@ function sortColumns({ columns, customColumnOrder, sortMode }: IEditViewColumnsP
  * and functions to update the selectable columns and moving them around.
  */
 export function useSelectableColumns(props: IEditViewColumnsPanelProps) {
-  const initialColumns = useMemo(() => sortColumns(props), [props.columns])
+  const initialColumns = useMemo(() => [...sortColumns(props)], [props.columns])
   const initialSelectedColumns = useMemo(
     () => initialColumns.filter((c) => c.data.isSelected),
     [initialColumns]
@@ -50,7 +51,7 @@ export function useSelectableColumns(props: IEditViewColumnsPanelProps) {
   const [selectableColumns, setSelectableColumns] = useState<IColumn[]>([])
 
   useEffect(() => {
-    setSelectableColumns(initialColumns)
+    setSelectableColumns([...initialColumns])
   }, [initialColumns])
 
   const selectedColumns = useMemo(
@@ -63,14 +64,20 @@ export function useSelectableColumns(props: IEditViewColumnsPanelProps) {
    *
    * @param col The column to update.
    * @param isSelected The new value for the `isSelected` property.
-   * @param idx The index of the column in the `selectableColumns` state.
    */
-  function selectColumn(col: IColumn, isSelected: boolean, idx: number) {
-    setSelectableColumns((prev) =>
-      prev.map((i) => (i.fieldName === col.fieldName ? _.set(i, 'data.isSelected', isSelected) : i))
+  function selectColumn(col: IColumn, isSelected: boolean) {
+    setSelectableColumns((_selectableColumns) =>
+      _selectableColumns.map((c) => {
+        if (c.fieldName !== col.fieldName) return c
+        return {
+          ...c,
+          data: {
+            ...c.data,
+            isSelected
+          }
+        } as IColumn
+      })
     )
-
-    moveColumn(idx, isSelected ? selectedColumns.length : selectedColumns.length - 1)
   }
 
   /**
@@ -81,7 +88,7 @@ export function useSelectableColumns(props: IEditViewColumnsPanelProps) {
    */
   function moveColumn(fromIndex: number, toIndex: number) {
     if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0) return
-    setSelectableColumns((prev) => arrayMove(prev, fromIndex, toIndex))
+    setSelectableColumns((_selectableColumns) => arrayMove(_selectableColumns, fromIndex, toIndex))
   }
 
   return {
@@ -90,5 +97,5 @@ export function useSelectableColumns(props: IEditViewColumnsPanelProps) {
     selectedColumns,
     selectColumn,
     moveColumn
-  } as const
+  }
 }

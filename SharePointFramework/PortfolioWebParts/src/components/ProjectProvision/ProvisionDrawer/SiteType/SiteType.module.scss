@@ -1,0 +1,20 @@
+.card {
+  width: 168px;
+  max-width: 100%;
+  height: fit-content;
+}
+
+.caption {
+  color: var(--colorNeutralForeground3);
+}
+
+.smallRadius {
+  border-radius: var(--borderRadiusSmall);
+  object-fit: cover;
+  transform: translate3d(0, 0, 1px);
+  max-height: 116px;
+}
+
+.grayBackground {
+  background-color: var(--colorNeutralBackground3);
+}

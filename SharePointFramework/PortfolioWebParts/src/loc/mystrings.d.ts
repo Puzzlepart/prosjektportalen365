@@ -6,12 +6,68 @@ declare interface IPortfolioWebPartsStrings {
     MoveUpDisabled: string
     MoveDown: string
     MoveDownDisabled: string
+    Back: string
+    Settings: string
+    Close: string
   },
   Placeholder: {
     TextField: string
+    SiteName: string
+    SiteDescription: string
     Icon: string,
     ChoiceField: string,
     MultiChoiceField: string,
+    GuestField: string,
+    UserField: string,
+    BusinessJustificationField: string
+  },
+  Provision: {
+    DrawerLevel1HeaderText: string,
+    DrawerLevel1DescriptionText: string,
+    SiteTypeFieldLabel: string,
+    SiteNameFieldLabel: string,
+    SiteNameFieldDescription: string,
+    SiteNamePrefixTooltipText: string,
+    SiteNameSuffixTooltipText: string,
+    SiteDescriptionFieldLabel: string,
+    SiteDescriptionFieldDescription: string,
+    BusinessJustificationFieldLabel: string,
+    BusinessJustificationFieldDescription: string,
+    AliasFieldLabel: string
+    UrlFieldLabel: string
+    OwnerFieldLabel: string,
+    OwnerFieldDescription: string,
+    OwnerFieldNoOptionsText: string,
+    MemberFieldLabel: string,
+    MemberFieldDescription: string,
+    DrawerLevel2HeaderText: string,
+    DrawerLevel2DescriptionText: string,
+    TeamifyFieldLabel: string,
+    TeamifyFieldDescription: string,
+    ConfidentialFieldLabel: string,
+    ConfidentialFieldDescription: string,
+    PrivacyFieldLabel: string,
+    PrivacyFieldDescription: string,
+    PrivacyFieldOptionPrivate: string,
+    PrivacyFieldOptionPublic: string,
+    ExternalSharingFieldLabel: string,
+    ExternalSharingFieldDescription: string,
+    GuestFieldLabel: string,
+    GuestFieldDescription: string,
+    GuestFieldNoOptionsText: string,
+    LanguageFieldLabel: string,
+    TimeZoneFieldLabel: string,
+    HubSiteFieldLabel: string,
+    DrawerFooterDescriptionText: string,
+    PreviousButtonLabel: string,
+    NextButtonLabel: string,
+    ProvisionButtonLabel: string
+    ToastCreatedTitle: string
+    ToastCreatedBody: string
+    ToastCreatedErrorTitle: string
+    ToastCreatedErrorBody: string
+    StatusMenuLabel: string
+    IdeaMenuLabel: string
   },
   AddColumnLabel: string
   AllProjectsHeaderText: string

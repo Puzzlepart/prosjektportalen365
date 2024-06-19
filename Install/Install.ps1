@@ -282,11 +282,6 @@ if ($Channel -ne "main") {
     $SiteDesignThumbnail = "https://publiccdn.sharepointonline.com/prosjektportalen.sharepoint.com/sites/ppassets/Thumbnails/prosjektomrade-test.png"
 }
 
-# Add channel to name for the site design if channel is specified and not main
-if ($Channel -ne "main") {
-    $SiteDesignName += " - $Channel"
-}
-
 if (-not $SkipSiteDesign.IsPresent) {
     $SiteScriptIds = @()
 
@@ -345,10 +340,16 @@ if (-not $SkipSiteDesign.IsPresent) {
 }
 if (-not $SkipDefaultSiteDesignAssociation.IsPresent) {
     StartAction("Setting default site design for hub $($Uri.AbsoluteUri) to $SiteDesignName")
-    Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
-    $SiteDesign = Get-PnPSiteDesign -Identity $SiteDesignName 
-    Set-PnPHubSite -Identity $Uri.AbsoluteUri -SiteDesignId $SiteDesign.Id.Guid
-    Disconnect-PnPOnline
+    try {
+        Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
+        $SiteDesign = Get-PnPSiteDesign -Identity $SiteDesignName 
+        Set-PnPHubSite -Identity $Uri.AbsoluteUri -SiteDesignId $SiteDesign.Id.Guid
+        Disconnect-PnPOnline
+    }
+    catch {
+        Write-Host ""
+        Write-Host "[WARNING] Failed to set default site design: $($_.Exception.Message)" -ForegroundColor Yellow
+    }
     EndAction
 }
 #endregion
