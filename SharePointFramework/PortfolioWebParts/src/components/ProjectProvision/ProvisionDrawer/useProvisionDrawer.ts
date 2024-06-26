@@ -20,8 +20,18 @@ export const useProvisionDrawer = () => {
   const level1Motion = useMotion<HTMLDivElement>(!level2)
   const level2Motion = useMotion<HTMLDivElement>(level2)
 
+  const useNamingConventions = context.state.settings.find(
+    (t) => t.title === 'UseNamingConventions'
+  )?.value
+
+  const namingConvention = useNamingConventions
+    ? context.state.settings.find((t) => t.title === 'NamingConvention')?.value
+    : context.state.types.find((t) => t.type === context.column.get('type'))?.namingConvention
+
+  const urlPrefix = `${context.props.webAbsoluteUrl.split('sites')[0]}sites/`
+  const aliasSuffix = '@' + context.props.pageContext.user.loginName.split('@')[1]
+
   const onSave = async (): Promise<boolean> => {
-    const namingConvention = context.state.settings['NamingConvention']
     const baseUrl = `${context.props.webAbsoluteUrl.split('sites')[0]}sites/`
 
     const requestItem: IProvisionRequestItem = {
@@ -66,10 +76,6 @@ export const useProvisionDrawer = () => {
     context.column.get('name')?.length < 2 ||
     context.column.get('justification')?.length < 2 ||
     context.column.get('owner')?.length < 1
-
-  const namingConvention = context.state.settings['NamingConvention']
-  const urlPrefix = `${context.props.webAbsoluteUrl.split('sites')[0]}sites/`
-  const aliasSuffix = '@' + context.props.pageContext.user.loginName.split('@')[1]
 
   const fluentProviderId = useId('fp-provision-drawer')
 

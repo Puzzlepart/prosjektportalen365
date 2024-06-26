@@ -831,7 +831,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         .using(DefaultCaching)()
 
       return spItems.map((item) => {
-        let value = item.Value
+        let value = item.Value === 'true' ? true : item.Value === 'false' ? false : item.Value
         if (item.Title === 'NamingConvention') {
           value = {
             value: item.Value,
@@ -865,18 +865,47 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       const provisionSite = Web([this._sp.web, provisionUrl])
       const typesList = provisionSite.lists.getByTitle('Provisioning Types')
       const spItems = await typesList.items
-        .select('Id', 'Title', 'SortOrder', 'Description', 'Allowed', 'Image', 'InternalTitle')
+        .select(
+          'Id',
+          'Title',
+          'SortOrder',
+          'Description',
+          'Allowed',
+          'Image',
+          'InternalTitle',
+          'PrefixText',
+          'PrefixUseAttribute',
+          'PrefixAttribute',
+          'SuffixText',
+          'SuffixUseAttribute',
+          'SuffixAttribute',
+          'VisibleTo/EMail',
+          'DefaultVisibility',
+          'DefaultConfidentialData'
+        )
+        .expand('VisibleTo')
         .using(DefaultCaching)()
       return spItems
         .filter((item) => item.Allowed)
         .sort((a, b) => (a.SortOrder > b.SortOrder ? 1 : -1))
         .map((item) => {
           return {
-            title: item.Title,
             order: item.SortOrder,
+            title: item.Title,
             description: item.Description,
             image: item.Image,
-            type: item.InternalTitle
+            type: item.InternalTitle,
+            namingConvention: {
+              prefixText: item.PrefixText,
+              prefixUseAttribute: item.PrefixUseAttribute,
+              prefixAttribute: item.PrefixAttribute,
+              suffixText: item.SuffixText,
+              suffixUseAttribute: item.SuffixUseAttribute,
+              suffixAttribute: item.SuffixAttribute
+            },
+            visibleTo: item.VisibleTo,
+            defaultVisibility: item.DefaultVisibility,
+            defaultConfidentialData: item.DefaultConfidentialData
           }
         })
     } catch (error) {
