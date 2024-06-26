@@ -16,9 +16,7 @@ export function useProjectProvisionState() {
     settings: [],
     types: {},
     requests: [],
-    properties: {
-      type: 'Project'
-    },
+    properties: {},
     refetch: new Date().getTime(),
     searchTerm: '',
     isRefetching: false

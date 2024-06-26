@@ -13,9 +13,10 @@ import { useId } from '@fluentui/react-components'
  */
 export const useProjectProvision = (props: IProjectProvisionProps) => {
   const { state, setState } = useProjectProvisionState()
-  const { column, setColumn } = useEditableColumn(props, state, setState)
 
   useProjectProvisionDataFetch(props, state.refetch, setState)
+
+  const { column, setColumn } = useEditableColumn(props, state, setState)
 
   const toasterId = useId('toaster')
   const fluentProviderId = useId('fp-project-provision')

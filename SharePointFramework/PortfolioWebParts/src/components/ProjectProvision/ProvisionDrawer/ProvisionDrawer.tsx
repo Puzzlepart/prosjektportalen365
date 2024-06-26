@@ -132,15 +132,20 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                   {/* {DEBUG && <DebugModel />} */}
                   <FieldContainer iconName='AppsList' label={strings.Provision.SiteTypeFieldLabel}>
                     <div className={styles.sitetypes}>
-                      {context.state.types.map((type) => (
-                        <SiteType
-                          key={type.title}
-                          title={type.title}
-                          description={type.description}
-                          image={type.image?.Url}
-                          type={type.type}
-                        />
-                      ))}
+                      {context.state.types
+                        .map((type) => {
+                          if (!type.visibleTo || type.visibleTo?.some((user) => user?.EMail?.includes(context.props?.pageContext?.user?.loginName))) {
+                            return (
+                              <SiteType
+                                key={type.title}
+                                title={type.title}
+                                description={type.description}
+                                image={type.image?.Url}
+                                type={type.type}
+                              />
+                            )
+                          }
+                        })}
                     </div>
                   </FieldContainer>
                   <FieldContainer

@@ -39,7 +39,7 @@ export const useProvisionDrawer = () => {
       SpaceDisplayName: context.column.get('name'),
       Description: context.column.get('description'),
       BusinessJustification: context.column.get('justification'),
-      SpaceType: 'Prosjektområde',
+      SpaceType: context.column.get('typeTitle'),
       SpaceTypeInternal: context.column.get('type'),
       Teamify: context.column.get('teamify'),
       OwnersId: context.state.properties.owner,
