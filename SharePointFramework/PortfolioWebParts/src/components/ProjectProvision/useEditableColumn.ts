@@ -11,9 +11,15 @@ export function useEditableColumn(
   state: IProjectProvisionState,
   setState: (newState: Partial<IProjectProvisionState>) => void
 ) {
-  const defaultType = !state.loading && state.types
-  .sort((a, b) => a.sortOrder - b.sortOrder)
-    .filter((type) => !type.visibleTo || type.visibleTo?.some((user) => user?.EMail?.includes(props?.pageContext?.user?.loginName)))[0]
+  const defaultType =
+    !state.loading &&
+    state.types
+      .sort((a, b) => a.sortOrder - b.sortOrder)
+      .filter(
+        (type) =>
+          !type.visibleTo ||
+          type.visibleTo?.some((user) => user?.EMail?.includes(props?.pageContext?.user?.loginName))
+      )[0]
 
   const initialColumn = new Map<string, any>([
     ['type', 'Project'],
@@ -133,7 +139,7 @@ export function useEditableColumn(
       setState({
         properties: {
           ...state.properties,
-          type: defaultType.type,
+          type: defaultType.type
         }
       })
       return newColumn
@@ -142,10 +148,14 @@ export function useEditableColumn(
 
   useEffect(() => {
     const defaultConfidentialData =
-      !state.loading && state.types.find((t) => t.type === state.properties.type || defaultType.type)?.defaultConfidentialData
+      !state.loading &&
+      state.types.find((t) => t.type === state.properties.type || defaultType.type)
+        ?.defaultConfidentialData
 
     const defaultVisibility =
-      !state.loading && state.types.find((t) => t.type === state.properties.type || defaultType.type)?.defaultVisibility === 'Public'
+      !state.loading &&
+      state.types.find((t) => t.type === state.properties.type || defaultType.type)
+        ?.defaultVisibility === 'Public'
         ? strings.Provision.PrivacyFieldOptionPublic
         : strings.Provision.PrivacyFieldOptionPrivate
 

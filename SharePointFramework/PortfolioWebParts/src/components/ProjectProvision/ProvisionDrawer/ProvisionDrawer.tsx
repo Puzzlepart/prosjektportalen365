@@ -132,20 +132,24 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                   {/* {DEBUG && <DebugModel />} */}
                   <FieldContainer iconName='AppsList' label={strings.Provision.SiteTypeFieldLabel}>
                     <div className={styles.sitetypes}>
-                      {context.state.types
-                        .map((type) => {
-                          if (!type.visibleTo || type.visibleTo?.some((user) => user?.EMail?.includes(context.props?.pageContext?.user?.loginName))) {
-                            return (
-                              <SiteType
-                                key={type.title}
-                                title={type.title}
-                                description={type.description}
-                                image={type.image?.Url}
-                                type={type.type}
-                              />
-                            )
-                          }
-                        })}
+                      {context.state.types.map((type) => {
+                        if (
+                          !type.visibleTo ||
+                          type.visibleTo?.some((user) =>
+                            user?.EMail?.includes(context.props?.pageContext?.user?.loginName)
+                          )
+                        ) {
+                          return (
+                            <SiteType
+                              key={type.title}
+                              title={type.title}
+                              description={type.description}
+                              image={type.image?.Url}
+                              type={type.type}
+                            />
+                          )
+                        }
+                      })}
                     </div>
                   </FieldContainer>
                   <FieldContainer
@@ -153,8 +157,8 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                     label={strings.Provision.SiteNameFieldLabel}
                     description={strings.Provision.SiteNameFieldDescription}
                     required={true}
-                  // validationState='success'
-                  // validationMessage='Navnet er ledig'
+                    // validationState='success'
+                    // validationMessage='Navnet er ledig'
                   >
                     <Input
                       value={context.column.get('name')}
@@ -383,25 +387,25 @@ export const ProvisionDrawer = (props: { toast: any }) => {
               onClick={() => {
                 level2
                   ? onSave().then((response) => {
-                    if (response) {
-                      props.toast(
-                        <Toast appearance='inverted'>
-                          <ToastTitle>{strings.Provision.ToastCreatedTitle}</ToastTitle>
-                          <ToastBody>{strings.Provision.ToastCreatedBody}</ToastBody>
-                        </Toast>,
-                        { intent: 'success' }
-                      )
-                      context.setState({ showProvisionDrawer: false, properties: {} })
-                    } else {
-                      props.toast(
-                        <Toast appearance='inverted'>
-                          <ToastTitle>{strings.Provision.ToastCreatedErrorTitle}</ToastTitle>
-                          <ToastBody>{strings.Provision.ToastCreatedErrorBody}</ToastBody>
-                        </Toast>,
-                        { intent: 'error' }
-                      )
-                    }
-                  })
+                      if (response) {
+                        props.toast(
+                          <Toast appearance='inverted'>
+                            <ToastTitle>{strings.Provision.ToastCreatedTitle}</ToastTitle>
+                            <ToastBody>{strings.Provision.ToastCreatedBody}</ToastBody>
+                          </Toast>,
+                          { intent: 'success' }
+                        )
+                        context.setState({ showProvisionDrawer: false, properties: {} })
+                      } else {
+                        props.toast(
+                          <Toast appearance='inverted'>
+                            <ToastTitle>{strings.Provision.ToastCreatedErrorTitle}</ToastTitle>
+                            <ToastBody>{strings.Provision.ToastCreatedErrorBody}</ToastBody>
+                          </Toast>,
+                          { intent: 'error' }
+                        )
+                      }
+                    })
                   : setLevel2(true)
               }}
             >
