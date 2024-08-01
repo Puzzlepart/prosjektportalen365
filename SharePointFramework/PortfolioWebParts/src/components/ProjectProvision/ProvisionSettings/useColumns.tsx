@@ -91,7 +91,8 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestSettingsIt
           <div className={styles.actions}>
             <Button
               appearance='subtle'
-              onClick={() => console.log(`edit request ${setting.title}`)}
+              onClick={() => console.log(`edit request ${setting.title}`)} // Add edit functionality for settings
+              disabled
               title='Rediger'
               icon={getFluentIcon('Edit')}
             />

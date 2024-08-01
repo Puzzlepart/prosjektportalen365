@@ -11,9 +11,12 @@ export function useCommands() {
   const context = useContext(ProjectProvisionContext)
 
   const toolbarItems = [
-    new ListMenuItem(null, strings.FilterText).setIcon('Filter').setOnClick(() => {
-      // console.log('Filter')
-    }),
+    new ListMenuItem(null, strings.FilterText)
+      .setIcon('Filter')
+      .setDisabled(true)
+      .setOnClick(() => {
+        // TODO: Add filter options for statuses
+      }),
     new ListMenuItem(null, 'Oppdater').setIcon('ArrowSync').setOnClick(() => {
       context.setState({
         isRefetching: true,

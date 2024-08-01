@@ -180,7 +180,6 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestItem>[] =>
       columnId: 'actions',
       renderHeaderCell: () => null,
       renderCell: (request) => {
-        const canEdit = request.status === Status.NotSubmitted
         const canDelete =
           request.status === Status.NotSubmitted ||
           request.status === Status.SpaceCreationFailed ||
@@ -188,14 +187,6 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestItem>[] =>
 
         return (
           <div className={styles.actions}>
-            {canEdit && (
-              <Button
-                appearance='subtle'
-                onClick={() => console.log(`edit request ${request.id}`)}
-                title='Rediger'
-                icon={getFluentIcon('Edit')}
-              />
-            )}
             {canDelete && (
               <Popover>
                 <PopoverTrigger disableButtonEnhancement>

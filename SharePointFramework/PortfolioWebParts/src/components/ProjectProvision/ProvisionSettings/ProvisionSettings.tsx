@@ -45,7 +45,7 @@ export const ProvisionSettings = (props: { toast: any }) => {
           }}
         >
           <DialogSurface>
-            <DialogBody>
+            <DialogBody style={{ maxHeight: 'calc(100vh - 236px)' }}>
               <DialogTitle
                 action={
                   <DialogTrigger action='close'>
@@ -64,7 +64,7 @@ export const ProvisionSettings = (props: { toast: any }) => {
                   <Spinner
                     size='extra-tiny'
                     label='Oppdaterer og henter innstillinger...'
-                    style={{ padding: 10 }}
+                    style={{ padding: 10, minHeight: '20px' }}
                   />
                 ) : (
                   <Commands />

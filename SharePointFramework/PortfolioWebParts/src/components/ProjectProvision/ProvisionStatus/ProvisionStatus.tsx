@@ -45,7 +45,7 @@ export const ProvisionStatus = (props: { toast: any }) => {
           }}
         >
           <DialogSurface>
-            <DialogBody>
+            <DialogBody style={{ maxHeight: 'calc(100vh - 236px)' }}>
               <DialogTitle
                 action={
                   <DialogTrigger action='close'>
