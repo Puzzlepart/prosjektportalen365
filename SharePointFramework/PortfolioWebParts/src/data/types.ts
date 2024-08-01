@@ -345,4 +345,12 @@ export interface IPortfolioWebPartsDataAdapter {
    * @returns A Promise that resolves to an array of containing provision requests.
    */
   fetchProvisionRequests?(user: any, provisionUrl: string): Promise<any[]>
+
+  /**
+   * Checks if a site exists based on its proposed URL
+   *
+   * @param siteUrl Site URL
+   *
+   */
+  siteExists?(siteUrl: string): Promise<boolean>
 }

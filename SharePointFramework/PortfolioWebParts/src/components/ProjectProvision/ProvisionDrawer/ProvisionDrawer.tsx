@@ -52,6 +52,8 @@ export const ProvisionDrawer = (props: { toast: any }) => {
     context,
     onSave,
     isSaveDisabled,
+    siteExists,
+    setSiteExists,
     namingConvention,
     urlPrefix,
     aliasSuffix,
@@ -129,7 +131,6 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                 <DrawerHeaderTitle>{strings.Provision.DrawerLevel1HeaderText}</DrawerHeaderTitle>
                 <p>{strings.Provision.DrawerLevel1DescriptionText}</p>
                 <div className={styles.content}>
-                  {/* {DEBUG && <DebugModel />} */}
                   <FieldContainer iconName='AppsList' label={strings.Provision.SiteTypeFieldLabel}>
                     <div className={styles.sitetypes}>
                       {context.state.types.map((type) => {
@@ -155,15 +156,36 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                   <FieldContainer
                     iconName='TextNumberFormat'
                     label={strings.Provision.SiteNameFieldLabel}
-                    description={strings.Provision.SiteNameFieldDescription}
                     required={true}
-                    // validationState='success'
-                    // validationMessage='Navnet er ledig'
+                    validationState={
+                      context.column.get('name').length
+                        ? siteExists
+                          ? 'error'
+                          : 'success'
+                        : 'none'
+                    }
+                    validationMessage={
+                      context.column.get('name').length
+                        ? siteExists
+                          ? 'Navnet oppgitt er ikke ledig. Prøv å endre navnet.'
+                          : 'Navnet er ledig'
+                        : strings.Provision.SiteNameFieldDescription
+                    }
                   >
                     <Input
                       value={context.column.get('name')}
-                      onChange={(_, data) => {
+                      onChange={async (_, data) => {
                         context.setColumn('name', data.value)
+
+                        if (data.value) {
+                          setTimeout(async () => {
+                            setSiteExists(
+                              await context.props.dataAdapter.siteExists(
+                                `${urlPrefix}${data.value}`
+                              )
+                            )
+                          }, 500)
+                        }
                       }}
                       contentBefore={
                         namingConvention?.prefixText && (

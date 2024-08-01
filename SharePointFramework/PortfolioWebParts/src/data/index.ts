@@ -994,6 +994,15 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       return []
     }
   }
+
+  public async siteExists(siteUrl: string): Promise<boolean> {
+    try {
+      const exists = await this._sp.site.exists(siteUrl)
+      return exists
+    } catch (error) {
+      return false
+    }
+  }
 }
 
 export * from './types'
