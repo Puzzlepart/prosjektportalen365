@@ -22,6 +22,7 @@ import { useProvisionStatus } from './useProvisionStatus'
 import { customLightTheme } from 'pp365-shared-library'
 import { Commands } from './Commands'
 import styles from './ProvisionStatus.module.scss'
+import strings from 'PortfolioWebPartsStrings'
 
 export const ProvisionStatus = (props: { toast: any }) => {
   const {
@@ -53,18 +54,14 @@ export const ProvisionStatus = (props: { toast: any }) => {
                   </DialogTrigger>
                 }
               >
-                Mine bestillinger
+                {strings.Provision.StatusDialogTitle}
               </DialogTitle>
               <DialogContent className={styles.content}>
-                <div>
-                  Her kan du se status på dine bestillinger, hvilke områdetype, status og dato for
-                  bestillingen. Det er også mulig å redigere og slette bestillinger som ikke er
-                  sendt inn.
-                </div>
+                <div>{strings.Provision.StatusDialogDescription}</div>
                 {context.state.isRefetching ? (
                   <Spinner
                     size='extra-tiny'
-                    label='Oppdaterer og henter bestillinger...'
+                    label={strings.Provision.StatusDialogSpinnerLabel}
                     style={{ padding: 10 }}
                   />
                 ) : (
@@ -92,11 +89,11 @@ export const ProvisionStatus = (props: { toast: any }) => {
                     <>
                       {context.state.searchTerm ? (
                         <div className={styles.message}>
-                          Ingen bestillinger samsvarer med søket.
+                          {strings.Provision.StatusDialogNoSearchResultsLabel}
                         </div>
                       ) : (
                         <div className={styles.message}>
-                          Du har ingen bestillinger, opprett en ny bestilling for å se status her.
+                          {strings.Provision.StatusDialogNoResultsLabel}
                         </div>
                       )}
                     </>

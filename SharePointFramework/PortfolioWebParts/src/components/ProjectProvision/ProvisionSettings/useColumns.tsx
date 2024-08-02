@@ -11,6 +11,7 @@ import styles from './ProvisionSettings.module.scss'
 import { ProjectProvisionContext } from '../context'
 import { getFluentIcon } from 'pp365-shared-library'
 import { IRequestSettingsItem } from './types'
+import strings from 'PortfolioWebPartsStrings'
 
 export const useColumns = (toast: any): TableColumnDefinition<IRequestSettingsItem>[] => {
   const context = useContext(ProjectProvisionContext)
@@ -25,7 +26,7 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestSettingsIt
         return null
       },
       renderHeaderCell: () => {
-        return 'Innstilling'
+        return strings.Provision.SettingLabel
       },
       renderCell: (setting) => {
         return (
@@ -46,7 +47,7 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestSettingsIt
         return null
       },
       renderHeaderCell: () => {
-        return 'Beskrivelse'
+        return strings.Provision.DescriptionLabel
       },
       renderCell: (setting) => {
         return (
@@ -67,7 +68,7 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestSettingsIt
         return null
       },
       renderHeaderCell: () => {
-        return 'Verdi'
+        return strings.Provision.ValueLabel
       },
       renderCell: (setting) => {
         if (
@@ -93,7 +94,7 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestSettingsIt
               appearance='subtle'
               onClick={() => console.log(`edit request ${setting.title}`)} // Add edit functionality for settings
               disabled
-              title='Rediger'
+              title={strings.Provision.EditLabel}
               icon={getFluentIcon('Edit')}
             />
           </div>

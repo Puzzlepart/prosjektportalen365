@@ -22,6 +22,7 @@ import { useProvisionSettings } from './useProvisionSettings'
 import { customLightTheme } from 'pp365-shared-library'
 import { Commands } from './Commands'
 import styles from './ProvisionSettings.module.scss'
+import strings from 'PortfolioWebPartsStrings'
 
 export const ProvisionSettings = (props: { toast: any }) => {
   const {
@@ -53,17 +54,14 @@ export const ProvisionSettings = (props: { toast: any }) => {
                   </DialogTrigger>
                 }
               >
-                Innstillinger for Bestillingsportalen
+                {strings.Provision.SettingsDialogTitle}
               </DialogTitle>
               <DialogContent className={styles.content}>
-                <div>
-                  Her har du en oversikt over alle innstillinger for Bestillingsportalen. Du kan
-                  endre innstillinger ved å klikke på redigeringsknappen til høyre for hver rad.
-                </div>
+                <div>{strings.Provision.SettingsDialogDescription}</div>
                 {context.state.isRefetching ? (
                   <Spinner
                     size='extra-tiny'
-                    label='Oppdaterer og henter innstillinger...'
+                    label={strings.Provision.SettingsDialogSpinnerLabel}
                     style={{ padding: 10, minHeight: '20px' }}
                   />
                 ) : (
@@ -91,11 +89,11 @@ export const ProvisionSettings = (props: { toast: any }) => {
                     <>
                       {context.state.searchTerm ? (
                         <div className={styles.message}>
-                          Ingen innstillinger samsvarer med søket.
+                          {strings.Provision.SettingsDialogNoSearchResultsLabel}
                         </div>
                       ) : (
                         <div className={styles.message}>
-                          Det finnes ingen innstillinger for Bestillingsportalen.
+                          {strings.Provision.SettingsDialogNoResultsLabel}
                         </div>
                       )}
                     </>

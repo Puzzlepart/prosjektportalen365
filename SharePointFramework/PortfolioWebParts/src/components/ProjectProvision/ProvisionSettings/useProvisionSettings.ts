@@ -49,7 +49,7 @@ export function useProvisionSettings(toast: any) {
    *
    * @param settings - settings
    */
-  function filtersettings(settings: any[]) {
+  function filterSettings(settings: any[]) {
     return settings.filter((request) =>
       _.any(Object.values(request), (value) => {
         if (Array.isArray(value) && value.length > 0) {
@@ -68,7 +68,7 @@ export function useProvisionSettings(toast: any) {
   }
 
   const settings = !context.state.loading
-    ? filtersettings(context.state.settings)
+    ? filterSettings(context.state.settings)
     : context.state.settings
 
   const fluentProviderId = useId('fp-provision-settings')

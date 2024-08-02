@@ -38,7 +38,6 @@ import { useProvisionDrawer } from './useProvisionDrawer'
 import styles from './ProvisionDrawer.module.scss'
 import { User } from './User'
 import { Guest } from './Guest'
-import { DebugModel } from './DebugModel'
 
 export const ProvisionDrawer = (props: { toast: any }) => {
   const {
@@ -59,9 +58,6 @@ export const ProvisionDrawer = (props: { toast: any }) => {
     aliasSuffix,
     fluentProviderId
   } = useProvisionDrawer()
-
-  // console.log(siteExists, context.column.get('name'), !!context.column.get('name').length, context.column.get('name').length)
-  // console.log('alias', context.column.get('alias'))
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
@@ -170,8 +166,8 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                     validationMessage={
                       context.column.get('name').length
                         ? siteExists
-                          ? 'Navnet oppgitt er ikke ledig. Prøv å endre navnet.'
-                          : 'Navnet er ledig'
+                          ? strings.Provision.SiteNameValidationErrorMessage
+                          : strings.Provision.SiteNameValidationSuccessMessage
                         : strings.Provision.SiteNameFieldDescription
                     }
                   >
@@ -294,7 +290,7 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                 <DrawerHeaderTitle>{strings.Provision.DrawerLevel2HeaderText}</DrawerHeaderTitle>
                 <p>{strings.Provision.DrawerLevel2DescriptionText}</p>
                 <div className={styles.content}>
-                  {DEBUG && <DebugModel />}
+                  {/* {DEBUG && <DebugModel />} */}
                   <FieldContainer
                     iconName='PeopleTeam'
                     label={strings.Provision.TeamifyFieldLabel}

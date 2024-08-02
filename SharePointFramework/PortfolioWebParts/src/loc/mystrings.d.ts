@@ -28,7 +28,9 @@ declare interface IPortfolioWebPartsStrings {
     SiteNameFieldLabel: string,
     SiteNameFieldDescription: string,
     SiteNamePrefixTooltipText: string,
-    SiteNameSuffixTooltipText: string,
+    SiteNameSuffixTooltipText: string
+    SiteNameValidationErrorMessage: string,
+    SiteNameValidationSuccessMessage: string,
     SiteDescriptionFieldLabel: string,
     SiteDescriptionFieldDescription: string,
     BusinessJustificationFieldLabel: string,
@@ -67,7 +69,44 @@ declare interface IPortfolioWebPartsStrings {
     ToastCreatedErrorTitle: string
     ToastCreatedErrorBody: string
     StatusMenuLabel: string
+    SettingsMenuLabel: string
     IdeaMenuLabel: string
+    SettingsSearchLabel: string
+    SettingsDialogTitle: string
+    SettingsDialogDescription: string
+    SettingsDialogSpinnerLabel: string
+    SettingsDialogNoSearchResultsLabel: string
+    SettingsDialogNoResultsLabel: string
+    SettingLabel: string
+    DescriptionLabel: string
+    ValueLabel: string
+    EditLabel: string
+    StatusSearchLabel: string
+    UpdateLabel: string
+    StatusDialogTitle: string
+    StatusDialogDescription: string
+    StatusDialogSpinnerLabel: string
+    StatusDialogNoSearchResultsLabel: string
+    StatusDialogNoResultsLabel: string
+    StatusLabel: string
+    SubmittedLabel: string
+    ApprovedLabel: string
+    RejectedLabel: string
+    PendingApprovalLabel: string
+    SpaceCreationFailedLabel: string
+    SpaceAlreadyExistsLabel: string
+    TeamRequestedLabel: string
+    SpaceCreationLabel: string
+    SpaceCreatedLabel: string
+    NotSubmittedLabel: string
+    SubmittedDateLabel: string
+    DeleteLabel: string
+    DeleteSubmissionLabel: string
+    DeleteSubmissionConfirmationLabel: string
+    DeletedSubmissionToastTitle: string
+    DeletedSubmissionToastBody: string
+    DeletedSubmissionErrorToastTitle: string
+    DeletedSubmissionErrorToastBody: string
   },
   AddColumnLabel: string
   AllProjectsHeaderText: string

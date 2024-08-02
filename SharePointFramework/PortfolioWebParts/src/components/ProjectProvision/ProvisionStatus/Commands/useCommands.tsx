@@ -17,7 +17,7 @@ export function useCommands() {
       .setOnClick(() => {
         // TODO: Add filter options for statuses
       }),
-    new ListMenuItem(null, 'Oppdater').setIcon('ArrowSync').setOnClick(() => {
+    new ListMenuItem(null, strings.Provision.UpdateLabel).setIcon('ArrowSync').setOnClick(() => {
       context.setState({
         isRefetching: true,
         refetch: new Date().getTime()

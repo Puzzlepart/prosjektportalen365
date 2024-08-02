@@ -75,9 +75,9 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
                     setState({ showProvisionSettings: true })
                   }}
                 >
-                  Innstillinger
+                  {strings.Provision.SettingsMenuLabel}
                 </MenuItem>
-                <MenuItem>{strings.Provision.IdeaMenuLabel}</MenuItem>
+                <MenuItem disabled>{strings.Provision.IdeaMenuLabel}</MenuItem>
               </MenuList>
             </MenuPopover>
           </Menu>

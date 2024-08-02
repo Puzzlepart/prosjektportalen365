@@ -30,6 +30,8 @@ import styles from './ProvisionStatus.module.scss'
 import { ProjectProvisionContext } from '../context'
 import { formatDate, getFluentIcon } from 'pp365-shared-library'
 import { IRequestItem, Status } from './types'
+import strings from 'PortfolioWebPartsStrings'
+import { format } from '@fluentui/react'
 
 export const useColumns = (toast: any): TableColumnDefinition<IRequestItem>[] => {
   const context = useContext(ProjectProvisionContext)
@@ -43,7 +45,7 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestItem>[] =>
         return null
       },
       renderHeaderCell: () => {
-        return 'Områdetittel'
+        return strings.Provision.SiteNameFieldLabel
       },
       renderCell: (request) => {
         return (
@@ -74,7 +76,7 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestItem>[] =>
         return a.type.localeCompare(b.type)
       },
       renderHeaderCell: () => {
-        return 'Områdetype'
+        return strings.Provision.SiteTypeFieldLabel
       },
       renderCell: (request) => {
         return (
@@ -92,7 +94,7 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestItem>[] =>
         return a.status.localeCompare(b.status)
       },
       renderHeaderCell: () => {
-        return 'Status'
+        return strings.Provision.StatusLabel
       },
       renderCell: (request) => {
         let statusIcon, statusColor, statusText
@@ -101,52 +103,52 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestItem>[] =>
           case Status.Submitted:
             statusIcon = <SparkleCircleRegular />
             statusColor = tokens.colorStatusWarningBackground2
-            statusText = 'Sendt inn'
+            statusText = strings.Provision.SubmittedLabel
             break
           case Status.Approved:
             statusIcon = <ApprovalsAppRegular />
             statusColor = tokens.colorStatusSuccessBackground2
-            statusText = 'Godkjent'
+            statusText = strings.Provision.ApprovedLabel
             break
           case Status.Rejected:
             statusIcon = <ErrorCircleRegular />
             statusColor = tokens.colorStatusDangerBackground2
-            statusText = 'Avslått'
+            statusText = strings.Provision.RejectedLabel
             break
           case Status.PendingApproval:
             statusIcon = <ArrowClockwiseDashesRegular />
             statusColor = tokens.colorStatusWarningBackground2
-            statusText = 'Venter på godkjenning'
+            statusText = strings.Provision.PendingApprovalLabel
             break
           case Status.SpaceCreationFailed:
             statusIcon = <ErrorCircleRegular />
             statusColor = tokens.colorStatusDangerBackground2
-            statusText = 'Område opprettelse feilet'
+            statusText = strings.Provision.SpaceCreationFailedLabel
             break
           case Status.SpaceAlreadyExists:
             statusIcon = <ErrorCircleRegular />
             statusColor = tokens.colorStatusDangerBackground2
-            statusText = 'Området eksisterer allerede'
+            statusText = strings.Provision.SpaceAlreadyExistsLabel
             break
           case Status.TeamRequested:
             statusIcon = <PeopleTeamRegular />
             statusColor = tokens.colorStatusWarningBackground2
-            statusText = 'Team forespurt'
+            statusText = strings.Provision.TeamRequestedLabel
             break
           case Status.SpaceCreation:
             statusIcon = <HourglassHalfRegular />
             statusColor = tokens.colorStatusWarningBackground2
-            statusText = 'Område opprettes'
+            statusText = strings.Provision.SpaceCreationLabel
             break
           case Status.SpaceCreated:
             statusIcon = <CheckmarkCircleRegular />
             statusColor = tokens.colorStatusSuccessBackground2
-            statusText = 'Område opprettet'
+            statusText = strings.Provision.SpaceCreatedLabel
             break
           default:
             statusIcon = <LightbulbCircleRegular />
             statusColor = tokens.colorNeutralBackground6
-            statusText = 'Ikke sendt'
+            statusText = strings.Provision.NotSubmittedLabel
             break
         }
 
@@ -170,7 +172,7 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestItem>[] =>
         return new Date(a.created).getTime() - new Date(b.created).getTime()
       },
       renderHeaderCell: () => {
-        return 'Bestillingsdato'
+        return strings.Provision.SubmittedDateLabel
       },
       renderCell: (request) => {
         return formatDate(request.created)
@@ -192,13 +194,13 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestItem>[] =>
                 <PopoverTrigger disableButtonEnhancement>
                   <Button
                     appearance='subtle'
-                    title='Slett bestilling'
+                    title={strings.Provision.DeleteSubmissionLabel}
                     icon={getFluentIcon('Delete')}
                   />
                 </PopoverTrigger>
                 <PopoverSurface tabIndex={-1}>
                   <div className={styles.deletePopover}>
-                    <div>Er du sikker på at du ønsker å slette bestillingen?</div>
+                    <div>{strings.Provision.DeleteSubmissionConfirmationLabel}</div>
                     <div>
                       <Button
                         appearance='subtle'
@@ -213,9 +215,14 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestItem>[] =>
                                 })
                                 toast(
                                   <Toast appearance='inverted'>
-                                    <ToastTitle>Slettet bestilling</ToastTitle>
+                                    <ToastTitle>
+                                      {strings.Provision.DeletedSubmissionToastTitle}
+                                    </ToastTitle>
                                     <ToastBody>
-                                      {`Bestillingen '${request.displayName}', ble slettet.`}
+                                      {format(
+                                        strings.Provision.DeletedSubmissionToastBody,
+                                        request.displayName
+                                      )}
                                     </ToastBody>
                                   </Toast>,
                                   { intent: 'success' }
@@ -224,10 +231,11 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestItem>[] =>
                               } else {
                                 toast(
                                   <Toast appearance='inverted'>
-                                    <ToastTitle>Feil ved sletting</ToastTitle>
+                                    <ToastTitle>
+                                      {strings.Provision.DeletedSubmissionErrorToastTitle}
+                                    </ToastTitle>
                                     <ToastBody>
-                                      Det oppstod en feil ved sletting av bestillingen. Vennligst
-                                      prøv igjen, eller kontakt administrator.
+                                      {strings.Provision.DeletedSubmissionErrorToastBody}
                                     </ToastBody>
                                   </Toast>,
                                   { intent: 'error' }
@@ -235,10 +243,10 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestItem>[] =>
                               }
                             })
                         }}
-                        title='Slett bestilling'
+                        title={strings.Provision.DeleteSubmissionLabel}
                         icon={getFluentIcon('Delete')}
                       >
-                        Slett
+                        {strings.Provision.DeleteLabel}
                       </Button>
                     </div>
                   </div>
