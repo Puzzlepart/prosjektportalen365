@@ -107,7 +107,7 @@ export function useEditableColumn(
     const transformedValue = await transformValue(value, key)
 
     if (key === 'name') {
-      const alias = value.replace(/[^a-zA-Z0-9-_ÆØÅæøå ]/g, '')
+      const alias = value.replace(/ /g, '').replace(/[^a-z-A-Z0-9-]/g, '')
       $setColumn((prev) => {
         const newColumn = new Map(prev)
         newColumn.set('alias', alias)

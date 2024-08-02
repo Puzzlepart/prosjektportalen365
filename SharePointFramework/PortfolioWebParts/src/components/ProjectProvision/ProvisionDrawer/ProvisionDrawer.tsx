@@ -60,6 +60,9 @@ export const ProvisionDrawer = (props: { toast: any }) => {
     fluentProviderId
   } = useProvisionDrawer()
 
+  // console.log(siteExists, context.column.get('name'), !!context.column.get('name').length, context.column.get('name').length)
+  // console.log('alias', context.column.get('alias'))
+
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme}>
@@ -179,10 +182,12 @@ export const ProvisionDrawer = (props: { toast: any }) => {
 
                         if (data.value) {
                           setTimeout(async () => {
+                            const alias = data.value
+                              .replace(/ /g, '')
+                              .replace(/[^a-z-A-Z0-9-]/g, '')
+
                             setSiteExists(
-                              await context.props.dataAdapter.siteExists(
-                                `${urlPrefix}${data.value}`
-                              )
+                              await context.props.dataAdapter.siteExists(`${urlPrefix}${alias}`)
                             )
                           }, 500)
                         }
