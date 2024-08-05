@@ -1,6 +1,6 @@
 {
     "name": "pp365-spfx-tasks",
-    "version": "1.9.1",
+    "version": "1.10.0",
     "scripts": {
       "build": "node ./build.js",
       "lint": "echo \"No linting configured\""
