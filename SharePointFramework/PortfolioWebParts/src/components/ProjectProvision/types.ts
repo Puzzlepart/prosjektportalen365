@@ -8,7 +8,12 @@ export interface IProjectProvisionState {
   loading: boolean
   showProvisionDrawer: boolean
   showProvisionStatus: boolean
-  settings: Map<string, any>
+  showProvisionSettings: boolean
+  settings: any[]
   types?: Record<string, any>
+  requests?: any[]
   properties: Record<string, any>
+  refetch?: number
+  isRefetching?: boolean
+  searchTerm?: string
 }

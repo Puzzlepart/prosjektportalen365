@@ -11,8 +11,19 @@ export function useEditableColumn(
   state: IProjectProvisionState,
   setState: (newState: Partial<IProjectProvisionState>) => void
 ) {
+  const defaultType =
+    !state.loading &&
+    state.types
+      .sort((a, b) => a.sortOrder - b.sortOrder)
+      .filter(
+        (type) =>
+          !type.visibleTo ||
+          type.visibleTo?.some((user) => user?.EMail?.includes(props?.pageContext?.user?.loginName))
+      )[0]
+
   const initialColumn = new Map<string, any>([
     ['type', 'Project'],
+    ['typeTitle', 'Prosjektområde'],
     ['name', ''],
     ['description', ''],
     ['justification', ''],
@@ -32,10 +43,6 @@ export function useEditableColumn(
   ])
 
   const [column, $setColumn] = useState<Map<string, any>>(initialColumn)
-
-  useEffect(() => {
-    $setColumn(initialColumn)
-  }, [])
 
   /**
    * Transform value for the field returning the transformed value.
@@ -100,7 +107,7 @@ export function useEditableColumn(
     const transformedValue = await transformValue(value, key)
 
     if (key === 'name') {
-      const alias = value.replace(/[^a-zA-Z0-9-_ÆØÅæøå ]/g, '')
+      const alias = value.replace(/ /g, '').replace(/[^a-z-A-Z0-9-]/g, '')
       $setColumn((prev) => {
         const newColumn = new Map(prev)
         newColumn.set('alias', alias)
@@ -122,6 +129,51 @@ export function useEditableColumn(
   const reset = () => {
     setState({ properties: {} })
   }
+
+  useEffect(() => {
+    $setColumn((prev) => {
+      const newColumn = new Map(prev)
+      newColumn.set('type', defaultType.type)
+      newColumn.set('typeTitle', defaultType.title)
+
+      setState({
+        properties: {
+          ...state.properties,
+          type: defaultType.type
+        }
+      })
+      return newColumn
+    })
+  }, [state.loading])
+
+  useEffect(() => {
+    const defaultConfidentialData =
+      !state.loading &&
+      state.types.find((t) => t.type === state.properties.type || defaultType.type)
+        ?.defaultConfidentialData
+
+    const defaultVisibility =
+      !state.loading &&
+      state.types.find((t) => t.type === state.properties.type || defaultType.type)
+        ?.defaultVisibility === 'Public'
+        ? strings.Provision.PrivacyFieldOptionPublic
+        : strings.Provision.PrivacyFieldOptionPrivate
+
+    $setColumn((prev) => {
+      const newColumns = new Map(prev)
+      newColumns.set('isConfidential', defaultConfidentialData)
+      newColumns.set('privacy', defaultVisibility)
+
+      setState({
+        properties: {
+          ...state.properties,
+          isConfidential: defaultConfidentialData,
+          privacy: defaultVisibility
+        }
+      })
+      return newColumns
+    })
+  }, [state.properties.type])
 
   return {
     column,

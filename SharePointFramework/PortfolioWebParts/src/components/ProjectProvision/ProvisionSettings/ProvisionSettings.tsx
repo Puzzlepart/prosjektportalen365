@@ -18,31 +18,31 @@ import {
   IdPrefixProvider,
   Spinner
 } from '@fluentui/react-components'
-import { useProvisionStatus } from './useProvisionStatus'
+import { useProvisionSettings } from './useProvisionSettings'
 import { customLightTheme } from 'pp365-shared-library'
 import { Commands } from './Commands'
-import styles from './ProvisionStatus.module.scss'
+import styles from './ProvisionSettings.module.scss'
 import strings from 'PortfolioWebPartsStrings'
 
-export const ProvisionStatus = (props: { toast: any }) => {
+export const ProvisionSettings = (props: { toast: any }) => {
   const {
     context,
-    requests,
+    settings,
     columns,
     columnSizingOptions,
     defaultSortState,
     getCellFocusMode,
     fluentProviderId
-  } = useProvisionStatus(props.toast)
+  } = useProvisionSettings(props.toast)
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme}>
         <Dialog
           modalType='modal'
-          open={context.state.showProvisionStatus}
+          open={context.state.showProvisionSettings}
           onOpenChange={(_, data) => {
-            context.setState({ showProvisionStatus: data.open })
+            context.setState({ showProvisionSettings: data.open })
           }}
         >
           <DialogSurface>
@@ -54,21 +54,21 @@ export const ProvisionStatus = (props: { toast: any }) => {
                   </DialogTrigger>
                 }
               >
-                {strings.Provision.StatusDialogTitle}
+                {strings.Provision.SettingsDialogTitle}
               </DialogTitle>
               <DialogContent className={styles.content}>
-                <div>{strings.Provision.StatusDialogDescription}</div>
+                <div>{strings.Provision.SettingsDialogDescription}</div>
                 {context.state.isRefetching ? (
                   <Spinner
                     size='extra-tiny'
-                    label={strings.Provision.StatusDialogSpinnerLabel}
-                    style={{ padding: 10 }}
+                    label={strings.Provision.SettingsDialogSpinnerLabel}
+                    style={{ padding: 10, minHeight: '20px' }}
                   />
                 ) : (
                   <Commands />
                 )}
                 <DataGrid
-                  items={requests}
+                  items={settings}
                   columns={columns}
                   defaultSortState={defaultSortState}
                   sortable
@@ -85,15 +85,15 @@ export const ProvisionStatus = (props: { toast: any }) => {
                       )}
                     </DataGridRow>
                   </DataGridHeader>
-                  {requests.length === 0 ? (
+                  {settings.length === 0 ? (
                     <>
                       {context.state.searchTerm ? (
                         <div className={styles.message}>
-                          {strings.Provision.StatusDialogNoSearchResultsLabel}
+                          {strings.Provision.SettingsDialogNoSearchResultsLabel}
                         </div>
                       ) : (
                         <div className={styles.message}>
-                          {strings.Provision.StatusDialogNoResultsLabel}
+                          {strings.Provision.SettingsDialogNoResultsLabel}
                         </div>
                       )}
                     </>

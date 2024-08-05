@@ -5,6 +5,7 @@ import { useMotionStyles } from './motionStyles'
 import { ProjectProvisionContext } from '../context'
 import { getGUID } from '@pnp/core'
 import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
+import { useId } from '@fluentui/react-components'
 
 /**
  * Component logic hook for `ProvisionDrawer`. This hook is responsible for
@@ -12,7 +13,6 @@ import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
  */
 export const useProvisionDrawer = () => {
   const context = useContext(ProjectProvisionContext)
-
   const [level2, setLevel2] = useState(false)
   const motionStyles = useMotionStyles()
   const toolbarBackIconMotion = useMotion<HTMLButtonElement>(level2)
@@ -20,11 +20,18 @@ export const useProvisionDrawer = () => {
   const level1Motion = useMotion<HTMLDivElement>(!level2)
   const level2Motion = useMotion<HTMLDivElement>(level2)
 
-  /**
-   * Saves the request to the Provision Requests list.
-   */
+  const useNamingConventions = context.state.settings.find(
+    (t) => t.title === 'UseNamingConventions'
+  )?.value
+
+  const namingConvention = useNamingConventions
+    ? context.state.settings.find((t) => t.title === 'NamingConvention')?.value
+    : context.state.types.find((t) => t.type === context.column.get('type'))?.namingConvention
+
+  const urlPrefix = `${context.props.webAbsoluteUrl.split('sites')[0]}sites/`
+  const aliasSuffix = '@' + context.props.pageContext.user.loginName.split('@')[1]
+
   const onSave = async (): Promise<boolean> => {
-    const namingConvention = context.state.settings.get('NamingConvention')
     const baseUrl = `${context.props.webAbsoluteUrl.split('sites')[0]}sites/`
 
     const requestItem: IProvisionRequestItem = {
@@ -32,7 +39,7 @@ export const useProvisionDrawer = () => {
       SpaceDisplayName: context.column.get('name'),
       Description: context.column.get('description'),
       BusinessJustification: context.column.get('justification'),
-      SpaceType: 'Prosjektområde',
+      SpaceType: context.column.get('typeTitle'),
       SpaceTypeInternal: context.column.get('type'),
       Teamify: context.column.get('teamify'),
       OwnersId: context.state.properties.owner,
@@ -52,8 +59,8 @@ export const useProvisionDrawer = () => {
       JoinHub: true,
       HubSiteTitle: context.props.pageContext.web.title,
       HubSite: context.props.pageContext.legacyPageContext.hubSiteId,
-      Prefix: namingConvention.prefixText,
-      Suffix: namingConvention.suffixText,
+      Prefix: namingConvention?.prefixText,
+      Suffix: namingConvention?.suffixText,
       Status: 'Submitted',
       Stage: 'Submitted',
       RequestKey: getGUID()
@@ -65,17 +72,15 @@ export const useProvisionDrawer = () => {
     )
   }
 
-  /**
-   * Save is disabled if the column name or field name is less than 2 characters.
-   */
+  const [siteExists, setSiteExists] = useState(false)
+
   const isSaveDisabled =
     context.column.get('name')?.length < 2 ||
     context.column.get('justification')?.length < 2 ||
-    context.column.get('owner')?.length < 1
+    context.column.get('owner')?.length < 1 ||
+    siteExists
 
-  const namingConvention = context.state.settings.get('NamingConvention')
-  const urlPrefix = `${context.props.webAbsoluteUrl.split('sites')[0]}sites/`
-  const aliasSuffix = '@' + context.props.pageContext.user.loginName.split('@')[1]
+  const fluentProviderId = useId('fp-provision-drawer')
 
   return {
     level2,
@@ -88,8 +93,11 @@ export const useProvisionDrawer = () => {
     context,
     onSave,
     isSaveDisabled,
+    siteExists,
+    setSiteExists,
     namingConvention,
     urlPrefix,
-    aliasSuffix
+    aliasSuffix,
+    fluentProviderId
   }
 }

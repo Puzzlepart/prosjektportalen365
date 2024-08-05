@@ -626,7 +626,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   }
 
   /**
-   * Checks if the current is in the specified SharePoint group.
+   * Checks if the current user is in the specified SharePoint group.
    *
    * @param groupName Group name
    */
@@ -810,8 +810,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     return items.filter(({ secondaryText }) => !_.findWhere(selectedItems, { secondaryText }))
   }
 
-  public async getProvisionRequestSettings(provisionUrl: string): Promise<Map<string, string>> {
-    const intialMap = new Map<string, string>()
+  public async getProvisionRequestSettings(provisionUrl: string): Promise<any[]> {
     try {
       const provisionSite = Web([this._sp.web, provisionUrl])
       const settingsList = provisionSite.lists.getByTitle('Provisioning Request Settings')
@@ -830,8 +829,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           'ExternalSharingSetting'
         )
         .using(DefaultCaching)()
-      return spItems.reduce((acc, item) => {
-        let value = item.Value
+
+      return spItems.map((item) => {
+        let value = item.Value === 'true' ? true : item.Value === 'false' ? false : item.Value
         if (item.Title === 'NamingConvention') {
           value = {
             value: item.Value,
@@ -848,11 +848,15 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
             externalSharingSetting: item.ExternalSharingSetting
           }
         }
-        acc.set(item.Title, value)
-        return acc
-      }, intialMap)
+
+        return {
+          title: item.Title,
+          value,
+          description: item.Description
+        }
+      })
     } catch (error) {
-      return intialMap
+      return []
     }
   }
 
@@ -861,18 +865,47 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       const provisionSite = Web([this._sp.web, provisionUrl])
       const typesList = provisionSite.lists.getByTitle('Provisioning Types')
       const spItems = await typesList.items
-        .select('Id', 'Title', 'SortOrder', 'Description', 'Allowed', 'Image', 'InternalTitle')
+        .select(
+          'Id',
+          'Title',
+          'SortOrder',
+          'Description',
+          'Allowed',
+          'Image',
+          'InternalTitle',
+          'PrefixText',
+          'PrefixUseAttribute',
+          'PrefixAttribute',
+          'SuffixText',
+          'SuffixUseAttribute',
+          'SuffixAttribute',
+          'VisibleTo/EMail',
+          'DefaultVisibility',
+          'DefaultConfidentialData'
+        )
+        .expand('VisibleTo')
         .using(DefaultCaching)()
       return spItems
         .filter((item) => item.Allowed)
         .sort((a, b) => (a.SortOrder > b.SortOrder ? 1 : -1))
         .map((item) => {
           return {
-            title: item.Title,
             order: item.SortOrder,
+            title: item.Title,
             description: item.Description,
             image: item.Image,
-            type: item.InternalTitle
+            type: item.InternalTitle,
+            namingConvention: {
+              prefixText: item.PrefixText,
+              prefixUseAttribute: item.PrefixUseAttribute,
+              prefixAttribute: item.PrefixAttribute,
+              suffixText: item.SuffixText,
+              suffixUseAttribute: item.SuffixUseAttribute,
+              suffixAttribute: item.SuffixAttribute
+            },
+            visibleTo: item.VisibleTo,
+            defaultVisibility: item.DefaultVisibility,
+            defaultConfidentialData: item.DefaultConfidentialData
           }
         })
     } catch (error) {
@@ -908,27 +941,67 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
-  public async fetchProvisionRequests(
-    queryTemplate: string,
-    selectProperties: string[],
-    batchSize = 500,
-    additionalQuery: Record<string, any> = {}
-  ): Promise<ISearchResult[]> {
-    const query: SearchQueryInit = {
-      QueryTemplate: `${queryTemplate}`,
-      Querytext: '*',
-      RowLimit: batchSize,
-      TrimDuplicates: false,
-      SelectProperties: [...selectProperties, 'Title'],
-      ...additionalQuery
+  public async deleteProvisionRequest(requestId: number, provisionUrl: string): Promise<boolean> {
+    try {
+      const provisionSite = Web([this._sp.web, provisionUrl])
+      const provisionRequestsList = provisionSite.lists.getByTitle('Provisioning Requests')
+      await provisionRequestsList.items.getById(requestId).delete()
+      return true
+    } catch (error) {
+      return false
     }
-    const { PrimarySearchResults, TotalRows } = await this._sp.search(query)
-    const results = [...PrimarySearchResults]
-    while (results.length < TotalRows) {
-      const response = await this._sp.search({ ...query, StartRow: results.length })
-      results.push(...response.PrimarySearchResults)
+  }
+
+  public async fetchProvisionRequests(user: string, provisionUrl: string): Promise<any[]> {
+    try {
+      const provisionSite = Web([this._sp.web, provisionUrl])
+      const provisionRequestsList = provisionSite.lists.getByTitle('Provisioning Requests')
+      const spItems = await provisionRequestsList.items
+        .select(
+          'Id',
+          'Title',
+          'SpaceDisplayName',
+          'SpaceType',
+          'SiteURL',
+          'Status',
+          'Stage',
+          'Comments',
+          'ApprovedDate',
+          'Created',
+          'Author/EMail'
+        )
+        .expand('Author')
+        .getAll()
+      return spItems
+        .filter((item) => item.Author?.EMail === user)
+        .sort((a, b) => (a.Created > b.Created ? 1 : -1))
+        .map((item) => {
+          return {
+            id: item.Id,
+            title: item.Title,
+            displayName: item.SpaceDisplayName,
+            type: item.SpaceType,
+            siteUrl: item.SiteURL?.Url,
+            status: item.Status,
+            stage: item.Stage,
+            comments: item.Comments,
+            approvedDate: item.ApprovedDate,
+            created: item.Created,
+            author: item.Author?.EMail
+          }
+        })
+    } catch (error) {
+      return []
     }
-    return results
+  }
+
+  public async siteExists(siteUrl: string): Promise<boolean> {
+    try {
+      const exists = await this._sp.site.exists(siteUrl)
+      return exists
+    } catch (error) {
+      return false
+    }
   }
 }
 

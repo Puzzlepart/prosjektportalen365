@@ -12,11 +12,14 @@ export function useProjectProvisionState() {
     loading: true,
     showProvisionDrawer: false,
     showProvisionStatus: false,
-    settings: new Map<string, any>(),
+    showProvisionSettings: false,
+    settings: [],
     types: {},
-    properties: {
-      type: 'Project'
-    }
+    requests: [],
+    properties: {},
+    refetch: new Date().getTime(),
+    searchTerm: '',
+    isRefetching: false
   })
 
   /**

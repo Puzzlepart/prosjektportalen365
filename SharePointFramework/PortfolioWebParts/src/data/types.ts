@@ -300,9 +300,9 @@ export interface IPortfolioWebPartsDataAdapter {
   /**
    * Retrieves the provision request settings from the "Provisioning Request Settings" list
    *
-   * @returns A Promise that resolves to a Map containing the settings.
+   * @returns A Promise that resolves to an array containing the provision request settings.
    */
-  getProvisionRequestSettings?(provisionUrl: string): Promise<Map<string, string>>
+  getProvisionRequestSettings?(provisionUrl: string): Promise<any[]>
 
   /**
    * Retrieves the provision types from the "Provisioning Types" list
@@ -314,7 +314,7 @@ export interface IPortfolioWebPartsDataAdapter {
   /**
    * Ensure users in the provision site and return their IDs.
    *
-   * @param user User
+   * @param users Users to ensure
    */
   getProvisionUsers?(users: any[], provisionUrl: string): Promise<Promise<number | null>[]>
 
@@ -328,19 +328,29 @@ export interface IPortfolioWebPartsDataAdapter {
   addProvisionRequests?(properties: IProvisionRequestItem, provisionUrl: string): Promise<boolean>
 
   /**
-   * Fetch provision requests from the provision requests list and their status
-   * Uses `this._sp.search` using the specified `{queryTemplate}` and `{selectProperties}`.
-   * Uses a `while` loop to fetch all items in batches of `{batchSize}`.
+   * Deletes a provision request item from the provisioning requests list
    *
-   * @param queryTemplate Query template
-   * @param selectProperties Select properties
-   * @param batchSize Batch size (default: 500)
-   * @param additionalQuery Additional query parameters
+   * @param requestId Id of the request to delete
+   * @param provisionUrl Url for the provisioning site
+   *
    */
-  fetchProvisionRequests?(
-    queryTemplate: string,
-    selectProperties: string[],
-    batchSize: number,
-    additionalQuery: Record<string, any>
-  ): Promise<any[]>
+  deleteProvisionRequest?(requestId: number, provisionUrl: string): Promise<boolean>
+
+  /**
+   * Retrieves the provision types from the "Provisioning Requests" list
+   *
+   * @param user User to fetch the provision requests for
+   * @param provisionUrl Url for the provisioning site
+   *
+   * @returns A Promise that resolves to an array of containing provision requests.
+   */
+  fetchProvisionRequests?(user: any, provisionUrl: string): Promise<any[]>
+
+  /**
+   * Checks if a site exists based on its proposed URL
+   *
+   * @param siteUrl Site URL
+   *
+   */
+  siteExists?(siteUrl: string): Promise<boolean>
 }

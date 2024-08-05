@@ -18,6 +18,8 @@ export const FieldContainer: FC<IFieldContainerProps> = (props) => {
         label={label}
         required={props.required}
         hint={props.description ?? props.hint}
+        validationState={props.validationState}
+        validationMessage={props.validationMessage}
       >
         {props.children}
       </Field>

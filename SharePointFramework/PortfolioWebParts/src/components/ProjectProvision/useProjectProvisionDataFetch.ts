@@ -6,23 +6,27 @@ import { IProjectProvisionProps, IProjectProvisionState } from './types'
  * fetching data and setting state.
  *
  * @param props Props
- * @param verticals Verticals
+ * @param refetch Timestamp for refetch. Changes to this variable refetches the data in `useEffect`
  * @param setState Set state callback
  */
 export function useProjectProvisionDataFetch(
   props: IProjectProvisionProps,
+  refetch: number,
   setState: (newState: Partial<IProjectProvisionState>) => void
 ) {
   useEffect(() => {
     Promise.all([
       props.dataAdapter.getProvisionRequestSettings(props.provisionUrl),
-      props.dataAdapter.getProvisionTypes(props.provisionUrl)
-    ]).then(([settings, types]) => {
+      props.dataAdapter.getProvisionTypes(props.provisionUrl),
+      props.dataAdapter.fetchProvisionRequests(props.pageContext.user.email, props.provisionUrl)
+    ]).then(([settings, types, requests]) => {
       setState({
         settings,
         types,
-        loading: false
+        requests,
+        loading: false,
+        isRefetching: false
       })
     })
-  }, [])
+  }, [refetch])
 }

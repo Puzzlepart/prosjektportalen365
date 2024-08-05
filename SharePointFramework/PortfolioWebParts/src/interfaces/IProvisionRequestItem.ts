@@ -1,4 +1,5 @@
 export interface IProvisionRequestItem {
+  Id?: number
   Title?: string
   SpaceDisplayName?: string
   Description?: string
