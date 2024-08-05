@@ -308,13 +308,13 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Process files.
+   * Process files in the source library inlcuding files and folders and copy them to the destination list.
    *
    * @param config Content config
    */
   private async _processFiles(config: ContentConfig) {
     try {
-      this.logInformation('Processing files', { listConfig: config })
+      this.logInformation('Processing files and folders', { listConfig: config })
       const progressText = format(
         strings.CopyFilesText,
         config.sourceListProps.ItemCount,
@@ -323,9 +323,10 @@ export class CopyListData extends BaseTask {
       )
       this.onProgress(progressText, '', 'Documentation')
 
+
       const spItems = await config.sourceList.items
         .expand('Folder')
-        .select('Title', 'LinkFilename', 'FileRef', 'FileDirRef', 'Folder/ServerRelativeUrl')()
+        .select('Title', 'LinkFilename', 'FileRef', 'FileDirRef', 'Folder/ServerRelativeUrl').getAll()
 
       const folders: string[] = []
       const files: any[] = []

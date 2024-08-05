@@ -19,6 +19,7 @@ Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detal
 - Rettet et problem med eksport til Excel for aggregerte oversikter [#1519](https://github.com/Puzzlepart/prosjektportalen365/issues/1519)
 - Rettet et problem med visningskolonner i aggregerte oversikter [#1447](https://github.com/Puzzlepart/prosjektportalen365/issues/1447)
 - Rettet et problem hvor tillatelseskonfigurasjon feilet dersom man ikke er eier på hub [#1549](https://github.com/Puzzlepart/prosjektportalen365/issues/1549)
+- Rettet et problem hvor provisjonering av dokumentbibliotek bare hentet 100 elementer [#1547](https://github.com/Puzzlepart/prosjektportalen365/issues/1547)
 
 ---
 
