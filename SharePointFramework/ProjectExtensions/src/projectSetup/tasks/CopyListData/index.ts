@@ -323,10 +323,10 @@ export class CopyListData extends BaseTask {
       )
       this.onProgress(progressText, '', 'Documentation')
 
-
       const spItems = await config.sourceList.items
         .expand('Folder')
-        .select('Title', 'LinkFilename', 'FileRef', 'FileDirRef', 'Folder/ServerRelativeUrl').getAll()
+        .select('Title', 'LinkFilename', 'FileRef', 'FileDirRef', 'Folder/ServerRelativeUrl')
+        .getAll()
 
       const folders: string[] = []
       const files: any[] = []
