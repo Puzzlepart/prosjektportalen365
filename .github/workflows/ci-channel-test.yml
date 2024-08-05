@@ -17,9 +17,6 @@ jobs:
   build_release_package_test:
     name: Build release package (test channel)
     runs-on: macos-latest
-    concurrency:
-      group: ${{ github.ref }}_build_release_package_for_test_channel
-      cancel-in-progress: true
     if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') && !contains(github.event.head_commit.message, '[packages-only]') }}
     steps:
       - uses: actions/checkout@v3
@@ -78,9 +75,6 @@ jobs:
   build_release_package_test_packages_only:
     name: Build release package - packages only (test channel)
     runs-on: macos-latest
-    concurrency:
-      group: ${{ github.ref }}_build_release_package_for_test_channel_packages_only
-      cancel-in-progress: true
     if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') || contains(github.event.head_commit.message, '[packages-only]')}}
     steps:
       - uses: actions/checkout@v3
