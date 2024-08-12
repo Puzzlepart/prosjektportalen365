@@ -347,6 +347,13 @@ export interface IPortfolioWebPartsDataAdapter {
   fetchProvisionRequests?(user: any, provisionUrl: string): Promise<any[]>
 
   /**
+   * Retrieves the team templates from the "Teams Templates" list
+   *
+   * @returns A Promise that resolves to a Map containing the templates.
+   */
+  getTeamTemplates?(provisionUrl: string): Promise<Record<string, any>>
+
+  /**
    * Checks if a site exists based on its proposed URL
    *
    * @param siteUrl Site URL

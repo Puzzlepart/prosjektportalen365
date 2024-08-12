@@ -7,6 +7,7 @@ export interface IProvisionRequestItem {
   SpaceType?: string
   SpaceTypeInternal?: string
   Teamify?: boolean
+  TeamsTemplate?: string
   OwnersId?: any
   MembersId?: any
   ConfidentialData?: boolean

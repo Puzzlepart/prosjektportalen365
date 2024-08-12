@@ -11,6 +11,7 @@ export interface IProjectProvisionState {
   showProvisionSettings: boolean
   settings: any[]
   types?: Record<string, any>
+  teamTemplates?: Record<string, any>
   requests?: any[]
   properties: Record<string, any>
   refetch?: number

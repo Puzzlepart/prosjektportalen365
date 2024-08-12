@@ -127,11 +127,15 @@ export class SitePermissions extends BaseTask {
    * Get site group by name with users from the portal web
    */
   private async _getSiteGroupByName(groupName: string) {
-    const group = await SPDataAdapter.portalDataService.web.siteGroups
-      .getByName(groupName)
-      .select('Title', 'Users')
-      .expand('Users')()
-    return group['Users'] && group['Users'].map((u: ISiteUserProps) => u.LoginName)
+    try {
+      const group = await SPDataAdapter.portalDataService.web.siteGroups
+        .getByName(groupName)
+        .select('Title', 'Users')
+        .expand('Users')()
+      return group['Users'] && group['Users'].map((u: ISiteUserProps) => u.LoginName)
+    } catch (error) {
+      throw new Error(`Failed to get site group by name ${groupName}. ${error}`)
+    }
   }
 
   /**

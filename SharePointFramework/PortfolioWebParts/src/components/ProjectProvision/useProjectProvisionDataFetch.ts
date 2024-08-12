@@ -18,11 +18,13 @@ export function useProjectProvisionDataFetch(
     Promise.all([
       props.dataAdapter.getProvisionRequestSettings(props.provisionUrl),
       props.dataAdapter.getProvisionTypes(props.provisionUrl),
+      props.dataAdapter.getTeamTemplates(props.provisionUrl),
       props.dataAdapter.fetchProvisionRequests(props.pageContext.user.email, props.provisionUrl)
-    ]).then(([settings, types, requests]) => {
+    ]).then(([settings, types, teamTemplates, requests]) => {
       setState({
         settings,
         types,
+        teamTemplates,
         requests,
         loading: false,
         isRefetching: false

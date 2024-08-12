@@ -32,6 +32,7 @@ export function useEditableColumn(
     ['owner', []],
     ['member', []],
     ['teamify', false],
+    ['teamTemplate', 'Standard'],
     ['isConfidential', false],
     ['privacy', strings.Provision.PrivacyFieldOptionPrivate],
     ['externalSharing', false],
@@ -54,6 +55,13 @@ export function useEditableColumn(
    */
   const transformValue = async (value: any, field: string) => {
     const valueMap = new Map<string, () => Promise<any[]> | any[] | string>([
+      [
+        'teamTemplate',
+        () => {
+          const template = state.teamTemplates.find((t) => t.title === value)
+          return template.templateId
+        }
+      ],
       [
         'privacy',
         () => {

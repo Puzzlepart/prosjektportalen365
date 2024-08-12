@@ -305,6 +305,28 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                     />
                   </FieldContainer>
                   <FieldContainer
+                    iconName='PeopleAudience'
+                    label={strings.Provision.TeamTemplateFieldLabel}
+                    description={strings.Provision.TeamTemplateFieldDescription}
+                    hidden={!context.column.get('teamify')}
+                  >
+                    <Dropdown
+                      defaultValue={'Standard'}
+                      selectedOptions={[context.column.get('teamTemplate')]}
+                      value={context.column.get('teamTemplate')}
+                      defaultSelectedOptions={['Standard']}
+                      onOptionSelect={(_, data) => {
+                        context.setColumn('teamTemplate', data.optionValue)
+                      }}
+                    >
+                      {context.state.teamTemplates.map((template) => (
+                        <Option key={template.title} value={template.title}>
+                          {template.title}
+                        </Option>
+                      ))}
+                    </Dropdown>
+                  </FieldContainer>
+                  <FieldContainer
                     iconName='BoxToolbox'
                     label={strings.Provision.ConfidentialFieldLabel}
                     description={strings.Provision.ConfidentialFieldDescription}

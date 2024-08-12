@@ -995,6 +995,28 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
+  public async getTeamTemplates(provisionUrl: string): Promise<Record<string, any>> {
+    try {
+      const provisionSite = Web([this._sp.web, provisionUrl])
+      const templatesList = provisionSite.lists.getByTitle('Teams Templates')
+      const spItems = await templatesList.items
+        .select('Id', 'Title', 'TemplateId', 'Description')
+        .using(DefaultCaching)()
+      return [
+        { title: 'Standard', templateId: 'standard', description: 'Standard team mal' },
+        ...spItems.map((item) => {
+          return {
+            title: item.Title,
+            templateId: item.TemplateId,
+            description: item.Description
+          }
+        })
+      ].sort((a, b) => (a.title > b.title ? 1 : -1))
+    } catch (error) {
+      return []
+    }
+  }
+
   public async siteExists(siteUrl: string): Promise<boolean> {
     try {
       const exists = await this._sp.site.exists(siteUrl)

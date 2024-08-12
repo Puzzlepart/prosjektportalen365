@@ -47,6 +47,8 @@ define([], function () {
       DrawerLevel2DescriptionText: 'Her kan du velge klassifisering for området. Angi språk, tilgangsinnstillinger og hubtilknytning.',
       TeamifyFieldLabel: 'Aktivere Teams for området?',
       TeamifyFieldDescription: 'Om du aktiverer Teams for området, vil et Teams-område bli opprettet og knyttet til området.',
+      TeamTemplateFieldLabel: 'Teams mal',
+      TeamTemplateFieldDescription: 'Hvilken teams mal vil du bruke for området?',
       ConfidentialFieldLabel: 'Konfidensielle/sensitive data',
       ConfidentialFieldDescription: 'Vil konfidensielle eller sensitive data bli lagret i dette rommet? Dersom ja, må du sørge for at du har satt riktige tillatelser.',
       PrivacyFieldLabel: 'Tilgangsinnstillinger',

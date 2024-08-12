@@ -42,6 +42,9 @@ export const useProvisionDrawer = () => {
       SpaceType: context.column.get('typeTitle'),
       SpaceTypeInternal: context.column.get('type'),
       Teamify: context.column.get('teamify'),
+      TeamsTemplate: context.column.get('teamify')
+        ? context.state.properties.teamTemplate || 'standard'
+        : '',
       OwnersId: context.state.properties.owner,
       MembersId: context.state.properties.member,
       ConfidentialData: context.column.get('isConfidential'),

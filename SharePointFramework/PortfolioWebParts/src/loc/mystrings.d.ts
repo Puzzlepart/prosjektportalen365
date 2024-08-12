@@ -46,6 +46,8 @@ declare interface IPortfolioWebPartsStrings {
     DrawerLevel2DescriptionText: string,
     TeamifyFieldLabel: string,
     TeamifyFieldDescription: string,
+    TeamTemplateFieldLabel: string,
+    TeamTemplateFieldDescription: string,
     ConfidentialFieldLabel: string,
     ConfidentialFieldDescription: string,
     PrivacyFieldLabel: string,

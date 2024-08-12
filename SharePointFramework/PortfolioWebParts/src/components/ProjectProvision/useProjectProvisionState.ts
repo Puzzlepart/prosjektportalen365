@@ -15,6 +15,7 @@ export function useProjectProvisionState() {
     showProvisionSettings: false,
     settings: [],
     types: {},
+    teamTemplates: {},
     requests: [],
     properties: {},
     refetch: new Date().getTime(),

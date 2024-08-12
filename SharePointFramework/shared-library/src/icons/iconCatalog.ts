@@ -112,7 +112,9 @@ import {
   ClockFilled,
   ClockRegular,
   PeopleTeamFilled,
-  PeopleTeamRegular
+  PeopleTeamRegular,
+  PeopleAudienceFilled,
+  PeopleAudienceRegular
 } from '@fluentui/react-icons'
 
 /**
@@ -166,6 +168,10 @@ export const iconCatalog = {
   PeopleTeam: {
     regular: PeopleTeamRegular,
     filled: PeopleTeamFilled
+  },
+  PeopleAudience: {
+    regular: PeopleAudienceRegular,
+    filled: PeopleAudienceFilled
   },
   MultiselectLtr: {
     regular: MultiselectLtrRegular,
