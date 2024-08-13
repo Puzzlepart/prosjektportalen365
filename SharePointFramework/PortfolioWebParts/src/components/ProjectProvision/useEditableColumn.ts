@@ -175,7 +175,7 @@ export function useEditableColumn(
       setState({
         properties: {
           ...state.properties,
-          isConfidential: defaultConfidentialData,
+          isConfidential: defaultConfidentialData
         }
       })
       return newColumns

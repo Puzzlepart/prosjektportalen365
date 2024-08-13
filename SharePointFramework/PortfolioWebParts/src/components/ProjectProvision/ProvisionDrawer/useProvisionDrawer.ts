@@ -49,7 +49,8 @@ export const useProvisionDrawer = () => {
       MembersId: context.state.properties.member,
       ConfidentialData: context.column.get('isConfidential'),
       Visibility: context.column.get('privacy')
-        ? (context.state.properties.privacy || 'Private') : 'Private',
+        ? context.state.properties.privacy || 'Private'
+        : 'Private',
       ExternalSharingRequired: context.column.get('externalSharing'),
       Guests: context.column.get('guest')?.join(';'),
       SiteURL: {
