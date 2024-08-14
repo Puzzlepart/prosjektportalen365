@@ -835,10 +835,10 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         if (item.Title === 'NamingConvention') {
           value = {
             value: item.Value,
-            prefixText: item.PrefixText,
+            prefixText: item.PrefixText || '',
             prefixUseAttribute: item.PrefixUseAttribute,
             prefixAttribute: item.PrefixAttribute,
-            suffixText: item.SuffixText,
+            suffixText: item.SuffixText || '',
             suffixUseAttribute: item.SuffixUseAttribute,
             suffixAttribute: item.SuffixAttribute
           }
@@ -896,10 +896,10 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
             image: item.Image,
             type: item.InternalTitle,
             namingConvention: {
-              prefixText: item.PrefixText,
+              prefixText: item.PrefixText || '',
               prefixUseAttribute: item.PrefixUseAttribute,
               prefixAttribute: item.PrefixAttribute,
-              suffixText: item.SuffixText,
+              suffixText: item.SuffixText || '',
               suffixUseAttribute: item.SuffixUseAttribute,
               suffixAttribute: item.SuffixAttribute
             },

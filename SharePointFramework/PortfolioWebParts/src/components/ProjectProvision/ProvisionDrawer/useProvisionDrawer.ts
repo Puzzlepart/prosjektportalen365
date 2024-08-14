@@ -34,9 +34,16 @@ export const useProvisionDrawer = () => {
   const onSave = async (): Promise<boolean> => {
     const baseUrl = `${context.props.webAbsoluteUrl.split('sites')[0]}sites/`
 
+    const name = `${namingConvention?.prefixText}${context.column.get('name')}${
+      namingConvention?.suffixText
+    }`
+    const alias = `${namingConvention?.prefixText}${context.column.get('alias')}${
+      namingConvention?.suffixText
+    }`
+
     const requestItem: IProvisionRequestItem = {
-      Title: context.column.get('name'),
-      SpaceDisplayName: context.column.get('name'),
+      Title: name,
+      SpaceDisplayName: name,
       Description: context.column.get('description'),
       BusinessJustification: context.column.get('justification'),
       SpaceType: context.column.get('typeTitle'),
@@ -48,17 +55,15 @@ export const useProvisionDrawer = () => {
       OwnersId: context.state.properties.owner,
       MembersId: context.state.properties.member,
       ConfidentialData: context.column.get('isConfidential'),
-      Visibility: context.column.get('privacy')
-        ? context.state.properties.privacy || 'Private'
-        : 'Private',
+      Visibility: context.state.properties.privacy || 'Private',
       ExternalSharingRequired: context.column.get('externalSharing'),
       Guests: context.column.get('guest')?.join(';'),
       SiteURL: {
-        Description: `${baseUrl}${context.column.get('alias')}`,
-        Url: `${baseUrl}${context.column.get('alias')}`
+        Description: `${baseUrl}${alias}`,
+        Url: `${baseUrl}${alias}`
       },
-      SiteAlias: context.column.get('alias'),
-      MailboxAlias: context.column.get('alias'),
+      SiteAlias: alias,
+      MailboxAlias: alias,
       TimeZoneId: 4,
       LCID: 1044,
       JoinHub: true,

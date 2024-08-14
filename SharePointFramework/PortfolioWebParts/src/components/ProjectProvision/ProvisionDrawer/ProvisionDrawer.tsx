@@ -178,9 +178,11 @@ export const ProvisionDrawer = (props: { toast: any }) => {
 
                         if (data.value) {
                           setTimeout(async () => {
-                            const alias = data.value
+                            const value = data.value
                               .replace(/ /g, '')
                               .replace(/[^a-z-A-Z0-9-]/g, '')
+
+                            const alias = `${namingConvention?.prefixText}${value}${namingConvention?.suffixText}`
 
                             setSiteExists(
                               await context.props.dataAdapter.siteExists(`${urlPrefix}${alias}`)
@@ -262,14 +264,18 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                   >
                     <Input
                       disabled
-                      value={context.column.get('alias')}
+                      value={`${namingConvention?.prefixText}${context.column.get('alias')}${
+                        namingConvention?.suffixText
+                      }`}
                       contentAfter={<Tag size='small'>{aliasSuffix}</Tag>}
                     />
                   </FieldContainer>
                   <FieldContainer iconName='Link' label={strings.Provision.UrlFieldLabel}>
                     <Input
                       disabled
-                      value={context.column.get('alias')}
+                      value={`${namingConvention?.prefixText}${context.column.get('alias')}${
+                        namingConvention?.suffixText
+                      }`}
                       contentBefore={<Tag size='small'>{urlPrefix}</Tag>}
                     />
                   </FieldContainer>
