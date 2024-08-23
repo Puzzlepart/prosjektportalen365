@@ -26,6 +26,8 @@ declare interface IProjectWebPartsStrings {
   PublishStatusReportSectionDataWarning: string
   AdminPageLinkLabel: string
   AdvancedGroupName: string
+  DataSourceNotFound: string
+  DataSourceError: string
   BarLabel: string
   CalloutTemplateFieldLabel: string
   CancelText: string

@@ -9,7 +9,7 @@ export interface IRiskMatrixProps
     IBaseWebPartComponentProps,
     Pick<IDynamicMatrixProps, 'fullWidth' | 'manualConfigurationPath' | 'calloutTemplate'> {
   /**
-   * The items to render in the matrix
+   * The items to render in the matrix unique to the RiskMatrix component.
    */
   items?: UncertaintyElementModel[]
 }

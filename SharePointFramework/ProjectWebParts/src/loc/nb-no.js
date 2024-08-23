@@ -70,6 +70,8 @@ define([], function () {
     CreateParentModalTitle: 'Overordnet prosjekt',
     CreateParentProjectLabel: 'Gjør om til overordnet prosjekt',
     CurrentPhaseViewNameFieldLabel: 'Visningsnavn for gjeldende fase',
+    DataSourceNotFound: 'Finner ingen datakilde med navn **{0}**.',
+    DataSourceError: 'Det skjedde en feil under uthenting av data fra datakilde med navn **{0}**. Oppdater siden og prøv igjen.',
     DataGroupName: 'Data',
     DefaultAdminPageLink: 'Admin.aspx',
     DefaultGroupByLabel: 'Standard gruppering',

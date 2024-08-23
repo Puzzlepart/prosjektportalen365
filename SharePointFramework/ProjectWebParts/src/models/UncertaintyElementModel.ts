@@ -20,18 +20,20 @@ export class UncertaintyElementModel implements IMatrixElementModel<Record<strin
     probabilityPostAction?: string,
     consequencePostAction?: string
   ) {
-    this.id = item.Id || item.ID
+    this.id = item.Id || item.ID || item.ListItemID
     this.title = item.Title
-    this.probability = parseInt(probability || item.GtRiskProbability, 10)
-    this.consequence = parseInt(consequence || item.GtRiskConsequence, 10)
-    this.probabilityPostAction = parseInt(
-      probabilityPostAction || item.GtRiskProbabilityPostAction,
-      10
-    )
-    this.consequencePostAction = parseInt(
-      consequencePostAction || item.GtRiskConsequencePostAction,
-      10
-    )
+    this.probability =
+      parseInt(probability || item.GtRiskProbability, 10) ||
+      parseFloat(item.GtRiskProbabilityOWSNMBR)
+    this.consequence =
+      parseInt(consequence || item.GtRiskConsequence, 10) ||
+      parseFloat(item.GtRiskConsequenceOWSNMBR)
+    this.probabilityPostAction =
+      parseInt(probabilityPostAction || item.GtRiskProbabilityPostAction, 10) ||
+      parseFloat(item.GtRiskProbabilityPostActionOWSNMBR)
+    this.consequencePostAction =
+      parseInt(consequencePostAction || item.GtRiskConsequencePostAction, 10) ||
+      parseFloat(item.GtRiskConsequencePostActionOWSNMBR)
   }
 
   public get tooltip() {

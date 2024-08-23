@@ -9,6 +9,16 @@ import { UncertaintyElementModel } from 'models'
  */
 export interface IRiskMatrixWebPartProps extends IBaseWebPartComponentProps, IRiskMatrixProps {
   /**
+   * Use a data source to retrieve data from for the items in the matrix.
+   */
+  useDataSource?: boolean
+
+  /**
+   * The name of the data source to retrieve data from.
+   */
+  dataSource?: string
+
+  /**
    * The name of the SharePoint list to retrieve data from.
    */
   listName?: string
@@ -41,17 +51,17 @@ export interface IRiskMatrixWebPartProps extends IBaseWebPartComponentProps, IRi
 
 export interface IRiskMatrixWebPartData {
   /**
-   * The items retrieved from the SharePoint list.
+   * The items retrieved from the SharePoint list related to the project.
    */
   items?: UncertaintyElementModel[]
 
   /**
-   * The configurations retrieved from the SharePoint list.
+   * The configurations retrieved from the SharePoint list at hub.
    */
   configurations?: IConfigurationFile[]
 
   /**
-   * The default configuration retrieved from the SharePoint list.
+   * The default configuration retrieved from the SharePoint list at hub.
    */
   defaultConfiguration?: IConfigurationFile
 }
