@@ -20,7 +20,8 @@ export class UncertaintyElementModel implements IMatrixElementModel<Record<strin
     probabilityPostAction?: string,
     consequencePostAction?: string
   ) {
-    this.id = item.Id || item.ID || item.ListItemID
+    const siteTitleInitials = item?.SiteTitle?.slice(0, 2)?.toUpperCase()
+    this.id = item.Id || item.ID || `${siteTitleInitials}${item.ListItemID}`
     this.title = item.Title
     this.probability =
       parseInt(probability || item.GtRiskProbability, 10) ||
