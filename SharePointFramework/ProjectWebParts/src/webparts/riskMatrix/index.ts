@@ -87,13 +87,13 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
 
     if (useDataSource) {
       this.dataSourceService = new DataSourceService(this.portalDataService.web)
-      items = await this._getItemsWithSource(dataSource, ['GtRiskStrategyOWSCHCS', 'GtRiskProximityOWSCHCS', 'GtRiskStatusOWSCHCS'], true)
+      items = (await this._getItemsWithSource(dataSource, ['GtRiskStrategyOWSCHCS', 'GtRiskProximityOWSCHCS', 'GtRiskStatusOWSCHCS', 'GtShowInPortfolioOWSBOOL'], true)).filter((item) => item.GtShowInPortfolioOWSBOOL === '1')
     } else {
       items = await this.sp.web.lists.getByTitle(listName).getItemsByCAMLQuery({ ViewXml: viewXml })
     }
 
     return items.map(
-      (i, idx) =>
+      (i) =>
         new UncertaintyElementModel(
           i,
           get(i, probabilityFieldName, { default: '' }),
