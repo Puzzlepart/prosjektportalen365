@@ -8,8 +8,8 @@ Param(
 
 $CI_MODE = (-not ([string]::IsNullOrEmpty($CI)))
 
-$global:__InstalledVersion = $null
-$global:__PreviousVersion = $null
+[version]$global:__InstalledVersion = $null
+[version]$global:__PreviousVersion = $null
 $global:__PnPConnection = $null
 $global:__CurrentChannelConfig = $null
 $InstallStartTime = (Get-Date -Format o)
@@ -77,8 +77,8 @@ Start-Transcript -Path $LogFilePath
 Connect-SharePoint -Url $Url
 $InstallLogEntries = Get-PnPListItem -List "Installasjonslogg" -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>"
 $NativeLogEntries = $InstallLogEntries | Where-Object {$_.FieldValues.Title -match "PP365+[\s]+[0-9]+[.][0-9]+[.][0-9]+[.][a-zA-Z0-9]+"}
-$global:__InstalledVersion = ($NativeLogEntries | Select-Object -First 1).FieldValues["InstallVersion"]
-$global:__PreviousVersion = ($NativeLogEntries | Select-Object -Skip 1 -First 1).FieldValues["InstallVersion"]
+$global:__InstalledVersion = ParseVersionString -VersionString ($NativeLogEntries | Select-Object -First 1).FieldValues["InstallVersion"]
+$global:__PreviousVersion = ParseVersionString -VersionString ($NativeLogEntries | Select-Object -Skip 1 -First 1).FieldValues["InstallVersion"]
 
 [System.Uri]$Uri = $Url
 $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")

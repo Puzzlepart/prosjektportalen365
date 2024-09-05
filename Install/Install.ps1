@@ -174,6 +174,28 @@ function LoadBundle() {
     return (Get-Command Connect-PnPOnline).Version
 }
 
+function ParseVersionString($VersionString) {
+    try {
+        $VersionParts = $VersionString.Split(".")
+        if ($VersionParts.Length -gt 3) {
+            return [version]::Parse($VersionString.Remove($VersionString.LastIndexOf(".")))
+        }
+        return [version]::Parse($VersionString)
+    }
+    catch {
+        Write-Host "[ERROR] Failed to parse version string: $VersionString" -ForegroundColor Red
+        Write-Host "[ERROR] Unable to compare with previous versions. Some upgrade actions might be skipped."
+        Write-Host "[ERROR] You can check out the list at $($Url)/Lists/Installasjonslogg."
+        Write-Host "[ERROR] Make sure that the field 'Versjonsnummer' has a valid version number value."
+        
+        $Input = Read-Host "Do you still want to continue? [Y/N]"
+        if ($Input -ne "Y" -and $Input -ne "y") {
+            exit 0
+        }
+        return [Version]"999.99.99"
+    }
+}
+
 if (-not [string]::IsNullOrEmpty($CI)) {
     Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
     Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop
