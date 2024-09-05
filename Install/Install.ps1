@@ -211,7 +211,7 @@ if ($Alias.Length -lt 2 -or (@("sites/", "teams/") -notcontains $ManagedPath) -o
 }
 #endregion
 
-$LogFilePath = "$PSScriptRoot/Install_Log_$([datetime]::Now.Ticks).txt"
+$LogFilePath = "$PSScriptRoot/Install_Log_$([datetime]::Now.ToString("yy-MM-ddThh-mm-ss")).txt"
 Set-PnPTraceLog -On -Level Debug -LogFile $LogFilePath
 
 #region Create site
@@ -592,11 +592,15 @@ if ($Channel -ne "main") {
 }
 
 ## Logging installation to SharePoint list
-$InstallationEntry = Add-PnPListItem -List "Installasjonslogg" -Values $InstallEntry -ErrorAction SilentlyContinue
+$InstallationEntry = Add-PnPListItem -List "Installasjonslogg" -Values $InstallEntry -ErrorAction Continue
 
 ## Attempting to attach the log file to installation entry
 if ($null -ne $InstallationEntry) {
-    $AttachmentOutput = Add-PnPListItemAttachment -List "Installasjonslogg" -Identity $InstallationEntry.Id -Path $LogFilePath -ErrorAction SilentlyContinue
+    $File = Get-Item -Path $LogFilePath
+    if  ($null -ne $File -and $File.Length -gt 0) {
+        Write-Host "[INFO] Attaching installation log file to installation entry"
+        $AttachmentOutput = Add-PnPListItemAttachment -List "Installasjonslogg" -Identity $InstallationEntry.Id -Path $LogFilePath -ErrorAction Continue
+    }    
 }
 
 Disconnect-PnPOnline
