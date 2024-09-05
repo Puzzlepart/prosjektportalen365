@@ -6,8 +6,8 @@ Param(
     [string]$Title = "Prosjektportalen",
     [Parameter(Mandatory = $false, HelpMessage = "Stored credential from Windows Credential Manager")]
     [string]$GenericCredential,
-    [Parameter(Mandatory = $false)]
-    [switch]$Interactive,
+    [Parameter(Mandatory = $false, HelpMessage = "Client ID of the Entra Id application used for interactive logins. Defaults to the multi-tenant Prosjektportalen app")]
+    [string]$ClientId = "da6c31a6-b557-4ac3-9994-7315da06ea3a",    
     [Parameter(Mandatory = $false, HelpMessage = "PowerShell credential to authenticate with")]
     [System.Management.Automation.PSCredential]$PSCredential,
     [Parameter(Mandatory = $false, HelpMessage = "Skip PnP template")]
@@ -115,7 +115,7 @@ function Connect-SharePoint {
             Connect-PnPOnline -Url $Url -Credentials $Credentials -ErrorAction Stop  -WarningAction Ignore
         }
         elseif ($Interactive.IsPresent) {
-            Connect-PnPOnline -Url $Url -Interactive -ErrorAction Stop -WarningAction Ignore
+            Connect-PnPOnline -Url $Url -Interactive -ClientId $ClientId -ErrorAction Stop -WarningAction Ignore
             $global:__InteractiveCachedAccessTokens[$Url] = Get-PnPAppAuthAccessToken
         }
         elseif ($null -ne $PSCredential) {
@@ -125,7 +125,7 @@ function Connect-SharePoint {
             Connect-PnPOnline -Url $Url -Credentials $GenericCredential -ErrorAction Stop  -WarningAction Ignore
         }
         else {
-            Connect-PnPOnline -Url $Url -ErrorAction Stop -WarningAction Ignore
+            Connect-PnPOnline -Url $Url -Interactive -ClientId $ClientId -ErrorAction Stop -WarningAction Ignore
         }
     }
     Catch {
@@ -201,7 +201,6 @@ $TemplatesBasePath = "$PSScriptRoot/Templates"
 Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
 $CurrentUser = Get-PnPProperty -Property CurrentUser -ClientObject (Get-PnPContext).Web
 Write-Host "[INFO] Installing with user [$($CurrentUser.Email)]"
-Disconnect-PnPOnline
 #endregion
 
 #region Check if URL specified is root site or admin site or invalid managed path
@@ -224,7 +223,6 @@ if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
             New-PnPSite -Type TeamSite -Title $Title -Alias $Alias -IsPublic:$true -ErrorAction Stop -Lcid $LanguageId >$null 2>&1
             EndAction
         }
-        Disconnect-PnPOnline
     }
     Catch {
         Write-Host "[ERROR] Failed to create site: $($_.Exception.Message)" -ForegroundColor Red
@@ -240,7 +238,6 @@ if (-not $Upgrade.IsPresent) {
         StartAction("Promoting $($Uri.AbsoluteUri) to hubsite")
         Register-PnPHubSite -Site $Uri.AbsoluteUri -ErrorAction SilentlyContinue >$null 2>&1
         EndAction
-        Disconnect-PnPOnline
     }
     Catch {
         Write-Host "[ERROR] Failed to promote site to hub site: $($_.Exception.Message)" -ForegroundColor Red
@@ -260,7 +257,6 @@ if (-not $Upgrade.IsPresent) {
         Get-PnPRoleDefinition -ErrorAction SilentlyContinue | ForEach-Object { $RoleDefinitions += $_ }
         Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -RemoveRole ($RoleDefinitions | Where-Object { $_.RoleTypeKind -eq "Editor" }) -ErrorAction SilentlyContinue
         Set-PnPGroupPermissions -Identity (Get-PnPGroup -AssociatedMemberGroup) -AddRole ($RoleDefinitions | Where-Object { $_.RoleTypeKind -eq "Reader" }) -ErrorAction SilentlyContinue    
-        Disconnect-PnPOnline
         EndAction
     }
     Catch {
@@ -306,7 +302,6 @@ if (-not $SkipSiteDesign.IsPresent) {
             }
             $SiteScriptIds += $SiteScript.Id.Guid
         }
-        Disconnect-PnPOnline
         EndAction
     }
     Catch {
@@ -329,8 +324,6 @@ if (-not $SkipSiteDesign.IsPresent) {
         if (-not [string]::IsNullOrEmpty($SiteDesignSecurityGroupId)) {         
             Grant-PnPSiteDesignRights -Identity $SiteDesign.Id.Guid -Principals @("c:0t.c|tenant|$SiteDesignSecurityGroupId")
         }
-
-        Disconnect-PnPOnline
         EndAction
     }
     Catch {
@@ -344,7 +337,6 @@ if (-not $SkipDefaultSiteDesignAssociation.IsPresent) {
         Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
         $SiteDesign = Get-PnPSiteDesign -Identity $SiteDesignName 
         Set-PnPHubSite -Identity $Uri.AbsoluteUri -SiteDesignId $SiteDesign.Id.Guid
-        Disconnect-PnPOnline
     }
     catch {
         Write-Host ""
@@ -360,7 +352,6 @@ if ($Upgrade.IsPresent) {
     try {
         Connect-SharePoint -Url $Uri.AbsoluteUri -ErrorAction Stop
         ."$PSScriptRoot/Scripts/PreInstallUpgrade.ps1"
-        Disconnect-PnPOnline
     }
     catch {
         Write-Host "[ERROR] Failed to run pre-install upgrade steps: $($_.Exception.Message)" -ForegroundColor Red
@@ -375,7 +366,6 @@ if (-not $SkipAppPackages.IsPresent) {
         if (-not $TenantAppCatalogUrl) {
             Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
             $TenantAppCatalogUrl = Get-PnPTenantAppCatalogUrl -ErrorAction SilentlyContinue
-            Disconnect-PnPOnline
         }
         Connect-SharePoint -Url $TenantAppCatalogUrl -ErrorAction Stop
     }
@@ -388,7 +378,6 @@ if (-not $SkipAppPackages.IsPresent) {
         foreach ($AppPkg in (Get-ChildItem "$PSScriptRoot/Apps/*.sppkg" -ErrorAction SilentlyContinue)) {
             Add-PnPApp -Path $AppPkg.FullName -Scope Tenant -Publish -Overwrite -SkipFeatureDeployment -ErrorAction Stop >$null 2>&1
         }
-        Disconnect-PnPOnline
         EndAction
     }
     Catch {
@@ -403,7 +392,6 @@ if (-not $Upgrade.IsPresent) {
     Try {
         Connect-SharePoint -Url $Uri.AbsoluteUri -ErrorAction Stop
         Remove-PnPClientSidePage -Identity Home.aspx -Force
-        Disconnect-PnPOnline
     }
     Catch {
         Write-Host "[WARNING] Failed to delete page Home.aspx. Please delete it manually." -ForegroundColor Yellow
@@ -415,8 +403,7 @@ if (-not $Upgrade.IsPresent) {
 if (-not $SkipTemplate.IsPresent) {
     Try {
         Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
-        Set-PnPTenantSite -NoScriptSite:$false -Url $Uri.AbsoluteUri -ErrorAction SilentlyContinue >$null 2>&1        
-        Disconnect-PnPOnline
+        Set-PnPTenantSite -NoScriptSite:$false -Url $Uri.AbsoluteUri -ErrorAction SilentlyContinue >$null 2>&1
 
         Connect-SharePoint -Url $Uri.AbsoluteUri -ErrorAction Stop
 
@@ -486,11 +473,9 @@ if (-not $SkipTemplate.IsPresent) {
             EndAction
         }
         
-        Disconnect-PnPOnline
 
         Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
-        Set-PnPTenantSite -NoScriptSite:$true -Url $Uri.AbsoluteUri -ErrorAction SilentlyContinue >$null 2>&1    
-        Disconnect-PnPOnline
+        Set-PnPTenantSite -NoScriptSite:$true -Url $Uri.AbsoluteUri -ErrorAction SilentlyContinue >$null 2>&1
     }
     Catch {
         Write-Host "[ERROR] Failed to apply PnP templates to $($Uri.AbsoluteUri): $($_.Exception.Message)" -ForegroundColor Red
@@ -504,7 +489,6 @@ Try {
     Connect-SharePoint -Url $Uri.AbsoluteUri -ErrorAction Stop
     StartAction("Clearing QuickLaunch")
     Get-PnPNavigationNode -Location QuickLaunch | Remove-PnPNavigationNode -Force
-    Disconnect-PnPOnline
     EndAction
 }
 Catch {
@@ -517,8 +501,7 @@ if (-not $SkipSearchConfiguration.IsPresent) {
     Try {
         Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
         StartAction("Importing Search Configuration")
-        Set-PnPSearchConfiguration -Scope Subscription -Path "$PSScriptRoot/SearchConfiguration.xml" -ErrorAction SilentlyContinue   
-        Disconnect-PnPOnline
+        Set-PnPSearchConfiguration -Scope Subscription -Path "$PSScriptRoot/SearchConfiguration.xml" -ErrorAction SilentlyContinue
         EndAction
     }
     Catch {
