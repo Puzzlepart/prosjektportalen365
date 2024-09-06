@@ -4,14 +4,17 @@ Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detal
 
 ## 1.10.0 - TBA
 
-### Forbedringer
-- En ny visning i Porteføljeoversikt vil være personlig som standard [#1539](https://github.com/Puzzlepart/prosjektportalen365/issues/1539)
+NB: Som en del av denne releasen må det godkjennes en ny app ved installasjon eller oppgradering. Dette skyldes at den tidligere PnP PowerShell appen som vi benyttet ikke lenger er tilgjengelig. Appen må godkjennes av Global Admin eller Application Admin. Prompt for å godkjenne denne appen vil automatisk dukke opp når brukeren setter i gang installasjonen.
 
 ### Ny funksjonalitet
 
+- Overgang til PnP PowerShell 2.10.0 og endringer på autentisering mot Microsoft 365 [#1226](https://github.com/Puzzlepart/prosjektportalen365/issues/1226)
 - Lagt til muligheten for et summeringsfelt i prosjektstatusseksjoner, denne kan summere eller finne gjennomsnitt av verdier basert på en kolonne i en liste- eller usikkerhetsseksjon [#1485](https://github.com/Puzzlepart/prosjektportalen365/issues/1485)
 - Lagt til mulighet for å legge til eller endre valg og verdier for idémodul, dette kan konfigureres med JSON i `Idékonfigurasjon` listen [#1488](https://github.com/Puzzlepart/prosjektportalen365/issues/1488)
 - Lagt til en aggregert oversikt for `Ressursallokering` i program og overordnet område mal [#1490](https://github.com/Puzzlepart/prosjektportalen365/issues/1490)
+
+### Forbedringer
+- En ny visning i Porteføljeoversikt vil være personlig som standard [#1539](https://github.com/Puzzlepart/prosjektportalen365/issues/1539)
 
 ### Feilrettinger
 
