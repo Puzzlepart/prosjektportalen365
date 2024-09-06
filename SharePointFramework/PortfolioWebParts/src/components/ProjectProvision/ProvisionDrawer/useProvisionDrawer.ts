@@ -86,6 +86,7 @@ export const useProvisionDrawer = () => {
 
   const isSaveDisabled =
     context.column.get('name')?.length < 2 ||
+    context.column.get('description')?.length < 2 ||
     context.column.get('justification')?.length < 2 ||
     context.column.get('owner')?.length < 1 ||
     siteExists

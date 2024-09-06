@@ -218,6 +218,7 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                   <FieldContainer
                     iconName='TextAlignLeft'
                     label={strings.Provision.SiteDescriptionFieldLabel}
+                    required={true}
                     description={strings.Provision.SiteDescriptionFieldDescription}
                   >
                     <Textarea
