@@ -7,6 +7,7 @@ export interface IProjectProvisionContext {
   setState: (newState: Partial<IProjectProvisionState>) => void
   column: Map<string, any>
   setColumn: (key: string, value: any) => void
+  reset: () => void
 }
 
 export const ProjectProvisionContext = createContext<IProjectProvisionContext>(null)
