@@ -4,7 +4,7 @@ Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detal
 
 ## 1.10.0 - TBA
 
-NB: Som en del av denne releasen må det godkjennes en ny app ved installasjon eller oppgradering. Dette skyldes at den tidligere PnP PowerShell appen som vi benyttet ikke lenger er tilgjengelig. Appen må godkjennes av Global Admin eller Application Admin. Prompt for å godkjenne denne appen vil automatisk dukke opp når brukeren setter i gang installasjonen.
+NB: Som en del av denne releasen må det godkjennes en ny app ved installasjon eller oppgradering. Dette skyldes at den tidligere PnP PowerShell appen som vi benyttet ikke lenger er tilgjengelig. Appen må godkjennes av Global Admin eller Application Admin. Prompt for å godkjenne denne appen vil automatisk dukke opp når brukeren setter i gang installasjonen. Som den del av denne endringen må nye oppdateringer og installasjoner gjøres med *PowerShell 7*.
 
 ### Ny funksjonalitet
 
