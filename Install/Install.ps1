@@ -371,7 +371,7 @@ if (-not $SkipTemplate.IsPresent) {
                 Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
             }
             catch {
-                Write-Host "`t[WARNING] Failed to apply PnP templates to, retrying..." -ForegroundColor Yellow
+                Write-Host "`t[WARNING] Failed to apply PnP Portfolio template, retrying..." -ForegroundColor Yellow
                 Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
             }
             EndAction
@@ -446,19 +446,18 @@ if ($Upgrade.IsPresent) {
 
 $sw.Stop()
 
-if ($null -eq $CI) {
-    Write-Host "[REQUIRED ACTION] Go to $($AdminSiteUrl)/_layouts/15/online/AdminHome.aspx#/webApiPermissionManagement and approve the pending requests" -ForegroundColor Yellow
-    Write-Host "[RECOMMENDED ACTION] Go to https://github.com/Puzzlepart/prosjektportalen365/wiki/Installasjon#steg-4-manuelle-steg-etter-installasjonen and verify post-install steps" -ForegroundColor Yellow
-}
-
 if ($Upgrade.IsPresent) {
     Write-Host "[SUCCESS] Upgrade completed in $($sw.Elapsed)" -ForegroundColor Green
 }
 else {
+    if ($null -eq $CI) {
+        Write-Host "[REQUIRED ACTION] Go to $($AdminSiteUrl)/_layouts/15/online/AdminHome.aspx#/webApiPermissionManagement and approve the pending requests" -ForegroundColor Yellow
+        Write-Host "[RECOMMENDED ACTION] Go to https://github.com/Puzzlepart/prosjektportalen365/wiki/Installasjon#steg-4-manuelle-steg-etter-installasjonen and verify post-install steps" -ForegroundColor Yellow
+    }
     Write-Host "[SUCCESS] Installation completed in $($sw.Elapsed)" -ForegroundColor Green
 }
 Write-Host "[INFO] Consider running .\Install\Scripts\UpgradeAllSitesToLatest.ps1 to upgrade all sites to the latest version of Prosjektportalen 365."
-Write-Host "[INFO] This is required after upgrading between minor versions, e.g. from 1.8.x to 1.9.x."
+Write-Host "[INFO] This is required after upgrading between minor versions, e.g. from 1.9.x to 1.10.x."
 #endregion
 
 ## Turning off PnP trace logging
