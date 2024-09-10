@@ -20,6 +20,7 @@ export class SPPortfolioOverviewViewItem {
   public GtPortfolioRefinersId?: number[] | { results: number[] } = []
   public GtPortfolioGroupById?: number = 0
   public GtPortfolioColumnOrder?: string = ''
+  public Author?: { EMail: string }
 }
 
 /**
@@ -112,6 +113,11 @@ export class PortfolioOverviewView {
   public groupById: number
 
   /**
+   * Author of the view.
+   */
+  public author: string
+
+  /**
    * The view properties as a map. Used in the `PortfolioOverview`
    * component to edit and create views.
    */
@@ -134,6 +140,7 @@ export class PortfolioOverviewView {
     this.columnIds = (item?.GtPortfolioColumnsId as number[]) ?? []
     this.refinerIds = (item?.GtPortfolioRefinersId as number[]) ?? []
     this.groupById = item?.GtPortfolioGroupById
+    this.author = item?.Author?.EMail
     this.$map = this._toMap()
   }
 
