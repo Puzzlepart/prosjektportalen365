@@ -24,6 +24,7 @@ NB: Som en del av denne releasen må det godkjennes en ny app ved installasjon e
 - Rettet et problem hvor tillatelseskonfigurasjon feilet dersom man ikke er eier på hub [#1549](https://github.com/Puzzlepart/prosjektportalen365/issues/1549)
 - Rettet et problem hvor provisjonering av dokumentbibliotek bare hentet 100 elementer [#1547](https://github.com/Puzzlepart/prosjektportalen365/issues/1547)
 - Rettet et problem hvor opprettelse av statusrapporter feilet dersom URL-felt var i bruk [#1546](https://github.com/Puzzlepart/prosjektportalen365/issues/1546)
+- Rettet et problem hvor eiere av personlige visninger ikke kunne redigere kolonner [#1553](https://github.com/Puzzlepart/prosjektportalen365/issues/1553)
 
 ---
 
