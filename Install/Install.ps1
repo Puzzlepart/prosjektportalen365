@@ -332,13 +332,13 @@ if (-not $SkipTemplate.IsPresent) {
             EndAction
         }
         elseif (-not $SkipTaxonomy.IsPresent -and $Upgrade.IsPresent) {
-            StartAction("Applying PnP template Taxonomy (B&A) to $($Uri.AbsoluteUri)")
             $TermSetA = Get-PnPTermSet -Identity "cc6cdd18-c7d5-42e1-8d19-a336dd78f3f2" -TermGroup "Prosjektportalen" -ErrorAction SilentlyContinue
             $TermSetB = Get-PnPTermSet -Identity "ec5ceb95-7259-4282-811f-7c57304be71e" -TermGroup "Prosjektportalen" -ErrorAction SilentlyContinue
             if (-not $TermSetA -or -not $TermSetB) {
+                StartAction("Applying PnP template Taxonomy (B&A) to $($Uri.AbsoluteUri)")
                 Invoke-PnPSiteTemplate "$TemplatesBasePath/TaxonomyBA.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
+                EndAction
             }
-            EndAction
         }
 
         if ($Upgrade.IsPresent) {
@@ -347,7 +347,7 @@ if (-not $SkipTemplate.IsPresent) {
                 Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers Navigation, SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
             }
             catch {
-                Write-Host "`t[WARNING] Failed to apply PnP templates to, retrying..." -ForegroundColor Yellow
+                Write-Host "`t[WARNING] Failed to apply PnP Portfolio template, retrying..." -ForegroundColor Yellow
                 Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers Navigation, SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
             }
             EndAction
