@@ -7,6 +7,7 @@ Param(
     [string]$ClientId = "da6c31a6-b557-4ac3-9994-7315da06ea3a"
 )
 
+. .\SharedFunctions.ps1
 
 $CI_MODE = (-not ([string]::IsNullOrEmpty($CI)))
 
@@ -28,35 +29,6 @@ if (Test-Path -Path "$ScriptDir/../.current-channel-config.json") {
     $global:__CurrentChannelConfig = Get-Content -Path "$ScriptDir/../.current-channel-config.json" -Raw -ErrorAction SilentlyContinue | ConvertFrom-Json
     Write-Host "[INFO] Loaded channel config from file .current-channel-config.json, will use channel $($global:__CurrentChannelConfig.Channel) when upgrading all sites to latest" -ForegroundColor Yellow
 }
-
-
-function Connect-SharePoint {
-    Param(
-        [Parameter(Mandatory = $true)]
-        [string]$Url
-    )
-
-    Try {
-        if ($CI_MODE) {
-            $DecodedCred = ([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($CI))).Split("|")
-            $Password = ConvertTo-SecureString -String $DecodedCred[1] -AsPlainText -Force
-            $Credentials = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $DecodedCred[0], $Password
-            Connect-PnPOnline -Url $Url -Credentials $Credentials -ErrorAction Stop  -WarningAction Ignore
-        }
-        else {
-            if ($null -ne $global:__PnPConnection.ClientId) {
-                Connect-PnPOnline -Url $Url -Interactive -ClientId $global:__PnPConnection.ClientId -ErrorAction Stop -WarningAction Ignore
-            }
-            Connect-PnPOnline -Url $Url -Interactive -ClientId $ClientId -ErrorAction Stop -WarningAction Ignore
-            $global:__PnPConnection = Get-PnPConnection
-        }
-    }
-    Catch {
-        Write-Host "[INFO] Failed to connect to [$Url]: $($_.Exception.Message)"
-        throw $_.Exception.Message
-    }
-}
-
 
 function UpgradeSite($Url) {
     Connect-SharePoint -Url $Url
