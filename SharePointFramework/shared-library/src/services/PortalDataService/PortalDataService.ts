@@ -347,7 +347,8 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     const email = this._configuration.spfxContext.pageContext.user.email
     const filter = `GtPortfolioIsPersonalView eq 0 or (GtPortfolioIsPersonalView eq 1 and Author/EMail eq '${email}')`
     const spItems = await this._getList('PORTFOLIO_VIEWS')
-      .items.select(...getClassProperties(SPPortfolioOverviewViewItem))
+      .items.select(...getClassProperties(SPPortfolioOverviewViewItem), 'Author/EMail')
+      .expand('Author')
       .filter(filter)
       .orderBy('GtSortOrder', true)<SPPortfolioOverviewViewItem[]>()
     return spItems.map((item) => new PortfolioOverviewView(item))

@@ -135,7 +135,7 @@ export function useEditableColumn(
    * Reset the properties.
    */
   const reset = () => {
-    setState({ properties: {} })
+    $setColumn(initialColumn)
   }
 
   useEffect(() => {

@@ -360,7 +360,6 @@ declare interface IPortfolioWebPartsStrings {
   TitleLabel: string
   TitleDescription: string
   ToggleColumnFormPanelLabel: string
-  ToggleEditViewColumnsLabel: string
   UseChangesButtonText: string
   UseDynamicColorsDescription: string
   UseDynamicColorsLabel: string

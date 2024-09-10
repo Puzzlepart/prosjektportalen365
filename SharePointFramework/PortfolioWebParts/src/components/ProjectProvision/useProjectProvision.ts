@@ -16,7 +16,7 @@ export const useProjectProvision = (props: IProjectProvisionProps) => {
 
   useProjectProvisionDataFetch(props, state.refetch, setState)
 
-  const { column, setColumn } = useEditableColumn(props, state, setState)
+  const { column, setColumn, reset } = useEditableColumn(props, state, setState)
 
   const toasterId = useId('toaster')
   const fluentProviderId = useId('fp-project-provision')
@@ -26,6 +26,7 @@ export const useProjectProvision = (props: IProjectProvisionProps) => {
     setState,
     column,
     setColumn,
+    reset,
     toasterId,
     fluentProviderId
   }

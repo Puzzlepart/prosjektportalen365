@@ -218,6 +218,7 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                   <FieldContainer
                     iconName='TextAlignLeft'
                     label={strings.Provision.SiteDescriptionFieldLabel}
+                    required={true}
                     description={strings.Provision.SiteDescriptionFieldDescription}
                   >
                     <Textarea
@@ -439,6 +440,7 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                 level2
                   ? onSave().then((response) => {
                       if (response) {
+                        context.reset()
                         props.toast(
                           <Toast appearance='inverted'>
                             <ToastTitle>{strings.Provision.ToastCreatedTitle}</ToastTitle>
@@ -447,6 +449,7 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                           { intent: 'success' }
                         )
                         context.setState({ showProvisionDrawer: false, properties: {} })
+                        setLevel2(false)
                       } else {
                         props.toast(
                           <Toast appearance='inverted'>

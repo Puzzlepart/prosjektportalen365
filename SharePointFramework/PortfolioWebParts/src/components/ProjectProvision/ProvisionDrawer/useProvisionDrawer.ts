@@ -42,7 +42,7 @@ export const useProvisionDrawer = () => {
     }`
 
     const requestItem: IProvisionRequestItem = {
-      Title: name,
+      Title: context.column.get('name'),
       SpaceDisplayName: name,
       Description: context.column.get('description'),
       BusinessJustification: context.column.get('justification'),
@@ -62,7 +62,7 @@ export const useProvisionDrawer = () => {
         Description: `${baseUrl}${alias}`,
         Url: `${baseUrl}${alias}`
       },
-      SiteAlias: alias,
+      SiteAlias: context.column.get('alias'),
       MailboxAlias: alias,
       TimeZoneId: 4,
       LCID: 1044,
@@ -86,6 +86,7 @@ export const useProvisionDrawer = () => {
 
   const isSaveDisabled =
     context.column.get('name')?.length < 2 ||
+    context.column.get('description')?.length < 2 ||
     context.column.get('justification')?.length < 2 ||
     context.column.get('owner')?.length < 1 ||
     siteExists

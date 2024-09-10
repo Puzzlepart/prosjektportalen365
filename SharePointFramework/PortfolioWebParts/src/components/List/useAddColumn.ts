@@ -52,8 +52,8 @@ export function useAddColumn(
       disabled: true
     },
     {
-      key: 'TOGGLE_EDIT_VIEW_COLUMNS_PANEL',
-      text: strings.ToggleEditViewColumnsLabel,
+      key: 'SHOW_HIDE_COLUMNS',
+      text: strings.ShowHideColumnsLabel,
       iconProps: { iconName: 'Eye' },
       onClick: onToggleEditViewColumnsPanel,
       disabled: isToggleEditViewColumnsPanelDisabled || !permissionCheck

@@ -2,7 +2,9 @@ Param(
     [Parameter(Mandatory = $true)]
     [string]$Url,
     [Parameter(Mandatory = $false)]
-    [switch]$Force
+    [switch]$Force,
+    [Parameter(Mandatory = $false, HelpMessage = "Client ID of the Entra Id application used for interactive logins. Defaults to the multi-tenant Prosjektportalen app")]
+    [string]$ClientId = "da6c31a6-b557-4ac3-9994-7315da06ea3a"
 )
 
 Write-Host "This script will clean up traces of a Prosjektportalen installation"
@@ -35,7 +37,7 @@ $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".share
 
 Set-PnPTraceLog -Off
 
-Connect-PnPOnline -Url $AdminSiteUrl -Interactive
+Connect-PnPOnline -Url $AdminSiteUrl -Interactive -ClientId $ClientId
 
 Write-Host "🗃️ Retrieving all sites of the Project Portal hub..."
 $ProjectsHub = Get-PnPTenantSite -Identity $Url -ErrorAction SilentlyContinue

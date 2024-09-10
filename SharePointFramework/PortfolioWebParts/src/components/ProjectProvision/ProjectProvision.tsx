@@ -25,7 +25,7 @@ import strings from 'PortfolioWebPartsStrings'
 import { ProvisionSettings } from './ProvisionSettings'
 
 export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
-  const { state, setState, column, setColumn, toasterId, fluentProviderId } =
+  const { state, setState, column, setColumn, reset, toasterId, fluentProviderId } =
     useProjectProvision(props)
   const restoreFocusTargetAttribute = useRestoreFocusTarget()
   const { dispatchToast } = useToastController(toasterId)
@@ -39,7 +39,7 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
   }
 
   return (
-    <ProjectProvisionContext.Provider value={{ props, state, setState, column, setColumn }}>
+    <ProjectProvisionContext.Provider value={{ props, state, setState, column, setColumn, reset }}>
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme}>
           <ProvisionDrawer toast={dispatchToast} />

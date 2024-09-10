@@ -362,7 +362,6 @@ define([], function () {
     TitleLabel: 'Tittel',
     TitleDescription: 'Tittel for visningen.',
     ToggleColumnFormPanelLabel: 'Legg til kolonne',
-    ToggleEditViewColumnsLabel: 'Vis eller skjul kolonner',
     UseChangesButtonText: 'Bruk',
     UseDynamicColorsDescription: 'Her kan du velge om kortvisningen skal ta i bruk dynamiske farger for logodelen, dette kan medføre lengre innlastningstid og anbefales for mindre porteføljer (krever at "Vis logo" er på).',
     UseDynamicColorsLabel: 'Bruk dynamiske farger',
