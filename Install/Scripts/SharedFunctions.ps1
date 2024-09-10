@@ -18,6 +18,10 @@ function Connect-SharePoint {
         [string]$Url
     )
 
+    if ($null -eq $global:__InteractiveCachedAccessTokens) {
+        $global:__InteractiveCachedAccessTokens = @{}
+    }
+
     Try {
         if ($null -ne $global:__InteractiveCachedAccessTokens[$Url]) {
             Connect-PnPOnline -Url $Url -AccessToken $global:__InteractiveCachedAccessTokens[$Url]

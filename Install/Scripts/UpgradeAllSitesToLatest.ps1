@@ -7,6 +7,8 @@ Param(
     [string]$ClientId = "da6c31a6-b557-4ac3-9994-7315da06ea3a"
 )
 
+$ErrorActionPreference = "Stop"
+
 . .\SharedFunctions.ps1
 
 $CI_MODE = (-not ([string]::IsNullOrEmpty($CI)))
@@ -42,7 +44,8 @@ function UpgradeSite($Url) {
     }
 }
 
-Write-Host "This script will update all existing sites in a Prosjektportalen installation. This requires you to have the SharePoint admin role"
+Write-Host "This script will update all existing sites belonging to the PP installation $Url."
+Write-Host "This requires you to have the SharePoint administrator role"
 
 Set-PnPTraceLog -Off
 $LogFilePath = "$PSScriptRoot/UpgradeSites_Log-$((Get-Date).ToString('yyyy-MM-dd-HH-mm')).txt"
@@ -51,8 +54,39 @@ Start-Transcript -Path $LogFilePath
 Connect-SharePoint -Url $Url
 $InstallLogEntries = Get-PnPListItem -List "Installasjonslogg" -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>"
 $NativeLogEntries = $InstallLogEntries | Where-Object {$_.FieldValues.Title -match "PP365+[\s]+[0-9]+[.][0-9]+[.][0-9]+[.][a-zA-Z0-9]+"}
-$global:__InstalledVersion = ParseVersionString -VersionString ($NativeLogEntries | Select-Object -First 1).FieldValues["InstallVersion"]
-$global:__PreviousVersion = ParseVersionString -VersionString ($NativeLogEntries | Select-Object -Skip 1 -First 1).FieldValues["InstallVersion"]
+$LatestInstallEntry = $NativeLogEntries | Select-Object -First 1
+$PreviousInstallEntry = $NativeLogEntries | Select-Object -Skip 1 -First 1
+
+if ($null -eq $LatestInstallEntry) {
+    $LatestInstallEntry = $InstallLogEntries | Select-Object -First 1
+    $PreviousInstallEntry = $InstallLogEntries | Select-Object -Skip 1 -First 1
+} 
+elseif ($null -eq $PreviousInstallEntry) {
+    $LatestInstallEntry = $InstallLogEntries | Select-Object -First 1
+    $PreviousInstallEntry = $InstallLogEntries | Select-Object -Skip 1 -First 1
+}
+
+if ($null -ne $LatestInstallEntry -and $null -ne $PreviousInstallEntry) {
+    $LatestInstallVersion = $LatestInstallEntry.FieldValues["InstallVersion"]
+    $PreviousInstallVersion = $PreviousInstallEntry.FieldValues["InstallVersion"]
+} else {
+    Write-Host "Could not identify previous installed versions. It's still possible to attempt to upgrade sites. We will attempt to run all avilable upgrade actions" -ForegroundColor Yellow
+    if ($null -ne $LatestInstallEntry) {
+        $LatestInstallVersion = $LatestInstallEntry.FieldValues["InstallVersion"]
+        $PreviousInstallVersion = "0.0.0"
+    } else {
+        Write-Host "Could not identify any installed versions. This is a critical error. Exiting script." -ForegroundColor Red
+        Stop-Transcript
+        exit 0
+    }
+}
+
+if ($LatestInstallVersion -eq $PreviousInstallVersion) {
+    Write-Host "The newest installed version is the same as the previous. The script might have some issues upgrading projects." -ForegroundColor Yellow
+}
+
+$global:__InstalledVersion = ParseVersionString -VersionString $LatestInstallVersion
+$global:__PreviousVersion = ParseVersionString -VersionString $PreviousInstallVersion
 
 [System.Uri]$Uri = $Url
 $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
@@ -90,7 +124,7 @@ if ($YesOrNo -eq "y" -or $CI_MODE) {
     }
 }
 
-Write-Host "Upgrading existing sites from version $global:__PreviousVersion to $global:__InstalledVersion)..."
+Write-Host "Upgrading existing sites from version $global:__PreviousVersion to $global:__InstalledVersion..."
 $ProjectsInHub | ForEach-Object -Begin {$ProgressCount = 0} {    
     [Int16]$PercentComplete = (++$ProgressCount)*100/$ProjectsInHub.Count
     Write-Progress -Activity "Upgrading all sites in hub" -Status "$PercentComplete% Complete" -PercentComplete $PercentComplete -CurrentOperation "Processing site $_"
@@ -127,10 +161,10 @@ Stop-Transcript
 Connect-SharePoint -Url $Url
 
 $InstallEntry = @{
-    Title            = "PP365 UpgradeAllSitesToLatest.ps1"
+    Title            = "PP365 $LatestInstallVersion UpgradeAllSitesToLatest.ps1"
     InstallStartTime = $InstallStartTime; 
     InstallEndTime   = (Get-Date -Format o); 
-    InstallVersion   = $global:__InstalledVersion;
+    InstallVersion   = $LatestInstallVersion;
     InstallCommand   = $MyInvocation.Line.Substring(2);
 }
 
