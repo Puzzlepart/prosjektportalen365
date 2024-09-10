@@ -2,7 +2,9 @@ Param(
     [Parameter(Mandatory = $true)]
     [string]$Url,
     [Parameter(Mandatory = $false, HelpMessage = "Used by Continuous Integration")]
-    [string]$CI
+    [string]$CI,
+    [Parameter(Mandatory = $false, HelpMessage = "Client ID of the Entra Id application used for interactive logins. Defaults to the multi-tenant Prosjektportalen app")]
+    [string]$ClientId = "da6c31a6-b557-4ac3-9994-7315da06ea3a"
 )
 
 
@@ -45,7 +47,7 @@ function Connect-SharePoint {
             if ($null -ne $global:__PnPConnection.ClientId) {
                 Connect-PnPOnline -Url $Url -Interactive -ClientId $global:__PnPConnection.ClientId -ErrorAction Stop -WarningAction Ignore
             }
-            Connect-PnPOnline -Url $Url -Interactive -ErrorAction Stop -WarningAction Ignore
+            Connect-PnPOnline -Url $Url -Interactive -ClientId $ClientId -ErrorAction Stop -WarningAction Ignore
             $global:__PnPConnection = Get-PnPConnection
         }
     }

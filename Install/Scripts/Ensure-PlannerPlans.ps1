@@ -11,7 +11,9 @@ param (
     $CurrentUser,
     [Parameter( Mandatory = $false, Position = 3 )]
     [switch]
-    $GrantPermissions
+    $GrantPermissions,
+    [Parameter(Mandatory = $false, HelpMessage = "Client ID of the Entra Id application used for interactive logins. Defaults to the multi-tenant Prosjektportalen app")]
+    [string]$ClientId = "da6c31a6-b557-4ac3-9994-7315da06ea3a"
 )
 
 $GroupsWhereAdded = [System.Collections.ArrayList]@()
@@ -19,7 +21,7 @@ $GroupsWhereAdded = [System.Collections.ArrayList]@()
 function GrantPermissions ($Url) {
     Write-Host "`tGranting owner permissions to site collection $Url"
     Set-PnPTenantSite -Url $Url -Owners $CurrentUser
-    Connect-PnPOnline -Url $Url -TenantAdminUrl $TenantAdminUrl -Interactive
+    Connect-PnPOnline -Url $Url -TenantAdminUrl $TenantAdminUrl -Interactive -ClientId $ClientId
     $GroupId = (Get-PnPSite -Includes GroupId -ErrorAction Ignore).GroupId.toString()
     Write-Host "`tGranting owner permissions to group $GroupId"
     Add-PnPMicrosoft365GroupOwner -Identity -Users $CurrentUser
@@ -44,7 +46,7 @@ if (-not (Get-Module | Where-Object { $_.Name -like "PnP.PowerShell" }) ) {
     Import-Module PnP.PowerShell
 }
 
-Connect-PnPOnline -TenantAdminUrl $TenantAdminUrl -Url $PortfolioUrl -Interactive
+Connect-PnPOnline -TenantAdminUrl $TenantAdminUrl -Url $PortfolioUrl -Interactive -clientId $ClientId
 
 $Children = Get-PnPHubSiteChild
 
@@ -58,7 +60,7 @@ else {
     $Children | ForEach-Object {
         $ChildSiteUrl = $_
     
-        Connect-PnPOnline -Url $ChildSiteUrl -TenantAdminUrl $TenantAdminUrl -Interactive;
+        Connect-PnPOnline -Url $ChildSiteUrl -TenantAdminUrl $TenantAdminUrl -Interactive -clientId $ClientId
         $GroupId = (Get-PnPSite -Includes GroupId -ErrorAction Ignore).GroupId.toString()
         $PlannerPlan = Get-PnPPlannerPlan -Group $GroupId 
         
