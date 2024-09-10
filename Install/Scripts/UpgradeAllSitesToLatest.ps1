@@ -161,7 +161,7 @@ Stop-Transcript
 Connect-SharePoint -Url $Url
 
 $InstallEntry = @{
-    Title            = "PP365 $LatestInstallVersion UpgradeAllSitesToLatest.ps1"
+    Title            = "PP365 UpgradeAllSitesToLatest $LatestInstallVersion";
     InstallStartTime = $InstallStartTime; 
     InstallEndTime   = (Get-Date -Format o); 
     InstallVersion   = $LatestInstallVersion;
