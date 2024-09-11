@@ -9,7 +9,7 @@ Param(
 
 $ErrorActionPreference = "Stop"
 
-. .\SharedFunctions.ps1
+. $PSScriptRoot\SharedFunctions.ps1
 
 $CI_MODE = (-not ([string]::IsNullOrEmpty($CI)))
 
