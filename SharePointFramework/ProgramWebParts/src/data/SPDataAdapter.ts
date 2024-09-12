@@ -861,7 +861,7 @@ export class SPDataAdapter
           RowLimit: 500,
           StartRow: 0,
           ClientType: 'ContentSearchRegular',
-          SelectProperties: ['SPWebURL', 'Title', 'SiteId'],
+          SelectProperties: ['SPWebURL', 'Title', 'SiteId', 'Path'],
           TrimDuplicates: false
         }
 
@@ -903,7 +903,7 @@ export class SPDataAdapter
             return {
               SiteId: item['GtSiteIdOWSTEXT'],
               Title: site?.Title ?? item['Title'],
-              SPWebURL: site && site['SPWebURL']
+              SPWebURL: site && site['SPWebURL'] || site['Path']
             }
           })
       },

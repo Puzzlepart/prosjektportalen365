@@ -6,6 +6,7 @@ export interface IProgramAdministrationProject extends Record<string, any> {
   SiteId: string
   Title: string
   SPWebURL: string
+  Path?: string
 }
 
 export interface IProgramAdministrationProps {
