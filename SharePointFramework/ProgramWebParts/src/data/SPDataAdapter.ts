@@ -903,7 +903,7 @@ export class SPDataAdapter
             return {
               SiteId: item['GtSiteIdOWSTEXT'],
               Title: site?.Title ?? item['Title'],
-              SPWebURL: site && site['SPWebURL'] || site['Path']
+              SPWebURL: (site && site['SPWebURL']) || site['Path']
             }
           })
       },
