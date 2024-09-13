@@ -267,7 +267,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
       Title: rowTitle,
       GtRegistratedIdeaId: rowId,
       GtIdeaUrl: pageUrl,
-      GtIdeaReporterId: rowReporter?.id,
+      GtIdeaReporterId: rowReporter?.id
     })
 
     Log.info(LOG_SOURCE, 'Updated work list')
@@ -327,7 +327,11 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
     )
     column2.addControl(
       new ClientsideText(
-        `<h3>Innmelder</h3>${reporter ? `<a href="mailto:${reporter?.email}" target="_blank">${reporter?.title}</a>` : 'Ikke angitt'}`
+        `<h3>Innmelder</h3>${
+          reporter
+            ? `<a href="mailto:${reporter?.email}" target="_blank">${reporter?.title}</a>`
+            : 'Ikke angitt'
+        }`
       )
     )
     column2.addControl(
