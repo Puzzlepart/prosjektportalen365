@@ -77,7 +77,6 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
                 >
                   {strings.Provision.SettingsMenuLabel}
                 </MenuItem>
-                <MenuItem disabled>{strings.Provision.IdeaMenuLabel}</MenuItem>
               </MenuList>
             </MenuPopover>
           </Menu>
