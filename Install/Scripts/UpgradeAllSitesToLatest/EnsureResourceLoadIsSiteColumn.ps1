@@ -1,4 +1,4 @@
-$TargetVersion = "1.7.2"
+$TargetVersion = [version]"1.7.2"
 
 if ($global:__PreviousVersion -lt $TargetVersion) {
     $ResourceAllocation = Get-PnPList -Identity "Ressursallokering" -ErrorAction SilentlyContinue

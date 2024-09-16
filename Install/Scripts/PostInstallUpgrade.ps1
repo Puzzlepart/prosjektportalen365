@@ -1,14 +1,14 @@
 ﻿
 $LastInstall = Get-PnPListItem -List "Installasjonslogg" -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>" | Select-Object -First 1 -Wait
 if ($null -ne $LastInstall) {
-    $PreviousVersion = $LastInstall.FieldValues["InstallVersion"]
+    $PreviousVersion = ParseVersionString -VersionString $LastInstall.FieldValues["InstallVersion"]
 
-    if ($PreviousVersion -lt "1.2.7") {
+    if ($PreviousVersion -lt [version]"1.2.7") {
         Write-Host "[INFO] In version v1.2.7 we added 'Prosjekttidslinje' to the top navigation. Adding this navigation item now as part of the upgrade" 
         Add-PnPNavigationNode -Location TopNavigationBar -Title "Prosjekttidslinje" -Url "$($Uri.LocalPath)/SitePages/Prosjekttidslinje.aspx"
     }
     
-    if ($PreviousVersion -lt "1.6.0") {
+    if ($PreviousVersion -lt [version]"1.6.0") {
         Write-Host "[INFO] In version v1.6.0 we added Project timeline configuration and reworked the TimelineContent list. Merging data now as part of the upgrade"
 
         $Items = Get-PnPListItem -List "Tidslinjeinnhold"
@@ -39,7 +39,7 @@ if ($null -ne $LastInstall) {
         Invoke-PnPQuery
     }
 
-    if ($PreviousVersion -lt "1.7.0") {
+    if ($PreviousVersion -lt [version]"1.7.0") {
         Write-Host "[INFO] In version v1.7.0 we reworked the aggregated webparts. Adding these navigation items now as part of the upgrade" 
         Add-PnPNavigationNode -Location TopNavigationBar -Title "Gevinstoversikt" -Url "$($Uri.LocalPath)/SitePages/Gevinstoversikt.aspx"
         Add-PnPNavigationNode -Location TopNavigationBar -Title "Erfaringslogg" -Url "$($Uri.LocalPath)/SitePages/Erfaringslogg.aspx"
@@ -48,7 +48,7 @@ if ($null -ne $LastInstall) {
         Write-Host "[SUCCESS] Please adjust navigation order manually"
     }
 
-    if ($PreviousVersion -lt "1.8.0" -or $PreviousVersion -like "*BA*") {
+    if ($PreviousVersion -lt [version]"1.8.0" -or $PreviousVersion -like "*BA*") {
         Write-Host "[INFO] In version v1.8.0 we have integrated the 'Bygg & Anlegg' addon with standard installation. Checking to see if addon has been previously installed..." 
 
         $TermSetA = Get-PnPTermSet -Identity "cc6cdd18-c7d5-42e1-8d19-a336dd78f3f2" -TermGroup "Prosjektportalen" -ErrorAction SilentlyContinue
@@ -113,7 +113,7 @@ if ($null -ne $LastInstall) {
         }
     }
 
-    if ($PreviousVersion -lt "1.8.2") {
+    if ($PreviousVersion -lt [version]"1.8.2") {
         Write-Host "[INFO] In version v1.8.2 we did some adjustments to Project Status attachments. This might take a while..."
         
         $PERSISTED_SECTION_DATA_JSON_FILENAME = "PersistedSectionDataJson.json"
@@ -169,7 +169,7 @@ if ($null -ne $LastInstall) {
         Write-Host "[SUCCESS] Project Status items successfully processed"
     }
     
-    if ($PreviousVersion -lt "1.9.0") {
+    if ($PreviousVersion -lt [version]"1.9.0") {
         Write-Host "[INFO] In version v1.9.0 we introduced data source levels. Adding default level 'Portfolio' to existing data sources..."
         
         Get-PnPListItem -List "Datakilder" | Where-Object { $_["Title"] -eq [System.Uri]::UnescapeDataString("Gevinstoversikt (Prosjektniv%C3%A5)") } | Remove-PnPListItem -Recycle -Force -ErrorAction SilentlyContinue | Out-Null

@@ -43,6 +43,8 @@ Param(
     [switch]$IncludeBAContent
 )
 
+. "$PSScriptRoot/Scripts/SharedFunctions.ps1"
+
 ## Storing access tokens for interactive logins
 $global:__InteractiveCachedAccessTokens = @{}
 
@@ -85,95 +87,6 @@ else {
     Write-Host "########################################################" -ForegroundColor Cyan
 }
 
-<#
-.SYNOPSIS
-Connect to SharePoint Online
-
-.DESCRIPTION
-Connect to SharePoint Online with the specified URL using PnP PowerShell
-
-.PARAMETER Url
-The URL to the SharePoint site
-
-.EXAMPLE
-Connect-SharePoint -Url https://contoso.sharepoint.com/sites/pp365
-#>
-function Connect-SharePoint {
-    Param(
-        [Parameter(Mandatory = $true)]
-        [string]$Url
-    )
-
-    Try {
-        if ($null -ne $global:__InteractiveCachedAccessTokens[$Url]) {
-            Connect-PnPOnline -Url $Url -AccessToken $global:__InteractiveCachedAccessTokens[$Url]
-        }
-        if (-not [string]::IsNullOrEmpty($CI)) {
-            $DecodedCred = ([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($CI))).Split("|")
-            $Password = ConvertTo-SecureString -String $DecodedCred[1] -AsPlainText -Force
-            $Credentials = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $DecodedCred[0], $Password
-            Connect-PnPOnline -Url $Url -Credentials $Credentials -ErrorAction Stop  -WarningAction Ignore
-        }
-        elseif ($Interactive.IsPresent) {
-            Connect-PnPOnline -Url $Url -Interactive -ClientId $ClientId -ErrorAction Stop -WarningAction Ignore
-            $global:__InteractiveCachedAccessTokens[$Url] = Get-PnPAppAuthAccessToken
-        }
-        elseif ($null -ne $PSCredential) {
-            Connect-PnPOnline -Url $Url -Credentials $PSCredential -ErrorAction Stop  -WarningAction Ignore
-        }
-        elseif ($null -ne $GenericCredential -and $GenericCredential -ne "") {
-            Connect-PnPOnline -Url $Url -Credentials $GenericCredential -ErrorAction Stop  -WarningAction Ignore
-        }
-        else {
-            Connect-PnPOnline -Url $Url -Interactive -ClientId $ClientId -ErrorAction Stop -WarningAction Ignore
-        }
-    }
-    Catch {
-        Write-Host "[INFO] Failed to connect to $($Url): $($_.Exception.Message)"
-        throw $_.Exception.Message
-    }
-}
-
-<#
-.SYNOPSIS
-Start action
-
-.DESCRIPTION
-Start action, write action name and start stopwatch
-
-.PARAMETER Action
-Action name to start
-#>
-function StartAction($Action) {
-    $global:sw_action = [Diagnostics.Stopwatch]::StartNew()
-    Write-Host "[INFO] $Action...  " -NoNewline
-}
-
-<#
-.SYNOPSIS
-End action
-
-.DESCRIPTION
-End action, stop stopwatch and write elapsed time
-#>
-function EndAction() {
-    $global:sw_action.Stop()
-    $ElapsedSeconds = [math]::Round(($global:sw_action.ElapsedMilliseconds) / 1000, 2)
-    Write-Host "Completed in $($ElapsedSeconds)s" -ForegroundColor Green
-}
-
-<#
-.SYNOPSIS
-Load PnP.PowerShell from bundle
-
-.DESCRIPTION
-Loaa PnP.PowerShell from bundle and return version.
-#>
-function LoadBundle() {
-    Import-Module "$PSScriptRoot/PnP.PowerShell/PnP.PowerShell.psd1" -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
-    return (Get-Command Connect-PnPOnline).Version
-}
-
 if (-not [string]::IsNullOrEmpty($CI)) {
     Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
     Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop
@@ -187,7 +100,6 @@ else {
         Write-Host "[INFO] Loaded module PnP.PowerShell v$((Get-Command Connect-PnPOnline).Version) from your environment"
     }
 }
-
 
 #region Setting variables based on input from user
 [System.Uri]$Uri = $Url.TrimEnd('/')
@@ -420,13 +332,13 @@ if (-not $SkipTemplate.IsPresent) {
             EndAction
         }
         elseif (-not $SkipTaxonomy.IsPresent -and $Upgrade.IsPresent) {
-            StartAction("Applying PnP template Taxonomy (B&A) to $($Uri.AbsoluteUri)")
             $TermSetA = Get-PnPTermSet -Identity "cc6cdd18-c7d5-42e1-8d19-a336dd78f3f2" -TermGroup "Prosjektportalen" -ErrorAction SilentlyContinue
             $TermSetB = Get-PnPTermSet -Identity "ec5ceb95-7259-4282-811f-7c57304be71e" -TermGroup "Prosjektportalen" -ErrorAction SilentlyContinue
             if (-not $TermSetA -or -not $TermSetB) {
+                StartAction("Applying PnP template Taxonomy (B&A) to $($Uri.AbsoluteUri)")
                 Invoke-PnPSiteTemplate "$TemplatesBasePath/TaxonomyBA.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
+                EndAction
             }
-            EndAction
         }
 
         if ($Upgrade.IsPresent) {
@@ -435,7 +347,7 @@ if (-not $SkipTemplate.IsPresent) {
                 Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers Navigation, SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
             }
             catch {
-                Write-Host "`t[WARNING] Failed to apply PnP templates to, retrying..." -ForegroundColor Yellow
+                Write-Host "`t[WARNING] Failed to apply PnP Portfolio template, retrying..." -ForegroundColor Yellow
                 Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers Navigation, SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
             }
             EndAction
@@ -459,7 +371,7 @@ if (-not $SkipTemplate.IsPresent) {
                 Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
             }
             catch {
-                Write-Host "`t[WARNING] Failed to apply PnP templates to, retrying..." -ForegroundColor Yellow
+                Write-Host "`t[WARNING] Failed to apply PnP Portfolio template, retrying..." -ForegroundColor Yellow
                 Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
             }
             EndAction
@@ -534,19 +446,18 @@ if ($Upgrade.IsPresent) {
 
 $sw.Stop()
 
-if ($null -eq $CI) {
-    Write-Host "[REQUIRED ACTION] Go to $($AdminSiteUrl)/_layouts/15/online/AdminHome.aspx#/webApiPermissionManagement and approve the pending requests" -ForegroundColor Yellow
-    Write-Host "[RECOMMENDED ACTION] Go to https://github.com/Puzzlepart/prosjektportalen365/wiki/Installasjon#steg-4-manuelle-steg-etter-installasjonen and verify post-install steps" -ForegroundColor Yellow
-}
-
 if ($Upgrade.IsPresent) {
     Write-Host "[SUCCESS] Upgrade completed in $($sw.Elapsed)" -ForegroundColor Green
 }
 else {
+    if ($null -eq $CI) {
+        Write-Host "[REQUIRED ACTION] Go to $($AdminSiteUrl)/_layouts/15/online/AdminHome.aspx#/webApiPermissionManagement and approve the pending requests" -ForegroundColor Yellow
+        Write-Host "[RECOMMENDED ACTION] Go to https://github.com/Puzzlepart/prosjektportalen365/wiki/Installasjon#steg-4-manuelle-steg-etter-installasjonen and verify post-install steps" -ForegroundColor Yellow
+    }
     Write-Host "[SUCCESS] Installation completed in $($sw.Elapsed)" -ForegroundColor Green
 }
 Write-Host "[INFO] Consider running .\Install\Scripts\UpgradeAllSitesToLatest.ps1 to upgrade all sites to the latest version of Prosjektportalen 365."
-Write-Host "[INFO] This is required after upgrading between minor versions, e.g. from 1.8.x to 1.9.x."
+Write-Host "[INFO] This is required after upgrading between minor versions, e.g. from 1.9.x to 1.10.x."
 #endregion
 
 ## Turning off PnP trace logging

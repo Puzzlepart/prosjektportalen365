@@ -1,9 +1,10 @@
-$TargetVersion = "1.9.0"
+$TargetVersion = [version]"1.9.0"
 
 if ($global:__PreviousVersion -lt $TargetVersion) {
     $BaseDir = "$ScriptDir/UpgradeAllSitesToLatest/EnsureProjectAggregrationWebPart"
     $Pages = Get-Content "$BaseDir/$.json" -Raw -Encoding UTF8 | ConvertFrom-Json
     
+    $ReplacedCount = 0
     foreach ($Page in $Pages) {
         $PageName = "$($Page.Name).aspx"
         $DeprecatedComponent = Get-PnPPageComponent -Page $PageName -ErrorAction SilentlyContinue | Where-Object { $_.WebPartId -eq $Page.ControlId } | Select-Object -First 1
@@ -14,6 +15,12 @@ if ($global:__PreviousVersion -lt $TargetVersion) {
 
             Remove-PnPPageComponent -Page $PageName -InstanceId $DeprecatedComponent.InstanceId -Force -ErrorAction SilentlyContinue
             Invoke-PnPSiteTemplate -Path "$BaseDir/Template_ProjectAggregationWebPart.xml" -Parameters @{"JsonControlData" = $JsonControlData; "PageName" = $PageName; "Title" = $Title }
+
+            $ReplacedCount++
         }
+    }
+
+    if ($ReplacedCount -eq 0) {
+        Write-Host "`t`tThe site does not need to replace any deprecated project aggregation components" -ForegroundColor Green
     }
 }

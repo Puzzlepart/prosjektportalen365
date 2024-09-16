@@ -7,11 +7,14 @@ Param(
     [string]$ClientId = "da6c31a6-b557-4ac3-9994-7315da06ea3a"
 )
 
+$ErrorActionPreference = "Stop"
+
+. $PSScriptRoot\SharedFunctions.ps1
 
 $CI_MODE = (-not ([string]::IsNullOrEmpty($CI)))
 
-$global:__InstalledVersion = $null
-$global:__PreviousVersion = $null
+[version]$global:__InstalledVersion = $null
+[version]$global:__PreviousVersion = $null
 $global:__PnPConnection = $null
 $global:__CurrentChannelConfig = $null
 $InstallStartTime = (Get-Date -Format o)
@@ -29,35 +32,6 @@ if (Test-Path -Path "$ScriptDir/../.current-channel-config.json") {
     Write-Host "[INFO] Loaded channel config from file .current-channel-config.json, will use channel $($global:__CurrentChannelConfig.Channel) when upgrading all sites to latest" -ForegroundColor Yellow
 }
 
-
-function Connect-SharePoint {
-    Param(
-        [Parameter(Mandatory = $true)]
-        [string]$Url
-    )
-
-    Try {
-        if ($CI_MODE) {
-            $DecodedCred = ([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($CI))).Split("|")
-            $Password = ConvertTo-SecureString -String $DecodedCred[1] -AsPlainText -Force
-            $Credentials = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $DecodedCred[0], $Password
-            Connect-PnPOnline -Url $Url -Credentials $Credentials -ErrorAction Stop  -WarningAction Ignore
-        }
-        else {
-            if ($null -ne $global:__PnPConnection.ClientId) {
-                Connect-PnPOnline -Url $Url -Interactive -ClientId $global:__PnPConnection.ClientId -ErrorAction Stop -WarningAction Ignore
-            }
-            Connect-PnPOnline -Url $Url -Interactive -ClientId $ClientId -ErrorAction Stop -WarningAction Ignore
-            $global:__PnPConnection = Get-PnPConnection
-        }
-    }
-    Catch {
-        Write-Host "[INFO] Failed to connect to [$Url]: $($_.Exception.Message)"
-        throw $_.Exception.Message
-    }
-}
-
-
 function UpgradeSite($Url) {
     Connect-SharePoint -Url $Url
     $ProjectPropertiesList = Get-PnPList -Identity "Prosjektegenskaper" -ErrorAction SilentlyContinue
@@ -70,7 +44,8 @@ function UpgradeSite($Url) {
     }
 }
 
-Write-Host "This script will update all existing sites in a Prosjektportalen installation. This requires you to have the SharePoint admin role"
+Write-Host "This script will update all existing sites belonging to the PP installation $Url."
+Write-Host "This requires you to have the SharePoint administrator role"
 
 Set-PnPTraceLog -Off
 $LogFilePath = "$PSScriptRoot/UpgradeSites_Log-$((Get-Date).ToString('yyyy-MM-dd-HH-mm')).txt"
@@ -79,8 +54,39 @@ Start-Transcript -Path $LogFilePath
 Connect-SharePoint -Url $Url
 $InstallLogEntries = Get-PnPListItem -List "Installasjonslogg" -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>"
 $NativeLogEntries = $InstallLogEntries | Where-Object {$_.FieldValues.Title -match "PP365+[\s]+[0-9]+[.][0-9]+[.][0-9]+[.][a-zA-Z0-9]+"}
-$global:__InstalledVersion = ($NativeLogEntries | Select-Object -First 1).FieldValues["InstallVersion"]
-$global:__PreviousVersion = ($NativeLogEntries | Select-Object -Skip 1 -First 1).FieldValues["InstallVersion"]
+$LatestInstallEntry = $NativeLogEntries | Select-Object -First 1
+$PreviousInstallEntry = $NativeLogEntries | Select-Object -Skip 1 -First 1
+
+if ($null -eq $LatestInstallEntry) {
+    $LatestInstallEntry = $InstallLogEntries | Select-Object -First 1
+    $PreviousInstallEntry = $InstallLogEntries | Select-Object -Skip 1 -First 1
+} 
+elseif ($null -eq $PreviousInstallEntry) {
+    $LatestInstallEntry = $InstallLogEntries | Select-Object -First 1
+    $PreviousInstallEntry = $InstallLogEntries | Select-Object -Skip 1 -First 1
+}
+
+if ($null -ne $LatestInstallEntry -and $null -ne $PreviousInstallEntry) {
+    $LatestInstallVersion = $LatestInstallEntry.FieldValues["InstallVersion"]
+    $PreviousInstallVersion = $PreviousInstallEntry.FieldValues["InstallVersion"]
+} else {
+    Write-Host "Could not identify previous installed versions. It's still possible to attempt to upgrade sites. We will attempt to run all avilable upgrade actions" -ForegroundColor Yellow
+    if ($null -ne $LatestInstallEntry) {
+        $LatestInstallVersion = $LatestInstallEntry.FieldValues["InstallVersion"]
+        $PreviousInstallVersion = "0.0.0"
+    } else {
+        Write-Host "Could not identify any installed versions. This is a critical error. Exiting script." -ForegroundColor Red
+        Stop-Transcript
+        exit 0
+    }
+}
+
+if ($LatestInstallVersion -eq $PreviousInstallVersion) {
+    Write-Host "The newest installed version is the same as the previous. The script might have some issues upgrading projects." -ForegroundColor Yellow
+}
+
+$global:__InstalledVersion = ParseVersionString -VersionString $LatestInstallVersion
+$global:__PreviousVersion = ParseVersionString -VersionString $PreviousInstallVersion
 
 [System.Uri]$Uri = $Url
 $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
@@ -118,7 +124,7 @@ if ($YesOrNo -eq "y" -or $CI_MODE) {
     }
 }
 
-Write-Host "Upgrading existing sites from version $global:__PreviousVersion to $global:__InstalledVersion)..."
+Write-Host "Upgrading existing sites from version $global:__PreviousVersion to $global:__InstalledVersion..."
 $ProjectsInHub | ForEach-Object -Begin {$ProgressCount = 0} {    
     [Int16]$PercentComplete = (++$ProgressCount)*100/$ProjectsInHub.Count
     Write-Progress -Activity "Upgrading all sites in hub" -Status "$PercentComplete% Complete" -PercentComplete $PercentComplete -CurrentOperation "Processing site $_"
@@ -155,10 +161,10 @@ Stop-Transcript
 Connect-SharePoint -Url $Url
 
 $InstallEntry = @{
-    Title            = "PP365 UpgradeAllSitesToLatest.ps1"
+    Title            = "PP365 UpgradeAllSitesToLatest $LatestInstallVersion";
     InstallStartTime = $InstallStartTime; 
     InstallEndTime   = (Get-Date -Format o); 
-    InstallVersion   = $global:__InstalledVersion;
+    InstallVersion   = $LatestInstallVersion;
     InstallCommand   = $MyInvocation.Line.Substring(2);
 }
 
