@@ -8,7 +8,7 @@ NB: Som en del av denne releasen må det godkjennes en ny app ved installasjon e
 
 ### Ny funksjonalitet
 
-- Overgang til PnP PowerShell 2.10.0 og endringer på autentisering mot Microsoft 365 [#1226](https://github.com/Puzzlepart/prosjektportalen365/issues/1226)
+- Overgang til PnP PowerShell 2.12.0 og endringer på autentisering mot Microsoft 365 [#1226](https://github.com/Puzzlepart/prosjektportalen365/issues/1226)
 - Lagt til muligheten for et summeringsfelt i prosjektstatusseksjoner, denne kan summere eller finne gjennomsnitt av verdier basert på en kolonne i en liste- eller usikkerhetsseksjon [#1485](https://github.com/Puzzlepart/prosjektportalen365/issues/1485)
 - Lagt til mulighet for å legge til eller endre valg og verdier for idémodul, dette kan konfigureres med JSON i `Idékonfigurasjon` listen [#1488](https://github.com/Puzzlepart/prosjektportalen365/issues/1488)
 - Lagt til en aggregert oversikt for `Ressursallokering` i program og overordnet område mal [#1490](https://github.com/Puzzlepart/prosjektportalen365/issues/1490)
