@@ -68,6 +68,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           )
         }
         case ProjectSetupValidation.NoGroupId: {
+          await deleteCustomizer(this)
           throw new ProjectSetupError(
             'NoGroupId',
             strings.NoGroupIdErrorMessage,

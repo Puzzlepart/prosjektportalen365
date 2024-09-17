@@ -24,7 +24,7 @@ export function useColumnContextMenu() {
 
   const { isAddColumn, createContextualMenuItems } = useAddColumn(
     true,
-    context.props.pageContext.legacyPageContext.isSiteAdmin || isViewAuthor
+    context.props.isSiteAdmin || isViewAuthor
   )
   const onOpenChange: MenuProps['onOpenChange'] = (_, data) => setOpen(data.open)
   const [checkedValues, setCheckedValues] = useState<MenuProps['checkedValues']>({})

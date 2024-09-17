@@ -44,6 +44,9 @@ const Icons = {
  */
 export function useToolbarItems(context: IPortfolioOverviewContext) {
   const userCanManageViews = context.props.configuration.userCanAddViews
+  const userCanEditGlobalViews = userCanManageViews && context.props.isSiteAdmin
+  const isViewAuthor =
+    userCanManageViews && context.state.currentView?.author === context.props.pageContext.user.email
 
   const { exportToExcel } = useExcelExport(context)
   const sharedViews = useViewsMenuItems(context, (view) => !view.isPersonal)
@@ -100,9 +103,10 @@ export function useToolbarItems(context: IPortfolioOverviewContext) {
               ),
               ...personalViews,
               ListMenuItemDivider,
-              ListMenuItemHeader(strings.ProgramsHeaderText).makeConditional(
-                !_.isEmpty(programViews)
-              ),
+              context.props.showProgramViews &&
+                ListMenuItemHeader(strings.ProgramsHeaderText).makeConditional(
+                  !_.isEmpty(programViews)
+                ),
               context.props.showProgramViews &&
                 new ListMenuItem(strings.SelectProgramText)
                   .setItems(programViews)
@@ -113,7 +117,7 @@ export function useToolbarItems(context: IPortfolioOverviewContext) {
                 new ListMenuItem(strings.NewViewText).setIcon(Icons.FormNew).setOnClick(() => {
                   context.dispatch(SET_VIEW_FORM_PANEL({ isOpen: true }))
                 }),
-              userCanManageViews &&
+              (userCanEditGlobalViews || isViewAuthor) &&
                 new ListMenuItem(strings.EditViewText).setIcon(Icons.Edit).setOnClick(() => {
                   context.dispatch(
                     SET_VIEW_FORM_PANEL({ isOpen: true, view: context.state.currentView })
