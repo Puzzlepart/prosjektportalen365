@@ -11,7 +11,8 @@ on:
       - .github/workflows/ci-channel-test.yml
 
 env:
-  CI_CREDENTIALS: ${{ secrets.CI_DEV_CREDENTIALS }}
+  CI_CERT_BASE64: ${{ secrets.CI_CERT_BASE64 }}
+  CI_TENANT: ${{ secrets.CI_TENANT }}
 
 jobs:
   build_release_package_test:
@@ -54,7 +55,7 @@ jobs:
           path: release
 
       - name: Upgrade
-        run: release/Install.ps1 -Url "${{ vars.SP_URL_TEST }}" -Upgrade -CI ${{ env.CI_CREDENTIALS }}
+        run: release/Install.ps1 -Url "${{ vars.SP_URL_TEST }}" -Upgrade -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }}
         shell: powershell
 
   upgrade_all_sites_to_latest:
@@ -69,7 +70,7 @@ jobs:
           path: release
 
       - name: Run script UpgradeAllSitesToLatest.ps1 in CI mode
-        run: release/Scripts/UpgradeAllSitesToLatest.ps1 -Url ${{ vars.SP_URL_TEST }} -CI ${{ env.CI_CREDENTIALS }}
+        run: release/Scripts/UpgradeAllSitesToLatest.ps1 -Url ${{ vars.SP_URL_TEST }} -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }}
         shell: powershell
 
   build_release_package_test_packages_only:
@@ -112,5 +113,5 @@ jobs:
           path: release
 
       - name: Upgrade
-        run: release/Install.ps1 -Url "${{ vars.SP_URL_TEST }}" -Upgrade -CI ${{ env.CI_CREDENTIALS }} -SkipTemplate
+        run: release/Install.ps1 -Url "${{ vars.SP_URL_TEST }}" -Upgrade -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -SkipTemplate
         shell: powershell

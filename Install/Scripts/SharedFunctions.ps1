@@ -11,11 +11,22 @@ The URL to the SharePoint site
 
 .EXAMPLE
 Connect-SharePoint -Url https://contoso.sharepoint.com/sites/pp365
+
+.EXAMPLE 
+$ConnectionInfo = [PSCustomObject]@{
+    ClientId         = $ClientId
+    CI               = $CI.IsPresent
+    Tenant           = $Tenant
+    CertificateBase64Encoded = $CertificateBase64Encoded
+}
+Connect-SharePoint -Url https://contoso.sharepoint.com/sites/pp365 -ConnectionInfo $ConnectionInfo
 #>
 function Connect-SharePoint {
     Param(
         [Parameter(Mandatory = $true)]
-        [string]$Url
+        [string]$Url,
+        [Parameter(Mandatory = $true)]
+        $ConnectionInfo
     )
 
     if ($null -eq $global:__InteractiveCachedAccessTokens) {
@@ -24,26 +35,19 @@ function Connect-SharePoint {
 
     Try {
         if ($null -ne $global:__InteractiveCachedAccessTokens[$Url]) {
-            Connect-PnPOnline -Url $Url -AccessToken $global:__InteractiveCachedAccessTokens[$Url]
+            Connect-PnPOnline -Url $Url -AccessToken $global:__InteractiveCachedAccessTokens[$Url] -ErrorAction Stop  -WarningAction Ignore
         }
-        if (-not [string]::IsNullOrEmpty($CI)) {
-            $DecodedCred = ([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($CI))).Split("|")
-            $Password = ConvertTo-SecureString -String $DecodedCred[1] -AsPlainText -Force
-            $Credentials = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $DecodedCred[0], $Password
-            Connect-PnPOnline -Url $Url -Credentials $Credentials -ErrorAction Stop  -WarningAction Ignore
-        }
-        elseif ($Interactive.IsPresent) {
-            Connect-PnPOnline -Url $Url -Interactive -ClientId $ClientId -ErrorAction Stop -WarningAction Ignore
-            $global:__InteractiveCachedAccessTokens[$Url] = Get-PnPAppAuthAccessToken
-        }
-        elseif ($null -ne $PSCredential) {
-            Connect-PnPOnline -Url $Url -Credentials $PSCredential -ErrorAction Stop  -WarningAction Ignore
-        }
-        elseif ($null -ne $GenericCredential -and $GenericCredential -ne "") {
-            Connect-PnPOnline -Url $Url -Credentials $GenericCredential -ErrorAction Stop  -WarningAction Ignore
+        if ($ConnectionInfo.CI) {
+            if ($ConnectionInfo.CertificateBase64Encoded -and $ConnectionInfo.Tenant) {
+                Connect-PnPOnline -Url $Url -CertificateBase64Encoded $ConnectionInfo.CertificateBase64Encoded -Tenant $ConnectionInfo.Tenant -ClientId $ConnectionInfo.ClientId -ErrorAction Stop  -WarningAction Ignore
+            } else {
+                throw "Missing certificate or tenant for CI mode"
+            }
+
         }
         else {
-            Connect-PnPOnline -Url $Url -Interactive -ClientId $ClientId -ErrorAction Stop -WarningAction Ignore
+            Connect-PnPOnline -Url $Url -Interactive -ClientId $ConnectionInfo.ClientId -ErrorAction Stop -WarningAction Ignore
+            $global:__InteractiveCachedAccessTokens[$Url] = Get-PnPAppAuthAccessToken
         }
     }
     Catch {
