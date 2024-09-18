@@ -104,11 +104,15 @@ $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".share
 
 Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
 
-# Get current logged in user
-$Context = Get-PnPContext
-$Context.Load($Context.Web.CurrentUser)
-$Context.ExecuteQuery()
-$UserName = $Context.Web.CurrentUser.LoginName
+Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
+$CurrentUser = Get-PnPProperty -Property CurrentUser -ClientObject (Get-PnPContext).Web -ErrorAction SilentlyContinue
+if ($null -ne $CurrentUser -and $CurrentUser.LoginName) {
+    Write-Host "[INFO] Installing with user [$($CurrentUser.LoginName)]"
+    $UserName = $CurrentUser.LoginName
+}
+else {
+    Write-Host "[WARNING] Failed to get current user. Assuming installation is done with an app or a service principal without e-mail." -ForegroundColor Yellow
+}
 
 Write-Host "Retrieving all sites of the Project Portal hub..."
 $ProjectsHub = Get-PnPTenantSite -Identity $Url
