@@ -49,9 +49,9 @@ Param(
 $global:__InteractiveCachedAccessTokens = @{}
 
 $ConnectionInfo = [PSCustomObject]@{
-    ClientId         = $ClientId
-    CI               = $CI.IsPresent
-    Tenant           = $Tenant
+    ClientId                 = $ClientId
+    CI                       = $CI.IsPresent
+    Tenant                   = $Tenant
     CertificateBase64Encoded = $CertificateBase64Encoded
 }
 
@@ -113,11 +113,13 @@ $TemplatesBasePath = "$PSScriptRoot/Templates"
 #region Print installation user
 Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
 $CurrentUser = Get-PnPProperty -Property CurrentUser -ClientObject (Get-PnPContext).Web -ErrorAction SilentlyContinue
-if ($null -eq $CurrentUser) {
+if ($CurrentUser.Email) {
+    $CurrentUserEmail = $CurrentUser.Email
+    Write-Host "[INFO] Installing with user [$CurrentUserEmail]"
+}
+else {
     Write-Host "[WARNING] Failed to get current user. Assuming installation is done with an app or a service principal without e-mail." -ForegroundColor Yellow
-    $CurrentUser = "N/A"
-} else {
-    Write-Host "[INFO] Installing with user [$($CurrentUser.Email)]"
+    $CurrentUserEmail = "N/A"
 }
 
 #endregion
@@ -480,16 +482,12 @@ $InstallEntry = @{
     InstallEndTime   = $InstallEndTime; 
     InstallVersion   = "{VERSION_PLACEHOLDER}";
     InstallCommand   = $MyInvocation.Line.Substring(2);
+    InstallUser      = $CurrentUserEmail;
+    InstallChannel   = $Channel;
 }
 
-if ($null -ne $CurrentUser.Email) {
-    $InstallEntry.InstallUser = $CurrentUser.Email
-}
 if ($CI.IsPresent) {
     $InstallEntry.InstallCommand = "GitHub CI";
-}
-if ($Channel -ne "main") {
-    $InstallEntry.InstallChannel = $Channel
 }
 
 ## Logging installation to SharePoint list
@@ -498,7 +496,7 @@ $InstallationEntry = Add-PnPListItem -List "Installasjonslogg" -Values $InstallE
 ## Attempting to attach the log file to installation entry
 if ($null -ne $InstallationEntry) {
     $File = Get-Item -Path $LogFilePath
-    if  ($null -ne $File -and $File.Length -gt 0) {
+    if ($null -ne $File -and $File.Length -gt 0) {
         Write-Host "[INFO] Attaching installation log file to installation entry"
         $AttachmentOutput = Add-PnPListItemAttachment -List "Installasjonslogg" -Identity $InstallationEntry.Id -Path $LogFilePath -ErrorAction Continue
     }    
