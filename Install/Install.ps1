@@ -194,7 +194,7 @@ $SiteDesignThumbnail = "https://publiccdn.sharepointonline.com/prosjektportalen.
 
 # Add channel to name for the site design if channel is specified and not main
 if ($Channel -ne "main") {
-    $SiteDesignName += " - $Channel"
+    $SiteDesignName = [Uri]::UnescapeDataString($SiteDesignName) + " [$Channel]"
     $SiteDesignDesc = [Uri]::UnescapeDataString("Denne malen brukes n%C3%A5r det opprettes prosjekter under en test-kanal installasjon av Prosjektportalen")
     $SiteDesignThumbnail = "https://publiccdn.sharepointonline.com/prosjektportalen.sharepoint.com/sites/ppassets/Thumbnails/prosjektomrade-test.png"
 }
@@ -234,7 +234,10 @@ if (-not $SkipSiteDesign.IsPresent) {
         StartAction("Creating/updating site design $SiteDesignName")
         Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
     
-        $SiteDesign = Get-PnPSiteDesign -Identity $SiteDesignName 
+        $NoOutput = Get-PnpSiteDesign | Where-Object {$_.Title.Contains("Prosjektområde - test")} | Remove-PnPSiteDesign -Force -ErrorAction SilentlyContinue
+
+        $SiteDesign = Get-PnPSiteDesign -Identity $SiteDesignName
+
 
         if ($null -ne $SiteDesign) {
             $SiteDesign = Set-PnPSiteDesign -Identity $SiteDesign -SiteScriptIds $SiteScriptIds -Description $SiteDesignDesc -Version "1" -ThumbnailUrl $SiteDesignThumbnail
