@@ -4,12 +4,8 @@ Param(
     [string]$Url,
     [Parameter(Mandatory = $false, HelpMessage = "N/A")]
     [string]$Title = "Prosjektportalen",
-    [Parameter(Mandatory = $false, HelpMessage = "Stored credential from Windows Credential Manager")]
-    [string]$GenericCredential,
-    [Parameter(Mandatory = $false, HelpMessage = "Client ID of the Entra Id application used for interactive logins. Defaults to the multi-tenant Prosjektportalen app")]
-    [string]$ClientId = "da6c31a6-b557-4ac3-9994-7315da06ea3a",    
-    [Parameter(Mandatory = $false, HelpMessage = "PowerShell credential to authenticate with")]
-    [System.Management.Automation.PSCredential]$PSCredential,
+    [Parameter(Mandatory = $false, HelpMessage = "Client ID of the Entra Id application used for interactive logins. Defaults to the multi-tenant Prosjektportalen app. In case of certificate-based authentication, this should be the Application ID of the Azure AD app.")]
+    [string]$ClientId = "da6c31a6-b557-4ac3-9994-7315da06ea3a",
     [Parameter(Mandatory = $false, HelpMessage = "Skip PnP template")]
     [switch]$SkipTemplate,
     [Parameter(Mandatory = $false, HelpMessage = "Do you want to skip deployment of taxonomy?")]
@@ -38,7 +34,11 @@ Param(
     [ValidateSet('Norwegian')]
     [string]$Language = "Norwegian",
     [Parameter(Mandatory = $false, HelpMessage = "Used by Continuous Integration")]
-    [string]$CI,
+    [switch]$CI,
+    [Parameter(Mandatory = $false, HelpMessage = "Tenant in case of certificate based authentication")]
+    [string]$Tenant,
+    [Parameter(Mandatory = $false, HelpMessage = "Base64 encoded certificate")]
+    [string]$CertificateBase64Encoded,
     [Parameter(Mandatory = $false, HelpMessage = "Do you want to include Bygg & Anlegg content (only when upgrading)")]
     [switch]$IncludeBAContent
 )
@@ -47,6 +47,13 @@ Param(
 
 ## Storing access tokens for interactive logins
 $global:__InteractiveCachedAccessTokens = @{}
+
+$ConnectionInfo = [PSCustomObject]@{
+    ClientId         = $ClientId
+    CI               = $CI.IsPresent
+    Tenant           = $Tenant
+    CertificateBase64Encoded = $CertificateBase64Encoded
+}
 
 #region Handling installation language and culture
 $LanguageIds = @{
@@ -69,25 +76,19 @@ $sw = [Diagnostics.Stopwatch]::StartNew()
 $global:sw_action = $null
 $InstallStartTime = (Get-Date -Format o)
 
-## Check if -Upgrade switch is present
-if ($Upgrade.IsPresent) {
-    Write-Host "########################################################" -ForegroundColor Cyan
-    Write-Host "### Upgrading Prosjektportalen 365 v{VERSION_PLACEHOLDER} #####" -ForegroundColor Cyan
-    if ($Channel -ne "main") {
-        Write-Host "### Channel: $Channel ####" -ForegroundColor Cyan
-    }
-    Write-Host "########################################################" -ForegroundColor Cyan
-}
-else {
-    Write-Host "########################################################" -ForegroundColor Cyan
-    Write-Host "### Installing Prosjektportalen 365 v{VERSION_PLACEHOLDER} ####" -ForegroundColor Cyan
-    if ($Channel -ne "main") {
-        Write-Host "### Channel: $Channel ####" -ForegroundColor Cyan
-    }
-    Write-Host "########################################################" -ForegroundColor Cyan
-}
 
-if (-not [string]::IsNullOrEmpty($CI)) {
+Write-Host "########################################################" -ForegroundColor Cyan
+Write-Host "### $($Upgrade.IsPresent ? "Upgrading" : "Installing") Prosjektportalen 365 v{VERSION_PLACEHOLDER} ####" -ForegroundColor Cyan
+if ($Channel -ne "main") {
+    Write-Host "### Channel: $Channel ####" -ForegroundColor Cyan
+}
+if ($CI.IsPresent) {
+    Write-Host "### Running in Continuous Integration mode ####" -ForegroundColor Cyan
+}
+Write-Host "########################################################" -ForegroundColor Cyan
+
+
+if ($CI.IsPresent -and $null -eq (Get-Module -Name PnP.PowerShell)) {
     Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
     Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop
 }
@@ -110,9 +111,15 @@ $TemplatesBasePath = "$PSScriptRoot/Templates"
 #endregion
 
 #region Print installation user
-Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
-$CurrentUser = Get-PnPProperty -Property CurrentUser -ClientObject (Get-PnPContext).Web
-Write-Host "[INFO] Installing with user [$($CurrentUser.Email)]"
+Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
+$CurrentUser = Get-PnPProperty -Property CurrentUser -ClientObject (Get-PnPContext).Web -ErrorAction SilentlyContinue
+if ($null -eq $CurrentUser) {
+    Write-Host "[WARNING] Failed to get current user. Assuming installation is done with an app or a service principal without e-mail." -ForegroundColor Yellow
+    $CurrentUser = "N/A"
+} else {
+    Write-Host "[INFO] Installing with user [$($CurrentUser.Email)]"
+}
+
 #endregion
 
 #region Check if URL specified is root site or admin site or invalid managed path
@@ -128,7 +135,7 @@ Set-PnPTraceLog -On -Level Debug -LogFile $LogFilePath
 #region Create site
 if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
     Try {
-        Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
+        Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
         $PortfolioSite = Get-PnPTenantSite -Url $Uri.AbsoluteUri -ErrorAction SilentlyContinue
         if ($null -eq $PortfolioSite) {
             StartAction("Creating portfolio site at $($Uri.AbsoluteUri)")
@@ -146,7 +153,7 @@ if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
 #region Promote site to hub site
 if (-not $Upgrade.IsPresent) {
     Try {
-        Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
+        Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
         StartAction("Promoting $($Uri.AbsoluteUri) to hubsite")
         Register-PnPHubSite -Site $Uri.AbsoluteUri -ErrorAction SilentlyContinue >$null 2>&1
         EndAction
@@ -162,7 +169,7 @@ if (-not $Upgrade.IsPresent) {
 if (-not $Upgrade.IsPresent) {
     Try {
         StartAction("Setting permissions for associated member group")
-        Connect-SharePoint -Url $Uri.AbsoluteUri -ErrorAction Stop
+        Connect-SharePoint -Url $Uri.AbsoluteUri -ConnectionInfo $ConnectionInfo
         # Must use english names to avoid errors, even on non 1033 sites
         # Where-Object doesn't work directly on Get-PnPRoleDefinition, so need to clone it first (https://github.com/Puzzlepart/prosjektportalen365/issues/35)
         $RoleDefinitions = @()
@@ -195,7 +202,7 @@ if (-not $SkipSiteDesign.IsPresent) {
 
     Try {
         StartAction("Creating/updating site scripts")  
-        Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
+        Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
         $SiteScripts = Get-PnPSiteScript
         $SiteScriptSrc = Get-ChildItem "$PSScriptRoot/SiteScripts/*.txt"
         foreach ($s in $SiteScriptSrc) {
@@ -223,7 +230,7 @@ if (-not $SkipSiteDesign.IsPresent) {
 
     Try {
         StartAction("Creating/updating site design $SiteDesignName")
-        Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
+        Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
     
         $SiteDesign = Get-PnPSiteDesign -Identity $SiteDesignName 
 
@@ -246,7 +253,7 @@ if (-not $SkipSiteDesign.IsPresent) {
 if (-not $SkipDefaultSiteDesignAssociation.IsPresent) {
     StartAction("Setting default site design for hub $($Uri.AbsoluteUri) to $SiteDesignName")
     try {
-        Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
+        Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
         $SiteDesign = Get-PnPSiteDesign -Identity $SiteDesignName 
         Set-PnPHubSite -Identity $Uri.AbsoluteUri -SiteDesignId $SiteDesign.Id.Guid
     }
@@ -262,7 +269,7 @@ if (-not $SkipDefaultSiteDesignAssociation.IsPresent) {
 if ($Upgrade.IsPresent) {
     Write-Host "[INFO] Running pre-install upgrade steps"
     try {
-        Connect-SharePoint -Url $Uri.AbsoluteUri -ErrorAction Stop
+        Connect-SharePoint -Url $Uri.AbsoluteUri -ConnectionInfo $ConnectionInfo
         ."$PSScriptRoot/Scripts/PreInstallUpgrade.ps1"
     }
     catch {
@@ -276,10 +283,10 @@ if ($Upgrade.IsPresent) {
 if (-not $SkipAppPackages.IsPresent) {
     Try {
         if (-not $TenantAppCatalogUrl) {
-            Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
+            Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
             $TenantAppCatalogUrl = Get-PnPTenantAppCatalogUrl -ErrorAction SilentlyContinue
         }
-        Connect-SharePoint -Url $TenantAppCatalogUrl -ErrorAction Stop
+        Connect-SharePoint -Url $TenantAppCatalogUrl -ConnectionInfo $ConnectionInfo
     }
     Catch {
         Write-Host "[ERROR] Failed to connect to Tenant App Catalog. Do you have a Tenant App Catalog in your tenant?" -ForegroundColor Red
@@ -302,7 +309,7 @@ if (-not $SkipAppPackages.IsPresent) {
 #region Remove existing Home.aspx
 if (-not $Upgrade.IsPresent) {
     Try {
-        Connect-SharePoint -Url $Uri.AbsoluteUri -ErrorAction Stop
+        Connect-SharePoint -Url $Uri.AbsoluteUri -ConnectionInfo $ConnectionInfo
         Remove-PnPClientSidePage -Identity Home.aspx -Force
     }
     Catch {
@@ -314,10 +321,10 @@ if (-not $Upgrade.IsPresent) {
 #region Applying PnP templates 
 if (-not $SkipTemplate.IsPresent) {
     Try {
-        Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
+        Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
         Set-PnPTenantSite -NoScriptSite:$false -Url $Uri.AbsoluteUri -ErrorAction SilentlyContinue >$null 2>&1
 
-        Connect-SharePoint -Url $Uri.AbsoluteUri -ErrorAction Stop
+        Connect-SharePoint -Url $Uri.AbsoluteUri -ConnectionInfo $ConnectionInfo
 
         # Applying additional check that we're connected to the correct site before applying templates
         $CurrentContext = Get-PnPContext
@@ -386,7 +393,7 @@ if (-not $SkipTemplate.IsPresent) {
         }
         
 
-        Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
+        Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
         Set-PnPTenantSite -NoScriptSite:$true -Url $Uri.AbsoluteUri -ErrorAction SilentlyContinue >$null 2>&1
     }
     Catch {
@@ -398,7 +405,7 @@ if (-not $SkipTemplate.IsPresent) {
 
 #region QuickLaunch 
 Try {
-    Connect-SharePoint -Url $Uri.AbsoluteUri -ErrorAction Stop
+    Connect-SharePoint -Url $Uri.AbsoluteUri -ConnectionInfo $ConnectionInfo
     StartAction("Clearing QuickLaunch")
     Get-PnPNavigationNode -Location QuickLaunch | Remove-PnPNavigationNode -Force
     EndAction
@@ -411,7 +418,7 @@ Catch {
 #region Search Configuration 
 if (-not $SkipSearchConfiguration.IsPresent) {
     Try {
-        Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
+        Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
         StartAction("Importing Search Configuration")
         Set-PnPSearchConfiguration -Scope Subscription -Path "$PSScriptRoot/SearchConfiguration.xml" -ErrorAction SilentlyContinue
         EndAction
@@ -424,7 +431,7 @@ if (-not $SkipSearchConfiguration.IsPresent) {
 
 #region Post install - running post-install scripts and applying PnP templates
 Write-Host "[INFO] Running post-install steps" 
-Connect-SharePoint -Url $Uri.AbsoluteUri -ErrorAction Stop
+Connect-SharePoint -Url $Uri.AbsoluteUri -ConnectionInfo $ConnectionInfo
 try {
     ."$PSScriptRoot/Scripts/PostInstall.ps1"
     Write-Host "[SUCCESS] Successfully ran post-install steps" -ForegroundColor Green
@@ -450,7 +457,7 @@ if ($Upgrade.IsPresent) {
     Write-Host "[SUCCESS] Upgrade completed in $($sw.Elapsed)" -ForegroundColor Green
 }
 else {
-    if ($null -eq $CI) {
+    if (-not $CI.IsPresent) {
         Write-Host "[REQUIRED ACTION] Go to $($AdminSiteUrl)/_layouts/15/online/AdminHome.aspx#/webApiPermissionManagement and approve the pending requests" -ForegroundColor Yellow
         Write-Host "[RECOMMENDED ACTION] Go to https://github.com/Puzzlepart/prosjektportalen365/wiki/Installasjon#steg-4-manuelle-steg-etter-installasjonen and verify post-install steps" -ForegroundColor Yellow
     }
@@ -478,7 +485,7 @@ $InstallEntry = @{
 if ($null -ne $CurrentUser.Email) {
     $InstallEntry.InstallUser = $CurrentUser.Email
 }
-if (-not [string]::IsNullOrEmpty($CI)) {
+if ($CI.IsPresent) {
     $InstallEntry.InstallCommand = "GitHub CI";
 }
 if ($Channel -ne "main") {
