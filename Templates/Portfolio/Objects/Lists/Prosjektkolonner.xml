@@ -580,7 +580,7 @@
             <pnp:DataValue FieldName="GtSortOrder">330</pnp:DataValue>
             <pnp:DataValue FieldName="Title">FNs bærekraftsmål</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtUNSustDevGoals</pnp:DataValue>
-            <pnp:DataValue FieldName="GtManagedProperty">GtUNSustDevGoalsTextOWSTEXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtUNSustDevGoalsTextOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Tags</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>

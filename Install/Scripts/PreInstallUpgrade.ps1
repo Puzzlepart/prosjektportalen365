@@ -94,4 +94,26 @@ if ($null -ne $LastInstall) {
         Remove-PnPSiteScript -Identity "IdeaRegistration" -Force -ErrorAction SilentlyContinue
         Write-Host "[SUCCESS] Successfully removed deprecated SiteScripts" -ForegroundColor Green
     }
+
+    if ($PreviousVersion -lt [version]"1.10.0") {
+        Write-Host "[INFO] Changing fieldtype of GtUNSustDevGoalsText"
+        try {
+            $Field = Get-PnPField -Identity "GtUNSustDevGoalsText" -List "Prosjekter" -Includes FieldTypeKind
+            if ($null -ne $Field) {
+                $Field.FieldTypeKind = [Microsoft.SharePoint.Client.FieldType]::Note
+                $Field.Update()
+                $Field.Context.ExecuteQuery()
+            }
+            
+            $Field = Get-PnPField -Identity "GtUNSustDevGoalsText" -Includes FieldTypeKind
+            if ($null -ne $Field) {
+                $Field.FieldTypeKind = [Microsoft.SharePoint.Client.FieldType]::Note
+                $Field.Update()
+                $Field.Context.ExecuteQuery()
+            }
+
+        } catch {
+            Write-Host "[ERROR] Failed to change fieldtype of GtUNSustDevGoalsText" -ForegroundColor Yellow
+        }
+    }
 }
