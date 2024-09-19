@@ -1,5 +1,5 @@
 import { IColumn, IScrollablePaneProps, IShimmeredDetailsListProps } from '@fluentui/react'
-import { SearchBoxProps } from '@fluentui/react-search-preview'
+import { SearchBoxProps } from '@fluentui/react-components'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { IFilterPanelProps } from 'pp365-shared-library'
 import { ListMenuItem } from 'pp365-shared-library'

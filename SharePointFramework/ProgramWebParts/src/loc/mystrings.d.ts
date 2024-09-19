@@ -185,7 +185,6 @@ declare interface IProgramWebPartsStrings {
   TimelineContentListName: string
   TitleLabel: string
   ToggleColumnFormPanelLabel: string
-  ToggleEditViewColumnsLabel: string
   UseChangesButtonText: string
   ViewNotFoundMessage: string
   DataSourceItemNotFound: string

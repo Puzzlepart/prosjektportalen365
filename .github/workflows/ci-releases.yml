@@ -12,7 +12,9 @@ on:
 
 env:
   SP_URL: "https://puzzlepart.sharepoint.com/sites/pp365"
-  CI_CREDENTIALS: ${{ secrets.CI_DEV_CREDENTIALS }}
+  CI_CERT_BASE64: ${{ secrets.CI_CERT_BASE64 }}
+  CI_TENANT: ${{ secrets.CI_TENANT }}
+  CI_CLIENT_ID: ${{ secrets.CI_CLIENT_ID }}
 
 jobs:
   build_release_package:
@@ -55,7 +57,7 @@ jobs:
           path: release
 
       - name: Upgrade
-        run: release/Install.ps1 -Url ${{ env.SP_URL }} -Upgrade -CI ${{ env.CI_CREDENTIALS }}
+        run: release/Install.ps1 -Url ${{ env.SP_URL }} -Upgrade -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }}
         shell: powershell
 
   install:
@@ -70,7 +72,7 @@ jobs:
           path: release
 
       - name: Install
-        run: release/Install.ps1 -Url "${{ env.SP_URL }}_${{ needs.build_release_package.outputs.sha_short }}" -Title "Prosjektportalen 365 ${{ needs.build_release_package.outputs.sha_short }}" -CI ${{ env.CI_CREDENTIALS }} -SkipAppPackages -SkipSiteDesign -SkipTaxonomy -SkipSearchConfiguration
+        run: release/Install.ps1 -Url "${{ env.SP_URL }}_${{ needs.build_release_package.outputs.sha_short }}" -Title "Prosjektportalen 365 ${{ needs.build_release_package.outputs.sha_short }}" -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }} -SkipAppPackages -SkipSiteDesign -SkipTaxonomy -SkipSearchConfiguration
         shell: powershell
 
   upgrade_all_sites_to_latest:
@@ -85,7 +87,7 @@ jobs:
           path: release
 
       - name: Run script UpgradeAllSitesToLatest.ps1 in CI mode
-        run: release/Scripts/UpgradeAllSitesToLatest.ps1 -Url ${{ env.SP_URL }} -CI ${{ env.CI_CREDENTIALS }}
+        run: release/Scripts/UpgradeAllSitesToLatest.ps1 -Url ${{ env.SP_URL }} -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }}
         shell: powershell
 
   build_release_package_packages_only:
@@ -127,5 +129,5 @@ jobs:
           path: release
 
       - name: Upgrade
-        run: release/Install.ps1 -Url ${{ env.SP_URL }} -Upgrade -CI ${{ env.CI_CREDENTIALS }} -SkipTemplate
+        run: release/Install.ps1 -Url ${{ env.SP_URL }} -Upgrade -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }} -SkipTemplate
         shell: powershell

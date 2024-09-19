@@ -1,14 +1,4 @@
-import {
-  AppsListRegular,
-  ContentView24Filled,
-  ContentView24Regular,
-  EditFilled,
-  EditRegular,
-  FormNewFilled,
-  FormNewRegular,
-  TextBulletListLtrRegular,
-  bundleIcon
-} from '@fluentui/react-icons'
+import { AppsListRegular, TextBulletListLtrRegular } from '@fluentui/react-icons'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ListMenuItem, ListMenuItemDivider } from 'pp365-shared-library'
 import { useMemo } from 'react'
@@ -20,15 +10,7 @@ import {
   TOGGLE_FILTER_PANEL
 } from '../reducer'
 import { useExcelExport } from './useExcelExport'
-
-/**
- * Object containing icons used in the toolbar.
- */
-const Icons = {
-  ContentView: bundleIcon(ContentView24Filled, ContentView24Regular),
-  FormNew: bundleIcon(FormNewFilled, FormNewRegular),
-  Edit: bundleIcon(EditFilled, EditRegular)
-}
+import { Icons } from './icons'
 
 /**
  * Returns an array of toolbar items for the PortfolioAggregation component.

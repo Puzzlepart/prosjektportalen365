@@ -6,12 +6,109 @@ declare interface IPortfolioWebPartsStrings {
     MoveUpDisabled: string
     MoveDown: string
     MoveDownDisabled: string
+    Back: string
+    Settings: string
+    Close: string
   },
   Placeholder: {
     TextField: string
+    SiteName: string
+    SiteDescription: string
     Icon: string,
     ChoiceField: string,
     MultiChoiceField: string,
+    GuestField: string,
+    UserField: string,
+    BusinessJustificationField: string
+  },
+  Provision: {
+    DrawerLevel1HeaderText: string,
+    DrawerLevel1DescriptionText: string,
+    SiteTypeFieldLabel: string,
+    SiteNameFieldLabel: string,
+    SiteNameFieldDescription: string,
+    SiteNamePrefixTooltipText: string,
+    SiteNameSuffixTooltipText: string
+    SiteNameValidationErrorMessage: string,
+    SiteNameValidationSuccessMessage: string,
+    SiteDescriptionFieldLabel: string,
+    SiteDescriptionFieldDescription: string,
+    BusinessJustificationFieldLabel: string,
+    BusinessJustificationFieldDescription: string,
+    AliasFieldLabel: string
+    UrlFieldLabel: string
+    OwnerFieldLabel: string,
+    OwnerFieldDescription: string,
+    OwnerFieldNoOptionsText: string,
+    MemberFieldLabel: string,
+    MemberFieldDescription: string,
+    DrawerLevel2HeaderText: string,
+    DrawerLevel2DescriptionText: string,
+    TeamifyFieldLabel: string,
+    TeamifyFieldDescription: string,
+    TeamTemplateFieldLabel: string,
+    TeamTemplateFieldDescription: string,
+    ConfidentialFieldLabel: string,
+    ConfidentialFieldDescription: string,
+    PrivacyFieldLabel: string,
+    PrivacyFieldDescription: string,
+    PrivacyFieldOptionPrivate: string,
+    PrivacyFieldOptionPublic: string,
+    ExternalSharingFieldLabel: string,
+    ExternalSharingFieldDescription: string,
+    GuestFieldLabel: string,
+    GuestFieldDescription: string,
+    GuestFieldNoOptionsText: string,
+    LanguageFieldLabel: string,
+    TimeZoneFieldLabel: string,
+    HubSiteFieldLabel: string,
+    DrawerFooterDescriptionText: string,
+    PreviousButtonLabel: string,
+    NextButtonLabel: string,
+    ProvisionButtonLabel: string
+    ToastCreatedTitle: string
+    ToastCreatedBody: string
+    ToastCreatedErrorTitle: string
+    ToastCreatedErrorBody: string
+    StatusMenuLabel: string
+    SettingsMenuLabel: string
+    IdeaMenuLabel: string
+    SettingsSearchLabel: string
+    SettingsDialogTitle: string
+    SettingsDialogDescription: string
+    SettingsDialogSpinnerLabel: string
+    SettingsDialogNoSearchResultsLabel: string
+    SettingsDialogNoResultsLabel: string
+    SettingLabel: string
+    DescriptionLabel: string
+    ValueLabel: string
+    EditLabel: string
+    StatusSearchLabel: string
+    UpdateLabel: string
+    StatusDialogTitle: string
+    StatusDialogDescription: string
+    StatusDialogSpinnerLabel: string
+    StatusDialogNoSearchResultsLabel: string
+    StatusDialogNoResultsLabel: string
+    StatusLabel: string
+    SubmittedLabel: string
+    ApprovedLabel: string
+    RejectedLabel: string
+    PendingApprovalLabel: string
+    SpaceCreationFailedLabel: string
+    SpaceAlreadyExistsLabel: string
+    TeamRequestedLabel: string
+    SpaceCreationLabel: string
+    SpaceCreatedLabel: string
+    NotSubmittedLabel: string
+    SubmittedDateLabel: string
+    DeleteLabel: string
+    DeleteSubmissionLabel: string
+    DeleteSubmissionConfirmationLabel: string
+    DeletedSubmissionToastTitle: string
+    DeletedSubmissionToastBody: string
+    DeletedSubmissionErrorToastTitle: string
+    DeletedSubmissionErrorToastBody: string
   },
   AddColumnLabel: string
   AllProjectsHeaderText: string
@@ -263,7 +360,6 @@ declare interface IPortfolioWebPartsStrings {
   TitleLabel: string
   TitleDescription: string
   ToggleColumnFormPanelLabel: string
-  ToggleEditViewColumnsLabel: string
   UseChangesButtonText: string
   UseDynamicColorsDescription: string
   UseDynamicColorsLabel: string

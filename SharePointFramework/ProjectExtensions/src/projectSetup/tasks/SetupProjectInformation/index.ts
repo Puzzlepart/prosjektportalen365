@@ -5,6 +5,7 @@ import { IProjectSetupData } from 'projectSetup'
 import { SPDataAdapter } from '../../../data'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../types'
+import _ from 'lodash'
 
 /**
  * Setup project information task handles the following tasks:
@@ -83,10 +84,13 @@ export class SetupProjectInformation extends BaseTask {
         'AlignCenter'
       )
       const ideaDataProperties = await this._getIdeaDataProperties()
-      const properties = this._createPropertiesItem(this.params, {
+      let properties = this._createPropertiesItem(this.params, {
         ...ideaDataProperties,
         TemplateParameters: JSON.stringify(this._templateParameters)
       })
+      if (this.params.properties.skipUpdateTemplateParameters) {
+        properties = _.omit(properties, 'TemplateParameters')
+      }
       const propertyItems = await list.items()
       const propertyItem = list.items.getById(1)
       if (propertyItems.length > 0) await propertyItem.update(properties)

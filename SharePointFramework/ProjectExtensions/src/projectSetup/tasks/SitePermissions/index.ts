@@ -31,15 +31,16 @@ export class SitePermissions extends BaseTask {
   ): Promise<IBaseTaskParams> {
     try {
       onProgress(strings.SitePermissionsText, strings.SitePermissionsSubText, 'Permissions')
-      const [permConfig, roleDefinitions, groups] = await Promise.all([
+      const [permConfig, roleDefinitions] = await Promise.all([
         this._getPermissionConfiguration(),
-        this._getRoleDefinitions(params.web),
-        this._getSiteGroups()
+        this._getRoleDefinitions(params.web)
       ])
 
       for (let i = 0; i < permConfig.length; i++) {
         const { groupName, permissionLevel } = permConfig[i]
-        const users = groups[groupName] || []
+        const siteGroup = await this._getSiteGroupByName(groupName)
+
+        const users = siteGroup || []
         if (isEmpty(users)) continue
         const roleDefId = roleDefinitions[permissionLevel]
         if (roleDefId) {
@@ -120,6 +121,21 @@ export class SitePermissions extends BaseTask {
       }),
       {}
     )
+  }
+
+  /**
+   * Get site group by name with users from the portal web
+   */
+  private async _getSiteGroupByName(groupName: string) {
+    try {
+      const group = await SPDataAdapter.portalDataService.web.siteGroups
+        .getByName(groupName)
+        .select('Title', 'Users')
+        .expand('Users')()
+      return group['Users'] && group['Users'].map((u: ISiteUserProps) => u.LoginName)
+    } catch (error) {
+      throw new Error(`Failed to get site group by name ${groupName}. ${error}`)
+    }
   }
 
   /**

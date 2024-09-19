@@ -1,5 +1,5 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { ISiteUserInfo } from '@pnp/sp/presets/all'
+import { ISiteUserInfo, SPFI } from '@pnp/sp/presets/all'
 import { ISearchResult, SortDirection } from '@pnp/sp/search'
 import {
   DataSource,
@@ -9,12 +9,13 @@ import {
   PortfolioOverviewView,
   ProjectContentColumn,
   ProjectListModel,
-  SPProjectContentColumnItem,
   SPProjectItem,
   TimelineConfigurationModel,
   TimelineContentModel
 } from 'pp365-shared-library'
 import { IPortfolioAggregationConfiguration, IPortfolioOverviewConfiguration } from '../components'
+import { IPersonaSharedProps } from '@fluentui/react'
+import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
 
 export interface IFetchDataForViewItemResult extends ISearchResult {
   SiteId: string
@@ -58,6 +59,11 @@ export interface IPortfolioWebPartsDataAdapter {
    * An optional instance of the data source service.
    */
   dataSourceService?: DataSourceService
+
+  /**
+   * An optional instance of the SPFI service.
+   */
+  sp?: SPFI
 
   /**
    * Fetch data sources by category and optional level.
@@ -279,13 +285,79 @@ export interface IPortfolioWebPartsDataAdapter {
   ): Promise<any[]>
 
   /**
-   * Adds a new column to the project content columns list and adds the column to the specified data source.
+   * Search for users using `_sp.profiles.clientPeoplePickerSearchUser`.
    *
-   * @param properties Properties for the new column (`Id` will be omitted)
-   * @param dataSource The data source to add the column to
+   * @param queryString Query string
+   * @param selectedItems Selected items that should be excluded from the result
+   * @param maximumEntitySuggestions Maximum entity suggestions
    */
-  addColumnToDataSource?(
-    properties: SPProjectContentColumnItem,
-    dataSource: DataSource
-  ): Promise<boolean>
+  clientPeoplePickerSearchUser?(
+    queryString: string,
+    selectedItems: any[],
+    maximumEntitySuggestions?: number
+  ): Promise<IPersonaSharedProps[]>
+
+  /**
+   * Retrieves the provision request settings from the "Provisioning Request Settings" list
+   *
+   * @returns A Promise that resolves to an array containing the provision request settings.
+   */
+  getProvisionRequestSettings?(provisionUrl: string): Promise<any[]>
+
+  /**
+   * Retrieves the provision types from the "Provisioning Types" list
+   *
+   * @returns A Promise that resolves to a Map containing the types.
+   */
+  getProvisionTypes?(provisionUrl: string): Promise<Record<string, any>>
+
+  /**
+   * Ensure users in the provision site and return their IDs.
+   *
+   * @param users Users to ensure
+   */
+  getProvisionUsers?(users: any[], provisionUrl: string): Promise<Promise<number | null>[]>
+
+  /**
+   * Adds a new provision request to the provisioning requests list
+   *
+   * @param properties Properties for the new provision request (`Id` will be omitted)
+   * @param provisionUrl Url for the provisioning site
+   *
+   */
+  addProvisionRequests?(properties: IProvisionRequestItem, provisionUrl: string): Promise<boolean>
+
+  /**
+   * Deletes a provision request item from the provisioning requests list
+   *
+   * @param requestId Id of the request to delete
+   * @param provisionUrl Url for the provisioning site
+   *
+   */
+  deleteProvisionRequest?(requestId: number, provisionUrl: string): Promise<boolean>
+
+  /**
+   * Retrieves the provision types from the "Provisioning Requests" list
+   *
+   * @param user User to fetch the provision requests for
+   * @param provisionUrl Url for the provisioning site
+   *
+   * @returns A Promise that resolves to an array of containing provision requests.
+   */
+  fetchProvisionRequests?(user: any, provisionUrl: string): Promise<any[]>
+
+  /**
+   * Retrieves the team templates from the "Teams Templates" list
+   *
+   * @returns A Promise that resolves to a Map containing the templates.
+   */
+  getTeamTemplates?(provisionUrl: string): Promise<Record<string, any>>
+
+  /**
+   * Checks if a site exists based on its proposed URL
+   *
+   * @param siteUrl Site URL
+   *
+   */
+  siteExists?(siteUrl: string): Promise<boolean>
 }

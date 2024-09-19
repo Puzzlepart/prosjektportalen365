@@ -102,7 +102,19 @@ import {
   DismissCircleRegular,
   DismissCircleFilled,
   NumberSymbolFilled,
-  NumberSymbolRegular
+  NumberSymbolRegular,
+  LocalLanguageFilled,
+  LocalLanguageRegular,
+  GuestFilled,
+  GuestRegular,
+  DatabaseFilled,
+  DatabaseRegular,
+  ClockFilled,
+  ClockRegular,
+  PeopleTeamFilled,
+  PeopleTeamRegular,
+  PeopleAudienceFilled,
+  PeopleAudienceRegular
 } from '@fluentui/react-icons'
 
 /**
@@ -152,6 +164,14 @@ export const iconCatalog = {
   People: {
     regular: PeopleRegular,
     filled: PeopleFilled
+  },
+  PeopleTeam: {
+    regular: PeopleTeamRegular,
+    filled: PeopleTeamFilled
+  },
+  PeopleAudience: {
+    regular: PeopleAudienceRegular,
+    filled: PeopleAudienceFilled
   },
   MultiselectLtr: {
     regular: MultiselectLtrRegular,
@@ -316,5 +336,21 @@ export const iconCatalog = {
   DismissCircle: {
     regular: DismissCircleRegular,
     filled: DismissCircleFilled
+  },
+  LocalLanguage: {
+    regular: LocalLanguageRegular,
+    filled: LocalLanguageFilled
+  },
+  Guest: {
+    regular: GuestRegular,
+    filled: GuestFilled
+  },
+  Database: {
+    regular: DatabaseRegular,
+    filled: DatabaseFilled
+  },
+  Clock: {
+    regular: ClockRegular,
+    filled: ClockFilled
   }
 }

@@ -347,7 +347,7 @@ export class SPDataAdapter
     const { items } = await this.fetchDataForViewBatch(
       configuration.views[0],
       configuration,
-      this.spfxContext.pageContext.legacyPageContext.hubSiteIdhubSiteId
+      this.spfxContext.pageContext.legacyPageContext.hubSiteId
     )
 
     const data = items
@@ -861,7 +861,7 @@ export class SPDataAdapter
           RowLimit: 500,
           StartRow: 0,
           ClientType: 'ContentSearchRegular',
-          SelectProperties: ['SPWebURL', 'Title', 'SiteId'],
+          SelectProperties: ['SPWebURL', 'Title', 'SiteId', 'Path'],
           TrimDuplicates: false
         }
 
@@ -903,7 +903,8 @@ export class SPDataAdapter
             return {
               SiteId: item['GtSiteIdOWSTEXT'],
               Title: site?.Title ?? item['Title'],
-              SPWebURL: site && site['SPWebURL']
+              SPWebURL: site && site['SPWebURL'],
+              Path: site?.Path
             }
           })
       },

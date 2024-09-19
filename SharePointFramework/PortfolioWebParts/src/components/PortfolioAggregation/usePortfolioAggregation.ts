@@ -1,5 +1,5 @@
 import { Selection, format } from '@fluentui/react'
-import { SearchBoxProps } from '@fluentui/react-search-preview'
+import { SearchBoxProps } from '@fluentui/react-components'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'PortfolioWebPartsStrings'
 import { IFilterPanelProps, ProjectContentColumn } from 'pp365-shared-library'

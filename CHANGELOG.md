@@ -4,13 +4,44 @@ Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detal
 
 ## 1.10.0 - TBA
 
+NB: Som en del av denne releasen må det godkjennes en ny app ved installasjon eller oppgradering. Dette skyldes at den tidligere PnP PowerShell appen som vi benyttet ikke lenger er tilgjengelig. Appen må godkjennes av Global Admin eller Application Admin. Prompt for å godkjenne denne appen vil automatisk dukke opp når brukeren setter i gang installasjonen. Som den del av denne endringen må nye oppdateringer og installasjoner gjøres med *PowerShell 7*.
+
 ### Ny funksjonalitet
 
+- Overgang til PnP PowerShell 2.12.0 og endringer på autentisering mot Microsoft 365 [#1226](https://github.com/Puzzlepart/prosjektportalen365/issues/1226)
 - Lagt til muligheten for et summeringsfelt i prosjektstatusseksjoner, denne kan summere eller finne gjennomsnitt av verdier basert på en kolonne i en liste- eller usikkerhetsseksjon [#1485](https://github.com/Puzzlepart/prosjektportalen365/issues/1485)
 - Lagt til mulighet for å legge til eller endre valg og verdier for idémodul, dette kan konfigureres med JSON i `Idékonfigurasjon` listen [#1488](https://github.com/Puzzlepart/prosjektportalen365/issues/1488)
 - Lagt til en aggregert oversikt for `Ressursallokering` i program og overordnet område mal [#1490](https://github.com/Puzzlepart/prosjektportalen365/issues/1490)
 
-## 1.9.1 - TBA
+### Forbedringer
+- En ny visning i Porteføljeoversikt vil være personlig som standard [#1539](https://github.com/Puzzlepart/prosjektportalen365/issues/1539)
+
+### Feilrettinger
+
+- Rettet et problem hvor planneroppgaver ikke ble provisjonert i riktig rekkefølge [#1530](https://github.com/Puzzlepart/prosjektportalen365/issues/1530)
+- Rettet et problem med eksport til Excel for aggregerte oversikter [#1519](https://github.com/Puzzlepart/prosjektportalen365/issues/1519)
+- Rettet et problem med visningskolonner i aggregerte oversikter [#1447](https://github.com/Puzzlepart/prosjektportalen365/issues/1447)
+- Rettet et problem hvor tillatelseskonfigurasjon feilet dersom man ikke er eier på hub [#1549](https://github.com/Puzzlepart/prosjektportalen365/issues/1549)
+- Rettet et problem hvor provisjonering av dokumentbibliotek bare hentet 100 elementer [#1547](https://github.com/Puzzlepart/prosjektportalen365/issues/1547)
+- Rettet et problem hvor opprettelse av statusrapporter feilet dersom URL-felt var i bruk [#1546](https://github.com/Puzzlepart/prosjektportalen365/issues/1546)
+- Rettet et problem hvor eiere av personlige visninger ikke kunne redigere kolonner [#1553](https://github.com/Puzzlepart/prosjektportalen365/issues/1553)
+- Rettet et problem hvor Prosjektkolonnekonfigurasjon verdier som inneholder punktum ikke ble korrekt vist på Porteføljeoversikten [#1557](https://github.com/Puzzlepart/prosjektportalen365/issues/1557)
+
+---
+
+## 1.9.1 - 07.05.2024
+
+### Forbedringer
+
+- Standard forhåndsvisning for migrerte tiltak (Tiltakshåndtering) er nå satt til 'Ingen forhåndsvisning' [#1480](https://github.com/Puzzlepart/prosjektportalen365/issues/1480)
+- Mulighet for å skru på/av informasjonsmelding for dynamisk hjemmeside, standard av [#1484](https://github.com/Puzzlepart/prosjektportalen365/issues/1484)
+- Tidslinjeliste baserer seg nå på område-id for å hente tidslinjeelementer, dette for å sikre at elementene hentes og vises riktig [#1477](https://github.com/Puzzlepart/prosjektportalen365/issues/1477)
+- Støtte for tallfelt i redigeringspaneler for prosjektstatus, prosjektinformasjon og tidslinje-liste [#1496](https://github.com/Puzzlepart/prosjektportalen365/issues/1496)
+- Forbedret ytelsen betraktelig og innlasting av store mengder prosjekter i prosjektutlisting webdel på forsiden av porteføljen [#1493](https://github.com/Puzzlepart/prosjektportalen365/pull/1493)
+- Forbedret skript for å oppgradere eksisterende prosjektområder [#1475](https://github.com/Puzzlepart/prosjektportalen365/issues/1475), [#1487](https://github.com/Puzzlepart/prosjektportalen365/issues/1487)
+- Forbedret filtreringsmuligheter for prosjekttidslinje på Porteføljenivå og Program/overordnet for underområder. Det er nå mulig å filtrere på prosjekter og prosjektinformasjon som er presisert i listen `Prosjektkolonner` [#1489](https://github.com/Puzzlepart/prosjektportalen365/issues/1489)
+- Oppdatert `Fasesider` prosjekttillegg til å støtte den nye vertikale inndeling [#1521](https://github.com/Puzzlepart/prosjektportalen365/issues/1521)
+- Dersom det er angitt et nytt navn til et prosjekt etter opprettelse blir dette nå synkronisert ned til porteføljen [#1518](https://github.com/Puzzlepart/prosjektportalen365/issues/1518)
 
 ### Feilrettinger
 
@@ -43,18 +74,6 @@ Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detal
 - Rettet et problem hvor lenke til prosjektets tidslinje ikke lenket riktig for program [#1511](https://github.com/Puzzlepart/prosjektportalen365/issues/1511)
 - Rettet et problem hvor Ja/Nei kolonner ble vist som 1/0 i filterpanel [#1522](https://github.com/Puzzlepart/prosjektportalen365/issues/1522)
 - Rettet et problem hvor migrering av tiltak feilet og frøs [#1524](https://github.com/Puzzlepart/prosjektportalen365/issues/1524)
-
-### Forbedringer
-
-- Standard forhåndsvisning for migrerte tiltak (Tiltakshåndtering) er nå satt til 'Ingen forhåndsvisning' [#1480](https://github.com/Puzzlepart/prosjektportalen365/issues/1480)
-- Mulighet for å skru på/av informasjonsmelding for dynamisk hjemmeside, standard av [#1484](https://github.com/Puzzlepart/prosjektportalen365/issues/1484)
-- Tidslinjeliste baserer seg nå på område-id for å hente tidslinjeelementer, dette for å sikre at elementene hentes og vises riktig [#1477](https://github.com/Puzzlepart/prosjektportalen365/issues/1477)
-- Støtte for tallfelt i redigeringspaneler for prosjektstatus, prosjektinformasjon og tidslinje-liste [#1496](https://github.com/Puzzlepart/prosjektportalen365/issues/1496)
-- Forbedret ytelsen betraktelig og innlasting av store mengder prosjekter i prosjektutlisting webdel på forsiden av porteføljen [#1493](https://github.com/Puzzlepart/prosjektportalen365/pull/1493)
-- Forbedret skript for å oppgradere eksisterende prosjektområder [#1475](https://github.com/Puzzlepart/prosjektportalen365/issues/1475), [#1487](https://github.com/Puzzlepart/prosjektportalen365/issues/1487)
-- Forbedret filtreringsmuligheter for prosjekttidslinje på Porteføljenivå og Program/overordnet for underområder. Det er nå mulig å filtrere på prosjekter og prosjektinformasjon som er presisert i listen `Prosjektkolonner` [#1489](https://github.com/Puzzlepart/prosjektportalen365/issues/1489)
-- Oppdatert `Fasesider` prosjekttillegg til å støtte den nye vertikale inndeling [#1521](https://github.com/Puzzlepart/prosjektportalen365/issues/1521)
-- Dersom det er angitt et nytt navn til et prosjekt etter opprettelse blir dette nå synkronisert ned til porteføljen [#1518](https://github.com/Puzzlepart/prosjektportalen365/issues/1518)
 
 ---
 
@@ -171,7 +190,6 @@ I denne versjonen er det gjort flere endringer på det visuelle uttrykket til Pr
 - Endret feltet GtSearchQuery til Note for å støtte lange spørringer. NB: Vil ikke endres gjennom oppgradering. Endre manuelt felttype til "Flere linjer med tekst" ved behov. [#970](https://github.com/Puzzlepart/prosjektportalen365/issues/970)
 - Endret standardsortering av dokumentbiblioteker til å sortere på filnavn (var "Ingen" før)
 - Standard visningsmodus er nå lagt til som egenskap for prosjektliste-webdelen [#1053](https://github.com/Puzzlepart/prosjektportalen365/issues/1053)
-
 
 ### Feilrettinger
 

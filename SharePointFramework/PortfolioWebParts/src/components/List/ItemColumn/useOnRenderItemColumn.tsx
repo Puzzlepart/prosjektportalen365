@@ -45,10 +45,11 @@ function renderItemColumn(item: Record<string, any>, column: IColumn): ReactNode
     return createElement(renderFunction, columnRenderProps)
   }
 
-  const config = get<ProjectColumnConfigDictionaryItem>(column, `data.config.${columnValue}`, null)
+  const config = get<ProjectColumnConfigDictionaryItem>(column, 'data.config', null)
+  const columnConfig = config && config[columnValue]
 
-  if (config) {
-    return <ConfigColumn {...columnRenderProps} {...config} />
+  if (columnConfig) {
+    return <ConfigColumn {...columnRenderProps} {...columnConfig} />
   }
   return <span>{columnValue}</span>
 }

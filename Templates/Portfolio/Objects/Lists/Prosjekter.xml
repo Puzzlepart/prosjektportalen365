@@ -16,7 +16,7 @@
                 <FieldRef Name="GtInstalledVersion" />
                 <FieldRef Name="GtCurrentVersion" />
                 <FieldRef Name="Modified" />
-                <FieldRef Name="ModifiedBy" />
+                <FieldRef Name="Editor" />
                 <FieldRef Name="Created" />
             </ViewFields>
             <RowLimit Paged="TRUE">100</RowLimit>

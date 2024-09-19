@@ -66,11 +66,13 @@ export class CopyListData extends BaseTask {
                   'GtAttachments',
                   'GtPlannerPreviewType'
                 ])
-              ).sort((a, b) => {
-                if (a.GtCategory === b.GtCategory) {
-                  return b.GtSortOrder - a.GtSortOrder
-                }
-              })
+              )
+                .sort((a, b) => a.GtSortOrder - b.GtSortOrder)
+                .sort((a, b) => {
+                  if (a.GtCategory === b.GtCategory) {
+                    return b.GtSortOrder - a.GtSortOrder
+                  }
+                })
 
               const labels = _.uniq(
                 _.flatten(
@@ -306,13 +308,13 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Process files.
+   * Process files in the source library inlcuding files and folders and copy them to the destination list.
    *
    * @param config Content config
    */
   private async _processFiles(config: ContentConfig) {
     try {
-      this.logInformation('Processing files', { listConfig: config })
+      this.logInformation('Processing files and folders', { listConfig: config })
       const progressText = format(
         strings.CopyFilesText,
         config.sourceListProps.ItemCount,
@@ -323,7 +325,8 @@ export class CopyListData extends BaseTask {
 
       const spItems = await config.sourceList.items
         .expand('Folder')
-        .select('Title', 'LinkFilename', 'FileRef', 'FileDirRef', 'Folder/ServerRelativeUrl')()
+        .select('Title', 'LinkFilename', 'FileRef', 'FileDirRef', 'Folder/ServerRelativeUrl')
+        .getAll()
 
       const folders: string[] = []
       const files: any[] = []

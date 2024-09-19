@@ -691,6 +691,15 @@
   <data name="SiteFields_GtProjectNumber_DisplayName" xml:space="preserve">
     <value>Prosjektnummer</value>
   </data>
+  <data name="SiteFields_GtReferenceGroup_DisplayName" xml:space="preserve">
+    <value>Referansegruppe</value>
+  </data>
+  <data name="SiteFields_GtSteeringGroup_DisplayName" xml:space="preserve">
+    <value>Styringsgruppe</value>
+  </data>
+  <data name="SiteFields_GtProjectMembers_DisplayName" xml:space="preserve">
+    <value>Deltakere</value>
+  </data>
   <data name="SiteFields_GtStatusTime_DisplayName" xml:space="preserve">
     <value>Status fremdrift</value>
   </data>
@@ -1605,6 +1614,15 @@
   </data>
   <data name="SiteFields_GtProjectNumber_Description" xml:space="preserve">
     <value>Hvis relevant, legg inn tilhørende prosjektnummer</value>
+  </data>
+  <data name="SiteFields_GtReferenceGroup_Description" xml:space="preserve">
+    <value>Hvis relevant, legg inn tilhørende referansegruppe for prosjektet</value>
+  </data>
+  <data name="SiteFields_GtSteeringGroup_Description" xml:space="preserve">
+    <value>Hvis relevant, legg inn tilhørende styringsgruppe for prosjektet</value>
+  </data>
+  <data name="SiteFields_GtProjectMembers_Description" xml:space="preserve">
+    <value>Hvis relevant, legg inn tilhørende deltakere for prosjektet</value>
   </data>
   <data name="SiteFields_GtStatusTime_Description" xml:space="preserve">
     <value>Hva er status på prosjektets fremdrift iht prosjektets leveranser?</value>

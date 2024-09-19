@@ -205,6 +205,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
   private _onSubmit = async (row: RowAccessor, comment: string): Promise<void> => {
     const rowId = row.getValueByName('ID')
     const rowTitle = row.getValueByName('Title')
+    const rowReporter = row.getValueByName('GtIdeaReporter')[0] || ''
 
     await this._sp.web.lists
       .getByTitle(this._config.registrationList)
@@ -218,7 +219,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
     Log.info(LOG_SOURCE, `Updated ${this._config.registrationList}: Approved`)
 
     const pageUrl = await this._createSitePage(row)
-    await this._updateProcessingList(rowId, rowTitle, pageUrl)
+    await this._updateProcessingList(rowId, rowTitle, rowReporter, pageUrl)
 
     window.location.reload()
   }
@@ -259,12 +260,14 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
   private _updateProcessingList = async (
     rowId: number,
     rowTitle: string,
+    rowReporter: any,
     pageUrl: string
   ): Promise<void> => {
     await this._sp.web.lists.getByTitle(this._config.processingList).items.add({
       Title: rowTitle,
       GtRegistratedIdeaId: rowId,
-      GtIdeaUrl: pageUrl
+      GtIdeaUrl: pageUrl,
+      GtIdeaReporterId: rowReporter?.id
     })
 
     Log.info(LOG_SOURCE, 'Updated work list')
@@ -296,7 +299,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
       'Article'
     )
 
-    const reporter = row.getValueByName('GtIdeaReporter')[0] || ''
+    const reporter = row.getValueByName('GtIdeaReporter')[0] || null
 
     page.layoutType = 'NoImage'
     page.showTopicHeader = true
@@ -322,10 +325,13 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
         `<h3>Overordnet gjennomføringsplan</h3>${row.getValueByName('GtIdeaExecutionPlan')}`
       )
     )
-
     column2.addControl(
       new ClientsideText(
-        `<h3>Innmelder</h3><a href="mailto:${reporter.email}" target="_blank">${reporter.title}</a>`
+        `<h3>Innmelder</h3>${
+          reporter
+            ? `<a href="mailto:${reporter?.email}" target="_blank">${reporter?.title}</a>`
+            : 'Ikke angitt'
+        }`
       )
     )
     column2.addControl(

@@ -2,14 +2,30 @@ Param(
     [Parameter(Mandatory = $true)]
     [string]$Url,
     [Parameter(Mandatory = $false, HelpMessage = "Used by Continuous Integration")]
-    [string]$CI
+    [switch]$CI,
+    [Parameter(Mandatory = $false, HelpMessage = "Client ID of the Entra Id application used for interactive logins. Defaults to the multi-tenant Prosjektportalen app")]
+    [string]$ClientId = "da6c31a6-b557-4ac3-9994-7315da06ea3a",
+    [Parameter(Mandatory = $false, HelpMessage = "Tenant in case of certificate based authentication")]
+    [string]$Tenant,
+    [Parameter(Mandatory = $false, HelpMessage = "Base64 encoded certificate")]
+    [string]$CertificateBase64Encoded
 )
 
+$ErrorActionPreference = "Stop"
 
-$CI_MODE = (-not ([string]::IsNullOrEmpty($CI)))
+. $PSScriptRoot\SharedFunctions.ps1
 
-$global:__InstalledVersion = $null
-$global:__PreviousVersion = $null
+$ConnectionInfo = [PSCustomObject]@{
+    ClientId         = $ClientId
+    CI               = $CI.IsPresent
+    Tenant           = $Tenant
+    CertificateBase64Encoded = $CertificateBase64Encoded
+}
+
+$CI_MODE = $CI.IsPresent
+
+[version]$global:__InstalledVersion = $null
+[version]$global:__PreviousVersion = $null
 $global:__PnPConnection = $null
 $global:__CurrentChannelConfig = $null
 $InstallStartTime = (Get-Date -Format o)
@@ -27,37 +43,8 @@ if (Test-Path -Path "$ScriptDir/../.current-channel-config.json") {
     Write-Host "[INFO] Loaded channel config from file .current-channel-config.json, will use channel $($global:__CurrentChannelConfig.Channel) when upgrading all sites to latest" -ForegroundColor Yellow
 }
 
-
-function Connect-SharePoint {
-    Param(
-        [Parameter(Mandatory = $true)]
-        [string]$Url
-    )
-
-    Try {
-        if ($CI_MODE) {
-            $DecodedCred = ([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($CI))).Split("|")
-            $Password = ConvertTo-SecureString -String $DecodedCred[1] -AsPlainText -Force
-            $Credentials = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $DecodedCred[0], $Password
-            Connect-PnPOnline -Url $Url -Credentials $Credentials -ErrorAction Stop  -WarningAction Ignore
-        }
-        else {
-            if ($null -ne $global:__PnPConnection.ClientId) {
-                Connect-PnPOnline -Url $Url -Interactive -ClientId $global:__PnPConnection.ClientId -ErrorAction Stop -WarningAction Ignore
-            }
-            Connect-PnPOnline -Url $Url -Interactive -ErrorAction Stop -WarningAction Ignore
-            $global:__PnPConnection = Get-PnPConnection
-        }
-    }
-    Catch {
-        Write-Host "[INFO] Failed to connect to [$Url]: $($_.Exception.Message)"
-        throw $_.Exception.Message
-    }
-}
-
-
 function UpgradeSite($Url) {
-    Connect-SharePoint -Url $Url
+    Connect-SharePoint -Url $Url -ConnectionInfo $ConnectionInfo
     $ProjectPropertiesList = Get-PnPList -Identity "Prosjektegenskaper" -ErrorAction SilentlyContinue
     if ($null -eq $ProjectPropertiesList) {
         Write-Host "`t`tNo Prosjektegenskaper list found - this site is not a qualified Prosjektportalen site. Skipping upgrade of site $Url" -ForegroundColor Yellow
@@ -68,28 +55,64 @@ function UpgradeSite($Url) {
     }
 }
 
-Write-Host "This script will update all existing sites in a Prosjektportalen installation. This requires you to have the SharePoint admin role"
+Write-Host "This script will update all existing sites belonging to the PP installation $Url."
+Write-Host "This requires you to have the SharePoint administrator role"
 
 Set-PnPTraceLog -Off
 $LogFilePath = "$PSScriptRoot/UpgradeSites_Log-$((Get-Date).ToString('yyyy-MM-dd-HH-mm')).txt"
 Start-Transcript -Path $LogFilePath
 
-Connect-SharePoint -Url $Url
+Connect-SharePoint -Url $Url -ConnectionInfo $ConnectionInfo
 $InstallLogEntries = Get-PnPListItem -List "Installasjonslogg" -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>"
 $NativeLogEntries = $InstallLogEntries | Where-Object {$_.FieldValues.Title -match "PP365+[\s]+[0-9]+[.][0-9]+[.][0-9]+[.][a-zA-Z0-9]+"}
-$global:__InstalledVersion = ($NativeLogEntries | Select-Object -First 1).FieldValues["InstallVersion"]
-$global:__PreviousVersion = ($NativeLogEntries | Select-Object -Skip 1 -First 1).FieldValues["InstallVersion"]
+$LatestInstallEntry = $NativeLogEntries | Select-Object -First 1
+$PreviousInstallEntry = $NativeLogEntries | Select-Object -Skip 1 -First 1
+
+if ($null -eq $LatestInstallEntry) {
+    $LatestInstallEntry = $InstallLogEntries | Select-Object -First 1
+    $PreviousInstallEntry = $InstallLogEntries | Select-Object -Skip 1 -First 1
+} 
+elseif ($null -eq $PreviousInstallEntry) {
+    $LatestInstallEntry = $InstallLogEntries | Select-Object -First 1
+    $PreviousInstallEntry = $InstallLogEntries | Select-Object -Skip 1 -First 1
+}
+
+if ($null -ne $LatestInstallEntry -and $null -ne $PreviousInstallEntry) {
+    $LatestInstallVersion = $LatestInstallEntry.FieldValues["InstallVersion"]
+    $PreviousInstallVersion = $PreviousInstallEntry.FieldValues["InstallVersion"]
+} else {
+    Write-Host "Could not identify previous installed versions. It's still possible to attempt to upgrade sites. We will attempt to run all avilable upgrade actions" -ForegroundColor Yellow
+    if ($null -ne $LatestInstallEntry) {
+        $LatestInstallVersion = $LatestInstallEntry.FieldValues["InstallVersion"]
+        $PreviousInstallVersion = "0.0.0"
+    } else {
+        Write-Host "Could not identify any installed versions. This is a critical error. Exiting script." -ForegroundColor Red
+        Stop-Transcript
+        exit 0
+    }
+}
+
+if ($LatestInstallVersion -eq $PreviousInstallVersion) {
+    Write-Host "The newest installed version is the same as the previous. The script might have some issues upgrading projects." -ForegroundColor Yellow
+}
+
+$global:__InstalledVersion = ParseVersionString -VersionString $LatestInstallVersion
+$global:__PreviousVersion = ParseVersionString -VersionString $PreviousInstallVersion
 
 [System.Uri]$Uri = $Url
 $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
 
-Connect-SharePoint -Url $AdminSiteUrl
+Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
 
-# Get current logged in user
-$Context = Get-PnPContext
-$Context.Load($Context.Web.CurrentUser)
-$Context.ExecuteQuery()
-$UserName = $Context.Web.CurrentUser.LoginName
+Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
+$CurrentUser = Get-PnPProperty -Property CurrentUser -ClientObject (Get-PnPContext).Web -ErrorAction SilentlyContinue
+if ($null -ne $CurrentUser -and $CurrentUser.LoginName) {
+    Write-Host "[INFO] Installing with user [$($CurrentUser.LoginName)]"
+    $UserName = $CurrentUser.LoginName
+}
+else {
+    Write-Host "[WARNING] Failed to get current user. Assuming installation is done with an app or a service principal without e-mail." -ForegroundColor Yellow
+}
 
 Write-Host "Retrieving all sites of the Project Portal hub..."
 $ProjectsHub = Get-PnPTenantSite -Identity $Url
@@ -116,7 +139,7 @@ if ($YesOrNo -eq "y" -or $CI_MODE) {
     }
 }
 
-Write-Host "Upgrading existing sites from version $global:__PreviousVersion to $global:__InstalledVersion)..."
+Write-Host "Upgrading existing sites from version $global:__PreviousVersion to $global:__InstalledVersion..."
 $ProjectsInHub | ForEach-Object -Begin {$ProgressCount = 0} {    
     [Int16]$PercentComplete = (++$ProgressCount)*100/$ProjectsInHub.Count
     Write-Progress -Activity "Upgrading all sites in hub" -Status "$PercentComplete% Complete" -PercentComplete $PercentComplete -CurrentOperation "Processing site $_"
@@ -140,7 +163,7 @@ if ($YesOrNo -eq "y" -or $CI_MODE) {
         Write-Progress -Activity "Removing admin access" -Status "$PercentComplete% Complete" -PercentComplete $PercentComplete -CurrentOperation "Processing site $_"
         
         Write-Host "`tRemoving access to $_"
-        Connect-SharePoint -Url $_
+        Connect-SharePoint -Url $_ -ConnectionInfo $ConnectionInfo
         Remove-PnPSiteCollectionAdmin -Owners $UserName
     }
 }
@@ -150,13 +173,13 @@ Write-Host "Upgrade of all project sites is complete" -ForegroundColor Green
 
 Stop-Transcript
 
-Connect-SharePoint -Url $Url
+Connect-SharePoint -Url $Url -ConnectionInfo $ConnectionInfo
 
 $InstallEntry = @{
-    Title            = "PP365 UpgradeAllSitesToLatest.ps1"
+    Title            = "PP365 UpgradeAllSitesToLatest $LatestInstallVersion";
     InstallStartTime = $InstallStartTime; 
     InstallEndTime   = (Get-Date -Format o); 
-    InstallVersion   = $global:__InstalledVersion;
+    InstallVersion   = $LatestInstallVersion;
     InstallCommand   = $MyInvocation.Line.Substring(2);
 }
 

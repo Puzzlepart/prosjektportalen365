@@ -223,7 +223,6 @@ define([], function () {
     TimelineContentListName: 'Tidslinjeinnhold',
     TitleLabel: 'Title',
     ToggleColumnFormPanelLabel: 'Add column',
-    ToggleEditViewColumnsLabel: 'Show or hide columns',
     UseChangesButtonText: 'Use',
     ViewNotFoundMessage: 'Cannot find the specified view.',
     ViewsListNameLabel: 'Views'

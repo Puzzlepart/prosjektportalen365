@@ -604,6 +604,15 @@
   <data name="SiteFields_GtProjectNumber_DisplayName" xml:space="preserve">
     <value>Project Number</value>
   </data>
+  <data name="SiteFields_GtReferenceGroup_DisplayName" xml:space="preserve">
+    <value>Reference group</value>
+  </data>
+  <data name="SiteFields_GtSteeringGroup_DisplayName" xml:space="preserve">
+    <value>Steering group</value>
+  </data>
+  <data name="SiteFields_GtProjectMembers_DisplayName" xml:space="preserve">
+    <value>Participants</value>
+  </data>
   <data name="SiteFields_GtStatusTime_DisplayName" xml:space="preserve">
     <value>Status Progress</value>
   </data>
@@ -1482,6 +1491,15 @@
   </data>
   <data name="SiteFields_GtProjectNumber_Description" xml:space="preserve">
     <value>If relevant, enter the corresponding project number</value>
+  </data>
+  <data name="SiteFields_GtReferenceGroup_Description" xml:space="preserve">
+    <value>If relevant, enter the associated reference group</value>
+  </data>
+  <data name="SiteFields_GtSteeringGroup_Description" xml:space="preserve">
+    <value>If relevant, enter the associated steering group</value>
+  </data>
+  <data name="SiteFields_GtProjectMembers_Description" xml:space="preserve">
+    <value>If relevant, enter the associated project participants</value>
   </data>
   <data name="SiteFields_GtStatusTime_Description" xml:space="preserve">
     <value>What is the status of the project's progress according to the project's deliverables?</value>

@@ -25,7 +25,8 @@
           "PortfolioOverviewWebPart": "909d00a8-c563-4b52-a7a4-1fb5876f9058",
           "ProjectListWebPart": "397a0947-7d83-4084-871b-d8e0d1edc770",
           "PortfolioTimelineWebPart": "58446c7e-4a78-49e0-8ae0-2efee199e58d",
-          "ResourceAllocationWebPart": "29759c81-896f-4128-818c-e2fc60ff0087"
+          "ResourceAllocationWebPart": "29759c81-896f-4128-818c-e2fc60ff0087",
+          "ProjectProvisionWebPart": "971a1fc0-fb4c-4a63-860d-e08a69af6f9e"
         }
       },
       "ProgramWebParts": {

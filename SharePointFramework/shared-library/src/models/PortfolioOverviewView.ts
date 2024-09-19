@@ -20,6 +20,7 @@ export class SPPortfolioOverviewViewItem {
   public GtPortfolioRefinersId?: number[] | { results: number[] } = []
   public GtPortfolioGroupById?: number = 0
   public GtPortfolioColumnOrder?: string = ''
+  public Author?: { EMail: string }
 }
 
 /**
@@ -112,6 +113,11 @@ export class PortfolioOverviewView {
   public groupById: number
 
   /**
+   * Author of the view.
+   */
+  public author: string
+
+  /**
    * The view properties as a map. Used in the `PortfolioOverview`
    * component to edit and create views.
    */
@@ -134,6 +140,7 @@ export class PortfolioOverviewView {
     this.columnIds = (item?.GtPortfolioColumnsId as number[]) ?? []
     this.refinerIds = (item?.GtPortfolioRefinersId as number[]) ?? []
     this.groupById = item?.GtPortfolioGroupById
+    this.author = item?.Author?.EMail
     this.$map = this._toMap()
   }
 
@@ -144,18 +151,20 @@ export class PortfolioOverviewView {
    * @param title Title of the view
    * @param view View to create the default view from
    * @param sortOrder Sort order for the view if no view is provided
+   * @param isPersonal `true` if the view is a personal view, `false` otherwise (default is `true`)
    */
   public createDefault(
     title: string,
     view?: PortfolioOverviewView,
-    sortOrder?: number
+    sortOrder?: number,
+    isPersonal: boolean = true
   ): PortfolioOverviewView {
     this.title = title
     this.sortOrder = view ? view.sortOrder + 1 : sortOrder
     this.searchQuery = view?.searchQuery ?? ''
     this.iconName = 'LocationCircle'
     this.isDefaultView = false
-    this.isPersonal = false
+    this.isPersonal = isPersonal
     this.$map = this._toMap()
     return this
   }

@@ -1,4 +1,4 @@
-$TargetVersion = "1.9.0"
+$TargetVersion = [version]"1.9.0"
 
 if ($global:__PreviousVersion -le $TargetVersion) {
   $fieldXml = @"
@@ -21,13 +21,11 @@ if ($global:__PreviousVersion -le $TargetVersion) {
       if ($null -ne $field) {
         $contentType = Get-PnPContentType -List $listName -Identity "Element" -ErrorAction SilentlyContinue
         if ($null -ne $contentType) {
-          Write-Host "`t`t`tAdding GtProjectAdminRoles field to contenttype"
           $newfieldct = Add-PnPFieldToContentType -Field "GtProjectAdminRoles" -ContentType $contentType.Name -ErrorAction SilentlyContinue
         }
 
         $items = Get-PnPListItem -List $listName
         foreach ($item in $items) {
-          Write-Host "`t`t`tSetting default value for GtProjectAdminRoles field"
           $item["GtProjectAdminRoles"] = [System.Uri]::UnescapeDataString("SP omr%C3%A5deadministrator")
           $item.Update()
           Invoke-PnPQuery

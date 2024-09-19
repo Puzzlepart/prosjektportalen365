@@ -21,6 +21,6 @@ export class ProjectInformationParentProject {
     this.url = spItem.GtSiteUrl
     this.childProjects = (JSON.parse(spItem.GtChildProjects ?? []) as any[]).map((i) => i.SPWebURL)
     if (spItem.GtIsParentProject) this.icon = Icons.BoxMultiple
-    else if (spItem.GtIsProgram) this.icon = Icons.BoxMultiple
+    else this.icon = Icons.BoxMultiple
   }
 }

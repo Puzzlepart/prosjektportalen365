@@ -99,6 +99,9 @@
                                         },
                                         "ResourceAllocationWebPart": {
                                             "$ref": "#/definitions/guid"
+                                        },
+                                        "ProjectProvisionWebPart": {
+                                            "$ref": "#/definitions/guid"
                                         }
                                     },
                                     "required": [
@@ -108,7 +111,8 @@
                                         "PortfolioOverviewWebPart",
                                         "ProjectListWebPart",
                                         "PortfolioTimelineWebPart",
-                                        "ResourceAllocationWebPart"
+                                        "ResourceAllocationWebPart",
+                                        "ProjectProvisionWebPart"
                                     ]
                                 }
                             },

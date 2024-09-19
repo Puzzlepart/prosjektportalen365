@@ -187,7 +187,6 @@ define([], function () {
     TitleDescription: 'Tittel for visningen.',
     TitleLabel: 'Tittel',
     ToggleColumnFormPanelLabel: 'Legg til kolonne',
-    ToggleEditViewColumnsLabel: 'Vis eller skjul kolonner',
     UseChangesButtonText: 'Bruk',
     ViewNotFoundMessage: 'Finner ikke angitt visning.',
     DataSourceItemNotFound: 'Datakilde ble ikke funnet',

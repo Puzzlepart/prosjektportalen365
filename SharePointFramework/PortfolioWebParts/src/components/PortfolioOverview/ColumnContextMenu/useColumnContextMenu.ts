@@ -20,9 +20,11 @@ import { MenuProps, useId } from '@fluentui/react-components'
 export function useColumnContextMenu() {
   const context = useContext(PortfolioOverviewContext)
   const [open, setOpen] = useState(false)
+  const isViewAuthor = context.state.currentView?.author === context.props.pageContext.user.email
+
   const { isAddColumn, createContextualMenuItems } = useAddColumn(
     true,
-    context.props.pageContext.legacyPageContext.isSiteAdmin
+    context.props.isSiteAdmin || isViewAuthor
   )
   const onOpenChange: MenuProps['onOpenChange'] = (_, data) => setOpen(data.open)
   const [checkedValues, setCheckedValues] = useState<MenuProps['checkedValues']>({})
@@ -140,12 +142,6 @@ export function useColumnContextMenu() {
             {
               key: 'DIVIDER_03',
               itemType: ContextualMenuItemType.Divider
-            },
-            {
-              key: 'SHOW_HIDE_COLUMNS',
-              text: strings.ShowHideColumnsLabel,
-              onClick: () => context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: true })),
-              iconProps: { iconName: 'Eye' }
             },
             {
               key: 'ADD_COLUMN',

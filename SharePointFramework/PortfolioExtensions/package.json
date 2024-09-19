@@ -1,6 +1,6 @@
 {
   "name": "pp365-portfolioextensions",
-  "version": "1.9.1",
+  "version": "1.10.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
@@ -10,13 +10,13 @@
   "main": "lib/index.js",
   "scripts": {
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
+    "prewatch": "node node_modules/pzl-spfx-tasks --pre-watch --loglevel silent",
+    "postwatch": "node node_modules/pzl-spfx-tasks --post-watch --loglevel silent",
     "serve": "concurrently \"gulp serve-deprecated --locale=nb-no --nobrowser\"",
     "build": "gulp bundle --ship && gulp package-solution --ship",
     "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color --fix --config ../.eslintrc.yaml && npm run prettier",
-    "prettier": "prettier '**/*.ts*' --write --loglevel silent --config ../.prettierrc.yaml",
-    "prewatch": "node ../.tasks/pre-watch.js",
-    "postwatch": "node ../.tasks/post-watch.js"
+    "prettier": "prettier '**/*.ts*' --write --loglevel silent --config ../.prettierrc.yaml"
   },
   "dependencies": {
     "@fluentui/react": "8.98.1",
@@ -31,16 +31,15 @@
     "@pnp/core": "3.17.0",
     "@pnp/logging": "3.17.0",
     "@pnp/sp": "3.17.0",
-    "pp365-shared-library": "1.9.1",
+    "pp365-shared-library": "1.10.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "tslib": "2.3.1",
     "underscore": "~1.13.6",
     "@pnp/queryable": "3.17.0",
     "sp-entityportal-service": "2.3.0",
-    "@fluentui/react-components": "~9.42.0",
-    "@fluentui/react-icons": "~2.0.224",
-    "@fluentui/react-search-preview": "~0.1.33"
+    "@fluentui/react-components": "~9.52.0",
+    "@fluentui/react-icons": "~2.0.240"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.17.4",
@@ -69,6 +68,25 @@
     "prettier": "2.7.1",
     "typescript": "4.5.5",
     "webpack": "5.74.0",
-    "@types/lodash": "~4.14.195"
+    "@types/lodash": "~4.14.195",
+    "pzl-spfx-tasks": "~0.5.10-2"
+  },
+  "config": {
+    "pzl-spfx-tasks": {
+      "upgrade": {
+        "types": [
+          "rush"
+        ],
+        "all": true
+      },
+      "modifyconfig": {
+        "backupFilePath": "./config/config.json.bak"
+      },
+      "createlaunchconfig": {
+        "userDataDir": "${workspaceFolder}/../.vscode/chrome-debug-user-data",
+        "preferredBrowser": "chrome",
+        "domainSpecificDataDir": true
+      }
+    }
   }
 }

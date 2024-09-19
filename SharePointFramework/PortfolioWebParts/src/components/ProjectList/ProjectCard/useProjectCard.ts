@@ -25,5 +25,5 @@ export function useProjectCard() {
     isDataLoaded: context.isDataLoaded && isImageLoaded,
     setIsImageLoaded,
     documentCardProps
-  } as const
+  }
 }

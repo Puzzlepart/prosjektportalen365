@@ -1,9 +1,9 @@
 
 $LastInstall = Get-PnPListItem -List "Installasjonslogg" -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>" | Select-Object -First 1 -Wait
 if ($null -ne $LastInstall) {
-    $PreviousVersion = $LastInstall.FieldValues["InstallVersion"]
+    $PreviousVersion = ParseVersionString -VersionString $LastInstall.FieldValues["InstallVersion"]
 
-    if ($PreviousVersion -lt "1.4.0") {
+    if ($PreviousVersion -lt [version]"1.4.0") {
         $DeprecatedIds = @(
             "d8558017-1e3b-4d13-82fa-2520e845297b", 
             "3ec6bcaf-28bc-4f2e-9e90-77e8cebf0b5f", 
@@ -20,13 +20,13 @@ if ($null -ne $LastInstall) {
         }
     }
 
-    if ($PreviousVersion -lt "1.5.0") {
+    if ($PreviousVersion -lt [version]"1.5.0") {
         Write-Host "[INFO] Applying PnP upgrade template [1.5.0] to [$Url]"
         Invoke-PnPSiteTemplate -Path "$TemplatesBasePath/1.5.0.pnp" -ErrorAction Stop
         Write-Host "[SUCCESS] Successfully applied PnP template [1.5.0] to [$Url]" -ForegroundColor Green
     }
     
-    if ($PreviousVersion -lt "1.7.0") {
+    if ($PreviousVersion -lt [version]"1.7.0") {
         $PnPClientSidePages = @(
             "Gevinstoversikt.aspx", 
             "Erfaringslogg.aspx", 
@@ -42,7 +42,7 @@ if ($null -ne $LastInstall) {
         }
     }
 
-    if ($PreviousVersion -lt "1.8.2" -or $PreviousVersion -like "*BA*") {
+    if ($PreviousVersion -lt [version]"1.8.2" -or $PreviousVersion -like "*BA*") {
         Write-Host "[INFO] In version v1.8.0 we have integrated the 'Bygg & Anlegg' addon with standard installation. Checking to see if addon has been previously installed..." 
 
         $TermSetA = Get-PnPTermSet -Identity "cc6cdd18-c7d5-42e1-8d19-a336dd78f3f2" -TermGroup "Prosjektportalen" -ErrorAction SilentlyContinue
@@ -78,13 +78,13 @@ if ($null -ne $LastInstall) {
         }
     }
 
-    if ($PreviousVersion -lt "1.8.2") {
+    if ($PreviousVersion -lt [version]"1.8.2") {
         Write-Host "[INFO] Applying PnP upgrade template [$TemplatesBasePath/1.8.1.pnp] to [$Url]"
         Invoke-PnPSiteTemplate -Path "$TemplatesBasePath/1.8.1.pnp" -ErrorAction Stop
         Write-Host "[SUCCESS] Successfully applied PnP template [1.8.1] to [$Url]" -ForegroundColor Green
     }
 
-    if ($PreviousVersion -lt "1.9.1") {
+    if ($PreviousVersion -lt [version]"1.9.1") {
         Write-Host "[INFO] Removing deprecated SiteScripts"
         Remove-PnPSiteScript -Identity "IdeaProcessing - test" -Force -ErrorAction SilentlyContinue
         Remove-PnPSiteScript -Identity "IdeaProjectData - test" -Force -ErrorAction SilentlyContinue
@@ -93,5 +93,27 @@ if ($null -ne $LastInstall) {
         Remove-PnPSiteScript -Identity "IdeaProjectData" -Force -ErrorAction SilentlyContinue
         Remove-PnPSiteScript -Identity "IdeaRegistration" -Force -ErrorAction SilentlyContinue
         Write-Host "[SUCCESS] Successfully removed deprecated SiteScripts" -ForegroundColor Green
+    }
+
+    if ($PreviousVersion -lt [version]"1.10.0") {
+        Write-Host "[INFO] Changing fieldtype of GtUNSustDevGoalsText"
+        try {
+            $Field = Get-PnPField -Identity "GtUNSustDevGoalsText" -List "Prosjekter" -Includes FieldTypeKind
+            if ($null -ne $Field) {
+                $Field.FieldTypeKind = [Microsoft.SharePoint.Client.FieldType]::Note
+                $Field.Update()
+                $Field.Context.ExecuteQuery()
+            }
+            
+            $Field = Get-PnPField -Identity "GtUNSustDevGoalsText" -Includes FieldTypeKind
+            if ($null -ne $Field) {
+                $Field.FieldTypeKind = [Microsoft.SharePoint.Client.FieldType]::Note
+                $Field.Update()
+                $Field.Context.ExecuteQuery()
+            }
+
+        } catch {
+            Write-Host "[ERROR] Failed to change fieldtype of GtUNSustDevGoalsText" -ForegroundColor Yellow
+        }
     }
 }

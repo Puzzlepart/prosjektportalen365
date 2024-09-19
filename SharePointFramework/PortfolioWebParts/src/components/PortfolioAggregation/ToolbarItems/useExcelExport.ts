@@ -1,6 +1,8 @@
+/* eslint-disable no-console */
 import { useCallback } from 'react'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
 import { IPortfolioAggregationContext } from '../context'
+import _ from 'lodash'
 
 /**
  * Hook that provides functionality for exporting data to Excel.
@@ -21,37 +23,45 @@ export function useExcelExport(context: IPortfolioAggregationContext) {
       if (!ExcelExportService.isConfigured) {
         return
       }
-      const { selectedItems, columns } = context.state
 
-      const items =
-        selectedItems?.length > 0
-          ? selectedItems
-          : context.state.items.filter((item) => {
-              if (Object.keys(context.state.activeFilters).length === 0) {
-                return true
-              }
-              return Object.keys(context.state.activeFilters).every((key) => {
-                const filterValues = context.state.activeFilters[key]
-                return filterValues.some((filterValue) => {
-                  return item[key] === filterValue || item[key]?.includes(filterValue)
-                })
+      const items = !_.isEmpty(context.state.selectedItems)
+        ? context.state.selectedItems
+        : context.state.items.filter((item) => {
+            if (Object.keys(context.state.activeFilters).length === 0) {
+              return true
+            }
+            return Object.keys(context.state.activeFilters).every((key) => {
+              const filterValues = context.state.activeFilters[key]
+              return filterValues.some((filterValue) => {
+                return item[key] === filterValue || item[key]?.includes(filterValue)
               })
             })
+          })
 
       const filteredItems = items.map((item) => {
         const filteredItem = { ...item }
         Object.keys(filteredItem).forEach((key) => {
-          const column = columns.find((c) => c.fieldName === key)
-          if (column && (column.dataType === 'currency' || column.dataType === 'number')) {
-            filteredItem[key] = Math.floor(filteredItem[key])
+          const column = context.columns.find((c) => c.fieldName === key)
+          switch (column?.dataType) {
+            case 'percentage':
+              filteredItem[key] = Math.floor(filteredItem[key] * 100) + '%'
+              break
+            case 'currency':
+            case 'number':
+              filteredItem[key] = Math.floor(filteredItem[key])
+              break
+            default:
+              break
           }
         })
         return filteredItem
       })
 
-      ExcelExportService.export(filteredItems, columns)
-    } catch (error) {}
-  }, [context.state])
+      ExcelExportService.export(filteredItems, context.columns)
+    } catch (error) {
+      console.log(error)
+    }
+  }, [context.state, context.columns])
 
   return { exportToExcel }
 }

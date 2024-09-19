@@ -3,7 +3,7 @@ name: CI (channels/test)
 on:
   push:
     branches:
-      - releases/1.9
+      - releases/1.10
     paths:
       - 'SharePointFramework/**'
       - 'Install/**'
@@ -11,15 +11,14 @@ on:
       - .github/workflows/ci-channel-test.yml
 
 env:
-  CI_CREDENTIALS: ${{ secrets.CI_DEV_CREDENTIALS }}
+  CI_CERT_BASE64: ${{ secrets.CI_CERT_BASE64 }}
+  CI_TENANT: ${{ secrets.CI_TENANT }}
+  CI_CLIENT_ID: ${{ secrets.CI_CLIENT_ID }}
 
 jobs:
   build_release_package_test:
     name: Build release package (test channel)
     runs-on: macos-latest
-    concurrency:
-      group: ${{ github.ref }}_build_release_package_for_test_channel
-      cancel-in-progress: true
     if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') && !contains(github.event.head_commit.message, '[packages-only]') }}
     steps:
       - uses: actions/checkout@v3
@@ -57,7 +56,7 @@ jobs:
           path: release
 
       - name: Upgrade
-        run: release/Install.ps1 -Url "${{ vars.SP_URL_TEST }}" -Upgrade -CI ${{ env.CI_CREDENTIALS }}
+        run: release/Install.ps1 -Url "${{ vars.SP_URL_TEST }}" -Upgrade -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }}
         shell: powershell
 
   upgrade_all_sites_to_latest:
@@ -72,16 +71,13 @@ jobs:
           path: release
 
       - name: Run script UpgradeAllSitesToLatest.ps1 in CI mode
-        run: release/Scripts/UpgradeAllSitesToLatest.ps1 -Url ${{ vars.SP_URL_TEST }} -CI ${{ env.CI_CREDENTIALS }}
+        run: release/Scripts/UpgradeAllSitesToLatest.ps1 -Url ${{ vars.SP_URL_TEST }} -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }}
         shell: powershell
 
   build_release_package_test_packages_only:
     name: Build release package - packages only (test channel)
     runs-on: macos-latest
-    concurrency:
-      group: ${{ github.ref }}_build_release_package_for_test_channel_packages_only
-      cancel-in-progress: true
-    if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') || contains(github.event.head_commit.message, '[packages-only]')}}
+    if: ${{ contains(github.event.head_commit.message, '[packages-only]')}}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -118,5 +114,5 @@ jobs:
           path: release
 
       - name: Upgrade
-        run: release/Install.ps1 -Url "${{ vars.SP_URL_TEST }}" -Upgrade -CI ${{ env.CI_CREDENTIALS }} -SkipTemplate
+        run: release/Install.ps1 -Url "${{ vars.SP_URL_TEST }}" -Upgrade -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }} -SkipTemplate
         shell: powershell

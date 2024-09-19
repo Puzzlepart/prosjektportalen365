@@ -12,8 +12,13 @@ export const createFieldValueMap = (): Map<string, (value: EditableSPFieldValue)
     [
       'URL',
       ({ value }) => {
-        const [url, description] = value.split(', ')
-        return { url, description }
+        try {
+          const url = value['Url']
+          const description = value['Description']
+          return { url, description }
+        } catch (error) {
+          throw new Error(`Feil ved mapping av URL felt: ${error}`)
+        }
       }
     ],
     ['TaxonomyFieldType', ({ value }) => value.split(';').map((v) => ({ key: v, name: v }))],

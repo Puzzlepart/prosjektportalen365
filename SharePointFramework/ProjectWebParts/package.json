@@ -1,6 +1,6 @@
 {
   "name": "pp365-projectwebparts",
-  "version": "1.9.1",
+  "version": "1.10.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
@@ -9,13 +9,13 @@
   "license": "MIT",
   "scripts": {
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
+    "prewatch": "node node_modules/pzl-spfx-tasks --pre-watch --loglevel silent",
+    "postwatch": "node node_modules/pzl-spfx-tasks --post-watch --loglevel silent",
     "serve": "concurrently \"gulp serve-deprecated --locale=nb-no --nobrowser\"",
     "build": "gulp bundle --ship && gulp package-solution --ship",
     "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color --fix --config ../.eslintrc.yaml && npm run prettier",
-    "prettier": "prettier '**/*.ts*' --write --loglevel silent --config ../.prettierrc.yaml",
-    "prewatch": "node ../.tasks/pre-watch.js",
-    "postwatch": "node ../.tasks/post-watch.js"
+    "prettier": "prettier '**/*.ts*' --write --loglevel silent --config ../.prettierrc.yaml"
   },
   "dependencies": {
     "@fluentui/react": "8.98.1",
@@ -39,7 +39,7 @@
     "get-value": "3.0.1",
     "interactjs": "1.6.2",
     "msgraph-helper": "0.8.3",
-    "pp365-shared-library": "1.9.1",
+    "pp365-shared-library": "1.10.0",
     "pzl-spfx-components": "0.0.11",
     "react": "17.0.1",
     "react-calendar-timeline": "0.27.0",
@@ -58,11 +58,10 @@
     "@pnp/core": "3.17.0",
     "@pnp/queryable": "3.17.0",
     "react-error-boundary": "~4.0.10",
-    "@fluentui/react-components": "~9.42.0",
-    "@fluentui/react-icons": "~2.0.224",
-    "@fluentui/react-search-preview": "~0.1.33",
+    "@fluentui/react-components": "~9.52.0",
+    "@fluentui/react-icons": "~2.0.240",
     "usehooks-ts": "~2.9.1",
-    "@fluentui/react-datepicker-compat": "~0.4.7",
+    "@fluentui/react-datepicker-compat": "~0.4.38",
     "smoothscroll-polyfill": "~0.4.4"
   },
   "devDependencies": {
@@ -97,6 +96,25 @@
     "typescript": "4.5.5",
     "webpack": "5.74.0",
     "@types/lodash": "~4.14.195",
-    "@types/smoothscroll-polyfill": "~0.3.3"
+    "@types/smoothscroll-polyfill": "~0.3.3",
+    "pzl-spfx-tasks": "~0.5.10-2"
+  },
+  "config": {
+    "pzl-spfx-tasks": {
+      "upgrade": {
+        "types": [
+          "rush"
+        ],
+        "all": true
+      },
+      "modifyconfig": {
+        "backupFilePath": "./config/config.json.bak"
+      },
+      "createlaunchconfig": {
+        "userDataDir": "${workspaceFolder}/../.vscode/chrome-debug-user-data",
+        "preferredBrowser": "chrome",
+        "domainSpecificDataDir": true
+      }
+    }
   }
 }

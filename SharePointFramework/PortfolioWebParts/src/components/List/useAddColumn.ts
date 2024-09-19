@@ -35,13 +35,13 @@ export function useAddColumn(
    *
    * @param onToggleColumnFormPanel On toggle column form panel callback
    * @param onToggleEditViewColumnsPanel On toggle edit view columns panel callback
-   * @param isToggleColumnFormPanelDisabled Is toggle column form panel disabled
+   * @param _isToggleColumnFormPanelDisabled Is toggle column form panel disabled
    * @param isToggleEditViewColumnsPanelDisabled Is toggle edit view columns panel disabled
    */
   const createContextualMenuItems = (
     onToggleColumnFormPanel: () => void,
     onToggleEditViewColumnsPanel: () => void,
-    isToggleColumnFormPanelDisabled = true,
+    _isToggleColumnFormPanelDisabled = true,
     isToggleEditViewColumnsPanelDisabled = false
   ): IContextualMenuItem[] => [
     {
@@ -52,8 +52,8 @@ export function useAddColumn(
       disabled: true
     },
     {
-      key: 'TOGGLE_EDIT_VIEW_COLUMNS_PANEL',
-      text: strings.ToggleEditViewColumnsLabel,
+      key: 'SHOW_HIDE_COLUMNS',
+      text: strings.ShowHideColumnsLabel,
       iconProps: { iconName: 'Eye' },
       onClick: onToggleEditViewColumnsPanel,
       disabled: isToggleEditViewColumnsPanelDisabled || !permissionCheck

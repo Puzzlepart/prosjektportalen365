@@ -54,6 +54,11 @@ export interface IProjectSetupProperties {
    * `title` and `subText`.
    */
   progressDialogContentProps?: IDialogContentProps
+
+  /**
+   * Skip updating template parameters fields on the project list item.
+   */
+  skipUpdateTemplateParameters?: boolean
 }
 
 export interface IProjectSetupData extends IProjectSetupDialogState {
