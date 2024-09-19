@@ -6,7 +6,7 @@
   "version": "1.10.0",
   "manifestVersion": 2,
   "requiresCustomScript": false,
-  "hiddenFromToolbox": true,
+  "hiddenFromToolbox": false,
   "supportedHosts": [
     "SharePointWebPart"
   ],
