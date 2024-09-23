@@ -99,6 +99,8 @@ if ($LatestInstallVersion -eq $PreviousInstallVersion) {
 $global:__InstalledVersion = ParseVersionString -VersionString $LatestInstallVersion
 $global:__PreviousVersion = ParseVersionString -VersionString $PreviousInstallVersion
 
+Write-Host "Getting ready to upgrade feature discrepancy between version $global:__PreviousVersion and $global:__InstalledVersion"
+
 [System.Uri]$Uri = $Url
 $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
 
@@ -107,11 +109,11 @@ Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
 Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
 $CurrentUser = Get-PnPProperty -Property CurrentUser -ClientObject (Get-PnPContext).Web -ErrorAction SilentlyContinue
 if ($null -ne $CurrentUser -and $CurrentUser.LoginName) {
-    Write-Host "[INFO] Installing with user [$($CurrentUser.LoginName)]"
+    Write-Host "Installing with user [$($CurrentUser.LoginName)]"
     $UserName = $CurrentUser.LoginName
 }
 else {
-    Write-Host "[WARNING] Failed to get current user. Assuming installation is done with an app or a service principal without e-mail." -ForegroundColor Yellow
+    Write-Host "Failed to get current user. Assuming installation is done with an app or a service principal without e-mail." -ForegroundColor Yellow
 }
 
 Write-Host "Retrieving all sites of the Project Portal hub..."
@@ -144,7 +146,7 @@ $ProjectsInHub | ForEach-Object -Begin {$ProgressCount = 0} {
     [Int16]$PercentComplete = (++$ProgressCount)*100/$ProjectsInHub.Count
     Write-Progress -Activity "Upgrading all sites in hub" -Status "$PercentComplete% Complete" -PercentComplete $PercentComplete -CurrentOperation "Processing site $_"
     
-    Write-Host "`tUpgrading site $_"
+    Write-Host "`tProcessing site $_"
     UpgradeSite -Url $_
     Write-Host "`t`tDone processing $_" -ForegroundColor Green
 }
