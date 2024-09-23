@@ -37,13 +37,8 @@ function Connect-SharePoint {
         if ($null -ne $global:__InteractiveCachedAccessTokens[$Url]) {
             Connect-PnPOnline -Url $Url -AccessToken $global:__InteractiveCachedAccessTokens[$Url] -ErrorAction Stop  -WarningAction Ignore
         }
-        if ($ConnectionInfo.CI) {
-            if ($ConnectionInfo.CertificateBase64Encoded -and $ConnectionInfo.Tenant) {
-                Connect-PnPOnline -Url $Url -CertificateBase64Encoded $ConnectionInfo.CertificateBase64Encoded -Tenant $ConnectionInfo.Tenant -ClientId $ConnectionInfo.ClientId -ErrorAction Stop  -WarningAction Ignore
-            } else {
-                throw "Missing certificate or tenant for CI mode"
-            }
-
+        elseif ($ConnectionInfo.CertificateBase64Encoded -and $ConnectionInfo.Tenant) {
+            Connect-PnPOnline -Url $Url -CertificateBase64Encoded $ConnectionInfo.CertificateBase64Encoded -Tenant $ConnectionInfo.Tenant -ClientId $ConnectionInfo.ClientId -ErrorAction Stop  -WarningAction Ignore
         }
         else {
             Connect-PnPOnline -Url $Url -Interactive -ClientId $ConnectionInfo.ClientId -ErrorAction Stop -WarningAction Ignore
