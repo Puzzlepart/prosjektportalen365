@@ -8,7 +8,9 @@ Param(
     [Parameter(Mandatory = $false, HelpMessage = "Tenant in case of certificate based authentication")]
     [string]$Tenant,
     [Parameter(Mandatory = $false, HelpMessage = "Base64 encoded certificate")]
-    [string]$CertificateBase64Encoded
+    [string]$CertificateBase64Encoded,
+    [Parameter(Mandatory = $false, HelpMessage = "Do you want to handle PnP libraries and PnP PowerShell without using bundled files?")]
+    [switch]$SkipLoadingBundle
 )
 
 $ErrorActionPreference = "Stop"
@@ -32,15 +34,29 @@ $InstallStartTime = (Get-Date -Format o)
 
 $ScriptDir = (Split-Path -Path $MyInvocation.MyCommand.Definition -Parent)
 
-if ($CI_MODE) {
-    Write-Host "[INFO] Running in CI mode. Installing module PnP.PowerShell." -ForegroundColor Yellow
+if ($CI.IsPresent -and $null -eq (Get-Module -Name PnP.PowerShell)) {
+    Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
     Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop
+}
+else {
+    if (-not $SkipLoadingBundle.IsPresent) {
+        $PnPVersion = LoadBundle -ScriptPath "$PSScriptRoot\.."
+        Write-Host "Loaded module PnP.PowerShell v$($PnPVersion) from bundle"
+    }
+    else {
+        if ($null -eq (Get-Command Connect-PnPOnline -ErrorAction SilentlyContinue)) {
+            Write-Host "[ERROR] PnP.PowerShell is not loaded. Please install the module or use the bundled version." -ForegroundColor Red
+            exit 0
+        } else {
+            Write-Host "Loaded module PnP.PowerShell v$((Get-Command Connect-PnPOnline).Version) from your environment"
+        }     
+    }
 }
 
 ## Checks if file .current-channel-config.json exists and loads it if it does
 if (Test-Path -Path "$ScriptDir/../.current-channel-config.json") {
     $global:__CurrentChannelConfig = Get-Content -Path "$ScriptDir/../.current-channel-config.json" -Raw -ErrorAction SilentlyContinue | ConvertFrom-Json
-    Write-Host "[INFO] Loaded channel config from file .current-channel-config.json, will use channel $($global:__CurrentChannelConfig.Channel) when upgrading all sites to latest" -ForegroundColor Yellow
+    Write-Host "Loaded channel config from file .current-channel-config.json, will use channel $($global:__CurrentChannelConfig.Channel) when upgrading all sites to latest" -ForegroundColor Yellow
 }
 
 function UpgradeSite($Url) {

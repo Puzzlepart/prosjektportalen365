@@ -86,8 +86,8 @@ Load PnP.PowerShell from bundle
 .DESCRIPTION
 Loaa PnP.PowerShell from bundle and return version.
 #>
-function LoadBundle() {
-    Import-Module "$PSScriptRoot/PnP.PowerShell/PnP.PowerShell.psd1" -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
+function LoadBundle($ScriptPath = $PSScriptRoot) {
+    Import-Module "$ScriptPath/PnP.PowerShell/PnP.PowerShell.psd1" -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
     return (Get-Command Connect-PnPOnline).Version
 }
 
