@@ -1,6 +1,6 @@
 # Endringslogg
 
-Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
+Sjekk ut [release notes](./releasenotes/1.10.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
 
 ## 1.10.0 - TBA
 
