@@ -60,20 +60,20 @@ export function useToolbarItems(context: IPortfolioOverviewContext) {
     [context.state.currentView?.id, context.state.isCompact]
   )
 
-  const menuItems = useMemo<ListMenuItem[]>(
+  return useMemo<ListMenuItem[]>(
     () =>
       [
         context.props.showExcelExportButton &&
-          new ListMenuItem(null, strings.ExcelExportButtonLabel)
-            .setIcon('ExcelLogoInverse')
-            .setOnClick(exportToExcel)
-            .setStyle({
-              color: '#10793F'
-            }),
+        new ListMenuItem(null, strings.ExcelExportButtonLabel)
+          .setIcon('ExcelLogoInverse')
+          .setOnClick(exportToExcel)
+          .setStyle({
+            color: '#10793F'
+          }),
         new ListMenuItem(context.state.currentView?.title, strings.PortfolioViewsListName)
           .setIcon(Icons.ContentView)
           .setWidth('fit-content')
-          .setStyle({ minWidth: '145px' })
+          .setStyle({ minWidth: '145px', display: context.props.showViewSelector ? 'flex' : 'none' })
           .setDisabled(context.state.isChangingView)
           .setItems(
             [
@@ -102,37 +102,38 @@ export function useToolbarItems(context: IPortfolioOverviewContext) {
                 !_.isEmpty(personalViews)
               ),
               ...personalViews,
-              ListMenuItemDivider,
-              context.props.showProgramViews &&
-                ListMenuItemHeader(strings.ProgramsHeaderText).makeConditional(
-                  !_.isEmpty(programViews)
-                ),
-              context.props.showProgramViews &&
-                new ListMenuItem(strings.SelectProgramText)
-                  .setItems(programViews)
-                  .setIcon(Icons.ChevronLeft)
-                  .makeConditional(!_.isEmpty(programViews)),
-              ListMenuItemDivider.makeConditional(!_.isEmpty(programViews)),
-              userCanManageViews &&
-                new ListMenuItem(strings.NewViewText).setIcon(Icons.FormNew).setOnClick(() => {
-                  context.dispatch(SET_VIEW_FORM_PANEL({ isOpen: true }))
+              context.props.showProgramViews && ListMenuItemDivider,
+              context.props.showProgramViews && ListMenuItemHeader(strings.ProgramsHeaderText).setStyle({
+                display: (context.props.showProgramViews && !_.isEmpty(programViews)) ? 'flex' : 'none',
+              }),
+              new ListMenuItem(strings.SelectProgramText)
+                .setItems(programViews)
+                .setIcon(Icons.ChevronLeft)
+                .setStyle({
+                  display: (context.props.showProgramViews && !_.isEmpty(programViews)) ? 'flex' : 'none',
                 }),
+              ListMenuItemDivider
+                .setStyle({
+                  display: (context.props.showProgramViews && !_.isEmpty(programViews)) ? 'flex' : 'none',
+                }),
+              userCanManageViews &&
+              new ListMenuItem(strings.NewViewText).setIcon(Icons.FormNew).setOnClick(() => {
+                context.dispatch(SET_VIEW_FORM_PANEL({ isOpen: true }))
+              }),
               (userCanEditGlobalViews || isViewAuthor) &&
-                new ListMenuItem(strings.EditViewText).setIcon(Icons.Edit).setOnClick(() => {
-                  context.dispatch(
-                    SET_VIEW_FORM_PANEL({ isOpen: true, view: context.state.currentView })
-                  )
-                })
+              new ListMenuItem(strings.EditViewText).setIcon(Icons.Edit).setOnClick(() => {
+                context.dispatch(
+                  SET_VIEW_FORM_PANEL({ isOpen: true, view: context.state.currentView })
+                )
+              })
             ],
             checkedValues
           ),
         context.props.showFilters &&
-          new ListMenuItem(null, strings.FilterText).setIcon('Filter').setOnClick(() => {
-            context.dispatch(TOGGLE_FILTER_PANEL())
-          })
+        new ListMenuItem(null, strings.FilterText).setIcon('Filter').setOnClick(() => {
+          context.dispatch(TOGGLE_FILTER_PANEL())
+        })
       ].filter(Boolean),
     [context.state, context.props]
   )
-
-  return menuItems
 }
