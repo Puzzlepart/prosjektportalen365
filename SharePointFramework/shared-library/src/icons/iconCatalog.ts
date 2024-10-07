@@ -114,7 +114,11 @@ import {
   PeopleTeamFilled,
   PeopleTeamRegular,
   PeopleAudienceFilled,
-  PeopleAudienceRegular
+  PeopleAudienceRegular,
+  BotFilled,
+  BotRegular,
+  BotSparkleFilled,
+  BotSparkleRegular,
 } from '@fluentui/react-icons'
 
 /**
@@ -352,5 +356,13 @@ export const iconCatalog = {
   Clock: {
     regular: ClockRegular,
     filled: ClockFilled
+  },
+  Bot: {
+    regular: BotRegular,
+    filled: BotFilled
+  },
+  BotSparkle: {
+    regular: BotSparkleRegular,
+    filled: BotSparkleFilled
   }
 }
