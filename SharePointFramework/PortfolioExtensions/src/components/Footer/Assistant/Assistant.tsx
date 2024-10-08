@@ -15,7 +15,8 @@ import {
   Toolbar,
   ToolbarButton,
   ToolbarGroup,
-  Spinner
+  Spinner,
+  DrawerHeaderTitle
 } from '@fluentui/react-components'
 import { customLightTheme, getFluentIcon } from 'pp365-shared-library'
 import styles from './Assistant.module.scss'
@@ -41,10 +42,14 @@ export const Assistant: FC = () => {
           <DrawerHeader>
             <DrawerHeaderNavigation>
               <Toolbar className={styles.toolbar}>
+                <DrawerHeaderTitle>
+                  Prosjektportalen assistent
+                </DrawerHeaderTitle>
                 <ToolbarGroup>
                   <ToolbarButton
                     appearance='subtle'
                     title='Innstillinger'
+                    disabled={!context.props.pageContext.legacyPageContext.isSiteAdmin}
                     icon={getFluentIcon('Settings')}
                     onClick={() =>
                       window.open(
@@ -63,24 +68,22 @@ export const Assistant: FC = () => {
               </Toolbar>
             </DrawerHeaderNavigation>
           </DrawerHeader>
-          <DrawerBody>
-            <div className={styles.body}>
-              {loading && (
-                <Spinner
-                  size='extra-tiny'
-                  label='Laster inn assistenten...'
-                  style={{ padding: 10, minHeight: '20px' }}
-                />
-              )}
-              <iframe
-                src={`https://pp365-ai-d2dge4fqc2bhbba9.norwayeast-01.azurewebsites.net?source=${context.props.pageContext.web.absoluteUrl}`}
-                style={{ display: loading ? 'none' : 'block', border: 'none' }}
-                title='Assistent for Prosjektportalen 365'
-                width='100%'
-                height='100%'
-                onLoad={() => setLoading(false)}
+          <DrawerBody className={styles.body}>
+            {loading && (
+              <Spinner
+                size='extra-tiny'
+                label='Laster inn assistenten...'
+                style={{ padding: 10, minHeight: '20px' }}
               />
-            </div>
+            )}
+            <iframe
+              src={`https://pp365-ai-d2dge4fqc2bhbba9.norwayeast-01.azurewebsites.net?source=${context.props.pageContext.web.absoluteUrl}`}
+              style={{ display: loading ? 'none' : 'block', border: 'none' }}
+              title='Assistent for Prosjektportalen 365'
+              width='100%'
+              height='100%'
+              onLoad={() => setLoading(false)}
+            />
           </DrawerBody>
         </OverlayDrawer>
         <Tooltip

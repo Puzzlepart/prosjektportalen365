@@ -1,8 +1,9 @@
 .toolbar {
-  justify-content: flex-end;
+  justify-content: space-between;
 }
 
 .body {
+  padding: 0;
   flex: 1;
   width: 100%;
   max-width: 100%;
