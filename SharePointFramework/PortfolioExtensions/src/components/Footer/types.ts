@@ -31,4 +31,9 @@ export interface IFooterProps {
    * The URL to the portal root
    */
   portalUrl: string
+
+  /**
+   * Use the assistant
+   */
+  useAssistant: boolean
 }

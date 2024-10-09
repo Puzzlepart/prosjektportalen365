@@ -42,9 +42,7 @@ export const Assistant: FC = () => {
           <DrawerHeader>
             <DrawerHeaderNavigation>
               <Toolbar className={styles.toolbar}>
-                <DrawerHeaderTitle>
-                  Prosjektportalen assistent
-                </DrawerHeaderTitle>
+                <DrawerHeaderTitle>Prosjektportalen assistent</DrawerHeaderTitle>
                 <ToolbarGroup>
                   <ToolbarButton
                     appearance='subtle'
