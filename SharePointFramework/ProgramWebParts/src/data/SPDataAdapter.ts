@@ -597,10 +597,9 @@ export class SPDataAdapter
         .getByTitle(strings.ProjectsListName)
         .items.select(...Object.keys(new SPProjectItem()))
         // eslint-disable-next-line quotes
-        .filter("GtProjectLifecycleStatus ne 'Avsluttet'")
+        .filter("GtProjectLifecycleStatus ne 'Avsluttet' and GtProjectLifecycleStatus ne 'Stengt'")
         .orderBy('Title')
-        .top(500)
-        .using(DefaultCaching)<SPProjectItem[]>(),
+        .using(DefaultCaching).getAll<SPProjectItem>(),
       MSGraph.Get<IGraphGroup[]>(
         '/me/memberOf/$/microsoft.graph.group',
         ['id', 'displayName'],
