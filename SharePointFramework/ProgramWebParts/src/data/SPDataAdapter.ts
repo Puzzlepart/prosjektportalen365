@@ -599,7 +599,8 @@ export class SPDataAdapter
         // eslint-disable-next-line quotes
         .filter("GtProjectLifecycleStatus ne 'Avsluttet' and GtProjectLifecycleStatus ne 'Stengt'")
         .orderBy('Title')
-        .using(DefaultCaching).getAll<SPProjectItem>(),
+        .using(DefaultCaching)
+        .getAll<SPProjectItem>(),
       MSGraph.Get<IGraphGroup[]>(
         '/me/memberOf/$/microsoft.graph.group',
         ['id', 'displayName'],

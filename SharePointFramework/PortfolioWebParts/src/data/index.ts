@@ -587,7 +587,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       users
     }
     let projects = this._combineResultData(result)
-    projects = projects.filter((m) => m.lifecycleStatus !== 'Avsluttet' && m.lifecycleStatus !== 'Stengt')
+    projects = projects.filter(
+      (m) => m.lifecycleStatus !== 'Avsluttet' && m.lifecycleStatus !== 'Stengt'
+    )
     projects = projects.sort((a, b) => a.title.localeCompare(b.title))
     return projects
   }
