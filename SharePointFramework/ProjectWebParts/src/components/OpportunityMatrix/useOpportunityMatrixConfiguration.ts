@@ -1,14 +1,15 @@
 import { dateAdd, getHashCode } from '@pnp/core'
 import { Caching } from '@pnp/queryable'
+import strings from 'ProjectWebPartsStrings'
 import { useEffect, useState } from 'react'
 import SPDataAdapter from '../../data'
 import { DynamicMatrixConfiguration } from '../DynamicMatrix'
 import { IOpportunityMatrixProps } from './types'
-import strings from 'ProjectWebPartsStrings'
 
 /**
- * Configuration hook for `OpportunityMatrix`. Generates the matrix configuration based on the
- * specified matrix size.
+ * Configuration hook for `OpportunityMatrix`. This hook will fetch the manual configuration
+ * from the specified URL or generate a dynamic configuration based on the size of the
+ * matrix.
  *
  * @param props Props
  */
@@ -18,8 +19,10 @@ export function useOpportunityMatrixConfiguration(props: IOpportunityMatrixProps
 
   // Fetch manual configuration if `pageContext` is set.
   useEffect(() => {
-    fetchJsonConfiguration()
-  }, [props.manualConfigurationPath])
+    if (props.pageContext) {
+      fetchJsonConfiguration()
+    }
+  }, [props.pageContext])
 
   /**
    * Fetches the manual configuration from the specified URL.

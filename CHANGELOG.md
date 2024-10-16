@@ -1,10 +1,22 @@
 # Endringslogg
 
-Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
+Sjekk ut [release notes](./releasenotes/1.10.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
 
-## 1.10.0 - TBA
+## 1.10.0 - 23.09.2024
 
-NB: Som en del av denne releasen må det godkjennes en ny app ved installasjon eller oppgradering. Dette skyldes at den tidligere PnP PowerShell appen som vi benyttet ikke lenger er tilgjengelig. Appen må godkjennes av Global Admin eller Application Admin. Prompt for å godkjenne denne appen vil automatisk dukke opp når brukeren setter i gang installasjonen. Som den del av denne endringen må nye oppdateringer og installasjoner gjøres med *PowerShell 7*.
+### Ny funksjonalitet
+
+### Forbedringer
+
+- Mulighetsmatrise har fått samme tilpasningsmuligheter som Risikomatrise, inkluderer overstyring av farger og konfigurasjon
+
+### Feilrettinger
+
+- Rettet et problem hvor programvisninger forble aktive selvom visningsvelgeren ble skrudd av [#1566](https://github.com/Puzzlepart/prosjektportalen365/issues/1566)
+
+## 1.10.0 - 23.09.2024
+
+NB: Som en del av denne versjonen kreves det godkjenning av en ny app-registrering ved installasjon eller oppgradering av Prosjektportalen 365. Dette skyldes at den tidligere PnP Management Shell-appen ikke lenger er tilgjengelig. Appen må godkjennes av en Global Administrator eller Application Administrator. Godkjenningsprosessen vil automatisk starte ved installasjon. Merk at oppdateringer og installasjoner nå må gjøres med PowerShell 7 eller nyere. [Les mer om dette her](https://github.com/Puzzlepart/prosjektportalen365/blob/main/releasenotes/1.10.0.md#overgang-til-nyeste-pnp-powershell)
 
 ### Ny funksjonalitet
 
@@ -14,6 +26,7 @@ NB: Som en del av denne releasen må det godkjennes en ny app ved installasjon e
 - Lagt til en aggregert oversikt for `Ressursallokering` i program og overordnet område mal [#1490](https://github.com/Puzzlepart/prosjektportalen365/issues/1490)
 
 ### Forbedringer
+
 - En ny visning i Porteføljeoversikt vil være personlig som standard [#1539](https://github.com/Puzzlepart/prosjektportalen365/issues/1539)
 
 ### Feilrettinger

@@ -1,12 +1,13 @@
+import { get } from '@microsoft/sp-lodash-subset'
 import {
   IPropertyPaneConfiguration,
+  PropertyPaneDropdown,
   PropertyPaneSlider,
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import * as strings from 'ProjectWebPartsStrings'
 import { IOpportunityMatrixProps, OpportunityMatrix } from 'components/OpportunityMatrix'
-import * as getValue from 'get-value'
 import _ from 'lodash'
 import ReactDom from 'react-dom'
 import SPDataAdapter from '../../data'
@@ -23,12 +24,13 @@ export default class OpportunityMatrixWebPart extends BaseProjectWebPart<IOpport
     try {
       const [items, configurations] = await Promise.all([
         this._getItems(),
-        SPDataAdapter.getConfigurations(strings.RiskMatrixConfigurationFolder)
+        SPDataAdapter.getConfigurations(strings.OpportunityMatrixConfigurationFolder)
       ])
       const defaultConfiguration = _.find(
         configurations,
         (config) =>
-          config.name === SPDataAdapter.globalSettings.get('RiskMatrixDefaultConfigurationFile')
+          config.name ===
+          SPDataAdapter.globalSettings.get('OpportunityMatrixDefaultConfigurationFile')
       )
       this._data = { items, configurations, defaultConfiguration }
     } catch (error) {
@@ -51,24 +53,29 @@ export default class OpportunityMatrixWebPart extends BaseProjectWebPart<IOpport
     }
   }
 
+  /**
+   * Get items from list `this.properties.listName` using CAML query
+   */
   protected async _getItems(): Promise<UncertaintyElementModel[]> {
     const {
       probabilityFieldName,
       consequenceFieldName,
       probabilityPostActionFieldName,
-      consequencePostActionFieldName
+      consequencePostActionFieldName,
+      viewXml,
+      listName
     } = this.properties
     const items: any[] = await this.sp.web.lists
-      .getByTitle(this.properties.listName)
-      .getItemsByCAMLQuery({ ViewXml: this.properties.viewXml })
+      .getByTitle(listName)
+      .getItemsByCAMLQuery({ ViewXml: viewXml })
     return items.map(
       (i) =>
         new UncertaintyElementModel(
           i,
-          getValue(i, probabilityFieldName, { default: '' }),
-          getValue(i, consequenceFieldName, { default: '' }),
-          getValue(i, probabilityPostActionFieldName, { default: '' }),
-          getValue(i, consequencePostActionFieldName, { default: '' })
+          get(i, probabilityFieldName, { default: '' }),
+          get(i, consequenceFieldName, { default: '' }),
+          get(i, probabilityPostActionFieldName, { default: '' }),
+          get(i, consequencePostActionFieldName, { default: '' })
         )
     )
   }
@@ -127,6 +134,15 @@ export default class OpportunityMatrixWebPart extends BaseProjectWebPart<IOpport
                   multiline: true,
                   resizable: true,
                   rows: 8
+                }),
+                PropertyPaneDropdown('manualConfigurationPath', {
+                  label: strings.ManualConfigurationPathLabel,
+                  options: this._data.configurations.map(({ url: key, title: text }) => ({
+                    key,
+                    text
+                  })),
+                  selectedKey:
+                    this.properties?.manualConfigurationPath ?? this._data.defaultConfiguration?.url
                 })
               ].filter(Boolean)
             }
