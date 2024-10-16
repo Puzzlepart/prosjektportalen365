@@ -2,7 +2,7 @@
 
 Sjekk ut [release notes](./releasenotes/1.10.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
 
-## 1.10.0 - 23.09.2024
+## 1.10.1 - TBA
 
 ### Ny funksjonalitet
 
