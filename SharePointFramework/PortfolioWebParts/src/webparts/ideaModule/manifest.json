@@ -24,7 +24,8 @@
       },
       "officeFabricIconFontName": "Lightbulb",
       "properties": {
-        "title": "Idémodul"
+        "title": "Idémodul",
+        "configurationList": "Idékonfigurasjon"
       }
     }
   ]
