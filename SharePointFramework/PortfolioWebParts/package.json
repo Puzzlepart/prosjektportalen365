@@ -65,6 +65,7 @@
     "react-virtualized-auto-sizer": "~1.0.24",
     "@fluentui/react-datepicker-compat": "~0.4.38",
     "@fluentui/react-motion-preview": "~0.5.20",
+    "@fluentui/react-nav-preview": "~0.9.1",
     "react-gauge-component": "~1.2.61"
   },
   "devDependencies": {

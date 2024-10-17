@@ -7,7 +7,7 @@ import { useIdeaModuleState } from './useIdeaModuleState'
  *
 clear */
 export function useIdeaModule(props: IIdeaModuleProps) {
-  const { state, setState } = useIdeaModuleState()
+  const { state, setState } = useIdeaModuleState(props)
   const fluentProviderId = useId('fp-idea-module')
 
   return {
