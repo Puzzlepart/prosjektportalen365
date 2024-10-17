@@ -1,7 +1,14 @@
 .ideaModule {
   margin: 0;
+  overflow: hidden;
+  display: flex;
+  height: 100%;
 
-  .container {
-    margin: 0;
+  .content {
+    flex: 1;
+    padding: 16px;
+    display: grid;
+    justify-content: flex-start;
+    align-items: flex-start;
   }
 }
