@@ -1,17 +1,23 @@
 /* eslint-disable prefer-spread */
 import { useState } from 'react'
-import { IIdeaModuleState } from './types'
+import { IIdeaModuleProps, IIdeaModuleState } from './types'
 
 /**
  * Component state hook for `IIdeaModule`.
  *
  * @param props Props
  */
-export function useIdeaModuleState() {
+export function useIdeaModuleState(props: IIdeaModuleProps) {
+  const defaultSort = { fieldName: props.sortBy, isSortedDescending: true }
+
   const [state, $setState] = useState<IIdeaModuleState>({
     loading: true,
     configuration: [],
-    ideas: {}
+    ideas: {},
+    error: null,
+    searchTerm: '',
+    renderMode: props.defaultRenderMode ?? 'tiles',
+    sort: defaultSort
   })
 
   /**

@@ -10,8 +10,8 @@ export interface IIdeaModuleContext {
 export const IdeaModuleContext = createContext<IIdeaModuleContext>(null)
 
 /**
- * Hook to get the `ProjectProvisionContext`
+ * Hook to get the `IdeaModuleContext`
  */
-export function useProjectProvisionContext() {
+export function useIdeaModuleContext() {
   return useContext(IdeaModuleContext)
 }
