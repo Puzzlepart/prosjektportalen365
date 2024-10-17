@@ -10,11 +10,6 @@ export interface IListContext extends IIdeaModuleProps {
    * Ideas to be rendered in the list.
    */
   ideas?: Record<string, IdeaListModel>
-
-  /**
-   * Size that determines the list appearance.
-   */
-  size?: 'extra-small' | 'small' | 'medium'
 }
 
 export const ListContext = createContext<IListContext>(null)

@@ -6,7 +6,8 @@ export interface IIdeaModuleProps extends IBaseComponentProps {
   showSearchBox?: boolean
   showRenderModeSelector?: boolean
   showSortBy?: boolean
-  defaultRenderMode?: ProjectListRenderMode
+  defaultRenderMode?: IdeaListRenderMode
+  listSize?: 'extra-small' | 'small' | 'medium'
 }
 
 export interface IIdeaModuleState {
@@ -16,12 +17,12 @@ export interface IIdeaModuleState {
   configuration?: ConfigurationItem[]
   ideas?: Record<string, any>
   searchTerm: string
-  renderMode?: ProjectListRenderMode
+  renderMode?: IdeaListRenderMode
   isUserInIdeaManagerGroup?: boolean
   sort?: { fieldName: string; isSortedDescending: boolean }
 }
 
-export type ProjectListRenderMode = 'tiles' | 'list' | 'compactList'
+export type IdeaListRenderMode = 'tiles' | 'list' | 'compactList'
 
 export interface IIdeaModuleHashState {
   ideaId?: string
