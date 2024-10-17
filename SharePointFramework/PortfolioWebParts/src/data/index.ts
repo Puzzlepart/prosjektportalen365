@@ -52,6 +52,7 @@ import {
 } from './types'
 import { IPersonaProps, IPersonaSharedProps } from '@fluentui/react'
 import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
+import { ConfigurationItem } from 'components/IdeaModule'
 
 /**
  * Data adapter for Portfolio Web Parts.
@@ -1025,6 +1026,36 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       return exists
     } catch (error) {
       return false
+    }
+  }
+
+  public async getConfiguration(listName: string): Promise<ConfigurationItem[]> {
+    try {
+      const configurationList = this._sp.web.lists.getByTitle(listName)
+      const spItems = await configurationList.items
+        .select(
+          'Id',
+          'Title',
+          'GtDescription',
+          'GtIdeaProcessingList',
+          'GtIdeaRegistrationList',
+          'GtIdeaProcessingChoices',
+          'GtIdeaRegistrationChoices'
+        )
+        .using(DefaultCaching)()
+
+      return spItems.map((item) => {
+        return {
+          title: item.Title,
+          description: item.GtDescription,
+          ideaProcessingList: item.GtIdeaProcessingList,
+          ideaRegistrationList: item.GtIdeaRegistrationList,
+          ideaProcessingChoices: item.GtIdeaProcessingChoices,
+          ideaRegistrationChoices: item.GtIdeaRegistrationChoices
+        }
+      })
+    } catch (error) {
+      return []
     }
   }
 }

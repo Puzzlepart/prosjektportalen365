@@ -102,6 +102,9 @@
                                         },
                                         "ProjectProvisionWebPart": {
                                             "$ref": "#/definitions/guid"
+                                        },
+                                        "IdeaModuleWebPart": {
+                                            "$ref": "#/definitions/guid"
                                         }
                                     },
                                     "required": [
@@ -112,7 +115,8 @@
                                         "ProjectListWebPart",
                                         "PortfolioTimelineWebPart",
                                         "ResourceAllocationWebPart",
-                                        "ProjectProvisionWebPart"
+                                        "ProjectProvisionWebPart",
+                                        "IdeaModuleWebPart"
                                     ]
                                 }
                             },
