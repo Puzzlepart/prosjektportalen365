@@ -2,6 +2,7 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Erfaringslogg.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Gevinstoversikt.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Home.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Idemodul.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Leveranseoversikt.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Portefoljeinnsikt.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Portefoljeoversikt.xml" />
