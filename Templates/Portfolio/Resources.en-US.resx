@@ -2672,6 +2672,12 @@
   <data name="ClientSidePages_ProjectTimeline_Title" xml:space="preserve">
     <value>Project Timeline</value>
   </data>
+  <data name="ClientSidePages_IdeaModule_PageName" xml:space="preserve">
+    <value>Idemodul.aspx</value>
+  </data>
+  <data name="ClientSidePages_IdeaModule_Title" xml:space="preserve">
+    <value>Idea module</value>
+  </data>
   <data name="SiteFields_GtFieldLocked_DisplayName" xml:space="preserve">
     <value>Låst</value>
   </data>
