@@ -13,6 +13,7 @@
 | ProjectListWebPart            | PortfolioWebParts   | Prosjektutlisting (porteføljeforside)                  | 54fbeb7d-e463-4dcc-8873-50a3ab2f0f68 |
 | PortfolioTimelineWebPart      | PortfolioWebParts   | Prosjekttidslinje (Porteføljenivå)                     | 7284c568-f66c-4218-bb2c-3734a3cfa581 |
 | ResourceAllocationWebPart     | PortfolioWebParts   | Ressursallokering (tidslinje)                          | 2ef269b2-6370-4841-8b35-2185b7ccb22a |
+| Idémodul                      | PortfolioWebParts   | Idémodul side for håndtering av Idéer                  | 20f151a9-6891-4408-a6d6-77e749b9e3e7 |
 | ProgramAdministrationWebpart  | ProgramWebParts     | Program administrasjon                                 | 9570e369-21a6-4bf5-8198-13506499de52 |
 | ProgramAggregationWebPart     | ProgramWebParts     | Program aggregeringsoversikt                           | 37c7e990-483d-4f70-b9b9-def1790817e7 |
 | ProgramProjectOverviewWebPart | ProgramWebParts     | Programoversikt                                        | 01417142-67c8-498b-a6da-6e78003023dd |
