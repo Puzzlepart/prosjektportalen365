@@ -2,17 +2,17 @@ import { format } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
 import { ListMenuItem, getFluentIcon } from 'pp365-shared-library'
-import { useContext, useMemo } from 'react'
-import { ProjectListContext } from '../context'
-import { ProjectListRenderMode } from '../types'
+import { useMemo } from 'react'
 import { renderModes } from './renderModes'
+import { useIdeaModuleContext } from 'components/IdeaModule/context'
+import { IdeaListRenderMode } from 'components/IdeaModule/types'
 
 /**
  * Component logic hook for `Commands`. This hook is responsible for
  * rendering the toolbar and handling its actions.
  */
 export function useCommands() {
-  const context = useContext(ProjectListContext)
+  const context = useIdeaModuleContext()
   const selectedRenderMode = useMemo(
     () => renderModes.find((renderMode) => renderMode.value === context.state.renderMode),
     [context.state.renderMode]
@@ -38,7 +38,7 @@ export function useCommands() {
             })
             .setOnClick(() => {
               context.setState({
-                renderMode: value as ProjectListRenderMode
+                renderMode: value as IdeaListRenderMode
               })
             })
         ),
@@ -62,9 +62,9 @@ export function useCommands() {
   ]
 
   const searchBoxPlaceholder =
-    !context.state.isDataLoaded || _.isEmpty(context.state.projects)
+    !context.state.loading || _.isEmpty(context.state.ideas)
       ? ''
-      : format(context.state.selectedVertical.searchBoxPlaceholder, context.projects.length)
+      : format(strings.SearchBoxPlaceholderText, context.state.ideas.length)
 
   return { toolbarItems, searchBoxPlaceholder }
 }

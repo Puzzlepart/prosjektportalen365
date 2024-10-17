@@ -1,13 +1,13 @@
 import { Avatar, Link, TableCellLayout } from '@fluentui/react-components'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectLogo } from 'pp365-shared-library'
-import React, { useContext } from 'react'
-import { ProjectMenu } from '../ProjectMenu'
-import { ListContext } from './context'
+import React from 'react'
 import { IListColumn } from './types'
+import { useIdeaModuleContext } from 'components/IdeaModule/context'
 
 export const useColumns = (): IListColumn[] => {
-  const context = useContext(ListContext)
+  const context = useIdeaModuleContext()
+
   return [
     {
       columnId: 'logo',
@@ -21,7 +21,7 @@ export const useColumns = (): IListColumn[] => {
             title={item.title}
             url={item.url}
             renderMode='list'
-            size={context.size !== 'medium' ? '32px' : '48px'}
+            size={context.props.listSize !== 'medium' ? '32px' : '48px'}
           />
         )
       }
@@ -81,7 +81,8 @@ export const useColumns = (): IListColumn[] => {
             truncate
             title={`${strings.ProjectOwner}: ${item.owner?.name ?? strings.NotSet}`}
           >
-            <Avatar size={context.size !== 'medium' ? 24 : 32} {...item.owner} /> {item.owner?.name}
+            <Avatar size={context.props.listSize !== 'medium' ? 24 : 32} {...item.owner} />{' '}
+            {item.owner?.name}
           </TableCellLayout>
         )
       }
@@ -101,29 +102,9 @@ export const useColumns = (): IListColumn[] => {
             truncate
             title={`${strings.ProjectManager}: ${item.manager?.name ?? strings.NotSet}`}
           >
-            <Avatar size={context.size !== 'medium' ? 24 : 32} {...item.manager} />{' '}
+            <Avatar size={context.props.listSize !== 'medium' ? 24 : 32} {...item.manager} />{' '}
             {item.manager?.name}
           </TableCellLayout>
-        )
-      }
-    },
-    {
-      columnId: 'actions',
-      defaultWidth: 40,
-      minWidth: 40,
-      compare: () => {
-        return -1
-      },
-      renderHeaderCell: () => {
-        return null
-      },
-      renderCell: (item) => {
-        return (
-          <ProjectMenu
-            project={item}
-            context={context}
-            size={context.size !== 'medium' ? 'small' : 'medium'}
-          />
         )
       }
     }

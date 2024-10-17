@@ -79,7 +79,7 @@ export function useIdeaListRenderer({ props, state }: IIdeaModuleContext) {
             value={{
               ...props,
               ideas: state.ideas,
-              size
+              listSize: size
             }}
           >
             <List />
