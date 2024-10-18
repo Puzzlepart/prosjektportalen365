@@ -13,13 +13,7 @@ export function useInstrumentColumn(props: IInstrumentColumnProps) {
   const endValue = props.item[props.endValueField] || props.item['GtDesiredValueOWSNMBR']
   const currentValue = props.item[props.currentValueField] || props.item['LastMeasurementValue']
   const unit = props.item[props.unitField] || props.item['GtMeasurementUnitOWSCHCS']
-  const description = props.description
-
-  // based on the end value and startvalue, create subArcs. where each subArc is a range of the gauge. Start and end should be 10% of the values, higher or lower. There should always be 4 subArs.
-  // first arc should be from startValue - 10% to startValue
-  // second arc should be from 30% of endValue
-  // third arc should be from 70% of endValue
-  // fourth arc should be from endValue to endValue + 10%
+  const description = props.item[props.descriptionField] || props.item['MeasurementIndicator']
 
   const subArcs: SubArc[] = [
     { limit: startValue - endValue * 0.1, showTick: true, color: '#FF2121' },

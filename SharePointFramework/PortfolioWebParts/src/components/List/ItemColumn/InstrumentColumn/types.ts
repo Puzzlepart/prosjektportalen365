@@ -8,5 +8,5 @@ export interface IInstrumentColumnProps
   endValueField?: string
   currentValueField?: string
   unitField?: string
-  description?: string
+  descriptionField?: string
 }

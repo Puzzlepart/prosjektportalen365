@@ -5,14 +5,7 @@ import styles from './InstrumentColumn.module.scss'
 import { format } from '@fluentui/react'
 import { IInstrumentColumnProps } from './types'
 import { useInstrumentColumn } from './useInstrumentColumn'
-import {
-  Link,
-  Popover,
-  PopoverSurface,
-  PopoverTrigger,
-  Text,
-  Title3
-} from '@fluentui/react-components'
+import { Link, Popover, PopoverSurface, PopoverTrigger, Text } from '@fluentui/react-components'
 import GaugeComponent from 'react-gauge-component'
 
 /**
@@ -55,8 +48,8 @@ export const InstrumentColumn: ColumnRenderComponent<IInstrumentColumnProps> = (
               labels={{
                 valueLabel: {
                   style: {
-                    fill: '#000',
-                    color: '#000',
+                    fill: '#222',
+                    color: '#222',
                     textShadow: 'none',
                     fontWeight: 'bold',
                     fontSize: '32px'
@@ -66,8 +59,10 @@ export const InstrumentColumn: ColumnRenderComponent<IInstrumentColumnProps> = (
               pointer={{ type: 'blob', animationDelay: 0.5 }}
               value={currentValue}
             />
-            <Text>{unit}</Text>
-            <Title3>{description}</Title3>
+            <Text>
+              Enhet: <strong>{unit}</strong>
+            </Text>
+            <div className={styles.description}>{description}</div>
           </div>
         </div>
       </PopoverSurface>

@@ -2,15 +2,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 260px;
-}
+  max-width: 280px;
+  padding: 12px;
 
-.title {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.infoText {
-  margin: 20px 0;
+  .description {
+    font-size: 16px;
+    text-align: center;
+    margin: 8px;
+  }
 }
