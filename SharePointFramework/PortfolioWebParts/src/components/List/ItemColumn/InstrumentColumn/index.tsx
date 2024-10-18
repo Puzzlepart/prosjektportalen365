@@ -1,7 +1,5 @@
-import { Checkbox, TextField } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import React from 'react'
-import { ColumnDataTypePropertyField } from '../ColumnDataTypeField'
 import { ColumnRenderComponent } from '../types'
 import styles from './InstrumentColumn.module.scss'
 import { format } from '@fluentui/react'
@@ -12,8 +10,10 @@ import {
   Popover,
   PopoverSurface,
   PopoverTrigger,
-  Text
+  Text,
+  Title3
 } from '@fluentui/react-components'
+import GaugeComponent from 'react-gauge-component'
 
 /**
  * A column render component that displays a link in the cell. When the link is clicked, a dialog is displayed
@@ -23,17 +23,17 @@ import {
  * `{{Count}}`. The `{{Title}}` placeholder will be replaced with the title of the column.
  *
  * @param props - The props for the component.
- * @param props.startValue - The start value of the instrument.
- * @param props.endValue - The end value of the instrument.
  * @param props.currentValue - The current value of the instrument.
  * @param props.unit - The unit of the instrument.
  * @param props.description - The description of the instrument.
+ * @param props.subArcs - The sub arcs of the instrument.
+ * @param props.minimumValue - The minimum value of the instrument.
+ * @param props.maximumValue - The maximum value of the instrument.
  * @param props.item - The item to render.
  */
 export const InstrumentColumn: ColumnRenderComponent<IInstrumentColumnProps> = (props) => {
-  const { startValue, endValue, currentValue, unit, description, item } =
+  const { currentValue, unit, description, subArcs, minimumValue, maximumValue } =
     useInstrumentColumn(props)
-  console.log(item)
 
   return (
     <Popover withArrow>
@@ -42,13 +42,33 @@ export const InstrumentColumn: ColumnRenderComponent<IInstrumentColumnProps> = (
       </PopoverTrigger>
       <PopoverSurface>
         <div>
-          <Text size={400}>{description}</Text>
-          <Text size={400}>
-            {currentValue} '-' {unit}
-          </Text>
-          <Text size={400}>
-            {startValue} - {endValue}
-          </Text>
+          <div className={styles.gauge} style={{ width: '100%', alignItems: 'center' }}>
+            <GaugeComponent
+              type='semicircle'
+              minValue={minimumValue}
+              maxValue={maximumValue}
+              arc={{
+                colorArray: ['#FF2121', '#00FF15'],
+                padding: 0.02,
+                subArcs: subArcs
+              }}
+              labels={{
+                valueLabel: {
+                  style: {
+                    fill: '#000',
+                    color: '#000',
+                    textShadow: 'none',
+                    fontWeight: 'bold',
+                    fontSize: '32px'
+                  }
+                }
+              }}
+              pointer={{ type: 'blob', animationDelay: 0.5 }}
+              value={currentValue}
+            />
+            <Text>{unit}</Text>
+            <Title3>{description}</Title3>
+          </div>
         </div>
       </PopoverSurface>
     </Popover>

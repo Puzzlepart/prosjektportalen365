@@ -19,7 +19,6 @@ export function useDialogColumn(props: IDialogColumnProps) {
   const items = tryParseJson(props.columnValue, [])
   const shouldRenderList = !_.isEmpty(items)
   const columns = useColumns()
-  console.log(items)
 
   const columnSizingOptions: TableColumnSizingOptions = columns.reduce(
     (options, col) => ({
