@@ -10,10 +10,11 @@
         <CHOICE>Currency</CHOICE>
         <CHOICE>Note</CHOICE>
         <CHOICE>Boolean</CHOICE>
-        <CHOICE>List</CHOICE>
         <CHOICE>Trend</CHOICE>
         <CHOICE>Modal</CHOICE>
+        <CHOICE>Instrument</CHOICE>
         <CHOICE>Filename</CHOICE>
+        <CHOICE>List</CHOICE>
         <CHOICE>ProjectInfo</CHOICE>
     </CHOICES>
 </Field>

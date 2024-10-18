@@ -348,7 +348,7 @@
             <pnp:DataValue FieldName="Title">Siste måling</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">LastMeasurementValue</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">LastMeasurementValue</pnp:DataValue>
-            <pnp:DataValue FieldName="GtFieldDataType">Number</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Instrument</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>

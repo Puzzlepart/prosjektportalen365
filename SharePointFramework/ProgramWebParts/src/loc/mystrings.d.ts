@@ -45,6 +45,7 @@ declare interface IProgramWebPartsStrings {
   ColumnRenderOptionCurrencyPrefixLabel: string
   ColumnRenderOptionDate: string
   ColumnRenderOptionDateIncludeTimeLabel: string
+  ColumnRenderOptionInstrument: string
   ColumnRenderOptionDialog: string
   ColumnRenderOptionDialogInfoTextTemplateDescription: string
   ColumnRenderOptionDialogInfoTextTemplateLabel: string

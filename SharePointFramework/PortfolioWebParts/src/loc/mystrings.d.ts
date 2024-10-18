@@ -139,6 +139,7 @@ declare interface IPortfolioWebPartsStrings {
   ColumnRenderOptionCurrencyPrefixLabel: string
   ColumnRenderOptionDate: string
   ColumnRenderOptionDateIncludeTimeLabel: string
+  ColumnRenderOptionInstrument: string
   ColumnRenderOptionDialog: string
   ColumnRenderOptionDialogInfoTextTemplateDescription: string
   ColumnRenderOptionDialogInfoTextTemplateLabel: string
@@ -327,6 +328,7 @@ declare interface IPortfolioWebPartsStrings {
   SearchQueryLabel: string
   SelectProgramText: string
   ShowAllMeasurementsLinkText: string
+  ShowInstrumentLinkText: string
   ShowCommandBarLabel: string
   ShowExcelExportButtonLabel: string
   ShowFieldFrontpageLabel: string
