@@ -168,6 +168,7 @@ declare interface IProgramWebPartsStrings {
   SearchPropertyPlaceholder: string
   SearchQueryLabel: string
   ShowAllMeasurementsLinkText: string
+  ShowInstrumentLinkText: string
   ShowCommandBarLabel: string
   ShowExcelExportButtonLabel: string
   ShowFieldFrontpageLabel: string

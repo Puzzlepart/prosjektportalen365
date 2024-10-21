@@ -72,5 +72,5 @@ export const InstrumentColumn: ColumnRenderComponent<IInstrumentColumnProps> = (
 
 InstrumentColumn.key = 'instrument'
 InstrumentColumn.id = 'Instrument'
-InstrumentColumn.displayName = strings.ColumnRenderOptionDialog
+InstrumentColumn.displayName = strings.ColumnRenderOptionInstrument
 InstrumentColumn.iconName = 'SpeedHigh'

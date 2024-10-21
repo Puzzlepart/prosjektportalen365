@@ -169,6 +169,7 @@ define([], function () {
     SearchPropertyPlaceholder: 'Søk i forvaltede egenskaper...',
     SearchQueryLabel: 'Søkespørring',
     ShowAllMeasurementsLinkText: 'Vis alle målinger',
+    ShowInstrumentLinkText: '{0} (vis instrument)',
     ShowCommandBarLabel: 'Vis kommandolinje',
     ShowExcelExportButtonLabel: 'Vis eksport til Excel-knapp',
     ShowFieldFrontpageLabel: 'Prosjektforside',
