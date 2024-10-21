@@ -11,6 +11,7 @@ export type ColumnDataType =
   | 'note'
   | 'trend'
   | 'modal'
+  | 'instrument'
   | 'filename'
   | 'list'
   | 'projectinfo'

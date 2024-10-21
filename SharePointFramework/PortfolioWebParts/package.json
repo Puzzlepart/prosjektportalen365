@@ -11,7 +11,7 @@
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
     "prewatch": "node node_modules/pzl-spfx-tasks --pre-watch --loglevel silent",
     "postwatch": "node node_modules/pzl-spfx-tasks --post-watch --loglevel silent",
-    "serve": "concurrently \"gulp serve-deprecated --locale=nb-no --nobrowser\"",
+    "serve": "concurrently \"gulp serve-deprecated --locale=nb-no --nobrowser NODE --max-old-space-size=8192\"",
     "build": "gulp bundle --ship && gulp package-solution --ship",
     "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color --fix --config ../.eslintrc.yaml && npm run prettier",
@@ -64,7 +64,8 @@
     "react-window": "~1.8.10",
     "react-virtualized-auto-sizer": "~1.0.24",
     "@fluentui/react-datepicker-compat": "~0.4.38",
-    "@fluentui/react-motion-preview": "~0.5.20"
+    "@fluentui/react-motion-preview": "~0.5.20",
+    "react-gauge-component": "~1.2.61"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.17.4",

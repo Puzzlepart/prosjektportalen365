@@ -9,6 +9,7 @@ import { NumberColumn } from './NumberColumn'
 import { PercentageColumn } from './PercentageColumn'
 import { DateColumn } from './DateColumn'
 import { DialogColumn } from './DialogColumn'
+import { InstrumentColumn } from './InstrumentColumn'
 import { FileNameColumn } from './FileNameColumn'
 import { ListColumn } from './ListColumn'
 import { TagsColumn } from './TagsColumn'
@@ -238,6 +239,7 @@ export function useColumnRenderComponentRegistry() {
       PercentageColumn,
       ListColumn,
       DialogColumn,
+      InstrumentColumn,
       TagsColumn,
       TrendColumn,
       UrlColumn,
