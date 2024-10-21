@@ -2,9 +2,13 @@
 
 Sjekk ut [release notes](./releasenotes/1.10.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
 
-## 1.10.1 - TBA
+## 1.11.0 - TBA
 
 ### Ny funksjonalitet
+
+- Lagt til instrumentvisning for 'Siste måling' på Gevinstoversikt [#1572](https://github.com/Puzzlepart/prosjektportalen365/issues/1572)
+
+## 1.10.1 - TBA
 
 ### Forbedringer
 
