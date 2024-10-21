@@ -68,26 +68,35 @@ const Reports = bundleIcon(DocumentBulletListMultiple20Filled, DocumentBulletLis
 export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
   const { state, setState, fluentProviderId } = useIdeaModule(props)
 
+  const [isOpen, setIsOpen] = React.useState(true)
   const [size, setNavSize] = useState<NavSize>('small')
   const [enabledLinks, setEnabledLinks] = useState(true)
 
   const linkDestination = enabledLinks ? '#' : ''
 
+  const renderHamburgerWithToolTip = () => {
+    return (
+      <Tooltip content="Navigation" relationship="label">
+        <Hamburger onClick={() => setIsOpen(!isOpen)} />
+      </Tooltip>
+    );
+  };
+
   return (
-    <div className={styles.ideaModule}>
-      <IdeaModuleContext.Provider value={{ props, state, setState }}>
-        <IdPrefixProvider value={fluentProviderId}>
-          <FluentProvider theme={customLightTheme}>
+    <IdeaModuleContext.Provider value={{ props, state, setState }}>
+      <IdPrefixProvider value={fluentProviderId}>
+        <FluentProvider theme={customLightTheme}>
+          <div className={styles.ideaModule}>
             <NavDrawer
               defaultSelectedValue='7'
               defaultSelectedCategoryValue='6'
-              open={true}
+              open={isOpen}
               type={'inline'}
               size={size}
             >
               <NavDrawerHeader>
-                <Tooltip content='Navigation' relationship='label'>
-                  <Hamburger />
+                <Tooltip content="Navigation" relationship="label">
+                  {renderHamburgerWithToolTip()}
                 </Tooltip>
               </NavDrawerHeader>
               <NavDrawerBody>
@@ -164,6 +173,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
               </NavDrawerBody>
             </NavDrawer>
             <div className={styles.content}>
+              {!isOpen && renderHamburgerWithToolTip()}
               <h1>
                 Bring your ideas to life. Here you can create, share and collaborate on ideas.
               </h1>
@@ -172,10 +182,10 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                 also collaborate on ideas with your team members.
               </p>
             </div>
-          </FluentProvider>
-        </IdPrefixProvider>
-      </IdeaModuleContext.Provider>
-    </div>
+          </div>
+        </FluentProvider>
+      </IdPrefixProvider>
+    </IdeaModuleContext.Provider>
   )
 }
 
