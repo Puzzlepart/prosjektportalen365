@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - releases/1.9
+      - feat/instrument
     paths:
       - "SharePointFramework/**"
       - "Install/**"
