@@ -76,11 +76,11 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
 
   const renderHamburgerWithToolTip = () => {
     return (
-      <Tooltip content="Navigation" relationship="label">
+      <Tooltip content='Navigation' relationship='label'>
         <Hamburger onClick={() => setIsOpen(!isOpen)} />
       </Tooltip>
-    );
-  };
+    )
+  }
 
   return (
     <IdeaModuleContext.Provider value={{ props, state, setState }}>
@@ -95,7 +95,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
               size={size}
             >
               <NavDrawerHeader>
-                <Tooltip content="Navigation" relationship="label">
+                <Tooltip content='Navigation' relationship='label'>
                   {renderHamburgerWithToolTip()}
                 </Tooltip>
               </NavDrawerHeader>
