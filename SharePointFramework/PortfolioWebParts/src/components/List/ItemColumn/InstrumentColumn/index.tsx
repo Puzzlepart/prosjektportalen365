@@ -25,8 +25,16 @@ import GaugeComponent from 'react-gauge-component'
  * @param props.item - The item to render.
  */
 export const InstrumentColumn: ColumnRenderComponent<IInstrumentColumnProps> = (props) => {
-  const { currentValue, unit, description, subArcs, minimumValue, maximumValue } =
-    useInstrumentColumn(props)
+  const {
+    startValue,
+    endValue,
+    currentValue,
+    unit,
+    description,
+    subArcs,
+    minimumValue,
+    maximumValue
+  } = useInstrumentColumn(props)
 
   return (
     <Popover withArrow>
@@ -41,7 +49,7 @@ export const InstrumentColumn: ColumnRenderComponent<IInstrumentColumnProps> = (
               minValue={minimumValue}
               maxValue={maximumValue}
               arc={{
-                colorArray: ['#FF2121', '#00FF15'],
+                colorArray: startValue > endValue ? ['#00FF15', '#FF2121'] : ['#FF2121', '#00FF15'],
                 padding: 0.02,
                 subArcs: subArcs
               }}

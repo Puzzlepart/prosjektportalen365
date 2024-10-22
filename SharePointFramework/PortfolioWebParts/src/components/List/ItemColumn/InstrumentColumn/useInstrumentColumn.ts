@@ -15,23 +15,42 @@ export function useInstrumentColumn(props: IInstrumentColumnProps) {
   const unit = props.item[props.unitField] || props.item['GtMeasurementUnitOWSCHCS']
   const description = props.item[props.descriptionField] || props.item['MeasurementIndicator']
 
-  const subArcs: SubArc[] = [
-    { limit: startValue - endValue * 0.1, showTick: true, color: '#FF2121' },
-    { limit: startValue, showTick: true },
-    { limit: startValue + (endValue - startValue) * 0.3, showTick: true },
-    { limit: startValue + (endValue - startValue) * 0.7, showTick: true },
-    { limit: endValue, showTick: true },
-    { limit: endValue + endValue * 0.1, showTick: true }
-  ]
+  let subArcs: SubArc[] = []
+  let minimumValue: number
+  let maximumValue: number
+
+  if (startValue < endValue) {
+    minimumValue = startValue - endValue * 0.1
+    maximumValue = endValue + endValue * 0.1
+    subArcs = [
+      { limit: startValue - endValue * 0.1, showTick: true, color: '#FF2121' },
+      { limit: startValue, showTick: true },
+      { limit: startValue + (endValue - startValue) * 0.3, showTick: true },
+      { limit: startValue + (endValue - startValue) * 0.7, showTick: true },
+      { limit: endValue, showTick: true },
+      { limit: endValue + endValue * 0.1, showTick: true }
+    ]
+  } else {
+    maximumValue = startValue + startValue * 0.1
+    minimumValue = endValue - startValue * 0.1
+    subArcs = [
+      { limit: endValue - startValue * 0.1, showTick: true, color: '#FF2121' },
+      { limit: endValue, showTick: true },
+      { limit: endValue + (startValue - endValue) * 0.3, showTick: true },
+      { limit: endValue + (startValue - endValue) * 0.7, showTick: true },
+      { limit: startValue, showTick: true },
+      { limit: startValue + startValue * 0.1, showTick: true }
+    ]
+  }
 
   return {
-    minimumValue: startValue - endValue * 0.1,
-    maximumValue: endValue + endValue * 0.1,
     startValue,
     endValue,
     currentValue,
     unit,
     description,
-    subArcs
+    subArcs,
+    minimumValue,
+    maximumValue
   } as const
 }
