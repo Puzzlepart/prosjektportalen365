@@ -27,6 +27,10 @@ export default class IdeaModuleWebPart extends BasePortfolioWebPart<IIdeaModuleP
                 PropertyPaneTextField('configurationList', {
                   label: 'Konfigurasjon liste',
                   description: 'Navn på Idékonfigurasjonsliste'
+                }),
+                PropertyPaneTextField('configurationList', {
+                  label: 'Konfigurasjonsnavn',
+                  description: 'Navn på konfigurasjonen som skal anvendes'
                 })
               ]
             }

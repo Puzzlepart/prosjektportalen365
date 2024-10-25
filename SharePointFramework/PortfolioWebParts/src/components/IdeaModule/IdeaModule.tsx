@@ -3,7 +3,7 @@ import styles from './IdeaModule.module.scss'
 import { IdeaModuleContext } from './context'
 import { IIdeaModuleProps } from './types'
 import { useIdeaModule } from './useIdeaModule'
-import { FluentProvider, IdPrefixProvider, Tooltip } from '@fluentui/react-components'
+import { FluentProvider, IdPrefixProvider, Spinner, Tooltip } from '@fluentui/react-components'
 import { customLightTheme } from 'pp365-shared-library'
 import {
   Hamburger,
@@ -23,56 +23,28 @@ import {
 import {
   Board20Filled,
   Board20Regular,
-  BoxMultiple20Filled,
-  BoxMultiple20Regular,
-  DataArea20Filled,
-  DataArea20Regular,
-  DocumentBulletListMultiple20Filled,
-  DocumentBulletListMultiple20Regular,
-  HeartPulse20Filled,
-  HeartPulse20Regular,
-  MegaphoneLoud20Filled,
-  MegaphoneLoud20Regular,
   NotePin20Filled,
   NotePin20Regular,
-  People20Filled,
-  People20Regular,
-  PeopleStar20Filled,
-  PeopleStar20Regular,
-  Person20Filled,
-  PersonLightbulb20Filled,
-  PersonLightbulb20Regular,
-  Person20Regular,
-  PersonSearch20Filled,
-  PersonSearch20Regular,
-  PreviewLink20Filled,
-  PreviewLink20Regular,
+  Lightbulb20Filled,
+  Lightbulb20Regular,
   bundleIcon,
   PersonCircle24Regular
 } from '@fluentui/react-icons'
+import { IdeaField } from './IdeaField'
 
-const Person = bundleIcon(Person20Filled, Person20Regular)
 const Dashboard = bundleIcon(Board20Filled, Board20Regular)
-const Announcements = bundleIcon(MegaphoneLoud20Filled, MegaphoneLoud20Regular)
-const EmployeeSpotlight = bundleIcon(PersonLightbulb20Filled, PersonLightbulb20Regular)
-const Search = bundleIcon(PersonSearch20Filled, PersonSearch20Regular)
-const PerformanceReviews = bundleIcon(PreviewLink20Filled, PreviewLink20Regular)
+const Lightbulb = bundleIcon(Lightbulb20Filled, Lightbulb20Regular)
 const JobPostings = bundleIcon(NotePin20Filled, NotePin20Regular)
-const Interviews = bundleIcon(People20Filled, People20Regular)
-const HealthPlans = bundleIcon(HeartPulse20Filled, HeartPulse20Regular)
-const TrainingPrograms = bundleIcon(BoxMultiple20Filled, BoxMultiple20Regular)
-const CareerDevelopment = bundleIcon(PeopleStar20Filled, PeopleStar20Regular)
-const Analytics = bundleIcon(DataArea20Filled, DataArea20Regular)
-const Reports = bundleIcon(DocumentBulletListMultiple20Filled, DocumentBulletListMultiple20Regular)
 
 export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
-  const { state, setState, fluentProviderId } = useIdeaModule(props)
+  const { state, setState, fluentProviderId, ideas } = useIdeaModule(props)
 
   const [isOpen, setIsOpen] = React.useState(true)
   const [size, setNavSize] = useState<NavSize>('small')
   const [enabledLinks, setEnabledLinks] = useState(true)
+  const [selectedIdea, setSelectedIdea] = useState('')
 
-  const linkDestination = enabledLinks ? '#' : ''
+  const linkDestination = enabledLinks ? `?idea=${selectedIdea}` : ''
 
   const renderHamburgerWithToolTip = () => {
     return (
@@ -86,103 +58,75 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
     <IdeaModuleContext.Provider value={{ props, state, setState }}>
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme}>
-          <div className={styles.ideaModule}>
-            <NavDrawer
-              defaultSelectedValue='7'
-              defaultSelectedCategoryValue='6'
-              open={isOpen}
-              type={'inline'}
-              size={size}
-            >
-              <NavDrawerHeader>
-                <Tooltip content='Navigation' relationship='label'>
-                  {renderHamburgerWithToolTip()}
-                </Tooltip>
-              </NavDrawerHeader>
-              <NavDrawerBody>
-                <AppItemStatic icon={<PersonCircle24Regular />}>Idémodul</AppItemStatic>
-                <NavItem href={linkDestination} icon={<Dashboard />} value='1'>
-                  Dashboard
-                </NavItem>
-                <NavItem href={linkDestination} icon={<Announcements />} value='2'>
-                  Announcements
-                </NavItem>
-                <NavItem href={linkDestination} icon={<EmployeeSpotlight />} value='3'>
-                  Employee Spotlight
-                </NavItem>
-                <NavItem icon={<Search />} href={linkDestination} value='4'>
-                  Profile Search
-                </NavItem>
-                <NavItem icon={<PerformanceReviews />} href={linkDestination} value='5'>
-                  Performance Reviews
-                </NavItem>
+          {state.loading ? (
+            <Spinner label='Laster inn idémodulen' size='extra-large' />
+          ) : (
+            <div className={styles.ideaModule}>
+              <NavDrawer
+                defaultSelectedValue='1'
+                defaultSelectedCategoryValue='3'
+                openCategories={['3', '5']}
+                open={isOpen}
+                type={'inline'}
+                size={size}
+              >
+                <NavDrawerHeader>
+                  <Tooltip content='Navigation' relationship='label'>
+                    {renderHamburgerWithToolTip()}
+                  </Tooltip>
+                </NavDrawerHeader>
+                <NavDrawerBody>
+                  <AppItemStatic icon={<PersonCircle24Regular />}>Idémodul</AppItemStatic>
+                  <NavItem href={linkDestination} icon={<Dashboard />} value='1'>
+                    Totaloversikt
+                  </NavItem>
+                  <NavSectionHeader>Registrerte idéer</NavSectionHeader>
+                  <NavItem href={linkDestination} icon={<Dashboard />} value='2'>
+                    Oversikt
+                  </NavItem>
+                  <NavCategory value='3'>
+                    <NavCategoryItem icon={<Lightbulb />}>Idéer</NavCategoryItem>
 
-                <NavSectionHeader>Employee Management</NavSectionHeader>
-                <NavCategory value='6'>
-                  <NavCategoryItem icon={<JobPostings />}>Job Postings</NavCategoryItem>
-                  <NavSubItemGroup>
-                    <NavSubItem href={linkDestination} value='7'>
-                      Openings
-                    </NavSubItem>
-                    <NavSubItem href={linkDestination} value='8'>
-                      Submissions
-                    </NavSubItem>
-                  </NavSubItemGroup>
-                </NavCategory>
-                <NavItem icon={<Interviews />} value='9'>
-                  Interviews
-                </NavItem>
-
-                <NavSectionHeader>Benefits</NavSectionHeader>
-                <NavItem icon={<HealthPlans />} value='10'>
-                  Health Plans
-                </NavItem>
-                <NavCategory value='11'>
-                  <NavCategoryItem icon={<Person />}>Retirement</NavCategoryItem>
-                  <NavSubItemGroup>
-                    <NavSubItem href={linkDestination} value='13'>
-                      Plan Information
-                    </NavSubItem>
-                    <NavSubItem href={linkDestination} value='14'>
-                      Fund Performance
-                    </NavSubItem>
-                  </NavSubItemGroup>
-                </NavCategory>
-
-                <NavDivider />
-                <NavItem icon={<TrainingPrograms />} value='15'>
-                  Training Programs
-                </NavItem>
-                <NavCategory value='16'>
-                  <NavCategoryItem icon={<CareerDevelopment />}>Career Development</NavCategoryItem>
-                  <NavSubItemGroup>
-                    <NavSubItem href={linkDestination} value='17'>
-                      Career Paths
-                    </NavSubItem>
-                    <NavSubItem href={linkDestination} value='18'>
-                      Planning
-                    </NavSubItem>
-                  </NavSubItemGroup>
-                </NavCategory>
-                <NavItem target='_blank' icon={<Analytics />} value='19'>
-                  Workforce Data
-                </NavItem>
-                <NavItem href={linkDestination} icon={<Reports />} value='20'>
-                  Reports
-                </NavItem>
-              </NavDrawerBody>
-            </NavDrawer>
-            <div className={styles.content}>
-              {!isOpen && renderHamburgerWithToolTip()}
-              <h1>
-                Bring your ideas to life. Here you can create, share and collaborate on ideas.
-              </h1>
-              <p>
-                With the new Idea module, you can create and share ideas with your team. You can
-                also collaborate on ideas with your team members.
-              </p>
+                    <NavSubItemGroup>
+                      {ideas.map((idea, idx) => (
+                        <NavSubItem href={linkDestination} value={`reg${idx}`} key={`reg${idx}`}>
+                          {idea.Title}
+                        </NavSubItem>
+                      ))}
+                    </NavSubItemGroup>
+                  </NavCategory>
+                  <NavDivider />
+                  <NavSectionHeader>Idéer under behandling</NavSectionHeader>
+                  <NavItem href={linkDestination} icon={<Dashboard />} value='4'>
+                    Oversikt
+                  </NavItem>
+                  <NavCategory value='5'>
+                    <NavCategoryItem icon={<JobPostings />}>Idéer</NavCategoryItem>
+                    <NavSubItemGroup>
+                      <NavSubItem href={linkDestination} value='6'>
+                        Idé 3
+                      </NavSubItem>
+                      <NavSubItem href={linkDestination} value='7'>
+                        Idé 4
+                      </NavSubItem>
+                    </NavSubItemGroup>
+                  </NavCategory>
+                </NavDrawerBody>
+              </NavDrawer>
+              <div className={styles.content}>
+                <p>
+                  Bring your ideas to life. Here you can create, share and collaborate on ideas.
+                </p>
+                <div className={styles.idea}>
+                  <div className={styles.ideaTitle}>{ideas[0].Title}</div>
+                  {ideas.map((model, idx) => (
+                    <IdeaField key={idx} model={model} />
+                  ))}
+                </div>
+                {!isOpen && renderHamburgerWithToolTip()}
+              </div>
             </div>
-          </div>
+          )}
         </FluentProvider>
       </IdPrefixProvider>
     </IdeaModuleContext.Provider>
@@ -191,6 +135,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
 
 IdeaModule.defaultProps = {
   configurationList: 'Idékonfigurasjon',
+  configuration: 'Standard',
   sortBy: 'Title',
   showSearchBox: true,
   showRenderModeSelector: true,

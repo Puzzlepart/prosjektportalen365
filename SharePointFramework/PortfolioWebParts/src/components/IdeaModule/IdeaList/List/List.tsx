@@ -19,7 +19,7 @@ export const List = () => {
   return (
     <div className={styles.list}>
       <DataGrid
-        items={context.state.ideas as any[]}
+        items={context.state.ideas.data.items as any[]}
         columns={columns}
         sortable
         defaultSortState={defaultSortState}

@@ -64,7 +64,7 @@ export function useCommands() {
   const searchBoxPlaceholder =
     !context.state.loading || _.isEmpty(context.state.ideas)
       ? ''
-      : format(strings.SearchBoxPlaceholderText, context.state.ideas.length)
+      : format(strings.SearchBoxPlaceholderText, context.state.ideas.data.items.length)
 
   return { toolbarItems, searchBoxPlaceholder }
 }

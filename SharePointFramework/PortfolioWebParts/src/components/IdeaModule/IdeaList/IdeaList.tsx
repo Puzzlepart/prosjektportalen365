@@ -13,7 +13,7 @@ export const IdeaList: FC<IIdeaModuleProps> = (props) => {
   const { context, fluentProviderId } = useIdeaList(props)
   const renderIdeas = useIdeaListRenderer(context)
 
-  if (context.state.ideas.length === 0) {
+  if (context.state.ideas.data.items.length === 0) {
     return (
       <FluentProvider theme={customLightTheme}>
         <section className={styles.ideaList}>
