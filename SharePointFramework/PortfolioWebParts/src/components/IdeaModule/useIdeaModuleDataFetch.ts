@@ -15,15 +15,17 @@ export function useIdeaModuleDataFetch(
   setState: (newState: Partial<IIdeaModuleState>) => void
 ) {
   useEffect(() => {
-    Promise.all([props.dataAdapter.getConfiguration(props.configurationList)]).then(
-      ([configuration]) => {
+    Promise.all([
+      props.dataAdapter.getIdeaConfiguration(props.configurationList, props.configuration)
+    ]).then(async ([configuration]) => {
+      await props.dataAdapter.getIdeasData(configuration).then((ideas) =>
         setState({
           configuration,
-          ideas: configuration,
+          ideas,
           loading: false,
           isRefetching: false
         })
-      }
-    )
+      )
+    })
   }, [refetch])
 }

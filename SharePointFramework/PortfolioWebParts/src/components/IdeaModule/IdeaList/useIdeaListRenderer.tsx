@@ -78,7 +78,7 @@ export function useIdeaListRenderer({ props, state }: IIdeaModuleContext) {
           <ListContext.Provider
             value={{
               ...props,
-              ideas: state.ideas,
+              ideas: {},
               listSize: size
             }}
           >

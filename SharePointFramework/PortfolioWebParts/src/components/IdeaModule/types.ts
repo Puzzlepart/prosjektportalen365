@@ -1,7 +1,9 @@
+import { ItemFieldValues, SPField } from 'pp365-shared-library'
 import { IBaseComponentProps } from '../types'
 
 export interface IIdeaModuleProps extends IBaseComponentProps {
   configurationList: string
+  configuration: string
   sortBy?: string
   showSearchBox?: boolean
   showRenderModeSelector?: boolean
@@ -12,10 +14,11 @@ export interface IIdeaModuleProps extends IBaseComponentProps {
 
 export interface IIdeaModuleState {
   loading?: boolean
+  refetch?: number
   isRefetching?: boolean
   error?: any
-  configuration?: ConfigurationItem[]
-  ideas?: Record<string, any>
+  configuration?: ConfigurationItem
+  ideas?: Ideas
   searchTerm: string
   renderMode?: IdeaListRenderMode
   isUserInIdeaManagerGroup?: boolean
@@ -35,4 +38,20 @@ export class ConfigurationItem {
   ideaRegistrationList: string
   ideaProcessingChoices: string
   ideaRegistrationChoices: string
+}
+
+export class Ideas {
+  data: IIdeaData
+}
+
+export interface IIdeaData {
+  /**
+   * The items from the lists containing the field values
+   */
+  items: ItemFieldValues[]
+
+  /**
+   * Fields for the list
+   */
+  fields?: SPField[]
 }

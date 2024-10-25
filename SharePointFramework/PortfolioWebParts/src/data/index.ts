@@ -16,13 +16,16 @@ import {
   DataSource,
   DataSourceService,
   DefaultCaching,
+  getClassProperties,
   getUserPhoto,
   IGraphGroup,
+  ItemFieldValues,
   PortalDataService,
   PortfolioOverviewView,
   ProjectContentColumn,
   ProjectListModel,
   SPContentType,
+  SPField,
   SPFxContext,
   SPProjectItem,
   SPTimelineConfigurationItem,
@@ -52,7 +55,8 @@ import {
 } from './types'
 import { IPersonaProps, IPersonaSharedProps } from '@fluentui/react'
 import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
-import { ConfigurationItem } from 'components/IdeaModule'
+import { ConfigurationItem, Ideas } from 'components/IdeaModule'
+import { IItem } from '@pnp/sp/items/types'
 
 /**
  * Data adapter for Portfolio Web Parts.
@@ -1029,7 +1033,10 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
-  public async getConfiguration(listName: string): Promise<ConfigurationItem[]> {
+  public async getIdeaConfiguration(
+    listName: string,
+    configurationName: string
+  ): Promise<ConfigurationItem> {
     try {
       const configurationList = this._sp.web.lists.getByTitle(listName)
       const spItems = await configurationList.items
@@ -1044,18 +1051,87 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         )
         .using(DefaultCaching)()
 
-      return spItems.map((item) => {
-        return {
+      const configuration: ConfigurationItem = spItems
+        .filter((item) => item.Title === configurationName)
+        .map((item) => ({
           title: item.Title,
           description: item.GtDescription,
           ideaProcessingList: item.GtIdeaProcessingList,
           ideaRegistrationList: item.GtIdeaRegistrationList,
           ideaProcessingChoices: item.GtIdeaProcessingChoices,
           ideaRegistrationChoices: item.GtIdeaRegistrationChoices
-        }
-      })
+        }))[0]
+
+      return configuration
     } catch (error) {
-      return []
+      return null
+    }
+  }
+
+  public async getItemFieldValues(item: IItem, userFields: string[] = []) {
+    const [fieldValuesAsText, fieldValues] = await Promise.all([
+      item.fieldValuesAsText<Record<string, string>>(),
+      item
+        .select(
+          '*',
+          ...userFields.map((fieldName) => `${fieldName}/Id`),
+          ...userFields.map((fieldName) => `${fieldName}/Title`),
+          ...userFields.map((fieldName) => `${fieldName}/EMail`)
+        )
+        .expand(...userFields)<Record<string, any>>()
+    ])
+    return ItemFieldValues.create({ fieldValues, fieldValuesAsText })
+  }
+
+  public async getIdeasData(configuration: ConfigurationItem): Promise<Ideas> {
+    try {
+      const ideaRegistrationList = this._sp.web.lists.getByTitle(configuration.ideaRegistrationList)
+      // const ideaProcessingList = this._sp.web.lists.getByTitle(configuration.ideaProcessingList)
+      // const registered = await ideaRegistrationList.items.select('*', 'FieldValuesAsText')
+      //   .expand('FieldValuesAsText').using(DefaultCaching)()
+      // const processing = await ideaProcessingList.items.select('*', 'FieldValuesAsText')
+      //   .expand('FieldValuesAsText').using(DefaultCaching)()
+
+      const fields = await ideaRegistrationList.fields
+        .select(...getClassProperties(SPField))
+        .filter(
+          "substringof('Gt', InternalName) or InternalName eq 'Title' or InternalName eq 'Id' or InternalName eq 'ID'"
+        )<SPField[]>()
+      const userFields = fields
+        .filter((fld) => fld.TypeAsString.indexOf('User') === 0)
+        .map((fld) => fld.InternalName)
+
+      const [ideaList] = await this._sp.web.lists
+        .filter(`Title eq '${configuration.ideaRegistrationList}'`)
+        .select('Id')()
+
+      const items = await this._sp.web.lists.getById(ideaList.Id).items.select('Id')<
+        { Id: number }[]
+      >()
+
+      const list = this._sp.web.lists.getById(ideaList.Id)
+      const listItems = await Promise.all(
+        items.map(async (item) => {
+          const listItem = await list.items.getById(item.Id)
+          return listItem
+        })
+      )
+
+      const allFieldValues = await Promise.all(
+        listItems.map(async (item) => {
+          const fieldValues = await this.getItemFieldValues(item, userFields)
+          return fieldValues
+        })
+      )
+
+      return {
+        data: {
+          items: allFieldValues,
+          fields
+        }
+      }
+    } catch (error) {
+      return null
     }
   }
 }

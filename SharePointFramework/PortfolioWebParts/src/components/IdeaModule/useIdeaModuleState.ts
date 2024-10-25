@@ -12,12 +12,13 @@ export function useIdeaModuleState(props: IIdeaModuleProps) {
 
   const [state, $setState] = useState<IIdeaModuleState>({
     loading: true,
-    configuration: [],
-    ideas: {},
+    configuration: null,
+    ideas: null,
     error: null,
     searchTerm: '',
     renderMode: props.defaultRenderMode ?? 'tiles',
-    sort: defaultSort
+    sort: defaultSort,
+    isRefetching: false
   })
 
   /**

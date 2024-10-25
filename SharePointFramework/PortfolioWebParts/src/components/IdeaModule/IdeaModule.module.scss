@@ -10,5 +10,22 @@
     display: grid;
     justify-content: flex-start;
     align-items: flex-start;
+
+    .idea {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 16px;
+      margin-bottom: 16px;
+
+      .ideaTitle {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin: 0;
+      }
+
+      .ideaField {
+        margin: 0;
+      }
+    }
   }
 }
