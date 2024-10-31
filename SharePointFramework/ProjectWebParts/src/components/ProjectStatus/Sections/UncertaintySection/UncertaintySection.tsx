@@ -48,11 +48,13 @@ export const UncertaintySection: FC = () => {
         break
       case 2:
         {
-          matrix = <OpportunityMatrix
-            {...context.props.opportunityMatrix}
-            pageContext={context.props.pageContext}
-            items={matrixElements}
-          />
+          matrix = (
+            <OpportunityMatrix
+              {...context.props.opportunityMatrix}
+              pageContext={context.props.pageContext}
+              items={matrixElements}
+            />
+          )
         }
         break
     }
