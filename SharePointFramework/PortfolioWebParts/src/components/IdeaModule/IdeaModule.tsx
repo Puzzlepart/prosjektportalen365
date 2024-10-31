@@ -37,14 +37,13 @@ const Lightbulb = bundleIcon(Lightbulb20Filled, Lightbulb20Regular)
 const JobPostings = bundleIcon(NotePin20Filled, NotePin20Regular)
 
 export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
-  const { state, setState, fluentProviderId, ideas } = useIdeaModule(props)
+  const { state, setState, fluentProviderId, selectedIdea } = useIdeaModule(props)
 
   const [isOpen, setIsOpen] = React.useState(true)
   const [size, setNavSize] = useState<NavSize>('small')
   const [enabledLinks, setEnabledLinks] = useState(true)
-  const [selectedIdea, setSelectedIdea] = useState('')
 
-  const linkDestination = enabledLinks ? `?idea=${selectedIdea}` : ''
+  const linkDestination = enabledLinks ? `#` : ''
 
   const renderHamburgerWithToolTip = () => {
     return (
@@ -88,9 +87,9 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                     <NavCategoryItem icon={<Lightbulb />}>Idéer</NavCategoryItem>
 
                     <NavSubItemGroup>
-                      {ideas.map((idea, idx) => (
+                      {state.ideas.data.items.map((idea, idx) => (
                         <NavSubItem href={linkDestination} value={`reg${idx}`} key={`reg${idx}`}>
-                          {idea.Title}
+                          {idea?.Title}
                         </NavSubItem>
                       ))}
                     </NavSubItemGroup>
@@ -118,8 +117,8 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                   Bring your ideas to life. Here you can create, share and collaborate on ideas.
                 </p>
                 <div className={styles.idea}>
-                  <div className={styles.ideaTitle}>{ideas[0].Title}</div>
-                  {ideas.map((model, idx) => (
+                    <h1 className={styles.ideaTitle}>{selectedIdea.item.Title}</h1>
+                    {state.selectedIdea.fieldValues.map((model, idx) => (
                     <IdeaField key={idx} model={model} />
                   ))}
                 </div>

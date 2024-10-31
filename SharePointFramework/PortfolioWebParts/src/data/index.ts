@@ -1105,9 +1105,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         .filter(`Title eq '${configuration.ideaRegistrationList}'`)
         .select('Id')()
 
-      const items = await this._sp.web.lists.getById(ideaList.Id).items.select('Id')<
-        { Id: number }[]
-      >()
+      const items = await this._sp.web.lists.getById(ideaList.Id).items()
 
       const list = this._sp.web.lists.getById(ideaList.Id)
       const listItems = await Promise.all(
@@ -1126,7 +1124,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
       return {
         data: {
-          items: allFieldValues,
+          items: items,
+          fieldValues: allFieldValues,
           fields
         }
       }

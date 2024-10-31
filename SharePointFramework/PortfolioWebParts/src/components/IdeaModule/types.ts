@@ -1,4 +1,4 @@
-import { ItemFieldValues, SPField } from 'pp365-shared-library'
+import { EditableSPField, ItemFieldValues, SPField } from 'pp365-shared-library'
 import { IBaseComponentProps } from '../types'
 
 export interface IIdeaModuleProps extends IBaseComponentProps {
@@ -19,6 +19,7 @@ export interface IIdeaModuleState {
   error?: any
   configuration?: ConfigurationItem
   ideas?: Ideas
+  selectedIdea?: IIdea
   searchTerm: string
   renderMode?: IdeaListRenderMode
   isUserInIdeaManagerGroup?: boolean
@@ -40,6 +41,19 @@ export class ConfigurationItem {
   ideaRegistrationChoices: string
 }
 
+export interface IIdea {
+  /**
+   * The item
+   */
+  item: any[]
+
+  /**
+   * The fieldValues for the item
+  */
+  fieldValues?: EditableSPField[]
+}
+
+
 export class Ideas {
   data: IIdeaData
 }
@@ -48,7 +62,12 @@ export interface IIdeaData {
   /**
    * The items from the lists containing the field values
    */
-  items: ItemFieldValues[]
+  items: any[]
+
+  /**
+   * The items from the lists containing the field values
+  */
+  fieldValues?: ItemFieldValues[]
 
   /**
    * Fields for the list
