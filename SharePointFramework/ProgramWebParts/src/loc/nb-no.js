@@ -111,7 +111,7 @@ define([], function () {
     FilterText: 'Filtrer',
     GeneralGroupName: 'Generelt',
     GroupByColumnLabel: 'Grupper etter {0}',
-    IconNameDescription: 'Navn på ikon fra UI Fabric. Se https://uifabricicons.azurewebsites.net/.',
+    IconNameDescription: 'Navn på ikon fra UI Fabric. Se oversikt her: https://uifabricicons.azurewebsites.net/.',
     IconNameLabel: 'Ikonnavn',
     InternalNameDescription: 'Internt feltnavn for denne kolonnen.',
     InternalNameLabel: 'Internt feltnavn',
