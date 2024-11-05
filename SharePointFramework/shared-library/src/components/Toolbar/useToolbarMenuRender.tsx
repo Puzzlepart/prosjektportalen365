@@ -92,16 +92,16 @@ export function useToolbarMenuRender() {
 
     return (
       <div hidden={item.hidden}>
-          <MenuItem
-            content={item.text}
-            icon={createIcon(item)}
-            style={createStyle(item)}
-            disabled={item.disabled}
-            onClick={(e) => {
-              item.onClick(e)
-              closeMenu && closeMenu()
-            }}
-          />
+        <MenuItem
+          content={item.text}
+          icon={createIcon(item)}
+          style={createStyle(item)}
+          disabled={item.disabled}
+          onClick={(e) => {
+            item.onClick(e)
+            closeMenu && closeMenu()
+          }}
+        />
       </div>
     )
   }
