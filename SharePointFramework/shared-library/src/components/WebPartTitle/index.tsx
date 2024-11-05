@@ -4,7 +4,6 @@ import { IWebPartTitleProps } from './types'
 import styles from './WebPartTitle.module.scss'
 import strings from 'SharedLibraryStrings'
 import { format } from '@fluentui/react'
-import { Fluent } from '../Fluent'
 import { customLightTheme } from '../../util'
 
 /**
@@ -28,7 +27,10 @@ export const WebPartTitle: FC<IWebPartTitleProps> = (props) => {
           </span>
         </h2>
         {props?.description && (
-          <div className={styles.infoLabel} title={format(strings.Aria.InfoLabelTitle, props?.description)}>
+          <div
+            className={styles.infoLabel}
+            title={format(strings.Aria.InfoLabelTitle, props?.description)}
+          >
             <InfoLabel
               size='large'
               info={
