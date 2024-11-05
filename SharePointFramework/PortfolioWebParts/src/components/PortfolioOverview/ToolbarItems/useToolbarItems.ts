@@ -45,8 +45,8 @@ const Icons = {
 export function useToolbarItems(context: IPortfolioOverviewContext) {
   const userCanManageViews = context.props.configuration.userCanAddViews
   const userCanEditGlobalViews = userCanManageViews && context.props.isSiteAdmin
-  const isViewAuthor =
-    userCanManageViews && context.state.currentView?.author === context.props.pageContext.user.email
+  const userEmail = context.props.pageContext.user.email ?? context.props.pageContext.user.loginName
+  const isViewAuthor = userCanManageViews && context.state.currentView?.author === userEmail
 
   const { exportToExcel } = useExcelExport(context)
   const sharedViews = useViewsMenuItems(context, (view) => !view.isPersonal)
