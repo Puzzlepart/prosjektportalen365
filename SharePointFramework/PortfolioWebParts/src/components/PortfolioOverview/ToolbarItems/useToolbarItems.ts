@@ -46,8 +46,7 @@ export function useToolbarItems(context: IPortfolioOverviewContext) {
   const userCanManageViews = context.props.configuration.userCanAddViews
   const userCanEditGlobalViews = userCanManageViews && context.props.isSiteAdmin
   const userEmail = context.props.pageContext.user.email ?? context.props.pageContext.user.loginName
-  const isViewAuthor = userCanManageViews && context.state.currentView?.author === userEmail
-
+  const userCanEditView = userCanManageViews && context.state.currentView?.author === userEmail
   const { exportToExcel } = useExcelExport(context)
   const sharedViews = useViewsMenuItems(context, (view) => !view.isPersonal)
   const personalViews = useViewsMenuItems(context, (view) => view.isPersonal)
@@ -100,7 +99,7 @@ export function useToolbarItems(context: IPortfolioOverviewContext) {
                 }),
               ListMenuItemDivider,
               ...sharedViews,
-              ListMenuItemDivider,
+              !_.isEmpty(personalViews) && ListMenuItemDivider,
               ListMenuItemHeader(strings.PersonalViewsHeaderText).makeConditional(
                 !_.isEmpty(personalViews)
               ),
@@ -122,12 +121,16 @@ export function useToolbarItems(context: IPortfolioOverviewContext) {
                 display:
                   context.props.showProgramViews && !_.isEmpty(programViews) ? 'flex' : 'none'
               }),
-              userCanManageViews &&
-                new ListMenuItem(strings.NewViewText).setIcon(Icons.FormNew).setOnClick(() => {
+              new ListMenuItem(strings.NewViewText)
+                .setDisabled(!userCanManageViews)
+                .setIcon(Icons.FormNew)
+                .setOnClick(() => {
                   context.dispatch(SET_VIEW_FORM_PANEL({ isOpen: true }))
                 }),
-              (userCanEditGlobalViews || isViewAuthor) &&
-                new ListMenuItem(strings.EditViewText).setIcon(Icons.Edit).setOnClick(() => {
+              new ListMenuItem(strings.EditViewText)
+                .setDisabled(!userCanEditView && !userCanEditGlobalViews)
+                .setIcon(Icons.Edit)
+                .setOnClick(() => {
                   context.dispatch(
                     SET_VIEW_FORM_PANEL({ isOpen: true, view: context.state.currentView })
                   )

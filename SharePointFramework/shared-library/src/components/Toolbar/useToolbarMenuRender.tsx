@@ -8,7 +8,8 @@ import {
   MenuPopover,
   MenuProps,
   MenuTrigger,
-  ToolbarButton
+  ToolbarButton,
+  Tooltip
 } from '@fluentui/react-components'
 import React, { CSSProperties, useState } from 'react'
 import { createIcon } from './createIcon'
@@ -34,15 +35,21 @@ export function useToolbarMenuRender() {
   ) {
     return (
       <div hidden={item.hidden}>
-        <ToolbarButton
-          icon={createIcon(item)}
-          title={item.text}
-          style={createStyle(item, buttonStyle)}
-          onClick={item.onClick}
-          disabled={item.disabled}
+        <Tooltip
+          content={item.description}
+          relationship={Boolean(item.text) ? 'description' : 'label'}
+          withArrow
         >
-          {item.text && <span style={labelStyle}>{item.text}</span>}
-        </ToolbarButton>
+          <ToolbarButton
+            icon={createIcon(item)}
+            title={item.text}
+            style={createStyle(item, buttonStyle)}
+            onClick={item.onClick}
+            disabled={item.disabled}
+          >
+            {item.text && <span style={labelStyle}>{item.text}</span>}
+          </ToolbarButton>
+        </Tooltip>
       </div>
     )
   }
@@ -80,19 +87,21 @@ export function useToolbarMenuRender() {
         </div>
       )
     }
+
     if (item.items) return renderMenu(item)
+
     return (
       <div hidden={item.hidden}>
-        <MenuItem
-          content={item.text}
-          icon={createIcon(item)}
-          style={createStyle(item)}
-          disabled={item.disabled}
-          onClick={(e) => {
-            item.onClick(e)
-            closeMenu && closeMenu()
-          }}
-        />
+          <MenuItem
+            content={item.text}
+            icon={createIcon(item)}
+            style={createStyle(item)}
+            disabled={item.disabled}
+            onClick={(e) => {
+              item.onClick(e)
+              closeMenu && closeMenu()
+            }}
+          />
       </div>
     )
   }
