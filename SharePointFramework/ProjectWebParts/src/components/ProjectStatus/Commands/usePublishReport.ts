@@ -6,7 +6,8 @@ import {
   CLEAR_USER_MESSAGE,
   REPORT_PUBLISHED,
   REPORT_PUBLISHING,
-  REPORT_PUBLISH_ERROR
+  REPORT_PUBLISH_ERROR,
+  SELECT_REPORT
 } from '../reducer'
 import { useCaptureReportSnapshot } from './useCaptureReportSnapshot'
 
@@ -47,6 +48,7 @@ export function usePublishReport() {
           strings.GtModerationStatus_Choice_Published
         )
         context.dispatch(REPORT_PUBLISHED({ updatedReport, message: null }))
+        context.dispatch(SELECT_REPORT({ report: updatedReport }))
       } catch (error) {
         context.dispatch(
           REPORT_PUBLISH_ERROR({ message: { text: error.message, intent: 'error' } })

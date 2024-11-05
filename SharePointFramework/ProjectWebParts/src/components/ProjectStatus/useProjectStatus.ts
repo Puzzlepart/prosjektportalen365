@@ -11,7 +11,7 @@ import { useProjectStatusDataFetch } from './useProjectStatusDataFetch'
 export function useProjectStatus(props: IProjectStatusProps) {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  useProjectStatusDataFetch(props, dispatch)
+  useProjectStatusDataFetch(props, state.refetch, dispatch)
 
   const context: IProjectStatusContext = {
     props,

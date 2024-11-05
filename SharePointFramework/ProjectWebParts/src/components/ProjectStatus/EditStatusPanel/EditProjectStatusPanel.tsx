@@ -21,6 +21,7 @@ export const EditStatusPanel: FC = () => {
       dataAdapter={SPDataAdapter}
       submit={submit}
       hiddenFields={['Title']}
+      onLightDismissClick={onDismiss}
       onDismiss={onDismiss}
     />
   )

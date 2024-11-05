@@ -4,15 +4,14 @@ on:
   push:
     branches:
       - releases/1.10
-      - feat/instrument
     paths:
-      - "SharePointFramework/**"
-      - "Install/**"
-      - "Templates/**"
+      - 'SharePointFramework/**'
+      - 'Install/**'
+      - 'Templates/**'
       - .github/workflows/ci-releases.yml
 
 env:
-  SP_URL: "https://puzzlepart.sharepoint.com/sites/pp365"
+  SP_URL: 'https://puzzlepart.sharepoint.com/sites/pp365'
   CI_CERT_BASE64: ${{ secrets.CI_CERT_BASE64 }}
   CI_TENANT: ${{ secrets.CI_TENANT }}
   CI_CLIENT_ID: ${{ secrets.CI_CLIENT_ID }}
