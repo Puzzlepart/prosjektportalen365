@@ -59,7 +59,8 @@
     "sp-entityportal-service": "2.3.0",
     "@fluentui/react-components": "~9.52.0",
     "@fluentui/react-icons": "~2.0.240",
-    "react-gauge-component": "~1.2.61"
+    "react-gauge-component": "~1.2.61",
+    "@microsoft/sp-http": "1.17.4"
   },
   "resolutions": {
     "@types/react": "16.8.8"
