@@ -90,6 +90,17 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
    * The active panel name and optional title
    */
   activePanel?: { name: string; headerText?: string }
+
+  /**
+   * The status for the report (currently selected)
+   */
+  reportStatus?: string
+
+  /**
+   * Timestamp for refetch. Changing this state variable refetches the data in
+   * `useProjectStatusDataFetch`.
+   */
+  refetch?: number
 }
 
 export interface IProjectStatusData {
