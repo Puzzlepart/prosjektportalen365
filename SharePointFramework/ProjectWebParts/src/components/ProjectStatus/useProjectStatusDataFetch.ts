@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { LogLevel } from '@pnp/logging'
 import { AnyAction } from '@reduxjs/toolkit'
 import strings from 'ProjectWebPartsStrings'
@@ -18,23 +17,12 @@ import { FetchDataResult, IProjectStatusProps } from './types'
 /**
  * Get report fields for Project Status. If content type ID is not provided,
  * the ID "0x010022252E35737A413FB56A1BA53862F6D5" is used, which is the ID
- * for the default content type for Project Status. If the fields cannot be
- * fetched using the provided content type ID, the default content type ID is used.
+ * for the default content type for Project Status.
  *
  * @param contentTypeId Content type ID for Project Status
  */
 async function getReportFields(contentTypeId = '0x010022252E35737A413FB56A1BA53862F6D5') {
-  let fields
-  try {
-    fields = await SPDataAdapter.portalDataService.getContentTypeFields(contentTypeId)
-  } catch (error) {
-    console.log(
-      `Error fetching fields for content type ID: ${contentTypeId}, using default ID (0x010022252E35737A413FB56A1BA53862F6D5) instead.`
-    )
-    fields = await SPDataAdapter.portalDataService.getContentTypeFields(
-      '0x010022252E35737A413FB56A1BA53862F6D5'
-    )
-  }
+  const fields = await SPDataAdapter.portalDataService.getContentTypeFields(contentTypeId)
   const reportFields = fields.map((field) => new EditableSPField(field))
   return reportFields
 }
