@@ -107,7 +107,7 @@ const createProjectStatusReducer = createReducer(initialState, {
     state.userHasAdminPermission = payload.data.userHasAdminPermission
     state.isDataLoaded = true
 
-    if (payload.initialSelectedReport.published) {
+    if (payload.initialSelectedReport?.published) {
       state.reportStatus = format(
         strings.PublishedStatusReport,
         formatDate(payload.initialSelectedReport?.publishedDate)
