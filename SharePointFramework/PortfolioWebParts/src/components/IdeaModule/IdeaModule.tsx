@@ -1,10 +1,10 @@
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 import styles from './IdeaModule.module.scss'
 import { IdeaModuleContext } from './context'
 import { IIdeaModuleProps } from './types'
 import { useIdeaModule } from './useIdeaModule'
 import { FluentProvider, IdPrefixProvider, Spinner, Tooltip } from '@fluentui/react-components'
-import { customLightTheme } from 'pp365-shared-library'
+import { customLightTheme, setUrlHash, UserMessage } from 'pp365-shared-library'
 import {
   Hamburger,
   NavCategory,
@@ -16,7 +16,6 @@ import {
   NavSectionHeader,
   NavSubItem,
   NavSubItemGroup,
-  NavSize,
   NavDivider,
   AppItemStatic
 } from '@fluentui/react-nav-preview'
@@ -37,13 +36,8 @@ const Lightbulb = bundleIcon(Lightbulb20Filled, Lightbulb20Regular)
 const JobPostings = bundleIcon(NotePin20Filled, NotePin20Regular)
 
 export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
-  const { state, setState, fluentProviderId, selectedIdea } = useIdeaModule(props)
-
+  const { state, setState, getSelectedIdea, fluentProviderId } = useIdeaModule(props)
   const [isOpen, setIsOpen] = React.useState(true)
-  const [size, setNavSize] = useState<NavSize>('small')
-  const [enabledLinks, setEnabledLinks] = useState(true)
-
-  const linkDestination = enabledLinks ? `#` : ''
 
   const renderHamburgerWithToolTip = () => {
     return (
@@ -52,6 +46,8 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
       </Tooltip>
     )
   }
+
+  console.log({ state })
 
   return (
     <IdeaModuleContext.Provider value={{ props, state, setState }}>
@@ -67,7 +63,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                 openCategories={['3', '5']}
                 open={isOpen}
                 type={'inline'}
-                size={size}
+                size='small'
               >
                 <NavDrawerHeader>
                   <Tooltip content='Navigation' relationship='label'>
@@ -76,19 +72,25 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                 </NavDrawerHeader>
                 <NavDrawerBody>
                   <AppItemStatic icon={<PersonCircle24Regular />}>Idémodul</AppItemStatic>
-                  <NavItem href={linkDestination} icon={<Dashboard />} value='1'>
+                  <NavItem href='#' icon={<Dashboard />} value='1'>
                     Totaloversikt
                   </NavItem>
                   <NavSectionHeader>Registrerte idéer</NavSectionHeader>
-                  <NavItem href={linkDestination} icon={<Dashboard />} value='2'>
+                  <NavItem href='#' icon={<Dashboard />} value='2'>
                     Oversikt
                   </NavItem>
                   <NavCategory value='3'>
                     <NavCategoryItem icon={<Lightbulb />}>Idéer</NavCategoryItem>
-
                     <NavSubItemGroup>
                       {state.ideas.data.items.map((idea, idx) => (
-                        <NavSubItem href={linkDestination} value={`reg${idx}`} key={`reg${idx}`}>
+                        <NavSubItem
+                          value={`reg${idx}`}
+                          key={`reg${idx}`}
+                          onClick={() => {
+                            setUrlHash({ ideaId: idea.Id.toString() })
+                            getSelectedIdea()
+                          }}
+                        >
                           {idea?.Title}
                         </NavSubItem>
                       ))}
@@ -96,31 +98,47 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                   </NavCategory>
                   <NavDivider />
                   <NavSectionHeader>Idéer under behandling</NavSectionHeader>
-                  <NavItem href={linkDestination} icon={<Dashboard />} value='4'>
+                  <NavItem href='#' icon={<Dashboard />} value='4'>
                     Oversikt
                   </NavItem>
                   <NavCategory value='5'>
                     <NavCategoryItem icon={<JobPostings />}>Idéer</NavCategoryItem>
                     <NavSubItemGroup>
-                      <NavSubItem href={linkDestination} value='6'>
-                        Idé 3
-                      </NavSubItem>
-                      <NavSubItem href={linkDestination} value='7'>
-                        Idé 4
-                      </NavSubItem>
+                      {state.ideas.data.items.map((idea, idx) => (
+                        <NavSubItem
+                          value={`proc${idx}`}
+                          key={`proc${idx}`}
+                          onClick={() => {
+                            setUrlHash({ ideaId: idea.Id.toString() })
+                            getSelectedIdea()
+                          }}
+                        >
+                          {idea?.Title}
+                        </NavSubItem>
+                      ))}
                     </NavSubItemGroup>
                   </NavCategory>
                 </NavDrawerBody>
               </NavDrawer>
               <div className={styles.content}>
-                <p>
-                  Bring your ideas to life. Here you can create, share and collaborate on ideas.
-                </p>
+                {state.error && (
+                  <UserMessage
+                    title='Det skjedde en feil ved innlastning av Idémodulen'
+                    text={state.error}
+                    intent='error'
+                  />
+                )}
                 <div className={styles.idea}>
-                    <h1 className={styles.ideaTitle}>{selectedIdea.item.Title}</h1>
-                    {state.selectedIdea.fieldValues.map((model, idx) => (
-                    <IdeaField key={idx} model={model} />
-                  ))}
+                  {state.selectedIdea ? (
+                    <>
+                      <h1 className={styles.ideaTitle}>{state.selectedIdea.item.Title}</h1>
+                      {state.selectedIdea.fieldValues.map((model, idx) => (
+                        <IdeaField key={idx} model={model} />
+                      ))}
+                    </>
+                  ) : (
+                    <Spinner label='Laster inn idé' size='medium' />
+                  )}
                 </div>
                 {!isOpen && renderHamburgerWithToolTip()}
               </div>

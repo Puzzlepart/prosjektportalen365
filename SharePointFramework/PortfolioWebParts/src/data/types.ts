@@ -16,7 +16,7 @@ import {
 import { IPortfolioAggregationConfiguration, IPortfolioOverviewConfiguration } from '../components'
 import { IPersonaSharedProps } from '@fluentui/react'
 import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
-import { ConfigurationItem, Ideas } from 'components/IdeaModule'
+import { ConfigurationItem, Idea } from 'components/IdeaModule'
 
 export interface IFetchDataForViewItemResult extends ISearchResult {
   SiteId: string
@@ -374,5 +374,5 @@ export interface IPortfolioWebPartsDataAdapter {
    *
    * @returns A Promise that resolves to an object containing the data for the ideas.
    */
-  getIdeasData?(configuration: ConfigurationItem): Promise<Ideas>
+  getIdeasData?(configuration: ConfigurationItem): Promise<Idea>
 }
