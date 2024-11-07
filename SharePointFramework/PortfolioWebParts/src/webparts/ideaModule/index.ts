@@ -25,12 +25,12 @@ export default class IdeaModuleWebPart extends BasePortfolioWebPart<IIdeaModuleP
               groupName: strings.GeneralGroupName,
               groupFields: [
                 PropertyPaneTextField('configurationList', {
-                  label: 'Konfigurasjon liste',
+                  label: 'Konfigurasjonsliste',
                   description: 'Navn på Idékonfigurasjonsliste'
                 }),
                 PropertyPaneTextField('configurationList', {
                   label: 'Konfigurasjonsnavn',
-                  description: 'Navn på konfigurasjonen som skal anvendes'
+                  description: 'Navn på konfigurasjonen som skal brukes'
                 })
               ]
             }

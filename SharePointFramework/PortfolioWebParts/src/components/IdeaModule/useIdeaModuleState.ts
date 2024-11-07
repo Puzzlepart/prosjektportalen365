@@ -18,7 +18,7 @@ export function useIdeaModuleState(props: IIdeaModuleProps) {
     searchTerm: '',
     renderMode: props.defaultRenderMode ?? 'tiles',
     sort: defaultSort,
-    isRefetching: false,
+    isRefetching: false
   })
 
   /**

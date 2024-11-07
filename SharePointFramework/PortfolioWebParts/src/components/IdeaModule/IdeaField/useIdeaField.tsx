@@ -147,10 +147,14 @@ export function useIdeaField(props: IIdeaFieldProps) {
 
     const value = props.model.getParsedValue()
 
-    if (renderMap.has(props.model.type)) {
-      return renderMap.get(props.model.type)(value)
+    if (value) {
+      if (renderMap.has(props.model.type)) {
+        return renderMap.get(props.model.type)(value)
+      } else {
+        return <div title={value.toString()}>{value}</div>
+      }
     } else {
-      return <div title={value.toString()}>{value}</div>
+      return <div title='Ingen verdi angitt for feltet'> </div>
     }
   }
 

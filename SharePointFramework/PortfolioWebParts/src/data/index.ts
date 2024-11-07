@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import { format } from '@fluentui/react/lib/Utilities'
 import { dateAdd, PnPClientStorage } from '@pnp/core'
 import {
@@ -55,7 +57,7 @@ import {
 } from './types'
 import { IPersonaProps, IPersonaSharedProps } from '@fluentui/react'
 import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
-import { ConfigurationItem, Ideas } from 'components/IdeaModule'
+import { ConfigurationItem, Idea } from 'components/IdeaModule'
 import { IItem } from '@pnp/sp/items/types'
 
 /**
@@ -1051,16 +1053,20 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         )
         .using(DefaultCaching)()
 
-      const configuration: ConfigurationItem = spItems
-        .filter((item) => item.Title === configurationName)
-        .map((item) => ({
-          title: item.Title,
-          description: item.GtDescription,
-          ideaProcessingList: item.GtIdeaProcessingList,
-          ideaRegistrationList: item.GtIdeaRegistrationList,
-          ideaProcessingChoices: item.GtIdeaProcessingChoices,
-          ideaRegistrationChoices: item.GtIdeaRegistrationChoices
-        }))[0]
+      const configurationItem = spItems.find((item) => item.Title === configurationName)
+
+      if (!configurationItem) {
+        throw new Error(`Configuration with name ${configurationName} not found`)
+      }
+
+      const configuration: ConfigurationItem = {
+        title: configurationItem.Title,
+        description: configurationItem.GtDescription,
+        ideaProcessingList: configurationItem.GtIdeaProcessingList,
+        ideaRegistrationList: configurationItem.GtIdeaRegistrationList,
+        ideaProcessingChoices: configurationItem.GtIdeaProcessingChoices,
+        ideaRegistrationChoices: configurationItem.GtIdeaRegistrationChoices
+      }
 
       return configuration
     } catch (error) {
@@ -1083,31 +1089,32 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     return ItemFieldValues.create({ fieldValues, fieldValuesAsText })
   }
 
-  public async getIdeasData(configuration: ConfigurationItem): Promise<Ideas> {
+  public getIdeaData(ideaId: number): Promise<Idea> {
+    console.log(ideaId)
     try {
-      const ideaRegistrationList = this._sp.web.lists.getByTitle(configuration.ideaRegistrationList)
-      // const ideaProcessingList = this._sp.web.lists.getByTitle(configuration.ideaProcessingList)
-      // const registered = await ideaRegistrationList.items.select('*', 'FieldValuesAsText')
-      //   .expand('FieldValuesAsText').using(DefaultCaching)()
-      // const processing = await ideaProcessingList.items.select('*', 'FieldValuesAsText')
-      //   .expand('FieldValuesAsText').using(DefaultCaching)()
+    } catch (error) {
+      return error
+    }
+  }
 
-      const fields = await ideaRegistrationList.fields
+  public async getIdeasData(configuration: ConfigurationItem): Promise<Idea> {
+    const getListData = async (
+      listName: string
+    ): Promise<{ items: any[]; fieldValues: ItemFieldValues[]; fields: SPField[] }> => {
+      const [listInfo] = await this._sp.web.lists.filter(`Title eq '${listName}'`).select('Id')()
+      const list = this._sp.web.lists.getById(listInfo.Id)
+      const items = await list.items()
+
+      const fields = await list.fields
         .select(...getClassProperties(SPField))
         .filter(
-          "substringof('Gt', InternalName) or InternalName eq 'Title' or InternalName eq 'Id' or InternalName eq 'ID'"
+          'substringof(\'Gt\', InternalName) or InternalName eq \'Title\' or InternalName eq \'Id\''
         )<SPField[]>()
+
       const userFields = fields
         .filter((fld) => fld.TypeAsString.indexOf('User') === 0)
         .map((fld) => fld.InternalName)
 
-      const [ideaList] = await this._sp.web.lists
-        .filter(`Title eq '${configuration.ideaRegistrationList}'`)
-        .select('Id')()
-
-      const items = await this._sp.web.lists.getById(ideaList.Id).items()
-
-      const list = this._sp.web.lists.getById(ideaList.Id)
       const listItems = await Promise.all(
         items.map(async (item) => {
           const listItem = await list.items.getById(item.Id)
@@ -1123,16 +1130,76 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       )
 
       return {
-        data: {
-          items: items,
-          fieldValues: allFieldValues,
-          fields
-        }
+        items: items,
+        fieldValues: allFieldValues,
+        fields
       }
-    } catch (error) {
-      return null
+    }
+
+    const registrationData = await getListData(configuration.ideaRegistrationList)
+    const processingData = await getListData(configuration.ideaProcessingList)
+
+    console.log({ registrationData, processingData })
+
+    return {
+      data: {
+        items: processingData.items,
+        fieldValues: processingData.fieldValues,
+        fields: processingData.fields
+      }
     }
   }
+
+  // public async getIdeasDataX(configuration: ConfigurationItem): Promise<Ideas> {
+  //   try {
+  //     const ideaRegistrationList = this._sp.web.lists.getByTitle(configuration.ideaRegistrationList)
+  //     // const ideaProcessingList = this._sp.web.lists.getByTitle(configuration.ideaProcessingList)
+  //     // const registered = await ideaRegistrationList.items.select('*', 'FieldValuesAsText')
+  //     //   .expand('FieldValuesAsText').using(DefaultCaching)()
+  //     // const processing = await ideaProcessingList.items.select('*', 'FieldValuesAsText')
+  //     //   .expand('FieldValuesAsText').using(DefaultCaching)()
+
+  //     // const fields = await ideaRegistrationList.fields
+  //     //   .select(...getClassProperties(SPField))
+  //     //   .filter(
+  //     //     "substringof('Gt', InternalName) or InternalName eq 'Title' or InternalName eq 'Id' or InternalName eq 'ID'"
+  //     //   )<SPField[]>()
+  //     // const userFields = fields
+  //     //   .filter((fld) => fld.TypeAsString.indexOf('User') === 0)
+  //     //   .map((fld) => fld.InternalName)
+
+  //     const [ideaList] = await this._sp.web.lists
+  //       .filter(`Title eq '${configuration.ideaRegistrationList}'`)
+  //       .select('Id')()
+
+  //     const items = await this._sp.web.lists.getById(ideaList.Id).items()
+
+  //     const list = this._sp.web.lists.getById(ideaList.Id)
+  //     const listItems = await Promise.all(
+  //       items.map(async (item) => {
+  //         const listItem = await list.items.getById(item.Id)
+  //         return listItem
+  //       })
+  //     )
+
+  //     const allFieldValues = await Promise.all(
+  //       listItems.map(async (item) => {
+  //         const fieldValues = await this.getItemFieldValues(item, userFields)
+  //         return fieldValues
+  //       })
+  //     )
+
+  //     return {
+  //       data: {
+  //         items: items,
+  //         fieldValues: allFieldValues,
+  //         fields
+  //       }
+  //     }
+  //   } catch (error) {
+  //     return null
+  //   }
+  // }
 }
 
 export * from './types'

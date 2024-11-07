@@ -1,5 +1,12 @@
 import { EditableSPField, ItemFieldValues, SPField } from 'pp365-shared-library'
 import { IBaseComponentProps } from '../types'
+import { MessageBarType } from '@fluentui/react'
+
+export class IdeaModuleErrorMessage extends Error {
+  constructor(public message: string, public type: MessageBarType) {
+    super(message)
+  }
+}
 
 export interface IIdeaModuleProps extends IBaseComponentProps {
   configurationList: string
@@ -18,7 +25,7 @@ export interface IIdeaModuleState {
   isRefetching?: boolean
   error?: any
   configuration?: ConfigurationItem
-  ideas?: Ideas
+  ideas?: Idea
   selectedIdea?: IIdea
   searchTerm: string
   renderMode?: IdeaListRenderMode
@@ -45,16 +52,15 @@ export interface IIdea {
   /**
    * The item
    */
-  item: any[]
+  item: any
 
   /**
    * The fieldValues for the item
-  */
+   */
   fieldValues?: EditableSPField[]
 }
 
-
-export class Ideas {
+export class Idea {
   data: IIdeaData
 }
 
@@ -66,7 +72,7 @@ export interface IIdeaData {
 
   /**
    * The items from the lists containing the field values
-  */
+   */
   fieldValues?: ItemFieldValues[]
 
   /**
