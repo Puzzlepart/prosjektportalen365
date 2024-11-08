@@ -9,6 +9,7 @@
             <pnp:NavigationNode Title="{resource:ClientSidePages_UncertaintyOverview_Title}" Url="{site}/SitePages/{resource:ClientSidePages_UncertaintyOverview_PageName}" />
             <pnp:NavigationNode Title="{resource:ClientSidePages_ResourceAllocation_Title}" Url="{site}/SitePages/{resource:ClientSidePages_ResourceAllocation_PageName}" />
             <pnp:NavigationNode Title="{resource:ClientSidePages_ProjectTimeline_Title}" Url="{site}/SitePages/{resource:ClientSidePages_ProjectTimeline_PageName}" />
+            <pnp:NavigationNode Title="{resource:ClientSidePages_IdeaModule_Title}" Url="{site}/SitePages/{resource:ClientSidePages_IdeaModule_PageName}" />
         </pnp:StructuralNavigation>
     </pnp:GlobalNavigation>
 </pnp:Navigation>
