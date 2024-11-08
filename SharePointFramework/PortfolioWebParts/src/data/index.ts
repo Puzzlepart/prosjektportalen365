@@ -45,8 +45,10 @@ import {
   ChartData,
   ChartDataItem,
   DataField,
+  IdeaConfigurationModel,
   ProgramItem,
-  SPChartConfigurationItem
+  SPChartConfigurationItem,
+  SPIdeaConfigurationItem
 } from '../models'
 import * as config from './config'
 import {
@@ -57,7 +59,7 @@ import {
 } from './types'
 import { IPersonaProps, IPersonaSharedProps } from '@fluentui/react'
 import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
-import { ConfigurationItem, Idea } from 'components/IdeaModule'
+import { Idea } from 'components/IdeaModule'
 import { IItem } from '@pnp/sp/items/types'
 
 /**
@@ -410,7 +412,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       const configElement = _.find(timelineConfig, { title: strings.ProjectLabel })
 
       return { data, reports, configElement, columns: configuration.refiners }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   /**
@@ -1036,41 +1038,22 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   }
 
   public async getIdeaConfiguration(
-    listName: string,
-    configurationName: string
-  ): Promise<ConfigurationItem> {
+    listName: string = 'Idékonfigurasjon',
+    configurationName: string = 'Standard'
+  ): Promise<IdeaConfigurationModel> {
     try {
-      const configurationList = this._sp.web.lists.getByTitle(listName)
-      const spItems = await configurationList.items
-        .select(
-          'Id',
-          'Title',
-          'GtDescription',
-          'GtIdeaProcessingList',
-          'GtIdeaRegistrationList',
-          'GtIdeaProcessingChoices',
-          'GtIdeaRegistrationChoices'
-        )
-        .using(DefaultCaching)()
+      const config = await this._sp.web.lists
+        .getByTitle(listName)
+        .select(...new SPIdeaConfigurationItem().fields)
+        .items()
 
-      const configurationItem = spItems.find((item) => item.Title === configurationName)
-
-      if (!configurationItem) {
-        throw new Error(`Configuration with name ${configurationName} not found`)
-      }
-
-      const configuration: ConfigurationItem = {
-        title: configurationItem.Title,
-        description: configurationItem.GtDescription,
-        ideaProcessingList: configurationItem.GtIdeaProcessingList,
-        ideaRegistrationList: configurationItem.GtIdeaRegistrationList,
-        ideaProcessingChoices: configurationItem.GtIdeaProcessingChoices,
-        ideaRegistrationChoices: configurationItem.GtIdeaRegistrationChoices
-      }
-
-      return configuration
+      return (
+        config
+          .map((item) => new IdeaConfigurationModel(item))
+          .find((item) => item.title === configurationName) || new IdeaConfigurationModel(config[0])
+      )
     } catch (error) {
-      return null
+      return error
     }
   }
 
@@ -1097,7 +1080,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
-  public async getIdeasData(configuration: ConfigurationItem): Promise<Idea> {
+  public async getIdeasData(configuration: IdeaConfigurationModel): Promise<Idea> {
     const getListData = async (
       listName: string
     ): Promise<{ items: any[]; fieldValues: ItemFieldValues[]; fields: SPField[] }> => {
@@ -1136,16 +1119,41 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       }
     }
 
-    const registrationData = await getListData(configuration.ideaRegistrationList)
-    const processingData = await getListData(configuration.ideaProcessingList)
+    const registrationData = await getListData(configuration.registrationList)
+    const processingData = await getListData(configuration.processingList)
 
-    console.log({ registrationData, processingData })
+    // For each registrationData.item and registrationData.fieldValues, find the corresponding processingData.item and processingData.fieldValues where the registrationData.item.Id is contained within the processingData.item.GtRegistratedIdeaId
+    const itemsData = registrationData.items.map((registered) => {
+      const processing = processingData.items.find(
+        (processingItem) => processingItem.GtRegistratedIdeaId === registered.Id
+      )
+
+      // merge the registered and processing item
+      return { ...registered, processing }
+    })
+
+    const fieldValues = registrationData.fieldValues.map((values) => {
+      const processingFieldValues = processingData.fieldValues.find(
+        (processingFieldValues) => processingFieldValues.id === values.id
+      )
+
+      // merge the values and processing values
+      return { ...values, ...processingFieldValues }
+    })
+
+    console.log({ itemsData, fieldValues, registrationData, processingData })
 
     return {
       data: {
-        items: processingData.items,
-        fieldValues: processingData.fieldValues,
-        fields: processingData.fields
+        items: itemsData,
+        fieldValues: {
+          registered: registrationData.fieldValues,
+          processing: processingData.fieldValues
+        },
+        fields: {
+          registered: registrationData.fields,
+          processing: processingData.fields
+        }
       }
     }
   }

@@ -7,21 +7,34 @@
   .content {
     flex: 1;
     padding: 16px;
+    gap: 16px;
     display: grid;
     justify-content: flex-start;
     align-items: flex-start;
 
-    .idea {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-gap: 16px;
-      margin-bottom: 16px;
+    .ideaHeader {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+
+      .ideaPhases {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+      }
 
       .ideaTitle {
         font-size: 1.5rem;
         font-weight: bold;
         margin: 0;
       }
+    }
+
+    .idea {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 16px;
+      margin-bottom: 16px;
 
       .ideaField {
         margin: 0;

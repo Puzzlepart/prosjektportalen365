@@ -3,8 +3,16 @@ import styles from './IdeaModule.module.scss'
 import { IdeaModuleContext } from './context'
 import { IIdeaModuleProps } from './types'
 import { useIdeaModule } from './useIdeaModule'
-import { FluentProvider, IdPrefixProvider, Spinner, Tooltip } from '@fluentui/react-components'
-import { customLightTheme, setUrlHash, UserMessage } from 'pp365-shared-library'
+import {
+  Divider,
+  FluentProvider,
+  IdPrefixProvider,
+  Spinner,
+  Tab,
+  TabList,
+  Tooltip
+} from '@fluentui/react-components'
+import { customLightTheme, getFluentIcon, setUrlHash, UserMessage } from 'pp365-shared-library'
 import {
   Hamburger,
   NavCategory,
@@ -26,8 +34,7 @@ import {
   NotePin20Regular,
   Lightbulb20Filled,
   Lightbulb20Regular,
-  bundleIcon,
-  PersonCircle24Regular
+  bundleIcon
 } from '@fluentui/react-icons'
 import { IdeaField } from './IdeaField'
 
@@ -47,8 +54,6 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
     )
   }
 
-  console.log({ state })
-
   return (
     <IdeaModuleContext.Provider value={{ props, state, setState }}>
       <IdPrefixProvider value={fluentProviderId}>
@@ -58,11 +63,11 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
           ) : (
             <div className={styles.ideaModule}>
               <NavDrawer
-                defaultSelectedValue='1'
-                defaultSelectedCategoryValue='3'
-                openCategories={['3', '5']}
+                defaultSelectedValue={state.selectedIdea?.item.Id.toString()}
+                // selectedCategoryValue={state.selectedIdea?.item.processing ? 'behandlingIdeer' : 'registreringIdeer'}
+                openCategories={['registreringIdeer', 'behandlingIdeer']}
                 open={isOpen}
-                type={'inline'}
+                type='inline'
                 size='small'
               >
                 <NavDrawerHeader>
@@ -71,21 +76,20 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                   </Tooltip>
                 </NavDrawerHeader>
                 <NavDrawerBody>
-                  <AppItemStatic icon={<PersonCircle24Regular />}>Idémodul</AppItemStatic>
-                  <NavItem href='#' icon={<Dashboard />} value='1'>
+                  <AppItemStatic icon={getFluentIcon('Lightbulb')}>Idémodul</AppItemStatic>
+                  <NavItem href='#' icon={<Dashboard />} value='total'>
                     Totaloversikt
                   </NavItem>
-                  <NavSectionHeader>Registrerte idéer</NavSectionHeader>
-                  <NavItem href='#' icon={<Dashboard />} value='2'>
+                  <NavSectionHeader>Registrering</NavSectionHeader>
+                  <NavItem href='#' icon={<Dashboard />} value='registrering'>
                     Oversikt
                   </NavItem>
-                  <NavCategory value='3'>
-                    <NavCategoryItem icon={<Lightbulb />}>Idéer</NavCategoryItem>
+                  <NavCategory value='registreringIdeer'>
+                    <NavCategoryItem icon={<Lightbulb />}>Mine idéer</NavCategoryItem>
                     <NavSubItemGroup>
-                      {state.ideas.data.items.map((idea, idx) => (
+                      {state.ideas.data.items.filter((idea) => !idea.processing).map((idea) => (
                         <NavSubItem
-                          value={`reg${idx}`}
-                          key={`reg${idx}`}
+                          value={idea.Id.toString()}
                           onClick={() => {
                             setUrlHash({ ideaId: idea.Id.toString() })
                             getSelectedIdea()
@@ -97,17 +101,16 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                     </NavSubItemGroup>
                   </NavCategory>
                   <NavDivider />
-                  <NavSectionHeader>Idéer under behandling</NavSectionHeader>
-                  <NavItem href='#' icon={<Dashboard />} value='4'>
+                  <NavSectionHeader>Behandling</NavSectionHeader>
+                  <NavItem href='#' icon={<Dashboard />} value='behandling'>
                     Oversikt
                   </NavItem>
-                  <NavCategory value='5'>
-                    <NavCategoryItem icon={<JobPostings />}>Idéer</NavCategoryItem>
+                  <NavCategory value='behandlingIdeer'>
+                    <NavCategoryItem icon={<JobPostings />}>Mine idéer</NavCategoryItem>
                     <NavSubItemGroup>
-                      {state.ideas.data.items.map((idea, idx) => (
+                      {state.ideas.data.items.filter((idea) => idea.processing).map((idea) => (
                         <NavSubItem
-                          value={`proc${idx}`}
-                          key={`proc${idx}`}
+                          value={idea.Id.toString()}
                           onClick={() => {
                             setUrlHash({ ideaId: idea.Id.toString() })
                             getSelectedIdea()
@@ -128,18 +131,91 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                     intent='error'
                   />
                 )}
-                <div className={styles.idea}>
-                  {state.selectedIdea ? (
-                    <>
+                {state.selectedIdea ? (
+                  <>
+                    <div className={styles.ideaHeader}>
+                      <TabList className={styles.ideaPhases} defaultSelectedValue='tab3'>
+                        <Tab
+                          icon={getFluentIcon('Lightbulb')}
+                          value='tab1'
+                          disabled
+                          style={{ cursor: 'default' }}
+                        >
+                          Registrering av idé
+                        </Tab>
+                        <Tab
+                          icon={getFluentIcon('ChevronRight')}
+                          value={null}
+                          disabled
+                          style={{ cursor: 'default' }}
+                        />
+                        <Tab
+                          icon={getFluentIcon('CheckmarkCircle')}
+                          value='tab2'
+                          disabled
+                          style={{ cursor: 'default' }}
+                        >
+                          Godkjent for behandling
+                        </Tab>
+                        <Tab
+                          icon={getFluentIcon('ChevronRight')}
+                          value={null}
+                          disabled
+                          style={{ cursor: 'default' }}
+                        />
+                        <Tab
+                          icon={getFluentIcon('Edit')}
+                          value='tab3'
+                          style={{ cursor: 'default' }}
+                        >
+                          Behandling av idé
+                        </Tab>
+                        <Tab
+                          icon={getFluentIcon('ChevronRight')}
+                          value={null}
+                          disabled
+                          style={{ cursor: 'default' }}
+                        />
+                        <Tab
+                          icon={getFluentIcon('CheckmarkCircle')}
+                          value='tab4'
+                          disabled
+                          style={{ cursor: 'default' }}
+                        >
+                          Idé godkjent
+                        </Tab>
+                        <Tab
+                          icon={getFluentIcon('ChevronRight')}
+                          value={null}
+                          disabled
+                          style={{ cursor: 'default' }}
+                        />
+                        <Tab
+                          icon={getFluentIcon('BoxToolbox')}
+                          value='tab5'
+                          disabled
+                          style={{ cursor: 'default' }}
+                        >
+                          Bestill prosjekt
+                        </Tab>
+                      </TabList>
                       <h1 className={styles.ideaTitle}>{state.selectedIdea.item.Title}</h1>
-                      {state.selectedIdea.fieldValues.map((model, idx) => (
+                    </div>
+                    <div className={styles.idea}>
+                      {state.selectedIdea.registeredFieldValues.map((model, idx) => (
                         <IdeaField key={idx} model={model} />
                       ))}
-                    </>
-                  ) : (
-                    <Spinner label='Laster inn idé' size='medium' />
-                  )}
-                </div>
+                    </div>
+                    <Divider />
+                    <div className={styles.idea}>
+                      {state.selectedIdea.processingFieldValues?.map((model, idx) => (
+                        <IdeaField key={idx} model={model} />
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <Spinner label='Laster inn idé' size='medium' />
+                )}
                 {!isOpen && renderHamburgerWithToolTip()}
               </div>
             </div>

@@ -1,6 +1,7 @@
 import { EditableSPField, ItemFieldValues, SPField } from 'pp365-shared-library'
 import { IBaseComponentProps } from '../types'
 import { MessageBarType } from '@fluentui/react'
+import { IdeaConfigurationModel } from 'models'
 
 export class IdeaModuleErrorMessage extends Error {
   constructor(public message: string, public type: MessageBarType) {
@@ -24,7 +25,7 @@ export interface IIdeaModuleState {
   refetch?: number
   isRefetching?: boolean
   error?: any
-  configuration?: ConfigurationItem
+  configuration?: IdeaConfigurationModel
   ideas?: Idea
   selectedIdea?: IIdea
   searchTerm: string
@@ -39,15 +40,6 @@ export interface IIdeaModuleHashState {
   ideaId?: string
 }
 
-export class ConfigurationItem {
-  title: string
-  description: string
-  ideaProcessingList: string
-  ideaRegistrationList: string
-  ideaProcessingChoices: string
-  ideaRegistrationChoices: string
-}
-
 export interface IIdea {
   /**
    * The item
@@ -55,16 +47,21 @@ export interface IIdea {
   item: any
 
   /**
-   * The fieldValues for the item
+   * The fieldValues for the registered fields
    */
-  fieldValues?: EditableSPField[]
+  registeredFieldValues?: EditableSPField[]
+
+  /**
+   * The fieldValues for the processing fields
+   */
+  processingFieldValues?: EditableSPField[]
 }
 
 export class Idea {
-  data: IIdeaData
+  data: IIdeasData
 }
 
-export interface IIdeaData {
+export interface IIdeasData {
   /**
    * The items from the lists containing the field values
    */
@@ -73,10 +70,16 @@ export interface IIdeaData {
   /**
    * The items from the lists containing the field values
    */
-  fieldValues?: ItemFieldValues[]
+  fieldValues?: {
+    registered: ItemFieldValues[]
+    processing: ItemFieldValues[]
+  }
 
   /**
    * Fields for the list
    */
-  fields?: SPField[]
+  fields?: {
+    registered: SPField[]
+    processing: SPField[]
+  }
 }
