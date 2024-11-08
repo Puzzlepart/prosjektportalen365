@@ -114,7 +114,13 @@ import {
   PeopleTeamFilled,
   PeopleTeamRegular,
   PeopleAudienceFilled,
-  PeopleAudienceRegular
+  PeopleAudienceRegular,
+  CaretRightRegular,
+  CaretRightFilled,
+  ChevronRightFilled,
+  ChevronRightRegular,
+  LightbulbRegular,
+  LightbulbFilled
 } from '@fluentui/react-icons'
 
 /**
@@ -289,6 +295,10 @@ export const iconCatalog = {
     regular: ChevronUpRegular,
     filled: ChevronUpFilled
   },
+  ChevronRight: {
+    regular: ChevronRightRegular,
+    filled: ChevronRightFilled
+  },
   NumberSymbolSquare: {
     regular: NumberSymbolSquareRegular,
     filled: NumberSymbolSquareFilled
@@ -352,5 +362,13 @@ export const iconCatalog = {
   Clock: {
     regular: ClockRegular,
     filled: ClockFilled
+  },
+  CaretRight: {
+    regular: CaretRightRegular,
+    filled: CaretRightFilled
+  },
+  Lightbulb: {
+    regular: LightbulbRegular,
+    filled: LightbulbFilled
   }
 }

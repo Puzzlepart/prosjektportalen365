@@ -42,13 +42,15 @@ export function useIdeaModule(props: IIdeaModuleProps) {
       return
     }
 
+
+
     const obj: IIdeaModuleHashState = {}
     if (selectedIdea) obj.ideaId = selectedIdea.Id.toString()
     setUrlHash(obj)
 
-    const fieldValues = state.ideas.data.fields
+    const registeredFieldValues = state.ideas.data.fields.registered
       .map((field) => {
-        const fieldValues: ItemFieldValues = state.ideas.data.fieldValues.find(
+        const fieldValues: ItemFieldValues = state.ideas.data.fieldValues.registered.find(
           (fv) => fv.id === selectedIdea.Id
         )
         if (!fieldValues) return null
@@ -60,15 +62,29 @@ export function useIdeaModule(props: IIdeaModuleProps) {
         return a.column.sortOrder - b.column.sortOrder
       })
 
+      const processingFieldValues = selectedIdea.processing && state.ideas.data.fields.processing
+        .map((field) => {
+          const fieldValues: ItemFieldValues = state.ideas.data.fieldValues.processing.find(
+            (fv) => fv.get('GtRegistratedIdeaId')?.value === selectedIdea.Id
+          )
+          if (!fieldValues) return null
+          return new EditableSPField(field).setValue(fieldValues)
+        })
+        .sort((a, b) => {
+          if (!a.column) return 1
+          if (!b.column) return -1
+          return a.column.sortOrder - b.column.sortOrder
+        })
+
     setState({
       ...state,
       selectedIdea: {
         item: selectedIdea,
-        fieldValues: fieldValues
+        registeredFieldValues,
+        processingFieldValues
       }
     })
   }
-
 
   useEffect(() => {
     if (!state.loading) {
