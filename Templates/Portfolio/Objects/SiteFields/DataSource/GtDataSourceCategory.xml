@@ -9,5 +9,6 @@
         <CHOICE>Ressursallokering</CHOICE>
         <CHOICE>Prosjekter</CHOICE>
         <CHOICE>Erfaringslogg</CHOICE>
+        <CHOICE>Idémodul</CHOICE>
     </CHOICES>
 </Field>
