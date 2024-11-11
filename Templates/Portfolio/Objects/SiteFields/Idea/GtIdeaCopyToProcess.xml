@@ -1,0 +1,1 @@
+<Field Type="Boolean" DisplayName="{resource:SiteFields_GtIdeaCopyToProcess_DisplayName}" Description="{resource:SiteFields_GtIdeaCopyToProcess_Description}" Group="{resource:SiteFields_Portfolio_Group}" ID="{3045f822-9637-4fbc-8981-79fc54d135e6}" StaticName="GtIdeaCopyToProcess" Name="GtIdeaCopyToProcess"><Default>1</Default></Field>

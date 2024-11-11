@@ -346,6 +346,9 @@
   <data name="View_Cards_DisplayName" xml:space="preserve">
     <value>Kortvisning</value>
   </data>
+  <data name="View_IdeaItems_DisplayName" xml:space="preserve">
+    <value>Idémodul</value>
+  </data>
   <data name="ContentTypes_Group" xml:space="preserve">
     <value>Prosjektportalen innholdstyper</value>
   </data>
@@ -594,6 +597,12 @@
   </data>
   <data name="ContentTypes_Idea_Configuration_Element_Description" xml:space="preserve">
     <value>Innholdstype for idékonfigurasjon (Idébehandling)</value>
+  </data>
+  <data name="ContentTypes_IdeaColumn_Name" xml:space="preserve">
+    <value>Idekolonne</value>
+  </data>
+  <data name="ContentTypes_IdeaColumn_Description" xml:space="preserve">
+    <value>Innholdstype for idekolonne (kolonnekonfigurasjon)</value>
   </data>
   <data name="ContentTypes_HelpContent_Name" xml:space="preserve">
     <value>Hjelpeinnhold</value>
@@ -2280,6 +2289,12 @@
   </data>
   <data name="SiteFields_GtIdeaRegistrationChoices_Description" xml:space="preserve">
     <value>Anbefalingsvalg settes opp med JSON, her kan flere valg legges til, merk at nøkkel (key) må forbli lik for standardvalgene</value>
+  </data>
+  <data name="SiteFields_GtIdeaCopyToProcess_DisplayName" xml:space="preserve">
+    <value>Kopier til behandling</value>
+  </data>
+  <data name="SiteFields_GtIdeaCopyToProcess_Description" xml:space="preserve">
+    <value>Verdien skal kopieres til behandling (kolonne i behandling må matche på visningsnavn eller internt navn, og type.)</value>
   </data>
   <data name="SiteFields_GtBAEndDateOriginal_DisplayName" xml:space="preserve">
     <value>Opprinnelig overtakelsesdato</value>
