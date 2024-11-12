@@ -60,12 +60,10 @@
                 <FieldRef Name="GtSortOrder" />
                 <FieldRef Name="LinkTitle" />
                 <FieldRef Name="GtInternalName" />
-                <FieldRef Name="GtShowFieldFrontpage" />
-                <FieldRef Name="GtShowFieldPortfolio" />
+                <FieldRef Name="GtManagedProperty" />
                 <FieldRef Name="GtFieldDataType" />
                 <FieldRef Name="GtColMinWidth" />
                 <FieldRef Name="GtColMaxWidth" />
-                <FieldRef Name="GtIsRefinable" />
                 <FieldRef Name="GtIsGroupable" />
                 <FieldRef Name="GtIdeaCopyToProcess" />
             </ViewFields>
