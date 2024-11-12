@@ -7,6 +7,7 @@ import {
 import { IBaseComponentProps } from '../types'
 import { MessageBarType } from '@fluentui/react'
 import { IdeaConfigurationModel } from 'models'
+import { Slot } from '@fluentui/react-components'
 
 export class IdeaModuleErrorMessage extends Error {
   constructor(public message: string, public type: MessageBarType) {
@@ -35,6 +36,7 @@ export interface IIdeaModuleState {
   configuration?: IdeaConfigurationModel
   ideas?: Idea
   selectedIdea?: IIdea
+  phase?: IdeaPhase
   searchTerm: string
   renderMode?: IdeaListRenderMode
   isUserInIdeaManagerGroup?: boolean
@@ -94,4 +96,17 @@ export interface IIdeasData {
    * Columns from "Prosjektinnholdskolonner" list
    */
   columns: ProjectContentColumn[]
+}
+
+export interface IIdeaPhase {
+  phase: IdeaPhase
+  name: string
+  icon?: Slot<'span'>
+}
+
+export enum IdeaPhase {
+  Registration,
+  Processing,
+  ApprovedForConcept,
+  Provisioned
 }

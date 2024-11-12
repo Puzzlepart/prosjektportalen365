@@ -21,7 +21,7 @@ export const createFieldValueMap = (): Map<string, (value: EditableSPFieldValue)
         }
       }
     ],
-    ['TaxonomyFieldType', ({ value }) => value.split(';').map((v) => ({ key: v, name: v }))],
+    ['TaxonomyFieldType', ({ value }) => value?.split(';').map((v) => ({ key: v, name: v }))],
     [
       'TaxonomyFieldTypeMulti',
       ({ $ }) =>
@@ -32,7 +32,7 @@ export const createFieldValueMap = (): Map<string, (value: EditableSPFieldValue)
     ],
     ['Date', ({ $ }) => new Date($)],
     ['DateTime', ({ $ }) => new Date($)],
-    ['MultiChoice', ({ value }) => value.split(', ')],
+    ['MultiChoice', ({ value }) => value?.split(', ')],
     [
       'User',
       ({ $ }) =>
