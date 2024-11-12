@@ -87,17 +87,20 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                   <NavCategory value='registreringIdeer'>
                     <NavCategoryItem icon={<Lightbulb />}>Mine idéer</NavCategoryItem>
                     <NavSubItemGroup>
-                      {state.ideas.data.items.filter((idea) => !idea.processing).map((idea) => (
-                        <NavSubItem
-                          value={idea.Id.toString()}
-                          onClick={() => {
-                            setUrlHash({ ideaId: idea.Id.toString() })
-                            getSelectedIdea()
-                          }}
-                        >
-                          {idea?.Title}
-                        </NavSubItem>
-                      ))}
+                      {state.ideas.data.items
+                        .filter((idea) => !idea.processing)
+                        .map((idea) => (
+                          <NavSubItem
+                            key={idea.Id.toString()}
+                            value={idea.Id.toString()}
+                            onClick={() => {
+                              setUrlHash({ ideaId: idea.Id.toString() })
+                              getSelectedIdea()
+                            }}
+                          >
+                            {idea?.Title}
+                          </NavSubItem>
+                        ))}
                     </NavSubItemGroup>
                   </NavCategory>
                   <NavDivider />
@@ -108,17 +111,20 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                   <NavCategory value='behandlingIdeer'>
                     <NavCategoryItem icon={<JobPostings />}>Mine idéer</NavCategoryItem>
                     <NavSubItemGroup>
-                      {state.ideas.data.items.filter((idea) => idea.processing).map((idea) => (
-                        <NavSubItem
-                          value={idea.Id.toString()}
-                          onClick={() => {
-                            setUrlHash({ ideaId: idea.Id.toString() })
-                            getSelectedIdea()
-                          }}
-                        >
-                          {idea?.Title}
-                        </NavSubItem>
-                      ))}
+                      {state.ideas.data.items
+                        .filter((idea) => idea.processing)
+                        .map((idea) => (
+                          <NavSubItem
+                            key={idea.Id.toString()}
+                            value={idea.Id.toString()}
+                            onClick={() => {
+                              setUrlHash({ ideaId: idea.Id.toString() })
+                              getSelectedIdea()
+                            }}
+                          >
+                            {idea?.Title}
+                          </NavSubItem>
+                        ))}
                     </NavSubItemGroup>
                   </NavCategory>
                 </NavDrawerBody>
@@ -229,9 +235,25 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
 IdeaModule.defaultProps = {
   configurationList: 'Idékonfigurasjon',
   configuration: 'Standard',
-  sortBy: 'Title',
-  showSearchBox: true,
-  showRenderModeSelector: true,
-  showSortBy: true,
-  defaultRenderMode: 'tiles'
+  hiddenRegFields: ['Title'],
+  hiddenProcFields: [
+    'Title',
+    'GtIdeaUrl',
+    'GtRegistratedIdea',
+    'GtIdeaProjectData',
+    'GtIdeaStrategicValue',
+    'GtIdeaStrategicNumber',
+    'GtIdeaQualityBenefit',
+    'GtIdeaQualityNumber',
+    'GtIdeaEconomicBenefit',
+    'GtIdeaEconomicNumber',
+    'GtIdeaOperationalNeed',
+    'GtIdeaOperationalNumber',
+    'GtIdeaRisk',
+    'GtIdeaRiskNumber',
+    'GtIdeaManualScore',
+    'GtIdeaManualComment',
+    'GtIdeaScore',
+    'GtIdeaPriority'
+  ]
 }
