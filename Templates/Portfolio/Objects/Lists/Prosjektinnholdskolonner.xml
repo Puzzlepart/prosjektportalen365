@@ -864,17 +864,6 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">1090</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Kommentar til anbefaling</pnp:DataValue>
-            <pnp:DataValue FieldName="GtInternalName">GtIdeaRecommendationComment</pnp:DataValue>
-            <pnp:DataValue FieldName="GtManagedProperty">GtIdeaRecommendationCommentOWSMTXT</pnp:DataValue>
-            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
-            <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
-            <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIdeaCopyToProcess">True</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">1100</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Anbefaling</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtIdeaRecommendation</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtIdeaRecommendationOWSCHCS</pnp:DataValue>
@@ -883,6 +872,17 @@
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIdeaCopyToProcess">True</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">1100</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Kommentar til anbefaling</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtIdeaRecommendationComment</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtIdeaRecommendationCommentOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
             <pnp:DataValue FieldName="GtIdeaCopyToProcess">True</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>

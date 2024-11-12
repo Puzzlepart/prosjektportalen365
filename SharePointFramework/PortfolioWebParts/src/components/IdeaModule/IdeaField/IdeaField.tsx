@@ -11,7 +11,11 @@ export const IdeaField: FC<IIdeaFieldProps> = (props) => {
       <Text title={props.model.displayName} weight='semibold' size={200} block truncate>
         {props.model.displayName}
       </Text>
-      <Text color='var(--colorNeutralForeground2)'>{renderValueForField()}</Text>
+      {renderValueForField() ? (
+        <Text>{renderValueForField()}</Text>
+      ) : (
+        <Text style={{ color: 'var(--colorNeutralForeground4)' }}>Ingen verdi</Text>
+      )}
     </div>
   )
 }

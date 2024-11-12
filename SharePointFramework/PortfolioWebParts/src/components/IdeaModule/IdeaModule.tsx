@@ -1,9 +1,14 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import styles from './IdeaModule.module.scss'
 import { IdeaModuleContext } from './context'
 import { IIdeaModuleProps } from './types'
 import { useIdeaModule } from './useIdeaModule'
 import {
+  Accordion,
+  AccordionHeader,
+  AccordionItem,
+  AccordionPanel,
+  AccordionToggleEventHandler,
   Divider,
   FluentProvider,
   IdPrefixProvider,
@@ -44,17 +49,92 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
   const { state, setState, getSelectedIdea, isOpen, renderHamburger, fluentProviderId } =
     useIdeaModule(props)
 
+  const [openItems, setOpenItems] = useState(['registration'])
+  const handleToggle: AccordionToggleEventHandler<string> = (event, data) => {
+    setOpenItems(data.openItems)
+  }
+
+  const ignoreFields = [
+    'GtIdeaRecommendation',
+    'GtIdeaRecommendationComment',
+    'GtIdeaDecision',
+    'GtIdeaDecisionComment'
+  ]
+
+  const renderStatus = () => {
+    const isInProcessing = state.selectedIdea.item.processing
+    const processing = state.configuration.processing
+    const registration = state.configuration.registration
+
+    const approveValue = isInProcessing
+      ? processing.find((p) => p.key === 'approve')?.recommendation
+      : registration.find((p) => p.key === 'approve')?.recommendation
+    const considerationValue = isInProcessing
+      ? processing.find((p) => p.key === 'consideration')?.recommendation
+      : registration.find((p) => p.key === 'consideration')?.recommendation
+    const rejectValue = isInProcessing
+      ? processing.find((p) => p.key === 'reject')?.recommendation
+      : registration.find((p) => p.key === 'reject')?.recommendation
+
+    const statusStyles = {
+      [approveValue]: {
+        backgroundColor: 'var(--colorPaletteLightGreenBackground1)',
+        borderColor: 'var(--colorPaletteLightGreenBorder1)'
+      },
+      [considerationValue]: {
+        backgroundColor: 'var(--colorPaletteYellowBackground1)',
+        borderColor: 'var(--colorPaletteYellowBorder1)'
+      },
+      [rejectValue]: {
+        backgroundColor: 'var(--colorPaletteRedBackground1)',
+        borderColor: 'var(--colorPaletteRedBorder1)'
+      }
+    }
+
+    const statusValue = isInProcessing
+      ? state.selectedIdea.item.processing.GtIdeaDecision
+      : state.selectedIdea.item.GtIdeaRecommendation
+
+    const backgroundColor =
+      statusStyles[statusValue]?.backgroundColor || 'var(--colorNeutralBackground2)'
+    const borderColor = statusStyles[statusValue]?.borderColor || 'var(--colorNeutralBorder2)'
+
+    const fieldValues = isInProcessing
+      ? state.selectedIdea.processingFieldValues
+      : state.selectedIdea.registeredFieldValues
+
+    const filterKey = isInProcessing ? 'GtIdeaDecision' : 'GtIdeaRecommendation'
+
+    return (
+      <div
+        className={styles.statusSection}
+        style={{ backgroundColor, border: `1px solid ${borderColor}` }}
+      >
+        <h2>Status</h2>
+        <div className={styles.status}>
+          {fieldValues
+            .filter((model) => model.internalName.includes(filterKey))
+            .map((model, idx) => (
+              <IdeaField key={idx} model={model} />
+            ))}
+        </div>
+      </div>
+    )
+  }
+
   return (
     <IdeaModuleContext.Provider value={{ props, state, setState }}>
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme}>
           {state.loading ? (
-            <Spinner label='Laster inn idémodulen' size='extra-large' />
+            <Spinner className={styles.loading} label='Laster inn idémodulen' size='extra-large' />
           ) : (
             <div className={styles.ideaModule}>
               <NavDrawer
-                  selectedValue={`nav${state.selectedIdea?.item.Id.toString()}`}
-                selectedCategoryValue={state.selectedIdea?.item.processing ? 'behandlingIdeer' : 'registreringIdeer'}
+                selectedValue={`nav${state.selectedIdea?.item.Id.toString()}`}
+                selectedCategoryValue={
+                  state.selectedIdea?.item.processing ? 'behandlingIdeer' : 'registreringIdeer'
+                }
                 openCategories={['registreringIdeer', 'behandlingIdeer']}
                 open={isOpen}
                 type='inline'
@@ -75,7 +155,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                     Oversikt
                   </NavItem>
                   <NavCategory value='registreringIdeer'>
-                    <NavCategoryItem icon={<Lightbulb />}>Mine idéer</NavCategoryItem>
+                    <NavCategoryItem icon={<Lightbulb />}>Registrerte idéer</NavCategoryItem>
                     <NavSubItemGroup>
                       {state.ideas.data.items
                         .filter((idea) => !idea.processing)
@@ -99,7 +179,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                     Oversikt
                   </NavItem>
                   <NavCategory value='behandlingIdeer'>
-                    <NavCategoryItem icon={<JobPostings />}>Mine idéer</NavCategoryItem>
+                    <NavCategoryItem icon={<JobPostings />}>Idéer i behandling</NavCategoryItem>
                     <NavSubItemGroup>
                       {state.ideas.data.items
                         .filter((idea) => idea.processing)
@@ -136,20 +216,46 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                       </div>
                       <h1 className={styles.ideaTitle}>{state.selectedIdea.item.Title}</h1>
                     </div>
-                    <div className={styles.idea}>
-                      {state.selectedIdea.registeredFieldValues.map((model, idx) => (
-                        <IdeaField key={idx} model={model} />
-                      ))}
-                    </div>
+                    {!state.selectedIdea.item.processing && (
+                      <div className={styles.idea}>
+                        {state.selectedIdea.registeredFieldValues
+                          .filter((model) => !ignoreFields.includes(model.internalName))
+                          .map((model, idx) => (
+                            <IdeaField key={idx} model={model} />
+                          ))}
+                      </div>
+                    )}
+                    {!state.selectedIdea.item.processing && renderStatus()}
+                    {state.selectedIdea.item.processing && (
+                      <Accordion openItems={openItems} onToggle={handleToggle} multiple collapsible>
+                        <AccordionItem value='registration'>
+                          <AccordionHeader size='large' icon={getFluentIcon('Lightbulb')}>
+                            Registrert idé
+                          </AccordionHeader>
+                          <AccordionPanel>
+                            <div className={styles.idea}>
+                              {state.selectedIdea.registeredFieldValues
+                                .filter((model) => !ignoreFields.includes(model.internalName))
+                                .map((model, idx) => (
+                                  <IdeaField key={idx} model={model} />
+                                ))}
+                            </div>
+                          </AccordionPanel>
+                        </AccordionItem>
+                      </Accordion>
+                    )}
                     <Divider />
                     <div className={styles.idea}>
-                      {state.selectedIdea.processingFieldValues?.map((model, idx) => (
-                        <IdeaField key={idx} model={model} />
-                      ))}
+                      {state.selectedIdea.processingFieldValues
+                        ?.filter((model) => !ignoreFields.includes(model.internalName))
+                        .map((model, idx) => (
+                          <IdeaField key={idx} model={model} />
+                        ))}
                     </div>
+                    {state.selectedIdea.item.processing && renderStatus()}
                   </>
                 ) : (
-                  <Spinner label='Laster inn idé' size='medium' />
+                  <Spinner className={styles.loading} label='Laster inn idé' size='medium' />
                 )}
               </div>
             </div>

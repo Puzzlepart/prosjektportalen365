@@ -1,8 +1,8 @@
 import { IPersonaProps, ITag, Link } from '@fluentui/react'
 import React from 'react'
 import { IIdeaFieldProps } from './types'
-import { Persona } from '@fluentui/react-components'
-import { OverflowTagMenu } from 'pp365-shared-library'
+import { Persona, Tag } from '@fluentui/react-components'
+import { getFluentIcon, OverflowTagMenu } from 'pp365-shared-library'
 import {
   ChevronCircleRightFilled,
   EarthFilled,
@@ -10,6 +10,7 @@ import {
   TagFilled,
   TagMultipleFilled
 } from '@fluentui/react-icons'
+import { useIdeaModuleContext } from '../context'
 
 /**
  * Component logic hook for the `IdeaField` component.
@@ -20,11 +21,10 @@ import {
  * as well as the `displayMode` for the `IdeaField` component.
  */
 export function useIdeaField(props: IIdeaFieldProps) {
-  /**
-   * Renders the value for the field based on the field type.
-   *
-   * @returns JSX.Element
-   */
+  const context = useIdeaModuleContext()
+
+  const isInProcessing = context.state.selectedIdea.item.processing
+
   const renderValueForField = () => {
     let icon = TagMultipleFilled
 
@@ -32,7 +32,7 @@ export function useIdeaField(props: IIdeaFieldProps) {
       props.model.internalName === 'GtIdeaRecommendation' ||
       props.model.internalName === 'GtIdeaDecision'
     ) {
-      props.model.type = 'TaxonomyFieldType'
+      props.model.type = 'IdeaStatus'
     }
 
     switch (props.model.internalName) {
@@ -145,6 +145,56 @@ export function useIdeaField(props: IIdeaFieldProps) {
         (date: Date) => {
           return <div title={date.toLocaleDateString()}>{date.toLocaleDateString()}</div>
         }
+      ],
+      [
+        'IdeaStatus',
+        (textValue: string) => {
+          const processing = context.state.configuration.processing
+          const registration = context.state.configuration.registration
+
+          const approveValue = isInProcessing
+            ? processing.find((p) => p.key === 'approve')?.recommendation
+            : registration.find((p) => p.key === 'approve')?.recommendation
+          const considerationValue = isInProcessing
+            ? processing.find((p) => p.key === 'consideration')?.recommendation
+            : registration.find((p) => p.key === 'consideration')?.recommendation
+          const rejectValue = isInProcessing
+            ? processing.find((p) => p.key === 'reject')?.recommendation
+            : registration.find((p) => p.key === 'reject')?.recommendation
+
+          const statusStyles = {
+            [approveValue]: {
+              backgroundColor: 'var(--colorPaletteLightGreenBackground2)',
+              icon: getFluentIcon('CheckmarkCircle')
+            },
+            [considerationValue]: {
+              backgroundColor: 'var(--colorPaletteYellowBackground2)',
+              icon: getFluentIcon('Edit')
+            },
+            [rejectValue]: {
+              backgroundColor: 'var(--colorPaletteRedBackground2)',
+              icon: getFluentIcon('DismissCircle')
+            }
+          }
+
+          const { backgroundColor, icon } = statusStyles[textValue] || {
+            backgroundColor: 'var(--colorNeutralBackground2)',
+            icon: null
+          }
+
+          return (
+            <div style={{ marginTop: 6 }}>
+              <Tag
+                style={{ backgroundColor, color: '#000' }}
+                appearance='brand'
+                icon={icon}
+                size='medium'
+              >
+                {textValue}
+              </Tag>
+            </div>
+          )
+        }
       ]
     ])
 
@@ -157,9 +207,9 @@ export function useIdeaField(props: IIdeaFieldProps) {
         return <div title={value.toString()}>{value}</div>
       }
     } else {
-      return <div title='Ingen verdi angitt for feltet'> </div>
+      return null
     }
   }
 
-  return { renderValueForField }
+  return { renderValueForField, isInProcessing }
 }
