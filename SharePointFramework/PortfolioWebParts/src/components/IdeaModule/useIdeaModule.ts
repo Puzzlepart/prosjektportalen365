@@ -42,19 +42,18 @@ export function useIdeaModule(props: IIdeaModuleProps) {
       return
     }
 
-
-
     const obj: IIdeaModuleHashState = {}
     if (selectedIdea) obj.ideaId = selectedIdea.Id.toString()
     setUrlHash(obj)
 
     const registeredFieldValues = state.ideas.data.fields.registered
+      .filter((field) => !props.hiddenRegFields?.includes(field.InternalName))
       .map((field) => {
         const fieldValues: ItemFieldValues = state.ideas.data.fieldValues.registered.find(
           (fv) => fv.id === selectedIdea.Id
         )
         if (!fieldValues) return null
-        return new EditableSPField(field).setValue(fieldValues)
+        return new EditableSPField(field).init(state.ideas.data.columns).setValue(fieldValues)
       })
       .sort((a, b) => {
         if (!a.column) return 1
@@ -62,14 +61,17 @@ export function useIdeaModule(props: IIdeaModuleProps) {
         return a.column.sortOrder - b.column.sortOrder
       })
 
-      const processingFieldValues = selectedIdea.processing && state.ideas.data.fields.processing
+    const processingFieldValues =
+      selectedIdea.processing &&
+      state.ideas.data.fields.processing
         .map((field) => {
           const fieldValues: ItemFieldValues = state.ideas.data.fieldValues.processing.find(
             (fv) => fv.get('GtRegistratedIdeaId')?.value === selectedIdea.Id
           )
           if (!fieldValues) return null
-          return new EditableSPField(field).setValue(fieldValues)
+          return new EditableSPField(field).init(state.ideas.data.columns).setValue(fieldValues)
         })
+        .filter((field) => !props.hiddenProcFields?.includes(field.InternalName))
         .sort((a, b) => {
           if (!a.column) return 1
           if (!b.column) return -1

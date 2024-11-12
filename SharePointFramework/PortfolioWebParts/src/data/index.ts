@@ -412,7 +412,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       const configElement = _.find(timelineConfig, { title: strings.ProjectLabel })
 
       return { data, reports, configElement, columns: configuration.refiners }
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**
@@ -1091,7 +1091,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       const fields = await list.fields
         .select(...getClassProperties(SPField))
         .filter(
-          'substringof(\'Gt\', InternalName) or InternalName eq \'Title\' or InternalName eq \'Id\''
+          "substringof('Gt', InternalName) or InternalName eq 'Title' or InternalName eq 'Id'"
         )<SPField[]>()
 
       const userFields = fields
@@ -1118,6 +1118,15 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         fields
       }
     }
+
+    const level = strings.DataSourceLevelPortfolio
+
+    const columns: ProjectContentColumn[] = await new Promise((resolve, reject) => {
+      this.portalDataService
+        .fetchProjectContentColumns('PROJECT_CONTENT_COLUMNS', 'Idémodul', level)
+        .then(resolve)
+        .catch(reject)
+    })
 
     const registrationData = await getListData(configuration.registrationList)
     const processingData = await getListData(configuration.processingList)
@@ -1153,7 +1162,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         fields: {
           registered: registrationData.fields,
           processing: processingData.fields
-        }
+        },
+        columns
       }
     }
   }

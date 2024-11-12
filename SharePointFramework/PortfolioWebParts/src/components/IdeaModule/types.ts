@@ -1,4 +1,9 @@
-import { EditableSPField, ItemFieldValues, SPField } from 'pp365-shared-library'
+import {
+  EditableSPField,
+  ItemFieldValues,
+  ProjectContentColumn,
+  SPField
+} from 'pp365-shared-library'
 import { IBaseComponentProps } from '../types'
 import { MessageBarType } from '@fluentui/react'
 import { IdeaConfigurationModel } from 'models'
@@ -18,6 +23,8 @@ export interface IIdeaModuleProps extends IBaseComponentProps {
   showSortBy?: boolean
   defaultRenderMode?: IdeaListRenderMode
   listSize?: 'extra-small' | 'small' | 'medium'
+  hiddenRegFields?: string[]
+  hiddenProcFields?: string[]
 }
 
 export interface IIdeaModuleState {
@@ -82,4 +89,9 @@ export interface IIdeasData {
     registered: SPField[]
     processing: SPField[]
   }
+
+  /**
+   * Columns from "Prosjektinnholdskolonner" list
+   */
+  columns: ProjectContentColumn[]
 }
