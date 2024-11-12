@@ -1,22 +1,33 @@
 /* eslint-disable no-console */
-
-import { useId } from '@fluentui/react-components'
-import { IIdeaModuleHashState, IIdeaModuleProps } from './types'
+import React from 'react'
+import { Tooltip, useId } from '@fluentui/react-components'
+import { IdeaPhase, IIdeaModuleHashState, IIdeaModuleProps } from './types'
 import { useIdeaModuleState } from './useIdeaModuleState'
 import { useIdeaModuleDataFetch } from './useIdeaModuleDataFetch'
 import { EditableSPField, ItemFieldValues, parseUrlHash, setUrlHash } from 'pp365-shared-library'
 import _ from 'lodash'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { Hamburger } from '@fluentui/react-nav-preview'
 
 /**
  * Component logic hook for `IdeaModule` component.
  *
 clear */
-export function useIdeaModule(props: IIdeaModuleProps) {
+export function useIdeaModule(props?: IIdeaModuleProps) {
   const { state, setState } = useIdeaModuleState(props)
   const fluentProviderId = useId('fp-idea-module')
 
   useIdeaModuleDataFetch(props, state.refetch, setState)
+
+  const [isOpen, setIsOpen] = useState(true)
+
+  const renderHamburger = () => {
+    return (
+      <Tooltip content='Navigation' relationship='label'>
+        <Hamburger onClick={() => setIsOpen(!isOpen)} />
+      </Tooltip>
+    )
+  }
 
   const getSelectedIdea = () => {
     const hashState = parseUrlHash()
@@ -78,13 +89,35 @@ export function useIdeaModule(props: IIdeaModuleProps) {
           return a.column.sortOrder - b.column.sortOrder
         })
 
+    let ideaPhase: IdeaPhase
+    if (selectedIdea.processing) {
+      if (
+        selectedIdea.processing.GtIdeaDecision ===
+        state.configuration.processing.find((p) => p.key === 'approve')?.recommendation
+      ) {
+        ideaPhase = IdeaPhase.ApprovedForConcept
+      } else {
+        ideaPhase = IdeaPhase.Processing
+      }
+    } else {
+      if (
+        selectedIdea.GtIdeaRecommendation ===
+        state.configuration.registration.find((p) => p.key === 'approve')?.recommendation
+      ) {
+        ideaPhase = IdeaPhase.Processing
+      } else {
+        ideaPhase = IdeaPhase.Registration
+      }
+    }
+
     setState({
       ...state,
       selectedIdea: {
         item: selectedIdea,
         registeredFieldValues,
         processingFieldValues
-      }
+      },
+      phase: ideaPhase
     })
   }
 
@@ -98,6 +131,8 @@ export function useIdeaModule(props: IIdeaModuleProps) {
     state,
     setState,
     getSelectedIdea,
+    renderHamburger,
+    isOpen,
     fluentProviderId
   }
 }

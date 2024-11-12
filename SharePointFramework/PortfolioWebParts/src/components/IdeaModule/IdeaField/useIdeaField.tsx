@@ -28,7 +28,10 @@ export function useIdeaField(props: IIdeaFieldProps) {
   const renderValueForField = () => {
     let icon = TagMultipleFilled
 
-    if (props.model.internalName === 'GtIdeaRecommendation') {
+    if (
+      props.model.internalName === 'GtIdeaRecommendation' ||
+      props.model.internalName === 'GtIdeaDecision'
+    ) {
       props.model.type = 'TaxonomyFieldType'
     }
 
