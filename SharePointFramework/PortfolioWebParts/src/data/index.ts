@@ -1072,14 +1072,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     return ItemFieldValues.create({ fieldValues, fieldValuesAsText })
   }
 
-  public getIdeaData(ideaId: number): Promise<Idea> {
-    console.log(ideaId)
-    try {
-    } catch (error) {
-      return error
-    }
-  }
-
   public async getIdeasData(configuration: IdeaConfigurationModel): Promise<Idea> {
     const getListData = async (
       listName: string
@@ -1131,13 +1123,11 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     const registrationData = await getListData(configuration.registrationList)
     const processingData = await getListData(configuration.processingList)
 
-    // For each registrationData.item and registrationData.fieldValues, find the corresponding processingData.item and processingData.fieldValues where the registrationData.item.Id is contained within the processingData.item.GtRegistratedIdeaId
     const itemsData = registrationData.items.map((registered) => {
       const processing = processingData.items.find(
         (processingItem) => processingItem.GtRegistratedIdeaId === registered.Id
       )
 
-      // merge the registered and processing item
       return { ...registered, processing }
     })
 
@@ -1146,11 +1136,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         (processingFieldValues) => processingFieldValues.id === values.id
       )
 
-      // merge the values and processing values
       return { ...values, ...processingFieldValues }
     })
-
-    console.log({ itemsData, fieldValues, registrationData, processingData })
 
     return {
       data: {
@@ -1167,57 +1154,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       }
     }
   }
-
-  // public async getIdeasDataX(configuration: ConfigurationItem): Promise<Ideas> {
-  //   try {
-  //     const ideaRegistrationList = this._sp.web.lists.getByTitle(configuration.ideaRegistrationList)
-  //     // const ideaProcessingList = this._sp.web.lists.getByTitle(configuration.ideaProcessingList)
-  //     // const registered = await ideaRegistrationList.items.select('*', 'FieldValuesAsText')
-  //     //   .expand('FieldValuesAsText').using(DefaultCaching)()
-  //     // const processing = await ideaProcessingList.items.select('*', 'FieldValuesAsText')
-  //     //   .expand('FieldValuesAsText').using(DefaultCaching)()
-
-  //     // const fields = await ideaRegistrationList.fields
-  //     //   .select(...getClassProperties(SPField))
-  //     //   .filter(
-  //     //     "substringof('Gt', InternalName) or InternalName eq 'Title' or InternalName eq 'Id' or InternalName eq 'ID'"
-  //     //   )<SPField[]>()
-  //     // const userFields = fields
-  //     //   .filter((fld) => fld.TypeAsString.indexOf('User') === 0)
-  //     //   .map((fld) => fld.InternalName)
-
-  //     const [ideaList] = await this._sp.web.lists
-  //       .filter(`Title eq '${configuration.ideaRegistrationList}'`)
-  //       .select('Id')()
-
-  //     const items = await this._sp.web.lists.getById(ideaList.Id).items()
-
-  //     const list = this._sp.web.lists.getById(ideaList.Id)
-  //     const listItems = await Promise.all(
-  //       items.map(async (item) => {
-  //         const listItem = await list.items.getById(item.Id)
-  //         return listItem
-  //       })
-  //     )
-
-  //     const allFieldValues = await Promise.all(
-  //       listItems.map(async (item) => {
-  //         const fieldValues = await this.getItemFieldValues(item, userFields)
-  //         return fieldValues
-  //       })
-  //     )
-
-  //     return {
-  //       data: {
-  //         items: items,
-  //         fieldValues: allFieldValues,
-  //         fields
-  //       }
-  //     }
-  //   } catch (error) {
-  //     return null
-  //   }
-  // }
 }
 
 export * from './types'

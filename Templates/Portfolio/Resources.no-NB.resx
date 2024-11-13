@@ -2159,10 +2159,10 @@
     <value>Løsningsforslag for idéen</value>
   </data>
   <data name="SiteFields_GtIdeaUrl_DisplayName" xml:space="preserve">
-    <value>KUR</value>
+    <value>IdéUrl</value>
   </data>
   <data name="SiteFields_GtIdeaUrl_Description" xml:space="preserve">
-    <value>Konsept utredningsrapport (KUR) for idéen</value>
+    <value>IdéUrl for idéen</value>
   </data>
   <data name="SiteFields_GtIdeaProjectData_DisplayName" xml:space="preserve">
     <value>Prosjektdata-tilknytning</value>

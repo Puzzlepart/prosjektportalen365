@@ -14,7 +14,7 @@ export const IdeaField: FC<IIdeaFieldProps> = (props) => {
       {renderValueForField() ? (
         <Text>{renderValueForField()}</Text>
       ) : (
-        <Text style={{ color: 'var(--colorNeutralForeground4)' }}>Ingen verdi</Text>
+        <Text style={{ color: 'var(--colorNeutralForeground4)' }}>Ikke angitt</Text>
       )}
     </div>
   )

@@ -2016,10 +2016,10 @@
     <value>Solution proposals for the idea</value>
   </data>
   <data name="SiteFields_GtIdeaUrl_DisplayName" xml:space="preserve">
-    <value>KUR</value>
+    <value>IdeaUrl</value>
   </data>
   <data name="SiteFields_GtIdeaUrl_Description" xml:space="preserve">
-    <value>Concept investigation report (KUR) for the idea</value>
+    <value>IdeaUrl for the idea</value>
   </data>
   <data name="SiteFields_GtIdeaProjectData_DisplayName" xml:space="preserve">
     <value>Project data association</value>
