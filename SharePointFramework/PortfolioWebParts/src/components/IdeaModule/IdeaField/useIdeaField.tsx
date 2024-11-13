@@ -23,8 +23,6 @@ import { useIdeaModuleContext } from '../context'
 export function useIdeaField(props: IIdeaFieldProps) {
   const context = useIdeaModuleContext()
 
-  const isInProcessing = context.state.selectedIdea.item.processing
-
   const renderValueForField = () => {
     let icon = TagMultipleFilled
 
@@ -156,32 +154,42 @@ export function useIdeaField(props: IIdeaFieldProps) {
           const processing = context.state.configuration.processing
           const registration = context.state.configuration.registration
 
-          const approveValue = isInProcessing
-            ? processing.find((p) => p.key === 'approve')?.recommendation
-            : registration.find((p) => p.key === 'approve')?.recommendation
-          const considerationValue = isInProcessing
-            ? processing.find((p) => p.key === 'consideration')?.recommendation
-            : registration.find((p) => p.key === 'consideration')?.recommendation
-          const rejectValue = isInProcessing
-            ? processing.find((p) => p.key === 'reject')?.recommendation
-            : registration.find((p) => p.key === 'reject')?.recommendation
+          const approveValue = [
+            processing.find((p) => p.key === 'approve')?.recommendation,
+            registration.find((p) => p.key === 'approve')?.recommendation
+          ]
+          const considerationValue = [
+            processing.find((p) => p.key === 'consideration')?.recommendation,
+            registration.find((p) => p.key === 'consideration')?.recommendation
+          ]
+          const rejectValue = [
+            processing.find((p) => p.key === 'reject')?.recommendation,
+            registration.find((p) => p.key === 'reject')?.recommendation
+          ]
 
           const statusStyles = {
-            [approveValue]: {
+            approve: {
               backgroundColor: 'var(--colorPaletteLightGreenBackground2)',
               icon: getFluentIcon('CheckmarkCircle')
             },
-            [considerationValue]: {
+            consideration: {
               backgroundColor: 'var(--colorPaletteYellowBackground2)',
               icon: getFluentIcon('Edit')
             },
-            [rejectValue]: {
+            reject: {
               backgroundColor: 'var(--colorPaletteRedBackground2)',
               icon: getFluentIcon('DismissCircle')
             }
           }
 
-          const { backgroundColor, icon } = statusStyles[textValue] || {
+          const statusKey = ['approve', 'consideration', 'reject'].find(
+            (key) =>
+              approveValue.includes(textValue) ||
+              considerationValue.includes(textValue) ||
+              rejectValue.includes(textValue)
+          )
+
+          const { backgroundColor, icon } = statusStyles[statusKey] || {
             backgroundColor: 'var(--colorNeutralBackground2)',
             icon: null
           }
@@ -215,5 +223,5 @@ export function useIdeaField(props: IIdeaFieldProps) {
     }
   }
 
-  return { renderValueForField, isInProcessing }
+  return { renderValueForField }
 }
