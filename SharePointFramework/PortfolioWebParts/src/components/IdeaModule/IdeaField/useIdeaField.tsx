@@ -57,20 +57,24 @@ export function useIdeaField(props: IIdeaFieldProps) {
       [
         'User',
         ([user]: IPersonaProps[]) => {
-          return (
-            <Persona
-              {...user}
-              title={user.text}
-              name={user.text}
-              size='small'
-              avatar={{
-                image: {
-                  src: user.imageUrl
-                }
-              }}
-              style={{ marginTop: 6 }}
-            />
-          )
+          if (user) {
+            return (
+              <Persona
+                {...user}
+                title={user.text}
+                name={user.text}
+                size='small'
+                avatar={{
+                  image: {
+                    src: user.imageUrl
+                  }
+                }}
+                style={{ marginTop: 6 }}
+              />
+            )
+          } else {
+            return null
+          }
         }
       ],
       [
