@@ -97,7 +97,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
 
     const backgroundColor =
       statusStyles[statusValue]?.backgroundColor || 'var(--colorNeutralBackground2)'
-    const borderColor = statusStyles[statusValue]?.borderColor || 'var(--colorNeutralBorder2)'
+    const borderColor = statusStyles[statusValue]?.borderColor || 'var(--colorNeutralBackground4)'
 
     const fieldValues = isInProcessing
       ? state.selectedIdea.processingFieldValues
@@ -236,10 +236,9 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                           </AccordionHeader>
                           <AccordionPanel>
                             <div className={styles.idea}>
-                              {state.selectedIdea.registeredFieldValues
-                                .map((model, idx) => (
-                                  <IdeaField key={idx} model={model} />
-                                ))}
+                              {state.selectedIdea.registeredFieldValues.map((model, idx) => (
+                                <IdeaField key={idx} model={model} />
+                              ))}
                             </div>
                           </AccordionPanel>
                         </AccordionItem>
