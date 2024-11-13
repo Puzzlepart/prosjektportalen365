@@ -237,7 +237,6 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                           <AccordionPanel>
                             <div className={styles.idea}>
                               {state.selectedIdea.registeredFieldValues
-                                .filter((model) => !ignoreFields.includes(model.internalName))
                                 .map((model, idx) => (
                                   <IdeaField key={idx} model={model} />
                                 ))}
