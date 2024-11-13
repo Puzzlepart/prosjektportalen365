@@ -6,6 +6,7 @@ dependencies:
   '@fluentui/react-hooks': 8.6.27_4865287ef69aa4f3fc3f709d3560286e
   '@fluentui/react-icons': 2.0.242_react@17.0.1
   '@fluentui/react-motion-preview': 0.5.21_9c907a7ccd27a2e2d0ee9de5366482d1
+  '@fluentui/react-nav-preview': 0.9.1_9c907a7ccd27a2e2d0ee9de5366482d1
   '@microsoft/decorators': 1.17.4
   '@microsoft/eslint-config-spfx': 1.17.4_eslint@8.25.0+typescript@4.5.5
   '@microsoft/eslint-plugin-spfx': 1.17.4_eslint@8.25.0+typescript@4.5.5
@@ -2098,6 +2099,22 @@ packages:
       react-dom: '>=16.14.0 <19.0.0'
     resolution:
       integrity: sha512-1D5Ih3Q/V6dkjSrmwsH0W61PY6b3TjkiMV5bS6Z8xsY/rbJRo1Ssv3yXFs82xo8SUDy4rVORLkfrbuM1Lo7ZSg==
+  /@fluentui/react-motion-components-preview/0.3.0_9c907a7ccd27a2e2d0ee9de5366482d1:
+    dependencies:
+      '@fluentui/react-motion': 9.6.0_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@swc/helpers': 0.5.11
+      '@types/react': 17.0.45
+      '@types/react-dom': 17.0.17
+      react: 17.0.1
+      react-dom: 17.0.1_react@17.0.1
+    dev: false
+    peerDependencies:
+      '@types/react': '>=16.14.0 <19.0.0'
+      '@types/react-dom': '>=16.9.0 <19.0.0'
+      react: '>=16.14.0 <19.0.0'
+      react-dom: '>=16.14.0 <19.0.0'
+    resolution:
+      integrity: sha512-N888xO727bSogyH0WUSW2pkjQ2vXEpyDa0Ygj+4XQaTfHz8DecDiKfM83zUpQ7pZOhx8eQPUP76flijm+iVm8w==
   /@fluentui/react-motion-preview/0.5.21_9c907a7ccd27a2e2d0ee9de5366482d1:
     dependencies:
       '@fluentui/react-jsx-runtime': 9.0.38_4865287ef69aa4f3fc3f709d3560286e
@@ -6722,7 +6739,7 @@ packages:
       '@fluentui/react': 7.204.0_9c907a7ccd27a2e2d0ee9de5366482d1
       '@fluentui/react-file-type-icons': 8.11.13_4865287ef69aa4f3fc3f709d3560286e
       '@fluentui/react-hooks': 8.8.5_4865287ef69aa4f3fc3f709d3560286e
-      '@fluentui/react-icons': 2.0.242_react@17.0.1
+      '@fluentui/react-icons': 2.0.261_react@17.0.1
       '@fluentui/react-northstar': 0.66.0_346d49937f02d12b52cc20d3762bb2de
       '@fluentui/react-theme-provider': 0.19.16_9c907a7ccd27a2e2d0ee9de5366482d1
       '@fluentui/scheme-utilities': 8.3.52_4865287ef69aa4f3fc3f709d3560286e
@@ -6782,7 +6799,7 @@ packages:
       '@fluentui/react-components': 9.53.0_9c907a7ccd27a2e2d0ee9de5366482d1
       '@fluentui/react-file-type-icons': 8.11.13_4865287ef69aa4f3fc3f709d3560286e
       '@fluentui/react-hooks': 8.8.5_4865287ef69aa4f3fc3f709d3560286e
-      '@fluentui/react-icons': 2.0.242_react@17.0.1
+      '@fluentui/react-icons': 2.0.261_react@17.0.1
       '@fluentui/react-icons-northstar': 0.66.5_react-dom@17.0.1+react@17.0.1
       '@fluentui/react-migration-v8-v9': 9.6.15_9c907a7ccd27a2e2d0ee9de5366482d1
       '@fluentui/react-northstar': 0.66.0_346d49937f02d12b52cc20d3762bb2de
@@ -25404,7 +25421,7 @@ packages:
     dependencies:
       '@fluentui/react': 8.98.1_9c907a7ccd27a2e2d0ee9de5366482d1
       '@fluentui/react-components': 9.52.0_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@fluentui/react-icons': 2.0.242_react@17.0.1
+      '@fluentui/react-icons': 2.0.261_react@17.0.1
       '@microsoft/decorators': 1.17.4
       '@microsoft/eslint-config-spfx': 1.17.4_eslint@8.25.0+typescript@4.5.5
       '@microsoft/eslint-plugin-spfx': 1.17.4_eslint@8.25.0+typescript@4.5.5
@@ -25464,7 +25481,8 @@ packages:
       '@fluentui/react-datepicker-compat': 0.4.39_9c907a7ccd27a2e2d0ee9de5366482d1
       '@fluentui/react-file-type-icons': 8.11.13_4865287ef69aa4f3fc3f709d3560286e
       '@fluentui/react-hooks': 8.6.27_4865287ef69aa4f3fc3f709d3560286e
-      '@fluentui/react-icons': 2.0.242_react@17.0.1
+      '@fluentui/react-icons': 2.0.261_react@17.0.1
+      '@fluentui/react-motion-components-preview': 0.3.0_9c907a7ccd27a2e2d0ee9de5366482d1
       '@fluentui/react-motion-preview': 0.5.21_9c907a7ccd27a2e2d0ee9de5366482d1
       '@fluentui/react-nav-preview': 0.9.1_9c907a7ccd27a2e2d0ee9de5366482d1
       '@microsoft/decorators': 1.17.4
@@ -25545,14 +25563,14 @@ packages:
     peerDependencies:
       '@pnp/odata': '*'
     resolution:
-      integrity: sha512-QH+N4mdQ5roufqeZ/NhxynFDyqmx8+lVQ6e+5UTC24nq+FtmwJrIz/i5j2lwlyR4kOnJxQltqkBK9M1Xlu6rNw==
+      integrity: sha512-E5t7s2IiGyWkdPgvgdb2Iw152thTYFGtlxhuFgNKX8sBQ/vJXXfpYNjsSYoXx4BofaQo6DvjCyD0LvOTlvcuFw==
       tarball: file:projects/pp365-portfoliowebparts.tgz
     version: 0.0.0
   file:projects/pp365-programwebparts.tgz_@pnp+odata@2.15.0:
     dependencies:
       '@fluentui/react': 8.98.1_9c907a7ccd27a2e2d0ee9de5366482d1
       '@fluentui/react-components': 9.52.0_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@fluentui/react-icons': 2.0.242_react@17.0.1
+      '@fluentui/react-icons': 2.0.261_react@17.0.1
       '@microsoft/eslint-config-spfx': 1.17.4_eslint@8.25.0+typescript@4.5.5
       '@microsoft/eslint-plugin-spfx': 1.17.4_eslint@8.25.0+typescript@4.5.5
       '@microsoft/rush-stack-compiler-4.5': 0.2.2
@@ -25633,7 +25651,7 @@ packages:
     dependencies:
       '@fluentui/react': 8.98.1_9c907a7ccd27a2e2d0ee9de5366482d1
       '@fluentui/react-components': 9.52.0_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@fluentui/react-icons': 2.0.242_react@17.0.1
+      '@fluentui/react-icons': 2.0.261_react@17.0.1
       '@microsoft/decorators': 1.17.4
       '@microsoft/eslint-config-spfx': 1.17.4_eslint@8.25.0+typescript@4.5.5
       '@microsoft/eslint-plugin-spfx': 1.17.4_eslint@8.25.0+typescript@4.5.5
@@ -25707,7 +25725,7 @@ packages:
       '@fluentui/react': 8.98.1_9c907a7ccd27a2e2d0ee9de5366482d1
       '@fluentui/react-components': 9.52.0_9c907a7ccd27a2e2d0ee9de5366482d1
       '@fluentui/react-datepicker-compat': 0.4.39_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@fluentui/react-icons': 2.0.242_react@17.0.1
+      '@fluentui/react-icons': 2.0.261_react@17.0.1
       '@microsoft/decorators': 1.17.4
       '@microsoft/eslint-config-spfx': 1.17.4_eslint@8.25.0+typescript@4.5.5
       '@microsoft/eslint-plugin-spfx': 1.17.4_eslint@8.25.0+typescript@4.5.5
@@ -25793,7 +25811,7 @@ packages:
       '@fluentui/react': 8.98.1_9c907a7ccd27a2e2d0ee9de5366482d1
       '@fluentui/react-components': 9.52.0_9c907a7ccd27a2e2d0ee9de5366482d1
       '@fluentui/react-datepicker-compat': 0.4.39_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@fluentui/react-icons': 2.0.242_react@17.0.1
+      '@fluentui/react-icons': 2.0.261_react@17.0.1
       '@microsoft/rush-stack-compiler-4.5': 0.2.2
       '@microsoft/sp-application-base': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
       '@microsoft/sp-build-web': 1.17.4
@@ -25860,7 +25878,7 @@ packages:
   file:projects/pp365-spfx-tasks.tgz_9c907a7ccd27a2e2d0ee9de5366482d1:
     dependencies:
       '@fluentui/react-components': 9.52.0_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@fluentui/react-icons': 2.0.242_react@17.0.1
+      '@fluentui/react-icons': 2.0.261_react@17.0.1
       '@types/colors': 1.2.1
       '@types/lodash': 4.14.195
       colors: 1.4.0
@@ -25884,7 +25902,7 @@ packages:
   file:projects/pp365-templates.tgz_9c907a7ccd27a2e2d0ee9de5366482d1:
     dependencies:
       '@fluentui/react-components': 9.52.0_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@fluentui/react-icons': 2.0.242_react@17.0.1
+      '@fluentui/react-icons': 2.0.261_react@17.0.1
       '@ptkdev/json-token-replace': 1.2.2
       '@types/lodash': 4.14.202
       chokidar-cli: 2.1.0
@@ -25913,6 +25931,7 @@ specifiers:
   '@fluentui/react-hooks': 8.6.27
   '@fluentui/react-icons': ~2.0.240
   '@fluentui/react-motion-preview': ~0.5.20
+  '@fluentui/react-nav-preview': ~0.9.1
   '@microsoft/decorators': 1.17.4
   '@microsoft/eslint-config-spfx': 1.17.4
   '@microsoft/eslint-plugin-spfx': 1.17.4

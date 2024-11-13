@@ -9,9 +9,9 @@
     padding: 16px 32px;
     gap: 16px;
     display: grid;
-    justify-content: flex-start;
     align-items: flex-start;
     height: fit-content;
+    width: 100%;
 
     .ideaHeader {
       display: flex;
@@ -21,12 +21,12 @@
       .toolbar {
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
         gap: 16px;
 
         .hamburger {
           position: absolute;
+          z-index: 2;
+          top: 5px;
           left: 32px;
         }
       }
@@ -41,7 +41,7 @@
 
     .idea {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
       grid-gap: 16px;
       margin-bottom: 16px;
 
@@ -55,7 +55,7 @@
       flex-direction: column;
       padding: 16px 32px;
       border-radius: var(--borderRadiusXLarge);
-      margin: 0 32px;
+      width: fit-content;
 
       .ideaTitle {
         font-size: 1rem;
@@ -66,9 +66,14 @@
       .status {
         display: flex;
         justify-content: flex-start;
+        flex-wrap: wrap;
         flex-direction: row;
         gap: 32px;
         margin-bottom: 16px;
+
+        .field {
+          max-width: 620px;
+        }
       }
     }
   }

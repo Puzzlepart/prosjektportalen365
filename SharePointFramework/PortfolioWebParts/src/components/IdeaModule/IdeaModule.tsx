@@ -115,7 +115,9 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
           {fieldValues
             .filter((model) => model.internalName.includes(filterKey))
             .map((model, idx) => (
-              <IdeaField key={idx} model={model} />
+              <div className={styles.field} key={idx}>
+                <IdeaField key={idx} model={model} />
+              </div>
             ))}
         </div>
       </div>
