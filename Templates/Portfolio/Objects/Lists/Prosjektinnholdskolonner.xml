@@ -52,6 +52,12 @@
         </View>
         <View MobileView="TRUE" Type="HTML" DisplayName="{resource:View_IdeaItems_DisplayName}" Url="{site}/{resource:Lists_ProjectContentColumns_Url}/IdeaItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
             <Query>
+                <Where>
+                    <Eq>
+                        <FieldRef Name="ContentType" />
+                        <Value Type="Computed">{resource:ContentTypes_IdeaColumn_Name}</Value>
+                    </Eq>
+                </Where>
                 <OrderBy>
                     <FieldRef Name="GtSortOrder" />
                 </OrderBy>
@@ -762,6 +768,7 @@
             <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
             <pnp:DataValue FieldName="GtIdeaCopyToProcess">True</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">1010</pnp:DataValue>
@@ -773,6 +780,7 @@
             <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
             <pnp:DataValue FieldName="GtIdeaCopyToProcess">True</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">1020</pnp:DataValue>
@@ -784,6 +792,7 @@
             <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
             <pnp:DataValue FieldName="GtIdeaCopyToProcess">True</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">1030</pnp:DataValue>
@@ -796,6 +805,7 @@
             <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtIdeaCopyToProcess">True</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">1040</pnp:DataValue>
@@ -807,6 +817,7 @@
             <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
             <pnp:DataValue FieldName="GtIdeaCopyToProcess">True</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">1050</pnp:DataValue>
@@ -818,6 +829,7 @@
             <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
             <pnp:DataValue FieldName="GtIdeaCopyToProcess">True</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">1060</pnp:DataValue>
@@ -829,6 +841,7 @@
             <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
             <pnp:DataValue FieldName="GtIdeaCopyToProcess">True</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">1070</pnp:DataValue>
@@ -840,6 +853,7 @@
             <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
             <pnp:DataValue FieldName="GtIdeaCopyToProcess">True</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">1080</pnp:DataValue>
@@ -852,6 +866,7 @@
             <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtIdeaCopyToProcess">True</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">1090</pnp:DataValue>
@@ -863,6 +878,7 @@
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">1100</pnp:DataValue>
@@ -873,6 +889,7 @@
             <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">1110</pnp:DataValue>
@@ -883,6 +900,7 @@
             <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">1120</pnp:DataValue>
@@ -893,6 +911,7 @@
             <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">1130</pnp:DataValue>
@@ -903,6 +922,7 @@
             <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">1140</pnp:DataValue>
@@ -913,6 +933,7 @@
             <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">1150</pnp:DataValue>
@@ -923,6 +944,7 @@
             <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">1160</pnp:DataValue>
@@ -934,6 +956,7 @@
             <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
             <pnp:DataValue FieldName="GtIdeaCopyToProcess">True</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">1170</pnp:DataValue>
@@ -946,6 +969,7 @@
             <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtIdeaCopyToProcess">True</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">1180</pnp:DataValue>
@@ -957,6 +981,7 @@
             <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
             <pnp:DataValue FieldName="GtIdeaCopyToProcess">True</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">1190</pnp:DataValue>
@@ -968,6 +993,7 @@
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">1200</pnp:DataValue>
@@ -978,6 +1004,7 @@
             <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
