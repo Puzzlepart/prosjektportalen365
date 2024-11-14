@@ -39,6 +39,17 @@
       }
     }
 
+    .accordion {
+      width: fit-content;
+      padding: 0 8px;
+      margin-bottom: 16px;
+
+      &:hover {
+        background-color: var(--colorNeutralBackground1Hover);
+        border-radius: var(--borderRadiusLarge);
+      }
+    }
+
     .idea {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));

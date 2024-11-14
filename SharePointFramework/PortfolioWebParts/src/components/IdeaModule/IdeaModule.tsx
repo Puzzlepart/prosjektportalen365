@@ -231,7 +231,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                     {state.selectedIdea.item.processing && (
                       <Accordion openItems={openItems} onToggle={handleToggle} multiple collapsible>
                         <AccordionItem value='registration'>
-                          <AccordionHeader size='large' icon={getFluentIcon('Lightbulb')}>
+                          <AccordionHeader className={styles.accordion} size='large' icon={getFluentIcon('Lightbulb')}>
                             Registrert idé
                           </AccordionHeader>
                           <AccordionPanel>

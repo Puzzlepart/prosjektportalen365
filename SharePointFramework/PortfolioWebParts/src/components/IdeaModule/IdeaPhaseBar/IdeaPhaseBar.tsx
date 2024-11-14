@@ -35,7 +35,7 @@ export const IdeaPhaseBar: FC = () => {
     <>
       <TabList className={styles.ideaPhases} selectedValue={context.state.phase}>
         {phases.map((phase) => {
-          if (phase.phase === IdeaPhase.Provisioned) {
+          if (phase.phase === IdeaPhase.Provisioned && context.props.provisionUrl) {
             return (
               <ProjectProvision
                 {...context.props}
@@ -46,7 +46,7 @@ export const IdeaPhaseBar: FC = () => {
                 }
                 size='medium'
                 disabled={context.state.phase !== IdeaPhase.ApprovedForConcept}
-                provisionUrl='https://puzzlepart.sharepoint.com/sites/bestillingsportalen'
+                provisionUrl={context.props.provisionUrl}
               />
             )
           }
