@@ -259,7 +259,16 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
       const field = registrationList.fields.find(
         (f) => f.internalName === col.InternalName || f.displayName === col.Title
       )
-      return field && columns.some((contentCol) => contentCol.internalName === col.InternalName)
+
+      const fieldsToCopy =
+        field &&
+        columns.find(
+          (contentCol) =>
+            contentCol.internalName === field.internalName ||
+            contentCol.fieldName === field.displayName
+        )
+
+      return fieldsToCopy
     })
 
     const copyData = columnsToCopy
@@ -270,8 +279,12 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
           }
         }
 
+        const internalName = registrationList.fields.find(
+          (fld) => fld.displayName === col.Title || fld.internalName === col.InternalName
+        )?.internalName
+
         return {
-          [col.InternalName]: registrationList.getValueByName(col.InternalName)
+          [col.InternalName]: registrationList.getValueByName(internalName)
         }
       })
       .reduce((acc, val) => ({ ...acc, ...val }), {})
