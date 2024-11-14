@@ -182,12 +182,14 @@ export function useIdeaField(props: IIdeaFieldProps) {
             }
           }
 
-          const statusKey = ['approve', 'consideration', 'reject'].find(
-            (key) =>
-              approveValue.includes(textValue) ||
-              considerationValue.includes(textValue) ||
-              rejectValue.includes(textValue)
-          )
+          let statusKey = null
+          if (approveValue.includes(textValue)) {
+            statusKey = 'approve'
+          } else if (considerationValue.includes(textValue)) {
+            statusKey = 'consideration'
+          } else if (rejectValue.includes(textValue)) {
+            statusKey = 'reject'
+          }
 
           const { backgroundColor, icon } = statusStyles[statusKey] || {
             backgroundColor: 'var(--colorNeutralBackground2)',
