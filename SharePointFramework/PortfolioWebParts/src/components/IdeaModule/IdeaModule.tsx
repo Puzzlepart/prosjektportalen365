@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 import styles from './IdeaModule.module.scss'
 import { IdeaModuleContext } from './context'
 import { IIdeaModuleProps } from './types'
@@ -8,7 +8,6 @@ import {
   AccordionHeader,
   AccordionItem,
   AccordionPanel,
-  AccordionToggleEventHandler,
   Divider,
   FluentProvider,
   IdPrefixProvider,
@@ -40,89 +39,15 @@ import {
 } from '@fluentui/react-icons'
 import { IdeaField } from './IdeaField'
 import { IdeaPhaseBar } from './IdeaPhaseBar'
+import { Commands } from './Commands'
 
 const Dashboard = bundleIcon(Board20Filled, Board20Regular)
 const Lightbulb = bundleIcon(Lightbulb20Filled, Lightbulb20Regular)
 const JobPostings = bundleIcon(NotePin20Filled, NotePin20Regular)
 
 export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
-  const { state, setState, getSelectedIdea, isOpen, renderHamburger, fluentProviderId } =
+  const { state, setState, getSelectedIdea, isOpen, renderHamburger, renderStatus, handleToggle, openItems, ignoreFields, fluentProviderId } =
     useIdeaModule(props)
-
-  const [openItems, setOpenItems] = useState(['registration'])
-  const handleToggle: AccordionToggleEventHandler<string> = (event, data) => {
-    setOpenItems(data.openItems)
-  }
-
-  const ignoreFields = [
-    'GtIdeaRecommendation',
-    'GtIdeaRecommendationComment',
-    'GtIdeaDecision',
-    'GtIdeaDecisionComment'
-  ]
-
-  const renderStatus = () => {
-    const isInProcessing = state.selectedIdea.item.processing
-    const processing = state.configuration.processing
-    const registration = state.configuration.registration
-
-    const approveValue = isInProcessing
-      ? processing.find((p) => p.key === 'approve')?.recommendation
-      : registration.find((p) => p.key === 'approve')?.recommendation
-    const considerationValue = isInProcessing
-      ? processing.find((p) => p.key === 'consideration')?.recommendation
-      : registration.find((p) => p.key === 'consideration')?.recommendation
-    const rejectValue = isInProcessing
-      ? processing.find((p) => p.key === 'reject')?.recommendation
-      : registration.find((p) => p.key === 'reject')?.recommendation
-
-    const statusStyles = {
-      [approveValue]: {
-        backgroundColor: 'var(--colorPaletteLightGreenBackground1)',
-        borderColor: 'var(--colorPaletteLightGreenBorder1)'
-      },
-      [considerationValue]: {
-        backgroundColor: 'var(--colorPaletteYellowBackground1)',
-        borderColor: 'var(--colorPaletteYellowBorder1)'
-      },
-      [rejectValue]: {
-        backgroundColor: 'var(--colorPaletteRedBackground1)',
-        borderColor: 'var(--colorPaletteRedBorder1)'
-      }
-    }
-
-    const statusValue = isInProcessing
-      ? state.selectedIdea.item.processing.GtIdeaDecision
-      : state.selectedIdea.item.GtIdeaRecommendation
-
-    const backgroundColor =
-      statusStyles[statusValue]?.backgroundColor || 'var(--colorNeutralBackground2)'
-    const borderColor = statusStyles[statusValue]?.borderColor || 'var(--colorNeutralBackground4)'
-
-    const fieldValues = isInProcessing
-      ? state.selectedIdea.processingFieldValues
-      : state.selectedIdea.registeredFieldValues
-
-    const filterKey = isInProcessing ? 'GtIdeaDecision' : 'GtIdeaRecommendation'
-
-    return (
-      <div
-        className={styles.statusSection}
-        style={{ backgroundColor, border: `1px solid ${borderColor}` }}
-      >
-        <h2>Status</h2>
-        <div className={styles.status}>
-          {fieldValues
-            .filter((model) => model.internalName.includes(filterKey))
-            .map((model, idx) => (
-              <div className={styles.field} key={idx}>
-                <IdeaField key={idx} model={model} />
-              </div>
-            ))}
-        </div>
-      </div>
-    )
-  }
 
   return (
     <IdeaModuleContext.Provider value={{ props, state, setState }}>
@@ -211,8 +136,9 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                 )}
                 {state.selectedIdea ? (
                   <>
+                    <Commands />
                     <div className={styles.ideaHeader}>
-                      <div className={styles.toolbar}>
+                      <div className={styles.phasebar}>
                         <div className={styles.hamburger}>{!isOpen && renderHamburger()}</div>
                         <IdeaPhaseBar />
                       </div>
@@ -238,7 +164,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                           >
                             Registrert idé
                           </AccordionHeader>
-                          <AccordionPanel>
+                          <AccordionPanel style={{ margin: 0 }}>
                             <div className={styles.idea}>
                               {state.selectedIdea.registeredFieldValues.map((model, idx) => (
                                 <IdeaField key={idx} model={model} />

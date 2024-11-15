@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React from 'react'
-import { Tooltip, useId } from '@fluentui/react-components'
+import { AccordionToggleEventHandler, Tooltip, useId } from '@fluentui/react-components'
 import { IdeaPhase, IIdeaModuleHashState, IIdeaModuleProps } from './types'
 import { useIdeaModuleState } from './useIdeaModuleState'
 import { useIdeaModuleDataFetch } from './useIdeaModuleDataFetch'
@@ -8,6 +8,8 @@ import { EditableSPField, ItemFieldValues, parseUrlHash, setUrlHash } from 'pp36
 import _ from 'lodash'
 import { useEffect, useState } from 'react'
 import { Hamburger } from '@fluentui/react-nav-preview'
+import styles from './IdeaModule.module.scss'
+import { IdeaField } from './IdeaField'
 
 /**
  * Component logic hook for `IdeaModule` component.
@@ -18,16 +20,6 @@ export function useIdeaModule(props: IIdeaModuleProps) {
   const fluentProviderId = useId('fp-idea-module')
 
   useIdeaModuleDataFetch(props, state.refetch, setState)
-
-  const [isOpen, setIsOpen] = useState(true)
-
-  const renderHamburger = () => {
-    return (
-      <Tooltip content='Navigation' relationship='label'>
-        <Hamburger onClick={() => setIsOpen(!isOpen)} />
-      </Tooltip>
-    )
-  }
 
   const getSelectedIdea = () => {
     const hashState = parseUrlHash()
@@ -121,6 +113,91 @@ export function useIdeaModule(props: IIdeaModuleProps) {
     })
   }
 
+  const [openItems, setOpenItems] = useState(['registration'])
+  const [isOpen, setIsOpen] = useState(true)
+
+  const handleToggle: AccordionToggleEventHandler<string> = (event, data) => {
+    setOpenItems(data.openItems)
+  }
+
+  const ignoreFields = [
+    'GtIdeaRecommendation',
+    'GtIdeaRecommendationComment',
+    'GtIdeaDecision',
+    'GtIdeaDecisionComment'
+  ]
+
+  const renderHamburger = () => {
+    return (
+      <Tooltip content='Navigation' relationship='label'>
+        <Hamburger onClick={() => setIsOpen(!isOpen)} />
+      </Tooltip>
+    )
+  }
+
+  const renderStatus = () => {
+    const isInProcessing = state.selectedIdea.item.processing
+    const processing = state.configuration.processing
+    const registration = state.configuration.registration
+
+    const approveValue = isInProcessing
+      ? processing.find((p) => p.key === 'approve')?.recommendation
+      : registration.find((p) => p.key === 'approve')?.recommendation
+    const considerationValue = isInProcessing
+      ? processing.find((p) => p.key === 'consideration')?.recommendation
+      : registration.find((p) => p.key === 'consideration')?.recommendation
+    const rejectValue = isInProcessing
+      ? processing.find((p) => p.key === 'reject')?.recommendation
+      : registration.find((p) => p.key === 'reject')?.recommendation
+
+    const statusStyles = {
+      [approveValue]: {
+        backgroundColor: 'var(--colorPaletteLightGreenBackground1)',
+        borderColor: 'var(--colorPaletteLightGreenBorder1)'
+      },
+      [considerationValue]: {
+        backgroundColor: 'var(--colorPaletteYellowBackground1)',
+        borderColor: 'var(--colorPaletteYellowBorder1)'
+      },
+      [rejectValue]: {
+        backgroundColor: 'var(--colorPaletteRedBackground1)',
+        borderColor: 'var(--colorPaletteRedBorder1)'
+      }
+    }
+
+    const statusValue = isInProcessing
+      ? state.selectedIdea.item.processing.GtIdeaDecision
+      : state.selectedIdea.item.GtIdeaRecommendation
+
+    const backgroundColor =
+      statusStyles[statusValue]?.backgroundColor || 'var(--colorNeutralBackground2)'
+    const borderColor = statusStyles[statusValue]?.borderColor || 'var(--colorNeutralBackground4)'
+
+    const fieldValues = isInProcessing
+      ? state.selectedIdea.processingFieldValues
+      : state.selectedIdea.registeredFieldValues
+
+    const filterKey = isInProcessing ? 'GtIdeaDecision' : 'GtIdeaRecommendation'
+
+    return (
+      <div
+        className={styles.statusSection}
+        style={{ backgroundColor, border: `1px solid ${borderColor}` }}
+      >
+        <h2>Status</h2>
+        <div className={styles.status}>
+          {fieldValues
+            .filter((model) => model.internalName.includes(filterKey))
+            .map((model, idx) => (
+              <div className={styles.field} key={idx}>
+                <IdeaField key={idx} model={model} />
+              </div>
+            ))}
+        </div>
+      </div>
+    )
+  }
+
   useEffect(() => {
     if (!state.loading) {
       getSelectedIdea()
@@ -132,7 +209,11 @@ export function useIdeaModule(props: IIdeaModuleProps) {
     setState,
     getSelectedIdea,
     renderHamburger,
+    renderStatus,
+    ignoreFields,
+    handleToggle,
     isOpen,
+    openItems,
     fluentProviderId
   }
 }
