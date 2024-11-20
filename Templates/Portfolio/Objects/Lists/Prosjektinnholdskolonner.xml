@@ -146,7 +146,7 @@
         <pnp:DataRow>            <!-- ID: 10 -->
             <pnp:DataValue FieldName="GtSortOrder">240</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Tiltak</pnp:DataValue>
-            <pnp:DataValue FieldName="GtInternalName">GtRiskActionOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtRiskAction</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtRiskActionOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Usikkerhetsoversikt</pnp:DataValue>
