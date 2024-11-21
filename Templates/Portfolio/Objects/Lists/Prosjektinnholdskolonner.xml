@@ -603,6 +603,16 @@
             <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
         </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 55 -->
+            <pnp:DataValue FieldName="Title">Endret</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">920</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">Modified</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">ModifiedOWSDATE</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Date</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory"></pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">120</pnp:DataValue>
+        </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 53 -->
             <pnp:DataValue FieldName="GtSortOrder">930</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Endret av</pnp:DataValue>
@@ -614,15 +624,15 @@
             <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>            <!-- ID: 55 -->
-            <pnp:DataValue FieldName="Title">Endret</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSortOrder">920</pnp:DataValue>
-            <pnp:DataValue FieldName="GtInternalName">Modified</pnp:DataValue>
-            <pnp:DataValue FieldName="GtManagedProperty">ModifiedOWSDATE</pnp:DataValue>
-            <pnp:DataValue FieldName="GtFieldDataType">Date</pnp:DataValue>
+        <pnp:DataRow>    <!-- ID: 66 -->
+            <pnp:DataValue FieldName="Title">Innholdstype</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">940</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">ContentType</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">ContentType</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory"></pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
-            <pnp:DataValue FieldName="GtColMaxWidth">120</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 56 -->
             <pnp:DataValue FieldName="GtSortOrder">640</pnp:DataValue>
