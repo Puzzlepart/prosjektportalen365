@@ -232,7 +232,7 @@ if (-not $SkipSiteDesign.IsPresent) {
         StartAction("Creating/updating site design $SiteDesignName")
         Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
     
-        $NoOutput = Get-PnpSiteDesign | Where-Object {$_.Title.Contains("Prosjektområde - test")} | Remove-PnPSiteDesign -Force -ErrorAction SilentlyContinue
+        $NoOutput = Get-PnpSiteDesign | Where-Object { $_.Title.Contains("Prosjektområde - test") } | Remove-PnPSiteDesign -Force -ErrorAction SilentlyContinue
 
         $SiteDesign = Get-PnPSiteDesign -Identity $SiteDesignName
 
@@ -266,6 +266,21 @@ if (-not $SkipDefaultSiteDesignAssociation.IsPresent) {
     }
     EndAction
 }
+
+try {
+    StartAction("Ensuring site collection administrator access to $Url")
+    $UserName = $CurrentUser.LoginName
+
+    Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
+    Set-PnPTenantSite -Url $Url -Owners $UserName -ErrorAction SilentlyContinue
+}
+catch {
+    Write-Host "Failed to get current user. Unable to ensure access to $Url." -ForegroundColor Yellow
+}
+finally {
+    EndAction
+}
+
 #endregion
 
 #region Running pre-install upgrade steps
