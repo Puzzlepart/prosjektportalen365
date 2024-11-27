@@ -2,7 +2,9 @@ name: Build release (main)
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - feat/ideamodule
     paths:
       - 'SharePointFramework/**'
       - 'Install/**'
