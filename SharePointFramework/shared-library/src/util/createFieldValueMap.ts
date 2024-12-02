@@ -13,8 +13,8 @@ export const createFieldValueMap = (): Map<string, (value: EditableSPFieldValue)
       'URL',
       ({ value }) => {
         try {
-          const url = value['Url']
-          const description = value['Description']
+          const url = value?.['Url']
+          const description = value?.['Description']
           return { url, description }
         } catch (error) {
           throw new Error(`Feil ved mapping av URL felt: ${error}`)
