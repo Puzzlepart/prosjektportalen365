@@ -831,7 +831,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">1050</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Løsningsforslag</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Overordnet gjennomføringsplan</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtIdeaExecutionPlan</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtIdeaExecutionPlanOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>

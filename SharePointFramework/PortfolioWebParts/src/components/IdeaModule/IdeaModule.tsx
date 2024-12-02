@@ -66,6 +66,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                 open={isOpen}
                 type='inline'
                 size='small'
+                style={{ width: '320px' }}
               >
                 <NavDrawerHeader>
                   <Tooltip content='Navigation' relationship='label'>
@@ -74,13 +75,13 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                 </NavDrawerHeader>
                 <NavDrawerBody>
                   <AppItemStatic icon={getFluentIcon('Lightbulb')}>Idémodul</AppItemStatic>
-                  <NavItem href='#' icon={<Dashboard />} value='total'>
+                  {/* <NavItem href='#' icon={<Dashboard />} value='total'>
                     Totaloversikt
-                  </NavItem>
+                  </NavItem> */}
                   <NavSectionHeader>Registrering</NavSectionHeader>
-                  <NavItem href='#' icon={<Dashboard />} value='registrering'>
+                  {/* <NavItem href='#' icon={<Dashboard />} value='registrering'>
                     Oversikt
-                  </NavItem>
+                  </NavItem> */}
                   <NavCategory value='registreringIdeer'>
                     <NavCategoryItem icon={<Lightbulb />}>Registrerte idéer</NavCategoryItem>
                     <NavSubItemGroup>
@@ -102,9 +103,9 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                   </NavCategory>
                   <NavDivider />
                   <NavSectionHeader>Behandling</NavSectionHeader>
-                  <NavItem href='#' icon={<Dashboard />} value='behandling'>
+                  {/* <NavItem href='#' icon={<Dashboard />} value='behandling'>
                     Oversikt
-                  </NavItem>
+                  </NavItem> */}
                   <NavCategory value='behandlingIdeer'>
                     <NavCategoryItem icon={<JobPostings />}>Idéer i behandling</NavCategoryItem>
                     <NavSubItemGroup>
@@ -136,7 +137,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                 )}
                 {state.selectedIdea ? (
                   <>
-                    <Commands />
+                    {/* <Commands /> */}
                     <div className={styles.ideaHeader}>
                       <div className={styles.phasebar}>
                         <div className={styles.hamburger}>{!isOpen && renderHamburger()}</div>
