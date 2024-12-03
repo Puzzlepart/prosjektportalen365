@@ -43,6 +43,8 @@ import {
 import { DataService } from '../DataService'
 import '@pnp/sp/presets/all'
 import _ from 'underscore'
+import { format } from '@fluentui/react'
+import strings from 'SharedLibraryStrings'
 
 export class PortalDataService extends DataService<IPortalDataServiceConfiguration> {
   private _sp: SPFI
@@ -432,6 +434,9 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
           message: `(PortalDataService) (syncList) Adding field [${field.InternalName}] to list [${params.listName}].`,
           level: LogLevel.Info
         })
+        if (params.progressFunc) {
+          params.progressFunc(format(strings.SyncListAddingField, field.Title))
+        }
         if (siteField) {
           const fldToAdd = jsomContext.web
             .get_fields()

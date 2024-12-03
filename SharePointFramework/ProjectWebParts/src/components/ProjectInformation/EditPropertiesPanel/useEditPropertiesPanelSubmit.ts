@@ -15,7 +15,7 @@ import { usePropertiesSync } from '../usePropertiesSync'
  */
 export function useEditPropertiesPanelSubmit(): ICustomEditPanelSubmitProps {
   const context = useProjectInformationContext()
-  const { syncPropertyItemToHub } = usePropertiesSync(context)
+  const onSyncProperties = usePropertiesSync(context)
   const [state, setState] = useState<
     Pick<ICustomEditPanelSubmitProps, 'error' | 'saveProgressText'>
   >({
@@ -58,7 +58,17 @@ export function useEditPropertiesPanelSubmit(): ICustomEditPanelSubmitProps {
         saveProgressText: strings.SynchronizingProjectPropertiesToPortfolioSiteStatusText
       }))
       try {
-        await syncPropertyItemToHub(data)
+        await onSyncProperties({
+          syncList: true,
+          syncPropertyItemToHub: true,
+          data,
+          onProgress: (saveProgressText) => {
+            setState((prevState) => ({
+              ...prevState,
+              saveProgressText
+            }))
+          }
+        })
       } catch (e) {
         setState({
           error: strings.SynchronizingProjectPropertiesToPortfolioSiteErrorText,

@@ -60,6 +60,7 @@ declare interface ISharedLibraryStrings {
   TimelineGroupDescription: string
   TriangleLabel: string
   TypeLabel: string
+  SyncListAddingField: string
 }
 
 declare module 'SharedLibraryStrings' {
