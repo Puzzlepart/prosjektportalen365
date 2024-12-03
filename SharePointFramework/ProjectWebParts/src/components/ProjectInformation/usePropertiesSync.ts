@@ -4,7 +4,7 @@ import { ListLogger } from 'pp365-shared-library/lib/logging'
 import { sleep } from 'pp365-shared-library/lib/util'
 import SPDataAdapter from '../../data'
 import { IProjectInformationContext, useProjectInformationContext } from './context'
-import { ProjectInformation } from './index'
+import { IProjectInformationData, ProjectInformation } from './index'
 import { PROPERTIES_UPDATED, SET_PROGRESS } from './reducer'
 import { useEffect } from 'react'
 import _ from 'lodash'
@@ -25,6 +25,19 @@ interface IUsePropertiesSyncParams {
    * Reload page after sync.
    */
   reload?: boolean
+
+  /**
+   * Progress callback function.
+   * 
+   * @param progress Progress text.
+   * @returns 
+   */
+  onProgress?: (progress: string) => void
+
+  /**
+   * Data to sync.
+   */
+  data?: IProjectInformationData
 }
 /**
  * Sync fields to the project properties list.
@@ -85,25 +98,16 @@ export function usePropertiesSync(context: IProjectInformationContext = null) {
    */
   const onSyncProperties = async (params: IUsePropertiesSyncParams = {}): Promise<void> => {
     if (context.props.skipSyncToHub) return
-    context.dispatch(
-      SET_PROGRESS({ title: strings.SyncProjectPropertiesProgressLabel, progress: {} })
-    )
-    const progressFunc = (progress: IProgressIndicatorProps) =>
-      context.dispatch(
-        SET_PROGRESS({ title: strings.SyncProjectPropertiesProgressLabel, progress })
-      )
+    params.onProgress(strings.SyncProjectPropertiesProgressLabel)
     try {
-      progressFunc({
-        label: strings.SyncProjectPropertiesListProgressDescription,
-        description: `${strings.PleaseWaitText}...`
-      })
+      params.onProgress(strings.SyncProjectPropertiesListProgressDescription)
       let created = false
       if (params.syncList) {
         const list = await syncList(context)
         created = list.created
       }
       if (!created && params.syncPropertyItemToHub)
-        await syncPropertyItemToHub(undefined, progressFunc)
+        await syncPropertyItemToHub(params.data, (progress) => params.onProgress(progress.label as string))
       SPDataAdapter.clearCache()
       await sleep(3)
       if (params.reload) window.location.reload()
@@ -119,10 +123,7 @@ export function usePropertiesSync(context: IProjectInformationContext = null) {
     }
   }
 
-  return {
-    syncPropertyItemToHub,
-    onSyncProperties
-  }
+  return onSyncProperties
 }
 
 type UseSyncListParams = {
