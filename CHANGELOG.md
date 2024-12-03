@@ -14,6 +14,7 @@ Sjekk ut [release notes](./releasenotes/1.10.0.md) for høydepunkter og mer deta
 
 - Mulighetsmatrise har fått samme tilpasningsmuligheter som Risikomatrise, inkluderer overstyring av farger og konfigurasjon
 - Forbedret prosjektstatus siden slik at det er tydeligere hva som er publisert og når. Samt bedre indikasjon på kladd. I tillegg er det gjort en rekke forbedringer på opprettelse, publisering og redigering av prosjektstatus, slik at man unngår å måtte laste inn side på nytt for å se endringer alle elementer på siden. [#1574](https://github.com/Puzzlepart/prosjektportalen365/issues/1574)
+- Hentet ut en gammel funksjon for synkronisering av felter fra hub til Prosjektegenskaper, ga den litt kjærlighet, og fikk den til å fungere igjen <3
 
 ### Feilrettinger
 
