@@ -46,7 +46,11 @@ export const CustomEditPanelFooter: FC<ICustomEditPanelFooterProps> = ({ isSaveD
         )}
         <div className={styles.container}>
           {isSaving ? (
-            <Field validationMessage={context.props.submit.saveProgressText} validationState='none'>
+            <Field
+              validationMessage={context.props.submit.saveProgressText}
+              validationState='none'
+              style={{ width: '100%' }}
+            >
               <ProgressBar />
             </Field>
           ) : (

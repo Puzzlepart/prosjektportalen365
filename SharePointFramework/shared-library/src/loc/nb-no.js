@@ -60,5 +60,6 @@ define([], function () {
     TimelineGroupDescription: 'Gå til tidslinje for prosjektet',
     TriangleLabel: 'Trekant',
     TypeLabel: 'Type',
+    SyncListAddingField: 'Legger til felt {0} i prosjektegenskaper...',
   }
 })

@@ -75,6 +75,7 @@ export type SyncListParams = {
   listName: string
   contentTypeId: string
   properties?: Record<string, string>
+  progressFunc?: (progress: string) => void
 }
 
 export interface ISyncListReturnType extends IListEnsureResult {
