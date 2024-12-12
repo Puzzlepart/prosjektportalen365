@@ -9,6 +9,7 @@ import { useIdeaModuleContext } from '../context'
 export const useDelete = () => {
   const context = useIdeaModuleContext()
   return async (): Promise<void> => {
-    console.log('delete', context)
+    // TODO: Implement the useDelete hook
+    // console.log('delete', context)
   }
 }

@@ -44,8 +44,18 @@ const Lightbulb = bundleIcon(Lightbulb20Filled, Lightbulb20Regular)
 const JobPostings = bundleIcon(NotePin20Filled, NotePin20Regular)
 
 export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
-  const { state, setState, getSelectedIdea, isOpen, renderHamburger, renderStatus, handleToggle, openItems, ignoreFields, fluentProviderId } =
-    useIdeaModule(props)
+  const {
+    state,
+    setState,
+    getSelectedIdea,
+    isOpen,
+    renderHamburger,
+    renderStatus,
+    handleToggle,
+    openItems,
+    ignoreFields,
+    fluentProviderId
+  } = useIdeaModule(props)
 
   return (
     <IdeaModuleContext.Provider value={{ props, state, setState }}>
@@ -57,8 +67,14 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
             <div className={styles.ideaModule}>
               <NavDrawer
                 selectedValue={`nav${state.selectedIdea?.item.Id.toString()}`}
-                defaultSelectedCategoryValue={state.selectedIdea?.item?.processing?.Id ? 'behandlingIdeer' : 'registreringIdeer'}
-                defaultOpenCategories={state.selectedIdea?.item?.processing?.Id ? ['behandlingIdeer'] : ['registreringIdeer']}
+                defaultSelectedCategoryValue={
+                  state.selectedIdea?.item?.processing?.Id ? 'behandlingIdeer' : 'registreringIdeer'
+                }
+                defaultOpenCategories={
+                  state.selectedIdea?.item?.processing?.Id
+                    ? ['behandlingIdeer']
+                    : ['registreringIdeer']
+                }
                 open={isOpen}
                 type='inline'
                 size='small'
@@ -79,7 +95,9 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                     Oversikt
                   </NavItem> */}
                   <NavCategory value='registreringIdeer'>
-                    <NavCategoryItem icon={<Lightbulb />} value='registrering'>Registrerte idéer</NavCategoryItem>
+                    <NavCategoryItem icon={<Lightbulb />} value='registrering'>
+                      Registrerte idéer
+                    </NavCategoryItem>
                     <NavSubItemGroup>
                       {state.ideas.data.items
                         .filter((idea) => !idea.processing)
@@ -103,7 +121,9 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                     Oversikt
                   </NavItem> */}
                   <NavCategory value='behandlingIdeer'>
-                    <NavCategoryItem icon={<JobPostings />} value='behandling'>Idéer i behandling</NavCategoryItem>
+                    <NavCategoryItem icon={<JobPostings />} value='behandling'>
+                      Idéer i behandling
+                    </NavCategoryItem>
                     <NavSubItemGroup>
                       {state.ideas.data.items
                         .filter((idea) => idea.processing)

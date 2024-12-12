@@ -19,21 +19,15 @@ export function useToolbarItems() {
   const menuItems = useMemo<ListMenuItem[]>(
     () =>
       [
-        new ListMenuItem('Ny idé', 'Opprett en ny idé')
-          .setIcon('QuizNew')
-          .setOnClick(() => {
-            createNewStatusReport
-          }),
-        new ListMenuItem('Rediger', 'Rediger idéen')
-          .setIcon('Edit')
-          .setOnClick(() => {
-            console.log('edit')
-          }),
-        new ListMenuItem('Godkjenn', 'Godkjenn idéen')
-          .setIcon('CloudArrowUp')
-          .setOnClick(() => {
-            decideIdea()
-          })
+        new ListMenuItem('Ny idé', 'Opprett en ny idé').setIcon('QuizNew').setOnClick(() => {
+          createNewStatusReport
+        }),
+        new ListMenuItem('Rediger', 'Rediger idéen').setIcon('Edit').setOnClick(() => {
+          // console.log('edit')
+        }),
+        new ListMenuItem('Godkjenn', 'Godkjenn idéen').setIcon('CloudArrowUp').setOnClick(() => {
+          decideIdea()
+        })
       ].filter(Boolean),
     [context.state]
   )
@@ -41,12 +35,9 @@ export function useToolbarItems() {
   const farMenuItems = useMemo<ListMenuItem[]>(
     () =>
       [
-        new ListMenuItem('Slett', 'Slett idéen')
-
-          .setIcon('Delete')
-          .setOnClick(() => {
-            deleteIdea()
-          })
+        new ListMenuItem('Slett', 'Slett idéen').setIcon('Delete').setOnClick(() => {
+          deleteIdea()
+        })
       ].filter(Boolean),
     [context.state]
   )

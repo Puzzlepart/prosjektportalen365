@@ -1,6 +1,5 @@
 import { useIdeaModuleContext } from '../context'
 
-
 /**
  * Hook for setting the decision for ideas. Returns a callback function for setting the decision.
  *
@@ -9,6 +8,7 @@ import { useIdeaModuleContext } from '../context'
 export const useDecision = () => {
   const context = useIdeaModuleContext()
   return async (): Promise<void> => {
-    console.log('decide', context)
+    // TODO: Implement the useDecision hook
+    // console.log('decide', context)
   }
 }
