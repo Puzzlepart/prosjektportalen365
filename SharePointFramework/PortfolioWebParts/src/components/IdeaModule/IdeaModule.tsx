@@ -21,7 +21,6 @@ import {
   NavDrawer,
   NavDrawerBody,
   NavDrawerHeader,
-  NavItem,
   NavSectionHeader,
   NavSubItem,
   NavSubItemGroup,
@@ -39,7 +38,6 @@ import {
 } from '@fluentui/react-icons'
 import { IdeaField } from './IdeaField'
 import { IdeaPhaseBar } from './IdeaPhaseBar'
-import { Commands } from './Commands'
 
 const Dashboard = bundleIcon(Board20Filled, Board20Regular)
 const Lightbulb = bundleIcon(Lightbulb20Filled, Lightbulb20Regular)
@@ -59,21 +57,19 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
             <div className={styles.ideaModule}>
               <NavDrawer
                 selectedValue={`nav${state.selectedIdea?.item.Id.toString()}`}
-                selectedCategoryValue={
-                  state.selectedIdea?.item.processing ? 'behandlingIdeer' : 'registreringIdeer'
-                }
-                openCategories={['registreringIdeer', 'behandlingIdeer']}
+                defaultSelectedCategoryValue={state.selectedIdea?.item?.processing?.Id ? 'behandlingIdeer' : 'registreringIdeer'}
+                defaultOpenCategories={state.selectedIdea?.item?.processing?.Id ? ['behandlingIdeer'] : ['registreringIdeer']}
                 open={isOpen}
                 type='inline'
                 size='small'
-                style={{ width: '320px' }}
+                className={styles.nav}
               >
                 <NavDrawerHeader>
-                  <Tooltip content='Navigation' relationship='label'>
+                  <Tooltip content='Navigasjonsmeny' relationship='label'>
                     {renderHamburger()}
                   </Tooltip>
                 </NavDrawerHeader>
-                <NavDrawerBody>
+                <NavDrawerBody className={styles.navBody}>
                   <AppItemStatic icon={getFluentIcon('Lightbulb')}>Idémodul</AppItemStatic>
                   {/* <NavItem href='#' icon={<Dashboard />} value='total'>
                     Totaloversikt
@@ -83,7 +79,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                     Oversikt
                   </NavItem> */}
                   <NavCategory value='registreringIdeer'>
-                    <NavCategoryItem icon={<Lightbulb />}>Registrerte idéer</NavCategoryItem>
+                    <NavCategoryItem icon={<Lightbulb />} value='registrering'>Registrerte idéer</NavCategoryItem>
                     <NavSubItemGroup>
                       {state.ideas.data.items
                         .filter((idea) => !idea.processing)
@@ -107,7 +103,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                     Oversikt
                   </NavItem> */}
                   <NavCategory value='behandlingIdeer'>
-                    <NavCategoryItem icon={<JobPostings />}>Idéer i behandling</NavCategoryItem>
+                    <NavCategoryItem icon={<JobPostings />} value='behandling'>Idéer i behandling</NavCategoryItem>
                     <NavSubItemGroup>
                       {state.ideas.data.items
                         .filter((idea) => idea.processing)

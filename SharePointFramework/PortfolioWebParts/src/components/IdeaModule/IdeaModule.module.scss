@@ -2,7 +2,6 @@
   margin: 0;
   overflow: hidden;
   display: flex;
-  height: 100vh;
 
   .content {
     flex: 1;
@@ -85,6 +84,15 @@
           max-width: 620px;
         }
       }
+    }
+  }
+
+  .nav {
+    min-height: -webkit-fill-available;
+    width: 340px;
+
+    .navBody {
+      padding-bottom: 20px;
     }
   }
 }
