@@ -16,6 +16,8 @@ export function useToolbarItems() {
   const deleteIdea = useDelete()
   const decideIdea = useDecision()
 
+  // TODO: Finish the implementation of the useToolbarItems hook
+
   const menuItems = useMemo<ListMenuItem[]>(
     () =>
       [
