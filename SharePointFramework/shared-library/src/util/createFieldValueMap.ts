@@ -13,15 +13,15 @@ export const createFieldValueMap = (): Map<string, (value: EditableSPFieldValue)
       'URL',
       ({ value }) => {
         try {
-          const url = value['Url']
-          const description = value['Description']
+          const url = value?.['Url']
+          const description = value?.['Description']
           return { url, description }
         } catch (error) {
           throw new Error(`Feil ved mapping av URL felt: ${error}`)
         }
       }
     ],
-    ['TaxonomyFieldType', ({ value }) => value.split(';').map((v) => ({ key: v, name: v }))],
+    ['TaxonomyFieldType', ({ value }) => value?.split(';').map((v) => ({ key: v, name: v }))],
     [
       'TaxonomyFieldTypeMulti',
       ({ $ }) =>
@@ -32,7 +32,7 @@ export const createFieldValueMap = (): Map<string, (value: EditableSPFieldValue)
     ],
     ['Date', ({ $ }) => new Date($)],
     ['DateTime', ({ $ }) => new Date($)],
-    ['MultiChoice', ({ value }) => value.split(', ')],
+    ['MultiChoice', ({ value }) => value?.split(', ')],
     [
       'User',
       ({ $ }) =>

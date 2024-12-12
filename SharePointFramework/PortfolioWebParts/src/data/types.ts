@@ -16,6 +16,8 @@ import {
 import { IPortfolioAggregationConfiguration, IPortfolioOverviewConfiguration } from '../components'
 import { IPersonaSharedProps } from '@fluentui/react'
 import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
+import { Idea } from 'components/IdeaModule'
+import { IdeaConfigurationModel } from 'models'
 
 export interface IFetchDataForViewItemResult extends ISearchResult {
   SiteId: string
@@ -298,9 +300,9 @@ export interface IPortfolioWebPartsDataAdapter {
   ): Promise<IPersonaSharedProps[]>
 
   /**
-   * Retrieves the provision request settings from the "Provisioning Request Settings" list
+   * Retrieves the configuration from the "Provisioning Request Settings" list
    *
-   * @returns A Promise that resolves to an array containing the provision request settings.
+   * @returns A Promise that resolves to an array containing the configuration.
    */
   getProvisionRequestSettings?(provisionUrl: string): Promise<any[]>
 
@@ -360,4 +362,21 @@ export interface IPortfolioWebPartsDataAdapter {
    *
    */
   siteExists?(siteUrl: string): Promise<boolean>
+
+  /**
+   * Retrieves the configuration from the "Idékonfigurasjon" list
+   *
+   * @returns A Promise that resolves to an array containing the configuration.
+   */
+  getIdeaConfiguration?(
+    listName: string,
+    configurationName: string
+  ): Promise<IdeaConfigurationModel>
+
+  /**
+   * Retrieves the data for the ideas from the "Idéregistrering" list
+   *
+   * @returns A Promise that resolves to an object containing the data for the ideas.
+   */
+  getIdeasData?(configuration: IdeaConfigurationModel): Promise<Idea>
 }

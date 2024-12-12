@@ -17,6 +17,7 @@ export class SPProjectContentColumnItem {
   public GtFieldDataTypeProperties?: string = ''
   public GtFieldLocked?: boolean = false
   public GtDataSourceLevel?: string[] = []
+  public GtIdeaCopyToProcess?: boolean = false
 }
 
 export type ProjectContentColumnData = {
@@ -43,6 +44,7 @@ export class ProjectContentColumn implements IProjectContentColumn {
   public isSorted?: boolean
   public isSortedDescending?: boolean
   public isMultiline?: boolean
+  public ideaCopyToProcess?: boolean
   public data?: ProjectContentColumnData
 
   constructor(item?: SPProjectContentColumnItem) {
@@ -60,6 +62,7 @@ export class ProjectContentColumn implements IProjectContentColumn {
     this.isMultiline = this.dataType === 'note' || this.dataType === 'tags'
     this.minWidth = item?.GtColMinWidth ?? 100
     this.maxWidth = item?.GtColMaxWidth
+    this.ideaCopyToProcess = item?.GtIdeaCopyToProcess
     this.data = {
       isGroupable: this.isGroupable,
       dataTypeProperties: tryParseJson(item?.GtFieldDataTypeProperties, {}),

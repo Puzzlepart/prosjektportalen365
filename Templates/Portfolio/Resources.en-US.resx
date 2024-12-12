@@ -334,6 +334,9 @@
   <data name="View_Cards_DisplayName" xml:space="preserve">
     <value>Card view</value>
   </data>
+  <data name="View_IdeaItems_DisplayName" xml:space="preserve">
+    <value>Idémodul</value>
+  </data>
   <data name="ContentTypes_Group" xml:space="preserve">
     <value>Project Portal content types</value>
   </data>
@@ -543,6 +546,12 @@
   </data>
   <data name="ContentTypes_Idea_Configuration_Element_Description" xml:space="preserve">
     <value>Content type for idea configuration (Idea Processing)</value>
+  </data>
+  <data name="ContentTypes_IdeaColumn_Name" xml:space="preserve">
+    <value>Idekolonne</value>
+  </data>
+  <data name="ContentTypes_IdeaColumn_Description" xml:space="preserve">
+    <value>Innholdstype for idekolonne (kolonnekonfigurasjon)</value>
   </data>
    <data name="ContentTypes_HelpContent_Name" xml:space="preserve">
     <value>Hjelpeinnhold</value>
@@ -2007,10 +2016,10 @@
     <value>Solution proposals for the idea</value>
   </data>
   <data name="SiteFields_GtIdeaUrl_DisplayName" xml:space="preserve">
-    <value>KUR</value>
+    <value>IdeaUrl</value>
   </data>
   <data name="SiteFields_GtIdeaUrl_Description" xml:space="preserve">
-    <value>Concept investigation report (KUR) for the idea</value>
+    <value>IdeaUrl for the idea</value>
   </data>
   <data name="SiteFields_GtIdeaProjectData_DisplayName" xml:space="preserve">
     <value>Project data association</value>
@@ -2137,6 +2146,12 @@
   </data>
   <data name="SiteFields_GtIdeaRegistrationChoices_Description" xml:space="preserve">
     <value>Recommendations are configured as JSON, multiple choices can be added, note that the key must remain the same for the default choices</value>
+  </data>
+  <data name="SiteFields_GtIdeaCopyToProcess_DisplayName" xml:space="preserve">
+    <value>Kopier til behandling</value>
+  </data>
+  <data name="SiteFields_GtIdeaCopyToProcess_Description" xml:space="preserve">
+    <value>Verdien skal kopieres til behandling (kolonne i behandling må matche på visningsnavn eller internt navn, og type.)</value>
   </data>
   <data name="SiteFields_GtBAEndDateOriginal_DisplayName" xml:space="preserve">
     <value>Original handover date</value>
@@ -2671,6 +2686,12 @@
   </data>
   <data name="ClientSidePages_ProjectTimeline_Title" xml:space="preserve">
     <value>Project Timeline</value>
+  </data>
+  <data name="ClientSidePages_IdeaModule_PageName" xml:space="preserve">
+    <value>Idemodul.aspx</value>
+  </data>
+  <data name="ClientSidePages_IdeaModule_Title" xml:space="preserve">
+    <value>Idea module</value>
   </data>
   <data name="SiteFields_GtFieldLocked_DisplayName" xml:space="preserve">
     <value>Låst</value>

@@ -65,7 +65,9 @@
     "react-virtualized-auto-sizer": "~1.0.24",
     "@fluentui/react-datepicker-compat": "~0.4.38",
     "@fluentui/react-motion-preview": "~0.5.20",
-    "react-gauge-component": "~1.2.61"
+    "@fluentui/react-nav-preview": "~0.9.1",
+    "react-gauge-component": "~1.2.61",
+    "@fluentui/react-motion-components-preview": "~0.3.0"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.17.4",

@@ -1,0 +1,9 @@
+<pnp:ClientSidePage PageName="{resource:ClientSidePages_IdeaModule_PageName}" PromoteAsNewsArticle="false" Overwrite="false" Layout="SingleWebPartAppPage" EnableComments="false" Title="{resource:ClientSidePages_IdeaModule_Title}" xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+    <pnp:Sections>
+        <pnp:Section Order="1" Type="OneColumn">
+            <pnp:Controls>
+                <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;properties&quot;:{&quot;configurationList&quot;:&quot;Idékonfigurasjon&quot;,&quot;configuration&quot;:&quot;Standard&quot;}}" ControlId="20f151a9-6891-4408-a6d6-77e749b9e3e7" Order="1" Column="1" />
+            </pnp:Controls>
+        </pnp:Section>
+    </pnp:Sections>
+</pnp:ClientSidePage>
