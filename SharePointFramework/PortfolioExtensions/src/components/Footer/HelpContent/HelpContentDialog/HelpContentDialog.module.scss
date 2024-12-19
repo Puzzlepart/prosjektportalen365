@@ -1,6 +1,6 @@
 .helpContentDialog {
   & > div[role="dialog"] {
-    max-width: 1000px;
+    max-width: fit-content;
     width: calc(100vw - 180px);
     height: calc(100vh - 180px);
   }
