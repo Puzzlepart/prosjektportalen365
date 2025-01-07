@@ -29,6 +29,7 @@ const createChangePhaseDialogReducer = () =>
             state.view = isEmpty(openCheclistItems) ? View.Summary : View.Initial
             state.checklistItems = checklistItems
             state.currentIdx = getNextIndex(checklistItems)
+            state.isChecklistMandatory = payload.context.state.phase.isChecklistMandatory === 'true'
           } else {
             state.view = View.Confirm
           }

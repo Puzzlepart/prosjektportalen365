@@ -90,6 +90,28 @@ export class ProjectPhaseModel {
   }
 
   /**
+   * Is End Phase
+   *
+   * Uses local custom property `EndPhase` from the term (if set, the phase will be visible after the last visible phase)
+   */
+  public get isEndPhase(): boolean {
+    try {
+      return JSON.parse(this.properties.EndPhase)
+    } catch {
+      return false
+    }
+  }
+
+  /**
+   * Is Checklist Mandatory
+   *
+   * Uses local custom property `ChecklistMandatory` from the term (if set, the checklist for the phase will be mandatory)
+   */
+  public get isChecklistMandatory() {
+    return this.properties.ChecklistMandatory
+  }
+
+  /**
    * Returns a string representation of the phase model that can
    * be used to update the term field using the `TextField` connected
    * to the field.

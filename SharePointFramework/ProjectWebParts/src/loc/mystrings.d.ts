@@ -37,6 +37,7 @@ declare interface IProjectWebPartsStrings {
   ChangingPhaseDescription: string
   ChecklistCommentDescription: string
   ChecklistCommentPlaceholder: string
+  ChecklistMandatory: string
   CheckpointDoneTooltip: string
   CheckpointNotRelevantTooltip: string
   CheckpointNotRelevantTooltipCommentEmpty: string

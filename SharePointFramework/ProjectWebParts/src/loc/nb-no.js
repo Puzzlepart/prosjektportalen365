@@ -46,6 +46,7 @@ define([], function () {
     ChangingPhaseDescription: 'Endrer fase til {0}',
     ChecklistCommentDescription: 'Kommentar er obligatorisk om sjekkpunktet skal markeres som "Ikke relevant" eller "Fortsatt åpen".',
     ChecklistCommentPlaceholder: 'Skriv inn en kommentar...',
+    ChecklistMandatory: 'Sjekkpunkter for endring til denne fasen er obligatoriske og kan ikke hoppes over.',
     CheckpointDoneTooltip: 'Sjekkpunktet er utført',
     CheckpointNotRelevantTooltip: 'Sjekkpunktet er ikke relevant',
     CheckpointNotRelevantTooltipCommentEmpty: 'Du kan ikke sette sjekkpunktet som \'Ikke relevant\' uten å legge inn en kommentar.',
