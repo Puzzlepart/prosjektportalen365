@@ -28,9 +28,16 @@ export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
                 <ul className={styles.phaseList}>
                   {context.state.data.phases
                     .filter((p) => p.isVisible)
-                    .map((phase, idx) => (
-                      <ProjectPhase key={idx} phase={phase} />
-                    ))}
+                    .map((phase, idx, phases) => {
+                      if (
+                        phase.isEndPhase &&
+                        context.state.phase?.id !== phases[phases.length - 2]?.id
+                      ) {
+                        return null
+                      }
+
+                      return <ProjectPhase key={idx} phase={phase} />
+                    })}
                 </ul>
                 <ChangePhaseDialog />
               </>

@@ -53,6 +53,7 @@ export function useProjectPhase(props: IProjectPhaseProps) {
     className: classNames.join(' '),
     subTextProps,
     context,
-    phasesLength
+    phasesLength,
+    isCurrentPhase
   } as const
 }
