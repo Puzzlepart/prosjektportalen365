@@ -61,6 +61,7 @@ $project-phase-padding: 0.25em;
   &.isCurrentPhase {
     background: $project-current-color;
     border-color: $project-current-color;
+    font-size: 5rem;
     font-weight: 600;
 
     &::after {
@@ -169,6 +170,7 @@ $project-phase-padding: 0.25em;
   &.isCurrentPhase {
     background: $project-current-color-hover;
     border-color: $project-current-color-hover;
+    font-size: 5rem;
 
     &::after {
       border-top-color: inherit;

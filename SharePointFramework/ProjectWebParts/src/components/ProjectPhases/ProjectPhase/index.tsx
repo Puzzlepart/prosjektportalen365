@@ -5,8 +5,16 @@ import { Popover, PopoverSurface, PopoverTrigger } from '@fluentui/react-compone
 import { ProjectPhasePopover } from './ProjectPhasePopover'
 
 export const ProjectPhase: FC<IProjectPhaseProps> = (props) => {
-  const { targetRef, handleOpenChange, open, className, subTextProps, context, phasesLength } =
-    useProjectPhase(props)
+  const {
+    targetRef,
+    handleOpenChange,
+    open,
+    className,
+    subTextProps,
+    context,
+    phasesLength,
+    isCurrentPhase
+  } = useProjectPhase(props)
 
   const altPadding = {
     paddingRight: '.125em',
