@@ -18,26 +18,29 @@ export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
   const { context, toasterId } = useProjectStatus(props)
 
   return (
-    <ProjectStatusContext.Provider value={context}>
-      <Fluent>
-        <div className={styles.root}>
-          <ScrollablePane>
-            <div className={styles.header}>
-              <Header />
-              <PublishedStatus />
-            </div>
-            <Commands />
-            <SectionTabs />
-            <UserMessages />
-            <div className={styles.container}>
-              <Sections />
-            </div>
-          </ScrollablePane>
-        </div>
-        <EditStatusPanel />
-        <Toaster id={toasterId} />
-      </Fluent>
-    </ProjectStatusContext.Provider>
+    <>
+      <ProjectStatusContext.Provider value={context}>
+        <Fluent>
+          <div className={styles.root}>
+            <ScrollablePane>
+              <div className={styles.header}>
+                <Header />
+                <PublishedStatus />
+              </div>
+              <Commands />
+              <SectionTabs />
+              <UserMessages />
+              <div className={styles.container}>
+                <Sections />
+              </div>
+            </ScrollablePane>
+          </div>
+          <EditStatusPanel />
+          <Toaster id={toasterId} />
+        </Fluent>
+      </ProjectStatusContext.Provider>
+      <Toaster id={toasterId} />
+    </>
   )
 }
 
