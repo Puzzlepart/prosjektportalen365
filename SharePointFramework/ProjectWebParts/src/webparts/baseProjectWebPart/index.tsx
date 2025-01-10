@@ -10,7 +10,6 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorBoundaryFallback } from './ErrorBoundary'
 import React from 'react'
 import { SiteContext } from 'pp365-shared-library'
-import { Toaster } from '@fluentui/react-components'
 
 Logger.subscribe(ConsoleListener())
 Logger.activeLogLevel = sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning

@@ -10,7 +10,9 @@ import { CLOSE_PANEL, SELECT_REPORT } from '../reducer'
 export function useEditStatusPanelSubmit(): ICustomEditPanelSubmitProps {
   const context = useProjectStatusContext()
   const { selectedReport } = context.state
-  const [state, setState] = useState<Pick<ICustomEditPanelSubmitProps, 'error' | 'saveProgressText'>>({
+  const [state, setState] = useState<
+    Pick<ICustomEditPanelSubmitProps, 'error' | 'saveProgressText'>
+  >({
     error: null,
     saveProgressText: null
   })
@@ -32,6 +34,6 @@ export function useEditStatusPanelSubmit(): ICustomEditPanelSubmitProps {
 
   return {
     ...state,
-    onSubmit,
+    onSubmit
   }
 }
