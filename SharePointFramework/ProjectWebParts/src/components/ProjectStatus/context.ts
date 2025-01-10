@@ -8,7 +8,6 @@ export interface IProjectStatusContext {
   props: IProjectStatusProps
   state: IProjectStatusState
   dispatch?: React.Dispatch<AnyAction>
-  testToast?: () => void
 }
 
 export const ProjectStatusContext = createContext<IProjectStatusContext>(null)
