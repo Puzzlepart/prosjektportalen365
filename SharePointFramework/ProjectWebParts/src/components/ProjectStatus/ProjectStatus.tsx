@@ -12,9 +12,10 @@ import { PublishedStatus } from './PublishedStatus'
 import { UserMessages } from './UserMessages/UserMessages'
 import { SectionTabs } from './SectionTabs'
 import { ScrollablePane } from '@fluentui/react'
+import { Toaster } from '@fluentui/react-components'
 
 export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
-  const { context } = useProjectStatus(props)
+  const { context, toasterId } = useProjectStatus(props)
 
   return (
     <ProjectStatusContext.Provider value={context}>
@@ -34,6 +35,7 @@ export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
           </ScrollablePane>
         </div>
         <EditStatusPanel />
+        <Toaster id={toasterId} />
       </Fluent>
     </ProjectStatusContext.Provider>
   )

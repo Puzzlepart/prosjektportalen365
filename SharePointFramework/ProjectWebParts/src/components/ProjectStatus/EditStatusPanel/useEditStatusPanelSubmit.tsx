@@ -1,5 +1,6 @@
-import { ICustomEditPanelSubmitProps } from 'pp365-shared-library'
-import { useState } from 'react'
+import { Toast, ToastBody, ToastTitle } from '@fluentui/react-components'
+import { ICustomEditPanelSubmitProps, parseErrorStack } from 'pp365-shared-library'
+import React, { useState } from 'react'
 import SPDataAdapter from '../../../data'
 import { useProjectStatusContext } from '../context'
 import { CLOSE_PANEL, SELECT_REPORT } from '../reducer'
@@ -18,12 +19,18 @@ export function useEditStatusPanelSubmit(): ICustomEditPanelSubmitProps {
   return {
     ...state,
     onSubmit: async ({ properties }) => {
-      const updatedReport = await SPDataAdapter.portalDataService.updateStatusReport(
-        selectedReport,
-        properties
-      )
-      context.dispatch(SELECT_REPORT({ report: updatedReport }))
-      context.dispatch(CLOSE_PANEL())
+      try {
+        const updatedReport = await SPDataAdapter.portalDataService.updateStatusReport(
+          selectedReport,
+          properties
+        )
+        context.dispatch(SELECT_REPORT({ report: updatedReport }))
+        context.dispatch(CLOSE_PANEL())
+      } catch (error) {
+        const e = parseErrorStack(error.message)
+        console.log(e)
+        context.testToast()
+      }
     }
   }
 }
