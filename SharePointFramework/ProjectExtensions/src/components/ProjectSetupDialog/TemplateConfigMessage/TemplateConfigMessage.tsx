@@ -10,10 +10,7 @@ export const TemplateConfigMessage: FC<ITemplateConfigMessageProps> = (props) =>
     <div className={styles.root}>
       {messages.map((message, index) => (
         <div key={index} hidden={message.hidden}>
-          <UserMessage
-            key={index}
-            text={message.text}
-            intent={message.intent} />
+          <UserMessage key={index} text={message.text} intent={message.intent} />
         </div>
       ))}
     </div>

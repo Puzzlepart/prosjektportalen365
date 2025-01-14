@@ -134,5 +134,5 @@ export enum ProjectSetupValidation {
    * 365 group. This will cause issues
    * provisioning Planner resources.
    */
-  UserNotGroupMember,
+  UserNotGroupMember
 }
