@@ -139,6 +139,7 @@ declare interface IProjectExtensionsStrings {
   SummaryMessage: string
   SyncLocalProjectPropertiesListText: string
   TemplateConfigMessage: string
+  PlannerMemberWarningMessage: string
   TemplateLibrarySelectModalTitle: string
   TemplateSelectDialogInfoText: string
   TemplateSelectDialogSubmitButtonText: string
