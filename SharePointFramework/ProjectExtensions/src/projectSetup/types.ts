@@ -127,5 +127,12 @@ export enum ProjectSetupValidation {
   /**
    * The current user is not site admin
    */
-  NotSiteAdmin
+  NotSiteAdmin,
+
+  /**
+   * The current user is an owner of the group,
+   * but not a member. This will cause issues
+   * provisioning Planner resources.
+   */
+  UserIsOwnerOnly,
 }

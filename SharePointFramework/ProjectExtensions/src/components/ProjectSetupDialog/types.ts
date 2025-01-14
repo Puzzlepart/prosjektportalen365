@@ -1,5 +1,5 @@
 import { ContentConfig, ProjectExtension, ProjectTemplate } from 'pp365-shared-library'
-import { IProjectSetupData } from 'projectSetup/types'
+import { IProjectSetupData, ProjectSetupValidation } from 'projectSetup/types'
 import { FC, HTMLProps } from 'react'
 import { IBaseDialogProps } from '../@BaseDialog/types'
 
@@ -23,6 +23,11 @@ export interface IProjectSetupDialogProps extends IBaseDialogProps {
    * Tasks to execute
    */
   tasks?: string[]
+
+  /**
+   * Validation for the project setup
+   */
+  validation?: ProjectSetupValidation
 }
 
 export interface IProjectSetupDialogState {

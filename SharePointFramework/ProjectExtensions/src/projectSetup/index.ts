@@ -50,6 +50,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     ProgressDialog: getId('progressdialog'),
     TemplateSelectDialog: getId('templateselectdialog')
   }
+  private _validation: ProjectSetupValidation
 
   @override
   public async onInit(): Promise<void> {
@@ -57,7 +58,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
 
     try {
       this._isSetup = await this._isProjectSetup()
-
+      this._validation = await this._validateProjectSetup()
       // eslint-disable-next-line default-case
       switch (this._validation) {
         case ProjectSetupValidation.NotSiteAdmin: {
@@ -107,6 +108,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
               strings.ProjectAlreadySetupStack
             )
           }
+        }
+        case ProjectSetupValidation.UserIsOwnerOnly: {
+
         }
       }
 
@@ -166,7 +170,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       await this._startSetup(taskParams, data)
 
       if (!stringIsNullOrEmpty(this.properties.forceTemplate)) {
-        await this.recreateNavMenu()
+        await this.initializeQuickLaunchMenu()
         await this.sp.web.lists
           .getByTitle(strings.ProjectPropertiesListName)
           .items.getById(1)
@@ -186,7 +190,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Adds the old custom navigation nodes to the quick launch menu
    */
-  private async recreateNavMenu() {
+  private async initializeQuickLaunchMenu() {
     const oldNodes: IMenuNode[] = await JSON.parse(localStorage.getItem('pp_navigationNodes'))
     const navigationNodes = _.uniq([...oldNodes])
     for await (const node of navigationNodes) {
@@ -257,7 +261,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
                 strings.SetupAbortedText
               )
             )
-          }
+          },
+          validation: this._validation
         })
         render(element, placeholder)
       }
@@ -488,9 +493,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Get validation
    */
-  private get _validation(): ProjectSetupValidation {
+  private async _validateProjectSetup(): Promise<ProjectSetupValidation> {
     const { isSiteAdmin, groupId, hubSiteId, siteId } = this.context.pageContext.legacyPageContext
-
+    return ProjectSetupValidation.UserIsOwnerOnly
     if (!isSiteAdmin) return ProjectSetupValidation.NotSiteAdmin
     if (!groupId) return ProjectSetupValidation.NoGroupId
     if (this.context.pageContext.web.language !== 1044)

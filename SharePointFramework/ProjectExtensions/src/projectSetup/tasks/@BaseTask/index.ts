@@ -72,6 +72,15 @@ export abstract class BaseTask implements IBaseTask {
   protected _log(message: string, data: any, level: LogLevel) {
     Logger.log({ message, data, level })
   }
+
+  /**
+   * Validate task and parameters
+   *
+   * @param _params Task parameters
+   */
+  public validate(_params: IBaseTaskParams): boolean {
+    return true
+  }
 }
 
 export * from './types'
