@@ -16,32 +16,31 @@ export function useTemplateConfigMessage({ section }: ITemplateConfigMessageProp
   const templateHasExtensions = !isEmpty(context.state.selectedTemplate?.extensions)
   const templateHasContentConfig = !isEmpty(context.state.selectedTemplate?.contentConfig)
 
-  const messages: IUserMessageProps[] = []
-
-  messages.push({
-    text: format(
-      strings.TemplateConfigMessage,
-      context.state.selectedTemplate?.text,
-      [
-        templateHasExtensions && strings.ExtensionsSectionHeaderText,
-        templateHasContentConfig && strings.ContentConfigSectionHeaderText
-      ]
-        .filter(Boolean)
-        .join(' og ')
-        .toLowerCase()
-    ),
-    hidden: !(
-      (section === 'ExtensionsSection' && templateHasExtensions) ||
-      (section === 'ContentConfigSection' && templateHasContentConfig) ||
-      (section === 'TemplateSelector' && (templateHasExtensions || templateHasContentConfig))
-    )
-  })
-
-  messages.push({
-    text: strings.PlannerMemberWarningMessage,
-    intent: 'warning',
-    hidden: context.props.validation !== ProjectSetupValidation.UserNotGroupMember
-  })
+  const messages: IUserMessageProps[] = [
+    {
+      text: strings.PlannerMemberWarningMessage,
+      intent: 'warning',
+      hidden: context.props.validation !== ProjectSetupValidation.UserNotGroupMember
+    },
+    {
+      text: format(
+        strings.TemplateConfigMessage,
+        context.state.selectedTemplate?.text,
+        [
+          templateHasExtensions && strings.ExtensionsSectionHeaderText,
+          templateHasContentConfig && strings.ContentConfigSectionHeaderText
+        ]
+          .filter(Boolean)
+          .join(' og ')
+          .toLowerCase()
+      ),
+      hidden: !(
+        (section === 'ExtensionsSection' && templateHasExtensions) ||
+        (section === 'ContentConfigSection' && templateHasContentConfig) ||
+        (section === 'TemplateSelector' && (templateHasExtensions || templateHasContentConfig))
+      )
+    }
+  ]
 
   return messages
 }
