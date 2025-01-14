@@ -130,9 +130,9 @@ export enum ProjectSetupValidation {
   NotSiteAdmin,
 
   /**
-   * The current user is an owner of the group,
-   * but not a member. This will cause issues
+   * The current user is not a member of the Microsoft
+   * 365 group. This will cause issues
    * provisioning Planner resources.
    */
-  UserIsOwnerOnly,
+  UserNotGroupMember,
 }

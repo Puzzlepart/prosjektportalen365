@@ -95,6 +95,7 @@ define([], function () {
         SummaryMessage: '{0} document(s) were copied to the project.',
         SyncLocalProjectPropertiesListText: 'Synchronizing list for project properties',
         TemplateConfigMessage: 'The selected project template **{0}** contains configuration for {1}. These are selected by default.',
+        PlannerMemberWarningMessage: 'You must be a member of the Microsoft 365 group to configure Planner. Please add yourself as a member or ask an administrator and try again.',
         TemplateLibrarySelectModalTitle: 'Hent dokumentmal',
         TemplateSelectDialogInfoText: 'Setting up the project takes about 10 minutes. Do not close the browser window while the site is being set up. It is not recommended to set up several sites at the same time.',
         TemplateSelectDialogSubmitButtonText: 'Set up the site',

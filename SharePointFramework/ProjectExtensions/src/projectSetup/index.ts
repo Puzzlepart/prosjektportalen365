@@ -8,7 +8,7 @@ import { IMenuNode } from '@pnp/sp/navigation'
 import { format, getId } from '@uifabric/utilities'
 import * as strings from 'ProjectExtensionsStrings'
 import { SPDataAdapter } from 'data'
-import { default as MSGraphHelper } from 'msgraph-helper'
+import msgraph from 'msgraph-helper'
 import {
   ContentConfig,
   ListLogger,
@@ -55,7 +55,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   @override
   public async onInit(): Promise<void> {
     this.sp = createSpfiInstance(this.context)
-
+    await msgraph.Init(this.context.msGraphClientFactory)
     try {
       this._isSetup = await this._isProjectSetup()
       this._validation = await this._validateProjectSetup()
@@ -108,9 +108,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
               strings.ProjectAlreadySetupStack
             )
           }
-        }
-        case ProjectSetupValidation.UserIsOwnerOnly: {
-
         }
       }
 
@@ -431,12 +428,10 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   /**
-   * Fetch data from SharePoint and initializes the `MSGraphHelper`. This is
-   * called when the component is first loaded.
+   * Fetch data from SharePoint.
    */
   private async _fetchData(): Promise<IProjectSetupData> {
     try {
-      await MSGraphHelper.Init(this.context.msGraphClientFactory)
       const data: IProjectSetupData = {}
       this._portalDataService = await new PortalDataService().configure({
         spfxContext: this.context
@@ -495,7 +490,11 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    */
   private async _validateProjectSetup(): Promise<ProjectSetupValidation> {
     const { isSiteAdmin, groupId, hubSiteId, siteId } = this.context.pageContext.legacyPageContext
-    return ProjectSetupValidation.UserIsOwnerOnly
+
+    const members = await msgraph.Get<any[]>(`groups/${groupId}/members`)
+    if (!members.some(({ mail }) => mail === this.context.pageContext.user.email)) {
+      return ProjectSetupValidation.UserNotGroupMember
+    }
     if (!isSiteAdmin) return ProjectSetupValidation.NotSiteAdmin
     if (!groupId) return ProjectSetupValidation.NoGroupId
     if (this.context.pageContext.web.language !== 1044)
