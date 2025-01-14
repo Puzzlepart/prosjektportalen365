@@ -1,10 +1,10 @@
 import { format } from '@fluentui/react'
+import { IUserMessageProps } from 'pp365-shared-library'
 import strings from 'ProjectExtensionsStrings'
 import { isEmpty } from 'underscore'
+import { ProjectSetupValidation } from '../../../projectSetup/types'
 import { useProjectSetupDialogContext } from '../context'
 import { ITemplateConfigMessageProps } from './types'
-import { IUserMessageProps } from 'pp365-shared-library'
-import { ProjectSetupValidation } from 'projectSetup/types'
 
 /**
  * Component logic hook for `TemplateConfigMessage`
@@ -38,9 +38,9 @@ export function useTemplateConfigMessage({ section }: ITemplateConfigMessageProp
   })
 
   messages.push({
-    text: 'Du må være medlem av prosjektgruppen for å kunne konfigurere Planner. Vennligst legg deg selv til som medlem eller spør en administrator og prøv deretter igjen.',
+    text: strings.PlannerMemberWarningMessage,
     intent: 'warning',
-    hidden: context.props.validation !== ProjectSetupValidation.UserIsOwnerOnly
+    hidden: context.props.validation !== ProjectSetupValidation.UserNotGroupMember
   })
 
   return messages
