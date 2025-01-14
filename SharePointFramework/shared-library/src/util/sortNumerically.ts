@@ -7,14 +7,14 @@ import { getObjectValue } from '.'
  * @param b Object b
  * @param ascending Sort ascending
  * @param property Property
- * @param currency Currency
+ * @param symbol Symbol to remove from string
  */
 export function sortNumerically<T>(
   a: T,
   b: T,
   ascending?: boolean,
   property?: string,
-  currency?: string
+  symbol?: string
 ): number {
   const aValue = getObjectValue(a, property, '-') || a
   const bValue = getObjectValue(b, property, '-') || b
@@ -26,15 +26,15 @@ export function sortNumerically<T>(
     return -1
   }
 
-  if (currency && typeof aValue === 'string' && typeof bValue === 'string') {
-    const aCurrencyValue = parseFloat(aValue.replace(currency, ''))
-    const bCurrencyValue = parseFloat(bValue.replace(currency, ''))
+  if (symbol && typeof aValue === 'string' && typeof bValue === 'string') {
+    const aFloatValue = parseFloat(aValue.replace(symbol, ''))
+    const bFloatValue = parseFloat(bValue.replace(symbol, ''))
 
-    if (!isNaN(aCurrencyValue) && !isNaN(bCurrencyValue)) {
-      if (aCurrencyValue < bCurrencyValue) {
+    if (!isNaN(aFloatValue) && !isNaN(bFloatValue)) {
+      if (aFloatValue < bFloatValue) {
         return ascending ? -1 : 1
       }
-      if (aCurrencyValue > bCurrencyValue) {
+      if (aFloatValue > bFloatValue) {
         return ascending ? 1 : -1
       }
     }

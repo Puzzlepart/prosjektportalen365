@@ -20,7 +20,6 @@ import {
   EXECUTE_SEARCH,
   ON_FILTER_CHANGED,
   SELECTION_CHANGED,
-  TOGGLE_EDIT_VIEW_COLUMNS_PANEL,
   SET_GROUP_BY,
   SET_SORT,
   SET_VIEW_FORM_PANEL,
@@ -29,6 +28,7 @@ import {
   TOGGLE_COLUMN_CONTEXT_MENU,
   TOGGLE_COLUMN_FORM_PANEL,
   TOGGLE_COMPACT,
+  TOGGLE_EDIT_VIEW_COLUMNS_PANEL,
   TOGGLE_FILTER_PANEL
 } from './actions'
 import { IPortfolioOverviewReducerParams } from './types'
@@ -149,18 +149,32 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
             return isSortedDescending ? $a - $b : $b - $a
           })
         } else {
-          if (payload.column.dataType === 'currency') {
-            state.items = state.items.sort((a, b) =>
-              sortNumerically(a, b, isSortedDescending, payload.column.fieldName, 'kr ')
-            )
-          } else if (payload.column.dataType === 'number') {
-            state.items = state.items.sort((a, b) =>
-              sortNumerically(a, b, isSortedDescending, payload.column.fieldName)
-            )
-          } else {
-            state.items.sort((a, b) =>
-              sortAlphabetically(a, b, isSortedDescending, payload.column.fieldName)
-            )
+          switch (payload.column.dataType) {
+            case 'date':
+              state.items = state.items.sort((a, b) =>
+                sortNumerically(a, b, isSortedDescending, payload.column.fieldName)
+              )
+              break
+            case 'number':
+              state.items = state.items.sort((a, b) =>
+                sortNumerically(a, b, isSortedDescending, payload.column.fieldName)
+              )
+              break
+            case 'currency':
+              state.items = state.items.sort((a, b) =>
+                sortNumerically(a, b, isSortedDescending, payload.column.fieldName, 'kr ')
+              )
+              break
+            case 'percentage':
+              state.items = state.items.sort((a, b) =>
+                sortNumerically(a, b, isSortedDescending, payload.column.fieldName, '%')
+              )
+              break
+            default:
+              state.items = state.items.sort((a, b) =>
+                sortAlphabetically(a, b, isSortedDescending, payload.column.fieldName)
+              )
+              break
           }
         }
         state.sortBy = _.pick(payload, ['column', 'customSort'])
