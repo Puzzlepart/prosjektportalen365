@@ -165,9 +165,9 @@ export const createPortfolioAggregationReducer = (
     ) => {
       state.columnContextMenu = payload
         ? {
-            column: payload.column,
-            target: payload.target as any
-          }
+          column: payload.column,
+          target: payload.target as any
+        }
         : null
     },
     [SET_ALL_COLLAPSED.type]: (state, { payload }: ReturnType<typeof SET_ALL_COLLAPSED>) => {
@@ -227,18 +227,27 @@ export const createPortfolioAggregationReducer = (
         state.groupBy = null
         state.groups = null
       }
-      if (payload.column.dataType === 'currency') {
-        state.items = state.items.sort((a, b) =>
-          sortNumerically(a, b, isSortedDescending, payload.column.fieldName, 'kr ')
-        )
-      } else if (payload.column.dataType === 'number') {
-        state.items = state.items.sort((a, b) =>
-          sortNumerically(a, b, isSortedDescending, payload.column.fieldName)
-        )
-      } else {
-        state.items.sort((a, b) =>
-          sortAlphabetically(a, b, isSortedDescending, payload.column.fieldName)
-        )
+      switch (payload.column.dataType) {
+        case 'currency':
+          state.items = state.items.sort((a, b) =>
+            sortNumerically(a, b, isSortedDescending, payload.column.fieldName, 'kr ')
+          )
+          break
+        case 'number':
+          state.items = state.items.sort((a, b) =>
+            sortNumerically(a, b, isSortedDescending, payload.column.fieldName)
+          )
+          break
+        case 'percentage':
+          state.items = state.items.sort((a, b) =>
+            sortNumerically(a, b, isSortedDescending, payload.column.fieldName, '%')
+          )
+          break
+        default:
+          state.items.sort((a, b) =>
+            sortAlphabetically(a, b, isSortedDescending, payload.column.fieldName)
+          )
+          break
       }
       state.columns = [...state.columns].map((col) => {
         col.isSorted = col.key === payload.column.key
