@@ -61,5 +61,7 @@ define([], function () {
     TriangleLabel: 'Trekant',
     TypeLabel: 'Type',
     SyncListAddingField: 'Legger til felt {0} i prosjektegenskaper...',
+    BooleanYes: 'Ja',
+    BooleanNo: 'Nei',
   }
 })
