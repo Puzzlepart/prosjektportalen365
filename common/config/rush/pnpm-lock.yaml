@@ -107,7 +107,6 @@ dependencies:
   shade-blend-color: 1.0.0
   smoothscroll-polyfill: 0.4.4
   sp-entityportal-service: 2.3.0
-  sp-js-provisioning: 1.2.4_5bb3879ba087c0ef402ac2f0f80f9922
   spfx-jsom: 0.6.6_5bb3879ba087c0ef402ac2f0f80f9922
   tslib: 2.3.1
   typescript: 4.5.5
@@ -22684,22 +22683,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-hnpz2vI8IpTFy7bMfjEMBXlFNLtYhYxxo4Q7FIY1C4JgyJ9S+Ogz5JaqhN4+eCM6nXwKMsCU3zIUhC/WIXd/og==
-  /sp-js-provisioning/1.2.4_5bb3879ba087c0ef402ac2f0f80f9922:
-    dependencies:
-      '@pnp/core': 3.17.0
-      '@pnp/logging': 3.17.0
-      '@pnp/nodejs': 3.17.0
-      '@pnp/queryable': 3.17.0
-      '@pnp/sp': 3.17.0
-      object.omit: 3.0.0
-      spfx-jsom: 0.6.6_5bb3879ba087c0ef402ac2f0f80f9922
-      xml-js: 1.6.11
-    dev: false
-    peerDependencies:
-      '@types/react': '*'
-      '@types/react-dom': '*'
-    resolution:
-      integrity: sha512-v8/bNIB294t9F4+U/e/0xQ85aqDCEOqUl92x0fW21QVsF/I5It5eWDJQnsNBaAMkFHaDg4v9O2z0U/3GTFLmnw==
   /sp-js-provisioning/1.2.5_5bb3879ba087c0ef402ac2f0f80f9922:
     dependencies:
       '@pnp/core': 3.17.0
@@ -22716,6 +22699,22 @@ packages:
       '@types/react-dom': '*'
     resolution:
       integrity: sha512-4HEUoYQP5joXLCLLdQCAoPMrEN0OcPeTywQeUmGZZc2Jd8HfGkMegXkwb8i/bwyip4qmreUN70MPO63cRoQtTQ==
+  /sp-js-provisioning/1.2.6-3_5bb3879ba087c0ef402ac2f0f80f9922:
+    dependencies:
+      '@pnp/core': 3.17.0
+      '@pnp/logging': 3.17.0
+      '@pnp/nodejs': 3.17.0
+      '@pnp/queryable': 3.17.0
+      '@pnp/sp': 3.17.0
+      object.omit: 3.0.0
+      spfx-jsom: 0.6.6_5bb3879ba087c0ef402ac2f0f80f9922
+      xml-js: 1.6.11
+    dev: false
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+    resolution:
+      integrity: sha512-LZbHxmDafUz5MeEXkIJ3yYZ7JkUcYyjaqCz0mfKRk8Ems4JoiDY1XIgexMq24eQlHGx7qSX65Ioadrt2VsloLA==
   /space-separated-tokens/2.0.2:
     dev: false
     resolution:
@@ -25723,7 +25722,7 @@ packages:
       react-markdown: 8.0.7_4865287ef69aa4f3fc3f709d3560286e
       rehype-raw: 6.1.1
       sp-entityportal-service: 2.3.0
-      sp-js-provisioning: 1.2.5_5bb3879ba087c0ef402ac2f0f80f9922
+      sp-js-provisioning: 1.2.6-3_5bb3879ba087c0ef402ac2f0f80f9922
       spfx-jsom: 0.6.6_5bb3879ba087c0ef402ac2f0f80f9922
       tslib: 2.3.1
       typescript: 4.5.5
@@ -25734,7 +25733,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectextensions'
     resolution:
-      integrity: sha512-DkG4Nf9zDt+VX+KAb4teLGayT3d6PyCZCepTq6rvVfZLR+fKm5jvFVPRe5nXnhpWsgSnhsdEveaJqPk9lP9TJA==
+      integrity: sha512-XV+O9xuh+E4f6RMvnuh+2bPsRHKW2bcCy5d/FmDg/O4jDlxT3hYuFvNI0In7RiqjXUM1Y2O+pszyy3Benu5XTA==
       tarball: file:projects/pp365-projectextensions.tgz
     version: 0.0.0
   file:projects/pp365-projectwebparts.tgz:
@@ -25821,7 +25820,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectwebparts'
     resolution:
-      integrity: sha512-gqFnkHXd3BDKgHQvDmyrw/KJNXLwWQCfriD54abAbFVihz3RCqwLisWGo7xO4V/t6xbzLgze/i8QwFMzbW7sYQ==
+      integrity: sha512-sKnz17F+SQ/cJIo/CeiRvNAlfdKqZoErzVus90UQwU9ntwiMRzCprvmQ2a8wHL1PNj8Ab1KHrj3dfvUogcWFSA==
       tarball: file:projects/pp365-projectwebparts.tgz
     version: 0.0.0
   file:projects/pp365-shared-library.tgz_interactjs@1.6.2:
@@ -26050,7 +26049,6 @@ specifiers:
   shade-blend-color: ~1.0.0
   smoothscroll-polyfill: ~0.4.4
   sp-entityportal-service: 2.3.0
-  sp-js-provisioning: 1.2.4
   spfx-jsom: 0.6.6
   tslib: 2.3.1
   typescript: 4.5.5

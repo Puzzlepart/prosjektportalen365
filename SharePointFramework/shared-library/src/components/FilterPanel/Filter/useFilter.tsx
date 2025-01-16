@@ -39,11 +39,12 @@ export function useFilter(props: IFilterProps) {
    * Render filter items
    */
   const renderItems = () => {
-    return state.items.map((props, idx) => (
+    return state.items.map((item, idx) => (
       <FilterItem
         key={idx}
-        {...props}
-        onChange={(_event, { checked }) => onChange(props, checked as boolean)}
+        {...item}
+        column={props.column}
+        onChange={(_event, { checked }) => onChange(item, checked as boolean)}
       />
     ))
   }
