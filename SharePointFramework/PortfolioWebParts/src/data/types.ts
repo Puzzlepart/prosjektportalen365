@@ -46,10 +46,12 @@ export interface IPortfolioWebPartsDataAdapter {
    *
    * @param spfxContext SPFx context (optional)
    * @param configuration Configuration for data adapter (optional)
+   * @param portfolio Portfolio instance (optional)
    */
   configure(
     spfxContext?: WebPartContext,
-    configuration?: any
+    configuration?: any,
+    portfolio?: PortfolioInstance
   ): Promise<IPortfolioWebPartsDataAdapter | void>
 
   /**
@@ -96,7 +98,8 @@ export interface IPortfolioWebPartsDataAdapter {
   ): Promise<{ charts: any; chartData: any; contentTypes: any }>
 
   /**
-   * Get portfolio configuration from SharePoint lists.
+   * Get portfolio configuration from SharePoint lists. Optionally from
+   * a specific portfolio instance.
    *
    * This includes:
    * - `columns` - Project columns
@@ -107,7 +110,7 @@ export interface IPortfolioWebPartsDataAdapter {
    * - `columnUrls` - Project columns list form URLs
    * - `userCanAddViews` - User can add portfolio views
    */
-  getPortfolioConfig?(): Promise<IPortfolioOverviewConfiguration>
+  getPortfolioConfig?(portfolio?: PortfolioInstance): Promise<IPortfolioOverviewConfiguration>
 
   /**
    * Get aggregated list config for the given category.
@@ -379,4 +382,13 @@ export interface IPortfolioWebPartsDataAdapter {
    * @returns A Promise that resolves to an object containing the data for the ideas.
    */
   getIdeasData?(configuration: IdeaConfigurationModel): Promise<Idea>
+}
+
+export type PortfolioInstance = {
+  uniqueId: string
+  title: string
+  url: string
+  columnsListName: string
+  columnConfigListName: string
+  viewsListName: string
 }
