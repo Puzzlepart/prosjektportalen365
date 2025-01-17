@@ -86,7 +86,10 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * @param expire Expire date for the hub site ID (optional with default of 1 year)
    */
   private async onInit(url?: string, expire: Date = dateAdd(new Date(), 'year', 1)): Promise<void> {
-    Logger.write(`(PortalDataService) (onInit) Initializing PortalDataService instance with URL ${url}`, LogLevel.Info)
+    Logger.write(
+      `(PortalDataService) (onInit) Initializing PortalDataService instance with URL ${url}`,
+      LogLevel.Info
+    )
     if (url) {
       this.url = url
       this._spPortal = spfi(this.url).using(AssignFrom(this._sp.web))
@@ -221,7 +224,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   /**
    * Get project columns from the project columns list in the portfolio site.
    * Optionally override the list name with the `listName` parameter.
-   * 
+   *
    * @param listName Optional list name for overriding the default list name
    */
   public async getProjectColumns(listName?: string): Promise<ProjectColumn[]> {
@@ -339,8 +342,8 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   }
 
   /**
-   * Get project column configuration using `DefaultCaching`. 
-   * 
+   * Get project column configuration using `DefaultCaching`.
+   *
    * @param listName Optional list name for overriding the default list name
    */
   public async getProjectColumnConfig(listName?: string): Promise<ProjectColumnConfig[]> {
@@ -407,9 +410,9 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     const urls = await this._getList(list, listName)
       .select('DefaultNewFormUrl', 'DefaultEditFormUrl')
       .expand('DefaultNewFormUrl', 'DefaultEditFormUrl')<{
-        DefaultNewFormUrl: string
-        DefaultEditFormUrl: string
-      }>()
+      DefaultNewFormUrl: string
+      DefaultEditFormUrl: string
+    }>()
     return {
       defaultNewFormUrl: makeUrlAbsolute(urls.DefaultNewFormUrl),
       defaultEditFormUrl: makeUrlAbsolute(urls.DefaultEditFormUrl)
@@ -505,7 +508,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
           fieldsAdded.push(field)
         }
         await executeQuery(jsomContext)
-      } catch (error) { }
+      } catch (error) {}
     }
     try {
       const templateParametersField = spList
@@ -517,7 +520,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         )
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
-    } catch { }
+    } catch {}
     if (ensureList.created && params.properties) {
       ensureList.list.items.add(params.properties)
     }

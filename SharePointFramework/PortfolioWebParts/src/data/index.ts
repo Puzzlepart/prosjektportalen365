@@ -1104,7 +1104,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       const fields = await list.fields
         .select(...getClassProperties(SPField))
         .filter(
-          "substringof('Gt', InternalName) or InternalName eq 'Title' or InternalName eq 'Id'"
+          'substringof(\'Gt\', InternalName) or InternalName eq \'Title\' or InternalName eq \'Id\''
         )<SPField[]>()
 
       const userFields = fields

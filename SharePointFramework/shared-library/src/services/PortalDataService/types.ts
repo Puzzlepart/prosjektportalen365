@@ -128,10 +128,14 @@ export interface IProjectDetails {
 
 /**
  * Generates an error for when the user does not have access to the portfolio.
- * 
+ *
  * @param url The URL of the portfolio
  */
 export const NoAccessToPortfolioError = (url: string): ErrorWithIntent => {
-  const error = new ErrorWithIntent(format(strings.NoAccessToPortfolioErrorText, url), 'warning', strings.NoAccessToPortfolioErrorTitle)
+  const error = new ErrorWithIntent(
+    format(strings.NoAccessToPortfolioErrorText, url),
+    'warning',
+    strings.NoAccessToPortfolioErrorTitle
+  )
   return error
 }
