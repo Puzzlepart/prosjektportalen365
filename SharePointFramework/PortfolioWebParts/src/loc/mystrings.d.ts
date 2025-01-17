@@ -1,4 +1,6 @@
 declare interface IPortfolioWebPartsStrings {
+  IconNameFieldPlaceholder: string
+  IconNameFieldLabel: string
   PortfolioSelectorDescription: string
   ShowPortfolioSelectorOnText: string
   ShowPortfolioSelectorOffText: string

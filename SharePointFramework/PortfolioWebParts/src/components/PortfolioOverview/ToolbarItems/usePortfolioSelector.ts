@@ -2,7 +2,6 @@ import strings from 'PortfolioWebPartsStrings'
 import { ListMenuItem } from 'pp365-shared-library'
 import { useMemo, useState } from 'react'
 import { IPortfolioOverviewContext } from '../context'
-import { Icons } from './icons'
 
 /**
  * Hook for generating the portfolio selector menu item.
@@ -31,6 +30,7 @@ export function usePortfolioSelector(context: IPortfolioOverviewContext) {
                 .setItems(
                     context.props.portfolios.map<ListMenuItem>((v) =>
                         new ListMenuItem(v.title)
+                            .setIcon(v.iconName)
                             .makeCheckable({
                                 name: 'portfolios',
                                 value: v.uniqueId.toString()

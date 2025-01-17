@@ -1,5 +1,7 @@
 define([], function () {
   return {
+    IconNameFieldLabel: 'Ikonnavn',
+    IconNameFieldPlaceholder: 'Skriv inn et ikonnavn fra UI Fabric (f.eks. "Page")',
     PortfolioSelectorDescription: 'Velg en portefølje for å vise prosjekter fra denne porteføljen.',
     ShowPortfolioSelectorOnText: 'Ja',
     ShowPortfolioSelectorOffText: 'Nei',

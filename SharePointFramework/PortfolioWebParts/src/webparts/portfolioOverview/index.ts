@@ -190,6 +190,13 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                       required: true
                     },
                     {
+                      id: 'iconName',
+                      title: strings.IconNameFieldLabel,
+                      placeholder: strings.IconNameFieldPlaceholder,
+                      type: CustomCollectionFieldType.string,
+                      required: false
+                    },
+                    {
                       id: 'viewsListName',
                       title: strings.ViewsListNameFieldLabel,
                       type: CustomCollectionFieldType.string,
@@ -213,7 +220,7 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                         PortalDataServiceDefaultConfiguration?.listNames
                           ?.PROJECT_COLUMN_CONFIGURATION,
                       required: true
-                    }
+                    },
                   ]
                 })
               ]

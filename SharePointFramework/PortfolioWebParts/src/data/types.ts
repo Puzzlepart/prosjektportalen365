@@ -393,6 +393,7 @@ export type PortfolioInstance = {
   columnsListName: string
   columnConfigListName: string
   viewsListName: string
+  iconName?: string
 }
 
 /**

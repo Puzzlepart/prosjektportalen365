@@ -1,14 +1,10 @@
 import strings from 'PortfolioWebPartsStrings'
-import { ListMenuItem, ListMenuItemDivider, ListMenuItemHeader } from 'pp365-shared-library'
+import { ListMenuItem } from 'pp365-shared-library'
 import { useMemo } from 'react'
-import _ from 'underscore'
 import { IPortfolioOverviewContext } from '../context'
-import { SET_VIEW_FORM_PANEL, TOGGLE_COMPACT, TOGGLE_FILTER_PANEL } from '../reducer'
-import { Icons } from './icons'
+import { TOGGLE_FILTER_PANEL } from '../reducer'
 import { useExcelExport } from './useExcelExport'
 import { usePortfolioSelector } from './usePortfolioSelector'
-import { useProgramMenuItems } from './useProgramMenuItems'
-import { useViewsMenuItems } from './useViewsMenuItems'
 import { useViewSelector } from './useViewSelector'
 
 

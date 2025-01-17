@@ -1,11 +1,6 @@
-import { BoxMultipleFilled, BoxMultipleRegular, bundleIcon } from '@fluentui/react-icons'
 import { ListMenuItem, PortfolioOverviewView } from 'pp365-shared-library'
 import { IPortfolioOverviewContext } from '../context'
 import { CHANGE_VIEW } from '../reducer'
-
-const Icons = {
-  BoxMultiple: bundleIcon(BoxMultipleFilled, BoxMultipleRegular)
-}
 
 /**
  * Returns an array of list menu items for each program in the configuration.
@@ -21,7 +16,7 @@ export function useProgramMenuItems(context: IPortfolioOverviewContext) {
       .setStyle({
         padding: '8px 12px'
       })
-      .setIcon(Icons.BoxMultiple)
+      .setIcon('BoxMultiple')
       .setOnClick(() => {
         const defaultView = context.props.configuration.views.find((v) => v.isDefaultView)
         if (!defaultView) return
