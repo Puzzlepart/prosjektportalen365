@@ -52,15 +52,18 @@ import {
 } from '../models'
 import * as config from './config'
 import {
+  GetPortfolioConfigError,
   IFetchDataForViewItemResult,
   IPortfolioViewData,
   IPortfolioWebPartsDataAdapter,
-  IProjectsData
+  IProjectsData,
+  PortfolioInstance
 } from './types'
 import { IPersonaProps, IPersonaSharedProps } from '@fluentui/react'
 import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
 import { Idea } from 'components/IdeaModule'
 import { IItem } from '@pnp/sp/items/types'
+import { WebPartContext } from '@microsoft/sp-webpart-base'
 
 /**
  * Data adapter for Portfolio Web Parts.
@@ -85,12 +88,26 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
    *
    * The `dataSourceService` is dependent on the `portalDataService` being configured, as it needs
    * `portalDataService.web` to be passed as a parameter to its constructor.
+   * 
+   * @param _spfxContext SPFx context (not used)
+   * @param _configuration Configuration (not used)
+   * @param portfolio Optionally the portfolio instance to configure the data adapter for
    */
-  public async configure(): Promise<DataAdapter> {
+  public async configure(_spfxContext?: WebPartContext, _configuration?: any, portfolio?: PortfolioInstance): Promise<DataAdapter> {
     await msGraph.Init(this._spfxContext.msGraphClientFactory)
     if (this.dataSourceService && this.portalDataService.isConfigured) return this
+    let overrideListNames = null
+    if (portfolio) {
+      overrideListNames = {
+        PROJECT_COLUMNS: portfolio.columnsListName,
+        PROJECT_COLUMNS_CONFIGURATION: portfolio.columnConfigListName,
+        PORTFOLIO_VIEWS: portfolio.viewsListName,
+      }
+    }
     this.portalDataService = await this.portalDataService.configure({
-      spfxContext: this._spfxContext
+      spfxContext: this._spfxContext,
+      url: portfolio?.url,
+      listNames: overrideListNames
     })
     this.dataSourceService = new DataSourceService(this.portalDataService.web)
     return this
@@ -136,32 +153,34 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   }
 
   public async getPortfolioConfig(): Promise<IPortfolioOverviewConfiguration> {
-    // eslint-disable-next-line prefer-const
-    const [columnConfig, columns, views, programs, viewsUrls, columnUrls, userCanAddViews] =
-      await Promise.all([
-        this.portalDataService.getProjectColumnConfig(),
-        this.portalDataService.getProjectColumns(),
-        this.portalDataService.getPortfolioOverviewViews(),
-        this.portalDataService.getPrograms(ProgramItem),
-        this.portalDataService.getListFormUrls('PORTFOLIO_VIEWS'),
-        this.portalDataService.getListFormUrls('PROJECT_COLUMNS'),
-        this.portalDataService.currentUserHasPermissionsToList(
-          'PORTFOLIO_VIEWS',
-          PermissionKind.AddListItems
-        )
-      ])
-    const configuredColumns = columns.map((col) => col.configure(columnConfig))
-    const refiners = columns.filter((col) => col.isRefinable)
-    const configuredViews = views.map((view) => view.configure(columns))
-    return {
-      columns: configuredColumns,
-      refiners,
-      views: configuredViews,
-      programs,
-      viewsUrls,
-      columnUrls,
-      userCanAddViews
-    } as IPortfolioOverviewConfiguration
+    try {
+      const [columnConfig, columns, views, programs, viewsUrls, columnUrls, userCanAddViews] =
+        await Promise.all([
+          this.portalDataService.getProjectColumnConfig(),
+          this.portalDataService.getProjectColumns(),
+          this.portalDataService.getPortfolioOverviewViews(),
+          this.portalDataService.getPrograms(ProgramItem),
+          this.portalDataService.getListFormUrls('PORTFOLIO_VIEWS'),
+          this.portalDataService.getListFormUrls('PROJECT_COLUMNS'),
+          this.portalDataService.currentUserHasPermissionsToList(
+            'PORTFOLIO_VIEWS',
+            PermissionKind.AddListItems
+          )
+        ])
+      const refiners = columns.filter((col) => col.isRefinable)
+      return {
+        columns: columns.map((col) => col.configure(columnConfig)),
+        views: views.map((view) => view.configure(columns)),
+        refiners,
+        programs,
+        viewsUrls,
+        columnUrls,
+        userCanAddViews,
+        hubSiteId: this.portalDataService.hubSiteId
+      } as IPortfolioOverviewConfiguration
+    } catch (error) {
+      throw GetPortfolioConfigError(error)
+    }
   }
 
   public async getAggregatedListConfig(
@@ -412,7 +431,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       const configElement = _.find(timelineConfig, { title: strings.ProjectLabel })
 
       return { data, reports, configElement, columns: configuration.refiners }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   /**

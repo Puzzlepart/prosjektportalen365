@@ -4,6 +4,7 @@ import { ISearchResult, SortDirection } from '@pnp/sp/search'
 import {
   DataSource,
   DataSourceService,
+  ErrorWithIntent,
   IGraphGroup,
   PortalDataService,
   PortfolioOverviewView,
@@ -18,6 +19,7 @@ import { IPersonaSharedProps } from '@fluentui/react'
 import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
 import { Idea } from 'components/IdeaModule'
 import { IdeaConfigurationModel } from 'models'
+import strings from 'PortfolioWebPartsStrings'
 
 export interface IFetchDataForViewItemResult extends ISearchResult {
   SiteId: string
@@ -391,4 +393,15 @@ export type PortfolioInstance = {
   columnsListName: string
   columnConfigListName: string
   viewsListName: string
+}
+
+/**
+ * Generates an error for when the user does not have access to the portfolio.
+ * 
+ * @param error The error that occurred
+ */
+export const GetPortfolioConfigError = (error: Error): ErrorWithIntent => {
+  const e = new ErrorWithIntent(strings.GetPortfolioConfigErrorText, 'error', strings.GetPortfolioConfigErrorTitle)
+  e.stack = error.stack
+  return e
 }
