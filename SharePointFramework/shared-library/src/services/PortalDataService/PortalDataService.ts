@@ -1,12 +1,17 @@
+import { format } from '@fluentui/react'
 import { find } from '@microsoft/sp-lodash-subset'
 import { AssignFrom, dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/core'
 import { Logger, LogLevel } from '@pnp/logging'
 import { IFolder } from '@pnp/sp/folders'
 import { ICamlQuery, IList } from '@pnp/sp/lists'
+import '@pnp/sp/presets/all'
 import { IItemUpdateResult, IItemUpdateResultData, spfi, SPFI } from '@pnp/sp/presets/all'
 import { PermissionKind } from '@pnp/sp/security'
 import { IWeb } from '@pnp/sp/webs'
+import { merge } from 'lodash'
+import strings from 'SharedLibraryStrings'
 import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
+import _ from 'underscore'
 import { createSpfiInstance, DefaultCaching, getItemFieldValues } from '../../data'
 import { ISPContentType } from '../../interfaces'
 import {
@@ -31,26 +36,24 @@ import {
   StatusReportAttachment
 } from '../../models'
 import { getClassProperties, makeUrlAbsolute, transformFieldXml } from '../../util'
+import { DataService } from '../DataService'
 import {
   GetStatusReportsOptions,
   IPortalDataServiceConfiguration,
+  IProjectDetails,
   ISyncListReturnType,
+  NoAccessToPortfolioError,
   PortalDataServiceDefaultConfiguration,
   PortalDataServiceList,
-  SyncListParams,
-  IProjectDetails
+  SyncListParams
 } from './types'
-import { DataService } from '../DataService'
-import '@pnp/sp/presets/all'
-import _ from 'underscore'
-import { format } from '@fluentui/react'
-import strings from 'SharedLibraryStrings'
 
 export class PortalDataService extends DataService<IPortalDataServiceConfiguration> {
   private _sp: SPFI
   private _spPortal: SPFI
   public web: IWeb
   public url: string
+  public hubSiteId: string
 
   /**
    * Configure PortalDataService
@@ -60,26 +63,49 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   public async configure(
     configuration: IPortalDataServiceConfiguration
   ): Promise<PortalDataService> {
-    super.onConfigureStart({ ...PortalDataServiceDefaultConfiguration, ...configuration })
+    super.onConfigureStart(merge(PortalDataServiceDefaultConfiguration, configuration))
     this._sp = createSpfiInstance(this._configuration.spfxContext)
-    await this.initPortalSite()
+    await this.onInit(configuration?.url)
     return super.onConfigured()
   }
 
   /**
-   * Initialize portal site setting `url`, `_spPortal` and `web` properties. Caches the result in local storage
-   * to avoid unnecessary requests.
+   * Initialize the `PortalDataService` instance. If the `url` parameter is
+   * set, the instance will be initialized with the specified URL. If the
+   * `url` parameter is not set, the instance will be initialized with the
+   * URL from the hub site ID in the SPFx context.
    *
-   * @param expire Expire (defaults to 1 year)
+   * @param url URL (optional)
+   * @param expire Expire date for the hub site ID (optional with default of 1 year)
    */
-  private async initPortalSite(expire: Date = dateAdd(new Date(), 'year', 1)): Promise<void> {
+  private async onInit(url?: string, expire: Date = dateAdd(new Date(), 'year', 1)): Promise<void> {
+    if (url) {
+      this.url = url
+      this._spPortal = spfi(this.url).using(AssignFrom(this._sp.web))
+      this.web = this._spPortal.web
+      this.hubSiteId = await new PnPClientStorage().local.getOrPut(
+        `hubsite_${this.url.replace(/-/g, '')}_id`,
+        async () => {
+          const { PrimarySearchResults } = await this._sp.search({
+            Querytext: `Path=${this.url} contentclass:STS_Site`,
+            SelectProperties: ['SiteId', 'Path']
+          })
+          if (PrimarySearchResults.length === 0) {
+            throw NoAccessToPortfolioError(this.url)
+          }
+          return PrimarySearchResults[0].SiteId
+        },
+        expire
+      )
+      return
+    }
     try {
-      const hubSiteId =
+      this.hubSiteId =
         this._configuration.spfxContext.pageContext.legacyPageContext.hubSiteId || ''
       try {
-        const { SiteUrl } = await (
+        const hubSite = await (
           await fetch(
-            `${this._configuration.spfxContext.pageContext.web.absoluteUrl}/_api/HubSites/GetById('${hubSiteId}')`,
+            `${this._configuration.spfxContext.pageContext.web.absoluteUrl}/_api/HubSites/GetById('${this.hubSiteId}')`,
             {
               method: 'GET',
               headers: {
@@ -89,13 +115,13 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
             }
           )
         ).json()
-        this.url = SiteUrl
+        this.url = hubSite.SiteUrl
       } catch (error) {
         this.url = await new PnPClientStorage().local.getOrPut(
-          `hubsite_${hubSiteId.replace(/-/g, '')}_url`,
+          `hubsite_${this.hubSiteId.replace(/-/g, '')}_url`,
           async () => {
             const { PrimarySearchResults } = await this._sp.search({
-              Querytext: `SiteId:${hubSiteId} contentclass:STS_Site`,
+              Querytext: `SiteId:${this.hubSiteId} contentclass:STS_Site`,
               SelectProperties: ['Path']
             })
             return PrimarySearchResults[0] ? PrimarySearchResults[0].Path : ''
@@ -187,10 +213,13 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
 
   /**
    * Get project columns from the project columns list in the portfolio site.
+   * Optionally override the list name with the `listName` parameter.
+   * 
+   * @param listName Optional list name for overriding the default list name
    */
-  public async getProjectColumns(): Promise<ProjectColumn[]> {
+  public async getProjectColumns(listName?: string): Promise<ProjectColumn[]> {
     try {
-      const spItems = await this._getList('PROJECT_COLUMNS').items.select(
+      const spItems = await this._getList('PROJECT_COLUMNS', listName).items.select(
         ...getClassProperties(SPProjectColumnItem)
       )<SPProjectColumnItem[]>()
       return spItems.map((item) => new ProjectColumn(item))
@@ -303,10 +332,12 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   }
 
   /**
-   * Get project column configuration using `DefaultCaching`.
+   * Get project column configuration using `DefaultCaching`. 
+   * 
+   * @param listName Optional list name for overriding the default list name
    */
-  public async getProjectColumnConfig(): Promise<ProjectColumnConfig[]> {
-    const spItems = await this._getList('PROJECT_COLUMN_CONFIGURATION')
+  public async getProjectColumnConfig(listName?: string): Promise<ProjectColumnConfig[]> {
+    const spItems = await this._getList('PROJECT_COLUMN_CONFIGURATION', listName)
       .items.orderBy('ID', true)
       .expand('GtPortfolioColumn', 'GtPortfolioColumnTooltip')
       .select(
@@ -360,16 +391,18 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * Get list form urls
    *
    * @param list List key
+   * @param listName Optional list name for overriding the default list name
    */
   public async getListFormUrls(
-    list: PortalDataServiceList
+    list: PortalDataServiceList,
+    listName?: string
   ): Promise<{ defaultNewFormUrl: string; defaultEditFormUrl: string }> {
-    const urls = await this._getList(list)
+    const urls = await this._getList(list, listName)
       .select('DefaultNewFormUrl', 'DefaultEditFormUrl')
       .expand('DefaultNewFormUrl', 'DefaultEditFormUrl')<{
-      DefaultNewFormUrl: string
-      DefaultEditFormUrl: string
-    }>()
+        DefaultNewFormUrl: string
+        DefaultEditFormUrl: string
+      }>()
     return {
       defaultNewFormUrl: makeUrlAbsolute(urls.DefaultNewFormUrl),
       defaultEditFormUrl: makeUrlAbsolute(urls.DefaultEditFormUrl)
@@ -382,12 +415,14 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    *
    * @param list List key
    * @param permissionKind Permission kind to check
+   * @param listName Optional list name for overriding the default list name
    */
   public async currentUserHasPermissionsToList(
     list: PortalDataServiceList,
-    permissionKind: PermissionKind
+    permissionKind: PermissionKind,
+    listName?: string
   ): Promise<boolean> {
-    return await this._getList(list).currentUserHasPermissions(permissionKind)
+    return await this._getList(list, listName).currentUserHasPermissions(permissionKind)
   }
 
   /**
@@ -463,7 +498,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
           fieldsAdded.push(field)
         }
         await executeQuery(jsomContext)
-      } catch (error) {}
+      } catch (error) { }
     }
     try {
       const templateParametersField = spList
@@ -475,7 +510,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         )
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
-    } catch {}
+    } catch { }
     if (ensureList.created && params.properties) {
       ensureList.list.items.add(params.properties)
     }
@@ -1003,8 +1038,9 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * Get list by `PortalDataServiceList` enum
    *
    * @param list List to get items from
+   * @param listName Optional list name for overriding the default list name
    */
-  private _getList(list: PortalDataServiceList): IList {
-    return this.web.lists.getByTitle(this._configuration.listNames[list])
+  private _getList(list: PortalDataServiceList, listName?: string): IList {
+    return this.web.lists.getByTitle(listName ?? this._configuration.listNames[list])
   }
 }
