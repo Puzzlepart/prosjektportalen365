@@ -7,7 +7,6 @@ import { useExcelExport } from './useExcelExport'
 import { usePortfolioSelector } from './usePortfolioSelector'
 import { useViewSelector } from './useViewSelector'
 
-
 /**
  * Returns an array of menu items for the toolbar in the PortfolioOverview component.
  *
@@ -24,18 +23,18 @@ export function useToolbarItems(context: IPortfolioOverviewContext) {
     () =>
       [
         context.props.showExcelExportButton &&
-        new ListMenuItem(null, strings.ExcelExportButtonLabel)
-          .setIcon('ExcelLogoInverse')
-          .setOnClick(exportToExcel)
-          .setStyle({
-            color: '#10793F'
-          }),
+          new ListMenuItem(null, strings.ExcelExportButtonLabel)
+            .setIcon('ExcelLogoInverse')
+            .setOnClick(exportToExcel)
+            .setStyle({
+              color: '#10793F'
+            }),
         portfolioSelector,
         viewSelector,
         context.props.showFilters &&
-        new ListMenuItem(null, strings.FilterText).setIcon('Filter').setOnClick(() => {
-          context.dispatch(TOGGLE_FILTER_PANEL())
-        })
+          new ListMenuItem(null, strings.FilterText).setIcon('Filter').setOnClick(() => {
+            context.dispatch(TOGGLE_FILTER_PANEL())
+          })
       ].filter(Boolean),
     [context.state, context.props]
   )

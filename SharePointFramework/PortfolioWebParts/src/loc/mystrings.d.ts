@@ -1,4 +1,7 @@
 declare interface IPortfolioWebPartsStrings {
+  PortfolioSelectorLabel: string
+  PortfoliosFieldDescription: string
+  SelectedPortfolioDescription: string
   ShowPortfolioSelectorDescription: string
   IconNameFieldPlaceholder: string
   IconNameFieldLabel: string
@@ -7,7 +10,7 @@ declare interface IPortfolioWebPartsStrings {
   ShowPortfolioSelectorOffText: string
   ShowPortfolioSelectorLabel: string
   SelectedPortfolioLabel: string
-  PortfoliosLabel: string
+  PortfoliosFieldLabel: string
   PortfoliosPanelHeader: string
   PortfoliosManageBtnLabel: string
   UrlFieldLabel: string

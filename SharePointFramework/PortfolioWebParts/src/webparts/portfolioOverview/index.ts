@@ -2,7 +2,6 @@ import {
   IPropertyPaneConfiguration,
   IPropertyPaneDropdownOption,
   PropertyPaneDropdown,
-  PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -74,9 +73,9 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
     try {
       const portfolios = this.properties.portfolios ?? []
       this._selectedPortfolioId = this.properties.selectedPortfolioId
-      const portfolio = portfolios.find(
-        ({ uniqueId }) => uniqueId === this._selectedPortfolioId
-      ) ?? _.first(portfolios)
+      const portfolio =
+        portfolios.find(({ uniqueId }) => uniqueId === this._selectedPortfolioId) ??
+        _.first(portfolios)
       await super.onInit(portfolio)
       this._configuration = await this.dataAdapter.getPortfolioConfig()
     } catch (error) {
@@ -125,15 +124,15 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                 PropertyPaneToggle('showSearchBox', {
                   label: strings.ShowSearchBoxLabel
                 }),
-                PropertyPaneTextField('textField', {
-                  label:'textField',
-                  description: 'A very long description of a text field',
-                }),
                 !_.isEmpty(this.properties.portfolios) &&
-                PropertyPaneDropdown('selectedPortfolioId', {
-                  label: strings.SelectedPortfolioLabel,
-                  options: this._getOptions('portfolios')
-                }),
+                  PropertyPaneDropdown('selectedPortfolioId', {
+                    label: strings.SelectedPortfolioLabel,
+                    options: this._getOptions('portfolios')
+                  }),
+                PropertyPaneDescription(
+                  strings.SelectedPortfolioDescription,
+                  !_.isEmpty(this.properties.portfolios)
+                ),
                 PropertyPaneDropdown('defaultViewId', {
                   label: strings.DefaultViewLabel,
                   options: this._getOptions('defaultViewId')
@@ -153,23 +152,26 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                   label: strings.ShowExcelExportButtonLabel
                 }),
                 this.properties.showExcelExportButton &&
-                PropertyPaneToggle('includeViewNameInExcelExportFilename', {
-                  label: strings.IncludeViewNameInExcelExportFilenameLabel
-                }),
+                  PropertyPaneToggle('includeViewNameInExcelExportFilename', {
+                    label: strings.IncludeViewNameInExcelExportFilenameLabel
+                  }),
                 !_.isEmpty(this.properties.portfolios) &&
-                PropertyPaneToggle('showPortfolioSelector', {
-                  label: strings.ShowPortfolioSelectorLabel,
-                  onText: strings.ShowPortfolioSelectorOnText,
-                  offText: strings.ShowPortfolioSelectorOffText
-                }),
-                PropertyPaneDescription( strings.ShowPortfolioSelectorDescription, !_.isEmpty(this.properties.portfolios)),
+                  PropertyPaneToggle('showPortfolioSelector', {
+                    label: strings.ShowPortfolioSelectorLabel,
+                    onText: strings.ShowPortfolioSelectorOnText,
+                    offText: strings.ShowPortfolioSelectorOffText
+                  }),
+                PropertyPaneDescription(
+                  strings.ShowPortfolioSelectorDescription,
+                  !_.isEmpty(this.properties.portfolios)
+                ),
                 PropertyPaneToggle('showViewSelector', {
                   label: strings.ShowViewSelectorLabel
                 }),
                 this.properties.showViewSelector &&
-                PropertyPaneToggle('showProgramViews', {
-                  label: strings.ShowProgramViewsLabel
-                })
+                  PropertyPaneToggle('showProgramViews', {
+                    label: strings.ShowProgramViewsLabel
+                  })
               ].filter(Boolean)
             },
             {
@@ -177,7 +179,7 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
               groupFields: [
                 PropertyFieldCollectionData('portfolios', {
                   key: 'portfolios',
-                  label: strings.PortfoliosLabel,
+                  label: strings.PortfoliosFieldLabel,
                   panelHeader: strings.PortfoliosPanelHeader,
                   manageBtnLabel: strings.PortfoliosManageBtnLabel,
                   value: this.properties.portfolios,
@@ -225,9 +227,10 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                         PortalDataServiceDefaultConfiguration?.listNames
                           ?.PROJECT_COLUMN_CONFIGURATION,
                       required: true
-                    },
+                    }
                   ]
-                })
+                }),
+                PropertyPaneDescription(strings.PortfoliosFieldDescription)
               ]
             },
             {
