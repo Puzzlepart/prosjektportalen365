@@ -1,5 +1,6 @@
 define([], function () {
   return {
+    AdvancedGroupName: 'Avansert',
     Aria: {
       MenuOverflowCount: '{0} flere elementer',
       MoveDisabled: 'Kan ikke flytte skjult kolonne',

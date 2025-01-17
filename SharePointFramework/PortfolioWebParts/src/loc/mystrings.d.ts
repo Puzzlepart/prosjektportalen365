@@ -1,4 +1,5 @@
 declare interface IPortfolioWebPartsStrings {
+  AdvancedGroupName: string
   Aria: {
     MenuOverflowCount: string
     MoveDisabled: string
