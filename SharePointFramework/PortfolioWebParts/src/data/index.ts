@@ -64,6 +64,7 @@ import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
 import { Idea } from 'components/IdeaModule'
 import { IItem } from '@pnp/sp/items/types'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
+import { LogLevel } from '@pnp/logging'
 
 /**
  * Data adapter for Portfolio Web Parts.
@@ -107,7 +108,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     this.portalDataService = await this.portalDataService.configure({
       spfxContext: this._spfxContext,
       url: portfolio?.url,
-      listNames: overrideListNames
+      listNames: overrideListNames,
+      activeLogLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
     })
     this.dataSourceService = new DataSourceService(this.portalDataService.web)
     return this
