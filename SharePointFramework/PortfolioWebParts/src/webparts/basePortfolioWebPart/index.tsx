@@ -60,8 +60,7 @@ export abstract class BasePortfolioWebPart<
     render(
       <ErrorBoundary
         fallbackRender={(p) => {
-          console.log('fallbackRender', p)
-          return <ErrorBoundaryFallback title={combinedProps['title']} error={p.error} />
+          return <ErrorBoundaryFallback {...p} title={combinedProps['title']} />
         }}
       >
         <FluentProvider theme={customLightTheme}>{element}</FluentProvider>
@@ -85,17 +84,21 @@ export abstract class BasePortfolioWebPart<
           Title: string
         }>()
       ).Title
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**
-   * Initialize the web part with the specified portfolio instance. 
-   * 
+   * Initialize the web part with the specified portfolio instance.
+   *
    * @param portfolio Optional portfolio instance to initialize the data adapter with
    */
   public async onInit(portfolio?: PortfolioInstance): Promise<void> {
     await this._setup()
-    this.dataAdapter = await new DataAdapter(this.context, this.sp).configure(this.context, null, portfolio)
+    this.dataAdapter = await new DataAdapter(this.context, this.sp).configure(
+      this.context,
+      null,
+      portfolio
+    )
     this.context.statusRenderer.clearLoadingIndicator(this.domElement)
   }
 

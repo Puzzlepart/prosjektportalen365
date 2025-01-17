@@ -89,12 +89,16 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
    *
    * The `dataSourceService` is dependent on the `portalDataService` being configured, as it needs
    * `portalDataService.web` to be passed as a parameter to its constructor.
-   * 
+   *
    * @param _spfxContext SPFx context (not used)
    * @param _configuration Configuration (not used)
    * @param portfolio Optionally the portfolio instance to configure the data adapter for
    */
-  public async configure(_spfxContext?: WebPartContext, _configuration?: any, portfolio?: PortfolioInstance): Promise<DataAdapter> {
+  public async configure(
+    _spfxContext?: WebPartContext,
+    _configuration?: any,
+    portfolio?: PortfolioInstance
+  ): Promise<DataAdapter> {
     await msGraph.Init(this._spfxContext.msGraphClientFactory)
     if (this.dataSourceService && this.portalDataService.isConfigured) return this
     let overrideListNames = null
@@ -102,7 +106,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       overrideListNames = {
         PROJECT_COLUMNS: portfolio.columnsListName,
         PROJECT_COLUMNS_CONFIGURATION: portfolio.columnConfigListName,
-        PORTFOLIO_VIEWS: portfolio.viewsListName,
+        PORTFOLIO_VIEWS: portfolio.viewsListName
       }
     }
     this.portalDataService = await this.portalDataService.configure({
@@ -433,7 +437,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       const configElement = _.find(timelineConfig, { title: strings.ProjectLabel })
 
       return { data, reports, configElement, columns: configuration.refiners }
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**
@@ -1104,7 +1108,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       const fields = await list.fields
         .select(...getClassProperties(SPField))
         .filter(
-          'substringof(\'Gt\', InternalName) or InternalName eq \'Title\' or InternalName eq \'Id\''
+          "substringof('Gt', InternalName) or InternalName eq 'Title' or InternalName eq 'Id'"
         )<SPField[]>()
 
       const userFields = fields

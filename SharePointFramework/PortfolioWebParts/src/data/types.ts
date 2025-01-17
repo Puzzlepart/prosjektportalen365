@@ -397,11 +397,15 @@ export type PortfolioInstance = {
 
 /**
  * Generates an error for when the user does not have access to the portfolio.
- * 
+ *
  * @param error The error that occurred
  */
 export const GetPortfolioConfigError = (error: Error): ErrorWithIntent => {
-  const e = new ErrorWithIntent(strings.GetPortfolioConfigErrorText, 'error', strings.GetPortfolioConfigErrorTitle)
+  const e = new ErrorWithIntent(
+    strings.GetPortfolioConfigErrorText,
+    'error',
+    strings.GetPortfolioConfigErrorTitle
+  )
   e.stack = error.stack
   return e
 }

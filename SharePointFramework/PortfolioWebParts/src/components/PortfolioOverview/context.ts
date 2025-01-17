@@ -14,7 +14,6 @@ export interface IPortfolioOverviewContext {
 
 export const PortfolioOverviewContext = createContext<IPortfolioOverviewContext>(null)
 
-
 /**
  * A hook that returns the current value of the `PortfolioOverviewContext`.
  *

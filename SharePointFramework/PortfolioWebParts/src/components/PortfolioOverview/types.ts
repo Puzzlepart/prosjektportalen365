@@ -63,7 +63,7 @@ export interface IPortfolioOverviewConfiguration {
 
 export interface IPortfolioOverviewProps
   extends IBaseComponentProps,
-  Pick<IListProps<ProjectColumn>, 'isListLayoutModeJustified'> {
+    Pick<IListProps<ProjectColumn>, 'isListLayoutModeJustified'> {
   /**
    * Configuration (columns and views etc).
    */
@@ -154,13 +154,18 @@ export interface IPortfolioOverviewProps
   selectedPortfolioId?: string
 
   /**
+   * The selected portfolio instance (not stored in web part properties, but "calculated" from `selectedPortfolioId`).
+   */
+  selectedPortfolio?: PortfolioInstance
+
+  /**
    * Show portfolio selector in view mode (not just in web part properties).
    */
   showPortfolioSelector?: boolean
 
   /**
    * Callback to set the selected portfolio.
-   * 
+   *
    * @param portfolioId The unique ID of the selected portfolio.
    */
   onSetPortfolio?: (portfolioId: string) => void
