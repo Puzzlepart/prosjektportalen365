@@ -1,4 +1,6 @@
 declare interface IPortfolioWebPartsStrings {
+  GetPortfolioConfigErrorTitle: string
+  GetPortfolioConfigErrorText: string
   AdvancedGroupName: string
   Aria: {
     MenuOverflowCount: string

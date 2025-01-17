@@ -1,4 +1,6 @@
 declare interface ISharedLibraryStrings {
+  NoAccessToPortfolioErrorTitle: string
+  NoAccessToPortfolioErrorText: string
   BooleanYes: string
   BooleanNo: string
   GtModerationStatus_Choice_Draft: string

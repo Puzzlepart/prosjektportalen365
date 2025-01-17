@@ -1,5 +1,7 @@
 define([], function () {
   return {
+    GetPortfolioConfigErrorTitle: 'Ingen konfigurasjon tilgjengelig',
+    GetPortfolioConfigErrorText: 'Du er kanskje utenfor en Prosjektportalen-instans? Gå til Avansert under webdelegenskaper for å konfigurere porteføljer.',
     AdvancedGroupName: 'Avansert',
     Aria: {
       MenuOverflowCount: '{0} flere elementer',
