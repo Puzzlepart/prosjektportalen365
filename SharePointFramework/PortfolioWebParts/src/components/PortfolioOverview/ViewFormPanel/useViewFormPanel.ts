@@ -1,9 +1,9 @@
 import _ from 'lodash'
 import { PortfolioOverviewView, SPPortfolioOverviewViewItem } from 'pp365-shared-library'
 import { CHANGE_VIEW, SET_VIEW_FORM_PANEL } from '../reducer'
-import { usePortfolioOverviewContext } from '../usePortfolioOverviewContext'
 import { useEditableView } from './useEditableView'
 import { useId } from '@fluentui/react-components'
+import { usePortfolioOverviewContext } from '../context'
 
 /**
  * Component logic hook for `ViewFormPanel`.

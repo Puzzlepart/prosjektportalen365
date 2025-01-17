@@ -5,9 +5,9 @@ import { useMemo } from 'react'
 import {
   EditViewColumnsPanelSortMode,
   IEditViewColumnsPanelProps
-} from '../EditViewColumnsPanel/types'
-import { IPortfolioOverviewContext } from './context'
-import { TOGGLE_EDIT_VIEW_COLUMNS_PANEL } from './reducer'
+} from '../../EditViewColumnsPanel/types'
+import { IPortfolioOverviewContext } from '../context'
+import { TOGGLE_EDIT_VIEW_COLUMNS_PANEL } from '../reducer'
 
 /**
  * Creates props for `EditViewColumnsPanel` component based on the context (`IPortfolioOverviewContext`)

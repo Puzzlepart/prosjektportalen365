@@ -8,7 +8,7 @@ import styles from './PortfolioOverview.module.scss'
 import { ViewFormPanel } from './ViewFormPanel'
 import { PortfolioOverviewContext } from './context'
 import { IPortfolioOverviewProps } from './types'
-import { usePortfolioOverview } from './usePortfolioOverview'
+import { usePortfolioOverview } from './hooks/usePortfolioOverview'
 
 export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
   const {

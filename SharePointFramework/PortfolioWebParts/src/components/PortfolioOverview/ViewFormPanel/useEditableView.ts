@@ -1,6 +1,6 @@
 import { PortfolioOverviewView } from 'pp365-shared-library'
 import { useEffect, useMemo, useState } from 'react'
-import { usePortfolioOverviewContext } from '../usePortfolioOverviewContext'
+import { usePortfolioOverviewContext } from '../context'
 
 /**
  * Hook that provides an editable view object and a function to update it.

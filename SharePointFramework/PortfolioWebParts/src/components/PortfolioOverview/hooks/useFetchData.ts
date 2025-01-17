@@ -4,9 +4,9 @@ import _ from 'lodash'
 import { PortfolioOverviewView } from 'pp365-shared-library/lib/models'
 import { parseUrlHash } from 'pp365-shared-library/lib/util/parseUrlHash'
 import { useEffect } from 'react'
-import { IPortfolioOverviewContext } from './context'
-import { DATA_FETCHED, DATA_FETCH_ERROR, STARTING_DATA_FETCH } from './reducer'
-import { PortfolioOverviewErrorMessage } from './types'
+import { IPortfolioOverviewContext } from '../context'
+import { DATA_FETCHED, DATA_FETCH_ERROR, STARTING_DATA_FETCH } from '../reducer'
+import { PortfolioOverviewErrorMessage } from '../types'
 import { usePersistedColumns } from './usePersistedColumns'
 
 /**

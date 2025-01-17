@@ -1,7 +1,7 @@
 import { IContextualMenuItem } from '@fluentui/react'
 import { PortfolioOverviewView } from 'pp365-shared-library/lib/models/PortfolioOverviewView'
-import { IPortfolioOverviewContext } from './context'
-import { CHANGE_VIEW } from './reducer'
+import { IPortfolioOverviewContext } from '../context'
+import { CHANGE_VIEW } from '../reducer'
 
 /**
  * Returns a function that converts a collection of `PortfolioOverviewView` objects to

@@ -3,8 +3,8 @@ import strings from 'PortfolioWebPartsStrings'
 import sortArray from 'array-sort'
 import { getObjectValue as get } from 'pp365-shared-library'
 import _ from 'underscore'
-import { IPortfolioOverviewContext } from './context'
-import { IPortfolioOverviewState } from './types'
+import { IPortfolioOverviewContext } from '../context'
+import { IPortfolioOverviewState } from '../types'
 
 /**
  * Create groups based on `items`, `columns` and `groupBy` field.
