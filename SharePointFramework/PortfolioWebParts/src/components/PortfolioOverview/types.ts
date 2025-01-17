@@ -11,6 +11,7 @@ import { IListProps } from '../List'
 import { IBaseComponentProps } from '../types'
 import { IColumnFormPanel } from './ColumnFormPanel/types'
 import { IViewFormPanel } from './ViewFormPanel/types'
+import { PortfolioInstance } from 'data/types'
 
 export class PortfolioOverviewErrorMessage extends Error {
   constructor(public message: string, public type: MessageBarType) {
@@ -136,6 +137,16 @@ export interface IPortfolioOverviewProps
    * projects in the current hub site.
    */
   isParentProject?: boolean
+
+  /**
+   * Portfolio instances configured in the web part properties.
+   */
+  portfolios?: PortfolioInstance[]
+
+  /**
+   * The unique ID of the selected portfolio.
+   */
+  selectedPortfolio?: string
 }
 
 export interface IPortfolioOverviewState
