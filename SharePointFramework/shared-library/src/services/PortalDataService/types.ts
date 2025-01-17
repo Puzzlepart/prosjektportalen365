@@ -1,6 +1,9 @@
 import { IListEnsureResult } from '@pnp/sp/lists'
 import { SPField } from '../../models'
 import { SPFxContext } from '../../types'
+import strings from 'SharedLibraryStrings'
+import { format } from '@fluentui/react'
+import { ErrorWithIntent } from '../../interfaces'
 
 export type PortalDataServiceList =
   | 'PROJECTS'
@@ -110,4 +113,14 @@ export interface IProjectDetails {
    * or `GtIsProgram` is set to `true` on the project item.
    */
   isParentProject: boolean
+}
+
+/**
+ * Generates an error for when the user does not have access to the portfolio.
+ * 
+ * @param url The URL of the portfolio
+ */
+export const NoAccessToPortfolioError = (url: string): ErrorWithIntent => {
+  const error = new ErrorWithIntent(format(strings.NoAccessToPortfolioErrorText, url), 'warning', strings.NoAccessToPortfolioErrorTitle)
+  return error
 }
