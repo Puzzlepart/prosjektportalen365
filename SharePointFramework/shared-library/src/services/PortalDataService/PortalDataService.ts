@@ -108,9 +108,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       return
     }
     try {
-      this.hubSiteId =
-        this._configuration.spfxContext.pageContext.legacyPageContext.hubSiteId || ''
-      console.log('onInit', this.hubSiteId)
+      this.hubSiteId = this._configuration.spfxContext.pageContext.legacyPageContext.hubSiteId || ''
       try {
         const hubSite = await (
           await fetch(

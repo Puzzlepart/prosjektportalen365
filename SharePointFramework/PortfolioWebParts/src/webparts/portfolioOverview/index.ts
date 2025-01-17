@@ -59,8 +59,8 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
   public async onInit(): Promise<void> {
     try {
       this._selectedPortfolioId = this.properties.selectedPortfolioId
-      const selectedPortfolio = this.properties.portfolios.find((portfolio) => portfolio.uniqueId === this._selectedPortfolioId)
-      await super.onInit(selectedPortfolio)
+      const portfolio = this.properties.portfolios.find(({ uniqueId }) => uniqueId === this._selectedPortfolioId)
+      await super.onInit(portfolio)
       this._configuration = await this.dataAdapter.getPortfolioConfig()
     } catch (error) {
       this._error = error
@@ -69,13 +69,18 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
 
   /**
    * Get dropdown options for the specified `targetProperty`. For now it only
-   * handles the `defaultViewId` property, but in the future it could be used
-   * to populate other dropdowns in the property pane.
+   * handles the `defaultViewId` and `portfolios` properties.
    *
    * @param targetProperty Target property
    */
-  protected _getOptions(targetProperty: string): IPropertyPaneDropdownOption[] {
+  protected _getOptions(targetProperty: keyof IPortfolioOverviewProps): IPropertyPaneDropdownOption[] {
     switch (targetProperty) {
+      case 'portfolios': {
+        return this.properties.portfolios.map((portfolio) => ({
+          key: portfolio.uniqueId,
+          text: portfolio.title
+        }))
+      }
       case 'defaultViewId':
         {
           if (this._configuration) {
@@ -104,17 +109,7 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                 !_.isEmpty(this.properties.portfolios) && (
                   PropertyPaneDropdown('selectedPortfolioId', {
                     label: strings.SelectedPortfolioLabel,
-                    options: this.properties.portfolios.map((portfolio) => ({
-                      key: portfolio.uniqueId,
-                      text: portfolio.title
-                    })),
-                  })
-                ),
-                !_.isEmpty(this.properties.portfolios) && (
-                  PropertyPaneToggle('showPortfolioSelector', {
-                    label: strings.ShowPortfolioSelectorLabel,
-                    onText: strings.ShowPortfolioSelectorOnText,
-                    offText: strings.ShowPortfolioSelectorOffText
+                    options: this._getOptions('portfolios')
                   })
                 ),
                 PropertyPaneDropdown('defaultViewId', {
@@ -139,6 +134,13 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                 PropertyPaneToggle('includeViewNameInExcelExportFilename', {
                   label: strings.IncludeViewNameInExcelExportFilenameLabel
                 }),
+                !_.isEmpty(this.properties.portfolios) && (
+                  PropertyPaneToggle('showPortfolioSelector', {
+                    label: strings.ShowPortfolioSelectorLabel,
+                    onText: strings.ShowPortfolioSelectorOnText,
+                    offText: strings.ShowPortfolioSelectorOffText
+                  })
+                ),
                 PropertyPaneToggle('showViewSelector', {
                   label: strings.ShowViewSelectorLabel
                 }),
