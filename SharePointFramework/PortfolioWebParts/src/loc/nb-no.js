@@ -6,7 +6,7 @@ define([], function () {
     ShowPortfolioSelectorLabel: 'Vis porteføljevelger',
     SelectedPortfolioLabel: 'Velg portefølje',
     PortfoliosLabel: 'Porteføljer',
-    PortfoliosPanelHeader: 'Porteføljer',
+    PortfoliosPanelHeader: 'Administrer porteføljer',
     PortfoliosManageBtnLabel: 'Administrer porteføljer',
     UrlFieldLabel: 'Nettstedsadresse',
     ViewsListNameFieldLabel: 'Liste for visninger',
