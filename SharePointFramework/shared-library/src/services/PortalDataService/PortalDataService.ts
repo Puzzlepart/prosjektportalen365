@@ -1,7 +1,7 @@
 import { format } from '@fluentui/react'
 import { find } from '@microsoft/sp-lodash-subset'
 import { AssignFrom, dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/core'
-import { Logger, LogLevel } from '@pnp/logging'
+import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import { IFolder } from '@pnp/sp/folders'
 import { ICamlQuery, IList } from '@pnp/sp/lists'
 import '@pnp/sp/presets/all'
@@ -63,7 +63,14 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   public async configure(
     configuration: IPortalDataServiceConfiguration
   ): Promise<PortalDataService> {
-    super.onConfigureStart(merge(PortalDataServiceDefaultConfiguration, configuration))
+    Logger.subscribe(ConsoleListener())
+    Logger.activeLogLevel = configuration.activeLogLevel
+    Logger.log({
+      message: '(PortalDataService) (configure) Configuring PortalDataService',
+      level: LogLevel.Info,
+      data: _.pick(configuration, 'listNames', 'url')
+    })
+    super.onConfigureStart(merge({ ...PortalDataServiceDefaultConfiguration }, configuration))
     this._sp = createSpfiInstance(this._configuration.spfxContext)
     await this.onInit(configuration?.url)
     return super.onConfigured()
@@ -79,6 +86,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * @param expire Expire date for the hub site ID (optional with default of 1 year)
    */
   private async onInit(url?: string, expire: Date = dateAdd(new Date(), 'year', 1)): Promise<void> {
+    Logger.write(`(PortalDataService) (onInit) Initializing PortalDataService instance with URL ${url}`, LogLevel.Info)
     if (url) {
       this.url = url
       this._spPortal = spfi(this.url).using(AssignFrom(this._sp.web))
@@ -102,6 +110,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     try {
       this.hubSiteId =
         this._configuration.spfxContext.pageContext.legacyPageContext.hubSiteId || ''
+      console.log('onInit', this.hubSiteId)
       try {
         const hubSite = await (
           await fetch(

@@ -120,13 +120,19 @@ import {
   ChevronRightFilled,
   ChevronRightRegular,
   LightbulbRegular,
-  LightbulbFilled
+  LightbulbFilled,
+  CollectionsRegular,
+  CollectionsFilled
 } from '@fluentui/react-icons'
 
 /**
  * An object containing the available Fluent icons and their corresponding regular and filled versions.
  */
 export const iconCatalog = {
+  Collections: {
+    regular: CollectionsRegular,
+    filled: CollectionsFilled
+  },
   ClipboardTask: {
     regular: ClipboardTaskRegular,
     filled: ClipboardTaskFilled
