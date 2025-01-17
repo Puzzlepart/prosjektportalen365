@@ -54,6 +54,11 @@ export interface IPortfolioOverviewConfiguration {
    * Current user can add views (has `ADD_LIST_ITEMS` permission)
    */
   userCanAddViews?: boolean
+
+  /**
+   * Hub site ID
+   */
+  hubSiteId?: string
 }
 
 export interface IPortfolioOverviewProps
