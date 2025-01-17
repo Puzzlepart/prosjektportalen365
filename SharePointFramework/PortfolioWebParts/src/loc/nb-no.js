@@ -1,7 +1,6 @@
 define([], function () {
   return {
     PortfolioSelectorLabel: 'Portefølje',
-    SelectedPortfolioDescription: 'Velg en portefølje for å vise prosjekter fra denne porteføljen. Tilgjengelige porteføljer administreres nedenfor under **Avansert**.',
     IconNameFieldLabel: 'Ikonnavn',
     IconNameFieldPlaceholder: 'Skriv inn et ikonnavn fra UI Fabric (f.eks. "Page")',
     PortfolioSelectorDescription: 'Velg en portefølje for å vise prosjekter fra denne porteføljen.',
@@ -10,6 +9,7 @@ define([], function () {
     ShowPortfolioSelectorLabel: 'Vis porteføljevelger',
     ShowPortfolioSelectorDescription: 'Porteføljevelgeren vil vises på kommandolinjen om det er flere enn én portefølje tilgjengelig.',
     SelectedPortfolioLabel: 'Standardportefølje',
+    SelectedPortfolioDescription: 'Velg en portefølje for å vise prosjekter fra denne porteføljen. Tilgjengelige porteføljer administreres nedenfor under **Avansert**. Om ingen standardportefølje er valgt, vil den første porteføljen i listen bli brukt.',
     PortfoliosFieldLabel: 'Porteføljer',
     PortfoliosFieldDescription: 'Administrer porteføljer for å vise prosjekter fra disse porteføljene. Du kan også velge en standardportefølje som skal vises i webdelen, dette velger du over **Generelt**. Dette brukes som regel om du bruker webdelen utenfor en Prosjektportalen-hub.',
     PortfoliosPanelHeader: 'Administrer porteføljer',
