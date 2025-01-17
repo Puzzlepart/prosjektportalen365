@@ -4,6 +4,7 @@ import { SPFxContext } from '../../types'
 import strings from 'SharedLibraryStrings'
 import { format } from '@fluentui/react'
 import { ErrorWithIntent } from '../../interfaces'
+import { LogLevel } from '@pnp/logging'
 
 export type PortalDataServiceList =
   | 'PROJECTS'
@@ -53,7 +54,16 @@ export interface IPortalDataServiceConfiguration extends Object {
     GLOBAL_SETTINGS?: string
     TIMELINE_CONTENT?: string
   }
+
+  /**
+   * The XML for the template parameters field.
+   */
   templateParametersFieldXml?: string
+
+  /**
+   * The active log level for the data service.
+   */
+  activeLogLevel?: LogLevel
 }
 
 export const PortalDataServiceDefaultConfiguration: Partial<IPortalDataServiceConfiguration> = {
@@ -75,7 +85,8 @@ export const PortalDataServiceDefaultConfiguration: Partial<IPortalDataServiceCo
     TIMELINE_CONTENT: 'Tidslinjeinnhold'
   },
   templateParametersFieldXml:
-    '<Field Type="Note" DisplayName="TemplateParameters" ID="{b8854944-7141-471f-b8df-53d93a4395ba}" StaticName="TemplateParameters" Name="TemplateParameters" UnlimitedLengthInDocumentLibrary="TRUE" Hidden="TRUE" />'
+    '<Field Type="Note" DisplayName="TemplateParameters" ID="{b8854944-7141-471f-b8df-53d93a4395ba}" StaticName="TemplateParameters" Name="TemplateParameters" UnlimitedLengthInDocumentLibrary="TRUE" Hidden="TRUE" />',
+  activeLogLevel: LogLevel.Off
 }
 
 export type GetStatusReportsOptions = {
