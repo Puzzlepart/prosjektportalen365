@@ -20,23 +20,35 @@ export type PortalDataServiceList =
   | 'TIMELINE_CONTENT'
 
 export interface IPortalDataServiceConfiguration extends Object {
+  /**
+   * The SPFx context to use for the data service.
+   */
   spfxContext?: SPFxContext
+
+  /**
+   * Override the URL from the `spfxContext` to use a different URL.
+   */
+  url?: string
+
+  /**
+   * The list names for the different lists used by the data service.
+   */
   listNames?: {
-    STATUS_SECTIONS: string
-    PROJECT_COLUMNS: string
-    PROJECT_COLUMN_CONFIGURATION: string
-    PROJECTS: string
-    PROJECT_STATUS: string
-    PROJECT_STATUS_ATTACHMENTS: string
-    PORTFOLIO_VIEWS: string
-    PROJECT_CONTENT_COLUMNS: string
-    DATA_SOURCES: string
-    PROJECT_ADMIN_ROLES: string
-    PROJECT_TEMPLATE_CONFIGURATION: string
-    IDEA_PROJECT_DATA: string
-    IDEA_PROCESSING: string
-    GLOBAL_SETTINGS: string
-    TIMELINE_CONTENT: string
+    STATUS_SECTIONS?: string
+    PROJECT_COLUMNS?: string
+    PROJECT_COLUMN_CONFIGURATION?: string
+    PROJECTS?: string
+    PROJECT_STATUS?: string
+    PROJECT_STATUS_ATTACHMENTS?: string
+    PORTFOLIO_VIEWS?: string
+    PROJECT_CONTENT_COLUMNS?: string
+    DATA_SOURCES?: string
+    PROJECT_ADMIN_ROLES?: string
+    PROJECT_TEMPLATE_CONFIGURATION?: string
+    IDEA_PROJECT_DATA?: string
+    IDEA_PROCESSING?: string
+    GLOBAL_SETTINGS?: string
+    TIMELINE_CONTENT?: string
   }
   templateParametersFieldXml?: string
 }
