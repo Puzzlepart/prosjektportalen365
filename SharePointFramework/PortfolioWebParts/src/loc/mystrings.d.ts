@@ -1,4 +1,16 @@
 declare interface IPortfolioWebPartsStrings {
+  PortfolioSelectorDescription: string
+  ShowPortfolioSelectorOnText: string
+  ShowPortfolioSelectorOffText: string
+  ShowPortfolioSelectorLabel: string
+  SelectedPortfolioLabel: string
+  PortfoliosLabel: string
+  PortfoliosPanelHeader: string
+  PortfoliosManageBtnLabel: string
+  UrlFieldLabel: string
+  ViewsListNameFieldLabel: string
+  ColumnsListNameFieldLabel: string
+  ColumnConfigListNameFieldLabel: string
   GetPortfolioConfigErrorTitle: string
   GetPortfolioConfigErrorText: string
   AdvancedGroupName: string

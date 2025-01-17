@@ -1,5 +1,17 @@
 define([], function () {
   return {
+    PortfolioSelectorDescription: 'Velg en portefølje for å vise prosjekter fra denne porteføljen.',
+    ShowPortfolioSelectorOnText: 'Ja',
+    ShowPortfolioSelectorOffText: 'Nei',
+    ShowPortfolioSelectorLabel: 'Vis porteføljevelger',
+    SelectedPortfolioLabel: 'Velg portefølje',
+    PortfoliosLabel: 'Porteføljer',
+    PortfoliosPanelHeader: 'Porteføljer',
+    PortfoliosManageBtnLabel: 'Administrer porteføljer',
+    UrlFieldLabel: 'Nettstedsadresse',
+    ViewsListNameFieldLabel: 'Liste for visninger',
+    ColumnsListNameFieldLabel: 'Liste for kolonner',
+    ColumnConfigListNameFieldLabel: 'Liste for kolonnekonfigurasjon',
     GetPortfolioConfigErrorTitle: 'Ingen konfigurasjon tilgjengelig',
     GetPortfolioConfigErrorText: 'Du er kanskje utenfor en Prosjektportalen-instans? Gå til Avansert under webdelegenskaper for å konfigurere porteføljer.',
     AdvancedGroupName: 'Avansert',
