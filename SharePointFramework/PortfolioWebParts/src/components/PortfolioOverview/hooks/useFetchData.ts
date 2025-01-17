@@ -66,23 +66,22 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
       let currentView: PortfolioOverviewView = null
       try {
         context.dispatch(STARTING_DATA_FETCH())
-        const { configuration, pageContext, isParentProject } = context.props
         const hashState = parseUrlHash()
         currentView = getCurrentView(hashState, context)
-        const { items, managedProperties } = isParentProject
+        const { items, managedProperties } = context.props.isParentProject
           ? await context.props.dataAdapter.fetchDataForViewBatch(
-              currentView,
-              configuration,
-              pageContext.legacyPageContext.hubSiteId
-            )
+            currentView,
+            context.props.configuration,
+            context.props.configuration.hubSiteId
+          )
           : await context.props.dataAdapter.fetchDataForView(
-              currentView,
-              configuration,
-              pageContext.legacyPageContext.hubSiteId
-            )
+            currentView,
+            context.props.configuration,
+            context.props.configuration.hubSiteId
+          )
         let groupBy = currentView.groupBy
         if (hashState.has('groupBy') && !groupBy) {
-          groupBy = _.find(configuration.columns, (fc) => fc.fieldName === hashState.get('groupBy'))
+          groupBy = _.find(context.props.configuration.columns, (fc) => fc.fieldName === hashState.get('groupBy'))
         }
         set(currentView.columns)
         context.dispatch(
