@@ -404,7 +404,7 @@ export type PortfolioInstance = {
 export const GetPortfolioConfigError = (error: Error): ErrorWithIntent => {
   const e = new ErrorWithIntent(
     strings.GetPortfolioConfigErrorText,
-    'error',
+    'warning',
     strings.GetPortfolioConfigErrorTitle
   )
   e.stack = error.stack

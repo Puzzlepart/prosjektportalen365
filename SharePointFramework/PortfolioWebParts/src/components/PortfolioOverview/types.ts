@@ -154,11 +154,6 @@ export interface IPortfolioOverviewProps
   selectedPortfolioId?: string
 
   /**
-   * The selected portfolio instance (not stored in web part properties, but "calculated" from `selectedPortfolioId`).
-   */
-  selectedPortfolio?: PortfolioInstance
-
-  /**
    * Show portfolio selector in view mode (not just in web part properties).
    */
   showPortfolioSelector?: boolean

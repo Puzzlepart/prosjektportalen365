@@ -10,11 +10,12 @@ import { IPortfolioOverviewContext } from '../context'
  */
 export function usePortfolioSelector(context: IPortfolioOverviewContext) {
     const [selectedPortfolioId, setSelectedPortfolioId] = useState(context.props.selectedPortfolioId)
+    const selectedPortfolio = useMemo(() => context.props.portfolios?.find((v) => v.uniqueId === selectedPortfolioId), [selectedPortfolioId, context.props.portfolios])
 
     return useMemo<ListMenuItem>(
         () =>
             new ListMenuItem(
-                context.props.selectedPortfolio?.title ?? strings.SelectedPortfolioLabel,
+                selectedPortfolio?.title ?? strings.SelectedPortfolioLabel,
                 strings.PortfolioSelectorDescription
             )
                 .setIcon('Collections')

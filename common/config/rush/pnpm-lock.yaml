@@ -25837,6 +25837,7 @@ packages:
       '@microsoft/sp-lodash-subset': 1.17.4
       '@microsoft/sp-module-interfaces': 1.17.4
       '@microsoft/sp-page-context': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-property-pane': 1.17.4_5bb3879ba087c0ef402ac2f0f80f9922
       '@microsoft/sp-webpart-base': 1.17.4_5bb3879ba087c0ef402ac2f0f80f9922
       '@pnp/core': 3.17.0
       '@pnp/logging': 3.17.0
@@ -25889,7 +25890,7 @@ packages:
     peerDependencies:
       interactjs: '*'
     resolution:
-      integrity: sha512-6Uaq2yicz9X5O8j2562XxqBFkMqA7sjL3c3XZviUx0O9oOlPb8iZ5ouTFBkkoK0uapYhFuYgmzi4NIApii0HcA==
+      integrity: sha512-jjy2tZLAGAyNUzMiqTlflZ8Rgj2eeIxhYwdHHI3qNw4g0ftZRv5dIry+4Q0HYNSnpxxhf2vRhqlUR086Arr+Rg==
       tarball: file:projects/pp365-shared-library.tgz
     version: 0.0.0
   file:projects/pp365-spfx-tasks.tgz_9c907a7ccd27a2e2d0ee9de5366482d1:

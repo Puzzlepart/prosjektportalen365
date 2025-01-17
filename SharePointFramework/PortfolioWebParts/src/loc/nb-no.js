@@ -6,6 +6,7 @@ define([], function () {
     ShowPortfolioSelectorOnText: 'Ja',
     ShowPortfolioSelectorOffText: 'Nei',
     ShowPortfolioSelectorLabel: 'Vis porteføljevelger',
+    ShowPortfolioSelectorDescription: 'Porteføljevelgeren vil vises på kommandolinjen om det er flere enn én portefølje tilgjengelig.',
     SelectedPortfolioLabel: 'Velg portefølje',
     PortfoliosLabel: 'Porteføljer',
     PortfoliosPanelHeader: 'Administrer porteføljer',
@@ -15,7 +16,7 @@ define([], function () {
     ColumnsListNameFieldLabel: 'Liste for kolonner',
     ColumnConfigListNameFieldLabel: 'Liste for kolonnekonfigurasjon',
     GetPortfolioConfigErrorTitle: 'Ingen konfigurasjon tilgjengelig',
-    GetPortfolioConfigErrorText: 'Du er kanskje utenfor en Prosjektportalen-instans? Gå til Avansert under webdelegenskaper for å konfigurere porteføljer.',
+    GetPortfolioConfigErrorText: 'Du er kanskje utenfor en Prosjektportalen-instans? Gå til **Avansert** under _webdelegenskaper_ for å konfigurere porteføljer. Du kan sette opp flere porteføljer og velge hvilken som skal vises som standard i webdelen.',
     AdvancedGroupName: 'Avansert',
     Aria: {
       MenuOverflowCount: '{0} flere elementer',

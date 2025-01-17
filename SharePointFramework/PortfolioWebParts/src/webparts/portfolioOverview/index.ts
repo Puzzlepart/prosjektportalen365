@@ -2,6 +2,7 @@ import {
   IPropertyPaneConfiguration,
   IPropertyPaneDropdownOption,
   PropertyPaneDropdown,
+  PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -21,7 +22,8 @@ import _ from 'lodash'
 import {
   PortalDataServiceDefaultConfiguration,
   UserMessage,
-  ErrorWithIntent
+  ErrorWithIntent,
+  PropertyPaneDescription
 } from 'pp365-shared-library'
 import { DataAdapter } from 'data'
 
@@ -45,10 +47,7 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
     this.renderComponent<IPortfolioOverviewProps>(PortfolioOverview, {
       configuration: this._configuration,
       onSetPortfolio: this.setPortfolio.bind(this),
-      selectedPortfolioId: this._selectedPortfolioId,
-      selectedPortfolio: this.properties.portfolios.find(
-        ({ uniqueId }) => uniqueId === this._selectedPortfolioId
-      )
+      selectedPortfolioId: this._selectedPortfolioId
     })
   }
 
@@ -73,10 +72,11 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
 
   public async onInit(): Promise<void> {
     try {
+      const portfolios = this.properties.portfolios ?? []
       this._selectedPortfolioId = this.properties.selectedPortfolioId
-      const portfolio = this.properties.portfolios.find(
+      const portfolio = portfolios.find(
         ({ uniqueId }) => uniqueId === this._selectedPortfolioId
-      )
+      ) ?? _.first(portfolios)
       await super.onInit(portfolio)
       this._configuration = await this.dataAdapter.getPortfolioConfig()
     } catch (error) {
@@ -125,11 +125,15 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                 PropertyPaneToggle('showSearchBox', {
                   label: strings.ShowSearchBoxLabel
                 }),
+                PropertyPaneTextField('textField', {
+                  label:'textField',
+                  description: 'A very long description of a text field',
+                }),
                 !_.isEmpty(this.properties.portfolios) &&
-                  PropertyPaneDropdown('selectedPortfolioId', {
-                    label: strings.SelectedPortfolioLabel,
-                    options: this._getOptions('portfolios')
-                  }),
+                PropertyPaneDropdown('selectedPortfolioId', {
+                  label: strings.SelectedPortfolioLabel,
+                  options: this._getOptions('portfolios')
+                }),
                 PropertyPaneDropdown('defaultViewId', {
                   label: strings.DefaultViewLabel,
                   options: this._getOptions('defaultViewId')
@@ -149,22 +153,23 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                   label: strings.ShowExcelExportButtonLabel
                 }),
                 this.properties.showExcelExportButton &&
-                  PropertyPaneToggle('includeViewNameInExcelExportFilename', {
-                    label: strings.IncludeViewNameInExcelExportFilenameLabel
-                  }),
+                PropertyPaneToggle('includeViewNameInExcelExportFilename', {
+                  label: strings.IncludeViewNameInExcelExportFilenameLabel
+                }),
                 !_.isEmpty(this.properties.portfolios) &&
-                  PropertyPaneToggle('showPortfolioSelector', {
-                    label: strings.ShowPortfolioSelectorLabel,
-                    onText: strings.ShowPortfolioSelectorOnText,
-                    offText: strings.ShowPortfolioSelectorOffText
-                  }),
+                PropertyPaneToggle('showPortfolioSelector', {
+                  label: strings.ShowPortfolioSelectorLabel,
+                  onText: strings.ShowPortfolioSelectorOnText,
+                  offText: strings.ShowPortfolioSelectorOffText
+                }),
+                PropertyPaneDescription( strings.ShowPortfolioSelectorDescription, !_.isEmpty(this.properties.portfolios)),
                 PropertyPaneToggle('showViewSelector', {
                   label: strings.ShowViewSelectorLabel
                 }),
                 this.properties.showViewSelector &&
-                  PropertyPaneToggle('showProgramViews', {
-                    label: strings.ShowProgramViewsLabel
-                  })
+                PropertyPaneToggle('showProgramViews', {
+                  label: strings.ShowProgramViewsLabel
+                })
               ].filter(Boolean)
             },
             {
