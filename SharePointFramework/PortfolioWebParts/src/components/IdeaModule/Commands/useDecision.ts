@@ -9,6 +9,5 @@ export const useDecision = () => {
   const context = useIdeaModuleContext()
   return async (): Promise<void> => {
     // TODO: Implement the useDecision hook
-    // console.log('decide', context)
   }
 }

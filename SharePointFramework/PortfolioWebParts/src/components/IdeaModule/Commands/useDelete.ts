@@ -10,6 +10,5 @@ export const useDelete = () => {
   const context = useIdeaModuleContext()
   return async (): Promise<void> => {
     // TODO: Implement the useDelete hook
-    // console.log('delete', context)
   }
 }

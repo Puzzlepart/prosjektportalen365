@@ -24,9 +24,7 @@ export function useToolbarItems() {
         new ListMenuItem('Ny idé', 'Opprett en ny idé').setIcon('QuizNew').setOnClick(() => {
           createNewStatusReport
         }),
-        new ListMenuItem('Rediger', 'Rediger idéen').setIcon('Edit').setOnClick(() => {
-          // console.log('edit')
-        }),
+        new ListMenuItem('Rediger', 'Rediger idéen').setIcon('Edit').setOnClick(() => {}),
         new ListMenuItem('Godkjenn', 'Godkjenn idéen').setIcon('CloudArrowUp').setOnClick(() => {
           decideIdea()
         })
