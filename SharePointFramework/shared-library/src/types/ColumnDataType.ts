@@ -15,3 +15,4 @@ export type ColumnDataType =
   | 'filename'
   | 'list'
   | 'projectinfo'
+  | 'statusreport'

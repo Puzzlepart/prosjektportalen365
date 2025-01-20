@@ -7,5 +7,4 @@ import { useIdeaModuleContext } from '../context'
 export const useCreateNewIdea = () => {
   const context = useIdeaModuleContext()
   // TODO: Implement the useCreateNewIdea hook
-  // console.log('create', context)
 }

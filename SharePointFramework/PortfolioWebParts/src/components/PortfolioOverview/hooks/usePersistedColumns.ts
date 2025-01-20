@@ -1,6 +1,6 @@
 import { dateAdd, PnPClientStorage } from '@pnp/core'
 import { ProjectColumn } from 'pp365-shared-library/lib/models'
-import { IPortfolioOverviewProps } from './types'
+import { IPortfolioOverviewProps } from '../types'
 import _ from 'underscore'
 
 /**

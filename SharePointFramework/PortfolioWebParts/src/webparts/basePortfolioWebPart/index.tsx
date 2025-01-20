@@ -7,7 +7,7 @@ import { SiteContext, createSpfiInstance, customLightTheme } from 'pp365-shared-
 import React, { ComponentClass, FC, createElement } from 'react'
 import { render } from 'react-dom'
 import { ErrorBoundary } from 'react-error-boundary'
-import { DataAdapter } from '../../data'
+import { DataAdapter, PortfolioInstance } from '../../data'
 import { ErrorBoundaryFallback } from './ErrorBoundary'
 import { FluentProvider } from '@fluentui/react-components'
 
@@ -29,6 +29,7 @@ export abstract class BasePortfolioWebPart<
    */
   protected createPropsForComponent<P>(props: Partial<P>): P {
     return {
+      manifestId: this.manifest.id,
       title: this._pageTitle,
       ...this.properties,
       ...props,
@@ -59,9 +60,9 @@ export abstract class BasePortfolioWebPart<
 
     render(
       <ErrorBoundary
-        fallbackRender={({ error }) => (
-          <ErrorBoundaryFallback title={combinedProps['title']} error={error} />
-        )}
+        fallbackRender={(p) => {
+          return <ErrorBoundaryFallback {...p} title={combinedProps['title']} />
+        }}
       >
         <FluentProvider theme={customLightTheme}>{element}</FluentProvider>
       </ErrorBoundary>,
@@ -87,9 +88,18 @@ export abstract class BasePortfolioWebPart<
     } catch (error) {}
   }
 
-  public async onInit(): Promise<void> {
+  /**
+   * Initialize the web part with the specified portfolio instance.
+   *
+   * @param portfolio Optional portfolio instance to initialize the data adapter with
+   */
+  public async onInit(portfolio?: PortfolioInstance): Promise<void> {
     await this._setup()
-    this.dataAdapter = await new DataAdapter(this.context, this.sp).configure()
+    this.dataAdapter = await new DataAdapter(this.context, this.sp).configure(
+      this.context,
+      null,
+      portfolio
+    )
     this.context.statusRenderer.clearLoadingIndicator(this.domElement)
   }
 

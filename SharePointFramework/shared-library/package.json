@@ -46,7 +46,8 @@
     "sp-js-provisioning": "~1.2.5",
     "@fluentui/react-datepicker-compat": "~0.4.38",
     "shade-blend-color": "~1.0.0",
-    "react-gauge-component": "~1.2.61"
+    "react-gauge-component": "~1.2.61",
+    "@microsoft/sp-property-pane": "1.17.4"
   },
   "devDependencies": {
     "@microsoft/rush-stack-compiler-4.5": "0.2.2",

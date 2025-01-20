@@ -67,7 +67,8 @@
     "@fluentui/react-motion-preview": "~0.5.20",
     "@fluentui/react-nav-preview": "~0.9.1",
     "react-gauge-component": "~1.2.61",
-    "@fluentui/react-motion-components-preview": "~0.3.0"
+    "@fluentui/react-motion-components-preview": "~0.3.0",
+    "react-fade-in": "~2.0.1"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.17.4",

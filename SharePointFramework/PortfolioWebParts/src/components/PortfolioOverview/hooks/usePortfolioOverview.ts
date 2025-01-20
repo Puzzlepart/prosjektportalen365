@@ -5,8 +5,8 @@ import strings from 'PortfolioWebPartsStrings'
 import { IFilterItemProps, IFilterPanelProps, ProjectColumn } from 'pp365-shared-library'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
 import { useMemo, useReducer } from 'react'
-import { OnColumnContextMenu } from '../List'
-import { IPortfolioOverviewContext } from './context'
+import { OnColumnContextMenu } from '../../List'
+import { IPortfolioOverviewContext } from '../context'
 import createReducer, {
   EXECUTE_SEARCH,
   ON_FILTER_CHANGED,
@@ -14,9 +14,9 @@ import createReducer, {
   TOGGLE_COLUMN_CONTEXT_MENU,
   TOGGLE_FILTER_PANEL,
   getInitialState
-} from './reducer'
-import { IPortfolioOverviewProps } from './types'
-import { useToolbarItems } from './ToolbarItems/useToolbarItems'
+} from '../reducer'
+import { IPortfolioOverviewProps } from '../types'
+import { useToolbarItems } from '../ToolbarItems/useToolbarItems'
 import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
 import { useFetchData } from './useFetchData'
 import { useFilteredData } from './useFilteredData'

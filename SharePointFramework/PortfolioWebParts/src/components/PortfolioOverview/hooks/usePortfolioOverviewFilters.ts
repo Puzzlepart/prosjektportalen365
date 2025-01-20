@@ -3,7 +3,7 @@ import { stringIsNullOrEmpty } from '@pnp/core'
 import * as uniq from 'array-unique'
 import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import _ from 'underscore'
-import { IPortfolioOverviewContext } from './context'
+import { IPortfolioOverviewContext } from '../context'
 
 /**
  * Returns an array of filters for the portfolio overview based on the current view and items.

@@ -25,7 +25,7 @@ export function useToolbarItems() {
           createNewStatusReport
         }),
         new ListMenuItem('Rediger', 'Rediger idéen').setIcon('Edit').setOnClick(() => {
-          // console.log('edit')
+          // Not implemented
         }),
         new ListMenuItem('Godkjenn', 'Godkjenn idéen').setIcon('CloudArrowUp').setOnClick(() => {
           decideIdea()

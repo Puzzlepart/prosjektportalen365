@@ -8,7 +8,7 @@ import styles from './PortfolioOverview.module.scss'
 import { ViewFormPanel } from './ViewFormPanel'
 import { PortfolioOverviewContext } from './context'
 import { IPortfolioOverviewProps } from './types'
-import { usePortfolioOverview } from './usePortfolioOverview'
+import { usePortfolioOverview } from './hooks/usePortfolioOverview'
 
 export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
   const {
@@ -37,12 +37,12 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
             onColumnContextMenu={onColumnContextMenu}
             compact={context.state.isCompact}
             isListLayoutModeJustified={props.isListLayoutModeJustified}
-            renderTitleProjectInformationPanel={true}
             webPartContext={props.spfxContext as WebPartContext}
             layerHostId={context.layerHostId}
             menuItems={menuItems}
             filterPanelProps={filterPanelProps}
             error={context.state.error}
+            renderTitleProjectInformationPanel
           />
         </div>
         <ColumnContextMenu />

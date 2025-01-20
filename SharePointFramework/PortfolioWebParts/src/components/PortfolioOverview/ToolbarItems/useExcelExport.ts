@@ -60,5 +60,5 @@ export function useExcelExport(context: IPortfolioOverviewContext) {
     }
   }, [context.state])
 
-  return { exportToExcel } as const
+  return exportToExcel
 }

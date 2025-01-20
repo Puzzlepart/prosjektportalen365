@@ -23,4 +23,9 @@ export interface IBaseComponentProps extends SiteContext {
    * SPFI instance.
    */
   sp?: SPFI
+
+  /**
+   * The ID of the SPFx component.
+   */
+  manifestId?: string
 }
