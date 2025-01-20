@@ -1383,7 +1383,7 @@ packages:
       '@uifabric/utilities': 7.38.2_9c907a7ccd27a2e2d0ee9de5366482d1
       classnames: 2.5.1
       react: 17.0.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -1702,7 +1702,7 @@ packages:
       '@uifabric/utilities': 7.38.2_9f7147fa6acafed13e71b068ea0d74dc
       react: 16.8.5
       react-dom: 16.8.5_react@16.8.5
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '*'
@@ -2502,7 +2502,7 @@ packages:
       '@types/react': 17.0.45
       '@uifabric/set-version': 7.0.24
       react: 17.0.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -2764,7 +2764,7 @@ packages:
       '@uifabric/utilities': 7.38.2_9c907a7ccd27a2e2d0ee9de5366482d1
       classnames: 2.5.1
       react: 17.0.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -3018,7 +3018,7 @@ packages:
       office-ui-fabric-react: 7.204.0_9c907a7ccd27a2e2d0ee9de5366482d1
       react: 17.0.1
       react-dom: 17.0.1_react@17.0.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -3032,7 +3032,7 @@ packages:
       '@fluentui/date-time-utilities': 8.6.9
       '@fluentui/font-icons-mdl2': 8.5.57_4865287ef69aa4f3fc3f709d3560286e
       '@fluentui/foundation-legacy': 8.4.23_4865287ef69aa4f3fc3f709d3560286e
-      '@fluentui/merge-styles': 8.5.12
+      '@fluentui/merge-styles': 8.6.13
       '@fluentui/react-focus': 8.9.20_4865287ef69aa4f3fc3f709d3560286e
       '@fluentui/react-hooks': 8.8.16_4865287ef69aa4f3fc3f709d3560286e
       '@fluentui/react-portal-compat-context': 9.0.13_4865287ef69aa4f3fc3f709d3560286e
@@ -4229,7 +4229,7 @@ packages:
     dependencies:
       es6-promise: 4.2.8
       isomorphic-fetch: 3.0.0
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     resolution:
       integrity: sha512-BQN50r3tohWYOaQ0de7LJ5eCRjI6eg4RQqLhGDlgRmZIZhWzH0bhR6QBMmmxtYtwKWifhPhJSxYDW+cP67TJVw==
@@ -4237,7 +4237,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.26.0
       msal: 1.4.18
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     resolution:
       integrity: sha512-fbDN3UJ+jtSP9llAejqmslMcv498YuIrS3OS/Luivb8OSjdUESZKdP0gcUunnuNIayePVT0/bGYSJTzAIptJQQ==
@@ -6565,7 +6565,7 @@ packages:
     dependencies:
       '@fluentui/merge-styles': 8.5.12
       '@fluentui/react': 8.106.4_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@fluentui/react-components': 9.52.0_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@fluentui/react-components': 9.57.0_9c907a7ccd27a2e2d0ee9de5366482d1
       '@fluentui/react-file-type-icons': 8.11.21_4865287ef69aa4f3fc3f709d3560286e
       '@fluentui/react-hooks': 8.8.16_4865287ef69aa4f3fc3f709d3560286e
       '@fluentui/react-icons': 2.0.271_react@17.0.1
@@ -7818,7 +7818,7 @@ packages:
       integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==
   /@types/lodash.isequal/4.5.8:
     dependencies:
-      '@types/lodash': 4.14.202
+      '@types/lodash': 4.17.14
     dev: false
     resolution:
       integrity: sha512-uput6pg4E/tj2LGxCZo9+y27JNyB2OZuuI/T5F+ylVDYuqICLG2/ktjxx0v6GvVntAf8TvEzeQLcV0ffRirXuA==
@@ -10936,7 +10936,7 @@ packages:
   /chart.js/2.9.4:
     dependencies:
       chartjs-color: 2.4.1
-      moment: 2.29.4
+      moment: 2.30.1
     dev: false
     resolution:
       integrity: sha512-B07aAzxcrikjAPyV+01j7BmOpxtQETxTSlQ26BEYJ+3iUkbNKaOJ/nDbT6JjyqYxseM0ON12COHYdU2cTIjC7A==
@@ -18634,7 +18634,7 @@ packages:
       integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
   /msal/1.4.12:
     dependencies:
-      tslib: 1.10.0
+      tslib: 1.14.1
     deprecated: This package is no longer supported. Please use @azure/msal-browser instead.
     dev: false
     engines:
@@ -18661,7 +18661,7 @@ packages:
       integrity: sha512-RjHwP2cCIWQ9iUIk1SziUMb9+jj5mC4OqG2w16E5yig8jySi/TwiFvKlwcjNrPsndph0HtgCtbENnk5julf3yQ==
   /msal/1.4.18:
     dependencies:
-      tslib: 1.10.0
+      tslib: 1.14.1
     deprecated: This package is no longer supported. Please use @azure/msal-browser instead.
     dev: false
     engines:
@@ -19283,7 +19283,7 @@ packages:
       prop-types: 15.8.1
       react: 16.8.5
       react-dom: 16.8.5_react@16.8.5
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <17.0.0'
@@ -19366,7 +19366,7 @@ packages:
       prop-types: 15.8.1
       react: 17.0.1
       react-dom: 17.0.1_react@17.0.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -21076,6 +21076,14 @@ packages:
       react: '>=16.13.1'
     resolution:
       integrity: sha512-b6PwbdSv8XeOSYvjt8LpgpKrZ0yGdtZokYwkwV2wlcZbxgopHX/hgPl5VgpnoVOWd868n1hktM8Qm4b+02MiLQ==
+  /react-fade-in/2.0.1_react@17.0.1:
+    dependencies:
+      react: 17.0.1
+    dev: false
+    peerDependencies:
+      react: ^16.8 || 17
+    resolution:
+      integrity: sha512-oqS/WT4znaXEHmL+yo0IDUDY7uC9K4RP35j1SdRUEBspR09B2iIC0i8oJ28tPOr6Ez/L2aktF9p89j+DbsTVNw==
   /react-gauge-component/1.2.62_react-dom@17.0.1+react@17.0.1:
     dependencies:
       '@types/d3': 7.4.3
@@ -23340,7 +23348,7 @@ packages:
       integrity: sha512-K7npNOKGRYuhAFFzkzMGfxFDpN6gDwf8hcMiE+uveTVbBgm93HrNP3ZDUpKqzZ4pG7TP6fmb+EMAQPjq9FqqvA==
   /substyle/9.4.1_react@17.0.1:
     dependencies:
-      '@babel/runtime': 7.4.5
+      '@babel/runtime': 7.26.0
       invariant: 2.2.4
       react: 17.0.1
     dev: false
@@ -25709,6 +25717,7 @@ packages:
       react-calendar-timeline: 0.27.0_5037b5fb8d56c2b0cc07428f64c324c4
       react-dom: 17.0.1_react@17.0.1
       react-error-boundary: 4.0.13_react@17.0.1
+      react-fade-in: 2.0.1_react@17.0.1
       react-gauge-component: 1.2.62_react-dom@17.0.1+react@17.0.1
       react-highcharts: 16.0.2_react-dom@17.0.1+react@17.0.1
       react-virtualized-auto-sizer: 1.0.25_react-dom@17.0.1+react@17.0.1
@@ -25725,7 +25734,7 @@ packages:
     peerDependencies:
       '@pnp/odata': '*'
     resolution:
-      integrity: sha512-E5t7s2IiGyWkdPgvgdb2Iw152thTYFGtlxhuFgNKX8sBQ/vJXXfpYNjsSYoXx4BofaQo6DvjCyD0LvOTlvcuFw==
+      integrity: sha512-uRKwyPcPzhOEYx9A/kGDyivUCbm7IXSrltD/ljncn4m5N0OdVRHhGqoXN4kyYlO2hgULCHrasZbeG/YSHXTTJw==
       tarball: file:projects/pp365-portfoliowebparts.tgz
     version: 0.0.0
   file:projects/pp365-programwebparts.tgz_@pnp+odata@2.15.0:
