@@ -1,11 +1,13 @@
+/* eslint-disable no-console */
 import { MessageBarType } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
+import { ColumnRenderComponentRegistry } from 'components/List'
 import _ from 'lodash'
 import { PortfolioOverviewView } from 'pp365-shared-library/lib/models'
 import { parseUrlHash } from 'pp365-shared-library/lib/util/parseUrlHash'
 import { useEffect } from 'react'
 import { IPortfolioOverviewContext } from '../context'
-import { DATA_FETCHED, DATA_FETCH_ERROR, STARTING_DATA_FETCH } from '../reducer'
+import { DATA_FETCH_ERROR, DATA_FETCHED, STARTING_DATA_FETCH } from '../reducer'
 import { PortfolioOverviewErrorMessage } from '../types'
 import { usePersistedColumns } from './usePersistedColumns'
 
@@ -88,6 +90,14 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
           (fc) => fc.fieldName === hashState.get('groupBy')
         )
       }
+
+      for (const column of currentView.columns) {
+        const fetchData = ColumnRenderComponentRegistry.getComponent(column.dataType)?.fetchData
+        if (typeof fetchData === 'function') {
+          _.set(column, 'data.$', await fetchData(context.props.configuration.web, column))
+        }
+      }
+
       set(currentView.columns)
       context.dispatch(
         DATA_FETCHED({

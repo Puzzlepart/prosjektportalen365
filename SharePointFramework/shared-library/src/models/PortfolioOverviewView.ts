@@ -123,6 +123,8 @@ export class PortfolioOverviewView {
    */
   public $map: Map<string, any>
 
+  public data: Record<string, any> = {}
+
   /**
    * Constructor for the `PortfolioOverviewView` class.
    *

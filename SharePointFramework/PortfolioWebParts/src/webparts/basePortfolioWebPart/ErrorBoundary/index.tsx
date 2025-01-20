@@ -6,7 +6,7 @@ import { format } from '@fluentui/react'
 import { IErrorBoundaryFallbackProps } from './types'
 
 export const ErrorBoundaryFallback: FC<IErrorBoundaryFallbackProps> = (props) => {
-  console.error(props.error)
+  console.log(props.error)
   return (
     <div role='alert' className={styles.root}>
       <h3>{format(strings.ErrorBoundaryFallbackText, props.title)}</h3>

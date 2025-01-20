@@ -175,6 +175,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         ])
       const refiners = columns.filter((col) => col.isRefinable)
       return {
+        web: this.portalDataService.web,
         columns: columns.map((col) => col.configure(columnConfig)),
         views: views.map((view) => view.configure(columns)),
         refiners,

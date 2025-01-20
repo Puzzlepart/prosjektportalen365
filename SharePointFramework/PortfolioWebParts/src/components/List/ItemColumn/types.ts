@@ -1,6 +1,7 @@
 import { IColumn } from '@fluentui/react'
-import { ColumnDataType } from 'pp365-shared-library'
+import { ColumnDataType, ProjectColumn } from 'pp365-shared-library'
 import { GetDataTypeProperties, IColumnDataTypeFieldOption } from './ColumnDataTypeField'
+import { IWeb } from '@pnp/sp/webs'
 
 export interface IRenderItemColumnProps extends React.HTMLAttributes<HTMLDivElement> {
   column?: IColumn
@@ -58,4 +59,13 @@ export interface ColumnRenderComponent<T extends IRenderItemColumnProps = IRende
    * Function that returns an array of data type properties for the component.
    */
   getDataTypeProperties?: GetDataTypeProperties
+
+  /**
+   * Optional data fetch function that will be called if a column using the
+   * component is used.
+   *
+   * @param web The web instance to fetch data from.
+   * @param column The column to fetch data for.
+   */
+  fetchData?: (web?: IWeb, column?: ProjectColumn) => Promise<any>
 }

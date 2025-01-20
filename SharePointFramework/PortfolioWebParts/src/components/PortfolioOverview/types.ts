@@ -12,6 +12,7 @@ import { IBaseComponentProps } from '../types'
 import { IColumnFormPanel } from './ColumnFormPanel/types'
 import { IViewFormPanel } from './ViewFormPanel/types'
 import { PortfolioInstance } from 'data/types'
+import { IWeb } from '@pnp/sp/webs'
 
 export class PortfolioOverviewErrorMessage extends Error {
   constructor(public message: string, public type: MessageBarType) {
@@ -20,6 +21,11 @@ export class PortfolioOverviewErrorMessage extends Error {
 }
 
 export interface IPortfolioOverviewConfiguration {
+  /**
+   * The web instance
+   */
+  web: IWeb
+
   /**
    * Available columns
    */

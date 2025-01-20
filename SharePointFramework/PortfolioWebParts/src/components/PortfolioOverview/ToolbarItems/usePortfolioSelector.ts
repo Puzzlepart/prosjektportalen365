@@ -10,45 +10,47 @@ import _ from 'lodash'
  * @param context - The `IPortfolioOverviewContext` object containing the necessary data for generating the view selector menu item.
  */
 export function usePortfolioSelector(context: IPortfolioOverviewContext) {
-    const [selectedPortfolioId, setSelectedPortfolioId] = useState(context.props.selectedPortfolioId)
-    const selectedPortfolio = useMemo(
-        () => context.props.portfolios?.find(({ uniqueId }) => uniqueId === selectedPortfolioId) ?? _.first(context.props.portfolios),
-        [selectedPortfolioId, context.props.portfolios]
-    )
+  const [selectedPortfolioId, setSelectedPortfolioId] = useState(context.props.selectedPortfolioId)
+  const selectedPortfolio = useMemo(
+    () =>
+      context.props.portfolios?.find(({ uniqueId }) => uniqueId === selectedPortfolioId) ??
+      _.first(context.props.portfolios),
+    [selectedPortfolioId, context.props.portfolios]
+  )
 
-    return useMemo<ListMenuItem>(
-        () =>
-            new ListMenuItem(
-                selectedPortfolio?.title ?? strings.PortfolioSelectorLabel,
-                strings.PortfolioSelectorDescription
-            )
-                .setIcon('Collections')
-                .setWidth('fit-content')
-                .setStyle({
-                    minWidth: '145px',
-                    display:
-                        context.props.showPortfolioSelector && context.props.portfolios?.length > 0
-                            ? 'flex'
-                            : 'none'
-                })
-                .setDisabled(context.state.isChangingView || context.props.portfolios?.length <= 1)
-                .setItems(
-                    context.props.portfolios.map<ListMenuItem>((v) =>
-                        new ListMenuItem(v.title)
-                            .setIcon(v.iconName)
-                            .makeCheckable({
-                                name: 'portfolios',
-                                value: v.uniqueId.toString()
-                            })
-                            .setOnClick(() => {
-                                setSelectedPortfolioId(v.uniqueId)
-                                context.props.onSetPortfolio(v.uniqueId)
-                            })
-                    ),
-                    {
-                        portfolios: [selectedPortfolio?.uniqueId].filter(Boolean)
-                    }
-                ),
-        [context.props.portfolios, context.state.isChangingView, selectedPortfolioId]
-    )
+  return useMemo<ListMenuItem>(
+    () =>
+      new ListMenuItem(
+        selectedPortfolio?.title ?? strings.PortfolioSelectorLabel,
+        strings.PortfolioSelectorDescription
+      )
+        .setIcon('Collections')
+        .setWidth('fit-content')
+        .setStyle({
+          minWidth: '145px',
+          display:
+            context.props.showPortfolioSelector && context.props.portfolios?.length > 0
+              ? 'flex'
+              : 'none'
+        })
+        .setDisabled(context.state.isChangingView || context.props.portfolios?.length <= 1)
+        .setItems(
+          context.props.portfolios.map<ListMenuItem>((v) =>
+            new ListMenuItem(v.title)
+              .setIcon(v.iconName)
+              .makeCheckable({
+                name: 'portfolios',
+                value: v.uniqueId.toString()
+              })
+              .setOnClick(() => {
+                setSelectedPortfolioId(v.uniqueId)
+                context.props.onSetPortfolio(v.uniqueId)
+              })
+          ),
+          {
+            portfolios: [selectedPortfolio?.uniqueId].filter(Boolean)
+          }
+        ),
+    [context.props.portfolios, context.state.isChangingView, selectedPortfolioId]
+  )
 }

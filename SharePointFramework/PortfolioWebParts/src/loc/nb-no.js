@@ -183,6 +183,7 @@ define([], function () {
     ColumnRenderOptionUrlDescriptionLabel: 'Beskrivelse',
     ColumnRenderOptionUrlOpenInNewTabLabel: 'Åpne i ny fane',
     ColumnRenderOptionUser: 'Person',
+    ColumnRenderOptionStatusReport: 'Statusrapport',
     ColumnSettingsDisabledTooltip: 'Kolonneinnstillinger er kun tilgjengelig når siden er i redigeringsmodus.',
     ColumnSettingsLabel: 'Kolonneinnstillinger',
     ColumnsListNameLabel: 'Kolonner',

@@ -29,6 +29,7 @@ export abstract class BasePortfolioWebPart<
    */
   protected createPropsForComponent<P>(props: Partial<P>): P {
     return {
+      manifestId: this.manifest.id,
       title: this._pageTitle,
       ...this.properties,
       ...props,
