@@ -13,7 +13,8 @@ export function useStatusReportColumn(props: IStatusColumnProps) {
   const status = _.get(props.column, 'data.$', []).find(
     ({ siteId }) => siteId === props.item.SiteId
   )
-  const onRenderContent = () => createElement(TooltipContent, { status })
+  const onRenderContent = () =>
+    createElement(TooltipContent, { status, animation: props.tooltip.animation })
   const tooltipProps: ITooltipProps = { onRenderContent }
 
   return {

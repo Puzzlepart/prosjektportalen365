@@ -21,7 +21,11 @@ export const StatusReportColumn: ColumnRenderComponent<IStatusColumnProps> = (
       calloutProps={{ gapSpace: 10 }}
     >
       <div>
-        <FadeIn className={styles.root} delay={100} transitionDuration={400}>
+        <FadeIn
+          className={styles.root}
+          delay={props.animation.delay}
+          transitionDuration={props.animation.transitionDuration}
+        >
           {status?.sections?.map(({ fieldName, iconName, color }) => (
             <Icon
               key={fieldName}
@@ -43,7 +47,17 @@ export const StatusReportColumn: ColumnRenderComponent<IStatusColumnProps> = (
 StatusReportColumn.defaultProps = {
   statusReportListName: 'Prosjektstatus',
   columnConfigListName: 'Prosjektkolonnekonfigurasjon',
-  statusSectionsListName: 'Statusseksjoner'
+  statusSectionsListName: 'Statusseksjoner',
+  animation: {
+    delay: 100,
+    transitionDuration: 400
+  },
+  tooltip: {
+    animation: {
+      delay: 250,
+      transitionDuration: 300
+    }
+  }
 }
 StatusReportColumn.key = 'statusreport'
 StatusReportColumn.id = 'StatusReport'

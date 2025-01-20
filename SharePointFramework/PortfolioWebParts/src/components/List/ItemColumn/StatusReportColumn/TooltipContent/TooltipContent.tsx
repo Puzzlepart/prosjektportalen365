@@ -6,7 +6,11 @@ import styles from './TooltipContent.module.scss'
 
 export const TooltipContent = (props: IStatusColumnProps): JSX.Element => {
   return (
-    <FadeIn className={styles.root} delay={250} transitionDuration={300}>
+    <FadeIn
+      className={styles.root}
+      delay={props.animation.delay}
+      transitionDuration={props.animation.transitionDuration}
+    >
       {props?.status?.sections?.map(({ fieldName, name, value, comment, iconName, color }) => (
         <div key={fieldName} className={styles.section}>
           <div className={styles.iconContainer}>
