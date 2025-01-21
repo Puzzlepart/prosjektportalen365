@@ -61,7 +61,7 @@ export function useViewSelector(context: IPortfolioOverviewContext) {
             ...personalViews,
             context.props.showProgramViews && ListMenuItemDivider,
             context.props.showProgramViews &&
-            ListMenuItemHeader(strings.ProgramsHeaderText).setStyle(programViewsStyle),
+              ListMenuItemHeader(strings.ProgramsHeaderText).setStyle(programViewsStyle),
             new ListMenuItem(strings.SelectProgramText)
               .setItems(programViews)
               .setIcon('ChevronLeft')
