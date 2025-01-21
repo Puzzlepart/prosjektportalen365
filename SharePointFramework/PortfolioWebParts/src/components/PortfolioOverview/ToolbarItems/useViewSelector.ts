@@ -29,10 +29,8 @@ export function useViewSelector(context: IPortfolioOverviewContext) {
       new ListMenuItem(context.state.currentView?.title, strings.PortfolioViewsListName)
         .setIcon('ContentView')
         .setWidth('fit-content')
-        .setStyle({
-          minWidth: '145px',
-          display: context.props.showViewSelector ? 'flex' : 'none'
-        })
+        .setStyle({ minWidth: '145px' })
+        .setHidden(!context.props.showViewSelector)
         .setDisabled(context.state.isChangingView)
         .setItems(
           [
@@ -63,7 +61,7 @@ export function useViewSelector(context: IPortfolioOverviewContext) {
             ...personalViews,
             context.props.showProgramViews && ListMenuItemDivider,
             context.props.showProgramViews &&
-              ListMenuItemHeader(strings.ProgramsHeaderText).setStyle(programViewsStyle),
+            ListMenuItemHeader(strings.ProgramsHeaderText).setStyle(programViewsStyle),
             new ListMenuItem(strings.SelectProgramText)
               .setItems(programViews)
               .setIcon('ChevronLeft')

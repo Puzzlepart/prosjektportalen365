@@ -26,13 +26,8 @@ export function usePortfolioSelector(context: IPortfolioOverviewContext) {
       )
         .setIcon('Collections')
         .setWidth('fit-content')
-        .setStyle({
-          minWidth: '145px',
-          display:
-            context.props.showPortfolioSelector && context.props.portfolios?.length > 0
-              ? 'flex'
-              : 'none'
-        })
+        .setStyle({ minWidth: '145px' })
+        .setHidden(!context.props.showPortfolioSelector || _.isEmpty(context.props.portfolios))
         .setDisabled(context.state.isChangingView || context.props.portfolios?.length <= 1)
         .setItems(
           context.props.portfolios.map<ListMenuItem>((v) =>
