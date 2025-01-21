@@ -21,6 +21,7 @@ import {
   getClassProperties,
   getUserPhoto,
   IGraphGroup,
+  IPortalDataServiceConfiguration,
   ItemFieldValues,
   PortalDataService,
   PortfolioOverviewView,
@@ -101,20 +102,19 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   ): Promise<DataAdapter> {
     await msGraph.Init(this._spfxContext.msGraphClientFactory)
     if (this.dataSourceService && this.portalDataService.isConfigured) return this
-    let overrideListNames = null
+    let configuration: IPortalDataServiceConfiguration = {
+      spfxContext: this._spfxContext,
+      url: portfolio?.url,
+      activeLogLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+    }
     if (portfolio) {
-      overrideListNames = {
+      configuration.listNames = {
         PROJECT_COLUMNS: portfolio.columnsListName,
-        PROJECT_COLUMNS_CONFIGURATION: portfolio.columnConfigListName,
+        PROJECT_COLUMN_CONFIGURATION: portfolio.columnConfigListName,
         PORTFOLIO_VIEWS: portfolio.viewsListName
       }
     }
-    this.portalDataService = await this.portalDataService.configure({
-      spfxContext: this._spfxContext,
-      url: portfolio?.url,
-      listNames: overrideListNames,
-      activeLogLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
-    })
+    this.portalDataService = await this.portalDataService.configure(configuration)
     this.dataSourceService = new DataSourceService(this.portalDataService.web)
     return this
   }

@@ -224,12 +224,10 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   /**
    * Get project columns from the project columns list in the portfolio site.
    * Optionally override the list name with the `listName` parameter.
-   *
-   * @param listName Optional list name for overriding the default list name
    */
-  public async getProjectColumns(listName?: string): Promise<ProjectColumn[]> {
+  public async getProjectColumns(): Promise<ProjectColumn[]> {
     try {
-      const spItems = await this._getList('PROJECT_COLUMNS', listName).items.select(
+      const spItems = await this._getList('PROJECT_COLUMNS').items.select(
         ...getClassProperties(SPProjectColumnItem)
       )<SPProjectColumnItem[]>()
       return spItems.map((item) => new ProjectColumn(item))
@@ -343,11 +341,9 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
 
   /**
    * Get project column configuration using `DefaultCaching`.
-   *
-   * @param listName Optional list name for overriding the default list name
    */
-  public async getProjectColumnConfig(listName?: string): Promise<ProjectColumnConfig[]> {
-    const spItems = await this._getList('PROJECT_COLUMN_CONFIGURATION', listName)
+  public async getProjectColumnConfig(): Promise<ProjectColumnConfig[]> {
+    const spItems = await this._getList('PROJECT_COLUMN_CONFIGURATION')
       .items.orderBy('ID', true)
       .expand('GtPortfolioColumn', 'GtPortfolioColumnTooltip')
       .select(
@@ -401,18 +397,16 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * Get list form urls
    *
    * @param list List key
-   * @param listName Optional list name for overriding the default list name
    */
   public async getListFormUrls(
-    list: PortalDataServiceList,
-    listName?: string
+    list: PortalDataServiceList
   ): Promise<{ defaultNewFormUrl: string; defaultEditFormUrl: string }> {
-    const urls = await this._getList(list, listName)
+    const urls = await this._getList(list)
       .select('DefaultNewFormUrl', 'DefaultEditFormUrl')
       .expand('DefaultNewFormUrl', 'DefaultEditFormUrl')<{
-      DefaultNewFormUrl: string
-      DefaultEditFormUrl: string
-    }>()
+        DefaultNewFormUrl: string
+        DefaultEditFormUrl: string
+      }>()
     return {
       defaultNewFormUrl: makeUrlAbsolute(urls.DefaultNewFormUrl),
       defaultEditFormUrl: makeUrlAbsolute(urls.DefaultEditFormUrl)
@@ -425,14 +419,12 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    *
    * @param list List key
    * @param permissionKind Permission kind to check
-   * @param listName Optional list name for overriding the default list name
    */
   public async currentUserHasPermissionsToList(
     list: PortalDataServiceList,
-    permissionKind: PermissionKind,
-    listName?: string
+    permissionKind: PermissionKind
   ): Promise<boolean> {
-    return await this._getList(list, listName).currentUserHasPermissions(permissionKind)
+    return await this._getList(list).currentUserHasPermissions(permissionKind)
   }
 
   /**
@@ -508,7 +500,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
           fieldsAdded.push(field)
         }
         await executeQuery(jsomContext)
-      } catch (error) {}
+      } catch (error) { }
     }
     try {
       const templateParametersField = spList
@@ -520,7 +512,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         )
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
-    } catch {}
+    } catch { }
     if (ensureList.created && params.properties) {
       ensureList.list.items.add(params.properties)
     }
@@ -1048,9 +1040,8 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * Get list by `PortalDataServiceList` enum
    *
    * @param list List to get items from
-   * @param listName Optional list name for overriding the default list name
    */
-  private _getList(list: PortalDataServiceList, listName?: string): IList {
-    return this.web.lists.getByTitle(listName ?? this._configuration.listNames[list])
+  private _getList(list: PortalDataServiceList): IList {
+    return this.web.lists.getByTitle(this._configuration.listNames[list])
   }
 }

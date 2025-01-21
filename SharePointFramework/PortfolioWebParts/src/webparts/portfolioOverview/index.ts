@@ -46,6 +46,7 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
     this.renderComponent<IPortfolioOverviewProps>(PortfolioOverview, {
       configuration: this._configuration,
       onSetPortfolio: this.setPortfolio.bind(this),
+      portfolios: this.properties.portfolios ?? [],
       selectedPortfolioId: this._selectedPortfolioId
     })
   }
