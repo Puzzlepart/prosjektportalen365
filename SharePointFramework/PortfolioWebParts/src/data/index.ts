@@ -102,7 +102,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   ): Promise<DataAdapter> {
     await msGraph.Init(this._spfxContext.msGraphClientFactory)
     if (this.dataSourceService && this.portalDataService.isConfigured) return this
-    let configuration: IPortalDataServiceConfiguration = {
+    const configuration: IPortalDataServiceConfiguration = {
       spfxContext: this._spfxContext,
       url: portfolio?.url,
       activeLogLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
