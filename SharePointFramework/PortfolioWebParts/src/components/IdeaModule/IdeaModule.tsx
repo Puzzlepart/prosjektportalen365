@@ -25,7 +25,8 @@ import {
   NavSubItem,
   NavSubItemGroup,
   NavDivider,
-  AppItemStatic
+  AppItemStatic,
+  NavItem
 } from '@fluentui/react-nav-preview'
 import {
   Board20Filled,
@@ -38,6 +39,7 @@ import {
 } from '@fluentui/react-icons'
 import { IdeaField } from './IdeaField'
 import { IdeaPhaseBar } from './IdeaPhaseBar'
+import { PortfolioAggregation } from 'components'
 
 const Dashboard = bundleIcon(Board20Filled, Board20Regular)
 const Lightbulb = bundleIcon(Lightbulb20Filled, Lightbulb20Regular)
@@ -48,6 +50,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
     state,
     setState,
     getSelectedIdea,
+    getSelectedView,
     isOpen,
     renderHamburger,
     renderStatus,
@@ -87,13 +90,29 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                 </NavDrawerHeader>
                 <NavDrawerBody className={styles.navBody}>
                   <AppItemStatic icon={getFluentIcon('Lightbulb')}>Idémodul</AppItemStatic>
-                  {/* <NavItem href='#' icon={<Dashboard />} value='total'>
+                  <NavItem
+                    icon={<Dashboard />}
+                    key='all'
+                    value='all'
+                    onClick={() => {
+                      setUrlHash({ viewId: 3 })
+                      getSelectedView()
+                    }}
+                  >
                     Totaloversikt
-                  </NavItem> */}
+                  </NavItem>
                   <NavSectionHeader>Registrering</NavSectionHeader>
-                  {/* <NavItem href='#' icon={<Dashboard />} value='registrering'>
+                  <NavItem
+                    icon={<Dashboard />}
+                    key='registration'
+                    value='registration'
+                    onClick={() => {
+                      setUrlHash({ viewId: 1 })
+                      getSelectedView()
+                    }}
+                  >
                     Oversikt
-                  </NavItem> */}
+                  </NavItem>
                   <NavCategory value='registreringIdeer'>
                     <NavCategoryItem icon={<Lightbulb />} value='registrering'>
                       Registrerte idéer
@@ -117,9 +136,17 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                   </NavCategory>
                   <NavDivider />
                   <NavSectionHeader>Behandling</NavSectionHeader>
-                  {/* <NavItem href='#' icon={<Dashboard />} value='behandling'>
+                  <NavItem
+                    icon={<Dashboard />}
+                    key='processing'
+                    value='processing'
+                    onClick={() => {
+                      setUrlHash({ viewId: 2 })
+                      getSelectedView()
+                    }}
+                  >
                     Oversikt
-                  </NavItem> */}
+                  </NavItem>
                   <NavCategory value='behandlingIdeer'>
                     <NavCategoryItem icon={<JobPostings />} value='behandling'>
                       Idéer i behandling
@@ -151,7 +178,25 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                     intent='error'
                   />
                 )}
-                {state.selectedIdea ? (
+                {state.selectedView && (
+                  <div className={styles.ideaList}>
+                    <PortfolioAggregation
+                      {...props}
+                      key={state.selectedView?.Id}
+                      title={state.selectedView?.Title}
+                      columns={state.ideas.data.columns}
+                    />
+                    {/* <List
+                      {...props}
+                      key={state.selectedView?.Id}
+                      title={state.selectedView?.Title}
+                      items={state.selectedView?.Items}
+                      columns={state.ideas.data.columns}
+                      hiddenColumns={props.hiddenRegFields}
+                    /> */}
+                  </div>
+                )}
+                {state.selectedIdea && (
                   <>
                     {/* <Commands /> */}
                     <div className={styles.ideaHeader}>
@@ -201,8 +246,6 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                     </div>
                     {state.selectedIdea.item.processing && renderStatus()}
                   </>
-                ) : (
-                  <Spinner className={styles.loading} label='Laster inn idé' size='medium' />
                 )}
               </div>
             </div>
@@ -212,10 +255,17 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
     </IdeaModuleContext.Provider>
   )
 }
+// <Spinner className={styles.loading} label='Laster inn idé' size='medium' />
 
 IdeaModule.defaultProps = {
-  configurationList: 'Idékonfigurasjon',
-  configuration: 'Standard',
+  dataSource: 'Registrerte idéer',
+  showCommandBar: true,
+  showExcelExportButton: true,
+  showFilters: true,
+  lockedColumns: false,
+
+  ideaConfigurationList: 'Idékonfigurasjon',
+  ideaConfiguration: 'Standard',
   hiddenRegFields: ['Title'],
   hiddenProcFields: [
     'Title',

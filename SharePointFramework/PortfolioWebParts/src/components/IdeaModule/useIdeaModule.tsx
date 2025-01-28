@@ -21,8 +21,74 @@ export function useIdeaModule(props: IIdeaModuleProps) {
 
   useIdeaModuleDataFetch(props, state.refetch, setState)
 
+  console.log({ state, props })
+
+  const getSelectedView = () => {
+    const hashState = parseUrlHash()
+
+    if (hashState.has('ideaId')) {
+      return
+    }
+
+    if (state.selectedView && state.selectedView?.Id === hashState.get('viewId')) {
+      return
+    }
+
+    const viewIdUrlParam = new URLSearchParams(document.location.search).get('viewId')
+
+    const views = [
+      {
+        Key: 'registration',
+        Id: 1,
+        Title: 'Registrerte idéer',
+        Items: state.ideas.data.items.filter((idea) => !idea.processing)
+      },
+      {
+        Key: 'processing',
+        Id: 2,
+        Title: 'Idéer i behandling',
+        Items: state.ideas.data.items.filter((idea) => idea.processing)
+      },
+      {
+        Key: 'all',
+        Id: 3,
+        Title: 'Alle idéer',
+        Items: state.ideas.data.items
+      }
+    ]
+    let selectedView = null
+
+    if (viewIdUrlParam) {
+      selectedView = _.find(views, (view) => view.Id.toString() === viewIdUrlParam)
+    } else if (hashState.has('viewId')) {
+      selectedView = _.find(views, (view) => view.Id === hashState.get('viewId'))
+    } else {
+      selectedView = _.first(views)
+    }
+
+    if (!selectedView) {
+      state.error = 'Det ble ikke funnet noe visning...'
+      return
+    }
+
+    const obj: IIdeaModuleHashState = {}
+    if (selectedView) obj.viewId = selectedView.Id.toString()
+    setUrlHash(obj)
+
+    setState({
+      ...state,
+      selectedView: selectedView,
+      selectedIdea: null,
+      phase: null
+    })
+  }
+
   const getSelectedIdea = () => {
     const hashState = parseUrlHash()
+
+    if (hashState.has('viewId')) {
+      return
+    }
 
     if (state.selectedIdea && state.selectedIdea.item.Id === hashState.get('ideaId')) {
       return
@@ -109,7 +175,8 @@ export function useIdeaModule(props: IIdeaModuleProps) {
         registeredFieldValues,
         processingFieldValues
       },
-      phase: ideaPhase
+      phase: ideaPhase,
+      selectedView: null
     })
   }
 
@@ -200,14 +267,21 @@ export function useIdeaModule(props: IIdeaModuleProps) {
 
   useEffect(() => {
     if (!state.loading) {
-      getSelectedIdea()
+      const hashState = parseUrlHash()
+
+      if (hashState.has('ideaId')) {
+        getSelectedIdea()
+      } else {
+        getSelectedView()
+      }
     }
-  }, [state.loading, state.selectedIdea])
+  }, [state.loading, state.selectedIdea, state.selectedView])
 
   return {
     state,
     setState,
     getSelectedIdea,
+    getSelectedView,
     renderHamburger,
     renderStatus,
     ignoreFields,
