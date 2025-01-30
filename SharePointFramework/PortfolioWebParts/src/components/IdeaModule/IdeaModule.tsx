@@ -40,6 +40,7 @@ import {
 import { IdeaField } from './IdeaField'
 import { IdeaPhaseBar } from './IdeaPhaseBar'
 import { PortfolioAggregation } from 'components'
+import _ from 'lodash'
 
 const Dashboard = bundleIcon(Board20Filled, Board20Regular)
 const Lightbulb = bundleIcon(Lightbulb20Filled, Lightbulb20Regular)
@@ -51,12 +52,12 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
     setState,
     getSelectedIdea,
     getSelectedView,
-    isOpen,
     renderHamburger,
     renderStatus,
     handleToggle,
-    openItems,
     ignoreFields,
+    isOpen,
+    openItems,
     fluentProviderId
   } = useIdeaModule(props)
 
@@ -69,7 +70,9 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
           ) : (
             <div className={styles.ideaModule}>
               <NavDrawer
-                selectedValue={`nav${state.selectedIdea?.item.Id.toString()}`}
+                selectedValue={
+                  state.selectedView ? 'overview' : `nav${state.selectedIdea?.item.Id.toString()}`
+                }
                 defaultSelectedCategoryValue={
                   state.selectedIdea?.item?.processing?.Id ? 'behandlingIdeer' : 'registreringIdeer'
                 }
@@ -92,27 +95,16 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                   <AppItemStatic icon={getFluentIcon('Lightbulb')}>Idémodul</AppItemStatic>
                   <NavItem
                     icon={<Dashboard />}
-                    key='all'
-                    value='all'
+                    key='overview'
+                    value='overview'
                     onClick={() => {
-                      setUrlHash({ viewId: 3 })
+                      setUrlHash({ viewId: _.first(props.configuration.views).id })
                       getSelectedView()
                     }}
                   >
-                    Totaloversikt
+                    Oversikt over idéer
                   </NavItem>
                   <NavSectionHeader>Registrering</NavSectionHeader>
-                  <NavItem
-                    icon={<Dashboard />}
-                    key='registration'
-                    value='registration'
-                    onClick={() => {
-                      setUrlHash({ viewId: 1 })
-                      getSelectedView()
-                    }}
-                  >
-                    Oversikt
-                  </NavItem>
                   <NavCategory value='registreringIdeer'>
                     <NavCategoryItem icon={<Lightbulb />} value='registrering'>
                       Registrerte idéer
@@ -136,17 +128,6 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                   </NavCategory>
                   <NavDivider />
                   <NavSectionHeader>Behandling</NavSectionHeader>
-                  <NavItem
-                    icon={<Dashboard />}
-                    key='processing'
-                    value='processing'
-                    onClick={() => {
-                      setUrlHash({ viewId: 2 })
-                      getSelectedView()
-                    }}
-                  >
-                    Oversikt
-                  </NavItem>
                   <NavCategory value='behandlingIdeer'>
                     <NavCategoryItem icon={<JobPostings />} value='behandling'>
                       Idéer i behandling
@@ -182,9 +163,8 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                   <div className={styles.ideaList}>
                     <PortfolioAggregation
                       {...props}
-                      key={state.selectedView?.Id}
-                      title={state.selectedView?.Title}
-                      columns={state.ideas.data.columns}
+                      key={state.selectedView?.id}
+                      title={state.selectedView?.title}
                     />
                     {/* <List
                       {...props}
@@ -262,8 +242,8 @@ IdeaModule.defaultProps = {
   showCommandBar: true,
   showExcelExportButton: true,
   showFilters: true,
+  showViewSelector: true,
   lockedColumns: false,
-
   ideaConfigurationList: 'Idékonfigurasjon',
   ideaConfiguration: 'Standard',
   hiddenRegFields: ['Title'],

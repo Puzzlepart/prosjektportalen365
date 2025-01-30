@@ -1,4 +1,5 @@
 import {
+  DataSource,
   EditableSPField,
   ItemFieldValues,
   ProjectContentColumn,
@@ -37,7 +38,7 @@ export interface IIdeaModuleState {
   configuration?: IdeaConfigurationModel
   ideas?: Idea
   selectedIdea?: IIdea
-  selectedView?: any
+  selectedView?: DataSource
   phase?: IdeaPhase
   searchTerm: string
   renderMode?: IdeaListRenderMode

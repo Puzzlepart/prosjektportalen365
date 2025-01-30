@@ -4,7 +4,13 @@ import { AccordionToggleEventHandler, Tooltip, useId } from '@fluentui/react-com
 import { IdeaPhase, IIdeaModuleHashState, IIdeaModuleProps } from './types'
 import { useIdeaModuleState } from './useIdeaModuleState'
 import { useIdeaModuleDataFetch } from './useIdeaModuleDataFetch'
-import { EditableSPField, ItemFieldValues, parseUrlHash, setUrlHash } from 'pp365-shared-library'
+import {
+  DataSource,
+  EditableSPField,
+  ItemFieldValues,
+  parseUrlHash,
+  setUrlHash
+} from 'pp365-shared-library'
 import _ from 'lodash'
 import { useEffect, useState } from 'react'
 import { Hamburger } from '@fluentui/react-nav-preview'
@@ -30,38 +36,19 @@ export function useIdeaModule(props: IIdeaModuleProps) {
       return
     }
 
-    if (state.selectedView && state.selectedView?.Id === hashState.get('viewId')) {
+    if (state.selectedView && state.selectedView?.id === hashState.get('viewId')) {
       return
     }
 
     const viewIdUrlParam = new URLSearchParams(document.location.search).get('viewId')
 
-    const views = [
-      {
-        Key: 'registration',
-        Id: 1,
-        Title: 'Registrerte idéer',
-        Items: state.ideas.data.items.filter((idea) => !idea.processing)
-      },
-      {
-        Key: 'processing',
-        Id: 2,
-        Title: 'Idéer i behandling',
-        Items: state.ideas.data.items.filter((idea) => idea.processing)
-      },
-      {
-        Key: 'all',
-        Id: 3,
-        Title: 'Alle idéer',
-        Items: state.ideas.data.items
-      }
-    ]
-    let selectedView = null
+    const views: DataSource[] = props.configuration.views
+    let selectedView: DataSource = null
 
     if (viewIdUrlParam) {
-      selectedView = _.find(views, (view) => view.Id.toString() === viewIdUrlParam)
+      selectedView = _.find(views, (view) => view.id.toString() === viewIdUrlParam)
     } else if (hashState.has('viewId')) {
-      selectedView = _.find(views, (view) => view.Id === hashState.get('viewId'))
+      selectedView = _.find(views, (view) => view.id === hashState.get('viewId'))
     } else {
       selectedView = _.first(views)
     }
@@ -72,7 +59,7 @@ export function useIdeaModule(props: IIdeaModuleProps) {
     }
 
     const obj: IIdeaModuleHashState = {}
-    if (selectedView) obj.viewId = selectedView.Id.toString()
+    if (selectedView) obj.viewId = selectedView.id.toString()
     setUrlHash(obj)
 
     setState({
@@ -284,8 +271,8 @@ export function useIdeaModule(props: IIdeaModuleProps) {
     getSelectedView,
     renderHamburger,
     renderStatus,
-    ignoreFields,
     handleToggle,
+    ignoreFields,
     isOpen,
     openItems,
     fluentProviderId

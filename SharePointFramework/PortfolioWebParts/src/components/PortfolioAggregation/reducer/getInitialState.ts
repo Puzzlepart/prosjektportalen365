@@ -19,6 +19,7 @@ export function getInitialState(props: IPortfolioAggregationProps) {
     dataSource: props.dataSource ?? first(props.configuration.views)?.title,
     views: props.configuration.views ?? [],
     dataSourceLevel: props.dataSourceLevel ?? props.configuration?.level,
+    dataSourceCategory: props.dataSourceCategory,
     columnForm: { isOpen: false, column: null },
     viewForm: { isOpen: false, view: null },
     isEditViewColumnsPanelOpen: false

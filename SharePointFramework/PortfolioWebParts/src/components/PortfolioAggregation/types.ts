@@ -167,7 +167,7 @@ export interface IPortfolioAggregationProps<T = any>
 }
 
 export interface IPortfolioAggregationState
-  extends Pick<IPortfolioAggregationProps, 'dataSourceLevel' | 'columns'> {
+  extends Pick<IPortfolioAggregationProps, 'dataSourceLevel' | 'dataSourceCategory' | 'columns'> {
   /**
    * `true` if the component is loading data. The list will be
    * rendered with shimmer placeholders if the component is loading.
