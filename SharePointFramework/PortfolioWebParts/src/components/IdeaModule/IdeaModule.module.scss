@@ -23,7 +23,8 @@
     }
   }
 
-  .content {
+  .content,
+  .error {
     flex: 1;
     padding: 32px;
     gap: 16px;
@@ -115,6 +116,11 @@
 
     .navBody {
       padding-bottom: 20px;
+
+      .noIdeas {
+        padding: 16px;
+        color: var(--colorNeutralForeground3);
+      }
     }
   }
 }

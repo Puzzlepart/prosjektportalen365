@@ -54,7 +54,13 @@ export function useIdeaModule(props: IIdeaModuleProps) {
     }
 
     if (!selectedView) {
-      state.error = 'Det ble ikke funnet noe visning...'
+      setState({
+        error: {
+          title: 'Ingen visning funnet',
+          message:
+            'Det ble ikke funnet noen visning. Det kan være at visningen som er spesifisert i adressefeltet ikke eksiterer, prøv å fjerne dette. Eventuelt opprett en ny visning (Datakilde).'
+        }
+      })
       return
     }
 
@@ -94,7 +100,13 @@ export function useIdeaModule(props: IIdeaModuleProps) {
     }
 
     if (!selectedIdea) {
-      state.error = 'Det ble ikke funnet noen ideer. Opprett en ny ide for å se din idé her.'
+      setState({
+        error: {
+          title: 'Ingen idé funnet',
+          message:
+            'Det ble ikke funnet noen idé. Det kan være at idéen som er spesifisert i adressefeltet ikke eksiterer, prøv å fjerne dette. Eventuelt opprett en ny idé.'
+        }
+      })
       return
     }
 

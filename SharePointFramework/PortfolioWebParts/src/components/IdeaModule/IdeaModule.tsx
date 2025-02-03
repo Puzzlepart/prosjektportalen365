@@ -110,20 +110,27 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                       Registrerte idéer
                     </NavCategoryItem>
                     <NavSubItemGroup>
-                      {state.ideas.data.items
-                        .filter((idea) => !idea.processing)
-                        .map((idea) => (
-                          <NavSubItem
-                            key={idea.Id.toString()}
-                            value={`nav${idea.Id.toString()}`}
-                            onClick={() => {
-                              setUrlHash({ ideaId: idea.Id.toString() })
-                              getSelectedIdea()
-                            }}
-                          >
-                            {idea?.Title}
-                          </NavSubItem>
-                        ))}
+                      {state.ideas.data.items.filter((idea) => !idea.processing).length > 0 ? (
+                        state.ideas.data.items
+                          .filter((idea) => !idea.processing)
+                          .map((idea) => (
+                            <NavSubItem
+                              key={idea.Id.toString()}
+                              value={`nav${idea.Id.toString()}`}
+                              onClick={() => {
+                                setUrlHash({ ideaId: idea.Id.toString() })
+                                getSelectedIdea()
+                              }}
+                            >
+                              {idea?.Title}
+                            </NavSubItem>
+                          ))
+                      ) : (
+                        <div className={styles.noIdeas}>
+                          Det for øyeblikket ingen registrerte idéer, idéer som blir registrert vil
+                          dukke opp her.
+                        </div>
+                      )}
                     </NavSubItemGroup>
                   </NavCategory>
                   <NavDivider />
@@ -133,24 +140,41 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                       Idéer i behandling
                     </NavCategoryItem>
                     <NavSubItemGroup>
-                      {state.ideas.data.items
-                        .filter((idea) => idea.processing)
-                        .map((idea) => (
-                          <NavSubItem
-                            key={idea.Id.toString()}
-                            value={`nav${idea.Id.toString()}`}
-                            onClick={() => {
-                              setUrlHash({ ideaId: idea.Id.toString() })
-                              getSelectedIdea()
-                            }}
-                          >
-                            {idea?.Title}
-                          </NavSubItem>
-                        ))}
+                      {state.ideas.data.items.filter((idea) => idea.processing).length > 0 ? (
+                        state.ideas.data.items
+                          .filter((idea) => idea.processing)
+                          .map((idea) => (
+                            <NavSubItem
+                              key={idea.Id.toString()}
+                              value={`nav${idea.Id.toString()}`}
+                              onClick={() => {
+                                setUrlHash({ ideaId: idea.Id.toString() })
+                                getSelectedIdea()
+                              }}
+                            >
+                              {idea?.Title}
+                            </NavSubItem>
+                          ))
+                      ) : (
+                        <div className={styles.noIdeas}>
+                          Det for øyeblikket ingen idéer i behandling, idéer i behandling vil dukke
+                          opp her.
+                        </div>
+                      )}
                     </NavSubItemGroup>
                   </NavCategory>
                 </NavDrawerBody>
               </NavDrawer>
+
+              {state.error && (
+                <div className={styles.error}>
+                  <UserMessage
+                    title={state.error.title}
+                    text={state.error.message}
+                    intent='error'
+                  />
+                </div>
+              )}
               {state.selectedView && (
                 <div className={styles.overview}>
                   <div className={styles.ideaList}>
@@ -172,13 +196,6 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
               )}
               {state.selectedIdea && (
                 <div className={styles.content}>
-                  {state.error && (
-                    <UserMessage
-                      title='Det skjedde en feil ved innlastning av Idémodulen'
-                      text={state.error}
-                      intent='error'
-                    />
-                  )}
                   <>
                     {/* <Commands /> */}
                     <div className={styles.ideaHeader}>

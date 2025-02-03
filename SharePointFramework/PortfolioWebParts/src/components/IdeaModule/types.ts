@@ -34,7 +34,7 @@ export interface IIdeaModuleState {
   loading?: boolean
   refetch?: number
   isRefetching?: boolean
-  error?: any
+  error?: { title: string; message: string }
   configuration?: IdeaConfigurationModel
   ideas?: Idea
   selectedIdea?: IIdea
