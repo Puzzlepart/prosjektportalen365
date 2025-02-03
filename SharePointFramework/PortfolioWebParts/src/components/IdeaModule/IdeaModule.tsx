@@ -151,15 +151,8 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                   </NavCategory>
                 </NavDrawerBody>
               </NavDrawer>
-              <div className={styles.content}>
-                {state.error && (
-                  <UserMessage
-                    title='Det skjedde en feil ved innlastning av Idémodulen'
-                    text={state.error}
-                    intent='error'
-                  />
-                )}
-                {state.selectedView && (
+              {state.selectedView && (
+                <div className={styles.overview}>
                   <div className={styles.ideaList}>
                     <PortfolioAggregation
                       {...props}
@@ -175,8 +168,17 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                       hiddenColumns={props.hiddenRegFields}
                     /> */}
                   </div>
-                )}
-                {state.selectedIdea && (
+                </div>
+              )}
+              {state.selectedIdea && (
+                <div className={styles.content}>
+                  {state.error && (
+                    <UserMessage
+                      title='Det skjedde en feil ved innlastning av Idémodulen'
+                      text={state.error}
+                      intent='error'
+                    />
+                  )}
                   <>
                     {/* <Commands /> */}
                     <div className={styles.ideaHeader}>
@@ -197,26 +199,33 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                     )}
                     {!state.selectedIdea.item.processing && renderStatus()}
                     {state.selectedIdea.item.processing && (
-                      <Accordion openItems={openItems} onToggle={handleToggle} multiple collapsible>
-                        <AccordionItem value='registration'>
-                          <AccordionHeader
-                            className={styles.accordion}
-                            size='large'
-                            icon={getFluentIcon('Lightbulb')}
-                          >
-                            Registrert idé
-                          </AccordionHeader>
-                          <AccordionPanel style={{ margin: 0 }}>
-                            <div className={styles.idea}>
-                              {state.selectedIdea.registeredFieldValues.map((model, idx) => (
-                                <IdeaField key={idx} model={model} />
-                              ))}
-                            </div>
-                          </AccordionPanel>
-                        </AccordionItem>
-                      </Accordion>
+                      <>
+                        <Accordion
+                          openItems={openItems}
+                          onToggle={handleToggle}
+                          multiple
+                          collapsible
+                        >
+                          <AccordionItem value='registration'>
+                            <AccordionHeader
+                              className={styles.accordion}
+                              size='large'
+                              icon={getFluentIcon('Lightbulb')}
+                            >
+                              Registrert idé
+                            </AccordionHeader>
+                            <AccordionPanel style={{ margin: 0 }}>
+                              <div className={styles.idea}>
+                                {state.selectedIdea.registeredFieldValues.map((model, idx) => (
+                                  <IdeaField key={idx} model={model} />
+                                ))}
+                              </div>
+                            </AccordionPanel>
+                          </AccordionItem>
+                        </Accordion>
+                        <Divider />
+                      </>
                     )}
-                    <Divider />
                     <div className={styles.idea}>
                       {state.selectedIdea.processingFieldValues
                         ?.filter((model) => !ignoreFields.includes(model.internalName))
@@ -226,8 +235,8 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                     </div>
                     {state.selectedIdea.item.processing && renderStatus()}
                   </>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           )}
         </FluentProvider>

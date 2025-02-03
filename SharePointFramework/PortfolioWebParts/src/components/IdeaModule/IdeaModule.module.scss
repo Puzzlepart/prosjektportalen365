@@ -1,24 +1,37 @@
 .ideaModule {
   margin: 0;
-  overflow: hidden;
+  position: absolute;
   display: flex;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 
-  .content {
+  .overview {
     flex: 1;
-    padding: 16px 32px;
     gap: 16px;
     display: grid;
     align-items: flex-start;
-    height: fit-content;
+    height: auto;
+    overflow-y: auto;
     width: 100%;
 
     .ideaList {
       position: relative;
       display: flex;
       width: 100%;
-      min-height: 800px;
       height: 100%;
     }
+  }
+
+  .content {
+    flex: 1;
+    padding: 32px;
+    gap: 16px;
+    display: grid;
+    align-items: flex-start;
+    height: auto;
+    overflow-y: auto;
+    width: 100%;
 
     .ideaHeader {
       display: flex;
