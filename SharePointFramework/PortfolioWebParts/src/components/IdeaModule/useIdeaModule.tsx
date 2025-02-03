@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React from 'react'
 import { AccordionToggleEventHandler, Tooltip, useId } from '@fluentui/react-components'
 import { IdeaPhase, IIdeaModuleHashState, IIdeaModuleProps } from './types'
@@ -26,8 +25,6 @@ export function useIdeaModule(props: IIdeaModuleProps) {
   const fluentProviderId = useId('fp-idea-module')
 
   useIdeaModuleDataFetch(props, state.refetch, setState)
-
-  console.log({ state, props })
 
   const getSelectedView = () => {
     const hashState = parseUrlHash()

@@ -184,14 +184,6 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                       key={state.selectedView?.id}
                       title={state.selectedView?.title}
                     />
-                    {/* <List
-                      {...props}
-                      key={state.selectedView?.Id}
-                      title={state.selectedView?.Title}
-                      items={state.selectedView?.Items}
-                      columns={state.ideas.data.columns}
-                      hiddenColumns={props.hiddenRegFields}
-                    /> */}
                   </div>
                 </div>
               )}
@@ -262,7 +254,6 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
     </IdeaModuleContext.Provider>
   )
 }
-// <Spinner className={styles.loading} label='Laster inn idé' size='medium' />
 
 IdeaModule.defaultProps = {
   dataSource: 'Registrerte idéer',

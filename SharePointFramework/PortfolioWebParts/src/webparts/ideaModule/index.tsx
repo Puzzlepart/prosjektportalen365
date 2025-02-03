@@ -1,4 +1,3 @@
-/* eslint-disable quotes */
 import {
   IPropertyPaneConfiguration,
   IPropertyPaneDropdownOption,
@@ -10,9 +9,7 @@ import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
 import { IIdeaModuleProps, IdeaModule } from 'components/IdeaModule'
 import _ from 'lodash'
-import React from 'react'
 import { IPortfolioAggregationConfiguration } from 'components'
-import { IMessageBarProps, MessageBar } from '@fluentui/react/lib/MessageBar'
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { ISPHttpClientOptions, SPHttpClient } from '@microsoft/sp-http'
 
@@ -20,8 +17,6 @@ export default class IdeaModuleWebPart extends BasePortfolioWebPart<IIdeaModuleP
   private _configuration: IPortfolioAggregationConfiguration
 
   public render(): void {
-    console.log(this.properties, this._configuration)
-
     this.renderComponent<IIdeaModuleProps>(IdeaModule, {
       ...this.properties,
       configuration: this._configuration,
@@ -130,6 +125,7 @@ export default class IdeaModuleWebPart extends BasePortfolioWebPart<IIdeaModuleP
             },
             {
               groupName: strings.DataSourceGroupName,
+              isCollapsed: true,
               groupFields: [
                 PropertyPaneTextField('dataSourceCategory', {
                   label: strings.DataSourceCategoryLabel,
