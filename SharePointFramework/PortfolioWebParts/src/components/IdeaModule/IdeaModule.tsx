@@ -177,6 +177,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
               )}
               {state.selectedView && (
                 <div className={styles.overview}>
+                  <div className={styles.hamburger}>{!isOpen && renderHamburger()}</div>
                   <div className={styles.ideaList}>
                     <PortfolioAggregation
                       {...props}

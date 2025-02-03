@@ -22,17 +22,11 @@ export default class IdeaModuleWebPart extends BasePortfolioWebPart<IIdeaModuleP
   public render(): void {
     console.log(this.properties, this._configuration)
 
-    if (!this.properties.dataSource) {
-      this.renderComponent<IMessageBarProps>(MessageBar, {
-        children: <span>{strings.PortfolioAggregationNotConfiguredMessage}</span>
-      })
-    } else {
-      this.renderComponent<IIdeaModuleProps>(IdeaModule, {
-        ...this.properties,
-        configuration: this._configuration,
-        onUpdateProperty: this._onUpdateProperty.bind(this)
-      })
-    }
+    this.renderComponent<IIdeaModuleProps>(IdeaModule, {
+      ...this.properties,
+      configuration: this._configuration,
+      onUpdateProperty: this._onUpdateProperty.bind(this)
+    })
   }
 
   /**

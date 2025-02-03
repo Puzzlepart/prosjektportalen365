@@ -43,13 +43,6 @@
         display: flex;
         flex-direction: column;
         gap: 16px;
-
-        .hamburger {
-          position: absolute;
-          z-index: 2;
-          top: 5px;
-          left: 32px;
-        }
       }
 
       .ideaTitle {
@@ -127,4 +120,11 @@
 
 .loading {
   padding: 32px;
+}
+
+.hamburger {
+  position: absolute;
+  z-index: 2;
+  top: 5px;
+  left: 12px;
 }
