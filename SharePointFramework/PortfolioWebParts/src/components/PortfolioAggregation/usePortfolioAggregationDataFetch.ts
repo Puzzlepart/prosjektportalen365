@@ -32,7 +32,7 @@ async function fetchData(context: IPortfolioAggregationContext) {
       ? context.props.dataAdapter.fetchProjects(context.props.configuration, dataSource.title)
       : Promise.resolve(undefined)
   ])
-  return { dataSource, items, columns, projects } 
+  return { dataSource, items, columns, projects }
 }
 
 /**
