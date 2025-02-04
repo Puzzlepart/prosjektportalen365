@@ -27,8 +27,8 @@ export const IdeaDialog: FC<IIdeaDialogProps> = (props) => {
   return (
     <IDeaDialogContext.Provider value={context}>
       <IdPrefixProvider value={fluentProviderId}>
-        <FluentProvider theme={customLightTheme}>
-          <DialogBody className={styles.ideaDialog}>
+        <FluentProvider theme={customLightTheme} className={styles.ideaDialog}>
+          <DialogBody className={styles.dialogBody}>
             <DialogTitle>{strings.IdeaProjectDataDialogTitle}</DialogTitle>
             <DialogContent>
               <UserMessage

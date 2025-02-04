@@ -37,7 +37,7 @@ export const ProvisionSettings = (props: { toast: any }) => {
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
-      <FluentProvider theme={customLightTheme}>
+      <FluentProvider theme={customLightTheme} className={styles.provisionSettingsDialog}>
         <Dialog
           modalType='modal'
           open={context.state.showProvisionSettings}

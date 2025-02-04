@@ -42,8 +42,8 @@ export const IdeaApprovalDialog: FC<IIdeaApprovalDialogProps> = (props) => {
   return (
     <IDeaApprovalDialogContext.Provider value={context}>
       <IdPrefixProvider value={fluentProviderId}>
-        <FluentProvider theme={customLightTheme}>
-          <DialogBody className={styles.ideaApprovalDialog}>
+        <FluentProvider theme={customLightTheme} className={styles.ideaApprovalDialog}>
+          <DialogBody className={styles.dialogBody}>
             <DialogTitle>{strings.SetRecommendationTitle}</DialogTitle>
             <DialogContent className={styles.content}>
               <UserMessage
