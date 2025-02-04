@@ -14,7 +14,10 @@ export function useDefaultColumns(context: IPortfolioAggregationContext) {
     [context.state.columns]
   )
 
-  if (context.state.dataSourceLevel === 'Prosjekt')
+  if (
+    context.state.dataSourceLevel === 'Prosjekt' ||
+    context.state.dataSourceCategory === 'Idémodul'
+  )
     selectedColumns = selectedColumns.filter((c) => c.internalName !== 'SiteTitle')
 
   return selectedColumns

@@ -1,10 +1,15 @@
-/* eslint-disable no-console */
 import React from 'react'
 import { AccordionToggleEventHandler, Tooltip, useId } from '@fluentui/react-components'
 import { IdeaPhase, IIdeaModuleHashState, IIdeaModuleProps } from './types'
 import { useIdeaModuleState } from './useIdeaModuleState'
 import { useIdeaModuleDataFetch } from './useIdeaModuleDataFetch'
-import { EditableSPField, ItemFieldValues, parseUrlHash, setUrlHash } from 'pp365-shared-library'
+import {
+  DataSource,
+  EditableSPField,
+  ItemFieldValues,
+  parseUrlHash,
+  setUrlHash
+} from 'pp365-shared-library'
 import _ from 'lodash'
 import { useEffect, useState } from 'react'
 import { Hamburger } from '@fluentui/react-nav-preview'
@@ -21,8 +26,59 @@ export function useIdeaModule(props: IIdeaModuleProps) {
 
   useIdeaModuleDataFetch(props, state.refetch, setState)
 
+  const getSelectedView = () => {
+    const hashState = parseUrlHash()
+
+    if (hashState.has('ideaId')) {
+      return
+    }
+
+    if (state.selectedView && state.selectedView?.id === hashState.get('viewId')) {
+      return
+    }
+
+    const viewIdUrlParam = new URLSearchParams(document.location.search).get('viewId')
+
+    const views: DataSource[] = props.configuration.views
+    let selectedView: DataSource = null
+
+    if (viewIdUrlParam) {
+      selectedView = _.find(views, (view) => view.id.toString() === viewIdUrlParam)
+    } else if (hashState.has('viewId')) {
+      selectedView = _.find(views, (view) => view.id === hashState.get('viewId'))
+    } else {
+      selectedView = _.first(views)
+    }
+
+    if (!selectedView) {
+      setState({
+        error: {
+          title: 'Ingen visning funnet',
+          message:
+            'Det ble ikke funnet noen visning. Det kan være at visningen som er spesifisert i adressefeltet ikke eksiterer, prøv å fjerne dette. Eventuelt opprett en ny visning (Datakilde).'
+        }
+      })
+      return
+    }
+
+    const obj: IIdeaModuleHashState = {}
+    if (selectedView) obj.viewId = selectedView.id.toString()
+    setUrlHash(obj)
+
+    setState({
+      ...state,
+      selectedView: selectedView,
+      selectedIdea: null,
+      phase: null
+    })
+  }
+
   const getSelectedIdea = () => {
     const hashState = parseUrlHash()
+
+    if (hashState.has('viewId')) {
+      return
+    }
 
     if (state.selectedIdea && state.selectedIdea.item.Id === hashState.get('ideaId')) {
       return
@@ -41,7 +97,13 @@ export function useIdeaModule(props: IIdeaModuleProps) {
     }
 
     if (!selectedIdea) {
-      state.error = 'Det ble ikke funnet noen ideer. Opprett en ny ide for å se din idé her.'
+      setState({
+        error: {
+          title: 'Ingen idé funnet',
+          message:
+            'Det ble ikke funnet noen idé. Det kan være at idéen som er spesifisert i adressefeltet ikke eksiterer, prøv å fjerne dette. Eventuelt opprett en ny idé.'
+        }
+      })
       return
     }
 
@@ -109,7 +171,8 @@ export function useIdeaModule(props: IIdeaModuleProps) {
         registeredFieldValues,
         processingFieldValues
       },
-      phase: ideaPhase
+      phase: ideaPhase,
+      selectedView: null
     })
   }
 
@@ -200,18 +263,25 @@ export function useIdeaModule(props: IIdeaModuleProps) {
 
   useEffect(() => {
     if (!state.loading) {
-      getSelectedIdea()
+      const hashState = parseUrlHash()
+
+      if (hashState.has('ideaId')) {
+        getSelectedIdea()
+      } else {
+        getSelectedView()
+      }
     }
-  }, [state.loading, state.selectedIdea])
+  }, [state.loading, state.selectedIdea, state.selectedView])
 
   return {
     state,
     setState,
     getSelectedIdea,
+    getSelectedView,
     renderHamburger,
     renderStatus,
-    ignoreFields,
     handleToggle,
+    ignoreFields,
     isOpen,
     openItems,
     fluentProviderId

@@ -1,15 +1,37 @@
 .ideaModule {
   margin: 0;
-  overflow: hidden;
+  position: absolute;
   display: flex;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 
-  .content {
+  .overview {
     flex: 1;
-    padding: 16px 32px;
     gap: 16px;
     display: grid;
     align-items: flex-start;
-    height: fit-content;
+    height: auto;
+    overflow-y: auto;
+    width: 100%;
+
+    .ideaList {
+      position: relative;
+      display: flex;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .content,
+  .error {
+    flex: 1;
+    padding: 32px;
+    gap: 16px;
+    display: grid;
+    align-items: flex-start;
+    height: auto;
+    overflow-y: auto;
     width: 100%;
 
     .ideaHeader {
@@ -21,13 +43,6 @@
         display: flex;
         flex-direction: column;
         gap: 16px;
-
-        .hamburger {
-          position: absolute;
-          z-index: 2;
-          top: 5px;
-          left: 32px;
-        }
       }
 
       .ideaTitle {
@@ -94,10 +109,22 @@
 
     .navBody {
       padding-bottom: 20px;
+
+      .noIdeas {
+        padding: 16px;
+        color: var(--colorNeutralForeground3);
+      }
     }
   }
 }
 
 .loading {
   padding: 32px;
+}
+
+.hamburger {
+  position: absolute;
+  z-index: 2;
+  top: 5px;
+  left: 12px;
 }

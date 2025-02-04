@@ -1,13 +1,14 @@
 import {
+  DataSource,
   EditableSPField,
   ItemFieldValues,
   ProjectContentColumn,
   SPField
 } from 'pp365-shared-library'
-import { IBaseComponentProps } from '../types'
 import { MessageBarType } from '@fluentui/react'
 import { IdeaConfigurationModel } from 'models'
 import { Slot } from '@fluentui/react-components'
+import { IPortfolioAggregationProps } from 'components/PortfolioAggregation'
 
 export class IdeaModuleErrorMessage extends Error {
   constructor(public message: string, public type: MessageBarType) {
@@ -15,9 +16,9 @@ export class IdeaModuleErrorMessage extends Error {
   }
 }
 
-export interface IIdeaModuleProps extends IBaseComponentProps {
-  configurationList: string
-  configuration: string
+export interface IIdeaModuleProps extends IPortfolioAggregationProps {
+  ideaConfigurationList: string
+  ideaConfiguration: string
   sortBy?: string
   showSearchBox?: boolean
   showRenderModeSelector?: boolean
@@ -33,10 +34,11 @@ export interface IIdeaModuleState {
   loading?: boolean
   refetch?: number
   isRefetching?: boolean
-  error?: any
+  error?: { title: string; message: string }
   configuration?: IdeaConfigurationModel
   ideas?: Idea
   selectedIdea?: IIdea
+  selectedView?: DataSource
   phase?: IdeaPhase
   searchTerm: string
   renderMode?: IdeaListRenderMode
@@ -47,6 +49,7 @@ export interface IIdeaModuleState {
 export type IdeaListRenderMode = 'tiles' | 'list' | 'compactList'
 
 export interface IIdeaModuleHashState {
+  viewId?: string
   ideaId?: string
 }
 

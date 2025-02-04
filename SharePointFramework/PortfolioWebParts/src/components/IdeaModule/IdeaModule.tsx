@@ -25,7 +25,8 @@ import {
   NavSubItem,
   NavSubItemGroup,
   NavDivider,
-  AppItemStatic
+  AppItemStatic,
+  NavItem
 } from '@fluentui/react-nav-preview'
 import {
   Board20Filled,
@@ -38,6 +39,8 @@ import {
 } from '@fluentui/react-icons'
 import { IdeaField } from './IdeaField'
 import { IdeaPhaseBar } from './IdeaPhaseBar'
+import { PortfolioAggregation } from 'components'
+import _ from 'lodash'
 
 const Dashboard = bundleIcon(Board20Filled, Board20Regular)
 const Lightbulb = bundleIcon(Lightbulb20Filled, Lightbulb20Regular)
@@ -48,12 +51,13 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
     state,
     setState,
     getSelectedIdea,
-    isOpen,
+    getSelectedView,
     renderHamburger,
     renderStatus,
     handleToggle,
-    openItems,
     ignoreFields,
+    isOpen,
+    openItems,
     fluentProviderId
   } = useIdeaModule(props)
 
@@ -66,7 +70,9 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
           ) : (
             <div className={styles.ideaModule}>
               <NavDrawer
-                selectedValue={`nav${state.selectedIdea?.item.Id.toString()}`}
+                selectedValue={
+                  state.selectedView ? 'overview' : `nav${state.selectedIdea?.item.Id.toString()}`
+                }
                 defaultSelectedCategoryValue={
                   state.selectedIdea?.item?.processing?.Id ? 'behandlingIdeer' : 'registreringIdeer'
                 }
@@ -87,71 +93,102 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                 </NavDrawerHeader>
                 <NavDrawerBody className={styles.navBody}>
                   <AppItemStatic icon={getFluentIcon('Lightbulb')}>Idémodul</AppItemStatic>
-                  {/* <NavItem href='#' icon={<Dashboard />} value='total'>
-                    Totaloversikt
-                  </NavItem> */}
+                  <NavItem
+                    icon={<Dashboard />}
+                    key='overview'
+                    value='overview'
+                    onClick={() => {
+                      setUrlHash({ viewId: _.first(props.configuration.views).id })
+                      getSelectedView()
+                    }}
+                  >
+                    Oversikt over idéer
+                  </NavItem>
                   <NavSectionHeader>Registrering</NavSectionHeader>
-                  {/* <NavItem href='#' icon={<Dashboard />} value='registrering'>
-                    Oversikt
-                  </NavItem> */}
                   <NavCategory value='registreringIdeer'>
                     <NavCategoryItem icon={<Lightbulb />} value='registrering'>
                       Registrerte idéer
                     </NavCategoryItem>
                     <NavSubItemGroup>
-                      {state.ideas.data.items
-                        .filter((idea) => !idea.processing)
-                        .map((idea) => (
-                          <NavSubItem
-                            key={idea.Id.toString()}
-                            value={`nav${idea.Id.toString()}`}
-                            onClick={() => {
-                              setUrlHash({ ideaId: idea.Id.toString() })
-                              getSelectedIdea()
-                            }}
-                          >
-                            {idea?.Title}
-                          </NavSubItem>
-                        ))}
+                      {state.ideas.data.items.filter((idea) => !idea.processing).length > 0 ? (
+                        state.ideas.data.items
+                          .filter((idea) => !idea.processing)
+                          .map((idea) => (
+                            <NavSubItem
+                              key={idea.Id.toString()}
+                              value={`nav${idea.Id.toString()}`}
+                              onClick={() => {
+                                setUrlHash({ ideaId: idea.Id.toString() })
+                                getSelectedIdea()
+                              }}
+                            >
+                              {idea?.Title}
+                            </NavSubItem>
+                          ))
+                      ) : (
+                        <div className={styles.noIdeas}>
+                          Det for øyeblikket ingen registrerte idéer, idéer som blir registrert vil
+                          dukke opp her.
+                        </div>
+                      )}
                     </NavSubItemGroup>
                   </NavCategory>
                   <NavDivider />
                   <NavSectionHeader>Behandling</NavSectionHeader>
-                  {/* <NavItem href='#' icon={<Dashboard />} value='behandling'>
-                    Oversikt
-                  </NavItem> */}
                   <NavCategory value='behandlingIdeer'>
                     <NavCategoryItem icon={<JobPostings />} value='behandling'>
                       Idéer i behandling
                     </NavCategoryItem>
                     <NavSubItemGroup>
-                      {state.ideas.data.items
-                        .filter((idea) => idea.processing)
-                        .map((idea) => (
-                          <NavSubItem
-                            key={idea.Id.toString()}
-                            value={`nav${idea.Id.toString()}`}
-                            onClick={() => {
-                              setUrlHash({ ideaId: idea.Id.toString() })
-                              getSelectedIdea()
-                            }}
-                          >
-                            {idea?.Title}
-                          </NavSubItem>
-                        ))}
+                      {state.ideas.data.items.filter((idea) => idea.processing).length > 0 ? (
+                        state.ideas.data.items
+                          .filter((idea) => idea.processing)
+                          .map((idea) => (
+                            <NavSubItem
+                              key={idea.Id.toString()}
+                              value={`nav${idea.Id.toString()}`}
+                              onClick={() => {
+                                setUrlHash({ ideaId: idea.Id.toString() })
+                                getSelectedIdea()
+                              }}
+                            >
+                              {idea?.Title}
+                            </NavSubItem>
+                          ))
+                      ) : (
+                        <div className={styles.noIdeas}>
+                          Det for øyeblikket ingen idéer i behandling, idéer i behandling vil dukke
+                          opp her.
+                        </div>
+                      )}
                     </NavSubItemGroup>
                   </NavCategory>
                 </NavDrawerBody>
               </NavDrawer>
-              <div className={styles.content}>
-                {state.error && (
+
+              {state.error && (
+                <div className={styles.error}>
                   <UserMessage
-                    title='Det skjedde en feil ved innlastning av Idémodulen'
-                    text={state.error}
+                    title={state.error.title}
+                    text={state.error.message}
                     intent='error'
                   />
-                )}
-                {state.selectedIdea ? (
+                </div>
+              )}
+              {state.selectedView && (
+                <div className={styles.overview}>
+                  <div className={styles.hamburger}>{!isOpen && renderHamburger()}</div>
+                  <div className={styles.ideaList}>
+                    <PortfolioAggregation
+                      {...props}
+                      key={state.selectedView?.id}
+                      title={state.selectedView?.title}
+                    />
+                  </div>
+                </div>
+              )}
+              {state.selectedIdea && (
+                <div className={styles.content}>
                   <>
                     {/* <Commands /> */}
                     <div className={styles.ideaHeader}>
@@ -172,26 +209,33 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                     )}
                     {!state.selectedIdea.item.processing && renderStatus()}
                     {state.selectedIdea.item.processing && (
-                      <Accordion openItems={openItems} onToggle={handleToggle} multiple collapsible>
-                        <AccordionItem value='registration'>
-                          <AccordionHeader
-                            className={styles.accordion}
-                            size='large'
-                            icon={getFluentIcon('Lightbulb')}
-                          >
-                            Registrert idé
-                          </AccordionHeader>
-                          <AccordionPanel style={{ margin: 0 }}>
-                            <div className={styles.idea}>
-                              {state.selectedIdea.registeredFieldValues.map((model, idx) => (
-                                <IdeaField key={idx} model={model} />
-                              ))}
-                            </div>
-                          </AccordionPanel>
-                        </AccordionItem>
-                      </Accordion>
+                      <>
+                        <Accordion
+                          openItems={openItems}
+                          onToggle={handleToggle}
+                          multiple
+                          collapsible
+                        >
+                          <AccordionItem value='registration'>
+                            <AccordionHeader
+                              className={styles.accordion}
+                              size='large'
+                              icon={getFluentIcon('Lightbulb')}
+                            >
+                              Registrert idé
+                            </AccordionHeader>
+                            <AccordionPanel style={{ margin: 0 }}>
+                              <div className={styles.idea}>
+                                {state.selectedIdea.registeredFieldValues.map((model, idx) => (
+                                  <IdeaField key={idx} model={model} />
+                                ))}
+                              </div>
+                            </AccordionPanel>
+                          </AccordionItem>
+                        </Accordion>
+                        <Divider />
+                      </>
                     )}
-                    <Divider />
                     <div className={styles.idea}>
                       {state.selectedIdea.processingFieldValues
                         ?.filter((model) => !ignoreFields.includes(model.internalName))
@@ -201,10 +245,8 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                     </div>
                     {state.selectedIdea.item.processing && renderStatus()}
                   </>
-                ) : (
-                  <Spinner className={styles.loading} label='Laster inn idé' size='medium' />
-                )}
-              </div>
+                </div>
+              )}
             </div>
           )}
         </FluentProvider>
@@ -214,8 +256,14 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
 }
 
 IdeaModule.defaultProps = {
-  configurationList: 'Idékonfigurasjon',
-  configuration: 'Standard',
+  dataSource: 'Registrerte idéer',
+  showCommandBar: true,
+  showExcelExportButton: true,
+  showFilters: true,
+  showViewSelector: true,
+  lockedColumns: false,
+  ideaConfigurationList: 'Idékonfigurasjon',
+  ideaConfiguration: 'Standard',
   hiddenRegFields: ['Title'],
   hiddenProcFields: [
     'Title',

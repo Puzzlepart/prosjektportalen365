@@ -236,6 +236,30 @@
             <pnp:DataValue FieldName="GtIconName">SyncStatus</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje</pnp:DataValue>
         </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtDataSourceId">a85e0567-7120-4d32-8ef3-08dc6a168aeb</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Registrerte idéer</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100AAE66CFF1A3F488D843FF7CF96E41DD9* DepartmentId:{{sitecollectionid}}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName">Lightbulb</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtDataSourceId">f5d1126f-08f5-406c-a91b-a3576d3b48ea</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Idéer i behandling</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x01000E7513A76B934F449CDB9B25FC172F44* DepartmentId:{{sitecollectionid}}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName">Lightbulb</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtDataSourceId">d7e226c3-eb6a-4e2a-abf9-6e27d88c18b6</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Alle idéer</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">(ContentTypeID:0x0100AAE66CFF1A3F488D843FF7CF96E41DD9* OR ContentTypeID:0x01000E7513A76B934F449CDB9B25FC172F44*) DepartmentId:{{sitecollectionid}}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName">Lightbulb</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje</pnp:DataValue>
+        </pnp:DataRow>
     </pnp:DataRows>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>
