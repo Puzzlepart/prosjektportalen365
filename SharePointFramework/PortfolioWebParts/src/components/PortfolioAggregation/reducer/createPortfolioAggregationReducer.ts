@@ -79,9 +79,7 @@ export const createPortfolioAggregationReducer = (
         return
       }
 
-      let selectedColumns = !_.isEmpty(props.columns)
-        ? props.columns
-        : payload.dataSource.columns ?? []
+      let selectedColumns = payload.dataSource.columns ?? props.columns ?? []
 
       let allColumnsForCategory = payload.columns.map((c) =>
         c.setData({
@@ -89,8 +87,9 @@ export const createPortfolioAggregationReducer = (
         })
       )
 
-      if (payload.dataSource.level.includes('Prosjekt'))
-        allColumnsForCategory = allColumnsForCategory.filter((c) => c.internalName !== 'SiteTitle')
+      if (payload.dataSource.level.includes('Prosjekt')) {
+        allColumnsForCategory = allColumnsForCategory.filter(({ internalName }) => internalName !== 'SiteTitle')
+      }
 
       selectedColumns = selectedColumns
         .map((c) => {
@@ -165,9 +164,9 @@ export const createPortfolioAggregationReducer = (
     ) => {
       state.columnContextMenu = payload
         ? {
-            column: payload.column,
-            target: payload.target as any
-          }
+          column: payload.column,
+          target: payload.target as any
+        }
         : null
     },
     [SET_ALL_COLLAPSED.type]: (state, { payload }: ReturnType<typeof SET_ALL_COLLAPSED>) => {
