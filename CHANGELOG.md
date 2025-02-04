@@ -14,6 +14,7 @@ Sjekk ut [release notes](./releasenotes/1.10.0.md) for høydepunkter og mer deta
 - Forbedret feilhåndtering for redigeringspanel for statusrapport [#1578](https://github.com/Puzzlepart/prosjektportalen365/issues/1578)
 - Forbedret feilhåndtering for provisjonering av Planner-oppgaver [#1593](https://github.com/Puzzlepart/prosjektportalen365/issues/1593)
 - Støtte for standalone Porteføljeoversikt [#1599](https://github.com/Puzzlepart/prosjektportalen365/issues/1599)
+- Støtte for å inkludere/eksludere tidskomponentene fra datofelter i aggregerte oversikter [#1575](https://github.com/Puzzlepart/prosjektportalen365/issues/1575)
 
 ### Feilrettinger
 - Boolean felttyper vises nå riktig, og filtreres korrekt [#1579](https://github.com/Puzzlepart/prosjektportalen365/issues/1579)

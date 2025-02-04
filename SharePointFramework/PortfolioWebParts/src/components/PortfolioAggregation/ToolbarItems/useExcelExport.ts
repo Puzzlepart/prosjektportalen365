@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
-import { useCallback } from 'react'
-import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
-import { IPortfolioAggregationContext } from '../context'
 import _ from 'lodash'
+import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
+import { useCallback } from 'react'
+import { IPortfolioAggregationContext } from '../context'
 
 /**
  * Hook that provides functionality for exporting data to Excel.
@@ -27,16 +27,16 @@ export function useExcelExport(context: IPortfolioAggregationContext) {
       const items = !_.isEmpty(context.state.selectedItems)
         ? context.state.selectedItems
         : context.state.items.filter((item) => {
-            if (Object.keys(context.state.activeFilters).length === 0) {
-              return true
-            }
-            return Object.keys(context.state.activeFilters).every((key) => {
-              const filterValues = context.state.activeFilters[key]
-              return filterValues.some((filterValue) => {
-                return item[key] === filterValue || item[key]?.includes(filterValue)
-              })
+          if (Object.keys(context.state.activeFilters).length === 0) {
+            return true
+          }
+          return Object.keys(context.state.activeFilters).every((key) => {
+            const filterValues = context.state.activeFilters[key]
+            return filterValues.some((filterValue) => {
+              return item[key] === filterValue || item[key]?.includes(filterValue)
             })
           })
+        })
 
       const filteredItems = items.map((item) => {
         const filteredItem = { ...item }
