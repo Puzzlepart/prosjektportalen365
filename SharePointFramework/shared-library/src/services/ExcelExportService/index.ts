@@ -51,7 +51,10 @@ class ExcelExportService {
             _columns.map((column) => {
               switch ((column as any).dataType) {
                 case 'date': {
-                  return formatDate(item[column.fieldName], column.data?.dataTypeProperties?.includeTime)
+                  return formatDate(
+                    item[column.fieldName],
+                    column.data?.dataTypeProperties?.includeTime
+                  )
                 }
                 default: {
                   return get(item, column.fieldName, null)

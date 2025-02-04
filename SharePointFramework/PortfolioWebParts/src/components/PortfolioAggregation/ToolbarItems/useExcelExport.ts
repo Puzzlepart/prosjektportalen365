@@ -27,16 +27,16 @@ export function useExcelExport(context: IPortfolioAggregationContext) {
       const items = !_.isEmpty(context.state.selectedItems)
         ? context.state.selectedItems
         : context.state.items.filter((item) => {
-          if (Object.keys(context.state.activeFilters).length === 0) {
-            return true
-          }
-          return Object.keys(context.state.activeFilters).every((key) => {
-            const filterValues = context.state.activeFilters[key]
-            return filterValues.some((filterValue) => {
-              return item[key] === filterValue || item[key]?.includes(filterValue)
+            if (Object.keys(context.state.activeFilters).length === 0) {
+              return true
+            }
+            return Object.keys(context.state.activeFilters).every((key) => {
+              const filterValues = context.state.activeFilters[key]
+              return filterValues.some((filterValue) => {
+                return item[key] === filterValue || item[key]?.includes(filterValue)
+              })
             })
           })
-        })
 
       const filteredItems = items.map((item) => {
         const filteredItem = { ...item }
