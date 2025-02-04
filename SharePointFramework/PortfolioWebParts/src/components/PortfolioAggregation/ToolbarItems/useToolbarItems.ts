@@ -44,60 +44,60 @@ export function useToolbarItems(context: IPortfolioAggregationContext) {
   const menuItems = useMemo<ListMenuItem[]>(
     () =>
       [
-        context.props.showExcelExportButton &&
-          new ListMenuItem(null, strings.ExcelExportButtonLabel)
-            .setIcon('ExcelLogoInverse')
-            .setOnClick(exportToExcel)
-            .setDisabled(context.state.isChangingView)
-            .setStyle({ color: '#10793F' }),
-        context.props.showViewSelector &&
-          new ListMenuItem(context.state.currentView?.title, strings.PortfolioViewsListName)
-            .setIcon(Icons.ContentView)
-            .setWidth('fit-content')
-            .setStyle({ minWidth: '145px' })
-            .setDisabled(context.state.isChangingView)
-            .setItems(
-              [
-                new ListMenuItem(strings.ListViewText)
-                  .setIcon(AppsListRegular)
-                  .makeCheckable({
-                    name: 'renderMode',
-                    value: 'list'
-                  })
-                  .setOnClick(() => {
-                    context.dispatch(TOGGLE_COMPACT())
-                  }),
-                new ListMenuItem(strings.CompactViewText)
-                  .setIcon(TextBulletListLtrRegular)
-                  .makeCheckable({
-                    name: 'renderMode',
-                    value: 'compactList'
-                  })
-                  .setOnClick(() => {
-                    context.dispatch(TOGGLE_COMPACT())
-                  }),
-                ListMenuItemDivider,
-                ...views,
-                ListMenuItemDivider,
-                new ListMenuItem(strings.NewViewText).setIcon(Icons.FormNew).setOnClick(() => {
-                  context.dispatch(SET_VIEW_FORM_PANEL({ isOpen: true }))
-                }),
-                new ListMenuItem(strings.EditViewText).setIcon(Icons.Edit).setOnClick(() => {
-                  context.dispatch(
-                    SET_VIEW_FORM_PANEL({ isOpen: true, view: context.state.currentView })
-                  )
+        new ListMenuItem(null, strings.ExcelExportButtonLabel)
+          .setIcon('ExcelLogoInverse')
+          .setOnClick(exportToExcel)
+          .setDisabled(context.state.isChangingView)
+          .setStyle({ color: '#10793F' })
+          .setHidden(!context.props.showExcelExportButton),
+        new ListMenuItem(context.state.currentView?.title, strings.PortfolioViewsListName)
+          .setIcon(Icons.ContentView)
+          .setWidth('fit-content')
+          .setStyle({ minWidth: '145px' })
+          .setDisabled(context.state.isChangingView)
+          .setHidden(!context.props.showViewSelector)
+          .setItems(
+            [
+              new ListMenuItem(strings.ListViewText)
+                .setIcon(AppsListRegular)
+                .makeCheckable({
+                  name: 'renderMode',
+                  value: 'list'
                 })
-              ],
-              checkedValues
-            ),
-        context.props.showFilters &&
-          new ListMenuItem(null, strings.FilterText)
-            .setIcon('Filter')
-            .setOnClick(() => {
-              context.dispatch(TOGGLE_FILTER_PANEL())
-            })
-            .setDisabled(context.state.isChangingView)
-      ].filter(Boolean),
+                .setOnClick(() => {
+                  context.dispatch(TOGGLE_COMPACT())
+                }),
+              new ListMenuItem(strings.CompactViewText)
+                .setIcon(TextBulletListLtrRegular)
+                .makeCheckable({
+                  name: 'renderMode',
+                  value: 'compactList'
+                })
+                .setOnClick(() => {
+                  context.dispatch(TOGGLE_COMPACT())
+                }),
+              ListMenuItemDivider,
+              ...views,
+              ListMenuItemDivider,
+              new ListMenuItem(strings.NewViewText).setIcon(Icons.FormNew).setOnClick(() => {
+                context.dispatch(SET_VIEW_FORM_PANEL({ isOpen: true }))
+              }),
+              new ListMenuItem(strings.EditViewText).setIcon(Icons.Edit).setOnClick(() => {
+                context.dispatch(
+                  SET_VIEW_FORM_PANEL({ isOpen: true, view: context.state.currentView })
+                )
+              })
+            ],
+            checkedValues
+          ),
+        new ListMenuItem(null, strings.FilterText)
+          .setIcon('Filter')
+          .setOnClick(() => {
+            context.dispatch(TOGGLE_FILTER_PANEL())
+          })
+          .setDisabled(context.state.isChangingView)
+          .setHidden(!context.props.showFilters)
+      ],
     [context.state, context.props]
   )
 

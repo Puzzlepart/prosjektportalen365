@@ -130,12 +130,14 @@ export interface IPortfolioAggregationProps<T = any>
   searchBoxPlaceholderText?: string
 
   /**
-   * Show Excel export button
+   * Show Excel export button. If set to `true`, the Excel
+   * export button will be shown in the command bar.
    */
   showExcelExportButton?: boolean
 
   /**
-   * Show Excel export button
+   * Show view selector. If set to `true`, the view selector
+   * will be shown in the command bar.
    */
   showViewSelector?: boolean
 
