@@ -1,4 +1,4 @@
-import { FluentProvider, IdPrefixProvider, useId } from '@fluentui/react-components'
+import { FluentProvider, IdPrefixProvider, mergeClasses, useId } from '@fluentui/react-components'
 import { customLightTheme } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { Configuration } from './Configuration'
@@ -15,11 +15,15 @@ export const Footer: FC<IFooterProps> = (props) => {
   const fluentProviderId = useId('fp-footer')
   const footer = useFooter(props)
 
+  if (!props.showFooter) {
+    return null
+  }
+
   return (
     <FooterContext.Provider value={{ ...footer, props }}>
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme}>
-          <div className={styles.footer}>
+          <div className={mergeClasses(styles.footer, props.minimizeFooter && styles.minimize)}>
             <section className={styles.left}>
               <SiteSettings />
               <Configuration />

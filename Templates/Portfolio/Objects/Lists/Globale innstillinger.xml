@@ -95,6 +95,22 @@
             <pnp:DataValue FieldName="GtSettingsValue">standard-konfigurasjon.json</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsCategory">Mulighetsmatrise</pnp:DataValue>
+        </pnp:DataRow>,
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSettingsId">{4973a0af-f7fb-483c-81b8-163a2b06b488}</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Vis/skjul footer</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsKey">ShowFooter</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsValue">1</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsCategory">Generelt</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSettingsId">{fb8cb873-ac5f-45e0-a091-1e14bfc7ea33}</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Automatisk minimering av footer</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsKey">MinimizeFooter</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsValue">1</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsEnabled">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsCategory">Generelt</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
