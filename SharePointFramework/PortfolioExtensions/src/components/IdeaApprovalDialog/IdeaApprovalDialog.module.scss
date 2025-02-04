@@ -1,15 +1,16 @@
 .ideaApprovalDialog {
-  max-width: 420px;
-  padding: 24px;
-
-  .content {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  & > div[class*="ms-Dialog-main"] {
+    border-radius: 8px !important;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.12), 0 32px 64px rgba(0, 0, 0, 0.14) !important;
   }
-}
+  .dialogBody {
+    max-width: 420px;
+    padding: 24px;
 
-div[class*="ms-Dialog-main"] {
-  border-radius: 8px !important;
-  box-shadow: 0 0 8px rgba(0,0,0,0.12), 0 32px 64px rgba(0,0,0,0.14) !important;
+    .content {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+  }
 }
