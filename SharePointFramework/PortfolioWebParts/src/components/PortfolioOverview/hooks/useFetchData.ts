@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { MessageBarType } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
-import { ColumnRenderComponentRegistry } from 'components/List'
+import { ColumnRenderComponentRegistry } from '../../List'
 import _ from 'lodash'
 import { PortfolioOverviewView } from 'pp365-shared-library/lib/models'
 import { parseUrlHash } from 'pp365-shared-library/lib/util/parseUrlHash'

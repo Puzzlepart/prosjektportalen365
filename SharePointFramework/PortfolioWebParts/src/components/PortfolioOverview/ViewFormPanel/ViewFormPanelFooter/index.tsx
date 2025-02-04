@@ -1,7 +1,7 @@
 import { Button, FluentProvider, IdPrefixProvider } from '@fluentui/react-components'
 import { useId } from '@fluentui/react-hooks'
 import strings from 'PortfolioWebPartsStrings'
-import { usePortfolioOverviewContext } from 'components/PortfolioOverview/context'
+import { usePortfolioOverviewContext } from '../../context'
 import { customLightTheme } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { SET_VIEW_FORM_PANEL } from '../../reducer'
