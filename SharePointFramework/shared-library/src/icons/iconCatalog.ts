@@ -15,14 +15,16 @@ import {
   ArrowSyncRegular,
   ArrowUndoFilled,
   ArrowUndoRegular,
+  BotFilled,
+  BotRegular,
+  BotSparkleFilled,
+  BotSparkleRegular,
   BoxMultipleFilled,
   BoxMultipleRegular,
   BoxToolboxFilled,
   BoxToolboxRegular,
   CalendarFilled,
   CalendarRegular,
-  CaretRightFilled,
-  CaretRightRegular,
   CheckmarkCircleFilled,
   CheckmarkCircleRegular,
   CheckmarkSquareFilled,
@@ -130,11 +132,7 @@ import {
   TextSortDescendingFilled,
   TextSortDescendingRegular,
   ToggleLeftFilled,
-  ToggleLeftRegular,
-  BotFilled,
-  BotRegular,
-  BotSparkleFilled,
-  BotSparkleRegular,
+  ToggleLeftRegular
 } from '@fluentui/react-icons'
 
 /**
@@ -396,5 +394,17 @@ export const iconCatalog = {
   Clock: {
     regular: ClockRegular,
     filled: ClockFilled
+  },
+  Lightbulb: {
+    regular: LightbulbRegular,
+    filled: LightbulbFilled
+  },
+  Bot: {
+    regular: BotRegular,
+    filled: BotFilled
+  },
+  BotSparkle: {
+    regular: BotSparkleRegular,
+    filled: BotSparkleFilled
   }
 }
