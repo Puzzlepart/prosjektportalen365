@@ -25,6 +25,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   private _installEntries: InstallationEntry[]
   private _gitHubReleases: IGitHubRelease[]
   private _links: { Url: string; Description: string; Level?: string }[]
+  private _useAssistant: boolean
   private _helpContent: HelpContentModel[]
   private _portalDataService: PortalDataService
   private _showFooter: boolean
@@ -51,6 +52,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     this._gitHubReleases = gitHubReleases
     this._helpContent = helpContent
     this._links = links
+    this._useAssistant = this._globalSettings.get('UseAssistant') === '1'
     this._showFooter = this._globalSettings.get('ShowFooter') === '1'
     this._minimizeFooter = this._globalSettings.get('MinimizeFooter') === '1'
     this.context.application.navigatedEvent.add(this, this._handleNavigatedEvent)
@@ -68,6 +70,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
       links: this._links,
       pageContext: this.context.pageContext,
       portalUrl: this._portalDataService.url,
+      useAssistant: this._useAssistant,
       showFooter: this._showFooter,
       minimizeFooter: this._minimizeFooter
     })

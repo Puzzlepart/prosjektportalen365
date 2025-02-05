@@ -33,6 +33,11 @@ export interface IFooterProps {
   portalUrl: string
 
   /**
+   * Use the assistant
+   */
+  useAssistant: boolean
+
+  /**
    * Whether or not to show the footer
    */
   showFooter: boolean

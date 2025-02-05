@@ -31,7 +31,7 @@ export const Footer: FC<IFooterProps> = (props) => {
               <PromotedLinks />
             </section>
             <section className={styles.right}>
-              <Assistant />
+              {props.useAssistant && <Assistant />}
               <InstallVersion />
               <HelpContent />
             </section>
