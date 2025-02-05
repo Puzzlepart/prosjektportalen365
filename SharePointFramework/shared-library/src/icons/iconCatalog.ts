@@ -130,7 +130,11 @@ import {
   TextSortDescendingFilled,
   TextSortDescendingRegular,
   ToggleLeftFilled,
-  ToggleLeftRegular
+  ToggleLeftRegular,
+  BotFilled,
+  BotRegular,
+  BotSparkleFilled,
+  BotSparkleRegular,
 } from '@fluentui/react-icons'
 
 /**
@@ -392,13 +396,5 @@ export const iconCatalog = {
   Clock: {
     regular: ClockRegular,
     filled: ClockFilled
-  },
-  CaretRight: {
-    regular: CaretRightRegular,
-    filled: CaretRightFilled
-  },
-  Lightbulb: {
-    regular: LightbulbRegular,
-    filled: LightbulbFilled
   }
 }
