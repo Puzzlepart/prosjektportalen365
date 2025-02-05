@@ -15,14 +15,16 @@ import {
   ArrowSyncRegular,
   ArrowUndoFilled,
   ArrowUndoRegular,
+  BotFilled,
+  BotRegular,
+  BotSparkleFilled,
+  BotSparkleRegular,
   BoxMultipleFilled,
   BoxMultipleRegular,
   BoxToolboxFilled,
   BoxToolboxRegular,
   CalendarFilled,
   CalendarRegular,
-  CaretRightFilled,
-  CaretRightRegular,
   CheckmarkCircleFilled,
   CheckmarkCircleRegular,
   CheckmarkSquareFilled,
@@ -393,12 +395,16 @@ export const iconCatalog = {
     regular: ClockRegular,
     filled: ClockFilled
   },
-  CaretRight: {
-    regular: CaretRightRegular,
-    filled: CaretRightFilled
-  },
   Lightbulb: {
     regular: LightbulbRegular,
     filled: LightbulbFilled
+  },
+  Bot: {
+    regular: BotRegular,
+    filled: BotFilled
+  },
+  BotSparkle: {
+    regular: BotSparkleRegular,
+    filled: BotSparkleFilled
   }
 }
