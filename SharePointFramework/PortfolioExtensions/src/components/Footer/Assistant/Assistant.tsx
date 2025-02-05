@@ -46,7 +46,12 @@ export const Assistant: FC = () => {
                     appearance='subtle'
                     title='Innstillinger'
                     icon={getFluentIcon('Settings')}
-                    onClick={() => window.open(`${context.props.portalUrl}/Lists/Globale%20innstillinger`, '_blank')}
+                    onClick={() =>
+                      window.open(
+                        `${context.props.portalUrl}/Lists/Globale%20innstillinger`,
+                        '_blank'
+                      )
+                    }
                   />
                   <ToolbarButton
                     title='Lukk'
@@ -68,12 +73,11 @@ export const Assistant: FC = () => {
                 />
               )}
               <iframe
+                src={`https://pp365-ai-d2dge4fqc2bhbba9.norwayeast-01.azurewebsites.net?source=${context.props.pageContext.web.absoluteUrl}`}
                 style={{ display: loading ? 'none' : 'block', border: 'none' }}
                 title='Assistent for Prosjektportalen 365'
-                src={`https://pp365-ai-d2dge4fqc2bhbba9.norwayeast-01.azurewebsites.net?source=${context.props.pageContext.web.absoluteUrl}`}
                 width='100%'
                 height='100%'
-                sandbox='allow-scripts allow-modal allow-popups'
                 onLoad={() => setLoading(false)}
               />
             </div>
