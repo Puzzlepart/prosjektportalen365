@@ -1,17 +1,47 @@
-.footer {
+  .footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     box-sizing: border-box;
-    min-height: 65px;
-    padding: 25px;
+    min-height: 40px;
+    padding: 0 25px;
     background-color: var(--colorNeutralBackground1);
     border-top: 1px solid var(--colorNeutralBackground3);
+    transition: all 0.2s ease-in-out;
 
-  .left, .right {
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
+    &:hover {
+      padding: 25px;
+    }
+
+    .left,
+    .right {
+      display: flex;
+      flex-direction: row;
+      gap: 8px;
+    }
+
+    &.minimize {
+      overflow: hidden;
+      opacity: 0;
+      min-height: 0px;
+      height: 12px;
+
+      .footer {
+        height: 100%;
+      }
+
+      &:hover {
+        height: 60px;
+        opacity: 1;
+
+        .footer {
+          display: flex;
+          height: 100%;
+        }
+      }
+    }
   }
-}

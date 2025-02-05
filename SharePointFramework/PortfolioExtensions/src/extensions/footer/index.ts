@@ -27,6 +27,9 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   private _links: { Url: string; Description: string; Level?: string }[]
   private _helpContent: HelpContentModel[]
   private _portalDataService: PortalDataService
+  private _showFooter: boolean
+  private _minimizeFooter: boolean
+  private _globalSettings: Map<string, string>
 
   /**
    * On init, fetch the installation logs, GitHub releases and links.
@@ -36,6 +39,8 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     this._portalDataService = await new PortalDataService().configure({
       spfxContext: this.context
     })
+    this._globalSettings = await this._portalDataService.getGlobalSettings()
+
     const [installEntries, gitHubReleases, helpContent, links] = await Promise.all([
       this._fetchInstallationLogs(),
       this._fetchGitHubReleases(),
@@ -46,6 +51,8 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     this._gitHubReleases = gitHubReleases
     this._helpContent = helpContent
     this._links = links
+    this._showFooter = this._globalSettings.get('ShowFooter') === '1'
+    this._minimizeFooter = this._globalSettings.get('MinimizeFooter') === '1'
     this.context.application.navigatedEvent.add(this, this._handleNavigatedEvent)
     return Promise.resolve()
   }
@@ -60,7 +67,9 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
       helpContent: this._helpContent,
       links: this._links,
       pageContext: this.context.pageContext,
-      portalUrl: this._portalDataService.url
+      portalUrl: this._portalDataService.url,
+      showFooter: this._showFooter,
+      minimizeFooter: this._minimizeFooter
     })
   }
 

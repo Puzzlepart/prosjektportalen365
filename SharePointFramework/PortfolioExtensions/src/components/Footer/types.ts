@@ -31,4 +31,14 @@ export interface IFooterProps {
    * The URL to the portal root
    */
   portalUrl: string
+
+  /**
+   * Whether or not to show the footer
+   */
+  showFooter: boolean
+
+  /**
+   * Whether or not to minimize the footer automtically
+   */
+  minimizeFooter: boolean
 }
