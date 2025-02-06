@@ -22,7 +22,7 @@ jobs:
     runs-on: macos-latest
     if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') && !contains(github.event.head_commit.message, '[packages-only]') }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
 
@@ -30,7 +30,7 @@ jobs:
         id: vars
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ vars.NODE_VERSION }}
 
@@ -38,7 +38,7 @@ jobs:
         run: Install/Build-Release.ps1 -CI -SkipBundle
         shell: pwsh
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: release-package
           path: release
@@ -51,7 +51,7 @@ jobs:
     runs-on: macos-latest
     if: ${{ !contains(github.event.head_commit.message, '[skip-upgrade]') }}
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: release-package
           path: release
@@ -66,7 +66,7 @@ jobs:
     runs-on: macos-latest
     if: ${{ !contains(github.event.head_commit.message, '[skip-install]') }}
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: release-package
           path: release
@@ -81,7 +81,7 @@ jobs:
     runs-on: macos-latest
     if: ${{ contains(github.event.head_commit.message, '[upgrade-all-sites-to-latest]') }}
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: release-package
           path: release
@@ -95,7 +95,7 @@ jobs:
     runs-on: macos-latest
     if: ${{ contains(github.event.head_commit.message, '[packages-only]') }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
 
@@ -103,7 +103,7 @@ jobs:
         id: vars
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ vars.NODE_VERSION }}
 
@@ -111,7 +111,7 @@ jobs:
         run: Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates
         shell: pwsh
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: release-package
           path: release
@@ -123,7 +123,7 @@ jobs:
     name: Upgrade packages only
     runs-on: macos-latest
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: release-package
           path: release
