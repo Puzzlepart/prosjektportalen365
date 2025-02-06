@@ -95,7 +95,7 @@
             <pnp:DataValue FieldName="GtSettingsValue">standard-konfigurasjon.json</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsCategory">Mulighetsmatrise</pnp:DataValue>
-        </pnp:DataRow>,
+        </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSettingsId">{4973a0af-f7fb-483c-81b8-163a2b06b488}</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Vis/skjul footer</pnp:DataValue>
