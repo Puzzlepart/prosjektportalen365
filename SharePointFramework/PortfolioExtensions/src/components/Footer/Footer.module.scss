@@ -12,6 +12,7 @@
     background-color: var(--colorNeutralBackground1);
     border-top: 1px solid var(--colorNeutralBackground3);
     transition: all 0.2s ease-in-out;
+    z-index: 9;
 
     &:hover {
       padding: 25px;
