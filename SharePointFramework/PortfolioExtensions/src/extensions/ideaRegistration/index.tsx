@@ -18,13 +18,9 @@ import { isUserAuthorized } from '../../helpers/isUserAuthorized'
 import strings from 'PortfolioExtensionsStrings'
 import { Choice, IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
 import { find } from 'underscore'
-import {
-  getClassProperties,
-  ProjectContentColumn,
-  SPField,
-  SPProjectContentColumnItem
-} from 'pp365-shared-library'
+import { ProjectContentColumn, SPProjectContentColumnItem } from 'pp365-shared-library'
 import _ from 'underscore'
+import { PortalDataService } from 'pp365-shared-library/lib/services/PortalDataService'
 
 const LOG_SOURCE: string = 'IdeaRegistrationCommand'
 
@@ -34,11 +30,15 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
   private _openLinkCmd: Command
   private _sp: SPFI
   private _config: IdeaConfigurationModel
+  private _portalDataService: PortalDataService
 
   @override
   public async onInit(): Promise<void> {
     Log.info(LOG_SOURCE, 'onInit: Initializing...')
     this._sp = spfi().using(SPFx(this.context))
+    this._portalDataService = await new PortalDataService().configure({
+      spfxContext: this.context
+    })
     this._openCmd = this.tryGetCommand('OPEN_IDEA_REGISTRATION_DIALOG')
     this._openCmd.visible = false
     this._openLinkCmd = this.tryGetCommand('IDEA_PROCESSING_LINK')
@@ -210,20 +210,6 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
    * @param comment Comment from the dialog
    */
   private _onSubmit = async (row: RowAccessor, comment: string): Promise<void> => {
-    const getProcessingColumns = async (): Promise<{ fields: SPField[] }> => {
-      const [listInfo] = await this._sp.web.lists
-        .filter(`Title eq '${this._config.processingList}'`)
-        .select('Id')()
-      const list = this._sp.web.lists.getById(listInfo.Id)
-      const fields = await list.fields
-        .select(...getClassProperties(SPField))
-        .filter("substringof('Gt', InternalName) or InternalName eq 'Title'")<SPField[]>()
-
-      return {
-        fields
-      }
-    }
-
     const contentColumns = async () => {
       try {
         const list = this._sp.web.lists.getByTitle('Prosjektinnholdskolonner')
@@ -248,14 +234,20 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
     }
 
     const columns = await contentColumns()
-    const processingColumns = await getProcessingColumns()
+    const processingColumns = await this._portalDataService.getListFields(
+      this._config.processingList,
+      "substringof('Gt', InternalName) or InternalName eq 'Title'",
+      this._sp.web
+    )
     const registrationList = row
+
+    console.log(processingColumns)
 
     const userFields = registrationList.fields
       .filter((fld) => fld.fieldType.indexOf('User') === 0)
       .map((fld) => fld.internalName)
 
-    const columnsToCopy = processingColumns.fields.filter((col) => {
+    const columnsToCopy = processingColumns.filter((col) => {
       const field = registrationList.fields.find(
         (f) => f.internalName === col.InternalName || f.displayName === col.Title
       )
