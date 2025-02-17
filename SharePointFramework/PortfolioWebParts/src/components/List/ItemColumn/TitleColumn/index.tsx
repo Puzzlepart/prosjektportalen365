@@ -23,8 +23,9 @@ const Icons = {
 
 export const TitleColumn: FC<ITitleColumnProps> = (props) => {
   const context = useContext(ListContext)
+  const url = props.item?.Path || props.item?.SPWebUrl
 
-  if (!props.item.Path) {
+  if (!url) {
     return (
       <span>
         <Text size={200}>{props.item.Title}</Text>
@@ -41,7 +42,7 @@ export const TitleColumn: FC<ITitleColumnProps> = (props) => {
   }
   if (!context.props.renderTitleProjectInformationPanel) {
     return (
-      <Link href={props.item.Path} target='_blank' rel='noopener noreferrer'>
+      <Link href={url} target='_blank' rel='noopener noreferrer'>
         {props.item.Title}
       </Link>
     )
@@ -49,7 +50,7 @@ export const TitleColumn: FC<ITitleColumnProps> = (props) => {
     return (
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <ProjectInformationPanel
-          {...SiteContext.create(context.props.webPartContext, props.item.SiteId, props.item.Path)}
+          {...SiteContext.create(context.props.webPartContext, props.item.SiteId, url)}
           title={props.item.Title}
           page='Portfolio'
           hideAllActions={true}
@@ -68,7 +69,7 @@ export const TitleColumn: FC<ITitleColumnProps> = (props) => {
             </Tooltip>
           )}
         >
-          <Link href={props.item.Path} rel='noopener noreferrer' target='_blank'>
+          <Link href={url} rel='noopener noreferrer' target='_blank'>
             {props.item.Title}
           </Link>
         </ProjectInformationPanel>

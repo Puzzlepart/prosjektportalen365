@@ -23,9 +23,11 @@ export const ProjectInformationColumn: ColumnRenderComponent<IProjectInformation
   props
 ) => {
   const context = useContext(ListContext)
+  const url = props.item?.Path || props.item?.SPWebUrl
+
   return (
     <ProjectInformationPanel
-      {...SiteContext.create(context.props.webPartContext, props.item.SiteId, props.item.SPWebURL)}
+      {...SiteContext.create(context.props.webPartContext, props.item.SiteId, url)}
       page={props.page}
       hideAllActions={true}
       panelProps={{
@@ -46,7 +48,7 @@ export const ProjectInformationColumn: ColumnRenderComponent<IProjectInformation
         </Tooltip>
       )}
     >
-      <Link href={props.item.SPWebURL} rel='noopener noreferrer' target='_blank'>
+      <Link href={url} rel='noopener noreferrer' target='_blank'>
         {props.columnValue}
       </Link>
     </ProjectInformationPanel>

@@ -265,7 +265,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           ...statusReport,
           ...project,
           Title: site.Title,
-          Path: site.Path,
+          Path: site?.Path,
+          SPWebUrl: site?.SPWebUrl,
           SiteId: site['SiteId']
         }
       })
@@ -298,7 +299,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         return {
           ...statusReport,
           ...project,
-          Path: site && site.Path,
+          Path: site?.Path,
+          SPWebUrl: site?.SPWebUrl,
           SiteId: project[siteIdProperty]
         }
       })
@@ -370,6 +372,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       ]),
       this._fetchItems(`DepartmentId:{${siteId}} contentclass:STS_Site`, [
         'Path',
+        'SPWebUrl',
         'Title',
         'SiteId'
       ]),
@@ -553,7 +556,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       Querytext: `DepartmentId:{${hubSiteId}} contentclass:STS_Site`,
       TrimDuplicates: false,
       RowLimit: rowLimit,
-      SelectProperties: ['Title', 'Path', 'SiteId', 'Created'],
+      SelectProperties: ['Title', 'Path', 'SPWebUrl', 'SiteId', 'Created'],
       SortList: [
         {
           Property: sortProperty,

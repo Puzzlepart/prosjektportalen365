@@ -47,18 +47,20 @@ export const LatestProjects: FC<ILatestProjectsProps> = (props) => {
     const viewCount = viewAll ? projects.length : props.rowLimit
     return [...projects].slice(0, viewCount).map((site, idx) => {
       const created = formatDate(site.Created, true)
+      const url = site?.Path || site?.SPWebUrl
+
       return (
         <div key={idx} className={className}>
           <ProjectLogo
             title={site.Title}
-            url={site.Path}
+            url={url}
             renderMode='list'
             size='48px'
             hidden={!props.showProjectLogo}
           />
           <div className={styles.container}>
             <div className={styles.title}>
-              <Link href={site.Path} target='_blank' title={site.Title}>
+              <Link href={url} target='_blank' title={site.Title}>
                 {site.Title}
               </Link>
             </div>
