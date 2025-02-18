@@ -21,7 +21,7 @@ export interface IChangePhaseDialogContext {
    *
    * @param properties Properties
    */
-  nextChecklistItem: (properties: Record<string, any>) => void
+  nextChecklistItem: (properties: Record<string, any>) => Promise<void>
 }
 
 export const ChangePhaseDialogContext = createContext<IChangePhaseDialogContext>(null)
