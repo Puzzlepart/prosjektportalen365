@@ -10,7 +10,10 @@ import { useBoolean } from 'usehooks-ts'
  * @param comment Comment value
  * @param onNextChecklistItem On next checklist item callback
  */
-export function useActions(comment: string, onNextChecklistItem: (statusValue: string) => Promise<void>) {
+export function useActions(
+  comment: string,
+  onNextChecklistItem: (statusValue: string) => Promise<void>
+) {
   const context = useContext(ProjectPhasesContext)
   const isCommentValid = comment?.length >= context.props.commentMinLength
   const isDisabled = useBoolean(false)
