@@ -1,10 +1,10 @@
 import { Selection, format } from '@fluentui/react'
-import { useId } from '@fluentui/react-hooks'
 import { SearchBoxProps } from '@fluentui/react-components'
+import { useId } from '@fluentui/react-hooks'
 import strings from 'PortfolioWebPartsStrings'
 import { IFilterItemProps, IFilterPanelProps, ProjectColumn } from 'pp365-shared-library'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
-import { useMemo, useReducer } from 'react'
+import { createElement, useMemo, useReducer } from 'react'
 import { OnColumnContextMenu } from '../../List'
 import { IPortfolioOverviewContext } from '../context'
 import createReducer, {
@@ -15,8 +15,9 @@ import createReducer, {
   TOGGLE_FILTER_PANEL,
   getInitialState
 } from '../reducer'
-import { IPortfolioOverviewProps } from '../types'
+import { ResultsCount } from '../ResultsCount'
 import { useToolbarItems } from '../ToolbarItems/useToolbarItems'
+import { IPortfolioOverviewProps } from '../types'
 import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
 import { useFetchData } from './useFetchData'
 import { useFilteredData } from './useFilteredData'
@@ -73,7 +74,8 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
     onChange: (_, data) => {
       context.dispatch(EXECUTE_SEARCH(data?.value))
     },
-    hidden: !props.showSearchBox
+    hidden: !props.showSearchBox,
+    contentAfter: createElement(ResultsCount, { displayCount: items.length })
   }
 
   const filters = usePortfolioOverviewFilters(context)
@@ -91,6 +93,8 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
     }),
     [context.state.isFilterPanelOpen, context.layerHostId, filters]
   )
+
+  console.log('usePortfolioOverview', items.length)
 
   return {
     context: {

@@ -1,4 +1,5 @@
 declare interface IPortfolioWebPartsStrings {
+  ResultsCountLabel: string
   ColumnRenderOptionStatusReport: string
   PortfolioSelectorLabel: string
   PortfoliosFieldDescription: string

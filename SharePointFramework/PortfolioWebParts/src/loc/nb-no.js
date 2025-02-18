@@ -1,5 +1,6 @@
 define([], function () {
   return {
+    ResultsCountLabel: 'Viser {0} av {1} prosjekter',
     PortfolioSelectorLabel: 'Portefølje',
     IconNameFieldLabel: 'Ikonnavn',
     IconNameFieldPlaceholder: 'Skriv inn et ikonnavn fra UI Fabric (f.eks. "Page")',

@@ -12,7 +12,6 @@ export const ListHeader: FC<IListHeaderProps> = (props) => {
   const fluentProviderId = useId('fp-list-header')
   const context = useContext(ListContext)
   const hasError = !!props.error
-
   return (
     <Sticky
       stickyClassName={styles.sticky}
