@@ -17,8 +17,8 @@ export function useInitialView() {
    *
    * @param statusValue Status value
    */
-  const onNextChecklistItem = (statusValue: string) => {
-    nextChecklistItem({
+  const onNextChecklistItem = async (statusValue: string) => {
+    await nextChecklistItem({
       GtChecklistStatus: statusValue,
       GtComment: comment
     })
