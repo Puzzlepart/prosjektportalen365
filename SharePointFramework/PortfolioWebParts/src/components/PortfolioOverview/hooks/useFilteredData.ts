@@ -1,21 +1,26 @@
 import { IGroup } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import sortArray from 'array-sort'
-import { getObjectValue as get, ProjectColumn, tryParseCurrency, tryParseInt } from 'pp365-shared-library'
+import {
+  getObjectValue as get,
+  ProjectColumn,
+  tryParseCurrency,
+  tryParseInt
+} from 'pp365-shared-library'
 import _ from 'underscore'
 import { IPortfolioOverviewContext } from '../context'
 import { IPortfolioOverviewState } from '../types'
 
 /**
  * Generates a display name for a group based on the column and its value.
- * 
+ *
  * Temporary function until we have a better way to handle this. It would be
  * nice to have _one_ place to do custom rendering of different column data
  * types.
  *
  * @param column - The column used for grouping.
  * @param value - The value of the column for the group.
- * 
+ *
  * @returns The display name for the group.
  */
 function getGroupDisplayName(column: ProjectColumn, value: string) {
@@ -24,15 +29,10 @@ function getGroupDisplayName(column: ProjectColumn, value: string) {
     case 'number':
       displayValue = tryParseInt(value, strings.NotSet) as string
       break
-    case 'currency': {
-      displayValue = tryParseCurrency(
-        value,
-        strings.NotSet,
-        'kr',
-        0,
-        2
-      )
-    }
+    case 'currency':
+      {
+        displayValue = tryParseCurrency(value, strings.NotSet, 'kr', 0, 2)
+      }
       break
   }
   return `${column.name}: ${displayValue}`
