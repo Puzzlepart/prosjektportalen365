@@ -94,8 +94,6 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
     [context.state.isFilterPanelOpen, context.layerHostId, filters]
   )
 
-  console.log('usePortfolioOverview', items.length)
-
   return {
     context: {
       ...context,

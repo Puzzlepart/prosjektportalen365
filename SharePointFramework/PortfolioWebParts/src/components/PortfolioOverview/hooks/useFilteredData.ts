@@ -1,10 +1,42 @@
 import { IGroup } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import sortArray from 'array-sort'
-import { getObjectValue as get } from 'pp365-shared-library'
+import { getObjectValue as get, ProjectColumn, tryParseCurrency, tryParseInt } from 'pp365-shared-library'
 import _ from 'underscore'
 import { IPortfolioOverviewContext } from '../context'
 import { IPortfolioOverviewState } from '../types'
+
+/**
+ * Generates a display name for a group based on the column and its value.
+ * 
+ * Temporary function until we have a better way to handle this. It would be
+ * nice to have _one_ place to do custom rendering of different column data
+ * types.
+ *
+ * @param column - The column used for grouping.
+ * @param value - The value of the column for the group.
+ * 
+ * @returns The display name for the group.
+ */
+function getGroupDisplayName(column: ProjectColumn, value: string) {
+  let displayValue = value
+  switch (column.dataType) {
+    case 'number':
+      displayValue = tryParseInt(value, strings.NotSet) as string
+      break
+    case 'currency': {
+      displayValue = tryParseCurrency(
+        value,
+        strings.NotSet,
+        'kr',
+        0,
+        2
+      )
+    }
+      break
+  }
+  return `${column.name}: ${displayValue}`
+}
 
 /**
  * Create groups based on `items`, `columns` and `groupBy` field.
@@ -30,7 +62,7 @@ function createGroups(items: any[], state: IPortfolioOverviewState) {
       const count = groupNames.filter((n) => n === name).length
       const group: IGroup = {
         key: `Group_${idx}`,
-        name: `${state.groupBy.name}: ${name}`,
+        name: getGroupDisplayName(state.groupBy, name),
         startIndex: groupNames.indexOf(name, 0),
         count,
         isShowingAll: count === items.length,
