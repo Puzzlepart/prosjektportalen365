@@ -67,6 +67,7 @@ dependencies:
   array-unique: 0.3.2
   chokidar-cli: 2.1.0
   clean-deep: 3.0.2
+  color-convert: 3.0.1
   colors: 1.4.0
   concurrently: 7.4.0
   dom-to-image: 2.6.0
@@ -3260,7 +3261,7 @@ packages:
       '@fluentui/utilities': 8.15.19_3df41e700a554c2356b362be396a0af4
       '@types/react': 17.0.45
       react: 17.0.2
-      tslib: 2.6.0
+      tslib: 2.8.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <19.0.0'
@@ -3274,7 +3275,7 @@ packages:
       '@fluentui/utilities': 8.15.19_4865287ef69aa4f3fc3f709d3560286e
       '@types/react': 17.0.45
       react: 17.0.1
-      tslib: 2.6.0
+      tslib: 2.8.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <19.0.0'
@@ -11306,6 +11307,14 @@ packages:
       node: '>=7.0.0'
     resolution:
       integrity: sha512-RRECPsj7iu/xb5oKYcsFHSppFNnsj/52OVTRKb4zP5onXwVF3zVmmToNcOfGC+CRDpfK/U584fMg38ZHCaElKQ==
+  /color-convert/3.0.1:
+    dependencies:
+      color-name: 2.0.0
+    dev: false
+    engines:
+      node: '>=14.6'
+    resolution:
+      integrity: sha512-5kQah2eolfQV7HCrxtsBBArPfT5dwaKYMCXeMQsdRO7ihTO/cuNLGjd50ITCDn+ZU/YbS0Go64SjP9154eopxg==
   /color-name/1.1.3:
     dev: false
     resolution:
@@ -11314,6 +11323,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==
+  /color-name/2.0.0:
+    dev: false
+    engines:
+      node: '>=12.20'
+    resolution:
+      integrity: sha512-SbtvAMWvASO5TE2QP07jHBMXKafgdZz8Vrsrn96fiL+O92/FN/PLARzUW5sKt013fjAprK2d2iCn2hk2Xb5oow==
   /color-string/1.9.1:
     dependencies:
       color-name: 1.1.4
@@ -11343,6 +11358,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-IfEDxwoWIjkeXL1eXcDiow4UbKjhLdq6/EuSVR9GMN7KVH3r9gQ83e73hsz1Nd1T3ijd5xv1wcWRYO+D6kCI2w==
+  /colors-convert/1.4.1:
+    dependencies:
+      lodash: 4.17.21
+    dev: false
+    resolution:
+      integrity: sha512-ocrpfnLi18zikmwuZ7McU66GaDp/wAdGindkYVDYX2D78cLALBZouBDpw1voMdSyjod6d/x/4vjIdyD23xYUSg==
   /colors/1.0.3:
     dev: false
     engines:
@@ -22801,22 +22822,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-hnpz2vI8IpTFy7bMfjEMBXlFNLtYhYxxo4Q7FIY1C4JgyJ9S+Ogz5JaqhN4+eCM6nXwKMsCU3zIUhC/WIXd/og==
-  /sp-js-provisioning/1.2.5_5bb3879ba087c0ef402ac2f0f80f9922:
-    dependencies:
-      '@pnp/core': 3.17.0
-      '@pnp/logging': 3.17.0
-      '@pnp/nodejs': 3.17.0
-      '@pnp/queryable': 3.17.0
-      '@pnp/sp': 3.17.0
-      object.omit: 3.0.0
-      spfx-jsom: 0.6.6_5bb3879ba087c0ef402ac2f0f80f9922
-      xml-js: 1.6.11
-    dev: false
-    peerDependencies:
-      '@types/react': '*'
-      '@types/react-dom': '*'
-    resolution:
-      integrity: sha512-4HEUoYQP5joXLCLLdQCAoPMrEN0OcPeTywQeUmGZZc2Jd8HfGkMegXkwb8i/bwyip4qmreUN70MPO63cRoQtTQ==
   /sp-js-provisioning/1.2.6_5bb3879ba087c0ef402ac2f0f80f9922:
     dependencies:
       '@pnp/core': 3.17.0
@@ -25927,6 +25932,7 @@ packages:
       '@types/lodash': 4.14.202
       '@types/react': 17.0.45
       '@types/react-dom': 17.0.17
+      '@types/shade-blend-color': 1.0.3
       '@types/smoothscroll-polyfill': 0.3.4
       '@types/underscore': 1.11.15
       '@types/webpack-env': 1.18.0
@@ -25935,7 +25941,9 @@ packages:
       '@uifabric/utilities': 6.45.1_9c907a7ccd27a2e2d0ee9de5366482d1
       ajv: 6.12.5
       array-sort: 1.0.0
+      color-convert: 3.0.1
       colors: 1.4.0
+      colors-convert: 1.4.1
       concurrently: 7.4.0
       dom-to-image: 2.6.0
       dotenv: 16.1.4
@@ -25965,6 +25973,7 @@ packages:
       react-markdown: 8.0.7_4865287ef69aa4f3fc3f709d3560286e
       react-scroll: 1.7.11_react-dom@17.0.1+react@17.0.1
       rehype-raw: 6.1.1
+      shade-blend-color: 1.0.0
       smoothscroll-polyfill: 0.4.4
       sp-entityportal-service: 2.3.0
       spfx-jsom: 0.6.6_5bb3879ba087c0ef402ac2f0f80f9922
@@ -25976,7 +25985,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectwebparts'
     resolution:
-      integrity: sha512-sKnz17F+SQ/cJIo/CeiRvNAlfdKqZoErzVus90UQwU9ntwiMRzCprvmQ2a8wHL1PNj8Ab1KHrj3dfvUogcWFSA==
+      integrity: sha512-MMpa5Ga/zqE570izo4U9x1ej0ka70ntyX8I4d4dnlMU9gMMsZRhW22aaZishguD2jumUL5RcuSdDTCyOoOzvZg==
       tarball: file:projects/pp365-projectwebparts.tgz
     version: 0.0.0
   file:projects/pp365-shared-library.tgz_interactjs@1.6.2:
@@ -26033,7 +26042,7 @@ packages:
       rehype-raw: 6.1.1
       shade-blend-color: 1.0.0
       sp-entityportal-service: 2.3.0
-      sp-js-provisioning: 1.2.5_5bb3879ba087c0ef402ac2f0f80f9922
+      sp-js-provisioning: 1.2.6_5bb3879ba087c0ef402ac2f0f80f9922
       spfx-jsom: 0.6.6_5bb3879ba087c0ef402ac2f0f80f9922
       tslib: 2.3.1
       typescript: 4.5.5
@@ -26164,6 +26173,7 @@ specifiers:
   array-unique: 0.3.2
   chokidar-cli: ^2.1.0
   clean-deep: 3.0.2
+  color-convert: ~3.0.1
   colors: 1.4.0
   concurrently: 7.4.0
   dom-to-image: 2.6.0

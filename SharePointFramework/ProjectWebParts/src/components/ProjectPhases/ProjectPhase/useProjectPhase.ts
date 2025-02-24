@@ -22,10 +22,12 @@ export function useProjectPhase(props: IProjectPhaseProps) {
   if (context.props.useStartArrow) classNames.push(styles.useStartArrow)
   if (context.props.useEndArrow) classNames.push(styles.useEndArrow)
   if (isCurrentPhase) classNames.push(styles.isCurrentPhase)
+
   if (props.phase.properties.PhaseLevel) {
     const className = props.phase.properties.PhaseLevel.toLowerCase()
     classNames.push(styles[className])
   }
+
   const subTextProps: HTMLProps<HTMLDivElement> = {
     hidden: !context.props.showSubText,
     className: styles.subText,

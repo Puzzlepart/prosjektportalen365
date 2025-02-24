@@ -1,14 +1,14 @@
-$project-color: #89ce87;
-$project-current-color: #54b054;
-$project-current-color-hover: #397e39;
+$project-color: var(--phase-color, #89ce87);
+$project-current-color: var(--phase-current-color, #54b054);
+$project-current-color-hover: var(--phase-current-hover-color, #397e39);
 
-$portfolio-color: #9dceee;
-$portfolio-current-color: #64addb;
-$portfolio-current-color-hover: #5688af;
+$portfolio-color: var(--phase-color, #9dceee);
+$portfolio-current-color: var(--phase-current-color, #64addb);
+$portfolio-current-color-hover: var(--phase-current-hover-color, #5688af);
 
-$end-color: #f0c993;
-$end-current-color: #f09440;
-$end-current-color-hover: #ba6f29;
+$end-color: var(--phase-color, #f0c993);
+$end-current-color: var(--phase-current-color, #f09440);
+$end-current-color-hover: var(--phase-current-hover-color, #ba6f29);
 
 $arrow-font-size: 4rem;
 $arrow-height: 1em;
@@ -68,6 +68,7 @@ $project-phase-padding: 0.25em;
       border-top-color: inherit;
       border-bottom-color: inherit;
     }
+
     &::before {
       border-left-color: inherit;
     }
@@ -86,6 +87,7 @@ $project-phase-padding: 0.25em;
       border-top-color: inherit;
       border-bottom-color: inherit;
     }
+
     &::before {
       border-left-color: inherit;
     }
@@ -99,6 +101,7 @@ $project-phase-padding: 0.25em;
         border-top-color: inherit;
         border-bottom-color: inherit;
       }
+
       &::before {
         border-left-color: inherit;
       }
@@ -113,6 +116,7 @@ $project-phase-padding: 0.25em;
       border-top-color: inherit;
       border-bottom-color: inherit;
     }
+
     &::before {
       border-left-color: inherit;
     }
@@ -126,6 +130,7 @@ $project-phase-padding: 0.25em;
         border-top-color: inherit;
         border-bottom-color: inherit;
       }
+
       &::before {
         border-left-color: inherit;
       }
@@ -163,6 +168,7 @@ $project-phase-padding: 0.25em;
     border-top-color: inherit;
     border-bottom-color: inherit;
   }
+
   &::before {
     border-left-color: inherit;
   }
@@ -176,6 +182,7 @@ $project-phase-padding: 0.25em;
       border-top-color: inherit;
       border-bottom-color: inherit;
     }
+
     &::before {
       border-left-color: inherit;
     }
@@ -189,6 +196,7 @@ $project-phase-padding: 0.25em;
       border-top-color: inherit;
       border-bottom-color: inherit;
     }
+
     &::before {
       border-left-color: inherit;
     }
@@ -201,6 +209,7 @@ $project-phase-padding: 0.25em;
         border-top-color: inherit;
         border-bottom-color: inherit;
       }
+
       &::before {
         border-left-color: inherit;
       }
@@ -215,6 +224,7 @@ $project-phase-padding: 0.25em;
       border-top-color: inherit;
       border-bottom-color: inherit;
     }
+
     &::before {
       border-left-color: inherit;
     }
@@ -227,6 +237,7 @@ $project-phase-padding: 0.25em;
         border-top-color: inherit;
         border-bottom-color: inherit;
       }
+
       &::before {
         border-left-color: inherit;
       }
