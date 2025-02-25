@@ -10,6 +10,8 @@ $end-color: var(--phase-color, #f0c993);
 $end-current-color: var(--phase-current-color, #f09440);
 $end-current-color-hover: var(--phase-current-hover-color, #ba6f29);
 
+$font-color: var(--font-color, white);
+
 $arrow-font-size: 4rem;
 $arrow-height: 1em;
 $chevron-height: 0.75em;
@@ -249,7 +251,7 @@ $project-phase-padding: 0.25em;
   font-weight: 400;
   padding: $chevron-width;
   text-align: center;
-  color: white;
+  color: $font-color;
 
   span {
     cursor: pointer;

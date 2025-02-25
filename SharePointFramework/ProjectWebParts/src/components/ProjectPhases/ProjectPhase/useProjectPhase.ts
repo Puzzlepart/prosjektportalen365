@@ -6,7 +6,7 @@ import styles from './ProjectPhase.module.scss'
 import { IProjectPhaseProps } from './types'
 import { PopoverProps } from '@fluentui/react-components'
 import pSBC from 'shade-blend-color'
-import { hslToHex, hexToHsl } from 'colors-convert'
+import { hslToHex, hexToHsl, hexToRgb } from 'colors-convert'
 
 /**
  * Component logic hook for `ProjectPhase`.
@@ -51,20 +51,26 @@ export function useProjectPhase(props: IProjectPhaseProps) {
 
   const phaseColor = props.phase.properties.PhaseColor
 
-  const changeSaturationAndDarken = (hex: string, saturation: number, darken: number) => {
-    if (!hex)
-      return
-
-    const blendedHex = pSBC(darken, hex)
-    const hslColor = hexToHsl(blendedHex)
+  const adjustColor = (hex: string, saturation: number, darken: number) => {
+    if (!hex) return
+    const hslColor = hexToHsl(pSBC(darken, hex))
     hslColor.s = saturation
     return hslToHex(hslColor)
   }
 
+  const getFontColor = (hex: string) => {
+    if (!hex) return
+    const { r, g, b } = hexToRgb(hex)
+    return 0.299 * r + 0.587 * g + 0.114 * b > 200 && 'black'
+  }
+
   const customPhaseColor = {
+    '--font-color': isCurrentPhase
+      ? getFontColor(adjustColor(phaseColor, 40, -0.25))
+      : getFontColor(phaseColor),
     '--phase-color': phaseColor,
-    '--phase-current-color': changeSaturationAndDarken(phaseColor, 40, -0.25),
-    '--phase-current-hover-color': changeSaturationAndDarken(phaseColor, 42, -0.45)
+    '--phase-current-color': adjustColor(phaseColor, 40, -0.25),
+    '--phase-current-hover-color': adjustColor(phaseColor, 42, -0.45)
   }
 
   useEffect(() => {
