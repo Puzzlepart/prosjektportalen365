@@ -63,7 +63,9 @@
     "usehooks-ts": "~2.9.1",
     "@fluentui/react-datepicker-compat": "~0.4.38",
     "smoothscroll-polyfill": "~0.4.4",
-    "react-gauge-component": "~1.2.61"
+    "react-gauge-component": "~1.2.61",
+    "shade-blend-color": "~1.0.0",
+    "colors-convert": "~1.4.1"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.17.4",
@@ -98,7 +100,8 @@
     "webpack": "5.74.0",
     "@types/lodash": "~4.14.195",
     "@types/smoothscroll-polyfill": "~0.3.3",
-    "pzl-spfx-tasks": "~0.5.10-2"
+    "pzl-spfx-tasks": "~0.5.10-2",
+    "@types/shade-blend-color": "~1.0.3"
   },
   "config": {
     "pzl-spfx-tasks": {

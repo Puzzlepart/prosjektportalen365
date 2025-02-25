@@ -8,6 +8,7 @@ Sjekk ut [release notes](./releasenotes/1.10.0.md) for høydepunkter og mer deta
 
 - Lagt til instrumentvisning for 'Siste måling' på Gevinstoversikt [#1572](https://github.com/Puzzlepart/prosjektportalen365/issues/1572)
 - Ny Idémodul for visning av idéer (registrering/behandling) samt feltkonfigurasjon slik at relevant data fra idéregistreringen kan videreføres til behandling [#1573](https://github.com/Puzzlepart/prosjektportalen365/issues/1573)
+- Lagt til mulighet for egendefinerte farger på fasene i fasevelgeren [#1613](https://github.com/Puzzlepart/prosjektportalen365/issues/1613)
 
 ### Forbedringer
 
