@@ -19,6 +19,7 @@ Sjekk ut [release notes](./releasenotes/1.10.0.md) for høydepunkter og mer deta
 - Footer tar nå mindre plass, samt støtte for minimering og skjuling av footer på globalt nivå [#1586](https://github.com/Puzzlepart/prosjektportalen365/issues/1586)
 - Støtte for 24 og 36 mnd for tidsramme i Prosjekttidslinjen [#1448](https://github.com/Puzzlepart/prosjektportalen365/issues/1448)
 - Viser nå antall prosjekter i Porteføljeoversikten [#1483](https://github.com/Puzzlepart/prosjektportalen365/issues/1483)
+- Støtte for å definere en initiell (skjult) fase før prosjektet går inn i `Konsept`-fasen for å gjennomgå sjekkpunkter når fase angis for prosjektet [#1616](https://github.com/Puzzlepart/prosjektportalen365/issues/1616)
 
 ### Feilrettinger
 
