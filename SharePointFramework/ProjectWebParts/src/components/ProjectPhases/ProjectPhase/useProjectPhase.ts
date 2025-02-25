@@ -5,6 +5,8 @@ import { OPEN_POPOVER } from '../reducer'
 import styles from './ProjectPhase.module.scss'
 import { IProjectPhaseProps } from './types'
 import { PopoverProps } from '@fluentui/react-components'
+import pSBC from 'shade-blend-color'
+import { hslToHex, hexToHsl } from 'colors-convert'
 
 /**
  * Component logic hook for `ProjectPhase`.
@@ -42,6 +44,29 @@ export function useProjectPhase(props: IProjectPhaseProps) {
     context.dispatch(OPEN_POPOVER({ phase: props.phase, target: targetRef.current }))
   }
 
+  const altPadding = {
+    paddingRight: '.125em',
+    paddingLeft: '.125em'
+  }
+
+  const phaseColor = props.phase.properties.PhaseColor
+
+  const changeSaturationAndDarken = (hex: string, saturation: number, darken: number) => {
+    if (!hex)
+      return
+
+    const blendedHex = pSBC(darken, hex)
+    const hslColor = hexToHsl(blendedHex)
+    hslColor.s = saturation
+    return hslToHex(hslColor)
+  }
+
+  const customPhaseColor = {
+    '--phase-color': phaseColor,
+    '--phase-current-color': changeSaturationAndDarken(phaseColor, 40, -0.25),
+    '--phase-current-hover-color': changeSaturationAndDarken(phaseColor, 42, -0.45)
+  }
+
   useEffect(() => {
     if (context.state.popover === null) {
       setOpen(false)
@@ -56,6 +81,8 @@ export function useProjectPhase(props: IProjectPhaseProps) {
     subTextProps,
     context,
     phasesLength,
-    isCurrentPhase
+    isCurrentPhase,
+    altPadding,
+    customPhaseColor
   } as const
 }
