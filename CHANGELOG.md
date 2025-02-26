@@ -25,8 +25,9 @@ Sjekk ut [release notes](./releasenotes/1.10.0.md) for høydepunkter og mer deta
 
 - Boolean felttyper vises nå riktig, og filtreres korrekt [#1579](https://github.com/Puzzlepart/prosjektportalen365/issues/1579)
 - Prosentkolonner sorteres nå riktig i aggregerte oversikter [#1581](https://github.com/Puzzlepart/prosjektportalen365/issues/1581)
-- Fiks for visningsvelger [#1560](https://github.com/Puzzlepart/prosjektportalen365/issues/1560)
-- Fiks for [#1609](https://github.com/Puzzlepart/prosjektportalen365/issues/1609)
+- Fikset et problem hvor skjuling/synliggjøring av visningvelger ikke ble lagret korrekt [#1560](https://github.com/Puzzlepart/prosjektportalen365/issues/1560)
+- Rettet et problem dersom brukeren gikk for raskt gjennom fasesjekkpunktene så ble det ikke registrert [#1609](https://github.com/Puzzlepart/prosjektportalen365/issues/1609)
+- Rettet et problem hvor menyer i porteføljeoversikt og aggregerte oversikter havnet utenfor skjermen [#1540](https://github.com/Puzzlepart/prosjektportalen365/issues/1540)
 
 ## 1.10.1 - TBA
 
