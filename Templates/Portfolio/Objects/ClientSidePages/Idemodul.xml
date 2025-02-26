@@ -1,4 +1,4 @@
-<pnp:ClientSidePage PageName="{resource:ClientSidePages_IdeaModule_PageName}" PromoteAsNewsArticle="false" Overwrite="false" Layout="SingleWebPartAppPage" EnableComments="false" Title="{resource:ClientSidePages_IdeaModule_Title}" xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+<pnp:ClientSidePage PageName="{resource:ClientSidePages_IdeaModule_PageName}" PromoteAsNewsArticle="false" Overwrite="true" Layout="SingleWebPartAppPage" EnableComments="false" Title="{resource:ClientSidePages_IdeaModule_Title}" xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:Sections>
         <pnp:Section Order="1" Type="OneColumn">
             <pnp:Controls>

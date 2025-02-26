@@ -25,7 +25,9 @@
       "officeFabricIconFontName": "Lightbulb",
       "properties": {
         "title": "Idémodul",
-        "configurationList": "Idékonfigurasjon"
+        "configurationList": "Idékonfigurasjon",
+        "dataSource": "Registrerte idéer",
+        "dataSourceCategory": "Idémodul"
       }
     }
   ]

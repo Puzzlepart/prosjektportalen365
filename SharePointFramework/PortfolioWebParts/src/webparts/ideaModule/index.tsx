@@ -91,6 +91,7 @@ export default class IdeaModuleWebPart extends BasePortfolioWebPart<IIdeaModuleP
           header: {
             description: 'Idémodul'
           },
+          displayGroupsAsAccordion: true,
           groups: [
             {
               groupName: strings.GeneralGroupName,

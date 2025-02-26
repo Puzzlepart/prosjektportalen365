@@ -257,6 +257,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
 
 IdeaModule.defaultProps = {
   dataSource: 'Registrerte idéer',
+  dataSourceCategory: 'Idémodul',
   showCommandBar: true,
   showExcelExportButton: true,
   showFilters: true,
