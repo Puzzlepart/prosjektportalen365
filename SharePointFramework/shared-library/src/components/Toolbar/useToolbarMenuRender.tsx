@@ -122,7 +122,7 @@ export function useToolbarMenuRender() {
     }
 
     return (
-      <Menu open={open} onOpenChange={onOpenChange} closeOnScroll>
+      <Menu open={open} onOpenChange={onOpenChange} closeOnScroll positioning={{ autoSize: true }}>
         <MenuTrigger disableButtonEnhancement>
           {renderMenuButton(
             item,
