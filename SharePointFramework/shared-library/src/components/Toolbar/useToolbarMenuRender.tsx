@@ -122,7 +122,7 @@ export function useToolbarMenuRender() {
     }
 
     return (
-      <Menu open={open} onOpenChange={onOpenChange} closeOnScroll positioning='below'>
+      <Menu open={open} onOpenChange={onOpenChange} closeOnScroll positioning={{ autoSize: true }}>
         <MenuTrigger disableButtonEnhancement>
           {renderMenuButton(
             item,
@@ -140,11 +140,6 @@ export function useToolbarMenuRender() {
             hasCheckmarks={hasCheckmarks}
             hasIcons={hasIcons}
             checkedValues={item.checkedValues}
-            style={{
-              maxHeight: 'calc(100vh - 100px)', // Prevents overflow beyond the screen
-              overflowY: 'auto', // Enables scrolling if needed
-              overflowX: 'hidden' // Hides horizontal scrollbar
-            }}
           >
             {item.items.map((menuItem) => renderMenuItem(menuItem, () => setOpen(false)))}
           </MenuList>
