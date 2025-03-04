@@ -13,7 +13,6 @@ import { useId } from '@fluentui/react-components'
  */
 export const useProjectProvision = (props: IProjectProvisionProps) => {
   const { state, setState } = useProjectProvisionState()
-
   useProjectProvisionDataFetch(props, state.refetch, setState)
 
   const { column, setColumn, reset } = useEditableColumn(props, state, setState)

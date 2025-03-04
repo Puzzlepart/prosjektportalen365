@@ -13,6 +13,7 @@ export function useEditableColumn(
 ) {
   const defaultType =
     !state.loading &&
+    !state.error &&
     state.types
       .sort((a, b) => a.sortOrder - b.sortOrder)
       .filter(

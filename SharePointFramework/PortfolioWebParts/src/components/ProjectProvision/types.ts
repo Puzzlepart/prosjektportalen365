@@ -11,6 +11,7 @@ export interface IProjectProvisionProps extends IBaseComponentProps {
 
 export interface IProjectProvisionState {
   loading: boolean
+  error?: Error
   showProvisionDrawer: boolean
   showProvisionStatus: boolean
   showProvisionSettings: boolean
