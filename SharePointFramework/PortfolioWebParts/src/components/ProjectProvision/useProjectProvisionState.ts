@@ -10,6 +10,7 @@ import { IProjectProvisionState } from './types'
 export function useProjectProvisionState() {
   const [state, $setState] = useState<IProjectProvisionState>({
     loading: true,
+    error: null,
     showProvisionDrawer: false,
     showProvisionStatus: false,
     showProvisionSettings: false,

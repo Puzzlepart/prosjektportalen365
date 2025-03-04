@@ -896,7 +896,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         }
       })
     } catch (error) {
-      return []
+      throw new Error(
+        'Kunne ikke hente innstillinger for Bestillingsportalen, vennligst sjekk at webdelen er riktig konfigurert og at listen eksisterer på området.'
+      )
     }
   }
 
@@ -949,7 +951,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           }
         })
     } catch (error) {
-      return []
+      throw new Error(
+        'Kunne ikke hente områdetyper, vennligst sjekk at webdelen er riktig konfigurert og at listen eksisterer på Bestillingsportalen.'
+      )
     }
   }
 
@@ -1031,7 +1035,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           }
         })
     } catch (error) {
-      return []
+      throw new Error(
+        'Kunne ikke hente bestillinger, vennligst sjekk at webdelen er riktig konfigurert og at listen eksisterer på Bestillingsportalen.'
+      )
     }
   }
 
@@ -1053,7 +1059,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         })
       ].sort((a, b) => (a.title > b.title ? 1 : -1))
     } catch (error) {
-      return []
+      throw new Error(
+        'Kunne ikke hente team maler, vennligst sjekk at webdelen er riktig konfigurert og at listen eksisterer på Bestillingsportalen.'
+      )
     }
   }
 
