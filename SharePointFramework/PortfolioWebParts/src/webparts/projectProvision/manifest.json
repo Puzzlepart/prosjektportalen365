@@ -17,10 +17,10 @@
         "default": "Other"
       },
       "title": {
-        "default": "Prosjekt provisjonering"
+        "default": "Bestillingsportalen (Prosjekt provisjonering)"
       },
       "description": {
-        "default": "Provisjonering av prosjekter"
+        "default": "Provisjonering av prosjekter gjennom bestillingsportalen"
       },
       "officeFabricIconFontName": "BuildDefinition",
       "properties": {
