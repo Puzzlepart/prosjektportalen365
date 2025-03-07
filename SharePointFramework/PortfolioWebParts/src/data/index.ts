@@ -866,11 +866,12 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           'SuffixText',
           'SuffixUseAttribute',
           'SuffixAttribute',
-          'ExternalSharingSetting'
+          'ExternalSharingSetting',
+          'PowerAppOnly'
         )
         .using(DefaultCaching)()
 
-      return spItems.map((item) => {
+      return spItems.filter((item) => !item.PowerAppOnly).map((item) => {
         let value = item.Value === 'true' ? true : item.Value === 'false' ? false : item.Value
         if (item.Title === 'NamingConvention') {
           value = {
