@@ -96,7 +96,7 @@ define([], function () {
       StatusMenuLabel: 'Mine bestillinger',
       SettingsMenuLabel: 'Innstillinger',
       IdeaMenuLabel: 'Registrer ide',
-      SettingsSearchLabel: 'Søk i bestillinger',
+      SettingsSearchLabel: 'Søk i innstillinger',
       SettingsDialogTitle: 'Innstillinger for Bestillingsportalen',
       SettingsDialogDescription: 'Her har du en oversikt over alle innstillinger for Bestillingsportalen. Du kan endre innstillinger ved å klikke på redigeringsknappen til høyre for hver rad.',
       SettingsDialogSpinnerLabel: 'Oppdaterer og henter innstillinger...',
