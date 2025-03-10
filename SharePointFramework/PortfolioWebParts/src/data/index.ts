@@ -871,31 +871,33 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         )
         .using(DefaultCaching)()
 
-      return spItems.filter((item) => !item.PowerAppOnly).map((item) => {
-        let value = item.Value === 'true' ? true : item.Value === 'false' ? false : item.Value
-        if (item.Title === 'NamingConvention') {
-          value = {
-            value: item.Value,
-            prefixText: item.PrefixText || '',
-            prefixUseAttribute: item.PrefixUseAttribute,
-            prefixAttribute: item.PrefixAttribute,
-            suffixText: item.SuffixText || '',
-            suffixUseAttribute: item.SuffixUseAttribute,
-            suffixAttribute: item.SuffixAttribute
+      return spItems
+        .filter((item) => !item.PowerAppOnly)
+        .map((item) => {
+          let value = item.Value === 'true' ? true : item.Value === 'false' ? false : item.Value
+          if (item.Title === 'NamingConvention') {
+            value = {
+              value: item.Value,
+              prefixText: item.PrefixText || '',
+              prefixUseAttribute: item.PrefixUseAttribute,
+              prefixAttribute: item.PrefixAttribute,
+              suffixText: item.SuffixText || '',
+              suffixUseAttribute: item.SuffixUseAttribute,
+              suffixAttribute: item.SuffixAttribute
+            }
+          } else if (item.Title === 'DefaultExternalSharingSetting') {
+            value = {
+              value: item.Value,
+              externalSharingSetting: item.ExternalSharingSetting
+            }
           }
-        } else if (item.Title === 'DefaultExternalSharingSetting') {
-          value = {
-            value: item.Value,
-            externalSharingSetting: item.ExternalSharingSetting
-          }
-        }
 
-        return {
-          title: item.Title,
-          value,
-          description: item.Description
-        }
-      })
+          return {
+            title: item.Title,
+            value,
+            description: item.Description
+          }
+        })
     } catch (error) {
       throw new Error(
         'Kunne ikke hente innstillinger for Bestillingsportalen, vennligst sjekk at webdelen er riktig konfigurert og at listen eksisterer på området.'
@@ -924,7 +926,11 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           'SuffixAttribute',
           'VisibleTo/EMail',
           'DefaultVisibility',
-          'DefaultConfidentialData'
+          'DefaultConfidentialData',
+          'ExternalSharing',
+          'DefaultHub',
+          'DefaultSensitivityLabel',
+          'DefaultRetentionLabel'
         )
         .expand('VisibleTo')
         .using(DefaultCaching)()
@@ -948,7 +954,11 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
             },
             visibleTo: item.VisibleTo,
             defaultVisibility: item.DefaultVisibility,
-            defaultConfidentialData: item.DefaultConfidentialData
+            defaultConfidentialData: item.DefaultConfidentialData,
+            externalSharing: item.ExternalSharing,
+            defaultHub: item.DefaultHub,
+            defaultSensitivityLabel: item.DefaultSensitivityLabel,
+            defaultRetentionLabel: item.DefaultRetentionLabel
           }
         })
     } catch (error) {
@@ -1064,6 +1074,31 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     } catch (error) {
       throw new Error(
         'Kunne ikke hente team maler, vennligst sjekk at webdelen er riktig konfigurert og at listen eksisterer på Bestillingsportalen.'
+      )
+    }
+  }
+
+  public async getSensitivityLabels(provisionUrl: string): Promise<Record<string, any>> {
+    try {
+      const provisionSite = Web([this._sp.web, provisionUrl])
+      const templatesList = provisionSite.lists.getByTitle('IP Labels')
+      const spItems = await templatesList.items
+        .select('Id', 'Title', 'LabelName', 'LabelId', 'LabelDescription', 'Enabled')
+        .using(DefaultCaching)()
+      return spItems
+        .filter((item) => item.Enabled)
+        .sort((a, b) => (a.SortOrder > b.SortOrder ? 1 : -1))
+        .map((item) => {
+          return {
+            title: item.Title,
+            labelName: item.LabelName,
+            labelId: item.LabelId,
+            labelDescription: item.LabelDescription
+          }
+        })
+    } catch (error) {
+      throw new Error(
+        'Kunne ikke hente følsomhetsetiketter, vennligst sjekk at webdelen er riktig konfigurert og at listen eksisterer på Bestillingsportalen.'
       )
     }
   }

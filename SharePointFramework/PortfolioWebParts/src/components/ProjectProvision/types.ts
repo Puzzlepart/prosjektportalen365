@@ -19,6 +19,7 @@ export interface IProjectProvisionState {
   settings: any[]
   types?: Record<string, any>
   teamTemplates?: Record<string, any>
+  sensitivityLabels?: Record<string, any>
   requests?: any[]
   properties: Record<string, any>
   refetch?: number
@@ -35,5 +36,5 @@ export interface IProvisionField {
   dataType?: string
   disabled?: boolean
   required?: boolean
-  page?: number
+  level?: number
 }

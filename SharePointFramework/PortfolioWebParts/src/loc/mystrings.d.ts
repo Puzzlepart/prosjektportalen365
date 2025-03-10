@@ -45,8 +45,12 @@ declare interface IPortfolioWebPartsStrings {
     BusinessJustificationField: string
   },
   Provision: {
+    DrawerLevel0HeaderText: string,
+    DrawerLevel0DescriptionText: string,
     DrawerLevel1HeaderText: string,
     DrawerLevel1DescriptionText: string,
+    DrawerLevel2HeaderText: string,
+    DrawerLevel2DescriptionText: string,
     SiteTypeFieldLabel: string,
     SiteNameFieldLabel: string,
     SiteNameFieldDescription: string,
@@ -65,8 +69,6 @@ declare interface IPortfolioWebPartsStrings {
     OwnerFieldNoOptionsText: string,
     MemberFieldLabel: string,
     MemberFieldDescription: string,
-    DrawerLevel2HeaderText: string,
-    DrawerLevel2DescriptionText: string,
     TeamifyFieldLabel: string,
     TeamifyFieldDescription: string,
     TeamTemplateFieldLabel: string,
