@@ -1013,12 +1013,13 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           'Comments',
           'ApprovedDate',
           'Created',
-          'Author/EMail'
+          'Author/EMail',
+          'RequestedBy/EMail'
         )
-        .expand('Author')
+        .expand('Author', 'RequestedBy')
         .getAll()
       return spItems
-        .filter((item) => item.Author?.EMail === user)
+        .filter((item) => item.Author?.EMail === user || item?.RequestedBy?.EMail === user)
         .sort((a, b) => (a.Created > b.Created ? 1 : -1))
         .map((item) => {
           return {
@@ -1032,7 +1033,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
             comments: item.Comments,
             approvedDate: item.ApprovedDate,
             created: item.Created,
-            author: item.Author?.EMail
+            author: item.Author?.EMail,
+            requestedBy: item.RequestedBy?.EMail
           }
         })
     } catch (error) {
