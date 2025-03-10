@@ -98,7 +98,7 @@ define([], function () {
       IdeaMenuLabel: 'Registrer ide',
       SettingsSearchLabel: 'Søk i innstillinger',
       SettingsDialogTitle: 'Innstillinger for Bestillingsportalen',
-      SettingsDialogDescription: 'Her har du en oversikt over alle innstillinger for Bestillingsportalen. Du kan endre innstillinger ved å klikke på redigeringsknappen til høyre for hver rad.',
+      SettingsDialogDescription: 'Her har du en oversikt over alle innstillinger for Bestillingsportalen.', // Du kan endre innstillinger ved å klikke på redigeringsknappen til høyre for hver rad.
       SettingsDialogSpinnerLabel: 'Oppdaterer og henter innstillinger...',
       SettingsDialogNoSearchResultsLabel: 'Ingen innstillinger samsvarer med søket.',
       SettingsDialogNoResultsLabel: 'Det finnes ingen innstillinger for Bestillingsportalen.',
@@ -109,7 +109,7 @@ define([], function () {
       StatusSearchLabel: 'Søk i bestillinger',
       UpdateLabel: 'Oppdater',
       StatusDialogTitle: 'Mine bestillinger',
-      StatusDialogDescription: 'Her kan du se status på dine bestillinger, hvilke områdetype, status og dato for bestillingen.Det er også mulig slette bestillinger som ikke er sendt inn.',
+      StatusDialogDescription: 'Her kan du se status på dine bestillinger, hvilke områdetype, status og dato for bestillingen. Det er også mulig å slette bestillinger som ikke er sendt inn eller som har blitt avslått.',
       StatusDialogSpinnerLabel: 'Oppdaterer og henter bestillinger...',
       StatusDialogNoSearchResultsLabel: 'Ingen bestillinger samsvarer med søket.',
       StatusDialogNoResultsLabel: 'Du har ingen bestillinger, opprett en ny bestilling for å se status her.',
