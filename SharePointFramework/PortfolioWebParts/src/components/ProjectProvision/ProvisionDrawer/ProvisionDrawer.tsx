@@ -25,12 +25,7 @@ import {
   IdPrefixProvider,
   FluentProvider
 } from '@fluentui/react-components'
-import {
-  ArrowLeft24Regular,
-  DataUsage24Regular,
-  Settings24Regular,
-  Dismiss24Regular
-} from '@fluentui/react-icons'
+import { ArrowLeft24Regular, Dismiss24Regular } from '@fluentui/react-icons'
 import strings from 'PortfolioWebPartsStrings'
 import { FieldContainer, customLightTheme } from 'pp365-shared-library'
 import { SiteType } from './SiteType'
@@ -38,16 +33,16 @@ import { useProvisionDrawer } from './useProvisionDrawer'
 import styles from './ProvisionDrawer.module.scss'
 import { User } from './User'
 import { Guest } from './Guest'
+import { DebugModel } from './DebugModel'
 
 export const ProvisionDrawer = (props: { toast: any }) => {
   const {
-    motionStyles,
-    level2,
-    setLevel2,
+    levels,
+    currentLevel,
+    setCurrentLevel,
     toolbarBackIconMotion,
-    toolbarCalendarIconMotion,
-    level1Motion,
-    level2Motion,
+    levelMotions,
+    motionStyles,
     context,
     onSave,
     isSaveDisabled,
@@ -83,12 +78,12 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                       title={strings.Aria.Back}
                       appearance='subtle'
                       icon={<ArrowLeft24Regular />}
-                      onClick={() => setLevel2(false)}
+                      onClick={() => setCurrentLevel(currentLevel - 1)}
                     />
                   )}
                 </ToolbarGroup>
                 <ToolbarGroup>
-                  {toolbarCalendarIconMotion.canRender && (
+                  {/* {toolbarCalendarIconMotion.canRender && (
                     <ToolbarButton
                       ref={toolbarCalendarIconMotion.ref}
                       className={mergeClasses(
@@ -97,7 +92,7 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                       )}
                       appearance='subtle'
                       icon={<DataUsage24Regular />}
-                      onClick={() => setLevel2(true)}
+                      onClick={() => setCurrentLevel(1)}
                     />
                   )}
 
@@ -105,7 +100,7 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                     appearance='subtle'
                     title={strings.Aria.Settings}
                     icon={<Settings24Regular />}
-                  />
+                  /> */}
                   <ToolbarButton
                     title={strings.Aria.Close}
                     appearance='subtle'
@@ -117,18 +112,18 @@ export const ProvisionDrawer = (props: { toast: any }) => {
             </DrawerHeaderNavigation>
           </DrawerHeader>
           <div className={styles.body}>
-            {level1Motion.canRender && (
+            {levelMotions[0].canRender && (
               <DrawerBody
-                ref={level1Motion.ref}
+                ref={levelMotions[0].ref}
                 className={mergeClasses(
                   styles.level,
                   motionStyles.level,
-                  motionStyles.level1,
-                  level1Motion.active && motionStyles.levelVisible
+                  motionStyles.level0,
+                  levelMotions[0].active && motionStyles.levelVisible
                 )}
               >
-                <DrawerHeaderTitle>{strings.Provision.DrawerLevel1HeaderText}</DrawerHeaderTitle>
-                <p>{strings.Provision.DrawerLevel1DescriptionText}</p>
+                <DrawerHeaderTitle>{levels[0].title}</DrawerHeaderTitle>
+                <p>{levels[0].description}</p>
                 <div className={styles.content}>
                   <FieldContainer iconName='AppsList' label={strings.Provision.SiteTypeFieldLabel}>
                     <div className={styles.sitetypes}>
@@ -283,19 +278,18 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                 </div>
               </DrawerBody>
             )}
-
-            {level2Motion.canRender && (
+            {levelMotions[1].canRender && (
               <DrawerBody
-                ref={level2Motion.ref}
+                ref={levelMotions[1].ref}
                 className={mergeClasses(
                   styles.level,
                   motionStyles.level,
-                  motionStyles.level2,
-                  level2Motion.active && motionStyles.levelVisible
+                  currentLevel === 2 ? motionStyles.level1a : motionStyles.level1,
+                  levelMotions[1].active && motionStyles.levelVisible
                 )}
               >
-                <DrawerHeaderTitle>{strings.Provision.DrawerLevel2HeaderText}</DrawerHeaderTitle>
-                <p>{strings.Provision.DrawerLevel2DescriptionText}</p>
+                <DrawerHeaderTitle>{levels[1].title}</DrawerHeaderTitle>
+                <p>{levels[1].description}</p>
                 <div className={styles.content}>
                   {/* {DEBUG && <DebugModel />} */}
                   <FieldContainer
@@ -428,16 +422,61 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                 </div>
               </DrawerBody>
             )}
+            {levelMotions[2].canRender && (
+              <DrawerBody
+                ref={levelMotions[2].ref}
+                className={mergeClasses(
+                  styles.level,
+                  motionStyles.level,
+                  motionStyles.level2,
+                  levelMotions[2].active && motionStyles.levelVisible
+                )}
+              >
+                <DrawerHeaderTitle>{levels[2].title}</DrawerHeaderTitle>
+                <p>{levels[2].description}</p>
+                <div className={styles.content}>
+                  {DEBUG && <DebugModel />}
+                  <FieldContainer
+                    iconName='LocalLanguage'
+                    label={strings.Provision.LanguageFieldLabel}
+                  >
+                    <Dropdown
+                      defaultValue={context.column.get('language')}
+                      defaultSelectedOptions={[context.column.get('language')]}
+                      disabled
+                    />
+                  </FieldContainer>
+                  <FieldContainer iconName='Clock' label={strings.Provision.TimeZoneFieldLabel}>
+                    <Dropdown
+                      defaultValue={context.column.get('timeZone')}
+                      defaultSelectedOptions={[context.column.get('timeZone')]}
+                      disabled
+                    />
+                  </FieldContainer>
+                  <FieldContainer iconName='Database' label={strings.Provision.HubSiteFieldLabel}>
+                    <Dropdown
+                      defaultValue={context.column.get('hubSiteTitle')}
+                      defaultSelectedOptions={[context.column.get('hubSiteTitle')]}
+                      disabled
+                    />
+                  </FieldContainer>
+                </div>
+              </DrawerBody>
+            )}
           </div>
           <DrawerFooter className={styles.footer}>
-            <Button appearance='subtle' disabled={!level2} onClick={() => setLevel2(false)}>
+            <Button
+              appearance='subtle'
+              disabled={currentLevel === 0}
+              onClick={() => setCurrentLevel(currentLevel - 1)}
+            >
               {strings.Provision.PreviousButtonLabel}
             </Button>
             <Button
               appearance='primary'
-              disabled={level2 && isSaveDisabled}
+              disabled={currentLevel === levels.length - 1 && isSaveDisabled}
               onClick={() => {
-                level2
+                currentLevel === levels.length - 1
                   ? onSave().then((response) => {
                       if (response) {
                         context.reset()
@@ -449,7 +488,7 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                           { intent: 'success' }
                         )
                         context.setState({ showProvisionDrawer: false, properties: {} })
-                        setLevel2(false)
+                        setCurrentLevel(0)
                       } else {
                         props.toast(
                           <Toast appearance='inverted'>
@@ -460,10 +499,12 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                         )
                       }
                     })
-                  : setLevel2(true)
+                  : setCurrentLevel(currentLevel + 1)
               }}
             >
-              {level2 ? strings.Provision.ProvisionButtonLabel : strings.Provision.NextButtonLabel}
+              {currentLevel === levels.length - 1
+                ? strings.Provision.ProvisionButtonLabel
+                : strings.Provision.NextButtonLabel}
             </Button>
           </DrawerFooter>
         </OverlayDrawer>

@@ -1,9 +1,13 @@
 /* eslint-disable quotes */
-import { IPropertyPaneConfiguration, PropertyPaneLabel, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane'
+import {
+  IPropertyPaneConfiguration,
+  PropertyPaneLabel,
+  PropertyPaneTextField
+} from '@microsoft/sp-property-pane'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
 import { IProjectProvisionProps, ProjectProvision } from 'components/ProjectProvision'
-import { PropertyFieldMessage } from '@pnp/spfx-property-controls/lib/PropertyFieldMessage';
+import { PropertyFieldMessage } from '@pnp/spfx-property-controls/lib/PropertyFieldMessage'
 import { PropertyPanePropertyEditor } from '@pnp/spfx-property-controls/lib/PropertyPanePropertyEditor'
 import {
   PropertyFieldCollectionData,
@@ -111,7 +115,7 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                       defaultValue: false
                     },
                     {
-                      id: 'page',
+                      id: 'level',
                       title: 'Side i skjema',
                       type: CustomCollectionFieldType.number,
                       disableEdit: true,
@@ -133,7 +137,7 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                   isVisible: true
                 })
               ]
-            },
+            }
           ]
         }
       ]

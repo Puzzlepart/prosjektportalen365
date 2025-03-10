@@ -12,7 +12,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       description: '',
       dataType: 'site',
       required: true,
-      page: 1
+      level: 0
     },
     {
       order: 20,
@@ -22,17 +22,18 @@ export const getDefaultFields = (): IProvisionField[] => {
       placeholder: 'Angi et navn for området',
       dataType: 'text',
       required: true,
-      page: 1
+      level: 0
     },
     {
       order: 30,
       fieldName: 'description',
       displayName: 'Beskrivelse',
-      description: 'Beskrivelsen er valgfri, men nyttig for at folk skal forstå hva området ditt er for.',
+      description:
+        'Beskrivelsen er valgfri, men nyttig for at folk skal forstå hva området ditt er for.',
       placeholder: 'Angi en beskrivelse for området',
       dataType: 'note',
       required: true,
-      page: 1
+      level: 0
     },
     {
       order: 40,
@@ -42,26 +43,28 @@ export const getDefaultFields = (): IProvisionField[] => {
       placeholder: 'Angi en forretningsmessig begrunnelse for bestillingen',
       dataType: 'note',
       required: true,
-      page: 1
+      level: 0
     },
     {
       order: 50,
       fieldName: 'owner',
       displayName: 'Eier(e)',
-      description: 'Eier(e) har full tilgang til området og kan legge til og fjerne medlemmer. Du kan legge til flere eiere senere.',
+      description:
+        'Eier(e) har full tilgang til området og kan legge til og fjerne medlemmer. Du kan legge til flere eiere senere.',
       placeholder: 'Angi brukere',
       dataType: 'userMulti',
       required: true,
-      page: 1
+      level: 0
     },
     {
       order: 60,
       fieldName: 'member',
       displayName: 'Medlem(mer)',
-      description: 'Medlem(mer) har tilgang til området basert på tillatelsene som er satt. Du kan legge til flere medlemmer senere.',
+      description:
+        'Medlem(mer) har tilgang til området basert på tillatelsene som er satt. Du kan legge til flere medlemmer senere.',
       placeholder: 'Angi brukere',
       dataType: 'userMulti',
-      page: 1
+      level: 0
     },
     {
       order: 70,
@@ -69,7 +72,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       displayName: 'Alias/navn',
       dataType: 'text',
       disabled: true,
-      page: 1
+      level: 0
     },
     {
       order: 80,
@@ -77,15 +80,16 @@ export const getDefaultFields = (): IProvisionField[] => {
       displayName: 'Områdeadresse',
       dataType: 'text',
       disabled: true,
-      page: 1
+      level: 0
     },
     {
       order: 90,
       fieldName: 'teamify',
       displayName: 'Aktivere Teams for området?',
-      description: 'Om du aktiverer Teams for området, vil et Teams-område bli opprettet og knyttet til området.',
+      description:
+        'Om du aktiverer Teams for området, vil et Teams-område bli opprettet og knyttet til området.',
       dataType: 'boolean',
-      page: 2
+      level: 1
     },
     {
       order: 100,
@@ -93,40 +97,44 @@ export const getDefaultFields = (): IProvisionField[] => {
       displayName: 'Teams mal',
       description: 'Hvilken teams mal vil du bruke for området?',
       dataType: 'choice',
-      page: 2
+      level: 1
     },
     {
       order: 110,
       fieldName: 'isConfidential',
       displayName: 'Konfidensielle/sensitive data',
-      description: 'Vil konfidensielle eller sensitive data bli lagret i dette rommet? Dersom ja, må du sørge for at du har satt riktige tillatelser.',
+      description:
+        'Vil konfidensielle eller sensitive data bli lagret i dette rommet? Dersom ja, må du sørge for at du har satt riktige tillatelser.',
       dataType: 'boolean',
-      page: 2
+      level: 1
     },
     {
       order: 120,
       fieldName: 'privacy',
       displayName: 'Tilgangsinnstillinger',
-      description: 'Vil konfidensielle eller sensitive data bli lagret i dette rommet? Dersom ja, må du sørge for at du har satt riktige tillatelser.',
+      description:
+        'Vil konfidensielle eller sensitive data bli lagret i dette rommet? Dersom ja, må du sørge for at du har satt riktige tillatelser.',
       dataType: 'choice',
-      page: 2
+      level: 1
     },
     {
       order: 130,
       fieldName: 'externalSharing',
       displayName: 'Tillat eksterne gjester',
-      description: 'Dersom denne er aktivert, vil man kunne invitere inn og dele enkeltfiler, mapper, bibliotek o.l. med eksterne gjestebrukere. NB! Invitasjon av eksterne gjestebrukere vil først være mulig etter at gruppen/området er opprettet.',
+      description:
+        'Dersom denne er aktivert, vil man kunne invitere inn og dele enkeltfiler, mapper, bibliotek o.l. med eksterne gjestebrukere. NB! Invitasjon av eksterne gjestebrukere vil først være mulig etter at gruppen/området er opprettet.',
       dataType: 'boolean',
-      page: 2
+      level: 1
     },
     {
       order: 140,
       fieldName: 'guest',
       displayName: 'Gjest(er)',
-      description: 'Gjester har begrenset tilgang til området. Du kan legge til flere gjester senere. Vennligst skriv inn en gyldig e-postadresse.',
+      description:
+        'Gjester har begrenset tilgang til området. Du kan legge til flere gjester senere. Vennligst skriv inn en gyldig e-postadresse.',
       placeholder: 'Angi gjester',
       dataType: 'userExternal',
-      page: 2
+      level: 1
     },
     {
       order: 150,
@@ -134,7 +142,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       displayName: 'Språk',
       dataType: 'choice',
       disabled: true,
-      page: 2
+      level: 1
     },
     {
       order: 160,
@@ -142,7 +150,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       displayName: 'Tidssone',
       dataType: 'choice',
       disabled: true,
-      page: 2
+      level: 1
     },
     {
       order: 170,
@@ -150,7 +158,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       displayName: 'Hubtilknytning',
       dataType: 'choice',
       disabled: true,
-      page: 2
+      level: 1
     }
   ]
 }

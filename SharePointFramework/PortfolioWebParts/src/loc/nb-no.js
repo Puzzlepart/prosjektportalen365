@@ -29,7 +29,7 @@ define([], function () {
       MoveUpDisabled: 'Kan ikke flytte opp, øverste element',
       MoveDown: 'Flytt ned',
       MoveDownDisabled: 'Kan ikke flytte ned, nederste element',
-      Back: 'Tilbake',
+      Back: 'Forrige/tilbake',
       Settings: 'Innstillinger',
       Close: 'Lukk'
     },
@@ -45,8 +45,12 @@ define([], function () {
       BusinessJustificationField: 'Angi en forretningsmessig begrunnelse'
     },
     Provision: {
-      DrawerLevel1HeaderText: 'Bestill område',
-      DrawerLevel1DescriptionText: 'Her kan du bestille et nytt område. Velg en av områdetypene under, og fyll ut informasjonen for området.',
+      DrawerLevel0HeaderText: 'Bestill område',
+      DrawerLevel0DescriptionText: 'Her kan du bestille et nytt område. Velg en av områdetypene under, og fyll ut informasjonen for området.',
+      DrawerLevel1HeaderText: 'Klassifisering',
+      DrawerLevel1DescriptionText: 'Her kan du velge klassifisering for området. Angi språk, tilgangsinnstillinger og hubtilknytning.',
+      DrawerLevel2HeaderText: 'Prosjektinformasjon',
+      DrawerLevel2DescriptionText: 'Her kan du forhåndsutfylle prosjektinformasjonen for prosjektet. Dette kan endres senere.',
       SiteTypeFieldLabel: 'Områdetype',
       SiteNameFieldLabel: 'Områdenavn',
       SiteNameFieldDescription: 'Velg et unikt navn som følger organisasjonens navngivningsstandarder.',
@@ -65,8 +69,6 @@ define([], function () {
       OwnerFieldNoOptionsText: 'Ingen treff...',
       MemberFieldLabel: 'Medlem(mer)',
       MemberFieldDescription: 'Medlem(mer) har tilgang til området basert på tillatelsene som er satt. Du kan legge til flere medlemmer senere.',
-      DrawerLevel2HeaderText: 'Klassifisering',
-      DrawerLevel2DescriptionText: 'Her kan du velge klassifisering for området. Angi språk, tilgangsinnstillinger og hubtilknytning.',
       TeamifyFieldLabel: 'Aktivere Teams for området?',
       TeamifyFieldDescription: 'Om du aktiverer Teams for området, vil et Teams-område bli opprettet og knyttet til området.',
       TeamTemplateFieldLabel: 'Teams mal',

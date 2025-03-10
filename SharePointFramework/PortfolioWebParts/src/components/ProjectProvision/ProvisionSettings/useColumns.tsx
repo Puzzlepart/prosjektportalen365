@@ -93,7 +93,7 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestSettingsIt
             return (
               <TableCellLayout style={{ overflow: 'hidden' }}>
                 <Text truncate wrap={true}>
-                  {setting.value as String}
+                  {setting.value as string}
                 </Text>
               </TableCellLayout>
             )

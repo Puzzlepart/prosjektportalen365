@@ -24,7 +24,6 @@ import { ProvisionDrawer } from './ProvisionDrawer'
 import strings from 'PortfolioWebPartsStrings'
 import { ProvisionSettings } from './ProvisionSettings'
 import { stringIsNullOrEmpty } from '@pnp/core'
-import { getDefaultFields } from './getDefaultFields'
 
 export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
   const { state, setState, column, setColumn, reset, toasterId, fluentProviderId } =
@@ -114,6 +113,6 @@ ProjectProvision.defaultProps = {
   disabled: false,
   icon: getFluentIcon('Add'),
   appearance: 'primary',
-  size: 'large',
+  size: 'large'
   // fields: getDefaultFields(),
 }
