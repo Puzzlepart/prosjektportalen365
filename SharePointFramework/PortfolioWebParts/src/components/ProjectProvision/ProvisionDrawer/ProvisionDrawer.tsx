@@ -25,6 +25,7 @@ import {
   Option,
   FluentProvider
 } from '@fluentui/react-components'
+import { DatePicker } from '@fluentui/react-datepicker-compat'
 import { ArrowLeft24Regular, Dismiss24Regular } from '@fluentui/react-icons'
 import strings from 'PortfolioWebPartsStrings'
 import { FieldContainer, customLightTheme } from 'pp365-shared-library'
@@ -35,6 +36,7 @@ import { User } from './User'
 import { Guest } from './Guest'
 import { DebugModel } from './DebugModel'
 import { IProvisionDrawerProps } from './types'
+import { DayOfWeek } from '@fluentui/react'
 
 export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
   const {
@@ -52,6 +54,9 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
     namingConvention,
     enableSensitivityLabels,
     enableRetentionLabels,
+    enableExpirationDate,
+    enableReadOnlyGroup,
+    enableInternalChannel,
     urlPrefix,
     aliasSuffix,
     fluentProviderId
@@ -431,6 +436,51 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                       </Option>
                     ))}
                   </Dropdown>
+                </FieldContainer>
+                <FieldContainer
+                  iconName='Calendar'
+                  label={strings.Provision.ExpirationDateFieldLabel}
+                  description={strings.Provision.ExpirationDateFieldDescription}
+                  hidden={!enableExpirationDate}
+                >
+                  <DatePicker
+                    value={context.column.get('expirationDate')}
+                    onSelectDate={(date) => context.setColumn('expirationDate', date)}
+                    formatDate={(date) => date.toLocaleDateString()}
+                    placeholder={strings.Placeholder.DatePicker}
+                    firstDayOfWeek={DayOfWeek.Monday}
+                    showWeekNumbers
+                    allowTextInput
+                    showMonthPickerAsOverlay={false}
+                  />
+                </FieldContainer>
+                <FieldContainer
+                  iconName='PeopleAudience'
+                  label={strings.Provision.ReadOnlyGroupFieldLabel}
+                  description={strings.Provision.ReadOnlyGroupFieldDescription}
+                  hidden={!enableReadOnlyGroup}
+                >
+                  <Switch
+                    checked={context.column.get('readOnlyGroup')}
+                    value={context.column.get('readOnlyGroup')}
+                    onChange={(_, data) => {
+                      context.setColumn('readOnlyGroup', data.checked)
+                    }}
+                  />
+                </FieldContainer>
+                <FieldContainer
+                  iconName='PeopleTeam'
+                  label={strings.Provision.InternalChannelFieldLabel}
+                  description={strings.Provision.InternalChannelFieldDescription}
+                  hidden={!enableInternalChannel}
+                >
+                  <Switch
+                    checked={context.column.get('internalChannel')}
+                    value={context.column.get('internalChannel')}
+                    onChange={(_, data) => {
+                      context.setColumn('internalChannel', data.checked)
+                    }}
+                  />
                 </FieldContainer>
                 <Divider />
                 <FieldContainer

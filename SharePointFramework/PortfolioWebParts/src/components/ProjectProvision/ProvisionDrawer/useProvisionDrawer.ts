@@ -46,6 +46,9 @@ export const useProvisionDrawer = () => {
 
   const enableSensitivityLabels = getGlobalSetting('EnableSensitivityLabels')
   const enableRetentionLabels = getGlobalSetting('EnableRetentionLabels')
+  const enableExpirationDate = getGlobalSetting('EnableExpirationDate')
+  const enableReadOnlyGroup = getGlobalSetting('EnableReadOnlyGroup')
+  const enableInternalChannel = getGlobalSetting('EnableInternalChannel')
 
   const namingConvention = getGlobalSetting('UseNamingConventions')
     ? context.state.settings.find((t) => t.title === 'NamingConvention')?.value
@@ -131,6 +134,9 @@ export const useProvisionDrawer = () => {
     namingConvention,
     enableSensitivityLabels,
     enableRetentionLabels,
+    enableExpirationDate,
+    enableReadOnlyGroup,
+    enableInternalChannel,
     urlPrefix,
     aliasSuffix,
     fluentProviderId
