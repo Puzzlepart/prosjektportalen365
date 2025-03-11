@@ -3,6 +3,7 @@ import { IBaseComponentProps } from 'components/types'
 
 export interface IProjectProvisionProps extends IBaseComponentProps {
   provisionUrl: string
+  debugMode?: boolean
   fields?: IProvisionField[]
   disabled?: boolean
   icon?: Slot<'span'>

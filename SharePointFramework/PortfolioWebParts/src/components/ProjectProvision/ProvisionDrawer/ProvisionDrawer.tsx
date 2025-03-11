@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { FC } from 'react'
 import {
   OverlayDrawer,
   DrawerHeader,
@@ -15,7 +15,6 @@ import {
   DrawerFooter,
   Toolbar,
   Dropdown,
-  Option,
   Button,
   Tag,
   Tooltip,
@@ -34,8 +33,9 @@ import styles from './ProvisionDrawer.module.scss'
 import { User } from './User'
 import { Guest } from './Guest'
 import { DebugModel } from './DebugModel'
+import { IProvisionDrawerProps } from './types'
 
-export const ProvisionDrawer = (props: { toast: any }) => {
+export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
   const {
     levels,
     currentLevel,
@@ -118,6 +118,7 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                 className={mergeClasses(
                   styles.level,
                   motionStyles.level,
+                  motionStyles.level0,
                   motionStyles.level0,
                   levelMotions[0].active && motionStyles.levelVisible
                 )}
@@ -278,34 +279,32 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                 </div>
               </DrawerBody>
             )}
-            {levelMotions[1].canRender && (
-              <DrawerBody
-                ref={levelMotions[1].ref}
-                className={mergeClasses(
-                  styles.level,
-                  motionStyles.level,
-                  currentLevel === 2 ? motionStyles.level1a : motionStyles.level1,
-                  levelMotions[1].active && motionStyles.levelVisible
-                )}
-              >
-                <DrawerHeaderTitle>{levels[1].title}</DrawerHeaderTitle>
-                <p>{levels[1].description}</p>
-                <div className={styles.content}>
-                  {/* {DEBUG && <DebugModel />} */}
-                  <FieldContainer
-                    iconName='PeopleTeam'
-                    label={strings.Provision.TeamifyFieldLabel}
-                    description={strings.Provision.TeamifyFieldDescription}
-                  >
-                    <Switch
-                      checked={context.column.get('teamify')}
-                      value={context.column.get('teamify')}
-                      onChange={(_, data) => {
-                        context.setColumn('teamify', data.checked)
-                      }}
-                    />
-                  </FieldContainer>
-                  <FieldContainer
+            <DrawerBody
+              ref={levelMotions[1].ref}
+              className={mergeClasses(
+                styles.level,
+                motionStyles.level,
+                currentLevel === 2 ? motionStyles.level1a : motionStyles.level1,
+                levelMotions[1].active && motionStyles.levelVisible
+              )}
+            >
+              <DrawerHeaderTitle>{levels[1].title}</DrawerHeaderTitle>
+              <p>{levels[1].description}</p>
+              <div className={styles.content}>
+                <FieldContainer
+                  iconName='PeopleTeam'
+                  label={strings.Provision.TeamifyFieldLabel}
+                  description={strings.Provision.TeamifyFieldDescription}
+                >
+                  <Switch
+                    checked={context.column.get('teamify')}
+                    value={context.column.get('teamify')}
+                    onChange={(_, data) => {
+                      context.setColumn('teamify', data.checked)
+                    }}
+                  />
+                </FieldContainer>
+                {/* <FieldContainer
                     iconName='PeopleAudience'
                     label={strings.Provision.TeamTemplateFieldLabel}
                     description={strings.Provision.TeamTemplateFieldDescription}
@@ -326,25 +325,25 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                         </Option>
                       ))}
                     </Dropdown>
-                  </FieldContainer>
-                  <FieldContainer
-                    iconName='BoxToolbox'
-                    label={strings.Provision.ConfidentialFieldLabel}
-                    description={strings.Provision.ConfidentialFieldDescription}
-                  >
-                    <Switch
-                      checked={context.column.get('isConfidential')}
-                      value={context.column.get('isConfidential')}
-                      onChange={(_, data) => {
-                        context.setColumn('isConfidential', data.checked)
+                  </FieldContainer> */}
+                <FieldContainer
+                  iconName='BoxToolbox'
+                  label={strings.Provision.ConfidentialFieldLabel}
+                  description={strings.Provision.ConfidentialFieldDescription}
+                >
+                  <Switch
+                    checked={context.column.get('isConfidential')}
+                    value={context.column.get('isConfidential')}
+                    onChange={(_, data) => {
+                      context.setColumn('isConfidential', data.checked)
 
-                        if (data.checked) {
-                          context.setColumn('privacy', strings.Provision.PrivacyFieldOptionPrivate)
-                        }
-                      }}
-                    />
-                  </FieldContainer>
-                  <FieldContainer
+                      if (data.checked) {
+                        context.setColumn('privacy', strings.Provision.PrivacyFieldOptionPrivate)
+                      }
+                    }}
+                  />
+                </FieldContainer>
+                {/* <FieldContainer
                     iconName='Eye'
                     label={strings.Provision.PrivacyFieldLabel}
                     description={strings.Provision.PrivacyFieldDescription}
@@ -366,62 +365,59 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                         {strings.Provision.PrivacyFieldOptionPublic}
                       </Option>
                     </Dropdown>
-                  </FieldContainer>
-                  <FieldContainer
-                    iconName='Guest'
-                    label={strings.Provision.ExternalSharingFieldLabel}
-                    description={strings.Provision.ExternalSharingFieldDescription}
-                  >
-                    <Switch
-                      checked={context.column.get('externalSharing')}
-                      value={context.column.get('externalSharing')}
-                      onChange={(_, data) => {
-                        context.setColumn('externalSharing', data.checked)
+                  </FieldContainer> */}
+                <FieldContainer
+                  iconName='Guest'
+                  label={strings.Provision.ExternalSharingFieldLabel}
+                  description={strings.Provision.ExternalSharingFieldDescription}
+                >
+                  <Switch
+                    checked={context.column.get('externalSharing')}
+                    value={context.column.get('externalSharing')}
+                    onChange={(_, data) => {
+                      context.setColumn('externalSharing', data.checked)
 
-                        if (!data.checked) {
-                          context.setColumn('guest', [])
-                        }
-                      }}
-                    />
-                  </FieldContainer>
-                  <FieldContainer
-                    iconName='People'
-                    label={strings.Provision.GuestFieldLabel}
-                    description={strings.Provision.GuestFieldDescription}
-                    hidden={!context.column.get('externalSharing')}
-                  >
-                    <Guest />
-                  </FieldContainer>
-                  <FieldContainer
-                    iconName='LocalLanguage'
-                    label={strings.Provision.LanguageFieldLabel}
-                  >
-                    <Dropdown
-                      defaultValue={context.column.get('language')}
-                      defaultSelectedOptions={[context.column.get('language')]}
-                      disabled
-                    />
-                  </FieldContainer>
-                  <FieldContainer iconName='Clock' label={strings.Provision.TimeZoneFieldLabel}>
-                    <Dropdown
-                      defaultValue={context.column.get('timeZone')}
-                      defaultSelectedOptions={[context.column.get('timeZone')]}
-                      disabled
-                    />
-                  </FieldContainer>
-                  <FieldContainer iconName='Database' label={strings.Provision.HubSiteFieldLabel}>
-                    <Dropdown
-                      defaultValue={context.column.get('hubSiteTitle')}
-                      defaultSelectedOptions={[context.column.get('hubSiteTitle')]}
-                      disabled
-                    />
-                  </FieldContainer>
-                  <p className={styles.ignoreGap}>
-                    {strings.Provision.DrawerFooterDescriptionText}
-                  </p>
-                </div>
-              </DrawerBody>
-            )}
+                      if (!data.checked) {
+                        context.setColumn('guest', [])
+                      }
+                    }}
+                  />
+                </FieldContainer>
+                <FieldContainer
+                  iconName='People'
+                  label={strings.Provision.GuestFieldLabel}
+                  description={strings.Provision.GuestFieldDescription}
+                  hidden={!context.column.get('externalSharing')}
+                >
+                  <Guest />
+                </FieldContainer>
+                <FieldContainer
+                  iconName='LocalLanguage'
+                  label={strings.Provision.LanguageFieldLabel}
+                >
+                  <Dropdown
+                    defaultValue={context.column.get('language')}
+                    defaultSelectedOptions={[context.column.get('language')]}
+                    disabled
+                  />
+                </FieldContainer>
+                <FieldContainer iconName='Clock' label={strings.Provision.TimeZoneFieldLabel}>
+                  <Dropdown
+                    defaultValue={context.column.get('timeZone')}
+                    defaultSelectedOptions={[context.column.get('timeZone')]}
+                    disabled
+                  />
+                </FieldContainer>
+                <FieldContainer iconName='Database' label={strings.Provision.HubSiteFieldLabel}>
+                  <Dropdown
+                    defaultValue={context.column.get('hubSiteTitle')}
+                    defaultSelectedOptions={[context.column.get('hubSiteTitle')]}
+                    disabled
+                  />
+                </FieldContainer>
+                <p className={styles.ignoreGap}>{strings.Provision.DrawerFooterDescriptionText}</p>
+              </div>
+            </DrawerBody>
             {levelMotions[2].canRender && (
               <DrawerBody
                 ref={levelMotions[2].ref}
@@ -435,7 +431,7 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                 <DrawerHeaderTitle>{levels[2].title}</DrawerHeaderTitle>
                 <p>{levels[2].description}</p>
                 <div className={styles.content}>
-                  {DEBUG && <DebugModel />}
+                  {props.debugMode || (DEBUG && <DebugModel />)}
                   <FieldContainer
                     iconName='LocalLanguage'
                     label={strings.Provision.LanguageFieldLabel}
