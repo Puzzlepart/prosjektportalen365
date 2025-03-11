@@ -2,7 +2,8 @@
 import {
   IPropertyPaneConfiguration,
   PropertyPaneLabel,
-  PropertyPaneTextField
+  PropertyPaneTextField,
+  PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
@@ -135,6 +136,11 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                   messageType: 0,
                   text: 'Her kan du redigere webdelens egenskaper i JSON-format. Eksport og import av egenskaper er også mulig slik at oppsett kan gjenbrukes og importeres i andre ansattsøk webdeler.',
                   isVisible: true
+                }),
+                PropertyPaneToggle('debugMode', {
+                  label: 'DebugMode',
+                  onText: 'På',
+                  offText: 'Av'
                 })
               ]
             }
