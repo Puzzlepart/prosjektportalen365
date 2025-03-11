@@ -1087,7 +1087,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         .using(DefaultCaching)()
       return spItems
         .filter((item) => item.Enabled)
-        .sort((a, b) => (a.SortOrder > b.SortOrder ? 1 : -1))
+        .sort((a, b) => (a.title > b.title ? 1 : -1))
         .map((item) => {
           return {
             title: item.Title,
@@ -1099,6 +1099,29 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     } catch (error) {
       throw new Error(
         'Kunne ikke hente følsomhetsetiketter, vennligst sjekk at webdelen er riktig konfigurert og at listen eksisterer på Bestillingsportalen.'
+      )
+    }
+  }
+
+  public async getRetentionLabels(provisionUrl: string): Promise<Record<string, any>> {
+    try {
+      const provisionSite = Web([this._sp.web, provisionUrl])
+      const templatesList = provisionSite.lists.getByTitle('Retention Labels')
+      const spItems = await templatesList.items
+        .select('Id', 'Title', 'LabelName', 'LabelDescription')
+        .using(DefaultCaching)()
+      return spItems
+        .sort((a, b) => (a.title > b.title ? 1 : -1))
+        .map((item) => {
+          return {
+            title: item.Title,
+            labelName: item.LabelName,
+            labelDescription: item.LabelDescription
+          }
+        })
+    } catch (error) {
+      throw new Error(
+        'Kunne ikke hente oppbevaringsetiketter, vennligst sjekk at webdelen er riktig konfigurert og at listen eksisterer på Bestillingsportalen.'
       )
     }
   }

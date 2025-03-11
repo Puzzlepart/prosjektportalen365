@@ -18,6 +18,7 @@ export function useProjectProvisionState() {
     types: {},
     teamTemplates: {},
     sensitivityLabels: {},
+    retentionLabels: {},
     requests: [],
     properties: {},
     refetch: new Date().getTime(),
