@@ -22,7 +22,7 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
   } = usePortfolioOverview(props)
 
   return (
-    <div className={styles.root}>
+    <div className={styles.portfolioOverview}>
       <PortfolioOverviewContext.Provider value={context}>
         <div className={styles.container}>
           <List
