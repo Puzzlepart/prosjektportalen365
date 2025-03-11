@@ -20,14 +20,16 @@ export function useProjectProvisionDataFetch(
       props.dataAdapter.getProvisionTypes(props.provisionUrl),
       props.dataAdapter.getTeamTemplates(props.provisionUrl),
       props.dataAdapter.getSensitivityLabels(props.provisionUrl),
+      props.dataAdapter.getRetentionLabels(props.provisionUrl),
       props.dataAdapter.fetchProvisionRequests(props.pageContext.user.email, props.provisionUrl)
     ])
-      .then(([settings, types, teamTemplates, sensitivityLabels, requests]) => {
+      .then(([settings, types, teamTemplates, sensitivityLabels, retentionLabels, requests]) => {
         setState({
           settings,
           types,
           teamTemplates,
           sensitivityLabels,
+          retentionLabels,
           requests,
           loading: false,
           isRefetching: false

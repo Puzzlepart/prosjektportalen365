@@ -22,6 +22,7 @@ import {
   ToastBody,
   ToastTitle,
   IdPrefixProvider,
+  Option,
   FluentProvider
 } from '@fluentui/react-components'
 import { ArrowLeft24Regular, Dismiss24Regular } from '@fluentui/react-icons'
@@ -49,6 +50,10 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
     siteExists,
     setSiteExists,
     namingConvention,
+    enableSensitivityLabels,
+    defaultSensitivityLabel,
+    enableRetentionLabels,
+    defaultRetentionLabel,
     urlPrefix,
     aliasSuffix,
     fluentProviderId
@@ -304,28 +309,68 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     }}
                   />
                 </FieldContainer>
-                {/* <FieldContainer
-                    iconName='PeopleAudience'
-                    label={strings.Provision.TeamTemplateFieldLabel}
-                    description={strings.Provision.TeamTemplateFieldDescription}
-                    hidden={!context.column.get('teamify')}
+                <FieldContainer
+                  iconName='PeopleAudience'
+                  label={strings.Provision.TeamTemplateFieldLabel}
+                  description={strings.Provision.TeamTemplateFieldDescription}
+                  hidden={!context.column.get('teamify')}
+                >
+                  <Dropdown
+                    // defaultValue={'Standard'}
+                    // defaultSelectedOptions={['Standard']}
+                    value={context.column.get('teamTemplate')}
+                    selectedOptions={[context.column.get('teamTemplate')]}
+                    onOptionSelect={(_, data) => {
+                      context.setColumn('teamTemplate', data.optionValue)
+                    }}
                   >
-                    <Dropdown
-                      defaultValue={'Standard'}
-                      selectedOptions={[context.column.get('teamTemplate')]}
-                      value={context.column.get('teamTemplate')}
-                      defaultSelectedOptions={['Standard']}
-                      onOptionSelect={(_, data) => {
-                        context.setColumn('teamTemplate', data.optionValue)
-                      }}
-                    >
-                      {context.state.teamTemplates.map((template) => (
-                        <Option key={template.title} value={template.title}>
-                          {template.title}
-                        </Option>
-                      ))}
-                    </Dropdown>
-                  </FieldContainer> */}
+                    {context.state.teamTemplates.map((template) => (
+                      <Option key={template.title} value={template.title}>
+                        {template.title}
+                      </Option>
+                    ))}
+                  </Dropdown>
+                </FieldContainer>
+                <FieldContainer
+                  iconName='PeopleCommunity'
+                  label={strings.Provision.SensitivityLabelFieldLabel}
+                  description={strings.Provision.SensitivityLabelFieldDescription}
+                  hidden={!enableSensitivityLabels}
+                >
+                  <Dropdown
+                    value={context.column.get('sensitivityLabel')}
+                    selectedOptions={[context.column.get('sensitivityLabel')]}
+                    onOptionSelect={(_, data) => {
+                      context.setColumn('sensitivityLabel', data.optionValue)
+                    }}
+                  >
+                    {context.state.sensitivityLabels.map((label) => (
+                      <Option key={label.title} value={label.title}>
+                        {label.title}
+                      </Option>
+                    ))}
+                  </Dropdown>
+                </FieldContainer>
+                <FieldContainer
+                  iconName='Checkmark'
+                  label={strings.Provision.RetentionLabelFieldLabel}
+                  description={strings.Provision.RetentionLabelFieldDescription}
+                  hidden={!enableRetentionLabels}
+                >
+                  <Dropdown
+                    value={context.column.get('retentionLabel')}
+                    selectedOptions={[context.column.get('retentionLabel')]}
+                    onOptionSelect={(_, data) => {
+                      context.setColumn('retentionLabel', data.optionValue)
+                    }}
+                  >
+                    {context.state.retentionLabels.map((label) => (
+                      <Option key={label.title} value={label.title}>
+                        {label.title}
+                      </Option>
+                    ))}
+                  </Dropdown>
+                </FieldContainer>
                 <FieldContainer
                   iconName='BoxToolbox'
                   label={strings.Provision.ConfidentialFieldLabel}
@@ -343,29 +388,29 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     }}
                   />
                 </FieldContainer>
-                {/* <FieldContainer
-                    iconName='Eye'
-                    label={strings.Provision.PrivacyFieldLabel}
-                    description={strings.Provision.PrivacyFieldDescription}
+                <FieldContainer
+                  iconName='Eye'
+                  label={strings.Provision.PrivacyFieldLabel}
+                  description={strings.Provision.PrivacyFieldDescription}
+                >
+                  <Dropdown
+                    // defaultValue={context.column.get('privacy')}
+                    // defaultSelectedOptions={[context.column.get('privacy')]}
+                    selectedOptions={[context.column.get('privacy')]}
+                    value={context.column.get('privacy')}
+                    onOptionSelect={(_, data) => {
+                      context.setColumn('privacy', data.optionValue)
+                    }}
+                    disabled={context.column.get('isConfidential')}
                   >
-                    <Dropdown
-                      defaultValue={context.column.get('privacy')}
-                      selectedOptions={[context.column.get('privacy')]}
-                      value={context.column.get('privacy')}
-                      defaultSelectedOptions={[context.column.get('privacy')]}
-                      onOptionSelect={(_, data) => {
-                        context.setColumn('privacy', data.optionValue)
-                      }}
-                      disabled={context.column.get('isConfidential')}
-                    >
-                      <Option value={strings.Provision.PrivacyFieldOptionPrivate}>
-                        {strings.Provision.PrivacyFieldOptionPrivate}
-                      </Option>
-                      <Option value={strings.Provision.PrivacyFieldOptionPublic}>
-                        {strings.Provision.PrivacyFieldOptionPublic}
-                      </Option>
-                    </Dropdown>
-                  </FieldContainer> */}
+                    <Option value={strings.Provision.PrivacyFieldOptionPrivate}>
+                      {strings.Provision.PrivacyFieldOptionPrivate}
+                    </Option>
+                    <Option value={strings.Provision.PrivacyFieldOptionPublic}>
+                      {strings.Provision.PrivacyFieldOptionPublic}
+                    </Option>
+                  </Dropdown>
+                </FieldContainer>
                 <FieldContainer
                   iconName='Guest'
                   label={strings.Provision.ExternalSharingFieldLabel}
