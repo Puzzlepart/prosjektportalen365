@@ -51,9 +51,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
     setSiteExists,
     namingConvention,
     enableSensitivityLabels,
-    defaultSensitivityLabel,
     enableRetentionLabels,
-    defaultRetentionLabel,
     urlPrefix,
     aliasSuffix,
     fluentProviderId
@@ -316,8 +314,6 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   hidden={!context.column.get('teamify')}
                 >
                   <Dropdown
-                    // defaultValue={'Standard'}
-                    // defaultSelectedOptions={['Standard']}
                     value={context.column.get('teamTemplate')}
                     selectedOptions={[context.column.get('teamTemplate')]}
                     onOptionSelect={(_, data) => {
@@ -331,46 +327,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     ))}
                   </Dropdown>
                 </FieldContainer>
-                <FieldContainer
-                  iconName='PeopleCommunity'
-                  label={strings.Provision.SensitivityLabelFieldLabel}
-                  description={strings.Provision.SensitivityLabelFieldDescription}
-                  hidden={!enableSensitivityLabels}
-                >
-                  <Dropdown
-                    value={context.column.get('sensitivityLabel')}
-                    selectedOptions={[context.column.get('sensitivityLabel')]}
-                    onOptionSelect={(_, data) => {
-                      context.setColumn('sensitivityLabel', data.optionValue)
-                    }}
-                  >
-                    {context.state.sensitivityLabels.map((label) => (
-                      <Option key={label.title} value={label.title}>
-                        {label.title}
-                      </Option>
-                    ))}
-                  </Dropdown>
-                </FieldContainer>
-                <FieldContainer
-                  iconName='Checkmark'
-                  label={strings.Provision.RetentionLabelFieldLabel}
-                  description={strings.Provision.RetentionLabelFieldDescription}
-                  hidden={!enableRetentionLabels}
-                >
-                  <Dropdown
-                    value={context.column.get('retentionLabel')}
-                    selectedOptions={[context.column.get('retentionLabel')]}
-                    onOptionSelect={(_, data) => {
-                      context.setColumn('retentionLabel', data.optionValue)
-                    }}
-                  >
-                    {context.state.retentionLabels.map((label) => (
-                      <Option key={label.title} value={label.title}>
-                        {label.title}
-                      </Option>
-                    ))}
-                  </Dropdown>
-                </FieldContainer>
+                <Divider />
                 <FieldContainer
                   iconName='BoxToolbox'
                   label={strings.Provision.ConfidentialFieldLabel}
@@ -394,8 +351,6 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   description={strings.Provision.PrivacyFieldDescription}
                 >
                   <Dropdown
-                    // defaultValue={context.column.get('privacy')}
-                    // defaultSelectedOptions={[context.column.get('privacy')]}
                     selectedOptions={[context.column.get('privacy')]}
                     value={context.column.get('privacy')}
                     onOptionSelect={(_, data) => {
@@ -436,6 +391,48 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                 >
                   <Guest />
                 </FieldContainer>
+                <Divider />
+                <FieldContainer
+                  iconName='PeopleCommunity'
+                  label={strings.Provision.SensitivityLabelFieldLabel}
+                  description={strings.Provision.SensitivityLabelFieldDescription}
+                  hidden={!enableSensitivityLabels}
+                >
+                  <Dropdown
+                    value={context.column.get('sensitivityLabel')}
+                    selectedOptions={[context.column.get('sensitivityLabel')]}
+                    onOptionSelect={(_, data) => {
+                      context.setColumn('sensitivityLabel', data.optionValue)
+                    }}
+                  >
+                    {context.state.sensitivityLabels.map((label) => (
+                      <Option key={label.title} value={label.title}>
+                        {label.title}
+                      </Option>
+                    ))}
+                  </Dropdown>
+                </FieldContainer>
+                <FieldContainer
+                  iconName='Checkmark'
+                  label={strings.Provision.RetentionLabelFieldLabel}
+                  description={strings.Provision.RetentionLabelFieldDescription}
+                  hidden={!enableRetentionLabels}
+                >
+                  <Dropdown
+                    value={context.column.get('retentionLabel')}
+                    selectedOptions={[context.column.get('retentionLabel')]}
+                    onOptionSelect={(_, data) => {
+                      context.setColumn('retentionLabel', data.optionValue)
+                    }}
+                  >
+                    {context.state.retentionLabels.map((label) => (
+                      <Option key={label.title} value={label.title}>
+                        {label.title}
+                      </Option>
+                    ))}
+                  </Dropdown>
+                </FieldContainer>
+                <Divider />
                 <FieldContainer
                   iconName='LocalLanguage'
                   label={strings.Provision.LanguageFieldLabel}

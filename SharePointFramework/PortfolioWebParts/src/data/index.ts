@@ -1087,7 +1087,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         .using(DefaultCaching)()
       return spItems
         .filter((item) => item.Enabled)
-        .sort((a, b) => (a.title > b.title ? 1 : -1))
+        .sort((a, b) => (a.Title > b.Title ? 1 : -1))
         .map((item) => {
           return {
             title: item.Title,
@@ -1111,7 +1111,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         .select('Id', 'Title', 'LabelName', 'LabelDescription')
         .using(DefaultCaching)()
       return spItems
-        .sort((a, b) => (a.title > b.title ? 1 : -1))
+        .sort((a, b) => (a.Title > b.Title ? 1 : -1))
         .map((item) => {
           return {
             title: item.Title,

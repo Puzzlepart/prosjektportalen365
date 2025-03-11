@@ -40,29 +40,14 @@ export const useProvisionDrawer = () => {
     useMotion<HTMLDivElement>(i === currentLevel)
   )
 
-  const settingsTitles = [
-    'UseNamingConventions',
-    'EnableSensitivityLabels',
-    'DefaultSensitivityLabels',
-    'EnableRetentionLabels',
-    'DefaultRetentionLabel'
-  ]
-  const settingsValues = settingsTitles.reduce((acc, setting) => {
-    const foundSetting = context.state.settings.find((t) => t.title === setting)?.value
-    if (foundSetting !== undefined) {
-      acc[setting] = foundSetting
-    }
-    return acc
-  }, {} as Record<string, any>)
+  const getGlobalSetting = (setting: string) => {
+    return context.state.settings.find((t) => t.title === setting)?.value
+  }
 
-  const useNamingConventions = settingsValues['UseNamingConventions']
-  const enableSensitivityLabels = settingsValues['EnableSensitivityLabels']
-  const defaultSensitivityLabel = settingsValues['DefaultSensitivityLabels']
-  const enableRetentionLabels = settingsValues['EnableRetentionLabels']
-  const defaultRetentionLabel = settingsValues['DefaultRetentionLabel']
-  // TODO: Add default labels logic
+  const enableSensitivityLabels = getGlobalSetting('EnableSensitivityLabels')
+  const enableRetentionLabels = getGlobalSetting('EnableRetentionLabels')
 
-  const namingConvention = useNamingConventions
+  const namingConvention = getGlobalSetting('UseNamingConventions')
     ? context.state.settings.find((t) => t.title === 'NamingConvention')?.value
     : context.state.types.find((t) => t.type === context.column.get('type'))?.namingConvention
 
@@ -145,9 +130,7 @@ export const useProvisionDrawer = () => {
     setSiteExists,
     namingConvention,
     enableSensitivityLabels,
-    defaultSensitivityLabel,
     enableRetentionLabels,
-    defaultRetentionLabel,
     urlPrefix,
     aliasSuffix,
     fluentProviderId

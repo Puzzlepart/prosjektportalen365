@@ -11,20 +11,11 @@ export function useEditableColumn(
   state: IProjectProvisionState,
   setState: (newState: Partial<IProjectProvisionState>) => void
 ) {
-  const defaultType =
-    !state.loading &&
-    !state.error &&
-    state.types
-      .sort((a, b) => a.sortOrder - b.sortOrder)
-      .filter(
-        (type) =>
-          !type.visibleTo ||
-          type.visibleTo?.some((user) => user?.EMail?.includes(props?.pageContext?.user?.loginName))
-      )[0]
+  const defaultType = !state.loading && !state.error && state.types[0]
 
   const initialColumn = new Map<string, any>([
-    ['type', 'Project'],
-    ['typeTitle', 'Prosjektområde'],
+    ['type', ''],
+    ['typeTitle', ''],
     ['name', ''],
     ['description', ''],
     ['justification', ''],
@@ -33,9 +24,11 @@ export function useEditableColumn(
     ['alias', ''],
     ['url', ''],
     ['teamify', false],
-    ['teamTemplate', 'Standard'],
+    ['teamTemplate', ''],
+    ['sensitiviyLabel', ''],
+    ['retentionLabel', ''],
     ['isConfidential', false],
-    ['privacy', strings.Provision.PrivacyFieldOptionPrivate],
+    ['privacy', ''],
     ['externalSharing', false],
     ['guest', []],
     ['language', 'Norsk (bokmål)'],
@@ -139,6 +132,14 @@ export function useEditableColumn(
     $setColumn(initialColumn)
   }
 
+  /**
+   * Get global setting value
+   * @param setting Setting to get
+   */
+  const getGlobalSetting = (setting: string) => {
+    return state.settings.find((t) => t.title === setting)?.value
+  }
+
   useEffect(() => {
     $setColumn((prev) => {
       const newColumn = new Map(prev)
@@ -156,31 +157,40 @@ export function useEditableColumn(
   }, [state.loading])
 
   useEffect(() => {
-    const defaultConfidentialData =
-      !state.loading &&
-      state.types.find((t) => t.type === state.properties.type || defaultType.type)
-        ?.defaultConfidentialData
+    if (!state.loading) {
+      const typeDefaults = state.types.find((t) => t.type === state.properties.type) || defaultType
+      const defaultConfidentialData = typeDefaults?.defaultConfidentialData
+      const defaultSensitivityLabel =
+        typeDefaults?.defaultSensitivityLabel || getGlobalSetting('DefaultSensitivityLabel')
+      const defaultRetentionLabel =
+        typeDefaults?.defaultRetentionLabel || getGlobalSetting('DefaultRetentionLabel')
+      const defaultVisibility =
+        typeDefaults?.defaultVisibility === 'Public'
+          ? strings.Provision.PrivacyFieldOptionPublic
+          : strings.Provision.PrivacyFieldOptionPrivate
+      const enableExternalSharing = getGlobalSetting('EnableExternalSharingByDefault')
 
-    const defaultVisibility =
-      !state.loading &&
-      state.types.find((t) => t.type === state.properties.type || defaultType.type)
-        ?.defaultVisibility === 'Public'
-        ? strings.Provision.PrivacyFieldOptionPublic
-        : strings.Provision.PrivacyFieldOptionPrivate
+      $setColumn((prev) => {
+        const newColumns = new Map(prev)
+        newColumns.set('isConfidential', defaultConfidentialData)
+        newColumns.set('privacy', defaultVisibility)
+        newColumns.set('sensitivityLabel', defaultSensitivityLabel)
+        newColumns.set('retentionLabel', defaultRetentionLabel)
+        newColumns.set('externalSharing', enableExternalSharing)
 
-    $setColumn((prev) => {
-      const newColumns = new Map(prev)
-      newColumns.set('isConfidential', defaultConfidentialData)
-      newColumns.set('privacy', defaultVisibility)
-
-      setState({
-        properties: {
-          ...state.properties,
-          isConfidential: defaultConfidentialData
-        }
+        setState({
+          properties: {
+            ...state.properties,
+            isConfidential: defaultConfidentialData,
+            privacy: defaultVisibility,
+            sensitivityLabel: defaultSensitivityLabel,
+            retentionLabel: defaultRetentionLabel,
+            externalSharing: enableExternalSharing
+          }
+        })
+        return newColumns
       })
-      return newColumns
-    })
+    }
   }, [state.properties.type])
 
   return {
