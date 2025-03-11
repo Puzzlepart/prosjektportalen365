@@ -26,7 +26,13 @@ export function useProjectProvisionDataFetch(
       .then(([settings, types, teamTemplates, sensitivityLabels, retentionLabels, requests]) => {
         setState({
           settings,
-          types,
+          types: types.filter(
+            (type) =>
+              !type.visibleTo ||
+              type.visibleTo?.some((user) =>
+                user?.EMail?.includes(props?.pageContext?.user?.loginName)
+              )
+          ),
           teamTemplates,
           sensitivityLabels,
           retentionLabels,
