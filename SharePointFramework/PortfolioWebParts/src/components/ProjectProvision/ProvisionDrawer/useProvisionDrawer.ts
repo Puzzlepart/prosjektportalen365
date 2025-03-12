@@ -67,6 +67,10 @@ export const useProvisionDrawer = () => {
       namingConvention?.suffixText
     }`
 
+    const sensitivityLabelId = context.state.sensitivityLabels.find(
+      (t) => t.name === context.column.get('sensitivityLabel')
+    )?.labelId
+
     const requestItem: IProvisionRequestItem = {
       Title: context.column.get('name'),
       SpaceDisplayName: name,
@@ -80,10 +84,19 @@ export const useProvisionDrawer = () => {
         : '',
       OwnersId: context.state.properties.owner,
       MembersId: context.state.properties.member,
+      RequestedById: context.state.properties.requestedBy,
       ConfidentialData: context.column.get('isConfidential'),
       Visibility: context.state.properties.privacy || 'Private',
       ExternalSharingRequired: context.column.get('externalSharing'),
       Guests: context.column.get('guest')?.join(';'),
+      SensitivityLabelName: context.column.get('sensitivityLabel'),
+      SensitivityLabelId: sensitivityLabelId,
+      RetentionLabelName: context.column.get('retentionLabel'),
+      ExpirationDate: context.column.get('expirationDate'),
+      ReadOnlyGroup: context.column.get('readOnlyGroup'),
+      InternalChannel: context.column.get('internalChannel'),
+      RequestedSource: context.column.get('requestedSource'),
+      SpaceImage: context.column.get('image'),
       SiteURL: {
         Description: `${baseUrl}${alias}`,
         Url: `${baseUrl}${alias}`

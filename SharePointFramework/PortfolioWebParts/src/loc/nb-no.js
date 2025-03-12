@@ -70,6 +70,8 @@ define([], function () {
       OwnerFieldNoOptionsText: 'Ingen treff...',
       MemberFieldLabel: 'Medlem(mer)',
       MemberFieldDescription: 'Medlem(mer) har tilgang til området basert på tillatelsene som er satt. Du kan legge til flere medlemmer senere.',
+      RequestedByFieldLabel: 'Bestilt på vegne av',
+      RequestedByFieldDescription: 'Dersom du bestiller området på vegne av noen, kan du angi navnet på vedkommende her.',
       TeamifyFieldLabel: 'Aktivere Teams for området?',
       TeamifyFieldDescription: 'Om du aktiverer Teams for området, vil et Teams-område bli opprettet og knyttet til området.',
       TeamTemplateFieldLabel: 'Teams mal',

@@ -262,6 +262,13 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     {/* Members can not be the same as the owner */}
                     <User type='member' />
                   </FieldContainer>
+                  <FieldContainer
+                    iconName='Person'
+                    label={strings.Provision.RequestedByFieldLabel}
+                    description={strings.Provision.RequestedByFieldDescription}
+                  >
+                    <User type='requestedBy' />
+                  </FieldContainer>
                   <Divider />
                   <FieldContainer
                     iconName='TextNumberFormat'

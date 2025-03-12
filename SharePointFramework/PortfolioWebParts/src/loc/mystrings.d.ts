@@ -70,6 +70,8 @@ declare interface IPortfolioWebPartsStrings {
     OwnerFieldNoOptionsText: string,
     MemberFieldLabel: string,
     MemberFieldDescription: string,
+    RequestedByFieldLabel: string,
+    RequestedByFieldDescription: string,
     TeamifyFieldLabel: string,
     TeamifyFieldDescription: string,
     TeamTemplateFieldLabel: string,

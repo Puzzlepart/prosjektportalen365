@@ -21,15 +21,18 @@ export function useEditableColumn(
     ['justification', ''],
     ['owner', []],
     ['member', []],
+    ['requestedBy', []],
     ['alias', ''],
     ['url', ''],
     ['teamify', false],
     ['teamTemplate', 'Standard'],
-    ['sensitiviyLabel', ''],
+    ['sensitivityLabel', ''],
     ['retentionLabel', ''],
     ['expirationDate', null],
     ['readOnlyGroup', false],
     ['internalChannel', false],
+    ['requestedSource', ''],
+    ['image', ''],
     ['isConfidential', false],
     ['privacy', ''],
     ['externalSharing', false],
@@ -88,6 +91,15 @@ export function useEditableColumn(
       ],
       [
         'member',
+        async () => {
+          const values = await Promise.all(
+            await props.dataAdapter.getProvisionUsers(value, props.provisionUrl)
+          )
+          return _.flatten(values)
+        }
+      ],
+      [
+        'requestedBy',
         async () => {
           const values = await Promise.all(
             await props.dataAdapter.getProvisionUsers(value, props.provisionUrl)
