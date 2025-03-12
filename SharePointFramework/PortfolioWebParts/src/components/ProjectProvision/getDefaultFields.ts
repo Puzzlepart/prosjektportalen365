@@ -133,7 +133,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       description:
         'Gjester har begrenset tilgang til området. Du kan legge til flere gjester senere. Vennligst skriv inn en gyldig e-postadresse.',
       placeholder: 'Angi gjester',
-      dataType: 'userExternal',
+      dataType: 'guest',
       level: 1
     },
     {

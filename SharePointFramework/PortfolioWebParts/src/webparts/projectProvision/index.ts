@@ -100,7 +100,7 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                         { key: 'choice', text: 'Valg' },
                         { key: 'user', text: 'Enkeltbruker' },
                         { key: 'userMulti', text: 'Flere brukere' },
-                        { key: 'userExternal', text: 'Gjestebrukere' },
+                        { key: 'guest', text: 'Gjestebrukere' },
                         { key: 'date', text: 'Dato' },
                         { key: 'tags', text: 'Taksonomi' },
                         { key: 'boolean', text: 'Ja/nei' },

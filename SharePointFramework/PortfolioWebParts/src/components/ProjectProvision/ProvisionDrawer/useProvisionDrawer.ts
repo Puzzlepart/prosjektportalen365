@@ -68,7 +68,7 @@ export const useProvisionDrawer = () => {
     }`
 
     const sensitivityLabelId = context.state.sensitivityLabels.find(
-      (t) => t.name === context.column.get('sensitivityLabel')
+      (t) => t.labelName === context.column.get('sensitivityLabel')
     )?.labelId
 
     const requestItem: IProvisionRequestItem = {
