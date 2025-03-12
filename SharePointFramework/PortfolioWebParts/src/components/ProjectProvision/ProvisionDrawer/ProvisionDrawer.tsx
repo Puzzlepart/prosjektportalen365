@@ -32,7 +32,7 @@ import { FieldContainer, customLightTheme } from 'pp365-shared-library'
 import { SiteType } from './SiteType'
 import { useProvisionDrawer } from './useProvisionDrawer'
 import styles from './ProvisionDrawer.module.scss'
-import { User } from './User'
+import { UserMulti } from './User'
 import { Guest } from './Guest'
 import { DebugModel } from './DebugModel'
 import { IProvisionDrawerProps } from './types'
@@ -252,7 +252,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     description={strings.Provision.OwnerFieldDescription}
                     required={true}
                   >
-                    <User type='owner' />
+                    <UserMulti type='owner' />
                   </FieldContainer>
                   <FieldContainer
                     iconName='People'
@@ -260,14 +260,14 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     description={strings.Provision.MemberFieldDescription}
                   >
                     {/* Members can not be the same as the owner */}
-                    <User type='member' />
+                    <UserMulti type='member' />
                   </FieldContainer>
                   <FieldContainer
                     iconName='Person'
                     label={strings.Provision.RequestedByFieldLabel}
                     description={strings.Provision.RequestedByFieldDescription}
                   >
-                    <User type='requestedBy' />
+                    <UserMulti type='requestedBy' />
                   </FieldContainer>
                   <Divider />
                   <FieldContainer

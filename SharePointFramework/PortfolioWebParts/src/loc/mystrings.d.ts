@@ -67,7 +67,7 @@ declare interface IPortfolioWebPartsStrings {
     UrlFieldLabel: string
     OwnerFieldLabel: string,
     OwnerFieldDescription: string,
-    OwnerFieldNoOptionsText: string,
+    UserFieldNoOptionsText: string,
     MemberFieldLabel: string,
     MemberFieldDescription: string,
     RequestedByFieldLabel: string,
