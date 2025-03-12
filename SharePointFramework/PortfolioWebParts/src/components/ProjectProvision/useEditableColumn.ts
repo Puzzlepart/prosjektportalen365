@@ -34,7 +34,7 @@ export function useEditableColumn(
     ['requestedSource', ''],
     ['image', ''],
     ['isConfidential', false],
-    ['privacy', ''],
+    ['privacy', strings.Provision.PrivacyFieldOptionPrivate],
     ['externalSharing', false],
     ['guest', []],
     ['language', 'Norsk (bokmål)'],
@@ -197,7 +197,6 @@ export function useEditableColumn(
           properties: {
             ...state.properties,
             isConfidential: defaultConfidentialData,
-            privacy: defaultVisibility,
             sensitivityLabel: defaultSensitivityLabel,
             retentionLabel: defaultRetentionLabel,
             externalSharing: enableExternalSharing
