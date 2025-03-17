@@ -1,4 +1,27 @@
 declare interface IPortfolioWebPartsStrings {
+  ResultsCountLabel: string
+  ColumnRenderOptionStatusReport: string
+  PortfolioSelectorLabel: string
+  PortfoliosFieldDescription: string
+  SelectedPortfolioDescription: string
+  ShowPortfolioSelectorDescription: string
+  IconNameFieldPlaceholder: string
+  IconNameFieldLabel: string
+  PortfolioSelectorDescription: string
+  ShowPortfolioSelectorOnText: string
+  ShowPortfolioSelectorOffText: string
+  ShowPortfolioSelectorLabel: string
+  SelectedPortfolioLabel: string
+  PortfoliosFieldLabel: string
+  PortfoliosPanelHeader: string
+  PortfoliosManageBtnLabel: string
+  UrlFieldLabel: string
+  ViewsListNameFieldLabel: string
+  ColumnsListNameFieldLabel: string
+  ColumnConfigListNameFieldLabel: string
+  GetPortfolioConfigErrorTitle: string
+  GetPortfolioConfigErrorText: string
+  AdvancedGroupName: string
   Aria: {
     MenuOverflowCount: string
     MoveDisabled: string
@@ -139,6 +162,7 @@ declare interface IPortfolioWebPartsStrings {
   ColumnRenderOptionCurrencyPrefixLabel: string
   ColumnRenderOptionDate: string
   ColumnRenderOptionDateIncludeTimeLabel: string
+  ColumnRenderOptionInstrument: string
   ColumnRenderOptionDialog: string
   ColumnRenderOptionDialogInfoTextTemplateDescription: string
   ColumnRenderOptionDialogInfoTextTemplateLabel: string
@@ -327,6 +351,7 @@ declare interface IPortfolioWebPartsStrings {
   SearchQueryLabel: string
   SelectProgramText: string
   ShowAllMeasurementsLinkText: string
+  ShowInstrumentLinkText: string
   ShowCommandBarLabel: string
   ShowExcelExportButtonLabel: string
   ShowFieldFrontpageLabel: string

@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { IMatrixCell } from '../DynamicMatrix'
 import { IOpportunityMatrixProps } from './types'
 import { useOpportunityMatrixConfiguration } from './useOpportunityMatrixConfiguration'
+import { useId } from '@fluentui/react-components'
 
 /**
  * Component logic hook for `OpportunityMatrix`. Builds the matrix elements and configuration
@@ -45,5 +46,14 @@ export function useOpportunityMatrix(props: IOpportunityMatrixProps) {
     return [...elements, ...postActionElements]
   }
 
-  return { configuration, error, getElementsForCell, setShowPostAction, showPostAction }
+  const fluentProviderId = useId('fp-opportunity-matrix')
+
+  return {
+    configuration,
+    error,
+    getElementsForCell,
+    setShowPostAction,
+    showPostAction,
+    fluentProviderId
+  }
 }

@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 import { format, IColumn } from '@fluentui/react'
-import * as XLSX from 'xlsx'
 import * as FileSaver from 'file-saver'
-import { stringToArrayBuffer } from '../../util'
+import * as XLSX from 'xlsx'
+import { formatDate, getObjectValue as get, stringToArrayBuffer } from '../../util'
 import { ExcelExportServiceDefaultConfiguration } from './ExcelExportServiceDefaultConfiguration'
 import { IExcelExportServiceConfiguration } from './IExcelExportServiceConfiguration'
-import { getDateValue, getObjectValue as get } from '../../util'
 
 class ExcelExportService {
   public configuration: IExcelExportServiceConfiguration
@@ -43,16 +42,19 @@ class ExcelExportService {
     const fileNameFormat = fileNamePart ? '{0}-{1}-{2}.xlsx' : '{0}-{1}.xlsx'
     try {
       const sheets = []
-      const _columns = columns.filter((column) => column.name)
+      const _columns = columns.filter((column) => Boolean(column.name))
       sheets.push({
         name: this.configuration.sheetName,
         data: [
-          _columns.map((column) => column.name),
+          _columns.map(({ name }) => name),
           ...items.map((item) =>
             _columns.map((column) => {
               switch ((column as any).dataType) {
                 case 'date': {
-                  return getDateValue(item, column.fieldName)
+                  return formatDate(
+                    item[column.fieldName],
+                    column.data?.dataTypeProperties?.includeTime
+                  )
                 }
                 default: {
                   return get(item, column.fieldName, null)

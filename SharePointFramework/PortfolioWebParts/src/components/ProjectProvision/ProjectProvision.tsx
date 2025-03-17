@@ -51,9 +51,10 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
                   primaryActionButton={{
                     onClick: () => setState({ showProvisionDrawer: true })
                   }}
-                  icon={getFluentIcon('Add')}
-                  appearance='primary'
-                  size='large'
+                  icon={props.icon}
+                  appearance={props.appearance}
+                  size={props.size}
+                  disabled={props.disabled}
                 >
                   {strings.Provision.ProvisionButtonLabel}
                 </SplitButton>
@@ -87,4 +88,11 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
       </IdPrefixProvider>
     </ProjectProvisionContext.Provider>
   )
+}
+
+ProjectProvision.defaultProps = {
+  disabled: false,
+  icon: getFluentIcon('Add'),
+  appearance: 'primary',
+  size: 'large'
 }

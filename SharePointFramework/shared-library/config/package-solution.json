@@ -3,7 +3,7 @@
   "solution": {
     "name": "Prosjektportalen 365 - Shared Library",
     "id": "805f6b14-7638-4e7f-8adb-f3927ebda6b8",
-    "version": "1.10.0.0",
+    "version": "1.11.0.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,

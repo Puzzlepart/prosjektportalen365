@@ -11,6 +11,8 @@ import { IListProps } from '../List'
 import { IBaseComponentProps } from '../types'
 import { IColumnFormPanel } from './ColumnFormPanel/types'
 import { IViewFormPanel } from './ViewFormPanel/types'
+import { PortfolioInstance } from 'data/types'
+import { IWeb } from '@pnp/sp/webs'
 
 export class PortfolioOverviewErrorMessage extends Error {
   constructor(public message: string, public type: MessageBarType) {
@@ -19,6 +21,11 @@ export class PortfolioOverviewErrorMessage extends Error {
 }
 
 export interface IPortfolioOverviewConfiguration {
+  /**
+   * The web instance
+   */
+  web: IWeb
+
   /**
    * Available columns
    */
@@ -53,6 +60,11 @@ export interface IPortfolioOverviewConfiguration {
    * Current user can add views (has `ADD_LIST_ITEMS` permission)
    */
   userCanAddViews?: boolean
+
+  /**
+   * Hub site ID
+   */
+  hubSiteId?: string
 }
 
 export interface IPortfolioOverviewProps
@@ -136,6 +148,28 @@ export interface IPortfolioOverviewProps
    * projects in the current hub site.
    */
   isParentProject?: boolean
+
+  /**
+   * Portfolio instances configured in the web part properties.
+   */
+  portfolios?: PortfolioInstance[]
+
+  /**
+   * The unique ID of the selected portfolio.
+   */
+  selectedPortfolioId?: string
+
+  /**
+   * Show portfolio selector in view mode (not just in web part properties).
+   */
+  showPortfolioSelector?: boolean
+
+  /**
+   * Callback to set the selected portfolio.
+   *
+   * @param portfolioId The unique ID of the selected portfolio.
+   */
+  onSetPortfolio?: (portfolioId: string) => void
 }
 
 export interface IPortfolioOverviewState

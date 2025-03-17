@@ -1,39 +1,11 @@
-import {
-  AppsListFilled,
-  AppsListRegular,
-  ChevronLeftFilled,
-  ChevronLeftRegular,
-  ContentView24Filled,
-  ContentView24Regular,
-  EditFilled,
-  EditRegular,
-  FormNewFilled,
-  FormNewRegular,
-  TextBulletListLtrFilled,
-  TextBulletListLtrRegular,
-  bundleIcon
-} from '@fluentui/react-icons'
 import strings from 'PortfolioWebPartsStrings'
-import { ListMenuItem, ListMenuItemDivider, ListMenuItemHeader } from 'pp365-shared-library'
+import { ListMenuItem } from 'pp365-shared-library'
 import { useMemo } from 'react'
-import _ from 'underscore'
 import { IPortfolioOverviewContext } from '../context'
-import { SET_VIEW_FORM_PANEL, TOGGLE_COMPACT, TOGGLE_FILTER_PANEL } from '../reducer'
+import { TOGGLE_FILTER_PANEL } from '../reducer'
 import { useExcelExport } from './useExcelExport'
-import { useProgramMenuItems } from './useProgramMenuItems'
-import { useViewsMenuItems } from './useViewsMenuItems'
-
-/**
- * Object containing icons used in the toolbar.
- */
-const Icons = {
-  ContentView: bundleIcon(ContentView24Filled, ContentView24Regular),
-  AppsList: bundleIcon(AppsListFilled, AppsListRegular),
-  TextBulletList: bundleIcon(TextBulletListLtrFilled, TextBulletListLtrRegular),
-  ChevronLeft: bundleIcon(ChevronLeftFilled, ChevronLeftRegular),
-  FormNew: bundleIcon(FormNewFilled, FormNewRegular),
-  Edit: bundleIcon(EditFilled, EditRegular)
-}
+import { usePortfolioSelector } from './usePortfolioSelector'
+import { useViewSelector } from './useViewSelector'
 
 /**
  * Returns an array of menu items for the toolbar in the PortfolioOverview component.
@@ -43,24 +15,11 @@ const Icons = {
  * @returns An array of `IListMenuItem` objects representing the toolbar items.
  */
 export function useToolbarItems(context: IPortfolioOverviewContext) {
-  const userCanManageViews = context.props.configuration.userCanAddViews
-  const userCanEditGlobalViews = userCanManageViews && context.props.isSiteAdmin
-  const isViewAuthor =
-    userCanManageViews && context.state.currentView?.author === context.props.pageContext.user.email
+  const exportToExcel = useExcelExport(context)
+  const portfolioSelector = usePortfolioSelector(context)
+  const viewSelector = useViewSelector(context)
 
-  const { exportToExcel } = useExcelExport(context)
-  const sharedViews = useViewsMenuItems(context, (view) => !view.isPersonal)
-  const personalViews = useViewsMenuItems(context, (view) => view.isPersonal)
-  const programViews = useProgramMenuItems(context)
-  const checkedValues = useMemo(
-    () => ({
-      views: [context.state.currentView?.id.toString()],
-      renderMode: context.state.isCompact ? ['compactList'] : ['list']
-    }),
-    [context.state.currentView?.id, context.state.isCompact]
-  )
-
-  const menuItems = useMemo<ListMenuItem[]>(
+  return useMemo<ListMenuItem[]>(
     () =>
       [
         context.props.showExcelExportButton &&
@@ -70,62 +29,8 @@ export function useToolbarItems(context: IPortfolioOverviewContext) {
             .setStyle({
               color: '#10793F'
             }),
-        new ListMenuItem(context.state.currentView?.title, strings.PortfolioViewsListName)
-          .setIcon(Icons.ContentView)
-          .setWidth('fit-content')
-          .setStyle({ minWidth: '145px' })
-          .setDisabled(context.state.isChangingView)
-          .setItems(
-            [
-              new ListMenuItem(strings.ListViewText)
-                .setIcon(Icons.AppsList)
-                .makeCheckable({
-                  name: 'renderMode',
-                  value: 'list'
-                })
-                .setOnClick(() => {
-                  context.dispatch(TOGGLE_COMPACT())
-                }),
-              new ListMenuItem(strings.CompactViewText)
-                .setIcon(Icons.TextBulletList)
-                .makeCheckable({
-                  name: 'renderMode',
-                  value: 'compactList'
-                })
-                .setOnClick(() => {
-                  context.dispatch(TOGGLE_COMPACT())
-                }),
-              ListMenuItemDivider,
-              ...sharedViews,
-              ListMenuItemDivider,
-              ListMenuItemHeader(strings.PersonalViewsHeaderText).makeConditional(
-                !_.isEmpty(personalViews)
-              ),
-              ...personalViews,
-              ListMenuItemDivider,
-              context.props.showProgramViews &&
-                ListMenuItemHeader(strings.ProgramsHeaderText).makeConditional(
-                  !_.isEmpty(programViews)
-                ),
-              context.props.showProgramViews &&
-                new ListMenuItem(strings.SelectProgramText)
-                  .setItems(programViews)
-                  .setIcon(Icons.ChevronLeft)
-                  .makeConditional(!_.isEmpty(programViews)),
-              ListMenuItemDivider.makeConditional(!_.isEmpty(programViews)),
-              userCanManageViews &&
-                new ListMenuItem(strings.NewViewText).setIcon(Icons.FormNew).setOnClick(() => {
-                  context.dispatch(SET_VIEW_FORM_PANEL({ isOpen: true }))
-                }),
-              (userCanEditGlobalViews || isViewAuthor) &&
-                new ListMenuItem(strings.EditViewText).setIcon(Icons.Edit).setOnClick(() => {
-                  context.dispatch(
-                    SET_VIEW_FORM_PANEL({ isOpen: true, view: context.state.currentView })
-                  )
-                })
-            ],
-            checkedValues
-          ),
+        portfolioSelector,
+        viewSelector,
         context.props.showFilters &&
           new ListMenuItem(null, strings.FilterText).setIcon('Filter').setOnClick(() => {
             context.dispatch(TOGGLE_FILTER_PANEL())
@@ -133,6 +38,4 @@ export function useToolbarItems(context: IPortfolioOverviewContext) {
       ].filter(Boolean),
     [context.state, context.props]
   )
-
-  return menuItems
 }

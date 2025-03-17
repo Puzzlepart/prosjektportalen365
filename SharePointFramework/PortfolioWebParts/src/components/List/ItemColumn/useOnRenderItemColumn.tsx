@@ -24,7 +24,7 @@ function renderItemColumn(item: Record<string, any>, column: IColumn): ReactNode
   }
   const columnValue = item[column.fieldName]
   const dataTypeProperties: Record<string, any> = column.data?.dataTypeProperties ?? {}
-  if (!columnValue) {
+  if (!columnValue && column.fieldName !== '-') {
     return dataTypeProperties.fallbackValue ?? null
   }
 

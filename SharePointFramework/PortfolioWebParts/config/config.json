@@ -65,6 +65,14 @@
           "manifest": "./src/webparts/projectProvision/manifest.json"
         }
       ]
+    },
+    "idea-module-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/ideaModule/index.js",
+          "manifest": "./src/webparts/ideaModule/manifest.json"
+        }
+      ]
     }
   },
   "externals": {},

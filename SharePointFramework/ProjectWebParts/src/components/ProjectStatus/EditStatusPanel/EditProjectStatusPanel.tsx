@@ -2,6 +2,7 @@ import { CustomEditPanel } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import SPDataAdapter from '../../../data'
 import { useEditStatusPanel } from './useEditStatusPanel'
+import { Toaster } from '@fluentui/react-components'
 
 /**
  * Edit properties panel uses `CustomEditPanel` to render an edit
@@ -13,16 +14,20 @@ export const EditStatusPanel: FC = () => {
   if (!fieldValues.id) return null
 
   return (
-    <CustomEditPanel
-      isOpen={isOpen}
-      headerText={headerText}
-      fieldValues={fieldValues}
-      fields={fields}
-      dataAdapter={SPDataAdapter}
-      submit={submit}
-      hiddenFields={['Title']}
-      onDismiss={onDismiss}
-    />
+    <>
+      <CustomEditPanel
+        isOpen={isOpen}
+        headerText={headerText}
+        fieldValues={fieldValues}
+        fields={fields}
+        dataAdapter={SPDataAdapter}
+        submit={submit}
+        hiddenFields={['Title']}
+        onLightDismissClick={onDismiss}
+        onDismiss={onDismiss}
+      />
+      <Toaster id='toaster-test' />
+    </>
   )
 }
 

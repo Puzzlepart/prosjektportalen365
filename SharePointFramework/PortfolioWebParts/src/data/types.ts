@@ -4,6 +4,7 @@ import { ISearchResult, SortDirection } from '@pnp/sp/search'
 import {
   DataSource,
   DataSourceService,
+  ErrorWithIntent,
   IGraphGroup,
   PortalDataService,
   PortfolioOverviewView,
@@ -16,6 +17,9 @@ import {
 import { IPortfolioAggregationConfiguration, IPortfolioOverviewConfiguration } from '../components'
 import { IPersonaSharedProps } from '@fluentui/react'
 import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
+import { Idea } from 'components/IdeaModule'
+import { IdeaConfigurationModel } from 'models'
+import strings from 'PortfolioWebPartsStrings'
 
 export interface IFetchDataForViewItemResult extends ISearchResult {
   SiteId: string
@@ -44,10 +48,12 @@ export interface IPortfolioWebPartsDataAdapter {
    *
    * @param spfxContext SPFx context (optional)
    * @param configuration Configuration for data adapter (optional)
+   * @param portfolio Portfolio instance (optional)
    */
   configure(
     spfxContext?: WebPartContext,
-    configuration?: any
+    configuration?: any,
+    portfolio?: PortfolioInstance
   ): Promise<IPortfolioWebPartsDataAdapter | void>
 
   /**
@@ -94,7 +100,8 @@ export interface IPortfolioWebPartsDataAdapter {
   ): Promise<{ charts: any; chartData: any; contentTypes: any }>
 
   /**
-   * Get portfolio configuration from SharePoint lists.
+   * Get portfolio configuration from SharePoint lists. Optionally from
+   * a specific portfolio instance.
    *
    * This includes:
    * - `columns` - Project columns
@@ -105,7 +112,7 @@ export interface IPortfolioWebPartsDataAdapter {
    * - `columnUrls` - Project columns list form URLs
    * - `userCanAddViews` - User can add portfolio views
    */
-  getPortfolioConfig?(): Promise<IPortfolioOverviewConfiguration>
+  getPortfolioConfig?(portfolio?: PortfolioInstance): Promise<IPortfolioOverviewConfiguration>
 
   /**
    * Get aggregated list config for the given category.
@@ -298,9 +305,9 @@ export interface IPortfolioWebPartsDataAdapter {
   ): Promise<IPersonaSharedProps[]>
 
   /**
-   * Retrieves the provision request settings from the "Provisioning Request Settings" list
+   * Retrieves the configuration from the "Provisioning Request Settings" list
    *
-   * @returns A Promise that resolves to an array containing the provision request settings.
+   * @returns A Promise that resolves to an array containing the configuration.
    */
   getProvisionRequestSettings?(provisionUrl: string): Promise<any[]>
 
@@ -360,4 +367,46 @@ export interface IPortfolioWebPartsDataAdapter {
    *
    */
   siteExists?(siteUrl: string): Promise<boolean>
+
+  /**
+   * Retrieves the configuration from the "Idékonfigurasjon" list
+   *
+   * @returns A Promise that resolves to an array containing the configuration.
+   */
+  getIdeaConfiguration?(
+    listName: string,
+    configurationName: string
+  ): Promise<IdeaConfigurationModel>
+
+  /**
+   * Retrieves the data for the ideas from the "Idéregistrering" list
+   *
+   * @returns A Promise that resolves to an object containing the data for the ideas.
+   */
+  getIdeasData?(configuration: IdeaConfigurationModel): Promise<Idea>
+}
+
+export type PortfolioInstance = {
+  uniqueId: string
+  title: string
+  url: string
+  columnsListName: string
+  columnConfigListName: string
+  viewsListName: string
+  iconName?: string
+}
+
+/**
+ * Generates an error for when the user does not have access to the portfolio.
+ *
+ * @param error The error that occurred
+ */
+export const GetPortfolioConfigError = (error: Error): ErrorWithIntent => {
+  const e = new ErrorWithIntent(
+    strings.GetPortfolioConfigErrorText,
+    'warning',
+    strings.GetPortfolioConfigErrorTitle
+  )
+  e.stack = error.stack
+  return e
 }

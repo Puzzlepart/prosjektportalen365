@@ -1,0 +1,43 @@
+@import "~@fluentui/react/dist/sass/References.scss";
+
+.root {
+  padding: 10px;
+
+  .section {
+    margin: 0 0 15px 0;
+    display: flex;
+    .iconContainer,
+    .body {
+      display: flex;
+    }
+    .iconContainer {
+      padding: 7px 0 0 0;
+      flex: 0 0 45px;
+      font-size: 20pt;
+    }
+    .body {
+      flex: 90%;
+      padding: 0;
+      flex-direction: column;
+
+      .name {
+        font-size: 16px;
+      }
+
+      .value {
+        font-size: 13px;
+      }
+
+      .comment {
+        padding: 6px 0 0 0;
+        font-size: 12px;
+      }
+    }
+  }
+
+  .footer {
+    font-size: 12px;
+    text-align: right;
+    color: #444;
+  }
+}

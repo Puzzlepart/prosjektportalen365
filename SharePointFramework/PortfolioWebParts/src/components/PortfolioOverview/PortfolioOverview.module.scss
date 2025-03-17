@@ -1,9 +1,9 @@
-@import "~@fluentui/react/dist/sass/References.scss";
-
-.root {
+.portfolioOverview {
   margin: 0;
+  min-height: calc(100vh - 450px);
 
   .container {
     margin: 0;
+    min-height: calc(100vh - 450px);
   }
 }

@@ -4,7 +4,7 @@
   "alias": "Footer",
   "componentType": "Extension",
   "extensionType": "ApplicationCustomizer",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "manifestVersion": 2,
   "requiresCustomScript": false
 }

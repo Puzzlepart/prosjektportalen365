@@ -19,16 +19,21 @@ const createChangePhaseDialogReducer = () =>
     {},
     {
       [INIT.type]: (state, { payload }: ReturnType<typeof INIT>) => {
-        if (payload.context.state.phase) {
-          const items = Object.keys(payload.context.state.phase.checklistData.items)
+        const phase =
+          payload.context.state.phase ||
+          payload.context.state.data.phases.find((phase) => phase.properties.IsInitial)
+
+        if (phase) {
+          const items = phase.checklistData.items ? Object.keys(phase.checklistData.items) : []
           if (!isEmpty(items)) {
-            const checklistItems = payload.context.state.phase.checklistData?.items || []
-            const openCheclistItems = checklistItems.filter(
-              (item) => item.status === strings.StatusOpen
+            const checklistItems = phase.checklistData?.items || []
+            const openChecklistItems = checklistItems.filter(
+              (item: ChecklistItemModel) => item.status === strings.StatusOpen
             )
-            state.view = isEmpty(openCheclistItems) ? View.Summary : View.Initial
+            state.view = isEmpty(openChecklistItems) ? View.Summary : View.Initial
             state.checklistItems = checklistItems
             state.currentIdx = getNextIndex(checklistItems)
+            state.isChecklistMandatory = phase.isChecklistMandatory === 'true'
           } else {
             state.view = View.Confirm
           }
@@ -36,11 +41,9 @@ const createChangePhaseDialogReducer = () =>
           state.view = View.Confirm
         }
       },
-
       [SET_VIEW.type]: (state, { payload }: ReturnType<typeof SET_VIEW>) => {
         state.view = payload.view
       },
-
       [CHECKLIST_ITEM_UPDATED.type]: (
         state,
         { payload }: ReturnType<typeof CHECKLIST_ITEM_UPDATED>

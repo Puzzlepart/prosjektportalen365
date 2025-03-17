@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import { format } from '@fluentui/react/lib/Utilities'
 import { dateAdd, PnPClientStorage } from '@pnp/core'
 import {
@@ -16,13 +18,17 @@ import {
   DataSource,
   DataSourceService,
   DefaultCaching,
+  getClassProperties,
   getUserPhoto,
   IGraphGroup,
+  IPortalDataServiceConfiguration,
+  ItemFieldValues,
   PortalDataService,
   PortfolioOverviewView,
   ProjectContentColumn,
   ProjectListModel,
   SPContentType,
+  SPField,
   SPFxContext,
   SPProjectItem,
   SPTimelineConfigurationItem,
@@ -40,18 +46,26 @@ import {
   ChartData,
   ChartDataItem,
   DataField,
+  IdeaConfigurationModel,
   ProgramItem,
-  SPChartConfigurationItem
+  SPChartConfigurationItem,
+  SPIdeaConfigurationItem
 } from '../models'
 import * as config from './config'
 import {
+  GetPortfolioConfigError,
   IFetchDataForViewItemResult,
   IPortfolioViewData,
   IPortfolioWebPartsDataAdapter,
-  IProjectsData
+  IProjectsData,
+  PortfolioInstance
 } from './types'
 import { IPersonaProps, IPersonaSharedProps } from '@fluentui/react'
 import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
+import { Idea } from 'components/IdeaModule'
+import { IItem } from '@pnp/sp/items/types'
+import { WebPartContext } from '@microsoft/sp-webpart-base'
+import { LogLevel } from '@pnp/logging'
 
 /**
  * Data adapter for Portfolio Web Parts.
@@ -76,13 +90,31 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
    *
    * The `dataSourceService` is dependent on the `portalDataService` being configured, as it needs
    * `portalDataService.web` to be passed as a parameter to its constructor.
+   *
+   * @param _spfxContext SPFx context (not used)
+   * @param _configuration Configuration (not used)
+   * @param portfolio Optionally the portfolio instance to configure the data adapter for
    */
-  public async configure(): Promise<DataAdapter> {
+  public async configure(
+    _spfxContext?: WebPartContext,
+    _configuration?: any,
+    portfolio?: PortfolioInstance
+  ): Promise<DataAdapter> {
     await msGraph.Init(this._spfxContext.msGraphClientFactory)
     if (this.dataSourceService && this.portalDataService.isConfigured) return this
-    this.portalDataService = await this.portalDataService.configure({
-      spfxContext: this._spfxContext
-    })
+    const configuration: IPortalDataServiceConfiguration = {
+      spfxContext: this._spfxContext,
+      url: portfolio?.url,
+      activeLogLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+    }
+    if (portfolio) {
+      configuration.listNames = {
+        PROJECT_COLUMNS: portfolio.columnsListName,
+        PROJECT_COLUMN_CONFIGURATION: portfolio.columnConfigListName,
+        PORTFOLIO_VIEWS: portfolio.viewsListName
+      }
+    }
+    this.portalDataService = await this.portalDataService.configure(configuration)
     this.dataSourceService = new DataSourceService(this.portalDataService.web)
     return this
   }
@@ -127,32 +159,35 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   }
 
   public async getPortfolioConfig(): Promise<IPortfolioOverviewConfiguration> {
-    // eslint-disable-next-line prefer-const
-    const [columnConfig, columns, views, programs, viewsUrls, columnUrls, userCanAddViews] =
-      await Promise.all([
-        this.portalDataService.getProjectColumnConfig(),
-        this.portalDataService.getProjectColumns(),
-        this.portalDataService.getPortfolioOverviewViews(),
-        this.portalDataService.getPrograms(ProgramItem),
-        this.portalDataService.getListFormUrls('PORTFOLIO_VIEWS'),
-        this.portalDataService.getListFormUrls('PROJECT_COLUMNS'),
-        this.portalDataService.currentUserHasPermissionsToList(
-          'PORTFOLIO_VIEWS',
-          PermissionKind.AddListItems
-        )
-      ])
-    const configuredColumns = columns.map((col) => col.configure(columnConfig))
-    const refiners = columns.filter((col) => col.isRefinable)
-    const configuredViews = views.map((view) => view.configure(columns))
-    return {
-      columns: configuredColumns,
-      refiners,
-      views: configuredViews,
-      programs,
-      viewsUrls,
-      columnUrls,
-      userCanAddViews
-    } as IPortfolioOverviewConfiguration
+    try {
+      const [columnConfig, columns, views, programs, viewsUrls, columnUrls, userCanAddViews] =
+        await Promise.all([
+          this.portalDataService.getProjectColumnConfig(),
+          this.portalDataService.getProjectColumns(),
+          this.portalDataService.getPortfolioOverviewViews(),
+          this.portalDataService.getPrograms(ProgramItem),
+          this.portalDataService.getListFormUrls('PORTFOLIO_VIEWS'),
+          this.portalDataService.getListFormUrls('PROJECT_COLUMNS'),
+          this.portalDataService.currentUserHasPermissionsToList(
+            'PORTFOLIO_VIEWS',
+            PermissionKind.AddListItems
+          )
+        ])
+      const refiners = columns.filter((col) => col.isRefinable)
+      return {
+        web: this.portalDataService.web,
+        columns: columns.map((col) => col.configure(columnConfig)),
+        views: views.map((view) => view.configure(columns)),
+        refiners,
+        programs,
+        viewsUrls,
+        columnUrls,
+        userCanAddViews,
+        hubSiteId: this.portalDataService.hubSiteId
+      } as IPortfolioOverviewConfiguration
+    } catch (error) {
+      throw GetPortfolioConfigError(error)
+    }
   }
 
   public async getAggregatedListConfig(
@@ -230,7 +265,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           ...statusReport,
           ...project,
           Title: site.Title,
-          Path: site.Path,
+          Path: site?.Path,
+          SPWebUrl: site?.SPWebUrl,
           SiteId: site['SiteId']
         }
       })
@@ -263,7 +299,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         return {
           ...statusReport,
           ...project,
-          Path: site && site.Path,
+          Path: site?.Path,
+          SPWebUrl: site?.SPWebUrl,
           SiteId: project[siteIdProperty]
         }
       })
@@ -335,6 +372,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       ]),
       this._fetchItems(`DepartmentId:{${siteId}} contentclass:STS_Site`, [
         'Path',
+        'SPWebUrl',
         'Title',
         'SiteId'
       ]),
@@ -518,7 +556,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       Querytext: `DepartmentId:{${hubSiteId}} contentclass:STS_Site`,
       TrimDuplicates: false,
       RowLimit: rowLimit,
-      SelectProperties: ['Title', 'Path', 'SiteId', 'Created'],
+      SelectProperties: ['Title', 'Path', 'SPWebUrl', 'SiteId', 'Created'],
       SortList: [
         {
           Property: sortProperty,
@@ -587,7 +625,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       users
     }
     let projects = this._combineResultData(result)
-    projects = projects.filter((m) => m.lifecycleStatus !== 'Avsluttet')
+    projects = projects.filter(
+      (m) => m.lifecycleStatus !== 'Avsluttet' && m.lifecycleStatus !== 'Stengt'
+    )
     projects = projects.sort((a, b) => a.title.localeCompare(b.title))
     return projects
   }
@@ -1023,6 +1063,124 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       return exists
     } catch (error) {
       return false
+    }
+  }
+
+  public async getIdeaConfiguration(
+    listName: string = 'Idékonfigurasjon',
+    configurationName: string = 'Standard'
+  ): Promise<IdeaConfigurationModel> {
+    try {
+      const config = await this._sp.web.lists
+        .getByTitle(listName)
+        .select(...new SPIdeaConfigurationItem().fields)
+        .items()
+
+      return (
+        config
+          .map((item) => new IdeaConfigurationModel(item))
+          .find((item) => item.title === configurationName) || new IdeaConfigurationModel(config[0])
+      )
+    } catch (error) {
+      return error
+    }
+  }
+
+  public async getItemFieldValues(item: IItem, userFields: string[] = []) {
+    const [fieldValuesAsText, fieldValues] = await Promise.all([
+      item.fieldValuesAsText<Record<string, string>>(),
+      item
+        .select(
+          '*',
+          ...userFields.map((fieldName) => `${fieldName}/Id`),
+          ...userFields.map((fieldName) => `${fieldName}/Title`),
+          ...userFields.map((fieldName) => `${fieldName}/EMail`)
+        )
+        .expand(...userFields)<Record<string, any>>()
+    ])
+    return ItemFieldValues.create({ fieldValues, fieldValuesAsText })
+  }
+
+  public async getIdeasData(configuration: IdeaConfigurationModel): Promise<Idea> {
+    const getListData = async (
+      listName: string
+    ): Promise<{ items: any[]; fieldValues: ItemFieldValues[]; fields: SPField[] }> => {
+      const [listInfo] = await this._sp.web.lists.filter(`Title eq '${listName}'`).select('Id')()
+      const list = this._sp.web.lists.getById(listInfo.Id)
+      const items = await list.items()
+
+      const fields = await list.fields
+        .select(...getClassProperties(SPField))
+        .filter(
+          "substringof('Gt', InternalName) or InternalName eq 'Title' or InternalName eq 'Id'"
+        )<SPField[]>()
+
+      const userFields = fields
+        .filter((fld) => fld.TypeAsString.indexOf('User') === 0)
+        .map((fld) => fld.InternalName)
+
+      const listItems = await Promise.all(
+        items.map(async (item) => {
+          const listItem = await list.items.getById(item.Id)
+          return listItem
+        })
+      )
+
+      const allFieldValues = await Promise.all(
+        listItems.map(async (item) => {
+          const fieldValues = await this.getItemFieldValues(item, userFields)
+          return fieldValues
+        })
+      )
+
+      return {
+        items: items,
+        fieldValues: allFieldValues,
+        fields
+      }
+    }
+
+    const level = strings.DataSourceLevelPortfolio
+
+    const columns: ProjectContentColumn[] = await new Promise((resolve, reject) => {
+      this.portalDataService
+        .fetchProjectContentColumns('PROJECT_CONTENT_COLUMNS', 'Idémodul', level)
+        .then(resolve)
+        .catch(reject)
+    })
+
+    const registrationData = await getListData(configuration.registrationList)
+    const processingData = await getListData(configuration.processingList)
+
+    const itemsData = registrationData.items.map((registered) => {
+      const processing = processingData.items.find(
+        (processingItem) => processingItem.GtRegistratedIdeaId === registered.Id
+      )
+
+      return { ...registered, processing }
+    })
+
+    const fieldValues = registrationData.fieldValues.map((values) => {
+      const processingFieldValues = processingData.fieldValues.find(
+        (processingFieldValues) => processingFieldValues.id === values.id
+      )
+
+      return { ...values, ...processingFieldValues }
+    })
+
+    return {
+      data: {
+        items: itemsData,
+        fieldValues: {
+          registered: registrationData.fieldValues,
+          processing: processingData.fieldValues
+        },
+        fields: {
+          registered: registrationData.fields,
+          processing: processingData.fields
+        },
+        columns
+      }
     }
   }
 }

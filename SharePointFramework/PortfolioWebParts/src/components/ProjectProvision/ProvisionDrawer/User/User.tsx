@@ -71,7 +71,13 @@ export const User = (props: { type: string; disabled?: boolean }) => {
       const secondaryText = matchingUsers.find((u) => u.text === user)?.secondaryText
 
       return (
-        <TagPickerOption key={user} value={user}>
+        <TagPickerOption
+          {...({
+            key: user,
+            value: user,
+            text: user
+          } as any)}
+        >
           <Persona
             avatar={{
               image: {

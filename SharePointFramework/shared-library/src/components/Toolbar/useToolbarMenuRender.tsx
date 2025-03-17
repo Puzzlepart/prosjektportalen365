@@ -8,7 +8,8 @@ import {
   MenuPopover,
   MenuProps,
   MenuTrigger,
-  ToolbarButton
+  ToolbarButton,
+  Tooltip
 } from '@fluentui/react-components'
 import React, { CSSProperties, useState } from 'react'
 import { createIcon } from './createIcon'
@@ -34,15 +35,21 @@ export function useToolbarMenuRender() {
   ) {
     return (
       <div hidden={item.hidden}>
-        <ToolbarButton
-          icon={createIcon(item)}
-          title={item.text}
-          style={createStyle(item, buttonStyle)}
-          onClick={item.onClick}
-          disabled={item.disabled}
+        <Tooltip
+          content={item.description}
+          relationship={Boolean(item.text) ? 'description' : 'label'}
+          withArrow
         >
-          {item.text && <span style={labelStyle}>{item.text}</span>}
-        </ToolbarButton>
+          <ToolbarButton
+            icon={createIcon(item)}
+            title={item.text}
+            style={createStyle(item, buttonStyle)}
+            onClick={item.onClick}
+            disabled={item.disabled}
+          >
+            {item.text && <span style={labelStyle}>{item.text}</span>}
+          </ToolbarButton>
+        </Tooltip>
       </div>
     )
   }
@@ -80,7 +87,9 @@ export function useToolbarMenuRender() {
         </div>
       )
     }
+
     if (item.items) return renderMenu(item)
+
     return (
       <div hidden={item.hidden}>
         <MenuItem
@@ -113,7 +122,7 @@ export function useToolbarMenuRender() {
     }
 
     return (
-      <Menu open={open} onOpenChange={onOpenChange} closeOnScroll>
+      <Menu open={open} onOpenChange={onOpenChange} closeOnScroll positioning={{ autoSize: true }}>
         <MenuTrigger disableButtonEnhancement>
           {renderMenuButton(
             item,

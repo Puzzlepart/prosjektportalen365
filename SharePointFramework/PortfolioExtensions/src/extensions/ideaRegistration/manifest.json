@@ -4,7 +4,7 @@
   "alias": "IdeaRegistration",
   "componentType": "Extension",
   "extensionType": "ListViewCommandSet",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "items": {
@@ -17,7 +17,7 @@
     },
     "IDEA_PROCESSING_LINK": {
       "title": {
-        "default": "Gå til idébehandling"
+        "default": "Gå til behandling"
       },
       "iconImageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAA/lJREFUWEe1l02ME2UYx//P27orIiaiQQ9GiSCShU5ljQfU2OnWQKKi7E4HDReJXvSiRCT4Fa0hfhDUqBe9aPBCdNvpqqAJxG7fGpWDcbFTdoOrGCQckCAmrl+7tu9jZtrisEw70y3Oceb5+L3P5zuEEM/q1ea8P3uVoYBHCLjJT4WBrwXw5kXTwjpwIPtXCLOuCAUJasl0Cop3g7AoSNb9zjgJQRvtYq4QRr4dAGnJ9JNgfuGMIYbNwIcQNBbhatl5X6NoHIr7CVgPgnZGluhpu5h7yUVq87QE0HTjUQCv/+ecn1pIp3dKKat+9nRdj57mhVtB9KLn+2ZbWm90DLByIH2zUPxlQ/G4iuDOQwXLDhPSlSlDEzV8AuAqR14JuuXQaO6rVrp+ESAtYRwGYVkYA36GzzoAY9IuWctbpeIcAG1gcABKuAVE4B1lmX8izMlny8T1oZcZtM19L1TKHh0Z9bNzDkA8aQwzw3Sqef6MWNxJS3kdOK37R4866nQPEbLlorUhFICWMH52lJgxXClZ987l9E2dWML4gAgbnMPYJeuKQIDF+qYLL8FUY4jQVlvmXukGQNPTjwO807HxGxbMOyp3/T3b3lkpWKGbSyNQ37v5F7S2PJrb3w1AfCC9hhXvc+cFxHXjMvtDe4DbzasjVfVTXYhNW+Zz3QDEEmmTiIddgKi4Zvyz7LG2AN4UdNMBTSfeTgiVAkdRSxjfOTOAAVmRVrKrCOhGkQAd9VlwfWAROgJxPb2dwc+4daDQX/7cOjgXiPhtxioWGHOTSby9Usw/Gwoglhq6lmp0pF4GmJw/I27odBY0ZsC3zWnKEV5SKeR/DAXgRiFpPMCMd1wGxmuVkrWlkyjEEsarRHjMjSLhwXLRereVfqttSJpujAC4p9OW9LYegI9saa1vB996Ha8ZXIQZ4fTtAgBTVYhlEzJ7op2xPt28Mgo12dRBj1pq7x85OSeARkHexeA9DQP7bD12BzIZ5WswkxGarHwKYK0bNdC6ssztDUpd8JVMN94C8JBjqN1un3WHeNuW1sNBzuugAU+fbl4cZXWkfifkjC3zz/upaPrQcwBlnMVTJbFkQmZ/D7IdCsAR8my1Mbtk3egLkDC+AaG/0y0aGAHHmXergeh+YjXthWASvWB+r/6usy0aDsBzSwoMa5vbT+hBNFtwVcrsq9XUeKBzAJGIWHGwkJ0IIxu6BrwAfg6Cvs95DjQVgxwEfT+vAH4b0rv5/pcULE8NXtZTE6eaExGgXQTl/nIxBAG8qTkBZyLq8sOFkV/Oaw3UW9H4GMC6AMN7bGndHdZ56CJ0h9GtGy+lC6Z3gHFfY9l4/UyB8D7/07ut8sXuXzsB+BfElbcwrolkGwAAAABJRU5ErkJggg==",
       "type": "command"

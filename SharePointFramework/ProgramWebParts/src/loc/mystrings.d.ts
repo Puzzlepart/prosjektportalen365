@@ -45,6 +45,7 @@ declare interface IProgramWebPartsStrings {
   ColumnRenderOptionCurrencyPrefixLabel: string
   ColumnRenderOptionDate: string
   ColumnRenderOptionDateIncludeTimeLabel: string
+  ColumnRenderOptionInstrument: string
   ColumnRenderOptionDialog: string
   ColumnRenderOptionDialogInfoTextTemplateDescription: string
   ColumnRenderOptionDialogInfoTextTemplateLabel: string
@@ -167,6 +168,7 @@ declare interface IProgramWebPartsStrings {
   SearchPropertyPlaceholder: string
   SearchQueryLabel: string
   ShowAllMeasurementsLinkText: string
+  ShowInstrumentLinkText: string
   ShowCommandBarLabel: string
   ShowExcelExportButtonLabel: string
   ShowFieldFrontpageLabel: string

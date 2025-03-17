@@ -1,4 +1,10 @@
-import { CheckboxCheckedFilled, CheckboxCheckedRegular, bundleIcon } from '@fluentui/react-icons'
+import {
+  CheckboxCheckedFilled,
+  CheckboxCheckedRegular,
+  DraftsFilled,
+  DraftsRegular,
+  bundleIcon
+} from '@fluentui/react-icons'
 import strings from 'ProjectWebPartsStrings'
 import { ListMenuItem } from 'pp365-shared-library'
 import { formatDate } from 'pp365-shared-library/lib/util/formatDate'
@@ -98,7 +104,7 @@ export function useToolbarItems() {
             }),
         new ListMenuItem(
           state.selectedReport
-            ? formatDate(state.selectedReport.created)
+            ? formatDate(state.selectedReport.publishedDate ?? state.selectedReport.modified)
             : strings.NoReportsFoundTitle
         )
           .setIcon('History')
@@ -107,13 +113,15 @@ export function useToolbarItems() {
           .setDisabled(state.data.reports.length < 2)
           .setItems(
             state.data.reports.map((report) =>
-              new ListMenuItem(formatDate(report.created, true), null)
+              new ListMenuItem(formatDate(report.publishedDate ?? report.modified, true), null)
                 .setIcon(
-                  report.published ? bundleIcon(CheckboxCheckedFilled, CheckboxCheckedRegular) : ''
+                  report.published
+                    ? bundleIcon(CheckboxCheckedFilled, CheckboxCheckedRegular)
+                    : bundleIcon(DraftsFilled, DraftsRegular)
                 )
                 .makeCheckable({
                   name: 'report',
-                  value: formatDate(report.created, true)
+                  value: formatDate(report.publishedDate ?? report.modified, true)
                 })
                 .setOnClick(() => {
                   SPDataAdapter.portalDataService
@@ -123,7 +131,14 @@ export function useToolbarItems() {
                     })
                 })
             ),
-            { report: [formatDate(state.selectedReport?.created, true)] }
+            {
+              report: [
+                formatDate(
+                  state.selectedReport?.publishedDate ?? state.selectedReport?.modified,
+                  true
+                )
+              ]
+            }
           ),
         state.selectedReport &&
           new ListMenuItem(

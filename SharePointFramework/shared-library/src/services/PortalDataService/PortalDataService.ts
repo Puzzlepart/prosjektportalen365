@@ -1,12 +1,17 @@
+import { format } from '@fluentui/react'
 import { find } from '@microsoft/sp-lodash-subset'
 import { AssignFrom, dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/core'
-import { Logger, LogLevel } from '@pnp/logging'
+import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import { IFolder } from '@pnp/sp/folders'
 import { ICamlQuery, IList } from '@pnp/sp/lists'
+import '@pnp/sp/presets/all'
 import { IItemUpdateResult, IItemUpdateResultData, spfi, SPFI } from '@pnp/sp/presets/all'
 import { PermissionKind } from '@pnp/sp/security'
 import { IWeb } from '@pnp/sp/webs'
+import { merge } from 'lodash'
+import strings from 'SharedLibraryStrings'
 import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
+import _ from 'underscore'
 import { createSpfiInstance, DefaultCaching, getItemFieldValues } from '../../data'
 import { ISPContentType } from '../../interfaces'
 import {
@@ -31,24 +36,24 @@ import {
   StatusReportAttachment
 } from '../../models'
 import { getClassProperties, makeUrlAbsolute, transformFieldXml } from '../../util'
+import { DataService } from '../DataService'
 import {
   GetStatusReportsOptions,
   IPortalDataServiceConfiguration,
+  IProjectDetails,
   ISyncListReturnType,
+  NoAccessToPortfolioError,
   PortalDataServiceDefaultConfiguration,
   PortalDataServiceList,
-  SyncListParams,
-  IProjectDetails
+  SyncListParams
 } from './types'
-import { DataService } from '../DataService'
-import '@pnp/sp/presets/all'
-import _ from 'underscore'
 
 export class PortalDataService extends DataService<IPortalDataServiceConfiguration> {
   private _sp: SPFI
   private _spPortal: SPFI
   public web: IWeb
   public url: string
+  public hubSiteId: string
 
   /**
    * Configure PortalDataService
@@ -58,26 +63,59 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   public async configure(
     configuration: IPortalDataServiceConfiguration
   ): Promise<PortalDataService> {
-    super.onConfigureStart({ ...PortalDataServiceDefaultConfiguration, ...configuration })
+    Logger.subscribe(ConsoleListener())
+    Logger.activeLogLevel = configuration.activeLogLevel
+    Logger.log({
+      message: '(PortalDataService) (configure) Configuring PortalDataService',
+      level: LogLevel.Info,
+      data: _.pick(configuration, 'listNames', 'url')
+    })
+    super.onConfigureStart(merge({ ...PortalDataServiceDefaultConfiguration }, configuration))
     this._sp = createSpfiInstance(this._configuration.spfxContext)
-    await this.initPortalSite()
+    await this.onInit(configuration?.url)
     return super.onConfigured()
   }
 
   /**
-   * Initialize portal site setting `url`, `_spPortal` and `web` properties. Caches the result in local storage
-   * to avoid unnecessary requests.
+   * Initialize the `PortalDataService` instance. If the `url` parameter is
+   * set, the instance will be initialized with the specified URL. If the
+   * `url` parameter is not set, the instance will be initialized with the
+   * URL from the hub site ID in the SPFx context.
    *
-   * @param expire Expire (defaults to 1 year)
+   * @param url URL (optional)
+   * @param expire Expire date for the hub site ID (optional with default of 1 year)
    */
-  private async initPortalSite(expire: Date = dateAdd(new Date(), 'year', 1)): Promise<void> {
+  private async onInit(url?: string, expire: Date = dateAdd(new Date(), 'year', 1)): Promise<void> {
+    Logger.write(
+      `(PortalDataService) (onInit) Initializing PortalDataService instance with URL ${url}`,
+      LogLevel.Info
+    )
+    if (url) {
+      this.url = url
+      this._spPortal = spfi(this.url).using(AssignFrom(this._sp.web))
+      this.web = this._spPortal.web
+      this.hubSiteId = await new PnPClientStorage().local.getOrPut(
+        `hubsite_${this.url.replace(/-/g, '')}_id`,
+        async () => {
+          const { PrimarySearchResults } = await this._sp.search({
+            Querytext: `Path=${this.url} contentclass:STS_Site`,
+            SelectProperties: ['SiteId', 'Path']
+          })
+          if (PrimarySearchResults.length === 0) {
+            throw NoAccessToPortfolioError(this.url)
+          }
+          return PrimarySearchResults[0].SiteId
+        },
+        expire
+      )
+      return
+    }
     try {
-      const hubSiteId =
-        this._configuration.spfxContext.pageContext.legacyPageContext.hubSiteId || ''
+      this.hubSiteId = this._configuration.spfxContext.pageContext.legacyPageContext.hubSiteId || ''
       try {
-        const { SiteUrl } = await (
+        const hubSite = await (
           await fetch(
-            `${this._configuration.spfxContext.pageContext.web.absoluteUrl}/_api/HubSites/GetById('${hubSiteId}')`,
+            `${this._configuration.spfxContext.pageContext.web.absoluteUrl}/_api/HubSites/GetById('${this.hubSiteId}')`,
             {
               method: 'GET',
               headers: {
@@ -87,13 +125,13 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
             }
           )
         ).json()
-        this.url = SiteUrl
+        this.url = hubSite.SiteUrl
       } catch (error) {
         this.url = await new PnPClientStorage().local.getOrPut(
-          `hubsite_${hubSiteId.replace(/-/g, '')}_url`,
+          `hubsite_${this.hubSiteId.replace(/-/g, '')}_url`,
           async () => {
             const { PrimarySearchResults } = await this._sp.search({
-              Querytext: `SiteId:${hubSiteId} contentclass:STS_Site`,
+              Querytext: `SiteId:${this.hubSiteId} contentclass:STS_Site`,
               SelectProperties: ['Path']
             })
             return PrimarySearchResults[0] ? PrimarySearchResults[0].Path : ''
@@ -185,6 +223,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
 
   /**
    * Get project columns from the project columns list in the portfolio site.
+   * Optionally override the list name with the `listName` parameter.
    */
   public async getProjectColumns(): Promise<ProjectColumn[]> {
     try {
@@ -432,6 +471,9 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
           message: `(PortalDataService) (syncList) Adding field [${field.InternalName}] to list [${params.listName}].`,
           level: LogLevel.Info
         })
+        if (params.progressFunc) {
+          params.progressFunc(format(strings.SyncListAddingField, field.Title))
+        }
         if (siteField) {
           const fldToAdd = jsomContext.web
             .get_fields()

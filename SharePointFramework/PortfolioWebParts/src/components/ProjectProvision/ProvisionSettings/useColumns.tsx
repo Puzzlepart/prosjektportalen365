@@ -1,21 +1,18 @@
 /* eslint-disable no-console */
 import {
   Button,
+  createTableColumn,
   TableCellLayout,
   TableColumnDefinition,
-  createTableColumn,
   Text
 } from '@fluentui/react-components'
-import React, { useContext } from 'react'
-import styles from './ProvisionSettings.module.scss'
-import { ProjectProvisionContext } from '../context'
-import { getFluentIcon } from 'pp365-shared-library'
-import { IRequestSettingsItem } from './types'
 import strings from 'PortfolioWebPartsStrings'
+import { getFluentIcon } from 'pp365-shared-library'
+import React from 'react'
+import styles from './ProvisionSettings.module.scss'
+import { IRequestSettingsItem } from './types'
 
 export const useColumns = (toast: any): TableColumnDefinition<IRequestSettingsItem>[] => {
-  const context = useContext(ProjectProvisionContext)
-
   return [
     createTableColumn<IRequestSettingsItem>({
       columnId: 'title',
@@ -87,12 +84,11 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestSettingsIt
     createTableColumn<IRequestSettingsItem>({
       columnId: 'actions',
       renderHeaderCell: () => null,
-      renderCell: (setting) => {
+      renderCell: () => {
         return (
           <div className={styles.actions}>
             <Button
               appearance='subtle'
-              onClick={() => console.log(`edit request ${setting.title}`)} // Add edit functionality for settings
               disabled
               title={strings.Provision.EditLabel}
               icon={getFluentIcon('Edit')}

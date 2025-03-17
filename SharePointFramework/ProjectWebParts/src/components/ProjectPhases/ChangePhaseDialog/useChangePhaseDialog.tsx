@@ -21,7 +21,7 @@ export function useChangePhaseDialog() {
    *
    * @param properties Properties
    */
-  const nextChecklistItem = async (properties: Partial<Record<string, any>>) => {
+  const nextChecklistItem = async (properties: Partial<Record<string, any>>): Promise<void> => {
     const currentItem = [...state.checklistItems][state.currentIdx]
     await SPDataAdapter.project.updateChecklistItem(
       strings.PhaseChecklistName,

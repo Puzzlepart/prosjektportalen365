@@ -46,7 +46,9 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
                       [6, 'months'],
                       [8, 'months'],
                       [10, 'months'],
-                      [12, 'months']
+                      [12, 'months'],
+                      [24, 'months'],
+                      [36, 'months']
                     ].map((val) => ({
                       key: val.toString(),
                       text: format(strings.DefaultTimeframeStartValue, val[0])
@@ -62,7 +64,9 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
                       [6, 'months'],
                       [8, 'months'],
                       [10, 'months'],
-                      [12, 'months']
+                      [12, 'months'],
+                      [24, 'months'],
+                      [36, 'months']
                     ].map((val) => ({
                       key: val.toString(),
                       text: format(strings.DefaultTimeframeEndValue, val[0])

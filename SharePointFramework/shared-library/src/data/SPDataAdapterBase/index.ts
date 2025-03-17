@@ -1,6 +1,6 @@
 import { format, IPersonaSharedProps, ITag } from '@fluentui/react'
 import { SPUser } from '@microsoft/sp-page-context'
-import { dateAdd, IPnPClientStore, PnPClientStorage } from '@pnp/core'
+import { IPnPClientStore, PnPClientStorage } from '@pnp/core'
 import { SPFI } from '@pnp/sp'
 import '@pnp/sp/presets/all'
 import { IWeb, PermissionKind } from '@pnp/sp/presets/all'
@@ -133,91 +133,82 @@ export class SPDataAdapterBase<
   }
 
   /**
-   * Check project admin permissions. The result is stored in `sessionStorage`
-   * for `expireMinutes` _(default 10)_ minutes to avoid too many requests.
+   * Check project admin permissions.
    *
    * @param permission Permission to check
    * @param properties Project properties
-   * @param expireMinutes Expiry in minutes (default 10)
    */
   public async checkProjectAdminPermissions(
     permission: ProjectAdminPermission,
-    properties: ItemFieldValues,
-    expireMinutes = 10
+    properties: ItemFieldValues
   ) {
     try {
       const { pageContext } = this.spfxContext
       if (!pageContext) return false
-      const storageKey = this.getStorageKey('getProjectAdminPermissions')
-      const storageExpire = dateAdd(new Date(), 'minute', expireMinutes)
-      const permissions = await new PnPClientStorage().session.getOrPut(
-        storageKey,
-        async () => {
-          const userPermissions = []
-          const rolesToCheck = properties.get('GtProjectAdminRoles').value
-          if (!_.isArray(rolesToCheck) || _.isEmpty(rolesToCheck)) {
-            const currentUserHasManageWebPermisson = await this.sp.web.currentUserHasPermissions(
-              PermissionKind.ManageWeb
-            )
-            if (currentUserHasManageWebPermisson) return true
-          }
-          const currentUser = await this.getCurrentUser(pageContext.user)
-          const projectAdminRoles = (await this.portalDataService.getProjectAdminRoles()).filter(
-            (role) => rolesToCheck.indexOf(role.title) !== -1
+
+      const permissions = await (async () => {
+        const userPermissions = []
+        const rolesToCheck = properties.get('GtProjectAdminRoles').value
+        if (!_.isArray(rolesToCheck) || _.isEmpty(rolesToCheck)) {
+          const currentUserHasManageWebPermisson = await this.sp.web.currentUserHasPermissions(
+            PermissionKind.ManageWeb
           )
-          for (let i = 0; i < projectAdminRoles.length; i++) {
-            const role = projectAdminRoles[i]
-            switch (role.type) {
-              case ProjectAdminRoleType.SiteAdmin:
-                {
-                  try {
-                    const currentUserHasManageWebPermisson =
-                      await this.sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
-                    if (currentUserHasManageWebPermisson) userPermissions.push(...role.permissions)
-                  } catch {}
+          if (currentUserHasManageWebPermisson) return true
+        }
+        const currentUser = await this.getCurrentUser(pageContext.user)
+        const projectAdminRoles = (await this.portalDataService.getProjectAdminRoles()).filter(
+          (role) => rolesToCheck.indexOf(role.title) !== -1
+        )
+        for (let i = 0; i < projectAdminRoles.length; i++) {
+          const role = projectAdminRoles[i]
+          switch (role.type) {
+            case ProjectAdminRoleType.SiteAdmin:
+              {
+                try {
+                  const currentUserHasManageWebPermisson =
+                    await this.sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
+                  if (currentUserHasManageWebPermisson) userPermissions.push(...role.permissions)
+                } catch {}
+              }
+              break
+            case ProjectAdminRoleType.ProjectProperty:
+              {
+                const projectFieldValue = properties.get(role.projectFieldName).value
+                if (
+                  _.isArray(projectFieldValue) &&
+                  projectFieldValue.indexOf(currentUser.Id) !== -1
+                )
+                  userPermissions.push(...role.permissions)
+                if (projectFieldValue === currentUser?.Id) userPermissions.push(...role.permissions)
+              }
+              break
+            case ProjectAdminRoleType.SharePointGroup:
+              {
+                let web: IWeb = null
+                switch (role.groupLevel) {
+                  case 'Prosjekt':
+                    web = this.sp.web
+                    break
+                  case 'Portefølje':
+                    web = this.portalDataService.web
+                    break
                 }
-                break
-              case ProjectAdminRoleType.ProjectProperty:
-                {
-                  const projectFieldValue = properties.get(role.projectFieldName).value
+                try {
                   if (
-                    _.isArray(projectFieldValue) &&
-                    projectFieldValue.indexOf(currentUser.Id) !== -1
+                    (
+                      await web.siteGroups
+                        .getByName(role.groupName)
+                        .users.filter(`Email eq '${currentUser.Email}'`)()
+                    ).length > 0
                   )
                     userPermissions.push(...role.permissions)
-                  if (projectFieldValue === currentUser?.Id)
-                    userPermissions.push(...role.permissions)
-                }
-                break
-              case ProjectAdminRoleType.SharePointGroup:
-                {
-                  let web: IWeb = null
-                  switch (role.groupLevel) {
-                    case 'Prosjekt':
-                      web = this.sp.web
-                      break
-                    case 'Portefølje':
-                      web = this.portalDataService.web
-                      break
-                  }
-                  try {
-                    if (
-                      (
-                        await web.siteGroups
-                          .getByName(role.groupName)
-                          .users.filter(`Email eq '${currentUser.Email}'`)()
-                      ).length > 0
-                    )
-                      userPermissions.push(...role.permissions)
-                  } catch {}
-                }
-                break
-            }
+                } catch {}
+              }
+              break
           }
-          return _.unique(userPermissions)
-        },
-        storageExpire
-      )
+        }
+        return _.unique(userPermissions)
+      })()
       if (typeof permissions === 'boolean') return permissions
       else return _.contains(permissions, permission.toString())
     } catch {

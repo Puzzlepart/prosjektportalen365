@@ -1,10 +1,44 @@
 # Endringslogg
 
-Sjekk ut [release notes](./releasenotes/1.10.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
+Sjekk ut [release notes](./releasenotes/1.11.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
 
-## 1.10.0 - TBA
+## 1.11.0 - TBA
 
 NB: Som en del av denne releasen må det godkjennes en ny app ved installasjon eller oppgradering. Dette skyldes at den tidligere PnP PowerShell appen som vi benyttet ikke lenger er tilgjengelig. Appen må godkjennes av Global Admin eller Application Admin. Prompt for å godkjenne denne appen vil automatisk dukke opp når brukeren setter i gang installasjonen. Som den del av denne endringen må nye oppdateringer og installasjoner gjøres med *PowerShell 7*.
+
+### Ny funksjonalitet
+
+- Lagt til instrumentvisning for 'Siste måling' på Gevinstoversikt [#1572](https://github.com/Puzzlepart/prosjektportalen365/issues/1572)
+- Ny Idémodul for visning av idéer (registrering/behandling) samt feltkonfigurasjon slik at relevant data fra idéregistreringen kan videreføres til behandling [#1573](https://github.com/Puzzlepart/prosjektportalen365/issues/1573)
+- Lagt til mulighet for egendefinerte farger på fasene i fasevelgeren [#1613](https://github.com/Puzzlepart/prosjektportalen365/issues/1613)
+
+### Forbedringer
+
+- Forbedret feilhåndtering for redigeringspanel for statusrapport [#1578](https://github.com/Puzzlepart/prosjektportalen365/issues/1578)
+- Forbedret feilhåndtering for provisjonering av Planner-oppgaver [#1593](https://github.com/Puzzlepart/prosjektportalen365/issues/1593)
+- Støtte for standalone Porteføljeoversikt [#1599](https://github.com/Puzzlepart/prosjektportalen365/issues/1599)
+- Støtte for å inkludere/eksludere tidskomponentene fra datofelter i aggregerte oversikter [#1575](https://github.com/Puzzlepart/prosjektportalen365/issues/1575)
+- Footer tar nå mindre plass, samt støtte for minimering og skjuling av footer på globalt nivå [#1586](https://github.com/Puzzlepart/prosjektportalen365/issues/1586)
+- Støtte for 24 og 36 mnd for tidsramme i Prosjekttidslinjen [#1448](https://github.com/Puzzlepart/prosjektportalen365/issues/1448)
+- Viser nå antall prosjekter i Porteføljeoversikten [#1483](https://github.com/Puzzlepart/prosjektportalen365/issues/1483)
+- Støtte for å definere en initiell (skjult) fase før prosjektet går inn i `Konsept`-fasen for å gjennomgå sjekkpunkter når fase angis for prosjektet [#1616](https://github.com/Puzzlepart/prosjektportalen365/issues/1616)
+- Mulighetsmatrise har fått samme tilpasningsmuligheter som Risikomatrise, inkluderer overstyring av farger og konfigurasjon
+- Forbedret prosjektstatus siden slik at det er tydeligere hva som er publisert og når. Samt bedre indikasjon på kladd. I tillegg er det gjort en rekke forbedringer på opprettelse, publisering og redigering av prosjektstatus, slik at man unngår å måtte laste inn side på nytt for å se endringer alle elementer på siden. [#1574](https://github.com/Puzzlepart/prosjektportalen365/issues/1574)
+- Hentet ut en gammel funksjon for synkronisering av felter fra hub til Prosjektegenskaper, ga den litt kjærlighet, og fikk den til å fungere igjen <3
+
+### Feilrettinger
+
+- Boolean felttyper vises nå riktig, og filtreres korrekt [#1579](https://github.com/Puzzlepart/prosjektportalen365/issues/1579)
+- Prosentkolonner sorteres nå riktig i aggregerte oversikter [#1581](https://github.com/Puzzlepart/prosjektportalen365/issues/1581)
+- Fikset et problem hvor skjuling/synliggjøring av visningvelger ikke ble lagret korrekt [#1560](https://github.com/Puzzlepart/prosjektportalen365/issues/1560)
+- Rettet et problem dersom brukeren gikk for raskt gjennom fasesjekkpunktene så ble det ikke registrert [#1609](https://github.com/Puzzlepart/prosjektportalen365/issues/1609)
+- Rettet et problem hvor menyer i porteføljeoversikt og aggregerte oversikter havnet utenfor skjermen [#1540](https://github.com/Puzzlepart/prosjektportalen365/issues/1540)
+- Dersom det var flere enn 16 sjekkpunkter så havnet disse utenfor "Endre til fase..."-dialogen. [#1607](https://github.com/Puzzlepart/prosjektportalen365/issues/1607)
+- Rettet et problem hvor programvisninger forble aktive selvom visningsvelgeren ble skrudd av [#1566](https://github.com/Puzzlepart/prosjektportalen365/issues/1566)
+
+## 1.10.0 - 23.09.2024
+
+NB: Som en del av denne versjonen kreves det godkjenning av en ny app-registrering ved installasjon eller oppgradering av Prosjektportalen 365. Dette skyldes at den tidligere PnP Management Shell-appen ikke lenger er tilgjengelig. Appen må godkjennes av en Global Administrator eller Application Administrator. Godkjenningsprosessen vil automatisk starte ved installasjon. Merk at oppdateringer og installasjoner nå må gjøres med PowerShell 7 eller nyere. [Les mer om dette her](https://github.com/Puzzlepart/prosjektportalen365/blob/main/releasenotes/1.10.0.md#overgang-til-nyeste-pnp-powershell)
 
 ### Ny funksjonalitet
 
@@ -14,6 +48,7 @@ NB: Som en del av denne releasen må det godkjennes en ny app ved installasjon e
 - Lagt til en aggregert oversikt for `Ressursallokering` i program og overordnet område mal [#1490](https://github.com/Puzzlepart/prosjektportalen365/issues/1490)
 
 ### Forbedringer
+
 - En ny visning i Porteføljeoversikt vil være personlig som standard [#1539](https://github.com/Puzzlepart/prosjektportalen365/issues/1539)
 
 ### Feilrettinger

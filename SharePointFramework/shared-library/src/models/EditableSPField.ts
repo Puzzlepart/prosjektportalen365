@@ -5,6 +5,7 @@ import { ItemFieldValues } from './ItemFieldValues'
 import { ProjectColumn, ProjectColumnFieldOverride } from './ProjectColumn'
 import { EditableSPFieldValue } from './EditableSPFieldValue'
 import { SPField } from './SPField'
+import { ProjectContentColumn } from './ProjectContentColumn'
 
 /**
  * An editable field for the `CustomEditPanel`.
@@ -106,8 +107,12 @@ export class EditableSPField extends SPField {
    * @param currentLocale Current locale
    * @param configurationName Configuration name
    */
-  public init(columns: ProjectColumn[], currentLocale?: string, configurationName?: string) {
-    this.column = columns.find((c) => c.internalName === this.internalName)
+  public init(
+    columns: (ProjectColumn | ProjectContentColumn)[],
+    currentLocale?: string,
+    configurationName?: string
+  ) {
+    this.column = columns.find((c) => c.internalName === this.internalName) as ProjectColumn
     this._isExternal = _.isEmpty(columns)
     this.displayName = this.column?.name ?? this.displayName
     this._initConfiguration(currentLocale, configurationName)

@@ -1,3 +1,4 @@
+export * from './ErrorWithIntent'
 export * from './IExcelExportConfig'
 export * from './IExcelExportSheet'
 export * from './IGraphGroup'

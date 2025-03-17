@@ -3,8 +3,10 @@ import { createAction, createReducer } from '@reduxjs/toolkit'
 import _ from 'lodash'
 import { IUserMessageProps } from 'pp365-shared-library/lib/components/UserMessage/types'
 import { SectionModel, StatusReport } from 'pp365-shared-library/lib/models'
-import { getUrlParam } from 'pp365-shared-library/lib/util'
+import { formatDate, getUrlParam } from 'pp365-shared-library/lib/util'
 import { FetchDataResult, IProjectStatusState } from './types'
+import strings from 'ProjectWebPartsStrings'
+import { format } from '@fluentui/react'
 
 /**
  * `INIT_DATA`: Dispatched by `useProjectStatusDataFetch` when data is loaded
@@ -70,6 +72,11 @@ export const OPEN_PANEL = createAction<IProjectStatusState['activePanel']>('OPEN
 export const CLOSE_PANEL = createAction('CLOSE_PANEL')
 
 /**
+ * `REFETCH_DATA`: Dispatched by ...
+ */
+export const REFETCH_DATA = createAction('REFETCH_DATA')
+
+/**
  * The initial state for the project status reducer.
  */
 export const initialState: IProjectStatusState = {
@@ -79,7 +86,8 @@ export const initialState: IProjectStatusState = {
     columnConfig: [],
     reportFields: []
   },
-  persistedSectionData: {}
+  persistedSectionData: {},
+  refetch: new Date().getTime()
 }
 
 /**
@@ -98,6 +106,18 @@ const createProjectStatusReducer = createReducer(initialState, {
     state.mostRecentReportId = _.first(payload.data.reports)?.id ?? 0
     state.userHasAdminPermission = payload.data.userHasAdminPermission
     state.isDataLoaded = true
+
+    if (payload.initialSelectedReport?.published) {
+      state.reportStatus = format(
+        strings.PublishedStatusReport,
+        formatDate(payload.initialSelectedReport?.publishedDate)
+      )
+    } else {
+      state.reportStatus = format(
+        strings.NotPublishedStatusReport,
+        formatDate(payload.initialSelectedReport?.modified)
+      )
+    }
   },
   [REPORT_PUBLISHING.type]: (state: IProjectStatusState) => {
     state.isPublishing = true
@@ -112,6 +132,7 @@ const createProjectStatusReducer = createReducer(initialState, {
     state.data = { ...state.data, reports }
     state.selectedReport = payload.updatedReport
     state.userMessage = payload.message
+    state.refetch = new Date().getTime()
     state.isPublishing = false
   },
   REPORT_PUBLISH_ERROR: (
@@ -127,6 +148,11 @@ const createProjectStatusReducer = createReducer(initialState, {
     state.selectedReport = _.first(reports)
     state.sourceUrl = decodeURIComponent(getUrlParam('Source') ?? '')
     state.mostRecentReportId = state.selectedReport?.id ?? 0
+    state.refetch = new Date().getTime()
+    state.reportStatus = format(
+      strings.PublishedStatusReport,
+      formatDate(state.selectedReport?.publishedDate)
+    )
   },
   [REPORT_DELETE_ERROR.type]: (
     state: IProjectStatusState,
@@ -143,6 +169,18 @@ const createProjectStatusReducer = createReducer(initialState, {
     )
     state.selectedReport = payload.report
     state.isDataLoaded = true
+
+    if (payload.report.published) {
+      state.reportStatus = format(
+        strings.PublishedStatusReport,
+        formatDate(payload.report?.publishedDate)
+      )
+    } else {
+      state.reportStatus = format(
+        strings.NotPublishedStatusReport,
+        formatDate(payload.report?.modified)
+      )
+    }
   },
   [PERSIST_SECTION_DATA.type]: (
     state: IProjectStatusState,
@@ -161,6 +199,10 @@ const createProjectStatusReducer = createReducer(initialState, {
   },
   [CLOSE_PANEL.type]: (state: IProjectStatusState) => {
     state.activePanel = null
+    state.refetch = new Date().getTime()
+  },
+  [REFETCH_DATA.type]: (state: IProjectStatusState) => {
+    state.refetch = new Date().getTime()
   }
 })
 

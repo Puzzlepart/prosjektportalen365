@@ -20,7 +20,9 @@ export const Actions: FC = () => {
       {
         actions.push({
           text: strings.Skip,
-          onClick: () => dispatch(SET_VIEW({ view: View.Confirm }))
+          onClick: () => dispatch(SET_VIEW({ view: View.Confirm })),
+          disabled: state.isChecklistMandatory,
+          title: state.isChecklistMandatory ? strings.ChecklistMandatory : undefined
         })
       }
       break

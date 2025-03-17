@@ -1,6 +1,6 @@
 {
   "name": "pp365-projectextensions",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
@@ -11,7 +11,7 @@
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
     "prewatch": "node node_modules/pzl-spfx-tasks --pre-watch --loglevel silent",
     "postwatch": "node node_modules/pzl-spfx-tasks --post-watch --loglevel silent",
-    "serve": "concurrently \"gulp serve-deprecated --locale=nb-no --nobrowser\"",
+    "serve": "concurrently \"gulp serve-deprecated --locale=nb-no --nobrowser NODE --max-old-space-size=8192\"",
     "build": "gulp bundle --ship && gulp package-solution --ship",
     "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color --fix --config ../.eslintrc.yaml && npm run prettier",
@@ -33,14 +33,14 @@
     "@uifabric/file-type-icons": "7.6.27",
     "@uifabric/utilities": "6.45.1",
     "msgraph-helper": "0.8.3",
-    "pp365-shared-library": "1.10.0",
+    "pp365-shared-library": "1.11.0",
     "react": "17.0.1",
     "react-autocomplete": "1.8.1",
     "react-dom": "17.0.1",
     "react-markdown": "^8.0.3",
     "rehype-raw": "^6.1.1",
     "sp-entityportal-service": "2.3.0",
-    "sp-js-provisioning": "1.2.4",
+    "sp-js-provisioning": "1.2.6",
     "spfx-jsom": "0.6.6",
     "tslib": "2.3.1",
     "underscore": "~1.13.6",
@@ -51,7 +51,8 @@
     "@fluentui/react-icons": "~2.0.240",
     "@microsoft/microsoft-graph-types": "~2.38.0",
     "usehooks-ts": "~2.9.1",
-    "lodash": "~4.17.21"
+    "lodash": "~4.17.21",
+    "react-gauge-component": "~1.2.61"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.17.4",

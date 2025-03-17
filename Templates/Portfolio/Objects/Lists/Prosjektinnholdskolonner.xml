@@ -2,6 +2,7 @@
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100033E98164175442BAAFDC0BCD98F037E" Default="true" />
+        <pnp:ContentTypeBinding ContentTypeID="0x0100F2E3AE5113CA4CCDA12439D77D6DD995" Default="true" />
     </pnp:ContentTypeBindings>
     <pnp:Views RemoveExistingViews="true">
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_ProjectContentColumns_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
@@ -49,6 +50,33 @@
             <Aggregations Value="Off" />
             <JSLink>clienttemplates.js</JSLink>
         </View>
+        <View MobileView="TRUE" Type="HTML" DisplayName="{resource:View_IdeaItems_DisplayName}" Url="{site}/{resource:Lists_ProjectContentColumns_Url}/IdeaItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
+            <Query>
+                <Where>
+                    <Eq>
+                        <FieldRef Name="ContentType" />
+                        <Value Type="Computed">{resource:ContentTypes_IdeaColumn_Name}</Value>
+                    </Eq>
+                </Where>
+                <OrderBy>
+                    <FieldRef Name="GtSortOrder" />
+                </OrderBy>
+            </Query>
+            <ViewFields>
+                <FieldRef Name="GtSortOrder" />
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtInternalName" />
+                <FieldRef Name="GtManagedProperty" />
+                <FieldRef Name="GtFieldDataType" />
+                <FieldRef Name="GtColMinWidth" />
+                <FieldRef Name="GtColMaxWidth" />
+                <FieldRef Name="GtIsGroupable" />
+                <FieldRef Name="GtIdeaCopyToProcess" />
+            </ViewFields>
+            <RowLimit Paged="TRUE">100</RowLimit>
+            <Aggregations Value="Off" />
+            <JSLink>clienttemplates.js</JSLink>
+        </View>
     </pnp:Views>
     <pnp:DataRows KeyColumn="GtInternalName" UpdateBehavior="Overwrite">
         <pnp:DataRow>            <!-- ID: 1 -->
@@ -61,6 +89,7 @@
             <pnp:DataValue FieldName="GtColMinWidth">120</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldLocked">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIdeaCopyToProcess">True</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 2 -->
             <pnp:DataValue FieldName="GtSortOrder">100</pnp:DataValue>
@@ -146,7 +175,7 @@
         <pnp:DataRow>            <!-- ID: 10 -->
             <pnp:DataValue FieldName="GtSortOrder">240</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Tiltak</pnp:DataValue>
-            <pnp:DataValue FieldName="GtInternalName">GtRiskActionOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtRiskAction</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtRiskActionOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Usikkerhetsoversikt</pnp:DataValue>
@@ -348,7 +377,7 @@
             <pnp:DataValue FieldName="Title">Siste måling</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">LastMeasurementValue</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">LastMeasurementValue</pnp:DataValue>
-            <pnp:DataValue FieldName="GtFieldDataType">Number</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Instrument</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
@@ -603,6 +632,16 @@
             <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
         </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 55 -->
+            <pnp:DataValue FieldName="Title">Endret</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">920</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">Modified</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">ModifiedOWSDATE</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Date</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory"></pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">120</pnp:DataValue>
+        </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 53 -->
             <pnp:DataValue FieldName="GtSortOrder">930</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Endret av</pnp:DataValue>
@@ -614,15 +653,15 @@
             <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>            <!-- ID: 55 -->
-            <pnp:DataValue FieldName="Title">Endret</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSortOrder">920</pnp:DataValue>
-            <pnp:DataValue FieldName="GtInternalName">Modified</pnp:DataValue>
-            <pnp:DataValue FieldName="GtManagedProperty">ModifiedOWSDATE</pnp:DataValue>
-            <pnp:DataValue FieldName="GtFieldDataType">Date</pnp:DataValue>
+        <pnp:DataRow>    <!-- ID: 66 -->
+            <pnp:DataValue FieldName="Title">Innholdstype</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">940</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">ContentType</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">ContentType</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory"></pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
-            <pnp:DataValue FieldName="GtColMaxWidth">120</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 56 -->
             <pnp:DataValue FieldName="GtSortOrder">640</pnp:DataValue>
@@ -728,6 +767,254 @@
             <pnp:DataValue FieldName="GtDataSourceCategory">Ressursallokering</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">1000</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Bakgrunn</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtIdeaBackground</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtIdeaBackgroundOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIdeaCopyToProcess">True</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">1010</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Problemstilling</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtIdeaIssue</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtIdeaIssueOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIdeaCopyToProcess">True</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">1020</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Mulige gevinster</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtIdeaPossibleGains</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtIdeaPossibleGainsOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIdeaCopyToProcess">True</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">1030</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Berørte parter</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtIdeaAffectedParties</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtIdeaAffectedPartiesOWSTEXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">120</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIdeaCopyToProcess">True</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">1040</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Løsningsforslag</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtIdeaSolutionProposals</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtIdeaSolutionProposalsOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIdeaCopyToProcess">True</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">1050</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Overordnet gjennomføringsplan</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtIdeaExecutionPlan</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtIdeaExecutionPlanOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIdeaCopyToProcess">True</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">1060</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Kritiske suksessfaktorer</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtIdeaCriticalSuccessFactors</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtIdeaCriticalSuccessFactorsOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIdeaCopyToProcess">True</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">1070</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Ressursbehov</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtIdeaResourceRequirements</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtIdeaResourceRequirementsOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIdeaCopyToProcess">True</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">1080</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Innmelder</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtIdeaReporter</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtIdeaReporter</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIdeaCopyToProcess">True</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">1090</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Idéeier</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtIdeaOwner</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtIdeaOwner</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">1100</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Overordnet løsningsbeskrivelse</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtIdeaSolutionDescription</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtIdeaSolutionDescriptionOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">1110</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Forventede gevinster</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtIdeaExpectedGain</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtIdeaExpectedGainOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">1120</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Gjennomføringsplan: Tilnærming</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtIdeaExecutionPlanApproach</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtIdeaExecutionPlanApproachOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">1130</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Gjennomføringsplan: Ressursbehov</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtIdeaExecutionResourceNeeds</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtIdeaExecutionResourceNeedsOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">1140</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Gjennomføringsplan: Suksessfaktorer</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtIdeaExecutionSuccessFactors</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtIdeaExecutionSuccessFactorsOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">1150</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Referanse</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtIdeaReference</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtIdeaReferenceOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">1160</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Andre kommentarer</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtIdeaOtherComments</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtIdeaOtherCommentsOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIdeaCopyToProcess">True</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">1170</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Anbefaling</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtIdeaRecommendation</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtIdeaRecommendationOWSCHCS</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Tags</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIdeaCopyToProcess">True</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">1180</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Kommentar til anbefaling</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtIdeaRecommendationComment</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtIdeaRecommendationCommentOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIdeaCopyToProcess">True</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">1190</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Beslutning</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtIdeaDecision</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtIdeaDecisionOWSCHCS</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Tags</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">1200</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Kommentar til beslutning</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtIdeaStrategicValue</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtIdeaDecisionCommentOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Idémodul</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100F2E3AE5113CA4CCDA12439D77D6DD995</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />

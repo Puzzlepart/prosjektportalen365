@@ -6,9 +6,11 @@ import { GetDataTypeProperties, IColumnDataTypeFieldOption } from './ColumnDataT
 import { BooleanColumn } from './BooleanColumn'
 import { CurrencyColumn } from './CurrencyColumn'
 import { NumberColumn } from './NumberColumn'
+import { NoteColumn } from './NoteColumn'
 import { PercentageColumn } from './PercentageColumn'
 import { DateColumn } from './DateColumn'
 import { DialogColumn } from './DialogColumn'
+import { InstrumentColumn } from './InstrumentColumn'
 import { FileNameColumn } from './FileNameColumn'
 import { ListColumn } from './ListColumn'
 import { TagsColumn } from './TagsColumn'
@@ -17,6 +19,7 @@ import { UrlColumn } from './UrlColumn'
 import { UserColumn } from './UserColumn'
 import { ColumnRenderComponent } from './types'
 import { ProjectInformationColumn } from './ProjectInformationColumn'
+import { StatusReportColumn } from './StatusReportColumn/StatusReportColumn'
 
 /**
  * A registry for column render components and column data type field options.
@@ -235,14 +238,17 @@ export function useColumnRenderComponentRegistry() {
       FileNameColumn,
       CurrencyColumn,
       NumberColumn,
+      NoteColumn,
       PercentageColumn,
       ListColumn,
       DialogColumn,
+      InstrumentColumn,
       TagsColumn,
       TrendColumn,
       UrlColumn,
       UserColumn,
-      ProjectInformationColumn
+      ProjectInformationColumn,
+      StatusReportColumn
     )
     ColumnRenderComponentRegistry.registerColumnRenderOption(
       'text',

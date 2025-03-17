@@ -20,7 +20,8 @@ import { MenuProps, useId } from '@fluentui/react-components'
 export function useColumnContextMenu() {
   const context = useContext(PortfolioOverviewContext)
   const [open, setOpen] = useState(false)
-  const isViewAuthor = context.state.currentView?.author === context.props.pageContext.user.email
+  const userEmail = context.props.pageContext.user.email ?? context.props.pageContext.user.loginName
+  const isViewAuthor = context.state.currentView?.author === userEmail
 
   const { isAddColumn, createContextualMenuItems } = useAddColumn(
     true,

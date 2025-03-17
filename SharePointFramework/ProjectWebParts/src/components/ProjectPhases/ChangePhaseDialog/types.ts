@@ -13,6 +13,11 @@ export interface IChangePhaseDialogState {
   currentIdx?: number
 
   /**
+   * Is checklist mandatory
+   */
+  isChecklistMandatory?: boolean
+
+  /**
    * Currently selected view
    */
   view?: View

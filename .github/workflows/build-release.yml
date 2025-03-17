@@ -2,7 +2,8 @@ name: Build release (main)
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
     paths:
       - 'SharePointFramework/**'
       - 'Install/**'
@@ -15,7 +16,7 @@ jobs:
     runs-on: macos-latest
     if: ${{ !contains(github.event.head_commit.message, '[skip-main-ci]') }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
 
@@ -23,7 +24,7 @@ jobs:
         id: vars
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ vars.NODE_VERSION }}
 
@@ -31,7 +32,7 @@ jobs:
         run: Install/Build-Release.ps1 -CI
         shell: pwsh
       
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: release-package
           path: release
@@ -47,7 +48,7 @@ jobs:
       cancel-in-progress: true
     if: ${{ always() || !contains(github.event.head_commit.message, '[skip-test-ci]') }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
 
@@ -55,7 +56,7 @@ jobs:
         id: vars
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ vars.NODE_VERSION }}
 
@@ -63,7 +64,7 @@ jobs:
         run: Install/Build-Release.ps1 -CI -Channel test
         shell: pwsh
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: release-package-test
           path: release

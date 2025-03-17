@@ -46,7 +46,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
   return (
     <ProjectInformationContextProvider value={context}>
       <Fluent transparent>
-        <WebPartTitle title={props.title} />
+        {props.title && <WebPartTitle title={props.title} />}
         <div className={styles.container}>
           {context.state.error && (
             <UserMessage

@@ -137,6 +137,7 @@ define([], function () {
     SummaryMessage: '{0} dokument(er) ble kopiert til prosjektområdet.',
     SyncLocalProjectPropertiesListText: 'Synkroniserer liste for prosjektegenskaper',
     TemplateConfigMessage: 'Den valgte prosjektmalen **{0}** inneholder konfigurasjon for {1}. Disse er valgt som standard.',
+    PlannerMemberWarningMessage: 'Du må være medlem av Microsoft 365 gruppa for å kunne konfigurere Planner. Vennligst legg deg selv til som medlem eller spør en administrator og prøv deretter igjen.',
     TemplateLibrarySelectModalTitle: 'Hent dokumentmal',
     TemplateSelectDialogInfoText: 'Oppsettet av prosjektområdet tar omtrent 10 minutter. Ikke lukk nettleservinduet mens området settes opp. Det anbefales ikke å sette opp flere områder samtidig.',
     TemplateSelectDialogSubmitButtonText: 'Sett opp området',

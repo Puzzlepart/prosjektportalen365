@@ -130,12 +130,14 @@ export interface IPortfolioAggregationProps<T = any>
   searchBoxPlaceholderText?: string
 
   /**
-   * Show Excel export button
+   * Show Excel export button. If set to `true`, the Excel
+   * export button will be shown in the command bar.
    */
   showExcelExportButton?: boolean
 
   /**
-   * Show Excel export button
+   * Show view selector. If set to `true`, the view selector
+   * will be shown in the command bar.
    */
   showViewSelector?: boolean
 
@@ -167,7 +169,7 @@ export interface IPortfolioAggregationProps<T = any>
 }
 
 export interface IPortfolioAggregationState
-  extends Pick<IPortfolioAggregationProps, 'dataSourceLevel' | 'columns'> {
+  extends Pick<IPortfolioAggregationProps, 'dataSourceLevel' | 'dataSourceCategory' | 'columns'> {
   /**
    * `true` if the component is loading data. The list will be
    * rendered with shimmer placeholders if the component is loading.

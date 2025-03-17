@@ -79,9 +79,7 @@ export const createPortfolioAggregationReducer = (
         return
       }
 
-      let selectedColumns = !_.isEmpty(props.columns)
-        ? props.columns
-        : payload.dataSource.columns ?? []
+      let selectedColumns = payload.dataSource.columns ?? props.columns ?? []
 
       let allColumnsForCategory = payload.columns.map((c) =>
         c.setData({
@@ -89,8 +87,11 @@ export const createPortfolioAggregationReducer = (
         })
       )
 
-      if (payload.dataSource.level.includes('Prosjekt'))
-        allColumnsForCategory = allColumnsForCategory.filter((c) => c.internalName !== 'SiteTitle')
+      if (payload.dataSource.level.includes('Prosjekt')) {
+        allColumnsForCategory = allColumnsForCategory.filter(
+          ({ internalName }) => internalName !== 'SiteTitle'
+        )
+      }
 
       selectedColumns = selectedColumns
         .map((c) => {
@@ -227,18 +228,27 @@ export const createPortfolioAggregationReducer = (
         state.groupBy = null
         state.groups = null
       }
-      if (payload.column.dataType === 'currency') {
-        state.items = state.items.sort((a, b) =>
-          sortNumerically(a, b, isSortedDescending, payload.column.fieldName, 'kr ')
-        )
-      } else if (payload.column.dataType === 'number') {
-        state.items = state.items.sort((a, b) =>
-          sortNumerically(a, b, isSortedDescending, payload.column.fieldName)
-        )
-      } else {
-        state.items.sort((a, b) =>
-          sortAlphabetically(a, b, isSortedDescending, payload.column.fieldName)
-        )
+      switch (payload.column.dataType) {
+        case 'currency':
+          state.items = state.items.sort((a, b) =>
+            sortNumerically(a, b, isSortedDescending, payload.column.fieldName, 'kr ')
+          )
+          break
+        case 'number':
+          state.items = state.items.sort((a, b) =>
+            sortNumerically(a, b, isSortedDescending, payload.column.fieldName)
+          )
+          break
+        case 'percentage':
+          state.items = state.items.sort((a, b) =>
+            sortNumerically(a, b, isSortedDescending, payload.column.fieldName, '%')
+          )
+          break
+        default:
+          state.items.sort((a, b) =>
+            sortAlphabetically(a, b, isSortedDescending, payload.column.fieldName)
+          )
+          break
       }
       state.columns = [...state.columns].map((col) => {
         col.isSorted = col.key === payload.column.key

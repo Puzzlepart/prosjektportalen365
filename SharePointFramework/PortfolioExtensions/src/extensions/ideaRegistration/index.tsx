@@ -14,11 +14,13 @@ import '@pnp/sp/lists'
 import '@pnp/sp/folders/list'
 import '@pnp/sp/site-groups/web'
 import '@pnp/sp/clientside-pages/web'
-import { ClientsideText, IClientsidePage } from '@pnp/sp/clientside-pages'
 import { isUserAuthorized } from '../../helpers/isUserAuthorized'
 import strings from 'PortfolioExtensionsStrings'
 import { Choice, IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
 import { find } from 'underscore'
+import { ProjectContentColumn, SPProjectContentColumnItem } from 'pp365-shared-library'
+import _ from 'underscore'
+import { PortalDataService } from 'pp365-shared-library/lib/services/PortalDataService'
 
 const LOG_SOURCE: string = 'IdeaRegistrationCommand'
 
@@ -28,14 +30,19 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
   private _openLinkCmd: Command
   private _sp: SPFI
   private _config: IdeaConfigurationModel
+  private _portalDataService: PortalDataService
 
   @override
   public async onInit(): Promise<void> {
     Log.info(LOG_SOURCE, 'onInit: Initializing...')
     this._sp = spfi().using(SPFx(this.context))
+    this._portalDataService = await new PortalDataService().configure({
+      spfxContext: this.context
+    })
     this._openCmd = this.tryGetCommand('OPEN_IDEA_REGISTRATION_DIALOG')
     this._openCmd.visible = false
     this._openLinkCmd = this.tryGetCommand('IDEA_PROCESSING_LINK')
+    // this._openLinkCmd.title = `Gå til ${this._config.processingList}`
     this._openLinkCmd.visible = this.context.pageContext.list.title.includes('registrering')
     this._userAuthorized = await isUserAuthorized(
       this._sp,
@@ -203,9 +210,78 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
    * @param comment Comment from the dialog
    */
   private _onSubmit = async (row: RowAccessor, comment: string): Promise<void> => {
+    const contentColumns = async () => {
+      try {
+        const list = this._sp.web.lists.getByTitle('Prosjektinnholdskolonner')
+
+        const columnItems = await list.items.select(
+          ...Object.keys(new SPProjectContentColumnItem())
+        )()
+
+        const filteredColumnItems = columnItems.filter(
+          (col) =>
+            col.GtDataSourceCategory === 'Idémodul' ||
+            (!col.GtDataSourceCategory && !col.GtDataSourceLevel) ||
+            (!col.GtDataSourceCategory && _.contains(col.GtDataSourceLevel, 'Portefølje'))
+        )
+
+        return filteredColumnItems
+          .filter((col) => col.GtIdeaCopyToProcess)
+          .map((item) => new ProjectContentColumn(item))
+      } catch (error) {
+        throw new Error(error)
+      }
+    }
+
+    const columns = await contentColumns()
+    const processingColumns = await this._portalDataService.getListFields(
+      this._config.processingList,
+      "substringof('Gt', InternalName) or InternalName eq 'Title'",
+      this._sp.web
+    )
+    const registrationList = row
+
+    console.log(processingColumns)
+
+    const userFields = registrationList.fields
+      .filter((fld) => fld.fieldType.indexOf('User') === 0)
+      .map((fld) => fld.internalName)
+
+    const columnsToCopy = processingColumns.filter((col) => {
+      const field = registrationList.fields.find(
+        (f) => f.internalName === col.InternalName || f.displayName === col.Title
+      )
+
+      const fieldsToCopy =
+        field &&
+        columns.find(
+          (contentCol) =>
+            contentCol.internalName === field.internalName ||
+            contentCol.fieldName === field.displayName
+        )
+
+      return fieldsToCopy
+    })
+
+    const copyData = columnsToCopy
+      .map((col) => {
+        if (userFields.includes(col.InternalName)) {
+          return {
+            [`${col.InternalName}Id`]: registrationList.getValueByName(col.InternalName)[0]?.id
+          }
+        }
+
+        const internalName = registrationList.fields.find(
+          (fld) => fld.displayName === col.Title || fld.internalName === col.InternalName
+        )?.internalName
+
+        return {
+          [col.InternalName]: registrationList.getValueByName(internalName)
+        }
+      })
+      .reduce((acc, val) => ({ ...acc, ...val }), {})
+
     const rowId = row.getValueByName('ID')
-    const rowTitle = row.getValueByName('Title')
-    const rowReporter = row.getValueByName('GtIdeaReporter')[0] || ''
 
     await this._sp.web.lists
       .getByTitle(this._config.registrationList)
@@ -218,9 +294,9 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
 
     Log.info(LOG_SOURCE, `Updated ${this._config.registrationList}: Approved`)
 
-    const pageUrl = await this._createSitePage(row)
-    await this._updateProcessingList(rowId, rowTitle, rowReporter, pageUrl)
+    const ideaModuleUrl = `${this.context.pageContext.site.absoluteUrl}/SitePages/Idemodul.aspx#ideaId=${rowId}`
 
+    await this._updateProcessingList(rowId, copyData, ideaModuleUrl)
     window.location.reload()
   }
 
@@ -255,19 +331,17 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
    * Update the work list with selected values of the registration list
    *
    * @param rowId Id of the row in the registration list
-   * @param rowTitle Title of the row in the registration list
+   * @param copyData Data to copy from the registration list to processing list
    */
   private _updateProcessingList = async (
     rowId: number,
-    rowTitle: string,
-    rowReporter: any,
+    copyData: any,
     pageUrl: string
   ): Promise<void> => {
     await this._sp.web.lists.getByTitle(this._config.processingList).items.add({
-      Title: rowTitle,
       GtRegistratedIdeaId: rowId,
       GtIdeaUrl: pageUrl,
-      GtIdeaReporterId: rowReporter?.id
+      ...copyData
     })
 
     Log.info(LOG_SOURCE, 'Updated work list')
@@ -283,83 +357,5 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
       row.getValueByName('GtIdeaRecommendation') ===
       find(this._config.registration, { key: Choice.Approve })?.recommendation
     )
-  }
-
-  /**
-   * Create a site page with the selected values of the registration list
-   *
-   * @param row Selected row
-   */
-  private _createSitePage = async (row: RowAccessor): Promise<string> => {
-    const title: string = row.getValueByName('Title')
-    const urlFriendlyTitle = title.replace(/é/g, 'e').replace(/[^a-zA-Z0-9-_ÆØÅæøå ]/g, '')
-    const page: IClientsidePage = await this._sp.web.addClientsidePage(
-      `KUR-${urlFriendlyTitle}`,
-      `KUR-${urlFriendlyTitle}`,
-      'Article'
-    )
-
-    const reporter = row.getValueByName('GtIdeaReporter')[0] || null
-
-    page.layoutType = 'NoImage'
-    page.showTopicHeader = true
-    page.topicHeader = 'Idé'
-    page.description = `Konsept utredningsrapport for: ${title}`
-
-    const section = page.addSection()
-    const column1 = section.addColumn(4)
-    const column2 = section.addColumn(4)
-    const column3 = section.addColumn(4)
-
-    column1.addControl(new ClientsideText(`<h3>Tittel</h3>${row.getValueByName('Title')}`))
-    column1.addControl(
-      new ClientsideText(`<h3>Bakgrunn</h3>${row.getValueByName('GtIdeaBackground')}`)
-    )
-    column1.addControl(
-      new ClientsideText(
-        `<h3>Forslag til løsning</h3>${row.getValueByName('GtIdeaSolutionProposals')}`
-      )
-    )
-    column1.addControl(
-      new ClientsideText(
-        `<h3>Overordnet gjennomføringsplan</h3>${row.getValueByName('GtIdeaExecutionPlan')}`
-      )
-    )
-    column2.addControl(
-      new ClientsideText(
-        `<h3>Innmelder</h3>${
-          reporter
-            ? `<a href="mailto:${reporter?.email}" target="_blank">${reporter?.title}</a>`
-            : 'Ikke angitt'
-        }`
-      )
-    )
-    column2.addControl(
-      new ClientsideText(`<h3>Ressursbehov</h3>${row.getValueByName('GtIdeaResourceRequirements')}`)
-    )
-    column2.addControl(
-      new ClientsideText(`<h3>Problemstilling</h3>${row.getValueByName('GtIdeaIssue')}`)
-    )
-    column2.addControl(
-      new ClientsideText(`<h3>Mulige gevinster</h3>${row.getValueByName('GtIdeaPossibleGains')}`)
-    )
-
-    column3.addControl(
-      new ClientsideText(`<h3>Berørte parter</h3>${row.getValueByName('GtIdeaAffectedParties')}`)
-    )
-    column3.addControl(
-      new ClientsideText(
-        `<h3>Kritiske suksessfaktorer</h3>${row.getValueByName('GtIdeaCriticalSuccessFactors')}`
-      )
-    )
-    column3.addControl(
-      new ClientsideText(`<h3>Andre kommentarer</h3>${row.getValueByName('GtIdeaOtherComments')}`)
-    )
-
-    section.emphasis = 1
-    page.save()
-    const savedPage = await page.load()
-
-    return savedPage['json'].AbsoluteUrl
   }
 }

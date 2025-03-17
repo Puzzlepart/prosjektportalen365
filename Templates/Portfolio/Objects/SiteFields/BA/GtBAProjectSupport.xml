@@ -1,5 +1,4 @@
 <Field ID="{c3cfcba3-299d-42e8-827b-a593ada04abc}" Name="GtBAProjectSupport" DisplayName="{resource:SiteFields_GtBAProjectSupport_DisplayName}" Type="Choice" Format="Dropdown" Group="{resource:SiteFields_BA_Group}" Description="{resource:SiteFields_GtBAProjectSupport_Description}" FillInChoice="TRUE" StaticName="GtBAProjectSupport">
-  <Default>Skal undersøkes/vurderes</Default>
   <CHOICES>
     <CHOICE>Skal undersøkes/vurderes</CHOICE>
     <CHOICE>Ikke aktuelt</CHOICE>

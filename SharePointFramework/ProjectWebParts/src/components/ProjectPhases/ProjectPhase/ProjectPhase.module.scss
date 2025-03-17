@@ -1,10 +1,16 @@
-$project-color: #89ce87;
-$project-current-color: #54b054;
-$project-current-color-hover: #397e39;
+$project-color: var(--phase-color, #89ce87);
+$project-current-color: var(--phase-current-color, #54b054);
+$project-current-color-hover: var(--phase-current-hover-color, #397e39);
 
-$portfolio-color: #9dceee;
-$portfolio-current-color: #64addb;
-$portfolio-current-color-hover: #5688af;
+$portfolio-color: var(--phase-color, #9dceee);
+$portfolio-current-color: var(--phase-current-color, #64addb);
+$portfolio-current-color-hover: var(--phase-current-hover-color, #5688af);
+
+$end-color: var(--phase-color, #f0c993);
+$end-current-color: var(--phase-current-color, #f09440);
+$end-current-color-hover: var(--phase-current-hover-color, #ba6f29);
+
+$font-color: var(--font-color, white);
 
 $arrow-font-size: 4rem;
 $arrow-height: 1em;
@@ -26,14 +32,15 @@ $project-phase-padding: 0.25em;
   height: 1em;
   max-height: 1em;
   background: $project-color;
+  border-color: $project-color;
   font-size: $arrow-font-size;
   line-height: $arrow-height;
   margin-right: $chevron-width;
   cursor: pointer;
   filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.15));
 
-  &:after,
-  &:before {
+  &::after,
+  &::before {
     position: absolute;
     z-index: -1;
     content: "";
@@ -41,28 +48,31 @@ $project-phase-padding: 0.25em;
     border-width: $chevron-height $chevron-width;
   }
 
-  &:after {
-    border-top-color: $project-color;
-    border-bottom-color: $project-color;
+  &::after {
+    border-top-color: inherit;
+    border-bottom-color: inherit;
     left: -$chevron-width;
   }
 
-  &:before {
+  &::before {
     border-right: 0;
-    border-left-color: $project-color;
+    border-left-color: inherit;
     right: -$chevron-width;
   }
 
   &.isCurrentPhase {
     background: $project-current-color;
+    border-color: $project-current-color;
+    font-size: 5rem;
     font-weight: 600;
 
-    &:after {
-      border-top-color: $project-current-color;
-      border-bottom-color: $project-current-color;
+    &::after {
+      border-top-color: inherit;
+      border-bottom-color: inherit;
     }
-    &:before {
-      border-left-color: $project-current-color;
+
+    &::before {
+      border-left-color: inherit;
     }
 
     span {
@@ -72,52 +82,69 @@ $project-phase-padding: 0.25em;
 
   &.portfolio {
     background: $portfolio-color;
+    border-color: $portfolio-color;
 
-    &:after {
-      border-top-color: $portfolio-color;
-      border-bottom-color: $portfolio-color;
+
+    &::after {
+      border-top-color: inherit;
+      border-bottom-color: inherit;
     }
-    &:before {
-      border-left-color: $portfolio-color;
+
+    &::before {
+      border-left-color: inherit;
     }
 
     &.isCurrentPhase {
       background: $portfolio-current-color;
+      border-color: $portfolio-current-color;
 
-      &:after {
-        border-top-color: $portfolio-current-color;
-        border-bottom-color: $portfolio-current-color;
+
+      &::after {
+        border-top-color: inherit;
+        border-bottom-color: inherit;
       }
-      &:before {
-        border-left-color: $portfolio-current-color;
+
+      &::before {
+        border-left-color: inherit;
+      }
+    }
+  }
+
+  &.end {
+    background: $end-color;
+    border-color: $end-color;
+
+    &::after {
+      border-top-color: inherit;
+      border-bottom-color: inherit;
+    }
+
+    &::before {
+      border-left-color: inherit;
+    }
+
+    &.isCurrentPhase {
+      background: $end-current-color;
+      border-color: $end-current-color;
+
+
+      &::after {
+        border-top-color: inherit;
+        border-bottom-color: inherit;
+      }
+
+      &::before {
+        border-left-color: inherit;
       }
     }
   }
 
   &.useStartArrow {
     &:first-child {
-      &:after {
-        border-left-color: $portfolio-color;
+      &::after {
+        border-left-color: inherit;
         border-top-left-radius: var(--borderRadiusMedium);
         border-bottom-left-radius: var(--borderRadiusMedium);
-      }
-
-      &.isCurrentPhase {
-        &:after {
-          border-left-color: $portfolio-current-color;
-        }
-      }
-    }
-
-    &:first-child:hover {
-      &:after {
-        border-left-color: $portfolio-current-color;
-      }
-
-      &.isCurrentPhase {
-        &:after {
-          border-left-color: $portfolio-current-color-hover;
-        }
       }
     }
   }
@@ -127,8 +154,94 @@ $project-phase-padding: 0.25em;
       border-top-right-radius: var(--borderRadiusMedium);
       border-bottom-right-radius: var(--borderRadiusMedium);
 
-      &:before {
+      &::before {
         border: none;
+      }
+    }
+  }
+}
+
+.projectPhase:hover {
+  background: $project-current-color;
+  border-color: $project-current-color;
+  filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.2));
+
+  &::after {
+    border-top-color: inherit;
+    border-bottom-color: inherit;
+  }
+
+  &::before {
+    border-left-color: inherit;
+  }
+
+  &.isCurrentPhase {
+    background: $project-current-color-hover;
+    border-color: $project-current-color-hover;
+    font-size: 5rem;
+
+    &::after {
+      border-top-color: inherit;
+      border-bottom-color: inherit;
+    }
+
+    &::before {
+      border-left-color: inherit;
+    }
+  }
+
+  &.portfolio {
+    background: $portfolio-current-color;
+    border-color: $portfolio-current-color;
+
+    &::after {
+      border-top-color: inherit;
+      border-bottom-color: inherit;
+    }
+
+    &::before {
+      border-left-color: inherit;
+    }
+
+    &.isCurrentPhase {
+      background: $portfolio-current-color-hover;
+      border-color: $portfolio-current-color-hover;
+
+      &::after {
+        border-top-color: inherit;
+        border-bottom-color: inherit;
+      }
+
+      &::before {
+        border-left-color: inherit;
+      }
+    }
+  }
+
+  &.end {
+    background: $end-current-color;
+    border-color: $end-current-color;
+
+    &::after {
+      border-top-color: inherit;
+      border-bottom-color: inherit;
+    }
+
+    &::before {
+      border-left-color: inherit;
+    }
+
+    &.isCurrentPhase {
+      background: $end-current-color-hover;
+      border-color: $end-current-color-hover;
+
+      &::after {
+        border-top-color: inherit;
+        border-bottom-color: inherit;
+      }
+
+      &::before {
+        border-left-color: inherit;
       }
     }
   }
@@ -138,7 +251,7 @@ $project-phase-padding: 0.25em;
   font-weight: 400;
   padding: $chevron-width;
   text-align: center;
-  color: white;
+  color: $font-color;
 
   span {
     cursor: pointer;
@@ -152,54 +265,5 @@ $project-phase-padding: 0.25em;
     line-height: 1em;
     font-size: 12px;
     font-weight: inherit;
-  }
-}
-
-.projectPhase:hover {
-  background: $project-current-color;
-  filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.2));
-
-  &:after {
-    border-top-color: $project-current-color;
-    border-bottom-color: $project-current-color;
-  }
-  &:before {
-    border-left-color: $project-current-color;
-  }
-
-  &.isCurrentPhase {
-    background: $project-current-color-hover;
-
-    &:after {
-      border-top-color: $project-current-color-hover;
-      border-bottom-color: $project-current-color-hover;
-    }
-    &:before {
-      border-left-color: $project-current-color-hover;
-    }
-  }
-
-  &.portfolio {
-    background: $portfolio-current-color;
-
-    &:after {
-      border-top-color: $portfolio-current-color;
-      border-bottom-color: $portfolio-current-color;
-    }
-    &:before {
-      border-left-color: $portfolio-current-color;
-    }
-
-    &.isCurrentPhase {
-      background: $portfolio-current-color-hover;
-
-      &:after {
-        border-top-color: $portfolio-current-color-hover;
-        border-bottom-color: $portfolio-current-color-hover;
-      }
-      &:before {
-        border-left-color: $portfolio-current-color-hover;
-      }
-    }
   }
 }

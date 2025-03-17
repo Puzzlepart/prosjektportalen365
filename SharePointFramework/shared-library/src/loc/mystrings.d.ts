@@ -1,5 +1,8 @@
-/* eslint-disable @typescript-eslint/no-empty-interface */
 declare interface ISharedLibraryStrings {
+  NoAccessToPortfolioErrorTitle: string
+  NoAccessToPortfolioErrorText: string
+  BooleanYes: string
+  BooleanNo: string
   GtModerationStatus_Choice_Draft: string
   GtModerationStatus_Choice_Published: string
   SaveText: string
@@ -60,6 +63,7 @@ declare interface ISharedLibraryStrings {
   TimelineGroupDescription: string
   TriangleLabel: string
   TypeLabel: string
+  SyncListAddingField: string
 }
 
 declare module 'SharedLibraryStrings' {

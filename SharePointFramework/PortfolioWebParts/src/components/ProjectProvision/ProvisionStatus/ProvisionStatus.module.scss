@@ -1,31 +1,33 @@
-.actions {
-  display: flex;
-  gap: 8px;
-}
+.provisionStatusDialog {
+  & > div[role="dialog"] {
+    min-width: 1140px;
+    min-height: 420px;
+    max-height: calc(100vh - 180px);
+    overflow: hidden;
+  }
 
-.deletePopover {
-  display: flex;
-  gap: 8px;
-  max-width: 110px;
-  flex-direction: column;
-  align-items: center;
-}
-
-div[role="dialog"] {
-  min-width: 1140px;
-  min-height: 420px;
-  max-height: calc(100vh - 180px);
-  overflow: hidden;
-}
-
-.content {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-
-  .message {
+  .actions {
     display: flex;
-    justify-content: center;
-    padding: 60px;
+    gap: 8px;
+  }
+
+  .deletePopover {
+    display: flex;
+    gap: 8px;
+    max-width: 110px;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .message {
+      display: flex;
+      justify-content: center;
+      padding: 60px;
+    }
   }
 }

@@ -8,7 +8,7 @@ import { IMenuNode } from '@pnp/sp/navigation'
 import { format, getId } from '@uifabric/utilities'
 import * as strings from 'ProjectExtensionsStrings'
 import { SPDataAdapter } from 'data'
-import { default as MSGraphHelper } from 'msgraph-helper'
+import msgraph from 'msgraph-helper'
 import {
   ContentConfig,
   ListLogger,
@@ -50,14 +50,15 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     ProgressDialog: getId('progressdialog'),
     TemplateSelectDialog: getId('templateselectdialog')
   }
+  private _validation: ProjectSetupValidation
 
   @override
   public async onInit(): Promise<void> {
     this.sp = createSpfiInstance(this.context)
-
+    await msgraph.Init(this.context.msGraphClientFactory)
     try {
       this._isSetup = await this._isProjectSetup()
-
+      this._validation = await this._validateProjectSetup()
       // eslint-disable-next-line default-case
       switch (this._validation) {
         case ProjectSetupValidation.NotSiteAdmin: {
@@ -166,7 +167,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       await this._startSetup(taskParams, data)
 
       if (!stringIsNullOrEmpty(this.properties.forceTemplate)) {
-        await this.recreateNavMenu()
+        await this.initializeQuickLaunchMenu()
         await this.sp.web.lists
           .getByTitle(strings.ProjectPropertiesListName)
           .items.getById(1)
@@ -186,7 +187,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Adds the old custom navigation nodes to the quick launch menu
    */
-  private async recreateNavMenu() {
+  private async initializeQuickLaunchMenu() {
     const oldNodes: IMenuNode[] = await JSON.parse(localStorage.getItem('pp_navigationNodes'))
     const navigationNodes = _.uniq([...oldNodes])
     for await (const node of navigationNodes) {
@@ -257,7 +258,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
                 strings.SetupAbortedText
               )
             )
-          }
+          },
+          validation: this._validation
         })
         render(element, placeholder)
       }
@@ -426,12 +428,10 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   /**
-   * Fetch data from SharePoint and initializes the `MSGraphHelper`. This is
-   * called when the component is first loaded.
+   * Fetch data from SharePoint.
    */
   private async _fetchData(): Promise<IProjectSetupData> {
     try {
-      await MSGraphHelper.Init(this.context.msGraphClientFactory)
       const data: IProjectSetupData = {}
       this._portalDataService = await new PortalDataService().configure({
         spfxContext: this.context
@@ -488,9 +488,13 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Get validation
    */
-  private get _validation(): ProjectSetupValidation {
+  private async _validateProjectSetup(): Promise<ProjectSetupValidation> {
     const { isSiteAdmin, groupId, hubSiteId, siteId } = this.context.pageContext.legacyPageContext
 
+    const members = await msgraph.Get<any[]>(`groups/${groupId}/members`)
+    if (!members.some(({ mail }) => mail === this.context.pageContext.user.email)) {
+      return ProjectSetupValidation.UserNotGroupMember
+    }
     if (!isSiteAdmin) return ProjectSetupValidation.NotSiteAdmin
     if (!groupId) return ProjectSetupValidation.NoGroupId
     if (this.context.pageContext.web.language !== 1044)

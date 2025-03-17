@@ -110,13 +110,15 @@ const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async
  * `useEffect` with an empty dependency array.
  *
  * @param props Component properties for `ProjectStatus`
+ * @param refetch Timestamp for refetch. Changes to this variable refetches the data in `useEffect`
  * @param dispatch Dispatcer
  */
 export const useProjectStatusDataFetch = (
   props: IProjectStatusProps,
+  refetch: number,
   dispatch: React.Dispatch<AnyAction>
 ) => {
   useEffect(() => {
     fetchData(props).then((data) => dispatch(INIT_DATA(data)))
-  }, [])
+  }, [refetch])
 }

@@ -1,5 +1,7 @@
 define([], function () {
   return {
+    NoAccessToPortfolioErrorTitle: 'Ingen tilgang til portefølje',
+    NoAccessToPortfolioErrorText: 'Du har ikke tilgangen til porteføljen for området {0}. Ta kontakt med en administrator.',
     GtModerationStatus_Choice_Draft: 'Kladd',
     GtModerationStatus_Choice_Published: 'Publisert',
     SaveText: 'Lagre',
@@ -60,5 +62,8 @@ define([], function () {
     TimelineGroupDescription: 'Gå til tidslinje for prosjektet',
     TriangleLabel: 'Trekant',
     TypeLabel: 'Type',
+    SyncListAddingField: 'Legger til felt {0} i prosjektegenskaper...',
+    BooleanYes: 'Ja',
+    BooleanNo: 'Nei',
   }
 })

@@ -1,6 +1,10 @@
 import { IListEnsureResult } from '@pnp/sp/lists'
 import { SPField } from '../../models'
 import { SPFxContext } from '../../types'
+import strings from 'SharedLibraryStrings'
+import { format } from '@fluentui/react'
+import { ErrorWithIntent } from '../../interfaces'
+import { LogLevel } from '@pnp/logging'
 
 export type PortalDataServiceList =
   | 'PROJECTS'
@@ -20,25 +24,46 @@ export type PortalDataServiceList =
   | 'TIMELINE_CONTENT'
 
 export interface IPortalDataServiceConfiguration extends Object {
+  /**
+   * The SPFx context to use for the data service.
+   */
   spfxContext?: SPFxContext
+
+  /**
+   * Override the URL from the `spfxContext` to use a different URL.
+   */
+  url?: string
+
+  /**
+   * The list names for the different lists used by the data service.
+   */
   listNames?: {
-    STATUS_SECTIONS: string
-    PROJECT_COLUMNS: string
-    PROJECT_COLUMN_CONFIGURATION: string
-    PROJECTS: string
-    PROJECT_STATUS: string
-    PROJECT_STATUS_ATTACHMENTS: string
-    PORTFOLIO_VIEWS: string
-    PROJECT_CONTENT_COLUMNS: string
-    DATA_SOURCES: string
-    PROJECT_ADMIN_ROLES: string
-    PROJECT_TEMPLATE_CONFIGURATION: string
-    IDEA_PROJECT_DATA: string
-    IDEA_PROCESSING: string
-    GLOBAL_SETTINGS: string
-    TIMELINE_CONTENT: string
+    STATUS_SECTIONS?: string
+    PROJECT_COLUMNS?: string
+    PROJECT_COLUMN_CONFIGURATION?: string
+    PROJECTS?: string
+    PROJECT_STATUS?: string
+    PROJECT_STATUS_ATTACHMENTS?: string
+    PORTFOLIO_VIEWS?: string
+    PROJECT_CONTENT_COLUMNS?: string
+    DATA_SOURCES?: string
+    PROJECT_ADMIN_ROLES?: string
+    PROJECT_TEMPLATE_CONFIGURATION?: string
+    IDEA_PROJECT_DATA?: string
+    IDEA_PROCESSING?: string
+    GLOBAL_SETTINGS?: string
+    TIMELINE_CONTENT?: string
   }
+
+  /**
+   * The XML for the template parameters field.
+   */
   templateParametersFieldXml?: string
+
+  /**
+   * The active log level for the data service.
+   */
+  activeLogLevel?: LogLevel
 }
 
 export const PortalDataServiceDefaultConfiguration: Partial<IPortalDataServiceConfiguration> = {
@@ -60,7 +85,8 @@ export const PortalDataServiceDefaultConfiguration: Partial<IPortalDataServiceCo
     TIMELINE_CONTENT: 'Tidslinjeinnhold'
   },
   templateParametersFieldXml:
-    '<Field Type="Note" DisplayName="TemplateParameters" ID="{b8854944-7141-471f-b8df-53d93a4395ba}" StaticName="TemplateParameters" Name="TemplateParameters" UnlimitedLengthInDocumentLibrary="TRUE" Hidden="TRUE" />'
+    '<Field Type="Note" DisplayName="TemplateParameters" ID="{b8854944-7141-471f-b8df-53d93a4395ba}" StaticName="TemplateParameters" Name="TemplateParameters" UnlimitedLengthInDocumentLibrary="TRUE" Hidden="TRUE" />',
+  activeLogLevel: LogLevel.Off
 }
 
 export type GetStatusReportsOptions = {
@@ -75,6 +101,7 @@ export type SyncListParams = {
   listName: string
   contentTypeId: string
   properties?: Record<string, string>
+  progressFunc?: (progress: string) => void
 }
 
 export interface ISyncListReturnType extends IListEnsureResult {
@@ -97,4 +124,18 @@ export interface IProjectDetails {
    * or `GtIsProgram` is set to `true` on the project item.
    */
   isParentProject: boolean
+}
+
+/**
+ * Generates an error for when the user does not have access to the portfolio.
+ *
+ * @param url The URL of the portfolio
+ */
+export const NoAccessToPortfolioError = (url: string): ErrorWithIntent => {
+  const error = new ErrorWithIntent(
+    format(strings.NoAccessToPortfolioErrorText, url),
+    'warning',
+    strings.NoAccessToPortfolioErrorTitle
+  )
+  return error
 }
