@@ -1,5 +1,4 @@
 <Field ID="{f73a2025-53ba-468e-a18f-3714a2a6c71e}" Name="GtBAProjectStatusCase" DisplayName="{resource:SiteFields_GtBAProjectStatusCase_DisplayName}" Type="Choice" Format="Dropdown" Group="{resource:SiteFields_BA_Group}" Description="{resource:SiteFields_GtBAProjectStatusCase_Description}" FillInChoice="TRUE" StaticName="GtBAProjectStatusCase">
-  <Default>Reguleringsplan annonsert</Default>
   <CHOICES>
     <CHOICE>Reguleringsplan annonsert</CHOICE>
     <CHOICE>Reguleringsplan 1.gangsbehandlet</CHOICE>
