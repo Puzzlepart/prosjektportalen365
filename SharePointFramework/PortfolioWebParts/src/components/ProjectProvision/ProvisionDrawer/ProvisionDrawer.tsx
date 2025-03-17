@@ -57,6 +57,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
     enableExpirationDate,
     enableReadOnlyGroup,
     enableInternalChannel,
+    enableExternalSharing,
     urlPrefix,
     aliasSuffix,
     fluentProviderId
@@ -382,6 +383,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   iconName='Guest'
                   label={strings.Provision.ExternalSharingFieldLabel}
                   description={strings.Provision.ExternalSharingFieldDescription}
+                  hidden={!enableExternalSharing}
                 >
                   <Switch
                     checked={context.column.get('externalSharing')}
