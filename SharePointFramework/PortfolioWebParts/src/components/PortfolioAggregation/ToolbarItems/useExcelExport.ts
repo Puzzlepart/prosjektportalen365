@@ -3,7 +3,6 @@ import _ from 'lodash'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
 import { useCallback } from 'react'
 import { IPortfolioAggregationContext } from '../context'
-import _ from 'lodash'
 
 /**
  * Hook that provides functionality for exporting data to Excel.
