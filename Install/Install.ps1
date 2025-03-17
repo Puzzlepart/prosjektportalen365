@@ -266,6 +266,21 @@ if (-not $SkipDefaultSiteDesignAssociation.IsPresent) {
     }
     EndAction
 }
+
+try {
+    StartAction("Ensuring site collection administrator access to $Url")
+    $UserName = $CurrentUser.LoginName
+
+    Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
+    Set-PnPTenantSite -Url $Url -Owners $UserName -ErrorAction SilentlyContinue
+}
+catch {
+    Write-Host "Failed to get current user. Unable to ensure access to $Url." -ForegroundColor Yellow
+}
+finally {
+    EndAction
+}
+
 #endregion
 
 #region Running pre-install upgrade steps
