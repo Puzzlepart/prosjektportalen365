@@ -24,6 +24,7 @@ export const Footer: FC<IFooterProps> = (props) => {
     <FooterContext.Provider value={{ ...footer, props }}>
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme}>
+          <div className={mergeClasses(styles.space, props.minimizeFooter && styles.minimize)} />
           <div className={mergeClasses(styles.footer, props.minimizeFooter && styles.minimize)}>
             <section className={styles.left}>
               <SiteSettings />
