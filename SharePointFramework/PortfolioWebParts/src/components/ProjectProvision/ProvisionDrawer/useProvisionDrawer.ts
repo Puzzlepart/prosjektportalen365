@@ -50,6 +50,9 @@ export const useProvisionDrawer = () => {
   const enableReadOnlyGroup = getGlobalSetting('EnableReadOnlyGroup')
   const enableInternalChannel = getGlobalSetting('EnableInternalChannel')
 
+  const typeDefaults = context.state.types.find((t) => t.type === context.state.properties.type)
+  const enableExternalSharing = typeDefaults?.externalSharing
+
   const namingConvention = getGlobalSetting('UseNamingConventions')
     ? context.state.settings.find((t) => t.title === 'NamingConvention')?.value
     : context.state.types.find((t) => t.type === context.column.get('type'))?.namingConvention
@@ -150,6 +153,7 @@ export const useProvisionDrawer = () => {
     enableExpirationDate,
     enableReadOnlyGroup,
     enableInternalChannel,
+    enableExternalSharing,
     urlPrefix,
     aliasSuffix,
     fluentProviderId
