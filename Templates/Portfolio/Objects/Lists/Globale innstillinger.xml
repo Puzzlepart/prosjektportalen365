@@ -114,11 +114,26 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSettingsId">{9f18d1fb-5dfc-4888-a4f4-df9eed305b74}</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Ta i bruk Prosjektportalen assistenten (eksperimentell)</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Ta i bruk Prosjektportalen assistenten</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsKey">UseAssistant</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsValue">0</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsCategory">Generelt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsCategory">Eksperimentell</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSettingsId">{325c1059-22e5-4d66-bef6-6c5b7a9d11b4}</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Konfigurasjonsoppsett for assistenten</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsKey">AssistantConfig</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsValue">{
+                "ApiBase": "",
+                "ApiKey": "",
+                "ModelName": "",
+                "ModelNameImages": "",
+                "ApiVersion": "",
+                "ApiVersionImages": ""
+            }</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsCategory">Eksperimentell</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
