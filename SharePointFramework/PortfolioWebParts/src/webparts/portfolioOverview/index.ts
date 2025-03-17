@@ -148,15 +148,15 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                   label: strings.ShowExcelExportButtonLabel
                 }),
                 this.properties.showExcelExportButton &&
-                PropertyPaneToggle('includeViewNameInExcelExportFilename', {
-                  label: strings.IncludeViewNameInExcelExportFilenameLabel
-                }),
+                  PropertyPaneToggle('includeViewNameInExcelExportFilename', {
+                    label: strings.IncludeViewNameInExcelExportFilenameLabel
+                  }),
                 !_.isEmpty(this.properties.portfolios) &&
-                PropertyPaneToggle('showPortfolioSelector', {
-                  label: strings.ShowPortfolioSelectorLabel,
-                  onText: strings.ShowPortfolioSelectorOnText,
-                  offText: strings.ShowPortfolioSelectorOffText
-                }),
+                  PropertyPaneToggle('showPortfolioSelector', {
+                    label: strings.ShowPortfolioSelectorLabel,
+                    onText: strings.ShowPortfolioSelectorOnText,
+                    offText: strings.ShowPortfolioSelectorOffText
+                  }),
                 PropertyPaneDescription(
                   strings.ShowPortfolioSelectorDescription,
                   !_.isEmpty(this.properties.portfolios)
@@ -165,9 +165,9 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                   label: strings.ShowViewSelectorLabel
                 }),
                 this.properties.showViewSelector &&
-                PropertyPaneToggle('showProgramViews', {
-                  label: strings.ShowProgramViewsLabel
-                })
+                  PropertyPaneToggle('showProgramViews', {
+                    label: strings.ShowProgramViewsLabel
+                  })
               ].filter(Boolean)
             },
             {
