@@ -1,6 +1,6 @@
 {
   "name": "pp365-templates",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "main": "generateTemplate.js",
   "scripts": {
     "watch": "chokidar \"./_JsonTemplate.json\" -c \"npm run generate-project-templates\"",

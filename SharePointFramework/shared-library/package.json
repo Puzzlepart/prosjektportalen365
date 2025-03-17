@@ -1,6 +1,6 @@
 {
   "name": "pp365-shared-library",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "sideEffects": false,
   "private": false,
   "main": "lib/index.js",

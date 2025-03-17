@@ -1,6 +1,6 @@
 # Endringslogg
 
-Sjekk ut [release notes](./releasenotes/1.10.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
+Sjekk ut [release notes](./releasenotes/1.11.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
 
 ## 1.11.0 - TBA
 
@@ -20,6 +20,9 @@ Sjekk ut [release notes](./releasenotes/1.10.0.md) for høydepunkter og mer deta
 - Støtte for 24 og 36 mnd for tidsramme i Prosjekttidslinjen [#1448](https://github.com/Puzzlepart/prosjektportalen365/issues/1448)
 - Viser nå antall prosjekter i Porteføljeoversikten [#1483](https://github.com/Puzzlepart/prosjektportalen365/issues/1483)
 - Støtte for å definere en initiell (skjult) fase før prosjektet går inn i `Konsept`-fasen for å gjennomgå sjekkpunkter når fase angis for prosjektet [#1616](https://github.com/Puzzlepart/prosjektportalen365/issues/1616)
+- Mulighetsmatrise har fått samme tilpasningsmuligheter som Risikomatrise, inkluderer overstyring av farger og konfigurasjon
+- Forbedret prosjektstatus siden slik at det er tydeligere hva som er publisert og når. Samt bedre indikasjon på kladd. I tillegg er det gjort en rekke forbedringer på opprettelse, publisering og redigering av prosjektstatus, slik at man unngår å måtte laste inn side på nytt for å se endringer alle elementer på siden. [#1574](https://github.com/Puzzlepart/prosjektportalen365/issues/1574)
+- Hentet ut en gammel funksjon for synkronisering av felter fra hub til Prosjektegenskaper, ga den litt kjærlighet, og fikk den til å fungere igjen <3
 
 ### Feilrettinger
 
@@ -29,17 +32,6 @@ Sjekk ut [release notes](./releasenotes/1.10.0.md) for høydepunkter og mer deta
 - Rettet et problem dersom brukeren gikk for raskt gjennom fasesjekkpunktene så ble det ikke registrert [#1609](https://github.com/Puzzlepart/prosjektportalen365/issues/1609)
 - Rettet et problem hvor menyer i porteføljeoversikt og aggregerte oversikter havnet utenfor skjermen [#1540](https://github.com/Puzzlepart/prosjektportalen365/issues/1540)
 - Dersom det var flere enn 16 sjekkpunkter så havnet disse utenfor "Endre til fase..."-dialogen. [#1607](https://github.com/Puzzlepart/prosjektportalen365/issues/1607)
-
-## 1.10.1 - TBA
-
-### Forbedringer
-
-- Mulighetsmatrise har fått samme tilpasningsmuligheter som Risikomatrise, inkluderer overstyring av farger og konfigurasjon
-- Forbedret prosjektstatus siden slik at det er tydeligere hva som er publisert og når. Samt bedre indikasjon på kladd. I tillegg er det gjort en rekke forbedringer på opprettelse, publisering og redigering av prosjektstatus, slik at man unngår å måtte laste inn side på nytt for å se endringer alle elementer på siden. [#1574](https://github.com/Puzzlepart/prosjektportalen365/issues/1574)
-- Hentet ut en gammel funksjon for synkronisering av felter fra hub til Prosjektegenskaper, ga den litt kjærlighet, og fikk den til å fungere igjen <3
-
-### Feilrettinger
-
 - Rettet et problem hvor programvisninger forble aktive selvom visningsvelgeren ble skrudd av [#1566](https://github.com/Puzzlepart/prosjektportalen365/issues/1566)
 
 ## 1.10.0 - 23.09.2024

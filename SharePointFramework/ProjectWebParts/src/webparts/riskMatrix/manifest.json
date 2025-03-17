@@ -3,7 +3,7 @@
   "id": "e536ae15-0748-4d96-b160-3abb30f1b71e",
   "alias": "RiskMatrixWebPart",
   "componentType": "WebPart",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "hiddenFromToolbox": true,
