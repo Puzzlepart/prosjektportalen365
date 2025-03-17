@@ -118,6 +118,10 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
     return {
       pages: [
         {
+          header: {
+            description: strings.ShowFieldPortfolioLabel
+          },
+          displayGroupsAsAccordion: true,
           groups: [
             {
               groupName: strings.GeneralGroupName,
@@ -125,15 +129,6 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                 PropertyPaneToggle('showSearchBox', {
                   label: strings.ShowSearchBoxLabel
                 }),
-                !_.isEmpty(this.properties.portfolios) &&
-                  PropertyPaneDropdown('selectedPortfolioId', {
-                    label: strings.SelectedPortfolioLabel,
-                    options: this._getOptions('portfolios')
-                  }),
-                PropertyPaneDescription(
-                  strings.SelectedPortfolioDescription,
-                  !_.isEmpty(this.properties.portfolios)
-                ),
                 PropertyPaneDropdown('defaultViewId', {
                   label: strings.DefaultViewLabel,
                   options: this._getOptions('defaultViewId')
@@ -153,15 +148,15 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                   label: strings.ShowExcelExportButtonLabel
                 }),
                 this.properties.showExcelExportButton &&
-                  PropertyPaneToggle('includeViewNameInExcelExportFilename', {
-                    label: strings.IncludeViewNameInExcelExportFilenameLabel
-                  }),
+                PropertyPaneToggle('includeViewNameInExcelExportFilename', {
+                  label: strings.IncludeViewNameInExcelExportFilenameLabel
+                }),
                 !_.isEmpty(this.properties.portfolios) &&
-                  PropertyPaneToggle('showPortfolioSelector', {
-                    label: strings.ShowPortfolioSelectorLabel,
-                    onText: strings.ShowPortfolioSelectorOnText,
-                    offText: strings.ShowPortfolioSelectorOffText
-                  }),
+                PropertyPaneToggle('showPortfolioSelector', {
+                  label: strings.ShowPortfolioSelectorLabel,
+                  onText: strings.ShowPortfolioSelectorOnText,
+                  offText: strings.ShowPortfolioSelectorOffText
+                }),
                 PropertyPaneDescription(
                   strings.ShowPortfolioSelectorDescription,
                   !_.isEmpty(this.properties.portfolios)
@@ -170,13 +165,22 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                   label: strings.ShowViewSelectorLabel
                 }),
                 this.properties.showViewSelector &&
-                  PropertyPaneToggle('showProgramViews', {
-                    label: strings.ShowProgramViewsLabel
-                  })
+                PropertyPaneToggle('showProgramViews', {
+                  label: strings.ShowProgramViewsLabel
+                })
               ].filter(Boolean)
             },
             {
+              groupName: strings.ListViewGroupName,
+              groupFields: [
+                PropertyPaneToggle('isListLayoutModeJustified', {
+                  label: strings.ListLayoutModeJustifiedLabel
+                })
+              ]
+            },
+            {
               groupName: strings.AdvancedGroupName,
+              isCollapsed: true,
               groupFields: [
                 PropertyFieldCollectionData('portfolios', {
                   key: 'portfolios',
@@ -231,15 +235,13 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                     }
                   ]
                 }),
-                PropertyPaneDescription(strings.PortfoliosFieldDescription)
-              ]
-            },
-            {
-              groupName: strings.ListViewGroupName,
-              groupFields: [
-                PropertyPaneToggle('isListLayoutModeJustified', {
-                  label: strings.ListLayoutModeJustifiedLabel
-                })
+                PropertyPaneDescription(strings.PortfoliosFieldDescription),
+                PropertyPaneDropdown('selectedPortfolioId', {
+                  label: strings.SelectedPortfolioLabel,
+                  options: this._getOptions('portfolios'),
+                  disabled: !_.isEmpty(this.properties.portfolios)
+                }),
+                PropertyPaneDescription(strings.SelectedPortfolioDescription)
               ]
             }
           ]
