@@ -262,6 +262,12 @@
   <data name="Lists_Timeline_Configuration_Field_GtSortOrder_Description" xml:space="preserve">
     <value>Specify the priority of the item under its group/project on the timeline, use for example 31 if you want the item to be between elements 30 and 40.</value>
   </data>
+  <data name="Lists_Global_Settings_Title" xml:space="preserve">
+    <value>Globale innstillinger</value>
+  </data>
+  <data name="Lists_Global_Settings_Url" xml:space="preserve">
+    <value>Lists/Globale innstillinger</value>
+  </data>
   <data name="Lists_IdeaProcessing_Title" xml:space="preserve">
     <value>Idébehandling</value>
   </data>

@@ -1,7 +1,7 @@
-<pnp:ListInstance Title="Globale innstillinger" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Globale innstillinger" EnableVersioning="true" Hidden="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false"
+<pnp:ListInstance Title="{resource:Lists_Global_Settings_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_Global_Settings_Url}" EnableVersioning="true" Hidden="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false"
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:Views>
-        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Globale innstillinger/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_Global_Settings_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
             <Query>
                 <GroupBy Collapse="TRUE" GroupLimit="30">
                     <FieldRef Name="GtSettingsCategory" />
@@ -11,12 +11,9 @@
                 <FieldRef Name="LinkTitle" />
                 <FieldRef Name="GtSettingsKey" />
                 <FieldRef Name="GtSettingsValue" />
-                <FieldRef Name="GtSettingsEnabled" />
             </ViewFields>
             <RowLimit Paged="TRUE">30</RowLimit>
             <JSLink>clienttemplates.js</JSLink>
-            <CustomFormatter><![CDATA[{"tileProps":{"$schema":"https://developer.microsoft.com/json-schemas/sp/v2/tile-formatting.schema.json","height":150,"width":450,"hideSelection":true,"fillHorizontally":true,"formatter":{"elmType":"div","attributes":{"class":"sp-card-container"},"children":[{"elmType":"div","attributes":{"class":"sp-card-defaultClickButton"},"customRowAction":{"action":"defaultClick"}},{"elmType":"div","attributes":{"class":"ms-bgColor-white sp-css-borderColor-neutralLight sp-card-borderHighlight sp-card-subContainer"},"children":[{"elmType":"div","attributes":{"class":"sp-card-displayColumnContainer"},"children":[{"elmType":"div","attributes":{"title":"[$Title]","class":"ms-fontColor-neutralPrimary sp-card-content sp-card-highlightedContent","role":"heading"},"style":{"white-space":"wrap","word-wrap":"normal"},"txtContent":"=if ([$Title] == '', '–', [$Title])"}]},{"elmType":"div","attributes":{"class":"sp-card-displayColumnContainer"},"children":[{"elmType":"p","attributes":{"title":"[$GtSettingsValue]","class":"ms-fontColor-neutralSecondary sp-card-content "},"txtContent":"=if ([$GtSettingsValue] == '', '–',if ([$GtSettingsValue] == '1', 'Ja', if ([$GtSettingsValue] == '0', 'Nei', [$GtSettingsValue])))"}]},{"elmType":"div","attributes":{"class":"sp-card-lastTextColumnContainer"},"style":{"display":"flex","margin-top":"15px"},"children":[{"elmType":"div","attributes":{"iconName":"=if ([$GtSettingsEnabled.displayValue] == 'Ja', 'CheckMark', 'Cancel')","class":"ms-fontSize-16 ms-fontWeight-regular ms-fontColor-themePrimary","title":""},"style":{"flex":"none","padding":"0px","height":"36px","color":"=if ([$GtSettingsEnabled.displayValue] == 'Ja', 'green', 'red')","margin-right":"4px"},"txtContent":""},{"elmType":"div","attributes":{"title":"=if ([$GtSettingsEnabled.displayValue] == '', '–', [$GtSettingsEnabled.displayValue])","class":"ms-fontColor-neutralPrimary sp-card-content "},"txtContent":"=if ([$GtSettingsEnabled.displayValue] == 'Ja', 'Denne innstillingen er aktivert', 'Denne innstillingen er deaktivert')"}]}]}]}}}]]></CustomFormatter>
-            <ViewType2>TILES</ViewType2>
         </View>
     </pnp:Views>
     <pnp:FieldRefs>
@@ -118,7 +115,7 @@
             <pnp:DataValue FieldName="GtSettingsKey">UseAssistant</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsValue">0</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsCategory">Eksperimentell</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsCategory">Assistent</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSettingsId">{325c1059-22e5-4d66-bef6-6c5b7a9d11b4}</pnp:DataValue>
@@ -133,7 +130,7 @@
                 "ApiVersionImages": ""
             }</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsCategory">Eksperimentell</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsCategory">Assistent</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
