@@ -27,7 +27,7 @@ export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgr
       spfxContext: this.context
     })
   }
-  
+
   /**
    * On update property. For `DisplayMode.Edit` it refreshes the property pane,
    * for `DisplayMode.Read` it updates the page using the `_api/SitePages/Pages/UpdateAppPage`
