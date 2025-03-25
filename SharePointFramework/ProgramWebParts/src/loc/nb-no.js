@@ -1,5 +1,6 @@
 define([], function () {
   return {
+    ResultsCountLabel: 'Viser {0} av {1} prosjekter',
     Aria: {
       MenuOverflowCount: '{0} flere elementer',
       MoveDisabled: 'Kan ikke flytte skjult kolonne',

@@ -25,7 +25,6 @@ export const Assistant: FC = () => {
   const context = useContext(FooterContext)
   const fluentProviderId = useId('fp-assistant')
   const isUnavailable = false
-  console.log(context)
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(true)
 

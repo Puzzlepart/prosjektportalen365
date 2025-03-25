@@ -241,8 +241,6 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
     )
     const registrationList = row
 
-    console.log(processingColumns)
-
     const userFields = registrationList.fields
       .filter((fld) => fld.fieldType.indexOf('User') === 0)
       .map((fld) => fld.internalName)

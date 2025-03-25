@@ -53,3 +53,8 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
     </div>
   )
 }
+
+PortfolioOverview.displayName = 'PortfolioOverview'
+PortfolioOverview.defaultProps = {
+  portfolios: []
+}
