@@ -198,11 +198,11 @@
             <pnp:DataValue FieldName="GtInternalName">GtProjectLogActors</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectLogActorsOWSCHCM</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Tags</pnp:DataValue>
-            <pnp:DataValue FieldName="GtFieldDataTypeProperties">{&quot;valueSeparator&quot;: &quot;;#&quot;}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Erfaringslogg</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataTypeProperties">{"valueSeparator": ";#"}</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 13 -->
             <pnp:DataValue FieldName="GtSortOrder">320</pnp:DataValue>
@@ -398,10 +398,10 @@
             <pnp:DataValue FieldName="GtInternalName">Measurements</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">Measurements</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Modal</pnp:DataValue>
-            <pnp:DataValue FieldName="GtFieldDataTypeProperties">{&quot;headerTitleField&quot;:&quot;Title&quot;,&quot;headerSubTitleField&quot;:&quot;MeasurementIndicator&quot;}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataTypeProperties">{"headerTitleField":"Title","headerSubTitleField":"MeasurementIndicator"}</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 32 -->
             <pnp:DataValue FieldName="GtSortOrder">600</pnp:DataValue>
