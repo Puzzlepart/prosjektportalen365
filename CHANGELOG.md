@@ -4,27 +4,26 @@ Sjekk ut [release notes](./releasenotes/1.11.0.md) for høydepunkter og mer deta
 
 ## 1.11.0 - TBA
 
-NB: Som en del av denne releasen må det godkjennes en ny app ved installasjon eller oppgradering. Dette skyldes at den tidligere PnP PowerShell appen som vi benyttet ikke lenger er tilgjengelig. Appen må godkjennes av Global Admin eller Application Admin. Prompt for å godkjenne denne appen vil automatisk dukke opp når brukeren setter i gang installasjonen. Som den del av denne endringen må nye oppdateringer og installasjoner gjøres med *PowerShell 7*.
-
 ### Ny funksjonalitet
 
 - Lagt til instrumentvisning for 'Siste måling' på Gevinstoversikt [#1572](https://github.com/Puzzlepart/prosjektportalen365/issues/1572)
-- Ny Idémodul for visning av idéer (registrering/behandling) samt feltkonfigurasjon slik at relevant data fra idéregistreringen kan videreføres til behandling [#1573](https://github.com/Puzzlepart/prosjektportalen365/issues/1573)
+- Ny webdel `Idémodul` for visning av idéer (registrering/behandling) samt feltkonfigurasjon slik at relevant data fra idéregistreringen kan videreføres til behandling [#1573](https://github.com/Puzzlepart/prosjektportalen365/issues/1573)
 - Lagt til mulighet for egendefinerte farger på fasene i fasevelgeren [#1613](https://github.com/Puzzlepart/prosjektportalen365/issues/1613)
 
 ### Forbedringer
 
 - Forbedret feilhåndtering for redigeringspanel for statusrapport [#1578](https://github.com/Puzzlepart/prosjektportalen365/issues/1578)
 - Forbedret feilhåndtering for provisjonering av Planner-oppgaver [#1593](https://github.com/Puzzlepart/prosjektportalen365/issues/1593)
-- Støtte for standalone Porteføljeoversikt [#1599](https://github.com/Puzzlepart/prosjektportalen365/issues/1599)
+- Støtte for frikoblet Porteføljeoversikt [#1599](https://github.com/Puzzlepart/prosjektportalen365/issues/1599)
 - Støtte for å inkludere/eksludere tidskomponentene fra datofelter i aggregerte oversikter [#1575](https://github.com/Puzzlepart/prosjektportalen365/issues/1575)
 - Footer tar nå mindre plass, samt støtte for minimering og skjuling av footer på globalt nivå [#1586](https://github.com/Puzzlepart/prosjektportalen365/issues/1586)
 - Støtte for 24 og 36 mnd for tidsramme i Prosjekttidslinjen [#1448](https://github.com/Puzzlepart/prosjektportalen365/issues/1448)
 - Viser nå antall prosjekter i Porteføljeoversikten [#1483](https://github.com/Puzzlepart/prosjektportalen365/issues/1483)
+- Ny fasetype `Ferdigstillelsesfase` og mulighet for å gjøre sjekkpunkter obligatoriske [#1590](https://github.com/Puzzlepart/prosjektportalen365/issues/1590)
 - Støtte for å definere en initiell (skjult) fase før prosjektet går inn i `Konsept`-fasen for å gjennomgå sjekkpunkter når fase angis for prosjektet [#1616](https://github.com/Puzzlepart/prosjektportalen365/issues/1616)
 - Mulighetsmatrise har fått samme tilpasningsmuligheter som Risikomatrise, inkluderer overstyring av farger og konfigurasjon
 - Forbedret prosjektstatus siden slik at det er tydeligere hva som er publisert og når. Samt bedre indikasjon på kladd. I tillegg er det gjort en rekke forbedringer på opprettelse, publisering og redigering av prosjektstatus, slik at man unngår å måtte laste inn side på nytt for å se endringer alle elementer på siden. [#1574](https://github.com/Puzzlepart/prosjektportalen365/issues/1574)
-- Hentet ut en gammel funksjon for synkronisering av felter fra hub til Prosjektegenskaper, ga den litt kjærlighet, og fikk den til å fungere igjen <3
+- Mulighet for to-veis synkronisering av felter i prosjektinformasjonen. Nye felter som legges til på portefølje synkroniseres opp til prosjektene. NB! Krever synkronisering av prosjektinformasjon for at nye felter kommer med.
 
 ### Feilrettinger
 
