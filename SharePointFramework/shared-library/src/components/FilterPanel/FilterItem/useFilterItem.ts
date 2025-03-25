@@ -3,7 +3,7 @@ import _ from 'lodash'
 import { IFilterItemProps } from './types'
 
 export function useFilterItem(props: IFilterItemProps) {
-  switch (props.column.data.renderAs) {
+  switch (props.column.data?.renderAs) {
     case 'boolean': {
       const valueIfTrue = _.get(
         props,
