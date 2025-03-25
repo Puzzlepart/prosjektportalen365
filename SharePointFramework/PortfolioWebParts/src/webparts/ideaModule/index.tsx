@@ -107,6 +107,7 @@ export default class IdeaModuleWebPart extends BasePortfolioWebPart<IIdeaModuleP
                 PropertyPaneTextField('hiddenRegFields', {
                   label: 'Skjulte felter (registrering)',
                   description: 'Felt som skal skjules fra idémodulen (Idéregistrering)',
+                  disabled: true,
                   multiline: true,
                   resizable: true,
                   rows: 1
@@ -114,6 +115,7 @@ export default class IdeaModuleWebPart extends BasePortfolioWebPart<IIdeaModuleP
                 PropertyPaneTextField('hiddenProcFields', {
                   label: 'Skjulte felter (behandling)',
                   description: 'Felt som skal skjules fra idémodulen (Idébehandling)',
+                  disabled: true,
                   multiline: true,
                   resizable: true,
                   rows: 6

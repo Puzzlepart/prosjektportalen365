@@ -310,7 +310,8 @@ export class SPDataAdapterBase<
         const inCustomGroup = Group === customSiteFieldsGroupName
         if (
           (!gtPrefix && !inCustomGroup && !forcedFields.includes(InternalName)) ||
-          hideFromEditForm || hidden
+          hideFromEditForm ||
+          hidden
         )
           return false
         return true
