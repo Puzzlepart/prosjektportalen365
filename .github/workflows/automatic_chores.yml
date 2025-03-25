@@ -3,7 +3,7 @@ name: Automatic chores
 on:
   push:
     branches:
-      - releases/1.10
+      - releases/1.11
     paths:
       - SharePointFramework/**
       - .github/workflows/automatic_chores.yml

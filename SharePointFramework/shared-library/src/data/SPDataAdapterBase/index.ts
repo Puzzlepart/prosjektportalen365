@@ -305,11 +305,13 @@ export class SPDataAdapterBase<
       } as SPField,
       ...fields.filter(({ SchemaXml, InternalName, Group }) => {
         const hideFromEditForm = SchemaXml.indexOf('ShowInEditForm="FALSE"') !== -1
+        const hidden = SchemaXml.indexOf('Hidden="TRUE"') !== -1
         const gtPrefix = InternalName.indexOf('Gt') === 0
         const inCustomGroup = Group === customSiteFieldsGroupName
         if (
           (!gtPrefix && !inCustomGroup && !forcedFields.includes(InternalName)) ||
-          hideFromEditForm
+          hideFromEditForm ||
+          hidden
         )
           return false
         return true
