@@ -13,7 +13,7 @@ import styles from './ProvisionSettings.module.scss'
 import { IRequestSettingsItem } from './types'
 import { stringIsNullOrEmpty } from '@pnp/core'
 
-export const useColumns = (toast: any): TableColumnDefinition<IRequestSettingsItem>[] => {
+export const useColumns = (): TableColumnDefinition<IRequestSettingsItem>[] => {
   return [
     createTableColumn<IRequestSettingsItem>({
       columnId: 'title',

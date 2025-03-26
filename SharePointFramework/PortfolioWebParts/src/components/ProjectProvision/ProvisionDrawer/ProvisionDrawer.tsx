@@ -136,26 +136,32 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                 <p>{levels[0].description}</p>
                 <div className={styles.content}>
                   <FieldContainer iconName='AppsList' label={strings.Provision.SiteTypeFieldLabel}>
-                    <div className={styles.sitetypes}>
-                      {context.state.types.map((type) => {
-                        if (
-                          !type.visibleTo ||
-                          type.visibleTo?.some((user) =>
-                            user?.EMail?.includes(context.props?.pageContext?.user?.loginName)
-                          )
-                        ) {
-                          return (
-                            <SiteType
-                              key={type.title}
-                              title={type.title}
-                              description={type.description}
-                              image={type.image?.Url}
-                              type={type.type}
-                            />
-                          )
-                        }
-                      })}
-                    </div>
+                    {context.props.siteTypeRenderMode !== 'dropdown' ? (
+                      <div className={styles.sitetypes}>
+                        {context.state.types.map((type) => (
+                          <SiteType
+                            key={type.title}
+                            title={type.title}
+                            description={type.description}
+                            image={type.image?.Url}
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      <Dropdown
+                        value={context.column.get('type')}
+                        selectedOptions={[context.column.get('type')]}
+                        onOptionSelect={(_, data) => {
+                          context.setColumn('type', data.optionValue)
+                        }}
+                      >
+                        {context.state.types.map((type) => (
+                          <Option key={type.title} value={type.title}>
+                            {type.title}
+                          </Option>
+                        ))}
+                      </Dropdown>
+                    )}
                   </FieldContainer>
                   <FieldContainer
                     iconName='TextNumberFormat'
@@ -277,18 +283,16 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   >
                     <Input
                       disabled
-                      value={`${namingConvention?.prefixText}${context.column.get('alias')}${
-                        namingConvention?.suffixText
-                      }`}
+                      value={`${namingConvention?.prefixText}${context.column.get('alias')}${namingConvention?.suffixText
+                        }`}
                       contentAfter={<Tag size='small'>{aliasSuffix}</Tag>}
                     />
                   </FieldContainer>
                   <FieldContainer iconName='Link' label={strings.Provision.UrlFieldLabel}>
                     <Input
                       disabled
-                      value={`${namingConvention?.prefixText}${context.column.get('alias')}${
-                        namingConvention?.suffixText
-                      }`}
+                      value={`${namingConvention?.prefixText}${context.column.get('alias')}${namingConvention?.suffixText
+                        }`}
                       contentBefore={<Tag size='small'>{urlPrefix}</Tag>}
                     />
                   </FieldContainer>
@@ -532,7 +536,8 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                 <DrawerHeaderTitle>{levels[2].title}</DrawerHeaderTitle>
                 <p>{levels[2].description}</p>
                 <div className={styles.content}>
-                  {props.debugMode || (DEBUG && <DebugModel />)}
+                  {context.props.debugMode || (DEBUG && <DebugModel />)}
+                  <Divider />
                   <FieldContainer
                     iconName='LocalLanguage'
                     label={strings.Provision.LanguageFieldLabel}
@@ -575,27 +580,27 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
               onClick={() => {
                 currentLevel === levels.length - 1
                   ? onSave().then((response) => {
-                      if (response) {
-                        context.reset()
-                        props.toast(
-                          <Toast appearance='inverted'>
-                            <ToastTitle>{strings.Provision.ToastCreatedTitle}</ToastTitle>
-                            <ToastBody>{strings.Provision.ToastCreatedBody}</ToastBody>
-                          </Toast>,
-                          { intent: 'success' }
-                        )
-                        context.setState({ showProvisionDrawer: false, properties: {} })
-                        setCurrentLevel(0)
-                      } else {
-                        props.toast(
-                          <Toast appearance='inverted'>
-                            <ToastTitle>{strings.Provision.ToastCreatedErrorTitle}</ToastTitle>
-                            <ToastBody>{strings.Provision.ToastCreatedErrorBody}</ToastBody>
-                          </Toast>,
-                          { intent: 'error' }
-                        )
-                      }
-                    })
+                    if (response) {
+                      context.reset()
+                      props.toast(
+                        <Toast appearance='inverted'>
+                          <ToastTitle>{strings.Provision.ToastCreatedTitle}</ToastTitle>
+                          <ToastBody>{strings.Provision.ToastCreatedBody}</ToastBody>
+                        </Toast>,
+                        { intent: 'success' }
+                      )
+                      context.setState({ showProvisionDrawer: false, properties: {} })
+                      setCurrentLevel(0)
+                    } else {
+                      props.toast(
+                        <Toast appearance='inverted'>
+                          <ToastTitle>{strings.Provision.ToastCreatedErrorTitle}</ToastTitle>
+                          <ToastBody>{strings.Provision.ToastCreatedErrorBody}</ToastBody>
+                        </Toast>,
+                        { intent: 'error' }
+                      )
+                    }
+                  })
                   : setCurrentLevel(currentLevel + 1)
               }}
             >
