@@ -24,7 +24,13 @@ export const useMotionStyles = makeStyles({
     opacity: 1,
     transform: 'translate3D(0, 0, 0)'
   },
+  level0: {
+    transform: 'translate3D(-100%, 0, 0)'
+  },
   level1: {
+    transform: 'translate3D(100%, 0, 0)'
+  },
+  level1a: {
     transform: 'translate3D(-100%, 0, 0)'
   },
   level2: {

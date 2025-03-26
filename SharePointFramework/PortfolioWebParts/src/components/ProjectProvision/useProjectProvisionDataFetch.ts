@@ -19,16 +19,34 @@ export function useProjectProvisionDataFetch(
       props.dataAdapter.getProvisionRequestSettings(props.provisionUrl),
       props.dataAdapter.getProvisionTypes(props.provisionUrl),
       props.dataAdapter.getTeamTemplates(props.provisionUrl),
+      props.dataAdapter.getSensitivityLabels(props.provisionUrl),
+      props.dataAdapter.getRetentionLabels(props.provisionUrl),
       props.dataAdapter.fetchProvisionRequests(props.pageContext.user.email, props.provisionUrl)
-    ]).then(([settings, types, teamTemplates, requests]) => {
-      setState({
-        settings,
-        types,
-        teamTemplates,
-        requests,
-        loading: false,
-        isRefetching: false
+    ])
+      .then(([settings, types, teamTemplates, sensitivityLabels, retentionLabels, requests]) => {
+        setState({
+          settings,
+          types: types.filter(
+            (type) =>
+              !type.visibleTo ||
+              type.visibleTo?.some((user) =>
+                user?.EMail?.includes(props?.pageContext?.user?.loginName)
+              )
+          ),
+          teamTemplates,
+          sensitivityLabels,
+          retentionLabels,
+          requests,
+          loading: false,
+          isRefetching: false
+        })
       })
-    })
+      .catch((error) => {
+        setState({
+          error,
+          loading: false,
+          isRefetching: false
+        })
+      })
   }, [refetch])
 }

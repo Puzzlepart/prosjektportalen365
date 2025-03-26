@@ -10,10 +10,19 @@ export interface IProvisionRequestItem {
   TeamsTemplate?: string
   OwnersId?: any
   MembersId?: any
+  RequestedById?: any
   ConfidentialData?: boolean
   Visibility?: string
   ExternalSharingRequired?: boolean
   Guests?: any
+  SensitivityLabelName?: string
+  SensitivityLabelId?: string
+  RetentionLabelName?: string
+  ExpirationDate?: Date
+  ReadOnlyGroup?: boolean
+  InternalChannel?: boolean
+  RequestedSource?: string
+  SpaceImage?: string
   SiteURL?: {
     Description?: string
     Url?: string

@@ -361,6 +361,20 @@ export interface IPortfolioWebPartsDataAdapter {
   getTeamTemplates?(provisionUrl: string): Promise<Record<string, any>>
 
   /**
+   * Retrieves the sensitivity labels from the "IP Labels" list
+   *
+   * @returns A Promise that resolves to a Map containing the labels.
+   */
+  getSensitivityLabels?(provisionUrl: string): Promise<Record<string, any>>
+
+  /**
+   * Retrieves the retention labels from the "Retention Labels" list
+   *
+   * @returns A Promise that resolves to a Map containing the labels.
+   */
+  getRetentionLabels?(provisionUrl: string): Promise<Record<string, any>>
+
+  /**
    * Checks if a site exists based on its proposed URL
    *
    * @param siteUrl Site URL
