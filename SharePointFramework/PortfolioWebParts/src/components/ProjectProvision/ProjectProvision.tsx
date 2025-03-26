@@ -101,7 +101,7 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
             </MenuPopover>
           </Menu>
           <ProvisionStatus toast={dispatchToast} />
-          <ProvisionSettings toast={dispatchToast} />
+          <ProvisionSettings />
           <Toaster toasterId={toasterId} />
         </FluentProvider>
       </IdPrefixProvider>

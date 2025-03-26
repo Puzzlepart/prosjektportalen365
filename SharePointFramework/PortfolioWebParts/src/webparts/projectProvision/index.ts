@@ -1,6 +1,7 @@
 /* eslint-disable quotes */
 import {
   IPropertyPaneConfiguration,
+  PropertyPaneDropdown,
   PropertyPaneLabel,
   PropertyPaneTextField,
   PropertyPaneToggle
@@ -40,6 +41,20 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                 PropertyPaneTextField('provisionUrl', {
                   label: 'Provisjoneringsområde',
                   description: 'URL til området som håndterer bestillinger'
+                })
+              ]
+            },
+            {
+              groupName: strings.GeneralGroupName,
+              groupFields: [
+                PropertyPaneDropdown('siteTypeRenderMode', {
+                  label: 'Visning av områdetype',
+                  options: [
+                    { key: 'cardNormal', text: 'Kort (med bilde)' },
+                    { key: 'cardMinimal', text: 'Kort (uten bilde og beskrivelse)' },
+                    { key: 'dropdown', text: 'Nedtrekksliste' }
+                  ],
+                  selectedKey: this.properties.siteTypeRenderMode ?? 'cardNormal'
                 })
               ]
             },

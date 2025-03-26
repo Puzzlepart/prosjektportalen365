@@ -1,5 +1,3 @@
-import { IProjectProvisionProps } from '../types'
-
-export interface IProvisionDrawerProps extends Pick<IProjectProvisionProps, 'debugMode'> {
+export interface IProvisionDrawerProps {
   toast?: any
 }

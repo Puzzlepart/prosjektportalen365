@@ -15,7 +15,6 @@ export function useEditableColumn(
 
   const initialColumn = new Map<string, any>([
     ['type', ''],
-    ['typeTitle', ''],
     ['name', ''],
     ['description', ''],
     ['justification', ''],
@@ -158,13 +157,12 @@ export function useEditableColumn(
   useEffect(() => {
     $setColumn((prev) => {
       const newColumn = new Map(prev)
-      newColumn.set('type', defaultType.type)
-      newColumn.set('typeTitle', defaultType.title)
+      newColumn.set('type', defaultType.title)
 
       setState({
         properties: {
           ...state.properties,
-          type: defaultType.type
+          type: defaultType.title
         }
       })
       return newColumn
@@ -173,7 +171,7 @@ export function useEditableColumn(
 
   useEffect(() => {
     if (!state.loading) {
-      const typeDefaults = state.types.find((t) => t.type === state.properties.type) || defaultType
+      const typeDefaults = state.types.find((t) => t.title === state.properties.type) || defaultType
       const defaultConfidentialData = typeDefaults?.defaultConfidentialData
       const defaultSensitivityLabel =
         typeDefaults?.defaultSensitivityLabel || getGlobalSetting('DefaultSensitivityLabel')

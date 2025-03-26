@@ -50,12 +50,12 @@ export const useProvisionDrawer = () => {
   const enableReadOnlyGroup = getGlobalSetting('EnableReadOnlyGroup')
   const enableInternalChannel = getGlobalSetting('EnableInternalChannel')
 
-  const typeDefaults = context.state.types.find((t) => t.type === context.state.properties.type)
+  const typeDefaults = context.state.types.find((t) => t.title === context.state.properties.type)
   const enableExternalSharing = typeDefaults?.externalSharing
 
   const namingConvention = getGlobalSetting('UseNamingConventions')
     ? context.state.settings.find((t) => t.title === 'NamingConvention')?.value
-    : context.state.types.find((t) => t.type === context.column.get('type'))?.namingConvention
+    : context.state.types.find((t) => t.title === context.column.get('type'))?.namingConvention
 
   const urlPrefix = `${context.props.webAbsoluteUrl.split('sites')[0]}sites/`
   const aliasSuffix = '@' + context.props.pageContext.user.loginName.split('@')[1]
@@ -74,13 +74,17 @@ export const useProvisionDrawer = () => {
       (t) => t.labelName === context.column.get('sensitivityLabel')
     )?.labelId
 
+    const spaceTypeInternal = context.state.types.find(
+      (t) => t.title === context.column.get('type')
+    )?.type
+
     const requestItem: IProvisionRequestItem = {
       Title: context.column.get('name'),
       SpaceDisplayName: name,
       Description: context.column.get('description'),
       BusinessJustification: context.column.get('justification'),
-      SpaceType: context.column.get('typeTitle'),
-      SpaceTypeInternal: context.column.get('type'),
+      SpaceType: context.column.get('type'),
+      SpaceTypeInternal: spaceTypeInternal,
       Teamify: context.column.get('teamify'),
       TeamsTemplate: context.column.get('teamify')
         ? context.state.properties.teamTemplate || 'standard'

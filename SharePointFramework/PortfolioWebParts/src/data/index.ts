@@ -1229,13 +1229,13 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       return { ...registered, processing }
     })
 
-    const fieldValues = registrationData.fieldValues.map((values) => {
-      const processingFieldValues = processingData.fieldValues.find(
-        (processingFieldValues) => processingFieldValues.id === values.id
-      )
+    // const fieldValues = registrationData.fieldValues.map((values) => {
+    //   const processingFieldValues = processingData.fieldValues.find(
+    //     (processingFieldValues) => processingFieldValues.id === values.id
+    //   )
 
-      return { ...values, ...processingFieldValues }
-    })
+    //   return { ...values, ...processingFieldValues }
+    // })
 
     return {
       data: {
