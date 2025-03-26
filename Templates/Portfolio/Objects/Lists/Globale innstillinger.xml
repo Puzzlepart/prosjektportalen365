@@ -122,12 +122,8 @@
             <pnp:DataValue FieldName="Title">Konfigurasjonsoppsett for assistenten</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsKey">AssistantConfig</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsValue">{
-                "ApiBase": "",
-                "ApiKey": "",
-                "ModelName": "",
-                "ModelNameImages": "",
-                "ApiVersion": "",
-                "ApiVersionImages": ""
+                "TenantId": "",
+                "KeyVaultName": ""
             }</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsCategory">Assistent</pnp:DataValue>
