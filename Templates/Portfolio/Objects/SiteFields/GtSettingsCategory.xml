@@ -3,5 +3,6 @@
         <CHOICE>Usikkerhetstiltak i Planner</CHOICE>
         <CHOICE>Risikomatrise</CHOICE>
         <CHOICE>Generelt</CHOICE>
+        <CHOICE>Assistent</CHOICE>
     </CHOICES>
 </Field>
