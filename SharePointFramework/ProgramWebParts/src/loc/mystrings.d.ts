@@ -152,6 +152,7 @@ declare interface IProgramWebPartsStrings {
   ProgramTimelineInfoText: string
   ProjectContentColumnsListName: string
   ProjectDeliveriesGroupName: string
+  ProjectInformationPanelButton: string
   ProjectLabel: string
   ProjectPropertiesHeader: string
   ProjectPropertiesListName: string

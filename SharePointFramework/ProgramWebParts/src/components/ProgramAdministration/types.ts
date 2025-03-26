@@ -5,7 +5,7 @@ import { SPDataAdapter } from 'data/SPDataAdapter'
 export interface IProgramAdministrationProject extends Record<string, any> {
   SiteId: string
   Title: string
-  SPWebURL: string
+  SPWebURL?: string
   Path?: string
 }
 
