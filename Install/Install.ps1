@@ -45,9 +45,6 @@ Param(
 
 . "$PSScriptRoot/Scripts/SharedFunctions.ps1"
 
-## Storing access tokens for interactive logins
-$global:__InteractiveCachedAccessTokens = @{}
-
 $ConnectionInfo = [PSCustomObject]@{
     ClientId                 = $ClientId
     CI                       = $CI.IsPresent
@@ -530,7 +527,3 @@ try {
 }
 catch {}
 #endregion
-
-## Clearing cached access tokens
-$global:__InteractiveCachedAccessTokens = $null
-
