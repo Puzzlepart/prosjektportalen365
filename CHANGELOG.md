@@ -2,6 +2,14 @@
 
 Sjekk ut [release notes](./releasenotes/1.11.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
 
+## 1.12.0 - TBA
+
+### Ny funksjonalitet
+
+### Forbedringer
+
+### Feilrettinger
+
 ## 1.11.0 - 26.03.2025
 
 ### Ny funksjonalitet
