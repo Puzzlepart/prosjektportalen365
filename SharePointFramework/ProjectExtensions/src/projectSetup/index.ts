@@ -403,7 +403,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       const [lockedTemplateName, templates] = await Promise.all([
         webAllProperties[lockedTemplateProperty],
         this._portalDataService.getItems(
-          resx.Lists_ProjectTemplates_Title,
+          resx.Lists_TemplateOptions_Title,
           ProjectTemplate,
           {
             ViewXml: '<View></View>'
@@ -438,7 +438,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         await Promise.all([
           this._getTemplates(),
           this._portalDataService.getItems(
-           resx.Lists_ProjectExtensions_Title,
+            resx.Lists_ProjectExtensions_Title,
             ProjectExtension,
             {
               ViewXml:
@@ -450,7 +450,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             'File'
           ]),
           this._portalDataService.getItems(
-            strings.ProjectTemplateFilesListName,
+            resx.Lists_ProjectTemplates_Title,
             ProjectTemplateFile,
             {
               ViewXml: '<View></View>'
@@ -477,7 +477,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       throw new ProjectSetupError(
         '_fetchData',
         strings.GetSetupDataErrorMessage,
-        strings.GetSetupDataErrorStack
+        strings.GetSetupDataErrorStack + error.message,
       )
     }
   }

@@ -79,7 +79,6 @@ define([], function () {
         ProjectPropertiesListName: 'Prosjektegenskaper',
         ProjectProvisioningStartLogText: 'Starting provisioning of the project {0}.',
         ProjectProvisioningSuccessLogText: 'The project {0} was provisioned without error.',
-        ProjectTemplateFilesListName: 'Prosjektmaler',
         ProvisionSiteFieldsErrorMessage: 'An error occurred while provisioning site columns',
         ProvisionSiteFieldsText: 'Creating site columns',
         ProvisionSiteFieldText: 'Created field {0} on site',

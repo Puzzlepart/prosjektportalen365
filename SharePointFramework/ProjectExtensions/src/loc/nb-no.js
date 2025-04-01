@@ -120,7 +120,6 @@ define([], function () {
     ProjectPropertiesListName: 'Prosjektegenskaper',
     ProjectProvisioningStartLogText: 'Starter provisjonering av prosjektet {0}.',
     ProjectProvisioningSuccessLogText: 'Prosjektet {0} ble provisjonert uten feil.',
-    ProjectTemplateFilesListName: 'Prosjektmaler',
     ProvisionSiteFieldsErrorMessage: 'Det skjedde en feil under provisjonering av områdekolonner',
     ProvisionSiteFieldsText: 'Oppretter områdekolonner',
     ProvisionSiteFieldText: 'Opprettet felt {0} på området',

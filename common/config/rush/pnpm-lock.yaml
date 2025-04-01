@@ -65,7 +65,6 @@ dependencies:
   '@uifabric/file-type-icons': 7.6.27_9c907a7ccd27a2e2d0ee9de5366482d1
   '@uifabric/utilities': 6.45.1_9c907a7ccd27a2e2d0ee9de5366482d1
   array-unique: 0.3.2
-  chokidar-cli: 2.1.0
   clean-deep: 3.0.2
   colors: 1.4.0
   colors-convert: 1.4.1
@@ -118,6 +117,7 @@ dependencies:
   valid-filename: 3.1.0
   webpack: 5.74.0
   xlsx: 0.16.9
+  xml2js: 0.6.2
   xmldom: 0.6.0
 lockfileVersion: 5.2
 packages:
@@ -25317,6 +25317,15 @@ packages:
       node: '>=4.0.0'
     resolution:
       integrity: sha512-drPFnkQJik/O+uPKpqSgr22mpuFHqKdbS835iAQrUC73L2F5WkboIRd63ai/2Yg6I1jzifPFKH2NTK+cfglkIA==
+  /xml2js/0.6.2:
+    dependencies:
+      sax: 1.4.1
+      xmlbuilder: 11.0.1
+    dev: false
+    engines:
+      node: '>=4.0.0'
+    resolution:
+      integrity: sha512-T4rieHaC1EXcES0Kxxj4JWgaUQHDk+qwHcYOCFHfiwKz7tOVPLq7Hjq9dM1WCMhylqMEfP7hMcOIChvotiZegA==
   /xmlbuilder/11.0.1:
     dev: false
     engines:
@@ -26092,6 +26101,7 @@ packages:
       pzl-spfx-tasks: 0.5.10
       replace: 1.2.2
       resx-json-typescript-converter: 1.0.4
+      xml2js: 0.6.2
     dev: false
     id: file:projects/pp365-templates.tgz
     name: '@rush-temp/pp365-templates'
@@ -26101,7 +26111,7 @@ packages:
       react: '*'
       react-dom: '*'
     resolution:
-      integrity: sha512-JZItbYNCKKqWQnGrd65Cojy+AuF2VxyIVqTqWFqRMjW9SOecCKhUIoWHNHr3vqX1X1zOUN/4+SD+kYuDkVivBg==
+      integrity: sha512-Fo8I+eXlTW870q2v+eBXzkVm+9lEt/muPL2ThFb9ta8T7sjBPos8wxdxsMiQyJ9ba53TDzT3mQfiv0H6WWvDfw==
       tarball: file:projects/pp365-templates.tgz
     version: 0.0.0
 specifiers:
@@ -26171,7 +26181,6 @@ specifiers:
   '@uifabric/file-type-icons': 7.6.27
   '@uifabric/utilities': 6.45.1
   array-unique: 0.3.2
-  chokidar-cli: ^2.1.0
   clean-deep: 3.0.2
   colors: 1.4.0
   colors-convert: ~1.4.1
@@ -26224,4 +26233,5 @@ specifiers:
   valid-filename: 3.1.0
   webpack: 5.74.0
   xlsx: ^0.16.9
+  xml2js: ^0.6.2
   xmldom: 0.6.0
