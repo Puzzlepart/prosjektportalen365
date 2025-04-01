@@ -572,19 +572,19 @@
     <value>Content Type for project admin permission</value>
   </data>
   <data name="SiteFields_Project_Group" xml:space="preserve">
-    <value>Columns for the Project Portal (Project)</value>
+    <value>Project Portal Columns (Project)</value>
   </data>
   <data name="SiteFields_Portfolio_Group" xml:space="preserve">
-    <value>Columns for the Project Portal (Portfolio)</value>
+    <value>Project Portal Columns (Portfolio)</value>
   </data>
   <data name="SiteFields_CustomFields_Group" xml:space="preserve">
-    <value>Custom columns for the Project Portal</value>
+    <value>Project Portal Columns (Custom)</value>
   </data>
   <data name="SiteFields_Idea_Group" xml:space="preserve">
-    <value>Columns for the Project Portal (Project Ideas)</value>
+    <value>Project Portal Columns (Project Ideas)</value>
   </data>
   <data name="SiteFields_BA_Group" xml:space="preserve">
-    <value>Columns for the Project Portal (Construction and Building)</value>
+    <value>Project Portal Columns (Construction and Building)</value>
   </data>
   <data name="SiteFields_GtRiskDescription_DisplayName" xml:space="preserve">
     <value>Description of uncertainty</value>
