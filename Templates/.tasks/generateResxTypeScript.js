@@ -41,12 +41,23 @@ async function parseResxFile(resxFilePath) {
 }
 
 /**
- * Generates the TypeScript interface definition file
- * @param {Object} strings - Combined strings from all locales
+ * Generates the TypeScript interface definition file with JSDoc comments showing values for all languages
+ * @param {Object} allStrings - Combined strings from all locales
+ * @param {Object} localeStrings - Object with locale codes as keys and their string values as values
  * @returns {string} TypeScript interface definition content
  */
-function generateTypescriptDefinition(strings) {
-  const interfaceContent = Object.keys(strings).map(key => `  ${key}: string`).join('\n')
+function generateTypescriptDefinition(allStrings, localeStrings = {}) {
+  const interfaceContent = Object.keys(allStrings).map(key => {
+    // Generate JSDoc comment with values from all locales
+    const localeValues = Object.entries(localeStrings)
+      .map(([locale, strings]) => `   * - \`${locale}\`: "${strings[key] ? strings[key].replace(/"/g, '\\"') : 'undefined'}"`)
+      .join('\n');
+
+    return `  /**
+${localeValues}
+   */
+  ${key}: string`;
+  }).join('\n\n');
 
   return `declare interface IResxStrings {
 ${interfaceContent}
@@ -82,9 +93,9 @@ ${stringEntries}
  */
 async function convertResxToTypescript() {
   try {
+    // Create output directories if they don't exist
     for (const dir of OUTPUT_PATHS) {
-      const outputDir = path.resolve(__dirname, dir, 'resx')
-
+      const outputDir = path.resolve(dir, 'resx')
       if (!fs.existsSync(outputDir)) {
         fs.mkdirSync(outputDir, { recursive: true })
       }
@@ -92,24 +103,47 @@ async function convertResxToTypescript() {
 
     // Parse all .resx files
     const allStrings = {}
+    const localeStrings = {}
+    
+    // First pass: collect all strings from all locales
     for (const resxFile of RESX_FILES) {
       console.log(`Processing ${resxFile.path}...`)
-      const resxPath = path.resolve(__dirname, resxFile.path)
-      const strings = await parseResxFile(resxPath)
+      const strings = await parseResxFile(resxFile.path)
+      
+      // Store strings for this locale
+      localeStrings[resxFile.locale] = strings
+      
+      // Add all keys to the combined strings object
+      Object.keys(strings).forEach(key => {
+        allStrings[key] = strings[key]
+      })
+    }
 
+    // Second pass: generate locale files and ensure all locales have all keys
+    for (const resxFile of RESX_FILES) {
+      const currentLocaleStrings = localeStrings[resxFile.locale]
+      
+      // Make sure this locale has all keys (even if undefined)
+      Object.keys(allStrings).forEach(key => {
+        if (!currentLocaleStrings[key]) {
+          currentLocaleStrings[key] = ''
+        }
+      })
+      
       // Generate locale file
-      const localeContent = generateLocaleFile(strings)
+      const localeContent = generateLocaleFile(currentLocaleStrings)
+      
+      // Write to all output directories
       for (const dir of OUTPUT_PATHS) {
         fs.writeFileSync(path.join(dir, 'resx', `${resxFile.locale}.js`), localeContent)
       }
       console.log(`Generated ${resxFile.locale}.js in all output directories`)
-
-      // Merge strings for type definition
-      Object.assign(allStrings, strings)
     }
 
-    // Generate TypeScript definition file
-    const definitionContent = generateTypescriptDefinition(allStrings)
+    // Generate TypeScript definition file with JSDoc comments including all locale values
+    const definitionContent = generateTypescriptDefinition(allStrings, localeStrings)
+    
+    // Write to all output directories
     for (const dir of OUTPUT_PATHS) {
       fs.writeFileSync(path.join(dir, 'resx', 'resx.d.ts'), definitionContent)
     }
