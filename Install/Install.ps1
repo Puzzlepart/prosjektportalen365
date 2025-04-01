@@ -58,12 +58,12 @@ $ConnectionInfo = [PSCustomObject]@{
 #region Handling installation language and culture
 $LanguageIds = @{
     "Norwegian"    = 1044;
-    "English (US)" = 1033;
+    "English" = 1033;
 }
 
 $LanguageCodes = @{
     "Norwegian"    = 'no-NB';
-    "English (US)" = 'en-US';
+    "English"      = 'en-US';
 }
 
 $Channel = "{CHANNEL_PLACEHOLDER}"
