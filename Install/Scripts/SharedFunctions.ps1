@@ -29,14 +29,7 @@ function Connect-SharePoint {
         $ConnectionInfo
     )
 
-    if ($null -eq $global:__InteractiveCachedAccessTokens) {
-        $global:__InteractiveCachedAccessTokens = @{}
-    }
-
     Try {
-        if ($null -ne $global:__InteractiveCachedAccessTokens[$Url]) {
-            Connect-PnPOnline -Url $Url -AccessToken $global:__InteractiveCachedAccessTokens[$Url] -ErrorAction Stop  -WarningAction Ignore
-        }
         if ($ConnectionInfo.CI) {
             if ($ConnectionInfo.CertificateBase64Encoded -and $ConnectionInfo.Tenant) {
                 Connect-PnPOnline -Url $Url -CertificateBase64Encoded $ConnectionInfo.CertificateBase64Encoded -Tenant $ConnectionInfo.Tenant -ClientId $ConnectionInfo.ClientId -ErrorAction Stop  -WarningAction Ignore
@@ -47,7 +40,6 @@ function Connect-SharePoint {
         }
         else {
             Connect-PnPOnline -Url $Url -Interactive -ClientId $ConnectionInfo.ClientId -ErrorAction Stop -WarningAction Ignore
-            $global:__InteractiveCachedAccessTokens[$Url] = Get-PnPAppAuthAccessToken
         }
     }
     Catch {
@@ -92,7 +84,7 @@ Load PnP.PowerShell from bundle
 Loaa PnP.PowerShell from bundle and return version.
 #>
 function LoadBundle() {
-    Import-Module "$PSScriptRoot/PnP.PowerShell/PnP.PowerShell.psd1" -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
+    Import-Module "$PWD/PnP.PowerShell/PnP.PowerShell.psd1" -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
     return (Get-Command Connect-PnPOnline).Version
 }
 
