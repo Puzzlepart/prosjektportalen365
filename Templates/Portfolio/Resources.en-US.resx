@@ -62,13 +62,13 @@
     <value>Portfolio administrators</value>
   </data>
   <data name="Lists_SitePages_Title" xml:space="preserve">
-    <value>Områdesider</value>
+    <value>Site Pages</value>
   </data>
   <data name="Lists_DataSources_Title" xml:space="preserve">
-    <value>Datakilder</value>
+    <value>Data Sources</value>
   </data>
   <data name="Lists_DataSources_Url" xml:space="preserve">
-    <value>Lists/Datakilder</value>
+    <value>Lists/DataSources</value>
   </data>
   <data name="Lists_CustomCharts_Title" xml:space="preserve">
     <value>Egendefinerte diagrammer</value>
@@ -77,136 +77,136 @@
     <value>CustomCharts</value>
   </data>
   <data name="Lists_PhaseChecklist_Title" xml:space="preserve">
-    <value>Fasesjekkliste</value>
+    <value>Phase Checklist</value>
   </data>
   <data name="Lists_PhaseChecklist_Url" xml:space="preserve">
-    <value>Lists/Fasesjekkliste</value>
+    <value>Lists/PhaseChecklist</value>
   </data>
   <data name="Lists_ChartConfiguration_Title" xml:space="preserve">
-    <value>Grafkonfigurasjon</value>
+    <value>Chart Configuration</value>
   </data>
   <data name="Lists_ChartConfiguration_Url" xml:space="preserve">
-    <value>Lists/Grafkonfigurasjon</value>
+    <value>Lists/ChartConfiguration</value>
   </data>
   <data name="Lists_InstallationLog_Title" xml:space="preserve">
-    <value>Installasjonslogg</value>
+    <value>Installation Log</value>
   </data>
   <data name="Lists_InstallationLog_Url" xml:space="preserve">
-    <value>Lists/Installasjonslogg</value>
+    <value>Lists/InstallationLog</value>
   </data>
   <data name="Lists_Stakeholders_Title" xml:space="preserve">
-    <value>Interessentregister</value>
+    <value>Stakeholders</value>
   </data>
   <data name="Lists_Stakeholders_Url" xml:space="preserve">
-    <value>Lists/Interessentregister</value>
+    <value>Lists/Stakeholders</value>
   </data>
   <data name="Lists_Configuration_Title" xml:space="preserve">
-    <value>Konfigurasjon</value>
+    <value>Configuration</value>
   </data>
   <data name="Lists_Configuration_Url" xml:space="preserve">
-    <value>Lists/Konfigurasjon</value>
+    <value>Lists/Configuration</value>
   </data>
   <data name="Lists_ConfigurationFiles_Title" xml:space="preserve">
-    <value>Konfigurasjonsfiler</value>
+    <value>Configuration Files</value>
   </data>
   <data name="Lists_ConfigurationFiles_Url" xml:space="preserve">
-    <value>Konfigurasjonsfiler</value>
+    <value>Configuration Files</value>
   </data>
   <data name="Lists_ListContent_Title" xml:space="preserve">
-    <value>Listeinnhold</value>
+    <value>List Content</value>
   </data>
   <data name="Lists_ListContent_Url" xml:space="preserve">
-    <value>Lists/Listeinnhold</value>
+    <value>Lists/ListContent</value>
   </data>
   <data name="Lists_Links_Title" xml:space="preserve">
-    <value>Lenker</value>
+    <value>Links</value>
   </data>
   <data name="Lists_Links_Url" xml:space="preserve">
-    <value>Lists/Lenker</value>
+    <value>Lists/Links</value>
   </data>
   <data name="Lists_Log_Title" xml:space="preserve">
-    <value>Logg</value>
+    <value>Log</value>
   </data>
   <data name="Lists_Log_Url" xml:space="preserve">
-    <value>Lists/Logg</value>
+    <value>Lists/Log</value>
   </data>
   <data name="Lists_TemplateLibrary_Title" xml:space="preserve">
-    <value>Malbibliotek</value>
+    <value>Template Library</value>
   </data>
   <data name="Lists_TemplateLibrary_Url" xml:space="preserve">
-    <value>Malbibliotek</value>
+    <value>TemplateLibrary</value>
   </data>
   <data name="Lists_PlannerTasks_Title" xml:space="preserve">
-    <value>Planneroppgaver</value>
+    <value>Planner Tasks</value>
   </data>
   <data name="Lists_PlannerTasks_Url" xml:space="preserve">
-    <value>Lists/Planneroppgaver</value>
+    <value>Lists/PlannerTasks</value>
   </data>
   <data name="Lists_PortfolioViews_Title" xml:space="preserve">
-    <value>Porteføljevisninger</value>
+    <value>Portfolio Views</value>
   </data>
   <data name="Lists_PortfolioViews_Url" xml:space="preserve">
-    <value>Lists/Porteføljevisninger</value>
+    <value>Lists/PortfolioViews</value>
   </data>
   <data name="Lists_Projects_Title" xml:space="preserve">
-    <value>Prosjekter</value>
+    <value>Projects</value>
   </data>
   <data name="Lists_Projects_Url" xml:space="preserve">
-    <value>Lists/Prosjekter</value>
+    <value>Lists/Projects</value>
   </data>
   <data name="Lists_ProjectData_Title" xml:space="preserve">
-    <value>Prosjektdata</value>
+    <value>Project Data</value>
   </data>
   <data name="Lists_ProjectData_Url" xml:space="preserve">
-    <value>Lists/Prosjektdata</value>
+    <value>Lists/ProjectData</value>
   </data>
   <data name="Lists_ProjectColumnConfiguration_Title" xml:space="preserve">
-    <value>Prosjektkolonnekonfigurasjon</value>
+    <value>Project Column Configuration</value>
   </data>
   <data name="Lists_ProjectColumnConfiguration_Url" xml:space="preserve">
-    <value>Lists/Prosjektkolonnekonfigurasjon</value>
+    <value>Lists/ProjectColumnConfiguration</value>
   </data>
   <data name="Lists_ProjectColumns_Title" xml:space="preserve">
-    <value>Prosjektkolonner</value>
+    <value>Project Columns</value>
   </data>
   <data name="Lists_ProjectColumns_Url" xml:space="preserve">
-    <value>Lists/Prosjektkolonner</value>
+    <value>Lists/ProjectColumns</value>
   </data>
   <data name="Lists_ProjectContentColumns_Title" xml:space="preserve">
-    <value>Prosjektinnholdskolonner</value>
+    <value>Project Content Columns</value>
   </data>
   <data name="Lists_ProjectContentColumns_Url" xml:space="preserve">
-    <value>Lists/Prosjektinnholdskolonner</value>
+    <value>Lists/ProjectContentColumns</value>
   </data>
   <data name="Lists_ProjectTemplates_Title" xml:space="preserve">
-    <value>Prosjektmaler</value>
+    <value>Project Templates</value>
   </data>
   <data name="Lists_ProjectTemplates_Url" xml:space="preserve">
-    <value>Prosjektmaler</value>
+    <value>ProjectTemplates</value>
   </data>
   <data name="Lists_ProjectStatus_Title" xml:space="preserve">
-    <value>Prosjektstatus</value>
+    <value>Project Status</value>
   </data>
   <data name="Lists_ProjectStatus_Url" xml:space="preserve">
-    <value>Lists/Prosjektstatus</value>
+    <value>Lists/ProjectStatus</value>
   </data>
   <data name="Lists_ProjectStatusAttachments_Title" xml:space="preserve">
-    <value>Prosjektstatusvedlegg</value>
+    <value>Project Status Attachments</value>
   </data>
   <data name="Lists_ProjectStatusAttachments_Url" xml:space="preserve">
-    <value>Prosjektstatusvedlegg</value>
+    <value>ProjectStatusAttachments</value>
   </data>
   <data name="Lists_ProjectExtensions_Title" xml:space="preserve">
-    <value>Prosjekttillegg</value>
+    <value>Project Extensions</value>
   </data>
   <data name="Lists_ProjectExtensions_Url" xml:space="preserve">
-    <value>Prosjekttillegg</value>
+    <value>ProjectExtensions</value>
   </data>
   <data name="Lists_ResourceAllocation_Title" xml:space="preserve">
-    <value>Ressursallokering</value>
+    <value>Resource Allocation</value>
   </data>
   <data name="Lists_ResourceAllocation_Url" xml:space="preserve">
-    <value>Lists/Ressursallokering</value>
+    <value>Lists/ResourceAllocation</value>
   </data>
   <data name="Lists_StatusSections_Title" xml:space="preserve">
     <value>Statusseksjoner</value>
@@ -365,13 +365,13 @@
     <value>Create a new custom chart</value>
   </data>
   <data name="ContentTypes_ChartConfigurationElement_Name" xml:space="preserve">
-    <value>Grafkonfigurasjonelement</value>
+    <value>Chart Configuration Element</value>
   </data>
   <data name="ContentTypes_ChartConfigurationElement_Description" xml:space="preserve">
     <value>Create a new chart configuration element</value>
   </data>
   <data name="ContentTypes_Stakeholder_Name" xml:space="preserve">
-    <value>Interessent</value>
+    <value>Stakeholder</value>
   </data>
   <data name="ContentTypes_Stakeholder_Description" xml:space="preserve">
     <value>Representation of a stakeholder, that has a vested interest in the project</value>

@@ -55,7 +55,7 @@ $ConnectionInfo = [PSCustomObject]@{
 #region Handling installation language and culture
 $LanguageIds = @{
     "Norwegian"    = 1044;
-    "English" = 1033;
+    "English"      = 1033;
 }
 
 $LanguageCodes = @{
