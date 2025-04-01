@@ -37,6 +37,7 @@
   },
   "externals": {},
   "localizedResources": {
+    "ResxStrings": "lib/loc/resx/{locale}.js",
     "PortfolioExtensionsStrings": "lib/loc/{locale}.js",
     "ControlStrings": "lib/loc/{locale}.js",
     "SharedLibraryStrings": "node_modules/pp365-shared-library/lib/loc/{locale}.js"
