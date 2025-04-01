@@ -209,31 +209,31 @@
     <value>Lists/ResourceAllocation</value>
   </data>
   <data name="Lists_StatusSections_Title" xml:space="preserve">
-    <value>Statusseksjoner</value>
+    <value>Status Sections</value>
   </data>
   <data name="Lists_StatusSections_Url" xml:space="preserve">
-    <value>Lists/Statusseksjoner</value>
+    <value>Lists/StatusSections</value>
   </data>
   <data name="Lists_Permission_Configuration_Title" xml:space="preserve">
-    <value>Tillatelseskonfigurasjon</value>
+    <value>Permission Configuration</value>
   </data>
   <data name="Lists_Permission_Configuration_Url" xml:space="preserve">
-    <value>Lists/Tillatelseskonfigurasjon</value>
+    <value>Lists/PermissionConfiguration</value>
   </data>
   <data name="Lists_Permission_Configuration_Description" xml:space="preserve">
     <value>Permission configuration for new projects. This list must not be changed.</value>
   </data>
   <data name="Lists_TemplateOptions_Title" xml:space="preserve">
-    <value>Maloppsett</value>
+    <value>Template Options</value>
   </data>
   <data name="Lists_TemplateOptions_Url" xml:space="preserve">
-    <value>Lists/Maloppsett</value>
+    <value>Lists/TemplateOptions</value>
   </data>
   <data name="Lists_TimelineContent_Title" xml:space="preserve">
-    <value>Tidslinjeinnhold</value>
+    <value>Timeline Content</value>
   </data>
   <data name="Lists_TimelineContent_Url" xml:space="preserve">
-    <value>Lists/Tidslinjeinnhold</value>
+    <value>Lists/TimelineContent</value>
   </data>
   <data name="Lists_TimelineContent_Field_Title_DisplayName" xml:space="preserve">
     <value>Title</value>
@@ -254,37 +254,37 @@
     <value>End date (milestone date)</value>
   </data>
   <data name="Lists_Timeline_Configuration_Title" xml:space="preserve">
-    <value>Tidslinjekonfigurasjon</value>
+    <value>Timeline Configuration</value>
   </data>
   <data name="Lists_Timeline_Configuration_Url" xml:space="preserve">
-    <value>Lists/Tidslinjekonfigurasjon</value>
+    <value>Lists/TimelineConfiguration</value>
   </data>
   <data name="Lists_Timeline_Configuration_Field_GtSortOrder_Description" xml:space="preserve">
     <value>Specify the priority of the item under its group/project on the timeline, use for example 31 if you want the item to be between elements 30 and 40.</value>
   </data>
   <data name="Lists_Global_Settings_Title" xml:space="preserve">
-    <value>Globale innstillinger</value>
+    <value>Global Settings</value>
   </data>
   <data name="Lists_Global_Settings_Url" xml:space="preserve">
-    <value>Lists/Globale innstillinger</value>
+    <value>Lists/GlobalSettings</value>
   </data>
   <data name="Lists_IdeaProcessing_Title" xml:space="preserve">
-    <value>Idébehandling</value>
+    <value>Idea Processing</value>
   </data>
   <data name="Lists_IdeaProcessing_Url" xml:space="preserve">
-    <value>Lists/Idebehandling</value>
+    <value>Lists/IdeaProcessing</value>
   </data>
   <data name="Lists_IdeaRegistration_Title" xml:space="preserve">
-    <value>Idéregistrering</value>
+    <value>Idea Registration</value>
   </data>
   <data name="Lists_IdeaRegistration_Url" xml:space="preserve">
-    <value>Lists/Ideregistrering</value>
+    <value>Lists/IdeaRegistration</value>
   </data>
   <data name="Lists_Idea_Configuration_Title" xml:space="preserve">
-    <value>Idékonfigurasjon</value>
+    <value>IdeaConfiguration</value>
   </data>
   <data name="Lists_Idea_Configuration_Url" xml:space="preserve">
-    <value>Lists/Idekonfigurasjon</value>
+    <value>Lists/IdeaConfiguration</value>
   </data>
   <data name="Lists_Idea_Configuration_Field_GtDescription_DisplayName" xml:space="preserve">
     <value>Dialog Descriptions</value>
@@ -293,40 +293,40 @@
     <value>Dialog descriptions for 1. Idea Registration, 2. Idea Processing, and 3. Project Data Creation, separated by semicolon</value>
   </data>
   <data name="Lists_PhaseChecklistA_Title" xml:space="preserve">
-    <value>Fasesjekkliste Anlegg</value>
+    <value>Phase Checklist A</value>
   </data>
   <data name="Lists_PhaseChecklistA_Url" xml:space="preserve">
-    <value>Lists/Fasesjekkliste_Anlegg</value>
+    <value>Lists/PhaseChecklist_A</value>
   </data>
   <data name="Lists_PhaseChecklistB_Title" xml:space="preserve">
-    <value>Fasesjekkliste Bygg</value>
+    <value>Phase Checklist B</value>
   </data>
   <data name="Lists_PhaseChecklistB_Url" xml:space="preserve">
-    <value>Lists/Fasesjekkliste_Bygg</value>
+    <value>Lists/PhaseChecklist_B</value>
   </data>
   <data name="Lists_PlannerTasksA_Title" xml:space="preserve">
-    <value>Planneroppgaver Anlegg</value>
+    <value>Planner Tasks A</value>
   </data>
   <data name="Lists_PlannerTasksA_Url" xml:space="preserve">
-    <value>Lists/Planneroppgaver_Anlegg</value>
+    <value>Lists/PlannerTasks_A</value>
   </data>
   <data name="Lists_PlannerTasksB_Title" xml:space="preserve">
-    <value>Planneroppgaver Bygg</value>
+    <value>Planner Tasks B</value>
   </data>
   <data name="Lists_PlannerTasksB_Url" xml:space="preserve">
-    <value>Lists/Planneroppgaver_Bygg</value>
+    <value>Lists/PlannerTasks_B</value>
   </data>
   <data name="Lists_DocumentsA_Title" xml:space="preserve">
-    <value>Standarddokumenter Anlegg</value>
+    <value>Standard Documents A</value>
   </data>
   <data name="Lists_DocumentsA_Url" xml:space="preserve">
-    <value>Standarddokumenter_Anlegg</value>
+    <value>StandardDocuments_A</value>
   </data>
   <data name="Lists_DocumentsB_Title" xml:space="preserve">
-    <value>Standarddokumenter Bygg</value>
+    <value>Standard Documents B</value>
   </data>
   <data name="Lists_DocumentsB_Url" xml:space="preserve">
-    <value>Standarddokumenter_Bygg</value>
+    <value>StandardDocuments_B</value>
   </data>
   <data name="View_AllItems_DisplayName" xml:space="preserve">
     <value>All items</value>
@@ -341,7 +341,7 @@
     <value>Card view</value>
   </data>
   <data name="View_IdeaItems_DisplayName" xml:space="preserve">
-    <value>Idémodul</value>
+    <value>Idea Module</value>
   </data>
   <data name="ContentTypes_Group" xml:space="preserve">
     <value>Project Portal content types</value>
@@ -377,13 +377,13 @@
     <value>Representation of a stakeholder, that has a vested interest in the project</value>
   </data>
   <data name="ContentTypes_ColumnChart_Name" xml:space="preserve">
-    <value>Kolonnediagram</value>
+    <value>Column Chart</value>
   </data>
   <data name="ContentTypes_ColumnChart_Description" xml:space="preserve">
     <value>Create a new column chart</value>
   </data>
   <data name="ContentTypes_ConfigurationElement_Name" xml:space="preserve">
-    <value>Konfigurasjonselement</value>
+    <value>Configuration Element</value>
   </data>
   <data name="ContentTypes_ConfigurationElement_Description" xml:space="preserve">
     <value>Element of configuration within the project</value>
