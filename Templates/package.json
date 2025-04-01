@@ -6,8 +6,8 @@
     "build": "npm run generate-project-templates && npm run generate-resx-json",
     "lint": "echo \"No linting configured\"",
     "generate-resx-json": "node ./.tasks/generateResxJson",
-    "generate-project-templates": "npm run generate-resx-json && node ./.tasks/generateProjectTemplates",
-    "generate-resx-ts": "node ./.tasks/resx-to-ts.js"
+    "generate-resx-ts": "node ./.tasks/generateResxTypeScript.js",
+    "generate-project-templates": "npm run generate-resx-json && npm run generate-resx-ts && node ./.tasks/generateProjectTemplates"
   },
   "dependencies": {
     "@fluentui/react-components": "~9.52.0",
