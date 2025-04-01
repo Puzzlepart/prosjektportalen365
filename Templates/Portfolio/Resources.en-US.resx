@@ -389,97 +389,97 @@
     <value>Element of configuration within the project</value>
   </data>
   <data name="ContentTypes_Links_Name" xml:space="preserve">
-    <value>Lenker</value>
+    <value>Links Element</value>
   </data>
   <data name="ContentTypes_Links_Description" xml:space="preserve">
     <value>Links element</value>
   </data>
   <data name="ContentTypes_ListContent_Name" xml:space="preserve">
-    <value>Listeinnhold</value>
+    <value>List Content</value>
   </data>
   <data name="ContentTypes_ListContent_Description" xml:space="preserve">
     <value>Representation of list content</value>
   </data>
   <data name="ContentTypes_ListSection_Name" xml:space="preserve">
-    <value>Listeseksjon</value>
+    <value>List Section</value>
   </data>
   <data name="ContentTypes_ListSection_Description" xml:space="preserve">
     <value>Representation of a list section</value>
   </data>
   <data name="ContentTypes_LogElement_Name" xml:space="preserve">
-    <value>Loggelement</value>
+    <value>Log Element</value>
   </data>
   <data name="ContentTypes_LogElement_Description" xml:space="preserve">
     <value>Representation of a log element</value>
   </data>
   <data name="ContentTypes_PlannerTask_Name" xml:space="preserve">
-    <value>Planneroppgave</value>
+    <value>Planner Task</value>
   </data>
   <data name="ContentTypes_PlannerTask_Description" xml:space="preserve">
     <value>A specific task to be accomplished as part of a Planner</value>
   </data>
   <data name="ContentTypes_PlannerTasks_Name" xml:space="preserve">
-    <value>Planneroppgaver</value>
+    <value>Planner Tasks</value>
   </data>
   <data name="ContentTypes_PlannerTasks_Description" xml:space="preserve">
     <value>A collection of tasks to be accomplished as part of a Planner</value>
   </data>
   <data name="ContentTypes_PortfolioView_Name" xml:space="preserve">
-    <value>Porteføljevisning</value>
+    <value>Portfolio View</value>
   </data>
   <data name="ContentTypes_PortfolioView_Description" xml:space="preserve">
     <value>A view of the portfolio</value>
   </data>
   <data name="ContentTypes_Project_Name" xml:space="preserve">
-    <value>Prosjekt</value>
+    <value>Project</value>
   </data>
   <data name="ContentTypes_Project_Description" xml:space="preserve">
     <value>A project within the portfolio</value>
   </data>
   <data name="ContentTypes_ProjectColumn_Name" xml:space="preserve">
-    <value>Prosjektkolonne</value>
+    <value>Project Column</value>
   </data>
   <data name="ContentTypes_ProjectColumn_Description" xml:space="preserve">
     <value>A project related column</value>
   </data>
   <data name="ContentTypes_ProjectContentColumn_Name" xml:space="preserve">
-    <value>Prosjektinnholdskolonne</value>
+    <value>Project Content Column</value>
   </data>
   <data name="ContentTypes_ProjectContentColumn_Description" xml:space="preserve">
     <value>A column containing specific content related to a project</value>
   </data>
   <data name="ContentTypes_ProjectColumnConfiguration_Name" xml:space="preserve">
-    <value>Prosjektkolonnekonfigurasjonselement</value>
+    <value>Project Column Configuration</value>
   </data>
   <data name="ContentTypes_ProjectColumnConfiguration_Description" xml:space="preserve">
-    <value>Configuration element for a project column</value>
+    <value>Content type for project column configuration</value>
   </data>
   <data name="ContentTypes_ProjectStatus_Name" xml:space="preserve">
-    <value>Prosjektstatus</value>
+    <value>Project Status</value>
   </data>
   <data name="ContentTypes_ProjectStatus_Description" xml:space="preserve">
     <value>The status of a project</value>
   </data>
   <data name="ContentTypes_ProjectBA_Name" xml:space="preserve">
-    <value>Prosjekt (ByggAnlegg)</value>
+    <value>Project (CB)</value>
   </data>
   <data name="ContentTypes_ProjectBA_Description" xml:space="preserve">
-    <value>Prosjekt innholdstype for bygg- og anleggsprosjekter</value>
+    <value>Project content type for construction and building projects</value>
   </data>
   <data name="ContentTypes_ProjectStatusBA_Name" xml:space="preserve">
-    <value>Prosjektstatus (ByggAnlegg)</value>
+    <value>Project Status (CB)</value>
   </data>
   <data name="ContentTypes_ProjectStatusBA_Description" xml:space="preserve">
-    <value>Prosjektstatus innholdstype for bygg- og anleggsprosjekter</value>
+    <value>Project Status content type for construction and building projects</value>
   </data>
   <data name="ContentTypes_ResourceAllocation_Name" xml:space="preserve">
-    <value>Ressursallokering</value>
+    <value>Resource Allocation</value>
   </data>
   <data name="ContentTypes_ResourceAllocation_Description" xml:space="preserve">
     <value>Allocation of resources</value>
   </data>
   <data name="ContentTypes_UncertaintySection_Name" xml:space="preserve">
-    <value>Usikkerhetseksjon</value>
+    <value>Uncertainties Section</value>
   </data>
   <data name="ContentTypes_UncertaintySection_Description" xml:space="preserve">
     <value>Uncertainties related to the project</value>
@@ -497,70 +497,70 @@
     <value>Status fields of the project</value>
   </data>
   <data name="ContentTypes_SectionBase_Name" xml:space="preserve">
-    <value>Seksjonsbase</value>
+    <value>Section Base</value>
   </data>
   <data name="ContentTypes_SectionBase_Description" xml:space="preserve">
     <value>Base section for content types</value>
   </data>
   <data name="ContentTypes_SectorDiagram_Name" xml:space="preserve">
-    <value>Sektordiagram</value>
+    <value>Sector Diagram</value>
   </data>
   <data name="ContentTypes_SectorDiagram_Description" xml:space="preserve">
-    <value>Create a new pie chart</value>
+    <value>Create a new sector diagram</value>
   </data>
   <data name="ContentTypes_Checkpoint_Name" xml:space="preserve">
-    <value>Sjekkpunkt</value>
+    <value>Checkpoint</value>
   </data>
   <data name="ContentTypes_Checkpoint_Description" xml:space="preserve">
     <value>Checkpoint</value>
   </data>
   <data name="ContentTypes_BarChart_Name" xml:space="preserve">
-    <value>Stolpediagram</value>
+    <value>Bar Chart</value>
   </data>
   <data name="ContentTypes_BarChart_Description" xml:space="preserve">
     <value>Create a new bar chart</value>
   </data>
   <data name="ContentTypes_Permission_Configuration_Element_Name" xml:space="preserve">
-    <value>Tillatelseskonfigurasjonelement</value>
+    <value>Permission Configuration Element</value>
   </data>
   <data name="ContentTypes_Permission_Configuration_Element_Description" xml:space="preserve">
     <value>Create a new permission configuration element</value>
   </data>
   <data name="ContentTypes_Timeline_Configuration_Element_Name" xml:space="preserve">
-    <value>Tidslinjekonfigurasjonelement</value>
+    <value>Timeline_´Configuration Element</value>
   </data>
   <data name="ContentTypes_Timeline_Configuration_Element_Description" xml:space="preserve">
     <value>Create a new timeline configuration element</value>
   </data>
   <data name="ContentTypes_Timeline_Element_Name" xml:space="preserve">
-    <value>Tidslinjeelement</value>
+    <value>Timeline Element</value>
   </data>
   <data name="ContentTypes_ProjectIdea_Name" xml:space="preserve">
-    <value>Prosjektidé</value>
+    <value>Project Idea</value>
   </data>
   <data name="ContentTypes_ProjectIdea_Description" xml:space="preserve">
     <value>Content type for project ideas (Idea registration)</value>
   </data>
   <data name="ContentTypes_IdeaProcessing_Name" xml:space="preserve">
-    <value>Idébehandling</value>
+    <value>Idea Processing</value>
   </data>
   <data name="ContentTypes_IdeaProcessing_Description" xml:space="preserve">
     <value>Content type for idea processing (Idea Processing)</value>
   </data>
   <data name="ContentTypes_Idea_Configuration_Element_Name" xml:space="preserve">
-    <value>Idékonfigurasjonelement</value>
+    <value>Idea Configuration Element</value>
   </data>
   <data name="ContentTypes_Idea_Configuration_Element_Description" xml:space="preserve">
     <value>Content type for idea configuration (Idea Processing)</value>
   </data>
   <data name="ContentTypes_IdeaColumn_Name" xml:space="preserve">
-    <value>Idekolonne</value>
+    <value>Idea Colmn</value>
   </data>
   <data name="ContentTypes_IdeaColumn_Description" xml:space="preserve">
-    <value>Innholdstype for idekolonne (kolonnekonfigurasjon)</value>
+    <value>Content Type for idea column (Column configuration)</value>
   </data>
    <data name="ContentTypes_HelpContent_Name" xml:space="preserve">
-    <value>Hjelpeinnhold</value>
+    <value>Help Content</value>
   </data>
   <data name="ContentTypes_HelpContent_Description" xml:space="preserve">
     <value>Content type for help content (Help Content)</value>
@@ -812,7 +812,7 @@
     <value>Last synchronized</value>
   </data>
   <data name="SiteFields_GtFieldDataType_DisplayName" xml:space="preserve">
-    <value>Datatype</value>
+    <value>Data type</value>
   </data>
   <data name="SiteFields_GtFieldDataTypeProperties_DisplayName" xml:space="preserve">
     <value>Data type properties</value>
@@ -935,7 +935,7 @@
     <value>Minimum Width</value>
   </data>
   <data name="SiteFields_GtColMaxWidth_DisplayName" xml:space="preserve">
-    <value>Maksimum Width</value>
+    <value>Maximum Width</value>
   </data>
   <data name="SiteFields_GtPortfolioColumnValue_DisplayName" xml:space="preserve">
     <value>Column Value</value>
@@ -1673,7 +1673,6 @@
     <value>Data type for this column. Controls how the column is displayed in the Portfolio Overview.</value>
   </data>
   <data name="SiteFields_GtFieldDataTypeProperties_Description" xml:space="preserve">
-    <value></value>
     <value>Properties of datatypes related to the field.</value>
   </data>
   <data name="SiteFields_GtResourceRole_Description" xml:space="preserve">
@@ -2640,7 +2639,7 @@
     <value>Experience Log</value>
   </data>
   <data name="ClientSidePages_BenefitOverview_PageName" xml:space="preserve">
-    <value>Gevinstoversikt.aspx</value>
+    <value>BenefitOverview.aspx</value>
   </data>
   <data name="ClientSidePages_BenefitOverview_Title" xml:space="preserve">
       <value>Benefit Overview</value>
@@ -2652,63 +2651,63 @@
       <value>Home</value>
   </data>
   <data name="ClientSidePages_Configuration_PageName" xml:space="preserve">
-      <value>Konfigurasjon.aspx</value>
+      <value>Configuration.aspx</value>
   </data>
   <data name="ClientSidePages_Configuration_Title" xml:space="preserve">
       <value>Configuration</value>
   </data>
   <data name="ClientSidePages_DeliveryOverview_PageName" xml:space="preserve">
-      <value>Leveranseoversikt.aspx</value>
+      <value>DeliveryOverview.aspx</value>
   </data>
   <data name="ClientSidePages_DeliveryOverview_Title" xml:space="preserve">
       <value>Delivery Overview</value>
   </data>
   <data name="ClientSidePages_PortfolioInsights_PageName" xml:space="preserve">
-      <value>Porteføljeinnsikt.aspx</value>
+      <value>PortfolioInsights.aspx</value>
   </data>
   <data name="ClientSidePages_PortfolioInsights_Title" xml:space="preserve">
       <value>Portfolio Insights</value>
   </data>
   <data name="ClientSidePages_PortfolioOverview_PageName" xml:space="preserve">
-      <value>Porteføljeoversikt.aspx</value>
+      <value>PortfolioOverview.aspx</value>
   </data>
   <data name="ClientSidePages_PortfolioOverview_Title" xml:space="preserve">
       <value>Portfolio Overview</value>
   </data>
   <data name="ClientSidePages_ResourceAllocation_PageName" xml:space="preserve">
-      <value>Ressursallokering.aspx</value>
+      <value>ResourceAllocation.aspx</value>
   </data>
   <data name="ClientSidePages_ResourceAllocation_Title" xml:space="preserve">
       <value>Resource Allocation</value>
   </data>
   <data name="ClientSidePages_UncertaintyOverview_PageName" xml:space="preserve">
-    <value>Usikkerhetsoversikt.aspx</value>
+    <value>UncertaintyOverview.aspx</value>
   </data>
   <data name="ClientSidePages_UncertaintyOverview_Title" xml:space="preserve">
     <value>Uncertainty Overview</value>
   </data>
   <data name="ClientSidePages_ProjectTimeline_PageName" xml:space="preserve">
-    <value>Prosjekttidslinje.aspx</value>
+    <value>ProjectTimeline_.aspx</value>
   </data>
   <data name="ClientSidePages_ProjectTimeline_Title" xml:space="preserve">
     <value>Project Timeline</value>
   </data>
   <data name="ClientSidePages_IdeaModule_PageName" xml:space="preserve">
-    <value>Idemodul.aspx</value>
+    <value>IdeaModule.aspx</value>
   </data>
   <data name="ClientSidePages_IdeaModule_Title" xml:space="preserve">
     <value>Idea module</value>
   </data>
   <data name="SiteFields_GtFieldLocked_DisplayName" xml:space="preserve">
-    <value>Låst</value>
+    <value>Locked</value>
   </data>
   <data name="SiteFields_GtFieldLocked_Description" xml:space="preserve">
-    <value>Kolonnen er låst og kan ikke redigeres eller velges bort.</value>
+    <value>The column is locked and cannot be changed. This is set in the configuration.</value>
   </data>
   <data name="SiteFields_GtFieldOverrides_DisplayName" xml:space="preserve">
-    <value>Tilpassede feltinnstillinger</value>
+    <value>Field overrides</value>
   </data>
   <data name="SiteFields_GtFieldOverrides_Description" xml:space="preserve">
-    <value>Tilpassede feltinnstillinger i JSON-format. Objektformat med konfigurasjonsnavnet først, deretter ett objekt med lokalene som nøkkel og feltinnstillingene (f.eks. displayName eller description) som verdi.</value>
+    <value>Field overrides in JSON-format. Object format with the configuration name first, then an object with the locales as key and the field settings (e.g. displayName or description) as value.</value>
   </data>
 </root>
