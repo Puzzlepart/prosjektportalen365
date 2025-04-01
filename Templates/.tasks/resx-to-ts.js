@@ -6,7 +6,10 @@ const RESX_FILES = [
   { path: path.resolve(__dirname, '../Portfolio/Resources.en-US.resx'), locale: 'en-us' },
   { path: path.resolve(__dirname, '../Portfolio/Resources.no-NB.resx'), locale: 'no-nb' },
 ];
-const OUTPUT_PATH = path.resolve(__dirname, '../../SharePointFramework/ProgramWebParts/src/loc');
+const OUTPUT_PATHS = [
+  path.resolve(__dirname, '../../SharePointFramework/ProgramWebParts/src/loc'),
+  path.resolve(__dirname, '../../SharePointFramework/ProjectExtensions/src/loc'),
+];
 
 /**
  * Parses a .resx file and extracts string resources
@@ -41,12 +44,12 @@ async function parseResxFile(resxFilePath) {
 function generateTypescriptDefinition(strings) {
   const interfaceContent = Object.keys(strings).map(key => `  ${key}: string;`).join('\n');
 
-  return `declare interface IStrings {
+  return `declare interface IResxStrings {
 ${interfaceContent}
 }
 
-declare module 'SharedLibraryStrings' {
-  const strings: IStrings;
+declare module 'ResxStrings' {
+  const strings: IResxStrings;
   export = strings;
 }
 `;
@@ -76,11 +79,12 @@ ${stringEntries}
  */
 async function convertResxToTypescript() {
   try {
-    // Create output directory if it doesn't exist
-    const outputDir = path.resolve(__dirname, OUTPUT_PATH, 'resx');
+    for (const dir of OUTPUT_PATHS) {
+      const outputDir = path.resolve(__dirname, dir, 'resx');
 
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir, { recursive: true });
+      if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir, { recursive: true });
+      }
     }
 
     // Parse all .resx files
@@ -92,8 +96,10 @@ async function convertResxToTypescript() {
 
       // Generate locale file
       const localeContent = generateLocaleFile(strings, resxFile.locale);
-      fs.writeFileSync(path.join(outputDir, `${resxFile.locale}.js`), localeContent);
-      console.log(`Generated ${resxFile.locale}.js`);
+      for (const dir of OUTPUT_PATHS) {
+        fs.writeFileSync(path.join(dir, `${resxFile.locale}.js`), localeContent);
+      }
+      console.log(`Generated ${resxFile.locale}.js in all output directories`);
 
       // Merge strings for type definition
       Object.assign(allStrings, strings);
@@ -101,8 +107,10 @@ async function convertResxToTypescript() {
 
     // Generate TypeScript definition file
     const definitionContent = generateTypescriptDefinition(allStrings);
-    fs.writeFileSync(path.join(outputDir, 'resx.d.ts'), definitionContent);
-    console.log('Generated resx.d.ts');
+    for (const dir of OUTPUT_PATHS) {
+      fs.writeFileSync(path.join(dir, 'resx.d.ts'), definitionContent);
+    }
+    console.log('Generated resx.d.ts in all output directories');
 
     console.log('Conversion completed successfully!');
   } catch (error) {
