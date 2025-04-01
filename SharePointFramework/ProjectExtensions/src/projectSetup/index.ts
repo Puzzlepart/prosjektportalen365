@@ -7,6 +7,7 @@ import { SPFI } from '@pnp/sp'
 import { IMenuNode } from '@pnp/sp/navigation'
 import { format, getId } from '@uifabric/utilities'
 import * as strings from 'ProjectExtensionsStrings'
+import * as resx from 'ResxStrings'
 import { SPDataAdapter } from 'data'
 import msgraph from 'msgraph-helper'
 import {
@@ -126,12 +127,12 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
 
   private async _ensureParentProjectPatch(): Promise<void> {
     const [singleItem] = await SPDataAdapter.portalDataService.web.lists
-      .getByTitle(this.properties.projectsList)
+      .getByTitle(resx.Lists_Projects_Title)
       .items.filter(
         `GtSiteId eq '${this.context.pageContext.legacyPageContext.siteId.replace(/([{}])/g, '')}'`
       )()
     await SPDataAdapter.portalDataService.web.lists
-      .getByTitle(this.properties.projectsList)
+      .getByTitle(resx.Lists_Projects_Title)
       .items.getById(singleItem.Id)
       .update({ GtIsParentProject: true })
   }
@@ -402,7 +403,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       const [lockedTemplateName, templates] = await Promise.all([
         webAllProperties[lockedTemplateProperty],
         this._portalDataService.getItems(
-          this.properties.templatesLibrary,
+          resx.Lists_ProjectTemplates_Title,
           ProjectTemplate,
           {
             ViewXml: '<View></View>'
@@ -433,15 +434,11 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   private async _fetchData(): Promise<IProjectSetupData> {
     try {
       const data: IProjectSetupData = {}
-      this._portalDataService = await new PortalDataService().configure({
-        spfxContext: this.context
-      })
-
       const [_templates, extensions, contentConfig, templateFiles, customActions, ideaData] =
         await Promise.all([
           this._getTemplates(),
           this._portalDataService.getItems(
-            this.properties.extensionsLibrary,
+           resx.Lists_ProjectExtensions_Title,
             ProjectExtension,
             {
               ViewXml:
@@ -449,7 +446,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             },
             ['File', 'FieldValuesAsText']
           ),
-          this._portalDataService.getItems(this.properties.contentConfigList, ContentConfig, {}, [
+          this._portalDataService.getItems(resx.Lists_ListContent_Title, ContentConfig, {}, [
             'File'
           ]),
           this._portalDataService.getItems(
@@ -491,14 +488,22 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   private async _validateProjectSetup(): Promise<ProjectSetupValidation> {
     const { isSiteAdmin, groupId, hubSiteId, siteId } = this.context.pageContext.legacyPageContext
 
+    this._portalDataService = await new PortalDataService().configure({
+      spfxContext: this.context
+    })
+
     const members = await msgraph.Get<any[]>(`groups/${groupId}/members`)
     if (!members.some(({ mail }) => mail === this.context.pageContext.user.email)) {
       return ProjectSetupValidation.UserNotGroupMember
     }
     if (!isSiteAdmin) return ProjectSetupValidation.NotSiteAdmin
     if (!groupId) return ProjectSetupValidation.NoGroupId
-    if (this.context.pageContext.web.language !== 1044)
-      return ProjectSetupValidation.InvalidWebLanguage
+    if (this.context.pageContext.web.language !== 1044) {
+      const { Language } = await this._portalDataService.web.select('Language')()
+      if (Language !== this.context.pageContext.web.language) {
+        return ProjectSetupValidation.InvalidWebLanguage
+      }
+    }
     if (!hubSiteId) return ProjectSetupValidation.NoHubConnection
     if (siteId.includes(hubSiteId)) return ProjectSetupValidation.IsHubSite
     if (this._isSetup) return ProjectSetupValidation.AlreadySetup

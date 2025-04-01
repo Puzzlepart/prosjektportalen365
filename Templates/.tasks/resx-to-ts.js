@@ -4,10 +4,14 @@ const xml2js = require('xml2js');
 
 const RESX_FILES = [
   { path: path.resolve(__dirname, '../Portfolio/Resources.en-US.resx'), locale: 'en-us' },
-  { path: path.resolve(__dirname, '../Portfolio/Resources.no-NB.resx'), locale: 'no-nb' },
+  { path: path.resolve(__dirname, '../Portfolio/Resources.no-NB.resx'), locale: 'nb-no' },
 ];
 const OUTPUT_PATHS = [
+  path.resolve(__dirname, '../../SharePointFramework/shared-library/src/loc'),
   path.resolve(__dirname, '../../SharePointFramework/ProgramWebParts/src/loc'),
+  path.resolve(__dirname, '../../SharePointFramework/PortfolioWebParts/src/loc'),
+  path.resolve(__dirname, '../../SharePointFramework/PortfolioExtensions/src/loc'),
+  path.resolve(__dirname, '../../SharePointFramework/ProjectWebParts/src/loc'),
   path.resolve(__dirname, '../../SharePointFramework/ProjectExtensions/src/loc'),
 ];
 
@@ -97,7 +101,7 @@ async function convertResxToTypescript() {
       // Generate locale file
       const localeContent = generateLocaleFile(strings, resxFile.locale);
       for (const dir of OUTPUT_PATHS) {
-        fs.writeFileSync(path.join(dir, `${resxFile.locale}.js`), localeContent);
+        fs.writeFileSync(path.join(dir, 'resx', `${resxFile.locale}.js`), localeContent);
       }
       console.log(`Generated ${resxFile.locale}.js in all output directories`);
 
@@ -108,7 +112,7 @@ async function convertResxToTypescript() {
     // Generate TypeScript definition file
     const definitionContent = generateTypescriptDefinition(allStrings);
     for (const dir of OUTPUT_PATHS) {
-      fs.writeFileSync(path.join(dir, 'resx.d.ts'), definitionContent);
+      fs.writeFileSync(path.join(dir, 'resx', 'resx.d.ts'), definitionContent);
     }
     console.log('Generated resx.d.ts in all output directories');
 
