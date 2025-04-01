@@ -235,7 +235,7 @@ if (-not $SkipBuildPnPTemplates.IsPresent) {
 
     npm run generate-project-templates >$null 2>&1
 
-    Get-ChildItem "./Content" -Directory -Filter "*no-NB*" | ForEach-Object {
+    Get-ChildItem "./Content" -Directory | ForEach-Object {
         Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/$($_.BaseName).pnp" -Folder $_.FullName -Force
     }
     EndAction
