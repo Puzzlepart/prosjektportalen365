@@ -340,6 +340,12 @@
   <data name="Lists_DocumentsB_Url" xml:space="preserve">
     <value>Standarddokumenter_Bygg</value>
   </data>
+  <data name="Lists_HelpContent_Title" xml:space="preserve">
+    <value>Hjelpeinnhold</value>
+  </data>
+  <data name="Lists_HelpContent_Url" xml:space="preserve">
+    <value>Lists/Hjelpeinnhold</value>
+  </data>
   <data name="View_AllItems_DisplayName" xml:space="preserve">
     <value>Alle elementer</value>
   </data>

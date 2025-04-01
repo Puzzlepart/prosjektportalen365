@@ -1,1 +1,1 @@
-<Field DisplayName="{resource:SiteFields_GtURL_DisplayName}" Title="URL" Description="{resource:SiteFields_GtURL_Description}" Required="TRUE" Format="Dropdown" MaxLength="255" Name="GtURL" Type="Text" ID="{dea96897-22ac-48a9-b9ea-9b27ba0ca6da}" SourceID="{{listid:Hjelpeinnhold}}" StaticName="GtURL" />
+<Field DisplayName="{resource:SiteFields_GtURL_DisplayName}" Title="URL" Description="{resource:SiteFields_GtURL_Description}" Required="TRUE" Format="Dropdown" MaxLength="255" Name="GtURL" Type="Text" ID="{dea96897-22ac-48a9-b9ea-9b27ba0ca6da}" StaticName="GtURL" />

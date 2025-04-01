@@ -71,7 +71,7 @@
     <value>Lists/DataSources</value>
   </data>
   <data name="Lists_CustomCharts_Title" xml:space="preserve">
-    <value>Egendefinerte diagrammer</value>
+    <value>Custom Charts</value>
   </data>
   <data name="Lists_CustomCharts_Url" xml:space="preserve">
     <value>CustomCharts</value>
@@ -235,6 +235,18 @@
   <data name="Lists_TimelineContent_Url" xml:space="preserve">
     <value>Lists/TimelineContent</value>
   </data>
+  <data name="Lists_ProjectAdminRoles_Title" xml:space="preserve">
+    <value>Project Admin Roles</value>
+  </data>
+  <data name="Lists_ProjectAdminRoles_Url" xml:space="preserve">
+    <value>Lists/ProjectAdminRoles</value>
+  </data>
+  <data name="Lists_ProjectAdminPermissions_Title" xml:space="preserve">
+    <value>Project Admin Permissions</value>
+  </data>
+  <data name="Lists_ProjectAdminPermissions_Url" xml:space="preserve">
+    <value>Lists/ProjectAdminPermissions</value>
+  </data>
   <data name="Lists_TimelineContent_Field_Title_DisplayName" xml:space="preserve">
     <value>Title</value>
   </data>
@@ -327,6 +339,12 @@
   </data>
   <data name="Lists_DocumentsB_Url" xml:space="preserve">
     <value>StandardDocuments_B</value>
+  </data>
+  <data name="Lists_HelpContent_Title" xml:space="preserve">
+    <value>Help Content</value>
+  </data>
+  <data name="Lists_HelpContent_Url" xml:space="preserve">
+    <value>Lists/HelpContent</value>
   </data>
   <data name="View_AllItems_DisplayName" xml:space="preserve">
     <value>All items</value>
@@ -2027,10 +2045,10 @@
     <value>Solution proposals for the idea</value>
   </data>
   <data name="SiteFields_GtIdeaUrl_DisplayName" xml:space="preserve">
-    <value>IdeaUrl</value>
+    <value>Idea URL</value>
   </data>
   <data name="SiteFields_GtIdeaUrl_Description" xml:space="preserve">
-    <value>IdeaUrl for the idea</value>
+    <value>URL for the idea</value>
   </data>
   <data name="SiteFields_GtIdeaProjectData_DisplayName" xml:space="preserve">
     <value>Project data association</value>
