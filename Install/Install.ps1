@@ -31,7 +31,7 @@ Param(
     [Parameter(Mandatory = $false, HelpMessage = "Tenant App Catalog Url")]
     [string]$TenantAppCatalogUrl,
     [Parameter(Mandatory = $false, HelpMessage = "Language")]
-    [ValidateSet('Norwegian')]
+    [ValidateSet('Norwegian', 'English')]
     [string]$Language = "Norwegian",
     [Parameter(Mandatory = $false, HelpMessage = "Used by Continuous Integration")]
     [switch]$CI,
