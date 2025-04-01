@@ -344,7 +344,7 @@
     <value>Idea Module</value>
   </data>
   <data name="ContentTypes_Group" xml:space="preserve">
-    <value>Project Portal content types</value>
+    <value>Project Portal Content Types</value>
   </data>
   <data name="ContentTypes_Uncertainty_Name" xml:space="preserve">
     <value>Uncertainty</value>
@@ -564,6 +564,12 @@
   </data>
   <data name="ContentTypes_HelpContent_Description" xml:space="preserve">
     <value>Content type for help content (Help Content)</value>
+  </data>
+  <data name="ContentTypes_ProjectAdminPermission_Name" xml:space="preserve">
+    <value>Project Admin Permission</value>
+  </data>
+  <data name="ContentTypes_ProjectAdminPermission_Description" xml:space="preserve">
+    <value>Content Type for project admin permission</value>
   </data>
   <data name="SiteFields_Project_Group" xml:space="preserve">
     <value>Columns for the Project Portal (Project)</value>
