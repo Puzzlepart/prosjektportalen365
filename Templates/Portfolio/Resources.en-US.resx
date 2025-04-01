@@ -527,7 +527,7 @@
     <value>Create a new permission configuration element</value>
   </data>
   <data name="ContentTypes_Timeline_Configuration_Element_Name" xml:space="preserve">
-    <value>Timeline_´Configuration Element</value>
+    <value>Timeline Configuration Element</value>
   </data>
   <data name="ContentTypes_Timeline_Configuration_Element_Description" xml:space="preserve">
     <value>Create a new timeline configuration element</value>
