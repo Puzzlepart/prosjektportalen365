@@ -16,37 +16,36 @@
 
 ## ➤ Table of Contents
 
-	* [➤ Site Design / Site Scripts](#-site-design--site-scripts)
-	* [➤ JS Provisjoneringsmal](#-js-provisjoneringsmal)
-	* [➤ Maler](#-maler)
-		* [JSON-provisjonmal](#json-provisjonmal)
-			* [Bygging av JSON-maler](#bygging-av-json-maler)
-		* [PnP-maler](#pnp-maler)
-			* [Portefølje](#porteflje)
-			* [Innholdsmaler](#innholdsmaler)
-	* [➤ NPM](#-npm)
-	* [➤ Bygge en ny utgivelse](#-bygge-en-ny-utgivelse)
-* [➤ For å kun bygge PnP-maler, bruk parameteren -SkipBuildSharePointFramework](#-for--kun-bygge-pnp-maler-bruk-parameteren--skipbuildsharepointframework)
-	* [➤ Continuous Integration](#-continuous-integration)
-		* [CI (releases/*)](#ci-releases)
-		* [Bygg og installer (dev)](#bygg-og-installer-dev)
-		* [CI (channels/test)](#ci-channelstest)
-		* [Bygg utgivelse (main)](#bygg-utgivelse-main)
-	* [➤ Opprettelse av en ny versjon](#-opprettelse-av-en-ny-versjon)
-		* [Patch-utgivelse](#patch-utgivelse)
-		* [Minor-utgivelse](#minor-utgivelse)
-	* [➤ Versjonering](#-versjonering)
-	* [➤ Installasjonskanaler](#-installasjonskanaler)
-		* [Generere en ny kanalkonfigurasjon](#generere-en-ny-kanalkonfigurasjon)
-		* [Bygge en ny versjon for en kanal](#bygge-en-ny-versjon-for-en-kanal)
-	* [➤ README generering](#-readme-generering)
-	* [➤ Development Environment Configuration](#-development-environment-configuration)
-		* [Environment Setup System](#environment-setup-system)
-			* [1. `environments.json`](#1-environmentsjson)
-			* [2. `.env` File](#2-env-file)
-			* [3. Watch Scripts in `package.json`](#3-watch-scripts-in-packagejson)
-		* [How It Works in Practice](#how-it-works-in-practice)
-		* [Benefits of This Approach](#benefits-of-this-approach)
+* [➤ Site Design / Site Scripts](#-site-design--site-scripts)
+* [➤ JS Provisjoneringsmal](#-js-provisjoneringsmal)
+* [➤ Maler](#-maler)
+	* [JSON-provisjonmal](#json-provisjonmal)
+		* [Bygging av JSON-maler](#bygging-av-json-maler)
+	* [PnP-maler](#pnp-maler)
+		* [Portefølje](#porteflje)
+		* [Innholdsmaler](#innholdsmaler)
+* [➤ NPM](#-npm)
+* [➤ Bygge en ny utgivelse](#-bygge-en-ny-utgivelse)
+* [➤ Continuous Integration](#-continuous-integration)
+	* [CI (releases/*)](#ci-releases)
+	* [Bygg og installer (dev)](#bygg-og-installer-dev)
+	* [CI (channels/test)](#ci-channelstest)
+	* [Bygg utgivelse (main)](#bygg-utgivelse-main)
+* [➤ Opprettelse av en ny versjon](#-opprettelse-av-en-ny-versjon)
+	* [Patch-utgivelse](#patch-utgivelse)
+	* [Minor-utgivelse](#minor-utgivelse)
+* [➤ Versjonering](#-versjonering)
+* [➤ Installasjonskanaler](#-installasjonskanaler)
+	* [Generere en ny kanalkonfigurasjon](#generere-en-ny-kanalkonfigurasjon)
+	* [Bygge en ny versjon for en kanal](#bygge-en-ny-versjon-for-en-kanal)
+* [➤ README generering](#-readme-generering)
+* [➤ Development Environment Configuration](#-development-environment-configuration)
+	* [Environment Setup System](#environment-setup-system)
+		* [1. `environments.json`](#1-environmentsjson)
+		* [2. `.env` File](#2-env-file)
+		* [3. Watch Scripts in `package.json`](#3-watch-scripts-in-packagejson)
+	* [How It Works in Practice](#how-it-works-in-practice)
+	* [Benefits of This Approach](#benefits-of-this-approach)
 </details>
 
 
@@ -201,11 +200,6 @@ Kjør PowerShell-skriptet `Build-Release.ps1` som ligger i `Install`-mappen:
 
 ```powershell
 ./Install/Build-Release.ps1
-
-
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#for--kun-bygge-pnp-maler-bruk-parameteren--skipbuildsharepointframework)
-
-# ➤ For å kun bygge PnP-maler, bruk parameteren -SkipBuildSharePointFramework
 ```
 
 Installasjonspakken skal finnes i utgivelsesmappen.
