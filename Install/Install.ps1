@@ -392,8 +392,8 @@ if (-not $SkipTemplate.IsPresent) {
             $Retry = 0
             $MaxRetries = 5
             while($Retry -lt $MaxRetries) {
-                try {
-                    Invoke-PnPSiteTemplate -InputInstance $Instance -Handlers Navigation, SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
+                try {                
+                    Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
                     break
                 }
                 catch {
@@ -407,13 +407,17 @@ if (-not $SkipTemplate.IsPresent) {
             }
             EndAction
 
-            StartAction("Applying PnP content template to $($Uri.AbsoluteUri)")
-            Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
-            EndAction
+            if (Test-Path "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp") {
+                StartAction("Applying PnP content template to $($Uri.AbsoluteUri)")
+                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" -Handlers Files -ErrorAction Stop -WarningAction SilentlyContinue
+                EndAction
+            }
 
-            StartAction("Applying PnP B&A content template to $($Uri.AbsoluteUri)")
-            Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
-            EndAction
+            if (Test-Path "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp") {
+                StartAction("Applying PnP B&A content template to $($Uri.AbsoluteUri)")
+                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
+                EndAction
+            }
         }
         
 
