@@ -40,7 +40,7 @@
     "react-markdown": "^8.0.3",
     "rehype-raw": "^6.1.1",
     "sp-entityportal-service": "2.3.0",
-    "sp-js-provisioning": "1.2.8",
+    "sp-js-provisioning": "~1.3.1-1",
     "spfx-jsom": "0.6.6",
     "tslib": "2.3.1",
     "underscore": "~1.13.6",
