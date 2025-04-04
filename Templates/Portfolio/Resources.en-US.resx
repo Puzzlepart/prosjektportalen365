@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema id="root"
+    xmlns=""
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -148,6 +151,9 @@
   <data name="Lists_PortfolioViews_Url" xml:space="preserve">
     <value>Lists/PortfolioViews</value>
   </data>
+  <data name="Lists_ProjectDeliveries_Title" xml:space="preserve">
+    <value>Project Deliveries</value>
+  </data>
   <data name="Lists_Projects_Title" xml:space="preserve">
     <value>Projects</value>
   </data>
@@ -235,7 +241,7 @@
   <data name="Lists_TemplateOptions_StandardTemplate_Description" xml:space="preserve">
     <value>This is the default project template that comes with Prosjektportalen 365.</value>
   </data>
-    <data name="Lists_TemplateOptions_ParentTemplate_Title" xml:space="preserve">
+  <data name="Lists_TemplateOptions_ParentTemplate_Title" xml:space="preserve">
     <value>Parent Template</value>
   </data>
   <data name="Lists_TemplateOptions_ParentTemplate_Description" xml:space="preserve">
@@ -396,6 +402,39 @@
   </data>
   <data name="ContentTypes_Uncertainty_Name" xml:space="preserve">
     <value>Uncertainty</value>
+  </data>
+  <data name="ContentTypes_Risk_Name" xml:space="preserve">
+    <value>Risk</value>
+  </data>
+  <data name="ContentTypes_Possibility_Name" xml:space="preserve">
+    <value>Possibility</value>
+  </data>
+  <data name="ContentTypes_CommunicationElement_Name" xml:space="preserve">
+    <value>Communication Element</value>
+  </data>
+  <data name="ContentTypes_ProjectDelivery_Name" xml:space="preserve">
+    <value>Project Delivery</value>
+  </data>
+  <data name="ContentTypes_ProjectLogElement_Name" xml:space="preserve">
+    <value>Project Log Element</value>
+  </data>
+  <data name="ContentTypes_ProjectEvent_Name" xml:space="preserve">
+    <value>Project Event</value>
+  </data>
+  <data name="ContentTypes_ProjectTask_Name" xml:space="preserve">
+    <value>Project Task</value>
+  </data>
+  <data name="ContentTypes_BenefitFollowup_Name" xml:space="preserve">
+    <value>Benefit Followup</value>
+  </data>
+  <data name="ContentTypes_Benefit_Name" xml:space="preserve">
+    <value>Benefit</value>
+  </data>
+  <data name="ContentTypes_Change_Name" xml:space="preserve">
+    <value>Change</value>
+  </data>
+  <data name="ContentTypes_MeasureIndicator_Name" xml:space="preserve">
+    <value>Measure Indicator</value>
   </data>
   <data name="ContentTypes_Uncertainty_Description" xml:space="preserve">
     <value>Uncertainties associated with the project</value>
@@ -607,7 +646,7 @@
   <data name="ContentTypes_IdeaColumn_Description" xml:space="preserve">
     <value>Content Type for idea column (Column configuration)</value>
   </data>
-   <data name="ContentTypes_HelpContent_Name" xml:space="preserve">
+  <data name="ContentTypes_HelpContent_Name" xml:space="preserve">
     <value>Help Content</value>
   </data>
   <data name="ContentTypes_HelpContent_Description" xml:space="preserve">
@@ -1241,7 +1280,7 @@
     <value>Function Name</value>
   </data>
   <data name="SiteFields_GtLogFunctionName_Description" xml:space="preserve">
-    <value>Name of the function generating the log element</value> 
+    <value>Name of the function generating the log element</value>
   </data>
   <data name="SiteFields_GtLogLevel_DisplayName" xml:space="preserve">
     <value>Log Level</value>
@@ -1619,16 +1658,16 @@
     <value>If the benefits are to be realized in different parts of the organization (or in several businesses), it is recommended to appoint a benefit owner in the different parts of the line organization (or the businesses) that own different parts of the planned benefits. Benefit owners then have a distributed responsibility for their part of the benefits, and play an important role as the benefit responsible's extended arm and local supporter.</value>
   </data>
   <data name="SiteFields_GtSecViewFields_Description" xml:space="preserve">
-      <value>Fields that are to be displayed in the sections view.</value>
+    <value>Fields that are to be displayed in the sections view.</value>
   </data>
   <data name="SiteFields_GtSecSumField_Description" xml:space="preserve">
-      <value>Fields to be summed, example: 'GtSum;Avg;Average of summation;currency'. Summation types: Add and Avg (Addition and Average). You can also specify to render as currency, defaults to number.</value>
+    <value>Fields to be summed, example: 'GtSum;Avg;Average of summation;currency'. Summation types: Add and Avg (Addition and Average). You can also specify to render as currency, defaults to number.</value>
   </data>
   <data name="SiteFields_GtSecIcon_Description" xml:space="preserve">
     <value>Name of icon from UI Fabric. See https://uifabricicons.azurewebsites.net/.</value>
   </data>
   <data name="SiteFields_GtSecShowInNavbar_Description" xml:space="preserve">
-      <value>Should this section be displayed in the navigation bar?</value>
+    <value>Should this section be displayed in the navigation bar?</value>
   </data>
   <data name="SiteFields_GtSecViewQuery_Description" xml:space="preserve">
     <value>The query that will be used to view the data in this section.</value>
@@ -1811,16 +1850,16 @@
     <value>Width (1-12) for 480px to 639px</value>
   </data>
   <data name="SiteFields_GtPiWidthSm_Description" xml:space="preserve">
-      <value>Width (1-12) for 320px to 479px</value>
+    <value>Width (1-12) for 320px to 479px</value>
   </data>
   <data name="SiteFields_GtPiWidthXl_Description" xml:space="preserve">
-      <value>Width (1-12) for 1024px to 1365px</value>
+    <value>Width (1-12) for 1024px to 1365px</value>
   </data>
   <data name="SiteFields_GtPiWidthXxl_Description" xml:space="preserve">
-      <value>Width (1-12) for 1366px to 1919px</value>
+    <value>Width (1-12) for 1366px to 1919px</value>
   </data>
   <data name="SiteFields_GtPiWidthXxxl_Description" xml:space="preserve">
-      <value>Width (1-12) for 1920px and upwards</value>
+    <value>Width (1-12) for 1920px and upwards</value>
   </data>
   <data name="SiteFields_GtPiXAxisTitle_Description" xml:space="preserve">
     <value>Title of the X-axis</value>
@@ -2302,7 +2341,7 @@
   <data name="SiteFields_GtBAStakeholderGroup_Description" xml:space="preserve">
     <value>Which stakeholder group does the stakeholder belong to?</value>
   </data>
-   <data name="SiteFields_GtResourceLink_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtResourceLink_DisplayName" xml:space="preserve">
     <value>Link to resource</value>
   </data>
   <data name="SiteFields_GtResourceLink_Description" xml:space="preserve">
@@ -2623,7 +2662,7 @@
   <data name="Choice_GtProjectPhaseChoice_Initiating" xml:space="preserve">
     <value>Initiating</value>
   </data>
-   <data name="Choice_GtProjectPhaseChoice_Directing" xml:space="preserve">
+  <data name="Choice_GtProjectPhaseChoice_Directing" xml:space="preserve">
     <value>Executing</value>
   </data>
   <data name="Choice_GtProjectPhaseChoice_Closing" xml:space="preserve">
@@ -2696,43 +2735,43 @@
     <value>BenefitOverview.aspx</value>
   </data>
   <data name="ClientSidePages_BenefitOverview_Title" xml:space="preserve">
-      <value>Benefit Overview</value>
+    <value>Benefit Overview</value>
   </data>
   <data name="ClientSidePages_Home_PageName" xml:space="preserve">
-      <value>Home.aspx</value>
+    <value>Home.aspx</value>
   </data>
   <data name="ClientSidePages_Home_Title" xml:space="preserve">
-      <value>Home</value>
+    <value>Home</value>
   </data>
   <data name="ClientSidePages_Configuration_PageName" xml:space="preserve">
-      <value>Configuration.aspx</value>
+    <value>Configuration.aspx</value>
   </data>
   <data name="ClientSidePages_Configuration_Title" xml:space="preserve">
-      <value>Configuration</value>
+    <value>Configuration</value>
   </data>
   <data name="ClientSidePages_DeliveryOverview_PageName" xml:space="preserve">
-      <value>DeliveryOverview.aspx</value>
+    <value>DeliveryOverview.aspx</value>
   </data>
   <data name="ClientSidePages_DeliveryOverview_Title" xml:space="preserve">
-      <value>Delivery Overview</value>
+    <value>Delivery Overview</value>
   </data>
   <data name="ClientSidePages_PortfolioInsights_PageName" xml:space="preserve">
-      <value>PortfolioInsights.aspx</value>
+    <value>PortfolioInsights.aspx</value>
   </data>
   <data name="ClientSidePages_PortfolioInsights_Title" xml:space="preserve">
-      <value>Portfolio Insights</value>
+    <value>Portfolio Insights</value>
   </data>
   <data name="ClientSidePages_PortfolioOverview_PageName" xml:space="preserve">
-      <value>PortfolioOverview.aspx</value>
+    <value>PortfolioOverview.aspx</value>
   </data>
   <data name="ClientSidePages_PortfolioOverview_Title" xml:space="preserve">
-      <value>Portfolio Overview</value>
+    <value>Portfolio Overview</value>
   </data>
   <data name="ClientSidePages_ResourceAllocation_PageName" xml:space="preserve">
-      <value>ResourceAllocation.aspx</value>
+    <value>ResourceAllocation.aspx</value>
   </data>
   <data name="ClientSidePages_ResourceAllocation_Title" xml:space="preserve">
-      <value>Resource Allocation</value>
+    <value>Resource Allocation</value>
   </data>
   <data name="ClientSidePages_UncertaintyOverview_PageName" xml:space="preserve">
     <value>UncertaintyOverview.aspx</value>
@@ -2763,5 +2802,122 @@
   </data>
   <data name="SiteFields_GtFieldOverrides_Description" xml:space="preserve">
     <value>Field overrides in JSON-format. Object format with the configuration name first, then an object with the locales as key and the field settings (e.g. displayName or description) as value.</value>
+  </data>
+  <data name="Navigation_Home_Title" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Navigation_ProjectStatus_Title" xml:space="preserve">
+    <value>Project Status</value>
+  </data>
+  <data name="Navigation_ProjectLog_Title" xml:space="preserve">
+    <value>Project Log</value>
+  </data>
+  <data name="Navigation_StakeholderRegister_Title" xml:space="preserve">
+    <value>Stakeholder Register</value>
+  </data>
+  <data name="Navigation_CommunicationPlan_Title" xml:space="preserve">
+    <value>Communication Plan</value>
+  </data>
+  <data name="Navigation_Uncertainty_Title" xml:space="preserve">
+    <value>Uncertainty</value>
+  </data>
+  <data name="Navigation_Documents_Title" xml:space="preserve">
+    <value>Documents</value>
+  </data>
+  <data name="Navigation_Tasks_Title" xml:space="preserve">
+    <value>Tasks</value>
+  </data>
+  <data name="Navigation_PhaseChecklist_Title" xml:space="preserve">
+    <value>Phase Checklist</value>
+  </data>
+  <data name="Navigation_Notebook_Title" xml:space="preserve">
+    <value>Notebook</value>
+  </data>
+  <data name="Navigation_BenefitsOverview_Title" xml:space="preserve">
+    <value>Benefits Overview</value>
+  </data>
+  <data name="Navigation_ChangeAnalysis_Title" xml:space="preserve">
+    <value>Change Analysis</value>
+  </data>
+  <data name="Navigation_BenefitsAnalysis_Title" xml:space="preserve">
+    <value>Benefits Analysis</value>
+  </data>
+  <data name="Navigation_MeasurementIndicators_Title" xml:space="preserve">
+    <value>Measurement Indicators</value>
+  </data>
+  <data name="Navigation_BenefitsFollowup_Title" xml:space="preserve">
+    <value>Benefits Follow-up</value>
+  </data>
+  <data name="Navigation_ProjectDeliveries_Title" xml:space="preserve">
+    <value>Project Deliveries</value>
+  </data>
+  <data name="Navigation_ResourceAllocation_Title" xml:space="preserve">
+    <value>Resource Allocation</value>
+  </data>
+  <data name="Navigation_ProjectTimeline_Title" xml:space="preserve">
+    <value>Project Timeline</value>
+  </data>
+  <data name="Navigation_SiteContent_Title" xml:space="preserve">
+    <value>Site Contents</value>
+  </data>
+  <data name="ClientSidePages_Home_Title" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="ClientSidePages_Tasks_Title" xml:space="preserve">
+    <value>Tasks</value>
+  </data>
+  <data name="ClientSidePages_BenefitsOverview_Title" xml:space="preserve">
+    <value>Benefits Overview</value>
+  </data>
+  <data name="ClientSidePages_ProjectStatus_Title" xml:space="preserve">
+    <value>Project Status</value>
+  </data>
+  <data name="ClientSidePages_ProjectTimeline_Title" xml:space="preserve">
+    <value>Project Timeline</value>
+  </data>
+  <data name="WebParts_ProjectInformation_Title" xml:space="preserve">
+    <value>Project Information</value>
+  </data>
+  <data name="WebParts_ProjectStatusHeader_Title" xml:space="preserve">
+    <value>Project Status Header</value>
+  </data>
+  <data name="WebParts_ProjectNews_Title" xml:space="preserve">
+    <value>Project News</value>
+  </data>
+  <data name="WebParts_ProjectPhase_Title" xml:space="preserve">
+    <value>Project Phase</value>
+  </data>
+  <data name="WebParts_CurrentPhase_Title" xml:space="preserve">
+    <value>Current Phase</value>
+  </data>
+  <data name="WebParts_Tasks_Title" xml:space="preserve">
+    <value>Tasks</value>
+  </data>
+  <data name="WebParts_MeetingsAndEvents_Title" xml:space="preserve">
+    <value>Meetings and Events</value>
+  </data>
+  <data name="WebParts_BenefitsOverview_Title" xml:space="preserve">
+    <value>Benefits Overview</value>
+  </data>
+  <data name="WebParts_BenefitsOverviewDataSource_Title" xml:space="preserve">
+    <value>Benefits Overview Data Source</value>
+  </data>
+  <data name="WebParts_BenefitsOverviewCategory_Title" xml:space="preserve">
+    <value>Benefits Overview Category</value>
+  </data>
+  <data name="WebParts_Project_Title" xml:space="preserve">
+    <value>Project</value>
+  </data>
+  <data name="WebParts_ProjectStatus_Title" xml:space="preserve">
+    <value>Project Status</value>
+  </data>
+  <data name="WebParts_RiskStrategy_Title" xml:space="preserve">
+    <value>Risk Strategy</value>
+  </data>
+  <data name="WebParts_RiskProximity_Title" xml:space="preserve">
+    <value>Risk Proximity</value>
+  </data>
+  <data name="WebParts_RiskStatus_Title" xml:space="preserve">
+    <value>Risk Status</value>
   </data>
 </root>

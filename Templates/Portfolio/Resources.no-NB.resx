@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema id="root"
+    xmlns=""
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -147,6 +150,9 @@
   </data>
   <data name="Lists_PortfolioViews_Url" xml:space="preserve">
     <value>Lists/Porteføljevisninger</value>
+  </data>
+  <data name="Lists_ProjectDeliveries_Title" xml:space="preserve">
+    <value>Prosjektleveranser</value>
   </data>
   <data name="Lists_Projects_Title" xml:space="preserve">
     <value>Prosjekter</value>
@@ -1484,7 +1490,7 @@
     <value>Prosjektmal</value>
   </data>
   <data name="SiteFields_GtProjectTemplate_Description" xml:space="preserve">
-  <value>Malen som skal brukes for prosjektet</value>
+    <value>Malen som skal brukes for prosjektet</value>
   </data>
   <data name="SiteFields_GtRiskConsequence_Description" xml:space="preserve">
     <value>Oppgi konsekvensen (0-5) av usikkerheten dersom den skulle inntreffe</value>
@@ -1643,7 +1649,7 @@
     <value>Oppsummer kort det totale risikobildet for prosjektet og hvilke tiltak prosjektet planlegger for neste periode.</value>
   </data>
   <data name="SiteFields_GtStatusOpportunitiesComment_Description" xml:space="preserve">
-      <value>Oppsummer kort det totale mulighetsbildet for prosjektet og hvilke tiltak prosjektet planlegger for neste periode.</value>
+    <value>Oppsummer kort det totale mulighetsbildet for prosjektet og hvilke tiltak prosjektet planlegger for neste periode.</value>
   </data>
   <data name="SiteFields_GtArchiveReference_Description" xml:space="preserve">
     <value>Hvis relevant, legg inn tilhørende sak- og arkivreferanse</value>
@@ -1724,22 +1730,22 @@
     <value>Dersom gevinstene skal realiseres i ulike deler av organisasjonen (eller i flere virksomheter) anbefales det å oppnevne en gevinsteier i de ulike delene av linjeorganisasjonen (eller virksomhetene) som eier ulike deler av de planlagte gevinstene. Gevinsteiere har da et distribuert ansvar for sin del av gevinstene, og har en viktig rolle som den gevinstansvarliges forlengede arm og lokale støttespiller.</value>
   </data>
   <data name="SiteFields_GtSecViewFields_Description" xml:space="preserve">
-      <value>Felt(er) som skal vises i seksjonsvisningen.</value>
+    <value>Felt(er) som skal vises i seksjonsvisningen.</value>
   </data>
   <data name="SiteFields_GtSecSumField_Description" xml:space="preserve">
-      <value>Felt som skal summeres, eksempel: 'GtSum;Avg;Gjennomsnitt av sum;currency'. Summeringstyper: Add og Avg (Addere og gjennomsnitt). Du kan også spesifisere å vise som valuta, standard er tall.</value>
+    <value>Felt som skal summeres, eksempel: 'GtSum;Avg;Gjennomsnitt av sum;currency'. Summeringstyper: Add og Avg (Addere og gjennomsnitt). Du kan også spesifisere å vise som valuta, standard er tall.</value>
   </data>
   <data name="SiteFields_GtSecIcon_Description" xml:space="preserve">
     <value>Navn på ikon fra UI Fabric. Se https://uifabricicons.azurewebsites.net/.</value>
   </data>
   <data name="SiteFields_GtSecShowInNavbar_Description" xml:space="preserve">
-      <value>Skal elementet vises i navigasjonsfeltet?</value>
+    <value>Skal elementet vises i navigasjonsfeltet?</value>
   </data>
   <data name="SiteFields_GtSecViewQuery_Description" xml:space="preserve">
     <value>Spørring for å generere visning.</value>
   </data>
   <data name="SiteFields_GtSecFieldName_Description" xml:space="preserve">
-      <value>Navnet på feltet som skal vises.</value>
+    <value>Navnet på feltet som skal vises.</value>
   </data>
   <data name="SiteFields_GtSecShowInStatusSection_Description" xml:space="preserve">
     <value>Skal elementet vises i statusseksjonen?</value>
@@ -1748,7 +1754,7 @@
     <value>Max antall rader som skal vises.</value>
   </data>
   <data name="SiteFields_GtSecShowAsSection_Description" xml:space="preserve">
-      <value>Skal elementet vises som en egen seksjon?</value>
+    <value>Skal elementet vises som en egen seksjon?</value>
   </data>
   <data name="SiteFields_GtSecSource_Description" xml:space="preserve">
     <value>Om seksjonen skal lenke til en annen side eller ett dokument</value>
@@ -1757,7 +1763,7 @@
     <value>Skal risikomatrisen vises?</value>
   </data>
   <data name="SiteFields_GtSecList_Description" xml:space="preserve">
-        <value>Velg liste</value>
+    <value>Velg liste</value>
   </data>
   <data name="SiteFields_GtSecView_Description" xml:space="preserve">
     <value>Velg en visning for listen. Spørring, felter og elementgrense fra listevisningen blir gjeldende.</value>
@@ -1775,7 +1781,7 @@
     <value>Kolonnerekkefølge i porteføljeoversikten. Styres i webdelen Porteføljeoversikt.</value>
   </data>
   <data name="SiteFields_GtProjectContentColumns_Description" xml:space="preserve">
-        <value>Kolonner som skal vises i prosjektets innholdsoversikt.</value>
+    <value>Kolonner som skal vises i prosjektets innholdsoversikt.</value>
   </data>
   <data name="SiteFields_GtPortfolioIsDefaultView_Description" xml:space="preserve">
     <value>Er om porteføljen standardvisning?</value>
@@ -2516,19 +2522,19 @@
     <value>Egendefinerte sorteringsrekkefølger</value>
   </data>
   <data name="SiteFields_GtFieldCustomSort_Description" xml:space="preserve">
-  <value>Spesifiser egne sorteringsrekkefølger for dette feltet. Formatet er [Navn på rekkefølge]:[Element],[Element],[Element]. Om du ønsker å spesifisere flere sorteringsrekkefølger bruk semikolon (;) for å skille dem.</value>
+    <value>Spesifiser egne sorteringsrekkefølger for dette feltet. Formatet er [Navn på rekkefølge]:[Element],[Element],[Element]. Om du ønsker å spesifisere flere sorteringsrekkefølger bruk semikolon (;) for å skille dem.</value>
   </data>
   <data name="SiteFields_GtInstalledVersion_DisplayName" xml:space="preserve">
     <value>Installert versjon</value>
   </data>
   <data name="SiteFields_GtInstalledVersion_Description" xml:space="preserve">
-  <value>Versjonen for installasjonen i det prosjektet ble opprettet og konfigurert.</value>
+    <value>Versjonen for installasjonen i det prosjektet ble opprettet og konfigurert.</value>
   </data>
   <data name="SiteFields_GtCurrentVersion_DisplayName" xml:space="preserve">
     <value>Gjeldende versjon</value>
   </data>
   <data name="SiteFields_GtCurrentVersion_Description" xml:space="preserve">
-  <value>Gjeldende versjon. Oppdateres når prosjektet oppgraderes.</value>
+    <value>Gjeldende versjon. Oppdateres når prosjektet oppgraderes.</value>
   </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Gå til &lt;a href="{0}" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>
@@ -3000,5 +3006,122 @@
   </data>
   <data name="SiteFields_GtFieldOverrides_Description" xml:space="preserve">
     <value>Tilpassede feltinnstillinger i JSON-format. Objektformat med konfigurasjonsnavnet først, deretter ett objekt med lokalene som nøkkel og feltinnstillingene (f.eks. displayName eller description) som verdi.</value>
+  </data>
+  <data name="Navigation_Home_Title" xml:space="preserve">
+    <value>Hjem</value>
+  </data>
+  <data name="Navigation_ProjectStatus_Title" xml:space="preserve">
+    <value>Prosjektstatus</value>
+  </data>
+  <data name="Navigation_ProjectLog_Title" xml:space="preserve">
+    <value>Prosjektlogg</value>
+  </data>
+  <data name="Navigation_StakeholderRegister_Title" xml:space="preserve">
+    <value>Interessentregister</value>
+  </data>
+  <data name="Navigation_CommunicationPlan_Title" xml:space="preserve">
+    <value>Kommunikasjonsplan</value>
+  </data>
+  <data name="Navigation_Uncertainty_Title" xml:space="preserve">
+    <value>Usikkerhet</value>
+  </data>
+  <data name="Navigation_Documents_Title" xml:space="preserve">
+    <value>Dokumenter</value>
+  </data>
+  <data name="Navigation_Tasks_Title" xml:space="preserve">
+    <value>Oppgaver</value>
+  </data>
+  <data name="Navigation_PhaseChecklist_Title" xml:space="preserve">
+    <value>Sjekkliste for fase</value>
+  </data>
+  <data name="Navigation_Notebook_Title" xml:space="preserve">
+    <value>Notatbok</value>
+  </data>
+  <data name="Navigation_BenefitsOverview_Title" xml:space="preserve">
+    <value>Gevinstoversikt</value>
+  </data>
+  <data name="Navigation_ChangeAnalysis_Title" xml:space="preserve">
+    <value>Endringsanalyse</value>
+  </data>
+  <data name="Navigation_BenefitsAnalysis_Title" xml:space="preserve">
+    <value>Gevinstanalyse</value>
+  </data>
+  <data name="Navigation_MeasurementIndicators_Title" xml:space="preserve">
+    <value>Målindikatorer</value>
+  </data>
+  <data name="Navigation_BenefitsFollowup_Title" xml:space="preserve">
+    <value>Gevinstoppfølging</value>
+  </data>
+  <data name="Navigation_ProjectDeliveries_Title" xml:space="preserve">
+    <value>Prosjektleveranser</value>
+  </data>
+  <data name="Navigation_ResourceAllocation_Title" xml:space="preserve">
+    <value>Ressursallokering</value>
+  </data>
+  <data name="Navigation_ProjectTimeline_Title" xml:space="preserve">
+    <value>Prosjekttidslinje</value>
+  </data>
+  <data name="Navigation_SiteContent_Title" xml:space="preserve">
+    <value>Områdeinnhold</value>
+  </data>
+  <data name="ClientSidePages_Home_Title" xml:space="preserve">
+    <value>Hjem</value>
+  </data>
+  <data name="ClientSidePages_Tasks_Title" xml:space="preserve">
+    <value>Oppgaver</value>
+  </data>
+  <data name="ClientSidePages_BenefitsOverview_Title" xml:space="preserve">
+    <value>Gevinstoversikt</value>
+  </data>
+  <data name="ClientSidePages_ProjectStatus_Title" xml:space="preserve">
+    <value>Prosjektstatus</value>
+  </data>
+  <data name="ClientSidePages_ProjectTimeline_Title" xml:space="preserve">
+    <value>Prosjekttidslinje</value>
+  </data>
+<data name="WebParts_ProjectInformation_Title" xml:space="preserve">
+    <value>Prosjektinformasjon</value>
+  </data>
+  <data name="WebParts_ProjectStatusHeader_Title" xml:space="preserve">
+    <value>Prosjektstatus</value>
+  </data>
+  <data name="WebParts_ProjectNews_Title" xml:space="preserve">
+    <value>Nyheter</value>
+  </data>
+  <data name="WebParts_ProjectPhase_Title" xml:space="preserve">
+    <value>Fase</value>
+  </data>
+  <data name="WebParts_CurrentPhase_Title" xml:space="preserve">
+    <value>Nåværende fase</value>
+  </data>
+  <data name="WebParts_Tasks_Title" xml:space="preserve">
+    <value>Oppgaver</value>
+  </data>
+  <data name="WebParts_MeetingsAndEvents_Title" xml:space="preserve">
+    <value>Møter og arrangementer</value>
+  </data>
+  <data name="WebParts_BenefitsOverview_Title" xml:space="preserve">
+    <value>Gevinstoversikt</value>
+  </data>
+  <data name="WebParts_BenefitsOverviewDataSource_Title" xml:space="preserve">
+    <value>Gevinstoversikt datakilde</value>
+  </data>
+  <data name="WebParts_BenefitsOverviewCategory_Title" xml:space="preserve">
+    <value>Gevinstoversikt kategori</value>
+  </data>
+  <data name="WebParts_Project_Title" xml:space="preserve">
+    <value>Prosjekt</value>
+  </data>
+  <data name="WebParts_ProjectStatus_Title" xml:space="preserve">
+    <value>Prosjektstatus</value>
+  </data>
+  <data name="WebParts_RiskStrategy_Title" xml:space="preserve">
+    <value>Risiko strategi</value>
+  </data>
+  <data name="WebParts_RiskProximity_Title" xml:space="preserve">
+    <value>Risiko nærhet</value>
+  </data>
+  <data name="WebParts_RiskStatus_Title" xml:space="preserve">
+    <value>Risiko status</value>
   </data>
 </root>

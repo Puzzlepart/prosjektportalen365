@@ -431,95 +431,95 @@
         }
     ],
     "SiteFields": [
-        "<Field ID=\"{8499bd48-4c5d-43ae-8e27-7968d49ca14f}\" Name=\"GtRiskFactor\" DisplayName=\"{{SiteFields_GtRiskFactor_DisplayName}}\" Type=\"Calculated\" Group=\"Kolonner for Prosjektportalen (Prosjekt)\" Description=\"\" ResultType=\"Number\" StaticName=\"GtRiskFactor\"><Formula>=GtRiskProbability*GtRiskConsequence</Formula><FieldRefs><FieldRef Name=\"GtRiskProbability\" ID=\"{0e1b295d-2bfb-4ef6-ae92-e72068e56111}\" /><FieldRef Name=\"GtRiskConsequence\" ID=\"{554d32a0-0148-4b3c-bfc4-f101232ee501}\" /></FieldRefs></Field>",
-        "<Field ID=\"{62f0454d-1150-4d55-86ef-075f786d6e5c}\" Name=\"GtRiskFactorPostAction\" DisplayName=\"{{SiteFields_GtRiskFactorPostAction_DisplayName}}\" Type=\"Calculated\" Group=\"Kolonner for Prosjektportalen (Prosjekt)\" Description=\"\" ResultType=\"Number\" StaticName=\"GtRiskFactorPostAction\"><Formula>=GtRiskProbabilityPostAction*GtRiskConsequencePostAction</Formula><FieldRefs><FieldRef Name=\"GtRiskProbabilityPostAction\" ID=\"{f81ebcb7-8791-44b0-9919-08ed5524b11d}\" /><FieldRef Name=\"GtRiskConsequencePostAction\" ID=\"{00f17233-d4c0-49d0-aebd-5004552abb17}\" /></FieldRefs></Field>",
-        "<Field ID=\"{88d9b92c-efed-45d0-a586-86d9196b77d0}\" Type=\"User\" Name=\"GtResourceUser\" StaticName=\"GtResourceUser\" DisplayName=\"Navn\" Description=\"Oppgi navnet på personen som allokeres/tildeles arbeid i prosjektet\" />",
-        "<Field ID=\"{08ac9d56-f8eb-4a2c-868f-d39fc012fcd6}\" Type=\"Number\" Name=\"GtResourceLoad\" StaticName=\"GtResourceLoad\" DisplayName=\"Belastning\" Description=\"Hva er ressursens forventede arbeidsbelastning, oppgis i tall som indikerer prosent\" Percentage=\"TRUE\" />",
-        "<Field ID=\"{2ae541a5-5ecc-481d-afb6-c03a6f1e71b4}\" Type=\"User\" Name=\"GtActionResponsible\" StaticName=\"GtActionResponsible\" DisplayName=\"Tiltaksansvarlig\" Description=\"Hvem er ansvarlig for å følge opp usikkerheten?\" />"
+        "<Field ID=\"{8499bd48-4c5d-43ae-8e27-7968d49ca14f}\" Name=\"GtRiskFactor\" DisplayName=\"{{SiteFields_GtRiskFactor_DisplayName}}\" Type=\"Calculated\" Group=\"{{SiteFields_Project_Group}}\" Description=\"{{SiteFields_GtRiskFactor_Description}}\" ResultType=\"Number\" StaticName=\"GtRiskFactor\"><Formula>=GtRiskProbability*GtRiskConsequence</Formula><FieldRefs><FieldRef Name=\"GtRiskProbability\" ID=\"{0e1b295d-2bfb-4ef6-ae92-e72068e56111}\" /><FieldRef Name=\"GtRiskConsequence\" ID=\"{554d32a0-0148-4b3c-bfc4-f101232ee501}\" /></FieldRefs></Field>",
+        "<Field ID=\"{62f0454d-1150-4d55-86ef-075f786d6e5c}\" Name=\"GtRiskFactorPostAction\" DisplayName=\"{{SiteFields_GtRiskFactorPostAction_DisplayName}}\" Type=\"Calculated\" Group=\"{{SiteFields_Project_Group}}\" Description=\"{{SiteFields_GtRiskFactorPostAction_Description}}\" ResultType=\"Number\" StaticName=\"GtRiskFactorPostAction\"><Formula>=GtRiskProbabilityPostAction*GtRiskConsequencePostAction</Formula><FieldRefs><FieldRef Name=\"GtRiskProbabilityPostAction\" ID=\"{f81ebcb7-8791-44b0-9919-08ed5524b11d}\" /><FieldRef Name=\"GtRiskConsequencePostAction\" ID=\"{00f17233-d4c0-49d0-aebd-5004552abb17}\" /></FieldRefs></Field>",
+        "<Field ID=\"{88d9b92c-efed-45d0-a586-86d9196b77d0}\" Type=\"User\" Name=\"GtResourceUser\" StaticName=\"GtResourceUser\" DisplayName=\"{{SiteFields_GtResourceUser_DisplayName}}\" Description=\"{{SiteFields_GtResourceUser_Description}}\" />",
+        "<Field ID=\"{08ac9d56-f8eb-4a2c-868f-d39fc012fcd6}\" Type=\"Number\" Name=\"GtResourceLoad\" StaticName=\"GtResourceLoad\" DisplayName=\"{{SiteFields_GtResourceLoad_DisplayName}}\" Description=\"{{SiteFields_GtResourceLoad_Description}}\" Percentage=\"TRUE\" />",
+        "<Field ID=\"{2ae541a5-5ecc-481d-afb6-c03a6f1e71b4}\" Type=\"User\" Name=\"GtActionResponsible\" StaticName=\"GtActionResponsible\" DisplayName=\"{{SiteFields_GtActionResponsible_DisplayName}}\" Description=\"{{SiteFields_GtActionResponsible_Description}}\" />"
     ],
     "Navigation": {
         "QuickLaunch": [
             {
                 "Url": "SitePages/ProjectHome.aspx",
-                "Title": "Hjem"
+                "Title": "{{Navigation_Home_Title}}"
             },
             {
                 "Url": "SitePages/Prosjektstatus.aspx",
-                "Title": "Prosjektstatus"
+                "Title": "{{Navigation_ProjectStatus_Title}}"
             },
             {
                 "Url": "Lists/Prosjektlogg/AllItems.aspx",
-                "Title": "Prosjektlogg"
+                "Title": "{{Navigation_ProjectLog_Title}}"
             },
             {
                 "Url": "Lists/Interessentregister/AllItems.aspx",
-                "Title": "Interessentregister"
+                "Title": "{{Navigation_StakeholderRegister_Title}}"
             },
             {
                 "Url": "Lists/Kommunikasjonsplan/AllItems.aspx",
-                "Title": "Kommunikasjonsplan"
+                "Title": "{{Navigation_CommunicationPlan_Title}}"
             },
             {
                 "Url": "Lists/Usikkerhet/AllItems.aspx",
-                "Title": "Usikkerhet"
+                "Title": "{{Navigation_Uncertainty_Title}}"
             },
             {
                 "Url": "Dokumenter/Forms/AllItems.aspx",
-                "Title": "Dokumenter"
+                "Title": "{{Navigation_Documents_Title}}"
             },
             {
                 "Url": "SitePages/Oppgaver.aspx",
-                "Title": "Oppgaver"
+                "Title": "{{Navigation_Tasks_Title}}"
             },
             {
                 "Url": "Lists/Fasesjekkliste/AllItems.aspx",
-                "Title": "Fasesjekkliste"
+                "Title": "{{Navigation_PhaseChecklist_Title}}"
             },
             {
                 "Url": "#",
-                "Title": "Notatblokk"
+                "Title": "{{Navigation_Notebook_Title}}"
             },
             {
                 "Url": "SitePages/Gevinstoversikt.aspx",
-                "Title": "Gevinstarbeid",
+                "Title": "{{Navigation_BenefitsOverview_Title}}",
                 "Children": [
                     {
                         "Url": "Lists/Endringsanalyse/AllItems.aspx",
-                        "Title": "Endringsanalyse"
+                        "Title": "{{Navigation_ChangeAnalysis_Title}}"
                     },
                     {
                         "Url": "Lists/Gevinstanalyse og gevinstrealiseringsplan/AllItems.aspx",
-                        "Title": "Gevinstanalyse og gevinstrealiseringsplan"
+                        "Title": "{{Navigation_BenefitsAnalysis_Title}}"
                     },
                     {
                         "Url": "Lists/Mleindikatorer/AllItems.aspx",
-                        "Title": "Måleindikatorer"
+                        "Title": "{{Navigation_MeasurementIndicators_Title}}"
                     },
                     {
                         "Url": "Lists/Gevinstoppflging/AllItems.aspx",
-                        "Title": "Gevinstoppfølging"
+                        "Title": "{{Navigation_BenefitsFollowup_Title}}"
                     },
                     {
                         "Url": "SitePages/Gevinstoversikt.aspx",
-                        "Title": "Gevinstoversikt"
+                        "Title": "{{Navigation_BenefitsOverview_Title}}"
                     }
                 ]
             },
             {
                 "Url": "Lists/Prosjektleveranser/AllItems.aspx",
-                "Title": "Prosjektleveranser"
+                "Title": "{{Navigation_ProjectDeliveries_Title}}"
             },
             {
                 "Url": "Lists/Ressursallokering/AllItems.aspx",
-                "Title": "Ressursallokering"
+                "Title": "{{Navigation_ResourceAllocation_Title}}"
             },
             {
                 "Url": "SitePages/Prosjekttidslinje.aspx",
-                "Title": "Prosjekttidslinje"
+                "Title": "{{Navigation_ProjectTimeline_Title}}"
             },
             {
                 "Url": "_layouts/15/viewlsts.aspx",
-                "Title": "Områdeinnhold"
+                "Title": "{{Navigation_SiteContent_Title}}"
             }
         ]
     },
@@ -536,9 +536,9 @@
                 {
                     "Id": "{{ControlId_ProjectInformationWebPart}}",
                     "Properties": {
-                        "title": "Prosjektinformasjon",
+                        "title": "{{WebParts_ProjectInformation_Title}}",
                         "statusReportsCount": 0,
-                        "statusReportsHeader": "Prosjektstatus",
+                        "statusReportsHeader": "{{WebParts_ProjectStatusHeader_Title}}",
                         "filterField": "GtShowFieldFrontpage",
                         "adminPageLink": "Admin.aspx"
                     }
@@ -546,7 +546,7 @@
                 {
                     "Id": "a5df8fdf-b508-4b66-98a6-d83bc2597f63",
                     "Properties": {
-                        "title": "Prosjektnyheter",
+                        "title": "{{WebParts_ProjectNews_Title}}",
                         "showChrome": true,
                         "compactMode": true
                     }
@@ -561,17 +561,17 @@
                                 {
                                     "Id": "{{ControlId_ProjectPhasesWebPart}}",
                                     "Properties": {
-                                        "phaseField": "Fase",
+                                        "phaseField": "{{WebParts_ProjectPhase_Title}}",
                                         "syncPropertiesAfterPhaseChange": true,
                                         "showSubText": true,
                                         "subTextTruncateLength": 50,
-                                        "currentPhaseViewName": "Gjeldende fase"
+                                        "currentPhaseViewName": "{{WebParts_CurrentPhase_Title}}"
                                     }
                                 },
                                 {
                                     "Id": "39c4c1c2-63fa-41be-8cc2-f6c0b49b253d",
                                     "Properties": {
-                                        "title": "Oppgaver",
+                                        "title": "{{WebParts_Tasks_Title}}",
                                         "isFullScreen": false,
                                         "plannerViewMode": "bucketchart"
                                     }
@@ -580,7 +580,7 @@
                                     "Id": "6676088b-e28e-4a90-b9cb-d0d0303cd2eb",
                                     "Properties": {
                                         "showPerPage": 5,
-                                        "title": "Møter og hendelser",
+                                        "title": "{{WebParts_MeetingsAndEvents_Title}}",
                                         "timeSpanLimitInMonth": 6
                                     }
                                 }
@@ -609,7 +609,7 @@
         },
         {
             "Name": "Oppgaver.aspx",
-            "Title": "Oppgaver",
+            "Title": "{{ClientSidePages_Tasks_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -632,7 +632,7 @@
         },
         {
             "Name": "Gevinstoversikt.aspx",
-            "Title": "Gevinstoversikt",
+            "Title": "{{ClientSidePages_BenefitsOverview_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -644,10 +644,10 @@
                                 {
                                     "Id": "{{ControlId_PortfolioAggregationWebPart}}",
                                     "Properties": {
-                                        "title": "Gevinstoversikt",
-                                        "dataSource": "Alle gevinstelementer for prosjektet",
-                                        "dataSourceCategory": "Gevinstoversikt",
-                                        "dataSourceLevel": "Prosjekt",
+                                        "title": "{{WebParts_BenefitsOverview_Title}}",
+                                        "dataSource": "{{WebParts_BenefitsOverviewDataSource_Title}}",
+                                        "dataSourceCategory": "{{WebParts_BenefitsOverviewCategory_Title}}",
+                                        "dataSourceLevel": "{{WebParts_Project_Title}}",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
                                         "showSearchBox": true
@@ -661,7 +661,7 @@
         },
         {
             "Name": "Prosjektstatus.aspx",
-            "Title": "Prosjektstatus",
+            "Title": "{{ClientSidePages_ProjectStatus_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -673,13 +673,13 @@
                                 {
                                     "Id": "{{ControlId_ProjectStatusWebPart}}",
                                     "Properties": {
-                                        "title": "Prosjektstatus",
+                                        "title": "{{WebParts_ProjectStatus_Title}}",
                                         "riskMatrix": {
-                                            "calloutTemplate": "<h3>{Title}</h3>\n<p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n<p><strong>Nærhet: </strong>{GtRiskProximity}</p>\n<p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>",
+                                            "calloutTemplate": "<h3>{Title}</h3>\n<p><strong>{{WebParts_RiskStrategy_Title}}: </strong>{GtRiskStrategy}</p>\n<p><strong>{{WebParts_RiskProximity_Title}}: </strong>{GtRiskProximity}</p>\n<p><strong>{{WebParts_RiskStatus_Title}}: </strong>{GtRiskStatus}</p>",
                                             "width": 800
                                         },
                                         "opportunityMatrix": {
-                                            "calloutTemplate": "<h3>{Title}</h3>\n<p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n<p><strong>Nærhet: </strong>{GtRiskProximity}</p>\n<p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>",
+                                            "calloutTemplate": "<h3>{Title}</h3>\n<p><strong>{{WebParts_RiskStrategy_Title}}: </strong>{GtRiskStrategy}</p>\n<p><strong>{{WebParts_RiskProximity_Title}}: </strong>{GtRiskProximity}</p>\n<p><strong>{{WebParts_RiskStatus_Title}}: </strong>{GtRiskStatus}</p>",
                                             "width": 800
                                         }
                                     }
@@ -692,7 +692,7 @@
         },
         {
             "Name": "Prosjekttidslinje.aspx",
-            "Title": "Prosjekttidslinje",
+            "Title": "{{ClientSidePages_ProjectTimeline_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -704,13 +704,13 @@
                                 {
                                     "Id": "{{ControlId_ProjectTimelineWebPart}}",
                                     "Properties": {
-                                        "listName": "Tidslinjeinnhold",
+                                        "listName": "{{Lists_TimelineContent_Title}}",
                                         "showTimeline": true,
                                         "showTimelineListCommands": true,
                                         "showTimelineList": true,
                                         "showProjectDeliveries": false,
-                                        "projectDeliveriesListName": "Prosjektleveranser",
-                                        "configItemTitle": "Prosjektleveranse"
+                                        "projectDeliveriesListName": "{{Lists_ProjectDeliveries_Title}}",
+                                        "configItemTitle": "{{ContentTypes_ProjectDelivery_Name}}"
                                     }
                                 }
                             ]
@@ -722,7 +722,7 @@
     ],
     "Lists": [
         {
-            "Title": "Fasesjekkliste",
+            "Title": "{{Lists_PhaseChecklist_Title}}",
             "Description": "",
             "Template": 100,
             "ContentTypesEnabled": true,
@@ -779,7 +779,7 @@
             ]
         },
         {
-            "Title": "Interessentregister",
+            "Title": "{{Lists_Stakeholders_Title}}",
             "Description": "",
             "Template": 100,
             "ContentTypesEnabled": true,
@@ -814,7 +814,7 @@
             ]
         },
         {
-            "Title": "Kommunikasjonsplan",
+            "Title": "{{Lists_CommunicationPlan_Title}}",
             "Description": "",
             "Template": 100,
             "ContentTypesEnabled": true,
@@ -828,7 +828,7 @@
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field Type=\"LookupMulti\" DisplayName=\"Målgruppe\" List=\"{listid:Interessentregister}\" ShowField=\"Title\" ID=\"{d685f33f-51b5-4e9f-a314-4b3d9467a7e4}\" Description=\"Hvem er målgruppen (interessent) for kommunikasjonsaktiviteten?\" StaticName=\"GtCommunicationTarget\" Name=\"GtCommunicationTarget\" Mult=\"TRUE\" />"
+                "<Field Type=\"LookupMulti\" DisplayName=\"{{Fields_CommunicationTarget_DisplayName}}\" List=\"{listid:Interessentregister}\" ShowField=\"Title\" ID=\"{d685f33f-51b5-4e9f-a314-4b3d9467a7e4}\" Description=\"{{Fields_CommunicationTarget_Description}}\" StaticName=\"GtCommunicationTarget\" Name=\"GtCommunicationTarget\" Mult=\"TRUE\" />"
             ],
             "Views": [
                 {
@@ -849,7 +849,7 @@
             ]
         },
         {
-            "Title": "Prosjektlogg",
+            "Title": "{{Lists_ProjectLog_Title}}",
             "Description": "",
             "Template": 100,
             "ContentTypesEnabled": false,
@@ -863,7 +863,7 @@
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field Type=\"Lookup\" DisplayName=\"Påvirker leveranse\" List=\"{listid:Prosjektleveranser}\" ShowField=\"Title\" ID=\"{022cc93f-13df-4420-bd47-55e4fdae5d18}\" Description=\"Hvis relevant, oppgi hvilken leveranse loggelementet påvirker\" StaticName=\"GtProjectLogProductLookup\" Name=\"GtProjectLogProductLookup\" />"
+                "<Field Type=\"Lookup\" DisplayName=\"{{Fields_ProjectLogProductLookup_DisplayName}}\" List=\"{listid:Prosjektleveranser}\" ShowField=\"Title\" ID=\"{022cc93f-13df-4420-bd47-55e4fdae5d18}\" Description=\"{{Fields_ProjectLogProductLookup_Description}}\" StaticName=\"GtProjectLogProductLookup\" Name=\"GtProjectLogProductLookup\" />"
             ],
             "Views": [
                 {
@@ -886,7 +886,7 @@
             ]
         },
         {
-            "Title": "Prosjektleveranser",
+            "Title": "{{Lists_ProjectDeliveries_Title}}",
             "Description": "",
             "Template": 100,
             "ContentTypesEnabled": true,
@@ -900,7 +900,7 @@
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field Type=\"LookupMulti\" DisplayName=\"Interessent(er)\" List=\"{listid:Interessentregister}\" ShowField=\"Title\" ID=\"{6d90e0b6-73e6-48fb-aa1e-b897b214f934}\" Description=\"Oppgi hvilken interessent(er) leveransen påvirker\" Name=\"GtDeliveryStakeholders\" StaticName=\"GtDeliveryStakeholders\" Name=\"GtDeliveryStakeholders\" Mult=\"TRUE\" />"
+                "<Field Type=\"LookupMulti\" DisplayName=\"{{Fields_DeliveryStakeholders_DisplayName}}\" List=\"{listid:Interessentregister}\" ShowField=\"Title\" ID=\"{6d90e0b6-73e6-48fb-aa1e-b897b214f934}\" Description=\"{{Fields_DeliveryStakeholders_Description}}\" Name=\"GtDeliveryStakeholders\" StaticName=\"GtDeliveryStakeholders\" Name=\"GtDeliveryStakeholders\" Mult=\"TRUE\" />"
             ],
             "Views": [
                 {
@@ -922,7 +922,7 @@
             ]
         },
         {
-            "Title": "Usikkerhet",
+            "Title": "{{Lists_Uncertainty_Title}}",
             "Description": "",
             "Template": 100,
             "ContentTypesEnabled": true,
@@ -1118,7 +1118,7 @@
             ]
         },
         {
-            "Title": "Dokumenter",
+            "Title": "{{Lists_Documents_Title}}",
             "Description": "",
             "Template": 101,
             "ContentTypesEnabled": false,
@@ -1130,12 +1130,12 @@
                     "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
                     "Name": "GtProjectPhase",
                     "Required": false,
-                    "DisplayName": "Fase"
+                    "DisplayName": "{{Fields_ProjectPhase_DisplayName}}"
                 }
             ],
             "Views": [
                 {
-                    "Title": "Alle dokumenter",
+                    "Title": "{{View_AllDocuments_DisplayName}}",
                     "ViewFields": [
                         "DocIcon",
                         "LinkFilename",
@@ -1150,7 +1150,7 @@
                     }
                 },
                 {
-                    "Title": "Gjeldende fase",
+                    "Title": "{{View_CurrentPhase_DisplayName}}",
                     "ViewFields": [
                         "DocIcon",
                         "LinkFilename",
@@ -1167,7 +1167,7 @@
             ]
         },
         {
-            "Title": "Gevinstanalyse og gevinstrealiseringsplan",
+            "Title": "{{Lists_BenefitsAnalysis_Title}}",
             "Description": "",
             "Template": 100,
             "ContentTypesEnabled": true,
@@ -1181,14 +1181,14 @@
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field Type=\"LookupMulti\" DisplayName=\"Endring\" List=\"{listid:Endringsanalyse}\" ShowField=\"LinkTitleNoMenu\" UnlimitedLengthInDocumentLibrary=\"FALSE\" RelationshipDeleteBehavior=\"None\" ID=\"{1d5752af-4d26-4aed-b20a-6229ac14ed5d}\" StaticName=\"GtChangeLookup\" Name=\"GtChangeLookup\" Group=\"\" Description=\"Hvilken endring fra endringsanalysen skal gevinsten knyttes mot?\" Mult=\"TRUE\" />"
+                "<Field Type=\"LookupMulti\" DisplayName=\"{{Fields_ChangeLookup_DisplayName}}\" List=\"{listid:Endringsanalyse}\" ShowField=\"LinkTitleNoMenu\" UnlimitedLengthInDocumentLibrary=\"FALSE\" RelationshipDeleteBehavior=\"None\" ID=\"{1d5752af-4d26-4aed-b20a-6229ac14ed5d}\" StaticName=\"GtChangeLookup\" Name=\"GtChangeLookup\" Group=\"\" Description=\"{{Fields_ChangeLookup_Description}}\" Mult=\"TRUE\" />"
             ],
             "FieldRefs": [
                 {
                     "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
                     "Name": "Title",
                     "Required": true,
-                    "DisplayName": "Gevinst"
+                    "DisplayName": "{{Fields_Benefit_DisplayName}}"
                 }
             ],
             "Views": [
@@ -1210,7 +1210,7 @@
                     }
                 },
                 {
-                    "Title": "Pr gevinsttype",
+                    "Title": "{{View_ByBenefitType_DisplayName}}",
                     "ViewFields": [
                         "GtChangeLookup",
                         "Title",
@@ -1228,7 +1228,7 @@
             ]
         },
         {
-            "Title": "Endringsanalyse",
+            "Title": "{{Lists_ChangeAnalysis_Title}}",
             "Description": "",
             "Template": 100,
             "ContentTypesEnabled": true,
@@ -1246,7 +1246,7 @@
                     "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
                     "Name": "Title",
                     "Required": true,
-                    "DisplayName": "Endring"
+                    "DisplayName": "{{Fields_Change_DisplayName}}"
                 }
             ],
             "Views": [
@@ -1264,7 +1264,7 @@
                     }
                 },
                 {
-                    "Title": "Pr prosess",
+                    "Title": "{{View_ByProcess_DisplayName}}",
                     "ViewFields": [
                         "GtChallengeDescription",
                         "LinkTitle"
@@ -1278,7 +1278,7 @@
             ]
         },
         {
-            "Title": "Måleindikatorer",
+            "Title": "{{Lists_MeasurementIndicators_Title}}",
             "Description": "",
             "Template": 100,
             "ContentTypesEnabled": true,
@@ -1292,8 +1292,8 @@
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field Type=\"Lookup\" DisplayName=\"Gevinst\" List=\"{listid:Gevinstanalyse og gevinstrealiseringsplan}\" ShowField=\"Title\" ID=\"{8d70fa93-b547-46f1-84e7-4982f8c9c675}\" StaticName=\"GtGainLookup\" Name=\"GtGainLookup\"  />",
-                "<Field Type=\"Lookup\" DisplayName=\"Gevinst:ID\" List=\"{listid:Gevinstanalyse og gevinstrealiseringsplan}\" ShowField=\"ID\" FieldRef=\"8d70fa93-b547-46f1-84e7-4982f8c9c675\" ReadOnly=\"TRUE\" UnlimitedLengthInDocumentLibrary=\"FALSE\" ID=\"{c239539c-8672-46cc-be77-fb53322f71ae}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtGainLookup_ID\" Name=\"GtGainLookup_ID\" />"
+                "<Field Type=\"Lookup\" DisplayName=\"{{Fields_GainLookup_DisplayName}}\" List=\"{listid:Gevinstanalyse og gevinstrealiseringsplan}\" ShowField=\"Title\" ID=\"{8d70fa93-b547-46f1-84e7-4982f8c9c675}\" StaticName=\"GtGainLookup\" Name=\"GtGainLookup\"  />",
+                "<Field Type=\"Lookup\" DisplayName=\"{{Fields_GainLookup_ID_DisplayName}}\" List=\"{listid:Gevinstanalyse og gevinstrealiseringsplan}\" ShowField=\"ID\" FieldRef=\"8d70fa93-b547-46f1-84e7-4982f8c9c675\" ReadOnly=\"TRUE\" UnlimitedLengthInDocumentLibrary=\"FALSE\" ID=\"{c239539c-8672-46cc-be77-fb53322f71ae}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtGainLookup_ID\" Name=\"GtGainLookup_ID\" />"
             ],
             "Views": [
                 {
@@ -1314,7 +1314,7 @@
             ]
         },
         {
-            "Title": "Gevinstoppfølging",
+            "Title": "{{Lists_BenefitsFollowup_Title}}",
             "Description": "",
             "Template": 100,
             "ContentTypesEnabled": false,
@@ -1331,14 +1331,14 @@
                 {
                     "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
                     "Name": "Title",
-                    "DisplayName": "Tittel",
+                    "DisplayName": "{{Fields_Title_DisplayName}}",
                     "Required": false
                 }
             ],
             "Fields": [
-                "<Field Type=\"Lookup\" DisplayName=\"Måleindikator\" List=\"{listid:Måleindikatorer}\" ShowField=\"Title\" ID=\"{92ae8541-f35e-4c05-8518-b9abce2d0860}\" Description=\"Knytt målingen opp mot riktig måleindikator\" StaticName=\"GtMeasureIndicatorLookup\" Name=\"GtMeasureIndicatorLookup\" />",
-                "<Field Type=\"Lookup\" DisplayName=\"Måleindikator:ID\" List=\"{listid:Måleindikatorer}\" ShowField=\"ID\" FieldRef=\"92ae8541-f35e-4c05-8518-b9abce2d0860\" ReadOnly=\"TRUE\" ID=\"{571f95d9-4c0b-4b4d-8a0b-9a1771811f07}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtMeasureIndicatorLookup_ID\" Name=\"GtMeasureIndicatorLookup_ID\" />",
-                "<Field Type=\"Lookup\" DisplayName=\"Måleindikator:Ønsket verdi\" List=\"{listid:Måleindikatorer}\" ShowField=\"GtDesiredValue\" FieldRef=\"92ae8541-f35e-4c05-8518-b9abce2d0860\" ReadOnly=\"TRUE\" ID=\"{8fe2e615-999b-48dc-8889-151ed84a757a}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtMeasureIndicatorLookup_GtDesiredValue\" Name=\"GtMeasureIndicatorLookup_GtDesiredValue\" />"
+                "<Field Type=\"Lookup\" DisplayName=\"{{Fields_MeasureIndicatorLookup_DisplayName}}\" List=\"{listid:Måleindikatorer}\" ShowField=\"Title\" ID=\"{92ae8541-f35e-4c05-8518-b9abce2d0860}\" Description=\"{{Fields_MeasureIndicatorLookup_Description}}\" StaticName=\"GtMeasureIndicatorLookup\" Name=\"GtMeasureIndicatorLookup\" />",
+                "<Field Type=\"Lookup\" DisplayName=\"{{Fields_MeasureIndicatorLookup_ID_DisplayName}}\" List=\"{listid:Måleindikatorer}\" ShowField=\"ID\" FieldRef=\"92ae8541-f35e-4c05-8518-b9abce2d0860\" ReadOnly=\"TRUE\" ID=\"{571f95d9-4c0b-4b4d-8a0b-9a1771811f07}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtMeasureIndicatorLookup_ID\" Name=\"GtMeasureIndicatorLookup_ID\" />",
+                "<Field Type=\"Lookup\" DisplayName=\"{{Fields_MeasureIndicatorLookup_DesiredValue_DisplayName}}\" List=\"{listid:Måleindikatorer}\" ShowField=\"GtDesiredValue\" FieldRef=\"92ae8541-f35e-4c05-8518-b9abce2d0860\" ReadOnly=\"TRUE\" ID=\"{8fe2e615-999b-48dc-8889-151ed84a757a}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtMeasureIndicatorLookup_GtDesiredValue\" Name=\"GtMeasureIndicatorLookup_GtDesiredValue\" />"
             ],
             "Views": [
                 {
@@ -1357,7 +1357,7 @@
                     }
                 },
                 {
-                    "Title": "Flat visning",
+                    "Title": "{{View_Flat_DisplayName}}",
                     "ViewFields": [
                         "GtMeasureIndicatorLookup",
                         "GtMeasureIndicatorLookup_GtDesiredValue",
@@ -1374,7 +1374,7 @@
             ]
         },
         {
-            "Title": "Ressursallokering",
+            "Title": "{{Lists_ResourceAllocation_Title}}",
             "Description": "",
             "Template": 100,
             "ContentTypesEnabled": false,
@@ -1383,7 +1383,7 @@
                 {
                     "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
                     "Name": "Title",
-                    "DisplayName": "Tittel",
+                    "DisplayName": "{{Fields_Title_DisplayName}}",
                     "Required": false,
                     "Hidden": true
                 }
