@@ -22,13 +22,13 @@
         </View>
     </pnp:Views>
     <pnp:Fields>
-        <Field Type="LookupMulti" Mult="TRUE" DisplayName="Listeinnhold" List="{listid:Listeinnhold}" ShowField="Title" RelationshipDeleteBehavior="None" ID="{dd01587d-5fc2-46c1-8681-8b81b2514e92}" SourceID="{{listid:Prosjektmaler}}" StaticName="ListContentConfigLookup" Name="ListContentConfigLookup" />
-        <Field Type="Boolean" DisplayName="Standardmal" ID="{7bb7252a-a0eb-4e6b-b181-be89075e1d20}" SourceID="{{listid:Prosjektmaler}}" StaticName="IsDefaultTemplate" Name="IsDefaultTemplate" />
-        <Field Type="LookupMulti" Hidden="TRUE" Mult="TRUE" DisplayName="Listeinnhold" List="{listid:Listeinnhold}" ShowField="Title" RelationshipDeleteBehavior="None" ID="{dd01587d-5fc2-46c1-8681-8b81b2514e92}" SourceID="{{listid:Prosjektmaler}}" StaticName="ListContentConfigLookup" Name="ListContentConfigLookup" />
-        <Field Type="Boolean" Hidden="TRUE" DisplayName="Standardmal" ID="{7bb7252a-a0eb-4e6b-b181-be89075e1d20}" SourceID="{{listid:Prosjektmaler}}" StaticName="IsDefaultTemplate" Name="IsDefaultTemplate">
+        <Field Type="LookupMulti" Mult="TRUE" DisplayName="Listeinnhold" List="{listid:{resource:Lists_ListContent_Title}}" ShowField="Title" RelationshipDeleteBehavior="None" ID="{dd01587d-5fc2-46c1-8681-8b81b2514e92}" StaticName="ListContentConfigLookup" Name="ListContentConfigLookup" />
+        <Field Type="Boolean" DisplayName="Standardmal" ID="{7bb7252a-a0eb-4e6b-b181-be89075e1d20}" StaticName="IsDefaultTemplate" Name="IsDefaultTemplate" />
+        <Field Type="LookupMulti" Hidden="TRUE" Mult="TRUE" DisplayName="Listeinnhold" List="{listid:{resource:Lists_ListContent_Title}}" ShowField="Title" RelationshipDeleteBehavior="None" ID="{dd01587d-5fc2-46c1-8681-8b81b2514e92}" StaticName="ListContentConfigLookup" Name="ListContentConfigLookup" />
+        <Field Type="Boolean" Hidden="TRUE" DisplayName="Standardmal" ID="{7bb7252a-a0eb-4e6b-b181-be89075e1d20}" StaticName="IsDefaultTemplate" Name="IsDefaultTemplate">
             <Default>0</Default>
         </Field>
-        <Field Description="Ikon fra https://dev.office.com/fabric#/styles/icons" Hidden="TRUE" DisplayName="Ikon" EnforceUniqueValues="FALSE" Format="Dropdown" Indexed="TRUE" MaxLength="15" Name="IconName" Title="IconName" Type="Text" ID="{a655dfc5-5272-43ed-a57e-66e2fa07400a}" SourceID="{{listid:Prosjektmaler}}" StaticName="IconName">
+        <Field Description="Ikon fra https://dev.office.com/fabric#/styles/icons" Hidden="TRUE" DisplayName="Ikon" EnforceUniqueValues="FALSE" Format="Dropdown" Indexed="TRUE" MaxLength="15" Name="IconName" Title="IconName" Type="Text" ID="{a655dfc5-5272-43ed-a57e-66e2fa07400a}" StaticName="IconName">
             <Default>Page</Default>
         </Field>
     </pnp:Fields>

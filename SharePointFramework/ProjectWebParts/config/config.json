@@ -53,6 +53,7 @@
   },
   "externals": {},
   "localizedResources": {
+    "ResxStrings": "lib/loc/resx/{locale}.js",
     "ProjectWebPartsStrings": "lib/loc/{locale}.js",
     "PzlSPFxComponentsStrings": "lib/loc/{locale}.js",
     "ControlStrings": "lib/loc/{locale}.js",

@@ -25,7 +25,6 @@ declare interface IPortfolioExtensionsStrings {
   IdeaProjectDataDialogInfoTitle: string
   IdeaProjectDataDialogTitle: string
   IdeaProjectDataTitle: string
-  InstallationLogListName: string
   InstallChannelLabel: string
   InstalledDateLabel: string
   InstallVersionLabel: string
@@ -37,7 +36,6 @@ declare interface IPortfolioExtensionsStrings {
   LatestGitHubReleaseIsSameText: any
   LatestGitHubReleaseLabel: string
   LatestGitHubReleaseLinkTitle: string
-  LinksListName: string
   LinksListDescription: string
   LinksListLabel: string
   SeeAllInstallationsLinkText: string

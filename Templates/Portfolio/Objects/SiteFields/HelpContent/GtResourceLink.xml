@@ -1,1 +1,1 @@
-<Field DisplayName="{resource:SiteFields_GtResourceLink_DisplayName}" Description="{resource:SiteFields_GtResourceLink_Description}" Format="Hyperlink" Name="GtResourceLink" Type="URL" ID="{5a4b9d7f-7219-443b-a517-2d23fb230673}" SourceID="{{listid:Hjelpeinnhold}}" StaticName="GtResourceLink" />
+<Field DisplayName="{resource:SiteFields_GtResourceLink_DisplayName}" Description="{resource:SiteFields_GtResourceLink_Description}" Format="Hyperlink" Name="GtResourceLink" Type="URL" ID="{5a4b9d7f-7219-443b-a517-2d23fb230673}" StaticName="GtResourceLink" />

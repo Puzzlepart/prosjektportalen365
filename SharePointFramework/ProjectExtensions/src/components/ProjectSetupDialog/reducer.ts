@@ -26,8 +26,8 @@ export default (data: IProjectSetupData) =>
       let [template] = data.templates.filter((t) => t.isDefault)
       if (!template) template = first(data.templates)
       state.selectedTemplate = template
-      state.selectedContentConfig = template.getContentConfig(data.contentConfig)
-      state.selectedExtensions = template.getExtensions(data.extensions)
+      state.selectedContentConfig = template?.getContentConfig(data.contentConfig) ?? []
+      state.selectedExtensions = template?.getExtensions(data.extensions) ?? []
     },
 
     [ON_LIST_CONTENT_CONFIG_CHANGED.type]: (

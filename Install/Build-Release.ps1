@@ -160,6 +160,7 @@ if ($USE_CHANNEL_CONFIG) {
 else {
     Copy-Item -Path "$SITE_SCRIPTS_BASEPATH/*.txt" -Filter *.txt -Destination $RELEASE_PATH_SITESCRIPTS -Force
 }
+Copy-Item -Path "$PSScriptRoot/../Templates/Portfolio/*.resx" -Filter *.resx -Destination $RELEASE_PATH -Force
 Copy-Item -Path "$PSScriptRoot/Install.ps1" -Destination $RELEASE_PATH -Force
 Copy-Item -Path "$PSScriptRoot/Scripts/*" -Recurse -Destination $RELEASE_PATH_SCRIPTS -Force
 Copy-Item -Path "$PSScriptRoot/SearchConfiguration.xml" -Destination $RELEASE_PATH -Force
@@ -173,6 +174,56 @@ if (-not $SkipBundle.IsPresent) {
 }
 
 (Get-Content "$RELEASE_PATH/Install.ps1") -Replace '{VERSION_PLACEHOLDER}', "$($NPM_PACKAGE_FILE.version).$($GIT_HASH)" -Replace "{CHANNEL_PLACEHOLDER}", $CHANNEL_CONFIG_NAME | Set-Content "$RELEASE_PATH/Install.ps1"
+#endregion
+
+#region Build PnP templates
+if (-not $SkipBuildPnPTemplates.IsPresent) {
+    Set-Location $PSScriptRoot
+    StartAction("Building Portfolio PnP template")
+    if ($USE_CHANNEL_CONFIG) {
+        npm run generate-pnp-templates >$null 2>&1
+        Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/Portfolio.pnp" -Folder "$PNP_TEMPLATES_DIST_BASEPATH/Portfolio" -Force
+    }
+    else {
+        Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/Portfolio.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/Portfolio" -Force
+    }
+    EndAction
+
+    StartAction("Building PnP content templates")
+    Set-Location $PNP_TEMPLATES_BASEPATH
+
+    if ($CI.IsPresent) {  
+        npm ci --silent --no-audit --no-fund >$null 2>&1
+    }
+    else {
+        npm install --no-progress --silent --no-audit --no-fund  >$null 2>&1
+    }
+
+    npm run generate-project-templates >$null 2>&1
+
+    Get-ChildItem "./Content" -Directory | ForEach-Object {
+        Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/$($_.BaseName).pnp" -Folder $_.FullName -Force
+    }
+    EndAction
+
+    StartAction("Building PnP upgrade templates")
+    Set-Location $PNP_TEMPLATES_BASEPATH
+
+    Get-ChildItem "./Upgrade" -Directory | ForEach-Object {
+        Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/$($_.BaseName).pnp" -Folder $_.FullName -Force
+    }
+    EndAction
+
+    Set-Location $PSScriptRoot
+
+    StartAction("Building Taxonomy PnP template")
+    Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/Taxonomy.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/Taxonomy" -Force
+    EndAction
+
+    StartAction("Building Taxonomy BA PnP template")
+    Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/TaxonomyBA.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/TaxonomyBA" -Force
+    EndAction
+}
 #endregion
 
 #region Clean node_modules for all SharePoint Framework solutions
@@ -206,56 +257,6 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
             node ../.tasks/modifySolutionFiles.js --revert --force >$null 2>&1 
         }
     }
-    EndAction
-}
-#endregion
-
-#region Build PnP templates
-if (-not $SkipBuildPnPTemplates.IsPresent) {
-    Set-Location $PSScriptRoot
-    StartAction("Building Portfolio PnP template")
-    if ($USE_CHANNEL_CONFIG) {
-        npm run generate-pnp-templates >$null 2>&1
-        Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/Portfolio.pnp" -Folder "$PNP_TEMPLATES_DIST_BASEPATH/Portfolio" -Force
-    }
-    else {
-        Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/Portfolio.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/Portfolio" -Force
-    }
-    EndAction
-
-    StartAction("Building PnP content templates")
-    Set-Location $PNP_TEMPLATES_BASEPATH
-
-    if ($CI.IsPresent) {  
-        npm ci --silent --no-audit --no-fund >$null 2>&1
-    }
-    else {
-        npm install --no-progress --silent --no-audit --no-fund  >$null 2>&1
-    }
-
-    npm run generate-project-templates >$null 2>&1
-
-    Get-ChildItem "./Content" -Directory -Filter "*no-NB*" | ForEach-Object {
-        Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/$($_.BaseName).pnp" -Folder $_.FullName -Force
-    }
-    EndAction
-
-    StartAction("Building PnP upgrade templates")
-    Set-Location $PNP_TEMPLATES_BASEPATH
-
-    Get-ChildItem "./Upgrade" -Directory | ForEach-Object {
-        Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/$($_.BaseName).pnp" -Folder $_.FullName -Force
-    }
-    EndAction
-
-    Set-Location $PSScriptRoot
-
-    StartAction("Building Taxonomy PnP template")
-    Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/Taxonomy.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/Taxonomy" -Force
-    EndAction
-
-    StartAction("Building Taxonomy BA PnP template")
-    Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/TaxonomyBA.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/TaxonomyBA" -Force
     EndAction
 }
 #endregion

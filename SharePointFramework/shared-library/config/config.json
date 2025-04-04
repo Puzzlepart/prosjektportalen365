@@ -13,6 +13,7 @@
   },
   "externals": {},
   "localizedResources": {
+    "ResxStrings": "lib/loc/resx/{locale}.js",
     "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js",
     "SharedLibraryStrings": "lib/loc/{locale}.js"
   }
