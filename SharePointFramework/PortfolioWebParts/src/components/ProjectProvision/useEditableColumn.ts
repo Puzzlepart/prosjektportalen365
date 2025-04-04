@@ -105,6 +105,15 @@ export function useEditableColumn(
           )
           return _.flatten(values)
         }
+      ],
+      [
+        'image',
+        () => {
+          if (value) {
+            return `${value.substring(0, 42)}...`
+          }
+          return null
+        }
       ]
     ])
     if (valueMap.has(field)) {

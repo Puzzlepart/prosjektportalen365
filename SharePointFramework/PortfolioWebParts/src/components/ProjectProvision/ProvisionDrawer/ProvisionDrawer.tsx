@@ -34,6 +34,7 @@ import { useProvisionDrawer } from './useProvisionDrawer'
 import styles from './ProvisionDrawer.module.scss'
 import { UserMulti } from './User'
 import { Guest } from './Guest'
+import { ImageUpload } from './ImageUpload'
 import { DebugModel } from './DebugModel'
 import { IProvisionDrawerProps } from './types'
 import { DayOfWeek } from '@fluentui/react'
@@ -283,16 +284,18 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   >
                     <Input
                       disabled
-                      value={`${namingConvention?.prefixText}${context.column.get('alias')}${namingConvention?.suffixText
-                        }`}
+                      value={`${namingConvention?.prefixText}${context.column.get('alias')}${
+                        namingConvention?.suffixText
+                      }`}
                       contentAfter={<Tag size='small'>{aliasSuffix}</Tag>}
                     />
                   </FieldContainer>
                   <FieldContainer iconName='Link' label={strings.Provision.UrlFieldLabel}>
                     <Input
                       disabled
-                      value={`${namingConvention?.prefixText}${context.column.get('alias')}${namingConvention?.suffixText
-                        }`}
+                      value={`${namingConvention?.prefixText}${context.column.get('alias')}${
+                        namingConvention?.suffixText
+                      }`}
                       contentBefore={<Tag size='small'>{urlPrefix}</Tag>}
                     />
                   </FieldContainer>
@@ -538,6 +541,9 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                 <div className={styles.content}>
                   {context.props.debugMode || (DEBUG && <DebugModel />)}
                   <Divider />
+                  <FieldContainer iconName='Image' label='Angi områdebilde'>
+                    <ImageUpload onImageUpload={(image) => context.setColumn('image', image)} />
+                  </FieldContainer>
                   <FieldContainer
                     iconName='LocalLanguage'
                     label={strings.Provision.LanguageFieldLabel}
@@ -580,27 +586,27 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
               onClick={() => {
                 currentLevel === levels.length - 1
                   ? onSave().then((response) => {
-                    if (response) {
-                      context.reset()
-                      props.toast(
-                        <Toast appearance='inverted'>
-                          <ToastTitle>{strings.Provision.ToastCreatedTitle}</ToastTitle>
-                          <ToastBody>{strings.Provision.ToastCreatedBody}</ToastBody>
-                        </Toast>,
-                        { intent: 'success' }
-                      )
-                      context.setState({ showProvisionDrawer: false, properties: {} })
-                      setCurrentLevel(0)
-                    } else {
-                      props.toast(
-                        <Toast appearance='inverted'>
-                          <ToastTitle>{strings.Provision.ToastCreatedErrorTitle}</ToastTitle>
-                          <ToastBody>{strings.Provision.ToastCreatedErrorBody}</ToastBody>
-                        </Toast>,
-                        { intent: 'error' }
-                      )
-                    }
-                  })
+                      if (response) {
+                        context.reset()
+                        props.toast(
+                          <Toast appearance='inverted'>
+                            <ToastTitle>{strings.Provision.ToastCreatedTitle}</ToastTitle>
+                            <ToastBody>{strings.Provision.ToastCreatedBody}</ToastBody>
+                          </Toast>,
+                          { intent: 'success' }
+                        )
+                        context.setState({ showProvisionDrawer: false, properties: {} })
+                        setCurrentLevel(0)
+                      } else {
+                        props.toast(
+                          <Toast appearance='inverted'>
+                            <ToastTitle>{strings.Provision.ToastCreatedErrorTitle}</ToastTitle>
+                            <ToastBody>{strings.Provision.ToastCreatedErrorBody}</ToastBody>
+                          </Toast>,
+                          { intent: 'error' }
+                        )
+                      }
+                    })
                   : setCurrentLevel(currentLevel + 1)
               }}
             >
