@@ -73,7 +73,7 @@ define([], function () {
         ProgressDialogDescription: 'Please wait. Do not close the browser window - then the project will not be set up correctly.',
         ProgressDialogLabel: 'Preparing the project',
         ProgressDialogSubText: 'Please wait. Do not close the browser window - then the project will not be set up correctly.',
-        ProgressDialogTitle: 'Setter opp prosjektområdet',
+        ProgressDialogTitle: 'Configuring the project',
         ProjectAlreadySetupMessage: 'The project is already set up',
         ProjectAlreadySetupStack: 'It seems that the project is already set up. Do you want to apply a template (not recommended) or skip setup?',
         ProjectPropertiesListName: 'Prosjektegenskaper',

@@ -275,7 +275,7 @@ export class PlannerConfiguration extends BaseTask {
         pageContext.web.absoluteUrl,
         'PlannerConfiguration'
       )
-
+      
       if (taskDetails.checklist?.length > 20) {
         await ListLogger.log({
           message: format(strings.PlannerTaskChecklistLimitLogText, taskDetails.name ?? taskId),

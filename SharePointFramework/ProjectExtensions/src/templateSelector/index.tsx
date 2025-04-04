@@ -14,6 +14,7 @@ import { render, unmountComponentAtNode } from 'react-dom'
 import { find, first } from 'underscore'
 import { ITemplateSelectorContext, TemplateSelectorContext } from './context'
 import { ITemplateSelectorCommandProperties } from './types'
+import resx from 'ResxStrings'
 
 Logger.subscribe(ConsoleListener())
 Logger.activeLogLevel = LogLevel.Info
@@ -39,7 +40,7 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
     this._openCmd = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR')
     if (!this._openCmd) return
     try {
-      const templateLib = 'Malbibliotek'
+      const templateLib = resx.Lists_TemplateLibrary_Title
       this._ctxValue.templateLibrary = {
         title: templateLib,
         url: `${SPDataAdapter.portalDataService.url}/${templateLib}`
