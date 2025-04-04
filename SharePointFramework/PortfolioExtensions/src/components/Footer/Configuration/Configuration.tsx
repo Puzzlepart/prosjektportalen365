@@ -3,6 +3,7 @@ import React, { FC, useContext } from 'react'
 import { FooterContext } from '../context'
 import { Button, Tooltip } from '@fluentui/react-components'
 import { getFluentIcon } from 'pp365-shared-library'
+import resx from 'ResxStrings'
 
 export const Configuration: FC = () => {
   const context = useContext(FooterContext)
@@ -15,7 +16,7 @@ export const Configuration: FC = () => {
         size='small'
         appearance='subtle'
         onClick={() =>
-          window.open(`${context.props.portalUrl}/SitePages/Konfigurasjon.aspx`, '_blank')
+          window.open(`${context.props.portalUrl}/SitePages/${resx.ClientSidePages_Configuration_PageName}`, '_blank')
         }
         icon={getFluentIcon('ContentSettings')}
       >

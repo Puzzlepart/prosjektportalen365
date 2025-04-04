@@ -12,7 +12,7 @@
                         <pnp:Property Key="IsDefaultTemplate" Value="1" />
                     </pnp:Properties>
                 </pnp:File>
-                <pnp:File Src="ProjectTemplates/ParentTemplate.txt" Folder="Prosjektmaler" Level="Published" Overwrite="true">
+                <pnp:File Src="ProjectTemplates/ParentTemplate.txt" Folder="ProjectTemplates" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Parent Template" />
                         <pnp:Property Key="GtDescription" Value="" />
@@ -21,7 +21,7 @@
                         <pnp:Property Key="GtIsParentProject" Value="1" />
                     </pnp:Properties>
                 </pnp:File>
-                <pnp:File Src="ProjectTemplates/ProgramTemplate.txt" Folder="Prosjektmaler" Level="Published" Overwrite="true">
+                <pnp:File Src="ProjectTemplates/ProgramTemplate.txt" Folder="ProjectTemplates" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Program Template" />
                         <pnp:Property Key="GtDescription" Value="" />
