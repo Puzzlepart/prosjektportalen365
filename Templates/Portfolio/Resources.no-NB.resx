@@ -2626,6 +2626,33 @@
   <data name="View_Flat_DisplayName" xml:space="preserve">
     <value>Flat visning</value>
   </data>
+  <data name="View_Archived_DisplayName" xml:space="preserve">
+    <value>Arkivert</value>
+  </data>
+  <data name="View_ByStatus_DisplayName" xml:space="preserve">
+    <value>Per status</value>
+  </data>
+  <data name="View_ClearedRisks_DisplayName" xml:space="preserve">
+    <value>Avklart risiko</value>
+  </data>
+  <data name="View_CurrentOpportunities_DisplayName" xml:space="preserve">
+    <value>Nåværende muligheter</value>
+  </data>
+  <data name="View_CurrentRisks_DisplayName" xml:space="preserve">
+    <value>Nåværende risikoer</value>
+  </data>
+  <data name="View_OpportunitiesOnly_DisplayName" xml:space="preserve">
+    <value>Kun muligheter</value>
+  </data>
+  <data name="View_RisksOnly_DisplayName" xml:space="preserve">
+    <value>Kun risikoer</value>
+  </data>
+  <data name="View_UnacceptableRisks_DisplayName" xml:space="preserve">
+    <value>Uakseptable risikoer</value>
+  </data>
+  <data name="View_WithoutResponsible_DisplayName" xml:space="preserve">
+    <value>Uten ansvarlig</value>
+  </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Gå til &lt;a href="{0}" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>
   </data>

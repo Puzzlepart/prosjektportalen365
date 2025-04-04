@@ -2395,7 +2395,7 @@
 - View_ByProcess_DisplayName
 - View_CurrentPhase_DisplayName
 - View_Flat_DisplayName
- <data name="ListFields_Benefit_DisplayName" xml:space="preserve">
+  <data name="ListFields_Benefit_DisplayName" xml:space="preserve">
     <value>Benefit</value>
   </data>
   <data name="ListFields_ChangeLookup_Description" xml:space="preserve">
@@ -2413,7 +2413,7 @@
   <data name="ListFields_CommunicationTarget_DisplayName" xml:space="preserve">
     <value>Communication target</value>
   </data>
-<data name="ListFields_DeliveryStakeholders_Description" xml:space="preserve">
+  <data name="ListFields_DeliveryStakeholders_Description" xml:space="preserve">
     <value>Who is the target group (stakeholder) for the delivery activity?</value>
   </data>
   <data name="ListFields_DeliveryStakeholders_DisplayName" xml:space="preserve">
@@ -2484,6 +2484,33 @@
   </data>
   <data name="View_Flat_DisplayName" xml:space="preserve">
     <value>Flat</value>
+  </data>
+  <data name="View_Archived_DisplayName" xml:space="preserve">
+    <value>Archived</value>
+  </data>
+  <data name="View_ByStatus_DisplayName" xml:space="preserve">
+    <value>By status</value>
+  </data>
+  <data name="View_ClearedRisks_DisplayName" xml:space="preserve">
+    <value>Cleared risks</value>
+  </data>
+  <data name="View_CurrentOpportunities_DisplayName" xml:space="preserve">
+    <value>Current opportunities</value>
+  </data>
+  <data name="View_CurrentRisks_DisplayName" xml:space="preserve">
+    <value>Current risks</value>
+  </data>
+  <data name="View_OpportunitiesOnly_DisplayName" xml:space="preserve">
+    <value>Opportunities only</value>
+  </data>
+  <data name="View_RisksOnly_DisplayName" xml:space="preserve">
+    <value>Risks only</value>
+  </data>
+  <data name="View_UnacceptableRisks_DisplayName" xml:space="preserve">
+    <value>Unacceptable risks</value>
+  </data>
+  <data name="View_WithoutResponsible_DisplayName" xml:space="preserve">
+    <value>Without responsible</value>
   </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Go to &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (opens in a new tab)</value>

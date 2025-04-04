@@ -747,11 +747,11 @@
                     ],
                     "AdditionalSettings": {
                         "RowLimit": 50,
-                        "ViewQuery": "<OrderBy><FieldRef Name=\"GtSortOrder\" /><FieldRef Name=\"ID\" /></OrderBy><Where><Neq><FieldRef Name=\"GtChecklistStatus\" /><Value Type=\"Text\">Arkivert</Value></Neq>\n</Where>"
+                        "ViewQuery": "<OrderBy><FieldRef Name=\"GtSortOrder\" /><FieldRef Name=\"ID\" /></OrderBy><Where><Neq><FieldRef Name=\"GtChecklistStatus\" /><Value Type=\"Text\">{{Choice_GtChecklistStatus_Archived}}</Value></Neq>\n</Where>"
                     }
                 },
                 {
-                    "Title": "Arkivert",
+                    "Title": "{{View_Archived_DisplayName}}",
                     "ViewFields": [
                         "GtSortOrder",
                         "LinkTitle",
@@ -760,11 +760,11 @@
                     ],
                     "AdditionalSettings": {
                         "RowLimit": 50,
-                        "ViewQuery": "<OrderBy><FieldRef Name=\"GtSortOrder\" /><FieldRef Name=\"ID\" /></OrderBy><Where><Eq><FieldRef Name=\"GtChecklistStatus\" /><Value Type=\"Text\">Arkivert</Value></Eq>\n</Where>"
+                        "ViewQuery": "<OrderBy><FieldRef Name=\"GtSortOrder\" /><FieldRef Name=\"ID\" /></OrderBy><Where><Eq><FieldRef Name=\"GtChecklistStatus\" /><Value Type=\"Text\">{{Choice_GtChecklistStatus_Archived}}</Value></Eq>\n</Where>"
                     }
                 },
                 {
-                    "Title": "Per status",
+                    "Title": "{{View_ByStatus_DisplayName}}",
                     "ViewFields": [
                         "GtSortOrder",
                         "LinkTitle",
@@ -828,7 +828,7 @@
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field Type=\"LookupMulti\" DisplayName=\"{{ListFields_CommunicationTarget_DisplayName}}\" List=\"{listid:Interessentregister}\" ShowField=\"Title\" ID=\"{d685f33f-51b5-4e9f-a314-4b3d9467a7e4}\" Description=\"{{ListFields_CommunicationTarget_Description}}\" StaticName=\"GtCommunicationTarget\" Name=\"GtCommunicationTarget\" Mult=\"TRUE\" />"
+                "<Field Type=\"LookupMulti\" DisplayName=\"{{ListFields_CommunicationTarget_DisplayName}}\" List=\"{listid:{{Lists_Stakeholders_Title}}}\" ShowField=\"Title\" ID=\"{d685f33f-51b5-4e9f-a314-4b3d9467a7e4}\" Description=\"{{ListFields_CommunicationTarget_Description}}\" StaticName=\"GtCommunicationTarget\" Name=\"GtCommunicationTarget\" Mult=\"TRUE\" />"
             ],
             "Views": [
                 {
@@ -863,7 +863,7 @@
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field Type=\"Lookup\" DisplayName=\"{{ListFields_ProjectLogProductLookup_DisplayName}}\" List=\"{listid:Prosjektleveranser}\" ShowField=\"Title\" ID=\"{022cc93f-13df-4420-bd47-55e4fdae5d18}\" Description=\"{{ListFields_ProjectLogProductLookup_Description}}\" StaticName=\"GtProjectLogProductLookup\" Name=\"GtProjectLogProductLookup\" />"
+                "<Field Type=\"Lookup\" DisplayName=\"{{ListFields_ProjectLogProductLookup_DisplayName}}\" List=\"{listid:{{Lists_ProjectDeliveries_Title}}}\" ShowField=\"Title\" ID=\"{022cc93f-13df-4420-bd47-55e4fdae5d18}\" Description=\"{{ListFields_ProjectLogProductLookup_Description}}\" StaticName=\"GtProjectLogProductLookup\" Name=\"GtProjectLogProductLookup\" />"
             ],
             "Views": [
                 {
@@ -963,7 +963,7 @@
                     }
                 },
                 {
-                    "Title": "Aktuell risiko",
+                    "Title": "{{View_CurrentRisks_DisplayName}}",
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
@@ -976,11 +976,11 @@
                     "AdditionalSettings": {
                         "RowLimit": 100,
                         "Paged": true,
-                        "ViewQuery": "<GroupBy Collapse= \"TRUE\" GroupLimit= \"30\"><FieldRef Name= \"GtRiskStatus\" Ascending= \"FALSE\" /></GroupBy><OrderBy><FieldRef Name= \"GtRiskFactor\" Ascending= \"FALSE\" /></OrderBy><Where><And><Neq><FieldRef Name= \"GtRiskStatus\" /><Value Type= \"Text\">Ikke lenger aktuell</Value></Neq><Eq><FieldRef Name= \"ContentType\" /><Value Type= \"Computed\">Risiko</Value></Eq></And></Where>"
+                        "ViewQuery": "<GroupBy Collapse= \"TRUE\" GroupLimit= \"30\"><FieldRef Name= \"GtRiskStatus\" Ascending= \"FALSE\" /></GroupBy><OrderBy><FieldRef Name= \"GtRiskFactor\" Ascending= \"FALSE\" /></OrderBy><Where><And><Neq><FieldRef Name= \"GtRiskStatus\" /><Value Type= \"Text\">{{Choice_GtRiskStatus_NoLongerRelevant}}</Value></Neq><Eq><FieldRef Name= \"ContentType\" /><Value Type= \"Computed\">{{ContentTypes_Risk_Name}}</Value></Eq></And></Where>"
                     }
                 },
                 {
-                    "Title": "Aktuelle muligheter",
+                    "Title": "{{View_CurrentOpportunities_DisplayName}}",
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
@@ -993,11 +993,11 @@
                     "AdditionalSettings": {
                         "RowLimit": 100,
                         "Paged": true,
-                        "ViewQuery": "<GroupBy Collapse= \"TRUE\" GroupLimit= \"30\"><FieldRef Name= \"GtRiskStatus\" Ascending= \"FALSE\" /></GroupBy><OrderBy><FieldRef Name= \"GtRiskFactor\" Ascending= \"FALSE\" /></OrderBy><Where><And><Neq><FieldRef Name= \"GtRiskStatus\" /><Value Type= \"Text\">Ikke lenger aktuell</Value></Neq><Eq><FieldRef Name= \"ContentType\" /><Value Type= \"Computed\">Mulighet</Value></Eq></And></Where>"
+                        "ViewQuery": "<GroupBy Collapse= \"TRUE\" GroupLimit= \"30\"><FieldRef Name= \"GtRiskStatus\" Ascending= \"FALSE\" /></GroupBy><OrderBy><FieldRef Name= \"GtRiskFactor\" Ascending= \"FALSE\" /></OrderBy><Where><And><Neq><FieldRef Name= \"GtRiskStatus\" /><Value Type= \"Text\">{{Choice_GtRiskStatus_NoLongerRelevant}}</Value></Neq><Eq><FieldRef Name= \"ContentType\" /><Value Type= \"Computed\">{{ContentTypes_Possibility_Name}}</Value></Eq></And></Where>"
                     }
                 },
                 {
-                    "Title": "Uakseptabel risiko",
+                    "Title": "{{View_UnacceptableRisks_DisplayName}}",
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
@@ -1013,11 +1013,11 @@
                     "AdditionalSettings": {
                         "RowLimit": 100,
                         "Paged": true,
-                        "ViewQuery": "<GroupBy Collapse= \"TRUE\" GroupLimit= \"30\"><FieldRef Name= \"GtRiskStatus\" Ascending= \"FALSE\" /></GroupBy><OrderBy><FieldRef Name= \"GtRiskFactor\" Ascending= \"FALSE\" /></OrderBy><Where><And><And><Neq><FieldRef Name= \"GtRiskStatus\" /><Value Type= \"Text\">Ikke lenger aktuell</Value></Neq><Gt><FieldRef Name= \"GtRiskFactor\" /><Value Type= \"Number\">10</Value></Gt></And><Eq><FieldRef Name= \"ContentType\" /><Value Type= \"Computed\">Risiko</Value></Eq></And></Where>"
+                        "ViewQuery": "<GroupBy Collapse= \"TRUE\" GroupLimit= \"30\"><FieldRef Name= \"GtRiskStatus\" Ascending= \"FALSE\" /></GroupBy><OrderBy><FieldRef Name= \"GtRiskFactor\" Ascending= \"FALSE\" /></OrderBy><Where><And><And><Neq><FieldRef Name= \"GtRiskStatus\" /><Value Type= \"Text\">{{Choice_GtRiskStatus_NoLongerRelevant}}</Value></Neq><Gt><FieldRef Name= \"GtRiskFactor\" /><Value Type= \"Number\">10</Value></Gt></And><Eq><FieldRef Name= \"ContentType\" /><Value Type= \"Computed\">{{ContentTypes_Risk_Name}}</Value></Eq></And></Where>"
                     }
                 },
                 {
-                    "Title": "Avklart risiko",
+                    "Title": "{{View_ClearedRisks_DisplayName}}",
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
@@ -1036,11 +1036,11 @@
                     "AdditionalSettings": {
                         "RowLimit": 100,
                         "Paged": true,
-                        "ViewQuery": "<OrderBy><FieldRef Name= \"GtRiskFactor\" Ascending= \"FALSE\" /></OrderBy><Where><And><Neq><FieldRef Name= \"GtRiskStatus\" /><Value Type= \"Text\">Ikke lenger aktuell</Value></Neq><Eq><FieldRef Name= \"ContentType\" /><Value Type= \"Computed\">Risiko</Value></Eq></And></Where>"
+                        "ViewQuery": "<OrderBy><FieldRef Name= \"GtRiskFactor\" Ascending= \"FALSE\" /></OrderBy><Where><And><Neq><FieldRef Name= \"GtRiskStatus\" /><Value Type= \"Text\">{{Choice_GtRiskStatus_NoLongerRelevant}}</Value></Neq><Eq><FieldRef Name= \"ContentType\" /><Value Type= \"Computed\">{{ContentTypes_Risk_Name}}</Value></Eq></And></Where>"
                     }
                 },
                 {
-                    "Title": "Uten ansvarlig",
+                    "Title": "{{View_WithoutResponsible_DisplayName}}",
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
@@ -1058,7 +1058,7 @@
                     }
                 },
                 {
-                    "Title": "Risiko",
+                    "Title": "{{View_RisksOnly_DisplayName}}",
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
@@ -1077,11 +1077,11 @@
                     "AdditionalSettings": {
                         "RowLimit": 100,
                         "Paged": true,
-                        "ViewQuery": "<Where><Eq><FieldRef Name=\"ContentType\" /><Value Type=\"Computed\">Risiko</Value></Eq></Where>"
+                        "ViewQuery": "<Where><Eq><FieldRef Name=\"ContentType\" /><Value Type=\"Computed\">{{ContentTypes_Risk_Name}}</Value></Eq></Where>"
                     }
                 },
                 {
-                    "Title": "Mulighet",
+                    "Title": "{{View_OpportunitiesOnly_DisplayName}}",
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
@@ -1100,11 +1100,11 @@
                     "AdditionalSettings": {
                         "RowLimit": 100,
                         "Paged": true,
-                        "ViewQuery": "<Where><Eq><FieldRef Name=\"ContentType\" /><Value Type=\"Computed\">Mulighet</Value></Eq></Where>"
+                        "ViewQuery": "<Where><Eq><FieldRef Name=\"ContentType\" /><Value Type=\"Computed\">{{ContentTypes_Possibility_Name}}</Value></Eq></Where>"
                     }
                 },
                 {
-                    "Title": "Gjeldende fase",
+                    "Title": "{{View_CurrentPhase_DisplayName}}",
                     "ViewFields": [
                         "ID",
                         "LinkTitle"
@@ -1181,7 +1181,7 @@
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field Type=\"LookupMulti\" DisplayName=\"{{ListFields_ChangeLookup_DisplayName}}\" List=\"{listid:Endringsanalyse}\" ShowField=\"LinkTitleNoMenu\" UnlimitedLengthInDocumentLibrary=\"FALSE\" RelationshipDeleteBehavior=\"None\" ID=\"{1d5752af-4d26-4aed-b20a-6229ac14ed5d}\" StaticName=\"GtChangeLookup\" Name=\"GtChangeLookup\" Group=\"\" Description=\"{{ListFields_ChangeLookup_Description}}\" Mult=\"TRUE\" />"
+                "<Field Type=\"LookupMulti\" DisplayName=\"{{ListFields_ChangeLookup_DisplayName}}\" List=\"{listid:{{Lists_ChangeAnalysis_Title}}}\" ShowField=\"LinkTitleNoMenu\" UnlimitedLengthInDocumentLibrary=\"FALSE\" RelationshipDeleteBehavior=\"None\" ID=\"{1d5752af-4d26-4aed-b20a-6229ac14ed5d}\" StaticName=\"GtChangeLookup\" Name=\"GtChangeLookup\" Group=\"\" Description=\"{{ListFields_ChangeLookup_Description}}\" Mult=\"TRUE\" />"
             ],
             "FieldRefs": [
                 {
@@ -1292,8 +1292,8 @@
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field Type=\"Lookup\" DisplayName=\"{{ListFields_GainLookup_DisplayName}}\" List=\"{listid:Gevinstanalyse og gevinstrealiseringsplan}\" ShowField=\"Title\" ID=\"{8d70fa93-b547-46f1-84e7-4982f8c9c675}\" StaticName=\"GtGainLookup\" Name=\"GtGainLookup\"  />",
-                "<Field Type=\"Lookup\" DisplayName=\"{{ListFields_GainLookup_ID_DisplayName}}\" List=\"{listid:Gevinstanalyse og gevinstrealiseringsplan}\" ShowField=\"ID\" FieldRef=\"8d70fa93-b547-46f1-84e7-4982f8c9c675\" ReadOnly=\"TRUE\" UnlimitedLengthInDocumentLibrary=\"FALSE\" ID=\"{c239539c-8672-46cc-be77-fb53322f71ae}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtGainLookup_ID\" Name=\"GtGainLookup_ID\" />"
+                "<Field Type=\"Lookup\" DisplayName=\"{{ListFields_GainLookup_DisplayName}}\" List=\"{listid:{{Lists_BenefitsAnalysis_Title}}}\" ShowField=\"Title\" ID=\"{8d70fa93-b547-46f1-84e7-4982f8c9c675}\" StaticName=\"GtGainLookup\" Name=\"GtGainLookup\"  />",
+                "<Field Type=\"Lookup\" DisplayName=\"{{ListFields_GainLookup_ID_DisplayName}}\" List=\"{listid:{{Lists_BenefitsAnalysis_Title}}}\" ShowField=\"ID\" FieldRef=\"8d70fa93-b547-46f1-84e7-4982f8c9c675\" ReadOnly=\"TRUE\" UnlimitedLengthInDocumentLibrary=\"FALSE\" ID=\"{c239539c-8672-46cc-be77-fb53322f71ae}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtGainLookup_ID\" Name=\"GtGainLookup_ID\" />"
             ],
             "Views": [
                 {
@@ -1336,9 +1336,9 @@
                 }
             ],
             "Fields": [
-                "<Field Type=\"Lookup\" DisplayName=\"{{ListFields_MeasureIndicatorLookup_DisplayName}}\" List=\"{listid:Måleindikatorer}\" ShowField=\"Title\" ID=\"{92ae8541-f35e-4c05-8518-b9abce2d0860}\" Description=\"{{ListFields_MeasureIndicatorLookup_Description}}\" StaticName=\"GtMeasureIndicatorLookup\" Name=\"GtMeasureIndicatorLookup\" />",
-                "<Field Type=\"Lookup\" DisplayName=\"{{ListFields_MeasureIndicatorLookup_ID_DisplayName}}\" List=\"{listid:Måleindikatorer}\" ShowField=\"ID\" FieldRef=\"92ae8541-f35e-4c05-8518-b9abce2d0860\" ReadOnly=\"TRUE\" ID=\"{571f95d9-4c0b-4b4d-8a0b-9a1771811f07}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtMeasureIndicatorLookup_ID\" Name=\"GtMeasureIndicatorLookup_ID\" />",
-                "<Field Type=\"Lookup\" DisplayName=\"{{ListFields_MeasureIndicatorLookup_DesiredValue_DisplayName}}\" List=\"{listid:Måleindikatorer}\" ShowField=\"GtDesiredValue\" FieldRef=\"92ae8541-f35e-4c05-8518-b9abce2d0860\" ReadOnly=\"TRUE\" ID=\"{8fe2e615-999b-48dc-8889-151ed84a757a}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtMeasureIndicatorLookup_GtDesiredValue\" Name=\"GtMeasureIndicatorLookup_GtDesiredValue\" />"
+                "<Field Type=\"Lookup\" DisplayName=\"{{ListFields_MeasureIndicatorLookup_DisplayName}}\" List=\"{listid:{{Lists_MeasurementIndicators_Title}}}\" ShowField=\"Title\" ID=\"{92ae8541-f35e-4c05-8518-b9abce2d0860}\" Description=\"{{ListFields_MeasureIndicatorLookup_Description}}\" StaticName=\"GtMeasureIndicatorLookup\" Name=\"GtMeasureIndicatorLookup\" />",
+                "<Field Type=\"Lookup\" DisplayName=\"{{ListFields_MeasureIndicatorLookup_ID_DisplayName}}\" List=\"{listid:{{Lists_MeasurementIndicators_Title}}}\" ShowField=\"ID\" FieldRef=\"92ae8541-f35e-4c05-8518-b9abce2d0860\" ReadOnly=\"TRUE\" ID=\"{571f95d9-4c0b-4b4d-8a0b-9a1771811f07}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtMeasureIndicatorLookup_ID\" Name=\"GtMeasureIndicatorLookup_ID\" />",
+                "<Field Type=\"Lookup\" DisplayName=\"{{ListFields_MeasureIndicatorLookup_DesiredValue_DisplayName}}\" List=\"{listid:{{Lists_MeasurementIndicators_Title}}}\" ShowField=\"GtDesiredValue\" FieldRef=\"92ae8541-f35e-4c05-8518-b9abce2d0860\" ReadOnly=\"TRUE\" ID=\"{8fe2e615-999b-48dc-8889-151ed84a757a}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtMeasureIndicatorLookup_GtDesiredValue\" Name=\"GtMeasureIndicatorLookup_GtDesiredValue\" />"
             ],
             "Views": [
                 {
