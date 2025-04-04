@@ -151,7 +151,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
 
       let data = await this._fetchData()
       ListLogger.init(
-        SPDataAdapter.portalDataService.web.lists.getByTitle('Logg'),
+        SPDataAdapter.portalDataService.web.lists.getByTitle(resx.Lists_Log_Title),
         this.context.pageContext.web.absoluteUrl,
         'ProjectSetup'
       )
