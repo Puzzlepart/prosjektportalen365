@@ -47,10 +47,10 @@
       <Default>0</Default>
     </Field>
     <Field Type="Text" DisplayName="Prosjektkolonner" MaxLength="255" ID="{69742a29-9bba-413e-b2cc-989d4430170b}" StaticName="GtProjectColumns" Name="GtProjectColumns">
-      <Default>Kolonner for Prosjektportalen (Prosjekt)</Default>
+      <Default>{resource:SiteFields_Project_Group}</Default>
     </Field>
     <Field Type="Text" DisplayName="Kundespesifikke kolonner" MaxLength="255" ID="{4efd9b9f-62ba-42e7-9dec-a37ad8b125a7}" StaticName="GtProjectCustomColumns" Name="GtProjectCustomColumns">
-      <Default>Egendefinerte kolonner for Prosjektportalen</Default>
+      <Default>{resource:SiteFields_CustomFields_Group}</Default>
     </Field>
     <Field Type="Boolean" DisplayName="Standard mal?" ID="{dd341142-d60d-41ad-a206-57f52aa1e60a}" StaticName="IsDefaultTemplate" Name="IsDefaultTemplate">
       <Default>0</Default>
@@ -74,8 +74,8 @@
       <pnp:DataValue FieldName="GtProjectTemplate">1</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectContentType">0x0100805E9E4FEAAB4F0EABAB2600D30DB70C</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectStatusContentType">0x010022252E35737A413FB56A1BA53862F6D5</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectColumns">Kolonner for Prosjektportalen (Prosjekt)</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectCustomColumns">Egendefinerte kolonner for Prosjektportalen</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectColumns">{resource:SiteFields_Project_Group}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectCustomColumns">{resource:SiteFields_CustomFields_Group}</pnp:DataValue>
       <pnp:DataValue FieldName="IsDefaultExtensionsLocked">False</pnp:DataValue>
       <pnp:DataValue FieldName="IsDefaultListContentLocked">False</pnp:DataValue>
       <pnp:DataValue FieldName="GtDescription">{resource:Lists_TemplateOptions_StandardTemplate_Description}</pnp:DataValue>
@@ -88,8 +88,8 @@
       <pnp:DataValue FieldName="GtProjectTemplate">2</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectContentType">0x0100805E9E4FEAAB4F0EABAB2600D30DB70C</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectStatusContentType">0x010022252E35737A413FB56A1BA53862F6D5</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectColumns">Kolonner for Prosjektportalen (Prosjekt)</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectCustomColumns">Egendefinerte kolonner for Prosjektportalen</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectColumns">{resource:SiteFields_Project_Group}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectCustomColumns">{resource:SiteFields_CustomFields_Group}</pnp:DataValue>
       <pnp:DataValue FieldName="IsHiddenTemplate">True</pnp:DataValue>
       <pnp:DataValue FieldName="GtDescription">{resource:Lists_TemplateOptions_ParentTemplate_Description}</pnp:DataValue>
       <pnp:DataValue FieldName="IconName">ProductVariant</pnp:DataValue>
@@ -102,8 +102,8 @@
       <pnp:DataValue FieldName="GtProjectContentType">0x0100805E9E4FEAAB4F0EABAB2600D30DB70C</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectStatusContentType">0x010022252E35737A413FB56A1BA53862F6D5</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectPhaseTermId">54f92279-2602-4d70-95b5-e6113f27666e</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectColumns">Kolonner for Prosjektportalen (Prosjekt)</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectCustomColumns">Egendefinerte kolonner for Prosjektportalen</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectColumns">{resource:SiteFields_Project_Group}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectCustomColumns">{resource:SiteFields_CustomFields_Group}</pnp:DataValue>
       <pnp:DataValue FieldName="GtIsProgram">True</pnp:DataValue>
       <pnp:DataValue FieldName="GtDescription">{resource:Lists_TemplateOptions_ProgramTemplate_Description}</pnp:DataValue>
       <pnp:DataValue FieldName="IconName">ProductList</pnp:DataValue>
@@ -117,8 +117,8 @@
       <pnp:DataValue FieldName="GtProjectContentType">0x0100805E9E4FEAAB4F0EABAB2600D30DB70CBA</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectStatusContentType">0x010022252E35737A413FB56A1BA53862F6D5BA</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectPhaseTermId">ec5ceb95-7259-4282-811f-7c57304be71e</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectColumns">Kolonner for Prosjektportalen (Prosjekt)</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectCustomColumns">Egendefinerte kolonner for Prosjektportalen</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectColumns">{resource:SiteFields_Project_Group}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectCustomColumns">{resource:SiteFields_CustomFields_Group}</pnp:DataValue>
       <pnp:DataValue FieldName="GtDescription">{resource:Lists_TemplateOptions_BuildingProject_Description}</pnp:DataValue>
       <pnp:DataValue FieldName="IconName">BuildDefinition</pnp:DataValue>
       <pnp:DataValue FieldName="GtDocumentTemplateLibrary">Malbibliotek</pnp:DataValue>
@@ -130,8 +130,8 @@
       <pnp:DataValue FieldName="GtProjectContentType">0x0100805E9E4FEAAB4F0EABAB2600D30DB70CBA</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectStatusContentType">0x010022252E35737A413FB56A1BA53862F6D5BA</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectPhaseTermId">cc6cdd18-c7d5-42e1-8d19-a336dd78f3f2</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectColumns">Kolonner for Prosjektportalen (Prosjekt)</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectCustomColumns">Egendefinerte kolonner for Prosjektportalen</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectColumns">{resource:SiteFields_Project_Group}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectCustomColumns">{resource:SiteFields_CustomFields_Group}</pnp:DataValue>
       <pnp:DataValue FieldName="GtDescription">{resource:Lists_TemplateOptions_ConstructionProject_Description}</pnp:DataValue>
       <pnp:DataValue FieldName="IconName">DeliveryTruck</pnp:DataValue>
       <pnp:DataValue FieldName="GtDocumentTemplateLibrary">Malbibliotek</pnp:DataValue>
