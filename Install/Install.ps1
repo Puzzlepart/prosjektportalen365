@@ -66,6 +66,7 @@ $LanguageCodes = @{
 $Channel = "{CHANNEL_PLACEHOLDER}"
 $LanguageId = $LanguageIds[$Language]
 $LanguageCode = $LanguageCodes[$Language]
+. "$PSScriptRoot/Scripts/Resources.ps1"
 #endregion
 
 $ErrorActionPreference = "Stop"
@@ -519,16 +520,22 @@ if ($CI.IsPresent) {
     $InstallEntry.InstallCommand = "GitHub CI";
 }
 
-## Logging installation to SharePoint list
-$InstallationEntry = Add-PnPListItem -List "Installasjonslogg" -Values $InstallEntry -ErrorAction Continue
+try {
+    $InstallationEntriesList = Get-PnPList -Identity (Get-Resource -Name "Lists_InstallationLog_Title") -ErrorAction Stop
 
-## Attempting to attach the log file to installation entry
-if ($null -ne $InstallationEntry) {
-    $File = Get-Item -Path $LogFilePath
-    if ($null -ne $File -and $File.Length -gt 0) {
-        Write-Host "[INFO] Attaching installation log file to installation entry"
-        $AttachmentOutput = Add-PnPListItemAttachment -List "Installasjonslogg" -Identity $InstallationEntry.Id -Path $LogFilePath -ErrorAction Continue
-    }    
+    ## Logging installation to SharePoint list
+    $InstallationEntry = Add-PnPListItem -List $InstallationEntriesList.Id -Values $InstallEntry -ErrorAction Continue
+
+    ## Attempting to attach the log file to installation entry
+    if ($null -ne $InstallationEntry) {
+        $File = Get-Item -Path $LogFilePath
+        if ($null -ne $File -and $File.Length -gt 0) {
+            Write-Host "[INFO] Attaching installation log file to installation entry"
+            $AttachmentOutput = Add-PnPListItemAttachment -List $InstallationEntriesList.Id -Identity $InstallationEntry.Id -Path $LogFilePath -ErrorAction Continue
+        }    
+    }
+} catch {
+    Write-Host "[WARNING] Installation log list not found. Skipping logging installation entry." -ForegroundColor Yellow
 }
 
 Disconnect-PnPOnline
