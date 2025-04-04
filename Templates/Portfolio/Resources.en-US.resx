@@ -2365,6 +2365,126 @@
   <data name="SiteFields_GtURL_Description" xml:space="preserve">
     <value>URL where the help content should be displayed. For example, SitePages/Home.aspx if you want the content to be displayed on the front page of the project.</value>
   </data>
+  - ListFields_Benefit_DisplayName
+- ListFields_ChangeLookup_Description
+- ListFields_ChangeLookup_DisplayName
+- ListFields_Change_DisplayName
+- ListFields_CommunicationTarget_Description
+- ListFields_CommunicationTarget_DisplayName
+- ListFields_DeliveryStakeholders_Description
+- ListFields_DeliveryStakeholders_DisplayName
+- ListFields_GainLookup_DisplayName
+- ListFields_GainLookup_ID_DisplayName
+- ListFields_MeasureIndicatorLookup_Description
+- ListFields_MeasureIndicatorLookup_DesiredValue_DisplayName
+- ListFields_MeasureIndicatorLookup_DisplayName
+- ListFields_MeasureIndicatorLookup_ID_DisplayName
+- ListFields_ProjectLogProductLookup_Description
+- ListFields_ProjectLogProductLookup_DisplayName
+- ListFields_ProjectPhase_DisplayName
+- ListFields_Title_DisplayName
+- Lists_BenefitsAnalysis_Title
+- Lists_BenefitsFollowup_Title
+- Lists_ChangeAnalysis_Title
+- Lists_CommunicationPlan_Title
+- Lists_Documents_Title
+- Lists_MeasurementIndicators_Title
+- Lists_ProjectLog_Title
+- Lists_Uncertainty_Title
+- View_ByBenefitType_DisplayName
+- View_ByProcess_DisplayName
+- View_CurrentPhase_DisplayName
+- View_Flat_DisplayName
+ <data name="ListFields_Benefit_DisplayName" xml:space="preserve">
+    <value>Benefit</value>
+  </data>
+  <data name="ListFields_ChangeLookup_Description" xml:space="preserve">
+    <value>What is the change that the benefit is related to?</value>
+  </data>
+  <data name="ListFields_ChangeLookup_DisplayName" xml:space="preserve">
+    <value>Change</value>
+  </data>
+  <data name="ListFields_Change_DisplayName" xml:space="preserve">
+    <value>Change</value>
+  </data>
+  <data name="ListFields_CommunicationTarget_Description" xml:space="preserve">
+    <value>Who is the target group (stakeholder) for the communication activity?</value>
+  </data>
+  <data name="ListFields_CommunicationTarget_DisplayName" xml:space="preserve">
+    <value>Communication target</value>
+  </data>
+<data name="ListFields_DeliveryStakeholders_Description" xml:space="preserve">
+    <value>Who is the target group (stakeholder) for the delivery activity?</value>
+  </data>
+  <data name="ListFields_DeliveryStakeholders_DisplayName" xml:space="preserve">
+    <value>Delivery stakeholders</value>
+  </data>
+  <data name="ListFields_GainLookup_DisplayName" xml:space="preserve">
+    <value>Gain</value>
+  </data>
+  <data name="ListFields_GainLookup_ID_DisplayName" xml:space="preserve">
+    <value>Gain ID</value>
+  </data>
+  <data name="ListFields_MeasureIndicatorLookup_Description" xml:space="preserve">
+    <value>What is the measurement indicator that the benefit is related to?</value>
+  </data>
+  <data name="ListFields_MeasureIndicatorLookup_DesiredValue_DisplayName" xml:space="preserve">
+    <value>Desired value</value>
+  </data>
+  <data name="ListFields_MeasureIndicatorLookup_DisplayName" xml:space="preserve">
+    <value>Measurement indicator</value>
+  </data>
+  <data name="ListFields_MeasureIndicatorLookup_ID_DisplayName" xml:space="preserve">
+    <value>Measurement indicator ID</value>
+  </data>
+  <data name="ListFields_ProjectLogProductLookup_Description" xml:space="preserve">
+    <value>What is the product that the project log is related to?</value>
+  </data>
+  <data name="ListFields_ProjectLogProductLookup_DisplayName" xml:space="preserve">
+    <value>Project log product</value>
+  </data>
+  <data name="ListFields_ProjectPhase_DisplayName" xml:space="preserve">
+    <value>Project phase</value>
+  </data>
+  <data name="ListFields_Title_DisplayName" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="Lists_BenefitsAnalysis_Title" xml:space="preserve">
+    <value>Benefits analysis</value>
+  </data>
+  <data name="Lists_BenefitsFollowup_Title" xml:space="preserve">
+    <value>Benefits follow-up</value>
+  </data>
+  <data name="Lists_ChangeAnalysis_Title" xml:space="preserve">
+    <value>Change analysis</value>
+  </data>
+  <data name="Lists_CommunicationPlan_Title" xml:space="preserve">
+    <value>Communication plan</value>
+  </data>
+  <data name="Lists_Documents_Title" xml:space="preserve">
+    <value>Documents</value>
+  </data>
+  <data name="Lists_MeasurementIndicators_Title" xml:space="preserve">
+    <value>Measurement indicators</value>
+  </data>
+  <data name="Lists_ProjectLog_Title" xml:space="preserve">
+    <value>Project log</value>
+  </data>
+  <data name="Lists_Uncertainty_Title" xml:space="preserve">
+    <value>Uncertainty</value>
+  </data>
+  <data name="View_ByBenefitType_DisplayName" xml:space="preserve">
+    <value>By benefit type</value>
+  </data>
+  <data name="View_ByProcess_DisplayName" xml:space="preserve">
+    <value>By process</value>
+  </data>
+  <data name="View_CurrentPhase_DisplayName" xml:space="preserve">
+    <value>Current phase</value>
+  </data>
+  <data name="View_Flat_DisplayName" xml:space="preserve">
+    <value>Flat</value>
+  </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Go to &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (opens in a new tab)</value>
   </data>

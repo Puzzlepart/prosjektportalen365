@@ -5,9 +5,10 @@
   "scripts": {
     "build": "npm run generate-project-templates && npm run generate-resx-json",
     "lint": "echo \"No linting configured\"",
-    "generate-resx-json": "node ./.tasks/generateResxJson",
+    "generate-resx-json": "node ./.tasks/generateResxJson.js",
     "generate-resx-ts": "node ./.tasks/generateResxTypeScript.js",
-    "generate-project-templates": "npm run generate-resx-json && npm run generate-resx-ts && node ./.tasks/generateProjectTemplates"
+    "generate-project-templates": "npm run generate-resx-json && npm run generate-resx-ts && node ./.tasks/generateProjectTemplates",
+    "validate-project-template": "node ./.tasks/validateProjectTemplate.js"
   },
   "dependencies": {
     "@fluentui/react-components": "~9.52.0",
@@ -21,5 +22,101 @@
     "pzl-spfx-tasks": "~0.5.10-2",
     "replace": "1.2.2",
     "xml2js": "^0.6.2"
+  },
+  "gitmoji": {
+    "build": [
+      "🏗️",
+      "Make architectural changes"
+    ],
+    "ci": [
+      "👷",
+      "Add or update CI build system",
+      [
+        "integration"
+      ]
+    ],
+    "chore": [
+      "💄",
+      "Boring chores",
+      [
+        "boring",
+        "stuff"
+      ]
+    ],
+    "docs": [
+      "📝",
+      "Added or updated documentation",
+      [
+        "doc",
+        "dox"
+      ]
+    ],
+    "feat": [
+      "✨",
+      "Introduced new features"
+    ],
+    "fix": [
+      "🐛",
+      "Fixed a bug",
+      [
+        "bugfix"
+      ]
+    ],
+    "perf": [
+      "⚡",
+      "Improved performance"
+    ],
+    "refactor": [
+      "♻️",
+      "Refactored code"
+    ],
+    "revert": [
+      "⏪",
+      "Reverted changes"
+    ],
+    "style": [
+      "💄",
+      "Added or updated the UI and style files"
+    ],
+    "test": [
+      "✅",
+      "Added or updated tests"
+    ],
+    "dev": [
+      "🔨",
+      "Add or update development scripts"
+    ],
+    "i18n": [
+      "🌐",
+      "Internationalization and localization"
+    ],
+    "changelog": [
+      "📓",
+      "Updated changelog"
+    ],
+    "readme": [
+      "📝",
+      "Updated readme"
+    ],
+    "typo": [
+      "✏️",
+      "Fixed typos"
+    ],
+    "rename": [
+      "🚚",
+      "Moved or renamed resources (e.g.: files, paths, routes)"
+    ],
+    "merge": [
+      "🔀",
+      "Merged a branch into this one"
+    ],
+    "auth": [
+      "🛂",
+      "Worked on code related to authorization, roles and permissions"
+    ],
+    "syntax": [
+      "✏️",
+      "Adjusted code syntax"
+    ]
   }
 }
