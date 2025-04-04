@@ -26,7 +26,6 @@ define([], function () {
     IdeaProjectDataDialogInfoTitle: 'Tilknytning av prosjektdata',
     IdeaProjectDataDialogTitle: 'Opprett prosjektdata for ideen',
     IdeaProjectDataTitle: 'Prosjektdata',
-    InstallationLogListName: 'Installasjonslogg',
     InstallChannelLabel: 'Installasjonskanal',
     InstalledDateLabel: 'Installasjonsdato',
     InstallVersionLabel: 'Versjon',

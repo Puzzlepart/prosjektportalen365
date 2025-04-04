@@ -16,7 +16,6 @@ define([], function () {
     IdeaProjectDataDialogBlockedMessage: 'Project data for this idea has already been created and associated.',
     IdeaProjectDataDialogTitle: 'Create project data for the idea',
     IdeaProjectDataTitle: 'Prosjektdata',
-    InstallationLogListName: 'Installasjonslogg',
     InstallChannelLabel: 'Installation channel',
     InstalledDateLabel: 'Installation date',
     InstallVersionLabel: 'Version',
