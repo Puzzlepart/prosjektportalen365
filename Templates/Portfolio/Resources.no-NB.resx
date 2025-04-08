@@ -121,6 +121,12 @@
   <data name="Lists_ListContent_Url" xml:space="preserve">
     <value>Lists/Listeinnhold</value>
   </data>
+  <data name="Lists_ListContent_PhaseCheckpoints_Title" xml:space="preserve">
+    <value>Fasesjekkpunkter</value>
+  </data>
+  <data name="Lists_ListContent_PhaseCheckpoints_Description" xml:space="preserve">
+    <value>Fasesjekkpunkter basert på Prosjektveiviserens beslutningspunkter.</value>
+  </data>
   <data name="Lists_Links_Title" xml:space="preserve">
     <value>Lenker</value>
   </data>

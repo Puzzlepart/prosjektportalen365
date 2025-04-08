@@ -80,10 +80,10 @@
     </pnp:Views>
     <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
         <pnp:DataRow>
-            <pnp:DataValue FieldName="Title">Fasesjekkpunkter</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDescription">Fasesjekkpunkter basert på Prosjektveiviserens beslutningspunkter</pnp:DataValue>
-            <pnp:DataValue FieldName="GtLccSourceList">Fasesjekkliste</pnp:DataValue>
-            <pnp:DataValue FieldName="GtLccDestinationList">Fasesjekkliste</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ListContent_PhaseCheckpoints_Title}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDescription">{resource:Lists_ListContent_PhaseCheckpoints_Description}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccSourceList">{resource:Lists_PhaseChecklist_Title}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccDestinationList">{resource:Lists_PhaseChecklist_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccFields">GtSortOrder,Title,GtProjectPhase</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccDefault">0</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccHidden">0</pnp:DataValue>
