@@ -9,6 +9,30 @@
           "manifest": "./src/projectSetup/manifest.json"
         }
       ]
+    },
+    "project-upgrade-application-customizer": {
+      "components": [
+        {
+          "entrypoint": "./lib/projectUpgrade/index.js",
+          "manifest": "./src/projectUpgrade/manifest.json"
+        }
+      ]
+    },
+    "template-selector-command-set": {
+      "components": [
+        {
+          "entrypoint": "./lib/templateSelector/index.js",
+          "manifest": "./src/templateSelector/manifest.json"
+        }
+      ]
+    },
+    "risk-action-field-customizer": {
+      "components": [
+        {
+          "entrypoint": "./lib/riskAction/index.js",
+          "manifest": "./src/riskAction/manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
