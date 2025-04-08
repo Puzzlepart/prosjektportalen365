@@ -82,29 +82,98 @@
   <data name="Lists_DataSources_Category_ProjectDeliveries" xml:space="preserve">
     <value>Leveranseoversikt</value>
   </data>
+  <data name="Lists_DataSources_Category_ProjectDeliveries_All" xml:space="preserve">
+    <value>Alle prosjektleveranser</value>
+  </data>
+  <data name="Lists_DataSources_Category_ProjectDeliveries_Children" xml:space="preserve">
+    <value>Alle leveranser for underområder</value>
+  </data>
   <data name="Lists_DataSources_Category_UncertaintyOverview" xml:space="preserve">
     <value>Usikkerhetsoversikt</value>
+  </data>
+  <data name="Lists_DataSources_Category_UncertaintyOverview_AllRisks" xml:space="preserve">
+    <value>Alle risikoelementer</value>
+  </data>
+  <data name="Lists_DataSources_Category_UncertaintyOverview_RisksPortfolioLevel" xml:space="preserve">
+    <value>Risikoelementer på porteføljenivå</value>
+  </data>
+  <data name="Lists_DataSources_Category_UncertaintyOverview_AllPossibilities" xml:space="preserve">
+    <value>Alle mulighetselementer</value>
+  </data>
+  <data name="Lists_DataSources_Category_UncertaintyOverview_PossibilitiesPortfolioLevel" xml:space="preserve">
+    <value>Mulighetselementer på porteføljenivå</value>
+  </data>
+  <data name="Lists_DataSources_Category_UncertaintyOverview_RisksChildren" xml:space="preserve">
+    <value>Alle risikoelementer for underområder</value>
+  </data>
+  <data name="Lists_DataSources_Category_UncertaintyOverview_PossibilitiesChildren" xml:space="preserve">
+    <value>Alle mulighetselementer for underområder</value>
   </data>
   <data name="Lists_DataSources_Category_ExperienceLog" xml:space="preserve">
     <value>Erfaringslogg</value>
   </data>
+  <data name="Lists_DataSources_Category_ExperienceLog_All" xml:space="preserve">
+    <value>Alle loggelementer</value>
+  </data>
   <data name="Lists_DataSources_Category_BenefitOverview" xml:space="preserve">
     <value>Gevinstoversikt</value>
+  </data>
+  <data name="Lists_DataSources_Category_BenefitOverview_All" xml:space="preserve">
+    <value>Alle gevinstelementer</value>
+  </data>
+  <data name="Lists_DataSources_Category_BenefitOverview_PortfolioLevel" xml:space="preserve">
+    <value>Gevinstelementer på porteføljenivå</value>
+  </data>
+  <data name="Lists_DataSources_Category_BenefitOverview_Project" xml:space="preserve">
+    <value>Alle gevinstelementer for prosjektet</value>
+  </data>
+  <data name="Lists_DataSources_Category_BenefitOverview_Children" xml:space="preserve">
+    <value>Alle gevinstelementer for underområder</value>
   </data>
   <data name="Lists_DataSources_Category_CommunicationPlan" xml:space="preserve">
     <value>Kommunikasjonsoversikt</value>
   </data>
+  <data name="Lists_DataSources_Category_CommunicationPlan_Children" xml:space="preserve">
+    <value>Alle kommunikasjonsplaner for underområder</value>
+  </data>
   <data name="Lists_DataSources_Category_ResourceAllocation" xml:space="preserve">
     <value>Ressursallokering</value>
+  </data>
+  <data name="Lists_DataSources_Category_ResourceAllocation_All" xml:space="preserve">
+    <value>Alle ressursallokeringer</value>
+  </data>
+  <data name="Lists_DataSources_Category_ResourceAllocation_Children" xml:space="preserve">
+    <value>Alle ressursallokeringer for underområder</value>
   </data>
   <data name="Lists_DataSources_Category_Projects" xml:space="preserve">
     <value>Prosjekter</value>
   </data>
+  <data name="Lists_DataSources_Category_Projects_All" xml:space="preserve">
+    <value>Alle prosjekter</value>
+  </data>
   <data name="Lists_DataSources_Category_ProjectStatus" xml:space="preserve">
     <value>Prosjektstatus</value>
   </data>
+  <data name="Lists_DataSources_Category_ProjectStatus_All" xml:space="preserve">
+    <value>Prosjektstatus</value>
+  </data>
+  <data name="Lists_DataSources_Category_ProjectStatus_Last7Days" xml:space="preserve">
+    <value>Prosjektstatus (siste 7 dager)</value>
+  </data>
+  <data name="Lists_DataSources_Category_ProjectStatus_Last30Days" xml:space="preserve">
+    <value>Prosjektstatus (siste 30 dager)</value>
+  </data>
   <data name="Lists_DataSources_Category_IdeaModule" xml:space="preserve">
     <value>Idémodul</value>
+  </data>
+  <data name="Lists_DataSources_Category_IdeaModule_Registered" xml:space="preserve">
+    <value>Registrerte idèer</value>
+  </data>
+  <data name="Lists_DataSources_Category_IdeaModule_Processing" xml:space="preserve">
+    <value>Idèer i behandling</value>
+  </data>
+  <data name="Lists_DataSources_Category_IdeaModule_All" xml:space="preserve">
+    <value>Alle idèer</value>
   </data>
   <data name="Lists_CustomCharts_Title" xml:space="preserve">
     <value>Egendefinerte diagrammer</value>

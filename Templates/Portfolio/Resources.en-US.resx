@@ -82,29 +82,98 @@
   <data name="Lists_DataSources_Category_ProjectDeliveries" xml:space="preserve">
     <value>Project Deliveries</value>
   </data>
+    <data name="Lists_DataSources_Category_ProjectDeliveries_All" xml:space="preserve">
+    <value>All Project Deliveries</value>
+  </data>
+  <data name="Lists_DataSources_Category_ProjectDeliveries_Children" xml:space="preserve">
+    <value>All Project Deliveries for child projects</value>
+  </data>
   <data name="Lists_DataSources_Category_UncertaintyOverview" xml:space="preserve">
     <value>Uncertainty Overview</value>
+  </data>
+  <data name="Lists_DataSources_Category_UncertaintyOverview_AllRisks" xml:space="preserve">
+    <value>All risks</value>
+  </data>
+  <data name="Lists_DataSources_Category_UncertaintyOverview_RisksPortfolioLevel" xml:space="preserve">
+    <value>Risks on portfolio level</value>
+  </data>
+  <data name="Lists_DataSources_Category_UncertaintyOverview_AllPossibilities" xml:space="preserve">
+    <value>All possibilities</value>
+  </data>
+  <data name="Lists_DataSources_Category_UncertaintyOverview_PossibilitiesPortfolioLevel" xml:space="preserve">
+    <value>Possibilities on portfolio level</value>
+  </data>
+  <data name="Lists_DataSources_Category_UncertaintyOverview_RisksChildren" xml:space="preserve">
+    <value>All risks for child projects</value>
+  </data>
+  <data name="Lists_DataSources_Category_UncertaintyOverview_PossibilitiesChildren" xml:space="preserve">
+    <value>All possibilities for child projects</value>
   </data>
   <data name="Lists_DataSources_Category_ExperienceLog" xml:space="preserve">
     <value>Experience Log</value>
   </data>
+  <data name="Lists_DataSources_Category_ExperienceLog_All" xml:space="preserve">
+    <value>All log elements</value>
+  </data>
   <data name="Lists_DataSources_Category_BenefitOverview" xml:space="preserve">
     <value>Benefit Overview</value>
+  </data>
+  <data name="Lists_DataSources_Category_BenefitOverview_All" xml:space="preserve">
+    <value>All benefit elements</value>
+  </data>
+  <data name="Lists_DataSources_Category_BenefitOverview_PortfolioLevel" xml:space="preserve">
+    <value>Benefit elements on portfolio level</value>
+  </data>
+  <data name="Lists_DataSources_Category_BenefitOverview_Project" xml:space="preserve">
+    <value>Benefits elements for the project</value>
+  </data>
+  <data name="Lists_DataSources_Category_BenefitOverview_Children" xml:space="preserve">
+    <value>All benefit elements for child projects</value>
   </data>
   <data name="Lists_DataSources_Category_CommunicationPlan" xml:space="preserve">
     <value>Communication Plan</value>
   </data>
+  <data name="Lists_DataSources_Category_CommunicationPlan_Children" xml:space="preserve">
+    <value>Alle communication plans for child projects</value>
+  </data>
   <data name="Lists_DataSources_Category_ResourceAllocation" xml:space="preserve">
     <value>Resource Allocation</value>
+  </data>
+  <data name="Lists_DataSources_Category_ResourceAllocation_All" xml:space="preserve">
+    <value>All resource allocations</value>
+  </data>
+  <data name="Lists_DataSources_Category_ResourceAllocation_Children" xml:space="preserve">
+    <value>All resource allocations for child projects</value>
   </data>
   <data name="Lists_DataSources_Category_Projects" xml:space="preserve">
     <value>Projects</value>
   </data>
+  <data name="Lists_DataSources_Category_Projects_All" xml:space="preserve">
+    <value>All projects</value>
+  </data>
   <data name="Lists_DataSources_Category_ProjectStatus" xml:space="preserve">
     <value>Project Status</value>
   </data>
+  <data name="Lists_DataSources_Category_ProjectStatus_All" xml:space="preserve">
+    <value>Project Status</value>
+  </data>
+  <data name="Lists_DataSources_Category_ProjectStatus_Last7Days" xml:space="preserve">
+    <value>Project Status (last 7 days)</value>
+  </data>
+  <data name="Lists_DataSources_Category_ProjectStatus_Last30Days" xml:space="preserve">
+    <value>Project Status (last 30 days)</value>
+  </data>
   <data name="Lists_DataSources_Category_IdeaModule" xml:space="preserve">
     <value>Idea Module</value>
+  </data>
+  <data name="Lists_DataSources_Category_IdeaModule_Registered" xml:space="preserve">
+    <value>Registered ideas</value>
+  </data>
+  <data name="Lists_DataSources_Category_IdeaModule_Processing" xml:space="preserve">
+    <value>Processing ideas</value>
+  </data>
+  <data name="Lists_DataSources_Category_IdeaModule_All" xml:space="preserve">
+    <value>All ideas</value>
   </data>
   <data name="Lists_CustomCharts_Title" xml:space="preserve">
     <value>Custom Charts</value>
