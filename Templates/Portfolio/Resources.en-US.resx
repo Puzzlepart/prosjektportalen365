@@ -127,6 +127,57 @@
   <data name="Lists_ListContent_PhaseCheckpoints_Description" xml:space="preserve">
     <value>Phase checkpoints based on Project Wizard decision points.</value>
   </data>
+  <data name="Lists_ListContent_PlannerTasks_Title" xml:space="preserve">
+    <value>Planner Tasks</value>
+  </data>
+  <data name="Lists_ListContent_PlannerTasks_Description" xml:space="preserve">
+    <value>Standard Planner tasks for projects.</value>
+  </data>
+  <data name="Lists_ListContent_PlannerTasks_DefaultPlan" xml:space="preserve">
+    <value>Project Tasks</value>
+  </data>
+  <data name="Lists_ListContent_PlannerTasksConstruction_Title" xml:space="preserve">
+    <value>Planner Tasks Construction</value>
+  </data>
+  <data name="Lists_ListContent_PlannerTasksConstruction_Description" xml:space="preserve">
+    <value>Standard Planner tasks for construction projects.</value>
+  </data>
+  <data name="Lists_ListContent_PlannerTasksConstruction_PlanName" xml:space="preserve">
+    <value>Construction Tasks</value>
+  </data>
+  <data name="Lists_ListContent_PlannerTasksBuilding_Title" xml:space="preserve">
+    <value>Planner Tasks Facility</value>
+  </data>
+  <data name="Lists_ListContent_PlannerTasksBuilding_Description" xml:space="preserve">
+    <value>Standard Planner tasks for facility projects.</value>
+  </data>
+  <data name="Lists_ListContent_PlannerTasksBuilding_PlanName" xml:space="preserve">
+    <value>Facility Tasks</value>
+  </data>
+  <data name="Lists_ListContent_StandardDocsConstruction_Title" xml:space="preserve">
+    <value>Standard Documents Construction</value>
+  </data>
+  <data name="Lists_ListContent_StandardDocsConstruction_Description" xml:space="preserve">
+    <value>Standard documents for construction projects.</value>
+  </data>
+  <data name="Lists_ListContent_StandardDocumentsBuilding_Title" xml:space="preserve">
+    <value>Standard Documents Building</value>
+  </data>
+  <data name="Lists_ListContent_StandardDocumentsBuilding_Description" xml:space="preserve">
+    <value>Standard documents for building projects.</value>
+  </data>
+  <data name="Lists_ListContent_PhaseChecklistConstruction_Title" xml:space="preserve">
+    <value>Phase Checklist Construction</value>
+  </data>
+  <data name="Lists_ListContent_PhaseChecklistConstruction_Description" xml:space="preserve">
+    <value>Phase checklist for construction projects.</value>
+  </data>
+  <data name="Lists_ListContent_PhaseChecklistBuilding_Title" xml:space="preserve">
+    <value>Phase Checklist Building</value>
+  </data>
+  <data name="Lists_ListContent_PhaseChecklistBuilding_Description" xml:space="preserve">
+    <value>Phase checklist for building projects.</value>
+  </data>
   <data name="Lists_Links_Title" xml:space="preserve">
     <value>Links</value>
   </data>

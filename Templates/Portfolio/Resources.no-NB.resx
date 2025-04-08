@@ -127,6 +127,57 @@
   <data name="Lists_ListContent_PhaseCheckpoints_Description" xml:space="preserve">
     <value>Fasesjekkpunkter basert på Prosjektveiviserens beslutningspunkter.</value>
   </data>
+  <data name="Lists_ListContent_PlannerTasks_Title" xml:space="preserve">
+    <value>Planneroppgaver</value>
+  </data>
+  <data name="Lists_ListContent_PlannerTasks_Description" xml:space="preserve">
+    <value>Standard Planneroppgaver for prosjekter.</value>
+  </data>
+  <data name="Lists_ListContent_PlannerTasks_DefaultPlan" xml:space="preserve">
+    <value>Prosjektoppgaver</value>
+  </data>
+  <data name="Lists_ListContent_PlannerTasksConstruction_Title" xml:space="preserve">
+    <value>Planneroppgaver Anlegg</value>
+  </data>
+  <data name="Lists_ListContent_PlannerTasksConstruction_Description" xml:space="preserve">
+    <value>Standard Planneroppgaver for anleggsprosjekter.</value>
+  </data>
+  <data name="Lists_ListContent_PlannerTasksConstruction_PlanName" xml:space="preserve">
+    <value>Anleggsoppgaver</value>
+  </data>
+  <data name="Lists_ListContent_PlannerTasksBuilding_Title" xml:space="preserve">
+    <value>Planneroppgaver Bygg</value>
+  </data>
+  <data name="Lists_ListContent_PlannerTasksBuilding_Description" xml:space="preserve">
+    <value>Standard Planneroppgaver for byggeprosjekter.</value>
+  </data>
+  <data name="Lists_ListContent_PlannerTasksBuilding_PlanName" xml:space="preserve">
+    <value>Byggeoppgaver</value>
+  </data>
+  <data name="Lists_ListContent_StandardDocsConstruction_Title" xml:space="preserve">
+    <value>Standarddokumenter Anlegg</value>
+  </data>
+  <data name="Lists_ListContent_StandardDocsConstruction_Description" xml:space="preserve">
+    <value>Standarddokumenter for anleggsprosjekter.</value>
+  </data>
+  <data name="Lists_ListContent_StandardDocumentsBuilding_Title" xml:space="preserve">
+    <value>Standarddokumenter Bygg</value>
+  </data>
+  <data name="Lists_ListContent_StandardDocumentsBuilding_Description" xml:space="preserve">
+    <value>Standarddokumenter for byggeprosjekter.</value>
+  </data>
+  <data name="Lists_ListContent_PhaseChecklistConstruction_Title" xml:space="preserve">
+    <value>Fasesjekkliste Anlegg</value>
+  </data>
+  <data name="Lists_ListContent_PhaseChecklistConstruction_Description" xml:space="preserve">
+    <value>Fasesjekkpunkter for anleggsprosjekter.</value>
+  </data>
+  <data name="Lists_ListContent_PhaseChecklistBuilding_Title" xml:space="preserve">
+    <value>Fasesjekkliste Bygg</value>
+  </data>
+  <data name="Lists_ListContent_PhaseChecklistBuilding_Description" xml:space="preserve">
+    <value>Fasesjekkpunkter for byggeprosjekter.</value>
+  </data>
   <data name="Lists_Links_Title" xml:space="preserve">
     <value>Lenker</value>
   </data>
@@ -403,6 +454,24 @@
   <data name="View_IdeaItems_DisplayName" xml:space="preserve">
     <value>Idémodul</value>
   </data>
+  <data name="View_ByBenefitType_DisplayName" xml:space="preserve">
+    <value>Etter gevinsttype</value>
+  </data>
+  <data name="View_ByProcess_DisplayName" xml:space="preserve">
+    <value>Etter prosess</value>
+  </data>
+  <data name="View_CurrentPhase_DisplayName" xml:space="preserve">
+    <value>Gjeldende fase</value>
+  </data>
+  <data name="View_Flat_DisplayName" xml:space="preserve">
+    <value>Flat visning</value>
+  </data>
+  <data name="View_Archived_DisplayName" xml:space="preserve">
+    <value>Arkivert</value>
+  </data>
+  <data name="View_ByStatus_DisplayName" xml:space="preserve">
+    <value>Etter status</value>
+  </data>
   <data name="ContentTypes_Group" xml:space="preserve">
     <value>Prosjektportalen innholdstyper</value>
   </data>
@@ -567,24 +636,6 @@
   </data>
   <data name="ContentTypes_ProjectStatusBA_Description" xml:space="preserve">
     <value>Prosjektstatus innholdstype for bygg- og anleggsprosjekter</value>
-  </data>
-  <data name="ContentTypes_ResourceAllocation_Name" xml:space="preserve">
-    <value>Ressursallokering</value>
-  </data>
-  <data name="ContentTypes_ResourceAllocation_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="ContentTypes_UncertaintySection_Name" xml:space="preserve">
-    <value>Usikkerhetseksjon</value>
-  </data>
-  <data name="ContentTypes_UncertaintySection_Description" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="ContentTypes_ProjectPropertiesSection_Name" xml:space="preserve">
-    <value>Seksjon for prosjektegenskaper</value>
-  </data>
-  <data name="ContentTypes_ProjectPropertiesSection_Description" xml:space="preserve">
-    <value></value>
   </data>
   <data name="ContentTypes_StatusFieldSection_Name" xml:space="preserve">
     <value>Seksjon for statusfelt</value>
