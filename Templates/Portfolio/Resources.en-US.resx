@@ -73,6 +73,39 @@
   <data name="Lists_DataSources_Url" xml:space="preserve">
     <value>Lists/DataSources</value>
   </data>
+  <data name="Lists_DataSources_Level_Portfolio" xml:space="preserve">
+    <value>Portfolio</value>
+  </data>
+  <data name="Lists_DataSources_Level_ParentProgram" xml:space="preserve">
+    <value>Parent/Program</value>
+  </data>
+  <data name="Lists_DataSources_Category_ProjectDeliveries" xml:space="preserve">
+    <value>Project Deliveries</value>
+  </data>
+  <data name="Lists_DataSources_Category_UncertaintyOverview" xml:space="preserve">
+    <value>Uncertainty Overview</value>
+  </data>
+  <data name="Lists_DataSources_Category_ExperienceLog" xml:space="preserve">
+    <value>Experience Log</value>
+  </data>
+  <data name="Lists_DataSources_Category_BenefitOverview" xml:space="preserve">
+    <value>Benefit Overview</value>
+  </data>
+  <data name="Lists_DataSources_Category_CommunicationPlan" xml:space="preserve">
+    <value>Communication Plan</value>
+  </data>
+  <data name="Lists_DataSources_Category_ResourceAllocation" xml:space="preserve">
+    <value>Resource Allocation</value>
+  </data>
+  <data name="Lists_DataSources_Category_Projects" xml:space="preserve">
+    <value>Projects</value>
+  </data>
+  <data name="Lists_DataSources_Category_ProjectStatus" xml:space="preserve">
+    <value>Project Status</value>
+  </data>
+  <data name="Lists_DataSources_Category_IdeaModule" xml:space="preserve">
+    <value>Idea Module</value>
+  </data>
   <data name="Lists_CustomCharts_Title" xml:space="preserve">
     <value>Custom Charts</value>
   </data>
@@ -3007,7 +3040,7 @@
   <data name="SiteFields_GtFieldOverrides_Description" xml:space="preserve">
     <value>Field overrides in JSON-format. Object format with the configuration name first, then an object with the locales as key and the field settings (e.g. displayName or description) as value.</value>
   </data>
-<data name="Navigation_BenefitsAnalysis_Url" xml:space="preserve">
+  <data name="Navigation_BenefitsAnalysis_Url" xml:space="preserve">
     <value>Lists/Benefits%20analysis/AllItems.aspx</value>
   </data>
   <data name="Navigation_BenefitsFollowup_Url" xml:space="preserve">
@@ -3042,7 +3075,7 @@
   </data>
   <data name="Navigation_StakeholderRegister_Url" xml:space="preserve">
     <value>Lists/Stakeholders/AllItems.aspx</value>
-  </data> 
+  </data>
   <data name="Navigation_Uncertainty_Url" xml:space="preserve">
     <value>Lists/Uncertainty/AllItems.aspx</value>
   </data>

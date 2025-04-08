@@ -118,7 +118,7 @@
                                         "title": "{{ClientSidePages_ParentBenefitOverview_WebPartTitle}}",
                                         "dataSource": "{{ClientSidePages_ParentBenefitOverview_DataSource}}",
                                         "dataSourceCategory": "{{ClientSidePages_ParentBenefitOverview_DataSourceCategory}}",
-                                        "dataSourceLevel": "{{ClientSidePages_ParentBenefitOverview_DataSourceLevel}}",
+                                        "dataSourceLevel": "{{Lists_DataSources_Level_ParentProgram}}",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
                                         "showSearchBox": true
@@ -231,7 +231,7 @@
                                         "title": "{{ClientSidePages_ParentDeliveries_WebPartTitle}}",
                                         "dataSource": "{{ClientSidePages_ParentDeliveries_DataSource}}",
                                         "dataSourceCategory": "{{ClientSidePages_ParentDeliveries_DataSourceCategory}}",
-                                        "dataSourceLevel": "{{ClientSidePages_ParentDeliveries_DataSourceLevel}}",
+                                        "dataSourceLevel": "{{Lists_DataSources_Level_ParentProgram}}",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
                                         "showSearchBox": true
@@ -260,7 +260,7 @@
                                         "title": "{{ClientSidePages_ParentUncertainties_WebPartTitle}}",
                                         "dataSource": "{{ClientSidePages_ParentUncertainties_DataSource}}",
                                         "dataSourceCategory": "{{ClientSidePages_ParentUncertainties_DataSourceCategory}}",
-                                        "dataSourceLevel": "{{ClientSidePages_ParentUncertainties_DataSourceLevel}}",
+                                        "dataSourceLevel": "{{Lists_DataSources_Level_ParentProgram}}",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
                                         "showSearchBox": true

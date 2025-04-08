@@ -73,6 +73,39 @@
   <data name="Lists_DataSources_Url" xml:space="preserve">
     <value>Lists/Datakilder</value>
   </data>
+  <data name="Lists_DataSources_Level_Portfolio" xml:space="preserve">
+    <value>Portefølje</value>
+  </data>
+  <data name="Lists_DataSources_Level_ParentProgram" xml:space="preserve">
+    <value>Overordnet/Program</value>
+  </data>
+  <data name="Lists_DataSources_Category_ProjectDeliveries" xml:space="preserve">
+    <value>Leveranseoversikt</value>
+  </data>
+  <data name="Lists_DataSources_Category_UncertaintyOverview" xml:space="preserve">
+    <value>Usikkerhetsoversikt</value>
+  </data>
+  <data name="Lists_DataSources_Category_ExperienceLog" xml:space="preserve">
+    <value>Erfaringslogg</value>
+  </data>
+  <data name="Lists_DataSources_Category_BenefitOverview" xml:space="preserve">
+    <value>Gevinstoversikt</value>
+  </data>
+  <data name="Lists_DataSources_Category_CommunicationPlan" xml:space="preserve">
+    <value>Kommunikasjonsoversikt</value>
+  </data>
+  <data name="Lists_DataSources_Category_ResourceAllocation" xml:space="preserve">
+    <value>Ressursallokering</value>
+  </data>
+  <data name="Lists_DataSources_Category_Projects" xml:space="preserve">
+    <value>Prosjekter</value>
+  </data>
+  <data name="Lists_DataSources_Category_ProjectStatus" xml:space="preserve">
+    <value>Prosjektstatus</value>
+  </data>
+  <data name="Lists_DataSources_Category_IdeaModule" xml:space="preserve">
+    <value>Idémodul</value>
+  </data>
   <data name="Lists_CustomCharts_Title" xml:space="preserve">
     <value>Egendefinerte diagrammer</value>
   </data>
@@ -3145,9 +3178,6 @@
   <data name="ClientSidePages_ParentBenefitOverview_DataSourceCategory" xml:space="preserve">
     <value>Gevinstoversikt</value>
   </data>
-  <data name="ClientSidePages_ParentBenefitOverview_DataSourceLevel" xml:space="preserve">
-    <value>Overordnet/Program</value>
-  </data>
   <data name="ClientSidePages_ParentBenefitOverview_PageName" xml:space="preserve">
     <value>OverordnetGevinster.aspx</value>
   </data>
@@ -3177,9 +3207,6 @@
   </data>
   <data name="ClientSidePages_ParentDeliveries_DataSourceCategory" xml:space="preserve">
     <value>Leveranseoversikt</value>
-  </data>
-  <data name="ClientSidePages_ParentDeliveries_DataSourceLevel" xml:space="preserve">
-    <value>Overordnet/Program</value>
   </data>
   <data name="ClientSidePages_ParentDeliveries_PageName" xml:space="preserve">
     <value>OverordnetLeveranser.aspx</value>
@@ -3234,9 +3261,6 @@
   </data>
   <data name="ClientSidePages_ParentUncertainties_DataSourceCategory" xml:space="preserve">
     <value>Usikkerhetsoversikt</value>
-  </data>
-  <data name="ClientSidePages_ParentUncertainties_DataSourceLevel" xml:space="preserve">
-    <value>Overordnet/Program</value>
   </data>
   <data name="ClientSidePages_ParentUncertainties_PageName" xml:space="preserve">
     <value>OverordnetUsikkerheter.aspx</value>
