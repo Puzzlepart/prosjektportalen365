@@ -9,20 +9,20 @@
     "Navigation": {
         "QuickLaunch": [
             {
-                "Url": "SitePages/OverordnetOversikt.aspx",
-                "Title": "Underordnet innhold",
+                "Url": "SitePages/{{ClientSidePages_ParentOverview_Name}}",
+                "Title": "{{Navigation_ChildContent_Title}}",
                 "Children": [
                     {
-                        "Url": "SitePages/Admin.aspx",
-                        "Title": "Administrasjon"
+                        "Url": "SitePages/{{ClientSidePages_ProgramAdmin_Name}}",
+                        "Title": "{{ClientSidePages_ProgramAdmin_Title}}"
                     },
                     {
-                        "Url": "SitePages/OverordnetOversikt.aspx",
-                        "Title": "Oversikt"
+                        "Url": "SitePages/{{ClientSidePages_ParentOverview_Name}}",
+                        "Title": "{{ClientSidePages_ParentOverview_Title}}"
                     },
                     {
-                        "Url": "SitePages/OverordnetGevinster.aspx",
-                        "Title": "Gevinster"
+                        "Url": "SitePages/{{ClientSidePages_ParentBenefitOverview_Name}}",
+                        "Title": "{{ClientSidePages_ParentBenefitOverview_Title}}"
                     },
                     {
                         "Url": "SitePages/OverordnetTidslinje.aspx",
@@ -50,8 +50,8 @@
     },
     "ClientSidePages": [
         {
-            "Name": "Admin.aspx",
-            "Title": "Administrasjon",
+            "Name": "{{ClientSidePages_ProgramAdmin_Name}}",
+            "Title": "{{ClientSidePages_ProgramAdmin_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -73,8 +73,8 @@
             ]
         },
         {
-            "Name": "OverordnetOversikt.aspx",
-            "Title": "Oversikt",
+            "Name": "{{ClientSidePages_ParentOverview_Name}}",
+            "Title": "{{ClientSidePages_ParentOverview_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -86,7 +86,7 @@
                                 {
                                     "Id": "{{ControlId_ProgramProjectOverviewWebPart}}",
                                     "Properties": {
-                                        "title": "Oversikt over underområder",
+                                        "title": "{{ClientSidePages_ParentOverview_WebPartTitle}}",
                                         "showCommandBar": true,
                                         "showFilters": true,
                                         "showGroupBy": true,
@@ -102,8 +102,8 @@
             ]
         },
         {
-            "Name": "OverordnetGevinster.aspx",
-            "Title": "Gevinster",
+            "Name": "{{ClientSidePages_ParentBenefitOverview_Name}}",
+            "Title": "{{ClientSidePages_ParentBenefitOverview_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -175,7 +175,9 @@
                                         "title": "Ressursallokeringer for underområder",
                                         "dataSource": "Alle ressursallokeringer for underområder",
                                         "dataSourceCategory": "Ressursallokering",
-                                        "hiddenColumns": ["Title"],
+                                        "hiddenColumns": [
+                                            "Title"
+                                        ],
                                         "showCommandBar": true,
                                         "showViewSelector": true,
                                         "showSearchBox": true

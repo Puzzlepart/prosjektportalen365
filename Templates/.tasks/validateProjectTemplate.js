@@ -6,7 +6,11 @@ const path = require('path')
 const tokenRegex = /{{(.*?)}}/g
 const templates = {
     DefaultTemplate: path.resolve(__dirname, '../Content/Portfolio_content.en-US/ProjectTemplates/DefaultTemplate.txt'),
+    ParentTemplate: path.resolve(__dirname, '../Content/Portfolio_content.en-US/ProjectTemplates/ParentTemplate.txt'),
+    ProgramTemplate: path.resolve(__dirname, '../Content/Portfolio_content.en-US/ProjectTemplates/ProgramTemplate.txt'),
     Standardmal: path.resolve(__dirname, '../Content/Portfolio_content.no-NB/ProjectTemplates/Standardmal.txt'),
+    Overordnet: path.resolve(__dirname, '../Content/Portfolio_content.no-NB/ProjectTemplates/Overordnet.txt'),
+    Programmal: path.resolve(__dirname, '../Content/Portfolio_content.no-NB/ProjectTemplates/Programmal.txt'),
 }
 
 for (const key of Object.keys(templates)) {

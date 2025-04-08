@@ -397,41 +397,41 @@
   <data name="Lists_Idea_Configuration_Field_GtDescription_Description" xml:space="preserve">
     <value>Dialog descriptions for 1. Idea Registration, 2. Idea Processing, and 3. Project Data Creation, separated by semicolon</value>
   </data>
-  <data name="Lists_PhaseChecklistA_Title" xml:space="preserve">
-    <value>Phase Checklist A</value>
+  <data name="Lists_PhaseChecklistConstruction_Title" xml:space="preserve">
+    <value>Phase Checklist Construction</value>
   </data>
-  <data name="Lists_PhaseChecklistA_Url" xml:space="preserve">
-    <value>Lists/PhaseChecklist_A</value>
+  <data name="Lists_PhaseChecklistConstruction_Url" xml:space="preserve">
+    <value>Lists/PhaseChecklist_Construction</value>
   </data>
-  <data name="Lists_PhaseChecklistB_Title" xml:space="preserve">
-    <value>Phase Checklist B</value>
+  <data name="Lists_PhaseChecklistBuilding_Title" xml:space="preserve">
+    <value>Phase Checklist Building</value>
   </data>
-  <data name="Lists_PhaseChecklistB_Url" xml:space="preserve">
-    <value>Lists/PhaseChecklist_B</value>
+  <data name="Lists_PhaseChecklistBuilding_Url" xml:space="preserve">
+    <value>Lists/PhaseChecklist_Building</value>
   </data>
-  <data name="Lists_PlannerTasksA_Title" xml:space="preserve">
-    <value>Planner Tasks A</value>
+  <data name="Lists_PlannerTasksConstruction_Title" xml:space="preserve">
+    <value>Planner Tasks Construction</value>
   </data>
-  <data name="Lists_PlannerTasksA_Url" xml:space="preserve">
-    <value>Lists/PlannerTasks_A</value>
+  <data name="Lists_PlannerTasksConstruction_Url" xml:space="preserve">
+    <value>Lists/PlannerTasks_Construction</value>
   </data>
-  <data name="Lists_PlannerTasksB_Title" xml:space="preserve">
-    <value>Planner Tasks B</value>
+  <data name="Lists_PlannerTasksBuilding_Title" xml:space="preserve">
+    <value>Planner Tasks Building</value>
   </data>
-  <data name="Lists_PlannerTasksB_Url" xml:space="preserve">
-    <value>Lists/PlannerTasks_B</value>
+  <data name="Lists_PlannerTasksBuilding_Url" xml:space="preserve">
+    <value>Lists/PlannerTasks_Building</value>
   </data>
-  <data name="Lists_DocumentsA_Title" xml:space="preserve">
-    <value>Standard Documents A</value>
+  <data name="Lists_DocumentsConstruction_Title" xml:space="preserve">
+    <value>Standard Documents Construction</value>
   </data>
-  <data name="Lists_DocumentsA_Url" xml:space="preserve">
-    <value>StandardDocuments_A</value>
+  <data name="Lists_DocumentsConstruction_Url" xml:space="preserve">
+    <value>StandardDocuments_Contruction</value>
   </data>
-  <data name="Lists_DocumentsB_Title" xml:space="preserve">
-    <value>Standard Documents B</value>
+  <data name="Lists_DocumentsBuilding_Title" xml:space="preserve">
+    <value>Standard Documents Building</value>
   </data>
-  <data name="Lists_DocumentsB_Url" xml:space="preserve">
-    <value>StandardDocuments_B</value>
+  <data name="Lists_DocumentsBuilding_Url" xml:space="preserve">
+    <value>StandardDocuments_Building</value>
   </data>
   <data name="Lists_HelpContent_Title" xml:space="preserve">
     <value>Help Content</value>
@@ -3102,6 +3102,9 @@
   </data>
   <data name="Navigation_SiteContent_Title" xml:space="preserve">
     <value>Site Contents</value>
+  </data>
+  <data name="Navigation_ChildContent_Title" xml:space="preserve">
+    <value>Child content</value>
   </data>
   <data name="ClientSidePages_Home_Title" xml:space="preserve">
     <value>Home</value>

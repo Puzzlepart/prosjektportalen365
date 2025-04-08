@@ -431,21 +431,21 @@
         }
     ],
     "SiteFields": [
-        "<Field ID=\"{8499bd48-4c5d-43ae-8e27-7968d49ca14f}\" Name=\"GtRiskFactor\" DisplayName=\"{{SiteFields_GtRiskFactor_DisplayName}}\" Type=\"Calculated\" Group=\"Kolonner for Prosjektportalen (Prosjekt)\" Description=\"\" ResultType=\"Number\" StaticName=\"GtRiskFactor\"><Formula>=GtRiskProbability*GtRiskConsequence</Formula><FieldRefs><FieldRef Name=\"GtRiskProbability\" ID=\"{0e1b295d-2bfb-4ef6-ae92-e72068e56111}\" /><FieldRef Name=\"GtRiskConsequence\" ID=\"{554d32a0-0148-4b3c-bfc4-f101232ee501}\" /></FieldRefs></Field>",
-        "<Field ID=\"{62f0454d-1150-4d55-86ef-075f786d6e5c}\" Name=\"GtRiskFactorPostAction\" DisplayName=\"{{SiteFields_GtRiskFactorPostAction_DisplayName}}\" Type=\"Calculated\" Group=\"Kolonner for Prosjektportalen (Prosjekt)\" Description=\"\" ResultType=\"Number\" StaticName=\"GtRiskFactorPostAction\"><Formula>=GtRiskProbabilityPostAction*GtRiskConsequencePostAction</Formula><FieldRefs><FieldRef Name=\"GtRiskProbabilityPostAction\" ID=\"{f81ebcb7-8791-44b0-9919-08ed5524b11d}\" /><FieldRef Name=\"GtRiskConsequencePostAction\" ID=\"{00f17233-d4c0-49d0-aebd-5004552abb17}\" /></FieldRefs></Field>",
-        "<Field ID=\"{88d9b92c-efed-45d0-a586-86d9196b77d0}\" Type=\"User\" Name=\"GtResourceUser\" StaticName=\"GtResourceUser\" DisplayName=\"Navn\" Description=\"Oppgi navnet på personen som allokeres/tildeles arbeid i prosjektet\" />",
-        "<Field ID=\"{08ac9d56-f8eb-4a2c-868f-d39fc012fcd6}\" Type=\"Number\" Name=\"GtResourceLoad\" StaticName=\"GtResourceLoad\" DisplayName=\"Belastning\" Description=\"Hva er ressursens forventede arbeidsbelastning, oppgis i tall som indikerer prosent\" Percentage=\"TRUE\" />",
-        "<Field ID=\"{2ae541a5-5ecc-481d-afb6-c03a6f1e71b4}\" Type=\"User\" Name=\"GtActionResponsible\" StaticName=\"GtActionResponsible\" DisplayName=\"Tiltaksansvarlig\" Description=\"Hvem er ansvarlig for å følge opp usikkerheten?\" />"
+        "<Field ID=\"{8499bd48-4c5d-43ae-8e27-7968d49ca14f}\" Name=\"GtRiskFactor\" DisplayName=\"{{SiteFields_GtRiskFactor_DisplayName}}\" Type=\"Calculated\" Group=\"{{SiteFields_Project_Group}}\" Description=\"{{SiteFields_GtRiskFactor_Description}}\" ResultType=\"Number\" StaticName=\"GtRiskFactor\"><Formula>=GtRiskProbability*GtRiskConsequence</Formula><FieldRefs><FieldRef Name=\"GtRiskProbability\" ID=\"{0e1b295d-2bfb-4ef6-ae92-e72068e56111}\" /><FieldRef Name=\"GtRiskConsequence\" ID=\"{554d32a0-0148-4b3c-bfc4-f101232ee501}\" /></FieldRefs></Field>",
+        "<Field ID=\"{62f0454d-1150-4d55-86ef-075f786d6e5c}\" Name=\"GtRiskFactorPostAction\" DisplayName=\"{{SiteFields_GtRiskFactorPostAction_DisplayName}}\" Type=\"Calculated\" Group=\"{{SiteFields_Project_Group}}\" Description=\"{{SiteFields_GtRiskFactorPostAction_Description}}\" ResultType=\"Number\" StaticName=\"GtRiskFactorPostAction\"><Formula>=GtRiskProbabilityPostAction*GtRiskConsequencePostAction</Formula><FieldRefs><FieldRef Name=\"GtRiskProbabilityPostAction\" ID=\"{f81ebcb7-8791-44b0-9919-08ed5524b11d}\" /><FieldRef Name=\"GtRiskConsequencePostAction\" ID=\"{00f17233-d4c0-49d0-aebd-5004552abb17}\" /></FieldRefs></Field>",
+        "<Field ID=\"{88d9b92c-efed-45d0-a586-86d9196b77d0}\" Type=\"User\" Name=\"GtResourceUser\" StaticName=\"GtResourceUser\" DisplayName=\"{{SiteFields_GtResourceUser_DisplayName}}\" Description=\"{{SiteFields_GtResourceUser_Description}}\" />",
+        "<Field ID=\"{08ac9d56-f8eb-4a2c-868f-d39fc012fcd6}\" Type=\"Number\" Name=\"GtResourceLoad\" StaticName=\"GtResourceLoad\" DisplayName=\"{{SiteFields_GtResourceLoad_DisplayName}}\" Description=\"{{SiteFields_GtResourceLoad_Description}}\" Percentage=\"TRUE\" />",
+        "<Field ID=\"{2ae541a5-5ecc-481d-afb6-c03a6f1e71b4}\" Type=\"User\" Name=\"GtActionResponsible\" StaticName=\"GtActionResponsible\" DisplayName=\"{{SiteFields_GtActionResponsible_DisplayName}}\" Description=\"{{SiteFields_GtActionResponsible_Description}}\" />"
     ],
     "Navigation": {
         "QuickLaunch": [
             {
                 "Url": "SitePages/ProgramHome.aspx",
-                "Title": "Hjem"
+                "Title": "{{Navigation_Home_Title}}"
             },
             {
-                "Url": "SitePages/Status.aspx",
-                "Title": "Programstatus"
+                "Url": "SitePages/{{ClientSidePages_ProgramStatus_Name}}",
+                "Title": "{{ClientSidePages_ProgramStatus_Title}}"
             },
             {
                 "Url": "SitePages/ProgramOversikt.aspx",
@@ -762,8 +762,8 @@
             ]
         },
         {
-            "Name": "Status.aspx",
-            "Title": "Programstatus",
+            "Name": "{{ClientSidePages_ProgramStatus_Name}}",
+            "Title": "{{ClientSidePages_ProgramStatus_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
