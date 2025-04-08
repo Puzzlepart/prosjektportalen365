@@ -444,35 +444,35 @@
                 "Title": "{{Navigation_Home_Title}}"
             },
             {
-                "Url": "SitePages/Prosjektstatus.aspx",
+                "Url": "SitePages/{{ClientSidePages_ProjectStatus_Name}}",
                 "Title": "{{Navigation_ProjectStatus_Title}}"
             },
             {
-                "Url": "Lists/Prosjektlogg/AllItems.aspx",
+                "Url": "{{Navigation_ProjectLog_Url}}",
                 "Title": "{{Navigation_ProjectLog_Title}}"
             },
             {
-                "Url": "Lists/Interessentregister/AllItems.aspx",
+                "Url": "{{Navigation_StakeholderRegister_Url}}",
                 "Title": "{{Navigation_StakeholderRegister_Title}}"
             },
             {
-                "Url": "Lists/Kommunikasjonsplan/AllItems.aspx",
+                "Url": "{{Navigation_CommunicationPlan_Url}}",
                 "Title": "{{Navigation_CommunicationPlan_Title}}"
             },
             {
-                "Url": "Lists/Usikkerhet/AllItems.aspx",
+                "Url": "{{Navigation_Uncertainty_Url}}",
                 "Title": "{{Navigation_Uncertainty_Title}}"
             },
             {
-                "Url": "Dokumenter/Forms/AllItems.aspx",
+                "Url": "{{Navigation_Documents_Url}}",
                 "Title": "{{Navigation_Documents_Title}}"
             },
             {
-                "Url": "SitePages/Oppgaver.aspx",
+                "Url": "SitePages/{{ClientSidePages_Tasks_PageName}}",
                 "Title": "{{Navigation_Tasks_Title}}"
             },
             {
-                "Url": "Lists/Fasesjekkliste/AllItems.aspx",
+                "Url": "{{Navigation_PhaseChecklist_Url}}",
                 "Title": "{{Navigation_PhaseChecklist_Title}}"
             },
             {
@@ -480,41 +480,41 @@
                 "Title": "{{Navigation_Notebook_Title}}"
             },
             {
-                "Url": "SitePages/Gevinstoversikt.aspx",
+                "Url":  "SitePages/{{ClientSidePages_BenefitsOverview_PageName}}",
                 "Title": "{{Navigation_BenefitsOverview_Title}}",
                 "Children": [
                     {
-                        "Url": "Lists/Endringsanalyse/AllItems.aspx",
+                        "Url": "{{Navigation_ChangeAnalysis_Url}}",
                         "Title": "{{Navigation_ChangeAnalysis_Title}}"
                     },
                     {
-                        "Url": "Lists/Gevinstanalyse og gevinstrealiseringsplan/AllItems.aspx",
+                        "Url":"{{Navigation_BenefitsAnalysis_Url}}",
                         "Title": "{{Navigation_BenefitsAnalysis_Title}}"
                     },
                     {
-                        "Url": "Lists/Mleindikatorer/AllItems.aspx",
+                        "Url": "{{Navigation_MeasurementIndicators_Url}}",
                         "Title": "{{Navigation_MeasurementIndicators_Title}}"
                     },
                     {
-                        "Url": "Lists/Gevinstoppflging/AllItems.aspx",
+                        "Url": "{{Navigation_BenefitsFollowup_Url}}",
                         "Title": "{{Navigation_BenefitsFollowup_Title}}"
                     },
                     {
-                        "Url": "SitePages/Gevinstoversikt.aspx",
+                        "Url": "SitePages/{{ClientSidePages_BenefitsOverview_PageName}}",
                         "Title": "{{Navigation_BenefitsOverview_Title}}"
                     }
                 ]
             },
             {
-                "Url": "Lists/Prosjektleveranser/AllItems.aspx",
+                "Url": "{{Navigation_ProjectDeliveries_Url}}",
                 "Title": "{{Navigation_ProjectDeliveries_Title}}"
             },
             {
-                "Url": "Lists/Ressursallokering/AllItems.aspx",
+                "Url": "{{Navigation_ResourceAllocation_Url}}",
                 "Title": "{{Navigation_ResourceAllocation_Title}}"
             },
             {
-                "Url": "SitePages/Prosjekttidslinje.aspx",
+                "Url": "SitePages/{{ClientSidePages_ProjectTimeline_PageName}}",
                 "Title": "{{Navigation_ProjectTimeline_Title}}"
             },
             {
@@ -608,7 +608,7 @@
             ]
         },
         {
-            "Name": "Oppgaver.aspx",
+            "Name": "{{ClientSidePages_Tasks_PageName}}",
             "Title": "{{ClientSidePages_Tasks_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
@@ -631,7 +631,7 @@
             ]
         },
         {
-            "Name": "Gevinstoversikt.aspx",
+            "Name": "{{ClientSidePages_BenefitsOverview_PageName}}",
             "Title": "{{ClientSidePages_BenefitsOverview_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
@@ -660,7 +660,7 @@
             ]
         },
         {
-            "Name": "Prosjektstatus.aspx",
+            "Name": "{{ClientSidePages_ProjectStatus_Name}}",
             "Title": "{{ClientSidePages_ProjectStatus_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
@@ -691,7 +691,7 @@
             ]
         },
         {
-            "Name": "Prosjekttidslinje.aspx",
+            "Name": "{{ClientSidePages_ProjectTimeline_PageName}}",
             "Title": "{{ClientSidePages_ProjectTimeline_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,

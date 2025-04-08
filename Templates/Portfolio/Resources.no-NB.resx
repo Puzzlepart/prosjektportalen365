@@ -2536,7 +2536,7 @@
   <data name="SiteFields_GtCurrentVersion_Description" xml:space="preserve">
     <value>Gjeldende versjon. Oppdateres når prosjektet oppgraderes.</value>
   </data>
-   <data name="ListFields_Benefit_DisplayName" xml:space="preserve">
+  <data name="ListFields_Benefit_DisplayName" xml:space="preserve">
     <value>Gevinst</value>
   </data>
   <data name="ListFields_ChangeLookup_Description" xml:space="preserve">
@@ -3124,6 +3124,45 @@
   <data name="SiteFields_GtFieldOverrides_Description" xml:space="preserve">
     <value>Tilpassede feltinnstillinger i JSON-format. Objektformat med konfigurasjonsnavnet først, deretter ett objekt med lokalene som nøkkel og feltinnstillingene (f.eks. displayName eller description) som verdi.</value>
   </data>
+  <data name="Navigation_BenefitsAnalysis_Url" xml:space="preserve">
+    <value>Lists/Gevinstanalyse og gevinstrealiseringsplan/AllItems.aspx</value>
+  </data>
+  <data name="Navigation_BenefitsFollowup_Url" xml:space="preserve">
+    <value>Lists/Gevinstoppflging/AllItems.aspx</value>
+  </data>
+  <data name="Navigation_ChangeAnalysis_Url" xml:space="preserve">
+    <value>Lists/Endringsanalyse/AllItems.aspx</value>
+  </data>
+  <data name="Navigation_CommunicationPlan_Url" xml:space="preserve">
+    <value>Lists/Kommunikasjonsplan/AllItems.aspx</value>
+  </data>
+  <data name="Navigation_Documents_Url" xml:space="preserve">
+    <value>Dokumenter/Forms/AllItems.aspx</value>
+  </data>
+  <data name="Navigation_MeasurementIndicators_Url" xml:space="preserve">
+    <value>Lists/Mleindikatorer/AllItems.aspx</value>
+  </data>
+  <data name="Navigation_PhaseChecklist_Url" xml:space="preserve">
+    <value>Lists/Fasesjekkliste/AllItems.aspx</value>
+  </data>
+  <data name="Navigation_ProjectDeliveries_Url" xml:space="preserve">
+    <value>Lists/Prosjektleveranser/AllItems.aspx</value>
+  </data>
+  <data name="Navigation_ProjectLog_Url" xml:space="preserve">
+    <value>Lists/Prosjektlogg/AllItems.aspx</value>
+  </data>
+  <data name="Navigation_ProjectStatus_Url" xml:space="preserve">
+    <value>SitePages/Prosjektstatus.aspx</value>
+  </data>
+  <data name="Navigation_ResourceAllocation_Url" xml:space="preserve">
+    <value>Lists/Ressursallokering/AllItems.aspx</value>
+  </data>
+  <data name="Navigation_StakeholderRegister_Url" xml:space="preserve">
+    <value>Lists/Interessentregister/AllItems.aspx</value>
+  </data>
+  <data name="Navigation_Uncertainty_Url" xml:space="preserve">
+    <value>Lists/Usikkerhet/AllItems.aspx</value>
+  </data>
   <data name="Navigation_Home_Title" xml:space="preserve">
     <value>Hjem</value>
   </data>
@@ -3187,8 +3226,17 @@
   <data name="ClientSidePages_Tasks_Title" xml:space="preserve">
     <value>Oppgaver</value>
   </data>
+  <data name="ClientSidePages_Tasks_PageName" xml:space="preserve">
+    <value>Oppgaver.aspx</value>
+  </data>
+  <data name="ClientSidePages_BenefitsOverview_PageName" xml:space="preserve">
+    <value>Gevinstoversikt.aspx</value>
+  </data>
   <data name="ClientSidePages_BenefitsOverview_Title" xml:space="preserve">
     <value>Gevinstoversikt</value>
+  </data>
+  <data name="ClientSidePages_ProjectStatus_Name" xml:space="preserve">
+    <value>Prosjektstatus.aspx</value>
   </data>
   <data name="ClientSidePages_ProjectStatus_Title" xml:space="preserve">
     <value>Prosjektstatus</value>
@@ -3196,7 +3244,7 @@
   <data name="ClientSidePages_ProjectTimeline_Title" xml:space="preserve">
     <value>Prosjekttidslinje</value>
   </data>
-<data name="WebParts_ProjectInformation_Title" xml:space="preserve">
+  <data name="WebParts_ProjectInformation_Title" xml:space="preserve">
     <value>Prosjektinformasjon</value>
   </data>
   <data name="WebParts_ProjectStatusHeader_Title" xml:space="preserve">

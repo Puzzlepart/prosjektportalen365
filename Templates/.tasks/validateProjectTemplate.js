@@ -22,7 +22,12 @@ for (const key of Object.keys(templates)) {
 
 
     let markdownContent = `The template ${key} contains the following tokens that has not been found in the .resx files:\n\n`
-    markdownContent += Array.from(tokens).map(t => `- ${t}`).join('\n')
+    if (tokens.size === 0) {
+        markdownContent += 'No missing tokens found.'
+    }
+    else {
+        markdownContent += Array.from(tokens).map(t => `- ${t}`).join('\n')
+    }
 
     fs.writeFileSync(`${key}-tokens.md`, markdownContent, { flag: 'w' })
 }
