@@ -103,7 +103,7 @@ export const useProvisionDrawer = () => {
       ReadOnlyGroup: context.column.get('readOnlyGroup'),
       InternalChannel: context.column.get('internalChannel'),
       RequestedSource: context.column.get('requestedSource'),
-      SpaceImage: context.column.get('image'),
+      SpaceImage: context.column.get('image')?.split(',')[1],
       SiteURL: {
         Description: `${baseUrl}${alias}`,
         Url: `${baseUrl}${alias}`
