@@ -541,32 +541,8 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                 <div className={styles.content}>
                   {context.props.debugMode || (DEBUG && <DebugModel />)}
                   <Divider />
-                  <FieldContainer iconName='Image' label='Angi områdebilde'>
+                  <FieldContainer iconName='Image' label={strings.Provision.ImageFieldLabel}>
                     <ImageUpload onImageUpload={(image) => context.setColumn('image', image)} />
-                  </FieldContainer>
-                  <FieldContainer
-                    iconName='LocalLanguage'
-                    label={strings.Provision.LanguageFieldLabel}
-                  >
-                    <Dropdown
-                      defaultValue={context.column.get('language')}
-                      defaultSelectedOptions={[context.column.get('language')]}
-                      disabled
-                    />
-                  </FieldContainer>
-                  <FieldContainer iconName='Clock' label={strings.Provision.TimeZoneFieldLabel}>
-                    <Dropdown
-                      defaultValue={context.column.get('timeZone')}
-                      defaultSelectedOptions={[context.column.get('timeZone')]}
-                      disabled
-                    />
-                  </FieldContainer>
-                  <FieldContainer iconName='Database' label={strings.Provision.HubSiteFieldLabel}>
-                    <Dropdown
-                      defaultValue={context.column.get('hubSiteTitle')}
-                      defaultSelectedOptions={[context.column.get('hubSiteTitle')]}
-                      disabled
-                    />
                   </FieldContainer>
                 </div>
               </DrawerBody>

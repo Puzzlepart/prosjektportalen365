@@ -114,5 +114,4 @@ ProjectProvision.defaultProps = {
   icon: getFluentIcon('Add'),
   appearance: 'primary',
   size: 'large'
-  // fields: getDefaultFields(),
 }

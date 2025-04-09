@@ -100,6 +100,8 @@ declare interface IPortfolioWebPartsStrings {
     LanguageFieldLabel: string,
     TimeZoneFieldLabel: string,
     HubSiteFieldLabel: string,
+    ImageFieldLabel: string,
+    ImageFieldDescription: string,
     DrawerFooterDescriptionText: string,
     PreviousButtonLabel: string,
     NextButtonLabel: string,
@@ -147,6 +149,7 @@ declare interface IPortfolioWebPartsStrings {
     DeletedSubmissionToastBody: string
     DeletedSubmissionErrorToastTitle: string
     DeletedSubmissionErrorToastBody: string
+    RequestedSource: string
   },
   AddColumnLabel: string
   AllProjectsHeaderText: string

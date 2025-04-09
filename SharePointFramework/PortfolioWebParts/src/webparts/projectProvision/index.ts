@@ -8,22 +8,33 @@ import {
 } from '@microsoft/sp-property-pane'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
-import { IProjectProvisionProps, ProjectProvision } from 'components/ProjectProvision'
+import { IProjectProvisionProps, IProvisionField, ProjectProvision } from 'components/ProjectProvision'
 import { PropertyFieldMessage } from '@pnp/spfx-property-controls/lib/PropertyFieldMessage'
 import { PropertyPanePropertyEditor } from '@pnp/spfx-property-controls/lib/PropertyPanePropertyEditor'
 import {
   PropertyFieldCollectionData,
   CustomCollectionFieldType
 } from '@pnp/spfx-property-controls/lib/PropertyFieldCollectionData'
+import { getDefaultFields } from 'components/ProjectProvision/getDefaultFields'
 
 export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProjectProvisionProps> {
+  private _defaultFields = getDefaultFields()
+
   public render(): void {
     this.renderComponent<IProjectProvisionProps>(ProjectProvision)
   }
 
+  private mergeFields(userFields: IProvisionField[], defaultFields: IProvisionField[]): IProvisionField[] {
+    const userFieldNames = userFields.map((field) => field.fieldName)
+    return [
+      ...userFields,
+      ...defaultFields.filter((defaultField) => !userFieldNames.includes(defaultField.fieldName))
+    ]
+  }
+
   public async onInit(): Promise<void> {
     await super.onInit()
-    // this.properties.fields = this.properties.fields || ProjectProvision.defaultProps.fields
+    this.properties.fields = this.mergeFields(this.properties.fields || [], this._defaultFields)
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -113,14 +124,14 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                         { key: 'note', text: 'Notat' },
                         { key: 'number', text: 'Tall' },
                         { key: 'choice', text: 'Valg' },
-                        { key: 'user', text: 'Enkeltbruker' },
                         { key: 'userMulti', text: 'Flere brukere' },
                         { key: 'guest', text: 'Gjestebrukere' },
                         { key: 'date', text: 'Dato' },
                         { key: 'tags', text: 'Taksonomi' },
                         { key: 'boolean', text: 'Ja/nei' },
                         { key: 'percentage', text: 'Prosent' },
-                        { key: 'site', text: 'Område' }
+                        { key: 'site', text: 'Område' },
+                        { key: 'image', text: 'Bilde' }
                       ],
                       defaultValue: 'text'
                     },

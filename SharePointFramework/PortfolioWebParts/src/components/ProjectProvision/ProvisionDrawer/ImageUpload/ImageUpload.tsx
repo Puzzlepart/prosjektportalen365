@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import { useDropzone } from 'react-dropzone'
 import styles from './ImageUpload.module.scss'
+import strings from 'PortfolioWebPartsStrings'
 
 export const ImageUpload: FC<{ onImageUpload: (image: string) => void }> = ({ onImageUpload }) => {
   const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject, acceptedFiles } =
@@ -34,7 +35,7 @@ export const ImageUpload: FC<{ onImageUpload: (image: string) => void }> = ({ on
         style={{ borderColor: getColor() }}
       >
         <input {...getInputProps()} />
-        <p>Dra og slipp noen bilder her, eller klikk for å velge filer (png, jpeg/jpg)</p>
+        <p>{strings.Provision.ImageFieldDescription}</p>
       </div>
       {acceptedFiles.length > 0 && (
         <div className={styles.imagePreview}>
