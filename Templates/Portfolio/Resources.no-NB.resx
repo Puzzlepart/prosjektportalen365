@@ -3535,4 +3535,16 @@
   <data name="WebParts_RiskStatus_Title" xml:space="preserve">
     <value>Risiko status</value>
   </data>
+  <data name="WebParts_LatestProjects_Title" xml:space="preserve">
+    <value>Siste prosjekter</value>
+  </data>
+  <data name="WebParts_LatestProjects_LoadingText" xml:space="preserve">
+    <value>Laster inn siste prosjekter...</value>
+  </data>
+  <data name="WebParts_LatestProjects_EmptyMessage" xml:space="preserve">
+    <value>Ingen prosjekter funnet.</value>
+  </data>
+  <data name="WebParts_UsefulLinks_Title" xml:space="preserve">
+    <value>Nyttige lenker</value>
+  </data>
 </root>

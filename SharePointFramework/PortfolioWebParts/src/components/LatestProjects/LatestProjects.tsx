@@ -26,10 +26,6 @@ import { useLatestProjects } from './useLatestProjects'
  * by default.
  *
  * @param props - The component props.
- * @param props.dataAdapter - The data adapter used to fetch project sites.
- * @param props.maxRowLimit - The maximum number of rows to fetch.
- * @param props.rowLimit - The number of rows to display.
- * @param props.showProjectLogo - Whether to show the project logo.
  */
 export const LatestProjects: FC<ILatestProjectsProps> = (props) => {
   const { className, loading, projects, viewAll, toggleViewAll, fluentProviderId } =
@@ -100,5 +96,3 @@ LatestProjects.defaultProps = {
   minRowLimit: 3,
   maxRowLimit: 10
 }
-
-export * from './types'

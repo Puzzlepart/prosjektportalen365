@@ -3361,4 +3361,16 @@
   <data name="WebParts_RiskStatus_Title" xml:space="preserve">
     <value>Risk Status</value>
   </data>
+  <data name="WebParts_LatestProjects_Title" xml:space="preserve">
+    <value>Latest Projects</value>
+  </data>
+  <data name="WebParts_LatestProjects_LoadingText" xml:space="preserve">
+    <value>Loading latest projects...</value>
+  </data>
+  <data name="WebParts_LatestProjects_EmptyMessage" xml:space="preserve">
+    <value>No projects found.</value>
+  </data>
+  <data name="WebParts_UsefulLinks_Title" xml:space="preserve">
+    <value>Useful Links</value>
+  </data>
 </root>
