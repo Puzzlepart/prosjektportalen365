@@ -214,6 +214,7 @@ define([], function () {
     SiteTitleLabel: 'Project',
     SortAscLabel: 'Z to A',
     SortByFieldLabel: 'Sorting property',
+    SortCardsByLabel: 'Sort the tiles by: {0}',
     SortDescLabel: 'A to Z',
     SortOrderDescription: 'The sort order determines the order in which the views are displayed. The lowest value is displayed first.',
     SortOrderLabel: 'Sort order',
