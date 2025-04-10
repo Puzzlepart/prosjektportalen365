@@ -28,6 +28,7 @@ import strings from 'ProjectWebPartsStrings'
 export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
   const { fluentProviderId, context } = useProjectInformation(props)
   if (context.state.hidden) return null
+  console.log('ProjectInformation', strings)
 
   if (!context.state.isDataLoaded) {
     return (
