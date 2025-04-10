@@ -71,7 +71,7 @@ jobs:
           path: release
 
       - name: Run script UpgradeAllSitesToLatest.ps1 in CI mode
-        run: release/Scripts/UpgradeAllSitesToLatest.ps1 -Url ${{ vars.SP_URL_ENG }} -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }}
+        run: release/Scripts/UpgradeAllSitesToLatest.ps1 -Url ${{ vars.SP_URL_ENG }} -Language English -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }}
         shell: powershell
 
   build_release_package_test_packages_only:
