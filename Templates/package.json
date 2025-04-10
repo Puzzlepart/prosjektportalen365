@@ -5,10 +5,10 @@
   "scripts": {
     "build": "npm run generate-project-templates && npm run generate-resx-json",
     "lint": "echo \"No linting configured\"",
-    "generate-resx-json": "node ./.tasks/generateResxJson.js",
-    "generate-resx-ts": "node ./.tasks/generateResxTypeScript.js",
-    "generate-project-templates": "npm run generate-resx-json && npm run generate-resx-ts && node ./.tasks/generateProjectTemplates",
-    "validate-project-template": "node ./.tasks/validateProjectTemplate.js"
+    "generate-resx-json": "node ./.tasks/generate-resx-json.js",
+    "generate-resx-ts": "node ./.tasks/generate-resx-ts.js",
+    "generate-project-templates": "npm run generate-resx-json && npm run generate-resx-ts && node ./.tasks/generate-project-templates.js",
+    "validate-project-template": "node ./.tasks/validate-project-template.js"
   },
   "dependencies": {
     "@fluentui/react-components": "~9.52.0",
