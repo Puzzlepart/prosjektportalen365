@@ -249,7 +249,7 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
         }
     }
     Set-Location $SHAREPOINT_FRAMEWORK_BASEPATH
-    rush build >$null 2>&1
+    rush rebuild >$null 2>&1
     Get-ChildItem "*/sharepoint/solution/" *.sppkg -Recurse -ErrorAction SilentlyContinue | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$RELEASE_PATH/Apps/$_")) } | Copy-Item -Destination $RELEASE_PATH_APPS -Force
     if ($USE_CHANNEL_CONFIG) {
         foreach ($Solution in $Solutions) {

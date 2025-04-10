@@ -193,6 +193,15 @@
   <data name="Lists_ChartConfiguration_Url" xml:space="preserve">
     <value>Lists/Grafkonfigurasjon</value>
   </data>
+  <data name="Lists_ChartConfiguration_ProjectsInVariousPhases_Title" xml:space="preserve">
+    <value>Prosjekter i ulike faser</value>
+  </data>
+  <data name="Lists_ChartConfiguration_ServiceAreas_Title" xml:space="preserve">
+    <value>Tjenesteområder</value>
+  </data>
+  <data name="Lists_ChartConfiguration_ProjectType_Title" xml:space="preserve">
+    <value>Prosjekttype</value>
+  </data>
   <data name="Lists_InstallationLog_Title" xml:space="preserve">
     <value>Installasjonslogg</value>
   </data>

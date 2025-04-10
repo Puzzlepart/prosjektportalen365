@@ -29,7 +29,7 @@
     <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Prosjekter i ulike faser</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ChartConfiguration_ProjectsInVariousPhases_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtPiSubTitle" />
             <pnp:DataValue FieldName="GtPiFields">7</pnp:DataValue>
             <pnp:DataValue FieldName="GtPiWidthSm">6</pnp:DataValue>
@@ -41,7 +41,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">20</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Tjenesteområder</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ChartConfiguration_ServiceAreas_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtPiSubTitle" />
             <pnp:DataValue FieldName="GtPiFields">5</pnp:DataValue>
             <pnp:DataValue FieldName="GtPiWidthSm">6</pnp:DataValue>
@@ -53,7 +53,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">30</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Prosjekttype</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ChartConfiguration_ProjectType_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtPiSubTitle" />
             <pnp:DataValue FieldName="GtPiFields">6</pnp:DataValue>
             <pnp:DataValue FieldName="GtPiWidthSm">6</pnp:DataValue>

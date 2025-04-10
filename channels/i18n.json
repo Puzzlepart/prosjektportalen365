@@ -46,7 +46,7 @@
         "name": "Prosjektportalen 365 - Project Extensions - i18n",
         "zippedPackage": "solution/pp-project-extensions-i18n.sppkg",
         "components": {
-          "ProjectSetup": "9f20ddfa-4494-493d-93f0-4995afe57e6g",
+          "ProjectSetup": "c0c51378-2c43-4e16-a3ed-86f01c6f358e",
           "ProjectUpgrade": "f2eb9f73-f3f4-45d4-b8de-27ecf7236b1e",
           "TemplateSelectorCommand": "42f5eb06-353c-4561-b095-4703e3144990",
           "RiskActionPlanner": "c83fcc0a-b559-4abd-83a8-dad64df4914e"

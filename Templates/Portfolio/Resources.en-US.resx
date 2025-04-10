@@ -193,6 +193,15 @@
   <data name="Lists_ChartConfiguration_Url" xml:space="preserve">
     <value>Lists/ChartConfiguration</value>
   </data>
+  <data name="Lists_ChartConfiguration_ProjectsInVariousPhases_Title" xml:space="preserve">
+    <value>Projects in various phases</value>
+  </data>
+  <data name="Lists_ChartConfiguration_ServiceAreas_Title" xml:space="preserve">
+    <value>Service Areas</value>
+  </data>
+  <data name="Lists_ChartConfiguration_ProjectType_Title" xml:space="preserve">
+    <value>Project Type</value>
+  </data>
   <data name="Lists_InstallationLog_Title" xml:space="preserve">
     <value>Installation Log</value>
   </data>
