@@ -10,12 +10,24 @@ Param(
     [Parameter(Mandatory = $false, HelpMessage = "Base64 encoded certificate")]
     [string]$CertificateBase64Encoded,
     [Parameter(Mandatory = $false, HelpMessage = "Do you want to handle PnP libraries and PnP PowerShell without using bundled files?")]
-    [switch]$SkipLoadingBundle
+    [switch]$SkipLoadingBundle,
+    [Parameter(Mandatory = $false, HelpMessage = "Language")]
+    [ValidateSet('Norwegian', 'English')]
+    [string]$Language = "Norwegian"
 )
 
 $ErrorActionPreference = "Stop"
 
+$LanguageCodes = @{
+    "Norwegian"    = 'no-NB';
+    "English"      = 'en-US';
+}
+$LanguageCode = $LanguageCodes[$Language]
+
 . $PSScriptRoot\SharedFunctions.ps1
+. $PSScriptRoot\Resources.ps1
+
+$InstallationEntriesList = Get-PnPList -Identity (Get-Resource -Name "Lists_InstallationLog_Title") -ErrorAction Stop
 
 $ConnectionInfo = [PSCustomObject]@{
     ClientId                 = $ClientId
@@ -79,9 +91,8 @@ $LogFilePath = "$PSScriptRoot/UpgradeSites_Log-$((Get-Date).ToString('yyyy-MM-dd
 Start-Transcript -Path $LogFilePath
 
 try {
-    
     Connect-SharePoint -Url $Url -ConnectionInfo $ConnectionInfo
-    $InstallLogEntries = Get-PnPListItem -List "Installasjonslogg" -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>"
+    $InstallLogEntries = Get-PnPListItem -List $InstallationEntriesList.Id -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>"
     $NativeLogEntries = $InstallLogEntries | Where-Object { $_.FieldValues.Title -match "PP365+[\s]+[0-9]+[.][0-9]+[.][0-9]+[.][a-zA-Z0-9]+" }
     $LatestInstallEntry = $NativeLogEntries | Select-Object -First 1
     $PreviousInstallEntry = $NativeLogEntries | Select-Object -Skip 1 -First 1
@@ -224,10 +235,10 @@ if ($Channel -ne "main") {
     $InstallEntry.InstallChannel = $global:__CurrentChannelConfig.Channel
 }
 
-$InstallationEntry = Add-PnPListItem -List "Installasjonslogg" -Values $InstallEntry -ErrorAction SilentlyContinue
+$InstallationEntry = Add-PnPListItem -List $InstallationEntriesList.Id -Values $InstallEntry -ErrorAction SilentlyContinue
 
 if ($null -ne $InstallationEntry) {
-    $AttachmentOutput = Add-PnPListItemAttachment -List "Installasjonslogg" -Identity $InstallationEntry.Id -Path $LogFilePath -ErrorAction SilentlyContinue
+    $AttachmentOutput = Add-PnPListItemAttachment -List $InstallationEntriesList.Id -Identity $InstallationEntry.Id -Path $LogFilePath -ErrorAction SilentlyContinue
 }
 
     

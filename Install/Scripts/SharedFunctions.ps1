@@ -107,7 +107,6 @@ function ParseVersionString($VersionString) {
     catch {
         Write-Host "[ERROR] Failed to parse version string: $VersionString" -ForegroundColor Red
         Write-Host "[ERROR] Unable to compare with previous versions. Some upgrade actions might be skipped."
-        Write-Host "[ERROR] You can check out the list at $($Url)/Lists/Installasjonslogg."
         Write-Host "[ERROR] Make sure that the field 'Versjonsnummer' has a valid version number value."
         
         $Input = Read-Host "Do you still want to continue? [Y/N]"
