@@ -24,7 +24,7 @@ import {
   ErrorWithIntent,
   PropertyPaneDescription
 } from 'pp365-shared-library'
-import { DataAdapter } from 'data'
+import { DataAdapter } from 'data/DataAdapter'
 
 export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPortfolioOverviewProps> {
   private _configuration: IPortfolioOverviewConfiguration
