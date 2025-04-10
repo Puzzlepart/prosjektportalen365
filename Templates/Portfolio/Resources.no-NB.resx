@@ -406,17 +406,26 @@
   <data name="Lists_TemplateOptions_StandardTemplate_Title" xml:space="preserve">
     <value>Standardmal</value>
   </data>
+  <data name="Lists_TemplateOptions_StandardTemplate_FileName" xml:space="preserve">
+    <value>Standardmal.txt</value>
+  </data>
   <data name="Lists_TemplateOptions_StandardTemplate_Description" xml:space="preserve">
     <value>Dette er standardmalen for prosjekt som følger med Prosjektportalen 365.</value>
   </data>
   <data name="Lists_TemplateOptions_ParentTemplate_Title" xml:space="preserve">
     <value>Overordnet mal</value>
   </data>
+  <data name="Lists_TemplateOptions_ParentTemplate_FileName" xml:space="preserve">
+    <value>Overordnet.txt</value>
+  </data>
   <data name="Lists_TemplateOptions_ParentTemplate_Description" xml:space="preserve">
     <value>Dette er standardmalen for overordnet prosjekt som følger med Prosjektportalen 365.</value>
   </data>
   <data name="Lists_TemplateOptions_ProgramTemplate_Title" xml:space="preserve">
     <value>Programmal</value>
+  </data>
+  <data name="Lists_TemplateOptions_ProgramTemplate_FileName" xml:space="preserve">
+    <value>Programmal.txt</value>
   </data>
   <data name="Lists_TemplateOptions_ProgramTemplate_Description" xml:space="preserve">
     <value>Dette er standardmalen for program som følger med Prosjektportalen 365.</value>

@@ -406,17 +406,26 @@
   <data name="Lists_TemplateOptions_StandardTemplate_Title" xml:space="preserve">
     <value>Default Template</value>
   </data>
+  <data name="Lists_TemplateOptions_StandardTemplate_FileName" xml:space="preserve">
+    <value>DefaultTemplate.txt</value>
+  </data>
   <data name="Lists_TemplateOptions_StandardTemplate_Description" xml:space="preserve">
     <value>This is the default project template that comes with Prosjektportalen 365.</value>
   </data>
   <data name="Lists_TemplateOptions_ParentTemplate_Title" xml:space="preserve">
     <value>Parent Template</value>
   </data>
+  <data name="Lists_TemplateOptions_ParentTemplate_FileName" xml:space="preserve">
+    <value>ParentTemplate.txt</value>
+  </data>
   <data name="Lists_TemplateOptions_ParentTemplate_Description" xml:space="preserve">
     <value>This is the default parent template that comes with Prosjektportalen 365.</value>
   </data>
   <data name="Lists_TemplateOptions_ProgramTemplate_Title" xml:space="preserve">
     <value>Program Template</value>
+  </data>
+  <data name="Lists_TemplateOptions_ProgramTemplate_FileName" xml:space="preserve">
+    <value>ProgramTemplate.txt</value>
   </data>
   <data name="Lists_TemplateOptions_ProgramTemplate_Description" xml:space="preserve">
     <value>This is the default program template that comes with Prosjektportalen 365.</value>
