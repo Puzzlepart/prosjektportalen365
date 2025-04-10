@@ -116,8 +116,8 @@
                                     "Id": "{{ControlId_ProgramAggregationWebPart}}",
                                     "Properties": {
                                         "title": "{{ClientSidePages_ParentBenefitOverview_WebPartTitle}}",
-                                        "dataSource": "{{ClientSidePages_ParentBenefitOverview_DataSource}}",
-                                        "dataSourceCategory": "{{ClientSidePages_ParentBenefitOverview_DataSourceCategory}}",
+                                        "dataSource": "{{Lists_DataSources_Category_BenefitOverview_Children}}",
+                                        "dataSourceCategory": "{{Lists_DataSources_Category_BenefitOverview}}",
                                         "dataSourceLevel": "{{Lists_DataSources_Level_ParentProgram}}",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
@@ -145,8 +145,8 @@
                                     "Id": "{{ControlId_ProgramAggregationWebPart}}",
                                     "Properties": {
                                         "title": "{{ClientSidePages_ParentCommunicationPlan_WebPartTitle}}",
-                                        "dataSource": "{{ClientSidePages_ParentCommunicationPlan_DataSource}}",
-                                        "dataSourceCategory": "{{ClientSidePages_ParentCommunicationPlan_DataSourceCategory}}",
+                                        "dataSource": "{{Lists_DataSources_Category_CommunicationPlan_Children}}",
+                                        "dataSourceCategory": "{{Lists_DataSources_Category_CommunicationPlan}}",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
                                         "showSearchBox": true
@@ -173,8 +173,8 @@
                                     "Id": "{{ControlId_ProgramAggregationWebPart}}",
                                     "Properties": {
                                         "title": "{{ClientSidePages_ParentResourceAllocation_WebPartTitle}}",
-                                        "dataSource": "{{ClientSidePages_ParentResourceAllocation_DataSource}}",
-                                        "dataSourceCategory": "{{ClientSidePages_ParentResourceAllocation_DataSourceCategory}}",
+                                        "dataSource": "{{Lists_DataSources_Category_ResourceAllocation_Children}}",
+                                        "dataSourceCategory": "{{Lists_DataSources_Category_ResourceAllocation}}",
                                         "hiddenColumns": [
                                             "Title"
                                         ],
@@ -204,8 +204,7 @@
                                     "Id": "{{ControlId_ProgramTimelineWebPart}}",
                                     "Properties": {
                                         "title": "{{ClientSidePages_ParentTimeline_WebPartTitle}}",
-                                        "infoText": "{{ClientSidePages_ParentTimeline_InfoText}}",
-                                        "dataSource": "{{ClientSidePages_ParentTimeline_DataSource}}"
+                                        "infoText": "{{ClientSidePages_ParentTimeline_InfoText}}"
                                     }
                                 }
                             ]
@@ -229,8 +228,8 @@
                                     "Id": "{{ControlId_ProgramAggregationWebPart}}",
                                     "Properties": {
                                         "title": "{{ClientSidePages_ParentDeliveries_WebPartTitle}}",
-                                        "dataSource": "{{ClientSidePages_ParentDeliveries_DataSource}}",
-                                        "dataSourceCategory": "{{ClientSidePages_ParentDeliveries_DataSourceCategory}}",
+                                        "dataSource": "{{Lists_DataSources_Category_ProjectDeliveries_Children}}",
+                                        "dataSourceCategory": "{{Lists_DataSources_Category_ProjectDeliveries}}",
                                         "dataSourceLevel": "{{Lists_DataSources_Level_ParentProgram}}",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
@@ -258,8 +257,8 @@
                                     "Id": "{{ControlId_ProgramAggregationWebPart}}",
                                     "Properties": {
                                         "title": "{{ClientSidePages_ParentUncertainties_WebPartTitle}}",
-                                        "dataSource": "{{ClientSidePages_ParentUncertainties_DataSource}}",
-                                        "dataSourceCategory": "{{ClientSidePages_ParentUncertainties_DataSourceCategory}}",
+                                        "dataSource": "{{Lists_DataSources_Category_UncertaintyOverview_RisksChildren}}",
+                                        "dataSourceCategory": "{{Lists_DataSources_Category_UncertaintyOverview}}",
                                         "dataSourceLevel": "{{Lists_DataSources_Level_ParentProgram}}",
                                         "showCommandBar": true,
                                         "showViewSelector": true,

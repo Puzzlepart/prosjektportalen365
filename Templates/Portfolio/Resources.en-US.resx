@@ -3097,6 +3097,81 @@
   <data name="ClientSidePages_IdeaModule_Title" xml:space="preserve">
     <value>Idea module</value>
   </data>
+  <data name="ClientSidePages_ParentAdmin_PageName" xml:space="preserve">
+    <value>Admin.aspx</value>
+  </data>
+  <data name="ClientSidePages_ParentAdmin_Title" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="ClientSidePages_ParentAdmin_WebPartTitle" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="ClientSidePages_ParentBenefitOverview_PageName" xml:space="preserve">
+    <value>ParentBenefitOverview.aspx</value>
+  </data>
+  <data name="ClientSidePages_ParentBenefitOverview_Title" xml:space="preserve">
+    <value>Benefits</value>
+  </data>
+  <data name="ClientSidePages_ParentBenefitOverview_WebPartTitle" xml:space="preserve">
+    <value>Benefits for child projects</value>
+  </data>
+  <data name="ClientSidePages_ParentCommunicationPlan_PageName" xml:space="preserve">
+    <value>ParentCommunicationPlan.aspx</value>
+  </data>
+  <data name="ClientSidePages_ParentCommunicationPlan_Title" xml:space="preserve">
+    <value>Communication Plan</value>
+  </data>
+  <data name="ClientSidePages_ParentCommunicationPlan_WebPartTitle" xml:space="preserve">
+    <value>Communication Plans for child projects</value>
+  </data>
+  <data name="ClientSidePages_ParentDeliveries_PageName" xml:space="preserve">
+    <value>ParentDeliveries.aspx</value>
+  </data>
+  <data name="ClientSidePages_ParentDeliveries_Title" xml:space="preserve">
+    <value>Deliveries</value>
+  </data>
+  <data name="ClientSidePages_ParentDeliveries_WebPartTitle" xml:space="preserve">
+    <value>Deliveries for child projects</value>
+  </data>
+  <data name="ClientSidePages_ParentOverview_PageName" xml:space="preserve">
+    <value>ParentOverview.aspx</value>
+  </data>
+  <data name="ClientSidePages_ParentOverview_Title" xml:space="preserve">
+    <value>Overview</value>
+  </data>
+  <data name="ClientSidePages_ParentOverview_WebPartTitle" xml:space="preserve">
+    <value>Overview for child projects</value>
+  </data>
+  <data name="ClientSidePages_ParentResourceAllocation_PageName" xml:space="preserve">
+    <value>ParentResourceAllocation.aspx</value>
+  </data>
+  <data name="ClientSidePages_ParentResourceAllocation_Title" xml:space="preserve">
+    <value>Resource Allocation</value>
+  </data>
+  <data name="ClientSidePages_ParentResourceAllocation_WebPartTitle" xml:space="preserve">
+    <value>Resource allocations for child projects</value>
+  </data>
+  <data name="ClientSidePages_ParentTimeline_InfoText" xml:space="preserve">
+    <value>Here you will find a list of all projects with start and end dates in the project. The project timeline also supports phases, subphases and milestones. To zoom in/out in the timeline: ALT+Mousewheel.</value>
+  </data>
+  <data name="ClientSidePages_ParentTimeline_PageName" xml:space="preserve">
+    <value>ParentTimeline.aspx</value>
+  </data>
+  <data name="ClientSidePages_ParentTimeline_Title" xml:space="preserve">
+    <value>Timeline</value>
+  </data>
+  <data name="ClientSidePages_ParentTimeline_WebPartTitle" xml:space="preserve">
+    <value>Timeline for child projects</value>
+  </data>
+  <data name="ClientSidePages_ParentUncertainties_PageName" xml:space="preserve">
+    <value>ParentUncertainties.aspx</value>
+  </data>
+  <data name="ClientSidePages_ParentUncertainties_Title" xml:space="preserve">
+    <value>Uncertainties</value>
+  </data>
+  <data name="ClientSidePages_ParentUncertainties_WebPartTitle" xml:space="preserve">
+    <value>Uncertainties for child projects</value>
+  </data>
   <data name="SiteFields_GtFieldLocked_DisplayName" xml:space="preserve">
     <value>Locked</value>
   </data>

@@ -3241,12 +3241,6 @@
   <data name="ClientSidePages_IdeaModule_Title" xml:space="preserve">
     <value>Idémodul</value>
   </data>
-  <data name="ClientSidePages_ParentBenefitOverview_DataSource" xml:space="preserve">
-    <value>Alle gevinstelementer for underområder</value>
-  </data>
-  <data name="ClientSidePages_ParentBenefitOverview_DataSourceCategory" xml:space="preserve">
-    <value>Gevinstoversikt</value>
-  </data>
   <data name="ClientSidePages_ParentBenefitOverview_PageName" xml:space="preserve">
     <value>OverordnetGevinster.aspx</value>
   </data>
@@ -3256,12 +3250,6 @@
   <data name="ClientSidePages_ParentBenefitOverview_WebPartTitle" xml:space="preserve">
     <value>Gevinster for underområder</value>
   </data>
-  <data name="ClientSidePages_ParentCommunicationPlan_DataSource" xml:space="preserve">
-    <value>Alle kommunikasjonsplaner for underområder</value>
-  </data>
-  <data name="ClientSidePages_ParentCommunicationPlan_DataSourceCategory" xml:space="preserve">
-    <value>Kommunikasjonsoversikt</value>
-  </data>
   <data name="ClientSidePages_ParentCommunicationPlan_PageName" xml:space="preserve">
     <value>OverordnetKommunikasjon.aspx</value>
   </data>
@@ -3270,12 +3258,6 @@
   </data>
   <data name="ClientSidePages_ParentCommunicationPlan_WebPartTitle" xml:space="preserve">
     <value>Kommunikasjonsplaner for underområder</value>
-  </data>
-  <data name="ClientSidePages_ParentDeliveries_DataSource" xml:space="preserve">
-    <value>Alle leveranser for underområder</value>
-  </data>
-  <data name="ClientSidePages_ParentDeliveries_DataSourceCategory" xml:space="preserve">
-    <value>Leveranseoversikt</value>
   </data>
   <data name="ClientSidePages_ParentDeliveries_PageName" xml:space="preserve">
     <value>OverordnetLeveranser.aspx</value>
@@ -3295,12 +3277,6 @@
   <data name="ClientSidePages_ParentOverview_WebPartTitle" xml:space="preserve">
     <value>Oversikt over underområder</value>
   </data>
-  <data name="ClientSidePages_ParentResourceAllocation_DataSource" xml:space="preserve">
-    <value>Alle ressursallokeringer for underområder</value>
-  </data>
-  <data name="ClientSidePages_ParentResourceAllocation_DataSourceCategory" xml:space="preserve">
-    <value>Ressursallokering</value>
-  </data>
   <data name="ClientSidePages_ParentResourceAllocation_PageName" xml:space="preserve">
     <value>OverordnetRessursallokeringer.aspx</value>
   </data>
@@ -3309,9 +3285,6 @@
   </data>
   <data name="ClientSidePages_ParentResourceAllocation_WebPartTitle" xml:space="preserve">
     <value>Ressursallokeringer for underområder</value>
-  </data>
-  <data name="ClientSidePages_ParentTimeline_DataSource" xml:space="preserve">
-    <value>Prosjekttidslinje</value>
   </data>
   <data name="ClientSidePages_ParentTimeline_InfoText" xml:space="preserve">
     <value>Her listes alle prosjektene med start- og sluttdato i prosjektet. Prosjekttidslinjen støtter også faser, delfaser og milepæler. For å zoome inn/ut i tidslinje: ALT+Musehjul.</value>
@@ -3324,12 +3297,6 @@
   </data>
   <data name="ClientSidePages_ParentTimeline_WebPartTitle" xml:space="preserve">
     <value>Tidslinje for underområder</value>
-  </data>
-  <data name="ClientSidePages_ParentUncertainties_DataSource" xml:space="preserve">
-    <value>Alle risikoelementer for underområder</value>
-  </data>
-  <data name="ClientSidePages_ParentUncertainties_DataSourceCategory" xml:space="preserve">
-    <value>Usikkerhetsoversikt</value>
   </data>
   <data name="ClientSidePages_ParentUncertainties_PageName" xml:space="preserve">
     <value>OverordnetUsikkerheter.aspx</value>
