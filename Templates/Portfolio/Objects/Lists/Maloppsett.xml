@@ -58,8 +58,8 @@
     <Field Type="Boolean" DisplayName="Konfigurer automatisk" Description="Konfigurer prosjektet automatisk med denne malen om en eier besøker SharePoint-området. Malen må også være låst." ID="{249ce763-d28e-4034-8dbc-64318ebc3b42}" StaticName="IsAutoConfigurable" Name="IsAutoConfigurable">
       <Default>0</Default>
     </Field>
-    <Field Type="Text" DisplayName="Malbibliotek" Description="Velg malbibliotek som skal brukes som kilde for maler som kan hentes inn til dokumentbibliotekene i prosjektet." MaxLength="255" ID="{02e86b34-2916-4010-afac-cf33eff03d54}" StaticName="GtDocumentTemplateLibrary" Name="GtDocumentTemplateLibrary">
-      <Default>Malbibliotek</Default>
+    <Field Type="Text" DisplayName="{resource:Lists_TemplateLibrary_Title}" Description="Velg malbibliotek som skal brukes som kilde for maler som kan hentes inn til dokumentbibliotekene i prosjektet." MaxLength="255" ID="{02e86b34-2916-4010-afac-cf33eff03d54}" StaticName="GtDocumentTemplateLibrary" Name="GtDocumentTemplateLibrary">
+      <Default>{resource:Lists_TemplateLibrary_Title}</Default>
     </Field>
     <Field Type="Text" DisplayName="Feltkonfigurasjon" ID="{b97638c9-7116-4dbc-b0cc-850291e89008}" StaticName="FieldConfigurationName" Name="FieldConfigurationName" />
   </pnp:Fields>
@@ -80,7 +80,7 @@
       <pnp:DataValue FieldName="IsDefaultListContentLocked">False</pnp:DataValue>
       <pnp:DataValue FieldName="GtDescription">{resource:Lists_TemplateOptions_StandardTemplate_Description}</pnp:DataValue>
       <pnp:DataValue FieldName="IconName">Page</pnp:DataValue>
-      <pnp:DataValue FieldName="GtDocumentTemplateLibrary">Malbibliotek</pnp:DataValue>
+      <pnp:DataValue FieldName="GtDocumentTemplateLibrary">{resource:Lists_TemplateLibrary_Title}</pnp:DataValue>
     </pnp:DataRow>
     <pnp:DataRow>
       <pnp:DataValue FieldName="Title">{resource:Lists_TemplateOptions_ParentTemplate_Title}</pnp:DataValue>
@@ -93,7 +93,7 @@
       <pnp:DataValue FieldName="IsHiddenTemplate">True</pnp:DataValue>
       <pnp:DataValue FieldName="GtDescription">{resource:Lists_TemplateOptions_ParentTemplate_Description}</pnp:DataValue>
       <pnp:DataValue FieldName="IconName">ProductVariant</pnp:DataValue>
-      <pnp:DataValue FieldName="GtDocumentTemplateLibrary">Malbibliotek</pnp:DataValue>
+      <pnp:DataValue FieldName="GtDocumentTemplateLibrary">{resource:Lists_TemplateLibrary_Title}</pnp:DataValue>
     </pnp:DataRow>
     <pnp:DataRow>
       <pnp:DataValue FieldName="Title">{resource:Lists_TemplateOptions_ProgramTemplate_Title}</pnp:DataValue>
@@ -107,7 +107,7 @@
       <pnp:DataValue FieldName="GtIsProgram">True</pnp:DataValue>
       <pnp:DataValue FieldName="GtDescription">{resource:Lists_TemplateOptions_ProgramTemplate_Description}</pnp:DataValue>
       <pnp:DataValue FieldName="IconName">ProductList</pnp:DataValue>
-      <pnp:DataValue FieldName="GtDocumentTemplateLibrary">Malbibliotek</pnp:DataValue>
+      <pnp:DataValue FieldName="GtDocumentTemplateLibrary">{resource:Lists_TemplateLibrary_Title}</pnp:DataValue>
       <pnp:DataValue FieldName="FieldConfigurationName">Program</pnp:DataValue>
     </pnp:DataRow>
     <pnp:DataRow>
@@ -121,7 +121,7 @@
       <pnp:DataValue FieldName="GtProjectCustomColumns">{resource:SiteFields_CustomFields_Group}</pnp:DataValue>
       <pnp:DataValue FieldName="GtDescription">{resource:Lists_TemplateOptions_BuildingProject_Description}</pnp:DataValue>
       <pnp:DataValue FieldName="IconName">BuildDefinition</pnp:DataValue>
-      <pnp:DataValue FieldName="GtDocumentTemplateLibrary">Malbibliotek</pnp:DataValue>
+      <pnp:DataValue FieldName="GtDocumentTemplateLibrary">{resource:Lists_TemplateLibrary_Title}</pnp:DataValue>
     </pnp:DataRow>
     <pnp:DataRow>
       <pnp:DataValue FieldName="Title">{resource:Lists_TemplateOptions_ConstructionProject_Title}</pnp:DataValue>
@@ -134,7 +134,7 @@
       <pnp:DataValue FieldName="GtProjectCustomColumns">{resource:SiteFields_CustomFields_Group}</pnp:DataValue>
       <pnp:DataValue FieldName="GtDescription">{resource:Lists_TemplateOptions_ConstructionProject_Description}</pnp:DataValue>
       <pnp:DataValue FieldName="IconName">DeliveryTruck</pnp:DataValue>
-      <pnp:DataValue FieldName="GtDocumentTemplateLibrary">Malbibliotek</pnp:DataValue>
+      <pnp:DataValue FieldName="GtDocumentTemplateLibrary">{resource:Lists_TemplateLibrary_Title}</pnp:DataValue>
     </pnp:DataRow>
   </pnp:DataRows>
 </pnp:ListInstance>
