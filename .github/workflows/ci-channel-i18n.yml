@@ -56,7 +56,7 @@ jobs:
           path: release
 
       - name: Upgrade
-        run: release/Install.ps1 -Url "${{ vars.SP_URL_ENG }}" -Upgrade -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }}
+        run: release/Install.ps1 -Url "${{ vars.SP_URL_ENG }}" -Language English -Upgrade -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }}
         shell: powershell
 
   upgrade_all_sites_to_latest:
@@ -114,5 +114,5 @@ jobs:
           path: release
 
       - name: Upgrade
-        run: release/Install.ps1 -Url "${{ vars.SP_URL_ENG }}" -Upgrade -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }} -SkipTemplate
+        run: release/Install.ps1 -Url "${{ vars.SP_URL_ENG }}" -Language English -Upgrade -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }} -SkipTemplate
         shell: powershell
