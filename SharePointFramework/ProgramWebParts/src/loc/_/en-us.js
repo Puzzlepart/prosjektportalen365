@@ -32,7 +32,6 @@ define([], function () {
         ProjectContentColumnsListName: 'Prosjektinnholdskolonner',
         ProjectDeliveriesGroupName: 'Project deliveries (beta)',
         ProjectLabel: 'Project',
-        ProjectPropertiesListName: 'Prosjektegenskaper',
         ProjectsListName: 'Prosjekter',
         SearchBoxGroupName: 'Search box',
         SearchBoxPlaceholderText: 'Search {0}...',

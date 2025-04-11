@@ -76,7 +76,6 @@ define([], function () {
         ProgressDialogTitle: 'Configuring the project',
         ProjectAlreadySetupMessage: 'The project is already set up',
         ProjectAlreadySetupStack: 'It seems that the project is already set up. Do you want to apply a template (not recommended) or skip setup?',
-        ProjectPropertiesListName: 'Prosjektegenskaper',
         ProjectProvisioningStartLogText: 'Starting provisioning of the project {0}.',
         ProjectProvisioningSuccessLogText: 'The project {0} was provisioned without error.',
         ProvisionSiteFieldsErrorMessage: 'An error occurred while provisioning site columns',

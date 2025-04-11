@@ -117,7 +117,6 @@ define([], function () {
     ProjectIdeaFoundTitle: 'Prosjektidé funnet',
     ProjectIdeaFoundMessage: 'Det ble funnet en prosjektidé for dette prosjektet. Prosjektdataene for denne idéen blir brukt til å fylle ut prosjektinformasjon.',
     ProjectPropertiesHeader: 'Prosjektinformasjon',
-    ProjectPropertiesListName: 'Prosjektegenskaper',
     ProjectProvisioningStartLogText: 'Starter provisjonering av prosjektet {0}.',
     ProjectProvisioningSuccessLogText: 'Prosjektet {0} ble provisjonert uten feil.',
     ProvisionSiteFieldsErrorMessage: 'Det skjedde en feil under provisjonering av områdekolonner',

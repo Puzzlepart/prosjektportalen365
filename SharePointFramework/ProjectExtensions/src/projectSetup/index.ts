@@ -170,7 +170,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       if (!stringIsNullOrEmpty(this.properties.forceTemplate)) {
         await this.initializeQuickLaunchMenu()
         await this.sp.web.lists
-          .getByTitle(strings.ProjectPropertiesListName)
+          .getByTitle(resx.Lists_ProjectProperties_Title)
           .items.getById(1)
           .update({ GtIsParentProject: true, GtChildProjects: JSON.stringify([]) })
         await this._ensureParentProjectPatch()
