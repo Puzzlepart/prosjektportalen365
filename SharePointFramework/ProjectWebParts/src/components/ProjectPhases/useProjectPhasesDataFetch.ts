@@ -9,18 +9,24 @@ import { DataFetchFunction } from '../../types/DataFetchFunction'
 import { ProjectPhases } from './index'
 import { INIT_DATA } from './reducer'
 import { IPhaseSitePageModel, IProjectPhasesData, IProjectPhasesProps } from './types'
+import { SPWeb } from '@microsoft/sp-page-context'
+import resx from 'ResxStrings'
 
 /**
  * Get phase site pages.
  */
 export const getPhaseSitePages: DataFetchFunction<
-  { phases: ProjectPhaseModel[]; sp: SPFI },
+  {
+    phases: ProjectPhaseModel[];
+    sp: SPFI;
+    web: SPWeb;
+  },
   IPhaseSitePageModel[]
 > = async (params) => {
   try {
     const pages = (
-      await params.sp.web.lists
-        .getByTitle('Områdesider')
+      await params.sp.web
+        .getList(`${params.web.serverRelativeUrl}/SitePages`)
         .items.select('Id', 'Title', 'FileLeafRef')()
     )
       .filter((p) => params.phases.some((phase) => phase.name === p.Title))
@@ -37,6 +43,8 @@ export const getPhaseSitePages: DataFetchFunction<
 
 /**
  * Fetch data for `ProjectPhases`.
+ * 
+ * @param props Component properties for `ProjectPhases`
  */
 const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = async (props) => {
   try {
@@ -48,14 +56,14 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
       })
     }
     const [phaseFieldCtx, checklistData, welcomePage, properties] = await Promise.all([
-      SPDataAdapter.getTermFieldContext(props.phaseField),
-      SPDataAdapter.project.getChecklistData(strings.PhaseChecklistName),
+      SPDataAdapter.getTermFieldContext('GtProjectPhase'),
+      SPDataAdapter.project.getChecklistData(resx.Lists_PhaseChecklist_Title),
       SPDataAdapter.project.getWelcomePage(),
       SPDataAdapter.project.getProjectInformationData()
     ])
     const [phases, currentPhaseName, userHasChangePhasePermission] = await Promise.all([
       SPDataAdapter.project.getPhases(phaseFieldCtx.termSetId, checklistData),
-      SPDataAdapter.project.getCurrentPhaseName(phaseFieldCtx.fieldName),
+      SPDataAdapter.project.getCurrentPhaseName('GtProjectPhase'),
       SPDataAdapter.checkProjectAdminPermissions(
         ProjectAdminPermission.ChangePhase,
         properties.fieldValues
@@ -63,9 +71,9 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
     ])
 
     const phaseSitePages = props.useDynamicHomepage
-      ? await getPhaseSitePages({ phases, sp: props.sp })
+      ? await getPhaseSitePages({ phases, sp: props.sp, web: props.pageContext?.web })
       : []
-    const [currentPhase] = phases.filter((p) => p.name === currentPhaseName)
+    const [currentPhase] = phases.filter(({name}) => name === currentPhaseName)
     return {
       currentPhase,
       phases,

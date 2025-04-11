@@ -565,7 +565,7 @@
                                     "Id": "f92bf067-bc19-489e-a556-7fe95f508720",
                                     "Properties": {
                                         "isDocumentLibrary": true,
-                                        "selectedListId": "{listid:Dokumenter}",
+                                        "selectedListId": "{listid:{{Lists_Documents_Title}}}",
                                         "webpartHeightKey": 4
                                     }
                                 }
