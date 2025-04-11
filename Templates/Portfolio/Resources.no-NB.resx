@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:schema id="root"
+        xmlns=""
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
         <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
         <xsd:element name="root" msdata:IsDataSet="true">
             <xsd:complexType>
@@ -1557,6 +1560,9 @@
     </data>
     <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
         <value>Gå til &lt;a href="{0}" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>
+    </data>
+    <data name="SiteFields_Title_DisplayName" xml:space="preserve">
+        <value>Tittel</value>
     </data>
     <data name="SiteFields_BA_Group" xml:space="preserve">
         <value>Kolonner for Prosjektportalen (Bygg og anlegg)</value>

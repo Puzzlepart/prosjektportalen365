@@ -1543,6 +1543,9 @@
     <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
         <value>Go to &lt;a href="{0}" target="_blank"&gt;the phase checklist&lt;/a&gt; (opens in a new tab)</value>
     </data>
+    <data name="SiteFields_Title_DisplayName" xml:space="preserve">
+        <value>Title</value>
+    </data>
     <data name="SiteFields_BA_Group" xml:space="preserve">
         <value>Project Portal Columns (Construction and Building)</value>
     </data>

@@ -99,7 +99,7 @@
     "webpack": "5.74.0",
     "yargs": "14.2.0",
     "@types/lodash": "~4.14.195",
-    "pzl-spfx-tasks": "0.5.13-5"
+    "pzl-spfx-tasks": "0.5.14-2"
   },
   "config": {
     "pzl-spfx-tasks": {
