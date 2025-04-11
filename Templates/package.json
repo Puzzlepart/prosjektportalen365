@@ -9,7 +9,7 @@
     "generate-resx-ts": "node ./.tasks/generate-resx-ts.js",
     "generate-project-templates": "npm run generate-resx-json && npm run generate-resx-ts && node ./.tasks/generate-project-templates.js",
     "validate-project-template": "node ./.tasks/validate-project-template.js",
-    "validate-loc": "echo \"No localization validation configured\""
+    "validate-loc": "node node_modules/pzl-spfx-tasks --validate-loc --loglevel verbose"
   },
   "dependencies": {
     "@fluentui/react-components": "~9.52.0",
@@ -20,9 +20,19 @@
   },
   "devDependencies": {
     "@types/lodash": "~4.14.195",
-    "pzl-spfx-tasks": "0.5.12",
+    "pzl-spfx-tasks": "0.5.13-0",
     "replace": "1.2.2",
     "xml2js": "^0.6.2"
+  },
+  "config": {
+    "pzl-spfx-tasks": {
+      "validateloc": {
+        "path": "../SharePointFramework/PortfolioWebParts/src/loc/resx",
+        "interface": "IResxStrings",
+        "dts": "resx.d.ts",
+        "output": "./resx-spfx-report.md"
+      }
+    }
   },
   "gitmoji": {
     "build": [

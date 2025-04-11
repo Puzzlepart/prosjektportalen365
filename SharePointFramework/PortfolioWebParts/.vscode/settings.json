@@ -12,8 +12,7 @@
     "sharepoint": true,
     "temp": true,
     "teams": true,
-    "release": true,
-    "src/loc/resx": true
+    "release": true
   },
   "typescript.tsdk": ".\\node_modules\\typescript\\lib"
 }

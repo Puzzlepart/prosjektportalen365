@@ -17,8 +17,10 @@ const OUTPUT_PATHS = [
 
 /**
  * Parses a .resx file and extracts string resources
- * @param {string} resxFilePath - Path to the .resx file
- * @returns {Promise<Object>} Object containing the extracted strings
+ * 
+ * @param {*} resxFilePath - Path to the .resx file
+ * 
+ * @returns {*} Object containing the extracted strings
  */
 async function parseResxFile(resxFilePath) {
   const parser = new xml2js.Parser()
@@ -42,9 +44,11 @@ async function parseResxFile(resxFilePath) {
 
 /**
  * Generates the TypeScript interface definition file with JSDoc comments showing values for all languages
- * @param {Object} allStrings - Combined strings from all locales
- * @param {Object} localeStrings - Object with locale codes as keys and their string values as values
- * @returns {string} TypeScript interface definition content
+ 
+ * @param {*} allStrings - Combined strings from all locales
+ * @param {*} localeStrings - Object with locale codes as keys and their string values as values
+
+ * @returns {*} TypeScript interface definition content
  */
 function generateTypescriptDefinition(allStrings, localeStrings = {}) {
   const interfaceContent = Object.keys(allStrings).map(key => {
@@ -77,6 +81,7 @@ declare module 'ResxStrings' {
  */
 function generateLocaleFile(strings) {
   const stringEntries = Object.entries(strings)
+    .filter(([, value]) => Boolean(value?.trim()))
     .map(([key, value]) => `  ${key}: "${value.replace(/"/g, '\\"')}"`)
     .join(',\n')
 
@@ -104,15 +109,15 @@ async function convertResxToTypescript() {
     // Parse all .resx files
     const allStrings = {}
     const localeStrings = {}
-    
+
     // First pass: collect all strings from all locales
     for (const resxFile of RESX_FILES) {
       console.log(`Processing ${resxFile.path}...`)
       const strings = await parseResxFile(resxFile.path)
-      
+
       // Store strings for this locale
       localeStrings[resxFile.locale] = strings
-      
+
       // Add all keys to the combined strings object
       Object.keys(strings).forEach(key => {
         allStrings[key] = strings[key]
@@ -122,17 +127,17 @@ async function convertResxToTypescript() {
     // Second pass: generate locale files and ensure all locales have all keys
     for (const resxFile of RESX_FILES) {
       const currentLocaleStrings = localeStrings[resxFile.locale]
-      
+
       // Make sure this locale has all keys (even if undefined)
       Object.keys(allStrings).forEach(key => {
         if (!currentLocaleStrings[key]) {
           currentLocaleStrings[key] = ''
         }
       })
-      
+
       // Generate locale file
       const localeContent = generateLocaleFile(currentLocaleStrings)
-      
+
       // Write to all output directories
       for (const dir of OUTPUT_PATHS) {
         fs.writeFileSync(path.join(dir, 'resx', `${resxFile.locale}.js`), localeContent)
@@ -142,7 +147,7 @@ async function convertResxToTypescript() {
 
     // Generate TypeScript definition file with JSDoc comments including all locale values
     const definitionContent = generateTypescriptDefinition(allStrings, localeStrings)
-    
+
     // Write to all output directories
     for (const dir of OUTPUT_PATHS) {
       fs.writeFileSync(path.join(dir, 'resx', 'resx.d.ts'), definitionContent)

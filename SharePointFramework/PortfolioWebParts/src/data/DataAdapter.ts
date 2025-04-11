@@ -1,7 +1,11 @@
 /* eslint-disable no-console */
 
+import { IPersonaProps, IPersonaSharedProps } from '@fluentui/react'
 import { format } from '@fluentui/react/lib/Utilities'
+import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, PnPClientStorage } from '@pnp/core'
+import { LogLevel } from '@pnp/logging'
+import { IItem } from '@pnp/sp/items/types'
 import {
   ISearchResult,
   PermissionKind,
@@ -12,8 +16,10 @@ import {
   Web
 } from '@pnp/sp/presets/all'
 import * as cleanDeep from 'clean-deep'
+import { Idea } from 'components/IdeaModule'
+import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
 import msGraph from 'msgraph-helper'
-import * as strings from 'PortfolioWebPartsStrings'
+import strings from 'PortfolioWebPartsStrings'
 import {
   DataSource,
   DataSourceService,
@@ -35,6 +41,7 @@ import {
   TimelineConfigurationModel,
   TimelineContentModel
 } from 'pp365-shared-library'
+import resx from 'ResxStrings'
 import _ from 'underscore'
 import { IPortfolioAggregationConfiguration } from '../components/PortfolioAggregation'
 import { IPortfolioOverviewConfiguration } from '../components/PortfolioOverview/types'
@@ -60,12 +67,6 @@ import {
   IProjectsData,
   PortfolioInstance
 } from './types'
-import { IPersonaProps, IPersonaSharedProps } from '@fluentui/react'
-import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
-import { Idea } from 'components/IdeaModule'
-import { IItem } from '@pnp/sp/items/types'
-import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { LogLevel } from '@pnp/logging'
 
 /**
  * Data adapter for Portfolio Web Parts.
@@ -606,7 +607,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   public async fetchEnrichedProjects(): Promise<ProjectListModel[]> {
     const localStore = new PnPClientStorage().local
     const siteId = this._spfxContext.pageContext.site.id.toString()
-    const list = this._sp.web.lists.getByTitle(strings.ProjectsListName)
+    const list = this._sp.web.lists.getByTitle(resx.Lists_Projects_Title)
     const [items, sites, memberOfGroups, users] = await localStore.getOrPut(
       `pp365_fetchenrichedprojects_${siteId}`,
       async () =>
