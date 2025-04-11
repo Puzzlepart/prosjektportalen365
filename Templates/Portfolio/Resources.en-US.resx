@@ -1543,9 +1543,6 @@
     <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
         <value>Go to &lt;a href="{0}" target="_blank"&gt;the phase checklist&lt;/a&gt; (opens in a new tab)</value>
     </data>
-    <data name="SiteFields_Title_DisplayName" xml:space="preserve">
-        <value>Title</value>
-    </data>
     <data name="SiteFields_BA_Group" xml:space="preserve">
         <value>Project Portal Columns (Construction and Building)</value>
     </data>
@@ -1738,6 +1735,9 @@
     <data name="SiteFields_GtChecklist_DisplayName" xml:space="preserve">
         <value>Checklist</value>
     </data>
+    <data name="SiteFields_GtChildProjects_DisplayName" xml:space="preserve">
+        <value>Child projects</value>
+    </data>
     <data name="SiteFields_GtColMaxWidth_Description" xml:space="preserve">
         <value>Maximum width for this column in pixels. Used in the Portfolio overview and aggregated views among other places.</value>
     </data>
@@ -1761,6 +1761,9 @@
     </data>
     <data name="SiteFields_GtCostsTotal_DisplayName" xml:space="preserve">
         <value>Total incurred costs</value>
+    </data>
+    <data name="SiteFields_GtCurrentVersion_DisplayName" xml:space="preserve">
+        <value>Current version</value>
     </data>
     <data name="SiteFields_GtDataSourceCategory_Description" xml:space="preserve">
         <value>The name of the category used by the overview pages. See Data sources list for examples of values.</value>
@@ -1888,11 +1891,23 @@
     <data name="SiteFields_GtEndDate_DisplayName" xml:space="preserve">
         <value>End date</value>
     </data>
+    <data name="SiteFields_GtExtensionDefault_DisplayName" xml:space="preserve">
+        <value>Default</value>
+    </data>
+    <data name="SiteFields_GtExtensionHidden_DisplayName" xml:space="preserve">
+        <value>Hidden</value>
+    </data>
+    <data name="SiteFields_GtExtensionLocked_DisplayName" xml:space="preserve">
+        <value>Locked</value>
+    </data>
     <data name="SiteFields_GtExternalURL_Description" xml:space="preserve">
         <value>External URL. Usually a .md file from https://raw.githubusercontent.com/wiki/.</value>
     </data>
     <data name="SiteFields_GtExternalURL_DisplayName" xml:space="preserve">
         <value>External URL</value>
+    </data>
+    <data name="SiteFields_GtFieldCustomSort_DisplayName" xml:space="preserve">
+        <value>Custom sort</value>
     </data>
     <data name="SiteFields_GtFieldDataTypeProperties_Description" xml:space="preserve">
         <value>Properties of datatypes related to the field.</value>
@@ -1947,6 +1962,12 @@
     </data>
     <data name="SiteFields_GtGroupId_DisplayName" xml:space="preserve">
         <value>Group ID</value>
+    </data>
+    <data name="SiteFields_GtGroupLevel_DisplayName" xml:space="preserve">
+        <value>Group level</value>
+    </data>
+    <data name="SiteFields_GtGroupName_DisplayName" xml:space="preserve">
+        <value>Group name</value>
     </data>
     <data name="SiteFields_GtHelpContentLevel_Description" xml:space="preserve">
         <value>Level for the help content. Used to determine which help content is displayed on the page.</value>
@@ -2224,6 +2245,9 @@
     <data name="SiteFields_GtIdeaUrl_DisplayName" xml:space="preserve">
         <value>Idea URL</value>
     </data>
+    <data name="SiteFields_GtInstalledVersion_DisplayName" xml:space="preserve">
+        <value>Installed version</value>
+    </data>
     <data name="SiteFields_GtInternalName_Description" xml:space="preserve">
         <value>Internal field name for this column.</value>
     </data>
@@ -2235,6 +2259,12 @@
     </data>
     <data name="SiteFields_GtIsGroupable_DisplayName" xml:space="preserve">
         <value>Groupable</value>
+    </data>
+    <data name="SiteFields_GtIsParentProject_DisplayName" xml:space="preserve">
+        <value>Is parent project</value>
+    </data>
+    <data name="SiteFields_GtIsProgram_DisplayName" xml:space="preserve">
+        <value>Is program</value>
     </data>
     <data name="SiteFields_GtIsRefinable_Description" xml:space="preserve">
         <value>Users can filter on this column in the Portfolio Overview.</value>
@@ -2290,6 +2320,9 @@
     <data name="SiteFields_GtLccHidden_DisplayName" xml:space="preserve">
         <value>Hidden</value>
     </data>
+    <data name="SiteFields_GtLccLocked_DisplayName" xml:space="preserve">
+        <value>Locked</value>
+    </data>
     <data name="SiteFields_GtLccSourceList_Description" xml:space="preserve">
         <value>Specify the source list from where the data will be copied.</value>
     </data>
@@ -2307,6 +2340,12 @@
     </data>
     <data name="SiteFields_GtLinkUrl_DisplayName" xml:space="preserve">
         <value>Link URL</value>
+    </data>
+    <data name="SiteFields_GtLogComponentName_DisplayName" xml:space="preserve">
+        <value>Component name</value>
+    </data>
+    <data name="SiteFields_GtLogContext_DisplayName" xml:space="preserve">
+        <value>Context</value>
     </data>
     <data name="SiteFields_GtLogFunctionName_Description" xml:space="preserve">
         <value>Name of the function generating the log element</value>
@@ -2385,6 +2424,9 @@
     </data>
     <data name="SiteFields_GtOverallStatus_DisplayName" xml:space="preserve">
         <value>Overall status</value>
+    </data>
+    <data name="SiteFields_GtParentProjects_DisplayName" xml:space="preserve">
+        <value>Parent projects</value>
     </data>
     <data name="SiteFields_GtPermissionLevel_Description" xml:space="preserve">
         <value>Define the SharePoint permission level for the project site.</value>
@@ -2554,6 +2596,12 @@
     <data name="SiteFields_GtPiYTickInterval_DisplayName" xml:space="preserve">
         <value>Interval (Y-axis)</value>
     </data>
+    <data name="SiteFields_GtPlannerName_DisplayName" xml:space="preserve">
+        <value>Planner name</value>
+    </data>
+    <data name="SiteFields_GtPlannerPreviewType_DisplayName" xml:space="preserve">
+        <value>Preview type</value>
+    </data>
     <data name="SiteFields_GtPlannerTags_Description" xml:space="preserve">
         <value>Planner tags separated by semicolons. Maximum number of unique Planner tags for a plan is 25, if this is exceeded the excess will not be included when creating.</value>
     </data>
@@ -2644,6 +2692,18 @@
     <data name="SiteFields_GtProcess_DisplayName" xml:space="preserve">
         <value>Process</value>
     </data>
+    <data name="SiteFields_GtProjectAdminPermissionId_DisplayName" xml:space="preserve">
+        <value>Permission ID</value>
+    </data>
+    <data name="SiteFields_GtProjectAdminPermission_DisplayName" xml:space="preserve">
+        <value>Permission</value>
+    </data>
+    <data name="SiteFields_GtProjectAdminPermissions_DisplayName" xml:space="preserve">
+        <value>Permissions</value>
+    </data>
+    <data name="SiteFields_GtProjectAdminRoles_DisplayName" xml:space="preserve">
+        <value>Roles</value>
+    </data>
     <data name="SiteFields_GtProjectContentColumns_Description" xml:space="preserve">
         <value>Define the columns for the project content section.</value>
     </data>
@@ -2661,6 +2721,9 @@
     </data>
     <data name="SiteFields_GtProjectContentRefiners_DisplayName" xml:space="preserve">
         <value>Filters</value>
+    </data>
+    <data name="SiteFields_GtProjectFieldName_DisplayName" xml:space="preserve">
+        <value>Field name</value>
     </data>
     <data name="SiteFields_GtProjectFinanceName_Description" xml:space="preserve">
         <value>If relevant, enter the associated project name from the financial system</value>
@@ -2832,6 +2895,9 @@
     </data>
     <data name="SiteFields_GtResourceAbsence_DisplayName" xml:space="preserve">
         <value>Absence</value>
+    </data>
+    <data name="SiteFields_GtResourceLinkIcon_DisplayName" xml:space="preserve">
+        <value>Link icon</value>
     </data>
     <data name="SiteFields_GtResourceLink_Description" xml:space="preserve">
         <value>Link up a resource if desired. If this is set, a button will be added under the text.</value>
@@ -3006,6 +3072,9 @@
     </data>
     <data name="SiteFields_GtSecViewQuery_DisplayName" xml:space="preserve">
         <value>Query</value>
+    </data>
+    <data name="SiteFields_GtSecView_DisplayName" xml:space="preserve">
+        <value>View</value>
     </data>
     <data name="SiteFields_GtSettingsCategory_DisplayName" xml:space="preserve">
         <value>Category</value>
@@ -3244,6 +3313,12 @@
     <data name="SiteFields_GtTimelineTypeLookup_DisplayName" xml:space="preserve">
         <value>Type</value>
     </data>
+    <data name="SiteFields_GtUNSustDevGoalsText_DisplayName" xml:space="preserve">
+        <value>UN Sustainable Development Goals (Text)</value>
+    </data>
+    <data name="SiteFields_GtUNSustDevGoals_DisplayName" xml:space="preserve">
+        <value>UN Sustainable Development Goals</value>
+    </data>
     <data name="SiteFields_GtURL_Description" xml:space="preserve">
         <value>URL where the help content should be displayed. For example, SitePages/Home.aspx if you want the content to be displayed on the front page of the project.</value>
     </data>
@@ -3282,6 +3357,9 @@
     </data>
     <data name="SiteFields_Project_Group" xml:space="preserve">
         <value>Project Portal Columns (Project)</value>
+    </data>
+    <data name="SiteFields_Title_DisplayName" xml:space="preserve">
+        <value>Title</value>
     </data>
     <data name="View_AllDocuments_DisplayName" xml:space="preserve">
         <value>All documents</value>
