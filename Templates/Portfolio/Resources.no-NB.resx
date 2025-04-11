@@ -346,6 +346,9 @@
   <data name="Lists_ProjectColumns_Url" xml:space="preserve">
     <value>Lists/Prosjektkolonner</value>
   </data>
+  <data name="Lists_ProjectColumns_StatusReport_DisplayName" xml:space="preserve">
+    <value>Statusrapport</value>
+  </data>
   <data name="Lists_ProjectContentColumns_Title" xml:space="preserve">
     <value>Prosjektinnholdskolonner</value>
   </data>
