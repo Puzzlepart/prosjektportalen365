@@ -755,16 +755,16 @@
     <value>Uncertainties related to the project</value>
   </data>
   <data name="ContentTypes_ProjectPropertiesSection_Name" xml:space="preserve">
-    <value>Seksjon for prosjektegenskaper</value>
+    <value>Project Properties Section</value>
   </data>
   <data name="ContentTypes_ProjectPropertiesSection_Description" xml:space="preserve">
-    <value>Properties of the project</value>
+    <value>Section for project properties</value>
   </data>
   <data name="ContentTypes_StatusFieldSection_Name" xml:space="preserve">
-    <value>Seksjon for statusfelt</value>
+    <value>Status Field Section</value>
   </data>
   <data name="ContentTypes_StatusFieldSection_Description" xml:space="preserve">
-    <value>Status fields of the project</value>
+    <value>Section for status field</value>
   </data>
   <data name="ContentTypes_SectionBase_Name" xml:space="preserve">
     <value>Section Base</value>
@@ -2429,10 +2429,10 @@
     <value>Recommendations are configured as JSON, multiple choices can be added, note that the key must remain the same for the default choices</value>
   </data>
   <data name="SiteFields_GtIdeaCopyToProcess_DisplayName" xml:space="preserve">
-    <value>Kopier til behandling</value>
+    <value>Copy to processing</value>
   </data>
-  <data name="SiteFields_GtIdeaCopyToProcess_Description" xml:space="preserve">
-    <value>Verdien skal kopieres til behandling (kolonne i behandling må matche på visningsnavn eller internt navn, og type.)</value>
+   <data name="SiteFields_GtIdeaCopyToProcess_Description" xml:space="preserve">
+    <value>The value should be copied to processing (the column in processing must match the display name or internal name, and type.)</value>
   </data>
   <data name="SiteFields_GtBAEndDateOriginal_DisplayName" xml:space="preserve">
     <value>Original handover date</value>
@@ -2548,36 +2548,6 @@
   <data name="SiteFields_GtURL_Description" xml:space="preserve">
     <value>URL where the help content should be displayed. For example, SitePages/Home.aspx if you want the content to be displayed on the front page of the project.</value>
   </data>
-  - ListFields_Benefit_DisplayName
-- ListFields_ChangeLookup_Description
-- ListFields_ChangeLookup_DisplayName
-- ListFields_Change_DisplayName
-- ListFields_CommunicationTarget_Description
-- ListFields_CommunicationTarget_DisplayName
-- ListFields_DeliveryStakeholders_Description
-- ListFields_DeliveryStakeholders_DisplayName
-- ListFields_GainLookup_DisplayName
-- ListFields_GainLookup_ID_DisplayName
-- ListFields_MeasureIndicatorLookup_Description
-- ListFields_MeasureIndicatorLookup_DesiredValue_DisplayName
-- ListFields_MeasureIndicatorLookup_DisplayName
-- ListFields_MeasureIndicatorLookup_ID_DisplayName
-- ListFields_ProjectLogProductLookup_Description
-- ListFields_ProjectLogProductLookup_DisplayName
-- ListFields_ProjectPhase_DisplayName
-- ListFields_Title_DisplayName
-- Lists_BenefitsAnalysis_Title
-- Lists_BenefitsFollowup_Title
-- Lists_ChangeAnalysis_Title
-- Lists_CommunicationPlan_Title
-- Lists_Documents_Title
-- Lists_MeasurementIndicators_Title
-- Lists_ProjectLog_Title
-- Lists_Uncertainty_Title
-- View_ByBenefitType_DisplayName
-- View_ByProcess_DisplayName
-- View_CurrentPhase_DisplayName
-- View_Flat_DisplayName
   <data name="ListFields_Benefit_DisplayName" xml:space="preserve">
     <value>Benefit</value>
   </data>
