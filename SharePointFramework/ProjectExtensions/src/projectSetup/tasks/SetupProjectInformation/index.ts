@@ -51,7 +51,7 @@ export class SetupProjectInformation extends BaseTask {
 
   /**
    * Sync local properties list on the current project site. If the list does not exist, it will be created
-   * using `portal.syncList`. If the list exists, it will be updated with the current project information and
+   * using `portalDataService.syncList`. If the list exists, it will be updated with the current project information and
    * the template parameters.
    *
    * The following properties are set for the property item initially:
