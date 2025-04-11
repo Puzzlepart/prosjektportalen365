@@ -40,7 +40,9 @@ Param(
     [Parameter(Mandatory = $false, HelpMessage = "Base64 encoded certificate")]
     [string]$CertificateBase64Encoded,
     [Parameter(Mandatory = $false, HelpMessage = "Do you want to include Bygg & Anlegg content (only when upgrading)")]
-    [switch]$IncludeBAContent
+    [switch]$IncludeBAContent,
+    [Parameter(Mandatory = $false, HelpMessage = "Which handlers to exclude when performing an upgrade")]
+    [string[]]$UpgradeExcludeHandlers = @("Navigation", "SupportedUILanguages", "Files"),
 )
 
 . "$PSScriptRoot/Scripts/SharedFunctions.ps1"
@@ -370,7 +372,8 @@ if (-not $SkipTemplate.IsPresent) {
             $MaxRetries = 5
             while($Retry -lt $MaxRetries) {
                 try {
-                    Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers Navigation, SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
+                    Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers $UpgradeExcludeHandlers -ErrorAction Stop -WarningAction SilentlyContinue
+                    break
                 }
                 catch {
                     Write-Host "`t[WARNING] Failed to apply PnP Portfolio template, retrying $($MaxRetries - $Retry) times..." -ForegroundColor Yellow
@@ -403,6 +406,7 @@ if (-not $SkipTemplate.IsPresent) {
             while($Retry -lt $MaxRetries) {
                 try {                
                     Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
+                    break
                 }
                 catch {
                     Write-Host "`t[WARNING] Failed to apply PnP Portfolio template, retrying $($MaxRetries - $Retry) times..." -ForegroundColor Yellow
