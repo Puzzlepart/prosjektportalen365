@@ -366,12 +366,20 @@ if (-not $SkipTemplate.IsPresent) {
 
         if ($Upgrade.IsPresent) {
             StartAction("Applying PnP template Portfolio to $($Uri.AbsoluteUri)")
-            try {
-                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers Navigation, SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
-            }
-            catch {
-                Write-Host "`t[WARNING] Failed to apply PnP Portfolio template, retrying..." -ForegroundColor Yellow
-                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers Navigation, SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
+            $Retry = 0
+            $MaxRetries = 5
+            while($Retry -lt $MaxRetries) {
+                try {
+                    Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers Navigation, SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
+                }
+                catch {
+                    Write-Host "`t[WARNING] Failed to apply PnP Portfolio template, retrying $($MaxRetries - $Retry) times..." -ForegroundColor Yellow
+                    $Retry++
+                    if ($Retry -eq $MaxRetries) {
+                        Write-Host "[ERROR] Failed to apply PnP Portfolio template after $MaxRetries attempts" -ForegroundColor Red
+                        throw
+                    }
+                }
             }
             EndAction
 
@@ -395,7 +403,6 @@ if (-not $SkipTemplate.IsPresent) {
             while($Retry -lt $MaxRetries) {
                 try {                
                     Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
-                    break
                 }
                 catch {
                     Write-Host "`t[WARNING] Failed to apply PnP Portfolio template, retrying $($MaxRetries - $Retry) times..." -ForegroundColor Yellow
