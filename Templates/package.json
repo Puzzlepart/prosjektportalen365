@@ -30,7 +30,8 @@
         "path": "../SharePointFramework/PortfolioWebParts/src/loc/resx",
         "interface": "IResxStrings",
         "dts": "resx.d.ts",
-        "output": "./resx-spfx-report.json"
+        "output": "./resx-spfx-report.md",
+        "summary": "./resx-spfx-report-summary.md"
       }
     }
   },

@@ -32,5 +32,5 @@ SharePointFramework/**/src/loc/resx
 .temp
 SharePointFramework/**/*-report.md
 SharePointFramework/**/*-report.json
-Templates/*-report.md
-Templates/*-report.json
+Templates/*-report*.md
+Templates/*-report*.json
