@@ -127,7 +127,7 @@
         "interface": "IPortfolioWebPartsStrings",
         "dts": "mystrings.d.ts",
         "output": "./localization-report.json",
-        "summary": "./localization-report.md"
+        "summary": true
       }
     }
   }
