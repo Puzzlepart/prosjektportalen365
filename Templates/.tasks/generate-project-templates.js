@@ -6,6 +6,7 @@ const fs = require('fs')
 const path = require('path')
 const pkg = require('../../package.json')
 const JsonTokenReplace = require('@ptkdev/json-token-replace')
+const { format } = require('util')
 const jsonTokenReplace = new JsonTokenReplace()
 
 // Template names for the different languages
@@ -27,6 +28,7 @@ const JSON_MASTER_TEMPLATES_DIR = fs.readdirSync(path.resolve(__dirname, '../Jso
 const JSON_TEMPLATE_PREFIX = '_JsonTemplate'
 const MAIN_CHANNEL_CONFIG = getFileContent('../channels/main.json')
 const CURRENT_CHANNEL_CONFIG = getFileContent('../.current-channel-config.json', MAIN_CHANNEL_CONFIG)
+const PROJECT_TEMPLATE_DIR = '../Content/Portfolio_content.{0}/ProjectTemplates/{1}.txt'
 
 /**
  * Get file content for the given file path in JSON format. If the file 
@@ -63,7 +65,7 @@ JSON_MASTER_TEMPLATES_DIR.forEach(templateFile => {
     const templateJson = getFileContent(`JsonTemplates/${templateFile}`)
     const templateType = templateFile.substring(JSON_TEMPLATE_PREFIX.length).replace((/\.[^.]+/), '')
     const outputPaths = Object.keys(templateNames).reduce((acc, lng) => {
-        acc[lng] = path.resolve(__dirname, `../Content/Portfolio_content.${lng}/ProjectTemplates/${templateNames[lng][templateType]}.txt`)
+        acc[lng] = path.resolve(__dirname, format(PROJECT_TEMPLATE_DIR, lng, templateNames[lng][templateType]))
         return acc
     }, {})
 
