@@ -101,7 +101,7 @@
     "webpack": "5.74.0",
     "@types/lodash": "~4.14.195",
     "@types/smoothscroll-polyfill": "~0.3.3",
-    "pzl-spfx-tasks": "0.5.12-2",
+    "pzl-spfx-tasks": "0.5.12",
     "@types/shade-blend-color": "~1.0.3"
   },
   "config": {
