@@ -30,4 +30,3 @@ SharePointFramework/**/environments.json
 SharePointFramework/**/src/loc/resx
 .gitmoji.json
 .temp
-Templates/*-tokens.md
