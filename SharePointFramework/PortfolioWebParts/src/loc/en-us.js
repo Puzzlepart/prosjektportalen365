@@ -255,9 +255,6 @@
     DataSourceLabel: 'Data source',
     DataSourceLevelDescription: 'Set the level for the data source. This is used to filter data sources in the web part based on where data is obtained from. This can be changed afterwards in the \'Data sources\' list if you want to make the query/view available elsewhere.',
     DataSourceLevelLabel: 'Data source level',
-    DataSourceLevelPortfolio: 'Portfolio',
-    DataSourceLevelProject: 'Project',
-    DataSourceListName: 'Datakilder',
     DataSourceNotFound: 'Cannot find any data source with name **{0}**.',
     DefaultDataSourceViewLabel: 'Default view (data source)',
     DefaultRenderModeLabel: 'Default display mode',
@@ -404,6 +401,8 @@
     ToggleColumnFormPanelLabel: 'Add column',
     UseChangesButtonText: 'Use',
     ViewNotFoundMessage: 'Cannot find the specified view.',
+    ViewNotFoundMessage_WebPartProperty: 'Cannot find the specified view **{0}**. Please check the view name and try again.',
+    ViewNotFoundMessage_Id:' Cannot find a view with ID **{0}**.',
     ViewsListNameLabel: 'Views'
   }
 })

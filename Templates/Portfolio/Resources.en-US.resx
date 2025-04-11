@@ -1048,6 +1048,9 @@
     <data name="Lists_DataSources_Level_Portfolio" xml:space="preserve">
         <value>Portfolio</value>
     </data>
+    <data name="Lists_DataSources_Level_Project" xml:space="preserve">
+        <value>Project</value>
+    </data>
     <data name="Lists_DataSources_Title" xml:space="preserve">
         <value>Data Sources</value>
     </data>

@@ -196,10 +196,10 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     level?: string
   ): Promise<IPortfolioAggregationConfiguration> {
     try {
-      let calculatedLevel = strings.DataSourceLevelPortfolio
+      let calculatedLevel = resx.Lists_DataSources_Level_Portfolio
 
       if (this.portalDataService.url !== this._spfxContext.pageContext.web.absoluteUrl) {
-        calculatedLevel = strings.DataSourceLevelProject
+        calculatedLevel = resx.Lists_DataSources_Level_Project
       }
 
       level = level ?? calculatedLevel
@@ -442,7 +442,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       const configElement = _.find(timelineConfig, { title: strings.ProjectLabel })
 
       return { data, reports, configElement, columns: configuration.refiners }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   /**
@@ -1141,11 +1141,11 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       }
     }
 
-    const level = strings.DataSourceLevelPortfolio
+    const level = resx.Lists_DataSources_Level_Portfolio
 
     const columns: ProjectContentColumn[] = await new Promise((resolve, reject) => {
       this.portalDataService
-        .fetchProjectContentColumns('PROJECT_CONTENT_COLUMNS', 'Idémodul', level)
+        .fetchProjectContentColumns('PROJECT_CONTENT_COLUMNS', resx.Lists_DataSources_Category_IdeaModule, level)
         .then(resolve)
         .catch(reject)
     })

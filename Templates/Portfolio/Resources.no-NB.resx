@@ -1066,6 +1066,9 @@
     <data name="Lists_DataSources_Level_Portfolio" xml:space="preserve">
         <value>Portefølje</value>
     </data>
+    <data name="Lists_DataSources_Level_Project" xml:space="preserve">
+        <value>Prosjekt</value>
+    </data>
     <data name="Lists_DataSources_Title" xml:space="preserve">
         <value>Datakilder</value>
     </data>

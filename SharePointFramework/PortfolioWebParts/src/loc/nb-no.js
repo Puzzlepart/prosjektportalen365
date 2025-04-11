@@ -213,9 +213,6 @@ define([], function () {
     DataSourceLabel: 'Datakilde',
     DataSourceLevelDescription: 'Angi nivået for datakilden. Dette brukes for å filtrere datakilder i webdelen basert på hvor man henter data fra. Dette kan endres i ettertid i \'Datakilder\'-listen om du ønsker å gjøre spørringen/visningen tilgjengelig andre steder.',
     DataSourceLevelLabel: 'Nivå for datakilde',
-    DataSourceLevelPortfolio: 'Portefølje',
-    DataSourceLevelProject: 'Prosjekt',
-    DataSourceListName: 'Datakilder',
     DataSourceNotFound: 'Finner ingen datakilde med navn **{0}**.',
     DefaultDataSourceViewLabel: 'Standardvisning (datakilde)',
     DefaultRenderModeDescription: 'Her kan du velge hvilken visning som skal være standard.',
@@ -393,6 +390,8 @@ define([], function () {
     ViewLessText: 'Vis færre',
     ViewMoreText: 'Vis flere',
     ViewNotFoundMessage: 'Finner ikke angitt visning.',
+    ViewNotFoundMessage_WebPartProperty: 'Finner ikke angitt visning **{0}**. Vennligst sjekk visningsnavnet i webdelegenskapene og prøv igjen.',
+    ViewNotFoundMessage_Id: 'Finner ingen visning med ID **{0}**.',
     ViewsListNameLabel: 'Visninger',
   }
 })
