@@ -30,3 +30,4 @@ SharePointFramework/**/environments.json
 SharePointFramework/**/src/loc/resx
 .gitmoji.json
 .temp
+SharePointFramework/**/localization-report.md

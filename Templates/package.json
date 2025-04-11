@@ -8,7 +8,8 @@
     "generate-resx-json": "node ./.tasks/generate-resx-json.js",
     "generate-resx-ts": "node ./.tasks/generate-resx-ts.js",
     "generate-project-templates": "npm run generate-resx-json && npm run generate-resx-ts && node ./.tasks/generate-project-templates.js",
-    "validate-project-template": "node ./.tasks/validate-project-template.js"
+    "validate-project-template": "node ./.tasks/validate-project-template.js",
+    "validate-loc": "echo \"No localization validation configured\""
   },
   "dependencies": {
     "@fluentui/react-components": "~9.52.0",
@@ -19,7 +20,7 @@
   },
   "devDependencies": {
     "@types/lodash": "~4.14.195",
-    "pzl-spfx-tasks": "~0.5.10-2",
+    "pzl-spfx-tasks": "0.5.12-2",
     "replace": "1.2.2",
     "xml2js": "^0.6.2"
   },

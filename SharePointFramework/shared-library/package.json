@@ -8,7 +8,8 @@
     "build": "gulp bundle --ship && gulp package-solution --ship",
     "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color --fix --config ../.eslintrc.yaml && npm run prettier",
-    "prettier": "prettier '**/*.ts*' --write --loglevel silent --config ../.prettierrc.yaml"
+    "prettier": "prettier '**/*.ts*' --write --loglevel silent --config ../.prettierrc.yaml",
+    "validate-loc": "node node_modules/pzl-spfx-tasks --validate-loc --loglevel verbose"
   },
   "dependencies": {
     "@microsoft/sp-application-base": "1.17.4",
@@ -71,7 +72,17 @@
     "@microsoft/sp-module-interfaces": "1.17.4",
     "@types/lodash": "~4.14.195",
     "@types/shade-blend-color": "~1.0.3",
-    "pzl-spfx-tasks": "~0.5.10-2"
+    "pzl-spfx-tasks": "0.5.12-2"
+  },
+  "config": {
+    "pzl-spfx-tasks": {
+      "validateloc": {
+        "path": "./src/loc",
+        "interface": "ISharedLibraryStrings",
+        "dts": "mystrings.d.ts",
+        "output": "./localization-report.md"
+      }
+    }
   },
   "gitmoji": {
     "build": [
