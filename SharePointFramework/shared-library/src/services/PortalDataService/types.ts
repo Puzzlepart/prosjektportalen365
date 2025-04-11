@@ -98,10 +98,31 @@ export type GetStatusReportsOptions = {
 }
 
 export type SyncListParams = {
+  /**
+   * The URL of the SharePoint site.
+   */
   url: string
+
+  /**
+   * The name of the list to sync.
+   */
   listName: string
+
+  /**
+   * The content type ID to use for the list.
+   */
   contentTypeId: string
+
+  /**
+   * The properties to set on the list item.
+   */
   properties?: Record<string, string>
+
+  /**
+   * Progress function to call during the sync process.
+   * 
+   * @param progress The progress text to display.
+   */
   progressFunc?: (progress: string) => void
 }
 

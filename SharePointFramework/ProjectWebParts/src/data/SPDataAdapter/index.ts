@@ -7,6 +7,7 @@ import { IProjectDataServiceParams, ProjectDataService } from 'pp365-shared-libr
 import { SPFxContext } from 'pp365-shared-library/lib/types'
 import { IConfigurationFile } from 'types'
 import { ISPDataAdapterConfiguration } from './types'
+import resx from 'ResxStrings'
 
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public project: ProjectDataService
@@ -27,7 +28,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       ...this.settings,
       spfxContext,
       entityService: this.entityService,
-      propertiesListName: strings.ProjectPropertiesListName
+      propertiesListName: resx.Lists_ProjectProperties_Title
     } as IProjectDataServiceParams)
   }
 

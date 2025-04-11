@@ -177,7 +177,6 @@ define([], function () {
     ProjectPhasesChangePhaseError: 'En feil oppsto under endring av fase. Vennligst prøv igjen eller kontakt en administrator.',
     ProjectPhasesFetchDataError: 'Du har ikke tilgang til å se denne webdelen.<br/><br/>Du må enten ha tilgang til porteføljeområdet, eller så må prosjektet være fristilt fra porteføljeområdet.',
     ProjectPropertiesHeader: 'Prosjektinformasjon',
-    ProjectPropertiesListName: 'Prosjektegenskaper',
     ProjectsListName: 'Prosjekter',
     ProjectStatusDataErrorText: 'Ingen tilgang. Du har ikke tillatelse til å se statusrapporter.',
     ProjectStatusGroupName: 'Prosjektstatus',

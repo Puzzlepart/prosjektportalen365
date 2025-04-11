@@ -559,6 +559,12 @@
   <data name="Lists_HelpContent_Url" xml:space="preserve">
     <value>Lists/Hjelpeinnhold</value>
   </data>
+  <data name="Lists_ProjectProperties_Title" xml:space="preserve">
+    <value>Prosjektegenskaper</value>
+  </data>
+  <data name="Lists_ProjectProperties_Url" xml:space="preserve">
+    <value>Lists/Prosjektegenskaper</value>
+  </data>
   <data name="View_AllItems_DisplayName" xml:space="preserve">
     <value>Alle elementer</value>
   </data>

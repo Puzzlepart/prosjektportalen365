@@ -126,7 +126,6 @@ define([], function () {
     ProjectLabel: 'Project',
     ProjectPhasesChangePhaseError: 'An error occured while changing the phase. Please try again or contact an administrator',
     ProjectPhasesFetchDataError: 'You do not have access to view this web part.<br/><br/>You must either have access to the portfolio site, or the project must be exempt from the portfolio site.',
-    ProjectPropertiesListName: 'Projectegenskaper',
     ProjectsListName: 'Projects',
     ProjectStatusDataErrorText: 'No access. You are not allowed to view status reports. ',
     ProjectStatusGroupName: 'Project Status',

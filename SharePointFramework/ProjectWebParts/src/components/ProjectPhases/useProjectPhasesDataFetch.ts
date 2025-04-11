@@ -63,7 +63,7 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
     ])
     const [phases, currentPhaseName, userHasChangePhasePermission] = await Promise.all([
       SPDataAdapter.project.getPhases(phaseFieldCtx.termSetId, checklistData),
-      SPDataAdapter.project.getCurrentPhaseName('GtProjectPhase'),
+      SPDataAdapter.project.getCurrentPhaseName(phaseFieldCtx.fieldName),
       SPDataAdapter.checkProjectAdminPermissions(
         ProjectAdminPermission.ChangePhase,
         properties.fieldValues
