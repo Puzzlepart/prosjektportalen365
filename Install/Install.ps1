@@ -42,7 +42,7 @@ Param(
     [Parameter(Mandatory = $false, HelpMessage = "Do you want to include Bygg & Anlegg content (only when upgrading)")]
     [switch]$IncludeBAContent,
     [Parameter(Mandatory = $false, HelpMessage = "Which handlers to exclude when performing an upgrade")]
-    [string[]]$UpgradeExcludeHandlers = @("Navigation", "SupportedUILanguages", "Files"),
+    [string[]]$UpgradeExcludeHandlers = @("Navigation", "SupportedUILanguages", "Files")
 )
 
 . "$PSScriptRoot/Scripts/SharedFunctions.ps1"
