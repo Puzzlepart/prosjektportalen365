@@ -422,15 +422,15 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                 >
                   <Guest />
                 </FieldContainer>
-                <Divider hidden={!enableSensitivityLabels} />
+                <Divider />
                 <FieldContainer
                   iconName='PeopleCommunity'
                   label={getField('sensitivityLabel').displayName}
                   description={getField('sensitivityLabel').description}
                   required={getField('sensitivityLabel').required}
-                  hidden={!enableSensitivityLabels}
                 >
                   <Dropdown
+                    disabled={!enableSensitivityLabels}
                     value={context.column.get('sensitivityLabel')}
                     selectedOptions={[context.column.get('sensitivityLabel')]}
                     onOptionSelect={(_, data) => {
@@ -449,9 +449,9 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   label={getField('retentionLabel').displayName}
                   description={getField('retentionLabel').description}
                   required={getField('retentionLabel').required}
-                  hidden={!enableRetentionLabels}
                 >
                   <Dropdown
+                    disabled={!enableRetentionLabels}
                     value={context.column.get('retentionLabel')}
                     selectedOptions={[context.column.get('retentionLabel')]}
                     onOptionSelect={(_, data) => {
@@ -483,37 +483,6 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     showMonthPickerAsOverlay={false}
                   />
                 </FieldContainer>
-                <FieldContainer
-                  iconName='PeopleAudience'
-                  label={getField('readOnlyGroup').displayName}
-                  description={getField('readOnlyGroup').description}
-                  required={getField('readOnlyGroup').required}
-                  hidden={!enableReadOnlyGroup}
-                >
-                  <Switch
-                    checked={context.column.get('readOnlyGroup')}
-                    value={context.column.get('readOnlyGroup')}
-                    onChange={(_, data) => {
-                      context.setColumn('readOnlyGroup', data.checked)
-                    }}
-                  />
-                </FieldContainer>
-                <FieldContainer
-                  iconName='PeopleTeam'
-                  label={getField('internalChannel').displayName}
-                  description={getField('internalChannel').description}
-                  required={getField('internalChannel').required}
-                  hidden={!enableInternalChannel}
-                >
-                  <Switch
-                    checked={context.column.get('internalChannel')}
-                    value={context.column.get('internalChannel')}
-                    onChange={(_, data) => {
-                      context.setColumn('internalChannel', data.checked)
-                    }}
-                  />
-                </FieldContainer>
-                <Divider />
                 <FieldContainer iconName='LocalLanguage' label={getField('language').displayName}>
                   <Dropdown
                     defaultValue={context.column.get('language')}
@@ -561,6 +530,61 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   >
                     <ImageUpload onImageUpload={(image) => context.setColumn('image', image)} />
                   </FieldContainer>
+                  <FieldContainer
+                    iconName='PeopleAudience'
+                    label={getField('readOnlyGroup').displayName}
+                    description={getField('readOnlyGroup').description}
+                    required={getField('readOnlyGroup').required}
+                    hidden={!enableReadOnlyGroup}
+                  >
+                    <Switch
+                      checked={context.column.get('readOnlyGroup')}
+                      value={context.column.get('readOnlyGroup')}
+                      onChange={(_, data) => {
+                        context.setColumn('readOnlyGroup', data.checked)
+                      }}
+                    />
+                  </FieldContainer>
+                  <FieldContainer
+                    iconName='PeopleTeam'
+                    label={getField('internalChannel').displayName}
+                    description={getField('internalChannel').description}
+                    required={getField('internalChannel').required}
+                    hidden={!enableInternalChannel}
+                  >
+                    <Switch
+                      checked={context.column.get('internalChannel')}
+                      value={context.column.get('internalChannel')}
+                      onChange={(_, data) => {
+                        context.setColumn('internalChannel', data.checked)
+                      }}
+                    />
+                  </FieldContainer>
+                  <Divider />
+                  <FieldContainer iconName='LocalLanguage' label={getField('language').displayName}>
+                    <Dropdown
+                      defaultValue={context.column.get('language')}
+                      defaultSelectedOptions={[context.column.get('language')]}
+                      disabled
+                    />
+                  </FieldContainer>
+                  <FieldContainer iconName='Clock' label={getField('timeZone').displayName}>
+                    <Dropdown
+                      defaultValue={context.column.get('timeZone')}
+                      defaultSelectedOptions={[context.column.get('timeZone')]}
+                      disabled
+                    />
+                  </FieldContainer>
+                  <FieldContainer iconName='Database' label={getField('hubSiteTitle').displayName}>
+                    <Dropdown
+                      defaultValue={context.column.get('hubSiteTitle')}
+                      defaultSelectedOptions={[context.column.get('hubSiteTitle')]}
+                      disabled
+                    />
+                  </FieldContainer>
+                  <p className={styles.ignoreGap}>
+                    {strings.Provision.DrawerFooterDescriptionText}
+                  </p>
                 </div>
               </DrawerBody>
             )}
