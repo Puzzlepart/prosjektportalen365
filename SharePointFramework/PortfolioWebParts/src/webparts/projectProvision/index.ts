@@ -8,7 +8,11 @@ import {
 } from '@microsoft/sp-property-pane'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
-import { IProjectProvisionProps, IProvisionField, ProjectProvision } from 'components/ProjectProvision'
+import {
+  IProjectProvisionProps,
+  IProvisionField,
+  ProjectProvision
+} from 'components/ProjectProvision'
 import { PropertyFieldMessage } from '@pnp/spfx-property-controls/lib/PropertyFieldMessage'
 import { PropertyPanePropertyEditor } from '@pnp/spfx-property-controls/lib/PropertyPanePropertyEditor'
 import {
@@ -24,7 +28,10 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
     this.renderComponent<IProjectProvisionProps>(ProjectProvision)
   }
 
-  private mergeFields(userFields: IProvisionField[], defaultFields: IProvisionField[]): IProvisionField[] {
+  private mergeFields(
+    userFields: IProvisionField[],
+    defaultFields: IProvisionField[]
+  ): IProvisionField[] {
     const userFieldNames = userFields.map((field) => field.fieldName)
     return [
       ...userFields,
