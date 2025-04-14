@@ -16,13 +16,14 @@ import {
 } from '@fluentui/react-components'
 import React, { FC } from 'react'
 import { IProjectProvisionProps } from './types'
-import { customLightTheme, getFluentIcon } from 'pp365-shared-library'
+import { customLightTheme, getFluentIcon, UserMessage } from 'pp365-shared-library'
 import { ProvisionStatus } from './ProvisionStatus'
 import { useProjectProvision } from './useProjectProvision'
 import { ProjectProvisionContext } from './context'
 import { ProvisionDrawer } from './ProvisionDrawer'
 import strings from 'PortfolioWebPartsStrings'
 import { ProvisionSettings } from './ProvisionSettings'
+import { stringIsNullOrEmpty } from '@pnp/core'
 
 export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
   const { state, setState, column, setColumn, reset, toasterId, fluentProviderId } =
@@ -30,11 +31,29 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
   const restoreFocusTargetAttribute = useRestoreFocusTarget()
   const { dispatchToast } = useToastController(toasterId)
 
+  console.log({ props, state, column })
+
   if (state.loading) {
     return (
       <Skeleton>
         <SkeletonItem style={{ width: '192px', height: '40px' }} />
       </Skeleton>
+    )
+  }
+
+  if (state.error) {
+    return (
+      <UserMessage title='Det har oppstått en feil' text={state.error.message} intent='error' />
+    )
+  }
+
+  if (stringIsNullOrEmpty(props.provisionUrl)) {
+    return (
+      <UserMessage
+        title='Ikke konfigurert'
+        text='Det er ikke konfigurert url til Bestillingsportalen. Vennligst angi dette i webdelen.'
+        intent='warning'
+      />
     )
   }
 
@@ -82,7 +101,7 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
             </MenuPopover>
           </Menu>
           <ProvisionStatus toast={dispatchToast} />
-          <ProvisionSettings toast={dispatchToast} />
+          <ProvisionSettings />
           <Toaster toasterId={toasterId} />
         </FluentProvider>
       </IdPrefixProvider>

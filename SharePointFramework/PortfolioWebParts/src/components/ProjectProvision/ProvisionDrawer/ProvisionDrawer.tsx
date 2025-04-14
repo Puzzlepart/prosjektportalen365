@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { FC } from 'react'
 import {
   OverlayDrawer,
   DrawerHeader,
@@ -15,7 +15,6 @@ import {
   DrawerFooter,
   Toolbar,
   Dropdown,
-  Option,
   Button,
   Tag,
   Tooltip,
@@ -23,39 +22,46 @@ import {
   ToastBody,
   ToastTitle,
   IdPrefixProvider,
+  Option,
   FluentProvider
 } from '@fluentui/react-components'
-import {
-  ArrowLeft24Regular,
-  DataUsage24Regular,
-  Settings24Regular,
-  Dismiss24Regular
-} from '@fluentui/react-icons'
+import { DatePicker } from '@fluentui/react-datepicker-compat'
+import { ArrowLeft24Regular, Dismiss24Regular } from '@fluentui/react-icons'
 import strings from 'PortfolioWebPartsStrings'
 import { FieldContainer, customLightTheme } from 'pp365-shared-library'
 import { SiteType } from './SiteType'
 import { useProvisionDrawer } from './useProvisionDrawer'
 import styles from './ProvisionDrawer.module.scss'
-import { User } from './User'
+import { UserMulti } from './User'
 import { Guest } from './Guest'
+import { ImageUpload } from './ImageUpload'
+import { DebugModel } from './DebugModel'
+import { IProvisionDrawerProps } from './types'
+import { DayOfWeek } from '@fluentui/react'
 
-export const ProvisionDrawer = (props: { toast: any }) => {
+export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
   const {
-    motionStyles,
-    level2,
-    setLevel2,
+    levels,
+    currentLevel,
+    setCurrentLevel,
     toolbarBackIconMotion,
-    toolbarCalendarIconMotion,
-    level1Motion,
-    level2Motion,
+    levelMotions,
+    motionStyles,
     context,
     onSave,
     isSaveDisabled,
     siteExists,
     setSiteExists,
     namingConvention,
+    enableSensitivityLabels,
+    enableRetentionLabels,
+    enableExpirationDate,
+    enableReadOnlyGroup,
+    enableInternalChannel,
+    enableExternalSharing,
     urlPrefix,
     aliasSuffix,
+    getField,
     fluentProviderId
   } = useProvisionDrawer()
 
@@ -83,12 +89,12 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                       title={strings.Aria.Back}
                       appearance='subtle'
                       icon={<ArrowLeft24Regular />}
-                      onClick={() => setLevel2(false)}
+                      onClick={() => setCurrentLevel(currentLevel - 1)}
                     />
                   )}
                 </ToolbarGroup>
                 <ToolbarGroup>
-                  {toolbarCalendarIconMotion.canRender && (
+                  {/* {toolbarCalendarIconMotion.canRender && (
                     <ToolbarButton
                       ref={toolbarCalendarIconMotion.ref}
                       className={mergeClasses(
@@ -97,7 +103,7 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                       )}
                       appearance='subtle'
                       icon={<DataUsage24Regular />}
-                      onClick={() => setLevel2(true)}
+                      onClick={() => setCurrentLevel(1)}
                     />
                   )}
 
@@ -105,7 +111,7 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                     appearance='subtle'
                     title={strings.Aria.Settings}
                     icon={<Settings24Regular />}
-                  />
+                  /> */}
                   <ToolbarButton
                     title={strings.Aria.Close}
                     appearance='subtle'
@@ -117,45 +123,56 @@ export const ProvisionDrawer = (props: { toast: any }) => {
             </DrawerHeaderNavigation>
           </DrawerHeader>
           <div className={styles.body}>
-            {level1Motion.canRender && (
+            {levelMotions[0].canRender && (
               <DrawerBody
-                ref={level1Motion.ref}
+                ref={levelMotions[0].ref}
                 className={mergeClasses(
                   styles.level,
                   motionStyles.level,
-                  motionStyles.level1,
-                  level1Motion.active && motionStyles.levelVisible
+                  motionStyles.level0,
+                  motionStyles.level0,
+                  levelMotions[0].active && motionStyles.levelVisible
                 )}
               >
-                <DrawerHeaderTitle>{strings.Provision.DrawerLevel1HeaderText}</DrawerHeaderTitle>
-                <p>{strings.Provision.DrawerLevel1DescriptionText}</p>
+                <DrawerHeaderTitle>{levels[0].title}</DrawerHeaderTitle>
+                <p>{levels[0].description}</p>
                 <div className={styles.content}>
-                  <FieldContainer iconName='AppsList' label={strings.Provision.SiteTypeFieldLabel}>
-                    <div className={styles.sitetypes}>
-                      {context.state.types.map((type) => {
-                        if (
-                          !type.visibleTo ||
-                          type.visibleTo?.some((user) =>
-                            user?.EMail?.includes(context.props?.pageContext?.user?.loginName)
-                          )
-                        ) {
-                          return (
-                            <SiteType
-                              key={type.title}
-                              title={type.title}
-                              description={type.description}
-                              image={type.image?.Url}
-                              type={type.type}
-                            />
-                          )
-                        }
-                      })}
-                    </div>
+                  <FieldContainer
+                    iconName='AppsList'
+                    label={getField('type').displayName}
+                    required={getField('type').required}
+                  >
+                    {context.props.siteTypeRenderMode !== 'dropdown' ? (
+                      <div className={styles.sitetypes}>
+                        {context.state.types.map((type) => (
+                          <SiteType
+                            key={type.title}
+                            title={type.title}
+                            description={type.description}
+                            image={type.image?.Url}
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      <Dropdown
+                        value={context.column.get('type')}
+                        selectedOptions={[context.column.get('type')]}
+                        onOptionSelect={(_, data) => {
+                          context.setColumn('type', data.optionValue)
+                        }}
+                      >
+                        {context.state.types.map((type) => (
+                          <Option key={type.title} value={type.title}>
+                            {type.title}
+                          </Option>
+                        ))}
+                      </Dropdown>
+                    )}
                   </FieldContainer>
                   <FieldContainer
                     iconName='TextNumberFormat'
-                    label={strings.Provision.SiteNameFieldLabel}
-                    required={true}
+                    label={getField('name').displayName}
+                    required={getField('name').required}
                     validationState={
                       context.column.get('name').length
                         ? siteExists
@@ -168,7 +185,7 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                         ? siteExists
                           ? strings.Provision.SiteNameValidationErrorMessage
                           : strings.Provision.SiteNameValidationSuccessMessage
-                        : strings.Provision.SiteNameFieldDescription
+                        : getField('name').description
                     }
                   >
                     <Input
@@ -212,27 +229,27 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                           </Tooltip>
                         )
                       }
-                      placeholder={strings.Placeholder.SiteName}
+                      placeholder={getField('name').placeholder}
                     />
                   </FieldContainer>
                   <FieldContainer
                     iconName='TextAlignLeft'
-                    label={strings.Provision.SiteDescriptionFieldLabel}
-                    required={true}
-                    description={strings.Provision.SiteDescriptionFieldDescription}
+                    label={getField('description').displayName}
+                    description={getField('description').description}
+                    required={getField('description').required}
                   >
                     <Textarea
                       value={context.column.get('description')}
                       onChange={(_, data) => context.setColumn('description', data.value)}
                       rows={2}
-                      placeholder={strings.Placeholder.SiteDescription}
+                      placeholder={getField('description').placeholder}
                     />
                   </FieldContainer>
                   <FieldContainer
                     iconName='TextAlignLeft'
-                    label={strings.Provision.BusinessJustificationFieldLabel}
-                    description={strings.Provision.BusinessJustificationFieldDescription}
-                    required={true}
+                    label={getField('justification').displayName}
+                    description={getField('justification').description}
+                    required={getField('justification').required}
                   >
                     <Textarea
                       value={context.column.get('justification')}
@@ -244,25 +261,31 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                   <Divider />
                   <FieldContainer
                     iconName='Person'
-                    label={strings.Provision.OwnerFieldLabel}
-                    description={strings.Provision.OwnerFieldDescription}
-                    required={true}
+                    label={getField('owner').displayName}
+                    description={getField('owner').description}
+                    required={getField('owner').required}
                   >
-                    <User type='owner' />
+                    <UserMulti type='owner' />
                   </FieldContainer>
                   <FieldContainer
                     iconName='People'
-                    label={strings.Provision.MemberFieldLabel}
-                    description={strings.Provision.MemberFieldDescription}
+                    label={getField('member').displayName}
+                    description={getField('member').description}
+                    required={getField('member').required}
                   >
                     {/* Members can not be the same as the owner */}
-                    <User type='member' />
+                    <UserMulti type='member' />
+                  </FieldContainer>
+                  <FieldContainer
+                    iconName='Person'
+                    label={getField('requestedBy').displayName}
+                    description={getField('requestedBy').description}
+                    required={getField('requestedBy').required}
+                  >
+                    <UserMulti type='requestedBy' />
                   </FieldContainer>
                   <Divider />
-                  <FieldContainer
-                    iconName='TextNumberFormat'
-                    label={strings.Provision.AliasFieldLabel}
-                  >
+                  <FieldContainer iconName='TextNumberFormat' label={getField('alias').displayName}>
                     <Input
                       disabled
                       value={`${namingConvention?.prefixText}${context.column.get('alias')}${
@@ -271,7 +294,7 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                       contentAfter={<Tag size='small'>{aliasSuffix}</Tag>}
                     />
                   </FieldContainer>
-                  <FieldContainer iconName='Link' label={strings.Provision.UrlFieldLabel}>
+                  <FieldContainer iconName='Link' label={getField('url').displayName}>
                     <Input
                       disabled
                       value={`${namingConvention?.prefixText}${context.column.get('alias')}${
@@ -283,139 +306,276 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                 </div>
               </DrawerBody>
             )}
+            <DrawerBody
+              ref={levelMotions[1].ref}
+              className={mergeClasses(
+                styles.level,
+                motionStyles.level,
+                currentLevel === 2 ? motionStyles.level1a : motionStyles.level1,
+                levelMotions[1].active && motionStyles.levelVisible
+              )}
+            >
+              <DrawerHeaderTitle>{levels[1].title}</DrawerHeaderTitle>
+              <p>{levels[1].description}</p>
+              <div className={styles.content}>
+                <FieldContainer
+                  iconName='PeopleTeam'
+                  label={getField('teamify').displayName}
+                  description={getField('teamify').description}
+                  required={getField('teamify').required}
+                >
+                  <Switch
+                    checked={context.column.get('teamify')}
+                    value={context.column.get('teamify')}
+                    onChange={(_, data) => {
+                      context.setColumn('teamify', data.checked)
+                    }}
+                  />
+                </FieldContainer>
+                <FieldContainer
+                  iconName='PeopleAudience'
+                  label={getField('teamTemplate').displayName}
+                  description={getField('teamTemplate').description}
+                  required={getField('teamTemplate').required}
+                  hidden={!context.column.get('teamify')}
+                >
+                  <Dropdown
+                    value={context.column.get('teamTemplate')}
+                    selectedOptions={[context.column.get('teamTemplate')]}
+                    onOptionSelect={(_, data) => {
+                      context.setColumn('teamTemplate', data.optionValue)
+                    }}
+                  >
+                    {context.state.teamTemplates.map((template) => (
+                      <Option key={template.title} value={template.title}>
+                        {template.title}
+                      </Option>
+                    ))}
+                  </Dropdown>
+                </FieldContainer>
+                <Divider />
+                <FieldContainer
+                  iconName='BoxToolbox'
+                  label={getField('isConfidential').displayName}
+                  description={getField('isConfidential').description}
+                  required={getField('isConfidential').required}
+                >
+                  <Switch
+                    checked={context.column.get('isConfidential')}
+                    value={context.column.get('isConfidential')}
+                    onChange={(_, data) => {
+                      context.setColumn('isConfidential', data.checked)
 
-            {level2Motion.canRender && (
+                      if (data.checked) {
+                        context.setColumn('privacy', strings.Provision.PrivacyFieldOptionPrivate)
+                      }
+                    }}
+                  />
+                </FieldContainer>
+                <FieldContainer
+                  iconName='Eye'
+                  label={getField('privacy').displayName}
+                  description={getField('privacy').description}
+                  required={getField('privacy').required}
+                >
+                  <Dropdown
+                    selectedOptions={[context.column.get('privacy')]}
+                    value={context.column.get('privacy')}
+                    onOptionSelect={(_, data) => {
+                      context.setColumn('privacy', data.optionValue)
+                    }}
+                    disabled={context.column.get('isConfidential')}
+                  >
+                    <Option value={strings.Provision.PrivacyFieldOptionPrivate}>
+                      {strings.Provision.PrivacyFieldOptionPrivate}
+                    </Option>
+                    <Option value={strings.Provision.PrivacyFieldOptionPublic}>
+                      {strings.Provision.PrivacyFieldOptionPublic}
+                    </Option>
+                  </Dropdown>
+                </FieldContainer>
+                <FieldContainer
+                  iconName='Guest'
+                  label={getField('externalSharing').displayName}
+                  description={getField('externalSharing').description}
+                  required={getField('externalSharing').required}
+                  hidden={!enableExternalSharing}
+                >
+                  <Switch
+                    checked={context.column.get('externalSharing')}
+                    value={context.column.get('externalSharing')}
+                    onChange={(_, data) => {
+                      context.setColumn('externalSharing', data.checked)
+
+                      if (!data.checked) {
+                        context.setColumn('guest', [])
+                      }
+                    }}
+                  />
+                </FieldContainer>
+                <FieldContainer
+                  iconName='People'
+                  label={getField('guest').displayName}
+                  description={getField('guest').description}
+                  required={getField('guest').required}
+                  hidden={!context.column.get('externalSharing')}
+                >
+                  <Guest />
+                </FieldContainer>
+                <Divider />
+                <FieldContainer
+                  iconName='PeopleCommunity'
+                  label={getField('sensitivityLabel').displayName}
+                  description={getField('sensitivityLabel').description}
+                  required={getField('sensitivityLabel').required}
+                >
+                  <Dropdown
+                    disabled={!enableSensitivityLabels}
+                    value={context.column.get('sensitivityLabel')}
+                    selectedOptions={[context.column.get('sensitivityLabel')]}
+                    onOptionSelect={(_, data) => {
+                      context.setColumn('sensitivityLabel', data.optionValue)
+                    }}
+                  >
+                    {context.state.sensitivityLabels.map((label) => (
+                      <Option key={label.title} value={label.title}>
+                        {label.title}
+                      </Option>
+                    ))}
+                  </Dropdown>
+                </FieldContainer>
+                <FieldContainer
+                  iconName='Checkmark'
+                  label={getField('retentionLabel').displayName}
+                  description={getField('retentionLabel').description}
+                  required={getField('retentionLabel').required}
+                >
+                  <Dropdown
+                    disabled={!enableRetentionLabels}
+                    value={context.column.get('retentionLabel')}
+                    selectedOptions={[context.column.get('retentionLabel')]}
+                    onOptionSelect={(_, data) => {
+                      context.setColumn('retentionLabel', data.optionValue)
+                    }}
+                  >
+                    {context.state.retentionLabels.map((label) => (
+                      <Option key={label.title} value={label.title}>
+                        {label.title}
+                      </Option>
+                    ))}
+                  </Dropdown>
+                </FieldContainer>
+                <FieldContainer
+                  iconName='Calendar'
+                  label={getField('expirationDate').displayName}
+                  description={getField('expirationDate').description}
+                  required={getField('expirationDate').required}
+                  hidden={!enableExpirationDate}
+                >
+                  <DatePicker
+                    value={context.column.get('expirationDate')}
+                    onSelectDate={(date) => context.setColumn('expirationDate', date)}
+                    formatDate={(date) => date.toLocaleDateString()}
+                    placeholder={strings.Placeholder.DatePicker}
+                    firstDayOfWeek={DayOfWeek.Monday}
+                    showWeekNumbers
+                    allowTextInput
+                    showMonthPickerAsOverlay={false}
+                  />
+                </FieldContainer>
+                <FieldContainer iconName='LocalLanguage' label={getField('language').displayName}>
+                  <Dropdown
+                    defaultValue={context.column.get('language')}
+                    defaultSelectedOptions={[context.column.get('language')]}
+                    disabled
+                  />
+                </FieldContainer>
+                <FieldContainer iconName='Clock' label={getField('timeZone').displayName}>
+                  <Dropdown
+                    defaultValue={context.column.get('timeZone')}
+                    defaultSelectedOptions={[context.column.get('timeZone')]}
+                    disabled
+                  />
+                </FieldContainer>
+                <FieldContainer iconName='Database' label={getField('hubSiteTitle').displayName}>
+                  <Dropdown
+                    defaultValue={context.column.get('hubSiteTitle')}
+                    defaultSelectedOptions={[context.column.get('hubSiteTitle')]}
+                    disabled
+                  />
+                </FieldContainer>
+                <p className={styles.ignoreGap}>{strings.Provision.DrawerFooterDescriptionText}</p>
+              </div>
+            </DrawerBody>
+            {levelMotions[2].canRender && (
               <DrawerBody
-                ref={level2Motion.ref}
+                ref={levelMotions[2].ref}
                 className={mergeClasses(
                   styles.level,
                   motionStyles.level,
                   motionStyles.level2,
-                  level2Motion.active && motionStyles.levelVisible
+                  levelMotions[2].active && motionStyles.levelVisible
                 )}
               >
-                <DrawerHeaderTitle>{strings.Provision.DrawerLevel2HeaderText}</DrawerHeaderTitle>
-                <p>{strings.Provision.DrawerLevel2DescriptionText}</p>
+                <DrawerHeaderTitle>{levels[2].title}</DrawerHeaderTitle>
+                <p>{levels[2].description}</p>
                 <div className={styles.content}>
-                  {/* {DEBUG && <DebugModel />} */}
+                  {context.props.debugMode || (DEBUG && <DebugModel />)}
+                  <Divider />
                   <FieldContainer
-                    iconName='PeopleTeam'
-                    label={strings.Provision.TeamifyFieldLabel}
-                    description={strings.Provision.TeamifyFieldDescription}
+                    iconName='Image'
+                    label={getField('image').displayName}
+                    description={getField('image').description}
+                    required={getField('image').required}
                   >
-                    <Switch
-                      checked={context.column.get('teamify')}
-                      value={context.column.get('teamify')}
-                      onChange={(_, data) => {
-                        context.setColumn('teamify', data.checked)
-                      }}
-                    />
+                    <ImageUpload onImageUpload={(image) => context.setColumn('image', image)} />
                   </FieldContainer>
                   <FieldContainer
                     iconName='PeopleAudience'
-                    label={strings.Provision.TeamTemplateFieldLabel}
-                    description={strings.Provision.TeamTemplateFieldDescription}
-                    hidden={!context.column.get('teamify')}
-                  >
-                    <Dropdown
-                      defaultValue={'Standard'}
-                      selectedOptions={[context.column.get('teamTemplate')]}
-                      value={context.column.get('teamTemplate')}
-                      defaultSelectedOptions={['Standard']}
-                      onOptionSelect={(_, data) => {
-                        context.setColumn('teamTemplate', data.optionValue)
-                      }}
-                    >
-                      {context.state.teamTemplates.map((template) => (
-                        <Option key={template.title} value={template.title}>
-                          {template.title}
-                        </Option>
-                      ))}
-                    </Dropdown>
-                  </FieldContainer>
-                  <FieldContainer
-                    iconName='BoxToolbox'
-                    label={strings.Provision.ConfidentialFieldLabel}
-                    description={strings.Provision.ConfidentialFieldDescription}
+                    label={getField('readOnlyGroup').displayName}
+                    description={getField('readOnlyGroup').description}
+                    required={getField('readOnlyGroup').required}
+                    hidden={!enableReadOnlyGroup}
                   >
                     <Switch
-                      checked={context.column.get('isConfidential')}
-                      value={context.column.get('isConfidential')}
+                      checked={context.column.get('readOnlyGroup')}
+                      value={context.column.get('readOnlyGroup')}
                       onChange={(_, data) => {
-                        context.setColumn('isConfidential', data.checked)
-
-                        if (data.checked) {
-                          context.setColumn('privacy', strings.Provision.PrivacyFieldOptionPrivate)
-                        }
+                        context.setColumn('readOnlyGroup', data.checked)
                       }}
                     />
                   </FieldContainer>
                   <FieldContainer
-                    iconName='Eye'
-                    label={strings.Provision.PrivacyFieldLabel}
-                    description={strings.Provision.PrivacyFieldDescription}
-                  >
-                    <Dropdown
-                      defaultValue={context.column.get('privacy')}
-                      selectedOptions={[context.column.get('privacy')]}
-                      value={context.column.get('privacy')}
-                      defaultSelectedOptions={[context.column.get('privacy')]}
-                      onOptionSelect={(_, data) => {
-                        context.setColumn('privacy', data.optionValue)
-                      }}
-                      disabled={context.column.get('isConfidential')}
-                    >
-                      <Option value={strings.Provision.PrivacyFieldOptionPrivate}>
-                        {strings.Provision.PrivacyFieldOptionPrivate}
-                      </Option>
-                      <Option value={strings.Provision.PrivacyFieldOptionPublic}>
-                        {strings.Provision.PrivacyFieldOptionPublic}
-                      </Option>
-                    </Dropdown>
-                  </FieldContainer>
-                  <FieldContainer
-                    iconName='Guest'
-                    label={strings.Provision.ExternalSharingFieldLabel}
-                    description={strings.Provision.ExternalSharingFieldDescription}
+                    iconName='PeopleTeam'
+                    label={getField('internalChannel').displayName}
+                    description={getField('internalChannel').description}
+                    required={getField('internalChannel').required}
+                    hidden={!enableInternalChannel}
                   >
                     <Switch
-                      checked={context.column.get('externalSharing')}
-                      value={context.column.get('externalSharing')}
+                      checked={context.column.get('internalChannel')}
+                      value={context.column.get('internalChannel')}
                       onChange={(_, data) => {
-                        context.setColumn('externalSharing', data.checked)
-
-                        if (!data.checked) {
-                          context.setColumn('guest', [])
-                        }
+                        context.setColumn('internalChannel', data.checked)
                       }}
                     />
                   </FieldContainer>
-                  <FieldContainer
-                    iconName='People'
-                    label={strings.Provision.GuestFieldLabel}
-                    description={strings.Provision.GuestFieldDescription}
-                    hidden={!context.column.get('externalSharing')}
-                  >
-                    <Guest />
-                  </FieldContainer>
-                  <FieldContainer
-                    iconName='LocalLanguage'
-                    label={strings.Provision.LanguageFieldLabel}
-                  >
+                  <Divider />
+                  <FieldContainer iconName='LocalLanguage' label={getField('language').displayName}>
                     <Dropdown
                       defaultValue={context.column.get('language')}
                       defaultSelectedOptions={[context.column.get('language')]}
                       disabled
                     />
                   </FieldContainer>
-                  <FieldContainer iconName='Clock' label={strings.Provision.TimeZoneFieldLabel}>
+                  <FieldContainer iconName='Clock' label={getField('timeZone').displayName}>
                     <Dropdown
                       defaultValue={context.column.get('timeZone')}
                       defaultSelectedOptions={[context.column.get('timeZone')]}
                       disabled
                     />
                   </FieldContainer>
-                  <FieldContainer iconName='Database' label={strings.Provision.HubSiteFieldLabel}>
+                  <FieldContainer iconName='Database' label={getField('hubSiteTitle').displayName}>
                     <Dropdown
                       defaultValue={context.column.get('hubSiteTitle')}
                       defaultSelectedOptions={[context.column.get('hubSiteTitle')]}
@@ -430,14 +590,18 @@ export const ProvisionDrawer = (props: { toast: any }) => {
             )}
           </div>
           <DrawerFooter className={styles.footer}>
-            <Button appearance='subtle' disabled={!level2} onClick={() => setLevel2(false)}>
+            <Button
+              appearance='subtle'
+              disabled={currentLevel === 0}
+              onClick={() => setCurrentLevel(currentLevel - 1)}
+            >
               {strings.Provision.PreviousButtonLabel}
             </Button>
             <Button
               appearance='primary'
-              disabled={level2 && isSaveDisabled}
+              disabled={currentLevel === levels.length - 1 && isSaveDisabled}
               onClick={() => {
-                level2
+                currentLevel === levels.length - 1
                   ? onSave().then((response) => {
                       if (response) {
                         context.reset()
@@ -449,7 +613,7 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                           { intent: 'success' }
                         )
                         context.setState({ showProvisionDrawer: false, properties: {} })
-                        setLevel2(false)
+                        setCurrentLevel(0)
                       } else {
                         props.toast(
                           <Toast appearance='inverted'>
@@ -460,10 +624,12 @@ export const ProvisionDrawer = (props: { toast: any }) => {
                         )
                       }
                     })
-                  : setLevel2(true)
+                  : setCurrentLevel(currentLevel + 1)
               }}
             >
-              {level2 ? strings.Provision.ProvisionButtonLabel : strings.Provision.NextButtonLabel}
+              {currentLevel === levels.length - 1
+                ? strings.Provision.ProvisionButtonLabel
+                : strings.Provision.NextButtonLabel}
             </Button>
           </DrawerFooter>
         </OverlayDrawer>

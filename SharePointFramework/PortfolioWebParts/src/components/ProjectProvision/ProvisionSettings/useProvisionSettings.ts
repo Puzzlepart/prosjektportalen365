@@ -9,9 +9,9 @@ import { useColumns } from './useColumns'
 import _ from 'underscore'
 import { ProjectProvisionContext } from '../context'
 
-export function useProvisionSettings(toast: any) {
+export function useProvisionSettings() {
   const context = useContext(ProjectProvisionContext)
-  const columns = useColumns(toast)
+  const columns = useColumns()
 
   const columnSizingOptions = {
     title: {

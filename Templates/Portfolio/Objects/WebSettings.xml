@@ -1,2 +1,1 @@
-<pnp:WebSettings xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema" WelcomePage="SitePages/Home.aspx">
-</pnp:WebSettings>
+<pnp:WebSettings xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema" WelcomePage="SitePages/Home.aspx" />
