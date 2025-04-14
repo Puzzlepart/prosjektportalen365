@@ -8,6 +8,8 @@ Sjekk ut [release notes](./releasenotes/1.11.0.md) for høydepunkter og mer deta
 
 ### Forbedringer
 
+- Muligheter for å angi følsomhets- og oppbevaringsetiketter, områdebilde og mye mer, samt styring av visningsnavn, beskriverlse og hva som er påkvred i `Bestill område`-skjema [#1623](https://github.com/Puzzlepart/prosjektportalen365/pull/1623)
+
 ### Feilrettinger
 
 ## 1.11.0 - 26.03.2025
