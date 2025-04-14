@@ -61,6 +61,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
     enableExternalSharing,
     urlPrefix,
     aliasSuffix,
+    getField,
     fluentProviderId
   } = useProvisionDrawer()
 
@@ -136,7 +137,11 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                 <DrawerHeaderTitle>{levels[0].title}</DrawerHeaderTitle>
                 <p>{levels[0].description}</p>
                 <div className={styles.content}>
-                  <FieldContainer iconName='AppsList' label={strings.Provision.SiteTypeFieldLabel}>
+                  <FieldContainer
+                    iconName='AppsList'
+                    label={getField('type').displayName}
+                    required={getField('type').required}
+                  >
                     {context.props.siteTypeRenderMode !== 'dropdown' ? (
                       <div className={styles.sitetypes}>
                         {context.state.types.map((type) => (
@@ -166,8 +171,8 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   </FieldContainer>
                   <FieldContainer
                     iconName='TextNumberFormat'
-                    label={strings.Provision.SiteNameFieldLabel}
-                    required={true}
+                    label={getField('name').displayName}
+                    required={getField('name').required}
                     validationState={
                       context.column.get('name').length
                         ? siteExists
@@ -180,7 +185,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                         ? siteExists
                           ? strings.Provision.SiteNameValidationErrorMessage
                           : strings.Provision.SiteNameValidationSuccessMessage
-                        : strings.Provision.SiteNameFieldDescription
+                        : getField('name').description
                     }
                   >
                     <Input
@@ -224,27 +229,27 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                           </Tooltip>
                         )
                       }
-                      placeholder={strings.Placeholder.SiteName}
+                      placeholder={getField('name').placeholder}
                     />
                   </FieldContainer>
                   <FieldContainer
                     iconName='TextAlignLeft'
-                    label={strings.Provision.SiteDescriptionFieldLabel}
-                    required={true}
-                    description={strings.Provision.SiteDescriptionFieldDescription}
+                    label={getField('description').displayName}
+                    description={getField('description').description}
+                    required={getField('description').required}
                   >
                     <Textarea
                       value={context.column.get('description')}
                       onChange={(_, data) => context.setColumn('description', data.value)}
                       rows={2}
-                      placeholder={strings.Placeholder.SiteDescription}
+                      placeholder={getField('description').placeholder}
                     />
                   </FieldContainer>
                   <FieldContainer
                     iconName='TextAlignLeft'
-                    label={strings.Provision.BusinessJustificationFieldLabel}
-                    description={strings.Provision.BusinessJustificationFieldDescription}
-                    required={true}
+                    label={getField('justification').displayName}
+                    description={getField('justification').description}
+                    required={getField('justification').required}
                   >
                     <Textarea
                       value={context.column.get('justification')}
@@ -256,32 +261,31 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   <Divider />
                   <FieldContainer
                     iconName='Person'
-                    label={strings.Provision.OwnerFieldLabel}
-                    description={strings.Provision.OwnerFieldDescription}
-                    required={true}
+                    label={getField('owner').displayName}
+                    description={getField('owner').description}
+                    required={getField('owner').required}
                   >
                     <UserMulti type='owner' />
                   </FieldContainer>
                   <FieldContainer
                     iconName='People'
-                    label={strings.Provision.MemberFieldLabel}
-                    description={strings.Provision.MemberFieldDescription}
+                    label={getField('member').displayName}
+                    description={getField('member').description}
+                    required={getField('member').required}
                   >
                     {/* Members can not be the same as the owner */}
                     <UserMulti type='member' />
                   </FieldContainer>
                   <FieldContainer
                     iconName='Person'
-                    label={strings.Provision.RequestedByFieldLabel}
-                    description={strings.Provision.RequestedByFieldDescription}
+                    label={getField('requestedBy').displayName}
+                    description={getField('requestedBy').description}
+                    required={getField('requestedBy').required}
                   >
                     <UserMulti type='requestedBy' />
                   </FieldContainer>
                   <Divider />
-                  <FieldContainer
-                    iconName='TextNumberFormat'
-                    label={strings.Provision.AliasFieldLabel}
-                  >
+                  <FieldContainer iconName='TextNumberFormat' label={getField('alias').displayName}>
                     <Input
                       disabled
                       value={`${namingConvention?.prefixText}${context.column.get('alias')}${
@@ -290,7 +294,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                       contentAfter={<Tag size='small'>{aliasSuffix}</Tag>}
                     />
                   </FieldContainer>
-                  <FieldContainer iconName='Link' label={strings.Provision.UrlFieldLabel}>
+                  <FieldContainer iconName='Link' label={getField('url').displayName}>
                     <Input
                       disabled
                       value={`${namingConvention?.prefixText}${context.column.get('alias')}${
@@ -316,8 +320,9 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
               <div className={styles.content}>
                 <FieldContainer
                   iconName='PeopleTeam'
-                  label={strings.Provision.TeamifyFieldLabel}
-                  description={strings.Provision.TeamifyFieldDescription}
+                  label={getField('teamify').displayName}
+                  description={getField('teamify').description}
+                  required={getField('teamify').required}
                 >
                   <Switch
                     checked={context.column.get('teamify')}
@@ -329,8 +334,9 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                 </FieldContainer>
                 <FieldContainer
                   iconName='PeopleAudience'
-                  label={strings.Provision.TeamTemplateFieldLabel}
-                  description={strings.Provision.TeamTemplateFieldDescription}
+                  label={getField('teamTemplate').displayName}
+                  description={getField('teamTemplate').description}
+                  required={getField('teamTemplate').required}
                   hidden={!context.column.get('teamify')}
                 >
                   <Dropdown
@@ -350,8 +356,9 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                 <Divider />
                 <FieldContainer
                   iconName='BoxToolbox'
-                  label={strings.Provision.ConfidentialFieldLabel}
-                  description={strings.Provision.ConfidentialFieldDescription}
+                  label={getField('isConfidential').displayName}
+                  description={getField('isConfidential').description}
+                  required={getField('isConfidential').required}
                 >
                   <Switch
                     checked={context.column.get('isConfidential')}
@@ -367,8 +374,9 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                 </FieldContainer>
                 <FieldContainer
                   iconName='Eye'
-                  label={strings.Provision.PrivacyFieldLabel}
-                  description={strings.Provision.PrivacyFieldDescription}
+                  label={getField('privacy').displayName}
+                  description={getField('privacy').description}
+                  required={getField('privacy').required}
                 >
                   <Dropdown
                     selectedOptions={[context.column.get('privacy')]}
@@ -388,8 +396,9 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                 </FieldContainer>
                 <FieldContainer
                   iconName='Guest'
-                  label={strings.Provision.ExternalSharingFieldLabel}
-                  description={strings.Provision.ExternalSharingFieldDescription}
+                  label={getField('externalSharing').displayName}
+                  description={getField('externalSharing').description}
+                  required={getField('externalSharing').required}
                   hidden={!enableExternalSharing}
                 >
                   <Switch
@@ -406,17 +415,19 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                 </FieldContainer>
                 <FieldContainer
                   iconName='People'
-                  label={strings.Provision.GuestFieldLabel}
-                  description={strings.Provision.GuestFieldDescription}
+                  label={getField('guest').displayName}
+                  description={getField('guest').description}
+                  required={getField('guest').required}
                   hidden={!context.column.get('externalSharing')}
                 >
                   <Guest />
                 </FieldContainer>
-                <Divider />
+                <Divider hidden={!enableSensitivityLabels} />
                 <FieldContainer
                   iconName='PeopleCommunity'
-                  label={strings.Provision.SensitivityLabelFieldLabel}
-                  description={strings.Provision.SensitivityLabelFieldDescription}
+                  label={getField('sensitivityLabel').displayName}
+                  description={getField('sensitivityLabel').description}
+                  required={getField('sensitivityLabel').required}
                   hidden={!enableSensitivityLabels}
                 >
                   <Dropdown
@@ -435,8 +446,9 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                 </FieldContainer>
                 <FieldContainer
                   iconName='Checkmark'
-                  label={strings.Provision.RetentionLabelFieldLabel}
-                  description={strings.Provision.RetentionLabelFieldDescription}
+                  label={getField('retentionLabel').displayName}
+                  description={getField('retentionLabel').description}
+                  required={getField('retentionLabel').required}
                   hidden={!enableRetentionLabels}
                 >
                   <Dropdown
@@ -455,8 +467,9 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                 </FieldContainer>
                 <FieldContainer
                   iconName='Calendar'
-                  label={strings.Provision.ExpirationDateFieldLabel}
-                  description={strings.Provision.ExpirationDateFieldDescription}
+                  label={getField('expirationDate').displayName}
+                  description={getField('expirationDate').description}
+                  required={getField('expirationDate').required}
                   hidden={!enableExpirationDate}
                 >
                   <DatePicker
@@ -472,8 +485,9 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                 </FieldContainer>
                 <FieldContainer
                   iconName='PeopleAudience'
-                  label={strings.Provision.ReadOnlyGroupFieldLabel}
-                  description={strings.Provision.ReadOnlyGroupFieldDescription}
+                  label={getField('readOnlyGroup').displayName}
+                  description={getField('readOnlyGroup').description}
+                  required={getField('readOnlyGroup').required}
                   hidden={!enableReadOnlyGroup}
                 >
                   <Switch
@@ -486,8 +500,9 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                 </FieldContainer>
                 <FieldContainer
                   iconName='PeopleTeam'
-                  label={strings.Provision.InternalChannelFieldLabel}
-                  description={strings.Provision.InternalChannelFieldDescription}
+                  label={getField('internalChannel').displayName}
+                  description={getField('internalChannel').description}
+                  required={getField('internalChannel').required}
                   hidden={!enableInternalChannel}
                 >
                   <Switch
@@ -499,24 +514,21 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   />
                 </FieldContainer>
                 <Divider />
-                <FieldContainer
-                  iconName='LocalLanguage'
-                  label={strings.Provision.LanguageFieldLabel}
-                >
+                <FieldContainer iconName='LocalLanguage' label={getField('language').displayName}>
                   <Dropdown
                     defaultValue={context.column.get('language')}
                     defaultSelectedOptions={[context.column.get('language')]}
                     disabled
                   />
                 </FieldContainer>
-                <FieldContainer iconName='Clock' label={strings.Provision.TimeZoneFieldLabel}>
+                <FieldContainer iconName='Clock' label={getField('timeZone').displayName}>
                   <Dropdown
                     defaultValue={context.column.get('timeZone')}
                     defaultSelectedOptions={[context.column.get('timeZone')]}
                     disabled
                   />
                 </FieldContainer>
-                <FieldContainer iconName='Database' label={strings.Provision.HubSiteFieldLabel}>
+                <FieldContainer iconName='Database' label={getField('hubSiteTitle').displayName}>
                   <Dropdown
                     defaultValue={context.column.get('hubSiteTitle')}
                     defaultSelectedOptions={[context.column.get('hubSiteTitle')]}
@@ -541,7 +553,12 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                 <div className={styles.content}>
                   {context.props.debugMode || (DEBUG && <DebugModel />)}
                   <Divider />
-                  <FieldContainer iconName='Image' label={strings.Provision.ImageFieldLabel}>
+                  <FieldContainer
+                    iconName='Image'
+                    label={getField('image').displayName}
+                    description={getField('image').description}
+                    required={getField('image').required}
+                  >
                     <ImageUpload onImageUpload={(image) => context.setColumn('image', image)} />
                   </FieldContainer>
                 </div>

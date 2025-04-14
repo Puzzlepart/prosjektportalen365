@@ -102,6 +102,7 @@ declare interface IPortfolioWebPartsStrings {
     HubSiteFieldLabel: string,
     ImageFieldLabel: string,
     ImageFieldDescription: string,
+    ImageDropZoneText: string,
     DrawerFooterDescriptionText: string,
     PreviousButtonLabel: string,
     NextButtonLabel: string,

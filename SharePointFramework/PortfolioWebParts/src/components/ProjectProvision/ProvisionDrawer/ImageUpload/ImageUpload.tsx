@@ -35,7 +35,7 @@ export const ImageUpload: FC<{ onImageUpload: (image: string) => void }> = ({ on
         style={{ borderColor: getColor() }}
       >
         <input {...getInputProps()} />
-        <p>{strings.Provision.ImageFieldDescription}</p>
+        <p>{strings.Provision.ImageDropZoneText}</p>
       </div>
       {acceptedFiles.length > 0 && (
         <div className={styles.imagePreview}>

@@ -40,6 +40,10 @@ export const useProvisionDrawer = () => {
     useMotion<HTMLDivElement>(i === currentLevel)
   )
 
+  const getField = (fieldName: string) => {
+    return context.props.fields.find((field) => field.fieldName === fieldName)
+  }
+
   const getGlobalSetting = (setting: string) => {
     return context.state.settings.find((t) => t.title === setting)?.value
   }
@@ -131,11 +135,12 @@ export const useProvisionDrawer = () => {
   const [siteExists, setSiteExists] = useState(false)
 
   const isSaveDisabled =
-    context.column.get('name')?.length < 2 ||
-    context.column.get('description')?.length < 2 ||
-    context.column.get('justification')?.length < 2 ||
-    context.column.get('owner')?.length < 1 ||
-    siteExists
+    context.props.fields
+      .filter((field) => field.required)
+      .some((field) => {
+        const value = context.column.get(field.fieldName)
+        return !value || (Array.isArray(value) ? value.length === 0 : value.length < 1)
+      }) || siteExists
 
   const fluentProviderId = useId('fp-provision-drawer')
 
@@ -160,6 +165,7 @@ export const useProvisionDrawer = () => {
     enableExternalSharing,
     urlPrefix,
     aliasSuffix,
+    getField,
     fluentProviderId
   }
 }
