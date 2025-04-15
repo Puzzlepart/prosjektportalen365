@@ -137,6 +137,7 @@ export class EditableSPField extends SPField {
       )
       this.displayName = configuration?.displayName ?? this.displayName
       this.description = configuration?.description ?? this.description
+      this.isReadOnly = configuration?.isReadOnly ?? this.isReadOnly
     }
   }
 
