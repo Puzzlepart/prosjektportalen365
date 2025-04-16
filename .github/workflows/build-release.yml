@@ -3,6 +3,7 @@ name: Build release (main)
 on:
   push:
     branches:
+      - releases/1.12
       - main
     paths:
       - 'SharePointFramework/**'
