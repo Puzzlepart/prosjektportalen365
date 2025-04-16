@@ -23,6 +23,8 @@ import { useProjectTimelineState } from './useProjectTimelineState'
  */
 export const useProjectTimeline = (props: IProjectTimelineProps) => {
   const { state, setState } = useProjectTimelineState()
+  let defaultTimeframe: TimelineTimeframe
+  let timeLapseCenter: Date
 
   /**
    * Get filtered data
@@ -163,16 +165,43 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
 
   const [sAmount, sDuration] = props.defaultTimeframeStart.split(',')
   const [eAmount, eDuration] = props.defaultTimeframeEnd.split(',')
-  const defaultTimeframe: TimelineTimeframe = [
-    [-parseInt(sAmount), sDuration as moment.unitOfTime.DurationConstructor],
-    [parseInt(eAmount), eDuration as moment.unitOfTime.DurationConstructor]
-  ]
+
+  const project = state.data?.items.find((item) => item.data?.type === strings.ProjectLabel)
+
+  if (project?.start_time && project?.end_time) {
+    if (props.projectTimeLapse) {
+      const monthsSinceStart = moment(project?.start_time).diff(moment().toDate(), 'months')
+      const timeLapseMonths = moment(project?.end_time).diff(moment(project?.start_time), 'months')
+      const timeLapseDays = moment(project?.end_time).diff(moment(project?.start_time), 'days')
+
+      timeLapseCenter = moment(project?.start_time)
+        .add(timeLapseDays / 2, 'days')
+        .toDate()
+
+      defaultTimeframe = [
+        [
+          -(parseInt(sAmount) - monthsSinceStart),
+          sDuration as moment.unitOfTime.DurationConstructor
+        ],
+        [
+          parseInt(eAmount) + timeLapseMonths + monthsSinceStart,
+          eDuration as moment.unitOfTime.DurationConstructor
+        ]
+      ]
+    }
+  } else {
+    defaultTimeframe = [
+      [-parseInt(sAmount), sDuration as moment.unitOfTime.DurationConstructor],
+      [parseInt(eAmount), eDuration as moment.unitOfTime.DurationConstructor]
+    ]
+  }
 
   return {
     state,
     setState,
     onFilterChange,
     onGroupByChange,
-    defaultTimeframe
+    defaultTimeframe,
+    timeLapseCenter
   }
 }
