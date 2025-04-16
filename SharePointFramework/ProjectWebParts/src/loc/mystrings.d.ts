@@ -64,6 +64,7 @@ declare interface IProjectWebPartsStrings {
   DefaultTimeframeEndValue: string
   DefaultTimeframeStartLabel: string
   DefaultTimeframeStartValue: string
+  ProjectTimeLapseLabel: string
   DeleteItemLabel: string
   DeleteReportButtonLabel: string
   DeleteReportButtonDescription: string

@@ -15,6 +15,11 @@ export interface ITimelineProps {
   defaultTimeframe?: TimelineTimeframe
 
   /**
+   * Timeline marker for Project time lapse
+   */
+  timeLapseMarker?: Date
+
+  /**
    * Timeline groups. Array of interface `ITimelineGroup`
    */
   groups: ITimelineGroup[]

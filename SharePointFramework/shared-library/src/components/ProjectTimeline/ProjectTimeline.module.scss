@@ -1,15 +1,8 @@
-@import '~@fluentui/react/dist/sass/References.scss';
-
 .root {
   margin: 15px 0 50px 0;
+
   .container {
     margin: 0px auto;
     padding-bottom: 260px;
   }
-}
-
-div[class*="react-calendar-timeline rct-header-root"] {
-  position: sticky;
-  top: 0;
-  z-index: 100;
 }
