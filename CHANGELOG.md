@@ -10,6 +10,7 @@ Sjekk ut [release notes](./releasenotes/1.11.0.md) for høydepunkter og mer deta
 
 - Muligheter for å angi følsomhets- og oppbevaringsetiketter, områdebilde og mye mer, samt styring av visningsnavn, beskrivelse og hva som er påkrevd i `Bestill område`-skjema [#1623](https://github.com/Puzzlepart/prosjektportalen365/pull/1623)
 - Lagt til mulighet for å skjule spesifikke kolonner på et globalt nivå basert på mal (Prosjektkolonner) [#1624](https://github.com/Puzzlepart/prosjektportalen365/issues/1624)
+- Prosjekttidslinje senterer seg nå rundt prosjektets tidsforløp (startdato - sluttdato) [#1625](https://github.com/Puzzlepart/prosjektportalen365/issues/1625)
 
 ### Feilrettinger
 
