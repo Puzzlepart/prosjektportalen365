@@ -1198,6 +1198,9 @@
     <data name="Lists_ListContent_Title" xml:space="preserve">
         <value>Listeinnhold</value>
     </data>
+    <data name="Lists_ListContent_Description" xml:space="preserve">
+        <value>Oppsett av listeinnhold for nye områder</value>
+    </data>
     <data name="Lists_ListContent_Url" xml:space="preserve">
         <value>Lists/Listeinnhold</value>
     </data>
@@ -1412,7 +1415,7 @@
         <value>Maloppsett</value>
     </data>
     <data name="Lists_TemplateOptions_Description" xml:space="preserve">
-        <value>Oppsett av listeinnhold for nye områder</value>
+        <value>Oppsett av maler for nye områder</value>
     </data>
     <data name="Lists_TemplateOptions_Url" xml:space="preserve">
         <value>Lists/Maloppsett</value>
@@ -3519,6 +3522,21 @@
     </data>
     <data name="View_WithoutResponsible_DisplayName" xml:space="preserve">
         <value>Uten ansvarlig</value>
+    </data>
+    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_Title" xml:space="preserve">
+        <value>Prosjektmaler og oppsett</value>
+    </data>
+    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_ProjectTemplates_Title" xml:space="preserve">
+        <value>Malfiler</value>
+    </data>
+    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_ProjectTemplates_Description" xml:space="preserve">
+        <value>Administrer malfiler (JSON format)</value>
+    </data>
+    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_ProjectExtensions_Title" xml:space="preserve">
+        <value>Maltillegg</value>
+    </data>
+    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_ProjectExtensions_Description" xml:space="preserve">
+        <value>Administrer øvrige maltilleggsfiler (JSON format)</value>
     </data>
     <data name="WebParts_BenefitsOverviewCategory_Title" xml:space="preserve">
         <value>Gevinstoversikt kategori</value>

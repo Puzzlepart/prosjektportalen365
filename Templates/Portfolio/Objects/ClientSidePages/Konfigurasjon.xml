@@ -3,7 +3,126 @@
     <pnp:Sections>
         <pnp:Section Order="1" Type="ThreeColumnVerticalSection">
             <pnp:Controls>
-                <pnp:CanvasControl WebPartType="QuickLinks" JsonControlData="{&quot;id&quot;: &quot;c70391ea-0b10-4ee9-b2b4-006d3fcad0cd&quot;, &quot;instanceId&quot;: &quot;fb7a674f-9888-4505-835e-42140c353a01&quot;, &quot;title&quot;: &quot;Quick links&quot;, &quot;description&quot;: &quot;Quick links&quot;, &quot;dataVersion&quot;: &quot;2.2&quot;, &quot;properties&quot;: {&quot;items&quot;:[{&quot;sourceItem&quot;:{&quot;itemType&quot;:2,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:2,&quot;id&quot;:1,&quot;fabricReactIcon&quot;:{&quot;iconName&quot;:&quot;pageheaderedit&quot;},&quot;altText&quot;:&quot;&quot;,&quot;rawPreviewImageMinCanvasWidth&quot;:32767},{&quot;sourceItem&quot;:{&quot;itemType&quot;:4,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:2,&quot;id&quot;:9,&quot;fabricReactIcon&quot;:{&quot;iconName&quot;:&quot;filecode&quot;},&quot;altText&quot;:&quot;&quot;,&quot;rawPreviewImageMinCanvasWidth&quot;:32767},{&quot;sourceItem&quot;:{&quot;itemType&quot;:4,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:2,&quot;id&quot;:10,&quot;fabricReactIcon&quot;:{&quot;iconName&quot;:&quot;appicondefaultadd&quot;},&quot;altText&quot;:&quot;&quot;,&quot;rawPreviewImageMinCanvasWidth&quot;:32767},{&quot;sourceItem&quot;:{&quot;itemType&quot;:4,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:2,&quot;id&quot;:11,&quot;fabricReactIcon&quot;:{&quot;iconName&quot;:&quot;folderlist&quot;},&quot;altText&quot;:&quot;&quot;,&quot;rawPreviewImageMinCanvasWidth&quot;:32767}],&quot;isMigrated&quot;:true,&quot;layoutId&quot;:&quot;List&quot;,&quot;shouldShowThumbnail&quot;:true,&quot;buttonLayoutOptions&quot;:{&quot;showDescription&quot;:true,&quot;buttonTreatment&quot;:1,&quot;iconPositionType&quot;:2,&quot;textAlignmentVertical&quot;:1,&quot;textAlignmentHorizontal&quot;:2,&quot;linesOfText&quot;:2},&quot;listLayoutOptions&quot;:{&quot;showDescription&quot;:true,&quot;showIcon&quot;:true},&quot;waffleLayoutOptions&quot;:{&quot;iconSize&quot;:1,&quot;onlyShowThumbnail&quot;:false},&quot;hideWebPartWhenEmpty&quot;:true,&quot;dataProviderId&quot;:&quot;QuickLinks&quot;,&quot;webId&quot;:&quot;{siteid}&quot;,&quot;siteId&quot;:&quot;{sitecollectionid}&quot;,&quot;pane_link_button&quot;:0,&quot;imageWidth&quot;:100,&quot;iconPicker&quot;:&quot;filetemplate&quot;,&quot;Administrer m(&quot;:{},&quot;Administrer ma(&quot;:{},&quot;Administrer mal(&quot;:{},&quot;Administrer male(&quot;:{},&quot;Administrer maler(&quot;:{},&quot;Administrer malf(&quot;:{},&quot;Administrer malfi(&quot;:{},&quot;Administrer malfil(&quot;:{},&quot;Administrer malfile(&quot;:{},&quot;Administrer malfiler(&quot;:{},&quot;Administrer malfiler (&quot;:{},&quot;Administrer øvrige mttillegg (&quot;:{},&quot;Administrer øvrige mattillegg (&quot;:{},&quot;Administrer øvrige malttillegg (&quot;:{},&quot;Administrer øvrige maltillegg (&quot;:{},&quot;Administrer øvrige maltilleggs (&quot;:{},&quot;Administrer øvrige maltilleggsf (&quot;:{},&quot;Administrer øvrige maltilleggsfi (&quot;:{},&quot;Administrer øvrige maltilleggsfil (&quot;:{},&quot;Administrer øvrige maltilleggsfile (&quot;:{},&quot;Administrer øvrige maltilleggsfiler (&quot;:{}}, &quot;serverProcessedContent&quot;: {&quot;htmlStrings&quot;:{},&quot;searchablePlainTexts&quot;:{&quot;title&quot;:&quot;Prosjektmaler og oppsett&quot;,&quot;items[0].description&quot;:&quot;Konfigurer maler for nye områder&quot;,&quot;items[1].description&quot;:&quot;Administrer malfiler (JSON format)&quot;,&quot;items[2].description&quot;:&quot;Administrer øvrige maltilleggsfiler (JSON format)&quot;,&quot;items[3].description&quot;:&quot;{resource:Lists_TemplateOptions_Description}&quot;,&quot;items[0].title&quot;:&quot;{resource:Lists_TemplateOptions_Title}&quot;,&quot;items[1].title&quot;:&quot;Malfiler&quot;,&quot;items[2].title&quot;:&quot;Maltillegg&quot;,&quot;items[3].title&quot;:&quot;Listeinnhold&quot;},&quot;imageSources&quot;:{},&quot;links&quot;:{&quot;baseUrl&quot;:&quot;{site}&quot;,&quot;items[0].sourceItem.url&quot;:&quot;{site}/{resource:Lists_TemplateOptions_Url}&quot;,&quot;items[1].sourceItem.url&quot;:&quot;{site}/Prosjektmaler&quot;,&quot;items[2].sourceItem.url&quot;:&quot;{site}/Prosjekttillegg&quot;,&quot;items[3].sourceItem.url&quot;:&quot;{site}/Lists/Listeinnhold&quot;},&quot;componentDependencies&quot;:{&quot;layoutComponentId&quot;:&quot;706e33c8-af37-4e7b-9d22-6e5694d92a6f&quot;}}, &quot;dynamicDataPaths&quot;: {}, &quot;dynamicDataValues&quot;: {}}" ControlId="c70391ea-0b10-4ee9-b2b4-006d3fcad0cd" Order="1" Column="1" />
+                <pnp:CanvasControl WebPartType="QuickLinks" JsonControlData="{
+    &quot;id&quot;: &quot;c70391ea-0b10-4ee9-b2b4-006d3fcad0cd&quot;,
+    &quot;instanceId&quot;: &quot;fb7a674f-9888-4505-835e-42140c353a01&quot;,
+    &quot;title&quot;: &quot;Quick links&quot;,
+    &quot;description&quot;: &quot;Quick links&quot;,
+    &quot;dataVersion&quot;: &quot;2.2&quot;,
+    &quot;properties&quot;: {
+        &quot;items&quot;: [
+            {
+                &quot;sourceItem&quot;: {
+                    &quot;itemType&quot;: 2,
+                    &quot;fileExtension&quot;: &quot;&quot;,
+                    &quot;progId&quot;: &quot;&quot;
+                },
+                &quot;thumbnailType&quot;: 2,
+                &quot;id&quot;: 1,
+                &quot;fabricReactIcon&quot;: {
+                    &quot;iconName&quot;: &quot;pageheaderedit&quot;
+                },
+                &quot;altText&quot;: &quot;&quot;,
+                &quot;rawPreviewImageMinCanvasWidth&quot;: 32767
+            },
+            {
+                &quot;sourceItem&quot;: {
+                    &quot;itemType&quot;: 4,
+                    &quot;fileExtension&quot;: &quot;&quot;,
+                    &quot;progId&quot;: &quot;&quot;
+                },
+                &quot;thumbnailType&quot;: 2,
+                &quot;id&quot;: 9,
+                &quot;fabricReactIcon&quot;: {
+                    &quot;iconName&quot;: &quot;filecode&quot;
+                },
+                &quot;altText&quot;: &quot;&quot;,
+                &quot;rawPreviewImageMinCanvasWidth&quot;: 32767
+            },
+            {
+                &quot;sourceItem&quot;: {
+                    &quot;itemType&quot;: 4,
+                    &quot;fileExtension&quot;: &quot;&quot;,
+                    &quot;progId&quot;: &quot;&quot;
+                },
+                &quot;thumbnailType&quot;: 2,
+                &quot;id&quot;: 10,
+                &quot;fabricReactIcon&quot;: {
+                    &quot;iconName&quot;: &quot;appicondefaultadd&quot;
+                },
+                &quot;altText&quot;: &quot;&quot;,
+                &quot;rawPreviewImageMinCanvasWidth&quot;: 32767
+            },
+            {
+                &quot;sourceItem&quot;: {
+                    &quot;itemType&quot;: 4,
+                    &quot;fileExtension&quot;: &quot;&quot;,
+                    &quot;progId&quot;: &quot;&quot;
+                },
+                &quot;thumbnailType&quot;: 2,
+                &quot;id&quot;: 11,
+                &quot;fabricReactIcon&quot;: {
+                    &quot;iconName&quot;: &quot;folderlist&quot;
+                },
+                &quot;altText&quot;: &quot;&quot;,
+                &quot;rawPreviewImageMinCanvasWidth&quot;: 32767
+            }
+        ],
+        &quot;isMigrated&quot;: true,
+        &quot;layoutId&quot;: &quot;List&quot;,
+        &quot;shouldShowThumbnail&quot;: true,
+        &quot;buttonLayoutOptions&quot;: {
+            &quot;showDescription&quot;: true,
+            &quot;buttonTreatment&quot;: 1,
+            &quot;iconPositionType&quot;: 2,
+            &quot;textAlignmentVertical&quot;: 1,
+            &quot;textAlignmentHorizontal&quot;: 2,
+            &quot;linesOfText&quot;: 2
+        },
+        &quot;listLayoutOptions&quot;: {
+            &quot;showDescription&quot;: true,
+            &quot;showIcon&quot;: true
+        },
+        &quot;waffleLayoutOptions&quot;: {
+            &quot;iconSize&quot;: 1,
+            &quot;onlyShowThumbnail&quot;: false
+        },
+        &quot;hideWebPartWhenEmpty&quot;: true,
+        &quot;dataProviderId&quot;: &quot;QuickLinks&quot;,
+        &quot;webId&quot;: &quot;{siteid}&quot;,
+        &quot;siteId&quot;: &quot;{sitecollectionid}&quot;,
+        &quot;pane_link_button&quot;: 0,
+        &quot;imageWidth&quot;: 100,
+        &quot;iconPicker&quot;: &quot;filetemplate&quot;
+    },
+    &quot;serverProcessedContent&quot;: {
+        &quot;htmlStrings&quot;: {},
+        &quot;searchablePlainTexts&quot;: {
+            &quot;title&quot;: &quot;{resource:WebParts_QuickLinks_ProjectTemplatesSetup_Title}&quot;,
+            &quot;items[0].description&quot;: &quot;{resource:Lists_TemplateOptions_Description}&quot;,
+            &quot;items[1].description&quot;: &quot;{resource:WebParts_QuickLinks_ProjectTemplatesSetup_ProjectTemplates_Description}&quot;,
+            &quot;items[2].description&quot;: &quot;{resource:WebParts_QuickLinks_ProjectTemplatesSetup_ProjectExtensions_Description}&quot;,
+            &quot;items[3].description&quot;: &quot;{resource:Lists_ListContent_Description}&quot;,
+            &quot;items[0].title&quot;: &quot;{resource:Lists_TemplateOptions_Title}&quot;,
+            &quot;items[1].title&quot;: &quot;{resource:WebParts_QuickLinks_ProjectTemplatesSetup_ProjectTemplates_Title}&quot;,
+            &quot;items[2].title&quot;: &quot;{resource:WebParts_QuickLinks_ProjectTemplatesSetup_ProjectExtensions_Title}&quot;,
+            &quot;items[3].title&quot;: &quot;{resource:Lists_ListContent_Title}&quot;
+        },
+        &quot;imageSources&quot;: {},
+        &quot;links&quot;: {
+            &quot;baseUrl&quot;: &quot;{site}&quot;,
+            &quot;items[0].sourceItem.url&quot;: &quot;{site}/{resource:Lists_TemplateOptions_Url}&quot;,
+            &quot;items[1].sourceItem.url&quot;: &quot;{site}/{resource:Lists_ProjectTemplates_Url}&quot;,
+            &quot;items[2].sourceItem.url&quot;: &quot;{site}/{resource:Lists_ProjectExtensions_Url}&quot;,
+            &quot;items[3].sourceItem.url&quot;: &quot;{site}/{resource:Lists_ListContent_Url}&quot;
+        },
+        &quot;componentDependencies&quot;: {
+            &quot;layoutComponentId&quot;: &quot;706e33c8-af37-4e7b-9d22-6e5694d92a6f&quot;
+        }
+    },
+    &quot;dynamicDataPaths&quot;: {},
+    &quot;dynamicDataValues&quot;: {}
+}" ControlId="c70391ea-0b10-4ee9-b2b4-006d3fcad0cd" Order="1" Column="1" />
                 <pnp:CanvasControl WebPartType="QuickLinks" JsonControlData="{&quot;id&quot;: &quot;c70391ea-0b10-4ee9-b2b4-006d3fcad0cd&quot;, &quot;instanceId&quot;: &quot;05cc2e3e-e1af-4c7f-aa38-40cd512c38a4&quot;, &quot;title&quot;: &quot;Quick links&quot;, &quot;description&quot;: &quot;Quick links&quot;, &quot;dataVersion&quot;: &quot;2.2&quot;, &quot;properties&quot;: {&quot;items&quot;:[{&quot;sourceItem&quot;:{&quot;itemType&quot;:4,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:2,&quot;id&quot;:13,&quot;fabricReactIcon&quot;:{&quot;iconName&quot;:&quot;receiptcheck&quot;},&quot;altText&quot;:&quot;&quot;,&quot;rawPreviewImageMinCanvasWidth&quot;:32767},{&quot;sourceItem&quot;:{&quot;itemType&quot;:4,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:2,&quot;id&quot;:15,&quot;fabricReactIcon&quot;:{&quot;iconName&quot;:&quot;plannerlogo&quot;},&quot;altText&quot;:&quot;&quot;,&quot;rawPreviewImageMinCanvasWidth&quot;:32767},{&quot;sourceItem&quot;:{&quot;itemType&quot;:4,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:2,&quot;id&quot;:14,&quot;fabricReactIcon&quot;:{&quot;iconName&quot;:&quot;accountmanagement&quot;},&quot;altText&quot;:&quot;&quot;,&quot;rawPreviewImageMinCanvasWidth&quot;:32767},{&quot;sourceItem&quot;:{&quot;itemType&quot;:4,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:2,&quot;id&quot;:19,&quot;fabricReactIcon&quot;:{&quot;iconName&quot;:&quot;filetemplate&quot;},&quot;altText&quot;:&quot;&quot;,&quot;rawPreviewImageMinCanvasWidth&quot;:32767}],&quot;isMigrated&quot;:true,&quot;layoutId&quot;:&quot;List&quot;,&quot;shouldShowThumbnail&quot;:true,&quot;buttonLayoutOptions&quot;:{&quot;showDescription&quot;:true,&quot;buttonTreatment&quot;:1,&quot;iconPositionType&quot;:2,&quot;textAlignmentVertical&quot;:1,&quot;textAlignmentHorizontal&quot;:2,&quot;linesOfText&quot;:2},&quot;listLayoutOptions&quot;:{&quot;showDescription&quot;:true,&quot;showIcon&quot;:true},&quot;waffleLayoutOptions&quot;:{&quot;iconSize&quot;:1,&quot;onlyShowThumbnail&quot;:false},&quot;hideWebPartWhenEmpty&quot;:true,&quot;dataProviderId&quot;:&quot;QuickLinks&quot;,&quot;webId&quot;:&quot;{siteid}&quot;,&quot;siteId&quot;:&quot;{sitecollectionid}&quot;,&quot;pane_link_button&quot;:0,&quot;imageWidth&quot;:100,&quot;iconPicker&quot;:&quot;permissions&quot;,&quot;Administrer m(&quot;:{},&quot;Administrer ma(&quot;:{},&quot;Administrer mal(&quot;:{},&quot;Administrer male(&quot;:{},&quot;Administrer maler(&quot;:{},&quot;Administrer malf(&quot;:{},&quot;Administrer malfi(&quot;:{},&quot;Administrer malfil(&quot;:{},&quot;Administrer malfile(&quot;:{},&quot;Administrer malfiler(&quot;:{},&quot;Administrer malfiler (&quot;:{},&quot;Administrer øvrige mttillegg (&quot;:{},&quot;Administrer øvrige mattillegg (&quot;:{},&quot;Administrer øvrige malttillegg (&quot;:{},&quot;Administrer øvrige maltillegg (&quot;:{},&quot;Administrer øvrige maltilleggs (&quot;:{},&quot;Administrer øvrige maltilleggsf (&quot;:{},&quot;Administrer øvrige maltilleggsfi (&quot;:{},&quot;Administrer øvrige maltilleggsfil (&quot;:{},&quot;Administrer øvrige maltilleggsfile (&quot;:{},&quot;Administrer øvrige maltilleggsfiler (&quot;:{}}, &quot;serverProcessedContent&quot;: {&quot;htmlStrings&quot;:{},&quot;searchablePlainTexts&quot;:{&quot;title&quot;:&quot;Lister og bibliotek&quot;,&quot;items[0].description&quot;:&quot;Standard fasesjekkpunkter fra Prosjektveiviseren&quot;,&quot;items[1].description&quot;:&quot;Standard prosjektoppgaver fra Prosjektveiviseren&quot;,&quot;items[2].description&quot;:&quot;Administrer standard interessentregister for nye områder&quot;,&quot;items[3].description&quot;:&quot;Maler i sentralt malbibliotek&quot;,&quot;items[0].title&quot;:&quot;Fasesjekkliste&quot;,&quot;items[1].title&quot;:&quot;Planneroppgaver&quot;,&quot;items[2].title&quot;:&quot;Interessentregister&quot;,&quot;items[3].title&quot;:&quot;Malbibliotek&quot;},&quot;imageSources&quot;:{},&quot;links&quot;:{&quot;baseUrl&quot;:&quot;{site}&quot;,&quot;items[0].sourceItem.url&quot;:&quot;{site}/Lists/Fasesjekkliste&quot;,&quot;items[1].sourceItem.url&quot;:&quot;{site}/Lists/Planneroppgaver&quot;,&quot;items[2].sourceItem.url&quot;:&quot;{site}/Lists/Interessentregister&quot;,&quot;items[3].sourceItem.url&quot;:&quot;{site}/Malbibliotek&quot;},&quot;componentDependencies&quot;:{&quot;layoutComponentId&quot;:&quot;706e33c8-af37-4e7b-9d22-6e5694d92a6f&quot;}}, &quot;dynamicDataPaths&quot;: {}, &quot;dynamicDataValues&quot;: {}}" ControlId="c70391ea-0b10-4ee9-b2b4-006d3fcad0cd" Order="2" Column="1" />
                 <pnp:CanvasControl WebPartType="QuickLinks" JsonControlData="{&quot;id&quot;: &quot;c70391ea-0b10-4ee9-b2b4-006d3fcad0cd&quot;, &quot;instanceId&quot;: &quot;4e5ea492-2e4e-4bf4-8bf7-c092a676f497&quot;, &quot;title&quot;: &quot;Quick links&quot;, &quot;description&quot;: &quot;Quick links&quot;, &quot;dataVersion&quot;: &quot;2.2&quot;, &quot;properties&quot;: {&quot;items&quot;:[{&quot;sourceItem&quot;:{&quot;itemType&quot;:4,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:2,&quot;id&quot;:5,&quot;fabricReactIcon&quot;:{&quot;iconName&quot;:&quot;database&quot;},&quot;altText&quot;:&quot;&quot;,&quot;rawPreviewImageMinCanvasWidth&quot;:32767},{&quot;sourceItem&quot;:{&quot;itemType&quot;:4,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:2,&quot;id&quot;:8,&quot;fabricReactIcon&quot;:{&quot;iconName&quot;:&quot;quadColumn&quot;},&quot;altText&quot;:&quot;&quot;,&quot;rawPreviewImageMinCanvasWidth&quot;:32767},{&quot;sourceItem&quot;:{&quot;itemType&quot;:4,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:2,&quot;id&quot;:3,&quot;fabricReactIcon&quot;:{&quot;iconName&quot;:&quot;planview&quot;},&quot;altText&quot;:&quot;&quot;,&quot;rawPreviewImageMinCanvasWidth&quot;:32767},{&quot;sourceItem&quot;:{&quot;itemType&quot;:4,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:2,&quot;id&quot;:1,&quot;fabricReactIcon&quot;:{&quot;iconName&quot;:&quot;triplecolumn&quot;},&quot;altText&quot;:&quot;&quot;,&quot;rawPreviewImageMinCanvasWidth&quot;:32767},{&quot;sourceItem&quot;:{&quot;itemType&quot;:4,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:2,&quot;id&quot;:2,&quot;fabricReactIcon&quot;:{&quot;iconName&quot;:&quot;color&quot;},&quot;altText&quot;:&quot;&quot;,&quot;rawPreviewImageMinCanvasWidth&quot;:32767},{&quot;sourceItem&quot;:{&quot;itemType&quot;:4,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:2,&quot;id&quot;:4,&quot;fabricReactIcon&quot;:{&quot;iconName&quot;:&quot;stackindicator&quot;},&quot;altText&quot;:&quot;&quot;,&quot;rawPreviewImageMinCanvasWidth&quot;:32767}],&quot;isMigrated&quot;:true,&quot;layoutId&quot;:&quot;List&quot;,&quot;shouldShowThumbnail&quot;:true,&quot;buttonLayoutOptions&quot;:{&quot;showDescription&quot;:true,&quot;buttonTreatment&quot;:1,&quot;iconPositionType&quot;:2,&quot;textAlignmentVertical&quot;:2,&quot;textAlignmentHorizontal&quot;:2,&quot;linesOfText&quot;:2},&quot;listLayoutOptions&quot;:{&quot;showDescription&quot;:true,&quot;showIcon&quot;:true},&quot;waffleLayoutOptions&quot;:{&quot;iconSize&quot;:1,&quot;onlyShowThumbnail&quot;:false},&quot;hideWebPartWhenEmpty&quot;:true,&quot;dataProviderId&quot;:&quot;QuickLinks&quot;,&quot;webId&quot;:&quot;{siteid}&quot;,&quot;siteId&quot;:&quot;{sitecollectionid}&quot;,&quot;pane_link_button&quot;:0,&quot;imageWidth&quot;:100,&quot;Tittel&quot;:&quot;Datakilder&quot;,&quot;Beskrivelse&quot;:&quot;Spørringer på porteføljenivå (unntatt porteføljeoversikt)&quot;,&quot;iconPicker&quot;:&quot;database&quot;}, &quot;serverProcessedContent&quot;: {&quot;htmlStrings&quot;:{},&quot;searchablePlainTexts&quot;:{&quot;title&quot;:&quot;Kolonner og visninger&quot;,&quot;items[0].description&quot;:&quot;Spørringer på porteføljenivå (unntatt porteføljeoversikt)&quot;,&quot;items[1].description&quot;:&quot;Administrer prosjektinnholds-kolonner (synlighet og metadata)&quot;,&quot;items[2].description&quot;:&quot;Visninger tilhørende porteføljeoversikten&quot;,&quot;items[3].description&quot;:&quot;Administrer prosjektkolonner (synlighet og metadata)&quot;,&quot;items[4].description&quot;:&quot;Administrer prosjektkolonneverdier (farge/ikon/navn) for statusfelter&quot;,&quot;items[5].description&quot;:&quot;Oppsett av prosjektstatusrapport&quot;,&quot;items[0].title&quot;:&quot;Datakilder&quot;,&quot;items[1].title&quot;:&quot;Prosjektinnholdskolonner&quot;,&quot;items[2].title&quot;:&quot;Porteføljevisninger&quot;,&quot;items[3].title&quot;:&quot;Prosjektkolonner&quot;,&quot;items[4].title&quot;:&quot;Prosjektkolonnekonfigurasjon&quot;,&quot;items[5].title&quot;:&quot;Statusseksjoner&quot;},&quot;imageSources&quot;:{},&quot;links&quot;:{&quot;baseUrl&quot;:&quot;{site}&quot;,&quot;items[0].sourceItem.url&quot;:&quot;{site}/Lists/Datakilder&quot;,&quot;items[1].sourceItem.url&quot;:&quot;{site}/Lists/Prosjektinnholdskolonner&quot;,&quot;items[2].sourceItem.url&quot;:&quot;{site}/Lists/Porteføljevisninger&quot;,&quot;items[3].sourceItem.url&quot;:&quot;{site}/Lists/Prosjektkolonner&quot;,&quot;items[4].sourceItem.url&quot;:&quot;{site}/Lists/Prosjektkolonnekonfigurasjon&quot;,&quot;items[5].sourceItem.url&quot;:&quot;{site}/Lists/Statusseksjoner&quot;},&quot;componentDependencies&quot;:{&quot;layoutComponentId&quot;:&quot;706e33c8-af37-4e7b-9d22-6e5694d92a6f&quot;}}, &quot;dynamicDataPaths&quot;: {}, &quot;dynamicDataValues&quot;: {}}" ControlId="c70391ea-0b10-4ee9-b2b4-006d3fcad0cd" Order="1" Column="2" />
                 <pnp:CanvasControl WebPartType="QuickLinks" JsonControlData="{&quot;id&quot;: &quot;c70391ea-0b10-4ee9-b2b4-006d3fcad0cd&quot;, &quot;instanceId&quot;: &quot;1d0079eb-2af4-4db5-bb89-d33f446962c5&quot;, &quot;title&quot;: &quot;Quick links&quot;, &quot;description&quot;: &quot;Quick links&quot;, &quot;dataVersion&quot;: &quot;2.2&quot;, &quot;properties&quot;: {&quot;items&quot;:[{&quot;sourceItem&quot;:{&quot;itemType&quot;:4,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:2,&quot;id&quot;:5,&quot;fabricReactIcon&quot;:{&quot;iconName&quot;:&quot;chart&quot;},&quot;altText&quot;:&quot;&quot;,&quot;rawPreviewImageMinCanvasWidth&quot;:32767},{&quot;sourceItem&quot;:{&quot;itemType&quot;:4,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:2,&quot;id&quot;:18,&quot;fabricReactIcon&quot;:{&quot;iconName&quot;:&quot;TimelineProgress&quot;},&quot;altText&quot;:&quot;&quot;,&quot;rawPreviewImageMinCanvasWidth&quot;:32767},{&quot;sourceItem&quot;:{&quot;itemType&quot;:4,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:2,&quot;id&quot;:6,&quot;fabricReactIcon&quot;:{&quot;iconName&quot;:&quot;Lightbulb&quot;},&quot;altText&quot;:&quot;&quot;,&quot;rawPreviewImageMinCanvasWidth&quot;:32767},{&quot;sourceItem&quot;:{&quot;itemType&quot;:4,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:2,&quot;id&quot;:7,&quot;fabricReactIcon&quot;:{&quot;iconName&quot;:&quot;Help&quot;},&quot;altText&quot;:&quot;&quot;,&quot;rawPreviewImageMinCanvasWidth&quot;:32767},{&quot;sourceItem&quot;:{&quot;itemType&quot;:4,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:2,&quot;id&quot;:1,&quot;fabricReactIcon&quot;:{&quot;iconName&quot;:&quot;link12&quot;},&quot;altText&quot;:&quot;&quot;,&quot;rawPreviewImageMinCanvasWidth&quot;:32767}],&quot;isMigrated&quot;:true,&quot;layoutId&quot;:&quot;List&quot;,&quot;shouldShowThumbnail&quot;:true,&quot;buttonLayoutOptions&quot;:{&quot;showDescription&quot;:true,&quot;buttonTreatment&quot;:1,&quot;iconPositionType&quot;:2,&quot;textAlignmentVertical&quot;:2,&quot;textAlignmentHorizontal&quot;:2,&quot;linesOfText&quot;:2},&quot;listLayoutOptions&quot;:{&quot;showDescription&quot;:true,&quot;showIcon&quot;:true},&quot;waffleLayoutOptions&quot;:{&quot;iconSize&quot;:1,&quot;onlyShowThumbnail&quot;:false},&quot;hideWebPartWhenEmpty&quot;:true,&quot;dataProviderId&quot;:&quot;QuickLinks&quot;,&quot;webId&quot;:&quot;{siteid}&quot;,&quot;siteId&quot;:&quot;{sitecollectionid}&quot;,&quot;pane_link_button&quot;:0,&quot;imageWidth&quot;:100,&quot;Tittel&quot;:&quot;Nyttige lenker&quot;,&quot;Beskrivelse&quot;:&quot;Konfigurer hvilke lenker som skal dukke opp under Nyttige lenker i footeren&quot;,&quot;iconPicker&quot;:&quot;link12&quot;}, &quot;serverProcessedContent&quot;: {&quot;htmlStrings&quot;:{},&quot;searchablePlainTexts&quot;:{&quot;title&quot;:&quot;Konfigurasjon&quot;,&quot;items[0].description&quot;:&quot;Administrer grafelementer i Porteføljeinnsikt&quot;,&quot;items[1].description&quot;:&quot;Konfigurasjon av tidslinjeelementenes farge, form og synlighet&quot;,&quot;items[2].description&quot;:&quot;Konfigurasjon av idémodulen, oppsett av flere idébehandlingslister...&quot;,&quot;items[3].description&quot;:&quot;Konfigurasjon og oppsett av innholdet i hjelpeinnhold&quot;,&quot;items[4].description&quot;:&quot;Konfigurer hvilke lenker som skal dukke opp under Nyttige lenker i footeren&quot;,&quot;items[0].title&quot;:&quot;Grafkonfigurasjon&quot;,&quot;items[1].title&quot;:&quot;Tidslinjekonfigurasjon&quot;,&quot;items[2].title&quot;:&quot;Idékonfigurasjon&quot;,&quot;items[3].title&quot;:&quot;Hjelpeinnhold konfigurasjon&quot;,&quot;items[4].title&quot;:&quot;Nyttige lenker&quot;},&quot;imageSources&quot;:{},&quot;links&quot;:{&quot;baseUrl&quot;:&quot;{site}&quot;,&quot;items[0].sourceItem.url&quot;:&quot;{site}/Lists/Grafkonfigurasjon&quot;,&quot;items[1].sourceItem.url&quot;:&quot;{site}/Lists/Tidslinjekonfigurasjon&quot;,&quot;items[2].sourceItem.url&quot;:&quot;{site}/Lists/Idekonfigurasjon&quot;,&quot;items[3].sourceItem.url&quot;:&quot;{site}/Lists/Hjelpeinnhold&quot;,&quot;items[4].sourceItem.url&quot;:&quot;{site}/Lists/Lenker/&quot;},&quot;componentDependencies&quot;:{&quot;layoutComponentId&quot;:&quot;706e33c8-af37-4e7b-9d22-6e5694d92a6f&quot;}}, &quot;dynamicDataPaths&quot;: {}, &quot;dynamicDataValues&quot;: {}}" ControlId="c70391ea-0b10-4ee9-b2b4-006d3fcad0cd" Order="2" Column="2" />

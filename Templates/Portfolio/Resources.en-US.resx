@@ -1180,6 +1180,9 @@
     <data name="Lists_ListContent_Title" xml:space="preserve">
         <value>List Content</value>
     </data>
+    <data name="Lists_ListContent_Description" xml:space="preserve">
+        <value>Setup of list content for new project sites</value>
+    </data>
     <data name="Lists_ListContent_Url" xml:space="preserve">
         <value>Lists/ListContent</value>
     </data>
@@ -1352,7 +1355,7 @@
         <value>Oppsett av listeinnhold for nye områder</value>
     </data>
     <data name="Lists_TemplateOptions_Description" xml:space="preserve">
-        <value>Setup of list content for new project sites</value>
+        <value>Setup of templates for new project sites</value>
     </data>
     <data name="Lists_TemplateLibrary_Url" xml:space="preserve">
         <value>TemplateLibrary</value>
@@ -3423,6 +3426,9 @@
     </data>
     <data name="View_WithoutResponsible_DisplayName" xml:space="preserve">
         <value>Without responsible</value>
+    </data>
+    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_Title" xml:space="preserve">
+        <value>Project Templates and Setup</value>
     </data>
     <data name="WebParts_BenefitsOverviewCategory_Title" xml:space="preserve">
         <value>Benefits Overview Category</value>
