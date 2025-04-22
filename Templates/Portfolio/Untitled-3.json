@@ -123,29 +123,29 @@
     "serverProcessedContent": {
         "htmlStrings": {},
         "searchablePlainTexts": {
-            "title": "Kolonner og visninger",
-            "items[0].description": "Spørringer på porteføljenivå (unntatt porteføljeoversikt)",
-            "items[1].description": "Administrer prosjektinnholds-kolonner (synlighet og metadata)",
-            "items[2].description": "Visninger tilhørende porteføljeoversikten",
-            "items[3].description": "Administrer prosjektkolonner (synlighet og metadata)",
-            "items[4].description": "Administrer prosjektkolonneverdier (farge/ikon/navn) for statusfelter",
-            "items[5].description": "Oppsett av prosjektstatusrapport",
-            "items[0].title": "Datakilder",
-            "items[1].title": "Prosjektinnholdskolonner",
-            "items[2].title": "Porteføljevisninger",
-            "items[3].title": "Prosjektkolonner",
-            "items[4].title": "Prosjektkolonnekonfigurasjon",
-            "items[5].title": "Statusseksjoner"
+            "title": "{resource:WebParts_QuickLinks_ColumnsViews_Title}",
+            "items[0].description": "{resource:Lists_DataSources_Description}",
+            "items[1].description": "{resource:Lists_ProjectContentColumns_Description}",
+            "items[2].description": "{resource:Lists_PortfolioViews_Description}",
+            "items[3].description": "{resource:Lists_ProjectColumns_Description}",
+            "items[4].description": "{resource:Lists_ProjectColumnConfig_Description}",
+            "items[5].description": "{resource:Lists_StatusSections_Description}",
+            "items[0].title": "{resource:Lists_DataSources_Title}",
+            "items[1].title": "{resource:Lists_ProjectContentColumns_Title}",
+            "items[2].title": "{resource:Lists_PortfolioViews_Title}",
+            "items[3].title": "{resource:Lists_ProjectColumns_Title}",
+            "items[4].title": "{resource:Lists_ProjectColumnConfig_Title}",
+            "items[5].title": "{resource:Lists_StatusSections_Title}"
         },
         "imageSources": {},
         "links": {
             "baseUrl": "{site}",
-            "items[0].sourceItem.url": "{site}/Lists/Datakilder",
-            "items[1].sourceItem.url": "{site}/Lists/Prosjektinnholdskolonner",
-            "items[2].sourceItem.url": "{site}/Lists/Porteføljevisninger",
-            "items[3].sourceItem.url": "{site}/Lists/Prosjektkolonner",
-            "items[4].sourceItem.url": "{site}/Lists/Prosjektkolonnekonfigurasjon",
-            "items[5].sourceItem.url": "{site}/Lists/Statusseksjoner"
+            "items[0].sourceItem.url": "{site}/{resource:Lists_DataSources_Url}",
+            "items[1].sourceItem.url": "{site}/{resource:Lists_ProjectContentColumns_Url}",
+            "items[2].sourceItem.url": "{site}/{resource:Lists_PortfolioViews_Url}",
+            "items[3].sourceItem.url": "{site}/{resource:Lists_ProjectColumns_Url}",
+            "items[4].sourceItem.url": "{site}/{resource:Lists_ProjectColumnConfig_Url}",
+            "items[5].sourceItem.url": "{site}/{resource:Lists_StatusSections_Url}"
         },
         "componentDependencies": {
             "layoutComponentId": "706e33c8-af37-4e7b-9d22-6e5694d92a6f"
