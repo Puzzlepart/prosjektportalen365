@@ -1,4 +1,4 @@
-<pnp:ListInstance Title="{resource:Lists_PortfolioViews_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_PortfolioViews_Url}" Hidden="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" 
+<pnp:ListInstance Title="{resource:Lists_PortfolioViews_Title}" Description="{resource:Lists_PortfolioViews_Description}" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_PortfolioViews_Url}" Hidden="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x01001BE34662FF90874E9FEB29B37B6BB18C" Default="true" />

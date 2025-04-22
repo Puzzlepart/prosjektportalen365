@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:schema id="root"
+        xmlns=""
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
         <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
         <xsd:element name="root" msdata:IsDataSet="true">
             <xsd:complexType>
@@ -3454,7 +3457,7 @@
     <data name="WebParts_QuickLinks_ProjectTemplatesSetup_ProjectExtensions_Description" xml:space="preserve">
         <value>Manage template extensions (JSON format)</value>
     </data>
-     <data name="WebParts_QuickLinks_ListsLibaries_Title" xml:space="preserve">
+    <data name="WebParts_QuickLinks_ListsLibaries_Title" xml:space="preserve">
         <value>Lists and Libraries</value>
     </data>
     <data name="WebParts_BenefitsOverviewCategory_Title" xml:space="preserve">
@@ -3513,5 +3516,26 @@
     </data>
     <data name="WebParts_UsefulLinks_Title" xml:space="preserve">
         <value>Useful Links</value>
+    </data>
+    <data name="WebParts_QuickLinks_ColumnsViews_Title" xml:space="preserve">
+        <value>Columns and Views</value>
+    </data>
+    <data name="Lists_DataSources_Description" xml:space="preserve">
+        <value>Queries at portfolio level (except for portfolio overview)</value>
+    </data>
+    <data name="Lists_ProjectContentColumns_Description" xml:space="preserve">
+        <value>Manage project content columns (visibility and metadata)</value>
+    </data>
+    <data name="Lists_PortfolioViews_Description" xml:space="preserve">
+        <value>Views related to the portfolio overview</value>
+    </data>
+    <data name="Lists_ProjectColumns_Description" xml:space="preserve">
+        <value>Manage project columns (visibility and metadata)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_Description" xml:space="preserve">
+        <value>Administrate project column values (color/icon/name) for status fields</value>
+    </data>
+    <data name="Lists_StatusSections_Description" xml:space="preserve">
+        <value>Setup of project status report</value>
     </data>
 </root>

@@ -3610,4 +3610,25 @@
     <data name="WebParts_UsefulLinks_Title" xml:space="preserve">
         <value>Nyttige lenker</value>
     </data>
+    <data name="WebParts_QuickLinks_ColumnsViews_Title" xml:space="preserve">
+        <value>Kolonner og visninger</value>
+    </data>
+    <data name="Lists_DataSources_Description" xml:space="preserve">
+        <value>Spørringer på porteføljenivå (unntatt porteføljeoversikt)</value>
+    </data>
+    <data name="Lists_ProjectContentColumns_Description" xml:space="preserve">
+        <value>Administrer prosjektinnholds-kolonner (synlighet og metadata)</value>
+    </data>
+    <data name="Lists_PortfolioViews_Description" xml:space="preserve">
+        <value>Visninger tilhørende porteføljeoversikten</value>
+    </data>
+    <data name="Lists_ProjectColumns_Description" xml:space="preserve">
+        <value>Administrer prosjektkolonner (synlighet og metadata)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_Description" xml:space="preserve">
+        <value>Administrer prosjektkolonneverdier (farge/ikon/navn) for statusfelter</value>
+    </data>
+    <data name="Lists_StatusSections_Description" xml:space="preserve">
+        <value>Oppsett av prosjektstatusrapport</value>
+    </data>
 </root>
