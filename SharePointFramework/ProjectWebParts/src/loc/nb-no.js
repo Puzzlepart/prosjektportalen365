@@ -78,6 +78,7 @@ define([], function () {
     DefaultTimeframeEndValue: '{0} måneder frem i tid',
     DefaultTimeframeStartLabel: 'Standard startdato',
     DefaultTimeframeStartValue: '{0} måneder tilbake i tid',
+    ProjectTimeLapseLabel: 'Sentrer tidslinjen på prosjektets tidsforløp',
     DeleteItemLabel: 'Slett',
     DeleteReportButtonLabel: 'Slett',
     DeleteReportButtonDescription: 'Slett den valgte statusrapporten.',

@@ -35,6 +35,7 @@ export type ProjectColumnCustomSort = {
 export type ProjectColumnFieldOverride = {
   displayName?: string
   description?: string
+  isReadOnly?: boolean
 }
 
 export type ProjectColumnData = {

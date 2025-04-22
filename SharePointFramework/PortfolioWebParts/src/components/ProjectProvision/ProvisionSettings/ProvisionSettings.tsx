@@ -24,7 +24,7 @@ import { Commands } from './Commands'
 import styles from './ProvisionSettings.module.scss'
 import strings from 'PortfolioWebPartsStrings'
 
-export const ProvisionSettings = (props: { toast: any }) => {
+export const ProvisionSettings = () => {
   const {
     context,
     settings,
@@ -33,7 +33,7 @@ export const ProvisionSettings = (props: { toast: any }) => {
     defaultSortState,
     getCellFocusMode,
     fluentProviderId
-  } = useProvisionSettings(props.toast)
+  } = useProvisionSettings()
 
   return (
     <IdPrefixProvider value={fluentProviderId}>

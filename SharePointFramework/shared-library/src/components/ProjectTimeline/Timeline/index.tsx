@@ -3,7 +3,7 @@ import { ITimelineItem } from '../../../interfaces/ITimelineItem'
 import moment from 'moment'
 import * as strings from 'SharedLibraryStrings'
 import React, { FC } from 'react'
-import ReactTimeline, { TimelineMarkers, TodayMarker } from 'react-calendar-timeline'
+import ReactTimeline, { CustomMarker, TimelineMarkers, TodayMarker } from 'react-calendar-timeline'
 import 'react-calendar-timeline/lib/Timeline.css'
 import { FilterPanel } from '../../FilterPanel'
 import { DetailsPopover } from '../DetailsPopover'
@@ -55,6 +55,15 @@ export const Timeline: FC<ITimelineProps> = (props) => {
             groupRenderer={groupRenderer}
           >
             <TimelineMarkers>
+              <CustomMarker date={props.timeLapseMarker}>
+                {({ styles }) => {
+                  const customStyles = {
+                    ...styles,
+                    backgroundColor: '#f35d69'
+                  }
+                  return <div style={customStyles} />
+                }}
+              </CustomMarker>
               <TodayMarker date={moment().toDate()} />
             </TimelineMarkers>
           </ReactTimeline>

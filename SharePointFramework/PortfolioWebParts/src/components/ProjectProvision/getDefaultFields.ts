@@ -1,0 +1,215 @@
+import strings from 'PortfolioWebPartsStrings'
+import { IProvisionField } from './types'
+
+/**
+ * Returns the default fields and configuration for the ProjectProvision component
+ */
+export const getDefaultFields = (): IProvisionField[] => {
+  return [
+    {
+      order: 10,
+      fieldName: 'type',
+      displayName: strings.Provision.SiteTypeFieldLabel,
+      description: '',
+      dataType: 'site',
+      required: true,
+      level: 0
+    },
+    {
+      order: 20,
+      fieldName: 'name',
+      displayName: strings.Provision.SiteNameFieldLabel,
+      description: strings.Provision.SiteNameFieldDescription,
+      placeholder: strings.Placeholder.SiteName,
+      dataType: 'text',
+      required: true,
+      level: 0
+    },
+    {
+      order: 30,
+      fieldName: 'description',
+      displayName: strings.Provision.DescriptionLabel,
+      description: strings.Provision.SiteDescriptionFieldDescription,
+      placeholder: strings.Placeholder.SiteDescription,
+      dataType: 'note',
+      required: true,
+      level: 0
+    },
+    {
+      order: 40,
+      fieldName: 'justification',
+      displayName: strings.Provision.BusinessJustificationFieldLabel,
+      description: strings.Provision.BusinessJustificationFieldDescription,
+      placeholder: strings.Placeholder.BusinessJustificationField,
+      dataType: 'note',
+      required: true,
+      level: 0
+    },
+    {
+      order: 50,
+      fieldName: 'owner',
+      displayName: strings.Provision.OwnerFieldLabel,
+      description: strings.Provision.OwnerFieldDescription,
+      placeholder: strings.Placeholder.UserField,
+      dataType: 'userMulti',
+      required: true,
+      level: 0
+    },
+    {
+      order: 60,
+      fieldName: 'member',
+      displayName: strings.Provision.MemberFieldLabel,
+      description: strings.Provision.MemberFieldDescription,
+      placeholder: strings.Placeholder.UserField,
+      dataType: 'userMulti',
+      level: 0
+    },
+    {
+      order: 70,
+      fieldName: 'requestedBy',
+      displayName: strings.Provision.RequestedByFieldLabel,
+      description: strings.Provision.RequestedByFieldDescription,
+      placeholder: strings.Placeholder.UserField,
+      dataType: 'userMulti',
+      level: 0
+    },
+    {
+      order: 80,
+      fieldName: 'alias',
+      displayName: strings.Provision.AliasFieldLabel,
+      dataType: 'text',
+      disabled: true,
+      level: 0
+    },
+    {
+      order: 90,
+      fieldName: 'url',
+      displayName: strings.Provision.UrlFieldLabel,
+      dataType: 'text',
+      disabled: true,
+      level: 0
+    },
+    {
+      order: 100,
+      fieldName: 'teamify',
+      displayName: strings.Provision.TeamifyFieldLabel,
+      description: strings.Provision.TeamifyFieldDescription,
+      dataType: 'boolean',
+      level: 1
+    },
+    {
+      order: 110,
+      fieldName: 'teamTemplate',
+      displayName: strings.Provision.TeamTemplateFieldLabel,
+      description: strings.Provision.TeamTemplateFieldDescription,
+      dataType: 'choice',
+      level: 1
+    },
+    {
+      order: 120,
+      fieldName: 'isConfidential',
+      displayName: strings.Provision.ConfidentialFieldLabel,
+      description: strings.Provision.ConfidentialFieldDescription,
+      dataType: 'boolean',
+      level: 1
+    },
+    {
+      order: 130,
+      fieldName: 'privacy',
+      displayName: strings.Provision.PrivacyFieldLabel,
+      description: strings.Provision.PrivacyFieldDescription,
+      dataType: 'choice',
+      level: 1
+    },
+    {
+      order: 140,
+      fieldName: 'externalSharing',
+      displayName: strings.Provision.ExternalSharingFieldLabel,
+      description: strings.Provision.ExternalSharingFieldDescription,
+      dataType: 'boolean',
+      level: 1
+    },
+    {
+      order: 150,
+      fieldName: 'guest',
+      displayName: strings.Provision.GuestFieldLabel,
+      description: strings.Provision.GuestFieldDescription,
+      placeholder: 'Angi gjester',
+      dataType: 'guest',
+      level: 1
+    },
+    {
+      order: 160,
+      fieldName: 'sensitivityLabel',
+      displayName: strings.Provision.SensitivityLabelFieldLabel,
+      description: strings.Provision.SensitivityLabelFieldDescription,
+      dataType: 'choice',
+      level: 1
+    },
+    {
+      order: 170,
+      fieldName: 'retentionLabel',
+      displayName: strings.Provision.RetentionLabelFieldLabel,
+      description: strings.Provision.RetentionLabelFieldDescription,
+      dataType: 'choice',
+      level: 1
+    },
+    {
+      order: 180,
+      fieldName: 'expirationDate',
+      displayName: strings.Provision.ExpirationDateFieldLabel,
+      description: strings.Provision.ExpirationDateFieldDescription,
+      dataType: 'date',
+      level: 1
+    },
+    {
+      order: 190,
+      fieldName: 'readOnlyGroup',
+      displayName: strings.Provision.ReadOnlyGroupFieldLabel,
+      description: strings.Provision.ReadOnlyGroupFieldDescription,
+      dataType: 'boolean',
+      level: 1
+    },
+    {
+      order: 200,
+      fieldName: 'internalChannel',
+      displayName: strings.Provision.InternalChannelFieldLabel,
+      description: strings.Provision.InternalChannelFieldDescription,
+      dataType: 'boolean',
+      disabled: true,
+      level: 1
+    },
+    {
+      order: 210,
+      fieldName: 'language',
+      displayName: strings.Provision.LanguageFieldLabel,
+      dataType: 'choice',
+      disabled: true,
+      level: 1
+    },
+    {
+      order: 220,
+      fieldName: 'timeZone',
+      displayName: strings.Provision.TimeZoneFieldLabel,
+      dataType: 'choice',
+      disabled: true,
+      level: 1
+    },
+    {
+      order: 230,
+      fieldName: 'hubSiteTitle',
+      displayName: strings.Provision.HubSiteFieldLabel,
+      dataType: 'choice',
+      disabled: true,
+      level: 1
+    },
+    {
+      order: 240,
+      fieldName: 'image',
+      displayName: strings.Provision.ImageFieldLabel,
+      description: strings.Provision.ImageFieldDescription,
+      dataType: 'image',
+      level: 2
+    }
+  ]
+}

@@ -20,6 +20,7 @@ export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
   showProjectDeliveries?: boolean
   projectDeliveriesListName?: string
   configItemTitle?: string
+  projectTimeLapse?: boolean
   defaultTimeframeStart?: string
   defaultTimeframeEnd?: string
   defaultGroupBy?: string
