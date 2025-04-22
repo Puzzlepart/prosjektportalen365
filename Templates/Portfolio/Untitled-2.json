@@ -93,23 +93,23 @@
     "serverProcessedContent": {
         "htmlStrings": {},
         "searchablePlainTexts": {
-            "title": "Lister og bibliotek",
-            "items[0].description": "Standard fasesjekkpunkter fra Prosjektveiviseren",
-            "items[1].description": "Standard prosjektoppgaver fra Prosjektveiviseren",
-            "items[2].description": "Administrer standard interessentregister for nye områder",
-            "items[3].description": "Maler i sentralt malbibliotek",
-            "items[0].title": "Fasesjekkliste",
-            "items[1].title": "Planneroppgaver",
-            "items[2].title": "Interessentregister",
-            "items[3].title": "Malbibliotek"
+            "title": "{resource:WebParts_QuickLinks_ListsLibaries_Title}",
+            "items[0].description": "{resource:Lists_PhaseChecklist_Description}",
+            "items[1].description": "{resource:Lists_PlannerTasks_Description}",
+            "items[2].description": "{resource:Lists_Stakeholders_Description}",
+            "items[3].description": "{resource:Lists_TemplateLibrary_Description}",
+            "items[0].title": "{resource:Lists_PhaseChecklist_Title}",
+            "items[1].title": "{resource:Lists_PlannerTasks_Title}",
+            "items[2].title": "{resource:Lists_Stakeholders_Title}",
+            "items[3].title": "{resource:Lists_TemplateLibrary_Title}"
         },
         "imageSources": {},
         "links": {
             "baseUrl": "{site}",
-            "items[0].sourceItem.url": "{site}/Lists/Fasesjekkliste",
-            "items[1].sourceItem.url": "{site}/Lists/Planneroppgaver",
-            "items[2].sourceItem.url": "{site}/Lists/Interessentregister",
-            "items[3].sourceItem.url": "{site}/Malbibliotek"
+            "items[0].sourceItem.url": "{site}/{resource:Lists_PhaseChecklist_Url}",
+            "items[1].sourceItem.url": "{site}/{resource:Lists_PlannerTasks_Url}",
+            "items[2].sourceItem.url": "{site}/{resource:Lists_Stakeholders_Url}",
+            "items[3].sourceItem.url": "{site}/{resource:Lists_TemplateLibrary_Url}"
         },
         "componentDependencies": {
             "layoutComponentId": "706e33c8-af37-4e7b-9d22-6e5694d92a6f"

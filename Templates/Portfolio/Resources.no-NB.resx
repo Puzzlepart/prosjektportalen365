@@ -1237,6 +1237,9 @@
     <data name="Lists_PhaseChecklist_Title" xml:space="preserve">
         <value>Fasesjekkliste</value>
     </data>
+    <data name="Lists_PhaseChecklist_Description" xml:space="preserve">
+        <value>Standard fasesjekkpunkter fra Prosjektveiviseren</value>
+    </data>
     <data name="Lists_PhaseChecklist_Url" xml:space="preserve">
         <value>Lists/Fasesjekkliste</value>
     </data>
@@ -1254,6 +1257,9 @@
     </data>
     <data name="Lists_PlannerTasks_Title" xml:space="preserve">
         <value>Planneroppgaver</value>
+    </data>
+    <data name="Lists_PlannerTasks_Description" xml:space="preserve">
+        <value>Standard prosjektoppgaver fra Prosjektveiviseren</value>
     </data>
     <data name="Lists_PlannerTasks_Url" xml:space="preserve">
         <value>Lists/Planneroppgaver</value>
@@ -1357,6 +1363,9 @@
     <data name="Lists_Stakeholders_Title" xml:space="preserve">
         <value>Interessentregister</value>
     </data>
+    <data name="Lists_Stakeholders_Description" xml:space="preserve">
+        <value>Administrer standard interessentregister for nye områder</value>
+    </data>
     <data name="Lists_Stakeholders_Url" xml:space="preserve">
         <value>Lists/Interessentregister</value>
     </data>
@@ -1368,6 +1377,9 @@
     </data>
     <data name="Lists_TemplateLibrary_Title" xml:space="preserve">
         <value>Malbibliotek</value>
+    </data>
+    <data name="Lists_TemplateLibrary_Description" xml:space="preserve">
+        <value>Maler i sentralt malbibliotek</value>
     </data>
     <data name="Lists_TemplateLibrary_Url" xml:space="preserve">
         <value>Malbibliotek</value>
@@ -3537,6 +3549,9 @@
     </data>
     <data name="WebParts_QuickLinks_ProjectTemplatesSetup_ProjectExtensions_Description" xml:space="preserve">
         <value>Administrer øvrige maltilleggsfiler (JSON format)</value>
+    </data>
+     <data name="WebParts_QuickLinks_ListsLibaries_Title" xml:space="preserve">
+        <value>Lister og bibliotek</value>
     </data>
     <data name="WebParts_BenefitsOverviewCategory_Title" xml:space="preserve">
         <value>Gevinstoversikt kategori</value>
