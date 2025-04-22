@@ -1,4 +1,4 @@
-<pnp:ListInstance Title="{resource:Lists_Timeline_Configuration_Title}" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_Timeline_Configuration_Url}" Hidden="true" RemoveExistingContentTypes="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false"
+<pnp:ListInstance Title="{resource:Lists_Timeline_Configuration_Title}" Description="{resource:Lists_Timeline_Configuration_Description}" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_Timeline_Configuration_Url}" Hidden="true" RemoveExistingContentTypes="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false"
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100DAFD9901A59F445EB29B2CE3D663A87D" Default="true" />

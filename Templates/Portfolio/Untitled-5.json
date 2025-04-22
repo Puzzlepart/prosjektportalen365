@@ -81,20 +81,20 @@
     "serverProcessedContent": {
         "htmlStrings": {},
         "searchablePlainTexts": {
-            "title": "Tilganger og roller",
-            "items[0].description": "Sett opp grupper og tilganger som kopieres over til nye prosjektområder",
-            "items[1].description": "Gi spesifikke brukere innsyn til alle prosjekter i porteføljen",
-            "items[2].description": "Konfigurasjon av roller som kan utføre administratorhandlinger i prosjektet",
-            "items[0].title": "Tillatelseskonfigurasjon",
-            "items[1].title": "Porteføljeinnsyn",
-            "items[2].title": "Prosjektadministrasjonsroller"
+            "title": "{resource:WebParts_QuickLinks_AccessAndRoles_SectionTitle}",
+            "items[0].description": "{resource:Lists_PermissionConfiguration_Description}",
+            "items[1].description": "{resource:Lists_PortfolioInsight_Description}",
+            "items[2].description": "{resource:Lists_ProjectAdminRoles_Description}",
+            "items[0].title": "{resource:Lists_PermissionConfiguration_Title}",
+            "items[1].title": "{resource:Lists_PortfolioInsight_Title}",
+            "items[2].title": "{resource:Lists_ProjectAdminRoles_Title}"
         },
         "imageSources": {},
         "links": {
             "baseUrl": "{site}",
-            "items[0].sourceItem.url": "{site}/Lists/Tillatelseskonfigurasjon",
-            "items[1].sourceItem.url": "{site}/_layouts/15/groups.aspx",
-            "items[2].sourceItem.url": "{site}/Lists/Prosjektadministrasjonsroller"
+            "items[0].sourceItem.url": "{site}/{resource:Lists_PermissionConfiguration_Url}",
+            "items[1].sourceItem.url": "{site}/{resource:Lists_PortfolioInsight_Url}",
+            "items[2].sourceItem.url": "{site}/{resource:Lists_ProjectAdminRoles_Url}"
         },
         "componentDependencies": {
             "layoutComponentId": "706e33c8-af37-4e7b-9d22-6e5694d92a6f"

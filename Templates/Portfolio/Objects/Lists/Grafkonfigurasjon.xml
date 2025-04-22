@@ -1,4 +1,4 @@
-﻿<pnp:ListInstance Title="{resource:Lists_ChartConfiguration_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_ChartConfiguration_Url}" Hidden="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" EnableAttachments="false" EnableFolderCreation="false" ContentTypesEnabled="true" RemoveExistingContentTypes="true" 
+﻿<pnp:ListInstance Title="{resource:Lists_ChartConfiguration_Title}" Description="{resource:Lists_ChartConfiguration_Description}" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_ChartConfiguration_Url}" Hidden="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" EnableAttachments="false" EnableFolderCreation="false" ContentTypesEnabled="true" RemoveExistingContentTypes="true" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100FAC6DE5CA35FAB46ABCF3CD575663D9D01" />

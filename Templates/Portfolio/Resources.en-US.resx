@@ -1082,7 +1082,10 @@
         <value>Lists/GlobalSettings</value>
     </data>
     <data name="Lists_HelpContent_Title" xml:space="preserve">
-        <value>Help Content</value>
+        <value>Configuration and Setup of Help Content</value>
+    </data>
+    <data name="Lists_HelpContent_Description" xml:space="preserve">
+        <value>Help</value>
     </data>
     <data name="Lists_HelpContent_Url" xml:space="preserve">
         <value>Lists/HelpContent</value>
@@ -1108,6 +1111,9 @@
     <data name="Lists_Idea_Configuration_Title" xml:space="preserve">
         <value>Idea Configuration</value>
     </data>
+    <data name="Lists_Idea_Configuration_Description" xml:space="preserve">
+        <value>Configuration of the idea module, setup of multiple idea processing lists.</value>
+    </data>
     <data name="Lists_Idea_Configuration_Url" xml:space="preserve">
         <value>Lists/IdeaConfiguration</value>
     </data>
@@ -1119,6 +1125,9 @@
     </data>
     <data name="Lists_Links_Title" xml:space="preserve">
         <value>Links</value>
+    </data>
+    <data name="Lists_Links_Description" xml:space="preserve">
+        <value>Configure which links should appear under Useful links in the footer.</value>
     </data>
     <data name="Lists_Links_Url" xml:space="preserve">
         <value>Lists/Links</value>
@@ -1452,6 +1461,9 @@
     </data>
     <data name="Lists_Timeline_Configuration_Url" xml:space="preserve">
         <value>Lists/TimelineConfiguration</value>
+    </data>
+    <data name="Lists_Timeline_Configuration_Description" xml:space="preserve">
+        <value>Configuration of the timeline elements' color, shape and visibility</value>
     </data>
     <data name="Lists_Uncertainty_Title" xml:space="preserve">
         <value>Uncertainty</value>
@@ -3537,5 +3549,14 @@
     </data>
     <data name="Lists_StatusSections_Description" xml:space="preserve">
         <value>Setup of project status report</value>
+    </data>
+    <data name="WebParts_QuickLinks_Configuration_SectionTitle" xml:space="preserve">
+        <value>Configuration</value>
+    </data>
+    <data name="WebParts_QuickLinks_AccessAndRoles_SectionTitle" xml:space="preserve">
+        <value>Access and Roles</value>
+    </data>
+    <data name="Lists_ChartConfiguration_Description" xml:space="preserve">
+        <value>Manage chart elements in Portfolio Insight</value>
     </data>
 </root>
