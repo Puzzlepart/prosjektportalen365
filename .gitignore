@@ -34,3 +34,4 @@ SharePointFramework/**/*-report.md
 SharePointFramework/**/*-report.json
 Templates/*-report*.md
 Templates/*-report*.json
+Templates/Portfolio/Objects/ClientSidePages/*.json

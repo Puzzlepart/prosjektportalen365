@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-    <xsd:schema id="root"
-        xmlns=""
-        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-        xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
         <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
         <xsd:element name="root" msdata:IsDataSet="true">
             <xsd:complexType>
@@ -928,6 +925,9 @@
     <data name="Lists_ChangeAnalysis_Title" xml:space="preserve">
         <value>Endringsanalyse</value>
     </data>
+    <data name="Lists_ChartConfiguration_Description" xml:space="preserve">
+        <value>Administrer grafelementer i Porteføljeinnsikt</value>
+    </data>
     <data name="Lists_ChartConfiguration_ProjectType_Title" xml:space="preserve">
         <value>Prosjekttype</value>
     </data>
@@ -1060,6 +1060,9 @@
     <data name="Lists_DataSources_Category_UncertaintyOverview_RisksPortfolioLevel" xml:space="preserve">
         <value>Risikoelementer på porteføljenivå</value>
     </data>
+    <data name="Lists_DataSources_Description" xml:space="preserve">
+        <value>Spørringer på porteføljenivå (unntatt porteføljeoversikt)</value>
+    </data>
     <data name="Lists_DataSources_Level_ParentProgram" xml:space="preserve">
         <value>Overordnet/Program</value>
     </data>
@@ -1096,11 +1099,11 @@
     <data name="Lists_Global_Settings_Url" xml:space="preserve">
         <value>Lists/Globale innstillinger</value>
     </data>
-    <data name="Lists_HelpContent_Title" xml:space="preserve">
-        <value>Hjelpeinnhold</value>
-    </data>
     <data name="Lists_HelpContent_Description" xml:space="preserve">
         <value>Konfigurasjon og oppsett av innholdet i hjelpeinnhold.</value>
+    </data>
+    <data name="Lists_HelpContent_Title" xml:space="preserve">
+        <value>Hjelpeinnhold</value>
     </data>
     <data name="Lists_HelpContent_Url" xml:space="preserve">
         <value>Lists/Hjelpeinnhold</value>
@@ -1117,6 +1120,9 @@
     <data name="Lists_IdeaRegistration_Url" xml:space="preserve">
         <value>Lists/Ideregistrering</value>
     </data>
+    <data name="Lists_Idea_Configuration_Description" xml:space="preserve">
+        <value>Konfigurasjon av idémodulen, oppsett av flere idébehandlingslister.</value>
+    </data>
     <data name="Lists_Idea_Configuration_Field_GtDescription_Description" xml:space="preserve">
         <value>Dialog beskrivelser for 1. Idéregistrering, 2. Idébehandling og 3. Prosjektdata opprettelse, separert med semikolon</value>
     </data>
@@ -1125,9 +1131,6 @@
     </data>
     <data name="Lists_Idea_Configuration_Title" xml:space="preserve">
         <value>Idékonfigurasjon</value>
-    </data>
-    <data name="Lists_Idea_Configuration_Description" xml:space="preserve">
-        <value>Konfigurasjon av idémodulen, oppsett av flere idébehandlingslister.</value>
     </data>
     <data name="Lists_Idea_Configuration_Url" xml:space="preserve">
         <value>Lists/Idekonfigurasjon</value>
@@ -1138,14 +1141,17 @@
     <data name="Lists_InstallationLog_Url" xml:space="preserve">
         <value>Lists/Installasjonslogg</value>
     </data>
-    <data name="Lists_Links_Title" xml:space="preserve">
-        <value>Lenker</value>
-    </data>
     <data name="Lists_Links_Description" xml:space="preserve">
         <value>Konfigurer hvilke lenker som skal dukke opp under Nyttige lenker i footeren.</value>
     </data>
+    <data name="Lists_Links_Title" xml:space="preserve">
+        <value>Lenker</value>
+    </data>
     <data name="Lists_Links_Url" xml:space="preserve">
         <value>Lists/Lenker</value>
+    </data>
+    <data name="Lists_ListContent_Description" xml:space="preserve">
+        <value>Oppsett av listeinnhold for nye områder</value>
     </data>
     <data name="Lists_ListContent_PhaseChecklistBuilding_Description" xml:space="preserve">
         <value>Fasesjekkpunkter for byggeprosjekter.</value>
@@ -1207,9 +1213,6 @@
     <data name="Lists_ListContent_Title" xml:space="preserve">
         <value>Listeinnhold</value>
     </data>
-    <data name="Lists_ListContent_Description" xml:space="preserve">
-        <value>Oppsett av listeinnhold for nye områder</value>
-    </data>
     <data name="Lists_ListContent_Url" xml:space="preserve">
         <value>Lists/Listeinnhold</value>
     </data>
@@ -1225,11 +1228,11 @@
     <data name="Lists_Permission_Configuration_Description" xml:space="preserve">
         <value>Tillatelseskonfigurasjon for nye prosjekter. Denne listen må ikke endres på.</value>
     </data>
-    <data name="Lists_Permission_Configuration_Title" xml:space="preserve">
-        <value>Tillatelseskonfigurasjon</value>
-    </data>
     <data name="Lists_Permission_Configuration_Description" xml:space="preserve">
         <value>Sett opp grupper og tilganger som kopieres over til nye prosjektområder</value>
+    </data>
+    <data name="Lists_Permission_Configuration_Title" xml:space="preserve">
+        <value>Tillatelseskonfigurasjon</value>
     </data>
     <data name="Lists_Permission_Configuration_Url" xml:space="preserve">
         <value>Lists/Tillatelseskonfigurasjon</value>
@@ -1246,11 +1249,11 @@
     <data name="Lists_PhaseChecklistConstruction_Url" xml:space="preserve">
         <value>Lists/Fasesjekkliste_Anlegg</value>
     </data>
-    <data name="Lists_PhaseChecklist_Title" xml:space="preserve">
-        <value>Fasesjekkliste</value>
-    </data>
     <data name="Lists_PhaseChecklist_Description" xml:space="preserve">
         <value>Standard fasesjekkpunkter fra Prosjektveiviseren</value>
+    </data>
+    <data name="Lists_PhaseChecklist_Title" xml:space="preserve">
+        <value>Fasesjekkliste</value>
     </data>
     <data name="Lists_PhaseChecklist_Url" xml:space="preserve">
         <value>Lists/Fasesjekkliste</value>
@@ -1267,14 +1270,17 @@
     <data name="Lists_PlannerTasksConstruction_Url" xml:space="preserve">
         <value>Lists/Planneroppgaver_Anlegg</value>
     </data>
-    <data name="Lists_PlannerTasks_Title" xml:space="preserve">
-        <value>Planneroppgaver</value>
-    </data>
     <data name="Lists_PlannerTasks_Description" xml:space="preserve">
         <value>Standard prosjektoppgaver fra Prosjektveiviseren</value>
     </data>
+    <data name="Lists_PlannerTasks_Title" xml:space="preserve">
+        <value>Planneroppgaver</value>
+    </data>
     <data name="Lists_PlannerTasks_Url" xml:space="preserve">
         <value>Lists/Planneroppgaver</value>
+    </data>
+    <data name="Lists_PortfolioViews_Description" xml:space="preserve">
+        <value>Visninger tilhørende porteføljeoversikten</value>
     </data>
     <data name="Lists_PortfolioViews_Title" xml:space="preserve">
         <value>Porteføljevisninger</value>
@@ -1288,20 +1294,26 @@
     <data name="Lists_ProjectAdminPermissions_Url" xml:space="preserve">
         <value>Lists/Prosjektadministrasjonstilganger</value>
     </data>
-    <data name="Lists_ProjectAdminRoles_Title" xml:space="preserve">
-        <value>Prosjektadministrasjonsroller</value>
-    </data>
     <data name="Lists_ProjectAdminRoles_Description" xml:space="preserve">
         <value>Konfigurasjon av roller som kan utføre administratorhandlinger i prosjektet</value>
     </data>
+    <data name="Lists_ProjectAdminRoles_Title" xml:space="preserve">
+        <value>Prosjektadministrasjonsroller</value>
+    </data>
     <data name="Lists_ProjectAdminRoles_Url" xml:space="preserve">
         <value>Lists/Prosjektadministrasjonsroller</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_Description" xml:space="preserve">
+        <value>Administrer prosjektkolonneverdier (farge/ikon/navn) for statusfelter</value>
     </data>
     <data name="Lists_ProjectColumnConfiguration_Title" xml:space="preserve">
         <value>Prosjektkolonnekonfigurasjon</value>
     </data>
     <data name="Lists_ProjectColumnConfiguration_Url" xml:space="preserve">
         <value>Lists/Prosjektkolonnekonfigurasjon</value>
+    </data>
+    <data name="Lists_ProjectColumns_Description" xml:space="preserve">
+        <value>Administrer prosjektkolonner (synlighet og metadata)</value>
     </data>
     <data name="Lists_ProjectColumns_StatusReport_DisplayName" xml:space="preserve">
         <value>Statusrapport</value>
@@ -1311,6 +1323,9 @@
     </data>
     <data name="Lists_ProjectColumns_Url" xml:space="preserve">
         <value>Lists/Prosjektkolonner</value>
+    </data>
+    <data name="Lists_ProjectContentColumns_Description" xml:space="preserve">
+        <value>Administrer prosjektinnholds-kolonner (synlighet og metadata)</value>
     </data>
     <data name="Lists_ProjectContentColumns_Title" xml:space="preserve">
         <value>Prosjektinnholdskolonner</value>
@@ -1348,6 +1363,9 @@
     <data name="Lists_ProjectStatusAttachments_Url" xml:space="preserve">
         <value>Prosjektstatusvedlegg</value>
     </data>
+    <data name="Lists_ProjectStatus_Description" xml:space="preserve">
+        <value>Inneholder alle statusrapporter for alle prosjekter.</value>
+    </data>
     <data name="Lists_ProjectStatus_Title" xml:space="preserve">
         <value>Prosjektstatus</value>
     </data>
@@ -1359,6 +1377,9 @@
     </data>
     <data name="Lists_ProjectTemplates_Url" xml:space="preserve">
         <value>Prosjektmaler</value>
+    </data>
+    <data name="Lists_Projects_Description" xml:space="preserve">
+        <value>Inneholder alle prosjektene i porteføljen, og egenskapene som er synkronisert for disse.</value>
     </data>
     <data name="Lists_Projects_Title" xml:space="preserve">
         <value>Prosjekter</value>
@@ -1375,14 +1396,17 @@
     <data name="Lists_SitePages_Title" xml:space="preserve">
         <value>Områdesider</value>
     </data>
-    <data name="Lists_Stakeholders_Title" xml:space="preserve">
-        <value>Interessentregister</value>
-    </data>
     <data name="Lists_Stakeholders_Description" xml:space="preserve">
         <value>Administrer standard interessentregister for nye områder</value>
     </data>
+    <data name="Lists_Stakeholders_Title" xml:space="preserve">
+        <value>Interessentregister</value>
+    </data>
     <data name="Lists_Stakeholders_Url" xml:space="preserve">
         <value>Lists/Interessentregister</value>
+    </data>
+    <data name="Lists_StatusSections_Description" xml:space="preserve">
+        <value>Oppsett av prosjektstatusrapport</value>
     </data>
     <data name="Lists_StatusSections_Title" xml:space="preserve">
         <value>Statusseksjoner</value>
@@ -1390,11 +1414,11 @@
     <data name="Lists_StatusSections_Url" xml:space="preserve">
         <value>Lists/Statusseksjoner</value>
     </data>
-    <data name="Lists_TemplateLibrary_Title" xml:space="preserve">
-        <value>Malbibliotek</value>
-    </data>
     <data name="Lists_TemplateLibrary_Description" xml:space="preserve">
         <value>Maler i sentralt malbibliotek</value>
+    </data>
+    <data name="Lists_TemplateLibrary_Title" xml:space="preserve">
+        <value>Malbibliotek</value>
     </data>
     <data name="Lists_TemplateLibrary_Url" xml:space="preserve">
         <value>Malbibliotek</value>
@@ -1410,6 +1434,9 @@
     </data>
     <data name="Lists_TemplateOptions_ConstructionProject_Title" xml:space="preserve">
         <value>Anleggsprosjekt</value>
+    </data>
+    <data name="Lists_TemplateOptions_Description" xml:space="preserve">
+        <value>Oppsett av maler for nye områder</value>
     </data>
     <data name="Lists_TemplateOptions_ParentTemplate_Description" xml:space="preserve">
         <value>Dette er standardmalen for overordnet prosjekt som følger med Prosjektportalen 365.</value>
@@ -1441,11 +1468,11 @@
     <data name="Lists_TemplateOptions_Title" xml:space="preserve">
         <value>Maloppsett</value>
     </data>
-    <data name="Lists_TemplateOptions_Description" xml:space="preserve">
-        <value>Oppsett av maler for nye områder</value>
-    </data>
     <data name="Lists_TemplateOptions_Url" xml:space="preserve">
         <value>Lists/Maloppsett</value>
+    </data>
+    <data name="Lists_TimelineContent_Description" xml:space="preserve">
+        <value>Inneholder alle tidslinjeelementer for alle prosjekter.</value>
     </data>
     <data name="Lists_TimelineContent_Field_GtBudgetTotal_Description" xml:space="preserve">
         <value>Budsjett for fasen/elementet (dersom aktuelt)</value>
@@ -1471,14 +1498,14 @@
     <data name="Lists_TimelineContent_Url" xml:space="preserve">
         <value>Lists/Tidslinjeinnhold</value>
     </data>
+    <data name="Lists_Timeline_Configuration_Description" xml:space="preserve">
+        <value>Konfigurasjon av tidslinjeelementenes farge, form og synlighet</value>
+    </data>
     <data name="Lists_Timeline_Configuration_Field_GtSortOrder_Description" xml:space="preserve">
         <value>Angi prioritering av elementet under tilhørende gruppe/prosjekt på tidslinjen, benytt f. eks 31 dersom du vil at elementet skal ligge mellom element 30 og 40.</value>
     </data>
     <data name="Lists_Timeline_Configuration_Title" xml:space="preserve">
         <value>Tidslinjekonfigurasjon</value>
-    </data>
-    <data name="Lists_Timeline_Configuration_Description" xml:space="preserve">
-        <value>Konfigurasjon av tidslinjeelementenes farge, form og synlighet</value>
     </data>
     <data name="Lists_Timeline_Configuration_Url" xml:space="preserve">
         <value>Lists/Tidslinjekonfigurasjon</value>
@@ -1599,9 +1626,6 @@
     </data>
     <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
         <value>Gå til &lt;a href="{0}" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>
-    </data>
-    <data name="SiteFields_Title_DisplayName" xml:space="preserve">
-        <value>Tittel</value>
     </data>
     <data name="SiteFields_BA_Group" xml:space="preserve">
         <value>Kolonner for Prosjektportalen (Bygg og anlegg)</value>
@@ -3481,6 +3505,9 @@
     <data name="SiteFields_Project_Group" xml:space="preserve">
         <value>Kolonner for Prosjektportalen (Prosjekt)</value>
     </data>
+    <data name="SiteFields_Title_DisplayName" xml:space="preserve">
+        <value>Tittel</value>
+    </data>
     <data name="View_AllDocuments_DisplayName" xml:space="preserve">
         <value>Alle dokumenter</value>
     </data>
@@ -3553,24 +3580,6 @@
     <data name="View_WithoutResponsible_DisplayName" xml:space="preserve">
         <value>Uten ansvarlig</value>
     </data>
-    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_Title" xml:space="preserve">
-        <value>Prosjektmaler og oppsett</value>
-    </data>
-    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_ProjectTemplates_Title" xml:space="preserve">
-        <value>Malfiler</value>
-    </data>
-    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_ProjectTemplates_Description" xml:space="preserve">
-        <value>Administrer malfiler (JSON format)</value>
-    </data>
-    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_ProjectExtensions_Title" xml:space="preserve">
-        <value>Maltillegg</value>
-    </data>
-    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_ProjectExtensions_Description" xml:space="preserve">
-        <value>Administrer øvrige maltilleggsfiler (JSON format)</value>
-    </data>
-     <data name="WebParts_QuickLinks_ListsLibaries_Title" xml:space="preserve">
-        <value>Lister og bibliotek</value>
-    </data>
     <data name="WebParts_BenefitsOverviewCategory_Title" xml:space="preserve">
         <value>Gevinstoversikt kategori</value>
     </data>
@@ -3613,6 +3622,42 @@
     <data name="WebParts_Project_Title" xml:space="preserve">
         <value>Prosjekt</value>
     </data>
+    <data name="WebParts_QuickLinks_AccessAndRoles_PortfolioInsight_Description" xml:space="preserve">
+        <value>Gi spesifikke brukere innsyn til alle prosjekter i porteføljen</value>
+    </data>
+    <data name="WebParts_QuickLinks_AccessAndRoles_PortfolioInsight_Title" xml:space="preserve">
+        <value>Porteføljeinnsyn</value>
+    </data>
+    <data name="WebParts_QuickLinks_AccessAndRoles_Title" xml:space="preserve">
+        <value>Tilganger og roller</value>
+    </data>
+    <data name="WebParts_QuickLinks_ColumnsViews_Title" xml:space="preserve">
+        <value>Kolonner og visninger</value>
+    </data>
+    <data name="WebParts_QuickLinks_Configuration_Title" xml:space="preserve">
+        <value>Konfigurasjon</value>
+    </data>
+    <data name="WebParts_QuickLinks_ListsLibaries_Title" xml:space="preserve">
+        <value>Lister og bibliotek</value>
+    </data>
+    <data name="WebParts_QuickLinks_ProjectData_Title" xml:space="preserve">
+        <value>Prosjektdata</value>
+    </data>
+    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_ProjectExtensions_Description" xml:space="preserve">
+        <value>Administrer øvrige maltilleggsfiler (JSON format)</value>
+    </data>
+    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_ProjectExtensions_Title" xml:space="preserve">
+        <value>Maltillegg</value>
+    </data>
+    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_ProjectTemplates_Description" xml:space="preserve">
+        <value>Administrer malfiler (JSON format)</value>
+    </data>
+    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_ProjectTemplates_Title" xml:space="preserve">
+        <value>Malfiler</value>
+    </data>
+    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_Title" xml:space="preserve">
+        <value>Prosjektmaler og oppsett</value>
+    </data>
     <data name="WebParts_RiskProximity_Title" xml:space="preserve">
         <value>Risiko nærhet</value>
     </data>
@@ -3627,41 +3672,5 @@
     </data>
     <data name="WebParts_UsefulLinks_Title" xml:space="preserve">
         <value>Nyttige lenker</value>
-    </data>
-    <data name="WebParts_QuickLinks_ColumnsViews_Title" xml:space="preserve">
-        <value>Kolonner og visninger</value>
-    </data>
-    <data name="Lists_DataSources_Description" xml:space="preserve">
-        <value>Spørringer på porteføljenivå (unntatt porteføljeoversikt)</value>
-    </data>
-    <data name="Lists_ProjectContentColumns_Description" xml:space="preserve">
-        <value>Administrer prosjektinnholds-kolonner (synlighet og metadata)</value>
-    </data>
-    <data name="Lists_PortfolioViews_Description" xml:space="preserve">
-        <value>Visninger tilhørende porteføljeoversikten</value>
-    </data>
-    <data name="Lists_ProjectColumns_Description" xml:space="preserve">
-        <value>Administrer prosjektkolonner (synlighet og metadata)</value>
-    </data>
-    <data name="Lists_ProjectColumnConfiguration_Description" xml:space="preserve">
-        <value>Administrer prosjektkolonneverdier (farge/ikon/navn) for statusfelter</value>
-    </data>
-    <data name="Lists_StatusSections_Description" xml:space="preserve">
-        <value>Oppsett av prosjektstatusrapport</value>
-    </data>
-     <data name="WebParts_QuickLinks_Configuration_Title" xml:space="preserve">
-        <value>Konfigurasjon</value>
-    </data>
-    <data name="WebParts_QuickLinks_AccessAndRoles_Title" xml:space="preserve">
-        <value>Tilganger og roller</value>
-    </data>
-    <data name="WebParts_QuickLinks_AccessAndRoles_PortfolioInsight_Title" xml:space="preserve">
-        <value>Porteføljeinnsyn</value>
-    </data>
-    <data name="WebParts_QuickLinks_AccessAndRoles_PortfolioInsight_Description" xml:space="preserve">
-        <value>Gi spesifikke brukere innsyn til alle prosjekter i porteføljen</value>
-    </data>
-    <data name="Lists_ChartConfiguration_Description" xml:space="preserve">
-        <value>Administrer grafelementer i Porteføljeinnsikt</value>
     </data>
 </root>

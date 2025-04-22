@@ -635,7 +635,108 @@
     &quot;dynamicDataValues&quot;: {}
 }" ControlId="c70391ea-0b10-4ee9-b2b4-006d3fcad0cd" Order="1" Column="3" />
                 <pnp:CanvasControl WebPartType="QuickLinks" JsonControlData="{&quot;id&quot;: &quot;c70391ea-0b10-4ee9-b2b4-006d3fcad0cd&quot;, &quot;instanceId&quot;: &quot;c583b2ad-49cd-4af3-80a1-3f6d81495af1&quot;, &quot;title&quot;: &quot;Quick links&quot;, &quot;description&quot;: &quot;Quick links&quot;, &quot;dataVersion&quot;: &quot;2.2&quot;, &quot;properties&quot;: {&quot;items&quot;:[{&quot;sourceItem&quot;:{&quot;itemType&quot;:4,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:2,&quot;id&quot;:1,&quot;fabricReactIcon&quot;:{&quot;iconName&quot;:&quot;installtodrive&quot;},&quot;altText&quot;:&quot;&quot;,&quot;rawPreviewImageMinCanvasWidth&quot;:32767},{&quot;sourceItem&quot;:{&quot;itemType&quot;:4,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:2,&quot;id&quot;:2,&quot;fabricReactIcon&quot;:{&quot;iconName&quot;:&quot;configurationsolid&quot;},&quot;altText&quot;:&quot;&quot;,&quot;rawPreviewImageMinCanvasWidth&quot;:32767},{&quot;sourceItem&quot;:{&quot;itemType&quot;:4,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:2,&quot;id&quot;:3,&quot;fabricReactIcon&quot;:{&quot;iconName&quot;:&quot;microsoftlistslogo48&quot;},&quot;altText&quot;:&quot;&quot;,&quot;rawPreviewImageMinCanvasWidth&quot;:32767},{&quot;sourceItem&quot;:{&quot;itemType&quot;:4,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:2,&quot;id&quot;:3,&quot;fabricReactIcon&quot;:{&quot;iconName&quot;:&quot;datamanagementsettings&quot;},&quot;altText&quot;:&quot;&quot;,&quot;rawPreviewImageMinCanvasWidth&quot;:32767}],&quot;isMigrated&quot;:true,&quot;layoutId&quot;:&quot;List&quot;,&quot;shouldShowThumbnail&quot;:true,&quot;buttonLayoutOptions&quot;:{&quot;showDescription&quot;:true,&quot;buttonTreatment&quot;:1,&quot;iconPositionType&quot;:2,&quot;textAlignmentVertical&quot;:2,&quot;textAlignmentHorizontal&quot;:2,&quot;linesOfText&quot;:2},&quot;listLayoutOptions&quot;:{&quot;showDescription&quot;:true,&quot;showIcon&quot;:true},&quot;waffleLayoutOptions&quot;:{&quot;iconSize&quot;:1,&quot;onlyShowThumbnail&quot;:false},&quot;hideWebPartWhenEmpty&quot;:true,&quot;dataProviderId&quot;:&quot;QuickLinks&quot;,&quot;webId&quot;:&quot;{siteid}&quot;,&quot;siteId&quot;:&quot;{sitecollectionid}&quot;,&quot;pane_link_button&quot;:0,&quot;imageWidth&quot;:100}, &quot;serverProcessedContent&quot;: {&quot;htmlStrings&quot;:{},&quot;searchablePlainTexts&quot;:{&quot;title&quot;:&quot;Avansert&quot;,&quot;items[0].description&quot;:&quot;Installasjons- og oppgraderingshistorikk&quot;,&quot;items[1].description&quot;:&quot;Konfigurasjonsfiler som kan brukes av Prosjektportalen&quot;,&quot;items[2].description&quot;:&quot;Inneholder loggoppføringer fra de ulike komponentene i Prosjektportalen 365&quot;,&quot;items[3].description&quot;:&quot;Globale innstillinger for installasjonen av Prosjektportalen 365&quot;,&quot;items[0].title&quot;:&quot;Installasjonslogg&quot;,&quot;items[1].title&quot;:&quot;Konfigurasjonsfiler&quot;,&quot;items[2].title&quot;:&quot;Logg&quot;,&quot;items[3].title&quot;:&quot;Globale innstillinger&quot;},&quot;imageSources&quot;:{},&quot;links&quot;:{&quot;baseUrl&quot;:&quot;{site}&quot;,&quot;items[0].sourceItem.url&quot;:&quot;{site}/Lists/Installasjonslogg&quot;,&quot;items[1].sourceItem.url&quot;:&quot;{site}/Konfigurasjonsfiler&quot;,&quot;items[2].sourceItem.url&quot;:&quot;{site}/Lists/Logg&quot;,&quot;items[3].sourceItem.url&quot;:&quot;{site}/Lists/Globale%20innstillinger&quot;},&quot;componentDependencies&quot;:{&quot;layoutComponentId&quot;:&quot;706e33c8-af37-4e7b-9d22-6e5694d92a6f&quot;}}, &quot;dynamicDataPaths&quot;: {}, &quot;dynamicDataValues&quot;: {}}" ControlId="c70391ea-0b10-4ee9-b2b4-006d3fcad0cd" Order="2" Column="3" />
-                <pnp:CanvasControl WebPartType="QuickLinks" JsonControlData="{&quot;id&quot;: &quot;c70391ea-0b10-4ee9-b2b4-006d3fcad0cd&quot;, &quot;instanceId&quot;: &quot;c2acc204-b715-47c2-bbfd-e7922f2deab6&quot;, &quot;title&quot;: &quot;Quick links&quot;, &quot;description&quot;: &quot;Quick links&quot;, &quot;dataVersion&quot;: &quot;2.2&quot;, &quot;properties&quot;: {&quot;items&quot;:[{&quot;sourceItem&quot;:{&quot;itemType&quot;:4,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:2,&quot;id&quot;:6,&quot;fabricReactIcon&quot;:{&quot;iconName&quot;:&quot;projectcollection&quot;},&quot;altText&quot;:&quot;&quot;,&quot;rawPreviewImageMinCanvasWidth&quot;:32767},{&quot;sourceItem&quot;:{&quot;itemType&quot;:4,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:2,&quot;id&quot;:7,&quot;fabricReactIcon&quot;:{&quot;iconName&quot;:&quot;awaystatus&quot;},&quot;altText&quot;:&quot;&quot;,&quot;rawPreviewImageMinCanvasWidth&quot;:32767},{&quot;sourceItem&quot;:{&quot;itemType&quot;:4,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:2,&quot;id&quot;:8,&quot;fabricReactIcon&quot;:{&quot;iconName&quot;:&quot;timeline&quot;},&quot;altText&quot;:&quot;&quot;,&quot;rawPreviewImageMinCanvasWidth&quot;:32767}],&quot;isMigrated&quot;:true,&quot;layoutId&quot;:&quot;List&quot;,&quot;shouldShowThumbnail&quot;:true,&quot;buttonLayoutOptions&quot;:{&quot;showDescription&quot;:true,&quot;buttonTreatment&quot;:1,&quot;iconPositionType&quot;:2,&quot;textAlignmentVertical&quot;:2,&quot;textAlignmentHorizontal&quot;:2,&quot;linesOfText&quot;:2},&quot;listLayoutOptions&quot;:{&quot;showDescription&quot;:true,&quot;showIcon&quot;:true},&quot;waffleLayoutOptions&quot;:{&quot;iconSize&quot;:1,&quot;onlyShowThumbnail&quot;:false},&quot;hideWebPartWhenEmpty&quot;:true,&quot;dataProviderId&quot;:&quot;QuickLinks&quot;,&quot;webId&quot;:&quot;{siteid}&quot;,&quot;siteId&quot;:&quot;{sitecollectionid}&quot;,&quot;pane_link_button&quot;:0,&quot;imageWidth&quot;:100}, &quot;serverProcessedContent&quot;: {&quot;htmlStrings&quot;:{},&quot;searchablePlainTexts&quot;:{&quot;title&quot;:&quot;Prosjektdata&quot;,&quot;items[0].description&quot;:&quot;Inneholder alle prosjektene i porteføljen, og egenskapene som er synkronisert for disse&quot;,&quot;items[1].description&quot;:&quot;Inneholder alle statusrapporter for alle prosjekter&quot;,&quot;items[2].description&quot;:&quot;Inneholder alle tidslinjeelementer for alle prosjekter&quot;,&quot;items[0].title&quot;:&quot;Prosjekter&quot;,&quot;items[1].title&quot;:&quot;Prosjektstatus&quot;,&quot;items[2].title&quot;:&quot;Tidslinjeinnhold&quot;},&quot;imageSources&quot;:{},&quot;links&quot;:{&quot;baseUrl&quot;:&quot;{site}&quot;,&quot;items[0].sourceItem.url&quot;:&quot;{site}/Lists/Prosjekter&quot;,&quot;items[1].sourceItem.url&quot;:&quot;{site}/Lists/Prosjektstatus&quot;,&quot;items[2].sourceItem.url&quot;:&quot;{site}/Lists/Tidslinjeinnhold&quot;},&quot;componentDependencies&quot;:{&quot;layoutComponentId&quot;:&quot;706e33c8-af37-4e7b-9d22-6e5694d92a6f&quot;}}, &quot;dynamicDataPaths&quot;: {}, &quot;dynamicDataValues&quot;: {}}" ControlId="c70391ea-0b10-4ee9-b2b4-006d3fcad0cd" Order="1" Column="4" />
+                <pnp:CanvasControl WebPartType="QuickLinks" JsonControlData="{
+    &quot;id&quot;: &quot;c70391ea-0b10-4ee9-b2b4-006d3fcad0cd&quot;,
+    &quot;instanceId&quot;: &quot;c2acc204-b715-47c2-bbfd-e7922f2deab6&quot;,
+    &quot;title&quot;: &quot;Quick links&quot;,
+    &quot;description&quot;: &quot;Quick links&quot;,
+    &quot;dataVersion&quot;: &quot;2.2&quot;,
+    &quot;properties&quot;: {
+        &quot;items&quot;: [
+            {
+                &quot;sourceItem&quot;: {
+                    &quot;itemType&quot;: 4,
+                    &quot;fileExtension&quot;: &quot;&quot;,
+                    &quot;progId&quot;: &quot;&quot;
+                },
+                &quot;thumbnailType&quot;: 2,
+                &quot;id&quot;: 6,
+                &quot;fabricReactIcon&quot;: {
+                    &quot;iconName&quot;: &quot;projectcollection&quot;
+                },
+                &quot;altText&quot;: &quot;&quot;,
+                &quot;rawPreviewImageMinCanvasWidth&quot;: 32767
+            },
+            {
+                &quot;sourceItem&quot;: {
+                    &quot;itemType&quot;: 4,
+                    &quot;fileExtension&quot;: &quot;&quot;,
+                    &quot;progId&quot;: &quot;&quot;
+                },
+                &quot;thumbnailType&quot;: 2,
+                &quot;id&quot;: 7,
+                &quot;fabricReactIcon&quot;: {
+                    &quot;iconName&quot;: &quot;awaystatus&quot;
+                },
+                &quot;altText&quot;: &quot;&quot;,
+                &quot;rawPreviewImageMinCanvasWidth&quot;: 32767
+            },
+            {
+                &quot;sourceItem&quot;: {
+                    &quot;itemType&quot;: 4,
+                    &quot;fileExtension&quot;: &quot;&quot;,
+                    &quot;progId&quot;: &quot;&quot;
+                },
+                &quot;thumbnailType&quot;: 2,
+                &quot;id&quot;: 8,
+                &quot;fabricReactIcon&quot;: {
+                    &quot;iconName&quot;: &quot;timeline&quot;
+                },
+                &quot;altText&quot;: &quot;&quot;,
+                &quot;rawPreviewImageMinCanvasWidth&quot;: 32767
+            }
+        ],
+        &quot;isMigrated&quot;: true,
+        &quot;layoutId&quot;: &quot;List&quot;,
+        &quot;shouldShowThumbnail&quot;: true,
+        &quot;buttonLayoutOptions&quot;: {
+            &quot;showDescription&quot;: true,
+            &quot;buttonTreatment&quot;: 1,
+            &quot;iconPositionType&quot;: 2,
+            &quot;textAlignmentVertical&quot;: 2,
+            &quot;textAlignmentHorizontal&quot;: 2,
+            &quot;linesOfText&quot;: 2
+        },
+        &quot;listLayoutOptions&quot;: {
+            &quot;showDescription&quot;: true,
+            &quot;showIcon&quot;: true
+        },
+        &quot;waffleLayoutOptions&quot;: {
+            &quot;iconSize&quot;: 1,
+            &quot;onlyShowThumbnail&quot;: false
+        },
+        &quot;hideWebPartWhenEmpty&quot;: true,
+        &quot;dataProviderId&quot;: &quot;QuickLinks&quot;,
+        &quot;webId&quot;: &quot;{siteid}&quot;,
+        &quot;siteId&quot;: &quot;{sitecollectionid}&quot;,
+        &quot;pane_link_button&quot;: 0,
+        &quot;imageWidth&quot;: 100
+    },
+    &quot;serverProcessedContent&quot;: {
+        &quot;htmlStrings&quot;: {},
+        &quot;searchablePlainTexts&quot;: {
+            &quot;title&quot;: &quot;{resource:WebParts_QuickLinks_ProjectData_Title}&quot;,
+            &quot;items[0].description&quot;: &quot;{resource:Lists_Projects_Description}&quot;,
+            &quot;items[1].description&quot;: &quot;{resource:Lists_ProjectStatus_Description}&quot;,
+            &quot;items[2].description&quot;: &quot;{resource:Lists_TimelineContent_Description}&quot;,
+            &quot;items[0].title&quot;: &quot;{resource:Lists_Projects_Title}&quot;,
+            &quot;items[1].title&quot;: &quot;{resource:Lists_ProjectStatus_Title}&quot;,
+            &quot;items[2].title&quot;: &quot;{resource:Lists_TimelineContent_Title}&quot;
+        },
+        &quot;imageSources&quot;: {},
+        &quot;links&quot;: {
+            &quot;baseUrl&quot;: &quot;{site}&quot;,
+            &quot;items[0].sourceItem.url&quot;: &quot;{site}/{resource:Lists_Projects_Url}&quot;,
+            &quot;items[1].sourceItem.url&quot;: &quot;{site}/{resource:Lists_ProjectStatus_Url}&quot;,
+            &quot;items[2].sourceItem.url&quot;: &quot;{site}/{resource:Lists_TimelineContent_Url}&quot;
+        },
+        &quot;componentDependencies&quot;: {
+            &quot;layoutComponentId&quot;: &quot;706e33c8-af37-4e7b-9d22-6e5694d92a6f&quot;
+        }
+    },
+    &quot;dynamicDataPaths&quot;: {},
+    &quot;dynamicDataValues&quot;: {}
+}" ControlId="c70391ea-0b10-4ee9-b2b4-006d3fcad0cd" Order="1" Column="4" />
                 <pnp:CanvasControl WebPartType="QuickLinks" JsonControlData="{&quot;id&quot;: &quot;c70391ea-0b10-4ee9-b2b4-006d3fcad0cd&quot;, &quot;instanceId&quot;: &quot;704620c7-8f5c-4584-acf7-bae9f0cd5077&quot;, &quot;title&quot;: &quot;Quick links&quot;, &quot;description&quot;: &quot;Quick links&quot;, &quot;dataVersion&quot;: &quot;2.3&quot;, &quot;properties&quot;: {&quot;items&quot;:[{&quot;sourceItem&quot;:{&quot;itemType&quot;:4,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:2,&quot;id&quot;:7,&quot;fabricReactIcon&quot;:{&quot;iconName&quot;:&quot;lightbulb&quot;},&quot;altText&quot;:&quot;&quot;,&quot;rawPreviewImageMinCanvasWidth&quot;:32767},{&quot;sourceItem&quot;:{&quot;itemType&quot;:4,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:2,&quot;id&quot;:6,&quot;fabricReactIcon&quot;:{&quot;iconName&quot;:&quot;diamonduser&quot;},&quot;altText&quot;:&quot;&quot;,&quot;rawPreviewImageMinCanvasWidth&quot;:32767},{&quot;sourceItem&quot;:{&quot;itemType&quot;:4,&quot;fileExtension&quot;:&quot;&quot;,&quot;progId&quot;:&quot;&quot;},&quot;thumbnailType&quot;:2,&quot;id&quot;:8,&quot;fabricReactIcon&quot;:{&quot;iconName&quot;:&quot;productlist&quot;},&quot;altText&quot;:&quot;&quot;,&quot;rawPreviewImageMinCanvasWidth&quot;:32767}],&quot;isMigrated&quot;:true,&quot;layoutId&quot;:&quot;List&quot;,&quot;shouldShowThumbnail&quot;:true,&quot;buttonLayoutOptions&quot;:{&quot;showDescription&quot;:true,&quot;buttonTreatment&quot;:1,&quot;iconPositionType&quot;:2,&quot;textAlignmentVertical&quot;:2,&quot;textAlignmentHorizontal&quot;:2,&quot;linesOfText&quot;:2},&quot;listLayoutOptions&quot;:{&quot;showDescription&quot;:true,&quot;showIcon&quot;:true},&quot;waffleLayoutOptions&quot;:{&quot;iconSize&quot;:1,&quot;onlyShowThumbnail&quot;:false},&quot;hideWebPartWhenEmpty&quot;:true,&quot;dataProviderId&quot;:&quot;QuickLinks&quot;,&quot;webId&quot;:&quot;{siteid}&quot;,&quot;siteId&quot;:&quot;{sitecollectionid}&quot;,&quot;pane_link_button&quot;:0,&quot;imageWidth&quot;:100,&quot;Tittel&quot;:&quot;Prosjektdata&quot;,&quot;iconPicker&quot;:&quot;diamonduser&quot;,&quot;Beskrivelse&quot;:&quot;Inneholder metadata tilknyttet ideer for synkronisering til prosjekter&quot;}, &quot;serverProcessedContent&quot;: {&quot;htmlStrings&quot;:{},&quot;searchablePlainTexts&quot;:{&quot;title&quot;:&quot;Idémodul&quot;,&quot;items[0].description&quot;:&quot;Liste for registrering av ideer&quot;,&quot;items[1].description&quot;:&quot;Liste for å behandle godkjente ideer&quot;,&quot;items[2].description&quot;:&quot;Inneholder metadata tilknyttet ideer for synkronisering til prosjekter&quot;,&quot;items[0].title&quot;:&quot;Idéregistrering&quot;,&quot;items[1].title&quot;:&quot;Idébehandling&quot;,&quot;items[2].title&quot;:&quot;Prosjektdata&quot;},&quot;imageSources&quot;:{},&quot;links&quot;:{&quot;baseUrl&quot;:&quot;{site}&quot;,&quot;items[0].sourceItem.url&quot;:&quot;{site}/Lists/Ideregistrering&quot;,&quot;items[1].sourceItem.url&quot;:&quot;{site}/Lists/Idebehandling&quot;,&quot;items[2].sourceItem.url&quot;:&quot;{site}/Lists/Prosjektdata&quot;},&quot;componentDependencies&quot;:{&quot;layoutComponentId&quot;:&quot;706e33c8-af37-4e7b-9d22-6e5694d92a6f&quot;}}, &quot;dynamicDataPaths&quot;: {}, &quot;dynamicDataValues&quot;: {}}" ControlId="c70391ea-0b10-4ee9-b2b4-006d3fcad0cd" Order="2" Column="4" />
             </pnp:Controls>
         </pnp:Section>

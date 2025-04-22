@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-    <xsd:schema id="root"
-        xmlns=""
-        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-        xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
         <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
         <xsd:element name="root" msdata:IsDataSet="true">
             <xsd:complexType>
@@ -913,6 +910,9 @@
     <data name="Lists_ChangeAnalysis_Title" xml:space="preserve">
         <value>Change analysis</value>
     </data>
+    <data name="Lists_ChartConfiguration_Description" xml:space="preserve">
+        <value>Manage chart elements in Portfolio Insight</value>
+    </data>
     <data name="Lists_ChartConfiguration_ProjectType_Title" xml:space="preserve">
         <value>Project Type</value>
     </data>
@@ -1045,6 +1045,9 @@
     <data name="Lists_DataSources_Category_UncertaintyOverview_RisksPortfolioLevel" xml:space="preserve">
         <value>Risks on portfolio level</value>
     </data>
+    <data name="Lists_DataSources_Description" xml:space="preserve">
+        <value>Queries at portfolio level (except for portfolio overview)</value>
+    </data>
     <data name="Lists_DataSources_Level_ParentProgram" xml:space="preserve">
         <value>Parent/Program</value>
     </data>
@@ -1081,11 +1084,11 @@
     <data name="Lists_Global_Settings_Url" xml:space="preserve">
         <value>Lists/GlobalSettings</value>
     </data>
-    <data name="Lists_HelpContent_Title" xml:space="preserve">
-        <value>Configuration and Setup of Help Content</value>
-    </data>
     <data name="Lists_HelpContent_Description" xml:space="preserve">
         <value>Help</value>
+    </data>
+    <data name="Lists_HelpContent_Title" xml:space="preserve">
+        <value>Configuration and Setup of Help Content</value>
     </data>
     <data name="Lists_HelpContent_Url" xml:space="preserve">
         <value>Lists/HelpContent</value>
@@ -1102,6 +1105,9 @@
     <data name="Lists_IdeaRegistration_Url" xml:space="preserve">
         <value>Lists/IdeaRegistration</value>
     </data>
+    <data name="Lists_Idea_Configuration_Description" xml:space="preserve">
+        <value>Configuration of the idea module, setup of multiple idea processing lists.</value>
+    </data>
     <data name="Lists_Idea_Configuration_Field_GtDescription_Description" xml:space="preserve">
         <value>Dialog descriptions for 1. Idea Registration, 2. Idea Processing, and 3. Project Data Creation, separated by semicolon</value>
     </data>
@@ -1110,9 +1116,6 @@
     </data>
     <data name="Lists_Idea_Configuration_Title" xml:space="preserve">
         <value>Idea Configuration</value>
-    </data>
-    <data name="Lists_Idea_Configuration_Description" xml:space="preserve">
-        <value>Configuration of the idea module, setup of multiple idea processing lists.</value>
     </data>
     <data name="Lists_Idea_Configuration_Url" xml:space="preserve">
         <value>Lists/IdeaConfiguration</value>
@@ -1123,14 +1126,17 @@
     <data name="Lists_InstallationLog_Url" xml:space="preserve">
         <value>Lists/InstallationLog</value>
     </data>
-    <data name="Lists_Links_Title" xml:space="preserve">
-        <value>Links</value>
-    </data>
     <data name="Lists_Links_Description" xml:space="preserve">
         <value>Configure which links should appear under Useful links in the footer.</value>
     </data>
+    <data name="Lists_Links_Title" xml:space="preserve">
+        <value>Links</value>
+    </data>
     <data name="Lists_Links_Url" xml:space="preserve">
         <value>Lists/Links</value>
+    </data>
+    <data name="Lists_ListContent_Description" xml:space="preserve">
+        <value>Setup of list content for new project sites</value>
     </data>
     <data name="Lists_ListContent_PhaseChecklistBuilding_Description" xml:space="preserve">
         <value>Phase checklist for building projects.</value>
@@ -1192,9 +1198,6 @@
     <data name="Lists_ListContent_Title" xml:space="preserve">
         <value>List Content</value>
     </data>
-    <data name="Lists_ListContent_Description" xml:space="preserve">
-        <value>Setup of list content for new project sites</value>
-    </data>
     <data name="Lists_ListContent_Url" xml:space="preserve">
         <value>Lists/ListContent</value>
     </data>
@@ -1210,11 +1213,11 @@
     <data name="Lists_Permission_Configuration_Description" xml:space="preserve">
         <value>Permission configuration for new projects. This list must not be changed.</value>
     </data>
-    <data name="Lists_Permission_Configuration_Title" xml:space="preserve">
-        <value>Permission Configuration</value>
-    </data>
     <data name="Lists_Permission_Configuration_Description" xml:space="preserve">
         <value>Set up groups and permissions that are copied to new project sites</value>
+    </data>
+    <data name="Lists_Permission_Configuration_Title" xml:space="preserve">
+        <value>Permission Configuration</value>
     </data>
     <data name="Lists_Permission_Configuration_Url" xml:space="preserve">
         <value>Lists/PermissionConfiguration</value>
@@ -1231,11 +1234,11 @@
     <data name="Lists_PhaseChecklistConstruction_Url" xml:space="preserve">
         <value>Lists/PhaseChecklist_Construction</value>
     </data>
+    <data name="Lists_PhaseChecklist_Description" xml:space="preserve">
+        <value/>
+    </data>
     <data name="Lists_PhaseChecklist_Title" xml:space="preserve">
         <value>Phase Checklist</value>
-    </data>
-    <data name="Lists_PhaseChecklist_Description" xml:space="preserve">
-        <value></value>
     </data>
     <data name="Lists_PhaseChecklist_Url" xml:space="preserve">
         <value>Lists/PhaseChecklist</value>
@@ -1252,14 +1255,17 @@
     <data name="Lists_PlannerTasksConstruction_Url" xml:space="preserve">
         <value>Lists/PlannerTasks_Construction</value>
     </data>
+    <data name="Lists_PlannerTasks_Description" xml:space="preserve">
+        <value/>
+    </data>
     <data name="Lists_PlannerTasks_Title" xml:space="preserve">
         <value>Planner Tasks</value>
     </data>
-    <data name="Lists_PlannerTasks_Description" xml:space="preserve">
-        <value></value>
-    </data>
     <data name="Lists_PlannerTasks_Url" xml:space="preserve">
         <value>Lists/PlannerTasks</value>
+    </data>
+    <data name="Lists_PortfolioViews_Description" xml:space="preserve">
+        <value>Views related to the portfolio overview</value>
     </data>
     <data name="Lists_PortfolioViews_Title" xml:space="preserve">
         <value>Portfolio Views</value>
@@ -1273,20 +1279,26 @@
     <data name="Lists_ProjectAdminPermissions_Url" xml:space="preserve">
         <value>Lists/ProjectAdminPermissions</value>
     </data>
-    <data name="Lists_ProjectAdminRoles_Title" xml:space="preserve">
-        <value>Project Admin Roles</value>
-    </data>
     <data name="Lists_ProjectAdminRoles_Description" xml:space="preserve">
         <value>Configuration of roles that can perform administrative actions in the project</value>
     </data>
+    <data name="Lists_ProjectAdminRoles_Title" xml:space="preserve">
+        <value>Project Admin Roles</value>
+    </data>
     <data name="Lists_ProjectAdminRoles_Url" xml:space="preserve">
         <value>Lists/ProjectAdminRoles</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_Description" xml:space="preserve">
+        <value>Administrate project column values (color/icon/name) for status fields</value>
     </data>
     <data name="Lists_ProjectColumnConfiguration_Title" xml:space="preserve">
         <value>Project Column Configuration</value>
     </data>
     <data name="Lists_ProjectColumnConfiguration_Url" xml:space="preserve">
         <value>Lists/ProjectColumnConfiguration</value>
+    </data>
+    <data name="Lists_ProjectColumns_Description" xml:space="preserve">
+        <value>Manage project columns (visibility and metadata)</value>
     </data>
     <data name="Lists_ProjectColumns_StatusReport_DisplayName" xml:space="preserve">
         <value>Status Report</value>
@@ -1296,6 +1308,9 @@
     </data>
     <data name="Lists_ProjectColumns_Url" xml:space="preserve">
         <value>Lists/ProjectColumns</value>
+    </data>
+    <data name="Lists_ProjectContentColumns_Description" xml:space="preserve">
+        <value>Manage project content columns (visibility and metadata)</value>
     </data>
     <data name="Lists_ProjectContentColumns_Title" xml:space="preserve">
         <value>Project Content Columns</value>
@@ -1333,6 +1348,9 @@
     <data name="Lists_ProjectStatusAttachments_Url" xml:space="preserve">
         <value>ProjectStatusAttachments</value>
     </data>
+    <data name="Lists_ProjectStatus_Description" xml:space="preserve">
+        <value>Contains all status reports for all projects.</value>
+    </data>
     <data name="Lists_ProjectStatus_Title" xml:space="preserve">
         <value>Project Status</value>
     </data>
@@ -1344,6 +1362,9 @@
     </data>
     <data name="Lists_ProjectTemplates_Url" xml:space="preserve">
         <value>ProjectTemplates</value>
+    </data>
+    <data name="Lists_Projects_Description" xml:space="preserve">
+        <value>Contains all projects in the portfolio, and the properties that are synchronized for these.</value>
     </data>
     <data name="Lists_Projects_Title" xml:space="preserve">
         <value>Projects</value>
@@ -1360,14 +1381,17 @@
     <data name="Lists_SitePages_Title" xml:space="preserve">
         <value>Site Pages</value>
     </data>
-    <data name="Lists_Stakeholders_Title" xml:space="preserve">
-        <value>Stakeholders</value>
-    </data>
     <data name="Lists_Stakeholders_Description" xml:space="preserve">
         <value>Manage standard stakeholder register for new project sites</value>
     </data>
+    <data name="Lists_Stakeholders_Title" xml:space="preserve">
+        <value>Stakeholders</value>
+    </data>
     <data name="Lists_Stakeholders_Url" xml:space="preserve">
         <value>Lists/Stakeholders</value>
+    </data>
+    <data name="Lists_StatusSections_Description" xml:space="preserve">
+        <value>Setup of project status report</value>
     </data>
     <data name="Lists_StatusSections_Title" xml:space="preserve">
         <value>Status Sections</value>
@@ -1375,20 +1399,14 @@
     <data name="Lists_StatusSections_Url" xml:space="preserve">
         <value>Lists/StatusSections</value>
     </data>
-    <data name="Lists_TemplateLibrary_Title" xml:space="preserve">
-        <value>Template Library</value>
-    </data>
     <data name="Lists_TemplateLibrary_Description" xml:space="preserve">
         <value>Templates in central template library</value>
     </data>
+    <data name="Lists_TemplateLibrary_Title" xml:space="preserve">
+        <value>Template Library</value>
+    </data>
     <data name="Lists_TemplateLibrary_Url" xml:space="preserve">
         <value>TemplateLibrary</value>
-    </data>
-    <data name="Lists_TemplateOptions_Description" xml:space="preserve">
-        <value>Oppsett av listeinnhold for nye områder</value>
-    </data>
-    <data name="Lists_TemplateOptions_Description" xml:space="preserve">
-        <value>Setup of templates for new project sites</value>
     </data>
     <data name="Lists_TemplateOptions_BuildingProject_Description" xml:space="preserve">
         <value>This is the template for building projects. Building projects have their own phases, project properties and fields in the project status.</value>
@@ -1401,6 +1419,12 @@
     </data>
     <data name="Lists_TemplateOptions_ConstructionProject_Title" xml:space="preserve">
         <value>Construction Project</value>
+    </data>
+    <data name="Lists_TemplateOptions_Description" xml:space="preserve">
+        <value>Oppsett av listeinnhold for nye områder</value>
+    </data>
+    <data name="Lists_TemplateOptions_Description" xml:space="preserve">
+        <value>Setup of templates for new project sites</value>
     </data>
     <data name="Lists_TemplateOptions_ParentTemplate_Description" xml:space="preserve">
         <value>This is the default parent template that comes with Prosjektportalen 365.</value>
@@ -1435,6 +1459,9 @@
     <data name="Lists_TemplateOptions_Url" xml:space="preserve">
         <value>Lists/TemplateOptions</value>
     </data>
+    <data name="Lists_TimelineContent_Description" xml:space="preserve">
+        <value>Contains all timeline elements for all projects.</value>
+    </data>
     <data name="Lists_TimelineContent_Field_GtBudgetTotal_Description" xml:space="preserve">
         <value>Budget for the phase/element (if applicable)</value>
     </data>
@@ -1459,6 +1486,9 @@
     <data name="Lists_TimelineContent_Url" xml:space="preserve">
         <value>Lists/TimelineContent</value>
     </data>
+    <data name="Lists_Timeline_Configuration_Description" xml:space="preserve">
+        <value>Configuration of the timeline elements' color, shape and visibility</value>
+    </data>
     <data name="Lists_Timeline_Configuration_Field_GtSortOrder_Description" xml:space="preserve">
         <value>Specify the priority of the item under its group/project on the timeline, use for example 31 if you want the item to be between elements 30 and 40.</value>
     </data>
@@ -1467,9 +1497,6 @@
     </data>
     <data name="Lists_Timeline_Configuration_Url" xml:space="preserve">
         <value>Lists/TimelineConfiguration</value>
-    </data>
-    <data name="Lists_Timeline_Configuration_Description" xml:space="preserve">
-        <value>Configuration of the timeline elements' color, shape and visibility</value>
     </data>
     <data name="Lists_Uncertainty_Title" xml:space="preserve">
         <value>Uncertainty</value>
@@ -3460,24 +3487,6 @@
     <data name="View_WithoutResponsible_DisplayName" xml:space="preserve">
         <value>Without responsible</value>
     </data>
-    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_Title" xml:space="preserve">
-        <value>Project Templates and Setup</value>
-    </data>
-    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_ProjectTemplates_Title" xml:space="preserve">
-        <value>Template files</value>
-    </data>
-    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_ProjectTemplates_Description" xml:space="preserve">
-        <value>Manage template files (JSON format)</value>
-    </data>
-    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_ProjectExtensions_Title" xml:space="preserve">
-        <value>Template extensions</value>
-    </data>
-    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_ProjectExtensions_Description" xml:space="preserve">
-        <value>Manage template extensions (JSON format)</value>
-    </data>
-    <data name="WebParts_QuickLinks_ListsLibaries_Title" xml:space="preserve">
-        <value>Lists and Libraries</value>
-    </data>
     <data name="WebParts_BenefitsOverviewCategory_Title" xml:space="preserve">
         <value>Benefits Overview Category</value>
     </data>
@@ -3520,6 +3529,42 @@
     <data name="WebParts_Project_Title" xml:space="preserve">
         <value>Project</value>
     </data>
+    <data name="WebParts_QuickLinks_AccessAndRoles_PortfolioInsight_Description" xml:space="preserve">
+        <value>Grant specific users access to all projects in the portfolio</value>
+    </data>
+    <data name="WebParts_QuickLinks_AccessAndRoles_PortfolioInsight_Title" xml:space="preserve">
+        <value>Portfolio Insight</value>
+    </data>
+    <data name="WebParts_QuickLinks_AccessAndRoles_Title" xml:space="preserve">
+        <value>Access and Roles</value>
+    </data>
+    <data name="WebParts_QuickLinks_ColumnsViews_Title" xml:space="preserve">
+        <value>Columns and Views</value>
+    </data>
+    <data name="WebParts_QuickLinks_Configuration_Title" xml:space="preserve">
+        <value>Configuration</value>
+    </data>
+    <data name="WebParts_QuickLinks_ListsLibaries_Title" xml:space="preserve">
+        <value>Lists and Libraries</value>
+    </data>
+    <data name="WebParts_QuickLinks_ProjectData_Title" xml:space="preserve">
+        <value>Project Data</value>
+    </data>
+    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_ProjectExtensions_Description" xml:space="preserve">
+        <value>Manage template extensions (JSON format)</value>
+    </data>
+    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_ProjectExtensions_Title" xml:space="preserve">
+        <value>Template extensions</value>
+    </data>
+    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_ProjectTemplates_Description" xml:space="preserve">
+        <value>Manage template files (JSON format)</value>
+    </data>
+    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_ProjectTemplates_Title" xml:space="preserve">
+        <value>Template files</value>
+    </data>
+    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_Title" xml:space="preserve">
+        <value>Project Templates and Setup</value>
+    </data>
     <data name="WebParts_RiskProximity_Title" xml:space="preserve">
         <value>Risk Proximity</value>
     </data>
@@ -3534,35 +3579,5 @@
     </data>
     <data name="WebParts_UsefulLinks_Title" xml:space="preserve">
         <value>Useful Links</value>
-    </data>
-    <data name="WebParts_QuickLinks_ColumnsViews_Title" xml:space="preserve">
-        <value>Columns and Views</value>
-    </data>
-    <data name="Lists_DataSources_Description" xml:space="preserve">
-        <value>Queries at portfolio level (except for portfolio overview)</value>
-    </data>
-    <data name="Lists_ProjectContentColumns_Description" xml:space="preserve">
-        <value>Manage project content columns (visibility and metadata)</value>
-    </data>
-    <data name="Lists_PortfolioViews_Description" xml:space="preserve">
-        <value>Views related to the portfolio overview</value>
-    </data>
-    <data name="Lists_ProjectColumns_Description" xml:space="preserve">
-        <value>Manage project columns (visibility and metadata)</value>
-    </data>
-    <data name="Lists_ProjectColumnConfiguration_Description" xml:space="preserve">
-        <value>Administrate project column values (color/icon/name) for status fields</value>
-    </data>
-    <data name="Lists_StatusSections_Description" xml:space="preserve">
-        <value>Setup of project status report</value>
-    </data>
-    <data name="WebParts_QuickLinks_Configuration_Title" xml:space="preserve">
-        <value>Configuration</value>
-    </data>
-    <data name="WebParts_QuickLinks_AccessAndRoles_Title" xml:space="preserve">
-        <value>Access and Roles</value>
-    </data>
-    <data name="Lists_ChartConfiguration_Description" xml:space="preserve">
-        <value>Manage chart elements in Portfolio Insight</value>
     </data>
 </root>
