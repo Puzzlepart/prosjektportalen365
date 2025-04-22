@@ -90,7 +90,8 @@ Write-Host "########################################################" -Foregroun
 
 if ($CI.IsPresent -and $null -eq (Get-Module -Name PnP.PowerShell)) {
     Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
-    Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop
+    Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop -RequiredVersion 2.12.0
+    Write-Host "[INFO] Installed module PnP.PowerShell v2.12.0" -ForegroundColor Green
 }
 else {
     if (-not $SkipLoadingBundle.IsPresent) {
