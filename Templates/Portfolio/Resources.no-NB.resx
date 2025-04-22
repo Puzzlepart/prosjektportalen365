@@ -1411,6 +1411,9 @@
     <data name="Lists_TemplateOptions_Title" xml:space="preserve">
         <value>Maloppsett</value>
     </data>
+    <data name="Lists_TemplateOptions_Description" xml:space="preserve">
+        <value>Oppsett av listeinnhold for nye områder</value>
+    </data>
     <data name="Lists_TemplateOptions_Url" xml:space="preserve">
         <value>Lists/Maloppsett</value>
     </data>

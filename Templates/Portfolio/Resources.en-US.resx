@@ -1348,6 +1348,12 @@
     <data name="Lists_TemplateLibrary_Title" xml:space="preserve">
         <value>Template Library</value>
     </data>
+    <data name="Lists_TemplateOptions_Description" xml:space="preserve">
+        <value>Oppsett av listeinnhold for nye områder</value>
+    </data>
+    <data name="Lists_TemplateOptions_Description" xml:space="preserve">
+        <value>Setup of list content for new project sites</value>
+    </data>
     <data name="Lists_TemplateLibrary_Url" xml:space="preserve">
         <value>TemplateLibrary</value>
     </data>
