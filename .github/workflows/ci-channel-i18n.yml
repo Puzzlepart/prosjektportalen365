@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - feat/i18n
+      - i18n/*
     paths:
       - 'SharePointFramework/**'
       - 'Install/**'
