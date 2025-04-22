@@ -1213,6 +1213,9 @@
     <data name="Lists_Permission_Configuration_Title" xml:space="preserve">
         <value>Permission Configuration</value>
     </data>
+    <data name="Lists_Permission_Configuration_Description" xml:space="preserve">
+        <value>Set up groups and permissions that are copied to new project sites</value>
+    </data>
     <data name="Lists_Permission_Configuration_Url" xml:space="preserve">
         <value>Lists/PermissionConfiguration</value>
     </data>
@@ -1272,6 +1275,9 @@
     </data>
     <data name="Lists_ProjectAdminRoles_Title" xml:space="preserve">
         <value>Project Admin Roles</value>
+    </data>
+    <data name="Lists_ProjectAdminRoles_Description" xml:space="preserve">
+        <value>Configuration of roles that can perform administrative actions in the project</value>
     </data>
     <data name="Lists_ProjectAdminRoles_Url" xml:space="preserve">
         <value>Lists/ProjectAdminRoles</value>
@@ -3550,10 +3556,10 @@
     <data name="Lists_StatusSections_Description" xml:space="preserve">
         <value>Setup of project status report</value>
     </data>
-    <data name="WebParts_QuickLinks_Configuration_SectionTitle" xml:space="preserve">
+    <data name="WebParts_QuickLinks_Configuration_Title" xml:space="preserve">
         <value>Configuration</value>
     </data>
-    <data name="WebParts_QuickLinks_AccessAndRoles_SectionTitle" xml:space="preserve">
+    <data name="WebParts_QuickLinks_AccessAndRoles_Title" xml:space="preserve">
         <value>Access and Roles</value>
     </data>
     <data name="Lists_ChartConfiguration_Description" xml:space="preserve">

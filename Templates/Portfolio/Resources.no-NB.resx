@@ -1228,6 +1228,9 @@
     <data name="Lists_Permission_Configuration_Title" xml:space="preserve">
         <value>Tillatelseskonfigurasjon</value>
     </data>
+    <data name="Lists_Permission_Configuration_Description" xml:space="preserve">
+        <value>Sett opp grupper og tilganger som kopieres over til nye prosjektområder</value>
+    </data>
     <data name="Lists_Permission_Configuration_Url" xml:space="preserve">
         <value>Lists/Tillatelseskonfigurasjon</value>
     </data>
@@ -1287,6 +1290,9 @@
     </data>
     <data name="Lists_ProjectAdminRoles_Title" xml:space="preserve">
         <value>Prosjektadministrasjonsroller</value>
+    </data>
+    <data name="Lists_ProjectAdminRoles_Description" xml:space="preserve">
+        <value>Konfigurasjon av roller som kan utføre administratorhandlinger i prosjektet</value>
     </data>
     <data name="Lists_ProjectAdminRoles_Url" xml:space="preserve">
         <value>Lists/Prosjektadministrasjonsroller</value>
@@ -3643,11 +3649,17 @@
     <data name="Lists_StatusSections_Description" xml:space="preserve">
         <value>Oppsett av prosjektstatusrapport</value>
     </data>
-     <data name="WebParts_QuickLinks_Configuration_SectionTitle" xml:space="preserve">
+     <data name="WebParts_QuickLinks_Configuration_Title" xml:space="preserve">
         <value>Konfigurasjon</value>
     </data>
-    <data name="WebParts_QuickLinks_AccessAndRoles_SectionTitle" xml:space="preserve">
+    <data name="WebParts_QuickLinks_AccessAndRoles_Title" xml:space="preserve">
         <value>Tilganger og roller</value>
+    </data>
+    <data name="WebParts_QuickLinks_AccessAndRoles_PortfolioInsight_Title" xml:space="preserve">
+        <value>Porteføljeinnsyn</value>
+    </data>
+    <data name="WebParts_QuickLinks_AccessAndRoles_PortfolioInsight_Description" xml:space="preserve">
+        <value>Gi spesifikke brukere innsyn til alle prosjekter i porteføljen</value>
     </data>
     <data name="Lists_ChartConfiguration_Description" xml:space="preserve">
         <value>Administrer grafelementer i Porteføljeinnsikt</value>
