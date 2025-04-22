@@ -31,17 +31,18 @@ export class ApplyTemplate extends BaseTask {
         spfxContext: params.context,
         logging: {
           prefix: '(ProjectSetup) (ApplyTemplate)',
-          activeLogLevel
+          activeLogLevel: LogLevel.Verbose
         }
       })
       this.logInformation('Applying template to site', { parameters: params.templateParameters })
       const templateSchema = _.omit(params.templateSchema, params.templateExcludeHandlers)
       await provisioner.applyTemplate(templateSchema, null, (handler) => {
-        if (APPLY_TEMPLATE_STATUS_MAP[handler]) {
+        if (APPLY_TEMPLATE_STATUS_MAP.has(handler)) {
+          const { text, iconName } = APPLY_TEMPLATE_STATUS_MAP.get(handler)!
           onProgress(
             format(strings.ApplyTemplateText, this.data.selectedTemplate.text),
-            APPLY_TEMPLATE_STATUS_MAP[handler].text,
-            APPLY_TEMPLATE_STATUS_MAP[handler].iconName
+            text,
+            iconName
           )
         }
       })
