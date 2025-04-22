@@ -1,0 +1,120 @@
+{
+    "id": "c70391ea-0b10-4ee9-b2b4-006d3fcad0cd",
+    "instanceId": "05cc2e3e-e1af-4c7f-aa38-40cd512c38a4",
+    "title": "Quick links",
+    "description": "Quick links",
+    "dataVersion": "2.2",
+    "properties": {
+        "items": [
+            {
+                "sourceItem": {
+                    "itemType": 4,
+                    "fileExtension": "",
+                    "progId": ""
+                },
+                "thumbnailType": 2,
+                "id": 13,
+                "fabricReactIcon": {
+                    "iconName": "receiptcheck"
+                },
+                "altText": "",
+                "rawPreviewImageMinCanvasWidth": 32767
+            },
+            {
+                "sourceItem": {
+                    "itemType": 4,
+                    "fileExtension": "",
+                    "progId": ""
+                },
+                "thumbnailType": 2,
+                "id": 15,
+                "fabricReactIcon": {
+                    "iconName": "plannerlogo"
+                },
+                "altText": "",
+                "rawPreviewImageMinCanvasWidth": 32767
+            },
+            {
+                "sourceItem": {
+                    "itemType": 4,
+                    "fileExtension": "",
+                    "progId": ""
+                },
+                "thumbnailType": 2,
+                "id": 14,
+                "fabricReactIcon": {
+                    "iconName": "accountmanagement"
+                },
+                "altText": "",
+                "rawPreviewImageMinCanvasWidth": 32767
+            },
+            {
+                "sourceItem": {
+                    "itemType": 4,
+                    "fileExtension": "",
+                    "progId": ""
+                },
+                "thumbnailType": 2,
+                "id": 19,
+                "fabricReactIcon": {
+                    "iconName": "filetemplate"
+                },
+                "altText": "",
+                "rawPreviewImageMinCanvasWidth": 32767
+            }
+        ],
+        "isMigrated": true,
+        "layoutId": "List",
+        "shouldShowThumbnail": true,
+        "buttonLayoutOptions": {
+            "showDescription": true,
+            "buttonTreatment": 1,
+            "iconPositionType": 2,
+            "textAlignmentVertical": 1,
+            "textAlignmentHorizontal": 2,
+            "linesOfText": 2
+        },
+        "listLayoutOptions": {
+            "showDescription": true,
+            "showIcon": true
+        },
+        "waffleLayoutOptions": {
+            "iconSize": 1,
+            "onlyShowThumbnail": false
+        },
+        "hideWebPartWhenEmpty": true,
+        "dataProviderId": "QuickLinks",
+        "webId": "{siteid}",
+        "siteId": "{sitecollectionid}",
+        "pane_link_button": 0,
+        "imageWidth": 100,
+        "iconPicker": "permissions"
+    },
+    "serverProcessedContent": {
+        "htmlStrings": {},
+        "searchablePlainTexts": {
+            "title": "Lister og bibliotek",
+            "items[0].description": "Standard fasesjekkpunkter fra Prosjektveiviseren",
+            "items[1].description": "Standard prosjektoppgaver fra Prosjektveiviseren",
+            "items[2].description": "Administrer standard interessentregister for nye områder",
+            "items[3].description": "Maler i sentralt malbibliotek",
+            "items[0].title": "Fasesjekkliste",
+            "items[1].title": "Planneroppgaver",
+            "items[2].title": "Interessentregister",
+            "items[3].title": "Malbibliotek"
+        },
+        "imageSources": {},
+        "links": {
+            "baseUrl": "{site}",
+            "items[0].sourceItem.url": "{site}/Lists/Fasesjekkliste",
+            "items[1].sourceItem.url": "{site}/Lists/Planneroppgaver",
+            "items[2].sourceItem.url": "{site}/Lists/Interessentregister",
+            "items[3].sourceItem.url": "{site}/Malbibliotek"
+        },
+        "componentDependencies": {
+            "layoutComponentId": "706e33c8-af37-4e7b-9d22-6e5694d92a6f"
+        }
+    },
+    "dynamicDataPaths": {},
+    "dynamicDataValues": {}
+}

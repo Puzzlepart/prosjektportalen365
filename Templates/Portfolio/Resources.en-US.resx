@@ -3430,6 +3430,18 @@
     <data name="WebParts_QuickLinks_ProjectTemplatesSetup_Title" xml:space="preserve">
         <value>Project Templates and Setup</value>
     </data>
+    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_ProjectTemplates_Title" xml:space="preserve">
+        <value>Template files</value>
+    </data>
+    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_ProjectTemplates_Description" xml:space="preserve">
+        <value>Administer template files (JSON format)</value>
+    </data>
+    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_ProjectExtensions_Title" xml:space="preserve">
+        <value>Template extensions</value>
+    </data>
+    <data name="WebParts_QuickLinks_ProjectTemplatesSetup_ProjectExtensions_Description" xml:space="preserve">
+        <value>Administer template extensions (JSON format)</value>
+    </data>
     <data name="WebParts_BenefitsOverviewCategory_Title" xml:space="preserve">
         <value>Benefits Overview Category</value>
     </data>

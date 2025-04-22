@@ -1,0 +1,102 @@
+{
+    "id": "c70391ea-0b10-4ee9-b2b4-006d3fcad0cd",
+    "instanceId": "c2acc204-b715-47c2-bbfd-e7922f2deab6",
+    "title": "Quick links",
+    "description": "Quick links",
+    "dataVersion": "2.2",
+    "properties": {
+        "items": [
+            {
+                "sourceItem": {
+                    "itemType": 4,
+                    "fileExtension": "",
+                    "progId": ""
+                },
+                "thumbnailType": 2,
+                "id": 6,
+                "fabricReactIcon": {
+                    "iconName": "projectcollection"
+                },
+                "altText": "",
+                "rawPreviewImageMinCanvasWidth": 32767
+            },
+            {
+                "sourceItem": {
+                    "itemType": 4,
+                    "fileExtension": "",
+                    "progId": ""
+                },
+                "thumbnailType": 2,
+                "id": 7,
+                "fabricReactIcon": {
+                    "iconName": "awaystatus"
+                },
+                "altText": "",
+                "rawPreviewImageMinCanvasWidth": 32767
+            },
+            {
+                "sourceItem": {
+                    "itemType": 4,
+                    "fileExtension": "",
+                    "progId": ""
+                },
+                "thumbnailType": 2,
+                "id": 8,
+                "fabricReactIcon": {
+                    "iconName": "timeline"
+                },
+                "altText": "",
+                "rawPreviewImageMinCanvasWidth": 32767
+            }
+        ],
+        "isMigrated": true,
+        "layoutId": "List",
+        "shouldShowThumbnail": true,
+        "buttonLayoutOptions": {
+            "showDescription": true,
+            "buttonTreatment": 1,
+            "iconPositionType": 2,
+            "textAlignmentVertical": 2,
+            "textAlignmentHorizontal": 2,
+            "linesOfText": 2
+        },
+        "listLayoutOptions": {
+            "showDescription": true,
+            "showIcon": true
+        },
+        "waffleLayoutOptions": {
+            "iconSize": 1,
+            "onlyShowThumbnail": false
+        },
+        "hideWebPartWhenEmpty": true,
+        "dataProviderId": "QuickLinks",
+        "webId": "{siteid}",
+        "siteId": "{sitecollectionid}",
+        "pane_link_button": 0,
+        "imageWidth": 100
+    },
+    "serverProcessedContent": {
+        "htmlStrings": {},
+        "searchablePlainTexts": {
+            "title": "Prosjektdata",
+            "items[0].description": "Inneholder alle prosjektene i porteføljen, og egenskapene som er synkronisert for disse",
+            "items[1].description": "Inneholder alle statusrapporter for alle prosjekter",
+            "items[2].description": "Inneholder alle tidslinjeelementer for alle prosjekter",
+            "items[0].title": "Prosjekter",
+            "items[1].title": "Prosjektstatus",
+            "items[2].title": "Tidslinjeinnhold"
+        },
+        "imageSources": {},
+        "links": {
+            "baseUrl": "{site}",
+            "items[0].sourceItem.url": "{site}/Lists/Prosjekter",
+            "items[1].sourceItem.url": "{site}/Lists/Prosjektstatus",
+            "items[2].sourceItem.url": "{site}/Lists/Tidslinjeinnhold"
+        },
+        "componentDependencies": {
+            "layoutComponentId": "706e33c8-af37-4e7b-9d22-6e5694d92a6f"
+        }
+    },
+    "dynamicDataPaths": {},
+    "dynamicDataValues": {}
+}

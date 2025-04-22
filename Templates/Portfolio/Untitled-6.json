@@ -1,0 +1,119 @@
+{
+    "id": "c70391ea-0b10-4ee9-b2b4-006d3fcad0cd",
+    "instanceId": "c583b2ad-49cd-4af3-80a1-3f6d81495af1",
+    "title": "Quick links",
+    "description": "Quick links",
+    "dataVersion": "2.2",
+    "properties": {
+        "items": [
+            {
+                "sourceItem": {
+                    "itemType": 4,
+                    "fileExtension": "",
+                    "progId": ""
+                },
+                "thumbnailType": 2,
+                "id": 1,
+                "fabricReactIcon": {
+                    "iconName": "installtodrive"
+                },
+                "altText": "",
+                "rawPreviewImageMinCanvasWidth": 32767
+            },
+            {
+                "sourceItem": {
+                    "itemType": 4,
+                    "fileExtension": "",
+                    "progId": ""
+                },
+                "thumbnailType": 2,
+                "id": 2,
+                "fabricReactIcon": {
+                    "iconName": "configurationsolid"
+                },
+                "altText": "",
+                "rawPreviewImageMinCanvasWidth": 32767
+            },
+            {
+                "sourceItem": {
+                    "itemType": 4,
+                    "fileExtension": "",
+                    "progId": ""
+                },
+                "thumbnailType": 2,
+                "id": 3,
+                "fabricReactIcon": {
+                    "iconName": "microsoftlistslogo48"
+                },
+                "altText": "",
+                "rawPreviewImageMinCanvasWidth": 32767
+            },
+            {
+                "sourceItem": {
+                    "itemType": 4,
+                    "fileExtension": "",
+                    "progId": ""
+                },
+                "thumbnailType": 2,
+                "id": 3,
+                "fabricReactIcon": {
+                    "iconName": "datamanagementsettings"
+                },
+                "altText": "",
+                "rawPreviewImageMinCanvasWidth": 32767
+            }
+        ],
+        "isMigrated": true,
+        "layoutId": "List",
+        "shouldShowThumbnail": true,
+        "buttonLayoutOptions": {
+            "showDescription": true,
+            "buttonTreatment": 1,
+            "iconPositionType": 2,
+            "textAlignmentVertical": 2,
+            "textAlignmentHorizontal": 2,
+            "linesOfText": 2
+        },
+        "listLayoutOptions": {
+            "showDescription": true,
+            "showIcon": true
+        },
+        "waffleLayoutOptions": {
+            "iconSize": 1,
+            "onlyShowThumbnail": false
+        },
+        "hideWebPartWhenEmpty": true,
+        "dataProviderId": "QuickLinks",
+        "webId": "{siteid}",
+        "siteId": "{sitecollectionid}",
+        "pane_link_button": 0,
+        "imageWidth": 100
+    },
+    "serverProcessedContent": {
+        "htmlStrings": {},
+        "searchablePlainTexts": {
+            "title": "Avansert",
+            "items[0].description": "Installasjons- og oppgraderingshistorikk",
+            "items[1].description": "Konfigurasjonsfiler som kan brukes av Prosjektportalen",
+            "items[2].description": "Inneholder loggoppføringer fra de ulike komponentene i Prosjektportalen 365",
+            "items[3].description": "Globale innstillinger for installasjonen av Prosjektportalen 365",
+            "items[0].title": "Installasjonslogg",
+            "items[1].title": "Konfigurasjonsfiler",
+            "items[2].title": "Logg",
+            "items[3].title": "Globale innstillinger"
+        },
+        "imageSources": {},
+        "links": {
+            "baseUrl": "{site}",
+            "items[0].sourceItem.url": "{site}/Lists/Installasjonslogg",
+            "items[1].sourceItem.url": "{site}/Konfigurasjonsfiler",
+            "items[2].sourceItem.url": "{site}/Lists/Logg",
+            "items[3].sourceItem.url": "{site}/Lists/Globale%20innstillinger"
+        },
+        "componentDependencies": {
+            "layoutComponentId": "706e33c8-af37-4e7b-9d22-6e5694d92a6f"
+        }
+    },
+    "dynamicDataPaths": {},
+    "dynamicDataValues": {}
+}

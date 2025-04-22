@@ -1,0 +1,105 @@
+{
+    "id": "c70391ea-0b10-4ee9-b2b4-006d3fcad0cd",
+    "instanceId": "704620c7-8f5c-4584-acf7-bae9f0cd5077",
+    "title": "Quick links",
+    "description": "Quick links",
+    "dataVersion": "2.3",
+    "properties": {
+        "items": [
+            {
+                "sourceItem": {
+                    "itemType": 4,
+                    "fileExtension": "",
+                    "progId": ""
+                },
+                "thumbnailType": 2,
+                "id": 7,
+                "fabricReactIcon": {
+                    "iconName": "lightbulb"
+                },
+                "altText": "",
+                "rawPreviewImageMinCanvasWidth": 32767
+            },
+            {
+                "sourceItem": {
+                    "itemType": 4,
+                    "fileExtension": "",
+                    "progId": ""
+                },
+                "thumbnailType": 2,
+                "id": 6,
+                "fabricReactIcon": {
+                    "iconName": "diamonduser"
+                },
+                "altText": "",
+                "rawPreviewImageMinCanvasWidth": 32767
+            },
+            {
+                "sourceItem": {
+                    "itemType": 4,
+                    "fileExtension": "",
+                    "progId": ""
+                },
+                "thumbnailType": 2,
+                "id": 8,
+                "fabricReactIcon": {
+                    "iconName": "productlist"
+                },
+                "altText": "",
+                "rawPreviewImageMinCanvasWidth": 32767
+            }
+        ],
+        "isMigrated": true,
+        "layoutId": "List",
+        "shouldShowThumbnail": true,
+        "buttonLayoutOptions": {
+            "showDescription": true,
+            "buttonTreatment": 1,
+            "iconPositionType": 2,
+            "textAlignmentVertical": 2,
+            "textAlignmentHorizontal": 2,
+            "linesOfText": 2
+        },
+        "listLayoutOptions": {
+            "showDescription": true,
+            "showIcon": true
+        },
+        "waffleLayoutOptions": {
+            "iconSize": 1,
+            "onlyShowThumbnail": false
+        },
+        "hideWebPartWhenEmpty": true,
+        "dataProviderId": "QuickLinks",
+        "webId": "{siteid}",
+        "siteId": "{sitecollectionid}",
+        "pane_link_button": 0,
+        "imageWidth": 100,
+        "Tittel": "Prosjektdata",
+        "iconPicker": "diamonduser",
+        "Beskrivelse": "Inneholder metadata tilknyttet ideer for synkronisering til prosjekter"
+    },
+    "serverProcessedContent": {
+        "htmlStrings": {},
+        "searchablePlainTexts": {
+            "title": "Idémodul",
+            "items[0].description": "Liste for registrering av ideer",
+            "items[1].description": "Liste for å behandle godkjente ideer",
+            "items[2].description": "Inneholder metadata tilknyttet ideer for synkronisering til prosjekter",
+            "items[0].title": "Idéregistrering",
+            "items[1].title": "Idébehandling",
+            "items[2].title": "Prosjektdata"
+        },
+        "imageSources": {},
+        "links": {
+            "baseUrl": "{site}",
+            "items[0].sourceItem.url": "{site}/Lists/Ideregistrering",
+            "items[1].sourceItem.url": "{site}/Lists/Idebehandling",
+            "items[2].sourceItem.url": "{site}/Lists/Prosjektdata"
+        },
+        "componentDependencies": {
+            "layoutComponentId": "706e33c8-af37-4e7b-9d22-6e5694d92a6f"
+        }
+    },
+    "dynamicDataPaths": {},
+    "dynamicDataValues": {}
+}

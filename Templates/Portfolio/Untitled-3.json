@@ -1,0 +1,156 @@
+{
+    "id": "c70391ea-0b10-4ee9-b2b4-006d3fcad0cd",
+    "instanceId": "4e5ea492-2e4e-4bf4-8bf7-c092a676f497",
+    "title": "Quick links",
+    "description": "Quick links",
+    "dataVersion": "2.2",
+    "properties": {
+        "items": [
+            {
+                "sourceItem": {
+                    "itemType": 4,
+                    "fileExtension": "",
+                    "progId": ""
+                },
+                "thumbnailType": 2,
+                "id": 5,
+                "fabricReactIcon": {
+                    "iconName": "database"
+                },
+                "altText": "",
+                "rawPreviewImageMinCanvasWidth": 32767
+            },
+            {
+                "sourceItem": {
+                    "itemType": 4,
+                    "fileExtension": "",
+                    "progId": ""
+                },
+                "thumbnailType": 2,
+                "id": 8,
+                "fabricReactIcon": {
+                    "iconName": "quadColumn"
+                },
+                "altText": "",
+                "rawPreviewImageMinCanvasWidth": 32767
+            },
+            {
+                "sourceItem": {
+                    "itemType": 4,
+                    "fileExtension": "",
+                    "progId": ""
+                },
+                "thumbnailType": 2,
+                "id": 3,
+                "fabricReactIcon": {
+                    "iconName": "planview"
+                },
+                "altText": "",
+                "rawPreviewImageMinCanvasWidth": 32767
+            },
+            {
+                "sourceItem": {
+                    "itemType": 4,
+                    "fileExtension": "",
+                    "progId": ""
+                },
+                "thumbnailType": 2,
+                "id": 1,
+                "fabricReactIcon": {
+                    "iconName": "triplecolumn"
+                },
+                "altText": "",
+                "rawPreviewImageMinCanvasWidth": 32767
+            },
+            {
+                "sourceItem": {
+                    "itemType": 4,
+                    "fileExtension": "",
+                    "progId": ""
+                },
+                "thumbnailType": 2,
+                "id": 2,
+                "fabricReactIcon": {
+                    "iconName": "color"
+                },
+                "altText": "",
+                "rawPreviewImageMinCanvasWidth": 32767
+            },
+            {
+                "sourceItem": {
+                    "itemType": 4,
+                    "fileExtension": "",
+                    "progId": ""
+                },
+                "thumbnailType": 2,
+                "id": 4,
+                "fabricReactIcon": {
+                    "iconName": "stackindicator"
+                },
+                "altText": "",
+                "rawPreviewImageMinCanvasWidth": 32767
+            }
+        ],
+        "isMigrated": true,
+        "layoutId": "List",
+        "shouldShowThumbnail": true,
+        "buttonLayoutOptions": {
+            "showDescription": true,
+            "buttonTreatment": 1,
+            "iconPositionType": 2,
+            "textAlignmentVertical": 2,
+            "textAlignmentHorizontal": 2,
+            "linesOfText": 2
+        },
+        "listLayoutOptions": {
+            "showDescription": true,
+            "showIcon": true
+        },
+        "waffleLayoutOptions": {
+            "iconSize": 1,
+            "onlyShowThumbnail": false
+        },
+        "hideWebPartWhenEmpty": true,
+        "dataProviderId": "QuickLinks",
+        "webId": "{siteid}",
+        "siteId": "{sitecollectionid}",
+        "pane_link_button": 0,
+        "imageWidth": 100,
+        "Tittel": "Datakilder",
+        "Beskrivelse": "Spørringer på porteføljenivå (unntatt porteføljeoversikt)",
+        "iconPicker": "database"
+    },
+    "serverProcessedContent": {
+        "htmlStrings": {},
+        "searchablePlainTexts": {
+            "title": "Kolonner og visninger",
+            "items[0].description": "Spørringer på porteføljenivå (unntatt porteføljeoversikt)",
+            "items[1].description": "Administrer prosjektinnholds-kolonner (synlighet og metadata)",
+            "items[2].description": "Visninger tilhørende porteføljeoversikten",
+            "items[3].description": "Administrer prosjektkolonner (synlighet og metadata)",
+            "items[4].description": "Administrer prosjektkolonneverdier (farge/ikon/navn) for statusfelter",
+            "items[5].description": "Oppsett av prosjektstatusrapport",
+            "items[0].title": "Datakilder",
+            "items[1].title": "Prosjektinnholdskolonner",
+            "items[2].title": "Porteføljevisninger",
+            "items[3].title": "Prosjektkolonner",
+            "items[4].title": "Prosjektkolonnekonfigurasjon",
+            "items[5].title": "Statusseksjoner"
+        },
+        "imageSources": {},
+        "links": {
+            "baseUrl": "{site}",
+            "items[0].sourceItem.url": "{site}/Lists/Datakilder",
+            "items[1].sourceItem.url": "{site}/Lists/Prosjektinnholdskolonner",
+            "items[2].sourceItem.url": "{site}/Lists/Porteføljevisninger",
+            "items[3].sourceItem.url": "{site}/Lists/Prosjektkolonner",
+            "items[4].sourceItem.url": "{site}/Lists/Prosjektkolonnekonfigurasjon",
+            "items[5].sourceItem.url": "{site}/Lists/Statusseksjoner"
+        },
+        "componentDependencies": {
+            "layoutComponentId": "706e33c8-af37-4e7b-9d22-6e5694d92a6f"
+        }
+    },
+    "dynamicDataPaths": {},
+    "dynamicDataValues": {}
+}

@@ -1,0 +1,105 @@
+{
+    "id": "c70391ea-0b10-4ee9-b2b4-006d3fcad0cd",
+    "instanceId": "e77bc443-3e1f-4057-906e-37fd8663a96b",
+    "title": "Quick links",
+    "description": "Quick links",
+    "dataVersion": "2.2",
+    "properties": {
+        "items": [
+            {
+                "sourceItem": {
+                    "itemType": 2,
+                    "fileExtension": "",
+                    "progId": ""
+                },
+                "thumbnailType": 2,
+                "id": 1,
+                "fabricReactIcon": {
+                    "iconName": "permissions"
+                },
+                "altText": "",
+                "rawPreviewImageMinCanvasWidth": 32767
+            },
+            {
+                "sourceItem": {
+                    "itemType": 4,
+                    "fileExtension": "",
+                    "progId": ""
+                },
+                "thumbnailType": 2,
+                "id": 3,
+                "fabricReactIcon": {
+                    "iconName": "profilesearch"
+                },
+                "altText": "",
+                "rawPreviewImageMinCanvasWidth": 32767
+            },
+            {
+                "sourceItem": {
+                    "itemType": 4,
+                    "fileExtension": "",
+                    "progId": ""
+                },
+                "thumbnailType": 2,
+                "id": 4,
+                "fabricReactIcon": {
+                    "iconName": "admin"
+                },
+                "altText": "",
+                "rawPreviewImageMinCanvasWidth": 32767
+            }
+        ],
+        "isMigrated": true,
+        "layoutId": "List",
+        "shouldShowThumbnail": true,
+        "buttonLayoutOptions": {
+            "showDescription": true,
+            "buttonTreatment": 1,
+            "iconPositionType": 2,
+            "textAlignmentVertical": 2,
+            "textAlignmentHorizontal": 2,
+            "linesOfText": 2
+        },
+        "listLayoutOptions": {
+            "showDescription": true,
+            "showIcon": true
+        },
+        "waffleLayoutOptions": {
+            "iconSize": 1,
+            "onlyShowThumbnail": false
+        },
+        "hideWebPartWhenEmpty": true,
+        "dataProviderId": "QuickLinks",
+        "webId": "{siteid}",
+        "siteId": "{sitecollectionid}",
+        "pane_link_button": 0,
+        "imageWidth": 100,
+        "Tittel": "Tillatelseskonfigurasjon",
+        "iconPicker": "permissions",
+        "Beskrivelse": "Sett opp grupper og tilganger som kopieres over til nye prosjektområder"
+    },
+    "serverProcessedContent": {
+        "htmlStrings": {},
+        "searchablePlainTexts": {
+            "title": "Tilganger og roller",
+            "items[0].description": "Sett opp grupper og tilganger som kopieres over til nye prosjektområder",
+            "items[1].description": "Gi spesifikke brukere innsyn til alle prosjekter i porteføljen",
+            "items[2].description": "Konfigurasjon av roller som kan utføre administratorhandlinger i prosjektet",
+            "items[0].title": "Tillatelseskonfigurasjon",
+            "items[1].title": "Porteføljeinnsyn",
+            "items[2].title": "Prosjektadministrasjonsroller"
+        },
+        "imageSources": {},
+        "links": {
+            "baseUrl": "{site}",
+            "items[0].sourceItem.url": "{site}/Lists/Tillatelseskonfigurasjon",
+            "items[1].sourceItem.url": "{site}/_layouts/15/groups.aspx",
+            "items[2].sourceItem.url": "{site}/Lists/Prosjektadministrasjonsroller"
+        },
+        "componentDependencies": {
+            "layoutComponentId": "706e33c8-af37-4e7b-9d22-6e5694d92a6f"
+        }
+    },
+    "dynamicDataPaths": {},
+    "dynamicDataValues": {}
+}
