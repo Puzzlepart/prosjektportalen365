@@ -3,7 +3,7 @@ name: CI (channels/i18n)
 on:
   push:
     branches:
-      - i18n/*
+      - releases/1.12
     paths:
       - 'SharePointFramework/**'
       - 'Install/**'
@@ -16,10 +16,10 @@ env:
   CI_CLIENT_ID: ${{ secrets.CI_CLIENT_ID }}
 
 jobs:
-  build_release_package_test:
+  build_release_package_i18n:
     name: Build release package (i18n channel)
     runs-on: macos-latest
-    if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') && !contains(github.event.head_commit.message, '[packages-only]') }}
+    if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') && !contains(github.event.head_commit.message, '[packages-only]') && contains(github.event.head_commit.message, '[i18n]') }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -45,7 +45,7 @@ jobs:
       sha_short: ${{ steps.vars.outputs.sha_short }}
 
   upgrade_channel_test:
-    needs: [build_release_package_test]
+    needs: [build_release_package_i18n]
     name: Upgrade (i18n channel)
     runs-on: macos-latest
     if: ${{ !contains(github.event.head_commit.message, '[skip-upgrade]') }}
@@ -60,7 +60,7 @@ jobs:
         shell: powershell
 
   upgrade_all_sites_to_latest:
-    needs: [build_release_package_test, upgrade_channel_test]
+    needs: [build_release_package_i18n, upgrade_channel_test]
     name: Upgrade all sites to latest (i18n channel)
     runs-on: macos-latest
     if: ${{ contains(github.event.head_commit.message, '[upgrade-all-sites-to-latest]') }}
@@ -74,7 +74,7 @@ jobs:
         run: release/Scripts/UpgradeAllSitesToLatest.ps1 -Url ${{ vars.SP_URL_ENG }} -Language English -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }}
         shell: powershell
 
-  build_release_package_test_packages_only:
+  build_release_package_i18n_packages_only:
     name: Build release package - packages only (i18n channel)
     runs-on: macos-latest
     if: ${{ contains(github.event.head_commit.message, '[packages-only]')}}
@@ -103,7 +103,7 @@ jobs:
       sha_short: ${{ steps.vars.outputs.sha_short }}
 
   upgrade_channel_test_packages_only:
-    needs: [build_release_package_test_packages_only]
+    needs: [build_release_package_i18n_packages_only]
     name: Upgrade packages only (i18n channel)
     runs-on: macos-latest
     if: ${{ !contains(github.event.head_commit.message, '[skip-upgrade]') }}
