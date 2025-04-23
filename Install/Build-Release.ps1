@@ -34,11 +34,18 @@ $global:ACTIONS_COUNT = $USE_CHANNEL_CONFIG ? 14 : 13
 $global:ACTION_INDEX = 1
 
 <#
+If running in CI mode, set the number of actions to 11. This is used to display the progress of the script.
+#>
+if($CI.IsPresent) {
+    $global:ACTIONS_COUNT = 11
+}
+
+<#
 Starts an action and writes the action name to the console. Make sure to update the $global:ACTIONS_COUNT before
 adding a new action. Uses -NoNewline to avoid a line break before the elapsed time is written.
 #>
 function StartAction($Action) {
-    $global:StopWatch_Action = [Diagnostics.Stopwatch]::StartNew()
+    $global:ACTION_SW = [Diagnostics.Stopwatch]::StartNew()
     Write-Host "[$($global:ACTION_INDEX)/$($global:ACTIONS_COUNT)] $Action... " -NoNewline
     $global:ACTION_INDEX++
 }
@@ -47,8 +54,8 @@ function StartAction($Action) {
 Ends an action and writes the elapsed time to the console.
 #>
 function EndAction() {
-    $global:StopWatch_Action.Stop()
-    $ElapsedSeconds = [math]::Round(($global:StopWatch_Action.ElapsedMilliseconds) / 1000, 2)
+    $global:ACTION_SW.Stop()
+    $ElapsedSeconds = [math]::Round(($global:ACTION_SW.ElapsedMilliseconds) / 1000, 2)
     Write-Host "Completed in $($ElapsedSeconds)s" -ForegroundColor Green
 }
 
@@ -78,7 +85,7 @@ if ($USE_CHANNEL_CONFIG) {
 $NPM_PACKAGE_FILE = Get-Content "$PSScriptRoot/../package.json" -Raw | ConvertFrom-Json
 
 $StopWatch = [Diagnostics.Stopwatch]::StartNew()
-$global:StopWatch_Action = $null
+$global:ACTION_SW = $null
 #endregion
 
 #region Paths
