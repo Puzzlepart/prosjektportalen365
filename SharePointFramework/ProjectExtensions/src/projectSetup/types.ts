@@ -99,9 +99,9 @@ export interface IProjectSetupData extends IProjectSetupDialogState {
   customActions?: any[]
 
   /**
-   * Idea project data field values
+   * Project data field values
    */
-  ideaData?: ItemFieldValues
+  projectData?: ItemFieldValues
 }
 
 export enum ProjectSetupValidation {

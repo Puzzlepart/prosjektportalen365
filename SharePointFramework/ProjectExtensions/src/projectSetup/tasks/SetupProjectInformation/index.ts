@@ -37,9 +37,9 @@ export class SetupProjectInformation extends BaseTask {
       this._templateParameters = params.templateSchema.Parameters
       await this._syncPropertiesList()
       await this._addEntryToHub()
-      if (this.data.ideaData) {
+      if (this.data.projectData) {
         await SPDataAdapter.portalDataService.updateIdeaData(
-          this.data.ideaData,
+          this.data.projectData,
           strings.IdeaDecisionStatusApprovedAndSynced
         )
       }
@@ -63,7 +63,7 @@ export class SetupProjectInformation extends BaseTask {
    * - `GtCurrentVersion`: The current version (same as installed version initially)
    * - `GtProjectTemplate`: The selected project template name
    *
-   * Also properties from the idea data are mapped to the property item. The mapping is done using the
+   * Also properties from the project data are mapped to the property item. The mapping is done using the
    * `SPDataAdapter.getMappedProjectProperties` method with the mapping type
    * `ProjectPropertiesMapType.FromPortfolioToProject`.
    */
@@ -84,9 +84,9 @@ export class SetupProjectInformation extends BaseTask {
         strings.CreatingLocalProjectPropertiesListItemText,
         'AlignCenter'
       )
-      const ideaDataProperties = await this._getIdeaDataProperties()
+      const projectDataProperties = await this._getProjectDataProperties()
       let properties = this._createPropertiesItem(this.params, {
-        ...ideaDataProperties,
+        ...projectDataProperties,
         TemplateParameters: JSON.stringify(this._templateParameters)
       })
       if (this.params.properties.skipUpdateTemplateParameters) {
@@ -102,19 +102,19 @@ export class SetupProjectInformation extends BaseTask {
   }
 
   /**
-   * Get mapped idea data properties for the current project.
+   * Get mapped project data properties for the current project.
    *
    * @param mapType The map type (default: `ProjectPropertiesMapType.FromPortfolioToProject`)
    * @param useSharePointTaxonomyHiddenFields If `true`, the SharePoint taxonomy hidden fields will be used (default: `true`)
    *
-   * @returns The mapped idea data properties
+   * @returns The mapped project data properties
    */
-  private async _getIdeaDataProperties(
+  private async _getProjectDataProperties(
     mapType = ProjectPropertiesMapType.FromPortfolioToProject,
     useSharePointTaxonomyHiddenFields = true
   ): Promise<Record<string, any>> {
-    if (!this.data.ideaData) return {}
-    return await SPDataAdapter.getMappedProjectProperties(this.data.ideaData, {
+    if (!this.data.projectData) return {}
+    return await SPDataAdapter.getMappedProjectProperties(this.data.projectData, {
       useSharePointTaxonomyHiddenFields,
       targetListName:
         mapType === ProjectPropertiesMapType.FromPortfolioToProject &&
@@ -161,7 +161,7 @@ export class SetupProjectInformation extends BaseTask {
    * * `GtProjectTemplate`: The selected project template name
    * * `ContentTypeId` (if custom content type is specified in template parameters)
    *
-   * Also properties from the idea data are mapped to the property item. The mapping is done using the
+   * Also properties from the project data are mapped to the property item. The mapping is done using the
    * `SPDataAdapter.getMappedProjectProperties` method with the mapping type
    * `ProjectPropertiesMapType.FromPortfolioToPortfolio`.
    */
@@ -174,13 +174,13 @@ export class SetupProjectInformation extends BaseTask {
       const siteId = pageContext.site.id.toString()
       const webUrl = pageContext.web.absoluteUrl
       const contentTypeId = this._templateParameters.ProjectContentTypeId
-      const ideaDataProperties = await this._getIdeaDataProperties(
+      const projectDataProperties = await this._getProjectDataProperties(
         ProjectPropertiesMapType.FromPortfolioToPortfolio,
         false
       )
       const properties = this._createPropertiesItem(this.params, {
         GtSiteId: siteId,
-        ...ideaDataProperties
+        ...projectDataProperties
       })
       if (!stringIsNullOrEmpty(contentTypeId)) {
         properties.ContentTypeId = contentTypeId

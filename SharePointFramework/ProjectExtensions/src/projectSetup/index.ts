@@ -434,6 +434,10 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   private async _fetchData(): Promise<IProjectSetupData> {
     try {
       const data: IProjectSetupData = {}
+      this._portalDataService = await new PortalDataService().configure({
+        spfxContext: this.context
+      })
+
       const [_templates, extensions, contentConfig, templateFiles, customActions, ideaData] =
         await Promise.all([
           this._getTemplates(),
@@ -458,7 +462,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             ['File']
           ),
           this.sp.web.userCustomActions(),
-          this._portalDataService.getIdeaData()
+          this._portalDataService.getProjectData()
         ])
       const templates = _templates.map((tmpl) => {
         const [tmplFile] = templateFiles.filter((file) => file.id === tmpl.projectTemplateId)
@@ -471,7 +475,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         contentConfig,
         templates,
         customActions,
-        ideaData
+        projectData
       } as IProjectSetupData
     } catch (error) {
       throw new ProjectSetupError(
