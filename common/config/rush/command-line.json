@@ -7,6 +7,13 @@
         "summary": "Runs eslint on all projects.",
         "description": "Runs eslint on all projects in the repo. Uses the eslint configuration from the project's package.json.",
         "enableParallelism": true
+      },
+      {
+        "commandKind": "bulk",
+        "name": "validate-loc",
+        "summary": "Runs validate-loc on all projects.",
+        "description": "Runs validate-loc on all projects in the repo. Uses the validateloc configuration from the project's package.json.",
+        "enableParallelism": true
       }
     ]
   }

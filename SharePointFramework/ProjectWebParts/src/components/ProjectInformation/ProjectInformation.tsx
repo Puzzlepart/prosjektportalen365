@@ -1,4 +1,5 @@
 import { FluentProvider, IdPrefixProvider } from '@fluentui/react-components'
+import strings from 'ProjectWebPartsStrings'
 import { Fluent, UserMessage, WebPartTitle, customLightTheme } from 'pp365-shared-library'
 import { ConfirmDialog } from 'pzl-spfx-components/lib/components/ConfirmDialog'
 import React, { FC } from 'react'
@@ -15,7 +16,6 @@ import { ProjectStatusReport } from './ProjectStatusReport'
 import { ProjectInformationContextProvider } from './context'
 import { IProjectInformationProps } from './types'
 import { useProjectInformation } from './useProjectInformation'
-import strings from 'ProjectWebPartsStrings'
 
 /**
  * Display project information. A number of actions are available to the user,

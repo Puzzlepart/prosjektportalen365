@@ -1,4 +1,4 @@
-import { MessageBarType } from '@fluentui/react'
+import { format, MessageBarType } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import { createReducer, current } from '@reduxjs/toolkit'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -166,9 +166,9 @@ export const createPortfolioAggregationReducer = (
     ) => {
       state.columnContextMenu = payload
         ? {
-            column: payload.column,
-            target: payload.target as any
-          }
+          column: payload.column,
+          target: payload.target as any
+        }
         : null
     },
     [SET_ALL_COLLAPSED.type]: (state, { payload }: ReturnType<typeof SET_ALL_COLLAPSED>) => {
@@ -260,11 +260,14 @@ export const createPortfolioAggregationReducer = (
       const hashState = parseUrlHash()
       const viewIdUrlParam = new URLSearchParams(document.location.href).get('viewId')
       let currentView: DataSource = null
+      let errorMessage = strings.ViewNotFoundMessage
 
       if (viewIdUrlParam) {
         currentView = _.find(state.views, (v) => v.id.toString() === viewIdUrlParam)
+        errorMessage = format(strings.ViewNotFoundMessage_Id, viewIdUrlParam)
       } else if (hashState.has('viewId')) {
         currentView = _.find(state.views, (v) => v.id === hashState.get('viewId'))
+        errorMessage = format(strings.ViewNotFoundMessage_Id, hashState.get('viewId'))
       } else if (props.defaultViewId) {
         currentView = _.find(
           state.views,
@@ -272,6 +275,7 @@ export const createPortfolioAggregationReducer = (
         )
       } else if (props.dataSource) {
         currentView = _.find(state.views, (v) => v.title === props.dataSource)
+        errorMessage = format(strings.ViewNotFoundMessage_WebPartProperty, props.dataSource)
       } else {
         currentView = _.find(state.views, (v) => v.isDefault)
       }
@@ -280,7 +284,7 @@ export const createPortfolioAggregationReducer = (
       }
       if (!currentView) {
         state.error = new PortfolioAggregationErrorMessage(
-          strings.ViewNotFoundMessage,
+          errorMessage,
           MessageBarType.error
         )
         return

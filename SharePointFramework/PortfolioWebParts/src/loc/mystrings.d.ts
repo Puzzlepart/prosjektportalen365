@@ -230,9 +230,6 @@ declare interface IPortfolioWebPartsStrings {
   DataSourceLabel: string
   DataSourceLevelDescription: string
   DataSourceLevelLabel: string
-  DataSourceLevelPortfolio: string
-  DataSourceLevelProject: string
-  DataSourceListName: string
   DataSourceNotFound: string
   DefaultDataSourceViewLabel: string
   DefaultRenderModeDescription: string
@@ -410,6 +407,8 @@ declare interface IPortfolioWebPartsStrings {
   ViewLessText: string
   ViewMoreText: string
   ViewNotFoundMessage: string
+  ViewNotFoundMessage_WebPartProperty: string
+  ViewNotFoundMessage_Id: string
   ViewsListNameLabel: string
 }
 

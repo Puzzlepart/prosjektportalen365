@@ -1,11 +1,12 @@
 import { stringIsNullOrEmpty } from '@pnp/core'
-import * as strings from 'ProjectExtensionsStrings'
+import _ from 'lodash'
 import { ProjectPropertiesMapType } from 'pp365-shared-library'
+import * as strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'projectSetup'
+import resx from 'ResxStrings'
 import { SPDataAdapter } from '../../../data'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../types'
-import _ from 'lodash'
 
 /**
  * Setup project information task handles the following tasks:
@@ -50,7 +51,7 @@ export class SetupProjectInformation extends BaseTask {
 
   /**
    * Sync local properties list on the current project site. If the list does not exist, it will be created
-   * using `portal.syncList`. If the list exists, it will be updated with the current project information and
+   * using `portalDataService.syncList`. If the list exists, it will be updated with the current project information and
    * the template parameters.
    *
    * The following properties are set for the property item initially:
@@ -75,7 +76,7 @@ export class SetupProjectInformation extends BaseTask {
       )
       const { list } = await this.params.portalDataService.syncList({
         url: this.params.webAbsoluteUrl,
-        listName: strings.ProjectPropertiesListName,
+        listName: resx.Lists_ProjectProperties_Title,
         contentTypeId: this._templateParameters.ProjectContentTypeId
       })
       this.onProgress(
@@ -117,7 +118,7 @@ export class SetupProjectInformation extends BaseTask {
       useSharePointTaxonomyHiddenFields,
       targetListName:
         mapType === ProjectPropertiesMapType.FromPortfolioToProject &&
-        strings.ProjectPropertiesListName,
+        resx.Lists_ProjectProperties_Title,
       mapType,
       projectContentTypeId: this._templateParameters.ProjectContentTypeId,
       customSiteFieldsGroup: this._templateParameters.CustomSiteFields

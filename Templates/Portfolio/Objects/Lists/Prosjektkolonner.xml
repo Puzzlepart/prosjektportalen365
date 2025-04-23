@@ -1,4 +1,4 @@
-<pnp:ListInstance Title="{resource:Lists_ProjectColumns_Title}" Description="" DocumentTemplate="" TemplateType="100" Hidden="true" Url="{resource:Lists_ProjectColumns_Url}" EnableVersioning="true" EnableAttachments="false" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false"
+<pnp:ListInstance Title="{resource:Lists_ProjectColumns_Title}" Description="{resource:Lists_ProjectColumns_Description}" DocumentTemplate="" TemplateType="100" Hidden="true" Url="{resource:Lists_ProjectColumns_Url}" EnableVersioning="true" EnableAttachments="false" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false"
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100248005C277FADD45B7266F9151442472" Default="true" />
@@ -34,7 +34,7 @@
     <pnp:DataRows KeyColumn="GtInternalName" UpdateBehavior="Overwrite">
         <pnp:DataRow>            <!-- ID: 1 -->
             <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Tittel</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_Title_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">Title</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">Title</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
@@ -48,7 +48,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 2 -->
             <pnp:DataValue FieldName="GtSortOrder">20</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Prosjektnavn i økonomisystemet</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtProjectFinanceName_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectFinanceName</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectFinanceNameOWSTEXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
@@ -64,12 +64,16 @@
                 "nb-no": {
                     "displayName": "Navn i økonomisystemet",
                     "description": "Hvis relevant, legg inn tilhørende program/prosjektnavn fra økonomisystemet"
+                },
+                "en-us": {
+                    "displayName": "Finance name",
+                    "description": "If relevant, add the corresponding program/project name from the finance system"
                 }
             }}</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 3 -->
             <pnp:DataValue FieldName="GtSortOrder">30</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Prosjektnummer</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtProjectNumber_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectNumber</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectNumberOWSTEXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
@@ -85,12 +89,16 @@
                 "nb-no": {
                     "displayName": "Program/prosjektnummer",
                     "description": "Hvis relevant, legg inn tilhørende program/prosjektnummer"
+                },
+                "en-us": {
+                    "displayName": "Program/project number",
+                    "description": "If relevant, enter the corresponding program/project number"
                 }
             }}</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 4 -->
             <pnp:DataValue FieldName="GtSortOrder">40</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Sak-/arkivreferanse</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtArchiveReference_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtArchiveReference</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtArchiveReferenceOWSTEXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
@@ -104,7 +112,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 5 -->
             <pnp:DataValue FieldName="GtSortOrder">50</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Tjenesteområde</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtProjectServiceArea_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectServiceArea</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectServiceAreaTextOWSTEXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Tags</pnp:DataValue>
@@ -120,12 +128,16 @@
                 "nb-no": {
                     "displayName": "Tjenesteområde",
                     "description": "Hva slags tjenesteområde hører programmet til?"
+                },
+                "en-us": {
+                    "displayName": "Service area",
+                    "description": "What service area does the program belong to?"
                 }
             }}</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 6 -->
             <pnp:DataValue FieldName="GtSortOrder">60</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Prosjekttype</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtProjectType_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectType</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectTypeTextOWSTEXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Tags</pnp:DataValue>
@@ -141,12 +153,16 @@
                 "nb-no": {
                     "displayName": "Programtype",
                     "description": "Hva slags type program er dette?"
+                },
+                "en-us": {
+                    "displayName": "Program type",
+                    "description": "What type of program is this?"
                 }
             }}</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 7 -->
             <pnp:DataValue FieldName="GtSortOrder">70</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Fase</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtProjectPhase_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectPhase</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectPhaseTextOWSTEXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
@@ -161,7 +177,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 8 -->
             <pnp:DataValue FieldName="GtSortOrder">80</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Prosjektleder</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtProjectManager_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectManager</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">RefinableString51</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
@@ -177,12 +193,16 @@
                 "nb-no": {
                     "displayName": "Programleder",
                     "description": "Hvem er leder for programmet?"
+                },
+                "en-us": {
+                    "displayName": "Program manager",
+                    "description": "Who is the program manager?"
                 }
             }}</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 9 -->
             <pnp:DataValue FieldName="GtSortOrder">90</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Prosjekteier</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtProjectOwner_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectOwner</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">RefinableString50</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
@@ -202,7 +222,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 10 -->
             <pnp:DataValue FieldName="GtSortOrder">150</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Gevinstansvarlig</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtGainsResponsible_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtGainsResponsible</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">RefinableString70</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldOverrides">{
@@ -223,7 +243,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 11 -->
             <pnp:DataValue FieldName="GtSortOrder">110</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Startdato</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStartDate_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStartDate</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtStartDateOWSDATE</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Date</pnp:DataValue>
@@ -237,7 +257,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 12 -->
             <pnp:DataValue FieldName="GtSortOrder">120</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Sluttdato</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtEndDate_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtEndDate</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtEndDateOWSDATE</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Date</pnp:DataValue>
@@ -251,7 +271,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 13 -->
             <pnp:DataValue FieldName="GtSortOrder">130</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Målsetting</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtProjectGoals_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectGoals</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectGoalsOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldOverrides">{
@@ -272,7 +292,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 14 -->
             <pnp:DataValue FieldName="GtSortOrder">140</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Totalbudsjett for prosjektet</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtBudgetTotal_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtBudgetTotal</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtBudgetTotalOWSCURR</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Currency</pnp:DataValue>
@@ -286,7 +306,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 15 -->
             <pnp:DataValue FieldName="GtSortOrder">150</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Kostnader påløpt totalt</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtCostsTotal_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtCostsTotal</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtCostsTotalOWSCURR</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Currency</pnp:DataValue>
@@ -300,7 +320,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 16 -->
             <pnp:DataValue FieldName="GtSortOrder">160</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Prognose for prosjektet</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtProjectForecast_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectForecast</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectForecastOWSCURR</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Currency</pnp:DataValue>
@@ -314,7 +334,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 17 -->
             <pnp:DataValue FieldName="GtSortOrder">170</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Dato for siste rapportering av kostnader</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtBudgetLastReportDate_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtBudgetLastReportDate</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtBudgetLastReportDateOWSDATE</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Date</pnp:DataValue>
@@ -510,7 +530,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 31 -->
             <pnp:DataValue FieldName="GtSortOrder">310</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Prosjektstøtte</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtProjectSupport_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectSupport</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">RefinableString60</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
@@ -526,12 +546,16 @@
                 "nb-no": {
                     "displayName": "Støtteressurser",
                     "description": "Hvem er støtteressurser for programmet? Dette kan være assisterende program/prosjektledere eller andre involverte."
+                },
+                "en-us": {
+                    "displayName": "Support resources",
+                    "description": "Who are the support resources for the program? This can be assisting program/project managers or other involved."
                 }
             }}</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 32 -->
             <pnp:DataValue FieldName="GtSortOrder">320</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Program</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtIsProgram_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtIsProgram</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtIsProgramOWSBOOL</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Boolean</pnp:DataValue>
@@ -546,7 +570,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 33 -->
             <pnp:DataValue FieldName="GtSortOrder">330</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Overordnet</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtIsParentProject_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtIsParentProject</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtIsParentProjectOWSBOOL</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Boolean</pnp:DataValue>
@@ -561,7 +585,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 32 -->
             <pnp:DataValue FieldName="GtSortOrder">320</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Prosjektstatus</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtProjectLifecycleStatus_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectLifecycleStatus</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectLifecycleStatusOWSCHCS</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
@@ -582,7 +606,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 33 -->
             <pnp:DataValue FieldName="GtSortOrder">330</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">FNs bærekraftsmål</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtUNSustDevGoals_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtUNSustDevGoals</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtUNSustDevGoalsTextOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Tags</pnp:DataValue>
@@ -624,7 +648,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 36 -->
             <pnp:DataValue FieldName="GtSortOrder">360</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Opprinnelig overtakelsesdato</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtBAEndDateOriginal_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtBAEndDateOriginal</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtBAEndDateOriginalOWSDATE</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Date</pnp:DataValue>
@@ -638,7 +662,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 37 -->
             <pnp:DataValue FieldName="GtSortOrder">370</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">HP-fase (ikke i bruk)</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtBAProjectInvestementPhase_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtBAProjectInvestementPhase</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtBAProjectInvestementPhaseOWSCHCS</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
@@ -652,7 +676,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 38 -->
             <pnp:DataValue FieldName="GtSortOrder">380</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Siste politiske vedtak</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtBAProjectPolitical_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtBAProjectPolitical</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtBAProjectPoliticalOWSDATE</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Date</pnp:DataValue>
@@ -666,7 +690,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 39 -->
             <pnp:DataValue FieldName="GtSortOrder">390</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Kommentar, siste politiske vedtak</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtBAProjectPoliticalComment_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtBAProjectPoliticalComment</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtBAProjectPoliticalCommentOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
@@ -680,7 +704,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 40 -->
             <pnp:DataValue FieldName="GtSortOrder">400</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Lenke til siste politiske vedtak</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtBAProjectPoliticalLink_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtBAProjectPoliticalLink</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtBAProjectPoliticalLinkOWSURLH</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">URL</pnp:DataValue>
@@ -694,7 +718,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 41 -->
             <pnp:DataValue FieldName="GtSortOrder">410</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Status tilskudd</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtBAProjectSupport_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtBAProjectSupport</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtBAProjectSupportOWSCHCS</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
@@ -708,7 +732,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 42 -->
             <pnp:DataValue FieldName="GtSortOrder">420</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Kommentar, tilskudd</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtBAProjectSupportComment_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtBAProjectSupportComment</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtBAProjectSupportCommentOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
@@ -722,7 +746,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 43 -->
             <pnp:DataValue FieldName="GtSortOrder">430</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Status SHA</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtBAProjectSHA_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtBAProjectSHA</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtBAProjectSHAOWSCHCS</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
@@ -736,7 +760,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 44 -->
             <pnp:DataValue FieldName="GtSortOrder">440</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Kommentar, SHA</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtBAProjectSHAComment_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtBAProjectSHAComment</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtBAProjectSHACommentOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
@@ -750,7 +774,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 45 -->
             <pnp:DataValue FieldName="GtSortOrder">450</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Status miljø</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtBAProjectEnv_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtBAProjectEnv</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtBAProjectEnvOWSCHCS</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
@@ -764,7 +788,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 46 -->
             <pnp:DataValue FieldName="GtSortOrder">460</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Kommentar, miljø</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtBAProjectEnvComment_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtBAProjectEnvComment</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtBAProjectEnvCommentOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
@@ -778,7 +802,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 47 -->
             <pnp:DataValue FieldName="GtSortOrder">470</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Status plan- og byggesak</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtBAProjectStatusCase_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtBAProjectStatusCase</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtBAProjectStatusCaseOWSCHCS</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
@@ -792,7 +816,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 48 -->
             <pnp:DataValue FieldName="GtSortOrder">480</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Kommentar, plan- og byggesak</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtBAProjectStatusCaseComment_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtBAProjectStatusCaseComment</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtBAProjectStatusCaseCommentOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
@@ -806,7 +830,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 49 -->
             <pnp:DataValue FieldName="GtSortOrder">490</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Prosjektadministrasjonsroller</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtProjectAdminRoles_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectAdminRoles</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectAdminRolesOWSCHCM</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Tags</pnp:DataValue>
@@ -822,12 +846,16 @@
                 "nb-no": {
                     "displayName": "Administrasjonsroller",
                     "description": "Velg hvilke roller som skal kunne administrere programmet. Dette inkluderer handlinger som å redigere egenskaper, fase og status."
+                },
+                "en-us": {
+                    "displayName": "Administration roles",
+                    "description": "Select which roles should be able to administrate the program. This includes actions like editing properties, phase and status."
                 }
             }}</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 50 -->
             <pnp:DataValue FieldName="GtSortOrder">500</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Statusrapport</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectColumns_StatusReport_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">-</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">-</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">StatusReport</pnp:DataValue>
@@ -839,9 +867,9 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataTypeProperties">{
-            "statusReportListName": "Prosjektstatus",
-            "columnConfigListName": "Prosjektkolonnekonfigurasjon",
-            "statusSectionsListName": "Statusseksjoner",
+            "statusReportListName": "{resource:Lists_ProjectStatus_Title}",
+            "columnConfigListName": "{resource:Lists_ProjectColumnConfiguration_Title}",
+            "statusSectionsListName": "{resource:Lists_StatusSections_Title}",
             "animation": {
                 "delay": 100,
                 "transitionDuration": 400

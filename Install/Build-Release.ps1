@@ -20,7 +20,7 @@ Param(
     [Parameter(Mandatory = $false)]
     [switch]$SkipBundle,
     [Parameter(Mandatory = $false)]
-    [ValidateSet("test", "kurs")]
+    [ValidateSet("test", "kurs", "i18n")]
     [string]$Channel,
     [Parameter(Mandatory = $false, HelpMessage = "Skip import of PnP.PowerShell module")]
     [switch]$SkipImportModule
@@ -66,13 +66,13 @@ if ($USE_CHANNEL_CONFIG) {
     $CHANNEL_CONFIG_SCHEMA = Get-Content "$PSScriptRoot/../channels/`$schema.json" -Raw
     $CHANNEL_CONFIG_JSON = Get-Content $CHANNEL_CONFIG_PATH -Raw
     $VALID_CONFIG_JSON = Test-Json -Json $CHANNEL_CONFIG_JSON -Schema $CHANNEL_CONFIG_SCHEMA -ErrorAction SilentlyContinue
-    if (-not $VALID_CONFIG_JSON) {
-        Write-Host "Channel configuration might not be valid (the JSON does not match the schema). Manually check schema, build continues..." -ForegroundColor Yellow
-    }
     $CHANNEL_CONFIG = $CHANNEL_CONFIG_JSON | ConvertFrom-Json
     $CHANNEL_CONFIG_NAME = $CHANNEL_CONFIG.name
     $CHANNEL_CONFIG_JSON | Out-File -Path "$PSScriptRoot/../.current-channel-config.json" -Encoding UTF8 -Force
     EndAction
+    if (-not $VALID_CONFIG_JSON) {
+        Write-Host "Channel configuration might not be valid (the JSON does not match the schema). Manually check schema, build continues..." -ForegroundColor Yellow
+    }
 }
 
 $NPM_PACKAGE_FILE = Get-Content "$PSScriptRoot/../package.json" -Raw | ConvertFrom-Json
@@ -160,6 +160,7 @@ if ($USE_CHANNEL_CONFIG) {
 else {
     Copy-Item -Path "$SITE_SCRIPTS_BASEPATH/*.txt" -Filter *.txt -Destination $RELEASE_PATH_SITESCRIPTS -Force
 }
+Copy-Item -Path "$PSScriptRoot/../Templates/Portfolio/*.resx" -Filter *.resx -Destination $RELEASE_PATH -Force
 Copy-Item -Path "$PSScriptRoot/Install.ps1" -Destination $RELEASE_PATH -Force
 Copy-Item -Path "$PSScriptRoot/Scripts/*" -Recurse -Destination $RELEASE_PATH_SCRIPTS -Force
 Copy-Item -Path "$PSScriptRoot/SearchConfiguration.xml" -Destination $RELEASE_PATH -Force
@@ -173,41 +174,6 @@ if (-not $SkipBundle.IsPresent) {
 }
 
 (Get-Content "$RELEASE_PATH/Install.ps1") -Replace '{VERSION_PLACEHOLDER}', "$($NPM_PACKAGE_FILE.version).$($GIT_HASH)" -Replace "{CHANNEL_PLACEHOLDER}", $CHANNEL_CONFIG_NAME | Set-Content "$RELEASE_PATH/Install.ps1"
-#endregion
-
-#region Clean node_modules for all SharePoint Framework solutions
-if ($Force.IsPresent) {
-    $Solutions | ForEach-Object {
-        StartAction("Clearing node_modules for SPFx solution [$_]")
-        rimraf "$SHAREPOINT_FRAMEWORK_BASEPATH/$_/node_modules/"
-        EndAction
-    }
-}
-#endregion
-
-#region Package SharePoint Framework solutions
-if (-not $SkipBuildSharePointFramework.IsPresent) {
-    StartAction("Packaging SPFx solutions")
-    if ($USE_CHANNEL_CONFIG) {
-        foreach ($Solution in $Solutions) {
-            Set-Location "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution"
-            $SOLUTION_CONFIG = $CHANNEL_CONFIG.spfx.solutions.($Solution)
-            $SOLUTION_CONFIG_JSON = ($SOLUTION_CONFIG | ConvertTo-Json)
-            $SOLUTION_CONFIG_JSON | Out-File -FilePath "./config/.generated-solution-config.json" -Encoding UTF8 -Force
-            node ../.tasks/modifySolutionFiles.js --force >$null 2>&1
-        }
-    }
-    Set-Location $SHAREPOINT_FRAMEWORK_BASEPATH
-    rush build >$null 2>&1
-    Get-ChildItem "*/sharepoint/solution/" *.sppkg -Recurse -ErrorAction SilentlyContinue | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$RELEASE_PATH/Apps/$_")) } | Copy-Item -Destination $RELEASE_PATH_APPS -Force
-    if ($USE_CHANNEL_CONFIG) {
-        foreach ($Solution in $Solutions) {
-            Set-Location "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution"
-            node ../.tasks/modifySolutionFiles.js --revert --force >$null 2>&1 
-        }
-    }
-    EndAction
-}
 #endregion
 
 #region Build PnP templates
@@ -235,7 +201,7 @@ if (-not $SkipBuildPnPTemplates.IsPresent) {
 
     npm run generate-project-templates >$null 2>&1
 
-    Get-ChildItem "./Content" -Directory -Filter "*no-NB*" | ForEach-Object {
+    Get-ChildItem "./Content" -Directory | ForEach-Object {
         Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/$($_.BaseName).pnp" -Folder $_.FullName -Force
     }
     EndAction
@@ -256,6 +222,41 @@ if (-not $SkipBuildPnPTemplates.IsPresent) {
 
     StartAction("Building Taxonomy BA PnP template")
     Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/TaxonomyBA.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/TaxonomyBA" -Force
+    EndAction
+}
+#endregion
+
+#region Clean node_modules for all SharePoint Framework solutions
+if ($Force.IsPresent) {
+    $Solutions | ForEach-Object {
+        StartAction("Clearing node_modules for SPFx solution [$_]")
+        rimraf "$SHAREPOINT_FRAMEWORK_BASEPATH/$_/node_modules/"
+        EndAction
+    }
+}
+#endregion
+
+#region Package SharePoint Framework solutions
+if (-not $SkipBuildSharePointFramework.IsPresent) {
+    StartAction("Packaging SPFx solutions")
+    if ($USE_CHANNEL_CONFIG) {
+        foreach ($Solution in $Solutions) {
+            Set-Location "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution"
+            $SOLUTION_CONFIG = $CHANNEL_CONFIG.spfx.solutions.($Solution)
+            $SOLUTION_CONFIG_JSON = ($SOLUTION_CONFIG | ConvertTo-Json)
+            $SOLUTION_CONFIG_JSON | Out-File -FilePath "./config/.generated-solution-config.json" -Encoding UTF8 -Force
+            node ../.tasks/modifySolutionFiles.js --force >$null 2>&1
+        }
+    }
+    Set-Location $SHAREPOINT_FRAMEWORK_BASEPATH
+    rush rebuild >$null 2>&1
+    Get-ChildItem "*/sharepoint/solution/" *.sppkg -Recurse -ErrorAction SilentlyContinue | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$RELEASE_PATH/Apps/$_")) } | Copy-Item -Destination $RELEASE_PATH_APPS -Force
+    if ($USE_CHANNEL_CONFIG) {
+        foreach ($Solution in $Solutions) {
+            Set-Location "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution"
+            node ../.tasks/modifySolutionFiles.js --revert --force >$null 2>&1 
+        }
+    }
     EndAction
 }
 #endregion

@@ -9,40 +9,40 @@
     "Navigation": {
         "QuickLaunch": [
             {
-                "Url": "SitePages/OverordnetOversikt.aspx",
-                "Title": "Underordnet innhold",
+                "Url": "SitePages/{{ClientSidePages_ParentOverview_PageName}}",
+                "Title": "{{Navigation_ChildContent_Title}}",
                 "Children": [
                     {
-                        "Url": "SitePages/Admin.aspx",
-                        "Title": "Administrasjon"
+                        "Url": "SitePages/{{ClientSidePages_ParentAdmin_PageName}}",
+                        "Title": "{{ClientSidePages_ParentAdmin_Title}}"
                     },
                     {
-                        "Url": "SitePages/OverordnetOversikt.aspx",
-                        "Title": "Oversikt"
+                        "Url": "SitePages/{{ClientSidePages_ParentOverview_PageName}}",
+                        "Title": "{{ClientSidePages_ParentOverview_Title}}"
                     },
                     {
-                        "Url": "SitePages/OverordnetGevinster.aspx",
-                        "Title": "Gevinster"
+                        "Url": "SitePages/{{ClientSidePages_ParentBenefitOverview_PageName}}",
+                        "Title": "{{ClientSidePages_ParentBenefitOverview_Title}}"
                     },
                     {
-                        "Url": "SitePages/OverordnetTidslinje.aspx",
-                        "Title": "Tidslinje"
+                        "Url": "SitePages/{{ClientSidePages_ParentTimeline_PageName}}",
+                        "Title": "{{ClientSidePages_ParentTimeline_Title}}"
                     },
                     {
-                        "Url": "SitePages/OverordnetLeveranser.aspx",
-                        "Title": "Leveranser"
+                        "Url": "SitePages/{{ClientSidePages_ParentDeliveries_PageName}}",
+                        "Title": "{{ClientSidePages_ParentDeliveries_Title}}"
                     },
                     {
-                        "Url": "SitePages/OverordnetUsikkerheter.aspx",
-                        "Title": "Usikkerheter"
+                        "Url": "SitePages/{{ClientSidePages_ParentUncertainties_PageName}}",
+                        "Title": "{{ClientSidePages_ParentUncertainties_Title}}"
                     },
                     {
-                        "Url": "SitePages/OverordnetKommunikasjon.aspx",
-                        "Title": "Kommunikasjonsplaner"
+                        "Url": "SitePages/{{ClientSidePages_ParentCommunicationPlan_PageName}}",
+                        "Title": "{{ClientSidePages_ParentCommunicationPlan_Title}}"
                     },
                     {
-                        "Url": "SitePages/OverordnetRessursallokeringer.aspx",
-                        "Title": "Ressursallokeringer"
+                        "Url": "SitePages/{{ClientSidePages_ParentResourceAllocation_PageName}}",
+                        "Title": "{{ClientSidePages_ParentResourceAllocation_Title}}"
                     }
                 ]
             }
@@ -50,8 +50,8 @@
     },
     "ClientSidePages": [
         {
-            "Name": "Admin.aspx",
-            "Title": "Administrasjon",
+            "Name": "{{ClientSidePages_ParentAdmin_PageName}}",
+            "Title": "{{ClientSidePages_ParentAdmin_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -63,7 +63,7 @@
                                 {
                                     "Id": "{{ControlId_ProgramAdministrationWebpart}}",
                                     "Properties": {
-                                        "title": "Administrasjon av underområder"
+                                        "title": "{{ClientSidePages_ParentAdmin_WebPartTitle}}"
                                     }
                                 }
                             ]
@@ -73,8 +73,8 @@
             ]
         },
         {
-            "Name": "OverordnetOversikt.aspx",
-            "Title": "Oversikt",
+            "Name": "{{ClientSidePages_ParentOverview_PageName}}",
+            "Title": "{{ClientSidePages_ParentOverview_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -86,7 +86,7 @@
                                 {
                                     "Id": "{{ControlId_ProgramProjectOverviewWebPart}}",
                                     "Properties": {
-                                        "title": "Oversikt over underområder",
+                                        "title": "{{ClientSidePages_ParentOverview_WebPartTitle}}",
                                         "showCommandBar": true,
                                         "showFilters": true,
                                         "showGroupBy": true,
@@ -102,8 +102,8 @@
             ]
         },
         {
-            "Name": "OverordnetGevinster.aspx",
-            "Title": "Gevinster",
+            "Name": "{{ClientSidePages_ParentBenefitOverview_PageName}}",
+            "Title": "{{ClientSidePages_ParentBenefitOverview_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -115,10 +115,10 @@
                                 {
                                     "Id": "{{ControlId_ProgramAggregationWebPart}}",
                                     "Properties": {
-                                        "title": "Gevinster for underområder",
-                                        "dataSource": "Alle gevinstelementer for underområder",
-                                        "dataSourceCategory": "Gevinstoversikt",
-                                        "dataSourceLevel": "Overordnet/Program",
+                                        "title": "{{ClientSidePages_ParentBenefitOverview_WebPartTitle}}",
+                                        "dataSource": "{{Lists_DataSources_Category_BenefitOverview_Children}}",
+                                        "dataSourceCategory": "{{Lists_DataSources_Category_BenefitOverview}}",
+                                        "dataSourceLevel": "{{Lists_DataSources_Level_ParentProgram}}",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
                                         "showSearchBox": true
@@ -131,8 +131,8 @@
             ]
         },
         {
-            "Name": "OverordnetKommunikasjon.aspx",
-            "Title": "Kommunikasjonsplaner",
+            "Name": "{{ClientSidePages_ParentCommunicationPlan_PageName}}",
+            "Title": "{{ClientSidePages_ParentCommunicationPlan_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -144,9 +144,9 @@
                                 {
                                     "Id": "{{ControlId_ProgramAggregationWebPart}}",
                                     "Properties": {
-                                        "title": "Kommunikasjonsplaner for underområder",
-                                        "dataSource": "Alle kommunikasjonsplaner for underområder",
-                                        "dataSourceCategory": "Kommunikasjonsoversikt",
+                                        "title": "{{ClientSidePages_ParentCommunicationPlan_WebPartTitle}}",
+                                        "dataSource": "{{Lists_DataSources_Category_CommunicationPlan_Children}}",
+                                        "dataSourceCategory": "{{Lists_DataSources_Category_CommunicationPlan}}",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
                                         "showSearchBox": true
@@ -159,8 +159,8 @@
             ]
         },
         {
-            "Name": "OverordnetRessursallokeringer.aspx",
-            "Title": "Ressursallokeringer",
+            "Name": "{{ClientSidePages_ParentResourceAllocation_PageName}}",
+            "Title": "{{ClientSidePages_ParentResourceAllocation_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -172,10 +172,12 @@
                                 {
                                     "Id": "{{ControlId_ProgramAggregationWebPart}}",
                                     "Properties": {
-                                        "title": "Ressursallokeringer for underområder",
-                                        "dataSource": "Alle ressursallokeringer for underområder",
-                                        "dataSourceCategory": "Ressursallokering",
-                                        "hiddenColumns": ["Title"],
+                                        "title": "{{ClientSidePages_ParentResourceAllocation_WebPartTitle}}",
+                                        "dataSource": "{{Lists_DataSources_Category_ResourceAllocation_Children}}",
+                                        "dataSourceCategory": "{{Lists_DataSources_Category_ResourceAllocation}}",
+                                        "hiddenColumns": [
+                                            "Title"
+                                        ],
                                         "showCommandBar": true,
                                         "showViewSelector": true,
                                         "showSearchBox": true
@@ -188,8 +190,8 @@
             ]
         },
         {
-            "Name": "OverordnetTidslinje.aspx",
-            "Title": "Tidslinje",
+            "Name": "{{ClientSidePages_ParentTimeline_PageName}}",
+            "Title": "{{ClientSidePages_ParentTimeline_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -201,9 +203,8 @@
                                 {
                                     "Id": "{{ControlId_ProgramTimelineWebPart}}",
                                     "Properties": {
-                                        "title": "Tidslinje for underområder",
-                                        "infoText": "Her listes alle prosjektene med start- og sluttdato i prosjektet. Prosjekttidslinjen støtter også faser, delfaser og milepæler. For å zoome inn/ut i tidslinje: ALT+Musehjul",
-                                        "dataSource": "Prosjekttidslinje"
+                                        "title": "{{ClientSidePages_ParentTimeline_WebPartTitle}}",
+                                        "infoText": "{{ClientSidePages_ParentTimeline_InfoText}}"
                                     }
                                 }
                             ]
@@ -213,8 +214,8 @@
             ]
         },
         {
-            "Name": "OverordnetLeveranser.aspx",
-            "Title": "Leveranser",
+            "Name": "{{ClientSidePages_ParentDeliveries_PageName}}",
+            "Title": "{{ClientSidePages_ParentDeliveries_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -226,10 +227,10 @@
                                 {
                                     "Id": "{{ControlId_ProgramAggregationWebPart}}",
                                     "Properties": {
-                                        "title": "Leveranser for underområder",
-                                        "dataSource": "Alle leveranser for underområder",
-                                        "dataSourceCategory": "Leveranseoversikt",
-                                        "dataSourceLevel": "Overordnet/Program",
+                                        "title": "{{ClientSidePages_ParentDeliveries_WebPartTitle}}",
+                                        "dataSource": "{{Lists_DataSources_Category_ProjectDeliveries_Children}}",
+                                        "dataSourceCategory": "{{Lists_DataSources_Category_ProjectDeliveries}}",
+                                        "dataSourceLevel": "{{Lists_DataSources_Level_ParentProgram}}",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
                                         "showSearchBox": true
@@ -242,8 +243,8 @@
             ]
         },
         {
-            "Name": "OverordnetUsikkerheter.aspx",
-            "Title": "Usikkerheter",
+            "Name": "{{ClientSidePages_ParentUncertainties_PageName}}",
+            "Title": "{{ClientSidePages_ParentUncertainties_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -255,10 +256,10 @@
                                 {
                                     "Id": "{{ControlId_ProgramAggregationWebPart}}",
                                     "Properties": {
-                                        "title": "Usikkerheter for underområder",
-                                        "dataSource": "Alle risikoelementer for underområder",
-                                        "dataSourceCategory": "Usikkerhetsoversikt",
-                                        "dataSourceLevel": "Overordnet/Program",
+                                        "title": "{{ClientSidePages_ParentUncertainties_WebPartTitle}}",
+                                        "dataSource": "{{Lists_DataSources_Category_UncertaintyOverview_RisksChildren}}",
+                                        "dataSourceCategory": "{{Lists_DataSources_Category_UncertaintyOverview}}",
+                                        "dataSourceLevel": "{{Lists_DataSources_Level_ParentProgram}}",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
                                         "showSearchBox": true

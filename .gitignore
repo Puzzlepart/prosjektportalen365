@@ -27,4 +27,11 @@ common/temp
 SharePointFramework/**/.vscode/chrome-debug-user-data
 SharePointFramework/**/.gitmoji.json
 SharePointFramework/**/environments.json
+SharePointFramework/**/src/loc/resx
 .gitmoji.json
+.temp
+SharePointFramework/**/*-report.md
+SharePointFramework/**/*-report.json
+Templates/*-report*.md
+Templates/*-report*.json
+Templates/Portfolio/Objects/ClientSidePages/*.json

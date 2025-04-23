@@ -6,8 +6,29 @@ const fs = require('fs')
 const path = require('path')
 const pkg = require('../../package.json')
 const JsonTokenReplace = require('@ptkdev/json-token-replace')
+const { format } = require('util')
 const jsonTokenReplace = new JsonTokenReplace()
 
+// Template names for the different languages
+const templateNames = {
+    'no-NB': {
+        'Project': 'Standardmal',
+        'Program': 'Programmal',
+        'Parent': 'Overordnet'
+    },
+    'en-US': {
+        'Project': 'DefaultTemplate',
+        'Program': 'ProgramTemplate',
+        'Parent': 'ParentTemplate'
+    }
+}
+
+const RESOURCES_JSON = getFileContent('Resources.json')
+const JSON_MASTER_TEMPLATES_DIR = fs.readdirSync(path.resolve(__dirname, '../JsonTemplates'))
+const JSON_TEMPLATE_PREFIX = '_JsonTemplate'
+const MAIN_CHANNEL_CONFIG = getFileContent('../channels/main.json')
+const CURRENT_CHANNEL_CONFIG = getFileContent('../.current-channel-config.json', MAIN_CHANNEL_CONFIG)
+const PROJECT_TEMPLATE_DIR = '../Content/Portfolio_content.{0}/ProjectTemplates/{1}.txt'
 
 /**
  * Get file content for the given file path in JSON format. If the file 
@@ -30,35 +51,9 @@ function getFileContent(file, fallbackValue = {}) {
     }
 }
 
-// Template names for the different languages
-const templateNames = {
-    'no-NB': {
-        'Project': 'Standardmal',
-        'Program': 'Programmal',
-        'Parent': 'Overordnet'
-    },
-    'en-US': {
-        'Project': 'DefaultTemplate',
-        'Program': 'ProgramTemplate',
-        'Parent': 'ParentTemplate'
-    }
-}
-
-// Resources in JSON format
-const resourcesJson = getFileContent('Resources.json')
-
-// JSON templates
-const jsonMasterTemplates = fs.readdirSync(path.resolve(__dirname, '../JsonTemplates'))
-
-// Get the main channel config
-const mainChannelConfig = getFileContent('../channels/main.json')
-
-// Get the current channel config with fallback to main channel config
-const currentChannelConfig = getFileContent('../.current-channel-config.json', mainChannelConfig)
-
 // Generate the channel replace values
-const channelReplaceValue = Object.keys(currentChannelConfig.spfx.solutions).reduce((acc, key) => {
-    const solution = currentChannelConfig.spfx.solutions[key]
+const channelReplaceValues = Object.keys(CURRENT_CHANNEL_CONFIG.spfx.solutions).reduce((acc, key) => {
+    const solution = CURRENT_CHANNEL_CONFIG.spfx.solutions[key]
     return Object.keys(solution.components).reduce((acc, componentKey) => {
         acc[`ControlId_${componentKey}`] = solution.components[componentKey]
         return acc
@@ -66,17 +61,16 @@ const channelReplaceValue = Object.keys(currentChannelConfig.spfx.solutions).red
 }, {})
 
 // For each JSON template, replace the tokens and write the output to the correct folder.
-jsonMasterTemplates.forEach(templateFile => {
+JSON_MASTER_TEMPLATES_DIR.forEach(templateFile => {
     const templateJson = getFileContent(`JsonTemplates/${templateFile}`)
-    const templateType = templateFile.substring('_JsonTemplate'.length).replace((/\.[^.]+/), '')
+    const templateType = templateFile.substring(JSON_TEMPLATE_PREFIX.length).replace((/\.[^.]+/), '')
     const outputPaths = Object.keys(templateNames).reduce((acc, lng) => {
-        acc[lng] = path.resolve(__dirname, `../Content/Portfolio_content.${lng}/ProjectTemplates/${templateNames[lng][templateType]}.txt`)
+        acc[lng] = path.resolve(__dirname, format(PROJECT_TEMPLATE_DIR, lng, templateNames[lng][templateType]))
         return acc
     }, {})
 
-
-    Object.keys(resourcesJson).forEach(lng => {
-        const jsonTokens = { ...resourcesJson[lng], ...channelReplaceValue }
+    Object.keys(RESOURCES_JSON).forEach(lng => {
+        const jsonTokens = { ...RESOURCES_JSON[lng], ...channelReplaceValues }
         let content = jsonTokenReplace.replace(
             jsonTokens,
             templateJson,

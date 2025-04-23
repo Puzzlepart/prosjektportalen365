@@ -157,7 +157,6 @@ define([], function () {
     ProjectInformationPanelButton: 'Åpne prosjektinformasjonspanel',
     ProjectLabel: 'Prosjekt',
     ProjectPropertiesHeader: 'Prosjektinformasjon',
-    ProjectPropertiesListName: 'Prosjektegenskaper',
     ProjectsListName: 'Prosjekter',
     SaveButtonLabel: 'Lagre',
     SearchBoxGroupName: 'Søkeboks',

@@ -81,10 +81,17 @@ function EndAction() {
 Load PnP.PowerShell from bundle
 
 .DESCRIPTION
-Loaa PnP.PowerShell from bundle and return version.
+Loads PnP.PowerShell from bundle and return version.
+
+.PARAMETER Version
+The version of PnP.PowerShell to load.
 #>
 function LoadBundle() {
-    Import-Module "$PWD/PnP.PowerShell/PnP.PowerShell.psd1" -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
+    Param(
+        [Parameter(Mandatory = $true)]
+        [string]$Version
+    )
+    Import-Module "$PWD/PnP.PowerShell/$Version/PnP.PowerShell.psd1" -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
     return (Get-Command Connect-PnPOnline).Version
 }
 
@@ -95,6 +102,8 @@ Parse version string
 .DESCRIPTION
 Parse version string and return version object.
 
+.PARAMETER VersionString
+The version string to parse
 #>
 function ParseVersionString($VersionString) {
     try {
@@ -107,7 +116,6 @@ function ParseVersionString($VersionString) {
     catch {
         Write-Host "[ERROR] Failed to parse version string: $VersionString" -ForegroundColor Red
         Write-Host "[ERROR] Unable to compare with previous versions. Some upgrade actions might be skipped."
-        Write-Host "[ERROR] You can check out the list at $($Url)/Lists/Installasjonslogg."
         Write-Host "[ERROR] Make sure that the field 'Versjonsnummer' has a valid version number value."
         
         $Input = Read-Host "Do you still want to continue? [Y/N]"

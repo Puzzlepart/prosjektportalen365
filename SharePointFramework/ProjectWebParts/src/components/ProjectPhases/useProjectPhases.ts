@@ -8,6 +8,7 @@ import reducer, { initialState } from './reducer'
 import { IProjectPhasesProps } from './types'
 import { useProjectPhasesDataFetch } from './useProjectPhasesDataFetch'
 import { useId } from '@fluentui/react-components'
+import resx from 'ResxStrings'
 
 /**
  * Component logic hook for `ProjectPhases`
@@ -17,7 +18,7 @@ export function useProjectPhases(props: IProjectPhasesProps) {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   ListLogger.init(
-    SPDataAdapter.portalDataService.web.lists.getByTitle(strings.LogListName),
+    SPDataAdapter.portalDataService.web.lists.getByTitle(resx.Lists_Log_Title),
     props.webAbsoluteUrl,
     ProjectPhases.displayName
   )

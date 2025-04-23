@@ -12,7 +12,8 @@
     "postversion": "npm run generate-readme && npm run sync-version",
     "rush:update": "node common/scripts/install-run-rush.js update",
     "rush:build": "node common/scripts/install-run-rush.js rebuild --verbose",
-    "rush:lint": "node common/scripts/install-run-rush.js lint"
+    "rush:lint": "node common/scripts/install-run-rush.js lint",
+    "build-release": "pwsh -File ./Install/build-release.ps1"
   },
   "repository": {
     "type": "git",

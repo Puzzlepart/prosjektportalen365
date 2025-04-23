@@ -155,7 +155,6 @@ declare interface IProgramWebPartsStrings {
   ProjectInformationPanelButton: string
   ProjectLabel: string
   ProjectPropertiesHeader: string
-  ProjectPropertiesListName: string
   ProjectsListName: string
   SaveButtonLabel: string
   SearchBoxGroupName: string

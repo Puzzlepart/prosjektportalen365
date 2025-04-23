@@ -5,6 +5,7 @@ import strings from 'SharedLibraryStrings'
 import { format } from '@fluentui/react'
 import { ErrorWithIntent } from '../../interfaces'
 import { LogLevel } from '@pnp/logging'
+import * as resx from 'ResxStrings'
 
 export type PortalDataServiceList =
   | 'PROJECTS'
@@ -49,7 +50,7 @@ export interface IPortalDataServiceConfiguration extends Object {
     DATA_SOURCES?: string
     PROJECT_ADMIN_ROLES?: string
     PROJECT_TEMPLATE_CONFIGURATION?: string
-    PROJECT_DATA?: string
+    IDEA_PROJECT_DATA?: string
     IDEA_PROCESSING?: string
     GLOBAL_SETTINGS?: string
     TIMELINE_CONTENT?: string
@@ -68,21 +69,21 @@ export interface IPortalDataServiceConfiguration extends Object {
 
 export const PortalDataServiceDefaultConfiguration: Partial<IPortalDataServiceConfiguration> = {
   listNames: {
-    STATUS_SECTIONS: 'Statusseksjoner',
-    PROJECT_COLUMNS: 'Prosjektkolonner',
-    PROJECT_COLUMN_CONFIGURATION: 'Prosjektkolonnekonfigurasjon',
-    PROJECT_STATUS: 'Prosjektstatus',
-    PROJECT_STATUS_ATTACHMENTS: 'Prosjektstatusvedlegg',
-    PROJECTS: 'Prosjekter',
-    PORTFOLIO_VIEWS: 'Porteføljevisninger',
-    PROJECT_CONTENT_COLUMNS: 'Prosjektinnholdskolonner',
-    DATA_SOURCES: 'Datakilder',
-    PROJECT_ADMIN_ROLES: 'Prosjektadministrasjonsroller',
-    PROJECT_TEMPLATE_CONFIGURATION: 'Maloppsett',
-    PROJECT_DATA: 'Prosjektdata',
-    IDEA_PROCESSING: 'Idébehandling',
-    GLOBAL_SETTINGS: 'Globale innstillinger',
-    TIMELINE_CONTENT: 'Tidslinjeinnhold'
+    STATUS_SECTIONS: resx.Lists_StatusSections_Title,
+    PROJECT_COLUMNS: resx.Lists_ProjectColumns_Title,
+    PROJECT_COLUMN_CONFIGURATION: resx.Lists_ProjectColumnConfiguration_Title,
+    PROJECT_STATUS: resx.Lists_ProjectStatus_Title,
+    PROJECT_STATUS_ATTACHMENTS: resx.Lists_ProjectStatusAttachments_Title,
+    PROJECTS: resx.Lists_Projects_Title,
+    PORTFOLIO_VIEWS: resx.Lists_PortfolioViews_Title,
+    PROJECT_CONTENT_COLUMNS: resx.Lists_ProjectContentColumns_Title,
+    DATA_SOURCES: resx.Lists_DataSources_Title,
+    PROJECT_ADMIN_ROLES: resx.Lists_ProjectAdminRoles_Title,
+    PROJECT_TEMPLATE_CONFIGURATION: resx.Lists_ProjectTemplates_Title,
+    IDEA_PROJECT_DATA: resx.Lists_ProjectData_Title,
+    IDEA_PROCESSING: resx.Lists_IdeaProcessing_Title,
+    GLOBAL_SETTINGS: resx.Lists_Global_Settings_Title,
+    TIMELINE_CONTENT: resx.Lists_TimelineContent_Title
   },
   templateParametersFieldXml:
     '<Field Type="Note" DisplayName="TemplateParameters" ID="{b8854944-7141-471f-b8df-53d93a4395ba}" StaticName="TemplateParameters" Name="TemplateParameters" UnlimitedLengthInDocumentLibrary="TRUE" Hidden="TRUE" />',
@@ -97,10 +98,31 @@ export type GetStatusReportsOptions = {
 }
 
 export type SyncListParams = {
+  /**
+   * The URL of the SharePoint site.
+   */
   url: string
+
+  /**
+   * The name of the list to sync.
+   */
   listName: string
+
+  /**
+   * The content type ID to use for the list.
+   */
   contentTypeId: string
+
+  /**
+   * The properties to set on the list item.
+   */
   properties?: Record<string, string>
+
+  /**
+   * Progress function to call during the sync process.
+   * 
+   * @param progress The progress text to display.
+   */
   progressFunc?: (progress: string) => void
 }
 

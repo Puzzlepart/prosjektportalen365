@@ -19,6 +19,7 @@ import {
 } from './types'
 import { PnPClientStorage } from '@pnp/core/storage'
 import { dateAdd } from '@pnp/core/util'
+import resx from 'ResxStrings'
 
 export default class FooterApplicationCustomizer extends BaseApplicationCustomizer<IFooterApplicationCustomizerProperties> {
   private _bottomPlaceholder: PlaceholderContent
@@ -45,7 +46,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     const [installEntries, gitHubReleases, helpContent, links] = await Promise.all([
       this._fetchInstallationLogs(),
       this._fetchGitHubReleases(),
-      this._fetchHelpContent(strings.HelpContentListName),
+      this._fetchHelpContent(),
       this._fetchLinks()
     ])
     this._installEntries = installEntries
@@ -60,7 +61,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   }
 
   private async _handleNavigatedEvent(): Promise<void> {
-    const helpContent = await this._fetchHelpContent(strings.HelpContentListName)
+    const helpContent = await this._fetchHelpContent()
     this._helpContent = helpContent
 
     this._renderFooter(PlaceholderName.Bottom, {
@@ -77,7 +78,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   }
 
   /**
-   * Fetch the installation logs from the `strings.InstallationLogListName` list. Converts
+   * Fetch the installation logs from the installation log list. Converts
    * the item properties to match the `IInstallationEntry` interface.
    *
    * @param orderBy Property to order by
@@ -89,7 +90,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   ): Promise<InstallationEntry[]> {
     try {
       const installationLogList = this._portalDataService.web.lists.getByTitle(
-        strings.InstallationLogListName
+        resx.Lists_InstallationLog_Title
       )
       const installationLogItems = await installationLogList.items.orderBy(
         orderBy,
@@ -105,10 +106,8 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
    * Fetch help content from the specified list filtered on level.
    *
    * The content is stored in `sessionStorage` for 4 hours.
-   *
-   * @param listName Name of the list
    */
-  private async _fetchHelpContent(listName: string): Promise<HelpContentModel[]> {
+  private async _fetchHelpContent(): Promise<HelpContentModel[]> {
     try {
       return await new PnPClientStorage().session.getOrPut(
         `pp365_help_content_${window.location.pathname}`,
@@ -119,7 +118,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
               ? 'Overordnet/Program'
               : 'Prosjekt'
             : 'Portefølje'
-          let items = await this._portalDataService.getItems(listName, HelpContentModel, {
+          let items = await this._portalDataService.getItems(resx.Lists_HelpContent_Title, HelpContentModel, {
             ViewXml: `<View>
             <Query>
                 <Where>
@@ -150,11 +149,11 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   }
 
   /**
-   * Fetch the links from the `strings.LinksListName` (Lenker) list on the hub site.
+   * Fetch the links from the links list on the hub site.
    */
   private async _fetchLinks(): Promise<{ Url: string; Description: string; Level?: string }[]> {
     try {
-      const linksList = this._portalDataService.web.lists.getByTitle(strings.LinksListName)
+      const linksList = this._portalDataService.web.lists.getByTitle(resx.Lists_Links_Title)
       const linksItems = await linksList.items()
       return linksItems.map((item) => {
         return {

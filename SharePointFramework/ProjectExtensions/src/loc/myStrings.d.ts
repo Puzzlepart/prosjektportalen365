@@ -119,10 +119,8 @@ declare interface IProjectExtensionsStrings {
   ProjectDataFoundTitle: string
   ProjectDataFoundMessage: string
   ProjectPropertiesHeader: string
-  ProjectPropertiesListName: string
   ProjectProvisioningStartLogText: string
   ProjectProvisioningSuccessLogText: string
-  ProjectTemplateFilesListName: string,
   ProvisionSiteFieldsErrorMessage: string
   ProvisionSiteFieldsText: string
   ProvisionSiteFieldText: string

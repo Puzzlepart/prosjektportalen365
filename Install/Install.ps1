@@ -31,7 +31,7 @@ Param(
     [Parameter(Mandatory = $false, HelpMessage = "Tenant App Catalog Url")]
     [string]$TenantAppCatalogUrl,
     [Parameter(Mandatory = $false, HelpMessage = "Language")]
-    [ValidateSet('Norwegian')]
+    [ValidateSet('Norwegian', 'English')]
     [string]$Language = "Norwegian",
     [Parameter(Mandatory = $false, HelpMessage = "Used by Continuous Integration")]
     [switch]$CI,
@@ -40,7 +40,9 @@ Param(
     [Parameter(Mandatory = $false, HelpMessage = "Base64 encoded certificate")]
     [string]$CertificateBase64Encoded,
     [Parameter(Mandatory = $false, HelpMessage = "Do you want to include Bygg & Anlegg content (only when upgrading)")]
-    [switch]$IncludeBAContent
+    [switch]$IncludeBAContent,
+    [Parameter(Mandatory = $false, HelpMessage = "Which handlers to exclude when performing an upgrade")]
+    [string[]]$UpgradeExcludeHandlers = @("Navigation", "SupportedUILanguages", "Files")
 )
 
 . "$PSScriptRoot/Scripts/SharedFunctions.ps1"
@@ -55,17 +57,18 @@ $ConnectionInfo = [PSCustomObject]@{
 #region Handling installation language and culture
 $LanguageIds = @{
     "Norwegian"    = 1044;
-    "English (US)" = 1033;
+    "English"      = 1033;
 }
 
 $LanguageCodes = @{
     "Norwegian"    = 'no-NB';
-    "English (US)" = 'en-US';
+    "English"      = 'en-US';
 }
 
 $Channel = "{CHANNEL_PLACEHOLDER}"
 $LanguageId = $LanguageIds[$Language]
 $LanguageCode = $LanguageCodes[$Language]
+. "$PSScriptRoot/Scripts/Resources.ps1"
 #endregion
 
 $ErrorActionPreference = "Stop"
@@ -87,11 +90,13 @@ Write-Host "########################################################" -Foregroun
 
 if ($CI.IsPresent -and $null -eq (Get-Module -Name PnP.PowerShell)) {
     Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
-    Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop
+    Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop -RequiredVersion 2.12.0
+    $Version = (Get-Command Connect-PnPOnline).Version
+    Write-Host "[INFO] Installed module PnP.PowerShell v$($Version) from PowerShell Gallery"
 }
 else {
     if (-not $SkipLoadingBundle.IsPresent) {
-        $PnPVersion = LoadBundle    
+        $PnPVersion = LoadBundle -Version 2.12.0
         Write-Host "[INFO] Loaded module PnP.PowerShell v$($PnPVersion) from bundle"
     }
     else {
@@ -365,20 +370,33 @@ if (-not $SkipTemplate.IsPresent) {
 
         if ($Upgrade.IsPresent) {
             StartAction("Applying PnP template Portfolio to $($Uri.AbsoluteUri)")
-            try {
-                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers Navigation, SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
-            }
-            catch {
-                Write-Host "`t[WARNING] Failed to apply PnP Portfolio template, retrying..." -ForegroundColor Yellow
-                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers Navigation, SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
+            $Retry = 0
+            $MaxRetries = 5
+            while($Retry -lt $MaxRetries) {
+                try {
+                    Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers $UpgradeExcludeHandlers -ErrorAction Stop -WarningAction SilentlyContinue
+                    break
+                }
+                catch {
+                    Write-Host "`t[WARNING] Failed to apply PnP Portfolio template, retrying $($MaxRetries - $Retry) times..." -ForegroundColor Yellow
+                    $Retry++
+                    if ($Retry -eq $MaxRetries) {
+                        Write-Host "[ERROR] Failed to apply PnP Portfolio template after $MaxRetries attempts" -ForegroundColor Red
+                        throw
+                    }
+                }
             }
             EndAction
 
-            StartAction("Applying PnP content template to $($Uri.AbsoluteUri)")
-            Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" -Handlers Files -ErrorAction Stop -WarningAction SilentlyContinue
-            EndAction
+            if(Test-Path "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp") {
+                StartAction("Applying PnP content template to $($Uri.AbsoluteUri)")
+                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" -Handlers Files -ErrorAction Stop -WarningAction SilentlyContinue
+                EndAction
+            } else {
+                Write-Host "[WARNING] No content template found for language $LanguageCode. Skipping content template." -ForegroundColor Yellow
+            }
 
-            if ($IncludeBAContent.IsPresent) {
+            if ($IncludeBAContent.IsPresent -and (Test-Path "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp")) {
                 StartAction("Applying PnP B&A content template to $($Uri.AbsoluteUri)")
                 Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
                 EndAction
@@ -389,22 +407,35 @@ if (-not $SkipTemplate.IsPresent) {
             $Instance = Read-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp"
             $Instance.SupportedUILanguages[0].LCID = $LanguageId
             Invoke-PnPSiteTemplate -InputInstance $Instance -Handlers SupportedUILanguages
-            try {
-                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
-            }
-            catch {
-                Write-Host "`t[WARNING] Failed to apply PnP Portfolio template, retrying..." -ForegroundColor Yellow
-                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
+            $Retry = 0
+            $MaxRetries = 5
+            while($Retry -lt $MaxRetries) {
+                try {                
+                    Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
+                    break
+                }
+                catch {
+                    Write-Host "`t[WARNING] Failed to apply PnP Portfolio template, retrying $($MaxRetries - $Retry) times..." -ForegroundColor Yellow
+                    $Retry++
+                    if ($Retry -eq $MaxRetries) {
+                        Write-Host "[ERROR] Failed to apply PnP Portfolio template after $MaxRetries attempts" -ForegroundColor Red
+                        throw
+                    }
+                }
             }
             EndAction
 
-            StartAction("Applying PnP content template to $($Uri.AbsoluteUri)")
-            Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
-            EndAction
+            if (Test-Path "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp") {
+                StartAction("Applying PnP content template to $($Uri.AbsoluteUri)")
+                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" -Handlers Files -ErrorAction Stop -WarningAction SilentlyContinue
+                EndAction
+            }
 
-            StartAction("Applying PnP B&A content template to $($Uri.AbsoluteUri)")
-            Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
-            EndAction
+            if (Test-Path "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp") {
+                StartAction("Applying PnP B&A content template to $($Uri.AbsoluteUri)")
+                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
+                EndAction
+            }
         }
         
 
@@ -506,16 +537,22 @@ if ($CI.IsPresent) {
     $InstallEntry.InstallCommand = "GitHub CI";
 }
 
-## Logging installation to SharePoint list
-$InstallationEntry = Add-PnPListItem -List "Installasjonslogg" -Values $InstallEntry -ErrorAction Continue
+try {
+    $InstallationEntriesList = Get-PnPList -Identity (Get-Resource -Name "Lists_InstallationLog_Title") -ErrorAction Stop
 
-## Attempting to attach the log file to installation entry
-if ($null -ne $InstallationEntry) {
-    $File = Get-Item -Path $LogFilePath
-    if ($null -ne $File -and $File.Length -gt 0) {
-        Write-Host "[INFO] Attaching installation log file to installation entry"
-        $AttachmentOutput = Add-PnPListItemAttachment -List "Installasjonslogg" -Identity $InstallationEntry.Id -Path $LogFilePath -ErrorAction Continue
-    }    
+    ## Logging installation to SharePoint list
+    $InstallationEntry = Add-PnPListItem -List $InstallationEntriesList.Id -Values $InstallEntry -ErrorAction Continue
+
+    ## Attempting to attach the log file to installation entry
+    if ($null -ne $InstallationEntry) {
+        $File = Get-Item -Path $LogFilePath
+        if ($null -ne $File -and $File.Length -gt 0) {
+            Write-Host "[INFO] Attaching installation log file to installation entry"
+            $AttachmentOutput = Add-PnPListItemAttachment -List $InstallationEntriesList.Id -Identity $InstallationEntry.Id -Path $LogFilePath -ErrorAction Continue
+        }    
+    }
+} catch {
+    Write-Host "[WARNING] Installation log list not found. Skipping logging installation entry." -ForegroundColor Yellow
 }
 
 Disconnect-PnPOnline

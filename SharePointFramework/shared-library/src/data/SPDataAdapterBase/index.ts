@@ -17,6 +17,7 @@ import {
   ProjectAdminPermission,
   ProjectPropertiesMapType
 } from './types'
+import resx from 'ResxStrings'
 
 export class SPDataAdapterBase<
   T extends ISPDataAdapterBaseConfiguration = ISPDataAdapterBaseConfiguration
@@ -90,10 +91,13 @@ export class SPDataAdapterBase<
   }
 
   /**
-   * Configure the SP data adapter
+   * Configure the SP data adapter with the given SPFx context
+   * and settings.
    *
-   * @param spfxContext Context
-   * @param settings Settings
+   * @param spfxContext SPFx context
+   * @param settings Settings for the data adapter
+   * 
+   * @returns The configured SP data adapter
    */
   public async configure(spfxContext: SPFxContext, settings: T) {
     this.spfxContext = spfxContext
@@ -104,7 +108,7 @@ export class SPDataAdapterBase<
     })
     this.entityService = new SpEntityPortalService(spfxContext, {
       portalUrl: this.portalDataService.url,
-      listName: 'Prosjekter',
+      listName: resx.Lists_Projects_Title,
       contentTypeId: '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
       identityFieldName: 'GtSiteId',
       urlFieldName: 'GtSiteUrl'

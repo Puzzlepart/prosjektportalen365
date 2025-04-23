@@ -3,23 +3,132 @@
   "version": "1.11.0",
   "main": "generateTemplate.js",
   "scripts": {
-    "watch": "chokidar \"./_JsonTemplate.json\" -c \"npm run generate-project-templates\"",
     "build": "npm run generate-project-templates && npm run generate-resx-json",
     "lint": "echo \"No linting configured\"",
-    "generate-resx-json": "node ./.tasks/generateResxJson",
-    "generate-project-templates": "npm run generate-resx-json && node ./.tasks/generateProjectTemplates"
+    "generate-resx-json": "node ./.tasks/generate-resx-json.js",
+    "generate-resx-ts": "node ./.tasks/generate-resx-ts.js",
+    "generate-project-templates": "npm run generate-resx-json && npm run generate-resx-ts && node ./.tasks/generate-project-templates.js",
+    "validate-project-template": "node ./.tasks/validate-project-template.js",
+    "validate-loc": "node node_modules/pzl-spfx-tasks --validate-loc --loglevel verbose"
   },
   "dependencies": {
-    "@ptkdev/json-token-replace": "^1.2.2",
-    "chokidar-cli": "^2.1.0",
-    "resx-json-typescript-converter": "^1.0.1",
-    "dotenv": "~16.1.3",
     "@fluentui/react-components": "~9.52.0",
-    "@fluentui/react-icons": "~2.0.240"
+    "@fluentui/react-icons": "~2.0.240",
+    "@ptkdev/json-token-replace": "^1.2.2",
+    "dotenv": "~16.1.3",
+    "resx-json-typescript-converter": "^1.0.1"
   },
   "devDependencies": {
-    "replace": "1.2.2",
     "@types/lodash": "~4.14.195",
-    "pzl-spfx-tasks": "~0.5.10-2"
+    "pzl-spfx-tasks": "0.5.14-4",
+    "replace": "1.2.2",
+    "xml2js": "^0.6.2"
+  },
+  "config": {
+    "pzl-spfx-tasks": {
+      "validateloc": {
+        "path": "../SharePointFramework/PortfolioWebParts/src/loc/resx",
+        "interface": "IResxStrings",
+        "dts": "resx.d.ts",
+        "output": "./resx-spfx-report.json",
+        "summary": true
+      }
+    }
+  },
+  "gitmoji": {
+    "build": [
+      "🏗️",
+      "Make architectural changes"
+    ],
+    "ci": [
+      "👷",
+      "Add or update CI build system",
+      [
+        "integration"
+      ]
+    ],
+    "chore": [
+      "💄",
+      "Boring chores",
+      [
+        "boring",
+        "stuff"
+      ]
+    ],
+    "docs": [
+      "📝",
+      "Added or updated documentation",
+      [
+        "doc",
+        "dox"
+      ]
+    ],
+    "feat": [
+      "✨",
+      "Introduced new features"
+    ],
+    "fix": [
+      "🐛",
+      "Fixed a bug",
+      [
+        "bugfix"
+      ]
+    ],
+    "perf": [
+      "⚡",
+      "Improved performance"
+    ],
+    "refactor": [
+      "♻️",
+      "Refactored code"
+    ],
+    "revert": [
+      "⏪",
+      "Reverted changes"
+    ],
+    "style": [
+      "💄",
+      "Added or updated the UI and style files"
+    ],
+    "test": [
+      "✅",
+      "Added or updated tests"
+    ],
+    "dev": [
+      "🔨",
+      "Add or update development scripts"
+    ],
+    "i18n": [
+      "🌐",
+      "Internationalization and localization"
+    ],
+    "changelog": [
+      "📓",
+      "Updated changelog"
+    ],
+    "readme": [
+      "📝",
+      "Updated readme"
+    ],
+    "typo": [
+      "✏️",
+      "Fixed typos"
+    ],
+    "rename": [
+      "🚚",
+      "Moved or renamed resources (e.g.: files, paths, routes)"
+    ],
+    "merge": [
+      "🔀",
+      "Merged a branch into this one"
+    ],
+    "auth": [
+      "🛂",
+      "Worked on code related to authorization, roles and permissions"
+    ],
+    "syntax": [
+      "✏️",
+      "Adjusted code syntax"
+    ]
   }
 }

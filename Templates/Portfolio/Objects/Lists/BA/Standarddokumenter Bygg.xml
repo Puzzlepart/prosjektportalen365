@@ -1,7 +1,7 @@
-<pnp:ListInstance Title="{resource:Lists_DocumentsB_Title}" TemplateType="101" Url="{resource:Lists_DocumentsB_Url}" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="500" DraftVersionVisibility="0" EnableAttachments="false" 
+<pnp:ListInstance Title="{resource:Lists_DocumentsBuilding_Title}" TemplateType="101" Url="{resource:Lists_DocumentsBuilding_Url}" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="500" DraftVersionVisibility="0" EnableAttachments="false" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:Views>
-        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllDocuments_DisplayName}" Url="{site}/{resource:Lists_DocumentsB_Url}/Forms/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/dlicon.png?rev=47">
+        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllDocuments_DisplayName}" Url="{site}/{resource:Lists_DocumentsBuilding_Url}/Forms/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/dlicon.png?rev=47">
             <Query>
                 <OrderBy>
                     <FieldRef Name="FileLeafRef" />

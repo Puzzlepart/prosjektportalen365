@@ -17,7 +17,6 @@ import { LoadingSkeleton, customLightTheme } from 'pp365-shared-library'
 export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
   const { rootRef, context, fluentProviderId, toasterId } = useProjectPhases(props)
   const { dispatchToast } = useToastController(toasterId)
-
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme} className={styles.root} ref={rootRef}>
@@ -64,5 +63,3 @@ ProjectPhases.defaultProps = {
   commentMinLength: 4,
   subTextTruncateLength: 50
 }
-
-export * from './types'

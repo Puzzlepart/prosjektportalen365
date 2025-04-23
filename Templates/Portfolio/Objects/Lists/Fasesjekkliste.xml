@@ -1,4 +1,4 @@
-﻿<pnp:ListInstance Title="{resource:Lists_PhaseChecklist_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_PhaseChecklist_Url}" Hidden="false" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" 
+﻿<pnp:ListInstance Title="{resource:Lists_PhaseChecklist_Title}" Description="{resource:Lists_PhaseChecklist_Description}" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_PhaseChecklist_Url}" Hidden="false" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100486B1F8AEA24486FBA1C1BA9146C360C" Default="true" />
