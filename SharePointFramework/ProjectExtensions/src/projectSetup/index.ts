@@ -438,7 +438,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         spfxContext: this.context
       })
 
-      const [_templates, extensions, contentConfig, templateFiles, customActions, ideaData] =
+      const [_templates, extensions, contentConfig, templateFiles, customActions, projectData] =
         await Promise.all([
           this._getTemplates(),
           this._portalDataService.getItems(
