@@ -41,7 +41,7 @@ import {
   TimelineConfigurationModel,
   TimelineContentModel
 } from 'pp365-shared-library'
-import resx from 'ResxStrings'
+import resource from 'SharedResources'
 import _ from 'underscore'
 import { IPortfolioAggregationConfiguration } from '../components/PortfolioAggregation'
 import { IPortfolioOverviewConfiguration } from '../components/PortfolioOverview/types'
@@ -196,10 +196,10 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     level?: string
   ): Promise<IPortfolioAggregationConfiguration> {
     try {
-      let calculatedLevel = resx.Lists_DataSources_Level_Portfolio
+      let calculatedLevel = resource.Lists_DataSources_Level_Portfolio
 
       if (this.portalDataService.url !== this._spfxContext.pageContext.web.absoluteUrl) {
-        calculatedLevel = resx.Lists_DataSources_Level_Project
+        calculatedLevel = resource.Lists_DataSources_Level_Project
       }
 
       level = level ?? calculatedLevel
@@ -607,7 +607,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   public async fetchEnrichedProjects(): Promise<ProjectListModel[]> {
     const localStore = new PnPClientStorage().local
     const siteId = this._spfxContext.pageContext.site.id.toString()
-    const list = this._sp.web.lists.getByTitle(resx.Lists_Projects_Title)
+    const list = this._sp.web.lists.getByTitle(resource.Lists_Projects_Title)
     const [items, sites, memberOfGroups, users] = await localStore.getOrPut(
       `pp365_fetchenrichedprojects_${siteId}`,
       async () =>
@@ -796,7 +796,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         throw new Error(format(strings.DataSourceNotFound, dataSourceName))
       }
       const dataSrcProperties = dataSrc.columns.map((col) => col.fieldName) || []
-      if (dataSrc.category.startsWith(resx.Lists_DataSources_Category_BenefitOverview)) {
+      if (dataSrc.category.startsWith(resource.Lists_DataSources_Category_BenefitOverview)) {
         items = await this.fetchBenefitItemsWithSource(dataSrc, [
           ...selectProperties,
           ...dataSrcProperties
@@ -1141,11 +1141,11 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       }
     }
 
-    const level = resx.Lists_DataSources_Level_Portfolio
+    const level = resource.Lists_DataSources_Level_Portfolio
 
     const columns: ProjectContentColumn[] = await new Promise((resolve, reject) => {
       this.portalDataService
-        .fetchProjectContentColumns('PROJECT_CONTENT_COLUMNS', resx.Lists_DataSources_Category_IdeaModule, level)
+        .fetchProjectContentColumns('PROJECT_CONTENT_COLUMNS', resource.Lists_DataSources_Category_IdeaModule, level)
         .then(resolve)
         .catch(reject)
     })

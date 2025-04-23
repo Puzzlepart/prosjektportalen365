@@ -5,7 +5,7 @@ import strings from 'SharedLibraryStrings'
 import { format } from '@fluentui/react'
 import { ErrorWithIntent } from '../../interfaces'
 import { LogLevel } from '@pnp/logging'
-import * as resx from 'ResxStrings'
+import resource from 'SharedResources'
 
 export type PortalDataServiceList =
   | 'PROJECTS'
@@ -69,21 +69,21 @@ export interface IPortalDataServiceConfiguration extends Object {
 
 export const PortalDataServiceDefaultConfiguration: Partial<IPortalDataServiceConfiguration> = {
   listNames: {
-    STATUS_SECTIONS: resx.Lists_StatusSections_Title,
-    PROJECT_COLUMNS: resx.Lists_ProjectColumns_Title,
-    PROJECT_COLUMN_CONFIGURATION: resx.Lists_ProjectColumnConfiguration_Title,
-    PROJECT_STATUS: resx.Lists_ProjectStatus_Title,
-    PROJECT_STATUS_ATTACHMENTS: resx.Lists_ProjectStatusAttachments_Title,
-    PROJECTS: resx.Lists_Projects_Title,
-    PORTFOLIO_VIEWS: resx.Lists_PortfolioViews_Title,
-    PROJECT_CONTENT_COLUMNS: resx.Lists_ProjectContentColumns_Title,
-    DATA_SOURCES: resx.Lists_DataSources_Title,
-    PROJECT_ADMIN_ROLES: resx.Lists_ProjectAdminRoles_Title,
-    PROJECT_TEMPLATE_CONFIGURATION: resx.Lists_ProjectTemplates_Title,
-    IDEA_PROJECT_DATA: resx.Lists_ProjectData_Title,
-    IDEA_PROCESSING: resx.Lists_IdeaProcessing_Title,
-    GLOBAL_SETTINGS: resx.Lists_Global_Settings_Title,
-    TIMELINE_CONTENT: resx.Lists_TimelineContent_Title
+    STATUS_SECTIONS: resource.Lists_StatusSections_Title,
+    PROJECT_COLUMNS: resource.Lists_ProjectColumns_Title,
+    PROJECT_COLUMN_CONFIGURATION: resource.Lists_ProjectColumnConfiguration_Title,
+    PROJECT_STATUS: resource.Lists_ProjectStatus_Title,
+    PROJECT_STATUS_ATTACHMENTS: resource.Lists_ProjectStatusAttachments_Title,
+    PROJECTS: resource.Lists_Projects_Title,
+    PORTFOLIO_VIEWS: resource.Lists_PortfolioViews_Title,
+    PROJECT_CONTENT_COLUMNS: resource.Lists_ProjectContentColumns_Title,
+    DATA_SOURCES: resource.Lists_DataSources_Title,
+    PROJECT_ADMIN_ROLES: resource.Lists_ProjectAdminRoles_Title,
+    PROJECT_TEMPLATE_CONFIGURATION: resource.Lists_ProjectTemplates_Title,
+    IDEA_PROJECT_DATA: resource.Lists_ProjectData_Title,
+    IDEA_PROCESSING: resource.Lists_IdeaProcessing_Title,
+    GLOBAL_SETTINGS: resource.Lists_Global_Settings_Title,
+    TIMELINE_CONTENT: resource.Lists_TimelineContent_Title
   },
   templateParametersFieldXml:
     '<Field Type="Note" DisplayName="TemplateParameters" ID="{b8854944-7141-471f-b8df-53d93a4395ba}" StaticName="TemplateParameters" Name="TemplateParameters" UnlimitedLengthInDocumentLibrary="TRUE" Hidden="TRUE" />',

@@ -77,7 +77,7 @@
   },
   "externals": {},
   "localizedResources": {
-    "ResxStrings": "lib/loc/resx/{locale}.js",
+    "SharedResources": "lib/loc/shared/{locale}.js",
     "ControlStrings": "lib/loc/{locale}.js",
     "PortfolioWebPartsStrings": "lib/loc/{locale}.js",
     "PzlSPFxComponentsStrings": "lib/loc/{locale}.js",

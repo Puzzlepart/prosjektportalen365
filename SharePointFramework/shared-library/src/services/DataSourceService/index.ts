@@ -2,7 +2,7 @@ import { DataSource, SPDataSourceItem } from '../../models/DataSource'
 import { ProjectContentColumn } from '../../models'
 import { IList } from '@pnp/sp/lists'
 import { IWeb } from '@pnp/sp/webs'
-import resx from 'ResxStrings'
+import resource from 'SharedResources'
 export class DataSourceService {
   private _dataSourcesList: IList
   private _columnsList: IList
@@ -11,13 +11,13 @@ export class DataSourceService {
    * Creates a new instance of `DataSourceService`
    *
    * @param web Web
-   * @param dataSourcesListName List name is default set to `{resx.Lists_DataSources_Title}` but can be overridden (not recommended)
-   * @param columnsListName Columns list name is default set to `{resx.Lists_ProjectContentColumns_Title}` but can be overridden (not recommended)
+   * @param dataSourcesListName List name is default set to `{resource.Lists_DataSources_Title}` but can be overridden (not recommended)
+   * @param columnsListName Columns list name is default set to `{resource.Lists_ProjectContentColumns_Title}` but can be overridden (not recommended)
    */
   constructor(
     public web: IWeb,
-    dataSourcesListName = resx.Lists_DataSources_Title,
-    columnsListName = resx.Lists_ProjectContentColumns_Title
+    dataSourcesListName = resource.Lists_DataSources_Title,
+    columnsListName = resource.Lists_ProjectContentColumns_Title
   ) {
     this._dataSourcesList = web.lists.getByTitle(dataSourcesListName)
     this._columnsList = web.lists.getByTitle(columnsListName)

@@ -8,7 +8,7 @@
     "**/coverage": true,
     "**/lib-amd": true,
     "src/**/*.scss.ts": true,
-    "src/loc/resx": true
+    "src/loc/shared": true
   },
   "typescript.tsdk": ".\\node_modules\\typescript\\lib",
   "FSharp.suggestGitignore": false

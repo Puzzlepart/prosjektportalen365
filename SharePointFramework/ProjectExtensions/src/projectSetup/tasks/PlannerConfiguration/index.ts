@@ -11,7 +11,7 @@ import { ListLogger } from 'pp365-shared-library/lib/logging'
 import { SPDataAdapter } from 'data'
 import { IPlannerBucket, IPlannerConfiguration, IPlannerPlan, ITaskDetails } from './types'
 import _ from 'underscore'
-import resx from 'ResxStrings'
+import resource from 'SharedResources'
 
 /**
  * @class PlannerConfiguration
@@ -132,7 +132,7 @@ export class PlannerConfiguration extends BaseTask {
 
       if (this._labels.length > 25) {
         ListLogger.init(
-          SPDataAdapter.portalDataService.web.lists.getByTitle(resx.Lists_Log_Title),
+          SPDataAdapter.portalDataService.web.lists.getByTitle(resource.Lists_Log_Title),
           pageContext.web.absoluteUrl,
           'PlannerConfiguration'
         )
@@ -271,7 +271,7 @@ export class PlannerConfiguration extends BaseTask {
 
     if (taskDetails.checklist?.length > 20 || taskDetails.attachments?.length > 10) {
       ListLogger.init(
-        SPDataAdapter.portalDataService.web.lists.getByTitle(resx.Lists_Log_Title),
+        SPDataAdapter.portalDataService.web.lists.getByTitle(resource.Lists_Log_Title),
         pageContext.web.absoluteUrl,
         'PlannerConfiguration'
       )

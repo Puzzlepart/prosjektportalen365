@@ -17,7 +17,7 @@ import {
   ProjectAdminPermission,
   ProjectPropertiesMapType
 } from './types'
-import resx from 'ResxStrings'
+import resource from 'SharedResources'
 
 export class SPDataAdapterBase<
   T extends ISPDataAdapterBaseConfiguration = ISPDataAdapterBaseConfiguration
@@ -108,7 +108,7 @@ export class SPDataAdapterBase<
     })
     this.entityService = new SpEntityPortalService(spfxContext, {
       portalUrl: this.portalDataService.url,
-      listName: resx.Lists_Projects_Title,
+      listName: resource.Lists_Projects_Title,
       contentTypeId: '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
       identityFieldName: 'GtSiteId',
       urlFieldName: 'GtSiteUrl'

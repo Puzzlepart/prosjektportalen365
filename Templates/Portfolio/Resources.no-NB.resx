@@ -778,6 +778,9 @@
     <data name="ContentTypes_ProjectLogElement_Name" xml:space="preserve">
         <value>Prosjektloggelement</value>
     </data>
+    <data name="ContentTypes_ProjectPropertiesSection_Name" xml:space="preserve">
+        <value>Seksjon for prosjektegenskaper</value>
+    </data>
     <data name="ContentTypes_ProjectStatusBA_Description" xml:space="preserve">
         <value>Prosjektstatus innholdstype for bygg- og anleggsprosjekter</value>
     </data>
@@ -840,6 +843,9 @@
     </data>
     <data name="ContentTypes_Timeline_Element_Name" xml:space="preserve">
         <value>Tidslinjeelement</value>
+    </data>
+    <data name="ContentTypes_UncertaintySection_Name" xml:space="preserve">
+        <value>Usikkerhetseksjon</value>
     </data>
     <data name="ContentTypes_Uncertainty_Description" xml:space="preserve">
         <value>Usikkerhet assosiert med prosjektet</value>
@@ -1654,6 +1660,9 @@
     <data name="SiteFields_GtActionDescription_Description" xml:space="preserve">
         <value/>
     </data>
+    <data name="SiteFields_GtActionDescription_Description" xml:space="preserve">
+        <value>Beskriv tiltak for å oppnå støtte hos interessenten eller redusere motstand/ hindringer.</value>
+    </data>
     <data name="SiteFields_GtActionDescription_DisplayName" xml:space="preserve">
         <value>Beskrivelse</value>
     </data>
@@ -1798,6 +1807,9 @@
     <data name="SiteFields_GtCategory_Description" xml:space="preserve">
         <value/>
     </data>
+    <data name="SiteFields_GtCategory_Description" xml:space="preserve">
+        <value>Hvilken kategori tilhører elementet?</value>
+    </data>
     <data name="SiteFields_GtCategory_DisplayName" xml:space="preserve">
         <value>Kategori</value>
     </data>
@@ -1861,6 +1873,9 @@
     <data name="SiteFields_GtDataSourceDefault_Description" xml:space="preserve">
         <value/>
     </data>
+    <data name="SiteFields_GtDataSourceDefault_Description" xml:space="preserve">
+        <value>Om datakilden skal være standard datakilde for kategorien.</value>
+    </data>
     <data name="SiteFields_GtDataSourceDefault_DisplayName" xml:space="preserve">
         <value>Standard for kategori</value>
     </data>
@@ -1878,6 +1893,9 @@
     </data>
     <data name="SiteFields_GtDataSourceLevel_Description" xml:space="preserve">
         <value/>
+    </data>
+    <data name="SiteFields_GtDataSourceLevel_Description" xml:space="preserve">
+        <value>Hvilket nivå i prosjektportalen er datakilden knyttet til?</value>
     </data>
     <data name="SiteFields_GtDataSourceLevel_DisplayName" xml:space="preserve">
         <value>Nivå</value>

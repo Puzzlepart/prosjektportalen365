@@ -6,8 +6,8 @@ import { ConsoleListener, LogLevel, Logger } from '@pnp/logging'
 import { SPFI } from '@pnp/sp'
 import { IMenuNode } from '@pnp/sp/navigation'
 import { format, getId } from '@uifabric/utilities'
-import * as strings from 'ProjectExtensionsStrings'
-import * as resx from 'ResxStrings'
+import strings from 'ProjectExtensionsStrings'
+import resource from 'SharedResources'
 import { SPDataAdapter } from 'data'
 import msgraph from 'msgraph-helper'
 import {
@@ -127,12 +127,12 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
 
   private async _ensureParentProjectPatch(): Promise<void> {
     const [singleItem] = await SPDataAdapter.portalDataService.web.lists
-      .getByTitle(resx.Lists_Projects_Title)
+      .getByTitle(resource.Lists_Projects_Title)
       .items.filter(
         `GtSiteId eq '${this.context.pageContext.legacyPageContext.siteId.replace(/([{}])/g, '')}'`
       )()
     await SPDataAdapter.portalDataService.web.lists
-      .getByTitle(resx.Lists_Projects_Title)
+      .getByTitle(resource.Lists_Projects_Title)
       .items.getById(singleItem.Id)
       .update({ GtIsParentProject: true })
   }
@@ -151,7 +151,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
 
       let data = await this._fetchData()
       ListLogger.init(
-        SPDataAdapter.portalDataService.web.lists.getByTitle(resx.Lists_Log_Title),
+        SPDataAdapter.portalDataService.web.lists.getByTitle(resource.Lists_Log_Title),
         this.context.pageContext.web.absoluteUrl,
         'ProjectSetup'
       )
@@ -170,7 +170,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       if (!stringIsNullOrEmpty(this.properties.forceTemplate)) {
         await this.initializeQuickLaunchMenu()
         await this.sp.web.lists
-          .getByTitle(resx.Lists_ProjectProperties_Title)
+          .getByTitle(resource.Lists_ProjectProperties_Title)
           .items.getById(1)
           .update({ GtIsParentProject: true, GtChildProjects: JSON.stringify([]) })
         await this._ensureParentProjectPatch()
@@ -403,7 +403,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       const [lockedTemplateName, templates] = await Promise.all([
         webAllProperties[lockedTemplateProperty],
         this._portalDataService.getItems(
-          resx.Lists_TemplateOptions_Title,
+          resource.Lists_TemplateOptions_Title,
           ProjectTemplate,
           {
             ViewXml: '<View></View>'
@@ -442,7 +442,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         await Promise.all([
           this._getTemplates(),
           this._portalDataService.getItems(
-            resx.Lists_ProjectExtensions_Title,
+            resource.Lists_ProjectExtensions_Title,
             ProjectExtension,
             {
               ViewXml:
@@ -450,11 +450,11 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             },
             ['File', 'FieldValuesAsText']
           ),
-          this._portalDataService.getItems(resx.Lists_ListContent_Title, ContentConfig, {}, [
+          this._portalDataService.getItems(resource.Lists_ListContent_Title, ContentConfig, {}, [
             'File'
           ]),
           this._portalDataService.getItems(
-            resx.Lists_ProjectTemplates_Title,
+            resource.Lists_ProjectTemplates_Title,
             ProjectTemplateFile,
             {
               ViewXml: '<View></View>'

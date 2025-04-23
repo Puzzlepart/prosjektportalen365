@@ -30,7 +30,7 @@
     },
     "externals": {},
     "localizedResources": {
-        "ResxStrings": "lib/loc/resx/{locale}.js",
+        "SharedResources": "lib/loc/shared/{locale}.js",
         "ProgramWebPartsStrings": "lib/loc/{locale}.js",
         "PortfolioWebPartsStrings": "lib/loc/{locale}.js",
         "ProjectWebPartsStrings": "node_modules/pp365-projectwebparts/lib/loc/{locale}.js",

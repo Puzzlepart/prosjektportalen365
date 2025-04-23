@@ -5,7 +5,7 @@ import { SpEntityPortalService } from 'sp-entityportal-service'
 import initSpfxJsom, { ExecuteJsomQuery } from 'spfx-jsom'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import _ from 'underscore'
-import * as resx from 'ResxStrings'
+import resource from 'SharedResources'
 import SPDataAdapter from 'data/SPDataAdapter'
 
 export class PreTask extends BaseTask {
@@ -31,7 +31,7 @@ export class PreTask extends BaseTask {
       })
       params.entityService = new SpEntityPortalService(params.context, {
         portalUrl: SPDataAdapter.portalDataService.url,
-        listName: resx.Lists_Projects_Title,
+        listName: resource.Lists_Projects_Title,
         identityFieldName: 'GtGroupId',
         urlFieldName: 'GtSiteUrl'
       })

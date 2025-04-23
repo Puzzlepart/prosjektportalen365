@@ -63,12 +63,12 @@ ${localeValues}
   ${key}: string`;
   }).join('\n\n');
 
-  return `declare interface IResxStrings {
+  return `declare interface ISharedResources {
 ${interfaceContent}
 }
 
-declare module 'ResxStrings' {
-  const strings: IResxStrings
+declare module 'SharedResources' {
+  const strings: ISharedResources
   export = strings
 }
 `
@@ -100,7 +100,7 @@ async function convertResxToTypescript() {
   try {
     // Create output directories if they don't exist
     for (const dir of OUTPUT_PATHS) {
-      const outputDir = path.resolve(dir, 'resx')
+      const outputDir = path.resolve(dir, 'shared')
       if (!fs.existsSync(outputDir)) {
         fs.mkdirSync(outputDir, { recursive: true })
       }
@@ -140,7 +140,7 @@ async function convertResxToTypescript() {
 
       // Write to all output directories
       for (const dir of OUTPUT_PATHS) {
-        fs.writeFileSync(path.join(dir, 'resx', `${resxFile.locale}.js`), localeContent)
+        fs.writeFileSync(path.join(dir, 'shared', `${resxFile.locale}.js`), localeContent)
       }
       console.log(`Generated ${resxFile.locale}.js in all output directories`)
     }
@@ -150,9 +150,9 @@ async function convertResxToTypescript() {
 
     // Write to all output directories
     for (const dir of OUTPUT_PATHS) {
-      fs.writeFileSync(path.join(dir, 'resx', 'resx.d.ts'), definitionContent)
+      fs.writeFileSync(path.join(dir, 'shared', 'shared.d.ts'), definitionContent)
     }
-    console.log('Generated resx.d.ts in all output directories')
+    console.log('Generated shared.d.ts in all output directories')
 
     console.log('Conversion completed successfully!')
   } catch (error) {

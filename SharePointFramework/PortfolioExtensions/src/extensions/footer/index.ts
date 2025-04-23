@@ -19,7 +19,7 @@ import {
 } from './types'
 import { PnPClientStorage } from '@pnp/core/storage'
 import { dateAdd } from '@pnp/core/util'
-import resx from 'ResxStrings'
+import resource from 'SharedResources'
 
 export default class FooterApplicationCustomizer extends BaseApplicationCustomizer<IFooterApplicationCustomizerProperties> {
   private _bottomPlaceholder: PlaceholderContent
@@ -90,7 +90,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   ): Promise<InstallationEntry[]> {
     try {
       const installationLogList = this._portalDataService.web.lists.getByTitle(
-        resx.Lists_InstallationLog_Title
+        resource.Lists_InstallationLog_Title
       )
       const installationLogItems = await installationLogList.items.orderBy(
         orderBy,
@@ -118,7 +118,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
               ? 'Overordnet/Program'
               : 'Prosjekt'
             : 'Portefølje'
-          let items = await this._portalDataService.getItems(resx.Lists_HelpContent_Title, HelpContentModel, {
+          let items = await this._portalDataService.getItems(resource.Lists_HelpContent_Title, HelpContentModel, {
             ViewXml: `<View>
             <Query>
                 <Where>
@@ -153,7 +153,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
    */
   private async _fetchLinks(): Promise<{ Url: string; Description: string; Level?: string }[]> {
     try {
-      const linksList = this._portalDataService.web.lists.getByTitle(resx.Lists_Links_Title)
+      const linksList = this._portalDataService.web.lists.getByTitle(resource.Lists_Links_Title)
       const linksItems = await linksList.items()
       return linksItems.map((item) => {
         return {

@@ -6,7 +6,7 @@ import SPDataAdapter from '../../data'
 import { IProjectInformationContext } from './context'
 import { IProjectInformationData, ProjectInformation } from './index'
 import { SET_PROGRESS } from './reducer'
-import resx from 'ResxStrings'
+import resource from 'SharedResources'
 
 interface IUsePropertiesSyncParams {
   /**
@@ -46,7 +46,7 @@ interface IUsePropertiesSyncParams {
 const syncList = async (context: IProjectInformationContext) => {
   return await SPDataAdapter.portalDataService.syncList({
     url: context.props.webAbsoluteUrl,
-    listName: resx.Lists_ProjectProperties_Title,
+    listName: resource.Lists_ProjectProperties_Title,
     contentTypeId:
       context.state.data.templateParameters.ProjectContentTypeId ??
       '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',

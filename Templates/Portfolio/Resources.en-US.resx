@@ -712,6 +712,18 @@
     <data name="ContentTypes_ProjectAdminPermission_Name" xml:space="preserve">
         <value>Project Admin Permission</value>
     </data>
+    <data name="ContentTypes_ProjectAdminRoleGroupMembership_Name" xml:space="preserve">
+        <value>Project Administration Role linked to a SharePoint group</value>
+    </data>
+    <data name="ContentTypes_ProjectAdminRoleProjectInfo_Name" xml:space="preserve">
+        <value>Project Administration Role linked to project properties</value>
+    </data>
+    <data name="ContentTypes_ProjectAdminRoleSiteAdmin_Name" xml:space="preserve">
+        <value>Project Administration Role - Site Administrator</value>
+    </data>
+    <data name="ContentTypes_ProjectAdminRole_Name" xml:space="preserve">
+        <value>Project Administration Role</value>
+    </data>
     <data name="ContentTypes_ProjectBA_Description" xml:space="preserve">
         <value>Project content type for construction and building projects</value>
     </data>

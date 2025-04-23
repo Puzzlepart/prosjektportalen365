@@ -10,7 +10,7 @@ import { ProjectPhases } from './index'
 import { INIT_DATA } from './reducer'
 import { IPhaseSitePageModel, IProjectPhasesData, IProjectPhasesProps } from './types'
 import { SPWeb } from '@microsoft/sp-page-context'
-import resx from 'ResxStrings'
+import resource from 'SharedResources'
 
 /**
  * Get phase site pages.
@@ -57,7 +57,7 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
     }
     const [phaseFieldCtx, checklistData, welcomePage, properties] = await Promise.all([
       SPDataAdapter.getTermFieldContext('GtProjectPhase'),
-      SPDataAdapter.project.getChecklistData(resx.Lists_PhaseChecklist_Title),
+      SPDataAdapter.project.getChecklistData(resource.Lists_PhaseChecklist_Title),
       SPDataAdapter.project.getWelcomePage(),
       SPDataAdapter.project.getProjectInformationData()
     ])

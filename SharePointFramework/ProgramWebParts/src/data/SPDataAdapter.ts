@@ -44,7 +44,7 @@ import { DEFAULT_SEARCH_SETTINGS, IProjectsData } from './types'
 import { IList } from '@pnp/sp/lists'
 import { IItem } from '@pnp/sp/items'
 import { PermissionKind } from '@pnp/sp/presets/all'
-import resx from 'ResxStrings'
+import resource from 'SharedResources'
 
 /**
  * `SPDataAdapter` is a class that extends the `SPDataAdapterBase` class and implements the `IPortfolioWebPartsDataAdapter` interface.
@@ -80,7 +80,7 @@ export class SPDataAdapter
       ...this.settings,
       spfxContext,
       entityService: this.entityService,
-      propertiesListName: resx.Lists_ProjectProperties_Title
+      propertiesListName: resource.Lists_ProjectProperties_Title
     } as IProjectDataServiceParams)
     this._propertyList = this.sp.web.lists.getByTitle('Prosjektegenskaper')
   }

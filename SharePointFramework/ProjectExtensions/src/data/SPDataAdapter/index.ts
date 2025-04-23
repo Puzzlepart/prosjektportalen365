@@ -7,7 +7,7 @@ import { DefaultCaching, SPDataAdapterBase } from 'pp365-shared-library/lib/data
 import { IProjectDataServiceParams, ProjectDataService } from 'pp365-shared-library/lib/services'
 import validFilename from 'valid-filename'
 import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration'
-import resx from 'ResxStrings'
+import resource from 'SharedResources'
 
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public project: ProjectDataService
@@ -27,7 +27,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       ...this.settings,
       spfxContext,
       entityService: this.entityService,
-      propertiesListName: resx.Lists_ProjectProperties_Title
+      propertiesListName: resource.Lists_ProjectProperties_Title
     } as IProjectDataServiceParams)
   }
 

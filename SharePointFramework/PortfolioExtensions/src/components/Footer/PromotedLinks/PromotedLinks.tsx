@@ -12,7 +12,7 @@ import {
   Tooltip
 } from '@fluentui/react-components'
 import { getFluentIcon } from 'pp365-shared-library'
-import resx from 'ResxStrings'
+import resource from 'SharedResources'
 
 export const PromotedLinks: FC = () => {
   const context = useContext(FooterContext)
@@ -26,11 +26,11 @@ export const PromotedLinks: FC = () => {
             <>
               {strings.LinksListDescription}
               <Link
-                href={`${context.props.portalUrl}/${resx.Lists_Links_Url}/AllItems.aspx`}
+                href={`${context.props.portalUrl}/${resource.Lists_Links_Url}/AllItems.aspx`}
                 target='_blank'
-                title={resx.Lists_Links_Title}
+                title={resource.Lists_Links_Title}
               >
-                {resx.Lists_Links_Title}
+                {resource.Lists_Links_Title}
               </Link>
             </>
           }

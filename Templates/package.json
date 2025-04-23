@@ -27,11 +27,10 @@
   "config": {
     "pzl-spfx-tasks": {
       "validateloc": {
-        "path": "../SharePointFramework/PortfolioWebParts/src/loc/resx",
-        "interface": "IResxStrings",
-        "dts": "resx.d.ts",
-        "output": "./resx-spfx-report.json",
-        "summary": true
+        "path": "../SharePointFramework/PortfolioWebParts/src/loc/shared",
+        "interface": "ISharedResources",
+        "dts": "shared.d.ts",
+        "output": "./resx-ts-report.json"
       }
     }
   },
