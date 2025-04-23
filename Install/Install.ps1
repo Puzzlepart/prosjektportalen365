@@ -26,6 +26,10 @@ Param(
     [switch]$Upgrade,
     [Parameter(Mandatory = $false, HelpMessage = "Site design name")]
     [string]$SiteDesignName = "Prosjektomr%C3%A5de",
+    [Parameter(Mandatory = $false, HelpMessage = "Site design description")]
+    [string]$SiteDesignDescription = "Samarbeid i et prosjektomr%C3%A5de fra Prosjektportalen",
+    [Parameter(Mandatory = $false, HelpMessage = "Site design description for channel installations")]
+    [string]$SiteDesignDescriptionChannel = "Denne malen brukes n%C3%A5r det opprettes prosjekter under en {0}-kanal installasjon av Prosjektportalen",
     [Parameter(Mandatory = $false, HelpMessage = "Security group to give View access to site design")]
     [string]$SiteDesignSecurityGroupId,
     [Parameter(Mandatory = $false, HelpMessage = "Tenant App Catalog Url")]
@@ -189,13 +193,14 @@ if (-not $Upgrade.IsPresent) {
 
 #region Creating/updating site design
 $SiteDesignName = [Uri]::UnescapeDataString($SiteDesignName)
-$SiteDesignDesc = [Uri]::UnescapeDataString("Samarbeid i et prosjektomr%C3%A5de fra Prosjektportalen")
+$SiteDesignDescription = [Uri]::UnescapeDataString($SiteDesignDescription)
 $SiteDesignThumbnail = "https://publiccdn.sharepointonline.com/prosjektportalen.sharepoint.com/sites/ppassets/Thumbnails/prosjektomrade.png"
 
 # Add channel to name for the site design if channel is specified and not main
 if ($Channel -ne "main") {
     $SiteDesignName = [Uri]::UnescapeDataString($SiteDesignName) + " [$Channel]"
-    $SiteDesignDesc = [Uri]::UnescapeDataString("Denne malen brukes n%C3%A5r det opprettes prosjekter under en test-kanal installasjon av Prosjektportalen")
+    $SiteDesignDescription = [string]::Format($SiteDesignDescriptionChannel, $Channel)
+    $SiteDesignDescription = [Uri]::UnescapeDataString($SiteDesignDescription)
     $SiteDesignThumbnail = "https://publiccdn.sharepointonline.com/prosjektportalen.sharepoint.com/sites/ppassets/Thumbnails/prosjektomrade-test.png"
 }
 
@@ -234,16 +239,16 @@ if (-not $SkipSiteDesign.IsPresent) {
         StartAction("Creating/updating site design $SiteDesignName")
         Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
     
-        $NoOutput = Get-PnpSiteDesign | Where-Object {$_.Title.Contains("Prosjektområde - test")} | Remove-PnPSiteDesign -Force -ErrorAction SilentlyContinue
+        Get-PnPSiteDesign | Where-Object {$_.Title.Contains("Prosjektområde - test")} | Remove-PnPSiteDesign -Force -ErrorAction SilentlyContinue >$null 2>&1
 
         $SiteDesign = Get-PnPSiteDesign -Identity $SiteDesignName
 
 
         if ($null -ne $SiteDesign) {
-            $SiteDesign = Set-PnPSiteDesign -Identity $SiteDesign -SiteScriptIds $SiteScriptIds -Description $SiteDesignDesc -Version "1" -ThumbnailUrl $SiteDesignThumbnail
+            $SiteDesign = Set-PnPSiteDesign -Identity $SiteDesign -SiteScriptIds $SiteScriptIds -Description $SiteDesignDescription -Version "1" -ThumbnailUrl $SiteDesignThumbnail
         }
         else {
-            $SiteDesign = Add-PnPSiteDesign -Title $SiteDesignName -SiteScriptIds $SiteScriptIds -Description $SiteDesignDesc -WebTemplate TeamSite -ThumbnailUrl $SiteDesignThumbnail
+            $SiteDesign = Add-PnPSiteDesign -Title $SiteDesignName -SiteScriptIds $SiteScriptIds -Description $SiteDesignDescription -WebTemplate TeamSite -ThumbnailUrl $SiteDesignThumbnail
         }
         if (-not [string]::IsNullOrEmpty($SiteDesignSecurityGroupId)) {         
             Grant-PnPSiteDesignRights -Identity $SiteDesign.Id.Guid -Principals @("c:0t.c|tenant|$SiteDesignSecurityGroupId")
