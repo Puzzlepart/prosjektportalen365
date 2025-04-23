@@ -18,7 +18,7 @@ export type PortalDataServiceList =
   | 'PROJECT_STATUS_ATTACHMENTS'
   | 'PROJECT_ADMIN_ROLES'
   | 'PROJECT_TEMPLATE_CONFIGURATION'
-  | 'IDEA_PROJECT_DATA'
+  | 'PROJECT_DATA'
   | 'IDEA_PROCESSING'
   | 'GLOBAL_SETTINGS'
   | 'TIMELINE_CONTENT'
@@ -49,7 +49,7 @@ export interface IPortalDataServiceConfiguration extends Object {
     DATA_SOURCES?: string
     PROJECT_ADMIN_ROLES?: string
     PROJECT_TEMPLATE_CONFIGURATION?: string
-    IDEA_PROJECT_DATA?: string
+    PROJECT_DATA?: string
     IDEA_PROCESSING?: string
     GLOBAL_SETTINGS?: string
     TIMELINE_CONTENT?: string
@@ -79,7 +79,7 @@ export const PortalDataServiceDefaultConfiguration: Partial<IPortalDataServiceCo
     DATA_SOURCES: 'Datakilder',
     PROJECT_ADMIN_ROLES: 'Prosjektadministrasjonsroller',
     PROJECT_TEMPLATE_CONFIGURATION: 'Maloppsett',
-    IDEA_PROJECT_DATA: 'Prosjektdata',
+    PROJECT_DATA: 'Prosjektdata',
     IDEA_PROCESSING: 'Idébehandling',
     GLOBAL_SETTINGS: 'Globale innstillinger',
     TIMELINE_CONTENT: 'Tidslinjeinnhold'
