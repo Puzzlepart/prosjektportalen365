@@ -37,22 +37,98 @@ export interface IPortalDataServiceConfiguration extends Object {
 
   /**
    * The list names for the different lists used by the data service.
+   * 
+   * @remarks 
+   * Use list names from the `SharedResources` module.
+   * 
+   * @example
+   * ```typescript
+   * import resource from 'SharedResources'
+   * 
+   * const config: IPortalDataServiceConfiguration = {
+   *   listNames: {
+   *     PROJECTS: resource.Lists_Projects_Title
+   *   }
+   * }
+   * ```
+   * 
+   * That way, the list names are automatically localized and you'll
+   * get intellisense for the list names for the different languages.
    */
   listNames?: {
+    /**
+     * The name of the list for status sections.
+     */
     STATUS_SECTIONS?: string
+
+    /**
+     * The name of the list for project columns.
+     */
     PROJECT_COLUMNS?: string
+
+    /**
+     * The name of the list for project column configuration.
+     */
     PROJECT_COLUMN_CONFIGURATION?: string
+
+    /**
+     * The name of the list for projects.
+     */
     PROJECTS?: string
+
+    /**
+     * The name of the list for project status.
+     */
     PROJECT_STATUS?: string
+
+    /**
+     * The name of the list for project status attachments.
+     */
     PROJECT_STATUS_ATTACHMENTS?: string
+
+    /**
+     * The name of the list for portfolio views.
+     */
     PORTFOLIO_VIEWS?: string
+
+    /**
+     * The name of the list for project content columns.
+     */
     PROJECT_CONTENT_COLUMNS?: string
+
+    /**
+     * The name of the list for data sources.
+     */
     DATA_SOURCES?: string
+
+    /**
+     * The name of the list for project admin roles.
+     */
     PROJECT_ADMIN_ROLES?: string
+
+    /**
+     * The name of the list for project template configuration.
+     */
     PROJECT_TEMPLATE_CONFIGURATION?: string
+
+    /**
+     * The name of the list for project data.
+     */
     PROJECT_DATA?: string
+
+    /**
+     * The name of the list for idea processing.
+     */
     IDEA_PROCESSING?: string
+
+    /**
+     * The name of the list for global settings.
+     */
     GLOBAL_SETTINGS?: string
+
+    /**
+     * The name of the list for timeline content.
+     */
     TIMELINE_CONTENT?: string
   }
 
