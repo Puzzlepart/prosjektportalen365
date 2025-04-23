@@ -50,7 +50,7 @@ export interface IPortalDataServiceConfiguration extends Object {
     DATA_SOURCES?: string
     PROJECT_ADMIN_ROLES?: string
     PROJECT_TEMPLATE_CONFIGURATION?: string
-    IDEA_PROJECT_DATA?: string
+    PROJECT_DATA?: string
     IDEA_PROCESSING?: string
     GLOBAL_SETTINGS?: string
     TIMELINE_CONTENT?: string
@@ -80,7 +80,7 @@ export const PortalDataServiceDefaultConfiguration: Partial<IPortalDataServiceCo
     DATA_SOURCES: resource.Lists_DataSources_Title,
     PROJECT_ADMIN_ROLES: resource.Lists_ProjectAdminRoles_Title,
     PROJECT_TEMPLATE_CONFIGURATION: resource.Lists_ProjectTemplates_Title,
-    IDEA_PROJECT_DATA: resource.Lists_ProjectData_Title,
+    PROJECT_DATA: resource.Lists_ProjectData_Title,
     IDEA_PROCESSING: resource.Lists_IdeaProcessing_Title,
     GLOBAL_SETTINGS: resource.Lists_Global_Settings_Title,
     TIMELINE_CONTENT: resource.Lists_TimelineContent_Title
