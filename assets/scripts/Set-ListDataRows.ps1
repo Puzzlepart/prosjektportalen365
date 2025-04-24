@@ -10,7 +10,7 @@ Param(
 # Example usage:
 # ./Set-ListDataRows.ps1 "Globale innstillinger" -ResxPath ../../Templates/Portfolio/Resources.no-NB.resx
 
-$File = Get-ChildItem -Path "$PSScriptRoot\..\..\Templates\**\$($ListName).xml" -Recurse 
+$File = Get-ChildItem -Path "$PSScriptRoot\..\..\Templates\Portfolio\Objects\Lists\**\$($ListName).xml" -Recurse | Select-Object -First 1
 $Content = Get-Content -Path $File.FullName
 [xml]$Xml = $Content
 
@@ -24,6 +24,10 @@ $Xml.ListInstance.DataRows.DataRow | ForEach-Object {
             $ResourceKey = $Matches.Groups[3].Value
             $ResourceValue = $Matches.Groups[1].Value.Trim()
             $ResourceToken = $Matches.Groups[2].Value.Trim()
+
+            if($null -eq $ResourceValue -or $ResourceValue -eq "") {
+              continue
+            }
 
             $ExistingResxValue = $ResxValues | Where-Object { $_.Key -eq $ResourceKey }
             if($null -eq $ExistingResxValue) {
@@ -44,6 +48,8 @@ if($Save.IsPresent) {
 } 
 
 if($ResxPath -ne $null -and $ResxPath -ne "") {
+    $ResxValues | Format-Table -AutoSize
+
     [xml]$ResxXml = Get-Content -Path $ResxPath
     $lastNode = $ResxXml.root.data | Select-Object -Last 1
     $ResxValues | ForEach-Object {
