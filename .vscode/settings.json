@@ -22,5 +22,5 @@
         "*.txt": "json",
         ".README": "markdown",
         ".development-guide/.README": "markdown"
-    },
+    }
 }
