@@ -81,7 +81,7 @@
     <pnp:DataRows KeyColumn="GtInternalName" UpdateBehavior="Overwrite">
         <pnp:DataRow>            <!-- ID: 1 -->
             <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Tittel</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_Title_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">Title</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">Title</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
@@ -93,7 +93,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 2 -->
             <pnp:DataValue FieldName="GtSortOrder">100</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Leveransebeskrivelse</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtDeliveryDescription_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtDeliveryDescription</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtDeliveryDescriptionOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
@@ -103,7 +103,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 3 -->
             <pnp:DataValue FieldName="GtSortOrder">120</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Sluttidspunkt</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtDeliveryEndTime_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtDeliveryEndTime</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtDeliveryEndTimeOWSDATE</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Date</pnp:DataValue>
@@ -113,7 +113,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 4 -->
             <pnp:DataValue FieldName="GtSortOrder">120</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Leveransestatus</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtDeliveryStatus_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtDeliveryStatus</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtDeliveryStatusOWSCHCS</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
@@ -124,7 +124,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 5 -->
             <pnp:DataValue FieldName="GtSortOrder">130</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Kommentar, leveransestatus</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtDeliveryStatusComment_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtDeliveryStatusComment</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtDeliveryStatusCommentOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
@@ -134,7 +134,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 6 -->
             <pnp:DataValue FieldName="GtSortOrder">200</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Sannsynlighet (S)</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtRiskProbability_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtRiskProbability</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtRiskProbabilityOWSNMBR</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Number</pnp:DataValue>
@@ -144,7 +144,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 7 -->
             <pnp:DataValue FieldName="GtSortOrder">210</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Konsekvens (K)</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtRiskConsequence_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtRiskConsequence</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtRiskConsequenceOWSNMBR</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Number</pnp:DataValue>
@@ -154,7 +154,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 8 -->
             <pnp:DataValue FieldName="GtSortOrder">220</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">S etter tiltak</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtRiskProbabilityPostAction_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtRiskProbabilityPostAction</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtRiskProbabilityPostActionOWSNMBR</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Number</pnp:DataValue>
@@ -164,7 +164,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 9 -->
             <pnp:DataValue FieldName="GtSortOrder">230</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">K etter tiltak</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtRiskConsequencePostAction_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtRiskConsequencePostAction</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtRiskConsequencePostActionOWSNMBR</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Number</pnp:DataValue>
@@ -174,7 +174,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 10 -->
             <pnp:DataValue FieldName="GtSortOrder">240</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Tiltak</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtRiskAction_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtRiskAction</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtRiskActionOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
@@ -184,7 +184,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 11 -->
             <pnp:DataValue FieldName="GtSortOrder">300</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Loggbeskrivelse</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtProjectLogDescription_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectLogDescription</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectLogDescriptionOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
@@ -194,7 +194,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 12 -->
             <pnp:DataValue FieldName="GtSortOrder">310</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Aktører</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtProjectLogActors_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectLogActors</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectLogActorsOWSCHCM</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Tags</pnp:DataValue>
@@ -206,7 +206,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 13 -->
             <pnp:DataValue FieldName="GtSortOrder">320</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Ansvarlig</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtProjectLogResponsible_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectLogResponsible</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectLogResponsibleOWSCHCS</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
@@ -217,7 +217,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 14 -->
             <pnp:DataValue FieldName="GtSortOrder">330</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Konsekvens</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtProjectLogConsequence_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectLogConsequence</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectLogConsequenceOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
@@ -228,7 +228,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 15 -->
             <pnp:DataValue FieldName="GtSortOrder">340</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Anbefaling</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtProjectLogRecommendation_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectLogRecommendation</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectLogRecommendationOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>

@@ -144,7 +144,7 @@
             <pnp:DataValue FieldName="GtProjectContentColumns">1,16,17,18,19,20,28,29,30,31</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentRefiners">16,17,19,25</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName">Trophy</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceLevel">Prosjekt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">{resource:Lists_DataSources_Level_Project}</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">b0ef3852-230e-4119-8156-5a2ba625e5e1</pnp:DataValue>
