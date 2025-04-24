@@ -7,10 +7,16 @@
         "**/dist": true,
         "**/.dist": true,
         "**/temp": true,
+        "**/.temp": true,
+        "**/common": true,
+        "**/release": true,
         "**/tmp": true,
+        "**/assets": true,
         "**/common/temp": true,
         "README.md": true,
-        ".development-guide/README.md": true
+        ".development-guide/README.md": true,
+        ".channel-replace-map.json": true,
+        ".current-channel-config.json": true
     },
     "files.associations": {
         "*.txt": "json",
