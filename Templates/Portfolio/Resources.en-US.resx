@@ -1408,6 +1408,21 @@
     <data name="Lists_ProjectContentColumns_Description" xml:space="preserve">
         <value>Manage project content columns (visibility and metadata)</value>
     </data>
+    <data name="Lists_ProjectContentColumns_LastMeasurementValue_Title" xml:space="preserve">
+        <value>Last Measurement Value</value>
+    </data>
+    <data name="Lists_ProjectContentColumns_MeasurementAchievement_Title" xml:space="preserve">
+        <value>Measurement Achievement</value>
+    </data>
+    <data name="Lists_ProjectContentColumns_MeasurementIndicator_Title" xml:space="preserve">
+        <value>Measurement Indicator</value>
+    </data>
+    <data name="Lists_ProjectContentColumns_Measurements_Title" xml:space="preserve">
+        <value>Measurements</value>
+    </data>
+    <data name="Lists_ProjectContentColumns_SiteTitle_Title" xml:space="preserve">
+        <value>Project</value>
+    </data>
     <data name="Lists_ProjectContentColumns_Title" xml:space="preserve">
         <value>Project Content Columns</value>
     </data>
@@ -1717,8 +1732,20 @@
     <data name="SiteFields_BA_Group" xml:space="preserve">
         <value>Project Portal Columns (Construction and Building)</value>
     </data>
+    <data name="SiteFields_ContentType_DisplayName" xml:space="preserve">
+        <value>Content Type</value>
+    </data>
+    <data name="SiteFields_CreatedBy_DisplayName" xml:space="preserve">
+        <value>Created by</value>
+    </data>
+    <data name="SiteFields_Created_DisplayName" xml:space="preserve">
+        <value>Created</value>
+    </data>
     <data name="SiteFields_CustomFields_Group" xml:space="preserve">
         <value>Project Portal Columns (Custom)</value>
+    </data>
+    <data name="SiteFields_Editor_DisplayName" xml:space="preserve">
+        <value>Modified by</value>
     </data>
     <data name="SiteFields_GtActionChannel_Description" xml:space="preserve">
         <value>Which channel is used for this communication activity?</value>
@@ -3523,6 +3550,9 @@
     <data name="SiteFields_InstallVersion_DisplayName" xml:space="preserve">
         <value>Version</value>
     </data>
+    <data name="SiteFields_Modified_DisplayName" xml:space="preserve">
+        <value>Modified</value>
+    </data>
     <data name="SiteFields_Portfolio_Group" xml:space="preserve">
         <value>Project Portal Columns (Portfolio)</value>
     </data>
@@ -3637,11 +3667,17 @@
     <data name="WebParts_QuickLinks_AccessAndRoles_Title" xml:space="preserve">
         <value>Access and Roles</value>
     </data>
+    <data name="WebParts_QuickLinks_Advanced_Title" xml:space="preserve">
+        <value>Advanced</value>
+    </data>
     <data name="WebParts_QuickLinks_ColumnsViews_Title" xml:space="preserve">
         <value>Columns and Views</value>
     </data>
     <data name="WebParts_QuickLinks_Configuration_Title" xml:space="preserve">
         <value>Configuration</value>
+    </data>
+    <data name="WebParts_QuickLinks_IdeaModule_Title" xml:space="preserve">
+        <value>Idea Module</value>
     </data>
     <data name="WebParts_QuickLinks_ListsLibaries_Title" xml:space="preserve">
         <value>Lists and Libraries</value>
@@ -3678,11 +3714,5 @@
     </data>
     <data name="WebParts_UsefulLinks_Title" xml:space="preserve">
         <value>Useful Links</value>
-    </data>
-    <data name="WebParts_QuickLinks_Advanced_Title" xml:space="preserve">
-        <value>Advanced</value>
-    </data>
-    <data name="WebParts_QuickLinks_IdeaModule_Title" xml:space="preserve">
-        <value>Idea Module</value>
     </data>
 </root>

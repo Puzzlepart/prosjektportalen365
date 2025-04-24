@@ -1,4 +1,4 @@
-_The template was validated 4/24/2025, 1:53:01 PM_
+_The template was validated 4/24/2025, 2:04:51 PM_
 
 The template contains the following tokens that has not been found in the .resx files:
 
@@ -504,7 +504,7 @@ _No tokens with missing translations or replacement values found._
                     },
                     {
                         "Url": "Lists/Mleindikatorer/AllItems.aspx",
-                        "Title": "Målindikatorer"
+                        "Title": "Måleindikatorer"
                     },
                     {
                         "Url": "Lists/Gevinstoppflging/AllItems.aspx",
@@ -1289,7 +1289,7 @@ _No tokens with missing translations or replacement values found._
             ]
         },
         {
-            "Title": "Målindikatorer",
+            "Title": "Måleindikatorer",
             "Description": "",
             "Template": 100,
             "ContentTypesEnabled": true,
@@ -1347,9 +1347,9 @@ _No tokens with missing translations or replacement values found._
                 }
             ],
             "Fields": [
-                "<Field Type=\"Lookup\" DisplayName=\"Målindikator\" List=\"{listid:Målindikatorer}\" ShowField=\"Title\" ID=\"{92ae8541-f35e-4c05-8518-b9abce2d0860}\" Description=\"Målindikator\" StaticName=\"GtMeasureIndicatorLookup\" Name=\"GtMeasureIndicatorLookup\" />",
-                "<Field Type=\"Lookup\" DisplayName=\"Målindikator-ID\" List=\"{listid:Målindikatorer}\" ShowField=\"ID\" FieldRef=\"92ae8541-f35e-4c05-8518-b9abce2d0860\" ReadOnly=\"TRUE\" ID=\"{571f95d9-4c0b-4b4d-8a0b-9a1771811f07}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtMeasureIndicatorLookup_ID\" Name=\"GtMeasureIndicatorLookup_ID\" />",
-                "<Field Type=\"Lookup\" DisplayName=\"Ønsket verdi\" List=\"{listid:Målindikatorer}\" ShowField=\"GtDesiredValue\" FieldRef=\"92ae8541-f35e-4c05-8518-b9abce2d0860\" ReadOnly=\"TRUE\" ID=\"{8fe2e615-999b-48dc-8889-151ed84a757a}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtMeasureIndicatorLookup_GtDesiredValue\" Name=\"GtMeasureIndicatorLookup_GtDesiredValue\" />"
+                "<Field Type=\"Lookup\" DisplayName=\"Målindikator\" List=\"{listid:Måleindikatorer}\" ShowField=\"Title\" ID=\"{92ae8541-f35e-4c05-8518-b9abce2d0860}\" Description=\"Målindikator\" StaticName=\"GtMeasureIndicatorLookup\" Name=\"GtMeasureIndicatorLookup\" />",
+                "<Field Type=\"Lookup\" DisplayName=\"Målindikator-ID\" List=\"{listid:Måleindikatorer}\" ShowField=\"ID\" FieldRef=\"92ae8541-f35e-4c05-8518-b9abce2d0860\" ReadOnly=\"TRUE\" ID=\"{571f95d9-4c0b-4b4d-8a0b-9a1771811f07}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtMeasureIndicatorLookup_ID\" Name=\"GtMeasureIndicatorLookup_ID\" />",
+                "<Field Type=\"Lookup\" DisplayName=\"Ønsket verdi\" List=\"{listid:Måleindikatorer}\" ShowField=\"GtDesiredValue\" FieldRef=\"92ae8541-f35e-4c05-8518-b9abce2d0860\" ReadOnly=\"TRUE\" ID=\"{8fe2e615-999b-48dc-8889-151ed84a757a}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtMeasureIndicatorLookup_GtDesiredValue\" Name=\"GtMeasureIndicatorLookup_GtDesiredValue\" />"
             ],
             "Views": [
                 {

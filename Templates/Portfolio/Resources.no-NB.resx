@@ -1298,7 +1298,7 @@
         <value>Lists/Logg</value>
     </data>
     <data name="Lists_MeasurementIndicators_Title" xml:space="preserve">
-        <value>Målindikatorer</value>
+        <value>Måleindikatorer</value>
     </data>
     <data name="Lists_Permission_Configuration_Description" xml:space="preserve">
         <value>Tillatelseskonfigurasjon for nye prosjekter. Denne listen må ikke endres på.</value>
@@ -1422,6 +1422,21 @@
     </data>
     <data name="Lists_ProjectContentColumns_Description" xml:space="preserve">
         <value>Administrer prosjektinnholds-kolonner (synlighet og metadata)</value>
+    </data>
+    <data name="Lists_ProjectContentColumns_LastMeasurementValue_Title" xml:space="preserve">
+        <value>Siste måling</value>
+    </data>
+    <data name="Lists_ProjectContentColumns_MeasurementAchievement_Title" xml:space="preserve">
+        <value>Måloppnåelse</value>
+    </data>
+    <data name="Lists_ProjectContentColumns_MeasurementIndicator_Title" xml:space="preserve">
+        <value>Måleindikator</value>
+    </data>
+    <data name="Lists_ProjectContentColumns_Measurements_Title" xml:space="preserve">
+        <value>Målinger</value>
+    </data>
+    <data name="Lists_ProjectContentColumns_SiteTitle_Title" xml:space="preserve">
+        <value>Prosjekt</value>
     </data>
     <data name="Lists_ProjectContentColumns_Title" xml:space="preserve">
         <value>Prosjektinnholdskolonner</value>
@@ -1652,7 +1667,7 @@
         <value>Hjem</value>
     </data>
     <data name="Navigation_MeasurementIndicators_Title" xml:space="preserve">
-        <value>Målindikatorer</value>
+        <value>Måleindikatorer</value>
     </data>
     <data name="Navigation_MeasurementIndicators_Url" xml:space="preserve">
         <value>Lists/Mleindikatorer/AllItems.aspx</value>
@@ -1729,8 +1744,20 @@
     <data name="SiteFields_BA_Group" xml:space="preserve">
         <value>Kolonner for Prosjektportalen (Bygg og anlegg)</value>
     </data>
+    <data name="SiteFields_ContentType_DisplayName" xml:space="preserve">
+        <value>Innholdstype</value>
+    </data>
+    <data name="SiteFields_CreatedBy_DisplayName" xml:space="preserve">
+        <value>Opprettet av</value>
+    </data>
+    <data name="SiteFields_Created_DisplayName" xml:space="preserve">
+        <value>Opprettet</value>
+    </data>
     <data name="SiteFields_CustomFields_Group" xml:space="preserve">
         <value>Egendefinerte kolonner for Prosjektportalen</value>
+    </data>
+    <data name="SiteFields_Editor_DisplayName" xml:space="preserve">
+        <value>Endret av</value>
     </data>
     <data name="SiteFields_GtActionChannel_Description" xml:space="preserve">
         <value>Hvilken kanal benyttes til denne kommunikasjonsaktiviteten?</value>
@@ -3610,6 +3637,9 @@
     <data name="SiteFields_InstallVersion_DisplayName" xml:space="preserve">
         <value>Versjon</value>
     </data>
+    <data name="SiteFields_Modified_DisplayName" xml:space="preserve">
+        <value>Endret</value>
+    </data>
     <data name="SiteFields_Portfolio_Group" xml:space="preserve">
         <value>Kolonner for Prosjektportalen (Portefølje)</value>
     </data>
@@ -3742,11 +3772,17 @@
     <data name="WebParts_QuickLinks_AccessAndRoles_Title" xml:space="preserve">
         <value>Tilganger og roller</value>
     </data>
+    <data name="WebParts_QuickLinks_Advanced_Title" xml:space="preserve">
+        <value>Avansert</value>
+    </data>
     <data name="WebParts_QuickLinks_ColumnsViews_Title" xml:space="preserve">
         <value>Kolonner og visninger</value>
     </data>
     <data name="WebParts_QuickLinks_Configuration_Title" xml:space="preserve">
         <value>Konfigurasjon</value>
+    </data>
+    <data name="WebParts_QuickLinks_IdeaModule_Title" xml:space="preserve">
+        <value>Idémodul</value>
     </data>
     <data name="WebParts_QuickLinks_ListsLibaries_Title" xml:space="preserve">
         <value>Lister og bibliotek</value>
@@ -3783,11 +3819,5 @@
     </data>
     <data name="WebParts_UsefulLinks_Title" xml:space="preserve">
         <value>Nyttige lenker</value>
-    </data>
-    <data name="WebParts_QuickLinks_Advanced_Title" xml:space="preserve">
-        <value>Avansert</value>
-    </data>
-    <data name="WebParts_QuickLinks_IdeaModule_Title" xml:space="preserve">
-        <value>Idémodul</value>
     </data>
 </root>
