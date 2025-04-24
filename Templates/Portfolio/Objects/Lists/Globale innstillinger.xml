@@ -30,7 +30,7 @@
   <pnp:DataRows KeyColumn="GtSettingsId" UpdateBehavior="Skip">
     <pnp:DataRow>
       <pnp:DataValue FieldName="GtSettingsId">{e77e3aa3-a6b9-4a7e-8b94-6cb889124b82}</pnp:DataValue>
-      <pnp:DataValue FieldName="Title">Bruk Planner for å håndtere tiltak i Usikkerhetslisten {resource:Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerEnabled}</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">Bruk Planner for å håndtere tiltak i Usikkerhetslisten {resource:Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerEnabled_Title}</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsKey">RiskActionPlannerEnabled</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsValue">1</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
@@ -38,7 +38,7 @@
     </pnp:DataRow>
     <pnp:DataRow>
       <pnp:DataValue FieldName="GtSettingsId">{bbc4d267-e6c6-4496-9323-f87832106ff7}</pnp:DataValue>
-      <pnp:DataValue FieldName="Title">Navn på mappen i Planner for tiltak for Usikkerhetslisten {resource:Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerBucketName}</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">Navn på mappen i Planner for tiltak for Usikkerhetslisten {resource:Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerBucketName_Title}</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsKey">RiskActionPlannerBucketName</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsValue">Tiltak</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
@@ -46,7 +46,7 @@
     </pnp:DataRow>
     <pnp:DataRow>
       <pnp:DataValue FieldName="GtSettingsId">{3078a897-4508-4242-80ab-da757db11289}</pnp:DataValue>
-      <pnp:DataValue FieldName="Title">Tekst som skal vises om det ikke er noen tiltak registrert for usikkerheten {resource:Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerNoActionsText}</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">Tekst som skal vises om det ikke er noen tiltak registrert for usikkerheten {resource:Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerNoActionsText_Title}</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsKey">RiskActionPlannerNoActionsText</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsValue">Det er ikke registrert noen tiltak for denne usikkerheten</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
@@ -54,7 +54,7 @@
     </pnp:DataRow>
     <pnp:DataRow>
       <pnp:DataValue FieldName="GtSettingsId">{8e998a8d-6e90-4ab2-be82-a64050e6fdda}</pnp:DataValue>
-      <pnp:DataValue FieldName="Title">Vis siste synkroniseringstidspunkt for Planner-oppgavene {resource:Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerShowLastSyncTime}</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">Vis siste synkroniseringstidspunkt for Planner-oppgavene {resource:Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerShowLastSyncTime_Title}</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsKey">RiskActionPlannerShowLastSyncTime</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsValue">1</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
@@ -62,7 +62,7 @@
     </pnp:DataRow>
     <pnp:DataRow>
       <pnp:DataValue FieldName="GtSettingsId">{7aa15d27-4c34-4fdb-a6dc-818fbc6e0f0a}</pnp:DataValue>
-      <pnp:DataValue FieldName="Title">Vis tiltakene i en liste horisontalt {resource:Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerHorizontalLayout}</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">Vis tiltakene i en liste horisontalt {resource:Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerHorizontalLayout_Title}</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsKey">RiskActionPlannerHorizontalLayout</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsValue">0</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
@@ -70,7 +70,7 @@
     </pnp:DataRow>
     <pnp:DataRow>
       <pnp:DataValue FieldName="GtSettingsId">{2261c914-7cef-4fa0-94c6-2fdee064840e}</pnp:DataValue>
-      <pnp:DataValue FieldName="Title">Avstand mellom tiltakene i listen {resource:Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerGap}</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">Avstand mellom tiltakene i listen {resource:Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerGap_Title}</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsKey">RiskActionPlannerGap</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsValue">2px</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
@@ -78,7 +78,7 @@
     </pnp:DataRow>
     <pnp:DataRow>
       <pnp:DataValue FieldName="GtSettingsId">{cc992fb7-b59a-4e19-9338-a7e75bec2fd3}</pnp:DataValue>
-      <pnp:DataValue FieldName="Title">Standard konfigurasjon for Risikomatrise {resource:Lists_Global_Settings_Category_RiskMatrix_RiskMatrixDefaultConfigurationFile}</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">Standard konfigurasjon for Risikomatrise {resource:Lists_Global_Settings_Category_RiskMatrix_RiskMatrixDefaultConfigurationFile_Title}</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsKey">RiskMatrixDefaultConfigurationFile</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsValue">standard-konfigurasjon.json</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
@@ -86,7 +86,7 @@
     </pnp:DataRow>
     <pnp:DataRow>
       <pnp:DataValue FieldName="GtSettingsId">{eb334b01-bf84-435f-a74d-de48bed6affe}</pnp:DataValue>
-      <pnp:DataValue FieldName="Title">Standard konfigurasjon for Mulighetsmatrise {resource:Lists_Global_Settings_Category_OpportunityMatrix_OpportunityMatrixDefaultConfigurationFile}</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">Standard konfigurasjon for Mulighetsmatrise {resource:Lists_Global_Settings_Category_OpportunityMatrix_OpportunityMatrixDefaultConfigurationFile_Title}</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsKey">OpportunityMatrixDefaultConfigurationFile</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsValue">standard-konfigurasjon.json</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
@@ -94,7 +94,7 @@
     </pnp:DataRow>
     <pnp:DataRow>
       <pnp:DataValue FieldName="GtSettingsId">{4973a0af-f7fb-483c-81b8-163a2b06b488}</pnp:DataValue>
-      <pnp:DataValue FieldName="Title">Vis/skjul footer i Prosjektportalen {resource:Lists_Global_Settings_Category_General_ShowFooter}</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">Vis/skjul footer i Prosjektportalen {resource:Lists_Global_Settings_Category_General_ShowFooter_Title}</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsKey">ShowFooter</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsValue">1</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
@@ -102,7 +102,7 @@
     </pnp:DataRow>
     <pnp:DataRow>
       <pnp:DataValue FieldName="GtSettingsId">{fb8cb873-ac5f-45e0-a091-1e14bfc7ea33}</pnp:DataValue>
-      <pnp:DataValue FieldName="Title">Automatisk minimering av footer {resource:Lists_Global_Settings_Category_General_MinimizeFooter}</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">Automatisk minimering av footer {resource:Lists_Global_Settings_Category_General_MinimizeFooter_Title}</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsKey">MinimizeFooter</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsValue">1</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsEnabled">False</pnp:DataValue>
@@ -110,7 +110,7 @@
     </pnp:DataRow>
     <pnp:DataRow>
       <pnp:DataValue FieldName="GtSettingsId">{9f18d1fb-5dfc-4888-a4f4-df9eed305b74}</pnp:DataValue>
-      <pnp:DataValue FieldName="Title">Ta i bruk Prosjektportalen assistenten {resource:Lists_Global_Settings_Category_Assistant_UseAssistant}</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">Ta i bruk Prosjektportalen assistenten {resource:Lists_Global_Settings_Category_Assistant_UseAssistant_Title}</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsKey">UseAssistant</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsValue">0</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
@@ -118,7 +118,7 @@
     </pnp:DataRow>
     <pnp:DataRow>
       <pnp:DataValue FieldName="GtSettingsId">{325c1059-22e5-4d66-bef6-6c5b7a9d11b4}</pnp:DataValue>
-      <pnp:DataValue FieldName="Title">Konfigurasjonsoppsett for assistenten {resource:Lists_Global_Settings_Category_Assistant_AssistantConfig}</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">Konfigurasjonsoppsett for assistenten {resource:Lists_Global_Settings_Category_Assistant_AssistantConfig_Title}</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsKey">AssistantConfig</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsValue">{
                 "TenantId": "",

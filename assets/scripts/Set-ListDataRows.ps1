@@ -22,16 +22,20 @@ $Xml.ListInstance.DataRows.DataRow | ForEach-Object {
         $Matches = [regex]::Matches($Value.InnerText, $Regex)
         if($Matches.Groups.length -eq 4) {
             $ResourceKey = $Matches.Groups[3].Value
-            $ResourceValue = $Matches.Groups[1].Value
-            $ResxValues += [PSCustomObject]@{
-                Key = $ResourceKey
-                Value = $ResourceValue
+            $ResourceValue = $Matches.Groups[1].Value.Trim()
+            $ResourceToken = $Matches.Groups[2].Value.Trim()
+
+            $ExistingResxValue = $ResxValues | Where-Object { $_.Key -eq $ResourceKey }
+            if($null -eq $ExistingResxValue) {
+                $ResxValues += [PSCustomObject]@{
+                    Key = $ResourceKey
+                    Value = $ResourceValue
+                }
             }
+            $Value.InnerText = $ResourceToken
         }
     }
 }
-
-$ResxValues
 
 if($Save.IsPresent) {
     # Save the modified XML back to the file
