@@ -1,4 +1,4 @@
-_The template was validated 11.4.2025, 09:39:20_
+_The template was validated 4/24/2025, 10:58:27 AM_
 
 The template contains the following tokens that has not been found in the .resx files:
 
@@ -545,7 +545,7 @@ _No tokens with missing translations or replacement values found._
             "CommentsDisabled": true,
             "VerticalSection": [
                 {
-                    "Id": "b8bec0be-2354-443d-a3ca-24b36e8ea7dc",
+                    "Id": "283a4b49-c2ee-4917-8f58-07c31e81733e",
                     "Properties": {
                         "title": "Project Information",
                         "statusReportsCount": 0,
@@ -570,7 +570,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "4449d3dc-fa58-4982-b87c-5a893114e7b7",
+                                    "Id": "3ebefd70-f62e-48d8-836d-482b74d481bf",
                                     "Properties": {
                                         "phaseField": "Project Phase",
                                         "syncPropertiesAfterPhaseChange": true,
@@ -653,7 +653,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "6c0e484d-f6da-40d4-81fc-ec1389ef29a8",
+                                    "Id": "aad033f7-106e-488e-bad4-9b66d7b26282",
                                     "Properties": {
                                         "title": "Benefits Overview",
                                         "dataSource": "Benefits Overview Data Source",
@@ -682,7 +682,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6",
+                                    "Id": "3231d86b-9b07-45f0-b112-a2f80d31b2f1",
                                     "Properties": {
                                         "title": "Project Status",
                                         "riskMatrix": {
@@ -713,7 +713,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "d156652b-9121-47af-89ae-1fe8427c53da",
+                                    "Id": "3fd903ad-3179-459a-b2b9-8d2963da8af2",
                                     "Properties": {
                                         "listName": "Timeline Content",
                                         "showTimeline": true,

@@ -1,9 +1,9 @@
-// generateResxJson.js
+// generate-resx-json.js
 
 const path = require('path')
-const resxConverter = require('resx-json-typescript-converter')
+const { convertResx } = require('resx-json-typescript-converter')
 
-resxConverter.convertResx([
+convertResx([
     path.resolve(__dirname, '../Portfolio/Resources.no-NB.resx'),
     path.resolve(__dirname, '../Portfolio/Resources.en-US.resx')
 ],

@@ -547,6 +547,12 @@
     <data name="ClientSidePages_PortfolioOverview_Title" xml:space="preserve">
         <value>Portfolio Overview</value>
     </data>
+    <data name="ClientSidePages_ProgramStatus_Name" xml:space="preserve">
+        <value>Status.aspx</value>
+    </data>
+    <data name="ClientSidePages_ProgramStatus_Title" xml:space="preserve">
+        <value>Program Status</value>
+    </data>
     <data name="ClientSidePages_ProjectStatus_Name" xml:space="preserve">
         <value>ProjectStatus.aspx</value>
     </data>
@@ -1111,6 +1117,21 @@
     <data name="Lists_Global_Settings_Url" xml:space="preserve">
         <value>Lists/GlobalSettings</value>
     </data>
+    <data name="Lists_GtDescription_DisplayName" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="Lists_GtIsProgram_DisplayName" xml:space="preserve">
+        <value>Program</value>
+    </data>
+    <data name="Lists_GtSiteIdLookup_DisplayName" xml:space="preserve">
+        <value>Project</value>
+    </data>
+    <data name="Lists_GtTag_DisplayName" xml:space="preserve">
+        <value>Tag</value>
+    </data>
+    <data name="Lists_GtTimelineTypeLookup_DisplayName" xml:space="preserve">
+        <value>Type</value>
+    </data>
     <data name="Lists_HelpContent_Description" xml:space="preserve">
         <value>Configuration and Setup of Help Content</value>
     </data>
@@ -1318,8 +1339,29 @@
     <data name="Lists_PlannerTasks_Url" xml:space="preserve">
         <value>Lists/PlannerTasks</value>
     </data>
+    <data name="Lists_PortfolioViews_AllProjects_Title" xml:space="preserve">
+        <value>All projects</value>
+    </data>
+    <data name="Lists_PortfolioViews_ClosedProjects_Title" xml:space="preserve">
+        <value>Closed projects</value>
+    </data>
     <data name="Lists_PortfolioViews_Description" xml:space="preserve">
         <value>Views related to the portfolio overview</value>
+    </data>
+    <data name="Lists_PortfolioViews_Economy_Title" xml:space="preserve">
+        <value>Economy</value>
+    </data>
+    <data name="Lists_PortfolioViews_MyProjects_Title" xml:space="preserve">
+        <value>My projects</value>
+    </data>
+    <data name="Lists_PortfolioViews_ParentProjects_Title" xml:space="preserve">
+        <value>All parent projects</value>
+    </data>
+    <data name="Lists_PortfolioViews_PortfolioStatus_Title" xml:space="preserve">
+        <value>Portfolio status</value>
+    </data>
+    <data name="Lists_PortfolioViews_Programs_Title" xml:space="preserve">
+        <value>All programs</value>
     </data>
     <data name="Lists_PortfolioViews_Title" xml:space="preserve">
         <value>Portfolio Views</value>

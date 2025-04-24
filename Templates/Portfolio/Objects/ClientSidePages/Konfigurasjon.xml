@@ -614,10 +614,10 @@
         &quot;searchablePlainTexts&quot;: {
             &quot;title&quot;: &quot;{resource:WebParts_QuickLinks_AccessAndRoles_Title}&quot;,
             &quot;items[0].description&quot;: &quot;{resource:Lists_Permission_Configuration_Description}&quot;,
-            &quot;items[1].description&quot;: &quot;{resource:Lists_PortfolioInsight_Description}&quot;,
+            &quot;items[1].description&quot;: &quot;{resource:WebParts_QuickLinks_AccessAndRoles_PortfolioInsight_Description}&quot;,
             &quot;items[2].description&quot;: &quot;{resource:Lists_ProjectAdminRoles_Description}&quot;,
             &quot;items[0].title&quot;: &quot;{resource:Lists_Permission_Configuration_Title}&quot;,
-            &quot;items[1].title&quot;: &quot;{resource:Lists_PortfolioInsight_Title}&quot;,
+            &quot;items[1].title&quot;: &quot;{resource:WebParts_QuickLinks_AccessAndRoles_PortfolioInsight_Title}&quot;,
             &quot;items[2].title&quot;: &quot;{resource:Lists_ProjectAdminRoles_Title}&quot;
         },
         &quot;imageSources&quot;: {},

@@ -12,17 +12,17 @@ _No tokens with missing translations or replacement values found._
 {
     "Version": "1.11.0",
     "Parameters": {
-        "ProvisionSiteFields": "Project Portal Columns (Project)",
-        "CustomSiteFields": "Project Portal Columns (Custom)",
+        "ProvisionSiteFields": "Kolonner for Prosjektportalen (Prosjekt)",
+        "CustomSiteFields": "Egendefinerte kolonner for Prosjektportalen",
         "ProjectContentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C",
         "ProjectStatusContentTypeId": "0x010022252E35737A413FB56A1BA53862F6D5"
     },
     "ContentTypes": [
         {
             "ID": "0x0100A87AE71CBF2643A6BC9D0948BD2EE897",
-            "Name": "Uncertainty",
+            "Name": "Usikkerhet",
             "Description": "",
-            "Group": "Project Portal Content Types",
+            "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
                     "ID": "e930090a-480e-414a-bd4a-0ef5bca31443",
@@ -84,21 +84,21 @@ _No tokens with missing translations or replacement values found._
         },
         {
             "ID": "0x0100A87AE71CBF2643A6BC9D0948BD2EE89701",
-            "Name": "Risk",
+            "Name": "Risiko",
             "Description": "",
-            "Group": "Project Portal Content Types"
+            "Group": "Prosjektportalen innholdstyper"
         },
         {
             "ID": "0x0100A87AE71CBF2643A6BC9D0948BD2EE89702",
-            "Name": "Possibility",
+            "Name": "Mulighet",
             "Description": "",
-            "Group": "Project Portal Content Types"
+            "Group": "Prosjektportalen innholdstyper"
         },
         {
             "ID": "0x010072C95831F8434782AB2FF6BE3E596F46",
-            "Name": "Stakeholder",
+            "Name": "Interessent",
             "Description": "",
-            "Group": "Project Portal Content Types",
+            "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
                     "ID": "2847b3b0-ed22-4c47-b7c0-3ebfc83dae4a",
@@ -132,9 +132,9 @@ _No tokens with missing translations or replacement values found._
         },
         {
             "ID": "0x010065CE65D51354419EA794C6FACD4FA2EB",
-            "Name": "Communication Element",
+            "Name": "Kommunikasjonselement",
             "Description": "",
-            "Group": "Project Portal Content Types",
+            "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
                     "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
@@ -164,9 +164,9 @@ _No tokens with missing translations or replacement values found._
         },
         {
             "ID": "0x0100486B1F8AEA24486FBA1C1BA9146C360C",
-            "Name": "Checkpoint",
+            "Name": "Sjekkpunkt",
             "Description": "",
-            "Group": "Project Portal Content Types",
+            "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
                     "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
@@ -188,9 +188,9 @@ _No tokens with missing translations or replacement values found._
         },
         {
             "ID": "0x0100D7B74DE815F946D3B0F99D19F9B36B68",
-            "Name": "Project Delivery",
+            "Name": "Prosjektleveranse",
             "Description": "",
-            "Group": "Project Portal Content Types",
+            "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
                     "ID": "99430a99-1354-418f-921f-7ddfdb6c0d7f",
@@ -248,9 +248,9 @@ _No tokens with missing translations or replacement values found._
         },
         {
             "ID": "0x01004EDD18CB92C14EBA97103D909C897810",
-            "Name": "Project Log Element",
+            "Name": "Prosjektloggelement",
             "Description": "",
-            "Group": "Project Portal Content Types",
+            "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
                     "ID": "2391d165-5d13-46b7-87d2-e32040293210",
@@ -288,15 +288,15 @@ _No tokens with missing translations or replacement values found._
         },
         {
             "ID": "0x010200C19C974828B24D469B69C22B2D1FFB63",
-            "Name": "Project Event",
+            "Name": "Prosjekthendelse",
             "Description": "",
-            "Group": "Project Portal Content Types"
+            "Group": "Prosjektportalen innholdstyper"
         },
         {
             "ID": "0x01080024FEF2F7FA284B7CB33E6635D636E380",
-            "Name": "Project Task",
+            "Name": "Prosjektoppgave",
             "Description": "",
-            "Group": "Project Portal Content Types",
+            "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
                     "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
@@ -306,8 +306,8 @@ _No tokens with missing translations or replacement values found._
         },
         {
             "ID": "0x010039EAFDC2A1624C1BA1A444FC8FE85DEC",
-            "Name": "Benefit Followup",
-            "Group": "Project Portal Content Types",
+            "Name": "Gevinstoppfølging",
+            "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
                     "ID": "5c6fafbb-aee4-4e46-b110-5c798916c2ca",
@@ -325,8 +325,8 @@ _No tokens with missing translations or replacement values found._
         },
         {
             "ID": "0x01004F466123309D46BAB9D5C6DE89A6CF67",
-            "Name": "Benefit",
-            "Group": "Project Portal Content Types",
+            "Name": "Gevinst",
+            "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
                     "ID": "a1a56abd-5b3d-45d2-8617-32b2f8b195de",
@@ -360,8 +360,8 @@ _No tokens with missing translations or replacement values found._
         },
         {
             "ID": "0x01001AF93A93F5534B5FBAF750572B11BB7F",
-            "Name": "Change",
-            "Group": "Project Portal Content Types",
+            "Name": "Endring",
+            "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
                     "ID": "68a5a2da-048c-4d2d-8ba4-5a8b32b60120",
@@ -375,8 +375,8 @@ _No tokens with missing translations or replacement values found._
         },
         {
             "ID": "0x010073043EFE3E814A2BBEF96B8457623F95",
-            "Name": "Measure Indicator",
-            "Group": "Project Portal Content Types",
+            "Name": "Måleindikator",
+            "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
                     "ID": "c5fc8781-7fbd-43a2-a215-c8c959bbab69",
@@ -397,8 +397,8 @@ _No tokens with missing translations or replacement values found._
         },
         {
             "ID": "0x010004EAFF7AFCC94C2680042E6881264120",
-            "Name": "Resource Allocation",
-            "Group": "Project Portal Content Types",
+            "Name": "Ressursallokering",
+            "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
                     "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
@@ -442,88 +442,112 @@ _No tokens with missing translations or replacement values found._
         }
     ],
     "SiteFields": [
-        "<Field ID=\"{8499bd48-4c5d-43ae-8e27-7968d49ca14f}\" Name=\"GtRiskFactor\" DisplayName=\"Risk Factor\" Type=\"Calculated\" Group=\"Project Portal Columns (Project)\" Description=\"Define the factors contributing to the risk\" ResultType=\"Number\" StaticName=\"GtRiskFactor\"><Formula>=GtRiskProbability*GtRiskConsequence</Formula><FieldRefs><FieldRef Name=\"GtRiskProbability\" ID=\"{0e1b295d-2bfb-4ef6-ae92-e72068e56111}\" /><FieldRef Name=\"GtRiskConsequence\" ID=\"{554d32a0-0148-4b3c-bfc4-f101232ee501}\" /></FieldRefs></Field>",
-        "<Field ID=\"{62f0454d-1150-4d55-86ef-075f786d6e5c}\" Name=\"GtRiskFactorPostAction\" DisplayName=\"Risk factor post action\" Type=\"Calculated\" Group=\"Project Portal Columns (Project)\" Description=\"Define the factors contributing to the risk after measures have been implemented\" ResultType=\"Number\" StaticName=\"GtRiskFactorPostAction\"><Formula>=GtRiskProbabilityPostAction*GtRiskConsequencePostAction</Formula><FieldRefs><FieldRef Name=\"GtRiskProbabilityPostAction\" ID=\"{f81ebcb7-8791-44b0-9919-08ed5524b11d}\" /><FieldRef Name=\"GtRiskConsequencePostAction\" ID=\"{00f17233-d4c0-49d0-aebd-5004552abb17}\" /></FieldRefs></Field>",
-        "<Field ID=\"{88d9b92c-efed-45d0-a586-86d9196b77d0}\" Type=\"User\" Name=\"GtResourceUser\" StaticName=\"GtResourceUser\" DisplayName=\"Name\" Description=\"Provide the name of the person being added\" />",
-        "<Field ID=\"{08ac9d56-f8eb-4a2c-868f-d39fc012fcd6}\" Type=\"Number\" Name=\"GtResourceLoad\" StaticName=\"GtResourceLoad\" DisplayName=\"Load\" Description=\"Enter (expected) allocation rate, given in figures indicating percentage\" Percentage=\"TRUE\" />",
-        "<Field ID=\"{2ae541a5-5ecc-481d-afb6-c03a6f1e71b4}\" Type=\"User\" Name=\"GtActionResponsible\" StaticName=\"GtActionResponsible\" DisplayName=\"Action Responsible\" Description=\"Who is responsible for this communication activity?\" />"
+        "<Field ID=\"{8499bd48-4c5d-43ae-8e27-7968d49ca14f}\" Name=\"GtRiskFactor\" DisplayName=\"Risikofaktor\" Type=\"Calculated\" Group=\"Kolonner for Prosjektportalen (Prosjekt)\" Description=\"Relevant risikofaktor før tiltakene iverksettes\" ResultType=\"Number\" StaticName=\"GtRiskFactor\"><Formula>=GtRiskProbability*GtRiskConsequence</Formula><FieldRefs><FieldRef Name=\"GtRiskProbability\" ID=\"{0e1b295d-2bfb-4ef6-ae92-e72068e56111}\" /><FieldRef Name=\"GtRiskConsequence\" ID=\"{554d32a0-0148-4b3c-bfc4-f101232ee501}\" /></FieldRefs></Field>",
+        "<Field ID=\"{62f0454d-1150-4d55-86ef-075f786d6e5c}\" Name=\"GtRiskFactorPostAction\" DisplayName=\"Risikofaktor etter tiltak\" Type=\"Calculated\" Group=\"Kolonner for Prosjektportalen (Prosjekt)\" Description=\"Oppgi den relevante risikofaktoren etter at tiltakene er iverksatt\" ResultType=\"Number\" StaticName=\"GtRiskFactorPostAction\"><Formula>=GtRiskProbabilityPostAction*GtRiskConsequencePostAction</Formula><FieldRefs><FieldRef Name=\"GtRiskProbabilityPostAction\" ID=\"{f81ebcb7-8791-44b0-9919-08ed5524b11d}\" /><FieldRef Name=\"GtRiskConsequencePostAction\" ID=\"{00f17233-d4c0-49d0-aebd-5004552abb17}\" /></FieldRefs></Field>",
+        "<Field ID=\"{88d9b92c-efed-45d0-a586-86d9196b77d0}\" Type=\"User\" Name=\"GtResourceUser\" StaticName=\"GtResourceUser\" DisplayName=\"Navn\" Description=\"Oppgi navnet på personen som legges inn\" />",
+        "<Field ID=\"{08ac9d56-f8eb-4a2c-868f-d39fc012fcd6}\" Type=\"Number\" Name=\"GtResourceLoad\" StaticName=\"GtResourceLoad\" DisplayName=\"Belastning\" Description=\"Oppgi (forventet) allokeringsgrad, oppgis i tall som indikerer prosent\" Percentage=\"TRUE\" />",
+        "<Field ID=\"{2ae541a5-5ecc-481d-afb6-c03a6f1e71b4}\" Type=\"User\" Name=\"GtActionResponsible\" StaticName=\"GtActionResponsible\" DisplayName=\"Tiltaksansvarlig\" Description=\"Hvem er ansvarlig for denne kommunikasjonsaktiviteten?\" />"
     ],
     "Navigation": {
         "QuickLaunch": [
             {
-                "Url": "SitePages/ProgramHome.aspx",
-                "Title": "Home"
+                "Url": "SitePages/ProjectHome.aspx",
+                "Title": "Hjem"
             },
             {
-                "Url": "SitePages/Status.aspx",
-                "Title": "Program Status"
+                "Url": "SitePages/Prosjektstatus.aspx",
+                "Title": "Prosjektstatus"
             },
             {
-                "Url": "SitePages/ProgramOversikt.aspx",
-                "Title": "Programinnhold",
-                "Children": [
-                    {
-                        "Url": "SitePages/Admin.aspx",
-                        "Title": "Administrasjon"
-                    },
-                    {
-                        "Url": "SitePages/ProgramOversikt.aspx",
-                        "Title": "Oversikt"
-                    },
-                    {
-                        "Url": "SitePages/ProgramGevinster.aspx",
-                        "Title": "Gevinster"
-                    },
-                    {
-                        "Url": "SitePages/ProgramTidslinje.aspx",
-                        "Title": "Tidslinje"
-                    },
-                    {
-                        "Url": "SitePages/ProgramLeveranser.aspx",
-                        "Title": "Leveranser"
-                    },
-                    {
-                        "Url": "SitePages/ProgramUsikkerheter.aspx",
-                        "Title": "Usikkerheter"
-                    },
-                    {
-                        "Url": "SitePages/ProgramKommunikasjon.aspx",
-                        "Title": "Kommunikasjonsplaner"
-                    },
-                    {
-                        "Url": "SitePages/ProgramRessursallokeringer.aspx",
-                        "Title": "Ressursallokeringer"
-                    }
-                ]
+                "Url": "Lists/Prosjektlogg/AllItems.aspx",
+                "Title": "Prosjektlogg"
+            },
+            {
+                "Url": "Lists/Interessentregister/AllItems.aspx",
+                "Title": "Interessentregister"
+            },
+            {
+                "Url": "Lists/Kommunikasjonsplan/AllItems.aspx",
+                "Title": "Kommunikasjonsplan"
+            },
+            {
+                "Url": "Lists/Usikkerhet/AllItems.aspx",
+                "Title": "Usikkerhet"
             },
             {
                 "Url": "Dokumenter/Forms/AllItems.aspx",
                 "Title": "Dokumenter"
             },
             {
-                "Url": "Lists/Programleveranser/AllItems.aspx",
-                "Title": "Programleveranser"
+                "Url": "SitePages/Oppgaver.aspx",
+                "Title": "Oppgaver"
             },
             {
-                "Url": "SitePages/Tidslinje.aspx",
-                "Title": "Programtidslinje"
+                "Url": "Lists/Fasesjekkliste/AllItems.aspx",
+                "Title": "Sjekkliste for fase"
+            },
+            {
+                "Url": "#",
+                "Title": "Notatbok"
+            },
+            {
+                "Url": "SitePages/Gevinstoversikt.aspx",
+                "Title": "Gevinstoversikt",
+                "Children": [
+                    {
+                        "Url": "Lists/Endringsanalyse/AllItems.aspx",
+                        "Title": "Endringsanalyse"
+                    },
+                    {
+                        "Url": "Lists/Gevinstanalyse og gevinstrealiseringsplan/AllItems.aspx",
+                        "Title": "Gevinstanalyse"
+                    },
+                    {
+                        "Url": "Lists/Mleindikatorer/AllItems.aspx",
+                        "Title": "Målindikatorer"
+                    },
+                    {
+                        "Url": "Lists/Gevinstoppflging/AllItems.aspx",
+                        "Title": "Gevinstoppfølging"
+                    },
+                    {
+                        "Url": "SitePages/Gevinstoversikt.aspx",
+                        "Title": "Gevinstoversikt"
+                    }
+                ]
+            },
+            {
+                "Url": "Lists/Prosjektleveranser/AllItems.aspx",
+                "Title": "Prosjektleveranser"
+            },
+            {
+                "Url": "Lists/Ressursallokering/AllItems.aspx",
+                "Title": "Ressursallokering"
+            },
+            {
+                "Url": "SitePages/Prosjekttidslinje.aspx",
+                "Title": "Prosjekttidslinje"
+            },
+            {
+                "Url": "_layouts/15/viewlsts.aspx",
+                "Title": "Områdeinnhold"
             }
         ]
     },
     "WebSettings": {
-        "WelcomePage": "SitePages/ProgramHome.aspx"
+        "WelcomePage": "SitePages/ProjectHome.aspx"
     },
     "ClientSidePages": [
         {
-            "Name": "ProgramHome.aspx",
-            "Title": "Home",
+            "Name": "ProjectHome.aspx",
+            "Title": "Hjem",
             "PageLayoutType": "Home",
             "CommentsDisabled": true,
             "VerticalSection": [
                 {
                     "Id": "283a4b49-c2ee-4917-8f58-07c31e81733e",
                     "Properties": {
-                        "title": "Programinformasjon",
+                        "title": "Prosjektinformasjon",
                         "statusReportsCount": 0,
                         "statusReportsHeader": "Prosjektstatus",
                         "filterField": "GtShowFieldFrontpage",
@@ -533,7 +557,7 @@ _No tokens with missing translations or replacement values found._
                 {
                     "Id": "a5df8fdf-b508-4b66-98a6-d83bc2597f63",
                     "Properties": {
-                        "title": "Programnyheter",
+                        "title": "Nyheter",
                         "showChrome": true,
                         "compactMode": true
                     }
@@ -552,14 +576,22 @@ _No tokens with missing translations or replacement values found._
                                         "syncPropertiesAfterPhaseChange": true,
                                         "showSubText": true,
                                         "subTextTruncateLength": 50,
-                                        "currentPhaseViewName": "Gjeldende fase"
+                                        "currentPhaseViewName": "Nåværende fase"
+                                    }
+                                },
+                                {
+                                    "Id": "39c4c1c2-63fa-41be-8cc2-f6c0b49b253d",
+                                    "Properties": {
+                                        "title": "Oppgaver",
+                                        "isFullScreen": false,
+                                        "plannerViewMode": "bucketchart"
                                     }
                                 },
                                 {
                                     "Id": "6676088b-e28e-4a90-b9cb-d0d0303cd2eb",
                                     "Properties": {
                                         "showPerPage": 5,
-                                        "title": "Møter og hendelser",
+                                        "title": "Møter og arrangementer",
                                         "timeSpanLimitInMonth": 6
                                     }
                                 }
@@ -576,7 +608,7 @@ _No tokens with missing translations or replacement values found._
                                     "Id": "f92bf067-bc19-489e-a556-7fe95f508720",
                                     "Properties": {
                                         "isDocumentLibrary": true,
-                                        "selectedListId": "{listid:Documents}",
+                                        "selectedListId": "{listid:Dokumenter}",
                                         "webpartHeightKey": 4
                                     }
                                 }
@@ -610,8 +642,8 @@ _No tokens with missing translations or replacement values found._
             ]
         },
         {
-            "Name": "Admin.aspx",
-            "Title": "Administrasjon",
+            "Name": "Gevinstoversikt.aspx",
+            "Title": "Gevinstoversikt",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -621,64 +653,12 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "da500bfe-49c7-4553-939a-b33254d77763",
+                                    "Id": "aad033f7-106e-488e-bad4-9b66d7b26282",
                                     "Properties": {
-                                        "title": "Administrasjon av underområder"
-                                    }
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "Name": "ProgramOversikt.aspx",
-            "Title": "Oversikt",
-            "PageLayoutType": "SingleWebPartAppPage",
-            "CommentsDisabled": true,
-            "Sections": [
-                {
-                    "Columns": [
-                        {
-                            "Factor": 12,
-                            "Controls": [
-                                {
-                                    "Id": "77c58192-1d15-4c09-b62a-96f9c9ffe8ad",
-                                    "Properties": {
-                                        "title": "Oversikt over underområder",
-                                        "showCommandBar": true,
-                                        "showFilters": true,
-                                        "showGroupBy": true,
-                                        "showSearchBox": true,
-                                        "showViewSelector": true,
-                                        "showExcelExportButton": true
-                                    }
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "Name": "ProgramGevinster.aspx",
-            "Title": "Gevinster",
-            "PageLayoutType": "SingleWebPartAppPage",
-            "CommentsDisabled": true,
-            "Sections": [
-                {
-                    "Columns": [
-                        {
-                            "Factor": 12,
-                            "Controls": [
-                                {
-                                    "Id": "555cb52f-48ef-4fa1-8984-7ec0176b2d52",
-                                    "Properties": {
-                                        "title": "Gevinster for underområder",
-                                        "dataSource": "Alle gevinstelementer for underområder",
-                                        "dataSourceCategory": "Gevinstoversikt",
-                                        "dataSourceLevel": "Overordnet/Program",
+                                        "title": "Gevinstoversikt",
+                                        "dataSource": "Gevinstoversikt datakilde",
+                                        "dataSourceCategory": "Gevinstoversikt kategori",
+                                        "dataSourceLevel": "Prosjekt",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
                                         "showSearchBox": true
@@ -691,92 +671,8 @@ _No tokens with missing translations or replacement values found._
             ]
         },
         {
-            "Name": "ProgramKommunikasjon.aspx",
-            "Title": "Kommunikasjonsplaner",
-            "PageLayoutType": "SingleWebPartAppPage",
-            "CommentsDisabled": true,
-            "Sections": [
-                {
-                    "Columns": [
-                        {
-                            "Factor": 12,
-                            "Controls": [
-                                {
-                                    "Id": "555cb52f-48ef-4fa1-8984-7ec0176b2d52",
-                                    "Properties": {
-                                        "title": "Kommunikasjonsplaner for underområder",
-                                        "dataSource": "Alle kommunikasjonsplaner for underområder",
-                                        "dataSourceCategory": "Kommunikasjonsoversikt",
-                                        "showCommandBar": true,
-                                        "showViewSelector": true,
-                                        "showSearchBox": true
-                                    }
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "Name": "ProgramRessursallokeringer.aspx",
-            "Title": "Ressursallokeringer",
-            "PageLayoutType": "SingleWebPartAppPage",
-            "CommentsDisabled": true,
-            "Sections": [
-                {
-                    "Columns": [
-                        {
-                            "Factor": 12,
-                            "Controls": [
-                                {
-                                    "Id": "555cb52f-48ef-4fa1-8984-7ec0176b2d52",
-                                    "Properties": {
-                                        "title": "Ressursallokeringer for underområder",
-                                        "dataSource": "Alle ressursallokeringer for underområder",
-                                        "dataSourceCategory": "Ressursallokering",
-                                        "hiddenColumns": [
-                                            "Title"
-                                        ],
-                                        "showCommandBar": true,
-                                        "showViewSelector": true,
-                                        "showSearchBox": true
-                                    }
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "Name": "ProgramTidslinje.aspx",
-            "Title": "Tidslinje",
-            "PageLayoutType": "SingleWebPartAppPage",
-            "CommentsDisabled": true,
-            "Sections": [
-                {
-                    "Columns": [
-                        {
-                            "Factor": 12,
-                            "Controls": [
-                                {
-                                    "Id": "70c29af4-b55a-4207-911b-8f254ed99f03",
-                                    "Properties": {
-                                        "title": "Tidslinje for underområder",
-                                        "infoText": "Her listes alle prosjektene med start- og sluttdato i prosjektet. Prosjekttidslinjen støtter også faser, delfaser og milepæler. For å zoome inn/ut i tidslinje: ALT+Musehjul",
-                                        "dataSource": "Prosjekttidslinje"
-                                    }
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "Name": "Status.aspx",
-            "Title": "Program Status",
+            "Name": "Prosjektstatus.aspx",
+            "Title": "Prosjektstatus",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -788,9 +684,13 @@ _No tokens with missing translations or replacement values found._
                                 {
                                     "Id": "3231d86b-9b07-45f0-b112-a2f80d31b2f1",
                                     "Properties": {
-                                        "title": "Programstatus",
+                                        "title": "Prosjektstatus",
                                         "riskMatrix": {
-                                            "calloutTemplate": "<h3>{Title}</h3>\n<p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n<p><strong>Nærhet: </strong>{GtRiskProximity}</p>\n<p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>",
+                                            "calloutTemplate": "<h3>{Title}</h3>\n<p><strong>Risiko strategi: </strong>{GtRiskStrategy}</p>\n<p><strong>Risiko nærhet: </strong>{GtRiskProximity}</p>\n<p><strong>Risiko status: </strong>{GtRiskStatus}</p>",
+                                            "width": 800
+                                        },
+                                        "opportunityMatrix": {
+                                            "calloutTemplate": "<h3>{Title}</h3>\n<p><strong>Risiko strategi: </strong>{GtRiskStrategy}</p>\n<p><strong>Risiko nærhet: </strong>{GtRiskProximity}</p>\n<p><strong>Risiko status: </strong>{GtRiskStatus}</p>",
                                             "width": 800
                                         }
                                     }
@@ -802,8 +702,8 @@ _No tokens with missing translations or replacement values found._
             ]
         },
         {
-            "Name": "Tidslinje.aspx",
-            "Title": "Programtidslinje",
+            "Name": "Prosjekttidslinje.aspx",
+            "Title": "Prosjekttidslinje",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -820,66 +720,8 @@ _No tokens with missing translations or replacement values found._
                                         "showTimelineListCommands": true,
                                         "showTimelineList": true,
                                         "showProjectDeliveries": false,
-                                        "projectDeliveriesListName": "Programleveranser",
+                                        "projectDeliveriesListName": "Prosjektleveranser",
                                         "configItemTitle": "Prosjektleveranse"
-                                    }
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "Name": "ProgramLeveranser.aspx",
-            "Title": "Leveranser",
-            "PageLayoutType": "SingleWebPartAppPage",
-            "CommentsDisabled": true,
-            "Sections": [
-                {
-                    "Columns": [
-                        {
-                            "Factor": 12,
-                            "Controls": [
-                                {
-                                    "Id": "555cb52f-48ef-4fa1-8984-7ec0176b2d52",
-                                    "Properties": {
-                                        "title": "Leveranser for underområder",
-                                        "dataSource": "Alle leveranser for underområder",
-                                        "dataSourceCategory": "Leveranseoversikt",
-                                        "dataSourceLevel": "Overordnet/Program",
-                                        "showCommandBar": true,
-                                        "showViewSelector": true,
-                                        "showSearchBox": true
-                                    }
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "Name": "ProgramUsikkerheter.aspx",
-            "Title": "Usikkerheter",
-            "PageLayoutType": "SingleWebPartAppPage",
-            "CommentsDisabled": true,
-            "Sections": [
-                {
-                    "Columns": [
-                        {
-                            "Factor": 12,
-                            "Controls": [
-                                {
-                                    "Id": "555cb52f-48ef-4fa1-8984-7ec0176b2d52",
-                                    "Properties": {
-                                        "title": "Usikkerheter for underområder",
-                                        "dataSource": "Alle risikoelementer for underområder",
-                                        "dataSourceCategory": "Usikkerhetsoversikt",
-                                        "dataSourceLevel": "Overordnet/Program",
-                                        "showCommandBar": true,
-                                        "showViewSelector": true,
-                                        "showSearchBox": true
                                     }
                                 }
                             ]
@@ -906,7 +748,7 @@ _No tokens with missing translations or replacement values found._
             },
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "Alle elementer",
                     "ViewFields": [
                         "GtSortOrder",
                         "LinkTitle",
@@ -963,7 +805,7 @@ _No tokens with missing translations or replacement values found._
             },
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "Alle elementer",
                     "ViewFields": [
                         "LinkTitle",
                         "GtStakeholderGroup",
@@ -1001,7 +843,7 @@ _No tokens with missing translations or replacement values found._
             ],
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "Alle elementer",
                     "ViewFields": [
                         "LinkTitle",
                         "GtProjectPhase",
@@ -1032,11 +874,11 @@ _No tokens with missing translations or replacement values found._
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field Type=\"Lookup\" DisplayName=\"Påvirker leveranse\" List=\"{listid:Prosjektleveranser}\" ShowField=\"Title\" ID=\"{022cc93f-13df-4420-bd47-55e4fdae5d18}\" Description=\"Hvis relevant, oppgi hvilken leveranse loggelementet påvirker\" StaticName=\"GtProjectLogProductLookup\" Name=\"GtProjectLogProductLookup\" />"
+                "<Field Type=\"Lookup\" DisplayName=\"Prosjektloggprodukt\" List=\"{listid:Prosjektleveranser}\" ShowField=\"Title\" ID=\"{022cc93f-13df-4420-bd47-55e4fdae5d18}\" Description=\"Prosjektloggprodukt\" StaticName=\"GtProjectLogProductLookup\" Name=\"GtProjectLogProductLookup\" />"
             ],
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "Alle elementer",
                     "ViewFields": [
                         "LinkTitle",
                         "GtProjectLogType",
@@ -1055,7 +897,7 @@ _No tokens with missing translations or replacement values found._
             ]
         },
         {
-            "Title": "Programleveranser",
+            "Title": "Prosjektleveranser",
             "Description": "",
             "Template": 100,
             "ContentTypesEnabled": true,
@@ -1069,11 +911,11 @@ _No tokens with missing translations or replacement values found._
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field Type=\"LookupMulti\" DisplayName=\"Interessent(er)\" List=\"{listid:Interessentregister}\" ShowField=\"Title\" ID=\"{6d90e0b6-73e6-48fb-aa1e-b897b214f934}\" Description=\"Oppgi hvilken interessent(er) leveransen påvirker\" Name=\"GtDeliveryStakeholders\" StaticName=\"GtDeliveryStakeholders\" Name=\"GtDeliveryStakeholders\" Mult=\"TRUE\" />"
+                "<Field Type=\"LookupMulti\" DisplayName=\"Leveranseinteressenter\" List=\"{listid:Interessentregister}\" ShowField=\"Title\" ID=\"{6d90e0b6-73e6-48fb-aa1e-b897b214f934}\" Description=\"Leveranseinteressenter\" Name=\"GtDeliveryStakeholders\" StaticName=\"GtDeliveryStakeholders\" Name=\"GtDeliveryStakeholders\" Mult=\"TRUE\" />"
             ],
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "Alle elementer",
                     "ViewFields": [
                         "LinkTitle",
                         "GtDeliveryDescription",
@@ -1109,7 +951,7 @@ _No tokens with missing translations or replacement values found._
             },
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "Alle elementer",
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
@@ -1132,7 +974,7 @@ _No tokens with missing translations or replacement values found._
                     }
                 },
                 {
-                    "Title": "Aktuell risiko",
+                    "Title": "Nåværende risikoer",
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
@@ -1149,7 +991,7 @@ _No tokens with missing translations or replacement values found._
                     }
                 },
                 {
-                    "Title": "Aktuelle muligheter",
+                    "Title": "Nåværende muligheter",
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
@@ -1166,7 +1008,7 @@ _No tokens with missing translations or replacement values found._
                     }
                 },
                 {
-                    "Title": "Uakseptabel risiko",
+                    "Title": "Uakseptable risikoer",
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
@@ -1227,7 +1069,7 @@ _No tokens with missing translations or replacement values found._
                     }
                 },
                 {
-                    "Title": "Risiko",
+                    "Title": "Kun risikoer",
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
@@ -1250,7 +1092,7 @@ _No tokens with missing translations or replacement values found._
                     }
                 },
                 {
-                    "Title": "Mulighet",
+                    "Title": "Kun muligheter",
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
@@ -1273,7 +1115,7 @@ _No tokens with missing translations or replacement values found._
                     }
                 },
                 {
-                    "Title": "Gjeldende fase",
+                    "Title": "Nåværende fase",
                     "ViewFields": [
                         "ID",
                         "LinkTitle"
@@ -1315,11 +1157,11 @@ _No tokens with missing translations or replacement values found._
                     "AdditionalSettings": {
                         "RowLimit": 30,
                         "Paged": true,
-                        "ViewQuery": ""
+                        "ViewQuery": "<OrderBy><FieldRef Name='LinkFilename' /></OrderBy>"
                     }
                 },
                 {
-                    "Title": "Gjeldende fase",
+                    "Title": "Nåværende fase",
                     "ViewFields": [
                         "DocIcon",
                         "LinkFilename",
@@ -1329,14 +1171,14 @@ _No tokens with missing translations or replacement values found._
                     "AdditionalSettings": {
                         "RowLimit": 30,
                         "Paged": true,
-                        "ViewQuery": "",
+                        "ViewQuery": "<OrderBy><FieldRef Name='LinkFilename' /></OrderBy>",
                         "Scope": 1
                     }
                 }
             ]
         },
         {
-            "Title": "Gevinstanalyse og gevinstrealiseringsplan",
+            "Title": "Gevinstanalyse",
             "Description": "",
             "Template": 100,
             "ContentTypesEnabled": true,
@@ -1362,7 +1204,7 @@ _No tokens with missing translations or replacement values found._
             ],
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "Alle elementer",
                     "ViewFields": [
                         "LinkTitle",
                         "GtChangeLookup",
@@ -1379,7 +1221,7 @@ _No tokens with missing translations or replacement values found._
                     }
                 },
                 {
-                    "Title": "Pr gevinsttype",
+                    "Title": "Gevinsttype",
                     "ViewFields": [
                         "GtChangeLookup",
                         "Title",
@@ -1420,7 +1262,7 @@ _No tokens with missing translations or replacement values found._
             ],
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "Alle elementer",
                     "ViewFields": [
                         "LinkTitle",
                         "GtProcess",
@@ -1433,7 +1275,7 @@ _No tokens with missing translations or replacement values found._
                     }
                 },
                 {
-                    "Title": "Pr prosess",
+                    "Title": "Per prosess",
                     "ViewFields": [
                         "GtChallengeDescription",
                         "LinkTitle"
@@ -1447,7 +1289,7 @@ _No tokens with missing translations or replacement values found._
             ]
         },
         {
-            "Title": "Måleindikatorer",
+            "Title": "Målindikatorer",
             "Description": "",
             "Template": 100,
             "ContentTypesEnabled": true,
@@ -1461,12 +1303,12 @@ _No tokens with missing translations or replacement values found._
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field Type=\"Lookup\" DisplayName=\"Gevinst\" List=\"{listid:Gevinstanalyse og gevinstrealiseringsplan}\" ShowField=\"Title\" ID=\"{8d70fa93-b547-46f1-84e7-4982f8c9c675}\" StaticName=\"GtGainLookup\" Name=\"GtGainLookup\"  />",
-                "<Field Type=\"Lookup\" DisplayName=\"Gevinst:ID\" List=\"{listid:Gevinstanalyse og gevinstrealiseringsplan}\" ShowField=\"ID\" FieldRef=\"8d70fa93-b547-46f1-84e7-4982f8c9c675\" ReadOnly=\"TRUE\" UnlimitedLengthInDocumentLibrary=\"FALSE\" ID=\"{c239539c-8672-46cc-be77-fb53322f71ae}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtGainLookup_ID\" Name=\"GtGainLookup_ID\" />"
+                "<Field Type=\"Lookup\" DisplayName=\"Gevinst\" List=\"{listid:Gevinstanalyse}\" ShowField=\"Title\" ID=\"{8d70fa93-b547-46f1-84e7-4982f8c9c675}\" StaticName=\"GtGainLookup\" Name=\"GtGainLookup\"  />",
+                "<Field Type=\"Lookup\" DisplayName=\"Gevinst-ID\" List=\"{listid:Gevinstanalyse}\" ShowField=\"ID\" FieldRef=\"8d70fa93-b547-46f1-84e7-4982f8c9c675\" ReadOnly=\"TRUE\" UnlimitedLengthInDocumentLibrary=\"FALSE\" ID=\"{c239539c-8672-46cc-be77-fb53322f71ae}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtGainLookup_ID\" Name=\"GtGainLookup_ID\" />"
             ],
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "Alle elementer",
                     "ViewFields": [
                         "LinkTitle",
                         "GtGainLookup",
@@ -1505,13 +1347,13 @@ _No tokens with missing translations or replacement values found._
                 }
             ],
             "Fields": [
-                "<Field Type=\"Lookup\" DisplayName=\"Måleindikator\" List=\"{listid:Måleindikatorer}\" ShowField=\"Title\" ID=\"{92ae8541-f35e-4c05-8518-b9abce2d0860}\" Description=\"Knytt målingen opp mot riktig måleindikator\" StaticName=\"GtMeasureIndicatorLookup\" Name=\"GtMeasureIndicatorLookup\" />",
-                "<Field Type=\"Lookup\" DisplayName=\"Måleindikator:ID\" List=\"{listid:Måleindikatorer}\" ShowField=\"ID\" FieldRef=\"92ae8541-f35e-4c05-8518-b9abce2d0860\" ReadOnly=\"TRUE\" ID=\"{571f95d9-4c0b-4b4d-8a0b-9a1771811f07}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtMeasureIndicatorLookup_ID\" Name=\"GtMeasureIndicatorLookup_ID\" />",
-                "<Field Type=\"Lookup\" DisplayName=\"Måleindikator:Ønsket verdi\" List=\"{listid:Måleindikatorer}\" ShowField=\"GtDesiredValue\" FieldRef=\"92ae8541-f35e-4c05-8518-b9abce2d0860\" ReadOnly=\"TRUE\" ID=\"{8fe2e615-999b-48dc-8889-151ed84a757a}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtMeasureIndicatorLookup_GtDesiredValue\" Name=\"GtMeasureIndicatorLookup_GtDesiredValue\" />"
+                "<Field Type=\"Lookup\" DisplayName=\"Målindikator\" List=\"{listid:Målindikatorer}\" ShowField=\"Title\" ID=\"{92ae8541-f35e-4c05-8518-b9abce2d0860}\" Description=\"Målindikator\" StaticName=\"GtMeasureIndicatorLookup\" Name=\"GtMeasureIndicatorLookup\" />",
+                "<Field Type=\"Lookup\" DisplayName=\"Målindikator-ID\" List=\"{listid:Målindikatorer}\" ShowField=\"ID\" FieldRef=\"92ae8541-f35e-4c05-8518-b9abce2d0860\" ReadOnly=\"TRUE\" ID=\"{571f95d9-4c0b-4b4d-8a0b-9a1771811f07}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtMeasureIndicatorLookup_ID\" Name=\"GtMeasureIndicatorLookup_ID\" />",
+                "<Field Type=\"Lookup\" DisplayName=\"Ønsket verdi\" List=\"{listid:Målindikatorer}\" ShowField=\"GtDesiredValue\" FieldRef=\"92ae8541-f35e-4c05-8518-b9abce2d0860\" ReadOnly=\"TRUE\" ID=\"{8fe2e615-999b-48dc-8889-151ed84a757a}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtMeasureIndicatorLookup_GtDesiredValue\" Name=\"GtMeasureIndicatorLookup_GtDesiredValue\" />"
             ],
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "Alle elementer",
                     "ViewFields": [
                         "GtMeasureIndicatorLookup",
                         "GtMeasureIndicatorLookup_GtDesiredValue",
@@ -1564,7 +1406,7 @@ _No tokens with missing translations or replacement values found._
             ],
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "Alle elementer",
                     "ViewFields": [
                         "ID",
                         "GtResourceUser",
@@ -1592,6 +1434,6 @@ _No tokens with missing translations or replacement values found._
 ## Template Path
 
 ```txt
-/Users/olemp/code/prosjektportalen365/Templates/Content/Portfolio_content.en-US/ProjectTemplates/ProgramTemplate.txt
+/Users/olemp/code/prosjektportalen365/Templates/Content/Portfolio_content.no-NB/ProjectTemplates/Standardmal.txt
 ```
 

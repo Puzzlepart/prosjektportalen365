@@ -12,48 +12,48 @@ _No tokens with missing translations or replacement values found._
 {
     "Version": "1.11.0",
     "Parameters": {
-        "ProvisionSiteFields": "Project Portal Columns (Project)",
-        "CustomSiteFields": "Project Portal Columns (Custom)",
+        "ProvisionSiteFields": "Kolonner for Prosjektportalen (Prosjekt)",
+        "CustomSiteFields": "Egendefinerte kolonner for Prosjektportalen",
         "ProjectContentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C",
         "ProjectStatusContentTypeId": "0x010022252E35737A413FB56A1BA53862F6D5"
     },
     "Navigation": {
         "QuickLaunch": [
             {
-                "Url": "SitePages/ParentOverview.aspx",
-                "Title": "Child content",
+                "Url": "SitePages/OverordnetOversikt.aspx",
+                "Title": "Underordnet innhold",
                 "Children": [
                     {
                         "Url": "SitePages/Admin.aspx",
-                        "Title": "Admin"
+                        "Title": "Administrasjon"
                     },
                     {
-                        "Url": "SitePages/ParentOverview.aspx",
-                        "Title": "Overview"
+                        "Url": "SitePages/OverordnetOversikt.aspx",
+                        "Title": "Oversikt"
                     },
                     {
-                        "Url": "SitePages/ParentBenefitOverview.aspx",
-                        "Title": "Benefits"
+                        "Url": "SitePages/OverordnetGevinster.aspx",
+                        "Title": "Gevinster"
                     },
                     {
-                        "Url": "SitePages/ParentTimeline.aspx",
-                        "Title": "Timeline"
+                        "Url": "SitePages/OverordnetTidslinje.aspx",
+                        "Title": "Tidslinje"
                     },
                     {
-                        "Url": "SitePages/ParentDeliveries.aspx",
-                        "Title": "Deliveries"
+                        "Url": "SitePages/OverordnetLeveranser.aspx",
+                        "Title": "Leveranser"
                     },
                     {
-                        "Url": "SitePages/ParentUncertainties.aspx",
-                        "Title": "Uncertainties"
+                        "Url": "SitePages/OverordnetUsikkerheter.aspx",
+                        "Title": "Usikkerheter"
                     },
                     {
-                        "Url": "SitePages/ParentCommunicationPlan.aspx",
-                        "Title": "Communication Plan"
+                        "Url": "SitePages/OverordnetKommunikasjon.aspx",
+                        "Title": "Kommunikasjonsplaner"
                     },
                     {
-                        "Url": "SitePages/ParentResourceAllocation.aspx",
-                        "Title": "Resource Allocation"
+                        "Url": "SitePages/OverordnetRessursallokeringer.aspx",
+                        "Title": "Ressursallokeringer"
                     }
                 ]
             }
@@ -62,7 +62,7 @@ _No tokens with missing translations or replacement values found._
     "ClientSidePages": [
         {
             "Name": "Admin.aspx",
-            "Title": "Admin",
+            "Title": "Administrasjon",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -74,7 +74,7 @@ _No tokens with missing translations or replacement values found._
                                 {
                                     "Id": "da500bfe-49c7-4553-939a-b33254d77763",
                                     "Properties": {
-                                        "title": "Admin"
+                                        "title": "Administrasjon av underområder"
                                     }
                                 }
                             ]
@@ -84,8 +84,8 @@ _No tokens with missing translations or replacement values found._
             ]
         },
         {
-            "Name": "ParentOverview.aspx",
-            "Title": "Overview",
+            "Name": "OverordnetOversikt.aspx",
+            "Title": "Oversikt",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -97,7 +97,7 @@ _No tokens with missing translations or replacement values found._
                                 {
                                     "Id": "77c58192-1d15-4c09-b62a-96f9c9ffe8ad",
                                     "Properties": {
-                                        "title": "Overview for child projects",
+                                        "title": "Oversikt over underområder",
                                         "showCommandBar": true,
                                         "showFilters": true,
                                         "showGroupBy": true,
@@ -113,8 +113,8 @@ _No tokens with missing translations or replacement values found._
             ]
         },
         {
-            "Name": "ParentBenefitOverview.aspx",
-            "Title": "Benefits",
+            "Name": "OverordnetGevinster.aspx",
+            "Title": "Gevinster",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -126,10 +126,10 @@ _No tokens with missing translations or replacement values found._
                                 {
                                     "Id": "555cb52f-48ef-4fa1-8984-7ec0176b2d52",
                                     "Properties": {
-                                        "title": "Benefits for child projects",
-                                        "dataSource": "All benefit elements for child projects",
-                                        "dataSourceCategory": "Benefit Overview",
-                                        "dataSourceLevel": "Parent/Program",
+                                        "title": "Gevinster for underområder",
+                                        "dataSource": "Alle gevinstelementer for underområder",
+                                        "dataSourceCategory": "Gevinstoversikt",
+                                        "dataSourceLevel": "Overordnet/Program",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
                                         "showSearchBox": true
@@ -142,8 +142,8 @@ _No tokens with missing translations or replacement values found._
             ]
         },
         {
-            "Name": "ParentCommunicationPlan.aspx",
-            "Title": "Communication Plan",
+            "Name": "OverordnetKommunikasjon.aspx",
+            "Title": "Kommunikasjonsplaner",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -155,9 +155,9 @@ _No tokens with missing translations or replacement values found._
                                 {
                                     "Id": "555cb52f-48ef-4fa1-8984-7ec0176b2d52",
                                     "Properties": {
-                                        "title": "Communication Plans for child projects",
-                                        "dataSource": "Alle communication plans for child projects",
-                                        "dataSourceCategory": "Communication Plan",
+                                        "title": "Kommunikasjonsplaner for underområder",
+                                        "dataSource": "Alle kommunikasjonsplaner for underområder",
+                                        "dataSourceCategory": "Kommunikasjonsoversikt",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
                                         "showSearchBox": true
@@ -170,8 +170,8 @@ _No tokens with missing translations or replacement values found._
             ]
         },
         {
-            "Name": "ParentResourceAllocation.aspx",
-            "Title": "Resource Allocation",
+            "Name": "OverordnetRessursallokeringer.aspx",
+            "Title": "Ressursallokeringer",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -183,9 +183,9 @@ _No tokens with missing translations or replacement values found._
                                 {
                                     "Id": "555cb52f-48ef-4fa1-8984-7ec0176b2d52",
                                     "Properties": {
-                                        "title": "Resource allocations for child projects",
-                                        "dataSource": "All resource allocations for child projects",
-                                        "dataSourceCategory": "Resource Allocation",
+                                        "title": "Ressursallokeringer for underområder",
+                                        "dataSource": "Alle ressursallokeringer for underområder",
+                                        "dataSourceCategory": "Ressursallokering",
                                         "hiddenColumns": [
                                             "Title"
                                         ],
@@ -201,8 +201,8 @@ _No tokens with missing translations or replacement values found._
             ]
         },
         {
-            "Name": "ParentTimeline.aspx",
-            "Title": "Timeline",
+            "Name": "OverordnetTidslinje.aspx",
+            "Title": "Tidslinje",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -214,8 +214,8 @@ _No tokens with missing translations or replacement values found._
                                 {
                                     "Id": "70c29af4-b55a-4207-911b-8f254ed99f03",
                                     "Properties": {
-                                        "title": "Timeline for child projects",
-                                        "infoText": "Here you will find a list of all projects with start and end dates in the project. The project timeline also supports phases, subphases and milestones. To zoom in/out in the timeline: ALT+Mousewheel."
+                                        "title": "Tidslinje for underområder",
+                                        "infoText": "Her listes alle prosjektene med start- og sluttdato i prosjektet. Prosjekttidslinjen støtter også faser, delfaser og milepæler. For å zoome inn/ut i tidslinje: ALT+Musehjul."
                                     }
                                 }
                             ]
@@ -225,8 +225,8 @@ _No tokens with missing translations or replacement values found._
             ]
         },
         {
-            "Name": "ParentDeliveries.aspx",
-            "Title": "Deliveries",
+            "Name": "OverordnetLeveranser.aspx",
+            "Title": "Leveranser",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -238,10 +238,10 @@ _No tokens with missing translations or replacement values found._
                                 {
                                     "Id": "555cb52f-48ef-4fa1-8984-7ec0176b2d52",
                                     "Properties": {
-                                        "title": "Deliveries for child projects",
-                                        "dataSource": "All Project Deliveries for child projects",
-                                        "dataSourceCategory": "Project Deliveries",
-                                        "dataSourceLevel": "Parent/Program",
+                                        "title": "Leveranser for underområder",
+                                        "dataSource": "Alle leveranser for underområder",
+                                        "dataSourceCategory": "Leveranseoversikt",
+                                        "dataSourceLevel": "Overordnet/Program",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
                                         "showSearchBox": true
@@ -254,8 +254,8 @@ _No tokens with missing translations or replacement values found._
             ]
         },
         {
-            "Name": "ParentUncertainties.aspx",
-            "Title": "Uncertainties",
+            "Name": "OverordnetUsikkerheter.aspx",
+            "Title": "Usikkerheter",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -267,10 +267,10 @@ _No tokens with missing translations or replacement values found._
                                 {
                                     "Id": "555cb52f-48ef-4fa1-8984-7ec0176b2d52",
                                     "Properties": {
-                                        "title": "Uncertainties for child projects",
-                                        "dataSource": "All risks for child projects",
-                                        "dataSourceCategory": "Uncertainty Overview",
-                                        "dataSourceLevel": "Parent/Program",
+                                        "title": "Usikkerheter for underområder",
+                                        "dataSource": "Alle risikoelementer for underområder",
+                                        "dataSourceCategory": "Usikkerhetsoversikt",
+                                        "dataSourceLevel": "Overordnet/Program",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
                                         "showSearchBox": true
@@ -289,6 +289,6 @@ _No tokens with missing translations or replacement values found._
 ## Template Path
 
 ```txt
-/Users/olemp/code/prosjektportalen365/Templates/Content/Portfolio_content.en-US/ProjectTemplates/ParentTemplate.txt
+/Users/olemp/code/prosjektportalen365/Templates/Content/Portfolio_content.no-NB/ProjectTemplates/Overordnet.txt
 ```
 

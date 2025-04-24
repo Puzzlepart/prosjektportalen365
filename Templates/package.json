@@ -16,7 +16,8 @@
     "@fluentui/react-icons": "~2.0.240",
     "@ptkdev/json-token-replace": "^1.2.2",
     "dotenv": "~16.1.3",
-    "resx-json-typescript-converter": "^1.0.1"
+    "resx-json-typescript-converter": "^1.0.1",
+    "glob": "~11.0.2"
   },
   "devDependencies": {
     "@types/lodash": "~4.14.195",

@@ -732,7 +732,7 @@ packages:
   /@fluentui/date-time-utilities/7.9.1:
     dependencies:
       '@uifabric/set-version': 7.0.24
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     resolution:
       integrity: sha512-o8iU1VIY+QsqVRWARKiky29fh4KR1xaKSgMClXIi65qkt8EDDhjmlzL0KVDEoDA2GWukwb/1PpaVCWDg4v3cUQ==
@@ -746,7 +746,7 @@ packages:
   /@fluentui/dom-utilities/1.1.2:
     dependencies:
       '@uifabric/set-version': 7.0.24
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     resolution:
       integrity: sha512-XqPS7l3YoMwxdNlaYF6S2Mp0K3FmVIOIy2K3YkMc+eRxu9wFK6emr2Q/3rBhtG5u/On37NExRT7/5CTLnoi9gw==
@@ -826,7 +826,7 @@ packages:
       integrity: sha512-kTOdBGk7xPK3usD4uQ77+2UrK9AsAp0CeAboEBSvV/1wO6uI86IWGN7iyvSaqnnZHRJ8k5VAMrE2lHRJsOveag==
   /@fluentui/keyboard-key/0.2.17:
     dependencies:
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     resolution:
       integrity: sha512-iT1bU56rKrKEOfODoW6fScY11qj3iaYrZ+z11T6fo5+TDm84UGkkXjLXJTE57ZJzg0/gbccHQWYv+chY7bJN8Q==
@@ -1693,7 +1693,7 @@ packages:
       '@uifabric/utilities': 7.38.2_9c907a7ccd27a2e2d0ee9de5366482d1
       classnames: 2.5.1
       react: 17.0.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -1978,7 +1978,7 @@ packages:
       '@uifabric/utilities': 7.38.2_9c907a7ccd27a2e2d0ee9de5366482d1
       react: 17.0.1
       react-dom: 17.0.1_react@17.0.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -1998,7 +1998,7 @@ packages:
       '@uifabric/utilities': 7.38.2_9f7147fa6acafed13e71b068ea0d74dc
       react: 16.8.5
       react-dom: 16.8.5_react@16.8.5
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -2104,7 +2104,7 @@ packages:
       '@uifabric/utilities': 7.38.2_9f7147fa6acafed13e71b068ea0d74dc
       react: 16.8.5
       react-dom: 16.8.5_react@16.8.5
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '*'
@@ -3460,7 +3460,7 @@ packages:
       '@types/react': 17.0.45
       '@uifabric/set-version': 7.0.24
       react: 17.0.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -3883,7 +3883,7 @@ packages:
       '@uifabric/utilities': 7.38.2_9c907a7ccd27a2e2d0ee9de5366482d1
       classnames: 2.5.1
       react: 17.0.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -4203,7 +4203,7 @@ packages:
       '@uifabric/set-version': 7.0.24
       react: 17.0.1
       react-dom: 17.0.1_react@17.0.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -4219,7 +4219,7 @@ packages:
       '@uifabric/set-version': 7.0.24
       react: 16.8.5
       react-dom: 16.8.5_react@16.8.5
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -4260,7 +4260,7 @@ packages:
       office-ui-fabric-react: 7.204.1_9c907a7ccd27a2e2d0ee9de5366482d1
       react: 17.0.1
       react-dom: 17.0.1_react@17.0.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -5456,7 +5456,7 @@ packages:
     dependencies:
       es6-promise: 4.2.8
       isomorphic-fetch: 3.0.0
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     resolution:
       integrity: sha512-BQN50r3tohWYOaQ0de7LJ5eCRjI6eg4RQqLhGDlgRmZIZhWzH0bhR6QBMmmxtYtwKWifhPhJSxYDW+cP67TJVw==
@@ -5464,7 +5464,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.27.0
       msal: 1.4.18
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     resolution:
       integrity: sha512-fbDN3UJ+jtSP9llAejqmslMcv498YuIrS3OS/Luivb8OSjdUESZKdP0gcUunnuNIayePVT0/bGYSJTzAIptJQQ==
@@ -7741,7 +7741,7 @@ packages:
     dependencies:
       '@fluentui/merge-styles': 8.5.12
       '@fluentui/react': 8.106.4_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@fluentui/react-components': 9.52.0_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@fluentui/react-components': 9.62.0_9c907a7ccd27a2e2d0ee9de5366482d1
       '@fluentui/react-file-type-icons': 8.11.21_4865287ef69aa4f3fc3f709d3560286e
       '@fluentui/react-hooks': 8.8.17_4865287ef69aa4f3fc3f709d3560286e
       '@fluentui/react-icons': 2.0.297_react@17.0.1
@@ -9930,7 +9930,7 @@ packages:
       '@uifabric/utilities': 7.38.2_9c907a7ccd27a2e2d0ee9de5366482d1
       react: 17.0.1
       react-dom: 17.0.1_react@17.0.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -9949,7 +9949,7 @@ packages:
       '@uifabric/utilities': 7.38.2_9f7147fa6acafed13e71b068ea0d74dc
       react: 16.8.5
       react-dom: 16.8.5_react@16.8.5
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -9976,7 +9976,7 @@ packages:
       '@uifabric/set-version': 7.0.24
       '@uifabric/styling': 7.25.1_9c907a7ccd27a2e2d0ee9de5366482d1
       '@uifabric/utilities': 7.38.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '*'
@@ -9990,7 +9990,7 @@ packages:
       '@uifabric/set-version': 7.0.24
       '@uifabric/styling': 7.25.1_9c907a7ccd27a2e2d0ee9de5366482d1
       '@uifabric/utilities': 7.38.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '*'
@@ -10004,7 +10004,7 @@ packages:
       '@uifabric/set-version': 7.0.24
       '@uifabric/styling': 7.25.1_9f7147fa6acafed13e71b068ea0d74dc
       '@uifabric/utilities': 7.38.2_9f7147fa6acafed13e71b068ea0d74dc
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '*'
@@ -10036,7 +10036,7 @@ packages:
       '@uifabric/utilities': 7.38.2_9c907a7ccd27a2e2d0ee9de5366482d1
       react: 17.0.1
       react-dom: 17.0.1_react@17.0.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -10054,7 +10054,7 @@ packages:
       '@uifabric/utilities': 7.38.2_9f7147fa6acafed13e71b068ea0d74dc
       react: 16.8.5
       react-dom: 16.8.5_react@16.8.5
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -10135,7 +10135,7 @@ packages:
       prop-types: 15.8.1
       react: 17.0.1
       react-dom: 17.0.1_react@17.0.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -10154,7 +10154,7 @@ packages:
       prop-types: 15.8.1
       react: 16.8.5
       react-dom: 16.8.5_react@16.8.5
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -12061,7 +12061,7 @@ packages:
   /chart.js/2.9.4:
     dependencies:
       chartjs-color: 2.4.1
-      moment: 2.29.4
+      moment: 2.30.1
     dev: false
     resolution:
       integrity: sha512-B07aAzxcrikjAPyV+01j7BmOpxtQETxTSlQ26BEYJ+3iUkbNKaOJ/nDbT6JjyqYxseM0ON12COHYdU2cTIjC7A==
@@ -15903,6 +15903,20 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-U/rnDpXJGF414QQQZv5uVsabTVxMSwzS5CH0p3DRCIV6ownl4f7PzGnkGmvlum2wB+9RlJWJZ6ACU1INnBqiPA==
+  /glob/11.0.2:
+    dependencies:
+      foreground-child: 3.3.1
+      jackspeak: 4.1.0
+      minimatch: 10.0.1
+      minipass: 7.1.2
+      package-json-from-dist: 1.0.1
+      path-scurry: 2.0.0
+    dev: false
+    engines:
+      node: 20 || >=22
+    hasBin: true
+    resolution:
+      integrity: sha512-YT7U7Vye+t5fZ/QMkBFrTJ7ZQxInIUjwyAjVj84CYXqgBdv30MFUPGnBR6sQaVq6Is15wYJUsnzTuWaGRBhBAQ==
   /glob/7.0.6:
     dependencies:
       fs.realpath: 1.0.0
@@ -17639,6 +17653,14 @@ packages:
       '@pkgjs/parseargs': 0.11.0
     resolution:
       integrity: sha512-N3yCS/NegsOBokc8GAdM8UcmfsKiSS8cipheD/nivzr700H+nsMOxJjQnvwOcRYVuFkdH0wGUvW2WbXGmrZGbQ==
+  /jackspeak/4.1.0:
+    dependencies:
+      '@isaacs/cliui': 8.0.2
+    dev: false
+    engines:
+      node: 20 || >=22
+    resolution:
+      integrity: sha512-9DDdhb5j6cpeitCbvLO7n7J4IxnbM6hoF6O1g4HQ5TfhvvKN8ywDM7668ZhMHRqVmxqhps/F6syWK2KcPxYlkw==
   /jest-changed-files/25.5.0:
     dependencies:
       '@jest/types': 25.5.0
@@ -18959,6 +18981,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==
+  /lru-cache/11.1.0:
+    dev: false
+    engines:
+      node: 20 || >=22
+    resolution:
+      integrity: sha512-QIXZUBJUx+2zHUdQujWejBkcD9+cs94tLn0+YL8UrCh+D5sCXZ4c7LaEH48pNwRY3MLDgqUFyhlCyjJPf1WP0A==
   /lru-cache/5.1.1:
     dependencies:
       yallist: 3.1.1
@@ -19555,6 +19583,14 @@ packages:
     dev: false
     resolution:
       integrity: sha512-JIYlbt6g8i5jKfJ3xz7rF0LXmv2TkDxBLUkiBeZ7bAx4GnnNMr8xFpGnOxn6GhTEHx3SjRrZEoU+j04prX1ktg==
+  /minimatch/10.0.1:
+    dependencies:
+      brace-expansion: 2.0.1
+    dev: false
+    engines:
+      node: 20 || >=22
+    resolution:
+      integrity: sha512-ethXTt3SGGR+95gudmqJ1eNhRO7eGEGIgYA9vnPatK4/etz2MEVDno5GMCibdMTuBMyElzIlgxMna3K94XDIDQ==
   /minimatch/3.0.5:
     dependencies:
       brace-expansion: 1.1.11
@@ -19647,6 +19683,12 @@ packages:
       node: '>=16 || 14 >=14.17'
     resolution:
       integrity: sha512-MzWSV5nYVT7mVyWCwn2o7JH13w2TBRmmSqSRCKzTw+lmft9X4z+3wjvs06Tzijo5z4W/kahUCDpRXTF+ZrmF/w==
+  /minipass/7.1.2:
+    dev: false
+    engines:
+      node: '>=16 || 14 >=14.17'
+    resolution:
+      integrity: sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw==
   /minizlib/2.1.2:
     dependencies:
       minipass: 3.3.6
@@ -19744,7 +19786,7 @@ packages:
       integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
   /msal/1.4.12:
     dependencies:
-      tslib: 1.10.0
+      tslib: 1.14.1
     deprecated: This package is no longer supported. Please use @azure/msal-browser instead.
     dev: false
     engines:
@@ -20382,7 +20424,7 @@ packages:
       prop-types: 15.8.1
       react: 16.8.5
       react-dom: 16.8.5_react@16.8.5
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <17.0.0'
@@ -20411,7 +20453,7 @@ packages:
       prop-types: 15.8.1
       react: 17.0.1
       react-dom: 17.0.1_react@17.0.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -20682,6 +20724,10 @@ packages:
       node: '>=6'
     resolution:
       integrity: sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==
+  /package-json-from-dist/1.0.1:
+    dev: false
+    resolution:
+      integrity: sha512-UEZIS3/by4OC8vL3P2dTXRETpebLI2NiI5vIrjaD/5UtrkFX/tNbwjTSRAGC/+7CAo2pIcBaRgWmcBBHcsaCIw==
   /package-json/6.5.0:
     dependencies:
       got: 9.6.0
@@ -20906,6 +20952,15 @@ packages:
       node: '>=16 || 14 >=14.18'
     resolution:
       integrity: sha512-Xa4Nw17FS9ApQFJ9umLiJS4orGjm7ZzwUrwamcGQuHSzDyth9boKDaycYdDcZDuqYATXw4HFXgaqWTctW/v1HA==
+  /path-scurry/2.0.0:
+    dependencies:
+      lru-cache: 11.1.0
+      minipass: 7.1.2
+    dev: false
+    engines:
+      node: 20 || >=22
+    resolution:
+      integrity: sha512-ypGJsmGtdXUOeM5u93TyeIEfEhM6s+ljAhrk5vAvSx8uyY/02OvrZnA0YNGUrPXfpJMgI1ODd3nwz8Npx4O4cg==
   /path-to-regexp/0.1.7:
     dev: false
     resolution:
@@ -24398,7 +24453,7 @@ packages:
       integrity: sha512-yQ3rwFWRfwNUY7H5vpU0wfdkNSnvnJinhF9830Swlaxl03zsOjCfmX0ugac+3LtK0lYSgwL/KXc8oYL3mG4YFQ==
   /substyle/9.4.1_react@17.0.1:
     dependencies:
-      '@babel/runtime': 7.4.5
+      '@babel/runtime': 7.27.0
       invariant: 2.2.4
       react: 17.0.1
     dev: false
@@ -27129,6 +27184,7 @@ packages:
       '@ptkdev/json-token-replace': 1.2.2
       '@types/lodash': 4.14.202
       dotenv: 16.1.4
+      glob: 11.0.2
       pzl-spfx-tasks: 0.5.14-4
       replace: 1.2.2
       resx-json-typescript-converter: 1.0.4
@@ -27142,7 +27198,7 @@ packages:
       react: '*'
       react-dom: '*'
     resolution:
-      integrity: sha512-F5DhF87h89GCtrsX0PIh8m3++QV9FBdvCsJfopy0rC4q/6ZFqY8qZGqktN53SJqYH6Grs1E9PVncSttkUrEmOw==
+      integrity: sha512-8Z2X27ZHG8W32xB2GPxyLvlZeM2uBwJywR2U0Vt7PR0B4Lj+i4OZvZoSqPnZFMP5QXi4fmi5O2WMwIqQKLVU1Q==
       tarball: file:projects/pp365-templates.tgz
     version: 0.0.0
 specifiers:

@@ -1,13 +1,12 @@
-/**
- * @fileoverview Generate JSON templates for Portfolio and Project sites
- * @author Puzzlepart
- */
+// generate-project-templates.js
+
 const fs = require('fs')
 const path = require('path')
 const pkg = require('../../package.json')
-const JsonTokenReplace = require('@ptkdev/json-token-replace')
 const { format } = require('util')
-const jsonTokenReplace = new JsonTokenReplace()
+const { getFileContent } = require('./util')
+const JsonTokenReplace = require('@ptkdev/json-token-replace')
+const { replace } = new JsonTokenReplace()
 
 // Template names for the different languages
 const templateNames = {
@@ -28,28 +27,7 @@ const JSON_MASTER_TEMPLATES_DIR = fs.readdirSync(path.resolve(__dirname, '../Jso
 const JSON_TEMPLATE_PREFIX = '_JsonTemplate'
 const MAIN_CHANNEL_CONFIG = getFileContent('../channels/main.json')
 const CURRENT_CHANNEL_CONFIG = getFileContent('../.current-channel-config.json', MAIN_CHANNEL_CONFIG)
-const PROJECT_TEMPLATE_DIR = '../Content/Portfolio_content.{0}/ProjectTemplates/{1}.txt'
-
-/**
- * Get file content for the given file path in JSON format. If the file 
- * does not exist or the JSON is invalid, the fallback value is returned.
- * 
- * By default the function goes up one folder from the current folder.
- * 
- * @param {*} file File path 
- * @param {*} fallbackValue Fallback value if file does not exist
- * 
- * @returns File contents as JSON
- */
-function getFileContent(file, fallbackValue = {}) {
-    try {
-        const fileContent = fs.readFileSync(path.resolve(__dirname, '..', file), 'UTF-8')
-        const fileContentJson = JSON.parse(fileContent)
-        return fileContentJson
-    } catch (error) {
-        return fallbackValue
-    }
-}
+const PROJECT_TEMPLATE_DIR = '../Content/Portfolio_content.%s/ProjectTemplates/%s.txt'
 
 // Generate the channel replace values
 const channelReplaceValues = Object.keys(CURRENT_CHANNEL_CONFIG.spfx.solutions).reduce((acc, key) => {
@@ -71,14 +49,14 @@ JSON_MASTER_TEMPLATES_DIR.forEach(templateFile => {
 
     Object.keys(RESOURCES_JSON).forEach(lng => {
         const jsonTokens = { ...RESOURCES_JSON[lng], ...channelReplaceValues }
-        let content = jsonTokenReplace.replace(
+        let content = replace(
             jsonTokens,
             templateJson,
             '{{',
             '}}'
         )
 
-        content = jsonTokenReplace.replace(
+        content = replace(
             pkg,
             content,
             '{',
@@ -88,7 +66,6 @@ JSON_MASTER_TEMPLATES_DIR.forEach(templateFile => {
         fs.writeFile(
             outputPaths[lng],
             JSON.stringify(content, null, 4),
-            () => {
-            })
+            () => {})
     })
 })

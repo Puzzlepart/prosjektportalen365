@@ -12,17 +12,17 @@ _No tokens with missing translations or replacement values found._
 {
     "Version": "1.11.0",
     "Parameters": {
-        "ProvisionSiteFields": "Project Portal Columns (Project)",
-        "CustomSiteFields": "Project Portal Columns (Custom)",
+        "ProvisionSiteFields": "Kolonner for Prosjektportalen (Prosjekt)",
+        "CustomSiteFields": "Egendefinerte kolonner for Prosjektportalen",
         "ProjectContentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C",
         "ProjectStatusContentTypeId": "0x010022252E35737A413FB56A1BA53862F6D5"
     },
     "ContentTypes": [
         {
             "ID": "0x0100A87AE71CBF2643A6BC9D0948BD2EE897",
-            "Name": "Uncertainty",
+            "Name": "Usikkerhet",
             "Description": "",
-            "Group": "Project Portal Content Types",
+            "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
                     "ID": "e930090a-480e-414a-bd4a-0ef5bca31443",
@@ -84,21 +84,21 @@ _No tokens with missing translations or replacement values found._
         },
         {
             "ID": "0x0100A87AE71CBF2643A6BC9D0948BD2EE89701",
-            "Name": "Risk",
+            "Name": "Risiko",
             "Description": "",
-            "Group": "Project Portal Content Types"
+            "Group": "Prosjektportalen innholdstyper"
         },
         {
             "ID": "0x0100A87AE71CBF2643A6BC9D0948BD2EE89702",
-            "Name": "Possibility",
+            "Name": "Mulighet",
             "Description": "",
-            "Group": "Project Portal Content Types"
+            "Group": "Prosjektportalen innholdstyper"
         },
         {
             "ID": "0x010072C95831F8434782AB2FF6BE3E596F46",
-            "Name": "Stakeholder",
+            "Name": "Interessent",
             "Description": "",
-            "Group": "Project Portal Content Types",
+            "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
                     "ID": "2847b3b0-ed22-4c47-b7c0-3ebfc83dae4a",
@@ -132,9 +132,9 @@ _No tokens with missing translations or replacement values found._
         },
         {
             "ID": "0x010065CE65D51354419EA794C6FACD4FA2EB",
-            "Name": "Communication Element",
+            "Name": "Kommunikasjonselement",
             "Description": "",
-            "Group": "Project Portal Content Types",
+            "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
                     "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
@@ -164,9 +164,9 @@ _No tokens with missing translations or replacement values found._
         },
         {
             "ID": "0x0100486B1F8AEA24486FBA1C1BA9146C360C",
-            "Name": "Checkpoint",
+            "Name": "Sjekkpunkt",
             "Description": "",
-            "Group": "Project Portal Content Types",
+            "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
                     "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
@@ -188,9 +188,9 @@ _No tokens with missing translations or replacement values found._
         },
         {
             "ID": "0x0100D7B74DE815F946D3B0F99D19F9B36B68",
-            "Name": "Project Delivery",
+            "Name": "Prosjektleveranse",
             "Description": "",
-            "Group": "Project Portal Content Types",
+            "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
                     "ID": "99430a99-1354-418f-921f-7ddfdb6c0d7f",
@@ -248,9 +248,9 @@ _No tokens with missing translations or replacement values found._
         },
         {
             "ID": "0x01004EDD18CB92C14EBA97103D909C897810",
-            "Name": "Project Log Element",
+            "Name": "Prosjektloggelement",
             "Description": "",
-            "Group": "Project Portal Content Types",
+            "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
                     "ID": "2391d165-5d13-46b7-87d2-e32040293210",
@@ -288,15 +288,15 @@ _No tokens with missing translations or replacement values found._
         },
         {
             "ID": "0x010200C19C974828B24D469B69C22B2D1FFB63",
-            "Name": "Project Event",
+            "Name": "Prosjekthendelse",
             "Description": "",
-            "Group": "Project Portal Content Types"
+            "Group": "Prosjektportalen innholdstyper"
         },
         {
             "ID": "0x01080024FEF2F7FA284B7CB33E6635D636E380",
-            "Name": "Project Task",
+            "Name": "Prosjektoppgave",
             "Description": "",
-            "Group": "Project Portal Content Types",
+            "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
                     "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
@@ -306,8 +306,8 @@ _No tokens with missing translations or replacement values found._
         },
         {
             "ID": "0x010039EAFDC2A1624C1BA1A444FC8FE85DEC",
-            "Name": "Benefit Followup",
-            "Group": "Project Portal Content Types",
+            "Name": "Gevinstoppfølging",
+            "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
                     "ID": "5c6fafbb-aee4-4e46-b110-5c798916c2ca",
@@ -325,8 +325,8 @@ _No tokens with missing translations or replacement values found._
         },
         {
             "ID": "0x01004F466123309D46BAB9D5C6DE89A6CF67",
-            "Name": "Benefit",
-            "Group": "Project Portal Content Types",
+            "Name": "Gevinst",
+            "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
                     "ID": "a1a56abd-5b3d-45d2-8617-32b2f8b195de",
@@ -360,8 +360,8 @@ _No tokens with missing translations or replacement values found._
         },
         {
             "ID": "0x01001AF93A93F5534B5FBAF750572B11BB7F",
-            "Name": "Change",
-            "Group": "Project Portal Content Types",
+            "Name": "Endring",
+            "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
                     "ID": "68a5a2da-048c-4d2d-8ba4-5a8b32b60120",
@@ -375,8 +375,8 @@ _No tokens with missing translations or replacement values found._
         },
         {
             "ID": "0x010073043EFE3E814A2BBEF96B8457623F95",
-            "Name": "Measure Indicator",
-            "Group": "Project Portal Content Types",
+            "Name": "Måleindikator",
+            "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
                     "ID": "c5fc8781-7fbd-43a2-a215-c8c959bbab69",
@@ -397,8 +397,8 @@ _No tokens with missing translations or replacement values found._
         },
         {
             "ID": "0x010004EAFF7AFCC94C2680042E6881264120",
-            "Name": "Resource Allocation",
-            "Group": "Project Portal Content Types",
+            "Name": "Ressursallokering",
+            "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
                     "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
@@ -442,21 +442,21 @@ _No tokens with missing translations or replacement values found._
         }
     ],
     "SiteFields": [
-        "<Field ID=\"{8499bd48-4c5d-43ae-8e27-7968d49ca14f}\" Name=\"GtRiskFactor\" DisplayName=\"Risk Factor\" Type=\"Calculated\" Group=\"Project Portal Columns (Project)\" Description=\"Define the factors contributing to the risk\" ResultType=\"Number\" StaticName=\"GtRiskFactor\"><Formula>=GtRiskProbability*GtRiskConsequence</Formula><FieldRefs><FieldRef Name=\"GtRiskProbability\" ID=\"{0e1b295d-2bfb-4ef6-ae92-e72068e56111}\" /><FieldRef Name=\"GtRiskConsequence\" ID=\"{554d32a0-0148-4b3c-bfc4-f101232ee501}\" /></FieldRefs></Field>",
-        "<Field ID=\"{62f0454d-1150-4d55-86ef-075f786d6e5c}\" Name=\"GtRiskFactorPostAction\" DisplayName=\"Risk factor post action\" Type=\"Calculated\" Group=\"Project Portal Columns (Project)\" Description=\"Define the factors contributing to the risk after measures have been implemented\" ResultType=\"Number\" StaticName=\"GtRiskFactorPostAction\"><Formula>=GtRiskProbabilityPostAction*GtRiskConsequencePostAction</Formula><FieldRefs><FieldRef Name=\"GtRiskProbabilityPostAction\" ID=\"{f81ebcb7-8791-44b0-9919-08ed5524b11d}\" /><FieldRef Name=\"GtRiskConsequencePostAction\" ID=\"{00f17233-d4c0-49d0-aebd-5004552abb17}\" /></FieldRefs></Field>",
-        "<Field ID=\"{88d9b92c-efed-45d0-a586-86d9196b77d0}\" Type=\"User\" Name=\"GtResourceUser\" StaticName=\"GtResourceUser\" DisplayName=\"Name\" Description=\"Provide the name of the person being added\" />",
-        "<Field ID=\"{08ac9d56-f8eb-4a2c-868f-d39fc012fcd6}\" Type=\"Number\" Name=\"GtResourceLoad\" StaticName=\"GtResourceLoad\" DisplayName=\"Load\" Description=\"Enter (expected) allocation rate, given in figures indicating percentage\" Percentage=\"TRUE\" />",
-        "<Field ID=\"{2ae541a5-5ecc-481d-afb6-c03a6f1e71b4}\" Type=\"User\" Name=\"GtActionResponsible\" StaticName=\"GtActionResponsible\" DisplayName=\"Action Responsible\" Description=\"Who is responsible for this communication activity?\" />"
+        "<Field ID=\"{8499bd48-4c5d-43ae-8e27-7968d49ca14f}\" Name=\"GtRiskFactor\" DisplayName=\"Risikofaktor\" Type=\"Calculated\" Group=\"Kolonner for Prosjektportalen (Prosjekt)\" Description=\"Relevant risikofaktor før tiltakene iverksettes\" ResultType=\"Number\" StaticName=\"GtRiskFactor\"><Formula>=GtRiskProbability*GtRiskConsequence</Formula><FieldRefs><FieldRef Name=\"GtRiskProbability\" ID=\"{0e1b295d-2bfb-4ef6-ae92-e72068e56111}\" /><FieldRef Name=\"GtRiskConsequence\" ID=\"{554d32a0-0148-4b3c-bfc4-f101232ee501}\" /></FieldRefs></Field>",
+        "<Field ID=\"{62f0454d-1150-4d55-86ef-075f786d6e5c}\" Name=\"GtRiskFactorPostAction\" DisplayName=\"Risikofaktor etter tiltak\" Type=\"Calculated\" Group=\"Kolonner for Prosjektportalen (Prosjekt)\" Description=\"Oppgi den relevante risikofaktoren etter at tiltakene er iverksatt\" ResultType=\"Number\" StaticName=\"GtRiskFactorPostAction\"><Formula>=GtRiskProbabilityPostAction*GtRiskConsequencePostAction</Formula><FieldRefs><FieldRef Name=\"GtRiskProbabilityPostAction\" ID=\"{f81ebcb7-8791-44b0-9919-08ed5524b11d}\" /><FieldRef Name=\"GtRiskConsequencePostAction\" ID=\"{00f17233-d4c0-49d0-aebd-5004552abb17}\" /></FieldRefs></Field>",
+        "<Field ID=\"{88d9b92c-efed-45d0-a586-86d9196b77d0}\" Type=\"User\" Name=\"GtResourceUser\" StaticName=\"GtResourceUser\" DisplayName=\"Navn\" Description=\"Oppgi navnet på personen som legges inn\" />",
+        "<Field ID=\"{08ac9d56-f8eb-4a2c-868f-d39fc012fcd6}\" Type=\"Number\" Name=\"GtResourceLoad\" StaticName=\"GtResourceLoad\" DisplayName=\"Belastning\" Description=\"Oppgi (forventet) allokeringsgrad, oppgis i tall som indikerer prosent\" Percentage=\"TRUE\" />",
+        "<Field ID=\"{2ae541a5-5ecc-481d-afb6-c03a6f1e71b4}\" Type=\"User\" Name=\"GtActionResponsible\" StaticName=\"GtActionResponsible\" DisplayName=\"Tiltaksansvarlig\" Description=\"Hvem er ansvarlig for denne kommunikasjonsaktiviteten?\" />"
     ],
     "Navigation": {
         "QuickLaunch": [
             {
                 "Url": "SitePages/ProgramHome.aspx",
-                "Title": "Home"
+                "Title": "Hjem"
             },
             {
                 "Url": "SitePages/Status.aspx",
-                "Title": "Program Status"
+                "Title": "Programstatus"
             },
             {
                 "Url": "SitePages/ProgramOversikt.aspx",
@@ -516,7 +516,7 @@ _No tokens with missing translations or replacement values found._
     "ClientSidePages": [
         {
             "Name": "ProgramHome.aspx",
-            "Title": "Home",
+            "Title": "Hjem",
             "PageLayoutType": "Home",
             "CommentsDisabled": true,
             "VerticalSection": [
@@ -576,7 +576,7 @@ _No tokens with missing translations or replacement values found._
                                     "Id": "f92bf067-bc19-489e-a556-7fe95f508720",
                                     "Properties": {
                                         "isDocumentLibrary": true,
-                                        "selectedListId": "{listid:Documents}",
+                                        "selectedListId": "{listid:Dokumenter}",
                                         "webpartHeightKey": 4
                                     }
                                 }
@@ -776,7 +776,7 @@ _No tokens with missing translations or replacement values found._
         },
         {
             "Name": "Status.aspx",
-            "Title": "Program Status",
+            "Title": "Programstatus",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -906,7 +906,7 @@ _No tokens with missing translations or replacement values found._
             },
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "Alle elementer",
                     "ViewFields": [
                         "GtSortOrder",
                         "LinkTitle",
@@ -963,7 +963,7 @@ _No tokens with missing translations or replacement values found._
             },
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "Alle elementer",
                     "ViewFields": [
                         "LinkTitle",
                         "GtStakeholderGroup",
@@ -1001,7 +1001,7 @@ _No tokens with missing translations or replacement values found._
             ],
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "Alle elementer",
                     "ViewFields": [
                         "LinkTitle",
                         "GtProjectPhase",
@@ -1036,7 +1036,7 @@ _No tokens with missing translations or replacement values found._
             ],
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "Alle elementer",
                     "ViewFields": [
                         "LinkTitle",
                         "GtProjectLogType",
@@ -1073,7 +1073,7 @@ _No tokens with missing translations or replacement values found._
             ],
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "Alle elementer",
                     "ViewFields": [
                         "LinkTitle",
                         "GtDeliveryDescription",
@@ -1109,7 +1109,7 @@ _No tokens with missing translations or replacement values found._
             },
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "Alle elementer",
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
@@ -1362,7 +1362,7 @@ _No tokens with missing translations or replacement values found._
             ],
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "Alle elementer",
                     "ViewFields": [
                         "LinkTitle",
                         "GtChangeLookup",
@@ -1420,7 +1420,7 @@ _No tokens with missing translations or replacement values found._
             ],
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "Alle elementer",
                     "ViewFields": [
                         "LinkTitle",
                         "GtProcess",
@@ -1466,7 +1466,7 @@ _No tokens with missing translations or replacement values found._
             ],
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "Alle elementer",
                     "ViewFields": [
                         "LinkTitle",
                         "GtGainLookup",
@@ -1511,7 +1511,7 @@ _No tokens with missing translations or replacement values found._
             ],
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "Alle elementer",
                     "ViewFields": [
                         "GtMeasureIndicatorLookup",
                         "GtMeasureIndicatorLookup_GtDesiredValue",
@@ -1564,7 +1564,7 @@ _No tokens with missing translations or replacement values found._
             ],
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "Alle elementer",
                     "ViewFields": [
                         "ID",
                         "GtResourceUser",
@@ -1592,6 +1592,6 @@ _No tokens with missing translations or replacement values found._
 ## Template Path
 
 ```txt
-/Users/olemp/code/prosjektportalen365/Templates/Content/Portfolio_content.en-US/ProjectTemplates/ProgramTemplate.txt
+/Users/olemp/code/prosjektportalen365/Templates/Content/Portfolio_content.no-NB/ProjectTemplates/Programmal.txt
 ```
 
