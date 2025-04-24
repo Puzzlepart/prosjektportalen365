@@ -1,4 +1,4 @@
-<pnp:ListInstance Title="{resource:Lists_ConfigurationFiles_Title}" Description="" TemplateType="101" Url="{resource:Lists_ConfigurationFiles_Url}" Hidden="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" EnableAttachments="false" 
+<pnp:ListInstance Title="{resource:Lists_ConfigurationFiles_Title}" Description="{resource:Lists_ConfigurationFiles_Description}" TemplateType="101" Url="{resource:Lists_ConfigurationFiles_Url}" Hidden="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" EnableAttachments="false" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>

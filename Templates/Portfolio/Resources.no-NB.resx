@@ -952,6 +952,9 @@
     <data name="Lists_CommunicationPlan_Title" xml:space="preserve">
         <value>Kommunikasjonsplan</value>
     </data>
+    <data name="Lists_ConfigurationFiles_Description" xml:space="preserve">
+        <value>Konfigurasjonsfiler som kan brukes av Prosjektportalen.</value>
+    </data>
     <data name="Lists_ConfigurationFiles_Title" xml:space="preserve">
         <value>Konfigurasjonsfiler</value>
     </data>
@@ -1099,6 +1102,9 @@
     <data name="Lists_Documents_Title" xml:space="preserve">
         <value>Dokumenter</value>
     </data>
+    <data name="Lists_Global_Settings_Description" xml:space="preserve">
+        <value>Globale innstillinger for installasjonen av Prosjektportalen 365.</value>
+    </data>
     <data name="Lists_Global_Settings_Title" xml:space="preserve">
         <value>Globale innstillinger</value>
     </data>
@@ -1114,11 +1120,17 @@
     <data name="Lists_HelpContent_Url" xml:space="preserve">
         <value>Lists/Hjelpeinnhold</value>
     </data>
+    <data name="Lists_IdeaProcessing_Description" xml:space="preserve">
+        <value>Liste for å behandle godkjente idèer.</value>
+    </data>
     <data name="Lists_IdeaProcessing_Title" xml:space="preserve">
         <value>Idébehandling</value>
     </data>
     <data name="Lists_IdeaProcessing_Url" xml:space="preserve">
         <value>Lists/Idebehandling</value>
+    </data>
+    <data name="Lists_IdeaRegistration_Description" xml:space="preserve">
+        <value>Liste for registrering av idèer.</value>
     </data>
     <data name="Lists_IdeaRegistration_Title" xml:space="preserve">
         <value>Idéregistrering</value>
@@ -1140,6 +1152,9 @@
     </data>
     <data name="Lists_Idea_Configuration_Url" xml:space="preserve">
         <value>Lists/Idekonfigurasjon</value>
+    </data>
+    <data name="Lists_InstallationLog_Description" xml:space="preserve">
+        <value>Installasjons- og oppgraderingshistorikk.</value>
     </data>
     <data name="Lists_InstallationLog_Title" xml:space="preserve">
         <value>Installasjonslogg</value>
@@ -1221,6 +1236,9 @@
     </data>
     <data name="Lists_ListContent_Url" xml:space="preserve">
         <value>Lists/Listeinnhold</value>
+    </data>
+    <data name="Lists_Log_Description" xml:space="preserve">
+        <value>Inneholder loggoppføringer fra de ulike komponentene i Prosjektportalen 365.</value>
     </data>
     <data name="Lists_Log_Title" xml:space="preserve">
         <value>Logg</value>
@@ -1338,6 +1356,9 @@
     </data>
     <data name="Lists_ProjectContentColumns_Url" xml:space="preserve">
         <value>Lists/Prosjektinnholdskolonner</value>
+    </data>
+    <data name="Lists_ProjectData_Description" xml:space="preserve">
+        <value>Inneholder metadata tilknyttet idèer for synkronisering til prosjekter.</value>
     </data>
     <data name="Lists_ProjectData_Title" xml:space="preserve">
         <value>Prosjektdata</value>

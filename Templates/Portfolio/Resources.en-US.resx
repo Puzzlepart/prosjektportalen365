@@ -943,6 +943,9 @@
     <data name="Lists_CommunicationPlan_Title" xml:space="preserve">
         <value>Communication plan</value>
     </data>
+    <data name="Lists_ConfigurationFiles_Description" xml:space="preserve">
+        <value>Configuration files that can be used in Prosjektportalen.</value>
+    </data>
     <data name="Lists_ConfigurationFiles_Title" xml:space="preserve">
         <value>Configuration Files</value>
     </data>
@@ -1090,6 +1093,9 @@
     <data name="Lists_Documents_Title" xml:space="preserve">
         <value>Documents</value>
     </data>
+    <data name="Lists_Global_Settings_Description" xml:space="preserve">
+        <value>Global settings for the installation of Prosjektportalen.</value>
+    </data>
     <data name="Lists_Global_Settings_Title" xml:space="preserve">
         <value>Global Settings</value>
     </data>
@@ -1105,11 +1111,17 @@
     <data name="Lists_HelpContent_Url" xml:space="preserve">
         <value>Lists/HelpContent</value>
     </data>
+    <data name="Lists_IdeaProcessing_Description" xml:space="preserve">
+        <value>List for managing approved ideas.</value>
+    </data>
     <data name="Lists_IdeaProcessing_Title" xml:space="preserve">
         <value>Idea Processing</value>
     </data>
     <data name="Lists_IdeaProcessing_Url" xml:space="preserve">
         <value>Lists/IdeaProcessing</value>
+    </data>
+    <data name="Lists_IdeaRegistration_Description" xml:space="preserve">
+        <value>List for registering ideas.</value>
     </data>
     <data name="Lists_IdeaRegistration_Title" xml:space="preserve">
         <value>Idea Registration</value>
@@ -1131,6 +1143,9 @@
     </data>
     <data name="Lists_Idea_Configuration_Url" xml:space="preserve">
         <value>Lists/IdeaConfiguration</value>
+    </data>
+    <data name="Lists_InstallationLog_Description" xml:space="preserve">
+        <value>Installation and upgrade history.</value>
     </data>
     <data name="Lists_InstallationLog_Title" xml:space="preserve">
         <value>Installation Log</value>
@@ -1213,6 +1228,9 @@
     <data name="Lists_ListContent_Url" xml:space="preserve">
         <value>Lists/ListContent</value>
     </data>
+    <data name="Lists_Log_Description" xml:space="preserve">
+        <value>Contains log entries from the various components of Prosjektportalen 365.</value>
+    </data>
     <data name="Lists_Log_Title" xml:space="preserve">
         <value>Log</value>
     </data>
@@ -1249,6 +1267,9 @@
     <data name="Lists_PhaseChecklist_Description" xml:space="preserve">
         <value/>
     </data>
+    <data name="Lists_PhaseChecklist_Description" xml:space="preserve">
+        <value>Checklist for the projects.</value>
+    </data>
     <data name="Lists_PhaseChecklist_Title" xml:space="preserve">
         <value>Phase Checklist</value>
     </data>
@@ -1269,6 +1290,9 @@
     </data>
     <data name="Lists_PlannerTasks_Description" xml:space="preserve">
         <value/>
+    </data>
+    <data name="Lists_PlannerTasks_Description" xml:space="preserve">
+        <value>Planner tasks for the projects.</value>
     </data>
     <data name="Lists_PlannerTasks_Title" xml:space="preserve">
         <value>Planner Tasks</value>
@@ -1329,6 +1353,9 @@
     </data>
     <data name="Lists_ProjectContentColumns_Url" xml:space="preserve">
         <value>Lists/ProjectContentColumns</value>
+    </data>
+    <data name="Lists_ProjectData_Description" xml:space="preserve">
+        <value>Contains metadata related to ideas for synchronization to projects.</value>
     </data>
     <data name="Lists_ProjectData_Title" xml:space="preserve">
         <value>Project Data</value>

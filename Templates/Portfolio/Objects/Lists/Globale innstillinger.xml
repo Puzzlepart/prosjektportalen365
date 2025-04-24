@@ -1,4 +1,4 @@
-<pnp:ListInstance Title="{resource:Lists_Global_Settings_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_Global_Settings_Url}" EnableVersioning="true" Hidden="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false"
+<pnp:ListInstance Title="{resource:Lists_Global_Settings_Title}" Description="{resource:Lists_Global_Settings_Description}" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_Global_Settings_Url}" EnableVersioning="true" Hidden="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false"
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:Views RemoveExistingViews="true">
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_Global_Settings_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
