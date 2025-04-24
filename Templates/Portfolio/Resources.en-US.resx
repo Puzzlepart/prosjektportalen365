@@ -1642,6 +1642,18 @@
     <data name="Lists_ProjectStatus_Url" xml:space="preserve">
         <value>Lists/ProjectStatus</value>
     </data>
+    <data name="Lists_ProjectTemplates_Fields_IsDefaultTemplate_Description" xml:space="preserve">
+        <value/>
+    </data>
+    <data name="Lists_ProjectTemplates_Fields_IsDefaultTemplate_DisplayName" xml:space="preserve">
+        <value>Default Template</value>
+    </data>
+    <data name="Lists_ProjectTemplates_Fields_ListContentConfigLookup_Description" xml:space="preserve">
+        <value/>
+    </data>
+    <data name="Lists_ProjectTemplates_Fields_ListContentConfigLookup_DisplayName" xml:space="preserve">
+        <value>List Content</value>
+    </data>
     <data name="Lists_ProjectTemplates_Title" xml:space="preserve">
         <value>Project Templates</value>
     </data>

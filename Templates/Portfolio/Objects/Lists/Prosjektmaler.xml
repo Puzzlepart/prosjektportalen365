@@ -1,41 +1,38 @@
-<pnp:ListInstance Title="{resource:Lists_ProjectTemplates_Title}" TemplateType="101" Description="" Url="{resource:Lists_ProjectTemplates_Url}" Hidden="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" EnableAttachments="false" 
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
-    <pnp:Views RemoveExistingViews="true">
-        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_ProjectTemplates_Url}/Forms/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
-            <Query>
-                <OrderBy>
-                    <FieldRef Name="FileLeafRef" />
-                </OrderBy>
-            </Query>
-            <ViewFields>
-                <FieldRef Name="DocIcon" />
-                <FieldRef Name="LinkFilename" />
-                <FieldRef Name="Title" />
-                <FieldRef Name="GtDescription" />
-                <FieldRef Name="GtIsProgram" />
-                <FieldRef Name="GtIsParentProject" />
-                <FieldRef Name="Modified" />
-            </ViewFields>
-            <RowLimit Paged="TRUE">30</RowLimit>
-            <Aggregations Value="Off" />
-            <JSLink>clienttemplates.js</JSLink>
-        </View>
-    </pnp:Views>
-    <pnp:Fields>
-        <Field Type="LookupMulti" Mult="TRUE" DisplayName="Listeinnhold" List="{listid:{resource:Lists_ListContent_Title}}" ShowField="Title" RelationshipDeleteBehavior="None" ID="{dd01587d-5fc2-46c1-8681-8b81b2514e92}" StaticName="ListContentConfigLookup" Name="ListContentConfigLookup" />
-        <Field Type="Boolean" DisplayName="Standardmal" ID="{7bb7252a-a0eb-4e6b-b181-be89075e1d20}" StaticName="IsDefaultTemplate" Name="IsDefaultTemplate" />
-        <Field Type="LookupMulti" Hidden="TRUE" Mult="TRUE" DisplayName="Listeinnhold" List="{listid:{resource:Lists_ListContent_Title}}" ShowField="Title" RelationshipDeleteBehavior="None" ID="{dd01587d-5fc2-46c1-8681-8b81b2514e92}" StaticName="ListContentConfigLookup" Name="ListContentConfigLookup" />
-        <Field Type="Boolean" Hidden="TRUE" DisplayName="Standardmal" ID="{7bb7252a-a0eb-4e6b-b181-be89075e1d20}" StaticName="IsDefaultTemplate" Name="IsDefaultTemplate">
-            <Default>0</Default>
-        </Field>
-        <Field Description="Ikon fra https://dev.office.com/fabric#/styles/icons" Hidden="TRUE" DisplayName="Ikon" EnforceUniqueValues="FALSE" Format="Dropdown" Indexed="TRUE" MaxLength="15" Name="IconName" Title="IconName" Type="Text" ID="{a655dfc5-5272-43ed-a57e-66e2fa07400a}" StaticName="IconName">
-            <Default>Page</Default>
-        </Field>
-    </pnp:Fields>
-    <pnp:FieldRefs>
-        <pnp:FieldRef ID="c3beecea-c0e5-4d18-9b45-3c7d7949bee4" Name="GtDescription" DisplayName="{resource:SiteFields_GtDescription_DisplayName}" />
-        <pnp:FieldRef ID="77baede1-38df-454c-a53a-dd7904ba0046" Name="GtIsProgram" DisplayName="{resource:SiteFields_GtIsProgram_DisplayName}" />
-        <pnp:FieldRef ID="8f1f38cb-7eb2-4122-a866-4c9e99b2ebed" Name="GtIsParentProject" DisplayName="{resource:SiteFields_GtIsParentProject_DisplayName}" />
-    </pnp:FieldRefs>
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
+<pnp:ListInstance Title="{resource:Lists_ProjectTemplates_Title}" TemplateType="101" Description="" Url="{resource:Lists_ProjectTemplates_Url}" Hidden="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" EnableAttachments="false" xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+  <pnp:Views RemoveExistingViews="true">
+    <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_ProjectTemplates_Url}/Forms/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
+      <Query>
+        <OrderBy>
+          <FieldRef Name="FileLeafRef" />
+        </OrderBy>
+      </Query>
+      <ViewFields>
+        <FieldRef Name="DocIcon" />
+        <FieldRef Name="LinkFilename" />
+        <FieldRef Name="Title" />
+        <FieldRef Name="GtDescription" />
+        <FieldRef Name="GtIsProgram" />
+        <FieldRef Name="GtIsParentProject" />
+        <FieldRef Name="Modified" />
+      </ViewFields>
+      <RowLimit Paged="TRUE">30</RowLimit>
+      <Aggregations Value="Off" />
+      <JSLink>clienttemplates.js</JSLink>
+    </View>
+  </pnp:Views>
+  <pnp:Fields>
+    <Field Type="LookupMulti" Hidden="TRUE" Mult="TRUE" DisplayName="{resource:Lists_ProjectTemplates_Fields_ListContentConfigLookup_DisplayName}" List="{listid:{resource:Lists_ListContent_Title}}" ShowField="Title" RelationshipDeleteBehavior="None" ID="{dd01587d-5fc2-46c1-8681-8b81b2514e92}" StaticName="ListContentConfigLookup" Name="ListContentConfigLookup" />
+    <Field Type="Boolean" Hidden="TRUE" DisplayName="{resource:Lists_ProjectTemplates_Fields_IsDefaultTemplate_DisplayName}" ID="{7bb7252a-a0eb-4e6b-b181-be89075e1d20}" StaticName="IsDefaultTemplate" Name="IsDefaultTemplate">
+      <Default>0</Default>
+    </Field>
+    <Field Description="{resource:Lists_ProjectTemplates_Fields_IconName_Description}" Hidden="TRUE" DisplayName="{resource:Lists_ProjectTemplates_Fields_IconName_DisplayName}" EnforceUniqueValues="FALSE" Format="Dropdown" Indexed="TRUE" MaxLength="15" Name="IconName" Title="IconName" Type="Text" ID="{a655dfc5-5272-43ed-a57e-66e2fa07400a}" StaticName="IconName">
+      <Default>Page</Default>
+    </Field>
+  </pnp:Fields>
+  <pnp:FieldRefs>
+    <pnp:FieldRef ID="c3beecea-c0e5-4d18-9b45-3c7d7949bee4" Name="GtDescription" DisplayName="{resource:SiteFields_GtDescription_DisplayName}" />
+    <pnp:FieldRef ID="77baede1-38df-454c-a53a-dd7904ba0046" Name="GtIsProgram" DisplayName="{resource:SiteFields_GtIsProgram_DisplayName}" />
+    <pnp:FieldRef ID="8f1f38cb-7eb2-4122-a866-4c9e99b2ebed" Name="GtIsParentProject" DisplayName="{resource:SiteFields_GtIsParentProject_DisplayName}" />
+  </pnp:FieldRefs>
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>

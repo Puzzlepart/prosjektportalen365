@@ -1657,6 +1657,24 @@
     <data name="Lists_ProjectStatus_Url" xml:space="preserve">
         <value>Lists/Prosjektstatus</value>
     </data>
+    <data name="Lists_ProjectTemplates_Fields_IconName_Description" xml:space="preserve">
+        <value>Ikon fra https://dev.office.com/fabric#/styles/icons</value>
+    </data>
+    <data name="Lists_ProjectTemplates_Fields_IconName_DisplayName" xml:space="preserve">
+        <value>Ikon</value>
+    </data>
+    <data name="Lists_ProjectTemplates_Fields_IsDefaultTemplate_Description" xml:space="preserve">
+        <value/>
+    </data>
+    <data name="Lists_ProjectTemplates_Fields_IsDefaultTemplate_DisplayName" xml:space="preserve">
+        <value>Standardmal</value>
+    </data>
+    <data name="Lists_ProjectTemplates_Fields_ListContentConfigLookup_Description" xml:space="preserve">
+        <value/>
+    </data>
+    <data name="Lists_ProjectTemplates_Fields_ListContentConfigLookup_DisplayName" xml:space="preserve">
+        <value>Listeinnhold</value>
+    </data>
     <data name="Lists_ProjectTemplates_Title" xml:space="preserve">
         <value>Prosjektmaler</value>
     </data>
