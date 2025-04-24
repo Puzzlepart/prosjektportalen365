@@ -22,46 +22,46 @@
   </pnp:Views>
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
   <pnp:Fields>
-    <Field Type="Text" DisplayName="Ikon" MaxLength="255" ID="{d953c1a3-9f7a-4cc3-8147-b6ce924a7901}" StaticName="IconName" Name="IconName">
+    <Field Type="Text" DisplayName="{resource:Lists_TemplateOptions_Fields_IconName_DisplayName}" MaxLength="255" ID="{d953c1a3-9f7a-4cc3-8147-b6ce924a7901}" StaticName="IconName" Name="IconName">
       <Default>Page</Default>
     </Field>
-    <Field Type="Lookup" DisplayName="Mal" Required="TRUE" List="{listid:{resource:Lists_ProjectTemplates_Title}}" ShowField="Title" UnlimitedLengthInDocumentLibrary="FALSE" RelationshipDeleteBehavior="None" ID="{8e762956-13a9-4cbd-965b-bbfed0d0d7a0}" StaticName="GtProjectTemplate" Name="GtProjectTemplate" />
-    <Field Type="LookupMulti" DisplayName="Utvidelser" List="{listid:{resource:Lists_ProjectExtensions_Title}}" ShowField="Title" Mult="TRUE" Sortable="FALSE" UnlimitedLengthInDocumentLibrary="FALSE" RelationshipDeleteBehavior="None" ID="{5627c98b-c725-44d0-9415-3125b8f61302}" StaticName="GtProjectExtensions" Name="GtProjectExtensions" />
-    <Field Type="Boolean" DisplayName="Lås valgte utvidelser?" Description="Dette gjør at valgte utvidelser for denne malen blir satt som obligatorisk." ID="{c5091d4a-9b05-4cd4-96e7-9076d4d66379}" StaticName="IsDefaultExtensionsLocked" Name="IsDefaultExtensionsLocked">
+    <Field Type="Lookup" DisplayName="{resource:Lists_TemplateOptions_Fields_GtProjectTemplate_DisplayName}" Required="TRUE" List="{listid:{resource:Lists_ProjectTemplates_Title}}" ShowField="Title" UnlimitedLengthInDocumentLibrary="FALSE" RelationshipDeleteBehavior="None" ID="{8e762956-13a9-4cbd-965b-bbfed0d0d7a0}" StaticName="GtProjectTemplate" Name="GtProjectTemplate" />
+    <Field Type="LookupMulti" DisplayName="{resource:Lists_TemplateOptions_Fields_GtProjectExtensions_DisplayName}" List="{listid:{resource:Lists_ProjectExtensions_Title}}" ShowField="Title" Mult="TRUE" Sortable="FALSE" UnlimitedLengthInDocumentLibrary="FALSE" RelationshipDeleteBehavior="None" ID="{5627c98b-c725-44d0-9415-3125b8f61302}" StaticName="GtProjectExtensions" Name="GtProjectExtensions" />
+    <Field Type="Boolean" DisplayName="{resource:Lists_TemplateOptions_Fields_IsDefaultExtensionsLocked_DisplayName}" Description="{resource:Lists_TemplateOptions_Fields_IsDefaultExtensionsLocked_Description}" ID="{c5091d4a-9b05-4cd4-96e7-9076d4d66379}" StaticName="IsDefaultExtensionsLocked" Name="IsDefaultExtensionsLocked">
       <Default>0</Default>
     </Field>
-    <Field Type="LookupMulti" DisplayName="Listeinnhold" List="{listid:{resource:Lists_ListContent_Title}}" ShowField="Title" UnlimitedLengthInDocumentLibrary="FALSE" RelationshipDeleteBehavior="None" ID="{a5554044-ab27-43b8-b11e-0fbfd641790c}" StaticName="ListContentConfigLookup" Name="ListContentConfigLookup" Mult="TRUE" Sortable="FALSE" />
-    <Field Type="Boolean" DisplayName="Lås valgte listeinnhold?" Description="Dette gjør at valgt listeinnhold for denne malen blir satt som obligatorisk." ID="{6e551826-2069-4ac9-a199-01f573fbccff}" StaticName="IsDefaultListContentLocked" Name="IsDefaultListContentLocked">
+    <Field Type="LookupMulti" DisplayName="{resource:Lists_TemplateOptions_Fields_ListContentConfigLookup_DisplayName}" List="{listid:{resource:Lists_ListContent_Title}}" ShowField="Title" UnlimitedLengthInDocumentLibrary="FALSE" RelationshipDeleteBehavior="None" ID="{a5554044-ab27-43b8-b11e-0fbfd641790c}" StaticName="ListContentConfigLookup" Name="ListContentConfigLookup" Mult="TRUE" Sortable="FALSE" />
+    <Field Type="Boolean" DisplayName="{resource:Lists_TemplateOptions_Fields_IsDefaultListContentLocked_DisplayName}" Description="{resource:Lists_TemplateOptions_Fields_IsDefaultListContentLocked_Description}" ID="{6e551826-2069-4ac9-a199-01f573fbccff}" StaticName="IsDefaultListContentLocked" Name="IsDefaultListContentLocked">
       <Default>0</Default>
     </Field>
-    <Field Type="Text" DisplayName="Prosjektfase Termsett ID" MaxLength="255" ID="{6287b5c6-85da-420d-815b-47de8122ec14}" StaticName="GtProjectPhaseTermId" Name="GtProjectPhaseTermId">
+    <Field Type="Text" DisplayName="{resource:Lists_TemplateOptions_Fields_GtProjectPhaseTermId_DisplayName}" MaxLength="255" ID="{6287b5c6-85da-420d-815b-47de8122ec14}" StaticName="GtProjectPhaseTermId" Name="GtProjectPhaseTermId">
       <Default>abcfc9d9-a263-4abb-8234-be973c46258a</Default>
     </Field>
-    <Field Type="Text" DisplayName="Prosjekt innholdstype" MaxLength="255" ID="{056c0b81-1a7c-4c9c-a0d1-d2cbe0fc0f02}" StaticName="GtProjectContentType" Name="GtProjectContentType">
+    <Field Type="Text" DisplayName="{resource:Lists_TemplateOptions_Fields_GtProjectContentType_DisplayName}" MaxLength="255" ID="{056c0b81-1a7c-4c9c-a0d1-d2cbe0fc0f02}" StaticName="GtProjectContentType" Name="GtProjectContentType">
       <Default>0x0100805E9E4FEAAB4F0EABAB2600D30DB70C</Default>
     </Field>
-    <Field Type="Text" DisplayName="Prosjektstatus innholdstype" MaxLength="255" ID="{eff52d5b-052b-4ba2-8fdc-ca3ca5c49cb1}" StaticName="GtProjectStatusContentType" Name="GtProjectStatusContentType">
+    <Field Type="Text" DisplayName="{resource:Lists_TemplateOptions_Fields_GtProjectStatusContentType_DisplayName}" MaxLength="255" ID="{eff52d5b-052b-4ba2-8fdc-ca3ca5c49cb1}" StaticName="GtProjectStatusContentType" Name="GtProjectStatusContentType">
       <Default>0x010022252E35737A413FB56A1BA53862F6D5</Default>
     </Field>
-    <Field Type="Boolean" DisplayName="Skjult" ID="{09735712-3dcd-4158-b661-9dce9f80e4f0}" StaticName="IsHiddenTemplate" Name="IsHiddenTemplate">
+    <Field Type="Boolean" DisplayName="{resource:Lists_TemplateOptions_Fields_IsHiddenTemplate_DisplayName}" ID="{09735712-3dcd-4158-b661-9dce9f80e4f0}" StaticName="IsHiddenTemplate" Name="IsHiddenTemplate">
       <Default>0</Default>
     </Field>
-    <Field Type="Text" DisplayName="Prosjektkolonner" MaxLength="255" ID="{69742a29-9bba-413e-b2cc-989d4430170b}" StaticName="GtProjectColumns" Name="GtProjectColumns">
+    <Field Type="Text" DisplayName="{resource:Lists_TemplateOptions_Fields_GtProjectColumns_DisplayName}" MaxLength="255" ID="{69742a29-9bba-413e-b2cc-989d4430170b}" StaticName="GtProjectColumns" Name="GtProjectColumns">
       <Default>{resource:SiteFields_Project_Group}</Default>
     </Field>
-    <Field Type="Text" DisplayName="Kundespesifikke kolonner" MaxLength="255" ID="{4efd9b9f-62ba-42e7-9dec-a37ad8b125a7}" StaticName="GtProjectCustomColumns" Name="GtProjectCustomColumns">
+    <Field Type="Text" DisplayName="{resource:Lists_TemplateOptions_Fields_GtProjectCustomColumns_DisplayName}" MaxLength="255" ID="{4efd9b9f-62ba-42e7-9dec-a37ad8b125a7}" StaticName="GtProjectCustomColumns" Name="GtProjectCustomColumns">
       <Default>{resource:SiteFields_CustomFields_Group}</Default>
     </Field>
-    <Field Type="Boolean" DisplayName="Standard mal?" ID="{dd341142-d60d-41ad-a206-57f52aa1e60a}" StaticName="IsDefaultTemplate" Name="IsDefaultTemplate">
+    <Field Type="Boolean" DisplayName="{resource:Lists_TemplateOptions_Fields_IsDefaultTemplate_DisplayName}" ID="{dd341142-d60d-41ad-a206-57f52aa1e60a}" StaticName="IsDefaultTemplate" Name="IsDefaultTemplate">
       <Default>0</Default>
     </Field>
-    <Field Type="Boolean" DisplayName="Konfigurer automatisk" Description="Konfigurer prosjektet automatisk med denne malen om en eier besøker SharePoint-området. Malen må også være låst." ID="{249ce763-d28e-4034-8dbc-64318ebc3b42}" StaticName="IsAutoConfigurable" Name="IsAutoConfigurable">
+    <Field Type="Boolean" DisplayName="{resource:Lists_TemplateOptions_Fields_IsAutoConfigurable_DisplayName}" Description="{resource:Lists_TemplateOptions_Fields_IsAutoConfigurable_Description}" ID="{249ce763-d28e-4034-8dbc-64318ebc3b42}" StaticName="IsAutoConfigurable" Name="IsAutoConfigurable">
       <Default>0</Default>
     </Field>
     <Field Type="Text" DisplayName="{resource:Lists_TemplateLibrary_Title}" Description="Velg malbibliotek som skal brukes som kilde for maler som kan hentes inn til dokumentbibliotekene i prosjektet." MaxLength="255" ID="{02e86b34-2916-4010-afac-cf33eff03d54}" StaticName="GtDocumentTemplateLibrary" Name="GtDocumentTemplateLibrary">
       <Default>{resource:Lists_TemplateLibrary_Title}</Default>
     </Field>
-    <Field Type="Text" DisplayName="Feltkonfigurasjon" ID="{b97638c9-7116-4dbc-b0cc-850291e89008}" StaticName="FieldConfigurationName" Name="FieldConfigurationName" />
+    <Field Type="Text" DisplayName="{resource:Lists_TemplateOptions_Fields_FieldConfigurationName_DisplayName}" ID="{b97638c9-7116-4dbc-b0cc-850291e89008}" StaticName="FieldConfigurationName" Name="FieldConfigurationName" />
   </pnp:Fields>
   <pnp:FieldRefs>
     <pnp:FieldRef ID="c3beecea-c0e5-4d18-9b45-3c7d7949bee4" Name="GtDescription" DisplayName="{resource:Lists_GtDescription_DisplayName}" />
