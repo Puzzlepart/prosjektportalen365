@@ -81,7 +81,8 @@
         "path": "./src/loc",
         "interface": "ISharedLibraryStrings",
         "dts": "mystrings.d.ts",
-        "output": "./localization-report.md"
+        "output": "./localization-report.md",
+        "summary": true
       }
     }
   },

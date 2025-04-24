@@ -23,7 +23,6 @@ declare interface IProjectWebPartsStrings {
   ManualConfigurationPathLabel: string
   UseDynamicConfigurationLabel: string
   PublishingReportLabel: string
-  PublishStatusReportSectionDataWarning: string
   AdminPageLinkLabel: string
   AdvancedGroupName: string
   BarLabel: string
