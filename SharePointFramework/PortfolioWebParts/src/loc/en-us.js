@@ -105,14 +105,15 @@
     },
     Placeholder: {
       TextField: 'Enter text',
-      SiteName: 'Project name',
-      SiteDescription: 'Project description',
-      Icon: 'Icon name',
-      ChoiceField: 'Choice field',
-      MultiChoiceField: 'Multi choice field',
-      GuestField: 'Guest field',
-      UserField: 'User field',
-      BusinessJustificationField: 'Business justification field'
+      SiteName: 'Enter a name for the project',
+      SiteDescription: 'Enter a description for the project',
+      Icon: 'Enter an icon name',
+      ChoiceField: 'Select an option',
+      MultiChoiceField: 'Select one or more options',
+      GuestField: 'Select guests',
+      UserField: 'Select users',
+      BusinessJustificationField: 'Specify the business justification for the project',
+      DatePicker: 'Pick a date'
     },
     ColumnCategoryDescription: 'The category of the column. This is used to group columns in the web part.',
     ColumnCategoryLabel: 'Column category',
