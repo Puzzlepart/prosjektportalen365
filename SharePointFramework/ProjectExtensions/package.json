@@ -108,7 +108,8 @@
         "path": "./src/loc",
         "interface": "IProjectExtensionsStrings",
         "dts": "mystrings.d.ts",
-        "output": "./localization-report.json"
+        "output": "./localization-report.md",
+        "summary": true
       }
     }
   }
