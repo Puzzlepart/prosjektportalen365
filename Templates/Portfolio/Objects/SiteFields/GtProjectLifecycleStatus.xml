@@ -1,8 +1,8 @@
 <Field ID="{18d92e18-10b6-42ea-815d-b12d7827564e}" Name="GtProjectLifecycleStatus" DisplayName="{resource:SiteFields_GtProjectLifecycleStatus_DisplayName}" Type="Choice" Format="Dropdown" Group="{resource:SiteFields_Portfolio_Group}" Description="{resource:SiteFields_GtProjectLifecycleStatus_Description}" StaticName="GtProjectLifecycleStatus">
-    <Default>Aktivt</Default>
+    <Default>{resource:Choice_GtProjectLifecycleStatus_Active}</Default>
     <CHOICES>
-        <CHOICE>Aktivt</CHOICE>
-        <CHOICE>Avventer</CHOICE>
-        <CHOICE>Avsluttet</CHOICE>
+        <CHOICE>{resource:Choice_GtProjectLifecycleStatus_Active}</CHOICE>
+        <CHOICE>{resource:Choice_GtProjectLifecycleStatus_Awaiting}</CHOICE>
+        <CHOICE>{resource:Choice_GtProjectLifecycleStatus_Closed}</CHOICE>
     </CHOICES>
 </Field>

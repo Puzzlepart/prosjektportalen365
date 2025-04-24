@@ -163,6 +163,15 @@
     <data name="Choice_GtPermissionLevel_Read" xml:space="preserve">
         <value>Read</value>
     </data>
+    <data name="Choice_GtProjectLifecycleStatus_Active" xml:space="preserve">
+        <value>Active</value>
+    </data>
+    <data name="Choice_GtProjectLifecycleStatus_Awaiting" xml:space="preserve">
+        <value>Awaiting</value>
+    </data>
+    <data name="Choice_GtProjectLifecycleStatus_Closed" xml:space="preserve">
+        <value>Closed</value>
+    </data>
     <data name="Choice_GtProjectLogActors_OtherStakeholders" xml:space="preserve">
         <value>Other Stakeholders</value>
     </data>
@@ -1102,11 +1111,20 @@
     <data name="Lists_Global_Settings_Url" xml:space="preserve">
         <value>Lists/GlobalSettings</value>
     </data>
-    <data name="Lists_HelpContent_Title" xml:space="preserve">
-        <value>Help Content</value>
-    </data>
     <data name="Lists_HelpContent_Description" xml:space="preserve">
         <value>Configuration and Setup of Help Content</value>
+    </data>
+    <data name="Lists_HelpContent_Level_ParentProgram" xml:space="preserve">
+        <value>Parent/Program</value>
+    </data>
+    <data name="Lists_HelpContent_Level_Portfolio" xml:space="preserve">
+        <value>Portfolio</value>
+    </data>
+    <data name="Lists_HelpContent_Level_Project" xml:space="preserve">
+        <value>Project</value>
+    </data>
+    <data name="Lists_HelpContent_Title" xml:space="preserve">
+        <value>Help Content</value>
     </data>
     <data name="Lists_HelpContent_Url" xml:space="preserve">
         <value>Lists/HelpContent</value>
@@ -3618,14 +3636,5 @@
     </data>
     <data name="WebParts_UsefulLinks_Title" xml:space="preserve">
         <value>Useful Links</value>
-    </data>
-    <data name="Lists_HelpContent_Level_ParentProgram" xml:space="preserve">
-        <value>Parent/Program</value>
-    </data>
-    <data name="Lists_HelpContent_Level_Portfolio" xml:space="preserve">
-        <value>Portfolio</value>
-    </data>
-    <data name="Lists_HelpContent_Level_Project" xml:space="preserve">
-        <value>Project</value>
     </data>
 </root>

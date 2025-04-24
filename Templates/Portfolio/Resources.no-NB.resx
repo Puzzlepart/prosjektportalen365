@@ -163,6 +163,15 @@
     <data name="Choice_GtPermissionLevel_Read" xml:space="preserve">
         <value>Lese</value>
     </data>
+    <data name="Choice_GtProjectLifecycleStatus_Active" xml:space="preserve">
+        <value>Aktivt</value>
+    </data>
+    <data name="Choice_GtProjectLifecycleStatus_Awaiting" xml:space="preserve">
+        <value>Avventer</value>
+    </data>
+    <data name="Choice_GtProjectLifecycleStatus_Closed" xml:space="preserve">
+        <value>Avsluttet</value>
+    </data>
     <data name="Choice_GtProjectLogActors_OtherStakeholders" xml:space="preserve">
         <value>Andre interessenter</value>
     </data>
@@ -1113,6 +1122,15 @@
     </data>
     <data name="Lists_HelpContent_Description" xml:space="preserve">
         <value>Konfigurasjon og oppsett av innholdet i hjelpeinnhold.</value>
+    </data>
+    <data name="Lists_HelpContent_Level_ParentProgram" xml:space="preserve">
+        <value>Overordnet/Program</value>
+    </data>
+    <data name="Lists_HelpContent_Level_Portfolio" xml:space="preserve">
+        <value>Portefølje</value>
+    </data>
+    <data name="Lists_HelpContent_Level_Project" xml:space="preserve">
+        <value>Prosjekt</value>
     </data>
     <data name="Lists_HelpContent_Title" xml:space="preserve">
         <value>Hjelpeinnhold</value>
@@ -3711,14 +3729,5 @@
     </data>
     <data name="WebParts_UsefulLinks_Title" xml:space="preserve">
         <value>Nyttige lenker</value>
-    </data>
-    <data name="Lists_HelpContent_Level_ParentProgram" xml:space="preserve">
-        <value>Overordnet/Program</value>
-    </data>
-    <data name="Lists_HelpContent_Level_Portfolio" xml:space="preserve">
-        <value>Portefølje</value>
-    </data>
-    <data name="Lists_HelpContent_Level_Project" xml:space="preserve">
-        <value>Prosjekt</value>
     </data>
 </root>
