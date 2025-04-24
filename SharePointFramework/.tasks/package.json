@@ -17,6 +17,6 @@
     "devDependencies": {
       "@types/lodash": "4.14.195",
       "@types/colors": "1.2.1",
-      "pzl-spfx-tasks": "0.5.14-4"
+      "pzl-spfx-tasks": "0.5.15-1"
     }
 }

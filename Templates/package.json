@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@types/lodash": "~4.14.195",
-    "pzl-spfx-tasks": "0.5.14-4",
+    "pzl-spfx-tasks": "0.5.15-1",
     "replace": "1.2.2",
     "xml2js": "^0.6.2"
   },

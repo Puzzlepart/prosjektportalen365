@@ -79,7 +79,6 @@ dependencies:
   file-saver: 2.0.5
   find: 0.3.0
   get-value: 3.0.1
-  glob: 10.2.6
   gulp: 4.0.2
   interactjs: 1.6.2
   jsom-ctx: 1.2.0
@@ -89,7 +88,7 @@ dependencies:
   object-assign: 4.1.1
   prettier: 2.7.1
   pzl-spfx-components: 0.0.11
-  pzl-spfx-tasks: 0.5.14-4
+  pzl-spfx-tasks: 0.5.15-0
   react: 17.0.1
   react-autocomplete: 1.8.1_react-dom@17.0.1+react@17.0.1
   react-beautiful-dnd: 13.1.1_react-dom@17.0.1+react@17.0.1
@@ -20946,7 +20945,7 @@ packages:
   /path-scurry/1.11.1:
     dependencies:
       lru-cache: 10.4.3
-      minipass: 6.0.2
+      minipass: 7.1.2
     dev: false
     engines:
       node: '>=16 || 14 >=14.18'
@@ -21836,7 +21835,7 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha512-hPa5JuhbVEowmPQaTbvw7clC/SAYxosheQSYvwF6VWlhDx5Pvj1pM1oRcroFpi+QRrp3x0IAdjboJ4fo25O75w==
-  /pzl-spfx-tasks/0.5.14-4:
+  /pzl-spfx-tasks/0.5.15-0:
     dependencies:
       colors: 1.4.0
       concurrently: 6.5.1
@@ -21851,7 +21850,23 @@ packages:
       yargs: 17.7.2
     dev: false
     resolution:
-      integrity: sha512-kQsX9+bJJSoCjkz+gXw/y5pvMnNfR3oTpotimK3OY0AYsBEyzdoq2s45nZ9vP4dLVNE8pYcT9rFmONuB65gywQ==
+      integrity: sha512-19KZ7Ba9DcIUJnt3URirMIa+3OmSkMNGYGjJNaK3UAPiMa7W8w/N3fZSRQ7qL/KDL4rvg0RYTQkd51DhnAS/tw==
+  /pzl-spfx-tasks/0.5.15-1:
+    dependencies:
+      colors: 1.4.0
+      concurrently: 6.5.1
+      dotenv: 16.1.3
+      glob: 10.2.6
+      inquirer: 8.2.6
+      livereload: 0.9.3
+      lodash: 4.17.21
+      quicktype-core: 23.0.105
+      ts-morph: 25.0.1
+      uuid: 9.0.1
+      yargs: 17.7.2
+    dev: false
+    resolution:
+      integrity: sha512-DSPJ7ZWWiGmQL/vni/WGO2TCVz5/HX+vBVzssjyARdcGe8FpKnmbsisYiSHgwYQDoGrrzOJkOTqJtlyiZeKHzg==
   /qs/6.10.3:
     dependencies:
       side-channel: 1.1.0
@@ -23163,7 +23178,7 @@ packages:
       integrity: sha512-PdhdWy89SiZogBLaw42zdeqtRJ//zFd2PgQavcICDUgJT5oW10QCRKbJ6bg4r0/UY2M6BWd5tkxuGFRvCkgfHQ==
   /rxjs/6.6.7:
     dependencies:
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     engines:
       npm: '>=2.0.0'
@@ -23171,7 +23186,7 @@ packages:
       integrity: sha512-hTdwr+7yYNIT5n4AMYp85KA6yw2Va0FLa3Rguvbpa4W3I5xynaBZo41cM3XM+4Q6fRMj3sBYIR1VAmZMXYJvRQ==
   /rxjs/7.8.2:
     dependencies:
-      tslib: 2.6.0
+      tslib: 2.8.1
     dev: false
     resolution:
       integrity: sha512-dhKf903U/PQZY6boNNtAGdWbG85WAbjT/1xYoZIC7FAY0yWapOBQVsVrDl58W86//e1VpMNBtRV4MaXfdMySFA==
@@ -26734,7 +26749,7 @@ packages:
       gulp: 4.0.2
       livereload: 0.9.3
       prettier: 2.7.1
-      pzl-spfx-tasks: 0.5.14-4
+      pzl-spfx-tasks: 0.5.15-1
       react: 17.0.1
       react-dom: 17.0.1_react@17.0.1
       react-gauge-component: 1.2.64_react-dom@17.0.1+react@17.0.1
@@ -26748,7 +26763,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-portfolioextensions'
     resolution:
-      integrity: sha512-Njc+3Wa8Z910JWEDZGycWokR0l3fJAFkqsLuYeQjyH6wJASSb8ecJkCi886yUY4qja0NcG2SgagUiPur03sqDw==
+      integrity: sha512-bPWONv+DjiWqGx7XxbzvLdPyXp99ZnNVRE8GyrKB647JkoRJu2nI2xpTo/qzqR5zPu6eiAQttcdbu38u0lbYGQ==
       tarball: file:projects/pp365-portfolioextensions.tgz
     version: 0.0.0
   file:projects/pp365-portfoliowebparts.tgz_@pnp+odata@2.15.0:
@@ -26817,7 +26832,7 @@ packages:
       object-assign: 4.1.1
       prettier: 2.7.1
       pzl-react-reusable-components: 0.3.4_5bb3879ba087c0ef402ac2f0f80f9922
-      pzl-spfx-tasks: 0.5.14-4
+      pzl-spfx-tasks: 0.5.15-1
       react: 17.0.1
       react-beautiful-dnd: 13.1.1_react-dom@17.0.1+react@17.0.1
       react-dom: 17.0.1_react@17.0.1
@@ -26840,7 +26855,7 @@ packages:
     peerDependencies:
       '@pnp/odata': '*'
     resolution:
-      integrity: sha512-VlDKRbzt35ms/t8Z5bi5tDJw2uF0IHhiB4s6Ba86bwtQgVR9KAbcNL3R9i/AfAsy+lxsBOT1TTvV0EQKWZfv2g==
+      integrity: sha512-3GA8WFiPZY8kPxvheRip9ZetBgyK7HwaSO8MJJVQrfLl/Vj5KotquxOtJbRByv9mLT3TCRy8g4ljsyFKHk3rMQ==
       tarball: file:projects/pp365-portfoliowebparts.tgz
     version: 0.0.0
   file:projects/pp365-programwebparts.tgz_@pnp+odata@2.15.0:
@@ -26902,7 +26917,7 @@ packages:
       object-assign: 4.1.1
       prettier: 2.7.1
       pzl-react-reusable-components: 0.0.14_5bb3879ba087c0ef402ac2f0f80f9922
-      pzl-spfx-tasks: 0.5.14-4
+      pzl-spfx-tasks: 0.5.15-1
       react: 17.0.1
       react-dom: 17.0.1_react@17.0.1
       react-gauge-component: 1.2.64_react-dom@17.0.1+react@17.0.1
@@ -26919,7 +26934,7 @@ packages:
     peerDependencies:
       '@pnp/odata': '*'
     resolution:
-      integrity: sha512-YyxRtBnstFmyu1yBV/qwTHchf6Sa1MPtSuaHjy/BsZy98Dj5jPT8PBVVGmyLXYxw3AKE3sG/B05BCj/Y/r2taw==
+      integrity: sha512-E83/spqFMW208eMaI0DFiJyMFY2o7Qq+alIF1zY8lCBIWBT0Wob+CB7Kys79qqIuku93O1Bak7gTHqBolIAy9Q==
       tarball: file:projects/pp365-programwebparts.tgz
     version: 0.0.0
   file:projects/pp365-projectextensions.tgz:
@@ -26973,7 +26988,7 @@ packages:
       lodash: 4.17.21
       msgraph-helper: 0.8.3_9c907a7ccd27a2e2d0ee9de5366482d1
       prettier: 2.7.1
-      pzl-spfx-tasks: 0.5.14-4
+      pzl-spfx-tasks: 0.5.15-1
       react: 17.0.1
       react-autocomplete: 1.8.1_react-dom@17.0.1+react@17.0.1
       react-dom: 17.0.1_react@17.0.1
@@ -26992,7 +27007,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectextensions'
     resolution:
-      integrity: sha512-XfxbOlAKwQ0Roy3dUDbFxOiERJCvS0BQPiHaogrZiXC95dxgQNE+aeewsfby377IGud193cgmvI9KOmh4pnlIg==
+      integrity: sha512-1Kmdp5N7tqhQrskQfHfqsp9DjwGxGb6mqBDkyQRkuiQGhTrMAVLApBDnkEb9v4Mjctsq8RkbF2cSsbopBeQICA==
       tarball: file:projects/pp365-projectextensions.tgz
     version: 0.0.0
   file:projects/pp365-projectwebparts.tgz:
@@ -27059,7 +27074,7 @@ packages:
       msgraph-helper: 0.8.3_9c907a7ccd27a2e2d0ee9de5366482d1
       prettier: 2.7.1
       pzl-spfx-components: 0.0.11
-      pzl-spfx-tasks: 0.5.14-4
+      pzl-spfx-tasks: 0.5.15-1
       react: 17.0.1
       react-dom: 17.0.1_react@17.0.1
       react-error-boundary: 4.0.13_react@17.0.1
@@ -27080,7 +27095,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectwebparts'
     resolution:
-      integrity: sha512-dV45WYRpCRwUEXlmFWwO3Rcyw6xp0s+G7vS1hgWLf/hSxvgSwOqhx3fG/64IxC74QcxKN41lm4zX0uA/sulv4w==
+      integrity: sha512-4Nm3gSbagBOS1h0CZLuQ9s8XHPIM2zcT5EmgjqxzNDLpMXwZEDsc2Zp0fDK2BrgyYvLgrTa+ec7Pqe/rHzkTfQ==
       tarball: file:projects/pp365-projectwebparts.tgz
     version: 0.0.0
   file:projects/pp365-shared-library.tgz_interactjs@1.6.2:
@@ -27129,7 +27144,7 @@ packages:
       lodash: 4.17.21
       moment: 2.29.4
       prettier: 2.7.1
-      pzl-spfx-tasks: 0.5.14-4
+      pzl-spfx-tasks: 0.5.15-1
       react: 17.0.1
       react-calendar-timeline: 0.28.0_586826e183845169eac7b28ba5d10805
       react-dom: 17.0.1_react@17.0.1
@@ -27151,7 +27166,7 @@ packages:
     peerDependencies:
       interactjs: '*'
     resolution:
-      integrity: sha512-bifW/qOWgkWQM6lgubQ0Z99Mm0OHTh8WAZ+/G3jYqapGLa65IqZitjdAEK0C4UZOd1TjQ3z3RRz1E2KMtmqVpA==
+      integrity: sha512-xtwddEU6ZLRv7SQG91qVtvUdnV00PnEnPq1/v+sP8mFw0pnaovGuiGY82i+6KFCsVp/SoETSFxzHIt461s7vsQ==
       tarball: file:projects/pp365-shared-library.tgz
     version: 0.0.0
   file:projects/pp365-spfx-tasks.tgz_9c907a7ccd27a2e2d0ee9de5366482d1:
@@ -27163,7 +27178,7 @@ packages:
       colors: 1.4.0
       dotenv: 16.1.3
       glob: 10.2.6
-      pzl-spfx-tasks: 0.5.14-4
+      pzl-spfx-tasks: 0.5.15-1
       yargs: 17.7.2
     dev: false
     id: file:projects/pp365-spfx-tasks.tgz
@@ -27174,7 +27189,7 @@ packages:
       react: '*'
       react-dom: '*'
     resolution:
-      integrity: sha512-jB8bFHniMKTcQGFoX1Zx18CC/01EdeUZBDYySW3RK46HYdINSsO5J1xbPCt2PItJfiwJZeF2KQbAX1/4nStszA==
+      integrity: sha512-JTr0DE+RfFhOiJyT7iI6PXfOmQJz91UIIo4HRICTd7CkehoNmhd8zpDtLGMLLv3LZGzEJj5EMu+Lzt0RtlhNaA==
       tarball: file:projects/pp365-spfx-tasks.tgz
     version: 0.0.0
   file:projects/pp365-templates.tgz_9c907a7ccd27a2e2d0ee9de5366482d1:
@@ -27185,7 +27200,7 @@ packages:
       '@types/lodash': 4.14.202
       dotenv: 16.1.4
       glob: 11.0.2
-      pzl-spfx-tasks: 0.5.14-4
+      pzl-spfx-tasks: 0.5.15-1
       replace: 1.2.2
       resx-json-typescript-converter: 1.0.4
       xml2js: 0.6.2
@@ -27198,7 +27213,7 @@ packages:
       react: '*'
       react-dom: '*'
     resolution:
-      integrity: sha512-8Z2X27ZHG8W32xB2GPxyLvlZeM2uBwJywR2U0Vt7PR0B4Lj+i4OZvZoSqPnZFMP5QXi4fmi5O2WMwIqQKLVU1Q==
+      integrity: sha512-itqtknJA7QjsMTflpyxaPrTp2nVJ2ewSGv3qv5sbS85d5x+8nQ6l8JV156GxWQThUpsTxkpHJ6aZlBerQOusFQ==
       tarball: file:projects/pp365-templates.tgz
     version: 0.0.0
 specifiers:
@@ -27282,7 +27297,6 @@ specifiers:
   file-saver: ^2.0.5
   find: 0.3.0
   get-value: 3.0.1
-  glob: 10.2.6
   gulp: 4.0.2
   interactjs: 1.6.2
   jsom-ctx: 1.2.0
@@ -27292,7 +27306,7 @@ specifiers:
   object-assign: 4.1.1
   prettier: 2.7.1
   pzl-spfx-components: 0.0.11
-  pzl-spfx-tasks: 0.5.14-4
+  pzl-spfx-tasks: 0.5.15-0
   react: 17.0.1
   react-autocomplete: 1.8.1
   react-beautiful-dnd: ~13.1.1
