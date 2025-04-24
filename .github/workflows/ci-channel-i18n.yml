@@ -19,7 +19,7 @@ jobs:
   build_release_package_i18n:
     name: Build release package (i18n channel)
     runs-on: macos-latest
-    if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') && !contains(github.event.head_commit.message, '[packages-only]') && contains(github.event.head_commit.message, '[i18n]') }}
+    if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') && !contains(github.event.head_commit.message, '[packages-only]') && contains(github.event.head_commit.message, 'i18n:') }}
     steps:
       - uses: actions/checkout@v4
         with:

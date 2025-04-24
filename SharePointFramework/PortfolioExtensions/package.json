@@ -93,7 +93,8 @@
         "path": "./src/loc",
         "interface": "IPortfolioExtensionsStrings",
         "dts": "mystrings.d.ts",
-        "output": "./localization-report.md"
+        "output": "./localization-report.md",
+        "summary": true
       }
     }
   }
