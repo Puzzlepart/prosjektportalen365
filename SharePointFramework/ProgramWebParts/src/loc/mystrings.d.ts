@@ -183,8 +183,6 @@ declare interface IProgramWebPartsStrings {
   SortDescLabel: string
   SortOrderDescription: string
   SortOrderLabel: string
-  TimelineConfigurationListName: string
-  TimelineContentListName: string
   TitleLabel: string
   ToggleColumnFormPanelLabel: string
   UseChangesButtonText: string

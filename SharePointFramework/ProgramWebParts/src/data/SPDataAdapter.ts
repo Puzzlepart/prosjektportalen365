@@ -82,7 +82,7 @@ export class SPDataAdapter
       entityService: this.entityService,
       propertiesListName: resource.Lists_ProjectProperties_Title
     } as IProjectDataServiceParams)
-    this._propertyList = this.sp.web.lists.getByTitle('Prosjektegenskaper')
+    this._propertyList = this.sp.web.lists.getByTitle(resource.Lists_ProjectProperties_Title)
   }
 
   public async getPortfolioConfig(): Promise<IPortfolioOverviewConfiguration> {
@@ -115,7 +115,7 @@ export class SPDataAdapter
 
   public async getAggregatedListConfig(
     category: string,
-    level: string = 'Overordnet/Program'
+    level: string = resource.Lists_DataSources_Level_ParentProgram
   ): Promise<IPortfolioAggregationConfiguration> {
     try {
       const columns = await this.portalDataService.fetchProjectContentColumns(
@@ -402,7 +402,7 @@ export class SPDataAdapter
   public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationModel[]) {
     const [timelineItems] = await Promise.all([
       this.portalDataService.web.lists
-        .getByTitle(strings.TimelineContentListName)
+        .getByTitle(resource.Lists_TimelineContent_Title)
         .items.select(
           'Title',
           'GtTimelineTypeLookup/Title',
@@ -459,7 +459,7 @@ export class SPDataAdapter
    */
   public async fetchTimelineConfiguration() {
     const timelineConfig = await this.portalDataService.web.lists
-      .getByTitle(strings.TimelineConfigurationListName)
+      .getByTitle(resource.Lists_Timeline_Configuration_Title)
       .items.select(
         'GtSortOrder',
         'Title',
@@ -486,7 +486,7 @@ export class SPDataAdapter
 
     if (config?.showElementProgram) {
       const projectDeliveries = await this.fetchItemsWithSource(
-        dataSourceName || 'Alle prosjektleveranser',
+        dataSourceName ?? resource.Lists_DataSources_Category_ProjectDeliveries_All,
         [
           'Title',
           'GtDeliveryDescriptionOWSMTXT',
@@ -600,8 +600,7 @@ export class SPDataAdapter
       this.portalDataService.web.lists
         .getByTitle(strings.ProjectsListName)
         .items.select(...Object.keys(new SPProjectItem()))
-        // eslint-disable-next-line quotes
-        .filter("GtProjectLifecycleStatus ne 'Avsluttet' and GtProjectLifecycleStatus ne 'Stengt'")
+        .filter(`GtProjectLifecycleStatus ne '${resource.Choice_GtProjectLifecycleStatus_Closed}' and GtProjectLifecycleStatus ne 'Stengt'`)
         .orderBy('Title')
         .using(DefaultCaching)
         .getAll<SPProjectItem>(),
@@ -773,7 +772,7 @@ export class SPDataAdapter
     if (!dataSrc) throw new Error(format(strings.DataSourceNotFound, dataSourceName))
     try {
       const dataSrcProperties = dataSrc.columns.map((col) => col.fieldName) || []
-      if (dataSrc.category.startsWith('Gevinstoversikt')) {
+      if (dataSrc.category.startsWith(resource.Lists_DataSources_Category_BenefitOverview)) {
         items = await this.fetchBenefitItemsWithSource(dataSrc, [
           ...selectProperties,
           ...dataSrcProperties

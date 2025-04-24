@@ -189,8 +189,6 @@ define([], function () {
         ShowFiltersLabel: 'Show filters',
         ShowGroupByLabel: 'Show grouping options',
         ShowSearchBoxLabel: 'Show search box',
-        ShowViewSelectorLabel: 'Show view selector',
-        TimelineConfigurationListName: 'Tidslinjekonfigurasjon',
-        TimelineContentListName: 'Tidslinjeinnhold',
+        ShowViewSelectorLabel: 'Show view selector'
     }
 })

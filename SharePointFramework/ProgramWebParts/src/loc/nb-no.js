@@ -185,8 +185,6 @@ define([], function () {
     SortDescLabel: 'A til Å',
     SortOrderDescription: 'Sorteringsrekkefølgen bestemmer hvilken rekkefølge visningene vises i. Lavest verdi vises først.',
     SortOrderLabel: 'Sorteringsrekkefølge',
-    TimelineConfigurationListName: 'Tidslinjekonfigurasjon',
-    TimelineContentListName: 'Tidslinjeinnhold',
     TitleDescription: 'Tittel for visningen.',
     TitleLabel: 'Tittel',
     ToggleColumnFormPanelLabel: 'Legg til kolonne',
