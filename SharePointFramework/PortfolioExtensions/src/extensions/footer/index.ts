@@ -3,10 +3,12 @@ import {
   PlaceholderContent,
   PlaceholderName
 } from '@microsoft/sp-application-base'
+import { PnPClientStorage } from '@pnp/core/storage'
+import { dateAdd } from '@pnp/core/util'
 import '@pnp/sp/items'
 import '@pnp/sp/lists'
 import '@pnp/sp/webs'
-import strings from 'PortfolioExtensionsStrings'
+import resource from 'SharedResources'
 import { Footer, IFooterProps } from 'components/Footer'
 import { PortalDataService } from 'pp365-shared-library/lib/services/PortalDataService'
 import { createElement } from 'react'
@@ -17,9 +19,6 @@ import {
   IGitHubRelease,
   InstallationEntry
 } from './types'
-import { PnPClientStorage } from '@pnp/core/storage'
-import { dateAdd } from '@pnp/core/util'
-import resource from 'SharedResources'
 
 export default class FooterApplicationCustomizer extends BaseApplicationCustomizer<IFooterApplicationCustomizerProperties> {
   private _bottomPlaceholder: PlaceholderContent
@@ -115,9 +114,9 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
           const project = await this._portalDataService.getProjectDetails()
           const level = project
             ? project.isParentProject
-              ? 'Overordnet/Program'
-              : 'Prosjekt'
-            : 'Portefølje'
+              ? resource.Lists_HelpContent_Level_ParentProgram
+              : resource.Lists_HelpContent_Level_Project
+            : resource.Lists_HelpContent_Level_Portfolio
           let items = await this._portalDataService.getItems(resource.Lists_HelpContent_Title, HelpContentModel, {
             ViewXml: `<View>
             <Query>

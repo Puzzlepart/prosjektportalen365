@@ -3712,4 +3712,13 @@
     <data name="WebParts_UsefulLinks_Title" xml:space="preserve">
         <value>Nyttige lenker</value>
     </data>
+    <data name="Lists_HelpContent_Level_ParentProgram" xml:space="preserve">
+        <value>Overordnet/Program</value>
+    </data>
+    <data name="Lists_HelpContent_Level_Portfolio" xml:space="preserve">
+        <value>Portefølje</value>
+    </data>
+    <data name="Lists_HelpContent_Level_Project" xml:space="preserve">
+        <value>Prosjekt</value>
+    </data>
 </root>
