@@ -728,7 +728,7 @@
     &quot;serverProcessedContent&quot;: {
         &quot;htmlStrings&quot;: {},
         &quot;searchablePlainTexts&quot;: {
-            &quot;title&quot;: &quot;Avansert&quot;,
+            &quot;title&quot;: &quot;{resource:WebParts_QuickLinks_Advanced_Title}&quot;,
             &quot;items[0].description&quot;: &quot;{resource:Lists_InstallationLog_Description}&quot;,
             &quot;items[1].description&quot;: &quot;{resource:Lists_ConfigurationFiles_Description}&quot;,
             &quot;items[2].description&quot;: &quot;{resource:Lists_Log_Description}&quot;,
@@ -935,7 +935,7 @@
     &quot;serverProcessedContent&quot;: {
         &quot;htmlStrings&quot;: {},
         &quot;searchablePlainTexts&quot;: {
-            &quot;title&quot;: &quot;Idémodul&quot;,
+            &quot;title&quot;: &quot;{resource:WebParts_QuickLinks_IdeaModule_Title}&quot;,
             &quot;items[0].description&quot;: &quot;{resource:Lists_IdeaRegistration_Description}&quot;,
             &quot;items[1].description&quot;: &quot;{resource:Lists_IdeaProcessing_Description}&quot;,
             &quot;items[2].description&quot;: &quot;{resource:Lists_ProjectData_Description}&quot;,

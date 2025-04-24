@@ -3679,4 +3679,10 @@
     <data name="WebParts_UsefulLinks_Title" xml:space="preserve">
         <value>Useful Links</value>
     </data>
+    <data name="WebParts_QuickLinks_Advanced_Title" xml:space="preserve">
+        <value>Advanced</value>
+    </data>
+    <data name="WebParts_QuickLinks_IdeaModule_Title" xml:space="preserve">
+        <value>Idea Module</value>
+    </data>
 </root>

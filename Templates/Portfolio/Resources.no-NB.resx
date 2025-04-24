@@ -3784,4 +3784,10 @@
     <data name="WebParts_UsefulLinks_Title" xml:space="preserve">
         <value>Nyttige lenker</value>
     </data>
+    <data name="WebParts_QuickLinks_Advanced_Title" xml:space="preserve">
+        <value>Avansert</value>
+    </data>
+    <data name="WebParts_QuickLinks_IdeaModule_Title" xml:space="preserve">
+        <value>Idémodul</value>
+    </data>
 </root>

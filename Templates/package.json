@@ -9,7 +9,7 @@
     "generate-resx-ts": "node ./.tasks/generate-resx-ts.js",
     "generate-project-templates": "npm run generate-resx-json && npm run generate-resx-ts && node ./.tasks/generate-project-templates.js",
     "validate-project-template": "node ./.tasks/validate-project-template.js",
-    "validate-loc": "node node_modules/pzl-spfx-tasks --validate-loc --loglevel verbose"
+    "validate-loc": "node node_modules/pzl-spfx-tasks --validate-loc --loglevel verbose && npm run validate-project-template"
   },
   "dependencies": {
     "@fluentui/react-components": "~9.52.0",
