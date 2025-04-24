@@ -2978,31 +2978,31 @@
         <value>Navnet på funksjonen som loggen refererer til.</value>
     </data>
     <data name="SiteFields_GtLogFunctionName_DisplayName" xml:space="preserve">
-        <value>Function Name</value>
+        <value>Funksjonsnavn</value>
     </data>
     <data name="SiteFields_GtLogLevel_Description" xml:space="preserve">
         <value>Nivået på loggmeldingen.</value>
     </data>
     <data name="SiteFields_GtLogLevel_DisplayName" xml:space="preserve">
-        <value>Log Level</value>
+        <value>Loggnivå</value>
     </data>
     <data name="SiteFields_GtLogMessage_Description" xml:space="preserve">
         <value>Innholdet i loggmeldingen.</value>
     </data>
     <data name="SiteFields_GtLogMessage_DisplayName" xml:space="preserve">
-        <value>Message</value>
+        <value>Melding</value>
     </data>
     <data name="SiteFields_GtLogScope_Description" xml:space="preserve">
-        <value>Angir rekkevidden for loggmeldingen.</value>
+        <value>Angir omfanget for loggmeldingen.</value>
     </data>
     <data name="SiteFields_GtLogScope_DisplayName" xml:space="preserve">
-        <value>Scope</value>
+        <value>Omfang</value>
     </data>
     <data name="SiteFields_GtLogWebUrl_Description" xml:space="preserve">
         <value>Nettadressen som loggen refererer til.</value>
     </data>
     <data name="SiteFields_GtLogWebUrl_DisplayName" xml:space="preserve">
-        <value>Web URL</value>
+        <value>Nettstedsadresse</value>
     </data>
     <data name="SiteFields_GtManagedProperty_Description" xml:space="preserve">
         <value>Navnet på den forvaltede egenskapen for denne kolonnen. Må settes om kolonnen skal kunne brukes i Porteføljeoversikten.</value>
@@ -4191,5 +4191,17 @@
     </data>
     <data name="WebParts_UsefulLinks_Title" xml:space="preserve">
         <value>Nyttige lenker</value>
+    </data>
+    <data name="Lists_Log_View_GroupByLogLevel" xml:space="preserve">
+        <value>Gruppert etter loggnivå</value>
+    </data>
+    <data name="Lists_Log_View_GroupByScope" xml:space="preserve">
+        <value>Gruppert etter omfang</value>
+    </data>
+    <data name="Lists_Log_View_GroupByFunction" xml:space="preserve">
+        <value>Gruppert etter funksjon</value>
+    </data>
+    <data name="Lists_Log_View_GroupByComponent" xml:space="preserve">
+        <value>Gruppert etter komponent</value>
     </data>
 </root>
