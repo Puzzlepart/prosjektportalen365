@@ -53,7 +53,12 @@ if($Save.IsPresent) {
 if($ResxPath -ne $null -and $ResxPath -ne "") {
     [xml]$ResxXml = Get-Content -Path $ResxPath
     $lastNode = $ResxXml.root.data | Select-Object -Last 1
-    $ResxValues | ForEach-Object {
+    $NewResxValues = $ResxValues | Where-object { $_.Key -notin $ResxXml.root.data.name }
+    if($NewResxValues.Count -eq 0) {
+        Write-Host "No new resources to add to $ResxPath." -ForegroundColor Yellow
+        return
+    }
+    $NewResxValues | ForEach-Object {
         $newNode = $lastNode.Clone()
         $newNode.name = $_.Key
         $newNode.value = $_.Value

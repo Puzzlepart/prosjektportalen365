@@ -19,11 +19,11 @@ $ResxValues = @()
 $Xml.ListInstance.DataRows.DataRow | ForEach-Object {
     foreach($Value in $_.DataValue) {
         $Regex = '^(.*?)(\{resource:([^}]+)\})'
-        $Matches = [regex]::Matches($Value.InnerText, $Regex)
-        if($Matches.Groups.length -eq 4) {
-            $ResourceKey = $Matches.Groups[3].Value
-            $ResourceValue = $Matches.Groups[1].Value.Trim()
-            $ResourceToken = $Matches.Groups[2].Value.Trim()
+        $RegexMatches = [regex]::Matches($Value.InnerText, $Regex)
+        if($RegexMatches.Groups.length -eq 4) {
+            $ResourceKey = $RegexMatches.Groups[3].Value
+            $ResourceValue = $RegexMatches.Groups[1].Value.Trim()
+            $ResourceToken = $RegexMatches.Groups[2].Value.Trim()
 
             if($null -eq $ResourceValue -or $ResourceValue -eq "") {
               continue
@@ -51,9 +51,14 @@ if($ResxPath -ne $null -and $ResxPath -ne "") {
     $ResxValues | Format-Table -AutoSize
 
     [xml]$ResxXml = Get-Content -Path $ResxPath
-    $lastNode = $ResxXml.root.data | Select-Object -Last 1
-    $ResxValues | ForEach-Object {
-        $newNode = $lastNode.Clone()
+    $LastNode = $ResxXml.root.data | Select-Object -Last 1
+    $NewResxValues = $ResxValues | Where-object { $_.Key -notin $ResxXml.root.data.name }
+    if($NewResxValues.Count -eq 0) {
+        Write-Host "No new resources to add to $ResxPath." -ForegroundColor Yellow
+        return
+    }
+    $NewResxValues | ForEach-Object {
+        $newNode = $LastNode.Clone()
         $newNode.name = $_.Key
         $newNode.value = $_.Value
         $ResxXml.root.AppendChild($newNode) | Out-Null
