@@ -421,12 +421,6 @@
     <data name="ClientSidePages_BenefitOverview_Title" xml:space="preserve">
         <value>Gevinstoversikt</value>
     </data>
-    <data name="ClientSidePages_BenefitsOverview_PageName" xml:space="preserve">
-        <value>Gevinstoversikt.aspx</value>
-    </data>
-    <data name="ClientSidePages_BenefitsOverview_Title" xml:space="preserve">
-        <value>Gevinstoversikt</value>
-    </data>
     <data name="ClientSidePages_Configuration_PageName" xml:space="preserve">
         <value>Konfigurasjon.aspx</value>
     </data>
@@ -2045,7 +2039,7 @@
         <value>Dokumenter</value>
     </data>
     <data name="Navigation_Documents_Url" xml:space="preserve">
-        <value>Dokumenter/Forms/AllItems.aspx</value>
+        <value>Delte dokumenter/Forms/AllItems.aspx</value>
     </data>
     <data name="Navigation_Home_Title" xml:space="preserve">
         <value>Hjem</value>

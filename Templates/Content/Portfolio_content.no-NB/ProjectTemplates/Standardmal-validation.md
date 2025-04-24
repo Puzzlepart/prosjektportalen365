@@ -1,4 +1,4 @@
-_The template was validated 4/24/2025, 4:57:02 PM_
+_The template was validated 4/24/2025, 5:52:13 PM_
 
 The template contains the following tokens that has not been found in the .resx files:
 
@@ -475,7 +475,7 @@ _No tokens with missing translations or replacement values found._
                 "Title": "Usikkerhet"
             },
             {
-                "Url": "Dokumenter/Forms/AllItems.aspx",
+                "Url": "Delte dokumenter/Forms/AllItems.aspx",
                 "Title": "Dokumenter"
             },
             {

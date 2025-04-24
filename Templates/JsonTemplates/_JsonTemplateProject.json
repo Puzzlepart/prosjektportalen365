@@ -480,7 +480,7 @@
                 "Title": "{{Navigation_Notebook_Title}}"
             },
             {
-                "Url":  "SitePages/{{ClientSidePages_BenefitsOverview_PageName}}",
+                "Url":  "SitePages/{{ClientSidePages_BenefitOverview_PageName}}",
                 "Title": "{{Navigation_BenefitsOverview_Title}}",
                 "Children": [
                     {
@@ -500,7 +500,7 @@
                         "Title": "{{Navigation_BenefitsFollowup_Title}}"
                     },
                     {
-                        "Url": "SitePages/{{ClientSidePages_BenefitsOverview_PageName}}",
+                        "Url": "SitePages/{{ClientSidePages_BenefitOverview_PageName}}",
                         "Title": "{{Navigation_BenefitsOverview_Title}}"
                     }
                 ]
@@ -631,8 +631,8 @@
             ]
         },
         {
-            "Name": "{{ClientSidePages_BenefitsOverview_PageName}}",
-            "Title": "{{ClientSidePages_BenefitsOverview_Title}}",
+            "Name": "{{ClientSidePages_BenefitOverview_PageName}}",
+            "Title": "{{ClientSidePages_BenefitOverview_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [

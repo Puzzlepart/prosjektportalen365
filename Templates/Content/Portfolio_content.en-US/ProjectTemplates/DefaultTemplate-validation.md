@@ -1,4 +1,4 @@
-_The template was validated 4/24/2025, 4:57:02 PM_
+_The template was validated 4/24/2025, 5:52:13 PM_
 
 The template contains the following tokens that has not been found in the .resx files:
 
@@ -491,7 +491,7 @@ _No tokens with missing translations or replacement values found._
                 "Title": "Notebook"
             },
             {
-                "Url": "SitePages/BenefitsOverview.aspx",
+                "Url": "SitePages/BenefitOverview.aspx",
                 "Title": "Benefits Overview",
                 "Children": [
                     {
@@ -511,7 +511,7 @@ _No tokens with missing translations or replacement values found._
                         "Title": "Benefits Follow-up"
                     },
                     {
-                        "Url": "SitePages/BenefitsOverview.aspx",
+                        "Url": "SitePages/BenefitOverview.aspx",
                         "Title": "Benefits Overview"
                     }
                 ]
@@ -642,8 +642,8 @@ _No tokens with missing translations or replacement values found._
             ]
         },
         {
-            "Name": "BenefitsOverview.aspx",
-            "Title": "Benefits Overview",
+            "Name": "BenefitOverview.aspx",
+            "Title": "Benefit Overview",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
