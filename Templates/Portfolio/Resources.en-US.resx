@@ -3832,4 +3832,58 @@
   <data name="Lists_Global_Settings_Fields_Title_Default" xml:space="preserve">
     <value>Setting without name</value>
   </data>
+  <data name="Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerEnabled_Title" xml:space="preserve">
+    <value>Use Planner to manage actions in the Uncertainty List</value>
+  </data>
+  <data name="Lists_Global_Settings_Category_RiskActionsPlanner" xml:space="preserve">
+    <value>Risk Actions in Planner</value>
+  </data>
+  <data name="Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerBucketName_Title" xml:space="preserve">
+    <value>Name of the bucket in Planner for actions for the Uncertainty List</value>
+  </data>
+  <data name="Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerNoActionsText_Title" xml:space="preserve">
+    <value>Text to be displayed if no actions are registered for the uncertainty</value>
+  </data>
+  <data name="Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerNoActionsText_Value" xml:space="preserve">
+    <value>There are no actions registered for this uncertainty.</value>
+  </data>
+  <data name="Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerShowLastSyncTime_Title" xml:space="preserve">
+    <value>Show the last sync time for the Planner tasks</value>
+  </data>
+  <data name="Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerHorizontalLayout_Title" xml:space="preserve">
+    <value>Show the actions in a horizontal layout</value>
+  </data>
+  <data name="Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerGap_Title" xml:space="preserve">
+    <value>Gap between the actions in the list</value>
+  </data>
+  <data name="Lists_Global_Settings_Category_RiskMatrix_RiskMatrixDefaultConfigurationFile_Title" xml:space="preserve">
+    <value>Standard configuration for Risk Matrix</value>
+  </data>
+  <data name="Lists_Global_Settings_Category_RiskMatrix" xml:space="preserve">
+    <value>Risk Matrix</value>
+  </data>
+  <data name="Lists_Global_Settings_Category_OpportunityMatrix_OpportunityMatrixDefaultConfigurationFile_Title" xml:space="preserve">
+    <value>Standard configuration for Opportunity Matrix</value>
+  </data>
+  <data name="Lists_Global_Settings_Category_OpportunityMatrix" xml:space="preserve">
+    <value>Opportunity Matrix</value>
+  </data>
+  <data name="Lists_Global_Settings_Category_General_ShowFooter_Title" xml:space="preserve">
+    <value>Show/hide footer in Prosjektportalen</value>
+  </data>
+  <data name="Lists_Global_Settings_Category_General" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="Lists_Global_Settings_Category_General_MinimizeFooter_Title" xml:space="preserve">
+    <value>Automatically minimize footer</value>
+  </data>
+  <data name="Lists_Global_Settings_Category_Assistant_UseAssistant_Title" xml:space="preserve">
+    <value>Use the Prosjektportalen assistant</value>
+  </data>
+  <data name="Lists_Global_Settings_Category_Assistant" xml:space="preserve">
+    <value>Assistant</value>
+  </data>
+  <data name="Lists_Global_Settings_Category_Assistant_AssistantConfig_Title" xml:space="preserve">
+    <value>Configuration setup for the assistant</value>
+  </data>
 </root>
