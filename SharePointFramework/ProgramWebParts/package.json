@@ -119,7 +119,8 @@
         "path": "./src/loc",
         "interface": "IProgramWebPartsStrings",
         "dts": "mystrings.d.ts",
-        "output": "./localization-report.md"
+        "output": "./localization-report.md",
+        "summary": true
       }
     }
   },
