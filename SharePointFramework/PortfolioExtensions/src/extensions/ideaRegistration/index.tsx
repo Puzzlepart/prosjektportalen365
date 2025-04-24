@@ -1,5 +1,4 @@
 import { override } from '@microsoft/decorators'
-import { Log } from '@microsoft/sp-core-library'
 import {
   BaseListViewCommandSet,
   Command,
@@ -34,7 +33,6 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
 
   @override
   public async onInit(): Promise<void> {
-    Log.info(LOG_SOURCE, 'onInit: Initializing...')
     this._sp = spfi().using(SPFx(this.context))
     this._portalDataService = await new PortalDataService().configure({
       spfxContext: this.context
@@ -42,7 +40,6 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
     this._openCmd = this.tryGetCommand('OPEN_IDEA_REGISTRATION_DIALOG')
     this._openCmd.visible = false
     this._openLinkCmd = this.tryGetCommand('IDEA_PROCESSING_LINK')
-    // this._openLinkCmd.title = `Gå til ${this._config.processingList}`
     this._openLinkCmd.visible = this.context.pageContext.list.title.includes('registrering')
     this._userAuthorized = await isUserAuthorized(
       this._sp,
@@ -134,8 +131,6 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
    * On ListView state changed, check if the user is authorized to use this command
    */
   private _onListViewStateChanged = async (): Promise<void> => {
-    Log.info(LOG_SOURCE, 'onListViewStateChanged: ListView state changed')
-
     const listName = this.context.pageContext.list.title
     const [config] = (await this._getIdeaConfiguration()).filter(
       (item) => item.registrationList === listName
@@ -151,11 +146,6 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
           config.registrationList === listName
       }
       this.raiseOnChange()
-    } else {
-      Log.info(
-        LOG_SOURCE,
-        'onListViewStateChanged: You are currently not authorized to use this command or the list is not configured for this command'
-      )
     }
   }
 
@@ -175,8 +165,6 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
           ?.recommendation,
         GtIdeaRecommendationComment: comment
       })
-
-    Log.info(LOG_SOURCE, `Updated ${this._config.registrationList}: Rejected`)
     window.location.reload()
   }
 
@@ -196,8 +184,6 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
           ?.recommendation,
         GtIdeaRecommendationComment: comment
       })
-
-    Log.info(LOG_SOURCE, `Updated ${this._config.registrationList}: Consideration`)
     window.location.reload()
   }
 
@@ -290,8 +276,6 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
         GtIdeaRecommendationComment: comment
       })
 
-    Log.info(LOG_SOURCE, `Updated ${this._config.registrationList}: Approved`)
-
     const ideaModuleUrl = `${this.context.pageContext.site.absoluteUrl}/SitePages/Idemodul.aspx#ideaId=${rowId}`
 
     await this._updateProcessingList(rowId, copyData, ideaModuleUrl)
@@ -320,8 +304,6 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
         GtIdeaRecommendationComment: comment
       })
 
-    Log.info(LOG_SOURCE, `Updated ${this._config.registrationList}: Other`)
-
     window.location.reload()
   }
 
@@ -341,8 +323,6 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
       GtIdeaUrl: pageUrl,
       ...copyData
     })
-
-    Log.info(LOG_SOURCE, 'Updated work list')
   }
 
   /**

@@ -1,10 +1,9 @@
 import * as strings from 'PortfolioWebPartsStrings'
+import { UserMessage } from 'pp365-shared-library'
 import { getBreakpoint } from 'pp365-shared-library/lib/util/getBreakpoint'
 import React, { Component } from 'react'
 import * as ReactHighcharts from 'react-highcharts'
-import { IChartProps } from './IChartProps'
-import { IChartState } from './IChartState'
-import { UserMessage } from 'pp365-shared-library'
+import { IChartProps, IChartState } from './types'
 
 export default class Chart extends Component<IChartProps, IChartState> {
   public static defaultProps: Partial<IChartProps> = {}
@@ -80,4 +79,4 @@ export default class Chart extends Component<IChartProps, IChartState> {
   }
 }
 
-export { IChartProps, IChartState }
+export * from './types'

@@ -1,24 +1,21 @@
 import { override } from '@microsoft/decorators'
-import { Log } from '@microsoft/sp-core-library'
+import { Dialog } from '@microsoft/sp-dialog'
 import {
   BaseListViewCommandSet,
   Command,
   IListViewCommandSetExecuteEventParameters,
   RowAccessor
 } from '@microsoft/sp-listview-extensibility'
-import { Dialog } from '@microsoft/sp-dialog'
 import { SPFI, spfi, SPFx } from '@pnp/sp'
-import '@pnp/sp/webs'
-import '@pnp/sp/lists'
 import '@pnp/sp/items'
+import '@pnp/sp/lists'
 import '@pnp/sp/site-groups/web'
+import '@pnp/sp/webs'
 import DialogPrompt from 'components/IdeaApprovalDialog'
-import strings from 'PortfolioExtensionsStrings'
 import { Choice, IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
-import { isUserAuthorized } from '../../helpers/isUserAuthorized'
+import strings from 'PortfolioExtensionsStrings'
 import { find } from 'underscore'
-
-const LOG_SOURCE: string = 'IdeaProcessingCommand'
+import { isUserAuthorized } from '../../helpers/isUserAuthorized'
 
 export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
   private _userAuthorized: boolean
@@ -28,7 +25,6 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
 
   @override
   public async onInit(): Promise<void> {
-    Log.info(LOG_SOURCE, 'onInit: Initializing...')
     this._sp = spfi().using(SPFx(this.context))
     this._openCmd = this.tryGetCommand('OPEN_IDEA_PROCESSING_DIALOG')
     this._openCmd.visible = false
@@ -100,8 +96,6 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
    * On ListView state changed, check if the user is authorized to use this command
    */
   private _onListViewStateChanged = async (): Promise<void> => {
-    Log.info(LOG_SOURCE, 'onListViewStateChanged: ListView state changed')
-
     const listName = this.context.pageContext.list.title
     const [config] = (await this._getIdeaConfiguration()).filter(
       (item) => item.processingList === listName
@@ -117,11 +111,6 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
           config.processingList === listName
       }
       this.raiseOnChange()
-    } else {
-      Log.info(
-        LOG_SOURCE,
-        'onListViewStateChanged: You are currently not authorized to use this command or the list is not configured for this command'
-      )
     }
   }
 
@@ -140,8 +129,6 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
         GtIdeaDecision: find(this._config.processing, { key: Choice.Reject })?.recommendation,
         GtIdeaDecisionComment: comment
       })
-
-    Log.info(LOG_SOURCE, `Updated ${this._config.processingList}: Rejected`)
     window.location.reload()
   }
 
@@ -161,8 +148,6 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
           ?.recommendation,
         GtIdeaDecisionComment: comment
       })
-
-    Log.info(LOG_SOURCE, `Updated ${this._config.processingList}: Consideration`)
     window.location.reload()
   }
 
@@ -181,8 +166,6 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
         GtIdeaDecision: find(this._config.processing, { key: Choice.Approve })?.recommendation,
         GtIdeaDecisionComment: comment
       })
-
-    Log.info(LOG_SOURCE, `Updated ${this._config.processingList}: Approved`)
     window.location.reload()
   }
 
@@ -205,8 +188,6 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
         GtIdeaDecision: find(this._config.processing, { choice: selectedChoice })?.recommendation,
         GtIdeaDecisionComment: comment
       })
-
-    Log.info(LOG_SOURCE, `Updated ${this._config.processingList}: Other`)
     window.location.reload()
   }
 
