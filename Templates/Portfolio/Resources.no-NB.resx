@@ -1453,6 +1453,12 @@
     <data name="Lists_Permission_Configuration_Description" xml:space="preserve">
         <value>Sett opp grupper og tilganger som kopieres over til nye prosjektområder</value>
     </data>
+    <data name="Lists_Permission_Configuration_Fields_GtTemplates_Description" xml:space="preserve">
+        <value>Velg hvilke(n) mal(er) tillatelseskonfigurasjonen skal gjelde for. Om du ikke velger noen, vil konfigurasjonen gjelde alle malene.</value>
+    </data>
+    <data name="Lists_Permission_Configuration_Fields_GtTemplates_DisplayName" xml:space="preserve">
+        <value>Gjelder mal(er)</value>
+    </data>
     <data name="Lists_Permission_Configuration_Title" xml:space="preserve">
         <value>Tillatelseskonfigurasjon</value>
     </data>

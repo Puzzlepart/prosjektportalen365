@@ -1432,6 +1432,12 @@
     <data name="Lists_Permission_Configuration_Description" xml:space="preserve">
         <value>Set up groups and permissions that are copied to new project sites</value>
     </data>
+    <data name="Lists_Permission_Configuration_Fields_GtTemplates_Description" xml:space="preserve">
+        <value>Select which template(s) the permission configuration should apply to. If you do not select any, the configuration will apply to all templates.</value>
+    </data>
+    <data name="Lists_Permission_Configuration_Fields_GtTemplates_DisplayName" xml:space="preserve">
+        <value>Associated templates</value>
+    </data>
     <data name="Lists_Permission_Configuration_Title" xml:space="preserve">
         <value>Permission Configuration</value>
     </data>
