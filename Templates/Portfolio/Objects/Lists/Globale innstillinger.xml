@@ -48,7 +48,7 @@
       <pnp:DataValue FieldName="GtSettingsId">{3078a897-4508-4242-80ab-da757db11289}</pnp:DataValue>
       <pnp:DataValue FieldName="Title">Tekst som skal vises om det ikke er noen tiltak registrert for usikkerheten {resource:Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerNoActionsText_Title}</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsKey">RiskActionPlannerNoActionsText</pnp:DataValue>
-      <pnp:DataValue FieldName="GtSettingsValue">Det er ikke registrert noen tiltak for denne usikkerheten</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsValue">Det er ikke registrert noen tiltak for denne usikkerheten {resource:Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerNoActionsText_Value}</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsCategory">Usikkerhetstiltak i Planner {resource:Lists_Global_Settings_Category_RiskActionsPlanner}</pnp:DataValue>
     </pnp:DataRow>
