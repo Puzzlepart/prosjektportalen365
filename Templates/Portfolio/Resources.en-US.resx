@@ -1714,16 +1714,16 @@
     <data name="Navigation_Uncertainty_Url" xml:space="preserve">
         <value>Lists/Uncertainty/AllItems.aspx</value>
     </data>
-    <data name="ProjectAdminPermissions_ChangePhase" xml:space="preserve">
+    <data name="Lists_ProjectAdminPermissions_ChangePhase" xml:space="preserve">
         <value>Change phase</value>
     </data>
-    <data name="ProjectAdminPermissions_ChildProjectsAdmin" xml:space="preserve">
+    <data name="Lists_ProjectAdminPermissions_ChildProjectsAdmin" xml:space="preserve">
         <value>Child projects administration</value>
     </data>
-    <data name="ProjectAdminPermissions_EditProjectProperties" xml:space="preserve">
+    <data name="Lists_ProjectAdminPermissions_EditProjectProperties" xml:space="preserve">
         <value>Edit project properties</value>
     </data>
-    <data name="ProjectAdminPermissions_ProjectStatusAdmin" xml:space="preserve">
+    <data name="Lists_ProjectAdminPermissions_ProjectStatusAdmin" xml:space="preserve">
         <value>Project status administration</value>
     </data>
     <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
@@ -3714,5 +3714,26 @@
     </data>
     <data name="WebParts_UsefulLinks_Title" xml:space="preserve">
         <value>Useful Links</value>
+    </data>
+    <data name="Lists_ProjectAdminRoles_ProjectManager" xml:space="preserve">
+        <value>Project Manager</value>
+    </data>
+    <data name="Lists_ProjectAdminRoles_ProjectOwner" xml:space="preserve">
+        <value>Project Owner</value>
+    </data>
+    <data name="Lists_ProjectAdminRoles_ProjectSupport" xml:space="preserve">
+        <value>Project Support</value>
+    </data>
+    <data name="Lists_ProjectAdminRoles_ProjectOffice" xml:space="preserve">
+        <value>Project Office</value>
+    </data>
+    <data name="Lists_ProjectAdminRoles_SPAdmin" xml:space="preserve">
+        <value>SP Admin</value>
+    </data>
+    <data name="Lists_ProjectAdminRoles_GroupLevel_Project" xml:space="preserve">
+        <value>Project</value>
+    </data>
+    <data name="Lists_ProjectAdminRoles_GroupLevel_Portfolio" xml:space="preserve">
+        <value>Portfolio</value>
     </data>
 </root>

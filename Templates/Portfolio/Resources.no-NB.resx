@@ -1726,16 +1726,16 @@
     <data name="Navigation_Uncertainty_Url" xml:space="preserve">
         <value>Lists/Usikkerhet/AllItems.aspx</value>
     </data>
-    <data name="ProjectAdminPermissions_ChangePhase" xml:space="preserve">
+    <data name="Lists_ProjectAdminPermissions_ChangePhase" xml:space="preserve">
         <value>Endre fase</value>
     </data>
-    <data name="ProjectAdminPermissions_ChildProjectsAdmin" xml:space="preserve">
+    <data name="Lists_ProjectAdminPermissions_ChildProjectsAdmin" xml:space="preserve">
         <value>Administrering av underområder</value>
     </data>
-    <data name="ProjectAdminPermissions_EditProjectProperties" xml:space="preserve">
+    <data name="Lists_ProjectAdminPermissions_EditProjectProperties" xml:space="preserve">
         <value>Redigere prosjektegenskaper</value>
     </data>
-    <data name="ProjectAdminPermissions_ProjectStatusAdmin" xml:space="preserve">
+    <data name="Lists_ProjectAdminPermissions_ProjectStatusAdmin" xml:space="preserve">
         <value>Administrere prosjektstatus</value>
     </data>
     <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
@@ -3819,5 +3819,26 @@
     </data>
     <data name="WebParts_UsefulLinks_Title" xml:space="preserve">
         <value>Nyttige lenker</value>
+    </data>
+    <data name="Lists_ProjectAdminRoles_ProjectManager" xml:space="preserve">
+        <value>Prosjektleder</value>
+    </data>
+    <data name="Lists_ProjectAdminRoles_ProjectOwner" xml:space="preserve">
+        <value>Prosjekteier</value>
+    </data>
+    <data name="Lists_ProjectAdminRoles_ProjectSupport" xml:space="preserve">
+        <value>Prosjektstøtte</value>
+    </data>
+    <data name="Lists_ProjectAdminRoles_ProjectOffice" xml:space="preserve">
+        <value>Prosjektkontor</value>
+    </data>
+    <data name="Lists_ProjectAdminRoles_SPAdmin" xml:space="preserve">
+        <value>SP områdeadministrator</value>
+    </data>
+    <data name="Lists_ProjectAdminRoles_GroupLevel_Project" xml:space="preserve">
+        <value>Prosjekt</value>
+    </data>
+    <data name="Lists_ProjectAdminRoles_GroupLevel_Portfolio" xml:space="preserve">
+        <value>Portefølje</value>
     </data>
 </root>

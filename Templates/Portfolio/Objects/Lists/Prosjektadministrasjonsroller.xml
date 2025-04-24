@@ -65,32 +65,32 @@
     </pnp:Views>
     <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
         <pnp:DataRow>
-            <pnp:DataValue FieldName="Title">Prosjektleder</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectAdminRoles_ProjectManager}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectFieldName">GtProjectManager</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectAdminPermissions">1,2,3</pnp:DataValue>
             <pnp:DataValue FieldName="ContentTypeId">0x0100618197F7C782A0459EB2FA5EBF1BDDF201</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="Title">Prosjekteier</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectAdminRoles_ProjectOwner}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectFieldName">GtProjectOwner</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectAdminPermissions">1,2,3</pnp:DataValue>
             <pnp:DataValue FieldName="ContentTypeId">0x0100618197F7C782A0459EB2FA5EBF1BDDF201</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="Title">Prosjektstøtte</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectAdminRoles_ProjectSupport}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectFieldName">GtProjectSupport</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectAdminPermissions">1,2,3</pnp:DataValue>
             <pnp:DataValue FieldName="ContentTypeId">0x0100618197F7C782A0459EB2FA5EBF1BDDF201</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="Title">Prosjektkontor</pnp:DataValue>
-            <pnp:DataValue FieldName="GtGroupName">Prosjektkontor</pnp:DataValue>
-            <pnp:DataValue FieldName="GtGroupLevel">Prosjekt</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectAdminRoles_ProjectOffice}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtGroupName">{resource:Lists_ProjectAdminRoles_ProjectOffice}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtGroupLevel">{resource:Lists_ProjectAdminRoles_GroupLevel_Project}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectAdminPermissions">1,2,3</pnp:DataValue>
             <pnp:DataValue FieldName="ContentTypeId">0x0100618197F7C782A0459EB2FA5EBF1BDDF202</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="Title">SP områdeadministrator</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectAdminRoles_SPAdmin}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectAdminPermissions">1,2,3,4</pnp:DataValue>
             <pnp:DataValue FieldName="ContentTypeId">0x0100618197F7C782A0459EB2FA5EBF1BDDF203</pnp:DataValue>
         </pnp:DataRow>
