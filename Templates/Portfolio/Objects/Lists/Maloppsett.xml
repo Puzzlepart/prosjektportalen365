@@ -58,7 +58,7 @@
     <Field Type="Boolean" DisplayName="{resource:Lists_TemplateOptions_Fields_IsAutoConfigurable_DisplayName}" Description="{resource:Lists_TemplateOptions_Fields_IsAutoConfigurable_Description}" ID="{249ce763-d28e-4034-8dbc-64318ebc3b42}" StaticName="IsAutoConfigurable" Name="IsAutoConfigurable">
       <Default>0</Default>
     </Field>
-    <Field Type="Text" DisplayName="{resource:Lists_TemplateLibrary_Title}" Description="Velg malbibliotek som skal brukes som kilde for maler som kan hentes inn til dokumentbibliotekene i prosjektet." MaxLength="255" ID="{02e86b34-2916-4010-afac-cf33eff03d54}" StaticName="GtDocumentTemplateLibrary" Name="GtDocumentTemplateLibrary">
+    <Field Type="Text" DisplayName="{resource:Lists_TemplateLibrary_Title}" Description="{resource:Lists_TemplateOptions_Fields_GtDocumentTemplateLibrary_Description}" MaxLength="255" ID="{02e86b34-2916-4010-afac-cf33eff03d54}" StaticName="GtDocumentTemplateLibrary" Name="GtDocumentTemplateLibrary">
       <Default>{resource:Lists_TemplateLibrary_Title}</Default>
     </Field>
     <Field Type="Text" DisplayName="{resource:Lists_TemplateOptions_Fields_FieldConfigurationName_DisplayName}" ID="{b97638c9-7116-4dbc-b0cc-850291e89008}" StaticName="FieldConfigurationName" Name="FieldConfigurationName" />

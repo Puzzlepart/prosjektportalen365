@@ -4198,4 +4198,13 @@
     <data name="Lists_Log_View_GroupByComponent" xml:space="preserve">
         <value>Gruppert etter komponent</value>
     </data>
+    <data name="Lists_TemplateOptions_Fields_GtDocumentTemplateLibrary_Description" xml:space="preserve">
+        <value>Velg malbibliotek som skal brukes som kilde for maler som kan hentes inn til dokumentbibliotekene i prosjektet.</value>
+    </data>
+    <data name="Lists_ResourceAllocation_Fields_Title_DisplayName" xml:space="preserve">
+        <value>Beskrivelse</value>
+    </data>
+    <data name="Lists_ResourceAllocation_Fields_Title_Description" xml:space="preserve">
+        <value>Beskriv kort formålet med allokeringen.</value>
+    </data>
 </root>

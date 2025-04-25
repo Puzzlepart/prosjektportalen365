@@ -26,10 +26,10 @@
         </View>
     </pnp:Views>
     <pnp:FieldRefs>
-        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" DisplayName="Beskrivelse" Required="false" />
+        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" DisplayName="{resource:Lists_ResourceAllocation_Fields_Title_DisplayName}" Required="false" />
     </pnp:FieldRefs>
     <pnp:Fields>
-        <Field ID="{fa564e0f-0c70-4ab9-b863-0177e6ddd247}" Type="Text" Name="Title" StaticName="Title" DisplayName="Beskrivelse" Description="Beskriv kort hensikten med allokeringen" />
+        <Field ID="{fa564e0f-0c70-4ab9-b863-0177e6ddd247}" Type="Text" Name="Title" StaticName="Title" DisplayName="{resource:Lists_ResourceAllocation_Fields_Title_DisplayName}" Description="{resource:Lists_ResourceAllocation_Fields_Title_Description}" />
     </pnp:Fields>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>

@@ -1,6 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:schema id="root"
+        xmlns=""
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
         <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
         <xsd:element name="root" msdata:IsDataSet="true">
             <xsd:complexType>
@@ -3996,5 +3999,14 @@
     </data>
     <data name="Lists_Log_View_GroupByComponent" xml:space="preserve">
         <value>Grouped by Component</value>
+    </data>
+    <data name="Lists_TemplateOptions_Fields_GtDocumentTemplateLibrary_Description" xml:space="preserve">
+        <value>Pick the template library to be used as a source for templates that can be imported into the project document libraries.</value>
+    </data>
+    <data name="Lists_ResourceAllocation_Fields_Title_DisplayName" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="Lists_ResourceAllocation_Fields_Title_Description" xml:space="preserve">
+        <value>Briefly describe the purpose of the allocation.</value>
     </data>
 </root>
