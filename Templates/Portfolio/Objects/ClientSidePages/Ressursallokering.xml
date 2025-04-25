@@ -2,7 +2,7 @@
     <pnp:Sections>
         <pnp:Section Order="1" Type="OneColumn">
             <pnp:Controls>
-                <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;properties&quot;:{&quot;dataSource&quot;:&quot;Alle ressursallokeringer&quot;}}" ControlId="2ef269b2-6370-4841-8b35-2185b7ccb22a" Order="1" Column="1" />
+                <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;properties&quot;:{&quot;dataSource&quot;:&quot;{resource:Lists_DataSources_Category_ResourceAllocation_All}&quot;}}" ControlId="2ef269b2-6370-4841-8b35-2185b7ccb22a" Order="1" Column="1" />
             </pnp:Controls>
         </pnp:Section>
     </pnp:Sections>
