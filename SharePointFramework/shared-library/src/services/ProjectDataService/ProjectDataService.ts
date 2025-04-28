@@ -337,11 +337,14 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
     termSetId: string,
     checklistData: { [termGuid: string]: ProjectPhaseChecklistData } = {}
   ): Promise<ProjectPhaseModel[]> {
-    const terms = await this._sp.termStore.sets
-      .getById(termSetId)
-      .terms.select('*', 'localProperties')
-      .using(DefaultCaching)()
-    return terms.map((term) => new ProjectPhaseModel(term, termSetId, checklistData[term.id]))
+    const [terms, web] = await Promise.all([
+      this._sp.termStore.sets
+        .getById(termSetId)
+        .terms.select('*', 'localProperties')
+        .using(DefaultCaching)(),
+      this._sp.web.select('Language')()
+    ])
+    return terms.map((term) => new ProjectPhaseModel(term, termSetId, checklistData[term.id], web.Language))
   }
 
   /**
@@ -383,9 +386,9 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
         obj[termGuid] = obj[termGuid]
           ? obj[termGuid]
           : {
-              stats: {},
-              items: []
-            }
+            stats: {},
+            items: []
+          }
         obj[termGuid].items.push(item)
         obj[termGuid].stats[status] = obj[termGuid].stats[status]
           ? obj[termGuid].stats[status] + 1

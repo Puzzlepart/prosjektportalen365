@@ -55,29 +55,28 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
         logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
       })
     }
-    const [phaseFieldCtx, checklistData, welcomePage, properties] = await Promise.all([
+    const [phaseField, checklistData, welcomePage, properties] = await Promise.all([
       SPDataAdapter.getTermFieldContext('GtProjectPhase'),
       SPDataAdapter.project.getChecklistData(resource.Lists_PhaseChecklist_Title),
       SPDataAdapter.project.getWelcomePage(),
       SPDataAdapter.project.getProjectInformationData()
     ])
     const [phases, currentPhaseName, userHasChangePhasePermission] = await Promise.all([
-      SPDataAdapter.project.getPhases(phaseFieldCtx.termSetId, checklistData),
-      SPDataAdapter.project.getCurrentPhaseName(phaseFieldCtx.fieldName),
+      SPDataAdapter.project.getPhases(phaseField.termSetId, checklistData),
+      SPDataAdapter.project.getCurrentPhaseName(phaseField.fieldName),
       SPDataAdapter.checkProjectAdminPermissions(
         ProjectAdminPermission.ChangePhase,
         properties.fieldValues
       )
     ])
-
     const phaseSitePages = props.useDynamicHomepage
       ? await getPhaseSitePages({ phases, sp: props.sp, web: props.pageContext?.web })
       : []
-    const [currentPhase] = phases.filter(({name}) => name === currentPhaseName)
+    const [currentPhase] = phases.filter(({ name }) => name === currentPhaseName)
     return {
       currentPhase,
       phases,
-      phaseField: phaseFieldCtx,
+      phaseField,
       phaseSitePages,
       welcomePage,
       userHasChangePhasePermission
