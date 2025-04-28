@@ -89,7 +89,7 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
         name: strings.TagFieldLabel,
         isCollapsed: true
       },
-      config.find((item) => item?.title === strings.ProjectLabel).timelineFilter && {
+      config.find((item) => item?.title === strings.ProjectLabel)?.timelineFilter && {
         fieldName: 'data.project',
         name: strings.SiteTitleLabel,
         isCollapsed: true
@@ -99,10 +99,13 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
         name: refiner.name,
         isCollapsed: true
       }))
-    ]
+    ].filter(Boolean) as {
+      fieldName: string
+      name: string
+      isCollapsed?: boolean
+    }[]
 
     const hiddenItems = config.filter((item) => !item?.timelineFilter).map((item) => item.title)
-
     return columns.map((col) => {
       const uniqueValues = uniq(
         // eslint-disable-next-line prefer-spread

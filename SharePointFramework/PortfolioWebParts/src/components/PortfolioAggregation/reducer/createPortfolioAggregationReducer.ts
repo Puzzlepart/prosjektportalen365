@@ -328,8 +328,7 @@ export const createPortfolioAggregationReducer = (
             if (column.fieldName.includes('OWSUSER')) {
               const match = value.match(/\|([^|]+)\|/)
               value = match ? match[1].trim() : null
-            }
-
+            }          
             return { name: value, value, selected: false }
           })
         items = items.sort((a, b) => (a.value > b.value ? 1 : -1))
