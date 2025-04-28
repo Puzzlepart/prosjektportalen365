@@ -1,4 +1,4 @@
-<pnp:ContentType ID="0x0100DAFD9901A59F445EB29B2CE3D663A87D" Name="{resource:ContentTypes_Timeline_Configuration_Element_Name}" Description="{resource:ContentTypes_Timeline_Configuration_Element_Description}" Group="{resource:ContentTypes_Group}" UpdateChildren="true"
+<pnp:ContentType ID="0x0100DAFD9901A59F445EB29B2CE3D663A87D" Name="{resource:ContentTypes_TimelineConfiguration_Element_Name}" Description="{resource:ContentTypes_TimelineConfiguration_Element_Description}" Group="{resource:ContentTypes_Group}" UpdateChildren="true"
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:FieldRefs>
         <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" UpdateChildren="true" />

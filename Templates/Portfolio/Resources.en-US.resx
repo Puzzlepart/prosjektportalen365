@@ -835,10 +835,10 @@
     <data name="ContentTypes_StatusFieldSection_Name" xml:space="preserve">
         <value>Status Field Section</value>
     </data>
-    <data name="ContentTypes_Timeline_Configuration_Element_Description" xml:space="preserve">
+    <data name="ContentTypes_TimelineConfiguration_Element_Description" xml:space="preserve">
         <value>Create a new timeline configuration element</value>
     </data>
-    <data name="ContentTypes_Timeline_Configuration_Element_Name" xml:space="preserve">
+    <data name="ContentTypes_TimelineConfiguration_Element_Name" xml:space="preserve">
         <value>Timeline Configuration Element</value>
     </data>
     <data name="ContentTypes_Timeline_Element_Name" xml:space="preserve">
@@ -1885,16 +1885,16 @@
     <data name="Lists_TimelineContent_Url" xml:space="preserve">
         <value>Lists/TimelineContent</value>
     </data>
-    <data name="Lists_Timeline_Configuration_Description" xml:space="preserve">
+    <data name="Lists_TimelineConfiguration_Description" xml:space="preserve">
         <value>Configuration of the timeline elements' color, shape and visibility</value>
     </data>
-    <data name="Lists_Timeline_Configuration_Field_GtSortOrder_Description" xml:space="preserve">
+    <data name="Lists_TimelineConfiguration_Field_GtSortOrder_Description" xml:space="preserve">
         <value>Specify the priority of the item under its group/project on the timeline, use for example 31 if you want the item to be between elements 30 and 40.</value>
     </data>
-    <data name="Lists_Timeline_Configuration_Title" xml:space="preserve">
+    <data name="Lists_TimelineConfiguration_Title" xml:space="preserve">
         <value>Timeline Configuration</value>
     </data>
-    <data name="Lists_Timeline_Configuration_Url" xml:space="preserve">
+    <data name="Lists_TimelineConfiguration_Url" xml:space="preserve">
         <value>Lists/TimelineConfiguration</value>
     </data>
     <data name="Lists_Uncertainty_Title" xml:space="preserve">

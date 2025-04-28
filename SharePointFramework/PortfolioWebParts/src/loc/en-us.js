@@ -411,8 +411,6 @@ define([], function () {
     StartDateLabel: 'Start date',
     StatusReportsCountLabel: 'Number of statusreports to display',
     TileViewGroupName: 'Tile view',
-    TimelineConfigurationListName: 'Tidslinjekonfigurasjon',
-    TimelineContentListName: 'Tidslinjeinnhold',
     TitleLabel: 'Title',
     ToggleColumnFormPanelLabel: 'Add column',
     UseChangesButtonText: 'Use',

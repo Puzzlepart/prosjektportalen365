@@ -21,13 +21,11 @@ export default class PortfolioTimelineWebPart extends BasePortfolioWebPart<IProj
               groupName: strings.ProjectDeliveriesGroupName,
               groupFields: [
                 PropertyPaneTextField('dataSourceName', {
-                  label: strings.DataSourceLabel,
-                  value: 'Alle prosjektleveranser'
+                  label: strings.DataSourceLabel
                 }),
                 PropertyPaneTextField('configItemTitle', {
                   label: strings.ConfigItemTitleFieldLabel,
-                  description: strings.ConfigItemTitleFieldDescription,
-                  value: 'Prosjektleveranse'
+                  description: strings.ConfigItemTitleFieldDescription
                 })
               ]
             }

@@ -459,7 +459,7 @@ export class SPDataAdapter
    */
   public async fetchTimelineConfiguration() {
     const timelineConfig = await this.portalDataService.web.lists
-      .getByTitle(resource.Lists_Timeline_Configuration_Title)
+      .getByTitle(resource.Lists_TimelineConfiguration_Title)
       .items.select(
         'GtSortOrder',
         'Title',

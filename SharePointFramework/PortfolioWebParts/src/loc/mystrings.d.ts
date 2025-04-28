@@ -396,8 +396,6 @@ declare interface IPortfolioWebPartsStrings {
   StartDateLabel: string
   StatusReportsCountLabel: string
   TileViewGroupName: string
-  TimelineConfigurationListName: string
-  TimelineContentListName: string
   TitleLabel: string
   TitleDescription: string
   ToggleColumnFormPanelLabel: string

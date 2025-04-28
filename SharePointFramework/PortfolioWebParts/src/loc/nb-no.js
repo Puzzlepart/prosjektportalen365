@@ -398,8 +398,6 @@ define([], function () {
     StartDateLabel: 'Startdato',
     StatusReportsCountLabel: 'Antall rapporter å vise',
     TileViewGroupName: 'Flisevisning',
-    TimelineConfigurationListName: 'Tidslinjekonfigurasjon',
-    TimelineContentListName: 'Tidslinjeinnhold',
     TitleLabel: 'Tittel',
     TitleDescription: 'Tittel for visningen.',
     ToggleColumnFormPanelLabel: 'Legg til kolonne',

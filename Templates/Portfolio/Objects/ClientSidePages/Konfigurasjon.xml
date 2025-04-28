@@ -506,12 +506,12 @@
         &quot;searchablePlainTexts&quot;: {
             &quot;title&quot;: &quot;{resource:WebParts_QuickLinks_Configuration_Title}&quot;,
             &quot;items[0].description&quot;: &quot;{resource:Lists_ChartConfiguration_Description}&quot;,
-            &quot;items[1].description&quot;: &quot;{resource:Lists_Timeline_Configuration_Description}&quot;,
+            &quot;items[1].description&quot;: &quot;{resource:Lists_TimelineConfiguration_Description}&quot;,
             &quot;items[2].description&quot;: &quot;{resource:Lists_Idea_Configuration_Description}&quot;,
             &quot;items[3].description&quot;: &quot;{resource:Lists_HelpContent_Description}&quot;,
             &quot;items[4].description&quot;: &quot;{resource:Lists_Links_Description}&quot;,
             &quot;items[0].title&quot;: &quot;{resource:Lists_ChartConfiguration_Title}&quot;,
-            &quot;items[1].title&quot;: &quot;{resource:Lists_Timeline_Configuration_Title}&quot;,
+            &quot;items[1].title&quot;: &quot;{resource:Lists_TimelineConfiguration_Title}&quot;,
             &quot;items[2].title&quot;: &quot;{resource:Lists_Idea_Configuration_Title}&quot;,
             &quot;items[3].title&quot;: &quot;{resource:Lists_HelpContent_Title}&quot;,
             &quot;items[4].title&quot;: &quot;{resource:Lists_Links_Title}&quot;
@@ -520,7 +520,7 @@
         &quot;links&quot;: {
             &quot;baseUrl&quot;: &quot;{site}&quot;,
             &quot;items[0].sourceItem.url&quot;: &quot;{site}/{resource:Lists_ChartConfiguration_Url}&quot;,
-            &quot;items[1].sourceItem.url&quot;: &quot;{site}/{resource:Lists_Timeline_Configuration_Url}&quot;,
+            &quot;items[1].sourceItem.url&quot;: &quot;{site}/{resource:Lists_TimelineConfiguration_Url}&quot;,
             &quot;items[2].sourceItem.url&quot;: &quot;{site}/{resource:Lists_Idea_Configuration_Url}&quot;,
             &quot;items[3].sourceItem.url&quot;: &quot;{site}/{resource:Lists_HelpContent_Url}&quot;,
             &quot;items[4].sourceItem.url&quot;: &quot;{site}/{resource:Lists_Links_Url}&quot;

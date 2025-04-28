@@ -847,10 +847,10 @@
     <data name="ContentTypes_StatusFieldSection_Name" xml:space="preserve">
         <value>Seksjon for statusfelt</value>
     </data>
-    <data name="ContentTypes_Timeline_Configuration_Element_Description" xml:space="preserve">
+    <data name="ContentTypes_TimelineConfiguration_Element_Description" xml:space="preserve">
         <value>Opprett et nytt tidslinjekonfigurasjonelement</value>
     </data>
-    <data name="ContentTypes_Timeline_Configuration_Element_Name" xml:space="preserve">
+    <data name="ContentTypes_TimelineConfiguration_Element_Name" xml:space="preserve">
         <value>Tidslinjekonfigurasjonelement</value>
     </data>
     <data name="ContentTypes_Timeline_Element_Description" xml:space="preserve">
@@ -1990,16 +1990,16 @@
     <data name="Lists_TimelineContent_Url" xml:space="preserve">
         <value>Lists/Tidslinjeinnhold</value>
     </data>
-    <data name="Lists_Timeline_Configuration_Description" xml:space="preserve">
+    <data name="Lists_TimelineConfiguration_Description" xml:space="preserve">
         <value>Konfigurasjon av tidslinjeelementenes farge, form og synlighet</value>
     </data>
-    <data name="Lists_Timeline_Configuration_Field_GtSortOrder_Description" xml:space="preserve">
+    <data name="Lists_TimelineConfiguration_Field_GtSortOrder_Description" xml:space="preserve">
         <value>Angi prioritering av elementet under tilhørende gruppe/prosjekt på tidslinjen, benytt f. eks 31 dersom du vil at elementet skal ligge mellom element 30 og 40.</value>
     </data>
-    <data name="Lists_Timeline_Configuration_Title" xml:space="preserve">
+    <data name="Lists_TimelineConfiguration_Title" xml:space="preserve">
         <value>Tidslinjekonfigurasjon</value>
     </data>
-    <data name="Lists_Timeline_Configuration_Url" xml:space="preserve">
+    <data name="Lists_TimelineConfiguration_Url" xml:space="preserve">
         <value>Lists/Tidslinjekonfigurasjon</value>
     </data>
     <data name="Lists_Uncertainty_Title" xml:space="preserve">

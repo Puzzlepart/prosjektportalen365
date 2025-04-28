@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 import { IPersonaProps, IPersonaSharedProps } from '@fluentui/react'
 import { format } from '@fluentui/react/lib/Utilities'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
@@ -455,7 +453,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
    */
   public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationModel[]) {
     const timelineItems = await this._sp.web.lists
-      .getByTitle(strings.TimelineContentListName)
+      .getByTitle(resource.Lists_TimelineContent_Title)
       .items.select(
         'Title',
         'GtTimelineTypeLookup/Title',
@@ -495,7 +493,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
   public async fetchTimelineConfiguration() {
     const timelineConfig = await this._sp.web.lists
-      .getByTitle(strings.TimelineConfigurationListName)
+      .getByTitle(resource.Lists_TimelineConfiguration_Title)
       .items.select(...new SPTimelineConfigurationItem().fields)()
     return timelineConfig.map((item) => new TimelineConfigurationModel(item)).filter(Boolean)
   }
@@ -507,13 +505,13 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   ) {
     const config = _.find(
       timelineConfig,
-      (col) => col.title === (configItemTitle || 'Prosjektleveranse')
+      (col) => col.title === (configItemTitle ?? resource.ContentTypes_ProjectDelivery_Name)
     )
     if (config?.showElementPortfolio) {
       const projectDeliveries = await (async () => {
         try {
           const deliveries = await this.fetchItemsWithSource(
-            dataSourceName || 'Alle prosjektleveranser',
+            dataSourceName ?? resource.Lists_DataSources_Category_ProjectDeliveries_All,
             [
               'Title',
               'GtDeliveryDescriptionOWSMTXT',
@@ -1068,7 +1066,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   }
 
   public async getIdeaConfiguration(
-    listName: string = 'Idékonfigurasjon',
+    listName: string = resource.Lists_Idea_Configuration_Title,
     configurationName: string = 'Standard'
   ): Promise<IdeaConfigurationModel> {
     try {
