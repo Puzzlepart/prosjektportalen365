@@ -1,187 +1,186 @@
-<pnp:ListInstance Title="{resource:Lists_StatusSections_Title}" Description="{resource:Lists_StatusSections_Description}" TemplateType="100" Url="{resource:Lists_StatusSections_Url}" ContentTypesEnabled="true" Hidden="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000"
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
-    <pnp:ContentTypeBindings>
-        <pnp:ContentTypeBinding ContentTypeID="0x01004CEFE616A94A3A48A27D9DEBDF5EC82803" Default="true" />
-        <pnp:ContentTypeBinding ContentTypeID="0x01004CEFE616A94A3A48A27D9DEBDF5EC82802" />
-        <pnp:ContentTypeBinding ContentTypeID="0x01004CEFE616A94A3A48A27D9DEBDF5EC82804" />
-        <pnp:ContentTypeBinding ContentTypeID="0x01004CEFE616A94A3A48A27D9DEBDF5EC82805" />
-    </pnp:ContentTypeBindings>
-    <pnp:Views>
-        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_StatusSections_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
-            <Query>
-                <OrderBy>
-                    <FieldRef Name="GtSortOrder" />
-                </OrderBy>
-            </Query>
-            <ViewFields>
-                <FieldRef Name="GtSortOrder" />
-                <FieldRef Name="ContentType" />
-                <FieldRef Name="LinkTitle" />
-                <FieldRef Name="GtSecShowInNavbar" />
-                <FieldRef Name="GtSecShowInStatusSection" />
-                <FieldRef Name="GtSecShowAsSection" />
-                <FieldRef Name="Modified" />
-            </ViewFields>
-            <RowLimit Paged="TRUE">30</RowLimit>
-            <Aggregations Value="Off" />
-            <JSLink>clienttemplates.js</JSLink>
-        </View>
-    </pnp:Views>
-    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Overordnet status</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecIcon">BarChart4</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowInNavbar">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowAsSection">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecFieldName">GtOverallStatus</pnp:DataValue>
-            <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82802</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">20</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Fremdrift</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecIcon">DateTime</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowInNavbar">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecFieldName">GtStatusTime</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecViewFields">Title,GtDeliveryAcceptanceDate,GtDeliveryStatus,GtDeliveryStatusComment,GtDeliveryQualityExpectations</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecList">Prosjektleveranser</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecViewQuery">&lt;OrderBy&gt;
+<pnp:ListInstance Title="{resource:Lists_StatusSections_Title}" Description="{resource:Lists_StatusSections_Description}" TemplateType="100" Url="{resource:Lists_StatusSections_Url}" ContentTypesEnabled="true" Hidden="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+  <pnp:ContentTypeBindings>
+    <pnp:ContentTypeBinding ContentTypeID="0x01004CEFE616A94A3A48A27D9DEBDF5EC82803" Default="true" />
+    <pnp:ContentTypeBinding ContentTypeID="0x01004CEFE616A94A3A48A27D9DEBDF5EC82802" />
+    <pnp:ContentTypeBinding ContentTypeID="0x01004CEFE616A94A3A48A27D9DEBDF5EC82804" />
+    <pnp:ContentTypeBinding ContentTypeID="0x01004CEFE616A94A3A48A27D9DEBDF5EC82805" />
+  </pnp:ContentTypeBindings>
+  <pnp:Views>
+    <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_StatusSections_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
+      <Query>
+        <OrderBy>
+          <FieldRef Name="GtSortOrder" />
+        </OrderBy>
+      </Query>
+      <ViewFields>
+        <FieldRef Name="GtSortOrder" />
+        <FieldRef Name="ContentType" />
+        <FieldRef Name="LinkTitle" />
+        <FieldRef Name="GtSecShowInNavbar" />
+        <FieldRef Name="GtSecShowInStatusSection" />
+        <FieldRef Name="GtSecShowAsSection" />
+        <FieldRef Name="Modified" />
+      </ViewFields>
+      <RowLimit Paged="TRUE">30</RowLimit>
+      <Aggregations Value="Off" />
+      <JSLink>clienttemplates.js</JSLink>
+    </View>
+  </pnp:Views>
+  <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_StatusSections_OverallStatus_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecIcon">BarChart4</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowInNavbar">False</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowAsSection">False</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecFieldName">GtOverallStatus</pnp:DataValue>
+      <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82802</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSortOrder">20</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_StatusSections_StatusTime_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecIcon">DateTime</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowInNavbar">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecFieldName">GtStatusTime</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecViewFields">Title,GtDeliveryAcceptanceDate,GtDeliveryStatus,GtDeliveryStatusComment,GtDeliveryQualityExpectations</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecList">{resource:Lists_ProjectDeliveries_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecViewQuery">&lt;OrderBy&gt;
 &lt;FieldRef Name="Modified" Ascending="FALSE" /&gt;
 &lt;/OrderBy&gt;</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecRowLimit">100</pnp:DataValue>
-            <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82805</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">30</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Økonomi</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecIcon">Money</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowInNavbar">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecViewFields">GtProjectFinanceName,GtBudgetTotal,GtCostsTotal,GtProjectForecast,GtBudgetLastReportDate</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecFieldName">GtStatusBudget</pnp:DataValue>
-            <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82803</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">40</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Kvalitet</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecIcon">Product</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowInNavbar">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecFieldName">GtStatusQuality</pnp:DataValue>
-            <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82802</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">50</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Risiko</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecIcon">Warning</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowInNavbar">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecViewFields">ID,Title,GtRiskProximity,GtRiskAction,GtRiskStrategy,GtRiskFactor,GtRiskFactorPostAction</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecFieldName">GtStatusRisk</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecList">Usikkerhet</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecViewQuery">&lt;OrderBy&gt;
+      <pnp:DataValue FieldName="GtSecRowLimit">100</pnp:DataValue>
+      <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82805</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSortOrder">30</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_StatusSections_StatusBudget_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecIcon">Money</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowInNavbar">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecViewFields">GtProjectFinanceName,GtBudgetTotal,GtCostsTotal,GtProjectForecast,GtBudgetLastReportDate</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecFieldName">GtStatusBudget</pnp:DataValue>
+      <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82803</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSortOrder">40</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_StatusSections_StatusQuality_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecIcon">Product</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowInNavbar">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecFieldName">GtStatusQuality</pnp:DataValue>
+      <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82802</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSortOrder">50</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_StatusSections_StatusRisk_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecIcon">Warning</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowInNavbar">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecViewFields">ID,Title,GtRiskProximity,GtRiskAction,GtRiskStrategy,GtRiskFactor,GtRiskFactorPostAction</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecFieldName">GtStatusRisk</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecList">{resource:Lists_Uncertainty_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecViewQuery">&lt;OrderBy&gt;
     &lt;FieldRef Name="GtRiskFactor" Ascending="FALSE" /&gt;
 &lt;/OrderBy&gt;
 &lt;Where&gt;
     &lt;And&gt;
         &lt;Neq&gt;
             &lt;FieldRef Name="GtRiskStatus" /&gt;
-            &lt;Value Type="Text"&gt;Ikke lenger aktuell&lt;/Value&gt;
+            &lt;Value Type="Text"&gt;{resource:Choice_GtRiskStatus_NoLongerRelevant}&lt;/Value&gt;
         &lt;/Neq&gt;
         &lt;Eq&gt;
             &lt;FieldRef Name="ContentType" /&gt;
-            &lt;Value Type="Computed"&gt;Risiko&lt;/Value&gt;
+            &lt;Value Type="Computed"&gt;{resource:ContentTypes_Risk_Name}&lt;/Value&gt;
         &lt;/Eq&gt;
     &lt;/And&gt;
 &lt;/Where&gt;</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecRowLimit">100</pnp:DataValue>
-            <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82804</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">60</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Gevinstoppnåelse</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecIcon">Trophy</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowInNavbar">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecFieldName">GtStatusGainAchievement</pnp:DataValue>
-            <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82802</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">70</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Muligheter</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecIcon">BranchCommit</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowInNavbar">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecViewFields">ID,Title,GtRiskProximity,GtRiskAction,GtRiskStrategy,GtRiskFactor,GtRiskFactorPostAction</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecFieldName">GtStatusOpportunities</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecList">Usikkerhet</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecViewQuery">&lt;OrderBy&gt;
+      <pnp:DataValue FieldName="GtSecRowLimit">100</pnp:DataValue>
+      <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82804</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSortOrder">60</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_StatusSections_StatusGainAchievement_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecIcon">Trophy</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowInNavbar">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecFieldName">GtStatusGainAchievement</pnp:DataValue>
+      <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82802</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSortOrder">70</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_StatusSections_StatusOpportunities_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecIcon">BranchCommit</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowInNavbar">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecViewFields">ID,Title,GtRiskProximity,GtRiskAction,GtRiskStrategy,GtRiskFactor,GtRiskFactorPostAction</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecFieldName">GtStatusOpportunities</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecList">{resource:Lists_Uncertainty_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecViewQuery">&lt;OrderBy&gt;
     &lt;FieldRef Name="GtRiskFactor" Ascending="FALSE" /&gt;
 &lt;/OrderBy&gt;
 &lt;Where&gt;
     &lt;And&gt;
         &lt;Neq&gt;
             &lt;FieldRef Name="GtRiskStatus" /&gt;
-            &lt;Value Type="Text"&gt;Ikke lenger aktuell&lt;/Value&gt;
+            &lt;Value Type="Text"&gt;{resource:Choice_GtRiskStatus_NoLongerRelevant}&lt;/Value&gt;
         &lt;/Neq&gt;
         &lt;Eq&gt;
             &lt;FieldRef Name="ContentType" /&gt;
-            &lt;Value Type="Computed"&gt;Mulighet&lt;/Value&gt;
+            &lt;Value Type="Computed"&gt;{resource:ContentTypes_Possibility_Name}&lt;/Value&gt;
         &lt;/Eq&gt;
     &lt;/And&gt;
 &lt;/Where&gt;</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecRowLimit">100</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecView">Aktuelle muligheter</pnp:DataValue>
-            <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82804</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">80</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Tilskudd</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecIcon">AddWork</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowInNavbar">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecFieldName">GtBAProjectSupport</pnp:DataValue>
-            <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82802</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">90</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">SHA</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecIcon">Health</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowInNavbar">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecFieldName">GtBAProjectSHA</pnp:DataValue>
-            <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82802</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">100</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Miljø</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecIcon">Globe</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowInNavbar">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecFieldName">GtBAProjectEnv</pnp:DataValue>
-            <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82802</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">110</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Plan- og byggesak</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecIcon">BuildDefinition</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowInNavbar">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSecFieldName">GtBAProjectStatusCase</pnp:DataValue>
-            <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82802</pnp:DataValue>
-        </pnp:DataRow>
-    </pnp:DataRows>
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
+      <pnp:DataValue FieldName="GtSecRowLimit">100</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecView">{resource:View_CurrentOpportunities_DisplayName}</pnp:DataValue>
+      <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82804</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSortOrder">80</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_StatusSections_ProjectSupport_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecIcon">AddWork</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowInNavbar">False</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecFieldName">GtBAProjectSupport</pnp:DataValue>
+      <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82802</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSortOrder">90</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_StatusSections_SHA_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecIcon">Health</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowInNavbar">False</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecFieldName">GtBAProjectSHA</pnp:DataValue>
+      <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82802</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSortOrder">100</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_StatusSections_Environment_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecIcon">Globe</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowInNavbar">False</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecFieldName">GtBAProjectEnv</pnp:DataValue>
+      <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82802</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSortOrder">110</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_StatusSections_StatusCase_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecIcon">BuildDefinition</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowInNavbar">False</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecFieldName">GtBAProjectStatusCase</pnp:DataValue>
+      <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82802</pnp:DataValue>
+    </pnp:DataRow>
+  </pnp:DataRows>
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>

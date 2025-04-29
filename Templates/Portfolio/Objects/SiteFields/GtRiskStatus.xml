@@ -1,1 +1,8 @@
-<Field Type="Choice" DisplayName="{resource:SiteFields_GtRiskStatus_DisplayName}" Description="{resource:SiteFields_GtRiskStatus_Description}" Format="RadioButtons" FillInChoice="FALSE" Group="{resource:SiteFields_Project_Group}" ID="{6c2da0dc-77b1-4152-b751-97adf436faa0}" StaticName="GtRiskStatus" Name="GtRiskStatus"><Default>Identifisert</Default><CHOICES><CHOICE>Identifisert</CHOICE><CHOICE>Tiltak gjennomført</CHOICE><CHOICE>Ikke lenger aktuell</CHOICE></CHOICES></Field>
+<Field Type="Choice" DisplayName="{resource:SiteFields_GtRiskStatus_DisplayName}" Description="{resource:SiteFields_GtRiskStatus_Description}" Format="RadioButtons" FillInChoice="FALSE" Group="{resource:SiteFields_Project_Group}" ID="{6c2da0dc-77b1-4152-b751-97adf436faa0}" StaticName="GtRiskStatus" Name="GtRiskStatus">
+    <Default>Identifisert</Default>
+    <CHOICES>
+        <CHOICE>Identifisert</CHOICE>
+        <CHOICE>Tiltak gjennomført</CHOICE>
+        <CHOICE>Ikke lenger aktuell</CHOICE>
+    </CHOICES>
+</Field>

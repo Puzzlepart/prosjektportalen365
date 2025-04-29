@@ -1,4 +1,4 @@
-_The template was validated 4/29/2025, 10:52:27 AM_
+_The template was validated 29.4.2025, 12:05:02_
 
 The template contains the following tokens that has not been found in the .resx files:
 
