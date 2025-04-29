@@ -448,54 +448,58 @@
                 "Title": "{{ClientSidePages_ProgramStatus_Title}}"
             },
             {
-                "Url": "SitePages/ProgramOversikt.aspx",
-                "Title": "Programinnhold",
+                "Url": "SitePages/{{ClientSidePages_ProgramOverview_PageName}}",
+                "Title": "{{Navigation_ProgramContent_Title}}",
                 "Children": [
                     {
-                        "Url": "SitePages/Admin.aspx",
-                        "Title": "Administrasjon"
+                        "Url": "SitePages/{{ClientSidePages_ParentAdmin_PageName}}",
+                        "Title": "{{ClientSidePages_ParentAdmin_Title}}"
                     },
                     {
-                        "Url": "SitePages/ProgramOversikt.aspx",
-                        "Title": "Oversikt"
+                        "Url": "SitePages/{{ClientSidePages_ProgramOverview_PageName}}",
+                        "Title": "{{ClientSidePages_ProgramOverview_Title}}"
                     },
                     {
-                        "Url": "SitePages/ProgramGevinster.aspx",
-                        "Title": "Gevinster"
+                        "Url": "SitePages/{{ClientSidePages_ProgramBenefitOverview_PageName}}",
+                        "Title": "{{ClientSidePages_ProgramBenefitOverview_Title}}"
                     },
                     {
-                        "Url": "SitePages/ProgramTidslinje.aspx",
-                        "Title": "Tidslinje"
+                        "Url": "SitePages/{{ClientSidePages_ProgramTimeline_PageName}}",
+                        "Title": "{{ClientSidePages_ProgramTimeline_Title}}"
                     },
                     {
-                        "Url": "SitePages/ProgramLeveranser.aspx",
-                        "Title": "Leveranser"
+                        "Url": "SitePages/{{ClientSidePages_ProgramDeliveries_PageName}}",
+                        "Title": "{{ClientSidePages_ProgramDeliveries_Title}}"
                     },
                     {
-                        "Url": "SitePages/ProgramUsikkerheter.aspx",
-                        "Title": "Usikkerheter"
+                        "Url": "SitePages/{{ClientSidePages_ProgramUncertainties_PageName}}",
+                        "Title": "{{ClientSidePages_ProgramUncertainties_Title}}"
                     },
                     {
-                        "Url": "SitePages/ProgramKommunikasjon.aspx",
-                        "Title": "Kommunikasjonsplaner"
+                        "Url": "SitePages/{{ClientSidePages_ProgramCommunicationPlan_PageName}}",
+                        "Title": "{{ClientSidePages_ProgamCommunicationPlan_Title}}"
                     },
                     {
-                        "Url": "SitePages/ProgramRessursallokeringer.aspx",
-                        "Title": "Ressursallokeringer"
+                        "Url": "SitePages/{{ClientSidePages_ProgramResourceAllocation_PageName}}",
+                        "Title": "{{ClientSidePages_ProgramResourceAllocation_Title}}"
                     }
                 ]
             },
             {
-                "Url": "Dokumenter/Forms/AllItems.aspx",
-                "Title": "Dokumenter"
+                "Url": "{{Navigation_Documents_Url}}",
+                "Title": "{{Navigation_Documents_Title}}"
             },
             {
-                "Url": "Lists/Programleveranser/AllItems.aspx",
-                "Title": "Programleveranser"
+                "Url": "{{Lists_ProgramDeliveries_Url}}/AllItems.aspx",
+                "Title": "{{Lists_ProgramDeliveries_Title}}"
             },
             {
-                "Url": "SitePages/Tidslinje.aspx",
-                "Title": "Programtidslinje"
+                "Url": "SitePages/{{ClientSidePages_ProgramProjectTimeline_PageName}}",
+                "Title": "{{ClientSidePages_ProgramProjectTimeline_Title}}"
+            },
+            {
+                "Url": "_layouts/15/viewlsts.aspx",
+                "Title": "{{Navigation_SiteContent_Title}}"
             }
         ]
     },
@@ -512,9 +516,9 @@
                 {
                     "Id": "{{ControlId_ProjectInformationWebPart}}",
                     "Properties": {
-                        "title": "Programinformasjon",
+                        "title": "{{WebParts_ProgramInformation_Title}}", 
                         "statusReportsCount": 0,
-                        "statusReportsHeader": "Prosjektstatus",
+                        "statusReportsHeader": "{{WebParts_ProjectStatusHeader_Title}}",
                         "filterField": "GtShowFieldFrontpage",
                         "adminPageLink": "Admin.aspx"
                     }
@@ -522,7 +526,7 @@
                 {
                     "Id": "a5df8fdf-b508-4b66-98a6-d83bc2597f63",
                     "Properties": {
-                        "title": "Programnyheter",
+                        "title": "{{WebParts_ProgramNews_Title}}",
                         "showChrome": true,
                         "compactMode": true
                     }
@@ -537,18 +541,18 @@
                                 {
                                     "Id": "{{ControlId_ProjectPhasesWebPart}}",
                                     "Properties": {
-                                        "phaseField": "Fase",
+                                        "phaseField": "{{WebParts_ProjectPhase_Title}}",
                                         "syncPropertiesAfterPhaseChange": true,
                                         "showSubText": true,
                                         "subTextTruncateLength": 50,
-                                        "currentPhaseViewName": "Gjeldende fase"
+                                        "currentPhaseViewName": "{{WebParts_CurrentPhase_Title}}"
                                     }
                                 },
                                 {
-                                    "Id": "6676088b-e28e-4a90-b9cb-d0d0303cd2eb",
+                                  "Id": "6676088b-e28e-4a90-b9cb-d0d0303cd2eb",
                                     "Properties": {
                                         "showPerPage": 5,
-                                        "title": "Møter og hendelser",
+                                        "title": "{{WebParts_MeetingsAndEvents_Title}}",
                                         "timeSpanLimitInMonth": 6
                                     }
                                 }
@@ -576,8 +580,8 @@
             ]
         },
         {
-            "Name": "Oppgaver.aspx",
-            "Title": "Oppgaver",
+            "Name": "{{ClientSidePages_Tasks_PageName}}",
+            "Title": "{{ClientSidePages_Tasks_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -599,8 +603,8 @@
             ]
         },
         {
-            "Name": "Admin.aspx",
-            "Title": "Administrasjon",
+            "Name": "{{ClientSidePages_ParentAdmin_PageName}}",
+            "Title": "{{ClientSidePages_ParentAdmin_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -612,7 +616,7 @@
                                 {
                                     "Id": "{{ControlId_ProgramAdministrationWebpart}}",
                                     "Properties": {
-                                        "title": "Administrasjon av underområder"
+                                        "title": "{{ClientSidePages_ParentAdmin_WebPartTitle}}"
                                     }
                                 }
                             ]
@@ -622,8 +626,8 @@
             ]
         },
         {
-            "Name": "ProgramOversikt.aspx",
-            "Title": "Oversikt",
+            "Name": "{{ClientSidePages_ProgramOverview_PageName}}",
+            "Title": "{{ClientSidePages_ProgramOverview_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -635,7 +639,7 @@
                                 {
                                     "Id": "{{ControlId_ProgramProjectOverviewWebPart}}",
                                     "Properties": {
-                                        "title": "Oversikt over underområder",
+                                        "title": "{{ClientSidePages_ParentOverview_WebPartTitle}}",
                                         "showCommandBar": true,
                                         "showFilters": true,
                                         "showGroupBy": true,
@@ -651,8 +655,8 @@
             ]
         },
         {
-            "Name": "ProgramGevinster.aspx",
-            "Title": "Gevinster",
+            "Name": "{{ClientSidePages_ProgramBenefitOverview_PageName}}",
+            "Title": "{{ClientSidePages_ProgramBenefitOverview_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -664,10 +668,10 @@
                                 {
                                     "Id": "{{ControlId_ProgramAggregationWebPart}}",
                                     "Properties": {
-                                        "title": "Gevinster for underområder",
-                                        "dataSource": "Alle gevinstelementer for underområder",
-                                        "dataSourceCategory": "Gevinstoversikt",
-                                        "dataSourceLevel": "Overordnet/Program",
+                                        "title": "{{ClientSidePages_ParentBenefitOverview_WebPartTitle}}",
+                                        "dataSource": "{{Lists_DataSources_Category_BenefitOverview_Children}}",
+                                        "dataSourceCategory": "{{Lists_DataSources_Category_BenefitOverview}}",
+                                        "dataSourceLevel": "{{Lists_DataSources_Level_ParentProgram}}",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
                                         "showSearchBox": true
@@ -680,8 +684,8 @@
             ]
         },
         {
-            "Name": "ProgramKommunikasjon.aspx",
-            "Title": "Kommunikasjonsplaner",
+            "Name": "{{ClientSidePages_ProgramCommunicationPlan_PageName}}",
+            "Title": "{{ClientSidePages_ProgamCommunicationPlan_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -693,9 +697,9 @@
                                 {
                                     "Id": "{{ControlId_ProgramAggregationWebPart}}",
                                     "Properties": {
-                                        "title": "Kommunikasjonsplaner for underområder",
-                                        "dataSource": "Alle kommunikasjonsplaner for underområder",
-                                        "dataSourceCategory": "Kommunikasjonsoversikt",
+                                        "title": "{{ClientSidePages_ParentCommunicationPlan_WebPartTitle}}",
+                                        "dataSource": "{{Lists_DataSources_Category_CommunicationPlan_Children}}",
+                                        "dataSourceCategory": "{{Lists_DataSources_Category_CommunicationPlan}}",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
                                         "showSearchBox": true
@@ -708,8 +712,8 @@
             ]
         },
         {
-            "Name": "ProgramRessursallokeringer.aspx",
-            "Title": "Ressursallokeringer",
+            "Name": "{{ClientSidePages_ProgramResourceAllocation_PageName}}",
+            "Title": "{{ClientSidePages_ProgramResourceAllocation_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -721,9 +725,9 @@
                                 {
                                     "Id": "{{ControlId_ProgramAggregationWebPart}}",
                                     "Properties": {
-                                        "title": "Ressursallokeringer for underområder",
-                                        "dataSource": "Alle ressursallokeringer for underområder",
-                                        "dataSourceCategory": "Ressursallokering",
+                                        "title": "{{ClientSidePages_ParentResourceAllocation_WebPartTitle}}",
+                                        "dataSource": "{{Lists_DataSources_Category_ResourceAllocation_Children}}",
+                                        "dataSourceCategory": "{{Lists_DataSources_Category_ResourceAllocation}}",
                                         "hiddenColumns": [
                                             "Title"
                                         ],
@@ -739,8 +743,8 @@
             ]
         },
         {
-            "Name": "ProgramTidslinje.aspx",
-            "Title": "Tidslinje",
+            "Name": "{{ClientSidePages_ProgramTimeline_PageName}}",
+            "Title": "{{ClientSidePages_ProgramTimeline_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -752,9 +756,8 @@
                                 {
                                     "Id": "{{ControlId_ProgramTimelineWebPart}}",
                                     "Properties": {
-                                        "title": "Tidslinje for underområder",
-                                        "infoText": "Her listes alle prosjektene med start- og sluttdato i prosjektet. Prosjekttidslinjen støtter også faser, delfaser og milepæler. For å zoome inn/ut i tidslinje: ALT+Musehjul",
-                                        "dataSource": "Prosjekttidslinje"
+                                        "title": "{{ClientSidePages_ParentTimeline_WebPartTitle}}",
+                                        "infoText": "{{ClientSidePages_ParentTimeline_InfoText}}"
                                     }
                                 }
                             ]
@@ -777,9 +780,9 @@
                                 {
                                     "Id": "{{ControlId_ProjectStatusWebPart}}",
                                     "Properties": {
-                                        "title": "Programstatus",
-                                        "riskMatrix": {
-                                            "calloutTemplate": "<h3>{Title}</h3>\n<p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n<p><strong>Nærhet: </strong>{GtRiskProximity}</p>\n<p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>",
+                                        "title": "{{WebParts_ProgramStatus_Title}}",
+                                            "riskMatrix": {
+                                            "calloutTemplate": "<h3>{Title}</h3>\n<p><strong>{{WebParts_RiskStrategy_Title}}: </strong>{GtRiskStrategy}</p>\n<p><strong>{{WebParts_RiskProximity_Title}}: </strong>{GtRiskProximity}</p>\n<p><strong>{{WebParts_RiskStatus_Title}}: </strong>{GtRiskStatus}</p>",
                                             "width": 800
                                         }
                                     }
@@ -791,8 +794,8 @@
             ]
         },
         {
-            "Name": "Tidslinje.aspx",
-            "Title": "Programtidslinje",
+            "Name": "{{ClientSidePages_ProgramProjectTimeline_PageName}}",
+            "Title": "{{ClientSidePages_ProgramProjectTimeline_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -804,13 +807,13 @@
                                 {
                                     "Id": "{{ControlId_ProjectTimelineWebPart}}",
                                     "Properties": {
-                                        "listName": "Tidslinjeinnhold",
+                                        "listName": "{{Lists_TimelineContent_Title}}",
                                         "showTimeline": true,
                                         "showTimelineListCommands": true,
                                         "showTimelineList": true,
                                         "showProjectDeliveries": false,
-                                        "projectDeliveriesListName": "Programleveranser",
-                                        "configItemTitle": "Prosjektleveranse"
+                                        "projectDeliveriesListName": "{{Lists_ProgramDeliveries_Title}}",
+                                        "configItemTitle": "{{ContentTypes_ProjectDelivery_Name}}"
                                     }
                                 }
                             ]
@@ -820,8 +823,8 @@
             ]
         },
         {
-            "Name": "ProgramLeveranser.aspx",
-            "Title": "Leveranser",
+            "Name": "{{ClientSidePages_ProgramDeliveries_PageName}}",
+            "Title": "{{ClientSidePages_ProgramDeliveries_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -833,10 +836,10 @@
                                 {
                                     "Id": "{{ControlId_ProgramAggregationWebPart}}",
                                     "Properties": {
-                                        "title": "Leveranser for underområder",
-                                        "dataSource": "Alle leveranser for underområder",
-                                        "dataSourceCategory": "Leveranseoversikt",
-                                        "dataSourceLevel": "Overordnet/Program",
+                                        "title": "{{ClientSidePages_ParentDeliveries_WebPartTitle}}",
+                                        "dataSource": "{{Lists_DataSources_Category_ProjectDeliveries_Children}}",
+                                        "dataSourceCategory": "{{Lists_DataSources_Category_ProjectDeliveries}}",
+                                        "dataSourceLevel": "{{Lists_DataSources_Level_ParentProgram}}",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
                                         "showSearchBox": true
@@ -849,8 +852,8 @@
             ]
         },
         {
-            "Name": "ProgramUsikkerheter.aspx",
-            "Title": "Usikkerheter",
+            "Name": "{{ClientSidePages_ProgramUncertainties_PageName}}",
+            "Title": "{{ClientSidePages_ProgramUncertainties_Title}}",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -862,10 +865,10 @@
                                 {
                                     "Id": "{{ControlId_ProgramAggregationWebPart}}",
                                     "Properties": {
-                                        "title": "Usikkerheter for underområder",
-                                        "dataSource": "Alle risikoelementer for underområder",
-                                        "dataSourceCategory": "Usikkerhetsoversikt",
-                                        "dataSourceLevel": "Overordnet/Program",
+                                        "title": "{{ClientSidePages_ParentUncertainties_WebPartTitle}}",
+                                        "dataSource": "{{Lists_DataSources_Category_UncertaintyOverview_RisksChildren}}",
+                                        "dataSourceCategory": "{{Lists_DataSources_Category_UncertaintyOverview}}",
+                                        "dataSourceLevel": "{{Lists_DataSources_Level_ParentProgram}}",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
                                         "showSearchBox": true
@@ -880,7 +883,7 @@
     ],
     "Lists": [
         {
-            "Title": "Fasesjekkliste",
+            "Title": "{{Lists_PhaseChecklist_Title}}",
             "Description": "",
             "Template": 100,
             "ContentTypesEnabled": true,
@@ -905,11 +908,11 @@
                     ],
                     "AdditionalSettings": {
                         "RowLimit": 50,
-                        "ViewQuery": "<OrderBy><FieldRef Name=\"GtSortOrder\" /><FieldRef Name=\"ID\" /></OrderBy><Where><Neq><FieldRef Name=\"GtChecklistStatus\" /><Value Type=\"Text\">Arkivert</Value></Neq>\n</Where>"
+                        "ViewQuery": "<OrderBy><FieldRef Name=\"GtSortOrder\" /><FieldRef Name=\"ID\" /></OrderBy><Where><Neq><FieldRef Name=\"GtChecklistStatus\" /><Value Type=\"Text\">{{Choice_GtChecklistStatus_Archived}}</Value></Neq>\n</Where>"
                     }
                 },
                 {
-                    "Title": "Arkivert",
+                    "Title": "{{View_Archived_DisplayName}}",
                     "ViewFields": [
                         "GtSortOrder",
                         "LinkTitle",
@@ -918,11 +921,11 @@
                     ],
                     "AdditionalSettings": {
                         "RowLimit": 50,
-                        "ViewQuery": "<OrderBy><FieldRef Name=\"GtSortOrder\" /><FieldRef Name=\"ID\" /></OrderBy><Where><Eq><FieldRef Name=\"GtChecklistStatus\" /><Value Type=\"Text\">Arkivert</Value></Eq>\n</Where>"
+                        "ViewQuery": "<OrderBy><FieldRef Name=\"GtSortOrder\" /><FieldRef Name=\"ID\" /></OrderBy><Where><Eq><FieldRef Name=\"GtChecklistStatus\" /><Value Type=\"Text\">{{Choice_GtChecklistStatus_Archived}}</Value></Eq>\n</Where>"
                     }
                 },
                 {
-                    "Title": "Per status",
+                    "Title": "{{View_ByStatus_DisplayName}}",
                     "ViewFields": [
                         "GtSortOrder",
                         "LinkTitle",
@@ -937,7 +940,7 @@
             ]
         },
         {
-            "Title": "Interessentregister",
+            "Title": "{{Lists_Stakeholders_Title}}",
             "Description": "",
             "Template": 100,
             "ContentTypesEnabled": true,
@@ -971,8 +974,8 @@
                 }
             ]
         },
-        {
-            "Title": "Kommunikasjonsplan",
+          {
+            "Title": "{{Lists_CommunicationPlan_Title}}",
             "Description": "",
             "Template": 100,
             "ContentTypesEnabled": true,
@@ -986,7 +989,7 @@
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field Type=\"LookupMulti\" DisplayName=\"Målgruppe\" List=\"{listid:Interessentregister}\" ShowField=\"Title\" ID=\"{d685f33f-51b5-4e9f-a314-4b3d9467a7e4}\" Description=\"Hvem er målgruppen (interessent) for kommunikasjonsaktiviteten?\" StaticName=\"GtCommunicationTarget\" Name=\"GtCommunicationTarget\" Mult=\"TRUE\" />"
+                "<Field Type=\"LookupMulti\" DisplayName=\"{{ListFields_CommunicationTarget_DisplayName}}\" List=\"{listid:{{Lists_Stakeholders_Title}}}\" ShowField=\"Title\" ID=\"{d685f33f-51b5-4e9f-a314-4b3d9467a7e4}\" Description=\"{{ListFields_CommunicationTarget_Description}}\" StaticName=\"GtCommunicationTarget\" Name=\"GtCommunicationTarget\" Mult=\"TRUE\" />"
             ],
             "Views": [
                 {
@@ -1044,7 +1047,7 @@
             ]
         },
         {
-            "Title": "Programleveranser",
+            "Title": "{{Lists_ProgramDeliveries_Title}}",
             "Description": "",
             "Template": 100,
             "ContentTypesEnabled": true,
@@ -1121,7 +1124,7 @@
                     }
                 },
                 {
-                    "Title": "Aktuell risiko",
+                    "Title": "{{View_CurrentRisks_DisplayName}}",
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
@@ -1134,11 +1137,11 @@
                     "AdditionalSettings": {
                         "RowLimit": 100,
                         "Paged": true,
-                        "ViewQuery": "<GroupBy Collapse= \"TRUE\" GroupLimit= \"30\"><FieldRef Name= \"GtRiskStatus\" Ascending= \"FALSE\" /></GroupBy><OrderBy><FieldRef Name= \"GtRiskFactor\" Ascending= \"FALSE\" /></OrderBy><Where><And><Neq><FieldRef Name= \"GtRiskStatus\" /><Value Type= \"Text\">Ikke lenger aktuell</Value></Neq><Eq><FieldRef Name= \"ContentType\" /><Value Type= \"Computed\">Risiko</Value></Eq></And></Where>"
+                        "ViewQuery": "<GroupBy Collapse= \"TRUE\" GroupLimit= \"30\"><FieldRef Name= \"GtRiskStatus\" Ascending= \"FALSE\" /></GroupBy><OrderBy><FieldRef Name= \"GtRiskFactor\" Ascending= \"FALSE\" /></OrderBy><Where><And><Neq><FieldRef Name= \"GtRiskStatus\" /><Value Type= \"Text\">{{Choice_GtRiskStatus_NoLongerRelevant}}</Value></Neq><Eq><FieldRef Name= \"ContentType\" /><Value Type= \"Computed\">{{ContentTypes_Risk_Name}}</Value></Eq></And></Where>"
                     }
                 },
                 {
-                    "Title": "Aktuelle muligheter",
+                    "Title": "{{View_CurrentOpportunities_DisplayName}}",
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
@@ -1151,11 +1154,11 @@
                     "AdditionalSettings": {
                         "RowLimit": 100,
                         "Paged": true,
-                        "ViewQuery": "<GroupBy Collapse= \"TRUE\" GroupLimit= \"30\"><FieldRef Name= \"GtRiskStatus\" Ascending= \"FALSE\" /></GroupBy><OrderBy><FieldRef Name= \"GtRiskFactor\" Ascending= \"FALSE\" /></OrderBy><Where><And><Neq><FieldRef Name= \"GtRiskStatus\" /><Value Type= \"Text\">Ikke lenger aktuell</Value></Neq><Eq><FieldRef Name= \"ContentType\" /><Value Type= \"Computed\">Mulighet</Value></Eq></And></Where>"
+                        "ViewQuery": "<GroupBy Collapse= \"TRUE\" GroupLimit= \"30\"><FieldRef Name= \"GtRiskStatus\" Ascending= \"FALSE\" /></GroupBy><OrderBy><FieldRef Name= \"GtRiskFactor\" Ascending= \"FALSE\" /></OrderBy><Where><And><Neq><FieldRef Name= \"GtRiskStatus\" /><Value Type= \"Text\">{{Choice_GtRiskStatus_NoLongerRelevant}}</Value></Neq><Eq><FieldRef Name= \"ContentType\" /><Value Type= \"Computed\">{{ContentTypes_Possibility_Name}}</Value></Eq></And></Where>"
                     }
                 },
                 {
-                    "Title": "Uakseptabel risiko",
+                    "Title": "{{View_UnacceptableRisks_DisplayName}}",
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
@@ -1171,11 +1174,11 @@
                     "AdditionalSettings": {
                         "RowLimit": 100,
                         "Paged": true,
-                        "ViewQuery": "<GroupBy Collapse= \"TRUE\" GroupLimit= \"30\"><FieldRef Name= \"GtRiskStatus\" Ascending= \"FALSE\" /></GroupBy><OrderBy><FieldRef Name= \"GtRiskFactor\" Ascending= \"FALSE\" /></OrderBy><Where><And><And><Neq><FieldRef Name= \"GtRiskStatus\" /><Value Type= \"Text\">Ikke lenger aktuell</Value></Neq><Gt><FieldRef Name= \"GtRiskFactor\" /><Value Type= \"Number\">10</Value></Gt></And><Eq><FieldRef Name= \"ContentType\" /><Value Type= \"Computed\">Risiko</Value></Eq></And></Where>"
+                        "ViewQuery": "<GroupBy Collapse= \"TRUE\" GroupLimit= \"30\"><FieldRef Name= \"GtRiskStatus\" Ascending= \"FALSE\" /></GroupBy><OrderBy><FieldRef Name= \"GtRiskFactor\" Ascending= \"FALSE\" /></OrderBy><Where><And><And><Neq><FieldRef Name= \"GtRiskStatus\" /><Value Type= \"Text\">{{Choice_GtRiskStatus_NoLongerRelevant}}</Value></Neq><Gt><FieldRef Name= \"GtRiskFactor\" /><Value Type= \"Number\">10</Value></Gt></And><Eq><FieldRef Name= \"ContentType\" /><Value Type= \"Computed\">{{ContentTypes_Risk_Name}}</Value></Eq></And></Where>"
                     }
                 },
                 {
-                    "Title": "Avklart risiko",
+                    "Title": "{{View_ClearedRisks_DisplayName}}",
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
@@ -1194,11 +1197,11 @@
                     "AdditionalSettings": {
                         "RowLimit": 100,
                         "Paged": true,
-                        "ViewQuery": "<OrderBy><FieldRef Name= \"GtRiskFactor\" Ascending= \"FALSE\" /></OrderBy><Where><And><Neq><FieldRef Name= \"GtRiskStatus\" /><Value Type= \"Text\">Ikke lenger aktuell</Value></Neq><Eq><FieldRef Name= \"ContentType\" /><Value Type= \"Computed\">Risiko</Value></Eq></And></Where>"
+                        "ViewQuery": "<OrderBy><FieldRef Name= \"GtRiskFactor\" Ascending= \"FALSE\" /></OrderBy><Where><And><Neq><FieldRef Name= \"GtRiskStatus\" /><Value Type= \"Text\">{{Choice_GtRiskStatus_NoLongerRelevant}}</Value></Neq><Eq><FieldRef Name= \"ContentType\" /><Value Type= \"Computed\">{{ContentTypes_Risk_Name}}</Value></Eq></And></Where>"
                     }
                 },
                 {
-                    "Title": "Uten ansvarlig",
+                    "Title": "{{View_WithoutResponsible_DisplayName}}",
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
@@ -1216,7 +1219,7 @@
                     }
                 },
                 {
-                    "Title": "Risiko",
+                    "Title": "{{View_RisksOnly_DisplayName}}",
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
@@ -1235,11 +1238,11 @@
                     "AdditionalSettings": {
                         "RowLimit": 100,
                         "Paged": true,
-                        "ViewQuery": "<Where><Eq><FieldRef Name=\"ContentType\" /><Value Type=\"Computed\">Risiko</Value></Eq></Where>"
+                        "ViewQuery": "<Where><Eq><FieldRef Name=\"ContentType\" /><Value Type=\"Computed\">{{ContentTypes_Risk_Name}}</Value></Eq></Where>"
                     }
                 },
                 {
-                    "Title": "Mulighet",
+                    "Title": "{{View_OpportunitiesOnly_DisplayName}}",
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
@@ -1258,11 +1261,11 @@
                     "AdditionalSettings": {
                         "RowLimit": 100,
                         "Paged": true,
-                        "ViewQuery": "<Where><Eq><FieldRef Name=\"ContentType\" /><Value Type=\"Computed\">Mulighet</Value></Eq></Where>"
+                        "ViewQuery": "<Where><Eq><FieldRef Name=\"ContentType\" /><Value Type=\"Computed\">{{ContentTypes_Possibility_Name}}</Value></Eq></Where>"
                     }
                 },
                 {
-                    "Title": "Gjeldende fase",
+                    "Title": "{{View_CurrentPhase_DisplayName}}",
                     "ViewFields": [
                         "ID",
                         "LinkTitle"
