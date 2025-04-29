@@ -658,7 +658,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     let projects: any[]
     if (odataQuery && !dataSource.includes('(Prosjektnivå)')) {
       projects = await this._sp.web.lists
-        .getByTitle(strings.ProjectsListName)
+        .getByTitle(resource.Lists_Projects_Title)
         .items.filter(`${odataQuery}`)<any[]>()
     }
     return projects

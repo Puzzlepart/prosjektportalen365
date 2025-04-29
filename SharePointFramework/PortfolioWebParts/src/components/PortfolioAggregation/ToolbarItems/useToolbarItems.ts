@@ -11,6 +11,7 @@ import {
 } from '../reducer'
 import { useExcelExport } from './useExcelExport'
 import { Icons } from './icons'
+import resource from 'SharedResources'
 
 /**
  * Returns an array of toolbar items for the PortfolioAggregation component.
@@ -49,7 +50,7 @@ export function useToolbarItems(context: IPortfolioAggregationContext) {
         .setDisabled(context.state.isChangingView)
         .setStyle({ color: '#10793F' })
         .setHidden(!context.props.showExcelExportButton),
-      new ListMenuItem(context.state.currentView?.title, strings.PortfolioViewsListName)
+      new ListMenuItem(context.state.currentView?.title, resource.Lists_PortfolioViews_Title)
         .setIcon(Icons.ContentView)
         .setWidth('fit-content')
         .setStyle({ minWidth: '145px' })

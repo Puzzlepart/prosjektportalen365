@@ -320,13 +320,10 @@ declare interface IPortfolioWebPartsStrings {
   PortfolioOverviewDataFetchErrorView: string
   PortfolioOverviewShowEditViewColumnsPanelHelpText: string
   PortfolioViewSearchQueryDescription: string
-  PortfolioViewsListName: string
   ProgramProjectsHeaderText: string
   ProgramSearchBoxPlaceholderText: string
   ProgramsHeaderText: string
-  ProjectColumnsListName: string
   ProjectContentColumnItemNotFound: string
-  ProjectContentColumnsListName: string
   ProjectDeliveriesGroupName: string
   ProjectInformationGroupName: string
   ProjectInformationPanelButton: string
@@ -339,7 +336,6 @@ declare interface IPortfolioWebPartsStrings {
   ProjectsAccessHeaderText: string
   ProjectsAccessSearchBoxPlaceholderText: string
   ProjectServiceArea: string
-  ProjectsListName: string
   ProjectType: string
   RelativeUrl: string,
   RenderModeCompactListText: string
