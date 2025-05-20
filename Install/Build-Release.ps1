@@ -20,7 +20,7 @@ Param(
     [Parameter(Mandatory = $false)]
     [switch]$SkipBundle,
     [Parameter(Mandatory = $false)]
-    [ValidateSet("test")]
+    [ValidateSet("test", "kurs")]
     [string]$Channel,
     [Parameter(Mandatory = $false, HelpMessage = "Skip import of PnP.PowerShell module")]
     [switch]$SkipImportModule

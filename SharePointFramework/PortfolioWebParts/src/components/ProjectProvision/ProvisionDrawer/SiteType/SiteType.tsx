@@ -6,22 +6,28 @@ import { ISiteType } from './types'
 
 export const SiteType: FC<ISiteType> = (props) => {
   const context = useContext(ProjectProvisionContext)
+  const isMinimal = context.props.siteTypeRenderMode === 'cardMinimal'
 
   return (
     <Card
       className={styles.card}
-      selected={context.column.get('type') === props.type}
-      onSelectionChange={() => context.setColumn('type', props.type)}
+      title={`${props.title} - ${props.description}`}
+      selected={context.column.get('type') === props.title}
+      onSelectionChange={() => context.setColumn('type', props.title)}
       floatingAction={
-        <Checkbox shape='circular' checked={context.column.get('type') === props.type} />
+        <Checkbox shape='circular' checked={context.column.get('type') === props.title} />
       }
     >
-      <CardPreview className={styles.grayBackground}>
-        <img className={styles.smallRadius} src={props.image} alt={props.title} />
-      </CardPreview>
+      {!isMinimal && (
+        <CardPreview className={styles.grayBackground}>
+          <img className={styles.smallRadius} src={props.image} alt={props.title} />
+        </CardPreview>
+      )}
       <CardHeader
         header={<Text weight='semibold'>{props.title}</Text>}
-        description={<Caption1 className={styles.caption}>{props.description}</Caption1>}
+        description={
+          !isMinimal && <Caption1 className={styles.caption}>{props.description}</Caption1>
+        }
       />
     </Card>
   )

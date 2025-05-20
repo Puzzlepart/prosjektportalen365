@@ -42,11 +42,16 @@ declare interface IPortfolioWebPartsStrings {
     MultiChoiceField: string,
     GuestField: string,
     UserField: string,
-    BusinessJustificationField: string
+    BusinessJustificationField: string,
+    DatePicker: string
   },
   Provision: {
+    DrawerLevel0HeaderText: string,
+    DrawerLevel0DescriptionText: string,
     DrawerLevel1HeaderText: string,
     DrawerLevel1DescriptionText: string,
+    DrawerLevel2HeaderText: string,
+    DrawerLevel2DescriptionText: string,
     SiteTypeFieldLabel: string,
     SiteNameFieldLabel: string,
     SiteNameFieldDescription: string,
@@ -62,11 +67,11 @@ declare interface IPortfolioWebPartsStrings {
     UrlFieldLabel: string
     OwnerFieldLabel: string,
     OwnerFieldDescription: string,
-    OwnerFieldNoOptionsText: string,
+    UserFieldNoOptionsText: string,
     MemberFieldLabel: string,
     MemberFieldDescription: string,
-    DrawerLevel2HeaderText: string,
-    DrawerLevel2DescriptionText: string,
+    RequestedByFieldLabel: string,
+    RequestedByFieldDescription: string,
     TeamifyFieldLabel: string,
     TeamifyFieldDescription: string,
     TeamTemplateFieldLabel: string,
@@ -82,9 +87,22 @@ declare interface IPortfolioWebPartsStrings {
     GuestFieldLabel: string,
     GuestFieldDescription: string,
     GuestFieldNoOptionsText: string,
+    SensitivityLabelFieldLabel: string,
+    SensitivityLabelFieldDescription: string,
+    RetentionLabelFieldLabel: string,
+    RetentionLabelFieldDescription: string,
+    ExpirationDateFieldLabel: string,
+    ExpirationDateFieldDescription: string,
+    ReadOnlyGroupFieldLabel: string,
+    ReadOnlyGroupFieldDescription: string,
+    InternalChannelFieldLabel: string,
+    InternalChannelFieldDescription: string,
     LanguageFieldLabel: string,
     TimeZoneFieldLabel: string,
     HubSiteFieldLabel: string,
+    ImageFieldLabel: string,
+    ImageFieldDescription: string,
+    ImageDropZoneText: string,
     DrawerFooterDescriptionText: string,
     PreviousButtonLabel: string,
     NextButtonLabel: string,
@@ -132,6 +150,7 @@ declare interface IPortfolioWebPartsStrings {
     DeletedSubmissionToastBody: string
     DeletedSubmissionErrorToastTitle: string
     DeletedSubmissionErrorToastBody: string
+    RequestedSource: string
   },
   AddColumnLabel: string
   AllProjectsHeaderText: string

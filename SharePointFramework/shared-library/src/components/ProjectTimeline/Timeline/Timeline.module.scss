@@ -47,6 +47,7 @@ div[class="rct-header-root"] {
   position: sticky;
   top: 0;
   background: #f4f4f4 !important;
+  z-index: 8;
 }
 
 div[class="rct-sidebar"] {
@@ -59,7 +60,7 @@ div[class="rct-scroll"] {
   z-index: 1 !important;
 }
 
-div[class="rct-dateHeader-primary"] {
+div[class*="rct-dateHeader-primary"] {
   color: #444 !important;
   border: none !important;
 }
@@ -71,4 +72,5 @@ div[class="rct-calendar-header"] {
 div[class*="rct-dateHeader"] {
   font-size: 10px !important;
   border: none !important;
+  background: #f4f4f4 !important;
 }

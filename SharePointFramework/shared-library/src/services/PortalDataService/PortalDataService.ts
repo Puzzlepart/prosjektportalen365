@@ -954,12 +954,12 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   }
 
   /**
-   * Get idea data for the current site URL as an `ItemFieldValues` object.
+   * Get project data for the current site URL as an `ItemFieldValues` object.
    */
-  public async getIdeaData() {
+  public async getProjectData() {
     try {
       const url = this._configuration.spfxContext.pageContext.site.absoluteUrl
-      const list = this._getList('IDEA_PROJECT_DATA')
+      const list = this._getList('PROJECT_DATA')
       const [spItem] = await list.items.select('Id').filter(`GtSiteUrl eq '${url}'`)()
       if (!spItem) return null
       const item = list.items.getById(spItem.Id)

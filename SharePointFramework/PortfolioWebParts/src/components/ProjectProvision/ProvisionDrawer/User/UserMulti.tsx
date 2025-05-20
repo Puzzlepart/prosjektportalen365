@@ -15,7 +15,7 @@ import strings from 'PortfolioWebPartsStrings'
 import { useProjectProvisionContext } from 'components/ProjectProvision/context'
 import React, { useEffect, useState } from 'react'
 
-export const User = (props: { type: string; disabled?: boolean }) => {
+export const UserMulti = (props: { type: string; disabled?: boolean }) => {
   const context = useProjectProvisionContext()
   const [query, setQuery] = useState<string>('')
   const [selectedUsers, setSelectedUsers] = useState<string[]>(
@@ -64,7 +64,7 @@ export const User = (props: { type: string; disabled?: boolean }) => {
     options: matchingUsers.map((user) => user.text),
     noOptionsElement: (
       <TagPickerOption value='no-matches'>
-        {strings.Provision.OwnerFieldNoOptionsText}
+        {strings.Provision.UserFieldNoOptionsText}
       </TagPickerOption>
     ),
     renderOption: (user) => {

@@ -62,10 +62,10 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
             <ContentConfigSection style={{ height: 400 }} />
           </PivotItem>
         </Pivot>
-        <div className={styles.projectIdeaMessage} hidden={!props.data.ideaData}>
+        <div className={styles.projectDataMessage} hidden={!props.data.projectData}>
           <UserMessage
-            title={strings.ProjectIdeaFoundTitle}
-            text={strings.ProjectIdeaFoundMessage}
+            title={strings.ProjectDataFoundTitle}
+            text={strings.ProjectDataFoundMessage}
             intent='success'
           />
         </div>

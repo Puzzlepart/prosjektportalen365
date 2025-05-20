@@ -154,6 +154,7 @@ define([], function () {
     ProgramTimelineInfoText: "Her listes alle prosjektene med start- og sluttdato som er tilknyttet området. For å zoome inn/ut i tidslinje: ALT+Musehjul",
     ProjectContentColumnsListName: 'Prosjektinnholdskolonner',
     ProjectDeliveriesGroupName: 'Prosjektleveranser (beta)',
+    ProjectInformationPanelButton: 'Åpne prosjektinformasjonspanel',
     ProjectLabel: 'Prosjekt',
     ProjectPropertiesHeader: 'Prosjektinformasjon',
     ProjectPropertiesListName: 'Prosjektegenskaper',

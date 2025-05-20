@@ -108,7 +108,8 @@ export class SPDataAdapter
       viewsUrls,
       columnUrls,
       programs: [],
-      userCanAddViews
+      userCanAddViews,
+      hubSiteId: this.spfxContext.pageContext.legacyPageContext.hubSiteId,
     } as IPortfolioOverviewConfiguration
   }
 
@@ -173,7 +174,8 @@ export class SPDataAdapter
           ...statusReport,
           ...project,
           Title: site.Title,
-          Path: site.Path,
+          Path: site?.Path,
+          SPWebUrl: site?.SPWebUrl,
           SiteId: site['SiteId']
         }
       })
@@ -205,7 +207,8 @@ export class SPDataAdapter
         return {
           ...statusReport,
           ...project,
-          Path: site && site.Path,
+          Path: site?.Path,
+          SPWebUrl: site?.SPWebUrl,
           SiteId: project[siteIdProperty]
         }
       })
@@ -275,6 +278,7 @@ export class SPDataAdapter
           ...statusReport,
           ...project,
           Path: site?.Path,
+          SPWebUrl: site?.SPWebUrl,
           SiteId: project[siteIdProperty]
         }
       })
@@ -312,7 +316,7 @@ export class SPDataAdapter
       this.sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
         QueryTemplate: `DepartmentId:{${siteId}} contentclass:STS_Site`,
-        SelectProperties: ['Path', 'Title', 'SiteId']
+        SelectProperties: ['Path', 'SPWebUrl', 'Title', 'SiteId']
       }),
       this.sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
@@ -535,7 +539,7 @@ export class SPDataAdapter
       Querytext: `DepartmentId:{${this.spfxContext.pageContext.legacyPageContext.hubSiteId}} contentclass:STS_Site`,
       TrimDuplicates: false,
       RowLimit: rowLimit,
-      SelectProperties: ['Title', 'Path', 'SiteId', 'Created'],
+      SelectProperties: ['Title', 'Path', 'SPWebUrl', 'SiteId', 'Created'],
       SortList: [
         {
           Property: sortProperty,
@@ -903,7 +907,7 @@ export class SPDataAdapter
             return {
               SiteId: item['GtSiteIdOWSTEXT'],
               Title: site?.Title ?? item['Title'],
-              SPWebURL: site && site['SPWebURL'],
+              SPWebURL: site?.SPWebUrl,
               Path: site?.Path
             }
           })

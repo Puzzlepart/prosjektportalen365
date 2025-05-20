@@ -11,8 +11,9 @@ import { getFluentIcon } from 'pp365-shared-library'
 import React from 'react'
 import styles from './ProvisionSettings.module.scss'
 import { IRequestSettingsItem } from './types'
+import { stringIsNullOrEmpty } from '@pnp/core'
 
-export const useColumns = (toast: any): TableColumnDefinition<IRequestSettingsItem>[] => {
+export const useColumns = (): TableColumnDefinition<IRequestSettingsItem>[] => {
   return [
     createTableColumn<IRequestSettingsItem>({
       columnId: 'title',
@@ -71,14 +72,33 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestSettingsIt
         if (
           setting.title !== 'NamingConvention' &&
           setting.title !== 'DefaultExternalSharingSetting'
-        )
-          return (
-            <TableCellLayout style={{ overflow: 'hidden' }}>
-              <Text truncate wrap={true}>
-                {setting.value}
-              </Text>
-            </TableCellLayout>
-          )
+        ) {
+          if (stringIsNullOrEmpty(setting.value)) {
+            return (
+              <TableCellLayout style={{ overflow: 'hidden' }}>
+                <Text truncate wrap={true} style={{ color: 'lightgrey' }}>
+                  Ikke angitt
+                </Text>
+              </TableCellLayout>
+            )
+          } else if (typeof setting.value === 'boolean') {
+            return (
+              <TableCellLayout style={{ overflow: 'hidden' }}>
+                <Text truncate wrap={true}>
+                  {setting.value ? 'Ja' : 'Nei'}
+                </Text>
+              </TableCellLayout>
+            )
+          } else {
+            return (
+              <TableCellLayout style={{ overflow: 'hidden' }}>
+                <Text truncate wrap={true}>
+                  {setting.value as string}
+                </Text>
+              </TableCellLayout>
+            )
+          }
+        }
       }
     }),
     createTableColumn<IRequestSettingsItem>({

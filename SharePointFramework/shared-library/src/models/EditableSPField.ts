@@ -137,6 +137,7 @@ export class EditableSPField extends SPField {
       )
       this.displayName = configuration?.displayName ?? this.displayName
       this.description = configuration?.description ?? this.description
+      this.isReadOnly = configuration?.isReadOnly ?? this.isReadOnly
     }
   }
 
@@ -158,7 +159,7 @@ export class EditableSPField extends SPField {
   }
 
   /**
-   * Get value for the field.
+   * Get the value for the field.
    */
   public getParsedValue<T>(): T {
     if (this._fieldValueMap.has(this.type)) {
@@ -195,7 +196,7 @@ export class EditableSPField extends SPField {
    * portfolio level.
    *
    * @param displayMode Display mode to check for
-   * @param page Page name to check for
+   * @param page Page name to check for, e.g. `Frontpage`, `ProjectStatus`, `Portfolio`
    * @param showFieldExternal Object with field internal name as key and boolean as value
    */
   public isVisible(

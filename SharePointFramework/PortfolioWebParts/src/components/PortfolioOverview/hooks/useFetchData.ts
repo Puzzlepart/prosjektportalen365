@@ -72,6 +72,7 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
       context.dispatch(STARTING_DATA_FETCH())
       const hashState = parseUrlHash()
       currentView = getCurrentView(hashState, context, reset)
+
       const { items, managedProperties } = context.props.isParentProject
         ? await context.props.dataAdapter.fetchDataForViewBatch(
             currentView,
