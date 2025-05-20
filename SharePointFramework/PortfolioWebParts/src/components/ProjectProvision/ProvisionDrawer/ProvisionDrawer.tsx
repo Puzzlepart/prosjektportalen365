@@ -61,6 +61,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
     enableExternalSharing,
     urlPrefix,
     aliasSuffix,
+    joinHub,
     getField,
     fluentProviderId
   } = useProvisionDrawer()
@@ -497,7 +498,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     disabled
                   />
                 </FieldContainer>
-                <FieldContainer iconName='Database' label={getField('hubSiteTitle').displayName}>
+                <FieldContainer iconName='Database' label={getField('hubSiteTitle').displayName} hidden={!joinHub}>
                   <Dropdown
                     defaultValue={context.column.get('hubSiteTitle')}
                     defaultSelectedOptions={[context.column.get('hubSiteTitle')]}
@@ -575,7 +576,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                       disabled
                     />
                   </FieldContainer>
-                  <FieldContainer iconName='Database' label={getField('hubSiteTitle').displayName}>
+                  <FieldContainer iconName='Database' label={getField('hubSiteTitle').displayName} hidden={!joinHub}>
                     <Dropdown
                       defaultValue={context.column.get('hubSiteTitle')}
                       defaultSelectedOptions={[context.column.get('hubSiteTitle')]}

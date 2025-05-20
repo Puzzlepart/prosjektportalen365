@@ -64,6 +64,10 @@ export const useProvisionDrawer = () => {
   const urlPrefix = `${context.props.webAbsoluteUrl.split('sites')[0]}sites/`
   const aliasSuffix = '@' + context.props.pageContext.user.loginName.split('@')[1]
 
+  const joinHub = !!context.state.types.find(
+    (t) => t.title === context.column.get('type')
+  )?.defaultHub
+
   const onSave = async (): Promise<boolean> => {
     const baseUrl = `${context.props.webAbsoluteUrl.split('sites')[0]}sites/`
 
@@ -116,9 +120,9 @@ export const useProvisionDrawer = () => {
       MailboxAlias: alias,
       TimeZoneId: 4,
       LCID: 1044,
-      JoinHub: true,
-      HubSiteTitle: context.props.pageContext.web.title,
-      HubSite: context.props.pageContext.legacyPageContext.hubSiteId,
+      JoinHub: joinHub,
+      HubSiteTitle: joinHub ? context.props.pageContext.web.title : '',
+      HubSite: joinHub ? context.props.pageContext.legacyPageContext.hubSiteId : '',
       Prefix: namingConvention?.prefixText,
       Suffix: namingConvention?.suffixText,
       Status: 'Submitted',
@@ -165,6 +169,7 @@ export const useProvisionDrawer = () => {
     enableExternalSharing,
     urlPrefix,
     aliasSuffix,
+    joinHub,
     getField,
     fluentProviderId
   }
