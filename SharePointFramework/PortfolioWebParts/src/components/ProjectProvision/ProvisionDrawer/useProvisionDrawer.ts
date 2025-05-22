@@ -53,6 +53,7 @@ export const useProvisionDrawer = () => {
   const enableExpirationDate = getGlobalSetting('EnableExpirationDate')
   const enableReadOnlyGroup = getGlobalSetting('EnableReadOnlyGroup')
   const enableInternalChannel = getGlobalSetting('EnableInternalChannel')
+  const enableAutoApproval = getGlobalSetting('EnableAutoApproval')
 
   const typeDefaults = context.state.types.find((t) => t.title === context.state.properties.type)
   const enableExternalSharing = typeDefaults?.externalSharing
@@ -86,6 +87,9 @@ export const useProvisionDrawer = () => {
       (t) => t.title === context.column.get('type')
     )?.type
 
+    const defaultTeamify = spaceTypeInternal === 'Microsoft Teams Team'
+    const disableTeamify = spaceTypeInternal === 'Viva Engage Community'
+
     const requestItem: IProvisionRequestItem = {
       Title: context.column.get('name'),
       SpaceDisplayName: name,
@@ -93,7 +97,7 @@ export const useProvisionDrawer = () => {
       BusinessJustification: context.column.get('justification'),
       SpaceType: context.column.get('type'),
       SpaceTypeInternal: spaceTypeInternal,
-      Teamify: context.column.get('teamify'),
+      Teamify: defaultTeamify ? true : disableTeamify ? false : context.column.get('teamify'),
       TeamsTemplate: context.column.get('teamify')
         ? context.state.properties.teamTemplate || 'standard'
         : '',
@@ -125,8 +129,8 @@ export const useProvisionDrawer = () => {
       HubSite: joinHub ? context.props.pageContext.legacyPageContext.hubSiteId : '',
       Prefix: namingConvention?.prefixText,
       Suffix: namingConvention?.suffixText,
-      Status: 'Submitted',
-      Stage: 'Submitted',
+      Status: enableAutoApproval ? 'Approved' : 'Submitted',
+      Stage: enableAutoApproval ? 'Approved' : 'Submitted',
       RequestKey: getGUID()
     }
 
