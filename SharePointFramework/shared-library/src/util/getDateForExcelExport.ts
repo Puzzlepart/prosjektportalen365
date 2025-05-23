@@ -12,9 +12,9 @@
 export function getDateForExcelExport(
   value: string | Date | undefined,
   includeTime: boolean = false
-): Date | string {
+): string {
   if (!value) return ''
-  const date = value instanceof Date ? new Date(value) : new Date(value)
+  const date = new Date(value)
   if (isNaN(date.getTime())) return ''
-  return includeTime ? date : date.toISOString().slice(0, 10)
+  return includeTime ? date.toISOString() : date.toISOString().slice(0, 10)
 }
