@@ -2,7 +2,7 @@
 import { format, IColumn } from '@fluentui/react'
 import * as FileSaver from 'file-saver'
 import * as XLSX from 'xlsx'
-import { formatDate, getObjectValue as get, stringToArrayBuffer } from '../../util'
+import { getDateForExcelExport, getObjectValue as get, stringToArrayBuffer } from '../../util'
 import { ExcelExportServiceDefaultConfiguration } from './ExcelExportServiceDefaultConfiguration'
 import { IExcelExportServiceConfiguration } from './IExcelExportServiceConfiguration'
 
@@ -51,7 +51,7 @@ class ExcelExportService {
             _columns.map((column) => {
               switch ((column as any).dataType) {
                 case 'date': {
-                  return formatDate(
+                  return getDateForExcelExport(
                     item[column.fieldName],
                     column.data?.dataTypeProperties?.includeTime
                   )
