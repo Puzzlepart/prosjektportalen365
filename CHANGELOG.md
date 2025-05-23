@@ -40,6 +40,7 @@ Sjekk ut [release notes](./releasenotes/1.11.0.md) for høydepunkter og mer deta
 
 ### Feilrettinger
 
+- Eksport av datofelter fra aggregerte oversikter viser nå Excel-vennlig datoformat [#1630](https://github.com/Puzzlepart/prosjektportalen365/issues/1630)
 - Boolean felttyper vises nå riktig, og filtreres korrekt [#1579](https://github.com/Puzzlepart/prosjektportalen365/issues/1579)
 - Prosentkolonner sorteres nå riktig i aggregerte oversikter [#1581](https://github.com/Puzzlepart/prosjektportalen365/issues/1581)
 - Fikset et problem hvor skjuling/synliggjøring av visningvelger ikke ble lagret korrekt [#1560](https://github.com/Puzzlepart/prosjektportalen365/issues/1560)
@@ -481,7 +482,7 @@ I denne versjonen er det gjort flere endringer på det visuelle uttrykket til Pr
 
 ## 1.3.0 - 22.10.2021
 
-### Ny funksjonalitet 
+### Ny funksjonalitet
 
 - Added a new project webpart 'Prosjekttidslinje' for showcasing projects and items for the current project on a timeline [#497](https://github.com/Puzzlepart/prosjektportalen365/issues/497)
 - Added read-only project cards to project list on the frontpage [#498](https://github.com/Puzzlepart/prosjektportalen365/issues/498)
