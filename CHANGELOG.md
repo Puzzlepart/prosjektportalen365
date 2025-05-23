@@ -2,7 +2,7 @@
 
 Sjekk ut [release notes](./releasenotes/1.11.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
 
-## 1.12.0 - TBA
+## 1.11.1 - TBA
 
 ### Ny funksjonalitet
 
@@ -13,6 +13,10 @@ Sjekk ut [release notes](./releasenotes/1.11.0.md) for høydepunkter og mer deta
 - Prosjekttidslinje senterer seg nå rundt prosjektets tidsforløp (startdato - sluttdato) [#1625](https://github.com/Puzzlepart/prosjektportalen365/issues/1625)
 
 ### Feilrettinger
+
+- Eksport av datofelter fra aggregerte oversikter viser nå Excel-vennlig datoformat [#1630](https://github.com/Puzzlepart/prosjektportalen365/issues/1630)
+
+---
 
 ## 1.11.0 - 26.03.2025
 
@@ -40,7 +44,6 @@ Sjekk ut [release notes](./releasenotes/1.11.0.md) for høydepunkter og mer deta
 
 ### Feilrettinger
 
-- Eksport av datofelter fra aggregerte oversikter viser nå Excel-vennlig datoformat [#1630](https://github.com/Puzzlepart/prosjektportalen365/issues/1630)
 - Boolean felttyper vises nå riktig, og filtreres korrekt [#1579](https://github.com/Puzzlepart/prosjektportalen365/issues/1579)
 - Prosentkolonner sorteres nå riktig i aggregerte oversikter [#1581](https://github.com/Puzzlepart/prosjektportalen365/issues/1581)
 - Fikset et problem hvor skjuling/synliggjøring av visningvelger ikke ble lagret korrekt [#1560](https://github.com/Puzzlepart/prosjektportalen365/issues/1560)
@@ -48,6 +51,8 @@ Sjekk ut [release notes](./releasenotes/1.11.0.md) for høydepunkter og mer deta
 - Rettet et problem hvor menyer i porteføljeoversikt og aggregerte oversikter havnet utenfor skjermen [#1540](https://github.com/Puzzlepart/prosjektportalen365/issues/1540)
 - Dersom det var flere enn 16 sjekkpunkter så havnet disse utenfor "Endre til fase..."-dialogen. [#1607](https://github.com/Puzzlepart/prosjektportalen365/issues/1607)
 - Rettet et problem hvor programvisninger forble aktive selvom visningsvelgeren ble skrudd av [#1566](https://github.com/Puzzlepart/prosjektportalen365/issues/1566)
+
+---
 
 ## 1.10.0 - 23.09.2024
 
