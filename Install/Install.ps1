@@ -127,7 +127,7 @@ if ($Alias.Length -lt 2 -or (@("sites/", "teams/") -notcontains $ManagedPath) -o
 #endregion
 
 $LogFilePath = "$PSScriptRoot/Install_Log_$([datetime]::Now.ToString("yy-MM-ddThh-mm-ss")).txt"
-Set-PnPTraceLog -On -Level Debug -LogFile $LogFilePath
+# Set-PnPTraceLog -On -Level Debug -LogFile $LogFilePath
 
 #region Create site
 if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
@@ -483,7 +483,7 @@ Write-Host "[INFO] This is required after upgrading between minor versions, e.g.
 #endregion
 
 ## Turning off PnP trace logging
-Set-PnPTraceLog -Off
+# Set-PnPTraceLog -Off
 
 #region Log installation and send pingback to Azure Function
 Write-Host "[INFO] Logging installation entry" 

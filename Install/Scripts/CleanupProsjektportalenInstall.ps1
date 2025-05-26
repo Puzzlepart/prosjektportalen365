@@ -35,7 +35,7 @@ Write-Host "🧼 Starting cleanup process"
 [System.Uri]$Uri = $Url
 $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
 
-Set-PnPTraceLog -Off
+# Set-PnPTraceLog -Off
 
 Connect-PnPOnline -Url $AdminSiteUrl -Interactive -ClientId $ClientId
 
