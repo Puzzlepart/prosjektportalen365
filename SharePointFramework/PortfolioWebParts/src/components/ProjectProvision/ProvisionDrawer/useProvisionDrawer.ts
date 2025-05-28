@@ -65,9 +65,14 @@ export const useProvisionDrawer = () => {
   const urlPrefix = `${context.props.webAbsoluteUrl.split('sites')[0]}sites/`
   const aliasSuffix = '@' + context.props.pageContext.user.loginName.split('@')[1]
 
-  const joinHub = !!context.state.types.find(
+  const joinHub = !!context.state.types.find((t) => t.title === context.column.get('type'))?.joinHub
+
+  const spaceTypeInternal = context.state.types.find(
     (t) => t.title === context.column.get('type')
-  )?.defaultHub
+  )?.type
+
+  const isTeam = spaceTypeInternal === 'Microsoft Teams Team'
+  const isViva = spaceTypeInternal === 'Viva Engage Community'
 
   const onSave = async (): Promise<boolean> => {
     const baseUrl = `${context.props.webAbsoluteUrl.split('sites')[0]}sites/`
@@ -83,13 +88,6 @@ export const useProvisionDrawer = () => {
       (t) => t.labelName === context.column.get('sensitivityLabel')
     )?.labelId
 
-    const spaceTypeInternal = context.state.types.find(
-      (t) => t.title === context.column.get('type')
-    )?.type
-
-    const defaultTeamify = spaceTypeInternal === 'Microsoft Teams Team'
-    const disableTeamify = spaceTypeInternal === 'Viva Engage Community'
-
     const requestItem: IProvisionRequestItem = {
       Title: context.column.get('name'),
       SpaceDisplayName: name,
@@ -97,7 +95,7 @@ export const useProvisionDrawer = () => {
       BusinessJustification: context.column.get('justification'),
       SpaceType: context.column.get('type'),
       SpaceTypeInternal: spaceTypeInternal,
-      Teamify: defaultTeamify ? true : disableTeamify ? false : context.column.get('teamify'),
+      Teamify: isTeam ? true : isViva ? false : context.column.get('teamify'),
       TeamsTemplate: context.column.get('teamify')
         ? context.state.properties.teamTemplate || 'standard'
         : '',
@@ -173,6 +171,8 @@ export const useProvisionDrawer = () => {
     enableExternalSharing,
     urlPrefix,
     aliasSuffix,
+    isTeam,
+    isViva,
     joinHub,
     getField,
     fluentProviderId

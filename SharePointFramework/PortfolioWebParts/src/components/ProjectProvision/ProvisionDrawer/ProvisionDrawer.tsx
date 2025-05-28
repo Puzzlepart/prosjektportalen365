@@ -62,6 +62,8 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
     urlPrefix,
     aliasSuffix,
     joinHub,
+    isTeam,
+    isViva,
     getField,
     fluentProviderId
   } = useProvisionDrawer()
@@ -326,7 +328,8 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   required={getField('teamify').required}
                 >
                   <Switch
-                    checked={context.column.get('teamify')}
+                    checked={context.column.get('teamify') || isTeam}
+                    disabled={isTeam || isViva}
                     value={context.column.get('teamify')}
                     onChange={(_, data) => {
                       context.setColumn('teamify', data.checked)
@@ -400,7 +403,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   label={getField('externalSharing').displayName}
                   description={getField('externalSharing').description}
                   required={getField('externalSharing').required}
-                  hidden={!enableExternalSharing}
+                  hidden={!enableExternalSharing || isViva}
                 >
                   <Switch
                     checked={context.column.get('externalSharing')}
@@ -498,7 +501,11 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     disabled
                   />
                 </FieldContainer>
-                <FieldContainer iconName='Database' label={getField('hubSiteTitle').displayName} hidden={!joinHub}>
+                <FieldContainer
+                  iconName='Database'
+                  label={getField('hubSiteTitle').displayName}
+                  hidden={!joinHub}
+                >
                   <Dropdown
                     defaultValue={context.column.get('hubSiteTitle')}
                     defaultSelectedOptions={[context.column.get('hubSiteTitle')]}
@@ -528,6 +535,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     label={getField('image').displayName}
                     description={getField('image').description}
                     required={getField('image').required}
+                    hidden={isViva}
                   >
                     <ImageUpload onImageUpload={(image) => context.setColumn('image', image)} />
                   </FieldContainer>
@@ -576,7 +584,11 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                       disabled
                     />
                   </FieldContainer>
-                  <FieldContainer iconName='Database' label={getField('hubSiteTitle').displayName} hidden={!joinHub}>
+                  <FieldContainer
+                    iconName='Database'
+                    label={getField('hubSiteTitle').displayName}
+                    hidden={!joinHub}
+                  >
                     <Dropdown
                       defaultValue={context.column.get('hubSiteTitle')}
                       defaultSelectedOptions={[context.column.get('hubSiteTitle')]}

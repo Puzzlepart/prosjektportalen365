@@ -928,6 +928,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           'DefaultVisibility',
           'DefaultConfidentialData',
           'ExternalSharing',
+          'JoinHub',
           'DefaultHub',
           'DefaultSensitivityLabel',
           'DefaultRetentionLabel'
@@ -956,6 +957,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
             defaultVisibility: item.DefaultVisibility,
             defaultConfidentialData: item.DefaultConfidentialData,
             externalSharing: item.ExternalSharing,
+            joinHub: item.JoinHub,
             defaultHub: item.DefaultHub,
             defaultSensitivityLabel: item.DefaultSensitivityLabel,
             defaultRetentionLabel: item.DefaultRetentionLabel
