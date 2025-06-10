@@ -544,7 +544,7 @@
                     }
                 },
                 {
-                    "Id": "{{ControlId_ProjectPhasesWebPart}}",
+                    "Id": "{{ControlId_ProjectNewsWebPart}}",
                     "Properties": {
                         "title": "Prosjektnyheter"
                     }
