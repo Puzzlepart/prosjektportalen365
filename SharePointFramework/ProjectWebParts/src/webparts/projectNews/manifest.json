@@ -1,0 +1,31 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "a9097537-6860-4e05-99f3-4ee21782687f",
+  "alias": "ProjectNewsWebPart",
+  "componentType": "WebPart",
+  "version": "1.11.0",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "hiddenFromToolbox": false,
+  "supportedHosts": [
+    "SharePointWebPart"
+  ],
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": {
+        "default": "Other"
+      },
+      "title": {
+        "default": "Prosjektnyheter"
+      },
+      "description": {
+        "default": " "
+      },
+      "officeFabricIconFontName": "News",
+      "properties": {
+        "christopherProp": "Christopher"
+      }
+    }
+  ]
+}

@@ -34,6 +34,14 @@
         }
       ]
     },
+    "project-timeline-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/projectTimeline/index.js",
+          "manifest": "./src/webparts/projectTimeline/manifest.json"
+        }
+      ]
+    },
     "risk-matrix-web-part": {
       "components": [
         {
@@ -42,11 +50,11 @@
         }
       ]
     },
-    "project-timeline-web-part": {
+    "project-news-web-part": {
       "components": [
         {
-          "entrypoint": "./lib/webparts/projectTimeline/index.js",
-          "manifest": "./src/webparts/projectTimeline/manifest.json"
+          "entrypoint": "./lib/webparts/projectNews/index.js",
+          "manifest": "./src/webparts/projectNews/manifest.json"
         }
       ]
     }

@@ -544,6 +544,12 @@
                     }
                 },
                 {
+                    "Id": "{{ControlId_ProjectPhasesWebPart}}",
+                    "Properties": {
+                        "title": "Prosjektnyheter"
+                    }
+                },
+                {
                     "Id": "a5df8fdf-b508-4b66-98a6-d83bc2597f63",
                     "Properties": {
                         "title": "Prosjektnyheter",
