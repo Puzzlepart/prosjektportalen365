@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { IProjectNewsProps, IProjectNewsState } from './types'
+import { SPHttpClient } from '@microsoft/sp-http'
 
 /**
  * Component data fetch hook for `ProjectNews`. This hook is responsible for
@@ -15,6 +16,17 @@ export function useProjectNewsDataFetch(
   setState: (newState: Partial<IProjectNewsState>) => void
 ) {
   useEffect(() => {
-    // TODO: Implement data fetching logic for Project News
+   setState({ loading: true })
+    const url = `${props.siteUrl}/_api/web/lists/GetByTitle('Site Pages')/items?$filter=PromotedState eq 2&$orderby=FirstPublishedDate desc&$top=5`
+    props.spHttpClient
+      .get(url, SPHttpClient.configurations.v1)
+      .then((res) => res.json())
+      .then((data) => {
+        setState({
+          loading: false,
+          data: { news: data.value }
+        })
+      })
+      .catch((error) => setState({ loading: false, error }))
   }, [refetch])
 }

@@ -1,3 +1,4 @@
+import { SPHttpClient } from '@microsoft/sp-http'
 import {
   IBaseWebPartComponentProps,
   IBaseWebPartComponentState
@@ -7,7 +8,12 @@ export interface IProjectNewsProps extends IBaseWebPartComponentProps {
   /**
    * Christopher prop (placeholder)
    */
-  christopherProp?: string
+  siteUrl: string
+  /**
+   * SPHttpClient for making requests
+   */
+  spHttpClient: SPHttpClient
+
 }
 
 export interface IProjectNewsState extends IBaseWebPartComponentState<IProjectNewsData> {

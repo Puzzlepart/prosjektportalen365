@@ -239,6 +239,13 @@ declare interface IProjectWebPartsStrings {
   WidthFieldLabel: string
   Yes: string
   PhaseCheckListItem: string
+  DialogueTitle: string
+  CreatingNewArticleStatus: string
+  NewsCreatedSuccessfully: string
+  NewsTitleLabel: string
+  NewsTitlePlaceholder: string
+  CreateButtonLabel: string
+  CancelButtonLabel: string
 }
 
 declare module 'ProjectWebPartsStrings' {

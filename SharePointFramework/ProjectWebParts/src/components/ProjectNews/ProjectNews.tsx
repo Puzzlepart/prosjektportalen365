@@ -5,14 +5,17 @@ import { customLightTheme } from 'pp365-shared-library'
 import { useProjectNews } from './useProjectNews'
 import { ProjectNewsContext } from './context'
 
+
 export const ProjectNews: FC<IProjectNewsProps> = (props) => {
-  const { context, fluentProviderId } = useProjectNews(props)
+  const { context, fluentProviderId} = useProjectNews(props)
+
+
 
   return (
     <ProjectNewsContext.Provider value={context}>
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme}>
-          <h1>Hello, {props.christopherProp}</h1>
+          <h1>Hello, {props.siteUrl}</h1>
         </FluentProvider>
       </IdPrefixProvider>
     </ProjectNewsContext.Provider>
@@ -20,5 +23,5 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
 }
 
 ProjectNews.defaultProps = {
-  christopherProp: 'Christopher'
+  siteUrl: 'https://puzzlepart.sharepoint.com/sites/prosjektportalen-news'
 }

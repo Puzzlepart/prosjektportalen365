@@ -10,7 +10,10 @@ export default class ProjectNewsWebPart extends BaseProjectWebPart<IProjectNewsP
   }
 
   public render(): void {
-    this.renderComponent(ProjectNews)
+    this.renderComponent<IProjectNewsProps>(ProjectNews, {
+      siteUrl: this.properties.siteUrl,
+      spHttpClient: this.context.spHttpClient
+    })
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -22,18 +25,13 @@ export default class ProjectNewsWebPart extends BaseProjectWebPart<IProjectNewsP
             {
               groupName: strings.GeneralGroupName,
               groupFields: [
-                PropertyPaneTextField('christopherProp', {
-                  label: 'strings.christopherProp',
-                  value: this.properties.christopherProp
+                PropertyPaneTextField('siteUrl', {
+                  label: 'URL til område for publisering',
+                  value: this.properties.siteUrl
                 })
               ]
             },
-            {
-              groupName: strings.AdvancedGroupName,
-              groupFields: [
-                // TODO: Add advanced properties here (if any)
-              ]
-            }
+
           ]
         }
       ]

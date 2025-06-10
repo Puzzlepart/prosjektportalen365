@@ -254,5 +254,12 @@ define([], function () {
     WidthFieldLabel: 'Bredde (piksler)',
     Yes: 'Ja',
     PhaseCheckListItem: 'Sjekkpunkt {0}',
+    DialogueTitle: "Opprett ny artikkel",
+    CreatingNewArticleStatus: "Oppretter ny artikkel...",
+    NewsCreatedSuccessfully: "Artikkelen ble opprettet.",
+    NewsTitleLabel: "Tittel",
+    NewsTitlePlaceholder: "Skriv inn artikkeltittel...",
+    CreateButtonLabel: "Opprett",
+    CancelButtonLabel: "Avbryt"
   }
 })

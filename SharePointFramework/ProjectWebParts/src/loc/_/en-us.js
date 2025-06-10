@@ -192,6 +192,18 @@ define([], function () {
     ViewXmlFieldLabel: 'View XML query',
     WebPartNoAccessMessage: 'You do not have access to view this web part. <br/> <br/> You must either have access to the portfolio site or the project must be free from the portfolio site.',
     WidthFieldLabel: 'Width (pixels)',
-    Yes: 'Yes'
+    Yes: 'Yes',
+    DialogueTitle: "Create a new project news article",
+    CreatingNewArticleStatus: "Creating news article...",
+    NewsCreatedSuccessfully: "News article created successfully.",
+    NewsTitleLabel: "Title",
+    NewsTitlePlaceholder: "Enter article title...",
+    CreateButtonLabel: "Create",
+    CancelButtonLabel: "Cancel"
+
+
+
+
+
   }
 })
