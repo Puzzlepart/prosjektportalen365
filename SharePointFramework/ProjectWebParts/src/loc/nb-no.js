@@ -260,6 +260,14 @@ define([], function () {
     NewsTitleLabel: "Tittel",
     NewsTitlePlaceholder: "Skriv inn artikkeltittel...",
     CreateButtonLabel: "Opprett",
-    CancelButtonLabel: "Avbryt"
+    CancelButtonLabel: "Avbryt",
+    ProjectNewsWebPartTitle: "Prosjekt Nyheter",
+    CreateNewsLinkLabel: "+ Opprett Nyhet",
+    NewsCreateError: "Noe gikk galt:",
+    NewsTitleRequired: "Tittel er påkrevd for å opprette en nyhetsartikkel.",
+    TemplateRequired: "En mal må velges for å opprette en nyhetsartikkel.",
+    TemplatePlaceholder: "Velg en mal",
+    TemplateLabel: "Mal",
+
   }
 })

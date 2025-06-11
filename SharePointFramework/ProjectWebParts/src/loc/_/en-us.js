@@ -199,7 +199,15 @@ define([], function () {
     NewsTitleLabel: "Title",
     NewsTitlePlaceholder: "Enter article title...",
     CreateButtonLabel: "Create",
-    CancelButtonLabel: "Cancel"
+    CancelButtonLabel: "Cancel",
+    ProjectNewsWebPartTitle: "Project News",
+    CreateNewsLinkLabel: "+ Create News",
+    NewsCreateError: "Something went wrong:",
+    NewsTitleRequired: "Title is required to create a news article.",
+    TemplateRequired: "Please select a template to create the news article.",
+    TemplatePlaceholder: "Select a template",
+    TemplateLabel: "Template",
+
 
 
 

@@ -245,7 +245,15 @@ declare interface IProjectWebPartsStrings {
   NewsTitleLabel: string
   NewsTitlePlaceholder: string
   CreateButtonLabel: string
-  CancelButtonLabel: string
+  CancelButtonLabel: string,
+  ProjectNewsWebPartTitle: string
+  CreateNewsLinkLabel: string
+  NewsTitleRequired: string
+  NewsCreateError: string
+  NewsCreateSuccess: string,
+  TemplateRequired: string,
+  TemplatePlaceholder: string,
+  TemplateLabel: string,
 }
 
 declare module 'ProjectWebPartsStrings' {
