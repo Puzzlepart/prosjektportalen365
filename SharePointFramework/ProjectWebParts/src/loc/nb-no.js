@@ -273,6 +273,8 @@ define([], function () {
     ShowMoreNews: "Vis flere",
     ShowLessNews: "Vis færre",
     EditedLabel: "Redigert",
+    MaxVisibleNewsDescription: "Angi det maksimale antallet nyhetsartikler som skal vises i listen.",
+    MaxVisibleNewsLabel: "Antall synlige nyheter (før vis mer)",
 
   }
 })

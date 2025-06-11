@@ -13,14 +13,14 @@ export interface NewsItem {
 
 interface RecentNewsListProps {
   news: NewsItem[]
+   maxVisible?: number
 }
 
-const MAX_VISIBLE = 6
 
-const RecentNewsList: React.FC<RecentNewsListProps> = ({ news }) => {
+const RecentNewsList: React.FC<RecentNewsListProps> = ({ news, maxVisible = 6 }) => {
   const [showAll, setShowAll] = React.useState(false)
 
-  const visibleNews = showAll ? news : news.slice(0, MAX_VISIBLE)
+  const visibleNews = showAll ? news : news.slice(0, maxVisible)
 
   return (
     <>
@@ -58,7 +58,7 @@ const RecentNewsList: React.FC<RecentNewsListProps> = ({ news }) => {
                         <>
                           {' · '}
                           <span>
-                            {strings.EditedLabel || 'Edited'}{' '}
+                            {strings.EditedLabel}{' '}
                             {new Date(item.modifiedDate).toLocaleDateString()}
                           </span>
                         </>
@@ -74,7 +74,7 @@ const RecentNewsList: React.FC<RecentNewsListProps> = ({ news }) => {
               </Card>
             ))}
           </div>
-          {!showAll && news.length > MAX_VISIBLE && (
+          {!showAll && news.length > maxVisible && (
             <Button
               appearance='secondary'
               onClick={() => setShowAll(true)}
@@ -82,7 +82,7 @@ const RecentNewsList: React.FC<RecentNewsListProps> = ({ news }) => {
               {strings.ShowMoreNews}
             </Button>
           )}
-          {showAll && news.length > MAX_VISIBLE && (
+          {showAll && news.length > maxVisible && (
             <Button
               appearance='secondary'
               onClick={() => setShowAll(false)}

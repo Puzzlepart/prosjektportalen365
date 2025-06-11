@@ -211,7 +211,9 @@ define([], function () {
     NoRecentNews: "No recent news found.",
      ShowMoreNews: "Show more",
     ShowLessNews: "Show less",
-    EditedLabel: "Edited"
+    EditedLabel: "Edited",
+    MaxVisibleNewsLabel: "Number of visible news articles (before 'Show more')",
+    MaxVisibleNewsDescription: "Set the maximum number of news articles to display in the web part.",
 
 
 

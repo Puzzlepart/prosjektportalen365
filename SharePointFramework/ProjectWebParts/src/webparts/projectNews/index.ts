@@ -28,6 +28,11 @@ export default class ProjectNewsWebPart extends BaseProjectWebPart<IProjectNewsP
                 PropertyPaneTextField('siteUrl', {
                   label: 'URL til område for publisering',
                   value: this.properties.siteUrl
+                }),
+                PropertyPaneTextField('maxVisibleNews', {
+                  label: strings.MaxVisibleNewsLabel,
+                  value: this.properties.maxVisibleNews?.toString() ?? '',
+                  description: strings.MaxVisibleNewsDescription
                 })
               ]
             },

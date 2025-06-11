@@ -7,6 +7,7 @@ import { ProjectNewsContext } from './context'
 import ProjectNewsDialog from './ProjectNewsDialogue/NewsDialogue'
 import strings from 'ProjectWebPartsStrings'
 import { SPHttpClient } from '@microsoft/sp-http'
+import RecentNewsList from './ProjectNewsRecentNewsList/RecentNewsList'
 
 export const ProjectNews: FC<IProjectNewsProps> = (props) => {
   const { context, fluentProviderId } = useProjectNews(props)
@@ -105,6 +106,15 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
     }
   }
 
+  const news = (context.state.data?.news || []).map(item => ({
+  name: item.Title,
+  url: `${props.siteUrl}/SitePages/${item.FileLeafRef}`,
+  authorName: item.Editor?.Title,
+  modifiedDate: item.Modified,
+  imageUrl: item.BannerImageUrl,
+  description: item.Description
+}))
+
   return (
     <ProjectNewsContext.Provider value={context}>
       <IdPrefixProvider value={fluentProviderId}>
@@ -126,6 +136,7 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
               selectedTemplate={selectedTemplate}
               onTemplateChange={handleTemplateChange}
             />
+            <RecentNewsList news={news} maxVisible={props.maxVisibleNews} />
           </section>
         </FluentProvider>
       </IdPrefixProvider>
@@ -134,5 +145,6 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
 }
 
 ProjectNews.defaultProps = {
-  siteUrl: 'https://puzzlepart.sharepoint.com/sites/prosjektportalen-news'
+  siteUrl: 'https://puzzlepart.sharepoint.com/sites/prosjektportalen-news',
+  maxVisibleNews: 6
 }

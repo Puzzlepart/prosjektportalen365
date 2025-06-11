@@ -14,6 +14,11 @@ export interface IProjectNewsProps extends IBaseWebPartComponentProps {
    */
   spHttpClient: SPHttpClient
 
+  /**
+   * The maximum number of news items to display
+   */
+  maxVisibleNews?: number
+
 }
 
 export interface IProjectNewsState extends IBaseWebPartComponentState<IProjectNewsData> {
@@ -29,9 +34,21 @@ export interface IProjectNewsState extends IBaseWebPartComponentState<IProjectNe
   refetch?: number
 }
 
+/**
+ * The shape of a news item as returned from SharePoint REST API
+ */
+export interface SharePointNewsItem {
+  Title: string
+  FileLeafRef: string
+  Editor?: { Title?: string }
+  Modified?: string
+  BannerImageUrl?: string
+  Description?: string
+}
+
 export interface IProjectNewsData {
   /**
    * news data set (placeholder, points to random model, create model if needed)
    */
-  news?: []
+  news?: SharePointNewsItem[]
 }

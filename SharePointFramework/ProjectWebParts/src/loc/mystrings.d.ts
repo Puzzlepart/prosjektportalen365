@@ -259,6 +259,8 @@ declare interface IProjectWebPartsStrings {
   ShowMoreNews: string,
   ShowLessNews: string,
   EditedLabel: string,
+  MaxVisibleNewsDescription: string,
+  MaxVisibleNewsLabel: string,
 }
 
 declare module 'ProjectWebPartsStrings' {
