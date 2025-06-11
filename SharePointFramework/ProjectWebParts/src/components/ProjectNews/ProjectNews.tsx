@@ -51,7 +51,6 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
     setSpinnerMode('creating')
     setErrorMessage('')
     try {
-      const templateName = selectedTemplate.split('/').pop()
       const newPageName = `${title.replace(/\s+/g, '-')}-${Date.now()}.aspx`
       const newPageUrl = `/SitePages/${newPageName}`
       const copyUrl = `${props.siteUrl}/_api/web/GetFileByServerRelativeUrl('${selectedTemplate}')/copyTo(strNewUrl='${newPageUrl}',bOverWrite=false)`
@@ -59,13 +58,37 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
         headers: { Accept: 'application/json;odata=nometadata' }
       })
       if (res.ok) {
+        // --- Update PromotedState and PageLayoutType ---
+        const listItemUrl = `${props.siteUrl}/_api/web/lists/GetByTitle('Site Pages')/items?$filter=FileLeafRef eq '${newPageName}'`
+        const listItemRes = await props.spHttpClient.get(
+          listItemUrl,
+          SPHttpClient.configurations.v1
+        )
+        const listItemData = await listItemRes.json()
+        const itemId = listItemData.value?.[0]?.Id
+        if (itemId) {
+          const updateUrl = `${props.siteUrl}/_api/web/lists/GetByTitle('Site Pages')/items(${itemId})`
+          await props.spHttpClient.post(updateUrl, SPHttpClient.configurations.v1, {
+            headers: {
+              Accept: 'application/json;odata=nometadata',
+              'Content-Type': 'application/json;odata=verbose',
+              'IF-MATCH': '*',
+              'X-HTTP-Method': 'MERGE'
+            },
+            body: JSON.stringify({
+              PromotedState: 2,
+              PageLayoutType: 'Article'
+            })
+          })
+        }
+        // --- End update ---
         setSpinnerMode('success')
         setTimeout(() => {
           setIsDialogOpen(false)
           setSpinnerMode('idle')
           setTitle('')
           setSelectedTemplate(undefined)
-          // Redirect to the new page in edit mode
+
           window.open(
             `${props.siteUrl}/SitePages/${encodeURIComponent(newPageName)}?Mode=Edit`,
             '_blank'

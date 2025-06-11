@@ -95,13 +95,13 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
                 required
               />
               <Label htmlFor='template-dropdown' required>
-                {strings.TemplateLabel || 'Velg mal'}
+                {strings.TemplateLabel}
               </Label>
               <Dropdown
                 id='template-dropdown'
                 value={selectedTemplate}
                 onOptionSelect={onTemplateChange}
-                placeholder={strings.TemplatePlaceholder || 'Velg en mal'}
+                placeholder={strings.TemplatePlaceholder}
                 >
                 {templates.map((t) => (
                   <Option key={t.ServerRelativeUrl} value={t.ServerRelativeUrl}>

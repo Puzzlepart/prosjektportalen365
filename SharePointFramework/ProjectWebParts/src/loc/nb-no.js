@@ -268,6 +268,11 @@ define([], function () {
     TemplateRequired: "En mal må velges for å opprette en nyhetsartikkel.",
     TemplatePlaceholder: "Velg en mal",
     TemplateLabel: "Mal",
+    RecentNewsTitle: "Nylige nyheter",
+    NoRecentNews: "Ingen nylige nyheter funnet.",
+    ShowMoreNews: "Vis flere",
+    ShowLessNews: "Vis færre",
+    EditedLabel: "Redigert",
 
   }
 })

@@ -207,6 +207,11 @@ define([], function () {
     TemplateRequired: "Please select a template to create the news article.",
     TemplatePlaceholder: "Select a template",
     TemplateLabel: "Template",
+    RecentNewsTitle: "Recent News",
+    NoRecentNews: "No recent news found.",
+     ShowMoreNews: "Show more",
+    ShowLessNews: "Show less",
+    EditedLabel: "Edited"
 
 
 
