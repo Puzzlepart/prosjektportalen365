@@ -8,6 +8,7 @@ import ProjectNewsDialog from './ProjectNewsDialogue/NewsDialogue'
 import strings from 'ProjectWebPartsStrings'
 import { SPHttpClient } from '@microsoft/sp-http'
 import RecentNewsList from './ProjectNewsRecentNewsList/RecentNewsList'
+import { ensureProjectNewsFolder, getServerRelativeUrl } from './util'
 
 export const ProjectNews: FC<IProjectNewsProps> = (props) => {
   const { context, fluentProviderId } = useProjectNews(props)
@@ -17,6 +18,7 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
   const [errorMessage, setErrorMessage] = React.useState('')
   const [templates, setTemplates] = React.useState<any[]>([])
   const [selectedTemplate, setSelectedTemplate] = React.useState<string | undefined>(undefined)
+  const folderName = props.newsFolderName || strings.NewsFolderNameDefault
 
   React.useEffect(() => {
     if (isDialogOpen) {
@@ -52,9 +54,15 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
     setSpinnerMode('creating')
     setErrorMessage('')
     try {
+      await ensureProjectNewsFolder(props.siteUrl, props.spHttpClient, folderName)
       const newPageName = `${title.replace(/\s+/g, '-')}-${Date.now()}.aspx`
-      const newPageUrl = `/SitePages/${newPageName}`
-      const copyUrl = `${props.siteUrl}/_api/web/GetFileByServerRelativeUrl('${selectedTemplate}')/copyTo(strNewUrl='${newPageUrl}',bOverWrite=false)`
+      const newPageServerRelativeUrl = getServerRelativeUrl(
+        props.siteUrl,
+        'SitePages',
+        folderName,
+        newPageName
+      )
+      const copyUrl = `${props.siteUrl}/_api/web/GetFileByServerRelativeUrl('${selectedTemplate}')/copyTo(strNewUrl='${newPageServerRelativeUrl}',bOverWrite=false)`
       const res = await props.spHttpClient.post(copyUrl, SPHttpClient.configurations.v1, {
         headers: { Accept: 'application/json;odata=nometadata' }
       })
@@ -90,30 +98,33 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
           setTitle('')
           setSelectedTemplate(undefined)
 
-          window.open(
-            `${props.siteUrl}/SitePages/${encodeURIComponent(newPageName)}?Mode=Edit`,
-            '_blank'
-          )
+          const editUrl = `${props.siteUrl}${getServerRelativeUrl(
+            props.siteUrl,
+            'SitePages',
+            folderName,
+            newPageName
+          )}?Mode=Edit`
+          window.open(editUrl, '_blank')
         }, 1200)
       } else {
         const error = await res.json()
-        setErrorMessage(error.error?.message?.value || strings.NewsCreateError)
+        setErrorMessage(strings.NewsCreateError + error.error?.message?.value)
         setSpinnerMode('idle')
       }
     } catch (err) {
-      setErrorMessage(strings.NewsCreateError)
+      setErrorMessage(strings.NewsCreateError + (err as Error).message)
       setSpinnerMode('idle')
     }
   }
 
-  const news = (context.state.data?.news || []).map(item => ({
-  name: item.Title,
-  url: `${props.siteUrl}/SitePages/${item.FileLeafRef}`,
-  authorName: item.Editor?.Title,
-  modifiedDate: item.Modified,
-  imageUrl: item.BannerImageUrl,
-  description: item.Description
-}))
+  const news = (context.state.data?.news || []).map((item) => ({
+    name: item.Title,
+    url: `${props.siteUrl}/SitePages/${folderName}/${item.FileLeafRef}`,
+    authorName: item.Editor?.Title,
+    modifiedDate: item.Modified,
+    imageUrl: item.BannerImageUrl,
+    description: item.Description
+  }))
 
   return (
     <ProjectNewsContext.Provider value={context}>

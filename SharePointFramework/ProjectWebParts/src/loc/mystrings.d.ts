@@ -261,6 +261,16 @@ declare interface IProjectWebPartsStrings {
   EditedLabel: string,
   MaxVisibleNewsDescription: string,
   MaxVisibleNewsLabel: string,
+  SiteUrlLabel: string,
+  SiteUrlDescription: string,
+  NewsFolderNameDescription: string,
+  NewsFolderNameDefault: string,
+  NewsFolderNameLabel: string,
+  FileNameRequired: string,
+  FileNameTooLong: string,
+  FileNameInvalid: string,
+  FileNameNoLeadingTrailingSpaces: string,
+  FileNameReserved: string
 }
 
 declare module 'ProjectWebPartsStrings' {

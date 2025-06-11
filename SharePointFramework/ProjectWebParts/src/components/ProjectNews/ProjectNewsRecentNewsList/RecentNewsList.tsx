@@ -13,7 +13,7 @@ export interface NewsItem {
 
 interface RecentNewsListProps {
   news: NewsItem[]
-   maxVisible?: number
+  maxVisible?: number
 }
 
 

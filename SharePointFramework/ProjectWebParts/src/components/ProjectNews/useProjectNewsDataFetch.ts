@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import { IProjectNewsProps, IProjectNewsState } from './types'
 import { SPHttpClient } from '@microsoft/sp-http'
+import { getServerRelativeUrl } from './util'
+import strings from 'ProjectWebPartsStrings'
 
 /**
  * Component data fetch hook for `ProjectNews`. This hook is responsible for
@@ -16,8 +18,13 @@ export function useProjectNewsDataFetch(
   setState: (newState: Partial<IProjectNewsState>) => void
 ) {
   useEffect(() => {
-   setState({ loading: true })
-    const url = `${props.siteUrl}/_api/web/lists/GetByTitle('Site Pages')/items?$filter=PromotedState eq 2&$orderby=FirstPublishedDate desc&$top=5`
+    setState({ loading: true })
+    const folderName = props.newsFolderName || strings.NewsFolderNameDefault
+    const folderServerRelativeUrl = getServerRelativeUrl(props.siteUrl, 'SitePages', folderName)
+    const url =
+      `${props.siteUrl}/_api/web/lists/GetByTitle('Site Pages')/items` +
+      `?$filter=PromotedState eq 2 and FileDirRef eq '${folderServerRelativeUrl}'` +
+      `&$orderby=FirstPublishedDate desc&$top=5`
     props.spHttpClient
       .get(url, SPHttpClient.configurations.v1)
       .then((res) => res.json())
@@ -28,5 +35,5 @@ export function useProjectNewsDataFetch(
         })
       })
       .catch((error) => setState({ loading: false, error }))
-  }, [refetch])
+  }, [refetch, props.siteUrl, props.newsFolderName])
 }

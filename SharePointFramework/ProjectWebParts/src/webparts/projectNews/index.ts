@@ -26,17 +26,22 @@ export default class ProjectNewsWebPart extends BaseProjectWebPart<IProjectNewsP
               groupName: strings.GeneralGroupName,
               groupFields: [
                 PropertyPaneTextField('siteUrl', {
-                  label: 'URL til område for publisering',
+                  label: strings.SiteUrlLabel,
+                  description: strings.SiteUrlDescription,
                   value: this.properties.siteUrl
                 }),
                 PropertyPaneTextField('maxVisibleNews', {
                   label: strings.MaxVisibleNewsLabel,
                   value: this.properties.maxVisibleNews?.toString() ?? '',
                   description: strings.MaxVisibleNewsDescription
+                }),
+                PropertyPaneTextField('newsFolderName', {
+                  label: strings.NewsFolderNameLabel,
+                  value: this.properties.newsFolderName ?? strings.NewsFolderNameDefault,
+                  description: strings.NewsFolderNameDescription
                 })
               ]
-            },
-
+            }
           ]
         }
       ]
