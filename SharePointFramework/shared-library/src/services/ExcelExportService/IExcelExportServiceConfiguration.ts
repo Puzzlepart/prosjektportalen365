@@ -7,4 +7,8 @@ export interface IExcelExportServiceConfiguration {
     type: any
     bookType: any
   }
+  newSheet?: {
+    name: string
+    column: string
+  }
 }

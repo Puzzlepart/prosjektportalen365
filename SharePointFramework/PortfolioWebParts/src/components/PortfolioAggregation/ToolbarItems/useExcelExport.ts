@@ -12,7 +12,13 @@ import { IPortfolioAggregationContext } from '../context'
  * @returns An object containing a contextual menu item for Excel export.
  */
 export function useExcelExport(context: IPortfolioAggregationContext) {
-  ExcelExportService.configure({ name: context.props.title })
+  ExcelExportService.configure({
+    name: context.props.title,
+    newSheet: {
+      name: 'Målinger',
+      column: 'Measurements'
+    }
+  })
 
   /**
    * Callback function for Excel export. Handles the export to Excel with state updates and
@@ -49,6 +55,16 @@ export function useExcelExport(context: IPortfolioAggregationContext) {
             case 'currency':
             case 'number':
               filteredItem[key] = Math.floor(filteredItem[key])
+              break
+            case 'trend':
+              const json = filteredItem[key]?.trim()
+              if (!json || json === '{}') {
+                filteredItem[key] = ''
+              } else {
+                const parsed = JSON.parse(json)
+                const achievement = Number(parsed?.Achievement)
+                filteredItem[key] = Math.floor(isNaN(achievement) ? 0 : achievement * 100) / 100
+              }
               break
             default:
               break

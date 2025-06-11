@@ -21,6 +21,49 @@ class ExcelExportService {
   }
 
   /**
+   * Parses a field from an item as a JSON array of objects.
+   * - Copies the item's 'Title' to each entry.
+   * - Renames 'Title' in entries to 'Måling'.
+   * - Skips properties with object values.
+   * Returns an empty array if parsing fails.
+   *
+   * @param item The object containing the field.
+   * @param column The field name to parse.
+   * @returns Array of transformed objects or empty array.
+   */
+  private parseJSONColumn(item: Record<string, any>, column: string): Record<string, any>[] {
+    const value = item[column]
+    if (typeof value !== 'string' || !value.trim()) return []
+    const skipKeys = ['ValueDisplay', 'AchievementDisplay']
+    const renameKeys: Record<string, string> = {
+      Title: 'Måling',
+      Value: 'Målt verdi',
+      Comment: 'Kommentar til måling',
+      Achievement: 'Måloppnåelse',
+      DateDisplay: 'Dato for måling'
+    }
+    try {
+      const parsed = JSON.parse(value)
+      if (!Array.isArray(parsed)) return []
+      return parsed.map((entry: any) => ({
+        Tittel: item['Title'],
+        ...Object.fromEntries(
+          Object.entries(entry)
+            .filter(([key, val]) => typeof val !== 'object' && !skipKeys.includes(key))
+            .map(([key, val]) => {
+              const renamedKey = renameKeys[key] || key
+              const transformedVal =
+                key === 'Achievement' && typeof val === 'number' ? Math.floor(val * 100) / 100 : val
+              return [renamedKey, transformedVal]
+            })
+        )
+      }))
+    } catch (error) {
+      throw new Error(`Error parsing JSON in column "${column}": ${error}`)
+    }
+  }
+
+  /**
    * Export the items with the given columns to an Excel file.
    * - The columns are used to create the header row.
    * - The items are used to create the data rows.
@@ -42,9 +85,12 @@ class ExcelExportService {
     const fileNameFormat = fileNamePart ? '{0}-{1}-{2}.xlsx' : '{0}-{1}.xlsx'
     try {
       const sheets = []
-      const _columns = columns.filter((column) => Boolean(column.name))
+      const additionalColumn = this.configuration?.newSheet?.column
+      const _columns = columns.filter(
+        (column) => column.fieldName !== additionalColumn && Boolean(column.name)
+      )
       sheets.push({
-        name: this.configuration.sheetName,
+        name: this.configuration.name,
         data: [
           _columns.map(({ name }) => name),
           ...items.map((item) =>
@@ -64,6 +110,20 @@ class ExcelExportService {
           )
         ]
       })
+      if (additionalColumn) {
+        const combinedJson = items
+          .map((item) => this.parseJSONColumn(item, additionalColumn))
+          .flat()
+          .filter(Boolean)
+
+        if (combinedJson.length) {
+          const sheetName = this.configuration?.newSheet?.name || `${sheetNamePrefix}Json`
+          const aoaData = XLSX.utils.sheet_to_json(XLSX.utils.json_to_sheet(combinedJson), {
+            header: 1
+          })
+          sheets.push({ name: sheetName, data: aoaData })
+        }
+      }
       const workBook = XLSX.utils.book_new()
       sheets.forEach((s, index) => {
         const sheet = XLSX.utils.aoa_to_sheet(s.data)
