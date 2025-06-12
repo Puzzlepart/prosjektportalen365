@@ -1,4 +1,5 @@
 import { SPHttpClient } from '@microsoft/sp-http'
+
 import {
   IBaseWebPartComponentProps,
   IBaseWebPartComponentState
@@ -84,7 +85,7 @@ export interface NewsItem {
    */
   authorName?: string
   /**
-   * Last modified date/time
+   * Last modified date/time (optional)
    */
   modifiedDate?: string
   /**
@@ -96,11 +97,28 @@ export interface NewsItem {
    */
   description?: string
 }
+/**
+ * Interface for the project news data, which includes an array of news items.
+ * This is used to pass news data to components like RecentNewsList.
+ */
 export interface IProjectNewsData {
   /**
-   * news data set
+   * Array of news items
    */
   news?: NewsItem[]
+}
+
+/**
+ * Props for the RecentNewsList component, which displays a list of recent news items.
+ * It extends the IProjectNewsData interface to include news data.
+ * The maxVisible prop controls how many news items are displayed initially.
+ */
+export interface RecentNewsListProps extends IProjectNewsData {
+  /**
+   * The maximum number of news items to display initially.
+   * If set, the component will show this many items before allowing the user to see more.
+   */
+  maxVisible?: number
 }
 
 /**
@@ -116,4 +134,61 @@ export interface TemplateFile {
    * The server-relative URL of the template file
    */
   ServerRelativeUrl: string
+}
+
+/**
+ * Props for the NewsDialog component, which is used to create news articles.
+ * It includes properties for managing the dialog state, title, error messages,
+ * and handlers for form submission and template selection.
+ */
+export interface NewsDialogProps {
+  /**
+   * Whether the dialog is open or not
+   */
+  open: boolean
+  /**
+   * Callback to handle opening and closing the dialog
+   * @param open - true if the dialog should be open, false otherwise
+   */
+  onOpenChange: (open: boolean) => void
+  /**
+   * The current state of the spinner in the dialog
+   * - 'idle': No action is being performed
+   * - 'creating': A new news article is being created
+   * - 'success': The news article has been successfully created
+   */
+  spinnerMode: 'idle' | 'creating' | 'success'
+  /**
+   * The title of the news article being created
+   */
+  title: string
+  /**
+   * The error message to display in the dialog when an error occurs
+   */
+  errorMessage: string
+  /**
+   * Handler for title input changes
+   * @param e - The event object
+   * @param data - The data containing the new title value
+   */
+  onTitleChange: (e: React.FormEvent, data: { value: string }) => void
+  /**
+   * Handler for form submission
+   * @param e - The event object
+   */
+  onSubmit: (e: React.FormEvent) => void
+  /**
+   * Array of available templates for creating news articles
+   */
+  templates: any[]
+  /**
+   * The currently selected template for creating a news article
+   */
+  selectedTemplate?: string
+  /**
+   * Handler for template selection changes
+   * @param e - The event object
+   * @param data - The data containing the selected template option value
+   */
+  onTemplateChange: (e: React.FormEvent, data: { optionValue: string }) => void
 }

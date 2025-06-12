@@ -1,25 +1,11 @@
 import * as React from 'react'
 import { Card, CardHeader, Link, Text, Button } from '@fluentui/react-components'
+
 import * as strings from 'ProjectWebPartsStrings'
-
-export interface NewsItem {
-  name: string
-  url: string
-  authorName?: string
-  modifiedDate?: string
-  imageUrl?: string
-  description?: string
-}
-
-interface RecentNewsListProps {
-  news: NewsItem[]
-  maxVisible?: number
-}
-
+import { RecentNewsListProps } from '../types'
 
 const RecentNewsList: React.FC<RecentNewsListProps> = ({ news, maxVisible = 6 }) => {
   const [showAll, setShowAll] = React.useState(false)
-
   const visibleNews = showAll ? news : news.slice(0, maxVisible)
 
   return (
@@ -58,8 +44,7 @@ const RecentNewsList: React.FC<RecentNewsListProps> = ({ news, maxVisible = 6 })
                         <>
                           {' · '}
                           <span>
-                            {strings.EditedLabel}{' '}
-                            {new Date(item.modifiedDate).toLocaleDateString()}
+                            {strings.EditedLabel} {new Date(item.modifiedDate).toLocaleDateString()}
                           </span>
                         </>
                       )}

@@ -1,4 +1,5 @@
 import { SPHttpClient, SPHttpClientResponse } from '@microsoft/sp-http'
+
 import * as strings from 'ProjectWebPartsStrings'
 import { TemplateFile } from './types'
 

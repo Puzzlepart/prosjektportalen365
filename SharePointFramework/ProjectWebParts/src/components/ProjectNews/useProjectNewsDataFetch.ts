@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
-import { IProjectNewsProps, IProjectNewsState, NewsItem } from './types'
 import { SPHttpClient } from '@microsoft/sp-http'
+
+import { IProjectNewsProps, IProjectNewsState, NewsItem } from './types'
 import { getNewsImageUrl, getServerRelativeUrl } from './util'
 import strings from 'ProjectWebPartsStrings'
 
@@ -23,26 +24,30 @@ export function useProjectNewsDataFetch(
     const sitePagesServerRelativeUrl = getServerRelativeUrl(props.siteUrl, 'SitePages')
     const folderServerRelativeUrl = getServerRelativeUrl(props.siteUrl, 'SitePages', folderName)
     const url =
-  `${props.siteUrl}/_api/web/GetListUsingPath(DecodedUrl=@a1)/items` +
-  `?@a1='${sitePagesServerRelativeUrl}'` +
-  `&$filter=FileDirRef eq '${folderServerRelativeUrl}'` +
-  `&$select=Title,FileLeafRef,BannerImageUrl,Description,Author/Title,Editor/Title,Modified,File/ServerRelativeUrl,File/Name,File/TimeLastModified` +
-  `&$expand=Author,Editor,File`
+      `${props.siteUrl}/_api/web/GetListUsingPath(DecodedUrl=@a1)/items` +
+      `?@a1='${sitePagesServerRelativeUrl}'` +
+      `&$filter=FileDirRef eq '${folderServerRelativeUrl}'` +
+      `&$select=Title,FileLeafRef,BannerImageUrl,Description,Author/Title,Editor/Title,Modified,File/ServerRelativeUrl,File/Name,File/TimeLastModified` +
+      `&$expand=Author,Editor,File`
     props.spHttpClient
       .get(url, SPHttpClient.configurations.v1)
       .then((res) => res.json())
       .then((data) => {
-        const news = (data.value || []).map(
-          (item): NewsItem => ({
-            name: item.File?.Name || item.Title,
-            url: item.File?.ServerRelativeUrl || '#',
-            authorName: item.Author?.Title || item.Editor?.Title,
-            modifiedDate: item.File?.TimeLastModified || item.Modified,
-            imageUrl: getNewsImageUrl(item),
-            description: item.Description
-          })
-        )
-        .sort((a, b) => new Date(b.modifiedDate ?? 0).getTime() - new Date(a.modifiedDate ?? 0).getTime())
+        const news = (data.value || [])
+          .map(
+            (item): NewsItem => ({
+              name: item.File?.Name || item.Title,
+              url: item.File?.ServerRelativeUrl || '#',
+              authorName: item.Author?.Title || item.Editor?.Title,
+              modifiedDate: item.File?.TimeLastModified || item.Modified,
+              imageUrl: getNewsImageUrl(item),
+              description: item.Description
+            })
+          )
+          .sort(
+            (a, b) =>
+              new Date(b.modifiedDate ?? 0).getTime() - new Date(a.modifiedDate ?? 0).getTime()
+          )
         setState({
           loading: false,
           data: { news }

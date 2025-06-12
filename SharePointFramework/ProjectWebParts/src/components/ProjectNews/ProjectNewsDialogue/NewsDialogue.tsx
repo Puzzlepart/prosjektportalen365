@@ -14,20 +14,9 @@ import {
   Option
 } from '@fluentui/react-components'
 import { CheckmarkCircle24Filled } from '@fluentui/react-icons'
-import * as strings from 'ProjectWebPartsStrings'
 
-interface NewsDialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  spinnerMode: 'idle' | 'creating' | 'success'
-  title: string
-  errorMessage: string
-  onTitleChange: (e: React.FormEvent, data: { value: string }) => void
-  onSubmit: (e: React.FormEvent) => void
-  templates: any[]
-  selectedTemplate?: string
-  onTemplateChange: (e: React.FormEvent, data: { optionValue: string }) => void
-}
+import * as strings from 'ProjectWebPartsStrings'
+import { NewsDialogProps } from '../types'
 
 const NewsDialog: React.FC<NewsDialogProps> = ({
   open,
