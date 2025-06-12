@@ -21,6 +21,8 @@ Sjekk ut [release notes](./releasenotes/1.11.0.md) for høydepunkter og mer deta
 
 - Eksport av datofelter fra aggregerte oversikter viser nå Excel-vennlig datoformat [#1630](https://github.com/Puzzlepart/prosjektportalen365/issues/1630)
 
+- Forbedre formatet på eksportert data av "Målinger" og "Måloppnåelse" [#1634](https://github.com/Puzzlepart/prosjektportalen365/issues/1634)
+
 ---
 
 ## 1.11.0 - 26.03.2025
@@ -279,7 +281,7 @@ I denne versjonen er det gjort flere endringer på det visuelle uttrykket til Pr
 - Rettet feil i oppgraderingsskriptet der noen tenants ikke kunne hente alle hub children [#1041](https://github.com/Puzzlepart/prosjektportalen365/pull/1041)
 - Rettet feil hvor kommandolinjen ikke ble vist som standard [#1042](https://github.com/Puzzlepart/prosjektportalen365/issues/1042)
 - Rettet feil ved provisjonering av Bygg- og anleggsprosjekter dersom Fasesjekkliste var valgt [#1052](https://github.com/Puzzlepart/prosjektportalen365/issues/1052)
-- Rettet feil hvor det ikke var mulig å synkronisere data fra 'Prosjektdata'-listen  (Idébehandling) [#1048](https://github.com/Puzzlepart/prosjektportalen365/pull/1048)
+- Rettet feil hvor det ikke var mulig å synkronisere data fra 'Prosjektdata'-listen (Idébehandling) [#1048](https://github.com/Puzzlepart/prosjektportalen365/pull/1048)
 - Rettet feil hvor termset for `FNs bærekraftsmål` manglet [#1058](https://github.com/Puzzlepart/prosjektportalen365/issues/1058)
 
 ---
