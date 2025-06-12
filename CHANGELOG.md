@@ -108,6 +108,8 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 
 - Eksport av datofelter fra aggregerte oversikter viser nå Excel-vennlig datoformat [#1630](https://github.com/Puzzlepart/prosjektportalen365/issues/1630)
 
+- Forbedre formatet på eksportert data av "Målinger" og "Måloppnåelse" [#1634](https://github.com/Puzzlepart/prosjektportalen365/issues/1634)
+
 ---
 
 ## 1.11.0 - 26.03.2025
