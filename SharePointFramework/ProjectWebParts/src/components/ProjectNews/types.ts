@@ -48,10 +48,14 @@ export interface SharePointNewsItem {
    */
   Title: string
   /**
-   * The title of the news item as it appears in the URL
+   * The file name of the news item, as it appears in the Site Pages library and in the page URL.
+   * Example: "My-News-Article.aspx"
    */
   FileLeafRef: string
-
+  /**
+   * The user who last modified the news item.
+   * Contains the display name of the editor.
+   */
   Editor?: { Title?: string }
   /**
    * The date when the news item was last modified
@@ -69,7 +73,7 @@ export interface SharePointNewsItem {
 
 export interface IProjectNewsData {
   /**
-   * news data set (placeholder, points to random model, create model if needed)
+   * news data set
    */
   news?: SharePointNewsItem[]
 }

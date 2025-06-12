@@ -98,12 +98,13 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
           setTitle('')
           setSelectedTemplate(undefined)
 
-          const editUrl = `${props.siteUrl}${getServerRelativeUrl(
+          const serverRelative = getServerRelativeUrl(
             props.siteUrl,
             'SitePages',
             folderName,
             newPageName
-          )}?Mode=Edit`
+          ).replace(/^\//, '')
+          const editUrl = `${props.siteUrl}/${serverRelative}?Mode=Edit`
           window.open(editUrl, '_blank')
         }, 1200)
       } else {

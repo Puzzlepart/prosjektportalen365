@@ -270,7 +270,8 @@ declare interface IProjectWebPartsStrings {
   FileNameTooLong: string,
   FileNameInvalid: string,
   FileNameNoLeadingTrailingSpaces: string,
-  FileNameReserved: string
+  FileNameReserved: string,
+  NewsFolderError: string,
 }
 
 declare module 'ProjectWebPartsStrings' {

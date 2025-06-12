@@ -22,13 +22,13 @@ export function useProjectNewsDataFetch(
     const folderName = props.newsFolderName || strings.NewsFolderNameDefault
     const folderServerRelativeUrl = getServerRelativeUrl(props.siteUrl, 'SitePages', folderName)
     const url =
-      `${props.siteUrl}/_api/web/lists/GetByTitle('Site Pages')/items` +
-      `?$filter=PromotedState eq 2 and FileDirRef eq '${folderServerRelativeUrl}'` +
-      `&$orderby=FirstPublishedDate desc&$top=5`
+      `${props.siteUrl}/_api/web/GetFolderByServerRelativeUrl('${folderServerRelativeUrl}')/Files` +
+      `?$select=Name,ServerRelativeUrl,TimeCreated,TimeLastModified,Author/Title,Editor/Title&$expand=Author,Editor`
     props.spHttpClient
       .get(url, SPHttpClient.configurations.v1)
       .then((res) => res.json())
       .then((data) => {
+        console.log('Project News data fetched:', data)
         setState({
           loading: false,
           data: { news: data.value }

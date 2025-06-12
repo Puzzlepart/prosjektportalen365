@@ -297,12 +297,12 @@ define([], function () {
     CreateButtonLabel: 'Opprett',
     CancelButtonLabel: 'Avbryt',
     CreateNewsLinkLabel: '+ Opprett Nyhet',
-    NewsCreateError: 'Noe gikk galt:',
+    NewsCreateError: 'Noe gikk galt: ',
     NewsTitleRequired: 'Tittel er påkrevd for å opprette en nyhetsartikkel.',
     TemplateRequired: 'En mal må velges for å opprette en nyhetsartikkel.',
     TemplatePlaceholder: 'Velg en mal',
     TemplateLabel: 'Mal',
-    RecentNewsTitle: 'Nylige nyheter',
+    RecentNewsTitle: 'Siste nytt',
     NoRecentNews: 'Ingen nylige nyheter funnet.',
     ShowMoreNews: 'Vis flere',
     ShowLessNews: 'Vis færre',
@@ -319,7 +319,8 @@ define([], function () {
     FileNameTooLong: 'Filnavn er for langt.',
     FileNameInvalid: 'Filnavn inneholder ugyldige tegn.',
     FileNameNoLeadingTrailingSpaces: 'Filnavn kan ikke ha ledende eller etterfølgende mellomrom.',
-    FileNameReserved: 'Filnavn er reservert.'
+    FileNameReserved: 'Filnavn er reservert.',
+    NewsFolderError: 'Feil ved oppretting av nyhetsmappe: ',
     // End of Project News Web Part strings
   }
 })

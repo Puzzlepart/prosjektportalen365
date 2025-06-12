@@ -225,7 +225,7 @@ define([], function () {
     CreateButtonLabel: 'Create',
     CancelButtonLabel: 'Cancel',
     CreateNewsLinkLabel: '+ Create News',
-    NewsCreateError: 'Something went wrong:',
+    NewsCreateError: 'Something went wrong: ',
     NewsTitleRequired: 'Title is required to create a news article.',
     TemplateRequired: 'Please select a template to create the news article.',
     TemplatePlaceholder: 'Select a template',
@@ -246,6 +246,7 @@ define([], function () {
     FileNameInvalid: 'File name contains invalid characters.',
     FileNameNoLeadingTrailingSpaces: 'File name cannot have leading or trailing spaces.',
     FileNameReserved: 'File name is reserved.',
+    NewsFolderError: "Failed to check or create news folder: ",
     // End of Project News Web Part strings
   }
 })
