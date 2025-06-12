@@ -27,7 +27,8 @@
           "ProjectListWebPart": "0c6f8862-917c-4f0b-b508-6c21ea3e5fe8",
           "ProjectProvisionWebPart": "f4448b23-90bf-42a2-8029-4ef5ddc3f0f2",
           "PortfolioTimelineWebPart": "082b231a-a10b-4a4a-8bcb-0b085ae19442",
-          "ResourceAllocationWebPart": "83b4e2bc-80f9-4704-bfd3-f1f6ba108a76"
+          "ResourceAllocationWebPart": "83b4e2bc-80f9-4704-bfd3-f1f6ba108a76",
+          "ProjectCardWebPart": "36eae076-70b5-48f0-8814-5db8f3812fa4"
         }
       },
       "ProgramWebParts": {

@@ -27,7 +27,8 @@
           "PortfolioTimelineWebPart": "7284c568-f66c-4218-bb2c-3734a3cfa581",
           "ResourceAllocationWebPart": "2ef269b2-6370-4841-8b35-2185b7ccb22a",
           "ProjectProvisionWebPart": "e88cea29-09a0-4ce4-a38c-e0d74b65f619",
-          "IdeaModuleWebPart": "20f151a9-6891-4408-a6d6-77e749b9e3e7"
+          "IdeaModuleWebPart": "20f151a9-6891-4408-a6d6-77e749b9e3e7",
+          "ProjectCardWebPart": "92d23158-485a-4103-96bb-d3036b347412"
         }
       },
       "ProgramWebParts": {

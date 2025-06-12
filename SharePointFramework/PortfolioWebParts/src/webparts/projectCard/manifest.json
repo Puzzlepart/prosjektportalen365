@@ -1,0 +1,29 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "92d23158-485a-4103-96bb-d3036b347412",
+  "alias": "ProjectCardWebPart",
+  "componentType": "WebPart",
+  "version": "1.11.0",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "hiddenFromToolbox": false,
+  "supportedHosts": [
+    "SharePointWebPart"
+  ],
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": {
+        "default": "Other"
+      },
+      "title": {
+        "default": "Prosjektkort"
+      },
+      "description": {
+        "default": "Prosjektkort viser informasjon om et prosjektet og andre relevante detaljer."
+      },
+      "officeFabricIconFontName": "Header",
+      "properties": { }
+    }
+  ]
+}
