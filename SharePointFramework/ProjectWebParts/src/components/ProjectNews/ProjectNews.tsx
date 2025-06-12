@@ -8,7 +8,7 @@ import ProjectNewsDialog from './ProjectNewsDialogue/NewsDialogue'
 import strings from 'ProjectWebPartsStrings'
 import { SPHttpClient } from '@microsoft/sp-http'
 import RecentNewsList from './ProjectNewsRecentNewsList/RecentNewsList'
-import { ensureProjectNewsFolder, getServerRelativeUrl } from './util'
+import { ensureProjectNewsFolder, getNewsEditUrl, getNewsPageName, getServerRelativeUrl, getTemplates } from './util'
 
 export const ProjectNews: FC<IProjectNewsProps> = (props) => {
   const { context, fluentProviderId } = useProjectNews(props)
@@ -19,17 +19,17 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
   const [templates, setTemplates] = React.useState<any[]>([])
   const [selectedTemplate, setSelectedTemplate] = React.useState<string | undefined>(undefined)
   const folderName = props.newsFolderName || strings.NewsFolderNameDefault
+  const recentNews = context.state.data?.news || []
 
   React.useEffect(() => {
-    if (isDialogOpen) {
-      const url = `${props.siteUrl}/_api/web/GetFolderByServerRelativeUrl('SitePages/Templates')/Files?$select=Name,ServerRelativeUrl`
-      props.spHttpClient
-        .get(url, SPHttpClient.configurations.v1)
-        .then((res) => res.json())
-        .then((data) => setTemplates(data.value || []))
-        .catch(() => setTemplates([]))
+  if (isDialogOpen) {
+    const fetchTemplates = async () => {
+      const templates = await getTemplates(props.siteUrl, props.spHttpClient)
+      setTemplates(templates)
     }
-  }, [isDialogOpen])
+    fetchTemplates()
+  }
+}, [isDialogOpen, props.siteUrl, props.spHttpClient])
 
   const handleTitleChange = (_: React.FormEvent, data: { value: string }) => {
     setTitle(data.value)
@@ -55,7 +55,7 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
     setErrorMessage('')
     try {
       await ensureProjectNewsFolder(props.siteUrl, props.spHttpClient, folderName)
-      const newPageName = `${title.replace(/\s+/g, '-')}-${Date.now()}.aspx`
+      const newPageName = getNewsPageName(title)
       const newPageServerRelativeUrl = getServerRelativeUrl(
         props.siteUrl,
         'SitePages',
@@ -74,10 +74,12 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
           SPHttpClient.configurations.v1
         )
         const listItemData = await listItemRes.json()
+        console.log('List item data:', listItemData)
         const itemId = listItemData.value?.[0]?.Id
+        console.log('itemId:', itemId)
         if (itemId) {
           const updateUrl = `${props.siteUrl}/_api/web/lists/GetByTitle('Site Pages')/items(${itemId})`
-          await props.spHttpClient.post(updateUrl, SPHttpClient.configurations.v1, {
+          const updateRes = await props.spHttpClient.post(updateUrl, SPHttpClient.configurations.v1, {
             headers: {
               Accept: 'application/json;odata=nometadata',
               'Content-Type': 'application/json;odata=verbose',
@@ -89,6 +91,7 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
               PageLayoutType: 'Article'
             })
           })
+          console.log('Update response status:', updateRes.status)
         }
         // --- End update ---
         setSpinnerMode('success')
@@ -98,13 +101,7 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
           setTitle('')
           setSelectedTemplate(undefined)
 
-          const serverRelative = getServerRelativeUrl(
-            props.siteUrl,
-            'SitePages',
-            folderName,
-            newPageName
-          ).replace(/^\//, '')
-          const editUrl = `${props.siteUrl}/${serverRelative}?Mode=Edit`
+          const editUrl = getNewsEditUrl(props.siteUrl, folderName, newPageName)
           window.open(editUrl, '_blank')
         }, 1200)
       } else {
@@ -117,15 +114,6 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
       setSpinnerMode('idle')
     }
   }
-
-  const news = (context.state.data?.news || []).map((item) => ({
-    name: item.Title,
-    url: `${props.siteUrl}/SitePages/${folderName}/${item.FileLeafRef}`,
-    authorName: item.Editor?.Title,
-    modifiedDate: item.Modified,
-    imageUrl: item.BannerImageUrl,
-    description: item.Description
-  }))
 
   return (
     <ProjectNewsContext.Provider value={context}>
@@ -148,7 +136,7 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
               selectedTemplate={selectedTemplate}
               onTemplateChange={handleTemplateChange}
             />
-            <RecentNewsList news={news} maxVisible={props.maxVisibleNews} />
+            <RecentNewsList news={recentNews} maxVisible={props.maxVisibleNews} />
           </section>
         </FluentProvider>
       </IdPrefixProvider>

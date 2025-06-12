@@ -42,38 +42,78 @@ export interface IProjectNewsState extends IBaseWebPartComponentState<IProjectNe
 /**
  * The shape of a news item as returned from SharePoint REST API
  */
-export interface SharePointNewsItem {
+// export interface SharePointNewsItem {
+//   /**
+//    * Title of the news item
+//    */
+//   Title: string
+//   /**
+//    * The file name of the news item, as it appears in the Site Pages library and in the page URL.
+//    * Example: "My-News-Article.aspx"
+//    */
+//   FileLeafRef: string
+//   /**
+//    * The user who last modified the news item.
+//    * Contains the display name of the editor.
+//    */
+//   Editor?: { Title?: string }
+//   /**
+//    * The date when the news item was last modified
+//    */
+//   Modified?: string
+//   /**
+//    * URL to the banner image for the news item
+//    */
+//   BannerImageUrl?: string
+//   /**
+//    * The description of the news item
+//    */
+//   Description?: string
+// }
+export interface NewsItem {
   /**
-   * Title of the news item
+   * Display name/title for the news card
    */
-  Title: string
+  name: string
   /**
-   * The file name of the news item, as it appears in the Site Pages library and in the page URL.
-   * Example: "My-News-Article.aspx"
+   * Absolute URL to the news page
    */
-  FileLeafRef: string
+  url: string
   /**
-   * The user who last modified the news item.
-   * Contains the display name of the editor.
+   * Display name of the author/editor
    */
-  Editor?: { Title?: string }
+  authorName?: string
   /**
-   * The date when the news item was last modified
+   * Last modified date/time
    */
-  Modified?: string
+  modifiedDate?: string
   /**
-   * URL to the banner image for the news item
+   * Banner image URL (optional)
    */
-  BannerImageUrl?: string
+  imageUrl?: string
   /**
-   * The description of the news item
+   * Description (optional)
    */
-  Description?: string
+  description?: string
 }
-
 export interface IProjectNewsData {
   /**
    * news data set
    */
-  news?: SharePointNewsItem[]
+  news?: NewsItem[]
+}
+
+/**
+ * Represents a template file in the Site Pages/Templates folder.
+ * Used for creating new news articles based on templates.
+ */
+export interface TemplateFile {
+  /**
+   * The name of the template file, e.g., "Project-Template.aspx"
+   */
+  Name: string
+  /**
+   * The server-relative URL of the template file
+   */
+  ServerRelativeUrl: string
 }

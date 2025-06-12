@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { IProjectNewsProps, IProjectNewsState } from './types'
+import { IProjectNewsProps, IProjectNewsState, NewsItem } from './types'
 import { SPHttpClient } from '@microsoft/sp-http'
 import { getServerRelativeUrl } from './util'
 import strings from 'ProjectWebPartsStrings'
@@ -20,18 +20,31 @@ export function useProjectNewsDataFetch(
   useEffect(() => {
     setState({ loading: true })
     const folderName = props.newsFolderName || strings.NewsFolderNameDefault
+    const sitePagesServerRelativeUrl = getServerRelativeUrl(props.siteUrl, 'SitePages')
     const folderServerRelativeUrl = getServerRelativeUrl(props.siteUrl, 'SitePages', folderName)
     const url =
-      `${props.siteUrl}/_api/web/GetFolderByServerRelativeUrl('${folderServerRelativeUrl}')/Files` +
-      `?$select=Name,ServerRelativeUrl,TimeCreated,TimeLastModified,Author/Title,Editor/Title&$expand=Author,Editor`
+  `${props.siteUrl}/_api/web/GetListUsingPath(DecodedUrl=@a1)/items` +
+  `?@a1='${sitePagesServerRelativeUrl}'` +
+  `&$filter=FileDirRef eq '${folderServerRelativeUrl}'` +
+  `&$select=Title,FileLeafRef,BannerImageUrl,Description,Author/Title,Editor/Title,Modified,File/ServerRelativeUrl,File/Name,File/TimeLastModified` +
+  `&$expand=Author,Editor,File`
     props.spHttpClient
       .get(url, SPHttpClient.configurations.v1)
       .then((res) => res.json())
       .then((data) => {
-        console.log('Project News data fetched:', data)
+        const news = (data.value || []).map(
+          (item): NewsItem => ({
+            name: item.File?.Name || item.Title,
+            url: item.File?.ServerRelativeUrl || '#',
+            authorName: item.Author?.Title || item.Editor?.Title,
+            modifiedDate: item.File?.TimeLastModified || item.Modified,
+            imageUrl: item.BannerImageUrl?.Url,
+            description: item.Description
+          })
+        )
         setState({
           loading: false,
-          data: { news: data.value }
+          data: { news }
         })
       })
       .catch((error) => setState({ loading: false, error }))
