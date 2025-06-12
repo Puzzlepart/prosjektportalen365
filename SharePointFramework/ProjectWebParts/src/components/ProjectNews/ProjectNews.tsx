@@ -1,19 +1,23 @@
 import { FluentProvider, IdPrefixProvider, Link } from '@fluentui/react-components'
 import React, { FC } from 'react'
+
 import { IProjectNewsProps } from './types'
 import { customLightTheme } from 'pp365-shared-library'
 import { useProjectNews } from './useProjectNews'
 import { ProjectNewsContext } from './context'
 import ProjectNewsDialog from './ProjectNewsDialogue/NewsDialogue'
 import strings from 'ProjectWebPartsStrings'
-import { SPHttpClient } from '@microsoft/sp-http'
 import RecentNewsList from './ProjectNewsRecentNewsList/RecentNewsList'
 import {
+  copyTemplatePage,
   ensureProjectNewsFolder,
+  extractSharePointErrorMessage,
   getNewsEditUrl,
   getNewsPageName,
   getServerRelativeUrl,
-  getTemplates
+  getSitePageItemIdByFileName,
+  getTemplates,
+  promotePageToNewsArticle
 } from './util'
 
 export const ProjectNews: FC<IProjectNewsProps> = (props) => {
@@ -68,44 +72,26 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
         folderName,
         newPageName
       )
-      const copyUrl = `${props.siteUrl}/_api/web/GetFileByServerRelativeUrl('${selectedTemplate}')/copyTo(strNewUrl='${newPageServerRelativeUrl}',bOverWrite=false)`
-      const res = await props.spHttpClient.post(copyUrl, SPHttpClient.configurations.v1, {
-        headers: { Accept: 'application/json;odata=nometadata' }
-      })
+      const res = await copyTemplatePage(
+        props.siteUrl,
+        props.spHttpClient,
+        selectedTemplate,
+        newPageServerRelativeUrl
+      )
       if (res.ok) {
-        // --- Update PromotedState and PageLayoutType ---
-        const sitePagesServerRelativeUrl = getServerRelativeUrl(props.siteUrl, 'SitePages')
-        const listItemUrl = `${props.siteUrl}/_api/web/GetListUsingPath(DecodedUrl=@a1)/items?@a1='${sitePagesServerRelativeUrl}'&$filter=FileLeafRef eq '${newPageName}'`
-        const listItemRes = await props.spHttpClient.get(
-          listItemUrl,
-          SPHttpClient.configurations.v1
+        const { itemId, sitePagesServerRelativeUrl } = await getSitePageItemIdByFileName(
+          props.siteUrl,
+          props.spHttpClient,
+          newPageName
         )
-        const listItemData = await listItemRes.json()
-        console.log('List item data:', listItemData)
-        const itemId = listItemData.value?.[0]?.Id
-        console.log('itemId:', itemId)
         if (itemId) {
-          const updateUrl = `${props.siteUrl}/_api/web/GetListUsingPath(DecodedUrl='${sitePagesServerRelativeUrl}')/items(${itemId})`
-
-          const updateRes = await props.spHttpClient.post(
-            updateUrl,
-            SPHttpClient.configurations.v1,
-            {
-              headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'IF-MATCH': '*',
-                'X-HTTP-Method': 'MERGE'
-              },
-              body: JSON.stringify({
-                PromotedState: 2,
-                PageLayoutType: 'Article'
-              })
-            }
+          await promotePageToNewsArticle(
+            props.siteUrl,
+            props.spHttpClient,
+            sitePagesServerRelativeUrl,
+            itemId
           )
-          console.log('Update response status:', updateRes.status)
         }
-        // --- End update ---
         setSpinnerMode('success')
         setTimeout(() => {
           setIsDialogOpen(false)
@@ -118,11 +104,11 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
         }, 1200)
       } else {
         const error = await res.json()
-        setErrorMessage(strings.NewsCreateError + error.error?.message?.value)
+        setErrorMessage(strings.NewsCreateError + extractSharePointErrorMessage(error))
         setSpinnerMode('idle')
       }
     } catch (err) {
-      setErrorMessage(strings.NewsCreateError + (err as Error).message)
+      setErrorMessage(strings.NewsCreateError + extractSharePointErrorMessage(err))
       setSpinnerMode('idle')
     }
   }

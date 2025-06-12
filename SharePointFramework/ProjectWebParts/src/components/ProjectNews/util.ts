@@ -1,14 +1,7 @@
-import { SPHttpClient } from '@microsoft/sp-http'
+import { SPHttpClient, SPHttpClientResponse } from '@microsoft/sp-http'
 import * as strings from 'ProjectWebPartsStrings'
 import { TemplateFile } from './types'
 
-
-const GENERIC_NEWS_IMAGE = 'https://static2.sharepointonline.com/files/fabric/assets/brand-icons/product/svg/sharepoint_48x1.svg'
-const KNOWN_PLACEHOLDER_IMAGES = [
-  '/_layouts/15/images/sitepagethumbnail.png',
-  'sitepagethumbnail.png',
-  'cdn.hubblecontent.osi.office.net/m365content/publish/', // partial match for brown line images
-]
 
 // --- SharePoint file name validation constants ---
 const invalidChars = /["*:<>?/\\|#%;]/g
@@ -132,65 +125,43 @@ export async function getTemplates(siteUrl: string, spHttpClient: SPHttpClient):
 }
 
 /**
- * Copies a template page to a new location and promotes it as news.
- * @param siteUrl Site URL
- * @param spHttpClient SPHttpClient instance
- * @param selectedTemplate Server relative URL of the template file
- * @param newPageServerRelativeUrl Server relative URL for the new page
- * @param newPageName Name of the new page file (e.g. "My-Page.aspx")
- * @returns Promise<void>
+ * Promotes a SharePoint site page to a news article by updating its PromotedState
+ * and PageLayoutType properties.
+ *
+ * @param siteUrl URL of the SharePoint site
+ * @param spHttpClient SPHttpClient instance to perform the HTTP request
+ * @param sitePagesServerRelativeUrl Server-relative URL of the SitePages library
+ * @param itemId ID of the list item representing the page to be promoted
+ * @returns Promise that resolves when the page has been successfully promoted or rejects with an error
+ *          if the promotion fails
+ * @throws Error if the HTTP request fails or the response is not successful
  */
-export async function copyAndPromoteNewsPage(
+export async function promotePageToNewsArticle(
   siteUrl: string,
   spHttpClient: SPHttpClient,
-  selectedTemplate: string,
-  newPageServerRelativeUrl: string,
-  newPageName: string
+  sitePagesServerRelativeUrl: string,
+  itemId: number
 ): Promise<void> {
-  // Copy the template
-  const copyUrl = `${siteUrl}/_api/web/GetFileByServerRelativeUrl('${selectedTemplate}')/copyTo(strNewUrl='${newPageServerRelativeUrl}',bOverWrite=false)`
-  const res = await spHttpClient.post(copyUrl, SPHttpClient.configurations.v1, {
-    headers: { Accept: 'application/json;odata=nometadata' }
-  })
-  if (!res.ok) {
-    const error = await res.json()
-    throw new Error('Copy failed: ' + (error.error?.message?.value || res.statusText))
-  }
-
-  // Retry logic to get the new item's ID
-  const getListItemIdWithRetry = async (maxRetries = 5, delayMs = 500): Promise<number | undefined> => {
-    const listItemUrl = `${siteUrl}/_api/web/lists/GetByTitle('Site Pages')/items?$filter=FileLeafRef eq '${newPageName}'`
-    for (let attempt = 0; attempt < maxRetries; attempt++) {
-      const listItemRes = await spHttpClient.get(listItemUrl, SPHttpClient.configurations.v1)
-      const listItemData = await listItemRes.json()
-      const itemId = listItemData.value?.[0]?.Id
-      if (itemId) return itemId
-      await new Promise(res => setTimeout(res, delayMs))
+  const updateUrl = `${siteUrl}/_api/web/GetListUsingPath(DecodedUrl='${sitePagesServerRelativeUrl}')/items(${itemId})`
+  const updateRes = await spHttpClient.post(
+    updateUrl,
+    SPHttpClient.configurations.v1,
+    {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'IF-MATCH': '*',
+        'X-HTTP-Method': 'MERGE'
+      },
+      body: JSON.stringify({
+        PromotedState: 2,
+        PageLayoutType: 'Article'
+      })
     }
-    return undefined
-  }
-
-  const itemId = await getListItemIdWithRetry()
-  if (!itemId) throw new Error('Could not find the list item for the new page after several attempts.')
-
-  // Promote as news
-  const updateUrl = `${siteUrl}/_api/web/lists/GetByTitle('Site Pages')/items(${itemId})`
-  const updateRes = await spHttpClient.post(updateUrl, SPHttpClient.configurations.v1, {
-    headers: {
-      Accept: 'application/json;odata=nometadata',
-      'Content-Type': 'application/json;odata=verbose',
-      'IF-MATCH': '*',
-      'X-HTTP-Method': 'MERGE'
-    },
-    body: JSON.stringify({
-      PromotedState: 2,
-      PageLayoutType: 'Article'
-    })
-  })
-  console.log('Update response status:', updateRes)
+  )
   if (!updateRes.ok) {
     const error = await updateRes.json()
-    throw new Error('Promote failed: ' + (error.error?.message?.value || updateRes.statusText))
+    throw new Error(error?.error?.message?.value || updateRes.statusText)
   }
 }
 
@@ -215,4 +186,68 @@ export function getNewsImageUrl(item: any): string | undefined {
     }
   }
   return undefined
+}
+
+
+/**
+ * Extracts and returns a user-friendly error message from a SharePoint error object.
+ * It checks various properties of the error object to find the most relevant message.
+ * If no specific message is found, it returns the stringified error object or an empty string.
+ *
+ * @param error The SharePoint error object.
+ * @returns The extracted error message as a string.
+ */
+export function extractSharePointErrorMessage(error: any): string {
+  return (
+    error?.error?.message?.value ||
+    error?.error?.message ||
+    error?.error?.code ||
+    error?.message ||
+    JSON.stringify(error) ||
+    ''
+  )
+}
+
+
+/**
+ * Retrieves the list item ID for a SharePoint site page given its file name.
+ *
+ * @param siteUrl URL of the SharePoint site
+ * @param spHttpClient SPHttpClient instance to use for making the request
+ * @param fileName Name of the file to find the item ID for
+ * @returns Promise that resolves with an object containing the item ID (if found)
+ *          and the server-relative URL of the SitePages library
+ */
+export async function getSitePageItemIdByFileName(
+  siteUrl: string,
+  spHttpClient: SPHttpClient,
+  fileName: string
+): Promise<{ itemId?: number, sitePagesServerRelativeUrl: string }> {
+  const sitePagesServerRelativeUrl = getServerRelativeUrl(siteUrl, 'SitePages')
+  const listItemUrl = `${siteUrl}/_api/web/GetListUsingPath(DecodedUrl=@a1)/items?@a1='${sitePagesServerRelativeUrl}'&$filter=FileLeafRef eq '${fileName}'`
+  const listItemRes = await spHttpClient.get(listItemUrl, SPHttpClient.configurations.v1)
+  const listItemData = await listItemRes.json()
+  const itemId = listItemData.value?.[0]?.Id
+  return { itemId, sitePagesServerRelativeUrl }
+}
+
+/**
+ * Copies a template page to a new server-relative URL.
+ *
+ * @param siteUrl URL of the SharePoint site
+ * @param spHttpClient SPHttpClient instance to use for making the request
+ * @param selectedTemplate Server-relative URL of the template page to copy
+ * @param newPageServerRelativeUrl Server-relative URL to copy the template page to
+ * @returns Promise that resolves with the raw response from the REST request
+ */
+export async function copyTemplatePage(
+  siteUrl: string,
+  spHttpClient: SPHttpClient,
+  selectedTemplate: string,
+  newPageServerRelativeUrl: string
+): Promise<SPHttpClientResponse> {
+  const copyUrl = `${siteUrl}/_api/web/GetFileByServerRelativeUrl('${selectedTemplate}')/copyTo(strNewUrl='${newPageServerRelativeUrl}',bOverWrite=false)`
+  return spHttpClient.post(copyUrl, SPHttpClient.configurations.v1, {
+    headers: { Accept: 'application/json;odata=nometadata' }
+  })
 }
