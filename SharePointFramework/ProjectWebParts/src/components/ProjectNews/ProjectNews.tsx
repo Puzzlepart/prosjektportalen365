@@ -8,7 +8,13 @@ import ProjectNewsDialog from './ProjectNewsDialogue/NewsDialogue'
 import strings from 'ProjectWebPartsStrings'
 import { SPHttpClient } from '@microsoft/sp-http'
 import RecentNewsList from './ProjectNewsRecentNewsList/RecentNewsList'
-import { ensureProjectNewsFolder, getNewsEditUrl, getNewsPageName, getServerRelativeUrl, getTemplates } from './util'
+import {
+  ensureProjectNewsFolder,
+  getNewsEditUrl,
+  getNewsPageName,
+  getServerRelativeUrl,
+  getTemplates
+} from './util'
 
 export const ProjectNews: FC<IProjectNewsProps> = (props) => {
   const { context, fluentProviderId } = useProjectNews(props)
@@ -22,14 +28,14 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
   const recentNews = context.state.data?.news || []
 
   React.useEffect(() => {
-  if (isDialogOpen) {
-    const fetchTemplates = async () => {
-      const templates = await getTemplates(props.siteUrl, props.spHttpClient)
-      setTemplates(templates)
+    if (isDialogOpen) {
+      const fetchTemplates = async () => {
+        const templates = await getTemplates(props.siteUrl, props.spHttpClient)
+        setTemplates(templates)
+      }
+      fetchTemplates()
     }
-    fetchTemplates()
-  }
-}, [isDialogOpen, props.siteUrl, props.spHttpClient])
+  }, [isDialogOpen, props.siteUrl, props.spHttpClient])
 
   const handleTitleChange = (_: React.FormEvent, data: { value: string }) => {
     setTitle(data.value)
@@ -68,7 +74,8 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
       })
       if (res.ok) {
         // --- Update PromotedState and PageLayoutType ---
-        const listItemUrl = `${props.siteUrl}/_api/web/lists/GetByTitle('Site Pages')/items?$filter=FileLeafRef eq '${newPageName}'`
+        const sitePagesServerRelativeUrl = getServerRelativeUrl(props.siteUrl, 'SitePages')
+        const listItemUrl = `${props.siteUrl}/_api/web/GetListUsingPath(DecodedUrl=@a1)/items?@a1='${sitePagesServerRelativeUrl}'&$filter=FileLeafRef eq '${newPageName}'`
         const listItemRes = await props.spHttpClient.get(
           listItemUrl,
           SPHttpClient.configurations.v1
@@ -78,19 +85,24 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
         const itemId = listItemData.value?.[0]?.Id
         console.log('itemId:', itemId)
         if (itemId) {
-          const updateUrl = `${props.siteUrl}/_api/web/lists/GetByTitle('Site Pages')/items(${itemId})`
-          const updateRes = await props.spHttpClient.post(updateUrl, SPHttpClient.configurations.v1, {
-            headers: {
-              Accept: 'application/json;odata=nometadata',
-              'Content-Type': 'application/json;odata=verbose',
-              'IF-MATCH': '*',
-              'X-HTTP-Method': 'MERGE'
-            },
-            body: JSON.stringify({
-              PromotedState: 2,
-              PageLayoutType: 'Article'
-            })
-          })
+          const updateUrl = `${props.siteUrl}/_api/web/GetListUsingPath(DecodedUrl='${sitePagesServerRelativeUrl}')/items(${itemId})`
+
+          const updateRes = await props.spHttpClient.post(
+            updateUrl,
+            SPHttpClient.configurations.v1,
+            {
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'IF-MATCH': '*',
+                'X-HTTP-Method': 'MERGE'
+              },
+              body: JSON.stringify({
+                PromotedState: 2,
+                PageLayoutType: 'Article'
+              })
+            }
+          )
           console.log('Update response status:', updateRes.status)
         }
         // --- End update ---

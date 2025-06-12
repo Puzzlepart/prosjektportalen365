@@ -2,6 +2,14 @@ import { SPHttpClient } from '@microsoft/sp-http'
 import * as strings from 'ProjectWebPartsStrings'
 import { TemplateFile } from './types'
 
+
+const GENERIC_NEWS_IMAGE = 'https://static2.sharepointonline.com/files/fabric/assets/brand-icons/product/svg/sharepoint_48x1.svg'
+const KNOWN_PLACEHOLDER_IMAGES = [
+  '/_layouts/15/images/sitepagethumbnail.png',
+  'sitepagethumbnail.png',
+  'cdn.hubblecontent.osi.office.net/m365content/publish/', // partial match for brown line images
+]
+
 // --- SharePoint file name validation constants ---
 const invalidChars = /["*:<>?/\\|#%;]/g
 const reservedNames = /^(con|prn|aux|nul|com[0-9]|lpt[0-9]|\.lock|desktop\.ini|_vti_|~\$|forms)$/i
@@ -101,7 +109,9 @@ export function getNewsPageName(title: string): string {
  */
 export function getNewsEditUrl(siteUrl: string, folderName: string, pageName: string): string {
   const serverRelative = getServerRelativeUrl(siteUrl, 'SitePages', folderName, pageName)
-  return `${siteUrl}${serverRelative}?Mode=Edit`;
+  const origin = new URL(siteUrl).origin
+  return `${origin}${serverRelative}?Mode=Edit`
+
 }
 
 /**
@@ -177,8 +187,32 @@ export async function copyAndPromoteNewsPage(
       PageLayoutType: 'Article'
     })
   })
+  console.log('Update response status:', updateRes)
   if (!updateRes.ok) {
     const error = await updateRes.json()
     throw new Error('Promote failed: ' + (error.error?.message?.value || updateRes.statusText))
   }
+}
+
+
+
+  /**
+   * Given a SharePoint news item, extracts the URL of the banner image.
+   * First looks at the BannerImageUrl field, then tries to extract the first
+   * image URL from the CanvasContent1 field (if it's a JSON string).
+   * Returns undefined if no image URL can be found.
+   * @param item SharePoint news item
+   */
+export function getNewsImageUrl(item: any): string | undefined {
+  if (item.BannerImageUrl?.Url) return item.BannerImageUrl.Url
+  if (item.CanvasContent1) {
+    try {
+      const html = JSON.parse(item.CanvasContent1)
+      const match = html.match(/<img[^>]+src="([^">]+)"/)
+      if (match && match[1]) return match[1]
+    } catch {
+      // ignore parse errors
+    }
+  }
+  return undefined
 }

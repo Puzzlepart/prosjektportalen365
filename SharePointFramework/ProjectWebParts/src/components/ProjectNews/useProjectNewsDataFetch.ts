@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { IProjectNewsProps, IProjectNewsState, NewsItem } from './types'
 import { SPHttpClient } from '@microsoft/sp-http'
-import { getServerRelativeUrl } from './util'
+import { getNewsImageUrl, getServerRelativeUrl } from './util'
 import strings from 'ProjectWebPartsStrings'
 
 /**
@@ -38,10 +38,11 @@ export function useProjectNewsDataFetch(
             url: item.File?.ServerRelativeUrl || '#',
             authorName: item.Author?.Title || item.Editor?.Title,
             modifiedDate: item.File?.TimeLastModified || item.Modified,
-            imageUrl: item.BannerImageUrl?.Url,
+            imageUrl: getNewsImageUrl(item),
             description: item.Description
           })
         )
+        .sort((a, b) => new Date(b.modifiedDate ?? 0).getTime() - new Date(a.modifiedDate ?? 0).getTime())
         setState({
           loading: false,
           data: { news }

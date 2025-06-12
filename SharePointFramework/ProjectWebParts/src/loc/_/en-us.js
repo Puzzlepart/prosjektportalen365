@@ -217,7 +217,7 @@ define([], function () {
     Yes: 'Yes',
     // Project News Web Part strings
     ProjectNewsWebPartTitle: 'Project News',
-    DialogueTitle: 'Create a new project news article',
+    DialogueTitle: 'Create a news article',
     CreatingNewArticleStatus: 'Creating news article...',
     NewsCreatedSuccessfully: 'News article created successfully.',
     NewsTitleLabel: 'Title',
