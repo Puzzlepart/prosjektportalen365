@@ -39,7 +39,6 @@ export function useProjectNewsDataFetch(
 
         const res = await props.spHttpClient.get(url, SPHttpClient.configurations.v1)
         const data = await res.json()
-        console.log('Project News data fetched', data)
         const news = (data.value || [])
           .map(
             (item): NewsItem => ({
@@ -68,7 +67,6 @@ export function useProjectNewsDataFetch(
           news,
           props.newsFolderName || strings.NewsFolderNameDefault
         )
-        console.log('NEWS', news)
         setState({
           loading: false,
           data: { news }

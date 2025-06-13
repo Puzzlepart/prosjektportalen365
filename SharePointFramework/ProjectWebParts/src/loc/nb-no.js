@@ -323,6 +323,7 @@ define([], function () {
     NewsFolderError: 'Feil ved oppretting av nyhetsmappe: ',
     LoadingLabel: 'Laster nyheter...',
     GenericErrorMessage: 'Noe gikk galt. Vennligst prøv igjen senere eller kontakt brukerstøtte.',
+    NewsCreateDuplicateFileError: 'En nyhetsartikkel med samme navn finnes allerede. Vennligst velg et annet navn.',
     // End of Project News Web Part strings
   }
 })

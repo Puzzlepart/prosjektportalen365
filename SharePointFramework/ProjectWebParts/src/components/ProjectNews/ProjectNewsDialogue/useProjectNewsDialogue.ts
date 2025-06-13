@@ -7,9 +7,9 @@ import {
   getServerRelativeUrl,
   copyTemplatePage,
   getNewsEditUrl,
-  extractSharePointErrorMessage,
   setOriginalSourceSiteId,
-  getSitePageItemIdByFileName
+  getSitePageItemIdByFileName,
+  doesSitePageExist
 } from '../util'
 import { IProjectNewsProps, TemplateFile } from '../types'
 
@@ -56,6 +56,17 @@ export function useProjectNewsDialog(props: IProjectNewsProps) {
       try {
         await ensureProjectNewsFolder(props.siteUrl, props.spHttpClient, folderName)
         const newPageName = getNewsPageName(title)
+        const exists = await doesSitePageExist(
+          props.siteUrl,
+          props.spHttpClient,
+          folderName,
+          newPageName
+        )
+        if (exists) {
+          setErrorMessage(strings.NewsCreateDuplicateFileError)
+          setSpinnerMode('idle')
+          return
+        }
         const newPageServerRelativeUrl = getServerRelativeUrl(
           props.siteUrl,
           'SitePages',
@@ -93,13 +104,20 @@ export function useProjectNewsDialog(props: IProjectNewsProps) {
           }, REDIRECT_DELAY)
         } else {
           const error = await res.json()
-          const detail = extractSharePointErrorMessage(error)
-          setErrorMessage(detail ? `${strings.NewsCreateError} ${detail}` : strings.NewsCreateError)
-          setSpinnerMode('idle')
+          setErrorMessage(
+            `${strings.NewsCreateError} ${
+              error.error?.message || error.error?.message?.value || error.message || 'Ukjent feil'
+            }`
+          )
         }
-      } catch (err) {
-        const detail = extractSharePointErrorMessage(err)
-        setErrorMessage(detail ? `${strings.NewsCreateError} ${detail}` : strings.NewsCreateError)
+      } catch (err: any) {
+        setErrorMessage(
+          `${strings.NewsCreateError} ${
+            err?.error?.message || err?.error?.message?.value || err?.message || 'Ukjent feil'
+          }`
+        )
+
+        console.error('Error creating news article:', err)
         setSpinnerMode('idle')
       }
     },

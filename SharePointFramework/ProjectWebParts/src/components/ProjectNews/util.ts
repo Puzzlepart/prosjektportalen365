@@ -182,7 +182,6 @@ export async function ensureAllNewsPromoted(
   }
   const folderServerRelativeUrl = getServerRelativeUrl(siteUrl, 'SitePages', folderName)
   for (const item of newsItems) {
-    // Only promote items in the correct folder
     if (
       item.PromotedState !== 2 &&
       item.Id &&
@@ -220,22 +219,24 @@ export function getNewsImageUrl(item: any): string | undefined {
 }
 
 /**
- * Extracts and returns a user-friendly error message from a SharePoint error object.
- * It checks various properties of the error object to find the most relevant message.
- * If no specific message is found, it returns the stringified error object or an empty string.
+ * Checks if a SharePoint site page exists.
  *
- * @param error The SharePoint error object.
- * @returns The extracted error message as a string.
+ * @param siteUrl URL of the SharePoint site
+ * @param spHttpClient SPHttpClient instance to perform the HTTP request
+ * @param folderName Name of the folder in the SitePages library where the page is located
+ * @param fileName File name of the page
+ * @returns Promise that resolves with a boolean indicating if the file exists or not.
  */
-export function extractSharePointErrorMessage(error: any): string {
-  return (
-    error?.error?.message?.value ||
-    error?.error?.message ||
-    error?.error?.code ||
-    error?.message ||
-    JSON.stringify(error) ||
-    ''
-  )
+export async function doesSitePageExist(
+  siteUrl: string,
+  spHttpClient: SPHttpClient,
+  folderName: string,
+  fileName: string
+): Promise<boolean> {
+  const serverRelativeUrl = getServerRelativeUrl(siteUrl, 'SitePages', folderName, fileName)
+  const url = `${siteUrl}/_api/web/GetFileByServerRelativeUrl('${serverRelativeUrl}')`
+  const res = await spHttpClient.get(url, SPHttpClient.configurations.v1)
+  return res.ok
 }
 
 /**
@@ -324,7 +325,7 @@ export async function setOriginalSourceSiteId(
       'X-HTTP-Method': 'MERGE'
     },
     body: JSON.stringify({
-      OData__OriginalSourceSiteId: siteId
+      _OriginalSourceSiteId: siteId
     })
   })
   console.log(`Setting OriginalSourceSiteId for item ${itemId} to ${siteId}`)

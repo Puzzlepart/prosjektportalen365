@@ -274,6 +274,7 @@ declare interface IProjectWebPartsStrings {
   NewsFolderError: string,
   LoadingLabel: string,
   GenericErrorMessage: string,
+  NewsCreateDuplicateFileError: string
 }
 
 declare module 'ProjectWebPartsStrings' {
