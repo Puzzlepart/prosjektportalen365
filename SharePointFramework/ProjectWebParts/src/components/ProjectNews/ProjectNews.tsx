@@ -8,110 +8,12 @@ import { ProjectNewsContext } from './context'
 import ProjectNewsDialog from './ProjectNewsDialogue/NewsDialogue'
 import strings from 'ProjectWebPartsStrings'
 import RecentNewsList from './ProjectNewsRecentNewsList/RecentNewsList'
-import {
-  copyTemplatePage,
-  ensureProjectNewsFolder,
-  extractSharePointErrorMessage,
-  getNewsEditUrl,
-  getNewsPageName,
-  getServerRelativeUrl,
-  getSitePageItemIdByFileName,
-  getTemplates,
-  promotePageToNewsArticle
-} from './util'
+import { useProjectNewsDialog } from './ProjectNewsDialogue/useProjectNewsDialogue'
 
 export const ProjectNews: FC<IProjectNewsProps> = (props) => {
   const { context, fluentProviderId } = useProjectNews(props)
-  const [isDialogOpen, setIsDialogOpen] = React.useState(false)
-  const [spinnerMode, setSpinnerMode] = React.useState<'idle' | 'creating' | 'success'>('idle')
-  const [title, setTitle] = React.useState('')
-  const [errorMessage, setErrorMessage] = React.useState('')
-  const [templates, setTemplates] = React.useState<any[]>([])
-  const [selectedTemplate, setSelectedTemplate] = React.useState<string | undefined>(undefined)
-  const folderName = props.newsFolderName || strings.NewsFolderNameDefault
+  const dialogue = useProjectNewsDialog(props)
   const recentNews = context.state.data?.news || []
-
-  React.useEffect(() => {
-    if (isDialogOpen) {
-      const fetchTemplates = async () => {
-        const templates = await getTemplates(props.siteUrl, props.spHttpClient)
-        setTemplates(templates)
-      }
-      fetchTemplates()
-    }
-  }, [isDialogOpen, props.siteUrl, props.spHttpClient])
-
-  const handleTitleChange = (_: React.FormEvent, data: { value: string }) => {
-    setTitle(data.value)
-    setErrorMessage('')
-  }
-
-  const handleTemplateChange = (_: React.FormEvent, data: { optionValue: string }) => {
-    setSelectedTemplate(data.optionValue)
-    setErrorMessage('')
-  }
-
-  const handleCreate = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!title.trim()) {
-      setErrorMessage(strings.NewsTitleRequired)
-      return
-    }
-    if (!selectedTemplate) {
-      setErrorMessage(strings.TemplateRequired)
-      return
-    }
-    setSpinnerMode('creating')
-    setErrorMessage('')
-    try {
-      await ensureProjectNewsFolder(props.siteUrl, props.spHttpClient, folderName)
-      const newPageName = getNewsPageName(title)
-      const newPageServerRelativeUrl = getServerRelativeUrl(
-        props.siteUrl,
-        'SitePages',
-        folderName,
-        newPageName
-      )
-      const res = await copyTemplatePage(
-        props.siteUrl,
-        props.spHttpClient,
-        selectedTemplate,
-        newPageServerRelativeUrl
-      )
-      if (res.ok) {
-        const { itemId, sitePagesServerRelativeUrl } = await getSitePageItemIdByFileName(
-          props.siteUrl,
-          props.spHttpClient,
-          newPageName
-        )
-        if (itemId) {
-          await promotePageToNewsArticle(
-            props.siteUrl,
-            props.spHttpClient,
-            sitePagesServerRelativeUrl,
-            itemId
-          )
-        }
-        setSpinnerMode('success')
-        setTimeout(() => {
-          setIsDialogOpen(false)
-          setSpinnerMode('idle')
-          setTitle('')
-          setSelectedTemplate(undefined)
-
-          const editUrl = getNewsEditUrl(props.siteUrl, folderName, newPageName)
-          window.open(editUrl, '_blank')
-        }, 1200)
-      } else {
-        const error = await res.json()
-        setErrorMessage(strings.NewsCreateError + extractSharePointErrorMessage(error))
-        setSpinnerMode('idle')
-      }
-    } catch (err) {
-      setErrorMessage(strings.NewsCreateError + extractSharePointErrorMessage(err))
-      setSpinnerMode('idle')
-    }
-  }
 
   return (
     <ProjectNewsContext.Provider value={context}>
@@ -120,19 +22,21 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
           <section>
             <h2>{strings.ProjectNewsWebPartTitle}</h2>
             <div>
-              <Link onClick={() => setIsDialogOpen(true)}>{strings.CreateNewsLinkLabel}</Link>
+              <Link onClick={() => dialogue.setIsDialogOpen(true)}>
+                {strings.CreateNewsLinkLabel}
+              </Link>
             </div>
             <ProjectNewsDialog
-              open={isDialogOpen}
-              onOpenChange={setIsDialogOpen}
-              spinnerMode={spinnerMode}
-              title={title}
-              errorMessage={errorMessage}
-              onTitleChange={handleTitleChange}
-              onSubmit={handleCreate}
-              templates={templates}
-              selectedTemplate={selectedTemplate}
-              onTemplateChange={handleTemplateChange}
+              open={dialogue.isDialogOpen}
+              onOpenChange={dialogue.setIsDialogOpen}
+              spinnerMode={dialogue.spinnerMode}
+              title={dialogue.title}
+              errorMessage={dialogue.errorMessage}
+              onTitleChange={dialogue.handleTitleChange}
+              onSubmit={dialogue.handleCreate}
+              templates={dialogue.templates}
+              selectedTemplate={dialogue.selectedTemplate}
+              onTemplateChange={dialogue.handleTemplateChange}
             />
             <RecentNewsList news={recentNews} maxVisible={props.maxVisibleNews} />
           </section>

@@ -1,0 +1,119 @@
+import { useState, useEffect, useCallback } from 'react'
+import strings from 'ProjectWebPartsStrings'
+import {
+  ensureProjectNewsFolder,
+  getTemplates,
+  getNewsPageName,
+  getServerRelativeUrl,
+  copyTemplatePage,
+  getSitePageItemIdByFileName,
+  promotePageToNewsArticle,
+  getNewsEditUrl,
+  extractSharePointErrorMessage
+} from '../util'
+import { IProjectNewsProps } from '../types'
+
+const DIALOG_CLOSE_DELAY = 1100
+
+export function useProjectNewsDialog(props: IProjectNewsProps) {
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [spinnerMode, setSpinnerMode] = useState<'idle' | 'creating' | 'success'>('idle')
+  const [title, setTitle] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
+  const [templates, setTemplates] = useState<any[]>([])
+  const [selectedTemplate, setSelectedTemplate] = useState<string | undefined>(undefined)
+  const folderName = props.newsFolderName || strings.NewsFolderNameDefault
+
+  useEffect(() => {
+    if (isDialogOpen) {
+      getTemplates(props.siteUrl, props.spHttpClient).then(setTemplates)
+    }
+  }, [isDialogOpen, props.siteUrl, props.spHttpClient])
+
+  const handleTitleChange = useCallback((_: React.FormEvent, data: { value: string }) => {
+    setTitle(data.value)
+    setErrorMessage('')
+  }, [])
+
+  const handleTemplateChange = useCallback((_: React.FormEvent, data: { optionValue: string }) => {
+    setSelectedTemplate(data.optionValue)
+    setErrorMessage('')
+  }, [])
+
+  const handleCreate = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault()
+      if (!title.trim()) {
+        setErrorMessage(strings.NewsTitleRequired)
+        return
+      }
+      if (!selectedTemplate) {
+        setErrorMessage(strings.TemplateRequired)
+        return
+      }
+      setSpinnerMode('creating')
+      setErrorMessage('')
+      try {
+        await ensureProjectNewsFolder(props.siteUrl, props.spHttpClient, folderName)
+        const newPageName = getNewsPageName(title)
+        const newPageServerRelativeUrl = getServerRelativeUrl(
+          props.siteUrl,
+          'SitePages',
+          folderName,
+          newPageName
+        )
+        const res = await copyTemplatePage(
+          props.siteUrl,
+          props.spHttpClient,
+          selectedTemplate,
+          newPageServerRelativeUrl
+        )
+        if (res.ok) {
+          const { itemId, sitePagesServerRelativeUrl } = await getSitePageItemIdByFileName(
+            props.siteUrl,
+            props.spHttpClient,
+            newPageName
+          )
+          if (itemId) {
+            await promotePageToNewsArticle(
+              props.siteUrl,
+              props.spHttpClient,
+              sitePagesServerRelativeUrl,
+              itemId
+            )
+          }
+          setSpinnerMode('success')
+          setTimeout(() => {
+            setIsDialogOpen(false)
+            setSpinnerMode('idle')
+            setTitle('')
+            setSelectedTemplate(undefined)
+            const editUrl = getNewsEditUrl(props.siteUrl, folderName, newPageName)
+            window.open(editUrl, '_blank')
+          }, DIALOG_CLOSE_DELAY)
+        } else {
+          const error = await res.json()
+          setErrorMessage(strings.NewsCreateError + extractSharePointErrorMessage(error))
+          setSpinnerMode('idle')
+        }
+      } catch (err) {
+        setErrorMessage(strings.NewsCreateError + extractSharePointErrorMessage(err))
+        setSpinnerMode('idle')
+      }
+    },
+    [title, selectedTemplate, props.siteUrl, props.spHttpClient, folderName]
+  )
+
+  return {
+    isDialogOpen,
+    setIsDialogOpen,
+    spinnerMode,
+    title,
+    errorMessage,
+    templates,
+    selectedTemplate,
+    handleTitleChange,
+    handleTemplateChange,
+    handleCreate
+  }
+}
