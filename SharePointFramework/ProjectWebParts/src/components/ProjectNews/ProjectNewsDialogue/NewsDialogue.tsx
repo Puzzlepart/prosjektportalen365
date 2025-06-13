@@ -17,6 +17,7 @@ import { CheckmarkCircle24Filled } from '@fluentui/react-icons'
 
 import * as strings from 'ProjectWebPartsStrings'
 import { NewsDialogProps } from '../types'
+import styles from './NewsDialogue.module.scss'
 
 const NewsDialog: React.FC<NewsDialogProps> = ({
   open,
@@ -34,39 +35,14 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
     <DialogSurface>
       <form onSubmit={onSubmit}>
         <DialogTitle style={{ textAlign: 'center' }}>{strings.DialogueTitle}</DialogTitle>
-        <DialogBody
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 16,
-            minWidth: 420,
-            maxWidth: 600,
-            padding: 8
-          }}>
+        <DialogBody className={styles.dialogBody}>
           {spinnerMode === 'creating' ? (
-            <div
-              style={{
-                width: '100%',
-                textAlign: 'center',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                minHeight: 200,
-                justifyContent: 'center'
-              }}>
+            <div className={styles.centeredSpinner}>
               <Spinner label={strings.CreatingNewArticleStatus} />
             </div>
           ) : spinnerMode === 'success' ? (
-            <div
-              style={{
-                textAlign: 'center',
-                minHeight: 200,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-              <CheckmarkCircle24Filled style={{ width: 64, height: 64, color: 'green' }} />
+            <div className={styles.centeredSuccess}>
+              <CheckmarkCircle24Filled className={styles.successIcon} />
               <div>{strings.NewsCreatedSuccessfully}</div>
             </div>
           ) : (

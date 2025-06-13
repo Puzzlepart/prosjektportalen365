@@ -1,4 +1,10 @@
-import { FluentProvider, IdPrefixProvider, Link, MessageBar, Spinner } from '@fluentui/react-components'
+import {
+  FluentProvider,
+  IdPrefixProvider,
+  Link,
+  MessageBar,
+  Spinner
+} from '@fluentui/react-components'
 import React, { FC } from 'react'
 
 import { IProjectNewsProps } from './types'
@@ -16,6 +22,20 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
   const recentNews = context.state.data?.news || []
   const { loading, error } = context.state
 
+  const handleCreateNewsClick = React.useCallback(() => {
+    dialogue.setIsDialogOpen(true)
+  }, [dialogue])
+
+  const handleCreateNewsKeyDown = React.useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault()
+        dialogue.setIsDialogOpen(true)
+      }
+    },
+    [dialogue]
+  )
+
   return (
     <ProjectNewsContext.Provider value={context}>
       <IdPrefixProvider value={fluentProviderId}>
@@ -28,13 +48,8 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
                 tabIndex={0}
                 aria-haspopup='dialog'
                 aria-label={strings.CreateNewsLinkLabel}
-                onClick={() => dialogue.setIsDialogOpen(true)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault()
-                    dialogue.setIsDialogOpen(true)
-                  }
-                }}>
+                onClick={handleCreateNewsClick}
+                onKeyDown={handleCreateNewsKeyDown}>
                 {strings.CreateNewsLinkLabel}
               </Link>
             </div>

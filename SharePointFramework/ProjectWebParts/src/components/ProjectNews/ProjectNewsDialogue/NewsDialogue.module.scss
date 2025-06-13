@@ -1,0 +1,25 @@
+.dialogBody {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 420px;
+  max-width: 600px;
+  padding: 8px;
+}
+
+.centeredSpinner,
+.centeredSuccess {
+  width: 100%;
+  text-align: center;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.successIcon {
+  width: 64px;
+  height: 64px;
+  color: green;
+}

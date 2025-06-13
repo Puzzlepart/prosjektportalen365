@@ -11,7 +11,7 @@ import {
   getNewsEditUrl,
   extractSharePointErrorMessage
 } from '../util'
-import { IProjectNewsProps } from '../types'
+import { IProjectNewsProps, TemplateFile } from '../types'
 
 const REDIRECT_DELAY = 1100
 
@@ -20,7 +20,7 @@ export function useProjectNewsDialog(props: IProjectNewsProps) {
   const [spinnerMode, setSpinnerMode] = useState<'idle' | 'creating' | 'success'>('idle')
   const [title, setTitle] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
-  const [templates, setTemplates] = useState<any[]>([])
+  const [templates, setTemplates] = useState<TemplateFile[]>([])
   const [selectedTemplate, setSelectedTemplate] = useState<string | undefined>(undefined)
   const folderName = props.newsFolderName || strings.NewsFolderNameDefault
 
@@ -93,11 +93,13 @@ export function useProjectNewsDialog(props: IProjectNewsProps) {
           }, REDIRECT_DELAY)
         } else {
           const error = await res.json()
-          setErrorMessage(strings.NewsCreateError + extractSharePointErrorMessage(error))
+          const detail = extractSharePointErrorMessage(error)
+          setErrorMessage(detail ? `${strings.NewsCreateError} ${detail}` : strings.NewsCreateError)
           setSpinnerMode('idle')
         }
       } catch (err) {
-        setErrorMessage(strings.NewsCreateError + extractSharePointErrorMessage(err))
+        const detail = extractSharePointErrorMessage(err)
+        setErrorMessage(detail ? `${strings.NewsCreateError} ${detail}` : strings.NewsCreateError)
         setSpinnerMode('idle')
       }
     },
