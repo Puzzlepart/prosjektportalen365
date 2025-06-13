@@ -6,10 +6,10 @@ import {
   getNewsPageName,
   getServerRelativeUrl,
   copyTemplatePage,
-  getSitePageItemIdByFileName,
-  promotePageToNewsArticle,
   getNewsEditUrl,
-  extractSharePointErrorMessage
+  extractSharePointErrorMessage,
+  setOriginalSourceSiteId,
+  getSitePageItemIdByFileName
 } from '../util'
 import { IProjectNewsProps, TemplateFile } from '../types'
 
@@ -68,20 +68,20 @@ export function useProjectNewsDialog(props: IProjectNewsProps) {
           selectedTemplate,
           newPageServerRelativeUrl
         )
-        if (res.ok) {
-          const { itemId, sitePagesServerRelativeUrl } = await getSitePageItemIdByFileName(
+        const { itemId, sitePagesServerRelativeUrl } = await getSitePageItemIdByFileName(
+          props.siteUrl,
+          props.spHttpClient,
+          newPageName
+        )
+        if (itemId) {
+          await setOriginalSourceSiteId(
             props.siteUrl,
             props.spHttpClient,
-            newPageName
+            sitePagesServerRelativeUrl,
+            itemId
           )
-          if (itemId) {
-            await promotePageToNewsArticle(
-              props.siteUrl,
-              props.spHttpClient,
-              sitePagesServerRelativeUrl,
-              itemId
-            )
-          }
+        }
+        if (res.ok) {
           setSpinnerMode('success')
           setTimeout(() => {
             setIsDialogOpen(false)

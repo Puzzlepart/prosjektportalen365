@@ -1,8 +1,7 @@
 import { SPHttpClient, SPHttpClientResponse } from '@microsoft/sp-http'
 
 import * as strings from 'ProjectWebPartsStrings'
-import { TemplateFile } from './types'
-
+import { NewsItem, TemplateFile } from './types'
 
 // --- SharePoint file name validation constants ---
 const invalidChars = /["*:<>?/\\|#%;]/g
@@ -105,7 +104,6 @@ export function getNewsEditUrl(siteUrl: string, folderName: string, pageName: st
   const serverRelative = getServerRelativeUrl(siteUrl, 'SitePages', folderName, pageName)
   const origin = new URL(siteUrl).origin
   return `${origin}${serverRelative}?Mode=Edit`
-
 }
 
 /**
@@ -114,7 +112,10 @@ export function getNewsEditUrl(siteUrl: string, folderName: string, pageName: st
  * @param spHttpClient SPHttpClient to use for the operation
  * @returns Promise that resolves with an array of templates, represented as objects with `Name` and `ServerRelativeUrl` properties
  */
-export async function getTemplates(siteUrl: string, spHttpClient: SPHttpClient): Promise<TemplateFile[]> {
+export async function getTemplates(
+  siteUrl: string,
+  spHttpClient: SPHttpClient
+): Promise<TemplateFile[]> {
   const url = `${siteUrl}/_api/web/GetFolderByServerRelativeUrl('SitePages/Templates')/Files?$select=Name,ServerRelativeUrl`
   try {
     const res = await spHttpClient.get(url, SPHttpClient.configurations.v1)
@@ -140,41 +141,70 @@ export async function getTemplates(siteUrl: string, spHttpClient: SPHttpClient):
 export async function promotePageToNewsArticle(
   siteUrl: string,
   spHttpClient: SPHttpClient,
-  sitePagesServerRelativeUrl: string,
   itemId: number
 ): Promise<void> {
-  const updateUrl = `${siteUrl}/_api/web/GetListUsingPath(DecodedUrl='${sitePagesServerRelativeUrl}')/items(${itemId})`
-  const updateRes = await spHttpClient.post(
-    updateUrl,
-    SPHttpClient.configurations.v1,
-    {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'IF-MATCH': '*',
-        'X-HTTP-Method': 'MERGE'
-      },
-      body: JSON.stringify({
-        PromotedState: 2,
-        PageLayoutType: 'Article'
-      })
-    }
-  )
-  if (!updateRes.ok) {
-    const error = await updateRes.json()
-    throw new Error(error?.error?.message?.value || updateRes.statusText)
+  const promoteUrl = `${siteUrl}/_api/sitepages/pages(${itemId})/PromoteToNews`
+  const res = await spHttpClient.post(promoteUrl, SPHttpClient.configurations.v1, {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      __metadata: { type: 'SP.Publishing.SitePage' }
+    })
+  })
+  if (!res.ok) {
+    const error = await res.json()
+    throw new Error(error?.error?.message?.value || res.statusText)
   }
 }
 
+/**
+ * Ensures that all news items are promoted to news articles.
+ * This function goes through all news items in Recent News List and if the item is not already promoted (PromotedState === 2),
+ * it will call the promotePageToNewsArticle function to promote the page.
+ *
+ * @param siteUrl URL of the SharePoint site
+ * @param spHttpClient SPHttpClient instance to perform the HTTP request
+ * @param newsItems An array of news items to ensure are promoted
+ * @returns Promise that resolves when all news items have been successfully promoted or rejects with an error
+ *          if one of the promotion fails
+ */
+export async function ensureAllNewsPromoted(
+  siteUrl: string,
+  spHttpClient: SPHttpClient,
+  newsItems: NewsItem[],
+  folderName: string
+): Promise<void> {
+  if (!newsItems || newsItems.length === 0) {
+    console.warn('No news items to promote.')
+    return
+  }
+  const folderServerRelativeUrl = getServerRelativeUrl(siteUrl, 'SitePages', folderName)
+  for (const item of newsItems) {
+    // Only promote items in the correct folder
+    if (
+      item.PromotedState !== 2 &&
+      item.Id &&
+      (item.url?.toLowerCase().startsWith(folderServerRelativeUrl.toLowerCase() + '/') ||
+        item.url?.toLowerCase() === folderServerRelativeUrl.toLowerCase())
+    ) {
+      try {
+        await promotePageToNewsArticle(siteUrl, spHttpClient, item.Id)
+      } catch (err) {
+        console.warn(`Failed to promote page ${item.name} (ID: ${item.Id}):`, err)
+      }
+    }
+  }
+}
 
-
-  /**
-   * Given a SharePoint news item, extracts the URL of the banner image.
-   * First looks at the BannerImageUrl field, then tries to extract the first
-   * image URL from the CanvasContent1 field (if it's a JSON string).
-   * Returns undefined if no image URL can be found.
-   * @param item SharePoint news item
-   */
+/**
+ * Given a SharePoint news item, extracts the URL of the banner image.
+ * First looks at the BannerImageUrl field, then tries to extract the first
+ * image URL from the CanvasContent1 field (if it's a JSON string).
+ * Returns undefined if no image URL can be found.
+ * @param item SharePoint news item
+ */
 export function getNewsImageUrl(item: any): string | undefined {
   if (item.BannerImageUrl?.Url) return item.BannerImageUrl.Url
   if (item.CanvasContent1) {
@@ -188,7 +218,6 @@ export function getNewsImageUrl(item: any): string | undefined {
   }
   return undefined
 }
-
 
 /**
  * Extracts and returns a user-friendly error message from a SharePoint error object.
@@ -209,7 +238,6 @@ export function extractSharePointErrorMessage(error: any): string {
   )
 }
 
-
 /**
  * Retrieves the list item ID for a SharePoint site page given its file name.
  *
@@ -223,7 +251,7 @@ export async function getSitePageItemIdByFileName(
   siteUrl: string,
   spHttpClient: SPHttpClient,
   fileName: string
-): Promise<{ itemId?: number, sitePagesServerRelativeUrl: string }> {
+): Promise<{ itemId?: number; sitePagesServerRelativeUrl: string }> {
   const sitePagesServerRelativeUrl = getServerRelativeUrl(siteUrl, 'SitePages')
   const listItemUrl = `${siteUrl}/_api/web/GetListUsingPath(DecodedUrl=@a1)/items?@a1='${sitePagesServerRelativeUrl}'&$filter=FileLeafRef eq '${fileName}'`
   const listItemRes = await spHttpClient.get(listItemUrl, SPHttpClient.configurations.v1)
@@ -252,3 +280,57 @@ export async function copyTemplatePage(
     headers: { Accept: 'application/json;odata=nometadata' }
   })
 }
+
+/**
+ * Retrieves the current site's ID using the SharePoint REST API.
+ *
+ * @param siteUrl URL of the SharePoint site
+ * @param spHttpClient SPHttpClient instance to use for making the request
+ * @returns Promise that resolves with the site ID as a string
+ */
+export async function getSiteId(siteUrl: string, spHttpClient: SPHttpClient): Promise<string> {
+  const siteIdRes = await spHttpClient.get(
+    `${siteUrl}/_api/site/id`,
+    SPHttpClient.configurations.v1
+  )
+  if (!siteIdRes.ok) {
+    throw new Error('Failed to retrieve site ID')
+  }
+  const siteIdData = await siteIdRes.json()
+  return siteIdData.value
+}
+
+/**
+ * Sets the "Original Source Site Id" field for a Site Page item.
+ * @param siteUrl URL of the SharePoint site where the page is stored
+ * @param spHttpClient SPHttpClient instance to use for making the request
+ * @param sitePagesServerRelativeUrl Server-relative URL of the SitePages library
+ * @param itemId ID of the list item representing the page
+ * @returns Promise that resolves when the field has been set
+ */
+export async function setOriginalSourceSiteId(
+  siteUrl: string,
+  spHttpClient: SPHttpClient,
+  sitePagesServerRelativeUrl: string,
+  itemId: number
+): Promise<void> {
+  const siteId = await getSiteId(siteUrl, spHttpClient)
+  const updateUrl = `${siteUrl}/_api/web/GetListUsingPath(DecodedUrl='${sitePagesServerRelativeUrl}')/items(${itemId})`
+  const updateRes = await spHttpClient.post(updateUrl, SPHttpClient.configurations.v1, {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'IF-MATCH': '*',
+      'X-HTTP-Method': 'MERGE'
+    },
+    body: JSON.stringify({
+      OData__OriginalSourceSiteId: siteId
+    })
+  })
+  console.log(`Setting OriginalSourceSiteId for item ${itemId} to ${siteId}`)
+  if (!updateRes.ok) {
+    const error = await updateRes.json()
+    throw new Error(error?.error?.message?.value || updateRes.statusText)
+  }
+}
+

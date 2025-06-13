@@ -2,4 +2,19 @@
   .container {
     padding: 20px;
   }
+   .createNewsLinkContainer {
+    margin-bottom: 32px;
+  }
+  .loadingContainer {
+    margin-top: 32px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
+  }
+  .errorContainer {
+    margin-top: 32px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
+  }
 }

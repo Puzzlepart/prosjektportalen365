@@ -13,6 +13,7 @@ import { useProjectNews } from './useProjectNews'
 import { ProjectNewsContext } from './context'
 import ProjectNewsDialog from './ProjectNewsDialogue/NewsDialogue'
 import strings from 'ProjectWebPartsStrings'
+import styles from './ProjectNews.module.scss'
 import RecentNewsList from './ProjectNewsRecentNewsList/RecentNewsList'
 import { useProjectNewsDialog } from './ProjectNewsDialogue/useProjectNewsDialogue'
 
@@ -40,9 +41,9 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
     <ProjectNewsContext.Provider value={context}>
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme}>
-          <section>
+          <section className={styles.projectNews}>
             <h2>{strings.ProjectNewsWebPartTitle}</h2>
-            <div>
+            <div className={styles.createNewsLinkContainer}>
               <Link
                 role='button'
                 tabIndex={0}
@@ -54,12 +55,12 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
               </Link>
             </div>
             {loading && (
-              <div style={{ margin: '24px 0', textAlign: 'center' }}>
+              <div className={styles.loadingContainer}>
                 <Spinner label={strings.LoadingLabel} />
               </div>
             )}
             {error && (
-              <div style={{ margin: '24px 0' }}>
+              <div className={styles.errorContainer}>
                 <MessageBar intent='error'>
                   {error.message || strings.GenericErrorMessage}
                 </MessageBar>
