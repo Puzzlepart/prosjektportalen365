@@ -321,6 +321,8 @@ define([], function () {
     FileNameNoLeadingTrailingSpaces: 'Filnavn kan ikke ha ledende eller etterfølgende mellomrom.',
     FileNameReserved: 'Filnavn er reservert.',
     NewsFolderError: 'Feil ved oppretting av nyhetsmappe: ',
+    LoadingLabel: 'Laster nyheter...',
+    GenericErrorMessage: 'Noe gikk galt. Vennligst prøv igjen senere eller kontakt brukerstøtte.',
     // End of Project News Web Part strings
   }
 })

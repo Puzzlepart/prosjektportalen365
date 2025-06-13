@@ -247,6 +247,8 @@ define([], function () {
     FileNameNoLeadingTrailingSpaces: 'File name cannot have leading or trailing spaces.',
     FileNameReserved: 'File name is reserved.',
     NewsFolderError: "Failed to check or create news folder: ",
+    LoadingLabel: 'Loading news articles...',
+    GenericErrorMessage: 'Something went wrong. Please try again later or contact support.',
     // End of Project News Web Part strings
   }
 })

@@ -272,6 +272,8 @@ declare interface IProjectWebPartsStrings {
   FileNameNoLeadingTrailingSpaces: string,
   FileNameReserved: string,
   NewsFolderError: string,
+  LoadingLabel: string,
+  GenericErrorMessage: string,
 }
 
 declare module 'ProjectWebPartsStrings' {

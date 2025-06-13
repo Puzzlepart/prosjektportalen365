@@ -1,4 +1,4 @@
-import { FluentProvider, IdPrefixProvider, Link } from '@fluentui/react-components'
+import { FluentProvider, IdPrefixProvider, Link, MessageBar, Spinner } from '@fluentui/react-components'
 import React, { FC } from 'react'
 
 import { IProjectNewsProps } from './types'
@@ -14,6 +14,7 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
   const { context, fluentProviderId } = useProjectNews(props)
   const dialogue = useProjectNewsDialog(props)
   const recentNews = context.state.data?.news || []
+  const { loading, error } = context.state
 
   return (
     <ProjectNewsContext.Provider value={context}>
@@ -37,19 +38,35 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
                 {strings.CreateNewsLinkLabel}
               </Link>
             </div>
-            <ProjectNewsDialog
-              open={dialogue.isDialogOpen}
-              onOpenChange={dialogue.setIsDialogOpen}
-              spinnerMode={dialogue.spinnerMode}
-              title={dialogue.title}
-              errorMessage={dialogue.errorMessage}
-              onTitleChange={dialogue.handleTitleChange}
-              onSubmit={dialogue.handleCreate}
-              templates={dialogue.templates}
-              selectedTemplate={dialogue.selectedTemplate}
-              onTemplateChange={dialogue.handleTemplateChange}
-            />
-            <RecentNewsList news={recentNews} maxVisible={props.maxVisibleNews} />
+            {loading && (
+              <div style={{ margin: '24px 0', textAlign: 'center' }}>
+                <Spinner label={strings.LoadingLabel} />
+              </div>
+            )}
+            {error && (
+              <div style={{ margin: '24px 0' }}>
+                <MessageBar intent='error'>
+                  {error.message || strings.GenericErrorMessage}
+                </MessageBar>
+              </div>
+            )}
+            {!loading && !error && (
+              <>
+                <ProjectNewsDialog
+                  open={dialogue.isDialogOpen}
+                  onOpenChange={dialogue.setIsDialogOpen}
+                  spinnerMode={dialogue.spinnerMode}
+                  title={dialogue.title}
+                  errorMessage={dialogue.errorMessage}
+                  onTitleChange={dialogue.handleTitleChange}
+                  onSubmit={dialogue.handleCreate}
+                  templates={dialogue.templates}
+                  selectedTemplate={dialogue.selectedTemplate}
+                  onTemplateChange={dialogue.handleTemplateChange}
+                />
+                <RecentNewsList news={recentNews} maxVisible={props.maxVisibleNews} />
+              </>
+            )}
           </section>
         </FluentProvider>
       </IdPrefixProvider>
