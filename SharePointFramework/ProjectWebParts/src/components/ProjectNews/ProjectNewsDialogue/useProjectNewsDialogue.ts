@@ -13,7 +13,7 @@ import {
 } from '../util'
 import { IProjectNewsProps } from '../types'
 
-const DIALOG_CLOSE_DELAY = 1100
+const REDIRECT_DELAY = 1100
 
 export function useProjectNewsDialog(props: IProjectNewsProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -90,7 +90,7 @@ export function useProjectNewsDialog(props: IProjectNewsProps) {
             setSelectedTemplate(undefined)
             const editUrl = getNewsEditUrl(props.siteUrl, folderName, newPageName)
             window.open(editUrl, '_blank')
-          }, DIALOG_CLOSE_DELAY)
+          }, REDIRECT_DELAY)
         } else {
           const error = await res.json()
           setErrorMessage(strings.NewsCreateError + extractSharePointErrorMessage(error))

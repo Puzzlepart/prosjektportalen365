@@ -22,7 +22,18 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
           <section>
             <h2>{strings.ProjectNewsWebPartTitle}</h2>
             <div>
-              <Link onClick={() => dialogue.setIsDialogOpen(true)}>
+              <Link
+                role='button'
+                tabIndex={0}
+                aria-haspopup='dialog'
+                aria-label={strings.CreateNewsLinkLabel}
+                onClick={() => dialogue.setIsDialogOpen(true)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    dialogue.setIsDialogOpen(true)
+                  }
+                }}>
                 {strings.CreateNewsLinkLabel}
               </Link>
             </div>
