@@ -632,6 +632,33 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     return projects
   }
 
+  public async fetchEnrichedProject(siteId: string): Promise<ProjectListModel> {
+    const localStore = new PnPClientStorage().local
+    const list = this._sp.web.lists.getByTitle(strings.ProjectsListName)
+    const [items, sites, memberOfGroups, users] = await localStore.getOrPut(
+      `pp365_fetchenrichedproject_${siteId}`,
+      async () =>
+        await Promise.all([
+          list.items
+            .select(...Object.keys(new SPProjectItem()))
+            .filter(`GtSiteId eq '${siteId}'`)
+            .getAll(),
+          this._fetchItems(`SiteId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId']),
+          this.fetchMemberGroups(),
+          this._sp.web.siteUsers.select('Id', 'Title', 'Email')()
+        ]),
+      dateAdd(new Date(), 'minute', 30)
+    )
+    const result: IProjectsData = {
+      items,
+      sites,
+      memberOfGroups,
+      users
+    }
+    const projects = this._combineResultData(result)
+    return _.first(projects)
+  }
+
   /**
    * Fetches groups where the user is a member from the Graph
    * using `msgraph-helper`. Resolves an empty array if the

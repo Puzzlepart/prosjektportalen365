@@ -43,8 +43,8 @@ export const ProjectMenu: FC<IProjectMenu> = (props) => {
       <MenuPopover>
         <MenuList>
           {props.context.quickLaunchMenu
-            .sort((a, b) => a.order - b.order)
-            .map((quickLaunchItem, idx) => (
+            ?.sort((a, b) => a.order - b.order)
+            ?.map((quickLaunchItem, idx) => (
               <MenuItem key={idx}>
                 <Link
                   href={props.project.url + quickLaunchItem.relativeUrl}

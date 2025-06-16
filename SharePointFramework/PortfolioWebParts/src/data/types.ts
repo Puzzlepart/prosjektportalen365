@@ -237,6 +237,15 @@ export interface IPortfolioWebPartsDataAdapter {
   fetchEnrichedProjects?(): Promise<ProjectListModel[]>
 
   /**
+   * Fetching enriched project by combining list item from projects list,
+   * Graph Groups and site users. The result are cached in `localStorage`
+   * for 30 minutes.
+   *
+   * @param siteId Site ID to fetch the project
+   */
+  fetchEnrichedProject?(siteId: string): Promise<ProjectListModel>
+
+  /**
    * Fetch projects from the projects list. If a data source is specified,
    * the projects are filtered using the `odataQuery` property from the
    * specified view.
