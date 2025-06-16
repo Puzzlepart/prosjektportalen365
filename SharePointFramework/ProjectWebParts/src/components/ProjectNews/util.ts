@@ -310,10 +310,9 @@ export async function setOriginalSourceSiteId(
       'X-HTTP-Method': 'MERGE'
     },
     body: JSON.stringify({
-      SourceSiteId: siteId
+      SourceSiteId: siteId // NB! change from SourceSiteId to use GtSiteId
     })
   })
-  console.log(`Setting OriginalSourceSiteId for item ${itemId} to ${siteId}`)
   if (!updateRes.ok) {
     const error = await updateRes.json()
     throw new Error(error?.error?.message?.value || updateRes.statusText)

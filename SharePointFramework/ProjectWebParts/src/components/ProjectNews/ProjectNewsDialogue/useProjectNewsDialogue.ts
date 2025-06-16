@@ -9,8 +9,7 @@ import {
   getNewsEditUrl,
   setOriginalSourceSiteId,
   getSitePageItemIdByFileName,
-  doesSitePageExist,
-
+  doesSitePageExist
 } from '../util'
 import { IProjectNewsProps, TemplateFile } from '../types'
 
@@ -87,8 +86,8 @@ export function useProjectNewsDialog(props: IProjectNewsProps) {
           newPageName
         )
         if (itemId) {
-          await new Promise(resolve => setTimeout(resolve, 500))
-
+          await new Promise((resolve) => setTimeout(resolve, 500))
+          // NB: change the field to update in this method.
           await setOriginalSourceSiteId(
             props.siteUrl,
             props.spHttpClient,
