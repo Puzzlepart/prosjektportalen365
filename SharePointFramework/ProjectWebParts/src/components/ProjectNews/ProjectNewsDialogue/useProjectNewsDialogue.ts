@@ -9,7 +9,8 @@ import {
   getNewsEditUrl,
   setOriginalSourceSiteId,
   getSitePageItemIdByFileName,
-  doesSitePageExist
+  doesSitePageExist,
+
 } from '../util'
 import { IProjectNewsProps, TemplateFile } from '../types'
 
@@ -23,6 +24,7 @@ export function useProjectNewsDialog(props: IProjectNewsProps) {
   const [templates, setTemplates] = useState<TemplateFile[]>([])
   const [selectedTemplate, setSelectedTemplate] = useState<string | undefined>(undefined)
   const folderName = props.newsFolderName || strings.NewsFolderNameDefault
+  const currentSiteId = props.context.pageContext.site.id.toString()
 
   useEffect(() => {
     if (isDialogOpen) {
@@ -85,11 +87,14 @@ export function useProjectNewsDialog(props: IProjectNewsProps) {
           newPageName
         )
         if (itemId) {
+          await new Promise(resolve => setTimeout(resolve, 500))
+
           await setOriginalSourceSiteId(
             props.siteUrl,
             props.spHttpClient,
             sitePagesServerRelativeUrl,
-            itemId
+            itemId,
+            currentSiteId
           )
         }
         if (res.ok) {
@@ -106,14 +111,14 @@ export function useProjectNewsDialog(props: IProjectNewsProps) {
           const error = await res.json()
           setErrorMessage(
             `${strings.NewsCreateError} ${
-              error.error?.message || error.error?.message?.value || error.message || 'Ukjent feil'
+              error.error?.message || error.error?.message?.value || error.message
             }`
           )
         }
       } catch (err: any) {
         setErrorMessage(
           `${strings.NewsCreateError} ${
-            err?.error?.message || err?.error?.message?.value || err?.message || 'Ukjent feil'
+            err?.error?.message || err?.error?.message?.value || err?.message
           }`
         )
 

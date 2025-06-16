@@ -1,4 +1,5 @@
 import { SPHttpClient } from '@microsoft/sp-http'
+import { WebPartContext } from '@microsoft/sp-webpart-base'
 
 import {
   IBaseWebPartComponentProps,
@@ -6,6 +7,12 @@ import {
 } from 'pp365-shared-library/lib/components/BaseWebPartComponent'
 
 export interface IProjectNewsProps extends IBaseWebPartComponentProps {
+
+  /**
+   * The context of the web part, used for making SharePoint HTTP requests.
+   * This is typically provided by the SharePoint Framework.
+   */
+  context: WebPartContext
   /**
    * The URL of the SharePoint site where the news is located.
    * This is used to fetch news items and to create new news pages.

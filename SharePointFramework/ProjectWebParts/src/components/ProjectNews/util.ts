@@ -283,39 +283,24 @@ export async function copyTemplatePage(
 }
 
 /**
- * Retrieves the current site's ID using the SharePoint REST API.
- *
- * @param siteUrl URL of the SharePoint site
- * @param spHttpClient SPHttpClient instance to use for making the request
- * @returns Promise that resolves with the site ID as a string
- */
-export async function getSiteId(siteUrl: string, spHttpClient: SPHttpClient): Promise<string> {
-  const siteIdRes = await spHttpClient.get(
-    `${siteUrl}/_api/site/id`,
-    SPHttpClient.configurations.v1
-  )
-  if (!siteIdRes.ok) {
-    throw new Error('Failed to retrieve site ID')
-  }
-  const siteIdData = await siteIdRes.json()
-  return siteIdData.value
-}
-
-/**
  * Sets the "Original Source Site Id" field for a Site Page item.
  * @param siteUrl URL of the SharePoint site where the page is stored
  * @param spHttpClient SPHttpClient instance to use for making the request
  * @param sitePagesServerRelativeUrl Server-relative URL of the SitePages library
  * @param itemId ID of the list item representing the page
+ * @param siteId The ID of the source site to set in the OriginalSourceSiteId field
  * @returns Promise that resolves when the field has been set
  */
 export async function setOriginalSourceSiteId(
   siteUrl: string,
   spHttpClient: SPHttpClient,
   sitePagesServerRelativeUrl: string,
-  itemId: number
+  itemId: number,
+  siteId: string
 ): Promise<void> {
-  const siteId = await getSiteId(siteUrl, spHttpClient)
+  if (!siteId) {
+    throw new Error('Site ID is required to set OriginalSourceSiteId')
+  }
   const updateUrl = `${siteUrl}/_api/web/GetListUsingPath(DecodedUrl='${sitePagesServerRelativeUrl}')/items(${itemId})`
   const updateRes = await spHttpClient.post(updateUrl, SPHttpClient.configurations.v1, {
     headers: {
@@ -325,7 +310,7 @@ export async function setOriginalSourceSiteId(
       'X-HTTP-Method': 'MERGE'
     },
     body: JSON.stringify({
-      _OriginalSourceSiteId: siteId
+      SourceSiteId: siteId
     })
   })
   console.log(`Setting OriginalSourceSiteId for item ${itemId} to ${siteId}`)

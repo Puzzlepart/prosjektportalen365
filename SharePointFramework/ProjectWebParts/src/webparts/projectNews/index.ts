@@ -12,7 +12,10 @@ export default class ProjectNewsWebPart extends BaseProjectWebPart<IProjectNewsP
   public render(): void {
     this.renderComponent<IProjectNewsProps>(ProjectNews, {
       siteUrl: this.properties.siteUrl,
-      spHttpClient: this.context.spHttpClient
+      spHttpClient: this.context.spHttpClient,
+      context: this.context,
+      maxVisibleNews: this.properties.maxVisibleNews,
+      newsFolderName: this.properties.newsFolderName
     })
   }
 
