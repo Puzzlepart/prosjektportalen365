@@ -147,20 +147,20 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   label: strings.ProjectMetadataFieldLabel,
                   options: [
                     {
-                      key: 'ProjectOwner',
-                      text: strings.ProjectOwner
+                      key: 'PrimaryField',
+                      text: 'Primær felt'
                     },
                     {
-                      key: 'ProjectManager',
-                      text: strings.ProjectManager
+                      key: 'SecondaryField',
+                      text: 'Sekundær felt'
                     },
                     {
-                      key: 'ProjectServiceArea',
-                      text: strings.ProjectServiceArea
+                      key: 'PrimaryUserField',
+                      text: 'Primær bruker'
                     },
                     {
-                      key: 'ProjectType',
-                      text: strings.ProjectType
+                      key: 'SecondaryUserField',
+                      text: 'Sekundær bruker'
                     },
                     {
                       key: 'ProjectPhase',

@@ -133,20 +133,20 @@ export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCar
                   label: strings.ProjectMetadataFieldLabel,
                   options: [
                     {
-                      key: 'PrimaryUserField',
-                      text: 'Primær bruker'
-                    },
-                    {
-                      key: 'SecondaryUserField',
-                      text: 'Sekundær bruker'
-                    },
-                    {
                       key: 'PrimaryField',
                       text: 'Primær felt'
                     },
                     {
                       key: 'SecondaryField',
                       text: 'Sekundær felt'
+                    },
+                    {
+                      key: 'PrimaryUserField',
+                      text: 'Primær bruker'
+                    },
+                    {
+                      key: 'SecondaryUserField',
+                      text: 'Sekundær bruker'
                     },
                     {
                       key: 'ProjectPhase',

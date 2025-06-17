@@ -12,14 +12,15 @@ export function useProjectCardContent() {
     const fieldValue = context.project?.data[field]
     let values: string[] = []
     if (typeof fieldValue === 'string') {
-      values = fieldValue.split(';')
-      if (!values.length || (values.length === 1 && values[0] === "")) {
-        const textValue = context.project?.data[`${field}Text`]
-        values = textValue ? [textValue] : []
-      }
+      values = fieldValue?.split(';')
     }
     else {
       values = []
+    }
+
+    if (!values.length || (values.length === 1 && values[0] === "")) {
+      const textValue = context.project?.data[`${field}Text`]
+      values = textValue ? textValue?.split(';') : []
     }
 
     const column = context.projectColumns?.find(col => col.fieldName.includes(field))

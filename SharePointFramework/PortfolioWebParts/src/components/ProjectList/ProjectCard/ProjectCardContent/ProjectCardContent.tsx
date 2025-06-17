@@ -10,14 +10,14 @@ export const ProjectCardContent: FC = () => {
   return (
     <div className={styles.content}>
       <OverflowTagMenu
-        text={primaryField.text}
-        tags={primaryField.tags}
+        text={primaryField?.text}
+        tags={primaryField?.tags}
         icon={GlobeLocationFilled}
         hidden={!shouldDisplay('PrimaryField') || !primaryField?.tags}
       />
       <OverflowTagMenu
-        text={secondaryField.text}
-        tags={secondaryField.tags}
+        text={secondaryField?.text}
+        tags={secondaryField?.tags}
         icon={TagMultipleFilled}
         hidden={!shouldDisplay('SecondaryField') || !secondaryField?.tags}
       />
