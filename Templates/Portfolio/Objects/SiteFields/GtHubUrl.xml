@@ -1,0 +1,1 @@
+<Field Type="URL" DisplayName="{resource:SiteFields_GtHubUrl_DisplayName}" Description="{resource:SiteFields_GtHubUrl_Description}" Group="{resource:SiteFields_Portfolio_Group} " ID="{35ab9d89-e011-4418-96b7-2beab470962f}" Format="Hyperlink" Name="GtHubUrl" StaticName="GtHubUrl" />

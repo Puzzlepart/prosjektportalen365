@@ -2965,4 +2965,10 @@
   <data name="SiteFields_GtFieldOverrides_Description" xml:space="preserve">
     <value>Tilpassede feltinnstillinger i JSON-format. Objektformat med konfigurasjonsnavnet først, deretter ett objekt med lokalene som nøkkel og feltinnstillingene (f.eks. displayName eller description) som verdi.</value>
   </data>
+  <data name="SiteFields_GtHubUrl_DisplayName" xml:space="preserve">
+    <value>Hub Lenke</value>
+  </data>
+  <data name="SiteFields_GtHubUrl_Description" xml:space="preserve">
+    <value>URL-en til hubområdet der nyhetsartikkelen opprinnelig ble publisert. Dette feltet brukes til å spore kildehuben, spesielt i miljøer med flere huber og krysspublisering.</value>
+  </data>
 </root>
