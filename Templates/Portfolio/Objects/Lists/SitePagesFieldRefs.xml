@@ -1,0 +1,7 @@
+<pnp:Lists xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+  <pnp:ListInstance Title="Site Pages" Remove="false" TemplateType="119">
+    <pnp:FieldRefs>
+      <pnp:FieldRef Name="GtSiteId"/>
+    </pnp:FieldRefs>
+  </pnp:ListInstance>
+</pnp:Lists>
