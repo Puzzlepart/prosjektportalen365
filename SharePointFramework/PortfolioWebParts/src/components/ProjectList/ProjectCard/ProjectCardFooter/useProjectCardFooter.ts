@@ -12,19 +12,19 @@ export function useProjectCardFooter() {
     name: strings.NotSet,
     color: 'brand'
   }
-  const ownerPersonaProps: AvatarProps = {
+  const primaryUserPersonaProps: AvatarProps = {
     ...defaultPersonaProps,
     ...context.project.owner,
-    role: strings.ProjectOwner
+    role: context.project?.data[context.primaryUserField]
   }
-  const managerPersonaProps: AvatarProps = {
+  const secondaryUserPersonaProps: AvatarProps = {
     ...defaultPersonaProps,
     ...context.project.manager,
-    role: strings.ProjectManager
+    role: context.project?.data[context.secondaryUserField]
   }
   return {
     phase: context.project.phase,
-    owner: ownerPersonaProps,
-    manager: managerPersonaProps
+    primaryUser: primaryUserPersonaProps,
+    secondaryUser: secondaryUserPersonaProps
   } as const
 }

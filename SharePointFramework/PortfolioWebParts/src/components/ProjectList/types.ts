@@ -99,6 +99,26 @@ export interface IProjectListProps extends IBaseComponentProps {
   showProjectLogo?: boolean
 
   /**
+   * Primary field to show on the project card
+   */
+  primaryField?: string
+
+  /**
+   * Secondary field to show on the project card
+   */
+  secondaryField?: string
+
+  /**
+   * Primary userfield to show on the project card footer.
+   */
+  primaryUserField?: string
+
+  /**
+   * Secondary userfield to show on the project card footer.
+   */
+  secondaryUserField?: string
+
+  /**
    * Project metadata to show on the project card
    */
   projectMetadata?: string[]

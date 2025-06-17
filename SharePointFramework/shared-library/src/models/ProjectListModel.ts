@@ -117,5 +117,6 @@ export class ProjectListModel {
     this.isParent = item.GtIsParentProject
     this.isProgram = item.GtIsProgram
     this.template = item.GtProjectTemplate
+    this.data = item
   }
 }

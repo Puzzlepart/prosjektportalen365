@@ -1,5 +1,4 @@
 import React, { FC } from 'react'
-import styles from './ProjectCard.module.scss'
 import { ProjectCardContext } from '../ProjectList/ProjectCard/context'
 import { IProjectCardProps } from './types'
 import { useProjectCard } from './useProjectCard'
@@ -14,13 +13,11 @@ export const ProjectCard: FC<IProjectCardProps> = (props) => {
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme}>
-        <div className={styles.projectCard}>
-          {state.isDataLoaded && (
-            <ProjectCardContext.Provider value={createCardContext(state.project)}>
-              <ProjectNewsCard />
-            </ProjectCardContext.Provider>
-          )}
-        </div>
+        {state.isDataLoaded && (
+          <ProjectCardContext.Provider value={createCardContext(state.project)}>
+            <ProjectNewsCard />
+          </ProjectCardContext.Provider>
+        )}
         <ProjectInformationPanel
           {...SiteContext.create(
             props.spfxContext,
@@ -45,11 +42,37 @@ export const ProjectCard: FC<IProjectCardProps> = (props) => {
 ProjectCard.defaultProps = {
   useDynamicColors: true,
   showProjectLogo: true,
+  primaryField: 'GtProjectServiceAreaText',
+  secondaryField: 'GtProjectTypeText',
+  primaryUserField: 'GtProjectOwner',
+  secondaryUserField: 'GtProjectManager',
   projectMetadata: [
-    'ProjectOwner',
-    'ProjectManager',
-    'ProjectServiceArea',
-    'ProjectType',
+    'PrimaryUserField',
+    'SecondaryUserField',
+    'PrimaryField',
+    'SecondaryField',
     'ProjectPhase'
+  ],
+  quickLaunchMenu: [
+    {
+      order: 10,
+      text: 'Prosjektstatus',
+      relativeUrl: '/SitePages/Prosjektstatus.aspx'
+    },
+    {
+      order: 20,
+      text: 'Dokumentbibliotek',
+      relativeUrl: '/Delte%20dokumenter'
+    },
+    {
+      order: 30,
+      text: 'Fasesjekkliste',
+      relativeUrl: '/Lists/Fasesjekkliste'
+    },
+    {
+      order: 40,
+      text: 'Oppgaver',
+      relativeUrl: '/SitePages/Oppgaver.aspx'
+    }
   ]
 }

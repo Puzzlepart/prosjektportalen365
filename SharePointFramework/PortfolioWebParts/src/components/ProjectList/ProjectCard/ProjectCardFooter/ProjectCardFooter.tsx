@@ -25,7 +25,7 @@ import { ProjectMenu } from 'components/ProjectList/ProjectMenu/ProjectMenu'
 
 export const ProjectCardFooter: FC = () => {
   const context = useContext(ProjectCardContext)
-  const { owner, manager } = useProjectCardFooter()
+  const { primaryUser, secondaryUser } = useProjectCardFooter()
   const PanelRight = bundleIcon(PanelRightContractFilled, PanelRightContractRegular)
   let templateIcon = bundleIcon(BoxFilled, BoxRegular)
   let templateText = context.project.template
@@ -63,30 +63,30 @@ export const ProjectCardFooter: FC = () => {
   const Persona = () => {
     return (
       <div className={styles.persona}>
-        <div hidden={!context.shouldDisplay('ProjectOwner')}>
+        <div hidden={!context.shouldDisplay('PrimaryUserField')}>
           <Tooltip
             content={
               <>
-                <strong>{owner.role}</strong>: {owner.name || strings.NotSet}
+                <strong>{primaryUser.role}</strong>: {primaryUser.name || strings.NotSet}
               </>
             }
             relationship='description'
             withArrow
           >
-            <Avatar className={styles.avatar} {...owner} />
+            <Avatar className={styles.avatar} {...primaryUser} />
           </Tooltip>
         </div>
-        <div hidden={!context.shouldDisplay('ProjectManager')}>
+        <div hidden={!context.shouldDisplay('SecondaryUserField')}>
           <Tooltip
             content={
               <>
-                <strong>{manager.role}</strong>: {manager.name || strings.NotSet}
+                <strong>{secondaryUser.role}</strong>: {secondaryUser.name || strings.NotSet}
               </>
             }
             relationship='description'
             withArrow
           >
-            <Avatar className={styles.avatar} {...manager} />
+            <Avatar className={styles.avatar} {...secondaryUser} />
           </Tooltip>
         </div>
       </div>
@@ -112,7 +112,8 @@ export const ProjectCardFooter: FC = () => {
         <Tooltip
           content={
             <>
-              <strong>{templateText}</strong> ({context.project.template})
+              <strong>{templateText}</strong>
+              {context.project.template ? ` (${context.project.template})` : ''}
             </>
           }
           relationship='description'

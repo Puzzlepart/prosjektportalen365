@@ -1,7 +1,7 @@
 import { IShimmerProps } from '@fluentui/react'
 import { ButtonProps } from '@fluentui/react-components'
 import { IPortfolioAggregationProps } from 'components/PortfolioAggregation'
-import { ProjectListModel } from 'pp365-shared-library'
+import { ProjectColumn, ProjectListModel } from 'pp365-shared-library'
 
 export interface IProjectCardProps extends IPortfolioAggregationProps {
   /**
@@ -20,6 +20,31 @@ export interface IProjectCardProps extends IPortfolioAggregationProps {
   shouldDisplay?: (key: string) => boolean
 
   /**
+   * Project column configuration
+   */
+  projectColumns?: ProjectColumn[]
+
+  /**
+   * Primary field to show on the project card
+   */
+  primaryField?: string
+
+  /**
+   * Secondary field to show on the project card
+   */
+  secondaryField?: string
+
+  /**
+   * Primary userfield to show on the project card footer.
+   */
+  primaryUserField?: string
+
+  /**
+   * Secondary userfield to show on the project card footer.
+   */
+  secondaryUserField?: string
+
+  /**
    * Project metadata to show on the project card
    */
   projectMetadata?: string[]
@@ -33,6 +58,11 @@ export interface IProjectCardProps extends IPortfolioAggregationProps {
    * Use dynamic colors for the project card
    */
   useDynamicColors?: boolean
+
+  /**
+   * Quick launch menu (List experience only)
+   */
+  quickLaunchMenu?: IQuickLaunch[]
 
   /**
    * Site ID to use for the project card
@@ -56,4 +86,21 @@ export interface IProjectCardState extends Pick<IShimmerProps, 'isDataLoaded'> {
    * the panel.
    */
   showProjectInfo?: ProjectListModel
+}
+
+export interface IQuickLaunch {
+  /**
+   * Order of the menu item
+   */
+  order?: number
+
+  /**
+   * Title for the menu item
+   */
+  text?: string
+
+  /**
+   * relative url to navigate to
+   */
+  relativeUrl?: string
 }

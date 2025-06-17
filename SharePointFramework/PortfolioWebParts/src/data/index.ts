@@ -639,10 +639,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       `pp365_fetchenrichedproject_${siteId}`,
       async () =>
         await Promise.all([
-          list.items
-            .select(...Object.keys(new SPProjectItem()))
-            .filter(`GtSiteId eq '${siteId}'`)
-            .getAll(),
+          list.items.filter(`GtSiteId eq '${siteId}'`).getAll(),
           this._fetchItems(`SiteId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId']),
           this.fetchMemberGroups(),
           this._sp.web.siteUsers.select('Id', 'Title', 'Email')()
@@ -656,7 +653,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       users
     }
     const projects = this._combineResultData(result)
-    return _.first(projects)
+    const project = _.first(projects)
+    return project
   }
 
   /**

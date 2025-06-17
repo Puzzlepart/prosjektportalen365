@@ -8,29 +8,29 @@ import _ from 'underscore'
 export function useProjectCardContent() {
   const context = useContext(ProjectCardContext)
 
+  const getField = (field: string) => {
+    const fieldValue = context.project?.data[field]
+    let values: string[] = []
+    if (typeof fieldValue === 'string') {
+      values = fieldValue.split(';')
+      if (!values.length || (values.length === 1 && values[0] === "")) {
+        const textValue = context.project?.data[`${field}Text`]
+        values = textValue ? [textValue] : []
+      }
+    }
+    else {
+      values = []
+    }
+
+    const column = context.projectColumns?.find(col => col.fieldName.includes(field))
+    return values.length
+      ? { tags: values, text: column?.name }
+      : undefined
+  }
+
   return {
-    phase: context.project.phase,
-    serviceArea:
-      !_.isEmpty(context.project.serviceArea) &&
-      context.project.serviceArea.map((area, idx) => {
-        return {
-          key: area + idx,
-          value: area,
-          primaryText: area,
-          children: area,
-          type: 'Tjenesteområde'
-        }
-      }),
-    type:
-      !_.isEmpty(context.project.type) &&
-      context.project.type.map((type, idx) => {
-        return {
-          key: type + idx,
-          value: type,
-          primaryText: type,
-          children: type,
-          type: 'Prosjekttype'
-        }
-      })
+    primaryField: getField(context.primaryField),
+    secondaryField: getField(context.secondaryField),
+    shouldDisplay: context.shouldDisplay
   }
 }
