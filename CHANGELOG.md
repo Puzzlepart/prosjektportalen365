@@ -6,6 +6,8 @@ Sjekk ut [release notes](./releasenotes/1.11.0.md) for høydepunkter og mer deta
 
 ### Ny funksjonalitet
 
+- Ny webdel `ProjectNews` i ProjectWebParts for publisering og visning av prosjektnyheter. Webdelen viser nyheter som er publisert til prosjektet, med mulighet til å opprette en ny artikkel fra egendefinerte maler. Ved å benytte seg av denne funksjonaliteten opprettes det en artikkel på nyhetsområdet med en referanse tilbake til prosjektet.
+
 ### Forbedringer
 
 - Muligheter for å angi følsomhets- og oppbevaringsetiketter, områdebilde og mye mer, samt styring av visningsnavn, beskrivelse og hva som er påkrevd i `Bestill område`-skjema [#1623](https://github.com/Puzzlepart/prosjektportalen365/pull/1623)

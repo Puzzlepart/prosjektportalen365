@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+
 import strings from 'ProjectWebPartsStrings'
 import {
   ensureProjectNewsFolder,
@@ -31,12 +32,12 @@ export function useProjectNewsDialog(props: IProjectNewsProps) {
     }
   }, [isDialogOpen, props.siteUrl, props.spHttpClient])
 
-  const handleTitleChange = useCallback((_: React.FormEvent, data: { value: string }) => {
+  const handleTitleChange = useCallback((_: React.FormEvent, data: { value: string }): void => {
     setTitle(data.value)
     setErrorMessage('')
   }, [])
 
-  const handleTemplateChange = useCallback((_: React.FormEvent, data: { optionValue: string }) => {
+  const handleTemplateChange = useCallback((_: React.FormEvent, data: { optionValue: string }): void => {
     setSelectedTemplate(data.optionValue)
     setErrorMessage('')
   }, [])
