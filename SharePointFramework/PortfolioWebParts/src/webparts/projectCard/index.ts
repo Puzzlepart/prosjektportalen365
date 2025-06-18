@@ -29,6 +29,8 @@ export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCar
   public async onInit(): Promise<void> {
     await super.onInit()
 
+    // this._projectSiteId = this.getProjectSiteId.bind(this)
+
     this._portalDataService = await new PortalDataService().configure({
       spfxContext: this.context
     })
@@ -52,8 +54,28 @@ export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCar
     this.renderComponent<IProjectCardProps>(ProjectCard, {
       ...this.properties,
       projectColumns: this._columns,
-      projectSiteId: this._projectSiteId || this.properties.projectSiteId,
+      projectSiteId: this._projectSiteId || this.properties.projectSiteId
     })
+  }
+
+  protected async getProjectSiteId(): Promise<string> {
+    const sitePageFolder = this.context.pageContext.site.serverRelativeUrl + '/SitePages' + '/News'
+
+    if (!this._projectSiteId) {
+      const sitePage = await this.context.spHttpClient.get(
+        `${this.context.pageContext.web.absoluteUrl}/_api/web/getfilebyserverrelativeurl('${this.context.pageContext.site.serverRelativeUrl}/SitePages/${this.context.pageContext.listItem.id}.aspx')/ListItemAllFields`,
+        SPHttpClient.configurations.v1,
+        {
+          headers: {
+            Accept: 'application/json;odata=nometadata',
+            'odata-version': ''
+          }
+        }
+      )
+      const data = await sitePage.json()
+      this._projectSiteId = data.GtSiteId
+    }
+    return this._projectSiteId
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -96,6 +118,33 @@ export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCar
                   checked: this.properties.useDynamicColors,
                   disabled: !this.properties.showProjectLogo
                 }),
+                PropertyFieldMultiSelect('projectMetadata', {
+                  key: 'projectMetadataFieldId',
+                  label: strings.ProjectMetadataFieldLabel,
+                  options: [
+                    {
+                      key: 'PrimaryField',
+                      text: 'Primært felt'
+                    },
+                    {
+                      key: 'SecondaryField',
+                      text: 'Sekundært felt'
+                    },
+                    {
+                      key: 'PrimaryUserField',
+                      text: 'Primær bruker'
+                    },
+                    {
+                      key: 'SecondaryUserField',
+                      text: 'Sekundær bruker'
+                    },
+                    {
+                      key: 'ProjectPhase',
+                      text: strings.PhaseLabel
+                    }
+                  ],
+                  selectedKeys: this.properties.projectMetadata ?? []
+                }),
                 PropertyPaneDropdown('primaryField', {
                   label: 'strings.PrimaryFieldLabel',
                   options: this._columnFieldOptions.map((option) => ({
@@ -127,33 +176,6 @@ export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCar
                     text: option.text
                   })),
                   selectedKey: this.properties.secondaryUserField ?? 'GtProjectManager'
-                }),
-                PropertyFieldMultiSelect('projectMetadata', {
-                  key: 'projectMetadataFieldId',
-                  label: strings.ProjectMetadataFieldLabel,
-                  options: [
-                    {
-                      key: 'PrimaryField',
-                      text: 'Primær felt'
-                    },
-                    {
-                      key: 'SecondaryField',
-                      text: 'Sekundær felt'
-                    },
-                    {
-                      key: 'PrimaryUserField',
-                      text: 'Primær bruker'
-                    },
-                    {
-                      key: 'SecondaryUserField',
-                      text: 'Sekundær bruker'
-                    },
-                    {
-                      key: 'ProjectPhase',
-                      text: strings.PhaseLabel
-                    }
-                  ],
-                  selectedKeys: this.properties.projectMetadata ?? []
                 }),
                 PropertyFieldCollectionData('quickLaunchMenu', {
                   key: 'quickLaunchFieldId',

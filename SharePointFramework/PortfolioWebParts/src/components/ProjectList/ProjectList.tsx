@@ -120,10 +120,10 @@ ProjectList.defaultProps = {
   primaryUserField: 'GtProjectOwner',
   secondaryUserField: 'GtProjectManager',
   projectMetadata: [
-    'PrimaryUserField',
-    'SecondaryUserField',
     'PrimaryField',
     'SecondaryField',
+    'PrimaryUserField',
+    'SecondaryUserField',
     'ProjectPhase'
   ],
   quickLaunchMenu: [

@@ -30,7 +30,6 @@ import {
   SPContentType,
   SPField,
   SPFxContext,
-  SPProjectItem,
   SPTimelineConfigurationItem,
   TimelineConfigurationModel,
   TimelineContentModel
@@ -611,7 +610,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       `pp365_fetchenrichedprojects_${siteId}`,
       async () =>
         await Promise.all([
-          list.items.select(...Object.keys(new SPProjectItem())).getAll<SPProjectItem>(),
+          list.items.getAll(),
           this._fetchItems(`DepartmentId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId']),
           this.fetchMemberGroups(),
           this._sp.web.siteUsers.select('Id', 'Title', 'Email')()

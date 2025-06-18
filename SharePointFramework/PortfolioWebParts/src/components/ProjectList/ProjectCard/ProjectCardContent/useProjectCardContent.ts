@@ -1,6 +1,5 @@
 import { useContext } from 'react'
 import { ProjectCardContext } from '../context'
-import _ from 'underscore'
 
 /**
  * Component logic hook for `ProjectCardContent`
@@ -13,20 +12,17 @@ export function useProjectCardContent() {
     let values: string[] = []
     if (typeof fieldValue === 'string') {
       values = fieldValue?.split(';')
-    }
-    else {
+    } else {
       values = []
     }
 
-    if (!values.length || (values.length === 1 && values[0] === "")) {
+    if (!values.length || (values.length === 1 && values[0] === '')) {
       const textValue = context.project?.data[`${field}Text`]
       values = textValue ? textValue?.split(';') : []
     }
 
-    const column = context.projectColumns?.find(col => col.fieldName.includes(field))
-    return values.length
-      ? { tags: values, text: column?.name }
-      : undefined
+    const column = context.projectColumns?.find((col) => col.fieldName.includes(field))
+    return values.length ? { tags: values, text: column?.name } : undefined
   }
 
   return {
