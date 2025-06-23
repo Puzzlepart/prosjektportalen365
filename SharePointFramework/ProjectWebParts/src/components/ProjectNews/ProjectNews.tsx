@@ -44,7 +44,7 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme}>
           <section className={styles.projectNews}>
-            {props.title && <WebPartTitle title={props.title} />}
+            {props.title && <WebPartTitle title={props.title} description={props.description} />}
             <div className={styles.createNewsLinkContainer}>
               <Button
                 className={styles.button}
