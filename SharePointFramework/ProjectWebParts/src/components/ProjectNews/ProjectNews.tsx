@@ -9,7 +9,7 @@ import { NewsRegular, NewsFilled, bundleIcon } from '@fluentui/react-icons'
 import React, { FC } from 'react'
 
 import { IProjectNewsProps } from './types'
-import { customLightTheme } from 'pp365-shared-library'
+import { customLightTheme, WebPartTitle } from 'pp365-shared-library'
 import { useProjectNews } from './useProjectNews'
 import { ProjectNewsContext } from './context'
 import ProjectNewsDialog from './ProjectNewsDialogue/NewsDialogue'
@@ -44,7 +44,7 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme}>
           <section className={styles.projectNews}>
-            <h2>{strings.ProjectNewsWebPartTitle}</h2>
+            {props.title && <WebPartTitle title={props.title} />}
             <div className={styles.createNewsLinkContainer}>
               <Button
                 className={styles.button}
