@@ -295,7 +295,6 @@ define([], function () {
     NewsTitleLabel: 'Tittel',
     NewsTitlePlaceholder: 'Skriv inn artikkeltittel...',
     CreateButtonLabel: 'Opprett',
-    CancelButtonLabel: 'Avbryt',
     CreateNewsLinkLabel: 'Opprett Nyhet',
     NewsCreateError: 'Noe gikk galt: ',
     NewsTitleRequired: 'Tittel er påkrevd for å opprette en nyhetsartikkel.',

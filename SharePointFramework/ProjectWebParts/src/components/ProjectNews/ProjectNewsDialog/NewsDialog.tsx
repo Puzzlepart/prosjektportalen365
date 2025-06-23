@@ -7,7 +7,6 @@ import {
   DialogActions,
   Button,
   Input,
-  Label,
   Spinner,
   MessageBar,
   Dropdown,
@@ -18,6 +17,7 @@ import { CheckmarkCircle24Filled } from '@fluentui/react-icons'
 import * as strings from 'ProjectWebPartsStrings'
 import { NewsDialogProps } from '../types'
 import styles from './NewsDialog.module.scss'
+import { FieldContainer } from 'pp365-shared-library/lib/components/FieldContainer/FieldContainer'
 
 const NewsDialog: React.FC<NewsDialogProps> = ({
   open,
@@ -47,37 +47,40 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
             </div>
           ) : (
             <>
-              <Label htmlFor='news-title-input' required>
-                {strings.NewsTitleLabel}
-              </Label>
-              {errorMessage && <MessageBar intent='error'>{errorMessage}</MessageBar>}
-              <Input
-                type='text'
-                placeholder={strings.NewsTitlePlaceholder}
-                id='news-title-input'
-                value={title}
-                onChange={onTitleChange}
+              <FieldContainer
+                label={strings.NewsTitleLabel}
                 required
-              />
-              <Label htmlFor='template-dropdown' required>
-                {strings.TemplateLabel}
-              </Label>
-              <Dropdown
-                id='template-dropdown'
-                value={templates.find((t) => t.ServerRelativeUrl === selectedTemplate)?.Name ?? ''}
-                onOptionSelect={(_, data) => {
-                  const selected = templates.find((t) => t.Name === data.optionValue)
-                  if (selected) {
-                    onTemplateChange(_, { optionValue: selected.ServerRelativeUrl })
+                validationMessage={errorMessage}>
+                {errorMessage && <MessageBar intent='error'>{errorMessage}</MessageBar>}
+                <Input
+                  type='text'
+                  placeholder={strings.NewsTitlePlaceholder}
+                  id='news-title-input'
+                  value={title}
+                  onChange={onTitleChange}
+                  required
+                />
+              </FieldContainer>
+              <FieldContainer label={strings.TemplateLabel} required>
+                <Dropdown
+                  id='template-dropdown'
+                  value={
+                    templates.find((t) => t.ServerRelativeUrl === selectedTemplate)?.Name ?? ''
                   }
-                }}
-                placeholder={strings.TemplatePlaceholder}>
-                {templates.map((t) => (
-                  <Option key={t.ServerRelativeUrl} value={t.Name}>
-                    {t.Name}
-                  </Option>
-                ))}
-              </Dropdown>
+                  onOptionSelect={(_, data) => {
+                    const selected = templates.find((t) => t.Name === data.optionValue)
+                    if (selected) {
+                      onTemplateChange(_, { optionValue: selected.ServerRelativeUrl })
+                    }
+                  }}
+                  placeholder={strings.TemplatePlaceholder}>
+                  {templates.map((t) => (
+                    <Option key={t.ServerRelativeUrl} value={t.Name}>
+                      {t.Name}
+                    </Option>
+                  ))}
+                </Dropdown>
+              </FieldContainer>
             </>
           )}
         </DialogBody>
@@ -87,7 +90,7 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
               {strings.CreateButtonLabel}
             </Button>
             <Button onClick={() => onOpenChange(false)} type='button'>
-              {strings.CancelButtonLabel}
+              {strings.CancelText}
             </Button>
           </DialogActions>
         )}

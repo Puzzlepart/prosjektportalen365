@@ -223,7 +223,6 @@ define([], function () {
     NewsTitleLabel: 'Title',
     NewsTitlePlaceholder: 'Enter article title...',
     CreateButtonLabel: 'Create',
-    CancelButtonLabel: 'Cancel',
     CreateNewsLinkLabel: 'Create News',
     NewsCreateError: 'Something went wrong: ',
     NewsTitleRequired: 'Title is required to create a news article.',

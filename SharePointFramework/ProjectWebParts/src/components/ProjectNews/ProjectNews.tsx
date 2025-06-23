@@ -2,14 +2,14 @@ import {
   Button,
   FluentProvider,
   IdPrefixProvider,
-  MessageBar,
   Spinner
 } from '@fluentui/react-components'
 import { NewsRegular, NewsFilled, bundleIcon } from '@fluentui/react-icons'
 import React, { FC } from 'react'
+import { format } from '@fluentui/react'
 
 import { IProjectNewsProps } from './types'
-import { customLightTheme, WebPartTitle } from 'pp365-shared-library'
+import { customLightTheme, UserMessage, WebPartTitle } from 'pp365-shared-library'
 import { useProjectNews } from './useProjectNews'
 import { ProjectNewsContext } from './context'
 import ProjectNewsDialog from './ProjectNewsDialog/NewsDialog'
@@ -62,14 +62,15 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
             </div>
             {loading && (
               <div className={styles.loadingContainer}>
-                <Spinner label={strings.LoadingLabel} />
+                <Spinner label={format(strings.LoadingText, props.title)} />
               </div>
             )}
             {error && (
               <div className={styles.errorContainer}>
-                <MessageBar intent='error'>
-                  {error.message || strings.GenericErrorMessage}
-                </MessageBar>
+                <UserMessage
+                  intent='error'
+                  text={error.message || strings.GenericErrorMessage}
+                />
               </div>
             )}
             {!loading && !error && (
