@@ -4,12 +4,11 @@ import {
   IdPrefixProvider,
   Spinner
 } from '@fluentui/react-components'
-import { NewsRegular, NewsFilled, bundleIcon } from '@fluentui/react-icons'
 import React, { FC } from 'react'
 import { format } from '@fluentui/react'
 
 import { IProjectNewsProps } from './types'
-import { customLightTheme, UserMessage, WebPartTitle } from 'pp365-shared-library'
+import { customLightTheme, getFluentIcon, UserMessage, WebPartTitle } from 'pp365-shared-library'
 import { useProjectNews } from './useProjectNews'
 import { ProjectNewsContext } from './context'
 import ProjectNewsDialog from './ProjectNewsDialog/NewsDialog'
@@ -24,7 +23,7 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
   const dialog = useProjectNewsDialog(props)
   const recentNews = context.state.data?.news || []
   const { loading, error } = context.state
-  const NewsIcon = bundleIcon(NewsFilled, NewsRegular)
+  const NewsIcon = getFluentIcon('News', { size: 24, filled: true })
   const handleCreateNewsClick = React.useCallback(() => {
     dialog.setIsDialogOpen(true)
   }, [dialog])

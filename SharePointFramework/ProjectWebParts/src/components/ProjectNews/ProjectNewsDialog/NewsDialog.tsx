@@ -11,12 +11,11 @@ import {
   Dropdown,
   Option
 } from '@fluentui/react-components'
-import { CheckmarkCircle24Filled } from '@fluentui/react-icons'
 
 import * as strings from 'ProjectWebPartsStrings'
 import { NewsDialogProps } from '../types'
 import styles from './NewsDialog.module.scss'
-import { FieldContainer } from 'pp365-shared-library/lib/components/FieldContainer/FieldContainer'
+import { getFluentIcon, FieldContainer } from 'pp365-shared-library'
 
 const NewsDialog: React.FC<NewsDialogProps> = ({
   open,
@@ -33,7 +32,7 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
   const isTitleValid = !!title && !errorMessage
   const isTemplateValid = !!selectedTemplate
   const canCreate = isTitleValid && isTemplateValid && spinnerMode === 'idle'
-
+  const SuccessIcon = getFluentIcon('CheckmarkCircle', { size: 64, color: '#107c10', filled: true })
   return (
     <Dialog open={open} onOpenChange={(_, data) => onOpenChange(data.open)}>
       <DialogSurface>
@@ -45,7 +44,7 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
             </div>
           ) : spinnerMode === 'success' ? (
             <div className={styles.centeredSuccess}>
-              <CheckmarkCircle24Filled className={styles.successIcon} />
+              {SuccessIcon}
               <div>{strings.NewsCreatedSuccessfully}</div>
             </div>
           ) : (
@@ -54,7 +53,8 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
                 label={strings.NewsTitleLabel}
                 required
                 validationMessage={errorMessage}
-                validationState={errorMessage ? 'error' : undefined}>
+                validationState={errorMessage ? 'error' : undefined}
+                iconName="TextBulletList">
                 <Input
                   type='text'
                   placeholder={strings.NewsTitlePlaceholder}
@@ -68,7 +68,8 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
                 label={strings.TemplateLabel}
                 required
                 validationState={!isTemplateValid ? 'error' : undefined}
-                validationMessage={!isTemplateValid ? strings.TemplateRequired : undefined}>
+                validationMessage={!isTemplateValid ? strings.TemplateRequired : undefined}
+                iconName='ChevronDown'>
                 <Dropdown
                   id='template-dropdown'
                   value={

@@ -22,7 +22,8 @@ const RecentNewsList: React.FC<RecentNewsListProps> = ({ news, maxVisible = 6 })
                 <CardHeader
                   header={
                     <Link href={item.url} target='_blank' rel='noopener noreferrer'>
-                      {item.name}
+                      {item.name.replace(/\.aspx$/i, '').replace(/-/g, ' ')}{' '}
+                      {/* Remove .aspx extension and replace dashes with spaces */}
                     </Link>
                   }
                   description={

@@ -299,7 +299,7 @@ export async function setOriginalSourceSiteId(
   siteId: string
 ): Promise<void> {
   if (!siteId) {
-    throw new Error('Site ID is required to set OriginalSourceSiteId')
+    throw new Error('Site ID is required to set GtSiteId')
   }
   const updateUrl = `${siteUrl}/_api/web/GetListUsingPath(DecodedUrl='${sitePagesServerRelativeUrl}')/items(${itemId})`
   const updateRes = await spHttpClient.post(updateUrl, SPHttpClient.configurations.v1, {
@@ -310,7 +310,7 @@ export async function setOriginalSourceSiteId(
       'X-HTTP-Method': 'MERGE'
     },
     body: JSON.stringify({
-      GtSiteId: siteId // NB! change from SourceSiteId to use GtSiteId
+      GtSiteId: siteId
     })
   })
   if (!updateRes.ok) {
@@ -318,4 +318,3 @@ export async function setOriginalSourceSiteId(
     throw new Error(error?.error?.message?.value || updateRes.statusText)
   }
 }
-
