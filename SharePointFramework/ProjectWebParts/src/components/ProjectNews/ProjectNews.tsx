@@ -12,31 +12,31 @@ import { IProjectNewsProps } from './types'
 import { customLightTheme, WebPartTitle } from 'pp365-shared-library'
 import { useProjectNews } from './useProjectNews'
 import { ProjectNewsContext } from './context'
-import ProjectNewsDialog from './ProjectNewsDialogue/NewsDialog'
+import ProjectNewsDialog from './ProjectNewsDialog/NewsDialog'
 import strings from 'ProjectWebPartsStrings'
 import styles from './ProjectNews.module.scss'
 import RecentNewsList from './ProjectNewsRecentNewsList/RecentNewsList'
-import { useProjectNewsDialog } from './ProjectNewsDialogue/useProjectNewsDialog'
+import { useProjectNewsDialog } from './ProjectNewsDialog/useProjectNewsDialog'
 
 
 export const ProjectNews: FC<IProjectNewsProps> = (props) => {
   const { context, fluentProviderId } = useProjectNews(props)
-  const dialogue = useProjectNewsDialog(props)
+  const dialog = useProjectNewsDialog(props)
   const recentNews = context.state.data?.news || []
   const { loading, error } = context.state
   const NewsIcon = bundleIcon(NewsFilled, NewsRegular)
   const handleCreateNewsClick = React.useCallback(() => {
-    dialogue.setIsDialogOpen(true)
-  }, [dialogue])
+    dialog.setIsDialogOpen(true)
+  }, [dialog])
 
   const handleCreateNewsKeyDown = React.useCallback(
     (e: React.KeyboardEvent) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault()
-        dialogue.setIsDialogOpen(true)
+        dialog.setIsDialogOpen(true)
       }
     },
-    [dialogue]
+    [dialog]
   )
 
   return (
@@ -75,16 +75,16 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
             {!loading && !error && (
               <>
                 <ProjectNewsDialog
-                  open={dialogue.isDialogOpen}
-                  onOpenChange={dialogue.setIsDialogOpen}
-                  spinnerMode={dialogue.spinnerMode}
-                  title={dialogue.title}
-                  errorMessage={dialogue.errorMessage}
-                  onTitleChange={dialogue.handleTitleChange}
-                  onSubmit={dialogue.handleCreate}
-                  templates={dialogue.templates}
-                  selectedTemplate={dialogue.selectedTemplate}
-                  onTemplateChange={dialogue.handleTemplateChange}
+                  open={dialog.isDialogOpen}
+                  onOpenChange={dialog.setIsDialogOpen}
+                  spinnerMode={dialog.spinnerMode}
+                  title={dialog.title}
+                  errorMessage={dialog.errorMessage}
+                  onTitleChange={dialog.handleTitleChange}
+                  onSubmit={dialog.handleCreate}
+                  templates={dialog.templates}
+                  selectedTemplate={dialog.selectedTemplate}
+                  onTemplateChange={dialog.handleTemplateChange}
                 />
                 <RecentNewsList news={recentNews} maxVisible={props.maxVisibleNews} />
               </>
