@@ -30,10 +30,14 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
   templates,
   selectedTemplate,
   onTemplateChange
-}) => (
-  <Dialog open={open} onOpenChange={(_, data) => onOpenChange(data.open)}>
-    <DialogSurface>
-      <form onSubmit={onSubmit}>
+}) => {
+  const isTitleValid = !!title && !errorMessage
+  const isTemplateValid = !!selectedTemplate
+  const canCreate = isTitleValid && isTemplateValid && spinnerMode === 'idle'
+
+  return (
+    <Dialog open={open} onOpenChange={(_, data) => onOpenChange(data.open)}>
+      <DialogSurface>
         <DialogTitle style={{ textAlign: 'center' }}>{strings.DialogueTitle}</DialogTitle>
         <DialogBody className={styles.dialogBody}>
           {spinnerMode === 'creating' ? (
@@ -50,8 +54,8 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
               <FieldContainer
                 label={strings.NewsTitleLabel}
                 required
-                validationMessage={errorMessage}>
-                {errorMessage && <MessageBar intent='error'>{errorMessage}</MessageBar>}
+                validationMessage={errorMessage}
+                validationState={errorMessage ? 'error' : undefined}>
                 <Input
                   type='text'
                   placeholder={strings.NewsTitlePlaceholder}
@@ -61,7 +65,11 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
                   required
                 />
               </FieldContainer>
-              <FieldContainer label={strings.TemplateLabel} required>
+              <FieldContainer
+                label={strings.TemplateLabel}
+                required
+                validationState={!isTemplateValid ? 'error' : undefined}
+                validationMessage={!isTemplateValid ? strings.TemplateRequired : undefined}>
                 <Dropdown
                   id='template-dropdown'
                   value={
@@ -86,7 +94,7 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
         </DialogBody>
         {spinnerMode === 'idle' && (
           <DialogActions>
-            <Button appearance='primary' type='submit' disabled={!!errorMessage}>
+            <Button appearance='primary' onClick={onSubmit} disabled={!canCreate}>
               {strings.CreateButtonLabel}
             </Button>
             <Button onClick={() => onOpenChange(false)} type='button'>
@@ -94,9 +102,9 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
             </Button>
           </DialogActions>
         )}
-      </form>
-    </DialogSurface>
-  </Dialog>
-)
+      </DialogSurface>
+    </Dialog>
+  )
+}
 
 export default NewsDialog
