@@ -310,7 +310,7 @@ export async function setOriginalSourceSiteId(
       'X-HTTP-Method': 'MERGE'
     },
     body: JSON.stringify({
-      SourceSiteId: siteId // NB! change from SourceSiteId to use GtSiteId
+      GtSiteId: siteId // NB! change from SourceSiteId to use GtSiteId
     })
   })
   if (!updateRes.ok) {

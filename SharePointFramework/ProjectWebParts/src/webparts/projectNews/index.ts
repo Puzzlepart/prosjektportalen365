@@ -1,12 +1,33 @@
-import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-property-pane'
-import { IProjectNewsProps, ProjectNews } from 'components/ProjectNews'
 import '@fluentui/react/dist/css/fabric.min.css'
+import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-property-pane'
+
+import { PortalDataService } from 'pp365-shared-library/lib/services/PortalDataService'
+import { IProjectNewsProps, ProjectNews } from 'components/ProjectNews'
 import * as strings from 'ProjectWebPartsStrings'
 import { BaseProjectWebPart } from '../baseProjectWebPart'
 
 export default class ProjectNewsWebPart extends BaseProjectWebPart<IProjectNewsProps> {
-  public async onInit() {
+  private _portalDataService: PortalDataService
+  private _globalSettings: Map<string, string>
+  private _projectNewsFolderName: string
+  private _projectNewsHubUrl: string
+  public async onInit(): Promise<void> {
     await super.onInit()
+    this._portalDataService = await new PortalDataService().configure({
+      spfxContext: this.context
+    })
+    this._globalSettings = await this._portalDataService.getGlobalSettings()
+    this._projectNewsFolderName =
+      this._globalSettings.get('ProjectNewsFolderName') || strings.NewsFolderNameDefault
+    this._projectNewsHubUrl =
+      this._globalSettings.get('ProjectNewsHubUrl') || this.properties.siteUrl
+
+    if (!this.properties.newsFolderName) {
+      this.properties.newsFolderName = this._projectNewsFolderName
+    }
+    if (!this.properties.siteUrl) {
+      this.properties.siteUrl = this._projectNewsHubUrl
+    }
   }
 
   public render(): void {
@@ -40,7 +61,7 @@ export default class ProjectNewsWebPart extends BaseProjectWebPart<IProjectNewsP
                 }),
                 PropertyPaneTextField('newsFolderName', {
                   label: strings.NewsFolderNameLabel,
-                  value: this.properties.newsFolderName ?? strings.NewsFolderNameDefault,
+                  value: this.properties.newsFolderName,
                   description: strings.NewsFolderNameDescription
                 })
               ]
