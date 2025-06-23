@@ -12,11 +12,11 @@ import { IProjectNewsProps } from './types'
 import { customLightTheme, WebPartTitle } from 'pp365-shared-library'
 import { useProjectNews } from './useProjectNews'
 import { ProjectNewsContext } from './context'
-import ProjectNewsDialog from './ProjectNewsDialogue/NewsDialogue'
+import ProjectNewsDialog from './ProjectNewsDialogue/NewsDialog'
 import strings from 'ProjectWebPartsStrings'
 import styles from './ProjectNews.module.scss'
 import RecentNewsList from './ProjectNewsRecentNewsList/RecentNewsList'
-import { useProjectNewsDialog } from './ProjectNewsDialogue/useProjectNewsDialogue'
+import { useProjectNewsDialog } from './ProjectNewsDialogue/useProjectNewsDialog'
 
 
 export const ProjectNews: FC<IProjectNewsProps> = (props) => {

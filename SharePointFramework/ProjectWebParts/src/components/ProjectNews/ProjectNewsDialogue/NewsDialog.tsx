@@ -17,7 +17,7 @@ import { CheckmarkCircle24Filled } from '@fluentui/react-icons'
 
 import * as strings from 'ProjectWebPartsStrings'
 import { NewsDialogProps } from '../types'
-import styles from './NewsDialogue.module.scss'
+import styles from './NewsDialog.module.scss'
 
 const NewsDialog: React.FC<NewsDialogProps> = ({
   open,
