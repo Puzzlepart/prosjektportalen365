@@ -11,7 +11,6 @@ const RecentNewsList: React.FC<RecentNewsListProps> = ({ news, maxVisible = 6 })
 
   return (
     <>
-      <h3>{strings.RecentNewsTitle}</h3>
       {news.length === 0 ? (
         <div>{strings.NoRecentNews}</div>
       ) : (

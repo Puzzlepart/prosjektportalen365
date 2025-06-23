@@ -1,10 +1,11 @@
 import {
+  Button,
   FluentProvider,
   IdPrefixProvider,
-  Link,
   MessageBar,
   Spinner
 } from '@fluentui/react-components'
+import { NewsRegular, NewsFilled, bundleIcon } from '@fluentui/react-icons'
 import React, { FC } from 'react'
 
 import { IProjectNewsProps } from './types'
@@ -17,12 +18,13 @@ import styles from './ProjectNews.module.scss'
 import RecentNewsList from './ProjectNewsRecentNewsList/RecentNewsList'
 import { useProjectNewsDialog } from './ProjectNewsDialogue/useProjectNewsDialogue'
 
+
 export const ProjectNews: FC<IProjectNewsProps> = (props) => {
   const { context, fluentProviderId } = useProjectNews(props)
   const dialogue = useProjectNewsDialog(props)
   const recentNews = context.state.data?.news || []
   const { loading, error } = context.state
-
+  const NewsIcon = bundleIcon(NewsFilled, NewsRegular)
   const handleCreateNewsClick = React.useCallback(() => {
     dialogue.setIsDialogOpen(true)
   }, [dialogue])
@@ -44,15 +46,19 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
           <section className={styles.projectNews}>
             <h2>{strings.ProjectNewsWebPartTitle}</h2>
             <div className={styles.createNewsLinkContainer}>
-              <Link
+              <Button
+                className={styles.button}
+                appearance='subtle'
+                icon={<NewsIcon />}
+                iconPosition='before'
+                onClick={handleCreateNewsClick}
+                onKeyDown={handleCreateNewsKeyDown}
+                aria-label={strings.CreateNewsLinkLabel}
                 role='button'
                 tabIndex={0}
-                aria-haspopup='dialog'
-                aria-label={strings.CreateNewsLinkLabel}
-                onClick={handleCreateNewsClick}
-                onKeyDown={handleCreateNewsKeyDown}>
+                aria-haspopup='dialog'>
                 {strings.CreateNewsLinkLabel}
-              </Link>
+              </Button>
             </div>
             {loading && (
               <div className={styles.loadingContainer}>

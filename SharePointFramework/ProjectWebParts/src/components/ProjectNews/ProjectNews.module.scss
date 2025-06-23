@@ -17,4 +17,10 @@
     display: flex;
     justify-content: center;
   }
+  .button {
+    justify-content: flex-start;
+    font-weight: var(--fontWeightRegular);
+  }
+
+
 }

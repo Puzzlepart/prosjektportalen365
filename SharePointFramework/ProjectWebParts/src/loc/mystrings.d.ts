@@ -254,7 +254,6 @@ declare interface IProjectWebPartsStrings {
   TemplateRequired: string,
   TemplatePlaceholder: string,
   TemplateLabel: string,
-  RecentNewsTitle: string,
   NoRecentNews: string,
   ShowMoreNews: string,
   ShowLessNews: string,
