@@ -42,5 +42,5 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Hjelpeinnhold.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Globale innstillinger.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Lenker.xml" />
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/SitePagesFieldRefs.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/SitePages.xml" />
 </pnp:Lists>

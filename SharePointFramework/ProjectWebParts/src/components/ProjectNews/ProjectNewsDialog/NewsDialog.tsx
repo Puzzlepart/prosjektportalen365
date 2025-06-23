@@ -8,7 +8,6 @@ import {
   Button,
   Input,
   Spinner,
-  MessageBar,
   Dropdown,
   Option
 } from '@fluentui/react-components'
