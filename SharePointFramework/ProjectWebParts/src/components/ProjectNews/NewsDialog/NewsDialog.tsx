@@ -54,7 +54,7 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
                 required
                 validationMessage={errorMessage}
                 validationState={errorMessage ? 'error' : undefined}
-                iconName="TextBulletList">
+                iconName='TextBulletList'>
                 <Input
                   type='text'
                   placeholder={strings.NewsTitlePlaceholder}
@@ -106,5 +106,4 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
     </Dialog>
   )
 }
-
 export default NewsDialog

@@ -11,19 +11,18 @@ import { IProjectNewsProps } from './types'
 import { customLightTheme, getFluentIcon, UserMessage, WebPartTitle } from 'pp365-shared-library'
 import { useProjectNews } from './useProjectNews'
 import { ProjectNewsContext } from './context'
-import ProjectNewsDialog from './ProjectNewsDialog/NewsDialog'
+import ProjectNewsDialog from './NewsDialog/NewsDialog'
 import strings from 'ProjectWebPartsStrings'
 import styles from './ProjectNews.module.scss'
-import RecentNewsList from './ProjectNewsRecentNewsList/RecentNewsList'
-import { useProjectNewsDialog } from './ProjectNewsDialog/useProjectNewsDialog'
-
+import RecentNewsList from './RecentNews/RecentNews'
+import { useProjectNewsDialog } from './NewsDialog/useNewsDialog'
 
 export const ProjectNews: FC<IProjectNewsProps> = (props) => {
   const { context, fluentProviderId } = useProjectNews(props)
   const dialog = useProjectNewsDialog(props)
   const recentNews = context.state.data?.news || []
   const { loading, error } = context.state
-  const NewsIcon = getFluentIcon('News', { size: 24, filled: true })
+  const NewsIcon = getFluentIcon('News')
   const handleCreateNewsClick = React.useCallback(() => {
     dialog.setIsDialogOpen(true)
   }, [dialog])
@@ -48,7 +47,7 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
               <Button
                 className={styles.button}
                 appearance='subtle'
-                icon={<NewsIcon />}
+                icon={NewsIcon}
                 iconPosition='before'
                 onClick={handleCreateNewsClick}
                 onKeyDown={handleCreateNewsKeyDown}
@@ -95,7 +94,6 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
     </ProjectNewsContext.Provider>
   )
 }
-
 ProjectNews.defaultProps = {
   siteUrl: 'https://puzzlepart.sharepoint.com/sites/prosjektportalen-news',
   maxVisibleNews: 6

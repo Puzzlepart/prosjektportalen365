@@ -113,7 +113,7 @@
             <pnp:DataValue FieldName="GtSettingsId">{f3b39250-7373-43c0-82a8-26530198dd35}</pnp:DataValue>
             <pnp:DataValue FieldName="Title">URL til område for nyhetspublisering</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsKey">ProjectNewsHubUrl</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsValue">https://puzzlepart.sharepoint.com/sites/pp365</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsValue">{hosturl}{site}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsCategory">Generelt</pnp:DataValue>
         </pnp:DataRow>
