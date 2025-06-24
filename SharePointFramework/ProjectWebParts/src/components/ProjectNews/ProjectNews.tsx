@@ -1,9 +1,4 @@
-import {
-  Button,
-  FluentProvider,
-  IdPrefixProvider,
-  Spinner
-} from '@fluentui/react-components'
+import { Button, FluentProvider, IdPrefixProvider, Spinner } from '@fluentui/react-components'
 import React, { FC } from 'react'
 import { format } from '@fluentui/react'
 
@@ -65,10 +60,7 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
             )}
             {error && (
               <div className={styles.errorContainer}>
-                <UserMessage
-                  intent='error'
-                  text={error.message || strings.GenericErrorMessage}
-                />
+                <UserMessage intent='error' text={error.message || strings.GenericErrorMessage} />
               </div>
             )}
             {!loading && !error && (
@@ -84,7 +76,6 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
                   templates={dialog.templates}
                   selectedTemplate={dialog.selectedTemplate}
                   onTemplateChange={dialog.handleTemplateChange}
-
                 />
                 <RecentNewsList news={recentNews} maxVisible={props.maxVisibleNews} />
               </>

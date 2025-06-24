@@ -120,7 +120,6 @@ export function useProjectNewsDialog(props: IProjectNewsProps) {
             err?.error?.message || err?.error?.message?.value || err?.message
           }`
         )
-
         console.error('Error creating news article:', err)
         setSpinnerMode('idle')
       }
