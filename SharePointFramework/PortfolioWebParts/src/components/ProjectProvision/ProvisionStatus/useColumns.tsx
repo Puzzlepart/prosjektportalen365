@@ -16,16 +16,7 @@ import {
   ToastBody
 } from '@fluentui/react-components'
 import React, { useContext } from 'react'
-import {
-  SparkleCircleRegular,
-  LightbulbCircleRegular,
-  CheckmarkCircleRegular,
-  ErrorCircleRegular,
-  PeopleTeamRegular,
-  ArrowClockwiseDashesRegular,
-  ApprovalsAppRegular,
-  HourglassHalfRegular
-} from '@fluentui/react-icons'
+
 import styles from './ProvisionStatus.module.scss'
 import { ProjectProvisionContext } from '../context'
 import { formatDate, getFluentIcon } from 'pp365-shared-library'

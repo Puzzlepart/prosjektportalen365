@@ -40,9 +40,7 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
   }
 
   if (state.error) {
-    return (
-      <UserMessage title={strings.ErrorTitle} text={state.error.message} intent='error' />
-    )
+    return <UserMessage title={strings.ErrorTitle} text={state.error.message} intent='error' />
   }
 
   if (stringIsNullOrEmpty(props.provisionUrl)) {
@@ -87,14 +85,16 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
                 >
                   {strings.Provision.StatusMenuLabel}
                 </MenuItem>
-                <MenuItem
-                  {...restoreFocusTargetAttribute}
-                  onClick={() => {
-                    setState({ showProvisionSettings: true })
-                  }}
-                >
-                  {strings.Provision.SettingsMenuLabel}
-                </MenuItem>
+                {props.pageContext.legacyPageContext.isSiteAdmin && (
+                  <MenuItem
+                    {...restoreFocusTargetAttribute}
+                    onClick={() => {
+                      setState({ showProvisionSettings: true })
+                    }}
+                  >
+                    {strings.Provision.SettingsMenuLabel}
+                  </MenuItem>
+                )}
               </MenuList>
             </MenuPopover>
           </Menu>
