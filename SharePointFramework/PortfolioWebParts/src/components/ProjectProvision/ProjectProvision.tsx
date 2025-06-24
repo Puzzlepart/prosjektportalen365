@@ -41,15 +41,15 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
 
   if (state.error) {
     return (
-      <UserMessage title='Det har oppstått en feil' text={state.error.message} intent='error' />
+      <UserMessage title={strings.ErrorTitle} text={state.error.message} intent='error' />
     )
   }
 
   if (stringIsNullOrEmpty(props.provisionUrl)) {
     return (
       <UserMessage
-        title='Ikke konfigurert'
-        text='Det er ikke konfigurert url til Bestillingsportalen. Vennligst angi dette i webdelen.'
+        title={strings.Provision.NotConfiguredTitle}
+        text={strings.Provision.NotConfiguredText}
         intent='warning'
       />
     )
