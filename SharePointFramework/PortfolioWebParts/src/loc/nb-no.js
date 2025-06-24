@@ -150,7 +150,9 @@ define([], function () {
       DeletedSubmissionToastBody: 'Bestillingen, {0}, er nå slettet.',
       DeletedSubmissionErrorToastTitle: 'Feil ved sletting',
       DeletedSubmissionErrorToastBody: 'Det oppstod en feil ved sletting av bestillingen. Vennligst prøv igjen, eller kontakt administrator.',
-      RequestedSource: 'Prosjektportalen - Bestillingsskjema'
+      RequestedSource: 'Prosjektportalen - Bestillingsskjema',
+      NotConfiguredTitle: 'Ikke konfigurert',
+      NotConfiguredText: 'Det er ikke konfigurert url til Bestillingsportalen. Vennligst angi dette i webdelen.',
     },
     AddColumnLabel: 'Legg til en kolonne',
     AllProjectsHeaderText: 'Alle prosjekter/program',

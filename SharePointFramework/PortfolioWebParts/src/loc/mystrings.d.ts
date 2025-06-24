@@ -151,6 +151,8 @@ declare interface IPortfolioWebPartsStrings {
     DeletedSubmissionErrorToastTitle: string
     DeletedSubmissionErrorToastBody: string
     RequestedSource: string
+    NotConfiguredTitle: string
+    NotConfiguredText: string
   },
   AddColumnLabel: string
   AllProjectsHeaderText: string

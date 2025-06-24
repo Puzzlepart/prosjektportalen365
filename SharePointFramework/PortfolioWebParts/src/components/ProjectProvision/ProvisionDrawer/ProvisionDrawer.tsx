@@ -26,9 +26,8 @@ import {
   FluentProvider
 } from '@fluentui/react-components'
 import { DatePicker } from '@fluentui/react-datepicker-compat'
-import { ArrowLeft24Regular, Dismiss24Regular } from '@fluentui/react-icons'
 import strings from 'PortfolioWebPartsStrings'
-import { FieldContainer, customLightTheme } from 'pp365-shared-library'
+import { FieldContainer, customLightTheme, getFluentIcon } from 'pp365-shared-library'
 import { SiteType } from './SiteType'
 import { useProvisionDrawer } from './useProvisionDrawer'
 import styles from './ProvisionDrawer.module.scss'
@@ -91,7 +90,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                       )}
                       title={strings.Aria.Back}
                       appearance='subtle'
-                      icon={<ArrowLeft24Regular />}
+                      icon={getFluentIcon('ArrowLeft')}
                       onClick={() => setCurrentLevel(currentLevel - 1)}
                     />
                   )}
@@ -118,7 +117,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   <ToolbarButton
                     title={strings.Aria.Close}
                     appearance='subtle'
-                    icon={<Dismiss24Regular />}
+                    icon={getFluentIcon('Dismiss')}
                     onClick={() => context.setState({ showProvisionDrawer: false })}
                   />
                 </ToolbarGroup>

@@ -101,52 +101,52 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestItem>[] =>
 
         switch (request.status) {
           case Status.Submitted:
-            statusIcon = <SparkleCircleRegular />
+            statusIcon = getFluentIcon('SparkleCircle')
             statusColor = tokens.colorStatusWarningBackground2
             statusText = strings.Provision.SubmittedLabel
             break
           case Status.Approved:
-            statusIcon = <ApprovalsAppRegular />
+            statusIcon = getFluentIcon('ApprovalsApp')
             statusColor = tokens.colorStatusSuccessBackground2
             statusText = strings.Provision.ApprovedLabel
             break
           case Status.Rejected:
-            statusIcon = <ErrorCircleRegular />
+            statusIcon = getFluentIcon('ErrorCircle')
             statusColor = tokens.colorStatusDangerBackground2
             statusText = strings.Provision.RejectedLabel
             break
           case Status.PendingApproval:
-            statusIcon = <ArrowClockwiseDashesRegular />
+            statusIcon = getFluentIcon('ArrowClockwiseDashes')
             statusColor = tokens.colorStatusWarningBackground2
             statusText = strings.Provision.PendingApprovalLabel
             break
           case Status.SpaceCreationFailed:
-            statusIcon = <ErrorCircleRegular />
+            statusIcon = getFluentIcon('ErrorCircle')
             statusColor = tokens.colorStatusDangerBackground2
             statusText = strings.Provision.SpaceCreationFailedLabel
             break
           case Status.SpaceAlreadyExists:
-            statusIcon = <ErrorCircleRegular />
+            statusIcon = getFluentIcon('ErrorCircle')
             statusColor = tokens.colorStatusDangerBackground2
             statusText = strings.Provision.SpaceAlreadyExistsLabel
             break
           case Status.TeamRequested:
-            statusIcon = <PeopleTeamRegular />
+            statusIcon = getFluentIcon('PeopleTeam')
             statusColor = tokens.colorStatusWarningBackground2
             statusText = strings.Provision.TeamRequestedLabel
             break
           case Status.SpaceCreation:
-            statusIcon = <HourglassHalfRegular />
+            statusIcon = getFluentIcon('HourglassHalf')
             statusColor = tokens.colorStatusWarningBackground2
             statusText = strings.Provision.SpaceCreationLabel
             break
           case Status.SpaceCreated:
-            statusIcon = <CheckmarkCircleRegular />
+            statusIcon = getFluentIcon('CheckmarkCircle')
             statusColor = tokens.colorStatusSuccessBackground2
             statusText = strings.Provision.SpaceCreatedLabel
             break
           default:
-            statusIcon = <LightbulbCircleRegular />
+            statusIcon = getFluentIcon('LightbulbCircle')
             statusColor = tokens.colorNeutralBackground6
             statusText = strings.Provision.NotSubmittedLabel
             break
