@@ -93,6 +93,8 @@ import {
   IconsRegular,
   ImageFilled,
   ImageRegular,
+  LibraryFilled,
+  LibraryRegular,
   LightbulbCircleFilled,
   LightbulbCircleRegular,
   LightbulbFilled,
@@ -442,5 +444,9 @@ export const iconCatalog = {
   SparkleCircle: {
     regular: SparkleCircleRegular,
     filled: SparkleCircleFilled
+  },
+  Library: {
+    regular: LibraryRegular,
+    filled: LibraryFilled
   }
 }

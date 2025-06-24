@@ -22,6 +22,7 @@ export interface IProjectProvisionState {
   types?: Record<string, any>
   teamTemplates?: Record<string, any>
   sensitivityLabels?: Record<string, any>
+  sensitivityLabelsLibrary?: Record<string, any>
   retentionLabels?: Record<string, any>
   requests?: any[]
   properties: Record<string, any>

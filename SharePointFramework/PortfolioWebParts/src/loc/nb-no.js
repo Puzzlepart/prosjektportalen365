@@ -89,6 +89,8 @@ define([], function () {
       GuestFieldNoOptionsText: 'Kan ikke legge til...',
       SensitivityLabelFieldLabel: 'Følsomhetsetikett',
       SensitivityLabelFieldDescription: 'Hvilken følsomhetsetikett vil du anvende for området?',
+      SensitivityLabelLibraryFieldLabel: 'Følsomhetsetikett for bibliotek',
+      SensitivityLabelLibraryFieldDescription: 'Hvilken følsomhetsetikett vil du anvende for dokumentbiblioteket for området?',
       RetentionLabelFieldLabel: 'Oppbevaringsetikett',
       RetentionLabelFieldDescription: 'Hvilken oppbevaringsetikett vil du anvende for området?',
       ExpirationDateFieldLabel: 'Utløpsdato',

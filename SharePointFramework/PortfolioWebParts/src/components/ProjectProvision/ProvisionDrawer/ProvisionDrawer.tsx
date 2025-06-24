@@ -53,6 +53,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
     setSiteExists,
     namingConvention,
     enableSensitivityLabels,
+    enableSensitivityLabelsLibrary,
     enableRetentionLabels,
     enableExpirationDate,
     enableReadOnlyGroup,
@@ -441,6 +442,27 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     }}
                   >
                     {context.state.sensitivityLabels.map((label) => (
+                      <Option key={label.title} value={label.title}>
+                        {label.title}
+                      </Option>
+                    ))}
+                  </Dropdown>
+                </FieldContainer>
+                <FieldContainer
+                  iconName='Library'
+                  label={getField('sensitivityLabelLibrary').displayName}
+                  description={getField('sensitivityLabelLibrary').description}
+                  required={getField('sensitivityLabelLibrary').required}
+                >
+                  <Dropdown
+                    disabled={!enableSensitivityLabelsLibrary}
+                    value={context.column.get('sensitivityLabelLibrary')}
+                    selectedOptions={[context.column.get('sensitivityLabelLibrary')]}
+                    onOptionSelect={(_, data) => {
+                      context.setColumn('sensitivityLabelLibrary', data.optionValue)
+                    }}
+                  >
+                    {context.state.sensitivityLabelsLibrary.map((label) => (
                       <Option key={label.title} value={label.title}>
                         {label.title}
                       </Option>

@@ -26,6 +26,7 @@ export function useEditableColumn(
     ['teamify', false],
     ['teamTemplate', 'Standard'],
     ['sensitivityLabel', ''],
+    ['sensitivityLabelLibrary', ''],
     ['retentionLabel', ''],
     ['expirationDate', null],
     ['readOnlyGroup', false],
@@ -184,6 +185,8 @@ export function useEditableColumn(
       const defaultConfidentialData = typeDefaults?.defaultConfidentialData
       const defaultSensitivityLabel =
         typeDefaults?.defaultSensitivityLabel || getGlobalSetting('DefaultSensitivityLabel')
+      const defaultSensitivityLabelLibrary =
+        typeDefaults?.defaultSensitivityLabelLibrary || getGlobalSetting('DefaultSensitivityLabelLibrary')
       const defaultRetentionLabel =
         typeDefaults?.defaultRetentionLabel || getGlobalSetting('DefaultRetentionLabel')
       const defaultVisibility =
@@ -197,6 +200,7 @@ export function useEditableColumn(
         newColumns.set('isConfidential', defaultConfidentialData)
         newColumns.set('privacy', defaultVisibility)
         newColumns.set('sensitivityLabel', defaultSensitivityLabel)
+        newColumns.set('sensitivityLabelLibrary', defaultSensitivityLabelLibrary)
         newColumns.set('retentionLabel', defaultRetentionLabel)
         newColumns.set('externalSharing', enableExternalSharing)
 
@@ -205,6 +209,7 @@ export function useEditableColumn(
             ...state.properties,
             isConfidential: defaultConfidentialData,
             sensitivityLabel: defaultSensitivityLabel,
+            sensitivityLabelLibrary: defaultSensitivityLabelLibrary,
             retentionLabel: defaultRetentionLabel,
             externalSharing: enableExternalSharing
           }

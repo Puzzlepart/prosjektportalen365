@@ -49,6 +49,7 @@ export const useProvisionDrawer = () => {
   }
 
   const enableSensitivityLabels = getGlobalSetting('EnableSensitivityLabels')
+  const enableSensitivityLabelsLibrary = getGlobalSetting('EnableSensitivityLabelsLibrary')
   const enableRetentionLabels = getGlobalSetting('EnableRetentionLabels')
   const enableExpirationDate = getGlobalSetting('EnableExpirationDate')
   const enableReadOnlyGroup = getGlobalSetting('EnableReadOnlyGroup')
@@ -88,6 +89,10 @@ export const useProvisionDrawer = () => {
       (t) => t.labelName === context.column.get('sensitivityLabel')
     )?.labelId
 
+    const sensitivityLabelLibraryId = context.state.sensitivityLabelsLibrary.find(
+      (t) => t.labelName === context.column.get('sensitivityLabelLibrary')
+    )?.labelId
+
     const requestItem: IProvisionRequestItem = {
       Title: context.column.get('name'),
       SpaceDisplayName: name,
@@ -108,6 +113,8 @@ export const useProvisionDrawer = () => {
       Guests: context.column.get('guest')?.join(';'),
       SensitivityLabelName: context.column.get('sensitivityLabel'),
       SensitivityLabelId: sensitivityLabelId,
+      SensitivityLabelLibraryName: context.column.get('sensitivityLabelLibrary'),
+      SensitivityLabelLibraryId: sensitivityLabelLibraryId,
       RetentionLabelName: context.column.get('retentionLabel'),
       ExpirationDate: context.column.get('expirationDate'),
       ReadOnlyGroup: context.column.get('readOnlyGroup'),
@@ -164,6 +171,7 @@ export const useProvisionDrawer = () => {
     setSiteExists,
     namingConvention,
     enableSensitivityLabels,
+    enableSensitivityLabelsLibrary,
     enableRetentionLabels,
     enableExpirationDate,
     enableReadOnlyGroup,
