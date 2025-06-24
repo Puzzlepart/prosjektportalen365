@@ -84,6 +84,7 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
                   templates={dialog.templates}
                   selectedTemplate={dialog.selectedTemplate}
                   onTemplateChange={dialog.handleTemplateChange}
+
                 />
                 <RecentNewsList news={recentNews} maxVisible={props.maxVisibleNews} />
               </>

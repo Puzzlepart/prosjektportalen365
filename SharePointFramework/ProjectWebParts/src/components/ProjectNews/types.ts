@@ -47,37 +47,6 @@ export interface IProjectNewsState extends IBaseWebPartComponentState<IProjectNe
   refetch?: number
 }
 
-/**
- * The shape of a news item as returned from SharePoint REST API
- */
-// export interface SharePointNewsItem {
-//   /**
-//    * Title of the news item
-//    */
-//   Title: string
-//   /**
-//    * The file name of the news item, as it appears in the Site Pages library and in the page URL.
-//    * Example: "My-News-Article.aspx"
-//    */
-//   FileLeafRef: string
-//   /**
-//    * The user who last modified the news item.
-//    * Contains the display name of the editor.
-//    */
-//   Editor?: { Title?: string }
-//   /**
-//    * The date when the news item was last modified
-//    */
-//   Modified?: string
-//   /**
-//    * URL to the banner image for the news item
-//    */
-//   BannerImageUrl?: string
-//   /**
-//    * The description of the news item
-//    */
-//   Description?: string
-// }
 export interface NewsItem {
   /**
    * Unique identifier for the news item
@@ -196,7 +165,7 @@ export interface NewsDialogProps {
   /**
    * Array of available templates for creating news articles
    */
-  templates: any[]
+  templates: TemplateFile[]
   /**
    * The currently selected template for creating a news article
    */

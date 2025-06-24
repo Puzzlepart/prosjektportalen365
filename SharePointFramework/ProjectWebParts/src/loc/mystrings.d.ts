@@ -273,6 +273,8 @@ declare interface IProjectWebPartsStrings {
   LoadingLabel: string,
   GenericErrorMessage: string,
   NewsCreateDuplicateFileError: string
+  PreviewLabel: string
+  NoPreviewAvailable: string
 }
 
 declare module 'ProjectWebPartsStrings' {

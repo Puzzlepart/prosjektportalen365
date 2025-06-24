@@ -248,6 +248,8 @@ define([], function () {
     LoadingLabel: 'Loading news articles...',
     GenericErrorMessage: 'Something went wrong. Please try again later or contact support.',
     NewsCreateDuplicateFileError: 'A news article with the same title already exists. Please choose a different title.',
+    PreviewLabel: 'Preview',
+    NoPreviewAvailable: 'Preview unavailable',
     // End of Project News Web Part strings
   }
 })

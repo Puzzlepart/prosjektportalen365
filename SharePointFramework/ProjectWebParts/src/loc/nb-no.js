@@ -322,6 +322,8 @@ define([], function () {
     LoadingLabel: 'Laster nyheter...',
     GenericErrorMessage: 'Noe gikk galt. Vennligst prøv igjen senere eller kontakt brukerstøtte.',
     NewsCreateDuplicateFileError: 'En nyhetsartikkel med samme navn finnes allerede. Vennligst velg et annet navn.',
+    PreviewLabel: 'Forhåndsvisning',
+    NoPreviewAvailable: 'Ingen forhåndsvisning tilgjengelig.',
     // End of Project News Web Part strings
   }
 })
