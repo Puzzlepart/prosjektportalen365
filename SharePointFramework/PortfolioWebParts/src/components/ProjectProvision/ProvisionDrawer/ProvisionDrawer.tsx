@@ -432,9 +432,9 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   label={getField('sensitivityLabel').displayName}
                   description={getField('sensitivityLabel').description}
                   required={getField('sensitivityLabel').required}
+                  hidden={!enableSensitivityLabels}
                 >
                   <Dropdown
-                    disabled={!enableSensitivityLabels}
                     value={context.column.get('sensitivityLabel')}
                     selectedOptions={[context.column.get('sensitivityLabel')]}
                     onOptionSelect={(_, data) => {
@@ -453,9 +453,9 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   label={getField('sensitivityLabelLibrary').displayName}
                   description={getField('sensitivityLabelLibrary').description}
                   required={getField('sensitivityLabelLibrary').required}
+                  hidden={!enableSensitivityLabelsLibrary}
                 >
                   <Dropdown
-                    disabled={!enableSensitivityLabelsLibrary}
                     value={context.column.get('sensitivityLabelLibrary')}
                     selectedOptions={[context.column.get('sensitivityLabelLibrary')]}
                     onOptionSelect={(_, data) => {
@@ -474,9 +474,9 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   label={getField('retentionLabel').displayName}
                   description={getField('retentionLabel').description}
                   required={getField('retentionLabel').required}
+                  hidden={!enableRetentionLabels}
                 >
                   <Dropdown
-                    disabled={!enableRetentionLabels}
                     value={context.column.get('retentionLabel')}
                     selectedOptions={[context.column.get('retentionLabel')]}
                     onOptionSelect={(_, data) => {
