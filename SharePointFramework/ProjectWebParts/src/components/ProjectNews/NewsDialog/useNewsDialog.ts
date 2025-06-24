@@ -88,7 +88,6 @@ export function useProjectNewsDialog(props: IProjectNewsProps) {
         )
         if (itemId) {
           await new Promise((resolve) => setTimeout(resolve, 500))
-          // NB: change the field to update in this method.
           await setOriginalSourceSiteId(
             props.siteUrl,
             props.spHttpClient,
@@ -128,7 +127,6 @@ export function useProjectNewsDialog(props: IProjectNewsProps) {
     },
     [title, selectedTemplate, props.siteUrl, props.spHttpClient, folderName]
   )
-
   return {
     isDialogOpen,
     setIsDialogOpen,
