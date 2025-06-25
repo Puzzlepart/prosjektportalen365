@@ -40,5 +40,6 @@ export interface IProvisionField {
   dataType?: string
   disabled?: boolean
   required?: boolean
+  hidden?: boolean
   level?: number
 }
