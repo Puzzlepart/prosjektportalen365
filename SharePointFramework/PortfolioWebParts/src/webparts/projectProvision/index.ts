@@ -45,6 +45,8 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+    const propertiesWithDefaults = { ...ProjectProvision.defaultProps, ...this.properties }
+
     return {
       pages: [
         {
@@ -56,37 +58,109 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
             {
               groupName: strings.GeneralGroupName,
               groupFields: [
-                PropertyPaneTextField('provisionUrl', {
-                  label: 'Provisjoneringsområde',
-                  description: 'URL til området som håndterer bestillinger'
+                PropertyPaneTextField('buttonLabel', {
+                  label: 'Tekst på knapp',
+                  description: 'Tekst som vises på knappen for å åpne bestillingsskjemaet.',
+                  placeholder: strings.Provision.ProvisionButtonLabel
                 })
               ]
             },
             {
-              groupName: strings.GeneralGroupName,
+              groupName: 'Utseende',
               groupFields: [
                 PropertyPaneDropdown('siteTypeRenderMode', {
                   label: 'Visning av områdetype',
                   options: [
                     { key: 'cardNormal', text: 'Kort (med bilde)' },
-                    { key: 'cardMinimal', text: 'Kort (uten bilde og beskrivelse)' },
+                    { key: 'cardMinimal', text: 'Kort (uten bilde)' },
                     { key: 'dropdown', text: 'Nedtrekksliste' }
                   ],
-                  selectedKey: this.properties.siteTypeRenderMode ?? 'cardNormal'
+                  selectedKey: propertiesWithDefaults.siteTypeRenderMode ?? 'cardNormal'
+                })
+              ]
+            },
+            {
+              groupName: 'Titler og beskrivelser',
+              isCollapsed: true,
+              groupFields: [
+                PropertyPaneTextField('level0Header', {
+                  label: 'Nivå 0 Tittel',
+                  description: 'Tittel som vises i første nivå.',
+                  placeholder: strings.Provision.DrawerLevel0HeaderText,
+                }),
+                PropertyPaneTextField('level0Description', {
+                  label: 'Beskrivelse',
+                  description: 'Beskrivelse av nivå 0. Vises under tittel.',
+                  multiline: true,
+                  placeholder: strings.Provision.DrawerLevel0DescriptionText,
+                  rows: 4
+                }),
+                PropertyPaneTextField('level1Header', {
+                  label: 'Nivå 1 Tittel',
+                  description: 'Tittel som vises i andre nivå.',
+                  placeholder: strings.Provision.DrawerLevel1HeaderText,
+                }),
+                PropertyPaneTextField('level1Description', {
+                  label: 'Beskrivelse',
+                  description: 'Beskrivelse av nivå 1. Vises under tittel.',
+                  multiline: true,
+                  placeholder: strings.Provision.DrawerLevel1DescriptionText,
+                  rows: 4
+                }),
+                PropertyPaneTextField('level2Header', {
+                  label: 'Nivå 2 Tittel',
+                  description: 'Tittel som vises i tredje nivå.',
+                  placeholder: strings.Provision.DrawerLevel2HeaderText,
+                }),
+                PropertyPaneTextField('level2Description', {
+                  label: 'Beskrivelse',
+                  description: 'Beskrivelse av nivå 2. Vises under tittel.',
+                  placeholder: strings.Provision.DrawerLevel2DescriptionText,
+                  multiline: true,
+                  rows: 4
+                }),
+                PropertyPaneTextField('footerDescription', {
+                  label: 'Bunntekst',
+                  description: 'Bunntekst som vises i bunnen av bestillingsskjemaet på siste nivå.',
+                  placeholder: strings.Provision.DrawerFooterDescriptionText,
+                  multiline: true,
+                  rows: 4
+                })
+              ]
+            },
+            {
+              groupName: 'Skjul/vis',
+              isCollapsed: true,
+              groupFields: [
+                PropertyPaneToggle('hideStatusMenu', {
+                  label: 'Skjul "Mine bestillinger" meny',
+                  checked: propertiesWithDefaults.hideStatusMenu,
+                  onText: 'På',
+                  offText: 'Av'
+                }),
+                PropertyPaneToggle('hideSettingsMenu', {
+                  label: 'Skjul "Innstillinger" meny',
+                  checked: propertiesWithDefaults.hideSettingsMenu,
+                  onText: 'På',
+                  offText: 'Av'
                 })
               ]
             },
             {
               groupName: 'Avansert',
-              isCollapsed: true,
+              isCollapsed: false,
               groupFields: [
+                PropertyPaneTextField('provisionUrl', {
+                  label: 'Provisjoneringsområde',
+                  description: 'URL til området som håndterer bestillinger'
+                }),
                 PropertyFieldCollectionData('fields', {
                   key: 'fields',
                   label: 'Felt konfigurasjon',
                   panelProps: {
                     type: 6
                   },
-                  panelHeader: 'Konfigurasjon av felter i bestillingsskjema',
+                  panelHeader: 'Konfigurasjon av felter',
                   manageBtnLabel: 'Konfigurer felter',
                   value: this.properties.fields,
                   disableItemCreation: true,
@@ -145,6 +219,12 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                     {
                       id: 'required',
                       title: 'Påkrevd felt',
+                      type: CustomCollectionFieldType.boolean,
+                      defaultValue: false
+                    },
+                    {
+                      id: 'hidden',
+                      title: 'Skjul felt',
                       type: CustomCollectionFieldType.boolean,
                       defaultValue: false
                     },

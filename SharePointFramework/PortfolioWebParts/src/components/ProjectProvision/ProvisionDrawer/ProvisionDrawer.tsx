@@ -37,6 +37,7 @@ import { ImageUpload } from './ImageUpload'
 import { DebugModel } from './DebugModel'
 import { IProvisionDrawerProps } from './types'
 import { DayOfWeek } from '@fluentui/react'
+import { stringIsNullOrEmpty } from '@pnp/core'
 
 export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
   const {
@@ -137,8 +138,12 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   levelMotions[0].active && motionStyles.levelVisible
                 )}
               >
-                <DrawerHeaderTitle>{levels[0].title}</DrawerHeaderTitle>
-                <p>{levels[0].description}</p>
+                {!stringIsNullOrEmpty(context.props.level0Header) && (
+                  <DrawerHeaderTitle>{levels[0].title}</DrawerHeaderTitle>
+                )}
+                {!stringIsNullOrEmpty(context.props.level0Description) && (
+                  <p>{levels[0].description}</p>
+                )}
                 <div className={styles.content}>
                   <FieldContainer
                     iconName='AppsList'
@@ -343,8 +348,12 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                 levelMotions[1].active && motionStyles.levelVisible
               )}
             >
-              <DrawerHeaderTitle>{levels[1].title}</DrawerHeaderTitle>
-              <p>{levels[1].description}</p>
+              {!stringIsNullOrEmpty(context.props.level1Header) && (
+                <DrawerHeaderTitle>{levels[1].title}</DrawerHeaderTitle>
+              )}
+              {!stringIsNullOrEmpty(context.props.level1Description) && (
+                <p>{levels[1].description}</p>
+              )}
               <div className={styles.content}>
                 <FieldContainer
                   iconName='PeopleTeam'
@@ -542,7 +551,6 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     showMonthPickerAsOverlay={false}
                   />
                 </FieldContainer>
-                <p className={styles.ignoreGap}>{strings.Provision.DrawerFooterDescriptionText}</p>
               </div>
             </DrawerBody>
             {levelMotions[2].canRender && (
@@ -555,8 +563,12 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   levelMotions[2].active && motionStyles.levelVisible
                 )}
               >
-                <DrawerHeaderTitle>{levels[2].title}</DrawerHeaderTitle>
-                <p>{levels[2].description}</p>
+                {!stringIsNullOrEmpty(context.props.level2Header) && (
+                  <DrawerHeaderTitle>{levels[2].title}</DrawerHeaderTitle>
+                )}
+                {!stringIsNullOrEmpty(context.props.level2Description) && (
+                  <p>{levels[2].description}</p>
+                )}
                 <div className={styles.content}>
                   {context.props.debugMode || (DEBUG && <DebugModel />)}
                   <Divider />
@@ -633,9 +645,9 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                       disabled
                     />
                   </FieldContainer>
-                  <p className={styles.ignoreGap}>
-                    {strings.Provision.DrawerFooterDescriptionText}
-                  </p>
+                  {!stringIsNullOrEmpty(context.props.footerDescription) && (
+                    <p className={styles.ignoreGap}>{context.props.footerDescription}</p>
+                  )}
                 </div>
               </DrawerBody>
             )}

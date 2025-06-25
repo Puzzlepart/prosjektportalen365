@@ -24,7 +24,7 @@
       },
       "officeFabricIconFontName": "BuildDefinition",
       "properties": {
-        "description": "ProjectProvision"
+        "buttonLabel": "Bestill område"
       }
     }
   ]

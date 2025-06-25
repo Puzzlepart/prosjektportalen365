@@ -17,18 +17,18 @@ export const useProvisionDrawer = () => {
   const levels = [
     {
       key: 'initial',
-      title: strings.Provision.DrawerLevel0HeaderText,
-      description: strings.Provision.DrawerLevel0DescriptionText
+      title: context.props.level0Header,
+      description: context.props.level0Description
     },
     {
       key: 'classification',
-      title: strings.Provision.DrawerLevel1HeaderText,
-      description: strings.Provision.DrawerLevel1DescriptionText
+      title: context.props.level1Header,
+      description: context.props.level1Description
     },
     {
       key: 'metadata',
-      title: strings.Provision.DrawerLevel2HeaderText,
-      description: strings.Provision.DrawerLevel2DescriptionText
+      title: context.props.level2Header,
+      description: context.props.level2Description
     }
   ]
   const [currentLevel, setCurrentLevel] = useState(0)

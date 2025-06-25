@@ -71,30 +71,33 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
                   size={props.size}
                   disabled={props.disabled}
                 >
-                  {strings.Provision.ProvisionButtonLabel}
+                  {props.buttonLabel}
                 </SplitButton>
               )}
             </MenuTrigger>
             <MenuPopover>
               <MenuList>
-                <MenuItem
-                  {...restoreFocusTargetAttribute}
-                  onClick={() => {
-                    setState({ showProvisionStatus: true })
-                  }}
-                >
-                  {strings.Provision.StatusMenuLabel}
-                </MenuItem>
-                {props.pageContext.legacyPageContext.isSiteAdmin && (
+                {!props.hideStatusMenu && (
                   <MenuItem
                     {...restoreFocusTargetAttribute}
                     onClick={() => {
-                      setState({ showProvisionSettings: true })
+                      setState({ showProvisionStatus: true })
                     }}
                   >
-                    {strings.Provision.SettingsMenuLabel}
+                    {strings.Provision.StatusMenuLabel}
                   </MenuItem>
                 )}
+                {props.pageContext.legacyPageContext.isSiteAdmin ||
+                  (!props.hideSettingsMenu && (
+                    <MenuItem
+                      {...restoreFocusTargetAttribute}
+                      onClick={() => {
+                        setState({ showProvisionSettings: true })
+                      }}
+                    >
+                      {strings.Provision.SettingsMenuLabel}
+                    </MenuItem>
+                  ))}
               </MenuList>
             </MenuPopover>
           </Menu>
@@ -108,7 +111,14 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
 }
 
 ProjectProvision.defaultProps = {
-  disabled: false,
+  buttonLabel: strings.Provision.ProvisionButtonLabel,
+  level0Header: strings.Provision.DrawerLevel0HeaderText,
+  level0Description: strings.Provision.DrawerLevel0DescriptionText,
+  level1Header: strings.Provision.DrawerLevel1HeaderText,
+  level1Description: strings.Provision.DrawerLevel1DescriptionText,
+  level2Header: strings.Provision.DrawerLevel2HeaderText,
+  level2Description: strings.Provision.DrawerLevel2DescriptionText,
+  footerDescription: strings.Provision.DrawerFooterDescriptionText,
   icon: getFluentIcon('Add'),
   appearance: 'primary',
   size: 'large'
