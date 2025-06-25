@@ -165,8 +165,18 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                         }}
                       >
                         {context.state.types.map((type) => (
-                          <Option key={type.title} value={type.title}>
-                            {type.title}
+                          <Option key={type.title} text={type.title} title={type.description}>
+                            <Tag
+                              className={styles.siteTag}
+                              media={<img className={styles.siteImage} src={type.image?.Url} />}
+                              appearance='outline'
+                              size='medium'
+                            >
+                              <div className={styles.siteDropdown}>
+                                <span>{type.title}</span>
+                                <div className={styles.description}>{type.description}</div>
+                              </div>
+                            </Tag>
                           </Option>
                         ))}
                       </Dropdown>

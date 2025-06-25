@@ -34,12 +34,8 @@ export function useProjectProvisionDataFetch(
               )
           ),
           teamTemplates,
-          sensitivityLabels: sensitivityLabels.filter(
-            (label) => !label.isLibrary
-          ),
-          sensitivityLabelsLibrary: sensitivityLabels.filter(
-            (label) => label.isLibrary
-          ),
+          sensitivityLabels: sensitivityLabels.filter((label) => !label.isLibrary),
+          sensitivityLabelsLibrary: sensitivityLabels.filter((label) => label.isLibrary),
           retentionLabels,
           requests,
           loading: false,

@@ -25,9 +25,7 @@ export const SiteType: FC<ISiteType> = (props) => {
       )}
       <CardHeader
         header={<Text weight='semibold'>{props.title}</Text>}
-        description={
-          !isMinimal && <Caption1 className={styles.caption}>{props.description}</Caption1>
-        }
+        description={<Caption1 className={styles.caption}>{props.description}</Caption1>}
       />
     </Card>
   )

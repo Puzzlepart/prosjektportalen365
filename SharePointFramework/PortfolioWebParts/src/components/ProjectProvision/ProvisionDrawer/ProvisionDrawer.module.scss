@@ -55,3 +55,31 @@
 .footer {
   justify-content: space-between;
 }
+
+.siteTag {
+  display: flex;
+  flex-direction: row;
+  height: 42px;
+  width: 100%;
+  overflow: hidden;
+
+  img.siteImage {
+    height: 38px;
+    border-radius: var(--borderRadiusSmall);
+    object-fit: cover;
+  }
+
+  .siteDropdown {
+    display: flex;
+    flex-direction: column;
+
+    .description {
+      width: 90%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--colorNeutralForeground3);
+      font-size: var(--fontSizeBase200);
+      line-height: var(--lineHeightBase200);
+    }
+  }
+}

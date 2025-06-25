@@ -186,7 +186,8 @@ export function useEditableColumn(
       const defaultSensitivityLabel =
         typeDefaults?.defaultSensitivityLabel || getGlobalSetting('DefaultSensitivityLabel')
       const defaultSensitivityLabelLibrary =
-        typeDefaults?.defaultSensitivityLabelLibrary || getGlobalSetting('DefaultSensitivityLabelLibrary')
+        typeDefaults?.defaultSensitivityLabelLibrary ||
+        getGlobalSetting('DefaultSensitivityLabelLibrary')
       const defaultRetentionLabel =
         typeDefaults?.defaultRetentionLabel || getGlobalSetting('DefaultRetentionLabel')
       const defaultVisibility =
