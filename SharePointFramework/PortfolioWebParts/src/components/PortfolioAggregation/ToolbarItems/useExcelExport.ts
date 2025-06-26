@@ -13,11 +13,7 @@ import { IPortfolioAggregationContext } from '../context'
  */
 export function useExcelExport(context: IPortfolioAggregationContext) {
   ExcelExportService.configure({
-    name: context.props.title,
-    newSheet: {
-      name: 'Målinger',
-      column: 'Measurements'
-    }
+    name: context.props.title
   })
 
   /**
