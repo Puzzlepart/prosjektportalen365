@@ -195,6 +195,7 @@ export function useEditableColumn(
           ? strings.Provision.PrivacyFieldOptionPublic
           : strings.Provision.PrivacyFieldOptionPrivate
       const enableExternalSharing = getGlobalSetting('EnableExternalSharingByDefault')
+      const defaultTeamify = typeDefaults?.teamify
 
       $setColumn((prev) => {
         const newColumns = new Map(prev)
@@ -204,6 +205,7 @@ export function useEditableColumn(
         newColumns.set('sensitivityLabelLibrary', defaultSensitivityLabelLibrary)
         newColumns.set('retentionLabel', defaultRetentionLabel)
         newColumns.set('externalSharing', enableExternalSharing)
+        newColumns.set('teamify', defaultTeamify)
 
         setState({
           properties: {
@@ -212,7 +214,8 @@ export function useEditableColumn(
             sensitivityLabel: defaultSensitivityLabel,
             sensitivityLabelLibrary: defaultSensitivityLabelLibrary,
             retentionLabel: defaultRetentionLabel,
-            externalSharing: enableExternalSharing
+            externalSharing: enableExternalSharing,
+            teamify: defaultTeamify
           }
         })
         return newColumns
