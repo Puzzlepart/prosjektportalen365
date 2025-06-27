@@ -112,6 +112,7 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
 
 ProjectProvision.defaultProps = {
   buttonLabel: strings.Provision.ProvisionButtonLabel,
+  autoOwner: true,
   level0Header: strings.Provision.DrawerLevel0HeaderText,
   level0Description: strings.Provision.DrawerLevel0DescriptionText,
   level1Header: strings.Provision.DrawerLevel1HeaderText,

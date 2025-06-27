@@ -62,6 +62,15 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                   label: 'Tekst på knapp',
                   description: 'Tekst som vises på knappen for å åpne bestillingsskjemaet.',
                   placeholder: strings.Provision.ProvisionButtonLabel
+                }),
+                PropertyPaneToggle('autoOwner', {
+                  label: 'Angi nåværende bruker som eier',
+                  checked: propertiesWithDefaults.autoOwner,
+                  onText: 'På',
+                  offText: 'Av'
+                }),
+                PropertyPaneLabel('propertyEditorLabel', {
+                  text: 'Hvis aktivert, vil den nåværende brukeren bli satt som eier av det nye området.'
                 })
               ]
             },
@@ -86,7 +95,7 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                 PropertyPaneTextField('level0Header', {
                   label: 'Nivå 0 Tittel',
                   description: 'Tittel som vises i første nivå.',
-                  placeholder: strings.Provision.DrawerLevel0HeaderText,
+                  placeholder: strings.Provision.DrawerLevel0HeaderText
                 }),
                 PropertyPaneTextField('level0Description', {
                   label: 'Beskrivelse',
@@ -98,7 +107,7 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                 PropertyPaneTextField('level1Header', {
                   label: 'Nivå 1 Tittel',
                   description: 'Tittel som vises i andre nivå.',
-                  placeholder: strings.Provision.DrawerLevel1HeaderText,
+                  placeholder: strings.Provision.DrawerLevel1HeaderText
                 }),
                 PropertyPaneTextField('level1Description', {
                   label: 'Beskrivelse',
@@ -110,7 +119,7 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                 PropertyPaneTextField('level2Header', {
                   label: 'Nivå 2 Tittel',
                   description: 'Tittel som vises i tredje nivå.',
-                  placeholder: strings.Provision.DrawerLevel2HeaderText,
+                  placeholder: strings.Provision.DrawerLevel2HeaderText
                 }),
                 PropertyPaneTextField('level2Description', {
                   label: 'Beskrivelse',

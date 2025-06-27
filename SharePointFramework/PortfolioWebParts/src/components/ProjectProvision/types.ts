@@ -4,6 +4,7 @@ import { IBaseComponentProps } from 'components/types'
 export interface IProjectProvisionProps extends IBaseComponentProps {
   // General
   buttonLabel?: string
+  autoOwner?: boolean
 
   // Visuals
   siteTypeRenderMode?: string
