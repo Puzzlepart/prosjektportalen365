@@ -93,6 +93,11 @@ export const useProvisionDrawer = () => {
       (t) => t.labelName === context.column.get('sensitivityLabelLibrary')
     )?.labelId
 
+    const expirationDate =
+      context.props.expirationDateMode === 'date'
+        ? context.column.get('expirationDate')
+        : context.state.properties.expirationDate
+
     const requestItem: IProvisionRequestItem = {
       Title: context.column.get('name'),
       SpaceDisplayName: name,
@@ -116,7 +121,7 @@ export const useProvisionDrawer = () => {
       SensitivityLabelLibraryName: context.column.get('sensitivityLabelLibrary'),
       SensitivityLabelLibraryId: sensitivityLabelLibraryId,
       RetentionLabelName: context.column.get('retentionLabel'),
-      ExpirationDate: context.column.get('expirationDate'),
+      ExpirationDate: expirationDate,
       ReadOnlyGroup: context.column.get('readOnlyGroup'),
       InternalChannel: context.column.get('internalChannel'),
       RequestedSource: strings.Provision.RequestedSource,

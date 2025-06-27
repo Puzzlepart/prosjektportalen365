@@ -8,6 +8,7 @@ export interface IProjectProvisionProps extends IBaseComponentProps {
 
   // Visuals
   siteTypeRenderMode?: string
+  expirationDateMode?: string
 
   // Titles and descriptions
   level0Header?: string

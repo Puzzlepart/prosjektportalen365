@@ -25,7 +25,8 @@
       "officeFabricIconFontName": "BuildDefinition",
       "properties": {
         "buttonLabel": "Bestill område",
-        "autoOwner": true
+        "autoOwner": true,
+        "expirationDateMode": "date"
       }
     }
   ]

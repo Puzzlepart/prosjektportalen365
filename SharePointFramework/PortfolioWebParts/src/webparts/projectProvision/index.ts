@@ -85,6 +85,14 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                     { key: 'dropdown', text: 'Nedtrekksliste' }
                   ],
                   selectedKey: propertiesWithDefaults.siteTypeRenderMode ?? 'cardNormal'
+                }),
+                PropertyPaneDropdown('expirationDateMode', {
+                  label: 'Utløpsdato felt',
+                  options: [
+                    { key: 'date', text: 'Datofelt' },
+                    { key: 'monthDropdown', text: 'Nedtrekk (måneder)' }
+                  ],
+                  selectedKey: propertiesWithDefaults.expirationDateMode ?? 'date'
                 })
               ]
             },

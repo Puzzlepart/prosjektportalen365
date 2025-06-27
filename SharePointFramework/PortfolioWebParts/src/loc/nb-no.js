@@ -155,6 +155,8 @@ define([], function () {
       RequestedSource: 'Prosjektportalen - Bestillingsskjema',
       NotConfiguredTitle: 'Ikke konfigurert',
       NotConfiguredText: 'Det er ikke konfigurert url til Bestillingsportalen. Vennligst angi dette i webdelen.',
+      ExpirationDateNoneOption: 'Ingen utløpsdato',
+      ExpirationDateMonthOption: '{0} måned(er)',
     },
     AddColumnLabel: 'Legg til en kolonne',
     AllProjectsHeaderText: 'Alle prosjekter/program',

@@ -115,6 +115,19 @@ export function useEditableColumn(
           }
           return null
         }
+      ],
+      [
+        'expirationDate',
+        () => {
+          if (props.expirationDateMode !== 'date') {
+            if (value && value !== '0') {
+              const date = new Date()
+              date.setMonth(date.getMonth() + parseInt(value, 10))
+              return date.toISOString()
+            }
+            return
+          }
+        }
       ]
     ])
     if (valueMap.has(field)) {

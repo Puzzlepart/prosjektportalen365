@@ -155,6 +155,8 @@ declare interface IPortfolioWebPartsStrings {
     RequestedSource: string
     NotConfiguredTitle: string
     NotConfiguredText: string
+    ExpirationDateNoneOption: string
+    ExpirationDateMonthOption: string
   },
   AddColumnLabel: string
   AllProjectsHeaderText: string

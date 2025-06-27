@@ -36,7 +36,7 @@ import { Guest } from './Guest'
 import { ImageUpload } from './ImageUpload'
 import { DebugModel } from './DebugModel'
 import { IProvisionDrawerProps } from './types'
-import { DayOfWeek } from '@fluentui/react'
+import { DayOfWeek, format } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/core'
 
 export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
@@ -540,16 +540,41 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   required={getField('expirationDate').required}
                   hidden={getField('expirationDate').hidden || !enableExpirationDate}
                 >
-                  <DatePicker
-                    value={context.column.get('expirationDate')}
-                    onSelectDate={(date) => context.setColumn('expirationDate', date)}
-                    formatDate={(date) => date.toLocaleDateString()}
-                    placeholder={strings.Placeholder.DatePicker}
-                    firstDayOfWeek={DayOfWeek.Monday}
-                    showWeekNumbers
-                    allowTextInput
-                    showMonthPickerAsOverlay={false}
-                  />
+                  {context.props.expirationDateMode === 'date' ? (
+                    <DatePicker
+                      value={context.column.get('expirationDate')}
+                      onSelectDate={(date) => context.setColumn('expirationDate', date)}
+                      formatDate={(date) => date.toLocaleDateString()}
+                      placeholder={strings.Placeholder.DatePicker}
+                      firstDayOfWeek={DayOfWeek.Monday}
+                      showWeekNumbers
+                      allowTextInput
+                      showMonthPickerAsOverlay={false}
+                    />
+                  ) : (
+                    <Dropdown
+                      defaultValue={strings.Provision.ExpirationDateNoneOption}
+                      defaultSelectedOptions={['0']}
+                      onOptionSelect={(_, data) => {
+                        context.setColumn('expirationDate', data.optionValue)
+                      }}
+                    >
+                      <Option value='0' text={strings.Provision.ExpirationDateNoneOption}>
+                        {strings.Provision.ExpirationDateNoneOption}
+                      </Option>
+                      {[1, 3, 6, 12, 24].map((month) => {
+                        return (
+                          <Option
+                            key={month.toString()}
+                            value={month.toString()}
+                            text={format(strings.Provision.ExpirationDateMonthOption, month)}
+                          >
+                            {format(strings.Provision.ExpirationDateMonthOption, month)}
+                          </Option>
+                        )
+                      })}
+                    </Dropdown>
+                  )}
                 </FieldContainer>
               </div>
             </DrawerBody>
