@@ -119,8 +119,8 @@ $TemplatesBasePath = "$PSScriptRoot/Templates"
 #region Print installation user
 Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
 $CurrentUser = Get-PnPProperty -Property CurrentUser -ClientObject (Get-PnPContext).Web -ErrorAction SilentlyContinue
-if ($null -ne $CurrentUser -and $CurrentUser.Email) {
-    Write-Host "[INFO] Installing with user [$($CurrentUser.Email)]"
+if ($null -ne $CurrentUser -and $CurrentUser.LoginName) {
+    Write-Host "[INFO] Installing with user [$($CurrentUser.LoginName)]"
 }
 else {
     Write-Host "[WARNING] Failed to get current user. Assuming installation is done with an app or a service principal without e-mail." -ForegroundColor Yellow
@@ -534,8 +534,8 @@ $InstallEntry = @{
     InstallChannel   = $Channel;
 }
 
-if ($null -ne $CurrentUser -and $CurrentUser.Email) {
-    $InstallEntry.InstallUser = $CurrentUser.Email
+if ($null -ne $CurrentUser -and $CurrentUser.LoginName) {
+    $InstallEntry.InstallUser = $CurrentUser.LoginName
 }
 
 if ($CI.IsPresent) {
