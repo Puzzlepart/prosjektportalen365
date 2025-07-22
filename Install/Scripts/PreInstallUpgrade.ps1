@@ -112,8 +112,24 @@ if ($null -ne $LastInstall) {
                 $Field.Context.ExecuteQuery()
             }
 
-        } catch {
+        }
+        catch {
             Write-Host "[ERROR] Failed to change fieldtype of GtUNSustDevGoalsText" -ForegroundColor Yellow
         }
     }
+    
+    if ($PreviousVersion -lt [version]"1.12.0") {
+        Write-Host "[INFO] Changing fieldtype of Installasjonslogg/InstallCommand from Text to Note"
+        try {
+            $Field = Get-PnPField -Identity "InstallCommand" -List "Installasjonslogg" -Includes FieldTypeKind
+            if ($null -ne $Field) {
+                $Field.FieldTypeKind = [Microsoft.SharePoint.Client.FieldType]::Note
+                $Field.Update()
+                $Field.Context.ExecuteQuery()
+            }
+        }
+        catch {
+            Write-Host "[ERROR] Failed to change fieldtype of InstallCommand" -ForegroundColor Yellow
+        }        
+    }    
 }
