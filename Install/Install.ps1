@@ -310,6 +310,7 @@ if (-not $SkipAppPackages.IsPresent) {
         if (-not $TenantAppCatalogUrl) {
             Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
             $TenantAppCatalogUrl = Get-PnPTenantAppCatalogUrl -ErrorAction SilentlyContinue
+            Set-PnPTenantSite -Url $TenantAppCatalogUrl -Owners $UserName -ErrorAction SilentlyContinue
         }
         Connect-SharePoint -Url $TenantAppCatalogUrl -ConnectionInfo $ConnectionInfo
     }
