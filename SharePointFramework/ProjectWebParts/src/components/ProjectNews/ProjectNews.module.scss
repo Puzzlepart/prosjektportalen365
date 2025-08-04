@@ -7,21 +7,25 @@
     gap: 15px;
     padding: 20px;
   }
-   .createNewsLinkContainer {
+
+  .createNewsLinkContainer {
     margin-bottom: 32px;
   }
+
   .loadingContainer {
     margin-top: 32px;
     margin-bottom: 24px;
     display: flex;
     justify-content: center;
   }
+
   .errorContainer {
     margin-top: 32px;
     margin-bottom: 24px;
     display: flex;
     justify-content: center;
   }
+
   .button {
     justify-content: flex-start;
     font-weight: var(--fontWeightRegular);

@@ -6,13 +6,16 @@
   min-width: 320px;
   margin: 0 auto;
 }
+
 .fieldContainer {
   margin-bottom: 12px;
 }
+
 .toggleButton {
   margin-top: 12px;
   margin-bottom: 24px;
 }
+
 .centeredSpinner,
 .centeredSuccess {
   display: flex;
@@ -21,12 +24,14 @@
   justify-content: center;
   min-height: 200px;
 }
+
 .drawerBody {
   height: 100%;
   padding: 0;
   display: flex;
   flex-direction: column;
 }
+
 .previewIframe {
   width: 100%;
   height: 100%;
@@ -35,6 +40,7 @@
   background: #fff;
   flex: 1 1 auto;
 }
+
 @media (max-width: 700px) {
   .dialogBody {
     max-width: 95vw;
