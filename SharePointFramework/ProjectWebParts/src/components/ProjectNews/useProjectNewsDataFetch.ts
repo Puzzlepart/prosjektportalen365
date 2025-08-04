@@ -30,8 +30,8 @@ export function useProjectNewsDataFetch(
           `${props.siteUrl}/_api/web/GetListUsingPath(DecodedUrl=@a1)/items` +
           `?@a1='${sitePagesServerRelativeUrl}'` +
           `&$filter=FileDirRef eq '${folderServerRelativeUrl}'` +
-          `&$select=Id,PromotedState,Title,FileLeafRef,BannerImageUrl,Description,Author/Title,Editor/Title,Modified,File/ServerRelativeUrl,File/Name,File/TimeLastModified` +
-          `&$expand=Author,Editor,File`
+          '&$select=Id,PromotedState,Title,FileLeafRef,BannerImageUrl,Description,Author/Title,Editor/Title,Modified,File/ServerRelativeUrl,File/Name,File/TimeLastModified' +
+          '&$expand=Author,Editor,File'
 
         const res = await props.spHttpClient.get(url, SPHttpClient.configurations.v1)
         const data = await res.json()

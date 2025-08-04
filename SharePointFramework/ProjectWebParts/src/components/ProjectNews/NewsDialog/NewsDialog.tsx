@@ -93,10 +93,10 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
                   <Dropdown
                     id='template-dropdown'
                     value={
-                      templates.find((t) => t.ServerRelativeUrl === selectedTemplate)?.Name ?? ''
+                      templates.find((t) => t.ServerRelativeUrl === selectedTemplate)?.Title ?? ''
                     }
                     onOptionSelect={(_, data) => {
-                      const selected = templates.find((t) => t.Name === data.optionValue)
+                      const selected = templates.find((t) => t.Title === data.optionValue)
                       if (selected) {
                         onTemplateChange(_, { optionValue: selected.ServerRelativeUrl })
                       }
@@ -104,8 +104,8 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
                     placeholder={strings.TemplatePlaceholder}
                   >
                     {templates.map((t) => (
-                      <Option key={t.ServerRelativeUrl} value={t.Name}>
-                        {t.Name}
+                      <Option key={t.ServerRelativeUrl} value={t.Title}>
+                        {t.Title}
                       </Option>
                     ))}
                   </Dropdown>

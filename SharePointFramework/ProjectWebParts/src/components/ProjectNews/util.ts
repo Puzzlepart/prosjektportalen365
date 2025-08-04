@@ -1,5 +1,5 @@
 import { SPHttpClient, SPHttpClientResponse } from '@microsoft/sp-http'
-
+import { stringIsNullOrEmpty } from '@pnp/core'
 import * as strings from 'ProjectWebPartsStrings'
 import { NewsItem, TemplateFile } from './types'
 
@@ -107,20 +107,23 @@ export function getNewsEditUrl(siteUrl: string, folderName: string, pageName: st
 }
 
 /**
- * Retrieves document templates from the 'Templates' folder in the SitePages library.
+ * Retrieves site page templates from the 'Templates' folder in the SitePages library.
  * @param siteUrl URL of the site to retrieve the templates from
  * @param spHttpClient SPHttpClient to use for the operation
- * @returns Promise that resolves with an array of templates, represented as objects with `Name` and `ServerRelativeUrl` properties
+ * @returns Promise that resolves with an array of templates, represented as objects with `Name`, `Title` and `ServerRelativeUrl` properties
  */
 export async function getTemplates(
   siteUrl: string,
   spHttpClient: SPHttpClient
 ): Promise<TemplateFile[]> {
-  const url = `${siteUrl}/_api/web/GetFolderByServerRelativeUrl('SitePages/Templates')/Files?$select=Name,ServerRelativeUrl`
+  const url = `${siteUrl}/_api/web/GetFolderByServerRelativeUrl('SitePages/Templates')/Files?$select=Name,Title,ServerRelativeUrl`
   try {
     const res = await spHttpClient.get(url, SPHttpClient.configurations.v1)
     const data = await res.json()
-    return data.value || []
+    return (data.value || []).map((item: any) => ({
+      ...item,
+      Title: stringIsNullOrEmpty(item.Title) ? item.Name.replace(/\.aspx$/i, '') : item.Title
+    }))
   } catch {
     return []
   }

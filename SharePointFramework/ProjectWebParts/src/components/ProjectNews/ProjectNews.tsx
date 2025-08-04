@@ -88,6 +88,5 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
   )
 }
 ProjectNews.defaultProps = {
-  siteUrl: 'https://puzzlepart.sharepoint.com/sites/prosjektportalen-news',
   maxVisibleNews: 6
 }

@@ -114,6 +114,12 @@ export interface TemplateFile {
    * The name of the template file, e.g., "Project-Template.aspx"
    */
   Name: string
+
+  /**
+   * The title of the template file
+   */
+  Title: string
+
   /**
    * The server-relative URL of the template file
    */
