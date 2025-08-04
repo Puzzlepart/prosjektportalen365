@@ -1,12 +1,12 @@
-import * as React from 'react'
+import React, { FC, useState } from 'react'
 import { Card, CardHeader, Link, Text, Button } from '@fluentui/react-components'
-
 import * as strings from 'ProjectWebPartsStrings'
 import styles from './RecentNews.module.scss'
 import { RecentNewsListProps } from '../types'
+import { getFluentIcon } from 'pp365-shared-library'
 
-const RecentNewsList: React.FC<RecentNewsListProps> = ({ news, maxVisible = 6 }) => {
-  const [showAll, setShowAll] = React.useState(false)
+const RecentNewsList: FC<RecentNewsListProps> = ({ news, maxVisible = 6 }) => {
+  const [showAll, setShowAll] = useState(false)
   const visibleNews = showAll ? news : news.slice(0, maxVisible)
 
   return (
@@ -31,7 +31,7 @@ const RecentNewsList: React.FC<RecentNewsListProps> = ({ news, maxVisible = 6 })
                       {item.authorName && <span>{item.authorName}</span>}
                       {item.modifiedDate && (
                         <>
-                          {' · '}
+                          {' | '}
                           <span>
                             {strings.EditedLabel} {new Date(item.modifiedDate).toLocaleDateString()}
                           </span>
@@ -48,24 +48,17 @@ const RecentNewsList: React.FC<RecentNewsListProps> = ({ news, maxVisible = 6 })
               </Card>
             ))}
           </div>
-          {!showAll && news.length > maxVisible && (
+          <div hidden={news.length <= maxVisible}>
             <Button
-              appearance='secondary'
-              onClick={() => setShowAll(true)}
-              className={styles.showMoreButton}
+              appearance='subtle'
+              size='small'
+              icon={showAll ? getFluentIcon('ChevronUp') : getFluentIcon('ChevronDown')}
+              title={showAll ? strings.ShowLessNews : strings.ShowMoreNews}
+              onClick={() => setShowAll(!showAll)}
             >
-              {strings.ShowMoreNews}
+              {showAll ? strings.ShowLessNews : strings.ShowMoreNews}
             </Button>
-          )}
-          {showAll && news.length > maxVisible && (
-            <Button
-              appearance='secondary'
-              onClick={() => setShowAll(false)}
-              className={styles.showMoreButton}
-            >
-              {strings.ShowLessNews}
-            </Button>
-          )}
+          </div>
         </>
       )}
     </>
