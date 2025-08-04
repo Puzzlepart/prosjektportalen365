@@ -107,7 +107,7 @@ export function getNewsEditUrl(siteUrl: string, folderName: string, pageName: st
 }
 
 /**
- * Retrieves site page templates from the 'Templates' folder in the SitePages library.
+ * Retrieves site page templates from the 'Maler' folder in the SitePages library.
  * @param siteUrl URL of the site to retrieve the templates from
  * @param spHttpClient SPHttpClient to use for the operation
  * @returns Promise that resolves with an array of templates, represented as objects with `Name`, `Title` and `ServerRelativeUrl` properties
@@ -116,7 +116,7 @@ export async function getTemplates(
   siteUrl: string,
   spHttpClient: SPHttpClient
 ): Promise<TemplateFile[]> {
-  const url = `${siteUrl}/_api/web/GetFolderByServerRelativeUrl('SitePages/Templates')/Files?$select=Name,Title,ServerRelativeUrl`
+  const url = `${siteUrl}/_api/web/GetFolderByServerRelativeUrl('SitePages/Maler')/Files?$select=Name,Title,ServerRelativeUrl`
   try {
     const res = await spHttpClient.get(url, SPHttpClient.configurations.v1)
     const data = await res.json()

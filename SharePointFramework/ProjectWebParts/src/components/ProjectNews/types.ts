@@ -106,7 +106,7 @@ export interface RecentNewsListProps extends IProjectNewsData {
 }
 
 /**
- * Represents a template file in the Site Pages/Templates folder.
+ * Represents a template file in the SitePages/Maler folder.
  * Used for creating new news articles based on templates.
  */
 export interface TemplateFile {
