@@ -53,7 +53,7 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
     <>
       <Dialog open={open} onOpenChange={(_, data) => onOpenChange(data.open)}>
         <DialogSurface>
-          <DialogTitle style={{ textAlign: 'center' }}>{strings.DialogueTitle}</DialogTitle>
+          <DialogTitle style={{ textAlign: 'center' }}>{strings.DialogTitle}</DialogTitle>
           <DialogBody className={styles.dialogBody}>
             {spinnerMode === 'creating' ? (
               <div className={styles.centeredSpinner}>

@@ -289,7 +289,7 @@ define([], function () {
     PhaseCheckListItem: 'Sjekkpunkt {0}',
     // Project News Web Part strings
     ProjectNewsWebPartTitle: 'Prosjektnyheter',
-    DialogueTitle: 'Opprett nyhetsartikkel',
+    DialogTitle: 'Opprett nyhetsartikkel',
     CreatingNewArticleStatus: 'Oppretter nyhetsartikkel...',
     NewsCreatedSuccessfully: 'Nyhetsartikkelen ble opprettet.',
     NewsTitleLabel: 'Tittel',
