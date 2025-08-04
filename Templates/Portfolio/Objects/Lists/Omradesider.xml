@@ -11,7 +11,7 @@
                 <FieldRef Name="DocIcon" />
                 <FieldRef Name="LinkFilename" />
                 <FieldRef Name="GtSiteId" />
-                <FieldRef Name="GtHubUrl" />
+                <FieldRef Name="GtHubSiteId" />
                 <FieldRef Name="Editor" />
                 <FieldRef Name="Modified" />
                 <FieldRef Name="Author" />
@@ -26,7 +26,7 @@
     </pnp:Folders>
     <pnp:FieldRefs>
         <pnp:FieldRef ID="fba7ced6-9970-4b14-ab9c-7c809310d86d" Name="GtSiteId" DisplayName="{resource:SiteFields_GtSiteId_DisplayName}" />
-        <pnp:FieldRef ID="35ab9d89-e011-4418-96b7-2beab470962f" Name="GtHubUrl" DisplayName="{resource:SiteFields_GtHubUrl_DisplayName}" />
+        <pnp:FieldRef ID="4d1ed0ee-e8be-4bcd-be4a-38da2d732cfe" Name="GtHubSiteId" DisplayName="{resource:SiteFields_GtHubSiteId_DisplayName}" />
     </pnp:FieldRefs>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>

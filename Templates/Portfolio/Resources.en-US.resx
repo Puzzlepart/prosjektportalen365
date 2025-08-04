@@ -2711,10 +2711,10 @@
   <data name="SiteFields_GtFieldOverrides_Description" xml:space="preserve">
     <value>Tilpassede feltinnstillinger i JSON-format. Objektformat med konfigurasjonsnavnet først, deretter ett objekt med lokalene som nøkkel og feltinnstillingene (f.eks. displayName eller description) som verdi.</value>
   </data>
-  <data name="SiteFields_GtHubUrl_DisplayName" xml:space="preserve">
-    <value>Hub URL</value>
+  <data name="SiteFields_GtHubSiteId_DisplayName" xml:space="preserve">
+    <value>Hub-ID</value>
   </data>
-  <data name="SiteFields_GtHubUrl_Description" xml:space="preserve">
-    <value>The URL of the hub site where the news article was originally published. This field is used to track the source hub, especially in environments with multiple hubs and cross-publishing.</value>
+  <data name="SiteFields_GtHubSiteId_Description" xml:space="preserve">
+    <value>The ID of the hub site.</value>
   </data>
 </root>
