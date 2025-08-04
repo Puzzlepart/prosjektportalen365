@@ -288,7 +288,7 @@ define([], function () {
     Yes: 'Ja',
     PhaseCheckListItem: 'Sjekkpunkt {0}',
     // Project News Web Part strings
-    ProjectNewsWebPartTitle: 'Prosjekt Nyheter',
+    ProjectNewsWebPartTitle: 'Prosjektnyheter',
     DialogueTitle: 'Opprett nyhetsartikkel',
     CreatingNewArticleStatus: 'Oppretter nyhetsartikkel...',
     NewsCreatedSuccessfully: 'Nyhetsartikkelen ble opprettet.',
@@ -311,7 +311,7 @@ define([], function () {
     SiteUrlLabel: 'URL til området',
     SiteUrlDescription: 'Angi URL-en til området der nyhetene skal publiseres.',
     NewsFolderNameDescription: 'Angi navnet på mappen der nyhetsartiklene skal lagres.',
-    NewsFolderNameDefault: 'Prosjekt Nyheter',
+    NewsFolderNameDefault: 'Prosjektnyheter',
     NewsFolderNameLabel: 'Mappenavn',
     FileNameRequired: 'Filnavn er påkrevd.',
     FileNameTooLong: 'Filnavn er for langt.',
