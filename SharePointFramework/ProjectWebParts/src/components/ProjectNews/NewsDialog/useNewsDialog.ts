@@ -37,10 +37,13 @@ export function useProjectNewsDialog(props: IProjectNewsProps) {
     setErrorMessage('')
   }, [])
 
-  const handleTemplateChange = useCallback((_: React.FormEvent, data: { optionValue: string }): void => {
-    setSelectedTemplate(data.optionValue)
-    setErrorMessage('')
-  }, [])
+  const handleTemplateChange = useCallback(
+    (_: React.FormEvent, data: { optionValue: string }): void => {
+      setSelectedTemplate(data.optionValue)
+      setErrorMessage('')
+    },
+    []
+  )
 
   const handleCreate = useCallback(
     async (e: React.FormEvent) => {

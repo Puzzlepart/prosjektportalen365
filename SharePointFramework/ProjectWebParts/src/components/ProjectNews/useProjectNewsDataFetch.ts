@@ -2,11 +2,7 @@ import { useEffect } from 'react'
 import { SPHttpClient } from '@microsoft/sp-http'
 
 import { IProjectNewsProps, IProjectNewsState, NewsItem } from './types'
-import {
-  getNewsImageUrl,
-  getServerRelativeUrl,
-  ensureAllNewsPromoted,
-} from './util'
+import { getNewsImageUrl, getServerRelativeUrl, ensureAllNewsPromoted } from './util'
 import strings from 'ProjectWebPartsStrings'
 
 /**

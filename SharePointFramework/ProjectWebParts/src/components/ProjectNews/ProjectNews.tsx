@@ -49,7 +49,8 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
                 aria-label={strings.CreateNewsLinkLabel}
                 role='button'
                 tabIndex={0}
-                aria-haspopup='dialog'>
+                aria-haspopup='dialog'
+              >
                 {strings.CreateNewsLinkLabel}
               </Button>
             </div>

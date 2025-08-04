@@ -52,7 +52,8 @@ const RecentNewsList: React.FC<RecentNewsListProps> = ({ news, maxVisible = 6 })
             <Button
               appearance='secondary'
               onClick={() => setShowAll(true)}
-              className={styles.showMoreButton}>
+              className={styles.showMoreButton}
+            >
               {strings.ShowMoreNews}
             </Button>
           )}
@@ -60,7 +61,8 @@ const RecentNewsList: React.FC<RecentNewsListProps> = ({ news, maxVisible = 6 })
             <Button
               appearance='secondary'
               onClick={() => setShowAll(false)}
-              className={styles.showMoreButton}>
+              className={styles.showMoreButton}
+            >
               {strings.ShowLessNews}
             </Button>
           )}

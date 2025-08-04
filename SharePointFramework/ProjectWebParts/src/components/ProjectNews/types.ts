@@ -7,7 +7,6 @@ import {
 } from 'pp365-shared-library/lib/components/BaseWebPartComponent'
 
 export interface IProjectNewsProps extends IBaseWebPartComponentProps {
-
   /**
    * The context of the web part, used for making SharePoint HTTP requests.
    * This is typically provided by the SharePoint Framework.
@@ -51,12 +50,12 @@ export interface NewsItem {
   /**
    * Unique identifier for the news item
    */
-  Id: number,
+  Id: number
   /**
    * The state of the news item, indicating its visibility or promotion status.
    * 0 for draft, 1 for published, and 2 for promoted. This is the promoted state in SharePoint.
    */
-  PromotedState: number,
+  PromotedState: number
   /**
    * Display name/title for the news card
    */

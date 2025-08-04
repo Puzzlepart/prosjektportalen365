@@ -72,7 +72,8 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
                   validationMessage={errorMessage}
                   validationState={errorMessage ? 'error' : undefined}
                   iconName='TextBulletList'
-                  className={styles.fieldContainer}>
+                  className={styles.fieldContainer}
+                >
                   <Input
                     ref={inputRef}
                     type='text'
@@ -89,7 +90,8 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
                   validationState={!isTemplateValid ? 'error' : undefined}
                   validationMessage={!isTemplateValid ? strings.TemplateRequired : undefined}
                   iconName='ChevronDown'
-                  className={styles.fieldContainer}>
+                  className={styles.fieldContainer}
+                >
                   <Dropdown
                     id='template-dropdown'
                     value={
@@ -101,7 +103,8 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
                         onTemplateChange(_, { optionValue: selected.ServerRelativeUrl })
                       }
                     }}
-                    placeholder={strings.TemplatePlaceholder}>
+                    placeholder={strings.TemplatePlaceholder}
+                  >
                     {templates.map((t) => (
                       <Option key={t.ServerRelativeUrl} value={t.Name}>
                         {t.Name}
@@ -114,7 +117,8 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
                     onClick={() => setIsDrawerOpen((open) => !open)}
                     disabled={!selected}
                     appearance='secondary'
-                    {...restoreFocusTargetAttributes}>
+                    {...restoreFocusTargetAttributes}
+                  >
                     {strings.PreviewLabel}
                   </ToggleButton>
                 </FieldContainer>
@@ -144,7 +148,8 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
             inputRef.current?.focus()
           }
         }}
-        {...restoreFocusSourceAttributes}>
+        {...restoreFocusSourceAttributes}
+      >
         <DrawerHeader>
           <DrawerHeaderTitle
             action={
@@ -154,7 +159,8 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
                 icon={DismissIcon}
                 onClick={() => setIsDrawerOpen(false)}
               />
-            }>
+            }
+          >
             {strings.PreviewLabel}
           </DrawerHeaderTitle>
         </DrawerHeader>
