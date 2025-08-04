@@ -1,8 +1,12 @@
 import {
   AddFilled,
   AddRegular,
+  ApprovalsAppFilled,
+  ApprovalsAppRegular,
   AppsListFilled,
   AppsListRegular,
+  ArrowClockwiseDashesFilled,
+  ArrowClockwiseDashesRegular,
   ArrowDownloadFilled,
   ArrowDownloadRegular,
   ArrowLeftFilled,
@@ -67,6 +71,8 @@ import {
   DismissRegular,
   EditFilled,
   EditRegular,
+  ErrorCircleFilled,
+  ErrorCircleRegular,
   EyeFilled,
   EyeRegular,
   FilterFilled,
@@ -81,10 +87,16 @@ import {
   GuestRegular,
   HistoryFilled,
   HistoryRegular,
+  HourglassHalfFilled,
+  HourglassHalfRegular,
   IconsFilled,
   IconsRegular,
   ImageFilled,
   ImageRegular,
+  LibraryFilled,
+  LibraryRegular,
+  LightbulbCircleFilled,
+  LightbulbCircleRegular,
   LightbulbFilled,
   LightbulbRegular,
   LinkFilled,
@@ -117,6 +129,8 @@ import {
   QuizNewRegular,
   SettingsFilled,
   SettingsRegular,
+  SparkleCircleFilled,
+  SparkleCircleRegular,
   TableCellEditFilled,
   TableCellEditRegular,
   TableSettingsFilled,
@@ -399,6 +413,10 @@ export const iconCatalog = {
     regular: LightbulbRegular,
     filled: LightbulbFilled
   },
+  LightbulbCircle: {
+    regular: LightbulbCircleRegular,
+    filled: LightbulbCircleFilled
+  },
   Bot: {
     regular: BotRegular,
     filled: BotFilled
@@ -406,5 +424,29 @@ export const iconCatalog = {
   BotSparkle: {
     regular: BotSparkleRegular,
     filled: BotSparkleFilled
+  },
+  HourglassHalf: {
+    regular: HourglassHalfRegular,
+    filled: HourglassHalfFilled
+  },
+  ErrorCircle: {
+    regular: ErrorCircleRegular,
+    filled: ErrorCircleFilled
+  },
+  ArrowClockwiseDashes: {
+    regular: ArrowClockwiseDashesRegular,
+    filled: ArrowClockwiseDashesFilled
+  },
+  ApprovalsApp: {
+    regular: ApprovalsAppRegular,
+    filled: ApprovalsAppFilled
+  },
+  SparkleCircle: {
+    regular: SparkleCircleRegular,
+    filled: SparkleCircleFilled
+  },
+  Library: {
+    regular: LibraryRegular,
+    filled: LibraryFilled
   }
 }

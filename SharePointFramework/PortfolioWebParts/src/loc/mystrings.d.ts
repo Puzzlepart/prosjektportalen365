@@ -89,6 +89,8 @@ declare interface IPortfolioWebPartsStrings {
     GuestFieldNoOptionsText: string,
     SensitivityLabelFieldLabel: string,
     SensitivityLabelFieldDescription: string,
+    SensitivityLabelLibraryFieldLabel: string,
+    SensitivityLabelLibraryFieldDescription: string,
     RetentionLabelFieldLabel: string,
     RetentionLabelFieldDescription: string,
     ExpirationDateFieldLabel: string,
@@ -151,6 +153,10 @@ declare interface IPortfolioWebPartsStrings {
     DeletedSubmissionErrorToastTitle: string
     DeletedSubmissionErrorToastBody: string
     RequestedSource: string
+    NotConfiguredTitle: string
+    NotConfiguredText: string
+    ExpirationDateNoneOption: string
+    ExpirationDateMonthOption: string
   },
   AddColumnLabel: string
   AllProjectsHeaderText: string

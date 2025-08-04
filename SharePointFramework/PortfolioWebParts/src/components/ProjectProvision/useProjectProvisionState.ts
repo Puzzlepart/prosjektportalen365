@@ -18,6 +18,7 @@ export function useProjectProvisionState() {
     types: {},
     teamTemplates: {},
     sensitivityLabels: {},
+    sensitivityLabelsLibrary: {},
     retentionLabels: {},
     requests: [],
     properties: {},

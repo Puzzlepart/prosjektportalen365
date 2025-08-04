@@ -26,6 +26,7 @@ export function useEditableColumn(
     ['teamify', false],
     ['teamTemplate', 'Standard'],
     ['sensitivityLabel', ''],
+    ['sensitivityLabelLibrary', ''],
     ['retentionLabel', ''],
     ['expirationDate', null],
     ['readOnlyGroup', false],
@@ -114,6 +115,19 @@ export function useEditableColumn(
           }
           return null
         }
+      ],
+      [
+        'expirationDate',
+        () => {
+          if (props.expirationDateMode !== 'date') {
+            if (value && value !== '0') {
+              const date = new Date()
+              date.setMonth(date.getMonth() + parseInt(value, 10))
+              return date.toISOString()
+            }
+            return
+          }
+        }
       ]
     ])
     if (valueMap.has(field)) {
@@ -179,39 +193,67 @@ export function useEditableColumn(
   }, [state.loading])
 
   useEffect(() => {
-    if (!state.loading) {
-      const typeDefaults = state.types.find((t) => t.title === state.properties.type) || defaultType
-      const defaultConfidentialData = typeDefaults?.defaultConfidentialData
-      const defaultSensitivityLabel =
-        typeDefaults?.defaultSensitivityLabel || getGlobalSetting('DefaultSensitivityLabel')
-      const defaultRetentionLabel =
-        typeDefaults?.defaultRetentionLabel || getGlobalSetting('DefaultRetentionLabel')
-      const defaultVisibility =
-        typeDefaults?.defaultVisibility === 'Public'
-          ? strings.Provision.PrivacyFieldOptionPublic
-          : strings.Provision.PrivacyFieldOptionPrivate
-      const enableExternalSharing = getGlobalSetting('EnableExternalSharingByDefault')
+    const setDefaults = async () => {
+      if (!state.loading) {
+        const typeDefaults =
+          state.types.find((t) => t.title === state.properties.type) || defaultType
+        const defaultConfidentialData = typeDefaults?.defaultConfidentialData
+        const defaultSensitivityLabel =
+          typeDefaults?.defaultSensitivityLabel || getGlobalSetting('DefaultSensitivityLabel')
+        const defaultSensitivityLabelLibrary =
+          typeDefaults?.defaultSensitivityLabelLibrary ||
+          getGlobalSetting('DefaultSensitivityLabelLibrary')
+        const defaultRetentionLabel =
+          typeDefaults?.defaultRetentionLabel || getGlobalSetting('DefaultRetentionLabel')
+        const defaultVisibility =
+          typeDefaults?.defaultVisibility === 'Public'
+            ? strings.Provision.PrivacyFieldOptionPublic
+            : strings.Provision.PrivacyFieldOptionPrivate
+        const enableExternalSharing = getGlobalSetting('EnableExternalSharingByDefault')
+        const defaultTeamify = typeDefaults?.teamify
 
-      $setColumn((prev) => {
-        const newColumns = new Map(prev)
-        newColumns.set('isConfidential', defaultConfidentialData)
-        newColumns.set('privacy', defaultVisibility)
-        newColumns.set('sensitivityLabel', defaultSensitivityLabel)
-        newColumns.set('retentionLabel', defaultRetentionLabel)
-        newColumns.set('externalSharing', enableExternalSharing)
+        let defaultOwner: any[] = []
+        let transformedOwner: any[] = []
 
-        setState({
-          properties: {
-            ...state.properties,
-            isConfidential: defaultConfidentialData,
-            sensitivityLabel: defaultSensitivityLabel,
-            retentionLabel: defaultRetentionLabel,
-            externalSharing: enableExternalSharing
-          }
+        if (props.autoOwner) {
+          const { displayName, loginName } = props.pageContext.user
+          defaultOwner = [
+            {
+              text: displayName,
+              secondaryText: loginName
+            }
+          ]
+          transformedOwner = await transformValue(defaultOwner, 'owner')
+        }
+
+        $setColumn((prev) => {
+          const newColumns = new Map(prev)
+          newColumns.set('isConfidential', defaultConfidentialData)
+          newColumns.set('privacy', defaultVisibility)
+          newColumns.set('sensitivityLabel', defaultSensitivityLabel)
+          newColumns.set('sensitivityLabelLibrary', defaultSensitivityLabelLibrary)
+          newColumns.set('retentionLabel', defaultRetentionLabel)
+          newColumns.set('externalSharing', enableExternalSharing)
+          newColumns.set('teamify', defaultTeamify)
+          newColumns.set('owner', defaultOwner)
+
+          setState({
+            properties: {
+              ...state.properties,
+              isConfidential: defaultConfidentialData,
+              sensitivityLabel: defaultSensitivityLabel,
+              sensitivityLabelLibrary: defaultSensitivityLabelLibrary,
+              retentionLabel: defaultRetentionLabel,
+              externalSharing: enableExternalSharing,
+              teamify: defaultTeamify,
+              owner: transformedOwner
+            }
+          })
+          return newColumns
         })
-        return newColumns
-      })
+      }
     }
+    setDefaults()
   }, [state.properties.type])
 
   return {

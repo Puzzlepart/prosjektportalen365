@@ -928,8 +928,11 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           'DefaultVisibility',
           'DefaultConfidentialData',
           'ExternalSharing',
+          'Teamify',
+          'JoinHub',
           'DefaultHub',
           'DefaultSensitivityLabel',
+          'DefaultSensitivityLabelLibrary',
           'DefaultRetentionLabel'
         )
         .expand('VisibleTo')
@@ -956,8 +959,11 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
             defaultVisibility: item.DefaultVisibility,
             defaultConfidentialData: item.DefaultConfidentialData,
             externalSharing: item.ExternalSharing,
+            teamify: item.Teamify,
+            joinHub: item.JoinHub,
             defaultHub: item.DefaultHub,
             defaultSensitivityLabel: item.DefaultSensitivityLabel,
+            defaultSensitivityLabelLibrary: item.DefaultSensitivityLabelLibrary,
             defaultRetentionLabel: item.DefaultRetentionLabel
           }
         })
@@ -1083,7 +1089,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       const provisionSite = Web([this._sp.web, provisionUrl])
       const templatesList = provisionSite.lists.getByTitle('IP Labels')
       const spItems = await templatesList.items
-        .select('Id', 'Title', 'LabelName', 'LabelId', 'LabelDescription', 'Enabled')
+        .select('Id', 'Title', 'LabelName', 'LabelId', 'LabelDescription', 'Enabled', 'IsLibrary')
         .using(DefaultCaching)()
       return spItems
         .filter((item) => item.Enabled)
@@ -1093,7 +1099,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
             title: item.Title,
             labelName: item.LabelName,
             labelId: item.LabelId,
-            labelDescription: item.LabelDescription
+            labelDescription: item.LabelDescription,
+            isLibrary: item.IsLibrary
           }
         })
     } catch (error) {

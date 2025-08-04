@@ -13,6 +13,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       description: '',
       dataType: 'site',
       required: true,
+      hidden: false,
       level: 0
     },
     {
@@ -23,6 +24,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       placeholder: strings.Placeholder.SiteName,
       dataType: 'text',
       required: true,
+      hidden: false,
       level: 0
     },
     {
@@ -33,6 +35,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       placeholder: strings.Placeholder.SiteDescription,
       dataType: 'note',
       required: true,
+      hidden: false,
       level: 0
     },
     {
@@ -43,6 +46,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       placeholder: strings.Placeholder.BusinessJustificationField,
       dataType: 'note',
       required: true,
+      hidden: false,
       level: 0
     },
     {
@@ -53,6 +57,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       placeholder: strings.Placeholder.UserField,
       dataType: 'userMulti',
       required: true,
+      hidden: false,
       level: 0
     },
     {
@@ -62,6 +67,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       description: strings.Provision.MemberFieldDescription,
       placeholder: strings.Placeholder.UserField,
       dataType: 'userMulti',
+      hidden: false,
       level: 0
     },
     {
@@ -71,6 +77,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       description: strings.Provision.RequestedByFieldDescription,
       placeholder: strings.Placeholder.UserField,
       dataType: 'userMulti',
+      hidden: true,
       level: 0
     },
     {
@@ -79,6 +86,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       displayName: strings.Provision.AliasFieldLabel,
       dataType: 'text',
       disabled: true,
+      hidden: false,
       level: 0
     },
     {
@@ -87,6 +95,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       displayName: strings.Provision.UrlFieldLabel,
       dataType: 'text',
       disabled: true,
+      hidden: false,
       level: 0
     },
     {
@@ -95,6 +104,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       displayName: strings.Provision.TeamifyFieldLabel,
       description: strings.Provision.TeamifyFieldDescription,
       dataType: 'boolean',
+      hidden: false,
       level: 1
     },
     {
@@ -103,6 +113,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       displayName: strings.Provision.TeamTemplateFieldLabel,
       description: strings.Provision.TeamTemplateFieldDescription,
       dataType: 'choice',
+      hidden: false,
       level: 1
     },
     {
@@ -111,6 +122,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       displayName: strings.Provision.ConfidentialFieldLabel,
       description: strings.Provision.ConfidentialFieldDescription,
       dataType: 'boolean',
+      hidden: false,
       level: 1
     },
     {
@@ -119,6 +131,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       displayName: strings.Provision.PrivacyFieldLabel,
       description: strings.Provision.PrivacyFieldDescription,
       dataType: 'choice',
+      hidden: false,
       level: 1
     },
     {
@@ -127,6 +140,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       displayName: strings.Provision.ExternalSharingFieldLabel,
       description: strings.Provision.ExternalSharingFieldDescription,
       dataType: 'boolean',
+      hidden: false,
       level: 1
     },
     {
@@ -136,6 +150,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       description: strings.Provision.GuestFieldDescription,
       placeholder: 'Angi gjester',
       dataType: 'guest',
+      hidden: false,
       level: 1
     },
     {
@@ -144,71 +159,89 @@ export const getDefaultFields = (): IProvisionField[] => {
       displayName: strings.Provision.SensitivityLabelFieldLabel,
       description: strings.Provision.SensitivityLabelFieldDescription,
       dataType: 'choice',
+      hidden: false,
       level: 1
     },
     {
       order: 170,
-      fieldName: 'retentionLabel',
-      displayName: strings.Provision.RetentionLabelFieldLabel,
-      description: strings.Provision.RetentionLabelFieldDescription,
+      fieldName: 'sensitivityLabelLibrary',
+      displayName: strings.Provision.SensitivityLabelLibraryFieldLabel,
+      description: strings.Provision.SensitivityLabelLibraryFieldDescription,
       dataType: 'choice',
+      hidden: false,
       level: 1
     },
     {
       order: 180,
-      fieldName: 'expirationDate',
-      displayName: strings.Provision.ExpirationDateFieldLabel,
-      description: strings.Provision.ExpirationDateFieldDescription,
-      dataType: 'date',
+      fieldName: 'retentionLabel',
+      displayName: strings.Provision.RetentionLabelFieldLabel,
+      description: strings.Provision.RetentionLabelFieldDescription,
+      dataType: 'choice',
+      hidden: false,
       level: 1
     },
     {
       order: 190,
-      fieldName: 'readOnlyGroup',
-      displayName: strings.Provision.ReadOnlyGroupFieldLabel,
-      description: strings.Provision.ReadOnlyGroupFieldDescription,
-      dataType: 'boolean',
+      fieldName: 'expirationDate',
+      displayName: strings.Provision.ExpirationDateFieldLabel,
+      description: strings.Provision.ExpirationDateFieldDescription,
+      dataType: 'date',
+      hidden: false,
       level: 1
     },
     {
       order: 200,
+      fieldName: 'readOnlyGroup',
+      displayName: strings.Provision.ReadOnlyGroupFieldLabel,
+      description: strings.Provision.ReadOnlyGroupFieldDescription,
+      dataType: 'boolean',
+      hidden: true,
+      level: 2
+    },
+    {
+      order: 210,
       fieldName: 'internalChannel',
       displayName: strings.Provision.InternalChannelFieldLabel,
       description: strings.Provision.InternalChannelFieldDescription,
       dataType: 'boolean',
       disabled: true,
-      level: 1
-    },
-    {
-      order: 210,
-      fieldName: 'language',
-      displayName: strings.Provision.LanguageFieldLabel,
-      dataType: 'choice',
-      disabled: true,
-      level: 1
+      hidden: true,
+      level: 2
     },
     {
       order: 220,
-      fieldName: 'timeZone',
-      displayName: strings.Provision.TimeZoneFieldLabel,
-      dataType: 'choice',
-      disabled: true,
-      level: 1
-    },
-    {
-      order: 230,
-      fieldName: 'hubSiteTitle',
-      displayName: strings.Provision.HubSiteFieldLabel,
-      dataType: 'choice',
-      disabled: true,
-      level: 1
-    },
-    {
-      order: 240,
       fieldName: 'image',
       displayName: strings.Provision.ImageFieldLabel,
       description: strings.Provision.ImageFieldDescription,
       dataType: 'image',
+      hidden: false,
+      level: 2
+    },
+    {
+      order: 230,
+      fieldName: 'language',
+      displayName: strings.Provision.LanguageFieldLabel,
+      dataType: 'choice',
+      disabled: true,
+      hidden: false,
+      level: 2
+    },
+    {
+      order: 240,
+      fieldName: 'timeZone',
+      displayName: strings.Provision.TimeZoneFieldLabel,
+      dataType: 'choice',
+      disabled: true,
+      hidden: false,
+      level: 2
+    },
+    {
+      order: 250,
+      fieldName: 'hubSiteTitle',
+      displayName: strings.Provision.HubSiteFieldLabel,
+      dataType: 'choice',
+      disabled: true,
+      hidden: false,
       level: 2
     }
   ]

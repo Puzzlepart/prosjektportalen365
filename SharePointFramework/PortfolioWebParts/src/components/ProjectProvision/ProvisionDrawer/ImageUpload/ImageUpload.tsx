@@ -17,7 +17,8 @@ export const ImageUpload: FC<{ onImageUpload: (image: string) => void }> = ({ on
         'image/jpeg': [],
         'image/jpg': [],
         'image/png': []
-      }
+      },
+      maxSize: 1048576
     })
 
   const getColor = () => {

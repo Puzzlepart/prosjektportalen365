@@ -17,8 +17,10 @@ export interface IProvisionRequestItem {
   Guests?: any
   SensitivityLabelName?: string
   SensitivityLabelId?: string
+  SensitivityLabelLibraryName?: string
+  SensitivityLabelLibraryId?: string
   RetentionLabelName?: string
-  ExpirationDate?: Date
+  ExpirationDate?: any
   ReadOnlyGroup?: boolean
   InternalChannel?: boolean
   RequestedSource?: string

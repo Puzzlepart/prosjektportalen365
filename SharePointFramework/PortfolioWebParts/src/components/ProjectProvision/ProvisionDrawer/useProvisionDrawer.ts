@@ -17,18 +17,18 @@ export const useProvisionDrawer = () => {
   const levels = [
     {
       key: 'initial',
-      title: strings.Provision.DrawerLevel0HeaderText,
-      description: strings.Provision.DrawerLevel0DescriptionText
+      title: context.props.level0Header,
+      description: context.props.level0Description
     },
     {
       key: 'classification',
-      title: strings.Provision.DrawerLevel1HeaderText,
-      description: strings.Provision.DrawerLevel1DescriptionText
+      title: context.props.level1Header,
+      description: context.props.level1Description
     },
     {
       key: 'metadata',
-      title: strings.Provision.DrawerLevel2HeaderText,
-      description: strings.Provision.DrawerLevel2DescriptionText
+      title: context.props.level2Header,
+      description: context.props.level2Description
     }
   ]
   const [currentLevel, setCurrentLevel] = useState(0)
@@ -49,10 +49,12 @@ export const useProvisionDrawer = () => {
   }
 
   const enableSensitivityLabels = getGlobalSetting('EnableSensitivityLabels')
+  const enableSensitivityLabelsLibrary = getGlobalSetting('EnableSensitivityLabelsLibrary')
   const enableRetentionLabels = getGlobalSetting('EnableRetentionLabels')
   const enableExpirationDate = getGlobalSetting('EnableExpirationDate')
   const enableReadOnlyGroup = getGlobalSetting('EnableReadOnlyGroup')
   const enableInternalChannel = getGlobalSetting('EnableInternalChannel')
+  const enableAutoApproval = getGlobalSetting('EnableAutoApproval')
 
   const typeDefaults = context.state.types.find((t) => t.title === context.state.properties.type)
   const enableExternalSharing = typeDefaults?.externalSharing
@@ -63,6 +65,15 @@ export const useProvisionDrawer = () => {
 
   const urlPrefix = `${context.props.webAbsoluteUrl.split('sites')[0]}sites/`
   const aliasSuffix = '@' + context.props.pageContext.user.loginName.split('@')[1]
+
+  const joinHub = !!context.state.types.find((t) => t.title === context.column.get('type'))?.joinHub
+
+  const spaceTypeInternal = context.state.types.find(
+    (t) => t.title === context.column.get('type')
+  )?.type
+
+  const isTeam = spaceTypeInternal === 'Microsoft Teams Team'
+  const isViva = spaceTypeInternal === 'Viva Engage Community'
 
   const onSave = async (): Promise<boolean> => {
     const baseUrl = `${context.props.webAbsoluteUrl.split('sites')[0]}sites/`
@@ -78,9 +89,14 @@ export const useProvisionDrawer = () => {
       (t) => t.labelName === context.column.get('sensitivityLabel')
     )?.labelId
 
-    const spaceTypeInternal = context.state.types.find(
-      (t) => t.title === context.column.get('type')
-    )?.type
+    const sensitivityLabelLibraryId = context.state.sensitivityLabelsLibrary.find(
+      (t) => t.labelName === context.column.get('sensitivityLabelLibrary')
+    )?.labelId
+
+    const expirationDate =
+      context.props.expirationDateMode === 'date'
+        ? context.column.get('expirationDate')
+        : context.state.properties.expirationDate
 
     const requestItem: IProvisionRequestItem = {
       Title: context.column.get('name'),
@@ -89,7 +105,7 @@ export const useProvisionDrawer = () => {
       BusinessJustification: context.column.get('justification'),
       SpaceType: context.column.get('type'),
       SpaceTypeInternal: spaceTypeInternal,
-      Teamify: context.column.get('teamify'),
+      Teamify: isTeam ? true : isViva ? false : context.column.get('teamify'),
       TeamsTemplate: context.column.get('teamify')
         ? context.state.properties.teamTemplate || 'standard'
         : '',
@@ -102,8 +118,10 @@ export const useProvisionDrawer = () => {
       Guests: context.column.get('guest')?.join(';'),
       SensitivityLabelName: context.column.get('sensitivityLabel'),
       SensitivityLabelId: sensitivityLabelId,
+      SensitivityLabelLibraryName: context.column.get('sensitivityLabelLibrary'),
+      SensitivityLabelLibraryId: sensitivityLabelLibraryId,
       RetentionLabelName: context.column.get('retentionLabel'),
-      ExpirationDate: context.column.get('expirationDate'),
+      ExpirationDate: expirationDate,
       ReadOnlyGroup: context.column.get('readOnlyGroup'),
       InternalChannel: context.column.get('internalChannel'),
       RequestedSource: strings.Provision.RequestedSource,
@@ -116,13 +134,13 @@ export const useProvisionDrawer = () => {
       MailboxAlias: alias,
       TimeZoneId: 4,
       LCID: 1044,
-      JoinHub: true,
-      HubSiteTitle: context.props.pageContext.web.title,
-      HubSite: context.props.pageContext.legacyPageContext.hubSiteId,
+      JoinHub: joinHub,
+      HubSiteTitle: joinHub ? context.props.pageContext.web.title : '',
+      HubSite: joinHub ? context.props.pageContext.legacyPageContext.hubSiteId : '',
       Prefix: namingConvention?.prefixText,
       Suffix: namingConvention?.suffixText,
-      Status: 'Submitted',
-      Stage: 'Submitted',
+      Status: enableAutoApproval ? 'Approved' : 'Submitted',
+      Stage: enableAutoApproval ? 'Approved' : 'Submitted',
       RequestKey: getGUID()
     }
 
@@ -158,6 +176,7 @@ export const useProvisionDrawer = () => {
     setSiteExists,
     namingConvention,
     enableSensitivityLabels,
+    enableSensitivityLabelsLibrary,
     enableRetentionLabels,
     enableExpirationDate,
     enableReadOnlyGroup,
@@ -165,6 +184,9 @@ export const useProvisionDrawer = () => {
     enableExternalSharing,
     urlPrefix,
     aliasSuffix,
+    isTeam,
+    isViva,
+    joinHub,
     getField,
     fluentProviderId
   }

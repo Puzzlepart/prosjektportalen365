@@ -2,10 +2,33 @@ import { Slot } from '@fluentui/react-components'
 import { IBaseComponentProps } from 'components/types'
 
 export interface IProjectProvisionProps extends IBaseComponentProps {
-  provisionUrl: string
-  debugMode?: boolean
+  // General
+  buttonLabel?: string
+  autoOwner?: boolean
+
+  // Visuals
   siteTypeRenderMode?: string
+  expirationDateMode?: string
+
+  // Titles and descriptions
+  level0Header?: string
+  level0Description?: string
+  level1Header?: string
+  level1Description?: string
+  level2Header?: string
+  level2Description?: string
+  footerDescription?: string
+
+  // Hide/show
+  hideStatusMenu?: boolean
+  hideSettingsMenu?: boolean
+
+  // Advanced
+  provisionUrl: string
   fields?: IProvisionField[]
+  debugMode?: boolean
+
+  // Other
   disabled?: boolean
   icon?: Slot<'span'>
   appearance?: 'secondary' | 'primary' | 'outline' | 'subtle' | 'transparent'
@@ -22,6 +45,7 @@ export interface IProjectProvisionState {
   types?: Record<string, any>
   teamTemplates?: Record<string, any>
   sensitivityLabels?: Record<string, any>
+  sensitivityLabelsLibrary?: Record<string, any>
   retentionLabels?: Record<string, any>
   requests?: any[]
   properties: Record<string, any>
@@ -39,5 +63,6 @@ export interface IProvisionField {
   dataType?: string
   disabled?: boolean
   required?: boolean
+  hidden?: boolean
   level?: number
 }
