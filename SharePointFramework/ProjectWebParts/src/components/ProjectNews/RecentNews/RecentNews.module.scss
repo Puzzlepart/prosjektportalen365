@@ -3,22 +3,22 @@
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 16px;
   margin: 16px 0;
-}
 
-.card {
-  min-height: 180px;
-}
+  .card {
+    min-height: 180px;
 
-.cardImage {
-  width: 100%;
-  height: 120px;
-  object-fit: cover;
-  border-radius: 4px;
-}
+    .cardImage {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
 
-.cardDescription {
-  margin-top: 8px;
-  color: #666;
+    .cardDescription {
+      margin-top: 8px;
+      color: #666;
+    }
+  }
 }
 
 .showMoreButton {

@@ -314,6 +314,7 @@ export async function setOriginalSourceSiteId(
     },
     body: JSON.stringify({
       GtSiteId: siteId
+      // TODO: Add GtHubSiteId
     })
   })
   if (!updateRes.ok) {

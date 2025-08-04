@@ -38,22 +38,20 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
         <FluentProvider theme={customLightTheme}>
           <section className={styles.projectNews}>
             {props.title && <WebPartTitle title={props.title} description={props.description} />}
-            <div className={styles.createNewsLinkContainer}>
-              <Button
-                className={styles.button}
-                appearance='subtle'
-                icon={NewsIcon}
-                iconPosition='before'
-                onClick={handleCreateNewsClick}
-                onKeyDown={handleCreateNewsKeyDown}
-                aria-label={strings.CreateNewsLinkLabel}
-                role='button'
-                tabIndex={0}
-                aria-haspopup='dialog'
-              >
-                {strings.CreateNewsLinkLabel}
-              </Button>
-            </div>
+            <Button
+              className={styles.button}
+              appearance='subtle'
+              icon={NewsIcon}
+              iconPosition='before'
+              onClick={handleCreateNewsClick}
+              onKeyDown={handleCreateNewsKeyDown}
+              aria-label={strings.CreateNewsLinkLabel}
+              role='button'
+              tabIndex={0}
+              aria-haspopup='dialog'
+            >
+              {strings.CreateNewsLinkLabel}
+            </Button>
             {loading && (
               <div className={styles.loadingContainer}>
                 <Spinner label={format(strings.LoadingText, props.title)} />
