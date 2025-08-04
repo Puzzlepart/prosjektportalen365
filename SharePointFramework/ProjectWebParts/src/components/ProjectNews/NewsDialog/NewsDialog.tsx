@@ -65,14 +65,13 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
                 <div>{strings.NewsCreatedSuccessfully}</div>
               </div>
             ) : (
-              <div>
+              <div className={styles.content}>
                 <FieldContainer
                   label={strings.NewsTitleLabel}
                   required
                   validationMessage={errorMessage}
                   validationState={errorMessage ? 'error' : undefined}
                   iconName='TextBulletList'
-                  className={styles.fieldContainer}
                 >
                   <Input
                     ref={inputRef}
@@ -90,7 +89,6 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
                   validationState={!isTemplateValid ? 'error' : undefined}
                   validationMessage={!isTemplateValid ? strings.TemplateRequired : undefined}
                   iconName='ChevronDown'
-                  className={styles.fieldContainer}
                 >
                   <Dropdown
                     id='template-dropdown'
@@ -111,17 +109,17 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
                       </Option>
                     ))}
                   </Dropdown>
-                  <ToggleButton
-                    className={styles.toggleButton}
-                    checked={isDrawerOpen}
-                    onClick={() => setIsDrawerOpen((open) => !open)}
-                    disabled={!selected}
-                    appearance='secondary'
-                    {...restoreFocusTargetAttributes}
-                  >
-                    {strings.PreviewLabel}
-                  </ToggleButton>
                 </FieldContainer>
+                <ToggleButton
+                  className={styles.toggleButton}
+                  checked={isDrawerOpen}
+                  onClick={() => setIsDrawerOpen((open) => !open)}
+                  disabled={!selected}
+                  appearance='secondary'
+                  {...restoreFocusTargetAttributes}
+                >
+                  {strings.PreviewLabel}
+                </ToggleButton>
               </div>
             )}
           </DialogBody>
