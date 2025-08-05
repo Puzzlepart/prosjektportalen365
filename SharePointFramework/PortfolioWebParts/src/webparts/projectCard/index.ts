@@ -17,7 +17,11 @@ import {
 import { CalloutTriggers } from '@pnp/spfx-property-controls/lib/PropertyFieldHeader'
 import { createElement } from 'react'
 import { PortalDataService, ProjectColumn } from 'pp365-shared-library'
-import { SPHttpClient } from '@microsoft/sp-http'
+import { spfi, SPFx } from '@pnp/sp'
+import '@pnp/sp/webs'
+import '@pnp/sp/lists'
+import '@pnp/sp/items'
+import '@pnp/sp/files'
 
 export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCardProps> {
   private _portalDataService: PortalDataService
@@ -29,7 +33,8 @@ export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCar
   public async onInit(): Promise<void> {
     await super.onInit()
 
-    // this._projectSiteId = this.getProjectSiteId.bind(this)
+    // Get the project site ID from the current page
+    this._projectSiteId = await this.getProjectSiteId()
 
     this._portalDataService = await new PortalDataService().configure({
       spfxContext: this.context
@@ -59,21 +64,51 @@ export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCar
   }
 
   protected async getProjectSiteId(): Promise<string> {
-    const sitePageFolder = this.context.pageContext.site.serverRelativeUrl + '/SitePages' + '/News'
-
     if (!this._projectSiteId) {
-      const sitePage = await this.context.spHttpClient.get(
-        `${this.context.pageContext.web.absoluteUrl}/_api/web/getfilebyserverrelativeurl('${this.context.pageContext.site.serverRelativeUrl}/SitePages/${this.context.pageContext.listItem.id}.aspx')/ListItemAllFields`,
-        SPHttpClient.configurations.v1,
-        {
-          headers: {
-            Accept: 'application/json;odata=nometadata',
-            'odata-version': ''
+      try {
+        const sp = spfi().using(SPFx(this.context))
+
+        // First try to get from the current list item if available
+        if (this.context.pageContext.listItem && this.context.pageContext.listItem.id) {
+          try {
+            const listItem = await sp.web.lists.getByTitle('Områdesider').items.getById(this.context.pageContext.listItem.id).select('GtSiteId')()
+            this._projectSiteId = listItem.GtSiteId || null
+            if (this._projectSiteId) {
+              return this._projectSiteId
+            }
+          } catch (listError) {
+            console.warn('Failed to get GtSiteId from Områdesider list, trying Site Pages:', listError)
+            // Try Site Pages as fallback
+            try {
+              const sitePageItem = await sp.web.lists.getByTitle('Site Pages').items.getById(this.context.pageContext.listItem.id).select('GtSiteId')()
+              this._projectSiteId = sitePageItem.GtSiteId || null
+              if (this._projectSiteId) {
+                return this._projectSiteId
+              }
+            } catch (sitePageError) {
+              console.warn('Failed to get GtSiteId from Site Pages list:', sitePageError)
+            }
           }
         }
-      )
-      const data = await sitePage.json()
-      this._projectSiteId = data.GtSiteId
+
+        // Fallback: Get the current page file name from the URL and fetch via file
+        const currentPageUrl = this.context.pageContext.legacyPageContext.requestUrl
+        const fileName = currentPageUrl.split('/').pop() || 'Home.aspx'
+
+        try {
+          const file = sp.web.getFileByServerRelativePath(`${this.context.pageContext.site.serverRelativeUrl}/SitePages/${fileName}`)
+          const item = await file.getItem()
+          // Get the item with the GtSiteId field
+          const itemData = await item()
+          this._projectSiteId = (itemData as any).GtSiteId || null
+        } catch (fileError) {
+          console.warn('Failed to fetch site page details via file:', fileError)
+          this._projectSiteId = null
+        }
+      } catch (error) {
+        console.error('Error getting project site ID:', error)
+        this._projectSiteId = null
+      }
     }
     return this._projectSiteId
   }
