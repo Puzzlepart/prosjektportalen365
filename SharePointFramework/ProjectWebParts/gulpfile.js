@@ -16,19 +16,20 @@ build.addSuppression('Warning - [sass] The local CSS class \'-webkit-filter\' is
 
 
 gulp.task('setHiddenToolbox', (done) => {
-    find.file(/\manifest.json$/, path.join(__dirname, 'src'), (files) => {
-        for (let i = 0; i < files.length; i++) {
-            let manifest = require(files[i])
-            if (['RiskMatrixWebPart'].indexOf(manifest.alias) !== -1) {
-                log(`[${colors.cyan('setHiddenToolbox')}] Skipping ${colors.cyan('hiddenFromToolbox')} for ${colors.cyan(manifest.alias)}...`)
-            } else if (manifest.hiddenFromToolbox !== !!argv.ship) {
-                log(`[${colors.cyan('setHiddenToolbox')}] Setting ${colors.cyan('hiddenFromToolbox')} to ${colors.cyan(!!argv.ship)} for ${colors.cyan(manifest.alias)}...`)
-                manifest.hiddenFromToolbox = !!argv.ship
-                fs.writeFile(files[i], JSON.stringify(manifest, null, 4), (_error) => { /* handle error */ })
-            }
-        }
-        done()
-    })
+  const skipAliases = ['RiskMatrixWebPart', 'ProjectNewsWebPart']
+  find.file(/\manifest.json$/, path.join(__dirname, 'src'), (files) => {
+    for (let i = 0; i < files.length; i++) {
+      let manifest = require(files[i])
+      if (skipAliases.indexOf(manifest.alias) !== -1) {
+        log(`[${colors.cyan('setHiddenToolbox')}] Skipping ${colors.cyan('hiddenFromToolbox')} for ${colors.cyan(manifest.alias)}...`)
+      } else if (manifest.hiddenFromToolbox !== !!argv.ship) {
+        log(`[${colors.cyan('setHiddenToolbox')}] Setting ${colors.cyan('hiddenFromToolbox')} to ${colors.cyan(!!argv.ship)} for ${colors.cyan(manifest.alias)}...`)
+        manifest.hiddenFromToolbox = !!argv.ship
+        fs.writeFile(files[i], JSON.stringify(manifest, null, 4), (_error) => { /* handle error */ })
+      }
+    }
+    done()
+  })
 })
 
 build.configureWebpack.mergeConfig({

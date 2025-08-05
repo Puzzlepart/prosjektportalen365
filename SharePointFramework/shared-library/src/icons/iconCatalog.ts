@@ -146,13 +146,19 @@ import {
   TextSortDescendingFilled,
   TextSortDescendingRegular,
   ToggleLeftFilled,
-  ToggleLeftRegular
+  ToggleLeftRegular,
+  NewsFilled,
+  NewsRegular
 } from '@fluentui/react-icons'
 
 /**
  * An object containing the available Fluent icons and their corresponding regular and filled versions.
  */
 export const iconCatalog = {
+  News: {
+    regular: NewsRegular,
+    filled: NewsFilled
+  },
   AppsList: {
     regular: AppsListRegular,
     filled: AppsListFilled

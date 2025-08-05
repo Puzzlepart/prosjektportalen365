@@ -64,7 +64,8 @@
     "smoothscroll-polyfill": "~0.4.4",
     "react-gauge-component": "~1.2.61",
     "shade-blend-color": "~1.0.0",
-    "colors-convert": "~1.4.1"
+    "colors-convert": "~1.4.1",
+    "@microsoft/sp-http": "1.17.4"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.17.4",

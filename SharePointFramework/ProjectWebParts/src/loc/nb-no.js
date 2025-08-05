@@ -5,7 +5,8 @@ define([], function () {
     NewStatusPanelTitle: 'Ny statusrapport',
     EditStatusPanelText: 'Rediger statusrapport',
     Aria: {
-      CurrentPhaseText: 'Dette er den gjeldende fasen. Det er derfor ikke mulig å endre til denne fasen.',
+      CurrentPhaseText:
+        'Dette er den gjeldende fasen. Det er derfor ikke mulig å endre til denne fasen.'
     },
     Placeholder: {
       DatePicker: 'Angi en dato',
@@ -16,17 +17,21 @@ define([], function () {
       PeoplePicker: 'Angi et navn eller en e-postadresse',
       NumberField: 'Skriv inn et tall',
       ChoiceField: 'Velg et alternativ',
-      MultiChoiceField: 'Velg ett eller flere alternativer',
+      MultiChoiceField: 'Velg ett eller flere alternativer'
     },
     SaveText: 'Lagre',
     ErrorBoundaryFallbackText: 'Det oppstod en feil under lasting av {0}.',
     ErrorBoundaryFallbackDescription: 'Feildetaljer:',
-    UpdatingProjectPropertiesErrorText: 'Det oppstod en feil under lagring av prosjektegenskaper. Vennligst prøv igjen senere.',
-    SynchronizingProjectPropertiesToPortfolioSiteErrorText: 'Det oppstod en feil under synkronisering av prosjektegenskaper til porteføljeområdet. Vennligst prøv igjen senere.',
+    UpdatingProjectPropertiesErrorText:
+      'Det oppstod en feil under lagring av prosjektegenskaper. Vennligst prøv igjen senere.',
+    SynchronizingProjectPropertiesToPortfolioSiteErrorText:
+      'Det oppstod en feil under synkronisering av prosjektegenskaper til porteføljeområdet. Vennligst prøv igjen senere.',
     UpdatingProjectPropertiesStatusText: 'Lagrer prosjektegenskaper...',
-    SynchronizingProjectPropertiesToPortfolioSiteStatusText: 'Synkroniserer prosjektegenskaper til porteføljeområdet...',
+    SynchronizingProjectPropertiesToPortfolioSiteStatusText:
+      'Synkroniserer prosjektegenskaper til porteføljeområdet...',
     UnknownConfigurationName: 'Konfigurasjon uten navn',
-    ManualConfigurationNotFoundOrInvalid: 'Manuell konfigurasjon for Risikomatrise ikke funnet eller har ugyldig format.',
+    ManualConfigurationNotFoundOrInvalid:
+      'Manuell konfigurasjon for Risikomatrise ikke funnet eller har ugyldig format.',
     RiskMatrixConfigurationFolder: 'Risikomatrise',
     SiteAssetsConfigurationFolder: 'SiteAssets/Konfigurasjon',
     UseDynamicConfigurationOffText: 'Nei, bruk manuell',
@@ -44,22 +49,26 @@ define([], function () {
     ChangeFirstPhaseDialogSubtitle: 'Dette vil medføre at prosjektet settes til {0} fasen',
     ChangePhaseText: 'Endre til denne fasen',
     ChangingPhaseDescription: 'Endrer fase til {0}',
-    ChecklistCommentDescription: 'Kommentar er obligatorisk om sjekkpunktet skal markeres som "Ikke relevant" eller "Fortsatt åpen".',
+    ChecklistCommentDescription:
+      'Kommentar er obligatorisk om sjekkpunktet skal markeres som "Ikke relevant" eller "Fortsatt åpen".',
     ChecklistCommentPlaceholder: 'Skriv inn en kommentar...',
-    ChecklistMandatory: 'Sjekkpunkter for endring til denne fasen er obligatoriske og kan ikke hoppes over.',
+    ChecklistMandatory:
+      'Sjekkpunkter for endring til denne fasen er obligatoriske og kan ikke hoppes over.',
     CheckpointDoneTooltip: 'Sjekkpunktet er utført',
     CheckpointNotRelevantTooltip: 'Sjekkpunktet er ikke relevant',
-    CheckpointNotRelevantTooltipCommentEmpty: 'Du kan ikke sette sjekkpunktet som \'Ikke relevant\' uten å legge inn en kommentar.',
+    CheckpointNotRelevantTooltipCommentEmpty:
+      "Du kan ikke sette sjekkpunktet som 'Ikke relevant' uten å legge inn en kommentar.",
     CheckPointsStatus: '{0} sjekkpunkter markert som **{1}**',
     CheckpointStillOpenTooltip: 'Sjekkpunktet er fortsatt åpent',
-    CheckpointStillOpenTooltipCommentEmpty: 'Du kan ikke sette sjekkpunktet som \'Fortsatt åpen\' uten å legge inn en kommentar.',
+    CheckpointStillOpenTooltipCommentEmpty:
+      "Du kan ikke sette sjekkpunktet som 'Fortsatt åpen' uten å legge inn en kommentar.",
     ChildProjectAdminLabel: 'Administrer underområder',
     CloseText: 'Lukk',
     ColorPickerStrings: {
       blue: 'Blå',
       green: 'Grønn',
       hex: '',
-      red: 'Rød',
+      red: 'Rød'
     },
     CommentLabel: 'Kommentar',
     ConfigItemTitleFieldLabel: 'Elementtittel (konfigurasjon)',
@@ -67,7 +76,8 @@ define([], function () {
     ConsequenceFieldNameFieldLabel: 'Feltnavn - Konsekvens',
     ConsequenceHeaderFieldLabel: 'Konsekvens {0}',
     ConsequencePostActionFieldNameFieldLabel: 'Feltnavn - Konsekvens (etter tiltak)',
-    CreateParentModalSubText: 'Ønsker du å gjøre om prosjektet til et overordnet prosjekt? Denne handlingen er ikke reversibel.',
+    CreateParentModalSubText:
+      'Ønsker du å gjøre om prosjektet til et overordnet prosjekt? Denne handlingen er ikke reversibel.',
     CreateParentModalTitle: 'Overordnet prosjekt',
     CreateParentProjectLabel: 'Gjør om til overordnet prosjekt',
     CurrentPhaseViewNameFieldLabel: 'Visningsnavn for gjeldende fase',
@@ -82,18 +92,21 @@ define([], function () {
     DeleteItemLabel: 'Slett',
     DeleteReportButtonLabel: 'Slett',
     DeleteReportButtonDescription: 'Slett den valgte statusrapporten.',
-    DeleteReportButtonDescriptionNoPermission: 'Du har ikke tilgang til å slette denne statusrapporten.',
+    DeleteReportButtonDescriptionNoPermission:
+      'Du har ikke tilgang til å slette denne statusrapporten.',
     DiamondLabel: 'Diamant',
     DocumentsListName: 'Dokumenter',
     EditItemLabel: 'Rediger',
     EditProjectInformationText: 'Rediger prosjektinformasjon',
     EditReportButtonLabel: 'Rediger',
     EditReportButtonDescription: 'Rediger den valgte statusrapporten.',
-    EditReportButtonDescriptionNoPermission: 'Du har ikke tilgang til å redigere denne statusrapporten.',
+    EditReportButtonDescriptionNoPermission:
+      'Du har ikke tilgang til å redigere denne statusrapporten.',
     EditSiteInformationText: 'Rediger områdeinformasjon',
     ErrorTitle: 'Det har oppstått en feil',
     ExternalUsersConfigInfoTitle: 'Eksterne brukere/gjester',
-    ExternalUsersConfigInfoMessage: 'Her konfigueres felter/kolonner som skal vises for eksterne brukere/gjester.<br /><br />Felter/kolonner som skal vises for brukere i organisasjonen konfigureres på porteføljeområdet av administrator.',
+    ExternalUsersConfigInfoMessage:
+      'Her konfigueres felter/kolonner som skal vises for eksterne brukere/gjester.<br /><br />Felter/kolonner som skal vises for brukere i organisasjonen konfigureres på porteføljeområdet av administrator.',
     ExternalUsersConfigText: 'Konfigurasjon',
     GeneralGroupName: 'Generelt',
     GetSnapshotButtonLabel: 'Åpne øyeblikksbilde',
@@ -109,11 +122,13 @@ define([], function () {
     HookUrlFieldDescription: 'URL som skal kalles ved endring av fase',
     HookUrlFieldLabel: 'Hook URL',
     ListNameFieldLabel: 'Listenavn',
-    ListSectionDataErrorMessage: 'Det oppsto en feil under uthenting av data for seksjonen. Er den riktig konfigurert?',
+    ListSectionDataErrorMessage:
+      'Det oppsto en feil under uthenting av data for seksjonen. Er den riktig konfigurert?',
     LoadingText: 'Laster {0}...',
     LogListName: 'Logg',
     LookAndFeelGroupName: 'Utseende og funksjonalitet',
-    ManualConfigurationNotFoundOrInvalid: 'Manuell konfigurasjon for Risikomatrise ble ikke funnet eller har ugyldig format.',
+    ManualConfigurationNotFoundOrInvalid:
+      'Manuell konfigurasjon for Risikomatrise ble ikke funnet eller har ugyldig format.',
     ManualConfigurationPathLabel: 'Manuell konfigurasjon',
     MatrixColorScaleConfigLabel: 'Fargekonfigurasjon',
     MatrixFullWidthLabel: 'Bruk full bredde',
@@ -142,19 +157,24 @@ define([], function () {
     NewItemLabel: 'Nytt element',
     NewStatusReportLabel: 'Opprett',
     NewStatusReportDescription: 'Opprett en ny statusrapport for prosjektet.',
-    NewStatusReportDescriptionNoPermission: 'Du har ikke tilgang til å opprette en ny statusrapport.',
+    NewStatusReportDescriptionNoPermission:
+      'Du har ikke tilgang til å opprette en ny statusrapport.',
     NewStatusReportTitle: 'Ny statusrapport for {0}',
     No: 'Nei',
-    NoLocalPropertiesListWarningMessage: 'Du må synkronisere prosjektinformasjonen før du kan konfigurere felter/kolonner som skal vises for eksterne brukere/gjester.<br /><br />Dette gjøres ved å klikke på knappen \'Synkroniser prosjektegenskaper\'.',
+    NoLocalPropertiesListWarningMessage:
+      "Du må synkronisere prosjektinformasjonen før du kan konfigurere felter/kolonner som skal vises for eksterne brukere/gjester.<br /><br />Dette gjøres ved å klikke på knappen 'Synkroniser prosjektegenskaper'.",
     NoPropertiesTitle: 'Prosjektinformasjon mangler.',
-    NoPropertiesMessage: 'Det finnes ingen informasjon om prosjektet. Trykk på _Rediger prosjektinformasjon_ for å fortsette.',
+    NoPropertiesMessage:
+      'Det finnes ingen informasjon om prosjektet. Trykk på _Rediger prosjektinformasjon_ for å fortsette.',
     NoReportsFoundTitle: 'Ingen rapporter funnet',
-    NoStatusReportsMessage: 'Det er ennå ikke rapportert status for prosjektet. Hvis du er eier av området, kan du rapportere status ved å klikke på _Ny statusrapport_ i menyen over.',
+    NoStatusReportsMessage:
+      'Det er ennå ikke rapportert status for prosjektet. Hvis du er eier av området, kan du rapportere status ved å klikke på _Ny statusrapport_ i menyen over.',
     NotPublishedStatusReport: 'Kladd, sist endret {0}',
     OpportunityMatrixGroupName: 'Mulighetsmatrise',
     OverrideHeadersLabel: 'Overstyr overskrifter for {0}x{0}',
     ParentProjectsGroupName: 'Overordnede prosjekter',
-    ParentProjectsHeaderDescription: 'Her listes alle program/overordnede prosjekter som dette prosjektet tilhører.',
+    ParentProjectsHeaderDescription:
+      'Her listes alle program/overordnede prosjekter som dette prosjektet tilhører.',
     ParentProjectsHeaderText: 'Overordnede prosjekter',
     PhaseChecklistLinkText: 'Gå til fasesjekklisten',
     PhaseChecklistName: 'Fasesjekkliste',
@@ -164,8 +184,10 @@ define([], function () {
     PhaseUseStartArrowLabel: 'Bruk startpil',
     PhaseUseEndArrowLabel: 'Bruk avsluttende pil',
     PhaseSitePageTitle: 'Dynamisk forside er aktivert',
-    PhaseSitePageFoundMessage: 'Å endre til denne fasen vil også endre forsiden til prosjektet.<br /><br />Side _{0}_ for fase funnet. Denne siden vil bli brukt som forside for prosjektet. Trykk **Ja** for å fortsette.',
-    PhaseSitePageNotFoundMessage: 'Side _{0}_ for fase ble ikke funnet, vennligst opprett. Ved trykk på **Ja** vil ikke forside endres, men fasen vil bli endret.',
+    PhaseSitePageFoundMessage:
+      'Å endre til denne fasen vil også endre forsiden til prosjektet.<br /><br />Side _{0}_ for fase funnet. Denne siden vil bli brukt som forside for prosjektet. Trykk **Ja** for å fortsette.',
+    PhaseSitePageNotFoundMessage:
+      'Side _{0}_ for fase ble ikke funnet, vennligst opprett. Ved trykk på **Ja** vil ikke forside endres, men fasen vil bli endret.',
     PleaseWaitText: 'Vennligst vent',
     ProbabilityFieldNameFieldLabel: 'Feltnavn - Sannsynlighet',
     ProbabilityHeaderFieldLabel: 'Sannsynlighet {0}',
@@ -175,23 +197,29 @@ define([], function () {
     ProjectInformationStatusReportHeaderText: 'Statusrapport',
     ProjectInformationStatusReportHeaderDescription: 'Publisert ({0})',
     ProjectLabel: 'Prosjekt',
-    ProjectPhasesChangePhaseError: 'En feil oppsto under endring av fase. Vennligst prøv igjen eller kontakt en administrator.',
-    ProjectPhasesFetchDataError: 'Du har ikke tilgang til å se denne webdelen.<br/><br/>Du må enten ha tilgang til porteføljeområdet, eller så må prosjektet være fristilt fra porteføljeområdet.',
+    ProjectPhasesChangePhaseError:
+      'En feil oppsto under endring av fase. Vennligst prøv igjen eller kontakt en administrator.',
+    ProjectPhasesFetchDataError:
+      'Du har ikke tilgang til å se denne webdelen.<br/><br/>Du må enten ha tilgang til porteføljeområdet, eller så må prosjektet være fristilt fra porteføljeområdet.',
     ProjectPropertiesHeader: 'Prosjektinformasjon',
     ProjectPropertiesListName: 'Prosjektegenskaper',
     ProjectsListName: 'Prosjekter',
     ProjectStatusDataErrorText: 'Ingen tilgang. Du har ikke tillatelse til å se statusrapporter.',
     ProjectStatusGroupName: 'Prosjektstatus',
     ProjectStatusProjectPropertiesGroupName: 'Prosjektegenskaper (Statusseksjoner)',
-    ProjectTimelineErrorFetchText: 'Feil ved henting av prosjektets data.<br><br>Sjekk at følgende SiteId er riktig med hva som ligger i "Prosjekter" listen. <br><br>- SiteId: {0} <br> - Tittel: {1} <br><br>Feilmelding: {2}',
-    ProjectTimelineErrorTransformItemText: 'Feil ved knytning av elementer til tidslinje.<br><br>Dette kan være grunnet problem med et element i "Prosjekter" listen (duplikat, slettet prosjekt), eller at et tidslinjeelement ikke har gyldig tilknytning. <br><br>- SiteId: {0} <br> - Tittel: {1} <br><br>Feilmelding: {2}',
+    ProjectTimelineErrorFetchText:
+      'Feil ved henting av prosjektets data.<br><br>Sjekk at følgende SiteId er riktig med hva som ligger i "Prosjekter" listen. <br><br>- SiteId: {0} <br> - Tittel: {1} <br><br>Feilmelding: {2}',
+    ProjectTimelineErrorTransformItemText:
+      'Feil ved knytning av elementer til tidslinje.<br><br>Dette kan være grunnet problem med et element i "Prosjekter" listen (duplikat, slettet prosjekt), eller at et tidslinjeelement ikke har gyldig tilknytning. <br><br>- SiteId: {0} <br> - Tittel: {1} <br><br>Feilmelding: {2}',
     ProjecttimelineGroupName: 'Prosjekttidslinje',
     ProjectTimelineItemInfo: '{0} - prosjektets tidsforløp',
-    ProjectTimelineListInfoText: 'Her listes listeelementene for prosjektet. Her kan du redigere og legge til nye elementer. Dette vil synkroniseres til listen på hubområdet. For å zoome inn/ut i tidslinje: ALT+Musehjul',
+    ProjectTimelineListInfoText:
+      'Her listes listeelementene for prosjektet. Her kan du redigere og legge til nye elementer. Dette vil synkroniseres til listen på hubområdet. For å zoome inn/ut i tidslinje: ALT+Musehjul',
     PublishedStatusReport: 'Publisert ({0})',
     PublishReportButtonLabel: 'Publiser',
     PublishReportButtonDescription: 'Publiserer den valgte statusrapporten.',
-    PublishReportButtonDescriptionNoPermission: 'Du har ikke tilgang til å publisere denne statusrapporten.',
+    PublishReportButtonDescriptionNoPermission:
+      'Du har ikke tilgang til å publisere denne statusrapporten.',
     PublishingReportLabel: 'Vennligst vent mens statusrapporten publiseres...',
     RedoText: 'Gjør om',
     RevertDefaultColorConfigurationText: 'Bruk standard',
@@ -221,7 +249,8 @@ define([], function () {
     StatusReportTruncateCommentsLabel: 'Avkort kommentarer',
     StatusStillOpen: 'Fortsatt åpen',
     SubTextTruncateLengthFieldLabel: 'Max lengde fasetekst',
-    SyncProjectPropertiesErrorText: 'Det skjedde feil under synkronisering av prosjektegenskaper til porteføljeområdet. Det kan for eksempel være et ugyldig felt.',
+    SyncProjectPropertiesErrorText:
+      'Det skjedde feil under synkronisering av prosjektegenskaper til porteføljeområdet. Det kan for eksempel være et ugyldig felt.',
     SyncProjectPropertiesListProgressDescription: 'Oppdaterer Prosjektegenskaper-listen',
     SyncProjectPropertiesProgressLabel: 'Synkroniserer prosjektegenskaper til porteføljeområdet',
     SyncProjectPropertiesValuesProgressDescription: 'Vennligst vent...',
@@ -236,23 +265,65 @@ define([], function () {
     ToggleUncertaintyPostActionOnText: 'Etter tiltak',
     TypeLabel: 'Type',
     UnknownConfigurationName: 'Konfigurasjon uten navn',
-    UnpublishedStatusReportInfo: 'Det eksisterer upubliserte statusrapporter. Det er dermed ikke mulig å opprette ny statusrapport. Om du er eier på området, kan du velge å publisere eller slette upubliserte rapporter etter valgt statusrapport.',
+    UnpublishedStatusReportInfo:
+      'Det eksisterer upubliserte statusrapporter. Det er dermed ikke mulig å opprette ny statusrapport. Om du er eier på området, kan du velge å publisere eller slette upubliserte rapporter etter valgt statusrapport.',
     PublishedStatusReportInfo: 'Statusrapporten er publisert og kan ikke redigeres/slettes.',
     AlreadyPublishedReportInfo: 'Statusrapporten er allerede publisert.',
     UseDynamicConfigurationLabel: 'Bruk dynamisk konfigurasjon',
     UseDynamicConfigurationOffText: 'Nei, bruk manuell',
     UseDynamicConfigurationOnText: 'Ja',
-    UseDynamicHomepageCalloutText: 'Her kan du velge om fasevelgeren skal være dynamisk og bruke egne sider for hver fase. Det krever at det er opprettet sider for hver fase på forhånd. Navnene på sidene må være identiske med navnene på fasene.',
+    UseDynamicHomepageCalloutText:
+      'Her kan du velge om fasevelgeren skal være dynamisk og bruke egne sider for hver fase. Det krever at det er opprettet sider for hver fase på forhånd. Navnene på sidene må være identiske med navnene på fasene.',
     UseDynamicHomepageFieldLabel: 'Bruk dynamisk hjemmeside',
     UseFramelessButtonsLabel: 'Rammeløse knapper',
-    UsePhaseHooksCalloutText: 'Her kan du velge om det skal kjøres hooks ved endring av faser. Ved endring av fase vil det bli eksekvert et kall mot url-en som er spesifisert under. Dersom kallet krever autentisering, kan dette fylles inn under url feltet. Kallet som blir eksekvert sender med følgende parametere:  \'webUrl\' og  \'apiKey\', disse er begge av typen  \'string\'.',
+    UsePhaseHooksCalloutText:
+      "Her kan du velge om det skal kjøres hooks ved endring av faser. Ved endring av fase vil det bli eksekvert et kall mot url-en som er spesifisert under. Dersom kallet krever autentisering, kan dette fylles inn under url feltet. Kallet som blir eksekvert sender med følgende parametere:  'webUrl' og  'apiKey', disse er begge av typen  'string'.",
     UsePhaseHooksFieldLabel: 'Bruk fasevelger hooks',
     ViewsGroupName: 'Visninger',
     ViewVersionHistoryText: 'Vis versjonshistorikk',
     ViewXmlFieldLabel: 'Vis XML spørring',
-    WebPartNoAccessMessage: 'Du har ikke tilgang til å se denne webdelen.<br/><br/>Du må enten ha tilgang til porteføljeområdet, eller så må prosjektet være fristilt fra porteføljeområdet.',
+    WebPartNoAccessMessage:
+      'Du har ikke tilgang til å se denne webdelen.<br/><br/>Du må enten ha tilgang til porteføljeområdet, eller så må prosjektet være fristilt fra porteføljeområdet.',
     WidthFieldLabel: 'Bredde (piksler)',
     Yes: 'Ja',
     PhaseCheckListItem: 'Sjekkpunkt {0}',
+    // Project News Web Part strings
+    ProjectNewsWebPartTitle: 'Prosjektnyheter',
+    DialogTitle: 'Opprett nyhetsartikkel',
+    CreatingNewArticleStatus: 'Oppretter nyhetsartikkel...',
+    NewsCreatedSuccessfully: 'Nyhetsartikkelen ble opprettet.',
+    NewsTitleLabel: 'Tittel',
+    NewsTitlePlaceholder: 'Angi verdi her',
+    CreateButtonLabel: 'Opprett',
+    CreateNewsLinkLabel: 'Opprett Nyhet',
+    NewsCreateError: 'Noe gikk galt: ',
+    NewsTitleRequired: 'Tittel er påkrevd for å opprette en nyhetsartikkel.',
+    TemplateRequired: 'En mal må velges for å opprette en nyhetsartikkel.',
+    TemplatePlaceholder: 'Velg et alternativ',
+    TemplateLabel: 'Mal',
+    NoRecentNews: 'Ingen nylige nyheter funnet.',
+    ShowMoreNews: 'Vis flere',
+    ShowLessNews: 'Vis færre',
+    EditedLabel: 'Redigert',
+    MaxVisibleNewsDescription:
+      'Angi antallet nyhetsartikler som skal vises i listen.',
+    MaxVisibleNewsLabel: 'Antall synlige nyheter (før vis mer)',
+    SiteUrlLabel: 'URL til området',
+    SiteUrlDescription: 'Angi URL-en til området der nyhetene skal publiseres.',
+    NewsFolderNameDescription: 'Angi navnet på mappen der nyhetsartiklene skal lagres.',
+    NewsFolderNameDefault: 'Prosjektnyheter',
+    NewsFolderNameLabel: 'Mappenavn',
+    FileNameRequired: 'Filnavn er påkrevd.',
+    FileNameTooLong: 'Filnavn er for langt.',
+    FileNameInvalid: 'Filnavn inneholder ugyldige tegn.',
+    FileNameNoLeadingTrailingSpaces: 'Filnavn kan ikke ha ledende eller etterfølgende mellomrom.',
+    FileNameReserved: 'Filnavn er reservert.',
+    NewsFolderError: 'Feil ved oppretting av nyhetsmappe: ',
+    LoadingLabel: 'Laster nyheter...',
+    GenericErrorMessage: 'Noe gikk galt. Vennligst prøv igjen senere eller kontakt brukerstøtte.',
+    NewsCreateDuplicateFileError: 'En nyhetsartikkel med samme navn finnes allerede. Vennligst velg et annet navn.',
+    PreviewLabel: 'Forhåndsvisning',
+    NoPreviewAvailable: 'Ingen forhåndsvisning tilgjengelig.',
+    // End of Project News Web Part strings
   }
 })

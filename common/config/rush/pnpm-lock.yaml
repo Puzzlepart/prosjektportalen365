@@ -52,7 +52,7 @@ dependencies:
   '@types/react': 17.0.45
   '@types/react-autocomplete': 1.8.11
   '@types/react-beautiful-dnd': 13.1.8
-  '@types/react-calendar-timeline': 0.26.0
+  '@types/react-calendar-timeline': 0.28.0
   '@types/react-dom': 17.0.17
   '@types/react-window': 1.8.8
   '@types/shade-blend-color': 1.0.3
@@ -7874,13 +7874,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-E3TyFsro9pQuK4r8S/OL6G99eq7p8v29sX0PM7oT8Z+PJfZvSQTx4zTQbUJ+QZXioAF0e7TGBEcA1XhYhCweyQ==
-  /@types/react-calendar-timeline/0.26.0:
-    dependencies:
-      '@types/react': 17.0.45
-      moment: 2.30.1
-    dev: false
-    resolution:
-      integrity: sha512-KMhmAcE/+dSHHXV3W2YH5xKHXn4FjCTsGHZbYSEa2QotOCPJC2rK4LKhWcpfl3MOoJDZ4MUPpzhV+1Dyzl6vjg==
   /@types/react-calendar-timeline/0.28.0:
     dependencies:
       '@types/react': 17.0.45
@@ -18630,6 +18623,7 @@ packages:
     resolution:
       integrity: sha512-rmTZ9kz+f3rCvK2TD1Ue/oZlns7OGoIWP4fc3llxxRXlOkHKoWPPWJOfFYpITabSow43QJbRIoHQXtt10VldyQ==
   /node-domexception/1.0.0:
+    deprecated: Use your platform's native DOMException instead
     dev: false
     engines:
       node: '>=10.5.0'
@@ -25395,7 +25389,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-portfolioextensions'
     resolution:
-      integrity: sha512-e1uvkqRfMOzpksAe6S8ut5zvgB9Wk6tLYB7XUDtsjju9H2N+45BeWXWC1MXAJudzxJiA86JZqvT030+B6WR3kQ==
+      integrity: sha512-JpnCypFJTuaEtzwoV/rrQ3cuSdHc6OSHMS0LdebjBmaK1KwkAHvIUZ7AJ/YtQaq+C7ZiMLGnyZH3wwlZk/Lccw==
       tarball: file:projects/pp365-portfolioextensions.tgz
     version: 0.0.0
   file:projects/pp365-portfoliowebparts.tgz_@pnp+odata@2.15.0:
@@ -25489,7 +25483,7 @@ packages:
     peerDependencies:
       '@pnp/odata': '*'
     resolution:
-      integrity: sha512-Abg/p+u33MdRl7M4JBusQkM6xfGE1dCLIryLq/oipS4/A/P45jEdA1Kv5Y3TeFhNQAp4Y25TmRESk5eZkL8LiA==
+      integrity: sha512-RPeXi2YObc+59TIE4cYwAigSTt7z/PKkudSCD4v2bUw3OJMC6kJDUYhtWhaNFwKGLtBCA0zQPVUbqWySuY7Wfg==
       tarball: file:projects/pp365-portfoliowebparts.tgz
     version: 0.0.0
   file:projects/pp365-programwebparts.tgz_@pnp+odata@2.15.0:
@@ -25570,7 +25564,7 @@ packages:
     peerDependencies:
       '@pnp/odata': '*'
     resolution:
-      integrity: sha512-ApKTVx9+ccKcZ3fviWLwfSxPGX7XTb6kAjG9YfBmNCYRWELe34RhAEtP2F7wxfyJCXhb7yEkgnBAbfq+29ancQ==
+      integrity: sha512-w1PruyA2VOGPgBGVIdyDESUOJ1ChrIyAhdOy5s2hGA8Y9MtACoWjIQtOKFDNPoNSlg3FC9U1ERDnlfFW3t8USA==
       tarball: file:projects/pp365-programwebparts.tgz
     version: 0.0.0
   file:projects/pp365-projectextensions.tgz:
@@ -25643,7 +25637,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectextensions'
     resolution:
-      integrity: sha512-dTpJT2cs5L91w2pwX38dxXtIzVNYH2luDPP2sSgTH8QIKqTzpNM97S1UhYEFd8KnQyb+1ZF4wITqIh0B+2700g==
+      integrity: sha512-O1kr3LPeC23vVjMZxp8nsB0Tz3UfwxXYlT0v7l0c0qhlJChV/oSvbbI+viiVgrjRIBvG/0uakIs/UBO2Elwsxg==
       tarball: file:projects/pp365-projectextensions.tgz
     version: 0.0.0
   file:projects/pp365-projectwebparts.tgz:
@@ -25660,6 +25654,7 @@ packages:
       '@microsoft/sp-build-web': 1.17.4
       '@microsoft/sp-core-library': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
       '@microsoft/sp-dialog': 1.17.4_5bb3879ba087c0ef402ac2f0f80f9922
+      '@microsoft/sp-http': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
       '@microsoft/sp-listview-extensibility': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
       '@microsoft/sp-lodash-subset': 1.17.4
       '@microsoft/sp-module-interfaces': 1.17.4
@@ -25733,7 +25728,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectwebparts'
     resolution:
-      integrity: sha512-SxboKd5GaGsfLK+Punu8a+rkanhp6zLH55hM4W+JNHl8k2vJQKwFSRKYHxof86zi+AKwjqbheio/FC8JkbWyhQ==
+      integrity: sha512-moHFLizQqSg3zvXrIyZx48oZWlPAYrrARb9b5/xJ2jdkfT7qgHZZsFFil+DlZpjvA8su5bv2WP5wi/0RTQmiMg==
       tarball: file:projects/pp365-projectwebparts.tgz
     version: 0.0.0
   file:projects/pp365-shared-library.tgz_interactjs@1.6.2:
@@ -25804,7 +25799,7 @@ packages:
     peerDependencies:
       interactjs: '*'
     resolution:
-      integrity: sha512-TtEoyO+fZrHBdOhqpvHPAcyDOaCPtu32+8sJKxzO3meC7g8418rlv5VuM/9jwpHPlp2wrjRsgedBAo/buqMmjw==
+      integrity: sha512-bvfjSWKY+vjmXybpk6wVLiecDtUi8kVoW7hsmccVIN6jZLegwjec2JZgQeu95sh29B/mNBP6Y8V3ZCsXX6Q24w==
       tarball: file:projects/pp365-shared-library.tgz
     version: 0.0.0
   file:projects/pp365-spfx-tasks.tgz_9c907a7ccd27a2e2d0ee9de5366482d1:
@@ -25827,7 +25822,7 @@ packages:
       react: '*'
       react-dom: '*'
     resolution:
-      integrity: sha512-pTFZ5fnm8hW20FJRDPP763pJYlw0WOV/qwn1g6PzNXigVt0mggsCBK1VOgISdfQh9Uw0Ywq8wJxhmPtqlfI1Yw==
+      integrity: sha512-hnL6XBw6aFS6dMrbnv9FX+D0hn1TGeCjGruuJhPpsZWGhtwKwp1oY2gDcPYaP13hopzCAPoceodexsEFr5owfQ==
       tarball: file:projects/pp365-spfx-tasks.tgz
     version: 0.0.0
   file:projects/pp365-templates.tgz_9c907a7ccd27a2e2d0ee9de5366482d1:
@@ -25850,7 +25845,7 @@ packages:
       react: '*'
       react-dom: '*'
     resolution:
-      integrity: sha512-IgID4+r4bnvwkPtILU0KW7JxzSge+KgmS6hXwtbHMunC8r7c5U7lEXxJdZ6BPBobDB4o2mCesEFbC4bBj9nuRA==
+      integrity: sha512-JZItbYNCKKqWQnGrd65Cojy+AuF2VxyIVqTqWFqRMjW9SOecCKhUIoWHNHr3vqX1X1zOUN/4+SD+kYuDkVivBg==
       tarball: file:projects/pp365-templates.tgz
     version: 0.0.0
 specifiers:
@@ -25907,7 +25902,7 @@ specifiers:
   '@types/react': 17.0.45
   '@types/react-autocomplete': ^1.8.6
   '@types/react-beautiful-dnd': ~13.1.4
-  '@types/react-calendar-timeline': 0.26.0
+  '@types/react-calendar-timeline': 0.28.0
   '@types/react-dom': 17.0.17
   '@types/react-window': ~1.8.8
   '@types/shade-blend-color': ~1.0.3

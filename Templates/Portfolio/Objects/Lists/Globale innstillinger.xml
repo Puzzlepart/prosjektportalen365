@@ -110,6 +110,22 @@
             <pnp:DataValue FieldName="GtSettingsCategory">Generelt</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSettingsId">{f3b39250-7373-43c0-82a8-26530198dd35}</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">URL til område for nyhetspublisering</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsKey">ProjectNewsHubUrl</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsValue">{hosturl}{site}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsCategory">Generelt</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSettingsId">{9caa9a60-bcbf-4f7a-bffa-9896d5da94cc}</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Mappe for publisering av nyheter</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsKey">ProjectNewsFolderName</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsValue">Prosjektnyheter</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsCategory">Generelt</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
             <pnp:DataValue FieldName="GtSettingsId">{9f18d1fb-5dfc-4888-a4f4-df9eed305b74}</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Ta i bruk Prosjektportalen assistenten</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsKey">UseAssistant</pnp:DataValue>

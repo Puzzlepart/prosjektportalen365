@@ -2711,4 +2711,10 @@
   <data name="SiteFields_GtFieldOverrides_Description" xml:space="preserve">
     <value>Tilpassede feltinnstillinger i JSON-format. Objektformat med konfigurasjonsnavnet først, deretter ett objekt med lokalene som nøkkel og feltinnstillingene (f.eks. displayName eller description) som verdi.</value>
   </data>
+  <data name="SiteFields_GtHubSiteId_DisplayName" xml:space="preserve">
+    <value>Hub-ID</value>
+  </data>
+  <data name="SiteFields_GtHubSiteId_Description" xml:space="preserve">
+    <value>The ID of the hub site.</value>
+  </data>
 </root>

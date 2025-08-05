@@ -1,0 +1,3 @@
+﻿<Field Description="{resource:SiteFields_GtHubSiteId_Description}" DisplayName="{resource:SiteFields_GtHubSiteId_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{4d1ed0ee-e8be-4bcd-be4a-38da2d732cfe}" Name="GtHubSiteId" ShowInDisplayForm="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE" StaticName="GtHubSiteId" Type="Text">
+    <Default>00000000-0000-0000-0000-000000000000</Default>
+</Field>
