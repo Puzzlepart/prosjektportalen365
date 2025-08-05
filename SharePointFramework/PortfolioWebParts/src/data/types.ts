@@ -242,8 +242,9 @@ export interface IPortfolioWebPartsDataAdapter {
    * for 30 minutes.
    *
    * @param siteId Site ID to fetch the project
+   * @param hubContext Optional hub context for cross-hub data access
    */
-  fetchEnrichedProject?(siteId: string): Promise<ProjectListModel>
+  fetchEnrichedProject?(siteId: string, hubContext?: IHubContext): Promise<ProjectListModel>
 
   /**
    * Fetch projects from the projects list. If a data source is specified,
@@ -432,4 +433,21 @@ export const GetPortfolioConfigError = (error: Error): ErrorWithIntent => {
   )
   e.stack = error.stack
   return e
+}
+
+export interface IHubContext {
+  /**
+   * Hub site ID (GUID)
+   */
+  hubSiteId: string
+
+  /**
+   * Hub site URL
+   */
+  hubSiteUrl: string
+
+  /**
+   * SPFx context configured for the hub site
+   */
+  spfxContext?: any
 }

@@ -1,4 +1,6 @@
 /* eslint-disable quotes */
+/* eslint-disable no-console */
+
 import {
   IPropertyPaneConfiguration,
   PropertyPaneDropdown,
@@ -17,11 +19,13 @@ import {
 import { CalloutTriggers } from '@pnp/spfx-property-controls/lib/PropertyFieldHeader'
 import { createElement } from 'react'
 import { PortalDataService, ProjectColumn } from 'pp365-shared-library'
+import { IHubContext } from '../../data/types'
 import { spfi, SPFx } from '@pnp/sp'
 import '@pnp/sp/webs'
 import '@pnp/sp/lists'
 import '@pnp/sp/items'
 import '@pnp/sp/files'
+import '@pnp/sp/hubsites'
 
 export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCardProps> {
   private _portalDataService: PortalDataService
@@ -29,12 +33,15 @@ export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCar
   private _columnFieldOptions: { key: string; text: string }[]
   private _columnUserOptions: { key: string; text: string }[]
   private _projectSiteId: string
+  private _hubSiteId: string
+  private _hubSiteUrl: string
+  private _hubContext: IHubContext
 
   public async onInit(): Promise<void> {
     await super.onInit()
 
-    // Get the project site ID from the current page
     this._projectSiteId = await this.getProjectSiteId()
+    this._hubContext = this.createHubContext()
 
     this._portalDataService = await new PortalDataService().configure({
       spfxContext: this.context
@@ -59,50 +66,84 @@ export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCar
     this.renderComponent<IProjectCardProps>(ProjectCard, {
       ...this.properties,
       projectColumns: this._columns,
-      projectSiteId: this._projectSiteId || this.properties.projectSiteId
+      projectSiteId: this._projectSiteId || this.properties.projectSiteId,
+      hubContext: this._hubContext
     })
+  }
+
+  private createHubContext(): IHubContext | undefined {
+    if (this._hubSiteId && this._hubSiteUrl) {
+      return {
+        hubSiteId: this._hubSiteId,
+        hubSiteUrl: this._hubSiteUrl,
+        spfxContext: this.context
+      }
+    }
+    return undefined
   }
 
   protected async getProjectSiteId(): Promise<string> {
     if (!this._projectSiteId) {
       try {
         const sp = spfi().using(SPFx(this.context))
+        let sitePageData: any = null
 
-        // First try to get from the current list item if available
         if (this.context.pageContext.listItem && this.context.pageContext.listItem.id) {
           try {
-            const listItem = await sp.web.lists.getByTitle('Områdesider').items.getById(this.context.pageContext.listItem.id).select('GtSiteId')()
-            this._projectSiteId = listItem.GtSiteId || null
-            if (this._projectSiteId) {
-              return this._projectSiteId
-            }
+            const listItem = await sp.web.lists
+              .getByTitle('Områdesider')
+              .items.getById(this.context.pageContext.listItem.id)
+              .select('GtSiteId', 'GtHubSiteId')()
+            sitePageData = listItem
           } catch (listError) {
-            console.warn('Failed to get GtSiteId from Områdesider list, trying Site Pages:', listError)
-            // Try Site Pages as fallback
+            console.warn('Failed to get data from Områdesider list, trying Site Pages:', listError)
+
             try {
-              const sitePageItem = await sp.web.lists.getByTitle('Site Pages').items.getById(this.context.pageContext.listItem.id).select('GtSiteId')()
-              this._projectSiteId = sitePageItem.GtSiteId || null
-              if (this._projectSiteId) {
-                return this._projectSiteId
-              }
+              const sitePageItem = await sp.web.lists
+                .getByTitle('Site Pages')
+                .items.getById(this.context.pageContext.listItem.id)
+                .select('GtSiteId', 'GtHubSiteId')()
+              sitePageData = sitePageItem
             } catch (sitePageError) {
-              console.warn('Failed to get GtSiteId from Site Pages list:', sitePageError)
+              console.warn('Failed to get data from Site Pages list:', sitePageError)
             }
           }
         }
 
-        // Fallback: Get the current page file name from the URL and fetch via file
-        const currentPageUrl = this.context.pageContext.legacyPageContext.requestUrl
-        const fileName = currentPageUrl.split('/').pop() || 'Home.aspx'
+        if (sitePageData) {
+          const gtSiteId = sitePageData.GtSiteId
+          const gtHubSiteId = sitePageData.GtHubSiteId
+          const currentHubSiteId = this.context.pageContext.legacyPageContext.hubSiteId
 
-        try {
-          const file = sp.web.getFileByServerRelativePath(`${this.context.pageContext.site.serverRelativeUrl}/SitePages/${fileName}`)
-          const item = await file.getItem()
-          // Get the item with the GtSiteId field
-          const itemData = await item()
-          this._projectSiteId = (itemData as any).GtSiteId || null
-        } catch (fileError) {
-          console.warn('Failed to fetch site page details via file:', fileError)
+          // Check if the hub site ID from the page matches the current hub
+          if (gtHubSiteId && currentHubSiteId && gtHubSiteId !== currentHubSiteId) {
+            try {
+              const hubSiteInfo = await sp.hubSites.getById(gtHubSiteId)()
+
+              if (hubSiteInfo && hubSiteInfo.SiteUrl) {
+                this._hubSiteUrl = hubSiteInfo.SiteUrl
+                this._hubSiteId = gtHubSiteId
+
+                // Create SP context for the hub site using the actual URL
+                const hubSp = spfi(this._hubSiteUrl).using(SPFx(this.context))
+
+                // Verify the hub site is accessible
+                await hubSp.web.select('Id', 'Title', 'Url')()
+
+                // Store the project site ID
+                this._projectSiteId = gtSiteId
+              } else {
+                this._projectSiteId = gtSiteId
+              }
+            } catch (hubError) {
+              // Fallback to using the site ID as-is
+              this._projectSiteId = gtSiteId
+            }
+          } else {
+            // Same hub or no hub specified, use the site ID directly
+            this._projectSiteId = gtSiteId
+          }
+        } else {
           this._projectSiteId = null
         }
       } catch (error) {

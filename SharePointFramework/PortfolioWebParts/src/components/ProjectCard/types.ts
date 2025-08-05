@@ -2,6 +2,7 @@ import { IShimmerProps } from '@fluentui/react'
 import { ButtonProps } from '@fluentui/react-components'
 import { IPortfolioAggregationProps } from 'components/PortfolioAggregation'
 import { ProjectColumn, ProjectListModel } from 'pp365-shared-library'
+import { IHubContext } from '../../data/types'
 
 export interface IProjectCardProps extends IPortfolioAggregationProps {
   /**
@@ -68,6 +69,11 @@ export interface IProjectCardProps extends IPortfolioAggregationProps {
    * Site ID to use for the project card
    */
   projectSiteId?: string
+
+  /**
+   * Hub context for cross-hub data access
+   */
+  hubContext?: IHubContext
 }
 
 export interface IProjectCardState extends Pick<IShimmerProps, 'isDataLoaded'> {
