@@ -2,10 +2,10 @@ import React, { FC, useState } from 'react'
 import { Card, CardHeader, Link, Text, Button } from '@fluentui/react-components'
 import * as strings from 'ProjectWebPartsStrings'
 import styles from './RecentNews.module.scss'
-import { RecentNewsListProps } from '../types'
 import { getFluentIcon } from 'pp365-shared-library'
+import { IRecentNewsProps } from './types'
 
-const RecentNewsList: FC<RecentNewsListProps> = ({ news, maxVisible = 6 }) => {
+export const RecentNews: FC<IRecentNewsProps> = ({ news, maxVisible = 6 }) => {
   const [showAll, setShowAll] = useState(false)
   const visibleNews = showAll ? news : news.slice(0, maxVisible)
 
@@ -64,5 +64,3 @@ const RecentNewsList: FC<RecentNewsListProps> = ({ news, maxVisible = 6 }) => {
     </>
   )
 }
-
-export default RecentNewsList

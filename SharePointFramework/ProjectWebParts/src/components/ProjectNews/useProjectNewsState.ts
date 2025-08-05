@@ -11,6 +11,8 @@ export function useProjectNewsState() {
   const [state, $setState] = useState<IProjectNewsState>({
     loading: true,
     error: null,
+    isDialogOpen: false,
+    isDrawerOpen: false,
     refetch: new Date().getTime()
   })
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { SPHttpClient, SPHttpClientResponse } from '@microsoft/sp-http'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import * as strings from 'ProjectWebPartsStrings'
@@ -280,7 +281,7 @@ export async function copyTemplatePage(
   newPageServerRelativeUrl: string
 ): Promise<SPHttpClientResponse> {
   const copyUrl = `${siteUrl}/_api/web/GetFileByServerRelativeUrl('${selectedTemplate}')/copyTo(strNewUrl='${newPageServerRelativeUrl}',bOverWrite=false)`
-  return spHttpClient.post(copyUrl, SPHttpClient.configurations.v1, {
+  return await spHttpClient.post(copyUrl, SPHttpClient.configurations.v1, {
     headers: { Accept: 'application/json;odata=nometadata' }
   })
 }
@@ -299,7 +300,8 @@ export async function setOriginalSourceSiteId(
   spHttpClient: SPHttpClient,
   sitePagesServerRelativeUrl: string,
   itemId: number,
-  siteId: string
+  siteId: string,
+  hubSiteId: string
 ): Promise<void> {
   if (!siteId) {
     throw new Error('Site ID is required to set GtSiteId')
@@ -313,8 +315,8 @@ export async function setOriginalSourceSiteId(
       'X-HTTP-Method': 'MERGE'
     },
     body: JSON.stringify({
-      GtSiteId: siteId
-      // TODO: Add GtHubSiteId
+      GtSiteId: siteId,
+      GtHubSiteId: hubSiteId
     })
   })
   if (!updateRes.ok) {

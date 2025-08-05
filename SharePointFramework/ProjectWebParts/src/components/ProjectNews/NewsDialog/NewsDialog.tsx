@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { FC, useContext } from 'react'
 import {
   Dialog,
   DialogSurface,
@@ -15,53 +15,53 @@ import {
   DrawerBody,
   ToggleButton,
   DrawerHeaderTitle,
-  useRestoreFocusTarget,
-  useRestoreFocusSource
+  useRestoreFocusSource,
+  useRestoreFocusTarget
 } from '@fluentui/react-components'
-
 import * as strings from 'ProjectWebPartsStrings'
-import { NewsDialogProps, TemplateFile } from '../types'
 import styles from './NewsDialog.module.scss'
 import { getFluentIcon, FieldContainer } from 'pp365-shared-library'
+import { INewsDialogProps } from './types'
+import { ProjectNewsContext } from '../context'
+import { useNewsDialog } from './useNewsDialog'
 
-const NewsDialog: React.FC<NewsDialogProps> = ({
-  open,
-  onOpenChange,
-  spinnerMode,
-  title,
-  errorMessage,
-  onTitleChange,
-  onSubmit,
-  templates,
-  selectedTemplate,
-  onTemplateChange
-}) => {
-  const [isDrawerOpen, setIsDrawerOpen] = React.useState(false)
-  const isTitleValid = !!title && !errorMessage
-  const isTemplateValid = !!selectedTemplate
-  const canCreate = isTitleValid && isTemplateValid && spinnerMode === 'idle'
-  const selected = templates.find((t: TemplateFile) => t.ServerRelativeUrl === selectedTemplate)
-  const origin = window.location.origin
-  const previewUrl = selected ? `${origin}${selected.ServerRelativeUrl}?Mode=Read` : null
-  const SuccessIcon = getFluentIcon('CheckmarkCircle', { size: 64, color: '#107c10', filled: true })
-  const DismissIcon = getFluentIcon('Dismiss', { size: 24, color: '#888' })
+export const NewsDialog: FC<INewsDialogProps> = () => {
+  const context = useContext(ProjectNewsContext)
+  const {
+    spinnerMode,
+    title,
+    errorMessage,
+    isTemplateValid,
+    templates,
+    selected,
+    selectedTemplate,
+    previewUrl,
+    canCreate,
+    inputRef,
+    handleTitleChange,
+    handleTemplateChange,
+    handleCreate
+  } = useNewsDialog()
+
   const restoreFocusTargetAttributes = useRestoreFocusTarget()
   const restoreFocusSourceAttributes = useRestoreFocusSource()
-  const inputRef = React.useRef<HTMLInputElement>(null)
 
   return (
     <>
-      <Dialog open={open} onOpenChange={(_, data) => onOpenChange(data.open)}>
+      <Dialog
+        open={context.state.isDialogOpen}
+        onOpenChange={(_, { open }) => context.setState({ isDialogOpen: open })}
+      >
         <DialogSurface>
           <DialogTitle style={{ textAlign: 'center' }}>{strings.DialogTitle}</DialogTitle>
           <DialogBody className={styles.dialogBody}>
             {spinnerMode === 'creating' ? (
               <div className={styles.centeredSpinner}>
-                <Spinner label={strings.CreatingNewArticleStatus} />
+                <Spinner label={strings.CreatingNewArticleStatus} size='small' />
               </div>
             ) : spinnerMode === 'success' ? (
               <div className={styles.centeredSuccess}>
-                {SuccessIcon}
+                {getFluentIcon('CheckmarkCircle', { size: 64, color: '#107c10', filled: true })}
                 <div>{strings.NewsCreatedSuccessfully}</div>
               </div>
             ) : (
@@ -79,7 +79,7 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
                     placeholder={strings.NewsTitlePlaceholder}
                     id='news-title-input'
                     value={title}
-                    onChange={onTitleChange}
+                    onChange={handleTitleChange}
                     required
                   />
                 </FieldContainer>
@@ -98,7 +98,7 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
                     onOptionSelect={(_, data) => {
                       const selected = templates.find((t) => t.Title === data.optionValue)
                       if (selected) {
-                        onTemplateChange(_, { optionValue: selected.ServerRelativeUrl })
+                        handleTemplateChange(_, { optionValue: selected.ServerRelativeUrl })
                       }
                     }}
                     placeholder={strings.TemplatePlaceholder}
@@ -112,8 +112,8 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
                 </FieldContainer>
                 <ToggleButton
                   className={styles.toggleButton}
-                  checked={isDrawerOpen}
-                  onClick={() => setIsDrawerOpen((open) => !open)}
+                  checked={context.state.isDrawerOpen}
+                  onClick={() => context.setState({ isDrawerOpen: !context.state.isDrawerOpen })}
                   disabled={!selected}
                   appearance='secondary'
                   {...restoreFocusTargetAttributes}
@@ -125,10 +125,10 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
           </DialogBody>
           {spinnerMode === 'idle' && (
             <DialogActions>
-              <Button appearance='primary' onClick={onSubmit} disabled={!canCreate}>
+              <Button appearance='primary' onClick={handleCreate} disabled={!canCreate}>
                 {strings.CreateButtonLabel}
               </Button>
-              <Button onClick={() => onOpenChange(false)} type='button'>
+              <Button onClick={() => context.setState({ isDialogOpen: false })} type='button'>
                 {strings.CancelText}
               </Button>
             </DialogActions>
@@ -136,12 +136,12 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
         </DialogSurface>
       </Dialog>
       <Drawer
-        open={isDrawerOpen}
+        open={context.state.isDrawerOpen}
         position='end'
         size='large'
-        onOpenChange={(_, data) => {
-          setIsDrawerOpen(data.open)
-          if (!data.open) {
+        onOpenChange={(_, { open }) => {
+          context.setState({ isDrawerOpen: open })
+          if (!open) {
             //Drawer does not restore focus to the trigger on backdrop click by default
             inputRef.current?.focus()
           }
@@ -154,8 +154,8 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
               <Button
                 appearance='subtle'
                 aria-label='Close'
-                icon={DismissIcon}
-                onClick={() => setIsDrawerOpen(false)}
+                icon={getFluentIcon('Dismiss')}
+                onClick={() => context.setState({ isDrawerOpen: false })}
               />
             }
           >
@@ -175,4 +175,3 @@ const NewsDialog: React.FC<NewsDialogProps> = ({
     </>
   )
 }
-export default NewsDialog

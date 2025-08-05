@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react'
-
+/* eslint-disable no-console */
+import React, { useState, useEffect, useCallback, useContext } from 'react'
 import strings from 'ProjectWebPartsStrings'
 import {
   ensureProjectNewsFolder,
@@ -12,113 +12,108 @@ import {
   getSitePageItemIdByFileName,
   doesSitePageExist
 } from '../util'
-import { IProjectNewsProps, TemplateFile } from '../types'
+import { TemplateFile } from '../types'
+import { ProjectNewsContext } from '../context'
+import { useNewsForm } from './useNewsForm'
 
-const REDIRECT_DELAY = 1100
+/**
+ * Component logic hook for `NewsDialog`
+ */
+export const useNewsDialog = () => {
+  const context = useContext(ProjectNewsContext)
+  const newsForm = useNewsForm()
 
-export function useProjectNewsDialog(props: IProjectNewsProps) {
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [spinnerMode, setSpinnerMode] = useState<'idle' | 'creating' | 'success'>('idle')
-  const [title, setTitle] = useState('')
-  const [errorMessage, setErrorMessage] = useState('')
   const [templates, setTemplates] = useState<TemplateFile[]>([])
-  const [selectedTemplate, setSelectedTemplate] = useState<string | undefined>(undefined)
-  const folderName = props.newsFolderName || strings.NewsFolderNameDefault
-  const currentSiteId = props.context.pageContext.site.id.toString()
+
+  const folderName = context.props.newsFolderName || strings.NewsFolderNameDefault
+  const currentSiteId = context.props.context.pageContext.site.id.toString()
+  const canCreate = newsForm.isFormValid && spinnerMode === 'idle'
+  const selected = templates.find(
+    (t: TemplateFile) => t.ServerRelativeUrl === newsForm.selectedTemplate
+  )
+  const origin = window.location.origin
+  const previewUrl = selected ? `${origin}${selected.ServerRelativeUrl}?Mode=Read` : null
 
   useEffect(() => {
-    if (isDialogOpen) {
-      getTemplates(props.siteUrl, props.spHttpClient).then(setTemplates)
+    if (context.state.isDialogOpen) {
+      getTemplates(context.props.siteUrl, context.props.spHttpClient).then(setTemplates)
     }
-  }, [isDialogOpen, props.siteUrl, props.spHttpClient])
-
-  const handleTitleChange = useCallback((_: React.FormEvent, data: { value: string }): void => {
-    setTitle(data.value)
-    setErrorMessage('')
-  }, [])
-
-  const handleTemplateChange = useCallback(
-    (_: React.FormEvent, data: { optionValue: string }): void => {
-      setSelectedTemplate(data.optionValue)
-      setErrorMessage('')
-    },
-    []
-  )
+  }, [context.state.isDialogOpen, context.props.siteUrl, context.props.spHttpClient])
 
   const handleCreate = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault()
-      if (!title.trim()) {
-        setErrorMessage(strings.NewsTitleRequired)
+
+      // Use the form validation from the hook
+      if (!newsForm.validateForm()) {
         return
       }
-      if (!selectedTemplate) {
-        setErrorMessage(strings.TemplateRequired)
-        return
-      }
+
       setSpinnerMode('creating')
-      setErrorMessage('')
+      newsForm.setFormErrorMessage('')
+
       try {
-        await ensureProjectNewsFolder(props.siteUrl, props.spHttpClient, folderName)
-        const newPageName = getNewsPageName(title)
+        await ensureProjectNewsFolder(context.props.siteUrl, context.props.spHttpClient, folderName)
+        const newPageName = getNewsPageName(newsForm.title)
         const exists = await doesSitePageExist(
-          props.siteUrl,
-          props.spHttpClient,
+          context.props.siteUrl,
+          context.props.spHttpClient,
           folderName,
           newPageName
         )
         if (exists) {
-          setErrorMessage(strings.NewsCreateDuplicateFileError)
+          newsForm.setFormErrorMessage(strings.NewsCreateDuplicateFileError)
           setSpinnerMode('idle')
           return
         }
         const newPageServerRelativeUrl = getServerRelativeUrl(
-          props.siteUrl,
+          context.props.siteUrl,
           'SitePages',
           folderName,
           newPageName
         )
         const res = await copyTemplatePage(
-          props.siteUrl,
-          props.spHttpClient,
-          selectedTemplate,
+          context.props.siteUrl,
+          context.props.spHttpClient,
+          newsForm.selectedTemplate,
           newPageServerRelativeUrl
         )
         const { itemId, sitePagesServerRelativeUrl } = await getSitePageItemIdByFileName(
-          props.siteUrl,
-          props.spHttpClient,
+          context.props.siteUrl,
+          context.props.spHttpClient,
           newPageName
         )
         if (itemId) {
           await new Promise((resolve) => setTimeout(resolve, 500))
           await setOriginalSourceSiteId(
-            props.siteUrl,
-            props.spHttpClient,
+            context.props.siteUrl,
+            context.props.spHttpClient,
             sitePagesServerRelativeUrl,
             itemId,
-            currentSiteId
+            currentSiteId,
+            context.props.pageContext.legacyPageContext.hubSiteId
           )
         }
         if (res.ok) {
           setSpinnerMode('success')
           setTimeout(() => {
-            setIsDialogOpen(false)
+            context.setState({ isDialogOpen: false })
             setSpinnerMode('idle')
-            setTitle('')
-            setSelectedTemplate(undefined)
-            const editUrl = getNewsEditUrl(props.siteUrl, folderName, newPageName)
+            newsForm.resetForm()
+            const editUrl = getNewsEditUrl(context.props.siteUrl, folderName, newPageName)
             window.open(editUrl, '_blank')
-          }, REDIRECT_DELAY)
+          }, 1100)
         } else {
           const error = await res.json()
-          setErrorMessage(
+          newsForm.setFormErrorMessage(
             `${strings.NewsCreateError} ${
               error.error?.message || error.error?.message?.value || error.message
             }`
           )
         }
       } catch (err: any) {
-        setErrorMessage(
+        newsForm.setFormErrorMessage(
           `${strings.NewsCreateError} ${
             err?.error?.message || err?.error?.message?.value || err?.message
           }`
@@ -127,18 +122,29 @@ export function useProjectNewsDialog(props: IProjectNewsProps) {
         setSpinnerMode('idle')
       }
     },
-    [title, selectedTemplate, props.siteUrl, props.spHttpClient, folderName]
+    [
+      newsForm,
+      context.props.siteUrl,
+      context.props.spHttpClient,
+      folderName,
+      currentSiteId,
+      context
+    ]
   )
   return {
-    isDialogOpen,
-    setIsDialogOpen,
     spinnerMode,
-    title,
-    errorMessage,
+    title: newsForm.title,
+    errorMessage: newsForm.errorMessage,
     templates,
-    selectedTemplate,
-    handleTitleChange,
-    handleTemplateChange,
-    handleCreate
+    selected,
+    selectedTemplate: newsForm.selectedTemplate,
+    handleTitleChange: newsForm.handleTitleChange,
+    handleTemplateChange: newsForm.handleTemplateChange,
+    handleCreate,
+    canCreate,
+    inputRef: newsForm.inputRef,
+    previewUrl,
+    isTemplateValid: newsForm.isTemplateValid,
+    isTitleValid: newsForm.isTitleValid
   }
 }
