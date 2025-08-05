@@ -11,7 +11,7 @@ import strings from 'PortfolioWebPartsStrings'
 /**
  * Component logic hook for `ProjectCard` component.
  *
-clear */
+ */
 export function useProjectCard(props: IProjectCardProps) {
   const { state, setState } = useProjectCardState()
   const fluentProviderId = useId('fp-project-card')
