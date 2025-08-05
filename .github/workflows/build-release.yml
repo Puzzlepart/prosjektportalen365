@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - releases/1.11
-      - feat/projectcard
       - main
     paths:
       - 'SharePointFramework/**'
