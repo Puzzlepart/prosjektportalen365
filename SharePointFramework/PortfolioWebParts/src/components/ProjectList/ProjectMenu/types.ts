@@ -2,7 +2,7 @@ import { ButtonProps } from '@fluentui/react-components'
 import { ProjectListModel } from 'pp365-shared-library/lib/models'
 import { IProjectListProps } from '../types'
 
-export interface IProjectMenu extends Pick<ButtonProps, 'appearance' | 'size'> {
+export interface IProjectMenu extends Pick<ButtonProps, 'appearance' | 'size' | 'disabled'> {
   /**
    * Project to show menu for
    */

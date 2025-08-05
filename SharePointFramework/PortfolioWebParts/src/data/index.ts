@@ -11,6 +11,7 @@ import {
   SPFI,
   Web
 } from '@pnp/sp/presets/all'
+import { spfi, SPFx } from '@pnp/sp'
 import * as cleanDeep from 'clean-deep'
 import msGraph from 'msgraph-helper'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -30,7 +31,6 @@ import {
   SPContentType,
   SPField,
   SPFxContext,
-  SPProjectItem,
   SPTimelineConfigurationItem,
   TimelineConfigurationModel,
   TimelineContentModel
@@ -55,6 +55,7 @@ import * as config from './config'
 import {
   GetPortfolioConfigError,
   IFetchDataForViewItemResult,
+  IHubContext,
   IPortfolioViewData,
   IPortfolioWebPartsDataAdapter,
   IProjectsData,
@@ -611,7 +612,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       `pp365_fetchenrichedprojects_${siteId}`,
       async () =>
         await Promise.all([
-          list.items.select(...Object.keys(new SPProjectItem())).getAll<SPProjectItem>(),
+          list.items.getAll(),
           this._fetchItems(`DepartmentId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId']),
           this.fetchMemberGroups(),
           this._sp.web.siteUsers.select('Id', 'Title', 'Email')()
@@ -630,6 +631,43 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     )
     projects = projects.sort((a, b) => a.title.localeCompare(b.title))
     return projects
+  }
+
+  public async fetchEnrichedProject(
+    siteId: string,
+    hubContext?: IHubContext
+  ): Promise<ProjectListModel> {
+    const localStore = new PnPClientStorage().local
+
+    // Use hub context if provided, otherwise use current context
+    const spfxHubContext = hubContext?.spfxContext || this._spfxContext
+    const spHub = hubContext ? spfi(hubContext.hubSiteUrl).using(SPFx(spfxHubContext)) : this._sp
+
+    const cacheKey = hubContext
+      ? `pp365_fetchenrichedproject_${siteId}_hub_${hubContext.hubSiteId}`
+      : `pp365_fetchenrichedproject_${siteId}`
+
+    const list = spHub.web.lists.getByTitle(strings.ProjectsListName)
+    const [items, sites, memberOfGroups, users] = await localStore.getOrPut(
+      cacheKey,
+      async () =>
+        await Promise.all([
+          list.items.filter(`GtSiteId eq '${siteId}'`).getAll(),
+          this._fetchItems(`SiteId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId']),
+          this.fetchMemberGroups(),
+          spHub.web.siteUsers.select('Id', 'Title', 'Email')()
+        ]),
+      dateAdd(new Date(), 'minute', 30)
+    )
+    const result: IProjectsData = {
+      items,
+      sites,
+      memberOfGroups,
+      users
+    }
+    const projects = this._combineResultData(result)
+    const project = _.first(projects)
+    return project
   }
 
   /**

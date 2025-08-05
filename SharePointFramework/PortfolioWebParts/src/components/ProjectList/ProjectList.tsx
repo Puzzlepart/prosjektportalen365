@@ -115,11 +115,15 @@ ProjectList.defaultProps = {
   hideVerticals: [],
   useDynamicColors: true,
   showProjectLogo: true,
+  primaryField: 'GtProjectServiceAreaText',
+  secondaryField: 'GtProjectTypeText',
+  primaryUserField: 'GtProjectOwner',
+  secondaryUserField: 'GtProjectManager',
   projectMetadata: [
-    'ProjectOwner',
-    'ProjectManager',
-    'ProjectServiceArea',
-    'ProjectType',
+    'PrimaryField',
+    'SecondaryField',
+    'PrimaryUserField',
+    'SecondaryUserField',
     'ProjectPhase'
   ],
   quickLaunchMenu: [

@@ -417,6 +417,11 @@ declare interface IPortfolioWebPartsStrings {
   ViewMoreText: string
   ViewNotFoundMessage: string
   ViewsListNameLabel: string
+  ProjectNotFound: string
+  PrimaryFieldLabel: string
+  SecondaryFieldLabel: string
+  PrimaryUserFieldLabel: string
+  SecondaryUserFieldLabel: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

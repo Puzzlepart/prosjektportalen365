@@ -19,11 +19,8 @@ export function useProjectLogo(props: IProjectLogoProps) {
    * @returns A boolean indicating if the image is a custom image.
    */
   const shouldUseCustomImage = (image: React.SyntheticEvent<HTMLImageElement, Event>) => {
-    return (image.target as HTMLImageElement).naturalHeight !== 648
-      ? (image.target as HTMLImageElement).naturalHeight !== 96
-        ? true
-        : false
-      : false
+    const height = (image.target as HTMLImageElement).naturalHeight
+    return height !== 648 && height !== 96 && height !== 1024
   }
 
   const conditionalStyling = {

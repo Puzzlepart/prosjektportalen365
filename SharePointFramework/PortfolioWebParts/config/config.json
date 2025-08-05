@@ -73,6 +73,14 @@
           "manifest": "./src/webparts/ideaModule/manifest.json"
         }
       ]
+    },
+    "project-card-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/projectCard/index.js",
+          "manifest": "./src/webparts/projectCard/manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
