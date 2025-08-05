@@ -7,12 +7,15 @@ Sjekk ut [release notes](./releasenotes/1.11.0.md) for høydepunkter og mer deta
 ### Ny funksjonalitet
 
 - Ny webdel `Prosjektnyheter` for publisering og visning av prosjektnyheter. Webdelen viser nyheter som er publisert fra prosjektet, med mulighet til å opprette nyhetsartikler.
+  - Som følge av den nye løsningen følger det også med en Prosjektnyhet-sidemal.
+- New webdel `Prosjektkort` for visning av prosjektinformasjon som et kort (lik kortvisningen på forsiden av porteføljen).
 
 ### Forbedringer
 
 - Muligheter for å angi følsomhets- og oppbevaringsetiketter, områdebilde og mye mer, samt styring av visningsnavn, beskrivelse og hva som er påkrevd i `Bestill område`-skjema [#1623](https://github.com/Puzzlepart/prosjektportalen365/pull/1623)
 - Lagt til mulighet for å skjule spesifikke kolonner på et globalt nivå basert på mal (Prosjektkolonner) [#1624](https://github.com/Puzzlepart/prosjektportalen365/issues/1624)
 - Prosjekttidslinje senterer seg nå rundt prosjektets tidsforløp (startdato - sluttdato) [#1625](https://github.com/Puzzlepart/prosjektportalen365/issues/1625)
+- Muligheter for å tilpasse informasjonen i prosjektkortet på forsiden av porteføljen, inkludert valg av hvilke felt som skal vises og i hvilken rekkefølge. [#1548](https://github.com/Puzzlepart/prosjektportalen365/issues/1548)
 
 ### Feilrettinger
 
