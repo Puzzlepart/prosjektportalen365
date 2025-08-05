@@ -126,7 +126,12 @@ export const ProjectCardFooter: FC = () => {
             title={context.project?.template}
           />
         </Tooltip>
-        <ProjectMenu project={context.project} context={context} appearance='subtle' />
+        <ProjectMenu
+          project={context.project}
+          context={context}
+          appearance='subtle'
+          disabled={!context.project || !context.project.url || context.project.url === '#'}
+        />
       </div>
     </CardFooter>
   )

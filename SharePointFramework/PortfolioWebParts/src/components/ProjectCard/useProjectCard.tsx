@@ -28,6 +28,7 @@ export function useProjectCard(props: IProjectCardProps) {
       {
         id: 'showProjectInfo',
         onClick: (event: React.MouseEvent<any>) => onExecuteCardAction(event, project),
+        disabled: !project || !project.url || project.url === '#',
         title: strings.ProjectInformationPanelButton
       }
     ]

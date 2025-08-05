@@ -37,6 +37,7 @@ export const ProjectMenu: FC<IProjectMenu> = (props) => {
             appearance={props.appearance}
             icon={<CalendarMonth />}
             size={props.size}
+            disabled={props.disabled}
           />
         </Tooltip>
       </MenuTrigger>
