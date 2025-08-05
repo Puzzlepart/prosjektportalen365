@@ -103,7 +103,7 @@ export interface IProjectNewsData {
 }
 
 /**
- * Represents a template file in the SitePages/Maler folder.
+ * Represents a template file in the SitePages/Maler (or Templates) folder.
  * Used for creating new news articles based on templates.
  */
 export interface TemplateFile {

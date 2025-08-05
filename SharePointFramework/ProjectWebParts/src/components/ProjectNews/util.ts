@@ -108,7 +108,8 @@ export function getNewsEditUrl(siteUrl: string, folderName: string, pageName: st
 }
 
 /**
- * Retrieves site page templates from the 'Maler' folder in the SitePages library.
+ * Retrieves site page templates from the 'Maler' folder in the SitePages library,
+ * with fallback to 'Templates' folder to support both Norwegian and English standards.
  * @param siteUrl URL of the site to retrieve the templates from
  * @param spHttpClient SPHttpClient to use for the operation
  * @returns Promise that resolves with an array of templates, represented as objects with `Name`, `Title` and `ServerRelativeUrl` properties
@@ -117,9 +118,25 @@ export async function getTemplates(
   siteUrl: string,
   spHttpClient: SPHttpClient
 ): Promise<TemplateFile[]> {
+  // Try Norwegian standard first (Maler)
   const url = `${siteUrl}/_api/web/GetFolderByServerRelativeUrl('SitePages/Maler')/Files?$select=Name,Title,ServerRelativeUrl`
   try {
     const res = await spHttpClient.get(url, SPHttpClient.configurations.v1)
+    if (res.ok) {
+      const data = await res.json()
+      return (data.value || []).map((item: any) => ({
+        ...item,
+        Title: stringIsNullOrEmpty(item.Title) ? item.Name.replace(/\.aspx$/i, '') : item.Title
+      }))
+    }
+  } catch {
+    // Ignore error and try fallback
+  }
+
+  // Fallback to English standard (Templates)
+  const templatesUrl = `${siteUrl}/_api/web/GetFolderByServerRelativeUrl('SitePages/Templates')/Files?$select=Name,Title,ServerRelativeUrl`
+  try {
+    const res = await spHttpClient.get(templatesUrl, SPHttpClient.configurations.v1)
     const data = await res.json()
     return (data.value || []).map((item: any) => ({
       ...item,
