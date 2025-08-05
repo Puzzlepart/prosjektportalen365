@@ -47,7 +47,7 @@ export const ProjectMenu: FC<IProjectMenu> = (props) => {
             ?.map((quickLaunchItem, idx) => (
               <MenuItem key={idx}>
                 <Link
-                  href={props.project.url + quickLaunchItem.relativeUrl}
+                  href={(props.project?.url || '') + quickLaunchItem.relativeUrl}
                   title={quickLaunchItem.text}
                 >
                   {quickLaunchItem.text}

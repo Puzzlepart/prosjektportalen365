@@ -14,16 +14,16 @@ export function useProjectCardFooter() {
   }
   const primaryUserPersonaProps: AvatarProps = {
     ...defaultPersonaProps,
-    ...context.project.owner,
-    role: context.project?.data[context.primaryUserField]
+    ...(context.project?.owner || {}),
+    role: context.project?.data?.[context.primaryUserField]
   }
   const secondaryUserPersonaProps: AvatarProps = {
     ...defaultPersonaProps,
-    ...context.project.manager,
-    role: context.project?.data[context.secondaryUserField]
+    ...(context.project?.manager || {}),
+    role: context.project?.data?.[context.secondaryUserField]
   }
   return {
-    phase: context.project.phase,
+    phase: context.project?.phase,
     primaryUser: primaryUserPersonaProps,
     secondaryUser: secondaryUserPersonaProps
   } as const

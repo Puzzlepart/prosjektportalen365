@@ -28,9 +28,9 @@ export const ProjectCardFooter: FC = () => {
   const { primaryUser, secondaryUser } = useProjectCardFooter()
   const PanelRight = bundleIcon(PanelRightContractFilled, PanelRightContractRegular)
   let templateIcon = bundleIcon(BoxFilled, BoxRegular)
-  let templateText = context.project.template
+  let templateText = context.project?.template
 
-  switch (context.project.template) {
+  switch (context.project?.template) {
     case 'Byggprosjekt':
       templateIcon = bundleIcon(BuildingFilled, BuildingRegular)
       templateText = 'Bygg'
@@ -44,7 +44,7 @@ export const ProjectCardFooter: FC = () => {
       templateText = 'Program'
       break
     case 'Standardmal':
-      if (context.project.isParent) {
+      if (context.project?.isParent) {
         templateIcon = bundleIcon(BoxMultipleFilled, BoxMultipleRegular)
         templateText = 'Overordnet prosjekt'
       } else {
@@ -113,7 +113,7 @@ export const ProjectCardFooter: FC = () => {
           content={
             <>
               <strong>{templateText}</strong>
-              {context.project.template ? ` (${context.project.template})` : ''}
+              {context.project?.template ? ` (${context.project.template})` : ''}
             </>
           }
           relationship='description'
@@ -123,7 +123,7 @@ export const ProjectCardFooter: FC = () => {
             className={styles.templateTag}
             appearance='subtle'
             icon={<Icon />}
-            title={context.project.template}
+            title={context.project?.template}
           />
         </Tooltip>
         <ProjectMenu project={context.project} context={context} appearance='subtle' />

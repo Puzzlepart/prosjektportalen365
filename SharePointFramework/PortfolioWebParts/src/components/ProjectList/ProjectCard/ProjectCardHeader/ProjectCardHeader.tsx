@@ -23,7 +23,7 @@ export const ProjectCardHeader: FC<IProjectCardHeaderProps> = (props) => {
   return (
     <>
       <CardPreview className={styles.preview}>
-        {showCustomImage && (
+        {showCustomImage && context.project && (
           <div {...headerProps}>
             <Link href={context.project.url} target='_blank' className={styles.link}>
               <Text
@@ -40,7 +40,7 @@ export const ProjectCardHeader: FC<IProjectCardHeaderProps> = (props) => {
             </Link>
           </div>
         )}
-        {context.showProjectLogo && (
+        {context.showProjectLogo && context.project && (
           <div className={styles.logo}>
             <Link
               href={context.project.url}

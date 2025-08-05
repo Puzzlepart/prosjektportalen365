@@ -7,9 +7,9 @@ export function useProjectCardHeader() {
   const context = useContext(ProjectCardContext)
   const [showCustomImage, setShowCustomImage] = useState(false)
 
-  const imageUrl = `${context.project.url}/_api/siteiconmanager/getsitelogo?type='1'`
-  const imageColorData = context.useDynamicColors
-    ? context.project.logo ?? useImageColor(imageUrl, { cors: true, colors: 2, windowSize: 5 })
+  const imageUrl = `${context.project?.url || ''}/_api/siteiconmanager/getsitelogo?type='1'`
+  const imageColorData = context.useDynamicColors && context.project
+    ? (context.project.logo || useImageColor(imageUrl, { cors: true, colors: 2, windowSize: 5 }))
     : null
 
   const colors =
