@@ -417,6 +417,7 @@ declare interface IPortfolioWebPartsStrings {
   ViewMoreText: string
   ViewNotFoundMessage: string
   ViewsListNameLabel: string
+  ProjectNotFound: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

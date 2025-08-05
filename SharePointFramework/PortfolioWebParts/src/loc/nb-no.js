@@ -419,5 +419,6 @@ define([], function () {
     ViewMoreText: 'Vis flere',
     ViewNotFoundMessage: 'Finner ikke angitt visning.',
     ViewsListNameLabel: 'Visninger',
+    ProjectNotFound: 'Prosjekt ikke angitt...'
   }
 })
