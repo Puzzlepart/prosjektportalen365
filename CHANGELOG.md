@@ -105,7 +105,6 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Flere nye felter på Prosjektstatus-listen for å tilrettelegge for KI-behandling av Prosjektstatus
 - Tittel angitt i Prosjektnyheter-dialogen brukes nå automatisk som tittel på den opprettede nyhetsartikler
 
-
 ### Feilrettinger
 
 - Eksport av datofelter fra aggregerte oversikter viser nå Excel-vennlig datoformat [#1630](https://github.com/Puzzlepart/prosjektportalen365/issues/1630)

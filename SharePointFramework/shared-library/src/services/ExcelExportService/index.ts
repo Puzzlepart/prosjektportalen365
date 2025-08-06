@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 import { format, IColumn } from '@fluentui/react'
 import * as FileSaver from 'file-saver'
-import { flatten } from 'underscore'
+import _ from 'underscore'
 import * as XLSX from 'xlsx'
 import { getObjectValue as get, getDateForExcelExport, stringToArrayBuffer } from '../../util'
 import { ExcelExportServiceDefaultConfiguration } from './ExcelExportServiceDefaultConfiguration'
@@ -122,7 +122,7 @@ class ExcelExportService {
       })
       const hasMeasurementsColumn = items.some((item) => item[measurementsColumn])
       if (hasMeasurementsColumn) {
-        const combinedJson = flatten(
+        const combinedJson = _.flatten(
           items.map((item) => this.parseMeasurementsColumn(item, measurementsColumn))
         ).filter(Boolean)
         if (combinedJson.length) {
