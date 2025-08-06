@@ -217,7 +217,7 @@ $InstallEntry = @{
 if ($null -ne $UserName) {
     $InstallEntry.InstallUser = $UserName
 }
-if (-not [string]::IsNullOrEmpty($CI)) {
+if ($CI.IsPresent) {
     $InstallEntry.InstallCommand = "GitHub CI";
 }
 if ($Channel -ne "main") {
