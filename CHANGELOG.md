@@ -8,7 +8,7 @@ Sjekk ut [release notes](./releasenotes/1.11.0.md) for høydepunkter og mer deta
 
 - Ny webdel `Prosjektnyheter` for publisering og visning av prosjektnyheter. Webdelen viser nyheter som er publisert fra prosjektet, med mulighet til å opprette nyhetsartikler.
   - Som følge av den nye løsningen følger det også med en Prosjektnyhet-sidemal.
-- New webdel `Prosjektkort` for visning av prosjektinformasjon som et kort (lik kortvisningen på forsiden av porteføljen).
+- Ny webdel `Prosjektkort` for visning av prosjektinformasjon som et kort (lik kortvisningen på forsiden av porteføljen).
 
 ### Forbedringer
 
