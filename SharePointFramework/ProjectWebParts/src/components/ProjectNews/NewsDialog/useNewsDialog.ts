@@ -131,6 +131,7 @@ export const useNewsDialog = () => {
       context
     ]
   )
+
   return {
     spinnerMode,
     title: newsForm.title,

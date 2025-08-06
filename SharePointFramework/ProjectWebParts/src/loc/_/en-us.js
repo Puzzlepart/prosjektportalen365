@@ -215,7 +215,6 @@ define([], function () {
       'You do not have access to view this web part. <br/> <br/> You must either have access to the portfolio site or the project must be free from the portfolio site.',
     WidthFieldLabel: 'Width (pixels)',
     Yes: 'Yes',
-    // Project News Web Part strings
     ProjectNewsWebPartTitle: 'Project News',
     DialogTitle: 'Create a news article',
     CreatingNewArticleStatus: 'Creating news article...',
@@ -223,16 +222,16 @@ define([], function () {
     NewsTitleLabel: 'Title',
     NewsTitlePlaceholder: 'Enter value here',
     CreateButtonLabel: 'Create',
-    CreateNewsLinkLabel: 'Create News',
+    CreateNewsLinkLabel: 'Create an article',
     NewsCreateError: 'Something went wrong: ',
     NewsTitleRequired: 'Title is required to create a news article.',
     TemplateRequired: 'Please select a template to create the news article.',
     TemplatePlaceholder: 'Select an option',
     TemplateLabel: 'Template',
-    NoRecentNews: 'No recent news found.',
+    NoRecentNews: 'Here you can create news articles for the project. There are currently no news articles.',
     ShowMoreNews: 'Show more',
     ShowLessNews: 'Show less',
-    EditedLabel: 'Edited',
+    ModifiedTooltipText: 'Modified {0}',
     MaxVisibleNewsLabel: "Number of visible news articles (before 'Show more')",
     MaxVisibleNewsDescription:
       'Set the number of news articles to display in the web part.',
@@ -248,8 +247,7 @@ define([], function () {
     LoadingLabel: 'Loading news articles...',
     GenericErrorMessage: 'Something went wrong. Please try again later or contact support.',
     NewsCreateDuplicateFileError: 'A news article with the same title already exists. Please choose a different title.',
-    PreviewLabel: 'Preview',
+    PreviewLabel: 'Preview selected template',
     NoPreviewAvailable: 'Preview unavailable',
-    // End of Project News Web Part strings
   }
 })

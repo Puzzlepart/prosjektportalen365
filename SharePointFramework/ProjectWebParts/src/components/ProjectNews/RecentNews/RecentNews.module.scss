@@ -1,8 +1,8 @@
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+.recentNews {
+  display: flex;
+  flex-direction: column;
   gap: 16px;
-  margin: 16px 0;
+  margin-top: 16px;
 
   .card {
     min-height: 180px;
@@ -15,10 +15,14 @@
     }
 
     .cardDescription {
-      margin-top: 8px;
-      color: #666;
+      color: var(--colorNeutralForeground3);
     }
   }
+}
+
+.noRecentNews {
+  margin-top: 8px;
+  color: var(--colorNeutralForeground3);
 }
 
 .showMoreButton {

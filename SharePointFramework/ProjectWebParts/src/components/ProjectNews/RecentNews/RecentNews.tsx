@@ -1,21 +1,30 @@
 import React, { FC, useState } from 'react'
-import { Card, CardHeader, Link, Text, Button } from '@fluentui/react-components'
+import { format } from '@fluentui/react'
+import {
+  Card,
+  CardHeader,
+  Link,
+  Text,
+  Button,
+  Caption1,
+  Caption1Strong
+} from '@fluentui/react-components'
 import * as strings from 'ProjectWebPartsStrings'
 import styles from './RecentNews.module.scss'
 import { getFluentIcon } from 'pp365-shared-library'
 import { IRecentNewsProps } from './types'
 
-export const RecentNews: FC<IRecentNewsProps> = ({ news, maxVisible = 6 }) => {
+export const RecentNews: FC<IRecentNewsProps> = ({ news, maxVisible = 4 }) => {
   const [showAll, setShowAll] = useState(false)
   const visibleNews = showAll ? news : news.slice(0, maxVisible)
 
   return (
     <>
       {news.length === 0 ? (
-        <div>{strings.NoRecentNews}</div>
+        <div className={styles.noRecentNews}>{strings.NoRecentNews}</div>
       ) : (
         <>
-          <div className={styles.grid}>
+          <div className={styles.recentNews}>
             {visibleNews.map((item) => (
               <Card key={item.name} className={styles.card}>
                 {item.imageUrl && <img src={item.imageUrl} alt='' className={styles.cardImage} />}
@@ -27,17 +36,22 @@ export const RecentNews: FC<IRecentNewsProps> = ({ news, maxVisible = 6 }) => {
                     </Link>
                   }
                   description={
-                    <Text>
-                      {item.authorName && <span>{item.authorName}</span>}
+                    <div>
+                      {item.authorName && <Caption1Strong>{item.authorName}</Caption1Strong>}
                       {item.modifiedDate && (
                         <>
-                          {' | '}
-                          <span>
-                            {strings.EditedLabel} {new Date(item.modifiedDate).toLocaleDateString()}
-                          </span>
+                          <Caption1
+                            title={format(
+                              strings.ModifiedTooltipText,
+                              new Date(item.modifiedDate).toLocaleDateString()
+                            )}
+                          >
+                            {' | '}
+                            {new Date(item.modifiedDate).toLocaleDateString()}
+                          </Caption1>
                         </>
                       )}
-                    </Text>
+                    </div>
                   }
                 />
                 {item.description && (

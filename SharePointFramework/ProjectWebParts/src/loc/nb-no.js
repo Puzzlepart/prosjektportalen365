@@ -295,16 +295,16 @@ define([], function () {
     NewsTitleLabel: 'Tittel',
     NewsTitlePlaceholder: 'Angi verdi her',
     CreateButtonLabel: 'Opprett',
-    CreateNewsLinkLabel: 'Opprett Nyhet',
+    CreateNewsLinkLabel: 'Opprett nyhetsartikkel',
     NewsCreateError: 'Noe gikk galt: ',
     NewsTitleRequired: 'Tittel er påkrevd for å opprette en nyhetsartikkel.',
     TemplateRequired: 'En mal må velges for å opprette en nyhetsartikkel.',
     TemplatePlaceholder: 'Velg et alternativ',
     TemplateLabel: 'Mal',
-    NoRecentNews: 'Ingen nylige nyheter funnet.',
+    NoRecentNews: 'Her kan du opprette nyhetsartikler for prosjektet. Det er for øyeblikket ingen nyhetsartikler.',
     ShowMoreNews: 'Vis flere',
     ShowLessNews: 'Vis færre',
-    EditedLabel: 'Redigert',
+    ModifiedTooltipText: 'Redigert {0}',
     MaxVisibleNewsDescription:
       'Angi antallet nyhetsartikler som skal vises i listen.',
     MaxVisibleNewsLabel: 'Antall synlige nyheter (før vis mer)',
@@ -322,8 +322,7 @@ define([], function () {
     LoadingLabel: 'Laster nyheter...',
     GenericErrorMessage: 'Noe gikk galt. Vennligst prøv igjen senere eller kontakt brukerstøtte.',
     NewsCreateDuplicateFileError: 'En nyhetsartikkel med samme navn finnes allerede. Vennligst velg et annet navn.',
-    PreviewLabel: 'Forhåndsvisning',
+    PreviewLabel: 'Forhåndsvis valgt mal',
     NoPreviewAvailable: 'Ingen forhåndsvisning tilgjengelig.',
-    // End of Project News Web Part strings
   }
 })

@@ -2,7 +2,7 @@
 import { SPHttpClient, SPHttpClientResponse } from '@microsoft/sp-http'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import * as strings from 'ProjectWebPartsStrings'
-import { NewsItem, TemplateFile } from './types'
+import { INewsItem, TemplateFile } from './types'
 
 // --- SharePoint file name validation constants ---
 const invalidChars = /["*:<>?/\\|#%;]/g
@@ -124,10 +124,15 @@ export async function getTemplates(
     const res = await spHttpClient.get(url, SPHttpClient.configurations.v1)
     if (res.ok) {
       const data = await res.json()
-      return (data.value || []).map((item: any) => ({
+      const templates = (data.value || []).map((item: any) => ({
         ...item,
         Title: stringIsNullOrEmpty(item.Title) ? item.Name.replace(/\.aspx$/i, '') : item.Title
       }))
+
+      // If we have templates, return them, otherwise try fallback
+      if (templates.length > 0) {
+        return templates
+      }
     }
   } catch {
     // Ignore error and try fallback
@@ -194,7 +199,7 @@ export async function promotePageToNewsArticle(
 export async function ensureAllNewsPromoted(
   siteUrl: string,
   spHttpClient: SPHttpClient,
-  newsItems: NewsItem[],
+  newsItems: INewsItem[],
   folderName: string
 ): Promise<void> {
   if (!newsItems || newsItems.length === 0) {
@@ -204,15 +209,15 @@ export async function ensureAllNewsPromoted(
   const folderServerRelativeUrl = getServerRelativeUrl(siteUrl, 'SitePages', folderName)
   for (const item of newsItems) {
     if (
-      item.PromotedState !== 2 &&
-      item.Id &&
+      item.promotedState !== 2 &&
+      item.id &&
       (item.url?.toLowerCase().startsWith(folderServerRelativeUrl.toLowerCase() + '/') ||
         item.url?.toLowerCase() === folderServerRelativeUrl.toLowerCase())
     ) {
       try {
-        await promotePageToNewsArticle(siteUrl, spHttpClient, item.Id)
+        await promotePageToNewsArticle(siteUrl, spHttpClient, item.id)
       } catch (err) {
-        console.warn(`Failed to promote page ${item.name} (ID: ${item.Id}):`, err)
+        console.warn(`Failed to promote page ${item.name} (ID: ${item.id}):`, err)
       }
     }
   }

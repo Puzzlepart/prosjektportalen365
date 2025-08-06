@@ -56,16 +56,16 @@ export interface IProjectNewsState extends IBaseWebPartComponentState<IProjectNe
   refetch?: number
 }
 
-export interface NewsItem {
+export interface INewsItem {
   /**
    * Unique identifier for the news item
    */
-  Id: number
+  id: number
   /**
    * The state of the news item, indicating its visibility or promotion status.
    * 0 for draft, 1 for published, and 2 for promoted. This is the promoted state in SharePoint.
    */
-  PromotedState: number
+  promotedState: number
   /**
    * Display name/title for the news card
    */
@@ -99,7 +99,7 @@ export interface IProjectNewsData {
   /**
    * Array of news items
    */
-  news?: NewsItem[]
+  news?: INewsItem[]
 }
 
 /**

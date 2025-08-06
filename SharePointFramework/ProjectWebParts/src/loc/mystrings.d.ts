@@ -256,7 +256,7 @@ declare interface IProjectWebPartsStrings {
   NoRecentNews: string,
   ShowMoreNews: string,
   ShowLessNews: string,
-  EditedLabel: string,
+  ModifiedTooltipText: string,
   MaxVisibleNewsDescription: string,
   MaxVisibleNewsLabel: string,
   SiteUrlLabel: string,

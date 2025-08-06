@@ -1,8 +1,6 @@
 .dialogBody {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  max-width: 480px;
   min-width: 320px;
   margin: 0 auto;
 
@@ -24,6 +22,11 @@
       margin-bottom: 16px;
     }
   }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+  }
 }
 
 .drawerBody {
@@ -39,6 +42,12 @@
     border: none;
     background: #fff;
     flex: 1 1 auto;
+  }
+
+  .noPreview {
+    padding: 16px;
+    color: var(--colorNeutralForeground3);
+    font-style: italic;
   }
 }
 

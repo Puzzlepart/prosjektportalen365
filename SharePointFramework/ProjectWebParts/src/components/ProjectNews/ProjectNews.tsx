@@ -58,5 +58,5 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
   )
 }
 ProjectNews.defaultProps = {
-  maxVisibleNews: 6
+  maxVisibleNews: 4
 }
