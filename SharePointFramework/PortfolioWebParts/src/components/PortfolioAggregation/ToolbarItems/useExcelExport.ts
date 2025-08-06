@@ -12,9 +12,7 @@ import { IPortfolioAggregationContext } from '../context'
  * @returns An object containing a contextual menu item for Excel export.
  */
 export function useExcelExport(context: IPortfolioAggregationContext) {
-  ExcelExportService.configure({
-    name: context.props.title
-  })
+  ExcelExportService.configure({ name: context.props.title })
 
   /**
    * Callback function for Excel export. Handles the export to Excel with state updates and
