@@ -24,7 +24,7 @@ export function useEditableColumn(
     ['alias', ''],
     ['url', ''],
     ['teamify', false],
-    ['teamTemplate', 'Standard'],
+    ['teamTemplate', strings.Provision.DefaultTeamTemplate],
     ['sensitivityLabel', ''],
     ['sensitivityLabelLibrary', ''],
     ['retentionLabel', ''],
@@ -37,8 +37,8 @@ export function useEditableColumn(
     ['privacy', strings.Provision.PrivacyFieldOptionPrivate],
     ['externalSharing', false],
     ['guest', []],
-    ['language', 'Norsk (bokmål)'],
-    ['timeZone', '(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna'],
+    ['language', strings.Provision.DefaultLanguage],
+    ['timeZone', strings.Provision.DefaultTimeZone],
     ['hubSite', props.pageContext.legacyPageContext.hubSiteId],
     ['hubSiteTitle', props.pageContext.web.title]
   ])

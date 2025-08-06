@@ -158,6 +158,9 @@ define([], function () {
       ExpirationDateNoneOption: 'Ingen utløpsdato',
       ExpirationDateMonthOption: '{0} måned(er)',
       NoProvisionAccessMessage: 'Du har ikke tilgang til Bestillingsportalen.',
+      DefaultTeamTemplate: 'Standard',
+      DefaultLanguage: 'Norsk (bokmål)',
+      DefaultTimeZone: '(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna'
     },
     AddColumnLabel: 'Legg til en kolonne',
     AllProjectsHeaderText: 'Alle prosjekter/program',

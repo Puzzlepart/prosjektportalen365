@@ -158,6 +158,9 @@ declare interface IPortfolioWebPartsStrings {
     ExpirationDateNoneOption: string
     ExpirationDateMonthOption: string
     NoProvisionAccessMessage: string
+    DefaultTeamTemplate: string
+    DefaultLanguage: string
+    DefaultTimeZone: string
   },
   AddColumnLabel: string
   AllProjectsHeaderText: string
