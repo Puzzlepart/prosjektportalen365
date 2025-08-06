@@ -157,6 +157,7 @@ declare interface IPortfolioWebPartsStrings {
     NotConfiguredText: string
     ExpirationDateNoneOption: string
     ExpirationDateMonthOption: string
+    NoProvisionAccessMessage: string
   },
   AddColumnLabel: string
   AllProjectsHeaderText: string
@@ -269,6 +270,7 @@ declare interface IPortfolioWebPartsStrings {
   ErrorBoundaryFallbackText: string
   ErrorFetchingProjectsTitle: string
   ErrorTitle: string
+  AccessTitle: string
   ExcelExportButtonLabel: string
   FiltersString: string
   FilterText: string

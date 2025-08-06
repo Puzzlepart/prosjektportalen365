@@ -45,7 +45,7 @@ export const useProvisionDrawer = () => {
   }
 
   const getGlobalSetting = (setting: string) => {
-    return context.state.settings.find((t) => t.title === setting)?.value
+    return context.state.settings?.find((t) => t.title === setting)?.value
   }
 
   const enableSensitivityLabels = getGlobalSetting('EnableSensitivityLabels')
@@ -56,19 +56,19 @@ export const useProvisionDrawer = () => {
   const enableInternalChannel = getGlobalSetting('EnableInternalChannel')
   const enableAutoApproval = getGlobalSetting('EnableAutoApproval')
 
-  const typeDefaults = context.state.types.find((t) => t.title === context.state.properties.type)
+  const typeDefaults = context.state.types?.find((t) => t.title === context.state.properties.type)
   const enableExternalSharing = typeDefaults?.externalSharing
 
   const namingConvention = getGlobalSetting('UseNamingConventions')
-    ? context.state.settings.find((t) => t.title === 'NamingConvention')?.value
-    : context.state.types.find((t) => t.title === context.column.get('type'))?.namingConvention
+    ? context.state.settings?.find((t) => t.title === 'NamingConvention')?.value
+    : context.state.types?.find((t) => t.title === context.column.get('type'))?.namingConvention
 
   const urlPrefix = `${context.props.webAbsoluteUrl.split('sites')[0]}sites/`
   const aliasSuffix = '@' + context.props.pageContext.user.loginName.split('@')[1]
 
-  const joinHub = !!context.state.types.find((t) => t.title === context.column.get('type'))?.joinHub
+  const joinHub = !!context.state.types?.find((t) => t.title === context.column.get('type'))?.joinHub
 
-  const spaceTypeInternal = context.state.types.find(
+  const spaceTypeInternal = context.state.types?.find(
     (t) => t.title === context.column.get('type')
   )?.type
 
@@ -85,11 +85,11 @@ export const useProvisionDrawer = () => {
       namingConvention?.suffixText
     }`
 
-    const sensitivityLabelId = context.state.sensitivityLabels.find(
+    const sensitivityLabelId = context.state.sensitivityLabels?.find(
       (t) => t.labelName === context.column.get('sensitivityLabel')
     )?.labelId
 
-    const sensitivityLabelLibraryId = context.state.sensitivityLabelsLibrary.find(
+    const sensitivityLabelLibraryId = context.state.sensitivityLabelsLibrary?.find(
       (t) => t.labelName === context.column.get('sensitivityLabelLibrary')
     )?.labelId
 

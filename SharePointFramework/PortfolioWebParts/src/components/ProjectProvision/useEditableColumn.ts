@@ -11,7 +11,7 @@ export function useEditableColumn(
   state: IProjectProvisionState,
   setState: (newState: Partial<IProjectProvisionState>) => void
 ) {
-  const defaultType = !state.loading && !state.error && state.types[0]
+  const defaultType = !state.loading && !state.error && state.types && state.types.length > 0 ? state.types[0] : null
 
   const initialColumn = new Map<string, any>([
     ['type', ''],
@@ -58,8 +58,8 @@ export function useEditableColumn(
       [
         'teamTemplate',
         () => {
-          const template = state.teamTemplates.find((t) => t.title === value)
-          return template.templateId
+          const template = state.teamTemplates?.find((t) => t.title === value)
+          return template?.templateId
         }
       ],
       [
@@ -174,27 +174,29 @@ export function useEditableColumn(
    * @param setting Setting to get
    */
   const getGlobalSetting = (setting: string) => {
-    return state.settings.find((t) => t.title === setting)?.value
+    return state.settings?.find((t) => t.title === setting)?.value
   }
 
   useEffect(() => {
-    $setColumn((prev) => {
-      const newColumn = new Map(prev)
-      newColumn.set('type', defaultType.title)
+    if (defaultType) {
+      $setColumn((prev) => {
+        const newColumn = new Map(prev)
+        newColumn.set('type', defaultType.title)
 
-      setState({
-        properties: {
-          ...state.properties,
-          type: defaultType.title
-        }
+        setState({
+          properties: {
+            ...state.properties,
+            type: defaultType.title
+          }
+        })
+        return newColumn
       })
-      return newColumn
-    })
-  }, [state.loading])
+    }
+  }, [state.loading, defaultType])
 
   useEffect(() => {
     const setDefaults = async () => {
-      if (!state.loading) {
+      if (!state.loading && state.types && state.types.length > 0 && defaultType) {
         const typeDefaults =
           state.types.find((t) => t.title === state.properties.type) || defaultType
         const defaultConfidentialData = typeDefaults?.defaultConfidentialData
@@ -254,7 +256,7 @@ export function useEditableColumn(
       }
     }
     setDefaults()
-  }, [state.properties.type])
+  }, [state.properties.type, defaultType])
 
   return {
     column,

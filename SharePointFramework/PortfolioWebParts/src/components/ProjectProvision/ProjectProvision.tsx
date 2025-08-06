@@ -43,6 +43,10 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
     return <UserMessage title={strings.ErrorTitle} text={state.error.message} intent='error' />
   }
 
+  if (state.accessDenied) {
+    return <UserMessage title={strings.AccessTitle} text={strings.Provision.NoProvisionAccessMessage} intent='warning' />
+  }
+
   if (stringIsNullOrEmpty(props.provisionUrl)) {
     return (
       <UserMessage

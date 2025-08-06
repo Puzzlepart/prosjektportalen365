@@ -153,7 +153,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   >
                     {context.props.siteTypeRenderMode !== 'dropdown' ? (
                       <div className={styles.sitetypes}>
-                        {context.state.types.map((type) => (
+                        {context.state.types?.map((type) => (
                           <SiteType
                             key={type.title}
                             title={type.title}
@@ -170,7 +170,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                           context.setColumn('type', data.optionValue)
                         }}
                       >
-                        {context.state.types.map((type) => (
+                        {context.state.types?.map((type) => (
                           <Option key={type.title} text={type.title} title={type.description}>
                             <Tag
                               className={styles.siteTag}
@@ -387,7 +387,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                       context.setColumn('teamTemplate', data.optionValue)
                     }}
                   >
-                    {context.state.teamTemplates.map((template) => (
+                    {context.state.teamTemplates?.map((template) => (
                       <Option key={template.title} value={template.title}>
                         {template.title}
                       </Option>
@@ -482,7 +482,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                       context.setColumn('sensitivityLabel', data.optionValue)
                     }}
                   >
-                    {context.state.sensitivityLabels.map((label) => (
+                    {context.state.sensitivityLabels?.map((label) => (
                       <Option key={label.title} value={label.title}>
                         {label.title}
                       </Option>
@@ -505,7 +505,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                       context.setColumn('sensitivityLabelLibrary', data.optionValue)
                     }}
                   >
-                    {context.state.sensitivityLabelsLibrary.map((label) => (
+                    {context.state.sensitivityLabelsLibrary?.map((label) => (
                       <Option key={label.title} value={label.title}>
                         {label.title}
                       </Option>
@@ -526,7 +526,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                       context.setColumn('retentionLabel', data.optionValue)
                     }}
                   >
-                    {context.state.retentionLabels.map((label) => (
+                    {context.state.retentionLabels?.map((label) => (
                       <Option key={label.title} value={label.title}>
                         {label.title}
                       </Option>
