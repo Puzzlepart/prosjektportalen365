@@ -17,7 +17,6 @@ export function useProjectProvisionDataFetch(
   refetch: number,
   setState: (newState: Partial<IProjectProvisionState>) => void
 ) {
-
   /**
    * Check if the user has access to the provision site using PnPjs permissions
    *
@@ -26,7 +25,9 @@ export function useProjectProvisionDataFetch(
   const checkProvisionSiteAccess = async (provisionUrl: string): Promise<boolean> => {
     try {
       const provisionSite = Web([props.dataAdapter.sp.web, provisionUrl])
-      const hasViewPermission = await provisionSite.currentUserHasPermissions(PermissionKind.ViewListItems)
+      const hasViewPermission = await provisionSite.currentUserHasPermissions(
+        PermissionKind.ViewListItems
+      )
       return hasViewPermission
     } catch (error) {
       return false
@@ -53,25 +54,27 @@ export function useProjectProvisionDataFetch(
           props.dataAdapter.getRetentionLabels(props.provisionUrl),
           props.dataAdapter.fetchProvisionRequests(props.pageContext.user.email, props.provisionUrl)
         ])
-          .then(([settings, types, teamTemplates, sensitivityLabels, retentionLabels, requests]) => {
-            setState({
-              settings,
-              types: types.filter(
-                (type) =>
-                  !type.visibleTo ||
-                  type.visibleTo?.some((user) =>
-                    user?.EMail?.includes(props?.pageContext?.user?.loginName)
-                  )
-              ),
-              teamTemplates,
-              sensitivityLabels: sensitivityLabels.filter((label) => !label.isLibrary),
-              sensitivityLabelsLibrary: sensitivityLabels.filter((label) => label.isLibrary),
-              retentionLabels,
-              requests,
-              loading: false,
-              isRefetching: false
-            })
-          })
+          .then(
+            ([settings, types, teamTemplates, sensitivityLabels, retentionLabels, requests]) => {
+              setState({
+                settings,
+                types: types.filter(
+                  (type) =>
+                    !type.visibleTo ||
+                    type.visibleTo?.some((user) =>
+                      user?.EMail?.includes(props?.pageContext?.user?.loginName)
+                    )
+                ),
+                teamTemplates,
+                sensitivityLabels: sensitivityLabels.filter((label) => !label.isLibrary),
+                sensitivityLabelsLibrary: sensitivityLabels.filter((label) => label.isLibrary),
+                retentionLabels,
+                requests,
+                loading: false,
+                isRefetching: false
+              })
+            }
+          )
           .catch((error) => {
             setState({
               error,

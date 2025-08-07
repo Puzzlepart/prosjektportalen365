@@ -1,6 +1,19 @@
 import { Slot } from '@fluentui/react-components'
 import { IBaseComponentProps } from 'components/types'
 
+export interface ITypeFieldConfiguration {
+  typeName: string
+  displayName?: string
+  fieldConfigurations: Record<string, IFieldDisplayNameConfiguration>
+  hiddenFields?: string
+}
+
+export interface IFieldDisplayNameConfiguration {
+  displayName?: string
+  description?: string
+  placeholder?: string
+}
+
 export interface IProjectProvisionProps extends IBaseComponentProps {
   // General
   buttonLabel?: string
@@ -26,6 +39,7 @@ export interface IProjectProvisionProps extends IBaseComponentProps {
   // Advanced
   provisionUrl: string
   fields?: IProvisionField[]
+  typeFieldConfigurations?: ITypeFieldConfiguration[]
   debugMode?: boolean
 
   // Other

@@ -11,7 +11,8 @@ export function useEditableColumn(
   state: IProjectProvisionState,
   setState: (newState: Partial<IProjectProvisionState>) => void
 ) {
-  const defaultType = !state.loading && !state.error && state.types && state.types.length > 0 ? state.types[0] : null
+  const defaultType =
+    !state.loading && !state.error && state.types && state.types.length > 0 ? state.types[0] : null
 
   const initialColumn = new Map<string, any>([
     ['type', ''],

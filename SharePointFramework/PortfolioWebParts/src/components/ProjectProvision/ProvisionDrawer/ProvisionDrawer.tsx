@@ -64,7 +64,6 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
     aliasSuffix,
     joinHub,
     isTeam,
-    isViva,
     getField,
     fluentProviderId
   } = useProvisionDrawer()
@@ -360,7 +359,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   label={getField('teamify').displayName}
                   description={getField('teamify').description}
                   required={getField('teamify').required}
-                  hidden={getField('teamify').hidden || isViva}
+                  hidden={getField('teamify').hidden}
                 >
                   <Switch
                     checked={context.column.get('teamify') || isTeam}
@@ -376,9 +375,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   label={getField('teamTemplate').displayName}
                   description={getField('teamTemplate').description}
                   required={getField('teamTemplate').required}
-                  hidden={
-                    !context.column.get('teamify') || getField('teamTemplate').hidden || isViva
-                  }
+                  hidden={!context.column.get('teamify') || getField('teamTemplate').hidden}
                 >
                   <Dropdown
                     value={context.column.get('teamTemplate')}
@@ -400,7 +397,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   label={getField('isConfidential').displayName}
                   description={getField('isConfidential').description}
                   required={getField('isConfidential').required}
-                  hidden={getField('isConfidential').hidden || isViva}
+                  hidden={getField('isConfidential').hidden}
                 >
                   <Switch
                     checked={context.column.get('isConfidential')}
@@ -419,7 +416,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   label={getField('privacy').displayName}
                   description={getField('privacy').description}
                   required={getField('privacy').required}
-                  hidden={getField('privacy').hidden || isViva}
+                  hidden={getField('privacy').hidden}
                 >
                   <Dropdown
                     selectedOptions={[context.column.get('privacy')]}
@@ -442,7 +439,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   label={getField('externalSharing').displayName}
                   description={getField('externalSharing').description}
                   required={getField('externalSharing').required}
-                  hidden={getField('externalSharing').hidden || !enableExternalSharing || isViva}
+                  hidden={getField('externalSharing').hidden || !enableExternalSharing}
                 >
                   <Switch
                     checked={context.column.get('externalSharing')}
@@ -632,7 +629,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     label={getField('image').displayName}
                     description={getField('image').description}
                     required={getField('image').required}
-                    hidden={getField('image').hidden || isViva}
+                    hidden={getField('image').hidden}
                   >
                     <ImageUpload onImageUpload={(image) => context.setColumn('image', image)} />
                   </FieldContainer>

@@ -45,7 +45,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       description: strings.Provision.BusinessJustificationFieldDescription,
       placeholder: strings.Placeholder.BusinessJustificationField,
       dataType: 'note',
-      required: true,
+      required: false,
       hidden: false,
       level: 0
     },

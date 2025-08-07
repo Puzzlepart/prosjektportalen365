@@ -241,7 +241,7 @@ define([], function () {
       SiteNameValidationErrorMessage: 'The name specified is not available. Try changing the name.',
       SiteNameValidationSuccessMessage: 'The name is available',
       SiteDescriptionFieldLabel: 'Description',
-      SiteDescriptionFieldDescription: 'The description is optional, but useful for people to understand what your area is for.',
+      SiteDescriptionFieldDescription: 'Provide a description, this is useful for people to understand what your area is for.',
       BusinessJustificationFieldLabel: 'Business justification',
       BusinessJustificationFieldDescription: 'Describe why you need this area? What is the purpose?',
       AliasFieldLabel: 'Alias/name',

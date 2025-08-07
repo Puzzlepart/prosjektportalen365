@@ -49,7 +49,11 @@ export const ProvisionStatus = (props: { toast: any }) => {
               <DialogTitle
                 action={
                   <DialogTrigger action='close'>
-                    <Button appearance='subtle' title={strings.Aria.Close} icon={getFluentIcon('Dismiss')} />
+                    <Button
+                      appearance='subtle'
+                      title={strings.Aria.Close}
+                      icon={getFluentIcon('Dismiss')}
+                    />
                   </DialogTrigger>
                 }
               >

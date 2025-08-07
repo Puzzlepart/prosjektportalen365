@@ -7,6 +7,7 @@ import { getGUID } from '@pnp/core'
 import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
 import { useId } from '@fluentui/react-components'
 import strings from 'PortfolioWebPartsStrings'
+import { getFieldsForType } from '../getFieldsForType'
 
 /**
  * Component logic hook for `ProvisionDrawer`. This hook is responsible for
@@ -41,7 +42,18 @@ export const useProvisionDrawer = () => {
   )
 
   const getField = (fieldName: string) => {
-    return context.props.fields.find((field) => field.fieldName === fieldName)
+    const selectedType = context.column.get('type')
+
+    const fieldsToUse =
+      selectedType && context.props.typeFieldConfigurations
+        ? getFieldsForType(
+            context.props.fields,
+            context.props.typeFieldConfigurations,
+            selectedType
+          )
+        : context.props.fields
+
+    return fieldsToUse.find((field) => field.fieldName === fieldName)
   }
 
   const getGlobalSetting = (setting: string) => {
@@ -66,7 +78,8 @@ export const useProvisionDrawer = () => {
   const urlPrefix = `${context.props.webAbsoluteUrl.split('sites')[0]}sites/`
   const aliasSuffix = '@' + context.props.pageContext.user.loginName.split('@')[1]
 
-  const joinHub = !!context.state.types?.find((t) => t.title === context.column.get('type'))?.joinHub
+  const joinHub = !!context.state.types?.find((t) => t.title === context.column.get('type'))
+    ?.joinHub
 
   const spaceTypeInternal = context.state.types?.find(
     (t) => t.title === context.column.get('type')
@@ -106,9 +119,10 @@ export const useProvisionDrawer = () => {
       SpaceType: context.column.get('type'),
       SpaceTypeInternal: spaceTypeInternal,
       Teamify: isTeam ? true : isViva ? false : context.column.get('teamify'),
-      TeamsTemplate: context.column.get('teamify')
-        ? context.state.properties.teamTemplate || 'standard'
-        : '',
+      TeamsTemplate:
+        context.column.get('teamify') || isTeam
+          ? context.state.properties.teamTemplate || 'standard'
+          : '',
       OwnersId: context.state.properties.owner,
       MembersId: context.state.properties.member,
       RequestedById: context.state.properties.requestedBy,
@@ -185,7 +199,6 @@ export const useProvisionDrawer = () => {
     urlPrefix,
     aliasSuffix,
     isTeam,
-    isViva,
     joinHub,
     getField,
     fluentProviderId
