@@ -41,18 +41,13 @@ export const useProvisionDrawer = () => {
     useMotion<HTMLDivElement>(i === currentLevel)
   )
 
+  const selectedType = context.column.get('type')
+  const fieldsToUse =
+    selectedType && context.props.typeFieldConfigurations
+      ? getFieldsForType(context.props.fields, context.props.typeFieldConfigurations, selectedType)
+      : context.props.fields
+
   const getField = (fieldName: string) => {
-    const selectedType = context.column.get('type')
-
-    const fieldsToUse =
-      selectedType && context.props.typeFieldConfigurations
-        ? getFieldsForType(
-            context.props.fields,
-            context.props.typeFieldConfigurations,
-            selectedType
-          )
-        : context.props.fields
-
     return fieldsToUse.find((field) => field.fieldName === fieldName)
   }
 
@@ -116,6 +111,7 @@ export const useProvisionDrawer = () => {
       SpaceDisplayName: name,
       Description: context.column.get('description'),
       BusinessJustification: context.column.get('justification'),
+      AdditionalInfo: context.column.get('additionalInfo'),
       SpaceType: context.column.get('type'),
       SpaceTypeInternal: spaceTypeInternal,
       Teamify: isTeam ? true : isViva ? false : context.column.get('teamify'),
@@ -167,7 +163,7 @@ export const useProvisionDrawer = () => {
   const [siteExists, setSiteExists] = useState(false)
 
   const isSaveDisabled =
-    context.props.fields
+    fieldsToUse
       .filter((field) => field.required)
       .some((field) => {
         const value = context.column.get(field.fieldName)

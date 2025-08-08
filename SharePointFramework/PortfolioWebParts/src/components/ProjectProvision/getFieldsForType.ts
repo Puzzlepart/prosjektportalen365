@@ -24,14 +24,13 @@ export const getFieldsForType = (
 
   let fieldConfigs: Record<string, IFieldDisplayNameConfiguration> = {}
   let hiddenFieldNames: string[] = []
+  let requiredFieldNames: string[] = []
 
   if (typeConfig.fieldConfigurations) {
     if (typeof typeConfig.fieldConfigurations === 'string') {
       try {
         fieldConfigs = JSON.parse(typeConfig.fieldConfigurations)
-      } catch (error) {
-        console.warn('Invalid JSON in field configurations:', error)
-      }
+      } catch (error) {}
     } else {
       fieldConfigs = typeConfig.fieldConfigurations
     }
@@ -48,9 +47,21 @@ export const getFieldsForType = (
     }
   }
 
+  if (typeConfig.requiredFields) {
+    if (typeof typeConfig.requiredFields === 'string') {
+      requiredFieldNames = typeConfig.requiredFields
+        .split(',')
+        .map((f) => f.trim())
+        .filter((f) => f)
+    } else if (Array.isArray(typeConfig.requiredFields)) {
+      requiredFieldNames = typeConfig.requiredFields
+    }
+  }
+
   return fields.map((field) => {
     const fieldConfig = fieldConfigs[field.fieldName]
     const isHidden = hiddenFieldNames.includes(field.fieldName)
+    const isRequired = requiredFieldNames.includes(field.fieldName)
 
     const updatedField = { ...field }
 
@@ -64,6 +75,10 @@ export const getFieldsForType = (
       updatedField.hidden = true
     }
 
+    if (isRequired) {
+      updatedField.required = true
+    }
+
     return updatedField
   })
 }
@@ -74,9 +89,16 @@ export const getFieldsForType = (
 export const getDefaultTypeFieldConfigurations = (): ITypeFieldConfiguration[] => {
   return [
     {
+      typeName: 'Prosjektområde',
+      displayName: 'Prosjektområde',
+      hiddenFields: 'additionalInfo',
+      requiredFields: 'type, name, description, owner'
+    },
+    {
       typeName: 'Viva Engage Community',
       displayName: 'Viva Engage Community',
       hiddenFields: 'teamify, teamTemplate, isConfidential, externalSharing, image',
+      requiredFields: 'type, name, description, owner',
       fieldConfigurations: {
         name: {
           displayName: strings.Provision.CommunityNameFieldLabel,
@@ -113,6 +135,7 @@ export const getDefaultTypeFieldConfigurations = (): ITypeFieldConfiguration[] =
     {
       typeName: 'Microsoft Teams Team',
       displayName: 'Microsoft Teams Team',
+      requiredFields: 'type, name, description, owner',
       fieldConfigurations: {
         name: {
           displayName: strings.Provision.TeamNameFieldLabel,

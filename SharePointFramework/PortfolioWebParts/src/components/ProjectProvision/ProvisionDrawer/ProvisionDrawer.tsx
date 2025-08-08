@@ -279,6 +279,20 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                       placeholder={getField('justification').placeholder}
                     />
                   </FieldContainer>
+                  <FieldContainer
+                    iconName='TextAlignLeft'
+                    label={getField('additionalInfo').displayName}
+                    description={getField('additionalInfo').description}
+                    required={getField('additionalInfo').required}
+                    hidden={getField('additionalInfo').hidden}
+                  >
+                    <Textarea
+                      value={context.column.get('additionalInfo')}
+                      onChange={(_, data) => context.setColumn('additionalInfo', data.value)}
+                      rows={2}
+                      placeholder={getField('additionalInfo').placeholder}
+                    />
+                  </FieldContainer>
                   <Divider />
                   <FieldContainer
                     iconName='Person'

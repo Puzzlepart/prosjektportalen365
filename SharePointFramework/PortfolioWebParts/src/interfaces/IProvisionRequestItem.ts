@@ -4,6 +4,7 @@ export interface IProvisionRequestItem {
   SpaceDisplayName?: string
   Description?: string
   BusinessJustification?: string
+  AdditionalInfo?: string
   SpaceType?: string
   SpaceTypeInternal?: string
   Teamify?: boolean

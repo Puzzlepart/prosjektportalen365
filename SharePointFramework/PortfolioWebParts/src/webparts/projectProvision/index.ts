@@ -116,7 +116,10 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                   label: strings.Provision.ExpirationDateModeFieldLabel,
                   options: [
                     { key: 'date', text: strings.Provision.ExpirationDateModeDate },
-                    { key: 'monthDropdown', text: strings.Provision.ExpirationDateModeMonthDropdown }
+                    {
+                      key: 'monthDropdown',
+                      text: strings.Provision.ExpirationDateModeMonthDropdown
+                    }
                   ],
                   selectedKey: propertiesWithDefaults.expirationDateMode ?? 'date'
                 })
@@ -230,8 +233,7 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                     {
                       id: 'description',
                       title: strings.Provision.FieldDescriptionLabel,
-                      type: CustomCollectionFieldType.string,
-                      required: true
+                      type: CustomCollectionFieldType.string
                     },
                     {
                       id: 'placeholder',
@@ -296,6 +298,7 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                       type: CustomCollectionFieldType.dropdown,
                       required: true,
                       options: [
+                        { key: 'Prosjektområde', text: 'Prosjektområde' },
                         { key: 'Viva Engage Community', text: 'Viva Engage Community' },
                         { key: 'Microsoft Teams Team', text: 'Microsoft Teams Team' }
                       ]
@@ -307,13 +310,10 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
 
                       defaultValue: '',
                       onCustomRender: (field, value, onUpdate, item) => {
-                        const availableFields = fieldsValue
-                          .filter((f) => !f.hidden)
-                          .map((f) => ({
-                            key: f.fieldName,
-                            text: f.displayName || f.fieldName,
-                            disabled: f.required
-                          }))
+                        const availableFields = fieldsValue.map((f) => ({
+                          key: f.fieldName,
+                          text: f.displayName || f.fieldName
+                        }))
 
                         let currentHiddenFields: string[] = []
                         if (value) {
@@ -376,8 +376,90 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                                   {
                                     key: availableField.key,
                                     value: availableField.key,
-                                    text: availableField.text,
-                                    disabled: availableField.disabled
+                                    text: availableField.text
+                                  },
+                                  availableField.text
+                                )
+                              )
+                            )
+                          )
+                        )
+                      }
+                    },
+                    {
+                      id: 'requiredFields',
+                      title: strings.Provision.RequiredFieldsForTypeLabel,
+                      type: CustomCollectionFieldType.custom,
+
+                      defaultValue: '',
+                      onCustomRender: (field, value, onUpdate, item) => {
+                        const availableFields = fieldsValue.map((f) => ({
+                          key: f.fieldName,
+                          text: f.displayName || f.fieldName
+                        }))
+
+                        let currentRequiredFields: string[] = []
+                        if (value) {
+                          if (typeof value === 'string') {
+                            currentRequiredFields = value
+                              .split(',')
+                              .map((f) => f.trim())
+                              .filter((f) => f)
+                          } else if (Array.isArray(value)) {
+                            currentRequiredFields = value
+                          } else if (typeof value === 'object' && value !== null) {
+                            if (value.toString() !== '[object Object]') {
+                              currentRequiredFields = value
+                                .toString()
+                                .split(',')
+                                .map((f) => f.trim())
+                                .filter((f) => f)
+                            }
+                          }
+                        }
+
+                        const selectedFieldNames = currentRequiredFields
+                          .map((fieldName) => {
+                            const field = availableFields.find((f) => f.key === fieldName)
+                            return field ? field.text : fieldName
+                          })
+                          .filter((name) => name)
+
+                        const displayValue =
+                          selectedFieldNames.length > 0
+                            ? selectedFieldNames.join(', ')
+                            : strings.Provision.RequiredFieldsForTypePlaceholder
+
+                        return React.createElement(
+                          IdPrefixProvider,
+                          {
+                            value: `requiredFields-${field.id}-${item?.id || 'new'}`
+                          },
+                          React.createElement(
+                            FluentProvider,
+                            {
+                              theme: customLightTheme,
+                              style: { background: 'transparent' }
+                            },
+                            React.createElement(
+                              Dropdown,
+                              {
+                                multiselect: true,
+                                placeholder: strings.Provision.RequiredFieldsForTypePlaceholder,
+                                value: displayValue,
+                                selectedOptions: currentRequiredFields,
+                                onOptionSelect: (event, data) => {
+                                  const newSelectedOptions = data.selectedOptions || []
+                                  onUpdate(field.id, newSelectedOptions.join(','))
+                                }
+                              },
+                              availableFields.map((availableField) =>
+                                React.createElement(
+                                  Option,
+                                  {
+                                    key: availableField.key,
+                                    value: availableField.key,
+                                    text: availableField.text
                                   },
                                   availableField.text
                                 )

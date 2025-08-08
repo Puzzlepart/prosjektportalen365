@@ -37,77 +37,80 @@ declare interface IPortfolioWebPartsStrings {
     TextField: string
     SiteName: string
     SiteDescription: string
-    Icon: string,
-    ChoiceField: string,
-    MultiChoiceField: string,
-    GuestField: string,
-    UserField: string,
-    BusinessJustificationField: string,
+    Icon: string
+    ChoiceField: string
+    MultiChoiceField: string
+    GuestField: string
+    UserField: string
+    BusinessJustificationField: string
+    AdditionalInfoField: string
     DatePicker: string
   },
   Provision: {
-    DrawerLevel0HeaderText: string,
-    DrawerLevel0DescriptionText: string,
-    DrawerLevel1HeaderText: string,
-    DrawerLevel1DescriptionText: string,
-    DrawerLevel2HeaderText: string,
-    DrawerLevel2DescriptionText: string,
-    SiteTypeFieldLabel: string,
-    SiteNameFieldLabel: string,
-    SiteNameFieldDescription: string,
-    SiteNamePrefixTooltipText: string,
+    DrawerLevel0HeaderText: string
+    DrawerLevel0DescriptionText: string
+    DrawerLevel1HeaderText: string
+    DrawerLevel1DescriptionText: string
+    DrawerLevel2HeaderText: string
+    DrawerLevel2DescriptionText: string
+    SiteTypeFieldLabel: string
+    SiteNameFieldLabel: string
+    SiteNameFieldDescription: string
+    SiteNamePrefixTooltipText: string
     SiteNameSuffixTooltipText: string
-    SiteNameValidationErrorMessage: string,
-    SiteNameValidationSuccessMessage: string,
-    SiteDescriptionFieldLabel: string,
-    SiteDescriptionFieldDescription: string,
-    BusinessJustificationFieldLabel: string,
-    BusinessJustificationFieldDescription: string,
+    SiteNameValidationErrorMessage: string
+    SiteNameValidationSuccessMessage: string
+    SiteDescriptionFieldLabel: string
+    SiteDescriptionFieldDescription: string
+    BusinessJustificationFieldLabel: string
+    BusinessJustificationFieldDescription: string
+    AdditionalInfoFieldLabel: string
+    AdditionalInfoFieldDescription: string
     AliasFieldLabel: string
     UrlFieldLabel: string
-    OwnerFieldLabel: string,
-    OwnerFieldDescription: string,
-    UserFieldNoOptionsText: string,
-    MemberFieldLabel: string,
-    MemberFieldDescription: string,
-    RequestedByFieldLabel: string,
-    RequestedByFieldDescription: string,
-    TeamifyFieldLabel: string,
-    TeamifyFieldDescription: string,
-    TeamTemplateFieldLabel: string,
-    TeamTemplateFieldDescription: string,
-    ConfidentialFieldLabel: string,
-    ConfidentialFieldDescription: string,
-    PrivacyFieldLabel: string,
-    PrivacyFieldDescription: string,
-    PrivacyFieldOptionPrivate: string,
-    PrivacyFieldOptionPublic: string,
-    ExternalSharingFieldLabel: string,
-    ExternalSharingFieldDescription: string,
-    GuestFieldLabel: string,
-    GuestFieldDescription: string,
-    GuestFieldNoOptionsText: string,
-    SensitivityLabelFieldLabel: string,
-    SensitivityLabelFieldDescription: string,
-    SensitivityLabelLibraryFieldLabel: string,
-    SensitivityLabelLibraryFieldDescription: string,
-    RetentionLabelFieldLabel: string,
-    RetentionLabelFieldDescription: string,
-    ExpirationDateFieldLabel: string,
-    ExpirationDateFieldDescription: string,
-    ReadOnlyGroupFieldLabel: string,
-    ReadOnlyGroupFieldDescription: string,
-    InternalChannelFieldLabel: string,
-    InternalChannelFieldDescription: string,
-    LanguageFieldLabel: string,
-    TimeZoneFieldLabel: string,
-    HubSiteFieldLabel: string,
-    ImageFieldLabel: string,
-    ImageFieldDescription: string,
-    ImageDropZoneText: string,
-    DrawerFooterDescriptionText: string,
-    PreviousButtonLabel: string,
-    NextButtonLabel: string,
+    OwnerFieldLabel: string
+    OwnerFieldDescription: string
+    UserFieldNoOptionsText: string
+    MemberFieldLabel: string
+    MemberFieldDescription: string
+    RequestedByFieldLabel: string
+    RequestedByFieldDescription: string
+    TeamifyFieldLabel: string
+    TeamifyFieldDescription: string
+    TeamTemplateFieldLabel: string
+    TeamTemplateFieldDescription: string
+    ConfidentialFieldLabel: string
+    ConfidentialFieldDescription: string
+    PrivacyFieldLabel: string
+    PrivacyFieldDescription: string
+    PrivacyFieldOptionPrivate: string
+    PrivacyFieldOptionPublic: string
+    ExternalSharingFieldLabel: string
+    ExternalSharingFieldDescription: string
+    GuestFieldLabel: string
+    GuestFieldDescription: string
+    GuestFieldNoOptionsText: string
+    SensitivityLabelFieldLabel: string
+    SensitivityLabelFieldDescription: string
+    SensitivityLabelLibraryFieldLabel: string
+    SensitivityLabelLibraryFieldDescription: string
+    RetentionLabelFieldLabel: string
+    RetentionLabelFieldDescription: string
+    ExpirationDateFieldLabel: string
+    ExpirationDateFieldDescription: string
+    ReadOnlyGroupFieldLabel: string
+    ReadOnlyGroupFieldDescription: string
+    InternalChannelFieldLabel: string
+    InternalChannelFieldDescription: string
+    LanguageFieldLabel: string
+    TimeZoneFieldLabel: string
+    HubSiteFieldLabel: string
+    ImageFieldLabel: string
+    ImageFieldDescription: string
+    ImageDropZoneText: string
+    DrawerFooterDescriptionText: string
+    PreviousButtonLabel: string
+    NextButtonLabel: string
     ProvisionButtonLabel: string
     ToastCreatedTitle: string
     ToastCreatedBody: string
@@ -262,6 +265,8 @@ declare interface IPortfolioWebPartsStrings {
     TypeNameLabel: string
     HiddenFieldsForTypeLabel: string
     HiddenFieldsForTypePlaceholder: string
+    RequiredFieldsForTypeLabel: string
+    RequiredFieldsForTypePlaceholder: string
     FieldConfigurationJsonLabel: string
     FieldConfigurationJsonPlaceholder: string
     PropertyEditorLabel: string
@@ -464,7 +469,7 @@ declare interface IPortfolioWebPartsStrings {
   ProjectServiceArea: string
   ProjectsListName: string
   ProjectType: string
-  RelativeUrl: string,
+  RelativeUrl: string
   RenderModeCompactListText: string
   RenderModeLabel: string
   RenderModeListText: string

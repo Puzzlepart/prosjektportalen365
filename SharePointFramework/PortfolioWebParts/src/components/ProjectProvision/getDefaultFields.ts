@@ -51,6 +51,17 @@ export const getDefaultFields = (): IProvisionField[] => {
     },
     {
       order: 50,
+      fieldName: 'additionalInfo',
+      displayName: strings.Provision.AdditionalInfoFieldLabel,
+      description: strings.Provision.AdditionalInfoFieldDescription,
+      placeholder: strings.Placeholder.AdditionalInfoField,
+      dataType: 'note',
+      required: false,
+      hidden: false,
+      level: 0
+    },
+    {
+      order: 60,
       fieldName: 'owner',
       displayName: strings.Provision.OwnerFieldLabel,
       description: strings.Provision.OwnerFieldDescription,
@@ -61,7 +72,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       level: 0
     },
     {
-      order: 60,
+      order: 70,
       fieldName: 'member',
       displayName: strings.Provision.MemberFieldLabel,
       description: strings.Provision.MemberFieldDescription,
@@ -71,7 +82,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       level: 0
     },
     {
-      order: 70,
+      order: 80,
       fieldName: 'requestedBy',
       displayName: strings.Provision.RequestedByFieldLabel,
       description: strings.Provision.RequestedByFieldDescription,
@@ -81,7 +92,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       level: 0
     },
     {
-      order: 80,
+      order: 90,
       fieldName: 'alias',
       displayName: strings.Provision.AliasFieldLabel,
       dataType: 'text',
@@ -90,7 +101,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       level: 0
     },
     {
-      order: 90,
+      order: 100,
       fieldName: 'url',
       displayName: strings.Provision.UrlFieldLabel,
       dataType: 'text',
@@ -99,7 +110,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       level: 0
     },
     {
-      order: 100,
+      order: 110,
       fieldName: 'teamify',
       displayName: strings.Provision.TeamifyFieldLabel,
       description: strings.Provision.TeamifyFieldDescription,
@@ -108,7 +119,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       level: 1
     },
     {
-      order: 110,
+      order: 120,
       fieldName: 'teamTemplate',
       displayName: strings.Provision.TeamTemplateFieldLabel,
       description: strings.Provision.TeamTemplateFieldDescription,
@@ -117,7 +128,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       level: 1
     },
     {
-      order: 120,
+      order: 130,
       fieldName: 'isConfidential',
       displayName: strings.Provision.ConfidentialFieldLabel,
       description: strings.Provision.ConfidentialFieldDescription,
@@ -126,7 +137,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       level: 1
     },
     {
-      order: 130,
+      order: 140,
       fieldName: 'privacy',
       displayName: strings.Provision.PrivacyFieldLabel,
       description: strings.Provision.PrivacyFieldDescription,
@@ -135,7 +146,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       level: 1
     },
     {
-      order: 140,
+      order: 150,
       fieldName: 'externalSharing',
       displayName: strings.Provision.ExternalSharingFieldLabel,
       description: strings.Provision.ExternalSharingFieldDescription,
@@ -144,7 +155,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       level: 1
     },
     {
-      order: 150,
+      order: 160,
       fieldName: 'guest',
       displayName: strings.Provision.GuestFieldLabel,
       description: strings.Provision.GuestFieldDescription,
@@ -154,7 +165,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       level: 1
     },
     {
-      order: 160,
+      order: 170,
       fieldName: 'sensitivityLabel',
       displayName: strings.Provision.SensitivityLabelFieldLabel,
       description: strings.Provision.SensitivityLabelFieldDescription,
@@ -163,7 +174,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       level: 1
     },
     {
-      order: 170,
+      order: 180,
       fieldName: 'sensitivityLabelLibrary',
       displayName: strings.Provision.SensitivityLabelLibraryFieldLabel,
       description: strings.Provision.SensitivityLabelLibraryFieldDescription,
@@ -172,7 +183,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       level: 1
     },
     {
-      order: 180,
+      order: 190,
       fieldName: 'retentionLabel',
       displayName: strings.Provision.RetentionLabelFieldLabel,
       description: strings.Provision.RetentionLabelFieldDescription,
@@ -181,7 +192,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       level: 1
     },
     {
-      order: 190,
+      order: 200,
       fieldName: 'expirationDate',
       displayName: strings.Provision.ExpirationDateFieldLabel,
       description: strings.Provision.ExpirationDateFieldDescription,
@@ -190,7 +201,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       level: 1
     },
     {
-      order: 200,
+      order: 210,
       fieldName: 'readOnlyGroup',
       displayName: strings.Provision.ReadOnlyGroupFieldLabel,
       description: strings.Provision.ReadOnlyGroupFieldDescription,
@@ -199,7 +210,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       level: 2
     },
     {
-      order: 210,
+      order: 220,
       fieldName: 'internalChannel',
       displayName: strings.Provision.InternalChannelFieldLabel,
       description: strings.Provision.InternalChannelFieldDescription,
@@ -209,7 +220,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       level: 2
     },
     {
-      order: 220,
+      order: 230,
       fieldName: 'image',
       displayName: strings.Provision.ImageFieldLabel,
       description: strings.Provision.ImageFieldDescription,
@@ -218,7 +229,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       level: 2
     },
     {
-      order: 230,
+      order: 240,
       fieldName: 'language',
       displayName: strings.Provision.LanguageFieldLabel,
       dataType: 'choice',
@@ -227,7 +238,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       level: 2
     },
     {
-      order: 240,
+      order: 250,
       fieldName: 'timeZone',
       displayName: strings.Provision.TimeZoneFieldLabel,
       dataType: 'choice',
@@ -236,7 +247,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       level: 2
     },
     {
-      order: 250,
+      order: 260,
       fieldName: 'hubSiteTitle',
       displayName: strings.Provision.HubSiteFieldLabel,
       dataType: 'choice',

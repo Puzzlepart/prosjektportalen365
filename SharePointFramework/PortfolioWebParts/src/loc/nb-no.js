@@ -43,6 +43,7 @@ define([], function () {
       GuestField: 'Angi gjester',
       UserField: 'Angi brukere',
       BusinessJustificationField: 'Angi en forretningsmessig begrunnelse',
+      AdditionalInfoField: 'Angi tilleggsinformasjon',
       DatePicker: 'Velg en dato'
     },
     Provision: {
@@ -63,6 +64,8 @@ define([], function () {
       SiteDescriptionFieldDescription: 'Angi en beskrivelse, dette er nyttig for at folk skal forstå hva området ditt er for.',
       BusinessJustificationFieldLabel: 'Forretningsmessig begrunnelse',
       BusinessJustificationFieldDescription: 'Beskriv hvorfor du har behov for dette området? Hva er formålet?',
+      AdditionalInfoFieldLabel: 'Tilleggsinformasjon',
+      AdditionalInfoFieldDescription: 'Angi ytterligere informasjon vedrørende bestillingen.',
       AliasFieldLabel: 'Alias/navn',
       UrlFieldLabel: 'Områdeadresse',
       OwnerFieldLabel: 'Eier(e)',
@@ -262,6 +265,8 @@ define([], function () {
       TypeNameLabel: 'Type',
       HiddenFieldsForTypeLabel: 'Skjulte felt for denne typen',
       HiddenFieldsForTypePlaceholder: 'Velg felt å skjule...',
+      RequiredFieldsForTypeLabel: 'Påkrevde felt for denne typen',
+      RequiredFieldsForTypePlaceholder: 'Velg felt som skal være påkrevde...',
       FieldConfigurationJsonLabel: 'Feltkonfigurasjon (JSON)',
       FieldConfigurationJsonPlaceholder: 'Enter JSON configuration for fields...',
       PropertyEditorLabel: 'Rediger webdelens egenskaper (JSON)',

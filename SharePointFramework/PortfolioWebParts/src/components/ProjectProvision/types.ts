@@ -4,8 +4,9 @@ import { IBaseComponentProps } from 'components/types'
 export interface ITypeFieldConfiguration {
   typeName: string
   displayName?: string
-  fieldConfigurations: Record<string, IFieldDisplayNameConfiguration>
+  fieldConfigurations?: Record<string, IFieldDisplayNameConfiguration>
   hiddenFields?: string
+  requiredFields?: string
 }
 
 export interface IFieldDisplayNameConfiguration {

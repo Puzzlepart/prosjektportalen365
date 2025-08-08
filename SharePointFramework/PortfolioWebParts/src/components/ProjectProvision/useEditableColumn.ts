@@ -19,6 +19,7 @@ export function useEditableColumn(
     ['name', ''],
     ['description', ''],
     ['justification', ''],
+    ['additionalInfo', ''],
     ['owner', []],
     ['member', []],
     ['requestedBy', []],

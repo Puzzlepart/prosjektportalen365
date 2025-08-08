@@ -340,8 +340,21 @@ define([], function () {
       ExpirationDateMonthOption: '{0} month(s)',
       NoProvisionAccessMessage: 'You do not have access to the Ordering portal.',
       DefaultTeamTemplate: 'Standard',
-      DefaultLanguage: 'English',
-      DefaultTimeZone: '(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna'
+      TypeConfigurationLabel: 'Type configuration',
+      TypeConfigurationPanelHeader: 'Type configuration',
+      TypeConfigurationManageBtnLabel: 'Configure types',
+      TypeNameLabel: 'Type',
+      HiddenFieldsForTypeLabel: 'Hidden fields for this type',
+      HiddenFieldsForTypePlaceholder: 'Select fields to hide...',
+      RequiredFieldsForTypeLabel: 'Required fields for this type',
+      RequiredFieldsForTypePlaceholder: 'Select fields to make required...',
+      FieldConfigurationJsonLabel: 'Field configuration (JSON)',
+      FieldConfigurationJsonPlaceholder: 'Enter JSON configuration for fields...',
+      PropertyEditorLabel: 'Edit web part properties (JSON)',
+      PropertyEditorDescription: 'Here you can edit the web part properties in JSON format. Export and import of properties is also possible so that setup can be reused and imported into other web parts.',
+      DebugModeLabel: 'Debug Mode',
+      DebugModeOnText: 'On',
+      DebugModeOffText: 'Off'
     },
   }
 })
