@@ -1,6 +1,20 @@
 <pnp:Security xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:SiteGroups>
         <pnp:SiteGroup
+            Title="Bestillingsportalen"
+            Description="Brukere som har tilgang til Bestillingsportalen for å bestille prosjekter og områder."
+            Owner="{associatedownergroupid}"
+            AllowMembersEditMembership="false"
+            OnlyAllowMembersViewMembership="true">
+        </pnp:SiteGroup>
+        <pnp:SiteGroup
+            Title="Assistentbrukere"
+            Description="Brukere som har tilgang til Prosjektportalen Assistent"
+            Owner="{associatedownergroupid}"
+            AllowMembersEditMembership="false"
+            OnlyAllowMembersViewMembership="true">
+        </pnp:SiteGroup>
+        <pnp:SiteGroup
             Title="Porteføljeinnsyn"
             Description="Innsyn i portefølje"
             Owner="{associatedownergroupid}"

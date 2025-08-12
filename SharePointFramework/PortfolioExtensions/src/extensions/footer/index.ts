@@ -26,6 +26,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   private _gitHubReleases: IGitHubRelease[]
   private _links: { Url: string; Description: string; Level?: string }[]
   private _useAssistant: boolean
+  private _hasAssistantAccess: boolean
   private _helpContent: HelpContentModel[]
   private _portalDataService: PortalDataService
   private _showFooter: boolean
@@ -55,6 +56,9 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     this._useAssistant = this._globalSettings.get('UseAssistant') === '1'
     this._showFooter = this._globalSettings.get('ShowFooter') === '1'
     this._minimizeFooter = this._globalSettings.get('MinimizeFooter') === '1'
+
+    const requireAssistantAccess = this._globalSettings.get('RequireAssistantAccess') === '1'
+    this._hasAssistantAccess = !requireAssistantAccess || await this._isUserInGroup(strings.AssistantGroupName)
     this.context.application.navigatedEvent.add(this, this._handleNavigatedEvent)
     return Promise.resolve()
   }
@@ -71,9 +75,21 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
       pageContext: this.context.pageContext,
       portalUrl: this._portalDataService.url,
       useAssistant: this._useAssistant,
+      hasAssistantAccess: this._hasAssistantAccess,
       showFooter: this._showFooter,
       minimizeFooter: this._minimizeFooter
     })
+  }
+
+  private async _isUserInGroup(groupName: string): Promise<boolean> {
+    try {
+      const [siteGroup] = await this._portalDataService.web.siteGroups
+        .select('CanCurrentUserViewMembership', 'Title')
+        .filter(`Title eq '${groupName}'`)()
+      return siteGroup && siteGroup['CanCurrentUserViewMembership']
+    } catch (error) {
+      return false
+    }
   }
 
   /**

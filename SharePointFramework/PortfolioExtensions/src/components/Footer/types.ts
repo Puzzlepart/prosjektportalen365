@@ -38,6 +38,11 @@ export interface IFooterProps {
   useAssistant: boolean
 
   /**
+   * Whether the current user has access to the assistant
+   */
+  hasAssistantAccess: boolean
+
+  /**
    * Whether or not to show the footer
    */
   showFooter: boolean

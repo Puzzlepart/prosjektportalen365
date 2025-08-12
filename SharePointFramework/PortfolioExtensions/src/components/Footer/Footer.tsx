@@ -32,7 +32,7 @@ export const Footer: FC<IFooterProps> = (props) => {
               <PromotedLinks />
             </section>
             <section className={styles.right}>
-              {props.useAssistant && <Assistant />}
+              {props.useAssistant && props.hasAssistantAccess && <Assistant />}
               <InstallVersion />
               <HelpContent />
             </section>

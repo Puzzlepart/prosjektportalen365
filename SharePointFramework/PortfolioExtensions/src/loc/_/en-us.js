@@ -2,6 +2,13 @@ define([], function () {
   return {
     ActionLabel: 'Action',
     ActionLabelPlaceholder: 'Please select action...',
+    AssistantButtonLabel: 'Assistant',
+    AssistantDrawerTitle: 'Project Portal Assistant',
+    AssistantIframeTitle: 'Assistant for Project Portal 365',
+    AssistantLoadingText: 'Loading assistant...',
+    AssistantSettingsTooltip: 'Settings',
+    AssistantTooltipAvailable: 'Open the assistant to use artificial intelligence in Project Portal 365.',
+    AssistantTooltipUnavailable: 'The assistant is not available.',
     CancelLabel: 'Cancel',
     CloseLabel: 'Close',
     CommentLabel: 'Comment',

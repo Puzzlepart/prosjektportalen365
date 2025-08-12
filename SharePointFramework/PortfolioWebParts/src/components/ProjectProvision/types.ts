@@ -39,6 +39,8 @@ export interface IProjectProvisionProps extends IBaseComponentProps {
 
   // Advanced
   provisionUrl: string
+  requireProvisionAccess?: boolean
+  hasProjectProvisionAccess?: boolean
   fields?: IProvisionField[]
   typeFieldConfigurations?: ITypeFieldConfiguration[]
   debugMode?: boolean

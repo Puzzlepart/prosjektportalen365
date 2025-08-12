@@ -26,8 +26,16 @@ import { ProvisionSettings } from './ProvisionSettings'
 import { stringIsNullOrEmpty } from '@pnp/core'
 
 export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
-  const { state, setState, column, setColumn, reset, toasterId, fluentProviderId } =
-    useProjectProvision(props)
+  const {
+    state,
+    setState,
+    column,
+    setColumn,
+    reset,
+    toasterId,
+    fluentProviderId,
+    hasProjectProvisionAccess
+  } = useProjectProvision(props)
   const restoreFocusTargetAttribute = useRestoreFocusTarget()
   const { dispatchToast } = useToastController(toasterId)
 
@@ -51,6 +59,10 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
         intent='warning'
       />
     )
+  }
+
+  if (!hasProjectProvisionAccess) {
+    return null
   }
 
   if (stringIsNullOrEmpty(props.provisionUrl)) {

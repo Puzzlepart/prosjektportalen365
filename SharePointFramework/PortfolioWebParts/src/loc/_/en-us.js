@@ -352,6 +352,7 @@ define([], function () {
       FieldConfigurationJsonPlaceholder: 'Enter JSON configuration for fields...',
       PropertyEditorLabel: 'Edit web part properties (JSON)',
       PropertyEditorDescription: 'Here you can edit the web part properties in JSON format. Export and import of properties is also possible so that setup can be reused and imported into other web parts.',
+      RequireProvisionAccessFieldLabel: 'Require access to provision portal',
       DebugModeLabel: 'Debug Mode',
       DebugModeOnText: 'On',
       DebugModeOffText: 'Off'

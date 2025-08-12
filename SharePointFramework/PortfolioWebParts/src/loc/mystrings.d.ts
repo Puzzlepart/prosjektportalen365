@@ -230,6 +230,7 @@ declare interface IPortfolioWebPartsStrings {
     FooterDescriptionFieldLabel: string
     FooterDescriptionFieldDescription: string
     ShowHideGroupName: string
+    RequireProvisionAccessFieldLabel: string
     HideStatusMenuFieldLabel: string
     HideSettingsMenuFieldLabel: string
     AdvancedGroupName: string
@@ -275,14 +276,15 @@ declare interface IPortfolioWebPartsStrings {
     DebugModeOnText: string
     DebugModeOffText: string
     WebPartDescription: string
+    ProvisionGroupName: string
   },
   AddColumnLabel: string
   AllProjectsHeaderText: string
   AllProjectsSearchBoxPlaceholderText: string
   BarLabel: string
-  BooleanNo: string
   BooleanOff: string
   BooleanOn: string
+  BooleanNo: string
   BooleanYes: string
   CancelButtonLabel: string
   ChartConfigurationListNameLabel: string

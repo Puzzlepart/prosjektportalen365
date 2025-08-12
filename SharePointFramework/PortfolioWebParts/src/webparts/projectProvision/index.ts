@@ -30,8 +30,19 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
   private _defaultFields = getDefaultFields()
   private _defaultTypeFieldConfigurations = getDefaultTypeFieldConfigurations()
 
-  public render(): void {
-    this.renderComponent<IProjectProvisionProps>(ProjectProvision)
+  public async render(): Promise<void> {
+    let hasProjectProvisionAccess = true
+    if (this.properties.requireProvisionAccess) {
+      try {
+        hasProjectProvisionAccess = await this.dataAdapter.isUserInGroup(
+          strings.Provision.ProvisionGroupName
+        )
+      } catch {
+        hasProjectProvisionAccess = false
+      }
+    }
+
+    this.renderComponent<IProjectProvisionProps>(ProjectProvision, { hasProjectProvisionAccess })
   }
 
   private mergeFields(
@@ -199,6 +210,12 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                 PropertyPaneTextField('provisionUrl', {
                   label: strings.Provision.ProvisionUrlFieldLabel,
                   description: strings.Provision.ProvisionUrlFieldDescription
+                }),
+                PropertyPaneToggle('requireProvisionAccess', {
+                  label: strings.Provision.RequireProvisionAccessFieldLabel,
+                  checked: propertiesWithDefaults.requireProvisionAccess,
+                  onText: strings.BooleanOn,
+                  offText: strings.BooleanOff
                 }),
                 PropertyFieldCollectionData('fields', {
                   key: 'fieldsCollection',
