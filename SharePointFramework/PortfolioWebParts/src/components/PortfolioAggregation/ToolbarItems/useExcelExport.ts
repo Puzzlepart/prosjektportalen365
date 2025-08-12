@@ -50,6 +50,16 @@ export function useExcelExport(context: IPortfolioAggregationContext) {
             case 'number':
               filteredItem[key] = Math.floor(filteredItem[key])
               break
+            case 'trend':
+              const json = filteredItem[key]?.trim()
+              if (!json || json === '{}') {
+                filteredItem[key] = ''
+              } else {
+                const parsed = JSON.parse(json)
+                const achievement = Number(parsed?.Achievement)
+                filteredItem[key] = Math.floor(isNaN(achievement) ? 0 : achievement * 100) / 100
+              }
+              break
             default:
               break
           }
