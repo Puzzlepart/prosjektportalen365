@@ -3,7 +3,7 @@
   "id": "20f151a9-6891-4408-a6d6-77e749b9e3e7",
   "alias": "IdeaModuleWebPart",
   "componentType": "WebPart",
-  "version": "1.11.0",
+  "version": "1.11.1",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "hiddenFromToolbox": true,

@@ -3,7 +3,7 @@
   "solution": {
     "name": "Prosjektportalen 365 - Project Web Parts",
     "id": "b69cb2f2-762d-425d-8e0b-d59c08918831",
-    "version": "1.11.0.0",
+    "version": "1.11.1.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "developer": {

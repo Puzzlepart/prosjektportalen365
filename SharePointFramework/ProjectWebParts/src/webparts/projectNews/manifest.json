@@ -3,11 +3,13 @@
   "id": "a9097537-6860-4e05-99f3-4ee21782687f",
   "alias": "ProjectNewsWebPart",
   "componentType": "WebPart",
-  "version": "1.11.0",
+  "version": "1.11.1",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "hiddenFromToolbox": false,
-  "supportedHosts": ["SharePointWebPart"],
+  "supportedHosts": [
+    "SharePointWebPart"
+  ],
   "preconfiguredEntries": [
     {
       "groupId": "5c03119e-3074-46fd-976b-c60198311f70",

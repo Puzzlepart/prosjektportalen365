@@ -3,7 +3,7 @@
   "id": "875ca87a-e331-4ffb-bc69-0272fdf80e41",
   "alias": "PortfolioInsightsWebPart",
   "componentType": "WebPart",
-  "version": "1.11.0",
+  "version": "1.11.1",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "hiddenFromToolbox": true,
