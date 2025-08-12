@@ -4,16 +4,28 @@ export interface IProvisionRequestItem {
   SpaceDisplayName?: string
   Description?: string
   BusinessJustification?: string
+  AdditionalInfo?: string
   SpaceType?: string
   SpaceTypeInternal?: string
   Teamify?: boolean
   TeamsTemplate?: string
   OwnersId?: any
   MembersId?: any
+  RequestedById?: any
   ConfidentialData?: boolean
   Visibility?: string
   ExternalSharingRequired?: boolean
   Guests?: any
+  SensitivityLabelName?: string
+  SensitivityLabelId?: string
+  SensitivityLabelLibraryName?: string
+  SensitivityLabelLibraryId?: string
+  RetentionLabelName?: string
+  ExpirationDate?: any
+  ReadOnlyGroup?: boolean
+  InternalChannel?: boolean
+  RequestedSource?: string
+  SpaceImage?: string
   SiteURL?: {
     Description?: string
     Url?: string

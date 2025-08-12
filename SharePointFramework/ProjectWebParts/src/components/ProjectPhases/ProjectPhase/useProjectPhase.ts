@@ -54,6 +54,11 @@ export function useProjectPhase(props: IProjectPhaseProps) {
   const adjustColor = (hex: string, saturation: number, darken: number) => {
     if (!hex) return
     const hslColor = hexToHsl(pSBC(darken, hex))
+
+    if (hslColor.s === 0) {
+      return hslToHex({ ...hslColor, l: hslColor.l - 0.1 })
+    }
+
     hslColor.s = saturation
     return hslToHex(hslColor)
   }

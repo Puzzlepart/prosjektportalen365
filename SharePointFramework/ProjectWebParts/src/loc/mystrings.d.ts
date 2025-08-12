@@ -64,6 +64,7 @@ declare interface IProjectWebPartsStrings {
   DefaultTimeframeEndValue: string
   DefaultTimeframeStartLabel: string
   DefaultTimeframeStartValue: string
+  ProjectTimeLapseLabel: string
   DeleteItemLabel: string
   DeleteReportButtonLabel: string
   DeleteReportButtonDescription: string
@@ -238,6 +239,42 @@ declare interface IProjectWebPartsStrings {
   WidthFieldLabel: string
   Yes: string
   PhaseCheckListItem: string
+  DialogTitle: string
+  CreatingNewArticleStatus: string
+  NewsCreatedSuccessfully: string
+  NewsTitleLabel: string
+  NewsTitlePlaceholder: string
+  CreateButtonLabel: string
+  ProjectNewsWebPartTitle: string
+  CreateNewsLinkLabel: string
+  NewsTitleRequired: string
+  NewsCreateError: string
+  NewsCreateSuccess: string,
+  TemplateRequired: string,
+  TemplatePlaceholder: string,
+  TemplateLabel: string,
+  NoRecentNews: string,
+  ShowMoreNews: string,
+  ShowLessNews: string,
+  ModifiedTooltipText: string,
+  MaxVisibleNewsDescription: string,
+  MaxVisibleNewsLabel: string,
+  SiteUrlLabel: string,
+  SiteUrlDescription: string,
+  NewsFolderNameDescription: string,
+  NewsFolderNameDefault: string,
+  NewsFolderNameLabel: string,
+  FileNameRequired: string,
+  FileNameTooLong: string,
+  FileNameInvalid: string,
+  FileNameNoLeadingTrailingSpaces: string,
+  FileNameReserved: string,
+  NewsFolderError: string,
+  LoadingLabel: string,
+  GenericErrorMessage: string,
+  NewsCreateDuplicateFileError: string
+  PreviewLabel: string
+  NoPreviewAvailable: string
 }
 
 declare module 'ProjectWebPartsStrings' {

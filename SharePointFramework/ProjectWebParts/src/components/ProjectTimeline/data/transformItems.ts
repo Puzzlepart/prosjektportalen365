@@ -54,9 +54,13 @@ export function transformItems(
               : item.itemTitle,
           start_time:
             item.getConfig('elementType') !== strings.BarLabel
-              ? moment(new Date(item.endDate))
-              : moment(new Date(item.startDate)),
-          end_time: moment(new Date(item.endDate)),
+              ? item.endDate
+                ? moment(new Date(item.endDate))
+                : undefined
+              : item.startDate
+              ? moment(new Date(item.startDate))
+              : undefined,
+          end_time: item.endDate ? moment(new Date(item.endDate)) : undefined,
           itemProps: { style }
         }
         timelineItem.data = {

@@ -27,7 +27,8 @@
           "PortfolioTimelineWebPart": "7284c568-f66c-4218-bb2c-3734a3cfa581",
           "ResourceAllocationWebPart": "2ef269b2-6370-4841-8b35-2185b7ccb22a",
           "ProjectProvisionWebPart": "e88cea29-09a0-4ce4-a38c-e0d74b65f619",
-          "IdeaModuleWebPart": "20f151a9-6891-4408-a6d6-77e749b9e3e7"
+          "IdeaModuleWebPart": "20f151a9-6891-4408-a6d6-77e749b9e3e7",
+          "ProjectCardWebPart": "92d23158-485a-4103-96bb-d3036b347412"
         }
       },
       "ProgramWebParts": {
@@ -62,7 +63,8 @@
           "ProjectPhasesWebPart": "4449d3dc-fa58-4982-b87c-5a893114e7b7",
           "ProjectStatusWebPart": "681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6",
           "ProjectTimelineWebPart": "d156652b-9121-47af-89ae-1fe8427c53da",
-          "RiskMatrixWebPart": "e536ae15-0748-4d96-b160-3abb30f1b71e"
+          "RiskMatrixWebPart": "e536ae15-0748-4d96-b160-3abb30f1b71e",
+          "ProjectNewsWebPart": "a9097537-6860-4e05-99f3-4ee21782687f"
         }
       },
       "shared-library": {

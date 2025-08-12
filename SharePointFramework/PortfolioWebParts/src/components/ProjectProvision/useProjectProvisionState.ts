@@ -10,12 +10,16 @@ import { IProjectProvisionState } from './types'
 export function useProjectProvisionState() {
   const [state, $setState] = useState<IProjectProvisionState>({
     loading: true,
+    error: null,
     showProvisionDrawer: false,
     showProvisionStatus: false,
     showProvisionSettings: false,
     settings: [],
     types: {},
     teamTemplates: {},
+    sensitivityLabels: {},
+    sensitivityLabelsLibrary: {},
+    retentionLabels: {},
     requests: [],
     properties: {},
     refetch: new Date().getTime(),

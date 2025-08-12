@@ -22,12 +22,12 @@
         </View>
     </pnp:Views>
     <pnp:Fields>
-        <Field DisplayName="{resource:SiteFields_InstallStartTime_DisplayName}" Format="DateTime" Name="InstallStartTime" Title="{resource:SiteFields_InstallStartTime_DisplayName}" Type="DateTime" ID="{8bb36128-4fc0-415d-9818-10fa686df919}" SourceID="{{listid:Installasjonslogg}}" StaticName="InstallStartTime" />
-        <Field DisplayName="{resource:SiteFields_InstallEndTime_DisplayName}" Format="DateTime" Name="InstallEndTime" Title="{resource:SiteFields_InstallEndTime_DisplayName}" Type="DateTime" ID="{b5f1936a-c2e0-4f63-b8e6-c1e61af2c096}" SourceID="{{listid:Installasjonslogg}}" StaticName="InstallEndTime" />
-        <Field DisplayName="{resource:SiteFields_InstallVersion_DisplayName}" Name="InstallVersion" Title="{resource:SiteFields_InstallVersion_DisplayName}" Type="Text" ID="{5e7d44ea-0667-4155-a2b8-fa46c018dbb2}" SourceID="{{listid:Installasjonslogg}}" StaticName="InstallVersion" />
-        <Field DisplayName="{resource:SiteFields_InstallCommand_DisplayName}" Name="InstallCommand" Title="{resource:SiteFields_InstallCommand_DisplayName}" Type="Text" ID="{265e131b-7825-421d-a1a1-c8eebe9d32e9}" SourceID="{{listid:Installasjonslogg}}" StaticName="InstallCommand" />
-        <Field DisplayName="{resource:SiteFields_InstallUser_DisplayName}" Name="InstallUser" Title="{resource:SiteFields_InstallUser_DisplayName}" Type="User" ShowField="ImnName" UserSelectionMode="PeopleOnly" ID="{9ee060e1-2f04-4982-8ec8-7097cc86fd54}" SourceID="{{listid:Installasjonslogg}}" StaticName="InstallUser" />
-        <Field DisplayName="{resource:SiteFields_InstallChannel_DisplayName}" Name="InstallChannel" Title="{resource:SiteFields_InstallChannel_DisplayName}" Type="Text" ID="{aea0c395-4f3a-4133-a646-c0d53b0820fb}" SourceID="{{listid:Installasjonslogg}}" StaticName="InstallChannel" />
+        <Field DisplayName="{resource:SiteFields_InstallStartTime_DisplayName}" Format="DateTime" Name="InstallStartTime" Title="{resource:SiteFields_InstallStartTime_DisplayName}" Type="DateTime" ID="{8bb36128-4fc0-415d-9818-10fa686df919}" StaticName="InstallStartTime" />
+        <Field DisplayName="{resource:SiteFields_InstallEndTime_DisplayName}" Format="DateTime" Name="InstallEndTime" Title="{resource:SiteFields_InstallEndTime_DisplayName}" Type="DateTime" ID="{b5f1936a-c2e0-4f63-b8e6-c1e61af2c096}" StaticName="InstallEndTime" />
+        <Field DisplayName="{resource:SiteFields_InstallVersion_DisplayName}" Name="InstallVersion" Title="{resource:SiteFields_InstallVersion_DisplayName}" Type="Text" ID="{5e7d44ea-0667-4155-a2b8-fa46c018dbb2}" StaticName="InstallVersion" />
+        <Field DisplayName="{resource:SiteFields_InstallCommand_DisplayName}" Name="InstallCommand" Title="{resource:SiteFields_InstallCommand_DisplayName}" Type="Note" ID="{265e131b-7825-421d-a1a1-c8eebe9d32e9}" StaticName="InstallCommand" />
+        <Field DisplayName="{resource:SiteFields_InstallUser_DisplayName}" Name="InstallUser" Title="{resource:SiteFields_InstallUser_DisplayName}" Type="User" ShowField="ImnName" UserSelectionMode="PeopleOnly" ID="{9ee060e1-2f04-4982-8ec8-7097cc86fd54}" StaticName="InstallUser" />
+        <Field DisplayName="{resource:SiteFields_InstallChannel_DisplayName}" Name="InstallChannel" Title="{resource:SiteFields_InstallChannel_DisplayName}" Type="Text" ID="{aea0c395-4f3a-4133-a646-c0d53b0820fb}" StaticName="InstallChannel" />
     </pnp:Fields>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>

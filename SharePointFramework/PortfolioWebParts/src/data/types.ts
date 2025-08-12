@@ -237,6 +237,16 @@ export interface IPortfolioWebPartsDataAdapter {
   fetchEnrichedProjects?(): Promise<ProjectListModel[]>
 
   /**
+   * Fetching enriched project by combining list item from projects list,
+   * Graph Groups and site users. The result are cached in `localStorage`
+   * for 30 minutes.
+   *
+   * @param siteId Site ID to fetch the project
+   * @param hubContext Optional hub context for cross-hub data access
+   */
+  fetchEnrichedProject?(siteId: string, hubContext?: IHubContext): Promise<ProjectListModel>
+
+  /**
    * Fetch projects from the projects list. If a data source is specified,
    * the projects are filtered using the `odataQuery` property from the
    * specified view.
@@ -361,6 +371,20 @@ export interface IPortfolioWebPartsDataAdapter {
   getTeamTemplates?(provisionUrl: string): Promise<Record<string, any>>
 
   /**
+   * Retrieves the sensitivity labels from the "IP Labels" list
+   *
+   * @returns A Promise that resolves to a Map containing the labels.
+   */
+  getSensitivityLabels?(provisionUrl: string): Promise<Record<string, any>>
+
+  /**
+   * Retrieves the retention labels from the "Retention Labels" list
+   *
+   * @returns A Promise that resolves to a Map containing the labels.
+   */
+  getRetentionLabels?(provisionUrl: string): Promise<Record<string, any>>
+
+  /**
    * Checks if a site exists based on its proposed URL
    *
    * @param siteUrl Site URL
@@ -409,4 +433,21 @@ export const GetPortfolioConfigError = (error: Error): ErrorWithIntent => {
   )
   e.stack = error.stack
   return e
+}
+
+export interface IHubContext {
+  /**
+   * Hub site ID (GUID)
+   */
+  hubSiteId: string
+
+  /**
+   * Hub site URL
+   */
+  hubSiteUrl: string
+
+  /**
+   * SPFx context configured for the hub site
+   */
+  spfxContext?: any
 }

@@ -20,7 +20,9 @@ export class CustomActions extends BaseTask {
   ): Promise<IBaseTaskParams> {
     this.params = params
     onProgress(strings.CustomActionsText, strings.CustomActionsSubText, 'SetAction')
-    await this._updateTemplateSelectorCustomAction()
+    try {
+      await this._updateTemplateSelectorCustomAction()
+    } catch (error) {}
     return params
   }
 
@@ -32,8 +34,11 @@ export class CustomActions extends BaseTask {
   private async _updateTemplateSelectorCustomAction(customActionTitle = 'Malvelger') {
     const templateLibraryUrl = this.data.selectedTemplate.templateLibraryUrl
     const templateSelectorCustomAction = this.data.customActions.find(
-      (c) => c.Title === customActionTitle
+      ({ Title }) => Title === customActionTitle
     )
+    if (!Boolean(templateSelectorCustomAction)) {
+      return
+    }
     let templateSelectorCustomActionProperties = JSON.parse(
       templateSelectorCustomAction.ClientSideComponentProperties
     )

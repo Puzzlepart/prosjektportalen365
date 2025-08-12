@@ -110,8 +110,8 @@ $TemplatesBasePath = "$PSScriptRoot/Templates"
 #region Print installation user
 Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
 $CurrentUser = Get-PnPProperty -Property CurrentUser -ClientObject (Get-PnPContext).Web -ErrorAction SilentlyContinue
-if ($null -ne $CurrentUser -and $CurrentUser.Email) {
-    Write-Host "[INFO] Installing with user [$($CurrentUser.Email)]"
+if ($null -ne $CurrentUser -and $CurrentUser.LoginName) {
+    Write-Host "[INFO] Installing with user [$($CurrentUser.LoginName)]"
 }
 else {
     Write-Host "[WARNING] Failed to get current user. Assuming installation is done with an app or a service principal without e-mail." -ForegroundColor Yellow
@@ -127,7 +127,7 @@ if ($Alias.Length -lt 2 -or (@("sites/", "teams/") -notcontains $ManagedPath) -o
 #endregion
 
 $LogFilePath = "$PSScriptRoot/Install_Log_$([datetime]::Now.ToString("yy-MM-ddThh-mm-ss")).txt"
-Set-PnPTraceLog -On -Level Debug -LogFile $LogFilePath
+# Set-PnPTraceLog -On -Level Debug -LogFile $LogFilePath
 
 #region Create site
 if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
@@ -300,6 +300,7 @@ if (-not $SkipAppPackages.IsPresent) {
         if (-not $TenantAppCatalogUrl) {
             Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
             $TenantAppCatalogUrl = Get-PnPTenantAppCatalogUrl -ErrorAction SilentlyContinue
+            Set-PnPTenantSite -Url $TenantAppCatalogUrl -Owners $UserName -ErrorAction SilentlyContinue
         }
         Connect-SharePoint -Url $TenantAppCatalogUrl -ConnectionInfo $ConnectionInfo
     }
@@ -483,7 +484,7 @@ Write-Host "[INFO] This is required after upgrading between minor versions, e.g.
 #endregion
 
 ## Turning off PnP trace logging
-Set-PnPTraceLog -Off
+# Set-PnPTraceLog -Off
 
 #region Log installation and send pingback to Azure Function
 Write-Host "[INFO] Logging installation entry" 
@@ -498,8 +499,8 @@ $InstallEntry = @{
     InstallChannel   = $Channel;
 }
 
-if ($null -ne $CurrentUser -and $CurrentUser.Email) {
-    $InstallEntry.InstallUser = $CurrentUser.Email
+if ($null -ne $CurrentUser -and $CurrentUser.LoginName) {
+    $InstallEntry.InstallUser = $CurrentUser.LoginName
 }
 
 if ($CI.IsPresent) {
@@ -511,7 +512,7 @@ $InstallationEntry = Add-PnPListItem -List "Installasjonslogg" -Values $InstallE
 
 ## Attempting to attach the log file to installation entry
 if ($null -ne $InstallationEntry) {
-    $File = Get-Item -Path $LogFilePath
+    $File = Get-Item -Path $LogFilePath -ErrorAction Continue
     if ($null -ne $File -and $File.Length -gt 0) {
         Write-Host "[INFO] Attaching installation log file to installation entry"
         $AttachmentOutput = Add-PnPListItemAttachment -List "Installasjonslogg" -Identity $InstallationEntry.Id -Path $LogFilePath -ErrorAction Continue

@@ -1,0 +1,30 @@
+.recentNews {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+
+  .card {
+    min-height: 180px;
+
+    .cardImage {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .cardDescription {
+      color: var(--colorNeutralForeground3);
+    }
+  }
+}
+
+.noRecentNews {
+  margin-top: 8px;
+  color: var(--colorNeutralForeground3);
+}
+
+.showMoreButton {
+  margin-top: 12px;
+}

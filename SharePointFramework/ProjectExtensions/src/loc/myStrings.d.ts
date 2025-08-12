@@ -116,8 +116,8 @@ declare interface IProjectExtensionsStrings {
   ProgressDialogTitle: string
   ProjectAlreadySetupMessage: string
   ProjectAlreadySetupStack: string
-  ProjectIdeaFoundTitle: string
-  ProjectIdeaFoundMessage: string
+  ProjectDataFoundTitle: string
+  ProjectDataFoundMessage: string
   ProjectPropertiesHeader: string
   ProjectPropertiesListName: string
   ProjectProvisioningStartLogText: string

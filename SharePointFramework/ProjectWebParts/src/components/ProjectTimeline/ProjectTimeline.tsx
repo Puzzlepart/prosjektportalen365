@@ -11,7 +11,7 @@ import { IProjectTimelineProps } from './types'
 import { useProjectTimeline } from './useProjectTimeline'
 
 export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
-  const { state, setState, onFilterChange, onGroupByChange, defaultTimeframe } =
+  const { state, setState, onFilterChange, onGroupByChange, defaultTimeframe, timeLapseCenter } =
     useProjectTimeline(props)
 
   return (
@@ -33,6 +33,7 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
                   title={props.title}
                   infoText={strings.ProjectTimelineListInfoText}
                   defaultTimeframe={defaultTimeframe}
+                  timeLapseMarker={timeLapseCenter}
                   groups={state.filteredData.groups}
                   items={state.filteredData.items}
                   filters={state.filters}
@@ -72,6 +73,7 @@ ProjectTimeline.defaultProps = {
   showTimeline: true,
   showTimelineList: true,
   showTimelineListCommands: true,
+  projectTimeLapse: true,
   defaultTimeframeStart: '4,months',
   defaultTimeframeEnd: '4,months',
   defaultGroupBy: strings.TypeLabel,

@@ -3,7 +3,7 @@
   "id": "37c7e990-483d-4f70-b9b9-def1790817e7",
   "alias": "ProgramAggregationWebPart",
   "componentType": "WebPart",
-  "version": "1.11.0",
+  "version": "1.11.1",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "hiddenFromToolbox": false,

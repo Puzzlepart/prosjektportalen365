@@ -3,6 +3,7 @@ name: Build release (main)
 on:
   push:
     branches:
+      - releases/1.11
       - main
     paths:
       - 'SharePointFramework/**'
@@ -67,6 +68,38 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: release-package-test
+          path: release
+    outputs:
+      sha_short: ${{ steps.vars.outputs.sha_short }}
+
+  build_release_package_kurs:
+    needs: [build-release]
+    name: Build kurs channel release (CI)
+    runs-on: macos-latest
+    concurrency:
+      group: ${{ github.ref }}_build_kurs_channel_release_ci
+      cancel-in-progress: true
+    if: ${{ always() || contains(github.event.head_commit.message, '[build-kurs]') }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Set sha_short
+        id: vars
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ vars.NODE_VERSION }}
+
+      - name: Run Install/Build-Release.ps1 in CI mode for channel kurs
+        run: Install/Build-Release.ps1 -CI -Channel kurs
+        shell: pwsh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-package-kurs
           path: release
     outputs:
       sha_short: ${{ steps.vars.outputs.sha_short }}

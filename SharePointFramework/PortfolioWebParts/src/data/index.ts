@@ -11,6 +11,7 @@ import {
   SPFI,
   Web
 } from '@pnp/sp/presets/all'
+import { spfi, SPFx } from '@pnp/sp'
 import * as cleanDeep from 'clean-deep'
 import msGraph from 'msgraph-helper'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -30,7 +31,6 @@ import {
   SPContentType,
   SPField,
   SPFxContext,
-  SPProjectItem,
   SPTimelineConfigurationItem,
   TimelineConfigurationModel,
   TimelineContentModel
@@ -55,6 +55,7 @@ import * as config from './config'
 import {
   GetPortfolioConfigError,
   IFetchDataForViewItemResult,
+  IHubContext,
   IPortfolioViewData,
   IPortfolioWebPartsDataAdapter,
   IProjectsData,
@@ -611,7 +612,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       `pp365_fetchenrichedprojects_${siteId}`,
       async () =>
         await Promise.all([
-          list.items.select(...Object.keys(new SPProjectItem())).getAll<SPProjectItem>(),
+          list.items.getAll(),
           this._fetchItems(`DepartmentId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId']),
           this.fetchMemberGroups(),
           this._sp.web.siteUsers.select('Id', 'Title', 'Email')()
@@ -630,6 +631,43 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     )
     projects = projects.sort((a, b) => a.title.localeCompare(b.title))
     return projects
+  }
+
+  public async fetchEnrichedProject(
+    siteId: string,
+    hubContext?: IHubContext
+  ): Promise<ProjectListModel> {
+    const localStore = new PnPClientStorage().local
+
+    // Use hub context if provided, otherwise use current context
+    const spfxHubContext = hubContext?.spfxContext || this._spfxContext
+    const spHub = hubContext ? spfi(hubContext.hubSiteUrl).using(SPFx(spfxHubContext)) : this._sp
+
+    const cacheKey = hubContext
+      ? `pp365_fetchenrichedproject_${siteId}_hub_${hubContext.hubSiteId}`
+      : `pp365_fetchenrichedproject_${siteId}`
+
+    const list = spHub.web.lists.getByTitle(strings.ProjectsListName)
+    const [items, sites, memberOfGroups, users] = await localStore.getOrPut(
+      cacheKey,
+      async () =>
+        await Promise.all([
+          list.items.filter(`GtSiteId eq '${siteId}'`).getAll(),
+          this._fetchItems(`SiteId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId']),
+          this.fetchMemberGroups(),
+          spHub.web.siteUsers.select('Id', 'Title', 'Email')()
+        ]),
+      dateAdd(new Date(), 'minute', 30)
+    )
+    const result: IProjectsData = {
+      items,
+      sites,
+      memberOfGroups,
+      users
+    }
+    const projects = this._combineResultData(result)
+    const project = _.first(projects)
+    return project
   }
 
   /**
@@ -866,37 +904,42 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           'SuffixText',
           'SuffixUseAttribute',
           'SuffixAttribute',
-          'ExternalSharingSetting'
+          'ExternalSharingSetting',
+          'PowerAppOnly'
         )
         .using(DefaultCaching)()
 
-      return spItems.map((item) => {
-        let value = item.Value === 'true' ? true : item.Value === 'false' ? false : item.Value
-        if (item.Title === 'NamingConvention') {
-          value = {
-            value: item.Value,
-            prefixText: item.PrefixText || '',
-            prefixUseAttribute: item.PrefixUseAttribute,
-            prefixAttribute: item.PrefixAttribute,
-            suffixText: item.SuffixText || '',
-            suffixUseAttribute: item.SuffixUseAttribute,
-            suffixAttribute: item.SuffixAttribute
+      return spItems
+        .filter((item) => !item.PowerAppOnly)
+        .map((item) => {
+          let value = item.Value === 'true' ? true : item.Value === 'false' ? false : item.Value
+          if (item.Title === 'NamingConvention') {
+            value = {
+              value: item.Value,
+              prefixText: item.PrefixText || '',
+              prefixUseAttribute: item.PrefixUseAttribute,
+              prefixAttribute: item.PrefixAttribute,
+              suffixText: item.SuffixText || '',
+              suffixUseAttribute: item.SuffixUseAttribute,
+              suffixAttribute: item.SuffixAttribute
+            }
+          } else if (item.Title === 'DefaultExternalSharingSetting') {
+            value = {
+              value: item.Value,
+              externalSharingSetting: item.ExternalSharingSetting
+            }
           }
-        } else if (item.Title === 'DefaultExternalSharingSetting') {
-          value = {
-            value: item.Value,
-            externalSharingSetting: item.ExternalSharingSetting
-          }
-        }
 
-        return {
-          title: item.Title,
-          value,
-          description: item.Description
-        }
-      })
+          return {
+            title: item.Title,
+            value,
+            description: item.Description
+          }
+        })
     } catch (error) {
-      return []
+      throw new Error(
+        'Kunne ikke hente innstillinger for Bestillingsportalen, vennligst sjekk at webdelen er riktig konfigurert og at listen eksisterer på området.'
+      )
     }
   }
 
@@ -921,7 +964,14 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           'SuffixAttribute',
           'VisibleTo/EMail',
           'DefaultVisibility',
-          'DefaultConfidentialData'
+          'DefaultConfidentialData',
+          'ExternalSharing',
+          'Teamify',
+          'JoinHub',
+          'DefaultHub',
+          'DefaultSensitivityLabel',
+          'DefaultSensitivityLabelLibrary',
+          'DefaultRetentionLabel'
         )
         .expand('VisibleTo')
         .using(DefaultCaching)()
@@ -945,11 +995,20 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
             },
             visibleTo: item.VisibleTo,
             defaultVisibility: item.DefaultVisibility,
-            defaultConfidentialData: item.DefaultConfidentialData
+            defaultConfidentialData: item.DefaultConfidentialData,
+            externalSharing: item.ExternalSharing,
+            teamify: item.Teamify,
+            joinHub: item.JoinHub,
+            defaultHub: item.DefaultHub,
+            defaultSensitivityLabel: item.DefaultSensitivityLabel,
+            defaultSensitivityLabelLibrary: item.DefaultSensitivityLabelLibrary,
+            defaultRetentionLabel: item.DefaultRetentionLabel
           }
         })
     } catch (error) {
-      return []
+      throw new Error(
+        'Kunne ikke hente områdetyper, vennligst sjekk at webdelen er riktig konfigurert og at listen eksisterer på Bestillingsportalen.'
+      )
     }
   }
 
@@ -1008,12 +1067,13 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           'Comments',
           'ApprovedDate',
           'Created',
-          'Author/EMail'
+          'Author/EMail',
+          'RequestedBy/EMail'
         )
-        .expand('Author')
+        .expand('Author', 'RequestedBy')
         .getAll()
       return spItems
-        .filter((item) => item.Author?.EMail === user)
+        .filter((item) => item.Author?.EMail === user || item?.RequestedBy?.EMail === user)
         .sort((a, b) => (a.Created > b.Created ? 1 : -1))
         .map((item) => {
           return {
@@ -1027,11 +1087,14 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
             comments: item.Comments,
             approvedDate: item.ApprovedDate,
             created: item.Created,
-            author: item.Author?.EMail
+            author: item.Author?.EMail,
+            requestedBy: item.RequestedBy?.EMail
           }
         })
     } catch (error) {
-      return []
+      throw new Error(
+        'Kunne ikke hente bestillinger, vennligst sjekk at webdelen er riktig konfigurert og at listen eksisterer på Bestillingsportalen.'
+      )
     }
   }
 
@@ -1053,7 +1116,58 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         })
       ].sort((a, b) => (a.title > b.title ? 1 : -1))
     } catch (error) {
-      return []
+      throw new Error(
+        'Kunne ikke hente team maler, vennligst sjekk at webdelen er riktig konfigurert og at listen eksisterer på Bestillingsportalen.'
+      )
+    }
+  }
+
+  public async getSensitivityLabels(provisionUrl: string): Promise<Record<string, any>> {
+    try {
+      const provisionSite = Web([this._sp.web, provisionUrl])
+      const templatesList = provisionSite.lists.getByTitle('IP Labels')
+      const spItems = await templatesList.items
+        .select('Id', 'Title', 'LabelName', 'LabelId', 'LabelDescription', 'Enabled', 'IsLibrary')
+        .using(DefaultCaching)()
+      return spItems
+        .filter((item) => item.Enabled)
+        .sort((a, b) => (a.Title > b.Title ? 1 : -1))
+        .map((item) => {
+          return {
+            title: item.Title,
+            labelName: item.LabelName,
+            labelId: item.LabelId,
+            labelDescription: item.LabelDescription,
+            isLibrary: item.IsLibrary
+          }
+        })
+    } catch (error) {
+      throw new Error(
+        'Kunne ikke hente følsomhetsetiketter, vennligst sjekk at webdelen er riktig konfigurert og at listen eksisterer på Bestillingsportalen.'
+      )
+    }
+  }
+
+  public async getRetentionLabels(provisionUrl: string): Promise<Record<string, any>> {
+    try {
+      const provisionSite = Web([this._sp.web, provisionUrl])
+      const templatesList = provisionSite.lists.getByTitle('Retention Labels')
+      const spItems = await templatesList.items
+        .select('Id', 'Title', 'LabelName', 'LabelDescription')
+        .using(DefaultCaching)()
+      return spItems
+        .sort((a, b) => (a.Title > b.Title ? 1 : -1))
+        .map((item) => {
+          return {
+            title: item.Title,
+            labelName: item.LabelName,
+            labelDescription: item.LabelDescription
+          }
+        })
+    } catch (error) {
+      throw new Error(
+        'Kunne ikke hente oppbevaringsetiketter, vennligst sjekk at webdelen er riktig konfigurert og at listen eksisterer på Bestillingsportalen.'
+      )
     }
   }
 
@@ -1160,13 +1274,13 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       return { ...registered, processing }
     })
 
-    const fieldValues = registrationData.fieldValues.map((values) => {
-      const processingFieldValues = processingData.fieldValues.find(
-        (processingFieldValues) => processingFieldValues.id === values.id
-      )
+    // const fieldValues = registrationData.fieldValues.map((values) => {
+    //   const processingFieldValues = processingData.fieldValues.find(
+    //     (processingFieldValues) => processingFieldValues.id === values.id
+    //   )
 
-      return { ...values, ...processingFieldValues }
-    })
+    //   return { ...values, ...processingFieldValues }
+    // })
 
     return {
       data: {

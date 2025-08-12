@@ -37,6 +37,10 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
                   label: strings.ShowTimelineLabel
                 }),
                 this.properties.showTimeline &&
+                  PropertyPaneToggle('projectTimeLapse', {
+                    label: strings.ProjectTimeLapseLabel
+                  }),
+                this.properties.showTimeline &&
                   PropertyPaneDropdown('defaultTimeframeStart', {
                     label: strings.DefaultTimeframeStartLabel,
                     selectedKey: propertiesWithDefaults.defaultTimeframeStart,

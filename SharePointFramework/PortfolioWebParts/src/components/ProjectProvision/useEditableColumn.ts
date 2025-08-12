@@ -12,33 +12,35 @@ export function useEditableColumn(
   setState: (newState: Partial<IProjectProvisionState>) => void
 ) {
   const defaultType =
-    !state.loading &&
-    state.types
-      .sort((a, b) => a.sortOrder - b.sortOrder)
-      .filter(
-        (type) =>
-          !type.visibleTo ||
-          type.visibleTo?.some((user) => user?.EMail?.includes(props?.pageContext?.user?.loginName))
-      )[0]
+    !state.loading && !state.error && state.types && state.types.length > 0 ? state.types[0] : null
 
   const initialColumn = new Map<string, any>([
-    ['type', 'Project'],
-    ['typeTitle', 'Prosjektområde'],
+    ['type', ''],
     ['name', ''],
     ['description', ''],
     ['justification', ''],
-    ['alias', ''],
-    ['url', ''],
+    ['additionalInfo', ''],
     ['owner', []],
     ['member', []],
+    ['requestedBy', []],
+    ['alias', ''],
+    ['url', ''],
     ['teamify', false],
-    ['teamTemplate', 'Standard'],
+    ['teamTemplate', strings.Provision.DefaultTeamTemplate],
+    ['sensitivityLabel', ''],
+    ['sensitivityLabelLibrary', ''],
+    ['retentionLabel', ''],
+    ['expirationDate', null],
+    ['readOnlyGroup', false],
+    ['internalChannel', false],
+    ['requestedSource', ''],
+    ['image', ''],
     ['isConfidential', false],
     ['privacy', strings.Provision.PrivacyFieldOptionPrivate],
     ['externalSharing', false],
     ['guest', []],
-    ['language', 'Norsk (bokmål)'],
-    ['timeZone', '(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna'],
+    ['language', strings.Provision.DefaultLanguage],
+    ['timeZone', strings.Provision.DefaultTimeZone],
     ['hubSite', props.pageContext.legacyPageContext.hubSiteId],
     ['hubSiteTitle', props.pageContext.web.title]
   ])
@@ -58,8 +60,8 @@ export function useEditableColumn(
       [
         'teamTemplate',
         () => {
-          const template = state.teamTemplates.find((t) => t.title === value)
-          return template.templateId
+          const template = state.teamTemplates?.find((t) => t.title === value)
+          return template?.templateId
         }
       ],
       [
@@ -96,6 +98,37 @@ export function useEditableColumn(
             await props.dataAdapter.getProvisionUsers(value, props.provisionUrl)
           )
           return _.flatten(values)
+        }
+      ],
+      [
+        'requestedBy',
+        async () => {
+          const values = await Promise.all(
+            await props.dataAdapter.getProvisionUsers(value, props.provisionUrl)
+          )
+          return _.flatten(values)
+        }
+      ],
+      [
+        'image',
+        () => {
+          if (value) {
+            return `${value.substring(0, 42)}...`
+          }
+          return null
+        }
+      ],
+      [
+        'expirationDate',
+        () => {
+          if (props.expirationDateMode !== 'date') {
+            if (value && value !== '0') {
+              const date = new Date()
+              date.setMonth(date.getMonth() + parseInt(value, 10))
+              return date.toISOString()
+            }
+            return
+          }
         }
       ]
     ])
@@ -138,49 +171,94 @@ export function useEditableColumn(
     $setColumn(initialColumn)
   }
 
-  useEffect(() => {
-    $setColumn((prev) => {
-      const newColumn = new Map(prev)
-      newColumn.set('type', defaultType.type)
-      newColumn.set('typeTitle', defaultType.title)
-
-      setState({
-        properties: {
-          ...state.properties,
-          type: defaultType.type
-        }
-      })
-      return newColumn
-    })
-  }, [state.loading])
+  /**
+   * Get global setting value
+   * @param setting Setting to get
+   */
+  const getGlobalSetting = (setting: string) => {
+    return state.settings?.find((t) => t.title === setting)?.value
+  }
 
   useEffect(() => {
-    const defaultConfidentialData =
-      !state.loading &&
-      state.types.find((t) => t.type === state.properties.type || defaultType.type)
-        ?.defaultConfidentialData
+    if (defaultType) {
+      $setColumn((prev) => {
+        const newColumn = new Map(prev)
+        newColumn.set('type', defaultType.title)
 
-    const defaultVisibility =
-      !state.loading &&
-      state.types.find((t) => t.type === state.properties.type || defaultType.type)
-        ?.defaultVisibility === 'Public'
-        ? strings.Provision.PrivacyFieldOptionPublic
-        : strings.Provision.PrivacyFieldOptionPrivate
-
-    $setColumn((prev) => {
-      const newColumns = new Map(prev)
-      newColumns.set('isConfidential', defaultConfidentialData)
-      newColumns.set('privacy', defaultVisibility)
-
-      setState({
-        properties: {
-          ...state.properties,
-          isConfidential: defaultConfidentialData
-        }
+        setState({
+          properties: {
+            ...state.properties,
+            type: defaultType.title
+          }
+        })
+        return newColumn
       })
-      return newColumns
-    })
-  }, [state.properties.type])
+    }
+  }, [state.loading, defaultType])
+
+  useEffect(() => {
+    const setDefaults = async () => {
+      if (!state.loading && state.types && state.types.length > 0 && defaultType) {
+        const typeDefaults =
+          state.types.find((t) => t.title === state.properties.type) || defaultType
+        const defaultConfidentialData = typeDefaults?.defaultConfidentialData
+        const defaultSensitivityLabel =
+          typeDefaults?.defaultSensitivityLabel || getGlobalSetting('DefaultSensitivityLabel')
+        const defaultSensitivityLabelLibrary =
+          typeDefaults?.defaultSensitivityLabelLibrary ||
+          getGlobalSetting('DefaultSensitivityLabelLibrary')
+        const defaultRetentionLabel =
+          typeDefaults?.defaultRetentionLabel || getGlobalSetting('DefaultRetentionLabel')
+        const defaultVisibility =
+          typeDefaults?.defaultVisibility === 'Public'
+            ? strings.Provision.PrivacyFieldOptionPublic
+            : strings.Provision.PrivacyFieldOptionPrivate
+        const enableExternalSharing = getGlobalSetting('EnableExternalSharingByDefault')
+        const defaultTeamify = typeDefaults?.teamify
+
+        let defaultOwner: any[] = []
+        let transformedOwner: any[] = []
+
+        if (props.autoOwner) {
+          const { displayName, loginName } = props.pageContext.user
+          defaultOwner = [
+            {
+              text: displayName,
+              secondaryText: loginName
+            }
+          ]
+          transformedOwner = await transformValue(defaultOwner, 'owner')
+        }
+
+        $setColumn((prev) => {
+          const newColumns = new Map(prev)
+          newColumns.set('isConfidential', defaultConfidentialData)
+          newColumns.set('privacy', defaultVisibility)
+          newColumns.set('sensitivityLabel', defaultSensitivityLabel)
+          newColumns.set('sensitivityLabelLibrary', defaultSensitivityLabelLibrary)
+          newColumns.set('retentionLabel', defaultRetentionLabel)
+          newColumns.set('externalSharing', enableExternalSharing)
+          newColumns.set('teamify', defaultTeamify)
+          newColumns.set('owner', defaultOwner)
+
+          setState({
+            properties: {
+              ...state.properties,
+              isConfidential: defaultConfidentialData,
+              sensitivityLabel: defaultSensitivityLabel,
+              sensitivityLabelLibrary: defaultSensitivityLabelLibrary,
+              retentionLabel: defaultRetentionLabel,
+              externalSharing: enableExternalSharing,
+              teamify: defaultTeamify,
+              owner: transformedOwner
+            }
+          })
+          return newColumns
+        })
+      }
+    }
+    setDefaults()
+  }, [state.properties.type, defaultType])
 
   return {
     column,
