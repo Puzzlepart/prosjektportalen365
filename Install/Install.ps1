@@ -512,10 +512,14 @@ $InstallationEntry = Add-PnPListItem -List "Installasjonslogg" -Values $InstallE
 
 ## Attempting to attach the log file to installation entry
 if ($null -ne $InstallationEntry) {
-    $File = Get-Item -Path $LogFilePath -ErrorAction Continue
-    if ($null -ne $File -and $File.Length -gt 0) {
-        Write-Host "[INFO] Attaching installation log file to installation entry"
-        $AttachmentOutput = Add-PnPListItemAttachment -List "Installasjonslogg" -Identity $InstallationEntry.Id -Path $LogFilePath -ErrorAction Continue
+    if (Test-Path -Path $LogFilePath) {
+        $File = Get-Item -Path $LogFilePath -ErrorAction Continue
+        if ($null -ne $File -and $File.Length -gt 0) {
+            Write-Host "[INFO] Attaching installation log file to installation entry"
+            $AttachmentOutput = Add-PnPListItemAttachment -List "Installasjonslogg" -Identity $InstallationEntry.Id -Path $LogFilePath -ErrorAction Continue
+        }
+    } else {
+        Write-Host "[INFO] Log file not found at $LogFilePath - skipping attachment"
     }    
 }
 
