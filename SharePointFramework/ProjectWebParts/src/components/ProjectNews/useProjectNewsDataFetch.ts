@@ -25,11 +25,12 @@ export function useProjectNewsDataFetch(
         const folderName = props.newsFolderName || strings.NewsFolderNameDefault
         const sitePagesServerRelativeUrl = getServerRelativeUrl(props.siteUrl, 'SitePages')
         const folderServerRelativeUrl = getServerRelativeUrl(props.siteUrl, 'SitePages', folderName)
+        const currentSiteId = props.context.pageContext.site.id.toString()
         const url =
           `${props.siteUrl}/_api/web/GetListUsingPath(DecodedUrl=@a1)/items` +
           `?@a1='${sitePagesServerRelativeUrl}'` +
-          `&$filter=FileDirRef eq '${folderServerRelativeUrl}'` +
-          '&$select=Id,PromotedState,Title,FileLeafRef,BannerImageUrl,Description,Author/Title,Editor/Title,Modified,File/ServerRelativeUrl,File/Name,File/TimeLastModified' +
+          `&$filter=FileDirRef eq '${folderServerRelativeUrl}' and GtSiteId eq '${currentSiteId}'` +
+          '&$select=Id,PromotedState,Title,FileLeafRef,BannerImageUrl,Description,GtSiteId,Author/Title,Editor/Title,Modified,File/ServerRelativeUrl,File/Name,File/TimeLastModified' +
           '&$expand=Author,Editor,File'
 
         const res = await props.spHttpClient.get(url, SPHttpClient.configurations.v1)
@@ -72,5 +73,5 @@ export function useProjectNewsDataFetch(
     }
 
     fetchData()
-  }, [refetch, props.siteUrl, props.newsFolderName])
+  }, [refetch, props.siteUrl, props.newsFolderName, props.context.pageContext.site.id])
 }
