@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <Field Type="Choice" DisplayName="{resource:SiteFields_GtAiStatusPosted_DisplayName}" Hidden="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE" ID="{32477351-23be-4b57-9e4a-94f957d3fe8f}" StaticName="GtAiStatusPosted" Name="GtAiStatusPosted" SourceID="{1717e993-67e6-401e-8894-7ff05046ed5c}">
+    <CHOICES>
+      <CHOICE>{resource:SiteFields_GtAiStatusPosted_Choice_Yes}</CHOICE>
+      <CHOICE>{resource:SiteFields_GtAiStatusPosted_Choice_No}</CHOICE>
+    </CHOICES>
+    <Default>{resource:SiteFields_GtAiStatusPosted_Choice_No}</Default>
+  </Field>
+</Elements>

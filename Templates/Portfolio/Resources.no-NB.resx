@@ -2971,4 +2971,43 @@
   <data name="SiteFields_GtHubSiteId_Description" xml:space="preserve">
     <value>ID til hubområdet.</value>
   </data>
+  <data name="SiteFields_GtAiStatusComments_DisplayName" xml:space="preserve">
+    <value>Prosjektstatus oppsummert (KI)</value>
+  </data>
+  <data name="SiteFields_GtAiStatus_DisplayName" xml:space="preserve">
+    <value>Prosjektstatus vurdert (KI)</value>
+  </data>
+  <data name="SiteFields_GtAiStatus_Choice_Weak" xml:space="preserve">
+    <value>Svak</value>
+  </data>
+  <data name="SiteFields_GtAiStatus_Choice_Satisfactory" xml:space="preserve">
+    <value>Tilfredsstillende</value>
+  </data>
+  <data name="SiteFields_GtAiStatus_Choice_Good" xml:space="preserve">
+    <value>God</value>
+  </data>
+  <data name="SiteFields_GtAiStatus_Choice_Excellent" xml:space="preserve">
+    <value>Prisverdig</value>
+  </data>
+  <data name="SiteFields_GtAiRecommendations_DisplayName" xml:space="preserve">
+    <value>Anbefalinger (KI)</value>
+  </data>
+  <data name="SiteFields_GtAiStatusPosted_DisplayName" xml:space="preserve">
+    <value>Prosjektstatus gjennomgått (KI)</value>
+  </data>
+  <data name="SiteFields_GtAiStatusPosted_Choice_Yes" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+  <data name="SiteFields_GtAiStatusPosted_Choice_No" xml:space="preserve">
+    <value>Nei</value>
+  </data>
+  <data name="SiteFields_GtAiStatusScoreNumber_DisplayName" xml:space="preserve">
+    <value>Prosjektstatusscore (KI)</value>
+  </data>
+  <data name="SiteFields_GtAiChangesSincePrev_DisplayName" xml:space="preserve">
+    <value>Endringer siden forrige (KI)</value>
+  </data>
+  <data name="SiteFields_GtAiProcessedDateTime_DisplayName" xml:space="preserve">
+    <value>Tidspunkt prosessert (KI)</value>
+  </data>
 </root>
