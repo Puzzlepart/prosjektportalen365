@@ -18,6 +18,7 @@ Sjekk ut [release notes](./releasenotes/1.11.0.md) for høydepunkter og mer deta
 - Muligheter for å tilpasse informasjonen i prosjektkortet på forsiden av porteføljen, inkludert valg av hvilke felt som skal vises og i hvilken rekkefølge. [#1548](https://github.com/Puzzlepart/prosjektportalen365/issues/1548)
 - Mulighet for å tilgangsstyre Prosjektportalen Assistent, slik at den ikke er tilgjengelig for alle brukere. [#1632](https://github.com/Puzzlepart/prosjektportalen365/issues/1632)
 - Mulighet for å tilgangsstyre synligheten av `Bestill område` knappen for å benytte seg av Bestillingsportalen, slik at den ikke er tilgjengelig for alle brukere.
+- Flere nye felter på Prosjektstatus-listen for å tilrettelegge for KI-behandling av Prosjektstatus
 
 ### Feilrettinger
 
