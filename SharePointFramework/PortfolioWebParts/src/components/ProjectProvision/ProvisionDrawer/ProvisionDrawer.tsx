@@ -27,9 +27,10 @@ import {
 } from '@fluentui/react-components'
 import { DatePicker } from '@fluentui/react-datepicker-compat'
 import strings from 'PortfolioWebPartsStrings'
-import { FieldContainer, customLightTheme, getFluentIcon } from 'pp365-shared-library'
+import { FieldContainer, customLightTheme, getFluentIcon, UserMessage } from 'pp365-shared-library'
 import { SiteType } from './SiteType'
 import { useProvisionDrawer } from './useProvisionDrawer'
+import { useLocalInput } from './useLocalInput'
 import styles from './ProvisionDrawer.module.scss'
 import { UserMulti } from './User'
 import { Guest } from './Guest'
@@ -50,6 +51,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
     context,
     onSave,
     isSaveDisabled,
+    missingFieldsInfo,
     siteExists,
     setSiteExists,
     namingConvention,
@@ -67,6 +69,12 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
     getField,
     fluentProviderId
   } = useProvisionDrawer()
+
+  // Local input hooks to prevent cursor jumping
+  const nameInput = useLocalInput('name')
+  const descriptionInput = useLocalInput('description')
+  const justificationInput = useLocalInput('justification')
+  const additionalInfoInput = useLocalInput('additionalInfo')
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
@@ -193,14 +201,10 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     required={getField('name').required}
                     hidden={getField('name').hidden}
                     validationState={
-                      context.column.get('name').length
-                        ? siteExists
-                          ? 'error'
-                          : 'success'
-                        : 'none'
+                      nameInput.value.length ? (siteExists ? 'error' : 'success') : 'none'
                     }
                     validationMessage={
-                      context.column.get('name').length
+                      nameInput.value.length
                         ? siteExists
                           ? strings.Provision.SiteNameValidationErrorMessage
                           : strings.Provision.SiteNameValidationSuccessMessage
@@ -208,9 +212,9 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     }
                   >
                     <Input
-                      value={context.column.get('name')}
+                      value={nameInput.value}
                       onChange={async (_, data) => {
-                        context.setColumn('name', data.value)
+                        nameInput.onChange(data.value)
 
                         if (data.value) {
                           setTimeout(async () => {
@@ -259,8 +263,8 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     hidden={getField('description').hidden}
                   >
                     <Textarea
-                      value={context.column.get('description')}
-                      onChange={(_, data) => context.setColumn('description', data.value)}
+                      value={descriptionInput.value}
+                      onChange={(_, data) => descriptionInput.onChange(data.value)}
                       rows={2}
                       placeholder={getField('description').placeholder}
                     />
@@ -273,8 +277,8 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     hidden={getField('justification').hidden}
                   >
                     <Textarea
-                      value={context.column.get('justification')}
-                      onChange={(_, data) => context.setColumn('justification', data.value)}
+                      value={justificationInput.value}
+                      onChange={(_, data) => justificationInput.onChange(data.value)}
                       rows={2}
                       placeholder={getField('justification').placeholder}
                     />
@@ -287,8 +291,8 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     hidden={getField('additionalInfo').hidden}
                   >
                     <Textarea
-                      value={context.column.get('additionalInfo')}
-                      onChange={(_, data) => context.setColumn('additionalInfo', data.value)}
+                      value={additionalInfoInput.value}
+                      onChange={(_, data) => additionalInfoInput.onChange(data.value)}
                       rows={2}
                       placeholder={getField('additionalInfo').placeholder}
                     />
@@ -683,6 +687,18 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   </FieldContainer>
                   {!stringIsNullOrEmpty(context.props.footerDescription) && (
                     <p className={styles.ignoreGap}>{context.props.footerDescription}</p>
+                  )}
+                  {isSaveDisabled && missingFieldsInfo.missingFields.length > 0 && (
+                    <UserMessage
+                      intent='error'
+                      title={strings.Provision.MissingFieldsTitle}
+                      text={`<ul>
+                          ${missingFieldsInfo.missingFields
+                            .map((field) => `<li>${field.displayName}</li>`)
+                            .join('')}
+                        </ul>`}
+                      containerStyle={{ marginTop: '16px' }}
+                    />
                   )}
                 </div>
               </DrawerBody>

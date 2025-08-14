@@ -44,8 +44,12 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestItem>[] =>
             {request.status === Status.SpaceCreated ? (
               <Link
                 href={request.siteUrl}
-                onClick={() => {
+                onClick={(e) => {
                   context.setState({ showProvisionStatus: false })
+                  e.preventDefault()
+                  setTimeout(() => {
+                    window.open(request.siteUrl, '_blank')
+                  }, 100)
                 }}
               >
                 <Text truncate wrap={true}>
@@ -175,75 +179,75 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestItem>[] =>
       renderCell: (request) => {
         const canDelete =
           request.status === Status.NotSubmitted ||
+          request.status === Status.Rejected ||
           request.status === Status.SpaceCreationFailed ||
           request.status === Status.SpaceAlreadyExists
 
         return (
           <div className={styles.actions}>
-            {canDelete && (
-              <Popover>
-                <PopoverTrigger disableButtonEnhancement>
-                  <Button
-                    appearance='subtle'
-                    title={strings.Provision.DeleteSubmissionLabel}
-                    icon={getFluentIcon('Delete')}
-                  />
-                </PopoverTrigger>
-                <PopoverSurface tabIndex={-1}>
-                  <div className={styles.deletePopover}>
-                    <div>{strings.Provision.DeleteSubmissionConfirmationLabel}</div>
-                    <div>
-                      <Button
-                        appearance='subtle'
-                        onClick={() => {
-                          context.props.dataAdapter
-                            .deleteProvisionRequest(request.id, context.props.provisionUrl)
-                            .then((response) => {
-                              if (response) {
-                                context.setState({
-                                  isRefetching: true,
-                                  refetch: new Date().getTime()
-                                })
-                                toast(
-                                  <Toast appearance='inverted'>
-                                    <ToastTitle>
-                                      {strings.Provision.DeletedSubmissionToastTitle}
-                                    </ToastTitle>
-                                    <ToastBody>
-                                      {format(
-                                        strings.Provision.DeletedSubmissionToastBody,
-                                        request.displayName
-                                      )}
-                                    </ToastBody>
-                                  </Toast>,
-                                  { intent: 'success' }
-                                )
-                                context.setState({ showProvisionDrawer: false, properties: {} })
-                              } else {
-                                toast(
-                                  <Toast appearance='inverted'>
-                                    <ToastTitle>
-                                      {strings.Provision.DeletedSubmissionErrorToastTitle}
-                                    </ToastTitle>
-                                    <ToastBody>
-                                      {strings.Provision.DeletedSubmissionErrorToastBody}
-                                    </ToastBody>
-                                  </Toast>,
-                                  { intent: 'error' }
-                                )
-                              }
-                            })
-                        }}
-                        title={strings.Provision.DeleteSubmissionLabel}
-                        icon={getFluentIcon('Delete')}
-                      >
-                        {strings.Provision.DeleteLabel}
-                      </Button>
-                    </div>
+            <Popover>
+              <PopoverTrigger disableButtonEnhancement>
+                <Button
+                  appearance='subtle'
+                  title={strings.Provision.DeleteSubmissionLabel}
+                  icon={getFluentIcon('Delete')}
+                  disabled={!canDelete}
+                />
+              </PopoverTrigger>
+              <PopoverSurface tabIndex={-1}>
+                <div className={styles.deletePopover}>
+                  <div>{strings.Provision.DeleteSubmissionConfirmationLabel}</div>
+                  <div>
+                    <Button
+                      appearance='subtle'
+                      onClick={() => {
+                        context.props.dataAdapter
+                          .deleteProvisionRequest(request.id, context.props.provisionUrl)
+                          .then((response) => {
+                            if (response) {
+                              context.setState({
+                                isRefetching: true,
+                                refetch: new Date().getTime()
+                              })
+                              toast(
+                                <Toast appearance='inverted'>
+                                  <ToastTitle>
+                                    {strings.Provision.DeletedSubmissionToastTitle}
+                                  </ToastTitle>
+                                  <ToastBody>
+                                    {format(
+                                      strings.Provision.DeletedSubmissionToastBody,
+                                      request.displayName
+                                    )}
+                                  </ToastBody>
+                                </Toast>,
+                                { intent: 'success' }
+                              )
+                              context.setState({ showProvisionDrawer: false, properties: {} })
+                            } else {
+                              toast(
+                                <Toast appearance='inverted'>
+                                  <ToastTitle>
+                                    {strings.Provision.DeletedSubmissionErrorToastTitle}
+                                  </ToastTitle>
+                                  <ToastBody>
+                                    {strings.Provision.DeletedSubmissionErrorToastBody}
+                                  </ToastBody>
+                                </Toast>,
+                                { intent: 'error' }
+                              )
+                            }
+                          })
+                      }}
+                      title={strings.Provision.DeleteSubmissionLabel}
+                      icon={getFluentIcon('Delete')}
+                    >
+                      {strings.Provision.DeleteLabel}
+                    </Button>
                   </div>
-                </PopoverSurface>
-              </Popover>
-            )}
+                </div>
+              </PopoverSurface>
+            </Popover>
           </div>
         )
       }

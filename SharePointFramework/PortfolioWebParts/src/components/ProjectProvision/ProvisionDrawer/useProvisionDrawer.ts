@@ -1,5 +1,5 @@
 /* eslint-disable prefer-spread */
-import { useContext, useState } from 'react'
+import { useContext, useState, useMemo } from 'react'
 import { useMotion } from '@fluentui/react-motion-preview'
 import { useMotionStyles } from './motionStyles'
 import { ProjectProvisionContext } from '../context'
@@ -162,13 +162,74 @@ export const useProvisionDrawer = () => {
 
   const [siteExists, setSiteExists] = useState(false)
 
-  const isSaveDisabled =
-    fieldsToUse
-      .filter((field) => field.required)
-      .some((field) => {
+  const isSaveDisabled = useMemo(() => {
+    const requiredFields = fieldsToUse.filter((field) => field.required && !field.hidden)
+
+    const missingRequiredFields = requiredFields.some((field) => {
+      const value = context.column.get(field.fieldName)
+
+      if (value === null || value === undefined) {
+        return true
+      }
+
+      if (Array.isArray(value)) {
+        return value.length === 0
+      }
+
+      if (typeof value === 'string') {
+        return value.trim().length === 0
+      }
+
+      if (typeof value === 'boolean') {
+        return false
+      }
+
+      return false
+    })
+
+    if (context.props.debugMode || (typeof DEBUG !== 'undefined' && DEBUG)) {
+      console.log('isSaveDisabled calculation:', {
+        selectedType: selectedType,
+        requiredFields: requiredFields.map((f) => ({
+          name: f.fieldName,
+          required: f.required,
+          hidden: f.hidden
+        })),
+        missingRequiredFields,
+        siteExists,
+        isSaveDisabled: missingRequiredFields || siteExists
+      })
+    }
+
+    return missingRequiredFields || siteExists
+  }, [fieldsToUse, context.column, siteExists, selectedType, context.props.debugMode])
+
+  const missingFieldsInfo = useMemo(() => {
+    const requiredFields = fieldsToUse.filter((field) => field.required && !field.hidden)
+
+    const missingFields = requiredFields
+      .filter((field) => {
         const value = context.column.get(field.fieldName)
-        return !value || (Array.isArray(value) ? value.length === 0 : value.length < 1)
-      }) || siteExists
+
+        if (value === null || value === undefined) return true
+        if (Array.isArray(value)) return value.length === 0
+        if (typeof value === 'string') return value.trim().length === 0
+        if (typeof value === 'boolean') return false
+        return false
+      })
+      .map((field) => ({
+        fieldName: field.fieldName,
+        displayName: field.displayName,
+        required: field.required
+      }))
+
+    return {
+      hasErrors: missingFields.length > 0 || siteExists,
+      missingFields,
+      siteExists,
+      totalRequired: requiredFields.length
+    }
+  }, [fieldsToUse, context.column, siteExists])
 
   const fluentProviderId = useId('fp-provision-drawer')
 
@@ -182,6 +243,7 @@ export const useProvisionDrawer = () => {
     context,
     onSave,
     isSaveDisabled,
+    missingFieldsInfo,
     siteExists,
     setSiteExists,
     namingConvention,

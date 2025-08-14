@@ -277,6 +277,7 @@ declare interface IPortfolioWebPartsStrings {
     DebugModeOffText: string
     WebPartDescription: string
     ProvisionGroupName: string
+    MissingFieldsTitle: string
   },
   AddColumnLabel: string
   AllProjectsHeaderText: string
