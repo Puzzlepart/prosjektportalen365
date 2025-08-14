@@ -87,7 +87,7 @@ Write-Host "########################################################" -Foregroun
 
 if ($CI.IsPresent -and $null -eq (Get-Module -Name PnP.PowerShell)) {
     Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
-    Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop
+    Install-Module -Name PnP.PowerShell -RequiredVersion 2.12.0 -Force -Scope CurrentUser -ErrorAction Stop
 }
 else {
     if (-not $SkipLoadingBundle.IsPresent) {
@@ -127,7 +127,7 @@ if ($Alias.Length -lt 2 -or (@("sites/", "teams/") -notcontains $ManagedPath) -o
 #endregion
 
 $LogFilePath = "$PSScriptRoot/Install_Log_$([datetime]::Now.ToString("yy-MM-ddThh-mm-ss")).txt"
-# Set-PnPTraceLog -On -Level Debug -LogFile $LogFilePath
+Set-PnPTraceLog -On -Level Debug -LogFile $LogFilePath
 
 #region Create site
 if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
@@ -512,14 +512,10 @@ $InstallationEntry = Add-PnPListItem -List "Installasjonslogg" -Values $InstallE
 
 ## Attempting to attach the log file to installation entry
 if ($null -ne $InstallationEntry) {
-    if (Test-Path -Path $LogFilePath) {
-        $File = Get-Item -Path $LogFilePath -ErrorAction Continue
-        if ($null -ne $File -and $File.Length -gt 0) {
-            Write-Host "[INFO] Attaching installation log file to installation entry"
-            $AttachmentOutput = Add-PnPListItemAttachment -List "Installasjonslogg" -Identity $InstallationEntry.Id -Path $LogFilePath -ErrorAction Continue
-        }
-    } else {
-        Write-Host "[INFO] Log file not found at $LogFilePath - skipping attachment"
+    $File = Get-Item -Path $LogFilePath -ErrorAction Continue
+    if ($null -ne $File -and $File.Length -gt 0) {
+        Write-Host "[INFO] Attaching installation log file to installation entry"
+        $AttachmentOutput = Add-PnPListItemAttachment -List "Installasjonslogg" -Identity $InstallationEntry.Id -Path $LogFilePath -ErrorAction Continue
     }    
 }
 
