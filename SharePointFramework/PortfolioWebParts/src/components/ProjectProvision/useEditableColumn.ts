@@ -224,11 +224,17 @@ export function useEditableColumn(
   )
 
   /**
-   * Reset the properties to initial values.
+   * Reset the properties to initial values and trigger re-initialization.
    */
   const reset = useCallback(() => {
     $setColumn(new Map(initialColumn))
-    setState({ properties: {} })
+
+    setState({
+      properties: {},
+      searchTerm: '',
+      isRefetching: false,
+      refetch: new Date().getTime()
+    })
   }, [initialColumn, setState])
 
   /**
