@@ -200,6 +200,31 @@ export const useProvisionDrawer = () => {
     return missingRequiredFields || siteExists
   }, [fieldsToUse, context.column, siteExists, selectedType, context.props.debugMode])
 
+  const missingFieldsInfo = useMemo(() => {
+    const requiredFields = fieldsToUse.filter((field) => field.required && !field.hidden)
+
+    const missingFields = requiredFields.filter((field) => {
+      const value = context.column.get(field.fieldName)
+
+      if (value === null || value === undefined) return true
+      if (Array.isArray(value)) return value.length === 0
+      if (typeof value === 'string') return value.trim().length === 0
+      if (typeof value === 'boolean') return false
+      return false
+    }).map(field => ({
+      fieldName: field.fieldName,
+      displayName: field.displayName,
+      required: field.required
+    }))
+
+    return {
+      hasErrors: missingFields.length > 0 || siteExists,
+      missingFields,
+      siteExists,
+      totalRequired: requiredFields.length
+    }
+  }, [fieldsToUse, context.column, siteExists])
+
   const fluentProviderId = useId('fp-provision-drawer')
 
   return {
@@ -212,6 +237,7 @@ export const useProvisionDrawer = () => {
     context,
     onSave,
     isSaveDisabled,
+    missingFieldsInfo,
     siteExists,
     setSiteExists,
     namingConvention,

@@ -276,7 +276,8 @@ define([], function () {
       DebugModeOnText: 'På',
       DebugModeOffText: 'Av',
       WebPartDescription: 'Områdebestilling',
-      ProvisionGroupName: 'Bestillingsportalen'
+      ProvisionGroupName: 'Bestillingsportalen',
+      MissingFieldsTitle: 'Manglende utfylling av følgende påkrevde felter',
     },
     AddColumnLabel: 'Legg til en kolonne',
     AllProjectsHeaderText: 'Alle prosjekter/program',
