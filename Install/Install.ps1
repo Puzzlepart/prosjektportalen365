@@ -127,7 +127,7 @@ if ($Alias.Length -lt 2 -or (@("sites/", "teams/") -notcontains $ManagedPath) -o
 #endregion
 
 $LogFilePath = "$PSScriptRoot/Install_Log_$([datetime]::Now.ToString("yy-MM-ddThh-mm-ss")).txt"
-Set-PnPTraceLog -On -Level Debug -LogFile $LogFilePath
+# Set-PnPTraceLog -On -Level Debug -LogFile $LogFilePath
 
 #region Create site
 if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
