@@ -49,13 +49,22 @@ export function useProjectProvisionDataFetch(
         Promise.all([
           props.dataAdapter.getProvisionRequestSettings(props.provisionUrl),
           props.dataAdapter.getProvisionTypes(props.provisionUrl),
+          props.dataAdapter.getPnPTemplates(props.provisionUrl),
           props.dataAdapter.getTeamTemplates(props.provisionUrl),
           props.dataAdapter.getSensitivityLabels(props.provisionUrl),
           props.dataAdapter.getRetentionLabels(props.provisionUrl),
           props.dataAdapter.fetchProvisionRequests(props.pageContext.user.email, props.provisionUrl)
         ])
           .then(
-            ([settings, types, teamTemplates, sensitivityLabels, retentionLabels, requests]) => {
+            ([
+              settings,
+              types,
+              pnpTemplates,
+              teamTemplates,
+              sensitivityLabels,
+              retentionLabels,
+              requests
+            ]) => {
               setState({
                 settings,
                 types: types.filter(
@@ -65,6 +74,7 @@ export function useProjectProvisionDataFetch(
                       user?.EMail?.includes(props?.pageContext?.user?.loginName)
                     )
                 ),
+                pnpTemplates,
                 teamTemplates,
                 sensitivityLabels: sensitivityLabels.filter((label) => !label.isLibrary),
                 sensitivityLabelsLibrary: sensitivityLabels.filter((label) => label.isLibrary),

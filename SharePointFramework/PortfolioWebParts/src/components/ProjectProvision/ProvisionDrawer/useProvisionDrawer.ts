@@ -47,6 +47,13 @@ export const useProvisionDrawer = () => {
       ? getFieldsForType(context.props.fields, context.props.typeFieldConfigurations, selectedType)
       : context.props.fields
 
+  const currentTypeConfig = context.state.types?.find((t) => t.title === selectedType)
+  const currentTemplate = currentTypeConfig?.templateId
+    ? context.state.pnpTemplates?.find(
+        (template) => template.id.toString() === currentTypeConfig.templateId
+      )
+    : null
+
   const getField = (fieldName: string) => {
     return fieldsToUse.find((field) => field.fieldName === fieldName)
   }
@@ -106,6 +113,10 @@ export const useProvisionDrawer = () => {
         ? context.column.get('expirationDate')
         : context.state.properties.expirationDate
 
+    // Determine PnP template URL based on selected type
+    const pnpTemplateUrl = currentTemplate?.absoluteUrl || null
+    const shouldApplyTemplate = !!currentTemplate && !!pnpTemplateUrl
+
     const requestItem: IProvisionRequestItem = {
       Title: context.column.get('name'),
       SpaceDisplayName: name,
@@ -131,6 +142,11 @@ export const useProvisionDrawer = () => {
       SensitivityLabelLibraryName: context.column.get('sensitivityLabelLibrary'),
       SensitivityLabelLibraryId: sensitivityLabelLibraryId,
       RetentionLabelName: context.column.get('retentionLabel'),
+      ApplyPnPTemplate: shouldApplyTemplate,
+      PnPTemplateURL: {
+        Description: pnpTemplateUrl,
+        Url: pnpTemplateUrl
+      },
       ExpirationDate: expirationDate,
       ReadOnlyGroup: context.column.get('readOnlyGroup'),
       InternalChannel: context.column.get('internalChannel'),
@@ -188,7 +204,7 @@ export const useProvisionDrawer = () => {
     })
 
     if (context.props.debugMode || (typeof DEBUG !== 'undefined' && DEBUG)) {
-      console.log('isSaveDisabled calculation:', {
+      console.log('sitetype debug menu:', {
         selectedType: selectedType,
         requiredFields: requiredFields.map((f) => ({
           name: f.fieldName,
@@ -197,12 +213,28 @@ export const useProvisionDrawer = () => {
         })),
         missingRequiredFields,
         siteExists,
-        isSaveDisabled: missingRequiredFields || siteExists
+        isSaveDisabled: missingRequiredFields || siteExists,
+        currentTypeConfig,
+        currentTemplate: currentTemplate
+          ? {
+              id: currentTemplate.id,
+              title: currentTemplate.title,
+              absoluteUrl: currentTemplate.absoluteUrl
+            }
+          : null
       })
     }
 
     return missingRequiredFields || siteExists
-  }, [fieldsToUse, context.column, siteExists, selectedType, context.props.debugMode])
+  }, [
+    fieldsToUse,
+    context.column,
+    siteExists,
+    selectedType,
+    context.props.debugMode,
+    currentTemplate,
+    currentTypeConfig
+  ])
 
   const missingFieldsInfo = useMemo(() => {
     const requiredFields = fieldsToUse.filter((field) => field.required && !field.hidden)
@@ -229,7 +261,7 @@ export const useProvisionDrawer = () => {
       siteExists,
       totalRequired: requiredFields.length
     }
-  }, [fieldsToUse, context.column, siteExists])
+  }, [fieldsToUse, context.column, siteExists, currentTemplate])
 
   const fluentProviderId = useId('fp-provision-drawer')
 
@@ -259,6 +291,8 @@ export const useProvisionDrawer = () => {
     isTeam,
     joinHub,
     getField,
-    fluentProviderId
+    fluentProviderId,
+    currentTemplate,
+    currentTypeConfig
   }
 }

@@ -21,6 +21,11 @@ export interface IProvisionRequestItem {
   SensitivityLabelLibraryName?: string
   SensitivityLabelLibraryId?: string
   RetentionLabelName?: string
+  ApplyPnPTemplate?: boolean
+  PnPTemplateURL?: {
+    Description?: string
+    Url?: string
+  }
   ExpirationDate?: any
   ReadOnlyGroup?: boolean
   InternalChannel?: boolean

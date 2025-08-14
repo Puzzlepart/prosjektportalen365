@@ -971,7 +971,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           'DefaultHub',
           'DefaultSensitivityLabel',
           'DefaultSensitivityLabelLibrary',
-          'DefaultRetentionLabel'
+          'DefaultRetentionLabel',
+          'TemplateId'
         )
         .expand('VisibleTo')
         .using(DefaultCaching)()
@@ -997,6 +998,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
             defaultVisibility: item.DefaultVisibility,
             defaultConfidentialData: item.DefaultConfidentialData,
             externalSharing: item.ExternalSharing,
+            templateId: item.TemplateId,
             teamify: item.Teamify,
             joinHub: item.JoinHub,
             defaultHub: item.DefaultHub,
@@ -1008,6 +1010,30 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     } catch (error) {
       throw new Error(
         'Kunne ikke hente områdetyper, vennligst sjekk at webdelen er riktig konfigurert og at listen eksisterer på Bestillingsportalen.'
+      )
+    }
+  }
+
+  public async getPnPTemplates(provisionUrl: string): Promise<Record<string, any>> {
+    try {
+      const provisionSite = Web([this._sp.web, provisionUrl])
+      const templatesList = provisionSite.lists.getByTitle('PnP Templates')
+      const spItems = await templatesList.items
+        .select('Id', 'Title', 'File/ServerRelativeUrl', 'FileRef', 'EncodedAbsUrl')
+        .expand('File')
+        .using(DefaultCaching)()
+      return spItems.map((item) => {
+        return {
+          id: item.Id,
+          title: item.Title,
+          fileRef: item.FileRef,
+          serverRelativeUrl: item.File?.ServerRelativeUrl,
+          absoluteUrl: item.EncodedAbsUrl
+        }
+      })
+    } catch (error) {
+      throw new Error(
+        'Kunne ikke hente pnp maler, vennligst sjekk at webdelen er riktig konfigurert og at listen eksisterer på Bestillingsportalen.'
       )
     }
   }

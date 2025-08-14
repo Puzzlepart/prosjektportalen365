@@ -329,6 +329,13 @@ export interface IPortfolioWebPartsDataAdapter {
   getProvisionTypes?(provisionUrl: string): Promise<Record<string, any>>
 
   /**
+   * Retrieves the PnP templates from the "PnP Templates" list
+   *
+   * @returns A Promise that resolves to a Map containing the templates.
+   */
+  getPnPTemplates?(provisionUrl: string): Promise<Record<string, any>>
+
+  /**
    * Ensure users in the provision site and return their IDs.
    *
    * @param users Users to ensure
