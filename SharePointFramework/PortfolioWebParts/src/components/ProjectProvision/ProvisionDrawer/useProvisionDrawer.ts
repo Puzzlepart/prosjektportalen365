@@ -190,7 +190,11 @@ export const useProvisionDrawer = () => {
     if (context.props.debugMode || (typeof DEBUG !== 'undefined' && DEBUG)) {
       console.log('isSaveDisabled calculation:', {
         selectedType: selectedType,
-        requiredFields: requiredFields.map(f => ({ name: f.fieldName, required: f.required, hidden: f.hidden })),
+        requiredFields: requiredFields.map((f) => ({
+          name: f.fieldName,
+          required: f.required,
+          hidden: f.hidden
+        })),
         missingRequiredFields,
         siteExists,
         isSaveDisabled: missingRequiredFields || siteExists
@@ -203,19 +207,21 @@ export const useProvisionDrawer = () => {
   const missingFieldsInfo = useMemo(() => {
     const requiredFields = fieldsToUse.filter((field) => field.required && !field.hidden)
 
-    const missingFields = requiredFields.filter((field) => {
-      const value = context.column.get(field.fieldName)
+    const missingFields = requiredFields
+      .filter((field) => {
+        const value = context.column.get(field.fieldName)
 
-      if (value === null || value === undefined) return true
-      if (Array.isArray(value)) return value.length === 0
-      if (typeof value === 'string') return value.trim().length === 0
-      if (typeof value === 'boolean') return false
-      return false
-    }).map(field => ({
-      fieldName: field.fieldName,
-      displayName: field.displayName,
-      required: field.required
-    }))
+        if (value === null || value === undefined) return true
+        if (Array.isArray(value)) return value.length === 0
+        if (typeof value === 'string') return value.trim().length === 0
+        if (typeof value === 'boolean') return false
+        return false
+      })
+      .map((field) => ({
+        fieldName: field.fieldName,
+        displayName: field.displayName,
+        required: field.required
+      }))
 
     return {
       hasErrors: missingFields.length > 0 || siteExists,

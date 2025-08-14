@@ -21,28 +21,34 @@ export const useLocalInput = (fieldName: string, debounceMs: number = 300) => {
     lastContextValueRef.current = contextValue
   }, [context.column, fieldName, localValue])
 
-  const updateContext = useCallback((value: string) => {
-    if (debounceRef.current) {
-      clearTimeout(debounceRef.current)
-    }
-
-    debounceRef.current = setTimeout(() => {
-      context.setColumn(fieldName, value)
-    }, debounceMs)
-  }, [context.setColumn, fieldName, debounceMs])
-
-  const handleChange = useCallback((value: string) => {
-    setLocalValue(value)
-
-    context.setState({
-      properties: {
-        ...context.state.properties,
-        [fieldName]: value
+  const updateContext = useCallback(
+    (value: string) => {
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current)
       }
-    })
 
-    updateContext(value)
-  }, [updateContext, context.setState, context.state.properties, fieldName])
+      debounceRef.current = setTimeout(() => {
+        context.setColumn(fieldName, value)
+      }, debounceMs)
+    },
+    [context.setColumn, fieldName, debounceMs]
+  )
+
+  const handleChange = useCallback(
+    (value: string) => {
+      setLocalValue(value)
+
+      context.setState({
+        properties: {
+          ...context.state.properties,
+          [fieldName]: value
+        }
+      })
+
+      updateContext(value)
+    },
+    [updateContext, context.setState, context.state.properties, fieldName]
+  )
 
   useEffect(() => {
     return () => {

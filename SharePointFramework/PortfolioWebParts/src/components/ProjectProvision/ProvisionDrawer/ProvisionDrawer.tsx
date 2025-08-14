@@ -201,11 +201,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     required={getField('name').required}
                     hidden={getField('name').hidden}
                     validationState={
-                      nameInput.value.length
-                        ? siteExists
-                          ? 'error'
-                          : 'success'
-                        : 'none'
+                      nameInput.value.length ? (siteExists ? 'error' : 'success') : 'none'
                     }
                     validationMessage={
                       nameInput.value.length
@@ -338,8 +334,9 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   >
                     <Input
                       disabled
-                      value={`${namingConvention?.prefixText}${context.column.get('alias')}${namingConvention?.suffixText
-                        }`}
+                      value={`${namingConvention?.prefixText}${context.column.get('alias')}${
+                        namingConvention?.suffixText
+                      }`}
                       contentAfter={<Tag size='small'>{aliasSuffix}</Tag>}
                     />
                   </FieldContainer>
@@ -350,8 +347,9 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   >
                     <Input
                       disabled
-                      value={`${namingConvention?.prefixText}${context.column.get('alias')}${namingConvention?.suffixText
-                        }`}
+                      value={`${namingConvention?.prefixText}${context.column.get('alias')}${
+                        namingConvention?.suffixText
+                      }`}
                       contentBefore={<Tag size='small'>{urlPrefix}</Tag>}
                     />
                   </FieldContainer>
@@ -690,15 +688,15 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   {!stringIsNullOrEmpty(context.props.footerDescription) && (
                     <p className={styles.ignoreGap}>{context.props.footerDescription}</p>
                   )}
-                  {isSaveDisabled && (missingFieldsInfo.missingFields.length > 0) && (
+                  {isSaveDisabled && missingFieldsInfo.missingFields.length > 0 && (
                     <UserMessage
-                      intent="error"
+                      intent='error'
                       title={strings.Provision.MissingFieldsTitle}
-                      text={
-                        `<ul>
-                          ${missingFieldsInfo.missingFields.map(field => `<li>${field.displayName}</li>`).join('')}
-                        </ul>`
-                      }
+                      text={`<ul>
+                          ${missingFieldsInfo.missingFields
+                            .map((field) => `<li>${field.displayName}</li>`)
+                            .join('')}
+                        </ul>`}
                       containerStyle={{ marginTop: '16px' }}
                     />
                   )}
@@ -720,27 +718,27 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
               onClick={() => {
                 currentLevel === levels.length - 1
                   ? onSave().then((response) => {
-                    if (response) {
-                      context.reset()
-                      props.toast(
-                        <Toast appearance='inverted'>
-                          <ToastTitle>{strings.Provision.ToastCreatedTitle}</ToastTitle>
-                          <ToastBody>{strings.Provision.ToastCreatedBody}</ToastBody>
-                        </Toast>,
-                        { intent: 'success' }
-                      )
-                      context.setState({ showProvisionDrawer: false, properties: {} })
-                      setCurrentLevel(0)
-                    } else {
-                      props.toast(
-                        <Toast appearance='inverted'>
-                          <ToastTitle>{strings.Provision.ToastCreatedErrorTitle}</ToastTitle>
-                          <ToastBody>{strings.Provision.ToastCreatedErrorBody}</ToastBody>
-                        </Toast>,
-                        { intent: 'error' }
-                      )
-                    }
-                  })
+                      if (response) {
+                        context.reset()
+                        props.toast(
+                          <Toast appearance='inverted'>
+                            <ToastTitle>{strings.Provision.ToastCreatedTitle}</ToastTitle>
+                            <ToastBody>{strings.Provision.ToastCreatedBody}</ToastBody>
+                          </Toast>,
+                          { intent: 'success' }
+                        )
+                        context.setState({ showProvisionDrawer: false, properties: {} })
+                        setCurrentLevel(0)
+                      } else {
+                        props.toast(
+                          <Toast appearance='inverted'>
+                            <ToastTitle>{strings.Provision.ToastCreatedErrorTitle}</ToastTitle>
+                            <ToastBody>{strings.Provision.ToastCreatedErrorBody}</ToastBody>
+                          </Toast>,
+                          { intent: 'error' }
+                        )
+                      }
+                    })
                   : setCurrentLevel(currentLevel + 1)
               }}
             >

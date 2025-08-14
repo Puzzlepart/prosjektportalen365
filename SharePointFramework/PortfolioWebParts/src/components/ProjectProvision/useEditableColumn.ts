@@ -346,12 +346,7 @@ export function useEditableColumn(
     }
 
     setDefaults()
-  }, [
-    state.loading,
-    state.types,
-    state.properties.type,
-    defaultType
-  ])
+  }, [state.loading, state.types, state.properties.type, defaultType])
 
   return {
     column,
