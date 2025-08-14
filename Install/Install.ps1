@@ -126,8 +126,8 @@ if ($Alias.Length -lt 2 -or (@("sites/", "teams/") -notcontains $ManagedPath) -o
 }
 #endregion
 
-$LogFilePath = "$PSScriptRoot/Install_Log_$([datetime]::Now.ToString("yy-MM-ddThh-mm-ss")).txt"
-# Set-PnPTraceLog -On -Level Debug -LogFile $LogFilePath
+$LogFilePath = "$PSScriptRoot\Install_Log_$([datetime]::Now.ToString("yy-MM-ddThh-mm-ss")).txt"
+Set-PnPTraceLog -On -Level Debug -LogFile $LogFilePath
 
 #region Create site
 if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
@@ -483,9 +483,6 @@ Write-Host "[INFO] Consider running .\Install\Scripts\UpgradeAllSitesToLatest.ps
 Write-Host "[INFO] This is required after upgrading between minor versions, e.g. from 1.10.x to 1.11.x."
 #endregion
 
-## Turning off PnP trace logging
-# Set-PnPTraceLog -Off
-
 #region Log installation and send pingback to Azure Function
 Write-Host "[INFO] Logging installation entry" 
 $InstallEndTime = (Get-Date -Format o)
@@ -509,6 +506,9 @@ if ($CI.IsPresent) {
 
 ## Logging installation to SharePoint list
 $InstallationEntry = Add-PnPListItem -List "Installasjonslogg" -Values $InstallEntry -ErrorAction Continue
+
+## Turning off PnP trace logging
+Set-PnPTraceLog -Off
 
 ## Attempting to attach the log file to installation entry
 if ($null -ne $InstallationEntry) {
