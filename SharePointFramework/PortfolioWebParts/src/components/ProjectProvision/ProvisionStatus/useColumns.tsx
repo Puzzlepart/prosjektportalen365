@@ -44,8 +44,12 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestItem>[] =>
             {request.status === Status.SpaceCreated ? (
               <Link
                 href={request.siteUrl}
-                onClick={() => {
+                onClick={(e) => {
                   context.setState({ showProvisionStatus: false })
+                  e.preventDefault()
+                  setTimeout(() => {
+                    window.open(request.siteUrl, '_blank')
+                  }, 100)
                 }}
               >
                 <Text truncate wrap={true}>
