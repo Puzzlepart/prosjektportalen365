@@ -268,7 +268,7 @@ export function useEditableColumn(
         console.error('Error setting default type:', error)
       }
     }
-  }, [defaultType, state.properties.type, state.properties, setState])
+  }, [state.loading, defaultType])
 
   // Set defaults based on selected type
   useEffect(() => {
@@ -350,13 +350,7 @@ export function useEditableColumn(
     state.loading,
     state.types,
     state.properties.type,
-    state.properties,
-    defaultType,
-    getGlobalSetting,
-    props.autoOwner,
-    props.pageContext.user,
-    transformValue,
-    setState
+    defaultType
   ])
 
   return {
