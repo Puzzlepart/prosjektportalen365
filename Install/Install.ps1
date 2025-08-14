@@ -86,16 +86,16 @@ Write-Host "########################################################" -Foregroun
 
 
 if ($CI.IsPresent -and $null -eq (Get-Module -Name PnP.PowerShell)) {
-    Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
+    Write-Host "[Running in CI mode. Installing PnP.PowerShell.]" -ForegroundColor Yellow
     Install-Module -Name PnP.PowerShell -RequiredVersion 2.12.0 -Force -Scope CurrentUser -ErrorAction Stop
 }
 else {
     if (-not $SkipLoadingBundle.IsPresent) {
         $PnPVersion = LoadBundle    
-        Write-Host "[INFO] Loaded module PnP.PowerShell v$($PnPVersion) from bundle"
+        Write-Host "[INFO] Loaded PnP.PowerShell v$($PnPVersion) from bundle"
     }
     else {
-        Write-Host "[INFO] Loaded module PnP.PowerShell v$((Get-Command Connect-PnPOnline).Version) from your environment"
+        Write-Host "[INFO] Loaded PnP.PowerShell v$((Get-Command Connect-PnPOnline).Version) from your environment"
     }
 }
 
