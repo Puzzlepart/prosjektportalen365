@@ -23,8 +23,7 @@ import {
 import { getDefaultFields } from 'components/ProjectProvision/getDefaultFields'
 import { getDefaultTypeFieldConfigurations } from 'components/ProjectProvision/getFieldsForType'
 import * as React from 'react'
-import { Dropdown, Option, FluentProvider, IdPrefixProvider } from '@fluentui/react-components'
-import { customLightTheme } from 'pp365-shared-library'
+import { Dropdown, Option, IdPrefixProvider } from '@fluentui/react-components'
 
 export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProjectProvisionProps> {
   private _defaultFields = getDefaultFields()
@@ -370,33 +369,26 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                             value: `hiddenFields-${field.id}-${item?.id || 'new'}`
                           },
                           React.createElement(
-                            FluentProvider,
+                            Dropdown,
                             {
-                              theme: customLightTheme,
-                              style: { background: 'transparent' }
+                              multiselect: true,
+                              placeholder: strings.Provision.HiddenFieldsForTypePlaceholder,
+                              value: displayValue,
+                              selectedOptions: currentHiddenFields,
+                              onOptionSelect: (event, data) => {
+                                const newSelectedOptions = data.selectedOptions || []
+                                onUpdate(field.id, newSelectedOptions.join(','))
+                              }
                             },
-                            React.createElement(
-                              Dropdown,
-                              {
-                                multiselect: true,
-                                placeholder: strings.Provision.HiddenFieldsForTypePlaceholder,
-                                value: displayValue,
-                                selectedOptions: currentHiddenFields,
-                                onOptionSelect: (event, data) => {
-                                  const newSelectedOptions = data.selectedOptions || []
-                                  onUpdate(field.id, newSelectedOptions.join(','))
-                                }
-                              },
-                              availableFields.map((availableField) =>
-                                React.createElement(
-                                  Option,
-                                  {
-                                    key: availableField.key,
-                                    value: availableField.key,
-                                    text: availableField.text
-                                  },
-                                  availableField.text
-                                )
+                            availableFields.map((availableField) =>
+                              React.createElement(
+                                Option,
+                                {
+                                  key: availableField.key,
+                                  value: availableField.key,
+                                  text: availableField.text
+                                },
+                                availableField.text
                               )
                             )
                           )
@@ -453,33 +445,26 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                             value: `requiredFields-${field.id}-${item?.id || 'new'}`
                           },
                           React.createElement(
-                            FluentProvider,
+                            Dropdown,
                             {
-                              theme: customLightTheme,
-                              style: { background: 'transparent' }
+                              multiselect: true,
+                              placeholder: strings.Provision.RequiredFieldsForTypePlaceholder,
+                              value: displayValue,
+                              selectedOptions: currentRequiredFields,
+                              onOptionSelect: (event, data) => {
+                                const newSelectedOptions = data.selectedOptions || []
+                                onUpdate(field.id, newSelectedOptions.join(','))
+                              }
                             },
-                            React.createElement(
-                              Dropdown,
-                              {
-                                multiselect: true,
-                                placeholder: strings.Provision.RequiredFieldsForTypePlaceholder,
-                                value: displayValue,
-                                selectedOptions: currentRequiredFields,
-                                onOptionSelect: (event, data) => {
-                                  const newSelectedOptions = data.selectedOptions || []
-                                  onUpdate(field.id, newSelectedOptions.join(','))
-                                }
-                              },
-                              availableFields.map((availableField) =>
-                                React.createElement(
-                                  Option,
-                                  {
-                                    key: availableField.key,
-                                    value: availableField.key,
-                                    text: availableField.text
-                                  },
-                                  availableField.text
-                                )
+                            availableFields.map((availableField) =>
+                              React.createElement(
+                                Option,
+                                {
+                                  key: availableField.key,
+                                  value: availableField.key,
+                                  text: availableField.text
+                                },
+                                availableField.text
                               )
                             )
                           )
