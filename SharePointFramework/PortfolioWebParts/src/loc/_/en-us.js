@@ -355,7 +355,8 @@ define([], function () {
       RequireProvisionAccessFieldLabel: 'Require access to provision portal',
       DebugModeLabel: 'Debug Mode',
       DebugModeOnText: 'On',
-      DebugModeOffText: 'Off'
-    },
+      DebugModeOffText: 'Off',
+      ProvisionError: 'Could not retrieve data from list \'{0}\', please check that the web part is configured correctly and that the list exists on the Ordering portal. Error: {1}',
+    }
   }
 })

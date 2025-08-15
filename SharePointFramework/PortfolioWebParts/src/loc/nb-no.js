@@ -278,6 +278,7 @@ define([], function () {
       WebPartDescription: 'Områdebestilling',
       ProvisionGroupName: 'Bestillingsportalen',
       MissingFieldsTitle: 'Manglende utfylling av følgende påkrevde felter',
+      ProvisionError: 'Kunne ikke hente data fra listen \'{0}\', vennligst sjekk at webdelen er riktig konfigurert og at listen eksisterer på Bestillingsportalen. Error: {1}',
     },
     AddColumnLabel: 'Legg til en kolonne',
     AllProjectsHeaderText: 'Alle prosjekter/program',

@@ -937,9 +937,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           }
         })
     } catch (error) {
-      throw new Error(
-        'Kunne ikke hente innstillinger for Bestillingsportalen, vennligst sjekk at webdelen er riktig konfigurert og at listen eksisterer på området.'
-      )
+      throw new Error(format(strings.Provision.ProvisionError, 'Provisioning Request Settings', error.message || error))
     }
   }
 
@@ -1008,9 +1006,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           }
         })
     } catch (error) {
-      throw new Error(
-        'Kunne ikke hente områdetyper, vennligst sjekk at webdelen er riktig konfigurert og at listen eksisterer på Bestillingsportalen.'
-      )
+      throw new Error(format(strings.Provision.ProvisionError, 'Provisioning Types', error.message || error))
     }
   }
 
@@ -1032,9 +1028,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         }
       })
     } catch (error) {
-      throw new Error(
-        'Kunne ikke hente pnp maler, vennligst sjekk at webdelen er riktig konfigurert og at listen eksisterer på Bestillingsportalen.'
-      )
+      throw new Error(format(strings.Provision.ProvisionError, 'PnP Templates', error.message || error))
     }
   }
 
@@ -1118,9 +1112,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           }
         })
     } catch (error) {
-      throw new Error(
-        'Kunne ikke hente bestillinger, vennligst sjekk at webdelen er riktig konfigurert og at listen eksisterer på Bestillingsportalen.'
-      )
+      throw new Error(format(strings.Provision.ProvisionError, 'Provisioning Requests', error.message || error))
     }
   }
 
@@ -1142,9 +1134,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         })
       ].sort((a, b) => (a.title > b.title ? 1 : -1))
     } catch (error) {
-      throw new Error(
-        'Kunne ikke hente team maler, vennligst sjekk at webdelen er riktig konfigurert og at listen eksisterer på Bestillingsportalen.'
-      )
+      throw new Error(format(strings.Provision.ProvisionError, 'Teams Templates', error.message || error))
     }
   }
 
@@ -1168,9 +1158,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           }
         })
     } catch (error) {
-      throw new Error(
-        'Kunne ikke hente følsomhetsetiketter, vennligst sjekk at webdelen er riktig konfigurert og at listen eksisterer på Bestillingsportalen.'
-      )
+      throw new Error(format(strings.Provision.ProvisionError, 'IP Labels', error.message || error))
     }
   }
 
@@ -1191,9 +1179,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           }
         })
     } catch (error) {
-      throw new Error(
-        'Kunne ikke hente oppbevaringsetiketter, vennligst sjekk at webdelen er riktig konfigurert og at listen eksisterer på Bestillingsportalen.'
-      )
+      throw new Error(format(strings.Provision.ProvisionError, 'Retention Labels', error.message || error))
     }
   }
 

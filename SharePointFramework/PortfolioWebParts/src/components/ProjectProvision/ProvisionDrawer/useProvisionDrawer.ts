@@ -125,7 +125,7 @@ export const useProvisionDrawer = () => {
       AdditionalInfo: context.column.get('additionalInfo'),
       SpaceType: context.column.get('type'),
       SpaceTypeInternal: spaceTypeInternal,
-      Teamify: isTeam ? true : isViva ? false : context.column.get('teamify'),
+      Teamify: isTeam ? true : isViva ? false : context.column.get('teamify') || false,
       TeamsTemplate:
         context.column.get('teamify') || isTeam
           ? context.state.properties.teamTemplate || 'standard'
