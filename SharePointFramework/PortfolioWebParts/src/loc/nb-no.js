@@ -269,7 +269,7 @@ define([], function () {
       RequiredFieldsForTypeLabel: 'Påkrevde felt for denne typen',
       RequiredFieldsForTypePlaceholder: 'Velg felt som skal være påkrevde...',
       FieldConfigurationJsonLabel: 'Feltkonfigurasjon (JSON)',
-      FieldConfigurationJsonPlaceholder: 'Enter JSON configuration for fields...',
+      FieldConfigurationJsonPlaceholder: 'Angi feltkonfigurasjon i JSON-format.',
       PropertyEditorLabel: 'Rediger webdelens egenskaper (JSON)',
       PropertyEditorDescription: 'Her kan du redigere webdelens egenskaper i JSON-format. Eksport og import av egenskaper er også mulig slik at oppsett kan gjenbrukes og importeres i andre ansattsøk webdeler.',
       DebugModeLabel: 'DebugMode',

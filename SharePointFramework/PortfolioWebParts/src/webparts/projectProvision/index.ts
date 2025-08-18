@@ -23,11 +23,19 @@ import {
 import { getDefaultFields } from 'components/ProjectProvision/getDefaultFields'
 import { getDefaultTypeFieldConfigurations } from 'components/ProjectProvision/getFieldsForType'
 import * as React from 'react'
-import { Dropdown, Option, IdPrefixProvider } from '@fluentui/react-components'
+import { Dropdown, Option, IdPrefixProvider, FluentProvider } from '@fluentui/react-components'
+import { customLightTheme } from 'pp365-shared-library'
+
+const DEFAULT_PROVISION_TYPES = [
+  { key: 'Prosjektområde', text: 'Prosjektområde' },
+  { key: 'Viva Engage Community', text: 'Viva Engage Community' },
+  { key: 'Microsoft Teams Team', text: 'Microsoft Teams Team' }
+]
 
 export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProjectProvisionProps> {
   private _defaultFields = getDefaultFields()
   private _defaultTypeFieldConfigurations = getDefaultTypeFieldConfigurations()
+  private _provisionTypes: Array<{ key: string; text: string; disabled?: boolean }> = []
 
   public async render(): Promise<void> {
     let hasProjectProvisionAccess = true
@@ -75,6 +83,47 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
       this.properties.typeFieldConfigurations || [],
       this._defaultTypeFieldConfigurations
     )
+
+    await this.loadProvisionTypes()
+  }
+
+  private async loadProvisionTypes(): Promise<void> {
+    if (!this.properties.provisionUrl) {
+      this._provisionTypes = [...DEFAULT_PROVISION_TYPES]
+      return
+    }
+
+    try {
+      const types = await this.dataAdapter.getProvisionTypes(this.properties.provisionUrl)
+      const availableTypeNames = types.map((type: any) => type.title)
+      const mergedTypes = new Map<string, { key: string; text: string; disabled?: boolean }>()
+
+      DEFAULT_PROVISION_TYPES.forEach(defaultType => {
+        mergedTypes.set(defaultType.key, {
+          key: defaultType.key,
+          text: defaultType.text,
+          disabled: !availableTypeNames.includes(defaultType.key)
+        })
+      })
+
+      types.forEach((type: any) => {
+        if (!mergedTypes.has(type.title)) {
+          mergedTypes.set(type.title, {
+            key: type.title,
+            text: type.title,
+            disabled: false
+          })
+        } else {
+          const existing = mergedTypes.get(type.title)!
+          existing.disabled = false
+        }
+      })
+
+      this._provisionTypes = Array.from(mergedTypes.values())
+    } catch (error) {
+      console.warn('Failed to load provision types, using defaults:', error)
+      this._provisionTypes = [...DEFAULT_PROVISION_TYPES]
+    }
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -313,11 +362,7 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                       title: strings.Provision.TypeNameLabel,
                       type: CustomCollectionFieldType.dropdown,
                       required: true,
-                      options: [
-                        { key: 'Prosjektområde', text: 'Prosjektområde' },
-                        { key: 'Viva Engage Community', text: 'Viva Engage Community' },
-                        { key: 'Microsoft Teams Team', text: 'Microsoft Teams Team' }
-                      ]
+                      options: this._provisionTypes
                     },
                     {
                       id: 'hiddenFields',
@@ -369,26 +414,33 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                             value: `hiddenFields-${field.id}-${item?.id || 'new'}`
                           },
                           React.createElement(
-                            Dropdown,
+                            FluentProvider,
                             {
-                              multiselect: true,
-                              placeholder: strings.Provision.HiddenFieldsForTypePlaceholder,
-                              value: displayValue,
-                              selectedOptions: currentHiddenFields,
-                              onOptionSelect: (event, data) => {
-                                const newSelectedOptions = data.selectedOptions || []
-                                onUpdate(field.id, newSelectedOptions.join(','))
-                              }
+                              theme: customLightTheme,
+                              style: { background: 'transparent' }
                             },
-                            availableFields.map((availableField) =>
-                              React.createElement(
-                                Option,
-                                {
-                                  key: availableField.key,
-                                  value: availableField.key,
-                                  text: availableField.text
-                                },
-                                availableField.text
+                            React.createElement(
+                              Dropdown,
+                              {
+                                multiselect: true,
+                                placeholder: strings.Provision.HiddenFieldsForTypePlaceholder,
+                                value: displayValue,
+                                selectedOptions: currentHiddenFields,
+                                onOptionSelect: (event, data) => {
+                                  const newSelectedOptions = data.selectedOptions || []
+                                  onUpdate(field.id, newSelectedOptions.join(','))
+                                }
+                              },
+                              availableFields.map((availableField) =>
+                                React.createElement(
+                                  Option,
+                                  {
+                                    key: availableField.key,
+                                    value: availableField.key,
+                                    text: availableField.text
+                                  },
+                                  availableField.text
+                                )
                               )
                             )
                           )
@@ -445,26 +497,33 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                             value: `requiredFields-${field.id}-${item?.id || 'new'}`
                           },
                           React.createElement(
-                            Dropdown,
+                            FluentProvider,
                             {
-                              multiselect: true,
-                              placeholder: strings.Provision.RequiredFieldsForTypePlaceholder,
-                              value: displayValue,
-                              selectedOptions: currentRequiredFields,
-                              onOptionSelect: (event, data) => {
-                                const newSelectedOptions = data.selectedOptions || []
-                                onUpdate(field.id, newSelectedOptions.join(','))
-                              }
+                              theme: customLightTheme,
+                              style: { background: 'transparent' }
                             },
-                            availableFields.map((availableField) =>
-                              React.createElement(
-                                Option,
-                                {
-                                  key: availableField.key,
-                                  value: availableField.key,
-                                  text: availableField.text
-                                },
-                                availableField.text
+                            React.createElement(
+                              Dropdown,
+                              {
+                                multiselect: true,
+                                placeholder: strings.Provision.RequiredFieldsForTypePlaceholder,
+                                value: displayValue,
+                                selectedOptions: currentRequiredFields,
+                                onOptionSelect: (event, data) => {
+                                  const newSelectedOptions = data.selectedOptions || []
+                                  onUpdate(field.id, newSelectedOptions.join(','))
+                                }
+                              },
+                              availableFields.map((availableField) =>
+                                React.createElement(
+                                  Option,
+                                  {
+                                    key: availableField.key,
+                                    value: availableField.key,
+                                    text: availableField.text
+                                  },
+                                  availableField.text
+                                )
                               )
                             )
                           )
@@ -548,5 +607,14 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
         }
       ]
     }
+  }
+
+  protected async onPropertyPaneFieldChanged(propertyPath: string, oldValue: any, newValue: any): Promise<void> {
+    if (propertyPath === 'provisionUrl' && oldValue !== newValue) {
+      await this.loadProvisionTypes()
+      this.context.propertyPane.refresh()
+      this.render()
+    }
+    super.onPropertyPaneFieldChanged(propertyPath, oldValue, newValue)
   }
 }
