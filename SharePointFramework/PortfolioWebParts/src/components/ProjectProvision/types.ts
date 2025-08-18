@@ -61,7 +61,7 @@ export interface IProjectProvisionState {
   showProvisionSettings: boolean
   settings: any[]
   types?: Record<string, any>
-  pnpTemplates?: Record<string, any>
+  siteTemplates?: Record<string, any>
   teamTemplates?: Record<string, any>
   sensitivityLabels?: Record<string, any>
   sensitivityLabelsLibrary?: Record<string, any>

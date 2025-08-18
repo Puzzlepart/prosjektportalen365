@@ -98,7 +98,7 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
       const availableTypeNames = types.map((type: any) => type.title)
       const mergedTypes = new Map<string, { key: string; text: string; disabled?: boolean }>()
 
-      DEFAULT_PROVISION_TYPES.forEach(defaultType => {
+      DEFAULT_PROVISION_TYPES.forEach((defaultType) => {
         mergedTypes.set(defaultType.key, {
           key: defaultType.key,
           text: defaultType.text,
@@ -609,7 +609,11 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
     }
   }
 
-  protected async onPropertyPaneFieldChanged(propertyPath: string, oldValue: any, newValue: any): Promise<void> {
+  protected async onPropertyPaneFieldChanged(
+    propertyPath: string,
+    oldValue: any,
+    newValue: any
+  ): Promise<void> {
     if (propertyPath === 'provisionUrl' && oldValue !== newValue) {
       await this.loadProvisionTypes()
       this.context.propertyPane.refresh()

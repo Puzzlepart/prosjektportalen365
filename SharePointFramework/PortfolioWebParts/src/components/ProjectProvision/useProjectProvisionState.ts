@@ -16,7 +16,7 @@ export function useProjectProvisionState() {
     showProvisionSettings: false,
     settings: [],
     types: {},
-    pnpTemplates: {},
+    siteTemplates: {},
     teamTemplates: {},
     sensitivityLabels: {},
     sensitivityLabelsLibrary: {},

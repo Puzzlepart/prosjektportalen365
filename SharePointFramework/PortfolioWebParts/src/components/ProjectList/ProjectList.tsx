@@ -27,7 +27,10 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
       <IdPrefixProvider value={context.fluentProviderId}>
         <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
           <section className={styles.projectList}>
-            <UserMessage title={strings.NoProjectsFoundTitle} text={strings.NoProjectsFoundMessage} />
+            <UserMessage
+              title={strings.NoProjectsFoundTitle}
+              text={strings.NoProjectsFoundMessage}
+            />
           </section>
         </FluentProvider>
       </IdPrefixProvider>

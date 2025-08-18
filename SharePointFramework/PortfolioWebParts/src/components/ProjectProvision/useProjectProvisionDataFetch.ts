@@ -49,7 +49,7 @@ export function useProjectProvisionDataFetch(
         Promise.all([
           props.dataAdapter.getProvisionRequestSettings(props.provisionUrl),
           props.dataAdapter.getProvisionTypes(props.provisionUrl),
-          props.dataAdapter.getPnPTemplates(props.provisionUrl),
+          props.dataAdapter.getSiteTemplates(props.provisionUrl),
           props.dataAdapter.getTeamTemplates(props.provisionUrl),
           props.dataAdapter.getSensitivityLabels(props.provisionUrl),
           props.dataAdapter.getRetentionLabels(props.provisionUrl),
@@ -59,7 +59,7 @@ export function useProjectProvisionDataFetch(
             ([
               settings,
               types,
-              pnpTemplates,
+              siteTemplates,
               teamTemplates,
               sensitivityLabels,
               retentionLabels,
@@ -74,7 +74,7 @@ export function useProjectProvisionDataFetch(
                       user?.EMail?.includes(props?.pageContext?.user?.loginName)
                     )
                 ),
-                pnpTemplates,
+                siteTemplates,
                 teamTemplates,
                 sensitivityLabels: sensitivityLabels.filter((label) => !label.isLibrary),
                 sensitivityLabelsLibrary: sensitivityLabels.filter((label) => label.isLibrary),

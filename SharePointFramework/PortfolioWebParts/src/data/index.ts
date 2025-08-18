@@ -937,7 +937,13 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           }
         })
     } catch (error) {
-      throw new Error(format(strings.Provision.ProvisionError, 'Provisioning Request Settings', error.message || error))
+      throw new Error(
+        format(
+          strings.Provision.ProvisionError,
+          'Provisioning Request Settings',
+          error.message || error
+        )
+      )
     }
   }
 
@@ -1006,29 +1012,31 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           }
         })
     } catch (error) {
-      throw new Error(format(strings.Provision.ProvisionError, 'Provisioning Types', error.message || error))
+      throw new Error(
+        format(strings.Provision.ProvisionError, 'Provisioning Types', error.message || error)
+      )
     }
   }
 
-  public async getPnPTemplates(provisionUrl: string): Promise<Record<string, any>> {
+  public async getSiteTemplates(provisionUrl: string): Promise<Record<string, any>> {
     try {
       const provisionSite = Web([this._sp.web, provisionUrl])
-      const templatesList = provisionSite.lists.getByTitle('PnP Templates')
+      const templatesList = provisionSite.lists.getByTitle('Site Templates')
       const spItems = await templatesList.items
-        .select('Id', 'Title', 'File/ServerRelativeUrl', 'FileRef', 'EncodedAbsUrl')
-        .expand('File')
+        .select('Id', 'Title', 'ApplyPnPTemplate', 'PnPTemplateURL')
         .using(DefaultCaching)()
       return spItems.map((item) => {
         return {
           id: item.Id,
           title: item.Title,
-          fileRef: item.FileRef,
-          serverRelativeUrl: item.File?.ServerRelativeUrl,
-          absoluteUrl: item.EncodedAbsUrl
+          applyPnPTemplate: item.ApplyPnPTemplate,
+          pnpTemplateUrl: item.PnPTemplateURL?.Url || '',
         }
       })
     } catch (error) {
-      throw new Error(format(strings.Provision.ProvisionError, 'PnP Templates', error.message || error))
+      throw new Error(
+        format(strings.Provision.ProvisionError, 'Site Templates', error.message || error)
+      )
     }
   }
 
@@ -1112,7 +1120,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           }
         })
     } catch (error) {
-      throw new Error(format(strings.Provision.ProvisionError, 'Provisioning Requests', error.message || error))
+      throw new Error(
+        format(strings.Provision.ProvisionError, 'Provisioning Requests', error.message || error)
+      )
     }
   }
 
@@ -1134,7 +1144,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         })
       ].sort((a, b) => (a.title > b.title ? 1 : -1))
     } catch (error) {
-      throw new Error(format(strings.Provision.ProvisionError, 'Teams Templates', error.message || error))
+      throw new Error(
+        format(strings.Provision.ProvisionError, 'Teams Templates', error.message || error)
+      )
     }
   }
 
@@ -1179,7 +1191,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           }
         })
     } catch (error) {
-      throw new Error(format(strings.Provision.ProvisionError, 'Retention Labels', error.message || error))
+      throw new Error(
+        format(strings.Provision.ProvisionError, 'Retention Labels', error.message || error)
+      )
     }
   }
 
