@@ -279,6 +279,9 @@ declare interface IPortfolioWebPartsStrings {
     ProvisionGroupName: string
     MissingFieldsTitle: string
     ProvisionError: string
+    FieldLogicGroupName: string
+    DefaultExpirationDateFieldLabel: string
+    ReadOnlyGroupLogicFieldLabel: string
   },
   AddColumnLabel: string
   AllProjectsHeaderText: string

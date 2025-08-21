@@ -568,15 +568,24 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     />
                   ) : (
                     <Dropdown
-                      defaultValue={strings.Provision.ExpirationDateNoneOption}
-                      defaultSelectedOptions={['0']}
+                      defaultValue={
+                        context.props.defaultExpirationDate === '0'
+                          ? strings.Provision.ExpirationDateNoneOption
+                          : format(
+                              strings.Provision.ExpirationDateMonthOption,
+                              context.props.defaultExpirationDate
+                            )
+                      }
+                      defaultSelectedOptions={[context.props.defaultExpirationDate || '0']}
                       onOptionSelect={(_, data) => {
                         context.setColumn('expirationDate', data.optionValue)
                       }}
                     >
-                      <Option value='0' text={strings.Provision.ExpirationDateNoneOption}>
-                        {strings.Provision.ExpirationDateNoneOption}
-                      </Option>
+                      {context.props.defaultExpirationDate === '0' && (
+                        <Option value='0' text={strings.Provision.ExpirationDateNoneOption}>
+                          {strings.Provision.ExpirationDateNoneOption}
+                        </Option>
+                      )}
                       {[1, 3, 6, 12, 24].map((month) => {
                         return (
                           <Option
@@ -632,7 +641,11 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     label={getField('internalChannel').displayName}
                     description={getField('internalChannel').description}
                     required={getField('internalChannel').required}
-                    hidden={getField('internalChannel').hidden || !enableInternalChannel}
+                    hidden={
+                      getField('internalChannel').hidden ||
+                      !enableInternalChannel ||
+                      (context.props.readOnlyGroupLogic && !context.column.get('readOnlyGroup'))
+                    }
                   >
                     <Switch
                       checked={context.column.get('internalChannel')}
