@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Elements xmlns="http://schemas.microsoft.com/sharepoint/">
-  <Field Type="Note" DisplayName="{resource:SiteFields_GtAiRecommendations_DisplayName}" Hidden="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE" ShowInDispForm="TRUE" ID="{3cb8e63c-bd94-4793-af08-efa8b2dcdaaf}" StaticName="GtAiRecommendations" Name="GtAiRecommendations" SourceID="{1717e993-67e6-401e-8894-7ff05046ed5c}" />
+  <Field Type="Note" DisplayName="{resource:SiteFields_GtAiRecommendations_DisplayName}" Hidden="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE" ShowInDispForm="TRUE" ID="{3cb8e63c-bd94-4793-af08-efa8b2dcdaaf}" StaticName="GtAiRecommendations" Name="GtAiRecommendations" />
 </Elements>

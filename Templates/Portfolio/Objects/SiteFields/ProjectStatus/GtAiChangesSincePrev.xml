@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Elements xmlns="http://schemas.microsoft.com/sharepoint/">
-  <Field Type="Note" DisplayName="{resource:SiteFields_GtAiChangesSincePrev_DisplayName}" Hidden="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE" ShowInDispForm="TRUE" ID="{1cbd1af8-295b-4040-bd7c-426151e0609a}" StaticName="GtAiChangesSincePrev" Name="GtAiChangesSincePrev" SourceID="{1717e993-67e6-401e-8894-7ff05046ed5c}" />
+  <Field Type="Note" DisplayName="{resource:SiteFields_GtAiChangesSincePrev_DisplayName}" Hidden="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE" ShowInDispForm="TRUE" ID="{1cbd1af8-295b-4040-bd7c-426151e0609a}" StaticName="GtAiChangesSincePrev" Name="GtAiChangesSincePrev" />
 </Elements>
