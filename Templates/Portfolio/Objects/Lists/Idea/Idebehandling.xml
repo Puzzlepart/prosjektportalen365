@@ -77,7 +77,7 @@
         <pnp:FieldRef ID="cca3f2fd-5684-43e1-9fb5-acf05592b1f6" Name="GtIdeaRisk" DisplayName="{resource:SiteFields_GtIdeaRisk_DisplayName}" />
         <pnp:FieldRef ID="9f7444b0-2f69-4ad0-a347-2d85cedddebb" Name="GtIdeaRiskNumber" DisplayName="{resource:SiteFields_GtIdeaRiskNumber_DisplayName}" />
         <pnp:FieldRef ID="15915e21-3ba3-4a39-8bf3-690b1cb044b5" Name="GtIdeaManualScore" DisplayName="{resource:SiteFields_GtIdeaManualScore_DisplayName}" />
-        <pnp:FieldRef ID="9b7cf4f7-641d-4a7f-be6a-245237dce476" Name="GtIdeaManualComment" DisplayName="{SiteFields_GtIdeaManualComment_DisplayName}" />
+        <pnp:FieldRef ID="9b7cf4f7-641d-4a7f-be6a-245237dce476" Name="GtIdeaManualComment" DisplayName="{resource:SiteFields_GtIdeaManualComment_DisplayName}" />
         <pnp:FieldRef ID="ce451f2c-a098-48ba-a8a5-d1d4ffc225d6" Name="GtIdeaScore" DisplayName="{resource:SiteFields_GtIdeaScore_DisplayName}" />
         <pnp:FieldRef ID="8fef6c38-28e1-497a-97d7-72e1a854fae1" Name="GtIdeaPriority" DisplayName="{resource:SiteFields_GtIdeaPriority_DisplayName}" />
     </pnp:FieldRefs>
