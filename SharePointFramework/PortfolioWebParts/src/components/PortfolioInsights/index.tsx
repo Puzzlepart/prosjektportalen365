@@ -34,7 +34,9 @@ export class PortfolioInsights extends Component<IPortfolioInsightsProps, IPortf
       const { charts, chartData, contentTypes } = await this.props.dataAdapter.fetchChartData(
         currentView,
         configuration,
-        _.isEmpty(this.props.chartConfigurationListName) ? PortfolioInsights.defaultProps.chartConfigurationListName : this.props.chartConfigurationListName,
+        _.isEmpty(this.props.chartConfigurationListName)
+          ? PortfolioInsights.defaultProps.chartConfigurationListName
+          : this.props.chartConfigurationListName,
         this.props.pageContext.site.id.toString()
       )
       this.setState({

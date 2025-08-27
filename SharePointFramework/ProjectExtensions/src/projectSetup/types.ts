@@ -9,37 +9,37 @@ import {
 
 export interface IProjectSetupProperties {
   /**
-   * Templates library. Use value from 
+   * Templates library. Use value from
    * the converted .resx file instead of
    * the hardcoded string.
-   * 
+   *
    * @deprecated
    */
   templatesLibrary: string
 
   /**
-   * Exensions library. Use value from 
+   * Exensions library. Use value from
    * the converted .resx file instead of
    * the hardcoded string.
-   * 
+   *
    * @deprecated
    */
   extensionsLibrary: string
 
   /**
-   * Projects list. Use value from 
+   * Projects list. Use value from
    * the converted .resx file instead of
    * the hardcoded string.
-   * 
+   *
    * @deprecated
    */
   projectsList: string
 
   /**
-   * List content config list. Use value from 
+   * List content config list. Use value from
    * the converted .resx file instead of
    * the hardcoded string.
-   * 
+   *
    * @deprecated
    */
   contentConfigList: string

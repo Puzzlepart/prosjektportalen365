@@ -37,21 +37,21 @@ export interface IPortalDataServiceConfiguration extends Object {
 
   /**
    * The list names for the different lists used by the data service.
-   * 
-   * @remarks 
+   *
+   * @remarks
    * Use list names from the `SharedResources` module.
-   * 
+   *
    * @example
    * ```typescript
    * import resource from 'SharedResources'
-   * 
+   *
    * const config: IPortalDataServiceConfiguration = {
    *   listNames: {
    *     PROJECTS: resource.Lists_Projects_Title
    *   }
    * }
    * ```
-   * 
+   *
    * That way, the list names are automatically localized and you'll
    * get intellisense for the list names for the different languages.
    */
@@ -196,7 +196,7 @@ export type SyncListParams = {
 
   /**
    * Progress function to call during the sync process.
-   * 
+   *
    * @param progress The progress text to display.
    */
   progressFunc?: (progress: string) => void

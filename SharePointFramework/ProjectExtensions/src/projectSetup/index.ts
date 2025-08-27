@@ -481,7 +481,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       throw new ProjectSetupError(
         '_fetchData',
         strings.GetSetupDataErrorMessage,
-        strings.GetSetupDataErrorStack + error.message,
+        strings.GetSetupDataErrorStack + error.message
       )
     }
   }

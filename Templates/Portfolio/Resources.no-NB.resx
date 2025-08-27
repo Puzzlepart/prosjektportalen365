@@ -1174,6 +1174,9 @@
     <data name="Lists_Global_Settings_Category_Assistant_UseAssistant_Title" xml:space="preserve">
         <value>Ta i bruk Prosjektportalen assistenten</value>
     </data>
+    <data name="Lists_Global_Settings_Category_Assistant_RequireAssistantAccess_Title" xml:space="preserve">
+        <value>Krev tilgang for å bruke assistenten</value>
+    </data>
     <data name="Lists_Global_Settings_Category_General" xml:space="preserve">
         <value>Generelt</value>
     </data>
@@ -1182,6 +1185,15 @@
     </data>
     <data name="Lists_Global_Settings_Category_General_ShowFooter_Title" xml:space="preserve">
         <value>Vis/skjul footer i Prosjektportalen</value>
+    </data>
+    <data name="Lists_Global_Settings_Category_General_ProjectNewsHubUrl_Title" xml:space="preserve">
+        <value>URL til område for nyhetspublisering</value>
+    </data>
+    <data name="Lists_Global_Settings_Category_General_ProjectNewsFolderName_Title" xml:space="preserve">
+        <value>Mappe for publisering av nyheter</value>
+    </data>
+    <data name="Lists_Global_Settings_Category_General_ProjectNewsFolderName_Value" xml:space="preserve">
+        <value>Prosjektnyheter</value>
     </data>
     <data name="Lists_Global_Settings_Category_OpportunityMatrix" xml:space="preserve">
         <value>Mulighetsmatrise</value>

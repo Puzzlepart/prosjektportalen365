@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { IProjectProvisionProps, IProjectProvisionState } from './types'
-import _, { transform } from 'lodash'
+import _ from 'lodash'
 import strings from 'PortfolioWebPartsStrings'
 
 /**
@@ -296,9 +296,8 @@ export function useEditableColumn(
         const enableExternalSharing = getGlobalSetting('EnableExternalSharingByDefault') === 'true'
         const defaultTeamify = typeDefaults?.teamify ?? false
 
-        const defaultExpirationDate = props.expirationDateMode === 'monthDropdown'
-          ? props.defaultExpirationDate || '0'
-          : null
+        const defaultExpirationDate =
+          props.expirationDateMode === 'monthDropdown' ? props.defaultExpirationDate || '0' : null
 
         let defaultOwner: any[] = []
         let transformedOwner: any[] = []

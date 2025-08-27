@@ -4,7 +4,14 @@ import { FooterContext } from '../../context'
 import styles from './InstallVersionTooltipContent.module.scss'
 import { LatestGitHubRelease } from './LatestGitHubRelease'
 import { WebPartTitle, formatDate, getFluentIcon, customLightTheme } from 'pp365-shared-library'
-import { Button, Divider, Label, FluentProvider, IdPrefixProvider, useId } from '@fluentui/react-components'
+import {
+  Button,
+  Divider,
+  Label,
+  FluentProvider,
+  IdPrefixProvider,
+  useId
+} from '@fluentui/react-components'
 
 /**
  * Component for displaying information about the latest installation

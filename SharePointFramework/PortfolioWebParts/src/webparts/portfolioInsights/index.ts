@@ -17,7 +17,7 @@ export default class PortfolioInsightsWebPart extends BasePortfolioWebPart<IPort
   /**
    * Gets the value of a property. If the property is empty, it returns the default value
    * from the `defaultProps` of the component `PortfolioInsights`.
-   * 
+   *
    * @param key Key of the property to get
    */
   private _getPropertyValue(key: keyof IPortfolioInsightsProps): string {

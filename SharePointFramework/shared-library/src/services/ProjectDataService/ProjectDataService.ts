@@ -344,7 +344,9 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
         .using(DefaultCaching)(),
       this._sp.web.select('Language')()
     ])
-    return terms.map((term) => new ProjectPhaseModel(term, termSetId, checklistData[term.id], web.Language))
+    return terms.map(
+      (term) => new ProjectPhaseModel(term, termSetId, checklistData[term.id], web.Language)
+    )
   }
 
   /**
@@ -386,9 +388,9 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
         obj[termGuid] = obj[termGuid]
           ? obj[termGuid]
           : {
-            stats: {},
-            items: []
-          }
+              stats: {},
+              items: []
+            }
         obj[termGuid].items.push(item)
         obj[termGuid].stats[status] = obj[termGuid].stats[status]
           ? obj[termGuid].stats[status] + 1

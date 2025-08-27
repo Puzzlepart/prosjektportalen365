@@ -17,9 +17,9 @@ import resource from 'SharedResources'
  */
 export const getPhaseSitePages: DataFetchFunction<
   {
-    phases: ProjectPhaseModel[];
-    sp: SPFI;
-    web: SPWeb;
+    phases: ProjectPhaseModel[]
+    sp: SPFI
+    web: SPWeb
   },
   IPhaseSitePageModel[]
 > = async (params) => {
@@ -43,7 +43,7 @@ export const getPhaseSitePages: DataFetchFunction<
 
 /**
  * Fetch data for `ProjectPhases`.
- * 
+ *
  * @param props Component properties for `ProjectPhases`
  */
 const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = async (props) => {

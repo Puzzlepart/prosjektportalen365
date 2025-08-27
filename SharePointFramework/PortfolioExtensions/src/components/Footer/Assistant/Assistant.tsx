@@ -88,9 +88,7 @@ export const Assistant: FC = () => {
           relationship='description'
           withArrow
           content={
-            isUnavailable
-              ? strings.AssistantTooltipUnavailable
-              : strings.AssistantTooltipAvailable
+            isUnavailable ? strings.AssistantTooltipUnavailable : strings.AssistantTooltipAvailable
           }
         >
           <Button

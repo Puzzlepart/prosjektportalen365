@@ -11,8 +11,8 @@ export const APPLY_TEMPLATE_STATUS_MAP = new Map<string, { text: string; iconNam
   ['ComposedLook', { text: strings.ApplyTemplateComposedLook, iconName: 'Design' }],
   ['SiteFields', { text: strings.ApplyTemplateSiteFields, iconName: 'NumberField' }],
   ['ContentTypes', { text: strings.ApplyTemplateContentTypes, iconName: 'ExploreContent' }],
-  ['ClientSidePages', { text: strings.ApplyTemplateClientSidePages, iconName: 'Page' }],
-]);
+  ['ClientSidePages', { text: strings.ApplyTemplateClientSidePages, iconName: 'Page' }]
+])
 
 export class ApplyTemplateTaskError extends BaseTaskError {
   /**

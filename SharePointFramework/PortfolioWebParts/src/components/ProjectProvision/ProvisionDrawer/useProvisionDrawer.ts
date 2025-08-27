@@ -149,7 +149,10 @@ export const useProvisionDrawer = () => {
       },
       ExpirationDate: expirationDate,
       ReadOnlyGroup: context.column.get('readOnlyGroup'),
-      InternalChannel: context.props.readOnlyGroupLogic && context.column.get('readOnlyGroup') ? context.column.get('internalChannel') : false,
+      InternalChannel:
+        context.props.readOnlyGroupLogic && context.column.get('readOnlyGroup')
+          ? context.column.get('internalChannel')
+          : false,
       RequestedSource: strings.Provision.RequestedSource,
       SpaceImage: context.column.get('image')?.split(',')[1],
       SiteURL: {

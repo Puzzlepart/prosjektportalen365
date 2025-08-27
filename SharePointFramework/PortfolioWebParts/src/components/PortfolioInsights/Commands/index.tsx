@@ -58,4 +58,3 @@ Commands.defaultProps = {
     views: []
   }
 }
-

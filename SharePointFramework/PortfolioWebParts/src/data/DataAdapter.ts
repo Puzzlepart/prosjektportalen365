@@ -441,7 +441,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       const configElement = _.find(timelineConfig, { title: strings.ProjectLabel })
 
       return { data, reports, configElement, columns: configuration.refiners }
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**
@@ -1283,7 +1283,11 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
     const columns: ProjectContentColumn[] = await new Promise((resolve, reject) => {
       this.portalDataService
-        .fetchProjectContentColumns('PROJECT_CONTENT_COLUMNS', resource.Lists_DataSources_Category_IdeaModule, level)
+        .fetchProjectContentColumns(
+          'PROJECT_CONTENT_COLUMNS',
+          resource.Lists_DataSources_Category_IdeaModule,
+          level
+        )
         .then(resolve)
         .catch(reject)
     })

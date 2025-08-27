@@ -19,6 +19,7 @@ import {
   IGitHubRelease,
   InstallationEntry
 } from './types'
+import strings from 'PortfolioExtensionsStrings'
 
 export default class FooterApplicationCustomizer extends BaseApplicationCustomizer<IFooterApplicationCustomizerProperties> {
   private _bottomPlaceholder: PlaceholderContent
@@ -58,7 +59,8 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     this._minimizeFooter = this._globalSettings.get('MinimizeFooter') === '1'
 
     const requireAssistantAccess = this._globalSettings.get('RequireAssistantAccess') === '1'
-    this._hasAssistantAccess = !requireAssistantAccess || await this._isUserInGroup(strings.AssistantGroupName)
+    this._hasAssistantAccess =
+      !requireAssistantAccess || (await this._isUserInGroup(strings.AssistantGroupName))
     this.context.application.navigatedEvent.add(this, this._handleNavigatedEvent)
     return Promise.resolve()
   }
@@ -133,8 +135,11 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
               ? resource.Lists_HelpContent_Level_ParentProgram
               : resource.Lists_HelpContent_Level_Project
             : resource.Lists_HelpContent_Level_Portfolio
-          let items = await this._portalDataService.getItems(resource.Lists_HelpContent_Title, HelpContentModel, {
-            ViewXml: `<View>
+          let items = await this._portalDataService.getItems(
+            resource.Lists_HelpContent_Title,
+            HelpContentModel,
+            {
+              ViewXml: `<View>
             <Query>
                 <Where>
                     <Eq>
@@ -147,7 +152,8 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
                 </OrderBy>
             </Query>
         </View>`
-          })
+            }
+          )
           items = items.filter((i) => i.matchPattern(window.location.pathname)).splice(0, 3)
           for (let i = 0; i < items.length; i++) {
             if (items[i].externalUrl) {

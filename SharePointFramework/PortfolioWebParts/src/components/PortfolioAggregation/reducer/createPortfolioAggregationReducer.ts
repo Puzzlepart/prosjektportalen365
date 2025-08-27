@@ -166,9 +166,9 @@ export const createPortfolioAggregationReducer = (
     ) => {
       state.columnContextMenu = payload
         ? {
-          column: payload.column,
-          target: payload.target as any
-        }
+            column: payload.column,
+            target: payload.target as any
+          }
         : null
     },
     [SET_ALL_COLLAPSED.type]: (state, { payload }: ReturnType<typeof SET_ALL_COLLAPSED>) => {
@@ -283,10 +283,7 @@ export const createPortfolioAggregationReducer = (
         currentView = _.first(state.views)
       }
       if (!currentView) {
-        state.error = new PortfolioAggregationErrorMessage(
-          errorMessage,
-          MessageBarType.error
-        )
+        state.error = new PortfolioAggregationErrorMessage(errorMessage, MessageBarType.error)
         return
       }
       const obj: IPortfolioAggregationHashState = {}
@@ -328,7 +325,7 @@ export const createPortfolioAggregationReducer = (
             if (column.fieldName.includes('OWSUSER')) {
               const match = value.match(/\|([^|]+)\|/)
               value = match ? match[1].trim() : null
-            }          
+            }
             return { name: value, value, selected: false }
           })
         items = items.sort((a, b) => (a.value > b.value ? 1 : -1))

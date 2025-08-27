@@ -21,8 +21,6 @@ import { ProjectContentColumn, SPProjectContentColumnItem } from 'pp365-shared-l
 import _ from 'underscore'
 import { PortalDataService } from 'pp365-shared-library/lib/services/PortalDataService'
 
-const LOG_SOURCE: string = 'IdeaRegistrationCommand'
-
 export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any> {
   private _userAuthorized: boolean
   private _openCmd: Command

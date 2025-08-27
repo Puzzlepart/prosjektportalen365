@@ -73,6 +73,6 @@ export function useProjectCardFooter() {
     primaryUser: primaryUserPersonaProps,
     secondaryUser: secondaryUserPersonaProps,
     ProjectTypeIcon,
-    projectTypeText,
+    projectTypeText
   }
 }

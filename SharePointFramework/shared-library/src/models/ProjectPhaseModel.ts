@@ -42,7 +42,10 @@ export class ProjectPhaseModel {
    */
   public get name(): string {
     console.log('this.term.labels', this.term.labels, this._languageTag, this.term.localProperties)
-    const localizedLabel = _.find(this.term.labels, (l) => l.languageTag.toLowerCase() === this._languageTag)
+    const localizedLabel = _.find(
+      this.term.labels,
+      (l) => l.languageTag.toLowerCase() === this._languageTag
+    )
     return localizedLabel?.name ?? _.first(this.term.labels)?.name
   }
 
@@ -74,7 +77,7 @@ export class ProjectPhaseModel {
    * fallback to `PhasePurpose` to support potential legacy use.
    */
   public get subText() {
-    return this._getLocalizedProperty('PhaseSubText') ?? this._getLocalizedProperty('PhasePurpose') 
+    return this._getLocalizedProperty('PhaseSubText') ?? this._getLocalizedProperty('PhasePurpose')
   }
 
   /**
@@ -143,6 +146,6 @@ export class ProjectPhaseModel {
       return propertyValue
     }
     const defaultPropertyValue = this.properties[property]
-    return defaultPropertyValue 
+    return defaultPropertyValue
   }
 }
