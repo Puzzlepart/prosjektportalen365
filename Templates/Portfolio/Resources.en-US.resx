@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
     <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
         <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
@@ -4123,4 +4123,49 @@
     <data name="WebParts_UsefulLinks_Title" xml:space="preserve">
         <value>Useful Links</value>
     </data>
+  <data name="SiteFields_GtHubSiteId_DisplayName" xml:space="preserve">
+    <value>Hub-ID</value>
+  </data>
+  <data name="SiteFields_GtHubSiteId_Description" xml:space="preserve">
+    <value>The ID of the hub site.</value>
+  </data>
+  <data name="SiteFields_GtAiStatusComments_DisplayName" xml:space="preserve">
+    <value>Project status summarized (AI)</value>
+  </data>
+  <data name="SiteFields_GtAiStatus_DisplayName" xml:space="preserve">
+    <value>Project status assessed (AI)</value>
+  </data>
+  <data name="SiteFields_GtAiStatus_Choice_Weak" xml:space="preserve">
+    <value>Weak</value>
+  </data>
+  <data name="SiteFields_GtAiStatus_Choice_Satisfactory" xml:space="preserve">
+    <value>Satisfactory</value>
+  </data>
+  <data name="SiteFields_GtAiStatus_Choice_Good" xml:space="preserve">
+    <value>Good</value>
+  </data>
+  <data name="SiteFields_GtAiStatus_Choice_Excellent" xml:space="preserve">
+    <value>Excellent</value>
+  </data>
+  <data name="SiteFields_GtAiRecommendations_DisplayName" xml:space="preserve">
+    <value>Recommendations (AI)</value>
+  </data>
+  <data name="SiteFields_GtAiStatusPosted_DisplayName" xml:space="preserve">
+    <value>Project status reviewed (AI)</value>
+  </data>
+  <data name="SiteFields_GtAiStatusPosted_Choice_Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="SiteFields_GtAiStatusPosted_Choice_No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="SiteFields_GtAiStatusScoreNumber_DisplayName" xml:space="preserve">
+    <value>Project status score (AI)</value>
+  </data>
+  <data name="SiteFields_GtAiChangesSincePrev_DisplayName" xml:space="preserve">
+    <value>Changes since previous (AI)</value>
+  </data>
+  <data name="SiteFields_GtAiProcessedDateTime_DisplayName" xml:space="preserve">
+    <value>Processed date/time (AI)</value>
+  </data>
 </root>

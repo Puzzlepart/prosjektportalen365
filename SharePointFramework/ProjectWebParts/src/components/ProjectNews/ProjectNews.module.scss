@@ -1,0 +1,29 @@
+.projectNews {
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 20px;
+  }
+
+  .loadingContainer {
+    margin-top: 32px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .errorContainer {
+    margin-top: 32px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .button {
+    justify-content: flex-start;
+    font-weight: var(--fontWeightRegular);
+  }
+}

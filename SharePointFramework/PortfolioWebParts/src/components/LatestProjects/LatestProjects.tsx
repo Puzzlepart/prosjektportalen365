@@ -69,20 +69,22 @@ export const LatestProjects: FC<ILatestProjectsProps> = (props) => {
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
-      <FluentProvider className={styles.root} theme={customLightTheme}>
-        <WebPartTitle title={props.title} />
-        <div className={styles.container}>
-          {loading ? <LoadingSkeleton /> : renderLatestProjects()}
-          <div hidden={projects.length <= props.rowLimit}>
-            <Button
-              appearance='subtle'
-              size='small'
-              icon={viewAll ? <ChevronUpFilled /> : <ChevronDownFilled />}
-              title={viewAll ? strings.ViewLessText : strings.ViewMoreText}
-              onClick={toggleViewAll}
-            >
-              {viewAll ? strings.ViewLessText : strings.ViewMoreText}
-            </Button>
+      <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
+        <div className={styles.root}>
+          <WebPartTitle title={props.title} />
+          <div className={styles.container}>
+            {loading ? <LoadingSkeleton /> : renderLatestProjects()}
+            <div hidden={projects.length <= props.rowLimit}>
+              <Button
+                appearance='subtle'
+                size='small'
+                icon={viewAll ? <ChevronUpFilled /> : <ChevronDownFilled />}
+                title={viewAll ? strings.ViewLessText : strings.ViewMoreText}
+                onClick={toggleViewAll}
+              >
+                {viewAll ? strings.ViewLessText : strings.ViewMoreText}
+              </Button>
+            </div>
           </div>
         </div>
       </FluentProvider>

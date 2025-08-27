@@ -109,7 +109,7 @@ export class SPDataAdapter
       columnUrls,
       programs: [],
       userCanAddViews,
-      hubSiteId: this.spfxContext.pageContext.legacyPageContext.hubSiteId,
+      hubSiteId: this.spfxContext.pageContext.legacyPageContext.hubSiteId
     } as IPortfolioOverviewConfiguration
   }
 

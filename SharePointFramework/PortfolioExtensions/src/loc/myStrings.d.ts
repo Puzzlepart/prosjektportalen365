@@ -3,6 +3,14 @@ declare interface IPortfolioExtensionsStrings {
   ActionLabelPlaceholder: string
   AdministratorLabel: string
   ApprovedSyncText: string
+  AssistantButtonLabel: string
+  AssistantDrawerTitle: string
+  AssistantIframeTitle: string
+  AssistantLoadingText: string
+  AssistantSettingsTooltip: string
+  AssistantTooltipAvailable: string
+  AssistantTooltipUnavailable: string
+  AssistantGroupName: string
   CancelLabel: string
   CloseLabel: string
   CommentLabel: string

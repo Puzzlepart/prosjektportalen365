@@ -7,7 +7,7 @@ import { ProjectPhasesContext } from '../../context'
 import { CHANGE_PHASE } from '../../reducer'
 import styles from './ProjectPhasePopover.module.scss'
 import { IProjectPhasePopoverProps } from './types'
-import { Button } from '@fluentui/react-components'
+import { Button, FluentProvider, IdPrefixProvider, useId } from '@fluentui/react-components'
 import {
   bundleIcon,
   CheckboxArrowRightFilled,
@@ -15,6 +15,7 @@ import {
   TaskListLtrFilled,
   TaskListLtrRegular
 } from '@fluentui/react-icons'
+import { customLightTheme } from 'pp365-shared-library'
 
 const Icons = {
   TaskList: bundleIcon(TaskListLtrFilled, TaskListLtrRegular),
@@ -23,62 +24,67 @@ const Icons = {
 
 export const ProjectPhasePopover: FC<IProjectPhasePopoverProps> = (props) => {
   const context = useContext(ProjectPhasesContext)
+  const fluentProviderId = useId('fp-project-phase-popover')
   if (!props.target) return null
   const { phase } = props
   const stats = Object.keys(phase.checklistData.stats)
   return (
-    <div className={styles.root}>
-      <h2 className={styles.title}>{phase.name}</h2>
-      <div className={styles.body}>
-        <h4 className={styles.subText}>{phase.subText}</h4>
-        <p>{phase.description}</p>
-        <div>
-          <div hidden={isEmpty(stats)}>
-            {stats.map((status, idx) => (
-              <div key={idx}>
-                <ReactMarkdown>
-                  {format(
-                    strings.CheckPointsStatus,
-                    phase.checklistData.stats[status],
-                    status.toLowerCase()
-                  )}
-                </ReactMarkdown>
+    <IdPrefixProvider value={fluentProviderId}>
+      <FluentProvider theme={customLightTheme}>
+        <div className={styles.root}>
+          <h2 className={styles.title}>{phase.name}</h2>
+          <div className={styles.body}>
+            <h4 className={styles.subText}>{phase.subText}</h4>
+            <p>{phase.description}</p>
+            <div>
+              <div hidden={isEmpty(stats)}>
+                {stats.map((status, idx) => (
+                  <div key={idx}>
+                    <ReactMarkdown>
+                      {format(
+                        strings.CheckPointsStatus,
+                        phase.checklistData.stats[status],
+                        status.toLowerCase()
+                      )}
+                    </ReactMarkdown>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          <div>
-            {!isEmpty(phase.checklistData.items) && (
-              <Button
-                as='a'
-                appearance='subtle'
-                icon={<Icons.TaskList />}
-                title={strings.PhaseChecklistLinkText}
-                href={phase.getFilteredPhaseChecklistViewUrl(
-                  `${context.props.webAbsoluteUrl}/${strings.PhaseChecklistViewUrl}`
+              <div>
+                {!isEmpty(phase.checklistData.items) && (
+                  <Button
+                    as='a'
+                    appearance='subtle'
+                    icon={<Icons.TaskList />}
+                    title={strings.PhaseChecklistLinkText}
+                    href={phase.getFilteredPhaseChecklistViewUrl(
+                      `${context.props.webAbsoluteUrl}/${strings.PhaseChecklistViewUrl}`
+                    )}
+                  >
+                    <span className={styles.label}>{strings.PhaseChecklistLinkText}</span>
+                  </Button>
                 )}
-              >
-                <span className={styles.label}>{strings.PhaseChecklistLinkText}</span>
-              </Button>
-            )}
-            {context.state.data.userHasChangePhasePermission && (
-              <Button
-                appearance='subtle'
-                icon={<Icons.CheckboxArrowRight />}
-                title={
-                  phase.id === context.state.data?.currentPhase?.id
-                    ? strings.Aria.CurrentPhaseText
-                    : strings.ChangePhaseText
-                }
-                onClick={() => context.dispatch(CHANGE_PHASE())}
-                disabled={phase.id === context.state.data?.currentPhase?.id}
-              >
-                <span className={styles.label}>{strings.ChangePhaseText}</span>
-              </Button>
-            )}
+                {context.state.data.userHasChangePhasePermission && (
+                  <Button
+                    appearance='subtle'
+                    icon={<Icons.CheckboxArrowRight />}
+                    title={
+                      phase.id === context.state.data?.currentPhase?.id
+                        ? strings.Aria.CurrentPhaseText
+                        : strings.ChangePhaseText
+                    }
+                    onClick={() => context.dispatch(CHANGE_PHASE())}
+                    disabled={phase.id === context.state.data?.currentPhase?.id}
+                  >
+                    <span className={styles.label}>{strings.ChangePhaseText}</span>
+                  </Button>
+                )}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </FluentProvider>
+    </IdPrefixProvider>
   )
 }
 

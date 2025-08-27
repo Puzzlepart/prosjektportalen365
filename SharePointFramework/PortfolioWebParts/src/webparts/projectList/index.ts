@@ -2,6 +2,7 @@
 import {
   IPropertyPaneConfiguration,
   IPropertyPaneDropdownOption,
+  PropertyPaneDropdown,
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
@@ -19,14 +20,41 @@ import * as strings from 'PortfolioWebPartsStrings'
 import { IProjectListProps, ProjectList, ProjectListVerticals } from 'components/ProjectList'
 import React from 'react'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
+import { PortalDataService, ProjectColumn } from 'pp365-shared-library'
 
 export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectListProps> {
-  public render(): void {
-    this.renderComponent<IProjectListProps>(ProjectList)
-  }
+  private _portalDataService: PortalDataService
+  private _columns: ProjectColumn[]
+  private _columnFieldOptions: { key: string; text: string }[]
+  private _columnUserOptions: { key: string; text: string }[]
 
   public async onInit(): Promise<void> {
     await super.onInit()
+
+    this._portalDataService = await new PortalDataService().configure({
+      spfxContext: this.context
+    })
+
+    this._columns = await this._portalDataService.getProjectColumns()
+
+    this._columnFieldOptions = this._columns.map((column) => ({
+      key: column.internalName,
+      text: column.name
+    }))
+
+    this._columnUserOptions = this._columns
+      .filter((column) => column.dataType === 'user')
+      .map((column) => ({
+        key: column.internalName,
+        text: column.name
+      }))
+  }
+
+  public render(): void {
+    this.renderComponent<IProjectListProps>(ProjectList, {
+      ...this.properties,
+      projectColumns: this._columns
+    })
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -147,20 +175,20 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   label: strings.ProjectMetadataFieldLabel,
                   options: [
                     {
-                      key: 'ProjectOwner',
-                      text: strings.ProjectOwner
+                      key: 'PrimaryField',
+                      text: strings.PrimaryFieldLabel
                     },
                     {
-                      key: 'ProjectManager',
-                      text: strings.ProjectManager
+                      key: 'SecondaryField',
+                      text: strings.SecondaryFieldLabel
                     },
                     {
-                      key: 'ProjectServiceArea',
-                      text: strings.ProjectServiceArea
+                      key: 'PrimaryUserField',
+                      text: strings.PrimaryUserFieldLabel
                     },
                     {
-                      key: 'ProjectType',
-                      text: strings.ProjectType
+                      key: 'SecondaryUserField',
+                      text: strings.SecondaryUserFieldLabel
                     },
                     {
                       key: 'ProjectPhase',
@@ -168,6 +196,38 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                     }
                   ],
                   selectedKeys: this.properties.projectMetadata ?? []
+                }),
+                PropertyPaneDropdown('primaryField', {
+                  label: strings.PrimaryFieldLabel,
+                  options: this._columnFieldOptions.map((option) => ({
+                    key: option.key,
+                    text: option.text
+                  })),
+                  selectedKey: this.properties.primaryField ?? 'GtProjectServiceArea'
+                }),
+                PropertyPaneDropdown('secondaryField', {
+                  label: strings.SecondaryFieldLabel,
+                  options: this._columnFieldOptions.map((option) => ({
+                    key: option.key,
+                    text: option.text
+                  })),
+                  selectedKey: this.properties.secondaryField ?? 'GtProjectType'
+                }),
+                PropertyPaneDropdown('primaryUserField', {
+                  label: strings.PrimaryUserFieldLabel,
+                  options: this._columnUserOptions.map((option) => ({
+                    key: option.key,
+                    text: option.text
+                  })),
+                  selectedKey: this.properties.primaryUserField ?? 'GtProjectOwner'
+                }),
+                PropertyPaneDropdown('secondaryUserField', {
+                  label: strings.SecondaryUserFieldLabel,
+                  options: this._columnUserOptions.map((option) => ({
+                    key: option.key,
+                    text: option.text
+                  })),
+                  selectedKey: this.properties.secondaryUserField ?? 'GtProjectManager'
                 }),
                 PropertyFieldCollectionData('quickLaunchMenu', {
                   key: 'quickLaunchFieldId',

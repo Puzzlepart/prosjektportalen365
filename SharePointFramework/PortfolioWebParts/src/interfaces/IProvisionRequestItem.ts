@@ -4,6 +4,7 @@ export interface IProvisionRequestItem {
   SpaceDisplayName?: string
   Description?: string
   BusinessJustification?: string
+  AdditionalInfo?: string
   SpaceType?: string
   SpaceTypeInternal?: string
   Teamify?: boolean
@@ -17,8 +18,15 @@ export interface IProvisionRequestItem {
   Guests?: any
   SensitivityLabelName?: string
   SensitivityLabelId?: string
+  SensitivityLabelLibraryName?: string
+  SensitivityLabelLibraryId?: string
   RetentionLabelName?: string
-  ExpirationDate?: Date
+  ApplyPnPTemplate?: boolean
+  PnPTemplateURL?: {
+    Description?: string
+    Url?: string
+  }
+  ExpirationDate?: any
   ReadOnlyGroup?: boolean
   InternalChannel?: boolean
   RequestedSource?: string

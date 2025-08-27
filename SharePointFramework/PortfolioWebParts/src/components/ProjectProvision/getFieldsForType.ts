@@ -1,0 +1,173 @@
+import { IProvisionField, ITypeFieldConfiguration, IFieldDisplayNameConfiguration } from './types'
+import * as strings from 'PortfolioWebPartsStrings'
+
+/**
+ * Gets field configurations based on the selected type
+ * @param fields Default field configuration
+ * @param typeFieldConfigurations Type-specific field configurations
+ * @param selectedType The currently selected type
+ * @returns Updated field configuration with type-specific display names
+ */
+export const getFieldsForType = (
+  fields: IProvisionField[],
+  typeFieldConfigurations: ITypeFieldConfiguration[],
+  selectedType: string
+): IProvisionField[] => {
+  if (!typeFieldConfigurations || !selectedType) {
+    return fields
+  }
+
+  const typeConfig = typeFieldConfigurations.find((config) => config.typeName === selectedType)
+  if (!typeConfig) {
+    return fields
+  }
+
+  let fieldConfigs: Record<string, IFieldDisplayNameConfiguration> = {}
+  let hiddenFieldNames: string[] = []
+  let requiredFieldNames: string[] = []
+
+  if (typeConfig.fieldConfigurations) {
+    if (typeof typeConfig.fieldConfigurations === 'string') {
+      try {
+        fieldConfigs = JSON.parse(typeConfig.fieldConfigurations)
+      } catch (error) {}
+    } else {
+      fieldConfigs = typeConfig.fieldConfigurations
+    }
+  }
+
+  if (typeConfig.hiddenFields) {
+    if (typeof typeConfig.hiddenFields === 'string') {
+      hiddenFieldNames = typeConfig.hiddenFields
+        .split(',')
+        .map((f) => f.trim())
+        .filter((f) => f)
+    } else if (Array.isArray(typeConfig.hiddenFields)) {
+      hiddenFieldNames = typeConfig.hiddenFields
+    }
+  }
+
+  if (typeConfig.requiredFields) {
+    if (typeof typeConfig.requiredFields === 'string') {
+      requiredFieldNames = typeConfig.requiredFields
+        .split(',')
+        .map((f) => f.trim())
+        .filter((f) => f)
+    } else if (Array.isArray(typeConfig.requiredFields)) {
+      requiredFieldNames = typeConfig.requiredFields
+    }
+  }
+
+  return fields.map((field) => {
+    const fieldConfig = fieldConfigs[field.fieldName]
+    const isHidden = hiddenFieldNames.includes(field.fieldName)
+    const isRequired = requiredFieldNames.includes(field.fieldName)
+
+    const updatedField = { ...field }
+
+    if (fieldConfig) {
+      updatedField.displayName = fieldConfig.displayName || field.displayName
+      updatedField.description = fieldConfig.description || field.description
+      updatedField.placeholder = fieldConfig.placeholder || field.placeholder
+    }
+
+    if (isHidden) {
+      updatedField.hidden = true
+    }
+
+    if (isRequired) {
+      updatedField.required = true
+    }
+
+    return updatedField
+  })
+}
+
+/**
+ * Gets default type field configurations
+ */
+export const getDefaultTypeFieldConfigurations = (): ITypeFieldConfiguration[] => {
+  return [
+    {
+      typeName: 'Prosjektområde',
+      displayName: 'Prosjektområde',
+      hiddenFields: 'additionalInfo',
+      requiredFields: 'type, name, description, owner'
+    },
+    {
+      typeName: 'Viva Engage Community',
+      displayName: 'Viva Engage Community',
+      hiddenFields: 'teamify, teamTemplate, isConfidential, externalSharing, image',
+      requiredFields: 'type, name, description, owner',
+      fieldConfigurations: {
+        name: {
+          displayName: strings.Provision.CommunityNameFieldLabel,
+          description: strings.Provision.CommunityNameFieldDescription,
+          placeholder: strings.Provision.CommunityNameFieldPlaceholder
+        },
+        description: {
+          displayName: strings.Provision.CommunityDescriptionFieldLabel,
+          description: strings.Provision.CommunityDescriptionFieldDescription,
+          placeholder: strings.Provision.CommunityDescriptionFieldPlaceholder
+        },
+        justification: {
+          displayName: strings.Provision.CommunityJustificationFieldLabel,
+          description: strings.Provision.CommunityJustificationFieldDescription,
+          placeholder: strings.Provision.CommunityJustificationFieldPlaceholder
+        },
+        owner: {
+          displayName: strings.Provision.CommunityOwnerFieldLabel,
+          description: strings.Provision.CommunityOwnerFieldDescription,
+          placeholder: strings.Provision.CommunityOwnerFieldPlaceholder
+        },
+        member: {
+          displayName: strings.Provision.CommunityMemberFieldLabel,
+          description: strings.Provision.CommunityMemberFieldDescription,
+          placeholder: strings.Provision.CommunityMemberFieldPlaceholder
+        },
+        privacy: {
+          displayName: strings.Provision.CommunityPrivacyFieldLabel,
+          description: strings.Provision.CommunityPrivacyFieldDescription,
+          placeholder: strings.Provision.CommunityPrivacyFieldPlaceholder
+        }
+      }
+    },
+    {
+      typeName: 'Microsoft Teams Team',
+      displayName: 'Microsoft Teams Team',
+      requiredFields: 'type, name, description, owner',
+      fieldConfigurations: {
+        name: {
+          displayName: strings.Provision.TeamNameFieldLabel,
+          description: strings.Provision.TeamNameFieldDescription,
+          placeholder: strings.Provision.TeamNameFieldPlaceholder
+        },
+        description: {
+          displayName: strings.Provision.TeamDescriptionFieldLabel,
+          description: strings.Provision.TeamDescriptionFieldDescription,
+          placeholder: strings.Provision.TeamDescriptionFieldPlaceholder
+        },
+        owner: {
+          displayName: strings.Provision.TeamOwnerFieldLabel,
+          description: strings.Provision.TeamOwnerFieldDescription,
+          placeholder: strings.Provision.TeamOwnerFieldPlaceholder
+        },
+        member: {
+          displayName: strings.Provision.TeamMemberFieldLabel,
+          description: strings.Provision.TeamMemberFieldDescription,
+          placeholder: strings.Provision.TeamMemberFieldPlaceholder
+        },
+        justification: {
+          displayName: strings.Provision.TeamJustificationFieldLabel,
+          description: strings.Provision.TeamJustificationFieldDescription,
+          placeholder: strings.Provision.TeamJustificationFieldPlaceholder
+        },
+        privacy: {
+          displayName: strings.Provision.TeamPrivacyFieldLabel,
+          description: strings.Provision.TeamPrivacyFieldDescription,
+          placeholder: strings.Provision.TeamPrivacyFieldPlaceholder
+        }
+      }
+    }
+  ]
+}

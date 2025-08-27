@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 
 import React, { FC, useContext, useState } from 'react'
+import * as strings from 'PortfolioExtensionsStrings'
 import { FooterContext } from '../context'
 import {
   OverlayDrawer,
@@ -41,11 +42,11 @@ export const Assistant: FC = () => {
           <DrawerHeader>
             <DrawerHeaderNavigation>
               <Toolbar className={styles.toolbar}>
-                <DrawerHeaderTitle>Prosjektportalen assistent</DrawerHeaderTitle>
+                <DrawerHeaderTitle>{strings.AssistantDrawerTitle}</DrawerHeaderTitle>
                 <ToolbarGroup>
                   <ToolbarButton
                     appearance='subtle'
-                    title='Innstillinger'
+                    title={strings.AssistantSettingsTooltip}
                     disabled={!context.props.pageContext.legacyPageContext.isSiteAdmin}
                     icon={getFluentIcon('Settings')}
                     onClick={() =>
@@ -56,7 +57,7 @@ export const Assistant: FC = () => {
                     }
                   />
                   <ToolbarButton
-                    title='Lukk'
+                    title={strings.CloseLabel}
                     appearance='subtle'
                     icon={getFluentIcon('Dismiss')}
                     onClick={() => setOpen(false)}
@@ -69,14 +70,14 @@ export const Assistant: FC = () => {
             {loading && (
               <Spinner
                 size='extra-tiny'
-                label='Laster inn assistenten...'
+                label={strings.AssistantLoadingText}
                 style={{ padding: 10, minHeight: '20px' }}
               />
             )}
             <iframe
               src={`https://pp365-ai-d2dge4fqc2bhbba9.norwayeast-01.azurewebsites.net?source=${context.props.pageContext.web.absoluteUrl}`}
               style={{ display: loading ? 'none' : 'block', border: 'none' }}
-              title='Assistent for Prosjektportalen 365'
+              title={strings.AssistantIframeTitle}
               width='100%'
               height='100%'
               onLoad={() => setLoading(false)}
@@ -88,8 +89,8 @@ export const Assistant: FC = () => {
           withArrow
           content={
             isUnavailable
-              ? 'Assistenten er ikke tilgjengelig.'
-              : 'Åpne assistenten for å ta i bruk kunstig intelligens i Prosjektportalen 365.'
+              ? strings.AssistantTooltipUnavailable
+              : strings.AssistantTooltipAvailable
           }
         >
           <Button
@@ -98,7 +99,7 @@ export const Assistant: FC = () => {
             icon={isUnavailable ? getFluentIcon('Bot') : getFluentIcon('BotSparkle')}
             onClick={() => setOpen(!open)}
           >
-            Assistent
+            {strings.AssistantButtonLabel}
           </Button>
         </Tooltip>
       </FluentProvider>

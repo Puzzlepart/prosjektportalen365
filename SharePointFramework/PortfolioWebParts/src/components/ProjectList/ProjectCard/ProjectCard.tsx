@@ -13,7 +13,7 @@ import { useProjectCard } from './useProjectCard'
 export const ProjectCard: FC = (props) => {
   const context = useContext(ProjectCardContext)
   const { isDataLoaded, setIsImageLoaded } = useProjectCard()
-  const phase = context.project.phase ? context.project.phase : strings.NotSet
+  const phase = context.project?.phase ? context.project.phase : strings.NotSet
 
   return (
     <Shimmer

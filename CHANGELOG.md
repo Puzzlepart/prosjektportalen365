@@ -14,6 +14,30 @@ Sjekk ut [release notes](./releasenotes/1.11.0.md) for høydepunkter og mer deta
 
 ### Feilrettinger
 
+## 1.11.1 - TBA
+
+### Ny funksjonalitet
+
+- Ny webdel `Prosjektnyheter` for publisering og visning av prosjektnyheter. Webdelen viser nyheter som er publisert fra prosjektet, med mulighet til å opprette nyhetsartikler.
+  - Som følge av den nye løsningen følger det også med en Prosjektnyhet-sidemal.
+- Ny webdel `Prosjektkort` for visning av prosjektinformasjon som et kort (lik kortvisningen på forsiden av porteføljen).
+
+### Forbedringer
+
+- Muligheter for å angi følsomhets- og oppbevaringsetiketter, områdebilde og mye mer, samt styring av visningsnavn, beskrivelse og hva som er påkrevd i `Bestill område`-skjema [#1623](https://github.com/Puzzlepart/prosjektportalen365/pull/1623)
+- Lagt til mulighet for å skjule spesifikke kolonner på et globalt nivå basert på mal (Prosjektkolonner) [#1624](https://github.com/Puzzlepart/prosjektportalen365/issues/1624)
+- Prosjekttidslinje senterer seg nå rundt prosjektets tidsforløp (startdato - sluttdato) [#1625](https://github.com/Puzzlepart/prosjektportalen365/issues/1625)
+- Muligheter for å tilpasse informasjonen i prosjektkortet på forsiden av porteføljen, inkludert valg av hvilke felt som skal vises og i hvilken rekkefølge. [#1548](https://github.com/Puzzlepart/prosjektportalen365/issues/1548)
+- Mulighet for å tilgangsstyre Prosjektportalen Assistent, slik at den ikke er tilgjengelig for alle brukere. [#1632](https://github.com/Puzzlepart/prosjektportalen365/issues/1632)
+- Mulighet for å tilgangsstyre synligheten av `Bestill område` knappen for å benytte seg av Bestillingsportalen, slik at den ikke er tilgjengelig for alle brukere.
+- Flere nye felter på Prosjektstatus-listen for å tilrettelegge for KI-behandling av Prosjektstatus
+
+### Feilrettinger
+
+- Eksport av datofelter fra aggregerte oversikter viser nå Excel-vennlig datoformat [#1630](https://github.com/Puzzlepart/prosjektportalen365/issues/1630)
+
+---
+
 ## 1.11.0 - 26.03.2025
 
 ### Ny funksjonalitet
@@ -47,6 +71,8 @@ Sjekk ut [release notes](./releasenotes/1.11.0.md) for høydepunkter og mer deta
 - Rettet et problem hvor menyer i porteføljeoversikt og aggregerte oversikter havnet utenfor skjermen [#1540](https://github.com/Puzzlepart/prosjektportalen365/issues/1540)
 - Dersom det var flere enn 16 sjekkpunkter så havnet disse utenfor "Endre til fase..."-dialogen. [#1607](https://github.com/Puzzlepart/prosjektportalen365/issues/1607)
 - Rettet et problem hvor programvisninger forble aktive selvom visningsvelgeren ble skrudd av [#1566](https://github.com/Puzzlepart/prosjektportalen365/issues/1566)
+
+---
 
 ## 1.10.0 - 23.09.2024
 
@@ -481,7 +507,7 @@ I denne versjonen er det gjort flere endringer på det visuelle uttrykket til Pr
 
 ## 1.3.0 - 22.10.2021
 
-### Ny funksjonalitet 
+### Ny funksjonalitet
 
 - Added a new project webpart 'Prosjekttidslinje' for showcasing projects and items for the current project on a timeline [#497](https://github.com/Puzzlepart/prosjektportalen365/issues/497)
 - Added read-only project cards to project list on the frontpage [#498](https://github.com/Puzzlepart/prosjektportalen365/issues/498)

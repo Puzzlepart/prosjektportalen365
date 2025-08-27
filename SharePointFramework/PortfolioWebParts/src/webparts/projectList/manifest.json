@@ -3,7 +3,7 @@
   "id": "54fbeb7d-e463-4dcc-8873-50a3ab2f0f68",
   "alias": "ProjectListWebPart",
   "componentType": "WebPart",
-  "version": "1.11.0",
+  "version": "1.11.1",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "hiddenFromToolbox": true,
@@ -25,11 +25,15 @@
       "officeFabricIconFontName": "ViewListGroup",
       "properties": {
         "showProjectLogo": true,
+        "primaryField": "GtProjectServiceAreaText",
+        "secondaryField": "GtProjectTypeText",
+        "primaryUserField": "GtProjectOwner",
+        "secondaryUserField": "GtProjectManager",
         "projectMetadata": [
-          "ProjectOwner",
-          "ProjectManager",
-          "ProjectServiceArea",
-          "ProjectType",
+          "PrimaryField",
+          "SecondaryField",
+          "PrimaryUserField",
+          "SecondaryUserField",
           "ProjectPhase"
         ],
         "sortBy": "Title",

@@ -5,6 +5,7 @@ import styles from './ProjectCardHeader.module.scss'
 import { useProjectCardHeader } from './useProjectCardHeader'
 import { IProjectCardHeaderProps } from './types'
 import { ProjectLogo } from 'pp365-shared-library'
+import strings from 'PortfolioWebPartsStrings'
 
 export const ProjectCardHeader: FC<IProjectCardHeaderProps> = (props) => {
   const context = useContext(ProjectCardContext)
@@ -25,17 +26,17 @@ export const ProjectCardHeader: FC<IProjectCardHeaderProps> = (props) => {
       <CardPreview className={styles.preview}>
         {showCustomImage && (
           <div {...headerProps}>
-            <Link href={context.project.url} target='_blank' className={styles.link}>
+            <Link href={context.project?.url || '#'} target='_blank' className={styles.link}>
               <Text
                 className={styles.projectTitle}
-                title={context.project.title}
+                title={context.project?.title || strings.ProjectNotFound}
                 weight='semibold'
                 wrap={false}
                 size={400}
                 truncate
                 block
               >
-                {context.project.title}
+                {context.project?.title || strings.ProjectNotFound}
               </Text>
             </Link>
           </div>
@@ -43,7 +44,7 @@ export const ProjectCardHeader: FC<IProjectCardHeaderProps> = (props) => {
         {context.showProjectLogo && (
           <div className={styles.logo}>
             <Link
-              href={context.project.url}
+              href={context.project?.url || '#'}
               target='_blank'
               className={styles.link}
               style={{
@@ -53,8 +54,8 @@ export const ProjectCardHeader: FC<IProjectCardHeaderProps> = (props) => {
               }}
             >
               <ProjectLogo
-                title={context.project.title}
-                url={context.project.url}
+                title={context.project?.title || strings.ProjectNotFound}
+                url={context.project?.url || '#'}
                 renderMode='card'
                 onImageLoad={(value) => {
                   props.onImageLoad

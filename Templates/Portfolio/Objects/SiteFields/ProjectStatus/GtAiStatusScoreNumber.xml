@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <Field Type="Number" DisplayName="{resource:SiteFields_GtAiStatusScoreNumber_DisplayName}" Hidden="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE" ShowInDispForm="TRUE" ID="{7453259d-7960-41f2-944f-fbea5830356d}" StaticName="GtAiStatusScoreNumber" Name="GtAiStatusScoreNumber" />
+</Elements>

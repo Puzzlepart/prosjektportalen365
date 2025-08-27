@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <Field Type="DateTime" DisplayName="{resource:SiteFields_GtAiProcessedDateTime_DisplayName}" Hidden="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE" ShowInDispForm="TRUE" ID="{a8f2c5d7-4e8b-4c9a-b1f3-7d6e8c9f2a4b}" StaticName="GtAiProcessedDateTime" Name="GtAiProcessedDateTime" Format="DateTime" />
+</Elements>

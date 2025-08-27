@@ -135,8 +135,7 @@ export default class IdeaModuleWebPart extends BasePortfolioWebPart<IIdeaModuleP
                   description: strings.DataSourceCategoryDescription
                 }),
                 PropertyPaneTextField('dataSource', {
-                  label: strings.DataSourceLabel,
-                  description: 'strings.DataSourceDescription'
+                  label: strings.DataSourceLabel
                 }),
                 PropertyPaneDropdown('dataSourceLevel', {
                   label: strings.DataSourceLevelLabel,

@@ -1,25 +1,25 @@
-import React, { FC, useContext } from 'react'
+import React, { FC } from 'react'
 import styles from './ProjectCardContent.module.scss'
 import { GlobeLocationFilled, TagMultipleFilled } from '@fluentui/react-icons'
-import { ProjectCardContext } from '../context'
 import { OverflowTagMenu } from 'pp365-shared-library'
+import { useProjectCardContent } from './useProjectCardContent'
 
 export const ProjectCardContent: FC = () => {
-  const context = useContext(ProjectCardContext)
+  const { primaryField, secondaryField, shouldDisplay } = useProjectCardContent()
 
   return (
     <div className={styles.content}>
       <OverflowTagMenu
-        text='Tjenesteområde'
-        tags={context.project.serviceArea}
+        text={primaryField?.text}
+        tags={primaryField?.tags}
         icon={GlobeLocationFilled}
-        hidden={!context.shouldDisplay('ProjectServiceArea')}
+        hidden={!shouldDisplay('PrimaryField') || !primaryField?.tags}
       />
       <OverflowTagMenu
-        text='Prosjekttype'
-        tags={context.project.type}
+        text={secondaryField?.text}
+        tags={secondaryField?.tags}
         icon={TagMultipleFilled}
-        hidden={!context.shouldDisplay('ProjectType')}
+        hidden={!shouldDisplay('SecondaryField') || !secondaryField?.tags}
       />
     </div>
   )

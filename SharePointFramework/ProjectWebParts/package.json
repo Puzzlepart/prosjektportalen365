@@ -1,6 +1,6 @@
 {
   "name": "pp365-projectwebparts",
-  "version": "1.11.0",
+  "version": "1.11.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
@@ -40,7 +40,7 @@
     "get-value": "3.0.1",
     "interactjs": "1.6.2",
     "msgraph-helper": "0.8.3",
-    "pp365-shared-library": "1.11.0",
+    "pp365-shared-library": "1.11.1",
     "pzl-spfx-components": "0.0.11",
     "react": "17.0.1",
     "react-dom": "17.0.1",
@@ -65,7 +65,8 @@
     "smoothscroll-polyfill": "~0.4.4",
     "react-gauge-component": "~1.2.61",
     "shade-blend-color": "~1.0.0",
-    "colors-convert": "~1.4.1"
+    "colors-convert": "~1.4.1",
+    "@microsoft/sp-http": "1.17.4"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.17.4",

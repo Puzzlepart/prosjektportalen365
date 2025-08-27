@@ -49,6 +49,14 @@
           "manifest": "./src/webparts/projectTimeline/manifest.json"
         }
       ]
+    },
+    "project-news-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/projectNews/index.js",
+          "manifest": "./src/webparts/projectNews/manifest.json"
+        }
+      ]
     }
   },
   "externals": {},

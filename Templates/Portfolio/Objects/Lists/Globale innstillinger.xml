@@ -127,6 +127,30 @@
       <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_Assistant}</pnp:DataValue>
     </pnp:DataRow>
+    <pnp:DataRow>
+        <pnp:DataValue FieldName="GtSettingsId">{caa4cd51-956f-4387-8971-24e395c434ad}</pnp:DataValue>
+        <pnp:DataValue FieldName="Title">Krev tilgang for å bruke assistenten</pnp:DataValue> // TODO: use resources
+        <pnp:DataValue FieldName="GtSettingsKey">RequireAssistantAccess</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsValue">0</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsEnabled">False</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsCategory">Assistent</pnp:DataValue> // TODO: use resources
+    </pnp:DataRow>
+    <pnp:DataRow>
+        <pnp:DataValue FieldName="GtSettingsId">{f3b39250-7373-43c0-82a8-26530198dd35}</pnp:DataValue>
+        <pnp:DataValue FieldName="Title">URL til område for nyhetspublisering</pnp:DataValue> // TODO: use resources
+        <pnp:DataValue FieldName="GtSettingsKey">ProjectNewsHubUrl</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsValue">{hosturl}{site}</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsCategory">Generelt</pnp:DataValue> // TODO: use resources
+    </pnp:DataRow>
+    <pnp:DataRow>
+        <pnp:DataValue FieldName="GtSettingsId">{9caa9a60-bcbf-4f7a-bffa-9896d5da94cc}</pnp:DataValue>
+        <pnp:DataValue FieldName="Title">Mappe for publisering av nyheter</pnp:DataValue> // TODO: use resources
+        <pnp:DataValue FieldName="GtSettingsKey">ProjectNewsFolderName</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsValue">Prosjektnyheter</pnp:DataValue> // TODO: use resources
+        <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsCategory">Generelt</pnp:DataValue> // TODO: use resources
+    </pnp:DataRow>
   </pnp:DataRows>
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>

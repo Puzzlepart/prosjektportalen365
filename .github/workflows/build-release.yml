@@ -79,7 +79,7 @@ jobs:
     concurrency:
       group: ${{ github.ref }}_build_kurs_channel_release_ci
       cancel-in-progress: true
-    if: ${{ always() || contains(github.event.head_commit.message, '[build-kurs]') }}
+    if: ${{ contains(github.event.head_commit.message, '[build-kurs]') }}
     steps:
       - uses: actions/checkout@v4
         with:

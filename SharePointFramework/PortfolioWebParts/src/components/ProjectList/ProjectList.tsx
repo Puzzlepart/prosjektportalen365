@@ -24,80 +24,89 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
 
   if (context.state.projects.length === 0) {
     return (
-      <FluentProvider theme={customLightTheme}>
-        <section className={styles.projectList}>
-          <UserMessage title={strings.NoProjectsFoundTitle} text={strings.NoProjectsFoundMessage} />
-        </section>
-      </FluentProvider>
+      <IdPrefixProvider value={context.fluentProviderId}>
+        <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
+          <section className={styles.projectList}>
+            <UserMessage
+              title={strings.NoProjectsFoundTitle}
+              text={strings.NoProjectsFoundMessage}
+            />
+          </section>
+        </FluentProvider>
+      </IdPrefixProvider>
     )
   }
 
   if (context.state.error) {
     return (
-      <FluentProvider theme={customLightTheme}>
-        <section className={styles.projectList}>
-          <UserMessage
-            title={strings.ErrorFetchingProjectsTitle}
-            text={context.state.error}
-            intent='error'
-          />
-        </section>
-      </FluentProvider>
+      <IdPrefixProvider value={context.fluentProviderId}>
+        <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
+          <section className={styles.projectList}>
+            <UserMessage
+              title={strings.ErrorFetchingProjectsTitle}
+              text={context.state.error}
+              intent='error'
+            />
+          </section>
+        </FluentProvider>
+      </IdPrefixProvider>
     )
   }
 
   return (
     <ProjectListContext.Provider value={context}>
       <IdPrefixProvider value={context.fluentProviderId}>
-        <FluentProvider className={styles.projectList} theme={customLightTheme}>
-          <div className={styles.tabs}>
-            <TabList
-              onTabSelect={(_, data: SelectTabData) =>
-                context.setState({
-                  selectedVertical: find(context.verticals, (v) => v.key === data.value)
-                })
-              }
-              selectedValue={context.state.selectedVertical.key}
-            >
-              {context.state.isDataLoaded &&
-                context.verticals
-                  .filter((vertical) => !vertical.isHidden || !vertical.isHidden(context.state))
-                  .map((vertical) => {
-                    const Icon = vertical.icon
-                    return (
-                      <Tab key={vertical.key} value={vertical.value} icon={<Icon />}>
-                        {vertical.text}
-                      </Tab>
-                    )
-                  })}
-            </TabList>
-          </div>
-          <Commands />
-          {context.state.isDataLoaded && isEmpty(context.projects) && (
-            <div className={styles.emptyMessage}>
-              <UserMessage
-                title={strings.NoProjectsFoundTitle}
-                text={strings.ProjectListEmptyMessage}
-              />
+        <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
+          <div className={styles.projectList}>
+            <div className={styles.tabs}>
+              <TabList
+                onTabSelect={(_, data: SelectTabData) =>
+                  context.setState({
+                    selectedVertical: find(context.verticals, (v) => v.key === data.value)
+                  })
+                }
+                selectedValue={context.state.selectedVertical.key}
+              >
+                {context.state.isDataLoaded &&
+                  context.verticals
+                    .filter((vertical) => !vertical.isHidden || !vertical.isHidden(context.state))
+                    .map((vertical) => {
+                      const Icon = vertical.icon
+                      return (
+                        <Tab key={vertical.key} value={vertical.value} icon={<Icon />}>
+                          {vertical.text}
+                        </Tab>
+                      )
+                    })}
+              </TabList>
             </div>
-          )}
-          <div className={styles.projects}>{renderProjects(context.projects)}</div>
-          <ProjectInformationPanel
-            {...SiteContext.create(
-              props.spfxContext,
-              context.state.showProjectInfo?.siteId,
-              context.state.showProjectInfo?.url
+            <Commands />
+            {context.state.isDataLoaded && isEmpty(context.projects) && (
+              <div className={styles.emptyMessage}>
+                <UserMessage
+                  title={strings.NoProjectsFoundTitle}
+                  text={strings.ProjectListEmptyMessage}
+                />
+              </div>
             )}
-            page='Portfolio'
-            hidden={!context.state.showProjectInfo}
-            hideAllActions={true}
-            panelProps={{
-              headerText: context.state.showProjectInfo?.title,
-              onDismiss: () => {
-                context.setState({ showProjectInfo: null })
-              }
-            }}
-          />
+            <div className={styles.projects}>{renderProjects(context.projects)}</div>
+            <ProjectInformationPanel
+              {...SiteContext.create(
+                props.spfxContext,
+                context.state.showProjectInfo?.siteId,
+                context.state.showProjectInfo?.url
+              )}
+              page='Portfolio'
+              hidden={!context.state.showProjectInfo}
+              hideAllActions={true}
+              panelProps={{
+                headerText: context.state.showProjectInfo?.title,
+                onDismiss: () => {
+                  context.setState({ showProjectInfo: null })
+                }
+              }}
+            />
+          </div>
         </FluentProvider>
       </IdPrefixProvider>
     </ProjectListContext.Provider>
@@ -115,11 +124,15 @@ ProjectList.defaultProps = {
   hideVerticals: [],
   useDynamicColors: true,
   showProjectLogo: true,
+  primaryField: 'GtProjectServiceAreaText',
+  secondaryField: 'GtProjectTypeText',
+  primaryUserField: 'GtProjectOwner',
+  secondaryUserField: 'GtProjectManager',
   projectMetadata: [
-    'ProjectOwner',
-    'ProjectManager',
-    'ProjectServiceArea',
-    'ProjectType',
+    'PrimaryField',
+    'SecondaryField',
+    'PrimaryUserField',
+    'SecondaryUserField',
     'ProjectPhase'
   ],
   quickLaunchMenu: [

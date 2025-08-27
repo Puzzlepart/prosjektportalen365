@@ -105,6 +105,9 @@
                                         },
                                         "IdeaModuleWebPart": {
                                             "$ref": "#/definitions/guid"
+                                        },
+                                        "ProjectCardWebPart": {
+                                            "$ref": "#/definitions/guid"
                                         }
                                     },
                                     "required": [
@@ -116,7 +119,8 @@
                                         "PortfolioTimelineWebPart",
                                         "ResourceAllocationWebPart",
                                         "ProjectProvisionWebPart",
-                                        "IdeaModuleWebPart"
+                                        "IdeaModuleWebPart",
+                                        "ProjectCardWebPart"
                                     ]
                                 }
                             },
@@ -241,6 +245,9 @@
                                         },
                                         "RiskMatrixWebPart": {
                                             "$ref": "#/definitions/guid"
+                                        },
+                                        "ProjectNewsWebPart": {
+                                            "$ref": "#/definitions/guid"
                                         }
                                     },
                                     "required": [
@@ -249,7 +256,8 @@
                                         "ProjectPhasesWebPart",
                                         "ProjectStatusWebPart",
                                         "ProjectTimelineWebPart",
-                                        "RiskMatrixWebPart"
+                                        "RiskMatrixWebPart",
+                                        "ProjectNewsWebPart"
                                     ]
                                 }
                             },

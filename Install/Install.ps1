@@ -104,7 +104,7 @@ else {
         Write-Host "[INFO] Loaded module PnP.PowerShell v$($PnPVersion) from bundle"
     }
     else {
-        Write-Host "[INFO] Loaded module PnP.PowerShell v$((Get-Command Connect-PnPOnline).Version) from your environment"
+        Write-Host "[INFO] Loaded PnP.PowerShell v$((Get-Command Connect-PnPOnline).Version) from your environment"
     }
 }
 
@@ -518,9 +518,6 @@ else {
 Write-Host "[INFO] Consider running .\Install\Scripts\UpgradeAllSitesToLatest.ps1 to upgrade all sites to the latest version of Prosjektportalen 365."
 Write-Host "[INFO] This is required after upgrading between minor versions, e.g. from 1.10.x to 1.11.x."
 #endregion
-
-## Turning off PnP trace logging
-Set-PnPTraceLog -Off
 
 #region Log installation and send pingback to Azure Function
 Write-Host "[INFO] Logging installation entry" 

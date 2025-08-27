@@ -14,7 +14,7 @@ const PanelRight = bundleIcon(PanelRightContractFilled, PanelRightContractRegula
 
 export const ProjectCardFooter: FC = () => {
   const context = useContext(ProjectCardContext)
-  const { owner, manager, ProjectTypeIcon, projectTypeText } = useProjectCardFooter()
+  const { primaryUser, secondaryUser, ProjectTypeIcon, projectTypeText } = useProjectCardFooter()
 
   return (
     <CardFooter
@@ -31,30 +31,30 @@ export const ProjectCardFooter: FC = () => {
       ))}
     >
       <div className={styles.persona}>
-        <div hidden={!context.shouldDisplay('ProjectOwner')}>
+        <div hidden={!context.shouldDisplay('PrimaryUserField')}>
           <Tooltip
             content={
               <>
-                <strong>{owner.role}</strong>: {owner.name || strings.NotSet}
+                <strong>{primaryUser.role}</strong>: {primaryUser.name || strings.NotSet}
               </>
             }
             relationship='description'
             withArrow
           >
-            <Avatar className={styles.avatar} {...owner} />
+            <Avatar className={styles.avatar} {...primaryUser} />
           </Tooltip>
         </div>
-        <div hidden={!context.shouldDisplay('ProjectManager')}>
+        <div hidden={!context.shouldDisplay('SecondaryUserField')}>
           <Tooltip
             content={
               <>
-                <strong>{manager.role}</strong>: {manager.name || strings.NotSet}
+                <strong>{secondaryUser.role}</strong>: {secondaryUser.name || strings.NotSet}
               </>
             }
             relationship='description'
             withArrow
           >
-            <Avatar className={styles.avatar} {...manager} />
+            <Avatar className={styles.avatar} {...secondaryUser} />
           </Tooltip>
         </div>
       </div>
@@ -75,7 +75,12 @@ export const ProjectCardFooter: FC = () => {
             title={context.project.template}
           />
         </Tooltip>
-        <ProjectMenu project={context.project} context={context} appearance='subtle' />
+        <ProjectMenu
+          project={context.project}
+          context={context}
+          appearance='subtle'
+          disabled={!context.project || !context.project.url || context.project.url === '#'}
+        />
       </div>
     </CardFooter>
   )

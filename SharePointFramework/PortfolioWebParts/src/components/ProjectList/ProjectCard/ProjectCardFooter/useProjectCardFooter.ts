@@ -28,15 +28,15 @@ export function useProjectCardFooter() {
     name: strings.NotSet,
     color: 'brand'
   }
-  const ownerPersonaProps: AvatarProps = {
+  const primaryUserPersonaProps: AvatarProps = {
     ...defaultPersonaProps,
-    ...context.project.owner,
-    role: strings.ProjectOwner
+    ...(context.project?.owner || {}),
+    role: context.project?.data?.[context.primaryUserField]
   }
-  const managerPersonaProps: AvatarProps = {
+  const secondaryUserPersonaProps: AvatarProps = {
     ...defaultPersonaProps,
-    ...context.project.manager,
-    role: strings.ProjectManager
+    ...(context.project?.manager || {}),
+    role: context.project?.data?.[context.secondaryUserField]
   }
   let ProjectTypeIcon = bundleIcon(BoxFilled, BoxRegular)
   let projectTypeText = context.project.template
@@ -69,9 +69,9 @@ export function useProjectCardFooter() {
       break
   }
   return {
-    phase: context.project.phase,
-    owner: ownerPersonaProps,
-    manager: managerPersonaProps,
+    phase: context.project?.phase,
+    primaryUser: primaryUserPersonaProps,
+    secondaryUser: secondaryUserPersonaProps,
     ProjectTypeIcon,
     projectTypeText,
   }

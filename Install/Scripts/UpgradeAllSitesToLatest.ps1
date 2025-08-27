@@ -86,7 +86,7 @@ function UpgradeSite($Url) {
 Write-Host "This script will update all existing sites belonging to the PP installation $Url."
 Write-Host "This requires you to have the SharePoint administrator role"
 
-Set-PnPTraceLog -Off
+# Set-PnPTraceLog -Off
 $LogFilePath = "$PSScriptRoot/UpgradeSites_Log-$((Get-Date).ToString('yyyy-MM-dd-HH-mm')).txt"
 Start-Transcript -Path $LogFilePath
 

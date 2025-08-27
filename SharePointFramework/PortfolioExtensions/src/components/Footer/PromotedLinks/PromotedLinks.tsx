@@ -9,14 +9,20 @@ import {
   MenuList,
   MenuPopover,
   MenuTrigger,
-  Tooltip
+  Tooltip,
+  FluentProvider,
+  IdPrefixProvider,
+  useId
 } from '@fluentui/react-components'
-import { getFluentIcon } from 'pp365-shared-library'
+import { getFluentIcon, customLightTheme } from 'pp365-shared-library'
 import resource from 'SharedResources'
 
 export const PromotedLinks: FC = () => {
   const context = useContext(FooterContext)
+  const fluentProviderId = useId('fp-footer-promoted-links')
   return (
+    <IdPrefixProvider value={fluentProviderId}>
+      <FluentProvider theme={customLightTheme}>
     <Menu>
       <MenuTrigger disableButtonEnhancement>
         <Tooltip
@@ -59,5 +65,7 @@ export const PromotedLinks: FC = () => {
         </MenuList>
       </MenuPopover>
     </Menu>
+      </FluentProvider>
+    </IdPrefixProvider>
   )
 }

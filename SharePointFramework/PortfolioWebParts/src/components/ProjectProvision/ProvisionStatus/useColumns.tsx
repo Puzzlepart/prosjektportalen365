@@ -16,16 +16,7 @@ import {
   ToastBody
 } from '@fluentui/react-components'
 import React, { useContext } from 'react'
-import {
-  SparkleCircleRegular,
-  LightbulbCircleRegular,
-  CheckmarkCircleRegular,
-  ErrorCircleRegular,
-  PeopleTeamRegular,
-  ArrowClockwiseDashesRegular,
-  ApprovalsAppRegular,
-  HourglassHalfRegular
-} from '@fluentui/react-icons'
+
 import styles from './ProvisionStatus.module.scss'
 import { ProjectProvisionContext } from '../context'
 import { formatDate, getFluentIcon } from 'pp365-shared-library'
@@ -53,8 +44,12 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestItem>[] =>
             {request.status === Status.SpaceCreated ? (
               <Link
                 href={request.siteUrl}
-                onClick={() => {
+                onClick={(e) => {
                   context.setState({ showProvisionStatus: false })
+                  e.preventDefault()
+                  setTimeout(() => {
+                    window.open(request.siteUrl, '_blank')
+                  }, 100)
                 }}
               >
                 <Text truncate wrap={true}>
@@ -101,52 +96,52 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestItem>[] =>
 
         switch (request.status) {
           case Status.Submitted:
-            statusIcon = <SparkleCircleRegular />
+            statusIcon = getFluentIcon('SparkleCircle')
             statusColor = tokens.colorStatusWarningBackground2
             statusText = strings.Provision.SubmittedLabel
             break
           case Status.Approved:
-            statusIcon = <ApprovalsAppRegular />
+            statusIcon = getFluentIcon('ApprovalsApp')
             statusColor = tokens.colorStatusSuccessBackground2
             statusText = strings.Provision.ApprovedLabel
             break
           case Status.Rejected:
-            statusIcon = <ErrorCircleRegular />
+            statusIcon = getFluentIcon('ErrorCircle')
             statusColor = tokens.colorStatusDangerBackground2
             statusText = strings.Provision.RejectedLabel
             break
           case Status.PendingApproval:
-            statusIcon = <ArrowClockwiseDashesRegular />
+            statusIcon = getFluentIcon('ArrowClockwiseDashes')
             statusColor = tokens.colorStatusWarningBackground2
             statusText = strings.Provision.PendingApprovalLabel
             break
           case Status.SpaceCreationFailed:
-            statusIcon = <ErrorCircleRegular />
+            statusIcon = getFluentIcon('ErrorCircle')
             statusColor = tokens.colorStatusDangerBackground2
             statusText = strings.Provision.SpaceCreationFailedLabel
             break
           case Status.SpaceAlreadyExists:
-            statusIcon = <ErrorCircleRegular />
+            statusIcon = getFluentIcon('ErrorCircle')
             statusColor = tokens.colorStatusDangerBackground2
             statusText = strings.Provision.SpaceAlreadyExistsLabel
             break
           case Status.TeamRequested:
-            statusIcon = <PeopleTeamRegular />
+            statusIcon = getFluentIcon('PeopleTeam')
             statusColor = tokens.colorStatusWarningBackground2
             statusText = strings.Provision.TeamRequestedLabel
             break
           case Status.SpaceCreation:
-            statusIcon = <HourglassHalfRegular />
+            statusIcon = getFluentIcon('HourglassHalf')
             statusColor = tokens.colorStatusWarningBackground2
             statusText = strings.Provision.SpaceCreationLabel
             break
           case Status.SpaceCreated:
-            statusIcon = <CheckmarkCircleRegular />
+            statusIcon = getFluentIcon('CheckmarkCircle')
             statusColor = tokens.colorStatusSuccessBackground2
             statusText = strings.Provision.SpaceCreatedLabel
             break
           default:
-            statusIcon = <LightbulbCircleRegular />
+            statusIcon = getFluentIcon('LightbulbCircle')
             statusColor = tokens.colorNeutralBackground6
             statusText = strings.Provision.NotSubmittedLabel
             break
@@ -184,75 +179,75 @@ export const useColumns = (toast: any): TableColumnDefinition<IRequestItem>[] =>
       renderCell: (request) => {
         const canDelete =
           request.status === Status.NotSubmitted ||
+          request.status === Status.Rejected ||
           request.status === Status.SpaceCreationFailed ||
           request.status === Status.SpaceAlreadyExists
 
         return (
           <div className={styles.actions}>
-            {canDelete && (
-              <Popover>
-                <PopoverTrigger disableButtonEnhancement>
-                  <Button
-                    appearance='subtle'
-                    title={strings.Provision.DeleteSubmissionLabel}
-                    icon={getFluentIcon('Delete')}
-                  />
-                </PopoverTrigger>
-                <PopoverSurface tabIndex={-1}>
-                  <div className={styles.deletePopover}>
-                    <div>{strings.Provision.DeleteSubmissionConfirmationLabel}</div>
-                    <div>
-                      <Button
-                        appearance='subtle'
-                        onClick={() => {
-                          context.props.dataAdapter
-                            .deleteProvisionRequest(request.id, context.props.provisionUrl)
-                            .then((response) => {
-                              if (response) {
-                                context.setState({
-                                  isRefetching: true,
-                                  refetch: new Date().getTime()
-                                })
-                                toast(
-                                  <Toast appearance='inverted'>
-                                    <ToastTitle>
-                                      {strings.Provision.DeletedSubmissionToastTitle}
-                                    </ToastTitle>
-                                    <ToastBody>
-                                      {format(
-                                        strings.Provision.DeletedSubmissionToastBody,
-                                        request.displayName
-                                      )}
-                                    </ToastBody>
-                                  </Toast>,
-                                  { intent: 'success' }
-                                )
-                                context.setState({ showProvisionDrawer: false, properties: {} })
-                              } else {
-                                toast(
-                                  <Toast appearance='inverted'>
-                                    <ToastTitle>
-                                      {strings.Provision.DeletedSubmissionErrorToastTitle}
-                                    </ToastTitle>
-                                    <ToastBody>
-                                      {strings.Provision.DeletedSubmissionErrorToastBody}
-                                    </ToastBody>
-                                  </Toast>,
-                                  { intent: 'error' }
-                                )
-                              }
-                            })
-                        }}
-                        title={strings.Provision.DeleteSubmissionLabel}
-                        icon={getFluentIcon('Delete')}
-                      >
-                        {strings.Provision.DeleteLabel}
-                      </Button>
-                    </div>
+            <Popover>
+              <PopoverTrigger disableButtonEnhancement>
+                <Button
+                  appearance='subtle'
+                  title={strings.Provision.DeleteSubmissionLabel}
+                  icon={getFluentIcon('Delete')}
+                  disabled={!canDelete}
+                />
+              </PopoverTrigger>
+              <PopoverSurface tabIndex={-1}>
+                <div className={styles.deletePopover}>
+                  <div>{strings.Provision.DeleteSubmissionConfirmationLabel}</div>
+                  <div>
+                    <Button
+                      appearance='subtle'
+                      onClick={() => {
+                        context.props.dataAdapter
+                          .deleteProvisionRequest(request.id, context.props.provisionUrl)
+                          .then((response) => {
+                            if (response) {
+                              context.setState({
+                                isRefetching: true,
+                                refetch: new Date().getTime()
+                              })
+                              toast(
+                                <Toast appearance='inverted'>
+                                  <ToastTitle>
+                                    {strings.Provision.DeletedSubmissionToastTitle}
+                                  </ToastTitle>
+                                  <ToastBody>
+                                    {format(
+                                      strings.Provision.DeletedSubmissionToastBody,
+                                      request.displayName
+                                    )}
+                                  </ToastBody>
+                                </Toast>,
+                                { intent: 'success' }
+                              )
+                              context.setState({ showProvisionDrawer: false, properties: {} })
+                            } else {
+                              toast(
+                                <Toast appearance='inverted'>
+                                  <ToastTitle>
+                                    {strings.Provision.DeletedSubmissionErrorToastTitle}
+                                  </ToastTitle>
+                                  <ToastBody>
+                                    {strings.Provision.DeletedSubmissionErrorToastBody}
+                                  </ToastBody>
+                                </Toast>,
+                                { intent: 'error' }
+                              )
+                            }
+                          })
+                      }}
+                      title={strings.Provision.DeleteSubmissionLabel}
+                      icon={getFluentIcon('Delete')}
+                    >
+                      {strings.Provision.DeleteLabel}
+                    </Button>
                   </div>
-                </PopoverSurface>
-              </Popover>
-            )}
+                </div>
+              </PopoverSurface>
+            </Popover>
           </div>
         )
       }

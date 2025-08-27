@@ -1,6 +1,6 @@
 {
   "name": "pp365-templates",
-  "version": "1.11.0",
+  "version": "1.11.1",
   "main": "generateTemplate.js",
   "scripts": {
     "build": "npm run generate-project-templates && npm run generate-resx-json",

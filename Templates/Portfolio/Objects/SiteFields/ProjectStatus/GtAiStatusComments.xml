@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <Field Type="Note" DisplayName="{resource:SiteFields_GtAiStatusComments_DisplayName}" Hidden="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE" ShowInDispForm="TRUE" ID="{b4f13c2a-897b-4f68-8854-6da3eb2bf184}" StaticName="GtAiStatusComments" Name="GtAiStatusComments" />
+</Elements>

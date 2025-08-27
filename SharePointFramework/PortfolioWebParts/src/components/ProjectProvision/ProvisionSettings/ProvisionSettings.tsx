@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { Dismiss24Regular } from '@fluentui/react-icons'
 import {
   DataGridBody,
   DataGridRow,
@@ -19,7 +18,7 @@ import {
   Spinner
 } from '@fluentui/react-components'
 import { useProvisionSettings } from './useProvisionSettings'
-import { customLightTheme } from 'pp365-shared-library'
+import { customLightTheme, getFluentIcon } from 'pp365-shared-library'
 import { Commands } from './Commands'
 import styles from './ProvisionSettings.module.scss'
 import strings from 'PortfolioWebPartsStrings'
@@ -50,7 +49,11 @@ export const ProvisionSettings = () => {
               <DialogTitle
                 action={
                   <DialogTrigger action='close'>
-                    <Button appearance='subtle' title='Lukk' icon={<Dismiss24Regular />} />
+                    <Button
+                      appearance='subtle'
+                      title={strings.Aria.Close}
+                      icon={getFluentIcon('Dismiss')}
+                    />
                   </DialogTrigger>
                 }
               >
