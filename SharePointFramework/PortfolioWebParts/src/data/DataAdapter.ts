@@ -626,7 +626,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
     let projects = this._combineResultData(result)
     projects = projects.filter(
-      (m) => m.lifecycleStatus !== 'Avsluttet' && m.lifecycleStatus !== 'Stengt'
+      (m) => m.lifecycleStatus !== strings.LifecycleStatus_Completed && m.lifecycleStatus !== strings.LifecycleStatus_Closed
     )
     projects = projects.sort((a, b) => a.title.localeCompare(b.title))
     return projects
@@ -768,7 +768,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       .map((res) => new BenefitMeasurement(res))
       .sort((a, b) => b.Date.getTime() - a.Date.getTime())
 
-    const indicactors = results
+    const indicators = results
       .filter((res) => res.ContentTypeID.indexOf(config.CONTENT_TYPE_ID_INDICATORS) === 0)
       .map((res) => {
         const indicator = new BenefitMeasurementIndicator(res)
@@ -778,7 +778,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       })
       .filter((i) => i.Benefit)
 
-    const items = indicactors.map((i) => {
+    const items = indicators.map((i) => {
       const benefit = i.Benefit
       const measurements = i.Measurements
       const firstMeasurement = _.first(i.Measurements)

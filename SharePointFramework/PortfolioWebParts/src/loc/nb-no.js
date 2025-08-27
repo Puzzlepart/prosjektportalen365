@@ -544,5 +544,7 @@ define([], function () {
     SecondaryFieldLabel: 'Sekundært felt',
     PrimaryUserFieldLabel: 'Primær bruker',
     SecondaryUserFieldLabel: 'Sekundær bruker',
+    LifecycleStatus_Completed: "Avsluttet",
+    LifecycleStatus_Closed: "Stengt"
   }
 })

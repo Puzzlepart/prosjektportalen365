@@ -548,6 +548,8 @@ define([], function () {
       FieldLogicGroupName: 'Field Logic',
       DefaultExpirationDateFieldLabel: 'Default expiration Date',
       ReadOnlyGroupLogicFieldLabel: 'Require read-only group for internal channel',
+      LifecycleStatus_Completed: "Completed",
+      LifecycleStatus_Closed: "Closed"
     }
   }
 })
