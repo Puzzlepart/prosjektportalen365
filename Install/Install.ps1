@@ -86,6 +86,9 @@ Write-Host "### $($Upgrade.IsPresent ? "Upgrading" : "Installing") Prosjektporta
 if ($Channel -ne "main") {
     Write-Host "### Channel: $Channel ####" -ForegroundColor Cyan
 }
+if ($Language -ne "Norwegian") {
+    Write-Host "### Language: $Language ####" -ForegroundColor Cyan
+}
 if ($CI.IsPresent) {
     Write-Host "### Running in Continuous Integration mode ####" -ForegroundColor Cyan
 }
@@ -145,7 +148,7 @@ if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
         $PortfolioSite = Get-PnPTenantSite -Url $Uri.AbsoluteUri -ErrorAction SilentlyContinue
         if ($null -eq $PortfolioSite) {
             StartAction("Creating portfolio site at $($Uri.AbsoluteUri)")
-            New-PnPSite -Type TeamSite -Title $Title -Alias $Alias -IsPublic:$true -ErrorAction Stop -Lcid $LanguageId >$null 2>&1
+            $PortfolioSite = New-PnPSite -Type TeamSite -Title $Title -Alias $Alias -IsPublic:$true -ErrorAction Stop -Lcid $LanguageId
             EndAction
         }
     }
