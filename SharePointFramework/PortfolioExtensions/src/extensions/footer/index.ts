@@ -44,12 +44,14 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     })
     this._globalSettings = await this._portalDataService.getGlobalSettings()
 
+    const requireAssistantAccess = this._globalSettings.get('RequireAssistantAccess') === '1'
     const [installEntries, gitHubReleases, helpContent, links] = await Promise.all([
       this._fetchInstallationLogs(),
       this._fetchGitHubReleases(),
       this._fetchHelpContent(),
       this._fetchLinks()
     ])
+
     this._installEntries = installEntries
     this._gitHubReleases = gitHubReleases
     this._helpContent = helpContent
@@ -57,8 +59,6 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     this._useAssistant = this._globalSettings.get('UseAssistant') === '1'
     this._showFooter = this._globalSettings.get('ShowFooter') === '1'
     this._minimizeFooter = this._globalSettings.get('MinimizeFooter') === '1'
-
-    const requireAssistantAccess = this._globalSettings.get('RequireAssistantAccess') === '1'
     this._hasAssistantAccess =
       !requireAssistantAccess || (await this._isUserInGroup(strings.AssistantGroupName))
     this.context.application.navigatedEvent.add(this, this._handleNavigatedEvent)
