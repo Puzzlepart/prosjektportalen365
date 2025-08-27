@@ -1030,7 +1030,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           id: item.Id,
           title: item.Title,
           applyPnPTemplate: item.ApplyPnPTemplate,
-          pnpTemplateUrl: item.PnPTemplateURL?.Url || '',
+          pnpTemplateUrl: item.PnPTemplateURL?.Url || ''
         }
       })
     } catch (error) {

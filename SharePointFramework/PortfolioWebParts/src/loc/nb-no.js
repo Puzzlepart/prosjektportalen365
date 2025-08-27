@@ -279,6 +279,9 @@ define([], function () {
       ProvisionGroupName: 'Bestillingsportalen',
       MissingFieldsTitle: 'Manglende utfylling av følgende påkrevde felter',
       ProvisionError: 'Kunne ikke hente data fra listen \'{0}\', vennligst sjekk at webdelen er riktig konfigurert og at listen eksisterer på Bestillingsportalen. Error: {1}',
+      FieldLogicGroupName: 'Feltlogikk',
+      DefaultExpirationDateFieldLabel: 'Standard utløpsdato',
+      ReadOnlyGroupLogicFieldLabel: 'Krev lesetilgangsgruppe for intern kanal',
     },
     AddColumnLabel: 'Legg til en kolonne',
     AllProjectsHeaderText: 'Alle prosjekter/program',
@@ -395,6 +398,7 @@ define([], function () {
     ErrorTitle: 'Det har oppstått en feil',
     AccessTitle: 'Ingen tilgang',
     ExcelExportButtonLabel: 'Eksporter til Excel',
+
     FiltersString: 'Filtre',
     FilterText: 'Filtrer',
     GeneralGroupName: 'Generelt',

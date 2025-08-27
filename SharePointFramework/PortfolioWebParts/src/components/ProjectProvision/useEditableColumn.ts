@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { IProjectProvisionProps, IProjectProvisionState } from './types'
-import _ from 'lodash'
+import _, { transform } from 'lodash'
 import strings from 'PortfolioWebPartsStrings'
 
 /**
@@ -296,8 +296,13 @@ export function useEditableColumn(
         const enableExternalSharing = getGlobalSetting('EnableExternalSharingByDefault') === 'true'
         const defaultTeamify = typeDefaults?.teamify ?? false
 
+        const defaultExpirationDate = props.expirationDateMode === 'monthDropdown'
+          ? props.defaultExpirationDate || '0'
+          : null
+
         let defaultOwner: any[] = []
         let transformedOwner: any[] = []
+        let transformedExpirationDate: any = null
 
         if (props.autoOwner) {
           const { displayName, loginName } = props.pageContext.user
@@ -315,6 +320,10 @@ export function useEditableColumn(
           }
         }
 
+        if (props.defaultExpirationDate && props.expirationDateMode === 'monthDropdown') {
+          transformedExpirationDate = await transformValue(defaultExpirationDate, 'expirationDate')
+        }
+
         $setColumn((prev) => {
           const newColumns = new Map(prev)
           newColumns.set('isConfidential', defaultConfidentialData)
@@ -325,6 +334,7 @@ export function useEditableColumn(
           newColumns.set('externalSharing', enableExternalSharing)
           newColumns.set('teamify', defaultTeamify)
           newColumns.set('owner', defaultOwner)
+          newColumns.set('expirationDate', defaultExpirationDate)
           return newColumns
         })
 
@@ -337,7 +347,8 @@ export function useEditableColumn(
             retentionLabel: defaultRetentionLabel,
             externalSharing: enableExternalSharing,
             teamify: defaultTeamify,
-            owner: transformedOwner
+            owner: transformedOwner,
+            expirationDate: transformedExpirationDate
           }
         })
       } catch (error) {

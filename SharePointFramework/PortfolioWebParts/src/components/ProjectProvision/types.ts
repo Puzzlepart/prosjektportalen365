@@ -37,6 +37,10 @@ export interface IProjectProvisionProps extends IBaseComponentProps {
   hideStatusMenu?: boolean
   hideSettingsMenu?: boolean
 
+  // Field logic
+  defaultExpirationDate?: string
+  readOnlyGroupLogic?: boolean
+
   // Advanced
   provisionUrl: string
   requireProvisionAccess?: boolean

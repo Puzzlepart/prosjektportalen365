@@ -8,6 +8,7 @@ import {
 } from '@microsoft/sp-property-pane'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
+import { format } from '@fluentui/react'
 import {
   IProjectProvisionProps,
   IProvisionField,
@@ -248,6 +249,32 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                   checked: propertiesWithDefaults.hideSettingsMenu,
                   onText: strings.Provision.AutoOwnerOnText,
                   offText: strings.Provision.AutoOwnerOffText
+                })
+              ]
+            },
+            {
+              groupName: strings.Provision.FieldLogicGroupName,
+              isCollapsed: true,
+              groupFields: [
+                ,
+                PropertyPaneDropdown('defaultExpirationDate', {
+                  label: strings.Provision.DefaultExpirationDateFieldLabel,
+                  options: [
+                    { key: '0', text: strings.Provision.ExpirationDateNoneOption },
+                    { key: '1', text: format(strings.Provision.ExpirationDateMonthOption, 1) },
+                    { key: '3', text: format(strings.Provision.ExpirationDateMonthOption, 3) },
+                    { key: '6', text: format(strings.Provision.ExpirationDateMonthOption, 6) },
+                    { key: '12', text: format(strings.Provision.ExpirationDateMonthOption, 12) },
+                    { key: '24', text: format(strings.Provision.ExpirationDateMonthOption, 24) }
+                  ],
+                  selectedKey: propertiesWithDefaults.defaultExpirationDate ?? '0',
+                  disabled: propertiesWithDefaults.expirationDateMode !== 'monthDropdown'
+                }),
+                PropertyPaneToggle('readOnlyGroupLogic', {
+                  label: strings.Provision.ReadOnlyGroupLogicFieldLabel,
+                  checked: propertiesWithDefaults.readOnlyGroupLogic,
+                  onText: strings.BooleanOn,
+                  offText: strings.BooleanOff
                 })
               ]
             },
@@ -618,6 +645,10 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
       await this.loadProvisionTypes()
       this.context.propertyPane.refresh()
       this.render()
+    }
+    if (propertyPath === 'expirationDateMode' && oldValue !== newValue) {
+      // Refresh property pane to enable/disable defaultExpirationDate dropdown
+      this.context.propertyPane.refresh()
     }
     super.onPropertyPaneFieldChanged(propertyPath, oldValue, newValue)
   }

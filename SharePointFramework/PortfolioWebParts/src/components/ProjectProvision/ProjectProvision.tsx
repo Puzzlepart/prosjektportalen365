@@ -136,6 +136,7 @@ ProjectProvision.defaultProps = {
   buttonLabel: strings.Provision.ProvisionButtonLabel,
   autoOwner: true,
   expirationDateMode: 'date',
+  defaultExpirationDate: '0',
   level0Header: strings.Provision.DrawerLevel0HeaderText,
   level0Description: strings.Provision.DrawerLevel0DescriptionText,
   level1Header: strings.Provision.DrawerLevel1HeaderText,
@@ -143,6 +144,7 @@ ProjectProvision.defaultProps = {
   level2Header: strings.Provision.DrawerLevel2HeaderText,
   level2Description: strings.Provision.DrawerLevel2DescriptionText,
   footerDescription: strings.Provision.DrawerFooterDescriptionText,
+  readOnlyGroupLogic: false,
   icon: getFluentIcon('Add'),
   appearance: 'primary',
   size: 'large'
