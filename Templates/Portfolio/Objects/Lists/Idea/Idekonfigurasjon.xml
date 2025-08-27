@@ -29,8 +29,8 @@
     <pnp:DataRows KeyColumn="Title" UpdateBehavior="Overwrite">
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">Standard</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIdeaProcessingList">Idébehandling</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIdeaRegistrationList">Idéregistrering</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIdeaProcessingList">{resource:Lists_IdeaProcessing_Title}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIdeaRegistrationList">{resource:Lists_IdeaRegistration_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDescription">{
                 "registration": "Dersom idéen blir godkjent vil det bli opprettet en detaljert idé-side for idéen og et element i Idébehandlingslisten.",
                 "processing": "Dersom idéen blir godkjent vil det være mulig å opprette prosjektdata som kan bli brukt for provisjonering av området.",
