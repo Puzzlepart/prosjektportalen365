@@ -427,6 +427,9 @@
     <data name="ClientSidePages_Configuration_Title" xml:space="preserve">
         <value>Konfigurasjon</value>
     </data>
+    <data name="ClientSidePages_Configuration_CustomActionTitle" xml:space="preserve">
+        <value>Konfigurasjon av Prosjektportalen</value>
+    </data>
     <data name="ClientSidePages_DeliveryOverview_PageName" xml:space="preserve">
         <value>Leveranseoversikt.aspx</value>
     </data>

@@ -22,6 +22,7 @@ Templates/*.ps1
 common/temp
 **/.rush/temp/
 **/*.build.log
+**/*.build.error.log
 **/package-lock.json
 .vscode/launch.json*
 SharePointFramework/**/.vscode/chrome-debug-user-data
