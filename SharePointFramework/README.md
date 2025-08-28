@@ -1,4 +1,124 @@
-# 1. Komponent oversikt
+# Utvikling av Prosjektportalen 365
+
+## Innholdsfortegnelse
+
+- [Utvikling av Prosjektportalen 365](#utvikling-av-prosjektportalen-365)
+  - [Innholdsfortegnelse](#innholdsfortegnelse)
+  - [Git og commit-praksis](#git-og-commit-praksis)
+    - [Branching-strategi](#branching-strategi)
+    - [Semantic Commit Messages](#semantic-commit-messages)
+    - [GitHub Actions og commit-triggere](#github-actions-og-commit-triggere)
+  - [Komponent oversikt](#komponent-oversikt)
+  - [SPFx løsningene](#spfx-løsningene)
+    - [shared-library](#shared-library)
+    - [PortfolioExtensions](#portfolioextensions)
+    - [PortfolioWebParts](#portfoliowebparts)
+    - [ProgramWebParts](#programwebparts)
+    - [ProjectExtensions](#projectextensions)
+    - [ProjectWebParts](#projectwebparts)
+  - [Bygging, pakketering og distribuering](#bygging-pakketering-og-distribuering)
+    - [Rush](#rush)
+    - [Bygging for utvikling](#bygging-for-utvikling)
+    - [Legge til en ny npm-pakke med rush](#legge-til-en-ny-npm-pakke-med-rush)
+    - [Oppdateringer til delt-bibliotek (shared-library)](#oppdateringer-til-delt-bibliotek-shared-library)
+    - [Overvåk konfigurasjon og kanaler](#overvåk-konfigurasjon-og-kanaler)
+    - [Bygg bare spesifikke komponenter](#bygg-bare-spesifikke-komponenter)
+  - [Versjonering](#versjonering)
+  - [Oppgaver](#oppgaver)
+
+## Git og commit-praksis
+
+### Branching-strategi
+
+Prosjektportalen bruker en release-basert branching-strategi hvor vi har dedikerte branches for hver release:
+
+Eksempel:
+
+- `releases/1.12` - Gjeldende utviklings-branch
+- `releases/1.11` - Forrige utgivelse  
+- `releases/1.10` - Tidligere utgivelse
+- osv...
+
+Alle nye funksjoner og feilrettinger skal utvikles mot den aktuelle release-branch. Formatet på versjonene følger [Semantic Versioning](http://semver.org/spec/v2.0.0.html). `Minor`-release får egen branch. `Patch`-release inngår i den relevante branchen.
+
+### Semantic Commit Messages
+
+Vi bruker semantiske commit-meldinger for å gjøre historikken mer lesbar og for å automatisere versjonering og changelog-generering.
+
+**Format:** `<type>(<scope>): <subject>`
+
+`<scope>` er valgfri
+
+**Eksempel:**
+
+```text
+feat: add hat to cat
+^--^  ^------------^
+|     |
+|     +-> Sammendrag i presens
+|
++-------> Type: chore, docs, feat, fix, refactor, style, eller ci
+```
+
+**Commit-typer:**
+
+- `feat`: ny funksjonalitet for brukeren (ikke ny funksjonalitet for byggskript)
+- `fix`: feilretting for brukeren (ikke retting av byggskript)
+- `docs`: endringer i dokumentasjon og /eller markdown-filer (changelog, readme...)
+- `style`: formatering, manglende semikolon osv.; ingen endring i produksjenskode
+- `refactor`: refaktorering av produksjenskode, f.eks. omdøping av en variabel
+- `chore`: oppdatering av grunt-oppgaver osv.; ingen endring i produksjenskode
+- `ci`: endringer i kontinuerlig integrasjon-konfigurasjon og skript (f.eks. GitHub Actions)
+
+**Flere eksempler:**
+
+```text
+feat(portfoliowebparts): add new risk matrix component
+fix(projectwebparts): resolve timeline rendering issue
+docs: update installation guide
+style(shared): fix indentation in utils
+refactor(projectextensions): simplify project setup logic
+chore: update dependencies
+ci: improve build process
+```
+
+**Referanser:**
+
+- [Conventional Commits](https://www.conventionalcommits.org/)
+- [Semantic Commit Messages](https://seesparkbox.com/foundry/semantic_commit_messages)
+- [Karma Git Commit Msg](http://karma-runner.github.io/1.0/dev/git-commit-msg.html)
+
+### GitHub Actions og commit-triggere
+
+Prosjektportalen bruker GitHub Actions for kontinuerlig integrasjon og deployment. Forskjellige commit-meldinger kan påvirke hvilke actions som kjøres:
+
+**Actions som hopper over CI:**
+
+- `[skip-ci]` - Hopper over alle CI-prosesser
+- `[skip-main-ci]` - Hopper over hovedbygging (build-release.yml)
+- `[skip-test-ci]` - Hopper over test-kanal bygging
+- `[packages-only]` - Bygger kun pakker (appkatalog), hopper over deployment av templates. Brukes dersom du ikke har gjort noen endringer på .xml-filene i Templates.
+
+**Eksempler på bruk:**
+
+```text
+docs: update README [skip-ci]
+chore: update package.json [skip-main-ci]
+fix(portfoliowebparts): minor styling fix [skip-test-ci]
+feat(shared): add new utility function [packages-only]
+```
+
+**Aktive workflows:**
+
+- **ci-releases.yml** - Kjører på `main` branch for release-bygging
+- **build-release.yml** - Kjører på `siste releases branch` og `main` for full bygging
+- **pr-package-spfx-dev.yml** - Kjører på pull requests mot release-branches
+- **automatic_chores.yml** - Kjører automatiske vedlikeholdsoppgaver (linting ++)
+- **ci-channel-test.yml** - Kanalspefikt bygger for testing
+
+**Tips:** Bruk skip-flaggene når du gjør endringer som ikke påvirker funksjonaliteten (som dokumentasjonsoppdateringer) for å spare CI-ressurser. Eller det ikke er nødvendig å få med endringene dine dersom du skal gjøre flere relaterte endringer i samme branch.
+
+## Komponent oversikt
 
 | Navn                          | Løsning/Pakke       | Beskrivelse                                            | Id                                   |
 | ----------------------------- | ------------------- | ------------------------------------------------------ | ------------------------------------ |
@@ -32,17 +152,17 @@
 | ProjectNewsWebPart            | ProjectWebParts     | Prosjektnyheter                                        | a9097537-6860-4e05-99f3-4ee21782687f |
 | SharedLibrary                 | SharedLibrary       | Pakke med delte komponenter                            | 0f65a874-dc9d-491d-b979-6ce1d943dd00 |
 
-# 2. SPFx løsningene
+## SPFx løsningene
 
 _På grunn av antallet komponenter, besluttet vi å dele komponentene inn i 6 forskjellige løsninger._
 
-## [shared-library](./shared-library/README.md)
+### [shared-library](./shared-library/README.md)
 
 Delt kode for SharePoint-rammeverksløsninger i Prosjektportalen 365.
 
 _Publisert til **npm** som `pp365-shared-library`_
 
-## [PortfolioExtensions](./PortfolioExtensions/README.md)
+### [PortfolioExtensions](./PortfolioExtensions/README.md)
 
 | Løsningsnavn             | ID                                               |
 | ------------------------ | ------------------------------------------------ |
@@ -56,7 +176,7 @@ For pakking og distribusjon direkte til SharePoint, se `3. Bygging, pakketering 
 
 _Publisert til **npm** som `pp365-portfolioextensions`_
 
-## [PortfolioWebParts](./PortfolioWebParts/README.md)
+### [PortfolioWebParts](./PortfolioWebParts/README.md)
 
 | Løsningsnavn             | ID                                   |
 | ------------------------ | ------------------------------------ |
@@ -70,7 +190,7 @@ For pakking og distribusjon direkte til SharePoint, se `3. Bygging, pakketering 
 
 _Publisert til **npm** som `pp365-projectwebparts`_
 
-## [ProgramWebParts](./ProgramWebParts/README.md)
+### [ProgramWebParts](./ProgramWebParts/README.md)
 
 | Løsningsnavn           | ID                                   |
 | ---------------------- | ------------------------------------ |
@@ -84,7 +204,7 @@ For pakking og distribusjon direkte til SharePoint, se `3. Bygging, pakketering 
 
 _Publisert til **npm** som `pp365-programwebparts`_
 
-## [ProjectExtensions](./ProjectExtensions/README.md)
+### [ProjectExtensions](./ProjectExtensions/README.md)
 
 | Løsningsnavn           | ID                                   |
 | ---------------------- | ------------------------------------ |
@@ -98,7 +218,7 @@ For pakking og distribusjon direkte til SharePoint, se `3. Bygging, pakketering 
 
 _Publisert til **npm** som `pp365-projectextensions`_
 
-## [ProjectWebParts](./ProjectWebParts/README.md)
+### [ProjectWebParts](./ProjectWebParts/README.md)
 
 | Løsningsnavn           | ID                                   |
 | ---------------------- | ------------------------------------ |
@@ -112,9 +232,9 @@ For pakking og distribusjon direkte til SharePoint, se `3. Bygging, pakketering 
 
 _Publisert til **npm** som `pp365-projectwebparts`_
 
-# 3. Bygging, pakketering og distribuering
+## Bygging, pakketering og distribuering
 
-## Rush
+### Rush
 
 Rush er et byggverktøy som brukes i Prosjektportalen for å administrere løsningene. Dette er spesielt nyttig da vi har et monorepo-oppsett hvor alle løsningene lagres i samme repo, da det lar oss administrere avhengigheter, byggprosesser og versjonering på tvers av alle løsninger på en konsistent måte.
 
@@ -132,7 +252,7 @@ Her er noen vanlige Rush-kommandoer vi ofte bruker når vi jobber med Prosjektpo
 
 For mer detaljert informasjon om hvordan du bruker Rush, kan du referere til den offisielle [Rush-dokumentasjonen](https://rushjs.io/).
 
-## Bygging for utvikling
+### Bygging for utvikling
 
 For å jobbe med de ulike løsningene, må du gjøre følgende:
 
@@ -141,7 +261,7 @@ For å jobbe med de ulike løsningene, må du gjøre følgende:
 
 _For å installere `rush` globalt, kjør `npm i @microsoft/rush -g` i terminalen._
 
-## Legge til en ny npm-pakke med rush
+### Legge til en ny npm-pakke med rush
 
 Ikke bruk lenger `npm i [pakkenavn] -S`. Med rush skal vi bruke `rush add -p [pakkenavn]`.
 
@@ -149,7 +269,7 @@ For å installere pakken for alle løsningene, legg til `--all` og legg til `-m`
 
 Les mer om kommandoen `rush add` [her](https://rushjs.io/pages/commands/rush_add/).
 
-## Oppdateringer til delt-bibliotek (shared-library)
+### Oppdateringer til delt-bibliotek (shared-library)
 
 Hvis du har utført endringer i `shared-library` som du vil skal ha effekt i en løsning som er avhengig av det, kan du bruke `rush rebuild`.
 
@@ -161,29 +281,29 @@ rush rebuild -o pp365-shared-library
 
 _Det bør ikke ta mer enn 30 sekunder._
 
-## Overvåk konfigurasjon og kanaler
+### Overvåk konfigurasjon og kanaler
 
 Hvis du vil overvåke/skjelne endringer for en spesifikk kanal, kan du sette `SERVE_CHANNEL` i `.env`-filen til løsningen din.
 
 Deretter kjører du `npm run watch` som du vanligvis gjør.
 
-## Bygg bare spesifikke komponenter
+### Bygg bare spesifikke komponenter
 
 Hvis du vil gjøre overvåking/serving raskere, kan du sette `SERVE_BUNDLE_REGEX` for å filtrere komponentene du vil bygge.
 
 **Eksempel:**
 
-```
+```text
 SERVE_CHANNEL=test
 SERVE_BUNDLE_REGEX=latest-projects-web-part
 ```
 
 Bare komponenten `LatestProject` vil bli bygget. `config.json` vil automatisk bli tilbakestilt når du avbryter overvåkingsskriptet.
 
-# 4. Versjonering
+## Versjonering
 
 Oppdater aldri versjonen av løsningene uavhengig. Versjonen holdes automatisk synkronisert med de andre pakkene.
 
-# 5. Oppgaver
+## Oppgaver
 
 Se [Oppgaver](.tasks/README.md).
