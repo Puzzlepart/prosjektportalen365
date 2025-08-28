@@ -55,6 +55,7 @@ define([], function () {
     SetRecommendationTitle: 'Set recommendation',
     SiteSettingsLinkText: 'Site settings',
     SubmitLabel: 'Submit',
-    IdeaRegistrationIncludeString: 'Registration'
+    IdeaRegistrationIncludeString: 'Registration',
+    AssistantGroupName: 'Assistant users'
   }
 })
