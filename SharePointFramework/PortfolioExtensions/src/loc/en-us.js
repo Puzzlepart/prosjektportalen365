@@ -39,7 +39,6 @@ define([], function () {
     IdeaProcessorsSiteGroup: 'Idebehandlere',
     IdeaProjectDataDialogBlockedMessage: 'Project data for this idea has already been created and associated.',
     IdeaProjectDataDialogTitle: 'Create project data for the idea',
-    IdeaProjectDataTitle: 'Prosjektdata',
     InstallChannelLabel: 'Installation channel',
     InstalledDateLabel: 'Installation date',
     InstallVersionLabel: 'Version',
@@ -55,6 +54,7 @@ define([], function () {
     SetRecommendationSubtitle: 'Select recommendation for: {0}. \n\n{1}',
     SetRecommendationTitle: 'Set recommendation',
     SiteSettingsLinkText: 'Site settings',
-    SubmitLabel: 'Submit'
+    SubmitLabel: 'Submit',
+    IdeaRegistrationIncludeString: 'Registration'
   }
 })

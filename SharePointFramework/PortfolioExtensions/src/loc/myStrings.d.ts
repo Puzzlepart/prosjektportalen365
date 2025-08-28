@@ -32,7 +32,6 @@ declare interface IPortfolioExtensionsStrings {
   IdeaProjectDataDialogNotApprovedMessage: string
   IdeaProjectDataDialogInfoTitle: string
   IdeaProjectDataDialogTitle: string
-  IdeaProjectDataTitle: string
   InstallChannelLabel: string
   InstalledDateLabel: string
   InstallVersionLabel: string
@@ -52,6 +51,7 @@ declare interface IPortfolioExtensionsStrings {
   SiteSettingsDescription: string
   SiteSettingsLabel: string
   SubmitLabel: string
+  IdeaRegistrationIncludeString: string
 }
 
 declare module 'PortfolioExtensionsStrings' {

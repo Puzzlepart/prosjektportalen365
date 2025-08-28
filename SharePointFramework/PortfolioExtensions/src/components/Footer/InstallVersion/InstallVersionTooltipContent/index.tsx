@@ -12,6 +12,7 @@ import {
   IdPrefixProvider,
   useId
 } from '@fluentui/react-components'
+import resource from 'SharedResources'
 
 /**
  * Component for displaying information about the latest installation
@@ -58,7 +59,7 @@ export const InstallVersionTooltipContent: FC = () => {
               appearance='subtle'
               onClick={() =>
                 window.open(
-                  `${context.props.portalUrl}/Lists/Installasjonslogg/AllItems.aspx`,
+                  `${context.props.portalUrl}/${resource.Lists_InstallationLog_Url}`,
                   '_blank'
                 )
               }

@@ -20,6 +20,7 @@ import { find } from 'underscore'
 import { ProjectContentColumn, SPProjectContentColumnItem } from 'pp365-shared-library'
 import _ from 'underscore'
 import { PortalDataService } from 'pp365-shared-library/lib/services/PortalDataService'
+import resource from 'SharedResources'
 
 export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any> {
   private _userAuthorized: boolean
@@ -38,7 +39,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
     this._openCmd = this.tryGetCommand('OPEN_IDEA_REGISTRATION_DIALOG')
     this._openCmd.visible = false
     this._openLinkCmd = this.tryGetCommand('IDEA_PROCESSING_LINK')
-    this._openLinkCmd.visible = this.context.pageContext.list.title.includes('registrering')
+    this._openLinkCmd.visible = this.context.pageContext.list.title.includes(strings.IdeaRegistrationIncludeString)
     this._userAuthorized = await isUserAuthorized(
       this._sp,
       strings.IdeaProcessorsSiteGroup,
@@ -196,7 +197,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
   private _onSubmit = async (row: RowAccessor, comment: string): Promise<void> => {
     const contentColumns = async () => {
       try {
-        const list = this._sp.web.lists.getByTitle('Prosjektinnholdskolonner')
+        const list = this._sp.web.lists.getByTitle(resource.Lists_ProjectContentColumns_Title)
 
         const columnItems = await list.items.select(
           ...Object.keys(new SPProjectContentColumnItem())
@@ -204,9 +205,9 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
 
         const filteredColumnItems = columnItems.filter(
           (col) =>
-            col.GtDataSourceCategory === 'Idémodul' ||
+            col.GtDataSourceCategory === resource.Lists_DataSources_Category_IdeaModule ||
             (!col.GtDataSourceCategory && !col.GtDataSourceLevel) ||
-            (!col.GtDataSourceCategory && _.contains(col.GtDataSourceLevel, 'Portefølje'))
+            (!col.GtDataSourceCategory && _.contains(col.GtDataSourceLevel, resource.Lists_DataSources_Level_Portfolio))
         )
 
         return filteredColumnItems
@@ -274,7 +275,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
         GtIdeaRecommendationComment: comment
       })
 
-    const ideaModuleUrl = `${this.context.pageContext.site.absoluteUrl}/SitePages/Idemodul.aspx#ideaId=${rowId}`
+    const ideaModuleUrl = `${this.context.pageContext.site.absoluteUrl}/SitePages/${resource.ClientSidePages_IdeaModule_PageName}#ideaId=${rowId}`
 
     await this._updateProcessingList(rowId, copyData, ideaModuleUrl)
     window.location.reload()

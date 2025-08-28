@@ -1,10 +1,11 @@
 /* eslint-disable max-classes-per-file */
+import resource from 'SharedResources'
 
 export class SPIdeaConfigurationItem {
   public Title: string = ''
   public GtDescription: string = null
-  public GtIdeaProcessingList: string = 'Idébehandling'
-  public GtIdeaRegistrationList: string = 'Idéregistrering'
+  public GtIdeaProcessingList: string = resource.Lists_IdeaProcessing_Title
+  public GtIdeaRegistrationList: string = resource.Lists_IdeaRegistration_Title
   public GtIdeaProcessingChoices: string = null
   public GtIdeaRegistrationChoices: string = null
   public get fields(): string[] {
@@ -21,7 +22,7 @@ export class IdeaConfigurationModel {
   public registration: { key: string; choice: string; recommendation?: string }[] = []
 
   /**
-   * Creates a new instance of TimelineConfigurationModel
+   * Creates a new instance of IdeaConfigurationModel
    *
    * @param item SP item
    */

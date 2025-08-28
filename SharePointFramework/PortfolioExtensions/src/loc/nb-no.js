@@ -33,7 +33,6 @@ define([], function () {
     IdeaProjectDataDialogNotApprovedMessage: 'Denne ideen er ikke godkjent, du kan dermed ikke opprette prosjektdata for ideen. Vent til ideen er godkjent før du oppretter prosjektdata.',
     IdeaProjectDataDialogInfoTitle: 'Tilknytning av prosjektdata',
     IdeaProjectDataDialogTitle: 'Opprett prosjektdata for ideen',
-    IdeaProjectDataTitle: 'Prosjektdata',
     InstallChannelLabel: 'Installasjonskanal',
     InstalledDateLabel: 'Installasjonsdato',
     InstallVersionLabel: 'Versjon',
@@ -52,6 +51,7 @@ define([], function () {
     SetRecommendationTitle: 'Sett anbefaling',
     SiteSettingsDescription: 'Vis alle områdeinnstillinger for Porteføljeområdet',
     SiteSettingsLabel: 'Områdeinnstillinger',
-    SubmitLabel: 'Send'
+    SubmitLabel: 'Send',
+    IdeaRegistrationIncludeString: 'registrering'
   }
 })

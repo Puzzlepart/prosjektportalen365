@@ -16,6 +16,7 @@ import { isUserAuthorized } from '../../helpers/isUserAuthorized'
 import strings from 'PortfolioExtensionsStrings'
 import { Choice, IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
 import { find } from 'underscore'
+import resource from 'SharedResources'
 
 export interface IIdeaProjectDataCommandProperties {
   ideaId: number
@@ -159,7 +160,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
    * @param properties Properties
    */
   public _addItem = async (properties: Record<string, any>): Promise<any> => {
-    const list = this._sp.web.lists.getByTitle(strings.IdeaProjectDataTitle)
+    const list = this._sp.web.lists.getByTitle(resource.Lists_ProjectData_Title)
     const itemAddResult = await list.items.add(properties)
     Log.info(LOG_SOURCE, '_updateItem: Added item to IdeaProjectData list')
     return itemAddResult.data
@@ -173,7 +174,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
   public editFormUrl = (item: any) => {
     return [
       `${this.context.pageContext.web.absoluteUrl}`,
-      `/Lists/${strings.IdeaProjectDataTitle}/EditForm.aspx`,
+      `/${resource.Lists_ProjectData_Url}/EditForm.aspx`,
       '?ID=',
       item.Id,
       '&Source=',
