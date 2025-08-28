@@ -289,6 +289,10 @@ define([], function () {
     NewsCreateDuplicateFileError: 'A news article with the same title already exists. Please choose a different title.',
     PreviewLabel: 'Preview selected template',
     NoPreviewAvailable: 'Preview unavailable',
-    SynchronizingProjectPropertiesToPortfolioSiteErrorText: 'An error occurred while syncing project properties to the portfolio site. Please try again later.'
+    SynchronizingProjectPropertiesToPortfolioSiteErrorText: 'An error occurred while syncing project properties to the portfolio site. Please try again later.',
+    ColorPickerStrings: 'Color picker strings',
+    NewsCreateSuccess: 'News article created successfully',
+    SiteUrlLabel: 'Site URL',
+    SiteUrlDescription: 'Enter the URL of the site where the news should be published.'
   }
 })

@@ -323,5 +323,7 @@ define([], function () {
     NewsCreateDuplicateFileError: 'En nyhetsartikkel med samme navn finnes allerede. Vennligst velg et annet navn.',
     PreviewLabel: 'Forhåndsvis valgt mal',
     NoPreviewAvailable: 'Ingen forhåndsvisning tilgjengelig.',
+    ColorPickerStrings: 'Fargevelgerstrenger',
+    NewsCreateSuccess: 'Nyhetsartikkel opprettet',
   }
 })
