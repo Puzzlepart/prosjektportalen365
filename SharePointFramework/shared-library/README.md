@@ -1,11 +1,11 @@
-# Shared Library
+# shared-library
 
-Shared code for the SharePoint Framework solutions in PP365.
+Delt kode for SharePoint Framework-løsningene i PP365.
 
-Contains data services, helpers, interfaces, logging utils, models, utils and types.
+Inneholder datatjenester, hjelpefunksjoner, grensesnitt, loggingsverktøy, modeller, verktøy og typer.
 
-_Published to **npm** as `pp365-shared-library`_
+_Publiseres til **npm** som `pp365-shared-library`_
 
-## Versioning
+## Versjonering
 
-Never update the version of this solution independently. The version is automatically kept in sync with the other packages.
+Aldri oppdater versjonen av denne løsningen uavhengig. Versjonen holdes automatisk synkronisert med de andre pakkene.

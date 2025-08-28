@@ -1,72 +1,68 @@
-## Project extensions 
+# ProjectExtensions
 
-This solution contains SPFx extensions for the project level.
+Denne løsningen inneholder SPFx-utvidelser for prosjektnivået.
 
-_Published to **npm** as `pp365-projectextensions`_
+_Publiseres til **npm** som `pp365-projectextensions`_
 
-### ProjectSetup
+## Oppsett av prosjekt
 
-Extension for configuring a new project.
+Utvidelse for konfigurering av et nytt prosjekt.
 
-Added to all projects, and removed when the configuration/setup is done.
+Legges til alle prosjekter, og fjernes når konfigureringen/oppsettet er ferdig.
 
-The user selectes a template, optional extensions and settings.
+Brukeren velger en mal, valgfrie utvidelser og innstillinger.
 
-
-#### Project template
+### Prosjektmal
 
 ![image-20210210212851547](assets/image-20210210212851547.png)
 
-
-#### List content
+### Listeinnhold
 
 ![image-20210210212959283](assets/image-20210210212959283.png)
 
-
-#### Settings
+### Innstillinger
 
 ![image-20210210213017732](assets/image-20210210213017732.png)
 
-### TemplateSelector
+## TemplateSelector
 
-Extension for copying templates from the hub/portal site to the project site.
+Utvidelse for kopiering av maler fra hub/portal-området til prosjektområdet.
 
-The templates should be stored in a library named `Malbibliotek`. This library is created when installing Prosjektportalen 365.
+Malene skal lagres i et bibliotek kalt `Malbibliotek`. Dette biblioteket opprettes når Prosjektportalen 365 installeres.
 
-#### Selecting templates
+### Velge maler
 
-In the initial screen the desired templates are selected by the user. They can navigate in the folder structure like in a SharePoint library.
+I det første skjermbildet velger brukeren ønskede maler. De kan navigere i mappestrukturen som i et SharePoint-bibliotek.
 
 ![image-20210210211449675](assets/image-20210210211449675.png)
 
+### Velge målbibliotek og mappe
 
-
-#### Selecting target library and folder
-
-In the next screen the user decides where the templates should be copied. They can navigate in the folder structure just like when selecting the templates.
+I det neste skjermbildet bestemmer brukeren hvor malene skal kopieres. De kan navigere i mappestrukturen akkurat som når de velger malene.
 
 ![image-20210210211654080](assets/image-20210210211654080.png)
 
-If there's more than 1 library on the project site, the user can also pick another library.
+Hvis det er mer enn 1 bibliotek på prosjektområdet, kan brukeren også velge et annet bibliotek.
 
 ![image-20210210212421865](assets/image-20210210212421865.png)
 
-#### Adjust file name and title
+### Juster filnavn og tittel
 
-Next they can adjust the file names and titles.
+Deretter kan de justere filnavnene og titlene.
 
 ![image-20210210211724583](assets/image-20210210211724583.png)
 
-#### Follow the progress
+### Følg fremdriften
 
-When the user has selected their templates, selected the target folder and clicked start - progress is shown.
+Når brukeren har valgt sine maler, valgt målmappen og klikket start - vises fremdrift.
 
 ![image-20210210211809859](assets/image-20210210211809859.png)
 
-### Serve
+## Serve
 
-- Take a copy of `config/serve.sample.json` and name it `serve.json`
-- Run `npm run serve`
+- Ta en kopi av `config/serve.sample.json` og gi den navnet `serve.json`
+- Kjør `npm run serve`
 
-### Versioning
-Never update the version of this solution independently. The version is automatically kept in sync with the other packages.
+## Versjonering
+
+Aldri oppdater versjonen av denne løsningen uavhengig. Versjonen holdes automatisk synkronisert med de andre pakkene.

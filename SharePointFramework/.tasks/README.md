@@ -1,20 +1,27 @@
-# SPFx tasks
-One shared place for node tasks used by our SPFx solutions.
+# SPFx-oppgaver
+
+Ett felles sted for `node`-oppgaver som brukes av våre SPFx-løsninger.
 
 ## createEnviromentFile.js
-Creates a `.env` file in the current folder (`process.cwd()`). This is ran as a part of the `pre-watch.js` task.
+
+Oppretter en `.env`-fil i gjeldende mappe (`process.cwd()`). Dette kjøres som en del av `pre-watch.js`-oppgaven.
 
 ## createServeConfig.js
-Creates a `config/serve.json` file from the template `config/serve.sample.json` for the current folder.
+
+Oppretter en `config/serve.json`-fil fra malen `config/serve.sample.json` for gjeldende mappe.
 
 ## modifySolutionFiles.js
-Modify `config/package-solution.json` and all `manifest.json` files for a solution to match IDs from the selected channel.
+
+Modifiserer `config/package-solution.json` og alle `manifest.json`-filer for en løsning slik at de samsvarer med ID-er fra den valgte kanalen.
 
 ## post-watch.js
-Runs `modifySolutionFiles.js` and `setBundleConfig.js`.
+
+Kjører `modifySolutionFiles.js` og `setBundleConfig.js`.
 
 ## pre-watch.js
-Runs `createEnviromentFile.js` and `modifySolutionFiles.js`. Also generates a `config/.generated-solution-config.json` if the channel environment variable `SERVE_CHANNEL` is set and not **main**.
+
+Kjører `createEnviromentFile.js` og `modifySolutionFiles.js`. Genererer også en `config/.generated-solution-config.json` hvis kanalets miljøvariabel `SERVE_CHANNEL` er satt og ikke er **main**.
 
 ## setBundleConfig.js
-Updates `config/config.json` for the solution based on the environment variable `SERVE_BUNDLE_REGEX`.
+
+Oppdaterer `config/config.json` for løsningen basert på miljøvariabelen `SERVE_BUNDLE_REGEX`.

@@ -1,64 +1,54 @@
-# Portfolio web parts
+# PortfolioWebParts
 
-_Published to **npm** as `pp365-portfoliowebparts`_
+_Publiseres til **npm** som `pp365-portfoliowebparts`_
 
 ## PortfolioAggregation
 
-Web part for dynamically presenting data from different sources specified in the data sources list (available through the configuration page).
+Webdel for dynamisk presentasjon av data fra forskjellige kilder spesifisert i datakildelisten (tilgjengelig gjennom konfigurasjonssiden).
 
-This web part is used on the risk overview, deliveries overview and experience log pages.
+Denne webdelen brukes på risikooversikten, leveranseoversikten og erfaringsloggsidene.
 
-### Initial setup
+### Første gangs oppsett
 
-When you add the web part the first time, you need to specify a data source name:
+Når du legger til webdelen første gang, må du spesifisere et datakildenavn:
 
 ![image-20210219110017427](assets/image-20210219110017427.png)
 
-
-Edit the web part and set the property **Datakilde**:
+Rediger webdelen og sett egenskapen **Datakilde**:
 
 <img src="assets/image-20210219110113413.png" alt="image-20210219110113413" style="zoom:80%;" />
 
-
-You can also adjust some other settings:
+Du kan også justere noen andre innstillinger:
 
 ![image-20210219110133325](assets/image-20210219110133325.png)
 
+Når du har satt en datakilde (**Datakilde**), bør noen data være synlige (hvis tilgjengelig).
 
+### Legge til tilpassede kolonner
 
-When you've set a data source (**Datakilde**), some data should be visible (if available).
-
-### Adding custom columns
-
-You'll only have the project name / site name at first, so you need to add more columns. When in edit mode, a column header with **Legg til kolonne** will be visible to the right (_just like in modern SharePoint lists_).
+Du vil bare ha prosjektnavnet / områdenavnet i begynnelsen, så du må legge til flere kolonner. Når du er i redigeringsmodus, vil en kolonneoverskrift med **Legg til kolonne** være synlig til høyre (_akkurat som i moderne SharePoint-lister_).
 
 ![image-20210219110311816](assets/image-20210219110311816.png)
 
-
-
-Click the column header to open the column panel:
-
+Klikk på kolonneoverskriften for å åpne kolonnepanelet:
 
 ![image-20210219110437180](assets/image-20210219110437180.png)
 
+### Justere kolonner
 
-
-### Adjusting columns
-
-When in edit mode, you'll get some additional commands in the column context menu.
+Når du er i redigeringsmodus, får du noen ekstra kommandoer i kolonnekontekstmenyen.
 
 ![image-20210219110649076](assets/image-20210219110649076.png)
 
+Du kan flytte kolonnene til venstre eller høyre, eller redigere kolonnen.
 
-You can move the columns to left or right, or edit the column.
+### Slette kolonner
 
-### Deleting columns
-
-When editing a column, you'll have the possiblity to delete the column.
+Når du redigerer en kolonne, har du muligheten til å slette kolonnen.
 
 ![image-20210219110744959](assets/image-20210219110744959.png)
 
 ## Serve
 
-- Take a copy of `config/serve.sample.json` and name it `serve.json`
-- Run `npm run serve`
+- Ta en kopi av `config/serve.sample.json` og gi den navnet `serve.json`
+- Kjør `npm run serve`
