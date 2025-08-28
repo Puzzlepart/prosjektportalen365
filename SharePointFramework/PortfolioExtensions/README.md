@@ -1,13 +1,14 @@
-# Portfolio extensions
+# PortfolioExtensions
 
-This solution contains SPFx extensions for the portfolio level.
+Denne løsningen inneholder SPFx-utvidelser for porteføljenivået.
 
-_Published to **npm** as `pp365-portfolioextensions`_
+_Publiseres til **npm** som `pp365-portfolioextensions`_
 
-## Extensions
+## Utvidelser
 
 ### Footer
-Add the footer custom action manually by running the following script:
+
+Legg til footer `custom action` manuelt ved å kjøre følgende skript:
 
 ```powershell
 Add-PnPApplicationCustomizer -Title "Footer" -ClientSideComponentId "84f27cec-ffde-4e00-a4cf-25c69f691054" -ClientSideComponentProperties "{`"listName`":`"Hjelpeinnhold`",`"linkText`":`"Hjelp tilgjengelig`"}"
@@ -15,9 +16,9 @@ Add-PnPApplicationCustomizer -Title "Footer" -ClientSideComponentId "84f27cec-ff
 
 ## Serve
 
-- Take a copy of `config/serve.sample.json` and name it `serve.json`
-- Run `npm run serve`
+- Ta en kopi av `config/serve.sample.json` og gi den navnet `serve.json`
+- Kjør `npm run serve`
 
-## Versioning
+## Versjonering
 
-Never update the version of this solution independently. The version is automatically kept in sync with the other packages.
+Aldri oppdater versjonen av denne løsningen uavhengig. Versjonen holdes automatisk synkronisert med de andre pakkene.

@@ -1,9 +1,10 @@
-# Project Web Parts 
+# ProjectWebParts
 
-This solution contains SPFx web parts for the project level.
+Denne løsningen inneholder SPFx-webdeler for prosjektnivået.
 
-_Published to **npm** as `pp365-projectwebparts`_
+_Publiseres til **npm** som `pp365-projectwebparts`_
 
 ## Serve
-- Take a copy of `config/serve.sample.json` and name it `serve.json`
-- Run `npm run serve`
+
+- Ta en kopi av `config/serve.sample.json` og gi den navnet `serve.json`
+- Kjør `npm run serve`

@@ -4,7 +4,7 @@ Sørg for at du ber om PR for din branch (høyre side). Sørg for at du gjør en
 
 ## Sjekklisten din
 
-Alle sjekkpunktene under må være sjekket av og godkjent for at vi skal kunne merge branchen din mot dev.
+Alle sjekkpunktene under må være sjekket av og godkjent for at vi skal kunne merge branchen din mot release-branch.
 
 - [ ] Legg ved beskrivelse i [CHANGELOG](https://github.com/Puzzlepart/prosjektportalen365/blob/dev/CHANGELOG.md), markert med **ID av issue** knyttet til PR-en
 - [ ] Angi korrekt `Milestone` på PR-en og issuet, samt tilegn deg selv PR-en og legg til `labels`
@@ -19,15 +19,17 @@ Hvis du har gjort noen visuelle endringer, vennligst legg til før/etter skjermb
 | -------- | ---------- |
 | Førbilde | Etterbilde |
 
+| Bilde beskrivelse |
+| ----------------- |
+| Bilde             |
+
 ### Hvordan teste
 
 Vennligst beskriv hvordan noen andre (en vanlig bruker uten kodeferdigheter) kan teste denne PR-en. Følg eksempelet under, punktene du legger ved vil bli brukt når vi tester neste versjon av Prosjektportalen
 
-| #   | Handling          | Forventet resultat     |
-| --- | ----------------- | ---------------------- |
-| 1   | Gjør følgende...  | Følgende er forventet  |
-| 2   | Deretter dette... | Her forventes dette... |
-| 3   | Deretter utfør... | Her skal...            |
+1. **Gjør følgende...** - Følgende er forventet
+2. **Deretter dette...** - Her forventes dette...
+3. **Deretter utfør...** - Her skal...
 
 ### Relevante issues (hvis aktuelt)
 
