@@ -482,7 +482,7 @@ export class SPDataAdapter
     timelineConfig: TimelineConfigurationModel[]
   ) {
     const config = timelineConfig.find(
-      (col) => col.title === (configItemTitle || 'Prosjektleveranse')
+      (col) => col.title === (configItemTitle || strings.ProjectDeliveryLabel)
     )
 
     if (config?.showElementProgram) {
@@ -520,7 +520,7 @@ export class SPDataAdapter
           ).usingConfig({
             sortOrder: 90,
             bgColorHex: '#384f61',
-            timelineCategory: 'Styring',
+            timelineCategory: strings.ManagementCategoryLabel,
             elementType: strings.BarLabel,
             timelineFilter: true,
             ...config
@@ -599,10 +599,10 @@ export class SPDataAdapter
     await MSGraph.Init(this.spfxContext.msGraphClientFactory)
     const [items, memberOfGroups, users] = await Promise.all([
       this.portalDataService.web.lists
-        .getByTitle(strings.ProjectsListName)
+        .getByTitle(resource.Lists_Projects_Title)
         .items.select(...Object.keys(new SPProjectItem()))
         .filter(
-          `GtProjectLifecycleStatus ne '${resource.Choice_GtProjectLifecycleStatus_Closed}' and GtProjectLifecycleStatus ne 'Stengt'`
+          `GtProjectLifecycleStatus ne '${resource.Choice_GtProjectLifecycleStatus_Closed}' and GtProjectLifecycleStatus ne '${strings.LifecycleStatus_Closed}'`
         )
         .orderBy('Title')
         .using(DefaultCaching)
@@ -630,9 +630,9 @@ export class SPDataAdapter
   ): Promise<any[]> {
     const odataQuery = (configuration?.views || []).find((v) => v.title === dataSource)?.odataQuery
     let projects: any[]
-    if (odataQuery && !dataSource.includes('(Prosjektnivå)')) {
+    if (odataQuery && !dataSource.includes(`(${strings.ProjectLevel})`)) {
       projects = await this.portalDataService.web.lists
-        .getByTitle(strings.ProjectsListName)
+        .getByTitle(resource.Lists_Projects_Title)
         .items.filter(`${odataQuery}`)<any[]>()
     }
     return projects
@@ -813,7 +813,7 @@ export class SPDataAdapter
   public async updateProjectInHub(properties: Record<string, any>): Promise<void> {
     try {
       const siteId = this.spfxContext.pageContext.site.id.toString()
-      const list = this.portalDataService.web.lists.getByTitle(strings.ProjectsListName)
+      const list = this.portalDataService.web.lists.getByTitle(resource.Lists_Projects_Title)
       const [item] = await list.items.filter(`GtSiteId eq '${siteId}'`)()
       await list.items.getById(item.ID).update(properties)
     } catch (error) {}

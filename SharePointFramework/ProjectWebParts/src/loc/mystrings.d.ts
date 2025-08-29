@@ -165,7 +165,6 @@ declare interface IProjectWebPartsStrings {
   ProjectPhasesChangePhaseError: string
   ProjectPhasesFetchDataError: string
   ProjectPropertiesHeader: string
-  ProjectsListName: string
   ProjectStatusDataErrorText: string
   ProjectStatusGroupName: string
   ProjectStatusProjectPropertiesGroupName: string

@@ -590,6 +590,7 @@ declare interface IPortfolioWebPartsStrings {
   SecondaryUserFieldLabel: string
   LifecycleStatus_Completed: string
   LifecycleStatus_Closed: string
+  ProjectLevel: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

@@ -36,7 +36,6 @@ export const useProgramAdministration = (props: IProgramAdministrationProps) => 
   }
 
   const childProjects = [...state.childProjects]
-
   const fluentProviderId = useId('fp-program-administration')
 
   return { context, childProjects, onSelectionChange, fluentProviderId }

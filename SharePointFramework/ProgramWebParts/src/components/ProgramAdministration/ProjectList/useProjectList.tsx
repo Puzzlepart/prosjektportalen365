@@ -12,7 +12,6 @@ export function useProjectList(props: IProjectListProps) {
   )
 
   const columns = useColumns(props.renderLinks)
-
   const columnSizingOptions: TableColumnSizingOptions = columns.reduce(
     (options, col) => ({
       ...options,

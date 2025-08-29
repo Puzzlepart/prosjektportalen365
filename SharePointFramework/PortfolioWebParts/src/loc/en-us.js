@@ -704,6 +704,7 @@ define([], function () {
     PrimaryUserFieldLabel: 'Primary user',
     SecondaryUserFieldLabel: 'Secondary user',
     LifecycleStatus_Completed: 'Completed',
-    LifecycleStatus_Closed: 'Closed'
+    LifecycleStatus_Closed: 'Closed',
+    ProjectLevel: 'Project level'
   }
 })

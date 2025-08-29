@@ -156,8 +156,8 @@ define([], function () {
     ProjectDeliveriesGroupName: 'Prosjektleveranser (beta)',
     ProjectInformationPanelButton: 'Åpne prosjektinformasjonspanel',
     ProjectLabel: 'Prosjekt',
+    ManagementCategoryLabel: 'Styring',
     ProjectPropertiesHeader: 'Prosjektinformasjon',
-    ProjectsListName: 'Prosjekter',
     SaveButtonLabel: 'Lagre',
     SearchBoxGroupName: 'Søkeboks',
     SearchBoxPlaceholderText: 'Søk i {0}...',
@@ -193,5 +193,8 @@ define([], function () {
     DataSourceItemNotFound: 'Datakilde ble ikke funnet',
     DataSourceListName: 'Datakilder',
     ProjectContentColumnItemNotFound: 'Prosjektinnholdskolonne ble ikke funnet',
+    ProjectDeliveryLabel: 'Prosjektleveranse',
+    LifecycleStatus_Closed: 'Stengt',
+    ProjectLevel: 'Prosjektnivå'
   }
 })

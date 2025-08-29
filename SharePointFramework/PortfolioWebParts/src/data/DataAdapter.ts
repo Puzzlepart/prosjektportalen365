@@ -696,7 +696,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   ): Promise<any[]> {
     const odataQuery = (configuration?.views || []).find((v) => v.title === dataSource)?.odataQuery
     let projects: any[]
-    if (odataQuery && !dataSource.includes('(Prosjektnivå)')) {
+    if (odataQuery && !dataSource.includes(`(${strings.ProjectLevel})`)) {
       projects = await this._sp.web.lists
         .getByTitle(resource.Lists_Projects_Title)
         .items.filter(`${odataQuery}`)<any[]>()

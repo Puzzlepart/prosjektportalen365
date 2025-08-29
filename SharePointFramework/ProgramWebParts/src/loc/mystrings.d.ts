@@ -154,8 +154,8 @@ declare interface IProgramWebPartsStrings {
   ProjectDeliveriesGroupName: string
   ProjectInformationPanelButton: string
   ProjectLabel: string
+  ManagementCategoryLabel: string
   ProjectPropertiesHeader: string
-  ProjectsListName: string
   SaveButtonLabel: string
   SearchBoxGroupName: string
   SearchBoxPlaceholderText: string
@@ -190,6 +190,9 @@ declare interface IProgramWebPartsStrings {
   DataSourceItemNotFound: string
   DataSourceListName: string
   ProjectContentColumnItemNotFound: string
+  ProjectDeliveryLabel: string
+  LifecycleStatus_Closed: string
+  ProjectLevel: string
 }
 
 declare module 'ProgramWebPartsStrings' {
