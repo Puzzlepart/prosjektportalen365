@@ -43,6 +43,7 @@ import {
   TOGGLE_FILTER_PANEL
 } from './actions'
 import { persistSelectedColumnsInWebPartProperties } from './persistSelectedColumnsInWebPartProperties'
+import resource from 'SharedResources'
 
 /**
  * Create reducer for `<PortfolioAggregation />` using `createReducer` from `@reduxjs/toolkit`.
@@ -87,7 +88,7 @@ export const createPortfolioAggregationReducer = (
         })
       )
 
-      if (payload.dataSource.level.includes('Prosjekt')) {
+      if (payload.dataSource.level.includes(resource.Lists_DataSources_Level_Project)) {
         allColumnsForCategory = allColumnsForCategory.filter(
           ({ internalName }) => internalName !== 'SiteTitle'
         )
