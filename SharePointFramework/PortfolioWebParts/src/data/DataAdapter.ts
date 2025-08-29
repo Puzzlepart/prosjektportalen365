@@ -1133,7 +1133,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         .select('Id', 'Title', 'TemplateId', 'Description')
         .using(DefaultCaching)()
       return [
-        { title: 'Standard', templateId: 'standard', description: 'Standard team mal' },
+        { title: 'Standard', templateId: 'standard', description: strings.Provision.StandardTeamTemplate },
         ...spItems.map((item) => {
           return {
             title: item.Title,

@@ -85,8 +85,8 @@ define([], function () {
       AutoOwnerOffText: "No",
       AppearanceGroupName: "Appearance",
       SiteTypeRenderModeFieldLabel: "Site type display mode",
-      SiteTypeRenderModeCardNormal: "Card (Normal)",
-      SiteTypeRenderModeCardMinimal: "Card (Minimal)",
+      SiteTypeRenderModeCardNormal: "Card (with image)",
+      SiteTypeRenderModeCardMinimal: "Card (without image and description)",
       SiteTypeRenderModeDropdown: "Dropdown",
       ExpirationDateModeFieldLabel: "Expiration date mode",
       ExpirationDateModeDate: "Date",
@@ -650,10 +650,12 @@ define([], function () {
       DebugModeOnText: 'On',
       DebugModeOffText: 'Off',
       ProvisionError: 'Could not retrieve data from list \'{0}\', please check that the web part is configured correctly and that the list exists on the provisioning portal. Error: {1}',
+      StandardTeamTemplate: 'Default team template',
       FieldLogicGroupName: 'Field Logic',
       AdvancedGroupName: 'Advanced',
       DefaultExpirationDateFieldLabel: 'Default expiration Date',
-      ReadOnlyGroupLogicFieldLabel: 'Require read-only group for internal channel'
+      ReadOnlyGroupLogicFieldLabel: 'Require read-only group for internal channel',
+      ProjectAreaType: 'Project Area'
     },
     Idea: {
       MenuLabel: "Submit idea",
@@ -678,7 +680,17 @@ define([], function () {
       RegisteredIdeaTitle: 'Registered idea',
       NoViewFoundErrorMessage: 'No view was found. It may be that the view specified in the address field does not exist, try removing this. Alternatively, create a new view (Data source).',
       NoIdeaFoundErrorMessage: 'No idea was found. It may be that the idea specified in the address field does not exist, try removing this. Alternatively, create a new idea.',
-      OrderAreaTitle: 'Order area'
+      ProvisionAreaTitle: 'Provision area',
+      ConfigurationListFieldLabel: 'Configuration list',
+      ConfigurationListFieldDescription: 'Name of the Idea configuration list',
+      ConfigurationNameFieldLabel: 'Configuration name',
+      ConfigurationNameFieldDescription: 'Name of the configuration to use',
+      HiddenRegistrationFieldsLabel: 'Hidden fields (registration)',
+      HiddenRegistrationFieldsDescription: 'Fields to hide from the idea module (Idea registration)',
+      HiddenProcessingFieldsLabel: 'Hidden fields (processing)',
+      HiddenProcessingFieldsDescription: 'Fields to hide from the idea module (Idea processing)',
+      ProvisionUrlFieldLabel: 'Provisioning area',
+      ProvisionUrlFieldDescription: 'URL to the area that handles requests'
     },
     AccessTitle: 'No access',
     ProjectNotFound: 'Project not specified...',

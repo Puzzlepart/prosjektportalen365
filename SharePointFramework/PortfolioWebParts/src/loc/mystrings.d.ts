@@ -278,9 +278,11 @@ declare interface IPortfolioWebPartsStrings {
     ProvisionGroupName: string
     MissingFieldsTitle: string
     ProvisionError: string
+    StandardTeamTemplate: string
     FieldLogicGroupName: string
     DefaultExpirationDateFieldLabel: string
     ReadOnlyGroupLogicFieldLabel: string
+    ProjectAreaType: string
   },
   Idea: {
     MenuLabel: string
@@ -305,7 +307,17 @@ declare interface IPortfolioWebPartsStrings {
     RegisteredIdeaTitle: string
     NoViewFoundErrorMessage: string
     NoIdeaFoundErrorMessage: string
-    OrderAreaTitle: string
+    ProvisionAreaTitle: string
+    ConfigurationListFieldLabel: string
+    ConfigurationListFieldDescription: string
+    ConfigurationNameFieldLabel: string
+    ConfigurationNameFieldDescription: string
+    HiddenRegistrationFieldsLabel: string
+    HiddenRegistrationFieldsDescription: string
+    HiddenProcessingFieldsLabel: string
+    HiddenProcessingFieldsDescription: string
+    ProvisionUrlFieldLabel: string
+    ProvisionUrlFieldDescription: string
   },
   AddColumnLabel: string
   AllProjectsHeaderText: string

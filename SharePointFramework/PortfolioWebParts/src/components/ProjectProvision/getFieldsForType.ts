@@ -90,7 +90,7 @@ export const getDefaultTypeFieldConfigurations = (): ITypeFieldConfiguration[] =
   return [
     {
       typeName: 'Prosjektområde',
-      displayName: 'Prosjektområde',
+      displayName: strings.Provision.ProjectAreaType,
       hiddenFields: 'additionalInfo',
       requiredFields: 'type, name, description, owner'
     },

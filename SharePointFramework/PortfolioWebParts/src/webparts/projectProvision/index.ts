@@ -28,7 +28,7 @@ import { Dropdown, Option, IdPrefixProvider, FluentProvider } from '@fluentui/re
 import { customLightTheme } from 'pp365-shared-library'
 
 const DEFAULT_PROVISION_TYPES = [
-  { key: 'Prosjektområde', text: 'Prosjektområde' },
+  { key: 'Prosjektområde', text: strings.Provision.ProjectAreaType },
   { key: 'Viva Engage Community', text: 'Viva Engage Community' },
   { key: 'Microsoft Teams Team', text: 'Microsoft Teams Team' }
 ]
@@ -631,94 +631,80 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
               ]
             },
             {
-              groupName: strings.GeneralGroupName,
-              groupFields: [
-                PropertyPaneDropdown('siteTypeRenderMode', {
-                  label: 'Visning av områdetype',
-                  options: [
-                    { key: 'cardNormal', text: 'Kort (med bilde)' },
-                    { key: 'cardMinimal', text: 'Kort (uten bilde og beskrivelse)' },
-                    { key: 'dropdown', text: 'Nedtrekksliste' }
-                  ],
-                  selectedKey: this.properties.siteTypeRenderMode ?? 'cardNormal'
-                })
-              ]
-            },
-            {
-              groupName: 'Avansert',
+              groupName: strings.Provision.AdvancedGroupName,
               isCollapsed: true,
               groupFields: [
                 PropertyFieldCollectionData('fields', {
                   key: 'fields',
-                  label: 'Felt konfigurasjon',
+                  label: strings.Provision.FieldsConfigurationLabel,
                   panelProps: {
                     type: 6
                   },
-                  panelHeader: 'Konfigurasjon av felter i bestillingsskjema',
-                  manageBtnLabel: 'Konfigurer felter',
+                  panelHeader: strings.Provision.FieldsConfigurationPanelHeader,
+                  manageBtnLabel: strings.Provision.FieldsConfigurationManageBtnLabel,
                   value: this.properties.fields,
                   disableItemCreation: true,
                   disableItemDeletion: true,
                   fields: [
                     {
                       id: 'order',
-                      title: 'Standard rekkefølge',
+                      title: strings.Provision.FieldOrderLabel,
                       type: CustomCollectionFieldType.number,
                       disableEdit: true
                     },
                     {
                       id: 'fieldName',
-                      title: 'Feltnavn (internt)',
+                      title: strings.Provision.FieldNameLabel,
                       type: CustomCollectionFieldType.string,
                       required: true
                     },
                     {
                       id: 'displayName',
-                      title: 'Visningsnavn',
+                      title: strings.Provision.FieldDisplayNameLabel,
                       type: CustomCollectionFieldType.string,
                       required: true
                     },
                     {
                       id: 'description',
-                      title: 'Beskrivelse',
+                      title: strings.Provision.FieldDescriptionLabel,
                       type: CustomCollectionFieldType.string,
                       required: true
                     },
                     {
                       id: 'placeholder',
-                      title: 'Plassholder',
+                      title: strings.Provision.FieldPlaceholderLabel,
                       type: CustomCollectionFieldType.string
                     },
                     {
                       id: 'dataType',
-                      title: 'Felttype',
+                      title: strings.Provision.FieldDataTypeLabel,
                       type: CustomCollectionFieldType.dropdown,
                       disableEdit: true,
                       options: [
-                        { key: 'text', text: 'Tekst' },
-                        { key: 'note', text: 'Notat' },
-                        { key: 'number', text: 'Tall' },
-                        { key: 'choice', text: 'Valg' },
-                        { key: 'userMulti', text: 'Flere brukere' },
-                        { key: 'guest', text: 'Gjestebrukere' },
-                        { key: 'date', text: 'Dato' },
-                        { key: 'tags', text: 'Taksonomi' },
-                        { key: 'boolean', text: 'Ja/nei' },
-                        { key: 'percentage', text: 'Prosent' },
-                        { key: 'site', text: 'Område' },
-                        { key: 'image', text: 'Bilde' }
+                        { key: 'text', text: strings.Provision.FieldDataTypeText },
+                        { key: 'note', text: strings.Provision.FieldDataTypeNote },
+                        { key: 'number', text: strings.Provision.FieldDataTypeNumber },
+                        { key: 'choice', text: strings.Provision.FieldDataTypeChoice },
+                        { key: 'userMulti', text: strings.Provision.FieldDataTypeUserMulti },
+                        { key: 'guest', text: strings.Provision.FieldDataTypeGuest },
+                        { key: 'date', text: strings.Provision.FieldDataTypeDate },
+                        { key: 'tags', text: strings.Provision.FieldDataTypeTags },
+                        { key: 'boolean', text: strings.Provision.FieldDataTypeBoolean },
+                        { key: 'percentage', text: strings.Provision.FieldDataTypePercentage },
+                        { key: 'site', text: strings.Provision.FieldDataTypeSite },
+                        { key: 'image', text: strings.Provision.FieldDataTypeImage }
                       ],
                       defaultValue: 'text'
                     },
                     {
                       id: 'required',
-                      title: 'Påkrevd felt',
+                      title: strings.Provision.FieldRequiredLabel,
                       type: CustomCollectionFieldType.boolean,
                       defaultValue: false
                     },
                     {
                       id: 'level',
-                      title: 'Side i skjema',
+                      title: strings.Provision.FieldLevelLabel,
                       type: CustomCollectionFieldType.number,
                       disableEdit: true,
                       defaultValue: 1
@@ -726,7 +712,7 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                   ]
                 }),
                 PropertyPaneLabel('propertyEditorLabel', {
-                  text: 'Rediger webdelens egenskaper (JSON)'
+                  text: strings.Provision.PropertyEditorLabel
                 }),
                 PropertyPanePropertyEditor({
                   key: 'propertyEditor',
@@ -735,13 +721,13 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                 PropertyFieldMessage('propertyEditorDescription', {
                   key: 'propertyEditorDescription',
                   messageType: 0,
-                  text: 'Her kan du redigere webdelens egenskaper i JSON-format. Eksport og import av egenskaper er også mulig slik at oppsett kan gjenbrukes og importeres i andre ansattsøk webdeler.',
+                  text: strings.Provision.PropertyEditorDescription,
                   isVisible: true
                 }),
                 PropertyPaneToggle('debugMode', {
-                  label: 'DebugMode',
-                  onText: 'På',
-                  offText: 'Av'
+                  label: strings.Provision.DebugModeLabel,
+                  onText: strings.Provision.DebugModeOnText,
+                  offText: strings.Provision.DebugModeOffText
                 })
               ]
             }
