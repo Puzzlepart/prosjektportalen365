@@ -1,5 +1,6 @@
 import { ListMenuItem } from 'pp365-shared-library'
 import { useMemo } from 'react'
+import * as strings from 'PortfolioWebPartsStrings'
 import { useIdeaModuleContext } from '../context'
 import { useCreateNewIdea } from './useCreateNewIdea'
 import { useDelete } from './useDelete'
@@ -21,13 +22,13 @@ export function useToolbarItems() {
   const menuItems = useMemo<ListMenuItem[]>(
     () =>
       [
-        new ListMenuItem('Ny idé', 'Opprett en ny idé').setIcon('QuizNew').setOnClick(() => {
+        new ListMenuItem(strings.Idea.NewButtonText, strings.Idea.NewButtonDescription).setIcon('QuizNew').setOnClick(() => {
           createNewStatusReport
         }),
-        new ListMenuItem('Rediger', 'Rediger idéen').setIcon('Edit').setOnClick(() => {
+        new ListMenuItem(strings.Idea.EditButtonText, strings.Idea.EditButtonDescription).setIcon('Edit').setOnClick(() => {
           // Implement the edit functionality
         }),
-        new ListMenuItem('Godkjenn', 'Godkjenn idéen').setIcon('CloudArrowUp').setOnClick(() => {
+        new ListMenuItem(strings.Idea.ApproveButtonText, strings.Idea.ApproveButtonDescription).setIcon('CloudArrowUp').setOnClick(() => {
           decideIdea()
         })
       ].filter(Boolean),
@@ -37,7 +38,7 @@ export function useToolbarItems() {
   const farMenuItems = useMemo<ListMenuItem[]>(
     () =>
       [
-        new ListMenuItem('Slett', 'Slett idéen').setIcon('Delete').setOnClick(() => {
+        new ListMenuItem(strings.Idea.DeleteButtonText, strings.Idea.DeleteButtonDescription).setIcon('Delete').setOnClick(() => {
           deleteIdea()
         })
       ].filter(Boolean),

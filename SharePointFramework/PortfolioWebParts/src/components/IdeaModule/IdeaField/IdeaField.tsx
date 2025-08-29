@@ -1,5 +1,6 @@
 import { Text } from '@fluentui/react-components'
 import React, { FC } from 'react'
+import * as strings from 'PortfolioWebPartsStrings'
 import { IIdeaFieldProps } from './types'
 import { useIdeaField } from './useIdeaField'
 
@@ -14,7 +15,7 @@ export const IdeaField: FC<IIdeaFieldProps> = (props) => {
       {renderValueForField() ? (
         <Text>{renderValueForField()}</Text>
       ) : (
-        <Text style={{ color: 'var(--colorNeutralForeground4)' }}>Ikke angitt</Text>
+        <Text style={{ color: 'var(--colorNeutralForeground4)' }}>{strings.Idea.NotSpecifiedText}</Text>
       )}
     </div>
   )

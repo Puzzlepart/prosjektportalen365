@@ -118,7 +118,6 @@ declare interface IPortfolioWebPartsStrings {
     ToastCreatedErrorBody: string
     StatusMenuLabel: string
     SettingsMenuLabel: string
-    IdeaMenuLabel: string
     SettingsSearchLabel: string
     SettingsDialogTitle: string
     SettingsDialogDescription: string
@@ -282,6 +281,31 @@ declare interface IPortfolioWebPartsStrings {
     FieldLogicGroupName: string
     DefaultExpirationDateFieldLabel: string
     ReadOnlyGroupLogicFieldLabel: string
+  },
+  Idea: {
+    MenuLabel: string
+    ModuleTitle: string
+    ModuleLoadingText: string
+    OverviewTitle: string
+    RegistrationSectionTitle: string
+    RegisteredIdeasTitle: string
+    ProcessingSectionTitle: string
+    ProcessingIdeasTitle: string
+    NewButtonText: string
+    NewButtonDescription: string
+    EditButtonText: string
+    EditButtonDescription: string
+    ApproveButtonText: string
+    ApproveButtonDescription: string
+    DeleteButtonText: string
+    DeleteButtonDescription: string
+    NotSpecifiedText: string
+    NoRegisteredIdeasText: string
+    NoProcessingIdeasText: string
+    RegisteredIdeaTitle: string
+    NoViewFoundErrorMessage: string
+    NoIdeaFoundErrorMessage: string
+    OrderAreaTitle: string
   },
   AddColumnLabel: string
   AllProjectsHeaderText: string

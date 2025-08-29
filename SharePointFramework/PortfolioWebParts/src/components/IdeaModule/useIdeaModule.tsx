@@ -1,5 +1,6 @@
 import React from 'react'
 import { AccordionToggleEventHandler, Tooltip, useId } from '@fluentui/react-components'
+import * as strings from 'PortfolioWebPartsStrings'
 import { IdeaPhase, IIdeaModuleHashState, IIdeaModuleProps } from './types'
 import { useIdeaModuleState } from './useIdeaModuleState'
 import { useIdeaModuleDataFetch } from './useIdeaModuleDataFetch'
@@ -54,8 +55,7 @@ export function useIdeaModule(props: IIdeaModuleProps) {
       setState({
         error: {
           title: 'Ingen visning funnet',
-          message:
-            'Det ble ikke funnet noen visning. Det kan være at visningen som er spesifisert i adressefeltet ikke eksiterer, prøv å fjerne dette. Eventuelt opprett en ny visning (Datakilde).'
+          message: strings.Idea.NoViewFoundErrorMessage
         }
       })
       return
@@ -100,8 +100,7 @@ export function useIdeaModule(props: IIdeaModuleProps) {
       setState({
         error: {
           title: 'Ingen idé funnet',
-          message:
-            'Det ble ikke funnet noen idé. Det kan være at idéen som er spesifisert i adressefeltet ikke eksiterer, prøv å fjerne dette. Eventuelt opprett en ny idé.'
+          message: strings.Idea.NoIdeaFoundErrorMessage
         }
       })
       return
