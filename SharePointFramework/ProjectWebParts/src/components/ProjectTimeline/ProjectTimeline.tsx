@@ -9,6 +9,7 @@ import styles from './ProjectTimeline.module.scss'
 import { TimelineList } from './TimelineList/TimelineList'
 import { IProjectTimelineProps } from './types'
 import { useProjectTimeline } from './useProjectTimeline'
+import resource from 'SharedResources'
 
 export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
   const { state, setState, onFilterChange, onGroupByChange, defaultTimeframe, timeLapseCenter } =
@@ -78,7 +79,7 @@ ProjectTimeline.defaultProps = {
   defaultTimeframeEnd: '4,months',
   defaultGroupBy: strings.TypeLabel,
   showProjectDeliveries: false,
-  projectDeliveriesListName: 'Prosjektleveranser',
-  configItemTitle: 'Prosjektleveranse',
-  defaultCategory: 'Styring'
+  projectDeliveriesListName: resource.Lists_ProjectDeliveries_Title,
+  configItemTitle: strings.ProjectDeliveryLabel,
+  defaultCategory: strings.ManagementCategoryLabel
 }

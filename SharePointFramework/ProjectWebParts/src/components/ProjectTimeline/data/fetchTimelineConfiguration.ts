@@ -3,7 +3,7 @@ import {
   SPTimelineConfigurationItem,
   TimelineConfigurationModel
 } from 'pp365-shared-library/lib/models'
-import strings from 'ProjectWebPartsStrings'
+import resource from 'SharedResources'
 
 /**
  * Fetches the timeline configuration from the SharePoint list.
@@ -13,7 +13,7 @@ import strings from 'ProjectWebPartsStrings'
 export async function fetchTimelineConfiguration() {
   return (
     await SPDataAdapter.portalDataService.web.lists
-      .getByTitle(strings.TimelineConfigurationListName)
+      .getByTitle(resource.Lists_TimelineConfiguration_Title)
       .items.select(...new SPTimelineConfigurationItem().fields)
       .orderBy('GtSortOrder')()
   )

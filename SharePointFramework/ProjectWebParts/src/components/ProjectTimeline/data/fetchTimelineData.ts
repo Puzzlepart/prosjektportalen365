@@ -9,6 +9,7 @@ import strings from 'ProjectWebPartsStrings'
 import { IProjectTimelineProps } from '../types'
 import '@pnp/sp/items/get-all'
 import { IColumn } from '@fluentui/react'
+import resource from 'SharedResources'
 
 /**
  * Fetch timeline items and columns.
@@ -22,7 +23,7 @@ export async function fetchTimelineData(
 ) {
   try {
     const timelineContentList = SPDataAdapter.portalDataService.web.lists.getByTitle(
-      strings.TimelineContentListName
+      resource.Lists_TimelineContent_Title
     )
 
     let projectDeliveries = []

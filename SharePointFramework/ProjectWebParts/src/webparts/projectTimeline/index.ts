@@ -10,6 +10,7 @@ import '@fluentui/react/dist/css/fabric.min.css'
 import { BaseProjectWebPart } from '../baseProjectWebPart'
 import * as strings from 'ProjectWebPartsStrings'
 import { format } from '@fluentui/react'
+import resource from 'SharedResources'
 
 export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectTimelineProps> {
   public async onInit() {
@@ -31,7 +32,7 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
               groupFields: [
                 PropertyPaneTextField('listName', {
                   label: strings.ListNameFieldLabel,
-                  value: 'Tidslinjeinnhold'
+                  value: resource.Lists_TimelineContent_Title
                 }),
                 PropertyPaneToggle('showTimeline', {
                   label: strings.ShowTimelineLabel
@@ -112,11 +113,11 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
                 }),
                 PropertyPaneTextField('projectDeliveriesListName', {
                   label: strings.ListNameFieldLabel,
-                  value: 'Prosjektleveranser'
+                  value: resource.Lists_ProjectDeliveries_Title
                 }),
                 PropertyPaneTextField('configItemTitle', {
                   label: strings.ConfigItemTitleFieldLabel,
-                  value: 'Prosjektleveranse'
+                  value: strings.ProjectDeliveryLabel
                 })
               ]
             }

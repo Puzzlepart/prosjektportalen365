@@ -156,6 +156,8 @@ declare interface IProjectWebPartsStrings {
   ProbabilityHeaderFieldLabel: string
   ProbabilityPostActionFieldNameFieldLabel: string
   ProjectDeliveriesGroupName: string
+  ProjectDeliveryLabel: string
+  ManagementCategoryLabel: string
   ProjectInformationDataFetchErrorText: string
   ProjectInformationStatusReportHeaderText: string
   ProjectInformationStatusReportHeaderDescription: string
@@ -212,8 +214,6 @@ declare interface IProjectWebPartsStrings {
   SyncPropertiesAfterPhaseChangeFieldLabel: string
   TagFieldLabel: string
   TasksLinkText: string
-  TimelineConfigurationListName: string
-  TimelineContentListName: string
   ToggleUncertaintyPostActionLabel: string
   ToggleUncertaintyPostActionOffText: string
   ToggleUncertaintyPostActionOnText: string
