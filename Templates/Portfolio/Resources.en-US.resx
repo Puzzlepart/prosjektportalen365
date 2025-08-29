@@ -2116,6 +2116,9 @@
     <data name="Navigation_Tasks_Title" xml:space="preserve">
         <value>Tasks</value>
     </data>
+    <data name="Navigation_Tasks_Url" xml:space="preserve">
+        <value>SitePages/Tasks.aspx</value>
+    </data>
     <data name="Navigation_Uncertainty_Title" xml:space="preserve">
         <value>Uncertainty</value>
     </data>

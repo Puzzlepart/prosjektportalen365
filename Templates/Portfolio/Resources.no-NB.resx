@@ -2174,7 +2174,7 @@
         <value>Notatbok</value>
     </data>
     <data name="Navigation_PhaseChecklist_Title" xml:space="preserve">
-        <value>Sjekkliste for fase</value>
+        <value>Fasesjekkliste</value>
     </data>
     <data name="Navigation_PhaseChecklist_Url" xml:space="preserve">
         <value>Lists/Fasesjekkliste/AllItems.aspx</value>
@@ -2220,6 +2220,9 @@
     </data>
     <data name="Navigation_Tasks_Title" xml:space="preserve">
         <value>Oppgaver</value>
+    </data>
+    <data name="Navigation_Tasks_Url" xml:space="preserve">
+        <value>SitePages/Oppgaver</value>
     </data>
     <data name="Navigation_Uncertainty_Title" xml:space="preserve">
         <value>Usikkerhet</value>
