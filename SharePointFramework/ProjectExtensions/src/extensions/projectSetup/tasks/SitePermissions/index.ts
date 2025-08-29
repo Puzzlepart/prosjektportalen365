@@ -7,6 +7,7 @@ import { OnProgressCallbackFunction } from '../types'
 import { IPermissionConfiguration } from './types'
 import { ICamlQuery } from '@pnp/sp/lists'
 import { ISiteUserProps } from '@pnp/sp/site-users'
+import resource from 'SharedResources'
 
 /**
  * Sets up permissions for the SP web.
@@ -76,7 +77,7 @@ export class SitePermissions extends BaseTask {
    */
   private async _getPermissionConfiguration(): Promise<IPermissionConfiguration[]> {
     const list = SPDataAdapter.portalDataService.web.lists.getByTitle(
-      strings.PermissionConfigurationList
+      resource.Lists_Permission_Configuration_Title
     )
 
     const query: ICamlQuery = {

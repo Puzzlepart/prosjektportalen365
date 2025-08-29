@@ -36,7 +36,7 @@ PlannerTaskNotStarted: 'Not started',
         IdeaDecisionStatusApprovedAndSynced: 'Approved and synced',
         NoGroupIdErrorMessage: 'No group ID found',
         NoGroupIdErrorStack: 'No group ID found. Check that the group ID is correct in the template setup.',
-        NotSiteAdminErrorMessage: 'You are not a site admin',   
+        NotSiteAdminErrorMessage: 'You are not a site admin',
         NotSiteAdminErrorStack: 'You are not a site admin. Check that you are a site admin in the template setup.',
         ProjectDataFoundTitle: 'Project data found',
         ProjectDataFoundMessage: 'Project data was found in the site. Do you want to apply the template anyway?',
@@ -144,6 +144,10 @@ PlannerTaskNotStarted: 'Not started',
         TemplateSelectorSearchPlaceholder: 'Search project templates...',
         TemplateSelectorTitle: 'Project template',
         TermSetDoesNotExistError: 'Cannot find term set ID. Check that the term set ID is correct in the template setup.',
-        TitleLabel: 'Title'
+        TitleLabel: 'Title',
+        ProgressLabel: 'Progress',
+        AssignedToLabel: 'Assigned to',
+        SaveButtonLabel: 'Save',
+        CancelButtonLabel: 'Cancel'
     }
 })

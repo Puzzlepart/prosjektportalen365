@@ -147,6 +147,10 @@ declare interface IProjectExtensionsStrings {
   TemplateSelectorTitle: string
   TermSetDoesNotExistError: string
   TitleLabel: string
+  ProgressLabel: string
+  AssignedToLabel: string
+  SaveButtonLabel: string
+  CancelButtonLabel: string
 }
 
 declare module 'ProjectExtensionsStrings' {

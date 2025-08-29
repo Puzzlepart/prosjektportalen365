@@ -34,15 +34,15 @@ export const PlannerTaskItem: FC<IPlannerTaskItemProps> = (props) => {
             <div className={styles.title}>{props.task.title}</div>
             <PlannerTaskItemProperty value={task?.description} />
             <PlannerTaskItemProperty
-              label='Startdato'
+              label={strings.StartDateLabel}
               value={task?.startDateTime?.toLocaleDateString()}
             />
             <PlannerTaskItemProperty
-              label='Forfallsdato'
+              label={strings.DueDateLabel}
               value={task?.dueDateTime?.toLocaleDateString()}
             />
-            <PlannerTaskItemProperty label='Fremdrift' value={task?.progress} />
-            <PlannerTaskItemProperty label='Tilordnet til'>
+            <PlannerTaskItemProperty label={strings.ProgressLabel} value={task?.progress} />
+            <PlannerTaskItemProperty label={strings.AssignedToLabel}>
               {task?.assignees.map((assignee) => (
                 <div key={assignee.displayName}>
                   <Persona

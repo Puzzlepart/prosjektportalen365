@@ -144,6 +144,10 @@ define([], function () {
     TemplateSelectorSearchPlaceholder: 'Søk i prosjektmaler...',
     TemplateSelectorTitle: 'Prosjektmal',
     TermSetDoesNotExistError: 'Finner ikke termsett ID. Sjekk at termsett ID er korrekt i maloppsettet.',
-    TitleLabel: 'Tittel'
+    TitleLabel: 'Tittel',
+    ProgressLabel: 'Fremdrift',
+    AssignedToLabel: 'Tilordnet til',
+    SaveButtonLabel: 'Lagre',
+    CancelButtonLabel: 'Avbryt'
   }
 })
