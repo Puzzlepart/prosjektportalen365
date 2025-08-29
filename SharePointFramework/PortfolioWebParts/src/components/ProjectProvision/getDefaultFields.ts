@@ -159,7 +159,7 @@ export const getDefaultFields = (): IProvisionField[] => {
       fieldName: 'guest',
       displayName: strings.Provision.GuestFieldLabel,
       description: strings.Provision.GuestFieldDescription,
-      placeholder: 'Angi gjester',
+      placeholder: strings.Placeholder.GuestField,
       dataType: 'guest',
       hidden: false,
       level: 1

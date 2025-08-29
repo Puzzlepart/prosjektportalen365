@@ -655,7 +655,9 @@ define([], function () {
       AdvancedGroupName: 'Advanced',
       DefaultExpirationDateFieldLabel: 'Default expiration Date',
       ReadOnlyGroupLogicFieldLabel: 'Require read-only group for internal channel',
-      ProjectAreaType: 'Project Area'
+      ProjectAreaType: 'Project Area',
+      VivaEngageCommunityType: 'Viva Engage Community',
+      MicrosoftTeamsTeamType: 'Microsoft Teams Team',
     },
     Idea: {
       MenuLabel: "Submit idea",
@@ -692,6 +694,9 @@ define([], function () {
       ProvisionUrlFieldLabel: 'Provisioning area',
       ProvisionUrlFieldDescription: 'URL to the area that handles requests'
     },
+    HideDataTypePropertiesLabel: 'Hide properties for display mode',
+    ShowDataTypePropertiesLabel: 'Show properties for display mode',
+    NoViewFoundTitle: 'No view found',
     AccessTitle: 'No access',
     ProjectNotFound: 'Project not specified...',
     PrimaryFieldLabel: 'Primary field',

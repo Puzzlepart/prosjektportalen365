@@ -282,7 +282,9 @@ define([], function () {
       FieldLogicGroupName: 'Feltlogikk',
       DefaultExpirationDateFieldLabel: 'Standard utløpsdato',
       ReadOnlyGroupLogicFieldLabel: 'Krev lesetilgangsgruppe for intern kanal',
-      ProjectAreaType: 'Prosjektområde'
+      ProjectAreaType: 'Prosjektområde',
+      VivaEngageCommunityType: 'Viva Engage felleskap',
+      MicrosoftTeamsTeamType: 'Microsoft Teams Team',
     },
     Idea: {
       MenuLabel: 'Registrer ide',
@@ -319,6 +321,9 @@ define([], function () {
       ProvisionUrlFieldLabel: 'Provisjoneringsområde',
       ProvisionUrlFieldDescription: 'URL til området som håndterer bestillinger'
     },
+    HideDataTypePropertiesLabel: 'Skjul egenskaper for visningsmodus',
+    ShowDataTypePropertiesLabel: 'Vis egenskaper for visningsmodus',
+    NoViewFoundTitle: 'Ingen visning funnet',
     AddColumnLabel: 'Legg til en kolonne',
     AllProjectsHeaderText: 'Alle prosjekter/program',
     AllProjectsSearchBoxPlaceholderText: 'Søk i alle {0} prosjekter...',

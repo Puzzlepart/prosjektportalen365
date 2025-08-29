@@ -96,7 +96,7 @@ export const getDefaultTypeFieldConfigurations = (): ITypeFieldConfiguration[] =
     },
     {
       typeName: 'Viva Engage Community',
-      displayName: 'Viva Engage Community',
+      displayName: strings.Provision.VivaEngageCommunityType,
       hiddenFields: 'teamify, teamTemplate, isConfidential, externalSharing, image',
       requiredFields: 'type, name, description, owner',
       fieldConfigurations: {
@@ -134,7 +134,7 @@ export const getDefaultTypeFieldConfigurations = (): ITypeFieldConfiguration[] =
     },
     {
       typeName: 'Microsoft Teams Team',
-      displayName: 'Microsoft Teams Team',
+      displayName: strings.Provision.MicrosoftTeamsTeamType,
       requiredFields: 'type, name, description, owner',
       fieldConfigurations: {
         name: {

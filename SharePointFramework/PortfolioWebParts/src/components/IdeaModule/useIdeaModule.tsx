@@ -54,7 +54,7 @@ export function useIdeaModule(props: IIdeaModuleProps) {
     if (!selectedView) {
       setState({
         error: {
-          title: 'Ingen visning funnet',
+          title: strings.NoViewFoundTitle,
           message: strings.Idea.NoViewFoundErrorMessage
         }
       })

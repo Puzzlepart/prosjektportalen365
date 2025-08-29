@@ -283,6 +283,8 @@ declare interface IPortfolioWebPartsStrings {
     DefaultExpirationDateFieldLabel: string
     ReadOnlyGroupLogicFieldLabel: string
     ProjectAreaType: string
+    VivaEngageCommunityType: string
+    MicrosoftTeamsTeamType: string
   },
   Idea: {
     MenuLabel: string
@@ -319,6 +321,9 @@ declare interface IPortfolioWebPartsStrings {
     ProvisionUrlFieldLabel: string
     ProvisionUrlFieldDescription: string
   },
+  HideDataTypePropertiesLabel: string
+  ShowDataTypePropertiesLabel: string
+  NoViewFoundTitle: string
   AddColumnLabel: string
   AllProjectsHeaderText: string
   AllProjectsSearchBoxPlaceholderText: string

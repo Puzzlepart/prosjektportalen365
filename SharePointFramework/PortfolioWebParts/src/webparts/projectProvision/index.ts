@@ -29,8 +29,8 @@ import { customLightTheme } from 'pp365-shared-library'
 
 const DEFAULT_PROVISION_TYPES = [
   { key: 'Prosjektområde', text: strings.Provision.ProjectAreaType },
-  { key: 'Viva Engage Community', text: 'Viva Engage Community' },
-  { key: 'Microsoft Teams Team', text: 'Microsoft Teams Team' }
+  { key: 'Viva Engage Community', text: strings.Provision.VivaEngageCommunityType },
+  { key: 'Microsoft Teams Team', text: strings.Provision.MicrosoftTeamsTeamType }
 ]
 
 export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProjectProvisionProps> {
