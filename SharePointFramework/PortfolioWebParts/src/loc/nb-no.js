@@ -420,7 +420,6 @@ define([], function () {
     ErrorTitle: 'Det har oppstått en feil',
     AccessTitle: 'Ingen tilgang',
     ExcelExportButtonLabel: 'Eksporter til Excel',
-
     FiltersString: 'Filtre',
     FilterText: 'Filtrer',
     GeneralGroupName: 'Generelt',
@@ -492,6 +491,11 @@ define([], function () {
     ProjectListQuickLaunch: 'Hurtigmeny for prosjekt',
     ProjectManager: 'Prosjektleder',
     ProjectMetadataFieldLabel: 'Prosjektmetadata',
+    ProjectCard: {
+      WebPartDescription: 'Prosjektkort',
+      ProjectSiteIdFieldLabel: 'Område ID',
+      ProjectSiteIdFieldDescription: 'ID for SharePoint-området (Prosjektet)'
+    },
     ProjectOwner: 'Prosjekteier',
     ProjectsAccessHeaderText: 'Tilgang til',
     ProjectsAccessSearchBoxPlaceholderText: 'Søk i {0} prosjekter du har tilgang til...',

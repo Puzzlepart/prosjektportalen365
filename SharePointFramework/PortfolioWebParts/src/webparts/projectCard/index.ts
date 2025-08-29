@@ -115,7 +115,6 @@ export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCar
           const gtHubSiteId = sitePageData.GtHubSiteId
           const currentHubSiteId = this.context.pageContext.legacyPageContext.hubSiteId
 
-          // Check if the hub site ID from the page matches the current hub
           if (gtHubSiteId && currentHubSiteId && gtHubSiteId !== currentHubSiteId) {
             try {
               const hubSiteInfo = await sp.hubSites.getById(gtHubSiteId)()
@@ -124,23 +123,17 @@ export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCar
                 this._hubSiteUrl = hubSiteInfo.SiteUrl
                 this._hubSiteId = gtHubSiteId
 
-                // Create SP context for the hub site using the actual URL
                 const hubSp = spfi(this._hubSiteUrl).using(SPFx(this.context))
-
-                // Verify the hub site is accessible
                 await hubSp.web.select('Id', 'Title', 'Url')()
 
-                // Store the project site ID
                 this._projectSiteId = gtSiteId
               } else {
                 this._projectSiteId = gtSiteId
               }
             } catch (hubError) {
-              // Fallback to using the site ID as-is
               this._projectSiteId = gtSiteId
             }
           } else {
-            // Same hub or no hub specified, use the site ID directly
             this._projectSiteId = gtSiteId
           }
         } else {
@@ -164,7 +157,7 @@ export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCar
       pages: [
         {
           header: {
-            description: 'Prosjektkort'
+            description: strings.ProjectCard.WebPartDescription
           },
           displayGroupsAsAccordion: true,
           groups: [
@@ -172,8 +165,8 @@ export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCar
               groupName: strings.GeneralGroupName,
               groupFields: [
                 PropertyPaneTextField('projectSiteId', {
-                  label: 'Område ID',
-                  description: 'ID for SharePoint-området (Prosjektet)'
+                  label: strings.ProjectCard.ProjectSiteIdFieldLabel,
+                  description: strings.ProjectCard.ProjectSiteIdFieldDescription
                 })
               ]
             },

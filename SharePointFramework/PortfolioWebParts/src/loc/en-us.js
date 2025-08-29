@@ -252,6 +252,11 @@ define([], function () {
     ProjectInformationPanelButton: 'Project information panel',
     ProjectListQuickLaunch: 'Project list',
     ProjectMetadataFieldLabel: 'Project metadata field',
+    ProjectCard: {
+      WebPartDescription: 'Project card',
+      ProjectSiteIdFieldLabel: 'Site ID',
+      ProjectSiteIdFieldDescription: 'ID for the SharePoint site (Project)'
+    },
     ProjectServiceArea: 'Project service area',
     ProjectType: 'Project type',
     RelativeUrl: 'Relative URL',
@@ -270,8 +275,6 @@ define([], function () {
     UseDynamicColorsLabel: 'Use dynamic colors',
     ViewLessText: 'View less',
     ViewMoreText: 'View more',
-
-
     ResultsCountLabel: 'Displaying {0} of {1} projects',
     ColumnRenderOptionStatusReport: 'Status report',
     PortfolioSelectorLabel: 'Portfolio selector',

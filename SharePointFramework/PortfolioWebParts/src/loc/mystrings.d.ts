@@ -489,6 +489,11 @@ declare interface IPortfolioWebPartsStrings {
   ProjectListQuickLaunch: string
   ProjectManager: string
   ProjectMetadataFieldLabel: string
+  ProjectCard: {
+    WebPartDescription: string
+    ProjectSiteIdFieldLabel: string
+    ProjectSiteIdFieldDescription: string
+  }
   ProjectOwner: string
   ProjectsAccessHeaderText: string
   ProjectsAccessSearchBoxPlaceholderText: string

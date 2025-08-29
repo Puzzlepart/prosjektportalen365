@@ -6,6 +6,7 @@ import { FluentProvider, IdPrefixProvider } from '@fluentui/react-components'
 import { ProjectCard as ProjectNewsCard } from '../ProjectList/ProjectCard'
 import { customLightTheme, SiteContext } from 'pp365-shared-library'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
+import resource from 'SharedResources'
 
 export const ProjectCard: FC<IProjectCardProps> = (props) => {
   const { state, setState, createCardContext, fluentProviderId } = useProjectCard(props)
@@ -56,23 +57,23 @@ ProjectCard.defaultProps = {
   quickLaunchMenu: [
     {
       order: 10,
-      text: 'Prosjektstatus',
-      relativeUrl: '/SitePages/Prosjektstatus.aspx'
+      text: resource.Navigation_ProjectStatus_Title,
+      relativeUrl: `/${resource.Navigation_ProjectStatus_Url}`
     },
     {
       order: 20,
-      text: 'Dokumentbibliotek',
-      relativeUrl: '/Delte%20dokumenter'
+      text: resource.Navigation_Documents_Title,
+      relativeUrl: `/${resource.Navigation_Documents_Url}`
     },
     {
       order: 30,
-      text: 'Fasesjekkliste',
-      relativeUrl: '/Lists/Fasesjekkliste'
+      text: resource.Navigation_PhaseChecklist_Title,
+      relativeUrl: `/${resource.Navigation_PhaseChecklist_Url}`
     },
     {
       order: 40,
-      text: 'Oppgaver',
-      relativeUrl: '/SitePages/Oppgaver.aspx'
+      text: resource.Navigation_Tasks_Title,
+      relativeUrl: `/${resource.Navigation_Tasks_Url}`
     }
   ]
 }
