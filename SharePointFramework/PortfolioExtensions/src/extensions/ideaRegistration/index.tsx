@@ -39,7 +39,9 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
     this._openCmd = this.tryGetCommand('OPEN_IDEA_REGISTRATION_DIALOG')
     this._openCmd.visible = false
     this._openLinkCmd = this.tryGetCommand('IDEA_PROCESSING_LINK')
-    this._openLinkCmd.visible = this.context.pageContext.list.title.includes(strings.IdeaRegistrationIncludeString)
+    this._openLinkCmd.visible = this.context.pageContext.list.title.includes(
+      strings.IdeaRegistrationIncludeString
+    )
     this._userAuthorized = await isUserAuthorized(
       this._sp,
       strings.IdeaProcessorsSiteGroup,
@@ -207,7 +209,8 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
           (col) =>
             col.GtDataSourceCategory === resource.Lists_DataSources_Category_IdeaModule ||
             (!col.GtDataSourceCategory && !col.GtDataSourceLevel) ||
-            (!col.GtDataSourceCategory && _.contains(col.GtDataSourceLevel, resource.Lists_DataSources_Level_Portfolio))
+            (!col.GtDataSourceCategory &&
+              _.contains(col.GtDataSourceLevel, resource.Lists_DataSources_Level_Portfolio))
         )
 
         return filteredColumnItems

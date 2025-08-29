@@ -41,8 +41,8 @@ export const IdeaDialog: FC<IIdeaDialogProps> = (props) => {
                   props.isBlocked
                     ? strings.IdeaProjectDataDialogBlockedMessage
                     : props.isApproved
-                      ? props.dialogMessage
-                      : strings.IdeaProjectDataDialogNotApprovedMessage,
+                    ? props.dialogMessage
+                    : strings.IdeaProjectDataDialogNotApprovedMessage,
                   encodeURIComponent(window.location.href)
                 )}
                 intent={props.isBlocked || !props.isApproved ? 'warning' : 'info'}

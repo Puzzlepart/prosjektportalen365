@@ -1,4 +1,5 @@
 /* eslint-disable prefer-spread */
+/* eslint-disable no-console */
 import { useContext, useState, useMemo } from 'react'
 import { useMotion } from '@fluentui/react-motion-preview'
 import { useMotionStyles } from './motionStyles'

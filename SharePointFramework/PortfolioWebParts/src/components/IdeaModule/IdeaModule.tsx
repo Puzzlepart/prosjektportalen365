@@ -68,7 +68,11 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme}>
           {state.loading ? (
-            <Spinner className={styles.loading} label={strings.Idea.ModuleLoadingText} size='extra-large' />
+            <Spinner
+              className={styles.loading}
+              label={strings.Idea.ModuleLoadingText}
+              size='extra-large'
+            />
           ) : (
             <div className={styles.ideaModule}>
               <NavDrawer
@@ -94,7 +98,9 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                   </Tooltip>
                 </NavDrawerHeader>
                 <NavDrawerBody className={styles.navBody}>
-                  <AppItemStatic icon={getFluentIcon('Lightbulb')}>{strings.Idea.ModuleTitle}</AppItemStatic>
+                  <AppItemStatic icon={getFluentIcon('Lightbulb')}>
+                    {strings.Idea.ModuleTitle}
+                  </AppItemStatic>
                   <NavItem
                     icon={<Dashboard />}
                     key='overview'
@@ -128,9 +134,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                             </NavSubItem>
                           ))
                       ) : (
-                        <div className={styles.noIdeas}>
-                          {strings.Idea.NoRegisteredIdeasText}
-                        </div>
+                        <div className={styles.noIdeas}>{strings.Idea.NoRegisteredIdeasText}</div>
                       )}
                     </NavSubItemGroup>
                   </NavCategory>
@@ -157,9 +161,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                             </NavSubItem>
                           ))
                       ) : (
-                        <div className={styles.noIdeas}>
-                          {strings.Idea.NoProcessingIdeasText}
-                        </div>
+                        <div className={styles.noIdeas}>{strings.Idea.NoProcessingIdeasText}</div>
                       )}
                     </NavSubItemGroup>
                   </NavCategory>

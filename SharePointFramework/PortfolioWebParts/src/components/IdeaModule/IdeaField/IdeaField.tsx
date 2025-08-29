@@ -15,7 +15,9 @@ export const IdeaField: FC<IIdeaFieldProps> = (props) => {
       {renderValueForField() ? (
         <Text>{renderValueForField()}</Text>
       ) : (
-        <Text style={{ color: 'var(--colorNeutralForeground4)' }}>{strings.Idea.NotSpecifiedText}</Text>
+        <Text style={{ color: 'var(--colorNeutralForeground4)' }}>
+          {strings.Idea.NotSpecifiedText}
+        </Text>
       )}
     </div>
   )

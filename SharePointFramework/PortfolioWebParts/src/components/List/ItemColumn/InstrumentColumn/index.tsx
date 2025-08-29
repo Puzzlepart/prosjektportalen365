@@ -67,9 +67,7 @@ export const InstrumentColumn: ColumnRenderComponent<IInstrumentColumnProps> = (
               pointer={{ type: 'blob', animationDelay: 0.5 }}
               value={currentValue}
             />
-            <Text>
-              {format(strings.InstrumentUnitLabel, unit)}
-            </Text>
+            <Text>{format(strings.InstrumentUnitLabel, unit)}</Text>
             <div className={styles.description}>{description}</div>
           </div>
         </div>

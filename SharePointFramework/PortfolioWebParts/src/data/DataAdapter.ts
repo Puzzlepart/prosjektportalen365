@@ -626,7 +626,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
     let projects = this._combineResultData(result)
     projects = projects.filter(
-      (m) => m.lifecycleStatus !== strings.LifecycleStatus_Completed && m.lifecycleStatus !== strings.LifecycleStatus_Closed
+      (m) =>
+        m.lifecycleStatus !== strings.LifecycleStatus_Completed &&
+        m.lifecycleStatus !== strings.LifecycleStatus_Closed
     )
     projects = projects.sort((a, b) => a.title.localeCompare(b.title))
     return projects
@@ -1133,7 +1135,11 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         .select('Id', 'Title', 'TemplateId', 'Description')
         .using(DefaultCaching)()
       return [
-        { title: 'Standard', templateId: 'standard', description: strings.Provision.StandardTeamTemplate },
+        {
+          title: 'Standard',
+          templateId: 'standard',
+          description: strings.Provision.StandardTeamTemplate
+        },
         ...spItems.map((item) => {
           return {
             title: item.Title,
