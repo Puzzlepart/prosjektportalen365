@@ -28,7 +28,7 @@ export const IdeaPhaseBar: FC = () => {
     },
     {
       phase: IdeaPhase.Provisioned,
-      name: strings.Idea.OrderAreaTitle,
+      name: strings.Idea.ProvisionAreaTitle,
       icon: getFluentIcon('BoxToolbox')
     }
   ]
