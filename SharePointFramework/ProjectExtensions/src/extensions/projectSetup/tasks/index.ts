@@ -1,4 +1,4 @@
-import { IProjectSetupData } from 'projectSetup'
+import { IProjectSetupData } from 'extensions/projectSetup'
 import { IBaseTask } from './@BaseTask'
 import { ApplyTemplate } from './ApplyTemplate'
 import { CopyListData } from './CopyListData'

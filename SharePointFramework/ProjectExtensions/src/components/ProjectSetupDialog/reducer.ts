@@ -1,7 +1,7 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
 import { ContentConfig, ProjectExtension, ProjectTemplate } from 'pp365-shared-library'
 import { first, uniq } from 'underscore'
-import { IProjectSetupData } from '../../projectSetup/types'
+import { IProjectSetupData } from '../../extensions/projectSetup/types'
 import { IProjectSetupDialogState } from './types'
 
 export const INIT = createAction('INIT')

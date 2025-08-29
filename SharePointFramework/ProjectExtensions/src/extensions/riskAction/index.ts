@@ -6,7 +6,7 @@ import {
 } from '@microsoft/sp-listview-extensibility'
 import { createElement } from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
-import { RiskAction } from '../components/RiskAction'
+import { RiskAction } from '../../components/RiskAction'
 import { RiskActionFieldCustomizerContext } from './context'
 import { DataAdapter } from './dataAdapter'
 import { RiskActionItemContext } from './types'

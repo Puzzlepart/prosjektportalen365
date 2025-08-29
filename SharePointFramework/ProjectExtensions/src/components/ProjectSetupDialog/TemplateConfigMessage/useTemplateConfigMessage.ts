@@ -2,7 +2,7 @@ import { format } from '@fluentui/react'
 import { IUserMessageProps } from 'pp365-shared-library'
 import strings from 'ProjectExtensionsStrings'
 import { isEmpty } from 'underscore'
-import { ProjectSetupValidation } from '../../../projectSetup/types'
+import { ProjectSetupValidation } from '../../../extensions/projectSetup/types'
 import { useProjectSetupDialogContext } from '../context'
 import { ITemplateConfigMessageProps } from './types'
 

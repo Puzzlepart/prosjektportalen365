@@ -1,6 +1,6 @@
 import { Logger, LogLevel } from '@pnp/logging'
 import { IWeb } from '@pnp/sp/webs'
-import ProjectSetup from 'projectSetup'
+import ProjectSetup from 'extensions/projectSetup'
 
 /**
  * Delete customizer for the specified project setup instance.

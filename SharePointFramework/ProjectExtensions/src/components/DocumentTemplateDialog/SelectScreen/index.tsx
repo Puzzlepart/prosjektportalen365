@@ -10,7 +10,7 @@ import {
 import { TemplateItem } from 'models'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { useContext, useMemo, useState } from 'react'
-import { TemplateSelectorContext } from '../../../templateSelector/context'
+import { TemplateSelectorContext } from '../../../extensions/templateSelector/context'
 import { isEmpty } from 'underscore'
 import { FolderNavigation } from '../FolderNavigation'
 import columns from './columns'

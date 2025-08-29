@@ -1,5 +1,5 @@
 import { stringIsNullOrEmpty } from '@pnp/core'
-import { IProjectSetupData } from 'projectSetup'
+import { IProjectSetupData } from 'extensions/projectSetup'
 import { format } from '@fluentui/react/lib/Utilities'
 import * as strings from 'ProjectExtensionsStrings'
 import { SPField } from 'pp365-shared-library/lib/models/SPField'

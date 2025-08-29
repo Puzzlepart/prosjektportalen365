@@ -5,32 +5,32 @@
     "project-setup-application-customizer": {
       "components": [
         {
-          "entrypoint": "./lib/projectSetup/index.js",
-          "manifest": "./src/projectSetup/manifest.json"
+          "entrypoint": "./lib/extensions/projectSetup/index.js",
+          "manifest": "./src/extensions/projectSetup/manifest.json"
         }
       ]
     },
     "project-upgrade-application-customizer": {
       "components": [
         {
-          "entrypoint": "./lib/projectUpgrade/index.js",
-          "manifest": "./src/projectUpgrade/manifest.json"
+          "entrypoint": "./lib/extensions/projectUpgrade/index.js",
+          "manifest": "./src/extensions/projectUpgrade/manifest.json"
         }
       ]
     },
     "template-selector-command-set": {
       "components": [
         {
-          "entrypoint": "./lib/templateSelector/index.js",
-          "manifest": "./src/templateSelector/manifest.json"
+          "entrypoint": "./lib/extensions/templateSelector/index.js",
+          "manifest": "./src/extensions/templateSelector/manifest.json"
         }
       ]
     },
     "risk-action-field-customizer": {
       "components": [
         {
-          "entrypoint": "./lib/riskAction/index.js",
-          "manifest": "./src/riskAction/manifest.json"
+          "entrypoint": "./lib/extensions/riskAction/index.js",
+          "manifest": "./src/extensions/riskAction/manifest.json"
         }
       ]
     }

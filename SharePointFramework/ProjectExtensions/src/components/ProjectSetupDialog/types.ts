@@ -1,5 +1,5 @@
 import { ContentConfig, ProjectExtension, ProjectTemplate } from 'pp365-shared-library'
-import { IProjectSetupData, ProjectSetupValidation } from 'projectSetup/types'
+import { IProjectSetupData, ProjectSetupValidation } from 'extensions/projectSetup/types'
 import { FC, HTMLProps } from 'react'
 import { IBaseDialogProps } from '../@BaseDialog/types'
 

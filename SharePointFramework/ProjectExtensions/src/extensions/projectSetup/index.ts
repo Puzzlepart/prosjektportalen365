@@ -30,7 +30,7 @@ import {
   IProjectSetupDialogState,
   ProgressDialog,
   ProjectSetupDialog
-} from '../components'
+} from '../../components'
 import { ProjectSetupError } from './ProjectSetupError'
 import { deleteCustomizer } from './deleteCustomizer'
 import * as Tasks from './tasks'
