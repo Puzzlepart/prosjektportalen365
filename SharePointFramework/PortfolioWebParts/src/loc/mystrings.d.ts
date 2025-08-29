@@ -337,6 +337,7 @@ declare interface IPortfolioWebPartsStrings {
   ColumnRenderOptionDate: string
   ColumnRenderOptionDateIncludeTimeLabel: string
   ColumnRenderOptionInstrument: string
+  InstrumentUnitLabel: string
   ColumnRenderOptionDialog: string
   ColumnRenderOptionDialogInfoTextTemplateDescription: string
   ColumnRenderOptionDialogInfoTextTemplateLabel: string

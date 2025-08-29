@@ -337,6 +337,7 @@ define([], function () {
     ColumnRenderOptionDate: 'Dato',
     ColumnRenderOptionDateIncludeTimeLabel: 'Inkluder tidspunkt',
     ColumnRenderOptionInstrument: 'Instrument',
+    InstrumentUnitLabel: 'Enhet: {0}',
     ColumnRenderOptionDialog: 'Modal',
     ColumnRenderOptionDialogInfoTextTemplateDescription: 'Mal for infotekst. Bruk {{GtMeasurementOWSCHCS}} for å vise måleindikatoren, {{GtStartValueOWSNMBR}} for å vise startverdien og {{GtDesiredValueOWSNMBR}} for å vise målet. Du kan også bruke andre kolonnenavn fra gevinstarbeidet.',
     ColumnRenderOptionDialogInfoTextTemplateLabel: 'Mal for infotekst',

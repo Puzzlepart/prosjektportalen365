@@ -68,7 +68,7 @@ export const InstrumentColumn: ColumnRenderComponent<IInstrumentColumnProps> = (
               value={currentValue}
             />
             <Text>
-              Enhet: <strong>{unit}</strong>
+              {format(strings.InstrumentUnitLabel, unit)}
             </Text>
             <div className={styles.description}>{description}</div>
           </div>

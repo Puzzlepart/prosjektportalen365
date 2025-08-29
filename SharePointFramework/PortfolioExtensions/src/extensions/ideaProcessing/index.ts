@@ -16,6 +16,7 @@ import { Choice, IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
 import strings from 'PortfolioExtensionsStrings'
 import { find } from 'underscore'
 import { isUserAuthorized } from '../../helpers/isUserAuthorized'
+import resource from 'SharedResources'
 
 export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
   private _userAuthorized: boolean
@@ -85,7 +86,7 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
    */
   private _getIdeaConfiguration = async (): Promise<IdeaConfigurationModel[]> => {
     const config = await this._sp.web.lists
-      .getByTitle(strings.IdeaConfigurationTitle)
+      .getByTitle(resource.Lists_Idea_Configuration_Title)
       .select(...new SPIdeaConfigurationItem().fields)
       .items()
 

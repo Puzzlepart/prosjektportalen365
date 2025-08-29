@@ -35,7 +35,6 @@ define([], function () {
     HelpContentLinkText: 'Help available',
     HelpContentListName: 'Hjelpeinnhold',
     IdeaAlreadyApproved: 'This idea has already been approved',
-    IdeaConfigurationTitle: 'Idékonfigurasjon',
     IdeaProcessorsSiteGroup: 'Idebehandlere',
     IdeaProjectDataDialogBlockedMessage: 'Project data for this idea has already been created and associated.',
     IdeaProjectDataDialogTitle: 'Create project data for the idea',

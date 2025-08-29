@@ -234,6 +234,7 @@ define([], function () {
     ColumnCategoryDescription: 'The category of the column. This is used to group columns in the web part.',
     ColumnCategoryLabel: 'Column category',
     ColumnRenderOptionInstrument: 'Instrument',
+    InstrumentUnitLabel: 'Unit: {0}',
     DefaultRenderModeDescription: 'The default display mode for the web part. This can be changed in the web part properties.',
     DefaultTimeframeEndLabel: 'Default end date',
     DefaultTimeframeEndValue: 'Default end date value',

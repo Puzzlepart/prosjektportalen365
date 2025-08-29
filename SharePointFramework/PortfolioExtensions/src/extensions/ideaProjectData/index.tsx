@@ -72,7 +72,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
    */
   private _getIdeaConfiguration = async (): Promise<IdeaConfigurationModel[]> => {
     const config = await this._sp.web.lists
-      .getByTitle(strings.IdeaConfigurationTitle)
+      .getByTitle(resource.Lists_Idea_Configuration_Title)
       .select(...new SPIdeaConfigurationItem().fields)
       .items()
 

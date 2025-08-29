@@ -25,7 +25,6 @@ define([], function () {
     HelpContentUnavailableLabel: 'Hjelp utilgjengelig',
     HelpContentListName: 'Hjelpeinnhold',
     IdeaAlreadyApproved: 'Denne ideen er allerede godkjent',
-    IdeaConfigurationTitle: 'Idékonfigurasjon',
     IdeaProcessingListErrorMessage: 'Fant ikke en idébehandlingsliste, vennligst sjekk idékonfigurasjonen eller kontakt administrator.',
     IdeaProcessorsSiteGroup: 'Idebehandlere',
     IdeaProjectDataDialogBlockedTitle: 'Prosjektdata element funnet',

@@ -19,7 +19,7 @@ export const fetchData = async (web: IWeb, column?: ProjectColumn) => {
     web.lists
       .getByTitle(props.statusReportListName)
       .items.top(500)
-      .filter("GtModerationStatus eq 'Publisert'")(),
+      .filter("GtModerationStatus eq 'Publisert'")(), // TODO: Use resources when available
     web.lists
       .getByTitle(props.statusSectionsListName)
       .items.select('GtSecFieldName', 'GtSecIcon')
