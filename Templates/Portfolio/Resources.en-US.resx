@@ -544,7 +544,18 @@
     <data name="Choice_GtBAStakeholderGroup_OtherActors" xml:space="preserve">
         <value>Other actors</value>
     </data>
-
+    <data name="Choice_GtDeliveryStatus_AccordingToPlan" xml:space="preserve">
+        <value>According to plan</value>
+    </data>
+    <data name="Choice_GtDeliveryStatus_MinorDeviations" xml:space="preserve">
+        <value>Minor deviations</value>
+    </data>
+    <data name="Choice_GtDeliveryStatus_MajorDeviations" xml:space="preserve">
+        <value>Major deviations</value>
+    </data>
+    <data name="Choice_GtDeliveryStatus_Approved" xml:space="preserve">
+        <value>Approved</value>
+    </data>
     <data name="ClientSidePages_BenefitOverview_PageName" xml:space="preserve">
         <value>BenefitOverview.aspx</value>
     </data>

@@ -544,6 +544,18 @@
     <data name="Choice_GtBAStakeholderGroup_OtherActors" xml:space="preserve">
         <value>Andre aktører</value>
     </data>
+    <data name="Choice_GtDeliveryStatus_AccordingToPlan" xml:space="preserve">
+        <value>Ihht. plan</value>
+    </data>
+    <data name="Choice_GtDeliveryStatus_MinorDeviations" xml:space="preserve">
+        <value>Små avvik</value>
+    </data>
+    <data name="Choice_GtDeliveryStatus_MajorDeviations" xml:space="preserve">
+        <value>Store avvik</value>
+    </data>
+    <data name="Choice_GtDeliveryStatus_Approved" xml:space="preserve">
+        <value>Godkjent</value>
+    </data>
     <data name="ClientSidePages_BenefitOverview_PageName" xml:space="preserve">
         <value>Gevinstoversikt.aspx</value>
     </data>
