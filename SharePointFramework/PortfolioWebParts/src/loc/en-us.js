@@ -659,6 +659,7 @@ define([], function () {
       VivaEngageCommunityType: 'Viva Engage Community',
       MicrosoftTeamsTeamType: 'Microsoft Teams Team',
     },
+    NotSpecifiedText: 'Not specified',
     Idea: {
       MenuLabel: "Submit idea",
       ModuleTitle: 'Idea Module',
@@ -676,7 +677,6 @@ define([], function () {
       ApproveButtonDescription: 'Approve the idea',
       DeleteButtonText: 'Delete',
       DeleteButtonDescription: 'Delete the idea',
-      NotSpecifiedText: 'Not specified',
       NoRegisteredIdeasText: 'There are currently no registered ideas, registered ideas will appear here',
       NoProcessingIdeasText: 'There are currently no ideas being processed, ideas in processing will appear here',
       RegisteredIdeaTitle: 'Registered idea',

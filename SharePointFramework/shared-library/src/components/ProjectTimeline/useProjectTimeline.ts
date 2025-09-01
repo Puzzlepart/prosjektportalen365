@@ -126,9 +126,9 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
           const name =
             col.fieldName.includes('GtIsProgram') || col.fieldName.includes('GtIsParentProject')
               ? value === '1'
-                ? 'Ja'
+                ? strings.BooleanYes
                 : value === '0'
-                ? 'Nei'
+                ? strings.BooleanNo
                 : value
               : value
           return { name: name, value, selected }

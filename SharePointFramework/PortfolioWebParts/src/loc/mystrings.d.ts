@@ -286,6 +286,7 @@ declare interface IPortfolioWebPartsStrings {
     VivaEngageCommunityType: string
     MicrosoftTeamsTeamType: string
   },
+  NotSpecifiedText: string
   Idea: {
     MenuLabel: string
     ModuleTitle: string
@@ -303,7 +304,6 @@ declare interface IPortfolioWebPartsStrings {
     ApproveButtonDescription: string
     DeleteButtonText: string
     DeleteButtonDescription: string
-    NotSpecifiedText: string
     NoRegisteredIdeasText: string
     NoProcessingIdeasText: string
     RegisteredIdeaTitle: string

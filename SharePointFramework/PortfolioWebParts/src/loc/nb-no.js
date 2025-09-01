@@ -286,6 +286,7 @@ define([], function () {
       VivaEngageCommunityType: 'Viva Engage felleskap',
       MicrosoftTeamsTeamType: 'Microsoft Teams Team',
     },
+    NotSpecifiedText: 'Ikke angitt',
     Idea: {
       MenuLabel: 'Registrer ide',
       ModuleTitle: 'Idémodul',
@@ -303,7 +304,6 @@ define([], function () {
       ApproveButtonDescription: 'Godkjenn idéen',
       DeleteButtonText: 'Slett',
       DeleteButtonDescription: 'Slett idéen',
-      NotSpecifiedText: 'Ikke angitt',
       NoRegisteredIdeasText: 'Det for øyeblikket ingen registrerte idéer, idéer som blir registrert vil dukke opp her',
       NoProcessingIdeasText: 'Det for øyeblikket ingen idéer i behandling, idéer i behandling vil dukke opp her',
       RegisteredIdeaTitle: 'Registrert idé',
