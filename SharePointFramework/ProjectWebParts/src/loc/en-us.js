@@ -290,6 +290,8 @@ define([], function () {
     ColorPickerStrings: 'Color picker strings',
     NewsCreateSuccess: 'News article created successfully',
     SiteUrlLabel: 'Site URL',
-    SiteUrlDescription: 'Enter the URL of the site where the news should be published.'
+    SiteUrlDescription: 'Enter the URL of the site where the news should be published.',
+    ShowCommentText: 'Show comment',
+    HideCommentText: 'Hide comment',
   }
 })

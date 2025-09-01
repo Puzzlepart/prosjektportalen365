@@ -319,5 +319,7 @@ define([], function () {
     NoPreviewAvailable: 'Ingen forhåndsvisning tilgjengelig.',
     ColorPickerStrings: 'Fargevelgerstrenger',
     NewsCreateSuccess: 'Nyhetsartikkel opprettet',
+    ShowCommentText: 'Vis kommentar',
+    HideCommentText: 'Skjul kommentar',
   }
 })

@@ -30,7 +30,7 @@ export const CheckListItem: FC<IChecklistItemProps> = ({ item }) => {
             appearance='transparent'
             size='small'
             icon={commentHidden ? getFluentIcon('ChevronUp') : getFluentIcon('ChevronDown')}
-            title={commentHidden ? 'Vis kommentar' : 'Skjul kommentar'}
+            title={commentHidden ? strings.ShowCommentText : strings.HideCommentText}
           />
         </div>
       </div>

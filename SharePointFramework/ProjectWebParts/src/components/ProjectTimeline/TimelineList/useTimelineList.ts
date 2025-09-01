@@ -26,7 +26,6 @@ export function useTimelineList() {
   )
 
   const defaultSortState = { sortColumn: 'Title', sortDirection: 'ascending' as SortDirection }
-
   const fluentProviderId = useId('fp-timeline-list')
 
   return {

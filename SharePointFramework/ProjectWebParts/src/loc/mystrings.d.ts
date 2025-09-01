@@ -267,6 +267,8 @@ declare interface IProjectWebPartsStrings {
   NewsCreateDuplicateFileError: string
   PreviewLabel: string
   NoPreviewAvailable: string
+  ShowCommentText: string
+  HideCommentText: string
 }
 
 declare module 'ProjectWebPartsStrings' {
