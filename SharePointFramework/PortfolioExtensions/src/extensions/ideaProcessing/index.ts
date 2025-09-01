@@ -31,7 +31,7 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
     this._openCmd.visible = false
     this._userAuthorized = await isUserAuthorized(
       this._sp,
-      strings.IdeaProcessorsSiteGroup, // TODO: User resource when this has been created
+      resource.Security_SiteGroup_IdeaProcessors_Title,
       this.context
     )
     this.context.listView.listViewStateChangedEvent.add(this, this._onListViewStateChanged)

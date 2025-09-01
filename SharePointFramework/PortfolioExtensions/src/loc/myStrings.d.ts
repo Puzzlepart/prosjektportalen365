@@ -24,7 +24,6 @@ declare interface IPortfolioExtensionsStrings {
   HelpContentUnavailableLabel: string
   IdeaAlreadyApproved: string
   IdeaProcessingListErrorMessage: string
-  IdeaProcessorsSiteGroup: string
   IdeaProjectDataDialogBlockedTitle: string
   IdeaProjectDataDialogBlockedMessage: string
   IdeaProjectDataDialogNotApprovedMessage: string

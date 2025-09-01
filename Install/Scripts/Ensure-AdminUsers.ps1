@@ -13,7 +13,7 @@ param (
     [string]$ClientId = "da6c31a6-b557-4ac3-9994-7315da06ea3a"
 )
 
-$PortfolioAdminGroupName = "Porteføljeadministratorer"
+$PortfolioAdminGroupName = "Porteføljeadministratorer" # TODO: support en-US
 $PortfolioUri = [System.Uri]$PortfolioUrl
 $TenantAdminUrl = (@($PortfolioUri.Scheme, "://", $PortfolioUri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
 

@@ -38,7 +38,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
     this._openCmd.visible = false
     this._userAuthorized = await isUserAuthorized(
       this._sp,
-      strings.IdeaProcessorsSiteGroup,
+      resource.Security_SiteGroup_IdeaProcessors_Title,
       this.context
     )
     this.context.listView.listViewStateChangedEvent.add(this, this._onListViewStateChanged)

@@ -275,7 +275,6 @@ declare interface IPortfolioWebPartsStrings {
     DebugModeOnText: string
     DebugModeOffText: string
     WebPartDescription: string
-    ProvisionGroupName: string
     MissingFieldsTitle: string
     ProvisionError: string
     StandardTeamTemplate: string
@@ -485,7 +484,6 @@ declare interface IPortfolioWebPartsStrings {
   PhaseLabel: string
   PortfolioAggregationNotConfiguredMessage: string
   PortfolioAggregationViewSearchQueryDescription: string
-  PortfolioManagerGroupName: string
   PortfolioOverviewColumnRenderDescription: string
   PortfolioOverviewDataFetchError: string
   PortfolioOverviewDataFetchErrorView: string

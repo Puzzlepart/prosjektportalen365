@@ -916,9 +916,6 @@
     <data name="DiceCalculator_LessThan10Additional" xml:space="preserve">
         <value>&lt;10% Extra Effort</value>
     </data>
-    <data name="Group_Portfolio_administrators_Name" xml:space="preserve">
-        <value>Portfolio administrators</value>
-    </data>
     <data name="ListFields_Benefit_DisplayName" xml:space="preserve">
         <value>Benefit</value>
     </data>
@@ -1719,6 +1716,9 @@
     </data>
     <data name="Lists_ProjectProperties_Url" xml:space="preserve">
         <value>Lists/ProjectProperties</value>
+    </data>
+    <data name="Lists_ProjectStatusAttachments_Description" xml:space="preserve">
+        <value>Contains all attachments related to status reports for projects.</value>
     </data>
     <data name="Lists_ProjectStatusAttachments_Title" xml:space="preserve">
         <value>Project Status Attachments</value>
@@ -4087,9 +4087,6 @@
     <data name="WebParts_QuickLinks_AccessAndRoles_PortfolioInsight_Description" xml:space="preserve">
         <value>Grant specific users access to all projects in the portfolio</value>
     </data>
-    <data name="WebParts_QuickLinks_AccessAndRoles_PortfolioInsight_Title" xml:space="preserve">
-        <value>Portfolio Insight</value>
-    </data>
     <data name="WebParts_QuickLinks_AccessAndRoles_Title" xml:space="preserve">
         <value>Access and Roles</value>
     </data>
@@ -4185,5 +4182,35 @@
   </data>
   <data name="SiteFields_GtAiProcessedDateTime_DisplayName" xml:space="preserve">
     <value>Processed date/time (AI)</value>
+  </data>
+  <data name="Security_SiteGroup_ProvisionPortal_Title" xml:space="preserve">
+    <value>Provision portal</value>
+  </data>
+  <data name="Security_SiteGroup_ProvisionPortal_Description" xml:space="preserve">
+    <value>Users who have access to the Provision Portal to order projects and areas.</value>
+  </data>
+  <data name="Security_SiteGroup_AssistantUsers_Title" xml:space="preserve">
+    <value>Assistant users</value>
+  </data>
+  <data name="Security_SiteGroup_AssistantUsers_Description" xml:space="preserve">
+    <value>Users who have access to the Project Portal Assistant</value>
+  </data>
+  <data name="Security_SiteGroup_PortfolioInsight_Title" xml:space="preserve">
+    <value>Portfolio insight</value>
+  </data>
+  <data name="Security_SiteGroup_PortfolioInsight_Description" xml:space="preserve">
+    <value>Insight into portfolio</value>
+  </data>
+  <data name="Security_SiteGroup_PortfolioAdministrators_Title" xml:space="preserve">
+    <value>Portfolio administrators</value>
+  </data>
+  <data name="Security_SiteGroup_PortfolioAdministrators_Description" xml:space="preserve">
+    <value>Portfolio administrators have by default full control over all project areas through the list &lt;a href=&quot;{site}/Lists/Tillatelseskonfigurasjon&quot;&gt;Permission Configuration&lt;/a&gt;.</value>
+  </data>
+  <data name="Security_SiteGroup_IdeaProcessors_Title" xml:space="preserve">
+    <value>Idea processors</value>
+  </data>
+  <data name="Security_SiteGroup_IdeaProcessors_Description" xml:space="preserve">
+    <value>Idea processors are people who can approve and process ideas: &lt;a href=&quot;{site}/Lists/Idebehandling&quot;&gt;Idea Processing&lt;/a&gt;.</value>
   </data>
 </root>

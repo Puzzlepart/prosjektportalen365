@@ -1,36 +1,36 @@
 <pnp:Security xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:SiteGroups>
         <pnp:SiteGroup
-            Title="Bestillingsportalen"
-            Description="Brukere som har tilgang til Bestillingsportalen for å bestille prosjekter og områder."
+            Title="{resource:Security_SiteGroup_ProvisionPortal_Title}"
+            Description="{resource:Security_SiteGroup_ProvisionPortal_Description}"
             Owner="{associatedownergroupid}"
             AllowMembersEditMembership="false"
             OnlyAllowMembersViewMembership="true">
         </pnp:SiteGroup>
         <pnp:SiteGroup
-            Title="Assistentbrukere"
-            Description="Brukere som har tilgang til Prosjektportalen Assistent"
+            Title="{resource:Security_SiteGroup_AssistantUsers_Title}"
+            Description="{resource:Security_SiteGroup_AssistantUsers_Description}"
             Owner="{associatedownergroupid}"
             AllowMembersEditMembership="false"
             OnlyAllowMembersViewMembership="true">
         </pnp:SiteGroup>
         <pnp:SiteGroup
-            Title="Porteføljeinnsyn"
-            Description="Innsyn i portefølje"
+            Title="{resource:Security_SiteGroup_PortfolioInsight_Title}"
+            Description="{resource:Security_SiteGroup_PortfolioInsight_Description}"
             Owner="{associatedownergroupid}"
             AllowMembersEditMembership="false"
             OnlyAllowMembersViewMembership="true">
         </pnp:SiteGroup>
         <pnp:SiteGroup
-            Title="Porteføljeadministratorer"
-            Description="Porteføljeadministratorer har som standard full kontroll på alle prosjektområder gjennom listen &lt;a href=&quot;{site}/Lists/Tillatelseskonfigurasjon&quot;&gt;Tillatelseskonfigurasjon&lt;/a&gt;."
+            Title="{resource:Security_SiteGroup_PortfolioAdministrators_Title}"
+            Description="{resource:Security_SiteGroup_PortfolioAdministrators_Description}"
             Owner="{associatedownergroupid}"
             AllowMembersEditMembership="false"
             OnlyAllowMembersViewMembership="true">
         </pnp:SiteGroup>
         <pnp:SiteGroup
-            Title="Idebehandlere"
-            Description="Idebehandlere er personer som kan kan godkjenne og behandle idéer: &lt;a href=&quot;{site}/Lists/Idebehandling&quot;&gt;Idebehandling&lt;/a&gt;."
+            Title="{resource:Security_SiteGroup_IdeaProcessors_Title}"
+            Description="{resource:Security_SiteGroup_IdeaProcessors_Description}"
             Owner="{associatedownergroupid}"
             AllowMembersEditMembership="false"
             OnlyAllowMembersViewMembership="true">

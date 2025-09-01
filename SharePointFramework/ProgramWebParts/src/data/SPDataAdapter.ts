@@ -147,7 +147,9 @@ export class SPDataAdapter
     siteId: string[]
   ): Promise<IPortfolioViewData> {
     siteId = this.spfxContext.pageContext.legacyPageContext.departmentId
-    const isCurrentUserInManagerGroup = await this.isUserInGroup(strings.PortfolioManagerGroupName)
+    const isCurrentUserInManagerGroup = await this.isUserInGroup(
+      resource.Security_SiteGroup_PortfolioInsight_Title
+    )
     if (isCurrentUserInManagerGroup) {
       return await this.fetchDataForManagerView(view, configuration, siteId)
     } else {

@@ -44,7 +44,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
     )
     this._userAuthorized = await isUserAuthorized(
       this._sp,
-      strings.IdeaProcessorsSiteGroup,
+      resource.Security_SiteGroup_IdeaProcessors_Title,
       this.context
     )
     this.context.listView.listViewStateChangedEvent.add(this, this._onListViewStateChanged)

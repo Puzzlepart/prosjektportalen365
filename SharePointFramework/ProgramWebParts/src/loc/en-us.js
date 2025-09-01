@@ -166,7 +166,6 @@ define([], function () {
     DefaultDataSourceViewLabel: 'Default view (data source)',
     DefaultViewLabel: 'Default view',
     GeneralGroupName: 'General',
-    PortfolioManagerGroupName: 'Portfolio insight',
     ProgramAdministrationAddChildsButtonLabel: 'Add projects',
     ProgramAdministrationEmptyMessage: 'No sites are connected to the program.',
     ProgramAdministrationHeader: 'Administration of child projects',

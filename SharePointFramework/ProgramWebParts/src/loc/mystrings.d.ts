@@ -136,7 +136,6 @@ declare interface IProgramWebPartsStrings {
   PersonalViewLabel: string
   PersonalViewsHeaderText: string
   PortfolioAggregationViewSearchQueryDescription: string
-  PortfolioManagerGroupName: string
   PortfolioViewSearchQueryDescription: string
   ProgramAdministrationAddChildsButtonDescription: string
   ProgramAdministrationAddChildsButtonLabel: string

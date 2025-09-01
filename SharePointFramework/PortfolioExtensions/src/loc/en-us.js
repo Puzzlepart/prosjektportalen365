@@ -34,7 +34,6 @@ define([], function () {
     CreateLabel: 'Create',
     HelpContentLinkText: 'Help available',
     IdeaAlreadyApproved: 'This idea has already been approved',
-    IdeaProcessorsSiteGroup: 'Idebehandlere',
     IdeaProjectDataDialogBlockedMessage: 'Project data for this idea has already been created and associated.',
     IdeaProjectDataDialogTitle: 'Create project data for the idea',
     InstallChannelLabel: 'Installation channel',

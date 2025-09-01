@@ -237,7 +237,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     configuration: IPortfolioOverviewConfiguration,
     siteId: string
   ): Promise<IPortfolioViewData> {
-    const isCurrentUserInManagerGroup = await this.isUserInGroup(strings.PortfolioManagerGroupName)
+    const isCurrentUserInManagerGroup = await this.isUserInGroup(
+      resource.Security_SiteGroup_PortfolioInsight_Title
+    )
     if (isCurrentUserInManagerGroup) {
       return await this.fetchDataForManagerView(view, configuration, siteId)
     } else {

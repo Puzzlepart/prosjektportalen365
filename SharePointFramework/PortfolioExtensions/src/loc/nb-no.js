@@ -25,7 +25,6 @@ define([], function () {
     HelpContentUnavailableLabel: 'Hjelp utilgjengelig',
     IdeaAlreadyApproved: 'Denne ideen er allerede godkjent',
     IdeaProcessingListErrorMessage: 'Fant ikke en idébehandlingsliste, vennligst sjekk idékonfigurasjonen eller kontakt administrator.',
-    IdeaProcessorsSiteGroup: 'Idebehandlere',
     IdeaProjectDataDialogBlockedTitle: 'Prosjektdata element funnet',
     IdeaProjectDataDialogBlockedMessage: 'Det er allerede opprettet og tilknyttet prosjektdata for denne ideen.',
     IdeaProjectDataDialogNotApprovedMessage: 'Denne ideen er ikke godkjent, du kan dermed ikke opprette prosjektdata for ideen. Vent til ideen er godkjent før du oppretter prosjektdata.',

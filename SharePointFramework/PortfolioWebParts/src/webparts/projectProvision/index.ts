@@ -28,6 +28,7 @@ import { getDefaultTypeFieldConfigurations } from 'components/ProjectProvision/g
 import * as React from 'react'
 import { Dropdown, Option, IdPrefixProvider, FluentProvider } from '@fluentui/react-components'
 import { customLightTheme } from 'pp365-shared-library'
+import resource from 'SharedResources'
 
 const DEFAULT_PROVISION_TYPES = [
   { key: 'Prosjektområde', text: strings.Provision.ProjectAreaType },
@@ -45,7 +46,7 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
     if (this.properties.requireProvisionAccess) {
       try {
         hasProjectProvisionAccess = await this.dataAdapter.isUserInGroup(
-          strings.Provision.ProvisionGroupName
+          resource.Security_SiteGroup_ProvisionPortal_Title
         )
       } catch {
         hasProjectProvisionAccess = false

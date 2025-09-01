@@ -138,7 +138,6 @@ define([], function () {
     PersonalViewLabel: 'Personlig visning',
     PersonalViewsHeaderText: 'Personlige visninger',
     PortfolioAggregationViewSearchQueryDescription: 'Søkespørringen for å hente data. DepartmentId refererer til Prosjektportalen-huben og bør ikke endres. ContentTypeId refererer til innholdstypen til dataelementet du vil hente. Gå til Datakilder-listen for å se eksempler.',
-    PortfolioManagerGroupName: 'Porteføljeinnsyn',
     PortfolioViewSearchQueryDescription: 'Søkespørringen for å hente prosjekter i porteføljen. DepartmentId refererer til Prosjektportalen-huben og bør ikke endres.',
     ProgramAdministrationAddChildsButtonDescription: 'Her kan du legge til underordnede områder.',
     ProgramAdministrationAddChildsButtonLabel: 'Legg til underområder',

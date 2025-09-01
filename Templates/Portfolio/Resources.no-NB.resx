@@ -931,9 +931,6 @@
     <data name="DiceCalculator_LessThan10Additional" xml:space="preserve">
         <value>&lt;10% ekstrainnsats</value>
     </data>
-    <data name="Group_Portfolio_administrators_Name" xml:space="preserve">
-        <value>Porteføljeadministratorer</value>
-    </data>
     <data name="ListFields_Benefit_DisplayName" xml:space="preserve">
         <value>Gevinst</value>
     </data>
@@ -1731,6 +1728,9 @@
     </data>
     <data name="Lists_ProjectProperties_Url" xml:space="preserve">
         <value>Lists/Prosjektegenskaper</value>
+    </data>
+    <data name="Lists_ProjectStatusAttachments_Description" xml:space="preserve">
+        <value>Inneholder alle vedlegg knyttet til statusrapporter for prosjekter.</value>
     </data>
     <data name="Lists_ProjectStatusAttachments_Title" xml:space="preserve">
         <value>Prosjektstatusvedlegg</value>
@@ -4383,5 +4383,35 @@
   </data>
   <data name="SiteFields_GtAiProcessedDateTime_DisplayName" xml:space="preserve">
     <value>Tidspunkt prosessert (KI)</value>
+  </data>
+  <data name="Security_SiteGroup_ProvisionPortal_Title" xml:space="preserve">
+    <value>Bestillingsportalen</value>
+  </data>
+  <data name="Security_SiteGroup_ProvisionPortal_Description" xml:space="preserve">
+    <value>Brukere som har tilgang til Bestillingsportalen for å bestille prosjekter og områder.</value>
+  </data>
+  <data name="Security_SiteGroup_AssistantUsers_Title" xml:space="preserve">
+    <value>Assistentbrukere</value>
+  </data>
+  <data name="Security_SiteGroup_AssistantUsers_Description" xml:space="preserve">
+    <value>Brukere som har tilgang til Prosjektportalen Assistent</value>
+  </data>
+  <data name="Security_SiteGroup_PortfolioInsight_Title" xml:space="preserve">
+    <value>Porteføljeinnsyn</value>
+  </data>
+  <data name="Security_SiteGroup_PortfolioInsight_Description" xml:space="preserve">
+    <value>Innsyn i portefølje</value>
+  </data>
+  <data name="Security_SiteGroup_PortfolioAdministrators_Title" xml:space="preserve">
+    <value>Porteføljeadministratorer</value>
+  </data>
+  <data name="Security_SiteGroup_PortfolioAdministrators_Description" xml:space="preserve">
+    <value>Porteføljeadministratorer har som standard full kontroll på alle prosjektområder gjennom listen &lt;a href=&quot;{site}/Lists/Tillatelseskonfigurasjon&quot;&gt;Tillatelseskonfigurasjon&lt;/a&gt;.</value>
+  </data>
+  <data name="Security_SiteGroup_IdeaProcessors_Title" xml:space="preserve">
+    <value>Idebehandlere</value>
+  </data>
+  <data name="Security_SiteGroup_IdeaProcessors_Description" xml:space="preserve">
+    <value>Idebehandlere er personer som kan kan godkjenne og behandle idéer: &lt;a href=&quot;{site}/Lists/Idebehandling&quot;&gt;Idebehandling&lt;/a&gt;.</value>
   </data>
 </root>

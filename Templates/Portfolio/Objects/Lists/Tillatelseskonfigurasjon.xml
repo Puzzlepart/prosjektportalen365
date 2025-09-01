@@ -27,7 +27,7 @@
   </pnp:Fields>
   <pnp:DataRows KeyColumn="GtSPGroupName" UpdateBehavior="Overwrite">
     <pnp:DataRow>
-      <pnp:DataValue FieldName="GtSPGroupName">{resource:Group_Portfolio_administrators_Name}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSPGroupName">{resource:Security_SiteGroup_PortfolioAdministrators_Title}</pnp:DataValue>
       <pnp:DataValue FieldName="GtPermissionLevel">{resource:Choice_GtPermissionLevel_FullControl}</pnp:DataValue>
     </pnp:DataRow>
   </pnp:DataRows>
