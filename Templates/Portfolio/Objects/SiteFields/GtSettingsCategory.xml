@@ -1,8 +1,8 @@
 <Field Type="Choice" DisplayName="{resource:SiteFields_GtSettingsCategory_DisplayName}" Format="Dropdown" FillInChoice="FALSE" Group="{resource:SiteFields_Portfolio_Group}" ID="{206c2e34-865f-4c7c-ac8a-acab573aee88}" StaticName="GtSettingsCategory" Name="GtSettingsCategory" ShowInEditForm="FALSE">
     <CHOICES>
-        <CHOICE>Usikkerhetstiltak i Planner</CHOICE>
-        <CHOICE>Risikomatrise</CHOICE>
-        <CHOICE>Generelt</CHOICE>
-        <CHOICE>Assistent</CHOICE>
+        <CHOICE>{resource:Choice_GtSettingsCategory_UncertaintyPlanner}</CHOICE>
+        <CHOICE>{resource:Choice_GtSettingsCategory_RiskMatrix}</CHOICE>
+        <CHOICE>{resource:Choice_GtSettingsCategory_General}</CHOICE>
+        <CHOICE>{resource:Choice_GtSettingsCategory_Assistant}</CHOICE>
     </CHOICES>
 </Field>

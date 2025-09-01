@@ -1,8 +1,8 @@
 <Field ID="{2bb7e155-3af4-4353-a460-8da404c4e748}" Name="GtStakeholderInfluencePossibilty" DisplayName="{resource:SiteFields_GtStakeholderInfluencePossibilty_DisplayName}" Type="Choice" Group="{resource:SiteFields_Project_Group}" Description="{resource:SiteFields_GtStakeholderInfluencePossibilty_Description}" StaticName="GtStakeholderInfluencePossibilty">
   <CHOICES>
-    <CHOICE>Stor</CHOICE>
-    <CHOICE>Middels</CHOICE>
-    <CHOICE>Liten</CHOICE>
-    <CHOICE>Ingen</CHOICE>
+    <CHOICE>{resource:Choice_GtStakeholderInfluencePossibilty_Large}</CHOICE>
+    <CHOICE>{resource:Choice_GtStakeholderInfluencePossibilty_Medium}</CHOICE>
+    <CHOICE>{resource:Choice_GtStakeholderInfluencePossibilty_Small}</CHOICE>
+    <CHOICE>{resource:Choice_GtStakeholderInfluencePossibilty_None}</CHOICE>
   </CHOICES>
 </Field>

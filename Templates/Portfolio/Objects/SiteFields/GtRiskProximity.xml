@@ -1,8 +1,8 @@
 <Field ID="{c755525b-3716-4ee8-a4f4-f9684808c009}" Name="GtRiskProximity" DisplayName="{resource:SiteFields_GtRiskProximity_DisplayName}" Type="Choice" Group="{resource:SiteFields_Project_Group}" Description="{resource:SiteFields_GtRiskProximity_Description}" StaticName="GtRiskProximity">
   <CHOICES>
-    <CHOICE>Umiddelbart</CHOICE>
-    <CHOICE>I denne fasen</CHOICE>
-    <CHOICE>Innenfor prosjektet</CHOICE>
-    <CHOICE>Utenfor prosjektet</CHOICE>
+    <CHOICE>{resource:Choice_GtRiskProximity_Immediate}</CHOICE>
+    <CHOICE>{resource:Choice_GtRiskProximity_ThisPhase}</CHOICE>
+    <CHOICE>{resource:Choice_GtRiskProximity_WithinProject}</CHOICE>
+    <CHOICE>{resource:Choice_GtRiskProximity_OutsideProject}</CHOICE>
   </CHOICES>
 </Field>

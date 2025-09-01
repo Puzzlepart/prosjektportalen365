@@ -1,13 +1,13 @@
 <Field ID="{04cfd3c0-5f18-4906-bdca-b5f84b693437}" Name="GtRiskStrategy" DisplayName="{resource:SiteFields_GtRiskStrategy_DisplayName}" Type="Choice" Group="{resource:SiteFields_Project_Group}" Description="{resource:SiteFields_GtRiskStrategy_Description}" StaticName="GtRiskStrategy">
-  <Default>Redusere</Default>
+  <Default>{resource:Choice_GtRiskStrategy_Reduce}</Default>
   <CHOICES>
-    <CHOICE>Redusere</CHOICE>
-    <CHOICE>Overvåke</CHOICE>
-    <CHOICE>Unngå</CHOICE>
-    <CHOICE>Overføre</CHOICE>
-    <CHOICE>Dele</CHOICE>
-    <CHOICE>Akseptere</CHOICE>
-    <CHOICE>Øke</CHOICE>
-    <CHOICE>Utnytte</CHOICE>
+    <CHOICE>{resource:Choice_GtRiskStrategy_Reduce}</CHOICE>
+    <CHOICE>{resource:Choice_GtRiskStrategy_Monitor}</CHOICE>
+    <CHOICE>{resource:Choice_GtRiskStrategy_Avoid}</CHOICE>
+    <CHOICE>{resource:Choice_GtRiskStrategy_Transfer}</CHOICE>
+    <CHOICE>{resource:Choice_GtRiskStrategy_Share}</CHOICE>
+    <CHOICE>{resource:Choice_GtRiskStrategy_Accept}</CHOICE>
+    <CHOICE>{resource:Choice_GtRiskStrategy_Enhance}</CHOICE>
+    <CHOICE>{resource:Choice_GtRiskStrategy_Exploit}</CHOICE>
   </CHOICES>
 </Field>

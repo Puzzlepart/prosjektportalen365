@@ -1,1 +1,3 @@
-<Field Type="DateTime" DisplayName="{resource:SiteFields_GtMeasurementDate_DisplayName}" Description="{resource:SiteFields_GtMeasurementDate_Description}" Format="DateOnly" FriendlyDisplayFormat="Disabled" ID="{5c6fafbb-aee4-4e46-b110-5c798916c2ca}" StaticName="GtMeasurementDate" Name="GtMeasurementDate" Group="{resource:SiteFields_Project_Group}"><Default>[today]</Default></Field>
+<Field Type="DateTime" DisplayName="{resource:SiteFields_GtMeasurementDate_DisplayName}" Description="{resource:SiteFields_GtMeasurementDate_Description}" Format="DateOnly" FriendlyDisplayFormat="Disabled" ID="{5c6fafbb-aee4-4e46-b110-5c798916c2ca}" StaticName="GtMeasurementDate" Name="GtMeasurementDate" Group="{resource:SiteFields_Project_Group}">
+  <Default>[today]</Default>
+</Field>

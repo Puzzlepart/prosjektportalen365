@@ -643,6 +643,189 @@
     <data name="Choice_GtIdeaStrategicValue_MainAreasEffect" xml:space="preserve">
         <value>5=Measurable effect on main areas or within several strategic areas. Project deliveries and results are directly mentioned in the strategy and/or provide documentable effects on the strategy's main goals</value>
     </data>
+    <data name="Choice_GtRiskStrategy_Reduce" xml:space="preserve">
+        <value>Reduce</value>
+    </data>
+    <data name="Choice_GtRiskStrategy_Monitor" xml:space="preserve">
+        <value>Monitor</value>
+    </data>
+    <data name="Choice_GtRiskStrategy_Avoid" xml:space="preserve">
+        <value>Avoid</value>
+    </data>
+    <data name="Choice_GtRiskStrategy_Transfer" xml:space="preserve">
+        <value>Transfer</value>
+    </data>
+    <data name="Choice_GtRiskStrategy_Share" xml:space="preserve">
+        <value>Share</value>
+    </data>
+    <data name="Choice_GtRiskStrategy_Accept" xml:space="preserve">
+        <value>Accept</value>
+    </data>
+    <data name="Choice_GtRiskStrategy_Enhance" xml:space="preserve">
+        <value>Enhance</value>
+    </data>
+    <data name="Choice_GtRiskStrategy_Exploit" xml:space="preserve">
+        <value>Exploit</value>
+    </data>
+    <data name="Choice_GtSettingsCategory_UncertaintyPlanner" xml:space="preserve">
+        <value>Uncertainty measures in Planner</value>
+    </data>
+    <data name="Choice_GtSettingsCategory_RiskMatrix" xml:space="preserve">
+        <value>Risk matrix</value>
+    </data>
+    <data name="Choice_GtSettingsCategory_General" xml:space="preserve">
+        <value>General</value>
+    </data>
+    <data name="Choice_GtSettingsCategory_Assistant" xml:space="preserve">
+        <value>Assistant</value>
+    </data>
+    <data name="Choice_GtStakeholderGroup_Employees" xml:space="preserve">
+        <value>Employees</value>
+    </data>
+    <data name="Choice_GtStakeholderGroup_Management" xml:space="preserve">
+        <value>Management</value>
+    </data>
+    <data name="Choice_GtStakeholderGroup_Citizens" xml:space="preserve">
+        <value>Citizens</value>
+    </data>
+    <data name="Choice_GtStakeholderGroup_Business" xml:space="preserve">
+        <value>Business</value>
+    </data>
+    <data name="Choice_GtStakeholderGroup_VoluntaryOrganization" xml:space="preserve">
+        <value>Voluntary/Organization</value>
+    </data>
+    <data name="Choice_GtStakeholderGroup_TradeUnion" xml:space="preserve">
+        <value>Trade union</value>
+    </data>
+    <data name="Choice_GtStakeholderGroup_OtherPublicActors" xml:space="preserve">
+        <value>Other public actors</value>
+    </data>
+    <data name="Choice_GtStakeholderGroup_Academia" xml:space="preserve">
+        <value>Academia</value>
+    </data>
+    <data name="Choice_GtStakeholderGroup_PolicyInstruments" xml:space="preserve">
+        <value>Policy instruments</value>
+    </data>
+    <data name="Choice_GtStakeholderGroup_Users" xml:space="preserve">
+        <value>Users</value>
+    </data>
+    <data name="Choice_GtStakeholderInfluence_Large" xml:space="preserve">
+        <value>Large</value>
+    </data>
+    <data name="Choice_GtStakeholderInfluence_Medium" xml:space="preserve">
+        <value>Medium</value>
+    </data>
+    <data name="Choice_GtStakeholderInfluence_Small" xml:space="preserve">
+        <value>Small</value>
+    </data>
+    <data name="Choice_GtStakeholderInfluence_None" xml:space="preserve">
+        <value>None</value>
+    </data>
+    <data name="Choice_GtStakeholderInfluencePossibilty_Large" xml:space="preserve">
+        <value>Large</value>
+    </data>
+    <data name="Choice_GtStakeholderInfluencePossibilty_Medium" xml:space="preserve">
+        <value>Medium</value>
+    </data>
+    <data name="Choice_GtStakeholderInfluencePossibilty_Small" xml:space="preserve">
+        <value>Small</value>
+    </data>
+    <data name="Choice_GtStakeholderInfluencePossibilty_None" xml:space="preserve">
+        <value>None</value>
+    </data>
+    <data name="Choice_GtPlannerPreviewType_Automatic" xml:space="preserve">
+        <value>Automatic (automatic)</value>
+    </data>
+    <data name="Choice_GtPlannerPreviewType_None" xml:space="preserve">
+        <value>None (noPreview)</value>
+    </data>
+    <data name="Choice_GtPlannerPreviewType_Checklist" xml:space="preserve">
+        <value>Checklist (checklist)</value>
+    </data>
+    <data name="Choice_GtPlannerPreviewType_Description" xml:space="preserve">
+        <value>Description (description)</value>
+    </data>
+    <data name="Choice_GtPlannerPreviewType_Reference" xml:space="preserve">
+        <value>Reference/attachment (reference)</value>
+    </data>
+    <data name="Choice_GtProjectLogActors_Suppliers" xml:space="preserve">
+        <value>Suppliers</value>
+    </data>
+    <data name="Choice_GtProjectLogActors_ProjectBoard" xml:space="preserve">
+        <value>Project board</value>
+    </data>
+    <data name="Choice_GtProjectLogActors_ProjectGroup" xml:space="preserve">
+        <value>Project group</value>
+    </data>
+    <data name="Choice_GtProjectLogActors_ReferenceGroup" xml:space="preserve">
+        <value>Reference group</value>
+    </data>
+    <data name="Choice_GtProjectLogActors_OtherStakeholders" xml:space="preserve">
+        <value>Other stakeholders</value>
+    </data>
+    <data name="Choice_GtProjectLogResponsible_ProjectOwner" xml:space="preserve">
+        <value>Project owner</value>
+    </data>
+    <data name="Choice_GtProjectLogResponsible_LineOrganization" xml:space="preserve">
+        <value>Line organization</value>
+    </data>
+    <data name="Choice_GtProjectLogResponsible_ProjectManager" xml:space="preserve">
+        <value>Project manager</value>
+    </data>
+    <data name="Choice_GtProjectLogResponsible_ProjectGroup" xml:space="preserve">
+        <value>Project group</value>
+    </data>
+    <data name="Choice_GtProjectLogResponsible_Supplier" xml:space="preserve">
+        <value>Supplier</value>
+    </data>
+    <data name="Choice_GtProjectLogResponsible_ReferenceGroups" xml:space="preserve">
+        <value>Reference groups</value>
+    </data>
+    <data name="Choice_GtProjectLogResponsible_Others" xml:space="preserve">
+        <value>Others</value>
+    </data>
+    <data name="Choice_GtProjectLogType_CommentConcernEvent" xml:space="preserve">
+        <value>Comment/Concern/Event</value>
+    </data>
+    <data name="Choice_GtProjectLogType_ChangeRequest" xml:space="preserve">
+        <value>Change request</value>
+    </data>
+    <data name="Choice_GtProjectLogType_DeviationFromSpec" xml:space="preserve">
+        <value>Deviation from specification</value>
+    </data>
+    <data name="Choice_GtProjectLogType_Decision" xml:space="preserve">
+        <value>Decision</value>
+    </data>
+    <data name="Choice_GtAllocationStatus_Requested" xml:space="preserve">
+        <value>Requested</value>
+    </data>
+    <data name="Choice_GtAllocationStatus_Assigned" xml:space="preserve">
+        <value>Assigned</value>
+    </data>
+    <data name="Choice_GtAllocationStatus_Rejected" xml:space="preserve">
+        <value>Rejected</value>
+    </data>
+    <data name="Choice_GtAllocationStatus_Other" xml:space="preserve">
+        <value>Other (describe in comment)</value>
+    </data>
+    <data name="Choice_GtRiskProximity_Immediate" xml:space="preserve">
+        <value>Immediate</value>
+    </data>
+    <data name="Choice_GtRiskProximity_ThisPhase" xml:space="preserve">
+        <value>In this phase</value>
+    </data>
+    <data name="Choice_GtRiskProximity_WithinProject" xml:space="preserve">
+        <value>Within project</value>
+    </data>
+    <data name="Choice_GtRiskProximity_OutsideProject" xml:space="preserve">
+        <value>Outside project</value>
+    </data>
+    <data name="Choice_GtTag_Superior" xml:space="preserve">
+        <value>Superior</value>
+    </data>
+    <data name="Choice_GtTag_Subordinate" xml:space="preserve">
+        <value>Subordinate</value>
+    </data>
     <data name="ClientSidePages_BenefitOverview_PageName" xml:space="preserve">
         <value>BenefitOverview.aspx</value>
     </data>

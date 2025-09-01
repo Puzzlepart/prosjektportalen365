@@ -1,9 +1,9 @@
 <Field Type="Choice" DisplayName="{resource:SiteFields_GtMeasurementUnit_DisplayName}" Description="{resource:SiteFields_GtMeasurementUnit_Description}" Format="Dropdown" ID="{0d38db52-2040-44c1-823e-7642f76519ee}" StaticName="GtMeasurementUnit" Name="GtMeasurementUnit" Group="{resource:SiteFields_Project_Group}">
-  <Default>Antall</Default>
+  <Default>{resource:Choice_GtMeasurementUnit_Number}</Default>
   <CHOICES>
-    <CHOICE>Antall</CHOICE>
-    <CHOICE>Kroner</CHOICE>
-    <CHOICE>Prosent</CHOICE>
-    <CHOICE>Timer</CHOICE>
+    <CHOICE>{resource:Choice_GtMeasurementUnit_Number}</CHOICE>
+    <CHOICE>{resource:Choice_GtMeasurementUnit_Currency}</CHOICE>
+    <CHOICE>{resource:Choice_GtMeasurementUnit_Percentage}</CHOICE>
+    <CHOICE>{resource:Choice_GtMeasurementUnit_Hours}</CHOICE>
   </CHOICES>
 </Field>

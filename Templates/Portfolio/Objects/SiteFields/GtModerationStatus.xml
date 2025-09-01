@@ -1,7 +1,7 @@
 <Field ID="{9a81b4e1-64ea-40c2-9be1-946f20e78999}" Name="GtModerationStatus" DisplayName="{resource:SiteFields_GtModerationStatus_DisplayName}" Type="Choice" Group="{resource:SiteFields_Portfolio_Group}" Description="{resource:SiteFields_GtModerationStatus_Description}" FillInChoice="FALSE" StaticName="GtModerationStatus" ShowInEditForm="FALSE" ShowInNewForm="FALSE">
-  <Default>Kladd</Default>
+  <Default>{resource:Choice_GtModerationStatus_Draft}</Default>
   <CHOICES>
-    <CHOICE>Kladd</CHOICE>
-    <CHOICE>Publisert</CHOICE>
+    <CHOICE>{resource:Choice_GtModerationStatus_Draft}</CHOICE>
+    <CHOICE>{resource:Choice_GtModerationStatus_Published}</CHOICE>
   </CHOICES>
 </Field>

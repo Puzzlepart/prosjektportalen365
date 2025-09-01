@@ -1,9 +1,9 @@
 ﻿<Field Type="Choice" DisplayName="{resource:SiteFields_GtAllocationStatus_DisplayName}" Description="{resource:SiteFields_GtAllocationStatus_Description}" Format="Dropdown" FillInChoice="FALSE" Group="{resource:SiteFields_Project_Group}" ID="{6ec4d897-ee44-42b2-80c0-3714021f6ac6}" StaticName="GtAllocationStatus" Name="GtAllocationStatus">
-    <Default>Forespurt</Default>
+    <Default>{resource:Choice_GtAllocationStatus_Requested}</Default>
     <CHOICES>
-        <CHOICE>Forespurt</CHOICE>
-        <CHOICE>Tildelt</CHOICE>
-        <CHOICE>Avvist</CHOICE>
-        <CHOICE>Annet (beskriv i kommentar)</CHOICE>
+        <CHOICE>{resource:Choice_GtAllocationStatus_Requested}</CHOICE>
+        <CHOICE>{resource:Choice_GtAllocationStatus_Assigned}</CHOICE>
+        <CHOICE>{resource:Choice_GtAllocationStatus_Rejected}</CHOICE>
+        <CHOICE>{resource:Choice_GtAllocationStatus_Other}</CHOICE>
     </CHOICES>
 </Field>
