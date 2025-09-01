@@ -69,7 +69,7 @@ export const NewsDialog: FC<INewsDialogProps> = () => {
               ) : (
                 <div className={styles.content}>
                   <UserMessage
-                    title='Opprett nyhetsartikkel for prosjektet'
+                    title={strings.DialogTitle}
                     text={strings.DialogDescription}
                     intent='info'
                   />
@@ -161,7 +161,7 @@ export const NewsDialog: FC<INewsDialogProps> = () => {
             action={
               <Button
                 appearance='subtle'
-                aria-label='Close'
+                aria-label={strings.CloseText}
                 icon={getFluentIcon('Dismiss')}
                 onClick={() => context.setState({ isDrawerOpen: false })}
               />
@@ -172,7 +172,7 @@ export const NewsDialog: FC<INewsDialogProps> = () => {
         </DrawerHeader>
         <DrawerBody className={styles.drawerBody}>
           {previewUrl ? (
-            <iframe src={previewUrl} title='Template Preview' className={styles.previewIframe} />
+            <iframe src={previewUrl} title={strings.PreviewLabel} className={styles.previewIframe} />
           ) : (
             <div className={styles.noPreview}>{strings.NoPreviewAvailable}</div>
           )}
