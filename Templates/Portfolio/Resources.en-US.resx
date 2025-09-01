@@ -1004,7 +1004,7 @@
         <value>Communication plan</value>
     </data>
     <data name="Lists_ConfigurationFiles_Description" xml:space="preserve">
-        <value>Configuration files that can be used in Prosjektportalen.</value>
+        <value>Configuration files that can be used in Project Portal.</value>
     </data>
     <data name="Lists_ConfigurationFiles_Title" xml:space="preserve">
         <value>Configuration Files</value>
@@ -1160,7 +1160,7 @@
         <value>Configuration setup for the assistant</value>
     </data>
     <data name="Lists_Global_Settings_Category_Assistant_UseAssistant_Title" xml:space="preserve">
-        <value>Use the Prosjektportalen assistant</value>
+        <value>Use the Project Portal assistant</value>
     </data>
     <data name="Lists_Global_Settings_Category_Assistant_RequireAssistantAccess_Title" xml:space="preserve">
         <value>Require access to use the assistant</value>
@@ -1172,7 +1172,7 @@
         <value>Automatically minimize footer</value>
     </data>
     <data name="Lists_Global_Settings_Category_General_ShowFooter_Title" xml:space="preserve">
-        <value>Show/hide footer in Prosjektportalen</value>
+        <value>Show/hide footer in Project Portal</value>
     </data>
     <data name="Lists_Global_Settings_Category_General_ProjectNewsHubUrl_Title" xml:space="preserve">
         <value>URL for news publishing site</value>
@@ -1220,7 +1220,7 @@
         <value>Standard configuration for Risk Matrix</value>
     </data>
     <data name="Lists_Global_Settings_Description" xml:space="preserve">
-        <value>Global settings for the installation of Prosjektportalen.</value>
+        <value>Global settings for the installation of Project Portal.</value>
     </data>
     <data name="Lists_Global_Settings_Fields_Title_Default" xml:space="preserve">
         <value>Setting without name</value>
@@ -1391,7 +1391,7 @@
         <value>Configure which links should appear under Useful links in the footer.</value>
     </data>
     <data name="Lists_Links_ProsjektveiviserenUserManual_Title" xml:space="preserve">
-        <value>Prosjektveiviseren brukermanual</value>
+        <value>Prosjektveiviseren usermanual</value>
     </data>
     <data name="Lists_Links_Title" xml:space="preserve">
         <value>Links</value>
@@ -1400,10 +1400,13 @@
         <value>Lists/Links</value>
     </data>
     <data name="Lists_Links_UserManual_Title" xml:space="preserve">
-        <value>Prosjektportalen brukermanual</value>
+        <value>Project Portal usermanual</value>
+    </data>
+    <data name="Lists_Links_LinkLevel_Member" xml:space="preserve">
+        <value>Member</value>
     </data>
     <data name="Lists_Links_kslaring_Title" xml:space="preserve">
-        <value>Prosjekt og Porteføljeverktøy: Kurs fra KS i Prosjektportalen</value>
+        <value>Project and Portfolio Tools: Course from KS in Project Portal</value>
     </data>
     <data name="Lists_ListContent_Description" xml:space="preserve">
         <value>Setup of list content for new project sites</value>
@@ -1472,7 +1475,7 @@
         <value>Lists/ListContent</value>
     </data>
     <data name="Lists_Log_Description" xml:space="preserve">
-        <value>Contains log entries from the various components of Prosjektportalen 365.</value>
+        <value>Contains log entries from the various components of Project Portal 365.</value>
     </data>
     <data name="Lists_Log_Title" xml:space="preserve">
         <value>Log</value>
@@ -1847,9 +1850,6 @@
         <value>Construction Project</value>
     </data>
     <data name="Lists_TemplateOptions_Description" xml:space="preserve">
-        <value>Oppsett av listeinnhold for nye områder</value>
-    </data>
-    <data name="Lists_TemplateOptions_Description" xml:space="preserve">
         <value>Setup of templates for new project sites</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_FieldConfigurationName_Description" xml:space="preserve">
@@ -1946,7 +1946,7 @@
         <value>List Content</value>
     </data>
     <data name="Lists_TemplateOptions_ParentTemplate_Description" xml:space="preserve">
-        <value>This is the default parent template that comes with Prosjektportalen 365.</value>
+        <value>This is the default parent template that comes with Project Portal 365.</value>
     </data>
     <data name="Lists_TemplateOptions_ParentTemplate_FileName" xml:space="preserve">
         <value>ParentTemplate.txt</value>
@@ -1955,7 +1955,7 @@
         <value>Parent Template</value>
     </data>
     <data name="Lists_TemplateOptions_ProgramTemplate_Description" xml:space="preserve">
-        <value>This is the default program template that comes with Prosjektportalen 365.</value>
+        <value>This is the default program template that comes with Project Portal 365.</value>
     </data>
     <data name="Lists_TemplateOptions_ProgramTemplate_FileName" xml:space="preserve">
         <value>ProgramTemplate.txt</value>
@@ -1964,7 +1964,7 @@
         <value>Program Template</value>
     </data>
     <data name="Lists_TemplateOptions_StandardTemplate_Description" xml:space="preserve">
-        <value>This is the default project template that comes with Prosjektportalen 365.</value>
+        <value>This is the default project template that comes with Project Portal 365.</value>
     </data>
     <data name="Lists_TemplateOptions_StandardTemplate_FileName" xml:space="preserve">
         <value>DefaultTemplate.txt</value>

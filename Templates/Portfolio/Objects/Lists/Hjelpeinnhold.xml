@@ -95,7 +95,7 @@
             <pnp:DataValue FieldName="GtURL">SitePages/{resource:ClientSidePages_UncertaintyOverview_PageName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://github.com/Puzzlepart/prosjektportalen-manual/blob/master/Brukermanual/3%20Portefolje/3.7%20Risikooversikt.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3.7%20Risikooversikt.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">80</pnp:DataValue>
@@ -185,7 +185,7 @@
             <pnp:DataValue FieldName="GtURL">{resource:Navigation_Uncertainty_Url}</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://github.com/Puzzlepart/prosjektportalen-manual/blob/master/Brukermanual/4%20Prosjekt/4.4.5%20Usikkerhet.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4.4.5%20Usikkerhet.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">170</pnp:DataValue>

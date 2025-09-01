@@ -1420,6 +1420,9 @@
     <data name="Lists_Links_UserManual_Title" xml:space="preserve">
         <value>Prosjektportalen brukermanual</value>
     </data>
+    <data name="Lists_Links_LinkLevel_Member" xml:space="preserve">
+        <value>Medlem</value>
+    </data>
     <data name="Lists_Links_kslaring_Title" xml:space="preserve">
         <value>Prosjekt og Porteføljeverktøy: Kurs fra KS i Prosjektportalen</value>
     </data>
