@@ -556,6 +556,12 @@
     <data name="Choice_GtDeliveryStatus_Approved" xml:space="preserve">
         <value>Approved</value>
     </data>
+    <data name="Choice_GtLinkLevel_Administrator" xml:space="preserve">
+        <value>Administrator</value>
+    </data>
+    <data name="Choice_GtLinkLevel_Member" xml:space="preserve">
+        <value>Member</value>
+    </data>
     <data name="ClientSidePages_BenefitOverview_PageName" xml:space="preserve">
         <value>BenefitOverview.aspx</value>
     </data>
