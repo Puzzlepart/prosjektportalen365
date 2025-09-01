@@ -54,6 +54,7 @@ declare interface IProjectWebPartsStrings {
   CreateParentModalSubText: string
   CreateParentModalTitle: string
   CreateParentProjectLabel: string
+  CreateParentSetupProgressText: string
   CurrentPhaseViewNameFieldLabel: string
   DataGroupName: string
   DefaultAdminPageLink: string

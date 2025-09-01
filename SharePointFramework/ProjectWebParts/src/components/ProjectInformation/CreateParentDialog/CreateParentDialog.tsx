@@ -12,7 +12,7 @@ import strings from 'ProjectWebPartsStrings'
 import React, { FC, useState } from 'react'
 import { useProjectInformationContext } from '../context'
 import { CLOSE_DIALOG } from '../reducer'
-import { ProjectSetupCustomAction } from './ProjectSetupCustomAction'
+import { createProjectSetupCustomAction } from './ProjectSetupCustomAction'
 
 export const CreateParentDialog: FC = () => {
   const context = useProjectInformationContext()
@@ -20,7 +20,8 @@ export const CreateParentDialog: FC = () => {
 
   async function applyCustomAction() {
     setLoading(true)
-    await context.props.sp.web.userCustomActions.add(ProjectSetupCustomAction)
+    const customAction = createProjectSetupCustomAction(strings.CreateParentSetupProgressText)
+    await context.props.sp.web.userCustomActions.add(customAction)
     location.reload()
   }
 

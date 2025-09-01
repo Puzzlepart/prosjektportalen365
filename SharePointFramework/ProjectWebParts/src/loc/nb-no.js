@@ -79,6 +79,7 @@ define([], function () {
       'Ønsker du å gjøre om prosjektet til et overordnet prosjekt? Denne handlingen er ikke reversibel.',
     CreateParentModalTitle: 'Overordnet prosjekt',
     CreateParentProjectLabel: 'Gjør om til overordnet prosjekt',
+    CreateParentSetupProgressText: 'Setter opp overordnet prosjekt',
     CurrentPhaseViewNameFieldLabel: 'Visningsnavn for gjeldende fase',
     DataGroupName: 'Data',
     DefaultAdminPageLink: 'Admin.aspx',

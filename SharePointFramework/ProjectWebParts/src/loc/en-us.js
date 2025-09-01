@@ -84,6 +84,7 @@ define([], function () {
       'Do you want to turn the site into a parent project? This action is not reversible.',
     CreateParentModalTitle: 'Parent project',
     CreateParentProjectLabel: 'Convert to parent project',
+    CreateParentSetupProgressText: 'Setting up parent project',
     CurrentPhaseViewNameFieldLabel: 'Display name for current phase',
     DataGroupName: 'Data',
     DefaultAdminPageLink: 'Admin.aspx',
