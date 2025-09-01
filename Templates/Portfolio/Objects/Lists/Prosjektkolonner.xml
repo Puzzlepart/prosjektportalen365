@@ -217,6 +217,10 @@
                 "nb-no": {
                     "displayName": "Programeier",
                     "description": "Hvem er eier av programmet?"
+                },
+                "en-us": {
+                    "displayName": "Program owner",
+                    "description": "Who is the owner of the program?"
                 }
             }}</pnp:DataValue>
         </pnp:DataRow>
@@ -230,6 +234,10 @@
                 "nb-no": {
                     "displayName": "Gevinstansvarlig",
                     "description": "Hvem er gevinstansvarlig for programmet?"
+                },
+                "en-us": {
+                    "displayName": "Benefits responsible",
+                    "description": "Who is responsible for benefits for the program?"
                 }
             }}</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
@@ -279,6 +287,10 @@
                 "nb-no": {
                     "displayName": "Målsetting",
                     "description": "Hva er programmets målsetting?"
+                },
+                "en-us": {
+                    "displayName": "Objectives",
+                    "description": "What are the program's objectives?"
                 }
             }}</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
@@ -601,6 +613,10 @@
                 "nb-no": {
                     "displayName": "Programstatus",
                     "description": "Hvilken status har programmet?"
+                },
+                "en-us": {
+                    "displayName": "Program status",
+                    "description": "What status does the program have?"
                 }
             }}</pnp:DataValue>
         </pnp:DataRow>
