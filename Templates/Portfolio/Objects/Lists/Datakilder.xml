@@ -67,7 +67,7 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">d0b101ad-aed6-4ff0-85d1-689f9ded14a1</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_UncertaintyOverview_AllRisks}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89701* DepartmentId:{{sitecollectionid}} -GtRiskStatusOWSCHCS="Ikke lenger aktuell"</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89701* DepartmentId:{{sitecollectionid}} -GtRiskStatusOWSCHCS="{resource:Choice_GtRiskStatus_NoLongerRelevant}"</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_UncertaintyOverview}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentColumns">1,6,7,8,9,10,45</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentRefiners">45,46,47,35</pnp:DataValue>
@@ -88,7 +88,7 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">bcca7fa3-8d99-4159-b5c1-1340f18314e1</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_UncertaintyOverview_AllPossibilities}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89702* DepartmentId:{{sitecollectionid}} -GtRiskStatusOWSCHCS="Ikke lenger aktuell"</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89702* DepartmentId:{{sitecollectionid}} -GtRiskStatusOWSCHCS="{resource:Choice_GtRiskStatus_NoLongerRelevant}"</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_UncertaintyOverview}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentColumns">1,6,7,8,9,10,45</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentRefiners">45,46,47,35</pnp:DataValue>
@@ -149,7 +149,7 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">b0ef3852-230e-4119-8156-5a2ba625e5e1</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_UncertaintyOverview_RisksChildren}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89701* DepartmentId:{{sitecollectionid}} -GtRiskStatusOWSCHCS="Ikke lenger aktuell"</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89701* DepartmentId:{{sitecollectionid}} -GtRiskStatusOWSCHCS="{resource:Choice_GtRiskStatus_NoLongerRelevant}"</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_UncertaintyOverview}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentColumns">1,6,7,8,9,10,45</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentRefiners">45,46,47,35</pnp:DataValue>
@@ -159,7 +159,7 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">dc3a4676-a38a-4fa7-a2b3-790f89046b52</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_UncertaintyOverview_PossibilitiesChildren}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89702* DepartmentId:{{sitecollectionid}} -GtRiskStatusOWSCHCS="Ikke lenger aktuell"</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89702* DepartmentId:{{sitecollectionid}} -GtRiskStatusOWSCHCS="{resource:Choice_GtRiskStatus_NoLongerRelevant}"</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_UncertaintyOverview}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentColumns">1,6,7,8,9,10,45</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentRefiners">45,46,47,35</pnp:DataValue>
