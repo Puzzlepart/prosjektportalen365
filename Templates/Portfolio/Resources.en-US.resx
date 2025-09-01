@@ -4747,4 +4747,22 @@
     <data name="TimelineConfiguration_Delivery_Category" xml:space="preserve">
         <value>Delivery</value>
     </data>
+    <data name="Templates_ProjectNews_Title" xml:space="preserve">
+        <value>Project News</value>
+    </data>
+    <data name="Templates_ProjectNews_TopicHeader" xml:space="preserve">
+        <value>TEXT ABOVE TITLE</value>
+    </data>
+    <data name="WebParts_ProjectCard_Title" xml:space="preserve">
+        <value>Project Card</value>
+    </data>
+    <data name="WebParts_ProjectCard_Description" xml:space="preserve">
+        <value>Project Card displays information about the project and other relevant details.</value>
+    </data>
+    <data name="WebParts_Divider_Title" xml:space="preserve">
+        <value>Divider</value>
+    </data>
+    <data name="WebParts_Divider_Description" xml:space="preserve">
+        <value>Adds a line to separate areas on the page.</value>
+    </data>
 </root>

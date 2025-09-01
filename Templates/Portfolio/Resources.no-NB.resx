@@ -4948,4 +4948,22 @@
     <data name="TimelineConfiguration_Delivery_Category" xml:space="preserve">
         <value>Leveranse</value>
     </data>
+    <data name="Templates_ProjectNews_Title" xml:space="preserve">
+        <value>Prosjektnyhet</value>
+    </data>
+    <data name="Templates_ProjectNews_TopicHeader" xml:space="preserve">
+        <value>TEKST OVER TITTEL</value>
+    </data>
+    <data name="WebParts_ProjectCard_Title" xml:space="preserve">
+        <value>Prosjektkort</value>
+    </data>
+    <data name="WebParts_ProjectCard_Description" xml:space="preserve">
+        <value>Prosjektkort viser informasjon om et prosjektet og andre relevante detaljer.</value>
+    </data>
+    <data name="WebParts_Divider_Title" xml:space="preserve">
+        <value>Delelinje</value>
+    </data>
+    <data name="WebParts_Divider_Description" xml:space="preserve">
+        <value>Legger til en linje for å dele områder på siden.</value>
+    </data>
 </root>
