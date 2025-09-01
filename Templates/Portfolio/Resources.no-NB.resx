@@ -1453,6 +1453,12 @@
     <data name="Lists_DataSources_Category_BenefitOverview_All" xml:space="preserve">
         <value>Alle gevinstelementer</value>
     </data>
+    <data name="Lists_DataSources_Level_NotInUse" xml:space="preserve">
+        <value>Ikke i bruk</value>
+    </data>
+    <data name="Lists_DataSources_Category_ProjectDocuments" xml:space="preserve">
+        <value>Prosjektdokumenter</value>
+    </data>
     <data name="Lists_DataSources_Category_BenefitOverview_Children" xml:space="preserve">
         <value>Alle gevinstelementer for underområder</value>
     </data>

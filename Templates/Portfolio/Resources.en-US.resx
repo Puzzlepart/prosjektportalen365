@@ -1453,6 +1453,12 @@
     <data name="Lists_DataSources_Category_CommunicationPlan_Children" xml:space="preserve">
         <value>Alle communication plans for child projects</value>
     </data>
+    <data name="Lists_DataSources_Level_NotInUse" xml:space="preserve">
+        <value>Not in use</value>
+    </data>
+    <data name="Lists_DataSources_Category_ProjectDocuments" xml:space="preserve">
+        <value>Project Documents</value>
+    </data>
     <data name="Lists_DataSources_Category_ExperienceLog" xml:space="preserve">
         <value>Experience Log</value>
     </data>
