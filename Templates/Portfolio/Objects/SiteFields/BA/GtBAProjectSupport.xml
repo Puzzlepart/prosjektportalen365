@@ -1,12 +1,12 @@
 <Field ID="{c3cfcba3-299d-42e8-827b-a593ada04abc}" Name="GtBAProjectSupport" DisplayName="{resource:SiteFields_GtBAProjectSupport_DisplayName}" Type="Choice" Format="Dropdown" Group="{resource:SiteFields_BA_Group}" Description="{resource:SiteFields_GtBAProjectSupport_Description}" FillInChoice="TRUE" StaticName="GtBAProjectSupport">
   <CHOICES>
-    <CHOICE>Skal undersøkes/vurderes</CHOICE>
-    <CHOICE>Ikke aktuelt</CHOICE>
-    <CHOICE>Dialog med tilskuddsyter opprettet</CHOICE>
-    <CHOICE>Har søkt</CHOICE>
-    <CHOICE>Har fått tilsagn</CHOICE>
-    <CHOICE>Har fått avslag</CHOICE>
-    <CHOICE>Søkt utbetaling</CHOICE>
-    <CHOICE>Har fått utbetalt</CHOICE>
+    <CHOICE>{resource:Choice_GtBAProjectSupport_ToBeInvestigated}</CHOICE>
+    <CHOICE>{resource:Choice_GtBAProjectSupport_NotApplicable}</CHOICE>
+    <CHOICE>{resource:Choice_GtBAProjectSupport_DialogWithGrantorEstablished}</CHOICE>
+    <CHOICE>{resource:Choice_GtBAProjectSupport_HasApplied}</CHOICE>
+    <CHOICE>{resource:Choice_GtBAProjectSupport_HasReceivedApproval}</CHOICE>
+    <CHOICE>{resource:Choice_GtBAProjectSupport_HasReceivedRejection}</CHOICE>
+    <CHOICE>{resource:Choice_GtBAProjectSupport_AppliedForPayment}</CHOICE>
+    <CHOICE>{resource:Choice_GtBAProjectSupport_HasReceivedPayment}</CHOICE>
   </CHOICES>
 </Field>

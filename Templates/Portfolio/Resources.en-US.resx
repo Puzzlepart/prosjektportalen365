@@ -355,7 +355,7 @@
     <data name="Choice_GtStatusBudget_OverBudget" xml:space="preserve">
         <value>Over Budget</value>
     </data>
-    <data name="Choice_GtStatusBudget_SlighlyBehindBudget" xml:space="preserve">
+    <data name="Choice_GtStatusBudget_SlightlyBehindBudget" xml:space="preserve">
         <value>Minor Overspending</value>
     </data>
     <data name="Choice_GtStatusBudget_UnknownBudget" xml:space="preserve">
@@ -418,6 +418,43 @@
     <data name="Choice_GtStatusTime_SmallDelay" xml:space="preserve">
         <value>Minor delays</value>
     </data>
+    <data name="Choice_GtBAProjectSHA_NoEvents" xml:space="preserve">
+        <value>No events registered last month</value>
+    </data>
+    <data name="Choice_GtBAProjectSHA_EventRegistered" xml:space="preserve">
+        <value>Event registered last month</value>
+    </data>
+    <data name="Choice_GtBAProjectEnv_NoEvents" xml:space="preserve">
+        <value>No events registered last month</value>
+    </data>
+    <data name="Choice_GtBAProjectEnv_EventRegistered" xml:space="preserve">
+        <value>Event registered last month</value>
+    </data>
+    <data name="Choice_GtBAProjectSupport_ToBeInvestigated" xml:space="preserve">
+        <value>To be investigated/evaluated</value>
+    </data>
+    <data name="Choice_GtBAProjectSupport_NotApplicable" xml:space="preserve">
+        <value>Not applicable</value>
+    </data>
+    <data name="Choice_GtBAProjectSupport_DialogWithGrantorEstablished" xml:space="preserve">
+        <value>Dialog with grantor established</value>
+    </data>
+    <data name="Choice_GtBAProjectSupport_HasApplied" xml:space="preserve">
+        <value>Has applied</value>
+    </data>
+    <data name="Choice_GtBAProjectSupport_HasReceivedApproval" xml:space="preserve">
+        <value>Has received approval</value>
+    </data>
+    <data name="Choice_GtBAProjectSupport_HasReceivedRejection" xml:space="preserve">
+        <value>Has received rejection</value>
+    </data>
+    <data name="Choice_GtBAProjectSupport_AppliedForPayment" xml:space="preserve">
+        <value>Applied for payment</value>
+    </data>
+    <data name="Choice_GtBAProjectSupport_HasReceivedPayment" xml:space="preserve">
+        <value>Has received payment</value>
+    </data>
+    
     <data name="ClientSidePages_BenefitOverview_PageName" xml:space="preserve">
         <value>BenefitOverview.aspx</value>
     </data>
@@ -1656,6 +1693,90 @@
     </data>
     <data name="Lists_ProjectColumnConfiguration_Url" xml:space="preserve">
         <value>Lists/ProjectColumnConfiguration</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusRisk_Low_Title" xml:space="preserve">
+        <value>Risk status (Low)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusRisk_Medium_Title" xml:space="preserve">
+        <value>Risk status (Medium)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusRisk_High_Title" xml:space="preserve">
+        <value>Risk status (High)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusOpportunities_Low_Title" xml:space="preserve">
+        <value>Opportunities status (Low)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusOpportunities_Medium_Title" xml:space="preserve">
+        <value>Opportunities status (Medium)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusOpportunities_High_Title" xml:space="preserve">
+        <value>Opportunities status (High)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusBudget_BelowBudget_Title" xml:space="preserve">
+        <value>Budget status (Below budget)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusBudget_OnBudget_Title" xml:space="preserve">
+        <value>Budget status (On budget)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusBudget_SlightlyBehindBudget_Title" xml:space="preserve">
+        <value>Budget status (Minor exceedings)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusBudget_UnknownBudget_Title" xml:space="preserve">
+        <value>Budget status (Unknown)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusBudget_OverBudget_Title" xml:space="preserve">
+        <value>Budget status (Over budget)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusTime_AheadOfSchedule_Title" xml:space="preserve">
+        <value>Schedule status (Ahead of schedule)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusTime_OnSchedule_Title" xml:space="preserve">
+        <value>Schedule status (On schedule)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusTime_SlightlyDelayed_Title" xml:space="preserve">
+        <value>Schedule status (Minor delays)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusTime_Delayed_Title" xml:space="preserve">
+        <value>Schedule status (Delayed)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusGainAchievement_AheadOfSchedule_Title" xml:space="preserve">
+        <value>Benefit achievement status (Ahead of schedule)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusGainAchievement_OnSchedule_Title" xml:space="preserve">
+        <value>Benefit achievement status (On schedule)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusGainAchievement_NotStarted_Title" xml:space="preserve">
+        <value>Benefit achievement status (Not started)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusGainAchievement_MinorDelays_Title" xml:space="preserve">
+        <value>Benefit achievement status (Minor delays)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusGainAchievement_BehindSchedule_Title" xml:space="preserve">
+        <value>Benefit achievement status (Delayed)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusQuality_LargeDeviation_Title" xml:space="preserve">
+        <value>Quality status (Large deviation from specification)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusQuality_SmallDeviation_Title" xml:space="preserve">
+        <value>Quality status (Small deviation from specification)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusQuality_AsExpected_Title" xml:space="preserve">
+        <value>Quality status (According to specification)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusQuality_ExceedsExpectations_Title" xml:space="preserve">
+        <value>Quality status (Better than specification)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtBAProjectSHA_NoEvents_Title" xml:space="preserve">
+        <value>Health and Safety status (None)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtBAProjectSHA_EventRegistered_Title" xml:space="preserve">
+        <value>Health and Safety status (Event)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtBAProjectEnv_NoEvents_Title" xml:space="preserve">
+        <value>Environment status (None)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtBAProjectEnv_EventRegistered_Title" xml:space="preserve">
+        <value>Environment status (Event)</value>
     </data>
     <data name="Lists_ProjectColumns_Description" xml:space="preserve">
         <value>Manage project columns (visibility and metadata)</value>

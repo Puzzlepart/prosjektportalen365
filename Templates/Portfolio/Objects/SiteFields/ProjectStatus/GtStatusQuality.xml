@@ -1,8 +1,8 @@
 ﻿<Field Description="{resource:SiteFields_GtStatusQuality_Description}" DisplayName="{resource:SiteFields_GtStatusQuality_DisplayName}" Format="RadioButtons" Group="{resource:SiteFields_Portfolio_Group}" ID="{0bbe6a84-67e6-4a9c-b26b-a5973dacd473}" Name="GtStatusQuality" StaticName="GtStatusQuality" Type="Choice">
     <CHOICES>
-        <CHOICE>Bedre enn spesifikasjon</CHOICE>
-        <CHOICE>Ihht. spesifikasjon</CHOICE>
-        <CHOICE>Mindre avvik fra spesifikasjon</CHOICE>
-        <CHOICE>Større avvik fra spesifikasjon</CHOICE>
+        <CHOICE>{resource:Choice_GtStatusQuality_ExceedsExpectations}</CHOICE>
+        <CHOICE>{resource:Choice_GtStatusQuality_AsExpected}</CHOICE>
+        <CHOICE>{resource:Choice_GtStatusQuality_SmallDeviation}</CHOICE>
+        <CHOICE>{resource:Choice_GtStatusQuality_LargeDeviation}</CHOICE>
     </CHOICES>
 </Field>

@@ -1,6 +1,6 @@
 <Field ID="{df96c2a2-d85c-4d10-ac1f-c5d9bf87873c}" Name="GtBAProjectEnv" DisplayName="{resource:SiteFields_GtBAProjectEnv_DisplayName}" Type="Choice" Format="RadioButtons" Group="{resource:SiteFields_BA_Group}" Description="{resource:SiteFields_GtBAProjectEnv_Description}" StaticName="GtBAProjectEnv">
   <CHOICES>
-    <CHOICE>Ingen hendelser siste måned</CHOICE>
-    <CHOICE>Hendelse registrert siste måned</CHOICE>
+    <CHOICE>{resource:Choice_GtBAProjectEnv_NoEvents}</CHOICE>
+    <CHOICE>{resource:Choice_GtBAProjectEnv_EventRegistered}</CHOICE>
   </CHOICES>
 </Field>

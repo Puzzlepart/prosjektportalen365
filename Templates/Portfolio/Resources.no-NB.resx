@@ -355,7 +355,7 @@
     <data name="Choice_GtStatusBudget_OverBudget" xml:space="preserve">
         <value>Over budsjett</value>
     </data>
-    <data name="Choice_GtStatusBudget_SlighlyBehindBudget" xml:space="preserve">
+    <data name="Choice_GtStatusBudget_SlightlyBehindBudget" xml:space="preserve">
         <value>Mindre overskridelser</value>
     </data>
     <data name="Choice_GtStatusBudget_UnknownBudget" xml:space="preserve">
@@ -417,6 +417,42 @@
     </data>
     <data name="Choice_GtStatusTime_SmallDelay" xml:space="preserve">
         <value>Mindre forsinkelser</value>
+    </data>
+    <data name="Choice_GtBAProjectSHA_NoEvents" xml:space="preserve">
+        <value>Ingen hendelser siste måned</value>
+    </data>
+    <data name="Choice_GtBAProjectSHA_EventRegistered" xml:space="preserve">
+        <value>Hendelse registrert siste måned</value>
+    </data>
+    <data name="Choice_GtBAProjectEnv_NoEvents" xml:space="preserve">
+        <value>Ingen hendelser siste måned</value>
+    </data>
+    <data name="Choice_GtBAProjectEnv_EventRegistered" xml:space="preserve">
+        <value>Hendelse registrert siste måned</value>
+    </data>
+    <data name="Choice_GtBAProjectSupport_ToBeInvestigated" xml:space="preserve">
+        <value>Skal undersøkes/vurderes</value>
+    </data>
+    <data name="Choice_GtBAProjectSupport_NotApplicable" xml:space="preserve">
+        <value>Ikke aktuelt</value>
+    </data>
+    <data name="Choice_GtBAProjectSupport_DialogWithGrantorEstablished" xml:space="preserve">
+        <value>Dialog med tilskuddsyter opprettet</value>
+    </data>
+    <data name="Choice_GtBAProjectSupport_HasApplied" xml:space="preserve">
+        <value>Har søkt</value>
+    </data>
+    <data name="Choice_GtBAProjectSupport_HasReceivedApproval" xml:space="preserve">
+        <value>Har fått tilsagn</value>
+    </data>
+    <data name="Choice_GtBAProjectSupport_HasReceivedRejection" xml:space="preserve">
+        <value>Har fått avslag</value>
+    </data>
+    <data name="Choice_GtBAProjectSupport_AppliedForPayment" xml:space="preserve">
+        <value>Søkt utbetaling</value>
+    </data>
+    <data name="Choice_GtBAProjectSupport_HasReceivedPayment" xml:space="preserve">
+        <value>Har fått utbetalt</value>
     </data>
     <data name="ClientSidePages_BenefitOverview_PageName" xml:space="preserve">
         <value>Gevinstoversikt.aspx</value>
@@ -1668,6 +1704,90 @@
     </data>
     <data name="Lists_ProjectColumnConfiguration_Url" xml:space="preserve">
         <value>Lists/Prosjektkolonnekonfigurasjon</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusRisk_Low_Title" xml:space="preserve">
+        <value>Status risiko (Lav)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusRisk_Medium_Title" xml:space="preserve">
+        <value>Status risiko (Medium)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusRisk_High_Title" xml:space="preserve">
+        <value>Status risiko (Høy)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusOpportunities_Low_Title" xml:space="preserve">
+        <value>Status muligheter (Lav)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusOpportunities_Medium_Title" xml:space="preserve">
+        <value>Status muligheter (Medium)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusOpportunities_High_Title" xml:space="preserve">
+        <value>Status muligheter (Høy)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusBudget_BelowBudget_Title" xml:space="preserve">
+        <value>Status økonomi (Under budsjett)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusBudget_OnBudget_Title" xml:space="preserve">
+        <value>Status økonomi (På budsjett)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusBudget_SlightlyBehindBudget_Title" xml:space="preserve">
+        <value>Status økonomi (Mindre overskridelser)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusBudget_UnknownBudget_Title" xml:space="preserve">
+        <value>Status økonomi (Vet ikke)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusBudget_OverBudget_Title" xml:space="preserve">
+        <value>Status økonomi (Over budsjett)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusTime_AheadOfSchedule_Title" xml:space="preserve">
+        <value>Status fremdrift (Foran plan)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusTime_OnSchedule_Title" xml:space="preserve">
+        <value>Status fremdrift (På plan)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusTime_SlightlyDelayed_Title" xml:space="preserve">
+        <value>Status fremdrift (Mindre forsinkelser)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusTime_Delayed_Title" xml:space="preserve">
+        <value>Status fremdrift (Forsinket)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusGainAchievement_AheadOfSchedule_Title" xml:space="preserve">
+        <value>Status gevinstoppnåelse (Foran plan)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusGainAchievement_OnSchedule_Title" xml:space="preserve">
+        <value>Status gevinstoppnåelse (På plan)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusGainAchievement_NotStarted_Title" xml:space="preserve">
+        <value>Status gevinstoppnåelse (Ikke påbegynt)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusGainAchievement_MinorDelays_Title" xml:space="preserve">
+        <value>Status gevinstoppnåelse (Mindre forsinkelser)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusGainAchievement_BehindSchedule_Title" xml:space="preserve">
+        <value>Status gevinstoppnåelse (Forsinket)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusQuality_LargeDeviation_Title" xml:space="preserve">
+        <value>Status kvalitet (Større avvik fra spesifikasjon)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusQuality_SmallDeviation_Title" xml:space="preserve">
+        <value>Status kvalitet (Mindre avvik fra spesifikasjon)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusQuality_AsExpected_Title" xml:space="preserve">
+        <value>Status kvalitet (Ihht. spesifikasjon)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtStatusQuality_ExceedsExpectations_Title" xml:space="preserve">
+        <value>Status kvalitet (Bedre enn spesifikasjon)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtBAProjectSHA_NoEvents_Title" xml:space="preserve">
+        <value>Status SHA (Ingen)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtBAProjectSHA_EventRegistered_Title" xml:space="preserve">
+        <value>Status SHA (Hendelse)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtBAProjectEnv_NoEvents_Title" xml:space="preserve">
+        <value>Status miljø (Ingen)</value>
+    </data>
+    <data name="Lists_ProjectColumnConfiguration_GtBAProjectEnv_EventRegistered_Title" xml:space="preserve">
+        <value>Status miljø (Hendelse)</value>
     </data>
     <data name="Lists_ProjectColumns_Description" xml:space="preserve">
         <value>Administrer prosjektkolonner (synlighet og metadata)</value>
