@@ -1,4 +1,3 @@
-import * as strings from 'ProjectWebPartsStrings'
 import { useContext } from 'react'
 import { ProjectPhasesContext } from './context'
 import resources from 'SharedResources'

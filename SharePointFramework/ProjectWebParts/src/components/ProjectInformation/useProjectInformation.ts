@@ -1,5 +1,4 @@
 import { useId } from '@fluentui/react-components'
-import strings from 'ProjectWebPartsStrings'
 import { ListLogger } from 'pp365-shared-library/lib/logging'
 import { useMemo } from 'react'
 import { ProjectInformation } from '.'

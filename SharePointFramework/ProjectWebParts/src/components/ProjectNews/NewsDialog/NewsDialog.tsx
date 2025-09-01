@@ -172,7 +172,11 @@ export const NewsDialog: FC<INewsDialogProps> = () => {
         </DrawerHeader>
         <DrawerBody className={styles.drawerBody}>
           {previewUrl ? (
-            <iframe src={previewUrl} title={strings.PreviewLabel} className={styles.previewIframe} />
+            <iframe
+              src={previewUrl}
+              title={strings.PreviewLabel}
+              className={styles.previewIframe}
+            />
           ) : (
             <div className={styles.noPreview}>{strings.NoPreviewAvailable}</div>
           )}

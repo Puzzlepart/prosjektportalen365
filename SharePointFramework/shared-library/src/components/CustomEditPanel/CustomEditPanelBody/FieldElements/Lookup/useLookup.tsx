@@ -23,7 +23,9 @@ export function useLookup(field: EditableSPField) {
             }))
             .filter((item) => {
               if (field.InternalName === 'GtTimelineTypeLookup') {
-                return item.text !== strings.ProjectLabel && item.text !== strings.ProjectDeliveryLabel
+                return (
+                  item.text !== strings.ProjectLabel && item.text !== strings.ProjectDeliveryLabel
+                )
               }
               return true
             })

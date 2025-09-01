@@ -75,9 +75,9 @@ export class StatusReport {
    * @param urlSourceParam - URL source param
    */
   public url(urlSourceParam: string) {
-    return `${resource.Navigation_ProjectStatus_Url}?selectedReport=${this.id}&Source=${encodeURIComponent(
-      urlSourceParam
-    )}`
+    return `${resource.Navigation_ProjectStatus_Url}?selectedReport=${
+      this.id
+    }&Source=${encodeURIComponent(urlSourceParam)}`
   }
 
   /**

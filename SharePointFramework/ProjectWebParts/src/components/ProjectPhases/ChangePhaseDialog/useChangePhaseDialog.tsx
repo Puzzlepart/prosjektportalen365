@@ -1,4 +1,3 @@
-import * as strings from 'ProjectWebPartsStrings'
 import { useContext, useEffect } from 'react'
 import SPDataAdapter from '../../../data'
 import { ProjectPhasesContext } from '../context'
