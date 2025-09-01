@@ -94,6 +94,7 @@ declare interface IProjectWebPartsStrings {
   HookUrlFieldLabel: string
   ListNameFieldLabel: string
   ListSectionDataErrorMessage: string
+  ListSectionElementIdPrefix: string
   LoadingText: string
   LookAndFeelGroupName: string
   ManualConfigurationNotFoundOrInvalid: string
@@ -197,6 +198,7 @@ declare interface IProjectWebPartsStrings {
   Skip: string
   SkipSyncToHubLabel: string
   StatusClosed: string
+  StatusElementText: string
   StatusNotRelevant: string
   StatusOpen: string
   StatusReportShowOnlyIconsLabel: string

@@ -1,10 +1,11 @@
 import { conditionalClassName } from 'pp365-shared-library/lib/util'
+import { LoadingSkeleton } from 'pp365-shared-library'
 import React, { FC, useContext } from 'react'
+import strings from 'ProjectWebPartsStrings'
 import { useProjectStatusContext } from '../../../ProjectStatus/context'
+import { SectionContext } from '../context'
 import styles from './BaseSection.module.scss'
 import { IBaseSectionProps } from './types'
-import { SectionContext } from '../context'
-import { LoadingSkeleton } from 'pp365-shared-library'
 
 export const BaseSection: FC<IBaseSectionProps> = (props) => {
   const context = useProjectStatusContext()
@@ -12,7 +13,7 @@ export const BaseSection: FC<IBaseSectionProps> = (props) => {
 
   return (
     <div
-      id={`seksjon${section?.id}`}
+      id={`${strings.ListSectionElementIdPrefix}${section?.id}`}
       className={conditionalClassName([
         styles.baseSection,
         props.transparent && styles.transparent,

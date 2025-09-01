@@ -118,6 +118,7 @@ define([], function () {
     ListNameFieldLabel: 'Listname',
     ListSectionDataErrorMessage:
       'An error occurred while retrieving data for the section. Is it configured correctly? ',
+    ListSectionElementIdPrefix: 'section',
     LoadingText: 'Loading {0} ...',
     LookAndFeelGroupName: 'Look and feel',
     ManualConfigurationNotFoundOrInvalid:
@@ -214,6 +215,7 @@ define([], function () {
     Skip: 'Skip All',
     SkipSyncToHubLabel: "Don't sync to hub",
     StatusClosed: 'Done',
+    StatusElementText: 'Status',
     StatusNotRelevant: 'Not applicable',
     StatusOpen: 'Open',
     StatusReportShowOnlyIconsLabel: 'Show icons only',

@@ -123,6 +123,7 @@ define([], function () {
     ListNameFieldLabel: 'Listenavn',
     ListSectionDataErrorMessage:
       'Det oppsto en feil under uthenting av data for seksjonen. Er den riktig konfigurert?',
+    ListSectionElementIdPrefix: 'seksjon',
     LoadingText: 'Laster {0}...',
     LookAndFeelGroupName: 'Utseende og funksjonalitet',
     ManualConfigurationNotFoundOrInvalid:
@@ -241,6 +242,7 @@ define([], function () {
     Skip: 'Hopp over alle',
     SkipSyncToHubLabel: 'Ikke synkroniser til hub',
     StatusClosed: 'Utført',
+    StatusElementText: 'Status',
     StatusNotRelevant: 'Ikke relevant',
     StatusOpen: 'Åpen',
     StatusReportShowOnlyIconsLabel: 'Vis kun ikoner',
