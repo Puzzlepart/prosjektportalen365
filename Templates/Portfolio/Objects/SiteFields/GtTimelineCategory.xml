@@ -1,1 +1,7 @@
-<Field ID="{aff55aa3-49a2-46ef-af10-9ae8031ab1b4}" DisplayName="{resource:SiteFields_GtTimelineCategory_DisplayName}" Name="GtTimelineCategory" Type="Choice" Group="{resource:SiteFields_Portfolio_Group}" Description="{resource:SiteFields_GtTimelineCategory_Description}" Format="RadioButtons" FillInChoice="FALSE" StaticName="GtTimelineCategory"><Default></Default><CHOICES><CHOICE>Styring</CHOICE><CHOICE>Leveranse</CHOICE></CHOICES></Field>
+<Field ID="{aff55aa3-49a2-46ef-af10-9ae8031ab1b4}" DisplayName="{resource:SiteFields_GtTimelineCategory_DisplayName}" Name="GtTimelineCategory" Type="Choice" Group="{resource:SiteFields_Portfolio_Group}" Description="{resource:SiteFields_GtTimelineCategory_Description}" Format="RadioButtons" FillInChoice="FALSE" StaticName="GtTimelineCategory">
+  <Default></Default>
+  <CHOICES>
+    <CHOICE>{resource:TimelineConfiguration_Management_Category}</CHOICE>
+    <CHOICE>{resource:TimelineConfiguration_Delivery_Category}</CHOICE>
+  </CHOICES>
+</Field>

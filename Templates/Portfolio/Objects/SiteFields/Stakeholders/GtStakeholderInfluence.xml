@@ -1,1 +1,8 @@
-<Field ID="{475d2ca1-5b8e-4479-96ae-81c0a89354f3}" Name="GtStakeholderInfluence" DisplayName="{resource:SiteFields_GtStakeholderInfluence_DisplayName}" Type="Choice" Group="{resource:SiteFields_Project_Group}" Description="{resource:SiteFields_GtStakeholderInfluence_Description}" StaticName="GtStakeholderInfluence"><CHOICES><CHOICE>Stor</CHOICE><CHOICE>Middels</CHOICE><CHOICE>Liten</CHOICE><CHOICE>Ingen</CHOICE></CHOICES></Field>
+<Field ID="{475d2ca1-5b8e-4479-96ae-81c0a89354f3}" Name="GtStakeholderInfluence" DisplayName="{resource:SiteFields_GtStakeholderInfluence_DisplayName}" Type="Choice" Group="{resource:SiteFields_Project_Group}" Description="{resource:SiteFields_GtStakeholderInfluence_Description}" StaticName="GtStakeholderInfluence">
+  <CHOICES>
+    <CHOICE>Stor</CHOICE>
+    <CHOICE>Middels</CHOICE>
+    <CHOICE>Liten</CHOICE>
+    <CHOICE>Ingen</CHOICE>
+  </CHOICES>
+</Field>

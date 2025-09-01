@@ -1,1 +1,9 @@
-<Field Type="Choice" DisplayName="{resource:SiteFields_GtActionStatus_DisplayName}" Description="{resource:SiteFields_GtActionStatus_Description}" Format="Dropdown" FillInChoice="FALSE" Group="{resource:SiteFields_Project_Group}" ID="{bf340fba-c512-4a07-a543-cdf2d10c578e}" StaticName="GtActionStatus" Name="GtActionStatus"><Default>Ikke påbegynt</Default><CHOICES><CHOICE>Ikke påbegynt</CHOICE><CHOICE>Påbegynt</CHOICE><CHOICE>Fullført</CHOICE><CHOICE>Utsatt</CHOICE></CHOICES></Field>
+<Field Type="Choice" DisplayName="{resource:SiteFields_GtActionStatus_DisplayName}" Description="{resource:SiteFields_GtActionStatus_Description}" Format="Dropdown" FillInChoice="FALSE" Group="{resource:SiteFields_Project_Group}" ID="{bf340fba-c512-4a07-a543-cdf2d10c578e}" StaticName="GtActionStatus" Name="GtActionStatus">
+  <Default>Ikke påbegynt</Default>
+  <CHOICES>
+    <CHOICE>Ikke påbegynt</CHOICE>
+    <CHOICE>Påbegynt</CHOICE>
+    <CHOICE>Fullført</CHOICE>
+    <CHOICE>Utsatt</CHOICE>
+  </CHOICES>
+</Field>

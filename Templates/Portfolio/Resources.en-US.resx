@@ -454,7 +454,97 @@
     <data name="Choice_GtBAProjectSupport_HasReceivedPayment" xml:space="preserve">
         <value>Has received payment</value>
     </data>
-    
+    <data name="Choice_GtBAProjectInvestementPhase_F0" xml:space="preserve">
+        <value>F0</value>
+    </data>
+    <data name="Choice_GtBAProjectInvestementPhase_F1" xml:space="preserve">
+        <value>F1</value>
+    </data>
+    <data name="Choice_GtBAProjectInvestementPhase_F2" xml:space="preserve">
+        <value>F2</value>
+    </data>
+    <data name="Choice_GtBAProjectInvestementPhase_F3" xml:space="preserve">
+        <value>F3</value>
+    </data>
+    <data name="Choice_GtBAProjectInvestementPhase_SeckePost" xml:space="preserve">
+        <value>S (Contingency)</value>
+    </data>
+    <data name="Choice_GtBAProjectInvestementPhase_NotRelevant" xml:space="preserve">
+        <value>Not relevant</value>
+    </data>
+    <data name="Choice_GtBAProjectStatusCase_RegulationPlanAnnounced" xml:space="preserve">
+        <value>Regulation plan announced</value>
+    </data>
+    <data name="Choice_GtBAProjectStatusCase_RegulationPlanFirstTreated" xml:space="preserve">
+        <value>Regulation plan first treated</value>
+    </data>
+    <data name="Choice_GtBAProjectStatusCase_RegulationPlanApproved" xml:space="preserve">
+        <value>Regulation plan approved</value>
+    </data>
+    <data name="Choice_GtBAProjectStatusCase_PreConferenceHeld" xml:space="preserve">
+        <value>Pre-conference held</value>
+    </data>
+    <data name="Choice_GtBAProjectStatusCase_FrameworkApplicationInProgress" xml:space="preserve">
+        <value>Framework application in progress</value>
+    </data>
+    <data name="Choice_GtBAProjectStatusCase_FrameworkApplicationSent" xml:space="preserve">
+        <value>Framework application sent</value>
+    </data>
+    <data name="Choice_GtBAProjectStatusCase_FrameworkPermitGranted" xml:space="preserve">
+        <value>Framework permit granted</value>
+    </data>
+    <data name="Choice_GtBAProjectStatusCase_IGSent" xml:space="preserve">
+        <value>Building permit application sent</value>
+    </data>
+    <data name="Choice_GtBAProjectStatusCase_IGGranted" xml:space="preserve">
+        <value>Building permit granted</value>
+    </data>
+    <data name="Choice_GtBAProjectStatusCase_ComplaintUnderReview" xml:space="preserve">
+        <value>Complaint under review</value>
+    </data>
+    <data name="Choice_GtBAStakeholderGroup_Political" xml:space="preserve">
+        <value>Political</value>
+    </data>
+    <data name="Choice_GtBAStakeholderGroup_MunicipalAdministration" xml:space="preserve">
+        <value>Municipal administration</value>
+    </data>
+    <data name="Choice_GtBAStakeholderGroup_Businesses" xml:space="preserve">
+        <value>Businesses</value>
+    </data>
+    <data name="Choice_GtBAStakeholderGroup_CollaborationPartners" xml:space="preserve">
+        <value>Collaboration partners</value>
+    </data>
+    <data name="Choice_GtBAStakeholderGroup_CouncilsAndCommittees" xml:space="preserve">
+        <value>Councils and committees</value>
+    </data>
+    <data name="Choice_GtBAStakeholderGroup_UnionRepresentatives" xml:space="preserve">
+        <value>Union representatives</value>
+    </data>
+    <data name="Choice_GtBAStakeholderGroup_ExternalAssociations" xml:space="preserve">
+        <value>External associations</value>
+    </data>
+    <data name="Choice_GtBAStakeholderGroup_PublicAuthorities" xml:space="preserve">
+        <value>Public authorities</value>
+    </data>
+    <data name="Choice_GtBAStakeholderGroup_SupervisionAndAgencies" xml:space="preserve">
+        <value>Supervision and agencies</value>
+    </data>
+    <data name="Choice_GtBAStakeholderGroup_UtilityProviders" xml:space="preserve">
+        <value>Utility providers</value>
+    </data>
+    <data name="Choice_GtBAStakeholderGroup_Transport" xml:space="preserve">
+        <value>Transport</value>
+    </data>
+    <data name="Choice_GtBAStakeholderGroup_Neighbors" xml:space="preserve">
+        <value>Neighbors</value>
+    </data>
+    <data name="Choice_GtBAStakeholderGroup_Users" xml:space="preserve">
+        <value>Users</value>
+    </data>
+    <data name="Choice_GtBAStakeholderGroup_OtherActors" xml:space="preserve">
+        <value>Other actors</value>
+    </data>
+
     <data name="ClientSidePages_BenefitOverview_PageName" xml:space="preserve">
         <value>BenefitOverview.aspx</value>
     </data>

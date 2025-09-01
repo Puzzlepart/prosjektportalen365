@@ -454,6 +454,96 @@
     <data name="Choice_GtBAProjectSupport_HasReceivedPayment" xml:space="preserve">
         <value>Har fått utbetalt</value>
     </data>
+    <data name="Choice_GtBAProjectInvestementPhase_F0" xml:space="preserve">
+        <value>F0</value>
+    </data>
+    <data name="Choice_GtBAProjectInvestementPhase_F1" xml:space="preserve">
+        <value>F1</value>
+    </data>
+    <data name="Choice_GtBAProjectInvestementPhase_F2" xml:space="preserve">
+        <value>F2</value>
+    </data>
+    <data name="Choice_GtBAProjectInvestementPhase_F3" xml:space="preserve">
+        <value>F3</value>
+    </data>
+    <data name="Choice_GtBAProjectInvestementPhase_SeckePost" xml:space="preserve">
+        <value>S (Sekkepost)</value>
+    </data>
+    <data name="Choice_GtBAProjectInvestementPhase_NotRelevant" xml:space="preserve">
+        <value>Ikke relevant</value>
+    </data>
+    <data name="Choice_GtBAProjectStatusCase_RegulationPlanAnnounced" xml:space="preserve">
+        <value>Reguleringsplan annonsert</value>
+    </data>
+    <data name="Choice_GtBAProjectStatusCase_RegulationPlanFirstTreated" xml:space="preserve">
+        <value>Reguleringsplan 1.gangsbehandlet</value>
+    </data>
+    <data name="Choice_GtBAProjectStatusCase_RegulationPlanApproved" xml:space="preserve">
+        <value>Reguleringsplan godkjent</value>
+    </data>
+    <data name="Choice_GtBAProjectStatusCase_PreConferenceHeld" xml:space="preserve">
+        <value>Forhåndskonferanse avholdt</value>
+    </data>
+    <data name="Choice_GtBAProjectStatusCase_FrameworkApplicationInProgress" xml:space="preserve">
+        <value>Rammesøknad under utarbeidelse</value>
+    </data>
+    <data name="Choice_GtBAProjectStatusCase_FrameworkApplicationSent" xml:space="preserve">
+        <value>Rammesøknad sendt</value>
+    </data>
+    <data name="Choice_GtBAProjectStatusCase_FrameworkPermitGranted" xml:space="preserve">
+        <value>Rammetillatelse gitt</value>
+    </data>
+    <data name="Choice_GtBAProjectStatusCase_IGSent" xml:space="preserve">
+        <value>IG sendt</value>
+    </data>
+    <data name="Choice_GtBAProjectStatusCase_IGGranted" xml:space="preserve">
+        <value>IG gitt</value>
+    </data>
+    <data name="Choice_GtBAProjectStatusCase_ComplaintUnderReview" xml:space="preserve">
+        <value>Klage under behandling</value>
+    </data>
+    <data name="Choice_GtBAStakeholderGroup_Political" xml:space="preserve">
+        <value>Politisk</value>
+    </data>
+    <data name="Choice_GtBAStakeholderGroup_MunicipalAdministration" xml:space="preserve">
+        <value>Kommuneadministrasjon</value>
+    </data>
+    <data name="Choice_GtBAStakeholderGroup_Businesses" xml:space="preserve">
+        <value>Virksomheter</value>
+    </data>
+    <data name="Choice_GtBAStakeholderGroup_CollaborationPartners" xml:space="preserve">
+        <value>Samarbeidspartnere</value>
+    </data>
+    <data name="Choice_GtBAStakeholderGroup_CouncilsAndCommittees" xml:space="preserve">
+        <value>Råd og utvalg</value>
+    </data>
+    <data name="Choice_GtBAStakeholderGroup_UnionRepresentatives" xml:space="preserve">
+        <value>Tillitsvalgte</value>
+    </data>
+    <data name="Choice_GtBAStakeholderGroup_ExternalAssociations" xml:space="preserve">
+        <value>Foreninger (eksterne)</value>
+    </data>
+    <data name="Choice_GtBAStakeholderGroup_PublicAuthorities" xml:space="preserve">
+        <value>Offentlige myndigheter</value>
+    </data>
+    <data name="Choice_GtBAStakeholderGroup_SupervisionAndAgencies" xml:space="preserve">
+        <value>Tilsyn og vesener</value>
+    </data>
+    <data name="Choice_GtBAStakeholderGroup_UtilityProviders" xml:space="preserve">
+        <value>Nettleverandører</value>
+    </data>
+    <data name="Choice_GtBAStakeholderGroup_Transport" xml:space="preserve">
+        <value>Transport</value>
+    </data>
+    <data name="Choice_GtBAStakeholderGroup_Neighbors" xml:space="preserve">
+        <value>Naboer</value>
+    </data>
+    <data name="Choice_GtBAStakeholderGroup_Users" xml:space="preserve">
+        <value>Brukere</value>
+    </data>
+    <data name="Choice_GtBAStakeholderGroup_OtherActors" xml:space="preserve">
+        <value>Andre aktører</value>
+    </data>
     <data name="ClientSidePages_BenefitOverview_PageName" xml:space="preserve">
         <value>Gevinstoversikt.aspx</value>
     </data>

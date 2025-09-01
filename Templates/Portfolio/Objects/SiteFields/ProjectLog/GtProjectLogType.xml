@@ -1,1 +1,9 @@
-<Field ID="{2391d165-5d13-46b7-87d2-e32040293210}" Name="GtProjectLogType" DisplayName="{resource:SiteFields_GtProjectLogType_DisplayName}" Type="Choice" Group="{resource:SiteFields_Project_Group}" Description="{resource:SiteFields_GtProjectLogType_Description}" StaticName="GtProjectLogType"><Default>Kommentar/Bekymring/Hendelse</Default><CHOICES><CHOICE>Kommentar/Bekymring/Hendelse</CHOICE><CHOICE>Endringsforespørsel</CHOICE><CHOICE>Avvik fra spesifikasjon</CHOICE><CHOICE>Beslutning</CHOICE></CHOICES></Field>
+<Field ID="{2391d165-5d13-46b7-87d2-e32040293210}" Name="GtProjectLogType" DisplayName="{resource:SiteFields_GtProjectLogType_DisplayName}" Type="Choice" Group="{resource:SiteFields_Project_Group}" Description="{resource:SiteFields_GtProjectLogType_Description}" StaticName="GtProjectLogType">
+  <Default>Kommentar/Bekymring/Hendelse</Default>
+  <CHOICES>
+    <CHOICE>Kommentar/Bekymring/Hendelse</CHOICE>
+    <CHOICE>Endringsforespørsel</CHOICE>
+    <CHOICE>Avvik fra spesifikasjon</CHOICE>
+    <CHOICE>Beslutning</CHOICE>
+  </CHOICES>
+</Field>
