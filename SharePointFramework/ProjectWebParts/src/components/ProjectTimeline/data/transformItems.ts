@@ -5,6 +5,7 @@ import { TimelineContentModel } from 'pp365-shared-library/lib/models'
 import strings from 'ProjectWebPartsStrings'
 import { CSSProperties } from 'react'
 import { IProjectTimelineProps, ITimelineGroup } from '../types'
+import resource from 'SharedResources'
 
 /**
  * Transform items for timeline
@@ -32,7 +33,7 @@ export function transformItems(
         _siteId = item.siteId ?? 'N/A'
 
         const background =
-          item.getConfig('elementType') !== strings.BarLabel
+          item.getConfig('elementType') !== resource.TimelineConfiguration_Bar_ElementType
             ? 'transparent'
             : item.getConfig('bgColorHex', '#f35d69')
 
@@ -49,11 +50,11 @@ export function transformItems(
           id,
           group: 0,
           title:
-            item.type === strings.ProjectLabel
+            item.type === resource.TimelineConfiguration_Project_Title
               ? format(strings.ProjectTimelineItemInfo, item.title)
               : item.itemTitle,
           start_time:
-            item.getConfig('elementType') !== strings.BarLabel
+            item.getConfig('elementType') !== resource.TimelineConfiguration_Bar_ElementType
               ? item.endDate
                 ? moment(new Date(item.endDate))
                 : undefined
@@ -66,7 +67,7 @@ export function transformItems(
         timelineItem.data = {
           project: item.title,
           projectUrl: item.url,
-          type: item.type || strings.PhaseLabel,
+          type: item.type || resource.TimelineConfiguration_Phase_Title,
           category: item.getConfig('timelineCategory', props.defaultCategory),
           phase: item.phase,
           description: item.description ?? '',
@@ -76,7 +77,10 @@ export function transformItems(
           sortOrder: item.getConfig<number>('sortOrder', 99),
           bgColorHex: item.getConfig('bgColorHex'),
           textColorHex: item.getConfig('textColorHex'),
-          elementType: item.getConfig('elementType', strings.BarLabel),
+          elementType: item.getConfig(
+            'elementType',
+            resource.TimelineConfiguration_Bar_ElementType
+          ),
           filter: item.getConfig('timelineFilter')
         }
         switch (props.defaultGroupBy) {

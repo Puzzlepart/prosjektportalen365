@@ -36,7 +36,7 @@ export default class ProgramTimelineWebPart extends BaseProgramWebPart<IProjectT
                 PropertyPaneTextField('configItemTitle', {
                   label: strings.ConfigItemTitleFieldLabel,
                   description: strings.ConfigItemTitleFieldDescription,
-                  value: strings.ProjectDeliveryLabel
+                  value: resource.TimelineConfiguration_ProjectDelivery_Title
                 })
               ]
             }

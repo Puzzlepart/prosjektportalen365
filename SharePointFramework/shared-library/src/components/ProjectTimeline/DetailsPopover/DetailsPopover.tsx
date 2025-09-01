@@ -12,7 +12,7 @@ export const DetailsPopover: FC<IDetailsPopoverProps> = (props) => {
 
   const popoverContent = (): JSX.Element => {
     switch (data.type) {
-      case strings.MilestoneLabel: {
+      case resource.TimelineConfiguration_Milestone_Title: {
         return (
           <>
             <p hidden={!data.type}>
@@ -25,8 +25,8 @@ export const DetailsPopover: FC<IDetailsPopoverProps> = (props) => {
           </>
         )
       }
-      case strings.PhaseLabel:
-      case strings.SubPhaseLabel: {
+      case resource.TimelineConfiguration_Phase_Title:
+      case resource.TimelineConfiguration_SubPhase_Title: {
         return (
           <>
             <p hidden={!data.type}>
@@ -45,7 +45,7 @@ export const DetailsPopover: FC<IDetailsPopoverProps> = (props) => {
         return (
           <>
             <p hidden={!data.projectUrl}>
-              <b>{strings.ProjectLabel}:</b>{' '}
+              <b>{resource.TimelineConfiguration_Project_Title}:</b>{' '}
               <Link href={data.projectUrl} target='_blank' title={data.project}>
                 {data.project}
               </Link>
@@ -74,11 +74,11 @@ export const DetailsPopover: FC<IDetailsPopoverProps> = (props) => {
           </>
         )
       }
-      case strings.ProjectLabel: {
+      case resource.TimelineConfiguration_Project_Title: {
         return (
           <>
             <p hidden={!data.projectUrl}>
-              <b>{strings.ProjectLabel}:</b>{' '}
+              <b>{resource.TimelineConfiguration_Project_Title}:</b>{' '}
               <Link href={data.projectUrl} target='_blank' title={data.project}>
                 {data.project}
               </Link>
@@ -110,14 +110,14 @@ export const DetailsPopover: FC<IDetailsPopoverProps> = (props) => {
             <p>
               <b>{strings.NameLabel}:</b> <span>{item.title}</span>
             </p>
-            <p hidden={data.elementType !== strings.TriangleLabel}>
+            <p hidden={data.elementType !== resource.TimelineConfiguration_Triangle_ElementType}>
               <b>{strings.ColumnRenderOptionDate}:</b>{' '}
               <span>{formatDate(item.end_time.toString())}</span>
             </p>
-            <p hidden={data.elementType === strings.TriangleLabel}>
+            <p hidden={data.elementType === resource.TimelineConfiguration_Triangle_ElementType}>
               <b>{strings.StartDateLabel}:</b> <span>{formatDate(item.start_time.toString())}</span>
             </p>
-            <p hidden={data.elementType === strings.TriangleLabel}>
+            <p hidden={data.elementType === resource.TimelineConfiguration_Triangle_ElementType}>
               <b>{strings.EndDateLabel}:</b> <span>{formatDate(item.end_time.toString())}</span>
             </p>
           </>

@@ -80,6 +80,6 @@ ProjectTimeline.defaultProps = {
   defaultGroupBy: strings.TypeLabel,
   showProjectDeliveries: false,
   projectDeliveriesListName: resource.Lists_ProjectDeliveries_Title,
-  configItemTitle: strings.ProjectDeliveryLabel,
-  defaultCategory: strings.ManagementCategoryLabel
+  configItemTitle: resource.TimelineConfiguration_ProjectDelivery_Title,
+  defaultCategory: resource.TimelineConfiguration_Management_Category
 }

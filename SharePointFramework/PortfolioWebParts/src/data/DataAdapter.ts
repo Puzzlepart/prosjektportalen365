@@ -440,7 +440,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         }))
         .filter(Boolean)
 
-      const configElement = _.find(timelineConfig, { title: strings.ProjectLabel })
+      const configElement = _.find(timelineConfig, {
+        title: resource.TimelineConfiguration_Project_Title
+      })
 
       return { data, reports, configElement, columns: configuration.refiners }
     } catch (error) {}
@@ -508,7 +510,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   ) {
     const config = _.find(
       timelineConfig,
-      (col) => col.title === (configItemTitle ?? resource.ContentTypes_ProjectDelivery_Name)
+      (col) =>
+        col.title === (configItemTitle ?? resource.TimelineConfiguration_ProjectDelivery_Title)
     )
     if (config?.showElementPortfolio) {
       const projectDeliveries = await (async () => {

@@ -19,7 +19,6 @@ define([], function () {
     AddColumnLabel: 'Legg til en kolonne',
     AddColumnLabel: 'Legg til en kolonne',
     AddProjectDialogSearchBoxPlaceholder: 'Søk i prosjekter...',
-    BarLabel: 'Bar',
     BooleanNo: 'Nei',
     BooleanOff: 'Av',
     BooleanOn: 'På',
@@ -152,8 +151,6 @@ define([], function () {
     ProgramTimelineInfoText: "Her listes alle prosjektene med start- og sluttdato som er tilknyttet området. For å zoome inn/ut i tidslinje: ALT+Musehjul",
     ProjectDeliveriesGroupName: 'Prosjektleveranser (beta)',
     ProjectInformationPanelButton: 'Åpne prosjektinformasjonspanel',
-    ProjectLabel: 'Prosjekt',
-    ManagementCategoryLabel: 'Styring',
     ProjectPropertiesHeader: 'Prosjektinformasjon',
     SaveButtonLabel: 'Lagre',
     SearchBoxGroupName: 'Søkeboks',
@@ -189,7 +186,6 @@ define([], function () {
     ViewNotFoundMessage: 'Finner ikke angitt visning.',
     DataSourceItemNotFound: 'Datakilde ble ikke funnet',
     ProjectContentColumnItemNotFound: 'Prosjektinnholdskolonne ble ikke funnet',
-    ProjectDeliveryLabel: 'Prosjektleveranse',
     LifecycleStatus_Closed: 'Stengt',
     ProjectLevel: 'Prosjektnivå'
   }

@@ -24,7 +24,6 @@ declare interface IProjectWebPartsStrings {
   PublishingReportLabel: string
   AdminPageLinkLabel: string
   AdvancedGroupName: string
-  BarLabel: string
   CalloutTemplateFieldLabel: string
   CancelText: string
   CategoryFieldLabel: string
@@ -67,7 +66,6 @@ declare interface IProjectWebPartsStrings {
   DeleteReportButtonLabel: string
   DeleteReportButtonDescription: string
   DeleteReportButtonDescriptionNoPermission: string
-  DiamondLabel: string
   EditItemLabel: string
   EditProjectInformationText: string
   EditReportButtonLabel: string
@@ -119,7 +117,6 @@ declare interface IProjectWebPartsStrings {
   MatrixHeader_VerySmall: string
   MatrixSizeLabel: string
   MilestoneDateLabel: string
-  MilestoneLabel: string
   MoveOn: string
   NavigateToSourceUrlText: string
   NewItemLabel: string
@@ -141,7 +138,6 @@ declare interface IProjectWebPartsStrings {
   ParentProjectsHeaderText: string
   PhaseChecklistLinkText: string
   PhaseFieldFieldLabel: string
-  PhaseLabel: string
   PhaseSitePageTitle: string
   PhaseSitePageFoundMessage: string
   PhaseSitePageNotFoundMessage: string
@@ -152,12 +148,9 @@ declare interface IProjectWebPartsStrings {
   ProbabilityHeaderFieldLabel: string
   ProbabilityPostActionFieldNameFieldLabel: string
   ProjectDeliveriesGroupName: string
-  ProjectDeliveryLabel: string
-  ManagementCategoryLabel: string
   ProjectInformationDataFetchErrorText: string
   ProjectInformationStatusReportHeaderText: string
   ProjectInformationStatusReportHeaderDescription: string
-  ProjectLabel: string
   ProjectPhasesChangePhaseError: string
   ProjectPhasesFetchDataError: string
   ProjectPropertiesHeader: string

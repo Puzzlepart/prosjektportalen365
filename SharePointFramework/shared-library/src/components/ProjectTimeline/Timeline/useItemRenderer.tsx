@@ -1,8 +1,8 @@
 import { ITimelineItem } from '../../../interfaces'
 import { ReactCalendarItemRendererProps } from 'react-calendar-timeline'
-import * as strings from 'SharedLibraryStrings'
 import styles from './Timeline.module.scss'
 import React from 'react'
+import resource from 'SharedResources'
 
 /**
  * Timeline item renderer hook.
@@ -37,7 +37,7 @@ export function useItemRenderer(
     }
 
     switch (calProps.item.data.elementType) {
-      case strings.DiamondLabel: {
+      case resource.TimelineConfiguration_Diamond_ElementType: {
         return (
           <div
             {...htmlProps}
@@ -51,7 +51,7 @@ export function useItemRenderer(
           </div>
         )
       }
-      case strings.TriangleLabel: {
+      case resource.TimelineConfiguration_Triangle_ElementType: {
         return (
           <div
             {...htmlProps}

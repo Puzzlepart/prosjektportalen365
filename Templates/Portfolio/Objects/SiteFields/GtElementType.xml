@@ -1,1 +1,8 @@
-<Field Type="Choice" DisplayName="{resource:SiteFields_GtElementType_DisplayName}" Description="{resource:SiteFields_GtElementType_Description}" Format="Dropdown" FillInChoice="FALSE" ID="{21d70251-03ef-47e6-bd7f-0f01bd15d500}" StaticName="GtElementType" Name="GtElementType" Group="{resource:SiteFields_Portfolio_Group}"><Default>Bar</Default><CHOICES><CHOICE>Bar</CHOICE><CHOICE>Diamant</CHOICE><CHOICE>Trekant</CHOICE></CHOICES></Field>
+<Field Type="Choice" DisplayName="{resource:SiteFields_GtElementType_DisplayName}" Description="{resource:SiteFields_GtElementType_Description}" Format="Dropdown" FillInChoice="FALSE" ID="{21d70251-03ef-47e6-bd7f-0f01bd15d500}" StaticName="GtElementType" Name="GtElementType" Group="{resource:SiteFields_Portfolio_Group}">
+  <Default>{resource:TimelineConfiguration_Bar_ElementType}</Default>
+  <CHOICES>
+    <CHOICE>{resource:TimelineConfiguration_Bar_ElementType}</CHOICE>
+    <CHOICE>{resource:TimelineConfiguration_Diamond_ElementType}</CHOICE>
+    <CHOICE>{resource:TimelineConfiguration_Triangle_ElementType}</CHOICE>
+  </CHOICES>
+</Field>

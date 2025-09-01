@@ -17,7 +17,6 @@ declare interface IProgramWebPartsStrings {
   AddColumnLabel: string
   AddColumnLabel: string
   AddProjectDialogSearchBoxPlaceholder: string
-  BarLabel: string
   BooleanNo: string
   BooleanOff: string
   BooleanOn: string
@@ -150,8 +149,6 @@ declare interface IProgramWebPartsStrings {
   ProgramTimelineInfoText: string
   ProjectDeliveriesGroupName: string
   ProjectInformationPanelButton: string
-  ProjectLabel: string
-  ManagementCategoryLabel: string
   ProjectPropertiesHeader: string
   SaveButtonLabel: string
   SearchBoxGroupName: string
@@ -186,7 +183,6 @@ declare interface IProgramWebPartsStrings {
   ViewNotFoundMessage: string
   DataSourceItemNotFound: string
   ProjectContentColumnItemNotFound: string
-  ProjectDeliveryLabel: string
   LifecycleStatus_Closed: string
   ProjectLevel: string
 }

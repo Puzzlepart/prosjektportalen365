@@ -83,8 +83,8 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
                     selectedKey: propertiesWithDefaults.defaultGroupBy,
                     options: [
                       {
-                        key: strings.ProjectLabel,
-                        text: strings.ProjectLabel
+                        key: resource.TimelineConfiguration_Project_Title,
+                        text: resource.TimelineConfiguration_Project_Title
                       },
                       {
                         key: strings.CategoryFieldLabel,
@@ -117,7 +117,7 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
                 }),
                 PropertyPaneTextField('configItemTitle', {
                   label: strings.ConfigItemTitleFieldLabel,
-                  value: strings.ProjectDeliveryLabel
+                  value: resource.TimelineConfiguration_ProjectDelivery_Title
                 })
               ]
             }

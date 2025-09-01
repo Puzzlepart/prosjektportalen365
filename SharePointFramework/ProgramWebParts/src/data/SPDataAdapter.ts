@@ -397,7 +397,9 @@ export class SPDataAdapter
       }))
       .filter(Boolean)
 
-    const configElement = _.find(timelineConfig, { title: strings.ProjectLabel })
+    const configElement = _.find(timelineConfig, {
+      title: resource.TimelineConfiguration_Project_Title
+    })
 
     return { data, reports, configElement, columns: configuration.refiners }
   }
@@ -484,7 +486,8 @@ export class SPDataAdapter
     timelineConfig: TimelineConfigurationModel[]
   ) {
     const config = timelineConfig.find(
-      (col) => col.title === (configItemTitle || strings.ProjectDeliveryLabel)
+      (col) =>
+        col.title === (configItemTitle || resource.TimelineConfiguration_ProjectDelivery_Title)
     )
 
     if (config?.showElementProgram) {
@@ -522,8 +525,8 @@ export class SPDataAdapter
           ).usingConfig({
             sortOrder: 90,
             bgColorHex: '#384f61',
-            timelineCategory: strings.ManagementCategoryLabel,
-            elementType: strings.BarLabel,
+            timelineCategory: resource.TimelineConfiguration_Management_Category,
+            elementType: resource.TimelineConfiguration_Bar_ElementType,
             timelineFilter: true,
             ...config
           })

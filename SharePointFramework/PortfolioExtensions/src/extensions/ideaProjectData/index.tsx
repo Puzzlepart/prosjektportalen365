@@ -110,7 +110,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
 
   /**
    * On submit fields will be updated,
-   * - Creates a new item to 'ProsjektData' list
+   * - Creates a new item to 'ProjectData' list
    *
    * @param row Selected row
    */

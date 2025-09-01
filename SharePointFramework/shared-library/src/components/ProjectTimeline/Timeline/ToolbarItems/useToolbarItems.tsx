@@ -11,6 +11,7 @@ import {
 import { ListMenuItem } from '../../../Toolbar'
 import strings from 'SharedLibraryStrings'
 import { ITimelineProps } from '../types'
+import resource from 'SharedResources'
 
 /**
  * Object containing icons used in the toolbar.
@@ -39,7 +40,7 @@ export function useToolbarItems(
 ) {
   const groups = [
     {
-      text: strings.ProjectLabel,
+      text: resource.TimelineConfiguration_Project_Title,
       icon: Icons.Box
     },
     {

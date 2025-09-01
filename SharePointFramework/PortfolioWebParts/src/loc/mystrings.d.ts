@@ -326,7 +326,6 @@ declare interface IPortfolioWebPartsStrings {
   AddColumnLabel: string
   AllProjectsHeaderText: string
   AllProjectsSearchBoxPlaceholderText: string
-  BarLabel: string
   BooleanOff: string
   BooleanOn: string
   BooleanNo: string
@@ -496,7 +495,6 @@ declare interface IPortfolioWebPartsStrings {
   ProjectDeliveriesGroupName: string
   ProjectInformationGroupName: string
   ProjectInformationPanelButton: string
-  ProjectLabel: string
   ProjectListEmptyMessage: string
   ProjectListQuickLaunch: string
   ProjectManager: string

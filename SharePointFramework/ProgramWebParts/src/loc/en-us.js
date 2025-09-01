@@ -147,7 +147,6 @@ define([], function () {
     MeasurementAchievementLabel: 'Goal achievement',
     Add: 'Add',
     AddProjectDialogSearchBoxPlaceholder: 'Search projects...',
-    BarLabel: 'Bar',
     Cancel: 'Cancel',
     CmdSelectionCountText: '{0} is marked',
     CmdSelectionCountTooltipText: 'The following projects have been selected:',
@@ -174,8 +173,6 @@ define([], function () {
     ProgramRemoveChildsButtonLabel: 'Remove child projects',
     ProgramTimelineInfoText: 'All the projects with start and end dates associated with the site are listed here. To zoom in/out in timeline: ALT+Mouse wheel.',
     ProjectDeliveriesGroupName: 'Project deliveries (beta)',
-    ProjectLabel: 'Project',
-    ManagementCategoryLabel: 'Management',
     SearchBoxGroupName: 'Search box',
     SearchBoxPlaceholderText: 'Search {0}...',
     SearchBoxPlaceholderTextDescription: 'Text that appears in the search box when it is empty. If no value is set, the text is based on the selected data source.',
@@ -186,7 +183,6 @@ define([], function () {
     ShowGroupByLabel: 'Show grouping options',
     ShowSearchBoxLabel: 'Show search box',
     ShowViewSelectorLabel: 'Show view selector',
-    ProjectDeliveryLabel: 'Project delivery',
     LifecycleStatus_Closed: 'Closed',
     ProjectLevel: 'Project level'
   }

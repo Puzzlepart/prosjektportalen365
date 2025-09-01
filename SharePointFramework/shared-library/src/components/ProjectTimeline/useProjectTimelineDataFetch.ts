@@ -12,6 +12,7 @@ import {
 } from '../../interfaces'
 import { ProjectListModel, TimelineContentModel } from '../../models'
 import { IProjectTimelineProps, IProjectTimelineState } from './types'
+import resource from 'SharedResources'
 
 /**
  * Creating groups based on projects title
@@ -66,7 +67,7 @@ const transformItems = (
       if (!group) return null
 
       const background =
-        item.getConfig('elementType') !== strings.BarLabel
+        item.getConfig('elementType') !== resource.TimelineConfiguration_Bar_ElementType
           ? 'transparent'
           : item.getConfig('bgColorHex', '#f35d69')
 
@@ -99,11 +100,11 @@ const transformItems = (
         id,
         group: group.id,
         title:
-          item.type === strings.ProjectLabel
+          item.type === resource.TimelineConfiguration_Project_Title
             ? format(strings.ProjectTimelineItemInfo, item.title)
             : item.itemTitle,
         start_time:
-          item.getConfig('elementType') !== strings.BarLabel
+          item.getConfig('elementType') !== resource.TimelineConfiguration_Bar_ElementType
             ? moment(new Date(item.endDate))
             : moment(new Date(item.startDate)),
         end_time: moment(new Date(item.endDate)),
@@ -172,7 +173,7 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
         project.siteId,
         project.title,
         project.title,
-        strings.ProjectLabel,
+        resource.TimelineConfiguration_Project_Title,
         project.startDate,
         project.endDate,
         '',

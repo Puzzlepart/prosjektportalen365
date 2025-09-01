@@ -10,6 +10,7 @@ import { ProjectColumn, TimelineConfigurationModel } from '../../models'
 import { IProjectTimelineProps, IProjectTimelineState } from './types'
 import { useProjectTimelineDataFetch } from './useProjectTimelineDataFetch'
 import { stringIsNullOrEmpty } from '@pnp/core'
+import resource from 'SharedResources'
 
 /**
  * Component logic hook for `ProjectTimeline`
@@ -89,7 +90,8 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
         name: strings.TagFieldLabel,
         isCollapsed: true
       },
-      config.find((item) => item?.title === strings.ProjectLabel)?.timelineFilter && {
+      config.find((item) => item?.title === resource.TimelineConfiguration_Project_Title)
+        ?.timelineFilter && {
         fieldName: 'data.project',
         name: strings.SiteTitleLabel,
         isCollapsed: true

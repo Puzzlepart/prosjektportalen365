@@ -813,7 +813,7 @@
                                         "showTimelineList": true,
                                         "showProjectDeliveries": false,
                                         "projectDeliveriesListName": "{{Lists_ProgramDeliveries_Title}}",
-                                        "configItemTitle": "{{ContentTypes_ProjectDelivery_Name}}"
+                                        "configItemTitle": "{{TimelineConfiguration_ProjectDelivery_Title}}"
                                     }
                                 }
                             ]

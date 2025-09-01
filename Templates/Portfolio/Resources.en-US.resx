@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:schema id="root"
+        xmlns=""
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
         <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
         <xsd:element name="root" msdata:IsDataSet="true">
             <xsd:complexType>
@@ -4138,79 +4141,112 @@
     <data name="WebParts_UsefulLinks_Title" xml:space="preserve">
         <value>Useful Links</value>
     </data>
-  <data name="SiteFields_GtHubSiteId_DisplayName" xml:space="preserve">
-    <value>Hub-ID</value>
-  </data>
-  <data name="SiteFields_GtHubSiteId_Description" xml:space="preserve">
-    <value>The ID of the hub site.</value>
-  </data>
-  <data name="SiteFields_GtAiStatusComments_DisplayName" xml:space="preserve">
-    <value>Project status summarized (AI)</value>
-  </data>
-  <data name="SiteFields_GtAiStatus_DisplayName" xml:space="preserve">
-    <value>Project status assessed (AI)</value>
-  </data>
-  <data name="SiteFields_GtAiStatus_Choice_Weak" xml:space="preserve">
-    <value>Weak</value>
-  </data>
-  <data name="SiteFields_GtAiStatus_Choice_Satisfactory" xml:space="preserve">
-    <value>Satisfactory</value>
-  </data>
-  <data name="SiteFields_GtAiStatus_Choice_Good" xml:space="preserve">
-    <value>Good</value>
-  </data>
-  <data name="SiteFields_GtAiStatus_Choice_Excellent" xml:space="preserve">
-    <value>Excellent</value>
-  </data>
-  <data name="SiteFields_GtAiRecommendations_DisplayName" xml:space="preserve">
-    <value>Recommendations (AI)</value>
-  </data>
-  <data name="SiteFields_GtAiStatusPosted_DisplayName" xml:space="preserve">
-    <value>Project status reviewed (AI)</value>
-  </data>
-  <data name="SiteFields_GtAiStatusPosted_Choice_Yes" xml:space="preserve">
-    <value>Yes</value>
-  </data>
-  <data name="SiteFields_GtAiStatusPosted_Choice_No" xml:space="preserve">
-    <value>No</value>
-  </data>
-  <data name="SiteFields_GtAiStatusScoreNumber_DisplayName" xml:space="preserve">
-    <value>Project status score (AI)</value>
-  </data>
-  <data name="SiteFields_GtAiChangesSincePrev_DisplayName" xml:space="preserve">
-    <value>Changes since previous (AI)</value>
-  </data>
-  <data name="SiteFields_GtAiProcessedDateTime_DisplayName" xml:space="preserve">
-    <value>Processed date/time (AI)</value>
-  </data>
-  <data name="Security_SiteGroup_ProvisionPortal_Title" xml:space="preserve">
-    <value>Provision portal</value>
-  </data>
-  <data name="Security_SiteGroup_ProvisionPortal_Description" xml:space="preserve">
-    <value>Users who have access to the Provision Portal to order projects and areas.</value>
-  </data>
-  <data name="Security_SiteGroup_AssistantUsers_Title" xml:space="preserve">
-    <value>Assistant users</value>
-  </data>
-  <data name="Security_SiteGroup_AssistantUsers_Description" xml:space="preserve">
-    <value>Users who have access to the Project Portal Assistant</value>
-  </data>
-  <data name="Security_SiteGroup_PortfolioInsight_Title" xml:space="preserve">
-    <value>Portfolio insight</value>
-  </data>
-  <data name="Security_SiteGroup_PortfolioInsight_Description" xml:space="preserve">
-    <value>Insight into portfolio</value>
-  </data>
-  <data name="Security_SiteGroup_PortfolioAdministrators_Title" xml:space="preserve">
-    <value>Portfolio administrators</value>
-  </data>
-  <data name="Security_SiteGroup_PortfolioAdministrators_Description" xml:space="preserve">
-    <value>Portfolio administrators have by default full control over all project areas through the list &lt;a href=&quot;{site}/Lists/Tillatelseskonfigurasjon&quot;&gt;Permission Configuration&lt;/a&gt;.</value>
-  </data>
-  <data name="Security_SiteGroup_IdeaProcessors_Title" xml:space="preserve">
-    <value>Idea processors</value>
-  </data>
-  <data name="Security_SiteGroup_IdeaProcessors_Description" xml:space="preserve">
-    <value>Idea processors are people who can approve and process ideas: &lt;a href=&quot;{site}/Lists/Idebehandling&quot;&gt;Idea Processing&lt;/a&gt;.</value>
-  </data>
+    <data name="SiteFields_GtHubSiteId_DisplayName" xml:space="preserve">
+        <value>Hub-ID</value>
+    </data>
+    <data name="SiteFields_GtHubSiteId_Description" xml:space="preserve">
+        <value>The ID of the hub site.</value>
+    </data>
+    <data name="SiteFields_GtAiStatusComments_DisplayName" xml:space="preserve">
+        <value>Project status summarized (AI)</value>
+    </data>
+    <data name="SiteFields_GtAiStatus_DisplayName" xml:space="preserve">
+        <value>Project status assessed (AI)</value>
+    </data>
+    <data name="SiteFields_GtAiStatus_Choice_Weak" xml:space="preserve">
+        <value>Weak</value>
+    </data>
+    <data name="SiteFields_GtAiStatus_Choice_Satisfactory" xml:space="preserve">
+        <value>Satisfactory</value>
+    </data>
+    <data name="SiteFields_GtAiStatus_Choice_Good" xml:space="preserve">
+        <value>Good</value>
+    </data>
+    <data name="SiteFields_GtAiStatus_Choice_Excellent" xml:space="preserve">
+        <value>Excellent</value>
+    </data>
+    <data name="SiteFields_GtAiRecommendations_DisplayName" xml:space="preserve">
+        <value>Recommendations (AI)</value>
+    </data>
+    <data name="SiteFields_GtAiStatusPosted_DisplayName" xml:space="preserve">
+        <value>Project status reviewed (AI)</value>
+    </data>
+    <data name="SiteFields_GtAiStatusPosted_Choice_Yes" xml:space="preserve">
+        <value>Yes</value>
+    </data>
+    <data name="SiteFields_GtAiStatusPosted_Choice_No" xml:space="preserve">
+        <value>No</value>
+    </data>
+    <data name="SiteFields_GtAiStatusScoreNumber_DisplayName" xml:space="preserve">
+        <value>Project status score (AI)</value>
+    </data>
+    <data name="SiteFields_GtAiChangesSincePrev_DisplayName" xml:space="preserve">
+        <value>Changes since previous (AI)</value>
+    </data>
+    <data name="SiteFields_GtAiProcessedDateTime_DisplayName" xml:space="preserve">
+        <value>Processed date/time (AI)</value>
+    </data>
+    <data name="Security_SiteGroup_ProvisionPortal_Title" xml:space="preserve">
+        <value>Provision portal</value>
+    </data>
+    <data name="Security_SiteGroup_ProvisionPortal_Description" xml:space="preserve">
+        <value>Users who have access to the Provision Portal to order projects and areas.</value>
+    </data>
+    <data name="Security_SiteGroup_AssistantUsers_Title" xml:space="preserve">
+        <value>Assistant users</value>
+    </data>
+    <data name="Security_SiteGroup_AssistantUsers_Description" xml:space="preserve">
+        <value>Users who have access to the Project Portal Assistant</value>
+    </data>
+    <data name="Security_SiteGroup_PortfolioInsight_Title" xml:space="preserve">
+        <value>Portfolio insight</value>
+    </data>
+    <data name="Security_SiteGroup_PortfolioInsight_Description" xml:space="preserve">
+        <value>Insight into portfolio</value>
+    </data>
+    <data name="Security_SiteGroup_PortfolioAdministrators_Title" xml:space="preserve">
+        <value>Portfolio administrators</value>
+    </data>
+    <data name="Security_SiteGroup_PortfolioAdministrators_Description" xml:space="preserve">
+        <value>Portfolio administrators have by default full control over all project areas through the list &lt;a href=&quot;{site}/Lists/Tillatelseskonfigurasjon&quot;&gt;Permission Configuration&lt;/a&gt;.</value>
+    </data>
+    <data name="Security_SiteGroup_IdeaProcessors_Title" xml:space="preserve">
+        <value>Idea processors</value>
+    </data>
+    <data name="Security_SiteGroup_IdeaProcessors_Description" xml:space="preserve">
+        <value>Idea processors are people who can approve and process ideas: &lt;a href=&quot;{site}/Lists/Idebehandling&quot;&gt;Idea Processing&lt;/a&gt;.</value>
+    </data>
+    <data name="TimelineConfiguration_Project_Title" xml:space="preserve">
+        <value>Project</value>
+    </data>
+    <data name="TimelineConfiguration_DecisionPoint_Title" xml:space="preserve">
+        <value>Decision Point</value>
+    </data>
+    <data name="TimelineConfiguration_Phase_Title" xml:space="preserve">
+        <value>Phase</value>
+    </data>
+    <data name="TimelineConfiguration_SubPhase_Title" xml:space="preserve">
+        <value>Subphase</value>
+    </data>
+    <data name="TimelineConfiguration_Milestone_Title" xml:space="preserve">
+        <value>Milestone</value>
+    </data>
+    <data name="TimelineConfiguration_ProjectDelivery_Title" xml:space="preserve">
+        <value>Project delivery</value>
+    </data>
+    <data name="TimelineConfiguration_Bar_ElementType" xml:space="preserve">
+        <value>Bar</value>
+    </data>
+    <data name="TimelineConfiguration_Diamond_ElementType" xml:space="preserve">
+        <value>Diamond</value>
+    </data>
+    <data name="TimelineConfiguration_Triangle_ElementType" xml:space="preserve">
+        <value>Trekant</value>
+    </data>
+    <data name="TimelineConfiguration_Management_Category" xml:space="preserve">
+        <value>Management</value>
+    </data>
+    <data name="TimelineConfiguration_Delivery_Category" xml:space="preserve">
+        <value>Delivery</value>
+    </data>
 </root>

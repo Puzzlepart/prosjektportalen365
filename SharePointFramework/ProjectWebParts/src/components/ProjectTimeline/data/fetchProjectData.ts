@@ -24,12 +24,15 @@ export async function fetchProjectData(
       .filter(`GtSiteId eq '${props.siteId}'`)
       .getAll()
 
-    const config = _.find(timelineConfig, (col) => col.title === strings.ProjectLabel)
+    const config = _.find(
+      timelineConfig,
+      (col) => col.title === resource.TimelineConfiguration_Project_Title
+    )
     const project = new TimelineContentModel(
       props.siteId,
       props.webTitle,
       props.webTitle,
-      strings.ProjectLabel,
+      resource.TimelineConfiguration_Project_Title,
       projectData?.GtStartDate,
       projectData?.GtEndDate
     ).usingConfig(config)

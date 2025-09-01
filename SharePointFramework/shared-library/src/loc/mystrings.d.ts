@@ -27,7 +27,6 @@ declare interface ISharedLibraryStrings {
   },
   AllocationPercetageLabel: string
   AllocationStatusLabel: string
-  BarLabel: string
   BudgetTotalLabel: string
   CategoryFieldLabel: string
   ColumnRenderOptionDate: string
@@ -35,7 +34,6 @@ declare interface ISharedLibraryStrings {
   CostsTotalLabel: string
   CurrentPhaseLabel: string
   DescriptionFieldLabel: string
-  DiamondLabel: string
   EndDateLabel: string
   ErrorTitle: string
   FiltersString: string
@@ -46,11 +44,7 @@ declare interface ISharedLibraryStrings {
   LastPublishedStatusreport: string
   LoadingText: string
   MilestoneDateLabel: string
-  MilestoneLabel: string
   NameLabel: string
-  PhaseLabel: string
-  ProjectLabel: string
-  ProjectDeliveryLabel: string
   ProjectTimelineErrorTransformItemText: string
   ProjectTimelineInfoText: string
   ProjectTimelineTitle: string
@@ -60,10 +54,8 @@ declare interface ISharedLibraryStrings {
   RoleLabel: string
   SiteTitleLabel: string
   StartDateLabel: string
-  SubPhaseLabel: string
   TagFieldLabel: string
   TimelineGroupDescription: string
-  TriangleLabel: string
   TypeLabel: string
   SyncListAddingField: string
 }

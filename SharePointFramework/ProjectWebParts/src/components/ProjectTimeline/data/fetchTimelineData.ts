@@ -5,7 +5,6 @@ import {
   TimelineConfigurationModel,
   TimelineContentModel
 } from 'pp365-shared-library/lib/models'
-import strings from 'ProjectWebPartsStrings'
 import { IProjectTimelineProps } from '../types'
 import '@pnp/sp/items/get-all'
 import { IColumn } from '@fluentui/react'
@@ -47,7 +46,7 @@ export async function fetchTimelineData(
           item.GtDeliveryDescription,
           item.GtTag || ''
         ).usingConfig({
-          elementType: strings.BarLabel,
+          elementType: resource.TimelineConfiguration_Bar_ElementType,
           timelineFilter: true,
           ...config
         })
