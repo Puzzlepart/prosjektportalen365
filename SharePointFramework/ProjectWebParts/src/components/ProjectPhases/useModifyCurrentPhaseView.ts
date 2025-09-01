@@ -1,6 +1,7 @@
 import * as strings from 'ProjectWebPartsStrings'
 import { useContext } from 'react'
 import { ProjectPhasesContext } from './context'
+import resources from 'SharedResources'
 
 /**
  * Hook for modifying the current phase view to only show documents for the current phase.
@@ -10,7 +11,7 @@ import { ProjectPhasesContext } from './context'
 export function useModifyCurrentPhaseView() {
   const { props, state } = useContext(ProjectPhasesContext)
   return async () => {
-    const documentsViews = props.sp.web.lists.getByTitle(strings.DocumentsListName).views
+    const documentsViews = props.sp.web.lists.getByTitle(resources.Lists_Documents_Title).views
     const [documentsFrontpageView] = await documentsViews
       .select('Id', 'ViewQuery')
       .filter(`Title eq '${props.currentPhaseViewName}'`)<{ Id: string; ViewQuery: string }[]>()

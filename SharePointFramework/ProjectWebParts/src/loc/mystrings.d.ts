@@ -18,10 +18,9 @@ declare interface IProjectWebPartsStrings {
   SiteAssetsConfigurationFolder: string
   RiskMatrixConfigurationFolder: string
   ManualConfigurationNotFoundOrInvalid: stringg
-  UseDynamicConfigurationOffText: string
-  UseDynamicConfigurationOnText: string
+  ToggleOnText: string
+  ToggleOffText: string
   ManualConfigurationPathLabel: string
-  UseDynamicConfigurationLabel: string
   PublishingReportLabel: string
   AdminPageLinkLabel: string
   AdvancedGroupName: string
@@ -69,7 +68,6 @@ declare interface IProjectWebPartsStrings {
   DeleteReportButtonDescription: string
   DeleteReportButtonDescriptionNoPermission: string
   DiamondLabel: string
-  DocumentsListName: string
   EditItemLabel: string
   EditProjectInformationText: string
   EditReportButtonLabel: string
@@ -96,7 +94,6 @@ declare interface IProjectWebPartsStrings {
   ListNameFieldLabel: string
   ListSectionDataErrorMessage: string
   LoadingText: string
-  LogListName: string
   LookAndFeelGroupName: string
   ManualConfigurationNotFoundOrInvalid: string
   ManualConfigurationPathLabel: string
@@ -221,9 +218,6 @@ declare interface IProjectWebPartsStrings {
   UnpublishedStatusReportInfo: string
   PublishedStatusReportInfo: string
   AlreadyPublishedReportInfo: string
-  UseDynamicConfigurationLabel: string
-  UseDynamicConfigurationOffText: string
-  UseDynamicConfigurationOnText: string
   UseDynamicHomepageCalloutText: string
   UseDynamicHomepageFieldLabel: string
   UseFramelessButtonsLabel: string
@@ -237,6 +231,7 @@ declare interface IProjectWebPartsStrings {
   Yes: string
   PhaseCheckListItem: string
   DialogTitle: string
+  DialogDescription: string
   CreatingNewArticleStatus: string
   NewsCreatedSuccessfully: string
   NewsTitleLabel: string

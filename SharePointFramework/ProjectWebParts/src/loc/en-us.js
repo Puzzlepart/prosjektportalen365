@@ -95,7 +95,6 @@ define([], function () {
     DeleteItemLabel: 'Delete',
     DeleteReportButtonText: 'Delete',
     DiamondLabel: 'Diamond',
-    DocumentsListName: 'Documents',
     EditItemLabel: 'Edit',
     EditProjectInformationText: 'Edit project information',
     EditReportButtonLabel: 'Edit status',
@@ -119,7 +118,6 @@ define([], function () {
     ListSectionDataErrorMessage:
       'An error occurred while retrieving data for the section. Is it configured correctly? ',
     LoadingText: 'Loading {0} ...',
-    LogListName: 'Log',
     LookAndFeelGroupName: 'Look and feel',
     ManualConfigurationNotFoundOrInvalid:
       'Manual configuration for Risk matrix not found or has invalid format.',
@@ -237,9 +235,8 @@ define([], function () {
     UnknownConfigurationName: 'Configuration without name',
     UnpublishedStatusReportInfo:
       'There are unpublished status reports. It is therefore not possible to create a new status report. If you are an owner of the site, you can publish or delete unpublished reports using the buttons above.',
-    UseDynamicConfigurationLabel: 'Use dynamic configuration',
-    UseDynamicConfigurationOffText: 'No, use manual',
-    UseDynamicConfigurationOnText: 'Yes',
+    ToggleOnText: 'On',
+    ToggleOffText: 'Off',
     UseDynamicHomepageCalloutText:
       'Here you can choose whether the phase selector should be dynamic and use separate pages for each phase. It requires pages for each phase to be created in advance. The names of the pages must be identical to the names of the phases.',
     UseDynamicHomepageFieldLabel: 'Use dynamic homepage',
@@ -256,6 +253,7 @@ define([], function () {
     Yes: 'Yes',
     ProjectNewsWebPartTitle: 'Project News',
     DialogTitle: 'Create a news article',
+    DialogDescription: 'Here you can create a news article for the project. The news article will be linked to the project. In the "Template" dropdown menu, you can select a template that will pre-fill the news article. Here, it is possible to get a preview of the content by clicking the "Preview selected template" button.',
     CreatingNewArticleStatus: 'Creating news article...',
     NewsCreatedSuccessfully: 'News article created successfully.',
     NewsTitleLabel: 'Title',

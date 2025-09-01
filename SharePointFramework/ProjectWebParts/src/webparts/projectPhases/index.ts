@@ -85,8 +85,8 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
                   calloutTrigger: CalloutTriggers.Click,
                   key: 'useDynamicHomepageFieldId',
                   label: strings.UseDynamicHomepageFieldLabel,
-                  onText: 'På',
-                  offText: 'Av',
+                  onText: strings.ToggleOnText,
+                  offText: strings.ToggleOffText,
                   calloutWidth: 430,
                   calloutContent: React.createElement(
                     'p',
@@ -99,8 +99,8 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
                   calloutTrigger: CalloutTriggers.Click,
                   key: 'usePhaseHooksFieldId',
                   label: strings.UsePhaseHooksFieldLabel,
-                  onText: 'På',
-                  offText: 'Av',
+                  onText: strings.ToggleOnText,
+                  offText: strings.ToggleOffText,
                   calloutWidth: 430,
                   calloutContent: React.createElement('p', {}, strings.UsePhaseHooksCalloutText),
                   checked: this.properties.usePhaseHooks

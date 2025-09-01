@@ -70,7 +70,7 @@ export const NewsDialog: FC<INewsDialogProps> = () => {
                 <div className={styles.content}>
                   <UserMessage
                     title='Opprett nyhetsartikkel for prosjektet'
-                    text='Her kan du opprette en nyhetsartikkel for prosjektet. Nyhetsartikkelen vil bli tilknyttet prosjektet. I nedtrekksmenyen for "Mal" kan du velge en mal som vil forhåndsutfylle nyhetsartikkelen, her er det mulig å få en forhåndsvisning av innholdet, ved å trykke på knappen "Forhåndsvis valgt mal".'
+                    text={strings.DialogDescription}
                     intent='info'
                   />
                   <FieldContainer

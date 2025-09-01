@@ -1,6 +1,8 @@
 define([], function () {
   return {
-    EditTimelineContentText: 'Rediger tidslinjeelement',
+    ToggleOnText: 'På',
+    ToggleOffText: 'Av',
+    ManualConfigurationPathLabel: 'Sti til manuell konfigurasjon', EditTimelineContentText: 'Rediger tidslinjeelement',
     NewTimelineContentText: 'Nytt tidslinjeelement',
     NewStatusPanelTitle: 'Ny statusrapport',
     EditStatusPanelText: 'Rediger statusrapport',
@@ -34,10 +36,7 @@ define([], function () {
       'Manuell konfigurasjon for Risikomatrise ikke funnet eller har ugyldig format.',
     RiskMatrixConfigurationFolder: 'Risikomatrise',
     SiteAssetsConfigurationFolder: 'SiteAssets/Konfigurasjon',
-    UseDynamicConfigurationOffText: 'Nei, bruk manuell',
-    UseDynamicConfigurationOnText: 'Ja',
     ManualConfigurationPathLabel: 'Manuell konfigurasjon',
-    UseDynamicConfigurationLabel: 'Bruk dynamisk konfigurasjon',
     AdminPageLinkLabel: 'Lenke til administrasjonssiden',
     AdvancedGroupName: 'Avansert',
     BarLabel: 'Bar',
@@ -95,7 +94,6 @@ define([], function () {
     DeleteReportButtonDescriptionNoPermission:
       'Du har ikke tilgang til å slette denne statusrapporten.',
     DiamondLabel: 'Diamant',
-    DocumentsListName: 'Dokumenter',
     EditItemLabel: 'Rediger',
     EditProjectInformationText: 'Rediger prosjektinformasjon',
     EditReportButtonLabel: 'Rediger',
@@ -125,7 +123,6 @@ define([], function () {
     ListSectionDataErrorMessage:
       'Det oppsto en feil under uthenting av data for seksjonen. Er den riktig konfigurert?',
     LoadingText: 'Laster {0}...',
-    LogListName: 'Logg',
     LookAndFeelGroupName: 'Utseende og funksjonalitet',
     ManualConfigurationNotFoundOrInvalid:
       'Manuell konfigurasjon for Risikomatrise ble ikke funnet eller har ugyldig format.',
@@ -267,9 +264,6 @@ define([], function () {
       'Det eksisterer upubliserte statusrapporter. Det er dermed ikke mulig å opprette ny statusrapport. Om du er eier på området, kan du velge å publisere eller slette upubliserte rapporter etter valgt statusrapport.',
     PublishedStatusReportInfo: 'Statusrapporten er publisert og kan ikke redigeres/slettes.',
     AlreadyPublishedReportInfo: 'Statusrapporten er allerede publisert.',
-    UseDynamicConfigurationLabel: 'Bruk dynamisk konfigurasjon',
-    UseDynamicConfigurationOffText: 'Nei, bruk manuell',
-    UseDynamicConfigurationOnText: 'Ja',
     UseDynamicHomepageCalloutText:
       'Her kan du velge om fasevelgeren skal være dynamisk og bruke egne sider for hver fase. Det krever at det er opprettet sider for hver fase på forhånd. Navnene på sidene må være identiske med navnene på fasene.',
     UseDynamicHomepageFieldLabel: 'Bruk dynamisk hjemmeside',
@@ -288,6 +282,7 @@ define([], function () {
     // Project News Web Part strings
     ProjectNewsWebPartTitle: 'Prosjektnyheter',
     DialogTitle: 'Opprett nyhetsartikkel',
+    DialogDescription: 'Her kan du opprette en nyhetsartikkel for prosjektet. Nyhetsartikkelen vil bli tilknyttet prosjektet. I nedtrekksmenyen for "Mal" kan du velge en mal som vil forhåndsutfylle nyhetsartikkelen, her er det mulig å få en forhåndsvisning av innholdet, ved å trykke på knappen "Forhåndsvis valgt mal".',
     CreatingNewArticleStatus: 'Oppretter nyhetsartikkel...',
     NewsCreatedSuccessfully: 'Nyhetsartikkelen ble opprettet.',
     NewsTitleLabel: 'Tittel',
