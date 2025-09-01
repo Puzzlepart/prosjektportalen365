@@ -1,5 +1,6 @@
 import strings from 'SharedLibraryStrings'
 import { ItemFieldValues } from './ItemFieldValues'
+import resource from 'SharedResources'
 
 export type StatusReportAttachment = {
   name?: string
@@ -74,7 +75,7 @@ export class StatusReport {
    * @param urlSourceParam - URL source param
    */
   public url(urlSourceParam: string) {
-    return `SitePages/Prosjektstatus.aspx?selectedReport=${this.id}&Source=${encodeURIComponent(
+    return `${resource.Navigation_ProjectStatus_Url}?selectedReport=${this.id}&Source=${encodeURIComponent(
       urlSourceParam
     )}`
   }

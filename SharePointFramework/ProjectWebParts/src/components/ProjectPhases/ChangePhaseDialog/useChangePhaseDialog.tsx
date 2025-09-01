@@ -3,6 +3,7 @@ import { useContext, useEffect } from 'react'
 import SPDataAdapter from '../../../data'
 import { ProjectPhasesContext } from '../context'
 import { CHECKLIST_ITEM_UPDATED, INIT, useChangePhaseDialogReducer } from './reducer'
+import resources from 'SharedResources'
 
 /**
  * Custom hook for managing the change phase dialog state and actions.
@@ -24,7 +25,7 @@ export function useChangePhaseDialog() {
   const nextChecklistItem = async (properties: Partial<Record<string, any>>): Promise<void> => {
     const currentItem = [...state.checklistItems][state.currentIdx]
     await SPDataAdapter.project.updateChecklistItem(
-      strings.PhaseChecklistName,
+      resources.Lists_PhaseChecklist_Title,
       currentItem.id,
       properties
     )

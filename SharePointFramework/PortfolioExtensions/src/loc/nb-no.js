@@ -23,7 +23,6 @@ define([], function () {
     HelpContentAvailableLabel: 'Hjelp tilgjengelig',
     HelpContentUnavailableDescription: 'Denne siden har ingen hjelpeinnhold, dersom du mener det burde vært hjelpeinnhold her, vennligst kontakt din administrator',
     HelpContentUnavailableLabel: 'Hjelp utilgjengelig',
-    HelpContentListName: 'Hjelpeinnhold',
     IdeaAlreadyApproved: 'Denne ideen er allerede godkjent',
     IdeaProcessingListErrorMessage: 'Fant ikke en idébehandlingsliste, vennligst sjekk idékonfigurasjonen eller kontakt administrator.',
     IdeaProcessorsSiteGroup: 'Idebehandlere',

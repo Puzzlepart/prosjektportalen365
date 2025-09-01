@@ -33,7 +33,6 @@ define([], function () {
     ConfigurationLabel: 'Configuration of Prosjektportalen',
     CreateLabel: 'Create',
     HelpContentLinkText: 'Help available',
-    HelpContentListName: 'Hjelpeinnhold',
     IdeaAlreadyApproved: 'This idea has already been approved',
     IdeaProcessorsSiteGroup: 'Idebehandlere',
     IdeaProjectDataDialogBlockedMessage: 'Project data for this idea has already been created and associated.',

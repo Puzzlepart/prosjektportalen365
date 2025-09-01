@@ -50,10 +50,12 @@ declare interface ISharedLibraryStrings {
   NameLabel: string
   PhaseLabel: string
   ProjectLabel: string
+  ProjectDeliveryLabel: string
   ProjectTimelineErrorTransformItemText: string
   ProjectTimelineInfoText: string
   ProjectTimelineTitle: string
   ProjectTimelineItemInfo: string
+  ProgramTimelineTitle: string
   ResourceLabel: string
   RoleLabel: string
   SiteTitleLabel: string

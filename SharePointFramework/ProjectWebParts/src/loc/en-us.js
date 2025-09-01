@@ -87,7 +87,6 @@ define([], function () {
     CreateParentSetupProgressText: 'Setting up parent project',
     CurrentPhaseViewNameFieldLabel: 'Display name for current phase',
     DataGroupName: 'Data',
-    DefaultAdminPageLink: 'Admin.aspx',
     DefaultGroupByLabel: 'Default grouping',
     DefaultTimeframeEndLabel: 'Default end date',
     DefaultTimeframeEndValue: '{0} months into the future',
@@ -163,8 +162,6 @@ define([], function () {
     ParentProjectsGroupName: 'Parent projects',
     ParentProjectsHeaderText: 'Parent projects',
     PhaseChecklistLinkText: 'Go to the phase checklist',
-    PhaseChecklistName: 'Phase Checklist',
-    PhaseChecklistViewUrl: 'Lists/PhaseChecklist/AllItems.aspx',
     PhaseFieldFieldLabel: 'Phase Field',
     PhaseLabel: 'Phase',
     PhaseSitePageFoundMessage:

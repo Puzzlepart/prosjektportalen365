@@ -4,6 +4,7 @@ import '@fluentui/react/dist/css/fabric.min.css'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
 import _ from 'lodash'
+import resource from 'SharedResources'
 
 export default class PortfolioInsightsWebPart extends BasePortfolioWebPart<IPortfolioInsightsProps> {
   public render(): void {
@@ -35,19 +36,19 @@ export default class PortfolioInsightsWebPart extends BasePortfolioWebPart<IPort
               groupName: strings.ConfigurationGroupName,
               groupFields: [
                 PropertyPaneTextField('chartConfigurationListName', {
-                  label: strings.ChartConfigurationListNameLabel,
+                  label: resource.Lists_ChartConfiguration_Title,
                   value: this._getPropertyValue('chartConfigurationListName')
                 }),
                 PropertyPaneTextField('columnConfigListName', {
-                  label: strings.ColumnConfigListNameLabel,
+                  label: resource.Lists_ProjectColumnConfiguration_Title,
                   value: this._getPropertyValue('columnConfigListName')
                 }),
                 PropertyPaneTextField('columnsListName', {
-                  label: strings.ColumnsListNameLabel,
+                  label: resource.Lists_ProjectColumns_Title,
                   value: this._getPropertyValue('columnsListName')
                 }),
                 PropertyPaneTextField('viewsListName', {
-                  label: strings.ViewsListNameLabel,
+                  label: resource.Lists_PortfolioViews_Title,
                   value: this._getPropertyValue('viewsListName')
                 })
               ]

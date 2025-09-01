@@ -57,7 +57,6 @@ declare interface IProjectWebPartsStrings {
   CreateParentSetupProgressText: string
   CurrentPhaseViewNameFieldLabel: string
   DataGroupName: string
-  DefaultAdminPageLink: string
   DefaultGroupByLabel: string
   DefaultTimeframeEndLabel: string
   DefaultTimeframeEndValue: string
@@ -141,8 +140,6 @@ declare interface IProjectWebPartsStrings {
   ParentProjectsHeaderDescription: string
   ParentProjectsHeaderText: string
   PhaseChecklistLinkText: string
-  PhaseChecklistName: string
-  PhaseChecklistViewUrl: string
   PhaseFieldFieldLabel: string
   PhaseLabel: string
   PhaseSitePageTitle: string

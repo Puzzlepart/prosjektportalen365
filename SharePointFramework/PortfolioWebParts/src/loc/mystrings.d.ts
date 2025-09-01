@@ -333,11 +333,9 @@ declare interface IPortfolioWebPartsStrings {
   BooleanNo: string
   BooleanYes: string
   CancelButtonLabel: string
-  ChartConfigurationListNameLabel: string
   ChartErrorText: string
   ColumnCategoryDescription: string
   ColumnCategoryLabel: string
-  ColumnConfigListNameLabel: string
   ColumnPersistRenderGloballyFieldDescription: string
   ColumnPersistRenderGloballyFieldLabel: string
   ColumnRenderDataTypePropertiesHeaderText: string
@@ -378,7 +376,6 @@ declare interface IPortfolioWebPartsStrings {
   ColumnRenderOptionUser: string
   ColumnSettingsDisabledTooltip: string
   ColumnSettingsLabel: string
-  ColumnsListNameLabel: string
   ColumnVisibilityDescription: string
   ColumnVisibilityLabel: string
   CommandBarGroupName: string
@@ -582,7 +579,6 @@ declare interface IPortfolioWebPartsStrings {
   ViewNotFoundMessage: string
   ViewNotFoundMessage_WebPartProperty: string
   ViewNotFoundMessage_Id: string
-  ViewsListNameLabel: string
   ProjectNotFound: string
   PrimaryFieldLabel: string
   SecondaryFieldLabel: string

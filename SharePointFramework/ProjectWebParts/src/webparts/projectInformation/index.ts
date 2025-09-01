@@ -8,6 +8,7 @@ import { PropertyFieldMultiSelect } from '@pnp/spfx-property-controls/lib/Proper
 import { IProjectInformationProps, ProjectInformation } from 'components/ProjectInformation'
 import * as strings from 'ProjectWebPartsStrings'
 import { BaseProjectWebPart } from '../baseProjectWebPart'
+import resource from 'SharedResources'
 
 export default class ProjectInformationWebPart extends BaseProjectWebPart<IProjectInformationProps> {
   public async onInit() {
@@ -17,7 +18,7 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<IProje
   public render(): void {
     this.renderComponent<IProjectInformationProps>(ProjectInformation, {
       onFieldExternalChanged: this._onFieldExternalChanged.bind(this),
-      adminPageLink: this.properties.adminPageLink ?? strings.DefaultAdminPageLink
+      adminPageLink: this.properties.adminPageLink ?? resource.ClientSidePages_ParentAdmin_PageName
     })
   }
 

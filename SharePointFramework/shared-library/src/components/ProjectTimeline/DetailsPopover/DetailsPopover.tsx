@@ -4,6 +4,7 @@ import React, { FC } from 'react'
 import { formatDate, tryParseCurrency } from '../../../util'
 import styles from './DetailsPopover.module.scss'
 import { IDetailsPopoverProps } from './types'
+import resource from 'SharedResources'
 
 export const DetailsPopover: FC<IDetailsPopoverProps> = (props) => {
   const { data } = props.timelineItem.item
@@ -84,7 +85,7 @@ export const DetailsPopover: FC<IDetailsPopoverProps> = (props) => {
             </p>
             <p hidden={!data.budgetTotal || !data.costsTotal}>
               <Link
-                href={`${data.projectUrl}/SitePages/Prosjektstatus.aspx`}
+                href={`${data.projectUrl}/${resource.Navigation_ProjectStatus_Url}`}
                 target='_blank'
                 title={strings.LastPublishedStatusreport}
               >

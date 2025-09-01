@@ -69,7 +69,6 @@ declare interface IProgramWebPartsStrings {
   ColumnRenderOptionUser: string
   ColumnSettingsDisabledTooltip: string
   ColumnSettingsLabel: string
-  ColumnsListNameLabel: string
   ColumnVisibilityDescription: string
   ColumnVisibilityLabel: string
   CommandBarGroupName: string
@@ -150,7 +149,6 @@ declare interface IProgramWebPartsStrings {
   ProgramRemoveChildsButtonLabel: string
   ProgramRemoveChildsDeletingLabel: string
   ProgramTimelineInfoText: string
-  ProjectContentColumnsListName: string
   ProjectDeliveriesGroupName: string
   ProjectInformationPanelButton: string
   ProjectLabel: string
@@ -188,7 +186,6 @@ declare interface IProgramWebPartsStrings {
   UseChangesButtonText: string
   ViewNotFoundMessage: string
   DataSourceItemNotFound: string
-  DataSourceListName: string
   ProjectContentColumnItemNotFound: string
   ProjectDeliveryLabel: string
   LifecycleStatus_Closed: string

@@ -43,7 +43,6 @@ define([], function () {
     UseChangesButtonText: 'Apply',
     ViewNotFoundMessage: 'The specified view could not be found.',
     DataSourceItemNotFound: 'Data source not found',
-    DataSourceListName: 'Data Sources',
     ProjectContentColumnItemNotFound: 'Project content column not found',
     Aria: {
       MenuOverflowCount: '{0} more items',
@@ -108,7 +107,6 @@ define([], function () {
     ColumnRenderOptionUser: 'Person',
     ColumnSettingsDisabledTooltip: 'Column settings are only available when the page is in edit mode.',
     ColumnSettingsLabel: 'Column settings',
-    ColumnsListNameLabel: 'Columns',
     ColumnVisibilityDescription: 'Specify where the column should be displayed. Project front page, project status page, portfolio overview, or all locations.',
     ColumnVisibilityLabel: 'Column visibility',
     CompactViewText: 'Compact list',
@@ -176,7 +174,6 @@ define([], function () {
     ProgramAdministrationSearchBoxPlaceholder: 'Search the program site...',
     ProgramRemoveChildsButtonLabel: 'Remove child projects',
     ProgramTimelineInfoText: 'All the projects with start and end dates associated with the site are listed here. To zoom in/out in timeline: ALT+Mouse wheel.',
-    ProjectContentColumnsListName: 'Prosjektinnholdskolonner',
     ProjectDeliveriesGroupName: 'Project deliveries (beta)',
     ProjectLabel: 'Project',
     ManagementCategoryLabel: 'Management',

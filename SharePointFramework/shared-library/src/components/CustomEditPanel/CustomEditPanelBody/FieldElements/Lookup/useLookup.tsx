@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { EditableSPField } from '../../../../../models'
 import { useCustomEditPanelContext } from '../../../context'
 import { get } from 'lodash'
+import strings from 'SharedLibraryStrings'
 
 export function useLookup(field: EditableSPField) {
   const context = useCustomEditPanelContext()
@@ -22,7 +23,7 @@ export function useLookup(field: EditableSPField) {
             }))
             .filter((item) => {
               if (field.InternalName === 'GtTimelineTypeLookup') {
-                return item.text !== 'Prosjekt' && item.text !== 'Prosjektleveranse'
+                return item.text !== strings.ProjectLabel && item.text !== strings.ProjectDeliveryLabel
               }
               return true
             })
