@@ -1,9 +1,9 @@
 <Field ID="{d0f5911c-85bc-4403-a9c4-9ed943298164}" Name="GtIdeaStrategicValue" StaticName="GtIdeaStrategicValue" DisplayName="{resource:SiteFields_GtIdeaStrategicValue_DisplayName}" Description="{resource:SiteFields_GtIdeaStrategicValue_Description}" Type="Choice" Group="{resource:SiteFields_Idea_Group}" ShowInNewForm="TRUE" ShowInEditForm="TRUE">
   <CHOICES>
-    <CHOICE>1=Det er ingen kobling mellom strategi og prosjektets leveranser</CHOICE>
-    <CHOICE>2=Prosjektets leveranser gir indirekte støtte til strategien på minst ett punkt</CHOICE>
-    <CHOICE>3=Prosjektets leveranser gir indirekte støtte til strategien på flere punkter</CHOICE>
-    <CHOICE>4=Prosjektets leveranser gir målbare resultater i forhold til realisering av strategi</CHOICE>
-    <CHOICE>5=Målbar effekt på hovedområder eller innen flere strategiske områder. Prosjektets leveranser og resultater er direkte nevnt i strategien og/eller gir dokumenterbare effekter på strategiens hovedmål</CHOICE>
+    <CHOICE>{resource:Choice_GtIdeaStrategicValue_NoConnection}</CHOICE>
+    <CHOICE>{resource:Choice_GtIdeaStrategicValue_IndirectSupport}</CHOICE>
+    <CHOICE>{resource:Choice_GtIdeaStrategicValue_MultipleSupport}</CHOICE>
+    <CHOICE>{resource:Choice_GtIdeaStrategicValue_MeasurableResults}</CHOICE>
+    <CHOICE>{resource:Choice_GtIdeaStrategicValue_MainAreasEffect}</CHOICE>
   </CHOICES>
 </Field>

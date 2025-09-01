@@ -1,9 +1,9 @@
 <Field ID="{76eb1411-4a09-4b0d-bfe2-6ecd7e7c1e75}" Name="GtIdeaQualityBenefit" StaticName="GtIdeaQualityBenefit" DisplayName="{resource:SiteFields_GtIdeaQualityBenefit_DisplayName}" Description="{resource:SiteFields_GtIdeaQualityBenefit_Description}" Type="Choice" Group="{resource:SiteFields_Idea_Group}" ShowInNewForm="TRUE" ShowInEditForm="TRUE">
   <CHOICES>
-    <CHOICE>1=Prosjektets leveranser har ikke dokumenterbar kvalitetshevende effekt, men kan ha indirekte påvirkning på kvalitet</CHOICE>
-    <CHOICE>2=Prosjektets leveranser gir kvalitativ gevinst som er vanskelig å dokumentere, da også andre faktorer vil ha innvirkning</CHOICE>
-    <CHOICE>3=Prosjektets leveranser gir dokumenterbar kvalitativ forbedring</CHOICE>
-    <CHOICE>4=Prosjektets leveranser gir dokumenterbar kvalitativ forbedring på områder som er strategisk viktige</CHOICE>
-    <CHOICE>5=Prosjektets leveranser gir vesentlig og dokumenterbar kvalitativ forbedring på områder som er strategisk viktige og på parametre det måles på.</CHOICE>
+    <CHOICE>{resource:Choice_GtIdeaQualityBenefit_NoDocumentedEffect}</CHOICE>
+    <CHOICE>{resource:Choice_GtIdeaQualityBenefit_QualitativeGain}</CHOICE>
+    <CHOICE>{resource:Choice_GtIdeaQualityBenefit_DocumentedImprovement}</CHOICE>
+    <CHOICE>{resource:Choice_GtIdeaQualityBenefit_StrategicImprovement}</CHOICE>
+    <CHOICE>{resource:Choice_GtIdeaQualityBenefit_SignificantImprovement}</CHOICE>
   </CHOICES>
 </Field>

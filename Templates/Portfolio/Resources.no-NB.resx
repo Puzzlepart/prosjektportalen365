@@ -562,6 +562,87 @@
     <data name="Choice_GtLinkLevel_Member" xml:space="preserve">
         <value>Medlem</value>
     </data>
+    <data name="Choice_GtModerationStatus_Draft" xml:space="preserve">
+        <value>Kladd</value>
+    </data>
+    <data name="Choice_GtModerationStatus_Published" xml:space="preserve">
+        <value>Publisert</value>
+    </data>
+    <data name="Choice_GtIdeaEconomicBenefit_NoKnownBenefit" xml:space="preserve">
+        <value>1=Prosjektets leveranser gir ikke noen kjent økonomisk gevinst, eller vil lede til negativ økonomisk gevinst (f.eks. prosjekter som er lovpålagte/må gjennomføres, men som vil medføre kost)</value>
+    </data>
+    <data name="Choice_GtIdeaEconomicBenefit_LimitedBenefit" xml:space="preserve">
+        <value>2=Prosjektets leveranser gir begrenset målbar og realiserbar gevinst</value>
+    </data>
+    <data name="Choice_GtIdeaEconomicBenefit_PotentialBenefit" xml:space="preserve">
+        <value>3=Prosjektets leveranser gir potensielt målbar gevinst, men realiserbarheten er usikker. Det kan være vanskelig å ta ut gevinst</value>
+    </data>
+    <data name="Choice_GtIdeaEconomicBenefit_MeasurableBenefit" xml:space="preserve">
+        <value>4=Prosjektets leveranser forventes å gi både målbar og realiserbar gevinst. Gevinsten kan tas ut i form av redusert kostnader</value>
+    </data>
+    <data name="Choice_GtIdeaEconomicBenefit_LargeBenefit" xml:space="preserve">
+        <value>5=Prosjektets leveranser gir stor målbar og realiserbar økonomisk gevinst</value>
+    </data>
+    <data name="Choice_GtIdeaOperationalNeed_NoSignificance" xml:space="preserve">
+        <value>1=Prosjektets leveranser har ikke betydning i forhold til eksisterende drift og aktiviteter</value>
+    </data>
+    <data name="Choice_GtIdeaOperationalNeed_MoreStable" xml:space="preserve">
+        <value>2=Prosjektets leveranser vil medføre mer stabil drift og aktiviteter</value>
+    </data>
+    <data name="Choice_GtIdeaOperationalNeed_LimitedRisk" xml:space="preserve">
+        <value>3=Det er en operasjonell risiko å ikke gjennomføre prosjektet. Vi er med sårbare uten gjennomføring, men risikoen er begrenset og håndterbar. Det kan settes i verk avdempende tiltak ved risikoen</value>
+    </data>
+    <data name="Choice_GtIdeaOperationalNeed_SignificantRisk" xml:space="preserve">
+        <value>4=Det er en vesentlig økt operasjonell risiko å ikke gjennomføre prosjektet. Vi kan få utfordringer med gjennomføring av kjernevirksomheten</value>
+    </data>
+    <data name="Choice_GtIdeaOperationalNeed_LegallyRequired" xml:space="preserve">
+        <value>5=Prosjektet er lovpålagt, juridisk nødvendig og må fullføres senest det tiden det tar å gjennomføre prosjektet. Manglende gjennomføring vil medføre vesentlig pålegg, påpakning fra eier eller tilsynsmyndighet (riksrevisjonen, datatilsynet m.v.)</value>
+    </data>
+    <data name="Choice_GtIdeaQualityBenefit_NoDocumentedEffect" xml:space="preserve">
+        <value>1=Prosjektets leveranser har ikke dokumenterbar kvalitetshevende effekt, men kan ha indirekte påvirkning på kvalitet</value>
+    </data>
+    <data name="Choice_GtIdeaQualityBenefit_QualitativeGain" xml:space="preserve">
+        <value>2=Prosjektets leveranser gir kvalitativ gevinst som er vanskelig å dokumentere, da også andre faktorer vil ha innvirkning</value>
+    </data>
+    <data name="Choice_GtIdeaQualityBenefit_DocumentedImprovement" xml:space="preserve">
+        <value>3=Prosjektets leveranser gir dokumenterbar kvalitativ forbedring</value>
+    </data>
+    <data name="Choice_GtIdeaQualityBenefit_StrategicImprovement" xml:space="preserve">
+        <value>4=Prosjektets leveranser gir dokumenterbar kvalitativ forbedring på områder som er strategisk viktige</value>
+    </data>
+    <data name="Choice_GtIdeaQualityBenefit_SignificantImprovement" xml:space="preserve">
+        <value>5=Prosjektets leveranser gir vesentlig og dokumenterbar kvalitativ forbedring på områder som er strategisk viktige og på parametre det måles på.</value>
+    </data>
+    <data name="Choice_GtIdeaRisk_CriticalRisk" xml:space="preserve">
+        <value>1=Kritisk risiko: Prosjektet har svært høy risiko, og det er stor sannsynlighet for ikke å lykkes med de viktigste målene eller med å realisere gevinster. Feil kan medføre store økonomiske tap. Kjernevirksomhet kan stoppe opp</value>
+    </data>
+    <data name="Choice_GtIdeaRisk_SignificantRisk" xml:space="preserve">
+        <value>2=Betydelig risiko: Prosjektet har høy risiko i gjennomføring og/eller i muligheten for å realisere gevinst etter at prosjektets leveranser er ferdigstilt</value>
+    </data>
+    <data name="Choice_GtIdeaRisk_MediumRisk" xml:space="preserve">
+        <value>3=Middels risiko: Prosjektet har middels høy risiko. Det er risiko knyttet til evner om å realisere gevinster. Prosjektet kan mislykkes i å nå alle sine mål</value>
+    </data>
+    <data name="Choice_GtIdeaRisk_SomeRisk" xml:space="preserve">
+        <value>4=Noe risiko: Prosjektet har ordinær risiko knyttet til tilgang på ressurser, beslutningskapasitet, kostnader etc. Risikoen er håndterbar ved å sette inn sannsynlighetsreduserende og konsekvensreduserende tiltak ved behov</value>
+    </data>
+    <data name="Choice_GtIdeaRisk_LowRisk" xml:space="preserve">
+        <value>5=Lav risiko: Prosjektet har lav risiko. Det er god tilgang til ressurser og kompetanse for prosjektgjennomføring, og organisasjonens evne til å realisere gevinster er godt kjent</value>
+    </data>
+    <data name="Choice_GtIdeaStrategicValue_NoConnection" xml:space="preserve">
+        <value>1=Det er ingen kobling mellom strategi og prosjektets leveranser</value>
+    </data>
+    <data name="Choice_GtIdeaStrategicValue_IndirectSupport" xml:space="preserve">
+        <value>2=Prosjektets leveranser gir indirekte støtte til strategien på minst ett punkt</value>
+    </data>
+    <data name="Choice_GtIdeaStrategicValue_MultipleSupport" xml:space="preserve">
+        <value>3=Prosjektets leveranser gir indirekte støtte til strategien på flere punkter</value>
+    </data>
+    <data name="Choice_GtIdeaStrategicValue_MeasurableResults" xml:space="preserve">
+        <value>4=Prosjektets leveranser gir målbare resultater i forhold til realisering av strategi</value>
+    </data>
+    <data name="Choice_GtIdeaStrategicValue_MainAreasEffect" xml:space="preserve">
+        <value>5=Målbar effekt på hovedområder eller innen flere strategiske områder. Prosjektets leveranser og resultater er direkte nevnt i strategien og/eller gir dokumenterbare effekter på strategiens hovedmål</value>
+    </data>
     <data name="ClientSidePages_BenefitOverview_PageName" xml:space="preserve">
         <value>Gevinstoversikt.aspx</value>
     </data>

@@ -562,6 +562,87 @@
     <data name="Choice_GtLinkLevel_Member" xml:space="preserve">
         <value>Member</value>
     </data>
+    <data name="Choice_GtModerationStatus_Draft" xml:space="preserve">
+        <value>Draft</value>
+    </data>
+    <data name="Choice_GtModerationStatus_Published" xml:space="preserve">
+        <value>Published</value>
+    </data>
+    <data name="Choice_GtIdeaEconomicBenefit_NoKnownBenefit" xml:space="preserve">
+        <value>1=Project deliveries provide no known economic benefit, or will lead to negative economic benefit (e.g., projects that are legally required/must be implemented, but will entail cost)</value>
+    </data>
+    <data name="Choice_GtIdeaEconomicBenefit_LimitedBenefit" xml:space="preserve">
+        <value>2=Project deliveries provide limited measurable and realizable benefit</value>
+    </data>
+    <data name="Choice_GtIdeaEconomicBenefit_PotentialBenefit" xml:space="preserve">
+        <value>3=Project deliveries provide potentially measurable benefit, but realizability is uncertain. It may be difficult to extract benefit</value>
+    </data>
+    <data name="Choice_GtIdeaEconomicBenefit_MeasurableBenefit" xml:space="preserve">
+        <value>4=Project deliveries are expected to provide both measurable and realizable benefit. The benefit can be extracted in the form of reduced costs</value>
+    </data>
+    <data name="Choice_GtIdeaEconomicBenefit_LargeBenefit" xml:space="preserve">
+        <value>5=Project deliveries provide large measurable and realizable economic benefit</value>
+    </data>
+    <data name="Choice_GtIdeaOperationalNeed_NoSignificance" xml:space="preserve">
+        <value>1=Project deliveries have no significance in relation to existing operations and activities</value>
+    </data>
+    <data name="Choice_GtIdeaOperationalNeed_MoreStable" xml:space="preserve">
+        <value>2=Project deliveries will lead to more stable operations and activities</value>
+    </data>
+    <data name="Choice_GtIdeaOperationalNeed_LimitedRisk" xml:space="preserve">
+        <value>3=There is an operational risk of not implementing the project. We are vulnerable without implementation, but the risk is limited and manageable. Mitigating measures can be implemented for the risk</value>
+    </data>
+    <data name="Choice_GtIdeaOperationalNeed_SignificantRisk" xml:space="preserve">
+        <value>4=There is a significantly increased operational risk of not implementing the project. We may face challenges in implementing core business</value>
+    </data>
+    <data name="Choice_GtIdeaOperationalNeed_LegallyRequired" xml:space="preserve">
+        <value>5=The project is legally required, legally necessary and must be completed within the time it takes to implement the project. Failure to implement will result in significant charges, penalties from owner or supervisory authority (Office of the Auditor General, Data Protection Authority, etc.)</value>
+    </data>
+    <data name="Choice_GtIdeaQualityBenefit_NoDocumentedEffect" xml:space="preserve">
+        <value>1=Project deliveries have no documentable quality-enhancing effect, but may have indirect impact on quality</value>
+    </data>
+    <data name="Choice_GtIdeaQualityBenefit_QualitativeGain" xml:space="preserve">
+        <value>2=Project deliveries provide qualitative benefit that is difficult to document, as other factors will also have an impact</value>
+    </data>
+    <data name="Choice_GtIdeaQualityBenefit_DocumentedImprovement" xml:space="preserve">
+        <value>3=Project deliveries provide documentable qualitative improvement</value>
+    </data>
+    <data name="Choice_GtIdeaQualityBenefit_StrategicImprovement" xml:space="preserve">
+        <value>4=Project deliveries provide documentable qualitative improvement in areas that are strategically important</value>
+    </data>
+    <data name="Choice_GtIdeaQualityBenefit_SignificantImprovement" xml:space="preserve">
+        <value>5=Project deliveries provide significant and documentable qualitative improvement in areas that are strategically important and on parameters measured</value>
+    </data>
+    <data name="Choice_GtIdeaRisk_CriticalRisk" xml:space="preserve">
+        <value>1=Critical risk: The project has very high risk, and there is a high probability of not succeeding with the most important goals or realizing benefits. Errors can lead to large financial losses. Core business may stop</value>
+    </data>
+    <data name="Choice_GtIdeaRisk_SignificantRisk" xml:space="preserve">
+        <value>2=Significant risk: The project has high risk in implementation and/or in the possibility of realizing benefit after the project deliveries are completed</value>
+    </data>
+    <data name="Choice_GtIdeaRisk_MediumRisk" xml:space="preserve">
+        <value>3=Medium risk: The project has medium-high risk. There is risk related to ability to realize benefits. The project may fail to reach all its goals</value>
+    </data>
+    <data name="Choice_GtIdeaRisk_SomeRisk" xml:space="preserve">
+        <value>4=Some risk: The project has ordinary risk related to access to resources, decision-making capacity, costs etc. The risk is manageable by implementing probability-reducing and consequence-reducing measures as needed</value>
+    </data>
+    <data name="Choice_GtIdeaRisk_LowRisk" xml:space="preserve">
+        <value>5=Low risk: The project has low risk. There is good access to resources and competence for project implementation, and the organization's ability to realize benefits is well known</value>
+    </data>
+    <data name="Choice_GtIdeaStrategicValue_NoConnection" xml:space="preserve">
+        <value>1=There is no connection between strategy and project deliveries</value>
+    </data>
+    <data name="Choice_GtIdeaStrategicValue_IndirectSupport" xml:space="preserve">
+        <value>2=Project deliveries provide indirect support to the strategy on at least one point</value>
+    </data>
+    <data name="Choice_GtIdeaStrategicValue_MultipleSupport" xml:space="preserve">
+        <value>3=Project deliveries provide indirect support to the strategy on multiple points</value>
+    </data>
+    <data name="Choice_GtIdeaStrategicValue_MeasurableResults" xml:space="preserve">
+        <value>4=Project deliveries provide measurable results in relation to strategy realization</value>
+    </data>
+    <data name="Choice_GtIdeaStrategicValue_MainAreasEffect" xml:space="preserve">
+        <value>5=Measurable effect on main areas or within several strategic areas. Project deliveries and results are directly mentioned in the strategy and/or provide documentable effects on the strategy's main goals</value>
+    </data>
     <data name="ClientSidePages_BenefitOverview_PageName" xml:space="preserve">
         <value>BenefitOverview.aspx</value>
     </data>
