@@ -1,5 +1,6 @@
 import { Field, FluentProvider, IdPrefixProvider, Switch } from '@fluentui/react-components'
 import strings from 'ProjectWebPartsStrings'
+import resource from 'SharedResources'
 import React, { FC } from 'react'
 import { DynamicMatrix } from '../DynamicMatrix'
 import { IOpportunityMatrixProps } from './types'
@@ -52,7 +53,7 @@ OpportunityMatrix.defaultProps = {
   fullWidth: true,
   calloutTemplate: `
   <h3>{Title}</h3>\n
-  <p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n
-  <p><strong>Nærhet: </strong>{GtRiskProximity}</p>\n
-  <p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>`
+  <p><strong>${resource.SiteFields_GtRiskStrategy_DisplayName}: </strong>{GtRiskStrategy}</p>\n
+  <p><strong>${resource.SiteFields_GtRiskProximity_DisplayName}: </strong>{GtRiskProximity}</p>\n
+  <p><strong>${resource.SiteFields_GtRiskStatus_DisplayName}: </strong>{GtRiskStatus}</p>`
 }
