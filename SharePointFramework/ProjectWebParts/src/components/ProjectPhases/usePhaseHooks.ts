@@ -34,11 +34,7 @@ export function usePhaseHooks() {
     // eslint-disable-next-line require-await
   ) => {
     try {
-      if (
-        !context.props.useArchive ||
-        !context.props.hookArchiveUrl ||
-        !context.props.hookArchiveAuth
-      ) {
+      if (!context.props.useArchive || !context.props.hookArchiveUrl) {
         return
       }
 
