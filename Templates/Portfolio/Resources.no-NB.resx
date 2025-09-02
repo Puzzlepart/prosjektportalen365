@@ -3623,7 +3623,7 @@
         <value>Kontekst knyttet til loggen.</value>
     </data>
     <data name="SiteFields_GtLogContext_DisplayName" xml:space="preserve">
-        <value>Context</value>
+        <value>Kontekst</value>
     </data>
     <data name="SiteFields_GtLogFunctionName_Description" xml:space="preserve">
         <value>Navnet på funksjonen som loggen refererer til.</value>
@@ -3648,6 +3648,24 @@
     </data>
     <data name="SiteFields_GtLogScope_DisplayName" xml:space="preserve">
         <value>Omfang</value>
+    </data>
+    <data name="SiteFields_GtLogOperation_Description" xml:space="preserve">
+        <value>Operasjonen som ble utført i arkiveringsprosessen</value>
+    </data>
+    <data name="SiteFields_GtLogOperation_DisplayName" xml:space="preserve">
+        <value>Operasjon</value>
+    </data>
+    <data name="SiteFields_GtLogReference_Description" xml:space="preserve">
+        <value>Referanse til arkivert innhold eller operasjon</value>
+    </data>
+    <data name="SiteFields_GtLogReference_DisplayName" xml:space="preserve">
+        <value>Referanse</value>
+    </data>
+    <data name="SiteFields_GtLogStatus_Description" xml:space="preserve">
+        <value>Status for arkiveringsoperasjonen</value>
+    </data>
+    <data name="SiteFields_GtLogStatus_DisplayName" xml:space="preserve">
+        <value>Status</value>
     </data>
     <data name="SiteFields_GtLogWebUrl_Description" xml:space="preserve">
         <value>Nettadressen som loggen refererer til.</value>
