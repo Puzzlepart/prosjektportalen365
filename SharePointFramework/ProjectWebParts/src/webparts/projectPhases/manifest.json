@@ -30,7 +30,10 @@
         "subTextTruncateLength": 50,
         "currentPhaseViewName": "Gjeldende fase",
         "useDynamicHomepage": false,
-        "usePhaseHooks": false
+        "usePhaseHooks": false,
+        "useArchive": false,
+        "hookArchiveUrl": "",
+        "hookArchiveAuth": ""
       }
     }
   ]

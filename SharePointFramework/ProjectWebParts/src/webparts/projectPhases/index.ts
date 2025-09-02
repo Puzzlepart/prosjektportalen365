@@ -112,6 +112,19 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
                 PropertyPaneTextField('hookAuth', {
                   label: strings.HookAuthFieldLabel,
                   description: strings.HookAuthFieldDescription
+                }),
+                PropertyPaneToggle('useArchive', {
+                  label: strings.UseArchiveFieldLabel
+                }),
+                PropertyPaneTextField('hookArchiveUrl', {
+                  label: strings.HookArchiveUrlFieldLabel,
+                  description: strings.HookArchiveUrlFieldDescription,
+                  disabled: !this.properties.useArchive
+                }),
+                PropertyPaneTextField('hookArchiveAuth', {
+                  label: strings.HookArchiveAuthFieldLabel,
+                  description: strings.HookArchiveAuthFieldDescription,
+                  disabled: !this.properties.useArchive
                 })
               ]
             }

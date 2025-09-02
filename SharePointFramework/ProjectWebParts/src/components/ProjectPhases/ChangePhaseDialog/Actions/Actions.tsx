@@ -3,6 +3,7 @@ import React, { FC, useContext } from 'react'
 import { DISMISS_CHANGE_PHASE_DIALOG } from '../../reducer'
 import { ProjectPhasesContext } from '../../context'
 import { useChangePhase } from '../../useChangePhase'
+import { usePhaseHooks } from '../../usePhaseHooks'
 import { View } from '../Views'
 import { ChangePhaseDialogContext } from '../context'
 import { SET_VIEW } from '../reducer'
@@ -12,6 +13,7 @@ export const Actions: FC = () => {
   const context = useContext(ProjectPhasesContext)
   const { state, dispatch } = useContext(ChangePhaseDialogContext)
   const onChangePhase = useChangePhase()
+  const [runHook, runArchiveHook] = usePhaseHooks()
   const actions = []
 
   // eslint-disable-next-line default-case
@@ -26,12 +28,26 @@ export const Actions: FC = () => {
         })
       }
       break
+    case View.Archive:
+      {
+        actions.push({
+          text: strings.ArchiveContinueText,
+          onClick: () => dispatch(SET_VIEW({ view: View.Confirm }))
+        })
+      }
+      break
     case View.Confirm:
       {
         actions.push({
           text: strings.Yes,
           onClick: async () => {
             dispatch(SET_VIEW({ view: View.ChangingPhase }))
+
+            // Run archive hook if archive configuration exists
+            if (state.archiveConfiguration && context.props.useArchive) {
+              await runArchiveHook(state.archiveConfiguration)
+            }
+
             await onChangePhase()
             context.dispatch(DISMISS_CHANGE_PHASE_DIALOG())
           }
@@ -42,7 +58,11 @@ export const Actions: FC = () => {
       {
         actions.push({
           text: strings.MoveOn,
-          onClick: () => dispatch(SET_VIEW({ view: View.Confirm }))
+          onClick: () => {
+            // If archive is enabled, go to archive view, otherwise go to confirm
+            const nextView = context.props.useArchive ? View.Archive : View.Confirm
+            dispatch(SET_VIEW({ view: nextView }))
+          }
         })
       }
       break

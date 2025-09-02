@@ -4,6 +4,7 @@ import { ChecklistItemModel } from 'pp365-shared-library'
 import { isEmpty } from 'underscore'
 import { IProjectPhasesContext } from '../context'
 import { View } from './Views'
+import { IArchiveConfiguration } from './Views/ArchiveView'
 import { getNextIndex } from './getNextIndex'
 import { IChangePhaseDialogState } from './types'
 import { useReducer } from 'react'
@@ -13,6 +14,9 @@ export const SET_VIEW = createAction<{ view: View }>('SET_VIEW')
 export const CHECKLIST_ITEM_UPDATED = createAction<{
   properties: Partial<Record<string, any>>
 }>('CHECKLIST_ITEM_UPDATED')
+export const SET_ARCHIVE_CONFIGURATION = createAction<{
+  archiveConfiguration: IArchiveConfiguration
+}>('SET_ARCHIVE_CONFIGURATION')
 
 const createChangePhaseDialogReducer = () =>
   createReducer<IChangePhaseDialogState>(
@@ -35,10 +39,12 @@ const createChangePhaseDialogReducer = () =>
             state.currentIdx = getNextIndex(checklistItems)
             state.isChecklistMandatory = phase.isChecklistMandatory === 'true'
           } else {
-            state.view = View.Confirm
+            // Check if archive is enabled
+            state.view = payload.context.props.useArchive ? View.Archive : View.Confirm
           }
         } else {
-          state.view = View.Confirm
+          // Check if archive is enabled
+          state.view = payload.context.props.useArchive ? View.Archive : View.Confirm
         }
       },
       [SET_VIEW.type]: (state, { payload }: ReturnType<typeof SET_VIEW>) => {
@@ -57,6 +63,12 @@ const createChangePhaseDialogReducer = () =>
         } else {
           state.view = View.Summary
         }
+      },
+      [SET_ARCHIVE_CONFIGURATION.type]: (
+        state,
+        { payload }: ReturnType<typeof SET_ARCHIVE_CONFIGURATION>
+      ) => {
+        state.archiveConfiguration = payload.archiveConfiguration
       }
     }
   )
