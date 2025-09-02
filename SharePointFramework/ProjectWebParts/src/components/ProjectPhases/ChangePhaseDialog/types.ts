@@ -1,5 +1,6 @@
 import { ChecklistItemModel } from 'pp365-shared-library/lib/models'
 import { View } from './Views'
+import { IArchiveConfiguration } from './Views/ArchiveView'
 
 export interface IChangePhaseDialogState {
   /**
@@ -21,4 +22,9 @@ export interface IChangePhaseDialogState {
    * Currently selected view
    */
   view?: View
+
+  /**
+   * Archive configuration when useArchive is enabled
+   */
+  archiveConfiguration?: IArchiveConfiguration
 }

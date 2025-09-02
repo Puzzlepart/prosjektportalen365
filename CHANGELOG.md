@@ -1,10 +1,16 @@
 # Endringslogg
 
-Sjekk ut [release notes](./releasenotes/1.11.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
+Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
 
 ## 1.12.0 - TBA
 
 ### Ny funksjonalitet
+
+- Ny arkivfunksjonalitet i fasevelgeren for arkivering av dokumenter og lister ved faseendring
+  - Selektiv valg av dokumenter fra Dokumentbiblioteket som skal arkiveres
+  - Selektiv valg av lister som skal arkiveres (skjult som standard for bedre oversikt)
+  - Webhook-integrasjon for ekstern arkivhåndtering med JSON-konfiguration av valgte elementer
+  - Støtte for egne arkiv-URL og autentisering gjennom webdel-egenskaper (`useArchive`, `hookArchiveUrl`, `hookArchiveAuth`)
 
 ### Forbedringer
 

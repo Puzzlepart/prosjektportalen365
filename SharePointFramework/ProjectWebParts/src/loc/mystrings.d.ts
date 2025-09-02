@@ -262,6 +262,18 @@ declare interface IProjectWebPartsStrings {
   NoPreviewAvailable: string
   ShowCommentText: string
   HideCommentText: string
+  ArchiveViewTitle: string
+  ArchiveViewDescription: string
+  ArchiveDocumentsSection: string
+  ArchiveListsSection: string
+  ArchiveSelectedItemsInfo: string
+  ArchiveLoadingText: string
+  ArchiveContinueText: string
+  UseArchiveFieldLabel: string
+  HookArchiveUrlFieldLabel: string
+  HookArchiveUrlFieldDescription: string
+  HookArchiveAuthFieldLabel: string
+  HookArchiveAuthFieldDescription: string
 }
 
 declare module 'ProjectWebPartsStrings' {

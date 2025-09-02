@@ -69,6 +69,21 @@ export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
   hookAuth: string
 
   /**
+   * Use archive functionality when switching phases
+   */
+  useArchive: boolean
+
+  /**
+   * Archive hook URL - for running archive hooks when switching phases
+   */
+  hookArchiveUrl: string
+
+  /**
+   * Archive hook auth - for authing archive hooks when switching phases
+   */
+  hookArchiveAuth: string
+
+  /**
    * Comment min. length
    *
    * @default 4
