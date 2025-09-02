@@ -3,7 +3,7 @@ import * as strings from 'ProjectWebPartsStrings'
 import { ProjectPhasesContext } from '../../../context'
 import { ChangePhaseDialogContext } from '../../context'
 import { SET_ARCHIVE_CONFIGURATION } from '../../reducer'
-import { IArchiveItem, IArchiveSection, IArchiveConfiguration } from './types'
+import { IArchiveSection, IArchiveConfiguration } from './types'
 
 /**
  * Hook for managing archive view state and actions
@@ -19,50 +19,22 @@ export function useArchiveView() {
     const initializeSections = async () => {
       setIsLoading(true)
       try {
-        // Mock data - in real implementation, this would fetch from SharePoint
-        // TODO: Replace with actual SharePoint API calls to get Documents and Lists
-        const documentItems: IArchiveItem[] = [
-          {
-            id: 1,
-            title: 'Project Charter.docx',
-            type: 'file',
-            url: '/Documents/Project Charter.docx',
-            selected: false
-          },
-          {
-            id: 2,
-            title: 'Requirements.docx',
-            type: 'file',
-            url: '/Documents/Requirements.docx',
-            selected: false
-          },
-          {
-            id: 3,
-            title: 'Specifications.pdf',
-            type: 'file',
-            url: '/Documents/Specifications.pdf',
-            selected: false
-          }
-        ]
-
-        const listItems: IArchiveItem[] = [
-          { id: 'tasks', title: 'Tasks', type: 'list', url: '/Lists/Tasks', selected: false },
-          { id: 'issues', title: 'Issues', type: 'list', url: '/Lists/Issues', selected: false },
-          { id: 'risks', title: 'Risk Log', type: 'list', url: '/Lists/RiskLog', selected: false }
-        ]
+        // Use real data from ProjectPhasesContext if available
+        const archiveDocuments = context.state?.data?.archiveDocuments || []
+        const archiveLists = context.state?.data?.archiveLists || []
 
         setSections([
           {
             key: 'documents',
             title: strings.ArchiveDocumentsSection,
             expanded: true,
-            items: documentItems
+            items: archiveDocuments
           },
           {
             key: 'lists',
             title: strings.ArchiveListsSection,
             expanded: false, // Collapsed by default as requested
-            items: listItems
+            items: archiveLists
           }
         ])
       } catch (error) {
@@ -73,7 +45,7 @@ export function useArchiveView() {
     }
 
     initializeSections()
-  }, [])
+  }, [context.state?.data?.archiveDocuments, context.state?.data?.archiveLists])
 
   // Update dialog context whenever sections change
   useEffect(() => {

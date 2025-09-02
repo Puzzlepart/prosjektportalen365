@@ -4,6 +4,7 @@ import {
   IBaseWebPartComponentState
 } from 'pp365-shared-library/lib/components/BaseWebPartComponent'
 import { IProjectPhasePopoverProps } from './ProjectPhase/ProjectPhasePopover'
+import { IArchiveItem } from './ChangePhaseDialog/Views/ArchiveView/types'
 
 export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
   /**
@@ -156,6 +157,16 @@ export interface IProjectPhasesData {
    * Current user has change phase permission (`75a08ae0-d69a-41b2-adf4-ae233c6bff9f`)
    */
   userHasChangePhasePermission?: boolean
+
+  /**
+   * Documents available for archiving
+   */
+  archiveDocuments?: IArchiveItem[]
+
+  /**
+   * Lists available for archiving
+   */
+  archiveLists?: IArchiveItem[]
 }
 
 export interface IPhaseSitePageModel {
