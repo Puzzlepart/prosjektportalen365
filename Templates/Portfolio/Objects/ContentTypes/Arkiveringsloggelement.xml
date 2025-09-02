@@ -1,0 +1,11 @@
+<pnp:ContentType ID="0x0100D9254F0E5237494285C0BB7BEA0A754A" Name="{resource:ContentTypes_LogElement_Name}" Description="{resource:ContentTypes_LogElement_Description}" Group="{resource:ContentTypes_Group}" UpdateChildren="true" 
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+    <pnp:FieldRefs>
+        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" UpdateChildren="true" />
+        <pnp:FieldRef ID="b9bbd94f-f9c0-4512-ad77-404f8a2c64b1" Name="GtLogWebUrl" UpdateChildren="true" />
+        <pnp:FieldRef ID="4614d809-1d6f-42a4-a9a6-3255d2e1f9b7" Name="GtLogMessage" UpdateChildren="true" />
+        <pnp:FieldRef ID="0ceeeca1-3b9e-4d5b-8abb-51fadf718075" Name="GtLogOperation" UpdateChildren="true" />
+        <pnp:FieldRef ID="95468edd-45dd-45d9-a7d4-5e1d543e8aa6" Name="GtLogReference" UpdateChildren="true" />
+        <pnp:FieldRef ID="1dde57da-20ab-4a8f-9ea1-9c4f4e12b56c" Name="GtLogStatus" UpdateChildren="true" />
+    </pnp:FieldRefs>
+</pnp:ContentType>
