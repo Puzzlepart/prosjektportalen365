@@ -1,6 +1,6 @@
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
-import { Button, Checkbox, Text, Spinner, ToggleButton } from '@fluentui/react-components'
+import { Checkbox, Text, Spinner, ToggleButton } from '@fluentui/react-components'
 import {
   ChevronRight16Regular,
   Document16Regular,
@@ -77,7 +77,11 @@ export const ArchiveView: FC = () => {
                 appearance='subtle'
                 size='small'
                 checked={section.items.every((item) => item.selected)}
-                icon={section.items.every((item) => item.selected) ? getFluentIcon('SelectAllOn') : getFluentIcon('SelectAllOff')}
+                icon={
+                  section.items.every((item) => item.selected)
+                    ? getFluentIcon('SelectAllOn')
+                    : getFluentIcon('SelectAllOff')
+                }
                 onClick={() => toggleSectionSelectAll(section.key)}
               >
                 {strings.ArchiveSelectAllText}

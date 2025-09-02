@@ -178,6 +178,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       const filteredLists = lists.filter(
         (list) =>
           !list.Title.startsWith('_') &&
+          list.Title !== 'Dokumenter' &&
           list.Title !== 'Style Library' &&
           list.Title !== 'Stilbibliotek' &&
           list.Title !== 'Site Assets' &&
