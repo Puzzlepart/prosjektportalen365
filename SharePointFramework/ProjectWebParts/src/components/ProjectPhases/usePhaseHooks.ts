@@ -8,7 +8,7 @@ import { IArchiveConfiguration } from './ChangePhaseDialog/Views/ArchiveView'
 export function usePhaseHooks() {
   const context = useContext(ProjectPhasesContext)
 
-  const run = async (
+  const runHook = async (
     headers = { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' }
     // eslint-disable-next-line require-await
   ) => {
@@ -34,7 +34,11 @@ export function usePhaseHooks() {
     // eslint-disable-next-line require-await
   ) => {
     try {
-      if (!context.props.useArchive || !context.props.hookArchiveUrl || !context.props.hookArchiveAuth) {
+      if (
+        !context.props.useArchive ||
+        !context.props.hookArchiveUrl ||
+        !context.props.hookArchiveAuth
+      ) {
         return
       }
 
@@ -56,5 +60,5 @@ export function usePhaseHooks() {
     }
   }
 
-  return [run, runArchiveHook] as const
+  return [runHook, runArchiveHook] as const
 }

@@ -36,11 +36,15 @@ export const ChangePhaseDialog: FC = () => {
             <DialogSurface>
               <DialogBody className={styles.changePhaseDialog}>
                 <DialogTitle>
-                  {format(strings.ChangePhaseDialogTitle, context.state.confirmPhase.name)}
+                  {state.view === View.Archive
+                    ? strings.ArchiveViewTitle
+                    : format(strings.ChangePhaseDialogTitle, context.state.confirmPhase.name)}
                 </DialogTitle>
                 <DialogContent className={styles.dialogContent}>
                   <Label weight='semibold'>
-                    {context.state.phase
+                    {state.view === View.Archive
+                      ? strings.ArchiveViewDescription
+                      : context.state.phase
                       ? format(
                           strings.ChangePhaseDialogSubtitle,
                           context.state.phase?.name,

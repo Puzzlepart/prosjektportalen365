@@ -22,9 +22,27 @@ export function useArchiveView() {
         // Mock data - in real implementation, this would fetch from SharePoint
         // TODO: Replace with actual SharePoint API calls to get Documents and Lists
         const documentItems: IArchiveItem[] = [
-          { id: 1, title: 'Project Charter.docx', type: 'file', url: '/Documents/Project Charter.docx', selected: false },
-          { id: 2, title: 'Requirements.docx', type: 'file', url: '/Documents/Requirements.docx', selected: false },
-          { id: 3, title: 'Specifications.pdf', type: 'file', url: '/Documents/Specifications.pdf', selected: false }
+          {
+            id: 1,
+            title: 'Project Charter.docx',
+            type: 'file',
+            url: '/Documents/Project Charter.docx',
+            selected: false
+          },
+          {
+            id: 2,
+            title: 'Requirements.docx',
+            type: 'file',
+            url: '/Documents/Requirements.docx',
+            selected: false
+          },
+          {
+            id: 3,
+            title: 'Specifications.pdf',
+            type: 'file',
+            url: '/Documents/Specifications.pdf',
+            selected: false
+          }
         ]
 
         const listItems: IArchiveItem[] = [
@@ -64,25 +82,21 @@ export function useArchiveView() {
   }, [sections])
 
   const toggleSection = (sectionKey: string) => {
-    setSections(prevSections =>
-      prevSections.map(section =>
-        section.key === sectionKey
-          ? { ...section, expanded: !section.expanded }
-          : section
+    setSections((prevSections) =>
+      prevSections.map((section) =>
+        section.key === sectionKey ? { ...section, expanded: !section.expanded } : section
       )
     )
   }
 
   const toggleItemSelection = (sectionKey: string, itemId: string | number) => {
-    setSections(prevSections =>
-      prevSections.map(section =>
+    setSections((prevSections) =>
+      prevSections.map((section) =>
         section.key === sectionKey
           ? {
               ...section,
-              items: section.items.map(item =>
-                item.id === itemId
-                  ? { ...item, selected: !item.selected }
-                  : item
+              items: section.items.map((item) =>
+                item.id === itemId ? { ...item, selected: !item.selected } : item
               )
             }
           : section
@@ -92,17 +106,17 @@ export function useArchiveView() {
 
   const getSelectedItemsCount = () => {
     return sections.reduce((total, section) => {
-      return total + section.items.filter(item => item.selected).length
+      return total + section.items.filter((item) => item.selected).length
     }, 0)
   }
 
   const getArchiveConfiguration = (): IArchiveConfiguration => {
-    const documentsSection = sections.find(s => s.key === 'documents')
-    const listsSection = sections.find(s => s.key === 'lists')
+    const documentsSection = sections.find((s) => s.key === 'documents')
+    const listsSection = sections.find((s) => s.key === 'lists')
 
     return {
-      documents: documentsSection?.items.filter(item => item.selected) || [],
-      lists: listsSection?.items.filter(item => item.selected) || []
+      documents: documentsSection?.items.filter((item) => item.selected) || [],
+      lists: listsSection?.items.filter((item) => item.selected) || []
     }
   }
 

@@ -1,11 +1,6 @@
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
-import {
-  Checkbox,
-  Text,
-  Button,
-  Spinner
-} from '@fluentui/react-components'
+import { Checkbox, Text, Spinner } from '@fluentui/react-components'
 import {
   ChevronRight16Regular,
   Document16Regular,
@@ -30,13 +25,8 @@ const getItemIcon = (item: IArchiveItem) => {
 }
 
 export const ArchiveView: FC = () => {
-  const {
-    sections,
-    isLoading,
-    toggleSection,
-    toggleItemSelection,
-    getSelectedItemsCount
-  } = useArchiveView()
+  const { sections, isLoading, toggleSection, toggleItemSelection, getSelectedItemsCount } =
+    useArchiveView()
 
   if (isLoading) {
     return (
@@ -50,20 +40,12 @@ export const ArchiveView: FC = () => {
 
   return (
     <div className={styles.archiveView}>
-      <Text size={500} weight="semibold">
-        {strings.ArchiveViewTitle}
-      </Text>
-
-      <Text size={300}>
-        {strings.ArchiveViewDescription}
-      </Text>
-
       {sections.map((section) => (
         <div key={section.key} className={styles.section}>
           <div
             className={styles.sectionHeader}
             onClick={() => toggleSection(section.key)}
-            role="button"
+            role='button'
             tabIndex={0}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
@@ -75,8 +57,9 @@ export const ArchiveView: FC = () => {
             <ChevronRight16Regular
               className={`${styles.icon} ${section.expanded ? styles.expanded : ''}`}
             />
-            <Text size={400} weight="semibold">
-              {section.title} ({section.items.filter(item => item.selected).length}/{section.items.length})
+            <Text size={400} weight='semibold'>
+              {section.title} ({section.items.filter((item) => item.selected).length}/
+              {section.items.length})
             </Text>
           </div>
 
@@ -90,9 +73,7 @@ export const ArchiveView: FC = () => {
                     label={
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         {getItemIcon(item)}
-                        <Text className={styles.itemTitle}>
-                          {item.title}
-                        </Text>
+                        <Text className={styles.itemTitle}>{item.title}</Text>
                       </div>
                     }
                   />
@@ -105,8 +86,11 @@ export const ArchiveView: FC = () => {
 
       {selectedCount > 0 && (
         <div className={styles.selectedItemsInfo}>
-          <Text size={300} weight="semibold">
-            {strings.ArchiveSelectedItemsInfo.replace('{0}', selectedCount.toString()).replace('{1}', selectedCount !== 1 ? 'er' : '')}
+          <Text size={300} weight='semibold'>
+            {strings.ArchiveSelectedItemsInfo.replace('{0}', selectedCount.toString()).replace(
+              '{1}',
+              selectedCount !== 1 ? 'er' : ''
+            )}
           </Text>
         </div>
       )}
