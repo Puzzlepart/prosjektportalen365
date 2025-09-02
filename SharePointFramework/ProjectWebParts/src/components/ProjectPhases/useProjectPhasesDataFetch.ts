@@ -72,6 +72,19 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
     const phaseSitePages = props.useDynamicHomepage
       ? await getPhaseSitePages({ phases, sp: props.sp, web: props.pageContext?.web })
       : []
+
+    // Fetch archive data if archive functionality is enabled
+    let archiveDocuments: any[] = []
+    let archiveLists: any[] = []
+    if (props.useArchive) {
+      const [documents, lists] = await Promise.all([
+        SPDataAdapter.getDocumentsForArchive(),
+        SPDataAdapter.getListsForArchive()
+      ])
+      archiveDocuments = documents.map((doc) => ({ ...doc, selected: false }))
+      archiveLists = lists.map((list) => ({ ...list, selected: false }))
+    }
+
     const [currentPhase] = phases.filter(({ name }) => name === currentPhaseName)
     return {
       currentPhase,
@@ -79,7 +92,8 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
       phaseField,
       phaseSitePages,
       welcomePage,
-      userHasChangePhasePermission
+      userHasChangePhasePermission,
+      ...(props.useArchive && { archiveDocuments, archiveLists })
     } as IProjectPhasesData
   } catch (error) {
     ListLogger.log({

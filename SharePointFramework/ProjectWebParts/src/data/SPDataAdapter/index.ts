@@ -134,6 +134,79 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       return []
     }
   }
+
+  /**
+   * Get documents from the Documents library for archiving
+   */
+  public async getDocumentsForArchive(): Promise<
+    { id: number; title: string; url: string; type: 'file' }[]
+  > {
+    try {
+      const documents = await this.sp.web.lists
+        .getByTitle(resource.Lists_Documents_Title)
+        .items.select('Id', 'Title', 'FileRef', 'FileLeafRef')
+        .filter('FSObjType eq 0') // Files only, not folders
+        .using(DefaultCaching)()
+
+      return documents.map((doc) => ({
+        id: doc.Id,
+        title: doc.Title || doc.FileLeafRef,
+        url: doc.FileRef,
+        type: 'file' as const
+      }))
+    } catch (error) {
+      Logger.log({
+        message: `(${this._name}) (getDocumentsForArchive) Error fetching documents: ${error.message}`,
+        level: LogLevel.Warning
+      })
+      return []
+    }
+  }
+
+  /**
+   * Get site lists for archiving (excluding system lists)
+   */
+  public async getListsForArchive(): Promise<
+    { id: string; title: string; url: string; type: 'list' }[]
+  > {
+    try {
+      const lists = await this.sp.web.lists
+        .select('Id', 'Title', 'DefaultViewUrl', 'Hidden', 'BaseTemplate')
+        .filter('Hidden eq false and BaseTemplate ne 850') // Exclude hidden lists and web page libraries
+        .using(DefaultCaching)()
+
+      // Filter out common system lists
+      const filteredLists = lists.filter(
+        (list) =>
+          !list.Title.startsWith('_') && // System lists often start with underscore
+          list.Title !== 'Style Library' &&
+          list.Title !== 'Stilbibliotek' &&
+          list.Title !== 'Site Assets' &&
+          list.Title !== 'Nettstedsobjekter' &&
+          list.Title !== 'Site Pages' &&
+          list.Title !== 'Områdesider' &&
+          list.Title !== 'Form Templates' &&
+          list.Title !== 'Skjemamaler' &&
+          list.Title !== 'Master Page Gallery' &&
+          list.Title !== 'Solution Gallery' &&
+          list.Title !== 'Theme Gallery' &&
+          list.Title !== 'Web Part Gallery'
+      )
+
+      return filteredLists.map((list) => ({
+        id: list.Id,
+        title: list.Title,
+        url: list.DefaultViewUrl,
+        type: 'list' as const
+      }))
+    } catch (error) {
+      Logger.log({
+        message: `(${this._name}) (getListsForArchive) Error fetching lists: ${error.message}`,
+        level: LogLevel.Warning
+      })
+      return []
+    }
+  }
 }
 
 export default new SPDataAdapter()
