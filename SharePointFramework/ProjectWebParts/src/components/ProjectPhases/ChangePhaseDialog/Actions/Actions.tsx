@@ -16,13 +16,15 @@ export const Actions: FC = () => {
   const [runHook, runArchiveHook] = usePhaseHooks()
   const actions = []
 
+  const getNextView = () => (context.props.useArchive ? View.Archive : View.Confirm)
+
   // eslint-disable-next-line default-case
   switch (state.view) {
     case View.Initial:
       {
         actions.push({
           text: strings.Skip,
-          onClick: () => dispatch(SET_VIEW({ view: View.Confirm })),
+          onClick: () => dispatch(SET_VIEW({ view: getNextView() })),
           disabled: state.isChecklistMandatory,
           title: state.isChecklistMandatory ? strings.ChecklistMandatory : undefined
         })
@@ -58,11 +60,7 @@ export const Actions: FC = () => {
       {
         actions.push({
           text: strings.MoveOn,
-          onClick: () => {
-            // If archive is enabled, go to archive view, otherwise go to confirm
-            const nextView = context.props.useArchive ? View.Archive : View.Confirm
-            dispatch(SET_VIEW({ view: nextView }))
-          }
+          onClick: () => dispatch(SET_VIEW({ view: getNextView() }))
         })
       }
       break

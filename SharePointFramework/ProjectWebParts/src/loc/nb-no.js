@@ -265,7 +265,7 @@ define([], function () {
       "Her kan du velge om det skal kjøres hooks ved endring av faser. Ved endring av fase vil det bli eksekvert et kall mot url-en som er spesifisert under. Dersom kallet krever autentisering, kan dette fylles inn under url feltet. Kallet som blir eksekvert sender med følgende parametere:  'webUrl' og  'apiKey', disse er begge av typen  'string'.",
     UsePhaseHooksFieldLabel: 'Bruk fasevelger hooks',
     ArchiveViewTitle: 'Velg elementer å arkivere',
-    ArchiveViewDescription: 'Velg hvilke dokumenter og lister du vil arkivere før faseendring. Arkiver vil bli opprettet og sendt til spesifisert arkivlokasjon.',
+    ArchiveViewDescription: 'Velg hvilke dokumenter og lister du vil arkivere før faseendring. Det som blir valgt vil bli sendt til spesifisert arkivlokasjon.',
     ArchiveDocumentsSection: 'Dokumenter',
     ArchiveListsSection: 'Lister',
     ArchiveSelectedItemsInfo: '{0} element{1} valgt for arkivering',
