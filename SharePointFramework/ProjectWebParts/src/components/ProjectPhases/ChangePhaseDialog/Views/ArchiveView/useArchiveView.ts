@@ -14,12 +14,10 @@ export function useArchiveView() {
   const [sections, setSections] = useState<IArchiveSection[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
-  // Initialize sections
   useEffect(() => {
     const initializeSections = async () => {
       setIsLoading(true)
       try {
-        // Use real data from ProjectPhasesContext if available
         const archiveDocuments = context.state?.data?.archiveDocuments || []
         const archiveLists = context.state?.data?.archiveLists || []
 
@@ -33,7 +31,7 @@ export function useArchiveView() {
           {
             key: 'lists',
             title: strings.ArchiveListsSection,
-            expanded: false, // Collapsed by default as requested
+            expanded: false,
             items: archiveLists
           }
         ])
@@ -47,7 +45,6 @@ export function useArchiveView() {
     initializeSections()
   }, [context.state?.data?.archiveDocuments, context.state?.data?.archiveLists])
 
-  // Update dialog context whenever sections change
   useEffect(() => {
     const archiveConfiguration = getArchiveConfiguration()
     dialogContext.dispatch(SET_ARCHIVE_CONFIGURATION({ archiveConfiguration }))
@@ -76,6 +73,21 @@ export function useArchiveView() {
     )
   }
 
+  const toggleSectionSelectAll = (sectionKey: string) => {
+    setSections((prevSections) =>
+      prevSections.map((section) => {
+        if (section.key === sectionKey) {
+          const allSelected = section.items.every((item) => item.selected)
+          return {
+            ...section,
+            items: section.items.map((item) => ({ ...item, selected: !allSelected }))
+          }
+        }
+        return section
+      })
+    )
+  }
+
   const getSelectedItemsCount = () => {
     return sections.reduce((total, section) => {
       return total + section.items.filter((item) => item.selected).length
@@ -97,6 +109,7 @@ export function useArchiveView() {
     isLoading,
     toggleSection,
     toggleItemSelection,
+    toggleSectionSelectAll,
     getSelectedItemsCount,
     getArchiveConfiguration
   }

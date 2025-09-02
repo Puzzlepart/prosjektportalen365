@@ -73,7 +73,6 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
       ? await getPhaseSitePages({ phases, sp: props.sp, web: props.pageContext?.web })
       : []
 
-    // Fetch archive data if archive functionality is enabled
     let archiveDocuments: any[] = []
     let archiveLists: any[] = []
     if (props.useArchive) {

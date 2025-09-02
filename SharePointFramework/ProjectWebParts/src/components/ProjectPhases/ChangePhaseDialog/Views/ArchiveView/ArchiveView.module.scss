@@ -3,25 +3,24 @@
 .archiveView {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 16px 0;
+  gap: 8px;
 
   .section {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 4px;
 
     .sectionHeader {
       display: flex;
       flex-direction: row;
       align-items: center;
       gap: 8px;
+      padding: 6px;
       cursor: pointer;
 
       &:hover {
         background-color: var(--colorSubtleBackgroundHover);
         border-radius: var(--borderRadiusSmall);
-        padding: 6px;
       }
 
       .icon {
@@ -34,18 +33,22 @@
       }
     }
 
+    .selectAllButton {
+      padding-left: 12px;
+      margin-bottom: 4px;
+    }
+
     .sectionContent {
-      padding-left: 24px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 4px;
+      padding-left: 12px;
 
       .item {
         display: flex;
         flex-direction: row;
         align-items: center;
-        gap: 8px;
-        padding: 8px;
+        padding: 4px;
         border-radius: var(--borderRadiusSmall);
 
         &:hover {
@@ -66,7 +69,7 @@
   }
 
   .selectedItemsInfo {
-    padding: 12px;
+    padding: 8px;
     background-color: var(--colorNeutralBackground2);
     border-radius: var(--borderRadiusMedium);
     border-left: 4px solid var(--colorBrandBackground);

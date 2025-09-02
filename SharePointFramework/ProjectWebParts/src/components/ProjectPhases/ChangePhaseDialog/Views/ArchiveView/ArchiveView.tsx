@@ -1,6 +1,6 @@
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
-import { Checkbox, Text, Spinner } from '@fluentui/react-components'
+import { Button, Checkbox, Text, Spinner, ToggleButton } from '@fluentui/react-components'
 import {
   ChevronRight16Regular,
   Document16Regular,
@@ -10,6 +10,8 @@ import {
 import styles from './ArchiveView.module.scss'
 import { useArchiveView } from './useArchiveView'
 import { IArchiveItem } from './types'
+import { format } from '@fluentui/react'
+import { getFluentIcon } from 'pp365-shared-library'
 
 const getItemIcon = (item: IArchiveItem) => {
   switch (item.type) {
@@ -25,8 +27,14 @@ const getItemIcon = (item: IArchiveItem) => {
 }
 
 export const ArchiveView: FC = () => {
-  const { sections, isLoading, toggleSection, toggleItemSelection, getSelectedItemsCount } =
-    useArchiveView()
+  const {
+    sections,
+    isLoading,
+    toggleSection,
+    toggleItemSelection,
+    toggleSectionSelectAll,
+    getSelectedItemsCount
+  } = useArchiveView()
 
   if (isLoading) {
     return (
@@ -63,6 +71,20 @@ export const ArchiveView: FC = () => {
             </Text>
           </div>
 
+          {section.expanded && section.items.length > 1 && (
+            <div className={styles.selectAllButton}>
+              <ToggleButton
+                appearance='subtle'
+                size='small'
+                checked={section.items.every((item) => item.selected)}
+                icon={section.items.every((item) => item.selected) ? getFluentIcon('SelectAllOn') : getFluentIcon('SelectAllOff')}
+                onClick={() => toggleSectionSelectAll(section.key)}
+              >
+                {strings.ArchiveSelectAllText}
+              </ToggleButton>
+            </div>
+          )}
+
           {section.expanded && (
             <div className={styles.sectionContent}>
               {section.items.map((item) => (
@@ -83,17 +105,11 @@ export const ArchiveView: FC = () => {
           )}
         </div>
       ))}
-
-      {selectedCount > 0 && (
-        <div className={styles.selectedItemsInfo}>
-          <Text size={300} weight='semibold'>
-            {strings.ArchiveSelectedItemsInfo.replace('{0}', selectedCount.toString()).replace(
-              '{1}',
-              selectedCount !== 1 ? 'er' : ''
-            )}
-          </Text>
-        </div>
-      )}
+      <div className={styles.selectedItemsInfo}>
+        <Text size={300} weight='semibold'>
+          {format(strings.ArchiveSelectedItemsInfo, selectedCount)}
+        </Text>
+      </div>
     </div>
   )
 }

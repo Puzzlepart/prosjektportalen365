@@ -39,11 +39,9 @@ const createChangePhaseDialogReducer = () =>
             state.currentIdx = getNextIndex(checklistItems)
             state.isChecklistMandatory = phase.isChecklistMandatory === 'true'
           } else {
-            // No checklist items - check if archive is enabled
             state.view = payload.context.props.useArchive ? View.Archive : View.Confirm
           }
         } else {
-          // No phase found - check if archive is enabled
           state.view = payload.context.props.useArchive ? View.Archive : View.Confirm
         }
       },

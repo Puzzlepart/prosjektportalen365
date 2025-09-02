@@ -145,12 +145,12 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       const documents = await this.sp.web.lists
         .getByTitle(resource.Lists_Documents_Title)
         .items.select('Id', 'Title', 'FileRef', 'FileLeafRef')
-        .filter('FSObjType eq 0') // Files only, not folders
+        .filter('FSObjType eq 0')
         .using(DefaultCaching)()
 
       return documents.map((doc) => ({
         id: doc.Id,
-        title: doc.Title || doc.FileLeafRef,
+        title: doc.FileLeafRef || doc.Title,
         url: doc.FileRef,
         type: 'file' as const
       }))
@@ -172,13 +172,12 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     try {
       const lists = await this.sp.web.lists
         .select('Id', 'Title', 'DefaultViewUrl', 'Hidden', 'BaseTemplate')
-        .filter('Hidden eq false and BaseTemplate ne 850') // Exclude hidden lists and web page libraries
+        .filter('Hidden eq false and BaseTemplate ne 850')
         .using(DefaultCaching)()
 
-      // Filter out common system lists
       const filteredLists = lists.filter(
         (list) =>
-          !list.Title.startsWith('_') && // System lists often start with underscore
+          !list.Title.startsWith('_') &&
           list.Title !== 'Style Library' &&
           list.Title !== 'Stilbibliotek' &&
           list.Title !== 'Site Assets' &&
