@@ -3496,6 +3496,24 @@
     <data name="SiteFields_GtLogScope_DisplayName" xml:space="preserve">
         <value>Scope</value>
     </data>
+    <data name="SiteFields_GtLogOperation_Description" xml:space="preserve">
+        <value>The operation that was performed in the archiving process</value>
+    </data>
+    <data name="SiteFields_GtLogOperation_DisplayName" xml:space="preserve">
+        <value>Operation</value>
+    </data>
+    <data name="SiteFields_GtLogReference_Description" xml:space="preserve">
+        <value>Reference to archived content or operation</value>
+    </data>
+    <data name="SiteFields_GtLogReference_DisplayName" xml:space="preserve">
+        <value>Reference</value>
+    </data>
+    <data name="SiteFields_GtLogStatus_Description" xml:space="preserve">
+        <value>Status of the archiving operation</value>
+    </data>
+    <data name="SiteFields_GtLogStatus_DisplayName" xml:space="preserve">
+        <value>Status</value>
+    </data>
     <data name="SiteFields_GtLogWebUrl_Description" xml:space="preserve">
         <value>URL of the site where the log was generated</value>
     </data>
