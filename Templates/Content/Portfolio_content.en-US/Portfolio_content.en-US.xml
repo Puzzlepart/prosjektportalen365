@@ -30,6 +30,51 @@
                         <pnp:Property Key="GtIsParentProject" Value="0" />
                     </pnp:Properties>
                 </pnp:File>
+                <pnp:File Src="TemplateLibrary/Benefits_Realization_Plan.docx" Folder="Template Library" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Benefits Realization Plan" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="TemplateLibrary/Benefits_Tool.xlsx" Folder="Template Library" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Benefits Tool" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="TemplateLibrary/Concept_Phase_Mandate.docx" Folder="Template Library" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Concept Phase Mandate" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="TemplateLibrary/Project_Justification.docx" Folder="Template Library" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Project Justification" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="TemplateLibrary/Project_Proposal.docx" Folder="Template Library" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Project Proposal" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="TemplateLibrary/Final_Report.docx" Folder="Template Library" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Final Report" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="TemplateLibrary/Steering_Document.docx" Folder="Template Library" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Steering Document" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="SiteAssets/Configuration/Riskmatrix/standard-configuration.json" Folder="SiteAssets/Configuration/Riskmatrix" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Standard 5x5 matrix" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="SiteAssets/Configuration/Opportunitymatrix/standard-configuration.json" Folder="SiteAssets/Configuration/Opportunitymatrix" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Standard 5x5 matrix" />
+                    </pnp:Properties>
+                </pnp:File>
             </pnp:Files>
         </pnp:ProvisioningTemplate>
     </pnp:Templates>
