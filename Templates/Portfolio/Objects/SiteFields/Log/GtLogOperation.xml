@@ -1,1 +1,1 @@
-<Field Description="{resource:SiteFields_GtLogOperation_Description}" DisplayName="{resource:SiteFields_GtLogOperation_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{a1b2c3d4-5e6f-7890-abcd-ef1234567890}" Name="GtLogOperation" StaticName="GtLogOperation" Type="Text" />
+<Field Description="{resource:SiteFields_GtLogOperation_Description}" DisplayName="{resource:SiteFields_GtLogOperation_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{0ceeeca1-3b9e-4d5b-8abb-51fadf718075}" Name="GtLogOperation" StaticName="GtLogOperation" Type="Text" />

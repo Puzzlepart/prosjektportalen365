@@ -1381,6 +1381,15 @@
     <data name="ListFields_Title_DisplayName" xml:space="preserve">
         <value>Title</value>
     </data>
+    <data name="Lists_ArchiveLog_Description" xml:space="preserve">
+        <value>List for logging archive operations in projects</value>
+    </data>
+    <data name="Lists_ArchiveLog_Title" xml:space="preserve">
+        <value>Archive Log</value>
+    </data>
+    <data name="Lists_ArchiveLog_Url" xml:space="preserve">
+        <value>Lists/ArchiveLog</value>
+    </data>
     <data name="Lists_BenefitsAnalysis_Title" xml:space="preserve">
         <value>Benefits analysis</value>
     </data>
@@ -3489,6 +3498,9 @@
     </data>
     <data name="SiteFields_GtLogMessage_DisplayName" xml:space="preserve">
         <value>Message</value>
+    </data>
+    <data name="SiteFields_GtLogMessage_ArchiveLog_DisplayName" xml:space="preserve">
+        <value>Phase transition</value>
     </data>
     <data name="SiteFields_GtLogScope_Description" xml:space="preserve">
         <value>Indicate the scope or context of the log element</value>
