@@ -2,6 +2,10 @@
   width: 550px;
   max-width: 550px;
 
+  & > div[role="dialog"] {
+    height: calc(100vh - 180px);
+  }
+
   .dialogContent {
     display: flex;
     flex-direction: column;

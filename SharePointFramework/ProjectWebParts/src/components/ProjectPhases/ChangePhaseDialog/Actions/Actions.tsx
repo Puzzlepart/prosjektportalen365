@@ -45,7 +45,6 @@ export const Actions: FC = () => {
           onClick: async () => {
             dispatch(SET_VIEW({ view: View.ChangingPhase }))
 
-            // Run archive hook if archive configuration exists
             if (state.archiveConfiguration && context.props.useArchive) {
               await runArchiveHook(state.archiveConfiguration)
             }
