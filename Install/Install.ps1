@@ -109,11 +109,13 @@ else {
     else {
         Write-Host "[INFO] Loaded PnP.PowerShell v$((Get-Command Connect-PnPOnline).Version) from your environment"
     }
-    Write-Host "[INFO] In version 1.12 of Prosjektportalen we upgraded PnP.PowerShell 3.1. As part of the authentication process with Microsoft 365, this script will open a browser window to authenticate. Make sure you have the correct browser window active. " -ForegroundColor Yellow
-    1..10 | ForEach-Object { $sec = 11 - $_; if ([Console]::KeyAvailable) { Write-Host ""; break }; Write-Host ("`r`tContinuing in {0} second{1}... (press any key to continue)" -f $sec, $(if ($sec -eq 1) { "" } else { "s" })) -NoNewline -ForegroundColor Yellow; Start-Sleep -Seconds 1 }; if ([Console]::KeyAvailable) { [void][Console]::ReadKey($true) }; Write-Host ""
+    Write-Host "[INFO] In version 1.12 of Prosjektportalen we upgraded PnP.PowerShell to version 3.1."
+    Write-Host "[INFO] As part of the authentication process with Microsoft 365, this script will open a browser window to authenticate."
+    Write-Host "[INFO] Make sure you have the correct browser active. "
+    1..11 | ForEach-Object { $sec = 11 - $_; if ([Console]::KeyAvailable) { [void][Console]::ReadKey($true); break }; Write-Host "`rContinuing in $sec second$(if ($sec -eq 1) { '' } else { 's' })... press any key to continue" -NoNewline -ForegroundColor Yellow; Start-Sleep -Seconds 1 }; if ([Console]::KeyAvailable) { [void][Console]::ReadKey($true) }; Write-Host ""
 }
 
-if ((Get-Command Connect-PnPOnline) -eq $null -or (Get-Command Connect-PnPOnline).Version -lt [version]"3.1.0") {
+if ($null -eq (Get-Command Connect-PnPOnline) -or (Get-Command Connect-PnPOnline).Version -lt [version]"3.1.0") {
     Write-Host "[ERROR] Correct PnP.PowerShell module not found. Please install it from PowerShell Gallery or do not use -SkipLoadingBundle." -ForegroundColor Red
     exit 0
 }
@@ -496,7 +498,6 @@ Write-Host "[INFO] Running post-install steps"
 Connect-SharePoint -Url $Uri.AbsoluteUri -ConnectionInfo $ConnectionInfo
 try {
     ."$PSScriptRoot/Scripts/PostInstall.ps1"
-    Write-Host "[SUCCESS] Successfully ran post-install steps" -ForegroundColor Green
 }
 catch {
     Write-Host "[WARNING] Failed to run post-install steps: $($_.Exception.Message)" -ForegroundColor Yellow
@@ -506,7 +507,6 @@ if ($Upgrade.IsPresent) {
     Write-Host "[INFO] Running post-install upgrade steps" 
     try {
         ."$PSScriptRoot/Scripts/PostInstallUpgrade.ps1"
-        Write-Host "[SUCCESS] Successfully ran post-install upgrade steps" -ForegroundColor Green
     }
     catch {
         Write-Host "[WARNING] Failed to run post-install upgrade steps: $($_.Exception.Message)" -ForegroundColor Yellow
@@ -514,6 +514,7 @@ if ($Upgrade.IsPresent) {
 }
 
 $sw.Stop()
+Stop-PnPTraceLog -StopFileLogging
 
 if ($Upgrade.IsPresent) {
     Write-Host "[SUCCESS] Upgrade completed in $($sw.Elapsed.ToString('hh\:mm\:ss'))" -ForegroundColor Green
@@ -526,7 +527,7 @@ else {
     Write-Host "[SUCCESS] Installation completed in $($sw.Elapsed.ToString('hh\:mm\:ss'))" -ForegroundColor Green
 }
 Write-Host "[INFO] Consider running .\Install\Scripts\UpgradeAllSitesToLatest.ps1 to upgrade all sites to the latest version of Prosjektportalen 365."
-Write-Host "[INFO] This is required after upgrading between minor versions, e.g. from 1.10.x to 1.11.x."
+Write-Host "[INFO] This is required if upgrading from a version earlier than 1.10.0."
 #endregion
 
 #region Log installation and send pingback to Azure Function

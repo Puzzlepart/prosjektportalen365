@@ -5,8 +5,7 @@ Set-PnPList -Identity (Get-Resource -Name "Lists_Configuration_Title") -EnableCo
 Set-PnPList -Identity (Get-Resource -Name "Lists_PortfolioViews_Title") -EnableContentTypes:$false >$null 2>&1  
 Set-PnPList -Identity (Get-Resource -Name "Lists_ProjectColumns_Title") -EnableContentTypes:$false >$null 2>&1  
 Set-PnPList -Identity (Get-Resource -Name "Lists_ResourceAllocation_Title") -EnableContentTypes:$false >$null 2>&1  
-Set-PnPList -Identity (Get-Resource -Name "Lists_PlannerTasks_Title") -EnableContentTypes:$false >$null 2>&1  
-Write-Host "[SUCCESS] Post-install action: Disabling content types for lists" -ForegroundColor Green
+Set-PnPList -Identity (Get-Resource -Name "Lists_PlannerTasks_Title") -EnableContentTypes:$false >$null 2>&1
 
 Write-Host "[INFO] Post-install action: Ensuring default project templates"
 $TemplateSetups = Get-PnPListItem -List (Get-Resource -Name "Lists_TemplateOptions_Title")
@@ -30,7 +29,6 @@ foreach ($tmpl in $TemplateFilesMap.GetEnumerator()) {
     }
 }
 
-Write-Host "[SUCCESS] Post-install action: Ensured default project templates" -ForegroundColor Green
 Write-Host "[INFO] Post-install action: Adding default list content to template setup"
 
 $TemplateSetupMap = @{
@@ -108,5 +106,3 @@ if ($Anlegg) {
 else {
     Write-Host "[WARNING] Failed to find Anleggsprosjekt template. Please check the Maloppsett list." -ForegroundColor Yellow
 }
-
-Write-Host "[SUCCESS] Post-install action: Added default list content to template setup" -ForegroundColor Green
