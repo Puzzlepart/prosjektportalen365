@@ -28,6 +28,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   private _links: { Url: string; Description: string; Level?: string }[]
   private _useAssistant: boolean
   private _hasAssistantAccess: boolean
+  private _assistantEndpointUrl: string
   private _helpContent: HelpContentModel[]
   private _portalDataService: PortalDataService
   private _showFooter: boolean
@@ -59,6 +60,14 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     this._useAssistant = this._globalSettings.get('UseAssistant') === '1'
     this._showFooter = this._globalSettings.get('ShowFooter') === '1'
     this._minimizeFooter = this._globalSettings.get('MinimizeFooter') === '1'
+
+    const useBetaChannel = this._globalSettings.get('UseBetaChannel') === '1'
+    const betaEndpointUrl = this._globalSettings.get('BetaEndpointUrl')
+    const endpointUrl = this._globalSettings.get('EndpointUrl')
+    this._assistantEndpointUrl = useBetaChannel && betaEndpointUrl
+      ? betaEndpointUrl
+      : endpointUrl || 'https://pp365-ai-d2dge4fqc2bhbba9.norwayeast-01.azurewebsites.net'
+
     this._hasAssistantAccess =
       !requireAssistantAccess || (await this._isUserInGroup(strings.AssistantGroupName))
     this.context.application.navigatedEvent.add(this, this._handleNavigatedEvent)
@@ -78,6 +87,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
       portalUrl: this._portalDataService.url,
       useAssistant: this._useAssistant,
       hasAssistantAccess: this._hasAssistantAccess,
+      assistantEndpointUrl: this._assistantEndpointUrl,
       showFooter: this._showFooter,
       minimizeFooter: this._minimizeFooter
     })

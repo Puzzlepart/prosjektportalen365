@@ -1,10 +1,10 @@
-<pnp:ListInstance Title="{resource:Lists_Lists_ProjectColumnConfiguration_Title}" Description="{resource:Lists_Lists_ProjectColumnConfiguration_Description}" DocumentTemplate="" Hidden="true" TemplateType="100" Url="{resource:Lists_Lists_ProjectColumnConfiguration_Url}" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false"
+<pnp:ListInstance Title="{resource:Lists_ProjectColumnConfiguration_Title}" Description="{resource:Lists_ProjectColumnConfiguration_Description}" DocumentTemplate="" Hidden="true" TemplateType="100" Url="{resource:Lists_ProjectColumnConfiguration_Url}" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false"
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x01005CC009F95743674DAF31B3531CFFA586" Default="true" />
     </pnp:ContentTypeBindings>
     <pnp:Views RemoveExistingViews="true">
-        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_Lists_ProjectColumnConfiguration_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
+        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_ProjectColumnConfiguration_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
             <Query>
                 <OrderBy>
                     <FieldRef Name="ID" />

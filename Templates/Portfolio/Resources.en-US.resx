@@ -1579,6 +1579,15 @@
     <data name="Lists_Global_Settings_Category_Assistant_RequireAssistantAccess_Title" xml:space="preserve">
         <value>Require access to use the assistant</value>
     </data>
+    <data name="Lists_Global_Settings_Category_Assistant_UseBetaChannel_Title" xml:space="preserve">
+        <value>Use beta channel for assistant</value>
+    </data>
+    <data name="Lists_Global_Settings_Category_Assistant_BetaEndpointUrl_Title" xml:space="preserve">
+        <value>Beta endpoint URL for assistant</value>
+    </data>
+    <data name="Lists_Global_Settings_Category_Assistant_EndpointUrl_Title" xml:space="preserve">
+        <value>Endpoint URL for assistant</value>
+    </data>
     <data name="Lists_Global_Settings_Category_General" xml:space="preserve">
         <value>General</value>
     </data>

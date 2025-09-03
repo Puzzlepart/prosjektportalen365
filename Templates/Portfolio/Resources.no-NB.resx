@@ -1594,6 +1594,15 @@
     <data name="Lists_Global_Settings_Category_Assistant_RequireAssistantAccess_Title" xml:space="preserve">
         <value>Krev tilgang for å bruke assistenten</value>
     </data>
+    <data name="Lists_Global_Settings_Category_Assistant_UseBetaChannel_Title" xml:space="preserve">
+        <value>Bruk beta-kanal for assistenten</value>
+    </data>
+    <data name="Lists_Global_Settings_Category_Assistant_BetaEndpointUrl_Title" xml:space="preserve">
+        <value>Beta-endepunkt URL for assistenten</value>
+    </data>
+    <data name="Lists_Global_Settings_Category_Assistant_EndpointUrl_Title" xml:space="preserve">
+        <value>Endepunkt URL for assistenten</value>
+    </data>
     <data name="Lists_Global_Settings_Category_General" xml:space="preserve">
         <value>Generelt</value>
     </data>
