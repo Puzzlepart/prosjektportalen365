@@ -19,7 +19,7 @@ $TenantAdminUrl = (@($PortfolioUri.Scheme, "://", $PortfolioUri.Authority) -join
 
 function GetPortfolioadminUsers($HubUrl){
     Write-Host "Looking for portfolio admin users in: $HubUrl (using TenantAdminUrl: $TenantAdminUrl)" -ForegroundColor DarkGreen
-    Connect-PnPOnline -Url $HubUrl -TenantAdminUrl $TenantAdminUrl -Interactive -ClientId $ClientId
+    Connect-PnPOnline -Url $HubUrl -TenantAdminUrl $TenantAdminUrl -ClientId $ClientId
     
     ## Getting security group (Porteføljeadministratorer) and returning its members
     $Group = Get-PnPSiteGroup -Group $PortfolioAdminGroupName
@@ -39,7 +39,7 @@ function GrantPermissions ($Url, $Members) {
     $CurrentUser = Get-PnPProperty -Property CurrentUser -ClientObject (Get-PnPContext).Web
     Write-Host "Granting owner permissions to site collection $Url for current user $($CurrentUser.Email)" -ForegroundColor DarkGreen
     Set-PnPTenantSite -Url $Url -Owners $CurrentUser.Email
-    Connect-PnPOnline -Url $Url -TenantAdminUrl $TenantAdminUrl -Interactive -clientId $ClientId
+    Connect-PnPOnline -Url $Url -TenantAdminUrl $TenantAdminUrl -ClientId $ClientId
     
     ## Adding security group (if not created)
     $Group = Get-PnPSiteGroup -Site $Url -Group $PortfolioAdminGroupName -ErrorAction SilentlyContinue
@@ -74,7 +74,7 @@ if (-not (Get-Module | Where-Object { $_.Name -like "PnP.PowerShell" }) ) {
     Import-Module PnP.PowerShell
 }
 
-Connect-PnPOnline -TenantAdminUrl $TenantAdminUrl -Url $PortfolioUrl -Interactive -ClientId $ClientId
+Connect-PnPOnline -TenantAdminUrl $TenantAdminUrl -Url $PortfolioUrl -ClientId $ClientId
 try{
     $Children = Get-PnPHubSiteChild
 }catch{
@@ -95,7 +95,7 @@ if ($GrantPermissions) {
 } elseif($GrantPermissionsAndDelete) {
     $Children | ForEach-Object {
         $ChildSiteUrl = $_
-        Connect-PnPOnline -Url $ChildSiteUrl -TenantAdminUrl $TenantAdminUrl -Interactive -ClientId $ClientId
+        Connect-PnPOnline -Url $ChildSiteUrl -TenantAdminUrl $TenantAdminUrl -ClientId $ClientId
         $Group = Get-PnPSiteGroup -Group $PortfolioAdminGroupName
         if($Group -and $Group.Count -gt 0){
             $Members = Get-PnPGroupMember -Group $PortfolioAdminGroupName

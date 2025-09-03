@@ -39,7 +39,7 @@ function Connect-SharePoint {
 
         }
         else {
-            Connect-PnPOnline -Url $Url -Interactive -ClientId $ConnectionInfo.ClientId -ErrorAction Stop -WarningAction Ignore
+            Connect-PnPOnline -Url $Url -ClientId $ConnectionInfo.ClientId -ErrorAction Stop -WarningAction Ignore
         }
     }
     Catch {

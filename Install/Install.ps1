@@ -60,13 +60,13 @@ $ConnectionInfo = [PSCustomObject]@{
 
 #region Handling installation language and culture
 $LanguageIds = @{
-    "Norwegian"    = 1044;
-    "English"      = 1033;
+    "Norwegian" = 1044;
+    "English"   = 1033;
 }
 
 $LanguageCodes = @{
-    "Norwegian"    = 'no-NB';
-    "English"      = 'en-US';
+    "Norwegian" = 'no-NB';
+    "English"   = 'en-US';
 }
 
 $Channel = "{CHANNEL_PLACEHOLDER}"
@@ -97,20 +97,26 @@ Write-Host "########################################################" -Foregroun
 
 if ($CI.IsPresent -and $null -eq (Get-Module -Name PnP.PowerShell)) {
     Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
-    Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop -RequiredVersion 2.12.0
+    Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop -RequiredVersion 3.1.0
     $Version = (Get-Command Connect-PnPOnline).Version
     Write-Host "[INFO] Installed module PnP.PowerShell v$($Version) from PowerShell Gallery"
 }
 else {
     if (-not $SkipLoadingBundle.IsPresent) {
-        $PnPVersion = LoadBundle -Version 2.12.0
+        $PnPVersion = LoadBundle -Version 3.1.0
         Write-Host "[INFO] Loaded module PnP.PowerShell v$($PnPVersion) from bundle"
     }
     else {
         Write-Host "[INFO] Loaded PnP.PowerShell v$((Get-Command Connect-PnPOnline).Version) from your environment"
     }
+    Write-Host "[INFO] In version 1.12 of Prosjektportalen we upgraded PnP.PowerShell 3.1. As part of the authentication process with Microsoft 365, this script will open a browser window to authenticate. Make sure you have the correct browser window active. " -ForegroundColor Yellow
+    1..10 | ForEach-Object { $sec = 11 - $_; if ([Console]::KeyAvailable) { Write-Host ""; break }; Write-Host ("`r`tContinuing in {0} second{1}... (press any key to continue)" -f $sec, $(if ($sec -eq 1) { "" } else { "s" })) -NoNewline -ForegroundColor Yellow; Start-Sleep -Seconds 1 }; if ([Console]::KeyAvailable) { [void][Console]::ReadKey($true) }; Write-Host ""
 }
 
+if ((Get-Command Connect-PnPOnline) -eq $null -or (Get-Command Connect-PnPOnline).Version -lt [version]"3.1.0") {
+    Write-Host "[ERROR] Correct PnP.PowerShell module not found. Please install it from PowerShell Gallery or do not use -SkipLoadingBundle." -ForegroundColor Red
+    exit 0
+}
 #region Setting variables based on input from user
 [System.Uri]$Uri = $Url.TrimEnd('/')
 $ManagedPath = $Uri.Segments[1]
@@ -139,7 +145,7 @@ if ($Alias.Length -lt 2 -or (@("sites/", "teams/") -notcontains $ManagedPath) -o
 #endregion
 
 $LogFilePath = "$PSScriptRoot/Install_Log_$([datetime]::Now.ToString("yy-MM-ddThh-mm-ss")).txt"
-Set-PnPTraceLog -On -Level Debug -LogFile $LogFilePath
+Start-PnPTraceLog -Path $LogFilePath -Level Debug
 
 #region Create site
 if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
@@ -242,7 +248,7 @@ if (-not $SkipSiteDesign.IsPresent) {
         StartAction("Creating/updating site design $SiteDesignName")
         Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
     
-        Get-PnPSiteDesign | Where-Object {$_.Title.Contains("Prosjektområde - test")} | Remove-PnPSiteDesign -Force -ErrorAction SilentlyContinue >$null 2>&1
+        Get-PnPSiteDesign | Where-Object { $_.Title.Contains("Prosjektområde - test") } | Remove-PnPSiteDesign -Force -ErrorAction SilentlyContinue >$null 2>&1
 
         $SiteDesign = Get-PnPSiteDesign -Identity $SiteDesignName
 
@@ -381,7 +387,7 @@ if (-not $SkipTemplate.IsPresent) {
             StartAction("Applying PnP template Portfolio to $($Uri.AbsoluteUri)")
             $Retry = 0
             $MaxRetries = 5
-            while($Retry -lt $MaxRetries) {
+            while ($Retry -lt $MaxRetries) {
                 try {
                     Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers $UpgradeExcludeHandlers -ErrorAction Stop -WarningAction SilentlyContinue
                     break
@@ -397,11 +403,12 @@ if (-not $SkipTemplate.IsPresent) {
             }
             EndAction
 
-            if(Test-Path "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp") {
+            if (Test-Path "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp") {
                 StartAction("Applying PnP content template to $($Uri.AbsoluteUri)")
                 Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" -Handlers Files -ErrorAction Stop -WarningAction SilentlyContinue
                 EndAction
-            } else {
+            }
+            else {
                 Write-Host "[WARNING] No content template found for language $LanguageCode. Skipping content template." -ForegroundColor Yellow
             }
 
@@ -418,7 +425,7 @@ if (-not $SkipTemplate.IsPresent) {
             Invoke-PnPSiteTemplate -InputInstance $Instance -Handlers SupportedUILanguages
             $Retry = 0
             $MaxRetries = 5
-            while($Retry -lt $MaxRetries) {
+            while ($Retry -lt $MaxRetries) {
                 try {                
                     Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
                     break
@@ -557,7 +564,8 @@ try {
             $AttachmentOutput = Add-PnPListItemAttachment -List $InstallationEntriesList.Id -Identity $InstallationEntry.Id -Path $LogFilePath -ErrorAction Continue
         }    
     }
-} catch {
+}
+catch {
     Write-Host "[WARNING] Installation log list not found. Skipping logging installation entry." -ForegroundColor Yellow
 }
 
