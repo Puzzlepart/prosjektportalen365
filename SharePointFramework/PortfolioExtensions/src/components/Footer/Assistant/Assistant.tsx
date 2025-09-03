@@ -76,7 +76,7 @@ export const Assistant: FC = () => {
               />
             )}
             <iframe
-              src={`https://pp365-ai-d2dge4fqc2bhbba9.norwayeast-01.azurewebsites.net?source=${context.props.pageContext.web.absoluteUrl}`}
+              src={`${context.props.assistantEndpointUrl}?source=${context.props.pageContext.web.absoluteUrl}`}
               style={{ display: loading ? 'none' : 'block', border: 'none' }}
               title={strings.AssistantIframeTitle}
               width='100%'

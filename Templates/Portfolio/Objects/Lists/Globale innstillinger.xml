@@ -105,7 +105,7 @@
       <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_General_MinimizeFooter_Title}</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsKey">MinimizeFooter</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsValue">1</pnp:DataValue>
-      <pnp:DataValue FieldName="GtSettingsEnabled">False</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_General}</pnp:DataValue>
     </pnp:DataRow>
     <pnp:DataRow>
@@ -148,10 +148,33 @@
         <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_Assistant_RequireAssistantAccess_Title}</pnp:DataValue>
         <pnp:DataValue FieldName="GtSettingsKey">RequireAssistantAccess</pnp:DataValue>
         <pnp:DataValue FieldName="GtSettingsValue">0</pnp:DataValue>
-        <pnp:DataValue FieldName="GtSettingsEnabled">False</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
         <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_Assistant}</pnp:DataValue>
     </pnp:DataRow>
-    
+    <pnp:DataRow>
+        <pnp:DataValue FieldName="GtSettingsId">{b8f7a9c2-1e4d-4b5c-8f9e-3a7c6d2b1e5f}</pnp:DataValue>
+        <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_Assistant_UseBetaChannel_Title}</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsKey">UseBetaChannel</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsValue">0</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_Assistant}</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+        <pnp:DataValue FieldName="GtSettingsId">{c9e8b7a6-2f5e-4c6d-9a0b-4b8d7e3c2f6a}</pnp:DataValue>
+        <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_Assistant_BetaEndpointUrl_Title}</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsKey">BetaEndpointUrl</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsValue">https://pp365-ai-dev-bpg4e8g7fuf7grep.norwayeast-01.azurewebsites.net/</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_Assistant}</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+        <pnp:DataValue FieldName="GtSettingsId">{d0f9c8b7-3a6f-4d7e-0b1c-5c9e8f4d3a7b}</pnp:DataValue>
+        <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_Assistant_EndpointUrl_Title}</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsKey">EndpointUrl</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsValue">https://pp365-ai-d2dge4fqc2bhbba9.norwayeast-01.azurewebsites.net</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_Assistant}</pnp:DataValue>
+    </pnp:DataRow>
   </pnp:DataRows>
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>
