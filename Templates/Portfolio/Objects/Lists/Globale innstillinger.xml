@@ -104,7 +104,7 @@
       <pnp:DataValue FieldName="GtSettingsId">{fb8cb873-ac5f-45e0-a091-1e14bfc7ea33}</pnp:DataValue>
       <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_General_MinimizeFooter_Title}</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsKey">MinimizeFooter</pnp:DataValue>
-      <pnp:DataValue FieldName="GtSettingsValue">1</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsValue">0</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_General}</pnp:DataValue>
     </pnp:DataRow>

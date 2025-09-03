@@ -52,7 +52,7 @@ export const Assistant: FC = () => {
                     icon={getFluentIcon('Settings')}
                     onClick={() =>
                       window.open(
-                        `${context.props.portalUrl}/Lists/${resource.Lists_Global_Settings_Url}`,
+                        `${context.props.portalUrl}/${resource.Lists_Global_Settings_Url}`,
                         '_blank'
                       )
                     }
