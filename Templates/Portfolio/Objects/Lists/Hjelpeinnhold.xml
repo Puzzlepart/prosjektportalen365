@@ -1,4 +1,4 @@
-<pnp:ListInstance Title="{resource:Lists_HelpContent_Title}" Description="{resource:Lists_HelpContent_Description}" DocumentTemplate="" Hidden="true" TemplateType="100" Url="{resource:Lists_HelpContent_Url}" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" EnableAttachments="false" EnableFolderCreation="false"
+<pnp:ListInstance Title="{resource:Lists_HelpContent_Title}" Description="{resource:Lists_HelpContent_Description}" DocumentTemplate="" Hidden="true" TemplateType="100" Url="{resource:Lists_HelpContent_Url}" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" EnableAttachments="false" EnableFolderCreation="false"
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x01007C1785494A2CAC40B7F7D81A040AC219" Default="true" />
@@ -26,7 +26,7 @@
             <CustomFormatter />
         </View>
     </pnp:Views>
-    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Overwrite">
+    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_PortfolioLevelUserManual}</pnp:DataValue>
