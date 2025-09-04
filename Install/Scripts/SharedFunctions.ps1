@@ -125,3 +125,35 @@ function ParseVersionString($VersionString) {
         return [Version]"999.99.99"
     }
 }
+
+<#
+.SYNOPSIS
+Show countdown with option to skip
+
+.DESCRIPTION
+Shows a countdown timer that can be interrupted by pressing any key
+
+.PARAMETER Message
+The message to display before the countdown
+
+.PARAMETER Seconds
+Number of seconds to countdown (default: 10)
+#>
+function Show-Countdown {
+    Param(
+        [Parameter(Mandatory = $false)]
+        [int]$Seconds = 10
+    )
+
+    $keyPressed = $false
+    for ($sec = $Seconds; $sec -gt 0; $sec--) {
+        if ([Console]::KeyAvailable) {
+            [void][Console]::ReadKey($true)
+            $keyPressed = $true
+            break
+        }
+        Write-Host "`rContinuing in $sec second$(if ($sec -eq 1) { '' } else { 's' })... press any key to continue immediately" -NoNewline -ForegroundColor Yellow
+        Start-Sleep -Seconds 1
+    }
+    Write-Host " - Continuing!" -ForegroundColor Green 
+}

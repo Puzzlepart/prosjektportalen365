@@ -112,7 +112,7 @@ else {
     Write-Host "[INFO] In version 1.12 of Prosjektportalen we upgraded PnP.PowerShell to version 3.1."
     Write-Host "[INFO] As part of the authentication process with Microsoft 365, this script will open a browser window to authenticate."
     Write-Host "[INFO] Make sure you have the correct browser active. "
-    1..11 | ForEach-Object { $sec = 11 - $_; if ([Console]::KeyAvailable) { [void][Console]::ReadKey($true); break }; Write-Host "`rContinuing in $sec second$(if ($sec -eq 1) { '' } else { 's' })... press any key to continue" -NoNewline -ForegroundColor Yellow; Start-Sleep -Seconds 1 }; if ([Console]::KeyAvailable) { [void][Console]::ReadKey($true) }; Write-Host ""
+    Show-Countdown -Seconds 15
 }
 
 if ($null -eq (Get-Command Connect-PnPOnline) -or (Get-Command Connect-PnPOnline).Version -lt [version]"3.1.0") {
