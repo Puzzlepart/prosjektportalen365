@@ -10,7 +10,8 @@ import {
   getNewsEditUrl,
   setOriginalSourceSiteId,
   getSitePageItemIdByFileName,
-  doesSitePageExist
+  doesSitePageExist,
+  promotePageToNewsArticle
 } from '../util'
 import { TemplateFile } from '../types'
 import { ProjectNewsContext } from '../context'
@@ -45,7 +46,6 @@ export const useNewsDialog = () => {
     async (e: React.FormEvent) => {
       e.preventDefault()
 
-      // Use the form validation from the hook
       if (!newsForm.validateForm()) {
         return
       }
@@ -94,6 +94,16 @@ export const useNewsDialog = () => {
             currentSiteId,
             context.props.pageContext.legacyPageContext.hubSiteId
           )
+
+          try {
+            await promotePageToNewsArticle(
+              context.props.siteUrl,
+              context.props.spHttpClient,
+              itemId
+            )
+          } catch (promoteError: any) {
+            console.warn('Failed to promote page to news article:', promoteError)
+          }
         }
         if (res.ok) {
           setSpinnerMode('success')
