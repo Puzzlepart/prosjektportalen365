@@ -3,6 +3,8 @@ import { SPHttpClient, SPHttpClientResponse } from '@microsoft/sp-http'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import * as strings from 'ProjectWebPartsStrings'
 import { INewsItem, TemplateFile } from './types'
+import SPDataAdapter from 'data'
+import resource from 'SharedResources'
 
 // --- SharePoint file name validation constants ---
 const invalidChars = /["*:<>?/\\|#%;]/g
@@ -308,6 +310,49 @@ export async function copyTemplatePage(
   })
 }
 
+const sitePagesFieldsCache = new Map<string, string[]>()
+
+/**
+ * Gets all field names starting with 'Gt' from the SitePages library.
+ * Results are cached per site URL to avoid repeated API calls.
+ * Checks for 'Områdesider' (Norwegian) first, then falls back to 'Site Pages' (English).
+ * @param siteUrl URL of the SharePoint site
+ * @param spHttpClient SPHttpClient instance to use for making the request
+ * @returns Promise that resolves with an array of field names starting with 'Gt'
+ */
+export async function getSitePagesFields(
+  siteUrl: string,
+  spHttpClient: SPHttpClient,
+  listTitle = 'Områdesider'
+): Promise<string[]> {
+  if (sitePagesFieldsCache.has(siteUrl)) {
+    const cachedFields = sitePagesFieldsCache.get(siteUrl)
+    if (cachedFields) {
+      return cachedFields
+    }
+  }
+
+  const defaultFields = ['GtSiteId', 'GtHubSiteId']
+
+  try {
+    const fieldsUrl = `${siteUrl}/_api/web/lists/getByTitle('${listTitle}')/fields?$select=InternalName&$filter=startswith(InternalName,'Gt')`
+    const res = await spHttpClient.get(fieldsUrl, SPHttpClient.configurations.v1)
+
+    if (res.ok) {
+      const data = await res.json()
+      const fields = data.value?.map((field: any) => field.InternalName) || []
+
+      sitePagesFieldsCache.set(siteUrl, fields)
+      return fields
+    }
+  } catch (error) {
+    console.warn('Error fetching SitePages fields:', error)
+  }
+
+  sitePagesFieldsCache.set(siteUrl, defaultFields)
+  return defaultFields
+}
+
 /**
  * Sets the "Original Source Site Id" field for a Site Page item.
  * @param siteUrl URL of the SharePoint site where the page is stored
@@ -328,6 +373,37 @@ export async function setOriginalSourceSiteId(
   if (!siteId) {
     throw new Error('Site ID is required to set GtSiteId')
   }
+
+  let fields: string[]
+  fields = await getSitePagesFields(siteUrl, spHttpClient, 'Områdesider')
+  if (fields.length === 0) {
+    fields = await getSitePagesFields(siteUrl, spHttpClient, 'Site Pages')
+  }
+
+  const projectFields = fields.filter((field) => !['GtSiteId', 'GtHubSiteId'].includes(field))
+
+  const [projectData] = await SPDataAdapter.portalDataService.web.lists
+    .getByTitle(resource.Lists_Projects_Title)
+    .items.select(...projectFields)
+    .filter(`GtSiteId eq '${siteId}'`)
+    .getAll()
+
+  const updateBody: any = {
+    GtSiteId: siteId,
+    GtHubSiteId: hubSiteId
+  }
+
+  if (projectData) {
+    for (const field of projectFields) {
+      if (projectData[field] !== undefined && projectData[field] !== null) {
+        updateBody[field] = projectData[field]
+      }
+    }
+    console.log('Updating site page with project fields:', Object.keys(updateBody))
+  } else {
+    console.warn(`No project data found for site ID: ${siteId}`)
+  }
+
   const updateUrl = `${siteUrl}/_api/web/GetListUsingPath(DecodedUrl='${sitePagesServerRelativeUrl}')/items(${itemId})`
   const updateRes = await spHttpClient.post(updateUrl, SPHttpClient.configurations.v1, {
     headers: {
@@ -336,11 +412,9 @@ export async function setOriginalSourceSiteId(
       'IF-MATCH': '*',
       'X-HTTP-Method': 'MERGE'
     },
-    body: JSON.stringify({
-      GtSiteId: siteId,
-      GtHubSiteId: hubSiteId
-    })
+    body: JSON.stringify(updateBody)
   })
+
   if (!updateRes.ok) {
     const error = await updateRes.json()
     throw new Error(error?.error?.message?.value || updateRes.statusText)
