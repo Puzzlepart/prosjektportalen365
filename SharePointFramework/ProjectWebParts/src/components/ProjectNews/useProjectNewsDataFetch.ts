@@ -54,9 +54,8 @@ export function useProjectNewsDataFetch(
           )
         // Some users may forget to use the SharePoint "Publish as news" feature after publishing an article,
         // resulting in pages that are not promoted as news (promotedState !== 2).
-        // To ensure all news articles are correctly promoted, we automatically check and promote any items
-        // that are not already news articles. This is a workaround for the fact that only the SharePoint UI
-        // or the /PromoteToNews endpoint can officially promote a page as news.
+        // This serves as a fallback for existing pages or pages created outside of the news dialog.
+        // New pages created through the news dialog are automatically promoted during creation.
         await ensureAllNewsPromoted(
           props.siteUrl,
           props.spHttpClient,
