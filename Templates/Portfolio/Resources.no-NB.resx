@@ -1396,6 +1396,9 @@
     <data name="ListFields_Title_DisplayName" xml:space="preserve">
         <value>Tittel</value>
     </data>
+    <data name="ListFields_DocumentType_DisplayName" xml:space="preserve">
+        <value>Dokumenttype</value>
+    </data>
     <data name="Lists_ArchiveLog_Description" xml:space="preserve">
         <value>Liste for loggføringer av arkivering i prosjekter</value>
     </data>
@@ -4702,6 +4705,57 @@
     <data name="SiteFields_Title_DisplayName" xml:space="preserve">
         <value>Tittel</value>
     </data>
+    <data name="SiteFields_GtDocumentType_Description" xml:space="preserve">
+        <value>Dokumenttype for klassifisering av dokumenter</value>
+    </data>
+    <data name="SiteFields_GtDocumentType_DisplayName" xml:space="preserve">
+        <value>Dokumenttype</value>
+    </data>
+    <data name="SiteFields_GtHubSiteId_DisplayName" xml:space="preserve">
+        <value>Hub-ID</value>
+    </data>
+    <data name="SiteFields_GtHubSiteId_Description" xml:space="preserve">
+        <value>ID til hubområdet.</value>
+    </data>
+    <data name="SiteFields_GtAiStatusComments_DisplayName" xml:space="preserve">
+        <value>Prosjektstatus oppsummert (KI)</value>
+    </data>
+    <data name="SiteFields_GtAiStatus_DisplayName" xml:space="preserve">
+        <value>Prosjektstatus vurdert (KI)</value>
+    </data>
+    <data name="SiteFields_GtAiStatus_Choice_Weak" xml:space="preserve">
+        <value>Svak</value>
+    </data>
+    <data name="SiteFields_GtAiStatus_Choice_Satisfactory" xml:space="preserve">
+        <value>Tilfredsstillende</value>
+    </data>
+    <data name="SiteFields_GtAiStatus_Choice_Good" xml:space="preserve">
+        <value>God</value>
+    </data>
+    <data name="SiteFields_GtAiStatus_Choice_Excellent" xml:space="preserve">
+        <value>Prisverdig</value>
+    </data>
+    <data name="SiteFields_GtAiRecommendations_DisplayName" xml:space="preserve">
+        <value>Anbefalinger (KI)</value>
+    </data>
+    <data name="SiteFields_GtAiStatusPosted_DisplayName" xml:space="preserve">
+        <value>Prosjektstatus gjennomgått (KI)</value>
+    </data>
+    <data name="SiteFields_GtAiStatusPosted_Choice_Yes" xml:space="preserve">
+        <value>Ja</value>
+    </data>
+    <data name="SiteFields_GtAiStatusPosted_Choice_No" xml:space="preserve">
+        <value>Nei</value>
+    </data>
+    <data name="SiteFields_GtAiStatusScoreNumber_DisplayName" xml:space="preserve">
+        <value>Prosjektstatusscore (KI)</value>
+    </data>
+    <data name="SiteFields_GtAiChangesSincePrev_DisplayName" xml:space="preserve">
+        <value>Endringer siden forrige (KI)</value>
+    </data>
+    <data name="SiteFields_GtAiProcessedDateTime_DisplayName" xml:space="preserve">
+        <value>Tidspunkt prosessert (KI)</value>
+    </data>
     <data name="View_AllDocuments_DisplayName" xml:space="preserve">
         <value>Alle dokumenter</value>
     </data>
@@ -4878,51 +4932,6 @@
     </data>
     <data name="WebParts_UsefulLinks_Title" xml:space="preserve">
         <value>Nyttige lenker</value>
-    </data>
-    <data name="SiteFields_GtHubSiteId_DisplayName" xml:space="preserve">
-        <value>Hub-ID</value>
-    </data>
-    <data name="SiteFields_GtHubSiteId_Description" xml:space="preserve">
-        <value>ID til hubområdet.</value>
-    </data>
-    <data name="SiteFields_GtAiStatusComments_DisplayName" xml:space="preserve">
-        <value>Prosjektstatus oppsummert (KI)</value>
-    </data>
-    <data name="SiteFields_GtAiStatus_DisplayName" xml:space="preserve">
-        <value>Prosjektstatus vurdert (KI)</value>
-    </data>
-    <data name="SiteFields_GtAiStatus_Choice_Weak" xml:space="preserve">
-        <value>Svak</value>
-    </data>
-    <data name="SiteFields_GtAiStatus_Choice_Satisfactory" xml:space="preserve">
-        <value>Tilfredsstillende</value>
-    </data>
-    <data name="SiteFields_GtAiStatus_Choice_Good" xml:space="preserve">
-        <value>God</value>
-    </data>
-    <data name="SiteFields_GtAiStatus_Choice_Excellent" xml:space="preserve">
-        <value>Prisverdig</value>
-    </data>
-    <data name="SiteFields_GtAiRecommendations_DisplayName" xml:space="preserve">
-        <value>Anbefalinger (KI)</value>
-    </data>
-    <data name="SiteFields_GtAiStatusPosted_DisplayName" xml:space="preserve">
-        <value>Prosjektstatus gjennomgått (KI)</value>
-    </data>
-    <data name="SiteFields_GtAiStatusPosted_Choice_Yes" xml:space="preserve">
-        <value>Ja</value>
-    </data>
-    <data name="SiteFields_GtAiStatusPosted_Choice_No" xml:space="preserve">
-        <value>Nei</value>
-    </data>
-    <data name="SiteFields_GtAiStatusScoreNumber_DisplayName" xml:space="preserve">
-        <value>Prosjektstatusscore (KI)</value>
-    </data>
-    <data name="SiteFields_GtAiChangesSincePrev_DisplayName" xml:space="preserve">
-        <value>Endringer siden forrige (KI)</value>
-    </data>
-    <data name="SiteFields_GtAiProcessedDateTime_DisplayName" xml:space="preserve">
-        <value>Tidspunkt prosessert (KI)</value>
     </data>
     <data name="Security_SiteGroup_ProvisionPortal_Title" xml:space="preserve">
         <value>Bestillingsportalen</value>

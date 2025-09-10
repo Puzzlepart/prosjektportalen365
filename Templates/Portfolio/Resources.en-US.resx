@@ -1381,6 +1381,9 @@
     <data name="ListFields_Title_DisplayName" xml:space="preserve">
         <value>Title</value>
     </data>
+    <data name="ListFields_DocumentType_DisplayName" xml:space="preserve">
+        <value>Document type</value>
+    </data>
     <data name="Lists_ArchiveLog_Description" xml:space="preserve">
         <value>List for logging archive operations in projects</value>
     </data>
@@ -4519,6 +4522,57 @@
     <data name="SiteFields_Title_DisplayName" xml:space="preserve">
         <value>Title</value>
     </data>
+    <data name="SiteFields_GtDocumentType_Description" xml:space="preserve">
+        <value>Document type for classification of documents</value>
+    </data>
+    <data name="SiteFields_GtDocumentType_DisplayName" xml:space="preserve">
+        <value>Document Type</value>
+    </data>
+    <data name="SiteFields_GtHubSiteId_DisplayName" xml:space="preserve">
+        <value>Hub-ID</value>
+    </data>
+    <data name="SiteFields_GtHubSiteId_Description" xml:space="preserve">
+        <value>The ID of the hub site.</value>
+    </data>
+    <data name="SiteFields_GtAiStatusComments_DisplayName" xml:space="preserve">
+        <value>Project status summarized (AI)</value>
+    </data>
+    <data name="SiteFields_GtAiStatus_DisplayName" xml:space="preserve">
+        <value>Project status assessed (AI)</value>
+    </data>
+    <data name="SiteFields_GtAiStatus_Choice_Weak" xml:space="preserve">
+        <value>Weak</value>
+    </data>
+    <data name="SiteFields_GtAiStatus_Choice_Satisfactory" xml:space="preserve">
+        <value>Satisfactory</value>
+    </data>
+    <data name="SiteFields_GtAiStatus_Choice_Good" xml:space="preserve">
+        <value>Good</value>
+    </data>
+    <data name="SiteFields_GtAiStatus_Choice_Excellent" xml:space="preserve">
+        <value>Excellent</value>
+    </data>
+    <data name="SiteFields_GtAiRecommendations_DisplayName" xml:space="preserve">
+        <value>Recommendations (AI)</value>
+    </data>
+    <data name="SiteFields_GtAiStatusPosted_DisplayName" xml:space="preserve">
+        <value>Project status reviewed (AI)</value>
+    </data>
+    <data name="SiteFields_GtAiStatusPosted_Choice_Yes" xml:space="preserve">
+        <value>Yes</value>
+    </data>
+    <data name="SiteFields_GtAiStatusPosted_Choice_No" xml:space="preserve">
+        <value>No</value>
+    </data>
+    <data name="SiteFields_GtAiStatusScoreNumber_DisplayName" xml:space="preserve">
+        <value>Project status score (AI)</value>
+    </data>
+    <data name="SiteFields_GtAiChangesSincePrev_DisplayName" xml:space="preserve">
+        <value>Changes since previous (AI)</value>
+    </data>
+    <data name="SiteFields_GtAiProcessedDateTime_DisplayName" xml:space="preserve">
+        <value>Processed date/time (AI)</value>
+    </data>
     <data name="View_AllDocuments_DisplayName" xml:space="preserve">
         <value>All documents</value>
     </data>
@@ -4677,51 +4731,6 @@
     </data>
     <data name="WebParts_UsefulLinks_Title" xml:space="preserve">
         <value>Useful Links</value>
-    </data>
-    <data name="SiteFields_GtHubSiteId_DisplayName" xml:space="preserve">
-        <value>Hub-ID</value>
-    </data>
-    <data name="SiteFields_GtHubSiteId_Description" xml:space="preserve">
-        <value>The ID of the hub site.</value>
-    </data>
-    <data name="SiteFields_GtAiStatusComments_DisplayName" xml:space="preserve">
-        <value>Project status summarized (AI)</value>
-    </data>
-    <data name="SiteFields_GtAiStatus_DisplayName" xml:space="preserve">
-        <value>Project status assessed (AI)</value>
-    </data>
-    <data name="SiteFields_GtAiStatus_Choice_Weak" xml:space="preserve">
-        <value>Weak</value>
-    </data>
-    <data name="SiteFields_GtAiStatus_Choice_Satisfactory" xml:space="preserve">
-        <value>Satisfactory</value>
-    </data>
-    <data name="SiteFields_GtAiStatus_Choice_Good" xml:space="preserve">
-        <value>Good</value>
-    </data>
-    <data name="SiteFields_GtAiStatus_Choice_Excellent" xml:space="preserve">
-        <value>Excellent</value>
-    </data>
-    <data name="SiteFields_GtAiRecommendations_DisplayName" xml:space="preserve">
-        <value>Recommendations (AI)</value>
-    </data>
-    <data name="SiteFields_GtAiStatusPosted_DisplayName" xml:space="preserve">
-        <value>Project status reviewed (AI)</value>
-    </data>
-    <data name="SiteFields_GtAiStatusPosted_Choice_Yes" xml:space="preserve">
-        <value>Yes</value>
-    </data>
-    <data name="SiteFields_GtAiStatusPosted_Choice_No" xml:space="preserve">
-        <value>No</value>
-    </data>
-    <data name="SiteFields_GtAiStatusScoreNumber_DisplayName" xml:space="preserve">
-        <value>Project status score (AI)</value>
-    </data>
-    <data name="SiteFields_GtAiChangesSincePrev_DisplayName" xml:space="preserve">
-        <value>Changes since previous (AI)</value>
-    </data>
-    <data name="SiteFields_GtAiProcessedDateTime_DisplayName" xml:space="preserve">
-        <value>Processed date/time (AI)</value>
     </data>
     <data name="Security_SiteGroup_ProvisionPortal_Title" xml:space="preserve">
         <value>Provision portal</value>

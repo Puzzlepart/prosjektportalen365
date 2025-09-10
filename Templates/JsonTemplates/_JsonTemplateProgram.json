@@ -1291,7 +1291,13 @@
                     "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
                     "Name": "GtProjectPhase",
                     "Required": false,
-                    "DisplayName": "Fase"
+                    "DisplayName": "{{ListFields_ProjectPhase_DisplayName}}"
+                },
+                {
+                    "ID": "a245f222-bae0-4753-ab78-4ddf33020ea7",
+                    "Name": "GtDocumentType",
+                    "Required": false,
+                    "DisplayName": "{{ListFields_DocumentType_DisplayName}}"
                 }
             ],
             "Views": [
@@ -1301,6 +1307,7 @@
                         "DocIcon",
                         "LinkFilename",
                         "GtProjectPhase",
+                        "GtDocumentType",
                         "Modified",
                         "Editor"
                     ],
@@ -1315,6 +1322,7 @@
                     "ViewFields": [
                         "DocIcon",
                         "LinkFilename",
+                        "GtDocumentType",
                         "Modified",
                         "Editor"
                     ],
@@ -1544,7 +1552,7 @@
                 {
                     "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
                     "Name": "Title",
-                    "DisplayName": "Tittel",
+                    "DisplayName": "{{ListFields_Title_DisplayName}}",
                     "Required": false,
                     "Hidden": true
                 }

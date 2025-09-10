@@ -1131,6 +1131,12 @@
                     "Name": "GtProjectPhase",
                     "Required": false,
                     "DisplayName": "{{ListFields_ProjectPhase_DisplayName}}"
+                },
+                {
+                    "ID": "a245f222-bae0-4753-ab78-4ddf33020ea7",
+                    "Name": "GtDocumentType",
+                    "Required": false,
+                    "DisplayName": "{{ListFields_DocumentType_DisplayName}}"
                 }
             ],
             "Views": [
@@ -1140,6 +1146,7 @@
                         "DocIcon",
                         "LinkFilename",
                         "GtProjectPhase",
+                        "GtDocumentType",
                         "Modified",
                         "Editor"
                     ],
@@ -1154,6 +1161,7 @@
                     "ViewFields": [
                         "DocIcon",
                         "LinkFilename",
+                        "GtDocumentType",
                         "Modified",
                         "Editor"
                     ],

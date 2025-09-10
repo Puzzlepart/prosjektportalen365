@@ -369,7 +369,7 @@
                         </pnp:TermSet>
                         <pnp:TermSet Name="Dokumenttype" ID="a474bbee-b38f-45e7-869f-d0ce50d49a86" Description=" ">
                             <pnp:Terms>
-                                <pnp:Term Name="Avtaler/Kontrakt" ID="f9d4fee9-17d4-4a18-8108-a0dd41dc3c51" SourceTermId="f9d4fee9-17d4-4a18-8108-a0dd41dc3c51">
+                                <pnp:Term Name="Avtaler/Kontrakt" ID="f9d4fee9-17d4-4a18-8108-a0dd41dc3c51" CustomSortOrder="1" SourceTermId="f9d4fee9-17d4-4a18-8108-a0dd41dc3c51">
                                     <pnp:Terms>
                                         <pnp:Term Name="Bestilling på selve prosjektet" ID="55185924-0650-456d-b65f-40588487c4f6" SourceTermId="55185924-0650-456d-b65f-40588487c4f6">
                                             <pnp:LocalCustomProperties>
@@ -408,7 +408,7 @@
                                         </pnp:Term>
                                     </pnp:Terms>
                                 </pnp:Term>
-                                <pnp:Term Name="Søknader/Vedtak (tillatelser)" ID="7b670193-1d96-4b97-b17d-459bebe61251" SourceTermId="7b670193-1d96-4b97-b17d-459bebe61251">
+                                <pnp:Term Name="Søknader/Vedtak (tillatelser)" ID="7b670193-1d96-4b97-b17d-459bebe61251" CustomSortOrder="2" SourceTermId="7b670193-1d96-4b97-b17d-459bebe61251">
                                     <pnp:Terms>
                                         <pnp:Term Name="Dispensasjoner fra fylkeskommunene – Kulturminner" ID="ce89ef48-806a-4955-817a-26840cc48def" SourceTermId="ce89ef48-806a-4955-817a-26840cc48def">
                                             <pnp:LocalCustomProperties>
@@ -437,7 +437,7 @@
                                         </pnp:Term>
                                     </pnp:Terms>
                                 </pnp:Term>
-                                <pnp:Term Name="Evalueringer" ID="48d14c97-ea40-4313-9d3d-8b3a27aa17e7" SourceTermId="48d14c97-ea40-4313-9d3d-8b3a27aa17e7">
+                                <pnp:Term Name="Evalueringer" ID="48d14c97-ea40-4313-9d3d-8b3a27aa17e7" CustomSortOrder="3" SourceTermId="48d14c97-ea40-4313-9d3d-8b3a27aa17e7">
                                     <pnp:Terms>
                                         <pnp:Term Name="Evaluering av prosjektet som helhet" ID="b0f673a4-6296-4618-aa74-1e3b5a4564a7" SourceTermId="b0f673a4-6296-4618-aa74-1e3b5a4564a7">
                                             <pnp:LocalCustomProperties>
@@ -466,7 +466,7 @@
                                         </pnp:Term>
                                     </pnp:Terms>
                                 </pnp:Term>
-                                <pnp:Term Name="Rapport" ID="29f5a8e4-8de9-4f97-bdc0-dba7788f31cc" SourceTermId="29f5a8e4-8de9-4f97-bdc0-dba7788f31cc">
+                                <pnp:Term Name="Rapport" ID="29f5a8e4-8de9-4f97-bdc0-dba7788f31cc" CustomSortOrder="4" SourceTermId="29f5a8e4-8de9-4f97-bdc0-dba7788f31cc">
                                     <pnp:Terms>
                                         <pnp:Term Name="Forventede gevinster" ID="d5903a77-5b21-42ef-b361-12fef79a0504" SourceTermId="d5903a77-5b21-42ef-b361-12fef79a0504">
                                             <pnp:LocalCustomProperties>
@@ -535,7 +535,7 @@
                                         </pnp:Term>
                                     </pnp:Terms>
                                 </pnp:Term>
-                                <pnp:Term Name="Økonomi" ID="e1e91000-426f-4079-9730-64ef5d71e1d6" SourceTermId="e1e91000-426f-4079-9730-64ef5d71e1d6">
+                                <pnp:Term Name="Økonomi" ID="e1e91000-426f-4079-9730-64ef5d71e1d6" CustomSortOrder="5" SourceTermId="e1e91000-426f-4079-9730-64ef5d71e1d6">
                                     <pnp:Terms>
                                         <pnp:Term Name="Varsel om justering av budsjett eller framdriftsplan opp mot konsulent" ID="965d39ed-2859-4448-ac59-9c1a30ba6eaf" SourceTermId="965d39ed-2859-4448-ac59-9c1a30ba6eaf">
                                             <pnp:LocalCustomProperties>
@@ -557,7 +557,7 @@
                                                 <pnp:Property Key="Archiveable" Value="true" />
                                             </pnp:LocalCustomProperties>
                                         </pnp:Term>
-                                        <pnp:Term Name="Økonomi; rapportering, endringsmelding, avdragsnota (A-nota) og tilleggsnota (T-nota)" ID="3d1e4efc-ebd8-425c-97ae-e59a5448f459" SourceTermId="3d1e4efc-ebd8-425c-97ae-e59a5448f459">
+                                        <pnp:Term Name="Økonomi: rapportering, endringsmelding, avdragsnota (A-nota) og tilleggsnota (T-nota)" ID="3d1e4efc-ebd8-425c-97ae-e59a5448f459" SourceTermId="3d1e4efc-ebd8-425c-97ae-e59a5448f459">
                                             <pnp:LocalCustomProperties>
                                                 <pnp:Property Key="Archiveable" Value="false" />
                                             </pnp:LocalCustomProperties>
@@ -569,7 +569,7 @@
                                         </pnp:Term>
                                     </pnp:Terms>
                                 </pnp:Term>
-                                <pnp:Term Name="Plan" ID="aaeeedd3-23a3-448f-9699-d5cefd3cc419" SourceTermId="aaeeedd3-23a3-448f-9699-d5cefd3cc419">
+                                <pnp:Term Name="Plan" ID="aaeeedd3-23a3-448f-9699-d5cefd3cc419" CustomSortOrder="6" SourceTermId="aaeeedd3-23a3-448f-9699-d5cefd3cc419">
                                     <pnp:Terms>
                                         <pnp:Term Name="Framdriftsplan for prosjektering" ID="d591e47b-66e9-4c7b-93b2-5044d07dc473" SourceTermId="d591e47b-66e9-4c7b-93b2-5044d07dc473">
                                             <pnp:LocalCustomProperties>
@@ -648,7 +648,7 @@
                                         </pnp:Term>
                                     </pnp:Terms>
                                 </pnp:Term>
-                                <pnp:Term Name="Referat/Notat" ID="4bdd10f0-0e29-4fda-b6aa-d794661b1a7a" SourceTermId="4bdd10f0-0e29-4fda-b6aa-d794661b1a7a">
+                                <pnp:Term Name="Referat/Notat" ID="4bdd10f0-0e29-4fda-b6aa-d794661b1a7a" CustomSortOrder="7" SourceTermId="4bdd10f0-0e29-4fda-b6aa-d794661b1a7a">
                                     <pnp:Terms>
                                         <pnp:Term Name="Arbeidsmiljøutvalget (AMU)" ID="802e77ba-a39a-4f4f-ab16-c815e34b9da9" SourceTermId="802e77ba-a39a-4f4f-ab16-c815e34b9da9">
                                             <pnp:LocalCustomProperties>
@@ -727,7 +727,7 @@
                                         </pnp:Term>
                                     </pnp:Terms>
                                 </pnp:Term>
-                                <pnp:Term Name="Tegninger/Bilder/Kart" ID="a1c1d6eb-7614-41b7-ad72-c5d7b42d0841" SourceTermId="a1c1d6eb-7614-41b7-ad72-c5d7b42d0841">
+                                <pnp:Term Name="Tegninger/Bilder/Kart" ID="a1c1d6eb-7614-41b7-ad72-c5d7b42d0841" CustomSortOrder="8" SourceTermId="a1c1d6eb-7614-41b7-ad72-c5d7b42d0841">
                                     <pnp:Terms>
                                         <pnp:Term Name="Situasjonsplan (trafikkregulering, kjøp og omregulering av tomt)" ID="e6f9556e-f6e2-413c-985c-9ab0d7265b0a" SourceTermId="e6f9556e-f6e2-413c-985c-9ab0d7265b0a">
                                             <pnp:LocalCustomProperties>
@@ -756,9 +756,9 @@
                                         </pnp:Term>
                                     </pnp:Terms>
                                 </pnp:Term>
-                                <pnp:Term Name="Annet arkivverdig dokument" ID="49703887-8bcc-4c1c-9679-229ca7a69f93" SourceTermId="49703887-8bcc-4c1c-9679-229ca7a69f93">
+                                <pnp:Term Name="Annet arkivverdig dokument" ID="49703887-8bcc-4c1c-9679-229ca7a69f93" CustomSortOrder="9" SourceTermId="49703887-8bcc-4c1c-9679-229ca7a69f93">
                                 </pnp:Term>
-                                <pnp:Term Name="Arbeidsdokument" ID="c7656209-700c-4cbc-aa3a-1b64efcfd51b" SourceTermId="c7656209-700c-4cbc-aa3a-1b64efcfd51b">
+                                <pnp:Term Name="Arbeidsdokument" ID="c7656209-700c-4cbc-aa3a-1b64efcfd51b" CustomSortOrder="10" SourceTermId="c7656209-700c-4cbc-aa3a-1b64efcfd51b">
                                 </pnp:Term>
                             </pnp:Terms>
                         </pnp:TermSet>
