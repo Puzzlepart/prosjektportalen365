@@ -1147,6 +1147,12 @@
     <data name="ContentTypes_LogElement_Name" xml:space="preserve">
         <value>Log Element</value>
     </data>
+    <data name="ContentTypes_ArchiveLogElement_Description" xml:space="preserve">
+        <value/>
+    </data>
+    <data name="ContentTypes_ArchiveLogElement_Name" xml:space="preserve">
+        <value>Archive Log Element</value>
+    </data>
     <data name="ContentTypes_MeasureIndicator_Name" xml:space="preserve">
         <value>Measure Indicator</value>
     </data>
