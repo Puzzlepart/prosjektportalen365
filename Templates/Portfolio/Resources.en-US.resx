@@ -3532,6 +3532,12 @@
     <data name="SiteFields_GtLogReference_DisplayName" xml:space="preserve">
         <value>Reference</value>
     </data>
+    <data name="SiteFields_GtLogArchiveUrl_Description" xml:space="preserve">
+        <value>URL to the archived content</value>
+    </data>
+    <data name="SiteFields_GtLogArchiveUrl_DisplayName" xml:space="preserve">
+        <value>Archived URL</value>
+    </data>
     <data name="SiteFields_GtLogStatus_Description" xml:space="preserve">
         <value>Status of the archiving operation</value>
     </data>

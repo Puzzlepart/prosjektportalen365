@@ -3685,6 +3685,12 @@
     <data name="SiteFields_GtLogReference_DisplayName" xml:space="preserve">
         <value>Referanse</value>
     </data>
+    <data name="SiteFields_GtLogArchiveUrl_Description" xml:space="preserve">
+        <value>URL til det arkiverte innholdet</value>
+    </data>
+    <data name="SiteFields_GtLogArchiveUrl_DisplayName" xml:space="preserve">
+        <value>Arkivert URL</value>
+    </data>
     <data name="SiteFields_GtLogStatus_Description" xml:space="preserve">
         <value>Status for arkiveringsoperasjonen</value>
     </data>

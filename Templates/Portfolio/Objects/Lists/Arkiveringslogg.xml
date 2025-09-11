@@ -19,6 +19,7 @@
         <FieldRef Name="GtLogScope" />
         <FieldRef Name="GtLogWebUrl" />
         <FieldRef Name="GtLogReference" />
+        <FieldRef Name="GtLogArchiveUrl" />
         <FieldRef Name="Created" />
         <FieldRef Name="Author" />
       </ViewFields>

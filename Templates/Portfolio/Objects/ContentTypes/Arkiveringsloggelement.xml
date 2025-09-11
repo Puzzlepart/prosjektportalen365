@@ -8,5 +8,6 @@
         <pnp:FieldRef ID="80dea622-3202-4896-b33f-9720aa19adbc" Name="GtLogScope" UpdateChildren="true" />
         <pnp:FieldRef ID="b9bbd94f-f9c0-4512-ad77-404f8a2c64b1" Name="GtLogWebUrl" UpdateChildren="true" />
         <pnp:FieldRef ID="95468edd-45dd-45d9-a7d4-5e1d543e8aa6" Name="GtLogReference" UpdateChildren="true" />
+        <pnp:FieldRef ID="436e52e0-3c7c-4711-aa1a-3a477d2b14ad" Name="GtLogArchiveUrl" UpdateChildren="true" />
     </pnp:FieldRefs>
 </pnp:ContentType>
