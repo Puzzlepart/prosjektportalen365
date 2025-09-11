@@ -80,7 +80,7 @@
       <pnp:DataValue FieldName="GtSettingsId">{cc992fb7-b59a-4e19-9338-a7e75bec2fd3}</pnp:DataValue>
       <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_RiskMatrix_RiskMatrixDefaultConfigurationFile_Title}</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsKey">RiskMatrixDefaultConfigurationFile</pnp:DataValue>
-      <pnp:DataValue FieldName="GtSettingsValue">standard-konfigurasjon.json</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsValue">{resource:Lists_Global_Settings_Category_RiskMatrix_RiskMatrixDefaultConfigurationFile_Value}</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_RiskMatrix}</pnp:DataValue>
     </pnp:DataRow>
@@ -88,7 +88,7 @@
       <pnp:DataValue FieldName="GtSettingsId">{eb334b01-bf84-435f-a74d-de48bed6affe}</pnp:DataValue>
       <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_OpportunityMatrix_OpportunityMatrixDefaultConfigurationFile_Title}</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsKey">OpportunityMatrixDefaultConfigurationFile</pnp:DataValue>
-      <pnp:DataValue FieldName="GtSettingsValue">standard-konfigurasjon.json</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsValue">{resource:Lists_Global_Settings_Category_OpportunityMatrix_OpportunityMatrixDefaultConfigurationFile_Value}</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_OpportunityMatrix}</pnp:DataValue>
     </pnp:DataRow>

@@ -1415,7 +1415,7 @@
         <value>Lists/Arkiveringslogg</value>
     </data>
     <data name="Lists_BenefitsAnalysis_Title" xml:space="preserve">
-        <value>Gevinstanalyse</value>
+        <value>Gevinstanalyse og gevinstrealiseringsplan</value>
     </data>
     <data name="Lists_BenefitsFollowup_Title" xml:space="preserve">
         <value>Gevinstoppfølging</value>
@@ -1645,6 +1645,9 @@
     <data name="Lists_Global_Settings_Category_OpportunityMatrix_OpportunityMatrixDefaultConfigurationFile_Title" xml:space="preserve">
         <value>Standard konfigurasjon for Mulighetsmatrise</value>
     </data>
+    <data name="Lists_Global_Settings_Category_OpportunityMatrix_OpportunityMatrixDefaultConfigurationFile_Value" xml:space="preserve">
+        <value>standard-konfigurasjon.json</value>
+    </data>
     <data name="Lists_Global_Settings_Category_RiskActionsPlanner" xml:space="preserve">
         <value>Usikkerhetstiltak i Planner</value>
     </data>
@@ -1674,6 +1677,9 @@
     </data>
     <data name="Lists_Global_Settings_Category_RiskMatrix_RiskMatrixDefaultConfigurationFile_Title" xml:space="preserve">
         <value>Standard konfigurasjon for Risikomatrise</value>
+    </data>
+    <data name="Lists_Global_Settings_Category_RiskMatrix_RiskMatrixDefaultConfigurationFile_Value" xml:space="preserve">
+        <value>standard-konfigurasjon.json</value>
     </data>
     <data name="Lists_Global_Settings_Description" xml:space="preserve">
         <value>Globale innstillinger for installasjonen av Prosjektportalen 365.</value>
@@ -2657,7 +2663,7 @@
         <value>Usikkerhet</value>
     </data>
     <data name="Navigation_BenefitsAnalysis_Title" xml:space="preserve">
-        <value>Gevinstanalyse</value>
+        <value>Gevinstanalyse og gevinstrealiseringsplan</value>
     </data>
     <data name="Navigation_BenefitsAnalysis_Url" xml:space="preserve">
         <value>Lists/Gevinstanalyse og gevinstrealiseringsplan/AllItems.aspx</value>
@@ -4832,10 +4838,10 @@
         <value>Uten ansvarlig</value>
     </data>
     <data name="WebParts_BenefitsOverviewCategory_Title" xml:space="preserve">
-        <value>Gevinstoversikt kategori</value>
+        <value>Gevinstoversikt</value>
     </data>
     <data name="WebParts_BenefitsOverviewDataSource_Title" xml:space="preserve">
-        <value>Gevinstoversikt datakilde</value>
+        <value>Alle gevinstelementer for prosjektet</value>
     </data>
     <data name="WebParts_BenefitsOverview_Title" xml:space="preserve">
         <value>Gevinstoversikt</value>

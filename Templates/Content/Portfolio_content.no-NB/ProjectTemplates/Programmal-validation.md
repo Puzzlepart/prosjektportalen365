@@ -1,4 +1,4 @@
-_The template was validated 29.4.2025, 12:05:02_
+_The template was validated 9/11/2025, 9:34:17 AM_
 
 The template contains the following tokens that has not been found in the .resx files:
 
@@ -10,7 +10,7 @@ _No tokens with missing translations or replacement values found._
 
 ```txt
 {
-    "Version": "1.11.0",
+    "Version": "1.11.1",
     "Parameters": {
         "ProvisionSiteFields": "Kolonner for Prosjektportalen (Prosjekt)",
         "CustomSiteFields": "Egendefinerte kolonner for Prosjektportalen",
@@ -525,7 +525,7 @@ _No tokens with missing translations or replacement values found._
             "CommentsDisabled": true,
             "VerticalSection": [
                 {
-                    "Id": "283a4b49-c2ee-4917-8f58-07c31e81733e",
+                    "Id": "b8bec0be-2354-443d-a3ca-24b36e8ea7dc",
                     "Properties": {
                         "title": "Programinformasjon",
                         "statusReportsCount": 0,
@@ -550,7 +550,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "3ebefd70-f62e-48d8-836d-482b74d481bf",
+                                    "Id": "4449d3dc-fa58-4982-b87c-5a893114e7b7",
                                     "Properties": {
                                         "phaseField": "Fase",
                                         "syncPropertiesAfterPhaseChange": true,
@@ -625,7 +625,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "da500bfe-49c7-4553-939a-b33254d77763",
+                                    "Id": "9570e369-21a6-4bf5-8198-13506499de52",
                                     "Properties": {
                                         "title": "Administrasjon av underområder"
                                     }
@@ -648,7 +648,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "77c58192-1d15-4c09-b62a-96f9c9ffe8ad",
+                                    "Id": "01417142-67c8-498b-a6da-6e78003023dd",
                                     "Properties": {
                                         "title": "Oversikt over underområder",
                                         "showCommandBar": true,
@@ -677,7 +677,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "555cb52f-48ef-4fa1-8984-7ec0176b2d52",
+                                    "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
                                     "Properties": {
                                         "title": "Gevinster for underområder",
                                         "dataSource": "Alle gevinstelementer for underområder",
@@ -706,7 +706,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "555cb52f-48ef-4fa1-8984-7ec0176b2d52",
+                                    "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
                                     "Properties": {
                                         "title": "Kommunikasjonsplaner for underområder",
                                         "dataSource": "Alle kommunikasjonsplaner for underområder",
@@ -734,7 +734,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "555cb52f-48ef-4fa1-8984-7ec0176b2d52",
+                                    "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
                                     "Properties": {
                                         "title": "Ressursallokeringer for underområder",
                                         "dataSource": "Alle ressursallokeringer for underområder",
@@ -765,7 +765,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "70c29af4-b55a-4207-911b-8f254ed99f03",
+                                    "Id": "f97a38ab-78c2-400e-899f-b0d4cda76166",
                                     "Properties": {
                                         "title": "Tidslinje for underområder",
                                         "infoText": "Her listes alle prosjektene med start- og sluttdato i prosjektet. Prosjekttidslinjen støtter også faser, delfaser og milepæler. For å zoome inn/ut i tidslinje: ALT+Musehjul."
@@ -789,7 +789,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "3231d86b-9b07-45f0-b112-a2f80d31b2f1",
+                                    "Id": "681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6",
                                     "Properties": {
                                         "title": "Programstatus",
                                         "riskMatrix": {
@@ -816,7 +816,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "3fd903ad-3179-459a-b2b9-8d2963da8af2",
+                                    "Id": "d156652b-9121-47af-89ae-1fe8427c53da",
                                     "Properties": {
                                         "listName": "Tidslinjeinnhold",
                                         "showTimeline": true,
@@ -845,7 +845,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "555cb52f-48ef-4fa1-8984-7ec0176b2d52",
+                                    "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
                                     "Properties": {
                                         "title": "Leveranser for underområder",
                                         "dataSource": "Alle leveranser for underområder",
@@ -874,7 +874,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "555cb52f-48ef-4fa1-8984-7ec0176b2d52",
+                                    "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
                                     "Properties": {
                                         "title": "Usikkerheter for underområder",
                                         "dataSource": "Alle risikoelementer for underområder",
@@ -1135,7 +1135,7 @@ _No tokens with missing translations or replacement values found._
                     }
                 },
                 {
-                    "Title": "Nåværende risikoer",
+                    "Title": "Aktuelle risikoer",
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
@@ -1152,7 +1152,7 @@ _No tokens with missing translations or replacement values found._
                     }
                 },
                 {
-                    "Title": "Nåværende muligheter",
+                    "Title": "Aktuelle muligheter",
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
@@ -1276,7 +1276,7 @@ _No tokens with missing translations or replacement values found._
                     }
                 },
                 {
-                    "Title": "Nåværende fase",
+                    "Title": "Gjeldende fase",
                     "ViewFields": [
                         "ID",
                         "LinkTitle"
@@ -1303,6 +1303,12 @@ _No tokens with missing translations or replacement values found._
                     "Name": "GtProjectPhase",
                     "Required": false,
                     "DisplayName": "Fase"
+                },
+                {
+                    "ID": "a245f222-bae0-4753-ab78-4ddf33020ea7",
+                    "Name": "GtDocumentType",
+                    "Required": false,
+                    "DisplayName": "Dokumenttype"
                 }
             ],
             "Views": [
@@ -1312,6 +1318,7 @@ _No tokens with missing translations or replacement values found._
                         "DocIcon",
                         "LinkFilename",
                         "GtProjectPhase",
+                        "GtDocumentType",
                         "Modified",
                         "Editor"
                     ],
@@ -1322,10 +1329,11 @@ _No tokens with missing translations or replacement values found._
                     }
                 },
                 {
-                    "Title": "Nåværende fase",
+                    "Title": "Gjeldende fase",
                     "ViewFields": [
                         "DocIcon",
                         "LinkFilename",
+                        "GtDocumentType",
                         "Modified",
                         "Editor"
                     ],
@@ -1339,7 +1347,7 @@ _No tokens with missing translations or replacement values found._
             ]
         },
         {
-            "Title": "Gevinstanalyse",
+            "Title": "Gevinstanalyse og gevinstrealiseringsplan",
             "Description": "",
             "Template": 100,
             "ContentTypesEnabled": true,
@@ -1464,8 +1472,8 @@ _No tokens with missing translations or replacement values found._
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field Type=\"Lookup\" DisplayName=\"Gevinst\" List=\"{listid:Gevinstanalyse}\" ShowField=\"Title\" ID=\"{8d70fa93-b547-46f1-84e7-4982f8c9c675}\" StaticName=\"GtGainLookup\" Name=\"GtGainLookup\"  />",
-                "<Field Type=\"Lookup\" DisplayName=\"Gevinst-ID\" List=\"{listid:Gevinstanalyse}\" ShowField=\"ID\" FieldRef=\"8d70fa93-b547-46f1-84e7-4982f8c9c675\" ReadOnly=\"TRUE\" UnlimitedLengthInDocumentLibrary=\"FALSE\" ID=\"{c239539c-8672-46cc-be77-fb53322f71ae}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtGainLookup_ID\" Name=\"GtGainLookup_ID\" />"
+                "<Field Type=\"Lookup\" DisplayName=\"Gevinst\" List=\"{listid:Gevinstanalyse og gevinstrealiseringsplan}\" ShowField=\"Title\" ID=\"{8d70fa93-b547-46f1-84e7-4982f8c9c675}\" StaticName=\"GtGainLookup\" Name=\"GtGainLookup\"  />",
+                "<Field Type=\"Lookup\" DisplayName=\"Gevinst-ID\" List=\"{listid:Gevinstanalyse og gevinstrealiseringsplan}\" ShowField=\"ID\" FieldRef=\"8d70fa93-b547-46f1-84e7-4982f8c9c675\" ReadOnly=\"TRUE\" UnlimitedLengthInDocumentLibrary=\"FALSE\" ID=\"{c239539c-8672-46cc-be77-fb53322f71ae}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtGainLookup_ID\" Name=\"GtGainLookup_ID\" />"
             ],
             "Views": [
                 {
@@ -1595,6 +1603,6 @@ _No tokens with missing translations or replacement values found._
 ## Template Path
 
 ```txt
-/Users/olemp/code/prosjektportalen365/Templates/Content/Portfolio_content.no-NB/ProjectTemplates/Programmal.txt
+/Users/bloom/Code/Prosjektportalen/pp365_110/Templates/Content/Portfolio_content.no-NB/ProjectTemplates/Programmal.txt
 ```
 

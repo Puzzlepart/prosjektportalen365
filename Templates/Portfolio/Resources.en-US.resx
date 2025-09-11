@@ -1400,7 +1400,7 @@
         <value>Lists/ArchiveLog</value>
     </data>
     <data name="Lists_BenefitsAnalysis_Title" xml:space="preserve">
-        <value>Benefits analysis</value>
+        <value>Benefits analysis and realization plan</value>
     </data>
     <data name="Lists_BenefitsFollowup_Title" xml:space="preserve">
         <value>Benefits follow-up</value>
@@ -1463,7 +1463,7 @@
         <value>Benefit elements on portfolio level</value>
     </data>
     <data name="Lists_DataSources_Category_BenefitOverview_Project" xml:space="preserve">
-        <value>Benefits elements for the project</value>
+        <value>Benefit elements for the project</value>
     </data>
     <data name="Lists_DataSources_Category_CommunicationPlan" xml:space="preserve">
         <value>Communication Plan</value>
@@ -1630,6 +1630,9 @@
     <data name="Lists_Global_Settings_Category_OpportunityMatrix_OpportunityMatrixDefaultConfigurationFile_Title" xml:space="preserve">
         <value>Standard configuration for Opportunity Matrix</value>
     </data>
+    <data name="Lists_Global_Settings_Category_OpportunityMatrix_OpportunityMatrixDefaultConfigurationFile_Value" xml:space="preserve">
+        <value>standard-configuration.json</value>
+    </data>
     <data name="Lists_Global_Settings_Category_RiskActionsPlanner" xml:space="preserve">
         <value>Risk Actions in Planner</value>
     </data>
@@ -1659,6 +1662,9 @@
     </data>
     <data name="Lists_Global_Settings_Category_RiskMatrix_RiskMatrixDefaultConfigurationFile_Title" xml:space="preserve">
         <value>Standard configuration for Risk Matrix</value>
+    </data>
+    <data name="Lists_Global_Settings_Category_RiskMatrix_RiskMatrixDefaultConfigurationFile_Value" xml:space="preserve">
+        <value>standard-configuration.json</value>
     </data>
     <data name="Lists_Global_Settings_Description" xml:space="preserve">
         <value>Global settings for the installation of Project Portal.</value>
@@ -2549,10 +2555,10 @@
         <value>Uncertainty</value>
     </data>
     <data name="Navigation_BenefitsAnalysis_Title" xml:space="preserve">
-        <value>Benefits Analysis</value>
+        <value>Benefits Analysis and Realization Plan</value>
     </data>
     <data name="Navigation_BenefitsAnalysis_Url" xml:space="preserve">
-        <value>Lists/Benefits%20analysis/AllItems.aspx</value>
+        <value>Lists/Benefits%20analysis%20and%20realization%20plan/AllItems.aspx</value>
     </data>
     <data name="Navigation_BenefitsFollowup_Title" xml:space="preserve">
         <value>Benefits Follow-up</value>
@@ -4634,13 +4640,13 @@
         <value>Without responsible</value>
     </data>
     <data name="WebParts_BenefitsOverviewCategory_Title" xml:space="preserve">
-        <value>Benefits Overview Category</value>
+        <value>Benefit Overview</value>
     </data>
     <data name="WebParts_BenefitsOverviewDataSource_Title" xml:space="preserve">
-        <value>Benefits Overview Data Source</value>
+        <value>Benefit elements for the project</value>
     </data>
     <data name="WebParts_BenefitsOverview_Title" xml:space="preserve">
-        <value>Benefits Overview</value>
+        <value>Benefit Overview</value>
     </data>
     <data name="WebParts_CurrentPhase_Title" xml:space="preserve">
         <value>Current Phase</value>

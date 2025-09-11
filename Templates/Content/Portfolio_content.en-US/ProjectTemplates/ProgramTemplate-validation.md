@@ -1,4 +1,4 @@
-_The template was validated 29.4.2025, 12:05:02_
+_The template was validated 9/11/2025, 9:34:17 AM_
 
 The template contains the following tokens that has not been found in the .resx files:
 
@@ -10,7 +10,7 @@ _No tokens with missing translations or replacement values found._
 
 ```txt
 {
-    "Version": "1.11.0",
+    "Version": "1.11.1",
     "Parameters": {
         "ProvisionSiteFields": "Project Portal Columns (Project)",
         "CustomSiteFields": "Project Portal Columns (Custom)",
@@ -525,7 +525,7 @@ _No tokens with missing translations or replacement values found._
             "CommentsDisabled": true,
             "VerticalSection": [
                 {
-                    "Id": "283a4b49-c2ee-4917-8f58-07c31e81733e",
+                    "Id": "b8bec0be-2354-443d-a3ca-24b36e8ea7dc",
                     "Properties": {
                         "title": "Program Information",
                         "statusReportsCount": 0,
@@ -550,7 +550,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "3ebefd70-f62e-48d8-836d-482b74d481bf",
+                                    "Id": "4449d3dc-fa58-4982-b87c-5a893114e7b7",
                                     "Properties": {
                                         "phaseField": "Project Phase",
                                         "syncPropertiesAfterPhaseChange": true,
@@ -625,7 +625,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "da500bfe-49c7-4553-939a-b33254d77763",
+                                    "Id": "9570e369-21a6-4bf5-8198-13506499de52",
                                     "Properties": {
                                         "title": "Admin"
                                     }
@@ -648,7 +648,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "77c58192-1d15-4c09-b62a-96f9c9ffe8ad",
+                                    "Id": "01417142-67c8-498b-a6da-6e78003023dd",
                                     "Properties": {
                                         "title": "Overview for child projects",
                                         "showCommandBar": true,
@@ -677,7 +677,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "555cb52f-48ef-4fa1-8984-7ec0176b2d52",
+                                    "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
                                     "Properties": {
                                         "title": "Benefits for child projects",
                                         "dataSource": "All benefit elements for child projects",
@@ -706,7 +706,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "555cb52f-48ef-4fa1-8984-7ec0176b2d52",
+                                    "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
                                     "Properties": {
                                         "title": "Communication Plans for child projects",
                                         "dataSource": "Alle communication plans for child projects",
@@ -734,7 +734,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "555cb52f-48ef-4fa1-8984-7ec0176b2d52",
+                                    "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
                                     "Properties": {
                                         "title": "Resource allocations for child projects",
                                         "dataSource": "All resource allocations for child projects",
@@ -765,7 +765,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "70c29af4-b55a-4207-911b-8f254ed99f03",
+                                    "Id": "f97a38ab-78c2-400e-899f-b0d4cda76166",
                                     "Properties": {
                                         "title": "Timeline for child projects",
                                         "infoText": "Here you will find a list of all projects with start and end dates in the project. The project timeline also supports phases, subphases and milestones. To zoom in/out in the timeline: ALT+Mousewheel."
@@ -789,7 +789,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "3231d86b-9b07-45f0-b112-a2f80d31b2f1",
+                                    "Id": "681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6",
                                     "Properties": {
                                         "title": "Program Status",
                                         "riskMatrix": {
@@ -816,7 +816,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "3fd903ad-3179-459a-b2b9-8d2963da8af2",
+                                    "Id": "d156652b-9121-47af-89ae-1fe8427c53da",
                                     "Properties": {
                                         "listName": "Timeline Content",
                                         "showTimeline": true,
@@ -824,7 +824,7 @@ _No tokens with missing translations or replacement values found._
                                         "showTimelineList": true,
                                         "showProjectDeliveries": false,
                                         "projectDeliveriesListName": "Program Deliveries",
-                                        "configItemTitle": "Project Delivery"
+                                        "configItemTitle": "Project delivery"
                                     }
                                 }
                             ]
@@ -845,7 +845,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "555cb52f-48ef-4fa1-8984-7ec0176b2d52",
+                                    "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
                                     "Properties": {
                                         "title": "Deliveries for child projects",
                                         "dataSource": "All Project Deliveries for child projects",
@@ -874,7 +874,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "555cb52f-48ef-4fa1-8984-7ec0176b2d52",
+                                    "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
                                     "Properties": {
                                         "title": "Uncertainties for child projects",
                                         "dataSource": "All risks for child projects",
@@ -1302,7 +1302,13 @@ _No tokens with missing translations or replacement values found._
                     "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
                     "Name": "GtProjectPhase",
                     "Required": false,
-                    "DisplayName": "Fase"
+                    "DisplayName": "Project phase"
+                },
+                {
+                    "ID": "a245f222-bae0-4753-ab78-4ddf33020ea7",
+                    "Name": "GtDocumentType",
+                    "Required": false,
+                    "DisplayName": "Document type"
                 }
             ],
             "Views": [
@@ -1312,6 +1318,7 @@ _No tokens with missing translations or replacement values found._
                         "DocIcon",
                         "LinkFilename",
                         "GtProjectPhase",
+                        "GtDocumentType",
                         "Modified",
                         "Editor"
                     ],
@@ -1326,6 +1333,7 @@ _No tokens with missing translations or replacement values found._
                     "ViewFields": [
                         "DocIcon",
                         "LinkFilename",
+                        "GtDocumentType",
                         "Modified",
                         "Editor"
                     ],
@@ -1339,7 +1347,7 @@ _No tokens with missing translations or replacement values found._
             ]
         },
         {
-            "Title": "Benefits analysis",
+            "Title": "Benefits analysis and realization plan",
             "Description": "",
             "Template": 100,
             "ContentTypesEnabled": true,
@@ -1464,8 +1472,8 @@ _No tokens with missing translations or replacement values found._
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field Type=\"Lookup\" DisplayName=\"Gain\" List=\"{listid:Benefits analysis}\" ShowField=\"Title\" ID=\"{8d70fa93-b547-46f1-84e7-4982f8c9c675}\" StaticName=\"GtGainLookup\" Name=\"GtGainLookup\"  />",
-                "<Field Type=\"Lookup\" DisplayName=\"Gain ID\" List=\"{listid:Benefits analysis}\" ShowField=\"ID\" FieldRef=\"8d70fa93-b547-46f1-84e7-4982f8c9c675\" ReadOnly=\"TRUE\" UnlimitedLengthInDocumentLibrary=\"FALSE\" ID=\"{c239539c-8672-46cc-be77-fb53322f71ae}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtGainLookup_ID\" Name=\"GtGainLookup_ID\" />"
+                "<Field Type=\"Lookup\" DisplayName=\"Gain\" List=\"{listid:Benefits analysis and realization plan}\" ShowField=\"Title\" ID=\"{8d70fa93-b547-46f1-84e7-4982f8c9c675}\" StaticName=\"GtGainLookup\" Name=\"GtGainLookup\"  />",
+                "<Field Type=\"Lookup\" DisplayName=\"Gain ID\" List=\"{listid:Benefits analysis and realization plan}\" ShowField=\"ID\" FieldRef=\"8d70fa93-b547-46f1-84e7-4982f8c9c675\" ReadOnly=\"TRUE\" UnlimitedLengthInDocumentLibrary=\"FALSE\" ID=\"{c239539c-8672-46cc-be77-fb53322f71ae}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtGainLookup_ID\" Name=\"GtGainLookup_ID\" />"
             ],
             "Views": [
                 {
@@ -1555,7 +1563,7 @@ _No tokens with missing translations or replacement values found._
                 {
                     "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
                     "Name": "Title",
-                    "DisplayName": "Tittel",
+                    "DisplayName": "Title",
                     "Required": false,
                     "Hidden": true
                 }
@@ -1595,6 +1603,6 @@ _No tokens with missing translations or replacement values found._
 ## Template Path
 
 ```txt
-/Users/olemp/code/prosjektportalen365/Templates/Content/Portfolio_content.en-US/ProjectTemplates/ProgramTemplate.txt
+/Users/bloom/Code/Prosjektportalen/pp365_110/Templates/Content/Portfolio_content.en-US/ProjectTemplates/ProgramTemplate.txt
 ```
 
