@@ -95,6 +95,7 @@ $SHAREPOINT_FRAMEWORK_BASEPATH = "$ROOT_PATH/SharePointFramework"
 $PNP_TEMPLATES_BASEPATH = "$ROOT_PATH/Templates"
 $SITE_SCRIPTS_BASEPATH = "$ROOT_PATH/SiteScripts/Src"
 $PNP_BUNDLE_PATH = "$PSScriptRoot/PnP.PowerShell"
+$PNP_VERSION = "3.1.0"
 $GIT_HASH = git log --pretty=format:'%h' -n 1
 $RELEASE_NAME = "$($NPM_PACKAGE_FILE.name)-$($NPM_PACKAGE_FILE.version).$($GIT_HASH)"
 if ($USE_CHANNEL_CONFIG) {
@@ -136,8 +137,13 @@ if ($CI.IsPresent) {
 }
 else {
     if(-not $SkipImportModule.IsPresent) {
-        Import-Module $PNP_BUNDLE_PATH/PnP.PowerShell.psd1 -DisableNameChecking -ErrorAction SilentlyContinue
+        Import-Module $PNP_BUNDLE_PATH/$PNP_VERSION/PnP.PowerShell.psd1 -DisableNameChecking -ErrorAction SilentlyContinue
     }
+}
+
+if ($null -eq (Get-Command Connect-PnPOnline) -or (Get-Command Connect-PnPOnline).Version -lt [version]$PNP_VERSION) {
+    Write-Host "[ERROR] Correct PnP.PowerShell module not found. Please install it from PowerShell Gallery or do not use -SkipLoadingBundle." -ForegroundColor Red
+    exit 0
 }
 
 if ($CI.IsPresent) {
