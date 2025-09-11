@@ -270,6 +270,7 @@ declare interface IProjectWebPartsStrings {
   ArchiveLoadingText: string
   ArchiveContinueText: string
   ArchiveSelectAllText: string
+  ArchiveNotArchivableText: string
   UseArchiveFieldLabel: string
   HookArchiveUrlFieldLabel: string
   HookArchiveUrlFieldDescription: string

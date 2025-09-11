@@ -71,14 +71,14 @@ export const ArchiveView: FC = () => {
             </Text>
           </div>
 
-          {section.expanded && section.items.length > 1 && (
+          {section.expanded && section.items.filter((item) => !item.disabled).length > 1 && (
             <div className={styles.selectAllButton}>
               <ToggleButton
                 appearance='subtle'
                 size='small'
-                checked={section.items.every((item) => item.selected)}
+                checked={section.items.filter((item) => !item.disabled).every((item) => item.selected)}
                 icon={
-                  section.items.every((item) => item.selected)
+                  section.items.filter((item) => !item.disabled).every((item) => item.selected)
                     ? getFluentIcon('SelectAllOn')
                     : getFluentIcon('SelectAllOff')
                 }
@@ -95,11 +95,19 @@ export const ArchiveView: FC = () => {
                 <div key={item.id} className={styles.item}>
                   <Checkbox
                     checked={item.selected}
-                    onChange={() => toggleItemSelection(section.key, item.id)}
+                    disabled={item.disabled}
+                    onChange={() => !item.disabled && toggleItemSelection(section.key, item.id)}
                     label={
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         {getItemIcon(item)}
-                        <Text className={styles.itemTitle}>{item.title}</Text>
+                        <Text className={`${styles.itemTitle} ${item.disabled ? styles.disabledItem : ''}`}>
+                          {item.title}
+                          {item.disabled && (
+                            <Text size={200} className={styles.notArchivableText}>
+                              {` (${strings.ArchiveNotArchivableText})`}
+                            </Text>
+                          )}
+                        </Text>
                       </div>
                     }
                   />

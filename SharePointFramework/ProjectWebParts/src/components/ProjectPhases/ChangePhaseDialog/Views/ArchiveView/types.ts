@@ -23,6 +23,11 @@ export interface IArchiveItem {
    * Whether the item is selected for archiving
    */
   selected: boolean
+
+  /**
+   * Whether the item is disabled (cannot be selected)
+   */
+  disabled?: boolean
 }
 
 export interface IArchiveSection {

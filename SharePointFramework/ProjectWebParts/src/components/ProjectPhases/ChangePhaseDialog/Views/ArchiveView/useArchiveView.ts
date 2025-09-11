@@ -65,7 +65,9 @@ export function useArchiveView() {
           ? {
               ...section,
               items: section.items.map((item) =>
-                item.id === itemId ? { ...item, selected: !item.selected } : item
+                item.id === itemId && !item.disabled
+                  ? { ...item, selected: !item.selected }
+                  : item
               )
             }
           : section
@@ -77,10 +79,15 @@ export function useArchiveView() {
     setSections((prevSections) =>
       prevSections.map((section) => {
         if (section.key === sectionKey) {
-          const allSelected = section.items.every((item) => item.selected)
+          const enabledItems = section.items.filter((item) => !item.disabled)
+          const allEnabledSelected = enabledItems.every((item) => item.selected)
           return {
             ...section,
-            items: section.items.map((item) => ({ ...item, selected: !allSelected }))
+            items: section.items.map((item) =>
+              item.disabled
+                ? item
+                : { ...item, selected: !allEnabledSelected }
+            )
           }
         }
         return section

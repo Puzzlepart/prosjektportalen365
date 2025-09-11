@@ -245,6 +245,7 @@ define([], function () {
     ArchiveLoadingText: 'Loading archive options...',
     ArchiveContinueText: 'Continue',
     ArchiveSelectAllText: 'Select all',
+    ArchiveNotArchivableText: 'Not archivable',
     UseArchiveFieldLabel: 'Use archive functionality',
     HookArchiveUrlFieldLabel: 'Archive hook URL',
     HookArchiveUrlFieldDescription: 'URL for the archive webhook endpoint that will handle the archiving process',

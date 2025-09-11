@@ -272,6 +272,7 @@ define([], function () {
     ArchiveLoadingText: 'Laster arkiveringsalternativer...',
     ArchiveContinueText: 'Fortsett',
     ArchiveSelectAllText: 'Velg alle',
+    ArchiveNotArchivableText: 'Ikke arkiverbar',
     UseArchiveFieldLabel: 'Bruk arkivfunksjonalitet',
     HookArchiveUrlFieldLabel: 'Arkiv hook URL',
     HookArchiveUrlFieldDescription: 'URL for arkiv webhook endpoint som håndterer arkiveringsprosessen',

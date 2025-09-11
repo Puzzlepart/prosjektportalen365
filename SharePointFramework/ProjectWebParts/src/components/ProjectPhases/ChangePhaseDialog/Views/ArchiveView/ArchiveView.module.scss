@@ -63,6 +63,15 @@
 
         .itemTitle {
           flex-grow: 1;
+
+          &.disabledItem {
+            color: var(--colorNeutralForegroundDisabled);
+          }
+
+          .notArchivableText {
+            color: var(--colorNeutralForegroundDisabled);
+            font-style: italic;
+          }
         }
       }
     }
