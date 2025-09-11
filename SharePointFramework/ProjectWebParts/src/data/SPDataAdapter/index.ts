@@ -6,7 +6,7 @@ import { DefaultCaching, SPDataAdapterBase } from 'pp365-shared-library/lib/data
 import { IProjectDataServiceParams, ProjectDataService } from 'pp365-shared-library/lib/services'
 import { SPFxContext } from 'pp365-shared-library/lib/types'
 import { IConfigurationFile } from 'types'
-import { ISPDataAdapterConfiguration } from './types'
+import { ISPDataAdapterConfiguration, IArchiveLogEntry, ArchiveLogStatus, ArchiveLogOperation, IArchiveDocumentItem, IArchiveListItem } from './types'
 import resource from 'SharedResources'
 
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
@@ -138,21 +138,21 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   /**
    * Get documents from the Documents library for archiving
    */
-  public async getDocumentsForArchive(): Promise<
-    { id: number; title: string; url: string; type: 'file' }[]
-  > {
+  public async getDocumentsForArchive(): Promise<IArchiveDocumentItem[]> {
     try {
       const documents = await this.sp.web.lists
         .getByTitle(resource.Lists_Documents_Title)
-        .items.select('Id', 'Title', 'FileRef', 'FileLeafRef')
+        .items.select('*', 'Id', 'Title', 'FileRef', 'FileLeafRef')
         .filter('FSObjType eq 0')
         .using(DefaultCaching)()
 
-      return documents.map((doc) => ({
+      return documents.map((doc): IArchiveDocumentItem => ({
         id: doc.Id,
         title: doc.FileLeafRef || doc.Title,
+        projectPhaseId: doc?.GtProjectPhase?.TermGuid,
+        documentTypeId: doc?.GtDocumentType?.TermGuid,
         url: doc.FileRef,
-        type: 'file' as const
+        type: 'file'
       }))
     } catch (error) {
       Logger.log({
@@ -166,9 +166,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   /**
    * Get site lists for archiving (excluding system lists)
    */
-  public async getListsForArchive(): Promise<
-    { id: string; title: string; url: string; type: 'list' }[]
-  > {
+  public async getListsForArchive(): Promise<IArchiveListItem[]> {
     try {
       const lists = await this.sp.web.lists
         .select('Id', 'Title', 'DefaultViewUrl', 'Hidden', 'BaseTemplate')
@@ -193,11 +191,11 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
           list.Title !== 'Web Part Gallery'
       )
 
-      return filteredLists.map((list) => ({
+      return filteredLists.map((list): IArchiveListItem => ({
         id: list.Id,
         title: list.Title,
         url: list.DefaultViewUrl,
-        type: 'list' as const
+        type: 'list'
       }))
     } catch (error) {
       Logger.log({
@@ -206,6 +204,159 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       })
       return []
     }
+  }
+
+  /**
+   * Archive log status enum for better type safety
+   */
+  public readonly ArchiveLogStatus: Record<string, ArchiveLogStatus> = {
+    SUCCESS: 'Success',
+    ERROR: 'Error',
+    WARNING: 'Warning',
+    IN_PROGRESS: 'In Progress'
+  } as const
+
+  /**
+   * Archive log operation enum for better type safety
+   */
+  public readonly ArchiveLogOperation: Record<string, ArchiveLogOperation> = {
+    DOCUMENT_ARCHIVE: 'Document Archive',
+    LIST_ARCHIVE: 'List Archive'
+  } as const
+
+  /**
+   * Write an entry to the Arkiveringslogg (Archive Log) list on the hub
+   *
+   * @param title Title of the log entry
+   * @param webUrl URL of the web/project being archived
+   * @param message Log message describing the operation
+   * @param operation Type of operation being performed
+   * @param reference Reference to the item/object being archived
+   * @param status Status of the operation (Success, Error, Warning, In Progress)
+   */
+  public async writeToArchiveLog(
+    title: string,
+    webUrl: string,
+    message: string,
+    operation: ArchiveLogOperation,
+    reference?: string,
+    status: ArchiveLogStatus = this.ArchiveLogStatus.SUCCESS
+  ): Promise<void> {
+    try {
+      const archiveLogList = this.portalDataService.web.lists.getByTitle('Arkiveringslogg')
+
+      const logItem: IArchiveLogEntry = {
+        Title: title,
+        GtLogWebUrl: webUrl,
+        GtLogMessage: message,
+        GtLogOperation: operation,
+        GtLogReference: reference || '',
+        GtLogStatus: status
+      }
+
+      await archiveLogList.items.add(logItem)
+
+      Logger.log({
+        message: `(${this._name}) (writeToArchiveLog) Successfully wrote archive log entry: ${title}`,
+        data: { logItem },
+        level: LogLevel.Info
+      })
+    } catch (error) {
+      Logger.log({
+        message: `(${this._name}) (writeToArchiveLog) Failed to write archive log entry: ${error.message}`,
+        data: { title, webUrl, message, operation, reference, status, error },
+        level: LogLevel.Error
+      })
+      // Don't throw error to avoid breaking the main operation
+    }
+  }
+
+  /**
+   * Convenience method to log document archiving operations
+   *
+   * @param documentTitle Title of the document being archived
+   * @param documentUrl URL of the document
+   * @param projectWebUrl URL of the project web
+   * @param status Status of the archiving operation
+   * @param errorMessage Optional error message if status is ERROR
+   */
+  public async logDocumentArchive(
+    documentTitle: string,
+    documentUrl: string,
+    projectWebUrl: string,
+    status: ArchiveLogStatus = this.ArchiveLogStatus.SUCCESS,
+    errorMessage?: string
+  ): Promise<void> {
+    const message = status === this.ArchiveLogStatus.ERROR && errorMessage
+      ? `Error archiving document: ${errorMessage}`
+      : `Document '${documentTitle}' ${status.toLowerCase()}`
+
+    await this.writeToArchiveLog(
+      `Document Archive: ${documentTitle}`,
+      projectWebUrl,
+      message,
+      this.ArchiveLogOperation.DOCUMENT_ARCHIVE,
+      documentUrl,
+      status
+    )
+  }
+
+  /**
+   * Convenience method to log list archiving operations
+   *
+   * @param listTitle Title of the list being archived
+   * @param listUrl URL of the list
+   * @param projectWebUrl URL of the project web
+   * @param status Status of the archiving operation
+   * @param errorMessage Optional error message if status is ERROR
+   */
+  public async logListArchive(
+    listTitle: string,
+    listUrl: string,
+    projectWebUrl: string,
+    status: ArchiveLogStatus = this.ArchiveLogStatus.SUCCESS,
+    errorMessage?: string
+  ): Promise<void> {
+    const message = status === this.ArchiveLogStatus.ERROR && errorMessage
+      ? `Error archiving list: ${errorMessage}`
+      : `List '${listTitle}' ${status.toLowerCase()}`
+
+    await this.writeToArchiveLog(
+      `List Archive: ${listTitle}`,
+      projectWebUrl,
+      message,
+      this.ArchiveLogOperation.LIST_ARCHIVE,
+      listUrl,
+      status
+    )
+  }
+
+  /**
+   * Convenience method to log project archiving operations
+   *
+   * @param projectTitle Title of the project being archived
+   * @param projectWebUrl URL of the project web
+   * @param status Status of the archiving operation
+   * @param errorMessage Optional error message if status is ERROR
+   */
+  public async logProjectArchive(
+    projectTitle: string,
+    projectWebUrl: string,
+    status: ArchiveLogStatus = this.ArchiveLogStatus.SUCCESS,
+    errorMessage?: string
+  ): Promise<void> {
+    const message = status === this.ArchiveLogStatus.ERROR && errorMessage
+      ? `Error archiving project: ${errorMessage}`
+      : `Project '${projectTitle}' ${status.toLowerCase()}`
+
+    await this.writeToArchiveLog(
+      `Project Archive: ${projectTitle}`,
+      projectWebUrl,
+      message,
+      this.ArchiveLogOperation.PROJECT_ARCHIVE,
+      projectWebUrl,
+      status
+    )
   }
 }
 

@@ -1,4 +1,4 @@
-import { ProjectPhaseChecklistData, ProjectPhaseModel } from 'pp365-shared-library/lib/models'
+import { ProjectPhaseChecklistData, ProjectPhaseModel, DocumentTypeModel } from 'pp365-shared-library/lib/models'
 import {
   IBaseWebPartComponentProps,
   IBaseWebPartComponentState
@@ -167,6 +167,11 @@ export interface IProjectPhasesData {
    * Lists available for archiving
    */
   archiveLists?: IArchiveItem[]
+
+  /**
+   * Document types available for archiving
+   */
+  documentTypes?: DocumentTypeModel[]
 }
 
 export interface IPhaseSitePageModel {

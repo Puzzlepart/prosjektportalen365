@@ -1,6 +1,7 @@
 export * from './ChecklistItemModel'
 export * from './CustomError'
 export * from './DataSource'
+export * from './DocumentTypeModel'
 export * from './ItemFieldValues'
 export * from './ProjectPropertyModel'
 export * from './ProjectTemplate'
