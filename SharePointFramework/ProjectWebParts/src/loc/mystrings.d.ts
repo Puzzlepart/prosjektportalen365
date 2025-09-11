@@ -216,6 +216,24 @@ declare interface IProjectWebPartsStrings {
   UseFramelessButtonsLabel: string
   UsePhaseHooksCalloutText: string
   UsePhaseHooksFieldLabel: string
+  ArchiveViewTitle: string
+  ArchiveViewDescription: string
+  ArchiveDocumentsSection: string
+  ArchiveListsSection: string
+  ArchiveSelectedItemsInfo: string
+  ArchiveLoadingText: string
+  ArchiveContinueText: string
+  ArchiveSelectAllText: string
+  ArchiveNotArchivableText: string
+  ArchiveList: string
+  ArchiveDocument: string
+  ArchivePhaseTransition: string
+  ErrorArchiving: string
+  UseArchiveFieldLabel: string
+  HookArchiveUrlFieldLabel: string
+  HookArchiveUrlFieldDescription: string
+  HookArchiveAuthFieldLabel: string
+  HookArchiveAuthFieldDescription: string
   ViewsGroupName: string
   ViewVersionHistoryText: string
   ViewXmlFieldLabel: string
@@ -262,20 +280,15 @@ declare interface IProjectWebPartsStrings {
   NoPreviewAvailable: string
   ShowCommentText: string
   HideCommentText: string
-  ArchiveViewTitle: string
-  ArchiveViewDescription: string
-  ArchiveDocumentsSection: string
-  ArchiveListsSection: string
-  ArchiveSelectedItemsInfo: string
-  ArchiveLoadingText: string
-  ArchiveContinueText: string
-  ArchiveSelectAllText: string
-  ArchiveNotArchivableText: string
-  UseArchiveFieldLabel: string
-  HookArchiveUrlFieldLabel: string
-  HookArchiveUrlFieldDescription: string
-  HookArchiveAuthFieldLabel: string
-  HookArchiveAuthFieldDescription: string
+  ArchiveLogStatusSuccess: string
+  ArchiveLogStatusError: string
+  ArchiveLogStatusWarning: string
+  ArchiveLogStatusInProgress: string
+  ArchiveLogScopeDocument: string
+  ArchiveLogScopeList: string
+  ArchiveLogOperationArchive: string
+  ArchiveLogOperationPhaseTransition: string
+  ArchiveLogOperationEndClosed: string
 }
 
 declare module 'ProjectWebPartsStrings' {

@@ -7,22 +7,13 @@ export type ISPDataAdapterConfiguration = ISPDataAdapterBaseConfiguration
  */
 export interface IArchiveLogEntry {
   Title: string
-  GtLogWebUrl: string
-  GtLogMessage: string
-  GtLogOperation: string
-  GtLogReference?: string
   GtLogStatus: string
+  GtLogOperation: string
+  GtLogMessage: string
+  GtLogScope: string
+  GtLogWebUrl: string
+  GtLogReference?: string
 }
-
-/**
- * Type for archive log status values
- */
-export type ArchiveLogStatus = 'Success' | 'Error' | 'Warning' | 'In Progress'
-
-/**
- * Type for archive log operation values
- */
-export type ArchiveLogOperation = 'Document Archive' | 'List Archive'
 
 /**
  * Interface for archive document item data

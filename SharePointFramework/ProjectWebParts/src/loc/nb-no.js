@@ -6,6 +6,15 @@ define([], function () {
     NewTimelineContentText: 'Nytt tidslinjeelement',
     NewStatusPanelTitle: 'Ny statusrapport',
     EditStatusPanelText: 'Rediger statusrapport',
+    ArchiveLogStatusSuccess: 'Arkivert',
+    ArchiveLogStatusError: 'Feil',
+    ArchiveLogStatusWarning: 'Advarsel',
+    ArchiveLogStatusInProgress: 'Til arkiv',
+    ArchiveLogScopeDocument: 'Dokument',
+    ArchiveLogScopeList: 'Liste',
+    ArchiveLogOperationArchive: 'Arkivering',
+    ArchiveLogOperationPhaseTransition: 'Faseovergang',
+    ArchiveLogOperationEndClosed: 'Avsluttet/Stengt/Låst',
     Aria: {
       CurrentPhaseText:
         'Dette er den gjeldende fasen. Det er derfor ikke mulig å endre til denne fasen.'
@@ -273,6 +282,10 @@ define([], function () {
     ArchiveContinueText: 'Fortsett',
     ArchiveSelectAllText: 'Velg alle',
     ArchiveNotArchivableText: 'Ikke arkiverbar',
+    ErrorArchiving: 'Feil ved arkivering: {0}',
+    ArchiveList: 'Liste: {0}',
+    ArchiveDocument: 'Dokument: {0}',
+    ArchivePhaseTransition: 'Fra {0}-fase til {1}-fase',
     UseArchiveFieldLabel: 'Bruk arkivfunksjonalitet',
     HookArchiveUrlFieldLabel: 'Arkiv hook URL',
     HookArchiveUrlFieldDescription: 'URL for arkiv webhook endpoint som håndterer arkiveringsprosessen',
@@ -327,6 +340,6 @@ define([], function () {
     ColorPickerStrings: 'Fargevelgerstrenger',
     NewsCreateSuccess: 'Nyhetsartikkel opprettet',
     ShowCommentText: 'Vis kommentar',
-    HideCommentText: 'Skjul kommentar',
+    HideCommentText: 'Skjul kommentar'
   }
 })

@@ -3514,9 +3514,6 @@
     <data name="SiteFields_GtLogMessage_DisplayName" xml:space="preserve">
         <value>Message</value>
     </data>
-    <data name="SiteFields_GtLogMessage_ArchiveLog_DisplayName" xml:space="preserve">
-        <value>Phase transition</value>
-    </data>
     <data name="SiteFields_GtLogScope_Description" xml:space="preserve">
         <value>Indicate the scope or context of the log element</value>
     </data>

@@ -3667,9 +3667,6 @@
     <data name="SiteFields_GtLogMessage_DisplayName" xml:space="preserve">
         <value>Melding</value>
     </data>
-    <data name="SiteFields_GtLogMessage_ArchiveLog_DisplayName" xml:space="preserve">
-        <value>Fasebytte</value>
-    </data>
     <data name="SiteFields_GtLogScope_Description" xml:space="preserve">
         <value>Angir omfanget for loggmeldingen.</value>
     </data>

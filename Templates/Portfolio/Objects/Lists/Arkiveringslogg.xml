@@ -13,11 +13,12 @@
       <ViewFields>
         <FieldRef Name="ID" />
         <FieldRef Name="Title" />
-        <FieldRef Name="GtLogWebUrl" />
-        <FieldRef Name="GtLogMessage" />
-        <FieldRef Name="GtLogOperation" />
-        <FieldRef Name="GtLogReference" />
         <FieldRef Name="GtLogStatus" />
+        <FieldRef Name="GtLogOperation" />
+        <FieldRef Name="GtLogMessage" />
+        <FieldRef Name="GtLogScope" />
+        <FieldRef Name="GtLogWebUrl" />
+        <FieldRef Name="GtLogReference" />
         <FieldRef Name="Created" />
         <FieldRef Name="Author" />
       </ViewFields>
@@ -26,12 +27,5 @@
       <JSLink>clienttemplates.js</JSLink>
     </View>
   </pnp:Views>
-  <pnp:FieldRefs>
-    <pnp:FieldRef ID="b9bbd94f-f9c0-4512-ad77-404f8a2c64b1" Name="GtLogWebUrl" DisplayName="{resource:SiteFields_GtLogWebUrl_DisplayName}" />
-    <pnp:FieldRef ID="4614d809-1d6f-42a4-a9a6-3255d2e1f9b7" Name="GtLogMessage" DisplayName="{resource:SiteFields_GtLogMessage_ArchiveLog_DisplayName}" />
-    <pnp:FieldRef ID="0ceeeca1-3b9e-4d5b-8abb-51fadf718075" Name="GtLogOperation" DisplayName="{resource:SiteFields_GtLogOperation_DisplayName}" />
-    <pnp:FieldRef ID="95468edd-45dd-45d9-a7d4-5e1d543e8aa6" Name="GtLogReference" DisplayName="{resource:SiteFields_GtLogReference_DisplayName}" />
-    <pnp:FieldRef ID="1dde57da-20ab-4a8f-9ea1-9c4f4e12b56c" Name="GtLogStatus" DisplayName="{resource:SiteFields_GtLogStatus_DisplayName}" />
-  </pnp:FieldRefs>
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>

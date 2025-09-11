@@ -6,8 +6,9 @@ import { DefaultCaching, SPDataAdapterBase } from 'pp365-shared-library/lib/data
 import { IProjectDataServiceParams, ProjectDataService } from 'pp365-shared-library/lib/services'
 import { SPFxContext } from 'pp365-shared-library/lib/types'
 import { IConfigurationFile } from 'types'
-import { ISPDataAdapterConfiguration, IArchiveLogEntry, ArchiveLogStatus, ArchiveLogOperation, IArchiveDocumentItem, IArchiveListItem } from './types'
+import { ISPDataAdapterConfiguration, IArchiveLogEntry, IArchiveDocumentItem, IArchiveListItem } from './types'
 import resource from 'SharedResources'
+import { format } from '@fluentui/react'
 
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public project: ProjectDataService
@@ -207,51 +208,36 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   }
 
   /**
-   * Archive log status enum for better type safety
-   */
-  public readonly ArchiveLogStatus: Record<string, ArchiveLogStatus> = {
-    SUCCESS: 'Success',
-    ERROR: 'Error',
-    WARNING: 'Warning',
-    IN_PROGRESS: 'In Progress'
-  } as const
-
-  /**
-   * Archive log operation enum for better type safety
-   */
-  public readonly ArchiveLogOperation: Record<string, ArchiveLogOperation> = {
-    DOCUMENT_ARCHIVE: 'Document Archive',
-    LIST_ARCHIVE: 'List Archive'
-  } as const
-
-  /**
-   * Write an entry to the Arkiveringslogg (Archive Log) list on the hub
+   * Write an entry to the Archive Log list on the hub
    *
    * @param title Title of the log entry
-   * @param webUrl URL of the web/project being archived
-   * @param message Log message describing the operation
-   * @param operation Type of operation being performed
-   * @param reference Reference to the item/object being archived
    * @param status Status of the operation (Success, Error, Warning, In Progress)
+   * @param operation Type of operation being performed
+   * @param message Log message describing the operation
+   * @param scope Scope or context of the log entry (Document, List)
+   * @param webUrl URL of the web/project being archived
+   * @param reference Reference to the item/object being archived
    */
   public async writeToArchiveLog(
     title: string,
-    webUrl: string,
+    status: string = strings.ArchiveLogStatusSuccess,
+    operation: string,
     message: string,
-    operation: ArchiveLogOperation,
-    reference?: string,
-    status: ArchiveLogStatus = this.ArchiveLogStatus.SUCCESS
+    scope: string,
+    webUrl: string,
+    reference?: string
   ): Promise<void> {
     try {
-      const archiveLogList = this.portalDataService.web.lists.getByTitle('Arkiveringslogg')
+      const archiveLogList = this.portalDataService.web.lists.getByTitle(resource.Lists_ArchiveLog_Title)
 
       const logItem: IArchiveLogEntry = {
         Title: title,
-        GtLogWebUrl: webUrl,
-        GtLogMessage: message,
+        GtLogStatus: status,
         GtLogOperation: operation,
-        GtLogReference: reference || '',
-        GtLogStatus: status
+        GtLogMessage: message,
+        GtLogScope: scope,
+        GtLogWebUrl: webUrl,
+        GtLogReference: reference || ''
       }
 
       await archiveLogList.items.add(logItem)
@@ -267,7 +253,6 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         data: { title, webUrl, message, operation, reference, status, error },
         level: LogLevel.Error
       })
-      // Don't throw error to avoid breaking the main operation
     }
   }
 
@@ -279,25 +264,28 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param projectWebUrl URL of the project web
    * @param status Status of the archiving operation
    * @param errorMessage Optional error message if status is ERROR
+   * @param message Optional custom message for the log entry
    */
   public async logDocumentArchive(
     documentTitle: string,
+    status: string = strings.ArchiveLogStatusSuccess,
+    message: string,
     documentUrl: string,
     projectWebUrl: string,
-    status: ArchiveLogStatus = this.ArchiveLogStatus.SUCCESS,
-    errorMessage?: string
+    errorMessage?: string,
   ): Promise<void> {
-    const message = status === this.ArchiveLogStatus.ERROR && errorMessage
-      ? `Error archiving document: ${errorMessage}`
-      : `Document '${documentTitle}' ${status.toLowerCase()}`
+    const logMessage = status === strings.ArchiveLogStatusError && errorMessage
+      ? errorMessage
+      : message || ''
 
     await this.writeToArchiveLog(
-      `Document Archive: ${documentTitle}`,
+      format(strings.ArchiveDocument, documentTitle),
+      status,
+      strings.ArchiveLogOperationPhaseTransition,
+      logMessage,
+      strings.ArchiveLogScopeDocument,
       projectWebUrl,
-      message,
-      this.ArchiveLogOperation.DOCUMENT_ARCHIVE,
       documentUrl,
-      status
     )
   }
 
@@ -309,53 +297,28 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param projectWebUrl URL of the project web
    * @param status Status of the archiving operation
    * @param errorMessage Optional error message if status is ERROR
+   * @param message Optional custom message for the log entry
    */
   public async logListArchive(
     listTitle: string,
+    status: string = strings.ArchiveLogStatusSuccess,
+    message: string,
     listUrl: string,
     projectWebUrl: string,
-    status: ArchiveLogStatus = this.ArchiveLogStatus.SUCCESS,
-    errorMessage?: string
+    errorMessage?: string,
   ): Promise<void> {
-    const message = status === this.ArchiveLogStatus.ERROR && errorMessage
-      ? `Error archiving list: ${errorMessage}`
-      : `List '${listTitle}' ${status.toLowerCase()}`
+    const logMessage = status === strings.ArchiveLogStatusError && errorMessage
+      ? format(strings.ErrorArchiving, errorMessage)
+      : message || ''
 
     await this.writeToArchiveLog(
-      `List Archive: ${listTitle}`,
+      format(strings.ArchiveList, listTitle),
+      status,
+      strings.ArchiveLogOperationPhaseTransition,
+      logMessage,
+      strings.ArchiveLogScopeList,
       projectWebUrl,
-      message,
-      this.ArchiveLogOperation.LIST_ARCHIVE,
       listUrl,
-      status
-    )
-  }
-
-  /**
-   * Convenience method to log project archiving operations
-   *
-   * @param projectTitle Title of the project being archived
-   * @param projectWebUrl URL of the project web
-   * @param status Status of the archiving operation
-   * @param errorMessage Optional error message if status is ERROR
-   */
-  public async logProjectArchive(
-    projectTitle: string,
-    projectWebUrl: string,
-    status: ArchiveLogStatus = this.ArchiveLogStatus.SUCCESS,
-    errorMessage?: string
-  ): Promise<void> {
-    const message = status === this.ArchiveLogStatus.ERROR && errorMessage
-      ? `Error archiving project: ${errorMessage}`
-      : `Project '${projectTitle}' ${status.toLowerCase()}`
-
-    await this.writeToArchiveLog(
-      `Project Archive: ${projectTitle}`,
-      projectWebUrl,
-      message,
-      this.ArchiveLogOperation.PROJECT_ARCHIVE,
-      projectWebUrl,
-      status
     )
   }
 }
