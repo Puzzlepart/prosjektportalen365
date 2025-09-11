@@ -6,9 +6,15 @@ Sjekk ut [release notes](./releasenotes/1.11.0.md) for høydepunkter og mer deta
 
 ### Ny funksjonalitet
 
+- Engelsk versjon av Prosjektportalen! *Hjelpedokumentasjon om hvordan komme i gang*
+
 ### Forbedringer
 
+- Oppdatert alle dokumentmaler fra Prosjektveiviseren. Lagt inn malene i en egen mappe "Fra Prosjektveiviseren" i malbiblioteket.
+- Endret "Ingen fase" til "Idé". For eksisterende installasjoner må dette eventuelt oppdateres manuelt.
+
 ### Feilrettinger
+
 
 ---
 

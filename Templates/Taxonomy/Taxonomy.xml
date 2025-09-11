@@ -8,18 +8,18 @@
                     <pnp:TermSets>
                         <pnp:TermSet Name="Fase" ID="abcfc9d9-a263-4abb-8234-be973c46258a" Description=" ">
                             <pnp:Terms>
-                                <pnp:Term Name="Ingen fase" ID="6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32" CustomSortOrder="1" SourceTermId="6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32">
+                                <pnp:Term Name="Flere faser" ID="777cc6ac-4639-4633-85b9-f1ef61197c4d" CustomSortOrder="2" SourceTermId="777cc6ac-4639-4633-85b9-f1ef61197c4d">
                                     <pnp:Labels>
-                                        <pnp:Label Language="1033" Value="No phase" IsDefaultForLanguage="true" />
+                                        <pnp:Label Language="1033" Value="Several phases" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                     <pnp:LocalCustomProperties>
                                         <pnp:Property Key="ShowOnFrontpage" Value="false" />
                                         <pnp:Property Key="PhaseSubText" Value="" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
-                                <pnp:Term Name="Flere faser" ID="777cc6ac-4639-4633-85b9-f1ef61197c4d" CustomSortOrder="2" SourceTermId="777cc6ac-4639-4633-85b9-f1ef61197c4d">
+                                <pnp:Term Name="Idé" ID="6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32" CustomSortOrder="1" SourceTermId="6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32">
                                     <pnp:Labels>
-                                        <pnp:Label Language="1033" Value="Several phases" IsDefaultForLanguage="true" />
+                                        <pnp:Label Language="1033" Value="Idea" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                     <pnp:LocalCustomProperties>
                                         <pnp:Property Key="ShowOnFrontpage" Value="false" />
