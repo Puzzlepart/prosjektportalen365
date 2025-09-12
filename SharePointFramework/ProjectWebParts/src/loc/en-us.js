@@ -246,8 +246,11 @@ define([], function () {
     UsePhaseHooksCalloutText:
       "Here you can choose whether hooks should be run when changing phases. When changing the phase, a call to the url specified below will be executed. If the call requires authentication, this can be filled in under the url field. The call that is executed sends with the following parameters: 'webUrl' and 'apiKey', both of which are of type 'string'.",
     UsePhaseHooksFieldLabel: 'Use phase selector hooks',
-    ArchiveViewTitle: 'Select items to archive',
-    ArchiveViewDescription: 'Choose which documents and lists you want to archive before changing phase. Archives will be created and sent to the specified archive location.',
+    ArchiveViewTitle: 'Archiving documents and lists',
+    ArchiveViewDescription: 'Choose which documents and lists you want to archive during the phase change.',
+    ArchiveInformationTitle: 'What to archive?',
+    ArchiveMoreInformationText: 'Click here for more information',
+    ArchiveInformationText: 'Below you can choose which documents and/or lists to archive. Then press \'<b>Continue</b>\' to proceed with the process.<br /><br />This process involves retrieving and logging selected documents and/or lists from the site for archiving.<br /><br />There will be one archive entry per item archived, this will be picked up by an archive job that archives this to an archive core.<br /><br />The logging will include information about which items are marked for archiving, it indicates which phase you are changing from and to, as well as who performed the phase change and when.',
     ArchiveDocumentsSection: 'Documents',
     ArchiveListsSection: 'Lists',
     ArchiveSelectedItemsInfo: '{0} item(s) selected for archiving',

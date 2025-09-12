@@ -218,6 +218,9 @@ declare interface IProjectWebPartsStrings {
   UsePhaseHooksFieldLabel: string
   ArchiveViewTitle: string
   ArchiveViewDescription: string
+  ArchiveMoreInformationText: string
+  ArchiveInformationTitle: string
+  ArchiveInformationText: string
   ArchiveDocumentsSection: string
   ArchiveListsSection: string
   ArchiveSelectedItemsInfo: string

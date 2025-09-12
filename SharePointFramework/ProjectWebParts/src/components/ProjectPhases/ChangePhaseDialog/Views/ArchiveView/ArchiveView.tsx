@@ -1,6 +1,6 @@
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
-import { Checkbox, Text, Spinner, ToggleButton } from '@fluentui/react-components'
+import { Checkbox, Text, Spinner, ToggleButton, Accordion, AccordionHeader, AccordionItem, AccordionPanel } from '@fluentui/react-components'
 import {
   ChevronRight16Regular,
   Document16Regular,
@@ -11,7 +11,9 @@ import styles from './ArchiveView.module.scss'
 import { useArchiveView } from './useArchiveView'
 import { IArchiveItem } from './types'
 import { format } from '@fluentui/react'
-import { getFluentIcon } from 'pp365-shared-library'
+import { getFluentIcon, UserMessage } from 'pp365-shared-library'
+import ReactMarkdown from 'react-markdown'
+import rehypeRaw from 'rehype-raw'
 
 const getItemIcon = (item: IArchiveItem) => {
   switch (item.type) {
@@ -48,6 +50,22 @@ export const ArchiveView: FC = () => {
 
   return (
     <div className={styles.archiveView}>
+      <UserMessage
+        title={strings.ArchiveInformationTitle}
+      >
+        <Accordion collapsible>
+          <AccordionItem value='1'>
+            <AccordionHeader className={styles.accordionHeader}>
+              <Text weight='bold'>{strings.ArchiveMoreInformationText}</Text>
+            </AccordionHeader>
+            <AccordionPanel>
+              <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+                {strings.ArchiveInformationText}
+              </ReactMarkdown>
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
+      </UserMessage>
       {sections.map((section) => (
         <div key={section.key} className={styles.section}>
           <div

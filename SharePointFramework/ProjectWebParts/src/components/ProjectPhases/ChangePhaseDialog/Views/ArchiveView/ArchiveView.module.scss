@@ -5,6 +5,11 @@
   flex-direction: column;
   gap: 8px;
 
+  .accordionHeader:hover {
+    font-weight: 900;
+    background-color: var(--colorNeutralBackground3Hover);
+  }
+
   .section {
     display: flex;
     flex-direction: column;
