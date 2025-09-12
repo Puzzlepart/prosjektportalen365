@@ -6,11 +6,9 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 
 ### Ny funksjonalitet
 
-- Ny arkivfunksjonalitet i fasevelgeren for arkivering av dokumenter og lister ved faseendring
-  - Selektiv valg av dokumenter fra Dokumentbiblioteket som skal arkiveres
-  - Selektiv valg av lister som skal arkiveres (skjult som standard for bedre oversikt)
-  - Webhook-integrasjon for ekstern arkivhåndtering med JSON-konfiguration av valgte elementer
-  - Støtte for egne arkiv-URL og autentisering gjennom webdel-egenskaper (`useArchive`, `hookArchiveUrl`, `hookArchiveAuth`)
+- Ny funksjonalitet i fasevelgeren for arkivering av dokumenter og lister som skal arkiveres ved faseendring
+  - Elementer som skal til arkivering loggføres i en ny liste på porteføljenivå kalt `Arkiveringslogg`
+  - Webhook-integrasjon for ekstern arkivhåndtering som håndterer arkivering av dokumenter og lister basert på loggføringen
 
 ### Forbedringer
 
