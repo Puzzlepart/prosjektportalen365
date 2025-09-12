@@ -117,7 +117,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">fbac5398-13bb-433b-999f-ddd4e8cd59a9</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">{Lists_DataSources_Category_BenefitOverview_All}</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_BenefitOverview_All}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">(ContentTypeID:0x010039EAFDC2A1624C1BA1A444FC8FE85DEC* OR ContentTypeID:0x01004F466123309D46BAB9D5C6DE89A6CF67* OR ContentTypeID:0x010073043EFE3E814A2BBEF96B8457623F95*) DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_BenefitOverview}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentColumns">1,16,17,18,19,20,28,29,30,31</pnp:DataValue>

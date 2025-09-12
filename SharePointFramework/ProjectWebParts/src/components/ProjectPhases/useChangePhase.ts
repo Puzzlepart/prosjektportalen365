@@ -17,7 +17,7 @@ import strings from 'ProjectWebPartsStrings'
  */
 export function useChangePhase(delayBeforeReload: number = 1000) {
   const context = useContext(ProjectPhasesContext)
-  const [runPhaseHook] = usePhaseHooks()
+  const [runHook] = usePhaseHooks()
   const changeWelcomePage = useChangeWelcomePage()
   const modifyCurrentPhaseView = useModifyCurrentPhaseView()
   return async () => {
@@ -27,7 +27,7 @@ export function useChangePhase(delayBeforeReload: number = 1000) {
         context.state.confirmPhase,
         context.state.data.phaseField
       )
-      if (context.props.usePhaseHooks) runPhaseHook()
+      if (context.props.usePhaseHooks) runHook()
       if (context.props.useDynamicHomepage) {
         await changeWelcomePage()
       }

@@ -367,6 +367,644 @@
                                 </pnp:Term>
                             </pnp:Terms>
                         </pnp:TermSet>
+                        <pnp:TermSet Name="Dokumenttype" ID="a474bbee-b38f-45e7-869f-d0ce50d49a86" Description=" ">
+                            <pnp:Terms>
+                                <pnp:Term Name="Avtaler/Kontrakt" ID="f9d4fee9-17d4-4a18-8108-a0dd41dc3c51" CustomSortOrder="1" SourceTermId="f9d4fee9-17d4-4a18-8108-a0dd41dc3c51">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Agreements/Contract" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                    <pnp:Terms>
+                                        <pnp:Term Name="Bestilling på selve prosjektet" ID="55185924-0650-456d-b65f-40588487c4f6" SourceTermId="55185924-0650-456d-b65f-40588487c4f6">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Order for the project itself" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Grunneieravtaler" ID="96a64185-37fe-4334-b966-2fda70890099" SourceTermId="96a64185-37fe-4334-b966-2fda70890099">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Landowner agreements" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Avtale om kjøp av tomt" ID="c354abbf-563e-4ce7-8818-5434907894f3" SourceTermId="c354abbf-563e-4ce7-8818-5434907894f3">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Agreement for purchase of plot" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Avtale om anleggsbidrag" ID="8cbceca3-0c6d-4929-9c39-6970fce89dab" SourceTermId="8cbceca3-0c6d-4929-9c39-6970fce89dab">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Agreement on construction contribution" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Overtakelsesprotokoll" ID="a2a29ce1-2555-453b-9ab1-5790505bd7a9" SourceTermId="a2a29ce1-2555-453b-9ab1-5790505bd7a9">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Handover protocol" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Kontrakter" ID="a20b7a1b-2ee6-412e-b222-9d107d786d85" SourceTermId="a20b7a1b-2ee6-412e-b222-9d107d786d85">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Contracts" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Rettighetsavtaler" ID="b258581d-cd0a-4e4b-a5fb-b59078ba8cf6" SourceTermId="b258581d-cd0a-4e4b-a5fb-b59078ba8cf6">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Rights agreements" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                    </pnp:Terms>
+                                </pnp:Term>
+                                <pnp:Term Name="Søknader/Vedtak (tillatelser)" ID="7b670193-1d96-4b97-b17d-459bebe61251" CustomSortOrder="2" SourceTermId="7b670193-1d96-4b97-b17d-459bebe61251">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Applications/Decisions (permits)" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                    <pnp:Terms>
+                                        <pnp:Term Name="Dispensasjoner fra fylkeskommunene – Kulturminner" ID="ce89ef48-806a-4955-817a-26840cc48def" SourceTermId="ce89ef48-806a-4955-817a-26840cc48def">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Exemptions from county councils – Cultural heritage" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Søknad om spillemidler eller andre midler" ID="98249ab4-a9a3-4241-826b-4ebba3a28452" SourceTermId="98249ab4-a9a3-4241-826b-4ebba3a28452">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Application for gaming funds or other funds" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Vedtak fra arbeidstilsynet" ID="fb212537-d3cf-41e6-81d4-e3d50e8d7775" SourceTermId="fb212537-d3cf-41e6-81d4-e3d50e8d7775">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Decision from the labor inspectorate" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Tillatelser fra eks. Jernbaneverket, Kulturminneforvaltning mm." ID="b0d6a476-a593-4cd0-ae08-46d6588c1e2c" SourceTermId="b0d6a476-a593-4cd0-ae08-46d6588c1e2c">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Permits from e.g. Railway Authority, Cultural Heritage Management, etc." IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Arbeidsvarsling, arbeid ved vei" ID="3489edd5-c208-480b-807a-55056aa0a3d3" SourceTermId="3489edd5-c208-480b-807a-55056aa0a3d3">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Work notification, roadwork" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                    </pnp:Terms>
+                                </pnp:Term>
+                                <pnp:Term Name="Evalueringer" ID="48d14c97-ea40-4313-9d3d-8b3a27aa17e7" CustomSortOrder="3" SourceTermId="48d14c97-ea40-4313-9d3d-8b3a27aa17e7">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Evaluations" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                    <pnp:Terms>
+                                        <pnp:Term Name="Evaluering av prosjektet som helhet" ID="b0f673a4-6296-4618-aa74-1e3b5a4564a7" SourceTermId="b0f673a4-6296-4618-aa74-1e3b5a4564a7">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Evaluation of the project as a whole" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Habilitetsvurdering" ID="0c62aa07-593d-4f01-a6bc-23499b5b5ea9" SourceTermId="0c62aa07-593d-4f01-a6bc-23499b5b5ea9">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Impartiality assessment" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Evaluering av fasen forprosjekt" ID="a4aa2191-5d78-4c7a-846f-1dc3510e4636" SourceTermId="a4aa2191-5d78-4c7a-846f-1dc3510e4636">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Evaluation of the pre-project phase" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Evaluering av konsulent i anskaffelsen" ID="957a0c8c-aaa0-40f9-b173-f74e09af330b" SourceTermId="957a0c8c-aaa0-40f9-b173-f74e09af330b">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Evaluation of consultant in procurement" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Uavhengig kontroll av utførelse (KUT)" ID="3df69a59-944a-4f4a-8707-2b50fb480239" SourceTermId="3df69a59-944a-4f4a-8707-2b50fb480239">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Independent control of execution (KUT)" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                    </pnp:Terms>
+                                </pnp:Term>
+                                <pnp:Term Name="Rapport" ID="29f5a8e4-8de9-4f97-bdc0-dba7788f31cc" CustomSortOrder="4" SourceTermId="29f5a8e4-8de9-4f97-bdc0-dba7788f31cc">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Report" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                    <pnp:Terms>
+                                        <pnp:Term Name="Forventede gevinster" ID="d5903a77-5b21-42ef-b361-12fef79a0504" SourceTermId="d5903a77-5b21-42ef-b361-12fef79a0504">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Expected benefits" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Tilbakemelding på tilsyn og retting av pålegg" ID="bddaf93c-7b37-488e-b1b4-691b3d6588b1" SourceTermId="bddaf93c-7b37-488e-b1b4-691b3d6588b1">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Feedback on supervision and correction of orders" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Risikovurdering" ID="6874c413-938c-49a8-b4eb-ea7f572a6f13" SourceTermId="6874c413-938c-49a8-b4eb-ea7f572a6f13">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Risk assessment" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Utredningsrapporter" ID="23b213fe-f7eb-41a3-984c-7d2922ca4b7f" SourceTermId="23b213fe-f7eb-41a3-984c-7d2922ca4b7f">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Investigation reports" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Rapport på miljøvurdering, vannstandsutredning med mer" ID="528ca7b4-cdf2-4a64-8e2e-39ddfc8eef27" SourceTermId="528ca7b4-cdf2-4a64-8e2e-39ddfc8eef27">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Report on environmental assessment, water level investigation and more" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="ROS-analyse" ID="d74401ac-d238-444c-98be-709832b222c2" SourceTermId="d74401ac-d238-444c-98be-709832b222c2">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="ROS analysis" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Månedsrapport/Vurdering av risikoer" ID="27bf094b-f62d-4aa1-bccc-2c0872de8a26" SourceTermId="27bf094b-f62d-4aa1-bccc-2c0872de8a26">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Monthly report/Risk assessment" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Rapport om uønskede hendelser (RUH-rapport)" ID="c87c4ba3-ab35-4987-a0dc-9ece3dc08d71" SourceTermId="c87c4ba3-ab35-4987-a0dc-9ece3dc08d71">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Report on unwanted incidents (RUH report)" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Støpeplan og rapporter" ID="46563435-8176-454c-b071-f8bd1c8e35b4" SourceTermId="46563435-8176-454c-b071-f8bd1c8e35b4">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Casting plan and reports" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Etterkontroll-dokumentasjon" ID="7f124be9-eb17-47d2-811b-1f00951aa384" SourceTermId="7f124be9-eb17-47d2-811b-1f00951aa384">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Post-control documentation" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Igangkjøringsdokumenter" ID="0ec37373-358f-476e-9576-ab3f05922cfe" SourceTermId="0ec37373-358f-476e-9576-ab3f05922cfe">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Startup documents" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Sluttrapport fra eksterne" ID="ec8f94a7-4535-4980-aac6-c59ad03c9009" SourceTermId="ec8f94a7-4535-4980-aac6-c59ad03c9009">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Final report from external parties" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Sluttrapport politisk ledelse" ID="0d348283-b23a-4507-8f58-eaafccebb352" SourceTermId="0d348283-b23a-4507-8f58-eaafccebb352">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Final report to political leadership" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                    </pnp:Terms>
+                                </pnp:Term>
+                                <pnp:Term Name="Økonomi" ID="e1e91000-426f-4079-9730-64ef5d71e1d6" CustomSortOrder="5" SourceTermId="e1e91000-426f-4079-9730-64ef5d71e1d6">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Economy" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                    <pnp:Terms>
+                                        <pnp:Term Name="Varsel om justering av budsjett eller framdriftsplan opp mot konsulent" ID="965d39ed-2859-4448-ac59-9c1a30ba6eaf" SourceTermId="965d39ed-2859-4448-ac59-9c1a30ba6eaf">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Notice of budget or schedule adjustment towards consultant" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Kostnadsoverslag" ID="245527b3-6963-4b23-ad8c-5835e7428a7a" SourceTermId="245527b3-6963-4b23-ad8c-5835e7428a7a">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Cost estimate" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Prosjektnummer og økonomiplan" ID="9b87c85d-9ce6-4063-8c47-172be2579d50" SourceTermId="9b87c85d-9ce6-4063-8c47-172be2579d50">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Project number and financial plan" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Garantier" ID="371f2a51-d4ee-4565-9504-06064f66a089" SourceTermId="371f2a51-d4ee-4565-9504-06064f66a089">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Warranties" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Økonomi: rapportering, endringsmelding, avdragsnota (A-nota) og tilleggsnota (T-nota)" ID="3d1e4efc-ebd8-425c-97ae-e59a5448f459" SourceTermId="3d1e4efc-ebd8-425c-97ae-e59a5448f459">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Economy: reporting, change notification, installment note (A-note) and additional note (T-note)" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="false" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Økonomi-informasjon fra entreprenør på enhetspriser" ID="494f0f94-b002-468d-a6be-1f9bd80a77e5" SourceTermId="494f0f94-b002-468d-a6be-1f9bd80a77e5">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Financial information from contractor on unit prices" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                    </pnp:Terms>
+                                </pnp:Term>
+                                <pnp:Term Name="Plan" ID="aaeeedd3-23a3-448f-9699-d5cefd3cc419" CustomSortOrder="6" SourceTermId="aaeeedd3-23a3-448f-9699-d5cefd3cc419">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Plan" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                    <pnp:Terms>
+                                        <pnp:Term Name="Framdriftsplan for prosjektering" ID="d591e47b-66e9-4c7b-93b2-5044d07dc473" SourceTermId="d591e47b-66e9-4c7b-93b2-5044d07dc473">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Progress plan for project planning" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Romprogram (krav fra arbeidstilsynet)" ID="428f3aad-90ee-4d4f-9b7b-cdb3df7c52e5" SourceTermId="428f3aad-90ee-4d4f-9b7b-cdb3df7c52e5">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Space program (requirement from labor inspectorate)" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Prosjektets forutsetninger" ID="616c612b-ee18-4e3b-bbdd-2e60fff39891" SourceTermId="616c612b-ee18-4e3b-bbdd-2e60fff39891">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Project prerequisites" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Planprosess" ID="b0b9e9b4-fb3d-4883-87eb-b6bcd07aba38" SourceTermId="b0b9e9b4-fb3d-4883-87eb-b6bcd07aba38">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Planning process" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Prosjektskisse" ID="9024fd74-1822-4510-a4cf-e01f2d406127" SourceTermId="9024fd74-1822-4510-a4cf-e01f2d406127">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Project sketch" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Byggherrens beslutningsplan" ID="137c0b6e-81a8-4955-815c-9e4f2cb93167" SourceTermId="137c0b6e-81a8-4955-815c-9e4f2cb93167">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Builder's decision plan" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Fremdriftsplaner" ID="4746f962-c0f8-4599-976f-e53ee680d5ed" SourceTermId="4746f962-c0f8-4599-976f-e53ee680d5ed">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Progress plans" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Helse, miljø og sikkerhet (HMS-plan)" ID="a11b3327-51b8-4af6-b933-57218809f0ae" SourceTermId="a11b3327-51b8-4af6-b933-57218809f0ae">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Health, environment and safety (HSE plan)" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Kommunikasjonsplan" ID="933259ce-cd9c-4321-9c18-ff3d09da10b6" SourceTermId="933259ce-cd9c-4321-9c18-ff3d09da10b6">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Communication plan" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Kvalitetsplan" ID="3abc05fa-1a84-4c79-aecd-d81b2ead7a84" SourceTermId="3abc05fa-1a84-4c79-aecd-d81b2ead7a84">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Quality plan" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Sikkerhet, helse og arbeidsmiljøplan (SHA-plan)" ID="0d07548f-e5ca-4890-9bf3-7d5f4bd14d45" SourceTermId="0d07548f-e5ca-4890-9bf3-7d5f4bd14d45">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Safety, health and working environment plan (SHA plan)" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Skiltplan" ID="39a2e04f-2186-4d85-80f1-3057a375a849" SourceTermId="39a2e04f-2186-4d85-80f1-3057a375a849">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Signage plan" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Varslingsplan" ID="c0e136ef-3c4d-4012-8b7c-f69dba3b2fb3" SourceTermId="c0e136ef-3c4d-4012-8b7c-f69dba3b2fb3">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Notification plan" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Avfallsplan (mottas)" ID="492d7e46-4aeb-4424-b73f-7ed98950c66f" SourceTermId="492d7e46-4aeb-4424-b73f-7ed98950c66f">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Waste plan (received)" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Beredskapsplan" ID="9f653f84-d060-44f8-be14-50882bbfded8" SourceTermId="9f653f84-d060-44f8-be14-50882bbfded8">
+                                            <pnp:Labels>
+                                                <pnp:Label Language="1033" Value="Emergency plan" IsDefaultForLanguage="true" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                    </pnp:Terms>
+                                </pnp:Term>
+                                <pnp:Term Name="Referat/Notat" ID="4bdd10f0-0e29-4fda-b6aa-d794661b1a7a" CustomSortOrder="7" SourceTermId="4bdd10f0-0e29-4fda-b6aa-d794661b1a7a">
+                                    <pnp:Labels>
+                                        <pnp:Label Value="Minutes/Notes" Language="1033" />
+                                    </pnp:Labels>
+                                    <pnp:Terms>
+                                        <pnp:Term Name="Arbeidsmiljøutvalget (AMU)" ID="802e77ba-a39a-4f4f-ab16-c815e34b9da9" SourceTermId="802e77ba-a39a-4f4f-ab16-c815e34b9da9">
+                                            <pnp:Labels>
+                                                <pnp:Label Value="Work Environment Committee (AMU)" Language="1033" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Referat fra oppstartsmøte og møtereferat fra møter med brukere både interne og eksterne" ID="a33106b7-0276-4c4e-b27e-b9a2cc6ddb36" SourceTermId="a33106b7-0276-4c4e-b27e-b9a2cc6ddb36">
+                                            <pnp:Labels>
+                                                <pnp:Label Value="Minutes from startup meeting and meeting minutes from meetings with both internal and external users" Language="1033" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Saksframlegg" ID="908f33dd-4e80-4b15-ba24-062b4b0deb93" SourceTermId="908f33dd-4e80-4b15-ba24-062b4b0deb93">
+                                            <pnp:Labels>
+                                                <pnp:Label Value="Case presentation" Language="1033" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Referat og notat" ID="71e087f9-7b4d-453f-8acd-fbe7e861dff2" SourceTermId="71e087f9-7b4d-453f-8acd-fbe7e861dff2">
+                                            <pnp:Labels>
+                                                <pnp:Label Value="Minutes and notes" Language="1033" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Brukerinvolvering" ID="56132472-88a4-4380-a643-2ca8374208c4" SourceTermId="56132472-88a4-4380-a643-2ca8374208c4">
+                                            <pnp:Labels>
+                                                <pnp:Label Value="User involvement" Language="1033" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Notater fra alle berørte fagdisipliner" ID="e23b9c56-a654-4ab0-9795-33234511285e" SourceTermId="e23b9c56-a654-4ab0-9795-33234511285e">
+                                            <pnp:Labels>
+                                                <pnp:Label Value="Notes from all affected disciplines" Language="1033" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Referat fra brukermedvirkning" ID="434cc0df-37a6-454d-80eb-a8c589a9b1c6" SourceTermId="434cc0df-37a6-454d-80eb-a8c589a9b1c6">
+                                            <pnp:Labels>
+                                                <pnp:Label Value="Minutes from user participation" Language="1033" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Referat fra brukermedvirkning, styringsgruppe og prosjekteringsmøter" ID="78b61a90-41f4-4720-9b09-63377340a852" SourceTermId="78b61a90-41f4-4720-9b09-63377340a852">
+                                            <pnp:Labels>
+                                                <pnp:Label Value="Minutes from user participation, steering group and project meetings" Language="1033" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Referat fra ferdigbefaring" ID="4f1d0d81-20b9-46e5-ad2e-aaeb376daef7" SourceTermId="4f1d0d81-20b9-46e5-ad2e-aaeb376daef7">
+                                            <pnp:Labels>
+                                                <pnp:Label Value="Minutes from final inspection" Language="1033" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Referat/protokoll fra 1.årsbefaring" ID="39f2e277-dd3b-4664-8c24-f34a718d0002" SourceTermId="39f2e277-dd3b-4664-8c24-f34a718d0002">
+                                            <pnp:Labels>
+                                                <pnp:Label Value="Minutes/protocol from 1-year inspection" Language="1033" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Referat HMS-møter" ID="8a6ba16b-9661-4a81-b7e7-11dc34a24d2f" SourceTermId="8a6ba16b-9661-4a81-b7e7-11dc34a24d2f">
+                                            <pnp:Labels>
+                                                <pnp:Label Value="Minutes HSE meetings" Language="1033" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Referat produksjonsmøter" ID="88f6118f-ea2f-40bb-898d-4c1f5f4282bb" SourceTermId="88f6118f-ea2f-40bb-898d-4c1f5f4282bb">
+                                            <pnp:Labels>
+                                                <pnp:Label Value="Minutes production meetings" Language="1033" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Referat prosjekteringsmøter" ID="1c399a0e-b85c-4ca8-b7da-9b2f6bdc3d00" SourceTermId="1c399a0e-b85c-4ca8-b7da-9b2f6bdc3d00">
+                                            <pnp:Labels>
+                                                <pnp:Label Value="Minutes design meetings" Language="1033" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Referat byggemøter – særmøter om spesielle tema" ID="69fe1c7f-606b-44e1-9c4e-39c9520fc994" SourceTermId="69fe1c7f-606b-44e1-9c4e-39c9520fc994">
+                                            <pnp:Labels>
+                                                <pnp:Label Value="Minutes construction meetings – special meetings on special topics" Language="1033" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Referat eksterne" ID="30d182b7-279e-4d23-a126-3bac79b6f00d" SourceTermId="30d182b7-279e-4d23-a126-3bac79b6f00d">
+                                            <pnp:Labels>
+                                                <pnp:Label Value="External minutes" Language="1033" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                    </pnp:Terms>
+                                </pnp:Term>
+                                <pnp:Term Name="Tegninger/Bilder/Kart" ID="a1c1d6eb-7614-41b7-ad72-c5d7b42d0841" CustomSortOrder="8" SourceTermId="a1c1d6eb-7614-41b7-ad72-c5d7b42d0841">
+                                    <pnp:Labels>
+                                        <pnp:Label Value="Drawings/Pictures/Maps" Language="1033" />
+                                    </pnp:Labels>
+                                    <pnp:Terms>
+                                        <pnp:Term Name="Situasjonsplan (trafikkregulering, kjøp og omregulering av tomt)" ID="e6f9556e-f6e2-413c-985c-9ab0d7265b0a" SourceTermId="e6f9556e-f6e2-413c-985c-9ab0d7265b0a">
+                                            <pnp:Labels>
+                                                <pnp:Label Value="Site plan (traffic regulation, purchase and rezoning of plot)" Language="1033" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Godkjente tegninger fra konsulent og andre" ID="a803394c-6529-4e8a-a56c-1edb3c731d5f" SourceTermId="a803394c-6529-4e8a-a56c-1edb3c731d5f">
+                                            <pnp:Labels>
+                                                <pnp:Label Value="Approved drawings from consultant and others" Language="1033" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Arbeidstegninger fra konsulent og andre" ID="7d3ad4ab-4095-4119-a701-513b004c14b4" SourceTermId="7d3ad4ab-4095-4119-a701-513b004c14b4">
+                                            <pnp:Labels>
+                                                <pnp:Label Value="Workdrawings from consultant and others" Language="1033" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Befaringsnotater, bilder" ID="652569eb-4874-4301-a828-7a89cdfcb76d" SourceTermId="652569eb-4874-4301-a828-7a89cdfcb76d">
+                                            <pnp:Labels>
+                                                <pnp:Label Value="Inspection notes, pictures" Language="1033" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                        <pnp:Term Name="Bilder for dokumentasjon av prosjekt" ID="f6b746a3-6e9f-422b-987b-e23b4617e8d7" SourceTermId="f6b746a3-6e9f-422b-987b-e23b4617e8d7">
+                                            <pnp:Labels>
+                                                <pnp:Label Value="Pictures for project documentation" Language="1033" />
+                                            </pnp:Labels>
+                                            <pnp:LocalCustomProperties>
+                                                <pnp:Property Key="Archiveable" Value="true" />
+                                            </pnp:LocalCustomProperties>
+                                        </pnp:Term>
+                                    </pnp:Terms>
+                                </pnp:Term>
+                                <pnp:Term Name="Annet arkivverdig dokument" ID="49703887-8bcc-4c1c-9679-229ca7a69f93" CustomSortOrder="9" SourceTermId="49703887-8bcc-4c1c-9679-229ca7a69f93">
+                                    <pnp:Labels>
+                                        <pnp:Label Value="Other archival documents" Language="1033" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Arbeidsdokument" ID="c7656209-700c-4cbc-aa3a-1b64efcfd51b" CustomSortOrder="10" SourceTermId="c7656209-700c-4cbc-aa3a-1b64efcfd51b">
+                                    <pnp:Labels>
+                                        <pnp:Label Value="Workdocument" Language="1033" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                            </pnp:Terms>
+                        </pnp:TermSet>
                     </pnp:TermSets>
                 </pnp:TermGroup>
             </pnp:TermGroups>

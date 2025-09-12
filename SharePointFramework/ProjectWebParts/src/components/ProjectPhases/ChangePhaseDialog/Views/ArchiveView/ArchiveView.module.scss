@@ -1,0 +1,91 @@
+@import "~@fluentui/react/dist/sass/References.scss";
+
+.archiveView {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .accordionHeader:hover {
+    font-weight: 900;
+    background-color: var(--colorNeutralBackground3Hover);
+  }
+
+  .section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .sectionHeader {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 8px;
+      padding: 6px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: var(--colorSubtleBackgroundHover);
+        border-radius: var(--borderRadiusSmall);
+      }
+
+      .icon {
+        font-size: 16px;
+        transition: transform 0.2s ease;
+
+        &.expanded {
+          transform: rotate(90deg);
+        }
+      }
+    }
+
+    .selectAllButton {
+      padding-left: 12px;
+      margin-bottom: 4px;
+    }
+
+    .sectionContent {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding-left: 12px;
+
+      .item {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 4px;
+        border-radius: var(--borderRadiusSmall);
+
+        &:hover {
+          background-color: var(--colorSubtleBackgroundHover);
+        }
+
+        .itemIcon {
+          width: 16px;
+          height: 16px;
+          flex-shrink: 0;
+        }
+
+        .itemTitle {
+          flex-grow: 1;
+
+          &.disabledItem {
+            color: var(--colorNeutralForegroundDisabled);
+          }
+
+          .notArchivableText {
+            color: var(--colorNeutralForegroundDisabled);
+            font-style: italic;
+          }
+        }
+      }
+    }
+  }
+
+  .selectedItemsInfo {
+    padding: 8px;
+    background-color: var(--colorNeutralBackground2);
+    border-radius: var(--borderRadiusMedium);
+    border-left: 4px solid var(--colorBrandBackground);
+  }
+}

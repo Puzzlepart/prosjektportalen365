@@ -1,4 +1,4 @@
-_The template was validated 29.4.2025, 12:05:02_
+_The template was validated 9/11/2025, 9:34:17 AM_
 
 The template contains the following tokens that has not been found in the .resx files:
 
@@ -10,7 +10,7 @@ _No tokens with missing translations or replacement values found._
 
 ```txt
 {
-    "Version": "1.11.0",
+    "Version": "1.11.1",
     "Parameters": {
         "ProvisionSiteFields": "Project Portal Columns (Project)",
         "CustomSiteFields": "Project Portal Columns (Custom)",
@@ -72,7 +72,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "da500bfe-49c7-4553-939a-b33254d77763",
+                                    "Id": "9570e369-21a6-4bf5-8198-13506499de52",
                                     "Properties": {
                                         "title": "Admin"
                                     }
@@ -95,7 +95,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "77c58192-1d15-4c09-b62a-96f9c9ffe8ad",
+                                    "Id": "01417142-67c8-498b-a6da-6e78003023dd",
                                     "Properties": {
                                         "title": "Overview for child projects",
                                         "showCommandBar": true,
@@ -124,7 +124,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "555cb52f-48ef-4fa1-8984-7ec0176b2d52",
+                                    "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
                                     "Properties": {
                                         "title": "Benefits for child projects",
                                         "dataSource": "All benefit elements for child projects",
@@ -153,7 +153,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "555cb52f-48ef-4fa1-8984-7ec0176b2d52",
+                                    "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
                                     "Properties": {
                                         "title": "Communication Plans for child projects",
                                         "dataSource": "Alle communication plans for child projects",
@@ -181,7 +181,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "555cb52f-48ef-4fa1-8984-7ec0176b2d52",
+                                    "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
                                     "Properties": {
                                         "title": "Resource allocations for child projects",
                                         "dataSource": "All resource allocations for child projects",
@@ -212,7 +212,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "70c29af4-b55a-4207-911b-8f254ed99f03",
+                                    "Id": "f97a38ab-78c2-400e-899f-b0d4cda76166",
                                     "Properties": {
                                         "title": "Timeline for child projects",
                                         "infoText": "Here you will find a list of all projects with start and end dates in the project. The project timeline also supports phases, subphases and milestones. To zoom in/out in the timeline: ALT+Mousewheel."
@@ -236,7 +236,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "555cb52f-48ef-4fa1-8984-7ec0176b2d52",
+                                    "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
                                     "Properties": {
                                         "title": "Deliveries for child projects",
                                         "dataSource": "All Project Deliveries for child projects",
@@ -265,7 +265,7 @@ _No tokens with missing translations or replacement values found._
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "555cb52f-48ef-4fa1-8984-7ec0176b2d52",
+                                    "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
                                     "Properties": {
                                         "title": "Uncertainties for child projects",
                                         "dataSource": "All risks for child projects",
@@ -289,6 +289,6 @@ _No tokens with missing translations or replacement values found._
 ## Template Path
 
 ```txt
-/Users/olemp/code/prosjektportalen365/Templates/Content/Portfolio_content.en-US/ProjectTemplates/ParentTemplate.txt
+/Users/bloom/Code/Prosjektportalen/pp365_110/Templates/Content/Portfolio_content.en-US/ProjectTemplates/ParentTemplate.txt
 ```
 

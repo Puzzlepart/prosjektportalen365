@@ -1147,6 +1147,12 @@
     <data name="ContentTypes_LogElement_Name" xml:space="preserve">
         <value>Loggelement</value>
     </data>
+    <data name="ContentTypes_ArchiveLogElement_Description" xml:space="preserve">
+        <value/>
+    </data>
+    <data name="ContentTypes_ArchiveLogElement_Name" xml:space="preserve">
+        <value>Arkiveringsloggelement</value>
+    </data>
     <data name="ContentTypes_MeasureIndicator_Name" xml:space="preserve">
         <value>Måleindikator</value>
     </data>
@@ -1396,8 +1402,20 @@
     <data name="ListFields_Title_DisplayName" xml:space="preserve">
         <value>Tittel</value>
     </data>
+    <data name="ListFields_DocumentType_DisplayName" xml:space="preserve">
+        <value>Dokumenttype</value>
+    </data>
+    <data name="Lists_ArchiveLog_Description" xml:space="preserve">
+        <value>Liste for loggføringer av arkivering i prosjekter</value>
+    </data>
+    <data name="Lists_ArchiveLog_Title" xml:space="preserve">
+        <value>Arkiveringslogg</value>
+    </data>
+    <data name="Lists_ArchiveLog_Url" xml:space="preserve">
+        <value>Lists/Arkiveringslogg</value>
+    </data>
     <data name="Lists_BenefitsAnalysis_Title" xml:space="preserve">
-        <value>Gevinstanalyse</value>
+        <value>Gevinstanalyse og gevinstrealiseringsplan</value>
     </data>
     <data name="Lists_BenefitsFollowup_Title" xml:space="preserve">
         <value>Gevinstoppfølging</value>
@@ -1627,6 +1645,9 @@
     <data name="Lists_Global_Settings_Category_OpportunityMatrix_OpportunityMatrixDefaultConfigurationFile_Title" xml:space="preserve">
         <value>Standard konfigurasjon for Mulighetsmatrise</value>
     </data>
+    <data name="Lists_Global_Settings_Category_OpportunityMatrix_OpportunityMatrixDefaultConfigurationFile_Value" xml:space="preserve">
+        <value>standard-konfigurasjon.json</value>
+    </data>
     <data name="Lists_Global_Settings_Category_RiskActionsPlanner" xml:space="preserve">
         <value>Usikkerhetstiltak i Planner</value>
     </data>
@@ -1656,6 +1677,9 @@
     </data>
     <data name="Lists_Global_Settings_Category_RiskMatrix_RiskMatrixDefaultConfigurationFile_Title" xml:space="preserve">
         <value>Standard konfigurasjon for Risikomatrise</value>
+    </data>
+    <data name="Lists_Global_Settings_Category_RiskMatrix_RiskMatrixDefaultConfigurationFile_Value" xml:space="preserve">
+        <value>standard-konfigurasjon.json</value>
     </data>
     <data name="Lists_Global_Settings_Description" xml:space="preserve">
         <value>Globale innstillinger for installasjonen av Prosjektportalen 365.</value>
@@ -2639,7 +2663,7 @@
         <value>Usikkerhet</value>
     </data>
     <data name="Navigation_BenefitsAnalysis_Title" xml:space="preserve">
-        <value>Gevinstanalyse</value>
+        <value>Gevinstanalyse og gevinstrealiseringsplan</value>
     </data>
     <data name="Navigation_BenefitsAnalysis_Url" xml:space="preserve">
         <value>Lists/Gevinstanalyse og gevinstrealiseringsplan/AllItems.aspx</value>
@@ -3623,7 +3647,7 @@
         <value>Kontekst knyttet til loggen.</value>
     </data>
     <data name="SiteFields_GtLogContext_DisplayName" xml:space="preserve">
-        <value>Context</value>
+        <value>Kontekst</value>
     </data>
     <data name="SiteFields_GtLogFunctionName_Description" xml:space="preserve">
         <value>Navnet på funksjonen som loggen refererer til.</value>
@@ -3648,6 +3672,30 @@
     </data>
     <data name="SiteFields_GtLogScope_DisplayName" xml:space="preserve">
         <value>Omfang</value>
+    </data>
+    <data name="SiteFields_GtLogOperation_Description" xml:space="preserve">
+        <value>Operasjonen som ble utført i arkiveringsprosessen</value>
+    </data>
+    <data name="SiteFields_GtLogOperation_DisplayName" xml:space="preserve">
+        <value>Operasjon</value>
+    </data>
+    <data name="SiteFields_GtLogReference_Description" xml:space="preserve">
+        <value>Referanse til arkivert innhold eller operasjon</value>
+    </data>
+    <data name="SiteFields_GtLogReference_DisplayName" xml:space="preserve">
+        <value>Referanse</value>
+    </data>
+    <data name="SiteFields_GtLogArchiveUrl_Description" xml:space="preserve">
+        <value>URL til det arkiverte innholdet</value>
+    </data>
+    <data name="SiteFields_GtLogArchiveUrl_DisplayName" xml:space="preserve">
+        <value>Arkivert URL</value>
+    </data>
+    <data name="SiteFields_GtLogStatus_Description" xml:space="preserve">
+        <value>Status for arkiveringsoperasjonen</value>
+    </data>
+    <data name="SiteFields_GtLogStatus_DisplayName" xml:space="preserve">
+        <value>Status</value>
     </data>
     <data name="SiteFields_GtLogWebUrl_Description" xml:space="preserve">
         <value>Nettadressen som loggen refererer til.</value>
@@ -4672,6 +4720,57 @@
     <data name="SiteFields_Title_DisplayName" xml:space="preserve">
         <value>Tittel</value>
     </data>
+    <data name="SiteFields_GtDocumentType_Description" xml:space="preserve">
+        <value>Dokumenttype for klassifisering av dokumenter</value>
+    </data>
+    <data name="SiteFields_GtDocumentType_DisplayName" xml:space="preserve">
+        <value>Dokumenttype</value>
+    </data>
+    <data name="SiteFields_GtHubSiteId_DisplayName" xml:space="preserve">
+        <value>Hub-ID</value>
+    </data>
+    <data name="SiteFields_GtHubSiteId_Description" xml:space="preserve">
+        <value>ID til hubområdet.</value>
+    </data>
+    <data name="SiteFields_GtAiStatusComments_DisplayName" xml:space="preserve">
+        <value>Prosjektstatus oppsummert (KI)</value>
+    </data>
+    <data name="SiteFields_GtAiStatus_DisplayName" xml:space="preserve">
+        <value>Prosjektstatus vurdert (KI)</value>
+    </data>
+    <data name="SiteFields_GtAiStatus_Choice_Weak" xml:space="preserve">
+        <value>Svak</value>
+    </data>
+    <data name="SiteFields_GtAiStatus_Choice_Satisfactory" xml:space="preserve">
+        <value>Tilfredsstillende</value>
+    </data>
+    <data name="SiteFields_GtAiStatus_Choice_Good" xml:space="preserve">
+        <value>God</value>
+    </data>
+    <data name="SiteFields_GtAiStatus_Choice_Excellent" xml:space="preserve">
+        <value>Prisverdig</value>
+    </data>
+    <data name="SiteFields_GtAiRecommendations_DisplayName" xml:space="preserve">
+        <value>Anbefalinger (KI)</value>
+    </data>
+    <data name="SiteFields_GtAiStatusPosted_DisplayName" xml:space="preserve">
+        <value>Prosjektstatus gjennomgått (KI)</value>
+    </data>
+    <data name="SiteFields_GtAiStatusPosted_Choice_Yes" xml:space="preserve">
+        <value>Ja</value>
+    </data>
+    <data name="SiteFields_GtAiStatusPosted_Choice_No" xml:space="preserve">
+        <value>Nei</value>
+    </data>
+    <data name="SiteFields_GtAiStatusScoreNumber_DisplayName" xml:space="preserve">
+        <value>Prosjektstatusscore (KI)</value>
+    </data>
+    <data name="SiteFields_GtAiChangesSincePrev_DisplayName" xml:space="preserve">
+        <value>Endringer siden forrige (KI)</value>
+    </data>
+    <data name="SiteFields_GtAiProcessedDateTime_DisplayName" xml:space="preserve">
+        <value>Tidspunkt prosessert (KI)</value>
+    </data>
     <data name="View_AllDocuments_DisplayName" xml:space="preserve">
         <value>Alle dokumenter</value>
     </data>
@@ -4742,10 +4841,10 @@
         <value>Uten ansvarlig</value>
     </data>
     <data name="WebParts_BenefitsOverviewCategory_Title" xml:space="preserve">
-        <value>Gevinstoversikt kategori</value>
+        <value>Gevinstoversikt</value>
     </data>
     <data name="WebParts_BenefitsOverviewDataSource_Title" xml:space="preserve">
-        <value>Gevinstoversikt datakilde</value>
+        <value>Alle gevinstelementer for prosjektet</value>
     </data>
     <data name="WebParts_BenefitsOverview_Title" xml:space="preserve">
         <value>Gevinstoversikt</value>
@@ -4848,51 +4947,6 @@
     </data>
     <data name="WebParts_UsefulLinks_Title" xml:space="preserve">
         <value>Nyttige lenker</value>
-    </data>
-    <data name="SiteFields_GtHubSiteId_DisplayName" xml:space="preserve">
-        <value>Hub-ID</value>
-    </data>
-    <data name="SiteFields_GtHubSiteId_Description" xml:space="preserve">
-        <value>ID til hubområdet.</value>
-    </data>
-    <data name="SiteFields_GtAiStatusComments_DisplayName" xml:space="preserve">
-        <value>Prosjektstatus oppsummert (KI)</value>
-    </data>
-    <data name="SiteFields_GtAiStatus_DisplayName" xml:space="preserve">
-        <value>Prosjektstatus vurdert (KI)</value>
-    </data>
-    <data name="SiteFields_GtAiStatus_Choice_Weak" xml:space="preserve">
-        <value>Svak</value>
-    </data>
-    <data name="SiteFields_GtAiStatus_Choice_Satisfactory" xml:space="preserve">
-        <value>Tilfredsstillende</value>
-    </data>
-    <data name="SiteFields_GtAiStatus_Choice_Good" xml:space="preserve">
-        <value>God</value>
-    </data>
-    <data name="SiteFields_GtAiStatus_Choice_Excellent" xml:space="preserve">
-        <value>Prisverdig</value>
-    </data>
-    <data name="SiteFields_GtAiRecommendations_DisplayName" xml:space="preserve">
-        <value>Anbefalinger (KI)</value>
-    </data>
-    <data name="SiteFields_GtAiStatusPosted_DisplayName" xml:space="preserve">
-        <value>Prosjektstatus gjennomgått (KI)</value>
-    </data>
-    <data name="SiteFields_GtAiStatusPosted_Choice_Yes" xml:space="preserve">
-        <value>Ja</value>
-    </data>
-    <data name="SiteFields_GtAiStatusPosted_Choice_No" xml:space="preserve">
-        <value>Nei</value>
-    </data>
-    <data name="SiteFields_GtAiStatusScoreNumber_DisplayName" xml:space="preserve">
-        <value>Prosjektstatusscore (KI)</value>
-    </data>
-    <data name="SiteFields_GtAiChangesSincePrev_DisplayName" xml:space="preserve">
-        <value>Endringer siden forrige (KI)</value>
-    </data>
-    <data name="SiteFields_GtAiProcessedDateTime_DisplayName" xml:space="preserve">
-        <value>Tidspunkt prosessert (KI)</value>
     </data>
     <data name="Security_SiteGroup_ProvisionPortal_Title" xml:space="preserve">
         <value>Bestillingsportalen</value>

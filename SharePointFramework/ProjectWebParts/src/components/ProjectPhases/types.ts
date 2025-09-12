@@ -1,9 +1,10 @@
-import { ProjectPhaseChecklistData, ProjectPhaseModel } from 'pp365-shared-library/lib/models'
+import { ProjectPhaseChecklistData, ProjectPhaseModel, DocumentTypeModel } from 'pp365-shared-library/lib/models'
 import {
   IBaseWebPartComponentProps,
   IBaseWebPartComponentState
 } from 'pp365-shared-library/lib/components/BaseWebPartComponent'
 import { IProjectPhasePopoverProps } from './ProjectPhase/ProjectPhasePopover'
+import { IArchiveItem } from './ChangePhaseDialog/Views/ArchiveView/types'
 
 export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
   /**
@@ -67,6 +68,21 @@ export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
    * Hook auth - for authing hooks when switching phases
    */
   hookAuth: string
+
+  /**
+   * Use archive functionality when switching phases
+   */
+  useArchive: boolean
+
+  /**
+   * Archive hook URL - for running archive hooks when switching phases
+   */
+  hookArchiveUrl: string
+
+  /**
+   * Archive hook auth - for authing archive hooks when switching phases
+   */
+  hookArchiveAuth: string
 
   /**
    * Comment min. length
@@ -141,6 +157,21 @@ export interface IProjectPhasesData {
    * Current user has change phase permission (`75a08ae0-d69a-41b2-adf4-ae233c6bff9f`)
    */
   userHasChangePhasePermission?: boolean
+
+  /**
+   * Documents available for archiving
+   */
+  archiveDocuments?: IArchiveItem[]
+
+  /**
+   * Lists available for archiving
+   */
+  archiveLists?: IArchiveItem[]
+
+  /**
+   * Document types available for archiving
+   */
+  documentTypes?: DocumentTypeModel[]
 }
 
 export interface IPhaseSitePageModel {

@@ -1,0 +1,1 @@
+<Field Description="{resource:SiteFields_GtLogStatus_Description}" DisplayName="{resource:SiteFields_GtLogStatus_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{1dde57da-20ab-4a8f-9ea1-9c4f4e12b56c}" Name="GtLogStatus" StaticName="GtLogStatus" Type="Text" />

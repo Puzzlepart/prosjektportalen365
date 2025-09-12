@@ -2,10 +2,20 @@ define([], function () {
   return {
     ToggleOnText: 'På',
     ToggleOffText: 'Av',
-    ManualConfigurationPathLabel: 'Sti til manuell konfigurasjon', EditTimelineContentText: 'Rediger tidslinjeelement',
+    ManualConfigurationPathLabel: 'Sti til manuell konfigurasjon',
+    EditTimelineContentText: 'Rediger tidslinjeelement',
     NewTimelineContentText: 'Nytt tidslinjeelement',
     NewStatusPanelTitle: 'Ny statusrapport',
     EditStatusPanelText: 'Rediger statusrapport',
+    ArchiveLogStatusSuccess: 'Arkivert',
+    ArchiveLogStatusError: 'Feil',
+    ArchiveLogStatusWarning: 'Advarsel',
+    ArchiveLogStatusInProgress: 'Til arkiv',
+    ArchiveLogScopeDocument: 'Dokument',
+    ArchiveLogScopeList: 'Liste',
+    ArchiveLogOperationArchive: 'Arkivering',
+    ArchiveLogOperationPhaseTransition: 'Faseovergang',
+    ArchiveLogOperationEndClosed: 'Avsluttet/Stengt/Låst',
     Aria: {
       CurrentPhaseText:
         'Dette er den gjeldende fasen. Det er derfor ikke mulig å endre til denne fasen.'
@@ -264,6 +274,27 @@ define([], function () {
     UsePhaseHooksCalloutText:
       "Her kan du velge om det skal kjøres hooks ved endring av faser. Ved endring av fase vil det bli eksekvert et kall mot url-en som er spesifisert under. Dersom kallet krever autentisering, kan dette fylles inn under url feltet. Kallet som blir eksekvert sender med følgende parametere:  'webUrl' og  'apiKey', disse er begge av typen  'string'.",
     UsePhaseHooksFieldLabel: 'Bruk fasevelger hooks',
+    ArchiveViewTitle: 'Arkivering av dokumenter og lister',
+    ArchiveViewDescription: 'Velg hvilke dokumenter og/eller lister du ønsker å arkivere under faseendringen.',
+    ArchiveInformationTitle: 'Hva skal arkiveres?',
+    ArchiveMoreInformationText: 'Trykk her for mer informasjon',
+    ArchiveInformationText: 'Under kan du velge hvilke dokumenter og/eller lister som skal arkiveres. Trykk deretter på \'<b>Fortsett</b>\' for å gå videre i prosessen.<br /><br />Denne prosessen innebærer at valgte dokumenter og/eller lister fra området blir hentet ut og logget for arkivering.<br /><br />Det vil være en arkivpost per element som arkiveres, dette blir plukket opp av en arkivjobb som arkiverer dette til en arkivkjerne.<br /><br />Loggføringen vil inneholde informasjon om hvilke elementer som er markert for arkivering, det angis hvilke fase man endrer fra og til, samt hvem som utførte fasebyttet og når.',
+    ArchiveDocumentsSection: 'Dokumenter',
+    ArchiveListsSection: 'Lister',
+    ArchiveSelectedItemsInfo: '{0} element(er) valgt for arkivering',
+    ArchiveLoadingText: 'Laster arkiveringsalternativer...',
+    ArchiveContinueText: 'Fortsett',
+    ArchiveSelectAllText: 'Velg alle',
+    ArchiveNotArchivableText: 'Ikke arkiverbar',
+    ErrorArchiving: 'Feil ved arkivering: {0}',
+    ArchiveList: 'Liste: {0}',
+    ArchiveDocument: 'Dokument: {0}',
+    ArchivePhaseTransition: 'Fra {0}-fase til {1}-fase',
+    UseArchiveFieldLabel: 'Bruk arkivfunksjonalitet',
+    HookArchiveUrlFieldLabel: 'Arkiv hook URL',
+    HookArchiveUrlFieldDescription: 'URL for arkiv webhook endpoint som håndterer arkiveringsprosessen',
+    HookArchiveAuthFieldLabel: 'Arkiv hook autentisering',
+    HookArchiveAuthFieldDescription: 'Autentiseringstoken eller API-nøkkel for arkiv webhook endpoint',
     ViewsGroupName: 'Visninger',
     ViewVersionHistoryText: 'Vis versjonshistorikk',
     ViewXmlFieldLabel: 'Vis XML spørring',
@@ -313,6 +344,6 @@ define([], function () {
     ColorPickerStrings: 'Fargevelgerstrenger',
     NewsCreateSuccess: 'Nyhetsartikkel opprettet',
     ShowCommentText: 'Vis kommentar',
-    HideCommentText: 'Skjul kommentar',
+    HideCommentText: 'Skjul kommentar'
   }
 })

@@ -1,0 +1,1 @@
+<Field Description="{resource:SiteFields_GtLogReference_Description}" DisplayName="{resource:SiteFields_GtLogReference_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{95468edd-45dd-45d9-a7d4-5e1d543e8aa6}" Name="GtLogReference" StaticName="GtLogReference" Type="Text" />

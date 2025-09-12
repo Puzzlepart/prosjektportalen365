@@ -1,12 +1,15 @@
 # Endringslogg
 
-Sjekk ut [release notes](./releasenotes/1.11.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
+Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
 
 ## 1.12.0 - TBA
 
 ### Ny funksjonalitet
 
 - Engelsk versjon av Prosjektportalen! *Hjelpedokumentasjon om hvordan komme i gang*
+- Ny funksjonalitet i fasevelgeren for arkivering av dokumenter og lister som skal arkiveres ved faseendring
+  - Elementer som skal til arkivering loggføres i en ny liste på porteføljenivå kalt `Arkiveringslogg`
+  - Webhook-integrasjon for ekstern arkivhåndtering som håndterer arkivering av dokumenter og lister basert på loggføringen
 
 ### Forbedringer
 

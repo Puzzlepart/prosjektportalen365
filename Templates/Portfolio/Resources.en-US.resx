@@ -1147,6 +1147,12 @@
     <data name="ContentTypes_LogElement_Name" xml:space="preserve">
         <value>Log Element</value>
     </data>
+    <data name="ContentTypes_ArchiveLogElement_Description" xml:space="preserve">
+        <value/>
+    </data>
+    <data name="ContentTypes_ArchiveLogElement_Name" xml:space="preserve">
+        <value>Archive Log Element</value>
+    </data>
     <data name="ContentTypes_MeasureIndicator_Name" xml:space="preserve">
         <value>Measure Indicator</value>
     </data>
@@ -1381,8 +1387,20 @@
     <data name="ListFields_Title_DisplayName" xml:space="preserve">
         <value>Title</value>
     </data>
+    <data name="ListFields_DocumentType_DisplayName" xml:space="preserve">
+        <value>Document type</value>
+    </data>
+    <data name="Lists_ArchiveLog_Description" xml:space="preserve">
+        <value>List for logging archive operations in projects</value>
+    </data>
+    <data name="Lists_ArchiveLog_Title" xml:space="preserve">
+        <value>Archive Log</value>
+    </data>
+    <data name="Lists_ArchiveLog_Url" xml:space="preserve">
+        <value>Lists/ArchiveLog</value>
+    </data>
     <data name="Lists_BenefitsAnalysis_Title" xml:space="preserve">
-        <value>Benefits analysis</value>
+        <value>Benefits analysis and realization plan</value>
     </data>
     <data name="Lists_BenefitsFollowup_Title" xml:space="preserve">
         <value>Benefits follow-up</value>
@@ -1445,7 +1463,7 @@
         <value>Benefit elements on portfolio level</value>
     </data>
     <data name="Lists_DataSources_Category_BenefitOverview_Project" xml:space="preserve">
-        <value>Benefits elements for the project</value>
+        <value>Benefit elements for the project</value>
     </data>
     <data name="Lists_DataSources_Category_CommunicationPlan" xml:space="preserve">
         <value>Communication Plan</value>
@@ -1612,6 +1630,9 @@
     <data name="Lists_Global_Settings_Category_OpportunityMatrix_OpportunityMatrixDefaultConfigurationFile_Title" xml:space="preserve">
         <value>Standard configuration for Opportunity Matrix</value>
     </data>
+    <data name="Lists_Global_Settings_Category_OpportunityMatrix_OpportunityMatrixDefaultConfigurationFile_Value" xml:space="preserve">
+        <value>standard-configuration.json</value>
+    </data>
     <data name="Lists_Global_Settings_Category_RiskActionsPlanner" xml:space="preserve">
         <value>Risk Actions in Planner</value>
     </data>
@@ -1641,6 +1662,9 @@
     </data>
     <data name="Lists_Global_Settings_Category_RiskMatrix_RiskMatrixDefaultConfigurationFile_Title" xml:space="preserve">
         <value>Standard configuration for Risk Matrix</value>
+    </data>
+    <data name="Lists_Global_Settings_Category_RiskMatrix_RiskMatrixDefaultConfigurationFile_Value" xml:space="preserve">
+        <value>standard-configuration.json</value>
     </data>
     <data name="Lists_Global_Settings_Description" xml:space="preserve">
         <value>Global settings for the installation of Project Portal.</value>
@@ -2531,10 +2555,10 @@
         <value>Uncertainty</value>
     </data>
     <data name="Navigation_BenefitsAnalysis_Title" xml:space="preserve">
-        <value>Benefits Analysis</value>
+        <value>Benefits Analysis and Realization Plan</value>
     </data>
     <data name="Navigation_BenefitsAnalysis_Url" xml:space="preserve">
-        <value>Lists/Benefits%20analysis/AllItems.aspx</value>
+        <value>Lists/Benefits%20analysis%20and%20realization%20plan/AllItems.aspx</value>
     </data>
     <data name="Navigation_BenefitsFollowup_Title" xml:space="preserve">
         <value>Benefits Follow-up</value>
@@ -3495,6 +3519,30 @@
     </data>
     <data name="SiteFields_GtLogScope_DisplayName" xml:space="preserve">
         <value>Scope</value>
+    </data>
+    <data name="SiteFields_GtLogOperation_Description" xml:space="preserve">
+        <value>The operation that was performed in the archiving process</value>
+    </data>
+    <data name="SiteFields_GtLogOperation_DisplayName" xml:space="preserve">
+        <value>Operation</value>
+    </data>
+    <data name="SiteFields_GtLogReference_Description" xml:space="preserve">
+        <value>Reference to archived content or operation</value>
+    </data>
+    <data name="SiteFields_GtLogReference_DisplayName" xml:space="preserve">
+        <value>Reference</value>
+    </data>
+    <data name="SiteFields_GtLogArchiveUrl_Description" xml:space="preserve">
+        <value>URL to the archived content</value>
+    </data>
+    <data name="SiteFields_GtLogArchiveUrl_DisplayName" xml:space="preserve">
+        <value>Archived URL</value>
+    </data>
+    <data name="SiteFields_GtLogStatus_Description" xml:space="preserve">
+        <value>Status of the archiving operation</value>
+    </data>
+    <data name="SiteFields_GtLogStatus_DisplayName" xml:space="preserve">
+        <value>Status</value>
     </data>
     <data name="SiteFields_GtLogWebUrl_Description" xml:space="preserve">
         <value>URL of the site where the log was generated</value>
@@ -4489,6 +4537,57 @@
     <data name="SiteFields_Title_DisplayName" xml:space="preserve">
         <value>Title</value>
     </data>
+    <data name="SiteFields_GtDocumentType_Description" xml:space="preserve">
+        <value>Document type for classification of documents</value>
+    </data>
+    <data name="SiteFields_GtDocumentType_DisplayName" xml:space="preserve">
+        <value>Document Type</value>
+    </data>
+    <data name="SiteFields_GtHubSiteId_DisplayName" xml:space="preserve">
+        <value>Hub-ID</value>
+    </data>
+    <data name="SiteFields_GtHubSiteId_Description" xml:space="preserve">
+        <value>The ID of the hub site.</value>
+    </data>
+    <data name="SiteFields_GtAiStatusComments_DisplayName" xml:space="preserve">
+        <value>Project status summarized (AI)</value>
+    </data>
+    <data name="SiteFields_GtAiStatus_DisplayName" xml:space="preserve">
+        <value>Project status assessed (AI)</value>
+    </data>
+    <data name="SiteFields_GtAiStatus_Choice_Weak" xml:space="preserve">
+        <value>Weak</value>
+    </data>
+    <data name="SiteFields_GtAiStatus_Choice_Satisfactory" xml:space="preserve">
+        <value>Satisfactory</value>
+    </data>
+    <data name="SiteFields_GtAiStatus_Choice_Good" xml:space="preserve">
+        <value>Good</value>
+    </data>
+    <data name="SiteFields_GtAiStatus_Choice_Excellent" xml:space="preserve">
+        <value>Excellent</value>
+    </data>
+    <data name="SiteFields_GtAiRecommendations_DisplayName" xml:space="preserve">
+        <value>Recommendations (AI)</value>
+    </data>
+    <data name="SiteFields_GtAiStatusPosted_DisplayName" xml:space="preserve">
+        <value>Project status reviewed (AI)</value>
+    </data>
+    <data name="SiteFields_GtAiStatusPosted_Choice_Yes" xml:space="preserve">
+        <value>Yes</value>
+    </data>
+    <data name="SiteFields_GtAiStatusPosted_Choice_No" xml:space="preserve">
+        <value>No</value>
+    </data>
+    <data name="SiteFields_GtAiStatusScoreNumber_DisplayName" xml:space="preserve">
+        <value>Project status score (AI)</value>
+    </data>
+    <data name="SiteFields_GtAiChangesSincePrev_DisplayName" xml:space="preserve">
+        <value>Changes since previous (AI)</value>
+    </data>
+    <data name="SiteFields_GtAiProcessedDateTime_DisplayName" xml:space="preserve">
+        <value>Processed date/time (AI)</value>
+    </data>
     <data name="View_AllDocuments_DisplayName" xml:space="preserve">
         <value>All documents</value>
     </data>
@@ -4544,13 +4643,13 @@
         <value>Without responsible</value>
     </data>
     <data name="WebParts_BenefitsOverviewCategory_Title" xml:space="preserve">
-        <value>Benefits Overview Category</value>
+        <value>Benefit Overview</value>
     </data>
     <data name="WebParts_BenefitsOverviewDataSource_Title" xml:space="preserve">
-        <value>Benefits Overview Data Source</value>
+        <value>Benefit elements for the project</value>
     </data>
     <data name="WebParts_BenefitsOverview_Title" xml:space="preserve">
-        <value>Benefits Overview</value>
+        <value>Benefit Overview</value>
     </data>
     <data name="WebParts_CurrentPhase_Title" xml:space="preserve">
         <value>Current Phase</value>
@@ -4647,51 +4746,6 @@
     </data>
     <data name="WebParts_UsefulLinks_Title" xml:space="preserve">
         <value>Useful Links</value>
-    </data>
-    <data name="SiteFields_GtHubSiteId_DisplayName" xml:space="preserve">
-        <value>Hub-ID</value>
-    </data>
-    <data name="SiteFields_GtHubSiteId_Description" xml:space="preserve">
-        <value>The ID of the hub site.</value>
-    </data>
-    <data name="SiteFields_GtAiStatusComments_DisplayName" xml:space="preserve">
-        <value>Project status summarized (AI)</value>
-    </data>
-    <data name="SiteFields_GtAiStatus_DisplayName" xml:space="preserve">
-        <value>Project status assessed (AI)</value>
-    </data>
-    <data name="SiteFields_GtAiStatus_Choice_Weak" xml:space="preserve">
-        <value>Weak</value>
-    </data>
-    <data name="SiteFields_GtAiStatus_Choice_Satisfactory" xml:space="preserve">
-        <value>Satisfactory</value>
-    </data>
-    <data name="SiteFields_GtAiStatus_Choice_Good" xml:space="preserve">
-        <value>Good</value>
-    </data>
-    <data name="SiteFields_GtAiStatus_Choice_Excellent" xml:space="preserve">
-        <value>Excellent</value>
-    </data>
-    <data name="SiteFields_GtAiRecommendations_DisplayName" xml:space="preserve">
-        <value>Recommendations (AI)</value>
-    </data>
-    <data name="SiteFields_GtAiStatusPosted_DisplayName" xml:space="preserve">
-        <value>Project status reviewed (AI)</value>
-    </data>
-    <data name="SiteFields_GtAiStatusPosted_Choice_Yes" xml:space="preserve">
-        <value>Yes</value>
-    </data>
-    <data name="SiteFields_GtAiStatusPosted_Choice_No" xml:space="preserve">
-        <value>No</value>
-    </data>
-    <data name="SiteFields_GtAiStatusScoreNumber_DisplayName" xml:space="preserve">
-        <value>Project status score (AI)</value>
-    </data>
-    <data name="SiteFields_GtAiChangesSincePrev_DisplayName" xml:space="preserve">
-        <value>Changes since previous (AI)</value>
-    </data>
-    <data name="SiteFields_GtAiProcessedDateTime_DisplayName" xml:space="preserve">
-        <value>Processed date/time (AI)</value>
     </data>
     <data name="Security_SiteGroup_ProvisionPortal_Title" xml:space="preserve">
         <value>Provision portal</value>

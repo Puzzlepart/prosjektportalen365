@@ -1,0 +1,1 @@
+<Field Description="{resource:SiteFields_GtLogArchiveUrl_Description}" DisplayName="{resource:SiteFields_GtLogArchiveUrl_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{436e52e0-3c7c-4711-aa1a-3a477d2b14ad}" Name="GtLogArchiveUrl" StaticName="GtLogArchiveUrl" Type="Text" />

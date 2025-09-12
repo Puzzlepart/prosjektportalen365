@@ -1,0 +1,1 @@
+<Field Description="{resource:SiteFields_GtLogOperation_Description}" DisplayName="{resource:SiteFields_GtLogOperation_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{0ceeeca1-3b9e-4d5b-8abb-51fadf718075}" Name="GtLogOperation" StaticName="GtLogOperation" Type="Text" />
