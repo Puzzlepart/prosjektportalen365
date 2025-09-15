@@ -16,6 +16,36 @@ export interface IArchiveLogEntry {
 }
 
 /**
+ * Interface for archive scope status
+ */
+export interface IArchiveScopeStatus {
+  scope: string
+  count: number
+  status: string
+}
+
+/**
+ * Interface for a single archive operation
+ */
+export interface IArchiveOperation {
+  operation: string
+  date: Date
+  message: string
+  documentCount: number
+  listCount: number
+  totalItems: number
+  scopes: IArchiveScopeStatus[]
+}
+
+/**
+ * Interface for detailed archive information
+ */
+export interface IArchiveStatusInfo {
+  lastArchiveDate: Date
+  operations: IArchiveOperation[]
+}
+
+/**
  * Interface for archive document item data
  */
 export interface IArchiveDocumentItem {

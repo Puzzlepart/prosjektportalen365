@@ -1,4 +1,8 @@
-import { ProjectPhaseChecklistData, ProjectPhaseModel, DocumentTypeModel } from 'pp365-shared-library/lib/models'
+import {
+  ProjectPhaseChecklistData,
+  ProjectPhaseModel,
+  DocumentTypeModel
+} from 'pp365-shared-library/lib/models'
 import {
   IBaseWebPartComponentProps,
   IBaseWebPartComponentState

@@ -89,6 +89,15 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<IProje
               ]
             },
             {
+              groupName: strings.ArchiveGroupName,
+              groupFields: [
+                PropertyPaneToggle('hideArchiveStatus', {
+                  label: strings.HideArchiveStatusLabel,
+                  checked: propertiesWithDefaults.hideArchiveStatus
+                })
+              ]
+            },
+            {
               groupName: strings.ProjectStatusGroupName,
               groupFields: [
                 PropertyPaneToggle('hideStatusReport', {

@@ -1,6 +1,15 @@
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
-import { Checkbox, Text, Spinner, ToggleButton, Accordion, AccordionHeader, AccordionItem, AccordionPanel } from '@fluentui/react-components'
+import {
+  Checkbox,
+  Text,
+  Spinner,
+  ToggleButton,
+  Accordion,
+  AccordionHeader,
+  AccordionItem,
+  AccordionPanel
+} from '@fluentui/react-components'
 import {
   ChevronRight16Regular,
   Document16Regular,
@@ -50,9 +59,7 @@ export const ArchiveView: FC = () => {
 
   return (
     <div className={styles.archiveView}>
-      <UserMessage
-        title={strings.ArchiveInformationTitle}
-      >
+      <UserMessage title={strings.ArchiveInformationTitle}>
         <Accordion collapsible>
           <AccordionItem value='1'>
             <AccordionHeader className={styles.accordionHeader}>
@@ -94,7 +101,9 @@ export const ArchiveView: FC = () => {
               <ToggleButton
                 appearance='subtle'
                 size='small'
-                checked={section.items.filter((item) => !item.disabled).every((item) => item.selected)}
+                checked={section.items
+                  .filter((item) => !item.disabled)
+                  .every((item) => item.selected)}
                 icon={
                   section.items.filter((item) => !item.disabled).every((item) => item.selected)
                     ? getFluentIcon('SelectAllOn')
@@ -118,7 +127,11 @@ export const ArchiveView: FC = () => {
                     label={
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         {getItemIcon(item)}
-                        <Text className={`${styles.itemTitle} ${item.disabled ? styles.disabledItem : ''}`}>
+                        <Text
+                          className={`${styles.itemTitle} ${
+                            item.disabled ? styles.disabledItem : ''
+                          }`}
+                        >
                           {item.title}
                           {item.disabled && (
                             <Text size={200} className={styles.notArchivableText}>

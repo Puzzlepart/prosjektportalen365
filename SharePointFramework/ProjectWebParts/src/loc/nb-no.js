@@ -177,6 +177,8 @@ define([], function () {
     NotPublishedStatusReport: 'Kladd, sist endret {0}',
     OpportunityMatrixGroupName: 'Mulighetsmatrise',
     OverrideHeadersLabel: 'Overstyr overskrifter for {0}x{0}',
+    ArchiveGroupName: 'Arkivering',
+    HideArchiveStatusLabel: 'Skjul arkiveringsstatus',
     ParentProjectsGroupName: 'Overordnede prosjekter',
     ParentProjectsHeaderDescription:
       'Her listes alle program/overordnede prosjekter som dette prosjektet tilhører.',
@@ -344,6 +346,12 @@ define([], function () {
     ColorPickerStrings: 'Fargevelgerstrenger',
     NewsCreateSuccess: 'Nyhetsartikkel opprettet',
     ShowCommentText: 'Vis kommentar',
-    HideCommentText: 'Skjul kommentar'
+    HideCommentText: 'Skjul kommentar',
+    ArchiveStatusHeaderText: 'Arkiveringsstatus',
+    ArchiveStatusHeaderDescription: 'Viser nylig arkiveringsaktivitet for dette prosjektet',
+    ArchiveStatusDetailedMessage: 'Siste arkiveringsaktivitet: {0}',
+    ArchiveStatusDocumentCount: '{0} dokument(er)',
+    ArchiveStatusListCount: '{0} liste(r)',
+    ArchiveStatusTotalCount: 'Sendt til arkivering: ',
   }
 })

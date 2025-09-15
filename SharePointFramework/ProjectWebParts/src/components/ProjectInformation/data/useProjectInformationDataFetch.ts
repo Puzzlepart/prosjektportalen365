@@ -24,6 +24,7 @@ import { fetchProjectStatusReportData } from './fetchProjectStatusReportData'
  * - `SPDataAdapter.portalDataService.getProjectColumns` - fetches project columns
  * - `SPDataAdapter.project.getProjectInformationData` - fetches project properties data
  * - `SPDataAdapter.portalDataService.getParentProjects` - fetches parent projects (only on frontpage)
+ * - `SPDataAdapter.getArchiveStatus` - fetches archive status information (only on frontpage)
  * - `fetchProjectStatusReportData` - fetches project status reports, sections and column config
  *
  * @remarks Ensures that `SPDataAdapter` is configured before fetching data.
@@ -40,18 +41,26 @@ const fetchData: DataFetchFunction<
 > = async (context) => {
   try {
     const isFrontpage = context.props.page === 'Frontpage'
-    const [columns, projectInformationData, [reports, sections, columnConfig], parentProjects] =
-      await Promise.all([
-        SPDataAdapter.portalDataService.getProjectColumns(),
-        SPDataAdapter.project.getProjectInformationData(),
-        fetchProjectStatusReportData(context),
-        isFrontpage
-          ? SPDataAdapter.portalDataService.getParentProjects(
-              context.props.webAbsoluteUrl,
-              ProjectInformationParentProject
-            )
-          : Promise.resolve([])
-      ])
+    const [
+      columns,
+      projectInformationData,
+      [reports, sections, columnConfig],
+      parentProjects,
+      archiveStatus
+    ] = await Promise.all([
+      SPDataAdapter.portalDataService.getProjectColumns(),
+      SPDataAdapter.project.getProjectInformationData(),
+      fetchProjectStatusReportData(context),
+      isFrontpage
+        ? SPDataAdapter.portalDataService.getParentProjects(
+            context.props.webAbsoluteUrl,
+            ProjectInformationParentProject
+          )
+        : Promise.resolve([]),
+      isFrontpage
+        ? SPDataAdapter.getArchiveStatus(context.props.webAbsoluteUrl)
+        : Promise.resolve(null)
+    ])
     const templateName = projectInformationData.fieldValues.get('GtProjectTemplate', {
       format: 'text'
     })
@@ -64,6 +73,7 @@ const fetchData: DataFetchFunction<
         sections,
         columnConfig,
         template,
+        archiveStatus,
         ...projectInformationData
       },
       userHasEditPermission: false

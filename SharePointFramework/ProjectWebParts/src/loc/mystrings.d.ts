@@ -133,6 +133,8 @@ declare interface IProjectWebPartsStrings {
   NotPublishedStatusReport: string
   OpportunityMatrixGroupName: string
   OverrideHeadersLabel: string
+  ArchiveGroupName: string
+  HideArchiveStatusLabel: string
   ParentProjectsGroupName: string
   ParentProjectsHeaderDescription: string
   ParentProjectsHeaderText: string
@@ -292,6 +294,12 @@ declare interface IProjectWebPartsStrings {
   ArchiveLogOperationArchive: string
   ArchiveLogOperationPhaseTransition: string
   ArchiveLogOperationEndClosed: string
+  ArchiveStatusHeaderText: string
+  ArchiveStatusHeaderDescription: string
+  ArchiveStatusDetailedMessage: string
+  ArchiveStatusDocumentCount: string
+  ArchiveStatusListCount: string
+  ArchiveStatusTotalCount: string
 }
 
 declare module 'ProjectWebPartsStrings' {

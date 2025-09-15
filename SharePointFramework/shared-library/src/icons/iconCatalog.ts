@@ -152,7 +152,11 @@ import {
   SelectAllOffFilled,
   SelectAllOffRegular,
   SelectAllOnFilled,
-  SelectAllOnRegular
+  SelectAllOnRegular,
+  ArchiveFilled,
+  ArchiveRegular,
+  WarningFilled,
+  WarningRegular
 } from '@fluentui/react-icons'
 
 /**
@@ -466,5 +470,13 @@ export const iconCatalog = {
   SelectAllOn: {
     regular: SelectAllOnRegular,
     filled: SelectAllOnFilled
+  },
+  Archive: {
+    regular: ArchiveRegular,
+    filled: ArchiveFilled
+  },
+  Warning: {
+    regular: WarningRegular,
+    filled: WarningFilled
   }
 }
