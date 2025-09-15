@@ -5,6 +5,7 @@ import { ConfirmDialog } from 'pzl-spfx-components/lib/components/ConfirmDialog'
 import React, { FC } from 'react'
 import { Actions } from './Actions'
 import { AllPropertiesPanel } from './AllPropertiesPanel'
+import { ArchiveStatus } from './ArchiveStatus'
 import { CreateParentDialog } from './CreateParentDialog'
 import { EditPropertiesPanel } from './EditPropertiesPanel'
 import { LoadingSkeleton } from './LoadingSkeleton'
@@ -58,6 +59,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
           <ProjectProperties />
           <Actions />
           <ParentProjectsList />
+          <ArchiveStatus />
           <ProjectStatusReport />
           <ProgressDialog />
           <AllPropertiesPanel />
@@ -77,5 +79,6 @@ ProjectInformation.defaultProps = {
   hideActions: [],
   showFieldExternal: {},
   hideStatusReport: false,
+  hideArchiveStatus: true,
   statusReportShowOnlyIcons: true
 }

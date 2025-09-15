@@ -2,7 +2,12 @@ import { LogLevel } from '@pnp/logging'
 import { SPFI } from '@pnp/sp'
 import { AnyAction } from '@reduxjs/toolkit'
 import * as strings from 'ProjectWebPartsStrings'
-import { ListLogger, ProjectAdminPermission, ProjectPhaseModel, DocumentTypeModel } from 'pp365-shared-library/lib/'
+import {
+  ListLogger,
+  ProjectAdminPermission,
+  ProjectPhaseModel,
+  DocumentTypeModel
+} from 'pp365-shared-library/lib/'
 import { useEffect } from 'react'
 import SPDataAdapter from '../../data'
 import { IArchiveDocumentItem, IArchiveListItem } from '../../data/SPDataAdapter/types'
@@ -74,19 +79,23 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
       ? await getPhaseSitePages({ phases, sp: props.sp, web: props.pageContext?.web })
       : []
 
-    let archiveDocuments: (IArchiveDocumentItem & { selected: boolean, disabled: any })[] = []
+    let archiveDocuments: (IArchiveDocumentItem & { selected: boolean; disabled: any })[] = []
     let archiveLists: (IArchiveListItem & { selected: boolean })[] = []
     let documentTypes: DocumentTypeModel[] = []
     if (props.useArchive) {
       const [documents, lists, docTypes] = await Promise.all([
         SPDataAdapter.getDocumentsForArchive(),
         SPDataAdapter.getListsForArchive(),
-        SPDataAdapter.getTermFieldContext('GtDocumentType').then(docTypeField =>
+        SPDataAdapter.getTermFieldContext('GtDocumentType').then((docTypeField) =>
           SPDataAdapter.project.getDocumentTypes(docTypeField.termSetId)
         )
       ])
       documentTypes = docTypes.filter((docType) => docType.isArchiveable)
-      archiveDocuments = documents.map((doc) => ({ ...doc, selected: false, disabled: !documentTypes.find(docType => docType.id === doc?.documentTypeId) }))
+      archiveDocuments = documents.map((doc) => ({
+        ...doc,
+        selected: false,
+        disabled: !documentTypes.find((docType) => docType.id === doc?.documentTypeId)
+      }))
       archiveLists = lists.map((list) => ({ ...list, selected: false }))
     }
 

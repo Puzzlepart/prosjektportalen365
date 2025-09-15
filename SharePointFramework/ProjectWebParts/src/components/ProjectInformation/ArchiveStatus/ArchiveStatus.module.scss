@@ -1,0 +1,10 @@
+@import "~@fluentui/react/dist/sass/References.scss";
+
+.messageBar {
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--colorNeutralBackground3Hover);
+    border-color: var(--colorNeutralStroke1Hover);
+  }
+}

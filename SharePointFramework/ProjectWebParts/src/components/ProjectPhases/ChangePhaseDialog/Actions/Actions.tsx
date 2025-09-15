@@ -22,9 +22,10 @@ const logArchiveOperations = async (
   targetPhase?: string
 ): Promise<void> => {
   try {
-    const phaseTransitionMessage = currentPhase && targetPhase
-      ? format(strings.ArchivePhaseTransition, currentPhase, targetPhase)
-      : undefined
+    const phaseTransitionMessage =
+      currentPhase && targetPhase
+        ? format(strings.ArchivePhaseTransition, currentPhase, targetPhase)
+        : undefined
 
     if (archiveConfiguration.documents && archiveConfiguration.documents.length > 0) {
       for (const doc of archiveConfiguration.documents) {

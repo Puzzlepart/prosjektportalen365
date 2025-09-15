@@ -165,6 +165,8 @@ define([], function () {
     NotPublishedStatusReport: 'Not published',
     OpportunityMatrixGroupName: 'Opportunity matrix',
     OverrideHeadersLabel: 'Override headers for {0}x{0}',
+    ArchiveGroupName: 'Archive',
+    HideArchiveStatusLabel: 'Hide archive status',
     ParentProjectsGroupName: 'Parent projects',
     ParentProjectsHeaderText: 'Parent projects',
     PhaseChecklistLinkText: 'Go to the phase checklist',
@@ -315,6 +317,12 @@ define([], function () {
     SiteUrlLabel: 'Site URL',
     SiteUrlDescription: 'Enter the URL of the site where the news should be published.',
     ShowCommentText: 'Show comment',
-    HideCommentText: 'Hide comment'
+    HideCommentText: 'Hide comment',
+    ArchiveStatusHeaderText: 'Archive Status',
+    ArchiveStatusHeaderDescription: 'Shows recent archive activity for this project',
+    ArchiveStatusDetailedMessage: 'Last archive activity: {0}',
+    ArchiveStatusDocumentCount: '{0} document(s)',
+    ArchiveStatusListCount: '{0} list(s)',
+    ArchiveStatusTotalCount: 'Sent to archive: '
   }
 })

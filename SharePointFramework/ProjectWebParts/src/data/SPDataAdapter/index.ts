@@ -6,7 +6,15 @@ import { DefaultCaching, SPDataAdapterBase } from 'pp365-shared-library/lib/data
 import { IProjectDataServiceParams, ProjectDataService } from 'pp365-shared-library/lib/services'
 import { SPFxContext } from 'pp365-shared-library/lib/types'
 import { IConfigurationFile } from 'types'
-import { ISPDataAdapterConfiguration, IArchiveLogEntry, IArchiveDocumentItem, IArchiveListItem } from './types'
+import {
+  IArchiveDocumentItem,
+  IArchiveListItem,
+  IArchiveLogEntry,
+  IArchiveScopeStatus,
+  IArchiveStatusInfo,
+  IArchiveOperation,
+  ISPDataAdapterConfiguration
+} from './types'
 import resource from 'SharedResources'
 import { format } from '@fluentui/react'
 
@@ -147,14 +155,16 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         .filter('FSObjType eq 0')
         .using(DefaultCaching)()
 
-      return documents.map((doc): IArchiveDocumentItem => ({
-        id: doc.Id,
-        title: doc.FileLeafRef || doc.Title,
-        projectPhaseId: doc?.GtProjectPhase?.TermGuid,
-        documentTypeId: doc?.GtDocumentType?.TermGuid,
-        url: doc.FileRef,
-        type: 'file'
-      }))
+      return documents.map(
+        (doc): IArchiveDocumentItem => ({
+          id: doc.Id,
+          title: doc.FileLeafRef || doc.Title,
+          projectPhaseId: doc?.GtProjectPhase?.TermGuid,
+          documentTypeId: doc?.GtDocumentType?.TermGuid,
+          url: doc.FileRef,
+          type: 'file'
+        })
+      )
     } catch (error) {
       Logger.log({
         message: `(${this._name}) (getDocumentsForArchive) Error fetching documents: ${error.message}`,
@@ -192,12 +202,14 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
           list.Title !== 'Web Part Gallery'
       )
 
-      return filteredLists.map((list): IArchiveListItem => ({
-        id: list.Id,
-        title: list.Title,
-        url: list.DefaultViewUrl,
-        type: 'list'
-      }))
+      return filteredLists.map(
+        (list): IArchiveListItem => ({
+          id: list.Id,
+          title: list.Title,
+          url: list.DefaultViewUrl,
+          type: 'list'
+        })
+      )
     } catch (error) {
       Logger.log({
         message: `(${this._name}) (getListsForArchive) Error fetching lists: ${error.message}`,
@@ -228,7 +240,9 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     reference?: string
   ): Promise<void> {
     try {
-      const archiveLogList = this.portalDataService.web.lists.getByTitle(resource.Lists_ArchiveLog_Title)
+      const archiveLogList = this.portalDataService.web.lists.getByTitle(
+        resource.Lists_ArchiveLog_Title
+      )
 
       const logItem: IArchiveLogEntry = {
         Title: title,
@@ -272,11 +286,10 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     message: string,
     documentUrl: string,
     projectWebUrl: string,
-    errorMessage?: string,
+    errorMessage?: string
   ): Promise<void> {
-    const logMessage = status === strings.ArchiveLogStatusError && errorMessage
-      ? errorMessage
-      : message || ''
+    const logMessage =
+      status === strings.ArchiveLogStatusError && errorMessage ? errorMessage : message || ''
 
     await this.writeToArchiveLog(
       format(strings.ArchiveDocument, documentTitle),
@@ -285,7 +298,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       logMessage,
       strings.ArchiveLogScopeDocument,
       projectWebUrl,
-      documentUrl,
+      documentUrl
     )
   }
 
@@ -305,11 +318,12 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     message: string,
     listUrl: string,
     projectWebUrl: string,
-    errorMessage?: string,
+    errorMessage?: string
   ): Promise<void> {
-    const logMessage = status === strings.ArchiveLogStatusError && errorMessage
-      ? format(strings.ErrorArchiving, errorMessage)
-      : message || ''
+    const logMessage =
+      status === strings.ArchiveLogStatusError && errorMessage
+        ? format(strings.ErrorArchiving, errorMessage)
+        : message || ''
 
     await this.writeToArchiveLog(
       format(strings.ArchiveList, listTitle),
@@ -318,8 +332,113 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       logMessage,
       strings.ArchiveLogScopeList,
       projectWebUrl,
-      listUrl,
+      listUrl
     )
+  }
+
+  /**
+   * Get information about all archive activity for the current project. The items are grouped by operation and created date.
+   *
+   * @param projectWebUrl URL of the project web to check
+   * @returns Promise<IArchiveStatusInfo | null> Archive information, or null if none found
+   */
+  public async getArchiveStatus(projectWebUrl: string): Promise<IArchiveStatusInfo | null> {
+    try {
+      const archiveLogList = this.portalDataService.web.lists.getByTitle(
+        resource.Lists_ArchiveLog_Title
+      )
+
+      const items = await archiveLogList.items
+        .filter(`GtLogWebUrl eq '${projectWebUrl}'`)
+        .orderBy('Created', false)
+        .select('Id', 'Created', 'GtLogOperation', 'GtLogMessage', 'GtLogScope', 'GtLogStatus')()
+
+      if (items.length === 0) {
+        return null
+      }
+
+      const operationGroups = new Map<string, any[]>()
+
+      items.forEach((item) => {
+        const createdDate = new Date(item.Created)
+        const dateKey = createdDate.toDateString()
+        const operation = item.GtLogOperation || 'Unknown'
+        const groupKey = `${operation}|${dateKey}`
+
+        if (!operationGroups.has(groupKey)) {
+          operationGroups.set(groupKey, [])
+        }
+        operationGroups.get(groupKey).push(item)
+      })
+
+      const operations: IArchiveOperation[] = Array.from(operationGroups.entries()).map(
+        ([groupKey, groupItems]) => {
+          const [operation] = groupKey.split('|')
+          const date = new Date(groupItems[0].Created)
+          const mostRecentMessage = groupItems[0].GtLogMessage || ''
+
+          let documentCount = 0
+          let listCount = 0
+          const scopeMap = new Map<string, { count: number; status: string; scope: string }>()
+
+          groupItems.forEach((item) => {
+            const scope = item.GtLogScope || 'N/A'
+            const status = item.GtLogStatus || 'N/A'
+
+            if (scope === strings.ArchiveLogScopeDocument) {
+              documentCount++
+            } else if (scope === strings.ArchiveLogScopeList) {
+              listCount++
+            }
+
+            const scopeStatusKey = `${scope}|${status}`
+            if (scopeMap.has(scopeStatusKey)) {
+              scopeMap.get(scopeStatusKey).count++
+            } else {
+              scopeMap.set(scopeStatusKey, { count: 1, status, scope })
+            }
+          })
+
+          const scopes: IArchiveScopeStatus[] = Array.from(scopeMap.entries()).map(([, data]) => ({
+            scope: data.scope,
+            count: data.count,
+            status: data.status
+          }))
+
+          return {
+            operation,
+            date,
+            message: mostRecentMessage,
+            documentCount,
+            listCount,
+            totalItems: groupItems.length,
+            scopes
+          }
+        }
+      )
+
+      operations.sort((a, b) => b.date.getTime() - a.date.getTime())
+
+      const result: IArchiveStatusInfo = {
+        lastArchiveDate: operations[0].date,
+        operations
+      }
+
+      Logger.log({
+        message: `(${this._name}) (getArchiveStatus) Retrieved archive status`,
+        data: { projectWebUrl, result },
+        level: LogLevel.Info
+      })
+
+      return result
+    } catch (error) {
+      Logger.log({
+        message: `(${this._name}) (getArchiveStatus) Failed to get archive status: ${error.message}`,
+        data: { projectWebUrl, error },
+        level: LogLevel.Error
+      })
+      return null
+    }
   }
 }
 
