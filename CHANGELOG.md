@@ -10,6 +10,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Ny funksjonalitet i fasevelgeren for arkivering av dokumenter og lister som skal arkiveres ved faseendring
   - Elementer som skal til arkivering loggføres i en ny liste på porteføljenivå kalt `Arkiveringslogg`
   - Webhook-integrasjon for ekstern arkivhåndtering som håndterer arkivering av dokumenter og lister basert på loggføringen
+- Ny status for arkivering av prosjekt, viser informasjon om de siste arkiveringsaktivitetene på prosjektet.
 
 ### Forbedringer
 
