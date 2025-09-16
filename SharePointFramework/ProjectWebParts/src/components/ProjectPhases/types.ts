@@ -9,6 +9,7 @@ import {
 } from 'pp365-shared-library/lib/components/BaseWebPartComponent'
 import { IProjectPhasePopoverProps } from './ProjectPhase/ProjectPhasePopover'
 import { IArchiveItem } from './ChangePhaseDialog/Views/ArchiveView/types'
+import { IArchiveStatusInfo } from '../../data/SPDataAdapter/types'
 
 export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
   /**
@@ -176,6 +177,11 @@ export interface IProjectPhasesData {
    * Document types available for archiving
    */
   documentTypes?: DocumentTypeModel[]
+
+  /**
+   * Archive status information for the project
+   */
+  archiveStatus?: IArchiveStatusInfo
 }
 
 export interface IPhaseSitePageModel {

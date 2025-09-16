@@ -66,7 +66,7 @@ define([], function () {
     CheckpointNotRelevantTooltip: 'Sjekkpunktet er ikke relevant',
     CheckpointNotRelevantTooltipCommentEmpty:
       "Du kan ikke sette sjekkpunktet som 'Ikke relevant' uten å legge inn en kommentar.",
-    CheckPointsStatus: '{0} sjekkpunkter markert som **{1}**',
+    CheckPointsStatus: '{0} sjekkpunkt(er): **{1}**',
     CheckpointStillOpenTooltip: 'Sjekkpunktet er fortsatt åpent',
     CheckpointStillOpenTooltipCommentEmpty:
       "Du kan ikke sette sjekkpunktet som 'Fortsatt åpen' uten å legge inn en kommentar.",

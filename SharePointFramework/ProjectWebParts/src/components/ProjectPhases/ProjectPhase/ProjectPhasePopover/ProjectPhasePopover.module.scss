@@ -10,15 +10,24 @@
 
   .body {
     max-width: 250px;
+    gap: 8px;
 
     .subText {
-     font-weight: 600;
+      font-weight: 600;
     }
 
     .label {
       text-align: left;
       font-weight: var(--fontWeightRegular);
       margin: 0;
+    }
+
+    .archiveInfo {
+      padding: var(--spacingHorizontalM);
+    }
+
+    .actions {
+      padding-top: 8px;
     }
   }
 }

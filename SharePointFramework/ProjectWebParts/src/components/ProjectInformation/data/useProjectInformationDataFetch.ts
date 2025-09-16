@@ -41,6 +41,7 @@ const fetchData: DataFetchFunction<
 > = async (context) => {
   try {
     const isFrontpage = context.props.page === 'Frontpage'
+    const shouldFetchArchiveStatus = isFrontpage && !context.props.hideArchiveStatus
     const [
       columns,
       projectInformationData,
@@ -57,7 +58,7 @@ const fetchData: DataFetchFunction<
             ProjectInformationParentProject
           )
         : Promise.resolve([]),
-      isFrontpage
+      shouldFetchArchiveStatus
         ? SPDataAdapter.getArchiveStatus(context.props.webAbsoluteUrl)
         : Promise.resolve(null)
     ])

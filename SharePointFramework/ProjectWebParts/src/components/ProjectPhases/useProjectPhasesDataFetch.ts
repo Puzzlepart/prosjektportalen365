@@ -10,7 +10,11 @@ import {
 } from 'pp365-shared-library/lib/'
 import { useEffect } from 'react'
 import SPDataAdapter from '../../data'
-import { IArchiveDocumentItem, IArchiveListItem } from '../../data/SPDataAdapter/types'
+import {
+  IArchiveDocumentItem,
+  IArchiveListItem,
+  IArchiveStatusInfo
+} from '../../data/SPDataAdapter/types'
 import { DataFetchFunction } from '../../types/DataFetchFunction'
 import { ProjectPhases } from './index'
 import { INIT_DATA } from './reducer'
@@ -82,13 +86,15 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
     let archiveDocuments: (IArchiveDocumentItem & { selected: boolean; disabled: any })[] = []
     let archiveLists: (IArchiveListItem & { selected: boolean })[] = []
     let documentTypes: DocumentTypeModel[] = []
+    let archiveStatus: IArchiveStatusInfo | null = null
     if (props.useArchive) {
-      const [documents, lists, docTypes] = await Promise.all([
+      const [documents, lists, docTypes, archiveStatusData] = await Promise.all([
         SPDataAdapter.getDocumentsForArchive(),
         SPDataAdapter.getListsForArchive(),
         SPDataAdapter.getTermFieldContext('GtDocumentType').then((docTypeField) =>
           SPDataAdapter.project.getDocumentTypes(docTypeField.termSetId)
-        )
+        ),
+        SPDataAdapter.getArchiveStatus(props.webAbsoluteUrl)
       ])
       documentTypes = docTypes.filter((docType) => docType.isArchiveable)
       archiveDocuments = documents.map((doc) => ({
@@ -97,6 +103,7 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
         disabled: !documentTypes.find((docType) => docType.id === doc?.documentTypeId)
       }))
       archiveLists = lists.map((list) => ({ ...list, selected: false }))
+      archiveStatus = archiveStatusData
     }
 
     const [currentPhase] = phases.filter(({ name }) => name === currentPhaseName)
@@ -107,7 +114,7 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
       phaseSitePages,
       welcomePage,
       userHasChangePhasePermission,
-      ...(props.useArchive && { archiveDocuments, archiveLists, documentTypes })
+      ...(props.useArchive && { archiveDocuments, archiveLists, documentTypes, archiveStatus })
     } as IProjectPhasesData
   } catch (error) {
     ListLogger.log({

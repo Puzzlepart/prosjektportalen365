@@ -70,7 +70,7 @@ define([], function () {
     CheckpointNotRelevantTooltip: 'Checkpoint is not relevant',
     CheckpointNotRelevantTooltipCommentEmpty:
       "You cannot set the checkpoint as 'Not Relevant' without commenting.",
-    CheckPointsStatus: '{0} checkpoints marked as **{1}**',
+    CheckPointsStatus: '{0} checkpoints: **{1}**',
     CheckpointStillOpenTooltip: 'Checkpoint is still open',
     CheckpointStillOpenTooltipCommentEmpty:
       "You cannot set the checkpoint as 'Still open' without posting a comment.",
