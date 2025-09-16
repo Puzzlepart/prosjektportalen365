@@ -252,7 +252,7 @@ define([], function () {
     ArchiveViewDescription: 'Choose which documents and lists you want to archive during the phase change.',
     ArchiveInformationTitle: 'What to archive?',
     ArchiveMoreInformationText: 'Click here for more information',
-    ArchiveInformationText: 'Below you can choose which documents and/or lists to archive. Then press \'<b>Continue</b>\' to proceed with the process.<br /><br />This process involves retrieving and logging selected documents and/or lists from the site for archiving.<br /><br />There will be one archive entry per item archived, this will be picked up by an archive job that archives this to an archive core.<br /><br />The logging will include information about which items are marked for archiving, it indicates which phase you are changing from and to, as well as who performed the phase change and when.',
+    ArchiveInformationText: 'Below you can choose which documents and/or lists to archive. Then press \'<b>Continue</b>\' to proceed with the process.<br /><br />This process involves retrieving and logging selected documents and/or lists from the site for archiving. The documents are filtered by the current phase, documents without a phase will also be included.<br /><br />There will be one archive entry per item archived, this will be picked up by an archive job that archives this to an archive core.<br /><br />The logging will include information about which items are marked for archiving, it indicates which phase you are changing from and to, as well as who performed the phase change and when.',
     ArchiveDocumentsSection: 'Documents',
     ArchiveListsSection: 'Lists',
     ArchiveSelectedItemsInfo: '{0} item(s) selected for archiving',

@@ -280,7 +280,7 @@ define([], function () {
     ArchiveViewDescription: 'Velg hvilke dokumenter og/eller lister du ønsker å arkivere under faseendringen.',
     ArchiveInformationTitle: 'Hva skal arkiveres?',
     ArchiveMoreInformationText: 'Trykk her for mer informasjon',
-    ArchiveInformationText: 'Under kan du velge hvilke dokumenter og/eller lister som skal arkiveres. Trykk deretter på \'<b>Fortsett</b>\' for å gå videre i prosessen.<br /><br />Denne prosessen innebærer at valgte dokumenter og/eller lister fra området blir hentet ut og logget for arkivering.<br /><br />Det vil være en arkivpost per element som arkiveres, dette blir plukket opp av en arkivjobb som arkiverer dette til en arkivkjerne.<br /><br />Loggføringen vil inneholde informasjon om hvilke elementer som er markert for arkivering, det angis hvilke fase man endrer fra og til, samt hvem som utførte fasebyttet og når.',
+    ArchiveInformationText: 'Under kan du velge hvilke dokumenter og/eller lister som skal arkiveres. Trykk deretter på \'<b>Fortsett</b>\' for å gå videre i prosessen.<br /><br />Denne prosessen innebærer at valgte dokumenter og/eller lister fra området blir hentet ut og logget for arkivering. Dokumentene som blir hentet er filtrert på gjeldende fase, dokumenter som ikke har fase vil også blir inkludert.<br /><br />Det vil være en arkivpost per element som arkiveres, dette blir plukket opp av en arkivjobb som arkiverer dette til en arkivkjerne.<br /><br />Loggføringen vil inneholde informasjon om hvilke elementer som er markert for arkivering, det angis hvilke fase man endrer fra og til, samt hvem som utførte fasebyttet og når.',
     ArchiveDocumentsSection: 'Dokumenter',
     ArchiveListsSection: 'Lister',
     ArchiveSelectedItemsInfo: '{0} element(er) valgt for arkivering',

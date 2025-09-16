@@ -15,18 +15,33 @@ export function useArchiveView() {
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    const initializeSections = async () => {
+    const initializeSections = () => {
       setIsLoading(true)
       try {
-        const archiveDocuments = context.state?.data?.archiveDocuments || []
+        const allArchiveDocuments = context.state?.data?.archiveDocuments || []
         const archiveLists = context.state?.data?.archiveLists || []
+        const currentPhase = context.state?.data?.currentPhase
+
+        let filteredDocuments = allArchiveDocuments
+
+        if (currentPhase?.id) {
+          const documentsWithCurrentPhase = allArchiveDocuments.filter(
+            (doc) => doc.projectPhaseId === currentPhase.id
+          )
+
+          const documentsWithoutPhase = allArchiveDocuments.filter(
+            (doc) => !doc.projectPhaseId || doc.projectPhaseId.trim() === ''
+          )
+
+          filteredDocuments = [...documentsWithoutPhase, ...documentsWithCurrentPhase]
+        }
 
         setSections([
           {
             key: 'documents',
             title: strings.ArchiveDocumentsSection,
             expanded: true,
-            items: archiveDocuments
+            items: filteredDocuments
           },
           {
             key: 'lists',
@@ -43,7 +58,11 @@ export function useArchiveView() {
     }
 
     initializeSections()
-  }, [context.state?.data?.archiveDocuments, context.state?.data?.archiveLists])
+  }, [
+    context.state?.data?.archiveDocuments,
+    context.state?.data?.archiveLists,
+    context.state?.data?.currentPhase
+  ])
 
   useEffect(() => {
     const archiveConfiguration = getArchiveConfiguration()

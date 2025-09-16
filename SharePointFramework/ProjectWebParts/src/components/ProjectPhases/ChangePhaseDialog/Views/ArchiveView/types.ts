@@ -28,6 +28,16 @@ export interface IArchiveItem {
    * Whether the item is disabled (cannot be selected)
    */
   disabled?: boolean
+
+  /**
+   * Project phase ID (only for documents)
+   */
+  projectPhaseId?: string
+
+  /**
+   * Document type ID (only for documents)
+   */
+  documentTypeId?: string
 }
 
 export interface IArchiveSection {
