@@ -134,10 +134,10 @@ if ($null -ne $CurrentUser -and $CurrentUser.LoginName) {
     Write-Host "[INFO] Installing with user [$($CurrentUser.LoginName)]"
 }
 else {
-    Write-Host "[WARNING] Failed to get current user. Assuming installation is done with an app or a service principal without e-mail." -ForegroundColor Yellow
+    Write-Host "[WARNING] Failed to get current user. Assuming installation is done with an app or service principal without e-mail." -ForegroundColor Yellow
 }
-
 #endregion
+
 
 #region Check if URL specified is root site or admin site or invalid managed path
 if ($Alias.Length -lt 2 -or (@("sites/", "teams/") -notcontains $ManagedPath) -or $Uri.Authority.Contains("-admin")) {
@@ -145,6 +145,12 @@ if ($Alias.Length -lt 2 -or (@("sites/", "teams/") -notcontains $ManagedPath) -o
     exit 0
 }
 #endregion
+
+$VersionInfo = Get-PPVersionInfoPair -Url $Url
+if ($VersionInfo.Channel -ne $Channel) {
+    Write-Host "[ERROR] The site at $Url was installed using channel '$($VersionInfo.Channel)'. You are now trying to install using channel '$Channel'. This is not supported." -ForegroundColor Red
+    exit 0
+}
 
 $LogFilePath = "$PSScriptRoot/Install_Log_$([datetime]::Now.ToString("yy-MM-ddThh-mm-ss")).txt"
 Start-PnPTraceLog -Path $LogFilePath -Level Debug

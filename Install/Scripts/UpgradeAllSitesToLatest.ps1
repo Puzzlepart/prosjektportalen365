@@ -24,6 +24,11 @@ $LanguageCodes = @{
 }
 $LanguageCode = $LanguageCodes[$Language]
 
+if ($null -eq (Get-Command Connect-PnPOnline) -or (Get-Command Connect-PnPOnline).Version -lt [version]"3.1.0") {
+    Write-Host "[ERROR] Correct PnP.PowerShell module not found. Please install it from PowerShell Gallery or do not use -SkipLoadingBundle." -ForegroundColor Red
+    exit 0
+}
+
 . $PSScriptRoot\SharedFunctions.ps1
 . $PSScriptRoot\Resources.ps1
 
@@ -92,43 +97,10 @@ Start-Transcript -Path $LogFilePath
 
 try {
     Connect-SharePoint -Url $Url -ConnectionInfo $ConnectionInfo
-    $InstallLogEntries = Get-PnPListItem -List $InstallationEntriesList.Id -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>"
-    $NativeLogEntries = $InstallLogEntries | Where-Object { $_.FieldValues.Title -match "PP365+[\s]+[0-9]+[.][0-9]+[.][0-9]+[.][a-zA-Z0-9]+" }
-    $LatestInstallEntry = $NativeLogEntries | Select-Object -First 1
-    $PreviousInstallEntry = $NativeLogEntries | Select-Object -Skip 1 -First 1
-
-    if ($null -eq $LatestInstallEntry) {
-        $LatestInstallEntry = $InstallLogEntries | Select-Object -First 1
-        $PreviousInstallEntry = $InstallLogEntries | Select-Object -Skip 1 -First 1
-    } 
-    elseif ($null -eq $PreviousInstallEntry) {
-        $LatestInstallEntry = $InstallLogEntries | Select-Object -First 1
-        $PreviousInstallEntry = $InstallLogEntries | Select-Object -Skip 1 -First 1
-    }
-
-    if ($null -ne $LatestInstallEntry -and $null -ne $PreviousInstallEntry) {
-        $LatestInstallVersion = $LatestInstallEntry.FieldValues["InstallVersion"]
-        $PreviousInstallVersion = $PreviousInstallEntry.FieldValues["InstallVersion"]
-    }
-    else {
-        Write-Host "Could not identify previous installed versions. It's still possible to attempt to upgrade sites. We will attempt to run all avilable upgrade actions" -ForegroundColor Yellow
-        if ($null -ne $LatestInstallEntry) {
-            $LatestInstallVersion = $LatestInstallEntry.FieldValues["InstallVersion"]
-            $PreviousInstallVersion = "0.0.0"
-        }
-        else {
-            Write-Host "Could not identify any installed versions. This is a critical error. Exiting script." -ForegroundColor Red
-            Stop-Transcript
-            exit 0
-        }
-    }
-
-    if ($LatestInstallVersion -eq $PreviousInstallVersion) {
-        Write-Host "The newest installed version is the same as the previous. The script might have some issues upgrading projects." -ForegroundColor Yellow
-    }
-
-    $global:__InstalledVersion = ParseVersionString -VersionString $LatestInstallVersion
-    $global:__PreviousVersion = ParseVersionString -VersionString $PreviousInstallVersion
+    
+    $VersionInfo = Get-PPVersionInfoPair -Url $Url
+    $global:__InstalledVersion = $VersionInfo.Latest
+    $global:__PreviousVersion = $VersionInfo.Previous
 
     Write-Host "Getting ready to upgrade feature discrepancy between version $global:__PreviousVersion and $global:__InstalledVersion"
 

@@ -33,7 +33,8 @@ function Connect-SharePoint {
         if ($ConnectionInfo.CI) {
             if ($ConnectionInfo.CertificateBase64Encoded -and $ConnectionInfo.Tenant) {
                 Connect-PnPOnline -Url $Url -CertificateBase64Encoded $ConnectionInfo.CertificateBase64Encoded -Tenant $ConnectionInfo.Tenant -ClientId $ConnectionInfo.ClientId -ErrorAction Stop  -WarningAction Ignore
-            } else {
+            }
+            else {
                 throw "Missing certificate or tenant for CI mode"
             }
 
@@ -156,4 +157,48 @@ function Show-Countdown {
         Start-Sleep -Seconds 1
     }
     Write-Host " - Continuing!" -ForegroundColor Green 
+}
+
+function Get-PPVersionInfoPair() {
+    
+    $InstallLogEntries = Get-PnPListItem -List $InstallationEntriesList.Id -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>"
+    $NativeLogEntries = $InstallLogEntries | Where-Object { $_.FieldValues.Title -match "PP365+[\s]+[0-9]+[.][0-9]+[.][0-9]+[.][a-zA-Z0-9]+" }
+    $LatestInstallEntry = $NativeLogEntries | Select-Object -First 1
+    $PreviousInstallEntry = $NativeLogEntries | Select-Object -Skip 1 -First 1
+
+    if ($null -eq $LatestInstallEntry) {
+        $LatestInstallEntry = $InstallLogEntries | Select-Object -First 1
+        $PreviousInstallEntry = $InstallLogEntries | Select-Object -Skip 1 -First 1
+    } 
+    elseif ($null -eq $PreviousInstallEntry) {
+        $LatestInstallEntry = $InstallLogEntries | Select-Object -First 1
+        $PreviousInstallEntry = $InstallLogEntries | Select-Object -Skip 1 -First 1
+    }
+
+    if ($null -ne $LatestInstallEntry -and $null -ne $PreviousInstallEntry) {
+        $LatestInstallVersion = $LatestInstallEntry.FieldValues["InstallVersion"]
+        $PreviousInstallVersion = $PreviousInstallEntry.FieldValues["InstallVersion"]
+    }
+    else {
+        Write-Host "Could not identify previous installed versions. It's still possible to attempt to upgrade sites. We will attempt to run all avilable upgrade actions" -ForegroundColor Yellow
+        if ($null -ne $LatestInstallEntry) {
+            $LatestInstallVersion = $LatestInstallEntry.FieldValues["InstallVersion"]
+            $PreviousInstallVersion = "0.0.0"
+        }
+        else {
+            Write-Host "Could not identify any installed versions. This is a critical error. Exiting script." -ForegroundColor Red
+            Stop-Transcript
+            exit 0
+        }
+    }
+
+    if ($LatestInstallVersion -eq $PreviousInstallVersion) {
+        Write-Host "The newest installed version is the same as the previous. The script might have some issues upgrading projects." -ForegroundColor Yellow
+    }
+
+    $InstalledVersion = ParseVersionString -VersionString $LatestInstallVersion
+    $PreviousVersion = ParseVersionString -VersionString $PreviousInstallVersion
+    $Channel = $LatestInstallEntry.FieldValues["InstallChannel"]
+
+    return @{ Latest = $InstalledVersion; Previous = $PreviousVersion; Channel = $Channel }
 }
