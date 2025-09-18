@@ -51,6 +51,7 @@ declare interface ISharedLibraryStrings {
   ProjectTimelineItemInfo: string
   ProgramTimelineTitle: string
   ResourceLabel: string
+  DepartmentLabel: string
   RoleLabel: string
   SiteTitleLabel: string
   StartDateLabel: string
@@ -58,6 +59,8 @@ declare interface ISharedLibraryStrings {
   TimelineGroupDescription: string
   TypeLabel: string
   SyncListAddingField: string
+  ResourceAllocationListLabel: string
+  ResourceAllocationListUrl: string
 }
 
 declare module 'SharedLibraryStrings' {

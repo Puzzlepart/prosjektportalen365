@@ -54,6 +54,7 @@ ResourceAllocation.defaultProps = {
     'SiteName',
     'RefinableString71',
     'RefinableString72',
+    'GtResourceUserOWSUSER',
     'GtResourceLoadOWSNMBR',
     'GtResourceAbsenceOWSCHCS',
     'GtStartDateOWSDATE',
