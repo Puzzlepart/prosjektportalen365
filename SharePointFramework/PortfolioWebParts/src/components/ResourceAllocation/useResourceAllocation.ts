@@ -25,10 +25,24 @@ export const useResourceAllocation = (props: IResourceAllocationProps) => {
     data: { items: [], groups: [] }
   })
 
+  let resourceNameToUPNs: Record<string, Set<string>> = {};
+  if (state.data.items && state.data.items.length > 0) {
+    state.data.items.forEach((i) => {
+      const resourceDisplay = get(i, 'data.resource');
+      if (!resourceDisplay) return;
+      const match = resourceDisplay.match(/^(.*?) \(/); // Navn før evt. department
+      const displayName = match ? match[1] : resourceDisplay;
+      const upn = i.props?.GtResourceUserOWSUSER?.split('|')[0]?.trim();
+      if (!resourceNameToUPNs[displayName]) resourceNameToUPNs[displayName] = new Set();
+      if (upn) resourceNameToUPNs[displayName].add(upn);
+    });
+  }
+
   const filters = [
-    { fieldName: 'data.project', name: strings.SiteTitleLabel },
+    { fieldName: 'data.role', name: strings.RoleLabel },
+    { fieldName: 'data.department', name: strings.DepartmentLabel },
     { fieldName: 'data.resource', name: strings.ResourceLabel },
-    { fieldName: 'data.role', name: strings.RoleLabel }
+    { fieldName: 'data.project', name: strings.SiteTitleLabel }
   ].map((col) => ({
     column: { key: col.fieldName, minWidth: 0, ...col },
     items: state.data.items
@@ -38,7 +52,20 @@ export const useResourceAllocation = (props: IResourceAllocationProps) => {
       .map((name) => {
         const filter = state.activeFilters[col.fieldName]
         const selected = filter ? filter.indexOf(name) !== -1 : false
-        return { name, value: name, selected }
+        let displayName = name
+        if (col.fieldName === 'data.resource' && name) {
+          const match = name.match(/^(.*?) \(/); // Navn før evt. department
+          const baseName = match ? match[1] : name
+          const upns = resourceNameToUPNs[baseName]
+          if (upns && upns.size > 1) {
+            const item = state.data.items.find((i) => get(i, 'data.resource') === name);
+            const upn = item?.props?.GtResourceUserOWSUSER?.split('|')[0]?.trim();
+            displayName = upn ? `${baseName} (${upn})` : baseName;
+          } else {
+            displayName = baseName
+          }
+        }
+        return { name: displayName, value: name, selected }
       })
   }))
 

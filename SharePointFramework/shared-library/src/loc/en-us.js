@@ -48,6 +48,7 @@ define([], function () {
     ProjectTimelineItemInfo: '{0} - project timeline',
     ProgramTimelineTitle: 'Program timeline',
     ResourceLabel: 'Resource',
+    DepartmentLabel: 'Department',
     RoleLabel: 'Role',
     SiteTitleLabel: 'Project',
     StartDateLabel: 'Start date',

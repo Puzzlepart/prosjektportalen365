@@ -48,6 +48,7 @@ define([], function () {
     ProjectTimelineItemInfo: '{0} - prosjektets tidsforløp',
     ProgramTimelineTitle: 'Programtidslinje',
     ResourceLabel: 'Ressurs',
+    DepartmentLabel: 'Avdeling',
     RoleLabel: 'Rolle',
     SiteTitleLabel: 'Prosjekt',
     StartDateLabel: 'Startdato',
