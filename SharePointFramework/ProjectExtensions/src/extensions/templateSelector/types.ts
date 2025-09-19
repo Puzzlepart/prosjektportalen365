@@ -8,4 +8,9 @@ export interface ITemplateSelectorCommandProperties {
    * View xml
    */
   viewXml: string
+
+  /**
+   * Template library name
+   */
+  templateLibrary: string
 }

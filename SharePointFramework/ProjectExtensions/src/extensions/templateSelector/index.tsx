@@ -40,7 +40,7 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
     this._openCmd = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR')
     if (!this._openCmd) return
     try {
-      const templateLib = resource.Lists_TemplateLibrary_Title
+      const templateLib = this.properties.templateLibrary || resource.Lists_TemplateLibrary_Title
       this._ctxValue.templateLibrary = {
         title: templateLib,
         url: `${SPDataAdapter.portalDataService.url}/${templateLib}`
