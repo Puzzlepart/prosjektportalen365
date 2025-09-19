@@ -19,6 +19,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 
 ### Feilrettinger
 
+- Rettet et problem hvor tilpassede malbiblioteket ikke ble valgt når man klikket på «Hent dokumentmal» fra dokumentbiblioteket[1628](https://github.com/Puzzlepart/prosjektportalen365/issues/1628)
 
 ---
 
@@ -302,7 +303,7 @@ I denne versjonen er det gjort flere endringer på det visuelle uttrykket til Pr
 - Rettet feil i oppgraderingsskriptet der noen tenants ikke kunne hente alle hub children [#1041](https://github.com/Puzzlepart/prosjektportalen365/pull/1041)
 - Rettet feil hvor kommandolinjen ikke ble vist som standard [#1042](https://github.com/Puzzlepart/prosjektportalen365/issues/1042)
 - Rettet feil ved provisjonering av Bygg- og anleggsprosjekter dersom Fasesjekkliste var valgt [#1052](https://github.com/Puzzlepart/prosjektportalen365/issues/1052)
-- Rettet feil hvor det ikke var mulig å synkronisere data fra 'Prosjektdata'-listen  (Idébehandling) [#1048](https://github.com/Puzzlepart/prosjektportalen365/pull/1048)
+- Rettet feil hvor det ikke var mulig å synkronisere data fra 'Prosjektdata'-listen (Idébehandling) [#1048](https://github.com/Puzzlepart/prosjektportalen365/pull/1048)
 - Rettet feil hvor termset for `FNs bærekraftsmål` manglet [#1058](https://github.com/Puzzlepart/prosjektportalen365/issues/1058)
 
 ---
