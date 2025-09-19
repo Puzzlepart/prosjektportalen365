@@ -11,6 +11,52 @@ export const DetailsPopover: FC<IDetailsPopoverProps> = (props) => {
   const { item } = props.timelineItem
 
   const popoverContent = (): JSX.Element => {
+    // Sjekk om dette er en fravær/linjeaktivitet (ikke prosjektallokering)
+    const isAbsence = !!(data.type && data.project === '' && data.type !== strings.ResourceLabel);
+    if (isAbsence) {
+      return (
+        <>
+          <p>
+            <b>
+              <Link href={strings.ResourceAllocationListUrl} target="_blank">
+                {strings.ResourceAllocationListLabel}
+              </Link>
+              :
+            </b>{' '}
+            <span>{data.type}</span>
+          </p>
+          <p hidden={!item.title}>
+            <b>{strings.DescriptionFieldLabel}:</b> <span>{item.title}</span>
+          </p>
+          <p hidden={!data.type}>
+            <b>{strings.TypeLabel}:</b> <span>{data.type}</span>
+          </p>
+          <p hidden={!data.comment}>
+            <b>{strings.CommentLabel}:</b> <span>{data.comment}</span>
+          </p>
+          <p hidden={typeof data.allocation !== 'number'}>
+            <b>{strings.AllocationPercetageLabel}:</b> <span>{data.allocation}%</span>
+          </p>
+          {/* Show any extra fields if present */}
+          {data.status && (
+            <p>
+              <b>{strings.AllocationStatusLabel}:</b> <span>{data.status}</span>
+            </p>
+          )}
+          {data.department && (
+            <p>
+              <b>{strings.DepartmentLabel}:</b> <span>{data.department}</span>
+            </p>
+          )}
+          <p>
+            <b>{strings.StartDateLabel}:</b> <span>{formatDate(item.start_time.toString())}</span>
+          </p>
+          <p>
+            <b>{strings.EndDateLabel}:</b> <span>{formatDate(item.end_time.toString())}</span>
+          </p>
+        </>
+      );
+    }
     switch (data.type) {
       case resource.TimelineConfiguration_Milestone_Title: {
         return (
@@ -52,6 +98,9 @@ export const DetailsPopover: FC<IDetailsPopoverProps> = (props) => {
             </p>
             <p hidden={!data.resource}>
               <b>{strings.ResourceLabel}:</b> <span>{data.resource}</span>
+            </p>
+            <p hidden={!data.department}>
+              <b>{strings.DepartmentLabel}:</b> <span>{data.department}</span>
             </p>
             <p hidden={!data.role}>
               <b>{strings.RoleLabel}:</b> <span>{data.role}</span>
