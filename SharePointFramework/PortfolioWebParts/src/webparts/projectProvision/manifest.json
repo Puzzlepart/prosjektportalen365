@@ -8,7 +8,8 @@
   "requiresCustomScript": false,
   "hiddenFromToolbox": false,
   "supportedHosts": [
-    "SharePointWebPart"
+    "SharePointWebPart",
+    "TeamsPersonalApp"
   ],
   "preconfiguredEntries": [
     {
@@ -17,7 +18,7 @@
         "default": "Other"
       },
       "title": {
-        "default": "Bestillingsportalen (Prosjekt provisjonering)"
+        "default": "Bestillingsportalen"
       },
       "description": {
         "default": "Provisjonering av prosjekter gjennom bestillingsportalen"
