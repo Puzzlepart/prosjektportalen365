@@ -16,6 +16,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 
 - Oppdatert alle dokumentmaler fra Prosjektveiviseren. Lagt inn malene i en egen mappe "Fra Prosjektveiviseren" i malbiblioteket.
 - Endret "Ingen fase" til "Idé". For eksisterende installasjoner må dette eventuelt oppdateres manuelt.
+- Forbedret ressursallokeringsoversikten, henter nå inn avdelingsinformasjon fra ressursene og viser dette i oversikten, samt tilbyr filter på avdeling.
 
 ### Feilrettinger
 
