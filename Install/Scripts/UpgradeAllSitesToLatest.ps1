@@ -98,7 +98,7 @@ Start-Transcript -Path $LogFilePath
 try {
     Connect-SharePoint -Url $Url -ConnectionInfo $ConnectionInfo
     
-    $VersionInfo = Get-PPVersionInfoPair -Url $Url
+    $VersionInfo = Get-PPInstallationInfo
     $global:__InstalledVersion = $VersionInfo.Latest
     $global:__PreviousVersion = $VersionInfo.Previous
 

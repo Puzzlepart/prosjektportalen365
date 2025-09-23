@@ -73,13 +73,13 @@ $Channel = "{CHANNEL_PLACEHOLDER}"
 $LanguageId = $LanguageIds[$Language]
 $LanguageCode = $LanguageCodes[$Language]
 . "$PSScriptRoot/Scripts/Resources.ps1"
+Initialize-Resources -LanguageCode $LanguageCode
 #endregion
 
 $ErrorActionPreference = "Stop"
 $sw = [Diagnostics.Stopwatch]::StartNew()
 $global:sw_action = $null
 $InstallStartTime = (Get-Date -Format o)
-
 
 Write-Host "########################################################" -ForegroundColor Cyan
 Write-Host "### $($Upgrade.IsPresent ? "Upgrading" : "Installing") Prosjektportalen 365 v{VERSION_PLACEHOLDER} ####" -ForegroundColor Cyan
@@ -146,11 +146,30 @@ if ($Alias.Length -lt 2 -or (@("sites/", "teams/") -notcontains $ManagedPath) -o
 }
 #endregion
 
-$VersionInfo = Get-PPVersionInfoPair -Url $Url
-if ($VersionInfo.Channel -ne $Channel) {
-    Write-Host "[ERROR] The site at $Url was installed using channel '$($VersionInfo.Channel)'. You are now trying to install using channel '$Channel'. This is not supported." -ForegroundColor Red
-    exit 0
+#region Check if installing to another installation channel when upgrading
+Connect-SharePoint -Url $Uri.AbsoluteUri -ConnectionInfo $ConnectionInfo
+$ExistingSite = Get-PnPSite -ErrorAction SilentlyContinue
+if ($Upgrade.IsPresent -and $null -ne $ExistingSite) {
+    $InstallInfo = Get-PPInstallationInfo
+    if ($InstallInfo.LanguageId -ne $LanguageId) {
+        Write-Host "[ERROR] The site you're trying to install to is already installed using language '$($InstallInfo.LanguageId)'. You are now trying to install using language '$LanguageId'. This is not supported." -ForegroundColor Red
+        exit 0
+    }
+    if ($null -eq $InstallInfo -or $null -eq $InstallInfo.Latest) {
+        Write-Host "[ERROR] Could not determine existing installation version. This is a critical error. Exiting script." -ForegroundColor Red
+        exit 0
+    }
+    if ($InstallInfo.Channel -ne $Channel) {
+        Write-Host "[ERROR] The site you're trying to install to is already installed using channel '$($InstallInfo.Channel)'. You are now trying to install using channel '$Channel'. This is not supported." -ForegroundColor Red
+        exit 0
+    }
+} else {
+    if ($null -ne $ExistingSite) {
+        Write-Host "[WARNING] The site you're trying to install to already exists. If you want to upgrade the site, use the -Upgrade switch. If you know what you're doing you can allow the script to continue" -ForegroundColor Yellow
+        Show-Countdown -Seconds 10
+    }
 }
+#endregion
 
 $LogFilePath = "$PSScriptRoot/Install_Log_$([datetime]::Now.ToString("yy-MM-ddThh-mm-ss")).txt"
 Start-PnPTraceLog -Path $LogFilePath -Level Debug

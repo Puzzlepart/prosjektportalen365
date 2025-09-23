@@ -159,8 +159,15 @@ function Show-Countdown {
     Write-Host " - Continuing!" -ForegroundColor Green 
 }
 
-function Get-PPVersionInfoPair() {
-    
+function Get-PPInstallationInfo() {
+    $CurrentWeb = Get-PnPWeb -ErrorAction Stop
+    $CurrentLanguage = Get-PnPProperty -ClientObject $CurrentWeb -Property "Language" -ErrorAction Stop
+
+    $InstallationEntriesList = Get-PnPList -Identity (Get-Resource -Name "Lists_InstallationLog_Title") -ErrorAction SilentlyContinue
+    if ($null -eq $InstallationEntriesList) {
+        Write-Host "Could not find installation log list." -ForegroundColor Red
+        return @{ LanguageId = $CurrentLanguage }
+    }
     $InstallLogEntries = Get-PnPListItem -List $InstallationEntriesList.Id -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>"
     $NativeLogEntries = $InstallLogEntries | Where-Object { $_.FieldValues.Title -match "PP365+[\s]+[0-9]+[.][0-9]+[.][0-9]+[.][a-zA-Z0-9]+" }
     $LatestInstallEntry = $NativeLogEntries | Select-Object -First 1
@@ -180,15 +187,14 @@ function Get-PPVersionInfoPair() {
         $PreviousInstallVersion = $PreviousInstallEntry.FieldValues["InstallVersion"]
     }
     else {
-        Write-Host "Could not identify previous installed versions. It's still possible to attempt to upgrade sites. We will attempt to run all avilable upgrade actions" -ForegroundColor Yellow
+        Write-Host "Could not identify previous installed versions." -ForegroundColor Yellow
         if ($null -ne $LatestInstallEntry) {
             $LatestInstallVersion = $LatestInstallEntry.FieldValues["InstallVersion"]
             $PreviousInstallVersion = "0.0.0"
         }
         else {
-            Write-Host "Could not identify any installed versions. This is a critical error. Exiting script." -ForegroundColor Red
-            Stop-Transcript
-            exit 0
+            Write-Host "Could not identify any installed versions." -ForegroundColor Red
+            return @{ LanguageId = $CurrentLanguage }
         }
     }
 
@@ -200,5 +206,5 @@ function Get-PPVersionInfoPair() {
     $PreviousVersion = ParseVersionString -VersionString $PreviousInstallVersion
     $Channel = $LatestInstallEntry.FieldValues["InstallChannel"]
 
-    return @{ Latest = $InstalledVersion; Previous = $PreviousVersion; Channel = $Channel }
+    return @{ Latest = $InstalledVersion; Previous = $PreviousVersion; Channel = $Channel; LanguageId = $CurrentLanguage }
 }
