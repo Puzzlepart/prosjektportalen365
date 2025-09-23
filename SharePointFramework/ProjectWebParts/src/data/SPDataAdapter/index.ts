@@ -180,7 +180,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public async getListsForArchive(): Promise<IArchiveListItem[]> {
     try {
       const lists = await this.sp.web.lists
-        .select('Id', 'Title', 'DefaultViewUrl', 'Hidden', 'BaseTemplate')
+        .select('Id', 'Title', 'DefaultViewUrl', 'Hidden', 'BaseTemplate', 'ItemCount')
         .filter('Hidden eq false and BaseTemplate ne 850')
         .using(DefaultCaching)()
 
@@ -207,7 +207,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
           id: list.Id,
           title: list.Title,
           url: list.DefaultViewUrl,
-          type: 'list'
+          type: 'list',
+          itemCount: list.ItemCount || 0
         })
       )
     } catch (error) {

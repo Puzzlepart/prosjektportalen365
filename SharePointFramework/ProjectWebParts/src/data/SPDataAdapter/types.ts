@@ -65,4 +65,5 @@ export interface IArchiveListItem {
   title: string
   url: string
   type: 'list'
+  itemCount: number
 }

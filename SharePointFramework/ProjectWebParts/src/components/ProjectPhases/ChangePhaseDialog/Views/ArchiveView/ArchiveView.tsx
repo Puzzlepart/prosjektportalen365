@@ -135,7 +135,9 @@ export const ArchiveView: FC = () => {
                           {item.title}
                           {item.disabled && (
                             <Text size={200} className={styles.notArchivableText}>
-                              {` (${strings.ArchiveNotArchivableText})`}
+                              {item.type === 'list' && item.itemCount === 0
+                                ? ` (${strings.ArchiveNotArchivableListText})`
+                                : ` (${strings.ArchiveNotArchivableText})`}
                             </Text>
                           )}
                         </Text>

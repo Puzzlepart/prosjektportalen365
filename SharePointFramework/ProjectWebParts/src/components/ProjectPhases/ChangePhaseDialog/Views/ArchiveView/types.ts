@@ -38,6 +38,11 @@ export interface IArchiveItem {
    * Document type ID (only for documents)
    */
   documentTypeId?: string
+
+  /**
+   * Item count (only for lists)
+   */
+  itemCount?: number
 }
 
 export interface IArchiveSection {

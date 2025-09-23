@@ -288,6 +288,7 @@ define([], function () {
     ArchiveContinueText: 'Fortsett',
     ArchiveSelectAllText: 'Velg alle',
     ArchiveNotArchivableText: 'Ikke arkiverbar',
+    ArchiveNotArchivableListText: 'Ikke arkiverbar, ingen elementer',
     ErrorArchiving: 'Feil ved arkivering: {0}',
     ArchiveList: 'Liste: {0}',
     ArchiveDocument: 'Dokument: {0}',

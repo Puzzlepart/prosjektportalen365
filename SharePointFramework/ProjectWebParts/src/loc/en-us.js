@@ -260,6 +260,7 @@ define([], function () {
     ArchiveContinueText: 'Continue',
     ArchiveSelectAllText: 'Select all',
     ArchiveNotArchivableText: 'Not archivable',
+    ArchiveNotArchivableListText: 'Not archivable, no items',
     ArchiveList: 'List: {0}',
     ArchiveDocument: 'Document: {0}',
     ArchivePhaseTransition: 'From {0}-phase to {1}-phase',

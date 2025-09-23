@@ -102,7 +102,11 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
         selected: false,
         disabled: !documentTypes.find((docType) => docType.id === doc?.documentTypeId)
       }))
-      archiveLists = lists.map((list) => ({ ...list, selected: false }))
+      archiveLists = lists.map((list) => ({
+        ...list,
+        selected: false,
+        disabled: list.itemCount === 0
+      }))
       archiveStatus = archiveStatusData
     }
 
