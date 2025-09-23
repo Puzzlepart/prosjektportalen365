@@ -292,7 +292,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       status === strings.ArchiveLogStatusError && errorMessage ? errorMessage : message || ''
 
     await this.writeToArchiveLog(
-      format(strings.ArchiveDocument, documentTitle),
+      documentTitle,
       status,
       strings.ArchiveLogOperationPhaseTransition,
       logMessage,
@@ -326,7 +326,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         : message || ''
 
     await this.writeToArchiveLog(
-      format(strings.ArchiveList, listTitle),
+      listTitle,
       status,
       strings.ArchiveLogOperationPhaseTransition,
       logMessage,
