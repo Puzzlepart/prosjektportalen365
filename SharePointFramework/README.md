@@ -57,7 +57,7 @@ feat: add hat to cat
 |     |
 |     +-> Sammendrag i presens
 |
-+-------> Type: chore, docs, feat, fix, refactor, style, eller ci
++-------> Type: chore, docs, feat, fix, refactor, style, ci eller install
 ```
 
 **Commit-typer:**
@@ -69,6 +69,7 @@ feat: add hat to cat
 - `refactor`: refaktorering av produksjenskode, f.eks. omdøping av en variabel
 - `chore`: oppdatering av grunt-oppgaver osv.; ingen endring i produksjenskode
 - `ci`: endringer i kontinuerlig integrasjon-konfigurasjon og skript (f.eks. GitHub Actions)
+- `install`: endringer i Installasjonsskript
 
 **Flere eksempler:**
 
@@ -80,6 +81,7 @@ style(shared): fix indentation in utils
 refactor(projectextensions): simplify project setup logic
 chore: update dependencies
 ci: improve build process
+install: update installation scripts
 ```
 
 **Referanser:**
