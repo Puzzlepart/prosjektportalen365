@@ -1,12 +1,13 @@
 # Om denne mappen
 
-Dokumentene i denne mappen er maler hentet fra Prosjektveiviseren. 
+Dokumentene i denne mappen er maler hentet fra Prosjektveiviseren.
 
 **Viktig:** Dokumentene blir automatisk overskrevet når Prosjektportalen oppgraderes. Vi anbefaler derfor at du ikke redigerer disse filene direkte.
 
 ## Hvordan tilpasse malene
 
 Hvis du ønsker å tilpasse malene:
+
 1. Kopier dokumentet til første nivået av dette biblioteket eller til en egen mappe
 2. Rediger den kopierte versjonen etter dine behov
 
@@ -22,4 +23,4 @@ Noen av malene (som interessenter og gevinstanalyse) finnes også som interaktiv
 
 ## Les mer
 
-Les mer om malene og hvordan de brukes på https://prosjektveiviseren.digdir.no/.
+Les mer om malene og hvordan de brukes på <https://prosjektveiviseren.digdir.no/>.
