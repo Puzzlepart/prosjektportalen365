@@ -2,7 +2,7 @@
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x010018DB532215EDE34C975F3AC3348948B1" Default="true" />
     </pnp:ContentTypeBindings>
-    <pnp:Views RemoveExistingViews="true">
+    <pnp:Views>
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_ProjectAdminPermissions_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
             <Query />
             <ViewFields>

@@ -4,7 +4,7 @@
         <pnp:ContentTypeBinding ContentTypeID="0x0100618197F7C782A0459EB2FA5EBF1BDDF202" />
         <pnp:ContentTypeBinding ContentTypeID="0x0100618197F7C782A0459EB2FA5EBF1BDDF203" />
     </pnp:ContentTypeBindings>
-    <pnp:Views RemoveExistingViews="true">
+    <pnp:Views>
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle roller" Url="{site}/{resource:Lists_ProjectAdminRoles_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
             <Query />
             <ViewFields>

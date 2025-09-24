@@ -3,7 +3,7 @@
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x01001BE34662FF90874E9FEB29B37B6BB18C" Default="true" />
     </pnp:ContentTypeBindings>
-    <pnp:Views RemoveExistingViews="true">
+    <pnp:Views>
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_PortfolioViews_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
             <Query>
                 <OrderBy>
