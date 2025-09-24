@@ -2,20 +2,21 @@
 <pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:Preferences></pnp:Preferences>
     <pnp:Templates ID="CONTAINER-TEMPLATE-PP-PORTFOLIO-CONTENT-EN-US">
-        <pnp:ProvisioningTemplate ID="TEMPLATE-PP-PORTFOLIO-CONTENT-EN-US" Version="1" Scope="RootSite">
+        <pnp:ProvisioningTemplate ID="TEMPLATE-PP-PORTFOLIO-EN-US" Scope="RootSite">
             <pnp:Files>
                 <pnp:File Src="ProjectTemplates/DefaultTemplate.txt" Folder="ProjectTemplates" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Default Template" />
-                        <pnp:Property Key="GtDescription" Value="" />
+                        <pnp:Property Key="GtDescription" Value="This is the default template for projects that comes with Project Portal 365. Will be overwritten during an upgrade." />
                         <pnp:Property Key="IconName" Value="Page" />
-                        <pnp:Property Key="IsDefaultTemplate" Value="1" />
+                        <pnp:Property Key="GtIsProgram" Value="0" />
+                        <pnp:Property Key="GtIsParentProject" Value="0" />
                     </pnp:Properties>
                 </pnp:File>
                 <pnp:File Src="ProjectTemplates/ParentTemplate.txt" Folder="ProjectTemplates" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Parent Template" />
-                        <pnp:Property Key="GtDescription" Value="" />
+                        <pnp:Property Key="GtDescription" Value="This is the default template for parent projects that comes with Project Portal 365. Will be overwritten during an upgrade." />
                         <pnp:Property Key="IconName" Value="Page" />
                         <pnp:Property Key="GtIsProgram" Value="0" />
                         <pnp:Property Key="GtIsParentProject" Value="1" />
@@ -24,45 +25,10 @@
                 <pnp:File Src="ProjectTemplates/ProgramTemplate.txt" Folder="ProjectTemplates" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Program Template" />
-                        <pnp:Property Key="GtDescription" Value="" />
+                        <pnp:Property Key="GtDescription" Value="This is the default template for programs that comes with Project Portal 365. Will be overwritten during an upgrade." />
                         <pnp:Property Key="IconName" Value="Page" />
                         <pnp:Property Key="GtIsProgram" Value="1" />
                         <pnp:Property Key="GtIsParentProject" Value="0" />
-                    </pnp:Properties>
-                </pnp:File>
-                <pnp:File Src="TemplateLibrary/Benefits_Realization_Plan.docx" Folder="TemplateLibrary" Level="Published" Overwrite="true">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Benefits Realization Plan" />
-                    </pnp:Properties>
-                </pnp:File>
-                <pnp:File Src="TemplateLibrary/Benefits_Tool.xlsx" Folder="TemplateLibrary" Level="Published" Overwrite="true">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Benefits Tool" />
-                    </pnp:Properties>
-                </pnp:File>
-                <pnp:File Src="TemplateLibrary/Concept_Phase_Mandate.docx" Folder="TemplateLibrary" Level="Published" Overwrite="true">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Concept Phase Mandate" />
-                    </pnp:Properties>
-                </pnp:File>
-                <pnp:File Src="TemplateLibrary/Project_Justification.docx" Folder="TemplateLibrary" Level="Published" Overwrite="true">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Project Justification" />
-                    </pnp:Properties>
-                </pnp:File>
-                <pnp:File Src="TemplateLibrary/Project_Proposal.docx" Folder="TemplateLibrary" Level="Published" Overwrite="true">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Project Proposal" />
-                    </pnp:Properties>
-                </pnp:File>
-                <pnp:File Src="TemplateLibrary/Final_Report.docx" Folder="TemplateLibrary" Level="Published" Overwrite="true">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Final Report" />
-                    </pnp:Properties>
-                </pnp:File>
-                <pnp:File Src="TemplateLibrary/Steering_Document.docx" Folder="TemplateLibrary" Level="Published" Overwrite="true">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Steering Document" />
                     </pnp:Properties>
                 </pnp:File>
                 <pnp:File Src="SiteAssets/Configuration/Riskmatrix/standard-configuration.json" Folder="SiteAssets/Configuration/Riskmatrix" Level="Published" Overwrite="true">
@@ -76,6 +42,566 @@
                     </pnp:Properties>
                 </pnp:File>
             </pnp:Files>
+            <pnp:Lists>
+                <pnp:ListInstance Title="Phase Checklist" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/PhaseChecklist" EnableVersioning="true" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false">
+                    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is there a clearly defined problem statement that highlights the need for further investigation?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Idea|6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Has it been clarified how or by whom the investigation will be financed?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Idea|6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">20</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is it most appropriate to carry out the initiative as a project or as a line task?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Idea|6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">30</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is the initiative in accordance with the business strategy?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Idea|6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">40</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is more information needed before a decision can be made?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Idea|6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">50</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Have the guidelines (IT-political or others) that apply and must be considered in the investigation been clarified?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Idea|6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">60</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Should we proceed to the concept phase and investigate different concepts for a possible project?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Idea|6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">70</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is the project realistic and feasible?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Starting up|99e85650-33de-4af4-b8db-edffbc8a310b</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">80</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Has a project steering committee been established?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Starting up|99e85650-33de-4af4-b8db-edffbc8a310b</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">90</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Has a role description for the project owner been established?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Starting up|99e85650-33de-4af4-b8db-edffbc8a310b</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">100</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Has a benefits manager been appointed and role description established?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Starting up|99e85650-33de-4af4-b8db-edffbc8a310b</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">110</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Does the project proposal support the organization's goals and strategies?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Starting up|99e85650-33de-4af4-b8db-edffbc8a310b</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">120</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Have sufficient assessments of alternative investments been made to ensure that the project proposal represents a correct choice to proceed with, including quantitative and qualitative benefit analyses and cost/benefit comparisons for each alternative?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Starting up|99e85650-33de-4af4-b8db-edffbc8a310b</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">130</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Are project manager and other key project participants appointed?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Starting up|99e85650-33de-4af4-b8db-edffbc8a310b</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">140</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is role description for project manager established?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Starting up|99e85650-33de-4af4-b8db-edffbc8a310b</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">150</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Are key resources allocated?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Starting up|99e85650-33de-4af4-b8db-edffbc8a310b</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">160</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Has a rough project justification been developed?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Starting up|99e85650-33de-4af4-b8db-edffbc8a310b</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">170</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is the project still desirable and in line with the organization's strategic goals?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Initiating|cda4f1e1-3488-4e57-8a04-6973df239689</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">180</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Are the project's result objectives with associated products/deliverables suitable to create the desired changes and benefits that were the basis for the assessments in the concept phase?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Initiating|cda4f1e1-3488-4e57-8a04-6973df239689</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">190</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Has a comprehensive and consistent plan been developed that breaks the project down into manageable phases?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Initiating|cda4f1e1-3488-4e57-8a04-6973df239689</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">200</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Have necessary strategies for implementation been developed (for example implementation strategy, quality strategy and procurement strategy)?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Initiating|cda4f1e1-3488-4e57-8a04-6973df239689</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">210</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Has stakeholder analysis been conducted?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Initiating|cda4f1e1-3488-4e57-8a04-6973df239689</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">220</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is the project organization clearly defined with roles and responsibilities, and are there resources to carry out the project?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Initiating|cda4f1e1-3488-4e57-8a04-6973df239689</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">230</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Has uncertainty analysis been performed and is the uncertainty acceptable?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Initiating|cda4f1e1-3488-4e57-8a04-6973df239689</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">240</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Are critical success factors identified?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Initiating|cda4f1e1-3488-4e57-8a04-6973df239689</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">250</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Has the benefits manager been actively involved in developing the benefits realization plan?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Initiating|cda4f1e1-3488-4e57-8a04-6973df239689</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">260</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Has the line organization's capacity to realize the benefits been assessed?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Initiating|cda4f1e1-3488-4e57-8a04-6973df239689</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">270</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Are the project's deliverables in accordance with defined result objectives?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Directing|99d7765a-c786-4792-a1a1-866ef0f982b9</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">280</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Are deliverables documented and delivered according to plan?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Directing|99d7765a-c786-4792-a1a1-866ef0f982b9</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">290</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is there any outstanding work that the project should be responsible for completing?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Directing|99d7765a-c786-4792-a1a1-866ef0f982b9</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">300</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Does the benefits manager perceive that the desired benefits are still realistic, and has the benefits realization plan been reviewed and possibly updated during the implementation phase(s)?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Directing|99d7765a-c786-4792-a1a1-866ef0f982b9</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">310</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is the line organization ready to use the deliverables from the project and has necessary training, user documentation, operational procedures etc. been developed and implemented?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Directing|99d7765a-c786-4792-a1a1-866ef0f982b9</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">320</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is it clear who should follow up and report effects (according to benefits realization plan), and to whom?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Directing|99d7765a-c786-4792-a1a1-866ef0f982b9</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">330</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is it clear who is responsible for management and operations, and have the necessary agreements been entered into?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Directing|99d7765a-c786-4792-a1a1-866ef0f982b9</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">340</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is outstanding work satisfactorily closed and possibly accepted and transferred to the line organization?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Closing|30e03c52-8c3e-4cfe-9b18-ca71593ce130</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">350</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is the project's main result (product, cost, time, quality, resource usage) documented?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Closing|30e03c52-8c3e-4cfe-9b18-ca71593ce130</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">360</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Are positive and negative experiences documented for knowledge transfer?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Closing|30e03c52-8c3e-4cfe-9b18-ca71593ce130</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">370</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Are the project documents properly archived?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Closing|30e03c52-8c3e-4cfe-9b18-ca71593ce130</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">380</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Are all project contracts closed?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Closing|30e03c52-8c3e-4cfe-9b18-ca71593ce130</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">390</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Have all relevant stakeholders been informed about the closure of the project?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Closing|30e03c52-8c3e-4cfe-9b18-ca71593ce130</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">400</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Er gevinstrealiseringsplanen oppdatert?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Closing|30e03c52-8c3e-4cfe-9b18-ca71593ce130</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">410</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is the Lessons Learned log updated, closed, and saved?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Closing|30e03c52-8c3e-4cfe-9b18-ca71593ce130</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">420</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Have planned measurements and initiatives been implemented?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Benefits realization|b7ba84f0-70b9-45c4-8c50-8f73bf15bbec</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">430</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Have expected benefits been achieved, or is there a need for additional measures? If so, has an action plan been developed?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Benefits realization|b7ba84f0-70b9-45c4-8c50-8f73bf15bbec</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">440</pnp:DataValue>
+                        </pnp:DataRow>
+                    </pnp:DataRows>
+                </pnp:ListInstance>
+                <pnp:ListInstance Title="Planner Tasks" TemplateType="100" Url="Lists/PlannerTasks" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true">
+                    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Overwrite">
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Decide on investigation of the idea and formulate a first draft of the project mandate</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Idea</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Define a clear problem statement that highlights the need for further investigation</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Idea</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">20</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Make it clear how or by whom the investigation will be financed</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Idea</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">30</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Assess whether it is most appropriate to carry out the initiative as a project or as a line task</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Idea</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">40</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Assess whether the initiative is in accordance with the business strategy</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Idea</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">50</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Consider if there are any guidelines (IT-political or others) that apply and must be taken into account in the investigation</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Idea</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">60</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Assess whether more information is needed before a decision can be made</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Idea</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">70</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Develop final project mandate and present it for decision at Decision Point 1 (DP1)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Idea</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">80</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Conduct DP1 (checklist and possible phase transition) and assess whether we should proceed to the concept phase and investigate different concepts for a possible project</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Idea</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">90</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">If it has been decided in DP1 to proceed to the concept phase, appoint an investigation leader for the concept phase</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Idea</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">100</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Establish the project proposal document for further work (based on the project mandate)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Starting up</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">110</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Appoint a project owner</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Starting up</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">120</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Consider whether a project steering committee should be established</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Starting up</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">130</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Establish role description for project owner</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Starting up</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">140</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Appoint a project manager</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Starting up</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">150</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Establish role description for project manager</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Starting up</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">160</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Allocate key resources for the project and make necessary agreements to ensure resource access, as well as assemble a project team</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Starting up</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">170</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Conduct necessary analyses (Socio-economic analysis, QA1, QA2, etc.)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Starting up</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">180</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Establish a rough project justification</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Starting up</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">190</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Collect experiences from previous projects and activities that are useful for this project</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Starting up</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">200</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Establish the project's own experience log</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Starting up</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">210</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Assess whether the project is realistic and feasible</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Starting up</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">220</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Assess whether the project proposal supports the organization's goals and strategies</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Starting up</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">230</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Assess whether a sufficient evaluation of various alternatives has been made to ensure that the project proposal provides a correct choice to proceed with. (Remember quantitative and qualitative benefit analyses and cost/benefit comparisons for each alternative)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Starting up</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">240</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Develop final project proposal for decision at Decision Point 2 (DP2)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Starting up</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">250</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Complete phase plan for the Planning Phase for decision at Decision Point 2 (DP2)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Starting up</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">260</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Conduct DP2 (checklist and possible phase transition) and assess whether to proceed to the planning phase and plan the project in detail</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Starting up</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">270</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Consider establishing necessary strategies for project implementation (This will vary between different project types. See examples under activities in the Planning Phase on Prosjektveiviseren.no)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Initiating</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">280</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Complete the detailed project justification that in total shall ensure that the project is still desirable and in line with the organization's strategic goals</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Initiating</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">290</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Conduct a stakeholder analysis</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Initiating</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">300</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Create a communication plan</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Initiating</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">310</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Establish a final project organization with roles and responsibilities, and sufficient resources to implement the project</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Initiating</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">320</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Conduct uncertainty analysis and assess whether the uncertainty is acceptable</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Initiating</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">330</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Identify critical success factors and deliverables in the project</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Initiating</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">340</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Develop a benefits realization plan that includes an assessment of the line organization's capacity to realize the benefits</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Initiating</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">350</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Develop a comprehensive and consistent implementation plan that breaks the project down into manageable phases with milestones</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Initiating</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">360</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Develop/collect necessary steering documentation for decision at Decision Point 3 (DP3)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Initiating</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">370</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Complete phase plan for first implementation phase for decision at DP3</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Initiating</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">380</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Conduct DP3 (checklist and possible phase transition) and assess whether to proceed to the implementation phase(s)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Initiating</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">390</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Follow up that the project's deliverables are in accordance with defined result goals for the project</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Directing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">400</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Ensure that deliverables are properly documented and delivered according to plan</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Directing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">410</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">When approaching the closing phase, assess whether there is any outstanding work that the project should be responsible for closing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Directing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">420</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Ensure that necessary training, user documentation, operational procedures etc. are developed and implemented</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Directing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">430</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Ensure good dialogue with the line organization along the way, so that it is ready to use the deliverables from the project</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Directing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">440</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Anchor and clarify who should follow up and report effects (according to benefits realization plan), when this should be reported after project completion and to whom</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Directing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">450</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Clarify who has responsibility for further management and operation of the project result, and enter into necessary agreements</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Directing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">460</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Deliver completed project deliverables to the line organization</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Directing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">470</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Update steering documentation (project justification, experience log and benefits realization plan) for decision at Decision Point 4 (DP4)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Directing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">480</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Complete phase plan for the closing phase for decision at DP4</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Directing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">490</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Conduct DP4 (checklist and possible phase transition) and assess whether to proceed to the closing phase</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Directing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">500</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Complete any remaining tasks and hand over final deliverables to the line organization</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Closing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">510</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Provide agreed support to the line organization during the implementation phase</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Closing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">520</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Ensure that all relevant contracts and agreements are formally closed</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Closing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">530</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Update and close the project accounts</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Closing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">540</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Close and archive project documentation (product, cost, time, quality, resource usage)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Closing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">550</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Document positive and negative experiences for knowledge transfer to the organization's experience log</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Closing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">560</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Update project justification and benefits realization plan (remember that planned effect measurements should be part of the organization's ordinary management processes to ensure goal achievement)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Closing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">570</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Evaluate the project and prepare final report</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Closing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">580</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Inform all relevant stakeholders about project closure</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Closing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">590</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Develop/collect necessary steering documentation (final report, updated project justification and benefits realization plan with residual risk) for decision at Decision Point 5 (DP5)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Closing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">600</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Conduct DP5 (checklist and possible phase transition) and assess whether to close the project and proceed to the realization phase</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Closing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">610</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Formally dissolve the project organization ('KickOut')</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Closing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">620</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Ensure that planned measurements and measures are carried out according to the benefits realization plan</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Benefits realization</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">630</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Measure whether expected benefits have been achieved or if there is a need for additional measures. If so, develop an action plan</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Benefits realization</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">640</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Carry out agreed effect measurements for decision at Decision Point 6 (DP6)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Benefits realization</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">650</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Conduct DP6 (checklist) and assess whether the desired effect has been achieved, and possibly consider new measures</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Benefits realization</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">660</pnp:DataValue>
+                        </pnp:DataRow>
+                    </pnp:DataRows>
+                </pnp:ListInstance>
+            </pnp:Lists>
         </pnp:ProvisioningTemplate>
     </pnp:Templates>
 </pnp:Provisioning>
