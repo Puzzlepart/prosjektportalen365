@@ -1639,6 +1639,9 @@
     <data name="Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerBucketName_Title" xml:space="preserve">
         <value>Name of the bucket in Planner for actions for the Uncertainty List</value>
     </data>
+    <data name="Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerBucketName_Value" xml:space="preserve">
+        <value>Actions</value>
+    </data>
     <data name="Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerEnabled_Title" xml:space="preserve">
         <value>Use Planner to manage actions in the Uncertainty List</value>
     </data>
@@ -1825,6 +1828,51 @@
     <data name="Lists_Idea_Configuration_Url" xml:space="preserve">
         <value>Lists/IdeaConfiguration</value>
     </data>
+    <data name="Lists_Idea_Configuration_GtIdeaRegistrationChoices_Approve_Choice_Value" xml:space="preserve">
+        <value>Approve</value>
+    </data>
+    <data name="Lists_Idea_Configuration_GtIdeaRegistrationChoices_Approve_Recommendation_Value" xml:space="preserve">
+        <value>Approved for idea detailing</value>
+    </data>
+    <data name="Lists_Idea_Configuration_GtIdeaRegistrationChoices_Consideration_Choice_Value" xml:space="preserve">
+        <value>Under consideration</value>
+    </data>
+    <data name="Lists_Idea_Configuration_GtIdeaRegistrationChoices_Consideration_Recommendation_Value" xml:space="preserve">
+        <value>Under consideration</value>
+    </data>
+    <data name="Lists_Idea_Configuration_GtIdeaRegistrationChoices_Reject_Choice_Value" xml:space="preserve">
+        <value>Reject</value>
+    </data>
+    <data name="Lists_Idea_Configuration_GtIdeaRegistrationChoices_Reject_Recommendation_Value" xml:space="preserve">
+        <value>Rejected</value>
+    </data>
+    <data name="Lists_Idea_Configuration_GtIdeaProcessingChoices_Approve_Choice_Value" xml:space="preserve">
+        <value>Approve</value>
+    </data>
+    <data name="Lists_Idea_Configuration_GtIdeaProcessingChoices_Approve_Recommendation_Value" xml:space="preserve">
+        <value>Approved for concept development</value>
+    </data>
+    <data name="Lists_Idea_Configuration_GtIdeaProcessingChoices_Consideration_Choice_Value" xml:space="preserve">
+        <value>Under consideration</value>
+    </data>
+    <data name="Lists_Idea_Configuration_GtIdeaProcessingChoices_Consideration_Recommendation_Value" xml:space="preserve">
+        <value>Under consideration</value>
+    </data>
+    <data name="Lists_Idea_Configuration_GtIdeaProcessingChoices_Reject_Choice_Value" xml:space="preserve">
+        <value>Reject</value>
+    </data>
+    <data name="Lists_Idea_Configuration_GtIdeaProcessingChoices_Reject_Recommendation_Value" xml:space="preserve">
+        <value>Rejected</value>
+    </data>
+    <data name="Lists_Idea_Configuration_GtDescription_Registration_Value" xml:space="preserve">
+        <value>If the idea is approved, a detailed idea page will be created and an item will be added to the Idea Processing list.</value>
+    </data>
+    <data name="Lists_Idea_Configuration_GtDescription_Processing_Value" xml:space="preserve">
+        <value>If the idea is approved, it will be possible to create project data that can be used for site provisioning.</value>
+    </data>
+    <data name="Lists_Idea_Configuration_GtDescription_ProjectData_Value" xml:space="preserve">
+        <value>Associate project data with the idea to synchronize data to a project later. Once project data is created, it is important to fill in the desired metadata, then add the project URL, which ensures metadata is synchronized to the project during provisioning. The project URL can either be filled in manually after a project has received a URL or through an ordering solution.</value>
+    </data>
     <data name="Lists_InstallationLog_Description" xml:space="preserve">
         <value>Installation and upgrade history.</value>
     </data>
@@ -1985,7 +2033,7 @@
         <value>Phase Checklist</value>
     </data>
     <data name="Lists_PhaseChecklist_Url" xml:space="preserve">
-        <value>Lists/PhaseChecklist</value>
+        <value>Lists/Phase%20Checklist</value>
     </data>
     <data name="Lists_PlannerTasksBuilding_Title" xml:space="preserve">
         <value>Planner Tasks Building</value>
@@ -2199,6 +2247,9 @@
     </data>
     <data name="Lists_ProjectColumns_Url" xml:space="preserve">
         <value>Lists/ProjectColumns</value>
+    </data>
+    <data name="Lists_ProjectColumns_Fields_GtFieldCustomSort_Value" xml:space="preserve">
+        <value>Logical order (AllApps):Starting up,Initiating,Directing,Closing,Benefits realization</value>
     </data>
     <data name="Lists_ProjectContentColumns_Description" xml:space="preserve">
         <value>Manage project content columns (visibility and metadata)</value>
@@ -3874,6 +3925,9 @@
     <data name="SiteFields_GtProjectAdminPermissions_DisplayName" xml:space="preserve">
         <value>Permissions</value>
     </data>
+    <data name="SiteFields_GtProjectAdminRoles_Description" xml:space="preserve">
+        <value>Select which roles should be able to administer the project. This includes actions such as editing project properties and phase.</value>
+    </data>
     <data name="SiteFields_GtProjectAdminRoles_DisplayName" xml:space="preserve">
         <value>Roles</value>
     </data>
@@ -4400,7 +4454,7 @@
         <value>What is the status of the project's gain achievement?</value>
     </data>
     <data name="SiteFields_GtStatusGainAchievement_DisplayName" xml:space="preserve">
-        <value>Status gain schievement</value>
+        <value>Status gain achievement</value>
     </data>
     <data name="SiteFields_GtStatusOpportunitiesComment_Description" xml:space="preserve">
         <value>Provide comments/details regarding the opportunities identified in the project status.</value>
@@ -4488,6 +4542,9 @@
     </data>
     <data name="SiteFields_GtUNSustDevGoalsText_DisplayName" xml:space="preserve">
         <value>UN Sustainable Development Goals (Text)</value>
+    </data>
+    <data name="SiteFields_GtUNSustDevGoals_Description" xml:space="preserve">
+        <value>The UN Sustainable Development Goals are the world's shared work plan to eradicate poverty, combat inequality, and stop climate change by 2030.</value>
     </data>
     <data name="SiteFields_GtUNSustDevGoals_DisplayName" xml:space="preserve">
         <value>UN Sustainable Development Goals</value>

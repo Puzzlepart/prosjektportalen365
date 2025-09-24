@@ -1654,6 +1654,9 @@
     <data name="Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerBucketName_Title" xml:space="preserve">
         <value>Navn på mappen i Planner for tiltak for Usikkerhetslisten</value>
     </data>
+    <data name="Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerBucketName_Value" xml:space="preserve">
+        <value>Tiltak</value>
+    </data>
     <data name="Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerEnabled_Title" xml:space="preserve">
         <value>Bruk Planner for å håndtere tiltak i Usikkerhetslisten</value>
     </data>
@@ -1842,6 +1845,51 @@
     </data>
     <data name="Lists_Idea_Configuration_Url" xml:space="preserve">
         <value>Lists/Idekonfigurasjon</value>
+    </data>
+    <data name="Lists_Idea_Configuration_GtIdeaRegistrationChoices_Approve_Choice_Value" xml:space="preserve">
+        <value>Godkjenn</value>
+    </data>
+    <data name="Lists_Idea_Configuration_GtIdeaRegistrationChoices_Approve_Recommendation_Value" xml:space="preserve">
+        <value>Godkjent for detaljering av idé</value>
+    </data>
+    <data name="Lists_Idea_Configuration_GtIdeaRegistrationChoices_Consideration_Choice_Value" xml:space="preserve">
+        <value>Under vurdering</value>
+    </data>
+    <data name="Lists_Idea_Configuration_GtIdeaRegistrationChoices_Consideration_Recommendation_Value" xml:space="preserve">
+        <value>Under vurdering</value>
+    </data>
+    <data name="Lists_Idea_Configuration_GtIdeaRegistrationChoices_Reject_Choice_Value" xml:space="preserve">
+        <value>Avvis</value>
+    </data>
+    <data name="Lists_Idea_Configuration_GtIdeaRegistrationChoices_Reject_Recommendation_Value" xml:space="preserve">
+        <value>Avvist</value>
+    </data>
+    <data name="Lists_Idea_Configuration_GtIdeaProcessingChoices_Approve_Choice_Value" xml:space="preserve">
+        <value>Godkjenn</value>
+    </data>
+    <data name="Lists_Idea_Configuration_GtIdeaProcessingChoices_Approve_Recommendation_Value" xml:space="preserve">
+        <value>Godkjent for konseptutredning</value>
+    </data>
+    <data name="Lists_Idea_Configuration_GtIdeaProcessingChoices_Consideration_Choice_Value" xml:space="preserve">
+        <value>Under vurdering</value>
+    </data>
+    <data name="Lists_Idea_Configuration_GtIdeaProcessingChoices_Consideration_Recommendation_Value" xml:space="preserve">
+        <value>Under vurdering</value>
+    </data>
+    <data name="Lists_Idea_Configuration_GtIdeaProcessingChoices_Reject_Choice_Value" xml:space="preserve">
+        <value>Avvis</value>
+    </data>
+    <data name="Lists_Idea_Configuration_GtIdeaProcessingChoices_Reject_Recommendation_Value" xml:space="preserve">
+        <value>Avvist</value>
+    </data>
+    <data name="Lists_Idea_Configuration_GtDescription_Registration_Value" xml:space="preserve">
+        <value>Dersom idéen blir godkjent vil det bli opprettet en detaljert idé-side for idéen og et element i Idébehandlingslisten.</value>
+    </data>
+    <data name="Lists_Idea_Configuration_GtDescription_Processing_Value" xml:space="preserve">
+        <value>Dersom idéen blir godkjent vil det være mulig å opprette prosjektdata som kan bli brukt for provisjonering av området.</value>
+    </data>
+    <data name="Lists_Idea_Configuration_GtDescription_ProjectData_Value" xml:space="preserve">
+        <value>Tilknytt prosjektdata til ideen for å synkronisere data til et prosjekt senere. Når prosjektdata er opprettet, er det viktig å fylle ut ønsket metadata, deretter legge inn url for prosjektet, dette gjør at metadata synkroniseres til prosjektet ved provisjonering. Url til prosjektet kan enten fylles inn manuelt etter at et prosjekt har fått URL eller via en bestillingsløsning.</value>
     </data>
     <data name="Lists_InstallationLog_Description" xml:space="preserve">
         <value>Installasjons- og oppgraderingshistorikk.</value>
@@ -2211,6 +2259,9 @@
     </data>
     <data name="Lists_ProjectColumns_Url" xml:space="preserve">
         <value>Lists/Prosjektkolonner</value>
+    </data>
+    <data name="Lists_ProjectColumns_Fields_GtFieldCustomSort_Value" xml:space="preserve">
+        <value>Logisk rekkefølge(AllApps):Konsept,Planlegge,Gjennomføre,Avslutte,Realisere</value>
     </data>
     <data name="Lists_ProjectContentColumns_Description" xml:space="preserve">
         <value>Administrer prosjektinnholds-kolonner (synlighet og metadata)</value>

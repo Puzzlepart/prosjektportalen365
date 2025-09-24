@@ -389,7 +389,7 @@ define([], function () {
     EditViewText: 'Edit the view',
     EmptyMessageDescription: 'No new projects found.',
     EndDateLabel: 'End date',
-    ExcelExportButtonLabel: 'Eksporter til Excel',
+    ExcelExportButtonLabel: 'Export to excel',
     ErrorFetchingProjectsTitle: 'An error occurred while retrieving projects.',
     FiltersString: 'Filters',
     FilterText: 'Filter',
