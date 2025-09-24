@@ -5,7 +5,7 @@
         <pnp:ContentTypeBinding ContentTypeID="0x0100618197F7C782A0459EB2FA5EBF1BDDF203" />
     </pnp:ContentTypeBindings>
     <pnp:Views>
-        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle roller" Url="{site}/{resource:Lists_ProjectAdminRoles_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllRoles_DisplayName}" Url="{site}/{resource:Lists_ProjectAdminRoles_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
             <Query />
             <ViewFields>
                 <FieldRef Name="ContentType" />
@@ -20,7 +20,7 @@
             <JSLink>clienttemplates.js</JSLink>
             <ViewData />
         </View>
-        <View Type="HTML" DisplayName="Prosjektadministrasjonsroller koblet mot prosjektegenskaper" Url="{site}/{resource:Lists_ProjectAdminRoles_Url}/Prosjektegenskaper.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+        <View Type="HTML" DisplayName="{resource:View_ProjectAdminRoles_ProjectProperties_DisplayName}" Url="{site}/{resource:Lists_ProjectAdminRoles_Url}/Prosjektegenskaper.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
             <Query>
                 <Where>
                     <Eq>
@@ -39,7 +39,7 @@
             <JSLink>clienttemplates.js</JSLink>
             <ViewData />
         </View>
-        <View Type="HTML" DisplayName="Prosjektadministrasjonsroller koblet mot SharePoint-gruppe" Url="{site}/{resource:Lists_ProjectAdminRoles_Url}/Gruppemedlemskap.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+        <View Type="HTML" DisplayName="{resource:View_ProjectAdminRoles_GroupMembership_DisplayName}" Url="{site}/{resource:Lists_ProjectAdminRoles_Url}/Gruppemedlemskap.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
             <Query>
                 <Where>
                     <Eq>

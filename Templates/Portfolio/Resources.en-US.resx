@@ -4594,6 +4594,12 @@
     <data name="View_AllItems_DisplayName" xml:space="preserve">
         <value>All items</value>
     </data>
+    <data name="View_AllPages_DisplayName" xml:space="preserve">
+        <value>Alle sider</value>
+    </data>
+    <data name="View_AllRoles_DisplayName" xml:space="preserve">
+        <value>Alle roller</value>
+    </data>
     <data name="View_Archived_DisplayName" xml:space="preserve">
         <value>Archived</value>
     </data>
@@ -4641,6 +4647,12 @@
     </data>
     <data name="View_WithoutResponsible_DisplayName" xml:space="preserve">
         <value>Without responsible</value>
+    </data>
+    <data name="View_ProjectAdminRoles_ProjectProperties_DisplayName" xml:space="preserve">
+        <value>Project administration roles linked to project properties</value>
+    </data>
+    <data name="View_ProjectAdminRoles_GroupMembership_DisplayName" xml:space="preserve">
+        <value>Project administration roles linked to SharePoint group</value>
     </data>
     <data name="WebParts_BenefitsOverviewCategory_Title" xml:space="preserve">
         <value>Benefit Overview</value>

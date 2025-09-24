@@ -28,7 +28,7 @@
     </pnp:Views>
     <pnp:FieldRefs>
         <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" DisplayName="{resource:SiteFields_GtSortOrder_DisplayName}" Required="true" />
-        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" DisplayName="Tittel" Required="true" />
+        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" DisplayName="{resource:SiteFields_Title_DisplayName" Required="true" />
         <pnp:FieldRef ID="31e405e0-2890-439d-9c9f-42354154feda" Name="GtSearchQuery" DisplayName="{resource:SiteFields_GtSearchQuery_DisplayName}" Required="true" />
         <pnp:FieldRef ID="b5fc712a-9908-4ba1-a8ac-7e51eca7a251" Name="GtPortfolioFabricIcon" DisplayName="{resource:SiteFields_GtPortfolioFabricIcon_DisplayName}" Required="true" />
         <pnp:FieldRef ID="43c79736-a2b6-452c-9995-6b72bba0ec16" Name="GtPortfolioColumns" DisplayName="{resource:SiteFields_GtPortfolioColumns_DisplayName}" Required="true" />
