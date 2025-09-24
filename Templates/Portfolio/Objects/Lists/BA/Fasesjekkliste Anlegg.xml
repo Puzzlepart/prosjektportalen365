@@ -1,6 +1,6 @@
 <pnp:ListInstance Title="{resource:Lists_PhaseChecklistConstruction_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_PhaseChecklistConstruction_Url}" Hidden="false" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" ContentTypesEnabled="false" RemoveExistingContentTypes="false" EnableFolderCreation="false" EnableAttachments="false"
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
-    <pnp:Views RemoveExistingViews="true">
+    <pnp:Views>
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_PhaseChecklistConstruction_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
             <Query>
                 <OrderBy>
@@ -21,37 +21,12 @@
     </pnp:Views>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
     <pnp:FieldRefs>
-        <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" DisplayName="Sorteringsrekkefølge" />
+        <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" DisplayName="{resource:SiteFields_GtSortOrder_DisplayName}" />
     </pnp:FieldRefs>
     <pnp:Fields>
-        <Field Type="Note" DisplayName="Fase_0" StaticName="j25543a5815d485da9a5e0773ad762e9" Name="j25543a5815d485da9a5e0773ad762e9" ID="{C886122C-1717-4C95-8B6B-8B2E553E5F2D}" ShowInViewForms="FALSE" Required="FALSE" Hidden="TRUE" />
-        <Field Description="" DisplayName="Fase" ID="{325543a5-815d-485d-a9a5-e0773ad762e9}" Name="GtProjectPhase" ShowField="Term1044" SourceID="{{siteid}}" StaticName="GtProjectPhase" Type="TaxonomyFieldType" WebId="{siteid}">
+        <Field Description="{resource:SiteFields_GtProjectPhase_Description}" DisplayName="{resource:SiteFields_GtProjectPhase_DisplayName}" ID="{325543a5-815d-485d-a9a5-e0773ad762e9}" Name="GtProjectPhase" ShowField="Term1044" SourceID="{{siteid}}" StaticName="GtProjectPhase" Type="TaxonomyFieldType" WebId="{siteid}">
             <Customization>
                 <ArrayOfProperty>
-                    <Property>
-                        <Name>FilterAssemblyStrongName</Name>
-                        <Value p4:type="q10:string"
-                            xmlns:p4="http://www.w3.org/2001/XMLSchema-instance"
-                            xmlns:q10="http://www.w3.org/2001/XMLSchema">Microsoft.SharePoint.Taxonomy, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c</Value>
-                    </Property>
-                    <Property>
-                        <Name>FilterClassName</Name>
-                        <Value p4:type="q11:string"
-                            xmlns:p4="http://www.w3.org/2001/XMLSchema-instance"
-                            xmlns:q11="http://www.w3.org/2001/XMLSchema">Microsoft.SharePoint.Taxonomy.TaxonomyField</Value>
-                    </Property>
-                    <Property>
-                        <Name>FilterJavascriptProperty</Name>
-                        <Value p4:type="q13:string"
-                            xmlns:p4="http://www.w3.org/2001/XMLSchema-instance"
-                            xmlns:q13="http://www.w3.org/2001/XMLSchema">FilteringJavascript</Value>
-                    </Property>
-                    <Property>
-                        <Name>FilterMethodName</Name>
-                        <Value p4:type="q12:string"
-                            xmlns:p4="http://www.w3.org/2001/XMLSchema-instance"
-                            xmlns:q12="http://www.w3.org/2001/XMLSchema">GetFilteringHtml</Value>
-                    </Property>
                     <Property>
                         <Name>SspId</Name>
                         <Value p4:type="q1:string"
@@ -63,12 +38,6 @@
                         <Value p4:type="q2:string"
                             xmlns:p4="http://www.w3.org/2001/XMLSchema-instance"
                             xmlns:q2="http://www.w3.org/2001/XMLSchema">{cc6cdd18-c7d5-42e1-8d19-a336dd78f3f2}</Value>
-                    </Property>
-                    <Property>
-                        <Name>TextField</Name>
-                        <Value p4:type="q6:string"
-                            xmlns:q6="http://www.w3.org/2001/XMLSchema"
-                            xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">{C886122C-1717-4C95-8B6B-8B2E553E5F2D}</Value>
                     </Property>
                 </ArrayOfProperty>
             </Customization>
