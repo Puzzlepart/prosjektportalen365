@@ -28,7 +28,10 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
   public async onInit(): Promise<void> {
     this._sp = spfi().using(SPFx(this.context))
     this._openCmd = this.tryGetCommand('OPEN_IDEA_PROCESSING_DIALOG')
+
+    this._openCmd.title = strings.IdeaProcessingCommandTitle
     this._openCmd.visible = false
+
     this._userAuthorized = await isUserAuthorized(
       this._sp,
       resource.Security_SiteGroup_IdeaProcessors_Title,

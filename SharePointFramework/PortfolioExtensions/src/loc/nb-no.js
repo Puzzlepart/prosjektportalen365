@@ -49,6 +49,10 @@ define([], function () {
     SiteSettingsDescription: 'Vis alle områdeinnstillinger for Porteføljeområdet',
     SiteSettingsLabel: 'Områdeinnstillinger',
     SubmitLabel: 'Send',
-    IdeaRegistrationIncludeString: 'registrering'
+    IdeaRegistrationIncludeString: 'registrering',
+    IdeaProcessingCommandTitle: 'Sett anbefaling',
+    IdeaProcessingLinkTitle: 'Gå til behandling',
+    IdeaRegistrationCommandTitle: 'Sett anbefaling',
+    IdeaProjectDataCommandTitle: 'Opprett prosjektdata'
   }
 })

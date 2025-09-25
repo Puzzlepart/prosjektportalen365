@@ -49,6 +49,10 @@ declare interface IPortfolioExtensionsStrings {
   SiteSettingsLabel: string
   SubmitLabel: string
   IdeaRegistrationIncludeString: string
+  IdeaProcessingCommandTitle: string
+  IdeaProcessingLinkTitle: string
+  IdeaRegistrationCommandTitle: string
+  IdeaProjectDataCommandTitle: string
 }
 
 declare module 'PortfolioExtensionsStrings' {

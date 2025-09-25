@@ -35,7 +35,10 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
     Log.info(LOG_SOURCE, 'onInit: Initializing...')
     this._sp = spfi().using(SPFx(this.context))
     this._openCmd = this.tryGetCommand('OPEN_IDEA_PROJECTDATA_DIALOG')
+
+    this._openCmd.title = strings.IdeaProjectDataCommandTitle
     this._openCmd.visible = false
+
     this._userAuthorized = await isUserAuthorized(
       this._sp,
       resource.Security_SiteGroup_IdeaProcessors_Title,

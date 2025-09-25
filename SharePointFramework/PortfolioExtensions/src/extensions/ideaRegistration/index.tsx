@@ -37,11 +37,17 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
       spfxContext: this.context
     })
     this._openCmd = this.tryGetCommand('OPEN_IDEA_REGISTRATION_DIALOG')
+
+    this._openCmd.title = strings.IdeaRegistrationCommandTitle
     this._openCmd.visible = false
+
     this._openLinkCmd = this.tryGetCommand('IDEA_PROCESSING_LINK')
+
+    this._openLinkCmd.title = strings.IdeaProcessingLinkTitle
     this._openLinkCmd.visible = this.context.pageContext.list.title.includes(
       strings.IdeaRegistrationIncludeString
     )
+
     this._userAuthorized = await isUserAuthorized(
       this._sp,
       resource.Security_SiteGroup_IdeaProcessors_Title,

@@ -53,6 +53,10 @@ define([], function () {
     SiteSettingsLinkText: 'Site settings',
     SubmitLabel: 'Submit',
     IdeaRegistrationIncludeString: 'Registration',
-    AssistantGroupName: 'Assistant users'
+    AssistantGroupName: 'Assistant users',
+    IdeaProcessingCommandTitle: 'Set recommendation',
+    IdeaProcessingLinkTitle: 'Go to processing',
+    IdeaRegistrationCommandTitle: 'Set recommendation',
+    IdeaProjectDataCommandTitle: 'Create project data'
   }
 })
