@@ -16,6 +16,7 @@ import { Choice, IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
 import strings from 'PortfolioExtensionsStrings'
 import { find } from 'underscore'
 import { isUserAuthorized } from '../../helpers/isUserAuthorized'
+import { themeColor } from 'pp365-shared-library'
 import resource from 'SharedResources'
 
 export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
@@ -30,6 +31,11 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
     this._openCmd = this.tryGetCommand('OPEN_IDEA_PROCESSING_DIALOG')
 
     this._openCmd.title = strings.IdeaProcessingCommandTitle
+
+    const fillColor = themeColor
+    const exportSvgCmd = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2048 2048'%3E%3Cpath d='M1024 0q141 0 272 36t244 104 207 160 161 207 103 245 37 272q0 141-36 272t-104 244-160 207-207 161-245 103-272 37q-141 0-272-36t-244-104-207-160-161-207-103-245-37-272q0-141 36-272t104-244 160-207 207-161T752 37t272-37zM907 1347q22 0 42-8t35-24l429-429q15-15 23-35t8-41q0-22-8-42t-23-34-35-23-42-9q-21 0-41 8t-36 23l-352 352-118-118q-32-32-77-32-22 0-42 8t-35 24-23 34-9 42q0 21 8 41t24 36l195 195q15 15 35 23t42 9z' fill='${fillColor.replace('#', '%23')}'%3E%3C/path%3E%3C/svg%3E`
+    this._openCmd.iconImageUrl = exportSvgCmd
+
     this._openCmd.visible = false
 
     this._userAuthorized = await isUserAuthorized(

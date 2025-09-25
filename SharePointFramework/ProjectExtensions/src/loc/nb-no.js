@@ -143,6 +143,7 @@ define([], function () {
     TemplateSelectorSearchClearText: 'Nullstill valg av prosjektmal',
     TemplateSelectorSearchPlaceholder: 'Søk i prosjektmaler...',
     TemplateSelectorTitle: 'Prosjektmal',
+    TemplateSelectorCommandTitle: 'Hent dokumentmal',
     TermSetDoesNotExistError: 'Finner ikke termsett ID. Sjekk at termsett ID er korrekt i maloppsettet.',
     TitleLabel: 'Tittel',
     ProgressLabel: 'Fremdrift',

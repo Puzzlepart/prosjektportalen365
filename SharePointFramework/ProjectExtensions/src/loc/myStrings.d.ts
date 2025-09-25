@@ -145,6 +145,7 @@ declare interface IProjectExtensionsStrings {
   TemplateSelectorSearchClearText: string
   TemplateSelectorSearchPlaceholder: string
   TemplateSelectorTitle: string
+  TemplateSelectorCommandTitle: string
   TermSetDoesNotExistError: string
   TitleLabel: string
   ProgressLabel: string
