@@ -1921,6 +1921,12 @@
     <data name="Lists_Links_kslaring_Title" xml:space="preserve">
         <value>Prosjekt og Porteføljeverktøy: Kurs fra KS i Prosjektportalen</value>
     </data>
+    <data name="Lists_Links_Teams_Title" xml:space="preserve">
+        <value>Hjelp og læring for Microsoft Teams</value>
+    </data>
+    <data name="Lists_Links_Teams_Url" xml:space="preserve">
+        <value>https://support.microsoft.com/nb-no/teams</value>
+    </data>
     <data name="Lists_ListContent_Description" xml:space="preserve">
         <value>Oppsett av listeinnhold for nye områder</value>
     </data>
@@ -4926,6 +4932,9 @@
     </data>
     <data name="WebParts_MeetingsAndEvents_Title" xml:space="preserve">
         <value>Møter og arrangementer</value>
+    </data>
+    <data name="WebParts_PortfolioOverview_Title" xml:space="preserve">
+        <value>Porteføljeoversikt</value>
     </data>
     <data name="WebParts_ProgramInformation_Title" xml:space="preserve">
         <value>Programinformasjon</value>

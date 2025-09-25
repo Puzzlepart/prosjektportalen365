@@ -1903,6 +1903,12 @@
     <data name="Lists_Links_kslaring_Title" xml:space="preserve">
         <value>Project and Portfolio Tools: Course from KS in Project Portal</value>
     </data>
+    <data name="Lists_Links_Teams_Title" xml:space="preserve">
+        <value>Microsoft Teams help & learning</value>
+    </data>
+    <data name="Lists_Links_Teams_Url" xml:space="preserve">
+        <value>https://support.microsoft.com/en-us/teams</value>
+    </data>
     <data name="Lists_ListContent_Description" xml:space="preserve">
         <value>Setup of list content for new project sites</value>
     </data>
@@ -4734,6 +4740,9 @@
     </data>
     <data name="WebParts_MeetingsAndEvents_Title" xml:space="preserve">
         <value>Meetings and Events</value>
+    </data>
+    <data name="WebParts_PortfolioOverview_Title" xml:space="preserve">
+        <value>Portfolio Overview</value>
     </data>
     <data name="WebParts_ProgramInformation_Title" xml:space="preserve">
         <value>Program Information</value>
