@@ -23,10 +23,7 @@
         "default": " "
       },
       "officeFabricIconFontName": "BuildQueueNew",
-      "properties": {
-        "title": "Siste prosjekter",
-        "showProjectLogo": false
-      }
+      "properties": {}
     }
   ]
 }

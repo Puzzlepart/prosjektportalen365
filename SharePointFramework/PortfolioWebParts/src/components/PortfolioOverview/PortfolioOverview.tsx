@@ -9,6 +9,7 @@ import { ViewFormPanel } from './ViewFormPanel'
 import { PortfolioOverviewContext } from './context'
 import { IPortfolioOverviewProps } from './types'
 import { usePortfolioOverview } from './hooks/usePortfolioOverview'
+import resource from 'SharedResources'
 
 export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
   const {
@@ -56,5 +57,13 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
 
 PortfolioOverview.displayName = 'PortfolioOverview'
 PortfolioOverview.defaultProps = {
-  portfolios: []
+  title: resource.WebParts_PortfolioOverview_Title,
+  portfolios: [],
+  statusReportsCount: 0,
+  showCommandBar: true,
+  showExcelExportButton: true,
+  showGroupBy: true,
+  showViewSelector: true,
+  showSearchBox: true,
+  showFilters: true
 }

@@ -20,6 +20,7 @@ import React, { FC } from 'react'
 import styles from './LatestProjects.module.scss'
 import { ILatestProjectsProps } from './types'
 import { useLatestProjects } from './useLatestProjects'
+import resource from 'SharedResources'
 
 /**
  * Renders a list of the latest projects. The list is sorted by the Created date
@@ -93,6 +94,7 @@ export const LatestProjects: FC<ILatestProjectsProps> = (props) => {
 }
 
 LatestProjects.defaultProps = {
+  title: resource.WebParts_LatestProjects_Title,
   showProjectLogo: true,
   rowLimit: 5,
   minRowLimit: 3,

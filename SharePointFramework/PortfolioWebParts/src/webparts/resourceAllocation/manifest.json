@@ -23,9 +23,7 @@
         "default": " "
       },
       "officeFabricIconFontName": "TimelineDelivery",
-      "properties": {
-        "dataSource": "Alle ressursallokeringer"
-      }
+      "properties": {}
     }
   ]
 }

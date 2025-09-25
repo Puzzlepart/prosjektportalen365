@@ -96,7 +96,7 @@ export default class IdeaModuleWebPart extends BasePortfolioWebPart<IIdeaModuleP
             {
               groupName: strings.GeneralGroupName,
               groupFields: [
-                PropertyPaneTextField('configurationList', {
+                PropertyPaneTextField('ideaConfigurationList', {
                   label: strings.Idea.ConfigurationListFieldLabel,
                   description: strings.Idea.ConfigurationListFieldDescription
                 }),

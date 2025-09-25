@@ -25,7 +25,6 @@
       },
       "officeFabricIconFontName": "FolderList",
       "properties": {
-        "title": "Porteføljeoversikt",
         "statusReportsCount": 0,
         "showCommandBar": true,
         "showExcelExportButton": true,

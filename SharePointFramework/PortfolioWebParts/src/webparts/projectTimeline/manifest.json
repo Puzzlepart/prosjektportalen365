@@ -25,13 +25,10 @@
       "officeFabricIconFontName": "TimelineDelivery",
       "properties": {
         "properties": {
-          "listName": "Tidslinjeinnhold",
           "showTimeline": true,
           "showTimelineListCommands": false,
           "showTimelineList": false,
-          "showProjectDeliveries": false,
-          "dataSourceName": "Alle prosjektleveranser",
-          "configItemTitle": "Prosjektleveranse"
+          "showProjectDeliveries": false
         }
       }
     }

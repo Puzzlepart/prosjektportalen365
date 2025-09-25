@@ -257,6 +257,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
   )
 }
 
+IdeaModule.displayName = 'IdeaModule'
 IdeaModule.defaultProps = {
   dataSource: strings.Idea.RegisteredIdeasTitle,
   dataSourceCategory: strings.Idea.ModuleTitle,

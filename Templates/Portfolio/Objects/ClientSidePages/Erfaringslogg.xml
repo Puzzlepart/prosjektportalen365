@@ -2,7 +2,7 @@
     <pnp:Sections>
         <pnp:Section Order="1" Type="OneColumn">
             <pnp:Controls>
-                <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;properties&quot;:{&quot;dataSource&quot;:&quot;Alle loggelementer&quot;,&quot;dataSourceCategory&quot;:&quot;{resource:Lists_DataSources_Category_ExperienceLog}&quot;,&quot;showCommandBar&quot;:true,&quot;showSearchBox&quot;:true,&quot;showExcelExportButton&quot;:true,&quot;showFilters&quot;:true,&quot;showViewSelector&quot;:true}}" ControlId="6c0e484d-f6da-40d4-81fc-ec1389ef29a8" Order="1" Column="1" />
+                <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;properties&quot;:{&quot;dataSource&quot;:&quot;{resource:Lists_DataSources_Category_ExperienceLog_All}&quot;,&quot;dataSourceCategory&quot;:&quot;{resource:Lists_DataSources_Category_ExperienceLog}&quot;,&quot;showCommandBar&quot;:true,&quot;showSearchBox&quot;:true,&quot;showExcelExportButton&quot;:true,&quot;showFilters&quot;:true,&quot;showViewSelector&quot;:true}}" ControlId="6c0e484d-f6da-40d4-81fc-ec1389ef29a8" Order="1" Column="1" />
             </pnp:Controls>
         </pnp:Section>
     </pnp:Sections>
