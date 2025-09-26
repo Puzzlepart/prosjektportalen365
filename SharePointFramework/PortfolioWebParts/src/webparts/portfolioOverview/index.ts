@@ -95,7 +95,7 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
   ): IPropertyPaneDropdownOption[] {
     switch (targetProperty) {
       case 'portfolios': {
-        return this.properties.portfolios.map((portfolio) => ({
+        return this.properties.portfolios?.map((portfolio) => ({
           key: portfolio.uniqueId,
           text: portfolio.title
         }))
