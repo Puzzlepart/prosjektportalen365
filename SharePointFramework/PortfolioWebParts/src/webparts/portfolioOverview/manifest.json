@@ -21,7 +21,7 @@
         "default": "Porteføljeoversikt"
       },
       "description": {
-        "default": " "
+        "default": "Få oversikt over porteføljen, prosjekter og programmer"
       },
       "officeFabricIconFontName": "FolderList",
       "properties": {
