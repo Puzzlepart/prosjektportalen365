@@ -22,9 +22,7 @@
         "default": "Webdel for å administrere (legge til/fjerne) underområder"
       },
       "officeFabricIconFontName": "Org",
-      "properties": {
-        "title": "Administrasjon av underområder"
-      }
+      "properties": {}
     }
   ]
 }

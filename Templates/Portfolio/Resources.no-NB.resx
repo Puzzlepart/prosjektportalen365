@@ -4936,6 +4936,9 @@
     <data name="WebParts_PortfolioOverview_Title" xml:space="preserve">
         <value>Porteføljeoversikt</value>
     </data>
+    <data name="WebParts_ProgramProjectOverview_Title" xml:space="preserve">
+        <value>Oversikt over underområder</value>
+    </data>
     <data name="WebParts_ProgramInformation_Title" xml:space="preserve">
         <value>Programinformasjon</value>
     </data>

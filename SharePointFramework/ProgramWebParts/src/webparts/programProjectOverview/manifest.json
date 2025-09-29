@@ -23,7 +23,6 @@
       },
       "officeFabricIconFontName": "Page",
       "properties": {
-        "title": "Oversikt over underområder",
         "showCommandBar": true,
         "showFilters": true,
         "showGroupBy": true,

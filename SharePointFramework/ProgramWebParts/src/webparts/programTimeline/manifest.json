@@ -22,11 +22,7 @@
         "default": " "
       },
       "officeFabricIconFontName": "Page",
-      "properties": {
-        "title": "Tidslinje for underområder",
-        "dataSourceName": "Alle prosjektleveranser",
-        "configItemTitle": "Prosjektleveranse"
-      }
+      "properties": {}
     }
   ]
 }
