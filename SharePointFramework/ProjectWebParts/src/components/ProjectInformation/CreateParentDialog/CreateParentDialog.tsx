@@ -20,7 +20,8 @@ export const CreateParentDialog: FC = () => {
 
   async function applyCustomAction() {
     setLoading(true)
-    const customAction = createProjectSetupCustomAction(strings.CreateParentSetupProgressText)
+    const lcid = context.props.pageContext.web.language
+    const customAction = createProjectSetupCustomAction(strings.CreateParentSetupProgressText, lcid)
     await context.props.sp.web.userCustomActions.add(customAction)
     location.reload()
   }
