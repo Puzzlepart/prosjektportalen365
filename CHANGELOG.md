@@ -20,6 +20,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 ### Feilrettinger
 
 - Rettet et problem hvor tilpassede malbiblioteket ikke ble valgt når man klikket på "Hent dokumentmal" fra dokumentbiblioteket [#1628](https://github.com/Puzzlepart/prosjektportalen365/issues/1628)
+- Rettet et problem hvor Porteføljeoversiktens egenskapspanel ikke fungerte
 
 ---
 
