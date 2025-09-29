@@ -1,4 +1,4 @@
-_The template was validated 9/11/2025, 9:34:17 AM_
+_The template was validated 9/29/2025, 12:12:09 PM_
 
 The template contains the following tokens that has not been found in the .resx files:
 
@@ -459,7 +459,7 @@ _No tokens with missing translations or replacement values found._
                 "Title": "Project Status"
             },
             {
-                "Url": "Lists/Project%20log/AllItems.aspx",
+                "Url": "Lists/Project log/AllItems.aspx",
                 "Title": "Project Log"
             },
             {
@@ -467,7 +467,7 @@ _No tokens with missing translations or replacement values found._
                 "Title": "Stakeholder Register"
             },
             {
-                "Url": "Lists/Communication%20plan/AllItems.aspx",
+                "Url": "Lists/Communication plan/AllItems.aspx",
                 "Title": "Communication Plan"
             },
             {
@@ -475,7 +475,7 @@ _No tokens with missing translations or replacement values found._
                 "Title": "Uncertainty"
             },
             {
-                "Url": "Shared%20Documents/Forms/AllItems.aspx",
+                "Url": "Shared Documents/Forms/AllItems.aspx",
                 "Title": "Documents"
             },
             {
@@ -483,7 +483,7 @@ _No tokens with missing translations or replacement values found._
                 "Title": "Tasks"
             },
             {
-                "Url": "Lists/Phase%20Checklist/AllItems.aspx",
+                "Url": "Lists/Phase Checklist/AllItems.aspx",
                 "Title": "Phase Checklist"
             },
             {
@@ -495,19 +495,19 @@ _No tokens with missing translations or replacement values found._
                 "Title": "Benefits Overview",
                 "Children": [
                     {
-                        "Url": "Lists/Change%20analysis/AllItems.aspx",
+                        "Url": "Lists/Change analysis/AllItems.aspx",
                         "Title": "Change Analysis"
                     },
                     {
-                        "Url": "Lists/Benefits%20analysis%20and%20realization%20plan/AllItems.aspx",
+                        "Url": "Lists/Benefits analysis and realization plan/AllItems.aspx",
                         "Title": "Benefits Analysis and Realization Plan"
                     },
                     {
-                        "Url": "Lists/Measurement%20indicators/AllItems.aspx",
+                        "Url": "Lists/Measurement indicators/AllItems.aspx",
                         "Title": "Measurement Indicators"
                     },
                     {
-                        "Url": "Lists/Benefits%20followup/AllItems.aspx",
+                        "Url": "Lists/Benefits followup/AllItems.aspx",
                         "Title": "Benefits Follow-up"
                     },
                     {
@@ -517,11 +517,11 @@ _No tokens with missing translations or replacement values found._
                 ]
             },
             {
-                "Url": "Lists/Project%20deliveries/AllItems.aspx",
+                "Url": "Lists/Project deliveries/AllItems.aspx",
                 "Title": "Project Deliveries"
             },
             {
-                "Url": "Lists/Resource%20Allocation/AllItems.aspx",
+                "Url": "Lists/Resource Allocation/AllItems.aspx",
                 "Title": "Resource Allocation"
             },
             {
@@ -911,7 +911,7 @@ _No tokens with missing translations or replacement values found._
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field Type=\"LookupMulti\" DisplayName=\"Delivery stakeholders\" List=\"{listid:Interessentregister}\" ShowField=\"Title\" ID=\"{6d90e0b6-73e6-48fb-aa1e-b897b214f934}\" Description=\"Who is the target group (stakeholder) for the delivery activity?\" Name=\"GtDeliveryStakeholders\" StaticName=\"GtDeliveryStakeholders\" Name=\"GtDeliveryStakeholders\" Mult=\"TRUE\" />"
+                "<Field Type=\"LookupMulti\" DisplayName=\"Delivery stakeholders\" List=\"{listid:Stakeholders}\" ShowField=\"Title\" ID=\"{6d90e0b6-73e6-48fb-aa1e-b897b214f934}\" Description=\"Who is the target group (stakeholder) for the delivery activity?\" Name=\"GtDeliveryStakeholders\" StaticName=\"GtDeliveryStakeholders\" Name=\"GtDeliveryStakeholders\" Mult=\"TRUE\" />"
             ],
             "Views": [
                 {

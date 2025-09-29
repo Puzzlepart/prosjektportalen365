@@ -1,4 +1,4 @@
-_The template was validated 9/11/2025, 9:34:17 AM_
+_The template was validated 9/29/2025, 12:12:09 PM_
 
 The template contains the following tokens that has not been found in the .resx files:
 
@@ -497,7 +497,7 @@ _No tokens with missing translations or replacement values found._
                 ]
             },
             {
-                "Url": "Shared%20Documents/Forms/AllItems.aspx",
+                "Url": "Shared Documents/Forms/AllItems.aspx",
                 "Title": "Documents"
             },
             {
@@ -1072,7 +1072,7 @@ _No tokens with missing translations or replacement values found._
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field Type=\"LookupMulti\" DisplayName=\"Delivery stakeholders\" List=\"{listid:Interessentregister}\" ShowField=\"Title\" ID=\"{6d90e0b6-73e6-48fb-aa1e-b897b214f934}\" Description=\"Who is the target group (stakeholder) for the delivery activity?\" Name=\"GtDeliveryStakeholders\" StaticName=\"GtDeliveryStakeholders\" Name=\"GtDeliveryStakeholders\" Mult=\"TRUE\" />"
+                "<Field Type=\"LookupMulti\" DisplayName=\"Delivery stakeholders\" List=\"{listid:Stakeholders}\" ShowField=\"Title\" ID=\"{6d90e0b6-73e6-48fb-aa1e-b897b214f934}\" Description=\"Who is the target group (stakeholder) for the delivery activity?\" Name=\"GtDeliveryStakeholders\" StaticName=\"GtDeliveryStakeholders\" Name=\"GtDeliveryStakeholders\" Mult=\"TRUE\" />"
             ],
             "Views": [
                 {
