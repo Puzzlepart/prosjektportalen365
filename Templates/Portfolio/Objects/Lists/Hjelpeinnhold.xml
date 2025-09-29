@@ -115,7 +115,17 @@
             <pnp:DataValue FieldName="GtURL">SitePages/{resource:ClientSidePages_ProjectTimeline_PageName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3.85%20Prosjekttidslinje.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3.9%20Prosjekttidslinje.md</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">95</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_IdeaModuleUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Portfolio}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName" />
+            <pnp:DataValue FieldName="GtURL">SitePages/{resource:ClientSidePages_IdeaModule_PageName}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtTextContent" />
+            <pnp:DataValue FieldName="GtResourceLink" />
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3.10%20Idemodul.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">100</pnp:DataValue>

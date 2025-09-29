@@ -1801,6 +1801,9 @@
     <data name="Lists_HelpContent_TimelineUserManual" xml:space="preserve">
         <value>Tidslinje Brukermanual</value>
     </data>
+    <data name="Lists_HelpContent_IdeaModuleUserManual" xml:space="preserve">
+        <value>Idémodul Brukermanual</value>
+    </data>
     <data name="Lists_HelpContent_Title" xml:space="preserve">
         <value>Hjelpeinnhold</value>
     </data>
