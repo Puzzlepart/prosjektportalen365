@@ -17,6 +17,7 @@ import { ProjectStatusReport } from './ProjectStatusReport'
 import { ProjectInformationContextProvider } from './context'
 import { IProjectInformationProps } from './types'
 import { useProjectInformation } from './useProjectInformation'
+import resource from 'SharedResources'
 
 /**
  * Display project information. A number of actions are available to the user,
@@ -74,6 +75,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
 
 ProjectInformation.displayName = 'Project Information'
 ProjectInformation.defaultProps = {
+  title: resource.WebParts_ProjectInformation_Title,
   page: 'Frontpage',
   customActions: [],
   hideActions: [],

@@ -272,7 +272,6 @@ define([], function () {
     UseDynamicHomepageCalloutText:
       'Her kan du velge om fasevelgeren skal være dynamisk og bruke egne sider for hver fase. Det krever at det er opprettet sider for hver fase på forhånd. Navnene på sidene må være identiske med navnene på fasene.',
     UseDynamicHomepageFieldLabel: 'Bruk dynamisk hjemmeside',
-    UseFramelessButtonsLabel: 'Rammeløse knapper',
     UsePhaseHooksCalloutText:
       "Her kan du velge om det skal kjøres hooks ved endring av faser. Ved endring av fase vil det bli eksekvert et kall mot url-en som er spesifisert under. Dersom kallet krever autentisering, kan dette fylles inn under url feltet. Kallet som blir eksekvert sender med følgende parametere:  'webUrl' og  'apiKey', disse er begge av typen  'string'.",
     UsePhaseHooksFieldLabel: 'Bruk fasevelger hooks',
@@ -306,7 +305,6 @@ define([], function () {
     WidthFieldLabel: 'Bredde (piksler)',
     Yes: 'Ja',
     PhaseCheckListItem: 'Sjekkpunkt {0}',
-    // Project News Web Part strings
     ProjectNewsWebPartTitle: 'Prosjektnyheter',
     DialogTitle: 'Opprett nyhetsartikkel',
     DialogDescription: 'Her kan du opprette en nyhetsartikkel for prosjektet. Nyhetsartikkelen vil bli tilknyttet prosjektet. I nedtrekksmenyen for "Mal" kan du velge en mal som vil forhåndsutfylle nyhetsartikkelen, her er det mulig å få en forhåndsvisning av innholdet, ved å trykke på knappen "Forhåndsvis valgt mal".',

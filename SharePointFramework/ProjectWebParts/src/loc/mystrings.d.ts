@@ -215,7 +215,6 @@ declare interface IProjectWebPartsStrings {
   AlreadyPublishedReportInfo: string
   UseDynamicHomepageCalloutText: string
   UseDynamicHomepageFieldLabel: string
-  UseFramelessButtonsLabel: string
   UsePhaseHooksCalloutText: string
   UsePhaseHooksFieldLabel: string
   ArchiveViewTitle: string

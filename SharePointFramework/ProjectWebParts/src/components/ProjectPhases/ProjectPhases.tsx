@@ -13,6 +13,7 @@ import {
   useToastController
 } from '@fluentui/react-components'
 import { LoadingSkeleton, customLightTheme } from 'pp365-shared-library'
+import resource from 'SharedResources'
 
 export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
   const { rootRef, context, fluentProviderId, toasterId } = useProjectPhases(props)
@@ -59,6 +60,8 @@ export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
 }
 ProjectPhases.displayName = 'Project Phases'
 ProjectPhases.defaultProps = {
+  phaseField: resource.SiteFields_GtProjectPhase_DisplayName,
+  currentPhaseViewName: resource.View_CurrentPhase_DisplayName,
   syncPropertiesAfterPhaseChange: true,
   commentMinLength: 4,
   subTextTruncateLength: 50

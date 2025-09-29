@@ -244,7 +244,6 @@ define([], function () {
     UseDynamicHomepageCalloutText:
       'Here you can choose whether the phase selector should be dynamic and use separate pages for each phase. It requires pages for each phase to be created in advance. The names of the pages must be identical to the names of the phases.',
     UseDynamicHomepageFieldLabel: 'Use dynamic homepage',
-    UseFramelessButtonsLabel: 'Frameless buttons',
     UsePhaseHooksCalloutText:
       "Here you can choose whether hooks should be run when changing phases. When changing the phase, a call to the url specified below will be executed. If the call requires authentication, this can be filled in under the url field. The call that is executed sends with the following parameters: 'webUrl' and 'apiKey', both of which are of type 'string'.",
     UsePhaseHooksFieldLabel: 'Use phase selector hooks',

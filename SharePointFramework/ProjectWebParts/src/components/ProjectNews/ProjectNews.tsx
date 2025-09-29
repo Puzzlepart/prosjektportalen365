@@ -57,6 +57,10 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
     </ProjectNewsContext.Provider>
   )
 }
+
 ProjectNews.defaultProps = {
+  siteUrl: '',
+  title: strings.ProjectNewsWebPartTitle,
+  newsFolderName: strings.NewsFolderNameDefault,
   maxVisibleNews: 4
 }

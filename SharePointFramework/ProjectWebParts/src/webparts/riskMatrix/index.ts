@@ -64,7 +64,7 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
       probabilityFieldName,
       consequenceFieldName,
       probabilityPostActionFieldName,
-      consequencePostActionFieldName,
+      consequencePostActionFieldName
     } = this.properties
     const items: any[] = await this.sp.web.lists
       .getByTitle(listName)

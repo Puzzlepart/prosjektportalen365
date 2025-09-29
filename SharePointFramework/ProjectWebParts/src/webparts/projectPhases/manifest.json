@@ -24,11 +24,9 @@
       },
       "officeFabricIconFontName": "GitGraph",
       "properties": {
-        "phaseField": "Fase",
         "syncPropertiesAfterPhaseChange": true,
         "showSubText": true,
         "subTextTruncateLength": 50,
-        "currentPhaseViewName": "Gjeldende fase",
         "useDynamicHomepage": false,
         "usePhaseHooks": false,
         "useArchive": false,

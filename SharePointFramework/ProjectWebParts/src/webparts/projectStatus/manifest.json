@@ -24,12 +24,7 @@
       },
       "officeFabricIconFontName": "AwayStatus",
       "properties": {
-        "title": "Prosjektstatus",
-        "fieldWidth": 250,
-        "riskMatrix": {
-          "calloutTemplate": "<h3>{Title}</h3>\n<p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n<p><strong>Nærhet: </strong>{GtRiskProximity}</p>\n<p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>",
-          "fullWidth": true
-        }
+        "fieldWidth": 250
       }
     }
   ]

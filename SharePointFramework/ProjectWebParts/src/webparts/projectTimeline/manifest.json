@@ -24,13 +24,10 @@
       },
       "officeFabricIconFontName": "TimelineDelivery",
       "properties": {
-        "listName": "Tidslinjeinnhold",
         "showTimeline": true,
         "showTimelineListCommands": true,
         "showTimelineList": true,
-        "showProjectDeliveries": false,
-        "projectDeliveriesListName": "Prosjektleveranser",
-        "configItemTitle": "Prosjektleveranse"
+        "showProjectDeliveries": false
       }
     }
   ]

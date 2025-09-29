@@ -71,6 +71,7 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
 
 ProjectTimeline.displayName = 'ProjectTimeline'
 ProjectTimeline.defaultProps = {
+  listName: resource.Lists_TimelineContent_Title,
   showTimeline: true,
   showTimelineList: true,
   showTimelineListCommands: true,
