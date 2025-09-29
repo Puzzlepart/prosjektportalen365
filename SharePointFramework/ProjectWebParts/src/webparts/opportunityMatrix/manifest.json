@@ -24,14 +24,11 @@
       },
       "officeFabricIconFontName": "BranchCommit",
       "properties": {
-        "listName": "Usikkerhet",
-        "viewXml": "<View><Query><Where><Eq><FieldRef Name=\"ContentType\" /><Value Type=\"Computed\">Mulighet</Value></Eq></Where></Query></View>",
         "probabilityFieldName": "GtRiskProbability",
         "consequenceFieldName": "GtRiskConsequence",
         "probabilityPostActionFieldName": "GtRiskProbabilityPostAction",
         "consequencePostActionFieldName": "GtRiskConsequencePostAction",
-        "width": 800,
-        "calloutTemplate": "<h3>{Title}</h3>\n<p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n<p><strong>Nærhet: </strong>{GtRiskProximity}</p>\n<p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>"
+        "fullWidth": true
       }
     }
   ]

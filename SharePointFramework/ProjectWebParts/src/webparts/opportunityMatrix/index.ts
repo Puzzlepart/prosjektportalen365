@@ -14,6 +14,7 @@ import SPDataAdapter from '../../data'
 import { UncertaintyElementModel } from '../../models'
 import { BaseProjectWebPart } from '../baseProjectWebPart'
 import { IOpportunityMatrixWebPartData, IOpportunityMatrixWebPartProps } from './types'
+import resource from 'SharedResources'
 
 export default class OpportunityMatrixWebPart extends BaseProjectWebPart<IOpportunityMatrixWebPartProps> {
   private _data: IOpportunityMatrixWebPartData = {}
@@ -57,13 +58,13 @@ export default class OpportunityMatrixWebPart extends BaseProjectWebPart<IOpport
    * Get items from list `this.properties.listName` using CAML query
    */
   protected async _getItems(): Promise<UncertaintyElementModel[]> {
+    const viewXml = `<View><Query><Where><Eq><FieldRef Name=\"ContentType\" /><Value Type=\"Computed\">${resource.ContentTypes_Possibility_Name}</Value></Eq></Where></Query></View>`
+    const listName = resource.Lists_Uncertainty_Title
     const {
       probabilityFieldName,
       consequenceFieldName,
       probabilityPostActionFieldName,
-      consequencePostActionFieldName,
-      viewXml,
-      listName
+      consequencePostActionFieldName
     } = this.properties
     const items: any[] = await this.sp.web.lists
       .getByTitle(listName)

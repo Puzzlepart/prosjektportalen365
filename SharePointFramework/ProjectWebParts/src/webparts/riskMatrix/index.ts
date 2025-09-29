@@ -15,6 +15,7 @@ import SPDataAdapter from '../../data'
 import { UncertaintyElementModel } from '../../models'
 import { BaseProjectWebPart } from '../baseProjectWebPart'
 import { IRiskMatrixWebPartData, IRiskMatrixWebPartProps } from './types'
+import resource from 'SharedResources'
 
 export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWebPartProps> {
   private _data: IRiskMatrixWebPartData = {}
@@ -57,13 +58,13 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
    * Get items from list `this.properties.listName` using CAML query
    */
   protected async _getItems(): Promise<UncertaintyElementModel[]> {
+    const viewXml = `<View><Query><Where><Eq><FieldRef Name=\"ContentType\" /><Value Type=\"Computed\">${resource.ContentTypes_Risk_Name}</Value></Eq></Where></Query></View>`
+    const listName = resource.Lists_Uncertainty_Title
     const {
       probabilityFieldName,
       consequenceFieldName,
       probabilityPostActionFieldName,
       consequencePostActionFieldName,
-      viewXml,
-      listName
     } = this.properties
     const items: any[] = await this.sp.web.lists
       .getByTitle(listName)

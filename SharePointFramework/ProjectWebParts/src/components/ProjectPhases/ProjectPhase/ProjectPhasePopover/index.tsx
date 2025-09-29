@@ -23,7 +23,7 @@ import {
   TaskListLtrRegular
 } from '@fluentui/react-icons'
 import { customLightTheme, getFluentIcon } from 'pp365-shared-library'
-import resources from 'SharedResources'
+import resource from 'SharedResources'
 
 const Icons = {
   TaskList: bundleIcon(TaskListLtrFilled, TaskListLtrRegular),
@@ -95,7 +95,7 @@ export const ProjectPhasePopover: FC<IProjectPhasePopoverProps> = (props) => {
                   icon={<Icons.TaskList />}
                   title={strings.PhaseChecklistLinkText}
                   href={phase.getFilteredPhaseChecklistViewUrl(
-                    `${context.props.webAbsoluteUrl}/${resources.Lists_PhaseChecklist_Url}`
+                    `${context.props.webAbsoluteUrl}/${resource.Lists_PhaseChecklist_Url}`
                   )}
                 >
                   <span className={styles.label}>{strings.PhaseChecklistLinkText}</span>
