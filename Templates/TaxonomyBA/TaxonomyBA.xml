@@ -32,7 +32,9 @@
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Portfolio" />
                                         <pnp:Property Key="PhaseSubText" Value="Mulighetsstudie (F0), Programfase (F1)" />
+                                        <pnp:Property Key="PhaseSubText_en-us" Value="Feasibility study (F0), Program phase (F1)" />
                                         <pnp:Property Key="PhaseDescription" Value="Denne fasen fokuserer på å tydeliggjøre prosjektets formål og spesifikke krav gjennom grundig analyse og utarbeidelse av et detaljert program." />
+                                        <pnp:Property Key="PhaseDescription_en-us" Value="This phase focuses on clarifying the project's purpose and specific requirements through thorough analysis and development of a detailed program." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Konseptutvikling og bearbeiding" ID="1692b4b4-bfce-4614-91b9-767d1bbb0c6b" CustomSortOrder="4" SourceTermId="1692b4b4-bfce-4614-91b9-767d1bbb0c6b">
@@ -43,7 +45,9 @@
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Project" />
                                         <pnp:Property Key="PhaseSubText" Value="Skisseprosjekt (F2), Forprosjekt (F2), Detaljprosjekt (F2)" />
+                                        <pnp:Property Key="PhaseSubText_en-us" Value="Sketch project (F2), Pre-project (F2), Detail project (F2)" />
                                         <pnp:Property Key="PhaseDescription" Value="I denne fasen blir ideer og konsepter utviklet videre gjennom skisseprosjekter, forprosjekter og detaljprosjekter for å skape en solid og realistisk plan." />
+                                        <pnp:Property Key="PhaseDescription_en-us" Value="In this phase, ideas and concepts are further developed through sketch projects, pre-projects and detail projects to create a solid and realistic plan." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Detaljprosjektering" ID="41c4d900-ec57-4779-a218-35e302b69e21" CustomSortOrder="5" SourceTermId="41c4d900-ec57-4779-a218-35e302b69e21">
@@ -54,7 +58,9 @@
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Project" />
                                         <pnp:Property Key="PhaseSubText" Value="Byggfase (F3), Sluttfase og overtakelse" />
+                                        <pnp:Property Key="PhaseSubText_en-us" Value="Construction phase (F3), Final phase and handover" />
                                         <pnp:Property Key="PhaseDescription" Value="Her blir tekniske detaljer og materialvalg spesifisert, og planer blir utarbeidet for selve byggeprosessen, avslutning og overtakelse av prosjektet." />
+                                        <pnp:Property Key="PhaseDescription_en-us" Value="Here technical details and material choices are specified, and plans are developed for the actual construction process, completion and handover of the project." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Utførelse" ID="2adec1fc-dc6d-4db7-bb5f-067287010fb7" CustomSortOrder="6" SourceTermId="2adec1fc-dc6d-4db7-bb5f-067287010fb7">
@@ -65,7 +71,9 @@
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Project" />
                                         <pnp:Property Key="PhaseSubText" Value="Prøvedrift" />
+                                        <pnp:Property Key="PhaseSubText_en-us" Value="Trial operation" />
                                         <pnp:Property Key="PhaseDescription" Value="I denne fasen blir konstruksjonen materialisert, og det gjennomføres nødvendige tester for å sikre at alt fungerer som det skal." />
+                                        <pnp:Property Key="PhaseDescription_en-us" Value="In this phase, the construction is materialized, and necessary tests are conducted to ensure that everything functions as intended." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Overlevering" ID="37f7238a-8d96-4d28-b3e1-ac2a9c59b40c" CustomSortOrder="7" SourceTermId="37f7238a-8d96-4d28-b3e1-ac2a9c59b40c">
@@ -76,7 +84,9 @@
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Portfolio" />
                                         <pnp:Property Key="PhaseSubText" Value="Forvaltning, Vedlikehold" />
+                                        <pnp:Property Key="PhaseSubText_en-us" Value="Management, Maintenance" />
                                         <pnp:Property Key="PhaseDescription" Value="Denne fasen fokuserer på en strukturert overføring av prosjektet til driftsfasen, inkludert implementering av forvaltnings- og vedlikeholdsprosedyrer." />
+                                        <pnp:Property Key="PhaseDescription_en-us" Value="This phase focuses on a structured transfer of the project to the operational phase, including implementation of management and maintenance procedures." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                             </pnp:Terms>
@@ -107,7 +117,9 @@
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Portfolio" />
                                         <pnp:Property Key="PhaseSubText" Value="Identifisering av behov og oppstart" />
+                                        <pnp:Property Key="PhaseSubText_en-us" Value="Identification of needs and startup" />
                                         <pnp:Property Key="PhaseDescription" Value="Initieringsfasen er den innledende fasen av anleggsprosjektet, der man identifiserer behovet for prosjektet og starter planleggingsprosessen." />
+                                        <pnp:Property Key="PhaseDescription_en-us" Value="The initiation phase is the initial phase of the construction project, where the need for the project is identified and the planning process is started." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Prosjektering og kontrahering" ID="1c286a0e-da40-451a-bab2-9e0583392ee3" CustomSortOrder="4" SourceTermId="1c286a0e-da40-451a-bab2-9e0583392ee3">
@@ -118,7 +130,9 @@
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Project" />
                                         <pnp:Property Key="PhaseSubText" Value="Utforming av prosjektet og inngåelse av kontrakter" />
+                                        <pnp:Property Key="PhaseSubText_en-us" Value="Project design and contract execution" />
                                         <pnp:Property Key="PhaseDescription" Value="I denne fasen blir prosjektet grundig planlagt og de nødvendige kontraktene inngås med relevante parter." />
+                                        <pnp:Property Key="PhaseDescription_en-us" Value="In this phase, the project is thoroughly planned and the necessary contracts are entered into with relevant parties." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Anleggsfase" ID="9b45a1ca-ae8c-4f4a-baa3-40353b7dd8fc" CustomSortOrder="5" SourceTermId="9b45a1ca-ae8c-4f4a-baa3-40353b7dd8fc">
@@ -129,7 +143,9 @@
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Project" />
                                         <pnp:Property Key="PhaseSubText" Value="Realisering av konstruksjonen" />
+                                        <pnp:Property Key="PhaseSubText_en-us" Value="Realization of construction" />
                                         <pnp:Property Key="PhaseDescription" Value="I denne fasen blir selve konstruksjonen gjennomført i tråd med de planene som er utarbeidet i forrige fase." />
+                                        <pnp:Property Key="PhaseDescription_en-us" Value="In this phase, the actual construction is carried out in accordance with the plans developed in the previous phase." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Overtakelse og overlevering" ID="1807d6c2-b4bd-415f-98aa-a4a2ccff8d11" CustomSortOrder="6" SourceTermId="1807d6c2-b4bd-415f-98aa-a4a2ccff8d11">
@@ -140,7 +156,9 @@
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Project" />
                                         <pnp:Property Key="PhaseSubText" Value="Test og formell avslutning av prosjektet" />
+                                        <pnp:Property Key="PhaseSubText_en-us" Value="Testing and formal project closure" />
                                         <pnp:Property Key="PhaseDescription" Value="Her gjennomføres nødvendige tester og inspeksjoner før prosjektet formelt avsluttes og overleveres til den ansvarlige parten." />
+                                        <pnp:Property Key="PhaseDescription_en-us" Value="Here necessary tests and inspections are conducted before the project is formally completed and handed over to the responsible party." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Bruks og driftsfase" ID="2f757e1c-7e2b-4be6-9eba-ecafe37531b6" CustomSortOrder="7" SourceTermId="2f757e1c-7e2b-4be6-9eba-ecafe37531b6">
@@ -151,7 +169,9 @@
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Portfolio" />
                                         <pnp:Property Key="PhaseSubText" Value="Implementering av drifts- og vedlikeholdsprosedyrer" />
+                                        <pnp:Property Key="PhaseSubText_en-us" Value="Implementation of operational and maintenance procedures" />
                                         <pnp:Property Key="PhaseDescription" Value="Denne fasen fokuserer på å implementere rutiner og prosedyrer for en effektiv drift og vedlikehold av anlegget i bruk." />
+                                        <pnp:Property Key="PhaseDescription_en-us" Value="This phase focuses on implementing routines and procedures for effective operation and maintenance of the facility in use." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                             </pnp:Terms>

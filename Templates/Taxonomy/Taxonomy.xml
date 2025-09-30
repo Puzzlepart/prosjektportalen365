@@ -34,7 +34,9 @@
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Portfolio" />
                                         <pnp:Property Key="PhaseSubText" Value="Avklare behov og velge konsept" />
+                                        <pnp:Property Key="PhaseSubText_en-us" Value="Clarify needs and select concept" />
                                         <pnp:Property Key="PhaseDescription" Value="Konseptfasen sikrer at et eventuelt prosjekt vil være riktig bruk av virksomhetens ressurser for å tilfredsstille et definert behov. Dette gjøres ved å utrede alternative konsepter og velge det beste." />
+                                        <pnp:Property Key="PhaseDescription_en-us" Value="The concept phase ensures that any project will be the right use of the organization's resources to satisfy a defined need. This is done by investigating alternative concepts and selecting the best one." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Planlegge" ID="cda4f1e1-3488-4e57-8a04-6973df239689" CustomSortOrder="4" SourceTermId="cda4f1e1-3488-4e57-8a04-6973df239689">
@@ -45,7 +47,9 @@
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Project" />
                                         <pnp:Property Key="PhaseSubText" Value="Planlegge overordnet styring" />
+                                        <pnp:Property Key="PhaseSubText_en-us" Value="Plan overall governance" />
                                         <pnp:Property Key="PhaseDescription" Value="Planleggingsfasen sikrer at virksomheten har en god forståelse for arbeidet som kreves for å gjennomføre prosjektet, før virksomhetsledelsen forplikter seg til en betydelig investering." />
+                                        <pnp:Property Key="PhaseDescription_en-us" Value="The planning phase ensures that the organization has a good understanding of the work required to implement the project, before management commits to a significant investment." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Gjennomføre" ID="99d7765a-c786-4792-a1a1-866ef0f982b9" CustomSortOrder="5" SourceTermId="99d7765a-c786-4792-a1a1-866ef0f982b9">
@@ -56,7 +60,9 @@
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Project" />
                                         <pnp:Property Key="PhaseSubText" Value="Gjennomføre leveranser og planlegge delfaser" />
+                                        <pnp:Property Key="PhaseSubText_en-us" Value="Execute deliveries and plan sub-phases" />
                                         <pnp:Property Key="PhaseDescription" Value="I gjennomføringsfasen leverer dere prosjektets produkter ved å gjennomføre delfaser i henhold til de planer og strategier som fremgår av styringsdokumentet." />
+                                        <pnp:Property Key="PhaseDescription_en-us" Value="In the execution phase, you deliver the project's products by implementing sub-phases according to the plans and strategies outlined in the project directive." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Avslutte" ID="30e03c52-8c3e-4cfe-9b18-ca71593ce130" CustomSortOrder="6" SourceTermId="30e03c52-8c3e-4cfe-9b18-ca71593ce130">
@@ -67,7 +73,9 @@
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Project" />
                                         <pnp:Property Key="PhaseSubText" Value="Evaluere og avslutte prosjektet" />
+                                        <pnp:Property Key="PhaseSubText_en-us" Value="Evaluate and close the project" />
                                         <pnp:Property Key="PhaseDescription" Value="Avslutningsfasen sikrer en strukturert og formell avslutning av prosjektet, og en god overlevering til linjen." />
+                                        <pnp:Property Key="PhaseDescription_en-us" Value="The closing phase ensures a structured and formal closure of the project, and a good handover to the line organization." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Realisere" ID="b7ba84f0-70b9-45c4-8c50-8f73bf15bbec" CustomSortOrder="7" SourceTermId="b7ba84f0-70b9-45c4-8c50-8f73bf15bbec">
@@ -78,7 +86,9 @@
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Portfolio" />
                                         <pnp:Property Key="PhaseSubText" Value="Realisere mål og gevinster" />
+                                        <pnp:Property Key="PhaseSubText_en-us" Value="Realize goals and benefits" />
                                         <pnp:Property Key="PhaseDescription" Value="Her følger virksomheten opp sin videre realisering av gevinster, og vurderer oppnåelse av effektmål." />
+                                        <pnp:Property Key="PhaseDescription_en-us" Value="Here the organization follows up on its further realization of benefits, and evaluates the achievement of impact goals." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                             </pnp:Terms>
@@ -93,7 +103,9 @@
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Program" />
                                         <pnp:Property Key="PhaseSubText" Value="Identifisere behov og muligheter" />
+                                        <pnp:Property Key="PhaseSubText_en-us" Value="Identify needs and opportunities" />
                                         <pnp:Property Key="PhaseDescription" Value="Identifisere organisatoriske behov og muligheter som kan kreve et program for effektiv løsning." />
+                                        <pnp:Property Key="PhaseDescription_en-us" Value="Identify organizational needs and opportunities that may require a program for effective solution." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Definere" ID="50c203e7-f912-4454-afda-d8c373e7f96a" CustomSortOrder="2" SourceTermId="50c203e7-f912-4454-afda-d8c373e7f96a">
@@ -104,7 +116,9 @@
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Program" />
                                         <pnp:Property Key="PhaseSubText" Value="Klargjøre mål og omfang" />
+                                        <pnp:Property Key="PhaseSubText_en-us" Value="Clarify goals and scope" />
                                         <pnp:Property Key="PhaseDescription" Value="Presisere programmets mål, omfang og nødvendige ressurser for å sikre målrettet suksess." />
+                                        <pnp:Property Key="PhaseDescription_en-us" Value="Specify the program's goals, scope and necessary resources to ensure targeted success." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Gjennomføre" ID="c245386f-6906-410d-ada5-27c64710df90" CustomSortOrder="3" SourceTermId="c245386f-6906-410d-ada5-27c64710df90">
@@ -115,7 +129,9 @@
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Program" />
                                         <pnp:Property Key="PhaseSubText" Value="Implementere og følge opp aktiviteter" />
+                                        <pnp:Property Key="PhaseSubText_en-us" Value="Implement and follow up activities" />
                                         <pnp:Property Key="PhaseDescription" Value="Aktivt utføre programplaner og overvåke fremdrift for å oppnå ønskede resultater." />
+                                        <pnp:Property Key="PhaseDescription_en-us" Value="Actively execute program plans and monitor progress to achieve desired results." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Avslutte" ID="5a42cd6a-0fba-46d3-aada-5caaa551915e" CustomSortOrder="4" SourceTermId="5a42cd6a-0fba-46d3-aada-5caaa551915e">
@@ -126,7 +142,9 @@
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Program" />
                                         <pnp:Property Key="PhaseSubText" Value="Evaluere og formell avslutning" />
+                                        <pnp:Property Key="PhaseSubText_en-us" Value="Evaluate and formal closure" />
                                         <pnp:Property Key="PhaseDescription" Value="Systematisk vurdere programmets suksess og sørge for en strukturert avslutning, inkludert nødvendig ressursallokering." />
+                                        <pnp:Property Key="PhaseDescription_en-us" Value="Systematically evaluate the program's success and ensure a structured closure, including necessary resource allocation." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                             </pnp:Terms>
