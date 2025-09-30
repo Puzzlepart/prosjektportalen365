@@ -30,7 +30,10 @@ export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
         ) : (
           <Timeline
             title={props.title}
-            infoText={format(strings.ResourceAllocationInfoText, resource.Lists_ResourceAllocation_Url)}
+            infoText={format(
+              strings.ResourceAllocationInfoText,
+              resource.Lists_ResourceAllocation_Url
+            )}
             defaultTimeframe={defaultTimeframe}
             groups={groups}
             items={items}

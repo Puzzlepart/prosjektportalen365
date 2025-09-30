@@ -82,7 +82,7 @@ export const DetailsPopover: FC<IDetailsPopoverProps> = (props) => {
           <>
             <p>
               <b>
-                <Link href={resource.Lists_ResourceAllocation_Url} target="_blank">
+                <Link href={resource.Lists_ResourceAllocation_Url} target='_blank'>
                   {resource.Lists_ResourceAllocation_Title}
                 </Link>
                 :

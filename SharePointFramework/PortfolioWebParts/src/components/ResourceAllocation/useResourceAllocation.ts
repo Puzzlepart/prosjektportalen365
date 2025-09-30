@@ -56,7 +56,7 @@ export const useResourceAllocation = (props: IResourceAllocationProps) => {
       .map((name) => {
         const filter = state.activeFilters[col.fieldName]
         const selected = filter ? filter.indexOf(name) !== -1 : false
-        let displayName = name
+        const displayName = name
         let tooltip: string | undefined = undefined
         if (col.fieldName === 'data.resource' && name) {
           const item = state.data.items.find((i) => get(i, 'data.resource') === name)

@@ -29,7 +29,6 @@ const enrichWithDepartmentInfo = async (
   searchResults: IAllocationSearchResult[],
   props: IResourceAllocationProps
 ): Promise<IEnrichedAllocationSearchResult[]> => {
-
   const uniqueUPNs = _.uniq(
     searchResults
       .map((res) => {
@@ -43,21 +42,23 @@ const enrichWithDepartmentInfo = async (
   )
 
   if (uniqueUPNs.length === 0) {
-    return searchResults.map(result => ({ ...result, userDepartment: undefined }))
+    return searchResults.map((result) => ({ ...result, userDepartment: undefined }))
   }
 
-  const query = uniqueUPNs.map(upn => `UserName:"${upn.replace(/"/g, '')}"`).join(' OR ')
+  const query = uniqueUPNs.map((upn) => `UserName:"${upn.replace(/"/g, '')}"`).join(' OR ')
 
   let peopleResults: any[] = []
   try {
-    peopleResults = (await props.sp.search({
-      QueryTemplate: query,
-      Querytext: '*',
-      RowLimit: 500,
-      TrimDuplicates: false,
-      SelectProperties: ['UserName', 'Department', 'PreferredName', 'WorkEmail'],
-      SourceId: 'b09a7990-05ea-4af9-81ef-edfab16c4e31'
-    })).PrimarySearchResults
+    peopleResults = (
+      await props.sp.search({
+        QueryTemplate: query,
+        Querytext: '*',
+        RowLimit: 500,
+        TrimDuplicates: false,
+        SelectProperties: ['UserName', 'Department', 'PreferredName', 'WorkEmail'],
+        SourceId: 'b09a7990-05ea-4af9-81ef-edfab16c4e31'
+      })
+    ).PrimarySearchResults
   } catch (error) {
     console.warn('Failed to batch fetch people search results:', error)
   }
@@ -71,7 +72,7 @@ const enrichWithDepartmentInfo = async (
     }
   }
 
-  return searchResults.map(result => {
+  return searchResults.map((result) => {
     let upn = result.GtResourceUserOWSUSER
     if (upn) {
       const parts = upn.split('|')
@@ -79,7 +80,7 @@ const enrichWithDepartmentInfo = async (
     } else {
       upn = undefined
     }
-    
+
     return {
       ...result,
       userDepartment: upn ? peopleMap.get(upn) : undefined
@@ -136,7 +137,8 @@ const transformItems = (
   const items = searchResults
     .map<ITimelineItem>((res, id) => {
       const resourceDisplay = res.RefinableString71
-      const group = groups.find((grp) => grp.title === resourceDisplay) ??
+      const group =
+        groups.find((grp) => grp.title === resourceDisplay) ??
         _.find(
           groups,
           (grp) => res.RefinableString72 && res.RefinableString72.indexOf(grp.title) !== -1
@@ -176,7 +178,9 @@ const transformItems = (
           allocation,
           role: isAbsence ? res.GtResourceAbsenceOWSCHCS : res.RefinableString72,
           resource: resourceDisplay,
-          resourceUpn: res.GtResourceUserOWSUSER ? res.GtResourceUserOWSUSER.split('|')[0]?.trim() : '',
+          resourceUpn: res.GtResourceUserOWSUSER
+            ? res.GtResourceUserOWSUSER.split('|')[0]?.trim()
+            : '',
           department: res.userDepartment || '',
           status: res.GtAllocationStatusOWSCHCS,
           comment: res.GtAllocationCommentOWSMTXT
