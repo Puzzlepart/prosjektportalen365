@@ -517,6 +517,7 @@ declare interface IPortfolioWebPartsStrings {
   ResourceAllocationGroupName: string
   ResourceAllocationInfoText: string
   ResourceLabel: string
+  ResourceAbsenceLabel: string
   DepartmentLabel: string
   RevertCustomOrderButtonText: string
   RevertCustomOrderButtonTooltip: string

@@ -101,11 +101,7 @@ const transformGroups = (searchResults: IEnrichedAllocationSearchResult[]): ITim
     searchResults
       .map((res) => {
         if (res.RefinableString71) {
-          let label = res.RefinableString71
-          if (res.userDepartment) {
-            label = `${label} (${res.userDepartment})`
-          }
-          return label
+          return res.RefinableString71
         }
         if (res.RefinableString72) return `${res.RefinableString72}|R`
         return undefined
@@ -139,10 +135,7 @@ const transformItems = (
 ): ITimelineItem[] => {
   const items = searchResults
     .map<ITimelineItem>((res, id) => {
-      let resourceDisplay = res.RefinableString71
-      if (res.userDepartment) {
-        resourceDisplay = `${resourceDisplay} (${res.userDepartment})`
-      }
+      const resourceDisplay = res.RefinableString71
       const group = groups.find((grp) => grp.title === resourceDisplay) ??
         _.find(
           groups,
@@ -179,10 +172,11 @@ const transformItems = (
         data: {
           project: isAbsence ? '' : res.SiteTitle,
           projectUrl: isAbsence ? '' : res.SiteName,
-          type: isAbsence ? res.GtResourceAbsenceOWSCHCS : strings.ResourceLabel,
+          type: isAbsence ? strings.ResourceAbsenceLabel : strings.ResourceLabel,
           allocation,
-          role: res.RefinableString72,
+          role: isAbsence ? res.GtResourceAbsenceOWSCHCS : res.RefinableString72,
           resource: resourceDisplay,
+          resourceUpn: res.GtResourceUserOWSUSER ? res.GtResourceUserOWSUSER.split('|')[0]?.trim() : '',
           department: res.userDepartment || '',
           status: res.GtAllocationStatusOWSCHCS,
           comment: res.GtAllocationCommentOWSMTXT

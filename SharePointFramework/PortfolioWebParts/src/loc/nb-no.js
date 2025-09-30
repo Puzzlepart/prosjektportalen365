@@ -519,6 +519,7 @@ define([], function () {
     ResourceAllocationGroupName: 'Ressursallokering',
     ResourceAllocationInfoText: 'Ressursallokering eller fravær som gjelder på tvers av prosjekter legges inn i den <a href="../{0}">sentrale ressursallokeringslisten</a>. Disse oppføringene vil vises med blå og rød (fravær) farge i tabellen under. Prosjektallokeringer vises med grønn farge. Fargestyrken til allokeringen baserer seg på allokeringsprosenten. <br/><br/>Merk: Visningen baserer seg på søk, så innholdet i visningen oppdaterer seg ikke umiddelbart etter at endringer er utført.<br/><br/>Tips: For å zoome inn/ut i tidslinje, bruk ALT+Musehjul eller CTRL+Musehjul. For å navigere frem og tilbake i tid kan du bruke SHIFT+Musehjul.',
     ResourceLabel: 'Ressurs',
+    ResourceAbsenceLabel: 'Ressurs (fravær)',
     DepartmentLabel: 'Avdeling',
     RevertCustomOrderButtonText: 'Tilbakestill rekkefølge',
     RevertCustomOrderButtonTooltip: 'Tilbakestill rekkefølge til standard rekkefølge for kolonner spesifisert i Prosjektkolonner-listen.',

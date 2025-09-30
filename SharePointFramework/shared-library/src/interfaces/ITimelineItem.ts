@@ -18,6 +18,7 @@ export interface ITimelineItemData {
   tag?: string
   role?: string
   resource?: string
+  resourceUpn?: string
   department?: string
   allocation?: number
   comment?: string

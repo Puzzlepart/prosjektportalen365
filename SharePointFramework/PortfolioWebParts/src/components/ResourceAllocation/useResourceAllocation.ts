@@ -57,19 +57,14 @@ export const useResourceAllocation = (props: IResourceAllocationProps) => {
         const filter = state.activeFilters[col.fieldName]
         const selected = filter ? filter.indexOf(name) !== -1 : false
         let displayName = name
+        let tooltip: string | undefined = undefined
         if (col.fieldName === 'data.resource' && name) {
-          const match = name.match(/^(.*?) \(/)
-          const baseName = match ? match[1] : name
-          const upns = resourceNameToUPNs[baseName]
-          if (upns && upns.size > 1) {
-            const item = state.data.items.find((i) => get(i, 'data.resource') === name)
-            const upn = item?.props?.GtResourceUserOWSUSER?.split('|')[0]?.trim()
-            displayName = upn ? `${baseName} (${upn})` : baseName
-          } else {
-            displayName = baseName
-          }
+          const item = state.data.items.find((i) => get(i, 'data.resource') === name)
+          const upn = item?.props?.GtResourceUserOWSUSER?.split('|')[0]?.trim()
+          const department = item?.data?.department
+          tooltip = upn ? (department ? `${upn} | ${department}` : upn) : undefined
         }
-        return { name: displayName, value: name, selected }
+        return { name: displayName, value: name, selected, tooltip }
       })
   }))
 

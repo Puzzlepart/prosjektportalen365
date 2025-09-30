@@ -50,12 +50,6 @@ export const DetailsPopover: FC<IDetailsPopoverProps> = (props) => {
                 {data.project}
               </Link>
             </p>
-            <p hidden={!data.resource}>
-              <b>{strings.ResourceLabel}:</b> <span>{data.resource}</span>
-            </p>
-            <p hidden={!data.department}>
-              <b>{strings.DepartmentLabel}:</b> <span>{data.department}</span>
-            </p>
             <p hidden={!data.role}>
               <b>{strings.RoleLabel}:</b> <span>{data.role}</span>
             </p>
@@ -73,6 +67,48 @@ export const DetailsPopover: FC<IDetailsPopoverProps> = (props) => {
             </p>
             <p>
               <b>{strings.EndDateLabel}:</b> <span>{formatDate(item.end_time.toString())}</span>
+            </p>
+            <p hidden={!data.resource}>
+              <b>{strings.ResourceLabel}:</b> <span title={data.resourceUpn}>{data.resource}</span>
+            </p>
+            <p hidden={!data.department}>
+              <b>{strings.DepartmentLabel}:</b> <span>{data.department}</span>
+            </p>
+          </>
+        )
+      }
+      case strings.ResourceAbsenceLabel: {
+        return (
+          <>
+            <p>
+              <b>
+                <Link href={resource.Lists_ResourceAllocation_Url} target="_blank">
+                  {resource.Lists_ResourceAllocation_Title}
+                </Link>
+                :
+              </b>{' '}
+              <span>{data.role}</span>
+            </p>
+            <p hidden={!data.allocation}>
+              <b>{strings.AllocationPercetageLabel}:</b> <span>{data.allocation}%</span>
+            </p>
+            <p hidden={!data.status}>
+              <b>{strings.AllocationStatusLabel}:</b> <span>{data.status}</span>
+            </p>
+            <p hidden={!data.comment}>
+              <b>{strings.CommentLabel}:</b> <span>{data.comment}</span>
+            </p>
+            <p>
+              <b>{strings.StartDateLabel}:</b> <span>{formatDate(item.start_time.toString())}</span>
+            </p>
+            <p>
+              <b>{strings.EndDateLabel}:</b> <span>{formatDate(item.end_time.toString())}</span>
+            </p>
+            <p hidden={!data.resource}>
+              <b>{strings.ResourceLabel}:</b> <span title={data.resourceUpn}>{data.resource}</span>
+            </p>
+            <p hidden={!data.department}>
+              <b>{strings.DepartmentLabel}:</b> <span>{data.department}</span>
             </p>
           </>
         )
@@ -110,20 +146,8 @@ export const DetailsPopover: FC<IDetailsPopoverProps> = (props) => {
       default: {
         return (
           <>
-            <p>
-              <b>
-                <Link href={resource.Lists_ResourceAllocation_Url} target="_blank">
-                  {resource.Lists_ResourceAllocation_Title}
-                </Link>
-                :
-              </b>{' '}
-              <span>{data.type}</span>
-            </p>
             <p hidden={!item.title}>
               <b>{strings.DescriptionFieldLabel}:</b> <span>{item.title}</span>
-            </p>
-            <p hidden={!data.type}>
-              <b>{strings.TypeLabel}:</b> <span>{data.type}</span>
             </p>
             <p hidden={!data.comment}>
               <b>{strings.CommentLabel}:</b> <span>{data.comment}</span>
@@ -131,15 +155,9 @@ export const DetailsPopover: FC<IDetailsPopoverProps> = (props) => {
             <p hidden={typeof data.allocation !== 'number'}>
               <b>{strings.AllocationPercetageLabel}:</b> <span>{data.allocation}%</span>
             </p>
-            {/* Show any extra fields if present */}
             {data.status && (
               <p>
                 <b>{strings.AllocationStatusLabel}:</b> <span>{data.status}</span>
-              </p>
-            )}
-            {data.department && (
-              <p>
-                <b>{strings.DepartmentLabel}:</b> <span>{data.department}</span>
               </p>
             )}
             <p>

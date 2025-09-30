@@ -465,6 +465,7 @@ define([], function () {
     RenderModeTilesText: 'Tiles',
     ResourceAllocationInfoText: 'Resource allocations or absences that apply across projects are entered into the <a href="../{0}">resource allocation hub list</a>. These entries will be shown in blue and red (absence) color in the table below. Project allocations are shown in green. The color strength of the allocation is based on the allocation percentage.',
     ResourceLabel: 'Resource',
+    ResourceAbsenceLabel: 'Resource (absence)',
     DepartmentLabel: 'Department',
     RevertCustomOrderButtonText: 'Reset order',
     RevertCustomOrderButtonTooltip: 'Reset order to default order for columns specified in the Project Columns list.',
