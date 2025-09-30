@@ -24,8 +24,8 @@ function renderItemColumn(item: Record<string, any>, column: IColumn): ReactNode
   }
   const columnValue = item[column.fieldName]
   const dataTypeProperties: Record<string, any> = column.data?.dataTypeProperties ?? {}
-  if (!columnValue && column.fieldName !== '-') {
-    return dataTypeProperties.fallbackValue ?? null
+  if (!columnValue && column.fieldName !== '-' && dataTypeProperties?.fallbackValue) {
+    return dataTypeProperties.fallbackValue
   }
 
   if (column.fieldName === 'Title' && column['dataType'] === 'text') {
