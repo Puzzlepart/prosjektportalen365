@@ -111,8 +111,6 @@ define([], function () {
     ExternalUsersConfigText: 'Configuration',
     GeneralGroupName: 'General',
     GetSnapshotButtonLabel: 'Open as snapshot',
-    GtModerationStatus_Choice_Draft: 'Draft',
-    GtModerationStatus_Choice_Published: 'Published',
     HideActionsLabel: 'Hide buttons',
     HideAllActionsLabel: 'Hide all buttons',
     HideParentProjectsLabel: 'Hide parent projects',

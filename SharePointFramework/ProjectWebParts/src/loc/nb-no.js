@@ -117,8 +117,6 @@ define([], function () {
     GeneralGroupName: 'Generelt',
     GetSnapshotButtonLabel: 'Åpne øyeblikksbilde',
     GetSnapshotButtonDescription: 'Åpner den valgte statusrapporten som et øyeblikksbilde.',
-    GtModerationStatus_Choice_Draft: 'Kladd',
-    GtModerationStatus_Choice_Published: 'Publisert',
     HideActionsLabel: 'Skjul knapper',
     HideAllActionsLabel: 'Skjul alle knapper',
     HideParentProjectsLabel: 'Skjul overordnede prosjekter',

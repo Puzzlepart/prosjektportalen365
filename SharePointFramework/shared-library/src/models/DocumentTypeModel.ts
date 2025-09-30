@@ -16,11 +16,7 @@ export class DocumentTypeModel {
    * @param _termSetId Term set ID
    * @param lcid Language code ID (default: `1044`)
    */
-  constructor(
-    public term: ITermInfo,
-    private _termSetId: string,
-    lcid: number = 1044
-  ) {
+  constructor(public term: ITermInfo, private _termSetId: string, lcid: number = 1044) {
     this.id = term.id
     this._languageTag = supportedLocalesMap.get(lcid)
   }

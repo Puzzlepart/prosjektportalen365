@@ -1,9 +1,13 @@
 import resource from 'SharedResources'
 
-export const createProjectSetupCustomAction = (progressTitle: string, lcid: number ): Record<string, any> => ({
+export const createProjectSetupCustomAction = (
+  progressTitle: string,
+  lcid: number
+): Record<string, any> => ({
   Title: 'ProjectSetup',
   Location: 'ClientSideExtension.ApplicationCustomizer',
-  ClientSideComponentId: lcid === 1044 ? 'ce34553d-ab47-4107-8dd1-e980d953996d' : 'c0c51378-2c43-4e16-a3ed-86f01c6f358e',
+  ClientSideComponentId:
+    lcid === 1044 ? 'ce34553d-ab47-4107-8dd1-e980d953996d' : 'c0c51378-2c43-4e16-a3ed-86f01c6f358e',
   ClientSideComponentProperties: JSON.stringify({
     templatesLibrary: resource.Lists_TemplateOptions_Title,
     extensionsLibrary: resource.Lists_ProjectExtensions_Title,

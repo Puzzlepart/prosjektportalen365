@@ -3,6 +3,7 @@ import { ProjectColumn } from 'pp365-shared-library'
 import { IStatusColumnProps, ProjectStatusModel } from './types'
 import _ from 'lodash'
 import { StatusReportColumn } from './StatusReportColumn'
+import resource from 'SharedResources'
 
 /**
  * Fetches data for the `StatusReportColumn` component.
@@ -19,7 +20,7 @@ export const fetchData = async (web: IWeb, column?: ProjectColumn) => {
     web.lists
       .getByTitle(props.statusReportListName)
       .items.top(500)
-      .filter("GtModerationStatus eq 'Publisert'")(), // TODO: Use resources when available
+      .filter(`GtModerationStatus eq '${resource.Choice_GtModerationStatus_Published}'`)(),
     web.lists
       .getByTitle(props.statusSectionsListName)
       .items.select('GtSecFieldName', 'GtSecIcon')

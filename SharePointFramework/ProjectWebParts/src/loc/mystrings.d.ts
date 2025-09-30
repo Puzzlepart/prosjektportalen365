@@ -79,8 +79,6 @@ declare interface IProjectWebPartsStrings {
   GeneralGroupName: string
   GetSnapshotButtonLabel: string
   GetSnapshotButtonDescription: string
-  GtModerationStatus_Choice_Draft: string
-  GtModerationStatus_Choice_Published: string
   HideActionsLabel: string
   HideAllActionsLabel: string
   HideParentProjectsLabel: string

@@ -38,7 +38,7 @@ ProjectTimeline.displayName = 'ProjectTimeline'
 ProjectTimeline.defaultProps = {
   showProjectDeliveries: false,
   dataSourceName: resource.Lists_DataSources_Category_ProjectDeliveries_All,
-  configItemTitle: resource.TimelineConfiguration_ProjectDelivery_Title,
+  configItemTitle: resource.TimelineConfiguration_ProjectDelivery_Title
 }
 
 export * from './Timeline'

@@ -2,8 +2,6 @@ define([], function () {
   return {
     NoAccessToPortfolioErrorTitle: 'No access to portfolio',
     NoAccessToPortfolioErrorText: 'Du har ikke tilgangen til porteføljen for området {0}. Ta kontakt med en administrator.',
-    GtModerationStatus_Choice_Draft: 'Draft',
-    GtModerationStatus_Choice_Published: 'Published',
     SaveText: 'Save',
     CloseText: 'Close',
     Aria: {

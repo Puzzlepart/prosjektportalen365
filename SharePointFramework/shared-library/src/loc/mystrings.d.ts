@@ -3,8 +3,6 @@ declare interface ISharedLibraryStrings {
   NoAccessToPortfolioErrorText: string
   BooleanYes: string
   BooleanNo: string
-  GtModerationStatus_Choice_Draft: string
-  GtModerationStatus_Choice_Published: string
   SaveText: string
   CloseText: string
   Aria: {

@@ -1,4 +1,3 @@
-import strings from 'SharedLibraryStrings'
 import { ItemFieldValues } from './ItemFieldValues'
 import resource from 'SharedResources'
 
@@ -104,10 +103,10 @@ export class StatusReport {
 
   /**
    * Returns `true` if the report is published. The moderation status must
-   * be `GtModerationStatus_Choice_Published` from the `SharedLibraryStrings`
+   * be `GtModerationStatus: Published` from the `SharedLibraryStrings`
    */
   public get published(): boolean {
-    return this.moderationStatus === strings.GtModerationStatus_Choice_Published
+    return this.moderationStatus === resource.Choice_GtModerationStatus_Published
   }
 
   /**

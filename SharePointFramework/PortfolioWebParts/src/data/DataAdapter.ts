@@ -379,7 +379,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         'SiteId'
       ]),
       this._fetchItems(
-        `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+        `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:${resource.Choice_GtModerationStatus_Published}`,
         [...configuration.columns.map((f) => f.fieldName), siteIdProperty, 'ListItemId'],
         500,
         { Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',') }
