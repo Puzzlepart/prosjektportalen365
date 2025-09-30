@@ -180,7 +180,7 @@
                 </pnp:File>                
             </pnp:Files>
             <pnp:Lists>
-                <pnp:ListInstance Title="Fasesjekkliste" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Fasesjekkliste" EnableVersioning="true" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false">
+                <pnp:ListInstance Title="Fasesjekkliste" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Fasesjekkliste" EnableVersioning="true" DraftVersionVisibility="0" ContentTypesEnabled="true" EnableFolderCreation="false" EnableAttachments="false">
                     <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Er det en tydelig definert problemstilling som synliggjør behovet for nærmere utredning?</pnp:DataValue>
@@ -404,7 +404,7 @@
                         </pnp:DataRow>
                     </pnp:DataRows>
                 </pnp:ListInstance>
-                <pnp:ListInstance Title="Planneroppgaver" TemplateType="100" Url="Lists/Planneroppgaver" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true">
+                <pnp:ListInstance Title="Planneroppgaver" TemplateType="100" Url="Lists/Planneroppgaver" ContentTypesEnabled="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true">
                     <pnp:DataRows KeyColumn="Title" UpdateBehavior="Overwrite">
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Beslutte utredning av idéen og utforme et førsteutkast til prosjektmandat</pnp:DataValue>

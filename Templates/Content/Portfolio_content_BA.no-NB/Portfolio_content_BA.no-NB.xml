@@ -842,7 +842,7 @@
                         </pnp:DataRow>
                     </pnp:DataRows>
                 </pnp:ListInstance>
-                <pnp:ListInstance Title="Planneroppgaver Bygg" TemplateType="100" Url="Lists/Planneroppgaver_Bygg" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true">
+                <pnp:ListInstance Title="Planneroppgaver Bygg" TemplateType="100" Url="Lists/Planneroppgaver_Bygg" ContentTypesEnabled="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true">
                     <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
                         <pnp:DataRow>
                             <pnp:DataValue FieldName='Title'>Analysere alternative løsninger</pnp:DataValue>

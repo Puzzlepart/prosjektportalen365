@@ -132,7 +132,7 @@
                             <pnp:DataValue FieldName="GtSortOrder">130</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
-                            <pnp:DataValue FieldName='Title'>Has consideration been given to processing time with external actors? (political P&B, county governor, Hafslund, NVE, Norwegian Public Roads Administration, others)?</pnp:DataValue>
+                            <pnp:DataValue FieldName='Title'>Has consideration been given to processing time with external actors? (political P and B, county governor, Hafslund, NVE, Norwegian Public Roads Administration, others)?</pnp:DataValue></pnp:DataValue>
                             <pnp:DataValue FieldName='GtProjectPhase'>Initiation|dca0a226-0907-4c54-8624-6b51fcac7a92</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">140</pnp:DataValue>
                         </pnp:DataRow>
@@ -237,7 +237,7 @@
                             <pnp:DataValue FieldName="GtSortOrder">340</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
-                            <pnp:DataValue FieldName='Title'>Is O&M/final documentation initiated?</pnp:DataValue>
+                            <pnp:DataValue FieldName='Title'>Is O and M/final documentation initiated?</pnp:DataValue>
                             <pnp:DataValue FieldName='GtProjectPhase'>Construction phase|9b45a1ca-ae8c-4f4a-baa3-40353b7dd8fc</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">350</pnp:DataValue>
                         </pnp:DataRow>
@@ -247,7 +247,7 @@
                             <pnp:DataValue FieldName="GtSortOrder">360</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
-                            <pnp:DataValue FieldName='Title'>Is all O&M/final documentation received?</pnp:DataValue>
+                            <pnp:DataValue FieldName='Title'>Is all O and M/final documentation received?</pnp:DataValue>
                             <pnp:DataValue FieldName='GtProjectPhase'>Handover and delivery|1807d6c2-b4bd-415f-98aa-a4a2ccff8d11</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">370</pnp:DataValue>
                         </pnp:DataRow>
@@ -400,7 +400,7 @@
                         <pnp:DataRow>
                             <pnp:DataValue FieldName='Title'>Documents to be produced in the construction phase</pnp:DataValue>
                             <pnp:DataValue FieldName='GtCategory'>Construction phase</pnp:DataValue>
-                            <pnp:DataValue FieldName='GtChecklist'>Advance notice to labor inspection;Organization plan/project plans;Progress plan (updated);HSE plan with attachments (updated);Environmental plan - construction projects (Prepared in design phase; further developed and followed up in implementation phase);Working drawings;Survey data;Correspondence;Possibly updated stakeholder analysis;Possibly updated information to neighbors and landowners;Possibly updated budget;O&M/final documentation</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtChecklist'>Advance notice to labor inspection;Organization plan/project plans;Progress plan (updated);HSE plan with attachments (updated);Environmental plan - construction projects (Prepared in design phase; further developed and followed up in implementation phase);Working drawings;Survey data;Correspondence;Possibly updated stakeholder analysis;Possibly updated information to neighbors and landowners;Possibly updated budget;O and M/final documentation</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">200</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
@@ -429,7 +429,7 @@
                             <pnp:DataValue FieldName="GtSortOrder">250</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
-                            <pnp:DataValue FieldName='Title'>Prepare O&M documentation</pnp:DataValue>
+                            <pnp:DataValue FieldName='Title'>Prepare O and M documentation</pnp:DataValue>
                             <pnp:DataValue FieldName='GtCategory'>Handover and delivery</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">260</pnp:DataValue>
                         </pnp:DataRow>
@@ -446,7 +446,7 @@
                         <pnp:DataRow>
                             <pnp:DataValue FieldName='Title'>Documents to be produced in the delivery phase</pnp:DataValue>
                             <pnp:DataValue FieldName='GtCategory'>Handover and delivery</pnp:DataValue>
-                            <pnp:DataValue FieldName='GtChecklist'>Minutes from final inspection;Signed handover protocol;Evaluation reports;Minutes from meeting on financial settlement;Signed delivery protocol;Completed O&M/final documentation;Final report with final accounts;Final accounts and completion certificate as basis for application for final payment of gaming funds.</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtChecklist'>Minutes from final inspection;Signed handover protocol;Evaluation reports;Minutes from meeting on financial settlement;Signed delivery protocol;Completed O and M/final documentation;Final report with final accounts;Final accounts and completion certificate as basis for application for final payment of gaming funds.</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">290</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
@@ -744,7 +744,7 @@
                             <pnp:DataValue FieldName="GtSortOrder">440</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
-                            <pnp:DataValue FieldName="Title">Has O&M/final documentation been initiated?</pnp:DataValue>
+                            <pnp:DataValue FieldName="Title">Has O and M/final documentation been initiated?</pnp:DataValue>
                             <pnp:DataValue FieldName="GtProjectPhase">Detailed planning|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">450</pnp:DataValue>
                         </pnp:DataRow>
@@ -769,7 +769,7 @@
                             <pnp:DataValue FieldName="GtSortOrder">490</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
-                            <pnp:DataValue FieldName="Title">Is O&M documentation completed and approved by EDF?</pnp:DataValue>
+                            <pnp:DataValue FieldName="Title">Is O and M documentation completed and approved by EDF?</pnp:DataValue>
                             <pnp:DataValue FieldName="GtProjectPhase">Detailed planning|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">500</pnp:DataValue>
                         </pnp:DataRow>
@@ -840,7 +840,7 @@
                         </pnp:DataRow>
                     </pnp:DataRows>
                 </pnp:ListInstance>
-                <pnp:ListInstance Title="Planner Tasks Building" TemplateType="100" Url="Lists/PlannerTasks_Building" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true">
+                <pnp:ListInstance Title="Planner Tasks Building" TemplateType="100" Url="Lists/PlannerTasks_Building" ContentTypesEnabled="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true">
                     <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
                         <pnp:DataRow>
                             <pnp:DataValue FieldName='Title'>Analyze alternative solutions</pnp:DataValue>
@@ -1020,7 +1020,7 @@
                             <pnp:DataValue FieldName="GtSortOrder">330</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
-                            <pnp:DataValue FieldName='Title'>Check received O&M documentation</pnp:DataValue>
+                            <pnp:DataValue FieldName='Title'>Check received O and M documentation</pnp:DataValue>
                             <pnp:DataValue FieldName='GtCategory'>Detailed planning - Build phase (P3)</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">340</pnp:DataValue>
                         </pnp:DataRow>

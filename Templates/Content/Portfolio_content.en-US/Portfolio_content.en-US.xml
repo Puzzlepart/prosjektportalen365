@@ -43,7 +43,7 @@
                 </pnp:File>
             </pnp:Files>
             <pnp:Lists>
-                <pnp:ListInstance Title="Phase Checklist" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Phase Checklist" EnableVersioning="true" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false">
+                <pnp:ListInstance Title="Phase Checklist" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Phase Checklist" EnableVersioning="true" DraftVersionVisibility="0" ContentTypesEnabled="true" EnableFolderCreation="false" EnableAttachments="false">
                     <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Is there a clearly defined problem statement that highlights the need for further investigation?</pnp:DataValue>
@@ -267,7 +267,7 @@
                         </pnp:DataRow>
                     </pnp:DataRows>
                 </pnp:ListInstance>
-                <pnp:ListInstance Title="Planner Tasks" TemplateType="100" Url="Lists/PlannerTasks" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true">
+                <pnp:ListInstance Title="Planner Tasks" TemplateType="100" Url="Lists/PlannerTasks" ContentTypesEnabled="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true">
                     <pnp:DataRows KeyColumn="Title" UpdateBehavior="Overwrite">
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Decide on investigation of the idea and formulate a first draft of the project mandate</pnp:DataValue>
