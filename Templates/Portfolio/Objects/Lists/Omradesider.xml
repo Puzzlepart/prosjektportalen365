@@ -22,7 +22,7 @@
         </View>
     </pnp:Views>
     <pnp:Folders>
-        <pnp:Folder Name="Prosjektnyheter" />
+        <pnp:Folder Name="{resource:Lists_Global_Settings_Category_General_ProjectNewsFolderName_Value}" />
     </pnp:Folders>
     <pnp:FieldRefs>
         <pnp:FieldRef ID="fba7ced6-9970-4b14-ab9c-7c809310d86d" Name="GtSiteId" DisplayName="{resource:SiteFields_GtSiteId_DisplayName}" />

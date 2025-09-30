@@ -1042,6 +1042,9 @@
     <data name="ClientSidePages_UncertaintyOverview_Title" xml:space="preserve">
         <value>Uncertainty Overview</value>
     </data>
+    <data name="ClientSidePages_Templates_ProjectNews_PageName" xml:space="preserve">
+        <value>Templates/ProjectNews.aspx</value>
+    </data>
     <data name="ContentTypes_BarChart_Description" xml:space="preserve">
         <value>Create a new bar chart</value>
     </data>

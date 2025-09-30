@@ -1,4 +1,4 @@
-_The template was validated 9/29/2025, 12:12:09 PM_
+_The template was validated 9/30/2025, 2:28:05 PM_
 
 The template contains the following tokens that has not been found in the .resx files:
 
@@ -558,7 +558,7 @@ _No tokens with missing translations or replacement values found._
                     "Id": "a9097537-6860-4e05-99f3-4ee21782687f",
                     "Properties": {
                         "title": "Project News",
-                        "newsFolderName": "Prosjektnyheter",
+                        "newsFolderName": "Projectnews",
                         "maxVisibleNews": 4
                     }
                 }

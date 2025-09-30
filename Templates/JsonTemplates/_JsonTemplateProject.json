@@ -547,7 +547,7 @@
                     "Id": "{{ControlId_ProjectNewsWebPart}}",
                     "Properties": {
                         "title": "{{WebParts_ProjectNews_Title}}",
-                        "newsFolderName": "Prosjektnyheter",
+                        "newsFolderName": "{{Lists_Global_Settings_Category_General_ProjectNewsFolderName_Value}}",
                         "maxVisibleNews": 4
                     }
                 }

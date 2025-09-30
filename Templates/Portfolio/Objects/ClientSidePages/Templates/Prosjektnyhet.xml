@@ -1,4 +1,4 @@
-<pnp:ClientSidePage PromoteAsNewsArticle="true" PromoteAsTemplate="true" Overwrite="false" Title="{resource:Templates_ProjectNews_Title}" ThumbnailUrl="" PageName="Maler/Prosjektnyhet.aspx" xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+<pnp:ClientSidePage PromoteAsNewsArticle="true" PromoteAsTemplate="true" Overwrite="false" Title="{resource:Templates_ProjectNews_Title}" ThumbnailUrl="" PageName="{resource:ClientSidePages_Templates_ProjectNews_PageName}" xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
   <pnp:Header Type="Default" LayoutType="FullWidthImage" ShowTopicHeader="false" ShowPublishDate="false" TopicHeader="" AlternativeText="" Authors="" AuthorByLineId="9" />
   <pnp:Sections>
     <pnp:Section Order="1" Type="OneColumnFullWidth">
