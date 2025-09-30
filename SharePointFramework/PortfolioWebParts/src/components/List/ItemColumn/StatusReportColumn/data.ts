@@ -35,7 +35,7 @@ export const fetchData = async (web: IWeb, column?: ProjectColumn) => {
       )
       .expand('GtPortfolioColumn')
       .filter(
-        "startswith(GtPortfolioColumn/GtInternalName,'GtStatus') or startswith(GtPortfolioColumn/GtInternalName,'GtOverallStatus')"
+        'startswith(GtPortfolioColumn/GtInternalName,\'GtStatus\') or startswith(GtPortfolioColumn/GtInternalName,\'GtOverallStatus\')'
       )
       .top(500)()
   ])

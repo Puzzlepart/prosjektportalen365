@@ -6,6 +6,7 @@ import { IResourceAllocationProps } from './types'
 import { useResourceAllocation } from './useResourceAllocation'
 import { LoadingSkeleton, Timeline, UserMessage, customLightTheme } from 'pp365-shared-library'
 import resource from 'SharedResources'
+import { format } from '@fluentui/react'
 
 export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
   const { state, filters, onFilterChange, items, groups, defaultTimeframe, fluentProviderId } =
@@ -29,7 +30,7 @@ export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
         ) : (
           <Timeline
             title={props.title}
-            infoText={strings.ResourceAllocationInfoText}
+            infoText={format(strings.ResourceAllocationInfoText, resource.Lists_ResourceAllocation_Url)}
             defaultTimeframe={defaultTimeframe}
             groups={groups}
             items={items}

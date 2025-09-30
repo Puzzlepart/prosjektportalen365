@@ -17,6 +17,8 @@ import {
 
 /**
  * Enriches search results with department information from user profiles
+ * Get unique UPNs from GtResourceUserOWSUSER. Format: email | display name | ...
+ * The search result source 'b09a7990-05ea-4af9-81ef-edfab16c4e31' is the generic people vertical
  *
  * @param searchResults Search results
  * @param props Component properties for `ResourceAllocation`
@@ -27,30 +29,26 @@ const enrichWithDepartmentInfo = async (
   searchResults: IAllocationSearchResult[],
   props: IResourceAllocationProps
 ): Promise<IEnrichedAllocationSearchResult[]> => {
-  // Get unique UPNs from GtResourceUserOWSUSER (format: 'Name|UPN')
 
   const uniqueUPNs = _.uniq(
     searchResults
       .map((res) => {
-        const val = res.GtResourceUserOWSUSER;
-        if (!val) return undefined;
-        // Format: email | display name | ...
-        const parts = val.split('|');
-        let email = parts.length > 0 ? parts[0].trim() : val.trim();
-        return email;
+        const val = res.GtResourceUserOWSUSER
+        if (!val) return undefined
+        const parts = val.split('|')
+        const email = parts.length > 0 ? parts[0].trim() : val.trim()
+        return email
       })
       .filter(Boolean)
-  );
+  )
 
   if (uniqueUPNs.length === 0) {
     return searchResults.map(result => ({ ...result, userDepartment: undefined }))
   }
 
-  // Build a people search query for all UPNs (using OR for each AccountName)
-  // Managed properties: AccountName, Department, PreferredName, WorkEmail
   const query = uniqueUPNs.map(upn => `UserName:"${upn.replace(/"/g, '')}"`).join(' OR ')
 
-  let peopleResults: any[] = [];
+  let peopleResults: any[] = []
   try {
     peopleResults = (await props.sp.search({
       QueryTemplate: query,
@@ -58,33 +56,28 @@ const enrichWithDepartmentInfo = async (
       RowLimit: 500,
       TrimDuplicates: false,
       SelectProperties: ['UserName', 'Department', 'PreferredName', 'WorkEmail'],
-      SourceId: 'b09a7990-05ea-4af9-81ef-edfab16c4e31' // People vertical
-    })).PrimarySearchResults;
+      SourceId: 'b09a7990-05ea-4af9-81ef-edfab16c4e31'
+    })).PrimarySearchResults
   } catch (error) {
-    console.warn('Failed to batch fetch people search results:', error);
+    console.warn('Failed to batch fetch people search results:', error)
   }
 
-  // ...
-
-
-  // Build a lookup by UserName (case-insensitive)
   const peopleMap = new Map<string, string>()
-  const allUserNames = [];
+  const allUserNames = []
   for (const person of peopleResults) {
     if (person.UserName && person.Department) {
       peopleMap.set(person.UserName.toLowerCase(), person.Department)
-      allUserNames.push(person.UserName.toLowerCase());
+      allUserNames.push(person.UserName.toLowerCase())
     }
   }
 
-  // Enrich search results with department information
   return searchResults.map(result => {
-    let upn = result.GtResourceUserOWSUSER;
+    let upn = result.GtResourceUserOWSUSER
     if (upn) {
-      const parts = upn.split('|');
-      upn = parts.length > 0 ? parts[0].trim().toLowerCase() : upn.trim().toLowerCase();
+      const parts = upn.split('|')
+      upn = parts.length > 0 ? parts[0].trim().toLowerCase() : upn.trim().toLowerCase()
     } else {
-      upn = undefined;
+      upn = undefined
     }
     
     return {
@@ -97,13 +90,13 @@ const enrichWithDepartmentInfo = async (
 /**
  * Creating groups based on user property (`RefinableString71`) on the search result,
  * with fallback to role (`RefinableString72`)
+ * For user groups, append department in parentheses if available
  *
  * @param searchResults Enriched search results
  *
  * @returns Timeline groups
  */
 const transformGroups = (searchResults: IEnrichedAllocationSearchResult[]): ITimelineGroup[] => {
-  // For user groups, append department in parentheses if available
   const groupNames = _.uniq(
     searchResults
       .map((res) => {
@@ -131,7 +124,7 @@ const transformGroups = (searchResults: IEnrichedAllocationSearchResult[]): ITim
 }
 
 /**
- * Transform items
+ * Transform items.
  *
  * @param searchResults Enriched search results
  * @param groups Groups
@@ -146,23 +139,22 @@ const transformItems = (
 ): ITimelineItem[] => {
   const items = searchResults
     .map<ITimelineItem>((res, id) => {
-      let resourceDisplay = res.RefinableString71;
+      let resourceDisplay = res.RefinableString71
       if (res.userDepartment) {
-        resourceDisplay = `${resourceDisplay} (${res.userDepartment})`;
+        resourceDisplay = `${resourceDisplay} (${res.userDepartment})`
       }
-      // Finn group basert på resourceDisplay (samme format som i transformGroups)
       const group = groups.find((grp) => grp.title === resourceDisplay) ??
         _.find(
           groups,
           (grp) => res.RefinableString72 && res.RefinableString72.indexOf(grp.title) !== -1
-        );
+        )
 
-      const isAbsence = res.ContentTypeId.indexOf('0x010029F45E75BA9CE340A83EFFB2927E11F4') !== -1;
-      if (!group || (isAbsence && !res.GtResourceAbsenceOWSCHCS)) return null;
-      const allocation = tryParsePercentage(res.GtResourceLoadOWSNMBR, false, 0) as number;
-      const itemOpacity = allocation < 30 ? 0.3 : allocation / 100;
-      const itemColor = allocation < 40 ? '#000' : '#fff';
-      const backgroundColor = isAbsence ? props.itemAbsenceColor : props.itemColor;
+      const isAbsence = res.ContentTypeId.indexOf('0x010029F45E75BA9CE340A83EFFB2927E11F4') !== -1
+      if (!group || (isAbsence && !res.GtResourceAbsenceOWSCHCS)) return null
+      const allocation = tryParsePercentage(res.GtResourceLoadOWSNMBR, false, 0) as number
+      const itemOpacity = allocation < 30 ? 0.3 : allocation / 100
+      const itemColor = allocation < 40 ? '#000' : '#fff'
+      const backgroundColor = isAbsence ? props.itemAbsenceColor : props.itemColor
       const style: React.CSSProperties = {
         color: itemColor,
         border: 'none',
@@ -170,12 +162,12 @@ const transformItems = (
         outline: 'none',
         background: `rgb(${backgroundColor})`,
         backgroundColor: `rgba(${backgroundColor}, ${itemOpacity})`
-      };
+      }
       const title = isAbsence
         ? `${res.GtResourceAbsenceOWSCHCS} (${allocation}%)`
-        : `${res.RefinableString72} - ${res.SiteTitle} (${allocation}%)`;
-      const start_time = moment(new Date(res.GtStartDateOWSDATE));
-      const end_time = moment(new Date(res.GtEndDateOWSDATE));
+        : `${res.RefinableString72} - ${res.SiteTitle} (${allocation}%)`
+      const start_time = moment(new Date(res.GtStartDateOWSDATE))
+      const end_time = moment(new Date(res.GtEndDateOWSDATE))
       return {
         group: group.id,
         id,
@@ -195,7 +187,7 @@ const transformItems = (
           status: res.GtAllocationStatusOWSCHCS,
           comment: res.GtAllocationCommentOWSMTXT
         }
-      } as ITimelineItem;
+      } as ITimelineItem
     })
     .filter(Boolean)
   return items
@@ -222,7 +214,6 @@ const fetchData = async (props: IResourceAllocationProps): Promise<ITimelineData
       })
     ).PrimarySearchResults as IAllocationSearchResult[]
 
-    // Enrich results with department information
     const enrichedResults = await enrichWithDepartmentInfo(results, props)
 
     const groups = transformGroups(enrichedResults)

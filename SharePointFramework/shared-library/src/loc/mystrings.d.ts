@@ -57,8 +57,6 @@ declare interface ISharedLibraryStrings {
   TimelineGroupDescription: string
   TypeLabel: string
   SyncListAddingField: string
-  ResourceAllocationListLabel: string
-  ResourceAllocationListUrl: string
 }
 
 declare module 'SharedLibraryStrings' {

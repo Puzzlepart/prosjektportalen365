@@ -11,7 +11,7 @@ export interface IAllocationSearchResult extends ISearchResult {
   GtAllocationStatusOWSCHCS: string
   GtAllocationCommentOWSMTXT: string
   SiteTitle: string
-  GtResourceUserOWSUSER: string // UPN or Name|UPN
+  GtResourceUserOWSUSER: string
 }
 
 export interface IEnrichedAllocationSearchResult extends IAllocationSearchResult {
