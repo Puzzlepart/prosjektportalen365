@@ -536,7 +536,7 @@
             <pnp:DataValue FieldName="GtSortOrder">145</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtDeliveryAcceptanceResponsible_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtDeliveryAcceptanceResponsible</pnp:DataValue>
-            <pnp:DataValue FieldName="GtManagedProperty">RefinableString80</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtDeliveryAcceptanceResponsibleOWSUSER</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_ProjectDeliveries}</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
@@ -559,7 +559,7 @@
             <pnp:DataValue FieldName="GtSortOrder">155</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtDeliveryQualityResponsible_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtDeliveryQualityResponsible</pnp:DataValue>
-            <pnp:DataValue FieldName="GtManagedProperty">RefinableString81</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtDeliveryQualityResponsibleOWSUSER</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_ProjectDeliveries}</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
@@ -641,7 +641,7 @@
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtProjectLogReporter_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSortOrder">360</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectLogReporter</pnp:DataValue>
-            <pnp:DataValue FieldName="GtManagedProperty">RefinableString83</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtProjectLogReporterOWSUSER</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_ExperienceLog}</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
