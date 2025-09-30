@@ -33,7 +33,7 @@
         </View>
     </pnp:Views>
     <pnp:FieldRefs>
-        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" DisplayName="{resource:SiteFields_Title_DisplayName" Required="true" />
+        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" DisplayName="{resource:SiteFields_Title_DisplayName}" Required="true" />
         <pnp:FieldRef ID="31e405e0-2890-439d-9c9f-42354154feda" Name="GtSearchQuery" DisplayName="{resource:SiteFields_GtSearchQuery_DisplayName}" Required="true" />
         <pnp:FieldRef ID="67a0a4b1-61d7-45c3-9157-7e302450a304" Name="GtDataSourceCategory" DisplayName="{resource:SiteFields_GtDataSourceCategory_DisplayName}" Required="true" />
         <pnp:FieldRef ID="9f6b103c-17c6-4a9c-908e-9d53a5a9ca60" Name="GtDataSourceLevel" DisplayName="{resource:SiteFields_GtDataSourceLevel_DisplayName}" Required="true" />
