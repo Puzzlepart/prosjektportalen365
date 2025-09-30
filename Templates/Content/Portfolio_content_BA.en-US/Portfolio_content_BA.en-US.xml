@@ -4,7 +4,7 @@
     <pnp:Templates ID="CONTAINER-TEMPLATE-PP-PORTFOLIO-CONTENT-EN-US">
         <pnp:ProvisioningTemplate ID="TEMPLATE-PP-PORTFOLIO-EN-US" Scope="RootSite">
             <pnp:Lists>
-                <pnp:ListInstance Title="{resource:Lists_DocumentsConstruction_Title}" TemplateType="101" Url="{resource:Lists_DocumentsConstruction_Url}" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="500" DraftVersionVisibility="0" EnableAttachments="false">
+                <pnp:ListInstance Title="Standard Documents Construction" TemplateType="101" Url="StandardDocuments_Construction" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="500" DraftVersionVisibility="0" EnableAttachments="false">
                     <pnp:Folders>
                         <pnp:Folder Name="100 Foundation">
                             <pnp:Folder Name="110 Official conditions-permits"></pnp:Folder>
@@ -64,7 +64,7 @@
                         </pnp:Folder>
                     </pnp:Folders>
                 </pnp:ListInstance>
-                <pnp:ListInstance Title="{resource:Lists_PhaseChecklistConstruction_Title}" TemplateType="100" Url="{resource:Lists_PhaseChecklistConstruction_Url}" Hidden="false" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false">
+                <pnp:ListInstance Title="Phase Checklist Construction" TemplateType="100" Url="Lists/PhaseChecklist_Construction" Hidden="false" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false">
                     <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
                         <pnp:DataRow>
                             <pnp:DataValue FieldName='Title'>Is the assignment order signed and received?</pnp:DataValue>
@@ -293,7 +293,7 @@
                         </pnp:DataRow>
                     </pnp:DataRows>
                 </pnp:ListInstance>
-                <pnp:ListInstance Title="{resource:Lists_PlannerTasksConstruction_Title}" TemplateType="100" Url="{resource:Lists_PlannerTasksConstruction_Url}" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true">
+                <pnp:ListInstance Title="Planner Tasks Construction" TemplateType="100" Url="Lists/PlannerTasks_Construction" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true">
                     <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
                         <pnp:DataRow >
                             <pnp:DataValue FieldName='Title'>Support the client in defining requirements and framework as needed</pnp:DataValue>
@@ -461,7 +461,7 @@
                         </pnp:DataRow>
                     </pnp:DataRows>
                 </pnp:ListInstance>
-                <pnp:ListInstance Title="{resource:Lists_DocumentsBuilding_Title}" TemplateType="101" Url="{resource:Lists_DocumentsBuilding_Url}" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="500" DraftVersionVisibility="0" EnableAttachments="false">
+                <pnp:ListInstance Title="Standard Documents Building" TemplateType="101" Url="StandardDocuments_Building" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="500" DraftVersionVisibility="0" EnableAttachments="false">
                     <pnp:Folders>
                         <pnp:Folder Name="100 Foundation">
                             <pnp:Folder Name="110 Official conditions-permits"></pnp:Folder>
@@ -521,7 +521,7 @@
                         </pnp:Folder>
                     </pnp:Folders>
                 </pnp:ListInstance>
-                <pnp:ListInstance Title="{resource:Lists_PhaseChecklistBuilding_Title}" TemplateType="100" Url="{resource:Lists_PhaseChecklistBuilding_Url}" Hidden="false" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false">
+                <pnp:ListInstance Title="Phase Checklist Building" TemplateType="100" Url="Lists/PhaseChecklist_Building" Hidden="false" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false">
                     <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Are user representatives consulted/involved?</pnp:DataValue>
@@ -840,7 +840,7 @@
                         </pnp:DataRow>
                     </pnp:DataRows>
                 </pnp:ListInstance>
-                <pnp:ListInstance Title="{resource:Lists_PlannerTasksBuilding_Title}" TemplateType="100" Url="{resource:Lists_PlannerTasksBuilding_Url}" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true">
+                <pnp:ListInstance Title="Planner Tasks Building" TemplateType="100" Url="Lists/PlannerTasks_Building" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true">
                     <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
                         <pnp:DataRow>
                             <pnp:DataValue FieldName='Title'>Analyze alternative solutions</pnp:DataValue>
