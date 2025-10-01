@@ -132,7 +132,7 @@
                             <pnp:DataValue FieldName="GtSortOrder">130</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
-                            <pnp:DataValue FieldName='Title'>Has consideration been given to processing time with external actors? (political P and B, county governor, Hafslund, NVE, Norwegian Public Roads Administration, others)?</pnp:DataValue></pnp:DataValue>
+                            <pnp:DataValue FieldName='Title'>Has consideration been given to processing time with external actors? (political P and B, county governor, Hafslund, NVE, Norwegian Public Roads Administration, others)?</pnp:DataValue>
                             <pnp:DataValue FieldName='GtProjectPhase'>Initiation|dca0a226-0907-4c54-8624-6b51fcac7a92</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">140</pnp:DataValue>
                         </pnp:DataRow>
