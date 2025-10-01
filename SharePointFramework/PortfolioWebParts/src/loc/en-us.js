@@ -463,7 +463,7 @@ define([], function () {
     RenderModeCompactListText: 'Compact list',
     RenderModeListText: 'List',
     RenderModeTilesText: 'Tiles',
-    ResourceAllocationInfoText: 'Resource allocations or absences that apply across projects are entered into the <a href="../{0}">resource allocation hub list</a>. These entries will be shown in blue and red (absence) color in the table below. Project allocations are shown in green. The color strength of the allocation is based on the allocation percentage.',
+    ResourceAllocationInfoText: 'Resource allocations or absences that apply across projects are entered into the <a href="../{0}">resource allocation hub list</a>. These entries will be shown in blue and red (absence) color in the table below. Project allocations are shown in green. The color strength of the allocation is based on the allocation percentage.<br/><br/>Note: The view is based on search, so the content of the view does not update immediately after changes are made.<br/><br/>Tip: To zoom in/out on the timeline, use ALT+Mouse Wheel or CTRL+Mouse Wheel. To navigate back and forth in time, you can use SHIFT+Mouse Wheel.',
     ResourceLabel: 'Resource',
     ResourceAbsenceLabel: 'Resource (absence)',
     DepartmentLabel: 'Department',

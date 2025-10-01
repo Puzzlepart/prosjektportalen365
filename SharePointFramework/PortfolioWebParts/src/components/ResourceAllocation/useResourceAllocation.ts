@@ -31,10 +31,6 @@ export const useResourceAllocation = (props: IResourceAllocationProps) => {
       const resourceDisplay = get(i, 'data.resource')
       if (!resourceDisplay) return
       const match = resourceDisplay.match(/^(.*?) \(/)
-      // --- IGNORE ---
-      // Display value of the name (before possible department)
-      // Example: "Ola Nordmann (IT)" -> "Ola Nordmann"
-      // Example: "Ola Nordmann" -> "Ola Nordmann"
       const displayName = match ? match[1] : resourceDisplay
       const upn = i.props?.GtResourceUserOWSUSER?.split('|')[0]?.trim()
       if (!resourceNameToUPNs[displayName]) resourceNameToUPNs[displayName] = new Set()
