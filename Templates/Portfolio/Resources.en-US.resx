@@ -4658,10 +4658,10 @@
         <value>Processed date/time (AI)</value>
     </data>
     <data name="View_AllDocuments_DisplayName" xml:space="preserve">
-        <value>All documents</value>
+        <value>All Documents</value>
     </data>
     <data name="View_AllItems_DisplayName" xml:space="preserve">
-        <value>All items</value>
+        <value>All Items</value>
     </data>
     <data name="View_AllPages_DisplayName" xml:space="preserve">
         <value>Alle sider</value>

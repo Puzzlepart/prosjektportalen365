@@ -1,4 +1,4 @@
-_The template was validated 9/30/2025, 2:28:05 PM_
+_The template was validated 10/1/2025, 11:21:15 AM_
 
 The template contains the following tokens that has not been found in the .resx files:
 
@@ -909,7 +909,7 @@ _No tokens with missing translations or replacement values found._
             },
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "All Items",
                     "ViewFields": [
                         "GtSortOrder",
                         "LinkTitle",
@@ -966,7 +966,7 @@ _No tokens with missing translations or replacement values found._
             },
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "All Items",
                     "ViewFields": [
                         "LinkTitle",
                         "GtStakeholderGroup",
@@ -1004,7 +1004,7 @@ _No tokens with missing translations or replacement values found._
             ],
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "All Items",
                     "ViewFields": [
                         "LinkTitle",
                         "GtProjectPhase",
@@ -1039,7 +1039,7 @@ _No tokens with missing translations or replacement values found._
             ],
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "All Items",
                     "ViewFields": [
                         "LinkTitle",
                         "GtProjectLogType",
@@ -1076,7 +1076,7 @@ _No tokens with missing translations or replacement values found._
             ],
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "All Items",
                     "ViewFields": [
                         "LinkTitle",
                         "GtDeliveryDescription",
@@ -1112,7 +1112,7 @@ _No tokens with missing translations or replacement values found._
             },
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "All Items",
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
@@ -1313,7 +1313,7 @@ _No tokens with missing translations or replacement values found._
             ],
             "Views": [
                 {
-                    "Title": "All documents",
+                    "Title": "All Documents",
                     "ViewFields": [
                         "DocIcon",
                         "LinkFilename",
@@ -1373,7 +1373,7 @@ _No tokens with missing translations or replacement values found._
             ],
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "All Items",
                     "ViewFields": [
                         "LinkTitle",
                         "GtChangeLookup",
@@ -1431,7 +1431,7 @@ _No tokens with missing translations or replacement values found._
             ],
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "All Items",
                     "ViewFields": [
                         "LinkTitle",
                         "GtProcess",
@@ -1477,7 +1477,7 @@ _No tokens with missing translations or replacement values found._
             ],
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "All Items",
                     "ViewFields": [
                         "LinkTitle",
                         "GtGainLookup",
@@ -1522,7 +1522,7 @@ _No tokens with missing translations or replacement values found._
             ],
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "All Items",
                     "ViewFields": [
                         "GtMeasureIndicatorLookup",
                         "GtMeasureIndicatorLookup_GtDesiredValue",
@@ -1575,7 +1575,7 @@ _No tokens with missing translations or replacement values found._
             ],
             "Views": [
                 {
-                    "Title": "All items",
+                    "Title": "All Items",
                     "ViewFields": [
                         "ID",
                         "GtResourceUser",
