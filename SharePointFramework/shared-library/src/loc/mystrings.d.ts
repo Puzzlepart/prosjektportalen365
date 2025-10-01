@@ -49,6 +49,8 @@ declare interface ISharedLibraryStrings {
   ProjectTimelineItemInfo: string
   ProgramTimelineTitle: string
   ResourceLabel: string
+  ResourceAbsenceLabel: string
+  DepartmentLabel: string
   RoleLabel: string
   SiteTitleLabel: string
   StartDateLabel: string
