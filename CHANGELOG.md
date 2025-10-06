@@ -23,6 +23,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Rettet et problem hvor tilpassede malbiblioteket ikke ble valgt når man klikket på "Hent dokumentmal" fra dokumentbiblioteket [#1628](https://github.com/Puzzlepart/prosjektportalen365/issues/1628)
 - Rettet et problem hvor Porteføljeoversiktens egenskapspanel ikke fungerte
 - Rettet et problem hvor tallet 0 vises som blankt i gevinstoversikten [#1649](https://github.com/Puzzlepart/prosjektportalen365/issues/1649)
+- Rettet et problem hvor programoversikten feilet i å hente komplett data når antall områder tilknyttet hub oversteg 500
 
 ---
 

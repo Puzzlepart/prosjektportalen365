@@ -306,28 +306,47 @@ export class SPDataAdapter
     queryArray?: string
   ) {
     const searchQuery = `${queryArray} ${view.searchQuery}`
-    let [
-      { PrimarySearchResults: projects },
-      { PrimarySearchResults: sites },
-      { PrimarySearchResults: statusReports }
-    ] = await Promise.all([
-      this.sp.search({
+
+    const fetchAllResults = async (queryTemplate: string, selectProperties: string[], refiners?: string) => {
+      const searchInit = {
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: searchQuery,
-        SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty]
-      }),
-      this.sp.search({
-        ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `DepartmentId:{${siteId}} contentclass:STS_Site`,
-        SelectProperties: ['Path', 'SPWebUrl', 'Title', 'SiteId']
-      }),
-      this.sp.search({
-        ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `${queryArray} DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:${resource.Choice_GtModerationStatus_Published}`,
-        SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
-        Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',')
-      })
+        QueryTemplate: queryTemplate,
+        SelectProperties: selectProperties,
+        RowLimit: 500,
+        StartRow: 0,
+        ...(refiners && { Refiners: refiners })
+      }
+
+      const firstResponse = await this.sp.search(searchInit)
+      const allResults = [...firstResponse.PrimarySearchResults]
+
+      while (allResults.length < firstResponse.TotalRows) {
+        const response = await this.sp.search({
+          ...searchInit,
+          StartRow: allResults.length
+        })
+        allResults.push(...response?.PrimarySearchResults)
+      }
+
+      return allResults
+    }
+
+    let [projects, sites, statusReports] = await Promise.all([
+      fetchAllResults(
+        searchQuery,
+        [...configuration.columns.map((f) => f.fieldName), siteIdProperty]
+      ),
+      fetchAllResults(
+        `DepartmentId:{${siteId}} contentclass:STS_Site`,
+        ['Path', 'SPWebUrl', 'Title', 'SiteId']
+      ),
+      fetchAllResults(
+        `${queryArray} DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:${resource.Choice_GtModerationStatus_Published}`,
+        [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
+        configuration.refiners.map((ref) => ref.fieldName).join(',')
+      )
     ])
+
     projects = projects.map((item) => cleanDeep({ ...item }))
     sites = sites.map((item) => cleanDeep({ ...item }))
     statusReports = statusReports.map((item) => cleanDeep({ ...item }))
