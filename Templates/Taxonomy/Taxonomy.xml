@@ -236,87 +236,87 @@
                             <pnp:Terms>
                                 <pnp:Term Name="01. Utrydde fattigdom" ID="28a1d80e-6201-4f90-9a0a-6755645497b6" SourceTermId="28a1d80e-6201-4f90-9a0a-6755645497b6">
                                     <pnp:Labels>
-                                        <pnp:Label Language="1033" Value="1. Utrydde fattigdom" IsDefaultForLanguage="true" />
+                                        <pnp:Label Language="1033" Value="1. No poverty" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                 </pnp:Term>
                                 <pnp:Term Name="02. Utrydde sult" ID="076fd5e4-41e4-469b-b0a5-47685141c121" SourceTermId="076fd5e4-41e4-469b-b0a5-47685141c121">
                                     <pnp:Labels>
-                                        <pnp:Label Language="1033" Value="2. Utrydde sult" IsDefaultForLanguage="true" />
+                                        <pnp:Label Language="1033" Value="2. Zero hunger" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                 </pnp:Term>
                                 <pnp:Term Name="03. God helse og livskvalitet" ID="4702f85b-9771-4f9d-86ea-f2266caa85ff" SourceTermId="4702f85b-9771-4f9d-86ea-f2266caa85ff">
                                     <pnp:Labels>
-                                        <pnp:Label Language="1033" Value="3. God helse og livskvalitet" IsDefaultForLanguage="true" />
+                                        <pnp:Label Language="1033" Value="3. Good health and well-being" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                 </pnp:Term>
                                 <pnp:Term Name="04. God utdanning" ID="2d26b638-cfbc-4e1b-81e7-f3bdce5cd250" SourceTermId="2d26b638-cfbc-4e1b-81e7-f3bdce5cd250">
                                     <pnp:Labels>
-                                        <pnp:Label Language="1033" Value="4. God utdanning" IsDefaultForLanguage="true" />
+                                        <pnp:Label Language="1033" Value="4. Quality education" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                 </pnp:Term>
                                 <pnp:Term Name="05. Likestilling mellom kjønnene" ID="93056cee-ab7a-469e-8471-6cb11d1c43bf" SourceTermId="93056cee-ab7a-469e-8471-6cb11d1c43bf">
                                     <pnp:Labels>
-                                        <pnp:Label Language="1033" Value="5. Likestilling mellom kjønnene" IsDefaultForLanguage="true" />
+                                        <pnp:Label Language="1033" Value="5. Gender equality" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                 </pnp:Term>
                                 <pnp:Term Name="06. Rent vann og gode sanitærforhold" ID="98d317a2-87be-4252-990c-a65043545efb" SourceTermId="98d317a2-87be-4252-990c-a65043545efb">
                                     <pnp:Labels>
-                                        <pnp:Label Language="1033" Value="6. Rent vann og gode sanitærforhold" IsDefaultForLanguage="true" />
+                                        <pnp:Label Language="1033" Value="6. Clean water and sanitation" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                 </pnp:Term>
                                 <pnp:Term Name="07. Ren energi til alle" ID="13b4f253-121a-446b-ba52-ad416c1f9a7b" SourceTermId="13b4f253-121a-446b-ba52-ad416c1f9a7b">
                                     <pnp:Labels>
-                                        <pnp:Label Language="1033" Value="7. Ren energi til alle" IsDefaultForLanguage="true" />
+                                        <pnp:Label Language="1033" Value="7. Affordable and clean energy" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                 </pnp:Term>
                                 <pnp:Term Name="08. Anstendig arbeid og økonomisk vekst" ID="e2d49957-72f3-40b4-8f65-0ee1acd06a42" SourceTermId="e2d49957-72f3-40b4-8f65-0ee1acd06a42">
                                     <pnp:Labels>
-                                        <pnp:Label Language="1033" Value="8. Anstendig arbeid og økonomisk vekst" IsDefaultForLanguage="true" />
+                                        <pnp:Label Language="1033" Value="8. Decent work and economic growth" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                 </pnp:Term>
                                 <pnp:Term Name="09. Industri, innovasjon og infrastruktur" ID="21a4505c-d2d6-4071-8116-f5b1a57903b7" SourceTermId="21a4505c-d2d6-4071-8116-f5b1a57903b7">
                                     <pnp:Labels>
-                                        <pnp:Label Language="1033" Value="9. Industri, innovasjon og infrastruktur" IsDefaultForLanguage="true" />
+                                        <pnp:Label Language="1033" Value="9. Industry, innovation and infrastructure" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                 </pnp:Term>
                                 <pnp:Term Name="10. Mindre ulikhet" ID="393752ef-df63-453c-9525-d713a619f547" SourceTermId="393752ef-df63-453c-9525-d713a619f547">
                                     <pnp:Labels>
-                                        <pnp:Label Language="1033" Value="10. Mindre ulikhet" IsDefaultForLanguage="true" />
+                                        <pnp:Label Language="1033" Value="10. Reduced inequalities" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                 </pnp:Term>
                                 <pnp:Term Name="11. Bærekraftige byer og lokalsamfunn" ID="c931c5ee-283f-4dc6-8613-8ff003d13c8c" SourceTermId="c931c5ee-283f-4dc6-8613-8ff003d13c8c">
                                     <pnp:Labels>
-                                        <pnp:Label Language="1033" Value="11. Bærekraftige byer og lokalsamfunn" IsDefaultForLanguage="true" />
+                                        <pnp:Label Language="1033" Value="11. Sustainable cities and communities" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                 </pnp:Term>
                                 <pnp:Term Name="12. Ansvarlig forbruk og produksjon" ID="f41654e0-da21-4dc3-b6d5-8bc88890c86d" SourceTermId="f41654e0-da21-4dc3-b6d5-8bc88890c86d">
                                     <pnp:Labels>
-                                        <pnp:Label Language="1033" Value="12. Ansvarlig forbruk og produksjon" IsDefaultForLanguage="true" />
+                                        <pnp:Label Language="1033" Value="12. Responsible consumption and production" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                 </pnp:Term>
                                 <pnp:Term Name="13. Stoppe klimaendringene" ID="70c2f6dc-93e6-4dec-9fe2-72d71d3cf6bf" SourceTermId="70c2f6dc-93e6-4dec-9fe2-72d71d3cf6bf">
                                     <pnp:Labels>
-                                        <pnp:Label Language="1033" Value="13. Stoppe klimaendringene" IsDefaultForLanguage="true" />
+                                        <pnp:Label Language="1033" Value="13. Climate action" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                 </pnp:Term>
                                 <pnp:Term Name="14. Livet i havet" ID="dedfa330-748f-44ab-9f24-dad8ba1db6fe" SourceTermId="dedfa330-748f-44ab-9f24-dad8ba1db6fe">
                                     <pnp:Labels>
-                                        <pnp:Label Language="1033" Value="14. Livet i havet" IsDefaultForLanguage="true" />
+                                        <pnp:Label Language="1033" Value="14. Life below water" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                 </pnp:Term>
                                 <pnp:Term Name="15. Livet på land" ID="c799311e-9e63-46a0-bff7-c1cf237713ce" SourceTermId="c799311e-9e63-46a0-bff7-c1cf237713ce">
                                     <pnp:Labels>
-                                        <pnp:Label Language="1033" Value="15. Livet på land" IsDefaultForLanguage="true" />
+                                        <pnp:Label Language="1033" Value="15. Life on land" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                 </pnp:Term>
                                 <pnp:Term Name="16. Fred, rettferdighet og velfungerende institusjoner" ID="e356fd9f-289a-4e40-a0cb-21205f238185" SourceTermId="e356fd9f-289a-4e40-a0cb-21205f238185">
                                     <pnp:Labels>
-                                        <pnp:Label Language="1033" Value="16. Fred, rettferdighet og velfungerende institusjoner" IsDefaultForLanguage="true" />
+                                        <pnp:Label Language="1033" Value="16. Peace, justice and strong institutions" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                 </pnp:Term>
                                 <pnp:Term Name="17. Samarbeid for å nå målene" ID="1e8be560-6d63-4d88-ae15-f493fad39347" SourceTermId="1e8be560-6d63-4d88-ae15-f493fad39347">
                                     <pnp:Labels>
-                                        <pnp:Label Language="1033" Value="17. Samarbeid for å nå målene" IsDefaultForLanguage="true" />
+                                        <pnp:Label Language="1033" Value="17. Partnership for the goals" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                 </pnp:Term>
                             </pnp:Terms>

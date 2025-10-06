@@ -15,6 +15,7 @@ import resource from 'SharedResources'
 export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectTimelineProps> {
   public async onInit() {
     await super.onInit()
+    this.properties.title = resource.ClientSidePages_ProjectTimeline_Title
   }
 
   public render(): void {
