@@ -4783,6 +4783,9 @@
     <data name="WebParts_QuickLinks_AccessAndRoles_PortfolioInsight_Description" xml:space="preserve">
         <value>Grant specific users access to all projects in the portfolio</value>
     </data>
+    <data name="WebParts_QuickLinks_AccessAndRoles_PortfolioInsight_Title" xml:space="preserve">
+        <value>Portfolio Insight</value>
+    </data>
     <data name="WebParts_QuickLinks_AccessAndRoles_Title" xml:space="preserve">
         <value>Access and Roles</value>
     </data>
