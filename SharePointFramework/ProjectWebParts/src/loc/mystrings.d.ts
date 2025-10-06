@@ -169,7 +169,6 @@ declare interface IProjectWebPartsStrings {
   PublishingReportLabel: string
   RedoText: string
   RevertDefaultColorConfigurationText: string
-  RiskMatrixConfigurationFolder: string
   RiskMatrixGroupName: string
   SaveColorConfigurationText: string
   SettingsGroupName: string
@@ -184,7 +183,6 @@ declare interface IProjectWebPartsStrings {
   ShowTimelineLabel: string
   ShowTimelineListCommandsLabel: string
   ShowTimelineListLabel: string
-  SiteAssetsConfigurationFolder: string
   Skip: string
   SkipSyncToHubLabel: string
   StatusClosed: string
