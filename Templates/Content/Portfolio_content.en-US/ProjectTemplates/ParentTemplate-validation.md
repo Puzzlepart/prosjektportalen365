@@ -1,4 +1,4 @@
-_The template was validated 10/6/2025, 1:07:13 PM_
+_The template was validated 10/6/2025, 1:43:58 PM_
 
 The template contains the following tokens that has not been found in the .resx files:
 
@@ -156,7 +156,7 @@ _No tokens with missing translations or replacement values found._
                                     "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
                                     "Properties": {
                                         "title": "Communication Plans for child projects",
-                                        "dataSource": "Alle communication plans for child projects",
+                                        "dataSource": "All communication plans for child projects",
                                         "dataSourceCategory": "Communication Plan",
                                         "showCommandBar": true,
                                         "showViewSelector": true,

@@ -1472,7 +1472,7 @@
         <value>Communication Plan</value>
     </data>
     <data name="Lists_DataSources_Category_CommunicationPlan_Children" xml:space="preserve">
-        <value>Alle communication plans for child projects</value>
+        <value>All communication plans for child projects</value>
     </data>
     <data name="Lists_DataSources_Level_NotInUse" xml:space="preserve">
         <value>Not in use</value>
@@ -4664,10 +4664,10 @@
         <value>All Items</value>
     </data>
     <data name="View_AllPages_DisplayName" xml:space="preserve">
-        <value>Alle sider</value>
+        <value>All Pages</value>
     </data>
     <data name="View_AllRoles_DisplayName" xml:space="preserve">
-        <value>Alle roller</value>
+        <value>All Roles</value>
     </data>
     <data name="View_Archived_DisplayName" xml:space="preserve">
         <value>Archived</value>
