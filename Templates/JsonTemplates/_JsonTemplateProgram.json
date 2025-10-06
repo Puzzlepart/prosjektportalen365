@@ -784,6 +784,10 @@
                                             "riskMatrix": {
                                             "calloutTemplate": "<h3>{Title}</h3>\n<p><strong>{{WebParts_RiskStrategy_Title}}: </strong>{GtRiskStrategy}</p>\n<p><strong>{{WebParts_RiskProximity_Title}}: </strong>{GtRiskProximity}</p>\n<p><strong>{{WebParts_RiskStatus_Title}}: </strong>{GtRiskStatus}</p>",
                                             "width": 800
+                                        },
+                                        "opportunityMatrix": {
+                                            "calloutTemplate": "<h3>{Title}</h3>\n<p><strong>{{WebParts_RiskStrategy_Title}}: </strong>{GtRiskStrategy}</p>\n<p><strong>{{WebParts_RiskProximity_Title}}: </strong>{GtRiskProximity}</p>\n<p><strong>{{WebParts_RiskStatus_Title}}: </strong>{GtRiskStatus}</p>",
+                                            "width": 800
                                         }
                                     }
                                 }
