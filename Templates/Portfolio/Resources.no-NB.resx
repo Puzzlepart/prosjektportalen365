@@ -92,7 +92,7 @@
         <value>Irriterende feil</value>
     </data>
     <data name="Choice_GtFeedbackCriticality_GeniousIdea" xml:space="preserve">
-        <value>Genial idè</value>
+        <value>Genial idé</value>
     </data>
     <data name="Choice_GtFeedbackCriticality_NiceToHave" xml:space="preserve">
         <value>Kjekt å ha</value>
@@ -1094,7 +1094,7 @@
         <value>Egendefinert diagram</value>
     </data>
     <data name="ContentTypes_DataSource_Description" xml:space="preserve">
-        <value>Definèr en datakilde for porteføljen</value>
+        <value>Definér en datakilde for porteføljen</value>
     </data>
     <data name="ContentTypes_DataSource_Name" xml:space="preserve">
         <value>Datakilde</value>
@@ -1505,13 +1505,13 @@
         <value>Idémodul</value>
     </data>
     <data name="Lists_DataSources_Category_IdeaModule_All" xml:space="preserve">
-        <value>Alle idèer</value>
+        <value>Alle idéer</value>
     </data>
     <data name="Lists_DataSources_Category_IdeaModule_Processing" xml:space="preserve">
-        <value>Idèer i behandling</value>
+        <value>Idéer i behandling</value>
     </data>
     <data name="Lists_DataSources_Category_IdeaModule_Registered" xml:space="preserve">
-        <value>Registrerte idèer</value>
+        <value>Registrerte idéer</value>
     </data>
     <data name="Lists_DataSources_Category_ProjectDeliveries" xml:space="preserve">
         <value>Leveranseoversikt</value>
@@ -1820,7 +1820,7 @@
         <value>Lists/Hjelpeinnhold</value>
     </data>
     <data name="Lists_IdeaProcessing_Description" xml:space="preserve">
-        <value>Liste for å behandle godkjente idèer.</value>
+        <value>Liste for å behandle godkjente idéer.</value>
     </data>
     <data name="Lists_IdeaProcessing_Title" xml:space="preserve">
         <value>Idébehandling</value>
@@ -1829,7 +1829,7 @@
         <value>Lists/Idebehandling</value>
     </data>
     <data name="Lists_IdeaRegistration_Description" xml:space="preserve">
-        <value>Liste for registrering av idèer.</value>
+        <value>Liste for registrering av idéer.</value>
     </data>
     <data name="Lists_IdeaRegistration_Title" xml:space="preserve">
         <value>Idéregistrering</value>
@@ -2300,7 +2300,7 @@
         <value>Lists/Prosjektinnholdskolonner</value>
     </data>
     <data name="Lists_ProjectData_Description" xml:space="preserve">
-        <value>Inneholder metadata tilknyttet idèer for synkronisering til prosjekter.</value>
+        <value>Inneholder metadata tilknyttet idéer for synkronisering til prosjekter.</value>
     </data>
     <data name="Lists_ProjectData_Title" xml:space="preserve">
         <value>Prosjektdata</value>
