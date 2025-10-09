@@ -90,16 +90,20 @@ export async function fetchTimelineData(
       (item) => item.GtSiteIdLookup?.GtSiteId === props.siteId
     )
 
-    const columns = defaultViewFields
-      .filter((column) => column.InternalName !== 'GtSiteIdLookup')
-      .map<IColumn>((column) => ({
-        key: column.InternalName,
-        name: column.Title,
-        fieldName: column.InternalName,
-        data: { type: column.TypeAsString },
-        minWidth: 100,
-        maxWidth: 200
-      }))
+    const columns = defaultViewColumns
+      .filter((columnName) => columnName !== 'GtSiteIdLookup')
+      .map<IColumn>((columnName) => {
+        const column = defaultViewFields.find((fld) => fld.InternalName === columnName)
+        return column ? {
+          key: column.InternalName,
+          name: column.Title,
+          fieldName: column.InternalName,
+          data: { type: column.TypeAsString },
+          minWidth: 100,
+          maxWidth: 200
+        } : null
+      })
+      .filter(Boolean)
 
     timelineContentItems = timelineListItems
       .filter((item) => item.GtSiteIdLookup !== null)
