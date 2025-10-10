@@ -20,7 +20,7 @@
             <JSLink>clienttemplates.js</JSLink>
             <ViewData />
         </View>
-        <View Type="HTML" DisplayName="{resource:View_ProjectAdminRoles_ProjectProperties_DisplayName}" Url="{site}/{resource:Lists_ProjectAdminRoles_Url}/Prosjektegenskaper.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+        <View Type="HTML" DisplayName="{resource:View_ProjectAdminRoles_ProjectProperties_DisplayName}" Url="{site}/{resource:Lists_ProjectAdminRoles_Url_ProjectProperties}" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
             <Query>
                 <Where>
                     <Eq>
@@ -39,7 +39,7 @@
             <JSLink>clienttemplates.js</JSLink>
             <ViewData />
         </View>
-        <View Type="HTML" DisplayName="{resource:View_ProjectAdminRoles_GroupMembership_DisplayName}" Url="{site}/{resource:Lists_ProjectAdminRoles_Url}/Gruppemedlemskap.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+        <View Type="HTML" DisplayName="{resource:View_ProjectAdminRoles_GroupMembership_DisplayName}" Url="{site}/{resource:Lists_ProjectAdminRoles_Url_GroupMembership}" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
             <Query>
                 <Where>
                     <Eq>

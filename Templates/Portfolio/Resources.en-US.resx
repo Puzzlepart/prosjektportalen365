@@ -2155,6 +2155,12 @@
     <data name="Lists_ProjectAdminRoles_Url" xml:space="preserve">
         <value>Lists/ProjectAdminRoles</value>
     </data>
+    <data name="Lists_ProjectAdminRoles_Url_GroupMembership" xml:space="preserve">
+        <value>Lists/ProjectAdminRoles/GroupMembership.aspx</value>
+    </data>
+    <data name="Lists_ProjectAdminRoles_Url_ProjectProperties" xml:space="preserve">
+        <value>Lists/ProjectAdminRoles/ProjectProperties.aspx</value>
+    </data>
     <data name="Lists_ProjectColumnConfiguration_Description" xml:space="preserve">
         <value>Administrate project column values (color/icon/name) for status fields</value>
     </data>

@@ -2167,6 +2167,12 @@
     <data name="Lists_ProjectAdminRoles_Url" xml:space="preserve">
         <value>Lists/Prosjektadministrasjonsroller</value>
     </data>
+    <data name="Lists_ProjectAdminRoles_Url_GroupMembership" xml:space="preserve">
+        <value>Lists/Prosjektadministrasjonsroller/Gruppemedlemskap.aspx</value>
+    </data>
+    <data name="Lists_ProjectAdminRoles_Url_ProjectProperties" xml:space="preserve">
+        <value>Lists/Prosjektadministrasjonsroller/Prosjektegenskaper.aspx</value>
+    </data>
     <data name="Lists_ProjectColumnConfiguration_Description" xml:space="preserve">
         <value>Administrer prosjektkolonneverdier (farge/ikon/navn) for statusfelter</value>
     </data>
