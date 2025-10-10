@@ -92,10 +92,12 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
         )
       }
 
-      for (const column of currentView.columns) {
-        const fetchData = ColumnRenderComponentRegistry.getComponent(column.dataType)?.fetchData
-        if (typeof fetchData === 'function') {
-          _.set(column, 'data.$', await fetchData(context.props.configuration.web, column))
+      if (!context.props.isParentProject) {
+        for (const column of currentView.columns) {
+          const fetchData = ColumnRenderComponentRegistry.getComponent(column.dataType)?.fetchData
+          if (typeof fetchData === 'function') {
+        _.set(column, 'data.$', await fetchData(context.props.configuration.web, column))
+          }
         }
       }
 
