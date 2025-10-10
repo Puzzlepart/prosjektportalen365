@@ -1192,14 +1192,26 @@
     <data name="ContentTypes_ProjectAdminPermission_Name" xml:space="preserve">
         <value>Project Admin Permission</value>
     </data>
+    <data name="ContentTypes_ProjectAdminRoleGroupMembership_Description" xml:space="preserve">
+        <value>Content type for a project administration role that is linked to a SharePoint group. Either at project or portfolio level.</value>
+    </data>
     <data name="ContentTypes_ProjectAdminRoleGroupMembership_Name" xml:space="preserve">
         <value>Project Administration Role linked to a SharePoint group</value>
+    </data>
+    <data name="ContentTypes_ProjectAdminRoleProjectInfo_Description" xml:space="preserve">
+        <value>Content type for a project administration role that is linked to a project property.</value>
     </data>
     <data name="ContentTypes_ProjectAdminRoleProjectInfo_Name" xml:space="preserve">
         <value>Project Administration Role linked to project properties</value>
     </data>
+    <data name="ContentTypes_ProjectAdminRoleSiteAdmin_Description" xml:space="preserve">
+        <value>Content type for a project administration role that is linked to the site administrator permission.</value>
+    </data>
     <data name="ContentTypes_ProjectAdminRoleSiteAdmin_Name" xml:space="preserve">
         <value>Project Administration Role - Site Administrator</value>
+    </data>
+    <data name="ContentTypes_ProjectAdminRole_Description" xml:space="preserve">
+        <value>Content type for project administration roles</value>
     </data>
     <data name="ContentTypes_ProjectAdminRole_Name" xml:space="preserve">
         <value>Project Administration Role</value>
@@ -1308,6 +1320,9 @@
     </data>
     <data name="ContentTypes_TimelineConfiguration_Element_Name" xml:space="preserve">
         <value>Timeline Configuration Element</value>
+    </data>
+    <data name="ContentTypes_Timeline_Element_Description" xml:space="preserve">
+        <value>Create a new timeline element</value>
     </data>
     <data name="ContentTypes_Timeline_Element_Name" xml:space="preserve">
         <value>Timeline Element</value>
@@ -2209,7 +2224,7 @@
     <data name="Lists_ProjectColumnConfiguration_GtStatusTime_OnSchedule_Title" xml:space="preserve">
         <value>Schedule status (On schedule)</value>
     </data>
-    <data name="Lists_ProjectColumnConfiguration_GtStatusTime_SlightlyDelayed_Title" xml:space="preserve">
+    <data name="Lists_ProjectColumnConfiguration_GtStatusTime_SmallDelay_Title" xml:space="preserve">
         <value>Schedule status (Minor delays)</value>
     </data>
     <data name="Lists_ProjectColumnConfiguration_GtStatusTime_Delayed_Title" xml:space="preserve">
@@ -2337,6 +2352,12 @@
     </data>
     <data name="Lists_ProjectStatus_Url" xml:space="preserve">
         <value>Lists/ProjectStatus</value>
+    </data>
+    <data name="Lists_ProjectTemplates_Fields_IconName_Description" xml:space="preserve">
+        <value>Icon from https://dev.office.com/fabric#/styles/icons</value>
+    </data>
+    <data name="Lists_ProjectTemplates_Fields_IconName_DisplayName" xml:space="preserve">
+        <value>Icon</value>
     </data>
     <data name="Lists_ProjectTemplates_Fields_IsDefaultTemplate_Description" xml:space="preserve">
         <value/>
@@ -3109,11 +3130,20 @@
     <data name="SiteFields_GtEndDate_DisplayName" xml:space="preserve">
         <value>End date</value>
     </data>
+    <data name="SiteFields_GtExtensionDefault_Description" xml:space="preserve">
+        <value>Selected as default</value>
+    </data>
     <data name="SiteFields_GtExtensionDefault_DisplayName" xml:space="preserve">
         <value>Default</value>
     </data>
+    <data name="SiteFields_GtExtensionHidden_Description" xml:space="preserve">
+        <value>If the element is hidden, it cannot be selected by users in the new project site setup dialog.</value>
+    </data>
     <data name="SiteFields_GtExtensionHidden_DisplayName" xml:space="preserve">
         <value>Hidden</value>
+    </data>
+    <data name="SiteFields_GtExtensionLocked_Description" xml:space="preserve">
+        <value>Lock the element. Use together with 'Selected as default' to make the element mandatory. If the element is set as locked, but not set as 'Selected as default' the element will not appear in the new project site setup dialog.</value>
     </data>
     <data name="SiteFields_GtExtensionLocked_DisplayName" xml:space="preserve">
         <value>Locked</value>
@@ -3123,6 +3153,9 @@
     </data>
     <data name="SiteFields_GtExternalURL_DisplayName" xml:space="preserve">
         <value>External URL</value>
+    </data>
+    <data name="SiteFields_GtFieldCustomSort_Description" xml:space="preserve">
+        <value>Specify custom sort orders for this field. The format is [Order name]:[Element],[Element],[Element]. If you want to specify multiple sort orders use semicolon (;) to separate them.</value>
     </data>
     <data name="SiteFields_GtFieldCustomSort_DisplayName" xml:space="preserve">
         <value>Custom sort</value>
@@ -3181,8 +3214,14 @@
     <data name="SiteFields_GtGroupId_DisplayName" xml:space="preserve">
         <value>Group ID</value>
     </data>
+    <data name="SiteFields_GtGroupLevel_Description" xml:space="preserve">
+        <value>Select which level the SharePoint group is located at.</value>
+    </data>
     <data name="SiteFields_GtGroupLevel_DisplayName" xml:space="preserve">
         <value>Group level</value>
+    </data>
+    <data name="SiteFields_GtGroupName_Description" xml:space="preserve">
+        <value>SharePoint group name.</value>
     </data>
     <data name="SiteFields_GtGroupName_DisplayName" xml:space="preserve">
         <value>Group name</value>
@@ -3538,6 +3577,9 @@
     <data name="SiteFields_GtLccHidden_DisplayName" xml:space="preserve">
         <value>Hidden</value>
     </data>
+    <data name="SiteFields_GtLccLocked_Description" xml:space="preserve">
+        <value>Lock the element. Use together with 'Selected as default' to make the element mandatory. If the element is set as locked, but not set as 'Selected as default' the element will not appear in the new project site setup dialog.</value>
+    </data>
     <data name="SiteFields_GtLccLocked_DisplayName" xml:space="preserve">
         <value>Locked</value>
     </data>
@@ -3559,8 +3601,14 @@
     <data name="SiteFields_GtLinkUrl_DisplayName" xml:space="preserve">
         <value>Link URL</value>
     </data>
+    <data name="SiteFields_GtLogComponentName_Description" xml:space="preserve">
+        <value>The name of the component that the log refers to.</value>
+    </data>
     <data name="SiteFields_GtLogComponentName_DisplayName" xml:space="preserve">
         <value>Component name</value>
+    </data>
+    <data name="SiteFields_GtLogContext_Description" xml:space="preserve">
+        <value>Context related to the log.</value>
     </data>
     <data name="SiteFields_GtLogContext_DisplayName" xml:space="preserve">
         <value>Context</value>
@@ -3838,8 +3886,14 @@
     <data name="SiteFields_GtPiYTickInterval_DisplayName" xml:space="preserve">
         <value>Interval (Y-axis)</value>
     </data>
+    <data name="SiteFields_GtPlannerName_Description" xml:space="preserve">
+        <value>Choose a custom name for the plan. Used if you want to create multiple plans for the same project. The full plan name will also include the name of the site/project.</value>
+    </data>
     <data name="SiteFields_GtPlannerName_DisplayName" xml:space="preserve">
         <value>Planner name</value>
+    </data>
+    <data name="SiteFields_GtPlannerPreviewType_Description" xml:space="preserve">
+        <value>Choose what should be displayed in the preview on the task card in Planner.</value>
     </data>
     <data name="SiteFields_GtPlannerPreviewType_DisplayName" xml:space="preserve">
         <value>Preview type</value>
@@ -3934,11 +3988,20 @@
     <data name="SiteFields_GtProcess_DisplayName" xml:space="preserve">
         <value>Process</value>
     </data>
+    <data name="SiteFields_GtProjectAdminPermissionId_Description" xml:space="preserve">
+        <value>Internal ID for the permission that must not be edited. Editing can break access control.</value>
+    </data>
     <data name="SiteFields_GtProjectAdminPermissionId_DisplayName" xml:space="preserve">
         <value>Permission ID</value>
     </data>
+    <data name="SiteFields_GtProjectAdminPermission_Description" xml:space="preserve">
+        <value>Internal permission name that must not be edited. Editing can break access control.</value>
+    </data>
     <data name="SiteFields_GtProjectAdminPermission_DisplayName" xml:space="preserve">
         <value>Permission</value>
+    </data>
+    <data name="SiteFields_GtProjectAdminPermissions_Description" xml:space="preserve">
+        <value>Select which permissions this role should have.</value>
     </data>
     <data name="SiteFields_GtProjectAdminPermissions_DisplayName" xml:space="preserve">
         <value>Permissions</value>
@@ -3966,6 +4029,9 @@
     </data>
     <data name="SiteFields_GtProjectContentRefiners_DisplayName" xml:space="preserve">
         <value>Filters</value>
+    </data>
+    <data name="SiteFields_GtProjectFieldName_Description" xml:space="preserve">
+        <value>Internal field name for project property.</value>
     </data>
     <data name="SiteFields_GtProjectFieldName_DisplayName" xml:space="preserve">
         <value>Field name</value>
@@ -4140,6 +4206,9 @@
     </data>
     <data name="SiteFields_GtResourceAbsence_DisplayName" xml:space="preserve">
         <value>Absence</value>
+    </data>
+    <data name="SiteFields_GtResourceLinkIcon_Description" xml:space="preserve">
+        <value>Icon name from UI Fabric. See https://uifabricicons.azurewebsites.net/.</value>
     </data>
     <data name="SiteFields_GtResourceLinkIcon_DisplayName" xml:space="preserve">
         <value>Link icon</value>
@@ -4317,6 +4386,9 @@
     </data>
     <data name="SiteFields_GtSecViewQuery_DisplayName" xml:space="preserve">
         <value>Query</value>
+    </data>
+    <data name="SiteFields_GtSecView_Description" xml:space="preserve">
+        <value>Select a view for the list. Query, fields and item limit from the list view will apply.</value>
     </data>
     <data name="SiteFields_GtSecView_DisplayName" xml:space="preserve">
         <value>View</value>

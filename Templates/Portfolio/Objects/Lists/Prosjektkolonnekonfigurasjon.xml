@@ -121,9 +121,9 @@
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectColumnConfiguration_GtStatusTime_SlightlyDelayed_Title}</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectColumnConfiguration_GtStatusTime_SmallDelay_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">19</pnp:DataValue>
-            <pnp:DataValue FieldName="GtPortfolioColumnValue">{resource:Choice_GtStatusTime_SlightlyDelayed}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnValue">{resource:Choice_GtStatusTime_SmallDelay}</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnColor">#e9b359</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>

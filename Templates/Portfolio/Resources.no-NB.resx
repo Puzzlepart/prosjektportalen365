@@ -2221,7 +2221,7 @@
     <data name="Lists_ProjectColumnConfiguration_GtStatusTime_OnSchedule_Title" xml:space="preserve">
         <value>Status fremdrift (På plan)</value>
     </data>
-    <data name="Lists_ProjectColumnConfiguration_GtStatusTime_SlightlyDelayed_Title" xml:space="preserve">
+    <data name="Lists_ProjectColumnConfiguration_GtStatusTime_SmallDelay_Title" xml:space="preserve">
         <value>Status fremdrift (Mindre forsinkelser)</value>
     </data>
     <data name="Lists_ProjectColumnConfiguration_GtStatusTime_Delayed_Title" xml:space="preserve">

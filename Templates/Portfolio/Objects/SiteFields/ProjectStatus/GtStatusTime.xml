@@ -2,7 +2,7 @@
     <CHOICES>
         <CHOICE>{resource:Choice_GtStatusTime_AheadOfSchedule}</CHOICE>
         <CHOICE>{resource:Choice_GtStatusTime_Delayed}</CHOICE>
-        <CHOICE>{resource:Choice_GtStatusTime_SlightlyDelayed}</CHOICE>
+        <CHOICE>{resource:Choice_GtStatusTime_SmallDelay}</CHOICE>
         <CHOICE>{resource:Choice_GtStatusTime_OnSchedule}</CHOICE>
     </CHOICES>
 </Field>
