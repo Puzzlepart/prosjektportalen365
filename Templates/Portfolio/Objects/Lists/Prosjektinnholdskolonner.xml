@@ -258,7 +258,7 @@
             <pnp:DataValue FieldName="GtSortOrder">400</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtGainsResponsible_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtGainsResponsible</pnp:DataValue>
-            <pnp:DataValue FieldName="GtManagedProperty">GtGainsResponsible</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtGainsResponsibleOWSUSER</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_BenefitOverview}</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
@@ -270,7 +270,7 @@
             <pnp:DataValue FieldName="GtSortOrder">410</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtGainsOwner_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtGainsOwner</pnp:DataValue>
-            <pnp:DataValue FieldName="GtManagedProperty">GtGainsOwner</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtGainsOwnerOWSUSER</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_BenefitOverview}</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
@@ -739,7 +739,7 @@
             <pnp:DataValue FieldName="GtSortOrder">700</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtResourceUser_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtResourceUser</pnp:DataValue>
-            <pnp:DataValue FieldName="GtManagedProperty">GtResourceUser</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtResourceUserOWSUSER</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_ResourceAllocation}</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
@@ -938,7 +938,7 @@
             <pnp:DataValue FieldName="GtSortOrder">1080</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtIdeaReporter_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtIdeaReporter</pnp:DataValue>
-            <pnp:DataValue FieldName="GtManagedProperty">GtIdeaReporter</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtIdeaReporterOWSUSER</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_IdeaModule}</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
@@ -951,7 +951,7 @@
             <pnp:DataValue FieldName="GtSortOrder">1090</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtIdeaOwner_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtIdeaOwner</pnp:DataValue>
-            <pnp:DataValue FieldName="GtManagedProperty">GtIdeaOwner</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtIdeaOwnerOWSUSER</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_IdeaModule}</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
