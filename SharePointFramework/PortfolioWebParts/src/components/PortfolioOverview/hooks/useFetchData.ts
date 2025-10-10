@@ -92,7 +92,7 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
         )
       }
 
-      if (!context.props.isParentProject) {
+      if (!context.props.isParentProject) { // TODO: Fix this for parent projects as well
         for (const column of currentView.columns) {
           const fetchData = ColumnRenderComponentRegistry.getComponent(column.dataType)?.fetchData
           if (typeof fetchData === 'function') {
