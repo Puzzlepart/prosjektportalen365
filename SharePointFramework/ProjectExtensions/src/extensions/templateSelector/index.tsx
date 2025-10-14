@@ -48,13 +48,14 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
     this._openCmd.iconImageUrl = exportSvg
 
     try {
-      const templateLib = this.properties.templateLibrary || resource.Lists_TemplateLibrary_Title
+      const templateLibTitle = this.properties.templateLibrary || resource.Lists_TemplateLibrary_Title
+      const templateLibUrl = this.properties.templateLibrary || resource.Lists_TemplateLibrary_Url
       this._ctxValue.templateLibrary = {
-        title: templateLib,
-        url: `${SPDataAdapter.portalDataService.url}/${templateLib}`
+        title: templateLibTitle,
+        url: `${SPDataAdapter.portalDataService.url}/${templateLibUrl}`
       }
       this._ctxValue.templates = await SPDataAdapter.getDocumentTemplates(
-        templateLib,
+        templateLibTitle,
         '<View Scope="RecursiveAll"></View>'
       )
       Logger.log({
