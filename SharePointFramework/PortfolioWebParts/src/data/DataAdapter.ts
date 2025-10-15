@@ -6,6 +6,7 @@ import { LogLevel } from '@pnp/logging'
 import { IItem } from '@pnp/sp/items/types'
 import {
   ISearchResult,
+  ISiteUserInfo,
   PermissionKind,
   QueryPropertyValueType,
   SearchQueryInit,
@@ -587,29 +588,60 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
    *
    * @param param0 Deconstructed object containing the result data
    */
-  private _combineResultData({
-    items,
-    sites,
-    memberOfGroups,
-    users
-  }: IProjectsData): ProjectListModel[] {
+  private _combineResultData(
+    { items, sites, memberOfGroups, users }: IProjectsData,
+    primaryUserField?: string,
+    secondaryUserField?: string
+  ): ProjectListModel[] {
+    const getUserById = (id?: number) => users.find((user) => user.Id === id)
+
+    const getUserFromField = (item: any, field?: string) => {
+      if (!field) return undefined
+      const value = item[`${field}Id`] ?? item[field]
+      const userId = Array.isArray(value) ? _.first(_.sortBy(value, (num) => num)) : value
+      return getUserById(userId)
+    }
+
+    const assignUser = (
+      model: ProjectListModel,
+      user: ISiteUserInfo | undefined,
+      key: keyof ProjectListModel
+    ) => {
+      if (!user) return
+      ;(model as any)[key] = {
+        name: user.Title,
+        image: { src: getUserPhoto(user.Email) }
+      }
+    }
+
     return items
       .map((item) => {
-        const [owner] = users.filter((user) => user.Id === item.GtProjectOwnerId)
-        const [manager] = users.filter((user) => user.Id === item.GtProjectManagerId)
+        const owner = getUserById(item.GtProjectOwnerId)
+        const manager = getUserById(item.GtProjectManagerId)
+
+        const primaryUser = primaryUserField ? getUserFromField(item, primaryUserField) : owner
+
+        const secondaryUser = secondaryUserField
+          ? getUserFromField(item, secondaryUserField)
+          : manager
+
         const group = _.find(memberOfGroups, (grp) => grp.id === item.GtGroupId)
         const model = new ProjectListModel(group?.displayName ?? item.Title, item)
         model.isUserMember = !!group
         model.hasUserAccess = _.any(sites, (site) => site['SiteId'] === item.GtSiteId)
-        if (manager)
-          model.manager = { name: manager.Title, image: { src: getUserPhoto(manager.Email) } }
-        if (owner) model.owner = { name: owner.Title, image: { src: getUserPhoto(owner.Email) } }
+
+        assignUser(model, primaryUser, 'primaryUser')
+        assignUser(model, secondaryUser, 'secondaryUser')
+        assignUser(model, manager, 'manager')
+        assignUser(model, owner, 'owner')
+
         return model
       })
       .filter(Boolean)
   }
 
-  public async fetchEnrichedProjects(): Promise<ProjectListModel[]> {
+  public async fetchEnrichedProjects( primaryUserField: string,
+    secondaryUserField: string): Promise<ProjectListModel[]> {
     const localStore = new PnPClientStorage().local
     const siteId = this._spfxContext.pageContext.site.id.toString()
     const list = this._sp.web.lists.getByTitle(resource.Lists_Projects_Title)
@@ -630,7 +662,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       memberOfGroups,
       users
     }
-    let projects = this._combineResultData(result)
+    let projects = this._combineResultData(result, primaryUserField, secondaryUserField)
     projects = projects.filter(
       (m) =>
         m.lifecycleStatus !== strings.LifecycleStatus_Completed &&
@@ -640,7 +672,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     return projects
   }
 
-  public async fetchEnrichedProject(
+ public async fetchEnrichedProject(
     siteId: string,
     hubContext?: IHubContext
   ): Promise<ProjectListModel> {

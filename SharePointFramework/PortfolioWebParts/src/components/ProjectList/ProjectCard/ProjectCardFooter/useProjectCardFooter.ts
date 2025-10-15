@@ -30,12 +30,12 @@ export function useProjectCardFooter() {
   }
   const primaryUserPersonaProps: AvatarProps = {
     ...defaultPersonaProps,
-    ...(context.project?.owner || {}),
+    ...(context.project?.primaryUser || {}),
     role: context.project?.data?.[context.primaryUserField]
   }
   const secondaryUserPersonaProps: AvatarProps = {
     ...defaultPersonaProps,
-    ...(context.project?.manager || {}),
+    ...(context.project?.secondaryUser || {}),
     role: context.project?.data?.[context.secondaryUserField]
   }
   let ProjectTypeIcon = bundleIcon(BoxFilled, BoxRegular)

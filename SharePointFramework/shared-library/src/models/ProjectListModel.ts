@@ -52,6 +52,16 @@ export class ProjectListModel {
   public endDate?: string
 
   /**
+   * The project primary user properties.
+   */
+  public primaryUser?: AvatarProps
+
+  /**
+   * The project secondary user properties.
+   */
+  public secondaryUser?: AvatarProps
+
+   /**
    * The project manager properties.
    */
   public manager?: AvatarProps

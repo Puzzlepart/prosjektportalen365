@@ -27,6 +27,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Rettet et problem hvor metadatafelt med støtte for flere verdier ikke ble kopiert korrekt ved opprettelse av nytt prosjekt
 - Rettet et problem i `Tidslinjekonfigurasjon`, hvor `Vis på portefølje` og `Vis på program` ikke filtrerte ut `Prosjekt`-elementet i henholdsvis portefølje- og programtidslinje
 - Rettet et problem hvor bruker måtte trykke to ganger for å åpne ytterligere valg som blir gruppert i Porteføljevisningen [#1302](https://github.com/Puzzlepart/prosjektportalen365/issues/1302)
+- Rettet et problem hvor valgte primære og sekundære brukeren ikke ble vist i bunnteksten på prosjektkortet
 
 ---
 

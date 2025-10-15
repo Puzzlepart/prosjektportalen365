@@ -234,7 +234,10 @@ export interface IPortfolioWebPartsDataAdapter {
    * for 30 minutes. Projects with lifecycle stage `Avsluttet` are excluded, and
    * the projects are sorted by Title ascending.
    */
-  fetchEnrichedProjects?(): Promise<ProjectListModel[]>
+  fetchEnrichedProjects?(
+    primaryUserField: string,
+    secondaryUserField: string,
+  ): Promise<ProjectListModel[]>
 
   /**
    * Fetching enriched project by combining list item from projects list,
