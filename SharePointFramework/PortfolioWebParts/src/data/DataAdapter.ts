@@ -602,13 +602,10 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       return getUserById(userId)
     }
 
-    const assignUser = (
-      model: ProjectListModel,
-      user: ISiteUserInfo | undefined,
-      key: keyof ProjectListModel
-    ) => {
-      if (!user) return
-      ;(model as any)[key] = {
+    const createUserPersona = (user: ISiteUserInfo | undefined) => {
+      if (!user) return undefined
+
+      return {
         name: user.Title,
         image: { src: getUserPhoto(user.Email) }
       }
@@ -629,19 +626,20 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         const model = new ProjectListModel(group?.displayName ?? item.Title, item)
         model.isUserMember = !!group
         model.hasUserAccess = _.any(sites, (site) => site['SiteId'] === item.GtSiteId)
-
-        assignUser(model, primaryUser, 'primaryUser')
-        assignUser(model, secondaryUser, 'secondaryUser')
-        assignUser(model, manager, 'manager')
-        assignUser(model, owner, 'owner')
+        model.primaryUser = createUserPersona(primaryUser)
+        model.secondaryUser = createUserPersona(secondaryUser)
+        model.manager = createUserPersona(manager)
+        model.owner = createUserPersona(owner)
 
         return model
       })
       .filter(Boolean)
   }
 
-  public async fetchEnrichedProjects( primaryUserField: string,
-    secondaryUserField: string): Promise<ProjectListModel[]> {
+  public async fetchEnrichedProjects(
+    primaryUserField?: string,
+    secondaryUserField?: string
+  ): Promise<ProjectListModel[]> {
     const localStore = new PnPClientStorage().local
     const siteId = this._spfxContext.pageContext.site.id.toString()
     const list = this._sp.web.lists.getByTitle(resource.Lists_Projects_Title)
@@ -672,7 +670,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     return projects
   }
 
- public async fetchEnrichedProject(
+  public async fetchEnrichedProject(
     siteId: string,
     hubContext?: IHubContext
   ): Promise<ProjectListModel> {

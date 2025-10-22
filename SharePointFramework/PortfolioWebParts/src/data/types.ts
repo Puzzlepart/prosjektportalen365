@@ -236,7 +236,7 @@ export interface IPortfolioWebPartsDataAdapter {
    */
   fetchEnrichedProjects?(
     primaryUserField: string,
-    secondaryUserField: string,
+    secondaryUserField: string
   ): Promise<ProjectListModel[]>
 
   /**
