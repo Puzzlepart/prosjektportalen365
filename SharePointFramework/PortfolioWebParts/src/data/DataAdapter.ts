@@ -602,12 +602,15 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       return getUserById(userId)
     }
 
-    const createUserPersona = (user: ISiteUserInfo | undefined) => {
-      if (!user) return undefined
+    const createUserPersona = (user: ISiteUserInfo | undefined, role?: string | undefined) => {
+      if (!user) {
+        return { role }
+      }
 
       return {
         name: user.Title,
-        image: { src: getUserPhoto(user.Email) }
+        image: { src: getUserPhoto(user.Email) },
+        role
       }
     }
 
@@ -615,19 +618,15 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       .map((item) => {
         const owner = getUserById(item.GtProjectOwnerId)
         const manager = getUserById(item.GtProjectManagerId)
-
-        const primaryUser = primaryUserField ? getUserFromField(item, primaryUserField) : owner
-
-        const secondaryUser = secondaryUserField
-          ? getUserFromField(item, secondaryUserField)
-          : manager
+        const primaryUser = primaryUserField && getUserFromField(item, primaryUserField)
+        const secondaryUser = secondaryUserField && getUserFromField(item, secondaryUserField)
 
         const group = _.find(memberOfGroups, (grp) => grp.id === item.GtGroupId)
         const model = new ProjectListModel(group?.displayName ?? item.Title, item)
         model.isUserMember = !!group
         model.hasUserAccess = _.any(sites, (site) => site['SiteId'] === item.GtSiteId)
-        model.primaryUser = createUserPersona(primaryUser)
-        model.secondaryUser = createUserPersona(secondaryUser)
+        model.primaryUser = createUserPersona(primaryUser, primaryUserField)
+        model.secondaryUser = createUserPersona(secondaryUser, secondaryUserField)
         model.manager = createUserPersona(manager)
         model.owner = createUserPersona(owner)
 

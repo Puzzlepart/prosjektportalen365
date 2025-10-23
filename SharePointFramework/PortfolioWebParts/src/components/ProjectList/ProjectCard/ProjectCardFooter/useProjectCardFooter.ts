@@ -24,20 +24,20 @@ import resource from 'SharedResources'
  */
 export function useProjectCardFooter() {
   const context = useContext(ProjectCardContext)
-  const defaultPersonaProps: AvatarProps = {
-    name: strings.NotSet,
-    color: 'brand'
+
+  const getPersonaProps = (user: AvatarProps | undefined): AvatarProps => {
+    const defaultPersonaProps: AvatarProps = {
+      name: strings.NotSet,
+      color: 'brand'
+    }
+    const role =
+      context.projectColumns.find((col) => col.internalName === user?.role)?.name || strings.NotSet
+
+    return { ...defaultPersonaProps, ...user, role }
   }
-  const primaryUserPersonaProps: AvatarProps = {
-    ...defaultPersonaProps,
-    ...(context.project?.primaryUser || {}),
-    role: context.project?.data?.[context.primaryUserField]
-  }
-  const secondaryUserPersonaProps: AvatarProps = {
-    ...defaultPersonaProps,
-    ...(context.project?.secondaryUser || {}),
-    role: context.project?.data?.[context.secondaryUserField]
-  }
+  const primaryUserPersonaProps = getPersonaProps(context.project?.primaryUser)
+  const secondaryUserPersonaProps = getPersonaProps(context.project?.secondaryUser)
+
   let ProjectTypeIcon = bundleIcon(BoxFilled, BoxRegular)
   let projectTypeText = context.project.template
 
