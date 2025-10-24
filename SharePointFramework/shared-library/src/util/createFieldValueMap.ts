@@ -21,11 +21,11 @@ export const createFieldValueMap = (): Map<string, (value: EditableSPFieldValue)
         }
       }
     ],
-    ['TaxonomyFieldType', ({ value }) => value?.split(';').map((v) => ({ key: v, name: v }))],
+    ['TaxonomyFieldType', ({ value }) => value?.split(';')?.map((v) => ({ key: v, name: v }))],
     [
       'TaxonomyFieldTypeMulti',
       ({ $ }) =>
-        ($ as Array<{ TermGuid: string; Label: string }>).map((term) => ({
+        ($ as Array<{ TermGuid: string; Label: string }>)?.map((term) => ({
           key: term.TermGuid,
           name: term.Label
         }))
@@ -36,7 +36,7 @@ export const createFieldValueMap = (): Map<string, (value: EditableSPFieldValue)
     [
       'User',
       ({ $ }) =>
-        ([$].filter(Boolean) as ISPFieldUser[]).map<IPersonaProps>(
+        ([$].filter(Boolean) as ISPFieldUser[])?.map<IPersonaProps>(
           ({ Id: key, Title: text, EMail: secondaryText }) => ({
             key,
             text,
@@ -48,7 +48,7 @@ export const createFieldValueMap = (): Map<string, (value: EditableSPFieldValue)
     [
       'UserMulti',
       ({ $ }) =>
-        ($ as ISPFieldUser[]).map<IPersonaProps>(
+        ($ as ISPFieldUser[])?.map<IPersonaProps>(
           ({ Id: key, Title: text, EMail: secondaryText }) => ({
             key,
             text,

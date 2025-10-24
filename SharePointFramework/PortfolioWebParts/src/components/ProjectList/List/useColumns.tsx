@@ -2,12 +2,19 @@ import { Avatar, Link, TableCellLayout } from '@fluentui/react-components'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectLogo } from 'pp365-shared-library'
 import React, { useContext } from 'react'
+import _ from 'underscore'
 import { ProjectMenu } from '../ProjectMenu'
 import { ListContext } from './context'
 import { IListColumn } from './types'
 
 export const useColumns = (): IListColumn[] => {
   const context = useContext(ListContext)
+  const primaryUserRole =
+    _.find(context.projectColumns, (col) => col.internalName === context.primaryUserField)?.name ||
+    strings.PrimaryUserFieldLabel
+  const secondaryUserRole =
+    _.find(context.projectColumns, (col) => col.internalName === context.secondaryUserField)
+      ?.name || strings.SecondaryUserFieldLabel
   return [
     {
       columnId: 'logo',
@@ -67,42 +74,43 @@ export const useColumns = (): IListColumn[] => {
       }
     },
     {
-      columnId: 'owner',
+      columnId: 'primaryUserRole',
       defaultWidth: 180,
       compare: (a, b) => {
-        return a.owner?.name?.localeCompare(b.owner?.name || '')
+        return a.primaryUser?.name?.localeCompare(b.primaryUser?.name || '')
       },
       renderHeaderCell: () => {
-        return strings.ProjectOwner
+        return primaryUserRole
       },
       renderCell: (item) => {
         return (
           <TableCellLayout
             truncate
-            title={`${strings.ProjectOwner}: ${item.owner?.name ?? strings.NotSet}`}
-          >
-            <Avatar size={context.size !== 'medium' ? 24 : 32} {...item.owner} /> {item.owner?.name}
+            title={`${strings.PrimaryUserFieldLabel}: ${item.primaryUser?.name ?? strings.NotSet}`}>
+            <Avatar size={context.size !== 'medium' ? 24 : 32} {...item.primaryUser} />{' '}
+            {item.primaryUser?.name}
           </TableCellLayout>
         )
       }
     },
     {
-      columnId: 'manager',
+      columnId: 'secondaryUserRole',
       defaultWidth: 180,
       compare: (a, b) => {
-        return a.manager?.name?.localeCompare(b.manager?.name || '')
+        return a.secondaryUser?.name?.localeCompare(b.secondaryUser?.name || '')
       },
-      renderHeaderCell: () => {
-        return strings.ProjectManager
+      renderHeaderCell: (item: any) => {
+        return secondaryUserRole
       },
       renderCell: (item) => {
         return (
           <TableCellLayout
             truncate
-            title={`${strings.ProjectManager}: ${item.manager?.name ?? strings.NotSet}`}
-          >
-            <Avatar size={context.size !== 'medium' ? 24 : 32} {...item.manager} />{' '}
-            {item.manager?.name}
+            title={`${strings.SecondaryUserFieldLabel}: ${
+              item.secondaryUser?.name ?? strings.NotSet
+            }`}>
+            <Avatar size={context.size !== 'medium' ? 24 : 32} {...item.secondaryUser} />{' '}
+            {item.secondaryUser?.name}
           </TableCellLayout>
         )
       }

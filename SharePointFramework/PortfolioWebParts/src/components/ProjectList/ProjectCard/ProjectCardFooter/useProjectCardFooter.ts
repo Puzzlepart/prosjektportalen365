@@ -16,8 +16,9 @@ import {
 } from '@fluentui/react-icons'
 import * as strings from 'PortfolioWebPartsStrings'
 import { useContext } from 'react'
-import { ProjectCardContext } from '../context'
 import resource from 'SharedResources'
+import _ from 'underscore'
+import { ProjectCardContext } from '../context'
 
 /**
  * Component logic hook for `ProjectCardFooter`
@@ -31,7 +32,7 @@ export function useProjectCardFooter() {
       color: 'brand'
     }
     const role =
-      context.projectColumns.find((col) => col.internalName === user?.role)?.name || strings.NotSet
+      _.find(context.projectColumns, (col) => col.internalName === user.role)?.name || strings.NotSet
 
     return { ...defaultPersonaProps, ...user, role }
   }

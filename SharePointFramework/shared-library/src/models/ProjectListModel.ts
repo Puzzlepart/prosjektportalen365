@@ -54,22 +54,12 @@ export class ProjectListModel {
   /**
    * The project primary user properties.
    */
-  public primaryUser?: AvatarProps
+  public primaryUser: AvatarProps
 
   /**
    * The project secondary user properties.
    */
-  public secondaryUser?: AvatarProps
-
-   /**
-   * The project manager properties.
-   */
-  public manager?: AvatarProps
-
-  /**
-   * The project owner properties.
-   */
-  public owner?: AvatarProps
+  public secondaryUser: AvatarProps
 
   /**
    * The project logo URL.

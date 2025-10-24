@@ -3,6 +3,7 @@ import { format } from '@fluentui/react/lib/Utilities'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, PnPClientStorage } from '@pnp/core'
 import { LogLevel } from '@pnp/logging'
+import { spfi, SPFx } from '@pnp/sp'
 import { IItem } from '@pnp/sp/items/types'
 import {
   ISearchResult,
@@ -14,7 +15,6 @@ import {
   SPFI,
   Web
 } from '@pnp/sp/presets/all'
-import { spfi, SPFx } from '@pnp/sp'
 import * as cleanDeep from 'clean-deep'
 import { Idea } from 'components/IdeaModule'
 import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
@@ -584,9 +584,13 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   }
 
   /**
-   * Combine the result data (items, sites, users, groups) to a list of `ProjectListModel`.@
-   *
-   * @param param0 Deconstructed object containing the result data
+   * Combines project data from multiple sources (items, sites, member groups, users) into a unified ProjectListModel array.
+   * 
+   * @param data - Object containing project items, sites, member groups, and users data
+   * @param primaryUserField - Optional field name to extract primary user information from project items
+   * @param secondaryUserField - Optional field name to extract secondary user information from project items
+   * @returns Array of ProjectListModel instances with combined data including user personas, membership status, and access permissions
+   * 
    */
   private _combineResultData(
     { items, sites, memberOfGroups, users }: IProjectsData,
@@ -606,7 +610,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       if (!user) {
         return { role }
       }
-
       return {
         name: user.Title,
         image: { src: getUserPhoto(user.Email) },
@@ -616,20 +619,14 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
     return items
       .map((item) => {
-        const owner = getUserById(item.GtProjectOwnerId)
-        const manager = getUserById(item.GtProjectManagerId)
         const primaryUser = primaryUserField && getUserFromField(item, primaryUserField)
         const secondaryUser = secondaryUserField && getUserFromField(item, secondaryUserField)
-
         const group = _.find(memberOfGroups, (grp) => grp.id === item.GtGroupId)
         const model = new ProjectListModel(group?.displayName ?? item.Title, item)
         model.isUserMember = !!group
         model.hasUserAccess = _.any(sites, (site) => site['SiteId'] === item.GtSiteId)
         model.primaryUser = createUserPersona(primaryUser, primaryUserField)
         model.secondaryUser = createUserPersona(secondaryUser, secondaryUserField)
-        model.manager = createUserPersona(manager)
-        model.owner = createUserPersona(owner)
-
         return model
       })
       .filter(Boolean)
