@@ -23,7 +23,7 @@ export const SelectScreen = (props: ISelectScreenProps) => {
   const templates = useMemo(
     () =>
       context.templates
-        .filter((item) => {
+        ?.filter((item) => {
           return !isEmpty(folder) ? folder === item.parentFolderUrl : item.level === 1
         })
         .sort((a, b) => (a.name > b.name ? 1 : -1))

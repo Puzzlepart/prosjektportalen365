@@ -2459,7 +2459,7 @@
         <value>Template Library</value>
     </data>
     <data name="Lists_TemplateLibrary_Url" xml:space="preserve">
-        <value>TemplateLibrary</value>
+        <value>Template Library</value>
     </data>
     <data name="Lists_TemplateOptions_BuildingProject_Description" xml:space="preserve">
         <value>This is the template for building projects. Building projects have their own phases, project properties and fields in the project status.</value>
