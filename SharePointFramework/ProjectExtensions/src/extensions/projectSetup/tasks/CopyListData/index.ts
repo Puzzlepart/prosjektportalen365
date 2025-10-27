@@ -402,6 +402,29 @@ export class CopyListData extends BaseTask {
                 }
               }
               break
+            case 'TaxonomyFieldTypeMulti':
+              {
+                const [textField] = sourceFields.filter((fld) => fld.Id === field.TextField)
+                if (textField && Array.isArray(fieldValue)) {
+                  const taxonomyValues = fieldValue
+                    .map((taxValue: any) => {
+                      const [taxonomyFieldValue] = (sourceItem.TaxCatchAll || []).filter(
+                        (tax: any) => tax.ID === taxValue.WssId
+                      )
+                      if (taxonomyFieldValue) {
+                        return `-1;#${taxonomyFieldValue.Term}|${taxValue.TermGuid}`
+                      }
+                      return null
+                    })
+                    .filter((v) => v !== null)
+
+                  if (taxonomyValues.length > 0) {
+                    const textFieldName = textField.InternalName
+                    obj[textFieldName] = taxonomyValues.join(';#')
+                  }
+                }
+              }
+              break
             default: {
               obj[fieldName] = fieldValue
             }
