@@ -499,14 +499,12 @@ define([], function () {
     ProjectInformationPanelButton: 'Åpne prosjektinformasjonspanel',
     ProjectListEmptyMessage: 'Søket etter prosjekter ga ingen resultater',
     ProjectListQuickLaunch: 'Hurtigmeny for prosjekt',
-    ProjectManager: 'Prosjektleder',
     ProjectMetadataFieldLabel: 'Prosjektmetadata',
     ProjectCard: {
       WebPartDescription: 'Prosjektkort',
       ProjectSiteIdFieldLabel: 'Område ID',
       ProjectSiteIdFieldDescription: 'ID for SharePoint-området (Prosjektet)'
     },
-    ProjectOwner: 'Prosjekteier',
     ProjectsAccessHeaderText: 'Tilgang til',
     ProjectsAccessSearchBoxPlaceholderText: 'Søk i {0} prosjekter du har tilgang til...',
     ProjectServiceArea: 'Tjenesteområder',

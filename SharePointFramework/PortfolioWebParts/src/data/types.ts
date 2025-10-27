@@ -235,8 +235,8 @@ export interface IPortfolioWebPartsDataAdapter {
    * the projects are sorted by Title ascending.
    */
   fetchEnrichedProjects?(
-    primaryUserField: string,
-    secondaryUserField: string
+    primaryUserField?: string,
+    secondaryUserField?: string
   ): Promise<ProjectListModel[]>
 
   /**

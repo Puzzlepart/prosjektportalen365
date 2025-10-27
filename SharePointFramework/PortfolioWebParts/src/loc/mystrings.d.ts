@@ -497,14 +497,12 @@ declare interface IPortfolioWebPartsStrings {
   ProjectInformationPanelButton: string
   ProjectListEmptyMessage: string
   ProjectListQuickLaunch: string
-  ProjectManager: string
   ProjectMetadataFieldLabel: string
   ProjectCard: {
     WebPartDescription: string
     ProjectSiteIdFieldLabel: string
     ProjectSiteIdFieldDescription: string
   }
-  ProjectOwner: string
   ProjectsAccessHeaderText: string
   ProjectsAccessSearchBoxPlaceholderText: string
   ProjectServiceArea: string
