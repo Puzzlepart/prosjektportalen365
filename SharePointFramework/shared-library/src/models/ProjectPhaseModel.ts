@@ -41,7 +41,6 @@ export class ProjectPhaseModel {
    * If the label is not found, it falls back to the first label.
    */
   public get name(): string {
-    console.log('this.term.labels', this.term.labels, this._languageTag, this.term.localProperties)
     const localizedLabel = _.find(
       this.term.labels,
       (l) => l.languageTag.toLowerCase() === this._languageTag

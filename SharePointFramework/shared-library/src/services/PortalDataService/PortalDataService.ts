@@ -963,7 +963,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       const [spItem] = await list.items.select('Id').filter(`GtSiteUrl eq '${url}'`)()
       if (!spItem) return null
       const item = list.items.getById(spItem.Id)
-      const fieldValues = await getItemFieldValues(item)
+      const fieldValues = await getItemFieldValues(item, [], true)
       return fieldValues
     } catch (error) {
       return null

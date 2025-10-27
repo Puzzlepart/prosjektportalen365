@@ -24,6 +24,7 @@ import {
   DataSourceService,
   DefaultCaching,
   getClassProperties,
+  getItemFieldValues,
   getUserPhoto,
   IGraphGroup,
   IPortalDataServiceConfiguration,
@@ -1236,21 +1237,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
-  public async getItemFieldValues(item: IItem, userFields: string[] = []) {
-    const [fieldValuesAsText, fieldValues] = await Promise.all([
-      item.fieldValuesAsText<Record<string, string>>(),
-      item
-        .select(
-          '*',
-          ...userFields.map((fieldName) => `${fieldName}/Id`),
-          ...userFields.map((fieldName) => `${fieldName}/Title`),
-          ...userFields.map((fieldName) => `${fieldName}/EMail`)
-        )
-        .expand(...userFields)<Record<string, any>>()
-    ])
-    return ItemFieldValues.create({ fieldValues, fieldValuesAsText })
-  }
-
   public async getIdeasData(configuration: IdeaConfigurationModel): Promise<Idea> {
     const getListData = async (
       listName: string
@@ -1278,7 +1264,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
       const allFieldValues = await Promise.all(
         listItems.map(async (item) => {
-          const fieldValues = await this.getItemFieldValues(item, userFields)
+          const fieldValues = await getItemFieldValues(item, userFields, true)
           return fieldValues
         })
       )
