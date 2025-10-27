@@ -30,6 +30,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Rettet et problem hvor bruker måtte trykke to ganger for å åpne ytterligere valg som blir gruppert i Porteføljevisningen [#1302](https://github.com/Puzzlepart/prosjektportalen365/issues/1302)
 - Rettet et problem der primær- og sekundærbruker, samt deres roller, ikke ble vist korrekt i kortvisning og listevisning i Prosjektutlistingen på forsiden av portalen.
 - Rettet et problem hvor `Tillat eksterne gjester` og `Gjest(er)` felt i `Bestill område`-skjema ikke fungerte som forventet selvom det var slått på for områdetypen.
+- Rettet et problem hvor endring av rekkefølge på kolonner i en aggregert oversikt-webdel blir ikke korrekt lagret [#1641](https://github.com/Puzzlepart/prosjektportalen365/issues/1641)
 
 ---
 
