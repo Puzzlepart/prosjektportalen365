@@ -30,5 +30,4 @@ export interface IFetchDataForViewItemResult extends ISearchResult {
 export interface IProjectsData {
   items: SPProjectItem[]
   memberOfGroups: IGraphGroup[]
-  users: ISiteUserInfo[]
 }
