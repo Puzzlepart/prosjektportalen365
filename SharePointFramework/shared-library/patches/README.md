@@ -13,8 +13,6 @@ This directory contains patches for npm packages that are applied automatically 
 
 **Fix:** Added the missing `HoverReactionBarSearchEmojiPlaceholder` property to the Norwegian locale file with the translation "Søk emoji".
 
-**Related Issue:** #[issue-number]
-
 ### How patches are applied
 
 Patches are automatically applied after `npm install` via the `postinstall` script defined in `package.json`. The patches are managed by [patch-package](https://github.com/ds300/patch-package).
