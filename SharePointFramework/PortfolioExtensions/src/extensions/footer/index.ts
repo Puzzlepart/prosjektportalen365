@@ -64,9 +64,10 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     const useBetaChannel = this._globalSettings.get('UseBetaChannel') === '1'
     const betaEndpointUrl = this._globalSettings.get('BetaEndpointUrl')
     const endpointUrl = this._globalSettings.get('EndpointUrl')
-    this._assistantEndpointUrl = useBetaChannel && betaEndpointUrl
-      ? betaEndpointUrl
-      : endpointUrl || 'https://pp365-ai-d2dge4fqc2bhbba9.norwayeast-01.azurewebsites.net'
+    this._assistantEndpointUrl =
+      useBetaChannel && betaEndpointUrl
+        ? betaEndpointUrl
+        : endpointUrl || 'https://pp365-ai-d2dge4fqc2bhbba9.norwayeast-01.azurewebsites.net'
 
     this._hasAssistantAccess =
       !requireAssistantAccess || (await this._isUserInGroup(strings.AssistantGroupName))

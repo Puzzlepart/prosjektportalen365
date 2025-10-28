@@ -163,7 +163,6 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
     const config = projectData.configElement
     let timelineItems = []
 
-    // Only add project elements if showElementPortfolio or showElementProgram is true
     if (config?.showElementPortfolio || config?.showElementProgram) {
       timelineItems = filteredProjects.map<TimelineContentModel>((project) => {
         const statusReport = projectData?.reports?.find((statusReport: any) => {

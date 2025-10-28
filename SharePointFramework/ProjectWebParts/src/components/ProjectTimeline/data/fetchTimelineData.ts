@@ -94,14 +94,16 @@ export async function fetchTimelineData(
       .filter((columnName) => columnName !== 'GtSiteIdLookup')
       .map<IColumn>((columnName) => {
         const column = defaultViewFields.find((fld) => fld.InternalName === columnName)
-        return column ? {
-          key: column.InternalName,
-          name: column.Title,
-          fieldName: column.InternalName,
-          data: { type: column.TypeAsString },
-          minWidth: 100,
-          maxWidth: 200
-        } : null
+        return column
+          ? {
+              key: column.InternalName,
+              name: column.Title,
+              fieldName: column.InternalName,
+              data: { type: column.TypeAsString },
+              minWidth: 100,
+              maxWidth: 200
+            }
+          : null
       })
       .filter(Boolean)
 
