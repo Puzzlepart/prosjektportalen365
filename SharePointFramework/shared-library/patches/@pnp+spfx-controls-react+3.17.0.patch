@@ -1,0 +1,13 @@
+diff --git a/node_modules/@pnp/spfx-controls-react/lib/loc/nb-no.js b/node_modules/@pnp/spfx-controls-react/lib/loc/nb-no.js
+index c1559aa..3cd1388 100644
+--- a/node_modules/@pnp/spfx-controls-react/lib/loc/nb-no.js
++++ b/node_modules/@pnp/spfx-controls-react/lib/loc/nb-no.js
+@@ -400,6 +400,7 @@ define([], function () {
+         "UpLoadFilesDragDropLabel": "Drag and Drop files or select Add File button",
+         "UpLoadFilesSelectAllLabel": "Select all",
+         "UploadFilesUploadButtonLabel": "Upload",
++        "HoverReactionBarSearchEmojiPlaceholder": "Søk emoji",
+     };
+ });
+ //# sourceMappingURL=nb-no.js.map
+\ No newline at end of file
