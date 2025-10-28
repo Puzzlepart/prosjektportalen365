@@ -11,6 +11,10 @@ export function useCaptureReportSnapshot() {
   return async (): Promise<Blob> => {
     try {
       const statusReportHtml = document.getElementById('pp-statussection')
+      if (!statusReportHtml) {
+        return null
+      }
+
       const date = moment().format('DD.MM.YYYY HH:mm')
       const dateStamp = document.createElement('p')
       dateStamp.textContent = `${date}`
