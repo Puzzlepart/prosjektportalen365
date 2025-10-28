@@ -103,7 +103,7 @@ export class PlannerConfiguration extends BaseTask {
     setupLabels = true
   ): Promise<IPlannerPlan> {
     try {
-      const existingGroupPlans = await this._fetchPlans(plan.owner)
+      const existingGroupPlans = await this.fetchPlans(plan.owner)
       const existingPlan = _.find(existingGroupPlans, (p) => p.title === plan.title)
       if (!existingPlan) {
         plan = await MSGraphHelper.Post('planner/plans', JSON.stringify(plan))
@@ -348,7 +348,7 @@ export class PlannerConfiguration extends BaseTask {
    *
    * @param owner Owner (group id)
    */
-  private _fetchPlans(owner: string) {
+  public fetchPlans(owner: string) {
     return MSGraphHelper.Get<IPlannerPlan[]>(`groups/${owner}/planner/plans`, ['id', 'title'])
   }
 
