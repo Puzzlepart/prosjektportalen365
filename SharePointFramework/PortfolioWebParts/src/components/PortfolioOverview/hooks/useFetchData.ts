@@ -92,11 +92,12 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
         )
       }
 
-      if (!context.props.isParentProject) { // TODO: Fix this for parent projects as well
+      if (!context.props.isParentProject) {
+        // TODO: Fix this for parent projects as well
         for (const column of currentView.columns) {
           const fetchData = ColumnRenderComponentRegistry.getComponent(column.dataType)?.fetchData
           if (typeof fetchData === 'function') {
-        _.set(column, 'data.$', await fetchData(context.props.configuration.web, column))
+            _.set(column, 'data.$', await fetchData(context.props.configuration.web, column))
           }
         }
       }

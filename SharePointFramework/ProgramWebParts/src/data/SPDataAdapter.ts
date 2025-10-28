@@ -36,8 +36,7 @@ import {
   SPDataAdapterBase,
   SPProjectItem,
   TimelineConfigurationModel,
-  TimelineContentModel,
-  getUserPhoto
+  TimelineContentModel
 } from 'pp365-shared-library'
 import _ from 'underscore'
 import { DEFAULT_SEARCH_SETTINGS, IProjectsData } from './types'
@@ -307,7 +306,11 @@ export class SPDataAdapter
   ) {
     const searchQuery = `${queryArray} ${view.searchQuery}`
 
-    const fetchAllResults = async (queryTemplate: string, selectProperties: string[], refiners?: string) => {
+    const fetchAllResults = async (
+      queryTemplate: string,
+      selectProperties: string[],
+      refiners?: string
+    ) => {
       const searchInit = {
         ...DEFAULT_SEARCH_SETTINGS,
         QueryTemplate: queryTemplate,
@@ -332,14 +335,16 @@ export class SPDataAdapter
     }
 
     let [projects, sites, statusReports] = await Promise.all([
-      fetchAllResults(
-        searchQuery,
-        [...configuration.columns.map((f) => f.fieldName), siteIdProperty]
-      ),
-      fetchAllResults(
-        `DepartmentId:{${siteId}} contentclass:STS_Site`,
-        ['Path', 'SPWebUrl', 'Title', 'SiteId']
-      ),
+      fetchAllResults(searchQuery, [
+        ...configuration.columns.map((f) => f.fieldName),
+        siteIdProperty
+      ]),
+      fetchAllResults(`DepartmentId:{${siteId}} contentclass:STS_Site`, [
+        'Path',
+        'SPWebUrl',
+        'Title',
+        'SiteId'
+      ]),
       fetchAllResults(
         `${queryArray} DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:${resource.Choice_GtModerationStatus_Published}`,
         [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
@@ -588,17 +593,12 @@ export class SPDataAdapter
    *
    * @param param0 Deconstructed object containing the result data
    */
-  private _combineResultData({ items, memberOfGroups, users }: IProjectsData): ProjectListModel[] {
+  private _combineResultData({ items, memberOfGroups }: IProjectsData): ProjectListModel[] {
     let projects = items
       .map((item) => {
         const [group] = memberOfGroups.filter((grp) => grp.id === item.GtGroupId)
-        const [owner] = users.filter((user) => user.Id === item.GtProjectOwnerId)
-        const [manager] = users.filter((user) => user.Id === item.GtProjectManagerId)
         const model = new ProjectListModel(group?.displayName ?? item.Title, item)
         model.isUserMember = !!group
-        if (manager)
-          model.manager = { name: manager.Title, image: { src: getUserPhoto(manager.Email) } }
-        if (owner) model.owner = { name: owner.Title, image: { src: getUserPhoto(owner.Email) } }
         return model
       })
       .filter((p) => p)
@@ -620,7 +620,7 @@ export class SPDataAdapter
 
   public async fetchEnrichedProjects(): Promise<ProjectListModel[]> {
     await MSGraph.Init(this.spfxContext.msGraphClientFactory)
-    const [items, memberOfGroups, users] = await Promise.all([
+    const [items, memberOfGroups] = await Promise.all([
       this.portalDataService.web.lists
         .getByTitle(resource.Lists_Projects_Title)
         .items.select(...Object.keys(new SPProjectItem()))
@@ -635,13 +635,11 @@ export class SPDataAdapter
         ['id', 'displayName'],
         // eslint-disable-next-line quotes
         "groupTypes/any(a:a%20eq%20'unified')"
-      ),
-      this.sp.web.siteUsers.select('Id', 'Title', 'Email').using(DefaultCaching)()
+      )
     ])
     const result: IProjectsData = {
       items,
-      memberOfGroups,
-      users
+      memberOfGroups
     }
     const projects = this._combineResultData(result)
     return projects

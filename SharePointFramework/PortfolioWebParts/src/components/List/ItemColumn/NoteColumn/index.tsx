@@ -3,9 +3,10 @@ import React from 'react'
 import { ColumnRenderComponent } from '../types'
 
 export const NoteColumn: ColumnRenderComponent = (props) => {
-  const value = props.columnValue && typeof props.columnValue === 'string'
-    ? props.columnValue.replace(/<[^>]*>/g, '')
-    : ''
+  const value =
+    props.columnValue && typeof props.columnValue === 'string'
+      ? props.columnValue.replace(/<[^>]*>/g, '')
+      : ''
   return <span>{value}</span>
 }
 

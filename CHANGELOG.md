@@ -21,12 +21,13 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 ### Feilrettinger
 
 - Rettet et problem hvor tilpassede malbiblioteket ikke ble valgt når man klikket på "Hent dokumentmal" fra dokumentbiblioteket [#1628](https://github.com/Puzzlepart/prosjektportalen365/issues/1628)
-- Rettet et problem hvor Porteføljeoversiktens egenskapspanel ikke fungerte
+- Rettet et problem hvor Porteføljeoversiktens egenskapspanel ikke fungerte.
 - Rettet et problem hvor tallet 0 vises som blankt i gevinstoversikten [#1649](https://github.com/Puzzlepart/prosjektportalen365/issues/1649)
-- Rettet et problem hvor programoversikten feilet i å hente komplett data når antall områder tilknyttet hub oversteg 500 elementer
-- Rettet et problem hvor metadatafelt med støtte for flere verdier ikke ble kopiert korrekt ved opprettelse av nytt prosjekt
-- Rettet et problem i `Tidslinjekonfigurasjon`, hvor `Vis på portefølje` og `Vis på program` ikke filtrerte ut `Prosjekt`-elementet i henholdsvis portefølje- og programtidslinje
+- Rettet et problem hvor programoversikten feilet i å hente komplett data når antall områder tilknyttet hub oversteg 500 elementer.
+- Rettet et problem hvor metadatafelt med støtte for flere verdier ikke ble kopiert korrekt ved opprettelse av nytt prosjekt.
+- Rettet et problem i `Tidslinjekonfigurasjon`, hvor `Vis på portefølje` og `Vis på program` ikke filtrerte ut `Prosjekt`-elementet i henholdsvis portefølje- og programtidslinje.
 - Rettet et problem hvor bruker måtte trykke to ganger for å åpne ytterligere valg som blir gruppert i Porteføljevisningen [#1302](https://github.com/Puzzlepart/prosjektportalen365/issues/1302)
+- Rettet et problem der primær- og sekundærbruker, samt deres roller, ikke ble vist korrekt i kortvisning og listevisning i Prosjektutlistingen på forsiden av portalen.
 
 ---
 

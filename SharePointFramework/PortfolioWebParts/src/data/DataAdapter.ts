@@ -3,9 +3,10 @@ import { format } from '@fluentui/react/lib/Utilities'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, PnPClientStorage } from '@pnp/core'
 import { LogLevel } from '@pnp/logging'
-import { IItem } from '@pnp/sp/items/types'
+import { spfi, SPFx } from '@pnp/sp'
 import {
   ISearchResult,
+  ISiteUserInfo,
   PermissionKind,
   QueryPropertyValueType,
   SearchQueryInit,
@@ -13,7 +14,6 @@ import {
   SPFI,
   Web
 } from '@pnp/sp/presets/all'
-import { spfi, SPFx } from '@pnp/sp'
 import * as cleanDeep from 'clean-deep'
 import { Idea } from 'components/IdeaModule'
 import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
@@ -583,33 +583,58 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   }
 
   /**
-   * Combine the result data (items, sites, users, groups) to a list of `ProjectListModel`.@
+   * Combines project data from multiple sources (items, sites, member groups, users) into a unified ProjectListModel array.
    *
-   * @param param0 Deconstructed object containing the result data
+   * @param data - Object containing project items, sites, member groups, and users data
+   * @param primaryUserField - Optional field name to extract primary user information from project items
+   * @param secondaryUserField - Optional field name to extract secondary user information from project items
+   * @returns Array of ProjectListModel instances with combined data including user personas, membership status, and access permissions
+   *
    */
-  private _combineResultData({
-    items,
-    sites,
-    memberOfGroups,
-    users
-  }: IProjectsData): ProjectListModel[] {
+  private _combineResultData(
+    { items, sites, memberOfGroups, users }: IProjectsData,
+    primaryUserField?: string,
+    secondaryUserField?: string
+  ): ProjectListModel[] {
+    const getUserById = (id?: number) => users.find((user) => user.Id === id)
+
+    const getUserFromField = (item: any, field?: string) => {
+      if (!field) return undefined
+      const value = item[`${field}Id`] ?? item[field]
+      const userId = Array.isArray(value) ? _.first(_.sortBy(value, (num) => num)) : value
+      return getUserById(userId)
+    }
+
+    const createUserPersona = (user: ISiteUserInfo | undefined, role?: string | undefined) => {
+      if (!user) {
+        return { role }
+      }
+      return {
+        name: user.Title,
+        image: { src: getUserPhoto(user.Email) },
+        role
+      }
+    }
+
     return items
       .map((item) => {
-        const [owner] = users.filter((user) => user.Id === item.GtProjectOwnerId)
-        const [manager] = users.filter((user) => user.Id === item.GtProjectManagerId)
+        const primaryUser = primaryUserField && getUserFromField(item, primaryUserField)
+        const secondaryUser = secondaryUserField && getUserFromField(item, secondaryUserField)
         const group = _.find(memberOfGroups, (grp) => grp.id === item.GtGroupId)
         const model = new ProjectListModel(group?.displayName ?? item.Title, item)
         model.isUserMember = !!group
         model.hasUserAccess = _.any(sites, (site) => site['SiteId'] === item.GtSiteId)
-        if (manager)
-          model.manager = { name: manager.Title, image: { src: getUserPhoto(manager.Email) } }
-        if (owner) model.owner = { name: owner.Title, image: { src: getUserPhoto(owner.Email) } }
+        model.primaryUser = createUserPersona(primaryUser, primaryUserField)
+        model.secondaryUser = createUserPersona(secondaryUser, secondaryUserField)
         return model
       })
       .filter(Boolean)
   }
 
-  public async fetchEnrichedProjects(): Promise<ProjectListModel[]> {
+  public async fetchEnrichedProjects(
+    primaryUserField?: string,
+    secondaryUserField?: string
+  ): Promise<ProjectListModel[]> {
     const localStore = new PnPClientStorage().local
     const siteId = this._spfxContext.pageContext.site.id.toString()
     const list = this._sp.web.lists.getByTitle(resource.Lists_Projects_Title)
@@ -630,7 +655,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       memberOfGroups,
       users
     }
-    let projects = this._combineResultData(result)
+    let projects = this._combineResultData(result, primaryUserField, secondaryUserField)
     projects = projects.filter(
       (m) =>
         m.lifecycleStatus !== strings.LifecycleStatus_Completed &&

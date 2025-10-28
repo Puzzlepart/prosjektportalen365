@@ -456,8 +456,6 @@ define([], function () {
     ProjectDeliveriesGroupName: 'Project deliveries (beta)',
     ProjectInformationGroupName: 'Settings for Project information panel',
     ProjectListEmptyMessage: 'The search returned no results',
-    ProjectManager: 'Project Manager',
-    ProjectOwner: 'Project owner',
     ProjectsAccessHeaderText: 'Access to',
     ProjectsAccessSearchBoxPlaceholderText: 'Search {0} projects you have access to...',
     RenderModeCompactListText: 'Compact list',

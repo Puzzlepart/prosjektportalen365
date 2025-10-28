@@ -52,14 +52,14 @@ export class ProjectListModel {
   public endDate?: string
 
   /**
-   * The project manager properties.
+   * The project primary user properties.
    */
-  public manager?: AvatarProps
+  public primaryUser: AvatarProps
 
   /**
-   * The project owner properties.
+   * The project secondary user properties.
    */
-  public owner?: AvatarProps
+  public secondaryUser: AvatarProps
 
   /**
    * The project logo URL.

@@ -16,28 +16,30 @@ import {
 } from '@fluentui/react-icons'
 import * as strings from 'PortfolioWebPartsStrings'
 import { useContext } from 'react'
-import { ProjectCardContext } from '../context'
 import resource from 'SharedResources'
+import _ from 'underscore'
+import { ProjectCardContext } from '../context'
 
 /**
  * Component logic hook for `ProjectCardFooter`
  */
 export function useProjectCardFooter() {
   const context = useContext(ProjectCardContext)
-  const defaultPersonaProps: AvatarProps = {
-    name: strings.NotSet,
-    color: 'brand'
+
+  const getPersonaProps = (user: AvatarProps | undefined): AvatarProps => {
+    const defaultPersonaProps: AvatarProps = {
+      name: strings.NotSet,
+      color: 'brand'
+    }
+    const role =
+      _.find(context.projectColumns, (col) => col.internalName === user.role)?.name ||
+      strings.NotSet
+
+    return { ...defaultPersonaProps, ...user, role }
   }
-  const primaryUserPersonaProps: AvatarProps = {
-    ...defaultPersonaProps,
-    ...(context.project?.owner || {}),
-    role: context.project?.data?.[context.primaryUserField]
-  }
-  const secondaryUserPersonaProps: AvatarProps = {
-    ...defaultPersonaProps,
-    ...(context.project?.manager || {}),
-    role: context.project?.data?.[context.secondaryUserField]
-  }
+  const primaryUserPersonaProps = getPersonaProps(context.project?.primaryUser)
+  const secondaryUserPersonaProps = getPersonaProps(context.project?.secondaryUser)
+
   let ProjectTypeIcon = bundleIcon(BoxFilled, BoxRegular)
   let projectTypeText = context.project.template
 

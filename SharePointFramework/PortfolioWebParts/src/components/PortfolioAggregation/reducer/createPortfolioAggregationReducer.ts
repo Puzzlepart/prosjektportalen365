@@ -271,7 +271,10 @@ export const createPortfolioAggregationReducer = (
       } else if (hashState.has('viewId')) {
         currentView = _.find(state.views, (v) => v.id === hashState.get('viewId'))
         if (!currentView) {
-          errorMessage = format(strings.ViewNotFoundMessage_Id || '{0}', hashState.get('viewId') || '')
+          errorMessage = format(
+            strings.ViewNotFoundMessage_Id || '{0}',
+            hashState.get('viewId') || ''
+          )
         }
       } else if (props.defaultViewId) {
         currentView = _.find(
@@ -281,7 +284,10 @@ export const createPortfolioAggregationReducer = (
       } else if (props.dataSource) {
         currentView = _.find(state.views, (v) => v.title === props.dataSource)
         if (!currentView) {
-          errorMessage = format(strings.ViewNotFoundMessage_WebPartProperty || '{0}', props.dataSource || '')
+          errorMessage = format(
+            strings.ViewNotFoundMessage_WebPartProperty || '{0}',
+            props.dataSource || ''
+          )
         }
       } else {
         currentView = _.find(state.views, (v) => v.isDefault)

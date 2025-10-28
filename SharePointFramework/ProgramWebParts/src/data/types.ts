@@ -1,4 +1,3 @@
-import { ISiteUserInfo } from '@pnp/sp/presets/all'
 import { ISearchQuery, ISearchResult, QueryPropertyValueType, SortDirection } from '@pnp/sp/search'
 import { IGraphGroup, SPProjectItem } from 'pp365-shared-library'
 
@@ -30,5 +29,4 @@ export interface IFetchDataForViewItemResult extends ISearchResult {
 export interface IProjectsData {
   items: SPProjectItem[]
   memberOfGroups: IGraphGroup[]
-  users: ISiteUserInfo[]
 }
