@@ -5,10 +5,10 @@ import moment from 'moment'
  * Hook for capturing a report snapshot using `dom-to-image`. Returns a callback function
  * for capturing the selected report.
  *
- * @returns A promise of the blob content for the report snapshot (string)
+ * @returns A promise of the blob content for the report snapshot, or null if capture fails
  */
 export function useCaptureReportSnapshot() {
-  return async (): Promise<Blob> => {
+  return async (): Promise<Blob | null> => {
     try {
       const statusReportHtml = document.getElementById('pp-statussection')
       if (!statusReportHtml) {
