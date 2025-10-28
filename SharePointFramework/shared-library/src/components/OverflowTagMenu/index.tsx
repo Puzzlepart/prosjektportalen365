@@ -60,28 +60,34 @@ export const OverflowTagMenu: FC<IOverflowTagMenuProps> = (props) => {
       return null
     }
 
+    const handleClick = (e: React.MouseEvent) => {
+      e.stopPropagation()
+    }
+
     return (
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme} style={{ backgroundColor: 'transparent' }}>
-          <Menu closeOnScroll>
-            <MenuTrigger disableButtonEnhancement>
-              <InteractionTag
-                aria-label={format(strings.Aria.MenuOverflowCount, overflowCount)}
-                title={format(strings.Aria.MenuOverflowCount, overflowCount)}
-                appearance='brand'
-              >
-                <InteractionTagPrimary primaryText={`+${overflowCount}`} />
-              </InteractionTag>
-            </MenuTrigger>
-            <MenuPopover style={{ maxWidth: 600 }}>
-              <MenuList hasCheckmarks={false}>
-                {!_.isEmpty(tags) &&
-                  tags
-                    .slice(-overflowCount)
-                    .map((tag) => <OverflowMenuItem key={tag.key} tag={tag} />)}
-              </MenuList>
-            </MenuPopover>
-          </Menu>
+          <div onClick={handleClick} onMouseDown={handleClick}>
+            <Menu closeOnScroll>
+              <MenuTrigger disableButtonEnhancement>
+                <InteractionTag
+                  aria-label={format(strings.Aria.MenuOverflowCount, overflowCount)}
+                  title={format(strings.Aria.MenuOverflowCount, overflowCount)}
+                  appearance='brand'
+                >
+                  <InteractionTagPrimary primaryText={`+${overflowCount}`} />
+                </InteractionTag>
+              </MenuTrigger>
+              <MenuPopover style={{ maxWidth: 600 }}>
+                <MenuList hasCheckmarks={false}>
+                  {!_.isEmpty(tags) &&
+                    tags
+                      .slice(-overflowCount)
+                      .map((tag) => <OverflowMenuItem key={tag.key} tag={tag} />)}
+                </MenuList>
+              </MenuPopover>
+            </Menu>
+          </div>
         </FluentProvider>
       </IdPrefixProvider>
     )
