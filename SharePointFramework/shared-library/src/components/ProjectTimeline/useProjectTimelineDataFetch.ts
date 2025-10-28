@@ -160,31 +160,36 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
         })
     )
 
-    let timelineItems = filteredProjects.map<TimelineContentModel>((project) => {
-      const config = projectData.configElement
-      const statusReport = projectData?.reports?.find((statusReport: any) => {
-        return statusReport.siteId === project.siteId
-      })
-      const data = projectData?.data?.find((data: any) => {
-        return data.siteId === project.siteId
-      })
+    const config = projectData.configElement
+    let timelineItems = []
 
-      return new TimelineContentModel(
-        project.siteId,
-        project.title,
-        project.title,
-        resource.TimelineConfiguration_Project_Title,
-        project.startDate,
-        project.endDate,
-        '',
-        '',
-        statusReport?.budgetTotal,
-        statusReport?.costsTotal,
-        project.url,
-        project.phase,
-        data?.properties
-      ).usingConfig(config)
-    })
+    // Only add project elements if showElementPortfolio or showElementProgram is true
+    if (config?.showElementPortfolio || config?.showElementProgram) {
+      timelineItems = filteredProjects.map<TimelineContentModel>((project) => {
+        const statusReport = projectData?.reports?.find((statusReport: any) => {
+          return statusReport.siteId === project.siteId
+        })
+        const data = projectData?.data?.find((data: any) => {
+          return data.siteId === project.siteId
+        })
+
+        return new TimelineContentModel(
+          project.siteId,
+          project.title,
+          project.title,
+          resource.TimelineConfiguration_Project_Title,
+          project.startDate,
+          project.endDate,
+          '',
+          '',
+          statusReport?.budgetTotal,
+          statusReport?.costsTotal,
+          project.url,
+          project.phase,
+          data?.properties
+        ).usingConfig(config)
+      })
+    }
 
     timelineItems = [...timelineItems, ...filteredTimelineItems]
     const groups = createProjectGroups(filteredProjects)

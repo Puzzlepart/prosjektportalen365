@@ -25,6 +25,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Rettet et problem hvor tallet 0 vises som blankt i gevinstoversikten [#1649](https://github.com/Puzzlepart/prosjektportalen365/issues/1649)
 - Rettet et problem hvor programoversikten feilet i å hente komplett data når antall områder tilknyttet hub oversteg 500 elementer
 - Rettet et problem hvor metadatafelt med støtte for flere verdier ikke ble kopiert korrekt ved opprettelse av nytt prosjekt
+- Rettet et problem i `Tidslinjekonfigurasjon`, hvor `Vis på portefølje` og `Vis på program` ikke filtrerte ut `Prosjekt`-elementet i henholdsvis portefølje- og programtidslinje
 
 ---
 
