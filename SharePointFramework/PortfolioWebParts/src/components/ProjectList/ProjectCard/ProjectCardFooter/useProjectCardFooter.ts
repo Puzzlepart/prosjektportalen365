@@ -32,7 +32,8 @@ export function useProjectCardFooter() {
       color: 'brand'
     }
     const role =
-      _.find(context.projectColumns, (col) => col.internalName === user.role)?.name || strings.NotSet
+      _.find(context.projectColumns, (col) => col.internalName === user.role)?.name ||
+      strings.NotSet
 
     return { ...defaultPersonaProps, ...user, role }
   }

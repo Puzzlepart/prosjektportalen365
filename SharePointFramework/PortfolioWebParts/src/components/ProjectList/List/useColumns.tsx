@@ -86,7 +86,8 @@ export const useColumns = (): IListColumn[] => {
         return (
           <TableCellLayout
             truncate
-            title={`${primaryUserRole}: ${item.primaryUser?.name ?? strings.NotSet}`}>
+            title={`${primaryUserRole}: ${item.primaryUser?.name ?? strings.NotSet}`}
+          >
             <Avatar size={context.size !== 'medium' ? 24 : 32} {...item.primaryUser} />{' '}
             {item.primaryUser?.name}
           </TableCellLayout>
@@ -106,9 +107,8 @@ export const useColumns = (): IListColumn[] => {
         return (
           <TableCellLayout
             truncate
-            title={`${secondaryUserRole}: ${
-              item.secondaryUser?.name ?? strings.NotSet
-            }`}>
+            title={`${secondaryUserRole}: ${item.secondaryUser?.name ?? strings.NotSet}`}
+          >
             <Avatar size={context.size !== 'medium' ? 24 : 32} {...item.secondaryUser} />{' '}
             {item.secondaryUser?.name}
           </TableCellLayout>

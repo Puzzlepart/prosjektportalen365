@@ -36,8 +36,7 @@ import {
   SPDataAdapterBase,
   SPProjectItem,
   TimelineConfigurationModel,
-  TimelineContentModel,
-  getUserPhoto
+  TimelineContentModel
 } from 'pp365-shared-library'
 import _ from 'underscore'
 import { DEFAULT_SEARCH_SETTINGS, IProjectsData } from './types'
@@ -307,7 +306,11 @@ export class SPDataAdapter
   ) {
     const searchQuery = `${queryArray} ${view.searchQuery}`
 
-    const fetchAllResults = async (queryTemplate: string, selectProperties: string[], refiners?: string) => {
+    const fetchAllResults = async (
+      queryTemplate: string,
+      selectProperties: string[],
+      refiners?: string
+    ) => {
       const searchInit = {
         ...DEFAULT_SEARCH_SETTINGS,
         QueryTemplate: queryTemplate,
@@ -332,14 +335,16 @@ export class SPDataAdapter
     }
 
     let [projects, sites, statusReports] = await Promise.all([
-      fetchAllResults(
-        searchQuery,
-        [...configuration.columns.map((f) => f.fieldName), siteIdProperty]
-      ),
-      fetchAllResults(
-        `DepartmentId:{${siteId}} contentclass:STS_Site`,
-        ['Path', 'SPWebUrl', 'Title', 'SiteId']
-      ),
+      fetchAllResults(searchQuery, [
+        ...configuration.columns.map((f) => f.fieldName),
+        siteIdProperty
+      ]),
+      fetchAllResults(`DepartmentId:{${siteId}} contentclass:STS_Site`, [
+        'Path',
+        'SPWebUrl',
+        'Title',
+        'SiteId'
+      ]),
       fetchAllResults(
         `${queryArray} DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:${resource.Choice_GtModerationStatus_Published}`,
         [...configuration.columns.map((f) => f.fieldName), siteIdProperty],

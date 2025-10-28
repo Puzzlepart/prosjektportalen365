@@ -4,7 +4,6 @@ import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, PnPClientStorage } from '@pnp/core'
 import { LogLevel } from '@pnp/logging'
 import { spfi, SPFx } from '@pnp/sp'
-import { IItem } from '@pnp/sp/items/types'
 import {
   ISearchResult,
   ISiteUserInfo,
@@ -585,12 +584,12 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
   /**
    * Combines project data from multiple sources (items, sites, member groups, users) into a unified ProjectListModel array.
-   * 
+   *
    * @param data - Object containing project items, sites, member groups, and users data
    * @param primaryUserField - Optional field name to extract primary user information from project items
    * @param secondaryUserField - Optional field name to extract secondary user information from project items
    * @returns Array of ProjectListModel instances with combined data including user personas, membership status, and access permissions
-   * 
+   *
    */
   private _combineResultData(
     { items, sites, memberOfGroups, users }: IProjectsData,

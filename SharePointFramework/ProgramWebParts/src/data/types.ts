@@ -1,4 +1,3 @@
-import { ISiteUserInfo } from '@pnp/sp/presets/all'
 import { ISearchQuery, ISearchResult, QueryPropertyValueType, SortDirection } from '@pnp/sp/search'
 import { IGraphGroup, SPProjectItem } from 'pp365-shared-library'
 
