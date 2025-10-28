@@ -18,7 +18,16 @@ export function useCaptureReportSnapshot() {
       dateStamp.style.fontWeight = '600'
       statusReportHtml.appendChild(dateStamp)
       statusReportHtml.style.backgroundColor = '#FFFFFF'
-      const content = await domToImage.toBlob(statusReportHtml)
+
+      // Get computed dimensions using getBoundingClientRect which accounts for zoom
+      const rect = statusReportHtml.getBoundingClientRect()
+
+      // Capture with explicit width and height to ensure consistent rendering
+      // regardless of browser zoom level
+      const content = await domToImage.toBlob(statusReportHtml, {
+        width: rect.width,
+        height: rect.height
+      })
       return content
     } catch (error) {
       return null
