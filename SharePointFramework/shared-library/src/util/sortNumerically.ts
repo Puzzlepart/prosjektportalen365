@@ -26,16 +26,21 @@ export function sortNumerically<T>(
     return -1
   }
 
-  if (symbol && typeof aValue === 'string' && typeof bValue === 'string') {
-    const aFloatValue = parseFloat(aValue.replace(symbol, ''))
-    const bFloatValue = parseFloat(bValue.replace(symbol, ''))
+  if (symbol) {
+    const aString = typeof aValue === 'string' ? aValue : String(aValue ?? '')
+    const bString = typeof bValue === 'string' ? bValue : String(bValue ?? '')
 
-    if (!isNaN(aFloatValue) && !isNaN(bFloatValue)) {
-      if (aFloatValue < bFloatValue) {
-        return ascending ? -1 : 1
-      }
-      if (aFloatValue > bFloatValue) {
-        return ascending ? 1 : -1
+    if (aString && bString) {
+      const aFloatValue = parseFloat(aString.replace(symbol, ''))
+      const bFloatValue = parseFloat(bString.replace(symbol, ''))
+
+      if (!isNaN(aFloatValue) && !isNaN(bFloatValue)) {
+        if (aFloatValue < bFloatValue) {
+          return ascending ? -1 : 1
+        }
+        if (aFloatValue > bFloatValue) {
+          return ascending ? 1 : -1
+        }
       }
     }
   }

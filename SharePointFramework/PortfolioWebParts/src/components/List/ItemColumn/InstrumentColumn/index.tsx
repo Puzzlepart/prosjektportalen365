@@ -39,7 +39,7 @@ export const InstrumentColumn: ColumnRenderComponent<IInstrumentColumnProps> = (
   return (
     <Popover withArrow>
       <PopoverTrigger disableButtonEnhancement>
-        <Link>{format(strings.ShowInstrumentLinkText, currentValue)}</Link>
+        <Link>{format(strings.ShowInstrumentLinkText || '{0}', currentValue ?? '')}</Link>
       </PopoverTrigger>
       <PopoverSurface>
         <div>
@@ -67,7 +67,7 @@ export const InstrumentColumn: ColumnRenderComponent<IInstrumentColumnProps> = (
               pointer={{ type: 'blob', animationDelay: 0.5 }}
               value={currentValue}
             />
-            <Text>{format(strings.InstrumentUnitLabel, unit)}</Text>
+            <Text>{format(strings.InstrumentUnitLabel || '{0}', unit ?? '')}</Text>
             <div className={styles.description}>{description}</div>
           </div>
         </div>

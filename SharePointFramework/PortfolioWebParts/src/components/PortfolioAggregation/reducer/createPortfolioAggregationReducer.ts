@@ -261,14 +261,18 @@ export const createPortfolioAggregationReducer = (
       const hashState = parseUrlHash()
       const viewIdUrlParam = new URLSearchParams(document.location.href).get('viewId')
       let currentView: DataSource = null
-      let errorMessage = strings.ViewNotFoundMessage
+      let errorMessage = strings.ViewNotFoundMessage || ''
 
       if (viewIdUrlParam) {
         currentView = _.find(state.views, (v) => v.id.toString() === viewIdUrlParam)
-        errorMessage = format(strings.ViewNotFoundMessage_Id, viewIdUrlParam)
+        if (!currentView) {
+          errorMessage = format(strings.ViewNotFoundMessage_Id || '{0}', viewIdUrlParam || '')
+        }
       } else if (hashState.has('viewId')) {
         currentView = _.find(state.views, (v) => v.id === hashState.get('viewId'))
-        errorMessage = format(strings.ViewNotFoundMessage_Id, hashState.get('viewId'))
+        if (!currentView) {
+          errorMessage = format(strings.ViewNotFoundMessage_Id || '{0}', hashState.get('viewId') || '')
+        }
       } else if (props.defaultViewId) {
         currentView = _.find(
           state.views,
@@ -276,7 +280,9 @@ export const createPortfolioAggregationReducer = (
         )
       } else if (props.dataSource) {
         currentView = _.find(state.views, (v) => v.title === props.dataSource)
-        errorMessage = format(strings.ViewNotFoundMessage_WebPartProperty, props.dataSource)
+        if (!currentView) {
+          errorMessage = format(strings.ViewNotFoundMessage_WebPartProperty || '{0}', props.dataSource || '')
+        }
       } else {
         currentView = _.find(state.views, (v) => v.isDefault)
       }

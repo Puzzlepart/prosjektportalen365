@@ -133,14 +133,17 @@ export function useIdeaField(props: IIdeaFieldProps) {
       ],
       [
         'Note',
-        (textValue: string) => (
-          <div
-            title={textValue.replace(/\n/g, '')}
-            dangerouslySetInnerHTML={{
-              __html: textValue.replace(/\n/g, '<br />')
-            }}
-          ></div>
-        )
+        (textValue: string) => {
+          const safeValue = textValue && typeof textValue === 'string' ? textValue : ''
+          return (
+            <div
+              title={safeValue.replace(/\n/g, '')}
+              dangerouslySetInnerHTML={{
+                __html: safeValue.replace(/\n/g, '<br />')
+              }}
+            ></div>
+          )
+        }
       ],
       [
         'DateTime',
