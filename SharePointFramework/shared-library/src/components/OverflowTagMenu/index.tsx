@@ -69,6 +69,7 @@ export const OverflowTagMenu: FC<IOverflowTagMenuProps> = (props) => {
                 aria-label={format(strings.Aria.MenuOverflowCount, overflowCount)}
                 title={format(strings.Aria.MenuOverflowCount, overflowCount)}
                 appearance='brand'
+                onClick={(e) => e.stopPropagation()}
               >
                 <InteractionTagPrimary primaryText={`+${overflowCount}`} />
               </InteractionTag>
