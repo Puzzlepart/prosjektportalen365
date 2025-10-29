@@ -71,7 +71,7 @@ export const useProvisionDrawer = () => {
   const enableInternalChannel = getGlobalSetting('EnableInternalChannel')
   const enableAutoApproval = getGlobalSetting('EnableAutoApproval')
 
-  const typeDefaults = context.state.types?.find((t) => t.title === context.state.properties.type)
+  const typeDefaults = context.state.types?.find((t) => t.title === selectedType)
   const enableExternalSharing = typeDefaults?.externalSharing
 
   const namingConvention = getGlobalSetting('UseNamingConventions')
