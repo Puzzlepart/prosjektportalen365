@@ -69,25 +69,25 @@ export const OverflowTagMenu: FC<IOverflowTagMenuProps> = (props) => {
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme} style={{ backgroundColor: 'transparent' }}>
           <div onClick={handleClick} onMouseDown={handleClick}>
-          <Menu closeOnScroll>
-            <MenuTrigger disableButtonEnhancement>
-              <InteractionTag
-                aria-label={format(strings.Aria.MenuOverflowCount, overflowCount)}
-                title={format(strings.Aria.MenuOverflowCount, overflowCount)}
-                appearance='brand'
-              >
-                <InteractionTagPrimary primaryText={`+${overflowCount}`} />
-              </InteractionTag>
-            </MenuTrigger>
-            <MenuPopover style={{ maxWidth: 600 }}>
-              <MenuList hasCheckmarks={false}>
-                {!_.isEmpty(tags) &&
-                  tags
-                    .slice(-overflowCount)
-                    .map((tag) => <OverflowMenuItem key={tag.key} tag={tag} />)}
-              </MenuList>
-            </MenuPopover>
-          </Menu>
+            <Menu closeOnScroll>
+              <MenuTrigger disableButtonEnhancement>
+                <InteractionTag
+                  aria-label={format(strings.Aria.MenuOverflowCount, overflowCount)}
+                  title={format(strings.Aria.MenuOverflowCount, overflowCount)}
+                  appearance='brand'
+                >
+                  <InteractionTagPrimary primaryText={`+${overflowCount}`} />
+                </InteractionTag>
+              </MenuTrigger>
+              <MenuPopover style={{ maxWidth: 600 }}>
+                <MenuList hasCheckmarks={false}>
+                  {!_.isEmpty(tags) &&
+                    tags
+                      .slice(-overflowCount)
+                      .map((tag) => <OverflowMenuItem key={tag.key} tag={tag} />)}
+                </MenuList>
+              </MenuPopover>
+            </Menu>
           </div>
         </FluentProvider>
       </IdPrefixProvider>
@@ -104,14 +104,16 @@ export const OverflowTagMenu: FC<IOverflowTagMenuProps> = (props) => {
                 <OverflowItem key={tag.key} id={tag.key}>
                   <InteractionTag
                     key={tag.value}
-                    className={`${styles.tag} ${shouldApplyPreviewStyles ? styles.tagPreview : undefined}`}
+                    className={`${styles.tag} ${
+                      shouldApplyPreviewStyles ? styles.tagPreview : undefined
+                    }`}
                     appearance='brand'
                     size='small'
                     title={`${tag.type}: ${tag.value}`}
                     {...tag}
                   >
-                    <InteractionTagPrimary 
-                      primaryText={tag.value} 
+                    <InteractionTagPrimary
+                      primaryText={tag.value}
                       icon={props.icon && <Icon />}
                       className={shouldApplyPreviewStyles ? styles.tagPrimary : undefined}
                     />
