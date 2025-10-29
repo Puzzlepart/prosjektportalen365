@@ -107,7 +107,7 @@ define([], function () {
       HubSiteFieldLabel: 'Hubtilknytning',
       ImageFieldLabel: 'Angi områdebilde',
       ImageFieldDescription: 'Her kan du laste opp et bilde som skal brukes som områdebilde.',
-      ImageDropZoneText: 'Dra og slipp bilde her, eller klikk for å velge bildefil (png, jpeg/jpg) NB! Kan ikke overstige 1 MB.',
+      ImageDropZoneText: 'Dra og slipp bilde her, eller klikk for å velge bildefil (png, jpeg/jpg) NB! Kan ikke overstige 800 KB.',
       DrawerFooterDescriptionText: 'Ditt område vil bli knyttet til en Microsoft 365-gruppe, som gir nettstedet ditt en delt OneNote-notatblokk, gruppe-e-postadresse og delt kalender.',
       PreviousButtonLabel: 'Forrige',
       NextButtonLabel: 'Neste',

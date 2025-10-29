@@ -570,7 +570,7 @@ define([], function () {
       HubSiteFieldLabel: 'Hub connection',
       ImageFieldLabel: 'Specify area image',
       ImageFieldDescription: 'Here you can upload an image to be used as an area image.',
-      ImageDropZoneText: 'Drag and drop image here, or click to select image file (png, jpeg/jpg) Note! Cannot exceed 1 MB.',
+      ImageDropZoneText: 'Drag and drop image here, or click to select image file (png, jpeg/jpg) Note! Cannot exceed 800 KB.',
       DrawerFooterDescriptionText: 'Your area will be linked to a Microsoft 365 group, which gives your website a shared OneNote notebook, group email address and shared calendar.',
       PreviousButtonLabel: 'Previous',
       NextButtonLabel: 'Next',
