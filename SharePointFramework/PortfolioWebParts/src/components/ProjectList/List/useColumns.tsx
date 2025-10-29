@@ -1,6 +1,7 @@
 import { Avatar, Link, TableCellLayout } from '@fluentui/react-components'
+import { GlobeLocationFilled, TagMultipleFilled } from '@fluentui/react-icons'
 import * as strings from 'PortfolioWebPartsStrings'
-import { ProjectLogo } from 'pp365-shared-library'
+import { OverflowTagMenu, ProjectLogo } from 'pp365-shared-library'
 import React, { useContext } from 'react'
 import _ from 'underscore'
 import { ProjectMenu } from '../ProjectMenu'
@@ -9,12 +10,40 @@ import { IListColumn } from './types'
 
 export const useColumns = (): IListColumn[] => {
   const context = useContext(ListContext)
+
+  const getField = (item: any, field: string) => {
+    const fieldValue = item.data[field]
+    let values: string[] = []
+    if (typeof fieldValue === 'string') {
+      values = fieldValue?.split(';')
+    } else {
+      values = []
+    }
+
+    if (!values.length || (values.length === 1 && values[0] === '')) {
+      const textValue = item.data[`${field}Text`]
+      values = textValue ? textValue?.split(';') : []
+    }
+
+    return values.length ? values : []
+  }
+
   const primaryUserRole =
     _.find(context.projectColumns, (col) => col.internalName === context.primaryUserField)?.name ||
     strings.PrimaryUserFieldLabel
+
   const secondaryUserRole =
     _.find(context.projectColumns, (col) => col.internalName === context.secondaryUserField)
       ?.name || strings.SecondaryUserFieldLabel
+
+  const primaryField =
+    _.find(context.projectColumns, (col) => col.internalName === context.primaryField)?.name ||
+    strings.PrimaryFieldLabel
+
+  const secondaryField =
+    _.find(context.projectColumns, (col) => col.internalName === context.secondaryField)?.name ||
+    strings.SecondaryFieldLabel
+
   return [
     {
       columnId: 'logo',
@@ -58,7 +87,7 @@ export const useColumns = (): IListColumn[] => {
     },
     {
       columnId: 'phase',
-      defaultWidth: 120,
+      defaultWidth: 100,
       compare: (a, b) => {
         return (a.phase || '').localeCompare(b.phase || '')
       },
@@ -69,6 +98,54 @@ export const useColumns = (): IListColumn[] => {
         return (
           <TableCellLayout truncate title={item.phase}>
             {item.phase || ''}
+          </TableCellLayout>
+        )
+      }
+    },
+    {
+      columnId: 'primaryField',
+      defaultWidth: 180,
+      compare: () => {
+        return -1
+      },
+      renderHeaderCell: () => {
+        return primaryField
+      },
+      renderCell: (item) => {
+        const tags = getField(item, context.primaryField)
+        return (
+          <TableCellLayout truncate>
+            <OverflowTagMenu
+              text={primaryField}
+              tags={tags}
+              icon={GlobeLocationFilled}
+              hidden={!tags.length}
+              isTagPreview={true}
+            />
+          </TableCellLayout>
+        )
+      }
+    },
+    {
+      columnId: 'secondaryField',
+      defaultWidth: 180,
+      compare: () => {
+        return -1
+      },
+      renderHeaderCell: () => {
+        return secondaryField
+      },
+      renderCell: (item) => {
+        const tags = getField(item, context.secondaryField)
+        return (
+          <TableCellLayout truncate>
+            <OverflowTagMenu
+              text={secondaryField}
+              tags={tags}
+              icon={TagMultipleFilled}
+              hidden={!tags.length}
+              isTagPreview={true}
+            />
           </TableCellLayout>
         )
       }
@@ -100,7 +177,7 @@ export const useColumns = (): IListColumn[] => {
       compare: (a, b) => {
         return a.secondaryUser?.name?.localeCompare(b.secondaryUser?.name || '')
       },
-      renderHeaderCell: (item: any) => {
+      renderHeaderCell: () => {
         return secondaryUserRole
       },
       renderCell: (item) => {
