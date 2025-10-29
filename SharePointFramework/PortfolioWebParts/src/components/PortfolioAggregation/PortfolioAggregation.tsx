@@ -31,7 +31,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
             title={props.title}
             enableShimmer={context.state.loading || context.state.isChangingView}
             items={context.items}
-            columns={context.columns}
+            columns={context.state.columns}
             hiddenColumns={props.hiddenColumns}
             groups={context.state.groups}
             selection={selection}

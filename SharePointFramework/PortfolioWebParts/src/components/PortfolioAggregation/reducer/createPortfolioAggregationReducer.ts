@@ -80,7 +80,7 @@ export const createPortfolioAggregationReducer = (
         return
       }
 
-      let selectedColumns = payload.dataSource.columns ?? props.columns ?? []
+      let selectedColumns = props.columns ?? []
 
       let allColumnsForCategory = payload.columns.map((c) =>
         c.setData({
@@ -101,12 +101,8 @@ export const createPortfolioAggregationReducer = (
         })
         .filter(Boolean)
 
-      const availableColumns = payload.columns.filter(
-        (c) => !_.some(selectedColumns, ({ key }) => key === c.key)
-      )
-
       state.columns = !_.isEmpty(selectedColumns)
-        ? [...selectedColumns, ...availableColumns]
+        ? selectedColumns
         : sortArray(allColumnsForCategory, 'sortOrder')
 
       state.allColumnsForCategory = allColumnsForCategory
