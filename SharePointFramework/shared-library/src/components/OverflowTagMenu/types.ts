@@ -30,4 +30,9 @@ export interface IOverflowTagMenuProps {
    * The icon to display
    */
   icon?: FluentIcon
+
+  /**
+   * If true, apply CSS constraints to limit tag width and enable text truncation
+   */
+  isTagPreview?: boolean
 }
