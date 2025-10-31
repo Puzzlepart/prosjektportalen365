@@ -344,12 +344,12 @@ export class PlannerConfiguration extends BaseTask {
   }
 
   /**
-   * Fetch plans
+   * Fetch plans for a specific group with request configuration
    *
-   * @param owner Owner (group id)
+   * @param groupId Group identifier
    */
-  private _fetchPlans(owner: string) {
-    return MSGraphHelper.Get<IPlannerPlan[]>(`groups/${owner}/planner/plans`, ['id', 'title'])
+  public _fetchPlans(groupId: string) {
+    return MSGraphHelper.Get<IPlannerPlan[]>(`groups/${groupId}/planner/plans`, ['id', 'title'])
   }
 
   /**

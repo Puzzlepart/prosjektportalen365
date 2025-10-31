@@ -153,18 +153,28 @@ export class CopyListData extends BaseTask {
    * Creates a default Planner plan if there's no Planner configuration. This
    * makes sure we have a Planner web part that doesn't throw errors.
    *
+   * When upgrading to a parent project, this method will skip creating a new
+   * default plan if the group already has existing plans to preserve them.
+   *
    * @param params Task parameters
    */
   private async createDefaultPlannerPlan(params: IBaseTaskParams) {
     if (!_.any(this.data.selectedContentConfig, (c) => c.type === ContentConfigType.Planner)) {
-      await new PlannerConfiguration(null, this.data, {}).ensurePlan(
-        {
-          title: params.context.pageContext.web.title,
-          owner: params.context.pageContext.legacyPageContext.groupId
-        },
-        params.context.pageContext,
-        false
-      )
+      const plannerConfig = new PlannerConfiguration(null, this.data, {})
+      await plannerConfig
+        ._fetchPlans(params.context.pageContext.legacyPageContext.groupId)
+        .then((plans) => {
+          if (_.isEmpty(plans)) {
+            plannerConfig.ensurePlan(
+              {
+                title: params.context.pageContext.web.title,
+                owner: params.context.pageContext.legacyPageContext.groupId
+              },
+              params.context.pageContext,
+              false
+            )
+          }
+        })
     }
   }
 
