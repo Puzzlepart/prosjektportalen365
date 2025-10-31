@@ -580,6 +580,7 @@ declare interface IPortfolioWebPartsStrings {
   SecondaryFieldLabel: string
   PrimaryUserFieldLabel: string
   SecondaryUserFieldLabel: string
+  RefreshRequiredDescription: string
   LifecycleStatus_Completed: string
   LifecycleStatus_Closed: string
   ProjectLevel: string

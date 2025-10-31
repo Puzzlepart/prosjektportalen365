@@ -22,7 +22,12 @@ export function useProjectListDataFetch(
 ) {
   useEffect(() => {
     Promise.all([
-      props.dataAdapter.fetchEnrichedProjects(props.primaryUserField, props.secondaryUserField),
+      props.dataAdapter.fetchEnrichedProjects({
+        primaryUserField: props.primaryUserField,
+        secondaryUserField: props.secondaryUserField,
+        primaryField: props.primaryField,
+        secondaryField: props.secondaryField
+      }),
       props.dataAdapter.isUserInGroup(resource.Security_SiteGroup_PortfolioInsight_Title)
     ]).then(([projects, isUserInPortfolioManagerGroup]) => {
       const selectedVertical =

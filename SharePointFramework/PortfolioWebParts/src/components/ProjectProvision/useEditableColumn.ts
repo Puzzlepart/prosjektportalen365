@@ -148,7 +148,7 @@ export function useEditableColumn(
             }
           ],
           [
-            'expirationDate',
+            'expirationDate', // TODO: support for users for english locale
             () => {
               if (props.expirationDateMode !== 'date') {
                 if (value && value !== '0') {

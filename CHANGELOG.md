@@ -18,6 +18,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Endret "Ingen fase" til "Idé". For eksisterende installasjoner må dette eventuelt oppdateres manuelt.
 - Forbedret ressursallokeringsoversikten, henter nå inn avdelingsinformasjon fra ressursene og viser dette i oversikten, samt tilbyr filter på avdeling.
 - Forbedret prosjektliste- og kompaktliste-visning, viser nå både primærfelt og sekundærfelt i visningen for økt synlighet og bedre kontekst i prosjektoversikten [#1659](https://github.com/Puzzlepart/prosjektportalen365/issues/1659)
+- Forbedringen rundt innlasting av store mengder prosjekter i prosjektutlisting webdel på forsiden av porteføljen
 
 ### Feilrettinger
 

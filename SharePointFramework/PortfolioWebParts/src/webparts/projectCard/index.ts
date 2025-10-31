@@ -13,6 +13,7 @@ import { IProjectCardProps, ProjectCard } from 'components/ProjectCard'
 import {
   CustomCollectionFieldType,
   PropertyFieldCollectionData,
+  PropertyFieldDropdownWithCallout,
   PropertyFieldMultiSelect,
   PropertyFieldToggleWithCallout
 } from '@pnp/spfx-property-controls'
@@ -214,37 +215,53 @@ export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCar
                   ],
                   selectedKeys: this.properties.projectMetadata ?? []
                 }),
-                PropertyPaneDropdown('primaryField', {
+                PropertyFieldDropdownWithCallout('primaryField', {
+                  calloutTrigger: CalloutTriggers.Hover,
+                  key: 'primaryFieldId',
                   label: strings.PrimaryFieldLabel,
                   options: this._columnFieldOptions.map((option) => ({
                     key: option.key,
                     text: option.text
                   })),
-                  selectedKey: this.properties.primaryField ?? 'GtProjectServiceArea'
+                  selectedKey: this.properties.primaryField ?? 'GtProjectServiceArea',
+                  calloutWidth: 430,
+                  calloutContent: createElement('p', {}, strings.RefreshRequiredDescription)
                 }),
-                PropertyPaneDropdown('secondaryField', {
+                PropertyFieldDropdownWithCallout('secondaryField', {
+                  calloutTrigger: CalloutTriggers.Hover,
+                  key: 'secondaryFieldId',
                   label: strings.SecondaryFieldLabel,
                   options: this._columnFieldOptions.map((option) => ({
                     key: option.key,
                     text: option.text
                   })),
-                  selectedKey: this.properties.secondaryField ?? 'GtProjectType'
+                  selectedKey: this.properties.secondaryField ?? 'GtProjectType',
+                  calloutWidth: 430,
+                  calloutContent: createElement('p', {}, strings.RefreshRequiredDescription)
                 }),
-                PropertyPaneDropdown('primaryUserField', {
+                PropertyFieldDropdownWithCallout('primaryUserField', {
+                  calloutTrigger: CalloutTriggers.Hover,
+                  key: 'primaryUserFieldId',
                   label: strings.PrimaryUserFieldLabel,
                   options: this._columnUserOptions.map((option) => ({
                     key: option.key,
                     text: option.text
                   })),
-                  selectedKey: this.properties.primaryUserField ?? 'GtProjectOwner'
+                  selectedKey: this.properties.primaryUserField ?? 'GtProjectOwner',
+                  calloutWidth: 430,
+                  calloutContent: createElement('p', {}, strings.RefreshRequiredDescription)
                 }),
-                PropertyPaneDropdown('secondaryUserField', {
+                PropertyFieldDropdownWithCallout('secondaryUserField', {
+                  calloutTrigger: CalloutTriggers.Hover,
+                  key: 'secondaryUserFieldId',
                   label: strings.SecondaryUserFieldLabel,
                   options: this._columnUserOptions.map((option) => ({
                     key: option.key,
                     text: option.text
                   })),
-                  selectedKey: this.properties.secondaryUserField ?? 'GtProjectManager'
+                  selectedKey: this.properties.secondaryUserField ?? 'GtProjectManager',
+                  calloutWidth: 430,
+                  calloutContent: createElement('p', {}, strings.RefreshRequiredDescription)
                 }),
                 PropertyFieldCollectionData('quickLaunchMenu', {
                   key: 'quickLaunchFieldId',

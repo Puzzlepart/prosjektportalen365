@@ -36,6 +36,7 @@ import {
   SPContentType,
   SPField,
   SPFxContext,
+  SPProjectItem,
   SPTimelineConfigurationItem,
   TimelineConfigurationModel,
   TimelineContentModel
@@ -60,6 +61,7 @@ import {
 import * as config from './config'
 import {
   GetPortfolioConfigError,
+  IEnrichedProjectsFields,
   IFetchDataForViewItemResult,
   IHubContext,
   IPortfolioViewData,
@@ -632,17 +634,34 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   }
 
   public async fetchEnrichedProjects(
-    primaryUserField?: string,
-    secondaryUserField?: string
+    fields?: IEnrichedProjectsFields
   ): Promise<ProjectListModel[]> {
     const localStore = new PnPClientStorage().local
     const siteId = this._spfxContext.pageContext.site.id.toString()
     const list = this._sp.web.lists.getByTitle(resource.Lists_Projects_Title)
+    const baseFields = Object.keys(new SPProjectItem())
+    const selectFields = [...baseFields]
+
+    if (fields?.primaryUserField) selectFields.push(`${fields.primaryUserField}Id`)
+    if (fields?.secondaryUserField) selectFields.push(`${fields.secondaryUserField}Id`)
+    if (fields?.primaryField) selectFields.push(fields.primaryField)
+    if (fields?.secondaryField) selectFields.push(fields.secondaryField)
+
+    const fieldsCacheKey = [
+      fields?.primaryUserField,
+      fields?.secondaryUserField,
+      fields?.primaryField,
+      fields?.secondaryField
+    ]
+      .filter(Boolean)
+      .join('_')
+    const cacheKey = `pp365_fetchenrichedprojects_${siteId}_${fieldsCacheKey || 'default'}`
+
     const [items, sites, memberOfGroups, users] = await localStore.getOrPut(
-      `pp365_fetchenrichedprojects_${siteId}`,
+      cacheKey,
       async () =>
         await Promise.all([
-          list.items.getAll(),
+          list.items.select(...selectFields).getAll(),
           this._fetchItems(`DepartmentId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId']),
           this.fetchMemberGroups(),
           this._sp.web.siteUsers.select('Id', 'Title', 'Email')()
@@ -655,7 +674,11 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       memberOfGroups,
       users
     }
-    let projects = this._combineResultData(result, primaryUserField, secondaryUserField)
+    let projects = this._combineResultData(
+      result,
+      fields?.primaryUserField,
+      fields?.secondaryUserField
+    )
     projects = projects.filter(
       (m) =>
         m.lifecycleStatus !== strings.LifecycleStatus_Completed &&
@@ -680,11 +703,16 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       : `pp365_fetchenrichedproject_${siteId}`
 
     const list = spHub.web.lists.getByTitle(resource.Lists_Projects_Title)
+    const selectFields = Object.keys(new SPProjectItem())
+
     const [items, sites, memberOfGroups, users] = await localStore.getOrPut(
       cacheKey,
       async () =>
         await Promise.all([
-          list.items.filter(`GtSiteId eq '${siteId}'`).getAll(),
+          list.items
+            .select(...selectFields)
+            .filter(`GtSiteId eq '${siteId}'`)
+            .getAll(),
           this._fetchItems(`SiteId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId']),
           this.fetchMemberGroups(),
           spHub.web.siteUsers.select('Id', 'Title', 'Email')()

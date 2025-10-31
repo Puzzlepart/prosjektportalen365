@@ -695,6 +695,7 @@ define([], function () {
     SecondaryFieldLabel: 'Secondary field',
     PrimaryUserFieldLabel: 'Primary user',
     SecondaryUserFieldLabel: 'Secondary user',
+    RefreshRequiredDescription: 'Requires refresh after changes',
     LifecycleStatus_Completed: 'Completed',
     LifecycleStatus_Closed: 'Closed',
     ProjectLevel: 'Project level'

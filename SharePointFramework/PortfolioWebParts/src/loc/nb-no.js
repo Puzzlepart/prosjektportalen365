@@ -582,6 +582,7 @@ define([], function () {
     SecondaryFieldLabel: 'Sekundært felt',
     PrimaryUserFieldLabel: 'Primær bruker',
     SecondaryUserFieldLabel: 'Sekundær bruker',
+    RefreshRequiredDescription: 'Krever refresh etter endringer',
     LifecycleStatus_Completed: 'Avsluttet',
     LifecycleStatus_Closed: 'Stengt',
     ProjectLevel: 'Prosjektnivå'
