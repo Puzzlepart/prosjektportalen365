@@ -34,7 +34,6 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Rettet et problem hvor endring av rekkefølge på kolonner i en aggregert oversikt-webdel blir ikke korrekt lagret [#1641](https://github.com/Puzzlepart/prosjektportalen365/issues/1641)
 - Rettet et problem hvor det ble opprettet en tom plan i Planner ved oppgradering til overordnet prosjekt. Eksisterende plan beholdes nå som forventet [#1555](https://github.com/Puzzlepart/prosjektportalen365/issues/1555)
 
-
 ---
 
 ## 1.11.1 - 18.08.2025
