@@ -161,21 +161,20 @@ export class CopyListData extends BaseTask {
   private async createDefaultPlannerPlan(params: IBaseTaskParams) {
     if (!_.any(this.data.selectedContentConfig, (c) => c.type === ContentConfigType.Planner)) {
       const plannerConfig = new PlannerConfiguration(null, this.data, {})
-      const existingPlans = await plannerConfig.fetchPlans(
-        params.context.pageContext.legacyPageContext.groupId
-      )
-
-      // Only create a default plan if no plans exist for this group
-      if (existingPlans.length === 0) {
-        await plannerConfig.ensurePlan(
-          {
-            title: params.context.pageContext.web.title,
-            owner: params.context.pageContext.legacyPageContext.groupId
-          },
-          params.context.pageContext,
-          false
-        )
-      }
+      await plannerConfig
+        ._fetchPlans(params.context.pageContext.legacyPageContext.groupId)
+        .then((plans) => {
+          if (_.isEmpty(plans)) {
+            plannerConfig.ensurePlan(
+              {
+                title: params.context.pageContext.web.title,
+                owner: params.context.pageContext.legacyPageContext.groupId
+              },
+              params.context.pageContext,
+              false
+            )
+          }
+        })
     }
   }
 
