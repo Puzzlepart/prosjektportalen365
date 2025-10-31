@@ -9,6 +9,7 @@ import { IProjectInformationProps, ProjectInformation } from 'components/Project
 import * as strings from 'ProjectWebPartsStrings'
 import { BaseProjectWebPart } from '../baseProjectWebPart'
 import resource from 'SharedResources'
+import { format } from '@fluentui/react'
 
 export default class ProjectInformationWebPart extends BaseProjectWebPart<IProjectInformationProps> {
   public async onInit() {
@@ -36,6 +37,9 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<IProje
             {
               groupName: strings.GeneralGroupName,
               groupFields: [
+                PropertyPaneTextField('title', {
+                  label: strings.ProjectPropertiesTitleLabel
+                }),
                 PropertyPaneToggle('skipSyncToHub', {
                   label: strings.SkipSyncToHubLabel
                 }),
@@ -49,7 +53,10 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<IProje
                   options: [
                     {
                       key: 'showAllProjectInformationAction',
-                      text: strings.ShowAllProjectInformationText
+                      text: format(
+                        strings.ShowAllProjectInformationText,
+                        this.properties.title?.toLowerCase()
+                      )
                     },
                     {
                       key: 'viewVersionHistoryAction',
@@ -57,7 +64,10 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<IProje
                     },
                     {
                       key: 'editProjectInformationAction',
-                      text: strings.EditProjectInformationText
+                      text: format(
+                        strings.EditProjectInformationText,
+                        this.properties.title?.toLowerCase()
+                      )
                     },
                     {
                       key: 'editSiteInformationAction',

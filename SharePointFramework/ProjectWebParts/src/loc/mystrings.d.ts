@@ -24,6 +24,7 @@ declare interface IProjectWebPartsStrings {
   PublishingReportLabel: string
   AdminPageLinkLabel: string
   AdvancedGroupName: string
+  ProjectPropertiesTitleLabel: string
   CalloutTemplateFieldLabel: string
   CancelText: string
   CategoryFieldLabel: string

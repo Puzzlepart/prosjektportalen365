@@ -103,7 +103,7 @@ define([], function () {
     DeleteReportButtonDescriptionNoPermission:
       'Du har ikke tilgang til å slette denne statusrapporten.',
     EditItemLabel: 'Rediger',
-    EditProjectInformationText: 'Rediger prosjektinformasjon',
+    EditProjectInformationText: 'Rediger {0}',
     EditReportButtonLabel: 'Rediger',
     EditReportButtonDescription: 'Rediger den valgte statusrapporten.',
     EditReportButtonDescriptionNoPermission:
@@ -226,7 +226,7 @@ define([], function () {
     RiskMatrixGroupName: 'Risikomatrise',
     SaveColorConfigurationText: 'Lagre',
     SettingsGroupName: 'Innstillinger',
-    ShowAllProjectInformationText: 'Vis all prosjektinformasjon',
+    ShowAllProjectInformationText: 'Vis all {0}',
     ShowFieldExternalUsersOnText: 'Synlig for eksterne brukere',
     ShowFieldExternalUsersOffText: 'Ikke synlig for eksterne brukere',
     ShowFilterButtonLabel: 'Vis filterknapp',
@@ -238,6 +238,7 @@ define([], function () {
     ShowTimelineListCommandsLabel: 'Vis kommandolinje for liste',
     ShowTimelineListLabel: 'Vis liste',
     Skip: 'Hopp over alle',
+    ProjectPropertiesTitleLabel: 'Tittel',
     SkipSyncToHubLabel: 'Ikke synkroniser til hub',
     StatusClosed: 'Utført',
     StatusElementText: 'Status',

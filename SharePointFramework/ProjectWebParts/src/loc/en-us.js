@@ -13,6 +13,7 @@ define([], function () {
     ArchiveLogScopeDocument: 'Document',
     ArchiveLogScopeList: 'List',
     ArchiveLogOperationArchive: 'Archive',
+    ProjectPropertiesTitleLabel: 'Title',
     ArchiveLogOperationPhaseTransition: 'Phase Transition',
     ArchiveLogOperationEndClosed: 'End/Closed/Locked',
     UpdatingProjectPropertiesErrorText: "An error occurred while saving project properties. Please try again later.",
