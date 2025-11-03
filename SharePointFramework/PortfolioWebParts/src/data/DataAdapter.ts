@@ -893,20 +893,17 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         throw new Error(format(strings.DataSourceNotFound, dataSourceName))
       }
       const dataSrcProperties = dataSrc.columns.map((col) => col.fieldName) || []
+      const uniqueProperties = _.uniq([...selectProperties, ...dataSrcProperties])
+      const propertiesToSelect = dataSrc.category.startsWith(
+        resource.Lists_DataSources_Category_BenefitOverview
+      )
+        ? uniqueProperties
+        : [...uniqueProperties, 'FileExtension', 'ServerRedirectedURL']
       if (dataSrc.category.startsWith(resource.Lists_DataSources_Category_BenefitOverview)) {
-        items = await this.fetchBenefitItemsWithSource(dataSrc, [
-          ...selectProperties,
-          ...dataSrcProperties
-        ])
+        items = await this.fetchBenefitItemsWithSource(dataSrc, propertiesToSelect)
       } else {
-        items = await this._fetchItems(dataSrc.searchQuery, [
-          ...selectProperties,
-          ...dataSrcProperties,
-          'FileExtension',
-          'ServerRedirectedURL'
-        ])
+        items = await this._fetchItems(dataSrc.searchQuery, propertiesToSelect)
       }
-
       return items
     } catch (error) {
       throw new Error(`${format(strings.DataSourceError, dataSourceName)}  ${error}`)
