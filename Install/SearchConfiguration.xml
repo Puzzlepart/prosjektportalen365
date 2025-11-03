@@ -229,6 +229,14 @@
                     <d3p1:SchemaId>0</d3p1:SchemaId> 
                 </d4p1:Value> 
             </d4p1:KeyValueOfstringAliasInfoy6h3NzC8>
+            <d4p1:KeyValueOfstringAliasInfoy6h3NzC8> 
+                <d4p1:Key>GtIdeaOperationalNumber</d4p1:Key> 
+                <d4p1:Value> 
+                    <d3p1:Name>GtIdeaOperationalNumber</d3p1:Name> 
+                    <d3p1:ManagedPid>1000000083</d3p1:ManagedPid> 
+                    <d3p1:SchemaId>0</d3p1:SchemaId> 
+                </d4p1:Value> 
+            </d4p1:KeyValueOfstringAliasInfoy6h3NzC8> 
             </d3p1:dictionary>
         </Aliases>
         <CategoriesAndCrawledProperties xmlns:d3p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
@@ -591,6 +599,17 @@
                                 <d5p1:SchemaId>0</d5p1:SchemaId> 
                             </d3p1:Value> 
                         </d3p1:KeyValueOfstringCrawledPropertyInfoy6h3NzC8>
+                         <d3p1:KeyValueOfstringCrawledPropertyInfoy6h3NzC8>
+                            <d3p1:Key>ows_GtIdeaOperationalNumber</d3p1:Key>
+                            <d3p1:Value>
+                                <d5p1:Name>ows_GtIdeaOperationalNumber</d5p1:Name>
+                                <d5p1:CategoryName>SharePoint</d5p1:CategoryName>
+                                <d5p1:IsImplicit>false</d5p1:IsImplicit>
+                                <d5p1:IsMappedToContents>true</d5p1:IsMappedToContents>
+                                <d5p1:Propset>00130329-0000-0130-c000-000000131346</d5p1:Propset> 
+                                <d5p1:SchemaId>0</d5p1:SchemaId> 
+                            </d3p1:Value> 
+                        </d3p1:KeyValueOfstringCrawledPropertyInfoy6h3NzC8>
                     </d5p1:dictionary>
                 </d3p1:Value>
             </d3p1:KeyValueOfguidCrawledPropertyInfoCollectionaSYUqUE_P>
@@ -886,6 +905,17 @@
                         <d3p1:CrawledPropertyName>ows_GtIdeaStrategicNumber</d3p1:CrawledPropertyName> 
                         <d3p1:CrawledPropset>00130329-0000-0130-c000-000000131346</d3p1:CrawledPropset> 
                         <d3p1:ManagedPid>1000000082</d3p1:ManagedPid> 
+                        <d3p1:MappingOrder>100</d3p1:MappingOrder> 
+                        <d3p1:SchemaId>0</d3p1:SchemaId> 
+                    </d4p1:Value> 
+                </d4p1:KeyValueOfstringMappingInfoy6h3NzC8>
+                 <d4p1:KeyValueOfstringMappingInfoy6h3NzC8> 
+                    <d4p1:Key>00130329-0000-0130-c000-000000131346:ows_GtIdeaOperationalNumber-&gt;1000000082</d4p1:Key> 
+                    <d4p1:Value> 
+                        <d3p1:Name>00130329-0000-0130-c000-000000131346:ows_GtIdeaOperationalNumber-&gt;1000000082</d3p1:Name> 
+                        <d3p1:CrawledPropertyName>ows_GtIdeaOperationalNumber</d3p1:CrawledPropertyName> 
+                        <d3p1:CrawledPropset>00130329-0000-0130-c000-000000131346</d3p1:CrawledPropset> 
+                        <d3p1:ManagedPid>1000000083</d3p1:ManagedPid> 
                         <d3p1:MappingOrder>100</d3p1:MappingOrder> 
                         <d3p1:SchemaId>0</d3p1:SchemaId> 
                     </d4p1:Value> 
@@ -1228,6 +1258,19 @@
                         <d3p1:EntityExtractorBitMap>0</d3p1:EntityExtractorBitMap>
                         <d3p1:ExtraProperties i:nil="true" />
                         <d3p1:ManagedPid>1000000082</d3p1:ManagedPid>
+                        <d3p1:MappingsOverridden>true</d3p1:MappingsOverridden>
+                        <d3p1:SchemaId>0</d3p1:SchemaId>
+                        <d3p1:TokenNormalization>true</d3p1:TokenNormalization>
+                    </d4p1:Value>
+                </d4p1:KeyValueOfstringOverrideInfoy6h3NzC8>
+                <d4p1:KeyValueOfstringOverrideInfoy6h3NzC8>
+                    <d4p1:Key>1000000083</d4p1:Key>
+                    <d4p1:Value>
+                        <d3p1:Name>1000000083</d3p1:Name>
+                        <d3p1:AliasesOverridden>true</d3p1:AliasesOverridden>
+                        <d3p1:EntityExtractorBitMap>0</d3p1:EntityExtractorBitMap>
+                        <d3p1:ExtraProperties i:nil="true" />
+                        <d3p1:ManagedPid>1000000083</d3p1:ManagedPid>
                         <d3p1:MappingsOverridden>true</d3p1:MappingsOverridden>
                         <d3p1:SchemaId>0</d3p1:SchemaId>
                         <d3p1:TokenNormalization>true</d3p1:TokenNormalization>
