@@ -1765,6 +1765,9 @@
     <data name="Lists_HelpContent_PortfolioLevelUserManual" xml:space="preserve">
         <value>Portfolio Level User Manual</value>
     </data>
+    <data name="Lists_HelpContent_CreateProjectUserManual" xml:space="preserve">
+        <value>Create Project User Manual</value>
+    </data>
     <data name="Lists_HelpContent_PortfolioOverviewUserManual" xml:space="preserve">
         <value>Portfolio Overview User Manual</value>
     </data>
@@ -1810,7 +1813,7 @@
     <data name="Lists_HelpContent_UncertaintiesUserManual" xml:space="preserve">
         <value>Uncertainty User Manual</value>
     </data>
-    <data name="Lists_HelpContent_UnknownOverviewUserManual" xml:space="preserve">
+    <data name="Lists_HelpContent_UncertaintyOverviewUserManual" xml:space="preserve">
         <value>Uncertainty Overview User Manual</value>
     </data>
     <data name="Lists_HelpContent_Url" xml:space="preserve">

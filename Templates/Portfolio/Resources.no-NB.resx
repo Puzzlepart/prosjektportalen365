@@ -1768,6 +1768,9 @@
     <data name="Lists_HelpContent_PortfolioLevelUserManual" xml:space="preserve">
         <value>Porteføljenivå Brukermanual</value>
     </data>
+    <data name="Lists_HelpContent_CreateProjectUserManual" xml:space="preserve">
+        <value>Opprett prosjekt Brukermanual</value>
+    </data>
     <data name="Lists_HelpContent_PortfolioOverviewUserManual" xml:space="preserve">
         <value>Porteføljeoversikt Brukermanual</value>
     </data>
@@ -1813,7 +1816,7 @@
     <data name="Lists_HelpContent_UncertaintiesUserManual" xml:space="preserve">
         <value>Usikkerhet Brukermanual</value>
     </data>
-    <data name="Lists_HelpContent_UnknownOverviewUserManual" xml:space="preserve">
+    <data name="Lists_HelpContent_UncertaintyOverviewUserManual" xml:space="preserve">
         <value>Usikkerhetsoversikt Brukermanual</value>
     </data>
     <data name="Lists_HelpContent_Url" xml:space="preserve">
