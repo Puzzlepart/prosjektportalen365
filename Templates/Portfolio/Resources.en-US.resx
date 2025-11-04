@@ -2402,7 +2402,7 @@
         <value>Resource Allocation</value>
     </data>
     <data name="Lists_ResourceAllocation_Url" xml:space="preserve">
-        <value>Lists/ResourceAllocation</value>
+        <value>Lists/Resource Allocation</value>
     </data>
     <data name="Lists_SitePages_Title" xml:space="preserve">
         <value>Site Pages</value>
@@ -2711,7 +2711,7 @@
         <value>Project Deliveries</value>
     </data>
     <data name="Navigation_ProjectDeliveries_Url" xml:space="preserve">
-        <value>Lists/Project deliveries/AllItems.aspx</value>
+        <value>Lists/Project Deliveries/AllItems.aspx</value>
     </data>
     <data name="Navigation_ProjectLog_Title" xml:space="preserve">
         <value>Project Log</value>
@@ -2723,7 +2723,7 @@
         <value>Project Status</value>
     </data>
     <data name="Navigation_ProjectStatus_Url" xml:space="preserve">
-        <value>SitePages/Project status.aspx</value>
+        <value>SitePages/ProjectStatus.aspx</value>
     </data>
     <data name="Navigation_ProjectTimeline_Title" xml:space="preserve">
         <value>Project Timeline</value>
