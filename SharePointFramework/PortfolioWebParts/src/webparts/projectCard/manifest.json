@@ -3,7 +3,7 @@
   "id": "92d23158-485a-4103-96bb-d3036b347412",
   "alias": "ProjectCardWebPart",
   "componentType": "WebPart",
-  "version": "1.11.1",
+  "version": "1.12.0",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "hiddenFromToolbox": false,
