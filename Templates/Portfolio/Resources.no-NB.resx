@@ -1726,6 +1726,9 @@
     <data name="Lists_HelpContent_BenefitFollowUpUserManual" xml:space="preserve">
         <value>Gevinstoppfølging Brukermanual</value>
     </data>
+    <data name="Lists_HelpContent_BenefitOverviewPortfolioUserManual" xml:space="preserve">
+        <value>Gevinstoversikt Portefølje Brukermanual</value>
+    </data>
     <data name="Lists_HelpContent_BenefitOverviewUserManual" xml:space="preserve">
         <value>Gevinstoversikt Brukermanual</value>
     </data>

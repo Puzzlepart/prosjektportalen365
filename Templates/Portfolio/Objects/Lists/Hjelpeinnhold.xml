@@ -69,7 +69,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">50</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_BenefitOverviewUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_BenefitOverviewPortfolioUserManual}</pnp:DataValue>
             <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Portfolio}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">SitePages/{resource:ClientSidePages_BenefitOverview_PageName}</pnp:DataValue>
