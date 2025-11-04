@@ -2,7 +2,7 @@
 
 Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
 
-## 1.12.0 - TBA
+## 1.12.0 - 05.11.2025
 
 ### Ny funksjonalitet
 
