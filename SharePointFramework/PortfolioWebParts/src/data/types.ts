@@ -42,6 +42,31 @@ export interface IProjectsData {
   users: ISiteUserInfo[]
 }
 
+/**
+ * Additional fields to include when fetching enriched projects
+ */
+export interface IEnrichedProjectsFields {
+  /**
+   * Primary user field
+   */
+  primaryUserField?: string
+
+  /**
+   * Secondary user field
+   */
+  secondaryUserField?: string
+
+  /**
+   * Primary field
+   */
+  primaryField?: string
+
+  /**
+   * Secondary field
+   */
+  secondaryField?: string
+}
+
 export interface IPortfolioWebPartsDataAdapter {
   /**
    * Configure data adapter - returns an configured instance of the data adapter.
@@ -233,8 +258,10 @@ export interface IPortfolioWebPartsDataAdapter {
    * Graph Groups and site users. The result are cached in `localStorage`
    * for 30 minutes. Projects with lifecycle stage `Avsluttet` are excluded, and
    * the projects are sorted by Title ascending.
+   *
+   * @param fields Additional fields to include in the query
    */
-  fetchEnrichedProjects?(): Promise<ProjectListModel[]>
+  fetchEnrichedProjects?(fields?: IEnrichedProjectsFields): Promise<ProjectListModel[]>
 
   /**
    * Fetching enriched project by combining list item from projects list,

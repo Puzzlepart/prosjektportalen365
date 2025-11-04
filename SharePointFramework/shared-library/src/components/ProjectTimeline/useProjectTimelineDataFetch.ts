@@ -12,6 +12,7 @@ import {
 } from '../../interfaces'
 import { ProjectListModel, TimelineContentModel } from '../../models'
 import { IProjectTimelineProps, IProjectTimelineState } from './types'
+import resource from 'SharedResources'
 
 /**
  * Creating groups based on projects title
@@ -66,7 +67,7 @@ const transformItems = (
       if (!group) return null
 
       const background =
-        item.getConfig('elementType') !== strings.BarLabel
+        item.getConfig('elementType') !== resource.TimelineConfiguration_Bar_ElementType
           ? 'transparent'
           : item.getConfig('bgColorHex', '#f35d69')
 
@@ -99,11 +100,11 @@ const transformItems = (
         id,
         group: group.id,
         title:
-          item.type === strings.ProjectLabel
+          item.type === resource.TimelineConfiguration_Project_Title
             ? format(strings.ProjectTimelineItemInfo, item.title)
             : item.itemTitle,
         start_time:
-          item.getConfig('elementType') !== strings.BarLabel
+          item.getConfig('elementType') !== resource.TimelineConfiguration_Bar_ElementType
             ? moment(new Date(item.endDate))
             : moment(new Date(item.startDate)),
         end_time: moment(new Date(item.endDate)),
@@ -159,31 +160,35 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
         })
     )
 
-    let timelineItems = filteredProjects.map<TimelineContentModel>((project) => {
-      const config = projectData.configElement
-      const statusReport = projectData?.reports?.find((statusReport: any) => {
-        return statusReport.siteId === project.siteId
-      })
-      const data = projectData?.data?.find((data: any) => {
-        return data.siteId === project.siteId
-      })
+    const config = projectData.configElement
+    let timelineItems = []
 
-      return new TimelineContentModel(
-        project.siteId,
-        project.title,
-        project.title,
-        strings.ProjectLabel,
-        project.startDate,
-        project.endDate,
-        '',
-        '',
-        statusReport?.budgetTotal,
-        statusReport?.costsTotal,
-        project.url,
-        project.phase,
-        data?.properties
-      ).usingConfig(config)
-    })
+    if (config?.showElementPortfolio || config?.showElementProgram) {
+      timelineItems = filteredProjects.map<TimelineContentModel>((project) => {
+        const statusReport = projectData?.reports?.find((statusReport: any) => {
+          return statusReport.siteId === project.siteId
+        })
+        const data = projectData?.data?.find((data: any) => {
+          return data.siteId === project.siteId
+        })
+
+        return new TimelineContentModel(
+          project.siteId,
+          project.title,
+          project.title,
+          resource.TimelineConfiguration_Project_Title,
+          project.startDate,
+          project.endDate,
+          '',
+          '',
+          statusReport?.budgetTotal,
+          statusReport?.costsTotal,
+          project.url,
+          project.phase,
+          data?.properties
+        ).usingConfig(config)
+      })
+    }
 
     timelineItems = [...timelineItems, ...filteredTimelineItems]
     const groups = createProjectGroups(filteredProjects)

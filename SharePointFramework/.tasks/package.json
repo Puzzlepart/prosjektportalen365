@@ -3,7 +3,8 @@
     "version": "1.11.1",
     "scripts": {
       "build": "node ./build.js",
-      "lint": "echo \"No linting configured\""
+      "lint": "echo \"No linting configured\"",
+      "validate-loc": "echo \"No localization validation configured\""
     },
     "dependencies": {
       "dotenv": "16.1.3",
@@ -16,6 +17,6 @@
     "devDependencies": {
       "@types/lodash": "4.14.195",
       "@types/colors": "1.2.1",
-      "pzl-spfx-tasks": "~0.5.10-2"
+      "pzl-spfx-tasks": "0.5.15-1"
     }
 }

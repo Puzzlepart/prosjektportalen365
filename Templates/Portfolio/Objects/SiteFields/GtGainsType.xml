@@ -1,1 +1,8 @@
-<Field Type="Choice" DisplayName="{resource:SiteFields_GtGainsType_DisplayName}" Format="RadioButtons" ID="{a1a56abd-5b3d-45d2-8617-32b2f8b195de}" StaticName="GtGainsType" Name="GtGainsType" Description="{resource:SiteFields_GtGainsType_Description}" Group="{resource:SiteFields_Project_Group}"><Default>Direkte</Default><CHOICES><CHOICE>Direkte</CHOICE><CHOICE>Indirekte</CHOICE><CHOICE>Kvalitativ</CHOICE></CHOICES></Field>
+<Field Type="Choice" DisplayName="{resource:SiteFields_GtGainsType_DisplayName}" Format="RadioButtons" ID="{a1a56abd-5b3d-45d2-8617-32b2f8b195de}" StaticName="GtGainsType" Name="GtGainsType" Description="{resource:SiteFields_GtGainsType_Description}" Group="{resource:SiteFields_Project_Group}">
+  <Default>{resource:Choice_GtGainsType_Directly}</Default>
+  <CHOICES>
+    <CHOICE>{resource:Choice_GtGainsType_Directly}</CHOICE>
+    <CHOICE>{resource:Choice_GtGainsType_Indirectly}</CHOICE>
+    <CHOICE>{resource:Choice_GtGainsType_Qualitative}</CHOICE>
+  </CHOICES>
+</Field>

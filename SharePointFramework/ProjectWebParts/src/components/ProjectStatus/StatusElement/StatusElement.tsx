@@ -1,12 +1,13 @@
 import { TooltipHost } from '@fluentui/react'
 import { ConditionalWrapper } from 'pp365-shared-library/lib/components'
+import { tryParseCurrency, tryParsePercentage } from 'pp365-shared-library'
+import strings from 'ProjectWebPartsStrings'
 import React, { FC, ReactNode, useContext } from 'react'
 import { SectionContext } from '../Sections/context'
 import styles from './StatusElement.module.scss'
 import { StatusElementIcon } from './StatusElementIcon/StatusElementIcon'
 import { IStatusElementProps } from './types'
 import { useStatusElement } from './useStatusElement'
-import { tryParseCurrency, tryParsePercentage } from 'pp365-shared-library'
 
 export const StatusElement: FC<IStatusElementProps> = (props) => {
   const { headerProps } = useContext(SectionContext)
@@ -38,7 +39,7 @@ export const StatusElement: FC<IStatusElementProps> = (props) => {
                 <div className={styles.label}>{headerProps.label}</div>
                 <div
                   className={styles.value}
-                  title={`Status ${headerProps.label}: ${headerProps.value}`}
+                  title={`${strings.StatusElementText} ${headerProps.label}: ${headerProps.value}`}
                 >
                   {headerProps.value}
                 </div>

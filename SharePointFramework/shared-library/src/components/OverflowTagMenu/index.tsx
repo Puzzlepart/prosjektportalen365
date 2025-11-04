@@ -1,9 +1,9 @@
-import React, { FC } from 'react'
-import styles from './OverflowTagMenu.module.scss'
-import { useOverflowTagMenu } from './useOverflowTagMenu'
-import _ from 'underscore'
+import { format } from '@fluentui/react'
 import {
   FluentProvider,
+  IdPrefixProvider,
+  InteractionTag,
+  InteractionTagPrimary,
   Menu,
   MenuItem,
   MenuList,
@@ -11,23 +11,24 @@ import {
   MenuTrigger,
   Overflow,
   OverflowItem,
-  useId,
-  useIsOverflowItemVisible,
-  useOverflowMenu,
-  InteractionTag,
-  InteractionTagPrimary,
   Tag,
   TagGroup,
-  IdPrefixProvider
+  useId,
+  useIsOverflowItemVisible,
+  useOverflowMenu
 } from '@fluentui/react-components'
-import { format } from '@fluentui/react'
-import { IOverflowTagMenuProps, OverflowMenuItemProps } from './types'
+import React, { FC } from 'react'
 import strings from 'SharedLibraryStrings'
+import _ from 'underscore'
 import { customLightTheme } from '../../util'
+import styles from './OverflowTagMenu.module.scss'
+import { IOverflowTagMenuProps, OverflowMenuItemProps } from './types'
+import { useOverflowTagMenu } from './useOverflowTagMenu'
 
 export const OverflowTagMenu: FC<IOverflowTagMenuProps> = (props) => {
   const { tags, icon } = useOverflowTagMenu(props)
   const Icon = icon
+  const shouldApplyPreviewStyles = props.isTagPreview && tags.length > 1
 
   const OverflowMenuItem = (props: OverflowMenuItemProps) => {
     const { tag } = props
@@ -60,28 +61,34 @@ export const OverflowTagMenu: FC<IOverflowTagMenuProps> = (props) => {
       return null
     }
 
+    const handleClick = (e: React.MouseEvent) => {
+      e.stopPropagation()
+    }
+
     return (
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme} style={{ backgroundColor: 'transparent' }}>
-          <Menu closeOnScroll>
-            <MenuTrigger disableButtonEnhancement>
-              <InteractionTag
-                aria-label={format(strings.Aria.MenuOverflowCount, overflowCount)}
-                title={format(strings.Aria.MenuOverflowCount, overflowCount)}
-                appearance='brand'
-              >
-                <InteractionTagPrimary primaryText={`+${overflowCount}`} />
-              </InteractionTag>
-            </MenuTrigger>
-            <MenuPopover style={{ maxWidth: 600 }}>
-              <MenuList hasCheckmarks={false}>
-                {!_.isEmpty(tags) &&
-                  tags
-                    .slice(-overflowCount)
-                    .map((tag) => <OverflowMenuItem key={tag.key} tag={tag} />)}
-              </MenuList>
-            </MenuPopover>
-          </Menu>
+          <div onClick={handleClick} onMouseDown={handleClick}>
+            <Menu closeOnScroll>
+              <MenuTrigger disableButtonEnhancement>
+                <InteractionTag
+                  aria-label={format(strings.Aria.MenuOverflowCount, overflowCount)}
+                  title={format(strings.Aria.MenuOverflowCount, overflowCount)}
+                  appearance='brand'
+                >
+                  <InteractionTagPrimary primaryText={`+${overflowCount}`} />
+                </InteractionTag>
+              </MenuTrigger>
+              <MenuPopover style={{ maxWidth: 600 }}>
+                <MenuList hasCheckmarks={false}>
+                  {!_.isEmpty(tags) &&
+                    tags
+                      .slice(-overflowCount)
+                      .map((tag) => <OverflowMenuItem key={tag.key} tag={tag} />)}
+                </MenuList>
+              </MenuPopover>
+            </Menu>
+          </div>
         </FluentProvider>
       </IdPrefixProvider>
     )
@@ -97,13 +104,19 @@ export const OverflowTagMenu: FC<IOverflowTagMenuProps> = (props) => {
                 <OverflowItem key={tag.key} id={tag.key}>
                   <InteractionTag
                     key={tag.value}
-                    className={styles.tag}
+                    className={`${styles.tag} ${
+                      shouldApplyPreviewStyles ? styles.tagPreview : undefined
+                    }`}
                     appearance='brand'
                     size='small'
                     title={`${tag.type}: ${tag.value}`}
                     {...tag}
                   >
-                    <InteractionTagPrimary primaryText={tag.value} icon={props.icon && <Icon />} />
+                    <InteractionTagPrimary
+                      primaryText={tag.value}
+                      icon={props.icon && <Icon />}
+                      className={shouldApplyPreviewStyles ? styles.tagPrimary : undefined}
+                    />
                   </InteractionTag>
                 </OverflowItem>
               ))}

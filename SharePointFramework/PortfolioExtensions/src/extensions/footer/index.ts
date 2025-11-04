@@ -3,10 +3,12 @@ import {
   PlaceholderContent,
   PlaceholderName
 } from '@microsoft/sp-application-base'
+import { PnPClientStorage } from '@pnp/core/storage'
+import { dateAdd } from '@pnp/core/util'
 import '@pnp/sp/items'
 import '@pnp/sp/lists'
 import '@pnp/sp/webs'
-import strings from 'PortfolioExtensionsStrings'
+import resource from 'SharedResources'
 import { Footer, IFooterProps } from 'components/Footer'
 import { PortalDataService } from 'pp365-shared-library/lib/services/PortalDataService'
 import { createElement } from 'react'
@@ -17,8 +19,7 @@ import {
   IGitHubRelease,
   InstallationEntry
 } from './types'
-import { PnPClientStorage } from '@pnp/core/storage'
-import { dateAdd } from '@pnp/core/util'
+import strings from 'PortfolioExtensionsStrings'
 
 export default class FooterApplicationCustomizer extends BaseApplicationCustomizer<IFooterApplicationCustomizerProperties> {
   private _bottomPlaceholder: PlaceholderContent
@@ -27,6 +28,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   private _links: { Url: string; Description: string; Level?: string }[]
   private _useAssistant: boolean
   private _hasAssistantAccess: boolean
+  private _assistantEndpointUrl: string
   private _helpContent: HelpContentModel[]
   private _portalDataService: PortalDataService
   private _showFooter: boolean
@@ -43,12 +45,14 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     })
     this._globalSettings = await this._portalDataService.getGlobalSettings()
 
+    const requireAssistantAccess = this._globalSettings.get('RequireAssistantAccess') === '1'
     const [installEntries, gitHubReleases, helpContent, links] = await Promise.all([
       this._fetchInstallationLogs(),
       this._fetchGitHubReleases(),
-      this._fetchHelpContent(strings.HelpContentListName),
+      this._fetchHelpContent(),
       this._fetchLinks()
     ])
+
     this._installEntries = installEntries
     this._gitHubReleases = gitHubReleases
     this._helpContent = helpContent
@@ -57,14 +61,22 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     this._showFooter = this._globalSettings.get('ShowFooter') === '1'
     this._minimizeFooter = this._globalSettings.get('MinimizeFooter') === '1'
 
-    const requireAssistantAccess = this._globalSettings.get('RequireAssistantAccess') === '1'
-    this._hasAssistantAccess = !requireAssistantAccess || await this._isUserInGroup(strings.AssistantGroupName)
+    const useBetaChannel = this._globalSettings.get('UseBetaChannel') === '1'
+    const betaEndpointUrl = this._globalSettings.get('BetaEndpointUrl')
+    const endpointUrl = this._globalSettings.get('EndpointUrl')
+    this._assistantEndpointUrl =
+      useBetaChannel && betaEndpointUrl
+        ? betaEndpointUrl
+        : endpointUrl || 'https://pp365-ai-d2dge4fqc2bhbba9.norwayeast-01.azurewebsites.net'
+
+    this._hasAssistantAccess =
+      !requireAssistantAccess || (await this._isUserInGroup(strings.AssistantGroupName))
     this.context.application.navigatedEvent.add(this, this._handleNavigatedEvent)
     return Promise.resolve()
   }
 
   private async _handleNavigatedEvent(): Promise<void> {
-    const helpContent = await this._fetchHelpContent(strings.HelpContentListName)
+    const helpContent = await this._fetchHelpContent()
     this._helpContent = helpContent
 
     this._renderFooter(PlaceholderName.Bottom, {
@@ -76,6 +88,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
       portalUrl: this._portalDataService.url,
       useAssistant: this._useAssistant,
       hasAssistantAccess: this._hasAssistantAccess,
+      assistantEndpointUrl: this._assistantEndpointUrl,
       showFooter: this._showFooter,
       minimizeFooter: this._minimizeFooter
     })
@@ -93,7 +106,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   }
 
   /**
-   * Fetch the installation logs from the `strings.InstallationLogListName` list. Converts
+   * Fetch the installation logs from the installation log list. Converts
    * the item properties to match the `IInstallationEntry` interface.
    *
    * @param orderBy Property to order by
@@ -105,7 +118,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   ): Promise<InstallationEntry[]> {
     try {
       const installationLogList = this._portalDataService.web.lists.getByTitle(
-        strings.InstallationLogListName
+        resource.Lists_InstallationLog_Title
       )
       const installationLogItems = await installationLogList.items.orderBy(
         orderBy,
@@ -121,10 +134,8 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
    * Fetch help content from the specified list filtered on level.
    *
    * The content is stored in `sessionStorage` for 4 hours.
-   *
-   * @param listName Name of the list
    */
-  private async _fetchHelpContent(listName: string): Promise<HelpContentModel[]> {
+  private async _fetchHelpContent(): Promise<HelpContentModel[]> {
     try {
       return await new PnPClientStorage().session.getOrPut(
         `pp365_help_content_${window.location.pathname}`,
@@ -132,11 +143,14 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
           const project = await this._portalDataService.getProjectDetails()
           const level = project
             ? project.isParentProject
-              ? 'Overordnet/Program'
-              : 'Prosjekt'
-            : 'Portefølje'
-          let items = await this._portalDataService.getItems(listName, HelpContentModel, {
-            ViewXml: `<View>
+              ? resource.Lists_HelpContent_Level_ParentProgram
+              : resource.Lists_HelpContent_Level_Project
+            : resource.Lists_HelpContent_Level_Portfolio
+          let items = await this._portalDataService.getItems(
+            resource.Lists_HelpContent_Title,
+            HelpContentModel,
+            {
+              ViewXml: `<View>
             <Query>
                 <Where>
                     <Eq>
@@ -149,7 +163,8 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
                 </OrderBy>
             </Query>
         </View>`
-          })
+            }
+          )
           items = items.filter((i) => i.matchPattern(window.location.pathname)).splice(0, 3)
           for (let i = 0; i < items.length; i++) {
             if (items[i].externalUrl) {
@@ -166,11 +181,11 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   }
 
   /**
-   * Fetch the links from the `strings.LinksListName` (Lenker) list on the hub site.
+   * Fetch the links from the links list on the hub site.
    */
   private async _fetchLinks(): Promise<{ Url: string; Description: string; Level?: string }[]> {
     try {
-      const linksList = this._portalDataService.web.lists.getByTitle(strings.LinksListName)
+      const linksList = this._portalDataService.web.lists.getByTitle(resource.Lists_Links_Title)
       const linksItems = await linksList.items()
       return linksItems.map((item) => {
         return {

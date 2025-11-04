@@ -119,10 +119,8 @@ declare interface IProjectExtensionsStrings {
   ProjectDataFoundTitle: string
   ProjectDataFoundMessage: string
   ProjectPropertiesHeader: string
-  ProjectPropertiesListName: string
   ProjectProvisioningStartLogText: string
   ProjectProvisioningSuccessLogText: string
-  ProjectTemplateFilesListName: string,
   ProvisionSiteFieldsErrorMessage: string
   ProvisionSiteFieldsText: string
   ProvisionSiteFieldText: string
@@ -147,8 +145,13 @@ declare interface IProjectExtensionsStrings {
   TemplateSelectorSearchClearText: string
   TemplateSelectorSearchPlaceholder: string
   TemplateSelectorTitle: string
+  TemplateSelectorCommandTitle: string
   TermSetDoesNotExistError: string
   TitleLabel: string
+  ProgressLabel: string
+  AssignedToLabel: string
+  SaveButtonLabel: string
+  CancelButtonLabel: string
 }
 
 declare module 'ProjectExtensionsStrings' {

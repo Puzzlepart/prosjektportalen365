@@ -5,7 +5,7 @@ import { IProjectProvisionProps } from './types'
 import { useEditableColumn } from './useEditableColumn'
 import { useId } from '@fluentui/react-components'
 import { useEffect, useState } from 'react'
-import strings from 'PortfolioWebPartsStrings'
+import resource from 'SharedResources'
 
 /**
  * Component logic hook for `ProjectProvision`. This hook is responsible for
@@ -31,7 +31,7 @@ export const useProjectProvision = (props: IProjectProvisionProps) => {
       } else if (props.dataAdapter?.isUserInGroup) {
         try {
           const hasAccess = await props.dataAdapter.isUserInGroup(
-            strings.Provision.ProvisionGroupName
+            resource.Security_SiteGroup_ProvisionPortal_Title
           )
           setHasProjectProvisionAccess(hasAccess)
         } catch {

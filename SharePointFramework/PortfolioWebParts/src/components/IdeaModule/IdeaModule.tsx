@@ -3,6 +3,7 @@ import styles from './IdeaModule.module.scss'
 import { IdeaModuleContext } from './context'
 import { IIdeaModuleProps } from './types'
 import { useIdeaModule } from './useIdeaModule'
+import * as strings from 'PortfolioWebPartsStrings'
 import {
   Accordion,
   AccordionHeader,
@@ -41,6 +42,7 @@ import { IdeaField } from './IdeaField'
 import { IdeaPhaseBar } from './IdeaPhaseBar'
 import { PortfolioAggregation } from 'components'
 import _ from 'lodash'
+import resource from 'SharedResources'
 
 const Dashboard = bundleIcon(Board20Filled, Board20Regular)
 const Lightbulb = bundleIcon(Lightbulb20Filled, Lightbulb20Regular)
@@ -66,7 +68,11 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme}>
           {state.loading ? (
-            <Spinner className={styles.loading} label='Laster inn idémodulen' size='extra-large' />
+            <Spinner
+              className={styles.loading}
+              label={strings.Idea.ModuleLoadingText}
+              size='extra-large'
+            />
           ) : (
             <div className={styles.ideaModule}>
               <NavDrawer
@@ -74,12 +80,12 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                   state.selectedView ? 'overview' : `nav${state.selectedIdea?.item.Id.toString()}`
                 }
                 defaultSelectedCategoryValue={
-                  state.selectedIdea?.item?.processing?.Id ? 'behandlingIdeer' : 'registreringIdeer'
+                  state.selectedIdea?.item?.processing?.Id ? 'processingIdeas' : 'registrationIdeas'
                 }
                 defaultOpenCategories={
                   state.selectedIdea?.item?.processing?.Id
-                    ? ['behandlingIdeer']
-                    : ['registreringIdeer']
+                    ? ['processingIdeas']
+                    : ['registrationIdeas']
                 }
                 open={isOpen}
                 type='inline'
@@ -87,12 +93,14 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                 className={styles.nav}
               >
                 <NavDrawerHeader>
-                  <Tooltip content='Navigasjonsmeny' relationship='label'>
+                  <Tooltip content='NavigationMenu' relationship='label'>
                     {renderHamburger()}
                   </Tooltip>
                 </NavDrawerHeader>
                 <NavDrawerBody className={styles.navBody}>
-                  <AppItemStatic icon={getFluentIcon('Lightbulb')}>Idémodul</AppItemStatic>
+                  <AppItemStatic icon={getFluentIcon('Lightbulb')}>
+                    {strings.Idea.ModuleTitle}
+                  </AppItemStatic>
                   <NavItem
                     icon={<Dashboard />}
                     key='overview'
@@ -102,12 +110,12 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                       getSelectedView()
                     }}
                   >
-                    Oversikt over idéer
+                    {strings.Idea.OverviewTitle}
                   </NavItem>
-                  <NavSectionHeader>Registrering</NavSectionHeader>
-                  <NavCategory value='registreringIdeer'>
-                    <NavCategoryItem icon={<Lightbulb />} value='registrering'>
-                      Registrerte idéer
+                  <NavSectionHeader>{strings.Idea.RegistrationSectionTitle}</NavSectionHeader>
+                  <NavCategory value='registrationIdeas'>
+                    <NavCategoryItem icon={<Lightbulb />} value='registration'>
+                      {strings.Idea.RegisteredIdeasTitle}
                     </NavCategoryItem>
                     <NavSubItemGroup>
                       {state.ideas.data.items.filter((idea) => !idea.processing).length > 0 ? (
@@ -126,18 +134,15 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                             </NavSubItem>
                           ))
                       ) : (
-                        <div className={styles.noIdeas}>
-                          Det for øyeblikket ingen registrerte idéer, idéer som blir registrert vil
-                          dukke opp her.
-                        </div>
+                        <div className={styles.noIdeas}>{strings.Idea.NoRegisteredIdeasText}</div>
                       )}
                     </NavSubItemGroup>
                   </NavCategory>
                   <NavDivider />
-                  <NavSectionHeader>Behandling</NavSectionHeader>
-                  <NavCategory value='behandlingIdeer'>
-                    <NavCategoryItem icon={<JobPostings />} value='behandling'>
-                      Idéer i behandling
+                  <NavSectionHeader>{strings.Idea.ProcessingSectionTitle}</NavSectionHeader>
+                  <NavCategory value='processingIdeas'>
+                    <NavCategoryItem icon={<JobPostings />} value='processing'>
+                      {strings.Idea.ProcessingIdeasTitle}
                     </NavCategoryItem>
                     <NavSubItemGroup>
                       {state.ideas.data.items.filter((idea) => idea.processing).length > 0 ? (
@@ -156,10 +161,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                             </NavSubItem>
                           ))
                       ) : (
-                        <div className={styles.noIdeas}>
-                          Det for øyeblikket ingen idéer i behandling, idéer i behandling vil dukke
-                          opp her.
-                        </div>
+                        <div className={styles.noIdeas}>{strings.Idea.NoProcessingIdeasText}</div>
                       )}
                     </NavSubItemGroup>
                   </NavCategory>
@@ -222,7 +224,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                               size='large'
                               icon={getFluentIcon('Lightbulb')}
                             >
-                              Registrert idé
+                              {strings.Idea.RegisteredIdeaTitle}
                             </AccordionHeader>
                             <AccordionPanel style={{ margin: 0 }}>
                               <div className={styles.idea}>
@@ -255,15 +257,16 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
   )
 }
 
+IdeaModule.displayName = 'IdeaModule'
 IdeaModule.defaultProps = {
-  dataSource: 'Registrerte idéer',
-  dataSourceCategory: 'Idémodul',
+  dataSource: strings.Idea.RegisteredIdeasTitle,
+  dataSourceCategory: strings.Idea.ModuleTitle,
   showCommandBar: true,
   showExcelExportButton: true,
   showFilters: true,
   showViewSelector: true,
   lockedColumns: false,
-  ideaConfigurationList: 'Idékonfigurasjon',
+  ideaConfigurationList: resource.Lists_Idea_Configuration_Title,
   ideaConfiguration: 'Standard',
   hiddenRegFields: ['Title'],
   hiddenProcFields: [

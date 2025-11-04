@@ -1,24 +1,23 @@
 import { override } from '@microsoft/decorators'
-import { Log } from '@microsoft/sp-core-library'
+import { Dialog } from '@microsoft/sp-dialog'
 import {
   BaseListViewCommandSet,
   Command,
   IListViewCommandSetExecuteEventParameters,
   RowAccessor
 } from '@microsoft/sp-listview-extensibility'
-import { Dialog } from '@microsoft/sp-dialog'
 import { SPFI, spfi, SPFx } from '@pnp/sp'
-import '@pnp/sp/webs'
-import '@pnp/sp/lists'
 import '@pnp/sp/items'
+import '@pnp/sp/lists'
 import '@pnp/sp/site-groups/web'
+import '@pnp/sp/webs'
 import DialogPrompt from 'components/IdeaApprovalDialog'
-import strings from 'PortfolioExtensionsStrings'
 import { Choice, IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
-import { isUserAuthorized } from '../../helpers/isUserAuthorized'
+import strings from 'PortfolioExtensionsStrings'
 import { find } from 'underscore'
-
-const LOG_SOURCE: string = 'IdeaProcessingCommand'
+import { isUserAuthorized } from '../../helpers/isUserAuthorized'
+import { themeColor } from 'pp365-shared-library'
+import resource from 'SharedResources'
 
 export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
   private _userAuthorized: boolean
@@ -28,13 +27,23 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
 
   @override
   public async onInit(): Promise<void> {
-    Log.info(LOG_SOURCE, 'onInit: Initializing...')
     this._sp = spfi().using(SPFx(this.context))
     this._openCmd = this.tryGetCommand('OPEN_IDEA_PROCESSING_DIALOG')
+
+    this._openCmd.title = strings.IdeaProcessingCommandTitle
+
+    const fillColor = themeColor
+    const exportSvgCmd = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2048 2048'%3E%3Cpath d='M1024 0q141 0 272 36t244 104 207 160 161 207 103 245 37 272q0 141-36 272t-104 244-160 207-207 161-245 103-272 37q-141 0-272-36t-244-104-207-160-161-207-103-245-37-272q0-141 36-272t104-244 160-207 207-161T752 37t272-37zM907 1347q22 0 42-8t35-24l429-429q15-15 23-35t8-41q0-22-8-42t-23-34-35-23-42-9q-21 0-41 8t-36 23l-352 352-118-118q-32-32-77-32-22 0-42 8t-35 24-23 34-9 42q0 21 8 41t24 36l195 195q15 15 35 23t42 9z' fill='${fillColor.replace(
+      '#',
+      '%23'
+    )}'%3E%3C/path%3E%3C/svg%3E`
+    this._openCmd.iconImageUrl = exportSvgCmd
+
     this._openCmd.visible = false
+
     this._userAuthorized = await isUserAuthorized(
       this._sp,
-      strings.IdeaProcessorsSiteGroup,
+      resource.Security_SiteGroup_IdeaProcessors_Title,
       this.context
     )
     this.context.listView.listViewStateChangedEvent.add(this, this._onListViewStateChanged)
@@ -89,7 +98,7 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
    */
   private _getIdeaConfiguration = async (): Promise<IdeaConfigurationModel[]> => {
     const config = await this._sp.web.lists
-      .getByTitle(strings.IdeaConfigurationTitle)
+      .getByTitle(resource.Lists_Idea_Configuration_Title)
       .select(...new SPIdeaConfigurationItem().fields)
       .items()
 
@@ -100,8 +109,6 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
    * On ListView state changed, check if the user is authorized to use this command
    */
   private _onListViewStateChanged = async (): Promise<void> => {
-    Log.info(LOG_SOURCE, 'onListViewStateChanged: ListView state changed')
-
     const listName = this.context.pageContext.list.title
     const [config] = (await this._getIdeaConfiguration()).filter(
       (item) => item.processingList === listName
@@ -117,11 +124,6 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
           config.processingList === listName
       }
       this.raiseOnChange()
-    } else {
-      Log.info(
-        LOG_SOURCE,
-        'onListViewStateChanged: You are currently not authorized to use this command or the list is not configured for this command'
-      )
     }
   }
 
@@ -140,8 +142,6 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
         GtIdeaDecision: find(this._config.processing, { key: Choice.Reject })?.recommendation,
         GtIdeaDecisionComment: comment
       })
-
-    Log.info(LOG_SOURCE, `Updated ${this._config.processingList}: Rejected`)
     window.location.reload()
   }
 
@@ -161,8 +161,6 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
           ?.recommendation,
         GtIdeaDecisionComment: comment
       })
-
-    Log.info(LOG_SOURCE, `Updated ${this._config.processingList}: Consideration`)
     window.location.reload()
   }
 
@@ -181,8 +179,6 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
         GtIdeaDecision: find(this._config.processing, { key: Choice.Approve })?.recommendation,
         GtIdeaDecisionComment: comment
       })
-
-    Log.info(LOG_SOURCE, `Updated ${this._config.processingList}: Approved`)
     window.location.reload()
   }
 
@@ -205,8 +201,6 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
         GtIdeaDecision: find(this._config.processing, { choice: selectedChoice })?.recommendation,
         GtIdeaDecisionComment: comment
       })
-
-    Log.info(LOG_SOURCE, `Updated ${this._config.processingList}: Other`)
     window.location.reload()
   }
 

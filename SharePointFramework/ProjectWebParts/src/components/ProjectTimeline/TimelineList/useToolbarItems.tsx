@@ -4,6 +4,7 @@ import _ from 'lodash'
 import { ItemFieldValues, ListMenuItem } from 'pp365-shared-library'
 import { useContext, useMemo } from 'react'
 import { ProjectTimelineContext } from '../context'
+import resource from 'SharedResources'
 
 /**
  * Returns an array of menu items for the toolbar in the PortfolioOverview component.
@@ -20,7 +21,7 @@ export function useToolbarItems() {
    */
   const deleteTimelineItem = async () => {
     const list = SPDataAdapter.portalDataService.web.lists.getByTitle(
-      strings.TimelineContentListName
+      resource.Lists_TimelineContent_Title
     )
 
     const selectedItems = context.state.selectedItems.map((id) =>

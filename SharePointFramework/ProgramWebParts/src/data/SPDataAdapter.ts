@@ -36,14 +36,14 @@ import {
   SPDataAdapterBase,
   SPProjectItem,
   TimelineConfigurationModel,
-  TimelineContentModel,
-  getUserPhoto
+  TimelineContentModel
 } from 'pp365-shared-library'
 import _ from 'underscore'
 import { DEFAULT_SEARCH_SETTINGS, IProjectsData } from './types'
 import { IList } from '@pnp/sp/lists'
 import { IItem } from '@pnp/sp/items'
 import { PermissionKind } from '@pnp/sp/presets/all'
+import resource from 'SharedResources'
 
 /**
  * `SPDataAdapter` is a class that extends the `SPDataAdapterBase` class and implements the `IPortfolioWebPartsDataAdapter` interface.
@@ -80,9 +80,9 @@ export class SPDataAdapter
       ...this.settings,
       spfxContext,
       entityService: this.entityService,
-      propertiesListName: strings.ProjectPropertiesListName
+      propertiesListName: resource.Lists_ProjectProperties_Title
     } as IProjectDataServiceParams)
-    this._propertyList = this.sp.web.lists.getByTitle('Prosjektegenskaper')
+    this._propertyList = this.sp.web.lists.getByTitle(resource.Lists_ProjectProperties_Title)
   }
 
   public async getPortfolioConfig(): Promise<IPortfolioOverviewConfiguration> {
@@ -115,7 +115,7 @@ export class SPDataAdapter
 
   public async getAggregatedListConfig(
     category: string,
-    level: string = 'Overordnet/Program'
+    level: string = resource.Lists_DataSources_Level_ParentProgram
   ): Promise<IPortfolioAggregationConfiguration> {
     try {
       const columns = await this.portalDataService.fetchProjectContentColumns(
@@ -146,7 +146,9 @@ export class SPDataAdapter
     siteId: string[]
   ): Promise<IPortfolioViewData> {
     siteId = this.spfxContext.pageContext.legacyPageContext.departmentId
-    const isCurrentUserInManagerGroup = await this.isUserInGroup(strings.PortfolioManagerGroupName)
+    const isCurrentUserInManagerGroup = await this.isUserInGroup(
+      resource.Security_SiteGroup_PortfolioInsight_Title
+    )
     if (isCurrentUserInManagerGroup) {
       return await this.fetchDataForManagerView(view, configuration, siteId)
     } else {
@@ -303,28 +305,53 @@ export class SPDataAdapter
     queryArray?: string
   ) {
     const searchQuery = `${queryArray} ${view.searchQuery}`
-    let [
-      { PrimarySearchResults: projects },
-      { PrimarySearchResults: sites },
-      { PrimarySearchResults: statusReports }
-    ] = await Promise.all([
-      this.sp.search({
+
+    const fetchAllResults = async (
+      queryTemplate: string,
+      selectProperties: string[],
+      refiners?: string
+    ) => {
+      const searchInit = {
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: searchQuery,
-        SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty]
-      }),
-      this.sp.search({
-        ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `DepartmentId:{${siteId}} contentclass:STS_Site`,
-        SelectProperties: ['Path', 'SPWebUrl', 'Title', 'SiteId']
-      }),
-      this.sp.search({
-        ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `${queryArray} DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
-        SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
-        Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',')
-      })
+        QueryTemplate: queryTemplate,
+        SelectProperties: selectProperties,
+        RowLimit: 500,
+        StartRow: 0,
+        ...(refiners && { Refiners: refiners })
+      }
+
+      const firstResponse = await this.sp.search(searchInit)
+      const allResults = [...firstResponse.PrimarySearchResults]
+
+      while (allResults.length < firstResponse.TotalRows) {
+        const response = await this.sp.search({
+          ...searchInit,
+          StartRow: allResults.length
+        })
+        allResults.push(...response?.PrimarySearchResults)
+      }
+
+      return allResults
+    }
+
+    let [projects, sites, statusReports] = await Promise.all([
+      fetchAllResults(searchQuery, [
+        ...configuration.columns.map((f) => f.fieldName),
+        siteIdProperty
+      ]),
+      fetchAllResults(`DepartmentId:{${siteId}} contentclass:STS_Site`, [
+        'Path',
+        'SPWebUrl',
+        'Title',
+        'SiteId'
+      ]),
+      fetchAllResults(
+        `${queryArray} DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:${resource.Choice_GtModerationStatus_Published}`,
+        [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
+        configuration.refiners.map((ref) => ref.fieldName).join(',')
+      )
     ])
+
     projects = projects.map((item) => cleanDeep({ ...item }))
     sites = sites.map((item) => cleanDeep({ ...item }))
     statusReports = statusReports.map((item) => cleanDeep({ ...item }))
@@ -375,8 +402,7 @@ export class SPDataAdapter
       })
       .filter((item) => item.siteId !== siteId)
 
-    const searchQuery =
-      'ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert'
+    const searchQuery = `ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:${resource.Choice_GtModerationStatus_Published}`
     const selectProperties = ['GtSiteIdOWSTEXT', 'GtCostsTotalOWSCURR', 'GtBudgetTotalOWSCURR']
 
     const statusReports = await this._fetchItems(
@@ -394,7 +420,9 @@ export class SPDataAdapter
       }))
       .filter(Boolean)
 
-    const configElement = _.find(timelineConfig, { title: strings.ProjectLabel })
+    const configElement = _.find(timelineConfig, {
+      title: resource.TimelineConfiguration_Project_Title
+    })
 
     return { data, reports, configElement, columns: configuration.refiners }
   }
@@ -402,7 +430,7 @@ export class SPDataAdapter
   public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationModel[]) {
     const [timelineItems] = await Promise.all([
       this.portalDataService.web.lists
-        .getByTitle(strings.TimelineContentListName)
+        .getByTitle(resource.Lists_TimelineContent_Title)
         .items.select(
           'Title',
           'GtTimelineTypeLookup/Title',
@@ -459,7 +487,7 @@ export class SPDataAdapter
    */
   public async fetchTimelineConfiguration() {
     const timelineConfig = await this.portalDataService.web.lists
-      .getByTitle(strings.TimelineConfigurationListName)
+      .getByTitle(resource.Lists_TimelineConfiguration_Title)
       .items.select(
         'GtSortOrder',
         'Title',
@@ -481,12 +509,13 @@ export class SPDataAdapter
     timelineConfig: TimelineConfigurationModel[]
   ) {
     const config = timelineConfig.find(
-      (col) => col.title === (configItemTitle || 'Prosjektleveranse')
+      (col) =>
+        col.title === (configItemTitle || resource.TimelineConfiguration_ProjectDelivery_Title)
     )
 
     if (config?.showElementProgram) {
       const projectDeliveries = await this.fetchItemsWithSource(
-        dataSourceName || 'Alle prosjektleveranser',
+        dataSourceName ?? resource.Lists_DataSources_Category_ProjectDeliveries_All,
         [
           'Title',
           'GtDeliveryDescriptionOWSMTXT',
@@ -519,8 +548,8 @@ export class SPDataAdapter
           ).usingConfig({
             sortOrder: 90,
             bgColorHex: '#384f61',
-            timelineCategory: 'Styring',
-            elementType: strings.BarLabel,
+            timelineCategory: resource.TimelineConfiguration_Management_Category,
+            elementType: resource.TimelineConfiguration_Bar_ElementType,
             timelineFilter: true,
             ...config
           })
@@ -564,17 +593,12 @@ export class SPDataAdapter
    *
    * @param param0 Deconstructed object containing the result data
    */
-  private _combineResultData({ items, memberOfGroups, users }: IProjectsData): ProjectListModel[] {
+  private _combineResultData({ items, memberOfGroups }: IProjectsData): ProjectListModel[] {
     let projects = items
       .map((item) => {
         const [group] = memberOfGroups.filter((grp) => grp.id === item.GtGroupId)
-        const [owner] = users.filter((user) => user.Id === item.GtProjectOwnerId)
-        const [manager] = users.filter((user) => user.Id === item.GtProjectManagerId)
         const model = new ProjectListModel(group?.displayName ?? item.Title, item)
         model.isUserMember = !!group
-        if (manager)
-          model.manager = { name: manager.Title, image: { src: getUserPhoto(manager.Email) } }
-        if (owner) model.owner = { name: owner.Title, image: { src: getUserPhoto(owner.Email) } }
         return model
       })
       .filter((p) => p)
@@ -596,12 +620,13 @@ export class SPDataAdapter
 
   public async fetchEnrichedProjects(): Promise<ProjectListModel[]> {
     await MSGraph.Init(this.spfxContext.msGraphClientFactory)
-    const [items, memberOfGroups, users] = await Promise.all([
+    const [items, memberOfGroups] = await Promise.all([
       this.portalDataService.web.lists
-        .getByTitle(strings.ProjectsListName)
+        .getByTitle(resource.Lists_Projects_Title)
         .items.select(...Object.keys(new SPProjectItem()))
-        // eslint-disable-next-line quotes
-        .filter("GtProjectLifecycleStatus ne 'Avsluttet' and GtProjectLifecycleStatus ne 'Stengt'")
+        .filter(
+          `GtProjectLifecycleStatus ne '${resource.Choice_GtProjectLifecycleStatus_Closed}' and GtProjectLifecycleStatus ne '${strings.LifecycleStatus_Closed}'`
+        )
         .orderBy('Title')
         .using(DefaultCaching)
         .getAll<SPProjectItem>(),
@@ -610,13 +635,11 @@ export class SPDataAdapter
         ['id', 'displayName'],
         // eslint-disable-next-line quotes
         "groupTypes/any(a:a%20eq%20'unified')"
-      ),
-      this.sp.web.siteUsers.select('Id', 'Title', 'Email').using(DefaultCaching)()
+      )
     ])
     const result: IProjectsData = {
       items,
-      memberOfGroups,
-      users
+      memberOfGroups
     }
     const projects = this._combineResultData(result)
     return projects
@@ -628,9 +651,9 @@ export class SPDataAdapter
   ): Promise<any[]> {
     const odataQuery = (configuration?.views || []).find((v) => v.title === dataSource)?.odataQuery
     let projects: any[]
-    if (odataQuery && !dataSource.includes('(Prosjektnivå)')) {
+    if (odataQuery && !dataSource.includes(`(${strings.ProjectLevel})`)) {
       projects = await this.portalDataService.web.lists
-        .getByTitle(strings.ProjectsListName)
+        .getByTitle(resource.Lists_Projects_Title)
         .items.filter(`${odataQuery}`)<any[]>()
     }
     return projects
@@ -773,7 +796,7 @@ export class SPDataAdapter
     if (!dataSrc) throw new Error(format(strings.DataSourceNotFound, dataSourceName))
     try {
       const dataSrcProperties = dataSrc.columns.map((col) => col.fieldName) || []
-      if (dataSrc.category.startsWith('Gevinstoversikt')) {
+      if (dataSrc.category.startsWith(resource.Lists_DataSources_Category_BenefitOverview)) {
         items = await this.fetchBenefitItemsWithSource(dataSrc, [
           ...selectProperties,
           ...dataSrcProperties
@@ -811,7 +834,7 @@ export class SPDataAdapter
   public async updateProjectInHub(properties: Record<string, any>): Promise<void> {
     try {
       const siteId = this.spfxContext.pageContext.site.id.toString()
-      const list = this.portalDataService.web.lists.getByTitle(strings.ProjectsListName)
+      const list = this.portalDataService.web.lists.getByTitle(resource.Lists_Projects_Title)
       const [item] = await list.items.filter(`GtSiteId eq '${siteId}'`)()
       await list.items.getById(item.ID).update(properties)
     } catch (error) {}

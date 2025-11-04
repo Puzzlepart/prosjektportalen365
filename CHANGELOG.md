@@ -1,6 +1,40 @@
 # Endringslogg
 
-Sjekk ut [release notes](./releasenotes/1.11.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
+Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
+
+## 1.12.0 - 05.11.2025
+
+### Ny funksjonalitet
+
+- Engelsk versjon av Prosjektportalen! *Hjelpedokumentasjon om hvordan komme i gang*
+- Ny funksjonalitet i fasevelgeren for arkivering av dokumenter og lister som skal arkiveres ved faseendring
+  - Elementer som skal til arkivering loggføres i en ny liste på porteføljenivå kalt `Arkiveringslogg`
+  - Webhook-integrasjon for ekstern arkivhåndtering som håndterer arkivering av dokumenter og lister basert på loggføringen
+- Ny status for arkivering av prosjekt, viser informasjon om de siste arkiveringsaktivitetene på prosjektet.
+
+### Forbedringer
+
+- Oppdatert alle dokumentmaler fra Prosjektveiviseren. Lagt inn malene i en egen mappe "Fra Prosjektveiviseren" i malbiblioteket.
+- Endret "Ingen fase" til "Idé". For eksisterende installasjoner må dette eventuelt oppdateres manuelt.
+- Forbedret ressursallokeringsoversikten, henter nå inn avdelingsinformasjon fra ressursene og viser dette i oversikten, samt tilbyr filter på avdeling.
+- Forbedret prosjektliste- og kompaktliste-visning, viser nå både primærfelt og sekundærfelt i visningen for økt synlighet og bedre kontekst i prosjektoversikten [#1659](https://github.com/Puzzlepart/prosjektportalen365/issues/1659)
+- Forbedringen rundt innlasting av store mengder prosjekter i prosjektutlisting webdel på forsiden av porteføljen
+
+### Feilrettinger
+
+- Rettet et problem hvor tilpassede malbiblioteket ikke ble valgt når man klikket på "Hent dokumentmal" fra dokumentbiblioteket [#1628](https://github.com/Puzzlepart/prosjektportalen365/issues/1628)
+- Rettet et problem hvor Porteføljeoversiktens egenskapspanel ikke fungerte.
+- Rettet et problem hvor tallet 0 vises som blankt i gevinstoversikten [#1649](https://github.com/Puzzlepart/prosjektportalen365/issues/1649)
+- Rettet et problem hvor programoversikten feilet i å hente komplett data når antall områder tilknyttet hub oversteg 500 elementer.
+- Rettet et problem hvor metadatafelt med støtte for flere verdier ikke ble kopiert korrekt ved opprettelse av nytt prosjekt.
+- Rettet et problem i `Tidslinjekonfigurasjon`, hvor `Vis på portefølje` og `Vis på program` ikke filtrerte ut `Prosjekt`-elementet i henholdsvis portefølje- og programtidslinje.
+- Rettet et problem hvor bruker måtte trykke to ganger for å åpne ytterligere valg som blir gruppert i Porteføljevisningen [#1302](https://github.com/Puzzlepart/prosjektportalen365/issues/1302)
+- Rettet et problem der primær- og sekundærbruker, samt deres roller, ikke ble vist korrekt i kortvisning og listevisning i Prosjektutlistingen på forsiden av portalen.
+- Rettet et problem hvor `Tillat eksterne gjester` og `Gjest(er)` felt i `Bestill område`-skjema ikke fungerte som forventet selvom det var slått på for områdetypen.
+- Rettet et problem hvor endring av rekkefølge på kolonner i en aggregert oversikt-webdel blir ikke korrekt lagret [#1641](https://github.com/Puzzlepart/prosjektportalen365/issues/1641)
+- Rettet et problem hvor det ble opprettet en tom plan i Planner ved oppgradering til overordnet prosjekt. Eksisterende plan beholdes nå som forventet [#1555](https://github.com/Puzzlepart/prosjektportalen365/issues/1555)
+
+---
 
 ## 1.11.1 - 18.08.2025
 
@@ -282,7 +316,7 @@ I denne versjonen er det gjort flere endringer på det visuelle uttrykket til Pr
 - Rettet feil i oppgraderingsskriptet der noen tenants ikke kunne hente alle hub children [#1041](https://github.com/Puzzlepart/prosjektportalen365/pull/1041)
 - Rettet feil hvor kommandolinjen ikke ble vist som standard [#1042](https://github.com/Puzzlepart/prosjektportalen365/issues/1042)
 - Rettet feil ved provisjonering av Bygg- og anleggsprosjekter dersom Fasesjekkliste var valgt [#1052](https://github.com/Puzzlepart/prosjektportalen365/issues/1052)
-- Rettet feil hvor det ikke var mulig å synkronisere data fra 'Prosjektdata'-listen  (Idébehandling) [#1048](https://github.com/Puzzlepart/prosjektportalen365/pull/1048)
+- Rettet feil hvor det ikke var mulig å synkronisere data fra 'Prosjektdata'-listen (Idébehandling) [#1048](https://github.com/Puzzlepart/prosjektportalen365/pull/1048)
 - Rettet feil hvor termset for `FNs bærekraftsmål` manglet [#1058](https://github.com/Puzzlepart/prosjektportalen365/issues/1058)
 
 ---

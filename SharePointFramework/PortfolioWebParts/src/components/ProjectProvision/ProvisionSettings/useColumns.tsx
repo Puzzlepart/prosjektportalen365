@@ -77,7 +77,7 @@ export const useColumns = (): TableColumnDefinition<IRequestSettingsItem>[] => {
             return (
               <TableCellLayout style={{ overflow: 'hidden' }}>
                 <Text truncate wrap={true} style={{ color: 'lightgrey' }}>
-                  Ikke angitt
+                  {strings.NotSpecifiedText}
                 </Text>
               </TableCellLayout>
             )
@@ -85,7 +85,7 @@ export const useColumns = (): TableColumnDefinition<IRequestSettingsItem>[] => {
             return (
               <TableCellLayout style={{ overflow: 'hidden' }}>
                 <Text truncate wrap={true}>
-                  {setting.value ? 'Ja' : 'Nei'}
+                  {setting.value ? strings.BooleanYes : strings.BooleanNo}
                 </Text>
               </TableCellLayout>
             )

@@ -1,4 +1,4 @@
-import strings from 'PortfolioWebPartsStrings'
+import resource from 'SharedResources'
 import { useEffect } from 'react'
 import _ from 'underscore'
 import { IProjectListProps, IProjectListState, IProjectListVertical } from './types'
@@ -7,7 +7,7 @@ import { IProjectListProps, IProjectListState, IProjectListVertical } from './ty
  * Component data fetch hook for `ProjectList`. This hook is responsible for
  * fetching data and setting state. It feches enriched projects using
  * `dataAdapter.fetchEnrichedProjects()` and checks if the current user is in
- * the `PortfolioManagerGroupName` group using `dataAdapter.isUserInGroup()`.
+ * the `PortfolioInsight` group using `dataAdapter.isUserInGroup()`.
  * The selected vertical is set to the `defaultVertical` prop or the first vertical in the
  * `verticals` prop.
  *
@@ -22,8 +22,13 @@ export function useProjectListDataFetch(
 ) {
   useEffect(() => {
     Promise.all([
-      props.dataAdapter.fetchEnrichedProjects(),
-      props.dataAdapter.isUserInGroup(strings.PortfolioManagerGroupName)
+      props.dataAdapter.fetchEnrichedProjects({
+        primaryUserField: props.primaryUserField,
+        secondaryUserField: props.secondaryUserField,
+        primaryField: props.primaryField,
+        secondaryField: props.secondaryField
+      }),
+      props.dataAdapter.isUserInGroup(resource.Security_SiteGroup_PortfolioInsight_Title)
     ]).then(([projects, isUserInPortfolioManagerGroup]) => {
       const selectedVertical =
         _.find(verticals, (vertical) => vertical.key === props.defaultVertical) ??

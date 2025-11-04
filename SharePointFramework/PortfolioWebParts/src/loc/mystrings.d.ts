@@ -118,7 +118,6 @@ declare interface IPortfolioWebPartsStrings {
     ToastCreatedErrorBody: string
     StatusMenuLabel: string
     SettingsMenuLabel: string
-    IdeaMenuLabel: string
     SettingsSearchLabel: string
     SettingsDialogTitle: string
     SettingsDialogDescription: string
@@ -276,27 +275,65 @@ declare interface IPortfolioWebPartsStrings {
     DebugModeOnText: string
     DebugModeOffText: string
     WebPartDescription: string
-    ProvisionGroupName: string
     MissingFieldsTitle: string
     ProvisionError: string
+    StandardTeamTemplate: string
     FieldLogicGroupName: string
     DefaultExpirationDateFieldLabel: string
     ReadOnlyGroupLogicFieldLabel: string
+    ProjectAreaType: string
+    VivaEngageCommunityType: string
+    MicrosoftTeamsTeamType: string
   },
+  NotSpecifiedText: string
+  Idea: {
+    MenuLabel: string
+    ModuleTitle: string
+    ModuleLoadingText: string
+    OverviewTitle: string
+    RegistrationSectionTitle: string
+    RegisteredIdeasTitle: string
+    ProcessingSectionTitle: string
+    ProcessingIdeasTitle: string
+    NewButtonText: string
+    NewButtonDescription: string
+    EditButtonText: string
+    EditButtonDescription: string
+    ApproveButtonText: string
+    ApproveButtonDescription: string
+    DeleteButtonText: string
+    DeleteButtonDescription: string
+    NoRegisteredIdeasText: string
+    NoProcessingIdeasText: string
+    RegisteredIdeaTitle: string
+    NoViewFoundErrorMessage: string
+    NoIdeaFoundErrorMessage: string
+    ProvisionAreaTitle: string
+    ConfigurationListFieldLabel: string
+    ConfigurationListFieldDescription: string
+    ConfigurationNameFieldLabel: string
+    ConfigurationNameFieldDescription: string
+    HiddenRegistrationFieldsLabel: string
+    HiddenRegistrationFieldsDescription: string
+    HiddenProcessingFieldsLabel: string
+    HiddenProcessingFieldsDescription: string
+    ProvisionUrlFieldLabel: string
+    ProvisionUrlFieldDescription: string
+  },
+  HideDataTypePropertiesLabel: string
+  ShowDataTypePropertiesLabel: string
+  NoViewFoundTitle: string
   AddColumnLabel: string
   AllProjectsHeaderText: string
   AllProjectsSearchBoxPlaceholderText: string
-  BarLabel: string
   BooleanOff: string
   BooleanOn: string
   BooleanNo: string
   BooleanYes: string
   CancelButtonLabel: string
-  ChartConfigurationListNameLabel: string
   ChartErrorText: string
   ColumnCategoryDescription: string
   ColumnCategoryLabel: string
-  ColumnConfigListNameLabel: string
   ColumnPersistRenderGloballyFieldDescription: string
   ColumnPersistRenderGloballyFieldLabel: string
   ColumnRenderDataTypePropertiesHeaderText: string
@@ -313,6 +350,7 @@ declare interface IPortfolioWebPartsStrings {
   ColumnRenderOptionDate: string
   ColumnRenderOptionDateIncludeTimeLabel: string
   ColumnRenderOptionInstrument: string
+  InstrumentUnitLabel: string
   ColumnRenderOptionDialog: string
   ColumnRenderOptionDialogInfoTextTemplateDescription: string
   ColumnRenderOptionDialogInfoTextTemplateLabel: string
@@ -336,7 +374,6 @@ declare interface IPortfolioWebPartsStrings {
   ColumnRenderOptionUser: string
   ColumnSettingsDisabledTooltip: string
   ColumnSettingsLabel: string
-  ColumnsListNameLabel: string
   ColumnVisibilityDescription: string
   ColumnVisibilityLabel: string
   CommandBarGroupName: string
@@ -361,9 +398,6 @@ declare interface IPortfolioWebPartsStrings {
   DataSourceLabel: string
   DataSourceLevelDescription: string
   DataSourceLevelLabel: string
-  DataSourceLevelPortfolio: string
-  DataSourceLevelProject: string
-  DataSourceListName: string
   DataSourceNotFound: string
   DefaultDataSourceViewLabel: string
   DefaultRenderModeDescription: string
@@ -449,32 +483,29 @@ declare interface IPortfolioWebPartsStrings {
   PhaseLabel: string
   PortfolioAggregationNotConfiguredMessage: string
   PortfolioAggregationViewSearchQueryDescription: string
-  PortfolioManagerGroupName: string
   PortfolioOverviewColumnRenderDescription: string
   PortfolioOverviewDataFetchError: string
   PortfolioOverviewDataFetchErrorView: string
   PortfolioOverviewShowEditViewColumnsPanelHelpText: string
   PortfolioViewSearchQueryDescription: string
-  PortfolioViewsListName: string
   ProgramProjectsHeaderText: string
   ProgramSearchBoxPlaceholderText: string
   ProgramsHeaderText: string
-  ProjectColumnsListName: string
   ProjectContentColumnItemNotFound: string
-  ProjectContentColumnsListName: string
   ProjectDeliveriesGroupName: string
   ProjectInformationGroupName: string
   ProjectInformationPanelButton: string
-  ProjectLabel: string
   ProjectListEmptyMessage: string
   ProjectListQuickLaunch: string
-  ProjectManager: string
   ProjectMetadataFieldLabel: string
-  ProjectOwner: string
+  ProjectCard: {
+    WebPartDescription: string
+    ProjectSiteIdFieldLabel: string
+    ProjectSiteIdFieldDescription: string
+  }
   ProjectsAccessHeaderText: string
   ProjectsAccessSearchBoxPlaceholderText: string
   ProjectServiceArea: string
-  ProjectsListName: string
   ProjectType: string
   RelativeUrl: string
   RenderModeCompactListText: string
@@ -484,6 +515,8 @@ declare interface IPortfolioWebPartsStrings {
   ResourceAllocationGroupName: string
   ResourceAllocationInfoText: string
   ResourceLabel: string
+  ResourceAbsenceLabel: string
+  DepartmentLabel: string
   RevertCustomOrderButtonText: string
   RevertCustomOrderButtonTooltip: string
   RoleLabel: string
@@ -531,8 +564,6 @@ declare interface IPortfolioWebPartsStrings {
   StartDateLabel: string
   StatusReportsCountLabel: string
   TileViewGroupName: string
-  TimelineConfigurationListName: string
-  TimelineContentListName: string
   TitleLabel: string
   TitleDescription: string
   ToggleColumnFormPanelLabel: string
@@ -542,12 +573,17 @@ declare interface IPortfolioWebPartsStrings {
   ViewLessText: string
   ViewMoreText: string
   ViewNotFoundMessage: string
-  ViewsListNameLabel: string
+  ViewNotFoundMessage_WebPartProperty: string
+  ViewNotFoundMessage_Id: string
   ProjectNotFound: string
   PrimaryFieldLabel: string
   SecondaryFieldLabel: string
   PrimaryUserFieldLabel: string
   SecondaryUserFieldLabel: string
+  RefreshRequiredDescription: string
+  LifecycleStatus_Completed: string
+  LifecycleStatus_Closed: string
+  ProjectLevel: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

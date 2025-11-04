@@ -1,9 +1,9 @@
 ﻿<Field Description="{resource:SiteFields_GtStatusGainAchievement_Description}" DisplayName="{resource:SiteFields_GtStatusGainAchievement_DisplayName}" Format="RadioButtons" Group="{resource:SiteFields_Portfolio_Group}" ID="{b1958607-cd56-4ecb-9ad7-65fb7d3c22c7}" Name="GtStatusGainAchievement" StaticName="GtStatusGainAchievement" Type="Choice">
     <CHOICES>
-        <CHOICE>Foran plan</CHOICE>
-        <CHOICE>Forsinket</CHOICE>
-        <CHOICE>Ikke påbegynt</CHOICE>
-        <CHOICE>Mindre forsinkelser</CHOICE>
-        <CHOICE>På plan</CHOICE>
+        <CHOICE>{resource:Choice_GtStatusGainAchievement_AheadOfSchedule}</CHOICE>
+        <CHOICE>{resource:Choice_GtStatusGainAchievement_BehindSchedule}</CHOICE>
+        <CHOICE>{resource:Choice_GtStatusGainAchievement_NotStarted}</CHOICE>
+        <CHOICE>{resource:Choice_GtStatusGainAchievement_MinorDelays}</CHOICE>
+        <CHOICE>{resource:Choice_GtStatusGainAchievement_OnSchedule}</CHOICE>
     </CHOICES>
 </Field>

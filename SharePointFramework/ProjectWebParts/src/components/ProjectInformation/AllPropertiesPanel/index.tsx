@@ -11,6 +11,7 @@ export const AllPropertiesPanel: FC<IBasePanelProps> = (props) => {
   return (
     <BasePanel
       {...props}
+      headerText={context.props.title}
       isOpen={context.state.activePanel === 'AllPropertiesPanel'}
       onDismiss={() => context.dispatch(CLOSE_PANEL())}
       onRenderBody={() => <ProjectProperties displayAllProperties />}

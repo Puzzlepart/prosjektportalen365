@@ -1,8 +1,8 @@
-import strings from 'ProjectWebPartsStrings'
 import { ProjectColumnConfig, SectionModel, StatusReport } from 'pp365-shared-library/lib'
 import SPDataAdapter from '../../../data'
 import { DataFetchFunction } from '../../../types/DataFetchFunction'
 import { IProjectInformationContext } from '../context'
+import resource from 'SharedResources'
 
 /**
  * Fetch project status reports (top: 1), sections and column config  if `props.hideStatusReport` is false.
@@ -21,7 +21,7 @@ export const fetchProjectStatusReportData: DataFetchFunction<
   try {
     const [reports, sections, columnConfig] = await Promise.all([
       SPDataAdapter.portalDataService.getStatusReports({
-        filter: `(GtSiteId eq '${context.props.siteId}') and GtModerationStatus eq '${strings.GtModerationStatus_Choice_Published}'`
+        filter: `(GtSiteId eq '${context.props.siteId}') and GtModerationStatus eq '${resource.Choice_GtModerationStatus_Published}'`
       }),
       SPDataAdapter.portalDataService.getProjectStatusSections(),
       SPDataAdapter.portalDataService.getProjectColumnConfig()

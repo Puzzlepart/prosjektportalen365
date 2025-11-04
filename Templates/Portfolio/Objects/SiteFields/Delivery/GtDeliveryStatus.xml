@@ -1,1 +1,9 @@
-<Field ID="{4322afd6-5f0f-4a22-819a-cb61668e6ede}" DisplayName="{resource:SiteFields_GtDeliveryStatus_DisplayName}" Name="GtDeliveryStatus" Type="Choice" Group="{resource:SiteFields_Project_Group}" Description="{resource:SiteFields_GtDeliveryStatus_Description}" Format="RadioButtons" FillInChoice="FALSE" StaticName="GtDeliveryStatus"><Default>Ihht. plan</Default><CHOICES><CHOICE>Ihht. plan</CHOICE><CHOICE>Små avvik</CHOICE><CHOICE>Store avvik</CHOICE><CHOICE>Godkjent</CHOICE></CHOICES></Field>
+<Field ID="{4322afd6-5f0f-4a22-819a-cb61668e6ede}" DisplayName="{resource:SiteFields_GtDeliveryStatus_DisplayName}" Name="GtDeliveryStatus" Type="Choice" Group="{resource:SiteFields_Project_Group}" Description="{resource:SiteFields_GtDeliveryStatus_Description}" Format="RadioButtons" FillInChoice="FALSE" StaticName="GtDeliveryStatus">
+  <Default>{resource:Choice_GtDeliveryStatus_AccordingToPlan}</Default>
+  <CHOICES>
+    <CHOICE>{resource:Choice_GtDeliveryStatus_AccordingToPlan}</CHOICE>
+    <CHOICE>{resource:Choice_GtDeliveryStatus_MinorDeviations}</CHOICE>
+    <CHOICE>{resource:Choice_GtDeliveryStatus_MajorDeviations}</CHOICE>
+    <CHOICE>{resource:Choice_GtDeliveryStatus_Approved}</CHOICE>
+  </CHOICES>
+</Field>

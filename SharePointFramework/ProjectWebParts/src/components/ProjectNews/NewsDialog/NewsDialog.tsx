@@ -69,8 +69,8 @@ export const NewsDialog: FC<INewsDialogProps> = () => {
               ) : (
                 <div className={styles.content}>
                   <UserMessage
-                    title='Opprett nyhetsartikkel for prosjektet'
-                    text='Her kan du opprette en nyhetsartikkel for prosjektet. Nyhetsartikkelen vil bli tilknyttet prosjektet. I nedtrekksmenyen for "Mal" kan du velge en mal som vil forhåndsutfylle nyhetsartikkelen, her er det mulig å få en forhåndsvisning av innholdet, ved å trykke på knappen "Forhåndsvis valgt mal".'
+                    title={strings.DialogTitle}
+                    text={strings.DialogDescription}
                     intent='info'
                   />
                   <FieldContainer
@@ -161,7 +161,7 @@ export const NewsDialog: FC<INewsDialogProps> = () => {
             action={
               <Button
                 appearance='subtle'
-                aria-label='Close'
+                aria-label={strings.CloseText}
                 icon={getFluentIcon('Dismiss')}
                 onClick={() => context.setState({ isDrawerOpen: false })}
               />
@@ -172,7 +172,11 @@ export const NewsDialog: FC<INewsDialogProps> = () => {
         </DrawerHeader>
         <DrawerBody className={styles.drawerBody}>
           {previewUrl ? (
-            <iframe src={previewUrl} title='Template Preview' className={styles.previewIframe} />
+            <iframe
+              src={previewUrl}
+              title={strings.PreviewLabel}
+              className={styles.previewIframe}
+            />
           ) : (
             <div className={styles.noPreview}>{strings.NoPreviewAvailable}</div>
           )}

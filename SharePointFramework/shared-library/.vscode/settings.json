@@ -9,7 +9,8 @@
     "**/lib": true,
     "**/dist": true,
     "**/release": true,
-    "src/**/*.scss.ts": true
+    "src/**/*.scss.ts": true,
+    "src/loc/shared": true
   },
   "typescript.tsdk": ".\\node_modules\\typescript\\lib",
   "azureAutomation.directory.basePath": ""

@@ -1,4 +1,3 @@
-import strings from 'ProjectWebPartsStrings'
 import SPDataAdapter from 'data/SPDataAdapter'
 import { ListLogger } from 'pp365-shared-library/lib/logging'
 import { useReducer, useRef } from 'react'
@@ -8,6 +7,7 @@ import reducer, { initialState } from './reducer'
 import { IProjectPhasesProps } from './types'
 import { useProjectPhasesDataFetch } from './useProjectPhasesDataFetch'
 import { useId } from '@fluentui/react-components'
+import resource from 'SharedResources'
 
 /**
  * Component logic hook for `ProjectPhases`
@@ -17,7 +17,7 @@ export function useProjectPhases(props: IProjectPhasesProps) {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   ListLogger.init(
-    SPDataAdapter.portalDataService.web.lists.getByTitle(strings.LogListName),
+    SPDataAdapter.portalDataService.web.lists.getByTitle(resource.Lists_Log_Title),
     props.webAbsoluteUrl,
     ProjectPhases.displayName
   )

@@ -1,1 +1,11 @@
-<Field ID="{7838332a-cf7f-47d5-924f-8c6d134935ea}" Name="GtProjectLogResponsible" DisplayName="{resource:SiteFields_GtProjectLogResponsible_DisplayName}" Type="Choice" Group="{resource:SiteFields_Project_Group}" Description="{resource:SiteFields_GtProjectLogResponsible_Description}" FillInChoice="TRUE" StaticName="GtProjectLogResponsible"><CHOICES><CHOICE>Prosjekteier</CHOICE><CHOICE>Linjeorganisasjon</CHOICE><CHOICE>Prosjektleder</CHOICE><CHOICE>Prosjektgruppe</CHOICE><CHOICE>Leverandør</CHOICE><CHOICE>Referansegrupper</CHOICE><CHOICE>Andre</CHOICE></CHOICES></Field>
+<Field ID="{7838332a-cf7f-47d5-924f-8c6d134935ea}" Name="GtProjectLogResponsible" DisplayName="{resource:SiteFields_GtProjectLogResponsible_DisplayName}" Type="Choice" Group="{resource:SiteFields_Project_Group}" Description="{resource:SiteFields_GtProjectLogResponsible_Description}" FillInChoice="TRUE" StaticName="GtProjectLogResponsible">
+  <CHOICES>
+    <CHOICE>{resource:Choice_GtProjectLogResponsible_ProjectOwner}</CHOICE>
+    <CHOICE>{resource:Choice_GtProjectLogResponsible_LineOrganization}</CHOICE>
+    <CHOICE>{resource:Choice_GtProjectLogResponsible_ProjectManager}</CHOICE>
+    <CHOICE>{resource:Choice_GtProjectLogResponsible_ProjectGroup}</CHOICE>
+    <CHOICE>{resource:Choice_GtProjectLogResponsible_Supplier}</CHOICE>
+    <CHOICE>{resource:Choice_GtProjectLogResponsible_ReferenceGroups}</CHOICE>
+    <CHOICE>{resource:Choice_GtProjectLogResponsible_Others}</CHOICE>
+  </CHOICES>
+</Field>

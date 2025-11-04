@@ -1,6 +1,6 @@
 {
   "name": "pp365",
-  "version": "1.11.1",
+  "version": "1.12.0",
   "description": "Prosjektportalen et prosjektstyringsverktøy for Microsoft 365 basert på Prosjektveiviseren.",
   "scripts": {
     "sync-version": "node ./.tasks/automatic-versioning.js",
@@ -12,7 +12,8 @@
     "postversion": "npm run generate-readme && npm run sync-version",
     "rush:update": "node common/scripts/install-run-rush.js update",
     "rush:build": "node common/scripts/install-run-rush.js rebuild --verbose",
-    "rush:lint": "node common/scripts/install-run-rush.js lint"
+    "rush:lint": "node common/scripts/install-run-rush.js lint",
+    "build-release": "pwsh -File ./Install/build-release.ps1"
   },
   "repository": {
     "type": "git",
@@ -47,7 +48,107 @@
     "uuid": "9.0.0",
     "yargs": "17.7.1"
   },
-  "volta": {
-    "node": "16.18.0"
+  "gitmoji": {
+    "install": [
+      "🔧",
+      "Adjustments or improvements to the install procedure",
+      [
+        "setup"
+      ]
+    ],
+    "build": [
+      "🏗️",
+      "Make architectural changes"
+    ],
+    "ci": [
+      "👷",
+      "Add or update CI build system",
+      [
+        "integration"
+      ]
+    ],
+    "chore": [
+      "💄",
+      "Boring chores",
+      [
+        "boring",
+        "stuff"
+      ]
+    ],
+    "docs": [
+      "📝",
+      "Added or updated documentation",
+      [
+        "doc",
+        "dox"
+      ]
+    ],
+    "feat": [
+      "✨",
+      "Introduced new features"
+    ],
+    "fix": [
+      "🐛",
+      "Fixed a bug",
+      [
+        "bugfix"
+      ]
+    ],
+    "perf": [
+      "⚡",
+      "Improved performance"
+    ],
+    "refactor": [
+      "♻️",
+      "Refactored code"
+    ],
+    "revert": [
+      "⏪",
+      "Reverted changes"
+    ],
+    "style": [
+      "💄",
+      "Added or updated the UI and style files"
+    ],
+    "test": [
+      "✅",
+      "Added or updated tests"
+    ],
+    "dev": [
+      "🔨",
+      "Add or update development scripts"
+    ],
+    "i18n": [
+      "🌐",
+      "Internationalization and localization"
+    ],
+    "changelog": [
+      "📓",
+      "Updated changelog"
+    ],
+    "readme": [
+      "📝",
+      "Updated readme"
+    ],
+    "typo": [
+      "✏️",
+      "Fixed typos"
+    ],
+    "rename": [
+      "🚚",
+      "Moved or renamed resources (e.g.: files, paths, routes)"
+    ],
+    "merge": [
+      "🔀",
+      "Merged a branch into this one"
+    ],
+    "auth": [
+      "🛂",
+      "Worked on code related to authorization, roles and permissions"
+    ],
+    "syntax": [
+      "✏️",
+      "Adjusted code syntax"
+    ]
   }
 }

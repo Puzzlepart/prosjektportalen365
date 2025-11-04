@@ -1,7 +1,7 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
 import { ContentConfig, ProjectExtension, ProjectTemplate } from 'pp365-shared-library'
 import { first, uniq } from 'underscore'
-import { IProjectSetupData } from '../../projectSetup/types'
+import { IProjectSetupData } from '../../extensions/projectSetup/types'
 import { IProjectSetupDialogState } from './types'
 
 export const INIT = createAction('INIT')
@@ -26,8 +26,8 @@ export default (data: IProjectSetupData) =>
       let [template] = data.templates.filter((t) => t.isDefault)
       if (!template) template = first(data.templates)
       state.selectedTemplate = template
-      state.selectedContentConfig = template.getContentConfig(data.contentConfig)
-      state.selectedExtensions = template.getExtensions(data.extensions)
+      state.selectedContentConfig = template?.getContentConfig(data.contentConfig) ?? []
+      state.selectedExtensions = template?.getExtensions(data.extensions) ?? []
     },
 
     [ON_LIST_CONTENT_CONFIG_CHANGED.type]: (

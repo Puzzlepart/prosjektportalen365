@@ -1,7 +1,7 @@
 import strings from 'ProjectExtensionsStrings'
 import { useState } from 'react'
 import { useBoolean } from 'usehooks-ts'
-import { useRiskActionFieldCustomizerContext } from '../../../../riskAction/context'
+import { useRiskActionFieldCustomizerContext } from '../../../../extensions/riskAction/context'
 import { useRiskActionContext } from '../../context'
 
 /**

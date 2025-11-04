@@ -7,19 +7,21 @@ import styles from './PortfolioInsights.module.scss'
 import { IPortfolioInsightsProps, IPortfolioInsightsState } from './types'
 import * as strings from 'PortfolioWebPartsStrings'
 import { UserMessage } from 'pp365-shared-library'
+import resource from 'SharedResources'
+import _ from 'lodash'
 
 /**
  * @component PortfolioInsights
  * @extends Component
  */
 export class PortfolioInsights extends Component<IPortfolioInsightsProps, IPortfolioInsightsState> {
-  public static defaultProps: Partial<IPortfolioInsightsProps> = {}
+  public static defaultProps: Partial<IPortfolioInsightsProps> = {
+    chartConfigurationListName: resource.Lists_ChartConfiguration_Title,
+    columnConfigListName: resource.Lists_ProjectColumnConfiguration_Title,
+    columnsListName: resource.Lists_ProjectColumns_Title,
+    viewsListName: resource.Lists_PortfolioViews_Title
+  }
 
-  /**
-   * Constructor
-   *
-   * @param props Props
-   */
   constructor(props: IPortfolioInsightsProps) {
     super(props)
     this.state = { loading: true }
@@ -28,11 +30,13 @@ export class PortfolioInsights extends Component<IPortfolioInsightsProps, IPortf
   public async componentDidMount() {
     try {
       const configuration = await this.props.dataAdapter.getPortfolioConfig()
-      const currentView = configuration.views[0]
+      const currentView = _.first(configuration.views)
       const { charts, chartData, contentTypes } = await this.props.dataAdapter.fetchChartData(
         currentView,
         configuration,
-        this.props.chartConfigurationListName,
+        _.isEmpty(this.props.chartConfigurationListName)
+          ? PortfolioInsights.defaultProps.chartConfigurationListName
+          : this.props.chartConfigurationListName,
         this.props.pageContext.site.id.toString()
       )
       this.setState({
@@ -55,7 +59,7 @@ export class PortfolioInsights extends Component<IPortfolioInsightsProps, IPortf
       <div className={styles.portfolioInsights}>
         <div className={styles.container}>
           <Commands
-            newFormUrl={`${this.props.pageContext.web.absoluteUrl}/Lists/Grafkonfigurasjon/NewForm.aspx`}
+            newFormUrl={`${this.props.pageContext.web.absoluteUrl}/${resource.Lists_ChartConfiguration_Url}/NewForm.aspx`}
             contentTypes={this.state.contentTypes}
             currentView={this.state.currentView}
             configuration={this.state.configuration}
@@ -116,4 +120,4 @@ export class PortfolioInsights extends Component<IPortfolioInsightsProps, IPortf
   }
 }
 
-export { IPortfolioInsightsProps }
+export * from './types'

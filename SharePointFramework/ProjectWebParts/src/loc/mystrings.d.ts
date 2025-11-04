@@ -18,15 +18,13 @@ declare interface IProjectWebPartsStrings {
   SiteAssetsConfigurationFolder: string
   RiskMatrixConfigurationFolder: string
   ManualConfigurationNotFoundOrInvalid: stringg
-  UseDynamicConfigurationOffText: string
-  UseDynamicConfigurationOnText: string
+  ToggleOnText: string
+  ToggleOffText: string
   ManualConfigurationPathLabel: string
-  UseDynamicConfigurationLabel: string
   PublishingReportLabel: string
-  PublishStatusReportSectionDataWarning: string
   AdminPageLinkLabel: string
   AdvancedGroupName: string
-  BarLabel: string
+  ProjectPropertiesTitleLabel: string
   CalloutTemplateFieldLabel: string
   CancelText: string
   CategoryFieldLabel: string
@@ -56,9 +54,9 @@ declare interface IProjectWebPartsStrings {
   CreateParentModalSubText: string
   CreateParentModalTitle: string
   CreateParentProjectLabel: string
+  CreateParentSetupProgressText: string
   CurrentPhaseViewNameFieldLabel: string
   DataGroupName: string
-  DefaultAdminPageLink: string
   DefaultGroupByLabel: string
   DefaultTimeframeEndLabel: string
   DefaultTimeframeEndValue: string
@@ -69,8 +67,6 @@ declare interface IProjectWebPartsStrings {
   DeleteReportButtonLabel: string
   DeleteReportButtonDescription: string
   DeleteReportButtonDescriptionNoPermission: string
-  DiamondLabel: string
-  DocumentsListName: string
   EditItemLabel: string
   EditProjectInformationText: string
   EditReportButtonLabel: string
@@ -84,8 +80,6 @@ declare interface IProjectWebPartsStrings {
   GeneralGroupName: string
   GetSnapshotButtonLabel: string
   GetSnapshotButtonDescription: string
-  GtModerationStatus_Choice_Draft: string
-  GtModerationStatus_Choice_Published: string
   HideActionsLabel: string
   HideAllActionsLabel: string
   HideParentProjectsLabel: string
@@ -96,8 +90,8 @@ declare interface IProjectWebPartsStrings {
   HookUrlFieldLabel: string
   ListNameFieldLabel: string
   ListSectionDataErrorMessage: string
+  ListSectionElementIdPrefix: string
   LoadingText: string
-  LogListName: string
   LookAndFeelGroupName: string
   ManualConfigurationNotFoundOrInvalid: string
   ManualConfigurationPathLabel: string
@@ -122,7 +116,6 @@ declare interface IProjectWebPartsStrings {
   MatrixHeader_VerySmall: string
   MatrixSizeLabel: string
   MilestoneDateLabel: string
-  MilestoneLabel: string
   MoveOn: string
   NavigateToSourceUrlText: string
   NewItemLabel: string
@@ -139,14 +132,13 @@ declare interface IProjectWebPartsStrings {
   NotPublishedStatusReport: string
   OpportunityMatrixGroupName: string
   OverrideHeadersLabel: string
+  ArchiveGroupName: string
+  HideArchiveStatusLabel: string
   ParentProjectsGroupName: string
   ParentProjectsHeaderDescription: string
   ParentProjectsHeaderText: string
   PhaseChecklistLinkText: string
-  PhaseChecklistName: string
-  PhaseChecklistViewUrl: string
   PhaseFieldFieldLabel: string
-  PhaseLabel: string
   PhaseSitePageTitle: string
   PhaseSitePageFoundMessage: string
   PhaseSitePageNotFoundMessage: string
@@ -160,12 +152,9 @@ declare interface IProjectWebPartsStrings {
   ProjectInformationDataFetchErrorText: string
   ProjectInformationStatusReportHeaderText: string
   ProjectInformationStatusReportHeaderDescription: string
-  ProjectLabel: string
   ProjectPhasesChangePhaseError: string
   ProjectPhasesFetchDataError: string
   ProjectPropertiesHeader: string
-  ProjectPropertiesListName: string
-  ProjectsListName: string
   ProjectStatusDataErrorText: string
   ProjectStatusGroupName: string
   ProjectStatusProjectPropertiesGroupName: string
@@ -181,7 +170,6 @@ declare interface IProjectWebPartsStrings {
   PublishingReportLabel: string
   RedoText: string
   RevertDefaultColorConfigurationText: string
-  RiskMatrixConfigurationFolder: string
   RiskMatrixGroupName: string
   SaveColorConfigurationText: string
   SettingsGroupName: string
@@ -196,10 +184,10 @@ declare interface IProjectWebPartsStrings {
   ShowTimelineLabel: string
   ShowTimelineListCommandsLabel: string
   ShowTimelineListLabel: string
-  SiteAssetsConfigurationFolder: string
   Skip: string
   SkipSyncToHubLabel: string
   StatusClosed: string
+  StatusElementText: string
   StatusNotRelevant: string
   StatusOpen: string
   StatusReportShowOnlyIconsLabel: string
@@ -214,8 +202,6 @@ declare interface IProjectWebPartsStrings {
   SyncPropertiesAfterPhaseChangeFieldLabel: string
   TagFieldLabel: string
   TasksLinkText: string
-  TimelineConfigurationListName: string
-  TimelineContentListName: string
   ToggleUncertaintyPostActionLabel: string
   ToggleUncertaintyPostActionOffText: string
   ToggleUncertaintyPostActionOnText: string
@@ -224,14 +210,32 @@ declare interface IProjectWebPartsStrings {
   UnpublishedStatusReportInfo: string
   PublishedStatusReportInfo: string
   AlreadyPublishedReportInfo: string
-  UseDynamicConfigurationLabel: string
-  UseDynamicConfigurationOffText: string
-  UseDynamicConfigurationOnText: string
   UseDynamicHomepageCalloutText: string
   UseDynamicHomepageFieldLabel: string
-  UseFramelessButtonsLabel: string
   UsePhaseHooksCalloutText: string
   UsePhaseHooksFieldLabel: string
+  ArchiveViewTitle: string
+  ArchiveViewDescription: string
+  ArchiveMoreInformationText: string
+  ArchiveInformationTitle: string
+  ArchiveInformationText: string
+  ArchiveDocumentsSection: string
+  ArchiveListsSection: string
+  ArchiveSelectedItemsInfo: string
+  ArchiveLoadingText: string
+  ArchiveContinueText: string
+  ArchiveSelectAllText: string
+  ArchiveNotArchivableText: string
+  ArchiveNotArchivableListText: string
+  ArchiveList: string
+  ArchiveDocument: string
+  ArchivePhaseTransition: string
+  ErrorArchiving: string
+  UseArchiveFieldLabel: string
+  HookArchiveUrlFieldLabel: string
+  HookArchiveUrlFieldDescription: string
+  HookArchiveAuthFieldLabel: string
+  HookArchiveAuthFieldDescription: string
   ViewsGroupName: string
   ViewVersionHistoryText: string
   ViewXmlFieldLabel: string
@@ -240,6 +244,7 @@ declare interface IProjectWebPartsStrings {
   Yes: string
   PhaseCheckListItem: string
   DialogTitle: string
+  DialogDescription: string
   CreatingNewArticleStatus: string
   NewsCreatedSuccessfully: string
   NewsTitleLabel: string
@@ -275,6 +280,23 @@ declare interface IProjectWebPartsStrings {
   NewsCreateDuplicateFileError: string
   PreviewLabel: string
   NoPreviewAvailable: string
+  ShowCommentText: string
+  HideCommentText: string
+  ArchiveLogStatusSuccess: string
+  ArchiveLogStatusError: string
+  ArchiveLogStatusWarning: string
+  ArchiveLogStatusInProgress: string
+  ArchiveLogScopeDocument: string
+  ArchiveLogScopeList: string
+  ArchiveLogOperationArchive: string
+  ArchiveLogOperationPhaseTransition: string
+  ArchiveLogOperationEndClosed: string
+  ArchiveStatusHeaderText: string
+  ArchiveStatusHeaderDescription: string
+  ArchiveStatusDetailedMessage: string
+  ArchiveStatusDocumentCount: string
+  ArchiveStatusListCount: string
+  ArchiveStatusTotalCount: string
 }
 
 declare module 'ProjectWebPartsStrings' {

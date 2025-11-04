@@ -6,6 +6,7 @@ import { useProjectTimeline } from './useProjectTimeline'
 import { UserMessage } from '../UserMessage'
 import strings from 'SharedLibraryStrings'
 import { LoadingSkeleton } from '../LoadingSkeleton'
+import resource from 'SharedResources'
 
 export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
   const { state, onFilterChange } = useProjectTimeline(props)
@@ -31,6 +32,13 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
       </div>
     </div>
   )
+}
+
+ProjectTimeline.displayName = 'ProjectTimeline'
+ProjectTimeline.defaultProps = {
+  showProjectDeliveries: false,
+  dataSourceName: resource.Lists_DataSources_Category_ProjectDeliveries_All,
+  configItemTitle: resource.TimelineConfiguration_ProjectDelivery_Title
 }
 
 export * from './Timeline'

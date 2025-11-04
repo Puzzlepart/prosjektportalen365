@@ -21,7 +21,7 @@ $GroupsWhereAdded = [System.Collections.ArrayList]@()
 function GrantPermissions ($Url) {
     Write-Host "`tGranting owner permissions to site collection $Url"
     Set-PnPTenantSite -Url $Url -Owners $CurrentUser
-    Connect-PnPOnline -Url $Url -TenantAdminUrl $TenantAdminUrl -Interactive -ClientId $ClientId
+    Connect-PnPOnline -Url $Url -TenantAdminUrl $TenantAdminUrl -ClientId $ClientId
     $GroupId = (Get-PnPSite -Includes GroupId -ErrorAction Ignore).GroupId.toString()
     Write-Host "`tGranting owner permissions to group $GroupId"
     Add-PnPMicrosoft365GroupOwner -Identity -Users $CurrentUser
@@ -46,7 +46,7 @@ if (-not (Get-Module | Where-Object { $_.Name -like "PnP.PowerShell" }) ) {
     Import-Module PnP.PowerShell
 }
 
-Connect-PnPOnline -TenantAdminUrl $TenantAdminUrl -Url $PortfolioUrl -Interactive -clientId $ClientId
+Connect-PnPOnline -TenantAdminUrl $TenantAdminUrl -Url $PortfolioUrl -clientId $ClientId
 
 $Children = Get-PnPHubSiteChild
 
@@ -60,7 +60,7 @@ else {
     $Children | ForEach-Object {
         $ChildSiteUrl = $_
     
-        Connect-PnPOnline -Url $ChildSiteUrl -TenantAdminUrl $TenantAdminUrl -Interactive -clientId $ClientId
+        Connect-PnPOnline -Url $ChildSiteUrl -TenantAdminUrl $TenantAdminUrl -clientId $ClientId
         $GroupId = (Get-PnPSite -Includes GroupId -ErrorAction Ignore).GroupId.toString()
         $PlannerPlan = Get-PnPPlannerPlan -Group $GroupId 
         

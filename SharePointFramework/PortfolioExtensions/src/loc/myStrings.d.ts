@@ -22,18 +22,13 @@ declare interface IPortfolioExtensionsStrings {
   HelpContentAvailableLabel: string
   HelpContentUnavailableDescription: string
   HelpContentUnavailableLabel: string
-  HelpContentListName: string
   IdeaAlreadyApproved: string
-  IdeaConfigurationTitle: string
   IdeaProcessingListErrorMessage: string
-  IdeaProcessorsSiteGroup: string
   IdeaProjectDataDialogBlockedTitle: string
   IdeaProjectDataDialogBlockedMessage: string
   IdeaProjectDataDialogNotApprovedMessage: string
   IdeaProjectDataDialogInfoTitle: string
   IdeaProjectDataDialogTitle: string
-  IdeaProjectDataTitle: string
-  InstallationLogListName: string
   InstallChannelLabel: string
   InstalledDateLabel: string
   InstallVersionLabel: string
@@ -45,7 +40,6 @@ declare interface IPortfolioExtensionsStrings {
   LatestGitHubReleaseIsSameText: any
   LatestGitHubReleaseLabel: string
   LatestGitHubReleaseLinkTitle: string
-  LinksListName: string
   LinksListDescription: string
   LinksListLabel: string
   SeeAllInstallationsLinkText: string
@@ -54,6 +48,11 @@ declare interface IPortfolioExtensionsStrings {
   SiteSettingsDescription: string
   SiteSettingsLabel: string
   SubmitLabel: string
+  IdeaRegistrationIncludeString: string
+  IdeaProcessingCommandTitle: string
+  IdeaProcessingLinkTitle: string
+  IdeaRegistrationCommandTitle: string
+  IdeaProjectDataCommandTitle: string
 }
 
 declare module 'PortfolioExtensionsStrings' {

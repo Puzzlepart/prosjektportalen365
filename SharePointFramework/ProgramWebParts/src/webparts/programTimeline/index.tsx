@@ -6,10 +6,12 @@ import {
 import strings from 'ProgramWebPartsStrings'
 import { unmountComponentAtNode } from 'react-dom'
 import { BaseProgramWebPart } from '../baseProgramWebPart'
+import resource from 'SharedResources'
 
 export default class ProgramTimelineWebPart extends BaseProgramWebPart<IProjectTimelineProps> {
   public async onInit() {
     await super.onInit()
+    this.properties.title = resource.ClientSidePages_ParentTimeline_WebPartTitle
   }
 
   public render(): void {
@@ -30,12 +32,12 @@ export default class ProgramTimelineWebPart extends BaseProgramWebPart<IProjectT
               groupFields: [
                 PropertyPaneTextField('dataSourceName', {
                   label: strings.DataSourceLabel,
-                  value: 'Alle prosjektleveranser'
+                  value: resource.Lists_DataSources_Category_ProjectDeliveries_All
                 }),
                 PropertyPaneTextField('configItemTitle', {
                   label: strings.ConfigItemTitleFieldLabel,
                   description: strings.ConfigItemTitleFieldDescription,
-                  value: 'Prosjektleveranse'
+                  value: resource.TimelineConfiguration_ProjectDelivery_Title
                 })
               ]
             }

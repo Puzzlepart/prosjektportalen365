@@ -21,6 +21,7 @@ import {
 } from '@fluentui/react-components'
 import { customLightTheme, getFluentIcon } from 'pp365-shared-library'
 import styles from './Assistant.module.scss'
+import resource from 'SharedResources'
 
 export const Assistant: FC = () => {
   const context = useContext(FooterContext)
@@ -51,7 +52,7 @@ export const Assistant: FC = () => {
                     icon={getFluentIcon('Settings')}
                     onClick={() =>
                       window.open(
-                        `${context.props.portalUrl}/Lists/Globale%20innstillinger`,
+                        `${context.props.portalUrl}/${resource.Lists_Global_Settings_Url}`,
                         '_blank'
                       )
                     }
@@ -75,7 +76,7 @@ export const Assistant: FC = () => {
               />
             )}
             <iframe
-              src={`https://pp365-ai-d2dge4fqc2bhbba9.norwayeast-01.azurewebsites.net?source=${context.props.pageContext.web.absoluteUrl}`}
+              src={`${context.props.assistantEndpointUrl}?source=${context.props.pageContext.web.absoluteUrl}`}
               style={{ display: loading ? 'none' : 'block', border: 'none' }}
               title={strings.AssistantIframeTitle}
               width='100%'
@@ -88,9 +89,7 @@ export const Assistant: FC = () => {
           relationship='description'
           withArrow
           content={
-            isUnavailable
-              ? strings.AssistantTooltipUnavailable
-              : strings.AssistantTooltipAvailable
+            isUnavailable ? strings.AssistantTooltipUnavailable : strings.AssistantTooltipAvailable
           }
         >
           <Button

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+<pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
     <pnp:Preferences></pnp:Preferences>
     <pnp:Templates ID="CONTAINER-TEMPLATE-PP-PORTFOLIO-CONTENT-NO-NB">
         <pnp:ProvisioningTemplate ID="TEMPLATE-PP-PORTFOLIO-NO-NB" Scope="RootSite">
@@ -31,50 +31,6 @@
                         <pnp:Property Key="GtIsParentProject" Value="0" />
                     </pnp:Properties>
                 </pnp:File>
-                <pnp:File Src="ProjectExtensions/Fasesider.txt" Folder="Prosjekttillegg" Level="Published" Overwrite="false">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Fasesider" />
-                        <pnp:Property Key="GtDescription" Value="Egne sider for de ulike standardfasene i Prosjektportalen til bruk sammen med dynamisk forside-funksjonaliteten. Dette tillegget inneholder sider for Konsept, Planlegge, Gjennomføre, Avslutte og Realisere." />
-                        <pnp:Property Key="GtExtensionDefault" Value="0" />
-                        <pnp:Property Key="GtExtensionHidden" Value="1" />
-                        <pnp:Property Key="GtExtensionLocked" Value="0" />
-                    </pnp:Properties>
-                </pnp:File>
-                <pnp:File Src="Malbibliotek/Gevinstrealiseringsplan.docx" Folder="Malbibliotek" Level="Published" Overwrite="true">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Gevinstrealiseringsplan" />
-                    </pnp:Properties>
-                </pnp:File>
-                <pnp:File Src="Malbibliotek/Gevinstverktøy.xlsx" Folder="Malbibliotek" Level="Published" Overwrite="true">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Gevinstverktøy" />
-                    </pnp:Properties>
-                </pnp:File>
-                <pnp:File Src="Malbibliotek/Mandat for konseptfasen.docx" Folder="Malbibliotek" Level="Published" Overwrite="true">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Mandat for konseptfasen" />
-                    </pnp:Properties>
-                </pnp:File>
-                <pnp:File Src="Malbibliotek/Prosjektbegrunnelse.docx" Folder="Malbibliotek" Level="Published" Overwrite="true">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Prosjektbegrunnelse" />
-                    </pnp:Properties>
-                </pnp:File>
-                <pnp:File Src="Malbibliotek/Prosjektforslag.docx" Folder="Malbibliotek" Level="Published" Overwrite="true">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Prosjektforslag" />
-                    </pnp:Properties>
-                </pnp:File>
-                <pnp:File Src="Malbibliotek/Sluttrapport.docx" Folder="Malbibliotek" Level="Published" Overwrite="true">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Sluttrapport" />
-                    </pnp:Properties>
-                </pnp:File>
-                <pnp:File Src="Malbibliotek/Styringsdokument.docx" Folder="Malbibliotek" Level="Published" Overwrite="true">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Styringsdokument" />
-                    </pnp:Properties>
-                </pnp:File>
                 <pnp:File Src="SiteAssets/Konfigurasjon/Risikomatrise/standard-konfigurasjon.json" Folder="SiteAssets/Konfigurasjon/Risikomatrise" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Standard 5x5 matrise" />
@@ -85,43 +41,180 @@
                         <pnp:Property Key="Title" Value="Standard 5x5 matrise" />
                     </pnp:Properties>
                 </pnp:File>
+                <pnp:File Src="Malbibliotek/!README.md" Folder="Malbibliotek" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="README - Malbibliotek" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Gevinstrealiseringsplan_v4.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Gevinstrealiseringsplan v4.0" />
+                        <pnp:Property Key="GtProjectPhase" Value="Planlegge|cda4f1e1-3488-4e57-8a04-6973df239689" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Interessentregister_v4.0.xlsx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Interessentregister v4.0" />
+                        <pnp:Property Key="GtProjectPhase" Value="Planlegge|cda4f1e1-3488-4e57-8a04-6973df239689" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Mandat_for_konseptfasen_v4.0.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Mandat for konseptfasen v4.0" />
+                        <pnp:Property Key="GtProjectPhase" Value="Idé|6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Prosjektbegrunnelse_v4.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Prosjektbegrunnelse v4.0" />
+                        <pnp:Property Key="GtProjectPhase" Value="Konsept|99e85650-33de-4af4-b8db-edffbc8a310b" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Prosjektforslag_v4.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Prosjektforslag v4.0" />
+                        <pnp:Property Key="GtProjectPhase" Value="Konsept|99e85650-33de-4af4-b8db-edffbc8a310b" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Sluttrapport_v5.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Sluttrapport v5.0" />
+                        <pnp:Property Key="GtProjectPhase" Value="Avslutte|30e03c52-8c3e-4cfe-9b18-ca71593ce130" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Styringsdokument_v4.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Styringsdokument v4.0" />
+                        <pnp:Property Key="GtProjectPhase" Value="Planlegge|cda4f1e1-3488-4e57-8a04-6973df239689" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Gevinstberegninger.xlsx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Gevinstberegninger" />
+                        <pnp:Property Key="GtProjectPhase" Value="Planlegge|cda4f1e1-3488-4e57-8a04-6973df239689" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Gevinstrealiseringsplan_v3.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Gevinstrealiseringsplan v3.0" />
+                        <pnp:Property Key="GtProjectPhase" Value="Planlegge|cda4f1e1-3488-4e57-8a04-6973df239689" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Gevinstverktøy_KommIT.xlsx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Gevinstverktøy KommIT" />
+                        <pnp:Property Key="GtProjectPhase" Value="Planlegge|cda4f1e1-3488-4e57-8a04-6973df239689" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Mandat for konseptfasen_v3.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Mandat for konseptfasen v3.0" />
+                        <pnp:Property Key="GtProjectPhase" Value="Idé|6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Prosjektbegrunnelse_v3.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Prosjektbegrunnelse v3.0" />
+                        <pnp:Property Key="GtProjectPhase" Value="Konsept|99e85650-33de-4af4-b8db-edffbc8a310b" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Prosjektforslag_v3.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Prosjektforslag v3.0" />
+                        <pnp:Property Key="GtProjectPhase" Value="Konsept|99e85650-33de-4af4-b8db-edffbc8a310b" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Sluttrapport_v2.2.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Sluttrapport v2.2" />
+                        <pnp:Property Key="GtProjectPhase" Value="Avslutte|30e03c52-8c3e-4cfe-9b18-ca71593ce130" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Styringsdokument_v3.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Styringsdokument v3.0" />
+                        <pnp:Property Key="GtProjectPhase" Value="Planlegge|cda4f1e1-3488-4e57-8a04-6973df239689" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Nynorsk_-_gevinstrealiseringsplan_v4.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren/Nynorsk" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Gevinstrealiseringsplan (nynorsk) v4.0" />
+                        <pnp:Property Key="GtProjectPhase" Value="Planlegge|cda4f1e1-3488-4e57-8a04-6973df239689" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Nynorsk_-_interessentregister_v4.0.xlsx" Folder="Malbibliotek/Fra Prosjektveiviseren/Nynorsk" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Interessentregister (nynorsk) v4.0" />
+                        <pnp:Property Key="GtProjectPhase" Value="Planlegge|cda4f1e1-3488-4e57-8a04-6973df239689" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Nynorsk_-_mandat_for_konseptfasen_v4.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren/Nynorsk" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Mandat for konseptfasen (nynorsk) v4.0" />
+                        <pnp:Property Key="GtProjectPhase" Value="Idé|6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Nynorsk_-_prosjektforslag_v4.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren/Nynorsk" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Prosjektforslag (nynorsk) v4.0" />
+                        <pnp:Property Key="GtProjectPhase" Value="Konsept|99e85650-33de-4af4-b8db-edffbc8a310b" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Nynorsk_-_prosjektgrunngjeving_v4.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren/Nynorsk" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Prosjektgrunngjeving (nynorsk) v4.0" />
+                        <pnp:Property Key="GtProjectPhase" Value="Konsept|99e85650-33de-4af4-b8db-edffbc8a310b" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Nynorsk_-_sluttrapport_v5.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren/Nynorsk" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Sluttrapport (nynorsk) v5.0" />
+                        <pnp:Property Key="GtProjectPhase" Value="Avslutte|30e03c52-8c3e-4cfe-9b18-ca71593ce130" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Nynorsk_-_styringsdokument_v4.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren/Nynorsk" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Styringsdokument (nynorsk) v4.0" />
+                        <pnp:Property Key="GtProjectPhase" Value="Planlegge|cda4f1e1-3488-4e57-8a04-6973df239689" />
+                    </pnp:Properties>
+                </pnp:File>                
             </pnp:Files>
             <pnp:Lists>
-                <pnp:ListInstance Title="Fasesjekkliste" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Fasesjekkliste" EnableVersioning="true" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false">
+                <pnp:ListInstance Title="Fasesjekkliste" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Fasesjekkliste" EnableVersioning="true" DraftVersionVisibility="0" ContentTypesEnabled="true" EnableFolderCreation="false" EnableAttachments="false">
                     <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Er det en tydelig definert problemstilling som synliggjør behovet for nærmere utredning?</pnp:DataValue>
-                            <pnp:DataValue FieldName="GtProjectPhase">Ingen fase|6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Idé|6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Er det tydeliggjort hvordan eller av hvem utredningen skal finansieres?</pnp:DataValue>
-                            <pnp:DataValue FieldName="GtProjectPhase">Ingen fase|6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Idé|6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">20</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Er det mest riktig å gjennomføre tiltaket som et prosjekt eller som en linjeoppgave?</pnp:DataValue>
-                            <pnp:DataValue FieldName="GtProjectPhase">Ingen fase|6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Idé|6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">30</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Er tiltaket  i henhold til virksomhetsstrategien?</pnp:DataValue>
-                            <pnp:DataValue FieldName="GtProjectPhase">Ingen fase|6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Idé|6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">40</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Er det behov for mer informasjon før det kan fattes en beslutning</pnp:DataValue>
-                            <pnp:DataValue FieldName="GtProjectPhase">Ingen fase|6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Idé|6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">50</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Er det tydeliggjort hvilke føringer (IT -politiske eller andre) som gjelder for og må tas hensyn til i utredningen?</pnp:DataValue>
-                            <pnp:DataValue FieldName="GtProjectPhase">Ingen fase|6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Idé|6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">60</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Skal vi gå videre til konseptfasen og utrede ulike konsepter for et mulig prosjekt?</pnp:DataValue>
-                            <pnp:DataValue FieldName="GtProjectPhase">Ingen fase|6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Idé|6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">70</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
@@ -311,56 +404,56 @@
                         </pnp:DataRow>
                     </pnp:DataRows>
                 </pnp:ListInstance>
-                <pnp:ListInstance Title="Planneroppgaver" TemplateType="100" Url="Lists/Planneroppgaver" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true">
+                <pnp:ListInstance Title="Planneroppgaver" TemplateType="100" Url="Lists/Planneroppgaver" ContentTypesEnabled="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true">
                     <pnp:DataRows KeyColumn="Title" UpdateBehavior="Overwrite">
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Beslutte utredning av idéen og utforme et førsteutkast til prosjektmandat</pnp:DataValue>
-                            <pnp:DataValue FieldName="GtCategory">Ingen fase</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Idé</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Definere en tydelig problemstilling som synliggjør behovet for nærmere utredning</pnp:DataValue>
-                            <pnp:DataValue FieldName="GtCategory">Ingen fase</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Idé</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">20</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Gjøre det tydelig hvordan eller av hvem utredningen skal finansieres</pnp:DataValue>
-                            <pnp:DataValue FieldName="GtCategory">Ingen fase</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Idé</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">30</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Vurdere om det er mest riktig å gjennomføre tiltaket som et prosjekt eller som en linjeoppgave</pnp:DataValue>
-                            <pnp:DataValue FieldName="GtCategory">Ingen fase</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Idé</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">40</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Vurdere om tiltaket er i henhold til virksomhetsstrategien</pnp:DataValue>
-                            <pnp:DataValue FieldName="GtCategory">Ingen fase</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Idé</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">50</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Vurdere om det finnes noen føringer (IT -politiske eller andre) som gjelder og må tas hensyn til i utredningen</pnp:DataValue>
-                            <pnp:DataValue FieldName="GtCategory">Ingen fase</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Idé</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">60</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Vurdere om det er behov for mer informasjon før det kan fattes en beslutning</pnp:DataValue>
-                            <pnp:DataValue FieldName="GtCategory">Ingen fase</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Idé</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">70</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Utforme endelig prosjektmandat og legge det fram til vedtak i Beslutningspunkt 1 (BP1)</pnp:DataValue>
-                            <pnp:DataValue FieldName="GtCategory">Ingen fase</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Idé</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">80</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Gjennomføre BP1 (sjekkliste og ev. faseovergang) og vurdere om vi skal gå videre til konseptfasen og utrede ulike konsepter for et mulig prosjekt</pnp:DataValue>
-                            <pnp:DataValue FieldName="GtCategory">Ingen fase</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Idé</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">90</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Hvis man i BP1 har vedtatt å gå videre til konseptfasen, utnevne en utredningsleder for konseptfasen</pnp:DataValue>
-                            <pnp:DataValue FieldName="GtCategory">Ingen fase</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Idé</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">100</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>

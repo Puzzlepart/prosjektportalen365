@@ -1,4 +1,3 @@
-import strings from 'ProjectWebPartsStrings'
 import moment from 'moment'
 import { PortalDataService } from 'pp365-shared-library/lib/services'
 import { useProjectStatusContext } from '../context'
@@ -10,13 +9,14 @@ import {
   SELECT_REPORT
 } from '../reducer'
 import { useCaptureReportSnapshot } from './useCaptureReportSnapshot'
+import resource from 'SharedResources'
 
 /**
  * Hook for publishing of reports. Returns a callback function
  * for publishing the selected report. The hook `useCaptureReport`
  * is used to capture the report as an image and attach it to the
  * SharePoint list item. The status of the report list item is
- * also updated to published (`GtModerationStatus_Choice_Published` from `strings`)
+ * also updated to published (`GtModerationStatus: Published` from `strings`)
  *
  * @returns A function callback that returns a promise of void
  */
@@ -45,7 +45,7 @@ export function usePublishReport() {
           context.state.selectedReport,
           moment().format('YYYY-MM-DD HH:mm'),
           attachments,
-          strings.GtModerationStatus_Choice_Published
+          resource.Choice_GtModerationStatus_Published
         )
         context.dispatch(REPORT_PUBLISHED({ updatedReport, message: null }))
         context.dispatch(SELECT_REPORT({ report: updatedReport }))

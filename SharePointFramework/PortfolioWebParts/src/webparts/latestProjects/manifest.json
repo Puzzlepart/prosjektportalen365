@@ -3,7 +3,7 @@
   "id": "941fd73c-b957-41c3-8d4f-082268407f10",
   "alias": "LatestProjectsWebPart",
   "componentType": "WebPart",
-  "version": "1.11.1",
+  "version": "1.12.0",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "hiddenFromToolbox": true,
@@ -23,10 +23,7 @@
         "default": " "
       },
       "officeFabricIconFontName": "BuildQueueNew",
-      "properties": {
-        "title": "Siste prosjekter",
-        "showProjectLogo": false
-      }
+      "properties": {}
     }
   ]
 }

@@ -1,10 +1,10 @@
 <Field Type="Choice" DisplayName="{resource:SiteFields_GtPlannerPreviewType_DisplayName}" Description="{resource:SiteFields_GtPlannerPreviewType_Description}" Format="Dropdown" Group="{resource:SiteFields_Portfolio_Group}" ID="{196383e2-61b5-455d-b4db-4d12018a6755}" StaticName="GtPlannerPreviewType" Name="GtPlannerPreviewType">
-    <Default>Automatisk (automatic)</Default>
+    <Default>{resource:Choice_GtPlannerPreviewType_Automatic}</Default>
     <CHOICES>
-      <CHOICE>Automatisk (automatic)</CHOICE>
-      <CHOICE>Ingen (noPreview)</CHOICE>
-      <CHOICE>Sjekkliste (checklist)</CHOICE>
-      <CHOICE>Beskrivelse (description)</CHOICE>
-      <CHOICE>Referanse/vedlegg (reference)</CHOICE>
+      <CHOICE>{resource:Choice_GtPlannerPreviewType_Automatic}</CHOICE>
+      <CHOICE>{resource:Choice_GtPlannerPreviewType_None}</CHOICE>
+      <CHOICE>{resource:Choice_GtPlannerPreviewType_Checklist}</CHOICE>
+      <CHOICE>{resource:Choice_GtPlannerPreviewType_Description}</CHOICE>
+      <CHOICE>{resource:Choice_GtPlannerPreviewType_Reference}</CHOICE>
     </CHOICES>
   </Field>

@@ -25,10 +25,24 @@ export const useResourceAllocation = (props: IResourceAllocationProps) => {
     data: { items: [], groups: [] }
   })
 
+  const resourceNameToUPNs: Record<string, Set<string>> = {}
+  if (state.data.items && state.data.items.length > 0) {
+    state.data.items.forEach((i) => {
+      const resourceDisplay = get(i, 'data.resource')
+      if (!resourceDisplay) return
+      const match = resourceDisplay.match(/^(.*?) \(/)
+      const displayName = match ? match[1] : resourceDisplay
+      const upn = i.props?.GtResourceUserOWSUSER?.split('|')[0]?.trim()
+      if (!resourceNameToUPNs[displayName]) resourceNameToUPNs[displayName] = new Set()
+      if (upn) resourceNameToUPNs[displayName].add(upn)
+    })
+  }
+
   const filters = [
-    { fieldName: 'data.project', name: strings.SiteTitleLabel },
+    { fieldName: 'data.role', name: strings.RoleLabel },
+    { fieldName: 'data.department', name: strings.DepartmentLabel },
     { fieldName: 'data.resource', name: strings.ResourceLabel },
-    { fieldName: 'data.role', name: strings.RoleLabel }
+    { fieldName: 'data.project', name: strings.SiteTitleLabel }
   ].map((col) => ({
     column: { key: col.fieldName, minWidth: 0, ...col },
     items: state.data.items
@@ -38,7 +52,15 @@ export const useResourceAllocation = (props: IResourceAllocationProps) => {
       .map((name) => {
         const filter = state.activeFilters[col.fieldName]
         const selected = filter ? filter.indexOf(name) !== -1 : false
-        return { name, value: name, selected }
+        const displayName = name
+        let tooltip: string | undefined = undefined
+        if (col.fieldName === 'data.resource' && name) {
+          const item = state.data.items.find((i) => get(i, 'data.resource') === name)
+          const upn = item?.props?.GtResourceUserOWSUSER?.split('|')[0]?.trim()
+          const department = item?.data?.department
+          tooltip = upn ? (department ? `${upn} | ${department}` : upn) : undefined
+        }
+        return { name: displayName, value: name, selected, tooltip }
       })
   }))
 

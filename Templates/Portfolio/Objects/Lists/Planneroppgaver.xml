@@ -1,4 +1,4 @@
-<pnp:ListInstance Title="{resource:Lists_PlannerTasks_Title}" TemplateType="100" Url="{resource:Lists_PlannerTasks_Url}" Hidden="false" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000"
+<pnp:ListInstance Title="{resource:Lists_PlannerTasks_Title}" Description="{resource:Lists_PlannerTasks_Description}" TemplateType="100" Url="{resource:Lists_PlannerTasks_Url}" Hidden="false" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000"
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x01000F43B5C9E86B4D7D9808100EC27E844A" Default="true" />

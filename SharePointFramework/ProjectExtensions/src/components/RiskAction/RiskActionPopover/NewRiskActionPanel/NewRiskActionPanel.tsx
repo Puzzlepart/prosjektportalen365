@@ -14,7 +14,7 @@ import styles from './NewRiskActionPanel.module.scss'
 import { ResponsibleField } from './ResponsibleField'
 import { useNewRiskActionPanel } from './useNewRiskActionPanel'
 import { FieldContainer } from 'pp365-shared-library'
-import { useRiskActionFieldCustomizerContext } from '../../../../riskAction/context'
+import { useRiskActionFieldCustomizerContext } from '../../../../extensions/riskAction/context'
 
 export const NewRiskActionPanel: FC<IPanelProps> = (props) => {
   const context = useRiskActionFieldCustomizerContext()

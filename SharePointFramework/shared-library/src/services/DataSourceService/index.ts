@@ -2,38 +2,40 @@ import { DataSource, SPDataSourceItem } from '../../models/DataSource'
 import { ProjectContentColumn } from '../../models'
 import { IList } from '@pnp/sp/lists'
 import { IWeb } from '@pnp/sp/webs'
-
+import resource from 'SharedResources'
 export class DataSourceService {
-  private list: IList
-  private columnsList: IList
+  private _dataSourcesList: IList
+  private _columnsList: IList
 
   /**
-   * Creates a new instance of DataSourceService
+   * Creates a new instance of `DataSourceService`
    *
    * @param web Web
-   * @param listName List name is default set to 'Datakilder' but can be overridden (not recommended)
-   * @param columnsListName Columns list name is default set to 'Prosjektinnholdskolonner' but can be overridden (not recommended)
+   * @param dataSourcesListName List name is default set to `{resource.Lists_DataSources_Title}` but can be overridden (not recommended)
+   * @param columnsListName Columns list name is default set to `{resource.Lists_ProjectContentColumns_Title}` but can be overridden (not recommended)
    */
   constructor(
     public web: IWeb,
-    listName = 'Datakilder',
-    columnsListName = 'Prosjektinnholdskolonner'
+    dataSourcesListName = resource.Lists_DataSources_Title,
+    columnsListName = resource.Lists_ProjectContentColumns_Title
   ) {
-    this.list = web.lists.getByTitle(listName)
-    this.columnsList = web.lists.getByTitle(columnsListName)
+    this._dataSourcesList = web.lists.getByTitle(dataSourcesListName)
+    this._columnsList = web.lists.getByTitle(columnsListName)
   }
 
   /**
-   * Get by name
+   * Get data sources by name.
    *
-   * @param name Name
+   * @param name The name of the data source
+   *
+   * @returns Data source
    */
   public async getByName(name: string): Promise<DataSource> {
     const [[item], columns] = await Promise.all([
-      this.list.items.select(...Object.keys(new SPDataSourceItem())).filter(`Title eq '${name}'`)<
-        SPDataSourceItem[]
-      >(),
-      this.columnsList.items()
+      this._dataSourcesList.items
+        .select(...Object.keys(new SPDataSourceItem()))
+        .filter(`Title eq '${name}'`)<SPDataSourceItem[]>(),
+      this._columnsList.items()
     ])
     return item
       ? new DataSource(
@@ -59,7 +61,7 @@ export class DataSourceService {
     if (level) {
       filter += ` and GtDataSourceLevel eq '${level}'`
     }
-    const items = await this.list.items
+    const items = await this._dataSourcesList.items
       .select(...Object.keys(new SPDataSourceItem()))
       .filter(`GtDataSourceCategory eq '${category}'`)
       .filter(filter)<SPDataSourceItem[]>()

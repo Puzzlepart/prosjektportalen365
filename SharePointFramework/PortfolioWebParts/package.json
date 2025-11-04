@@ -1,6 +1,6 @@
 {
   "name": "pp365-portfoliowebparts",
-  "version": "1.11.1",
+  "version": "1.12.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
@@ -11,11 +11,12 @@
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
     "prewatch": "node node_modules/pzl-spfx-tasks --pre-watch --loglevel silent",
     "postwatch": "node node_modules/pzl-spfx-tasks --post-watch --loglevel silent",
-    "serve": "concurrently \"gulp serve-deprecated --locale=nb-no --nobrowser NODE --max-old-space-size=8192\"",
+    "serve": "concurrently \"gulp serve-deprecated --nobrowser NODE --max-old-space-size=12288\"",
     "build": "gulp bundle --ship && gulp package-solution --ship",
     "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color --fix --config ../.eslintrc.yaml && npm run prettier",
-    "prettier": "prettier '**/*.ts*' --write --loglevel silent --config ../.prettierrc.yaml"
+    "prettier": "prettier '**/*.ts*' --write --loglevel silent --config ../.prettierrc.yaml",
+    "validate-loc": "node node_modules/pzl-spfx-tasks --validate-loc --loglevel verbose"
   },
   "dependencies": {
     "@fluentui/react": "8.98.1",
@@ -102,7 +103,7 @@
     "@types/react-beautiful-dnd": "~13.1.4",
     "@types/lodash": "~4.14.195",
     "@types/react-window": "~1.8.8",
-    "pzl-spfx-tasks": "~0.5.10-2"
+    "pzl-spfx-tasks": "0.5.15-1"
   },
   "config": {
     "pzl-spfx-tasks": {
@@ -119,6 +120,13 @@
         "userDataDir": "${workspaceFolder}/../.vscode/chrome-debug-user-data",
         "preferredBrowser": "chrome",
         "domainSpecificDataDir": true
+      },
+      "validateloc": {
+        "path": "./src/loc",
+        "interface": "IPortfolioWebPartsStrings",
+        "dts": "mystrings.d.ts",
+        "output": "./localization-report.md",
+        "summary": true
       }
     }
   }

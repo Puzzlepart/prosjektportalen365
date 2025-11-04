@@ -1,7 +1,7 @@
 import { IPanelProps } from '@fluentui/react'
 import { useId } from '@fluentui/react-components'
 import { useCallback, useState } from 'react'
-import { useRiskActionFieldCustomizerContext } from '../../../../riskAction/context'
+import { useRiskActionFieldCustomizerContext } from '../../../../extensions/riskAction/context'
 import { useRiskActionContext } from '../../context'
 
 /**

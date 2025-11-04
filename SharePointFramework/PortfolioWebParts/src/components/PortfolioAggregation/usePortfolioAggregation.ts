@@ -15,7 +15,6 @@ import {
   usePortfolioAggregationReducer
 } from './reducer'
 import { IPortfolioAggregationProps } from './types'
-import { useDefaultColumns } from './useDefaultColumns'
 import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
 import { usePortfolioAggregationDataFetch } from './usePortfolioAggregationDataFetch'
 import { usePortfolioAggregationFilteredItems } from './usePortfolioAggregationFilteredItems'
@@ -46,7 +45,6 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
   usePortfolioAggregationDataFetch(context, [context.state.currentView])
 
   context.items = usePortfolioAggregationFilteredItems(context)
-  context.columns = useDefaultColumns(context)
 
   const searchBox = useMemo<SearchBoxProps>(
     () => ({

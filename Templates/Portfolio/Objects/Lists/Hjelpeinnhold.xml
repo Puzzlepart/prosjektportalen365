@@ -1,10 +1,10 @@
-<pnp:ListInstance Title="Hjelpeinnhold" Description="" DocumentTemplate="" Hidden="true" TemplateType="100" Url="Lists/Hjelpeinnhold" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" EnableAttachments="false" EnableFolderCreation="false"
+<pnp:ListInstance Title="{resource:Lists_HelpContent_Title}" Description="{resource:Lists_HelpContent_Description}" DocumentTemplate="" Hidden="true" TemplateType="100" Url="{resource:Lists_HelpContent_Url}" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" EnableAttachments="false" EnableFolderCreation="false"
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x01007C1785494A2CAC40B7F7D81A040AC219" Default="true" />
     </pnp:ContentTypeBindings>
-    <pnp:Views RemoveExistingViews="true">
-        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Hjelpeinnhold/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+    <pnp:Views>
+        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_HelpContent_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
             <Query>
                 <OrderBy>
                     <FieldRef Name="GtSortOrder" />
@@ -29,273 +29,293 @@
     <pnp:DataRows KeyColumn="Title" UpdateBehavior="Overwrite">
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Porteføljenivå Brukermanual</pnp:DataValue>
-            <pnp:DataValue FieldName="GtHelpContentLevel">Portefølje</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_PortfolioLevelUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Portfolio}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">SitePages/Home.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3%20Portefoljeniva.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3-Portefoljeniva.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">20</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Porteføljeoversikt Brukermanual</pnp:DataValue>
-            <pnp:DataValue FieldName="GtHelpContentLevel">Portefølje</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_CreateProjectUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Portfolio}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
-            <pnp:DataValue FieldName="GtURL">SitePages/Porteføljeoversikt.aspx</pnp:DataValue>
+            <pnp:DataValue FieldName="GtURL">SitePages/Home.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3.2%20Portefoljeoversikt.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3.0-OpprettNyttProsjekt.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">30</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Porteføljeinnsikt Brukermanual</pnp:DataValue>
-            <pnp:DataValue FieldName="GtHelpContentLevel">Portefølje</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_PortfolioOverviewUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Portfolio}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
-            <pnp:DataValue FieldName="GtURL">SitePages/Porteføljeinnsikt.aspx</pnp:DataValue>
+            <pnp:DataValue FieldName="GtURL">SitePages/{resource:ClientSidePages_PortfolioOverview_PageName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3.3%20Portefoljeinnsikt.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3.1-Portefoljeoversikt.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">40</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Gevinstoversikt Brukermanual</pnp:DataValue>
-            <pnp:DataValue FieldName="GtHelpContentLevel">Portefølje</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_PortfolioInsightUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Portfolio}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
-            <pnp:DataValue FieldName="GtURL">SitePages/Gevinstoversikt.aspx</pnp:DataValue>
+            <pnp:DataValue FieldName="GtURL">SitePages/{resource:ClientSidePages_PortfolioInsights_PageName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3.4%20Gevinstoversikt.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3.2-Portefoljeinnsikt.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">50</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Erfaringslogg </pnp:DataValue>
-            <pnp:DataValue FieldName="GtHelpContentLevel">Portefølje</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_BenefitOverviewPortfolioUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Portfolio}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
-            <pnp:DataValue FieldName="GtURL">SitePages/Erfaringslogg.aspx</pnp:DataValue>
+            <pnp:DataValue FieldName="GtURL">SitePages/{resource:ClientSidePages_BenefitOverview_PageName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3.4%20Erfaringslogg.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3.4-Gevinstoversikt.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">60</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Leveranseoversikt Brukermanual</pnp:DataValue>
-            <pnp:DataValue FieldName="GtHelpContentLevel">Portefølje</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_ExperienceLogUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Portfolio}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
-            <pnp:DataValue FieldName="GtURL">SitePages/Leveranseoversikt.aspx</pnp:DataValue>
+            <pnp:DataValue FieldName="GtURL">SitePages/{resource:ClientSidePages_ExperienceLog_PageName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3.6%20Leveranseoversikt.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3.5-Erfaringslogg.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">70</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Usikkerhetsoversikt Brukermanual</pnp:DataValue>
-            <pnp:DataValue FieldName="GtHelpContentLevel">Portefølje</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_DeliveryOverviewUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Portfolio}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
-            <pnp:DataValue FieldName="GtURL">SitePages/Usikkerhetsoversikt.aspx</pnp:DataValue>
+            <pnp:DataValue FieldName="GtURL">SitePages/{resource:ClientSidePages_DeliveryOverview_PageName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://github.com/Puzzlepart/prosjektportalen-manual/blob/master/Brukermanual/3%20Portefolje/3.7%20Risikooversikt.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3.6-Leveranseoversikt.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">80</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Ressursallokering Brukermanual</pnp:DataValue>
-            <pnp:DataValue FieldName="GtHelpContentLevel">Portefølje</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_UncertaintyOverviewUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Portfolio}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
-            <pnp:DataValue FieldName="GtURL">SitePages/Ressursallokering.aspx</pnp:DataValue>
+            <pnp:DataValue FieldName="GtURL">SitePages/{resource:ClientSidePages_UncertaintyOverview_PageName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3.8%20Ressursallokering.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3.7-Usikkerhetsoversikt.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">90</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Tidslinje Brukermanual</pnp:DataValue>
-            <pnp:DataValue FieldName="GtHelpContentLevel">Portefølje</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_ResourceAllocationUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Portfolio}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
-            <pnp:DataValue FieldName="GtURL">SitePages/Prosjekttidslinje.aspx</pnp:DataValue>
+            <pnp:DataValue FieldName="GtURL">SitePages/{resource:ClientSidePages_ResourceAllocation_PageName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3.85%20Prosjekttidslinje.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3.8-Ressursallokering.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">100</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Prosjektområdet Brukermanual</pnp:DataValue>
-            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_IdeaModuleUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Portfolio}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
-            <pnp:DataValue FieldName="GtURL">SitePages/ProjectHome.aspx</pnp:DataValue>
+            <pnp:DataValue FieldName="GtURL">SitePages/{resource:ClientSidePages_IdeaModule_PageName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4%20Prosjekt.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3.10-Idemodul.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">110</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Prosjektegenskaper og fasesetting Brukermanual</pnp:DataValue>
-            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_TimelineUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Portfolio}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName" />
+            <pnp:DataValue FieldName="GtURL">SitePages/{resource:ClientSidePages_ProjectTimeline_PageName}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtTextContent" />
+            <pnp:DataValue FieldName="GtResourceLink" />
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3.9-Prosjekttidslinje.md</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">120</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_ProjectSiteUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Project};#{resource:Lists_HelpContent_Level_ParentProgram}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">SitePages/ProjectHome.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4.2%20Prosjektinformasjon%20og%20fasesetting.md</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">120</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Prosjektstatus Brukermanual</pnp:DataValue>
-            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIconName" />
-            <pnp:DataValue FieldName="GtURL">SitePages/Prosjektstatus.aspx</pnp:DataValue>
-            <pnp:DataValue FieldName="GtTextContent" />
-            <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4.4.1%20Prosjektstatus.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4-Prosjekt.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">130</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Prosjektlogg Brukermanual</pnp:DataValue>
-            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_ProjectPropertiesUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Project};#{resource:Lists_HelpContent_Level_ParentProgram}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
-            <pnp:DataValue FieldName="GtURL">Lists/Prosjektlogg/AllItems.aspx</pnp:DataValue>
+            <pnp:DataValue FieldName="GtURL">SitePages/ProjectHome.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4.4.2%20Prosjektlogg.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4.1-ProsjektinformasjonOgFasesetting.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">140</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Interessentregister Brukermanual</pnp:DataValue>
-            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_ProjectStatusUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Project};#{resource:Lists_HelpContent_Level_ParentProgram}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
-            <pnp:DataValue FieldName="GtURL">Lists/Interessentregister/AllItems.aspx</pnp:DataValue>
+            <pnp:DataValue FieldName="GtURL">{resource:Navigation_ProjectStatus_Url}</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4.4.3%20Interessentregister.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4.2-Prosjektstatus.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">150</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Kommunikasjonsplan Brukermanual</pnp:DataValue>
-            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_ProjectLogUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Project};#{resource:Lists_HelpContent_Level_ParentProgram}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
-            <pnp:DataValue FieldName="GtURL">Lists/Kommunikasjonsplan/AllItems.aspx</pnp:DataValue>
+            <pnp:DataValue FieldName="GtURL">{resource:Navigation_ProjectLog_Url}</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4.4.4%20Kommunikasjonsplan.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4.3-Prosjektlogg.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">160</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Usikkerhet Brukermanual</pnp:DataValue>
-            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_StakeholderRegisterUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Project};#{resource:Lists_HelpContent_Level_ParentProgram}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
-            <pnp:DataValue FieldName="GtURL">Usikkerhet/AllItems.aspx</pnp:DataValue>
+            <pnp:DataValue FieldName="GtURL">{resource:Navigation_StakeholderRegister_Url}</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://github.com/Puzzlepart/prosjektportalen-manual/blob/master/Brukermanual/4%20Prosjekt/4.4.5%20Usikkerhet.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4.4-Interessentregister.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">170</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Dokumenter Brukermanual</pnp:DataValue>
-            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_CommunicationPlanUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Project};#{resource:Lists_HelpContent_Level_ParentProgram}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
-            <pnp:DataValue FieldName="GtURL">Delte%20dokumenter/Forms/AllItems.aspx</pnp:DataValue>
+            <pnp:DataValue FieldName="GtURL">{resource:Navigation_CommunicationPlan_Url}</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4.4.6%20Dokumenter.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4.5-Kommunikasjonsplan.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">180</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Oppgaver Brukermanual</pnp:DataValue>
-            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_UncertaintiesUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Project};#{resource:Lists_HelpContent_Level_ParentProgram}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
-            <pnp:DataValue FieldName="GtURL">SitePages/Oppgaver.aspx</pnp:DataValue>
+            <pnp:DataValue FieldName="GtURL">{resource:Navigation_Uncertainty_Url}</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4.4.7%20Oppgaver.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4.6-Usikkerhet.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">190</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Fasesjekkliste Brukermanual</pnp:DataValue>
-            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_DocumentsUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Project};#{resource:Lists_HelpContent_Level_ParentProgram}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
-            <pnp:DataValue FieldName="GtURL">Lists/Fasesjekkliste/AllItems.aspx</pnp:DataValue>
+            <pnp:DataValue FieldName="GtURL">{resource:Navigation_Documents_Url}</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4.4.8%20Fasesjekkliste.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4.7-Dokumenter.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">200</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Endringsanalyse Brukermanual</pnp:DataValue>
-            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_TasksUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Project};#{resource:Lists_HelpContent_Level_ParentProgram}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
-            <pnp:DataValue FieldName="GtURL">Lists/Endringsanalyse/AllItems.aspx</pnp:DataValue>
+            <pnp:DataValue FieldName="GtURL">SitePages/{resource:ClientSidePages_Tasks_PageName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4.4.12.1%20Endringsanalyse.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4.8-Oppgaver.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">210</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Gevinstananlyse og gevinstrealiseringsblan Brukermanual</pnp:DataValue>
-            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_PhaseChecklistUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Project};#{resource:Lists_HelpContent_Level_ParentProgram}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
-            <pnp:DataValue FieldName="GtURL">Lists/Gevinstanalyse%20og%20gevinstrealiseringsplan/AllItems.aspx</pnp:DataValue>
+            <pnp:DataValue FieldName="GtURL">{resource:Navigation_PhaseChecklist_Url}</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4.4.12.2%20Gevinstanalyse%20og%20realisering.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4.9-Fasesjekkliste.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">220</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Måleindikatorer Brukermanual</pnp:DataValue>
-            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_ChangeAnalysisUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Project};#{resource:Lists_HelpContent_Level_ParentProgram}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
-            <pnp:DataValue FieldName="GtURL">Lists/Mleindikatorer/AllItems.aspx</pnp:DataValue>
+            <pnp:DataValue FieldName="GtURL">{resource:Navigation_ChangeAnalysis_Url}</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4.4.12.3%20M%C3%A5leindikatorer.md</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">220</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Gevinstoppfølging Brukermanual</pnp:DataValue>
-            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIconName" />
-            <pnp:DataValue FieldName="GtURL">Lists/Gevinstoppflging/AllItems.aspx</pnp:DataValue>
-            <pnp:DataValue FieldName="GtTextContent" />
-            <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4.4.12.4%20Gevinstoppfolging.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/5.1.1-Endringsanalyse.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">230</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Gevinstoversikt Brukermanual</pnp:DataValue>
-            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_BenefitAnalysisUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Project};#{resource:Lists_HelpContent_Level_ParentProgram}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
-            <pnp:DataValue FieldName="GtURL">SitePages/Gevinstoversikt.aspx</pnp:DataValue>
+            <pnp:DataValue FieldName="GtURL">{resource:Navigation_BenefitsAnalysis_Url}</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4.4.12.5%20Gevinstoversikt.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/5.1.2-GevinstanalyseOgRealisering.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">240</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Prosjektleveranser Brukermanual</pnp:DataValue>
-            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_MeasureIndicatorsUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Project};#{resource:Lists_HelpContent_Level_ParentProgram}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
-            <pnp:DataValue FieldName="GtURL">Lists/Prosjektleveranser/AllItems.aspx</pnp:DataValue>
+            <pnp:DataValue FieldName="GtURL">{resource:Navigation_MeasurementIndicators_Url}</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4.4.10%20Prosjektleveranser.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/5.1.3-Maleindikatorer.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">250</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Ressursallokering (Prosjekt) Brukermanual</pnp:DataValue>
-            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_BenefitFollowUpUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Project};#{resource:Lists_HelpContent_Level_ParentProgram}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
-            <pnp:DataValue FieldName="GtURL">Lists/Ressursallokering/AllItems.aspx</pnp:DataValue>
+            <pnp:DataValue FieldName="GtURL">{resource:Navigation_BenefitsFollowup_Url}</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4.4.11%20Ressursallokering.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/5.1.4-Gevinstoppfolging.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">260</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Prosjekttidslinje Brukermanual</pnp:DataValue>
-            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_BenefitOverviewUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Project};#{resource:Lists_HelpContent_Level_ParentProgram}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
-            <pnp:DataValue FieldName="GtURL">SitePages/Prosjekttidslinje.aspx</pnp:DataValue>
+            <pnp:DataValue FieldName="GtURL">SitePages/{resource:ClientSidePages_BenefitOverview_PageName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/Prosjekttidslinje.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/5.1.5-Gevinstoversikt.md</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">270</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_ProjectDeliveriesUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Project};#{resource:Lists_HelpContent_Level_ParentProgram}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName" />
+            <pnp:DataValue FieldName="GtURL">{resource:Navigation_ProjectDeliveries_Url}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtTextContent" />
+            <pnp:DataValue FieldName="GtResourceLink" />
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/5.2-Prosjektleveranser.md</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">280</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_ResourceAllocationProjectUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Project};#{resource:Lists_HelpContent_Level_ParentProgram}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName" />
+            <pnp:DataValue FieldName="GtURL">{resource:Lists_ResourceAllocation_Url}/AllItems.aspx</pnp:DataValue>
+            <pnp:DataValue FieldName="GtTextContent" />
+            <pnp:DataValue FieldName="GtResourceLink" />
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/5.3-Ressursallokering.md</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">290</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_ProjectTimelineUserManual}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Project};#{resource:Lists_HelpContent_Level_ParentProgram}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName" />
+            <pnp:DataValue FieldName="GtURL">SitePages/{resource:ClientSidePages_ProjectTimeline_PageName}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtTextContent" />
+            <pnp:DataValue FieldName="GtResourceLink" />
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/5.4-Prosjekttidslinje.md</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />

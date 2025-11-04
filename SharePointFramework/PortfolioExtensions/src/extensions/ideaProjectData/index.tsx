@@ -16,6 +16,8 @@ import { isUserAuthorized } from '../../helpers/isUserAuthorized'
 import strings from 'PortfolioExtensionsStrings'
 import { Choice, IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
 import { find } from 'underscore'
+import { themeColor } from 'pp365-shared-library'
+import resource from 'SharedResources'
 
 export interface IIdeaProjectDataCommandProperties {
   ideaId: number
@@ -34,10 +36,21 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
     Log.info(LOG_SOURCE, 'onInit: Initializing...')
     this._sp = spfi().using(SPFx(this.context))
     this._openCmd = this.tryGetCommand('OPEN_IDEA_PROJECTDATA_DIALOG')
+
+    this._openCmd.title = strings.IdeaProjectDataCommandTitle
+
+    const fillColor = themeColor
+    const exportSvgCmd = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2048 2048'%3E%3Cpath d='M1088 960h320v128h-320v320H960v-320H640V960h320V640h128v320zm-64-832q124 0 238 32t214 90 181 140 140 181 91 214 32 239q0 124-32 238t-90 214-140 181-181 140-214 91-239 32q-124 0-238-32t-214-90-181-140-140-181-91-214-32-239q0-124 32-238t90-214 140-181 181-140 214-91 239-32zm0 1664q106 0 204-27t183-78 156-120 120-155 77-184 28-204q0-106-27-204t-78-183-120-156-155-120-184-77-204-28q-106 0-204 27t-183 78-156 120-120 155-77 184-28 204q0 106 27 204t78 183 120 156 155 120 184 77 204 28z' fill='${fillColor.replace(
+      '#',
+      '%23'
+    )}'%3E%3C/path%3E%3C/svg%3E`
+    this._openCmd.iconImageUrl = exportSvgCmd
+
     this._openCmd.visible = false
+
     this._userAuthorized = await isUserAuthorized(
       this._sp,
-      strings.IdeaProcessorsSiteGroup,
+      resource.Security_SiteGroup_IdeaProcessors_Title,
       this.context
     )
     this.context.listView.listViewStateChangedEvent.add(this, this._onListViewStateChanged)
@@ -71,7 +84,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
    */
   private _getIdeaConfiguration = async (): Promise<IdeaConfigurationModel[]> => {
     const config = await this._sp.web.lists
-      .getByTitle(strings.IdeaConfigurationTitle)
+      .getByTitle(resource.Lists_Idea_Configuration_Title)
       .select(...new SPIdeaConfigurationItem().fields)
       .items()
 
@@ -109,7 +122,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
 
   /**
    * On submit fields will be updated,
-   * - Creates a new item to 'ProsjektData' list
+   * - Creates a new item to 'ProjectData' list
    *
    * @param row Selected row
    */
@@ -159,7 +172,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
    * @param properties Properties
    */
   public _addItem = async (properties: Record<string, any>): Promise<any> => {
-    const list = this._sp.web.lists.getByTitle(strings.IdeaProjectDataTitle)
+    const list = this._sp.web.lists.getByTitle(resource.Lists_ProjectData_Title)
     const itemAddResult = await list.items.add(properties)
     Log.info(LOG_SOURCE, '_updateItem: Added item to IdeaProjectData list')
     return itemAddResult.data
@@ -173,7 +186,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
   public editFormUrl = (item: any) => {
     return [
       `${this.context.pageContext.web.absoluteUrl}`,
-      `/Lists/${strings.IdeaProjectDataTitle}/EditForm.aspx`,
+      `/${resource.Lists_ProjectData_Url}/EditForm.aspx`,
       '?ID=',
       item.Id,
       '&Source=',

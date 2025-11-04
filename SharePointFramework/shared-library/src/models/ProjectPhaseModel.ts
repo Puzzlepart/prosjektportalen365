@@ -1,6 +1,7 @@
 import { ITermInfo } from '@pnp/sp/taxonomy'
 import { ChecklistItemModel } from './ChecklistItemModel'
 import _ from 'underscore'
+import { supportedLocalesMap } from '../config'
 
 export type ProjectPhaseChecklistData = {
   stats?: Record<string, number>
@@ -8,11 +9,12 @@ export type ProjectPhaseChecklistData = {
 }
 
 /**
- * Model for project phase
+ * Model for a Project Phase.
  */
 export class ProjectPhaseModel {
   public id: string
   public checklistData: ProjectPhaseChecklistData
+  private _languageTag: string
 
   /**
    * Constructor for `ProjectPhaseModel`
@@ -20,22 +22,30 @@ export class ProjectPhaseModel {
    * @param term Term info
    * @param _termSetId Term set ID
    * @param checklistData Checklist data for the phase term
+   * @param lcid Language code ID (default: `1044`)
    */
   constructor(
     public term: ITermInfo,
     private _termSetId: string,
-    checklistData: ProjectPhaseChecklistData
+    checklistData: ProjectPhaseChecklistData,
+    lcid: number = 1044
   ) {
     this.id = term.id
     this.checklistData = checklistData ?? { stats: {}, items: [] }
+    this._languageTag = supportedLocalesMap.get(lcid)
   }
 
   /**
-   * Phase name
+   * Phase name is the localized label of the term.
+   * It uses the `lcid` property to get the correct label.
+   * If the label is not found, it falls back to the first label.
    */
   public get name(): string {
-    const localizedLabel = _.find(this.term.labels, (l) => l.languageTag === 'nb-NO')
-    return localizedLabel?.name ?? this.term.labels[0].name
+    const localizedLabel = _.find(
+      this.term.labels,
+      (l) => l.languageTag.toLowerCase() === this._languageTag
+    )
+    return localizedLabel?.name ?? _.first(this.term.labels)?.name
   }
 
   /**
@@ -55,8 +65,8 @@ export class ProjectPhaseModel {
    * Phase letter is the first letter of the phase name in uppercase.
    */
   public get letter() {
-    if (this.properties.PhaseLetter) return this.properties.PhaseLetter
-    return this.name.substring(0, 1).toUpperCase()
+    const phaseLetter = this._getLocalizedProperty('PhaseLetter')
+    return phaseLetter ?? this.name.substring(0, 1).toUpperCase()
   }
 
   /**
@@ -66,14 +76,14 @@ export class ProjectPhaseModel {
    * fallback to `PhasePurpose` to support potential legacy use.
    */
   public get subText() {
-    return this.properties.PhaseSubText || this.properties.PhasePurpose
+    return this._getLocalizedProperty('PhaseSubText') ?? this._getLocalizedProperty('PhasePurpose')
   }
 
   /**
    * Phase description (shown in the popover when clicking a phase)
    */
   public get description() {
-    return this.properties.PhaseDescription
+    return this._getLocalizedProperty('PhaseDescription')
   }
 
   /**
@@ -127,5 +137,14 @@ export class ProjectPhaseModel {
    */
   public getFilteredPhaseChecklistViewUrl = (baseUrl: string): string => {
     return `${baseUrl}?FilterField1=GtProjectPhase&FilterValue1=${this.name}`
+  }
+
+  private _getLocalizedProperty = (property: string): string => {
+    const propertyValue = this.properties[`${property}_${this._languageTag}`]
+    if (propertyValue) {
+      return propertyValue
+    }
+    const defaultPropertyValue = this.properties[property]
+    return defaultPropertyValue
   }
 }

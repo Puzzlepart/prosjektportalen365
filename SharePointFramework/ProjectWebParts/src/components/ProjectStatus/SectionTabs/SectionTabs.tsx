@@ -1,9 +1,10 @@
 import React, { FC } from 'react'
-import styles from '../ProjectStatus.module.scss'
-import { TabList, Tab, SelectTabData } from '@fluentui/react-components'
-import { useSections } from '../Sections/useSections'
-import smoothscroll from 'smoothscroll-polyfill'
 import { Sticky, StickyPositionType } from '@fluentui/react'
+import { TabList, Tab, SelectTabData } from '@fluentui/react-components'
+import smoothscroll from 'smoothscroll-polyfill'
+import strings from 'ProjectWebPartsStrings'
+import styles from '../ProjectStatus.module.scss'
+import { useSections } from '../Sections/useSections'
 
 export const SectionTabs: FC = () => {
   smoothscroll.polyfill()
@@ -11,7 +12,7 @@ export const SectionTabs: FC = () => {
 
   const scrollIntoView = (sectionId) => {
     const scrollablePane = document.querySelector('.ms-ScrollablePane--contentContainer')
-    const section = document.getElementById(`seksjon${sectionId}`)
+    const section = document.getElementById(`${strings.ListSectionElementIdPrefix}${sectionId}`)
 
     if (scrollablePane && section) {
       const relativeTop = section.offsetTop - scrollablePane.scrollTop

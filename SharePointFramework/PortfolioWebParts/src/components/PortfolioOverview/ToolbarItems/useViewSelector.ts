@@ -6,6 +6,7 @@ import { IPortfolioOverviewContext } from '../context'
 import { SET_VIEW_FORM_PANEL, TOGGLE_COMPACT } from '../reducer'
 import { useProgramMenuItems } from './useProgramMenuItems'
 import { useViewsMenuItems } from './useViewsMenuItems'
+import resource from 'SharedResources'
 
 /**
  * Hook for generating the view selector menu item.
@@ -26,7 +27,7 @@ export function useViewSelector(context: IPortfolioOverviewContext) {
 
   return useMemo<ListMenuItem>(
     () =>
-      new ListMenuItem(context.state.currentView?.title, strings.PortfolioViewsListName)
+      new ListMenuItem(context.state.currentView?.title, resource.Lists_PortfolioViews_Title)
         .setIcon('ContentView')
         .setWidth('fit-content')
         .setStyle({ minWidth: '145px' })

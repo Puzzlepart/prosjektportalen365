@@ -1,0 +1,1158 @@
+<?xml version="1.0"?>
+<pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+    <pnp:Preferences></pnp:Preferences>
+    <pnp:Templates ID="CONTAINER-TEMPLATE-PP-PORTFOLIO-CONTENT-EN-US">
+        <pnp:ProvisioningTemplate ID="TEMPLATE-PP-PORTFOLIO-EN-US" Scope="RootSite">
+            <pnp:Lists>
+                <pnp:ListInstance Title="Standard Documents Construction" TemplateType="101" Url="StandardDocuments_Construction" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="500" DraftVersionVisibility="0" EnableAttachments="false">
+                    <pnp:Folders>
+                        <pnp:Folder Name="100 Foundation">
+                            <pnp:Folder Name="110 Official conditions-permits"></pnp:Folder>
+                            <pnp:Folder Name="120 Political processing"></pnp:Folder>
+                            <pnp:Folder Name="130 Media (info)"></pnp:Folder>
+                            <pnp:Folder Name="140 Assignments and basic data"></pnp:Folder>
+                            <pnp:Folder Name="150 Agreements (excl. supplier agreements)"></pnp:Folder>
+                            <pnp:Folder Name="160 Project plans- authorities"></pnp:Folder>
+                            <pnp:Folder Name="170 Notes- experiences"></pnp:Folder>
+                            <pnp:Folder Name="180 Address lists"></pnp:Folder>
+                        </pnp:Folder>
+                        <pnp:Folder Name="200 Procurement">
+                            <pnp:Folder Name="210 Advisors and Architects"></pnp:Folder>
+                            <pnp:Folder Name="220 Construction management"></pnp:Folder>
+                            <pnp:Folder Name="230 Contractors"></pnp:Folder>
+                        </pnp:Folder>
+                        <pnp:Folder Name="300 Economics- progress">
+                            <pnp:Folder Name="310 Budget"></pnp:Folder>
+                            <pnp:Folder Name="320 Invoices"></pnp:Folder>
+                            <pnp:Folder Name="330 Changes"></pnp:Folder>
+                            <pnp:Folder Name="340 Progress"></pnp:Folder>
+                            <pnp:Folder Name="350 Reporting"></pnp:Folder>
+                        </pnp:Folder>
+                        <pnp:Folder Name="400 Correspondence">
+                            <pnp:Folder Name="410 Municipality"></pnp:Folder>
+                            <pnp:Folder Name="420 External authorities"></pnp:Folder>
+                            <pnp:Folder Name="430 Information"></pnp:Folder>
+                            <pnp:Folder Name="440 Architects and Advisors"></pnp:Folder>
+                            <pnp:Folder Name="450 Contractors"></pnp:Folder>
+                            <pnp:Folder Name="460 Construction manager"></pnp:Folder>
+                            <pnp:Folder Name="470 Property owners"></pnp:Folder>
+                            <pnp:Folder Name="480 Others"></pnp:Folder>
+                        </pnp:Folder>
+                        <pnp:Folder Name="500 Meetings">
+                            <pnp:Folder Name="510 Client meetings"></pnp:Folder>
+                            <pnp:Folder Name="520 Design"></pnp:Folder>
+                            <pnp:Folder Name="530 Construction meetings"></pnp:Folder>
+                            <pnp:Folder Name="540 Progress meetings"></pnp:Folder>
+                            <pnp:Folder Name="550 Special meetings"></pnp:Folder>
+                            <pnp:Folder Name="560 Other meetings"></pnp:Folder>
+                        </pnp:Folder>
+                        <pnp:Folder Name="600 QC, HSE, Environment, Risk">
+                            <pnp:Folder Name="610 QC"></pnp:Folder>
+                            <pnp:Folder Name="620 HSE"></pnp:Folder>
+                            <pnp:Folder Name="630 Environment"></pnp:Folder>
+                            <pnp:Folder Name="640 Risk"></pnp:Folder>
+                        </pnp:Folder>
+                        <pnp:Folder Name="700 Drawings and Reports">
+                            <pnp:Folder Name="710 Drawings"></pnp:Folder>
+                            <pnp:Folder Name="720 Images and video"></pnp:Folder>
+                            <pnp:Folder Name="730 Technical reports"></pnp:Folder>
+                        </pnp:Folder>
+                        <pnp:Folder Name="800 FDV">
+                            <pnp:Folder Name="810 FDV Building"></pnp:Folder>
+                            <pnp:Folder Name="820 FDV Facility"></pnp:Folder>
+                            <pnp:Folder Name="830 Protocols- final report"></pnp:Folder>
+                        </pnp:Folder>
+                    </pnp:Folders>
+                </pnp:ListInstance>
+                <pnp:ListInstance Title="Phase Checklist Construction" TemplateType="100" Url="Lists/PhaseChecklist_Construction" Hidden="false" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false">
+                    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Is the assignment order signed and received?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Initiation|dca0a226-0907-4c54-8624-6b51fcac7a92</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Is the scope unambiguously described?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Initiation|dca0a226-0907-4c54-8624-6b51fcac7a92</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">20</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Are foundation documents attached (reports, investigations, drawings)?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Initiation|dca0a226-0907-4c54-8624-6b51fcac7a92</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">30</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Are relations with authorities clarified (regulatory plans, etc.)?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Initiation|dca0a226-0907-4c54-8624-6b51fcac7a92</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">40</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Has stakeholder analysis been conducted?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Initiation|dca0a226-0907-4c54-8624-6b51fcac7a92</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">50</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Is the contract signed by both parties?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Initiation|dca0a226-0907-4c54-8624-6b51fcac7a92</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">60</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Is the project organization (client/executing) unambiguous?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Initiation|dca0a226-0907-4c54-8624-6b51fcac7a92</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">70</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Are environmental requirements for the project defined?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Initiation|dca0a226-0907-4c54-8624-6b51fcac7a92</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">80</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Is the financial framework reasonable in relation to the scope of the assignment?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Initiation|dca0a226-0907-4c54-8624-6b51fcac7a92</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">90</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Has gaming fund subsidy been applied for the project? If so, has it been agreed how this should be accounted for?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Initiation|dca0a226-0907-4c54-8624-6b51fcac7a92</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">100</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Are there other financing sources in the project? If so, has it been agreed how this should be accounted for?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Initiation|dca0a226-0907-4c54-8624-6b51fcac7a92</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">110</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Has it been clarified whether the project is entitled to 100% VAT deduction?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Initiation|dca0a226-0907-4c54-8624-6b51fcac7a92</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">120</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Has a progress plan been prepared for the assignment?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Initiation|dca0a226-0907-4c54-8624-6b51fcac7a92</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">130</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Has consideration been given to processing time with external actors? (political P and B, county governor, Hafslund, NVE, Norwegian Public Roads Administration, others)?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Initiation|dca0a226-0907-4c54-8624-6b51fcac7a92</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">140</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Are requirements for universal design defined?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Initiation|dca0a226-0907-4c54-8624-6b51fcac7a92</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">150</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Are all archive-worthy documents stored in the archive system?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Initiation|dca0a226-0907-4c54-8624-6b51fcac7a92</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">160</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Has the property register for registered rights been checked and is it OK?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Design and contracting|1c286a0e-da40-451a-bab2-9e0583392ee3</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">170</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Has it been checked with the county municipality if cultural monuments are registered or should be registered in the construction area?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Design and contracting|1c286a0e-da40-451a-bab2-9e0583392ee3</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">180</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Has it been checked with the county municipality if there are requirements for archaeological registrations in the construction area (must be done in the summer half-year)?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Design and contracting|1c286a0e-da40-451a-bab2-9e0583392ee3</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">190</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Has it been verified that nature type registrations have been made in the construction area (must be done in the summer half-year)?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Design and contracting|1c286a0e-da40-451a-bab2-9e0583392ee3</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">200</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Have all relevant stakeholders been contacted? Including KTA - operations, neighbors/landowners and cable companies?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Design and contracting|1c286a0e-da40-451a-bab2-9e0583392ee3</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">210</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Are all rights issues clarified with landowners?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Design and contracting|1c286a0e-da40-451a-bab2-9e0583392ee3</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">220</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Is VAT distribution key agreed with KTA and entered in Agresso?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Design and contracting|1c286a0e-da40-451a-bab2-9e0583392ee3</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">230</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Has an agreement been written for HSE coordination design (KP)?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Design and contracting|1c286a0e-da40-451a-bab2-9e0583392ee3</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">240</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Has an agreement been written for HSE coordination execution (KU)?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Design and contracting|1c286a0e-da40-451a-bab2-9e0583392ee3</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">250</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Is the application for framework permit approved?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Design and contracting|1c286a0e-da40-451a-bab2-9e0583392ee3</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">260</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Is the competition basis quality assured?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Design and contracting|1c286a0e-da40-451a-bab2-9e0583392ee3</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">270</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Have completed self-reporting forms for wages and working conditions been received?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Design and contracting|1c286a0e-da40-451a-bab2-9e0583392ee3</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">280</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Are all archive-worthy documents stored in the archive system?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Design and contracting|1c286a0e-da40-451a-bab2-9e0583392ee3</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">290</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Has advance notice been sent to the labor inspection?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Construction phase|9b45a1ca-ae8c-4f4a-baa3-40353b7dd8fc</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">300</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Have measures from stakeholder analysis and possible communication plan been implemented?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Construction phase|9b45a1ca-ae8c-4f4a-baa3-40353b7dd8fc</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">310</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Is the application for IG (commencement) approved?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Construction phase|9b45a1ca-ae8c-4f4a-baa3-40353b7dd8fc</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">320</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Are risk assessment and HSE plan updated?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Construction phase|9b45a1ca-ae8c-4f4a-baa3-40353b7dd8fc</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">330</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Is environmental plan updated and followed up?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Construction phase|9b45a1ca-ae8c-4f4a-baa3-40353b7dd8fc</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">340</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Is O and M/final documentation initiated?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Construction phase|9b45a1ca-ae8c-4f4a-baa3-40353b7dd8fc</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">350</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Are all archival documents stored in the archive system?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Construction phase|9b45a1ca-ae8c-4f4a-baa3-40353b7dd8fc</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">360</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Is all O and M/final documentation received?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Handover and delivery|1807d6c2-b4bd-415f-98aa-a4a2ccff8d11</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">370</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Are all defects and deficiencies corrected?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Handover and delivery|1807d6c2-b4bd-415f-98aa-a4a2ccff8d11</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">380</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Have operations personnel and users received necessary training?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Handover and delivery|1807d6c2-b4bd-415f-98aa-a4a2ccff8d11</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">390</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Is the handover protocol signed?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Handover and delivery|1807d6c2-b4bd-415f-98aa-a4a2ccff8d11</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">400</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Is the delivery protocol to the client signed?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Handover and delivery|1807d6c2-b4bd-415f-98aa-a4a2ccff8d11</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">410</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Is a final report with final accounting written?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Handover and delivery|1807d6c2-b4bd-415f-98aa-a4a2ccff8d11</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">420</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Are evaluation reports of contractors written?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Handover and delivery|1807d6c2-b4bd-415f-98aa-a4a2ccff8d11</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">430</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Are all outstanding amounts paid to contractors?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Handover and delivery|1807d6c2-b4bd-415f-98aa-a4a2ccff8d11</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">440</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Are all archival documents stored in the archive system?</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtProjectPhase'>Handover and delivery|1807d6c2-b4bd-415f-98aa-a4a2ccff8d11</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">450</pnp:DataValue>
+                        </pnp:DataRow>
+                    </pnp:DataRows>
+                </pnp:ListInstance>
+                <pnp:ListInstance Title="Planner Tasks Construction" TemplateType="100" Url="Lists/PlannerTasks_Construction" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true">
+                    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
+                        <pnp:DataRow >
+                            <pnp:DataValue FieldName='Title'>Support the client in defining requirements and framework as needed</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Initiation</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtChecklist'>Ensure signed assignment order;Clarify economic framework/experience figures</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Obtain available baseline information</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Design and contracting</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">20</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Describe the project</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Design and contracting</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">30</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Contract consultants</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Design and contracting</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtChecklist'>Perform peer review of assignment description</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">40</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Establish project organization</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Design and contracting</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">50</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Conduct preliminary project</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Design and contracting</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtChecklist'>Assess need for preliminary conference or framework application;Preliminary calculation;Conduct environmental review and possibly write environmental plan;Conduct risk analysis (internal)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">60</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Dialogue with stakeholders</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Design and contracting</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">70</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Establish HSE plan for design phase</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Design and contracting</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">80</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Conduct detailed design</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Design and contracting</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtChecklist'>Complete tender drawings and requirements specification;Framework permit application shall be prepared and sent to Planning and Building for approval;Prepare complete calculation;Conduct external ROS analysis (for projects over 10 mill);Submit political case</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">90</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Documents to be produced in the design phase</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Design and contracting</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtChecklist'>Organization plan/project plans;Plan documents;Changes to assignment description;Submitted application for building permit (Pramework application or 1st stage application);HSE plan (with attachments);Checklist HSE coordinator Design (KP);Project risk assessment (Excel form);Complete calculation;Preliminary project report;Application for pre-approval of gaming funds;Political case presentation;Stakeholder analysis;Agreements with cable companies;Signed landowner agreements;Neighbor information (sent out);Basis for announcing competition (in Doffin);(Preliminary) progress plan</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">100</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Prepare competition documents including requirements specification and tender drawings</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Design and contracting</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtChecklist'>Perform peer review of competition documents;Review quantity description and tender documents</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">110</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Announce competition(s)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Design and contracting</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">120</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Evaluate bids</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Design and contracting</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">130</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Hold contract meeting</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Design and contracting</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">140</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Draft and sign contract documents</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Design and contracting</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">150</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Documents to be produced in the contracting phase</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Design and contracting</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtChecklist'>Competition documents - construction;Procurement protocol over 500,000 kr. (with evaluation report);Opening protocol;Protocol from bid inspection;Agreement on HSE coordination execution (KU);Notice to bidders;Signed contract(s);Completed self-reporting form for wages and working conditions;Budget</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">160</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Submit application for commencement (IG)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Construction phase</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">170</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Hold startup meeting</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Construction phase</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">180</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Define organization and roles</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Construction phase</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">190</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Documents to be produced in the construction phase</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Construction phase</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtChecklist'>Advance notice to labor inspection;Organization plan/project plans;Progress plan (updated);HSE plan with attachments (updated);Environmental plan - construction projects (Prepared in design phase; further developed and followed up in implementation phase);Working drawings;Survey data;Correspondence;Possibly updated stakeholder analysis;Possibly updated information to neighbors and landowners;Possibly updated budget;O and M/final documentation</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">200</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Pre-inspection</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Handover and delivery</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">210</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Final inspection</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Handover and delivery</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">220</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Trial operation</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Handover and delivery</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">230</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Handover (from contractor to project)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Handover and delivery</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">240</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Delivery (from project to client)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Handover and delivery</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">250</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Prepare O and M documentation</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Handover and delivery</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">260</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Financial closure</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Handover and delivery</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">270</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Completion notice</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Handover and delivery</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">280</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Documents to be produced in the delivery phase</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Handover and delivery</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtChecklist'>Minutes from final inspection;Signed handover protocol;Evaluation reports;Minutes from meeting on financial settlement;Signed delivery protocol;Completed O and M/final documentation;Final report with final accounts;Final accounts and completion certificate as basis for application for final payment of gaming funds.</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">290</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Warranty period</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Utilization and operational</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">300</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Management, operation and maintenance</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Utilization and operational</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">310</pnp:DataValue>
+                        </pnp:DataRow>
+                    </pnp:DataRows>
+                </pnp:ListInstance>
+                <pnp:ListInstance Title="Standard Documents Building" TemplateType="101" Url="StandardDocuments_Building" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="500" DraftVersionVisibility="0" EnableAttachments="false">
+                    <pnp:Folders>
+                        <pnp:Folder Name="100 Foundation">
+                            <pnp:Folder Name="110 Official conditions-permits"></pnp:Folder>
+                            <pnp:Folder Name="120 Political processing"></pnp:Folder>
+                            <pnp:Folder Name="130 Media (info)"></pnp:Folder>
+                            <pnp:Folder Name="140 Assignments and basic data"></pnp:Folder>
+                            <pnp:Folder Name="150 Agreements (excl. supplier agreements)"></pnp:Folder>
+                            <pnp:Folder Name="160 Project plans- authorities"></pnp:Folder>
+                            <pnp:Folder Name="170 Notes- experiences"></pnp:Folder>
+                            <pnp:Folder Name="180 Address lists"></pnp:Folder>
+                        </pnp:Folder>
+                        <pnp:Folder Name="200 Procurement">
+                            <pnp:Folder Name="210 Advisors and Architects"></pnp:Folder>
+                            <pnp:Folder Name="220 Construction management"></pnp:Folder>
+                            <pnp:Folder Name="230 Contractors"></pnp:Folder>
+                        </pnp:Folder>
+                        <pnp:Folder Name="300 Economics- progress">
+                            <pnp:Folder Name="310 Budget"></pnp:Folder>
+                            <pnp:Folder Name="320 Invoices"></pnp:Folder>
+                            <pnp:Folder Name="330 Changes"></pnp:Folder>
+                            <pnp:Folder Name="340 Progress"></pnp:Folder>
+                            <pnp:Folder Name="350 Reporting"></pnp:Folder>
+                        </pnp:Folder>
+                        <pnp:Folder Name="400 Correspondence">
+                            <pnp:Folder Name="410 Municipality"></pnp:Folder>
+                            <pnp:Folder Name="420 External authorities"></pnp:Folder>
+                            <pnp:Folder Name="430 Information"></pnp:Folder>
+                            <pnp:Folder Name="440 Architects and Advisors"></pnp:Folder>
+                            <pnp:Folder Name="450 Contractors"></pnp:Folder>
+                            <pnp:Folder Name="460 Construction manager"></pnp:Folder>
+                            <pnp:Folder Name="470 Property owners"></pnp:Folder>
+                            <pnp:Folder Name="480 Others"></pnp:Folder>
+                        </pnp:Folder>
+                        <pnp:Folder Name="500 Meetings">
+                            <pnp:Folder Name="510 Client meetings"></pnp:Folder>
+                            <pnp:Folder Name="520 Design"></pnp:Folder>
+                            <pnp:Folder Name="530 Construction meetings"></pnp:Folder>
+                            <pnp:Folder Name="540 Progress meetings"></pnp:Folder>
+                            <pnp:Folder Name="550 Special meetings"></pnp:Folder>
+                            <pnp:Folder Name="560 Other meetings"></pnp:Folder>
+                        </pnp:Folder>
+                        <pnp:Folder Name="600 QC, HSE, Environment, Risk">
+                            <pnp:Folder Name="610 QC"></pnp:Folder>
+                            <pnp:Folder Name="620 HSE"></pnp:Folder>
+                            <pnp:Folder Name="630 Environment"></pnp:Folder>
+                            <pnp:Folder Name="640 Risk"></pnp:Folder>
+                        </pnp:Folder>
+                        <pnp:Folder Name="700 Drawings and Reports">
+                            <pnp:Folder Name="710 Drawings"></pnp:Folder>
+                            <pnp:Folder Name="720 Images and video"></pnp:Folder>
+                            <pnp:Folder Name="730 Professional reports"></pnp:Folder>
+                        </pnp:Folder>
+                        <pnp:Folder Name="800 FDV">
+                            <pnp:Folder Name="810 FDV Building"></pnp:Folder>
+                            <pnp:Folder Name="820 FDV Facility"></pnp:Folder>
+                            <pnp:Folder Name="830 Protocols- final report"></pnp:Folder>
+                        </pnp:Folder>
+                    </pnp:Folders>
+                </pnp:ListInstance>
+                <pnp:ListInstance Title="Phase Checklist Building" TemplateType="100" Url="Lists/PhaseChecklist_Building" Hidden="false" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false">
+                    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Are user representatives consulted/involved?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Clarify needs|35997358-534f-475b-be9f-2544a3b80c8d</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is EDF consulted/involved?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Clarify needs|35997358-534f-475b-be9f-2544a3b80c8d</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">20</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is Nature and Sports consulted/involved?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Clarify needs|35997358-534f-475b-be9f-2544a3b80c8d</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">30</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is Cleaning consulted/involved?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Clarify needs|35997358-534f-475b-be9f-2544a3b80c8d</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">40</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is the main safety representative consulted/involved?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Clarify needs|35997358-534f-475b-be9f-2544a3b80c8d</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">50</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is AMU or union representative consulted/involved?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Clarify needs|35997358-534f-475b-be9f-2544a3b80c8d</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">60</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is the council for People with reduced functional ability contacted for statement in connection with universal design?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Clarify needs|35997358-534f-475b-be9f-2544a3b80c8d</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">70</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is the municipal medical officer and/or Environmental health service consulted/involved?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Clarify needs|35997358-534f-475b-be9f-2544a3b80c8d</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">80</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is the client consulted/involved</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Clarify needs|35997358-534f-475b-be9f-2544a3b80c8d</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">90</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is Planning and Building consulted/involved?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Clarify needs|35997358-534f-475b-be9f-2544a3b80c8d</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">100</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is the ICT department consulted/involved?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Clarify needs|35997358-534f-475b-be9f-2544a3b80c8d</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">110</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Are all archival documents stored in the archive system?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Clarify needs|35997358-534f-475b-be9f-2544a3b80c8d</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">120</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is the checklist for assignment description filled out and discussed with PRU?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Clarify needs|35997358-534f-475b-be9f-2544a3b80c8d</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">130</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Are options for service and maintenance of the building included in the tender documentation?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Concept development and processing|1692b4b4-bfce-4614-91b9-767d1bbb0c6b</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">140</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Are options for service and maintenance of green areas included in the tender documentation?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Concept development and processing|1692b4b4-bfce-4614-91b9-767d1bbb0c6b</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">150</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Are user representatives consulted/involved?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Concept development and processing|1692b4b4-bfce-4614-91b9-767d1bbb0c6b</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">160</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is EDF consulted/involved?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Concept development and processing|1692b4b4-bfce-4614-91b9-767d1bbb0c6b</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">170</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is Nature and Sports consulted/involved?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Concept development and processing|1692b4b4-bfce-4614-91b9-767d1bbb0c6b</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">180</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is Cleaning consulted/involved?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Concept development and processing|1692b4b4-bfce-4614-91b9-767d1bbb0c6b</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">190</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is the main safety representative consulted/involved?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Concept development and processing|1692b4b4-bfce-4614-91b9-767d1bbb0c6b</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">200</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is AMU or union representative consulted/involved?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Concept development and processing|1692b4b4-bfce-4614-91b9-767d1bbb0c6b</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">210</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Has the council for people with disabilities been contacted for statement in connection with universal design?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Concept development and processing|1692b4b4-bfce-4614-91b9-767d1bbb0c6b</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">220</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Has a project manager with road/facility construction competence been consulted/involved?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Concept development and processing|1692b4b4-bfce-4614-91b9-767d1bbb0c6b</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">230</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is Planning and Building consulted/involved?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Concept development and processing|1692b4b4-bfce-4614-91b9-767d1bbb0c6b</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">240</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is the ICT department consulted/involved?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Concept development and processing|1692b4b4-bfce-4614-91b9-767d1bbb0c6b</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">250</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is VAT distribution key entered in Agresso?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Concept development and processing|1692b4b4-bfce-4614-91b9-767d1bbb0c6b</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">260</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Has an agreement been written for HSE coordination design (KP)?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Concept development and processing|1692b4b4-bfce-4614-91b9-767d1bbb0c6b</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">270</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Has an agreement been written for HSE coordination execution (KU)?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Concept development and processing|1692b4b4-bfce-4614-91b9-767d1bbb0c6b</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">280</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is the application for framework permit approved?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Concept development and processing|1692b4b4-bfce-4614-91b9-767d1bbb0c6b</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">290</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is the competition basis quality assured?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Concept development and processing|1692b4b4-bfce-4614-91b9-767d1bbb0c6b</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">300</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Have completed self-reporting forms for wages and working conditions been received?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Concept development and processing|1692b4b4-bfce-4614-91b9-767d1bbb0c6b</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">310</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Are all archival documents stored in the archive system?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Concept development and processing|1692b4b4-bfce-4614-91b9-767d1bbb0c6b</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">320</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Has advance notice been sent to the labor inspection?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Detailed planning|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">330</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Have measures from stakeholder analysis and possible communication plan been implemented?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Detailed planning|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">340</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is the application for IG (commencement) approved?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Detailed planning|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">350</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is risk assessment and HSE plan updated?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Detailed planning|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">360</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is environmental plan updated and followed up?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Detailed planning|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">370</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is EDF involved in testing?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Detailed planning|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">380</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Are installations and completion of building technical installations tested and found OK?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Detailed planning|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">390</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Are coordinated start-up and system function tests of the technical installations performed and documented?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Detailed planning|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">400</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Have representatives from EDF participated in preliminary inspection?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Detailed planning|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">410</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Have representatives from Nature and Sports participated in preliminary inspection of outdoor areas?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Detailed planning|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">420</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Have representatives from KTA participated in preliminary inspection?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Detailed planning|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">430</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Has the report from preliminary inspection with defect list been recorded?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Detailed planning|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">440</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Has O and M/final documentation been initiated?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Detailed planning|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">450</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Have integrated tests been performed that can confirm that the technical installations function in interaction across system and contractor boundaries?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Detailed planning|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">460</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Have full-scale (simulation of ordinary operation) tests been conducted and accepted?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Detailed planning|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">470</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Have stability and performance tests of technical installations been conducted and accepted?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Detailed planning|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">480</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Has operational personnel participated in full-scale tests?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Detailed planning|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">490</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is O and M documentation completed and approved by EDF?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Detailed planning|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">500</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Are all deficiencies remedied?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Detailed planning|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">510</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">If applicable; is a plan for remedying deficiencies established?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Detailed planning|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">520</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Has responsibility for any follow-up of deficiencies and change requests been clarified?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Detailed planning|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">530</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Has a meeting plan for the trial operation period been prepared?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Detailed planning|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">540</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Has it been clarified with EDF and controller how much project funds should be set aside for the 1st trial operation/1st operating year?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Detailed planning|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">550</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">For schools and kindergartens: have we received environmental health approval from the Labour Inspection Authority?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Detailed planning|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">560</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Er alle arkivverdige dokumenter lagret i arkivsystemet?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Detailed planning|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">570</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Are all deficiencies remedied?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Execution|2adec1fc-dc6d-4db7-bb5f-067287010fb7</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">580</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Is the checklist for operation startup filled out?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Execution|2adec1fc-dc6d-4db7-bb5f-067287010fb7</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">590</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Has a final report with final accounts been written?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Execution|2adec1fc-dc6d-4db7-bb5f-067287010fb7</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">600</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Have evaluation reports been written for the contractors?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Execution|2adec1fc-dc6d-4db7-bb5f-067287010fb7</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">610</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Have all outstanding amounts been paid to the contractors?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Execution|2adec1fc-dc6d-4db7-bb5f-067287010fb7</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">620</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Are all archival documents stored in the archive system?</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtProjectPhase">Execution|2adec1fc-dc6d-4db7-bb5f-067287010fb7</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">630</pnp:DataValue>
+                        </pnp:DataRow>
+                    </pnp:DataRows>
+                </pnp:ListInstance>
+                <pnp:ListInstance Title="Planner Tasks Building" TemplateType="100" Url="Lists/PlannerTasks_Building" ContentTypesEnabled="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true">
+                    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Analyze alternative solutions</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Clarify needs - Possibility Study (P0)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Assess sites, traffic conditions, energy solutions etc (see Checklist for assignment agreement - construction)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Clarify needs - Possibility Study (P0)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">20</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Make overall cost assessments/budget allocation for the various alternatives</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Clarify needs - Possibility Study (P0)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">30</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Vurdere overordnet fremdriftsplan</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Clarify needs - Possibility Study (P0)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">40</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Foreta en Interessentanalyse</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Clarify needs - Possibility Study (P0)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">50</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Forberede politisk sak/presentasjon av alternativer</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Clarify needs - Possibility Study (P0)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">60</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Establish project organization</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Clarify needs - Room and Functional Program (P1)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtChecklist'>Contact HVO and AMU;Write organizational plan;Hold startup meeting;Establish reporting routines;Update/conduct stakeholder analysis</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">70</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Engage architect/consultants</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Clarify needs - Room and Functional Program (P1)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtChecklist'>Prepare competition basis for architect/consultant;Announce competition(s);Evaluate bids;Hold contract meeting;Draft and sign agreement document</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">80</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Develop room and functional program</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Clarify needs - Room and Functional Program (P1)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtChecklist'>Investigate and describe several different alternatives (if relevant);Assess advantages and disadvantages of different contract forms based on challenges and success criteria for the project. (Final decision on contract form is made by the steering group);Internal or external quality assurance;Internal approval in the Steering Group (IG1)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">90</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Prepare Political Case Presentation (PS1)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Clarify needs - Room and Functional Program (P1)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">100</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Secure relevant government subsidies</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Clarify needs - Room and Functional Program (P1)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtChecklist'>Assess opportunities for government subsidies;Contact Sports and Recreation and start the process to apply for gaming funds according to routine for gaming funds in projects;Contact Husbanken and start the process to apply for Husbank subsidies according to routine for Husbank subsidies;Identify relevant subsidy funds for energy and environmental measures according to Routine Description for projects that apply for and receive subsidies for energy and environmental measures</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">110</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Prepare assignment agreement</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Clarify needs - Room and Functional Program (P1)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtChecklist'>Fill out checklist for assignment description;Review checklist with KS leader</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">120</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Conduct sketch project</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Concept development and processing - Sketch project (P2)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtChecklist'>Startup meeting;Assessment/adjustment of program;Update project organization;Update progress plan and calculation;Update stakeholder analysis with measures;Write communication plan;Contact with building/regulation;Proposals for constructions;HSE in sketch project;Environmental review and environmental plan;Environmentally directed health protection (kindergartens and schools);Consult HVO and AMU;Ground and property acquisition;Universal design;Compilation of sketch project</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">130</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Intern godkjenning i styringsgruppen (IG2)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Concept development and processing - Sketch project (P2)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">140</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Contracting of architect and consultant services, possibly contractor</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Concept development and processing - Pre-project (P2)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtChecklist'>Prepare competition basis;Announce competition(s);Evaluate bids;Hold contract meeting;Draft and sign agreement document;Agreement on HSE coordination execution (KU)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">150</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Conduct preliminary project</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Concept development and processing - Pre-project (P2)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtChecklist'>Follow up/update stakeholder analysis with measures;Contact ICT;Apply for government subsidies (if relevant);Update environmental plan;Prepare/update HSE plan;Calculate life cycle costs (LCC);Send framework application;Prepare distribution key (if not 100% VAT compensation);Prepare preliminary project drawings;Send advance notice to labor inspection;Present case to the council for people with disabilities;Contact AMU;Update planning documents;Compile preliminary project;Conduct uncertainty analysis;Update calculation</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">160</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>External quality assurance (K2)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Concept development and processing - Pre-project (P2)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">170</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Internal approval in the steering group (IG3)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Concept development and processing - Pre-project (P2)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">180</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Prepare political case presentation (PS2)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Concept development and processing - Preprojecting</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">190</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Detailed planning (P2)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Concept development and processing - Detailed planning (P2)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">200</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Contracting of contractor (If the project is implemented as turnkey contract, cooperative contract, or PPP contract)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Concept development and processing - Detailed planning (P2)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtChecklist'>Prepare competition basis;Quality assure competition basis;Announce competition(s);Evaluate bids;Hold contract meeting;Formulate and sign contract document</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">210</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Detailed planning</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Concept development and processing - Detailed planning (P2)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtChecklist'>Follow up/update stakeholder analysis with measures;Follow up/update communication plan;Update environmental plan;Update HSE plan;Follow up measures from uncertainty analysis;Update calculation;Compile detailed project;Send framework application (if not done in preliminary project);Evaluate architect and consultant services;Process framework application</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">220</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Internal approval in the steering group (IG4)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Concept development and processing - Detailed planning (P2)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">230</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Contracting of contractor (if the project is implemented as main contract, divided contract or general contract)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Detailed planning - Build phase (P3)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtChecklist'>Prepare competition basis;Quality assure competition basis;Announce competition(s);Evaluate bids;Hold contract meeting;Formulate and sign contract document</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">240</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Send application for commencement (IG)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Detailed planning - Build phase (P3)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">250</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Processing of application for IG</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Detailed planning - Build phase (P3)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">260</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Hold startup meeting</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Detailed planning - Build phase (P3)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">270</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Define organization and roles</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Detailed planning - Build phase (P3)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">280</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Exercise project management in the construction phase</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Detailed planning - Build phase (P3)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtChecklist'>Follow up contractor and update plans;Follow up and update communication plan;Follow up and update uncertainty analysis;Plan training of operations personnel</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">290</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Installation</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Detailed planning - Build phase (P3)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">300</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Startup (incl. function tests)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Detailed planning - Build phase (P3)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">310</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Preliminary inspection</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Detailed planning - Build phase (P3)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">320</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Technical completion</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Detailed planning - Build phase (P3)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">330</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Check received O and M documentation</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Detailed planning - Build phase (P3)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">340</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Construction cleaning 1</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Detailed planning - End phase and takeover</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">350</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Commissioning (incl. full-scale tests)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Detailed planning - End phase and takeover</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">360</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Training of operations personnel</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Detailed planning - End phase and takeover</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">370</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Construction cleaning 2</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Detailed planning - End phase and takeover</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">380</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Final inspection</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Detailed planning - End phase and takeover</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">390</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Apply for temporary use permit and completion certificate</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Detailed planning - End phase and takeover</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">400</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Remediation of defects</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Detailed planning - End phase and takeover</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">410</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Building with technical facilities ready for trial operation</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Detailed planning - End phase and takeover</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">420</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Takeover from contractor</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Detailed planning - End phase and takeover</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">430</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Handover meeting with property manager and controller</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Detailed planning - End phase and takeover</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">440</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Economic closure</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Detailed planning - End phase and takeover</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtChecklist'>Follow up any payments according to procedures for state grants;Send final report to Sports and Outdoor Life according to routine for gaming funds in project;Ensure payment from Norwegian State Housing Bank grants according to routine for Housing Bank grants;Send final report to Enova according to Routine description for projects that apply for and receive grants for energy and environmental measures;Review grant letters with contractual energy results with EDF according to Routine description for projects that apply for and receive grants for energy and environmental measures</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">450</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Internal approval in Steering Group (IG5)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Detailed planning - End phase and takeover</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">460</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Write final report and evaluation reports</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Detailed planning - End phase and takeover</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">470</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Enter service and maintenance agreements</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Execution - Trial operation (1st operational year)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">480</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Follow-up meeting 1 with contractor and PL from PRU</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Execution - Trial operation (1st operational year)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">490</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Follow-up meeting 2 with contractor and PL from PRU</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Execution - Trial operation (1st operational year)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">500</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Follow-up meeting 3 with contractor and PL from PRU</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Execution - Trial operation (1st operational year)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">510</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Trial operation system A</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Execution - Trial operation (1st operational year)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">520</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Trial operation system B</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Execution - Trial operation (1st operational year)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">530</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Trial operation system C</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Execution - Trial operation (1st operational year)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">540</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Warranty inspection</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Execution - Trial operation (1st operational year)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">550</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Review of the project and which funds follow the building over to property management and operations after trial operation</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Execution - Trial operation (1st operational year)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">560</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Property management</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Delivery - Warranty period (years 2-5)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">570</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Operations</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Delivery - Warranty period (years 2-5)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">580</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName='Title'>Maintenance</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtCategory'>Delivery - Warranty period (years 2-5)</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">590</pnp:DataValue>
+                        </pnp:DataRow>
+                    </pnp:DataRows>
+                </pnp:ListInstance>
+            </pnp:Lists>
+        </pnp:ProvisioningTemplate>
+    </pnp:Templates>
+</pnp:Provisioning>

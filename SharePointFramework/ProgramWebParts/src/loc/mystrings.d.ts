@@ -17,7 +17,6 @@ declare interface IProgramWebPartsStrings {
   AddColumnLabel: string
   AddColumnLabel: string
   AddProjectDialogSearchBoxPlaceholder: string
-  BarLabel: string
   BooleanNo: string
   BooleanOff: string
   BooleanOn: string
@@ -69,7 +68,6 @@ declare interface IProgramWebPartsStrings {
   ColumnRenderOptionUser: string
   ColumnSettingsDisabledTooltip: string
   ColumnSettingsLabel: string
-  ColumnsListNameLabel: string
   ColumnVisibilityDescription: string
   ColumnVisibilityLabel: string
   CommandBarGroupName: string
@@ -137,7 +135,6 @@ declare interface IProgramWebPartsStrings {
   PersonalViewLabel: string
   PersonalViewsHeaderText: string
   PortfolioAggregationViewSearchQueryDescription: string
-  PortfolioManagerGroupName: string
   PortfolioViewSearchQueryDescription: string
   ProgramAdministrationAddChildsButtonDescription: string
   ProgramAdministrationAddChildsButtonLabel: string
@@ -150,13 +147,9 @@ declare interface IProgramWebPartsStrings {
   ProgramRemoveChildsButtonLabel: string
   ProgramRemoveChildsDeletingLabel: string
   ProgramTimelineInfoText: string
-  ProjectContentColumnsListName: string
   ProjectDeliveriesGroupName: string
   ProjectInformationPanelButton: string
-  ProjectLabel: string
   ProjectPropertiesHeader: string
-  ProjectPropertiesListName: string
-  ProjectsListName: string
   SaveButtonLabel: string
   SearchBoxGroupName: string
   SearchBoxPlaceholderText: string
@@ -184,15 +177,14 @@ declare interface IProgramWebPartsStrings {
   SortDescLabel: string
   SortOrderDescription: string
   SortOrderLabel: string
-  TimelineConfigurationListName: string
-  TimelineContentListName: string
   TitleLabel: string
   ToggleColumnFormPanelLabel: string
   UseChangesButtonText: string
   ViewNotFoundMessage: string
   DataSourceItemNotFound: string
-  DataSourceListName: string
   ProjectContentColumnItemNotFound: string
+  LifecycleStatus_Closed: string
+  ProjectLevel: string
 }
 
 declare module 'ProgramWebPartsStrings' {

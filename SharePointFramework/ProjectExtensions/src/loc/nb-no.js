@@ -78,7 +78,7 @@ define([], function () {
     GetSetupDataErrorMessage: 'Det skjedde en feil',
     GetSetupDataErrorStack: 'Det skjedde en feil under uthenting av data fra hubområdet. Dersom Prosjektportalen nylig er installert, kan det være grunnen. Prøv igjen litt senere.',
     IdeaDecisionStatusApprovedAndSynced: 'Godkjent og synkronisert',
-    InvalidLanguageErrorMessage: 'Ugyldig språk for området',
+    InvalidLanguageErrorMessage: 'Ugyldig språk for området. Språket må være det samme som på hubområdet.',
     InvalidLanguageErrorStack: 'Språket som er satt for området støttes ikke. Området må være opprettet med norsk språk.',
     IsHubSiteErrorMessage: 'Kan ikke legge prosjektmalen på et hubområde',
     IsHubSiteErrorStack: 'Det er ikke mulig å legge områdedesign for prosjekt på et hubområde. Operasjon avbrutt.',
@@ -117,10 +117,8 @@ define([], function () {
     ProjectDataFoundTitle: 'Prosjektdata funnet',
     ProjectDataFoundMessage: 'Det ble funnet en prosjektdata for dette prosjektet. Prosjektdata blir brukt til å fylle ut prosjektinformasjon.',
     ProjectPropertiesHeader: 'Prosjektinformasjon',
-    ProjectPropertiesListName: 'Prosjektegenskaper',
     ProjectProvisioningStartLogText: 'Starter provisjonering av prosjektet {0}.',
     ProjectProvisioningSuccessLogText: 'Prosjektet {0} ble provisjonert uten feil.',
-    ProjectTemplateFilesListName: 'Prosjektmaler',
     ProvisionSiteFieldsErrorMessage: 'Det skjedde en feil under provisjonering av områdekolonner',
     ProvisionSiteFieldsText: 'Oppretter områdekolonner',
     ProvisionSiteFieldText: 'Opprettet felt {0} på området',
@@ -145,7 +143,12 @@ define([], function () {
     TemplateSelectorSearchClearText: 'Nullstill valg av prosjektmal',
     TemplateSelectorSearchPlaceholder: 'Søk i prosjektmaler...',
     TemplateSelectorTitle: 'Prosjektmal',
+    TemplateSelectorCommandTitle: 'Hent dokumentmal',
     TermSetDoesNotExistError: 'Finner ikke termsett ID. Sjekk at termsett ID er korrekt i maloppsettet.',
-    TitleLabel: 'Tittel'
+    TitleLabel: 'Tittel',
+    ProgressLabel: 'Fremdrift',
+    AssignedToLabel: 'Tilordnet til',
+    SaveButtonLabel: 'Lagre',
+    CancelButtonLabel: 'Avbryt'
   }
 })

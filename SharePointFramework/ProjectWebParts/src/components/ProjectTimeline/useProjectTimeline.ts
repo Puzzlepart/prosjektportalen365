@@ -13,6 +13,7 @@ import strings from 'ProjectWebPartsStrings'
 import moment from 'moment'
 import { ITimelineItem } from 'pp365-shared-library/lib/interfaces'
 import { useProjectTimelineState } from './useProjectTimelineState'
+import resource from 'SharedResources'
 
 /**
  * Component logic hook for `ProjectTimeline`
@@ -166,7 +167,9 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
   const [sAmount, sDuration] = props.defaultTimeframeStart.split(',')
   const [eAmount, eDuration] = props.defaultTimeframeEnd.split(',')
 
-  const project = state.data?.items.find((item) => item.data?.type === strings.ProjectLabel)
+  const project = state.data?.items.find(
+    (item) => item.data?.type === resource.TimelineConfiguration_Project_Title
+  )
 
   if (project?.start_time && project?.end_time) {
     if (props.projectTimeLapse) {

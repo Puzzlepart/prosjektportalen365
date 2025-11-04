@@ -53,6 +53,9 @@ export class TimelineContentModel {
    * @param fallbackValue Fallback value
    */
   public getConfig<T = string>(key: keyof TimelineConfigurationModel, fallbackValue: T = null) {
+    if (!this._config) {
+      return fallbackValue as T
+    }
     return (this._config[key] ?? fallbackValue) as T
   }
 }

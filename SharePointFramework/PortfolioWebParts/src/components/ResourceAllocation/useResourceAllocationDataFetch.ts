@@ -1,6 +1,6 @@
 import { format } from '@fluentui/react/lib/Utilities'
 import sortArray from 'array-sort'
-import { IAllocationSearchResult } from 'interfaces'
+import { IAllocationSearchResult, IEnrichedAllocationSearchResult } from 'interfaces'
 import _ from 'lodash'
 import moment from 'moment'
 import strings from 'PortfolioWebPartsStrings'
@@ -16,19 +16,97 @@ import {
 } from 'pp365-shared-library/lib/interfaces'
 
 /**
- * Creating groups based on user property (`RefinableString71`) on the search result,
- * with fallback to role (`RefinableString72`)
+ * Enriches search results with department information from user profiles
+ * Get unique UPNs from GtResourceUserOWSUSER. Format: email | display name | ...
+ * The search result source 'b09a7990-05ea-4af9-81ef-edfab16c4e31' is the generic people vertical
  *
  * @param searchResults Search results
+ * @param props Component properties for `ResourceAllocation`
+ *
+ * @returns Enriched search results with department information
+ */
+const enrichWithDepartmentInfo = async (
+  searchResults: IAllocationSearchResult[],
+  props: IResourceAllocationProps
+): Promise<IEnrichedAllocationSearchResult[]> => {
+  const uniqueUPNs = _.uniq(
+    searchResults
+      .map((res) => {
+        const val = res.GtResourceUserOWSUSER
+        if (!val) return undefined
+        const parts = val.split('|')
+        const email = parts.length > 0 ? parts[0].trim() : val.trim()
+        return email
+      })
+      .filter(Boolean)
+  )
+
+  if (uniqueUPNs.length === 0) {
+    return searchResults.map((result) => ({ ...result, userDepartment: undefined }))
+  }
+
+  const query = uniqueUPNs.map((upn) => `UserName:"${upn.replace(/"/g, '')}"`).join(' OR ')
+
+  let peopleResults: any[] = []
+  try {
+    peopleResults = (
+      await props.sp.search({
+        QueryTemplate: query,
+        Querytext: '*',
+        RowLimit: 500,
+        TrimDuplicates: false,
+        SelectProperties: ['UserName', 'Department', 'PreferredName', 'WorkEmail'],
+        SourceId: 'b09a7990-05ea-4af9-81ef-edfab16c4e31'
+      })
+    ).PrimarySearchResults
+  } catch (error) {
+    console.warn('Failed to batch fetch people search results:', error)
+  }
+
+  const peopleMap = new Map<string, string>()
+  const allUserNames = []
+  for (const person of peopleResults) {
+    if (person.UserName && person.Department) {
+      peopleMap.set(person.UserName.toLowerCase(), person.Department)
+      allUserNames.push(person.UserName.toLowerCase())
+    }
+  }
+
+  return searchResults.map((result) => {
+    let upn = result.GtResourceUserOWSUSER
+    if (upn) {
+      const parts = upn.split('|')
+      upn = parts.length > 0 ? parts[0].trim().toLowerCase() : upn.trim().toLowerCase()
+    } else {
+      upn = undefined
+    }
+
+    return {
+      ...result,
+      userDepartment: upn ? peopleMap.get(upn) : undefined
+    }
+  })
+}
+
+/**
+ * Creating groups based on user property (`RefinableString71`) on the search result,
+ * with fallback to role (`RefinableString72`)
+ * For user groups, append department in parentheses if available
+ *
+ * @param searchResults Enriched search results
  *
  * @returns Timeline groups
  */
-const transformGroups = (searchResults: IAllocationSearchResult[]): ITimelineGroup[] => {
+const transformGroups = (searchResults: IEnrichedAllocationSearchResult[]): ITimelineGroup[] => {
   const groupNames = _.uniq(
     searchResults
-      .map(
-        (res) => res.RefinableString71 ?? (res.RefinableString72 && `${res.RefinableString72}|R`)
-      )
+      .map((res) => {
+        if (res.RefinableString71) {
+          return res.RefinableString71
+        }
+        if (res.RefinableString72) return `${res.RefinableString72}|R`
+        return undefined
+      })
       .filter(Boolean)
   )
   const groups = groupNames.map<ITimelineGroup>((name, index) => {
@@ -43,26 +121,24 @@ const transformGroups = (searchResults: IAllocationSearchResult[]): ITimelineGro
 }
 
 /**
- * Transform items
+ * Transform items.
  *
- * @param searchResults Search results
+ * @param searchResults Enriched search results
  * @param groups Groups
  * @param props Component properties for `ResourceAllocation`
  *
  * @returns Timeline items
  */
 const transformItems = (
-  searchResults: IAllocationSearchResult[],
+  searchResults: IEnrichedAllocationSearchResult[],
   groups: ITimelineGroup[],
   props: IResourceAllocationProps
 ): ITimelineItem[] => {
   const items = searchResults
     .map<ITimelineItem>((res, id) => {
+      const resourceDisplay = res.RefinableString71
       const group =
-        _.find(
-          groups,
-          (grp) => res.RefinableString71 && res.RefinableString71.indexOf(grp.title) !== -1
-        ) ??
+        groups.find((grp) => grp.title === resourceDisplay) ??
         _.find(
           groups,
           (grp) => res.RefinableString72 && res.RefinableString72.indexOf(grp.title) !== -1
@@ -96,12 +172,16 @@ const transformItems = (
         itemProps: { style },
         props: res,
         data: {
-          project: res.SiteTitle,
-          projectUrl: res.SiteName,
-          type: strings.ResourceLabel,
+          project: isAbsence ? '' : res.SiteTitle,
+          projectUrl: isAbsence ? '' : res.SiteName,
+          type: isAbsence ? strings.ResourceAbsenceLabel : strings.ResourceLabel,
           allocation,
-          role: res.RefinableString72,
-          resource: res.RefinableString71,
+          role: isAbsence ? res.GtResourceAbsenceOWSCHCS : res.RefinableString72,
+          resource: resourceDisplay,
+          resourceUpn: res.GtResourceUserOWSUSER
+            ? res.GtResourceUserOWSUSER.split('|')[0]?.trim()
+            : '',
+          department: res.userDepartment || '',
           status: res.GtAllocationStatusOWSCHCS,
           comment: res.GtAllocationCommentOWSMTXT
         }
@@ -131,8 +211,11 @@ const fetchData = async (props: IResourceAllocationProps): Promise<ITimelineData
         SelectProperties: props.selectProperties
       })
     ).PrimarySearchResults as IAllocationSearchResult[]
-    const groups = transformGroups(results)
-    const items = transformItems(results, groups, props)
+
+    const enrichedResults = await enrichWithDepartmentInfo(results, props)
+
+    const groups = transformGroups(enrichedResults)
+    const items = transformItems(enrichedResults, groups, props)
     return { items, groups }
   } catch (error) {
     throw error

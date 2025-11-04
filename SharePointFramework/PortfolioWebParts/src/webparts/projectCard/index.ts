@@ -13,6 +13,7 @@ import { IProjectCardProps, ProjectCard } from 'components/ProjectCard'
 import {
   CustomCollectionFieldType,
   PropertyFieldCollectionData,
+  PropertyFieldDropdownWithCallout,
   PropertyFieldMultiSelect,
   PropertyFieldToggleWithCallout
 } from '@pnp/spfx-property-controls'
@@ -115,7 +116,6 @@ export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCar
           const gtHubSiteId = sitePageData.GtHubSiteId
           const currentHubSiteId = this.context.pageContext.legacyPageContext.hubSiteId
 
-          // Check if the hub site ID from the page matches the current hub
           if (gtHubSiteId && currentHubSiteId && gtHubSiteId !== currentHubSiteId) {
             try {
               const hubSiteInfo = await sp.hubSites.getById(gtHubSiteId)()
@@ -124,23 +124,17 @@ export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCar
                 this._hubSiteUrl = hubSiteInfo.SiteUrl
                 this._hubSiteId = gtHubSiteId
 
-                // Create SP context for the hub site using the actual URL
                 const hubSp = spfi(this._hubSiteUrl).using(SPFx(this.context))
-
-                // Verify the hub site is accessible
                 await hubSp.web.select('Id', 'Title', 'Url')()
 
-                // Store the project site ID
                 this._projectSiteId = gtSiteId
               } else {
                 this._projectSiteId = gtSiteId
               }
             } catch (hubError) {
-              // Fallback to using the site ID as-is
               this._projectSiteId = gtSiteId
             }
           } else {
-            // Same hub or no hub specified, use the site ID directly
             this._projectSiteId = gtSiteId
           }
         } else {
@@ -164,7 +158,7 @@ export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCar
       pages: [
         {
           header: {
-            description: 'Prosjektkort'
+            description: strings.ProjectCard.WebPartDescription
           },
           displayGroupsAsAccordion: true,
           groups: [
@@ -172,8 +166,8 @@ export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCar
               groupName: strings.GeneralGroupName,
               groupFields: [
                 PropertyPaneTextField('projectSiteId', {
-                  label: 'Område ID',
-                  description: 'ID for SharePoint-området (Prosjektet)'
+                  label: strings.ProjectCard.ProjectSiteIdFieldLabel,
+                  description: strings.ProjectCard.ProjectSiteIdFieldDescription
                 })
               ]
             },
@@ -221,37 +215,53 @@ export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCar
                   ],
                   selectedKeys: this.properties.projectMetadata ?? []
                 }),
-                PropertyPaneDropdown('primaryField', {
+                PropertyFieldDropdownWithCallout('primaryField', {
+                  calloutTrigger: CalloutTriggers.Hover,
+                  key: 'primaryFieldId',
                   label: strings.PrimaryFieldLabel,
                   options: this._columnFieldOptions.map((option) => ({
                     key: option.key,
                     text: option.text
                   })),
-                  selectedKey: this.properties.primaryField ?? 'GtProjectServiceArea'
+                  selectedKey: this.properties.primaryField ?? 'GtProjectServiceArea',
+                  calloutWidth: 430,
+                  calloutContent: createElement('p', {}, strings.RefreshRequiredDescription)
                 }),
-                PropertyPaneDropdown('secondaryField', {
+                PropertyFieldDropdownWithCallout('secondaryField', {
+                  calloutTrigger: CalloutTriggers.Hover,
+                  key: 'secondaryFieldId',
                   label: strings.SecondaryFieldLabel,
                   options: this._columnFieldOptions.map((option) => ({
                     key: option.key,
                     text: option.text
                   })),
-                  selectedKey: this.properties.secondaryField ?? 'GtProjectType'
+                  selectedKey: this.properties.secondaryField ?? 'GtProjectType',
+                  calloutWidth: 430,
+                  calloutContent: createElement('p', {}, strings.RefreshRequiredDescription)
                 }),
-                PropertyPaneDropdown('primaryUserField', {
+                PropertyFieldDropdownWithCallout('primaryUserField', {
+                  calloutTrigger: CalloutTriggers.Hover,
+                  key: 'primaryUserFieldId',
                   label: strings.PrimaryUserFieldLabel,
                   options: this._columnUserOptions.map((option) => ({
                     key: option.key,
                     text: option.text
                   })),
-                  selectedKey: this.properties.primaryUserField ?? 'GtProjectOwner'
+                  selectedKey: this.properties.primaryUserField ?? 'GtProjectOwner',
+                  calloutWidth: 430,
+                  calloutContent: createElement('p', {}, strings.RefreshRequiredDescription)
                 }),
-                PropertyPaneDropdown('secondaryUserField', {
+                PropertyFieldDropdownWithCallout('secondaryUserField', {
+                  calloutTrigger: CalloutTriggers.Hover,
+                  key: 'secondaryUserFieldId',
                   label: strings.SecondaryUserFieldLabel,
                   options: this._columnUserOptions.map((option) => ({
                     key: option.key,
                     text: option.text
                   })),
-                  selectedKey: this.properties.secondaryUserField ?? 'GtProjectManager'
+                  selectedKey: this.properties.secondaryUserField ?? 'GtProjectManager',
+                  calloutWidth: 430,
+                  calloutContent: createElement('p', {}, strings.RefreshRequiredDescription)
                 }),
                 PropertyFieldCollectionData('quickLaunchMenu', {
                   key: 'quickLaunchFieldId',

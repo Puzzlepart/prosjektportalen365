@@ -3,7 +3,7 @@
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x01000E7513A76B934F449CDB9B25FC172F44" Default="true" />
     </pnp:ContentTypeBindings>
-    <pnp:Views RemoveExistingViews="true">
+    <pnp:Views>
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_IdeaProcessing_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
             <Query>
                 <OrderBy>
@@ -66,19 +66,19 @@
         </View>
     </pnp:Views>
     <pnp:FieldRefs>
-        <pnp:FieldRef ID="d0f5911c-85bc-4403-a9c4-9ed943298164" Name="GtIdeaStrategicValue" DisplayName="Strategisk verdi" />
-        <pnp:FieldRef ID="d8a940ba-d7ce-413a-ba26-2140f09a8c58" Name="GtIdeaStrategicNumber" DisplayName="Strategisk verdi (tall)" />
-        <pnp:FieldRef ID="76eb1411-4a09-4b0d-bfe2-6ecd7e7c1e75" Name="GtIdeaQualityBenefit" DisplayName="Kvalitativ gevinst" />
-        <pnp:FieldRef ID="201dba9f-b85e-475c-8b7c-603b2cbe886c" Name="GtIdeaQualityNumber" DisplayName="Kvalitativ gevinst (tall)" />
-        <pnp:FieldRef ID="37b7f04e-b158-49eb-96f3-637ce1292e75" Name="GtIdeaEconomicBenefit" DisplayName="Økonomisk gevinst" />
-        <pnp:FieldRef ID="d04ec769-0834-467b-84bf-bba219819ff2" Name="GtIdeaEconomicNumber" DisplayName="Økonomisk gevinst (tall)" />
-        <pnp:FieldRef ID="d3dcbabd-2df6-4338-864d-33417f8220aa" Name="GtIdeaOperationalNeed" DisplayName="Operasjonelt behov/lovpålagt" />
-        <pnp:FieldRef ID="28585ae1-e205-49a9-865e-00cb2c860fe0" Name="GtIdeaOperationalNumber" DisplayName="Operasjonelt behov/lovpålagt (tall)" />
-        <pnp:FieldRef ID="cca3f2fd-5684-43e1-9fb5-acf05592b1f6" Name="GtIdeaRisk" DisplayName="Risiko" />
-        <pnp:FieldRef ID="9f7444b0-2f69-4ad0-a347-2d85cedddebb" Name="GtIdeaRiskNumber" DisplayName="Risiko (tall)" />
-        <pnp:FieldRef ID="15915e21-3ba3-4a39-8bf3-690b1cb044b5" Name="GtIdeaManualScore" DisplayName="Justering" />
-        <pnp:FieldRef ID="9b7cf4f7-641d-4a7f-be6a-245237dce476" Name="GtIdeaManualComment" DisplayName="Kommentar til justering" />
-        <pnp:FieldRef ID="ce451f2c-a098-48ba-a8a5-d1d4ffc225d6" Name="GtIdeaScore" DisplayName="Score" />
-        <pnp:FieldRef ID="8fef6c38-28e1-497a-97d7-72e1a854fae1" Name="GtIdeaPriority" DisplayName="Prioritering" />
+        <pnp:FieldRef ID="d0f5911c-85bc-4403-a9c4-9ed943298164" Name="GtIdeaStrategicValue" DisplayName="{resource:SiteFields_GtIdeaStrategicValue_DisplayName}" />
+        <pnp:FieldRef ID="d8a940ba-d7ce-413a-ba26-2140f09a8c58" Name="GtIdeaStrategicNumber" DisplayName="{resource:SiteFields_GtIdeaStrategicNumber_DisplayName}" />
+        <pnp:FieldRef ID="76eb1411-4a09-4b0d-bfe2-6ecd7e7c1e75" Name="GtIdeaQualityBenefit" DisplayName="{resource:SiteFields_GtIdeaQualityBenefit_DisplayName}" />
+        <pnp:FieldRef ID="201dba9f-b85e-475c-8b7c-603b2cbe886c" Name="GtIdeaQualityNumber" DisplayName="{resource:SiteFields_GtIdeaQualityNumber_DisplayName}" />
+        <pnp:FieldRef ID="37b7f04e-b158-49eb-96f3-637ce1292e75" Name="GtIdeaEconomicBenefit" DisplayName="{resource:SiteFields_GtIdeaEconomicBenefit_DisplayName}" />
+        <pnp:FieldRef ID="d04ec769-0834-467b-84bf-bba219819ff2" Name="GtIdeaEconomicNumber" DisplayName="{resource:SiteFields_GtIdeaEconomicNumber_DisplayName}" />
+        <pnp:FieldRef ID="d3dcbabd-2df6-4338-864d-33417f8220aa" Name="GtIdeaOperationalNeed" DisplayName="{resource:SiteFields_GtIdeaOperationalNeed_DisplayName}" />
+        <pnp:FieldRef ID="28585ae1-e205-49a9-865e-00cb2c860fe0" Name="GtIdeaOperationalNumber" DisplayName="{resource:SiteFields_GtIdeaOperationalNumber_DisplayName}" />
+        <pnp:FieldRef ID="cca3f2fd-5684-43e1-9fb5-acf05592b1f6" Name="GtIdeaRisk" DisplayName="{resource:SiteFields_GtIdeaRisk_DisplayName}" />
+        <pnp:FieldRef ID="9f7444b0-2f69-4ad0-a347-2d85cedddebb" Name="GtIdeaRiskNumber" DisplayName="{resource:SiteFields_GtIdeaRiskNumber_DisplayName}" />
+        <pnp:FieldRef ID="15915e21-3ba3-4a39-8bf3-690b1cb044b5" Name="GtIdeaManualScore" DisplayName="{resource:SiteFields_GtIdeaManualScore_DisplayName}" />
+        <pnp:FieldRef ID="9b7cf4f7-641d-4a7f-be6a-245237dce476" Name="GtIdeaManualComment" DisplayName="{resource:SiteFields_GtIdeaManualComment_DisplayName}" />
+        <pnp:FieldRef ID="ce451f2c-a098-48ba-a8a5-d1d4ffc225d6" Name="GtIdeaScore" DisplayName="{resource:SiteFields_GtIdeaScore_DisplayName}" />
+        <pnp:FieldRef ID="8fef6c38-28e1-497a-97d7-72e1a854fae1" Name="GtIdeaPriority" DisplayName="{resource:SiteFields_GtIdeaPriority_DisplayName}" />
     </pnp:FieldRefs>
 </pnp:ListInstance>

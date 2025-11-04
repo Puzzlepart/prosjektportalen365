@@ -1,5 +1,5 @@
-import strings from 'SharedLibraryStrings'
 import { ItemFieldValues } from './ItemFieldValues'
+import resource from 'SharedResources'
 
 export type StatusReportAttachment = {
   name?: string
@@ -74,9 +74,9 @@ export class StatusReport {
    * @param urlSourceParam - URL source param
    */
   public url(urlSourceParam: string) {
-    return `SitePages/Prosjektstatus.aspx?selectedReport=${this.id}&Source=${encodeURIComponent(
-      urlSourceParam
-    )}`
+    return `${resource.Navigation_ProjectStatus_Url}?selectedReport=${
+      this.id
+    }&Source=${encodeURIComponent(urlSourceParam)}`
   }
 
   /**
@@ -103,10 +103,10 @@ export class StatusReport {
 
   /**
    * Returns `true` if the report is published. The moderation status must
-   * be `GtModerationStatus_Choice_Published` from the `SharedLibraryStrings`
+   * be `GtModerationStatus: Published` from the `SharedLibraryStrings`
    */
   public get published(): boolean {
-    return this.moderationStatus === strings.GtModerationStatus_Choice_Published
+    return this.moderationStatus === resource.Choice_GtModerationStatus_Published
   }
 
   /**

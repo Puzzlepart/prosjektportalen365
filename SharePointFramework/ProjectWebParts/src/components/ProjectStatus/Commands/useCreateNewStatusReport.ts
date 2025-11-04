@@ -4,6 +4,7 @@ import { ItemFieldValue } from 'pp365-shared-library'
 import SPDataAdapter from '../../../data'
 import { useProjectStatusContext } from '../context'
 import { OPEN_PANEL, SELECT_REPORT } from '../reducer'
+import resource from 'SharedResources'
 
 /**
  * Hook for creating new status reports. Returns a callback function
@@ -30,7 +31,7 @@ export function useCreateNewStatusReport() {
     let properties: Record<string, any> = {
       Title: format(strings.NewStatusReportTitle, props.webTitle),
       GtSiteId: props.siteId,
-      GtModerationStatus: strings.GtModerationStatus_Choice_Draft
+      GtModerationStatus: resource.Choice_GtModerationStatus_Draft
     }
     if (lastReport?.fieldValues) {
       properties = reportFields.reduce((obj, field) => {

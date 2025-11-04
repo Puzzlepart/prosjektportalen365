@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import React, { FC, createElement } from 'react'
+import * as strings from 'PortfolioWebPartsStrings'
 import styles from './DataTypeFields.module.scss'
 import { IDataTypeFieldsProps } from './types'
 import { getFluentIcon } from 'pp365-shared-library'
@@ -37,14 +38,14 @@ export const DataTypeFields: FC<IDataTypeFieldsProps> = (props) => {
         icon={isFieldsVisible ? getFluentIcon('ChevronUp') : getFluentIcon('ChevronDown')}
         title={
           isFieldsVisible
-            ? 'Skjul egenskaper for visningsmodus'
-            : 'Vis egenskaper for visningsmodus'
+            ? strings.HideDataTypePropertiesLabel
+            : strings.ShowDataTypePropertiesLabel
         }
         onClick={toggleIsFieldsVisible}
       >
         {isFieldsVisible
-          ? 'Skjul egenskaper for visningsmodus'
-          : 'Vis egenskaper for visningsmodus'}
+          ? strings.HideDataTypePropertiesLabel
+          : strings.ShowDataTypePropertiesLabel}
       </Button>
       <div className={styles.container} hidden={!isFieldsVisible}>
         {fieldElements}

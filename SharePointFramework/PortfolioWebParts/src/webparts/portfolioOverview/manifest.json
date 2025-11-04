@@ -3,7 +3,7 @@
   "id": "e58e3d32-057a-4418-97ce-172b92482ba2",
   "alias": "PortfolioOverviewWebPart",
   "componentType": "WebPart",
-  "version": "1.11.1",
+  "version": "1.12.0",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "hiddenFromToolbox": false,
@@ -21,11 +21,10 @@
         "default": "Porteføljeoversikt"
       },
       "description": {
-        "default": " "
+        "default": "Få oversikt over porteføljen, prosjekter og programmer"
       },
       "officeFabricIconFontName": "FolderList",
       "properties": {
-        "title": "Porteføljeoversikt",
         "statusReportsCount": 0,
         "showCommandBar": true,
         "showExcelExportButton": true,

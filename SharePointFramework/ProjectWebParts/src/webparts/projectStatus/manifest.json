@@ -3,7 +3,7 @@
   "id": "681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6",
   "alias": "ProjectStatusWebPart",
   "componentType": "WebPart",
-  "version": "1.11.1",
+  "version": "1.12.0",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "hiddenFromToolbox": true,
@@ -24,12 +24,7 @@
       },
       "officeFabricIconFontName": "AwayStatus",
       "properties": {
-        "title": "Prosjektstatus",
-        "fieldWidth": 250,
-        "riskMatrix": {
-          "calloutTemplate": "<h3>{Title}</h3>\n<p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n<p><strong>Nærhet: </strong>{GtRiskProximity}</p>\n<p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>",
-          "fullWidth": true
-        }
+        "fieldWidth": 250
       }
     }
   ]

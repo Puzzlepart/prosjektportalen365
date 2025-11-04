@@ -12,7 +12,8 @@
     "sharepoint": true,
     "temp": true,
     "teams": true,
-    "release": true
+    "release": true,
+    "src/loc/shared": true
   },
   "typescript.tsdk": ".\\node_modules\\typescript\\lib",
   "FSharp.suggestGitignore": false

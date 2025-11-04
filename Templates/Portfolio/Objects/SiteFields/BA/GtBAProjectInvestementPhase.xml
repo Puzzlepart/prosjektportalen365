@@ -1,10 +1,10 @@
 <Field ID="{3060379a-34d5-4bfb-a97d-f6efa834ff69}" Name="GtBAProjectInvestementPhase" Hidden="true" DisplayName="{resource:SiteFields_GtBAProjectInvestementPhase_DisplayName}" Type="Choice" Format="Dropdown" Group="{resource:SiteFields_BA_Group}" Description="" FillInChoice="TRUE" StaticName="GtBAProjectInvestementPhase">
   <CHOICES>
-    <CHOICE>F0</CHOICE>
-    <CHOICE>F1</CHOICE>
-    <CHOICE>F2</CHOICE>
-    <CHOICE>F3</CHOICE>
-    <CHOICE>S (Sekkepost)</CHOICE>
-    <CHOICE>Ikke relevant</CHOICE>
+    <CHOICE>{resource:Choice_GtBAProjectInvestementPhase_F0}</CHOICE>
+    <CHOICE>{resource:Choice_GtBAProjectInvestementPhase_F1}</CHOICE>
+    <CHOICE>{resource:Choice_GtBAProjectInvestementPhase_F2}</CHOICE>
+    <CHOICE>{resource:Choice_GtBAProjectInvestementPhase_F3}</CHOICE>
+    <CHOICE>{resource:Choice_GtBAProjectInvestementPhase_SeckePost}</CHOICE>
+    <CHOICE>{resource:Choice_GtBAProjectInvestementPhase_NotRelevant}</CHOICE>
   </CHOICES>
 </Field>

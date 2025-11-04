@@ -1,14 +1,14 @@
 <Field ID="{f73a2025-53ba-468e-a18f-3714a2a6c71e}" Name="GtBAProjectStatusCase" DisplayName="{resource:SiteFields_GtBAProjectStatusCase_DisplayName}" Type="Choice" Format="Dropdown" Group="{resource:SiteFields_BA_Group}" Description="{resource:SiteFields_GtBAProjectStatusCase_Description}" FillInChoice="TRUE" StaticName="GtBAProjectStatusCase">
   <CHOICES>
-    <CHOICE>Reguleringsplan annonsert</CHOICE>
-    <CHOICE>Reguleringsplan 1.gangsbehandlet</CHOICE>
-    <CHOICE>Reguleringsplan godkjent</CHOICE>
-    <CHOICE>Forhåndskonferanse avholdt</CHOICE>
-    <CHOICE>Rammesøknad under utarbeidelse</CHOICE>
-    <CHOICE>Rammesøknad sendt</CHOICE>
-    <CHOICE>Rammetillatelse gitt</CHOICE>
-    <CHOICE>IG sendt</CHOICE>
-    <CHOICE>IG gitt</CHOICE>
-    <CHOICE>Klage under behandling</CHOICE>
+    <CHOICE>{resource:Choice_GtBAProjectStatusCase_RegulationPlanAnnounced}</CHOICE>
+    <CHOICE>{resource:Choice_GtBAProjectStatusCase_RegulationPlanFirstTreated}</CHOICE>
+    <CHOICE>{resource:Choice_GtBAProjectStatusCase_RegulationPlanApproved}</CHOICE>
+    <CHOICE>{resource:Choice_GtBAProjectStatusCase_PreConferenceHeld}</CHOICE>
+    <CHOICE>{resource:Choice_GtBAProjectStatusCase_FrameworkApplicationInProgress}</CHOICE>
+    <CHOICE>{resource:Choice_GtBAProjectStatusCase_FrameworkApplicationSent}</CHOICE>
+    <CHOICE>{resource:Choice_GtBAProjectStatusCase_FrameworkPermitGranted}</CHOICE>
+    <CHOICE>{resource:Choice_GtBAProjectStatusCase_IGSent}</CHOICE>
+    <CHOICE>{resource:Choice_GtBAProjectStatusCase_IGGranted}</CHOICE>
+    <CHOICE>{resource:Choice_GtBAProjectStatusCase_ComplaintUnderReview}</CHOICE>
   </CHOICES>
 </Field>

@@ -3,7 +3,7 @@
         <pnp:ContentTypeBinding ContentTypeID="0x010018DB532215EDE34C975F3AC3348948B1" Default="true" />
     </pnp:ContentTypeBindings>
     <pnp:Views>
-        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/{resource:Lists_ProjectAdminPermissions_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_ProjectAdminPermissions_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
             <Query />
             <ViewFields>
                 <FieldRef Name="LinkTitle" />
@@ -16,25 +16,25 @@
     </pnp:Views>
     <pnp:DataRows KeyColumn="GtProjectAdminPermission" UpdateBehavior="Overwrite">
         <pnp:DataRow>
-            <pnp:DataValue FieldName="Title">{resource:ProjectAdminPermissions_EditProjectProperties}</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectAdminPermissions_EditProjectProperties}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectAdminPermission">EditProjectProperties</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectAdminPermissionId">edc568a8-9cfc-4547-9af2-d9d3aeb5aa2a</pnp:DataValue>
             <pnp:DataValue FieldName="ContentTypeId">0x010018DB532215EDE34C975F3AC3348948B1</pnp:DataValue>
         </pnp:DataRow>  
         <pnp:DataRow>
-            <pnp:DataValue FieldName="Title">{resource:ProjectAdminPermissions_ChangePhase}</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectAdminPermissions_ChangePhase}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectAdminPermission">ChangePhase</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectAdminPermissionId">75a08ae0-d69a-41b2-adf4-ae233c6bff9f</pnp:DataValue>
             <pnp:DataValue FieldName="ContentTypeId">0x010018DB532215EDE34C975F3AC3348948B1</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="Title">{resource:ProjectAdminPermissions_ProjectStatusAdmin}</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectAdminPermissions_ProjectStatusAdmin}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectAdminPermission">ProjectStatusAdmin</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectAdminPermissionId">f6b875ae-fdb4-4ceb-bc75-ed853c2a2b0e</pnp:DataValue>
             <pnp:DataValue FieldName="ContentTypeId">0x010018DB532215EDE34C975F3AC3348948B1</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="Title">{resource:ProjectAdminPermissions_ChildProjectsAdmin}</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectAdminPermissions_ChildProjectsAdmin}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectAdminPermission">ChildProjectsAdmin</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectAdminPermissionId">2281c92a-f5ff-4d99-8814-e7b2f33d1ac9</pnp:DataValue>
             <pnp:DataValue FieldName="ContentTypeId">0x010018DB532215EDE34C975F3AC3348948B1</pnp:DataValue>

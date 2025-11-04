@@ -3,7 +3,7 @@
   "id": "aff0baa2-9ab4-4c13-a062-d5fa5028121c",
   "alias": "OpportunityMatrixWebPart",
   "componentType": "WebPart",
-  "version": "1.11.1",
+  "version": "1.12.0",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "hiddenFromToolbox": false,
@@ -24,14 +24,11 @@
       },
       "officeFabricIconFontName": "BranchCommit",
       "properties": {
-        "listName": "Usikkerhet",
-        "viewXml": "<View><Query><Where><Eq><FieldRef Name=\"ContentType\" /><Value Type=\"Computed\">Mulighet</Value></Eq></Where></Query></View>",
         "probabilityFieldName": "GtRiskProbability",
         "consequenceFieldName": "GtRiskConsequence",
         "probabilityPostActionFieldName": "GtRiskProbabilityPostAction",
         "consequencePostActionFieldName": "GtRiskConsequencePostAction",
-        "width": 800,
-        "calloutTemplate": "<h3>{Title}</h3>\n<p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n<p><strong>Nærhet: </strong>{GtRiskProximity}</p>\n<p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>"
+        "fullWidth": true
       }
     }
   ]

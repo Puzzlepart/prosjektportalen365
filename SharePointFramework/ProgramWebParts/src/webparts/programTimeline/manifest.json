@@ -3,7 +3,7 @@
   "id": "f97a38ab-78c2-400e-899f-b0d4cda76166",
   "alias": "ProgramTimelineWebPart",
   "componentType": "WebPart",
-  "version": "1.11.1",
+  "version": "1.12.0",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "supportedHosts": [
@@ -22,11 +22,7 @@
         "default": " "
       },
       "officeFabricIconFontName": "Page",
-      "properties": {
-        "title": "Tidslinje for underområder",
-        "dataSourceName": "Alle prosjektleveranser",
-        "configItemTitle": "Prosjektleveranse"
-      }
+      "properties": {}
     }
   ]
 }

@@ -1,8 +1,8 @@
 ﻿<Field Description="{resource:SiteFields_GtStatusTime_Description}" DisplayName="{resource:SiteFields_GtStatusTime_DisplayName}" Format="RadioButtons" Group="{resource:SiteFields_Portfolio_Group}" ID="{1447ef51-8e9b-4d16-aa2a-526dc9f1539e}" Name="GtStatusTime" StaticName="GtStatusTime" Type="Choice">
     <CHOICES>
-        <CHOICE>Foran plan</CHOICE>
-        <CHOICE>Forsinket</CHOICE>
-        <CHOICE>Mindre forsinkelser</CHOICE>
-        <CHOICE>På plan</CHOICE>
+        <CHOICE>{resource:Choice_GtStatusTime_AheadOfSchedule}</CHOICE>
+        <CHOICE>{resource:Choice_GtStatusTime_Delayed}</CHOICE>
+        <CHOICE>{resource:Choice_GtStatusTime_SmallDelay}</CHOICE>
+        <CHOICE>{resource:Choice_GtStatusTime_OnSchedule}</CHOICE>
     </CHOICES>
 </Field>

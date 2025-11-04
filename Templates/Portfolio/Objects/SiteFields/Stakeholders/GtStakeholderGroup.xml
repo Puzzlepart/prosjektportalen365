@@ -1,1 +1,14 @@
-<Field ID="{2847b3b0-ed22-4c47-b7c0-3ebfc83dae4a}" Name="GtStakeholderGroup" DisplayName="{resource:SiteFields_GtStakeholderGroup_DisplayName}" Type="Choice" Group="{resource:SiteFields_Project_Group}" Description="{resource:SiteFields_GtStakeholderGroup_Description}" StaticName="GtStakeholderGroup"><CHOICES><CHOICE>Medarbeidere</CHOICE><CHOICE>Ledelse</CHOICE><CHOICE>Innbyggere</CHOICE><CHOICE>Næringsliv</CHOICE><CHOICE>Frivillighet/Organisasjon</CHOICE><CHOICE>Fagforening</CHOICE><CHOICE>Andre offentlige aktører</CHOICE><CHOICE>Akademia</CHOICE><CHOICE>Virkemiddelapparat</CHOICE><CHOICE>Brukere</CHOICE></CHOICES></Field>
+<Field ID="{2847b3b0-ed22-4c47-b7c0-3ebfc83dae4a}" Name="GtStakeholderGroup" DisplayName="{resource:SiteFields_GtStakeholderGroup_DisplayName}" Type="Choice" Group="{resource:SiteFields_Project_Group}" Description="{resource:SiteFields_GtStakeholderGroup_Description}" StaticName="GtStakeholderGroup">
+  <CHOICES>
+    <CHOICE>{resource:Choice_GtStakeholderGroup_Employees}</CHOICE>
+    <CHOICE>{resource:Choice_GtStakeholderGroup_Management}</CHOICE>
+    <CHOICE>{resource:Choice_GtStakeholderGroup_Citizens}</CHOICE>
+    <CHOICE>{resource:Choice_GtStakeholderGroup_Business}</CHOICE>
+    <CHOICE>{resource:Choice_GtStakeholderGroup_VoluntaryOrganization}</CHOICE>
+    <CHOICE>{resource:Choice_GtStakeholderGroup_TradeUnion}</CHOICE>
+    <CHOICE>{resource:Choice_GtStakeholderGroup_OtherPublicActors}</CHOICE>
+    <CHOICE>{resource:Choice_GtStakeholderGroup_Academia}</CHOICE>
+    <CHOICE>{resource:Choice_GtStakeholderGroup_PolicyInstruments}</CHOICE>
+    <CHOICE>{resource:Choice_GtStakeholderGroup_Users}</CHOICE>
+  </CHOICES>
+</Field>

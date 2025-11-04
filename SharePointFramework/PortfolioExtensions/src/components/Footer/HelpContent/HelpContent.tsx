@@ -2,7 +2,13 @@ import strings from 'PortfolioExtensionsStrings'
 import React, { FC, useContext } from 'react'
 import { HelpContentDialog } from './HelpContentDialog'
 import { FooterContext } from '../context'
-import { Button, Tooltip, FluentProvider, IdPrefixProvider, useId } from '@fluentui/react-components'
+import {
+  Button,
+  Tooltip,
+  FluentProvider,
+  IdPrefixProvider,
+  useId
+} from '@fluentui/react-components'
 import { getFluentIcon, customLightTheme } from 'pp365-shared-library'
 
 export const HelpContent: FC = () => {
@@ -29,7 +35,9 @@ export const HelpContent: FC = () => {
               disabled={isUnavailable}
               icon={getFluentIcon('QuestionCircle')}
             >
-              {isUnavailable ? strings.HelpContentUnavailableLabel : strings.HelpContentAvailableLabel}
+              {isUnavailable
+                ? strings.HelpContentUnavailableLabel
+                : strings.HelpContentAvailableLabel}
             </Button>
           </Tooltip>
         </HelpContentDialog>

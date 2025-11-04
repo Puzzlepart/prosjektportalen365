@@ -4,7 +4,7 @@ import { IPortfolioOverviewConfiguration } from '../../../components/PortfolioOv
 export interface ICommandsProps {
   newFormUrl: string
   currentView: PortfolioOverviewView
-  configuration: IPortfolioOverviewConfiguration
+  configuration: Partial<IPortfolioOverviewConfiguration>
   contentTypes: { StringId: string; Name: string }[]
   onViewChanged: (view: PortfolioOverviewView) => Promise<void>
 }

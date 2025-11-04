@@ -25,3 +25,4 @@ const brandVariants: BrandVariants = {
 
 export const customLightTheme = createLightTheme(brandVariants)
 export const customDarkTheme = createDarkTheme(brandVariants)
+export const themeColor = primaryColor

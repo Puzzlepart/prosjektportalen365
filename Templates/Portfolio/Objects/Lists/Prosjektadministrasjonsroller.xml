@@ -1,11 +1,11 @@
-<pnp:ListInstance Title="{resource:Lists_ProjectAdminRoles_Title}" Description="" Hidden="true" TemplateType="100" Url="{resource:Lists_ProjectAdminRoles_Url}" EnableVersioning="true" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableAttachments="false" EnableFolderCreation="false" xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+<pnp:ListInstance Title="{resource:Lists_ProjectAdminRoles_Title}" Description="{resource:Lists_ProjectAdminRoles_Description}" Hidden="true" TemplateType="100" Url="{resource:Lists_ProjectAdminRoles_Url}" EnableVersioning="true" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableAttachments="false" EnableFolderCreation="false" xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100618197F7C782A0459EB2FA5EBF1BDDF201" Default="true" />
         <pnp:ContentTypeBinding ContentTypeID="0x0100618197F7C782A0459EB2FA5EBF1BDDF202" />
         <pnp:ContentTypeBinding ContentTypeID="0x0100618197F7C782A0459EB2FA5EBF1BDDF203" />
     </pnp:ContentTypeBindings>
-    <pnp:Views RemoveExistingViews="true">
-        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle roller" Url="{site}/{resource:Lists_ProjectAdminRoles_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+    <pnp:Views>
+        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllRoles_DisplayName}" Url="{site}/{resource:Lists_ProjectAdminRoles_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
             <Query />
             <ViewFields>
                 <FieldRef Name="ContentType" />
@@ -20,7 +20,7 @@
             <JSLink>clienttemplates.js</JSLink>
             <ViewData />
         </View>
-        <View Type="HTML" DisplayName="Prosjektadministrasjonsroller koblet mot prosjektegenskaper" Url="{site}/{resource:Lists_ProjectAdminRoles_Url}/Prosjektegenskaper.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+        <View Type="HTML" DisplayName="{resource:View_ProjectAdminRoles_ProjectProperties_DisplayName}" Url="{site}/{resource:Lists_ProjectAdminRoles_Url_ProjectProperties}" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
             <Query>
                 <Where>
                     <Eq>
@@ -39,7 +39,7 @@
             <JSLink>clienttemplates.js</JSLink>
             <ViewData />
         </View>
-        <View Type="HTML" DisplayName="Prosjektadministrasjonsroller koblet mot SharePoint-gruppe" Url="{site}/{resource:Lists_ProjectAdminRoles_Url}/Gruppemedlemskap.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+        <View Type="HTML" DisplayName="{resource:View_ProjectAdminRoles_GroupMembership_DisplayName}" Url="{site}/{resource:Lists_ProjectAdminRoles_Url_GroupMembership}" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
             <Query>
                 <Where>
                     <Eq>
@@ -65,32 +65,32 @@
     </pnp:Views>
     <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
         <pnp:DataRow>
-            <pnp:DataValue FieldName="Title">Prosjektleder</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectAdminRoles_ProjectManager}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectFieldName">GtProjectManager</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectAdminPermissions">1,2,3</pnp:DataValue>
             <pnp:DataValue FieldName="ContentTypeId">0x0100618197F7C782A0459EB2FA5EBF1BDDF201</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="Title">Prosjekteier</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectAdminRoles_ProjectOwner}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectFieldName">GtProjectOwner</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectAdminPermissions">1,2,3</pnp:DataValue>
             <pnp:DataValue FieldName="ContentTypeId">0x0100618197F7C782A0459EB2FA5EBF1BDDF201</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="Title">Prosjektstøtte</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectAdminRoles_ProjectSupport}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectFieldName">GtProjectSupport</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectAdminPermissions">1,2,3</pnp:DataValue>
             <pnp:DataValue FieldName="ContentTypeId">0x0100618197F7C782A0459EB2FA5EBF1BDDF201</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="Title">Prosjektkontor</pnp:DataValue>
-            <pnp:DataValue FieldName="GtGroupName">Prosjektkontor</pnp:DataValue>
-            <pnp:DataValue FieldName="GtGroupLevel">Prosjekt</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectAdminRoles_ProjectOffice}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtGroupName">{resource:Lists_ProjectAdminRoles_ProjectOffice}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtGroupLevel">{resource:Lists_ProjectAdminRoles_GroupLevel_Project}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectAdminPermissions">1,2,3</pnp:DataValue>
             <pnp:DataValue FieldName="ContentTypeId">0x0100618197F7C782A0459EB2FA5EBF1BDDF202</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="Title">SP områdeadministrator</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectAdminRoles_SPAdmin}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectAdminPermissions">1,2,3,4</pnp:DataValue>
             <pnp:DataValue FieldName="ContentTypeId">0x0100618197F7C782A0459EB2FA5EBF1BDDF203</pnp:DataValue>
         </pnp:DataRow>

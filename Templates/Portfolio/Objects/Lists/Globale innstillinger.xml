@@ -1,157 +1,180 @@
-<pnp:ListInstance Title="{resource:Lists_Global_Settings_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_Global_Settings_Url}" EnableVersioning="true" Hidden="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false"
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
-    <pnp:Views RemoveExistingViews="true">
-        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_Global_Settings_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
-            <Query>
-                <GroupBy Collapse="TRUE" GroupLimit="30">
-                    <FieldRef Name="GtSettingsCategory" />
-                </GroupBy>
-            </Query>
-            <ViewFields>
-                <FieldRef Name="LinkTitle" />
-                <FieldRef Name="GtSettingsKey" />
-                <FieldRef Name="GtSettingsValue" />
-            </ViewFields>
-            <RowLimit Paged="TRUE">30</RowLimit>
-            <JSLink>clienttemplates.js</JSLink>
-        </View>
-    </pnp:Views>
-    <pnp:FieldRefs>
-        <pnp:FieldRef ID="a53cbdcc-210a-45d1-8fb2-c31498328f33" Name="GtSettingsKey" DisplayName="{resource:SiteFields_GtSettingsKey_DisplayName}" />
-        <pnp:FieldRef ID="b658a702-fd9d-4f75-b8f1-fe7fbdb91af4" Name="GtSettingsValue" DisplayName="{resource:SiteFields_GtSettingsValue_DisplayName}" />
-        <pnp:FieldRef ID="46bf2f85-9030-459e-b0bf-fee3f9389101" Name="GtSettingsEnabled" DisplayName="{resource:SiteFields_GtSettingsEnabled_DisplayName}" />
-        <pnp:FieldRef ID="206c2e34-865f-4c7c-ac8a-acab573aee88" Name="GtSettingsCategory" DisplayName="{resource:SiteFields_GtSettingsCategory_DisplayName}" />
-        <pnp:FieldRef ID="efb20164-49b3-4b61-b251-04eb7c2a4df9" Name="GtSettingsId" DisplayName="{resource:SiteFields_GtSettingsId_DisplayName}" />
-    </pnp:FieldRefs>
-    <pnp:Fields>
-        <Field ID="{fa564e0f-0c70-4ab9-b863-0177e6ddd247}" Type="Text" Name="Title" DisplayName="Tittel" Required="FALSE" SourceID="http://schemas.microsoft.com/sharepoint/v3" StaticName="Title" FromBaseType="TRUE" MaxLength="255" ColName="nvarchar1" RowOrdinal="0" ShowInEditForm="FALSE">
-            <Default>Innstilling uten navn</Default>
-        </Field>
-    </pnp:Fields>
-    <pnp:DataRows KeyColumn="GtSettingsId" UpdateBehavior="Skip">
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSettingsId">{e77e3aa3-a6b9-4a7e-8b94-6cb889124b82}</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Bruk Planner for å håndtere tiltak i Usikkerhetslisten</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsKey">RiskActionPlannerEnabled</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsValue">1</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsCategory">Usikkerhetstiltak i Planner</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSettingsId">{bbc4d267-e6c6-4496-9323-f87832106ff7}</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Navn på mappen i Planner for tiltak for Usikkerhetslisten</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsKey">RiskActionPlannerBucketName</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsValue">Tiltak</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsCategory">Usikkerhetstiltak i Planner</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSettingsId">{3078a897-4508-4242-80ab-da757db11289}</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Tekst som skal vises om det ikke er noen tiltak registrert</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsKey">RiskActionPlannerNoActionsText</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsValue">Det er ikke registrert noen tiltak for denne usikkerheten</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsCategory">Usikkerhetstiltak i Planner</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSettingsId">{8e998a8d-6e90-4ab2-be82-a64050e6fdda}</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Vis siste synkroniseringstidspunkt for Planner-oppgavene</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsKey">RiskActionPlannerShowLastSyncTime</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsValue">1</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsCategory">Usikkerhetstiltak i Planner</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSettingsId">{7aa15d27-4c34-4fdb-a6dc-818fbc6e0f0a}</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Vis tiltakene i en liste horisontalt</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsKey">RiskActionPlannerHorizontalLayout</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsValue">0</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsCategory">Usikkerhetstiltak i Planner</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSettingsId">{2261c914-7cef-4fa0-94c6-2fdee064840e}</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Avstand mellom tiltakene i listen</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsKey">RiskActionPlannerGap</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsValue">2px</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsCategory">Usikkerhetstiltak i Planner</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSettingsId">{cc992fb7-b59a-4e19-9338-a7e75bec2fd3}</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Standard konfigurasjon for Risikomatrise</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsKey">RiskMatrixDefaultConfigurationFile</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsValue">standard-konfigurasjon.json</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsCategory">Risikomatrise</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSettingsId">{eb334b01-bf84-435f-a74d-de48bed6affe}</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Standard konfigurasjon for Mulighetsmatrise</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsKey">OpportunityMatrixDefaultConfigurationFile</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsValue">standard-konfigurasjon.json</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsCategory">Mulighetsmatrise</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSettingsId">{4973a0af-f7fb-483c-81b8-163a2b06b488}</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Vis/skjul footer</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsKey">ShowFooter</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsValue">1</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsCategory">Generelt</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSettingsId">{fb8cb873-ac5f-45e0-a091-1e14bfc7ea33}</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Automatisk minimering av footer</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsKey">MinimizeFooter</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsValue">1</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsEnabled">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsCategory">Generelt</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSettingsId">{f3b39250-7373-43c0-82a8-26530198dd35}</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">URL til område for nyhetspublisering</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsKey">ProjectNewsHubUrl</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsValue">{hosturl}{site}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsCategory">Generelt</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSettingsId">{9caa9a60-bcbf-4f7a-bffa-9896d5da94cc}</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Mappe for publisering av nyheter</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsKey">ProjectNewsFolderName</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsValue">Prosjektnyheter</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsCategory">Generelt</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSettingsId">{9f18d1fb-5dfc-4888-a4f4-df9eed305b74}</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Ta i bruk Prosjektportalen assistenten</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsKey">UseAssistant</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsValue">0</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsCategory">Assistent</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSettingsId">{325c1059-22e5-4d66-bef6-6c5b7a9d11b4}</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Konfigurasjonsoppsett for assistenten</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsKey">AssistantConfig</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsValue">{
+<pnp:ListInstance Title="{resource:Lists_Global_Settings_Title}" Description="{resource:Lists_Global_Settings_Description}" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_Global_Settings_Url}" EnableVersioning="true" Hidden="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false" xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+  <pnp:Views>
+    <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_Global_Settings_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+      <Query>
+        <GroupBy Collapse="TRUE" GroupLimit="30">
+          <FieldRef Name="GtSettingsCategory" />
+        </GroupBy>
+      </Query>
+      <ViewFields>
+        <FieldRef Name="LinkTitle" />
+        <FieldRef Name="GtSettingsKey" />
+        <FieldRef Name="GtSettingsValue" />
+      </ViewFields>
+      <RowLimit Paged="TRUE">30</RowLimit>
+      <JSLink>clienttemplates.js</JSLink>
+    </View>
+  </pnp:Views>
+  <pnp:FieldRefs>
+    <pnp:FieldRef ID="a53cbdcc-210a-45d1-8fb2-c31498328f33" Name="GtSettingsKey" DisplayName="{resource:SiteFields_GtSettingsKey_DisplayName}" />
+    <pnp:FieldRef ID="b658a702-fd9d-4f75-b8f1-fe7fbdb91af4" Name="GtSettingsValue" DisplayName="{resource:SiteFields_GtSettingsValue_DisplayName}" />
+    <pnp:FieldRef ID="46bf2f85-9030-459e-b0bf-fee3f9389101" Name="GtSettingsEnabled" DisplayName="{resource:SiteFields_GtSettingsEnabled_DisplayName}" />
+    <pnp:FieldRef ID="206c2e34-865f-4c7c-ac8a-acab573aee88" Name="GtSettingsCategory" DisplayName="{resource:SiteFields_GtSettingsCategory_DisplayName}" />
+    <pnp:FieldRef ID="efb20164-49b3-4b61-b251-04eb7c2a4df9" Name="GtSettingsId" DisplayName="{resource:SiteFields_GtSettingsId_DisplayName}" />
+  </pnp:FieldRefs>
+  <pnp:Fields>
+    <Field ID="{fa564e0f-0c70-4ab9-b863-0177e6ddd247}" Type="Text" Name="Title" DisplayName="{resource:Lists_Global_Settings_Fields_Title_DisplayName}" Required="FALSE" SourceID="http://schemas.microsoft.com/sharepoint/v3" StaticName="Title" FromBaseType="TRUE" MaxLength="255" ColName="nvarchar1" RowOrdinal="0" ShowInEditForm="FALSE">
+      <Default>{resource:Lists_Global_Settings_Fields_Title_Default}</Default>
+    </Field>
+  </pnp:Fields>
+  <pnp:DataRows KeyColumn="GtSettingsId" UpdateBehavior="Skip">
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSettingsId">{e77e3aa3-a6b9-4a7e-8b94-6cb889124b82}</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerEnabled_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsKey">RiskActionPlannerEnabled</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsValue">1</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_RiskActionsPlanner}</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSettingsId">{bbc4d267-e6c6-4496-9323-f87832106ff7}</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerBucketName_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsKey">RiskActionPlannerBucketName</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsValue">{resource:Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerBucketName_Value}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_RiskActionsPlanner}</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSettingsId">{3078a897-4508-4242-80ab-da757db11289}</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerNoActionsText_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsKey">RiskActionPlannerNoActionsText</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsValue">{resource:Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerNoActionsText_Value}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_RiskActionsPlanner}</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSettingsId">{8e998a8d-6e90-4ab2-be82-a64050e6fdda}</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerShowLastSyncTime_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsKey">RiskActionPlannerShowLastSyncTime</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsValue">1</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_RiskActionsPlanner}</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSettingsId">{7aa15d27-4c34-4fdb-a6dc-818fbc6e0f0a}</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerHorizontalLayout_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsKey">RiskActionPlannerHorizontalLayout</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsValue">0</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_RiskActionsPlanner}</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSettingsId">{2261c914-7cef-4fa0-94c6-2fdee064840e}</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_RiskActionsPlanner_RiskActionPlannerGap_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsKey">RiskActionPlannerGap</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsValue">2px</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_RiskActionsPlanner}</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSettingsId">{cc992fb7-b59a-4e19-9338-a7e75bec2fd3}</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_RiskMatrix_RiskMatrixDefaultConfigurationFile_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsKey">RiskMatrixDefaultConfigurationFile</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsValue">{resource:Lists_Global_Settings_Category_RiskMatrix_RiskMatrixDefaultConfigurationFile_Value}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_RiskMatrix}</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSettingsId">{eb334b01-bf84-435f-a74d-de48bed6affe}</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_OpportunityMatrix_OpportunityMatrixDefaultConfigurationFile_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsKey">OpportunityMatrixDefaultConfigurationFile</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsValue">{resource:Lists_Global_Settings_Category_OpportunityMatrix_OpportunityMatrixDefaultConfigurationFile_Value}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_OpportunityMatrix}</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSettingsId">{4973a0af-f7fb-483c-81b8-163a2b06b488}</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_General_ShowFooter_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsKey">ShowFooter</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsValue">1</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_General}</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSettingsId">{fb8cb873-ac5f-45e0-a091-1e14bfc7ea33}</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_General_MinimizeFooter_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsKey">MinimizeFooter</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsValue">0</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_General}</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSettingsId">{f3b39250-7373-43c0-82a8-26530198dd35}</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_General_ProjectNewsHubUrl_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsKey">ProjectNewsHubUrl</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsValue">{hosturl}{site}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_General}</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSettingsId">{9caa9a60-bcbf-4f7a-bffa-9896d5da94cc}</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_General_ProjectNewsFolderName_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsKey">ProjectNewsFolderName</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsValue">{resource:Lists_Global_Settings_Category_General_ProjectNewsFolderName_Value}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_General}</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSettingsId">{9f18d1fb-5dfc-4888-a4f4-df9eed305b74}</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_Assistant_UseAssistant_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsKey">UseAssistant</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsValue">0</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_Assistant}</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSettingsId">{325c1059-22e5-4d66-bef6-6c5b7a9d11b4}</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_Assistant_AssistantConfig_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsKey">AssistantConfig</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsValue">{
                 "TenantId": "",
                 "KeyVaultName": ""
             }</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsCategory">Assistent</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSettingsId">{caa4cd51-956f-4387-8971-24e395c434ad}</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Krev tilgang for å bruke assistenten</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsKey">RequireAssistantAccess</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsValue">0</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsEnabled">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSettingsCategory">Assistent</pnp:DataValue>
-        </pnp:DataRow>
-    </pnp:DataRows>
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
+      <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_Assistant}</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+        <pnp:DataValue FieldName="GtSettingsId">{caa4cd51-956f-4387-8971-24e395c434ad}</pnp:DataValue>
+        <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_Assistant_RequireAssistantAccess_Title}</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsKey">RequireAssistantAccess</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsValue">0</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_Assistant}</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+        <pnp:DataValue FieldName="GtSettingsId">{b8f7a9c2-1e4d-4b5c-8f9e-3a7c6d2b1e5f}</pnp:DataValue>
+        <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_Assistant_UseBetaChannel_Title}</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsKey">UseBetaChannel</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsValue">0</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_Assistant}</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+        <pnp:DataValue FieldName="GtSettingsId">{c9e8b7a6-2f5e-4c6d-9a0b-4b8d7e3c2f6a}</pnp:DataValue>
+        <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_Assistant_BetaEndpointUrl_Title}</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsKey">BetaEndpointUrl</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsValue">https://pp365-ai-dev-bpg4e8g7fuf7grep.norwayeast-01.azurewebsites.net/</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_Assistant}</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+        <pnp:DataValue FieldName="GtSettingsId">{d0f9c8b7-3a6f-4d7e-0b1c-5c9e8f4d3a7b}</pnp:DataValue>
+        <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_Assistant_EndpointUrl_Title}</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsKey">EndpointUrl</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsValue">https://pp365-ai-d2dge4fqc2bhbba9.norwayeast-01.azurewebsites.net</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+        <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_Assistant}</pnp:DataValue>
+    </pnp:DataRow>
+  </pnp:DataRows>
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>

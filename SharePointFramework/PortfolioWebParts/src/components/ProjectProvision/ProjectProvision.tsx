@@ -78,7 +78,7 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
   return (
     <ProjectProvisionContext.Provider value={{ props, state, setState, column, setColumn, reset }}>
       <IdPrefixProvider value={fluentProviderId}>
-        <FluentProvider theme={customLightTheme}>
+        <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
           <ProvisionDrawer toast={dispatchToast} />
           <Menu positioning='below-end'>
             <MenuTrigger disableButtonEnhancement>

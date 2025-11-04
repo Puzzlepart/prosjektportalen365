@@ -12,6 +12,7 @@ import { UserMessages } from './UserMessages/UserMessages'
 import { ProjectStatusContext } from './context'
 import { IProjectStatusProps } from './types'
 import { useProjectStatus } from './useProjectStatus'
+import resource from 'SharedResources'
 
 export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
   const { context } = useProjectStatus(props)
@@ -41,6 +42,8 @@ export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
 
 ProjectStatus.displayName = 'ProjectStatus'
 ProjectStatus.defaultProps = {
+  title: resource.WebParts_ProjectStatus_Title,
+  fieldWidth: 250,
   persistSectionDataAttachmentFileName: 'PersistedSectionDataJson.json',
   snapshotAttachmentFileName: 'Snapshot.png',
   description: ''

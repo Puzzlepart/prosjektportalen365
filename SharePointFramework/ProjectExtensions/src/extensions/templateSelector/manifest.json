@@ -1,0 +1,19 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/command-set-extension-manifest.schema.json",
+  "id": "c9080212-e63e-47cc-8278-00ad38c3f5a5",
+  "alias": "TemplateSelectorCommand",
+  "componentType": "Extension",
+  "extensionType": "ListViewCommandSet",
+  "version": "1.12.0",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "items": {
+    "OPEN_TEMPLATE_SELECTOR": {
+      "title": {
+        "default": "Hent dokumentmal"
+      },
+      "type": "command",
+      "iconImageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFwAAABcCAYAAADj79JYAAADHUlEQVR4Xu3dsa7TMBQG4ONUFAkQgpmVkZENCTFUqYLUiYGBFWYegZUZNqY7MLHCgBpZ6mOwMoIQLEClNIlREENI06ZO7GPX/u+Ym/ikn09sJ3FdQT1/i8ViSUQf+/53Ztt+K6UeSyk/+HLeInDw5uN5hR4DuFfosYB7gx4TuBfouuBfieiHLx1Qz3lcI6JbA+fntE3XAldKPZdSvvIVXGN05Qw9VnBnzUvM4E7QYwdnR48CXAjxoq7ru0KI1YH+h61NjwK86ezn8/lFURRvXaNHA96MrrIsu+4aPSrwpjlxjR4duGv0KMFdokcL7go9anAX6NGDc6MD/N+dENfoBeCtW08OdIB37vVtowO85+GKTfQowC29MBn1wAvg02qjQX8kpTx5Dg/Ap4GT7mtHgAN8vIDGS+TxQTpHRp3haZrer+v6jTHN/wvqnYIRNbgl6L/FHrp6AG5JHeCWYA8VC3CAMwswh0OGM4OnaXqnqqqn3bBJkrzP81yeejpB3fic+qFd7gdwZn2AA5xZgDkcMhzg4wUOPUsRQrzM8/yiXfJqtbqy3W5fE9G9TsTPZVk+2Ww239rbTZUdVIbrjJXTNL1a1/U7InrYAf+klHogpfzS3m6qbIADfHyTYioLkeEn1gHAT4QytRvATUkGVE5QneY51AvAmWsJ4ABnFmAOF1SGZ1l2uSiKG13D2Wz2c71e/2K0Fcvl8mZZlpfaMauqqoIC1xkW2sQ/9tgA4BbkAc68zgvAAW7hOjY4HW3q2UWT4aamMkwFb0ZLu93umVLqdrusJEm+B9VpToXiOB7gHMqtGAAHOLMAczhkOMDHC+hMZRgfZfjIY1MwgspwPEsZTgajewDcKOdwYQAfNjK6B8CNcg4XBvBho+j2CGqUcg61B3DmWgI4wJkFmMMFleGYJsGcPRgWAnzv6yxBNSnIcGQ4MpwjBzBNQnPFh6mVgmkSUwUNHh9Up2nQxVpRALdG218wwAHOLMAcTivDiciXHzC1uuKDN6tJMCfDsXBWV3zw5rv2AKe9dcL7lkI1duMDcIBbWUQGTcr+pXW2bfgf3hMhgpa4HF8AAAAASUVORK5CYII="
+    }
+  }
+}

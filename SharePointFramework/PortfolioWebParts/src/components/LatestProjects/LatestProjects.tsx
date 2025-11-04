@@ -1,0 +1,102 @@
+import { format } from '@fluentui/react'
+import {
+  Button,
+  Caption1,
+  FluentProvider,
+  IdPrefixProvider,
+  Link
+} from '@fluentui/react-components'
+import { ChevronDownFilled, ChevronUpFilled } from '@fluentui/react-icons'
+import strings from 'PortfolioWebPartsStrings'
+import {
+  LoadingSkeleton,
+  ProjectLogo,
+  UserMessage,
+  WebPartTitle,
+  formatDate,
+  customLightTheme
+} from 'pp365-shared-library'
+import React, { FC } from 'react'
+import styles from './LatestProjects.module.scss'
+import { ILatestProjectsProps } from './types'
+import { useLatestProjects } from './useLatestProjects'
+import resource from 'SharedResources'
+
+/**
+ * Renders a list of the latest projects. The list is sorted by the Created date
+ * by default.
+ *
+ * @param props - The component props.
+ */
+export const LatestProjects: FC<ILatestProjectsProps> = (props) => {
+  const { className, loading, projects, viewAll, toggleViewAll, fluentProviderId } =
+    useLatestProjects(props)
+
+  /**
+   * Function to render the latest projects.
+   */
+  function renderLatestProjects(): JSX.Element[] | JSX.Element {
+    if (!loading && projects.length === 0) {
+      return (
+        <UserMessage title={strings.NoProjectsFoundTitle} text={strings.NoProjectsFoundMessage} />
+      )
+    }
+    const viewCount = viewAll ? projects.length : props.rowLimit
+    return [...projects].slice(0, viewCount).map((site, idx) => {
+      const created = formatDate(site.Created, true)
+      const url = site?.Path || site?.SPWebUrl
+
+      return (
+        <div key={idx} className={className}>
+          <ProjectLogo
+            title={site.Title}
+            url={url}
+            renderMode='list'
+            size='48px'
+            hidden={!props.showProjectLogo}
+          />
+          <div className={styles.container}>
+            <div className={styles.title}>
+              <Link href={url} target='_blank' title={site.Title}>
+                {site.Title}
+              </Link>
+            </div>
+            <Caption1 title={format(strings.CreatedTooltipText, created)}>{created}</Caption1>
+          </div>
+        </div>
+      )
+    })
+  }
+
+  return (
+    <IdPrefixProvider value={fluentProviderId}>
+      <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
+        <div className={styles.root}>
+          <WebPartTitle title={props.title} />
+          <div className={styles.container}>
+            {loading ? <LoadingSkeleton /> : renderLatestProjects()}
+            <div hidden={projects.length <= props.rowLimit}>
+              <Button
+                appearance='subtle'
+                size='small'
+                icon={viewAll ? <ChevronUpFilled /> : <ChevronDownFilled />}
+                title={viewAll ? strings.ViewLessText : strings.ViewMoreText}
+                onClick={toggleViewAll}
+              >
+                {viewAll ? strings.ViewLessText : strings.ViewMoreText}
+              </Button>
+            </div>
+          </div>
+        </div>
+      </FluentProvider>
+    </IdPrefixProvider>
+  )
+}
+
+LatestProjects.defaultProps = {
+  title: resource.WebParts_LatestProjects_Title,
+  showProjectLogo: true,
+  rowLimit: 5,
+  minRowLimit: 3,
+  maxRowLimit: 10
+}

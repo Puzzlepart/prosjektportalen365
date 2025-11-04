@@ -5,6 +5,7 @@ import { useProjectInformationContext } from '../context'
 import strings from 'ProjectWebPartsStrings'
 import { CLOSE_PANEL } from '../reducer'
 import { useEditPropertiesPanelSubmit } from './useEditPropertiesPanelSubmit'
+import { format } from '@fluentui/react'
 
 /**
  * Edit properties panel uses `CustomEditPanel` to render an edit
@@ -16,7 +17,7 @@ export const EditPropertiesPanel: FC = () => {
   return (
     <CustomEditPanel
       isOpen={context.state.activePanel === 'EditPropertiesPanel'}
-      headerText={strings.EditProjectInformationText}
+      headerText={format(strings.EditProjectInformationText, context.props.title?.toLowerCase())}
       fieldValues={context.state.data.fieldValues}
       fields={context.state.properties}
       dataAdapter={SPDataAdapter}

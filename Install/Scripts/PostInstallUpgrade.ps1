@@ -1,5 +1,5 @@
-﻿
-$LastInstall = Get-PnPListItem -List "Installasjonslogg" -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>" | Select-Object -First 1 -Wait
+﻿$InstallationEntriesList = Get-PnPList -Identity (Get-Resource -Name "Lists_InstallationLog_Title") -ErrorAction Stop
+$LastInstall = Get-PnPListItem -List $InstallationEntriesList.Id -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>" | Select-Object -First 1 -Wait
 if ($null -ne $LastInstall) {
     $PreviousVersion = ParseVersionString -VersionString $LastInstall.FieldValues["InstallVersion"]
 
@@ -11,7 +11,7 @@ if ($null -ne $LastInstall) {
     if ($PreviousVersion -lt [version]"1.6.0") {
         Write-Host "[INFO] In version v1.6.0 we added Project timeline configuration and reworked the TimelineContent list. Merging data now as part of the upgrade"
 
-        $Items = Get-PnPListItem -List "Tidslinjeinnhold"
+        $Items = Get-PnPListItem -List (Get-Resource -Name "Lists_TimelineContent_Title")
         $Milestone = [Uri]::UnescapeDataString("Milep%C3%A6l")
         foreach ($Item in $Items) {
             $OldSiteId = $Item.FieldValues["SiteIdLookup"].LookupId
@@ -34,8 +34,8 @@ if ($null -ne $LastInstall) {
             Invoke-PnPQuery
         }
 
-        Remove-PnPField -List "Tidslinjeinnhold" -Identity "SiteIdLookup" -Force -ErrorAction SilentlyContinue
-        Remove-PnPField -List "Tidslinjeinnhold" -Identity "TimelineType" -Force -ErrorAction SilentlyContinue
+        Remove-PnPField -List (Get-Resource -Name "Lists_TimelineContent_Title") -Identity "SiteIdLookup" -Force -ErrorAction SilentlyContinue
+        Remove-PnPField -List (Get-Resource -Name "Lists_TimelineContent_Title") -Identity "TimelineType" -Force -ErrorAction SilentlyContinue
         Invoke-PnPQuery
     }
 
@@ -126,10 +126,10 @@ if ($null -ne $LastInstall) {
         }
 
         # Get the folder where the attachments should be uploaded
-        $ProjectStatusAttachmentsFolder = Get-PnPFolder -Url "Prosjektstatusvedlegg"
+        $ProjectStatusAttachmentsFolder = Get-PnPFolder -Url (Get-Resource -Name "Lists_ProjectStatusAttachments_Url")
 
         # Get all the items in the list
-        $ProjectStatusItems = Get-PnPListItem -List "Prosjektstatus"
+        $ProjectStatusItems = Get-PnPListItem -List (Get-Resource -Name "Lists_ProjectStatus_Title")
 
         foreach ($ProjectStatusItem in $ProjectStatusItems) {
             $Id = $ProjectStatusItem["ID"]
@@ -139,7 +139,7 @@ if ($null -ne $LastInstall) {
             Write-Host "Processing item $($Id) ($Title)" -InformationAction Ignore
 
             # Create a folder for the item in the attachments folder
-            Write-Host "`tCreating folder for item $Id in Prosjektstatusvedlegg" -InformationAction Ignore
+            Write-Host "`tCreating folder for item $Id in $($ProjectStatusAttachmentsFolder.Name)" -InformationAction Ignore
             Add-PnPFolder -Folder $ProjectStatusAttachmentsFolder -Name $Id -ErrorAction SilentlyContinue | Out-Null
             $TempAttachmentFolder = "$($TEMP_FOLDER)/$Id"
 
@@ -149,21 +149,21 @@ if ($null -ne $LastInstall) {
             }
 
             # Download the attachments for the item to the temp folder
-            Get-PnPListItemAttachment -List "Prosjektstatus" -Identity $Id -Path $TempAttachmentFolder -Force -WarningAction SilentlyContinue -ErrorAction SilentlyContinue
+            Get-PnPListItemAttachment -List (Get-Resource -Name "Lists_ProjectStatus_Title") -Identity $Id -Path $TempAttachmentFolder -Force -WarningAction SilentlyContinue -ErrorAction SilentlyContinue
 
             # Check if the field GtSectionDataJson has a value
             if (-not [string]::IsNullOrEmpty($PersistedSectionDataJson)) {
-                Write-Host "`tCreating $PERSISTED_SECTION_DATA_JSON_FILENAME for item $Id in Prosjektstatusvedlegg/$Id" -InformationAction Ignore
+                Write-Host "`tCreating $PERSISTED_SECTION_DATA_JSON_FILENAME for item $Id in $($ProjectStatusAttachmentsFolder.Name)/$Id" -InformationAction Ignore
                 $PersistedSectionDataJson | Out-File "$($TempAttachmentFolder)/$($PERSISTED_SECTION_DATA_JSON_FILENAME)" -Encoding utf8
-                Add-PnPFile -Path "$($TempAttachmentFolder)/$($PERSISTED_SECTION_DATA_JSON_FILENAME)" -Folder "Prosjektstatusvedlegg/$Id" -NewFileName $PERSISTED_SECTION_DATA_JSON_FILENAME -ErrorAction SilentlyContinue | Out-Null
-                Write-Host "`tSuccessfully uploaded $PERSISTED_SECTION_DATA_JSON_FILENAME for item $Id in Prosjektstatus" -ForegroundColor Green -InformationAction Ignore
+                Add-PnPFile -Path "$($TempAttachmentFolder)/$($PERSISTED_SECTION_DATA_JSON_FILENAME)" -Folder "$($ProjectStatusAttachmentsFolder.Name)/$Id" -NewFileName $PERSISTED_SECTION_DATA_JSON_FILENAME -ErrorAction SilentlyContinue | Out-Null
+                Write-Host "`tSuccessfully uploaded $PERSISTED_SECTION_DATA_JSON_FILENAME for item $Id in $(Get-Resource -Name "Lists_ProjectStatus_Title")" -ForegroundColor Green -InformationAction Ignore
             }
 
             # Check $TempAttachmentFolder for PNG file starting with "Ny-statusrapport-for" to exclude potential attachments uploaded by the end users
             $Snapshot = Get-ChildItem -Path $TempAttachmentFolder | Where-Object { $_.Extension -eq ".png" -and $_.Name -like "Ny-statusrapport-for*" } | Select-Object -First 1
             if ($null -ne $Snapshot) {
-                Write-Host "`tCreating $SNAPSHOT_FILENAME for item $Id in Prosjektstatusvedlegg/$Id" -InformationAction Ignore
-                Add-PnPFile -Path $Snapshot.FullName -Folder "Prosjektstatusvedlegg/$Id" -NewFileName $SNAPSHOT_FILENAME -ErrorAction SilentlyContinue | Out-Null
+                Write-Host "`tCreating $SNAPSHOT_FILENAME for item $Id in $($ProjectStatusAttachmentsFolder.Name)/$Id" -InformationAction Ignore
+                Add-PnPFile -Path $Snapshot.FullName -Folder "$($ProjectStatusAttachmentsFolder.Name)/$Id" -NewFileName $SNAPSHOT_FILENAME -ErrorAction SilentlyContinue | Out-Null
             }
         }
         Write-Host "[SUCCESS] Project Status items successfully processed"
@@ -172,10 +172,9 @@ if ($null -ne $LastInstall) {
     if ($PreviousVersion -lt [version]"1.9.0") {
         Write-Host "[INFO] In version v1.9.0 we introduced data source levels. Adding default level 'Portfolio' to existing data sources..."
         
-        Get-PnPListItem -List "Datakilder" | Where-Object { $_["Title"] -eq [System.Uri]::UnescapeDataString("Gevinstoversikt (Prosjektniv%C3%A5)") } | Remove-PnPListItem -Recycle -Force -ErrorAction SilentlyContinue | Out-Null
-        Get-PnPListItem -List "Datakilder" | Where-Object { $_["Title"] -eq "Programrisiko" } | Remove-PnPListItem -Recycle -Force -ErrorAction SilentlyContinue | Out-Null
-        
-        Get-PnPListItem -List "Datakilder" | ForEach-Object {
+        Get-PnPListItem -List (Get-Resource -Name "Lists_DataSources_Title") | Where-Object { $_["Title"] -eq [System.Uri]::UnescapeDataString("Gevinstoversikt (Prosjektniv%C3%A5)") } | Remove-PnPListItem -Recycle -Force -ErrorAction SilentlyContinue | Out-Null
+        Get-PnPListItem -List (Get-Resource -Name "Lists_DataSources_Title") | Where-Object { $_["Title"] -eq "Programrisiko" } | Remove-PnPListItem -Recycle -Force -ErrorAction SilentlyContinue | Out-Null
+        Get-PnPListItem -List (Get-Resource -Name "Lists_DataSources_Title") | ForEach-Object {
             $Item = $_
             $Levels = $Item["GtDataSourceLevel"]
             if ($null -eq $Levels) {

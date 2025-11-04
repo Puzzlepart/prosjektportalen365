@@ -3,8 +3,6 @@ declare interface ISharedLibraryStrings {
   NoAccessToPortfolioErrorText: string
   BooleanYes: string
   BooleanNo: string
-  GtModerationStatus_Choice_Draft: string
-  GtModerationStatus_Choice_Published: string
   SaveText: string
   CloseText: string
   Aria: {
@@ -27,7 +25,6 @@ declare interface ISharedLibraryStrings {
   },
   AllocationPercetageLabel: string
   AllocationStatusLabel: string
-  BarLabel: string
   BudgetTotalLabel: string
   CategoryFieldLabel: string
   ColumnRenderOptionDate: string
@@ -35,7 +32,6 @@ declare interface ISharedLibraryStrings {
   CostsTotalLabel: string
   CurrentPhaseLabel: string
   DescriptionFieldLabel: string
-  DiamondLabel: string
   EndDateLabel: string
   ErrorTitle: string
   FiltersString: string
@@ -46,22 +42,20 @@ declare interface ISharedLibraryStrings {
   LastPublishedStatusreport: string
   LoadingText: string
   MilestoneDateLabel: string
-  MilestoneLabel: string
   NameLabel: string
-  PhaseLabel: string
-  ProjectLabel: string
   ProjectTimelineErrorTransformItemText: string
   ProjectTimelineInfoText: string
   ProjectTimelineTitle: string
   ProjectTimelineItemInfo: string
+  ProgramTimelineTitle: string
   ResourceLabel: string
+  ResourceAbsenceLabel: string
+  DepartmentLabel: string
   RoleLabel: string
   SiteTitleLabel: string
   StartDateLabel: string
-  SubPhaseLabel: string
   TagFieldLabel: string
   TimelineGroupDescription: string
-  TriangleLabel: string
   TypeLabel: string
   SyncListAddingField: string
 }

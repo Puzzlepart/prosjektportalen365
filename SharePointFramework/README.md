@@ -41,9 +41,28 @@ Eksempel:
 
 Alle nye funksjoner og feilrettinger skal utvikles mot den aktuelle release-branch. Formatet på versjonene følger [Semantic Versioning](http://semver.org/spec/v2.0.0.html). `Minor`-release får egen branch. `Patch`-release inngår i den relevante branchen.
 
+**Arbeidsflyt for GitHub Issues:**
+
+Når du jobber med et spesifikt GitHub issue, opprett en branch fra gjeldende release-branch med følgende navnekonvensjon:
+
+```text
+issues/<issue-nummer>
+```
+
+**Eksempler:**
+
+```bash
+git checkout releases/1.12
+git checkout -b issues/1628
+```
+
+Når arbeidet er ferdig, opprett en pull request tilbake til release-branchen. Husk å referere til issue-nummeret i PR-beskrivelsen.
+
 ### Semantic Commit Messages
 
 Vi bruker semantiske commit-meldinger for å gjøre historikken mer lesbar og for å automatisere versjonering og changelog-generering.
+
+**OBS: Alle commit-meldinger skal skrives på engelsk.**
 
 **Format:** `<type>(<scope>): <subject>`
 
@@ -57,7 +76,7 @@ feat: add hat to cat
 |     |
 |     +-> Sammendrag i presens
 |
-+-------> Type: chore, docs, feat, fix, refactor, style, eller ci
++-------> Type: chore, docs, feat, fix, refactor, style, ci eller install
 ```
 
 **Commit-typer:**
@@ -69,6 +88,7 @@ feat: add hat to cat
 - `refactor`: refaktorering av produksjenskode, f.eks. omdøping av en variabel
 - `chore`: oppdatering av grunt-oppgaver osv.; ingen endring i produksjenskode
 - `ci`: endringer i kontinuerlig integrasjon-konfigurasjon og skript (f.eks. GitHub Actions)
+- `install`: endringer i Installasjonsskript
 
 **Flere eksempler:**
 
@@ -80,6 +100,7 @@ style(shared): fix indentation in utils
 refactor(projectextensions): simplify project setup logic
 chore: update dependencies
 ci: improve build process
+install: update installation scripts
 ```
 
 **Referanser:**
@@ -128,7 +149,7 @@ feat(shared): add new utility function [packages-only]
 | IdeaRegistration              | PortfolioExtensions | Liste utvidelse for Idéregistrering                    | 5d26712e-bdad-4ebf-b33f-9c759042bef6 |
 | LatestProjectsWebPart         | PortfolioWebParts   | Siste prosjekter                                       | 941fd73c-b957-41c3-8d4f-082268407f10 |
 | PortfolioAggregationWebPart   | PortfolioWebParts   | Portefølje aggregeringsoversikt (eks: Gevinstoversikt) | 6c0e484d-f6da-40d4-81fc-ec1389ef29a8 |
-| PortfolioInsightsWebPart      | PortfolioWebParts   | Porteføljeinnsyn                                       | 875ca87a-e331-4ffb-bc69-0272fdf80e41 |
+| PortfolioInsightsWebPart      | PortfolioWebParts   | Porteføljeinnsikt                                       | 875ca87a-e331-4ffb-bc69-0272fdf80e41 |
 | PortfolioOverviewWebPart      | PortfolioWebParts   | Porteføljeoversikt                                     | e58e3d32-057a-4418-97ce-172b92482ba2 |
 | ProjectListWebPart            | PortfolioWebParts   | Prosjektutlisting (porteføljeforside)                  | 54fbeb7d-e463-4dcc-8873-50a3ab2f0f68 |
 | PortfolioTimelineWebPart      | PortfolioWebParts   | Prosjekttidslinje (Porteføljenivå)                     | 7284c568-f66c-4218-bb2c-3734a3cfa581 |

@@ -23,7 +23,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
   } = usePortfolioAggregation(props)
 
   return (
-    <div className={styles.root}>
+    <div className={styles.portfolioAggregation}>
       <PortfolioAggregationContext.Provider value={context}>
         <div className={styles.container}>
           <List
@@ -31,7 +31,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
             title={props.title}
             enableShimmer={context.state.loading || context.state.isChangingView}
             items={context.items}
-            columns={context.columns}
+            columns={context.state.columns}
             hiddenColumns={props.hiddenColumns}
             groups={context.state.groups}
             selection={selection}

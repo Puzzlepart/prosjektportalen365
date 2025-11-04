@@ -10,4 +10,9 @@ export interface IAllocationSearchResult extends ISearchResult {
   GtAllocationStatusOWSCHCS: string
   GtAllocationCommentOWSMTXT: string
   SiteTitle: string
+  GtResourceUserOWSUSER: string
+}
+
+export interface IEnrichedAllocationSearchResult extends IAllocationSearchResult {
+  userDepartment?: string
 }

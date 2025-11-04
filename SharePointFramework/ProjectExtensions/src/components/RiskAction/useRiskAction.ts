@@ -1,6 +1,6 @@
 import { useId } from '@fluentui/react-components'
 import { useMemo, useState } from 'react'
-import { useRiskActionFieldCustomizerContext } from '../../riskAction/context'
+import { useRiskActionFieldCustomizerContext } from '../../extensions/riskAction/context'
 
 /**
  * Custom hook for managing risk action functionality.

@@ -12,6 +12,7 @@ import {
 import { unmountComponentAtNode } from 'react-dom'
 import { BaseProgramWebPart } from '../baseProgramWebPart'
 import { IProgramProjectOverviewProps } from './types'
+import resource from 'SharedResources'
 
 export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramProjectOverviewProps> {
   private _configuration: IPortfolioOverviewConfiguration
@@ -32,6 +33,7 @@ export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramP
   public async onInit(): Promise<void> {
     await super.onInit()
     this._configuration = await this._dataAdapter.getPortfolioConfig()
+    this.properties.title = resource.WebParts_ProgramProjectOverview_Title
   }
 
   protected onDispose(): void {

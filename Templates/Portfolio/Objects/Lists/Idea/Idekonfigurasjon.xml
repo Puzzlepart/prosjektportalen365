@@ -1,9 +1,9 @@
-<pnp:ListInstance Title="{resource:Lists_Idea_Configuration_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_Idea_Configuration_Url}" Hidden="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false"
+<pnp:ListInstance Title="{resource:Lists_Idea_Configuration_Title}" Description="{resource:Lists_Idea_Configuration_Description}" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_Idea_Configuration_Url}" Hidden="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false"
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100C21DA86A3A3245E78C51758E7B8F3041" Default="true" />
     </pnp:ContentTypeBindings>
-    <pnp:Views RemoveExistingViews="true">
+    <pnp:Views>
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_Idea_Configuration_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
             <Query>
                 <OrderBy>
@@ -29,22 +29,22 @@
     <pnp:DataRows KeyColumn="Title" UpdateBehavior="Overwrite">
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">Standard</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIdeaProcessingList">Idébehandling</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIdeaRegistrationList">Idéregistrering</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIdeaProcessingList">{resource:Lists_IdeaProcessing_Title}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIdeaRegistrationList">{resource:Lists_IdeaRegistration_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDescription">{
-                "registration": "Dersom idéen blir godkjent vil det bli opprettet en detaljert idé-side for idéen og et element i Idébehandlingslisten.",
-                "processing": "Dersom idéen blir godkjent vil det være mulig å opprette prosjektdata som kan bli brukt for provisjonering av området.",
-                "projectData": "Tilknytt prosjektdata til ideen for å synkronisere data til et prosjekt senere. Når prosjektdata er opprettet, er det viktig å fylle ut ønsket metadata, deretter legge inn url for prosjektet, dette gjør at metadata synkroniseres til prosjektet ved provisjonering. Url til prosjektet kan enten fylles inn manuelt etter at et prosjekt har fått URL eller via en bestillingsløsning."
+                "registration": "{resource:Lists_Idea_Configuration_GtDescription_Registration_Value}",
+                "processing": "{resource:Lists_Idea_Configuration_GtDescription_Processing_Value}",
+                "projectData": "{resource:Lists_Idea_Configuration_GtDescription_ProjectData_Value}"
             }</pnp:DataValue>
             <pnp:DataValue FieldName="GtIdeaRegistrationChoices">{
-                "approve": { "choice": "Godkjenn", "recommendation": "Godkjent for detaljering av idé" },
-                "consideration": { "choice": "Under vurdering", "recommendation": "Under vurdering" },
-                "reject": { "choice": "Avvis", "recommendation": "Avvist" }
+                "approve": { "choice": "{resource:Lists_Idea_Configuration_GtIdeaRegistrationChoices_Approve_Choice_Value}", "recommendation": "{resource:Lists_Idea_Configuration_GtIdeaRegistrationChoices_Approve_Recommendation_Value}" },
+                "consideration": { "choice": "{resource:Lists_Idea_Configuration_GtIdeaRegistrationChoices_Consideration_Choice_Value}", "recommendation": "{resource:Lists_Idea_Configuration_GtIdeaRegistrationChoices_Consideration_Recommendation_Value}" },
+                "reject": { "choice": "{resource:Lists_Idea_Configuration_GtIdeaRegistrationChoices_Reject_Choice_Value}", "recommendation": "{resource:Lists_Idea_Configuration_GtIdeaRegistrationChoices_Reject_Recommendation_Value}" }
             }</pnp:DataValue>
             <pnp:DataValue FieldName="GtIdeaProcessingChoices">{
-                "approve": { "choice": "Godkjenn", "recommendation": "Godkjent for konseptutredning" },
-                "consideration": { "choice": "Under vurdering", "recommendation": "Under vurdering" },
-                "reject": { "choice": "Avvis", "recommendation": "Avvist" }
+                "approve": { "choice": "{resource:Lists_Idea_Configuration_GtIdeaProcessingChoices_Approve_Choice_Value}", "recommendation": "{resource:Lists_Idea_Configuration_GtIdeaProcessingChoices_Approve_Recommendation_Value}" },
+                "consideration": { "choice": "{resource:Lists_Idea_Configuration_GtIdeaProcessingChoices_Consideration_Choice_Value}", "recommendation": "{resource:Lists_Idea_Configuration_GtIdeaProcessingChoices_Consideration_Recommendation_Value}" },
+                "reject": { "choice": "{resource:Lists_Idea_Configuration_GtIdeaProcessingChoices_Reject_Choice_Value}", "recommendation": "{resource:Lists_Idea_Configuration_GtIdeaProcessingChoices_Reject_Recommendation_Value}" }
             }</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>

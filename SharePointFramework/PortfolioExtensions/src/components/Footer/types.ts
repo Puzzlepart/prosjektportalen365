@@ -43,6 +43,11 @@ export interface IFooterProps {
   hasAssistantAccess: boolean
 
   /**
+   * The assistant endpoint URL
+   */
+  assistantEndpointUrl: string
+
+  /**
    * Whether or not to show the footer
    */
   showFooter: boolean

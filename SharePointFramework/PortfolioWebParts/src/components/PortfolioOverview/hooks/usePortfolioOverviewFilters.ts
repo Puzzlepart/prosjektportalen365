@@ -4,6 +4,7 @@ import * as uniq from 'array-unique'
 import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import _ from 'underscore'
 import { IPortfolioOverviewContext } from '../context'
+import strings from 'PortfolioWebPartsStrings'
 
 /**
  * Returns an array of filters for the portfolio overview based on the current view and items.
@@ -31,9 +32,9 @@ export function usePortfolioOverviewFilters(context: IPortfolioOverviewContext) 
         const name =
           column.fieldName.includes('GtIsProgram') || column.fieldName.includes('GtIsParentProject')
             ? value === '1'
-              ? 'Ja'
+              ? strings.BooleanYes
               : value === '0'
-              ? 'Nei'
+              ? strings.BooleanNo
               : value
             : value
 

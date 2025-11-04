@@ -1,7 +1,7 @@
 <pnp:ListInstance Title="{resource:Lists_SitePages_Title}" Description="" DocumentTemplate="" TemplateType="119" Url="SitePages" EnableVersioning="true" EnableMinorVersions="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="1" TemplateFeatureID="00bfea71-c796-4402-9f2f-0eb9a6e71b18" ContentTypesEnabled="true" EnableAttachments="false" EnableFolderCreation="true" DefaultDisplayFormUrl="{site}/SitePages/Forms/DispForm.aspx" DefaultEditFormUrl="{site}/SitePages/Forms/EditForm.aspx" DefaultNewFormUrl="{site}/SitePages/Forms/Upload.aspx" IrmExpire="false" IrmReject="false" IsApplicationList="true"   
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
-    <pnp:Views RemoveExistingViews="true">
-        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle sider" Url="{site}/SitePages/Forms/AllPages.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ToolbarTemplate="WikiLibraryViewToolBar">
+    <pnp:Views>
+        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllPages_DisplayName}" Url="{site}/SitePages/Forms/AllPages.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ToolbarTemplate="WikiLibraryViewToolBar">
             <Query>
                 <OrderBy>
                     <FieldRef Name="Modified" Ascending="FALSE" />
@@ -22,7 +22,7 @@
         </View>
     </pnp:Views>
     <pnp:Folders>
-        <pnp:Folder Name="Prosjektnyheter" />
+        <pnp:Folder Name="{resource:Lists_Global_Settings_Category_General_ProjectNewsFolderName_Value}" />
     </pnp:Folders>
     <pnp:FieldRefs>
         <pnp:FieldRef ID="fba7ced6-9970-4b14-ab9c-7c809310d86d" Name="GtSiteId" DisplayName="{resource:SiteFields_GtSiteId_DisplayName}" />

@@ -1,5 +1,4 @@
 import { override } from '@microsoft/decorators'
-import { Log } from '@microsoft/sp-core-library'
 import {
   BaseListViewCommandSet,
   Command,
@@ -18,11 +17,10 @@ import { isUserAuthorized } from '../../helpers/isUserAuthorized'
 import strings from 'PortfolioExtensionsStrings'
 import { Choice, IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
 import { find } from 'underscore'
-import { ProjectContentColumn, SPProjectContentColumnItem } from 'pp365-shared-library'
+import { ProjectContentColumn, SPProjectContentColumnItem, themeColor } from 'pp365-shared-library'
 import _ from 'underscore'
 import { PortalDataService } from 'pp365-shared-library/lib/services/PortalDataService'
-
-const LOG_SOURCE: string = 'IdeaRegistrationCommand'
+import resource from 'SharedResources'
 
 export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any> {
   private _userAuthorized: boolean
@@ -34,19 +32,37 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
 
   @override
   public async onInit(): Promise<void> {
-    Log.info(LOG_SOURCE, 'onInit: Initializing...')
     this._sp = spfi().using(SPFx(this.context))
     this._portalDataService = await new PortalDataService().configure({
       spfxContext: this.context
     })
     this._openCmd = this.tryGetCommand('OPEN_IDEA_REGISTRATION_DIALOG')
+
+    this._openCmd.title = strings.IdeaRegistrationCommandTitle
+
+    const fillColor = themeColor
+    const exportSvgCmd = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2048 2048'%3E%3Cpath d='M1024 0q141 0 272 36t244 104 207 160 161 207 103 245 37 272q0 141-36 272t-104 244-160 207-207 161-245 103-272 37q-141 0-272-36t-244-104-207-160-161-207-103-245-37-272q0-141 36-272t104-244 160-207 207-161T752 37t272-37zM907 1347q22 0 42-8t35-24l429-429q15-15 23-35t8-41q0-22-8-42t-23-34-35-23-42-9q-21 0-41 8t-36 23l-352 352-118-118q-32-32-77-32-22 0-42 8t-35 24-23 34-9 42q0 21 8 41t24 36l195 195q15 15 35 23t42 9z' fill='${fillColor.replace(
+      '#',
+      '%23'
+    )}'%3E%3C/path%3E%3C/svg%3E`
+    const exportSvgLinkCmd = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2048 2048'%3E%3Cpath d='M960 0q97 0 187 25t168 71 143 110 110 142 71 169 25 187q0 145-55 269t-157 225q-83 82-127 183t-45 219v256q0 40-15 75t-41 61-61 41-75 15H832q-40 0-75-15t-61-41-41-61-15-75v-256q0-118-44-219t-128-183q-102-101-157-225t-55-269q0-97 25-187t71-168 110-143T604 96t169-71T960 0zm128 1920q26 0 45-19t19-45v-192H768v192q0 26 19 45t45 19h256zm67-384q13-129 66-234t143-196q83-84 127-183t45-219q0-119-45-224t-124-183-183-123-224-46q-119 0-224 45T553 297 430 480t-46 224q0 119 44 218t128 184q90 91 143 196t66 234h390z' fill='${fillColor.replace(
+      '#',
+      '%23'
+    )}'%3E%3C/path%3E%3C/svg%3E`
+
+    this._openCmd.iconImageUrl = exportSvgCmd
     this._openCmd.visible = false
     this._openLinkCmd = this.tryGetCommand('IDEA_PROCESSING_LINK')
-    // this._openLinkCmd.title = `Gå til ${this._config.processingList}`
-    this._openLinkCmd.visible = this.context.pageContext.list.title.includes('registrering')
+
+    this._openLinkCmd.title = strings.IdeaProcessingLinkTitle
+    this._openLinkCmd.iconImageUrl = exportSvgLinkCmd
+    this._openLinkCmd.visible = this.context.pageContext.list.title.includes(
+      strings.IdeaRegistrationIncludeString
+    )
+
     this._userAuthorized = await isUserAuthorized(
       this._sp,
-      strings.IdeaProcessorsSiteGroup,
+      resource.Security_SiteGroup_IdeaProcessors_Title,
       this.context
     )
     this.context.listView.listViewStateChangedEvent.add(this, this._onListViewStateChanged)
@@ -112,7 +128,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
    */
   private _getIdeaConfiguration = async (): Promise<IdeaConfigurationModel[]> => {
     const config = await this._sp.web.lists
-      .getByTitle(strings.IdeaConfigurationTitle)
+      .getByTitle(resource.Lists_Idea_Configuration_Title)
       .select(...new SPIdeaConfigurationItem().fields)
       .items()
 
@@ -134,8 +150,6 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
    * On ListView state changed, check if the user is authorized to use this command
    */
   private _onListViewStateChanged = async (): Promise<void> => {
-    Log.info(LOG_SOURCE, 'onListViewStateChanged: ListView state changed')
-
     const listName = this.context.pageContext.list.title
     const [config] = (await this._getIdeaConfiguration()).filter(
       (item) => item.registrationList === listName
@@ -151,11 +165,6 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
           config.registrationList === listName
       }
       this.raiseOnChange()
-    } else {
-      Log.info(
-        LOG_SOURCE,
-        'onListViewStateChanged: You are currently not authorized to use this command or the list is not configured for this command'
-      )
     }
   }
 
@@ -175,8 +184,6 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
           ?.recommendation,
         GtIdeaRecommendationComment: comment
       })
-
-    Log.info(LOG_SOURCE, `Updated ${this._config.registrationList}: Rejected`)
     window.location.reload()
   }
 
@@ -196,8 +203,6 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
           ?.recommendation,
         GtIdeaRecommendationComment: comment
       })
-
-    Log.info(LOG_SOURCE, `Updated ${this._config.registrationList}: Consideration`)
     window.location.reload()
   }
 
@@ -212,7 +217,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
   private _onSubmit = async (row: RowAccessor, comment: string): Promise<void> => {
     const contentColumns = async () => {
       try {
-        const list = this._sp.web.lists.getByTitle('Prosjektinnholdskolonner')
+        const list = this._sp.web.lists.getByTitle(resource.Lists_ProjectContentColumns_Title)
 
         const columnItems = await list.items.select(
           ...Object.keys(new SPProjectContentColumnItem())
@@ -220,9 +225,10 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
 
         const filteredColumnItems = columnItems.filter(
           (col) =>
-            col.GtDataSourceCategory === 'Idémodul' ||
+            col.GtDataSourceCategory === resource.Lists_DataSources_Category_IdeaModule ||
             (!col.GtDataSourceCategory && !col.GtDataSourceLevel) ||
-            (!col.GtDataSourceCategory && _.contains(col.GtDataSourceLevel, 'Portefølje'))
+            (!col.GtDataSourceCategory &&
+              _.contains(col.GtDataSourceLevel, resource.Lists_DataSources_Level_Portfolio))
         )
 
         return filteredColumnItems
@@ -290,9 +296,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
         GtIdeaRecommendationComment: comment
       })
 
-    Log.info(LOG_SOURCE, `Updated ${this._config.registrationList}: Approved`)
-
-    const ideaModuleUrl = `${this.context.pageContext.site.absoluteUrl}/SitePages/Idemodul.aspx#ideaId=${rowId}`
+    const ideaModuleUrl = `${this.context.pageContext.site.absoluteUrl}/SitePages/${resource.ClientSidePages_IdeaModule_PageName}#ideaId=${rowId}`
 
     await this._updateProcessingList(rowId, copyData, ideaModuleUrl)
     window.location.reload()
@@ -320,8 +324,6 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
         GtIdeaRecommendationComment: comment
       })
 
-    Log.info(LOG_SOURCE, `Updated ${this._config.registrationList}: Other`)
-
     window.location.reload()
   }
 
@@ -341,8 +343,6 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
       GtIdeaUrl: pageUrl,
       ...copyData
     })
-
-    Log.info(LOG_SOURCE, 'Updated work list')
   }
 
   /**

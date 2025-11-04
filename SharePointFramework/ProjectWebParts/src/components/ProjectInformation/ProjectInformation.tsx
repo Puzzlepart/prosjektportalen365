@@ -1,9 +1,11 @@
 import { FluentProvider, IdPrefixProvider } from '@fluentui/react-components'
+import strings from 'ProjectWebPartsStrings'
 import { Fluent, UserMessage, WebPartTitle, customLightTheme } from 'pp365-shared-library'
 import { ConfirmDialog } from 'pzl-spfx-components/lib/components/ConfirmDialog'
 import React, { FC } from 'react'
 import { Actions } from './Actions'
 import { AllPropertiesPanel } from './AllPropertiesPanel'
+import { ArchiveStatus } from './ArchiveStatus'
 import { CreateParentDialog } from './CreateParentDialog'
 import { EditPropertiesPanel } from './EditPropertiesPanel'
 import { LoadingSkeleton } from './LoadingSkeleton'
@@ -15,7 +17,7 @@ import { ProjectStatusReport } from './ProjectStatusReport'
 import { ProjectInformationContextProvider } from './context'
 import { IProjectInformationProps } from './types'
 import { useProjectInformation } from './useProjectInformation'
-import strings from 'ProjectWebPartsStrings'
+import resource from 'SharedResources'
 
 /**
  * Display project information. A number of actions are available to the user,
@@ -58,6 +60,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
           <ProjectProperties />
           <Actions />
           <ParentProjectsList />
+          <ArchiveStatus />
           <ProjectStatusReport />
           <ProgressDialog />
           <AllPropertiesPanel />
@@ -72,10 +75,12 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
 
 ProjectInformation.displayName = 'Project Information'
 ProjectInformation.defaultProps = {
+  title: resource.WebParts_ProjectInformation_Title,
   page: 'Frontpage',
   customActions: [],
   hideActions: [],
   showFieldExternal: {},
   hideStatusReport: false,
+  hideArchiveStatus: true,
   statusReportShowOnlyIcons: true
 }

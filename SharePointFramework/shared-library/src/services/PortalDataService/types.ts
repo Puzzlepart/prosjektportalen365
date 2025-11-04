@@ -5,6 +5,7 @@ import strings from 'SharedLibraryStrings'
 import { format } from '@fluentui/react'
 import { ErrorWithIntent } from '../../interfaces'
 import { LogLevel } from '@pnp/logging'
+import resource from 'SharedResources'
 
 export type PortalDataServiceList =
   | 'PROJECTS'
@@ -36,22 +37,98 @@ export interface IPortalDataServiceConfiguration extends Object {
 
   /**
    * The list names for the different lists used by the data service.
+   *
+   * @remarks
+   * Use list names from the `SharedResources` module.
+   *
+   * @example
+   * ```typescript
+   * import resource from 'SharedResources'
+   *
+   * const config: IPortalDataServiceConfiguration = {
+   *   listNames: {
+   *     PROJECTS: resource.Lists_Projects_Title
+   *   }
+   * }
+   * ```
+   *
+   * That way, the list names are automatically localized and you'll
+   * get intellisense for the list names for the different languages.
    */
   listNames?: {
+    /**
+     * The name of the list for status sections.
+     */
     STATUS_SECTIONS?: string
+
+    /**
+     * The name of the list for project columns.
+     */
     PROJECT_COLUMNS?: string
+
+    /**
+     * The name of the list for project column configuration.
+     */
     PROJECT_COLUMN_CONFIGURATION?: string
+
+    /**
+     * The name of the list for projects.
+     */
     PROJECTS?: string
+
+    /**
+     * The name of the list for project status.
+     */
     PROJECT_STATUS?: string
+
+    /**
+     * The name of the list for project status attachments.
+     */
     PROJECT_STATUS_ATTACHMENTS?: string
+
+    /**
+     * The name of the list for portfolio views.
+     */
     PORTFOLIO_VIEWS?: string
+
+    /**
+     * The name of the list for project content columns.
+     */
     PROJECT_CONTENT_COLUMNS?: string
+
+    /**
+     * The name of the list for data sources.
+     */
     DATA_SOURCES?: string
+
+    /**
+     * The name of the list for project admin roles.
+     */
     PROJECT_ADMIN_ROLES?: string
+
+    /**
+     * The name of the list for project template configuration.
+     */
     PROJECT_TEMPLATE_CONFIGURATION?: string
+
+    /**
+     * The name of the list for project data.
+     */
     PROJECT_DATA?: string
+
+    /**
+     * The name of the list for idea processing.
+     */
     IDEA_PROCESSING?: string
+
+    /**
+     * The name of the list for global settings.
+     */
     GLOBAL_SETTINGS?: string
+
+    /**
+     * The name of the list for timeline content.
+     */
     TIMELINE_CONTENT?: string
   }
 
@@ -68,21 +145,21 @@ export interface IPortalDataServiceConfiguration extends Object {
 
 export const PortalDataServiceDefaultConfiguration: Partial<IPortalDataServiceConfiguration> = {
   listNames: {
-    STATUS_SECTIONS: 'Statusseksjoner',
-    PROJECT_COLUMNS: 'Prosjektkolonner',
-    PROJECT_COLUMN_CONFIGURATION: 'Prosjektkolonnekonfigurasjon',
-    PROJECT_STATUS: 'Prosjektstatus',
-    PROJECT_STATUS_ATTACHMENTS: 'Prosjektstatusvedlegg',
-    PROJECTS: 'Prosjekter',
-    PORTFOLIO_VIEWS: 'Porteføljevisninger',
-    PROJECT_CONTENT_COLUMNS: 'Prosjektinnholdskolonner',
-    DATA_SOURCES: 'Datakilder',
-    PROJECT_ADMIN_ROLES: 'Prosjektadministrasjonsroller',
-    PROJECT_TEMPLATE_CONFIGURATION: 'Maloppsett',
-    PROJECT_DATA: 'Prosjektdata',
-    IDEA_PROCESSING: 'Idébehandling',
-    GLOBAL_SETTINGS: 'Globale innstillinger',
-    TIMELINE_CONTENT: 'Tidslinjeinnhold'
+    STATUS_SECTIONS: resource.Lists_StatusSections_Title,
+    PROJECT_COLUMNS: resource.Lists_ProjectColumns_Title,
+    PROJECT_COLUMN_CONFIGURATION: resource.Lists_ProjectColumnConfiguration_Title,
+    PROJECT_STATUS: resource.Lists_ProjectStatus_Title,
+    PROJECT_STATUS_ATTACHMENTS: resource.Lists_ProjectStatusAttachments_Title,
+    PROJECTS: resource.Lists_Projects_Title,
+    PORTFOLIO_VIEWS: resource.Lists_PortfolioViews_Title,
+    PROJECT_CONTENT_COLUMNS: resource.Lists_ProjectContentColumns_Title,
+    DATA_SOURCES: resource.Lists_DataSources_Title,
+    PROJECT_ADMIN_ROLES: resource.Lists_ProjectAdminRoles_Title,
+    PROJECT_TEMPLATE_CONFIGURATION: resource.Lists_ProjectTemplates_Title,
+    PROJECT_DATA: resource.Lists_ProjectData_Title,
+    IDEA_PROCESSING: resource.Lists_IdeaProcessing_Title,
+    GLOBAL_SETTINGS: resource.Lists_Global_Settings_Title,
+    TIMELINE_CONTENT: resource.Lists_TimelineContent_Title
   },
   templateParametersFieldXml:
     '<Field Type="Note" DisplayName="TemplateParameters" ID="{b8854944-7141-471f-b8df-53d93a4395ba}" StaticName="TemplateParameters" Name="TemplateParameters" UnlimitedLengthInDocumentLibrary="TRUE" Hidden="TRUE" />',
@@ -97,10 +174,31 @@ export type GetStatusReportsOptions = {
 }
 
 export type SyncListParams = {
+  /**
+   * The URL of the SharePoint site.
+   */
   url: string
+
+  /**
+   * The name of the list to sync.
+   */
   listName: string
+
+  /**
+   * The content type ID to use for the list.
+   */
   contentTypeId: string
+
+  /**
+   * The properties to set on the list item.
+   */
   properties?: Record<string, string>
+
+  /**
+   * Progress function to call during the sync process.
+   *
+   * @param progress The progress text to display.
+   */
   progressFunc?: (progress: string) => void
 }
 

@@ -10,7 +10,7 @@ import strings from 'SharedLibraryStrings'
 export function useGroupRenderer() {
   return ({ group }: ReactCalendarGroupRendererProps<ITimelineGroup>) => {
     const style: React.CSSProperties = { display: 'block', width: '100%' }
-    const page = group.isProgram ? 'Programtidslinje' : 'Prosjekttidslinje'
+    const page = group.isProgram ? strings.ProgramTimelineTitle : strings.ProjectTimelineTitle
 
     return (
       <div style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>

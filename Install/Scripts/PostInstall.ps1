@@ -1,24 +1,22 @@
 Write-Host "[INFO] Post-install action: Disabling content types for lists"
-Set-PnPList -Identity Prosjektkolonnekonfigurasjon -EnableContentTypes:$false >$null 2>&1  
-Set-PnPList -Identity Fasesjekkliste -EnableContentTypes:$false >$null 2>&1  
-Set-PnPList -Identity Konfigurasjon -EnableContentTypes:$false >$null 2>&1  
-Set-PnPList -Identity ([System.Uri]::UnescapeDataString('Portef%C3%B8ljevisninger')) -EnableContentTypes:$false >$null 2>&1  
-Set-PnPList -Identity Prosjektkolonner -EnableContentTypes:$false >$null 2>&1  
-Set-PnPList -Identity Ressursallokering -EnableContentTypes:$false >$null 2>&1  
-Set-PnPList -Identity Planneroppgaver -EnableContentTypes:$false >$null 2>&1  
-Write-Host "[SUCCESS] Post-install action: Disabling content types for lists" -ForegroundColor Green
+Set-PnPList -Identity (Get-Resource -Name "Lists_ProjectColumnConfiguration_Title") -EnableContentTypes:$false >$null 2>&1  
+Set-PnPList -Identity (Get-Resource -Name "Lists_PhaseChecklist_Title") -EnableContentTypes:$false >$null 2>&1  
+Set-PnPList -Identity (Get-Resource -Name "Lists_Configuration_Title") -EnableContentTypes:$false >$null 2>&1  
+Set-PnPList -Identity (Get-Resource -Name "Lists_PortfolioViews_Title") -EnableContentTypes:$false >$null 2>&1  
+Set-PnPList -Identity (Get-Resource -Name "Lists_ProjectColumns_Title") -EnableContentTypes:$false >$null 2>&1  
+Set-PnPList -Identity (Get-Resource -Name "Lists_ResourceAllocation_Title") -EnableContentTypes:$false >$null 2>&1  
+Set-PnPList -Identity (Get-Resource -Name "Lists_PlannerTasks_Title") -EnableContentTypes:$false >$null 2>&1
 
 Write-Host "[INFO] Post-install action: Ensuring default project templates"
-$TemplateSetups = Get-PnPListItem -List "Maloppsett"
-$TemplateFiles = Get-PnPListItem -List "Prosjektmaler"
-
-$TemplatesMap = @{
-    "Standardmal"    = "Standardmal.txt";
-    "Programmal"     = "Programmal.txt";
-    "Overordnet mal" = "Overordnet.txt";
+$TemplateSetups = Get-PnPListItem -List (Get-Resource -Name "Lists_TemplateOptions_Title")
+$TemplateFiles = Get-PnPListItem -List (Get-Resource -Name "Lists_ProjectTemplates_Title")
+$TemplateFilesMap = @{
+    (Get-Resource -Name "Lists_TemplateOptions_StandardTemplate_Title")     = (Get-Resource -Name "Lists_TemplateOptions_StandardTemplate_FileName");
+    (Get-Resource -Name "Lists_TemplateOptions_ProgramTemplate_Title")      = (Get-Resource -Name "Lists_TemplateOptions_ProgramTemplate_FileName");
+    (Get-Resource -Name "Lists_TemplateOptions_ParentTemplate_Title")       = (Get-Resource -Name "Lists_TemplateOptions_ParentTemplate_FileName");
 }
 
-foreach ($tmpl in $TemplatesMap.GetEnumerator()) {
+foreach ($tmpl in $TemplateFilesMap.GetEnumerator()) {
     $TemplateSetup = $TemplateSetups | Where-Object { $_["Title"] -eq $tmpl.Name }
     $TemplateFileId = $TemplateFiles | Where-Object { $_["FileLeafRef"] -eq $tmpl.Value } | Select-Object -ExpandProperty Id
     if ($null -ne $TemplateFileId -and $null -ne $TemplateSetup) {
@@ -31,28 +29,27 @@ foreach ($tmpl in $TemplatesMap.GetEnumerator()) {
     }
 }
 
-Write-Host "[SUCCESS] Post-install action: Ensured default project templates" -ForegroundColor Green
 Write-Host "[INFO] Post-install action: Adding default list content to template setup"
 
 $TemplateSetupMap = @{
-    "Bygg"     = "Byggprosjekt";
-    "Anlegg"   = "Anleggsprosjekt";
-    "Standard" = "Standardmal"
+    "Standard" = (Get-Resource -Name "Lists_TemplateOptions_StandardTemplate_Title");
+    "Bygg"     = (Get-Resource -Name "Lists_TemplateOptions_BuildingProject_Title");
+    "Anlegg"   = (Get-Resource -Name "Lists_TemplateOptions_ConstructionProject_Title");
 }
 
 $ListContentMap = @{
-    "FasesjekkStandard" = "Fasesjekkpunkter";
-    "PlannerStandard"   = "Planneroppgaver";
-    "FasesjekkBygg"     = "Fasesjekkliste Bygg";
-    "PlannerBygg"       = "Planneroppgaver Bygg";
-    "DokumentBygg"      = "Standarddokumenter Bygg";
-    "FasesjekkAnlegg"   = "Fasesjekkliste Anlegg";
-    "PlannerAnlegg"     = "Planneroppgaver Anlegg";
-    "DokumentAnlegg"    = "Standarddokumenter Anlegg";
+    "FasesjekkStandard" = (Get-Resource -Name "Lists_ListContent_PhaseCheckpoints_Title");
+    "FasesjekkBygg"     = (Get-Resource -Name "Lists_ListContent_PhaseChecklistBuilding_Title");
+    "FasesjekkAnlegg"   = (Get-Resource -Name "Lists_ListContent_PhaseChecklistConstruction_Title");
+    "PlannerStandard"   = (Get-Resource -Name "Lists_ListContent_PlannerTasks_Title");
+    "PlannerBygg"       = (Get-Resource -Name "Lists_ListContent_PlannerTasksBuilding_Title");
+    "PlannerAnlegg"     = (Get-Resource -Name "Lists_ListContent_PlannerTasksConstruction_Title");
+    "DokumentBygg"      = (Get-Resource -Name "Lists_ListContent_StandardDocumentsBuilding_Title");
+    "DokumentAnlegg"    = (Get-Resource -Name "Lists_ListContent_StandardDocsConstruction_Title");
 }
 
-$ListContent = Get-PnPListItem -List Listeinnhold
-$TemplateOptions = Get-PnPListItem -List Maloppsett
+$ListContent = Get-PnPListItem -List (Get-Resource -Name "Lists_ListContent_Title")
+$TemplateOptions = Get-PnPListItem -List (Get-Resource -Name "Lists_TemplateOptions_Title")
 
 
 $DefaultExists = $TemplateOptions | Where-Object { $_["IsDefaultTemplate"] -eq $True }
@@ -109,5 +106,3 @@ if ($Anlegg) {
 else {
     Write-Host "[WARNING] Failed to find Anleggsprosjekt template. Please check the Maloppsett list." -ForegroundColor Yellow
 }
-
-Write-Host "[SUCCESS] Post-install action: Added default list content to template setup" -ForegroundColor Green

@@ -2,7 +2,7 @@
     <pnp:Sections>
         <pnp:Section Order="1" Type="OneColumn">
             <pnp:Controls>
-                <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;properties&quot;:{&quot;chartConfigurationListName&quot;:&quot;Grafkonfigurasjon&quot;,&quot;columnConfigListName&quot;:&quot;Prosjektkolonnekonfigurasjon&quot;,&quot;columnsListName&quot;:&quot;Prosjektkolonner&quot;,&quot;viewsListName&quot;:&quot;Porteføljevisninger&quot;}}" ControlId="875ca87a-e331-4ffb-bc69-0272fdf80e41" Order="1" Column="1" />
+                <pnp:CanvasControl WebPartType="Custom" JsonControlData="{}" ControlId="875ca87a-e331-4ffb-bc69-0272fdf80e41" Order="1" Column="1" />
             </pnp:Controls>
         </pnp:Section>
     </pnp:Sections>

@@ -8,6 +8,7 @@ import styles from './StatusColumn.module.scss'
 import { IStatusColumnProps } from './types'
 import { useStatusReportColumn } from './useStatusReportColumn'
 import { fetchData } from './data'
+import resource from 'SharedResources'
 
 export const StatusReportColumn: ColumnRenderComponent<IStatusColumnProps> = (
   props
@@ -45,9 +46,9 @@ export const StatusReportColumn: ColumnRenderComponent<IStatusColumnProps> = (
   )
 }
 StatusReportColumn.defaultProps = {
-  statusReportListName: 'Prosjektstatus',
-  columnConfigListName: 'Prosjektkolonnekonfigurasjon',
-  statusSectionsListName: 'Statusseksjoner',
+  statusReportListName: resource.Lists_ProjectStatus_Title,
+  columnConfigListName: resource.Lists_ProjectColumnConfiguration_Title,
+  statusSectionsListName: resource.Lists_StatusSections_Title,
   animation: {
     delay: 100,
     transitionDuration: 400

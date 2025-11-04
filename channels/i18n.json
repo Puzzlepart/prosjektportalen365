@@ -1,0 +1,80 @@
+{
+    "$schema": "./$schema.json",
+    "name": "i18n",
+    "spfx": {
+        "solutions": {
+            "PortfolioExtensions": {
+                "id": "f435060e-0748-4993-8b5d-ee83ef8a8ad8",
+                "name": "Prosjektportalen 365 - Portfolio Extensions - i18n",
+                "zippedPackage": "solution/pp-portfolio-extensions-i18n.sppkg",
+                "components": {
+                    "Footer": "75d27710-49a9-4492-a4ec-3ac4f1e798d3",
+                    "IdeaProcessing": "b0d947e7-5e19-46b0-9811-d60668ddd88c",
+                    "IdeaProjectData": "811694ea-8514-4598-98c5-7d7b9f3ed274",
+                    "IdeaRegistration": "33cdafbb-1b00-4ca4-80dc-0cbe466309bc"
+                }
+            },
+            "PortfolioWebParts": {
+                "id": "75422576-0c56-48e2-8a84-1a192685ceff",
+                "name": "Prosjektportalen 365 - Portfolio Web Parts - i18n",
+                "zippedPackage": "solution/pp-portfolio-web-parts-i18n.sppkg",
+                "components": {
+                    "LatestProjectsWebPart": "4d374373-9fd8-4ba5-8a03-524651cac3e9",
+                    "PortfolioAggregationWebPart": "aad033f7-106e-488e-bad4-9b66d7b26282",
+                    "PortfolioInsightsWebPart": "fb8e6170-c2bf-4026-9953-dc1b72701947",
+                    "PortfolioOverviewWebPart": "a09d00a8-c563-4b52-a7a4-1fb5876f9059",
+                    "ProjectListWebPart": "497a0947-7d83-4084-871b-d8e0d1edc771",
+                    "PortfolioTimelineWebPart": "68446c7e-4a78-49e0-8ae0-2efee199e58e",
+                    "ResourceAllocationWebPart": "39759c81-896f-4128-818c-e2fc60ff0088",
+                    "ProjectProvisionWebPart": "a71a1fc0-fb4c-4a63-860d-e08a69af6f9f",
+                    "IdeaModuleWebPart": "d445a5e8-0bce-47e7-b4d0-c519bfaaad78",
+                    "ProjectCardWebPart": "c003d021-06e8-417e-8139-18b0092b745f"
+                }
+            },
+            "ProgramWebParts": {
+                "id": "92fe1890-e114-4b9b-bd4d-c86012aa33ea",
+                "name": "Prosjektportalen 365 - Program Web Parts - i18n",
+                "zippedPackage": "solution/pp-program-web-parts-i18n.sppkg",
+                "components": {
+                    "ProgramAdministrationWebpart": "da500bfe-49c7-4553-939a-b33254d77763",
+                    "ProgramAggregationWebPart": "555cb52f-48ef-4fa1-8984-7ec0176b2d52",
+                    "ProgramProjectOverviewWebPart": "77c58192-1d15-4c09-b62a-96f9c9ffe8ad",
+                    "ProgramTimelineWebPart": "70c29af4-b55a-4207-911b-8f254ed99f03"
+                }
+            },
+            "ProjectExtensions": {
+                "id": "8883f20d-a353-4107-84aa-ec6ebc2e24ff",
+                "name": "Prosjektportalen 365 - Project Extensions - i18n",
+                "zippedPackage": "solution/pp-project-extensions-i18n.sppkg",
+                "components": {
+                    "ProjectSetup": "c0c51378-2c43-4e16-a3ed-86f01c6f358e",
+                    "ProjectUpgrade": "f2eb9f73-f3f4-45d4-b8de-27ecf7236b1e",
+                    "TemplateSelectorCommand": "42f5eb06-353c-4561-b095-4703e3144990",
+                    "RiskActionPlanner": "c83fcc0a-b559-4abd-83a8-dad64df4914e"
+                }
+            },
+            "ProjectWebParts": {
+                "id": "a9305c90-4fdb-4289-9379-2702957b3778",
+                "name": "Prosjektportalen 365 - Project Web Parts - i18n",
+                "zippedPackage": "solution/pp-project-web-parts-i18n.sppkg",
+                "components": {
+                    "OpportunityMatrixWebPart": "3301e02b-877c-427b-ace7-6ffb959b7327",
+                    "ProjectInformationWebPart": "283a4b49-c2ee-4917-8f58-07c31e81733e",
+                    "ProjectPhasesWebPart": "3ebefd70-f62e-48d8-836d-482b74d481bf",
+                    "ProjectStatusWebPart": "3231d86b-9b07-45f0-b112-a2f80d31b2f1",
+                    "ProjectTimelineWebPart": "3fd903ad-3179-459a-b2b9-8d2963da8af2",
+                    "RiskMatrixWebPart": "c1500cba-4eef-437e-92db-7728dcd9502d",
+                    "ProjectNewsWebPart": "1e38c80e-820d-42bd-92a1-fb0d254b21a6"
+                }
+            },
+            "shared-library": {
+                "id": "6968d36f-7835-4155-8569-13f83f11c033",
+                "name": "Prosjektportalen 365 - Shared Library - i18n",
+                "zippedPackage": "solution/pp-shared-library-i18n.sppkg",
+                "components": {
+                    "SharedLibrary": "ebbc7e1a-42a4-48e4-bcd1-ae00437687c6"
+                }
+            }
+        }
+    }
+}

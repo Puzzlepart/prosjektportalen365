@@ -34,7 +34,8 @@ export class ProjectAdminRole {
   public groupName: string
 
   /**
-   * The level of the group. Can be 'Prosjekt' or 'Portefølje'.
+   * The level of the group. Can be `Lists_ProjectAdminRoles_GroupLevel_Project`
+   * or `Lists_ProjectAdminRoles_GroupLevel_Portfolio` from `SharedResources`.
    */
   public groupLevel: string
 

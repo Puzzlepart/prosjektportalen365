@@ -1,35 +1,35 @@
 <pnp:ListInstance Title="{resource:Lists_Permission_Configuration_Title}" Description="{resource:Lists_Permission_Configuration_Description}" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_Permission_Configuration_Url}" Hidden="true" RemoveExistingContentTypes="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false" xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
-    <pnp:ContentTypeBindings>
-        <pnp:ContentTypeBinding ContentTypeID="0x0100189583AF4D61934E9E196AF1630A8314" Default="true" />
-    </pnp:ContentTypeBindings>
-    <pnp:Views>
-        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_Permission_Configuration_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
-            <Query>
-                <OrderBy>
-                    <FieldRef Name="GtSPGroupName" Ascending="FALSE" />
-                </OrderBy>
-            </Query>
-            <ViewFields>
-                <FieldRef Name="GtSPGroupName" />
-                <FieldRef Name="GtPermissionLevel" />
-                <FieldRef Name="GtTemplates" />
-            </ViewFields>
-            <RowLimit Paged="TRUE">100</RowLimit>
-            <Aggregations Value="Off" />
-            <JSLink>clienttemplates.js</JSLink>
-        </View>
-    </pnp:Views>
-    <pnp:FieldRefs>
-        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" DisplayName="Tittel" Hidden="true" />
-    </pnp:FieldRefs>
-    <pnp:Fields>
-        <Field DisplayName="Gjelder mal(er)" Description="Velg hvilke(n) mal(er) tillatelseskonfigurasjonen skal gjelde for. Om du ikke velger noen, vil konfigurasjonen gjelde alle malene." List="{listid:{resource:Lists_TemplateOptions_Title}}" Mult="TRUE" Name="GtTemplates" ShowField="Title" Title="GtTemplates" Type="LookupMulti" ID="{86d71834-de91-48a8-8482-b349dc42be69}" StaticName="GtTemplates" />
-    </pnp:Fields>
-    <pnp:DataRows KeyColumn="GtSPGroupName" UpdateBehavior="Overwrite">
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSPGroupName">{resource:Group_Portfolio_administrators_Name}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtPermissionLevel">{resource:Choice_GtPermissionLevel_FullControl}</pnp:DataValue>
-        </pnp:DataRow>
-    </pnp:DataRows>
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
+  <pnp:ContentTypeBindings>
+    <pnp:ContentTypeBinding ContentTypeID="0x0100189583AF4D61934E9E196AF1630A8314" Default="true" />
+  </pnp:ContentTypeBindings>
+  <pnp:Views>
+    <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_Permission_Configuration_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
+      <Query>
+        <OrderBy>
+          <FieldRef Name="GtSPGroupName" Ascending="FALSE" />
+        </OrderBy>
+      </Query>
+      <ViewFields>
+        <FieldRef Name="GtSPGroupName" />
+        <FieldRef Name="GtPermissionLevel" />
+        <FieldRef Name="GtTemplates" />
+      </ViewFields>
+      <RowLimit Paged="TRUE">100</RowLimit>
+      <Aggregations Value="Off" />
+      <JSLink>clienttemplates.js</JSLink>
+    </View>
+  </pnp:Views>
+  <pnp:FieldRefs>
+    <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" DisplayName="{resource:SiteFields_Title_DisplayName}" Hidden="true" />
+  </pnp:FieldRefs>
+  <pnp:Fields>
+    <Field DisplayName="{resource:Lists_Permission_Configuration_Fields_GtTemplates_DisplayName}" Description="{resource:Lists_Permission_Configuration_Fields_GtTemplates_Description}" List="{listid:{resource:Lists_TemplateOptions_Title}}" Mult="TRUE" Name="GtTemplates" ShowField="Title" Title="GtTemplates" Type="LookupMulti" ID="{86d71834-de91-48a8-8482-b349dc42be69}" StaticName="GtTemplates" />
+  </pnp:Fields>
+  <pnp:DataRows KeyColumn="GtSPGroupName" UpdateBehavior="Overwrite">
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSPGroupName">{resource:Security_SiteGroup_PortfolioAdministrators_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtPermissionLevel">{resource:Choice_GtPermissionLevel_FullControl}</pnp:DataValue>
+    </pnp:DataRow>
+  </pnp:DataRows>
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>

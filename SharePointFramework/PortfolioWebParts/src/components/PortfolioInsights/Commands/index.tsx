@@ -27,7 +27,7 @@ export const Commands: FC<ICommandsProps> = (props) => {
   const farItems: ICommandBarItemProps[] = [
     {
       key: 'VIEW_SELECTOR',
-      name: props.currentView.title,
+      name: props.currentView?.title,
       iconProps: { iconName: 'List' },
       buttonStyles: { root: { border: 'none' } },
       itemType: ContextualMenuItemType.Header,
@@ -49,4 +49,12 @@ export const Commands: FC<ICommandsProps> = (props) => {
       <CommandBar items={items} farItems={farItems} />
     </div>
   )
+}
+
+Commands.displayName = 'Commands'
+Commands.defaultProps = {
+  contentTypes: [],
+  configuration: {
+    views: []
+  }
 }

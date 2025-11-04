@@ -90,13 +90,13 @@ export const getDefaultTypeFieldConfigurations = (): ITypeFieldConfiguration[] =
   return [
     {
       typeName: 'Prosjektområde',
-      displayName: 'Prosjektområde',
+      displayName: strings.Provision.ProjectAreaType,
       hiddenFields: 'additionalInfo',
       requiredFields: 'type, name, description, owner'
     },
     {
       typeName: 'Viva Engage Community',
-      displayName: 'Viva Engage Community',
+      displayName: strings.Provision.VivaEngageCommunityType,
       hiddenFields: 'teamify, teamTemplate, isConfidential, externalSharing, image',
       requiredFields: 'type, name, description, owner',
       fieldConfigurations: {
@@ -134,7 +134,7 @@ export const getDefaultTypeFieldConfigurations = (): ITypeFieldConfiguration[] =
     },
     {
       typeName: 'Microsoft Teams Team',
-      displayName: 'Microsoft Teams Team',
+      displayName: strings.Provision.MicrosoftTeamsTeamType,
       requiredFields: 'type, name, description, owner',
       fieldConfigurations: {
         name: {

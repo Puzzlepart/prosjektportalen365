@@ -1,7 +1,13 @@
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC, useContext } from 'react'
 import { FooterContext } from '../context'
-import { Button, Tooltip, FluentProvider, IdPrefixProvider, useId } from '@fluentui/react-components'
+import {
+  Button,
+  Tooltip,
+  FluentProvider,
+  IdPrefixProvider,
+  useId
+} from '@fluentui/react-components'
 import { getFluentIcon, customLightTheme } from 'pp365-shared-library'
 
 export const SiteSettings: FC = () => {

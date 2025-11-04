@@ -1,0 +1,72 @@
+@import "~@fluentui/react/dist/sass/References.scss";
+
+.root {
+  max-width: 420px;
+  min-width: 280px;
+
+  .accordionHeader {
+    &:hover {
+      background-color: var(--colorSubtleBackgroundHover);
+      border-radius: var(--borderRadiusMedium);
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .icon {
+        color: var(--colorBrandForeground1);
+      }
+
+      .title {
+        font-weight: var(--fontWeightSemibold);
+        font-size: var(--fontSizeBase300);
+        color: var(--colorNeutralForeground1);
+      }
+    }
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 12px;
+    padding-bottom: 12px;
+
+    .message {
+      padding: 8px;
+      background-color: var(--colorNeutralBackground2);
+      border-radius: var(--borderRadiusMedium);
+      font-size: var(--fontSizeBase200);
+      color: var(--colorNeutralForeground2);
+    }
+
+    .statusGroup {
+      .statusTitle {
+        margin: 0 0 8px 0;
+        font-size: var(--fontSizeBase300);
+        font-weight: var(--fontWeightSemibold);
+        color: var(--colorNeutralForeground1);
+      }
+    }
+
+    .scopeListContainer {
+      margin: 0;
+
+      .scopeList {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        gap: 6px;
+      }
+    }
+  }
+
+  .footer {
+    padding-top: 8px;
+    font-size: var(--fontSizeBase200);
+    color: var(--colorNeutralForeground2);
+  }
+}

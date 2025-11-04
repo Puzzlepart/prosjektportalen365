@@ -1,5 +1,4 @@
 import { useId } from '@fluentui/react-components'
-import strings from 'ProjectWebPartsStrings'
 import { ListLogger } from 'pp365-shared-library/lib/logging'
 import { useMemo } from 'react'
 import { ProjectInformation } from '.'
@@ -8,6 +7,7 @@ import { IProjectInformationContext } from './context'
 import { useProjectInformationDataFetch } from './data'
 import { useProjectInformationReducer } from './reducer'
 import { IProjectInformationProps } from './types'
+import resource from 'SharedResources'
 
 /**
  * Component logic hook for `ProjectInformation`.
@@ -26,7 +26,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
 
   if (SPDataAdapter.isConfigured) {
     ListLogger.init(
-      SPDataAdapter.portalDataService.web.lists.getByTitle(strings.LogListName),
+      SPDataAdapter.portalDataService.web.lists.getByTitle(resource.Lists_Log_Title),
       props.webAbsoluteUrl,
       ProjectInformation.displayName
     )

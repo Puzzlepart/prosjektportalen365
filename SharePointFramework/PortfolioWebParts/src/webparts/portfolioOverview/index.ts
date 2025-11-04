@@ -24,7 +24,7 @@ import {
   ErrorWithIntent,
   PropertyPaneDescription
 } from 'pp365-shared-library'
-import { DataAdapter } from 'data'
+import { DataAdapter } from 'data/DataAdapter'
 
 export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPortfolioOverviewProps> {
   private _configuration: IPortfolioOverviewConfiguration
@@ -95,7 +95,7 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
   ): IPropertyPaneDropdownOption[] {
     switch (targetProperty) {
       case 'portfolios': {
-        return this.properties.portfolios.map((portfolio) => ({
+        return this.properties.portfolios?.map((portfolio) => ({
           key: portfolio.uniqueId,
           text: portfolio.title
         }))

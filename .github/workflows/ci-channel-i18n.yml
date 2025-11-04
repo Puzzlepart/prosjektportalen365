@@ -1,0 +1,118 @@
+name: CI (channels/i18n)
+
+on:
+  push:
+    branches:
+      - releases/1.12
+    paths:
+      - 'SharePointFramework/**'
+      - 'Install/**'
+      - 'Templates/**'
+      - .github/workflows/ci-channel-i18n.yml
+
+env:
+  CI_CERT_BASE64: ${{ secrets.CI_CERT_BASE64 }}
+  CI_TENANT: ${{ secrets.CI_TENANT }}
+  CI_CLIENT_ID: ${{ secrets.CI_CLIENT_ID }}
+
+jobs:
+  build_release_package_i18n:
+    name: Build release package (i18n channel)
+    runs-on: macos-latest
+    if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') && !contains(github.event.head_commit.message, '[packages-only]') && contains(github.event.head_commit.message, 'i18n:') }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Set sha_short
+        id: vars
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ vars.NODE_VERSION }}
+
+      - name: Run Install/Build-Release.ps1 in CI mode for channel i18n
+        run: Install/Build-Release.ps1 -CI -SkipBundle -Channel i18n
+        shell: pwsh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-package-i18n
+          path: release
+    outputs:
+      sha_short: ${{ steps.vars.outputs.sha_short }}
+
+  upgrade_channel_test:
+    needs: [build_release_package_i18n]
+    name: Upgrade (i18n channel)
+    runs-on: macos-latest
+    if: ${{ !contains(github.event.head_commit.message, '[skip-upgrade]') }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-package-i18n
+          path: release
+
+      - name: Upgrade
+        run: release/Install.ps1 -Url "${{ vars.SP_URL_ENG }}" -Language English -Upgrade -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }}
+        shell: powershell
+
+  upgrade_all_sites_to_latest:
+    needs: [build_release_package_i18n, upgrade_channel_test]
+    name: Upgrade all sites to latest (i18n channel)
+    runs-on: macos-latest
+    if: ${{ contains(github.event.head_commit.message, '[upgrade-all-sites-to-latest]') }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-package-i18n
+          path: release
+
+      - name: Run script UpgradeAllSitesToLatest.ps1 in CI mode
+        run: release/Scripts/UpgradeAllSitesToLatest.ps1 -Url ${{ vars.SP_URL_ENG }} -Language English -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }}
+        shell: powershell
+
+  build_release_package_i18n_packages_only:
+    name: Build release package - packages only (i18n channel)
+    runs-on: macos-latest
+    if: ${{ contains(github.event.head_commit.message, '[packages-only]')}}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Set sha_short
+        id: vars
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ vars.NODE_VERSION }}
+
+      - name: Run Install/Build-Release.ps1 in CI mode for channel i18n
+        run: Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel i18n
+        shell: pwsh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-package-i18n
+          path: release
+    outputs:
+      sha_short: ${{ steps.vars.outputs.sha_short }}
+
+  upgrade_channel_test_packages_only:
+    needs: [build_release_package_i18n_packages_only]
+    name: Upgrade packages only (i18n channel)
+    runs-on: macos-latest
+    if: ${{ !contains(github.event.head_commit.message, '[skip-upgrade]') }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-package-i18n
+          path: release
+
+      - name: Upgrade
+        run: release/Install.ps1 -Url "${{ vars.SP_URL_ENG }}" -Language English -Upgrade -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }} -SkipTemplate
+        shell: powershell

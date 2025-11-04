@@ -16,6 +16,7 @@ import strings from 'ProjectWebPartsStrings'
 import { useProjectInformationContext } from '../context'
 import { OPEN_DIALOG, OPEN_PANEL } from '../reducer'
 import { ActionType } from './types'
+import { format } from '@fluentui/react'
 
 /**
  * Logic hook for `<Actions />` component.
@@ -24,7 +25,7 @@ export const useActions = () => {
   const context = useProjectInformationContext()
   if (context.props.hideAllActions || context.props.displayMode === DisplayMode.Edit) return []
   const showAllProjectInformationAction: ActionType = [
-    strings.ShowAllProjectInformationText,
+    format(strings.ShowAllProjectInformationText, context.props.title?.toLowerCase()),
     () => {
       context.dispatch(OPEN_PANEL('AllPropertiesPanel'))
     },
@@ -39,7 +40,7 @@ export const useActions = () => {
     !context.state.userHasEditPermission
   ]
   const editProjectInformationAction: ActionType = [
-    strings.EditProjectInformationText,
+    format(strings.EditProjectInformationText, context.props.title?.toLowerCase()),
     () => {
       context.dispatch(OPEN_PANEL('EditPropertiesPanel'))
     },

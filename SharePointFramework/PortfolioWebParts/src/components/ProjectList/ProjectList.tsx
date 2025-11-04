@@ -17,6 +17,7 @@ import { useProjectList } from './useProjectList'
 import { useProjectListRenderer } from './useProjectListRenderer'
 import { ProjectListContext } from './context'
 import { Commands } from './Commands'
+import resource from 'SharedResources'
 
 export const ProjectList: FC<IProjectListProps> = (props) => {
   const context = useProjectList(props)
@@ -138,23 +139,23 @@ ProjectList.defaultProps = {
   quickLaunchMenu: [
     {
       order: 10,
-      text: 'Prosjektstatus',
-      relativeUrl: '/SitePages/Prosjektstatus.aspx'
+      text: resource.Navigation_ProjectStatus_Title,
+      relativeUrl: `/${resource.Navigation_ProjectStatus_Url}`
     },
     {
       order: 20,
-      text: 'Dokumentbibliotek',
-      relativeUrl: '/Delte%20dokumenter'
+      text: resource.Navigation_Documents_Title,
+      relativeUrl: `/${resource.Navigation_Documents_Url}`
     },
     {
       order: 30,
-      text: 'Fasesjekkliste',
-      relativeUrl: '/Lists/Fasesjekkliste'
+      text: resource.Navigation_PhaseChecklist_Title,
+      relativeUrl: `/${resource.Navigation_PhaseChecklist_Url}`
     },
     {
       order: 40,
-      text: 'Oppgaver',
-      relativeUrl: '/SitePages/Oppgaver.aspx'
+      text: resource.Navigation_Tasks_Title,
+      relativeUrl: `/${resource.Navigation_Tasks_Url}`
     }
   ]
 }

@@ -89,40 +89,40 @@ export default class IdeaModuleWebPart extends BasePortfolioWebPart<IIdeaModuleP
       pages: [
         {
           header: {
-            description: 'Idémodul'
+            description: strings.Idea.ModuleTitle
           },
           displayGroupsAsAccordion: true,
           groups: [
             {
               groupName: strings.GeneralGroupName,
               groupFields: [
-                PropertyPaneTextField('configurationList', {
-                  label: 'Konfigurasjonsliste',
-                  description: 'Navn på Idékonfigurasjonsliste'
+                PropertyPaneTextField('ideaConfigurationList', {
+                  label: strings.Idea.ConfigurationListFieldLabel,
+                  description: strings.Idea.ConfigurationListFieldDescription
                 }),
                 PropertyPaneTextField('configuration', {
-                  label: 'Konfigurasjonsnavn',
-                  description: 'Navn på konfigurasjonen som skal brukes'
+                  label: strings.Idea.ConfigurationNameFieldLabel,
+                  description: strings.Idea.ConfigurationNameFieldDescription
                 }),
                 PropertyPaneTextField('hiddenRegFields', {
-                  label: 'Skjulte felter (registrering)',
-                  description: 'Felt som skal skjules fra idémodulen (Idéregistrering)',
+                  label: strings.Idea.HiddenRegistrationFieldsLabel,
+                  description: strings.Idea.HiddenRegistrationFieldsDescription,
                   disabled: true,
                   multiline: true,
                   resizable: true,
                   rows: 1
                 }),
                 PropertyPaneTextField('hiddenProcFields', {
-                  label: 'Skjulte felter (behandling)',
-                  description: 'Felt som skal skjules fra idémodulen (Idébehandling)',
+                  label: strings.Idea.HiddenProcessingFieldsLabel,
+                  description: strings.Idea.HiddenProcessingFieldsDescription,
                   disabled: true,
                   multiline: true,
                   resizable: true,
                   rows: 6
                 }),
                 PropertyPaneTextField('provisionUrl', {
-                  label: 'Provisjoneringsområde',
-                  description: 'URL til området som håndterer bestillinger'
+                  label: strings.Idea.ProvisionUrlFieldLabel,
+                  description: strings.Idea.ProvisionUrlFieldDescription
                 })
               ]
             },

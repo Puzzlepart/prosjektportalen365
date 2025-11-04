@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import styles from './IdeaPhaseBar.module.scss'
 import { Tab, TabList } from '@fluentui/react-components'
+import * as strings from 'PortfolioWebPartsStrings'
 import { getFluentIcon } from 'pp365-shared-library'
 import { useIdeaModuleContext } from '../context'
 import { IdeaPhase } from '../types'
@@ -27,7 +28,7 @@ export const IdeaPhaseBar: FC = () => {
     },
     {
       phase: IdeaPhase.Provisioned,
-      name: 'Bestill område',
+      name: strings.Idea.ProvisionAreaTitle,
       icon: getFluentIcon('BoxToolbox')
     }
   ]

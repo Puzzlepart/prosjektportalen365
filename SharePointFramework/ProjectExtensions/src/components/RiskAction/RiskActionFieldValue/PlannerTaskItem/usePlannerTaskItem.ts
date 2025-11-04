@@ -1,7 +1,7 @@
 import { PopoverProps } from '@fluentui/react-components'
 import { useState } from 'react'
-import { useRiskActionFieldCustomizerContext } from '../../../../riskAction/context'
-import { RiskActionPlannerTask } from '../../../../riskAction/types'
+import { useRiskActionFieldCustomizerContext } from '../../../../extensions/riskAction/context'
+import { RiskActionPlannerTask } from '../../../../extensions/riskAction/types'
 import { IPlannerTaskItemProps } from './types'
 
 /**

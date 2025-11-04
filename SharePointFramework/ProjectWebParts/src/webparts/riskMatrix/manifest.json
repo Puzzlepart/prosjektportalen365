@@ -3,7 +3,7 @@
   "id": "e536ae15-0748-4d96-b160-3abb30f1b71e",
   "alias": "RiskMatrixWebPart",
   "componentType": "WebPart",
-  "version": "1.11.1",
+  "version": "1.12.0",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "hiddenFromToolbox": false,
@@ -24,14 +24,11 @@
       },
       "officeFabricIconFontName": "AsteriskSolid",
       "properties": {
-        "listName": "Usikkerhet",
-        "viewXml": "<View><Query><Where><Eq><FieldRef Name=\"ContentType\" /><Value Type=\"Computed\">Risiko</Value></Eq></Where></Query></View>",
         "probabilityFieldName": "GtRiskProbability",
         "consequenceFieldName": "GtRiskConsequence",
         "probabilityPostActionFieldName": "GtRiskProbabilityPostAction",
         "consequencePostActionFieldName": "GtRiskConsequencePostAction",
-        "fullWidth": true,
-        "calloutTemplate": "<h3>{Title}</h3>\n<p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n<p><strong>Nærhet: </strong>{GtRiskProximity}</p>\n<p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>"
+        "fullWidth": true
       }
     }
   ]

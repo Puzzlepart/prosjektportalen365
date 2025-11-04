@@ -1,7 +1,7 @@
 <Field Type="Choice" DisplayName="{resource:SiteFields_GtGroupLevel_DisplayName}" Description="{resource:SiteFields_GtGroupLevel_Description}" Group="{resource:SiteFields_Portfolio_Group}" ID="{3d1f4fc4-9fac-4ece-8127-16707ca808e7}" StaticName="GtGroupLevel" Name="GtGroupLevel">
-    <Default>Prosjekt</Default>
+    <Default>{resource:Lists_ProjectAdminRoles_GroupLevel_Project}</Default>
     <CHOICES>
-        <CHOICE>Prosjekt</CHOICE>
-        <CHOICE>Portefølje</CHOICE>
+        <CHOICE>{resource:Lists_ProjectAdminRoles_GroupLevel_Project}</CHOICE>
+        <CHOICE>{resource:Lists_ProjectAdminRoles_GroupLevel_Portfolio}</CHOICE>
     </CHOICES>
 </Field>

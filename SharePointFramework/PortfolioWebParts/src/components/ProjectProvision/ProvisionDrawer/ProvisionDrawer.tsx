@@ -332,6 +332,10 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     label={getField('alias').displayName}
                     hidden={getField('alias').hidden}
                   >
+                    <UserMulti type='requestedBy' />
+                  </FieldContainer>
+                  <Divider />
+                  <FieldContainer iconName='TextNumberFormat' label={getField('alias').displayName}>
                     <Input
                       disabled
                       value={`${namingConvention?.prefixText}${context.column.get('alias')}${

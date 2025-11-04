@@ -10,7 +10,7 @@ import {
 import { TemplateItem } from 'models'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { useContext, useMemo, useState } from 'react'
-import { TemplateSelectorContext } from '../../../templateSelector/context'
+import { TemplateSelectorContext } from '../../../extensions/templateSelector/context'
 import { isEmpty } from 'underscore'
 import { FolderNavigation } from '../FolderNavigation'
 import columns from './columns'
@@ -23,7 +23,7 @@ export const SelectScreen = (props: ISelectScreenProps) => {
   const templates = useMemo(
     () =>
       context.templates
-        .filter((item) => {
+        ?.filter((item) => {
           return !isEmpty(folder) ? folder === item.parentFolderUrl : item.level === 1
         })
         .sort((a, b) => (a.name > b.name ? 1 : -1))

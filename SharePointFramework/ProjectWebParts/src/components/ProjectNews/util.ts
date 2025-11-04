@@ -4,6 +4,7 @@ import { stringIsNullOrEmpty } from '@pnp/core'
 import * as strings from 'ProjectWebPartsStrings'
 import { INewsItem, TemplateFile } from './types'
 import SPDataAdapter from 'data'
+import resource from 'SharedResources'
 
 // --- SharePoint file name validation constants ---
 const invalidChars = /["*:<>?/\\|#%;]/g
@@ -382,7 +383,7 @@ export async function setOriginalSourceSiteId(
   const projectFields = fields.filter((field) => !['GtSiteId', 'GtHubSiteId'].includes(field))
 
   const [projectData] = await SPDataAdapter.portalDataService.web.lists
-    .getByTitle(strings.ProjectsListName)
+    .getByTitle(resource.Lists_Projects_Title)
     .items.select(...projectFields)
     .filter(`GtSiteId eq '${siteId}'`)
     .getAll()

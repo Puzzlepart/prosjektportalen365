@@ -1,4 +1,5 @@
 /* eslint-disable prefer-spread */
+/* eslint-disable no-console */
 import { useContext, useState, useMemo } from 'react'
 import { useMotion } from '@fluentui/react-motion-preview'
 import { useMotionStyles } from './motionStyles'
@@ -70,7 +71,7 @@ export const useProvisionDrawer = () => {
   const enableInternalChannel = getGlobalSetting('EnableInternalChannel')
   const enableAutoApproval = getGlobalSetting('EnableAutoApproval')
 
-  const typeDefaults = context.state.types?.find((t) => t.title === context.state.properties.type)
+  const typeDefaults = context.state.types?.find((t) => t.title === selectedType)
   const enableExternalSharing = typeDefaults?.externalSharing
 
   const namingConvention = getGlobalSetting('UseNamingConventions')
@@ -149,7 +150,10 @@ export const useProvisionDrawer = () => {
       },
       ExpirationDate: expirationDate,
       ReadOnlyGroup: context.column.get('readOnlyGroup'),
-      InternalChannel: context.props.readOnlyGroupLogic && context.column.get('readOnlyGroup') ? context.column.get('internalChannel') : false,
+      InternalChannel:
+        context.props.readOnlyGroupLogic && context.column.get('readOnlyGroup')
+          ? context.column.get('internalChannel')
+          : false,
       RequestedSource: strings.Provision.RequestedSource,
       SpaceImage: context.column.get('image')?.split(',')[1],
       SiteURL: {

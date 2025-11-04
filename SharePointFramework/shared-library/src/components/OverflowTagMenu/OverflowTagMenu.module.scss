@@ -21,4 +21,14 @@ div > .menuItem {
   button {
     cursor: default !important;
   }
+
+  &.tagPreview {
+    max-width: 50%;
+
+    .tagPrimary {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
 }

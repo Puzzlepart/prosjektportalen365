@@ -12,6 +12,7 @@ import * as ProjectDataService from 'pp365-shared-library/lib/services/ProjectDa
 import { IProjectStatusData } from '../ProjectStatus'
 import { ActionType } from './Actions/types'
 import { IProgressDialogProps } from './ProgressDialog/types'
+import { IArchiveStatusInfo } from '../../data/SPDataAdapter/types'
 
 export type ProjectInformationPanelType = 'EditPropertiesPanel' | 'AllPropertiesPanel'
 export type ProjectInformationDialogType = 'CreateParentDialog'
@@ -67,6 +68,11 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
    * Hide latest status report
    */
   hideStatusReport?: boolean
+
+  /**
+   * Hide archive status section
+   */
+  hideArchiveStatus?: boolean
 
   /**
    * Truncate status report comments to the specified length and add ellipsis (...)
@@ -159,4 +165,9 @@ export interface IProjectInformationData
    * The template used for the project
    */
   template?: ProjectTemplate
+
+  /**
+   * Archive status information (only available on frontpage)
+   */
+  archiveStatus?: IArchiveStatusInfo
 }

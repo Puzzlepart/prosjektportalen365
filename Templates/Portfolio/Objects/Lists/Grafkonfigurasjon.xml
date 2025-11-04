@@ -1,4 +1,4 @@
-﻿<pnp:ListInstance Title="{resource:Lists_ChartConfiguration_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_ChartConfiguration_Url}" Hidden="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" EnableAttachments="false" EnableFolderCreation="false" ContentTypesEnabled="true" RemoveExistingContentTypes="true" 
+﻿<pnp:ListInstance Title="{resource:Lists_ChartConfiguration_Title}" Description="{resource:Lists_ChartConfiguration_Description}" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_ChartConfiguration_Url}" Hidden="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" EnableAttachments="false" EnableFolderCreation="false" ContentTypesEnabled="true" RemoveExistingContentTypes="true" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100FAC6DE5CA35FAB46ABCF3CD575663D9D01" />
@@ -29,7 +29,7 @@
     <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Prosjekter i ulike faser</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ChartConfiguration_ProjectsInVariousPhases_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtPiSubTitle" />
             <pnp:DataValue FieldName="GtPiFields">7</pnp:DataValue>
             <pnp:DataValue FieldName="GtPiWidthSm">6</pnp:DataValue>
@@ -41,7 +41,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">20</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Tjenesteområder</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ChartConfiguration_ServiceAreas_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtPiSubTitle" />
             <pnp:DataValue FieldName="GtPiFields">5</pnp:DataValue>
             <pnp:DataValue FieldName="GtPiWidthSm">6</pnp:DataValue>
@@ -53,7 +53,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">30</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Prosjekttype</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ChartConfiguration_ProjectType_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtPiSubTitle" />
             <pnp:DataValue FieldName="GtPiFields">6</pnp:DataValue>
             <pnp:DataValue FieldName="GtPiWidthSm">6</pnp:DataValue>

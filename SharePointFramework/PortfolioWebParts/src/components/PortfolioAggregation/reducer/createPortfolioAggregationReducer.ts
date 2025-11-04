@@ -1,4 +1,4 @@
-import { MessageBarType } from '@fluentui/react'
+import { format, MessageBarType } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import { createReducer, current } from '@reduxjs/toolkit'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -43,6 +43,7 @@ import {
   TOGGLE_FILTER_PANEL
 } from './actions'
 import { persistSelectedColumnsInWebPartProperties } from './persistSelectedColumnsInWebPartProperties'
+import resource from 'SharedResources'
 
 /**
  * Create reducer for `<PortfolioAggregation />` using `createReducer` from `@reduxjs/toolkit`.
@@ -79,7 +80,7 @@ export const createPortfolioAggregationReducer = (
         return
       }
 
-      let selectedColumns = payload.dataSource.columns ?? props.columns ?? []
+      let selectedColumns = props.columns ?? []
 
       let allColumnsForCategory = payload.columns.map((c) =>
         c.setData({
@@ -87,7 +88,7 @@ export const createPortfolioAggregationReducer = (
         })
       )
 
-      if (payload.dataSource.level.includes('Prosjekt')) {
+      if (payload.dataSource.level.includes(resource.Lists_DataSources_Level_Project)) {
         allColumnsForCategory = allColumnsForCategory.filter(
           ({ internalName }) => internalName !== 'SiteTitle'
         )
@@ -100,12 +101,8 @@ export const createPortfolioAggregationReducer = (
         })
         .filter(Boolean)
 
-      const availableColumns = payload.columns.filter(
-        (c) => !_.some(selectedColumns, ({ key }) => key === c.key)
-      )
-
       state.columns = !_.isEmpty(selectedColumns)
-        ? [...selectedColumns, ...availableColumns]
+        ? selectedColumns
         : sortArray(allColumnsForCategory, 'sortOrder')
 
       state.allColumnsForCategory = allColumnsForCategory
@@ -260,11 +257,21 @@ export const createPortfolioAggregationReducer = (
       const hashState = parseUrlHash()
       const viewIdUrlParam = new URLSearchParams(document.location.href).get('viewId')
       let currentView: DataSource = null
+      let errorMessage = strings.ViewNotFoundMessage || ''
 
       if (viewIdUrlParam) {
         currentView = _.find(state.views, (v) => v.id.toString() === viewIdUrlParam)
+        if (!currentView) {
+          errorMessage = format(strings.ViewNotFoundMessage_Id || '{0}', viewIdUrlParam || '')
+        }
       } else if (hashState.has('viewId')) {
         currentView = _.find(state.views, (v) => v.id === hashState.get('viewId'))
+        if (!currentView) {
+          errorMessage = format(
+            strings.ViewNotFoundMessage_Id || '{0}',
+            hashState.get('viewId') || ''
+          )
+        }
       } else if (props.defaultViewId) {
         currentView = _.find(
           state.views,
@@ -272,6 +279,12 @@ export const createPortfolioAggregationReducer = (
         )
       } else if (props.dataSource) {
         currentView = _.find(state.views, (v) => v.title === props.dataSource)
+        if (!currentView) {
+          errorMessage = format(
+            strings.ViewNotFoundMessage_WebPartProperty || '{0}',
+            props.dataSource || ''
+          )
+        }
       } else {
         currentView = _.find(state.views, (v) => v.isDefault)
       }
@@ -279,10 +292,7 @@ export const createPortfolioAggregationReducer = (
         currentView = _.first(state.views)
       }
       if (!currentView) {
-        state.error = new PortfolioAggregationErrorMessage(
-          strings.ViewNotFoundMessage,
-          MessageBarType.error
-        )
+        state.error = new PortfolioAggregationErrorMessage(errorMessage, MessageBarType.error)
         return
       }
       const obj: IPortfolioAggregationHashState = {}
@@ -325,7 +335,6 @@ export const createPortfolioAggregationReducer = (
               const match = value.match(/\|([^|]+)\|/)
               value = match ? match[1].trim() : null
             }
-
             return { name: value, value, selected: false }
           })
         items = items.sort((a, b) => (a.value > b.value ? 1 : -1))

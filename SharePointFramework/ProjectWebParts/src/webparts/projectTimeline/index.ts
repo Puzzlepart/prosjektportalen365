@@ -10,10 +10,12 @@ import '@fluentui/react/dist/css/fabric.min.css'
 import { BaseProjectWebPart } from '../baseProjectWebPart'
 import * as strings from 'ProjectWebPartsStrings'
 import { format } from '@fluentui/react'
+import resource from 'SharedResources'
 
 export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectTimelineProps> {
   public async onInit() {
     await super.onInit()
+    this.properties.title = resource.ClientSidePages_ProjectTimeline_Title
   }
 
   public render(): void {
@@ -31,7 +33,7 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
               groupFields: [
                 PropertyPaneTextField('listName', {
                   label: strings.ListNameFieldLabel,
-                  value: 'Tidslinjeinnhold'
+                  value: resource.Lists_TimelineContent_Title
                 }),
                 PropertyPaneToggle('showTimeline', {
                   label: strings.ShowTimelineLabel
@@ -82,8 +84,8 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
                     selectedKey: propertiesWithDefaults.defaultGroupBy,
                     options: [
                       {
-                        key: strings.ProjectLabel,
-                        text: strings.ProjectLabel
+                        key: resource.TimelineConfiguration_Project_Title,
+                        text: resource.TimelineConfiguration_Project_Title
                       },
                       {
                         key: strings.CategoryFieldLabel,
@@ -112,11 +114,11 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
                 }),
                 PropertyPaneTextField('projectDeliveriesListName', {
                   label: strings.ListNameFieldLabel,
-                  value: 'Prosjektleveranser'
+                  value: resource.Lists_ProjectDeliveries_Title
                 }),
                 PropertyPaneTextField('configItemTitle', {
                   label: strings.ConfigItemTitleFieldLabel,
-                  value: 'Prosjektleveranse'
+                  value: resource.TimelineConfiguration_ProjectDelivery_Title
                 })
               ]
             }

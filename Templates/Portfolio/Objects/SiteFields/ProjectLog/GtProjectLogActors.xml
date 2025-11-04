@@ -1,1 +1,9 @@
-<Field ID="{6539658a-b186-402c-b224-9fb41cb48596}" Name="GtProjectLogActors" DisplayName="{resource:SiteFields_GtProjectLogActors_DisplayName}" Type="MultiChoice" Group="{resource:SiteFields_Project_Group}" Description="{resource:SiteFields_GtProjectLogActors_Description}" FillInChoice="TRUE" StaticName="GtProjectLogActors"><CHOICES><CHOICE>Leverandører</CHOICE><CHOICE>Prosjektstyre</CHOICE><CHOICE>Prosjektgruppe</CHOICE><CHOICE>Referansegruppe</CHOICE><CHOICE>Andre interessenter</CHOICE></CHOICES></Field>
+<Field ID="{6539658a-b186-402c-b224-9fb41cb48596}" Name="GtProjectLogActors" DisplayName="{resource:SiteFields_GtProjectLogActors_DisplayName}" Type="MultiChoice" Group="{resource:SiteFields_Project_Group}" Description="{resource:SiteFields_GtProjectLogActors_Description}" FillInChoice="TRUE" StaticName="GtProjectLogActors">
+  <CHOICES>
+    <CHOICE>{resource:Choice_GtProjectLogActors_Suppliers}</CHOICE>
+    <CHOICE>{resource:Choice_GtProjectLogActors_ProjectBoard}</CHOICE>
+    <CHOICE>{resource:Choice_GtProjectLogActors_ProjectGroup}</CHOICE>
+    <CHOICE>{resource:Choice_GtProjectLogActors_ReferenceGroup}</CHOICE>
+    <CHOICE>{resource:Choice_GtProjectLogActors_OtherStakeholders}</CHOICE>
+  </CHOICES>
+</Field>

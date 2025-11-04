@@ -5,6 +5,7 @@ import { TimelineConfigurationModel, TimelineContentModel } from 'pp365-shared-l
 import strings from 'ProjectWebPartsStrings'
 import { IProjectTimelineProps } from '../types'
 import '@pnp/sp/items/get-all'
+import resource from 'SharedResources'
 
 /**
  * Fetch project data
@@ -18,17 +19,20 @@ export async function fetchProjectData(
 ) {
   try {
     const [projectData] = await SPDataAdapter.portalDataService.web.lists
-      .getByTitle(strings.ProjectsListName)
+      .getByTitle(resource.Lists_Projects_Title)
       .items.select('Id', 'GtStartDate', 'GtEndDate')
       .filter(`GtSiteId eq '${props.siteId}'`)
       .getAll()
 
-    const config = _.find(timelineConfig, (col) => col.title === strings.ProjectLabel)
+    const config = _.find(
+      timelineConfig,
+      (col) => col.title === resource.TimelineConfiguration_Project_Title
+    )
     const project = new TimelineContentModel(
       props.siteId,
       props.webTitle,
       props.webTitle,
-      strings.ProjectLabel,
+      resource.TimelineConfiguration_Project_Title,
       projectData?.GtStartDate,
       projectData?.GtEndDate
     ).usingConfig(config)

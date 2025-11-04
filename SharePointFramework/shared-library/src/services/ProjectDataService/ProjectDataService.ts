@@ -6,6 +6,7 @@ import { DefaultCaching, createSpfiInstance, getItemFieldValues } from '../../da
 import {
   ChecklistItemModel,
   ChecklistSPItem,
+  DocumentTypeModel,
   ItemFieldValues,
   ProjectPhaseChecklistData,
   ProjectPhaseModel,
@@ -337,11 +338,32 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
     termSetId: string,
     checklistData: { [termGuid: string]: ProjectPhaseChecklistData } = {}
   ): Promise<ProjectPhaseModel[]> {
-    const terms = await this._sp.termStore.sets
-      .getById(termSetId)
-      .terms.select('*', 'localProperties')
-      .using(DefaultCaching)()
-    return terms.map((term) => new ProjectPhaseModel(term, termSetId, checklistData[term.id]))
+    const [terms, web] = await Promise.all([
+      this._sp.termStore.sets
+        .getById(termSetId)
+        .terms.select('*', 'localProperties')
+        .using(DefaultCaching)(),
+      this._sp.web.select('Language')()
+    ])
+    return terms.map(
+      (term) => new ProjectPhaseModel(term, termSetId, checklistData[term.id], web.Language)
+    )
+  }
+
+  /**
+   * Get document types for the project.
+   *
+   * @param termSetId Term set ID
+   */
+  public async getDocumentTypes(termSetId: string): Promise<DocumentTypeModel[]> {
+    const [terms, web] = await Promise.all([
+      this._sp.termStore.sets
+        .getById(termSetId)
+        .terms.select('*', 'localProperties')
+        .using(DefaultCaching)(),
+      this._sp.web.select('Language')()
+    ])
+    return terms.map((term) => new DocumentTypeModel(term, termSetId, web.Language))
   }
 
   /**

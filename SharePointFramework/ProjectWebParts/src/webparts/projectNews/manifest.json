@@ -3,7 +3,7 @@
   "id": "a9097537-6860-4e05-99f3-4ee21782687f",
   "alias": "ProjectNewsWebPart",
   "componentType": "WebPart",
-  "version": "1.11.1",
+  "version": "1.12.0",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "hiddenFromToolbox": false,
@@ -25,12 +25,7 @@
         "en-US": "Publish project news to a central hub and display the latest updates from your project in an organized way."
       },
       "officeFabricIconFontName": "News",
-      "properties": {
-        "title": "Prosjektnyheter",
-        "siteUrl": "",
-        "newsFolderName": "Prosjektnyheter",
-        "maxVisibleNews": 4
-      }
+      "properties": {}
     }
   ]
 }

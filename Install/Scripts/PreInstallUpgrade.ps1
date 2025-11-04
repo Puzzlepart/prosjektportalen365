@@ -1,5 +1,5 @@
-
-$LastInstall = Get-PnPListItem -List "Installasjonslogg" -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>" | Select-Object -First 1 -Wait
+$InstallationEntriesList = Get-PnPList -Identity (Get-Resource -Name "Lists_InstallationLog_Title") -ErrorAction Stop
+$LastInstall = Get-PnPListItem -List $InstallationEntriesList.Id -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>" | Select-Object -First 1 -Wait
 if ($null -ne $LastInstall) {
     $PreviousVersion = ParseVersionString -VersionString $LastInstall.FieldValues["InstallVersion"]
 
@@ -96,10 +96,10 @@ if ($null -ne $LastInstall) {
     }
 
     if ($PreviousVersion -lt [version]"1.10.0") {
-        Write-Host "[INFO] Changing fieldtype of GtUNSustDevGoalsText"
         try {
             $Field = Get-PnPField -Identity "GtUNSustDevGoalsText" -List "Prosjekter" -Includes FieldTypeKind
             if ($null -ne $Field) {
+                Write-Host "[INFO] Changing fieldtype of GtUNSustDevGoalsText"
                 $Field.FieldTypeKind = [Microsoft.SharePoint.Client.FieldType]::Note
                 $Field.Update()
                 $Field.Context.ExecuteQuery()
@@ -118,11 +118,11 @@ if ($null -ne $LastInstall) {
         }
     }
     
-    if ($PreviousVersion -lt [version]"1.12.0") {
-        Write-Host "[INFO] Changing fieldtype of Installasjonslogg/InstallCommand from Text to Note"
+    if ($PreviousVersion -lt [version]"1.11.1") {
         try {
             $Field = Get-PnPField -Identity "InstallCommand" -List "Installasjonslogg" -Includes FieldTypeKind
-            if ($null -ne $Field) {
+            if ($null -ne $Field -and $Field.FieldTypeKind -eq [Microsoft.SharePoint.Client.FieldType]::Text) {
+                Write-Host "[INFO] Changing fieldtype of Installasjonslogg/InstallCommand from Text to Note"
                 $Field.FieldTypeKind = [Microsoft.SharePoint.Client.FieldType]::Note
                 $Field.Update()
                 $Field.Context.ExecuteQuery()

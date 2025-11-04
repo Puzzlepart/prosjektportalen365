@@ -5,10 +5,10 @@ import {
   TimelineConfigurationModel,
   TimelineContentModel
 } from 'pp365-shared-library/lib/models'
-import strings from 'ProjectWebPartsStrings'
 import { IProjectTimelineProps } from '../types'
 import '@pnp/sp/items/get-all'
 import { IColumn } from '@fluentui/react'
+import resource from 'SharedResources'
 
 /**
  * Fetch timeline items and columns.
@@ -22,7 +22,7 @@ export async function fetchTimelineData(
 ) {
   try {
     const timelineContentList = SPDataAdapter.portalDataService.web.lists.getByTitle(
-      strings.TimelineContentListName
+      resource.Lists_TimelineContent_Title
     )
 
     let projectDeliveries = []
@@ -46,7 +46,7 @@ export async function fetchTimelineData(
           item.GtDeliveryDescription,
           item.GtTag || ''
         ).usingConfig({
-          elementType: strings.BarLabel,
+          elementType: resource.TimelineConfiguration_Bar_ElementType,
           timelineFilter: true,
           ...config
         })
@@ -90,16 +90,22 @@ export async function fetchTimelineData(
       (item) => item.GtSiteIdLookup?.GtSiteId === props.siteId
     )
 
-    const columns = defaultViewFields
-      .filter((column) => column.InternalName !== 'GtSiteIdLookup')
-      .map<IColumn>((column) => ({
-        key: column.InternalName,
-        name: column.Title,
-        fieldName: column.InternalName,
-        data: { type: column.TypeAsString },
-        minWidth: 100,
-        maxWidth: 200
-      }))
+    const columns = defaultViewColumns
+      .filter((columnName) => columnName !== 'GtSiteIdLookup')
+      .map<IColumn>((columnName) => {
+        const column = defaultViewFields.find((fld) => fld.InternalName === columnName)
+        return column
+          ? {
+              key: column.InternalName,
+              name: column.Title,
+              fieldName: column.InternalName,
+              data: { type: column.TypeAsString },
+              minWidth: 100,
+              maxWidth: 200
+            }
+          : null
+      })
+      .filter(Boolean)
 
     timelineContentItems = timelineListItems
       .filter((item) => item.GtSiteIdLookup !== null)

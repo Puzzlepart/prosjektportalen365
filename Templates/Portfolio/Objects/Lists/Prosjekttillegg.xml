@@ -1,6 +1,6 @@
 <pnp:ListInstance Title="{resource:Lists_ProjectExtensions_Title}" Description="" DocumentTemplate="" Hidden="true" TemplateType="101" Url="{resource:Lists_ProjectExtensions_Url}" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" EnableAttachments="false" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
-    <pnp:Views RemoveExistingViews="true">
+    <pnp:Views>
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_ProjectExtensions_Url}/Forms/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
             <Query>
                 <OrderBy>

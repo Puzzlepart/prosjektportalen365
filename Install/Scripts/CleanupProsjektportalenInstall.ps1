@@ -37,7 +37,7 @@ $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".share
 
 # Set-PnPTraceLog -Off
 
-Connect-PnPOnline -Url $AdminSiteUrl -Interactive -ClientId $ClientId
+Connect-PnPOnline -Url $AdminSiteUrl -ClientId $ClientId
 
 Write-Host "🗃️ Retrieving all sites of the Project Portal hub..."
 $ProjectsHub = Get-PnPTenantSite -Identity $Url -ErrorAction SilentlyContinue

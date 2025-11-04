@@ -1,8 +1,15 @@
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC, useContext } from 'react'
 import { FooterContext } from '../context'
-import { Button, Tooltip, FluentProvider, IdPrefixProvider, useId } from '@fluentui/react-components'
+import {
+  Button,
+  Tooltip,
+  FluentProvider,
+  IdPrefixProvider,
+  useId
+} from '@fluentui/react-components'
 import { getFluentIcon, customLightTheme } from 'pp365-shared-library'
+import resource from 'SharedResources'
 
 export const Configuration: FC = () => {
   const context = useContext(FooterContext)
@@ -18,7 +25,10 @@ export const Configuration: FC = () => {
             size='small'
             appearance='subtle'
             onClick={() =>
-              window.open(`${context.props.portalUrl}/SitePages/Konfigurasjon.aspx`, '_blank')
+              window.open(
+                `${context.props.portalUrl}/SitePages/${resource.ClientSidePages_Configuration_PageName}`,
+                '_blank'
+              )
             }
             icon={getFluentIcon('ContentSettings')}
           >
