@@ -3,6 +3,7 @@ name: CI (channels/i18n)
 on:
   push:
     branches:
+      - main
       - releases/1.12
     paths:
       - 'SharePointFramework/**'

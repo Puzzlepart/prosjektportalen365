@@ -3,7 +3,6 @@
 
 import {
   IPropertyPaneConfiguration,
-  PropertyPaneDropdown,
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'

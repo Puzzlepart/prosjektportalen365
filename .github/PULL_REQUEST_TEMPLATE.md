@@ -6,7 +6,7 @@ Sørg for at du ber om PR for din branch (høyre side). Sørg for at du gjør en
 
 Alle sjekkpunktene under må være sjekket av og godkjent for at vi skal kunne merge branchen din mot release-branch.
 
-- [ ] Legg ved beskrivelse i [CHANGELOG](https://github.com/Puzzlepart/prosjektportalen365/blob/dev/CHANGELOG.md), markert med **ID av issue** knyttet til PR-en
+- [ ] Legg ved beskrivelse i [CHANGELOG](https://github.com/Puzzlepart/prosjektportalen365/blob/dev/CHANGELOG.md), markert med **ID av issue** (dersom relevant) knyttet til PR-en
 - [ ] Angi korrekt `Milestone` på PR-en og issuet, samt tilegn deg selv PR-en og legg til `labels`
 
 ### Beskrivelse
