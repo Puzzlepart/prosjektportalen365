@@ -1064,7 +1064,7 @@
         <value>Grafkonfigurasjonelement</value>
     </data>
     <data name="ContentTypes_Checkpoint_Description" xml:space="preserve">
-        <value/>
+        <value>Opprett et nytt sjekkpunkt</value>
     </data>
     <data name="ContentTypes_Checkpoint_Name" xml:space="preserve">
         <value>Sjekkpunkt</value>
@@ -1082,7 +1082,7 @@
         <value>Kommunikasjonselement</value>
     </data>
     <data name="ContentTypes_ConfigurationElement_Description" xml:space="preserve">
-        <value/>
+        <value>Opprett et nytt konfigurasjonselement</value>
     </data>
     <data name="ContentTypes_ConfigurationElement_Name" xml:space="preserve">
         <value>Konfigurasjonselement</value>
@@ -1133,25 +1133,25 @@
         <value>Lenker</value>
     </data>
     <data name="ContentTypes_ListContent_Description" xml:space="preserve">
-        <value/>
+        <value>Opprett et nytt listeinnhold</value>
     </data>
     <data name="ContentTypes_ListContent_Name" xml:space="preserve">
         <value>Listeinnhold</value>
     </data>
     <data name="ContentTypes_ListSection_Description" xml:space="preserve">
-        <value/>
+        <value>Opprett en ny listeseksjon</value>
     </data>
     <data name="ContentTypes_ListSection_Name" xml:space="preserve">
         <value>Listeseksjon</value>
     </data>
     <data name="ContentTypes_LogElement_Description" xml:space="preserve">
-        <value/>
+        <value>Opprett et nytt loggelement</value>
     </data>
     <data name="ContentTypes_LogElement_Name" xml:space="preserve">
         <value>Loggelement</value>
     </data>
     <data name="ContentTypes_ArchiveLogElement_Description" xml:space="preserve">
-        <value/>
+        <value>Opprett et nytt arkiveringsloggelement</value>
     </data>
     <data name="ContentTypes_ArchiveLogElement_Name" xml:space="preserve">
         <value>Arkiveringsloggelement</value>
@@ -1166,19 +1166,19 @@
         <value>Tillatelseskonfigurasjonelement</value>
     </data>
     <data name="ContentTypes_PlannerTask_Description" xml:space="preserve">
-        <value/>
+        <value>En spesifikk oppgave som skal utføres som en del av en Planner</value>
     </data>
     <data name="ContentTypes_PlannerTask_Name" xml:space="preserve">
         <value>Planneroppgave</value>
     </data>
     <data name="ContentTypes_PlannerTasks_Description" xml:space="preserve">
-        <value/>
+        <value>En samling oppgaver som skal utføres som en del av en Planner</value>
     </data>
     <data name="ContentTypes_PlannerTasks_Name" xml:space="preserve">
         <value>Planneroppgaver</value>
     </data>
     <data name="ContentTypes_PortfolioView_Description" xml:space="preserve">
-        <value/>
+        <value>Opprett en ny porteføljevisning</value>
     </data>
     <data name="ContentTypes_PortfolioView_Name" xml:space="preserve">
         <value>Porteføljevisning</value>
@@ -1223,19 +1223,19 @@
         <value>Prosjekt (ByggAnlegg)</value>
     </data>
     <data name="ContentTypes_ProjectColumnConfiguration_Description" xml:space="preserve">
-        <value/>
+        <value>Opprett et nytt prosjektkolonnekonfigurasjonelement</value>
     </data>
     <data name="ContentTypes_ProjectColumnConfiguration_Name" xml:space="preserve">
         <value>Prosjektkolonnekonfigurasjonselement</value>
     </data>
     <data name="ContentTypes_ProjectColumn_Description" xml:space="preserve">
-        <value/>
+        <value>Opprett en ny prosjektkolonne</value>
     </data>
     <data name="ContentTypes_ProjectColumn_Name" xml:space="preserve">
         <value>Prosjektkolonne</value>
     </data>
     <data name="ContentTypes_ProjectContentColumn_Description" xml:space="preserve">
-        <value/>
+        <value>Opprett en ny prosjektinnholdskolonne</value>
     </data>
     <data name="ContentTypes_ProjectContentColumn_Name" xml:space="preserve">
         <value>Prosjektinnholdskolonne</value>
@@ -1268,7 +1268,7 @@
         <value>Prosjektstatus (ByggAnlegg)</value>
     </data>
     <data name="ContentTypes_ProjectStatus_Description" xml:space="preserve">
-        <value/>
+        <value>Opprett en ny prosjektstatus</value>
     </data>
     <data name="ContentTypes_ProjectStatus_Name" xml:space="preserve">
         <value>Prosjektstatus</value>
@@ -1277,7 +1277,7 @@
         <value>Prosjektoppgave</value>
     </data>
     <data name="ContentTypes_Project_Description" xml:space="preserve">
-        <value/>
+        <value>Opprett et nytt prosjekt</value>
     </data>
     <data name="ContentTypes_Project_Name" xml:space="preserve">
         <value>Prosjekt</value>
@@ -1292,7 +1292,7 @@
         <value>Risiko</value>
     </data>
     <data name="ContentTypes_SectionBase_Description" xml:space="preserve">
-        <value/>
+        <value>Opprett en ny seksjonsbase</value>
     </data>
     <data name="ContentTypes_SectionBase_Name" xml:space="preserve">
         <value>Seksjonsbase</value>
@@ -1304,13 +1304,13 @@
         <value>Sektordiagram</value>
     </data>
     <data name="ContentTypes_Stakeholder_Description" xml:space="preserve">
-        <value/>
+        <value>Opprett en ny interessent</value>
     </data>
     <data name="ContentTypes_Stakeholder_Name" xml:space="preserve">
         <value>Interessent</value>
     </data>
     <data name="ContentTypes_StatusFieldSection_Description" xml:space="preserve">
-        <value/>
+        <value>Opprett en ny seksjon for statusfelt</value>
     </data>
     <data name="ContentTypes_StatusFieldSection_Name" xml:space="preserve">
         <value>Seksjon for statusfelt</value>
@@ -2363,13 +2363,13 @@
         <value>Ikon</value>
     </data>
     <data name="Lists_ProjectTemplates_Fields_IsDefaultTemplate_Description" xml:space="preserve">
-        <value/>
+        <value>Angi om dette er standardmalen</value>
     </data>
     <data name="Lists_ProjectTemplates_Fields_IsDefaultTemplate_DisplayName" xml:space="preserve">
         <value>Standardmal</value>
     </data>
     <data name="Lists_ProjectTemplates_Fields_ListContentConfigLookup_Description" xml:space="preserve">
-        <value/>
+        <value>Velg listeinnholdskonfigurasjon for denne malen</value>
     </data>
     <data name="Lists_ProjectTemplates_Fields_ListContentConfigLookup_DisplayName" xml:space="preserve">
         <value>Listeinnhold</value>
@@ -2480,10 +2480,10 @@
         <value>Oppsett av maler for nye områder</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_FieldConfigurationName_Description" xml:space="preserve">
-        <value/>
+        <value>Velg feltkonfigurasjon for denne malen</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_FieldConfigurationName_Description" xml:space="preserve">
-        <value/>
+        <value>Velg feltkonfigurasjon for denne malen</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_FieldConfigurationName_DisplayName" xml:space="preserve">
         <value>Feltkonfigurasjon</value>
@@ -2495,10 +2495,10 @@
         <value>Velg malbibliotek som skal brukes som kilde for maler som kan hentes inn til dokumentbibliotekene i prosjektet.</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectColumns_Description" xml:space="preserve">
-        <value/>
+        <value>Velg prosjektkolonner som skal inkluderes i denne malen</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectColumns_Description" xml:space="preserve">
-        <value/>
+        <value>Velg prosjektkolonner som skal inkluderes i denne malen</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectColumns_DisplayName" xml:space="preserve">
         <value>Prosjektkolonner</value>
@@ -2507,10 +2507,10 @@
         <value>Prosjektkolonner</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectContentType_Description" xml:space="preserve">
-        <value/>
+        <value>Velg innholdstypen som skal brukes for prosjekter opprettet med denne malen</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectContentType_Description" xml:space="preserve">
-        <value/>
+        <value>Velg innholdstypen som skal brukes for prosjekter opprettet med denne malen</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectContentType_DisplayName" xml:space="preserve">
         <value>Prosjekt innholdstype</value>
@@ -2519,10 +2519,10 @@
         <value>Prosjekt innholdstype</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectCustomColumns_Description" xml:space="preserve">
-        <value/>
+        <value>Velg kundespesifikke kolonner som skal inkluderes i denne malen</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectCustomColumns_Description" xml:space="preserve">
-        <value/>
+        <value>Velg kundespesifikke kolonner som skal inkluderes i denne malen</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectCustomColumns_DisplayName" xml:space="preserve">
         <value>Kundespesifikke kolonner</value>
@@ -2531,10 +2531,10 @@
         <value>Kundespesifikke kolonner</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectExtensions_Description" xml:space="preserve">
-        <value/>
+        <value>Velg utvidelser som skal inkluderes i denne malen</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectExtensions_Description" xml:space="preserve">
-        <value/>
+        <value>Velg utvidelser som skal inkluderes i denne malen</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectExtensions_DisplayName" xml:space="preserve">
         <value>Utvidelser</value>
@@ -2543,10 +2543,10 @@
         <value>Utvidelser</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectPhaseTermId_Description" xml:space="preserve">
-        <value/>
+        <value>Angi termsett-ID for prosjektfaser</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectPhaseTermId_Description" xml:space="preserve">
-        <value/>
+        <value>Angi termsett-ID for prosjektfaser</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectPhaseTermId_DisplayName" xml:space="preserve">
         <value>Prosjektfase Termsett ID</value>
@@ -2555,10 +2555,10 @@
         <value>Prosjektfase Termsett ID</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectStatusContentType_Description" xml:space="preserve">
-        <value/>
+        <value>Velg innholdstypen som skal brukes for prosjektstatus</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectStatusContentType_Description" xml:space="preserve">
-        <value/>
+        <value>Velg innholdstypen som skal brukes for prosjektstatus</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectStatusContentType_DisplayName" xml:space="preserve">
         <value>Prosjektstatus innholdstype</value>
@@ -2567,10 +2567,10 @@
         <value>Prosjektstatus innholdstype</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectTemplate_Description" xml:space="preserve">
-        <value/>
+        <value>Velg PnP-malen som skal brukes ved opprettelse av prosjekter</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectTemplate_Description" xml:space="preserve">
-        <value/>
+        <value>Velg PnP-malen som skal brukes ved opprettelse av prosjekter</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectTemplate_DisplayName" xml:space="preserve">
         <value>Mal</value>
@@ -2579,10 +2579,10 @@
         <value>Mal</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_IconName_Description" xml:space="preserve">
-        <value/>
+        <value>Angi ikonnavnet for denne malen</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_IconName_Description" xml:space="preserve">
-        <value/>
+        <value>Angi ikonnavnet for denne malen</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_IconName_DisplayName" xml:space="preserve">
         <value>Ikon</value>
@@ -2627,10 +2627,10 @@
         <value>Lås valgte listeinnhold?</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_IsDefaultTemplate_Description" xml:space="preserve">
-        <value/>
+        <value>Angi om dette er standardmalen</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_IsDefaultTemplate_Description" xml:space="preserve">
-        <value/>
+        <value>Angi om dette er standardmalen</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_IsDefaultTemplate_DisplayName" xml:space="preserve">
         <value>Standard mal?</value>
@@ -2639,10 +2639,10 @@
         <value>Standard mal?</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_IsHiddenTemplate_Description" xml:space="preserve">
-        <value/>
+        <value>Skjul denne malen fra malvalg</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_IsHiddenTemplate_Description" xml:space="preserve">
-        <value/>
+        <value>Skjul denne malen fra malvalg</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_IsHiddenTemplate_DisplayName" xml:space="preserve">
         <value>Skjult</value>
@@ -2651,10 +2651,10 @@
         <value>Skjult</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_ListContentConfigLookup_Description" xml:space="preserve">
-        <value/>
+        <value>Velg listeinnholdskonfigurasjon for denne malen</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_ListContentConfigLookup_Description" xml:space="preserve">
-        <value/>
+        <value>Velg listeinnholdskonfigurasjon for denne malen</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_ListContentConfigLookup_DisplayName" xml:space="preserve">
         <value>Listeinnhold</value>

@@ -63,7 +63,7 @@ Kildefilene finnes i mappen **src**.
 
 ## ➤ JS Provisjoneringsmal
 
-Ikke alt vi ønsker å gjøre er tilgjengelig med `site design`, så vi bruker også [sp-js-provisioning](https://github.com/Puzzlepart/sp-js-provisioning). Vær oppmerksom på at vi bruker `Puzzlepart-branch` fra **pnp**.
+For å sette opp prosjektområdene bruker vi Prosjektområde `site design` som laster inn en extension for prosjektsetup som bruker [sp-js-provisioning](https://github.com/Puzzlepart/sp-js-provisioning).
 
 Med våre PnP-innholdsmaler (se **3.2.2**) setter vi opp en standardmal. Standardmalene for våre støttede språk er bygget fra kildefilen [_JsonTemplate.json](../Templates/_JsonTemplate.json).
 
