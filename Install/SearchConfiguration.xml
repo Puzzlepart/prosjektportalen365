@@ -599,7 +599,7 @@
                                 <d5p1:SchemaId>0</d5p1:SchemaId> 
                             </d3p1:Value> 
                         </d3p1:KeyValueOfstringCrawledPropertyInfoy6h3NzC8>
-                         <d3p1:KeyValueOfstringCrawledPropertyInfoy6h3NzC8>
+                        <d3p1:KeyValueOfstringCrawledPropertyInfoy6h3NzC8>
                             <d3p1:Key>ows_GtIdeaOperationalNumber</d3p1:Key>
                             <d3p1:Value>
                                 <d5p1:Name>ows_GtIdeaOperationalNumber</d5p1:Name>
@@ -909,7 +909,7 @@
                         <d3p1:SchemaId>0</d3p1:SchemaId> 
                     </d4p1:Value> 
                 </d4p1:KeyValueOfstringMappingInfoy6h3NzC8>
-                 <d4p1:KeyValueOfstringMappingInfoy6h3NzC8> 
+                <d4p1:KeyValueOfstringMappingInfoy6h3NzC8> 
                     <d4p1:Key>00130329-0000-0130-c000-000000131346:ows_GtIdeaOperationalNumber-&gt;1000000082</d4p1:Key> 
                     <d4p1:Value> 
                         <d3p1:Name>00130329-0000-0130-c000-000000131346:ows_GtIdeaOperationalNumber-&gt;1000000082</d3p1:Name> 
