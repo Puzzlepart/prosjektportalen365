@@ -331,6 +331,7 @@ define([], function () {
     ColumnRenderOptionDialogShowInfoTextLabel: 'Show infotext',
     ColumnRenderOptionNote: 'Note',
     ColumnRenderOptionNumber: 'Number',
+    ColumnRenderOptionCalculated: 'Calculated',
     ColumnRenderOptionPercentage: 'Percentage',
     ColumnRenderOptionProjectInfo: 'Projectinformation',
     ColumnRenderOptionTags: 'Labels',
