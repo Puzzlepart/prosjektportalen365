@@ -10,6 +10,10 @@ export const DateColumn: ColumnRenderComponent<IDateColumnProps> = (props) => {
   return <span>{formatDate(props.columnValue, props.includeTime)}</span>
 }
 
+DateColumn.defaultProps = {
+  includeTime: false
+}
+
 DateColumn.key = 'date'
 DateColumn.id = 'Date'
 DateColumn.displayName = strings.ColumnRenderOptionDate
