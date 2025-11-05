@@ -6,7 +6,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 
 ### Ny funksjonalitet
 
-- Engelsk versjon av Prosjektportalen! *Hjelpedokumentasjon om hvordan komme i gang*
+- Engelsk versjon av Prosjektportalen! Sjekk ut [release notes](./releasenotes/1.12.0.md#prosjektportalen-på-engelsk) for mer informasjon.
 - Ny funksjonalitet i fasevelgeren for arkivering av dokumenter og lister som skal arkiveres ved faseendring
   - Elementer som skal til arkivering loggføres i en ny liste på porteføljenivå kalt `Arkiveringslogg`
   - Webhook-integrasjon for ekstern arkivhåndtering som håndterer arkivering av dokumenter og lister basert på loggføringen
