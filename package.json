@@ -28,18 +28,14 @@
   "contributors": [
     {
       "name": "Tarjei Ormestøyl",
-      "email": "tarjeieo@puzzlepart.com"
-    },
-    {
-      "name": "Ole Martin Pettersen",
-      "email": "olemp@puzzlepart.com"
+      "email": "tarjei.ormestoyl@crayon.no"
     },
     {
       "name": "Remi Blom-Ohlsen",
-      "email": "remi.blom-ohlsen@puzzlepart.com"
+      "email": "remi.blom-ohlsen@crayon.no"
     }
   ],
-  "author": "olemp@puzzlepart.com",
+  "author": "tarjei.ormestoyl@crayon.no",
   "license": "MIT",
   "devDependencies": {
     "fs-extra": "11.1.0",
