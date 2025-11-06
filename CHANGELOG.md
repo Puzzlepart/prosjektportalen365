@@ -8,7 +8,13 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 
 ### Forbedringer
 
+- Lagt til karakterteller (maks 255 tegn) for navnefeltet i Bestillingsportalen-skjema som dukker opp dersom bruker overgår 200 tegn
+- Lagt til begrensning av antall karakterer for Alias/navn i Bestillingsportalen-skjema
+- Redusert maksimal bildestørrelse fra 800KB til 512KB for bildeopplasting i Bestillingsportalen-skjema
+
 ### Feilrettinger
+
+- Rettet et problem hvor bildeforhåndsvisning forsvant ved navigasjon mellom nivåer i Bestillingsportalen-skjema
 
 ---
 

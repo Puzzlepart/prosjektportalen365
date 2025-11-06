@@ -1,9 +1,12 @@
-import React, { FC } from 'react'
+import React, { FC, useMemo } from 'react'
 import { useDropzone } from 'react-dropzone'
 import styles from './ImageUpload.module.scss'
 import strings from 'PortfolioWebPartsStrings'
 
-export const ImageUpload: FC<{ onImageUpload: (image: string) => void }> = ({ onImageUpload }) => {
+export const ImageUpload: FC<{
+  onImageUpload: (image: string) => void
+  currentImage?: string
+}> = ({ onImageUpload, currentImage }) => {
   const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject, acceptedFiles } =
     useDropzone({
       onDrop: (file) => {
@@ -18,7 +21,7 @@ export const ImageUpload: FC<{ onImageUpload: (image: string) => void }> = ({ on
         'image/jpg': [],
         'image/png': []
       },
-      maxSize: 800000
+      maxSize: 512000
     })
 
   const getColor = () => {
@@ -28,22 +31,36 @@ export const ImageUpload: FC<{ onImageUpload: (image: string) => void }> = ({ on
     return '#e0e0e0'
   }
 
+  const imagePreviewSrc = useMemo(() => {
+    if (acceptedFiles.length > 0) {
+      return URL.createObjectURL(acceptedFiles[0])
+    }
+    return currentImage
+  }, [acceptedFiles, currentImage])
+
+  const imagePreviewName = useMemo(() => {
+    if (acceptedFiles.length > 0) {
+      return acceptedFiles[0].name
+    }
+    return 'Uploaded image'
+  }, [acceptedFiles])
+
   return (
     <div className={styles.imageUpload}>
       <div
         className={styles.dropzone}
         {...getRootProps({ isFocused, isDragAccept, isDragReject })}
-        style={{ borderColor: getColor() }}
+        style={{ borderColor: getColor(), color: isDragReject && '#ff1744' }}
       >
         <input {...getInputProps()} />
-        <p>{strings.Provision.ImageDropZoneText}</p>
+        <p>{isDragReject ? strings.Provision.ImageDropZoneErrorText : strings.Provision.ImageDropZoneText}</p>
       </div>
-      {acceptedFiles.length > 0 && (
+      {imagePreviewSrc && (
         <div className={styles.imagePreview}>
           <img
-            src={URL.createObjectURL(acceptedFiles[0])}
-            alt={acceptedFiles[0].name}
-            title={acceptedFiles[0].name}
+            src={imagePreviewSrc}
+            alt={imagePreviewName}
+            title={imagePreviewName}
           />
         </div>
       )}

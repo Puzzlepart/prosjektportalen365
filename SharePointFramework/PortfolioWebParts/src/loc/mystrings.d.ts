@@ -108,6 +108,7 @@ declare interface IPortfolioWebPartsStrings {
     ImageFieldLabel: string
     ImageFieldDescription: string
     ImageDropZoneText: string
+    ImageDropZoneErrorText: string
     DrawerFooterDescriptionText: string
     PreviousButtonLabel: string
     NextButtonLabel: string

@@ -214,11 +214,12 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     <Input
                       value={nameInput.value}
                       onChange={async (_, data) => {
-                        nameInput.onChange(data.value)
+                        const limitedValue = data.value.substring(0, 255)
+                        nameInput.onChange(limitedValue)
 
-                        if (data.value) {
+                        if (limitedValue) {
                           setTimeout(async () => {
-                            const value = data.value
+                            const value = limitedValue
                               .replace(/ /g, '')
                               .replace(/[^a-z-A-Z0-9-]/g, '')
 
@@ -242,15 +243,30 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                         )
                       }
                       contentAfter={
-                        namingConvention?.suffixText && (
-                          <Tooltip
-                            withArrow
-                            content={strings.Provision.SiteNameSuffixTooltipText}
-                            relationship='label'
+                        <>
+                          {namingConvention?.suffixText && (
+                            <Tooltip
+                              withArrow
+                              content={strings.Provision.SiteNameSuffixTooltipText}
+                              relationship='label'
+                            >
+                              <Tag size='small'>{namingConvention?.suffixText}</Tag>
+                            </Tooltip>
+                          )}
+                          {nameInput.value.length >= 200 && (
+                            <span
+                              style={{
+                                fontSize: '12px',
+                                color:
+                                  nameInput.value.length > 255
+                                    ? 'var(--colorPaletteRedForeground1)'
+                                  : 'var(--colorNeutralForeground3)',
+                              marginLeft: namingConvention?.suffixText ? '8px' : '0'
+                            }}
                           >
-                            <Tag size='small'>{namingConvention?.suffixText}</Tag>
-                          </Tooltip>
-                        )
+                            {nameInput.value.length}/255
+                          </span>)}
+                        </>
                       }
                       placeholder={getField('name').placeholder}
                     />
@@ -666,7 +682,10 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     required={getField('image').required}
                     hidden={getField('image').hidden}
                   >
-                    <ImageUpload onImageUpload={(image) => context.setColumn('image', image)} />
+                    <ImageUpload
+                      onImageUpload={(image) => context.setColumn('image', image)}
+                      currentImage={context.column.get('image')}
+                    />
                   </FieldContainer>
                   <Divider />
                   <FieldContainer
