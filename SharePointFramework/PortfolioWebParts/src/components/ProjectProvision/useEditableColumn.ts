@@ -193,8 +193,13 @@ export function useEditableColumn(
           const newColumn = new Map(prev)
 
           if (key === 'name' && typeof value === 'string') {
-            const alias = value.replace(/ /g, '').replace(/[^a-z-A-Z0-9-]/g, '')
-            newColumn.set('alias', alias)
+            if (value.length <= 64) {
+              const alias = value
+                .replace(/ /g, '')
+                .replace(/[^a-z-A-Z0-9-]/g, '')
+                .substring(0, 64)
+              newColumn.set('alias', alias)
+            }
           }
 
           newColumn.set(key, value)
@@ -205,8 +210,13 @@ export function useEditableColumn(
           properties: {
             ...state.properties,
             [key]: transformedValue,
-            ...(key === 'name' && typeof value === 'string'
-              ? { alias: value.replace(/ /g, '').replace(/[^a-z-A-Z0-9-]/g, '') }
+            ...(key === 'name' && typeof value === 'string' && value.length <= 64
+              ? {
+                  alias: value
+                    .replace(/ /g, '')
+                    .replace(/[^a-z-A-Z0-9-]/g, '')
+                    .substring(0, 64)
+                }
               : {})
           }
         })
