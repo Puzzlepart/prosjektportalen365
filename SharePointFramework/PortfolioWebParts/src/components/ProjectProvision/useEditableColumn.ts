@@ -193,13 +193,11 @@ export function useEditableColumn(
           const newColumn = new Map(prev)
 
           if (key === 'name' && typeof value === 'string') {
-            if (value.length <= 64) {
-              const alias = value
-                .replace(/ /g, '')
-                .replace(/[^a-z-A-Z0-9-]/g, '')
-                .substring(0, 64)
-              newColumn.set('alias', alias)
-            }
+            const alias = value
+              .substring(0, 64)
+              .replace(/ /g, '')
+              .replace(/[^a-z-A-Z0-9-]/g, '')
+            newColumn.set('alias', alias)
           }
 
           newColumn.set(key, value)
@@ -210,19 +208,18 @@ export function useEditableColumn(
           properties: {
             ...state.properties,
             [key]: transformedValue,
-            ...(key === 'name' && typeof value === 'string' && value.length <= 64
+            ...(key === 'name' && typeof value === 'string'
               ? {
                   alias: value
+                    .substring(0, 64)
                     .replace(/ /g, '')
                     .replace(/[^a-z-A-Z0-9-]/g, '')
-                    .substring(0, 64)
                 }
               : {})
           }
         })
       } catch (error) {
         console.error(`Error setting column '${key}':`, error)
-        // Still update the column with the original value to maintain UI consistency
         $setColumn((prev) => {
           const newColumn = new Map(prev)
           newColumn.set(key, value)
