@@ -10,6 +10,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Ny funksjonalitet i fasevelgeren for arkivering av dokumenter og lister som skal arkiveres ved faseendring
   - Elementer som skal til arkivering loggføres i en ny liste på porteføljenivå kalt `Arkiveringslogg`
   - Webhook-integrasjon for ekstern arkivhåndtering som håndterer arkivering av dokumenter og lister basert på loggføringen
+  - Nytt taksonomifelt "dokumenttype" i dokumentbiblioteket på nye prosjekter
 - Ny status for arkivering av prosjekt, viser informasjon om de siste arkiveringsaktivitetene på prosjektet.
 
 ### Forbedringer
@@ -22,6 +23,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 
 ### Feilrettinger
 
+- Rettet et problem hvor Prosjektstatus-feltene for PP-Assistentens vurdering ikke ble installert (Førte til feil i bruk av PP-assistenten mot prosjektstatus)
 - Rettet et problem hvor tilpassede malbiblioteket ikke ble valgt når man klikket på "Hent dokumentmal" fra dokumentbiblioteket [#1628](https://github.com/Puzzlepart/prosjektportalen365/issues/1628)
 - Rettet et problem hvor Porteføljeoversiktens egenskapspanel ikke fungerte.
 - Rettet et problem hvor tallet 0 vises som blankt i gevinstoversikten [#1649](https://github.com/Puzzlepart/prosjektportalen365/issues/1649)
