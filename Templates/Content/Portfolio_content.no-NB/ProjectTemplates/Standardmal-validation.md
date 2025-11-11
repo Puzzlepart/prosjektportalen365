@@ -1,4 +1,4 @@
-_The template was validated 10/10/2025, 1:28:40 PM_
+_The template was validated 11/4/2025, 12:19:45 PM_
 
 The template contains the following tokens that has not been found in the .resx files:
 
@@ -10,7 +10,7 @@ _No tokens with missing translations or replacement values found._
 
 ```txt
 {
-    "Version": "1.11.1",
+    "Version": "1.12.0",
     "Parameters": {
         "ProvisionSiteFields": "Kolonner for Prosjektportalen (Prosjekt)",
         "CustomSiteFields": "Egendefinerte kolonner for Prosjektportalen",

@@ -3,7 +3,7 @@ on:
   pull_request:
     types: [assigned, opened, synchronize, reopened]
     branches:
-      - releases/1.11
+      - releases/1.12
     paths:
       - SharePointFramework/**
       - .github/workflows/pr-package-spfx-dev.yml

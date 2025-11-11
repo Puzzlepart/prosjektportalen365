@@ -302,7 +302,7 @@
             <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_ResourceAllocationProjectUserManual}</pnp:DataValue>
             <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Project};#{resource:Lists_HelpContent_Level_ParentProgram}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
-            <pnp:DataValue FieldName="GtURL">{resource:Lists_ResourceAllocation_Url}/AllItems.aspx</pnp:DataValue>
+            <pnp:DataValue FieldName="GtURL">{resource:Navigation_ResourceAllocation_Url}</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
             <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/5.3-Ressursallokering.md</pnp:DataValue>

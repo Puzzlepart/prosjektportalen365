@@ -4,6 +4,7 @@ import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, PnPClientStorage } from '@pnp/core'
 import { LogLevel } from '@pnp/logging'
 import { spfi, SPFx } from '@pnp/sp'
+import '@pnp/sp/items/get-all'
 import {
   ISearchResult,
   ISiteUserInfo,

@@ -131,5 +131,11 @@ if ($null -ne $LastInstall) {
         catch {
             Write-Host "[ERROR] Failed to change fieldtype of InstallCommand" -ForegroundColor Yellow
         }        
-    }    
+    }
+
+    if ($PreviousVersion -lt [version]"1.12.0") {
+        Write-Host "[INFO] Applying PnP upgrade template [1.12.0] to [$Url]"
+        Invoke-PnPSiteTemplate -Path "$TemplatesBasePath/1.12.0.pnp" -ErrorAction Stop
+        Write-Host "[SUCCESS] Successfully applied PnP template [1.12.0] to [$Url]" -ForegroundColor Green
+    }
 }

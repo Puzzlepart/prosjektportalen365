@@ -1151,7 +1151,7 @@
         <value>Log Element</value>
     </data>
     <data name="ContentTypes_ArchiveLogElement_Description" xml:space="preserve">
-        <value/>
+        <value>Create a new archive log element</value>
     </data>
     <data name="ContentTypes_ArchiveLogElement_Name" xml:space="preserve">
         <value>Archive Log Element</value>
@@ -1713,6 +1713,9 @@
     </data>
     <data name="Lists_GtTag_DisplayName" xml:space="preserve">
         <value>Tag</value>
+    </data>
+    <data name="Lists_GtTimelineTypeLookup_Description" xml:space="preserve">
+        <value>Select the timeline type for this element</value>
     </data>
     <data name="Lists_GtTimelineTypeLookup_DisplayName" xml:space="preserve">
         <value>Type</value>
@@ -2366,13 +2369,13 @@
         <value>Icon</value>
     </data>
     <data name="Lists_ProjectTemplates_Fields_IsDefaultTemplate_Description" xml:space="preserve">
-        <value/>
+        <value>Specify if this is the default template</value>
     </data>
     <data name="Lists_ProjectTemplates_Fields_IsDefaultTemplate_DisplayName" xml:space="preserve">
         <value>Default Template</value>
     </data>
     <data name="Lists_ProjectTemplates_Fields_ListContentConfigLookup_Description" xml:space="preserve">
-        <value/>
+        <value>Select list content configuration for this template</value>
     </data>
     <data name="Lists_ProjectTemplates_Fields_ListContentConfigLookup_DisplayName" xml:space="preserve">
         <value>List Content</value>
@@ -2402,7 +2405,7 @@
         <value>Resource Allocation</value>
     </data>
     <data name="Lists_ResourceAllocation_Url" xml:space="preserve">
-        <value>Lists/ResourceAllocation</value>
+        <value>Lists/Resource Allocation</value>
     </data>
     <data name="Lists_SitePages_Title" xml:space="preserve">
         <value>Site Pages</value>
@@ -2483,7 +2486,7 @@
         <value>Setup of templates for new project sites</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_FieldConfigurationName_Description" xml:space="preserve">
-        <value/>
+        <value>Select field configuration for this template</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_FieldConfigurationName_DisplayName" xml:space="preserve">
         <value>Field configuration</value>
@@ -2492,49 +2495,49 @@
         <value>Pick the template library to be used as a source for templates that can be imported into the project document libraries.</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectColumns_Description" xml:space="preserve">
-        <value/>
+        <value>Select project columns to include in this template</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectColumns_DisplayName" xml:space="preserve">
         <value>Project Columns</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectContentType_Description" xml:space="preserve">
-        <value/>
+        <value>Select the content type to use for projects created with this template</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectContentType_DisplayName" xml:space="preserve">
         <value>Content Type for Project</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectCustomColumns_Description" xml:space="preserve">
-        <value/>
+        <value>Select custom columns to include in this template</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectCustomColumns_DisplayName" xml:space="preserve">
         <value>Customer Specific Columns</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectExtensions_Description" xml:space="preserve">
-        <value/>
+        <value>Select extensions to include in this template</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectExtensions_DisplayName" xml:space="preserve">
         <value>Extensions</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectPhaseTermId_Description" xml:space="preserve">
-        <value/>
+        <value>Enter the term set ID for project phases</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectPhaseTermId_DisplayName" xml:space="preserve">
         <value>Project Phase Term Set ID</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectStatusContentType_Description" xml:space="preserve">
-        <value/>
+        <value>Select the content type to use for project status</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectStatusContentType_DisplayName" xml:space="preserve">
         <value>Content Type for Project Status</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectTemplate_Description" xml:space="preserve">
-        <value/>
+        <value>Select the PnP template to apply when creating projects</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectTemplate_DisplayName" xml:space="preserve">
         <value>Template</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_IconName_Description" xml:space="preserve">
-        <value/>
+        <value>Enter the icon name for this template</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_IconName_DisplayName" xml:space="preserve">
         <value>Icon</value>
@@ -2558,19 +2561,19 @@
         <value>Lock selected list content?</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_IsDefaultTemplate_Description" xml:space="preserve">
-        <value/>
+        <value>Specify if this is the default template</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_IsDefaultTemplate_DisplayName" xml:space="preserve">
         <value>Default Template</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_IsHiddenTemplate_Description" xml:space="preserve">
-        <value/>
+        <value>Hide this template from template selection</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_IsHiddenTemplate_DisplayName" xml:space="preserve">
         <value>Hidden</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_ListContentConfigLookup_Description" xml:space="preserve">
-        <value/>
+        <value>Select list content configuration for this template</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_ListContentConfigLookup_DisplayName" xml:space="preserve">
         <value>List Content</value>
@@ -2711,7 +2714,7 @@
         <value>Project Deliveries</value>
     </data>
     <data name="Navigation_ProjectDeliveries_Url" xml:space="preserve">
-        <value>Lists/Project deliveries/AllItems.aspx</value>
+        <value>Lists/Project Deliveries/AllItems.aspx</value>
     </data>
     <data name="Navigation_ProjectLog_Title" xml:space="preserve">
         <value>Project Log</value>
@@ -2723,7 +2726,7 @@
         <value>Project Status</value>
     </data>
     <data name="Navigation_ProjectStatus_Url" xml:space="preserve">
-        <value>SitePages/Project status.aspx</value>
+        <value>SitePages/ProjectStatus.aspx</value>
     </data>
     <data name="Navigation_ProjectTimeline_Title" xml:space="preserve">
         <value>Project Timeline</value>
@@ -3006,6 +3009,9 @@
     </data>
     <data name="SiteFields_GtCostsTotal_DisplayName" xml:space="preserve">
         <value>Total incurred costs</value>
+    </data>
+    <data name="SiteFields_GtCurrentVersion_Description" xml:space="preserve">
+        <value>The current version of Prosjektportalen installed on this site</value>
     </data>
     <data name="SiteFields_GtCurrentVersion_DisplayName" xml:space="preserve">
         <value>Current version</value>
@@ -3507,6 +3513,9 @@
     </data>
     <data name="SiteFields_GtIdeaUrl_DisplayName" xml:space="preserve">
         <value>Idea URL</value>
+    </data>
+    <data name="SiteFields_GtInstalledVersion_Description" xml:space="preserve">
+        <value>The originally installed version of Prosjektportalen on this site</value>
     </data>
     <data name="SiteFields_GtInstalledVersion_DisplayName" xml:space="preserve">
         <value>Installed version</value>

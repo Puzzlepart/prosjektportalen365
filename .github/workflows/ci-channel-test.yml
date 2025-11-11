@@ -3,9 +3,7 @@ name: CI (channels/test)
 on:
   push:
     branches:
-      - main
-      - releases/1.12
-      - feat/phase-archive
+      - releases/1.13
     paths:
       - 'SharePointFramework/**'
       - 'Install/**'
