@@ -112,7 +112,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         }
       }
 
-      // Remove alternative languages before showing the setup dialog
       await this._removeAlternativeLanguages()
 
       this._initializeSetup({
@@ -579,12 +578,13 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
 
   /**
    * Remove alternative languages from the current site before showing the setup dialog.
-   * This ensures the site operates in single language mode only.
-   * Only executes if the current user is a site admin.
+   * Disables multilingual features by setting IsMultilingual to false, then reloads
+   * the page to apply changes. Shows a progress dialog during the operation and logs
+   * the action to the SharePoint Log list after reload. Only executes if the current
+   * user is a site admin and the site has multilingual features enabled.
    */
   private async _removeAlternativeLanguages(): Promise<void> {
     try {
-      // Check if user has the required permissions (site admin)
       if (!this.context.pageContext.legacyPageContext.isSiteAdmin) {
         Logger.write(
           '(ProjectSetup) User is not a site admin, skipping alternative language removal.',
@@ -593,7 +593,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         return
       }
 
-      // Check if the site has multiple languages enabled
       const webInfo = await this.sp.web.select('Language', 'IsMultilingual')()
       
       Logger.write(
@@ -601,7 +600,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         LogLevel.Info
       )
 
-      // If the site is not multilingual, no action is needed
       if (!webInfo.IsMultilingual) {
         Logger.write(
           '(ProjectSetup) Site is not configured as multilingual, no alternative languages to remove.',
@@ -610,7 +608,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         return
       }
 
-      // Show progress dialog to user ONLY if we need to remove languages
       this._renderProgressDialog({
         progressIndicator: {
           label: strings.RemoveAlternativeLanguagesText,
@@ -620,13 +617,11 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         dialogContentProps: this.properties.progressDialogContentProps
       })
 
-      // Use REST API to disable multilingual features
       Logger.write(
         '(ProjectSetup) Disabling multilingual features to remove alternative languages.',
         LogLevel.Info
       )
 
-      // Use the batch API to update the web properties
       await this.sp.web.update({ IsMultilingual: false })
 
       Logger.write(
@@ -634,15 +629,12 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         LogLevel.Info
       )
 
-      // Dismiss the progress dialog after language removal
       const progressDialog = this._getPlaceholder('ProgressDialog')
       this._unmount(progressDialog)
 
-      // Store a flag that we removed languages so we can log it after reload
       const languageRemovedKey = `pp_languagesRemoved_${this.context.pageContext.site.id.toString()}`
       sessionStorage.setItem(languageRemovedKey, 'true')
 
-      // Reload the page to ensure SharePoint reinitializes with correct language settings
       Logger.write(
         '(ProjectSetup) Reloading page after language removal to apply changes.',
         LogLevel.Info
@@ -650,13 +642,11 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       window.location.reload()
 
     } catch (error) {
-      // Log error but don't throw - this is not critical for setup to continue
       Logger.write(
         `(ProjectSetup) Failed to remove alternative languages: ${error.message}`,
         LogLevel.Warning
       )
       
-      // Dismiss progress dialog on error as well
       const progressDialog = this._getPlaceholder('ProgressDialog')
       this._unmount(progressDialog)
     }
