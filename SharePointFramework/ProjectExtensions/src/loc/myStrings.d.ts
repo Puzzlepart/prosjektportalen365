@@ -126,6 +126,10 @@ declare interface IProjectExtensionsStrings {
   ProvisionSiteFieldText: string
   ProvisionTemplateText: string
   RecycleBinText: string
+  RemoveAlternativeLanguagesText: string
+  RemoveAlternativeLanguagesSubText: string
+  RemoveAlternativeLanguagesErrorMessage: string
+  RemoveAlternativeLanguagesProgressText: string
   RunHooksText: string
   SetTaxonomyFieldsErrorMessage: string
   SetupAbortedText: string
