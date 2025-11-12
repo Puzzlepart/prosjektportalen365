@@ -112,6 +112,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         }
       }
 
+      await this._removeAlternativeLanguages()
+
       this._initializeSetup({
         sp: this.sp,
         web: this.sp.web,
@@ -155,6 +157,18 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         this.context.pageContext.web.absoluteUrl,
         'ProjectSetup'
       )
+
+      // Check if we removed languages before the reload and log it
+      const languageRemovedKey = `pp_languagesRemoved_${this.context.pageContext.site.id.toString()}`
+      if (sessionStorage.getItem(languageRemovedKey) === 'true') {
+        sessionStorage.removeItem(languageRemovedKey)
+        await ListLogger.log({
+          message: `Removed alternative languages from site: ${this.context.pageContext.web.title}`,
+          functionName: '_removeAlternativeLanguages',
+          component: 'ProjectSetup'
+        })
+      }
+
       const provisioningInfo = await this._getSetupInfo(data)
       data = { ...data, ...provisioningInfo }
       this._renderProgressDialog({
@@ -559,6 +573,82 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       return ['SitePages/CollabHome.aspx', 'SitePages/Home.aspx'].indexOf(WelcomePage) === -1
     } catch {
       return false
+    }
+  }
+
+  /**
+   * Remove alternative languages from the current site before showing the setup dialog.
+   * Disables multilingual features by setting IsMultilingual to false, then reloads
+   * the page to apply changes. Shows a progress dialog during the operation and logs
+   * the action to the SharePoint Log list after reload. Only executes if the current
+   * user is a site admin and the site has multilingual features enabled.
+   */
+  private async _removeAlternativeLanguages(): Promise<void> {
+    try {
+      if (!this.context.pageContext.legacyPageContext.isSiteAdmin) {
+        Logger.write(
+          '(ProjectSetup) User is not a site admin, skipping alternative language removal.',
+          LogLevel.Info
+        )
+        return
+      }
+
+      const webInfo = await this.sp.web.select('Language', 'IsMultilingual')()
+      
+      Logger.write(
+        `(ProjectSetup) Current language: ${webInfo.Language}, Is multilingual: ${webInfo.IsMultilingual}`,
+        LogLevel.Info
+      )
+
+      if (!webInfo.IsMultilingual) {
+        Logger.write(
+          '(ProjectSetup) Site is not configured as multilingual, no alternative languages to remove.',
+          LogLevel.Info
+        )
+        return
+      }
+
+      this._renderProgressDialog({
+        progressIndicator: {
+          label: strings.RemoveAlternativeLanguagesText,
+          description: strings.RemoveAlternativeLanguagesProgressText
+        },
+        iconName: 'LocalLanguage',
+        dialogContentProps: this.properties.progressDialogContentProps
+      })
+
+      Logger.write(
+        '(ProjectSetup) Disabling multilingual features to remove alternative languages.',
+        LogLevel.Info
+      )
+
+      await this.sp.web.update({ IsMultilingual: false })
+
+      Logger.write(
+        '(ProjectSetup) Successfully disabled multilingual features, alternative languages removed.',
+        LogLevel.Info
+      )
+
+      const progressDialog = this._getPlaceholder('ProgressDialog')
+      this._unmount(progressDialog)
+
+      const languageRemovedKey = `pp_languagesRemoved_${this.context.pageContext.site.id.toString()}`
+      sessionStorage.setItem(languageRemovedKey, 'true')
+
+      Logger.write(
+        '(ProjectSetup) Reloading page after language removal to apply changes.',
+        LogLevel.Info
+      )
+      window.location.reload()
+
+    } catch (error) {
+      Logger.write(
+        `(ProjectSetup) Failed to remove alternative languages: ${error.message}`,
+        LogLevel.Warning
+      )
+      
+      const progressDialog = this._getPlaceholder('ProgressDialog')
+      this._unmount(progressDialog)
     }
   }
 
