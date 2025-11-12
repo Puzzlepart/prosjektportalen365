@@ -359,6 +359,7 @@ define([], function () {
     ColumnRenderOptionFilename: 'Filnavn',
     ColumnRenderOptionNote: 'Notat',
     ColumnRenderOptionNumber: 'Tall',
+    ColumnRenderOptionCalculated: 'Beregnet',
     ColumnRenderOptionPercentage: 'Prosent',
     ColumnRenderOptionProjectInfo: 'Prosjektinformasjon',
     ColumnRenderOptionTags: 'Etiketter',

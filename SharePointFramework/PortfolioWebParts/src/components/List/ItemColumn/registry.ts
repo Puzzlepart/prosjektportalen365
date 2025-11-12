@@ -2,24 +2,25 @@
 import strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
 import { useEffect } from 'react'
-import { GetDataTypeProperties, IColumnDataTypeFieldOption } from './ColumnDataTypeField'
 import { BooleanColumn } from './BooleanColumn'
+import { CalculatedColumn } from './CalculatedColumn'
+import { GetDataTypeProperties, IColumnDataTypeFieldOption } from './ColumnDataTypeField'
 import { CurrencyColumn } from './CurrencyColumn'
-import { NumberColumn } from './NumberColumn'
-import { NoteColumn } from './NoteColumn'
-import { PercentageColumn } from './PercentageColumn'
 import { DateColumn } from './DateColumn'
 import { DialogColumn } from './DialogColumn'
-import { InstrumentColumn } from './InstrumentColumn'
 import { FileNameColumn } from './FileNameColumn'
+import { InstrumentColumn } from './InstrumentColumn'
 import { ListColumn } from './ListColumn'
+import { NoteColumn } from './NoteColumn'
+import { NumberColumn } from './NumberColumn'
+import { PercentageColumn } from './PercentageColumn'
+import { ProjectInformationColumn } from './ProjectInformationColumn'
+import { StatusReportColumn } from './StatusReportColumn/StatusReportColumn'
 import { TagsColumn } from './TagsColumn'
 import { TrendColumn } from './TrendColumn'
 import { UrlColumn } from './UrlColumn'
 import { UserColumn } from './UserColumn'
 import { ColumnRenderComponent } from './types'
-import { ProjectInformationColumn } from './ProjectInformationColumn'
-import { StatusReportColumn } from './StatusReportColumn/StatusReportColumn'
 
 /**
  * A registry for column render components and column data type field options.
@@ -234,6 +235,7 @@ export function useColumnRenderComponentRegistry() {
   useEffect(() => {
     ColumnRenderComponentRegistry.registerMultiple(
       BooleanColumn,
+      CalculatedColumn,
       DateColumn,
       FileNameColumn,
       CurrencyColumn,

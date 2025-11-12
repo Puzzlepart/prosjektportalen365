@@ -359,6 +359,7 @@ declare interface IPortfolioWebPartsStrings {
   ColumnRenderOptionFilename: string
   ColumnRenderOptionNote: string
   ColumnRenderOptionNumber: string
+  ColumnRenderOptionCalculated: string
   ColumnRenderOptionPercentage: string
   ColumnRenderOptionProjectInfo: string
   ColumnRenderOptionTags: string
