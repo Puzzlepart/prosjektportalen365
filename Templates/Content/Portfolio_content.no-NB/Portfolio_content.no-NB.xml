@@ -31,6 +31,20 @@
                         <pnp:Property Key="GtIsParentProject" Value="0" />
                     </pnp:Properties>
                 </pnp:File>
+                <pnp:File Src="Prosjekttillegg/EnkeltProsjekt.json" Folder="Prosjekttillegg" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Forenklet prosjektmal" />
+                        <pnp:Property Key="GtDescription" Value="Forenklet forside med fokus på dokumentsamhandling og redusert venstremeny med færre valg, passende for mindre og enklere prosjekter" />
+                        <pnp:Property Key="GtExtensionHidden" Value="1"/>
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Prosjekttillegg/EnkelVenstremeny.json" Folder="Prosjekttillegg" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Redusert venstremeny" />
+                        <pnp:Property Key="GtDescription" Value="Redusert venstremeny med færre valg, passende for enkle prosjekter" />
+                        <pnp:Property Key="GtExtensionHidden" Value="1"/>
+                    </pnp:Properties>
+                </pnp:File>
                 <pnp:File Src="SiteAssets/Konfigurasjon/Risikomatrise/standard-konfigurasjon.json" Folder="SiteAssets/Konfigurasjon/Risikomatrise" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Standard 5x5 matrise" />

@@ -1,0 +1,38 @@
+{
+"Navigation": {
+        "QuickLaunch": [
+            {
+                "Url": "SitePages/ProjectHome.aspx",
+                "Title": "Hjem"
+            },
+            {
+                "Url": "SitePages/Prosjektstatus.aspx",
+                "Title": "Prosjektstatus"
+            },
+            {
+                "Url": "Dokumenter/Forms/AllItems.aspx",
+                "Title": "Dokumenter"
+            },
+            {
+                "Url": "SitePages/Oppgaver.aspx",
+                "Title": "Oppgaver"
+            },
+            {
+                "Url": "Lists/Usikkerhet/AllItems.aspx",
+                "Title": "Usikkerhet"
+            },
+            {
+                "Url": "Lists/Fasesjekkliste/AllItems.aspx",
+                "Title": "Fasesjekkliste"
+            },
+            {
+                "Url": "SitePages/Prosjekttidslinje.aspx",
+                "Title": "Prosjekttidslinje"
+            },
+            {
+                "Url": "_layouts/15/viewlsts.aspx",
+                "Title": "Områdeinnhold"
+            }
+        ]
+    }
+}
