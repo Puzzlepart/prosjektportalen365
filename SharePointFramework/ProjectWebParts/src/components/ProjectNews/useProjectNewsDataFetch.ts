@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { SPHttpClient } from '@microsoft/sp-http'
 import { INewsItem, IProjectNewsProps, IProjectNewsState } from './types'
-import { getNewsImageUrl, getServerRelativeUrl, ensureAllNewsPromoted } from './util'
+import { getNewsImageUrl, getServerRelativeUrl } from './util'
 import strings from 'ProjectWebPartsStrings'
 
 /**
@@ -52,16 +52,7 @@ export function useProjectNewsDataFetch(
             (a, b) =>
               new Date(b.modifiedDate ?? 0).getTime() - new Date(a.modifiedDate ?? 0).getTime()
           )
-        // Some users may forget to use the SharePoint "Publish as news" feature after publishing an article,
-        // resulting in pages that are not promoted as news (promotedState !== 2).
-        // This serves as a fallback for existing pages or pages created outside of the news dialog.
-        // New pages created through the news dialog are automatically promoted during creation.
-        await ensureAllNewsPromoted(
-          props.siteUrl,
-          props.spHttpClient,
-          news,
-          props.newsFolderName || strings.NewsFolderNameDefault
-        )
+
         setState({
           loading: false,
           data: { news }

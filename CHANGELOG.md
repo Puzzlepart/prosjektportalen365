@@ -73,6 +73,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Mulighet for å tilgangsstyre Prosjektportalen Assistent, slik at den ikke er tilgjengelig for alle brukere. [#1632](https://github.com/Puzzlepart/prosjektportalen365/issues/1632)
 - Mulighet for å tilgangsstyre synligheten av `Bestill område` knappen for å benytte seg av Bestillingsportalen, slik at den ikke er tilgjengelig for alle brukere.
 - Flere nye felter på Prosjektstatus-listen for å tilrettelegge for KI-behandling av Prosjektstatus
+- Tittel angitt i Prosjektnyheter-dialogen brukes nå automatisk som tittel på den opprettede nyhetsartikler
 
 ### Feilrettinger
 
