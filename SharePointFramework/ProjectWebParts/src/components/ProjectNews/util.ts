@@ -2,7 +2,7 @@
 import { SPHttpClient, SPHttpClientResponse } from '@microsoft/sp-http'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import * as strings from 'ProjectWebPartsStrings'
-import { INewsItem, TemplateFile } from './types'
+import { TemplateFile } from './types'
 import SPDataAdapter from 'data'
 import resource from 'SharedResources'
 
@@ -155,77 +155,6 @@ export async function getTemplates(
 }
 
 /**
- * Promotes a SharePoint site page to a news article by updating its PromotedState
- * and PageLayoutType properties.
- *
- * @param siteUrl URL of the SharePoint site
- * @param spHttpClient SPHttpClient instance to perform the HTTP request
- * @param sitePagesServerRelativeUrl Server-relative URL of the SitePages library
- * @param itemId ID of the list item representing the page to be promoted
- * @returns Promise that resolves when the page has been successfully promoted or rejects with an error
- *          if the promotion fails
- * @throws Error if the HTTP request fails or the response is not successful
- */
-export async function promotePageToNewsArticle(
-  siteUrl: string,
-  spHttpClient: SPHttpClient,
-  itemId: number
-): Promise<void> {
-  const promoteUrl = `${siteUrl}/_api/sitepages/pages(${itemId})/PromoteToNews`
-  const res = await spHttpClient.post(promoteUrl, SPHttpClient.configurations.v1, {
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      __metadata: { type: 'SP.Publishing.SitePage' }
-    })
-  })
-  if (!res.ok) {
-    const error = await res.json()
-    throw new Error(error?.error?.message?.value || res.statusText)
-  }
-}
-
-/**
- * Ensures that all news items are promoted to news articles.
- * This function goes through all news items in Recent News List and if the item is not already promoted (PromotedState === 2),
- * it will call the promotePageToNewsArticle function to promote the page.
- *
- * @param siteUrl URL of the SharePoint site
- * @param spHttpClient SPHttpClient instance to perform the HTTP request
- * @param newsItems An array of news items to ensure are promoted
- * @returns Promise that resolves when all news items have been successfully promoted or rejects with an error
- *          if one of the promotion fails
- */
-export async function ensureAllNewsPromoted(
-  siteUrl: string,
-  spHttpClient: SPHttpClient,
-  newsItems: INewsItem[],
-  folderName: string
-): Promise<void> {
-  if (!newsItems || newsItems.length === 0) {
-    console.warn('No news items to promote.')
-    return
-  }
-  const folderServerRelativeUrl = getServerRelativeUrl(siteUrl, 'SitePages', folderName)
-  for (const item of newsItems) {
-    if (
-      item.promotedState !== 2 &&
-      item.id &&
-      (item.url?.toLowerCase().startsWith(folderServerRelativeUrl.toLowerCase() + '/') ||
-        item.url?.toLowerCase() === folderServerRelativeUrl.toLowerCase())
-    ) {
-      try {
-        await promotePageToNewsArticle(siteUrl, spHttpClient, item.id)
-      } catch (err) {
-        console.warn(`Failed to promote page ${item.name} (ID: ${item.id}):`, err)
-      }
-    }
-  }
-}
-
-/**
  * Given a SharePoint news item, extracts the URL of the banner image.
  * First looks at the BannerImageUrl field, then tries to extract the first
  * image URL from the CanvasContent1 field (if it's a JSON string).
@@ -368,7 +297,8 @@ export async function setOriginalSourceSiteId(
   sitePagesServerRelativeUrl: string,
   itemId: number,
   siteId: string,
-  hubSiteId: string
+  hubSiteId: string,
+  title: string
 ): Promise<void> {
   if (!siteId) {
     throw new Error('Site ID is required to set GtSiteId')
