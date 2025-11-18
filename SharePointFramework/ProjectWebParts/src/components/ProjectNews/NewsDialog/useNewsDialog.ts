@@ -92,7 +92,8 @@ export const useNewsDialog = () => {
             sitePagesServerRelativeUrl,
             itemId,
             currentSiteId,
-            context.props.pageContext.legacyPageContext.hubSiteId
+            context.props.pageContext.legacyPageContext.hubSiteId,
+            newsForm.title
           )
 
           try {
