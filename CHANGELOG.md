@@ -16,6 +16,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 ### Feilrettinger
 
 - Rettet et problem hvor bildeforhåndsvisning forsvant ved navigasjon mellom nivåer i Bestillingsportalen-skjema
+- Rettet et problem hvor nyheter publisert fra prosjekter ikke fikk publiseringsdato
 
 ---
 
