@@ -10,6 +10,8 @@ jobs:
   generate-sbom:
     name: Generate SBOM
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required to push changes and upload artifacts
     steps:
       - uses: actions/checkout@v4
         with:
