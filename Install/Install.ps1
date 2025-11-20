@@ -69,9 +69,28 @@ $LanguageCodes = @{
     "English"   = 'en-US';
 }
 
-$Channel = "{CHANNEL_PLACEHOLDER}"
+$SiteDesignNames = @{
+    "Norwegian" = "Prosjektomr%C3%A5de";
+    "English"   = "Project%20Site";
+}
+
+$SiteTitleDefaults = @{
+    "Norwegian" = "Prosjektportalen";
+    "English"   = "Project Portal";
+}
+
 $LanguageId = $LanguageIds[$Language]
 $LanguageCode = $LanguageCodes[$Language]
+
+if ($SiteDesignName -eq "Prosjektomr%C3%A5de") {
+    $SiteDesignName = $SiteDesignNames[$Language]
+}
+
+if ($Title -eq "Prosjektportalen") {
+    $Title = $SiteTitleDefaults[$Language]
+}
+
+$Channel = "{CHANNEL_PLACEHOLDER}"
 . "$PSScriptRoot/Scripts/Resources.ps1"
 Initialize-Resources -LanguageCode $LanguageCode
 #endregion
@@ -181,7 +200,7 @@ if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
         $PortfolioSite = Get-PnPTenantSite -Url $Uri.AbsoluteUri -ErrorAction SilentlyContinue
         if ($null -eq $PortfolioSite) {
             StartAction("Creating portfolio site at $($Uri.AbsoluteUri)")
-            $PortfolioSite = New-PnPSite -Type TeamSite -Title $Title -Alias $Alias -IsPublic:$true -ErrorAction Stop -Lcid $LanguageId
+            $PortfolioSite = New-PnPSite -Type TeamSite -Title $Title -Alias $Alias -IsPublic:$true -ErrorAction Stop -Lcid $LanguageId -Wait -HideGroupInOutlook -WelcomeEmailDisabled
             EndAction
         }
     }
