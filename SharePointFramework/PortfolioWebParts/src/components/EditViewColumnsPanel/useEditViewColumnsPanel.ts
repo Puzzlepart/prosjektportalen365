@@ -6,7 +6,8 @@ import _ from 'lodash'
 import { useId } from '@fluentui/react-components'
 
 /**
- * Hook that provides functionality for editing and selecting columns in a view.
+ * Hook that provides functionality for editing and selecting columns in a view, including
+ * drag-and-drop reordering and saving the selected columns.
  *
  * @param props The properties for the component.
  *
