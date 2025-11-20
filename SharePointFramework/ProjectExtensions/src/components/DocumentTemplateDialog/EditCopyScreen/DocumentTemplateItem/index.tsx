@@ -32,7 +32,7 @@ export const DocumentTemplateItem: FC<IDocumentTemplateItemProps> = (props) => {
       switch ((event.target as HTMLInputElement).id) {
         case nameId:
           {
-            const newName = `${newValue}.${props.item.fileExtension}`
+            const newName = props.item.isFolder ? newValue : `${newValue}.${props.item.fileExtension}`
             const errorMsg = await SPDataAdapter.isFilenameValid(state.targetFolder, newName)
             props.onInputChanged(props.item.id, { newName }, errorMsg)
           }
@@ -70,8 +70,8 @@ export const DocumentTemplateItem: FC<IDocumentTemplateItemProps> = (props) => {
             id={nameId}
             label={strings.FileNameLabel}
             placeholder={strings.FileNameLabel}
-            defaultValue={props.item.nameWithoutExtension}
-            suffix={`.${props.item.fileExtension}`}
+            defaultValue={props.item.isFolder ? props.item.name : props.item.nameWithoutExtension}
+            suffix={props.item.isFolder ? undefined : `.${props.item.fileExtension}`}
             errorMessage={props.item.errorMessage}
             onChange={onInputChange}
           />

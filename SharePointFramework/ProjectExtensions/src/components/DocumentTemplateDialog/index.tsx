@@ -50,7 +50,10 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
         })
       )
       try {
-        filesAdded.push(await template.copyTo(folder))
+        const result = await template.copyTo(folder)
+        if (result) {
+          filesAdded.push(result)
+        }
       } catch (error) {}
     }
     selection.setItems([], true)
