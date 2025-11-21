@@ -10,7 +10,7 @@ import { useProjectInformationContext } from '../context'
  */
 export function useProjectStatusReport() {
   const context = useProjectInformationContext()
-  const sortedReports = context.state.data.reports.sort((a, b) => b.created.getTime() - a.created.getTime())
+  const sortedReports = [...context.state.data.reports].sort((a, b) => b.created.getTime() - a.created.getTime())
   const selectedReport = _.first(sortedReports)
   if (!selectedReport || context.props.hideStatusReport) return null
   const projectStatusContext: IProjectStatusContext = {
