@@ -11,7 +11,7 @@ import { useProjectInformationContext } from '../context'
 export function useProjectStatusReport() {
   const context = useProjectInformationContext()
   const publishedReports = context.state.data.reports.filter((report) => report.published)
-  const sortedReports = [...publishedReports].sort((a, b) => b.publishedDate.getTime() - a.publishedDate.getTime())
+  const sortedReports = [...publishedReports].sort((a, b) => (b.publishedDate ?? b.modified).getTime() - (a.publishedDate ?? a.modified).getTime())
   const selectedReport = _.first(sortedReports)
   if (!selectedReport || context.props.hideStatusReport) return null
   const projectStatusContext: IProjectStatusContext = {
