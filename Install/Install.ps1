@@ -178,7 +178,7 @@ if ($Upgrade.IsPresent -and $null -ne $ExistingSite) {
         Write-Host "[ERROR] Could not determine existing installation version. This is a critical error. Exiting script." -ForegroundColor Red
         exit 0
     }
-    if ($InstallInfo.Channel -ne $Channel) {
+    if ($null -ne $InstallInfo.Channel -and "" -ne $InstallInfo.Channel -and $InstallInfo.Channel -ne $Channel) {
         Write-Host "[ERROR] The site you're trying to install to is already installed using channel '$($InstallInfo.Channel)'. You are now trying to install using channel '$Channel'. This is not supported." -ForegroundColor Red
         exit 0
     }
