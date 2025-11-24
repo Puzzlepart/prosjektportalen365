@@ -38,6 +38,7 @@ import {
   TimelineConfigurationModel,
   TimelineContentModel
 } from 'pp365-shared-library'
+import { Site } from '@pnp/sp/sites'
 import _ from 'underscore'
 import { DEFAULT_SEARCH_SETTINGS, IProjectsData } from './types'
 import { IList } from '@pnp/sp/lists'
@@ -955,6 +956,23 @@ export class SPDataAdapter
       }
     } catch (error) {
       return []
+    }
+  }
+
+  /**
+   * Resolve the HubSiteId for a given site URL.
+   * Uses PnPjs `Site(siteUrl)` to query the site and return its `HubSiteId`.
+   *
+   * @param siteUrl Absolute URL of the site to resolve
+   * @returns The HubSiteId string, or `undefined` if it could not be resolved
+   */
+  public async resolveHubSiteIdFromUrl(siteUrl: string): Promise<string | undefined> {
+    if (!siteUrl) return undefined
+    try {
+      const siteInfo = await Site(siteUrl).select('HubSiteId')()
+      return siteInfo?.HubSiteId ?? undefined
+    } catch (e) {
+      return undefined
     }
   }
 

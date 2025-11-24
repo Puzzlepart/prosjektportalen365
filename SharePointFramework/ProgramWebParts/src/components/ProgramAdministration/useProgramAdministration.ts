@@ -1,11 +1,15 @@
 import { ProjectAdminPermission } from 'pp365-shared-library/lib'
-import { useEffect, useMemo, useReducer } from 'react'
+import { useEffect, useMemo, useReducer, useState } from 'react'
 import reducer, { DATA_LOADED, SET_SELECTED_TO_DELETE, initialState } from './reducer'
 import { IProgramAdministrationProps } from './types'
 import { useId } from '@fluentui/react-components'
 
 export const useProgramAdministration = (props: IProgramAdministrationProps) => {
   const [state, dispatch] = useReducer(reducer, initialState)
+
+  const [programHubs, setProgramHubs] = useState<{ url: string; hubSiteId?: string }[] | undefined>(
+    undefined
+  )
 
   useEffect(() => {
     props.dataAdapter.project.getProjectInformationData().then((properties) => {
@@ -14,8 +18,27 @@ export const useProgramAdministration = (props: IProgramAdministrationProps) => 
         props.dataAdapter.checkProjectAdminPermissions(
           ProjectAdminPermission.ChildProjectsAdmin,
           properties.fieldValues
-        )
-      ]).then(([childProjects, userHasManagePermission]) => {
+        ),
+        props.dataAdapter.globalSettings.get('AvailableProgramHubs')
+      ]).then(([childProjects, userHasManagePermission, availableProgramHubsRaw]) => {
+        let parsedHubs: string[] = []
+        if (availableProgramHubsRaw && typeof availableProgramHubsRaw === 'string') {
+          parsedHubs = availableProgramHubsRaw
+            .split(';')
+            .map((s) => s.trim())
+            .filter(Boolean)
+        }
+
+        if (parsedHubs.length > 0) {
+          Promise.all(
+            parsedHubs.map(async (u) => ({ url: u, hubSiteId: await props.dataAdapter.resolveHubSiteIdFromUrl(u) }))
+          )
+            .then((resolved) => setProgramHubs(resolved))
+            .catch(() => setProgramHubs(undefined))
+        } else {
+          setProgramHubs(undefined)
+        }
+
         dispatch(
           DATA_LOADED({
             data: { childProjects, userHasManagePermission },
@@ -38,5 +61,5 @@ export const useProgramAdministration = (props: IProgramAdministrationProps) => 
   const childProjects = [...state.childProjects]
   const fluentProviderId = useId('fp-program-administration')
 
-  return { context, childProjects, onSelectionChange, fluentProviderId }
+  return { context, childProjects, onSelectionChange, fluentProviderId, programHubs }
 }
