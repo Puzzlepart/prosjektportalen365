@@ -74,6 +74,8 @@ define([], function () {
     FilenameAlreadyInUseErrorText: 'Filnavnet er allerede i bruk.',
     FilenameInValidErrorText: 'Filnavnet er ugyldig.',
     FileNameLabel: 'Filnavn',
+    FolderNameAlreadyInUseErrorText: 'Mappenavnet er allerede i bruk.',
+    FolderNameInValidErrorText: 'Mappenavnet er ugyldig.',
     GetMoreText: 'Hent flere',
     GetSetupDataErrorMessage: 'Det skjedde en feil',
     GetSetupDataErrorStack: 'Det skjedde en feil under uthenting av data fra hubområdet. Dersom Prosjektportalen nylig er installert, kan det være grunnen. Prøv igjen litt senere.',

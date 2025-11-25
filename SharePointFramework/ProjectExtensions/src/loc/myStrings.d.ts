@@ -76,6 +76,8 @@ declare interface IProjectExtensionsStrings {
   FilenameAlreadyInUseErrorText: string
   FilenameInValidErrorText: string
   FileNameLabel: string
+  FolderNameAlreadyInUseErrorText: string
+  FolderNameInValidErrorText: string
   GetMoreText: string
   GetSetupDataErrorMessage: string
   GetSetupDataErrorStack: string
