@@ -56,17 +56,24 @@ export const TargetFolderScreen: FC = () => {
         currentFolder={folder}
         setFolder={setFolder}
       />
-      <DetailsList
-        items={folders.sort((a, b) => (a.name > b.name ? 1 : -1))}
-        columns={columns()}
-        selectionMode={SelectionMode.none}
-        layoutMode={DetailsListLayoutMode.justified}
-        constrainMode={ConstrainMode.horizontalConstrained}
-        onItemInvoked={(folder: SPFolder) => {
-          if (folder.isLibrary) setRoot(folder)
-          setFolder(folder.url)
-        }}
-      />
+      {folders.length === 0 && folder !== null ? (
+        <UserMessage
+          text={strings.NoFoldersAvailableText}
+          intent='info'
+        />
+      ) : (
+        <DetailsList
+          items={folders.sort((a, b) => (a.name > b.name ? 1 : -1))}
+          columns={columns()}
+          selectionMode={SelectionMode.none}
+          layoutMode={DetailsListLayoutMode.justified}
+          constrainMode={ConstrainMode.horizontalConstrained}
+          onItemInvoked={(folder: SPFolder) => {
+            if (folder.isLibrary) setRoot(folder)
+            setFolder(folder.url)
+          }}
+        />
+      )}
       <DialogFooter>
         <PrimaryButton
           text={strings.CopyHereText}
