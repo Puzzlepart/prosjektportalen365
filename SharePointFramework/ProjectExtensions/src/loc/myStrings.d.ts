@@ -76,6 +76,9 @@ declare interface IProjectExtensionsStrings {
   FilenameAlreadyInUseErrorText: string
   FilenameInValidErrorText: string
   FileNameLabel: string
+  FolderNameLabel: string
+  FolderNameAlreadyInUseErrorText: string
+  FolderNameInValidErrorText: string
   GetMoreText: string
   GetSetupDataErrorMessage: string
   GetSetupDataErrorStack: string
@@ -88,6 +91,7 @@ declare interface IProjectExtensionsStrings {
   LibraryDropdownLabel: string
   ModifiedLabel: string
   NameLabel: string
+  NoFoldersAvailableText: string
   NoGroupIdErrorMessage: string
   NoGroupIdErrorStack: string
   NoHubSiteErrorMessage: string

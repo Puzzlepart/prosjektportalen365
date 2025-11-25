@@ -20,9 +20,7 @@ export const initState = (): IDocumentTemplateDialogState => ({
 
 export default createReducer(initState(), {
   [SELECTION_CHANGED.type]: (state, { payload }: ReturnType<typeof SELECTION_CHANGED>) => {
-    state.selected = (payload.selection.getSelection() as TemplateItem[]).filter(
-      (item) => !item.isFolder
-    )
+    state.selected = payload.selection.getSelection() as TemplateItem[]
   },
   [START_COPY.type]: (state) => {
     state.screen = DocumentTemplateDialogScreen.CopyProgress
