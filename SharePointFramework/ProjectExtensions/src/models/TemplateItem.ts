@@ -100,13 +100,125 @@ export class TemplateItem {
    */
   public async copyTo(folder: IFolder, shouldOverwrite: boolean = true): Promise<IFileAddResult> {
     try {
-      const content = await this.web.getFileByServerRelativePath(this.serverRelativeUrl).getBlob()
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      const fileAddResult = await folder.files.addUsingPath(this.newName, content, {
-        Overwrite: shouldOverwrite
-      })
-      await (await fileAddResult.file.getItem()).update({ Title: this.newTitle })
-      return fileAddResult
+      if (this.isFolder) {
+        return await this.copyFolderWithContents(folder, shouldOverwrite)
+      } else {
+        const content = await this.web.getFileByServerRelativePath(this.serverRelativeUrl).getBlob()
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        const fileAddResult = await folder.files.addUsingPath(this.newName, content, {
+          Overwrite: shouldOverwrite
+        })
+        await (await fileAddResult.file.getItem()).update({ Title: this.newTitle })
+        return fileAddResult
+      }
+    } catch (error) {
+      throw error
+    }
+  }
+
+  /**
+   * Copy folder with all its contents recursively
+   *
+   * @param targetFolder Target folder
+   * @param shouldOverwrite Should overwrite
+   *
+   * @returns File add result for the first file copied (or null if no files)
+   */
+  private async copyFolderWithContents(
+    targetFolder: IFolder,
+    shouldOverwrite: boolean = true
+  ): Promise<IFileAddResult> {
+    try {
+      const newFolder = await targetFolder.folders.addUsingPath(this.newName, true)
+
+      const sourceFolder = this.web.getFolderByServerRelativePath(this.serverRelativeUrl)
+      const [files, subFolders] = await Promise.all([
+        sourceFolder.files.select('Name', 'ServerRelativeUrl', 'Title')(),
+        sourceFolder.folders.select('Name', 'ServerRelativeUrl')()
+      ])
+
+      let firstFileResult: IFileAddResult = null
+
+      for (const file of files) {
+        try {
+          const content = await this.web.getFileByServerRelativePath(file.ServerRelativeUrl).getBlob()
+          const fileAddResult = await newFolder.folder.files.addUsingPath(file.Name, content, {
+            Overwrite: shouldOverwrite
+          })
+          if (!firstFileResult) {
+            firstFileResult = fileAddResult
+          }
+          if (file.Title) {
+            await (await fileAddResult.file.getItem()).update({ Title: file.Title })
+          }
+        } catch (error) {
+          // Continue with next file if one fails
+        }
+      }
+
+      for (const subFolder of subFolders) {
+        if (subFolder.Name.startsWith('_') || subFolder.Name === 'Forms') {
+          continue
+        }
+        try {
+          await this.copySubFolder(subFolder.ServerRelativeUrl, newFolder.folder, shouldOverwrite)
+        } catch (error) {
+          // Continue with next folder if one fails
+        }
+      }
+
+      return firstFileResult
+    } catch (error) {
+      throw error
+    }
+  }
+
+  /**
+   * Copy a subfolder recursively
+   *
+   * @param sourceFolderUrl Source folder server relative URL
+   * @param targetFolder Target folder
+   * @param shouldOverwrite Should overwrite
+   */
+  private async copySubFolder(
+    sourceFolderUrl: string,
+    targetFolder: IFolder,
+    shouldOverwrite: boolean = true
+  ): Promise<void> {
+    try {
+      const sourceFolder = this.web.getFolderByServerRelativePath(sourceFolderUrl)
+      const [folderInfo, files, subFolders] = await Promise.all([
+        sourceFolder.select('Name')(),
+        sourceFolder.files.select('Name', 'ServerRelativeUrl', 'Title')(),
+        sourceFolder.folders.select('Name', 'ServerRelativeUrl')()
+      ])
+
+      const newFolder = await targetFolder.folders.addUsingPath(folderInfo.Name, true)
+
+      for (const file of files) {
+        try {
+          const content = await this.web.getFileByServerRelativePath(file.ServerRelativeUrl).getBlob()
+          const fileAddResult = await newFolder.folder.files.addUsingPath(file.Name, content, {
+            Overwrite: shouldOverwrite
+          })
+          if (file.Title) {
+            await (await fileAddResult.file.getItem()).update({ Title: file.Title })
+          }
+        } catch (error) {
+          // Continue with next file if one fails
+        }
+      }
+
+      for (const subFolder of subFolders) {
+        if (subFolder.Name.startsWith('_') || subFolder.Name === 'Forms') {
+          continue
+        }
+        try {
+          await this.copySubFolder(subFolder.ServerRelativeUrl, newFolder.folder, shouldOverwrite)
+        } catch (error) {
+          // Continue with next folder if one fails
+        }
+      }
     } catch (error) {
       throw error
     }

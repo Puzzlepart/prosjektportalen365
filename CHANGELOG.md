@@ -6,6 +6,11 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 
 ### Ny funksjonalitet
 
+- Støtte for å kopiere mapper med innhold fra dokumentmalbibliotek [#1277](https://github.com/Puzzlepart/prosjektportalen365/issues/1277)
+  - Brukere kan nå velge mapper i tillegg til filer når de henter dokumentmaler
+  - Mapper kopieres rekursivt med all struktur og innhold
+  - Systemmapper hoppes automatisk over under kopiering
+
 ### Forbedringer
 
 - Lagt til karakterteller (maks 255 tegn) for navnefeltet i Bestillingsportalen-skjema som dukker opp dersom bruker overgår 200 tegn
