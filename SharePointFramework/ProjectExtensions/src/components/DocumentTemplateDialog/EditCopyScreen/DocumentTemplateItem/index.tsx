@@ -46,8 +46,8 @@ export const DocumentTemplateItem: FC<IDocumentTemplateItemProps> = (props) => {
 
   useEffect(() => {
     SPDataAdapter.isFilenameValid(state.targetFolder, props.item.name, props.item.isFolder).then((errorMessage) => {
+      props.onInputChanged(props.item.id, {}, errorMessage)
       if (errorMessage) {
-        props.onInputChanged(props.item.id, {}, errorMessage)
         setIsExpanded(true)
       }
     })
