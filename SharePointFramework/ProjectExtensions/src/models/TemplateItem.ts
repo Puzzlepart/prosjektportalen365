@@ -101,10 +101,8 @@ export class TemplateItem {
   public async copyTo(folder: IFolder, shouldOverwrite: boolean = true): Promise<IFileAddResult> {
     try {
       if (this.isFolder) {
-        // For folders, create the folder and copy all contents recursively
         return await this.copyFolderWithContents(folder, shouldOverwrite)
       } else {
-        // For files, copy the file as before
         const content = await this.web.getFileByServerRelativePath(this.serverRelativeUrl).getBlob()
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         const fileAddResult = await folder.files.addUsingPath(this.newName, content, {
@@ -131,10 +129,8 @@ export class TemplateItem {
     shouldOverwrite: boolean = true
   ): Promise<IFileAddResult> {
     try {
-      // Create the destination folder
       const newFolder = await targetFolder.folders.addUsingPath(this.newName, true)
 
-      // Get all items in the source folder
       const sourceFolder = this.web.getFolderByServerRelativePath(this.serverRelativeUrl)
       const [files, subFolders] = await Promise.all([
         sourceFolder.files.select('Name', 'ServerRelativeUrl', 'Title')(),
@@ -143,7 +139,6 @@ export class TemplateItem {
 
       let firstFileResult: IFileAddResult = null
 
-      // Copy all files in the folder
       for (const file of files) {
         try {
           const content = await this.web.getFileByServerRelativePath(file.ServerRelativeUrl).getBlob()
@@ -153,7 +148,6 @@ export class TemplateItem {
           if (!firstFileResult) {
             firstFileResult = fileAddResult
           }
-          // Update file title if available
           if (file.Title) {
             await (await fileAddResult.file.getItem()).update({ Title: file.Title })
           }
@@ -162,9 +156,7 @@ export class TemplateItem {
         }
       }
 
-      // Recursively copy all subfolders
       for (const subFolder of subFolders) {
-        // Skip system folders
         if (subFolder.Name.startsWith('_') || subFolder.Name === 'Forms') {
           continue
         }
@@ -201,17 +193,14 @@ export class TemplateItem {
         sourceFolder.folders.select('Name', 'ServerRelativeUrl')()
       ])
 
-      // Create the subfolder in target
       const newFolder = await targetFolder.folders.addUsingPath(folderInfo.Name, true)
 
-      // Copy all files in the subfolder
       for (const file of files) {
         try {
           const content = await this.web.getFileByServerRelativePath(file.ServerRelativeUrl).getBlob()
           const fileAddResult = await newFolder.folder.files.addUsingPath(file.Name, content, {
             Overwrite: shouldOverwrite
           })
-          // Update file title if available
           if (file.Title) {
             await (await fileAddResult.file.getItem()).update({ Title: file.Title })
           }
@@ -220,9 +209,7 @@ export class TemplateItem {
         }
       }
 
-      // Recursively copy subfolders
       for (const subFolder of subFolders) {
-        // Skip system folders
         if (subFolder.Name.startsWith('_') || subFolder.Name === 'Forms') {
           continue
         }

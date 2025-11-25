@@ -88,6 +88,7 @@ declare interface IProjectExtensionsStrings {
   LibraryDropdownLabel: string
   ModifiedLabel: string
   NameLabel: string
+  NoFoldersAvailableText: string
   NoGroupIdErrorMessage: string
   NoGroupIdErrorStack: string
   NoHubSiteErrorMessage: string
