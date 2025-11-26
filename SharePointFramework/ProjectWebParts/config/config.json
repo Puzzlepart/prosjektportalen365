@@ -57,6 +57,14 @@
           "manifest": "./src/webparts/projectNews/manifest.json"
         }
       ]
+    },
+    "dynamic-list-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/dynamicList/index.js",
+          "manifest": "./src/webparts/dynamicList/manifest.json"
+        }
+      ]
     }
   },
   "externals": {},

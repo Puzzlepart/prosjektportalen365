@@ -248,6 +248,9 @@
                                         },
                                         "ProjectNewsWebPart": {
                                             "$ref": "#/definitions/guid"
+                                        },
+                                        "DynamicListWebPart": {
+                                            "$ref": "#/definitions/guid"
                                         }
                                     },
                                     "required": [
@@ -257,7 +260,8 @@
                                         "ProjectStatusWebPart",
                                         "ProjectTimelineWebPart",
                                         "RiskMatrixWebPart",
-                                        "ProjectNewsWebPart"
+                                        "ProjectNewsWebPart",
+                                        "DynamicListWebPart"
                                     ]
                                 }
                             },

@@ -1,0 +1,78 @@
+.singleItemView {
+  flex: 1;
+  padding: 32px;
+  gap: 16px;
+  display: grid;
+  align-items: flex-start;
+  height: auto;
+  overflow-y: auto;
+  width: 100%;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--colorNeutralStroke2);
+
+    .title {
+      font-size: 2rem;
+      font-weight: bold;
+      line-height: normal;
+      min-height: 32px;
+      margin: 0;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+
+      .actionButton {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        background: var(--colorNeutralBackground1);
+        border: 1px solid var(--colorNeutralStroke1);
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        color: var(--colorNeutralForeground1);
+        transition: all 0.2s;
+
+        &:hover {
+          background: var(--colorNeutralBackground1Hover);
+          border-color: var(--colorNeutralStroke1Hover);
+        }
+
+        &:active {
+          background: var(--colorNeutralBackground1Pressed);
+        }
+
+        .actionIcon {
+          font-size: 16px;
+        }
+      }
+    }
+  }
+
+  .fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    grid-gap: 16px;
+    margin-bottom: 16px;
+
+    .field {
+      margin: 0;
+    }
+  }
+
+  .emptyState {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    color: var(--colorNeutralForeground3);
+  }
+}

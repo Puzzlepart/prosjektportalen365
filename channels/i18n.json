@@ -64,7 +64,8 @@
                     "ProjectStatusWebPart": "3231d86b-9b07-45f0-b112-a2f80d31b2f1",
                     "ProjectTimelineWebPart": "3fd903ad-3179-459a-b2b9-8d2963da8af2",
                     "RiskMatrixWebPart": "c1500cba-4eef-437e-92db-7728dcd9502d",
-                    "ProjectNewsWebPart": "1e38c80e-820d-42bd-92a1-fb0d254b21a6"
+                    "ProjectNewsWebPart": "1e38c80e-820d-42bd-92a1-fb0d254b21a6",
+                    "DynamicListWebPart": "c879a33d-c55b-4207-ad47-d3ed24d253ef"
                 }
             },
             "shared-library": {

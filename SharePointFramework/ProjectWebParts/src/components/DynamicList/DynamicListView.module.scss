@@ -1,0 +1,25 @@
+.dynamicListView {
+  width: 100%;
+  height: 100%;
+
+  .commandBar {
+    margin-bottom: 16px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--colorNeutralStroke2);
+
+    > div {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  .searchBox {
+    margin-bottom: 16px;
+    padding: 8px 0;
+
+    > div {
+      max-width: 400px;
+    }
+  }
+}
