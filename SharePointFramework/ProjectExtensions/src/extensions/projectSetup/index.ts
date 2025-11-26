@@ -431,7 +431,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       } else if (lockedTemplateName) {
         const lockedTemplate = templates.find((t) => t.text === lockedTemplateName)
         if (lockedTemplate) {
-          lockedTemplate.isForced = true
           lockedTemplate.isLocked = true
           return [lockedTemplate]
         }
