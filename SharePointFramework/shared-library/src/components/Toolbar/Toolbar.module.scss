@@ -7,6 +7,17 @@
     height: 40px;
     padding: 0 !important;
 
+    .search {
+      width: 100%;
+      max-width: 100%;
+
+      .searchBox {
+        box-shadow: var(--shadow2);
+        width: inherit;
+        max-width: inherit;
+      }
+    }
+
     button {
       height: 40px;
       width: -moz-fit-content;
