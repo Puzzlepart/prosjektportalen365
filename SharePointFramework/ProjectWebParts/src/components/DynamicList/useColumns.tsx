@@ -16,16 +16,18 @@ export function useColumns(): IListColumn[] {
     }
 
     return context.state.data.listColumns.map((column) => {
+      const fieldName = column.fieldName || column.key
+
       return createTableColumn<Record<string, any>>({
         columnId: column.key,
         compare: (a, b) => {
-          const aVal = a[column.fieldName] || ''
-          const bVal = b[column.fieldName] || ''
+          const aVal = a[fieldName] || ''
+          const bVal = b[fieldName] || ''
           return aVal.toString().localeCompare(bVal.toString())
         },
         renderHeaderCell: () => column.name,
         renderCell: (item) => {
-          const value = item[column.fieldName]
+          const value = item[fieldName]
 
           // Handle different field types
           if (value === null || value === undefined) {

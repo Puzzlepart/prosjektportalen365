@@ -55,10 +55,17 @@ export function useToolbarItems(isSingleView: boolean = false) {
   }, [context.state.currentView?.id, context.state.views, context.setState])
 
   /**
-   * Delete selected items
+   * Delete selected items with confirmation
    */
   const deleteItems = useCallback(async () => {
     if (!context.props.listName) return
+
+    const selectedCount = context.state.selectedItems.length
+    const confirmed = window.confirm(
+      `Er du sikker på at du vil slette ${selectedCount} ${selectedCount === 1 ? 'element' : 'elementer'}?`
+    )
+
+    if (!confirmed) return
 
     const web = SPDataAdapter.sp.web
     const list = web.lists.getByTitle(context.props.listName)
@@ -142,7 +149,7 @@ export function useToolbarItems(isSingleView: boolean = false) {
     items.push(
       new ListMenuItem('Rediger element', 'Rediger valgt element')
         .setIcon(EditRegular)
-        .setDisabled(context.state.selectedItems.length !== 1)
+        .setDisabled(!context.state.selectedItems || context.state.selectedItems.length !== 1)
         .setOnClick(() => {
           const selectedItems = context.state.selectedItems.map((id) =>
             context.state.data.listItems.find((_, idx) => idx === id)
@@ -194,7 +201,7 @@ export function useToolbarItems(isSingleView: boolean = false) {
     context.state.showFilterPanel,
     context.state.data?.listItems?.length,
     context.state.data?.listTitle,
-    context.state.selectedItems,
+    context.state.selectedItems?.length,
     context.state.searchTerm,
     context.state.views,
     context.state.currentView,
@@ -232,17 +239,18 @@ export function useToolbarItems(isSingleView: boolean = false) {
           .setItems(viewMenuItems, checkedValues)
       )
     }
-
     items.push(
-      new ListMenuItem(null, 'Oppdater').setIcon('ArrowSync').setOnClick(() => {
-        context.setState({
-          isRefetching: true,
-          refetch: new Date().getTime()
-        })
-      }),
+      new ListMenuItem(null, 'Oppdater')
+        .setIcon('ArrowSync')
+        .setOnClick(() => {
+          context.setState({
+            isRefetching: true,
+            refetch: new Date().getTime()
+          })
+        }),
       new ListMenuItem('Slett', 'Slett valgte elementer')
         .setIcon(DeleteRegular)
-        .setDisabled(context.state.selectedItems.length === 0)
+        .setDisabled(!context.state.selectedItems || context.state.selectedItems.length === 0)
         .setOnClick(() => {
           deleteItems()
         })
@@ -263,7 +271,7 @@ export function useToolbarItems(isSingleView: boolean = false) {
     context.props.showFilters,
     context.props.showViewSelector,
     context.state.showFilterPanel,
-    context.state.selectedItems,
+    context.state.selectedItems?.length,
     context.state.data?.listItems?.length,
     context.state.views,
     context.state.currentView,
@@ -273,8 +281,56 @@ export function useToolbarItems(isSingleView: boolean = false) {
     deleteItems
   ])
 
+  const filterPanelProps = useMemo(
+    () =>
+      context.props.showFilters
+        ? {
+          isOpen: context.state.showFilterPanel,
+          filters: context.state.filters || [],
+          onDismiss: () => context.setState({ showFilterPanel: false }),
+          onFilterChange: (column: any, selectedItems: any[]) => {
+            // Update activeFilters
+            const newActiveFilters = { ...context.state.activeFilters }
+
+            if (selectedItems.length > 0) {
+              newActiveFilters[column.fieldName] = selectedItems.map((i) => i.value)
+            } else {
+              delete newActiveFilters[column.fieldName]
+            }
+
+            // Update filter items to reflect selection
+            const newFilters = context.state.filters?.map((f) => {
+              if (column.key === f.column.key) {
+                return {
+                  ...f,
+                  items: f.items.map((item) => ({
+                    ...item,
+                    selected: selectedItems.some((si) => si.value === item.value)
+                  }))
+                }
+              }
+              return f
+            })
+
+            context.setState({
+              activeFilters: newActiveFilters,
+              filters: newFilters
+            })
+          }
+        }
+        : null,
+    [
+      context.props.showFilters,
+      context.state.showFilterPanel,
+      context.state.filters,
+      context.state.activeFilters,
+      context.setState
+    ]
+  )
+
   return {
     menuItems,
-    farMenuItems
+    farMenuItems,
+    filterPanelProps
   }
 }

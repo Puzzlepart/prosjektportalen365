@@ -16,18 +16,19 @@ export const FilterPanel: FC<IFilterPanelProps> = (props) => {
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme}>
           <div className={styles.filterPanel}>
-            {props.filters.length === 0 && (
+            {(!props.filters || props.filters.length === 0) && (
               <UserMessage
                 title={strings.FilterPanelEmptyTitle}
                 text={strings.FilterPanelEmptyMessage}
                 intent='info'
               />
             )}
-            {props.filters
-              .filter((f) => f.items.length > 1)
-              .map((f, idx) => (
-                <Filter {...f} key={idx} onFilterChange={props.onFilterChange} />
-              ))}
+            {props.filters &&
+              props.filters
+                .filter((f) => f.items.length > 1)
+                .map((f, idx) => (
+                  <Filter {...f} key={idx} onFilterChange={props.onFilterChange} />
+                ))}
           </div>
         </FluentProvider>
       </IdPrefixProvider>

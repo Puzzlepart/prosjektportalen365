@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { IDynamicListProps, IDynamicListState } from '../types'
 import { fetchListData } from './fetchListData'
+import { generateFilters } from './generateFilters'
 
 export function useDynamicListDataFetch(
   props: IDynamicListProps,
@@ -36,6 +37,10 @@ export function useDynamicListDataFetch(
           columns: fetchedData.listColumns?.map(c => c.name)
         })
 
+        // Generate filters from the fetched data
+        const filters = generateFilters(fetchedData)
+        console.log('[DynamicList] Generated filters:', filters.length)
+
         // Only set currentView if it's not already set or if it's the initial load
         const newCurrentView = state.currentView ||
           fetchedData.views?.find((v) => v.id === viewIdToUse) ||
@@ -45,14 +50,16 @@ export function useDynamicListDataFetch(
           data: fetchedData,
           views: fetchedData.views || [],
           currentView: newCurrentView,
+          filters: filters,
           isLoading: false,
-          isChangingView: false
+          isChangingView: false,
+          isRefetching: false
         })
       })
       .catch((error) => {
         if (cancelled) return
         console.error('[DynamicList] Error fetching data:', error)
-        setState({ error: error.message, isLoading: false, isChangingView: false })
+        setState({ error: error.message, isLoading: false, isChangingView: false, isRefetching: false })
       })
 
     return () => {

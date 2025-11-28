@@ -78,7 +78,7 @@ export const DynamicListView: FC = () => {
     [
       useTableSelection({
         selectionMode: 'multiselect',
-        defaultSelectedItems: new Set(context.state.selectedItems.map(String))
+        defaultSelectedItems: new Set(context.state.selectedItems?.map(String) || [])
       }),
       useTableSort({
         defaultSortState: { sortColumn: columns[0]?.columnId, sortDirection: 'ascending' }
@@ -112,10 +112,6 @@ export const DynamicListView: FC = () => {
     },
     [toggleAllRows, allRowsSelected, rows, context]
   )
-
-  if (context.state.isLoading) {
-    return <div>Laster...</div>
-  }
 
   if (!context.state.data?.listItems?.length) {
     return <div>Ingen elementer å vise</div>
@@ -178,7 +174,7 @@ export const DynamicListView: FC = () => {
                   return (
                     <TableCell key={column.columnId} {...cellProps}>
                       <TableCellLayout>
-                        {column.renderCell ? column.renderCell(item) : item[column.columnId]}
+                        {column.renderCell ? column.renderCell(item) : (item as any)[column.columnId]}
                       </TableCellLayout>
                     </TableCell>
                   )
