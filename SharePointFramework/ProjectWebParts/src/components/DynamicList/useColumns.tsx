@@ -39,7 +39,7 @@ export function useColumns(): IListColumn[] {
 
           // Handle booleans
           if (typeof value === 'boolean') {
-            return value ? 'Yes' : 'No'
+            return value ? 'Ja' : 'Nei'
           }
 
           return value.toString()

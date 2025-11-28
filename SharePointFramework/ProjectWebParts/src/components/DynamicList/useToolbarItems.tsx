@@ -124,10 +124,10 @@ export function useToolbarItems(isSingleView: boolean = false) {
 
     if (showNewItem) {
       items.push(
-        new ListMenuItem('New Item', 'Create a new item').setIcon(AddRegular).setOnClick(() => {
+        new ListMenuItem('Nytt element', 'Opprett et nytt element').setIcon(AddRegular).setOnClick(() => {
           context.setState({
             panel: {
-              headerText: 'New Item',
+              headerText: 'Nytt element',
               submit: {
                 onSubmit: async ({ properties }) => {
                   await saveItem(null, properties)
@@ -140,7 +140,7 @@ export function useToolbarItems(isSingleView: boolean = false) {
     }
 
     items.push(
-      new ListMenuItem('Edit Item', 'Edit selected item')
+      new ListMenuItem('Rediger element', 'Rediger valgt element')
         .setIcon(EditRegular)
         .setDisabled(context.state.selectedItems.length !== 1)
         .setOnClick(() => {
@@ -153,7 +153,7 @@ export function useToolbarItems(isSingleView: boolean = false) {
             const fieldValues = new ItemFieldValues(item)
             context.setState({
               panel: {
-                headerText: 'Edit Item',
+                headerText: 'Rediger element',
                 fieldValues,
                 submit: {
                   onSubmit: async ({ properties }) => {
@@ -170,9 +170,9 @@ export function useToolbarItems(isSingleView: boolean = false) {
     if (!isSingleView && context.props.showSearchBox) {
       items.push(
         new ListMenuItem().setSearchBox({
-          placeholder: `Search in ${context.props.viewName || context.state.data?.listTitle || 'list'}...`,
-          title: 'Search',
-          'aria-label': 'Search',
+          placeholder: `Søk i ${context.state.currentView?.title || context.state.data?.listTitle || 'liste'}...`,
+          title: 'Søk',
+          'aria-label': 'Søk',
           value: context.state.searchTerm || '',
           onChange: (_, { value }) => context.setState({ searchTerm: value }),
           contentAfter: {
@@ -222,8 +222,8 @@ export function useToolbarItems(isSingleView: boolean = false) {
 
       items.push(
         new ListMenuItem(
-          context.state.currentView?.title || 'Select View',
-          'Select a view to display'
+          context.state.currentView?.title || 'Velg visning',
+          'Velg en visning å vise'
         )
           .setIcon(Icons.ContentView)
           .setWidth('fit-content')
@@ -234,13 +234,13 @@ export function useToolbarItems(isSingleView: boolean = false) {
     }
 
     items.push(
-      new ListMenuItem(null, 'Refresh').setIcon('ArrowSync').setOnClick(() => {
+      new ListMenuItem(null, 'Oppdater').setIcon('ArrowSync').setOnClick(() => {
         context.setState({
           isRefetching: true,
           refetch: new Date().getTime()
         })
       }),
-      new ListMenuItem('Delete', 'Delete selected items')
+      new ListMenuItem('Slett', 'Slett valgte elementer')
         .setIcon(DeleteRegular)
         .setDisabled(context.state.selectedItems.length === 0)
         .setOnClick(() => {
@@ -251,7 +251,7 @@ export function useToolbarItems(isSingleView: boolean = false) {
     // Hide filters in single view
     if (!isSingleView && context.props.showFilters) {
       items.push(
-        new ListMenuItem('Filter', 'Toggle filters').setIcon(FilterRegular).setOnClick(() => {
+        new ListMenuItem('Filter', 'Vis/skjul filtre').setIcon(FilterRegular).setOnClick(() => {
           context.setState({ showFilterPanel: !context.state.showFilterPanel })
         })
       )

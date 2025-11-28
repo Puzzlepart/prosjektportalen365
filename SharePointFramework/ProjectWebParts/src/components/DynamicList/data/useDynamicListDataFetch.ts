@@ -20,6 +20,8 @@ export function useDynamicListDataFetch(
     const viewIdToUse = state.currentView?.id || props.defaultViewId
     const propsWithView = { ...props, defaultViewId: viewIdToUse }
 
+    console.log('[useDynamicListDataFetch] Fetching with view ID:', viewIdToUse, 'currentView:', state.currentView?.title)
+
     let cancelled = false
 
     setState({ isLoading: true })

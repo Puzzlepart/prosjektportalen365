@@ -15,7 +15,7 @@ export const SingleItemView: FC = () => {
     return (
       <div className={styles.singleItemView}>
         <div className={styles.emptyState}>
-          <Text size={400}>No item to display</Text>
+          <Text size={400}>Ingen elementer å vise</Text>
         </div>
       </div>
     )
@@ -24,7 +24,7 @@ export const SingleItemView: FC = () => {
   return (
     <div className={styles.singleItemView}>
       <div className={styles.header}>
-        <h1 className={styles.title}>{item.Title || 'Untitled'}</h1>
+        <h1 className={styles.title}>{item.Title || 'Uten tittel'}</h1>
       </div>
       <div className={styles.fields}>
         {columns.map((column) => {

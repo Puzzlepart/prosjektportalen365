@@ -114,15 +114,15 @@ export const DynamicListView: FC = () => {
   )
 
   if (context.state.isLoading) {
-    return <div>Loading...</div>
+    return <div>Laster...</div>
   }
 
   if (!context.state.data?.listItems?.length) {
-    return <div>No items to display</div>
+    return <div>Ingen elementer å vise</div>
   }
 
   if (!columns.length) {
-    return <div>No columns to display</div>
+    return <div>Ingen kolonner å vise</div>
   }
 
   return (

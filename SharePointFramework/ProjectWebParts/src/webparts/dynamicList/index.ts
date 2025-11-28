@@ -50,7 +50,7 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
         .sort((a, b) => a.Title.localeCompare(b.Title))
         .map((list) => ({
           key: list.Title,
-          text: `${list.Title} (${list.ItemCount || 0} items)`
+          text: `${list.Title} (${list.ItemCount || 0} elementer)`
         }))
 
       this._listsLoading = false
@@ -69,7 +69,7 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
       this._viewsLoading = true
 
       if (!this.properties.listName) {
-        this._viewOptions = [{ key: 'All Fields', text: 'All Fields' }]
+        this._viewOptions = [{ key: 'All Fields', text: 'Alle felt' }]
         this._viewsLoading = false
         return
       }
@@ -81,7 +81,7 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
 
       // Always add "All Fields" as the first option
       this._viewOptions = [
-        { key: 'All Fields', text: 'All Fields' },
+        { key: 'All Fields', text: 'Alle felt' },
         ...views
           .sort((a, b) => {
             // Default view first, then alphabetically
@@ -91,7 +91,7 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
           })
           .map((view) => ({
             key: view.Id, // Use ID as key for better integration
-            text: view.DefaultView ? `${view.Title} (Default)` : view.Title,
+            text: view.DefaultView ? `${view.Title} (Standard)` : view.Title,
             data: { title: view.Title, isDefault: view.DefaultView }
           }))
       ]
@@ -99,7 +99,7 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
       this._viewsLoading = false
     } catch (error) {
       console.error('Error loading views:', error)
-      this._viewOptions = [{ key: 'All Fields', text: 'All Fields' }]
+      this._viewOptions = [{ key: 'All Fields', text: 'Alle felt' }]
       this._viewsLoading = false
     }
   }
@@ -161,11 +161,11 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
         {
           groups: [
             {
-              groupName: 'List Settings',
+              groupName: 'Listeinnstillinger',
               groupFields: [
                 PropertyPaneTextField('webUrl', {
-                  label: 'Site URL',
-                  description: 'Leave empty to use current site',
+                  label: 'Nettadresse',
+                  description: 'La stå tom for å bruke gjeldende område',
                   placeholder: this.context.pageContext.web.absoluteUrl
                 }),
                 PropertyPaneDropdown('listName', {
@@ -176,35 +176,35 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                 }),
                 this.properties.listName &&
                   PropertyPaneDropdown('defaultViewId', {
-                    label: 'Default View',
+                    label: 'Standardvisning',
                     options: this._viewOptions,
                     selectedKey: this._getSelectedViewKey(),
                     disabled: this._viewsLoading
                   }),
                 PropertyPaneTextField('title', {
-                  label: 'Title',
-                  description: 'Title to display above the list'
+                  label: 'Tittel',
+                  description: 'Tittel som vises over listen'
                 }),
                 PropertyPaneToggle('showSearchBox', {
-                  label: 'Show Search Box',
-                  onText: 'On',
-                  offText: 'Off'
+                  label: 'Vis søkeboks',
+                  onText: 'På',
+                  offText: 'Av'
                 }),
                 PropertyPaneToggle('showViewSelector', {
-                  label: 'Show View Selector',
-                  onText: 'On',
-                  offText: 'Off'
+                  label: 'Vis visningsvelger',
+                  onText: 'På',
+                  offText: 'Av'
                 }),
                 PropertyPaneDropdown('mode', {
-                  label: 'Display Mode',
+                  label: 'Visningsmodus',
                   options: [
-                    { key: DynamicListMode.Multi, text: 'Multi-item (Grid View)' },
-                    { key: DynamicListMode.Single, text: 'Single-item (Detail View)' }
+                    { key: DynamicListMode.Multi, text: 'Flere elementer (Rutenettvisning)' },
+                    { key: DynamicListMode.Single, text: 'Enkelt element (Detaljvisning)' }
                   ],
                   selectedKey: this.properties.mode || DynamicListMode.Multi
                 }),
                 PropertyPaneSlider('maxItems', {
-                  label: 'Maximum Items',
+                  label: 'Maksimalt antall elementer',
                   min: 0,
                   max: 10,
                   step: 1,
@@ -212,17 +212,17 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                   showValue: true
                 }),
                 PropertyPaneToggle('showCommandBar', {
-                  label: 'Show Command Bar',
-                  onText: 'On',
-                  offText: 'Off'
+                  label: 'Vis kommandolinje',
+                  onText: 'På',
+                  offText: 'Av'
                 }),
                 PropertyPaneToggle('showFilters', {
-                  label: 'Show Filters',
-                  onText: 'On',
-                  offText: 'Off'
+                  label: 'Vis filtre',
+                  onText: 'På',
+                  offText: 'Av'
                 }),
                 PropertyPaneSlider('pageSize', {
-                  label: 'Items per page',
+                  label: 'Elementer per side',
                   min: 10,
                   max: 100,
                   step: 10,

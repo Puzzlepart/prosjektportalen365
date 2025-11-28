@@ -29,10 +29,24 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
       .expand('Author', 'Editor')
       .getAll()
 
-    // Fetch fields based on view selection
-    // Priority: defaultViewId > viewName > 'All Fields'
+    // Always fetch all fields first
+    const allFields = await list.fields
+      .filter('Hidden eq false and ReadOnlyField eq false')
+      .select(
+        'InternalName',
+        'Title',
+        'TypeAsString',
+        'Required',
+        'Description',
+        'Choices',
+        'FieldTypeKind'
+      )()
+
+    // Determine which fields to display based on view selection
     let fields: any[]
     let viewToUse: string | null = null
+
+    console.log('[fetchListData] Props defaultViewId:', props.defaultViewId, 'viewName:', props.viewName)
 
     if (props.defaultViewId && props.defaultViewId !== 'All Fields') {
       viewToUse = props.defaultViewId
@@ -40,68 +54,44 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
       viewToUse = props.viewName
     }
 
+    console.log('[fetchListData] viewToUse:', viewToUse)
+
     if (viewToUse) {
       try {
-        // Fetch fields from the selected view (by ID or Title)
+        // Fetch view field names
         let view: any
         if (props.defaultViewId && props.defaultViewId !== 'All Fields') {
           // Fetch by ID
           console.log('[fetchListData] Fetching view by ID:', props.defaultViewId)
-          view = await list.views.getById(props.defaultViewId).select('ViewFields')()
+          view = await list.views.getById(props.defaultViewId)()
         } else {
           // Fetch by Title (backward compatibility)
           console.log('[fetchListData] Fetching view by Title:', viewToUse)
-          view = await list.views.getByTitle(viewToUse).select('ViewFields')()
+          view = await list.views.getByTitle(viewToUse)()
         }
 
-        const viewFieldNames = view.ViewFields?.Items || []
-        console.log('[fetchListData] View field names:', viewFieldNames)
+        const viewFieldNames = view.ViewFields || []
+        console.log('[fetchListData] View field names:', viewFieldNames, 'count:', viewFieldNames.length)
 
-        // Fetch full field metadata for the view fields
-        const allFields = await list.fields.select(
-          'InternalName',
-          'Title',
-          'TypeAsString',
-          'Required',
-          'Description',
-          'Choices',
-          'FieldTypeKind'
-        )()
-
-        // Filter to only fields in the view, maintaining view order
-        fields = viewFieldNames
-          .map((fieldName: string) => allFields.find((f) => f.InternalName === fieldName))
-          .filter(Boolean)
-
-        console.log('[fetchListData] Filtered fields for view:', fields.length)
+        // Filter all fields to only those in the view, maintaining view order
+        if (viewFieldNames.length > 0) {
+          fields = viewFieldNames
+            .map((fieldName: string) => allFields.find((f) => f.InternalName === fieldName))
+            .filter(Boolean)
+          console.log('[fetchListData] Filtered fields for view:', fields.length)
+        } else {
+          // If view has no fields, use all fields
+          console.log('[fetchListData] View has no fields, using all fields')
+          fields = allFields
+        }
       } catch (error) {
-        console.error('[fetchListData] Error fetching view fields, falling back to all fields:', error)
+        console.error('[fetchListData] Error fetching view fields, using all fields:', error)
         // Fall back to all fields if view fetch fails
-        fields = await list.fields
-          .filter('Hidden eq false and ReadOnlyField eq false')
-          .select(
-            'InternalName',
-            'Title',
-            'TypeAsString',
-            'Required',
-            'Description',
-            'Choices',
-            'FieldTypeKind'
-          )()
+        fields = allFields
       }
     } else {
-      // Fetch all non-hidden, editable fields (original behavior)
-      fields = await list.fields
-        .filter('Hidden eq false and ReadOnlyField eq false')
-        .select(
-          'InternalName',
-          'Title',
-          'TypeAsString',
-          'Required',
-          'Description',
-          'Choices',
-          'FieldTypeKind'
-        )()
+      // Use all fields when no specific view is selected
+      fields = allFields
     }
 
     // Transform fields to columns
