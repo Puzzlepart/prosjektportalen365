@@ -3,9 +3,14 @@
 
   .container {
     margin: 0px auto;
+    padding: 32px;
 
     .header {
-      padding: 0px 32px;
+      padding: 0;
+    }
+
+    .commandBar {
+      margin-bottom: 16px;
     }
   }
 }

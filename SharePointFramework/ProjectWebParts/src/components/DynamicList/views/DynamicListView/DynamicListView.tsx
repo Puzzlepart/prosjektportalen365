@@ -20,18 +20,16 @@ import {
 } from '@fluentui/react-components'
 import * as React from 'react'
 import { FC, useContext, useMemo, useCallback } from 'react'
-import { DynamicListContext } from './context'
-import { Toolbar, customLightTheme } from 'pp365-shared-library'
-import { useColumns } from './useColumns'
-import { useToolbarItems } from './useToolbarItems'
-import { useFilteredData } from './useFilteredData'
+import { DynamicListContext } from '../../context'
+import { customLightTheme } from 'pp365-shared-library'
+import { useColumns } from '../../useColumns'
+import { useFilteredData } from '../../useFilteredData'
 import styles from './DynamicListView.module.scss'
 
 export const DynamicListView: FC = () => {
   const context = useContext(DynamicListContext)
   const columns = useColumns()
   const filteredItems = useFilteredData()
-  const { menuItems, farMenuItems } = useToolbarItems()
   const fluentProviderId = useId('fp-dynamic-list')
 
   // Column sizing options
@@ -130,11 +128,6 @@ export const DynamicListView: FC = () => {
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme} className={styles.dynamicListView}>
-        {context.props.showCommandBar && (
-          <div className={styles.commandBar}>
-            <Toolbar items={menuItems} farItems={farMenuItems} />
-          </div>
-        )}
         <div style={{ overflowX: 'auto', width: '100%' }}>
           <Table
             sortable

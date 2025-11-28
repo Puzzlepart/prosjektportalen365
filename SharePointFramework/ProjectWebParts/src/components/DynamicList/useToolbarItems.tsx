@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useMemo, useContext } from 'react'
+import { useMemo, useContext, useCallback } from 'react'
 import { DynamicListContext } from './context'
 import { ListMenuItem, ItemFieldValues, ListMenuItemDivider } from 'pp365-shared-library'
 import {
@@ -19,7 +19,7 @@ const Icons = {
   ContentView: bundleIcon(ContentView24Filled, ContentView24Regular)
 }
 
-export function useToolbarItems() {
+export function useToolbarItems(isSingleView: boolean = false) {
   const context = useContext(DynamicListContext)
 
   const checkedValues = useMemo(
@@ -32,7 +32,7 @@ export function useToolbarItems() {
   /**
    * Handle view selection change
    */
-  const onViewChange = async (viewId: string) => {
+  const onViewChange = useCallback(async (viewId: string) => {
     if (viewId === context.state.currentView?.id) return
 
     context.setState({ isChangingView: true })
@@ -52,12 +52,12 @@ export function useToolbarItems() {
     setTimeout(() => {
       context.setState({ refetch: Date.now() })
     }, 0)
-  }
+  }, [context.state.currentView?.id, context.state.views, context.setState])
 
   /**
    * Delete selected items
    */
-  const deleteItems = async () => {
+  const deleteItems = useCallback(async () => {
     if (!context.props.listName) return
 
     const web = SPDataAdapter.sp.web
@@ -79,23 +79,23 @@ export function useToolbarItems() {
       selectedItems: [],
       refetch: Date.now()
     })
-  }
+  }, [context.props.listName, context.state.selectedItems, context.state.data.listItems, context.setState])
 
   /**
    * Dismisses the panel and refetches data
    */
-  const dismissPanel = () => {
+  const dismissPanel = useCallback(() => {
     context.setState({
       selectedItems: [],
       refetch: Date.now(),
       panel: null
     })
-  }
+  }, [context.setState])
 
   /**
    * Adds or updates an item in the list
    */
-  const saveItem = async (itemId: number | null, properties: Record<string, any>) => {
+  const saveItem = useCallback(async (itemId: number | null, properties: Record<string, any>) => {
     if (!context.props.listName) return
 
     const web = SPDataAdapter.sp.web
@@ -108,17 +108,21 @@ export function useToolbarItems() {
     }
 
     dismissPanel()
-  }
+  }, [context.props.listName, dismissPanel])
 
   const menuItems = useMemo<ListMenuItem[]>(() => {
     const items: ListMenuItem[] = []
 
+    const hasItems = context.state.data?.listItems && context.state.data.listItems.length > 0
     const canAddItem =
       context.props.maxItems === 0 ||
       !context.state.data?.listItems ||
       context.state.data.listItems.length < context.props.maxItems
 
-    if (canAddItem) {
+    // In single view, only show New Item if there are no items
+    const showNewItem = isSingleView ? !hasItems && canAddItem : canAddItem
+
+    if (showNewItem) {
       items.push(
         new ListMenuItem('New Item', 'Create a new item').setIcon(AddRegular).setOnClick(() => {
           context.setState({
@@ -162,7 +166,8 @@ export function useToolbarItems() {
         })
     )
 
-    if (context.props.showSearchBox) {
+    // Hide search in single view
+    if (!isSingleView && context.props.showSearchBox) {
       items.push(
         new ListMenuItem().setSearchBox({
           placeholder: `Search in ${context.props.viewName || context.state.data?.listTitle || 'list'}...`,
@@ -180,6 +185,7 @@ export function useToolbarItems() {
 
     return items
   }, [
+    isSingleView,
     context.props.showFilters,
     context.props.showSearchBox,
     context.props.showViewSelector,
@@ -193,13 +199,16 @@ export function useToolbarItems() {
     context.state.views,
     context.state.currentView,
     context.state.isChangingView,
-    checkedValues
+    context.state.isLoading,
+    checkedValues,
+    saveItem
   ])
 
   const farMenuItems = useMemo<ListMenuItem[]>(() => {
     const items: ListMenuItem[] = []
 
-    if (context.props.showViewSelector && context.state.views?.length > 0) {
+    // Hide view selector in single view
+    if (!isSingleView && context.props.showViewSelector && context.state.views?.length > 0) {
       const viewMenuItems = context.state.views.map((view) =>
         new ListMenuItem(view.isDefault ? `${view.title} (Default)` : view.title)
           .makeCheckable({
@@ -239,7 +248,8 @@ export function useToolbarItems() {
         })
     )
 
-    if (context.props.showFilters) {
+    // Hide filters in single view
+    if (!isSingleView && context.props.showFilters) {
       items.push(
         new ListMenuItem('Filter', 'Toggle filters').setIcon(FilterRegular).setOnClick(() => {
           context.setState({ showFilterPanel: !context.state.showFilterPanel })
@@ -248,7 +258,20 @@ export function useToolbarItems() {
     }
 
     return items
-  }, [context.state.selectedItems, context.state.data?.listItems?.length, context.props.maxItems])
+  }, [
+    isSingleView,
+    context.props.showFilters,
+    context.props.showViewSelector,
+    context.state.showFilterPanel,
+    context.state.selectedItems,
+    context.state.data?.listItems?.length,
+    context.state.views,
+    context.state.currentView,
+    context.state.isChangingView,
+    checkedValues,
+    onViewChange,
+    deleteItems
+  ])
 
   return {
     menuItems,

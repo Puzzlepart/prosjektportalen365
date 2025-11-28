@@ -3,11 +3,38 @@ import * as React from 'react'
 import { DynamicListContext } from './context'
 import { IDynamicListProps, DynamicListMode } from './types'
 import { useDynamicList } from './useDynamicList'
-import { DynamicListView } from './DynamicListView'
-import { SingleItemView } from './SingleItemView'
-import { WebPartTitle, ItemFieldValues, CustomEditPanel } from 'pp365-shared-library'
+import { DynamicListView } from './views/DynamicListView/DynamicListView'
+import { SingleItemView } from './views/SingleItemView/SingleItemView'
+import { WebPartTitle, ItemFieldValues, CustomEditPanel, Toolbar } from 'pp365-shared-library'
 import SPDataAdapter from '../../data'
+import { useToolbarItems } from './useToolbarItems'
 import styles from './DynamicList.module.scss'
+
+const DynamicListContent: FC<{ isSingleView: boolean }> = ({ isSingleView }) => {
+  const context = React.useContext(DynamicListContext)
+  const { menuItems, farMenuItems } = useToolbarItems(isSingleView)
+
+  return (
+    <>
+      <div className={styles.header}>
+        <WebPartTitle
+          title={context.props.title || context.state.data?.listTitle}
+          description={context.props.infoText}
+        />
+      </div>
+      {context.props.showCommandBar && (
+        <div className={styles.commandBar}>
+          <Toolbar items={menuItems} farItems={farMenuItems} />
+        </div>
+      )}
+      {context.state.isLoading && <div>Loading...</div>}
+      {context.state.error && <div>Error: {context.state.error}</div>}
+      {!context.state.isLoading && !context.state.error && context.state.data && (
+        <>{isSingleView ? <SingleItemView /> : <DynamicListView />}</>
+      )}
+    </>
+  )
+}
 
 export const DynamicList: FC<IDynamicListProps> = (props) => {
   const { state, setState } = useDynamicList(props)
@@ -25,21 +52,13 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
   const displayMode =
     props.mode || (props.maxItems === 1 ? DynamicListMode.Single : DynamicListMode.Multi)
 
+  const isSingleView = displayMode === DynamicListMode.Single
+
   return (
     <div className={styles.dynamicList}>
       <DynamicListContext.Provider value={context}>
         <div className={styles.container}>
-          <div className={styles.header}>
-            <WebPartTitle
-              title={props.title || state.data?.listTitle}
-              description={props.infoText}
-            />
-          </div>
-          {state.isLoading && <div>Loading...</div>}
-          {state.error && <div>Error: {state.error}</div>}
-          {!state.isLoading && !state.error && state.data && (
-            <>{displayMode === DynamicListMode.Single ? <SingleItemView /> : <DynamicListView />}</>
-          )}
+          <DynamicListContent isSingleView={isSingleView} />
         </div>
         {state.panel && (
           <CustomEditPanel

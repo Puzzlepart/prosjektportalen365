@@ -114,39 +114,54 @@ export function useToolbarMenuRender() {
    * @returns The rendered menu.
    */
   function renderMenu(item: ListMenuItem) {
-    const hasCheckmarks = item.items.some((i) => i.value)
-    const hasIcons = item.items.some((i) => i.icon)
-    const [open, setOpen] = useState(false)
-    const onOpenChange: MenuProps['onOpenChange'] = (_, data) => {
-      setOpen(data.open)
-    }
-
-    return (
-      <Menu open={open} onOpenChange={onOpenChange} closeOnScroll positioning={{ autoSize: true }}>
-        <MenuTrigger disableButtonEnhancement>
-          {renderMenuButton(
-            item,
-            {
-              justifyContent: 'left',
-              fontWeight: 'var(--fontWeightRegular)',
-              padding: '0 6px',
-              minHeight: 32
-            },
-            { textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'inherit' }
-          )}
-        </MenuTrigger>
-        <MenuPopover>
-          <MenuList
-            hasCheckmarks={hasCheckmarks}
-            hasIcons={hasIcons}
-            checkedValues={item.checkedValues}
-          >
-            {item.items.map((menuItem) => renderMenuItem(menuItem, () => setOpen(false)))}
-          </MenuList>
-        </MenuPopover>
-      </Menu>
-    )
+    return <MenuComponent item={item} renderMenuButton={renderMenuButton} renderMenuItem={renderMenuItem} />
   }
 
   return { renderMenuItem, renderMenu }
+}
+
+/**
+ * Menu component that manages its own open state.
+ */
+function MenuComponent({
+  item,
+  renderMenuButton,
+  renderMenuItem
+}: {
+  item: ListMenuItem
+  renderMenuButton: (item: ListMenuItem, buttonStyle?: CSSProperties, labelStyle?: CSSProperties) => JSX.Element
+  renderMenuItem: (item: ListMenuItem, closeMenu?: () => void) => JSX.Element
+}) {
+  const hasCheckmarks = item.items.some((i) => i.value)
+  const hasIcons = item.items.some((i) => i.icon)
+  const [open, setOpen] = useState(false)
+  const onOpenChange: MenuProps['onOpenChange'] = (_, data) => {
+    setOpen(data.open)
+  }
+
+  return (
+    <Menu open={open} onOpenChange={onOpenChange} closeOnScroll positioning={{ autoSize: true }}>
+      <MenuTrigger disableButtonEnhancement>
+        {renderMenuButton(
+          item,
+          {
+            justifyContent: 'left',
+            fontWeight: 'var(--fontWeightRegular)',
+            padding: '0 6px',
+            minHeight: 32
+          },
+          { textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'inherit' }
+        )}
+      </MenuTrigger>
+      <MenuPopover>
+        <MenuList
+          hasCheckmarks={hasCheckmarks}
+          hasIcons={hasIcons}
+          checkedValues={item.checkedValues}
+        >
+          {item.items.map((menuItem) => renderMenuItem(menuItem, () => setOpen(false)))}
+        </MenuList>
+      </MenuPopover>
+    </Menu>
+  )
 }
