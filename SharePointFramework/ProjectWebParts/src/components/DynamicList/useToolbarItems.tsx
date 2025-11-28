@@ -1,14 +1,58 @@
 import * as React from 'react'
-import { useMemo, useContext, createElement } from 'react'
+import { useMemo, useContext } from 'react'
 import { DynamicListContext } from './context'
-import { ListMenuItem, ItemFieldValues } from 'pp365-shared-library'
-import { ArrowSyncRegular, FilterRegular, AddRegular, EditRegular, DeleteRegular } from '@fluentui/react-icons'
-import { SearchBox } from '@fluentui/react-components'
+import { ListMenuItem, ItemFieldValues, ListMenuItemDivider } from 'pp365-shared-library'
+import {
+  ArrowSyncRegular,
+  FilterRegular,
+  AddRegular,
+  EditRegular,
+  DeleteRegular,
+  ContentView24Filled,
+  ContentView24Regular,
+  bundleIcon
+} from '@fluentui/react-icons'
 import SPDataAdapter from '../../data'
 import _ from 'lodash'
 
+const Icons = {
+  ContentView: bundleIcon(ContentView24Filled, ContentView24Regular)
+}
+
 export function useToolbarItems() {
   const context = useContext(DynamicListContext)
+
+  const checkedValues = useMemo(
+    () => ({
+      views: [context.state.currentView?.id]
+    }),
+    [context.state.currentView?.id]
+  )
+
+  /**
+   * Handle view selection change
+   */
+  const onViewChange = async (viewId: string) => {
+    if (viewId === context.state.currentView?.id) return
+
+    context.setState({ isChangingView: true })
+
+    // Find the selected view
+    const selectedView = context.state.views?.find((v) => v.id === viewId)
+    if (!selectedView) return
+
+    // Update current view and trigger refetch with new view
+    // This will cause the data to be refetched with the new view's fields
+    context.setState({
+      currentView: selectedView,
+      isChangingView: false
+    })
+
+    // Trigger refetch after state is updated
+    setTimeout(() => {
+      context.setState({ refetch: Date.now() })
+    }, 0)
+  }
 
   /**
    * Delete selected items
@@ -58,10 +102,8 @@ export function useToolbarItems() {
     const list = web.lists.getByTitle(context.props.listName)
 
     if (itemId) {
-      // Update existing item
       await list.items.getById(itemId).update(properties)
     } else {
-      // Create new item
       await list.items.add(properties)
     }
 
@@ -71,7 +113,6 @@ export function useToolbarItems() {
   const menuItems = useMemo<ListMenuItem[]>(() => {
     const items: ListMenuItem[] = []
 
-    // Add new item button (if maxItems allows)
     const canAddItem =
       context.props.maxItems === 0 ||
       !context.state.data?.listItems ||
@@ -94,7 +135,6 @@ export function useToolbarItems() {
       )
     }
 
-    // Edit item button
     items.push(
       new ListMenuItem('Edit Item', 'Edit selected item')
         .setIcon(EditRegular)
@@ -122,44 +162,19 @@ export function useToolbarItems() {
         })
     )
 
-    // Add SearchBox to toolbar if enabled
     if (context.props.showSearchBox) {
       items.push(
-        new ListMenuItem('', '').setCustomRender(() =>
-          createElement(SearchBox, {
-            placeholder: `Search in ${context.props.viewName || context.state.data?.listTitle || 'list'}...`,
-            value: context.state.searchTerm || '',
-            onChange: (_, data) => context.setState({ searchTerm: data?.value || '' }),
-            contentAfter: createElement(
-              'span',
-              { style: { fontSize: '12px', color: '#666', marginLeft: '8px' } },
-              `${context.state.data?.listItems?.filter((item) => {
-                if (!context.state.searchTerm || context.state.searchTerm.trim() === '') return true
-                const searchTerm = context.state.searchTerm.toLowerCase()
-                return context.state.data.listColumns.some((col) => {
-                  const value = item[col.fieldName] || ''
-                  return String(value).toLowerCase().indexOf(searchTerm) !== -1
-                })
-              }).length || 0} results`
-            )
-          })
-        )
-      )
-    }
-
-    // Refresh button
-    items.push(
-      new ListMenuItem('Refresh', 'Refresh the list').setIcon(ArrowSyncRegular).setOnClick(() => {
-        context.setState({ refetch: Date.now() })
-      })
-    )
-
-    // Filter button (if enabled)
-    if (context.props.showFilters) {
-      items.push(
-        new ListMenuItem('Filter', 'Toggle filters').setIcon(FilterRegular).setOnClick(() => {
-          context.setState({ showFilterPanel: !context.state.showFilterPanel })
+        new ListMenuItem().setSearchBox({
+          placeholder: `Search in ${context.props.viewName || context.state.data?.listTitle || 'list'}...`,
+          title: 'Search',
+          'aria-label': 'Search',
+          value: context.state.searchTerm || '',
+          onChange: (_, { value }) => context.setState({ searchTerm: value }),
+          contentAfter: {
+            onClick: () => context.setState({ searchTerm: '' })
+          }
         })
+          .setDisabled(context.state.isLoading || _.isEmpty(context.state.data.listItems))
       )
     }
 
@@ -167,20 +182,55 @@ export function useToolbarItems() {
   }, [
     context.props.showFilters,
     context.props.showSearchBox,
+    context.props.showViewSelector,
     context.props.maxItems,
     context.props.viewName,
     context.state.showFilterPanel,
     context.state.data?.listItems?.length,
     context.state.data?.listTitle,
     context.state.selectedItems,
-    context.state.searchTerm
+    context.state.searchTerm,
+    context.state.views,
+    context.state.currentView,
+    context.state.isChangingView,
+    checkedValues
   ])
 
   const farMenuItems = useMemo<ListMenuItem[]>(() => {
     const items: ListMenuItem[] = []
 
-    // Delete button
+    if (context.props.showViewSelector && context.state.views?.length > 0) {
+      const viewMenuItems = context.state.views.map((view) =>
+        new ListMenuItem(view.isDefault ? `${view.title} (Default)` : view.title)
+          .makeCheckable({
+            name: 'views',
+            value: view.id
+          })
+          .setOnClick(() => {
+            onViewChange(view.id)
+          })
+      )
+
+      items.push(
+        new ListMenuItem(
+          context.state.currentView?.title || 'Select View',
+          'Select a view to display'
+        )
+          .setIcon(Icons.ContentView)
+          .setWidth('fit-content')
+          .setStyle({ minWidth: '145px' })
+          .setDisabled(context.state.isChangingView)
+          .setItems(viewMenuItems, checkedValues)
+      )
+    }
+
     items.push(
+      new ListMenuItem(null, 'Refresh').setIcon('ArrowSync').setOnClick(() => {
+        context.setState({
+          isRefetching: true,
+          refetch: new Date().getTime()
+        })
+      }),
       new ListMenuItem('Delete', 'Delete selected items')
         .setIcon(DeleteRegular)
         .setDisabled(context.state.selectedItems.length === 0)
@@ -189,20 +239,11 @@ export function useToolbarItems() {
         })
     )
 
-    // Show item count and limit
-    if (context.props.maxItems > 0 && context.state.data?.listItems) {
-      const itemCount = context.state.data.listItems.length
+    if (context.props.showFilters) {
       items.push(
-        new ListMenuItem(
-          `${itemCount} of ${context.props.maxItems} item${context.props.maxItems !== 1 ? 's' : ''}`
-        ).setDisabled(true)
-      )
-    }
-
-    // Show selected count (for multi-select mode)
-    if (context.state.selectedItems?.length > 0) {
-      items.push(
-        new ListMenuItem(`${context.state.selectedItems.length} selected`).setDisabled(true)
+        new ListMenuItem('Filter', 'Toggle filters').setIcon(FilterRegular).setOnClick(() => {
+          context.setState({ showFilterPanel: !context.state.showFilterPanel })
+        })
       )
     }
 

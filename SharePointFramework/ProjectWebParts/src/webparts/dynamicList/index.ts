@@ -190,6 +190,11 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                   onText: 'On',
                   offText: 'Off'
                 }),
+                PropertyPaneToggle('showViewSelector', {
+                  label: 'Show View Selector',
+                  onText: 'On',
+                  offText: 'Off'
+                }),
                 PropertyPaneDropdown('mode', {
                   label: 'Display Mode',
                   options: [

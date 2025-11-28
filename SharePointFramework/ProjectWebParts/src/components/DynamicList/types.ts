@@ -48,6 +48,11 @@ export interface IDynamicListProps extends IBaseWebPartComponentProps {
   showSearchBox?: boolean
 
   /**
+   * Show view selector in toolbar
+   */
+  showViewSelector?: boolean
+
+  /**
    * Whether to show the command bar with actions
    */
   showCommandBar?: boolean
@@ -115,6 +120,11 @@ export interface IDynamicListState extends IBaseWebPartComponentState<IDynamicLi
   selectedItem?: Record<string, any>
 
   /**
+   * Indicates if data is being refetched
+   */
+  isRefetching?: boolean
+
+  /**
    * Timestamp for refetch. Changing this state variable refetches the data
    */
   refetch?: number
@@ -123,6 +133,21 @@ export interface IDynamicListState extends IBaseWebPartComponentState<IDynamicLi
    * Search term for filtering items
    */
   searchTerm?: string
+
+  /**
+   * Current selected view
+   */
+  currentView?: { id: string; title: string; isDefault?: boolean }
+
+  /**
+   * Available views for the list
+   */
+  views?: Array<{ id: string; title: string; isDefault?: boolean }>
+
+  /**
+   * Whether view is currently being changed
+   */
+  isChangingView?: boolean
 
   /**
    * Panel for editing or creating new items
@@ -155,4 +180,9 @@ export interface IDynamicListData {
    * List ID
    */
   listId?: string
+
+  /**
+   * Available views
+   */
+  views?: Array<{ id: string; title: string; isDefault?: boolean }>
 }

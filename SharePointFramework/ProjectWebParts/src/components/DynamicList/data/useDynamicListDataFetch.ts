@@ -1,35 +1,60 @@
-import { useEffect, useState } from 'react'
-import { IDynamicListProps, IDynamicListState, IDynamicListData } from '../types'
+import { useEffect } from 'react'
+import { IDynamicListProps, IDynamicListState } from '../types'
 import { fetchListData } from './fetchListData'
 
 export function useDynamicListDataFetch(
   props: IDynamicListProps,
   state: IDynamicListState,
   setState: (newState: Partial<IDynamicListState>) => void
-): IDynamicListData {
-  const [data, setData] = useState<IDynamicListData>({
-    listItems: [],
-    listColumns: []
-  })
-
+): void {
   useEffect(() => {
     if (!props.listName) {
-      setData({ listItems: [], listColumns: [] })
-      setState({ isLoading: false })
+      setState({
+        data: { listItems: [], listColumns: [] },
+        isLoading: false
+      })
       return
     }
 
+    // Use currentView if available, otherwise use props
+    const viewIdToUse = state.currentView?.id || props.defaultViewId
+    const propsWithView = { ...props, defaultViewId: viewIdToUse }
+
+    let cancelled = false
+
     setState({ isLoading: true })
-    fetchListData(props)
+
+    fetchListData(propsWithView)
       .then((fetchedData) => {
-        setData(fetchedData)
-        setState({ data: fetchedData, isLoading: false })
+        if (cancelled) return
+
+        console.log('[DynamicList] Fetched data:', {
+          itemCount: fetchedData.listItems?.length,
+          columnCount: fetchedData.listColumns?.length,
+          columns: fetchedData.listColumns?.map(c => c.name)
+        })
+
+        // Only set currentView if it's not already set or if it's the initial load
+        const newCurrentView = state.currentView ||
+          fetchedData.views?.find((v) => v.id === viewIdToUse) ||
+          fetchedData.views?.find((v) => v.isDefault)
+
+        setState({
+          data: fetchedData,
+          views: fetchedData.views || [],
+          currentView: newCurrentView,
+          isLoading: false,
+          isChangingView: false
+        })
       })
       .catch((error) => {
+        if (cancelled) return
         console.error('[DynamicList] Error fetching data:', error)
-        setState({ error: error.message, isLoading: false })
+        setState({ error: error.message, isLoading: false, isChangingView: false })
       })
-  }, [props.listName, props.pageContext?.web?.absoluteUrl, state.refetch])
 
-  return data
+    return () => {
+      cancelled = true
+    }
+  }, [props.listName, props.pageContext?.web?.absoluteUrl, state.refetch])
 }

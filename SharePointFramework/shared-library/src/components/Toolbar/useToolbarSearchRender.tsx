@@ -15,9 +15,10 @@ export function useToolbarSearchRender() {
     if (!item.searchBox) return null
 
     return (
-      <div hidden={item.hidden} style={{ minWidth: '250px', maxWidth: '400px', ...item.style }}>
+      <div className={styles.search} hidden={item.hidden}>
         <SearchBox
           className={styles.searchBox}
+          style={{ minWidth: '250px', width: '320px', ...item.style }}
           disabled={item.disabled}
           placeholder={item.searchBox.placeholder}
           aria-label={item.searchBox['aria-label']}

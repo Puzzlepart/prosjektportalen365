@@ -11,7 +11,9 @@ export function useDynamicList(props: IDynamicListProps) {
     },
     activeFilters: {},
     selectedItems: [],
-    searchTerm: ''
+    searchTerm: '',
+    views: [],
+    isChangingView: false
   })
 
   const setState = useCallback((newState: Partial<IDynamicListState>, callback?: () => void) => {
@@ -25,13 +27,10 @@ export function useDynamicList(props: IDynamicListProps) {
   }, [])
 
   // Fetch data
-  const data = useDynamicListDataFetch(props, state, setState)
+  useDynamicListDataFetch(props, state, setState)
 
   return {
-    state: {
-      ...state,
-      data: data.listItems.length > 0 ? data : state.data
-    },
+    state,
     setState
   }
 }

@@ -4,22 +4,7 @@
 
   .commandBar {
     margin-bottom: 16px;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--colorNeutralStroke2);
+    padding: 8px 32px;
 
-    > div {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-  }
-
-  .searchBox {
-    margin-bottom: 16px;
-    padding: 8px 0;
-
-    > div {
-      max-width: 400px;
-    }
   }
 }

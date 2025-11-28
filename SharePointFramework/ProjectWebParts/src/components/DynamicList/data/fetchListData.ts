@@ -1,6 +1,7 @@
 import { IColumn } from '@fluentui/react'
 import { IDynamicListProps, IDynamicListData } from '../types'
 import SPDataAdapter from '../../../data'
+import { EditableSPField } from 'pp365-shared-library'
 import '@pnp/sp/lists'
 import '@pnp/sp/fields'
 import '@pnp/sp/items'
@@ -40,33 +41,54 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
     }
 
     if (viewToUse) {
-      // Fetch fields from the selected view (by ID or Title)
-      let view: any
-      if (props.defaultViewId && props.defaultViewId !== 'All Fields') {
-        // Fetch by ID
-        view = await list.views.getById(props.defaultViewId).select('ViewFields')()
-      } else {
-        // Fetch by Title (backward compatibility)
-        view = await list.views.getByTitle(viewToUse).select('ViewFields')()
+      try {
+        // Fetch fields from the selected view (by ID or Title)
+        let view: any
+        if (props.defaultViewId && props.defaultViewId !== 'All Fields') {
+          // Fetch by ID
+          console.log('[fetchListData] Fetching view by ID:', props.defaultViewId)
+          view = await list.views.getById(props.defaultViewId).select('ViewFields')()
+        } else {
+          // Fetch by Title (backward compatibility)
+          console.log('[fetchListData] Fetching view by Title:', viewToUse)
+          view = await list.views.getByTitle(viewToUse).select('ViewFields')()
+        }
+
+        const viewFieldNames = view.ViewFields?.Items || []
+        console.log('[fetchListData] View field names:', viewFieldNames)
+
+        // Fetch full field metadata for the view fields
+        const allFields = await list.fields.select(
+          'InternalName',
+          'Title',
+          'TypeAsString',
+          'Required',
+          'Description',
+          'Choices',
+          'FieldTypeKind'
+        )()
+
+        // Filter to only fields in the view, maintaining view order
+        fields = viewFieldNames
+          .map((fieldName: string) => allFields.find((f) => f.InternalName === fieldName))
+          .filter(Boolean)
+
+        console.log('[fetchListData] Filtered fields for view:', fields.length)
+      } catch (error) {
+        console.error('[fetchListData] Error fetching view fields, falling back to all fields:', error)
+        // Fall back to all fields if view fetch fails
+        fields = await list.fields
+          .filter('Hidden eq false and ReadOnlyField eq false')
+          .select(
+            'InternalName',
+            'Title',
+            'TypeAsString',
+            'Required',
+            'Description',
+            'Choices',
+            'FieldTypeKind'
+          )()
       }
-
-      const viewFieldNames = view.ViewFields?.Items || []
-
-      // Fetch full field metadata for the view fields
-      const allFields = await list.fields.select(
-        'InternalName',
-        'Title',
-        'TypeAsString',
-        'Required',
-        'Description',
-        'Choices',
-        'FieldTypeKind'
-      )()
-
-      // Filter to only fields in the view, maintaining view order
-      fields = viewFieldNames
-        .map((fieldName: string) => allFields.find((f) => f.InternalName === fieldName))
-        .filter(Boolean)
     } else {
       // Fetch all non-hidden, editable fields (original behavior)
       fields = await list.fields
@@ -138,10 +160,34 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
         'LookupField'
       )()
 
+    // Map to EditableSPField instances
+    const mappedFields = editableFields.map((fld) => new EditableSPField(fld))
+
+    // Fetch available views
+    const views = await list.views
+      .select('Title', 'Id', 'DefaultView')
+      .filter('Hidden eq false')()
+
+    const viewsList = views.map((view) => ({
+      id: view.Id,
+      title: view.Title,
+      isDefault: view.DefaultView
+    }))
+
+    // Find current view
+    let currentView = viewsList.find((v) => v.id === props.defaultViewId)
+    if (!currentView && props.viewName && props.viewName !== 'All Fields') {
+      currentView = viewsList.find((v) => v.title === props.viewName)
+    }
+    if (!currentView) {
+      currentView = viewsList.find((v) => v.isDefault)
+    }
+
     return {
       listItems,
       listColumns: columns,
-      fields: editableFields,
+      fields: mappedFields,
+      views: viewsList,
       listTitle: listInfo.Title,
       listId: listInfo.Id
     }
