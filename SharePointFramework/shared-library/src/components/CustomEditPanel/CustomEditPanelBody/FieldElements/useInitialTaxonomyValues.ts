@@ -27,23 +27,29 @@ export const useInitialTaxonomyValues = () => {
 
   const ensureLanguageSupport = useCallback(
     (labels: ITermLabel[] = []) => {
-      if (!labels.length) return []
-      const normalized = labels.map((label) => ({ ...label }))
+      if (!labels || !labels.length) return []
+      const validLabels = labels.filter((label) => label && label.name)
+      if (!validLabels.length) return []
+      
+      const normalized = validLabels.map((label) => ({ ...label }))
       const ensureLabel = (languageTag: string) => {
         if (!languageTag) return
-        if (
-          !normalized.some(
-            (label) => label.languageTag?.toLowerCase() === languageTag.toLowerCase()
-          )
-        ) {
+        const toLower = languageTag.toLowerCase()
+        const matches = normalized.filter(
+          (label) => label.languageTag?.toLowerCase() === toLower
+        )
+        if (!matches.length) {
           const base = normalized.find((label) => label.isDefault) ?? normalized[0]
+          if (!base || !base.name) return
           normalized.push({
             ...base,
-            isDefault: base.languageTag?.toLowerCase() === languageTag.toLowerCase()
-              ? base.isDefault
-              : false,
+            isDefault: true,
             languageTag
           })
+          return
+        }
+        if (!matches.some((label) => label.isDefault)) {
+          matches[0].isDefault = true
         }
       }
       ensureLabel(currentLocale)
@@ -54,12 +60,32 @@ export const useInitialTaxonomyValues = () => {
   )
 
   const mapInitialValues = useCallback((term: Term) => {
+    if (!term) return null
+    
     if ('id' in term) {
-      return { labels: ensureLanguageSupport(term.labels), id: term.id }
+      if (!term.labels || !Array.isArray(term.labels)) {
+        console.warn('Term has no valid labels array:', term)
+        return null
+      }
+      
+      const labels = ensureLanguageSupport(term.labels)
+      if (!labels || labels.length === 0 || !labels[0]?.name) {
+        console.warn('Term labels could not be processed:', term)
+        return null
+      }
+      return { labels, id: term.id }
     } else {
+      if (!term.name) {
+        console.warn('Tag term has no name:', term)
+        return null
+      }
       const labels = ensureLanguageSupport([
         { name: term.name, isDefault: true, languageTag: currentLocale }
       ])
+      if (!labels || labels.length === 0) {
+        console.warn('Could not create labels for tag term:', term)
+        return null
+      }
       return { labels, id: term.key }
     }
   }, [ensureLanguageSupport, currentLocale])
