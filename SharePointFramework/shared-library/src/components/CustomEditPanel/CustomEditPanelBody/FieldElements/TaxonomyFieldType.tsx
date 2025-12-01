@@ -38,7 +38,7 @@ export const TaxonomyFieldType: FieldElementComponent = ({ field }) => {
         context={context.props.dataAdapter.spfxContext as any} // Newest version of the control requires this cast for now, as context type is incompatibale with other types of SPFxContext
         panelTitle={field.description || field.displayName}
         initialValues={normalizeTerms(terms)}
-        label=''
+        label={field.displayName}
         termSetId={field.getProperty('TermSetId')}
         onChange={handleChange}
       />
