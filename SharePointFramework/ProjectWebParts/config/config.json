@@ -64,7 +64,7 @@
     "SharedResources": "lib/loc/shared/{locale}.js",
     "ProjectWebPartsStrings": "lib/loc/{locale}.js",
     "PzlSPFxComponentsStrings": "lib/loc/{locale}.js",
-    "ControlStrings": "lib/loc/{locale}.js",
+    "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js",
     "PropertyControlStrings": "node_modules/@pnp/spfx-property-controls/lib/loc/{locale}.js",
     "SharedLibraryStrings": "node_modules/pp365-shared-library/lib/loc/{locale}.js"
   }

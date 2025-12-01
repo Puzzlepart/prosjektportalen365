@@ -39,7 +39,7 @@ export const TaxonomyFieldTypeMulti: FieldElementComponent = ({ field }) => {
         panelTitle={field.description || field.displayName}
         initialValues={normalizeTerms(terms)}
         allowMultipleSelections
-        label={field.displayName}
+        label=''
         termSetId={field.getProperty('TermSetId')}
         onChange={handleChange}
       />
