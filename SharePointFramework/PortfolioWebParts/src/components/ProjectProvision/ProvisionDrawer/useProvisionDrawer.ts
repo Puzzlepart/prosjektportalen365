@@ -161,7 +161,7 @@ export const useProvisionDrawer = () => {
         Description: `${baseUrl}${alias}`,
         Url: `${baseUrl}${alias}`
       },
-      SiteAlias: context.column.get('alias'),
+      SiteAlias: alias,
       MailboxAlias: alias,
       TimeZoneId: 4,
       LCID: 1044,
