@@ -22,6 +22,11 @@ define([], function () {
       ChoiceField: 'Velg et alternativ',
       MultiChoiceField: 'Velg ett eller flere alternativer',
     },
+    Validation: {
+      NumberFieldMin: 'Verdien må være minst {0}',
+      NumberFieldMax: 'Verdien må være maksimalt {0}',
+      NumberFieldMinMax: 'Verdien må være mellom {0} og {1}',
+    },
     AllocationPercetageLabel: 'Allokeringsprosent',
     AllocationStatusLabel: 'Allokeringsstatus',
     BudgetTotalLabel: 'Totalbudsjett',
