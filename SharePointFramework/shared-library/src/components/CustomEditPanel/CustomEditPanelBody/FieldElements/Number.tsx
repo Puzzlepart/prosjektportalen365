@@ -14,20 +14,22 @@ export const Number: FieldElementComponent = ({ field }) => {
   const minValue = field.column?.data?.dataTypeProperties?.min
   const maxValue = field.column?.data?.dataTypeProperties?.max
 
+  const clearValidation = () => {
+    setValidationState('none')
+    setValidationMessage(null)
+    context.clearValidationError(field.internalName)
+  }
+
   const validateValue = (value: string) => {
     if (!value) {
-      setValidationState('none')
-      setValidationMessage(null)
-      context.clearValidationError(field.internalName)
+      clearValidation()
       return
     }
 
     const numericValue = parseFloat(value)
 
     if (isNaN(numericValue)) {
-      setValidationState('none')
-      setValidationMessage(null)
-      context.clearValidationError(field.internalName)
+      clearValidation()
       return
     }
 
@@ -56,9 +58,7 @@ export const Number: FieldElementComponent = ({ field }) => {
       return
     }
 
-    setValidationState('none')
-    setValidationMessage(null)
-    context.clearValidationError(field.internalName)
+    clearValidation()
   }
 
   const handleChange = (_, data) => {
