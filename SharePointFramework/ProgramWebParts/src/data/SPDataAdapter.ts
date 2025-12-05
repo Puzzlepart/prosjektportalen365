@@ -40,10 +40,10 @@ import {
 } from 'pp365-shared-library'
 import { Site } from '@pnp/sp/sites'
 import _ from 'underscore'
-import { DEFAULT_SEARCH_SETTINGS, IProjectsData } from './types'
+import { DEFAULT_SEARCH_SETTINGS, IProgramHub, IProjectsData } from './types'
 import { IList } from '@pnp/sp/lists'
 import { IItem } from '@pnp/sp/items'
-import { PermissionKind } from '@pnp/sp/presets/all'
+import { PermissionKind, Web } from '@pnp/sp/presets/all'
 import resource from 'SharedResources'
 
 /**
@@ -878,14 +878,36 @@ export class SPDataAdapter
    * search index for all sites with the same DepartmentId as the current hubsite and all project items with
    * the same DepartmentId as the current hubsite. The sites are then matched with the items to
    * retrieve the SiteId and SPWebURL. The result are cached for 5 minutes.
+   * 
+   * @param hubs Optional array of program hubs with their URLs and hub site IDs
    */
-  public async getHubSiteProjects() {
+  public async getHubSiteProjects(hubs?: IProgramHub[]) {
     const { HubSiteId } = await this.sp.site.select('HubSiteId')()
+    
+    let hubSiteIds: string[] = [HubSiteId]
+    
+    if (hubs && hubs.length > 0) {
+      const resolvedHubs = await Promise.all(
+        hubs.map(async (hub) => ({
+          ...hub,
+          hubSiteId: hub.hubSiteId || await this.resolveHubSiteIdFromUrl(hub.url)
+        }))
+      )
+      
+      hubSiteIds = resolvedHubs
+        .filter(hub => hub.hubSiteId)
+        .map(hub => hub.hubSiteId)
+    }
+    
+    const hubSiteQuery = hubSiteIds.map(id => `DepartmentId:{${id}}`).join(' OR ')
+    
+    const cacheKey = `HubSiteProjects_${hubSiteIds.sort().join('_')}`
+    
     return new PnPClientStorage().local.getOrPut(
-      `HubSiteProjects_${HubSiteId}`,
+      cacheKey,
       async () => {
         const sitesQuery: SearchQueryInit = {
-          Querytext: `DepartmentId:{${HubSiteId}} contentclass:STS_Site NOT WebTemplate:TEAMCHANNEL`,
+          Querytext: `(${hubSiteQuery}) contentclass:STS_Site NOT WebTemplate:TEAMCHANNEL`,
           RowLimit: 500,
           StartRow: 0,
           ClientType: 'ContentSearchRegular',
@@ -902,7 +924,7 @@ export class SPDataAdapter
         }
 
         const itemsQuery: SearchQueryInit = {
-          Querytext: `DepartmentId:{${HubSiteId}} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*`,
+          Querytext: `(${hubSiteQuery}) ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*`,
           RowLimit: 500,
           StartRow: 0,
           ClientType: 'ContentSearchRegular',
@@ -961,7 +983,7 @@ export class SPDataAdapter
 
   /**
    * Resolve the HubSiteId for a given site URL.
-   * Uses PnPjs `Site(siteUrl)` to query the site and return its `HubSiteId`.
+   * Uses PnPjs to query the site and return its `HubSiteId`.
    *
    * @param siteUrl Absolute URL of the site to resolve
    * @returns The HubSiteId string, or `undefined` if it could not be resolved
@@ -969,9 +991,11 @@ export class SPDataAdapter
   public async resolveHubSiteIdFromUrl(siteUrl: string): Promise<string | undefined> {
     if (!siteUrl) return undefined
     try {
-      const siteInfo = await Site(siteUrl).select('HubSiteId')()
+      const site = Site([this.sp.site, siteUrl])
+      const siteInfo = await site.select('HubSiteId')()
       return siteInfo?.HubSiteId ?? undefined
     } catch (e) {
+      console.error(e)
       return undefined
     }
   }

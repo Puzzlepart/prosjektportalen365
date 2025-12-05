@@ -7,8 +7,10 @@ export const useAddProjectDialog = () => {
   const context = useContext(ProgramAdministrationContext)
 
   useEffect(() => {
+    if (context.programHubs === undefined) return
+    
     context.props.dataAdapter
-      .getHubSiteProjects()
+      .getHubSiteProjects(context.programHubs)
       .then((availableProjects) =>
         context.dispatch(DATA_LOADED({ data: { availableProjects }, scope: 'AddProjectDialog' }))
       )
@@ -17,7 +19,7 @@ export const useAddProjectDialog = () => {
           DATA_LOADED({ data: { availableProjects: [] }, scope: 'AddProjectDialog' })
         )
       )
-  }, [])
+  }, [context.programHubs])
 
   const availableProjects = context.state.availableProjects.filter(
     ({ SiteId }) =>

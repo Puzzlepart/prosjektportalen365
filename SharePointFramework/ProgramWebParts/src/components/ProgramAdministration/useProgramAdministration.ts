@@ -3,13 +3,16 @@ import { useEffect, useMemo, useReducer, useState } from 'react'
 import reducer, { DATA_LOADED, SET_SELECTED_TO_DELETE, initialState } from './reducer'
 import { IProgramAdministrationProps } from './types'
 import { useId } from '@fluentui/react-components'
+import { IProgramHub } from 'data'
 
 export const useProgramAdministration = (props: IProgramAdministrationProps) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const [programHubs, setProgramHubs] = useState<{ url: string; hubSiteId?: string }[] | undefined>(
+  const [programHubs, setProgramHubs] = useState<IProgramHub[] | undefined>(
     undefined
   )
+
+  console.log(programHubs);
 
   useEffect(() => {
     props.dataAdapter.project.getProjectInformationData().then((properties) => {
@@ -28,6 +31,8 @@ export const useProgramAdministration = (props: IProgramAdministrationProps) => 
             .map((s) => s.trim())
             .filter(Boolean)
         }
+        console.log(availableProgramHubsRaw);
+        console.log(parsedHubs);
 
         if (parsedHubs.length > 0) {
           Promise.all(
@@ -49,7 +54,7 @@ export const useProgramAdministration = (props: IProgramAdministrationProps) => 
     })
   }, [])
 
-  const context = useMemo(() => ({ props, state, dispatch }), [props, state])
+  const context = useMemo(() => ({ props, state, dispatch, programHubs }), [props, state, programHubs])
 
   /**
    * Callback function for handling selection change in the `ProjectList` component.
