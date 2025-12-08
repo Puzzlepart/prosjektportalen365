@@ -26,9 +26,7 @@ export const FilterPanel: FC<IFilterPanelProps> = (props) => {
             {props.filters &&
               props.filters
                 .filter((f) => f.items.length > 1)
-                .map((f, idx) => (
-                  <Filter {...f} key={idx} onFilterChange={props.onFilterChange} />
-                ))}
+                .map((f, idx) => <Filter {...f} key={idx} onFilterChange={props.onFilterChange} />)}
           </div>
         </FluentProvider>
       </IdPrefixProvider>

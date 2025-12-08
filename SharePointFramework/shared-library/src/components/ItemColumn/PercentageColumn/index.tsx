@@ -1,5 +1,5 @@
-import strings from 'PortfolioWebPartsStrings'
-import { tryParsePercentage } from 'pp365-shared-library'
+import strings from 'SharedLibraryStrings'
+import { tryParsePercentage } from '../../../util'
 import React from 'react'
 import { ColumnRenderComponent } from '../types'
 

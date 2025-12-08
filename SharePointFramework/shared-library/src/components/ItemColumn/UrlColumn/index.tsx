@@ -1,7 +1,7 @@
 /* eslint-disable prefer-const */
 import { TextField, Toggle } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/core'
-import strings from 'PortfolioWebPartsStrings'
+import strings from 'SharedLibraryStrings'
 import React from 'react'
 import { ColumnDataTypePropertyField } from '../ColumnDataTypeField'
 import { ColumnRenderComponent } from '../types'

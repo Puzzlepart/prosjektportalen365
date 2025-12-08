@@ -1,11 +1,11 @@
 import { Dropdown } from '@fluentui/react'
-import strings from 'PortfolioWebPartsStrings'
+import strings from 'SharedLibraryStrings'
 import React, { FC } from 'react'
 import { DataTypeFields } from './DataTypeFields'
 import { IColumnDataTypeFieldProps } from './types'
 import { useDataTypeDropdown } from './useDataTypeDropdown'
 import { useDataTypeProperties } from './useDataTypeProperties'
-import { FieldContainer } from 'pp365-shared-library'
+import { FieldContainer } from '../../FieldContainer'
 import { Switch } from '@fluentui/react-components'
 import styles from './ColumnRenderField.module.scss'
 

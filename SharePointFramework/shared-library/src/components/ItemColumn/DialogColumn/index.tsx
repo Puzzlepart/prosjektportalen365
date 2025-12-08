@@ -1,5 +1,5 @@
 import { Checkbox, TextField } from '@fluentui/react'
-import strings from 'PortfolioWebPartsStrings'
+import strings from 'SharedLibraryStrings'
 import React from 'react'
 import { ColumnDataTypePropertyField } from '../ColumnDataTypeField'
 import { ColumnRenderComponent } from '../types'
@@ -23,7 +23,7 @@ import {
   Text
 } from '@fluentui/react-components'
 import { stringIsNullOrEmpty } from '@pnp/core'
-import { UserMessage } from 'pp365-shared-library'
+import { UserMessage } from '../../UserMessage'
 
 /**
  * A column render component that displays a link in the cell. When the link is clicked, a dialog is displayed

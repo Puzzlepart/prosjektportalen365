@@ -1,4 +1,4 @@
-import strings from 'PortfolioWebPartsStrings'
+import strings from 'SharedLibraryStrings'
 import React from 'react'
 import { ColumnRenderComponent } from '../types'
 

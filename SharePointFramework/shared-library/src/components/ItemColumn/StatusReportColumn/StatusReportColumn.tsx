@@ -1,6 +1,6 @@
 import { Icon } from '@fluentui/react/lib/Icon'
 import { TooltipDelay, TooltipHost } from '@fluentui/react/lib/Tooltip'
-import strings from 'PortfolioWebPartsStrings'
+import strings from 'SharedLibraryStrings'
 import React from 'react'
 import FadeIn from 'react-fade-in'
 import { ColumnRenderComponent } from '../types'

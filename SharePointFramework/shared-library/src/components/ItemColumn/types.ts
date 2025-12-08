@@ -1,5 +1,5 @@
 import { IColumn } from '@fluentui/react'
-import { ColumnDataType, ProjectColumn } from 'pp365-shared-library'
+import { ColumnDataType, ProjectColumn } from '../../models'
 import { GetDataTypeProperties, IColumnDataTypeFieldOption } from './ColumnDataTypeField'
 import { IWeb } from '@pnp/sp/webs'
 

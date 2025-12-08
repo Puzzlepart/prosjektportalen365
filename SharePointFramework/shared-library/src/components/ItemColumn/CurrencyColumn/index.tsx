@@ -1,6 +1,6 @@
 import { TextField } from '@fluentui/react'
-import strings from 'PortfolioWebPartsStrings'
-import { tryParseCurrency } from 'pp365-shared-library'
+import strings from 'SharedLibraryStrings'
+import { tryParseCurrency } from '../../../util'
 import React from 'react'
 import { ColumnDataTypePropertyField } from '../ColumnDataTypeField'
 import { ColumnRenderComponent } from '../types'

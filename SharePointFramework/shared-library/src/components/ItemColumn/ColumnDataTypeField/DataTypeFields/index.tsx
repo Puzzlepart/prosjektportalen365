@@ -1,9 +1,9 @@
 import _ from 'lodash'
 import React, { FC, createElement } from 'react'
-import * as strings from 'PortfolioWebPartsStrings'
+import * as strings from 'SharedLibraryStrings'
 import styles from './DataTypeFields.module.scss'
 import { IDataTypeFieldsProps } from './types'
-import { getFluentIcon } from 'pp365-shared-library'
+import { getFluentIcon } from '../../../../icons'
 import { Button } from '@fluentui/react-components'
 
 /**

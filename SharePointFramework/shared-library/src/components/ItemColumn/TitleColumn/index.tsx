@@ -1,6 +1,6 @@
-import strings from 'PortfolioWebPartsStrings'
+import strings from 'SharedLibraryStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
-import { SiteContext } from 'pp365-shared-library'
+import { SiteContext } from '../../../services'
 import React, { FC, useContext } from 'react'
 import { ListContext } from '../../context'
 import { ITitleColumnProps } from './types'

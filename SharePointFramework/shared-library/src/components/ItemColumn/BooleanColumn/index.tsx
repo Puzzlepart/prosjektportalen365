@@ -1,5 +1,5 @@
 import { TextField } from '@fluentui/react'
-import strings from 'PortfolioWebPartsStrings'
+import strings from 'SharedLibraryStrings'
 import React from 'react'
 import { ColumnDataTypePropertyField, IColumnDataTypePropertyField } from '../ColumnDataTypeField'
 import { ColumnRenderComponent } from '../types'

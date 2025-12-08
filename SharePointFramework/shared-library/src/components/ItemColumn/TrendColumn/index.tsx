@@ -1,6 +1,6 @@
 import { Checkbox, ICheckboxProps, Icon } from '@fluentui/react'
-import strings from 'PortfolioWebPartsStrings'
-import { tryParseJson } from 'pp365-shared-library'
+import strings from 'SharedLibraryStrings'
+import { tryParseJson } from '../../../util'
 import React from 'react'
 import { IColumnDataTypePropertyField } from '../ColumnDataTypeField'
 import { ColumnRenderComponent } from '../types'

@@ -1,5 +1,5 @@
-import strings from 'PortfolioWebPartsStrings'
-import { tryParseInt } from 'pp365-shared-library'
+import strings from 'SharedLibraryStrings'
+import { tryParseInt } from '../../../util'
 import React from 'react'
 import { ColumnRenderComponent } from '../types'
 

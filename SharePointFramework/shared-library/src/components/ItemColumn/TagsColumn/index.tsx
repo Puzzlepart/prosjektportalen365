@@ -1,6 +1,6 @@
 import { TextField } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/core'
-import strings from 'PortfolioWebPartsStrings'
+import strings from 'SharedLibraryStrings'
 import React from 'react'
 import { ColumnDataTypePropertyField } from '../ColumnDataTypeField'
 import { ColumnRenderComponent } from '../types'
@@ -12,7 +12,7 @@ import {
   TagFilled,
   TagMultipleFilled
 } from '@fluentui/react-icons'
-import { OverflowTagMenu } from 'pp365-shared-library'
+import { OverflowTagMenu } from '../../OverflowTagMenu'
 import styles from './TagsColumn.module.scss'
 
 export const TagsColumn: ColumnRenderComponent<ITagsColumnProps> = (props) => {

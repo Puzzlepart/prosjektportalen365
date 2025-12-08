@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import strings from 'PortfolioWebPartsStrings'
+import strings from 'SharedLibraryStrings'
 import _ from 'lodash'
 import { useEffect } from 'react'
 import { GetDataTypeProperties, IColumnDataTypeFieldOption } from './ColumnDataTypeField'

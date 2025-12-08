@@ -1,6 +1,6 @@
 import { TableCellLayout, TableColumnDefinition, Text } from '@fluentui/react-components'
 import React from 'react'
-import * as strings from 'PortfolioWebPartsStrings'
+import * as strings from 'SharedLibraryStrings'
 import { Icon } from '@fluentui/react'
 
 export interface IColumn extends TableColumnDefinition<any> {

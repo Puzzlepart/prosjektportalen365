@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { t9r } from 'pp365-shared-library'
+import { t9r } from '../../../util'
 import { IDialogColumnProps } from './types'
 
 /**

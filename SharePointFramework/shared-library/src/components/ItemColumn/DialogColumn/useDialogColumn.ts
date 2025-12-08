@@ -1,4 +1,4 @@
-import { tryParseJson } from 'pp365-shared-library'
+import { tryParseJson } from '../../../util'
 import { IDialogColumnProps } from './types'
 import { useInfoText } from './useInfoText'
 import _ from 'lodash'

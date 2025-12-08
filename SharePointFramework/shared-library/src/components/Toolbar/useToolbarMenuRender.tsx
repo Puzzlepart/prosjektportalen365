@@ -114,7 +114,13 @@ export function useToolbarMenuRender() {
    * @returns The rendered menu.
    */
   function renderMenu(item: ListMenuItem) {
-    return <MenuComponent item={item} renderMenuButton={renderMenuButton} renderMenuItem={renderMenuItem} />
+    return (
+      <MenuComponent
+        item={item}
+        renderMenuButton={renderMenuButton}
+        renderMenuItem={renderMenuItem}
+      />
+    )
   }
 
   return { renderMenuItem, renderMenu }
@@ -129,7 +135,11 @@ function MenuComponent({
   renderMenuItem
 }: {
   item: ListMenuItem
-  renderMenuButton: (item: ListMenuItem, buttonStyle?: CSSProperties, labelStyle?: CSSProperties) => JSX.Element
+  renderMenuButton: (
+    item: ListMenuItem,
+    buttonStyle?: CSSProperties,
+    labelStyle?: CSSProperties
+  ) => JSX.Element
   renderMenuItem: (item: ListMenuItem, closeMenu?: () => void) => JSX.Element
 }) {
   const hasCheckmarks = item.items.some((i) => i.value)

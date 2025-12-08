@@ -1,7 +1,7 @@
 import { FluentIcon } from '@fluentui/react-icons/lib/utils/createFluentIcon'
 import { CSSProperties, MouseEventHandler } from 'react'
 import { IFilterPanelProps } from '../FilterPanel'
-import { InputProps, SearchBoxProps } from '@fluentui/react-components'
+import { SearchBoxProps } from '@fluentui/react-components'
 
 /**
  * Props for the Toolbar component.

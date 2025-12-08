@@ -1,5 +1,5 @@
 import { IWeb } from '@pnp/sp/webs'
-import { ProjectColumn } from 'pp365-shared-library'
+import { ProjectColumn } from '../../../models'
 import { IStatusColumnProps, ProjectStatusModel } from './types'
 import _ from 'lodash'
 import { StatusReportColumn } from './StatusReportColumn'

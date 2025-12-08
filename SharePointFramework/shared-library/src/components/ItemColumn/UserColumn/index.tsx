@@ -1,8 +1,8 @@
 import { Avatar, Text, Tooltip } from '@fluentui/react-components'
-import strings from 'PortfolioWebPartsStrings'
+import strings from 'SharedLibraryStrings'
 import React from 'react'
 import { ColumnRenderComponent } from '../types'
-import { SearchValueType, getUserPhoto } from 'pp365-shared-library'
+import { SearchValueType, getUserPhoto } from '../../../util'
 import styles from './UserColumn.module.scss'
 
 export const UserColumn: ColumnRenderComponent = ({ columnValue, column }) => {
