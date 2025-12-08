@@ -12,8 +12,6 @@ export const useProgramAdministration = (props: IProgramAdministrationProps) => 
     undefined
   )
 
-  console.log(programHubs);
-
   useEffect(() => {
     props.dataAdapter.project.getProjectInformationData().then((properties) => {
       Promise.all([
@@ -31,12 +29,13 @@ export const useProgramAdministration = (props: IProgramAdministrationProps) => 
             .map((s) => s.trim())
             .filter(Boolean)
         }
-        console.log(availableProgramHubsRaw);
-        console.log(parsedHubs);
 
         if (parsedHubs.length > 0) {
           Promise.all(
-            parsedHubs.map(async (u) => ({ url: u, hubSiteId: await props.dataAdapter.resolveHubSiteIdFromUrl(u) }))
+            parsedHubs.map(async (u) => {
+              const resolved = await props.dataAdapter.resolveHubSiteFromUrl(u)
+              return { url: u, hubSiteId: resolved.hubSiteId, title: resolved.title }
+            })
           )
             .then((resolved) => setProgramHubs(resolved))
             .catch(() => setProgramHubs(undefined))

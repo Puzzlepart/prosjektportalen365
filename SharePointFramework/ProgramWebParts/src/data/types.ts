@@ -34,4 +34,5 @@ export interface IProjectsData {
 export interface IProgramHub {
   url: string
   hubSiteId?: string
+  title?: string
 }

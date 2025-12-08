@@ -33,6 +33,7 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
               search={{
                 placeholder: strings.ProgramAdministrationSearchBoxPlaceholder
               }}
+              programHubs={context.programHubs}
             />
           )}
           {context.state.addProjectDialog && <AddProjectDialog />}

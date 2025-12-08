@@ -882,21 +882,27 @@ export class SPDataAdapter
    * @param hubs Optional array of program hubs with their URLs and hub site IDs
    */
   public async getHubSiteProjects(hubs?: IProgramHub[]) {
-    const { HubSiteId } = await this.sp.site.select('HubSiteId')()
-    
-    let hubSiteIds: string[] = [HubSiteId]
+    let hubSiteIds: string[] = []
     
     if (hubs && hubs.length > 0) {
       const resolvedHubs = await Promise.all(
-        hubs.map(async (hub) => ({
-          ...hub,
-          hubSiteId: hub.hubSiteId || await this.resolveHubSiteIdFromUrl(hub.url)
-        }))
+        hubs.map(async (hub) => {
+          if (hub.hubSiteId && hub.title) return hub
+          const resolved = await this.resolveHubSiteFromUrl(hub.url)
+          return {
+            ...hub,
+            hubSiteId: hub.hubSiteId || resolved.hubSiteId,
+            title: hub.title || resolved.title
+          }
+        })
       )
       
       hubSiteIds = resolvedHubs
         .filter(hub => hub.hubSiteId)
         .map(hub => hub.hubSiteId)
+    } else {
+      const { HubSiteId } = await this.sp.site.select('HubSiteId')()
+      hubSiteIds = [HubSiteId]
     }
     
     const hubSiteQuery = hubSiteIds.map(id => `DepartmentId:{${id}}`).join(' OR ')
@@ -911,7 +917,7 @@ export class SPDataAdapter
           RowLimit: 500,
           StartRow: 0,
           ClientType: 'ContentSearchRegular',
-          SelectProperties: ['SPWebURL', 'Title', 'SiteId', 'Path'],
+          SelectProperties: ['SPWebURL', 'Title', 'SiteId', 'Path', 'DepartmentId'],
           TrimDuplicates: false
         }
 
@@ -950,13 +956,21 @@ export class SPDataAdapter
           )
           .map<IProgramAdministrationProject>((item) => {
             const site = sts_sites.find((site) => site['SiteId'] === item['GtSiteIdOWSTEXT'])
+            const hubSiteId = site?.['DepartmentId']
+            const hub = hubs?.find(h => h.hubSiteId === hubSiteId)
             return {
               SiteId: item['GtSiteIdOWSTEXT'],
               Title: site?.Title ?? item['Title'],
               SPWebURL: site?.SPWebUrl,
-              Path: site?.Path
+              Path: site?.Path,
+              HubSiteId: hubSiteId,
+              HubSiteUrl: hub?.url,
+              HubSiteTitle: hub?.title,
+              _site: site
             }
           })
+          .filter(project => project._site)
+          .map(({ _site, ...project }) => project)
       },
       dateAdd(new Date(), 'minute', 5)
     )
@@ -982,21 +996,28 @@ export class SPDataAdapter
   }
 
   /**
-   * Resolve the HubSiteId for a given site URL.
-   * Uses PnPjs to query the site and return its `HubSiteId`.
+   * Resolve the HubSiteId and Title for a given site URL.
+   * Uses PnPjs to query the site and return its `HubSiteId` and `Title`.
    *
    * @param siteUrl Absolute URL of the site to resolve
-   * @returns The HubSiteId string, or `undefined` if it could not be resolved
+   * @returns Object with hubSiteId and title, or undefined values if resolution failed
    */
-  public async resolveHubSiteIdFromUrl(siteUrl: string): Promise<string | undefined> {
-    if (!siteUrl) return undefined
+  public async resolveHubSiteFromUrl(siteUrl: string): Promise<{ hubSiteId?: string; title?: string }> {
+    if (!siteUrl) return { hubSiteId: undefined, title: undefined }
     try {
+      const web = Web([this.sp.web, siteUrl])
       const site = Site([this.sp.site, siteUrl])
-      const siteInfo = await site.select('HubSiteId')()
-      return siteInfo?.HubSiteId ?? undefined
+      const [siteInfo, webInfo] = await Promise.all([
+        site.select('HubSiteId')(),
+        web.select('Title')()
+      ])
+      return {
+        hubSiteId: siteInfo?.HubSiteId ?? undefined,
+        title: webInfo?.Title ?? undefined
+      }
     } catch (e) {
       console.error(e)
-      return undefined
+      return { hubSiteId: undefined, title: undefined }
     }
   }
 
