@@ -1,7 +1,7 @@
 import { IColumn } from '@fluentui/react'
 import { IDynamicListProps, IDynamicListData } from '../types'
 import SPDataAdapter from '../../../data'
-import { EditableSPField, isHubSite } from 'pp365-shared-library'
+import { EditableSPField, isHubSite, ProjectContentColumn } from 'pp365-shared-library'
 import { Web } from '@pnp/sp/webs'
 import '@pnp/sp/lists'
 import '@pnp/sp/fields'
@@ -27,6 +27,60 @@ function getWeb(webUrl?: string, props?: IDynamicListProps) {
     // Another site URL - create Web instance
     return Web([SPDataAdapter.sp.web, webUrl])
   }
+}
+
+/**
+ * Fetches column configuration from ProjectContentColumns (Prosjektinnholdskolonner) list
+ * This provides dataType and dataTypeProperties for proper column rendering
+ * Fetches all columns since DynamicList doesn't use categories
+ */
+async function fetchProjectContentColumns(): Promise<ProjectContentColumn[]> {
+  try {
+    if (SPDataAdapter.portalDataService?.isConfigured) {
+      return await SPDataAdapter.portalDataService.fetchProjectContentColumns('PROJECT_CONTENT_COLUMNS')
+    }
+    return []
+  } catch (error) {
+    console.warn(
+      '[fetchListData] Could not fetch ProjectContentColumns configuration:',
+      error
+    )
+    return []
+  }
+}
+
+/**
+ * Enriches SharePoint columns with configuration from ProjectContentColumns
+ * Merges dataType, dataTypeProperties, and other rendering configuration
+ */
+function enrichColumnsWithConfiguration(
+  spColumns: IColumn[],
+  projectContentColumns: ProjectContentColumn[]
+): IColumn[] {
+  return spColumns.map((spColumn) => {
+    // Try to find matching configuration by internal name
+    const configColumn = projectContentColumns.find(
+      (c) => c.internalName === spColumn.fieldName || c.fieldName === spColumn.fieldName
+    )
+
+    if (configColumn) {
+      // Merge configuration from ProjectContentColumns
+      return {
+        ...spColumn,
+        name: configColumn.name || spColumn.name,
+        minWidth: configColumn.minWidth || spColumn.minWidth,
+        maxWidth: configColumn.maxWidth || spColumn.maxWidth,
+        dataType: configColumn.dataType,
+        data: {
+          ...spColumn.data,
+          ...configColumn.data,
+          dataTypeProperties: configColumn.data?.dataTypeProperties || spColumn.data?.dataTypeProperties
+        }
+      }
+    }
+
+    return spColumn
+  })
 }
 
 /**
@@ -93,8 +147,11 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
     const web = getWeb(props.webUrl, props)
     const list = web.lists.getByTitle(props.listName)
 
-    // Fetch list info
-    const listInfo = await list.select('Title', 'Id')()
+    // Fetch list info and ProjectContentColumns configuration in parallel
+    const [listInfo, projectContentColumns] = await Promise.all([
+      list.select('Title', 'Id')(),
+      fetchProjectContentColumns()
+    ])
 
     // Fetch list items
     const items = await list.items
@@ -178,7 +235,7 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
     }
 
     // Transform fields to columns
-    const columns: IColumn[] = fields
+    let columns: IColumn[] = fields
       .filter(
         (field) => !field.InternalName.startsWith('_') && field.InternalName !== 'Attachments'
       )
@@ -201,6 +258,13 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
           }
         }
       })
+
+    // Enrich columns with configuration from ProjectContentColumns
+    console.log(
+      '[fetchListData] Enriching columns with ProjectContentColumns configuration:',
+      projectContentColumns.length
+    )
+    columns = enrichColumnsWithConfiguration(columns, projectContentColumns)
 
     // Transform items for display
     const listItems = items.map((item) => {
