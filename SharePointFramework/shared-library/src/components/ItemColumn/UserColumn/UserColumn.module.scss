@@ -1,0 +1,10 @@
+.avatar {
+  display: flex;
+  gap: 8;
+  align-items: center;
+}
+
+.truncatedText {
+  overflow: hidden !important;
+  white-space: nowrap !important;
+}
