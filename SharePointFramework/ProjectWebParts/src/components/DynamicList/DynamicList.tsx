@@ -5,7 +5,14 @@ import { IDynamicListProps, DynamicListMode } from './types'
 import { useDynamicList } from './useDynamicList'
 import { DynamicListView } from './views/DynamicListView/DynamicListView'
 import { SingleItemView } from './views/SingleItemView/SingleItemView'
-import { WebPartTitle, ItemFieldValues, CustomEditPanel, Toolbar, isHubSite, UserMessage } from 'pp365-shared-library'
+import {
+  WebPartTitle,
+  ItemFieldValues,
+  CustomEditPanel,
+  Toolbar,
+  isHubSite,
+  UserMessage
+} from 'pp365-shared-library'
 import { Spinner } from '@fluentui/react-components'
 import { Web } from '@pnp/sp/webs'
 import SPDataAdapter from '../../data'
@@ -61,9 +68,7 @@ const DynamicListContent: FC<{ isSingleView: boolean }> = ({ isSingleView }) => 
           ) : (
             <>
               {context.state.error && <div>Error: {context.state.error}</div>}
-              {context.state.data && (
-                <>{isSingleView ? <SingleItemView /> : <DynamicListView />}</>
-              )}
+              {context.state.data && <>{isSingleView ? <SingleItemView /> : <DynamicListView />}</>}
             </>
           )}
         </>
@@ -90,7 +95,8 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
     props.mode || (props.maxItems === 1 ? DynamicListMode.Single : DynamicListMode.Multi)
 
   const hasOnlyOneItem = state.data?.listItems?.length === 1
-  const isSingleView = displayMode === DynamicListMode.Single || hasOnlyOneItem || state.isDrilledDown
+  const isSingleView =
+    displayMode === DynamicListMode.Single || hasOnlyOneItem || state.isDrilledDown
 
   // Get the target web based on webUrl prop
   const targetWeb = useMemo(() => {

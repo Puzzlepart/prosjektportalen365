@@ -50,12 +50,11 @@ export function generateFilters(data: IDynamicListData): IFilterProps[] {
     )
 
     // Get unique non-empty values
-    const uniqueValues = _.uniq(allValues)
-      .filter((value) => {
-        if (value == null || value === '') return false
-        if (typeof value === 'string' && value.trim() === '') return false
-        return true
-      })
+    const uniqueValues = _.uniq(allValues).filter((value) => {
+      if (value == null || value === '') return false
+      if (typeof value === 'string' && value.trim() === '') return false
+      return true
+    })
 
     // Only create filter if there are multiple unique values (no point filtering with 1 value)
     if (uniqueValues.length > 1 && uniqueValues.length < 100) {

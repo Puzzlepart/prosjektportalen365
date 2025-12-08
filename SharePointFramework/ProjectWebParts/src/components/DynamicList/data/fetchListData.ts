@@ -30,6 +30,58 @@ function getWeb(webUrl?: string, props?: IDynamicListProps) {
 }
 
 /**
+ * Maps SharePoint field type to our column data type
+ */
+function mapSharePointTypeToDataType(typeAsString: string, fieldTypeKind: number): string {
+  // Map based on TypeAsString first
+  const typeMapping: Record<string, string> = {
+    Boolean: 'boolean',
+    DateTime: 'date',
+    Number: 'number',
+    Currency: 'number',
+    Integer: 'number',
+    Counter: 'number',
+    User: 'user',
+    UserMulti: 'user',
+    Lookup: 'text',
+    LookupMulti: 'text',
+    Choice: 'choice',
+    MultiChoice: 'choice',
+    URL: 'url',
+    Note: 'note',
+    Text: 'text'
+  }
+
+  const mappedType = typeMapping[typeAsString]
+  if (mappedType) return mappedType
+
+  // Fallback based on FieldTypeKind
+  switch (fieldTypeKind) {
+    case 2: // Integer
+    case 9: // Number
+    case 10: // Currency
+      return 'number'
+    case 4: // DateTime
+      return 'date'
+    case 8: // Boolean
+      return 'boolean'
+    case 20: // User
+      return 'user'
+    case 7: // Lookup
+      return 'text'
+    case 6: // Choice
+    case 15: // MultiChoice
+      return 'choice'
+    case 11: // URL
+      return 'url'
+    case 3: // Note (multiline)
+      return 'note'
+    default:
+      return 'text'
+  }
+}
+
+/**
  * Fetches list data including items, columns, and field metadata
  */
 export async function fetchListData(props: IDynamicListProps): Promise<IDynamicListData> {
@@ -67,7 +119,12 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
     let fields: any[]
     let viewToUse: string | null = null
 
-    console.log('[fetchListData] Props defaultViewId:', props.defaultViewId, 'viewName:', props.viewName)
+    console.log(
+      '[fetchListData] Props defaultViewId:',
+      props.defaultViewId,
+      'viewName:',
+      props.viewName
+    )
 
     if (props.defaultViewId && props.defaultViewId !== 'All Fields') {
       viewToUse = props.defaultViewId
@@ -92,7 +149,12 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
         }
 
         const viewFieldNames = view.ViewFields || []
-        console.log('[fetchListData] View field names:', viewFieldNames, 'count:', viewFieldNames.length)
+        console.log(
+          '[fetchListData] View field names:',
+          viewFieldNames,
+          'count:',
+          viewFieldNames.length
+        )
 
         // Filter all fields to only those in the view, maintaining view order
         if (viewFieldNames.length > 0) {
@@ -120,17 +182,25 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
       .filter(
         (field) => !field.InternalName.startsWith('_') && field.InternalName !== 'Attachments'
       )
-      .map((field) => ({
-        key: field.InternalName,
-        name: field.Title,
-        fieldName: field.InternalName,
-        minWidth: 100,
-        maxWidth: 300,
-        isResizable: true,
-        isSorted: false,
-        isSortedDescending: false,
-        data: { type: field.TypeAsString }
-      }))
+      .map((field) => {
+        const dataType = mapSharePointTypeToDataType(field.TypeAsString, field.FieldTypeKind)
+        return {
+          key: field.InternalName,
+          name: field.Title,
+          fieldName: field.InternalName,
+          minWidth: 100,
+          maxWidth: 300,
+          isResizable: true,
+          isSorted: false,
+          isSortedDescending: false,
+          dataType: dataType,
+          data: {
+            type: dataType,
+            fieldType: field.TypeAsString,
+            fieldTypeKind: field.FieldTypeKind
+          }
+        }
+      })
 
     // Transform items for display
     const listItems = items.map((item) => {
@@ -175,9 +245,7 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
     const mappedFields = editableFields.map((fld) => new EditableSPField(fld))
 
     // Fetch available views
-    const views = await list.views
-      .select('Title', 'Id', 'DefaultView')
-      .filter('Hidden eq false')()
+    const views = await list.views.select('Title', 'Id', 'DefaultView').filter('Hidden eq false')()
 
     const viewsList = views.map((view) => ({
       id: view.Id,

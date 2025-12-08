@@ -1,6 +1,7 @@
 import { createTableColumn, TableColumnDefinition } from '@fluentui/react-components'
 import { useContext, useMemo } from 'react'
 import { DynamicListContext } from './context'
+import { renderItemColumn, useColumnRenderComponentRegistry } from 'pp365-shared-library'
 
 export interface IListColumn extends TableColumnDefinition<any> {
   minWidth?: number
@@ -9,6 +10,9 @@ export interface IListColumn extends TableColumnDefinition<any> {
 
 export function useColumns(): IListColumn[] {
   const context = useContext(DynamicListContext)
+
+  // Register column render components
+  useColumnRenderComponentRegistry()
 
   return useMemo(() => {
     if (!context.state.data?.listColumns) {
@@ -27,24 +31,8 @@ export function useColumns(): IListColumn[] {
         },
         renderHeaderCell: () => column.name,
         renderCell: (item) => {
-          const value = item[fieldName]
-
-          // Handle different field types
-          if (value === null || value === undefined) {
-            return '-'
-          }
-
-          // Handle dates
-          if (value instanceof Date) {
-            return value.toLocaleDateString()
-          }
-
-          // Handle booleans
-          if (typeof value === 'boolean') {
-            return value ? 'Ja' : 'Nei'
-          }
-
-          return value.toString()
+          // Use the column render system to render the cell value
+          return renderItemColumn(item, column)
         }
       })
     })

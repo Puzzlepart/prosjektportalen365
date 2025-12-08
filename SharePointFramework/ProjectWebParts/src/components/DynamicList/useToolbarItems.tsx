@@ -1,9 +1,7 @@
-import * as React from 'react'
 import { useMemo, useContext, useCallback } from 'react'
 import { DynamicListContext } from './context'
-import { ListMenuItem, ItemFieldValues, ListMenuItemDivider, isHubSite } from 'pp365-shared-library'
+import { ListMenuItem, ItemFieldValues, isHubSite } from 'pp365-shared-library'
 import {
-  ArrowSyncRegular,
   FilterRegular,
   AddRegular,
   EditRegular,
@@ -53,27 +51,30 @@ export function useToolbarItems(isSingleView: boolean = false) {
   /**
    * Handle view selection change
    */
-  const onViewChange = useCallback(async (viewId: string) => {
-    if (viewId === context.state.currentView?.id) return
+  const onViewChange = useCallback(
+    async (viewId: string) => {
+      if (viewId === context.state.currentView?.id) return
 
-    context.setState({ isChangingView: true })
+      context.setState({ isChangingView: true })
 
-    // Find the selected view
-    const selectedView = context.state.views?.find((v) => v.id === viewId)
-    if (!selectedView) return
+      // Find the selected view
+      const selectedView = context.state.views?.find((v) => v.id === viewId)
+      if (!selectedView) return
 
-    // Update current view and trigger refetch with new view
-    // This will cause the data to be refetched with the new view's fields
-    context.setState({
-      currentView: selectedView,
-      isChangingView: false
-    })
+      // Update current view and trigger refetch with new view
+      // This will cause the data to be refetched with the new view's fields
+      context.setState({
+        currentView: selectedView,
+        isChangingView: false
+      })
 
-    // Trigger refetch after state is updated
-    setTimeout(() => {
-      context.setState({ refetch: Date.now() })
-    }, 0)
-  }, [context.state.currentView?.id, context.state.views, context.setState])
+      // Trigger refetch after state is updated
+      setTimeout(() => {
+        context.setState({ refetch: Date.now() })
+      }, 0)
+    },
+    [context.state.currentView?.id, context.state.views, context.setState]
+  )
 
   /**
    * Delete selected items with confirmation
@@ -83,7 +84,9 @@ export function useToolbarItems(isSingleView: boolean = false) {
 
     const selectedCount = context.state.selectedItems.length
     const confirmed = window.confirm(
-      `Er du sikker på at du vil slette ${selectedCount} ${selectedCount === 1 ? 'element' : 'elementer'}?`
+      `Er du sikker på at du vil slette ${selectedCount} ${
+        selectedCount === 1 ? 'element' : 'elementer'
+      }?`
     )
 
     if (!confirmed) return
@@ -107,7 +110,13 @@ export function useToolbarItems(isSingleView: boolean = false) {
       selectedItems: [],
       refetch: Date.now()
     })
-  }, [context.props.listName, context.props.webUrl, context.state.selectedItems, context.state.data.listItems, context.setState])
+  }, [
+    context.props.listName,
+    context.props.webUrl,
+    context.state.selectedItems,
+    context.state.data.listItems,
+    context.setState
+  ])
 
   /**
    * Dismisses the panel and refetches data
@@ -123,20 +132,23 @@ export function useToolbarItems(isSingleView: boolean = false) {
   /**
    * Adds or updates an item in the list
    */
-  const saveItem = useCallback(async (itemId: number | null, properties: Record<string, any>) => {
-    if (!context.props.listName) return
+  const saveItem = useCallback(
+    async (itemId: number | null, properties: Record<string, any>) => {
+      if (!context.props.listName) return
 
-    const web = getWeb(context.props.webUrl, context.props.pageContext)
-    const list = web.lists.getByTitle(context.props.listName)
+      const web = getWeb(context.props.webUrl, context.props.pageContext)
+      const list = web.lists.getByTitle(context.props.listName)
 
-    if (itemId) {
-      await list.items.getById(itemId).update(properties)
-    } else {
-      await list.items.add(properties)
-    }
+      if (itemId) {
+        await list.items.getById(itemId).update(properties)
+      } else {
+        await list.items.add(properties)
+      }
 
-    dismissPanel()
-  }, [context.props.listName, context.props.webUrl, dismissPanel])
+      dismissPanel()
+    },
+    [context.props.listName, context.props.webUrl, dismissPanel]
+  )
 
   const menuItems = useMemo<ListMenuItem[]>(() => {
     const items: ListMenuItem[] = []
@@ -166,18 +178,20 @@ export function useToolbarItems(isSingleView: boolean = false) {
 
     if (showNewItem) {
       items.push(
-        new ListMenuItem('Nytt element', 'Opprett et nytt element').setIcon(AddRegular).setOnClick(() => {
-          context.setState({
-            panel: {
-              headerText: 'Nytt element',
-              submit: {
-                onSubmit: async ({ properties }) => {
-                  await saveItem(null, properties)
+        new ListMenuItem('Nytt element', 'Opprett et nytt element')
+          .setIcon(AddRegular)
+          .setOnClick(() => {
+            context.setState({
+              panel: {
+                headerText: 'Nytt element',
+                submit: {
+                  onSubmit: async ({ properties }) => {
+                    await saveItem(null, properties)
+                  }
                 }
               }
-            }
+            })
           })
-        })
       )
     }
 
@@ -211,16 +225,19 @@ export function useToolbarItems(isSingleView: boolean = false) {
     // Hide search in single view
     if (!isSingleView && context.props.showSearchBox) {
       items.push(
-        new ListMenuItem().setSearchBox({
-          placeholder: `Søk i ${context.state.currentView?.title || context.state.data?.listTitle || 'liste'}...`,
-          title: 'Søk',
-          'aria-label': 'Søk',
-          value: context.state.searchTerm || '',
-          onChange: (_, { value }) => context.setState({ searchTerm: value }),
-          contentAfter: {
-            onClick: () => context.setState({ searchTerm: '' })
-          }
-        })
+        new ListMenuItem()
+          .setSearchBox({
+            placeholder: `Søk i ${
+              context.state.currentView?.title || context.state.data?.listTitle || 'liste'
+            }...`,
+            title: 'Søk',
+            'aria-label': 'Søk',
+            value: context.state.searchTerm || '',
+            onChange: (_, { value }) => context.setState({ searchTerm: value }),
+            contentAfter: {
+              onClick: () => context.setState({ searchTerm: '' })
+            }
+          })
           .setDisabled(context.state.isLoading || _.isEmpty(context.state.data.listItems))
       )
     }
@@ -276,14 +293,12 @@ export function useToolbarItems(isSingleView: boolean = false) {
       )
     }
     items.push(
-      new ListMenuItem(null, 'Oppdater')
-        .setIcon('ArrowSync')
-        .setOnClick(() => {
-          context.setState({
-            isRefetching: true,
-            refetch: new Date().getTime()
-          })
-        }),
+      new ListMenuItem(null, 'Oppdater').setIcon('ArrowSync').setOnClick(() => {
+        context.setState({
+          isRefetching: true,
+          refetch: new Date().getTime()
+        })
+      }),
       new ListMenuItem('Slett', 'Slett valgte elementer')
         .setIcon(DeleteRegular)
         .setDisabled(!context.state.selectedItems || context.state.selectedItems.length === 0)
@@ -321,39 +336,39 @@ export function useToolbarItems(isSingleView: boolean = false) {
     () =>
       context.props.showFilters
         ? {
-          isOpen: context.state.showFilterPanel,
-          filters: context.state.filters || [],
-          onDismiss: () => context.setState({ showFilterPanel: false }),
-          onFilterChange: (column: any, selectedItems: any[]) => {
-            // Update activeFilters
-            const newActiveFilters = { ...context.state.activeFilters }
+            isOpen: context.state.showFilterPanel,
+            filters: context.state.filters || [],
+            onDismiss: () => context.setState({ showFilterPanel: false }),
+            onFilterChange: (column: any, selectedItems: any[]) => {
+              // Update activeFilters
+              const newActiveFilters = { ...context.state.activeFilters }
 
-            if (selectedItems.length > 0) {
-              newActiveFilters[column.fieldName] = selectedItems.map((i) => i.value)
-            } else {
-              delete newActiveFilters[column.fieldName]
-            }
-
-            // Update filter items to reflect selection
-            const newFilters = context.state.filters?.map((f) => {
-              if (column.key === f.column.key) {
-                return {
-                  ...f,
-                  items: f.items.map((item) => ({
-                    ...item,
-                    selected: selectedItems.some((si) => si.value === item.value)
-                  }))
-                }
+              if (selectedItems.length > 0) {
+                newActiveFilters[column.fieldName] = selectedItems.map((i) => i.value)
+              } else {
+                delete newActiveFilters[column.fieldName]
               }
-              return f
-            })
 
-            context.setState({
-              activeFilters: newActiveFilters,
-              filters: newFilters
-            })
+              // Update filter items to reflect selection
+              const newFilters = context.state.filters?.map((f) => {
+                if (column.key === f.column.key) {
+                  return {
+                    ...f,
+                    items: f.items.map((item) => ({
+                      ...item,
+                      selected: selectedItems.some((si) => si.value === item.value)
+                    }))
+                  }
+                }
+                return f
+              })
+
+              context.setState({
+                activeFilters: newActiveFilters,
+                filters: newFilters
+              })
+            }
           }
-        }
         : null,
     [
       context.props.showFilters,

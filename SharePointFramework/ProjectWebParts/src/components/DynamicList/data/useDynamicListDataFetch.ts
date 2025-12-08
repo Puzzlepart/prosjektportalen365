@@ -21,7 +21,12 @@ export function useDynamicListDataFetch(
     const viewIdToUse = state.currentView?.id || props.defaultViewId
     const propsWithView = { ...props, defaultViewId: viewIdToUse }
 
-    console.log('[useDynamicListDataFetch] Fetching with view ID:', viewIdToUse, 'currentView:', state.currentView?.title)
+    console.log(
+      '[useDynamicListDataFetch] Fetching with view ID:',
+      viewIdToUse,
+      'currentView:',
+      state.currentView?.title
+    )
 
     let cancelled = false
 
@@ -34,7 +39,7 @@ export function useDynamicListDataFetch(
         console.log('[DynamicList] Fetched data:', {
           itemCount: fetchedData.listItems?.length,
           columnCount: fetchedData.listColumns?.length,
-          columns: fetchedData.listColumns?.map(c => c.name)
+          columns: fetchedData.listColumns?.map((c) => c.name)
         })
 
         // Generate filters from the fetched data
@@ -42,7 +47,8 @@ export function useDynamicListDataFetch(
         console.log('[DynamicList] Generated filters:', filters.length)
 
         // Only set currentView if it's not already set or if it's the initial load
-        const newCurrentView = state.currentView ||
+        const newCurrentView =
+          state.currentView ||
           fetchedData.views?.find((v) => v.id === viewIdToUse) ||
           fetchedData.views?.find((v) => v.isDefault)
 
@@ -59,7 +65,12 @@ export function useDynamicListDataFetch(
       .catch((error) => {
         if (cancelled) return
         console.error('[DynamicList] Error fetching data:', error)
-        setState({ error: error.message, isLoading: false, isChangingView: false, isRefetching: false })
+        setState({
+          error: error.message,
+          isLoading: false,
+          isChangingView: false,
+          isRefetching: false
+        })
       })
 
     return () => {

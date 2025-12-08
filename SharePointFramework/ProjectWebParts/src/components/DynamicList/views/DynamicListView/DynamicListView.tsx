@@ -14,7 +14,6 @@ import {
   useTableSelection,
   useTableSort,
   useTableColumnSizing_unstable,
-  TableColumnDefinition,
   TableRowId,
   TableColumnSizingOptions
 } from '@fluentui/react-components'
@@ -61,13 +60,7 @@ export const DynamicListView: FC = () => {
   // Setup table features
   const {
     getRows,
-    selection: {
-      allRowsSelected,
-      someRowsSelected,
-      toggleAllRows,
-      toggleRow,
-      isRowSelected
-    },
+    selection: { allRowsSelected, someRowsSelected, toggleAllRows, toggleRow, isRowSelected },
     sort: { getSortDirection, toggleColumnSort, sort },
     columnSizing_unstable: columnSizingState
   } = useTableFeatures(
@@ -127,72 +120,80 @@ export const DynamicListView: FC = () => {
         <div style={{ overflowX: 'auto', width: '100%' }}>
           <Table
             sortable
-            aria-label="Dynamic list table"
+            aria-label='Dynamic list table'
             noNativeElements={true}
             style={{ minWidth: '100%' }}
           >
-          <TableHeader>
-            <TableRow>
-              <TableSelectionCell
-                checked={
-                  allRowsSelected ? true : someRowsSelected ? 'mixed' : false
-                }
-                onClick={handleToggleAllRows}
-                checkboxIndicator={{ 'aria-label': 'Select all rows' }}
-                subtle
-              />
-              {columns.map((column) => {
-                const headerCellProps = columnSizingState.getTableHeaderCellProps(column.columnId)
-                return (
-                  <TableHeaderCell
-                    key={column.columnId}
-                    sortDirection={getSortDirection(column.columnId)}
-                    onClick={(e) => toggleColumnSort(e, column.columnId)}
-                    {...headerCellProps}
-                    style={{
-                      ...headerCellProps.style,
-                      overflow: 'hidden'
-                    }}
-                  >
-                    {column.renderHeaderCell ? column.renderHeaderCell() : column.columnId}
-                  </TableHeaderCell>
-                )
-              })}
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {rows.map(({ item, rowId }) => (
-              <TableRow key={rowId}>
+            <TableHeader>
+              <TableRow>
                 <TableSelectionCell
-                  checked={isRowSelected(rowId)}
-                  onClick={(e) => handleToggleRow(e, rowId)}
-                  checkboxIndicator={{ 'aria-label': 'Select row' }}
+                  checked={allRowsSelected ? true : someRowsSelected ? 'mixed' : false}
+                  onClick={handleToggleAllRows}
+                  checkboxIndicator={{ 'aria-label': 'Select all rows' }}
                   subtle
                 />
-                {columns.map((column, colIndex) => {
-                  const cellProps = columnSizingState.getTableCellProps(column.columnId)
-                  const isFirstColumn = colIndex === 0
-
+                {columns.map((column) => {
+                  const headerCellProps = columnSizingState.getTableHeaderCellProps(column.columnId)
                   return (
-                    <TableCell key={column.columnId} {...cellProps}>
-                      <TableCellLayout
-                        style={isFirstColumn ? { cursor: 'pointer', color: 'var(--colorBrandForeground1)' } : undefined}
-                        onClick={isFirstColumn ? () => {
-                          context.setState({
-                            selectedItem: item,
-                            isDrilledDown: true
-                          })
-                        } : undefined}
-                      >
-                        {column.renderCell ? column.renderCell(item) : (item as any)[column.columnId]}
-                      </TableCellLayout>
-                    </TableCell>
+                    <TableHeaderCell
+                      key={column.columnId}
+                      sortDirection={getSortDirection(column.columnId)}
+                      onClick={(e) => toggleColumnSort(e, column.columnId)}
+                      {...headerCellProps}
+                      style={{
+                        ...headerCellProps.style,
+                        overflow: 'hidden'
+                      }}
+                    >
+                      {column.renderHeaderCell ? column.renderHeaderCell() : column.columnId}
+                    </TableHeaderCell>
                   )
                 })}
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {rows.map(({ item, rowId }) => (
+                <TableRow key={rowId}>
+                  <TableSelectionCell
+                    checked={isRowSelected(rowId)}
+                    onClick={(e) => handleToggleRow(e, rowId)}
+                    checkboxIndicator={{ 'aria-label': 'Select row' }}
+                    subtle
+                  />
+                  {columns.map((column, colIndex) => {
+                    const cellProps = columnSizingState.getTableCellProps(column.columnId)
+                    const isFirstColumn = colIndex === 0
+
+                    return (
+                      <TableCell key={column.columnId} {...cellProps}>
+                        <TableCellLayout
+                          style={
+                            isFirstColumn
+                              ? { cursor: 'pointer', color: 'var(--colorBrandForeground1)' }
+                              : undefined
+                          }
+                          onClick={
+                            isFirstColumn
+                              ? () => {
+                                  context.setState({
+                                    selectedItem: item,
+                                    isDrilledDown: true
+                                  })
+                                }
+                              : undefined
+                          }
+                        >
+                          {column.renderCell
+                            ? column.renderCell(item)
+                            : (item as any)[column.columnId]}
+                        </TableCellLayout>
+                      </TableCell>
+                    )
+                  })}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </div>
       </FluentProvider>
     </IdPrefixProvider>

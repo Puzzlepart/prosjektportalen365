@@ -28,7 +28,9 @@ export const SingleItemView: FC = () => {
       </div>
       <div className={styles.fields}>
         {columns.map((column) => {
-          const columnDef = context.state.data?.listColumns?.find((col) => col.key === column.columnId)
+          const columnDef = context.state.data?.listColumns?.find(
+            (col) => col.key === column.columnId
+          )
           if (!columnDef) return null
 
           const fieldValue = item[columnDef.fieldName]
