@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useMemo, useContext, useCallback } from 'react'
 import { DynamicListContext } from './context'
-import { ListMenuItem, ItemFieldValues, ListMenuItemDivider } from 'pp365-shared-library'
+import { ListMenuItem, ItemFieldValues, ListMenuItemDivider, isHubSite } from 'pp365-shared-library'
 import {
   ArrowSyncRegular,
   FilterRegular,
@@ -13,10 +13,30 @@ import {
   bundleIcon
 } from '@fluentui/react-icons'
 import SPDataAdapter from '../../data'
+import { Web } from '@pnp/sp/webs'
+import { PageContext } from '@microsoft/sp-page-context'
+import '@pnp/sp/lists'
+import '@pnp/sp/items'
 import _ from 'lodash'
 
 const Icons = {
   ContentView: bundleIcon(ContentView24Filled, ContentView24Regular)
+}
+
+/**
+ * Get the appropriate web instance based on webUrl and pageContext
+ */
+function getWeb(webUrl?: string, pageContext?: PageContext) {
+  if (!webUrl) {
+    // Check if current site is the hub site
+    if (pageContext && isHubSite(pageContext)) {
+      return SPDataAdapter.portalDataService.web
+    }
+    return SPDataAdapter.sp.web
+  } else {
+    // Another site URL - create Web instance
+    return Web([SPDataAdapter.sp.web, webUrl])
+  }
 }
 
 export function useToolbarItems(isSingleView: boolean = false) {
@@ -67,7 +87,7 @@ export function useToolbarItems(isSingleView: boolean = false) {
 
     if (!confirmed) return
 
-    const web = SPDataAdapter.sp.web
+    const web = getWeb(context.props.webUrl, context.props.pageContext)
     const list = web.lists.getByTitle(context.props.listName)
 
     const selectedItems = context.state.selectedItems.map((id) =>
@@ -86,7 +106,7 @@ export function useToolbarItems(isSingleView: boolean = false) {
       selectedItems: [],
       refetch: Date.now()
     })
-  }, [context.props.listName, context.state.selectedItems, context.state.data.listItems, context.setState])
+  }, [context.props.listName, context.props.webUrl, context.state.selectedItems, context.state.data.listItems, context.setState])
 
   /**
    * Dismisses the panel and refetches data
@@ -105,7 +125,7 @@ export function useToolbarItems(isSingleView: boolean = false) {
   const saveItem = useCallback(async (itemId: number | null, properties: Record<string, any>) => {
     if (!context.props.listName) return
 
-    const web = SPDataAdapter.sp.web
+    const web = getWeb(context.props.webUrl, context.props.pageContext)
     const list = web.lists.getByTitle(context.props.listName)
 
     if (itemId) {
@@ -115,7 +135,7 @@ export function useToolbarItems(isSingleView: boolean = false) {
     }
 
     dismissPanel()
-  }, [context.props.listName, dismissPanel])
+  }, [context.props.listName, context.props.webUrl, dismissPanel])
 
   const menuItems = useMemo<ListMenuItem[]>(() => {
     const items: ListMenuItem[] = []

@@ -5,8 +5,9 @@ import { IDynamicListProps, DynamicListMode } from './types'
 import { useDynamicList } from './useDynamicList'
 import { DynamicListView } from './views/DynamicListView/DynamicListView'
 import { SingleItemView } from './views/SingleItemView/SingleItemView'
-import { WebPartTitle, ItemFieldValues, CustomEditPanel, Toolbar } from 'pp365-shared-library'
+import { WebPartTitle, ItemFieldValues, CustomEditPanel, Toolbar, isHubSite } from 'pp365-shared-library'
 import { Spinner } from '@fluentui/react-components'
+import { Web } from '@pnp/sp/webs'
 import SPDataAdapter from '../../data'
 import { useToolbarItems } from './useToolbarItems'
 import styles from './DynamicList.module.scss'
@@ -70,6 +71,20 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
 
   const isSingleView = displayMode === DynamicListMode.Single
 
+  // Get the target web based on webUrl prop
+  const targetWeb = useMemo(() => {
+    if (!props.webUrl) {
+      // Check if current site is the hub site
+      if (props.pageContext && isHubSite(props.pageContext)) {
+        return SPDataAdapter.portalDataService.web
+      }
+      return SPDataAdapter.sp.web
+    } else {
+      // For another site URL, create a Web instance
+      return Web([SPDataAdapter.sp.web, props.webUrl])
+    }
+  }, [props.webUrl, props.pageContext])
+
   return (
     <div className={styles.dynamicList}>
       <DynamicListContext.Provider value={context}>
@@ -82,7 +97,7 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
             fields={state.data?.fields || []}
             fieldValues={state.panel.fieldValues || new ItemFieldValues()}
             dataAdapter={SPDataAdapter}
-            targetWeb={SPDataAdapter.sp.web}
+            targetWeb={targetWeb}
             onDismiss={() => {
               setState({
                 selectedItems: [],

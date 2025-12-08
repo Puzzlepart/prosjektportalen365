@@ -39,7 +39,14 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
     try {
       this._listsLoading = true
 
-      const lists = await SPDataAdapter.sp.web.lists
+      // Get the correct web based on webUrl property
+      let web = SPDataAdapter.sp.web
+      if (this.properties.webUrl) {
+        const { Web } = await import('@pnp/sp/webs')
+        web = Web([SPDataAdapter.sp.web, this.properties.webUrl])
+      }
+
+      const lists = await web.lists
         .select('Title', 'Id', 'Hidden', 'BaseTemplate', 'ItemCount')
         .filter('Hidden eq false and BaseTemplate ne 850')() // Exclude hidden lists and document libraries
 
@@ -74,7 +81,14 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
         return
       }
 
-      const list = SPDataAdapter.sp.web.lists.getByTitle(this.properties.listName)
+      // Get the correct web based on webUrl property
+      let web = SPDataAdapter.sp.web
+      if (this.properties.webUrl) {
+        const { Web } = await import('@pnp/sp/webs')
+        web = Web([SPDataAdapter.sp.web, this.properties.webUrl])
+      }
+
+      const list = web.lists.getByTitle(this.properties.listName)
       const views = await list.views
         .select('Title', 'Id', 'DefaultView')
         .filter('Hidden eq false')()
@@ -166,6 +180,7 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                 PropertyPaneTextField('webUrl', {
                   label: 'Nettadresse',
                   description: 'La stå tom for å bruke gjeldende område',
+                  multiline: true,
                   placeholder: this.context.pageContext.web.absoluteUrl
                 }),
                 PropertyPaneDropdown('listName', {

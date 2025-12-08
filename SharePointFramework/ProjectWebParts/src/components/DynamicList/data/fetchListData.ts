@@ -1,12 +1,33 @@
 import { IColumn } from '@fluentui/react'
 import { IDynamicListProps, IDynamicListData } from '../types'
 import SPDataAdapter from '../../../data'
-import { EditableSPField } from 'pp365-shared-library'
+import { EditableSPField, isHubSite } from 'pp365-shared-library'
+import { Web } from '@pnp/sp/webs'
 import '@pnp/sp/lists'
 import '@pnp/sp/fields'
 import '@pnp/sp/items'
 import '@pnp/sp/items/get-all'
 import '@pnp/sp/views'
+
+/**
+ * Get the appropriate web instance based on webUrl and pageContext
+ * @param webUrl Optional web URL. If not provided, checks if current site is hub. If another URL, creates Web instance.
+ * @param props Component props containing pageContext
+ */
+function getWeb(webUrl?: string, props?: IDynamicListProps) {
+  if (!webUrl) {
+    // Check if current site is the hub site
+    if (props?.pageContext && isHubSite(props.pageContext)) {
+      // Current site is hub, use portal data service
+      return SPDataAdapter.portalDataService.web
+    }
+    // Current site is not hub
+    return SPDataAdapter.sp.web
+  } else {
+    // Another site URL - create Web instance
+    return Web([SPDataAdapter.sp.web, webUrl])
+  }
+}
 
 /**
  * Fetches list data including items, columns, and field metadata
@@ -17,7 +38,7 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
       return { listItems: [], listColumns: [] }
     }
 
-    const web = SPDataAdapter.sp.web
+    const web = getWeb(props.webUrl, props)
     const list = web.lists.getByTitle(props.listName)
 
     // Fetch list info
