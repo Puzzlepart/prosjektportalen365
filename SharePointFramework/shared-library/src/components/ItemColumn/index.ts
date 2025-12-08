@@ -1,3 +1,3 @@
-export { ColumnRenderComponentRegistry } from './registry'
+export { ColumnRenderComponentRegistry, useColumnRenderComponentRegistry } from './registry'
 export * from './types'
 export * from './useOnRenderItemColumn'
