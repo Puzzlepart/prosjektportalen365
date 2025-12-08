@@ -105,7 +105,6 @@ define([], function () {
     ModalColumnEmptyListMessage: 'Det ble ikke funnet noen elementer for denne dialogen.',
     ShowAllMeasurementsLinkText: 'Vis alle målinger',
     ShowInstrumentLinkText: '{0} (vis instrument)',
-    NoProjectData: 'Kan ikke hente alle data fra prosjektområdet. Det kan være at du ikke har tilgang til selve området. Det kan også være at området nylig er opprettet eller at prosjektegenskaper ikke er utfylt.',
     ProjectInformationPanelButton: 'Åpne prosjektinformasjonspanel',
   }
 })

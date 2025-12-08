@@ -267,6 +267,8 @@ define([], function () {
     ViewLessText: 'View less',
     ViewMoreText: 'View more',
     ResultsCountLabel: 'Displaying {0} of {1} projects',
+    ColumnRenderOptionStatusReport: 'Status report',
+    ColumnRenderOptionProjectInfo: 'Project information',
     PortfolioSelectorLabel: 'Portfolio selector',
     PortfoliosFieldDescription: 'Select the portfolios to be displayed in the portfolio selector.',
     SelectedPortfolioDescription: 'The portfolio selected in the portfolio selector.',
@@ -648,6 +650,8 @@ define([], function () {
     RefreshRequiredDescription: 'Requires refresh after changes',
     LifecycleStatus_Completed: 'Completed',
     LifecycleStatus_Closed: 'Closed',
-    ProjectLevel: 'Project level'
+    ProjectLevel: 'Project level',
+    ColumnRenderOptionText: 'Text',
+    NoProjectData: 'Unable to retrieve all data from the project. It may be that you do not have access to the project itself. It may also be that the project has recently been created or that project properties have not been filled in.',
   }
 })

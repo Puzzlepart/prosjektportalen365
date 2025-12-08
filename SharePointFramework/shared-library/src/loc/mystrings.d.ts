@@ -104,7 +104,6 @@ declare interface ISharedLibraryStrings {
   ModalColumnEmptyListMessage: string
   ShowAllMeasurementsLinkText: string
   ShowInstrumentLinkText: string
-  NoProjectData: string
   ProjectInformationPanelButton: string
 }
 

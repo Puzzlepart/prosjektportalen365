@@ -1,6 +1,8 @@
 define([], function () {
   return {
     ResultsCountLabel: 'Viser {0} av {1} prosjekter',
+    ColumnRenderOptionStatusReport: 'Statusrapport',
+    ColumnRenderOptionProjectInfo: 'Prosjektinformasjon',
     PortfolioSelectorLabel: 'Portefølje',
     IconNameFieldLabel: 'Ikonnavn',
     IconNameFieldPlaceholder: 'Skriv inn et ikonnavn fra UI Fabric (f.eks. "Page")',
@@ -538,6 +540,8 @@ define([], function () {
     RefreshRequiredDescription: 'Krever refresh etter endringer',
     LifecycleStatus_Completed: 'Avsluttet',
     LifecycleStatus_Closed: 'Stengt',
-    ProjectLevel: 'Prosjektnivå'
+    ProjectLevel: 'Prosjektnivå',
+    ColumnRenderOptionText: 'Tekst',
+    NoProjectData: 'Kan ikke hente alle data fra prosjektområdet. Det kan være at du ikke har tilgang til selve området. Det kan også være at området nylig er opprettet eller at prosjektegenskaper ikke er utfylt.',
   }
 })

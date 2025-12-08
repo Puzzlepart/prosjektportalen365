@@ -321,8 +321,6 @@ declare interface IPortfolioWebPartsStrings {
     ProvisionUrlFieldLabel: string
     ProvisionUrlFieldDescription: string
   },
-  HideDataTypePropertiesLabel: string
-  ShowDataTypePropertiesLabel: string
   NoViewFoundTitle: string
   AddColumnLabel: string
   AllProjectsHeaderText: string
@@ -335,44 +333,10 @@ declare interface IPortfolioWebPartsStrings {
   ChartErrorText: string
   ColumnCategoryDescription: string
   ColumnCategoryLabel: string
-  ColumnPersistRenderGloballyFieldDescription: string
-  ColumnPersistRenderGloballyFieldLabel: string
   ColumnRenderDataTypePropertiesHeaderText: string
   ColumnRenderDescription: string
   ColumnRenderLabel: string
-  ColumnRenderOptionBoolean: string
-  ColumnRenderOptionBooleanFalse: string
-  ColumnRenderOptionBooleanTrue: string
-  ColumnRenderOptionCurrency: string
-  ColumnRenderOptionCurrencyFallbackValueLabel: string
-  ColumnRenderOptionCurrencyMaximumFractionDigitsLabel: string
-  ColumnRenderOptionCurrencyMinimumFractionDigitsLabel: string
-  ColumnRenderOptionCurrencyPrefixLabel: string
-  ColumnRenderOptionDate: string
-  ColumnRenderOptionDateIncludeTimeLabel: string
-  ColumnRenderOptionInstrument: string
-  InstrumentUnitLabel: string
-  ColumnRenderOptionDialog: string
-  ColumnRenderOptionDialogInfoTextTemplateDescription: string
-  ColumnRenderOptionDialogInfoTextTemplateLabel: string
-  ColumnRenderOptionDialogLinkTextLabel: string
-  ColumnRenderOptionDialogShowInfoTextLabel: string
-  ColumnRenderOptionFilename: string
-  ColumnRenderOptionNote: string
-  ColumnRenderOptionNumber: string
-  ColumnRenderOptionPercentage: string
   ColumnRenderOptionProjectInfo: string
-  ColumnRenderOptionTags: string
-  ColumnRenderOptionTagsValueSeparatorDescription: string
-  ColumnRenderOptionTagsValueSeparatorLabel: string
-  ColumnRenderOptionText: string
-  ColumnRenderOptionTrend: string
-  ColumnRenderOptionTrendShowTrendIconLabel: string
-  ColumnRenderOptionUrl: string
-  ColumnRenderOptionUrlDescriptionDescription: string
-  ColumnRenderOptionUrlDescriptionLabel: string
-  ColumnRenderOptionUrlOpenInNewTabLabel: string
-  ColumnRenderOptionUser: string
   ColumnSettingsDisabledTooltip: string
   ColumnSettingsLabel: string
   ColumnVisibilityDescription: string
@@ -452,14 +416,8 @@ declare interface IPortfolioWebPartsStrings {
   LoadingText: string
   MaxWidthDescription: string
   MaxWidthLabel: string
-  MeasurementAchievementLabel: string
-  MeasurementCommentLabel: string
-  MeasurementDateLabel: string
-  MeasurementValueLabel: string
   MinWidthDescription: string
   MinWidthLabel: string
-  ModalColumnEmptyListMessage: string
-  ModalColumnEmptyListTitle: string
   MoveLeftLabel: string
   MoveRightLabel: string
   MyProjectsHeaderText: string
@@ -471,7 +429,6 @@ declare interface IPortfolioWebPartsStrings {
   NewViewText: string
   NoAccessMessage: string
   NoDefaultViewMessage: string
-  NoProjectData: string
   NoProjectsFoundMessage: string
   NoProjectsFoundTitle: string
   NotSet: string
@@ -535,8 +492,6 @@ declare interface IPortfolioWebPartsStrings {
   SearchPropertyPlaceholder: string
   SearchQueryLabel: string
   SelectProgramText: string
-  ShowAllMeasurementsLinkText: string
-  ShowInstrumentLinkText: string
   ShowCommandBarLabel: string
   ShowExcelExportButtonLabel: string
   ShowFieldFrontpageLabel: string
@@ -585,6 +540,8 @@ declare interface IPortfolioWebPartsStrings {
   LifecycleStatus_Completed: string
   LifecycleStatus_Closed: string
   ProjectLevel: string
+  ColumnRenderOptionText: string
+  NoProjectData: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

@@ -105,7 +105,6 @@ define([], function () {
     ModalColumnEmptyListMessage: 'No elements found.',
     ShowAllMeasurementsLinkText: 'Show all measurements',
     ShowInstrumentLinkText: 'Show instrument',
-    NoProjectData: 'Unable to retrieve all data from the project. It may be that you do not have access to the project itself. It may also be that the project has recently been created or that project properties have not been filled in.',
     ProjectInformationPanelButton: 'Project information panel',
   }
 })

@@ -7,9 +7,11 @@ import {
   IRenderItemColumnProps,
   useColumnRenderComponentRegistry
 } from 'pp365-shared-library'
-import React, { ReactNode, createElement, useMemo } from 'react'
+import React, { ReactNode, createElement, useMemo, useEffect } from 'react'
 import { ConfigColumn } from './ConfigColumn'
 import { TitleColumn } from './TitleColumn'
+import { StatusReportColumn } from './StatusReportColumn'
+import { ProjectInformationColumn } from './ProjectInformationColumn'
 
 /**
  * On render item column function. First checks if the column has a custom render function,
@@ -70,6 +72,13 @@ function renderItemColumn(item: Record<string, any>, column: IColumn): ReactNode
  */
 export const useOnRenderItemColumn = () => {
   useColumnRenderComponentRegistry()
+  useEffect(() => {
+    ColumnRenderComponentRegistry.registerMultiple(
+      StatusReportColumn,
+      ProjectInformationColumn
+    )
+  }, [])
+
   return useMemo(
     () => (item?: any, _index?: number, column?: IColumn) => renderItemColumn(item, column),
     []
