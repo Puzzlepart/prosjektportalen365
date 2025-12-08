@@ -10,6 +10,7 @@ import {
   DeleteRegular,
   ContentView24Filled,
   ContentView24Regular,
+  ArrowLeftRegular,
   bundleIcon
 } from '@fluentui/react-icons'
 import SPDataAdapter from '../../data'
@@ -140,6 +141,20 @@ export function useToolbarItems(isSingleView: boolean = false) {
   const menuItems = useMemo<ListMenuItem[]>(() => {
     const items: ListMenuItem[] = []
 
+    // Show back button when drilled down to single item view
+    if (context.state.isDrilledDown) {
+      items.push(
+        new ListMenuItem('Tilbake', 'Tilbake til listevisning')
+          .setIcon(ArrowLeftRegular)
+          .setOnClick(() => {
+            context.setState({
+              isDrilledDown: false,
+              selectedItem: undefined
+            })
+          })
+      )
+    }
+
     const hasItems = context.state.data?.listItems && context.state.data.listItems.length > 0
     const canAddItem =
       context.props.maxItems === 0 ||
@@ -227,6 +242,7 @@ export function useToolbarItems(isSingleView: boolean = false) {
     context.state.currentView,
     context.state.isChangingView,
     context.state.isLoading,
+    context.state.isDrilledDown,
     checkedValues,
     saveItem
   ])

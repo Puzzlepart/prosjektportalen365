@@ -153,6 +153,11 @@ export interface IDynamicListState extends IBaseWebPartComponentState<IDynamicLi
    * Panel for editing or creating new items
    */
   panel?: Partial<ICustomEditPanelProps>
+
+  /**
+   * Whether user has drilled down from list view to single item view
+   */
+  isDrilledDown?: boolean
 }
 
 export interface IDynamicListData {

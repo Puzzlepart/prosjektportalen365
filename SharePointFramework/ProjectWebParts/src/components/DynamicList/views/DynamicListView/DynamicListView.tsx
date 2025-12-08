@@ -169,11 +169,21 @@ export const DynamicListView: FC = () => {
                   checkboxIndicator={{ 'aria-label': 'Select row' }}
                   subtle
                 />
-                {columns.map((column) => {
+                {columns.map((column, colIndex) => {
                   const cellProps = columnSizingState.getTableCellProps(column.columnId)
+                  const isFirstColumn = colIndex === 0
+
                   return (
                     <TableCell key={column.columnId} {...cellProps}>
-                      <TableCellLayout>
+                      <TableCellLayout
+                        style={isFirstColumn ? { cursor: 'pointer', color: 'var(--colorBrandForeground1)' } : undefined}
+                        onClick={isFirstColumn ? () => {
+                          context.setState({
+                            selectedItem: item,
+                            isDrilledDown: true
+                          })
+                        } : undefined}
+                      >
                         {column.renderCell ? column.renderCell(item) : (item as any)[column.columnId]}
                       </TableCellLayout>
                     </TableCell>

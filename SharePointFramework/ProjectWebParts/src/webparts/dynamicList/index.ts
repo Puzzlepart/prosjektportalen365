@@ -173,14 +173,14 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
     return {
       pages: [
         {
+          displayGroupsAsAccordion: true,
           groups: [
             {
-              groupName: 'Listeinnstillinger',
+              groupName: strings.GeneralGroupName,
               groupFields: [
                 PropertyPaneTextField('webUrl', {
                   label: 'Nettadresse',
                   description: 'La stå tom for å bruke gjeldende område',
-                  multiline: true,
                   placeholder: this.context.pageContext.web.absoluteUrl
                 }),
                 PropertyPaneDropdown('listName', {
@@ -199,17 +199,13 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                 PropertyPaneTextField('title', {
                   label: 'Tittel',
                   description: 'Tittel som vises over listen'
-                }),
-                PropertyPaneToggle('showSearchBox', {
-                  label: 'Vis søkeboks',
-                  onText: 'På',
-                  offText: 'Av'
-                }),
-                PropertyPaneToggle('showViewSelector', {
-                  label: 'Vis visningsvelger',
-                  onText: 'På',
-                  offText: 'Av'
-                }),
+                })
+              ]
+            },
+            {
+              groupName: 'Utseende',
+              isCollapsed: true,
+              groupFields: [
                 PropertyPaneDropdown('mode', {
                   label: 'Visningsmodus',
                   options: [
@@ -226,16 +222,6 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                   value: this.properties.maxItems || 0,
                   showValue: true
                 }),
-                PropertyPaneToggle('showCommandBar', {
-                  label: 'Vis kommandolinje',
-                  onText: 'På',
-                  offText: 'Av'
-                }),
-                PropertyPaneToggle('showFilters', {
-                  label: 'Vis filtre',
-                  onText: 'På',
-                  offText: 'Av'
-                }),
                 PropertyPaneSlider('pageSize', {
                   label: 'Elementer per side',
                   min: 10,
@@ -243,6 +229,32 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                   step: 10,
                   value: this.properties.pageSize || 30,
                   showValue: true
+                })
+              ]
+            },
+            {
+              groupName: 'Vis/skjul',
+              isCollapsed: true,
+              groupFields: [
+                PropertyPaneToggle('showCommandBar', {
+                  label: 'Vis kommandolinje',
+                  onText: 'På',
+                  offText: 'Av'
+                }),
+                PropertyPaneToggle('showSearchBox', {
+                  label: 'Vis søkeboks',
+                  onText: 'På',
+                  offText: 'Av'
+                }),
+                PropertyPaneToggle('showViewSelector', {
+                  label: 'Vis visningsvelger',
+                  onText: 'På',
+                  offText: 'Av'
+                }),
+                PropertyPaneToggle('showFilters', {
+                  label: 'Vis filtre',
+                  onText: 'På',
+                  offText: 'Av'
                 })
               ]
             }

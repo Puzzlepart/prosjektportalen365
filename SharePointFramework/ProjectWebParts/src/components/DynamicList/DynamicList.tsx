@@ -5,7 +5,7 @@ import { IDynamicListProps, DynamicListMode } from './types'
 import { useDynamicList } from './useDynamicList'
 import { DynamicListView } from './views/DynamicListView/DynamicListView'
 import { SingleItemView } from './views/SingleItemView/SingleItemView'
-import { WebPartTitle, ItemFieldValues, CustomEditPanel, Toolbar, isHubSite } from 'pp365-shared-library'
+import { WebPartTitle, ItemFieldValues, CustomEditPanel, Toolbar, isHubSite, UserMessage } from 'pp365-shared-library'
 import { Spinner } from '@fluentui/react-components'
 import { Web } from '@pnp/sp/webs'
 import SPDataAdapter from '../../data'
@@ -15,6 +15,25 @@ import styles from './DynamicList.module.scss'
 const DynamicListContent: FC<{ isSingleView: boolean }> = ({ isSingleView }) => {
   const context = React.useContext(DynamicListContext)
   const { menuItems, farMenuItems, filterPanelProps } = useToolbarItems(isSingleView)
+
+  // Show message if no list is selected
+  if (!context.props.listName) {
+    return (
+      <>
+        <div className={styles.header}>
+          <WebPartTitle
+            title={context.props.title || 'Dynamisk liste'}
+            description={context.props.infoText}
+          />
+        </div>
+        <UserMessage
+          title='Ingen liste valgt'
+          text='Vennligst velg en liste i webdel-egenskapene for å vise innhold.'
+          intent='info'
+        />
+      </>
+    )
+  }
 
   return (
     <>
@@ -66,10 +85,12 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
   )
 
   // Determine display mode
+  // Use single view if: explicitly set to Single mode, maxItems is 1, only 1 item exists, or drilled down from list
   const displayMode =
     props.mode || (props.maxItems === 1 ? DynamicListMode.Single : DynamicListMode.Multi)
 
-  const isSingleView = displayMode === DynamicListMode.Single
+  const hasOnlyOneItem = state.data?.listItems?.length === 1
+  const isSingleView = displayMode === DynamicListMode.Single || hasOnlyOneItem || state.isDrilledDown
 
   // Get the target web based on webUrl prop
   const targetWeb = useMemo(() => {
