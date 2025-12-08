@@ -18,8 +18,6 @@ import { TrendColumn } from './TrendColumn'
 import { UrlColumn } from './UrlColumn'
 import { UserColumn } from './UserColumn'
 import { ColumnRenderComponent } from './types'
-import { ProjectInformationColumn } from './ProjectInformationColumn'
-import { StatusReportColumn } from './StatusReportColumn/StatusReportColumn'
 
 /**
  * A registry for column render components and column data type field options.
@@ -246,9 +244,7 @@ export function useColumnRenderComponentRegistry() {
       TagsColumn,
       TrendColumn,
       UrlColumn,
-      UserColumn,
-      ProjectInformationColumn,
-      StatusReportColumn
+      UserColumn
     )
     ColumnRenderComponentRegistry.registerColumnRenderOption(
       'text',

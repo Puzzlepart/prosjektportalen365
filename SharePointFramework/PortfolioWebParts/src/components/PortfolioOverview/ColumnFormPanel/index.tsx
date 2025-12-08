@@ -6,7 +6,7 @@ import styles from './ColumnFormPanel.module.scss'
 import { useColumnFormPanel } from './useColumnFormPanel'
 import { ColumnFormPanelFooter } from './ColumnFormPanelFooter'
 import { ColumnSearchPropertyField, FieldContainer, customLightTheme } from 'pp365-shared-library'
-import { ColumnDataTypeField } from '../../List/ItemColumn/ColumnDataTypeField'
+import { ColumnDataTypeField } from 'pp365-shared-library/lib/components/ItemColumn/ColumnDataTypeField'
 import {
   Combobox,
   Option,

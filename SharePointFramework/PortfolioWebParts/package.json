@@ -21,7 +21,6 @@
   "dependencies": {
     "@fluentui/react": "8.98.1",
     "@fluentui/react-hooks": "8.6.27",
-    "@fluentui/react-file-type-icons": "~8.11.9",
     "@microsoft/decorators": "1.17.4",
     "@microsoft/sp-core-library": "1.17.4",
     "@microsoft/sp-lodash-subset": "1.17.4",

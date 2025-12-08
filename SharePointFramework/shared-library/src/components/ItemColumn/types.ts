@@ -1,5 +1,6 @@
 import { IColumn } from '@fluentui/react'
-import { ColumnDataType, ProjectColumn } from '../../models'
+import { ProjectColumn } from '../../models'
+import { ColumnDataType } from '../../types'
 import { GetDataTypeProperties, IColumnDataTypeFieldOption } from './ColumnDataTypeField'
 import { IWeb } from '@pnp/sp/webs'
 

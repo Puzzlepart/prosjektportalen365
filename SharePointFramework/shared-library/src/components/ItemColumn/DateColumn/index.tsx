@@ -1,4 +1,4 @@
-import { TextField } from '@fluentui/react'
+import { Toggle } from '@fluentui/react'
 import strings from 'SharedLibraryStrings'
 import { formatDate } from '../../../util'
 import React from 'react'

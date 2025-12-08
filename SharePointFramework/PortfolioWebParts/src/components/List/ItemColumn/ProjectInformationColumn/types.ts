@@ -1,4 +1,4 @@
-import { IRenderItemColumnProps } from '../types'
+import { IRenderItemColumnProps } from "pp365-shared-library"
 
 export interface IProjectInformationColumnProps extends IRenderItemColumnProps {
   page?: 'Frontpage' | 'ProjectStatus' | 'Portfolio'

@@ -1,6 +1,12 @@
 import { IColumn } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/core'
-import { ProjectColumnConfigDictionaryItem, getObjectValue as get, ColumnRenderComponentRegistry, IRenderItemColumnProps, useColumnRenderComponentRegistry } from 'pp365-shared-library'
+import {
+  ProjectColumnConfigDictionaryItem,
+  getObjectValue as get,
+  ColumnRenderComponentRegistry,
+  IRenderItemColumnProps,
+  useColumnRenderComponentRegistry
+} from 'pp365-shared-library'
 import React, { ReactNode, createElement, useMemo } from 'react'
 import { ConfigColumn } from './ConfigColumn'
 import { TitleColumn } from './TitleColumn'

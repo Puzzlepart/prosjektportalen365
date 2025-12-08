@@ -1,5 +1,4 @@
-import { ProjectColumnConfigDictionaryItem } from 'pp365-shared-library'
-import { IRenderItemColumnProps } from '../types'
+import { IRenderItemColumnProps, ProjectColumnConfigDictionaryItem } from 'pp365-shared-library'
 import { ICalloutProps } from '@fluentui/react'
 
 export interface IConfigColumnProps

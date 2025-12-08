@@ -3,12 +3,12 @@ import { TooltipDelay, TooltipHost } from '@fluentui/react/lib/Tooltip'
 import strings from 'PortfolioWebPartsStrings'
 import React from 'react'
 import FadeIn from 'react-fade-in'
-import { ColumnRenderComponent } from '../types'
 import styles from './StatusColumn.module.scss'
 import { IStatusColumnProps } from './types'
 import { useStatusReportColumn } from './useStatusReportColumn'
 import { fetchData } from './data'
 import resource from 'SharedResources'
+import { ColumnRenderComponent } from 'pp365-shared-library'
 
 export const StatusReportColumn: ColumnRenderComponent<IStatusColumnProps> = (
   props
