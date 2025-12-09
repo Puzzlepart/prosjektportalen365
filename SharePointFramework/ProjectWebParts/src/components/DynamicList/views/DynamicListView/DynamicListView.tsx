@@ -62,7 +62,8 @@ export const DynamicListView: FC = () => {
     getRows,
     selection: { allRowsSelected, someRowsSelected, toggleAllRows, toggleRow, isRowSelected },
     sort: { getSortDirection, toggleColumnSort, sort },
-    columnSizing_unstable: columnSizingState
+    columnSizing_unstable: columnSizingState,
+    tableRef
   } = useTableFeatures(
     {
       columns,
@@ -119,6 +120,8 @@ export const DynamicListView: FC = () => {
       <FluentProvider theme={customLightTheme} className={styles.dynamicListView}>
         <div style={{ overflowX: 'auto', width: '100%' }}>
           <Table
+            ref={tableRef}
+            {...columnSizingState.getTableProps()}
             sortable
             aria-label='Dynamic list table'
             noNativeElements={true}
@@ -129,8 +132,7 @@ export const DynamicListView: FC = () => {
                 <TableSelectionCell
                   checked={allRowsSelected ? true : someRowsSelected ? 'mixed' : false}
                   onClick={handleToggleAllRows}
-                  checkboxIndicator={{ 'aria-label': 'Select all rows' }}
-                  subtle
+                  checkboxIndicator={{ 'aria-label': 'Velg alle' }}
                 />
                 {columns.map((column) => {
                   const headerCellProps = columnSizingState.getTableHeaderCellProps(column.columnId)

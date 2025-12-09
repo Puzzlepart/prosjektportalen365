@@ -5,6 +5,15 @@
   .commandBar {
     margin-bottom: 16px;
     padding: 8px 32px;
+  }
 
+  :global(.fui-TableCell) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    font-size: 12px;
+    font-weight: 400;
+    color: #323130;
   }
 }
