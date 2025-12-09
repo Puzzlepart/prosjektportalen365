@@ -190,27 +190,31 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
     const web = getWeb(props.webUrl, props)
     const list = web.lists.getByTitle(props.listName)
 
-    const [listInfo, projectContentColumns] = await Promise.all([
+    const [listInfo, projectContentColumns, allFields, views] = await Promise.all([
       list.select('Title', 'Id')(),
-      fetchProjectContentColumns()
+      fetchProjectContentColumns(),
+      list.fields
+        .filter('Hidden eq false and ReadOnlyField eq false')
+        .select(
+          'InternalName',
+          'Title',
+          'TypeAsString',
+          'Required',
+          'Description',
+          'Choices',
+          'FieldTypeKind',
+          'DefaultValue',
+          'MaxLength',
+          'LookupList',
+          'LookupField'
+        )(),
+      list.views.select('Title', 'Id', 'DefaultView').filter('Hidden eq false')()
     ])
 
     const items = await list.items
       .select('*', 'Author/Title', 'Editor/Title')
       .expand('Author', 'Editor')
       .getAll()
-
-    const allFields = await list.fields
-      .filter('Hidden eq false and ReadOnlyField eq false')
-      .select(
-        'InternalName',
-        'Title',
-        'TypeAsString',
-        'Required',
-        'Description',
-        'Choices',
-        'FieldTypeKind'
-      )()
 
     let fields: any[]
     let viewToUse: string | null = null
@@ -314,25 +318,7 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
       return transformedItem
     })
 
-    const editableFields = await list.fields
-      .filter('Hidden eq false and ReadOnlyField eq false')
-      .select(
-        'InternalName',
-        'Title',
-        'TypeAsString',
-        'Required',
-        'Description',
-        'Choices',
-        'FieldTypeKind',
-        'DefaultValue',
-        'MaxLength',
-        'LookupList',
-        'LookupField'
-      )()
-
-    const mappedFields = editableFields.map((fld) => new EditableSPField(fld))
-
-    const views = await list.views.select('Title', 'Id', 'DefaultView').filter('Hidden eq false')()
+    const mappedFields = allFields.map((fld) => new EditableSPField(fld))
 
     const viewsList = views.map((view) => ({
       id: view.Id,

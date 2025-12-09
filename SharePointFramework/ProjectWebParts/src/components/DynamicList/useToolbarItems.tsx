@@ -82,7 +82,7 @@ export function useToolbarItems(isSingleView: boolean = false) {
         context.setState({ refetch: Date.now() })
       }, 0)
     },
-    [context.state.currentView?.id, context.state.views, context.setState]
+    [context.state, context.setState]
   )
 
   /**
@@ -122,13 +122,7 @@ export function useToolbarItems(isSingleView: boolean = false) {
       selectedItems: [],
       refetch: Date.now()
     })
-  }, [
-    context.props.listName,
-    context.props.webUrl,
-    context.state.selectedItems,
-    context.state.data.listItems,
-    context.setState
-  ])
+  }, [context.state, context.props, context.setState])
 
   /**
    * Dismisses the edit panel and triggers a data refetch.
@@ -167,7 +161,7 @@ export function useToolbarItems(isSingleView: boolean = false) {
 
       dismissPanel()
     },
-    [context.props.listName, context.props.webUrl, dismissPanel]
+    [context.props, dismissPanel]
   )
 
   const menuItems = useMemo<ListMenuItem[]>(() => {
@@ -261,26 +255,7 @@ export function useToolbarItems(isSingleView: boolean = false) {
     }
 
     return items
-  }, [
-    isSingleView,
-    context.props.showFilters,
-    context.props.showSearchBox,
-    context.props.showViewSelector,
-    context.props.maxItems,
-    context.props.viewName,
-    context.state.showFilterPanel,
-    context.state.data?.listItems?.length,
-    context.state.data?.listTitle,
-    context.state.selectedItems?.length,
-    context.state.searchTerm,
-    context.state.views,
-    context.state.currentView,
-    context.state.isChangingView,
-    context.state.isLoading,
-    context.state.isDrilledDown,
-    checkedValues,
-    saveItem
-  ])
+  }, [isSingleView, context.state, context.props, saveItem])
 
   const farMenuItems = useMemo<ListMenuItem[]>(() => {
     const items: ListMenuItem[] = []
@@ -333,20 +308,7 @@ export function useToolbarItems(isSingleView: boolean = false) {
     }
 
     return items
-  }, [
-    isSingleView,
-    context.props.showFilters,
-    context.props.showViewSelector,
-    context.state.showFilterPanel,
-    context.state.selectedItems?.length,
-    context.state.data?.listItems?.length,
-    context.state.views,
-    context.state.currentView,
-    context.state.isChangingView,
-    checkedValues,
-    onViewChange,
-    deleteItems
-  ])
+  }, [isSingleView, context.state, context.props, checkedValues, onViewChange, deleteItems])
 
   const filterPanelProps = useMemo(
     () =>
@@ -384,13 +346,7 @@ export function useToolbarItems(isSingleView: boolean = false) {
             }
           }
         : null,
-    [
-      context.props.showFilters,
-      context.state.showFilterPanel,
-      context.state.filters,
-      context.state.activeFilters,
-      context.setState
-    ]
+    [context.state, context.props]
   )
 
   return {

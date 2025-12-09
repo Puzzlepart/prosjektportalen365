@@ -46,10 +46,5 @@ export function useFilteredData() {
     }
 
     return items
-  }, [
-    context.state.data?.listItems,
-    context.state.data?.listColumns,
-    context.state.searchTerm,
-    context.state.activeFilters
-  ])
+  }, [context.state])
 }
