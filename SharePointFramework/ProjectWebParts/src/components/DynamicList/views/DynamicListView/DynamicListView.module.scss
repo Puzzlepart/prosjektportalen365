@@ -1,10 +1,16 @@
 .dynamicListView {
-  width: 100%;
-  height: 100%;
+  position: relative;
+  flex: 1;
+  overflow: hidden;
 
-  .commandBar {
-    margin-bottom: 16px;
-    padding: 8px 32px;
+  .scrollContainer {
+    overflow: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0 32px;
   }
 
   :global(.fui-TableCell) {

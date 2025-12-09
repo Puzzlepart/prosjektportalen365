@@ -118,14 +118,13 @@ export const DynamicListView: FC = () => {
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme} className={styles.dynamicListView}>
-        <div style={{ overflowX: 'auto', width: '100%' }}>
+        <div className={styles.scrollContainer}>
           <Table
             ref={tableRef}
             {...columnSizingState.getTableProps()}
             sortable
             aria-label='Dynamic list table'
             noNativeElements={true}
-            style={{ minWidth: '100%' }}
           >
             <TableHeader>
               <TableRow>
@@ -134,23 +133,16 @@ export const DynamicListView: FC = () => {
                   onClick={handleToggleAllRows}
                   checkboxIndicator={{ 'aria-label': 'Velg alle' }}
                 />
-                {columns.map((column) => {
-                  const headerCellProps = columnSizingState.getTableHeaderCellProps(column.columnId)
-                  return (
-                    <TableHeaderCell
-                      key={column.columnId}
-                      sortDirection={getSortDirection(column.columnId)}
-                      onClick={(e) => toggleColumnSort(e, column.columnId)}
-                      {...headerCellProps}
-                      style={{
-                        ...headerCellProps.style,
-                        overflow: 'hidden'
-                      }}
-                    >
-                      {column.renderHeaderCell ? column.renderHeaderCell() : column.columnId}
-                    </TableHeaderCell>
-                  )
-                })}
+                {columns.map((column) => (
+                  <TableHeaderCell
+                    key={column.columnId}
+                    {...columnSizingState.getTableHeaderCellProps(column.columnId)}
+                    sortDirection={getSortDirection(column.columnId)}
+                    onClick={(e) => toggleColumnSort(e, column.columnId)}
+                  >
+                    {column.renderHeaderCell ? column.renderHeaderCell() : column.columnId}
+                  </TableHeaderCell>
+                ))}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -163,11 +155,13 @@ export const DynamicListView: FC = () => {
                     subtle
                   />
                   {columns.map((column, colIndex) => {
-                    const cellProps = columnSizingState.getTableCellProps(column.columnId)
                     const isFirstColumn = colIndex === 0
 
                     return (
-                      <TableCell key={column.columnId} {...cellProps}>
+                      <TableCell
+                        key={column.columnId}
+                        {...columnSizingState.getTableCellProps(column.columnId)}
+                      >
                         <TableCellLayout
                           style={
                             isFirstColumn

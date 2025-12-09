@@ -1,16 +1,23 @@
 .dynamicList {
-  margin: 15px 0 50px 0;
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 
   .container {
-    margin: 0px auto;
-    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
 
     .header {
-      padding: 0;
+      padding: 32px 32px 16px 32px;
+      flex-shrink: 0;
     }
 
     .commandBar {
-      margin-bottom: 16px;
+      padding: 0 32px 16px 32px;
+      flex-shrink: 0;
     }
   }
 }
