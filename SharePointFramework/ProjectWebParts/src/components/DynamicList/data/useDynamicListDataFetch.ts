@@ -3,6 +3,18 @@ import { IDynamicListProps, IDynamicListState } from '../types'
 import { fetchListData } from './fetchListData'
 import { generateFilters } from './generateFilters'
 
+/**
+ * Hook that manages data fetching for DynamicList.
+ *
+ * Fetches list data whenever the list name, web URL, or refetch timestamp changes.
+ * Handles view selection by using currentView from state if available, otherwise falls
+ * back to defaultViewId from props. Generates filters from fetched data and updates
+ * state with results.
+ *
+ * @param props Component configuration properties
+ * @param state Current component state
+ * @param setState Function to update component state
+ */
 export function useDynamicListDataFetch(
   props: IDynamicListProps,
   state: IDynamicListState,
@@ -17,7 +29,6 @@ export function useDynamicListDataFetch(
       return
     }
 
-    // Use currentView if available, otherwise use props
     const viewIdToUse = state.currentView?.id || props.defaultViewId
     const propsWithView = { ...props, defaultViewId: viewIdToUse }
 
@@ -42,11 +53,9 @@ export function useDynamicListDataFetch(
           columns: fetchedData.listColumns?.map((c) => c.name)
         })
 
-        // Generate filters from the fetched data
         const filters = generateFilters(fetchedData)
         console.log('[DynamicList] Generated filters:', filters.length)
 
-        // Only set currentView if it's not already set or if it's the initial load
         const newCurrentView =
           state.currentView ||
           fetchedData.views?.find((v) => v.id === viewIdToUse) ||

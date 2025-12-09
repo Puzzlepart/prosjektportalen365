@@ -25,21 +25,33 @@ import { useColumns } from '../../useColumns'
 import { useFilteredData } from '../../useFilteredData'
 import styles from './DynamicListView.module.scss'
 
+/**
+ * Renders list data in a multi-column table view with sorting, filtering, and selection.
+ *
+ * Features:
+ * - Resizable columns with sticky headers
+ * - Multi-select with row checkboxes
+ * - Column sorting
+ * - Click first column to drill down to single item view
+ * - Column widths from ProjectContentColumns configuration
+ * - Custom cell rendering via ItemColumn system
+ */
 export const DynamicListView: FC = () => {
   const context = useContext(DynamicListContext)
   const columns = useColumns()
   const filteredItems = useFilteredData()
   const fluentProviderId = useId('fp-dynamic-list')
 
-  // Column sizing options
   const columnSizingOptions: TableColumnSizingOptions = useMemo(
     () =>
       columns.reduce(
         (options, col) => ({
           ...options,
           [col.columnId]: {
-            defaultWidth: col.defaultWidth || 150,
-            minWidth: col.minWidth || 100
+            idealWidth: col.maxWidth || 160,
+            minWidth: col.minWidth || 120,
+            defaultWidth: col.maxWidth || 160,
+            maxWidth: col.maxWidth
           }
         }),
         {}
@@ -47,7 +59,6 @@ export const DynamicListView: FC = () => {
     [columns]
   )
 
-  // Convert items to include row IDs
   const items = useMemo(
     () =>
       filteredItems.map((item, index) => ({
@@ -57,7 +68,6 @@ export const DynamicListView: FC = () => {
     [filteredItems]
   )
 
-  // Setup table features
   const {
     getRows,
     selection: { allRowsSelected, someRowsSelected, toggleAllRows, toggleRow, isRowSelected },
@@ -86,7 +96,6 @@ export const DynamicListView: FC = () => {
 
   const rows = sort(getRows())
 
-  // Sync selection state
   const handleToggleRow = useCallback(
     (e: React.MouseEvent, rowId: TableRowId) => {
       toggleRow(e, rowId)

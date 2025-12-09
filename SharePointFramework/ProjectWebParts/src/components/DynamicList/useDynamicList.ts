@@ -2,6 +2,15 @@ import { useState, useCallback } from 'react'
 import { IDynamicListProps, IDynamicListState } from './types'
 import { useDynamicListDataFetch } from './data/useDynamicListDataFetch'
 
+/**
+ * Main hook for managing DynamicList state and data fetching.
+ *
+ * Initializes component state, provides a setState function that supports callbacks,
+ * and triggers data fetching through useDynamicListDataFetch.
+ *
+ * @param props Component configuration properties
+ * @returns Object containing state and setState function
+ */
 export function useDynamicList(props: IDynamicListProps) {
   const [state, _setState] = useState<IDynamicListState>({
     isLoading: true,
@@ -26,7 +35,6 @@ export function useDynamicList(props: IDynamicListProps) {
     })
   }, [])
 
-  // Fetch data
   useDynamicListDataFetch(props, state, setState)
 
   return {

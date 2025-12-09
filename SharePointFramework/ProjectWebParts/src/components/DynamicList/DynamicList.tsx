@@ -19,11 +19,18 @@ import SPDataAdapter from '../../data'
 import { useToolbarItems } from './useToolbarItems'
 import styles from './DynamicList.module.scss'
 
+/**
+ * Internal component that renders the main content of the DynamicList.
+ *
+ * Handles rendering of the web part title, toolbar, loading states, and either
+ * the DynamicListView or SingleItemView based on display mode.
+ *
+ * @param isSingleView Whether to display in single item view mode
+ */
 const DynamicListContent: FC<{ isSingleView: boolean }> = ({ isSingleView }) => {
   const context = React.useContext(DynamicListContext)
   const { menuItems, farMenuItems, filterPanelProps } = useToolbarItems(isSingleView)
 
-  // Show message if no list is selected
   if (!context.props.listName) {
     return (
       <>
@@ -77,6 +84,18 @@ const DynamicListContent: FC<{ isSingleView: boolean }> = ({ isSingleView }) => 
   )
 }
 
+/**
+ * DynamicList web part component for displaying SharePoint list data.
+ *
+ * Provides a flexible list view with features including:
+ * - Multi-view and single-view display modes
+ * - Filtering, searching, and sorting capabilities
+ * - Item selection and editing via CustomEditPanel
+ * - Support for custom views and column configurations
+ * - Integration with ProjectContentColumns for column metadata
+ *
+ * @param props Configuration properties for the DynamicList
+ */
 export const DynamicList: FC<IDynamicListProps> = (props) => {
   const { state, setState } = useDynamicList(props)
 
@@ -89,8 +108,6 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
     [props, state]
   )
 
-  // Determine display mode
-  // Use single view if: explicitly set to Single mode, maxItems is 1, only 1 item exists, or drilled down from list
   const displayMode =
     props.mode || (props.maxItems === 1 ? DynamicListMode.Single : DynamicListMode.Multi)
 
@@ -98,16 +115,17 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
   const isSingleView =
     displayMode === DynamicListMode.Single || hasOnlyOneItem || state.isDrilledDown
 
-  // Get the target web based on webUrl prop
+  /**
+   * Determines the target SharePoint web instance based on webUrl prop.
+   * Returns portal web if current site is a hub, otherwise returns current web or creates a Web instance.
+   */
   const targetWeb = useMemo(() => {
     if (!props.webUrl) {
-      // Check if current site is the hub site
       if (props.pageContext && isHubSite(props.pageContext)) {
         return SPDataAdapter.portalDataService.web
       }
       return SPDataAdapter.sp.web
     } else {
-      // For another site URL, create a Web instance
       return Web([SPDataAdapter.sp.web, props.webUrl])
     }
   }, [props.webUrl, props.pageContext])
@@ -122,7 +140,7 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
           <CustomEditPanel
             isOpen={true}
             fields={state.data?.fields || []}
-            fieldValues={state.panel.fieldValues || new ItemFieldValues()}
+            fieldValues={state.panel.fieldValues}
             dataAdapter={SPDataAdapter}
             targetWeb={targetWeb}
             onDismiss={() => {

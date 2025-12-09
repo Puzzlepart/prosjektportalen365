@@ -23,17 +23,24 @@ const Icons = {
 }
 
 /**
- * Get the appropriate web instance based on webUrl and pageContext
+ * Get the appropriate web instance based on webUrl and pageContext.
+ *
+ * Determines which SharePoint web instance to use:
+ * - If no webUrl provided and current site is a hub site, returns the portal web
+ * - If no webUrl provided and not a hub site, returns the current web
+ * - If webUrl is provided, creates and returns a Web instance for that URL
+ *
+ * @param webUrl Optional web URL to target a specific site
+ * @param pageContext Optional page context to determine if current site is a hub
+ * @returns Web instance for the appropriate SharePoint site
  */
 function getWeb(webUrl?: string, pageContext?: PageContext) {
   if (!webUrl) {
-    // Check if current site is the hub site
     if (pageContext && isHubSite(pageContext)) {
       return SPDataAdapter.portalDataService.web
     }
     return SPDataAdapter.sp.web
   } else {
-    // Another site URL - create Web instance
     return Web([SPDataAdapter.sp.web, webUrl])
   }
 }
@@ -49,7 +56,13 @@ export function useToolbarItems(isSingleView: boolean = false) {
   )
 
   /**
-   * Handle view selection change
+   * Handle view selection change.
+   *
+   * Finds the selected view, updates the current view state, and triggers a data refetch
+   * with the new view's field configuration. The refetch is delayed using setTimeout to
+   * ensure state is updated before triggering the data fetch.
+   *
+   * @param viewId The ID of the view to switch to
    */
   const onViewChange = useCallback(
     async (viewId: string) => {
@@ -57,18 +70,14 @@ export function useToolbarItems(isSingleView: boolean = false) {
 
       context.setState({ isChangingView: true })
 
-      // Find the selected view
       const selectedView = context.state.views?.find((v) => v.id === viewId)
       if (!selectedView) return
 
-      // Update current view and trigger refetch with new view
-      // This will cause the data to be refetched with the new view's fields
       context.setState({
         currentView: selectedView,
         isChangingView: false
       })
 
-      // Trigger refetch after state is updated
       setTimeout(() => {
         context.setState({ refetch: Date.now() })
       }, 0)
@@ -77,7 +86,10 @@ export function useToolbarItems(isSingleView: boolean = false) {
   )
 
   /**
-   * Delete selected items with confirmation
+   * Delete selected items with confirmation.
+   *
+   * Prompts the user for confirmation, then deletes all selected items from the list
+   * and triggers a data refetch.
    */
   const deleteItems = useCallback(async () => {
     if (!context.props.listName) return
@@ -119,7 +131,9 @@ export function useToolbarItems(isSingleView: boolean = false) {
   ])
 
   /**
-   * Dismisses the panel and refetches data
+   * Dismisses the edit panel and triggers a data refetch.
+   *
+   * Clears selected items, closes the panel, and refreshes the list data.
    */
   const dismissPanel = useCallback(() => {
     context.setState({
@@ -130,7 +144,13 @@ export function useToolbarItems(isSingleView: boolean = false) {
   }, [context.setState])
 
   /**
-   * Adds or updates an item in the list
+   * Adds a new item or updates an existing item in the list.
+   *
+   * If itemId is null, creates a new item. Otherwise, updates the existing item
+   * with the provided ID. After saving, dismisses the panel and refreshes the data.
+   *
+   * @param itemId The ID of the item to update, or null to create a new item
+   * @param properties The properties to save on the item
    */
   const saveItem = useCallback(
     async (itemId: number | null, properties: Record<string, any>) => {
@@ -153,7 +173,6 @@ export function useToolbarItems(isSingleView: boolean = false) {
   const menuItems = useMemo<ListMenuItem[]>(() => {
     const items: ListMenuItem[] = []
 
-    // Show back button when drilled down to single item view
     if (context.state.isDrilledDown) {
       items.push(
         new ListMenuItem('Tilbake', 'Tilbake til listevisning')
@@ -173,7 +192,6 @@ export function useToolbarItems(isSingleView: boolean = false) {
       !context.state.data?.listItems ||
       context.state.data.listItems.length < context.props.maxItems
 
-    // In single view, only show New Item if there are no items
     const showNewItem = isSingleView ? !hasItems && canAddItem : canAddItem
 
     if (showNewItem) {
@@ -184,6 +202,7 @@ export function useToolbarItems(isSingleView: boolean = false) {
             context.setState({
               panel: {
                 headerText: 'Nytt element',
+                fieldValues: new ItemFieldValues(),
                 submit: {
                   onSubmit: async ({ properties }) => {
                     await saveItem(null, properties)
@@ -222,7 +241,6 @@ export function useToolbarItems(isSingleView: boolean = false) {
         })
     )
 
-    // Hide search in single view
     if (!isSingleView && context.props.showSearchBox) {
       items.push(
         new ListMenuItem()
@@ -267,7 +285,6 @@ export function useToolbarItems(isSingleView: boolean = false) {
   const farMenuItems = useMemo<ListMenuItem[]>(() => {
     const items: ListMenuItem[] = []
 
-    // Hide view selector in single view
     if (!isSingleView && context.props.showViewSelector && context.state.views?.length > 0) {
       const viewMenuItems = context.state.views.map((view) =>
         new ListMenuItem(view.isDefault ? `${view.title} (Default)` : view.title)
@@ -307,7 +324,6 @@ export function useToolbarItems(isSingleView: boolean = false) {
         })
     )
 
-    // Hide filters in single view
     if (!isSingleView && context.props.showFilters) {
       items.push(
         new ListMenuItem('Filter', 'Vis/skjul filtre').setIcon(FilterRegular).setOnClick(() => {
@@ -340,7 +356,6 @@ export function useToolbarItems(isSingleView: boolean = false) {
             filters: context.state.filters || [],
             onDismiss: () => context.setState({ showFilterPanel: false }),
             onFilterChange: (column: any, selectedItems: any[]) => {
-              // Update activeFilters
               const newActiveFilters = { ...context.state.activeFilters }
 
               if (selectedItems.length > 0) {
@@ -349,7 +364,6 @@ export function useToolbarItems(isSingleView: boolean = false) {
                 delete newActiveFilters[column.fieldName]
               }
 
-              // Update filter items to reflect selection
               const newFilters = context.state.filters?.map((f) => {
                 if (column.key === f.column.key) {
                   return {

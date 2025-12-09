@@ -10,29 +10,45 @@ import '@pnp/sp/items/get-all'
 import '@pnp/sp/views'
 
 /**
- * Get the appropriate web instance based on webUrl and pageContext
- * @param webUrl Optional web URL. If not provided, checks if current site is hub. If another URL, creates Web instance.
- * @param props Component props containing pageContext
+ * Gets the appropriate Web instance based on the webUrl parameter and hub site status.
+ *
+ * This function determines which SharePoint web instance to use for fetching list data
+ * by evaluating three scenarios:
+ *
+ * 1. External site (webUrl provided): Creates a new Web instance for the specified URL
+ *    to fetch from another site collection
+ * 2. Current site is hub (no webUrl, isHubSite true): Returns the portal data service web
+ *    to access hub-level data
+ * 3. Current site is not hub (no webUrl, isHubSite false): Returns the standard SP web
+ *    instance for the current site
+ *
+ * @param webUrl - Optional web URL. If provided, creates a Web instance for that URL
+ * @param props - Component props containing pageContext for hub site detection
+ * @returns A Web instance configured to fetch list data from the appropriate location
  */
 function getWeb(webUrl?: string, props?: IDynamicListProps) {
   if (!webUrl) {
-    // Check if current site is the hub site
     if (props?.pageContext && isHubSite(props.pageContext)) {
-      // Current site is hub, use portal data service
       return SPDataAdapter.portalDataService.web
     }
-    // Current site is not hub
     return SPDataAdapter.sp.web
   } else {
-    // Another site URL - create Web instance
     return Web([SPDataAdapter.sp.web, webUrl])
   }
 }
 
 /**
- * Fetches column configuration from ProjectContentColumns (Prosjektinnholdskolonner) list
- * This provides dataType and dataTypeProperties for proper column rendering
- * Fetches all columns since DynamicList doesn't use categories
+ * Fetches column configuration from the ProjectContentColumns (Prosjektinnholdskolonner) list.
+ *
+ * This function retrieves column metadata from the hub site's configuration list, which provides
+ * critical information for proper column rendering including dataType, dataTypeProperties,
+ * minWidth, and maxWidth values. Unlike PortfolioAggregation which filters by category,
+ * this fetches all columns since DynamicList displays content from various list types.
+ *
+ * The configuration is used by enrichColumnsWithConfiguration to merge hub settings with
+ * SharePoint field definitions.
+ *
+ * @returns Promise resolving to array of ProjectContentColumn configurations, or empty array if unavailable
  */
 async function fetchProjectContentColumns(): Promise<ProjectContentColumn[]> {
   try {
@@ -50,26 +66,40 @@ async function fetchProjectContentColumns(): Promise<ProjectContentColumn[]> {
 }
 
 /**
- * Enriches SharePoint columns with configuration from ProjectContentColumns
- * Merges dataType, dataTypeProperties, and other rendering configuration
+ * Enriches SharePoint columns with configuration from ProjectContentColumns.
+ *
+ * This function merges hub-level column configuration with SharePoint field definitions
+ * to create fully configured column objects for rendering. It performs the following:
+ *
+ * 1. Matches columns: Attempts to find matching ProjectContentColumn configuration by
+ *    comparing internalName or fieldName
+ * 2. Merges configuration: If match found, merges name, minWidth, maxWidth, dataType,
+ *    and dataTypeProperties from the hub configuration
+ * 3. Preserves original: If no match found, returns the SharePoint column unchanged
+ *    without applying any default width values
+ *
+ * This ensures column widths and rendering properties come from the hub configuration
+ * (Prosjektinnholdskolonner list) rather than hardcoded defaults.
+ *
+ * @param spColumns - Array of columns created from SharePoint field definitions
+ * @param projectContentColumns - Array of column configurations from ProjectContentColumns list
+ * @returns Array of enriched columns with merged configuration
  */
 function enrichColumnsWithConfiguration(
   spColumns: IColumn[],
   projectContentColumns: ProjectContentColumn[]
 ): IColumn[] {
   return spColumns.map((spColumn) => {
-    // Try to find matching configuration by internal name
     const configColumn = projectContentColumns.find(
       (c) => c.internalName === spColumn.fieldName || c.fieldName === spColumn.fieldName
     )
 
     if (configColumn) {
-      // Merge configuration from ProjectContentColumns
       return {
         ...spColumn,
         name: configColumn.name || spColumn.name,
-        minWidth: configColumn.minWidth || spColumn.minWidth,
-        maxWidth: configColumn.maxWidth || spColumn.maxWidth,
+        minWidth: configColumn.minWidth,
+        maxWidth: configColumn.maxWidth,
         dataType: configColumn.dataType,
         data: {
           ...spColumn.data,
@@ -84,10 +114,24 @@ function enrichColumnsWithConfiguration(
 }
 
 /**
- * Maps SharePoint field type to our column data type
+ * Maps SharePoint field type to column data type identifier.
+ *
+ * This function converts SharePoint field type identifiers to simplified data type
+ * strings used for column rendering. It uses a two-tier mapping strategy:
+ *
+ * 1. Primary mapping: Checks TypeAsString (e.g., "Boolean", "DateTime") against
+ *    a predefined type mapping dictionary
+ * 2. Fallback mapping: If TypeAsString doesn't match, uses FieldTypeKind numeric
+ *    value to determine the type
+ *
+ * This ensures consistent data type classification regardless of which SharePoint
+ * field property is available.
+ *
+ * @param typeAsString - The SharePoint field's TypeAsString property (e.g., "Text", "Number")
+ * @param fieldTypeKind - The SharePoint field's FieldTypeKind numeric value
+ * @returns Data type string for column configuration (e.g., "text", "number", "date")
  */
 function mapSharePointTypeToDataType(typeAsString: string, fieldTypeKind: number): string {
-  // Map based on TypeAsString first
   const typeMapping: Record<string, string> = {
     Boolean: 'boolean',
     DateTime: 'date',
@@ -109,26 +153,25 @@ function mapSharePointTypeToDataType(typeAsString: string, fieldTypeKind: number
   const mappedType = typeMapping[typeAsString]
   if (mappedType) return mappedType
 
-  // Fallback based on FieldTypeKind
   switch (fieldTypeKind) {
-    case 2: // Integer
-    case 9: // Number
-    case 10: // Currency
+    case 2:
+    case 9:
+    case 10:
       return 'number'
-    case 4: // DateTime
+    case 4:
       return 'date'
-    case 8: // Boolean
+    case 8:
       return 'boolean'
-    case 20: // User
+    case 20:
       return 'user'
-    case 7: // Lookup
+    case 7:
       return 'text'
-    case 6: // Choice
-    case 15: // MultiChoice
+    case 6:
+    case 15:
       return 'choice'
-    case 11: // URL
+    case 11:
       return 'url'
-    case 3: // Note (multiline)
+    case 3:
       return 'note'
     default:
       return 'text'
@@ -147,19 +190,16 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
     const web = getWeb(props.webUrl, props)
     const list = web.lists.getByTitle(props.listName)
 
-    // Fetch list info and ProjectContentColumns configuration in parallel
     const [listInfo, projectContentColumns] = await Promise.all([
       list.select('Title', 'Id')(),
       fetchProjectContentColumns()
     ])
 
-    // Fetch list items
     const items = await list.items
       .select('*', 'Author/Title', 'Editor/Title')
       .expand('Author', 'Editor')
       .getAll()
 
-    // Always fetch all fields first
     const allFields = await list.fields
       .filter('Hidden eq false and ReadOnlyField eq false')
       .select(
@@ -172,7 +212,6 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
         'FieldTypeKind'
       )()
 
-    // Determine which fields to display based on view selection
     let fields: any[]
     let viewToUse: string | null = null
 
@@ -193,14 +232,11 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
 
     if (viewToUse) {
       try {
-        // Fetch view field names
         let view: any
         if (props.defaultViewId && props.defaultViewId !== 'All Fields') {
-          // Fetch by ID
           console.log('[fetchListData] Fetching view by ID:', props.defaultViewId)
           view = await list.views.getById(props.defaultViewId)()
         } else {
-          // Fetch by Title (backward compatibility)
           console.log('[fetchListData] Fetching view by Title:', viewToUse)
           view = await list.views.getByTitle(viewToUse)()
         }
@@ -213,28 +249,23 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
           viewFieldNames.length
         )
 
-        // Filter all fields to only those in the view, maintaining view order
         if (viewFieldNames.length > 0) {
           fields = viewFieldNames
             .map((fieldName: string) => allFields.find((f) => f.InternalName === fieldName))
             .filter(Boolean)
           console.log('[fetchListData] Filtered fields for view:', fields.length)
         } else {
-          // If view has no fields, use all fields
           console.log('[fetchListData] View has no fields, using all fields')
           fields = allFields
         }
       } catch (error) {
         console.error('[fetchListData] Error fetching view fields, using all fields:', error)
-        // Fall back to all fields if view fetch fails
         fields = allFields
       }
     } else {
-      // Use all fields when no specific view is selected
       fields = allFields
     }
 
-    // Transform fields to columns
     let columns: IColumn[] = fields
       .filter(
         (field) => !field.InternalName.startsWith('_') && field.InternalName !== 'Attachments'
@@ -245,8 +276,8 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
           key: field.InternalName,
           name: field.Title,
           fieldName: field.InternalName,
-          minWidth: 100,
-          maxWidth: 300,
+          minWidth: undefined,
+          maxWidth: undefined,
           isResizable: true,
           isSorted: false,
           isSortedDescending: false,
@@ -259,27 +290,22 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
         }
       })
 
-    // Enrich columns with configuration from ProjectContentColumns
     console.log(
       '[fetchListData] Enriching columns with ProjectContentColumns configuration:',
       projectContentColumns.length
     )
     columns = enrichColumnsWithConfiguration(columns, projectContentColumns)
 
-    // Transform items for display
     const listItems = items.map((item) => {
       const transformedItem: Record<string, any> = { ...item }
 
-      // Handle lookup fields, person fields, etc.
       Object.keys(item).forEach((key) => {
         const value = item[key]
 
-        // Handle person/group fields
         if (value && typeof value === 'object' && 'Title' in value) {
           transformedItem[key] = value.Title
         }
 
-        // Handle multi-value fields
         if (Array.isArray(value)) {
           transformedItem[key] = value.map((v) => (v.Title ? v.Title : v)).join(', ')
         }
@@ -288,7 +314,6 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
       return transformedItem
     })
 
-    // Fetch all editable fields for CustomEditPanel
     const editableFields = await list.fields
       .filter('Hidden eq false and ReadOnlyField eq false')
       .select(
@@ -305,10 +330,8 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
         'LookupField'
       )()
 
-    // Map to EditableSPField instances
     const mappedFields = editableFields.map((fld) => new EditableSPField(fld))
 
-    // Fetch available views
     const views = await list.views.select('Title', 'Id', 'DefaultView').filter('Hidden eq false')()
 
     const viewsList = views.map((view) => ({
@@ -317,7 +340,6 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
       isDefault: view.DefaultView
     }))
 
-    // Find current view
     let currentView = viewsList.find((v) => v.id === props.defaultViewId)
     if (!currentView && props.viewName && props.viewName !== 'All Fields') {
       currentView = viewsList.find((v) => v.title === props.viewName)

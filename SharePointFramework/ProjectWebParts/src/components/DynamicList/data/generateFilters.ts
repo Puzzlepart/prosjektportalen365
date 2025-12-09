@@ -4,10 +4,25 @@ import { get } from '@microsoft/sp-lodash-subset'
 import _ from 'lodash'
 
 /**
- * Generates filters from list data by extracting unique values from each column
+ * Generates filters from list data by extracting unique values from each column.
+ *
+ * This function creates filter configurations for columns that would benefit from filtering,
+ * while skipping certain column types that don't make sense to filter (like ID, Modified,
+ * Created, Author, Editor, and long text fields like Description or Notes).
+ *
+ * The process includes:
+ * 1. Filtering to only include filterable columns (excluding metadata and long text)
+ * 2. Extracting all values for each column, handling multi-value fields (Person, Choice with
+ *    multiple selections) by splitting on semicolons
+ * 3. Getting unique non-empty values and filtering to only those with multiple unique values
+ *    (no point filtering with only 1 value) and less than 100 values (to avoid overwhelming UI)
+ * 4. Sorting values alphabetically using Norwegian locale
+ * 5. Formatting display values by parsing special SharePoint formats:
+ *    - User fields: ID;#Name or Name|email|ID format
+ *    - Lookup values: ID;#Value format
  *
  * @param data - The list data containing items and columns
- * @returns Array of filter configurations
+ * @returns Array of filter configurations with parsed and formatted values
  */
 export function generateFilters(data: IDynamicListData): IFilterProps[] {
   if (!data?.listItems?.length || !data?.listColumns?.length) {
@@ -16,17 +31,13 @@ export function generateFilters(data: IDynamicListData): IFilterProps[] {
 
   const filters: IFilterProps[] = []
 
-  // Generate filters for columns that would benefit from filtering
-  // Skip certain column types that don't make sense to filter
   const filterableColumns = data.listColumns.filter((column) => {
     const fieldName = column.fieldName || column.key
 
-    // Skip ID, Modified, Created, and other metadata columns
     if (['ID', 'Modified', 'Created', 'Author', 'Editor'].includes(fieldName)) {
       return false
     }
 
-    // Skip very long text fields
     if (fieldName.includes('Description') || fieldName.includes('Notes')) {
       return false
     }
@@ -37,11 +48,9 @@ export function generateFilters(data: IDynamicListData): IFilterProps[] {
   filterableColumns.forEach((column) => {
     const fieldName = column.fieldName || column.key
 
-    // Extract all values for this column (handle multi-value fields with semicolons)
     const allValues = _.flatten(
       data.listItems.map((item) => {
         const value = get(item, fieldName, '')
-        // Handle multi-value fields (Person, Choice with multiple selections)
         if (typeof value === 'string' && value.includes(';')) {
           return value.split(';')
         }
@@ -49,16 +58,13 @@ export function generateFilters(data: IDynamicListData): IFilterProps[] {
       })
     )
 
-    // Get unique non-empty values
     const uniqueValues = _.uniq(allValues).filter((value) => {
       if (value == null || value === '') return false
       if (typeof value === 'string' && value.trim() === '') return false
       return true
     })
 
-    // Only create filter if there are multiple unique values (no point filtering with 1 value)
     if (uniqueValues.length > 1 && uniqueValues.length < 100) {
-      // Sort values
       const sortedValues = uniqueValues.sort((a, b) => {
         const aStr = String(a)
         const bStr = String(b)
@@ -68,13 +74,11 @@ export function generateFilters(data: IDynamicListData): IFilterProps[] {
       const filterItems = sortedValues.map((value) => {
         let displayValue = String(value)
 
-        // Handle user fields (format: ID;#Name or Name|email|ID)
         if (fieldName.includes('OWSUSER') || displayValue.includes('|')) {
           const match = displayValue.match(/\|([^|]+)\|/)
           displayValue = match ? match[1].trim() : displayValue
         }
 
-        // Handle lookup values (format: ID;#Value)
         if (displayValue.includes(';#')) {
           displayValue = displayValue.split(';#')[1] || displayValue
         }

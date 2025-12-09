@@ -13,6 +13,13 @@
     padding: 0 32px;
   }
 
+  :global(.fui-TableHeader) {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: var(--colorNeutralBackground1);
+  }
+
   :global(.fui-TableCell) {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -20,6 +27,16 @@
     padding-bottom: 12px;
     font-size: 12px;
     font-weight: 400;
+    color: #323130;
+  }
+
+  :global(.fui-TableHeaderCell) {
+    flex: 0 1 auto;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-weight: 600;
+    font-size: 14px;
     color: #323130;
   }
 }

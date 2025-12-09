@@ -5,6 +5,13 @@ import { DynamicListContext } from '../../context'
 import { useColumns } from '../../useColumns'
 import styles from './SingleItemView.module.scss'
 
+/**
+ * Renders a single list item in a detailed field-by-field view.
+ *
+ * Displays all fields from the selected item or the first item in the list
+ * if no specific item is selected. Uses the same column render system as
+ * DynamicListView for consistent field rendering.
+ */
 export const SingleItemView: FC = () => {
   const context = useContext(DynamicListContext)
   const columns = useColumns()
