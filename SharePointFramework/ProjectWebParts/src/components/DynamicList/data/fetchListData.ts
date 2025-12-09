@@ -53,14 +53,13 @@ function getWeb(webUrl?: string, props?: IDynamicListProps) {
 async function fetchProjectContentColumns(): Promise<ProjectContentColumn[]> {
   try {
     if (SPDataAdapter.portalDataService?.isConfigured) {
-      return await SPDataAdapter.portalDataService.fetchProjectContentColumns('PROJECT_CONTENT_COLUMNS')
+      return await SPDataAdapter.portalDataService.fetchProjectContentColumns(
+        'PROJECT_CONTENT_COLUMNS'
+      )
     }
     return []
   } catch (error) {
-    console.warn(
-      '[fetchListData] Could not fetch ProjectContentColumns configuration:',
-      error
-    )
+    console.warn('[fetchListData] Could not fetch ProjectContentColumns configuration:', error)
     return []
   }
 }
@@ -104,7 +103,8 @@ function enrichColumnsWithConfiguration(
         data: {
           ...spColumn.data,
           ...configColumn.data,
-          dataTypeProperties: configColumn.data?.dataTypeProperties || spColumn.data?.dataTypeProperties
+          dataTypeProperties:
+            configColumn.data?.dataTypeProperties || spColumn.data?.dataTypeProperties
         }
       }
     }

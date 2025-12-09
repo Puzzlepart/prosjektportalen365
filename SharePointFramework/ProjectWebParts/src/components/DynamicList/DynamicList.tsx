@@ -7,13 +7,13 @@ import { DynamicListView } from './views/DynamicListView/DynamicListView'
 import { SingleItemView } from './views/SingleItemView/SingleItemView'
 import {
   WebPartTitle,
-  ItemFieldValues,
   CustomEditPanel,
   Toolbar,
   isHubSite,
-  UserMessage
+  UserMessage,
+  LoadingSkeleton
 } from 'pp365-shared-library'
-import { Spinner } from '@fluentui/react-components'
+import { Spinner, Skeleton, SkeletonItem } from '@fluentui/react-components'
 import { Web } from '@pnp/sp/webs'
 import SPDataAdapter from '../../data'
 import { useToolbarItems } from './useToolbarItems'
@@ -52,32 +52,36 @@ const DynamicListContent: FC<{ isSingleView: boolean }> = ({ isSingleView }) => 
   return (
     <>
       <div className={styles.header}>
-        <WebPartTitle
-          title={context.props.title || context.state.data?.listTitle}
-          description={context.props.infoText}
-        />
+        {context.state.isLoading ? (
+          <Skeleton className={styles.headerSkeleton}>
+            <SkeletonItem className={styles.titleSkeleton} />
+          </Skeleton>
+        ) : (
+          <WebPartTitle
+            title={context.props.title || context.state.data?.listTitle}
+            description={context.props.infoText}
+          />
+        )}
       </div>
       {context.state.isRefetching ? (
         <Spinner
           size='extra-tiny'
-          label='Oppdaterer...'
+          label='Oppdaterer og henter data på nytt...'
           style={{ padding: 10, minHeight: '20px' }}
         />
       ) : (
+        context.props.showCommandBar && (
+          <div className={styles.commandBar}>
+            <Toolbar items={menuItems} farItems={farMenuItems} filterPanel={filterPanelProps} />
+          </div>
+        )
+      )}
+      {context.state.isLoading ? (
+        <LoadingSkeleton />
+      ) : (
         <>
-          {context.props.showCommandBar && (
-            <div className={styles.commandBar}>
-              <Toolbar items={menuItems} farItems={farMenuItems} filterPanel={filterPanelProps} />
-            </div>
-          )}
-          {context.state.isLoading ? (
-            <Spinner size='extra-large' label='Laster...' />
-          ) : (
-            <>
-              {context.state.error && <div>Error: {context.state.error}</div>}
-              {context.state.data && <>{isSingleView ? <SingleItemView /> : <DynamicListView />}</>}
-            </>
-          )}
+          {context.state.error && <div>Error: {context.state.error}</div>}
+          {context.state.data && <>{isSingleView ? <SingleItemView /> : <DynamicListView />}</>}
         </>
       )}
     </>
