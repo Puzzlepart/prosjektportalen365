@@ -48,16 +48,19 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
 
       const lists = await web.lists
         .select('Title', 'Id', 'Hidden', 'BaseTemplate', 'ItemCount')
-        .filter('Hidden eq false and BaseTemplate ne 850')() // Exclude hidden lists and document libraries
+        .filter('Hidden eq false and BaseTemplate ne 850')() // Exclude hidden lists and folder lists
 
       this._listOptions = lists
         .filter(
-          (list) => !list.Title.startsWith('_') && list.BaseTemplate === 100 // Generic list
+          (list) =>
+            !list.Title.startsWith('_') && (list.BaseTemplate === 100 || list.BaseTemplate === 101) // Generic list or Document library
         )
         .sort((a, b) => a.Title.localeCompare(b.Title))
         .map((list) => ({
           key: list.Title,
-          text: `${list.Title} (${list.ItemCount || 0} elementer)`
+          text: `${list.Title} (${list.ItemCount || 0} ${
+            list.BaseTemplate === 101 ? 'dokumenter' : 'elementer'
+          })`
         }))
 
       this._listsLoading = false

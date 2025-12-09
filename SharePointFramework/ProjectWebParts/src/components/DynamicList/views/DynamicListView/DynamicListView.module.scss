@@ -3,23 +3,6 @@
   flex: 1;
   overflow: hidden;
 
-  .scrollContainer {
-    overflow: auto;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: 0 32px;
-  }
-
-  :global(.fui-TableHeader) {
-    position: sticky;
-    top: 0;
-    z-index: 1;
-    background-color: var(--colorNeutralBackground1);
-  }
-
   :global(.fui-TableCell) {
     overflow: hidden;
     text-overflow: ellipsis;

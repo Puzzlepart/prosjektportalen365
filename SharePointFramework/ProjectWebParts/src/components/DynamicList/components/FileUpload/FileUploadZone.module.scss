@@ -1,0 +1,96 @@
+.uploadZone {
+  border: 2px dashed var(--colorNeutralStroke1);
+  border-radius: 8px;
+  padding: 40px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: var(--colorNeutralBackground1);
+
+  &:hover:not(.uploading) {
+    border-color: var(--colorBrandStroke1);
+    background-color: var(--colorNeutralBackground1Hover);
+  }
+
+  &.dragOver {
+    border-color: var(--colorBrandStroke1);
+    background-color: var(--colorBrandBackground2);
+  }
+
+  &.uploading {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.icon {
+  font-size: 48px;
+  color: var(--colorBrandForeground1);
+}
+
+.text {
+  font-size: 16px;
+  color: var(--colorNeutralForeground2);
+}
+
+.fileInput {
+  display: none;
+}
+
+.fullScreenContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.fullScreenOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.overlayContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 48px;
+  background-color: var(--colorNeutralBackground1);
+  border-radius: 12px;
+  box-shadow: var(--shadow64);
+  text-align: center;
+  max-width: 500px;
+}
+
+.overlayIcon {
+  font-size: 64px;
+  color: var(--colorBrandForeground1);
+}
+
+.overlayText {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--colorNeutralForeground1);
+}
+
+.overlaySubtext {
+  font-size: 16px;
+  color: var(--colorNeutralForeground2);
+}

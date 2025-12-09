@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { IDynamicListProps, IDynamicListState } from '../types'
+import { IDynamicListProps, IDynamicListState, DocumentLibraryViewMode } from '../types'
 import { fetchListData } from './fetchListData'
 import { generateFilters } from './generateFilters'
 
@@ -61,11 +61,16 @@ export function useDynamicListDataFetch(
           fetchedData.views?.find((v) => v.id === viewIdToUse) ||
           fetchedData.views?.find((v) => v.isDefault)
 
+        const isDocLib = fetchedData.baseTemplate === 101
+
         setState({
           data: fetchedData,
           views: fetchedData.views || [],
           currentView: newCurrentView,
           filters: filters,
+          isDocumentLibrary: isDocLib,
+          documentViewMode: isDocLib ? DocumentLibraryViewMode.Flat : undefined,
+          currentFolderPath: isDocLib ? '' : undefined,
           isLoading: false,
           isChangingView: false,
           isRefetching: false

@@ -1,11 +1,12 @@
 .singleItemView {
+  padding: 0 32px;
   flex: 1;
   gap: 16px;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   align-items: flex-start;
   height: auto;
   overflow-y: auto;
-  width: 100%;
 
   .header {
     display: flex;

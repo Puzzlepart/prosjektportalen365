@@ -1,0 +1,69 @@
+.documentLibraryView {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: auto;
+}
+
+.toolbar {
+  padding: 12px 16px;
+  background-color: var(--colorNeutralBackground1);
+  border-bottom: 1px solid var(--colorNeutralStroke1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.uploadZoneContainer {
+  padding: 16px;
+  background-color: var(--colorNeutralBackground2);
+}
+
+.breadcrumb {
+  padding: 12px 16px;
+  background-color: var(--colorNeutralBackground1);
+  border-bottom: 1px solid var(--colorNeutralStroke1);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+}
+
+.breadcrumbLink {
+  color: var(--colorBrandForeground1);
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.separator {
+  color: var(--colorNeutralForeground3);
+  user-select: none;
+}
+
+.dataGrid {
+  flex: 1;
+  min-height: 0;
+}
+
+.fileName {
+  color: var(--colorBrandForeground1);
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--colorNeutralForeground3);
+  font-size: 16px;
+}

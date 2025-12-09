@@ -1,6 +1,6 @@
 import { useMemo, useContext, useCallback } from 'react'
 import { DynamicListContext } from './context'
-import { ListMenuItem, ItemFieldValues, isHubSite } from 'pp365-shared-library'
+import { ListMenuItem, ItemFieldValues } from 'pp365-shared-library'
 import {
   FilterRegular,
   AddRegular,
@@ -11,42 +11,28 @@ import {
   ArrowLeftRegular,
   bundleIcon
 } from '@fluentui/react-icons'
-import SPDataAdapter from '../../data'
-import { Web } from '@pnp/sp/webs'
-import { PageContext } from '@microsoft/sp-page-context'
 import '@pnp/sp/lists'
 import '@pnp/sp/items'
+import '@pnp/sp/folders'
+import '@pnp/sp/files'
+import '@pnp/sp/files/folder'
 import _ from 'lodash'
+import { useExcelExport } from './hooks'
+import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
+import { getWeb } from './utils'
 
 const Icons = {
   ContentView: bundleIcon(ContentView24Filled, ContentView24Regular)
 }
 
-/**
- * Get the appropriate web instance based on webUrl and pageContext.
- *
- * Determines which SharePoint web instance to use:
- * - If no webUrl provided and current site is a hub site, returns the portal web
- * - If no webUrl provided and not a hub site, returns the current web
- * - If webUrl is provided, creates and returns a Web instance for that URL
- *
- * @param webUrl Optional web URL to target a specific site
- * @param pageContext Optional page context to determine if current site is a hub
- * @returns Web instance for the appropriate SharePoint site
- */
-function getWeb(webUrl?: string, pageContext?: PageContext) {
-  if (!webUrl) {
-    if (pageContext && isHubSite(pageContext)) {
-      return SPDataAdapter.portalDataService.web
-    }
-    return SPDataAdapter.sp.web
-  } else {
-    return Web([SPDataAdapter.sp.web, webUrl])
-  }
-}
-
 export function useToolbarItems(isSingleView: boolean = false) {
   const context = useContext(DynamicListContext)
+  const exportToExcel = useExcelExport()
+
+  // Configure Excel export service
+  ExcelExportService.configure({
+    name: context.props.title || context.state.data?.listTitle || 'Export'
+  })
 
   const checkedValues = useMemo(
     () => ({
@@ -138,6 +124,91 @@ export function useToolbarItems(isSingleView: boolean = false) {
   }, [context.setState])
 
   /**
+   * Upload files to the document library.
+   *
+   * @param files The files to upload
+   */
+  const uploadFiles = useCallback(
+    async (files: File[]) => {
+      if (!context.props.listName) return
+
+      try {
+        const web = getWeb(context.props.webUrl, context.props.pageContext)
+        const list = web.lists.getByTitle(context.props.listName)
+        const folderPath = context.state.currentFolderPath || ''
+
+        for (const file of files) {
+          if (folderPath) {
+            // Upload to specific folder
+            const targetFolder = list.rootFolder.folders.getByUrl(folderPath)
+            await targetFolder.files.addUsingPath(file.name, file, { Overwrite: true })
+          } else {
+            // Upload to root folder
+            await list.rootFolder.files.addUsingPath(file.name, file, { Overwrite: true })
+          }
+        }
+
+        context.setState({ refetch: Date.now() })
+      } catch (error) {
+        console.error('Error uploading files:', error)
+      }
+    },
+    [context.props, context.state.currentFolderPath, context.setState]
+  )
+
+  /**
+   * Create a new blank document in the document library.
+   *
+   * @param documentType The type of document to create
+   */
+  const createDocument = useCallback(
+    async (documentType: 'word' | 'excel' | 'powerpoint') => {
+      if (!context.props.listName) return
+
+      try {
+        const web = getWeb(context.props.webUrl, context.props.pageContext)
+        const list = web.lists.getByTitle(context.props.listName)
+        const folderPath = context.state.currentFolderPath || ''
+        const timestamp = new Date().getTime()
+
+        let fileName: string
+        let contentType: string
+
+        switch (documentType) {
+          case 'word':
+            fileName = `Nytt Word-dokument ${timestamp}.docx`
+            contentType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            break
+          case 'excel':
+            fileName = `Ny Excel-arbeidsbok ${timestamp}.xlsx`
+            contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            break
+          case 'powerpoint':
+            fileName = `Ny PowerPoint-presentasjon ${timestamp}.pptx`
+            contentType =
+              'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+            break
+        }
+
+        const emptyFile = new Blob([], { type: contentType })
+        if (folderPath) {
+          // Create in specific folder
+          const targetFolder = list.rootFolder.folders.getByUrl(folderPath)
+          await targetFolder.files.addUsingPath(fileName, emptyFile, { Overwrite: true })
+        } else {
+          // Create in root folder
+          await list.rootFolder.files.addUsingPath(fileName, emptyFile, { Overwrite: true })
+        }
+
+        context.setState({ refetch: Date.now() })
+      } catch (error) {
+        console.error('Error creating document:', error)
+      }
+    },
+    [context.props, context.state.currentFolderPath, context.setState]
+  )
+
+  /**
    * Adds a new item or updates an existing item in the list.
    *
    * If itemId is null, creates a new item. Otherwise, updates the existing item
@@ -188,7 +259,43 @@ export function useToolbarItems(isSingleView: boolean = false) {
 
     const showNewItem = isSingleView ? !hasItems && canAddItem : canAddItem
 
-    if (showNewItem) {
+    // For document libraries, show "Ny" dropdown with document types
+    if (context.state.isDocumentLibrary && showNewItem) {
+      const documentMenuItems = [
+        new ListMenuItem('Word-dokument').setIcon('WordDocument').setOnClick(async () => {
+          await createDocument('word')
+        }),
+        new ListMenuItem('Excel-arbeidsbok').setIcon('ExcelDocument').setOnClick(async () => {
+          await createDocument('excel')
+        }),
+        new ListMenuItem('PowerPoint-presentasjon')
+          .setIcon('PowerPointDocument')
+          .setOnClick(async () => {
+            await createDocument('powerpoint')
+          }),
+        new ListMenuItem('Last opp fil').setIcon('Upload').setOnClick(() => {
+          // Trigger file upload via input element
+          const input = document.createElement('input')
+          input.type = 'file'
+          input.multiple = true
+          input.accept = '.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx'
+          input.onchange = async (e: any) => {
+            const files = Array.from(e.target.files || []) as File[]
+            if (files.length > 0) {
+              await uploadFiles(files)
+            }
+          }
+          input.click()
+        })
+      ]
+
+      items.push(
+        new ListMenuItem('Ny', 'Opprett nytt dokument eller last opp fil')
+          .setIcon(AddRegular)
+          .setItems(documentMenuItems)
+      )
+    } else if (showNewItem && !context.state.isDocumentLibrary) {
+      // For regular lists, show "Nytt element" button
       items.push(
         new ListMenuItem('Nytt element', 'Opprett et nytt element')
           .setIcon(AddRegular)
@@ -208,32 +315,34 @@ export function useToolbarItems(isSingleView: boolean = false) {
       )
     }
 
-    items.push(
-      new ListMenuItem('Rediger element', 'Rediger valgt element')
-        .setIcon(EditRegular)
-        .setDisabled(!context.state.selectedItems || context.state.selectedItems.length !== 1)
-        .setOnClick(() => {
-          const selectedItems = context.state.selectedItems.map((id) =>
-            context.state.data.listItems.find((_, idx) => idx === id)
-          )
+    if (!context.state.isDocumentLibrary) {
+      items.push(
+        new ListMenuItem('Rediger element', 'Rediger valgt element')
+          .setIcon(EditRegular)
+          .setDisabled(!context.state.selectedItems || context.state.selectedItems.length !== 1)
+          .setOnClick(() => {
+            const selectedItems = context.state.selectedItems.map((id) =>
+              context.state.data.listItems.find((_, idx) => idx === id)
+            )
 
-          const item = _.first(selectedItems)
-          if (item) {
-            const fieldValues = new ItemFieldValues(item)
-            context.setState({
-              panel: {
-                headerText: 'Rediger element',
-                fieldValues,
-                submit: {
-                  onSubmit: async ({ properties }) => {
-                    await saveItem(fieldValues.id, properties)
+            const item = _.first(selectedItems)
+            if (item) {
+              const fieldValues = new ItemFieldValues(item)
+              context.setState({
+                panel: {
+                  headerText: 'Rediger element',
+                  fieldValues,
+                  submit: {
+                    onSubmit: async ({ properties }) => {
+                      await saveItem(fieldValues.id, properties)
+                    }
                   }
                 }
-              }
-            })
-          }
-        })
-    )
+              })
+            }
+          })
+      )
+    }
 
     if (!isSingleView && context.props.showSearchBox) {
       items.push(
@@ -259,6 +368,21 @@ export function useToolbarItems(isSingleView: boolean = false) {
 
   const farMenuItems = useMemo<ListMenuItem[]>(() => {
     const items: ListMenuItem[] = []
+
+    // Add Excel Export button
+    if (!isSingleView && !context.state.isDocumentLibrary) {
+      items.push(
+        new ListMenuItem(null, 'Eksporter til Excel')
+          .setIcon('ExcelLogoInverse')
+          .setOnClick(exportToExcel)
+          .setDisabled(
+            context.state.isExporting ||
+              context.state.isLoading ||
+              _.isEmpty(context.state.data?.listItems)
+          )
+          .setStyle({ color: '#10793F' })
+      )
+    }
 
     if (!isSingleView && context.props.showViewSelector && context.state.views?.length > 0) {
       const viewMenuItems = context.state.views.map((view) =>
@@ -308,7 +432,15 @@ export function useToolbarItems(isSingleView: boolean = false) {
     }
 
     return items
-  }, [isSingleView, context.state, context.props, checkedValues, onViewChange, deleteItems])
+  }, [
+    isSingleView,
+    context.state,
+    context.props,
+    checkedValues,
+    onViewChange,
+    deleteItems,
+    exportToExcel
+  ])
 
   const filterPanelProps = useMemo(
     () =>

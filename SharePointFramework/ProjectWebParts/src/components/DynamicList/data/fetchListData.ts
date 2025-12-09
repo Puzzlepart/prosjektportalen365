@@ -191,7 +191,7 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
     const list = web.lists.getByTitle(props.listName)
 
     const [listInfo, projectContentColumns, allFields, views] = await Promise.all([
-      list.select('Title', 'Id')(),
+      list.select('Title', 'Id', 'BaseTemplate')(),
       fetchProjectContentColumns(),
       list.fields
         .filter('Hidden eq false and ReadOnlyField eq false')
@@ -211,10 +211,29 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
       list.views.select('Title', 'Id', 'DefaultView').filter('Hidden eq false')()
     ])
 
-    const items = await list.items
+    const isDocumentLibrary = listInfo.BaseTemplate === 101
+
+    const itemsQuery = list.items
       .select('*', 'Author/Title', 'Editor/Title')
       .expand('Author', 'Editor')
-      .getAll()
+
+    if (isDocumentLibrary) {
+      itemsQuery
+        .select(
+          '*',
+          'FileRef',
+          'FileLeafRef',
+          'File/Name',
+          'File/ServerRelativeUrl',
+          'File/Length',
+          'FSObjType',
+          'Author/Title',
+          'Editor/Title'
+        )
+        .expand('Author', 'Editor', 'File')
+    }
+
+    const items = await itemsQuery.getAll()
 
     let fields: any[]
     let viewToUse: string | null = null
@@ -340,7 +359,8 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
       fields: mappedFields,
       views: viewsList,
       listTitle: listInfo.Title,
-      listId: listInfo.Id
+      listId: listInfo.Id,
+      baseTemplate: listInfo.BaseTemplate
     }
   } catch (error) {
     console.error('[DynamicList] fetchListData error:', error)

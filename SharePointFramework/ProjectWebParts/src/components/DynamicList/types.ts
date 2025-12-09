@@ -18,6 +18,41 @@ export enum DynamicListMode {
   Single = 'single'
 }
 
+export enum DocumentLibraryViewMode {
+  /**
+   * Display all documents in a flat list
+   */
+  Flat = 'flat',
+  /**
+   * Display documents with folder navigation
+   */
+  Folders = 'folders'
+}
+
+/**
+ * Column context menu configuration.
+ */
+export interface IColumnContextMenu {
+  column: any
+  target: HTMLElement
+}
+
+export interface IFileItem extends Record<string, any> {
+  Id: number
+  FileRef: string
+  FileLeafRef: string
+  File_x0020_Type?: string
+  File?: {
+    Length?: number
+    Name?: string
+    ServerRelativeUrl?: string
+  }
+  Modified: string
+  Editor?: { Title: string }
+  _UIVersionString?: string
+  FSObjType?: number
+}
+
 export interface IDynamicListProps extends IBaseWebPartComponentProps {
   /**
    * The URL of the site where the list is located.
@@ -158,6 +193,41 @@ export interface IDynamicListState extends IBaseWebPartComponentState<IDynamicLi
    * Whether user has drilled down from list view to single item view
    */
   isDrilledDown?: boolean
+
+  /**
+   * Whether the list is a document library
+   */
+  isDocumentLibrary?: boolean
+
+  /**
+   * Current folder path for document library navigation
+   */
+  currentFolderPath?: string
+
+  /**
+   * Document library view mode (flat or folders)
+   */
+  documentViewMode?: DocumentLibraryViewMode
+
+  /**
+   * Column context menu state
+   */
+  columnContextMenu?: IColumnContextMenu
+
+  /**
+   * Whether edit view columns panel is open
+   */
+  isEditViewColumnsPanelOpen?: boolean
+
+  /**
+   * Whether Excel export is in progress
+   */
+  isExporting?: boolean
+
+  /**
+   * Custom column order (stored in session storage)
+   */
+  customColumnOrder?: number[]
 }
 
 export interface IDynamicListData {
@@ -190,4 +260,9 @@ export interface IDynamicListData {
    * Available views
    */
   views?: Array<{ id: string; title: string; isDefault?: boolean }>
+
+  /**
+   * List base template (101 = Document Library)
+   */
+  baseTemplate?: number
 }

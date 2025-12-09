@@ -4,7 +4,9 @@ import { DynamicListContext } from './context'
 import { IDynamicListProps, DynamicListMode } from './types'
 import { useDynamicList } from './useDynamicList'
 import { DynamicListView } from './views/DynamicListView/DynamicListView'
+import { DocumentLibraryView } from './views/DocumentLibraryView'
 import { SingleItemView } from './views/SingleItemView/SingleItemView'
+import { ColumnContextMenu } from './components/ColumnContextMenu'
 import {
   WebPartTitle,
   CustomEditPanel,
@@ -26,8 +28,12 @@ import styles from './DynamicList.module.scss'
  * the DynamicListView or SingleItemView based on display mode.
  *
  * @param isSingleView Whether to display in single item view mode
+ * @param targetWeb The SharePoint web instance to use for operations
  */
-const DynamicListContent: FC<{ isSingleView: boolean }> = ({ isSingleView }) => {
+const DynamicListContent: FC<{ isSingleView: boolean; targetWeb: any }> = ({
+  isSingleView,
+  targetWeb
+}) => {
   const context = React.useContext(DynamicListContext)
   const { menuItems, farMenuItems, filterPanelProps } = useToolbarItems(isSingleView)
 
@@ -81,7 +87,17 @@ const DynamicListContent: FC<{ isSingleView: boolean }> = ({ isSingleView }) => 
       ) : (
         <>
           {context.state.error && <div>Error: {context.state.error}</div>}
-          {context.state.data && <>{isSingleView ? <SingleItemView /> : <DynamicListView />}</>}
+          {context.state.data && (
+            <>
+              {context.state.isDocumentLibrary ? (
+                <DocumentLibraryView />
+              ) : isSingleView ? (
+                <SingleItemView />
+              ) : (
+                <DynamicListView />
+              )}
+            </>
+          )}
         </>
       )}
     </>
@@ -138,8 +154,9 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
     <div className={styles.dynamicList}>
       <DynamicListContext.Provider value={context}>
         <div className={styles.container}>
-          <DynamicListContent isSingleView={isSingleView} />
+          <DynamicListContent isSingleView={isSingleView} targetWeb={targetWeb} />
         </div>
+        <ColumnContextMenu />
         {state.panel && (
           <CustomEditPanel
             isOpen={true}
