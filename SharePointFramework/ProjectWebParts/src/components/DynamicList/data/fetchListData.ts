@@ -8,6 +8,8 @@ import '@pnp/sp/fields'
 import '@pnp/sp/items'
 import '@pnp/sp/items/get-all'
 import '@pnp/sp/views'
+import '@pnp/sp/taxonomy'
+import { TaxonomyTermModel } from '../models/TaxonomyTermModel'
 
 /**
  * Gets the appropriate Web instance based on the webUrl parameter and hub site status.
@@ -179,6 +181,51 @@ function mapSharePointTypeToDataType(typeAsString: string, fieldTypeKind: number
 }
 
 /**
+ * Fetches taxonomy terms for all term sets used in the columns.
+ *
+ * @param columns - Array of columns that may contain taxonomy fields
+ * @returns Promise resolving to Map of termSetId to array of TaxonomyTermModel
+ */
+async function fetchTaxonomyTermsForColumns(
+  columns: IColumn[]
+): Promise<Map<string, TaxonomyTermModel[]>> {
+  const termSetIds = columns
+    .filter((col) => col.data?.termSetId)
+    .map((col) => col.data.termSetId)
+    .filter((id, index, self) => self.indexOf(id) === index) // unique
+
+  if (termSetIds.length === 0) {
+    return new Map()
+  }
+
+  try {
+    const webLanguage = await SPDataAdapter.sp.web.select('Language')()
+    const lcid = webLanguage.Language || 1033
+
+    const termsMap = new Map<string, TaxonomyTermModel[]>()
+
+    await Promise.all(
+      termSetIds.map(async (termSetId) => {
+        try {
+          const terms = await SPDataAdapter.sp.termStore.sets
+            .getById(termSetId)
+            .terms.select('*', 'localProperties')()
+          const taxonomyTerms = terms.map((term) => new TaxonomyTermModel(term, termSetId, lcid))
+          termsMap.set(termSetId, taxonomyTerms)
+        } catch (error) {
+          console.warn(`[fetchListData] Could not fetch terms for term set ${termSetId}:`, error)
+        }
+      })
+    )
+
+    return termsMap
+  } catch (error) {
+    console.warn('[fetchListData] Could not fetch web language:', error)
+    return new Map()
+  }
+}
+
+/**
  * Fetches list data including items, columns, and field metadata
  */
 export async function fetchListData(props: IDynamicListProps): Promise<IDynamicListData> {
@@ -234,6 +281,19 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
     }
 
     const items = await itemsQuery.getAll()
+
+    // Fetch taxonomy fields separately to get TermSetId information
+    const taxonomyFields = await list.fields
+      .filter(
+        "TypeAsString eq 'TaxonomyFieldType' or TypeAsString eq 'TaxonomyFieldTypeMulti'"
+      )
+      .select('InternalName', 'TypeAsString', 'TermSetId')()
+
+    // Create a map for quick lookup of taxonomy field info
+    // TermSetId is not in IFieldInfo type definition, so we cast to any
+    const taxonomyFieldMap = new Map(
+      taxonomyFields.map((field: any) => [field.InternalName, field.TermSetId as string])
+    )
 
     let fields: any[]
     let viewToUse: string | null = null
@@ -295,6 +355,13 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
       )
       .map((field) => {
         const dataType = mapSharePointTypeToDataType(field.TypeAsString, field.FieldTypeKind)
+        const isTaxonomyField =
+          field.TypeAsString === 'TaxonomyFieldType' ||
+          field.TypeAsString === 'TaxonomyFieldTypeMulti'
+
+        // Get TermSetId from the taxonomy field map
+        const termSetId = isTaxonomyField ? taxonomyFieldMap.get(field.InternalName) : undefined
+
         return {
           key: field.InternalName,
           name: field.Title,
@@ -308,7 +375,9 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
           data: {
             type: dataType,
             fieldType: field.TypeAsString,
-            fieldTypeKind: field.FieldTypeKind
+            fieldTypeKind: field.FieldTypeKind,
+            // Include TermSetId for taxonomy fields
+            ...(isTaxonomyField && termSetId && { termSetId })
           }
         }
       })
@@ -319,12 +388,50 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
     )
     columns = enrichColumnsWithConfiguration(columns, projectContentColumns)
 
+    // Fetch taxonomy terms for transformation
+    const taxonomyTermsMap = await fetchTaxonomyTermsForColumns(columns)
+
     const listItems = items.map((item) => {
       const transformedItem: Record<string, any> = { ...item }
 
       Object.keys(item).forEach((key) => {
         const value = item[key]
+        const column = columns.find((col) => col.fieldName === key)
 
+        // Handle taxonomy fields first
+        if (column?.data?.termSetId && taxonomyTermsMap.has(column.data.termSetId)) {
+          const terms = taxonomyTermsMap.get(column.data.termSetId)
+
+          if (value) {
+            const values = Array.isArray(value) ? value : [value]
+
+            const termNames = values
+              .map((v) => {
+                const termGuid =
+                  typeof v === 'object' && 'TermGuid' in v
+                    ? v.TermGuid
+                    : typeof v === 'string'
+                    ? v
+                    : null
+
+                if (termGuid) {
+                  const term = terms.find((t) => t.id === termGuid)
+                  if (term) return term.name
+                }
+
+                // Fallback to Label
+                if (typeof v === 'object' && 'Label' in v) return v.Label
+
+                return null
+              })
+              .filter(Boolean)
+
+            transformedItem[key] = termNames.join(';')
+            return
+          }
+        }
+
+        // Handle other field types
         if (value && typeof value === 'object' && 'Title' in value) {
           transformedItem[key] = value.Title
         }

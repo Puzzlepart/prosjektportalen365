@@ -22,6 +22,9 @@ export interface IListColumn extends TableColumnDefinition<any> {
  * with proper sorting, rendering, and sizing configuration. Width values come from
  * ProjectContentColumns configuration enriched in fetchListData.
  *
+ * Taxonomy field values are already transformed to semicolon-separated term names
+ * by fetchListData, so no additional transformation is needed here.
+ *
  * @returns Array of table column definitions with rendering and sizing metadata
  */
 export function useColumns(): IListColumn[] {
@@ -45,9 +48,7 @@ export function useColumns(): IListColumn[] {
             return aVal.toString().localeCompare(bVal.toString())
           },
           renderHeaderCell: () => column.name,
-          renderCell: (item) => {
-            return renderItemColumn(item, column)
-          }
+          renderCell: (item) => renderItemColumn(item, column)
         }),
         minWidth: column.minWidth,
         maxWidth: column.maxWidth,
