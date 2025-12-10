@@ -1,6 +1,7 @@
 import { useMemo, useContext, useCallback } from 'react'
 import { DynamicListContext } from './context'
-import { ListMenuItem, ItemFieldValues } from 'pp365-shared-library'
+import { ListMenuItem, ItemFieldValues, ListMenuItemDivider } from 'pp365-shared-library'
+import { DocumentLibraryViewMode } from './types'
 import {
   FilterRegular,
   AddRegular,
@@ -34,12 +35,17 @@ export function useToolbarItems(isSingleView: boolean = false) {
     name: context.props.title || context.state.data?.listTitle || 'Export'
   })
 
-  const checkedValues = useMemo(
-    () => ({
-      views: [context.state.currentView?.id]
-    }),
-    [context.state.currentView?.id]
-  )
+  const checkedValues = useMemo(() => {
+    const viewMode =
+      context.state.documentLibraryViewMode ||
+      context.props.documentLibraryViewMode ||
+      DocumentLibraryViewMode.Folders
+
+    return {
+      views: [context.state.currentView?.id],
+      documentViewMode: [viewMode]
+    }
+  }, [context.state.currentView?.id, context.state.documentLibraryViewMode, context.props.documentLibraryViewMode])
 
   /**
    * Handle view selection change.
@@ -385,7 +391,37 @@ export function useToolbarItems(isSingleView: boolean = false) {
     }
 
     if (!isSingleView && context.props.showViewSelector && context.state.views?.length > 0) {
-      const viewMenuItems = context.state.views.map((view) =>
+      const viewMenuItems: ListMenuItem[] = []
+
+      // Add document library view mode selector for document libraries
+      if (context.state.isDocumentLibrary) {
+        viewMenuItems.push(
+          new ListMenuItem('Mappevisning')
+            .makeCheckable({
+              name: 'documentViewMode',
+              value: DocumentLibraryViewMode.Folders
+            })
+            .setOnClick(() => {
+              context.setState({
+                documentLibraryViewMode: DocumentLibraryViewMode.Folders
+              })
+            }),
+          new ListMenuItem('Flat visning')
+            .makeCheckable({
+              name: 'documentViewMode',
+              value: DocumentLibraryViewMode.Flat
+            })
+            .setOnClick(() => {
+              context.setState({
+                documentLibraryViewMode: DocumentLibraryViewMode.Flat
+              })
+            }),
+          ListMenuItemDivider
+        )
+      }
+
+      // Add regular views
+      const regularViews = context.state.views.map((view) =>
         new ListMenuItem(view.isDefault ? `${view.title} (Default)` : view.title)
           .makeCheckable({
             name: 'views',
@@ -395,6 +431,8 @@ export function useToolbarItems(isSingleView: boolean = false) {
             onViewChange(view.id)
           })
       )
+
+      viewMenuItems.push(...regularViews)
 
       items.push(
         new ListMenuItem(

@@ -22,7 +22,8 @@ export function useDynamicList(props: IDynamicListProps) {
     selectedItems: [],
     searchTerm: '',
     views: [],
-    isChangingView: false
+    isChangingView: false,
+    documentLibraryViewMode: props.documentLibraryViewMode
   })
 
   const setState = useCallback((newState: Partial<IDynamicListState>, callback?: () => void) => {

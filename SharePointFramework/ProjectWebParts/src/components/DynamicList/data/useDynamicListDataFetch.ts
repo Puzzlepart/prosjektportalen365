@@ -69,7 +69,7 @@ export function useDynamicListDataFetch(
           currentView: newCurrentView,
           filters: filters,
           isDocumentLibrary: isDocLib,
-          documentViewMode: isDocLib ? DocumentLibraryViewMode.Flat : undefined,
+          documentLibraryViewMode: isDocLib ? DocumentLibraryViewMode.Folders : undefined,
           currentFolderPath: isDocLib ? '' : undefined,
           isLoading: false,
           isChangingView: false,

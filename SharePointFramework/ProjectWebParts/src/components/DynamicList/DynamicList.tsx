@@ -1,7 +1,7 @@
 import { FC, useMemo } from 'react'
 import * as React from 'react'
 import { DynamicListContext } from './context'
-import { IDynamicListProps, DynamicListMode } from './types'
+import { IDynamicListProps, DynamicListMode, DocumentLibraryViewMode } from './types'
 import { useDynamicList } from './useDynamicList'
 import { DynamicListView } from './views/DynamicListView/DynamicListView'
 import { DocumentLibraryView } from './views/DocumentLibraryView'
@@ -185,5 +185,6 @@ DynamicList.defaultProps = {
   showFilters: false,
   pageSize: 30,
   maxItems: 0,
-  mode: DynamicListMode.Multi
+  mode: DynamicListMode.Multi,
+  documentLibraryViewMode: DocumentLibraryViewMode.Folders
 }

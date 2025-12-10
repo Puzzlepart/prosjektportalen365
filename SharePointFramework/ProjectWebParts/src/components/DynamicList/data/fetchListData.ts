@@ -270,6 +270,7 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
           '*',
           'FileRef',
           'FileLeafRef',
+          'FileDirRef',
           'File/Name',
           'File/ServerRelativeUrl',
           'File/Length',

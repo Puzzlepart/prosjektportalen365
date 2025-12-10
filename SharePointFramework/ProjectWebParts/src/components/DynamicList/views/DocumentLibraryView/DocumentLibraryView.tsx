@@ -1,10 +1,11 @@
 import { Icon } from '@fluentui/react/lib/Icon'
+import { Breadcrumb, BreadcrumbItem, BreadcrumbButton } from '@fluentui/react-components'
 import React, { FC, useContext, useMemo, useCallback } from 'react'
 import { DynamicListContext } from '../../context'
 import { useColumns } from '../../useColumns'
 import { useFilteredData } from '../../useFilteredData'
 import { ListView, IListViewColumn } from '../ListView'
-import { IFileItem } from '../../types'
+import { IFileItem, DocumentLibraryViewMode } from '../../types'
 import { TableCellLayout } from '@fluentui/react-components'
 import { FileUploadZone } from '../../components/FileUpload'
 import { getWeb } from '../../utils'
@@ -32,38 +33,88 @@ export const DocumentLibraryView: FC = () => {
   const baseColumns = useColumns()
   const filteredItems = useFilteredData()
 
-  /**
-   * Map file extensions to Fluent UI icon names.
-   */
-  const getFileIcon = (extension: string): string => {
-    const ext = extension?.toLowerCase()
-    switch (ext) {
-      case 'docx':
-      case 'doc':
-        return 'WordDocument'
-      case 'xlsx':
-      case 'xls':
-        return 'ExcelDocument'
-      case 'pptx':
-      case 'ppt':
-        return 'PowerPointDocument'
-      case 'pdf':
-        return 'PDF'
-      case 'txt':
-        return 'TextDocument'
-      case 'png':
-      case 'jpg':
-      case 'jpeg':
-      case 'gif':
-        return 'FileImage'
-      default:
-        return 'Page'
-    }
-  }
+  const viewMode =
+    context.state.documentLibraryViewMode ||
+    context.props.documentLibraryViewMode ||
+    DocumentLibraryViewMode.Folders
 
   /**
-   * Format file size from bytes to human-readable format.
+   * Filter items based on view mode and current folder.
+   * Uses FileDirRef (parent folder URL) - same pattern as DocumentTemplateDialog.
    */
+  const items = useMemo(() => {
+    let itemsToDisplay = filteredItems
+
+    // In Folders mode, filter by parent folder URL
+    if (viewMode === DocumentLibraryViewMode.Folders) {
+      const currentPath = context.state.currentFolderPath || ''
+
+      // Get library root path from first item's FileDirRef
+      let libraryRootPath = ''
+      if (filteredItems.length > 0 && filteredItems[0].FileDirRef) {
+        libraryRootPath = filteredItems[0].FileDirRef
+      }
+
+      itemsToDisplay = filteredItems.filter((item: IFileItem) => {
+        if (!item.FileDirRef) return false
+
+        if (!currentPath) {
+          // Root level: show only items whose parent folder is the library root
+          return item.FileDirRef === libraryRootPath
+        } else {
+          // Subfolder: show only items whose parent is the current folder
+          const fullCurrentPath = `${libraryRootPath}/${currentPath}`
+          return item.FileDirRef === fullCurrentPath
+        }
+      })
+    }
+
+    // In Flat mode, hide folders
+    if (viewMode === DocumentLibraryViewMode.Flat) {
+      itemsToDisplay = itemsToDisplay.filter((item: IFileItem) => item.FSObjType !== 1)
+    }
+
+    return itemsToDisplay
+  }, [filteredItems, viewMode, context.state.currentFolderPath])
+
+  const breadcrumbItems = useMemo(() => {
+    const currentPath = context.state.currentFolderPath || ''
+    if (!currentPath) {
+      return [
+        {
+          text: context.state.data?.listTitle || 'Documents',
+          key: 'root',
+          onClick: () => context.setState({ currentFolderPath: '' })
+        }
+      ]
+    }
+
+    const items = [
+      {
+        text: context.state.data?.listTitle || 'Documents',
+        key: 'root',
+        onClick: () => context.setState({ currentFolderPath: '' })
+      }
+    ]
+
+    const pathSegments = currentPath.split('/').filter(Boolean)
+    let accumulatedPath = ''
+
+    pathSegments.forEach((segment, index) => {
+      accumulatedPath += (accumulatedPath ? '/' : '') + segment
+      const isLast = index === pathSegments.length - 1
+      const pathForClick = accumulatedPath
+
+      items.push({
+        text: segment,
+        key: pathForClick,
+        onClick: isLast ? undefined : () => context.setState({ currentFolderPath: pathForClick })
+      })
+    })
+
+    return items
+  }, [context.state.currentFolderPath, context.state.data?.listTitle, context.setState])
+
   const formatFileSize = (bytes: number): string => {
     if (bytes === 0) return '0 B'
     const k = 1024
@@ -73,30 +124,11 @@ export const DocumentLibraryView: FC = () => {
   }
 
   /**
-   * Override column rendering for document library-specific columns.
+   * Override column rendering for document library-specific column.
    */
   const columns: IListViewColumn[] = useMemo(() => {
     return baseColumns.map((col) => {
       const columnId = col.columnId
-
-      // Add file icon to first column (typically Name or Title)
-      if (columnId === 'FileLeafRef' || columnId === 'Title') {
-        return {
-          ...col,
-          renderCell: (item: IFileItem) => {
-            const isFolder = item.FSObjType === 1
-            return (
-              <TableCellLayout
-                media={
-                  <Icon iconName={isFolder ? 'FabricFolder' : getFileIcon(item.File_x0020_Type)} />
-                }
-              >
-                {item[columnId]}
-              </TableCellLayout>
-            )
-          }
-        }
-      }
 
       // Format file size
       if (
@@ -114,53 +146,41 @@ export const DocumentLibraryView: FC = () => {
         }
       }
 
-      // Format dates
-      if (columnId === 'Modified' || columnId === 'Created') {
-        return {
-          ...col,
-          renderCell: (item: any) => (
-            <TableCellLayout>
-              {item[columnId] ? new Date(item[columnId]).toLocaleString('nb-NO') : ''}
-            </TableCellLayout>
-          )
-        }
-      }
-
-      // Format user fields
-      if (columnId === 'Editor' || columnId === 'Author') {
-        return {
-          ...col,
-          renderCell: (item: any) => (
-            <TableCellLayout>{item[columnId]?.Title || ''}</TableCellLayout>
-          )
-        }
-      }
-
       return col
     })
   }, [baseColumns])
 
-  const handleFileClick = (item: IFileItem) => {
-    const isFolder = item.FSObjType === 1
+  /**
+   * Handle file/folder click.
+   * Opens folders in the current view, opens files in Office Online.
+   */
+  const handleFileClick = useCallback(
+    (item: IFileItem) => {
+      const isFolder = item.FSObjType === 1
 
-    if (isFolder) {
-      // Navigate to folder
-      context.setState({ currentFolderPath: item.FileRef })
-    } else {
-      // Open file in Office Online or default viewer
-      if (item.FileRef) {
-        window.open(item.FileRef, '_blank')
+      if (isFolder) {
+        // Navigate into folder
+        const fileName = item.FileLeafRef
+        const currentPath = context.state.currentFolderPath || ''
+        const newPath = currentPath ? `${currentPath}/${fileName}` : fileName
+        context.setState({ currentFolderPath: newPath })
+      } else {
+        // Open file in Office Online if available
+        if (item.FileRef) {
+          const siteUrl = context.props.webUrl
+          const fileUrl = `${siteUrl}/${item.FileRef}`
+          window.open(fileUrl, '_blank')
+        }
       }
-    }
-  }
+    },
+    [context.state.currentFolderPath, context.setState, context.props.webUrl]
+  )
 
   /**
-   * Handle file upload from drag and drop.
+   * Handle file upload via drag-and-drop or file selection.
    */
   const handleFilesSelected = useCallback(
     async (files: File[]) => {
-      if (!context.props.listName) return
-
       try {
         const web = getWeb(context.props.webUrl, context.props.pageContext)
         const list = web.lists.getByTitle(context.props.listName)
@@ -187,9 +207,24 @@ export const DocumentLibraryView: FC = () => {
 
   return (
     <FileUploadZone onFilesSelected={handleFilesSelected} fullScreen>
+      {viewMode === DocumentLibraryViewMode.Folders && breadcrumbItems.length > 1 && (
+        <div className={styles.breadcrumb}>
+          <Breadcrumb>
+            {breadcrumbItems.map((item) => (
+              <BreadcrumbItem key={item.key}>
+                {item.onClick ? (
+                  <BreadcrumbButton onClick={item.onClick}>{item.text}</BreadcrumbButton>
+                ) : (
+                  <BreadcrumbButton current>{item.text}</BreadcrumbButton>
+                )}
+              </BreadcrumbItem>
+            ))}
+          </Breadcrumb>
+        </div>
+      )}
       <ListView
         columns={columns as any}
-        items={filteredItems}
+        items={items}
         onFirstColumnClick={handleFileClick}
         emptyMessage='Ingen dokumenter å vise'
         noColumnsMessage='Ingen kolonner å vise'

@@ -41,6 +41,7 @@ export interface IFileItem extends Record<string, any> {
   Id: number
   FileRef: string
   FileLeafRef: string
+  FileDirRef: string
   File_x0020_Type?: string
   File?: {
     Length?: number
@@ -116,6 +117,11 @@ export interface IDynamicListProps extends IBaseWebPartComponentProps {
    * Display mode: 'multi' for grid view, 'single' for detailed single-item view
    */
   mode?: DynamicListMode
+
+  /**
+   * Document library view mode: 'folders' for folder navigation, 'flat' for all documents in one list
+   */
+  documentLibraryViewMode?: DocumentLibraryViewMode
 }
 
 export interface IDynamicListState extends IBaseWebPartComponentState<IDynamicListData> {
@@ -207,7 +213,7 @@ export interface IDynamicListState extends IBaseWebPartComponentState<IDynamicLi
   /**
    * Document library view mode (flat or folders)
    */
-  documentViewMode?: DocumentLibraryViewMode
+  documentLibraryViewMode?: DocumentLibraryViewMode
 
   /**
    * Column context menu state
