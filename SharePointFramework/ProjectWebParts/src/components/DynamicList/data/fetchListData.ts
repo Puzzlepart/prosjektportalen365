@@ -275,6 +275,7 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
           'File/ServerRelativeUrl',
           'File/Length',
           'FSObjType',
+          'File_x0020_Type',
           'Author/Title',
           'Editor/Title'
         )

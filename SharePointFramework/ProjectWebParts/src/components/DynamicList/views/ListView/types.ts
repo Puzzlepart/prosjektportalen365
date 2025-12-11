@@ -50,6 +50,11 @@ export interface IListViewProps {
   items: any[]
 
   /**
+   * Flag indicating if the view is for a document library.
+   */
+  isDocumentLibrary?: boolean
+
+  /**
    * Callback fired when the first column is clicked.
    * Used for drill-down functionality in DynamicListView.
    *

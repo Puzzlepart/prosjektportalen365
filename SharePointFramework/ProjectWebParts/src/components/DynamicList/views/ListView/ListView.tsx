@@ -15,7 +15,8 @@ import {
   useTableSort,
   useTableColumnSizing_unstable,
   TableRowId,
-  TableColumnSizingOptions
+  TableColumnSizingOptions,
+  Link
 } from '@fluentui/react-components'
 import * as React from 'react'
 import { FC, useContext, useMemo, useCallback } from 'react'
@@ -39,6 +40,7 @@ import { IListViewProps } from './types'
 export const ListView: FC<IListViewProps> = ({
   columns,
   items,
+  isDocumentLibrary,
   onFirstColumnClick,
   emptyMessage = 'Ingen elementer å vise',
   noColumnsMessage = 'Ingen kolonner å vise',
@@ -99,7 +101,26 @@ export const ListView: FC<IListViewProps> = ({
     ]
   )
 
-  const rows = sort(getRows())
+  const rows = useMemo(() => {
+    const sortedRows = sort(getRows())
+
+    // For document libraries, ensure folders always appear first
+    if (isDocumentLibrary) {
+      return sortedRows.sort((a, b) => {
+        const aIsFolder = a.item.FSObjType === 1
+        const bIsFolder = b.item.FSObjType === 1
+
+        // Folders before files
+        if (aIsFolder && !bIsFolder) return -1
+        if (!aIsFolder && bIsFolder) return 1
+
+        // Preserve the existing sort order within same type
+        return 0
+      })
+    }
+
+    return sortedRows
+  }, [sort, getRows, isDocumentLibrary])
 
   const handleToggleRow = useCallback(
     (e: React.MouseEvent, rowId: TableRowId) => {
@@ -183,28 +204,27 @@ export const ListView: FC<IListViewProps> = ({
                   />
                   {columns.map((column, colIndex) => {
                     const isFirstColumn = colIndex === 0
+                    const cellContent = column.renderCell
+                      ? column.renderCell(item)
+                      : (item as any)[column.columnId]
 
                     return (
                       <TableCell
                         key={column.columnId}
                         {...columnSizingState.getTableCellProps(column.columnId)}
                       >
-                        <TableCellLayout
-                          style={
-                            isFirstColumn && onFirstColumnClick
-                              ? { cursor: 'pointer', color: 'var(--colorBrandForeground1)' }
-                              : undefined
-                          }
-                          onClick={
-                            isFirstColumn && onFirstColumnClick
-                              ? () => onFirstColumnClick(item)
-                              : undefined
-                          }
-                        >
-                          {column.renderCell
-                            ? column.renderCell(item)
-                            : (item as any)[column.columnId]}
-                        </TableCellLayout>
+                        {isFirstColumn && onFirstColumnClick ? (
+                          <TableCellLayout>
+                            <Link
+                              title={isDocumentLibrary ? 'Åpne dokument' : 'Vis detaljer'}
+                              onClick={() => onFirstColumnClick(item)}
+                            >
+                              {cellContent}
+                            </Link>
+                          </TableCellLayout>
+                        ) : (
+                          <TableCellLayout>{cellContent}</TableCellLayout>
+                        )}
                       </TableCell>
                     )
                   })}

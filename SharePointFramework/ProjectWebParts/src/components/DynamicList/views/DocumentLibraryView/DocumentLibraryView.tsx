@@ -1,5 +1,10 @@
 import { Icon } from '@fluentui/react/lib/Icon'
-import { Breadcrumb, BreadcrumbItem, BreadcrumbButton } from '@fluentui/react-components'
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbDivider,
+  BreadcrumbButton
+} from '@fluentui/react-components'
 import React, { FC, useContext, useMemo, useCallback } from 'react'
 import { DynamicListContext } from '../../context'
 import { useColumns } from '../../useColumns'
@@ -21,12 +26,6 @@ import styles from './DocumentLibraryView.module.scss'
  *
  * Uses the base ListView component with document library-specific column rendering.
  * Supports folder navigation and Office Online integration.
- *
- * @component
- * @example
- * ```tsx
- * <DocumentLibraryView />
- * ```
  */
 export const DocumentLibraryView: FC = () => {
   const context = useContext(DynamicListContext)
@@ -41,6 +40,7 @@ export const DocumentLibraryView: FC = () => {
   /**
    * Filter items based on view mode and current folder.
    * Uses FileDirRef (parent folder URL) - same pattern as DocumentTemplateDialog.
+   * Sorts folders alphabetically first, then files.
    */
   const items = useMemo(() => {
     let itemsToDisplay = filteredItems
@@ -73,6 +73,21 @@ export const DocumentLibraryView: FC = () => {
     if (viewMode === DocumentLibraryViewMode.Flat) {
       itemsToDisplay = itemsToDisplay.filter((item: IFileItem) => item.FSObjType !== 1)
     }
+
+    // Sort: folders first (alphabetically), then files (alphabetically)
+    itemsToDisplay = [...itemsToDisplay].sort((a: IFileItem, b: IFileItem) => {
+      const aIsFolder = a.FSObjType === 1
+      const bIsFolder = b.FSObjType === 1
+
+      // Folders before files
+      if (aIsFolder && !bIsFolder) return -1
+      if (!aIsFolder && bIsFolder) return 1
+
+      // Within same type, sort alphabetically by name
+      const aName = a.FileLeafRef || ''
+      const bName = b.FileLeafRef || ''
+      return aName.localeCompare(bName, undefined, { numeric: true, sensitivity: 'base' })
+    })
 
     return itemsToDisplay
   }, [filteredItems, viewMode, context.state.currentFolderPath])
@@ -125,29 +140,34 @@ export const DocumentLibraryView: FC = () => {
 
   /**
    * Override column rendering for document library-specific column.
+   * Filters out Title column and formats file size.
    */
   const columns: IListViewColumn[] = useMemo(() => {
-    return baseColumns.map((col) => {
-      const columnId = col.columnId
+    return baseColumns
+      .filter((col) => {
+        const columnId = col.columnId
+        return columnId !== 'Title'
+      })
+      .map((col) => {
+        const columnId = col.columnId
 
-      // Format file size
-      if (
-        columnId === 'File' ||
-        columnId === 'File.Length' ||
-        (col as any).fieldName === 'File_x0020_Size'
-      ) {
-        return {
-          ...col,
-          renderCell: (item: IFileItem) => (
-            <TableCellLayout>
-              {item.File?.Length ? formatFileSize(item.File.Length) : ''}
-            </TableCellLayout>
-          )
+        if (
+          columnId === 'File' ||
+          columnId === 'File.Length' ||
+          (col as any).fieldName === 'File_x0020_Size'
+        ) {
+          return {
+            ...col,
+            renderCell: (item: IFileItem) => (
+              <TableCellLayout>
+                {item.File?.Length ? formatFileSize(item.File.Length) : ''}
+              </TableCellLayout>
+            )
+          }
         }
-      }
 
-      return col
-    })
+        return col
+      })
   }, [baseColumns])
 
   /**
@@ -159,16 +179,14 @@ export const DocumentLibraryView: FC = () => {
       const isFolder = item.FSObjType === 1
 
       if (isFolder) {
-        // Navigate into folder
         const fileName = item.FileLeafRef
         const currentPath = context.state.currentFolderPath || ''
         const newPath = currentPath ? `${currentPath}/${fileName}` : fileName
         context.setState({ currentFolderPath: newPath })
       } else {
-        // Open file in Office Online if available
         if (item.FileRef) {
-          const siteUrl = context.props.webUrl
-          const fileUrl = `${siteUrl}/${item.FileRef}`
+          const siteUrl = context.props.webUrl.replace(/\/$/, '') // Remove trailing slash
+          const fileUrl = `${siteUrl}/_layouts/15/Doc.aspx?sourcedoc=${encodeURIComponent(item.FileRef)}&action=default`
           window.open(fileUrl, '_blank')
         }
       }
@@ -177,7 +195,8 @@ export const DocumentLibraryView: FC = () => {
   )
 
   /**
-   * Handle file upload via drag-and-drop or file selection.
+   * Handle file upload via drag-and-drop or file selection. If inside a folder, uploads
+   * to that folder; otherwise uploads to the root of the document library.
    */
   const handleFilesSelected = useCallback(
     async (files: File[]) => {
@@ -188,11 +207,9 @@ export const DocumentLibraryView: FC = () => {
 
         for (const file of files) {
           if (folderPath) {
-            // Upload to specific folder
             const targetFolder = list.rootFolder.folders.getByUrl(folderPath)
             await targetFolder.files.addUsingPath(file.name, file, { Overwrite: true })
           } else {
-            // Upload to root folder
             await list.rootFolder.files.addUsingPath(file.name, file, { Overwrite: true })
           }
         }
@@ -209,15 +226,18 @@ export const DocumentLibraryView: FC = () => {
     <FileUploadZone onFilesSelected={handleFilesSelected} fullScreen>
       {viewMode === DocumentLibraryViewMode.Folders && breadcrumbItems.length > 1 && (
         <div className={styles.breadcrumb}>
-          <Breadcrumb>
-            {breadcrumbItems.map((item) => (
-              <BreadcrumbItem key={item.key}>
-                {item.onClick ? (
-                  <BreadcrumbButton onClick={item.onClick}>{item.text}</BreadcrumbButton>
-                ) : (
-                  <BreadcrumbButton current>{item.text}</BreadcrumbButton>
-                )}
-              </BreadcrumbItem>
+          <Breadcrumb aria-label='Folder navigation'>
+            {breadcrumbItems.map((item, index) => (
+              <React.Fragment key={item.key}>
+                <BreadcrumbItem>
+                  {item.onClick ? (
+                    <BreadcrumbButton onClick={item.onClick}>{item.text}</BreadcrumbButton>
+                  ) : (
+                    <BreadcrumbButton current>{item.text}</BreadcrumbButton>
+                  )}
+                </BreadcrumbItem>
+                {index < breadcrumbItems.length - 1 && <BreadcrumbDivider />}
+              </React.Fragment>
             ))}
           </Breadcrumb>
         </div>
@@ -225,6 +245,7 @@ export const DocumentLibraryView: FC = () => {
       <ListView
         columns={columns as any}
         items={items}
+        isDocumentLibrary
         onFirstColumnClick={handleFileClick}
         emptyMessage='Ingen dokumenter å vise'
         noColumnsMessage='Ingen kolonner å vise'
