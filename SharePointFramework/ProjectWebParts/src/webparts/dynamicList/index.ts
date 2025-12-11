@@ -24,9 +24,8 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
 
   public async onInit() {
     await super.onInit()
-    // Load lists for the current/selected site
     await this._loadListOptions()
-    // Load views for the selected list
+
     if (this.properties.listName) {
       await this._loadViewOptions()
     }
@@ -34,12 +33,12 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
 
   /**
    * Load available lists from the selected site (or current site if not specified)
+   * Excludes hidden lists and folder lists.
    */
   private async _loadListOptions(): Promise<void> {
     try {
       this._listsLoading = true
 
-      // Get the correct web based on webUrl property
       let web = SPDataAdapter.sp.web
       if (this.properties.webUrl) {
         const { Web } = await import('@pnp/sp/webs')
@@ -48,12 +47,12 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
 
       const lists = await web.lists
         .select('Title', 'Id', 'Hidden', 'BaseTemplate', 'ItemCount')
-        .filter('Hidden eq false and BaseTemplate ne 850')() // Exclude hidden lists and folder lists
+        .filter('Hidden eq false and BaseTemplate ne 850')()
 
       this._listOptions = lists
         .filter(
           (list) =>
-            !list.Title.startsWith('_') && (list.BaseTemplate === 100 || list.BaseTemplate === 101) // Generic list or Document library
+            !list.Title.startsWith('_') && (list.BaseTemplate === 100 || list.BaseTemplate === 101)
         )
         .sort((a, b) => a.Title.localeCompare(b.Title))
         .map((list) => ({
@@ -73,6 +72,7 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
 
   /**
    * Load available views from the selected list
+   * Always add "All Fields" as the first option.
    */
   private async _loadViewOptions(): Promise<void> {
     try {
@@ -84,7 +84,6 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
         return
       }
 
-      // Get the correct web based on webUrl property
       let web = SPDataAdapter.sp.web
       if (this.properties.webUrl) {
         const { Web } = await import('@pnp/sp/webs')
@@ -96,18 +95,16 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
         .select('Title', 'Id', 'DefaultView')
         .filter('Hidden eq false')()
 
-      // Always add "All Fields" as the first option
       this._viewOptions = [
         { key: 'All Fields', text: 'Alle felt' },
         ...views
           .sort((a, b) => {
-            // Default view first, then alphabetically
             if (a.DefaultView) return -1
             if (b.DefaultView) return 1
             return a.Title.localeCompare(b.Title)
           })
           .map((view) => ({
-            key: view.Id, // Use ID as key for better integration
+            key: view.Id,
             text: view.DefaultView ? `${view.Title} (Standard)` : view.Title,
             data: { title: view.Title, isDefault: view.DefaultView }
           }))
@@ -141,27 +138,23 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
     oldValue: any,
     newValue: any
   ): Promise<void> {
-    // When webUrl changes, reload the list options
     if (propertyPath === 'webUrl') {
-      this.properties.listName = '' // Clear the selected list
-      this.properties.viewName = 'All Fields' // Reset to default view
-      this.properties.defaultViewId = null // Clear default view ID
+      this.properties.listName = ''
+      this.properties.viewName = 'All Fields'
+      this.properties.defaultViewId = null
       await this._loadListOptions()
       this.context.propertyPane.refresh()
     }
 
-    // When listName changes, reload the view options
     if (propertyPath === 'listName') {
-      this.properties.viewName = 'All Fields' // Reset to default view
-      this.properties.defaultViewId = null // Clear default view ID
+      this.properties.viewName = 'All Fields'
+      this.properties.defaultViewId = null
       await this._loadViewOptions()
       this.context.propertyPane.refresh()
     }
 
-    // When defaultViewId changes, update viewName for backward compatibility
     if (propertyPath === 'defaultViewId') {
       if (newValue && newValue !== 'All Fields') {
-        // Find the view title from the options
         const selectedView = this._viewOptions.find((opt) => opt.key === newValue)
         this.properties.viewName = (selectedView as any)?.data?.title || newValue
       } else {

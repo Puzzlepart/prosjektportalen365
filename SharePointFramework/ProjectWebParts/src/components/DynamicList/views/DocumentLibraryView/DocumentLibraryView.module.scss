@@ -1,8 +1,7 @@
 .documentLibraryView {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: auto;
+  position: relative;
+  flex: 1;
+  overflow: hidden;
 }
 
 .breadcrumb {

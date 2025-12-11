@@ -30,7 +30,6 @@ export function useToolbarItems(isSingleView: boolean = false) {
   const context = useContext(DynamicListContext)
   const exportToExcel = useExcelExport()
 
-  // Configure Excel export service
   ExcelExportService.configure({
     name: context.props.title || context.state.data?.listTitle || 'Export'
   })
@@ -45,7 +44,11 @@ export function useToolbarItems(isSingleView: boolean = false) {
       views: [context.state.currentView?.id],
       documentViewMode: [viewMode]
     }
-  }, [context.state.currentView?.id, context.state.documentLibraryViewMode, context.props.documentLibraryViewMode])
+  }, [
+    context.state.currentView?.id,
+    context.state.documentLibraryViewMode,
+    context.props.documentLibraryViewMode
+  ])
 
   /**
    * Handle view selection change.
@@ -145,11 +148,9 @@ export function useToolbarItems(isSingleView: boolean = false) {
 
         for (const file of files) {
           if (folderPath) {
-            // Upload to specific folder
             const targetFolder = list.rootFolder.folders.getByUrl(folderPath)
             await targetFolder.files.addUsingPath(file.name, file, { Overwrite: true })
           } else {
-            // Upload to root folder
             await list.rootFolder.files.addUsingPath(file.name, file, { Overwrite: true })
           }
         }
@@ -198,11 +199,9 @@ export function useToolbarItems(isSingleView: boolean = false) {
 
         const emptyFile = new Blob([], { type: contentType })
         if (folderPath) {
-          // Create in specific folder
           const targetFolder = list.rootFolder.folders.getByUrl(folderPath)
           await targetFolder.files.addUsingPath(fileName, emptyFile, { Overwrite: true })
         } else {
-          // Create in root folder
           await list.rootFolder.files.addUsingPath(fileName, emptyFile, { Overwrite: true })
         }
 
@@ -265,7 +264,6 @@ export function useToolbarItems(isSingleView: boolean = false) {
 
     const showNewItem = isSingleView ? !hasItems && canAddItem : canAddItem
 
-    // For document libraries, show "Ny" dropdown with document types
     if (context.state.isDocumentLibrary && showNewItem) {
       const documentMenuItems = [
         new ListMenuItem('Word-dokument').setIcon('WordDocument').setOnClick(async () => {
@@ -280,7 +278,6 @@ export function useToolbarItems(isSingleView: boolean = false) {
             await createDocument('powerpoint')
           }),
         new ListMenuItem('Last opp fil').setIcon('Upload').setOnClick(() => {
-          // Trigger file upload via input element
           const input = document.createElement('input')
           input.type = 'file'
           input.multiple = true
@@ -301,7 +298,6 @@ export function useToolbarItems(isSingleView: boolean = false) {
           .setItems(documentMenuItems)
       )
     } else if (showNewItem && !context.state.isDocumentLibrary) {
-      // For regular lists, show "Nytt element" button
       items.push(
         new ListMenuItem('Nytt element', 'Opprett et nytt element')
           .setIcon(AddRegular)
@@ -375,7 +371,6 @@ export function useToolbarItems(isSingleView: boolean = false) {
   const farMenuItems = useMemo<ListMenuItem[]>(() => {
     const items: ListMenuItem[] = []
 
-    // Add Excel Export button
     if (!isSingleView && !context.state.isDocumentLibrary) {
       items.push(
         new ListMenuItem(null, 'Eksporter til Excel')
@@ -393,7 +388,6 @@ export function useToolbarItems(isSingleView: boolean = false) {
     if (!isSingleView && context.props.showViewSelector && context.state.views?.length > 0) {
       const viewMenuItems: ListMenuItem[] = []
 
-      // Add document library view mode selector for document libraries
       if (context.state.isDocumentLibrary) {
         viewMenuItems.push(
           new ListMenuItem('Mappevisning')
@@ -420,7 +414,6 @@ export function useToolbarItems(isSingleView: boolean = false) {
         )
       }
 
-      // Add regular views
       const regularViews = context.state.views.map((view) =>
         new ListMenuItem(view.isDefault ? `${view.title} (Default)` : view.title)
           .makeCheckable({

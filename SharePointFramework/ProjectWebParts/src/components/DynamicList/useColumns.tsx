@@ -52,7 +52,8 @@ export function useColumns(): IListColumn[] {
         }),
         minWidth: column.minWidth,
         maxWidth: column.maxWidth,
-        defaultWidth: column.minWidth
+        defaultWidth: column.minWidth,
+        data: column.data
       }
     })
   }, [context.state.data?.listColumns])

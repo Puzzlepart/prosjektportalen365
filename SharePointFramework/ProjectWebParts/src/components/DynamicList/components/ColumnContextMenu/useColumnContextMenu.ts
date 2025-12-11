@@ -1,4 +1,4 @@
-import { ContextualMenuItemType, IContextualMenuItem } from '@fluentui/react'
+import { IContextualMenuItem } from '@fluentui/react'
 import { MenuProps } from '@fluentui/react-components'
 import { useContext, useEffect, useState } from 'react'
 import { DynamicListContext } from '../../context'
@@ -36,22 +36,25 @@ export function useColumnContextMenu() {
   const { column, target } = context.state.columnContextMenu
   columnContextMenu.target = target
 
-  columnContextMenu.items = [
+  const isGroupable = column.data?.isGroupable === true
+
+  const columnName = column.renderHeaderCell ? column.renderHeaderCell() : column.columnId
+
+  const menuItems: IContextualMenuItem[] = [
     {
       key: 'GROUP_BY',
-      text: `Grupper etter ${column.name}`,
+      text: `Grupper etter ${columnName}`,
       iconProps: { iconName: 'GroupList' },
       canCheck: false,
-      disabled: true, // TODO: Add grouping functionality
+      disabled: !isGroupable,
       onClick: () => {
+        // TODO: We need to implemnent grouping functionality so this is rendered properly, similar to PortfolioAggregaton/List
         context.setState({ columnContextMenu: null })
       }
-    },
-    {
-      key: 'DIVIDER_01',
-      itemType: ContextualMenuItemType.Divider
-    },
-  ] as IContextualMenuItem[]
+    }
+  ]
+
+  columnContextMenu.items = menuItems
 
   return columnContextMenu
 }

@@ -9,10 +9,6 @@
   overflow-y: auto;
 
   .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
     padding-bottom: 16px;
     border-bottom: 1px solid var(--colorNeutralStroke2);
 
@@ -22,38 +18,6 @@
       line-height: normal;
       min-height: 32px;
       margin: 0;
-    }
-
-    .actions {
-      display: flex;
-      gap: 8px;
-
-      .actionButton {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 6px 12px;
-        background: var(--colorNeutralBackground1);
-        border: 1px solid var(--colorNeutralStroke1);
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 14px;
-        color: var(--colorNeutralForeground1);
-        transition: all 0.2s;
-
-        &:hover {
-          background: var(--colorNeutralBackground1Hover);
-          border-color: var(--colorNeutralStroke1Hover);
-        }
-
-        &:active {
-          background: var(--colorNeutralBackground1Pressed);
-        }
-
-        .actionIcon {
-          font-size: 16px;
-        }
-      }
     }
   }
 

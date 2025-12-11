@@ -58,7 +58,8 @@ export function useEditViewColumnsPanel() {
       disabled: !context.state.customColumnOrder?.length,
       onClick: onRevertViewColumnOrder
     },
-    helpText: 'Velg kolonner og rekkefølge. Endringer lagres kun i økten (ikke permanent).',
+    helpText:
+      'Velg kolonner og rekkefølge. OBS: Endringer lagres kun i denne nettleserøkten og forsvinner når du lukker nettleseren.',
     customColumnOrder: context.state.customColumnOrder
   }
 }

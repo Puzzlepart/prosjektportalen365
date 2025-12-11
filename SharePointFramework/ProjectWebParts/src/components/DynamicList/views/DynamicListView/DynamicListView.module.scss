@@ -2,24 +2,4 @@
   position: relative;
   flex: 1;
   overflow: hidden;
-
-  :global(.fui-TableCell) {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding-top: 12px;
-    padding-bottom: 12px;
-    font-size: 12px;
-    font-weight: 400;
-    color: #323130;
-  }
-
-  :global(.fui-TableHeaderCell) {
-    flex: 0 1 auto;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    font-weight: 600;
-    font-size: 14px;
-    color: #323130;
-  }
 }

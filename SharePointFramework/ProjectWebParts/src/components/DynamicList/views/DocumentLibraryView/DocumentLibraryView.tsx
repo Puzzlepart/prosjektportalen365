@@ -1,4 +1,3 @@
-import { Icon } from '@fluentui/react/lib/Icon'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -45,11 +44,9 @@ export const DocumentLibraryView: FC = () => {
   const items = useMemo(() => {
     let itemsToDisplay = filteredItems
 
-    // In Folders mode, filter by parent folder URL
     if (viewMode === DocumentLibraryViewMode.Folders) {
       const currentPath = context.state.currentFolderPath || ''
 
-      // Get library root path from first item's FileDirRef
       let libraryRootPath = ''
       if (filteredItems.length > 0 && filteredItems[0].FileDirRef) {
         libraryRootPath = filteredItems[0].FileDirRef
@@ -59,31 +56,25 @@ export const DocumentLibraryView: FC = () => {
         if (!item.FileDirRef) return false
 
         if (!currentPath) {
-          // Root level: show only items whose parent folder is the library root
           return item.FileDirRef === libraryRootPath
         } else {
-          // Subfolder: show only items whose parent is the current folder
           const fullCurrentPath = `${libraryRootPath}/${currentPath}`
           return item.FileDirRef === fullCurrentPath
         }
       })
     }
 
-    // In Flat mode, hide folders
     if (viewMode === DocumentLibraryViewMode.Flat) {
       itemsToDisplay = itemsToDisplay.filter((item: IFileItem) => item.FSObjType !== 1)
     }
 
-    // Sort: folders first (alphabetically), then files (alphabetically)
     itemsToDisplay = [...itemsToDisplay].sort((a: IFileItem, b: IFileItem) => {
       const aIsFolder = a.FSObjType === 1
       const bIsFolder = b.FSObjType === 1
 
-      // Folders before files
       if (aIsFolder && !bIsFolder) return -1
       if (!aIsFolder && bIsFolder) return 1
 
-      // Within same type, sort alphabetically by name
       const aName = a.FileLeafRef || ''
       const bName = b.FileLeafRef || ''
       return aName.localeCompare(bName, undefined, { numeric: true, sensitivity: 'base' })
@@ -185,8 +176,10 @@ export const DocumentLibraryView: FC = () => {
         context.setState({ currentFolderPath: newPath })
       } else {
         if (item.FileRef) {
-          const siteUrl = context.props.webUrl.replace(/\/$/, '') // Remove trailing slash
-          const fileUrl = `${siteUrl}/_layouts/15/Doc.aspx?sourcedoc=${encodeURIComponent(item.FileRef)}&action=default`
+          const siteUrl = context.props.webUrl.replace(/\/$/, '')
+          const fileUrl = `${siteUrl}/_layouts/15/Doc.aspx?sourcedoc=${encodeURIComponent(
+            item.FileRef
+          )}&action=default`
           window.open(fileUrl, '_blank')
         }
       }

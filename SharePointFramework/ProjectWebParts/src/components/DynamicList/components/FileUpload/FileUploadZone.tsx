@@ -128,7 +128,6 @@ export const FileUploadZone: FC<IFileUploadZoneProps> = ({
     }
   }, [fullScreen])
 
-  // Full-screen overlay mode
   if (fullScreen) {
     return (
       <div
@@ -146,7 +145,9 @@ export const FileUploadZone: FC<IFileUploadZoneProps> = ({
                 {isUploading ? 'Laster opp filer...' : 'Slipp filer her for å laste opp'}
               </Text>
               <Text className={styles.overlaySubtext}>
-                {isUploading ? 'Vennligst vent...' : 'Filene vil bli lastet opp til gjeldende mappe'}
+                {isUploading
+                  ? 'Vennligst vent...'
+                  : 'Filene vil bli lastet opp til gjeldende mappe'}
               </Text>
             </div>
           </div>
@@ -155,7 +156,6 @@ export const FileUploadZone: FC<IFileUploadZoneProps> = ({
     )
   }
 
-  // Traditional upload zone mode
   return (
     <Card
       className={`${styles.uploadZone} ${isDragOver ? styles.dragOver : ''} ${

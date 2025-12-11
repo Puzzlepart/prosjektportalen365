@@ -4,6 +4,12 @@ import { get } from '@microsoft/sp-lodash-subset'
 import _ from 'lodash'
 
 /**
+ * Maximum number of unique values allowed for a filter to be generated.
+ * Prevents overwhelming the UI with too many filter options.
+ */
+const MAX_FILTER_VALUES = 100
+
+/**
  * Generates filters from list data by extracting unique values from each column.
  *
  * This function creates filter configurations for columns that would benefit from filtering,
@@ -64,7 +70,7 @@ export function generateFilters(data: IDynamicListData): IFilterProps[] {
       return true
     })
 
-    if (uniqueValues.length > 1 && uniqueValues.length < 100) {
+    if (uniqueValues.length > 1 && uniqueValues.length < MAX_FILTER_VALUES) {
       const sortedValues = uniqueValues.sort((a, b) => {
         const aStr = String(a)
         const bStr = String(b)

@@ -192,7 +192,7 @@ async function fetchTaxonomyTermsForColumns(
   const termSetIds = columns
     .filter((col) => col.data?.termSetId)
     .map((col) => col.data.termSetId)
-    .filter((id, index, self) => self.indexOf(id) === index) // unique
+    .filter((id, index, self) => self.indexOf(id) === index)
 
   if (termSetIds.length === 0) {
     return new Map()
@@ -284,15 +284,10 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
 
     const items = await itemsQuery.getAll()
 
-    // Fetch taxonomy fields separately to get TermSetId information
     const taxonomyFields = await list.fields
-      .filter(
-        "TypeAsString eq 'TaxonomyFieldType' or TypeAsString eq 'TaxonomyFieldTypeMulti'"
-      )
+      .filter("TypeAsString eq 'TaxonomyFieldType' or TypeAsString eq 'TaxonomyFieldTypeMulti'")
       .select('InternalName', 'TypeAsString', 'TermSetId')()
 
-    // Create a map for quick lookup of taxonomy field info
-    // TermSetId is not in IFieldInfo type definition, so we cast to any
     const taxonomyFieldMap = new Map(
       taxonomyFields.map((field: any) => [field.InternalName, field.TermSetId as string])
     )
@@ -300,47 +295,28 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
     let fields: any[]
     let viewToUse: string | null = null
 
-    console.log(
-      '[fetchListData] Props defaultViewId:',
-      props.defaultViewId,
-      'viewName:',
-      props.viewName
-    )
-
     if (props.defaultViewId && props.defaultViewId !== 'All Fields') {
       viewToUse = props.defaultViewId
     } else if (props.viewName && props.viewName !== 'All Fields') {
       viewToUse = props.viewName
     }
 
-    console.log('[fetchListData] viewToUse:', viewToUse)
-
     if (viewToUse) {
       try {
         let view: any
         if (props.defaultViewId && props.defaultViewId !== 'All Fields') {
-          console.log('[fetchListData] Fetching view by ID:', props.defaultViewId)
           view = await list.views.getById(props.defaultViewId)()
         } else {
-          console.log('[fetchListData] Fetching view by Title:', viewToUse)
           view = await list.views.getByTitle(viewToUse)()
         }
 
         const viewFieldNames = view.ViewFields || []
-        console.log(
-          '[fetchListData] View field names:',
-          viewFieldNames,
-          'count:',
-          viewFieldNames.length
-        )
 
         if (viewFieldNames.length > 0) {
           fields = viewFieldNames
             .map((fieldName: string) => allFields.find((f) => f.InternalName === fieldName))
             .filter(Boolean)
-          console.log('[fetchListData] Filtered fields for view:', fields.length)
         } else {
-          console.log('[fetchListData] View has no fields, using all fields')
           fields = allFields
         }
       } catch (error) {
@@ -361,7 +337,6 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
           field.TypeAsString === 'TaxonomyFieldType' ||
           field.TypeAsString === 'TaxonomyFieldTypeMulti'
 
-        // Get TermSetId from the taxonomy field map
         const termSetId = isTaxonomyField ? taxonomyFieldMap.get(field.InternalName) : undefined
 
         return {
@@ -378,19 +353,13 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
             type: dataType,
             fieldType: field.TypeAsString,
             fieldTypeKind: field.FieldTypeKind,
-            // Include TermSetId for taxonomy fields
             ...(isTaxonomyField && termSetId && { termSetId })
           }
         }
       })
 
-    console.log(
-      '[fetchListData] Enriching columns with ProjectContentColumns configuration:',
-      projectContentColumns.length
-    )
     columns = enrichColumnsWithConfiguration(columns, projectContentColumns)
 
-    // Fetch taxonomy terms for transformation
     const taxonomyTermsMap = await fetchTaxonomyTermsForColumns(columns)
 
     const listItems = items.map((item) => {
@@ -400,7 +369,6 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
         const value = item[key]
         const column = columns.find((col) => col.fieldName === key)
 
-        // Handle taxonomy fields first
         if (column?.data?.termSetId && taxonomyTermsMap.has(column.data.termSetId)) {
           const terms = taxonomyTermsMap.get(column.data.termSetId)
 
@@ -421,7 +389,6 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
                   if (term) return term.name
                 }
 
-                // Fallback to Label
                 if (typeof v === 'object' && 'Label' in v) return v.Label
 
                 return null
@@ -433,7 +400,6 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
           }
         }
 
-        // Handle other field types
         if (value && typeof value === 'object' && 'Title' in value) {
           transformedItem[key] = value.Title
         }

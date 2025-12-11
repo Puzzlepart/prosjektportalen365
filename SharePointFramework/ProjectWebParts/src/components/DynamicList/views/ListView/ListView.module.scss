@@ -1,17 +1,29 @@
 .scrollContainer {
-  overflow-x: auto;
-  overflow-y: auto;
-  max-height: calc(100vh - 250px);
+  overflow: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0 32px;
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
+  :global(.fui-TableCell) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-top: 11px;
+    padding-bottom: 11px;
+    font-size: 12px;
+    font-weight: 400;
+    color: #323130;
   }
 
-  thead {
-    position: sticky;
-    top: 0;
-    z-index: 1;
-    background-color: var(--colorNeutralBackground1);
+  :global(.fui-TableHeaderCell) {
+    flex: 0 1 auto;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-weight: 600;
+    font-size: 14px;
+    color: #323130;
   }
 }

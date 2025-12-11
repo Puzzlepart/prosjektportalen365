@@ -49,6 +49,38 @@ export const ListView: FC<IListViewProps> = ({
   const context = useContext(DynamicListContext)
   const fluentProviderId = useId('fp-list-view')
 
+  const selectedRows = useMemo(() => {
+    // Map original data array indices to filtered item indices
+    const selectedIndices = new Set<TableRowId>()
+    context.state.selectedItems?.forEach((originalIndex) => {
+      const item = context.state.data?.listItems[originalIndex]
+      if (item) {
+        const filteredIndex = items.findIndex((i) => i === item)
+        if (filteredIndex !== -1) {
+          selectedIndices.add(filteredIndex)
+        }
+      }
+    })
+    return selectedIndices
+  }, [context.state.selectedItems, context.state.data?.listItems, items])
+
+  const handleSelectionChange = useCallback(
+    (_e: any, data: { selectedItems: Set<TableRowId> }) => {
+      // Map filtered item indices to original data array indices
+      const selectedItems = Array.from(data.selectedItems)
+        .map((rowId) => {
+          const index = Number(rowId)
+          const item = items[index]
+          // Find this item's index in the original data array
+          return context.state.data.listItems.findIndex((i) => i === item)
+        })
+        .filter((idx) => idx !== -1)
+
+      context.setState({ selectedItems })
+    },
+    [context, items]
+  )
+
   const columnSizingOptions: TableColumnSizingOptions = useMemo(
     () =>
       columns.reduce(
@@ -89,7 +121,8 @@ export const ListView: FC<IListViewProps> = ({
     [
       useTableSelection({
         selectionMode: 'multiselect',
-        defaultSelectedItems: new Set(context.state.selectedItems?.map(String) || [])
+        selectedItems: selectedRows,
+        onSelectionChange: handleSelectionChange
       }),
       useTableSort({
         defaultSortState: { sortColumn: columns[0]?.columnId, sortDirection: 'ascending' }
@@ -102,44 +135,47 @@ export const ListView: FC<IListViewProps> = ({
   )
 
   const rows = useMemo(() => {
-    const sortedRows = sort(getRows())
+    const baseRows = getRows((row) => {
+      const selected = isRowSelected(row.rowId)
+      return {
+        ...row,
+        onClick: (e: React.MouseEvent) => toggleRow(e, row.rowId),
+        onKeyDown: (e: React.KeyboardEvent) => {
+          if (e.key === ' ') {
+            e.preventDefault()
+            toggleRow(e, row.rowId)
+          }
+        },
+        selected,
+        appearance: selected ? ('brand' as const) : ('none' as const)
+      }
+    })
 
-    // For document libraries, ensure folders always appear first
+    const sortedRows = sort(baseRows)
+
     if (isDocumentLibrary) {
       return sortedRows.sort((a, b) => {
         const aIsFolder = a.item.FSObjType === 1
         const bIsFolder = b.item.FSObjType === 1
 
-        // Folders before files
         if (aIsFolder && !bIsFolder) return -1
         if (!aIsFolder && bIsFolder) return 1
 
-        // Preserve the existing sort order within same type
         return 0
       })
     }
 
     return sortedRows
-  }, [sort, getRows, isDocumentLibrary])
+  }, [getRows, isRowSelected, toggleRow, sort, isDocumentLibrary])
 
-  const handleToggleRow = useCallback(
-    (e: React.MouseEvent, rowId: TableRowId) => {
-      toggleRow(e, rowId)
-      const selectedRows = rows
-        .filter((row) => isRowSelected(row.rowId))
-        .map((row) => Number(row.rowId))
-      context.setState({ selectedItems: selectedRows })
+  const toggleAllKeydown = useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>) => {
+      if (e.key === ' ') {
+        toggleAllRows(e)
+        e.preventDefault()
+      }
     },
-    [toggleRow, rows, isRowSelected, context]
-  )
-
-  const handleToggleAllRows = useCallback(
-    (e: React.MouseEvent) => {
-      toggleAllRows(e)
-      const selectedRows = allRowsSelected ? [] : rows.map((row) => Number(row.rowId))
-      context.setState({ selectedItems: selectedRows })
-    },
-    [toggleAllRows, allRowsSelected, rows, context]
+    [toggleAllRows]
   )
 
   if (!items.length) {
@@ -165,7 +201,8 @@ export const ListView: FC<IListViewProps> = ({
               <TableRow>
                 <TableSelectionCell
                   checked={allRowsSelected ? true : someRowsSelected ? 'mixed' : false}
-                  onClick={handleToggleAllRows}
+                  onClick={toggleAllRows}
+                  onKeyDown={toggleAllKeydown}
                   checkboxIndicator={{ 'aria-label': 'Velg alle' }}
                 />
                 {columns.map((column) => (
@@ -194,13 +231,17 @@ export const ListView: FC<IListViewProps> = ({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {rows.map(({ item, rowId }) => (
-                <TableRow key={rowId}>
+              {rows.map(({ item, rowId, selected, onClick, onKeyDown, appearance }) => (
+                <TableRow
+                  key={rowId}
+                  onClick={onClick}
+                  onKeyDown={onKeyDown}
+                  aria-selected={selected}
+                  appearance={appearance}
+                >
                   <TableSelectionCell
-                    checked={isRowSelected(rowId)}
-                    onClick={(e) => handleToggleRow(e, rowId)}
-                    checkboxIndicator={{ 'aria-label': 'Select row' }}
-                    subtle
+                    checked={selected}
+                    checkboxIndicator={{ 'aria-label': 'Velg rad' }}
                   />
                   {columns.map((column, colIndex) => {
                     const isFirstColumn = colIndex === 0
@@ -216,8 +257,10 @@ export const ListView: FC<IListViewProps> = ({
                         {isFirstColumn && onFirstColumnClick ? (
                           <TableCellLayout>
                             <Link
-                              title={isDocumentLibrary ? 'Åpne dokument' : 'Vis detaljer'}
-                              onClick={() => onFirstColumnClick(item)}
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                onFirstColumnClick(item)
+                              }}
                             >
                               {cellContent}
                             </Link>
