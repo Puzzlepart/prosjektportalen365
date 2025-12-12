@@ -89,10 +89,10 @@ The version of PnP.PowerShell to load.
 #>
 function LoadBundle() {
     Param(
-        [Parameter(Mandatory = $true)]
-        [string]$Version
+        [Parameter(Mandatory = $false)]
+        [string]$Version = "3.1.0"
     )
-    Import-Module "$PWD/PnP.PowerShell/$Version/PnP.PowerShell.psd1" -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
+    Import-Module "../PnP.PowerShell/$Version/PnP.PowerShell.psd1" -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
     return (Get-Command Connect-PnPOnline).Version
 }
 
