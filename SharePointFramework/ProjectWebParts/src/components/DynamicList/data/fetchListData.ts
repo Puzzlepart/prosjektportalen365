@@ -237,9 +237,11 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
     const web = getWeb(props.webUrl, props)
     const list = web.lists.getByTitle(props.listName)
 
-    // Fetch all fields using PortalDataService (like TimelineList does)
-    // This ensures we get all SPField properties including ShowInEditForm
-    const allFields = await SPDataAdapter.portalDataService.getListFields(props.listName, undefined, web)
+    const allFields = await SPDataAdapter.portalDataService.getListFields(
+      props.listName,
+      undefined,
+      web
+    )
 
     const [listInfo, projectContentColumns, views] = await Promise.all([
       list.select('Title', 'Id', 'BaseTemplate')(),
@@ -320,7 +322,9 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
       .filter((field) => {
         const showInEditForm = field.ShowInEditForm ?? true
         const hidden = field.Hidden ?? false
-        const readOnlyField = field.SchemaXml ? field.SchemaXml.indexOf('ReadOnly="TRUE"') !== -1 : false
+        const readOnlyField = field.SchemaXml
+          ? field.SchemaXml.indexOf('ReadOnly="TRUE"') !== -1
+          : false
 
         // Keep ReadOnly fields if they are defined in ProjectContentColumns
         const isInProjectContentColumns = projectContentColumns.some(

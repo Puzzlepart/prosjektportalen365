@@ -26,7 +26,7 @@ const Icons = {
   ContentView: bundleIcon(ContentView24Filled, ContentView24Regular)
 }
 
-export function useToolbarItems(isSingleView: boolean = false) {
+export function useToolbarItems(isSingleView: boolean = false, showNewButton: boolean = true) {
   const context = useContext(DynamicListContext)
   const exportToExcel = useExcelExport()
 
@@ -261,15 +261,7 @@ export function useToolbarItems(isSingleView: boolean = false) {
       )
     }
 
-    const hasItems = context.state.data?.listItems && context.state.data.listItems.length > 0
-    const canAddItem =
-      context.props.maxItems === 0 ||
-      !context.state.data?.listItems ||
-      context.state.data.listItems.length < context.props.maxItems
-
-    const showNewItem = isSingleView ? !hasItems && canAddItem : canAddItem
-
-    if (context.state.isDocumentLibrary && showNewItem) {
+    if (context.state.isDocumentLibrary && showNewButton) {
       const documentMenuItems = [
         new ListMenuItem('Word-dokument').setIcon('WordDocument').setOnClick(async () => {
           await createDocument('word')
@@ -302,7 +294,7 @@ export function useToolbarItems(isSingleView: boolean = false) {
           .setIcon(AddRegular)
           .setItems(documentMenuItems)
       )
-    } else if (showNewItem && !context.state.isDocumentLibrary) {
+    } else if (showNewButton && !context.state.isDocumentLibrary) {
       items.push(
         new ListMenuItem('Nytt element', 'Opprett et nytt element')
           .setIcon(AddRegular)
@@ -374,7 +366,7 @@ export function useToolbarItems(isSingleView: boolean = false) {
     }
 
     return items
-  }, [isSingleView, context.state, context.props, saveItem])
+  }, [isSingleView, showNewButton, context.state, context.props, saveItem])
 
   const farMenuItems = useMemo<ListMenuItem[]>(() => {
     const items: ListMenuItem[] = []

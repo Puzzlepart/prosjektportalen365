@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react'
+import { FC, useContext, useEffect, useMemo } from 'react'
 import * as React from 'react'
 import { DynamicListContext } from './context'
 import { IDynamicListProps, DynamicListMode, DocumentLibraryViewMode } from './types'
@@ -28,14 +28,16 @@ import styles from './DynamicList.module.scss'
  * the DynamicListView or SingleItemView based on display mode.
  *
  * @param isSingleView Whether to display in single item view mode
+ * @param showNewButton Whether to show the new item button
  * @param targetWeb The SharePoint web instance to use for operations
  */
-const DynamicListContent: FC<{ isSingleView: boolean; targetWeb: any }> = ({
+const DynamicListContent: FC<{ isSingleView: boolean; showNewButton: boolean; targetWeb: any }> = ({
   isSingleView,
+  showNewButton,
   targetWeb
 }) => {
-  const context = React.useContext(DynamicListContext)
-  const { menuItems, farMenuItems, filterPanelProps } = useToolbarItems(isSingleView)
+  const context = useContext(DynamicListContext)
+  const { menuItems, farMenuItems, filterPanelProps } = useToolbarItems(isSingleView, showNewButton)
 
   if (!context.props.listName) {
     return (
@@ -46,11 +48,13 @@ const DynamicListContent: FC<{ isSingleView: boolean; targetWeb: any }> = ({
             description={context.props.infoText}
           />
         </div>
-        <UserMessage
-          title='Ingen liste valgt'
-          text='Vennligst velg en liste i webdel-egenskapene for å vise innhold.'
-          intent='info'
-        />
+        <div style={{ padding: '0 32px' }}>
+          <UserMessage
+            title='Ingen liste valgt'
+            text='Vennligst velg en liste i webdel-egenskapene for å vise innhold.'
+            intent='info'
+          />
+        </div>
       </>
     )
   }
@@ -133,7 +137,17 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
 
   const hasOnlyOneItem = state.data?.listItems?.length === 1
   const isSingleView =
-    displayMode === DynamicListMode.Single || hasOnlyOneItem || state.isDrilledDown
+    displayMode === DynamicListMode.Single ||
+    (displayMode === DynamicListMode.Multi && (hasOnlyOneItem || state.isDrilledDown))
+
+  const showNewButton = displayMode === DynamicListMode.Multi
+
+  // In single view mode, auto-select the first item so edit button is enabled
+  useEffect(() => {
+    if (isSingleView && state.data?.listItems?.length > 0 && !state.selectedItems?.length) {
+      setState({ selectedItems: [0] })
+    }
+  }, [isSingleView, state.data?.listItems?.length, state.selectedItems?.length])
 
   /**
    * Determines the target SharePoint web instance based on webUrl prop.
@@ -154,7 +168,7 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
     <div className={styles.dynamicList}>
       <DynamicListContext.Provider value={context}>
         <div className={styles.container}>
-          <DynamicListContent isSingleView={isSingleView} targetWeb={targetWeb} />
+          <DynamicListContent isSingleView={isSingleView} showNewButton={showNewButton} targetWeb={targetWeb} />
         </div>
         <ColumnContextMenu />
         {state.panel && (
@@ -170,8 +184,8 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
                 panel: null
               })
             }}
-              {...state.panel}
-            />
+            {...state.panel}
+          />
         )}
       </DynamicListContext.Provider>
     </div>

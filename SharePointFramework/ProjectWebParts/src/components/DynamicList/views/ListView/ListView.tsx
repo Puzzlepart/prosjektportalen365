@@ -50,7 +50,6 @@ export const ListView: FC<IListViewProps> = ({
   const fluentProviderId = useId('fp-list-view')
 
   const selectedRows = useMemo(() => {
-    // Map original data array indices to filtered item indices
     const selectedIndices = new Set<TableRowId>()
     context.state.selectedItems?.forEach((originalIndex) => {
       const item = context.state.data?.listItems[originalIndex]
@@ -66,12 +65,10 @@ export const ListView: FC<IListViewProps> = ({
 
   const handleSelectionChange = useCallback(
     (_e: any, data: { selectedItems: Set<TableRowId> }) => {
-      // Map filtered item indices to original data array indices
       const selectedItems = Array.from(data.selectedItems)
         .map((rowId) => {
           const index = Number(rowId)
           const item = items[index]
-          // Find this item's index in the original data array
           return context.state.data.listItems.findIndex((i) => i === item)
         })
         .filter((idx) => idx !== -1)
@@ -179,15 +176,19 @@ export const ListView: FC<IListViewProps> = ({
   )
 
   if (!items.length) {
-    return <div style={{ padding: '0 32px' }} >
-      <UserMessage title='Ingen elementer funnet' text={emptyMessage} intent='info'/>
-    </div>
+    return (
+      <div style={{ padding: '0 32px' }}>
+        <UserMessage title='Ingen elementer funnet' text={emptyMessage} intent='info' />
+      </div>
+    )
   }
 
   if (!columns.length) {
-    return <div style={{ padding: '0 32px' }} >
-      <UserMessage title='Ingen kolonner funnet' text={noColumnsMessage} intent='info' />
-    </div>
+    return (
+      <div style={{ padding: '0 32px' }}>
+        <UserMessage title='Ingen kolonner funnet' text={noColumnsMessage} intent='info' />
+      </div>
+    )
   }
 
   return (
