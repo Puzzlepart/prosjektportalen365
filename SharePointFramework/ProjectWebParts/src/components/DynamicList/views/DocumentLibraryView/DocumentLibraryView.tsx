@@ -240,7 +240,11 @@ export const DocumentLibraryView: FC = () => {
         items={items}
         isDocumentLibrary
         onFirstColumnClick={handleFileClick}
-        emptyMessage='Ingen dokumenter å vise'
+        emptyMessage={
+          breadcrumbItems.length > 1
+            ? 'Ingen dokumenter å vise i valgt mappe, gå tilbake ved å navigere i menyen over'
+            : 'Ingen dokumenter å vise'
+        }
         noColumnsMessage='Ingen kolonner å vise'
         className={styles.documentLibraryView}
       />

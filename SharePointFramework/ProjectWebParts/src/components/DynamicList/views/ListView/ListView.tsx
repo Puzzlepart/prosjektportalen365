@@ -179,11 +179,15 @@ export const ListView: FC<IListViewProps> = ({
   )
 
   if (!items.length) {
-    return <UserMessage title='Ingen elementer funnet' text={emptyMessage} intent='info' />
+    return <div style={{ padding: '0 32px' }} >
+      <UserMessage title='Ingen elementer funnet' text={emptyMessage} intent='info'/>
+    </div>
   }
 
   if (!columns.length) {
-    return <UserMessage title='Ingen kolonner funnet' text={noColumnsMessage} intent='info' />
+    return <div style={{ padding: '0 32px' }} >
+      <UserMessage title='Ingen kolonner funnet' text={noColumnsMessage} intent='info' />
+    </div>
   }
 
   return (
