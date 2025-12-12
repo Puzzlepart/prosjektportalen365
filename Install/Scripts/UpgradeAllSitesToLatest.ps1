@@ -18,21 +18,29 @@ Param(
 
 $ErrorActionPreference = "Stop"
 
-$LanguageCodes = @{
-    "Norwegian"    = 'no-NB';
-    "English"      = 'en-US';
-}
-$LanguageCode = $LanguageCodes[$Language]
-
-if ($null -eq (Get-Command Connect-PnPOnline) -or (Get-Command Connect-PnPOnline).Version -lt [version]"3.1.0") {
-    Write-Host "[ERROR] Correct PnP.PowerShell module not found. Please install it from PowerShell Gallery or do not use -SkipLoadingBundle." -ForegroundColor Red
-    exit 0
-}
-
 . $PSScriptRoot\SharedFunctions.ps1
 . $PSScriptRoot\Resources.ps1
 
-$InstallationEntriesList = Get-PnPList -Identity (Get-Resource -Name "Lists_InstallationLog_Title") -ErrorAction Stop
+
+if ($CI.IsPresent -and $null -eq (Get-Module -Name PnP.PowerShell)) {
+    Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
+    Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop
+}
+else {
+    if (-not $SkipLoadingBundle.IsPresent) {
+        $PnPVersion = LoadBundle
+        Write-Host "Loaded module PnP.PowerShell v$($PnPVersion) from bundle"
+    }
+    else {
+        if ($null -eq (Get-Command Connect-PnPOnline -ErrorAction SilentlyContinue)) {
+            Write-Host "[ERROR] PnP.PowerShell is not loaded. Please install the module or use the bundled version." -ForegroundColor Red
+            exit 0
+        }
+        else {
+            Write-Host "Loaded module PnP.PowerShell v$((Get-Command Connect-PnPOnline).Version) from your environment"
+        }     
+    }
+}
 
 $ConnectionInfo = [PSCustomObject]@{
     ClientId                 = $ClientId
@@ -50,25 +58,6 @@ $global:__CurrentChannelConfig = $null
 $InstallStartTime = (Get-Date -Format o)
 
 $ScriptDir = (Split-Path -Path $MyInvocation.MyCommand.Definition -Parent)
-
-if ($CI.IsPresent -and $null -eq (Get-Module -Name PnP.PowerShell)) {
-    Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
-    Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop
-}
-else {
-    if (-not $SkipLoadingBundle.IsPresent) {
-        $PnPVersion = LoadBundle -ScriptPath "$PSScriptRoot\.."
-        Write-Host "Loaded module PnP.PowerShell v$($PnPVersion) from bundle"
-    }
-    else {
-        if ($null -eq (Get-Command Connect-PnPOnline -ErrorAction SilentlyContinue)) {
-            Write-Host "[ERROR] PnP.PowerShell is not loaded. Please install the module or use the bundled version." -ForegroundColor Red
-            exit 0
-        } else {
-            Write-Host "Loaded module PnP.PowerShell v$((Get-Command Connect-PnPOnline).Version) from your environment"
-        }     
-    }
-}
 
 ## Checks if file .current-channel-config.json exists and loads it if it does
 if (Test-Path -Path "$ScriptDir/../.current-channel-config.json") {
@@ -98,6 +87,21 @@ Start-Transcript -Path $LogFilePath
 try {
     Connect-SharePoint -Url $Url -ConnectionInfo $ConnectionInfo
     
+    $Web = Get-PnPWeb
+    $SiteLCID = $Web.Language
+
+    $LanguageCode = switch ($SiteLCID) {
+        1044 { 'no-NB' }  # Norwegian (Bokmål)
+        1033 { 'en-US' }  # English (US)
+        default { 
+            Write-Host "[WARNING] Unsupported site language LCID: $SiteLCID. Defaulting to Norwegian." -ForegroundColor Yellow
+            'no-NB' 
+        }
+    }
+
+    Write-Host "Detected site language: $LanguageCode (LCID: $SiteLCID)"
+    Initialize-Resources -LanguageCode $LanguageCode
+
     $VersionInfo = Get-PPInstallationInfo
     $global:__InstalledVersion = $VersionInfo.Latest
     $global:__PreviousVersion = $VersionInfo.Previous
@@ -169,7 +173,8 @@ try {
                 Write-Host "`tRemoving access to $_"
                 Connect-SharePoint -Url $_ -ConnectionInfo $ConnectionInfo
                 Remove-PnPSiteCollectionAdmin -Owners $UserName
-            } catch {
+            }
+            catch {
                 Write-Host "`t`tFailed to remove access to $_" -ForegroundColor Yellow
             }
         }
@@ -207,6 +212,7 @@ if ($Channel -ne "main") {
     $InstallEntry.InstallChannel = $global:__CurrentChannelConfig.Channel
 }
 
+$InstallationEntriesList = Get-PnPList -Identity (Get-Resource -Name "Lists_InstallationLog_Title") -ErrorAction Stop
 $InstallationEntry = Add-PnPListItem -List $InstallationEntriesList.Id -Values $InstallEntry -ErrorAction SilentlyContinue
 
 if ($null -ne $InstallationEntry) {
