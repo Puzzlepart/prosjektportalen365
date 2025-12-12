@@ -57,8 +57,7 @@ import resource from 'SharedResources'
 
 export class SPDataAdapter
   extends SPDataAdapterBase<ISPDataAdapterBaseConfiguration>
-  implements IPortfolioWebPartsDataAdapter
-{
+  implements IPortfolioWebPartsDataAdapter {
   public project: ProjectDataService
   public dataSourceService: DataSourceService
   public childProjects: Array<Record<string, string>>
@@ -459,7 +458,7 @@ export class SPDataAdapter
             (child) =>
               child?.SiteId === item?.GtSiteIdLookup?.GtSiteId ||
               item?.GtSiteIdLookup?.GtSiteId ===
-                this?.spfxContext?.pageContext?.site?.id?.toString()
+              this?.spfxContext?.pageContext?.site?.id?.toString()
           )
         ) {
           if (item.GtSiteIdLookup?.GtSiteId && config?.showElementProgram) {
@@ -838,7 +837,7 @@ export class SPDataAdapter
       const list = this.portalDataService.web.lists.getByTitle(resource.Lists_Projects_Title)
       const [item] = await list.items.filter(`GtSiteId eq '${siteId}'`)()
       await list.items.getById(item.ID).update(properties)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   /**
@@ -853,7 +852,15 @@ export class SPDataAdapter
       const projectProperties = await this._propertyItem.select('GtChildProjects')()
       try {
         const childProjects = JSON.parse(projectProperties.GtChildProjects)
-        return !_.isEmpty(childProjects) ? childProjects : []
+        if (_.isEmpty(childProjects)) return []
+
+        const seen = new Set<string>()
+        const uniqueProjects = childProjects.filter((project: Record<string, string>) => {
+          if (seen.has(project.SiteId)) return false
+          seen.add(project.SiteId)
+          return true
+        })
+        return uniqueProjects
       } catch {
         return []
       }
@@ -870,7 +877,7 @@ export class SPDataAdapter
     try {
       this._propertyItem = this._propertyList.items.getById(1)
       this.childProjects = await this.getChildProjects()
-    } catch (error) {}
+    } catch (error) { }
   }
 
   /**
@@ -881,34 +888,34 @@ export class SPDataAdapter
    * 
    * @param hubs Optional array of program hubs with their URLs and hub site IDs
    */
-  public async getHubSiteProjects(hubs?: IProgramHub[]) {
-    let hubSiteIds: string[] = []
-    
-    if (hubs && hubs.length > 0) {
-      const resolvedHubs = await Promise.all(
-        hubs.map(async (hub) => {
-          if (hub.hubSiteId && hub.title) return hub
-          const resolved = await this.resolveHubSiteFromUrl(hub.url)
-          return {
-            ...hub,
-            hubSiteId: hub.hubSiteId || resolved.hubSiteId,
-            title: hub.title || resolved.title
-          }
-        })
-      )
-      
-      hubSiteIds = resolvedHubs
-        .filter(hub => hub.hubSiteId)
-        .map(hub => hub.hubSiteId)
-    } else {
-      const { HubSiteId } = await this.sp.site.select('HubSiteId')()
-      hubSiteIds = [HubSiteId]
+  public async getHubSiteProjects(hubs: IProgramHub[]) {
+    if (!hubs || hubs.length === 0) {
+      throw new Error('getHubSiteProjects requires at least one hub to be provided')
     }
-    
+
+    const resolvedHubs = await Promise.all(
+      hubs.map(async (hub) => {
+        if (hub.hubSiteId && hub.title) return hub
+        const resolved = await this.resolveHubSiteFromUrl(hub.url)
+        return {
+          ...hub,
+          hubSiteId: hub.hubSiteId || resolved.hubSiteId,
+          title: hub.title || resolved.title
+        }
+      })
+    )
+
+    const hubSiteIds = resolvedHubs
+      .filter(hub => hub.hubSiteId)
+      .map(hub => hub.hubSiteId)
+
+    if (hubSiteIds.length === 0) {
+      throw new Error('No valid hub site IDs found in provided hubs')
+    }
+
     const hubSiteQuery = hubSiteIds.map(id => `DepartmentId:{${id}}`).join(' OR ')
-    
     const cacheKey = `HubSiteProjects_${hubSiteIds.sort().join('_')}`
-    
+
     return new PnPClientStorage().local.getOrPut(
       cacheKey,
       async () => {
@@ -986,7 +993,8 @@ export class SPDataAdapter
       const projectProperties = await this._propertyItem.select('GtChildProjects')()
       try {
         const childProjects = JSON.parse(projectProperties.GtChildProjects)
-        return childProjects.map((p: Record<string, any>) => p.SiteId)
+        const siteIds = childProjects.map((p: Record<string, any>) => p.SiteId)
+        return _.uniq(siteIds)
       } catch {
         return []
       }
@@ -1026,10 +1034,10 @@ export class SPDataAdapter
    * in the child projects project property `GtChildProjects`. Also initializes the `propertyItem` property
    * of the class, so that it can be used in other methods.
    */
-  public async fetchChildProjects(): Promise<any[]> {
+  public async fetchChildProjects(hubs: IProgramHub[]): Promise<any[]> {
     this._propertyItem = this._propertyList.items.getById(1)
     const [availableProjects, childProjects] = await Promise.all([
-      this.getHubSiteProjects(),
+      this.getHubSiteProjects(hubs),
       this.getChildProjects()
     ])
     const childProjectsSiteIds = childProjects.map((p: Record<string, any>) => p.SiteId)
@@ -1045,7 +1053,13 @@ export class SPDataAdapter
     const { GtChildProjects } = await this._propertyItem.select('GtChildProjects')()
     const projects = JSON.parse(GtChildProjects)
     const updatedProjects = [...projects, ...newProjects]
-    const updateProperties = { GtChildProjects: JSON.stringify(updatedProjects) }
+    const seen = new Set<string>()
+    const uniqueProjects = updatedProjects.filter((project: Record<string, string>) => {
+      if (seen.has(project.SiteId)) return false
+      seen.add(project.SiteId)
+      return true
+    })
+    const updateProperties = { GtChildProjects: JSON.stringify(uniqueProjects) }
     await this._propertyItem.update(updateProperties)
     await this.updateProjectInHub(updateProperties)
   }

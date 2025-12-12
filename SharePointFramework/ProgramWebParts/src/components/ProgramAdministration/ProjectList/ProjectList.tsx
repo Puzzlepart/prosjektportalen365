@@ -21,7 +21,12 @@ import strings from 'ProgramWebPartsStrings'
 export const ProjectList: FC<IProjectListProps> = (props) => {
   const context = useContext(ProgramAdministrationContext)
   const { items, columns, columnSizingOptions, defaultSortState, onSearch, groupedData, shouldEnableGrouping } = useProjectList(props)
-  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set())
+  
+  const initialExpandedGroups = props.defaultGroupsExpanded && shouldEnableGrouping
+    ? new Set(Object.keys(groupedData))
+    : new Set<string>()
+  
+  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(initialExpandedGroups)
 
   const toggleGroup = (hubName: string) => {
     setExpandedGroups(prev => {

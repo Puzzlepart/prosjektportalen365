@@ -13,43 +13,55 @@ export const useProgramAdministration = (props: IProgramAdministrationProps) => 
   )
 
   useEffect(() => {
-    props.dataAdapter.project.getProjectInformationData().then((properties) => {
-      Promise.all([
-        props.dataAdapter.fetchChildProjects(),
+    props.dataAdapter.project.getProjectInformationData().then(async (properties) => {
+      const [userHasManagePermission, availableProgramHubsRaw] = await Promise.all([
         props.dataAdapter.checkProjectAdminPermissions(
           ProjectAdminPermission.ChildProjectsAdmin,
           properties.fieldValues
         ),
         props.dataAdapter.globalSettings.get('AvailableProgramHubs')
-      ]).then(([childProjects, userHasManagePermission, availableProgramHubsRaw]) => {
-        let parsedHubs: string[] = []
-        if (availableProgramHubsRaw && typeof availableProgramHubsRaw === 'string') {
-          parsedHubs = availableProgramHubsRaw
-            .split(';')
-            .map((s) => s.trim())
-            .filter(Boolean)
-        }
+      ])
 
-        if (parsedHubs.length > 0) {
-          Promise.all(
+      let parsedHubs: string[] = []
+      if (availableProgramHubsRaw && typeof availableProgramHubsRaw === 'string') {
+        parsedHubs = availableProgramHubsRaw
+          .split(';')
+          .map((s) => s.trim())
+          .filter(Boolean)
+      }
+
+      let resolvedHubs: IProgramHub[] = []
+      if (parsedHubs.length > 0) {
+        try {
+          resolvedHubs = await Promise.all(
             parsedHubs.map(async (u) => {
               const resolved = await props.dataAdapter.resolveHubSiteFromUrl(u)
               return { url: u, hubSiteId: resolved.hubSiteId, title: resolved.title }
             })
           )
-            .then((resolved) => setProgramHubs(resolved))
-            .catch(() => setProgramHubs(undefined))
-        } else {
+          setProgramHubs(resolvedHubs)
+        } catch {
           setProgramHubs(undefined)
         }
+      } else {
+        setProgramHubs(undefined)
+      }
 
-        dispatch(
-          DATA_LOADED({
-            data: { childProjects, userHasManagePermission },
-            scope: 'ProgramAdministration'
-          })
-        )
-      })
+      let childProjects = []
+      if (resolvedHubs.length > 0) {
+        try {
+          childProjects = await props.dataAdapter.fetchChildProjects(resolvedHubs)
+        } catch (error) {
+          console.error('Failed to fetch child projects:', error)
+        }
+      }
+
+      dispatch(
+        DATA_LOADED({
+          data: { childProjects, userHasManagePermission },
+          scope: 'ProgramAdministration'
+        })
+      )
     })
   }, [])
 

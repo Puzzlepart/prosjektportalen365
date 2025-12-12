@@ -8,4 +8,5 @@ export interface IProjectListProps {
   renderLinks?: boolean
   hideCommands?: boolean
   programHubs?: IProgramHub[]
+  defaultGroupsExpanded?: boolean
 }

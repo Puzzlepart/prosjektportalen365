@@ -7,7 +7,8 @@ export const useAddProjectDialog = () => {
   const context = useContext(ProgramAdministrationContext)
 
   useEffect(() => {
-    if (context.programHubs === undefined) return
+    if (!context.programHubs || context.programHubs.length === 0) return
+    if (!context.programHubs.some(h => h.hubSiteId)) return
     
     context.props.dataAdapter
       .getHubSiteProjects(context.programHubs)
