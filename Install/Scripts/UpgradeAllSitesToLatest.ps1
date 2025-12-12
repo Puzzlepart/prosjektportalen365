@@ -87,7 +87,7 @@ Start-Transcript -Path $LogFilePath
 try {
     Connect-SharePoint -Url $Url -ConnectionInfo $ConnectionInfo
     
-    $Web = Get-PnPWeb
+    $Web = Get-PnPWeb -Includes Language
     $SiteLCID = $Web.Language
 
     $LanguageCode = switch ($SiteLCID) {
@@ -105,6 +105,7 @@ try {
     $VersionInfo = Get-PPInstallationInfo
     $global:__InstalledVersion = $VersionInfo.Latest
     $global:__PreviousVersion = $VersionInfo.Previous
+    $global:__InstalledChannel = $VersionInfo.Channel
 
     Write-Host "Getting ready to upgrade feature discrepancy between version $global:__PreviousVersion and $global:__InstalledVersion"
 
@@ -112,6 +113,7 @@ try {
     $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
 
     Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
+    $UserName = ""
     $CurrentUser = Get-PnPProperty -Property CurrentUser -ClientObject (Get-PnPContext).Web -ErrorAction SilentlyContinue
     if ($null -ne $CurrentUser -and $CurrentUser.LoginName) {
         Write-Host "Installing with user [$($CurrentUser.LoginName)]"
@@ -131,12 +133,12 @@ try {
     if (-not $CI_MODE) {
         Write-Host "We can grant $UserName admin access to existing projects. This will ensure that all project will be upgraded. If you select no, the script will only upgrade the sites you are already an owner of."
         do {
-            $YesOrNo = Read-Host "Do you want to grant $UserName access to all sites in the hub (listed above)? (y/n)"
+            $GrantAccessConfirm = Read-Host "Do you want to grant $UserName access to all sites in the hub (listed above)? (y/n)"
         } 
-        while ("y", "n" -notcontains $YesOrNo)
+        while ("y", "n" -notcontains $GrantAccessConfirm)
     }
 
-    if ($YesOrNo -eq "y" -or $CI_MODE) {    
+    if ($GrantAccessConfirm -eq "y" -or $CI_MODE) {    
         $ProjectsInHub | ForEach-Object -Begin { $ProgressCount = 0 } {
             [Int16]$PercentComplete = (++$ProgressCount) * 100 / $ProjectsInHub.Count
             Write-Progress -Activity "Granting access to all sites in the hub" -Status "$PercentComplete% Complete" -PercentComplete $PercentComplete -CurrentOperation "Processing site $_"
@@ -159,12 +161,12 @@ try {
     if (-not $CI_MODE) {
         Write-Host "We can remove $UserName's admin access from existing projects."
         do {
-            $YesOrNo = Read-Host "Do you want to remove $UserName's admin access from all sites in the hub? (y/n)"
+            $RemoveAccessConfirm = Read-Host "Do you want to remove $UserName's admin access from all sites in the hub? (y/n)"
         } 
-        while ("y", "n" -notcontains $YesOrNo)
+        while ("y", "n" -notcontains $RemoveAccessConfirm)
     }
 
-    if ($YesOrNo -eq "y" -or $CI_MODE) {
+    if ($RemoveAccessConfirm -eq "y" -or $CI_MODE) {
         $ProjectsInHub | ForEach-Object -Begin { $ProgressCount = 0 } {    
             [Int16]$PercentComplete = (++$ProgressCount) * 100 / $ProjectsInHub.Count
             Write-Progress -Activity "Removing admin access" -Status "$PercentComplete% Complete" -PercentComplete $PercentComplete -CurrentOperation "Processing site $_"
@@ -195,11 +197,12 @@ finally {
 Connect-SharePoint -Url $Url -ConnectionInfo $ConnectionInfo
 
 $InstallEntry = @{
-    Title            = "PP365 UpgradeAllSitesToLatest $LatestInstallVersion";
+    Title            = "PP365 UpgradeAllSitesToLatest $global:__InstalledVersion";
     InstallStartTime = $InstallStartTime; 
     InstallEndTime   = (Get-Date -Format o); 
-    InstallVersion   = $LatestInstallVersion;
+    InstallVersion   = $global:__InstalledVersion;
     InstallCommand   = $MyInvocation.Line.Substring(2);
+    InstallChannel   = $global:__InstalledChannel
 }
 
 if ($null -ne $UserName) {
@@ -207,9 +210,6 @@ if ($null -ne $UserName) {
 }
 if ($CI.IsPresent) {
     $InstallEntry.InstallCommand = "GitHub CI";
-}
-if ($Channel -ne "main") {
-    $InstallEntry.InstallChannel = $global:__CurrentChannelConfig.Channel
 }
 
 $InstallationEntriesList = Get-PnPList -Identity (Get-Resource -Name "Lists_InstallationLog_Title") -ErrorAction Stop
