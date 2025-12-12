@@ -9,6 +9,10 @@ import { IUrlColumnProps } from './types'
 import { Link } from '@fluentui/react-components'
 
 export const UrlColumn: ColumnRenderComponent<IUrlColumnProps> = (props) => {
+  if (!props.columnValue) {
+    return null
+  }
+
   let [url, description] = props.columnValue.split(', ').filter((v) => !stringIsNullOrEmpty(v))
   const target = props.openInNewTab === false ? '_self' : '_blank'
   if (stringIsNullOrEmpty(description)) {
