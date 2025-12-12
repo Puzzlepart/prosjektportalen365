@@ -170,8 +170,8 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
                 panel: null
               })
             }}
-            {...state.panel}
-          />
+              {...state.panel}
+            />
         )}
       </DynamicListContext.Provider>
     </div>

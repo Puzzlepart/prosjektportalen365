@@ -28,7 +28,7 @@ import { TaxonomyTermModel } from '../models/TaxonomyTermModel'
  * @param props - Component props containing pageContext for hub site detection
  * @returns A Web instance configured to fetch list data from the appropriate location
  */
-function getWeb(webUrl?: string, props?: IDynamicListProps) {
+export function getWeb(webUrl?: string, props?: IDynamicListProps) {
   if (!webUrl) {
     if (props?.pageContext && isHubSite(props.pageContext)) {
       return SPDataAdapter.portalDataService.web
@@ -237,24 +237,13 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
     const web = getWeb(props.webUrl, props)
     const list = web.lists.getByTitle(props.listName)
 
-    const [listInfo, projectContentColumns, allFields, views] = await Promise.all([
+    // Fetch all fields using PortalDataService (like TimelineList does)
+    // This ensures we get all SPField properties including ShowInEditForm
+    const allFields = await SPDataAdapter.portalDataService.getListFields(props.listName, undefined, web)
+
+    const [listInfo, projectContentColumns, views] = await Promise.all([
       list.select('Title', 'Id', 'BaseTemplate')(),
       fetchProjectContentColumns(),
-      list.fields
-        .filter('Hidden eq false and ReadOnlyField eq false')
-        .select(
-          'InternalName',
-          'Title',
-          'TypeAsString',
-          'Required',
-          'Description',
-          'Choices',
-          'FieldTypeKind',
-          'DefaultValue',
-          'MaxLength',
-          'LookupList',
-          'LookupField'
-        )(),
       list.views.select('Title', 'Id', 'DefaultView').filter('Hidden eq false')()
     ])
 
@@ -328,9 +317,24 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
     }
 
     let columns: IColumn[] = fields
-      .filter(
-        (field) => !field.InternalName.startsWith('_') && field.InternalName !== 'Attachments'
-      )
+      .filter((field) => {
+        const showInEditForm = field.ShowInEditForm ?? true
+        const hidden = field.Hidden ?? false
+        const readOnlyField = field.SchemaXml ? field.SchemaXml.indexOf('ReadOnly="TRUE"') !== -1 : false
+
+        // Keep ReadOnly fields if they are defined in ProjectContentColumns
+        const isInProjectContentColumns = projectContentColumns.some(
+          (c) => c.internalName === field.InternalName || c.fieldName === field.InternalName
+        )
+
+        return (
+          showInEditForm &&
+          !hidden &&
+          (!readOnlyField || isInProjectContentColumns) &&
+          !field.InternalName.startsWith('_') &&
+          field.InternalName !== 'Attachments'
+        )
+      })
       .map((field) => {
         const dataType = mapSharePointTypeToDataType(field.TypeAsString, field.FieldTypeKind)
         const isTaxonomyField =

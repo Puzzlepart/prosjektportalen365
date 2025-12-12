@@ -229,10 +229,15 @@ export function useToolbarItems(isSingleView: boolean = false) {
       const web = getWeb(context.props.webUrl, context.props.pageContext)
       const list = web.lists.getByTitle(context.props.listName)
 
-      if (itemId) {
-        await list.items.getById(itemId).update(properties)
-      } else {
-        await list.items.add(properties)
+      try {
+        if (itemId) {
+          await list.items.getById(itemId).update(properties)
+        } else {
+          await list.items.add(properties)
+        }
+      } catch (error) {
+        console.error('[DynamicList] Error saving item:', error)
+        throw error
       }
 
       dismissPanel()
@@ -302,10 +307,13 @@ export function useToolbarItems(isSingleView: boolean = false) {
         new ListMenuItem('Nytt element', 'Opprett et nytt element')
           .setIcon(AddRegular)
           .setOnClick(() => {
+            const fieldValues = new ItemFieldValues()
+            const fields = context.state.data?.fields || []
+
             context.setState({
               panel: {
                 headerText: 'Nytt element',
-                fieldValues: new ItemFieldValues(),
+                fieldValues: fieldValues,
                 submit: {
                   onSubmit: async ({ properties }) => {
                     await saveItem(null, properties)
