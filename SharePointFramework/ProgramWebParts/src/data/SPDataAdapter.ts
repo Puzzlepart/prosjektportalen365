@@ -963,7 +963,8 @@ export class SPDataAdapter
           )
           .map<IProgramAdministrationProject>((item) => {
             const site = sts_sites.find((site) => site['SiteId'] === item['GtSiteIdOWSTEXT'])
-            const hubSiteId = site?.['DepartmentId']
+            const rawHubSiteId = site?.['DepartmentId']
+            const hubSiteId = rawHubSiteId ? rawHubSiteId.replace(/[{}]/g, '').toLowerCase() : rawHubSiteId
             const hub = hubs?.find(h => h.hubSiteId === hubSiteId)
             return {
               SiteId: item['GtSiteIdOWSTEXT'],
@@ -1019,8 +1020,9 @@ export class SPDataAdapter
         site.select('HubSiteId')(),
         web.select('Title')()
       ])
+      const rawHubSiteId = siteInfo?.HubSiteId
       return {
-        hubSiteId: siteInfo?.HubSiteId ?? undefined,
+        hubSiteId: rawHubSiteId ? rawHubSiteId.replace(/[{}]/g, '').toLowerCase() : undefined,
         title: webInfo?.Title ?? undefined
       }
     } catch (e) {
