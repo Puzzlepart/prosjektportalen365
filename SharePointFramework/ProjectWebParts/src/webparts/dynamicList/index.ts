@@ -140,7 +140,6 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
    */
   private _getColumnOptions(): void {
     try {
-      // Access the component's data through the domElement
       const dataElement = this.domElement.querySelector('[data-list-columns]')
       if (dataElement) {
         const columnsJson = dataElement.getAttribute('data-list-columns')
@@ -150,6 +149,15 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
             key: col.fieldName || col.key,
             text: col.name
           }))
+
+          if (!this.properties.nonFilterableColumns || this.properties.nonFilterableColumns.length === 0) {
+            this.properties.nonFilterableColumns = columns
+              .filter((col: any) => {
+                const dataType = col.dataType || col.data?.type
+                return dataType === 'note' || dataType === 'datetime' || dataType === 'number'
+              })
+              .map((col: any) => col.fieldName || col.key)
+          }
           return
         }
       }
@@ -173,6 +181,7 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
       this.properties.viewName = 'All Fields'
       this.properties.defaultViewId = null
       this.properties.hiddenColumns = []
+      this.properties.nonFilterableColumns = []
       await this._loadListOptions()
       this.context.propertyPane.refresh()
     }
@@ -181,6 +190,7 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
       this.properties.viewName = 'All Fields'
       this.properties.defaultViewId = null
       this.properties.hiddenColumns = []
+      this.properties.nonFilterableColumns = []
       await this._loadViewOptions()
       this.context.propertyPane.refresh()
       this.render()
@@ -199,7 +209,6 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    // Update column options from rendered component state
     this._getColumnOptions()
 
     return {
@@ -244,6 +253,13 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                     label: 'Skjul kolonner',
                     options: this._columnOptions,
                     selectedKeys: this.properties.hiddenColumns || []
+                  }),
+                this.properties.listName &&
+                  PropertyFieldMultiSelect('nonFilterableColumns', {
+                    key: 'nonFilterableColumns',
+                    label: 'Ikke-filtrerbare kolonner',
+                    options: this._columnOptions,
+                    selectedKeys: this.properties.nonFilterableColumns || []
                   })
               ]
             },

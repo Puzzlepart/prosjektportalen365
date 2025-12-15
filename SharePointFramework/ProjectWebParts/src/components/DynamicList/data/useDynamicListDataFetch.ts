@@ -40,7 +40,7 @@ export function useDynamicListDataFetch(
       .then((fetchedData) => {
         if (cancelled) return
 
-        const filters = generateFilters(fetchedData)
+        const filters = generateFilters(fetchedData, props.nonFilterableColumns)
 
         const newCurrentView =
           state.currentView ||
@@ -77,4 +77,11 @@ export function useDynamicListDataFetch(
       cancelled = true
     }
   }, [props.listName, props.pageContext?.web?.absoluteUrl, state.refetch])
+
+  useEffect(() => {
+    if (state.data && state.data.listItems && state.data.listColumns) {
+      const filters = generateFilters(state.data, props.nonFilterableColumns)
+      setState({ filters })
+    }
+  }, [props.nonFilterableColumns])
 }

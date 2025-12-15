@@ -28,9 +28,10 @@ const MAX_FILTER_VALUES = 100
  *    - Lookup values: ID;#Value format
  *
  * @param data - The list data containing items and columns
+ * @param nonFilterableColumns - Array of column internal names that should not be filterable
  * @returns Array of filter configurations with parsed and formatted values
  */
-export function generateFilters(data: IDynamicListData): IFilterProps[] {
+export function generateFilters(data: IDynamicListData, nonFilterableColumns?: string[]): IFilterProps[] {
   if (!data?.listItems?.length || !data?.listColumns?.length) {
     return []
   }
@@ -39,6 +40,10 @@ export function generateFilters(data: IDynamicListData): IFilterProps[] {
 
   const filterableColumns = data.listColumns.filter((column) => {
     const fieldName = column.fieldName || column.key
+
+    if (nonFilterableColumns && nonFilterableColumns.includes(fieldName)) {
+      return false
+    }
 
     if (['ID', 'Modified', 'Created', 'Author', 'Editor'].includes(fieldName)) {
       return false

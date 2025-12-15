@@ -23,6 +23,7 @@ A flexible, configurable web part for displaying SharePoint list data in a dynam
 | `viewName` | string | 'All Fields' | The view title to use for field selection (for backward compatibility) |
 | `defaultViewId` | string | null | **Default view ID** (SharePoint item ID). **Takes precedence over viewName**. Selected from dropdown of available views |
 | `hiddenColumns` | string[] | [] | Array of internal field names to hide. If specified, these columns will be excluded from display (filters at rendering level). Use the multi-select control in property pane to choose columns to hide |
+| `nonFilterableColumns` | string[] | [] | Array of internal field names that should NOT be filterable. By default, Note, Date, and Number type fields are automatically added to this list. Use the multi-select control to add/remove fields from filtering |
 | `title` | string | - | Title to display above the list (defaults to list title) |
 | `showSearchBox` | boolean | `false` | Show/hide the search box for filtering items |
 | `mode` | 'multi' \| 'single' | 'multi' | Display mode: multi-item grid or single-item detail view |

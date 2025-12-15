@@ -36,7 +36,6 @@ export function useColumns(): IListColumn[] {
       return []
     }
 
-    // Filter out columns that are in hiddenColumns property if specified
     let columns = context.state.data.listColumns
     if (context.props.hiddenColumns && context.props.hiddenColumns.length > 0) {
       columns = columns.filter(

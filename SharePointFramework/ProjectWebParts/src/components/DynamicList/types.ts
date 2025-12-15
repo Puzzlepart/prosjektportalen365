@@ -106,6 +106,13 @@ export interface IDynamicListProps extends IBaseWebPartComponentProps {
   hiddenColumns?: string[]
 
   /**
+   * Array of internal field names that should NOT be filterable.
+   * If specified, these columns will be excluded from filter generation.
+   * By default, Note, Date, and Number fields are good candidates to disable.
+   */
+  nonFilterableColumns?: string[]
+
+  /**
    * Show search box
    */
   showSearchBox?: boolean
