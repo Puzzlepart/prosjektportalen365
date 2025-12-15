@@ -36,7 +36,15 @@ export function useColumns(): IListColumn[] {
       return []
     }
 
-    return context.state.data.listColumns.map((column) => {
+    // Filter out columns that are in hiddenColumns property if specified
+    let columns = context.state.data.listColumns
+    if (context.props.hiddenColumns && context.props.hiddenColumns.length > 0) {
+      columns = columns.filter(
+        (column) => !context.props.hiddenColumns.includes(column.fieldName || column.key)
+      )
+    }
+
+    return columns.map((column) => {
       const fieldName = column.fieldName || column.key
 
       return {
@@ -56,5 +64,5 @@ export function useColumns(): IListColumn[] {
         data: column.data
       }
     })
-  }, [context.state.data?.listColumns])
+  }, [context.state.data?.listColumns, context.props.hiddenColumns])
 }

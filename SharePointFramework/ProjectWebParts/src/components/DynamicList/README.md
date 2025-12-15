@@ -22,6 +22,7 @@ A flexible, configurable web part for displaying SharePoint list data in a dynam
 | `listName` | string | - | The internal name of the SharePoint list to display. **Selected from dropdown** of available lists |
 | `viewName` | string | 'All Fields' | The view title to use for field selection (for backward compatibility) |
 | `defaultViewId` | string | null | **Default view ID** (SharePoint item ID). **Takes precedence over viewName**. Selected from dropdown of available views |
+| `hiddenColumns` | string[] | [] | Array of internal field names to hide. If specified, these columns will be excluded from display (filters at rendering level). Use the multi-select control in property pane to choose columns to hide |
 | `title` | string | - | Title to display above the list (defaults to list title) |
 | `showSearchBox` | boolean | `false` | Show/hide the search box for filtering items |
 | `mode` | 'multi' \| 'single' | 'multi' | Display mode: multi-item grid or single-item detail view |
@@ -44,9 +45,17 @@ A flexible, configurable web part for displaying SharePoint list data in a dynam
 
 The webpart supports view selection similar to PortfolioOverview, with **defaultViewId taking precedence** over viewName.
 
+#### Column Selection Priority
+
+1. **hiddenColumns** (if specified) - Hides selected columns from the view
+2. **defaultViewId** (if specified) - Uses columns from SharePoint view ID
+3. **viewName** (if specified) - Uses columns from view title (backward compatibility)
+4. **"All Fields"** (default) - Shows all list fields
+
 #### View Selection Priority
 
-1. **defaultViewId** (if specified) - Uses SharePoint view ID
+1. **hiddenColumns** (if specified) - Filters columns after view selection
+2. **defaultViewId** (if specified) - Uses SharePoint view ID
 2. **viewName** (if specified) - Uses view title (backward compatibility)
 3. **"All Fields"** (default) - Shows all list fields
 

@@ -5,6 +5,7 @@ import {
   PropertyPaneDropdown,
   IPropertyPaneDropdownOption
 } from '@microsoft/sp-property-pane'
+import { PropertyFieldMultiSelect } from '@pnp/spfx-property-controls/lib/PropertyFieldMultiSelect'
 import { IDynamicListProps, DynamicListMode, WebContextMode } from 'components/DynamicList'
 import { DynamicList } from 'components/DynamicList/DynamicList'
 import '@fluentui/react/dist/css/fabric.min.css'
@@ -20,6 +21,7 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
   private _listsLoading: boolean = false
   private _viewOptions: IPropertyPaneDropdownOption[] = []
   private _viewsLoading: boolean = false
+  private _columnOptions: IPropertyPaneDropdownOption[] = []
 
   public async onInit() {
     await super.onInit()
@@ -132,6 +134,31 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
     return this.properties.viewName || 'All Fields'
   }
 
+  /**
+   * Get column options from the rendered component's state data.
+   * Called when property pane configuration is built.
+   */
+  private _getColumnOptions(): void {
+    try {
+      // Access the component's data through the domElement
+      const dataElement = this.domElement.querySelector('[data-list-columns]')
+      if (dataElement) {
+        const columnsJson = dataElement.getAttribute('data-list-columns')
+        if (columnsJson) {
+          const columns = JSON.parse(columnsJson)
+          this._columnOptions = columns.map((col: any) => ({
+            key: col.fieldName || col.key,
+            text: col.name
+          }))
+          return
+        }
+      }
+    } catch (error) {
+      console.error('Error getting column options from component:', error)
+    }
+    this._columnOptions = []
+  }
+
   public render(): void {
     this.renderComponent<IDynamicListProps>(DynamicList)
   }
@@ -145,6 +172,7 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
       this.properties.listName = ''
       this.properties.viewName = 'All Fields'
       this.properties.defaultViewId = null
+      this.properties.hiddenColumns = []
       await this._loadListOptions()
       this.context.propertyPane.refresh()
     }
@@ -152,8 +180,10 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
     if (propertyPath === 'listName') {
       this.properties.viewName = 'All Fields'
       this.properties.defaultViewId = null
+      this.properties.hiddenColumns = []
       await this._loadViewOptions()
       this.context.propertyPane.refresh()
+      this.render()
     }
 
     if (propertyPath === 'defaultViewId') {
@@ -169,6 +199,9 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+    // Update column options from rendered component state
+    this._getColumnOptions()
+
     return {
       pages: [
         {
@@ -205,16 +238,23 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                     selectedKey: this._getSelectedViewKey(),
                     disabled: this._viewsLoading
                   }),
-                PropertyPaneTextField('title', {
-                  label: 'Tittel',
-                  description: 'Tittel som vises over listen'
-                })
+                this.properties.listName &&
+                  PropertyFieldMultiSelect('hiddenColumns', {
+                    key: 'hiddenColumns',
+                    label: 'Skjul kolonner',
+                    options: this._columnOptions,
+                    selectedKeys: this.properties.hiddenColumns || []
+                  })
               ]
             },
             {
               groupName: 'Utseende',
-              isCollapsed: true,
+              isCollapsed: false,
               groupFields: [
+                PropertyPaneTextField('title', {
+                  label: 'Tittel',
+                  description: 'Tittel som vises over listen'
+                }),
                 PropertyPaneDropdown('mode', {
                   label: 'Visningsmodus',
                   options: [
@@ -231,7 +271,7 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
               ]
             },
             {
-              groupName: 'Vis/skjul',
+              groupName: 'Vis/skjul (Kommandolinje)',
               isCollapsed: true,
               groupFields: [
                 PropertyPaneToggle('showCommandBar', {
