@@ -262,39 +262,60 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
     }
 
     if (context.state.isDocumentLibrary && showNewButton) {
-      const documentMenuItems = [
-        new ListMenuItem('Word-dokument').setIcon('WordDocument').setOnClick(async () => {
-          await createDocument('word')
-        }),
-        new ListMenuItem('Excel-arbeidsbok').setIcon('ExcelDocument').setOnClick(async () => {
-          await createDocument('excel')
-        }),
-        new ListMenuItem('PowerPoint-presentasjon')
-          .setIcon('PowerPointDocument')
-          .setOnClick(async () => {
-            await createDocument('powerpoint')
-          }),
-        new ListMenuItem('Last opp fil').setIcon('Upload').setOnClick(() => {
-          const input = document.createElement('input')
-          input.type = 'file'
-          input.multiple = true
-          input.accept = '.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx'
-          input.onchange = async (e: any) => {
-            const files = Array.from(e.target.files || []) as File[]
-            if (files.length > 0) {
-              await uploadFiles(files)
-            }
-          }
-          input.click()
-        })
-      ]
+      const documentMenuItems: ListMenuItem[] = []
 
-      items.push(
-        new ListMenuItem('Ny', 'Opprett nytt dokument eller last opp fil')
-          .setIcon(AddRegular)
-          .setItems(documentMenuItems)
-      )
-    } else if (showNewButton && !context.state.isDocumentLibrary) {
+      if (context.props.showNewWordButton !== false) {
+        documentMenuItems.push(
+          new ListMenuItem('Word-dokument').setIcon('WordDocument').setOnClick(async () => {
+            await createDocument('word')
+          })
+        )
+      }
+
+      if (context.props.showNewExcelButton !== false) {
+        documentMenuItems.push(
+          new ListMenuItem('Excel-arbeidsbok').setIcon('ExcelDocument').setOnClick(async () => {
+            await createDocument('excel')
+          })
+        )
+      }
+
+      if (context.props.showNewPowerPointButton !== false) {
+        documentMenuItems.push(
+          new ListMenuItem('PowerPoint-presentasjon')
+            .setIcon('PowerPointDocument')
+            .setOnClick(async () => {
+              await createDocument('powerpoint')
+            })
+        )
+      }
+
+      if (context.props.showUploadButton !== false) {
+        documentMenuItems.push(
+          new ListMenuItem('Last opp fil').setIcon('Upload').setOnClick(() => {
+            const input = document.createElement('input')
+            input.type = 'file'
+            input.multiple = true
+            input.accept = '.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx'
+            input.onchange = async (e: any) => {
+              const files = Array.from(e.target.files || []) as File[]
+              if (files.length > 0) {
+                await uploadFiles(files)
+              }
+            }
+            input.click()
+          })
+        )
+      }
+
+      if (documentMenuItems.length > 0) {
+        items.push(
+          new ListMenuItem('Ny', 'Opprett nytt dokument eller last opp fil')
+            .setIcon(AddRegular)
+            .setItems(documentMenuItems)
+        )
+      }
+    } else if (showNewButton && !context.state.isDocumentLibrary && context.props.showNewButton !== false) {
       items.push(
         new ListMenuItem('Nytt element', 'Opprett et nytt element')
           .setIcon(AddRegular)
@@ -317,7 +338,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       )
     }
 
-    if (!context.state.isDocumentLibrary) {
+    if (!context.state.isDocumentLibrary && context.props.showEditButton !== false) {
       items.push(
         new ListMenuItem('Rediger element', 'Rediger valgt element')
           .setIcon(EditRegular)
@@ -371,7 +392,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
   const farMenuItems = useMemo<ListMenuItem[]>(() => {
     const items: ListMenuItem[] = []
 
-    if (!isSingleView && !context.state.isDocumentLibrary) {
+    if (!isSingleView && !context.state.isDocumentLibrary && context.props.showExportButton !== false) {
       items.push(
         new ListMenuItem(null, 'Eksporter til Excel')
           .setIcon('ExcelLogoInverse')
@@ -388,7 +409,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
     if (!isSingleView && context.props.showViewSelector && context.state.views?.length > 0) {
       const viewMenuItems: ListMenuItem[] = []
 
-      if (context.state.isDocumentLibrary) {
+      if (context.state.isDocumentLibrary && context.props.showViewModeToggle !== false) {
         viewMenuItems.push(
           new ListMenuItem('Mappevisning')
             .makeCheckable({
@@ -439,20 +460,28 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
           .setItems(viewMenuItems, checkedValues)
       )
     }
-    items.push(
-      new ListMenuItem(null, 'Oppdater').setIcon('ArrowSync').setOnClick(() => {
-        context.setState({
-          isRefetching: true,
-          refetch: new Date().getTime()
+
+    if (context.props.showRefreshButton !== false) {
+      items.push(
+        new ListMenuItem(null, 'Oppdater').setIcon('ArrowSync').setOnClick(() => {
+          context.setState({
+            isRefetching: true,
+            refetch: new Date().getTime()
+          })
         })
-      }),
-      new ListMenuItem('Slett', 'Slett valgte elementer')
-        .setIcon(DeleteRegular)
-        .setDisabled(!context.state.selectedItems || context.state.selectedItems.length === 0)
-        .setOnClick(() => {
-          deleteItems()
-        })
-    )
+      )
+    }
+
+    if (context.props.showDeleteButton !== false) {
+      items.push(
+        new ListMenuItem('Slett', 'Slett valgte elementer')
+          .setIcon(DeleteRegular)
+          .setDisabled(!context.state.selectedItems || context.state.selectedItems.length === 0)
+          .setOnClick(() => {
+            deleteItems()
+          })
+      )
+    }
 
     if (!isSingleView && context.props.showFilters) {
       items.push(

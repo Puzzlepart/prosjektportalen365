@@ -208,5 +208,15 @@ DynamicList.defaultProps = {
   showFilters: false,
   useProjectContentColumnNames: true,
   mode: DynamicListMode.Multi,
-  documentLibraryViewMode: DocumentLibraryViewMode.Folders
+  documentLibraryViewMode: DocumentLibraryViewMode.Folders,
+  showNewButton: true,
+  showEditButton: true,
+  showDeleteButton: true,
+  showRefreshButton: true,
+  showExportButton: true,
+  showUploadButton: true,
+  showNewWordButton: true,
+  showNewExcelButton: true,
+  showNewPowerPointButton: true,
+  showViewModeToggle: true
 }

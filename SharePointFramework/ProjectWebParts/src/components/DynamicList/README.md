@@ -28,6 +28,16 @@ A flexible, configurable web part for displaying SharePoint list data in a dynam
 | `showCommandBar` | boolean | `true` | Show/hide the command bar with actions |
 | `showFilters` | boolean | `false` | Enable filter panel (future feature) |
 | `useProjectContentColumnNames` | boolean | `true` | Use column display names from ProjectContentColumns (Prosjektinnholdskolonner). If false, uses names directly from the list/library |
+| `showNewButton` | boolean | `true` | Show/hide the "Ny" (New) button for creating new list items |
+| `showEditButton` | boolean | `true` | Show/hide the "Rediger" (Edit) button for editing selected items |
+| `showDeleteButton` | boolean | `true` | Show/hide the "Slett" (Delete) button for deleting selected items |
+| `showRefreshButton` | boolean | `true` | Show/hide the "Oppdater" (Refresh) button for reloading data |
+| `showExportButton` | boolean | `true` | Show/hide the "Eksporter til Excel" (Export to Excel) button |
+| `showUploadButton` | boolean | `true` | Show/hide the file upload option in document libraries |
+| `showNewWordButton` | boolean | `true` | Show/hide the "Nytt Word-dokument" option in document libraries |
+| `showNewExcelButton` | boolean | `true` | Show/hide the "Nytt Excel-dokument" option in document libraries |
+| `showNewPowerPointButton` | boolean | `true` | Show/hide the "Nytt PowerPoint-dokument" option in document libraries |
+| `showViewModeToggle` | boolean | `true` | Show/hide the folder/flat view toggle in document libraries |
 | `infoText` | string | - | Additional information text to display |
 
 ### View Selection Behavior

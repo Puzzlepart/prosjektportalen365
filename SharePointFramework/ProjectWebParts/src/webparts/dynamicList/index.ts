@@ -253,6 +253,56 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                   label: 'Vis filtre',
                   onText: 'På',
                   offText: 'Av'
+                }),
+                PropertyPaneToggle('showNewButton', {
+                  label: 'Vis Ny-knapp',
+                  onText: 'På',
+                  offText: 'Av'
+                }),
+                PropertyPaneToggle('showEditButton', {
+                  label: 'Vis Rediger-knapp',
+                  onText: 'På',
+                  offText: 'Av'
+                }),
+                PropertyPaneToggle('showDeleteButton', {
+                  label: 'Vis Slett-knapp',
+                  onText: 'På',
+                  offText: 'Av'
+                }),
+                PropertyPaneToggle('showRefreshButton', {
+                  label: 'Vis Oppdater-knapp',
+                  onText: 'På',
+                  offText: 'Av'
+                }),
+                PropertyPaneToggle('showExportButton', {
+                  label: 'Vis Eksporter-knapp',
+                  onText: 'På',
+                  offText: 'Av'
+                }),
+                PropertyPaneToggle('showUploadButton', {
+                  label: 'Vis Last opp-knapp (dokumentbibliotek)',
+                  onText: 'På',
+                  offText: 'Av'
+                }),
+                PropertyPaneToggle('showNewWordButton', {
+                  label: 'Vis Nytt Word-dokument-knapp',
+                  onText: 'På',
+                  offText: 'Av'
+                }),
+                PropertyPaneToggle('showNewExcelButton', {
+                  label: 'Vis Nytt Excel-dokument-knapp',
+                  onText: 'På',
+                  offText: 'Av'
+                }),
+                PropertyPaneToggle('showNewPowerPointButton', {
+                  label: 'Vis Nytt PowerPoint-dokument-knapp',
+                  onText: 'På',
+                  offText: 'Av'
+                }),
+                PropertyPaneToggle('showViewModeToggle', {
+                  label: 'Vis mappe/flat visning-veksling',
+                  onText: 'På',
+                  offText: 'Av'
                 })
               ]
             }

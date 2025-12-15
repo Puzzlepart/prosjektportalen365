@@ -139,6 +139,56 @@ export interface IDynamicListProps extends IBaseWebPartComponentProps {
    * Document library view mode: 'folders' for folder navigation, 'flat' for all documents in one list
    */
   documentLibraryViewMode?: DocumentLibraryViewMode
+
+  /**
+   * Show/hide the New Item button for regular lists
+   */
+  showNewButton?: boolean
+
+  /**
+   * Show/hide the Edit Item button
+   */
+  showEditButton?: boolean
+
+  /**
+   * Show/hide the Delete Item button
+   */
+  showDeleteButton?: boolean
+
+  /**
+   * Show/hide the Refresh/Reload button
+   */
+  showRefreshButton?: boolean
+
+  /**
+   * Show/hide the Excel Export button
+   */
+  showExportButton?: boolean
+
+  /**
+   * For document libraries: Show/hide the Upload File option
+   */
+  showUploadButton?: boolean
+
+  /**
+   * For document libraries: Show/hide the New Word Document option
+   */
+  showNewWordButton?: boolean
+
+  /**
+   * For document libraries: Show/hide the New Excel Document option
+   */
+  showNewExcelButton?: boolean
+
+  /**
+   * For document libraries: Show/hide the New PowerPoint Document option
+   */
+  showNewPowerPointButton?: boolean
+
+  /**
+   * Show/hide the View Mode toggle (Flat/Folder view for document libraries)
+   */
+  showViewModeToggle?: boolean
 }
 
 export interface IDynamicListState extends IBaseWebPartComponentState<IDynamicListData> {
