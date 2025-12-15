@@ -20,10 +20,7 @@ import '@pnp/sp/files/folder'
 import styles from './DocumentLibraryView.module.scss'
 
 /**
- * DocumentLibraryView displays SharePoint document library items with file-specific
- * columns including file icons, names, modified dates, modified by, and file sizes.
- *
- * Uses the base ListView component with document library-specific column rendering.
+ * DocumentLibraryView displays SharePoint document library items.
  * Supports folder navigation and Office Online integration.
  */
 export const DocumentLibraryView: FC = () => {
@@ -121,43 +118,11 @@ export const DocumentLibraryView: FC = () => {
     return items
   }, [context.state.currentFolderPath, context.state.data?.listTitle, context.setState])
 
-  const formatFileSize = (bytes: number): string => {
-    if (bytes === 0) return '0 B'
-    const k = 1024
-    const sizes = ['B', 'KB', 'MB', 'GB']
-    const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return Math.round(bytes / Math.pow(k, i)) + ' ' + sizes[i]
-  }
-
-  /**
-   * Override column rendering for document library-specific column.
-   * Filters out Title column and formats file size.
-   */
   const columns: IListViewColumn[] = useMemo(() => {
     return baseColumns
       .filter((col) => {
         const columnId = col.columnId
         return columnId !== 'Title'
-      })
-      .map((col) => {
-        const columnId = col.columnId
-
-        if (
-          columnId === 'File' ||
-          columnId === 'File.Length' ||
-          (col as any).fieldName === 'File_x0020_Size'
-        ) {
-          return {
-            ...col,
-            renderCell: (item: IFileItem) => (
-              <TableCellLayout>
-                {item.File?.Length ? formatFileSize(item.File.Length) : ''}
-              </TableCellLayout>
-            )
-          }
-        }
-
-        return col
       })
   }, [baseColumns])
 

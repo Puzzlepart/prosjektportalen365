@@ -8,14 +8,6 @@ import styles from './DynamicListView.module.scss'
 
 /**
  * Renders list data in a multi-column table view with sorting, filtering, and selection.
- *
- * Features:
- * - Resizable columns with sticky headers
- * - Multi-select with row checkboxes
- * - Column sorting
- * - Click first column to drill down to single item view
- * - Column widths from ProjectContentColumns configuration
- * - Custom cell rendering via ItemColumn system
  */
 export const DynamicListView: FC = () => {
   const context = useContext(DynamicListContext)

@@ -4,14 +4,13 @@ import { FC, useContext } from 'react'
 import { DynamicListContext } from '../../context'
 import { useColumns } from '../../useColumns'
 import styles from './SingleItemView.module.scss'
-import { customLightTheme } from 'pp365-shared-library'
+import { customLightTheme, UserMessage } from 'pp365-shared-library'
 
 /**
- * Renders a single list item in a detailed field-by-field view.
+ * Renders a single list item in a detailed view.
  *
  * Displays all fields from the selected item or the first item in the list
- * if no specific item is selected. Uses the same column render system as
- * DynamicListView for consistent field rendering.
+ * if no specific item is selected.
  */
 export const SingleItemView: FC = () => {
   const context = useContext(DynamicListContext)
@@ -22,10 +21,8 @@ export const SingleItemView: FC = () => {
 
   if (!item) {
     return (
-      <div className={styles.singleItemView}>
-        <div className={styles.emptyState}>
-          <Text size={400}>Ingen elementer å vise</Text>
-        </div>
+      <div style={{ padding: '0 32px' }}>
+        <UserMessage title='Ingen element funnet' text='Det finnes ingen elementer å vise' intent='info' />
       </div>
     )
   }

@@ -28,14 +28,6 @@ import { IListViewProps } from './types'
 /**
  * Base ListView component that provides common table rendering functionality
  * for both DynamicListView and DocumentLibraryView.
- *
- * Features:
- * - Resizable columns with sticky headers
- * - Multi-select with row checkboxes
- * - Column sorting
- * - Column context menu support
- * - Custom cell rendering
- * - Configurable first column click behavior
  */
 export const ListView: FC<IListViewProps> = ({
   columns,
