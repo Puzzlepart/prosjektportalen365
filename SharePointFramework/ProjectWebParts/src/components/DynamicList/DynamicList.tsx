@@ -1,7 +1,7 @@
 import { FC, useContext, useEffect, useMemo } from 'react'
 import * as React from 'react'
 import { DynamicListContext } from './context'
-import { IDynamicListProps, DynamicListMode, DocumentLibraryViewMode } from './types'
+import { IDynamicListProps, DynamicListMode, DocumentLibraryViewMode, WebContextMode } from './types'
 import { useDynamicList } from './useDynamicList'
 import { DynamicListView } from './views/DynamicListView/DynamicListView'
 import { DocumentLibraryView } from './views/DocumentLibraryView'
@@ -142,7 +142,6 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
 
   const showNewButton = displayMode === DynamicListMode.Multi
 
-  // In single view mode, auto-select the first item so edit button is enabled
   useEffect(() => {
     if (isSingleView && state.data?.listItems?.length > 0 && !state.selectedItems?.length) {
       setState({ selectedItems: [0] })
@@ -150,19 +149,24 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
   }, [isSingleView, state.data?.listItems?.length, state.selectedItems?.length])
 
   /**
-   * Determines the target SharePoint web instance based on webUrl prop.
-   * Returns portal web if current site is a hub, otherwise returns current web or creates a Web instance.
+   * Determines the target SharePoint web instance based on webContextMode prop.
+   * - CurrentProject: Uses current site web
+   * - HubSite: Uses portal data service web (hub site)
+   * - CustomSite: Uses custom URL if provided
    */
   const targetWeb = useMemo(() => {
-    if (!props.webUrl) {
-      if (props.pageContext && isHubSite(props.pageContext)) {
+    const webContextMode = props.webContextMode || WebContextMode.CurrentProject
+
+    switch (webContextMode) {
+      case WebContextMode.HubSite:
         return SPDataAdapter.portalDataService.web
-      }
-      return SPDataAdapter.sp.web
-    } else {
-      return Web([SPDataAdapter.sp.web, props.webUrl])
+      case WebContextMode.CustomSite:
+        return props.webUrl ? Web([SPDataAdapter.sp.web, props.webUrl]) : SPDataAdapter.sp.web
+      case WebContextMode.CurrentProject:
+      default:
+        return SPDataAdapter.sp.web
     }
-  }, [props.webUrl, props.pageContext])
+  }, [props.webContextMode, props.webUrl])
 
   return (
     <div className={styles.dynamicList}>

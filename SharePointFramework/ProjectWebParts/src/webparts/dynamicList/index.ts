@@ -6,7 +6,7 @@ import {
   PropertyPaneDropdown,
   IPropertyPaneDropdownOption
 } from '@microsoft/sp-property-pane'
-import { IDynamicListProps, DynamicListMode } from 'components/DynamicList'
+import { IDynamicListProps, DynamicListMode, WebContextMode } from 'components/DynamicList'
 import { DynamicList } from 'components/DynamicList/DynamicList'
 import '@fluentui/react/dist/css/fabric.min.css'
 import { BaseProjectWebPart } from '../baseProjectWebPart'
@@ -40,7 +40,11 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
       this._listsLoading = true
 
       let web = SPDataAdapter.sp.web
-      if (this.properties.webUrl) {
+      const webContextMode = this.properties.webContextMode || WebContextMode.CurrentProject
+
+      if (webContextMode === WebContextMode.HubSite) {
+        web = SPDataAdapter.portalDataService.web
+      } else if (webContextMode === WebContextMode.CustomSite && this.properties.webUrl) {
         const { Web } = await import('@pnp/sp/webs')
         web = Web([SPDataAdapter.sp.web, this.properties.webUrl])
       }
@@ -138,7 +142,7 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
     oldValue: any,
     newValue: any
   ): Promise<void> {
-    if (propertyPath === 'webUrl') {
+    if (propertyPath === 'webContextMode' || propertyPath === 'webUrl') {
       this.properties.listName = ''
       this.properties.viewName = 'All Fields'
       this.properties.defaultViewId = null
@@ -174,11 +178,21 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
             {
               groupName: strings.GeneralGroupName,
               groupFields: [
-                PropertyPaneTextField('webUrl', {
-                  label: 'Nettadresse',
-                  description: 'La stå tom for å bruke gjeldende område',
-                  placeholder: this.context.pageContext.web.absoluteUrl
+                PropertyPaneDropdown('webContextMode', {
+                  label: 'Område',
+                  options: [
+                    { key: WebContextMode.CurrentProject, text: 'Gjeldende prosjekt' },
+                    { key: WebContextMode.HubSite, text: 'Porteføljeområde (hub)' },
+                    { key: WebContextMode.CustomSite, text: 'Egendefinert område' }
+                  ],
+                  selectedKey: this.properties.webContextMode || WebContextMode.CurrentProject
                 }),
+                (this.properties.webContextMode === WebContextMode.CustomSite) &&
+                  PropertyPaneTextField('webUrl', {
+                    label: 'Nettadresse',
+                    description: 'Angi URL til SharePoint-området',
+                    placeholder: this.context.pageContext.web.absoluteUrl
+                  }),
                 PropertyPaneDropdown('listName', {
                   label: strings.ListNameFieldLabel,
                   options: this._listOptions,

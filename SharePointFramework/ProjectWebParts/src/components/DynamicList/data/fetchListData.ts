@@ -1,5 +1,5 @@
 import { IColumn } from '@fluentui/react'
-import { IDynamicListProps, IDynamicListData } from '../types'
+import { IDynamicListProps, IDynamicListData, WebContextMode } from '../types'
 import SPDataAdapter from '../../../data'
 import { EditableSPField, isHubSite, ProjectContentColumn } from 'pp365-shared-library'
 import { Web } from '@pnp/sp/webs'
@@ -12,30 +12,30 @@ import '@pnp/sp/taxonomy'
 import { TaxonomyTermModel } from '../models/TaxonomyTermModel'
 
 /**
- * Gets the appropriate Web instance based on the webUrl parameter and hub site status.
+ * Gets the appropriate Web instance based on the webContextMode parameter.
  *
  * This function determines which SharePoint web instance to use for fetching list data
- * by evaluating three scenarios:
+ * by evaluating the webContextMode:
  *
- * 1. External site (webUrl provided): Creates a new Web instance for the specified URL
- *    to fetch from another site collection
- * 2. Current site is hub (no webUrl, isHubSite true): Returns the portal data service web
- *    to access hub-level data
- * 3. Current site is not hub (no webUrl, isHubSite false): Returns the standard SP web
- *    instance for the current site
+ * 1. CurrentProject: Returns the standard SP web instance for the current site
+ * 2. HubSite: Returns the portal data service web to access hub-level data
+ * 3. CustomSite: Creates a new Web instance for the specified URL
  *
- * @param webUrl - Optional web URL. If provided, creates a Web instance for that URL
- * @param props - Component props containing pageContext for hub site detection
+ * @param webUrl - Optional web URL. Used only when webContextMode is CustomSite
+ * @param props - Component props containing webContextMode
  * @returns A Web instance configured to fetch list data from the appropriate location
  */
 export function getWeb(webUrl?: string, props?: IDynamicListProps) {
-  if (!webUrl) {
-    if (props?.pageContext && isHubSite(props.pageContext)) {
+  const webContextMode = props?.webContextMode || WebContextMode.CurrentProject
+
+  switch (webContextMode) {
+    case WebContextMode.HubSite:
       return SPDataAdapter.portalDataService.web
-    }
-    return SPDataAdapter.sp.web
-  } else {
-    return Web([SPDataAdapter.sp.web, webUrl])
+    case WebContextMode.CustomSite:
+      return webUrl ? Web([SPDataAdapter.sp.web, webUrl]) : SPDataAdapter.sp.web
+    case WebContextMode.CurrentProject:
+    default:
+      return SPDataAdapter.sp.web
   }
 }
 

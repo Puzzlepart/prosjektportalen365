@@ -29,6 +29,21 @@ export enum DocumentLibraryViewMode {
   Folders = 'folders'
 }
 
+export enum WebContextMode {
+  /**
+   * Use the current project site
+   */
+  CurrentProject = 'current',
+  /**
+   * Use the hub site that the project is connected to
+   */
+  HubSite = 'hub',
+  /**
+   * Use a custom site URL
+   */
+  CustomSite = 'custom'
+}
+
 /**
  * Column context menu configuration.
  */
@@ -56,8 +71,13 @@ export interface IFileItem extends Record<string, any> {
 
 export interface IDynamicListProps extends IBaseWebPartComponentProps {
   /**
+   * Mode for determining which site to use
+   */
+  webContextMode?: WebContextMode
+
+  /**
    * The URL of the site where the list is located.
-   * If not specified, uses the current site.
+   * Only used when webContextMode is 'custom'.
    */
   webUrl?: string
 
