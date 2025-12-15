@@ -31,7 +31,10 @@ const MAX_FILTER_VALUES = 100
  * @param nonFilterableColumns - Array of column internal names that should not be filterable
  * @returns Array of filter configurations with parsed and formatted values
  */
-export function generateFilters(data: IDynamicListData, nonFilterableColumns?: string[]): IFilterProps[] {
+export function generateFilters(
+  data: IDynamicListData,
+  nonFilterableColumns?: string[]
+): IFilterProps[] {
   if (!data?.listItems?.length || !data?.listColumns?.length) {
     return []
   }

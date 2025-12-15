@@ -315,7 +315,11 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
             .setItems(documentMenuItems)
         )
       }
-    } else if (showNewButton && !context.state.isDocumentLibrary && context.props.showNewButton !== false) {
+    } else if (
+      showNewButton &&
+      !context.state.isDocumentLibrary &&
+      context.props.showNewButton !== false
+    ) {
       items.push(
         new ListMenuItem('Nytt element', 'Opprett et nytt element')
           .setIcon(AddRegular)
@@ -392,7 +396,11 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
   const farMenuItems = useMemo<ListMenuItem[]>(() => {
     const items: ListMenuItem[] = []
 
-    if (!isSingleView && !context.state.isDocumentLibrary && context.props.showExportButton !== false) {
+    if (
+      !isSingleView &&
+      !context.state.isDocumentLibrary &&
+      context.props.showExportButton !== false
+    ) {
       items.push(
         new ListMenuItem(null, 'Eksporter til Excel')
           .setIcon('ExcelLogoInverse')
