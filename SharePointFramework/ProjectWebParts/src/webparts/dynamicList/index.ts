@@ -2,7 +2,6 @@ import {
   IPropertyPaneConfiguration,
   PropertyPaneTextField,
   PropertyPaneToggle,
-  PropertyPaneSlider,
   PropertyPaneDropdown,
   IPropertyPaneDropdownOption
 } from '@microsoft/sp-property-pane'
@@ -187,7 +186,7 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                   ],
                   selectedKey: this.properties.webContextMode || WebContextMode.CurrentProject
                 }),
-                (this.properties.webContextMode === WebContextMode.CustomSite) &&
+                this.properties.webContextMode === WebContextMode.CustomSite &&
                   PropertyPaneTextField('webUrl', {
                     label: 'Nettadresse',
                     description: 'Angi URL til SharePoint-området',
@@ -224,21 +223,10 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                   ],
                   selectedKey: this.properties.mode || DynamicListMode.Multi
                 }),
-                PropertyPaneSlider('maxItems', {
-                  label: 'Maksimalt antall elementer',
-                  min: 0,
-                  max: 10,
-                  step: 1,
-                  value: this.properties.maxItems || 0,
-                  showValue: true
-                }),
-                PropertyPaneSlider('pageSize', {
-                  label: 'Elementer per side',
-                  min: 10,
-                  max: 100,
-                  step: 10,
-                  value: this.properties.pageSize || 30,
-                  showValue: true
+                PropertyPaneToggle('useProjectContentColumnNames', {
+                  label: 'Bruk kolonnenavn fra Prosjektinnholdskolonner',
+                  onText: 'På',
+                  offText: 'Av'
                 })
               ]
             },
@@ -263,11 +251,6 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                 }),
                 PropertyPaneToggle('showFilters', {
                   label: 'Vis filtre',
-                  onText: 'På',
-                  offText: 'Av'
-                }),
-                PropertyPaneToggle('useProjectContentColumnNames', {
-                  label: 'Bruk kolonnenavn fra Prosjektinnholdskolonner',
                   onText: 'På',
                   offText: 'Av'
                 })

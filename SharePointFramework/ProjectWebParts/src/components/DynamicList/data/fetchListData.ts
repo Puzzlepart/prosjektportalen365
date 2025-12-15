@@ -1,7 +1,7 @@
 import { IColumn } from '@fluentui/react'
 import { IDynamicListProps, IDynamicListData, WebContextMode } from '../types'
 import SPDataAdapter from '../../../data'
-import { EditableSPField, isHubSite, ProjectContentColumn } from 'pp365-shared-library'
+import { EditableSPField, ProjectContentColumn } from 'pp365-shared-library'
 import { Web } from '@pnp/sp/webs'
 import '@pnp/sp/lists'
 import '@pnp/sp/fields'
@@ -100,7 +100,7 @@ function enrichColumnsWithConfiguration(
     if (configColumn) {
       return {
         ...spColumn,
-        name: useProjectContentColumnNames ? (configColumn.name || spColumn.name) : spColumn.name,
+        name: useProjectContentColumnNames ? configColumn.name || spColumn.name : spColumn.name,
         minWidth: configColumn.minWidth,
         maxWidth: configColumn.maxWidth,
         dataType: configColumn.dataType,

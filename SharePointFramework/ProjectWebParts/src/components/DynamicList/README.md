@@ -25,11 +25,9 @@ A flexible, configurable web part for displaying SharePoint list data in a dynam
 | `title` | string | - | Title to display above the list (defaults to list title) |
 | `showSearchBox` | boolean | `false` | Show/hide the search box for filtering items |
 | `mode` | 'multi' \| 'single' | 'multi' | Display mode: multi-item grid or single-item detail view |
-| `maxItems` | number | 0 | Maximum items allowed (0 = unlimited). When set to 1, automatically switches to single-item mode |
 | `showCommandBar` | boolean | `true` | Show/hide the command bar with actions |
 | `showFilters` | boolean | `false` | Enable filter panel (future feature) |
 | `useProjectContentColumnNames` | boolean | `true` | Use column display names from ProjectContentColumns (Prosjektinnholdskolonner). If false, uses names directly from the list/library |
-| `pageSize` | number | `30` | Number of items to display per page |
 | `infoText` | string | - | Additional information text to display |
 
 ### View Selection Behavior
@@ -67,7 +65,7 @@ The webpart supports view selection similar to PortfolioOverview, with **default
 - Pagination for large lists
 - Best for: Tasks, Issues, Documents, any list with multiple items
 
-#### Single-Item Mode (`mode: 'single'` or `maxItems: 1`)
+#### Single-Item Mode (`mode: 'single'`)
 
 - Displays one item in a detailed field-by-field view
 - Grid layout with responsive columns (450px minimum)
@@ -75,7 +73,7 @@ The webpart supports view selection similar to PortfolioOverview, with **default
 - Automatically filters out system fields
 - Best for: Settings, Configuration, Site Information, any list with a single record
 
-**Note:** When `maxItems` is set to 1, the mode automatically switches to 'single' even if not explicitly configured.
+**Note:** When a list only has one item, the mode automatically switches to 'single' even if not explicitly configured.
 
 ## Usage
 
@@ -95,35 +93,6 @@ The webpart supports view selection similar to PortfolioOverview, with **default
 6. Configure display options as needed
 
 The webpart automatically fetches all available lists and views from the selected site and displays them in dropdowns for easy selection.
-
-### Example Configuration
-
-```json
-{
-  "listName": "Tasks",
-  "title": "My Tasks",
-  "showCommandBar": true,
-  "showFilters": false,
-  "pageSize": 30
-}
-```
-
-## Component Structure
-
-```text
-DynamicList/
-├── DynamicList.tsx           # Main component
-├── DynamicListView.tsx       # Grid view component
-├── SingleItemView.tsx        # Single-item detail view
-├── useDynamicList.ts         # State management hook
-├── useColumns.tsx            # Column configuration
-├── useToolbarItems.tsx       # Toolbar items
-├── context.ts                # React context
-├── types.ts                  # TypeScript interfaces
-└── data/
-    ├── fetchListData.ts      # Data fetching logic
-    └── useDynamicListDataFetch.ts  # Data fetch hook
-```
 
 ## Data Fetching
 
@@ -146,12 +115,6 @@ The component is designed to be extended with:
 
 ## Technical Details
 
-### Dependencies
-
-- `@fluentui/react-components` - Fluent UI components
-- `@pnp/sp` - PnP JS for SharePoint data access
-- `pp365-shared-library` - Shared components and utilities
-
 ### State Management
 
 Uses React hooks with context API for state management:
@@ -169,24 +132,6 @@ Uses React hooks with context API for state management:
 
 ## Future Enhancements
 
-- [ ] Server-side pagination
-- [ ] Advanced filtering UI
 - [ ] Column customization (show/hide, reorder)
-- [ ] Inline editing
-- [ ] Export to Excel
 - [ ] Bulk operations
 - [ ] Custom views/templates
-- [ ] Channel-based configuration
-
-## Migration from TimelineList
-
-To migrate from TimelineList to DynamicList:
-
-1. Replace `ProjectTimeline` web part with `DynamicList`
-2. Configure list name in web part properties
-3. Adjust display properties as needed
-4. Custom timeline-specific features will need to be re-implemented
-
-## Channel Configuration (Future)
-
-Channel-based configuration will allow different list configurations based on the current channel context, similar to other web parts in the solution.

@@ -126,19 +126,9 @@ export interface IDynamicListProps extends IBaseWebPartComponentProps {
   useProjectContentColumnNames?: boolean
 
   /**
-   * Number of items to show per page
-   */
-  pageSize?: number
-
-  /**
    * Additional info text to display
    */
   infoText?: string
-
-  /**
-   * Maximum number of items allowed in the list (0 = unlimited)
-   */
-  maxItems?: number
 
   /**
    * Display mode: 'multi' for grid view, 'single' for detailed single-item view

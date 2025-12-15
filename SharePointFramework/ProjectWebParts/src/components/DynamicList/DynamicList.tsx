@@ -1,7 +1,12 @@
 import { FC, useContext, useEffect, useMemo } from 'react'
 import * as React from 'react'
 import { DynamicListContext } from './context'
-import { IDynamicListProps, DynamicListMode, DocumentLibraryViewMode, WebContextMode } from './types'
+import {
+  IDynamicListProps,
+  DynamicListMode,
+  DocumentLibraryViewMode,
+  WebContextMode
+} from './types'
 import { useDynamicList } from './useDynamicList'
 import { DynamicListView } from './views/DynamicListView/DynamicListView'
 import { DocumentLibraryView } from './views/DocumentLibraryView'
@@ -11,7 +16,6 @@ import {
   WebPartTitle,
   CustomEditPanel,
   Toolbar,
-  isHubSite,
   UserMessage,
   LoadingSkeleton
 } from 'pp365-shared-library'
@@ -132,15 +136,12 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
     [props, state]
   )
 
-  const displayMode =
-    props.mode || (props.maxItems === 1 ? DynamicListMode.Single : DynamicListMode.Multi)
-
   const hasOnlyOneItem = state.data?.listItems?.length === 1
   const isSingleView =
-    displayMode === DynamicListMode.Single ||
-    (displayMode === DynamicListMode.Multi && (hasOnlyOneItem || state.isDrilledDown))
+    props.mode === DynamicListMode.Single ||
+    (props.mode === DynamicListMode.Multi && (hasOnlyOneItem || state.isDrilledDown))
 
-  const showNewButton = displayMode === DynamicListMode.Multi
+  const showNewButton = props.mode === DynamicListMode.Multi
 
   useEffect(() => {
     if (isSingleView && state.data?.listItems?.length > 0 && !state.selectedItems?.length) {
@@ -172,7 +173,11 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
     <div className={styles.dynamicList}>
       <DynamicListContext.Provider value={context}>
         <div className={styles.container}>
-          <DynamicListContent isSingleView={isSingleView} showNewButton={showNewButton} targetWeb={targetWeb} />
+          <DynamicListContent
+            isSingleView={isSingleView}
+            showNewButton={showNewButton}
+            targetWeb={targetWeb}
+          />
         </div>
         <ColumnContextMenu />
         {state.panel && (
@@ -202,8 +207,6 @@ DynamicList.defaultProps = {
   showViewSelector: true,
   showFilters: false,
   useProjectContentColumnNames: true,
-  pageSize: 30,
-  maxItems: 0,
   mode: DynamicListMode.Multi,
   documentLibraryViewMode: DocumentLibraryViewMode.Folders
 }
