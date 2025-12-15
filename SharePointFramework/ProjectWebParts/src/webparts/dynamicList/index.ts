@@ -22,6 +22,7 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
   private _viewOptions: IPropertyPaneDropdownOption[] = []
   private _viewsLoading: boolean = false
   private _columnOptions: IPropertyPaneDropdownOption[] = []
+  private _nonFilterableColumnsInitialized: boolean = false
 
   public async onInit() {
     await super.onInit()
@@ -150,13 +151,14 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
             text: col.name
           }))
 
-          if (!this.properties.nonFilterableColumns || this.properties.nonFilterableColumns.length === 0) {
+          if (!this._nonFilterableColumnsInitialized && !this.properties.nonFilterableColumns) {
             this.properties.nonFilterableColumns = columns
               .filter((col: any) => {
                 const dataType = col.dataType || col.data?.type
                 return dataType === 'note' || dataType === 'datetime' || dataType === 'number'
               })
               .map((col: any) => col.fieldName || col.key)
+            this._nonFilterableColumnsInitialized = true
           }
           return
         }
@@ -191,6 +193,7 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
       this.properties.defaultViewId = null
       this.properties.hiddenColumns = []
       this.properties.nonFilterableColumns = []
+      this._nonFilterableColumnsInitialized = false
       await this._loadViewOptions()
       this.context.propertyPane.refresh()
       this.render()

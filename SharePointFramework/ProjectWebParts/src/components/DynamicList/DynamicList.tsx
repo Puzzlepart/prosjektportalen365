@@ -176,6 +176,21 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
     }
   }, [props.webContextMode, props.webUrl])
 
+  /**
+   * Filter fields for edit panel - exclude hidden columns unless they are required
+   */
+  const editPanelFields = useMemo(() => {
+    if (!state.data?.fields) return []
+
+    return state.data.fields.filter((field) => {
+      const fieldName = field.InternalName || field.displayName
+      const isHidden = props.hiddenColumns?.includes(fieldName)
+      const isRequired = field.Required === true
+
+      return !isHidden || isRequired
+    })
+  }, [state.data?.fields, props.hiddenColumns])
+
   return (
     <div className={styles.dynamicList}>
       <DynamicListContext.Provider value={context}>
@@ -190,7 +205,7 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
         {state.panel && (
           <CustomEditPanel
             isOpen={true}
-            fields={state.data?.fields || []}
+            fields={editPanelFields}
             fieldValues={state.panel.fieldValues}
             dataAdapter={SPDataAdapter}
             targetWeb={targetWeb}
