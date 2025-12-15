@@ -22,6 +22,7 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
   private _viewOptions: IPropertyPaneDropdownOption[] = []
   private _viewsLoading: boolean = false
   private _columnOptions: IPropertyPaneDropdownOption[] = []
+  private _columnsLoading: boolean = false
 
   public async onInit() {
     await super.onInit()
@@ -29,6 +30,7 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
 
     if (this.properties.listName) {
       await this._loadViewOptions()
+      await this._loadColumnOptions()
     }
   }
 
@@ -135,28 +137,77 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
   }
 
   /**
-   * Get column options from the rendered component's state data.
-   * Called when property pane configuration is built.
+   * Load available columns from the selected list.
+   * Uses the exact same filtering logic as fetchListData to ensure consistency.
    */
-  private _getColumnOptions(): void {
+  private async _loadColumnOptions(): Promise<void> {
     try {
-      const dataElement = this.domElement.querySelector('[data-list-columns]')
-      if (dataElement) {
-        const columnsJson = dataElement.getAttribute('data-list-columns')
-        if (columnsJson) {
-          const columns = JSON.parse(columnsJson)
-          this._columnOptions = columns.map((col: any) => ({
-            key: col.fieldName || col.key,
-            text: col.name
-          }))
+      this._columnsLoading = true
 
-          return
-        }
+      if (!this.properties.listName) {
+        this._columnOptions = []
+        this._columnsLoading = false
+        return
       }
+
+      let web = SPDataAdapter.sp.web
+      const webContextMode = this.properties.webContextMode || WebContextMode.CurrentProject
+
+      if (webContextMode === WebContextMode.HubSite) {
+        web = SPDataAdapter.portalDataService.web
+      } else if (webContextMode === WebContextMode.CustomSite && this.properties.webUrl) {
+        const { Web } = await import('@pnp/sp/webs')
+        web = Web([SPDataAdapter.sp.web, this.properties.webUrl])
+      }
+
+      const allFields = await SPDataAdapter.portalDataService.getListFields(
+        this.properties.listName,
+        undefined,
+        web
+      )
+
+      let projectContentColumns = []
+      try {
+        if (SPDataAdapter.portalDataService?.isConfigured) {
+          projectContentColumns = await SPDataAdapter.portalDataService.fetchProjectContentColumns(
+            'PROJECT_CONTENT_COLUMNS'
+          )
+        }
+      } catch (error) {
+        console.warn('Could not fetch ProjectContentColumns configuration:', error)
+      }
+
+      this._columnOptions = allFields
+        .filter((field) => {
+          const showInEditForm = field.ShowInEditForm ?? true
+          const hidden = field.Hidden ?? false
+          const readOnlyField = field.SchemaXml
+            ? field.SchemaXml.indexOf('ReadOnly="TRUE"') !== -1
+            : false
+
+          const isInProjectContentColumns = projectContentColumns.some(
+            (c) => c.internalName === field.InternalName || c.fieldName === field.InternalName
+          )
+
+          return (
+            showInEditForm &&
+            !hidden &&
+            (!readOnlyField || isInProjectContentColumns) &&
+            !field.InternalName.startsWith('_') &&
+            field.InternalName !== 'Attachments'
+          )
+        })
+        .map((field) => ({
+          key: field.InternalName,
+          text: field.Title
+        }))
+
+      this._columnsLoading = false
     } catch (error) {
-      console.error('Error getting column options from component:', error)
+      console.error('Error loading columns:', error)
+      this._columnOptions = []
+      this._columnsLoading = false
     }
-    this._columnOptions = []
   }
 
   public render(): void {
@@ -184,6 +235,7 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
       this.properties.hiddenColumns = []
       this.properties.nonFilterableColumns = []
       await this._loadViewOptions()
+      await this._loadColumnOptions()
       this.context.propertyPane.refresh()
       this.render()
     }
@@ -201,8 +253,6 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    this._getColumnOptions()
-
     return {
       pages: [
         {
@@ -244,14 +294,16 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                     key: 'hiddenColumns',
                     label: 'Skjul kolonner',
                     options: this._columnOptions,
-                    selectedKeys: this.properties.hiddenColumns || []
+                    selectedKeys: this.properties.hiddenColumns || [],
+                    disabled: this._columnsLoading
                   }),
                 this.properties.listName &&
                   PropertyFieldMultiSelect('nonFilterableColumns', {
                     key: 'nonFilterableColumns',
                     label: 'Ikke-filtrerbare kolonner',
                     options: this._columnOptions,
-                    selectedKeys: this.properties.nonFilterableColumns || []
+                    selectedKeys: this.properties.nonFilterableColumns || [],
+                    disabled: this._columnsLoading
                   })
               ]
             },

@@ -65,14 +65,7 @@ const DynamicListContent: FC<{ isSingleView: boolean; showNewButton: boolean; ta
 
   return (
     <>
-      <div
-        className={styles.header}
-        data-list-columns={
-          context.state.data?.listColumns
-            ? JSON.stringify(context.state.data.listColumns)
-            : undefined
-        }
-      >
+      <div className={styles.header}>
         {context.state.isLoading ? (
           <Skeleton className={styles.headerSkeleton}>
             <SkeletonItem className={styles.titleSkeleton} />
