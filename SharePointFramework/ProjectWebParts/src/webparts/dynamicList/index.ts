@@ -265,6 +265,11 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                   label: 'Vis filtre',
                   onText: 'På',
                   offText: 'Av'
+                }),
+                PropertyPaneToggle('useProjectContentColumnNames', {
+                  label: 'Bruk kolonnenavn fra Prosjektinnholdskolonner',
+                  onText: 'På',
+                  offText: 'Av'
                 })
               ]
             }

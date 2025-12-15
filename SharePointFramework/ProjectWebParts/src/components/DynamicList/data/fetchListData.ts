@@ -84,11 +84,13 @@ async function fetchProjectContentColumns(): Promise<ProjectContentColumn[]> {
  *
  * @param spColumns - Array of columns created from SharePoint field definitions
  * @param projectContentColumns - Array of column configurations from ProjectContentColumns list
+ * @param useProjectContentColumnNames - Whether to use display names from ProjectContentColumns
  * @returns Array of enriched columns with merged configuration
  */
 function enrichColumnsWithConfiguration(
   spColumns: IColumn[],
-  projectContentColumns: ProjectContentColumn[]
+  projectContentColumns: ProjectContentColumn[],
+  useProjectContentColumnNames: boolean = true
 ): IColumn[] {
   return spColumns.map((spColumn) => {
     const configColumn = projectContentColumns.find(
@@ -98,7 +100,7 @@ function enrichColumnsWithConfiguration(
     if (configColumn) {
       return {
         ...spColumn,
-        name: configColumn.name || spColumn.name,
+        name: useProjectContentColumnNames ? (configColumn.name || spColumn.name) : spColumn.name,
         minWidth: configColumn.minWidth,
         maxWidth: configColumn.maxWidth,
         dataType: configColumn.dataType,
@@ -366,7 +368,11 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
         }
       })
 
-    columns = enrichColumnsWithConfiguration(columns, projectContentColumns)
+    columns = enrichColumnsWithConfiguration(
+      columns,
+      projectContentColumns,
+      props.useProjectContentColumnNames ?? true
+    )
 
     const taxonomyTermsMap = await fetchTaxonomyTermsForColumns(columns)
 

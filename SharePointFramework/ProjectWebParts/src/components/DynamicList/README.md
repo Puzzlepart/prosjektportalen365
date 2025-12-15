@@ -17,7 +17,8 @@ A flexible, configurable web part for displaying SharePoint list data in a dynam
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `webUrl` | string | (current site) | URL of the site where the list is located. Leave empty to use the current site |
+| `webContextMode` | 'current' \| 'hub' \| 'custom' | 'current' | Determines which SharePoint site to use: **current** (current project), **hub** (portfolio hub site), or **custom** (custom URL) |
+| `webUrl` | string | - | Custom site URL (only used when webContextMode is 'custom') |
 | `listName` | string | - | The internal name of the SharePoint list to display. **Selected from dropdown** of available lists |
 | `viewName` | string | 'All Fields' | The view title to use for field selection (for backward compatibility) |
 | `defaultViewId` | string | null | **Default view ID** (SharePoint item ID). **Takes precedence over viewName**. Selected from dropdown of available views |
@@ -27,6 +28,7 @@ A flexible, configurable web part for displaying SharePoint list data in a dynam
 | `maxItems` | number | 0 | Maximum items allowed (0 = unlimited). When set to 1, automatically switches to single-item mode |
 | `showCommandBar` | boolean | `true` | Show/hide the command bar with actions |
 | `showFilters` | boolean | `false` | Enable filter panel (future feature) |
+| `useProjectContentColumnNames` | boolean | `true` | Use column display names from ProjectContentColumns (Prosjektinnholdskolonner). If false, uses names directly from the list/library |
 | `pageSize` | number | `30` | Number of items to display per page |
 | `infoText` | string | - | Additional information text to display |
 
@@ -81,8 +83,12 @@ The webpart supports view selection similar to PortfolioOverview, with **default
 
 1. Add the web part to a SharePoint page
 2. Edit the web part properties
-3. **(Optional)** Specify a Site URL if you want to display a list from a different site (leave empty for current site)
-4. **Select a list** from the dropdown - all available lists from the selected site will be shown with item counts
+3. **Select a site mode** to determine where the list is located:
+   - **Gjeldende prosjekt** (Current Project): Uses the current project site
+   - **Porteføljeområde (hub)** (Hub Site): Uses the portfolio hub site that the project is connected to
+   - **Egendefinert område** (Custom Site): Allows you to specify a custom SharePoint site URL
+4. **(If Custom Site selected)** Enter the full SharePoint site URL
+5. **Select a list** from the dropdown - all available lists from the selected site will be shown with item counts
 5. **Select a view** to determine which fields to display:
    - **All Fields** (default): Shows all non-hidden, editable fields from the list
    - **Specific View**: Shows only the fields included in the selected view, in the view's order

@@ -119,6 +119,13 @@ export interface IDynamicListProps extends IBaseWebPartComponentProps {
   showFilters?: boolean
 
   /**
+   * Whether to use column display names from ProjectContentColumns configuration.
+   * If true, uses names from Prosjektinnholdskolonner list.
+   * If false, uses names directly from the SharePoint list/library.
+   */
+  useProjectContentColumnNames?: boolean
+
+  /**
    * Number of items to show per page
    */
   pageSize?: number

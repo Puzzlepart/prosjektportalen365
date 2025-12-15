@@ -201,6 +201,7 @@ DynamicList.defaultProps = {
   showSearchBox: true,
   showViewSelector: true,
   showFilters: false,
+  useProjectContentColumnNames: true,
   pageSize: 30,
   maxItems: 0,
   mode: DynamicListMode.Multi,
