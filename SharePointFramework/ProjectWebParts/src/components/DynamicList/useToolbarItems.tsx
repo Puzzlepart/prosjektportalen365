@@ -195,11 +195,27 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
         const folderPath = context.state.currentFolderPath || ''
 
         for (const file of files) {
+          let addedFile
           if (folderPath) {
             const targetFolder = list.rootFolder.folders.getByUrl(folderPath)
-            await targetFolder.files.addUsingPath(file.name, file, { Overwrite: true })
+            addedFile = await targetFolder.files.addUsingPath(file.name, file, { Overwrite: true })
           } else {
-            await list.rootFolder.files.addUsingPath(file.name, file, { Overwrite: true })
+            addedFile = await list.rootFolder.files.addUsingPath(file.name, file, { Overwrite: true })
+          }
+          
+          // Set GtSiteId and GtSiteTitle if useSiteIdFiltering is enabled
+          if (context.props.useSiteIdFiltering && addedFile?.data) {
+            const siteId = context.props.pageContext?.site?.id?.toString()
+            const siteTitle = context.props.pageContext?.web?.title
+            const itemId = addedFile.data.ListItemAllFields?.Id
+            
+            if (itemId && (siteId || siteTitle)) {
+              const updateProps: Record<string, any> = {}
+              if (siteId) updateProps.GtSiteId = siteId
+              if (siteTitle) updateProps.GtSiteTitle = siteTitle
+              
+              await list.items.getById(itemId).update(updateProps)
+            }
           }
         }
 
@@ -250,11 +266,27 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
         }
 
         const emptyFile = new Blob([], { type: contentType })
+        let addedFile
         if (folderPath) {
           const targetFolder = list.rootFolder.folders.getByUrl(folderPath)
-          await targetFolder.files.addUsingPath(fileName, emptyFile, { Overwrite: true })
+          addedFile = await targetFolder.files.addUsingPath(fileName, emptyFile, { Overwrite: true })
         } else {
-          await list.rootFolder.files.addUsingPath(fileName, emptyFile, { Overwrite: true })
+          addedFile = await list.rootFolder.files.addUsingPath(fileName, emptyFile, { Overwrite: true })
+        }
+        
+        // Set GtSiteId and GtSiteTitle if useSiteIdFiltering is enabled
+        if (context.props.useSiteIdFiltering && addedFile?.data) {
+          const siteId = context.props.pageContext?.site?.id?.toString()
+          const siteTitle = context.props.pageContext?.web?.title
+          const itemId = addedFile.data.ListItemAllFields?.Id
+          
+          if (itemId && (siteId || siteTitle)) {
+            const updateProps: Record<string, any> = {}
+            if (siteId) updateProps.GtSiteId = siteId
+            if (siteTitle) updateProps.GtSiteTitle = siteTitle
+            
+            await list.items.getById(itemId).update(updateProps)
+          }
         }
 
         context.setState({ refetch: Date.now() })
@@ -290,6 +322,18 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
           await list.items.getById(itemId).update(properties)
           dismissPanel()
         } else {
+          // Add GtSiteId and GtSiteTitle if useSiteIdFiltering is enabled
+          if (context.props.useSiteIdFiltering) {
+            const siteId = context.props.pageContext?.site?.id?.toString()
+            const siteTitle = context.props.pageContext?.web?.title
+            if (siteId) {
+              properties.GtSiteId = siteId
+            }
+            if (siteTitle) {
+              properties.GtSiteTitle = siteTitle
+            }
+          }
+          
           const result = await list.items.add(properties)
           const newItemId = result.data.ID
 

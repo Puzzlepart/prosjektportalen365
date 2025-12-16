@@ -166,11 +166,27 @@ export const DocumentLibraryView: FC = () => {
         const folderPath = context.state.currentFolderPath || ''
 
         for (const file of files) {
+          let addedFile
           if (folderPath) {
             const targetFolder = list.rootFolder.folders.getByUrl(folderPath)
-            await targetFolder.files.addUsingPath(file.name, file, { Overwrite: true })
+            addedFile = await targetFolder.files.addUsingPath(file.name, file, { Overwrite: true })
           } else {
-            await list.rootFolder.files.addUsingPath(file.name, file, { Overwrite: true })
+            addedFile = await list.rootFolder.files.addUsingPath(file.name, file, { Overwrite: true })
+          }
+          
+          // Set GtSiteId and GtSiteTitle if useSiteIdFiltering is enabled
+          if (context.props.useSiteIdFiltering && addedFile?.data) {
+            const siteId = context.props.pageContext?.site?.id?.toString()
+            const siteTitle = context.props.pageContext?.web?.title
+            const itemId = addedFile.data.ListItemAllFields?.Id
+            
+            if (itemId && (siteId || siteTitle)) {
+              const updateProps: Record<string, any> = {}
+              if (siteId) updateProps.GtSiteId = siteId
+              if (siteTitle) updateProps.GtSiteTitle = siteTitle
+              
+              await list.items.getById(itemId).update(updateProps)
+            }
           }
         }
 
