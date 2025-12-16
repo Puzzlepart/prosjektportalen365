@@ -437,7 +437,7 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                 this.properties.useSiteIdFiltering &&
                   this._isDocumentLibrary() &&
                   PropertyPaneToggle('useProjectFolder', {
-                    label: 'Opprett prosjektmappe i dokumentbibliotek',
+                    label: 'Anvend prosjektmappe i dokumentbibliotek',
                     onText: 'På',
                     offText: 'Av',
                     checked: this.properties.useProjectFolder || false

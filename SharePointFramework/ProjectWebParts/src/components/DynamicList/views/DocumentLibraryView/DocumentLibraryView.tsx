@@ -81,7 +81,11 @@ export const DocumentLibraryView: FC = () => {
 
   const breadcrumbItems = useMemo(() => {
     const currentPath = context.state.currentFolderPath || ''
-    if (!currentPath) {
+    const projectFolderName = context.props.useProjectFolder
+      ? context.props.pageContext?.web?.title
+      : null
+
+    if (!currentPath && !projectFolderName) {
       return [
         {
           text: context.state.data?.listTitle || 'Documents',
@@ -91,31 +95,46 @@ export const DocumentLibraryView: FC = () => {
       ]
     }
 
-    const items = [
-      {
+    const items = []
+
+    if (!projectFolderName) {
+      items.push({
         text: context.state.data?.listTitle || 'Documents',
         key: 'root',
         onClick: () => context.setState({ currentFolderPath: '' })
-      }
-    ]
-
-    const pathSegments = currentPath.split('/').filter(Boolean)
-    let accumulatedPath = ''
-
-    pathSegments.forEach((segment, index) => {
-      accumulatedPath += (accumulatedPath ? '/' : '') + segment
-      const isLast = index === pathSegments.length - 1
-      const pathForClick = accumulatedPath
-
-      items.push({
-        text: segment,
-        key: pathForClick,
-        onClick: isLast ? undefined : () => context.setState({ currentFolderPath: pathForClick })
       })
-    })
+    }
+
+    if (projectFolderName) {
+      const isAtProjectFolder = currentPath === projectFolderName
+      items.push({
+        text: projectFolderName,
+        key: projectFolderName,
+        onClick: isAtProjectFolder ? undefined : () => context.setState({ currentFolderPath: projectFolderName })
+      })
+    }
+
+    if (currentPath && currentPath !== projectFolderName) {
+      const pathSegments = currentPath.split('/').filter(Boolean)
+      let accumulatedPath = ''
+      const startIndex = projectFolderName && pathSegments[0] === projectFolderName ? 1 : 0
+
+      for (let index = startIndex; index < pathSegments.length; index++) {
+        const segment = pathSegments[index]
+        accumulatedPath += (accumulatedPath ? '/' : '') + segment
+        const isLast = index === pathSegments.length - 1
+        const pathForClick = accumulatedPath
+
+        items.push({
+          text: segment,
+          key: pathForClick,
+          onClick: isLast ? undefined : () => context.setState({ currentFolderPath: pathForClick })
+        })
+      }
+    }
 
     return items
-  }, [context.state.currentFolderPath, context.state.data?.listTitle, context.setState])
+  }, [context.state.currentFolderPath, context.state.data?.listTitle, context.props.useProjectFolder, context.props.pageContext?.web?.title, context.setState])
 
   const columns: IListViewColumn[] = useMemo(() => {
     return baseColumns.filter((col) => {
@@ -163,7 +182,21 @@ export const DocumentLibraryView: FC = () => {
           context.props.webContextMode
         )
         const list = web.lists.getByTitle(context.props.listName)
-        const folderPath = context.state.currentFolderPath || ''
+        let folderPath = context.state.currentFolderPath || ''
+
+        if (context.props.useProjectFolder) {
+          const projectFolderName = context.props.pageContext?.web?.title
+          if (projectFolderName) {
+            try {
+              await list.rootFolder.folders.getByUrl(projectFolderName)()
+            } catch {
+              await list.rootFolder.folders.addUsingPath(projectFolderName)
+            }
+            if (!folderPath) {
+              folderPath = projectFolderName
+            }
+          }
+        }
 
         for (const file of files) {
           let addedFile
@@ -171,21 +204,26 @@ export const DocumentLibraryView: FC = () => {
             const targetFolder = list.rootFolder.folders.getByUrl(folderPath)
             addedFile = await targetFolder.files.addUsingPath(file.name, file, { Overwrite: true })
           } else {
-            addedFile = await list.rootFolder.files.addUsingPath(file.name, file, { Overwrite: true })
+            addedFile = await list.rootFolder.files.addUsingPath(file.name, file, {
+              Overwrite: true
+            })
           }
-          
-          // Set GtSiteId and GtSiteTitle if useSiteIdFiltering is enabled
-          if (context.props.useSiteIdFiltering && addedFile?.data) {
-            const siteId = context.props.pageContext?.site?.id?.toString()
-            const siteTitle = context.props.pageContext?.web?.title
-            const itemId = addedFile.data.ListItemAllFields?.Id
-            
-            if (itemId && (siteId || siteTitle)) {
-              const updateProps: Record<string, any> = {}
-              if (siteId) updateProps.GtSiteId = siteId
-              if (siteTitle) updateProps.GtSiteTitle = siteTitle
-              
-              await list.items.getById(itemId).update(updateProps)
+
+          if (context.props.useSiteIdFiltering && addedFile) {
+            try {
+              const siteId = context.props.pageContext?.site?.id?.toString()
+              const siteTitle = context.props.pageContext?.web?.title
+
+              if (siteId || siteTitle) {
+                const fileItem = await addedFile.file.getItem()
+                const updateProps: Record<string, any> = {}
+                if (siteId) updateProps.GtSiteId = siteId
+                if (siteTitle) updateProps.GtSiteTitle = siteTitle
+
+                await fileItem.update(updateProps)
+              }
+            } catch (err) {
+              console.error('Error setting GtSiteId/GtSiteTitle on file:', err)
             }
           }
         }
@@ -200,24 +238,25 @@ export const DocumentLibraryView: FC = () => {
 
   return (
     <FileUploadZone onFilesSelected={handleFilesSelected} fullScreen>
-      {viewMode === DocumentLibraryViewMode.Folders && breadcrumbItems.length > 1 && (
-        <div className={styles.breadcrumb}>
-          <Breadcrumb aria-label='Folder navigation'>
-            {breadcrumbItems.map((item, index) => (
-              <React.Fragment key={item.key}>
-                <BreadcrumbItem>
-                  {item.onClick ? (
-                    <BreadcrumbButton onClick={item.onClick}>{item.text}</BreadcrumbButton>
-                  ) : (
-                    <BreadcrumbButton current>{item.text}</BreadcrumbButton>
-                  )}
-                </BreadcrumbItem>
-                {index < breadcrumbItems.length - 1 && <BreadcrumbDivider />}
-              </React.Fragment>
-            ))}
-          </Breadcrumb>
-        </div>
-      )}
+      {viewMode === DocumentLibraryViewMode.Folders &&
+        (breadcrumbItems.length > 1 || context.props.useProjectFolder) && (
+          <div className={styles.breadcrumb}>
+            <Breadcrumb aria-label='Folder navigation'>
+              {breadcrumbItems.map((item, index) => (
+                <React.Fragment key={item.key}>
+                  <BreadcrumbItem>
+                    {item.onClick ? (
+                      <BreadcrumbButton onClick={item.onClick}>{item.text}</BreadcrumbButton>
+                    ) : (
+                      <BreadcrumbButton current>{item.text}</BreadcrumbButton>
+                    )}
+                  </BreadcrumbItem>
+                  {index < breadcrumbItems.length - 1 && <BreadcrumbDivider />}
+                </React.Fragment>
+              ))}
+            </Breadcrumb>
+          </div>
+        )}
       <ListView
         columns={columns as any}
         items={items}

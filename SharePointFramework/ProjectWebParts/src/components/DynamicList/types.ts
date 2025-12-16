@@ -128,7 +128,8 @@ export interface IDynamicListProps extends IBaseWebPartComponentProps {
 
   /**
    * For document libraries: Create and use a project-specific folder.
-   * When enabled, creates a folder named after the site title and uses it as root.
+   * When enabled, creates a folder named after the site title and uses it as root when creating/uploading a file
+   * if there is not already a project-specific folder at the current location.
    * All operations (upload, new files) will target this folder.
    */
   useProjectFolder?: boolean

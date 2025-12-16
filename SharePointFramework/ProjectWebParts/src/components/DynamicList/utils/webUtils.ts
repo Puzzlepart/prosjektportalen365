@@ -33,7 +33,6 @@ export function getWeb(
     }
   }
 
-  // Fallback to old logic for backward compatibility
   if (!webUrl) {
     if (pageContext && isHubSite(pageContext)) {
       return SPDataAdapter.portalDataService.web
