@@ -12,6 +12,7 @@ export class SPField {
   public Description?: string = ''
   public SchemaXml: string = '<Field></Field>'
   public TypeAsString?: string = 'Text'
+  public FieldTypeKind?: number = 2
   public Group?: string = ''
   public Hidden?: boolean = false
   public Required?: boolean = false

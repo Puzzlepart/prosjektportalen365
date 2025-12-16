@@ -183,6 +183,72 @@ function mapSharePointTypeToDataType(typeAsString: string, fieldTypeKind: number
 }
 
 /**
+ * Transforms a raw SharePoint item into a display-ready format.
+ * Applies the same transformation logic as fetchListData for consistency.
+ *
+ * @param item - Raw SharePoint item
+ * @param columns - Column definitions with taxonomy termSetId information
+ * @param taxonomyTermsMap - Map of termSetId to taxonomy terms for label resolution
+ * @returns Transformed item with human-readable values
+ */
+export function transformListItem(
+  item: any,
+  columns: IColumn[],
+  taxonomyTermsMap: Map<string, TaxonomyTermModel[]>
+): Record<string, any> {
+  const transformedItem: Record<string, any> = { ...item }
+
+  Object.keys(item).forEach((key) => {
+    const value = item[key]
+    const column = columns.find((col) => col.fieldName === key)
+
+    // Handle taxonomy fields with term store lookup
+    if (column?.data?.termSetId && taxonomyTermsMap.has(column.data.termSetId)) {
+      const terms = taxonomyTermsMap.get(column.data.termSetId)
+
+      if (value) {
+        const values = Array.isArray(value) ? value : [value]
+
+        const termNames = values
+          .map((v) => {
+            const termGuid =
+              typeof v === 'object' && 'TermGuid' in v
+                ? v.TermGuid
+                : typeof v === 'string'
+                ? v
+                : null
+
+            if (termGuid) {
+              const term = terms.find((t) => t.id === termGuid)
+              if (term) return term.name
+            }
+
+            if (typeof v === 'object' && 'Label' in v) return v.Label
+
+            return null
+          })
+          .filter(Boolean)
+
+        transformedItem[key] = termNames.join(';')
+        return
+      }
+    }
+
+    // Handle user/lookup fields
+    if (value && typeof value === 'object' && 'Title' in value) {
+      transformedItem[key] = value.Title
+    }
+
+    // Handle multi-value fields
+    if (Array.isArray(value)) {
+      transformedItem[key] = value.map((v) => (v.Title ? v.Title : v)).join(', ')
+    }
+  })
+
+  return transformedItem
+}
+
+/**
  * Fetches taxonomy terms for all term sets used in the columns.
  *
  * @param columns - Array of columns that may contain taxonomy fields
@@ -376,55 +442,7 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
 
     const taxonomyTermsMap = await fetchTaxonomyTermsForColumns(columns)
 
-    const listItems = items.map((item) => {
-      const transformedItem: Record<string, any> = { ...item }
-
-      Object.keys(item).forEach((key) => {
-        const value = item[key]
-        const column = columns.find((col) => col.fieldName === key)
-
-        if (column?.data?.termSetId && taxonomyTermsMap.has(column.data.termSetId)) {
-          const terms = taxonomyTermsMap.get(column.data.termSetId)
-
-          if (value) {
-            const values = Array.isArray(value) ? value : [value]
-
-            const termNames = values
-              .map((v) => {
-                const termGuid =
-                  typeof v === 'object' && 'TermGuid' in v
-                    ? v.TermGuid
-                    : typeof v === 'string'
-                    ? v
-                    : null
-
-                if (termGuid) {
-                  const term = terms.find((t) => t.id === termGuid)
-                  if (term) return term.name
-                }
-
-                if (typeof v === 'object' && 'Label' in v) return v.Label
-
-                return null
-              })
-              .filter(Boolean)
-
-            transformedItem[key] = termNames.join(';')
-            return
-          }
-        }
-
-        if (value && typeof value === 'object' && 'Title' in value) {
-          transformedItem[key] = value.Title
-        }
-
-        if (Array.isArray(value)) {
-          transformedItem[key] = value.map((v) => (v.Title ? v.Title : v)).join(', ')
-        }
-      })
-
-      return transformedItem
-    })
+    const listItems = items.map((item) => transformListItem(item, columns, taxonomyTermsMap))
 
     const mappedFields = allFields.map((fld) => new EditableSPField(fld))
 
@@ -453,6 +471,126 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
     }
   } catch (error) {
     console.error('[DynamicList] fetchListData error:', error)
+    throw error
+  }
+}
+
+/**
+ * Fetches a single list item by ID and transforms it using the same logic as fetchListData.
+ * This is useful for delta updates when creating or updating items without refetching the entire list.
+ *
+ * @param props Component configuration properties
+ * @param itemId The ID of the item to fetch
+ * @param existingColumns Optional existing column definitions to avoid refetching
+ * @returns The transformed item ready for display
+ */
+export async function fetchSingleItem(
+  props: IDynamicListProps,
+  itemId: number,
+  existingColumns?: IColumn[]
+): Promise<any> {
+  try {
+    if (!props.listName) {
+      throw new Error('List name is required')
+    }
+
+    const web = getWeb(props.webUrl, props)
+    const list = web.lists.getByTitle(props.listName)
+
+    // Fetch the item with expanded fields
+    const itemQuery = list.items
+      .getById(itemId)
+      .select('*', 'Author/Title', 'Editor/Title')
+      .expand('Author', 'Editor')
+
+    const isDocumentLibrary = existingColumns?.[0]?.data?.fieldType === 'File'
+    if (isDocumentLibrary) {
+      itemQuery
+        .select(
+          '*',
+          'FileRef',
+          'FileLeafRef',
+          'FileDirRef',
+          'File/Name',
+          'File/ServerRelativeUrl',
+          'File/Length',
+          'FSObjType',
+          'File_x0020_Type',
+          'Author/Title',
+          'Editor/Title'
+        )
+        .expand('Author', 'Editor', 'File')
+    }
+
+    const item = await itemQuery()
+
+    // If columns are provided, use them; otherwise fetch them
+    let columns = existingColumns
+    let taxonomyTermsMap = new Map<string, TaxonomyTermModel[]>()
+
+    if (!columns) {
+      // Fetch columns (simplified version - in real scenario we'd need all the column setup)
+      const allFields = await SPDataAdapter.portalDataService.getListFields(
+        props.listName,
+        undefined,
+        web
+      )
+
+      const projectContentColumns = await fetchProjectContentColumns()
+
+      const taxonomyFields = await list.fields
+        .filter("TypeAsString eq 'TaxonomyFieldType' or TypeAsString eq 'TaxonomyFieldTypeMulti'")
+        .select('InternalName', 'TypeAsString', 'TermSetId')()
+
+      const taxonomyFieldMap = new Map(
+        taxonomyFields.map((field: any) => [field.InternalName, field.TermSetId as string])
+      )
+
+      columns = allFields
+        .filter((field) => {
+          const showInEditForm = field.ShowInEditForm ?? true
+          const hidden = field.Hidden ?? false
+          return showInEditForm && !hidden
+        })
+        .map((field) => {
+          const dataType = mapSharePointTypeToDataType(field.TypeAsString, field.FieldTypeKind)
+          const isTaxonomyField =
+            field.TypeAsString === 'TaxonomyFieldType' ||
+            field.TypeAsString === 'TaxonomyFieldTypeMulti'
+          const termSetId = isTaxonomyField ? taxonomyFieldMap.get(field.InternalName) : undefined
+
+          return {
+            key: field.InternalName,
+            name: field.Title,
+            fieldName: field.InternalName,
+            minWidth: undefined,
+            maxWidth: undefined,
+            isResizable: true,
+            isSorted: false,
+            isSortedDescending: false,
+            dataType: dataType,
+            data: {
+              type: dataType,
+              fieldType: field.TypeAsString,
+              fieldTypeKind: field.FieldTypeKind,
+              ...(isTaxonomyField && termSetId && { termSetId })
+            }
+          }
+        })
+
+      columns = enrichColumnsWithConfiguration(
+        columns,
+        projectContentColumns,
+        props.useProjectContentColumnNames ?? true
+      )
+
+      taxonomyTermsMap = await fetchTaxonomyTermsForColumns(columns)
+    }
+
+    // Transform the item using the shared transformation logic
+    return transformListItem(item, columns, taxonomyTermsMap)
+  } catch (error) {
+    console.error('[DynamicList] fetchSingleItem error:', error)
     throw error
   }
 }

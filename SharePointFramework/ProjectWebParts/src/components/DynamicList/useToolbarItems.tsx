@@ -21,6 +21,7 @@ import _ from 'lodash'
 import { useExcelExport } from './hooks'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
 import { getWeb } from './utils'
+import { fetchSingleItem } from './data/fetchListData'
 
 const Icons = {
   ContentView: bundleIcon(ContentView24Filled, ContentView24Regular)
@@ -84,7 +85,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
    * Delete selected items with confirmation.
    *
    * Prompts the user for confirmation, then deletes all selected items from the list
-   * and triggers a data refetch.
+   * and removes them from state without refetching.
    */
   const deleteItems = useCallback(async () => {
     if (!context.props.listName) return
@@ -105,6 +106,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       context.state.data.listItems.find((_, idx) => idx === id)
     )
 
+    // Delete items from SharePoint
     await Promise.all(
       selectedItems.map(async (item: any) => {
         if (item?.Id) {
@@ -113,15 +115,24 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       })
     )
 
+    // Remove deleted items from state
+    const deletedItemIds = new Set(selectedItems.map((item: any) => item?.Id).filter(Boolean))
+    const updatedListItems = context.state.data.listItems.filter(
+      (item: any) => !deletedItemIds.has(item.Id)
+    )
+
     context.setState({
       selectedItems: [],
-      refetch: Date.now()
+      data: {
+        ...context.state.data,
+        listItems: updatedListItems
+      }
     })
   }, [context.state, context.props, context.setState])
 
   /**
    * Dismisses the edit panel and triggers a data refetch.
-   *
+  /**
    * Clears selected items, closes the panel, and refreshes the list data.
    */
   const dismissPanel = useCallback(() => {
@@ -131,6 +142,41 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       panel: null
     })
   }, [context.setState])
+
+  /**
+   * Dismisses the panel and adds a newly created item to the current state
+   * without triggering a full refetch. Uses fetchSingleItem to ensure the same
+   * transformation logic as fetchListData.
+   */
+  const dismissPanelWithNewItem = useCallback(
+    async (itemId: number) => {
+      try {
+        // Fetch and transform the new item using existing columns
+        const transformedItem = await fetchSingleItem(
+          context.props,
+          itemId,
+          context.state.data?.listColumns
+        )
+
+        // Add the new item to the beginning of the list
+        const updatedListItems = [transformedItem, ...(context.state.data?.listItems || [])]
+
+        context.setState({
+          selectedItems: [],
+          panel: null,
+          data: {
+            ...context.state.data,
+            listItems: updatedListItems
+          }
+        })
+      } catch (error) {
+        console.error('[DynamicList] Error fetching new item:', error)
+        // Fallback to full refetch on error
+        dismissPanel()
+      }
+    },
+    [context.props, context.state.data, context.setState]
+  )
 
   /**
    * Upload files to the document library.
@@ -231,18 +277,22 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
       try {
         if (itemId) {
+          // Update existing item - needs full refetch to update all views
           await list.items.getById(itemId).update(properties)
+          dismissPanel()
         } else {
-          await list.items.add(properties)
+          // Create new item - fetch and transform it using fetchSingleItem
+          const result = await list.items.add(properties)
+          const newItemId = result.data.ID
+
+          await dismissPanelWithNewItem(newItemId)
         }
       } catch (error) {
         console.error('[DynamicList] Error saving item:', error)
         throw error
       }
-
-      dismissPanel()
     },
-    [context.props, dismissPanel]
+    [context.props, dismissPanel, dismissPanelWithNewItem]
   )
 
   const menuItems = useMemo<ListMenuItem[]>(() => {
