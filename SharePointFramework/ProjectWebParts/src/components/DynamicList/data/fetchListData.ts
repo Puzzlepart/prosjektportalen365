@@ -457,14 +457,39 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
       currentView = viewsList.find((v) => v.isDefault)
     }
 
+    // Handle Site ID filtering if enabled
+    let filteredListItems = listItems
+    let siteIdFieldMissing = false
+
+    if (props.useSiteIdFiltering) {
+      const hasGtSiteId = columns.some((col) => col.fieldName === 'GtSiteId')
+      const hasGtSiteTitle = columns.some((col) => col.fieldName === 'GtSiteTitle')
+      const hasBothFields = hasGtSiteId && hasGtSiteTitle
+
+      if (!hasBothFields) {
+        siteIdFieldMissing = true
+      } else {
+        // Get current site ID from page context
+        const currentSiteId = props.pageContext?.site?.id?.toString()
+
+        if (currentSiteId) {
+          filteredListItems = listItems.filter((item) => {
+            const itemSiteId = item.GtSiteId
+            return itemSiteId && itemSiteId === currentSiteId
+          })
+        }
+      }
+    }
+
     return {
-      listItems,
+      listItems: filteredListItems,
       listColumns: columns,
       fields: mappedFields,
       views: viewsList,
       listTitle: listInfo.Title,
       listId: listInfo.Id,
-      baseTemplate: listInfo.BaseTemplate
+      baseTemplate: listInfo.BaseTemplate,
+      siteIdFieldMissing
     }
   } catch (error) {
     console.error('[DynamicList] fetchListData error:', error)

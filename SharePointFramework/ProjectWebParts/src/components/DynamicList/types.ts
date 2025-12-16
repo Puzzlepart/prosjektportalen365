@@ -120,6 +120,20 @@ export interface IDynamicListProps extends IBaseWebPartComponentProps {
   minHeight?: number | string
 
   /**
+   * Enable filtering based on GtSiteId field.
+   * When enabled, only items matching the current site's ID will be displayed.
+   * Requires GtSiteId field to exist on the list/library.
+   */
+  useSiteIdFiltering?: boolean
+
+  /**
+   * For document libraries: Create and use a project-specific folder.
+   * When enabled, creates a folder named after the site title and uses it as root.
+   * All operations (upload, new files) will target this folder.
+   */
+  useProjectFolder?: boolean
+
+  /**
    * Show search box
    */
   showSearchBox?: boolean
@@ -359,4 +373,9 @@ export interface IDynamicListData {
    * List base template (101 = Document Library)
    */
   baseTemplate?: number
+
+  /**
+   * Warning message if Site ID filtering is enabled but GtSiteId field is missing
+   */
+  siteIdFieldMissing?: boolean
 }

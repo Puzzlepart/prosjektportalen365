@@ -3,6 +3,7 @@ import {
   PropertyPaneTextField,
   PropertyPaneToggle,
   PropertyPaneDropdown,
+  PropertyPaneButton,
   IPropertyPaneDropdownOption
 } from '@microsoft/sp-property-pane'
 import { PropertyFieldMultiSelect } from '@pnp/spfx-property-controls/lib/PropertyFieldMultiSelect'
@@ -15,6 +16,7 @@ import SPDataAdapter from '../../data'
 import '@pnp/sp/webs'
 import '@pnp/sp/lists'
 import '@pnp/sp/views'
+import '@pnp/sp/fields'
 
 export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListProps> {
   private _listOptions: IPropertyPaneDropdownOption[] = []
@@ -23,6 +25,8 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
   private _viewsLoading: boolean = false
   private _columnOptions: IPropertyPaneDropdownOption[] = []
   private _columnsLoading: boolean = false
+  private _hasSiteIdFieldCache: boolean | null = null
+  private _isDocumentLibraryCache: boolean | null = null
 
   public async onInit() {
     await super.onInit()
@@ -64,9 +68,8 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
         .sort((a, b) => a.Title.localeCompare(b.Title))
         .map((list) => ({
           key: list.Title,
-          text: `${list.Title} (${list.ItemCount || 0} ${
-            list.BaseTemplate === 101 ? 'dokumenter' : 'elementer'
-          })`
+          text: `${list.Title} (${list.ItemCount || 0} ${list.BaseTemplate === 101 ? 'dokumenter' : 'elementer'
+            })`
         }))
 
       this._listsLoading = false
@@ -214,6 +217,83 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
     this.renderComponent<IDynamicListProps>(DynamicList)
   }
 
+  /**
+   * Checks if the selected list has a GtSiteId field
+   */
+  private _hasSiteIdField(): boolean {
+    if (this._hasSiteIdFieldCache !== null) return this._hasSiteIdFieldCache
+
+    const hasGtSiteId = this._columnOptions.some((col) => col.key === 'GtSiteId')
+    const hasGtSiteTitle = this._columnOptions.some((col) => col.key === 'GtSiteTitle')
+    const hasBothFields = hasGtSiteId && hasGtSiteTitle
+
+    this._hasSiteIdFieldCache = hasBothFields
+    return hasBothFields
+  }
+
+  /**
+   * Checks if the selected list is a document library
+   */
+  private _isDocumentLibrary(): boolean {
+    if (this._isDocumentLibraryCache !== null) return this._isDocumentLibraryCache
+
+    // Check if any list option has 'dokumenter' in the text (BaseTemplate 101)
+    const selectedList = this._listOptions.find((opt) => opt.key === this.properties.listName)
+    const isDocLib = selectedList?.text?.includes('dokumenter') || false
+    this._isDocumentLibraryCache = isDocLib
+    return isDocLib
+  }
+
+  /**
+   * Adds GtSiteId field to the selected list
+   */
+  private async _addSiteIdColumn(): Promise<void> {
+    if (!this.properties.listName) return
+
+    try {
+      let web = SPDataAdapter.sp.web
+      const webContextMode = this.properties.webContextMode || WebContextMode.CurrentProject
+
+      if (webContextMode === WebContextMode.HubSite) {
+        web = SPDataAdapter.portalDataService.web
+      } else if (webContextMode === WebContextMode.CustomSite && this.properties.webUrl) {
+        const { Web } = await import('@pnp/sp/webs')
+        web = Web([SPDataAdapter.sp.web, this.properties.webUrl])
+      }
+
+      const list = web.lists.getByTitle(this.properties.listName)
+
+      await list.fields.addText('GtSiteId', {
+        MaxLength: 255,
+        Group: 'Prosjektportalen'
+      })
+
+      await list.fields.getByInternalNameOrTitle('GtSiteId').update({
+        Title: 'Område-ID',
+        Description: 'ID for området/prosjektet som elementet tilhører'
+      })
+
+      await list.fields.addText('GtSiteTitle', {
+        MaxLength: 255,
+        Group: 'Prosjektportalen'
+      })
+
+      await list.fields.getByInternalNameOrTitle('GtSiteTitle').update({
+        Title: 'Område tittel',
+        Description: 'Tittel for området/prosjektet som elementet tilhører'
+      })
+
+      this._hasSiteIdFieldCache = null
+      await this._loadColumnOptions()
+      this.context.propertyPane.refresh()
+
+      alert('Område-ID og Område tittel kolonnene ble opprettet!')
+    } catch (error) {
+      console.error('Error adding GtSiteId and GtSiteTitle columns:', error)
+      alert('Kunne ikke opprette kolonnene. Se konsollen for detaljer.')
+    }
+  }
+
   protected async onPropertyPaneFieldChanged(
     propertyPath: string,
     oldValue: any,
@@ -234,6 +314,8 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
       this.properties.defaultViewId = null
       this.properties.hiddenColumns = []
       this.properties.nonFilterableColumns = []
+      this._hasSiteIdFieldCache = null
+      this._isDocumentLibraryCache = null
       await this._loadViewOptions()
       await this._loadColumnOptions()
       this.context.propertyPane.refresh()
@@ -271,11 +353,11 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                   selectedKey: this.properties.webContextMode || WebContextMode.CurrentProject
                 }),
                 this.properties.webContextMode === WebContextMode.CustomSite &&
-                  PropertyPaneTextField('webUrl', {
-                    label: 'Nettadresse',
-                    description: 'Angi URL til SharePoint-området',
-                    placeholder: this.context.pageContext.web.absoluteUrl
-                  }),
+                PropertyPaneTextField('webUrl', {
+                  label: 'Nettadresse',
+                  description: 'Angi URL til SharePoint-området',
+                  placeholder: this.context.pageContext.web.absoluteUrl
+                }),
                 PropertyPaneDropdown('listName', {
                   label: strings.ListNameFieldLabel,
                   options: this._listOptions,
@@ -283,28 +365,28 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                   disabled: this._listsLoading
                 }),
                 this.properties.listName &&
-                  PropertyPaneDropdown('defaultViewId', {
-                    label: 'Standardvisning',
-                    options: this._viewOptions,
-                    selectedKey: this._getSelectedViewKey(),
-                    disabled: this._viewsLoading
-                  }),
+                PropertyPaneDropdown('defaultViewId', {
+                  label: 'Standardvisning',
+                  options: this._viewOptions,
+                  selectedKey: this._getSelectedViewKey(),
+                  disabled: this._viewsLoading
+                }),
                 this.properties.listName &&
-                  PropertyFieldMultiSelect('hiddenColumns', {
-                    key: 'hiddenColumns',
-                    label: 'Skjul kolonner',
-                    options: this._columnOptions,
-                    selectedKeys: this.properties.hiddenColumns || [],
-                    disabled: this._columnsLoading
-                  }),
+                PropertyFieldMultiSelect('hiddenColumns', {
+                  key: 'hiddenColumns',
+                  label: 'Skjul kolonner',
+                  options: this._columnOptions,
+                  selectedKeys: this.properties.hiddenColumns || [],
+                  disabled: this._columnsLoading
+                }),
                 this.properties.listName &&
-                  PropertyFieldMultiSelect('nonFilterableColumns', {
-                    key: 'nonFilterableColumns',
-                    label: 'Ikke-filtrerbare kolonner',
-                    options: this._columnOptions,
-                    selectedKeys: this.properties.nonFilterableColumns || [],
-                    disabled: this._columnsLoading
-                  })
+                PropertyFieldMultiSelect('nonFilterableColumns', {
+                  key: 'nonFilterableColumns',
+                  label: 'Ikke-filtrerbare kolonner',
+                  options: this._columnOptions,
+                  selectedKeys: this.properties.nonFilterableColumns || [],
+                  disabled: this._columnsLoading
+                })
               ]
             },
             {
@@ -334,6 +416,33 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                   offText: 'Av'
                 })
               ]
+            },
+            {
+              groupName: 'Område-id funksjonalitet',
+              isCollapsed: true,
+              groupFields: [
+                PropertyPaneToggle('useSiteIdFiltering', {
+                  label: 'Anvend område-id funksjonalitet',
+                  onText: 'På',
+                  offText: 'Av',
+                  checked: this.properties.useSiteIdFiltering || false
+                }),
+                this.properties.useSiteIdFiltering &&
+                !this._hasSiteIdField() &&
+                PropertyPaneButton('addSiteIdColumn', {
+                  text: 'Legg til område-id kolonne',
+                    buttonType: 0,
+                    onClick: () => this._addSiteIdColumn()
+                }),
+                this.properties.useSiteIdFiltering &&
+                this._isDocumentLibrary() &&
+                PropertyPaneToggle('useProjectFolder', {
+                  label: 'Opprett prosjektmappe i dokumentbibliotek',
+                  onText: 'På',
+                  offText: 'Av',
+                  checked: this.properties.useProjectFolder || false
+                })
+              ].filter(Boolean)
             },
             {
               groupName: 'Vis/skjul (Kommandolinje)',
