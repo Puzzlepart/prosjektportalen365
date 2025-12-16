@@ -457,7 +457,6 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
       currentView = viewsList.find((v) => v.isDefault)
     }
 
-    // Handle Site ID filtering if enabled
     let filteredListItems = listItems
     let siteIdFieldMissing = false
 
@@ -469,7 +468,6 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
       if (!hasBothFields) {
         siteIdFieldMissing = true
       } else {
-        // Get current site ID from page context
         const currentSiteId = props.pageContext?.site?.id?.toString()
 
         if (currentSiteId) {

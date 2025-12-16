@@ -68,8 +68,9 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
         .sort((a, b) => a.Title.localeCompare(b.Title))
         .map((list) => ({
           key: list.Title,
-          text: `${list.Title} (${list.ItemCount || 0} ${list.BaseTemplate === 101 ? 'dokumenter' : 'elementer'
-            })`
+          text: `${list.Title} (${list.ItemCount || 0} ${
+            list.BaseTemplate === 101 ? 'dokumenter' : 'elementer'
+          })`
         }))
 
       this._listsLoading = false
@@ -237,7 +238,6 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
   private _isDocumentLibrary(): boolean {
     if (this._isDocumentLibraryCache !== null) return this._isDocumentLibraryCache
 
-    // Check if any list option has 'dokumenter' in the text (BaseTemplate 101)
     const selectedList = this._listOptions.find((opt) => opt.key === this.properties.listName)
     const isDocLib = selectedList?.text?.includes('dokumenter') || false
     this._isDocumentLibraryCache = isDocLib
@@ -353,11 +353,11 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                   selectedKey: this.properties.webContextMode || WebContextMode.CurrentProject
                 }),
                 this.properties.webContextMode === WebContextMode.CustomSite &&
-                PropertyPaneTextField('webUrl', {
-                  label: 'Nettadresse',
-                  description: 'Angi URL til SharePoint-området',
-                  placeholder: this.context.pageContext.web.absoluteUrl
-                }),
+                  PropertyPaneTextField('webUrl', {
+                    label: 'Nettadresse',
+                    description: 'Angi URL til SharePoint-området',
+                    placeholder: this.context.pageContext.web.absoluteUrl
+                  }),
                 PropertyPaneDropdown('listName', {
                   label: strings.ListNameFieldLabel,
                   options: this._listOptions,
@@ -365,28 +365,28 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                   disabled: this._listsLoading
                 }),
                 this.properties.listName &&
-                PropertyPaneDropdown('defaultViewId', {
-                  label: 'Standardvisning',
-                  options: this._viewOptions,
-                  selectedKey: this._getSelectedViewKey(),
-                  disabled: this._viewsLoading
-                }),
+                  PropertyPaneDropdown('defaultViewId', {
+                    label: 'Standardvisning',
+                    options: this._viewOptions,
+                    selectedKey: this._getSelectedViewKey(),
+                    disabled: this._viewsLoading
+                  }),
                 this.properties.listName &&
-                PropertyFieldMultiSelect('hiddenColumns', {
-                  key: 'hiddenColumns',
-                  label: 'Skjul kolonner',
-                  options: this._columnOptions,
-                  selectedKeys: this.properties.hiddenColumns || [],
-                  disabled: this._columnsLoading
-                }),
+                  PropertyFieldMultiSelect('hiddenColumns', {
+                    key: 'hiddenColumns',
+                    label: 'Skjul kolonner',
+                    options: this._columnOptions,
+                    selectedKeys: this.properties.hiddenColumns || [],
+                    disabled: this._columnsLoading
+                  }),
                 this.properties.listName &&
-                PropertyFieldMultiSelect('nonFilterableColumns', {
-                  key: 'nonFilterableColumns',
-                  label: 'Ikke-filtrerbare kolonner',
-                  options: this._columnOptions,
-                  selectedKeys: this.properties.nonFilterableColumns || [],
-                  disabled: this._columnsLoading
-                })
+                  PropertyFieldMultiSelect('nonFilterableColumns', {
+                    key: 'nonFilterableColumns',
+                    label: 'Ikke-filtrerbare kolonner',
+                    options: this._columnOptions,
+                    selectedKeys: this.properties.nonFilterableColumns || [],
+                    disabled: this._columnsLoading
+                  })
               ]
             },
             {
@@ -428,20 +428,20 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                   checked: this.properties.useSiteIdFiltering || false
                 }),
                 this.properties.useSiteIdFiltering &&
-                !this._hasSiteIdField() &&
-                PropertyPaneButton('addSiteIdColumn', {
-                  text: 'Legg til område-id kolonne',
+                  !this._hasSiteIdField() &&
+                  PropertyPaneButton('addSiteIdColumn', {
+                    text: 'Legg til område-id kolonne',
                     buttonType: 0,
                     onClick: () => this._addSiteIdColumn()
-                }),
+                  }),
                 this.properties.useSiteIdFiltering &&
-                this._isDocumentLibrary() &&
-                PropertyPaneToggle('useProjectFolder', {
-                  label: 'Opprett prosjektmappe i dokumentbibliotek',
-                  onText: 'På',
-                  offText: 'Av',
-                  checked: this.properties.useProjectFolder || false
-                })
+                  this._isDocumentLibrary() &&
+                  PropertyPaneToggle('useProjectFolder', {
+                    label: 'Opprett prosjektmappe i dokumentbibliotek',
+                    onText: 'På',
+                    offText: 'Av',
+                    checked: this.properties.useProjectFolder || false
+                  })
               ].filter(Boolean)
             },
             {

@@ -98,7 +98,7 @@ const DynamicListContent: FC<{ isSingleView: boolean; showNewButton: boolean; ta
             <div style={{ padding: '0 32px', marginBottom: '16px' }}>
               <UserMessage
                 title='Område-id relaterte felter ikke funnet'
-                  text='Område-id (GtSiteId) og Område tittel (GtSiteTitle) feltene må finnes på liste/dokumentbiblioteket for å ta i bruk denne funksjonaliteten. Bruk knappen i webdel-egenskapene for å legge til feltene, eller opprett dette manuelt på listen/dokumentbiblioteket.'
+                text='Område-id (GtSiteId) og Område tittel (GtSiteTitle) feltene må finnes på liste/dokumentbiblioteket for å ta i bruk denne funksjonaliteten. Bruk knappen i webdel-egenskapene for å legge til feltene, eller opprett dette manuelt på listen/dokumentbiblioteket.'
                 intent='warning'
               />
             </div>

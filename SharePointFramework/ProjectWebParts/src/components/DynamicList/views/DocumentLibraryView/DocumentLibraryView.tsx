@@ -157,7 +157,11 @@ export const DocumentLibraryView: FC = () => {
   const handleFilesSelected = useCallback(
     async (files: File[]) => {
       try {
-        const web = getWeb(context.props.webUrl, context.props.pageContext)
+        const web = getWeb(
+          context.props.webUrl,
+          context.props.pageContext,
+          context.props.webContextMode
+        )
         const list = web.lists.getByTitle(context.props.listName)
         const folderPath = context.state.currentFolderPath || ''
 

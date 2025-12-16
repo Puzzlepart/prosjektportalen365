@@ -99,7 +99,11 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
     if (!confirmed) return
 
-    const web = getWeb(context.props.webUrl, context.props.pageContext)
+    const web = getWeb(
+      context.props.webUrl,
+      context.props.pageContext,
+      context.props.webContextMode
+    )
     const list = web.lists.getByTitle(context.props.listName)
 
     const selectedItems = context.state.selectedItems.map((id) =>
@@ -182,7 +186,11 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       if (!context.props.listName) return
 
       try {
-        const web = getWeb(context.props.webUrl, context.props.pageContext)
+        const web = getWeb(
+          context.props.webUrl,
+          context.props.pageContext,
+          context.props.webContextMode
+        )
         const list = web.lists.getByTitle(context.props.listName)
         const folderPath = context.state.currentFolderPath || ''
 
@@ -213,7 +221,11 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       if (!context.props.listName) return
 
       try {
-        const web = getWeb(context.props.webUrl, context.props.pageContext)
+        const web = getWeb(
+          context.props.webUrl,
+          context.props.pageContext,
+          context.props.webContextMode
+        )
         const list = web.lists.getByTitle(context.props.listName)
         const folderPath = context.state.currentFolderPath || ''
         const timestamp = new Date().getTime()
@@ -266,7 +278,11 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
     async (itemId: number | null, properties: Record<string, any>) => {
       if (!context.props.listName) return
 
-      const web = getWeb(context.props.webUrl, context.props.pageContext)
+      const web = getWeb(
+        context.props.webUrl,
+        context.props.pageContext,
+        context.props.webContextMode
+      )
       const list = web.lists.getByTitle(context.props.listName)
 
       try {
