@@ -315,6 +315,11 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                   label: 'Tittel',
                   description: 'Tittel som vises over listen'
                 }),
+                PropertyPaneTextField('minHeight', {
+                  label: 'Minimum høyde',
+                  description:
+                    'Minimum høyde for webdelen (f.eks. 500px, 50vh, eller bare tall for piksler) NB! Gjelder kun listevisning'
+                }),
                 PropertyPaneDropdown('mode', {
                   label: 'Visningsmodus',
                   options: [

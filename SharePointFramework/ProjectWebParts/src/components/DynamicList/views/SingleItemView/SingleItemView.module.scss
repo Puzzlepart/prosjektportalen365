@@ -6,6 +6,7 @@
   flex-direction: column;
   height: auto;
   overflow-y: auto;
+  overflow-x: hidden;
 
   .header {
     padding-bottom: 16px;
@@ -29,6 +30,7 @@
     .field {
       display: flex;
       flex-direction: column;
+      text-wrap-style: balance;
       gap: 4px;
     }
   }

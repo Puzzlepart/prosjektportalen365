@@ -1,9 +1,9 @@
 .root {
   display: flex;
   justify-content: space-between;
+  gap: 15px;
 
   .toolbar {
-    width: 100%;
     gap: 15px;
     height: 40px;
     padding: 0 !important;

@@ -136,11 +136,13 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
   )
 
   const hasOnlyOneItem = state.data?.listItems?.length === 1
+  const hasNoItems = state.data?.listItems?.length === 0
   const isSingleView =
     props.mode === DynamicListMode.Single ||
     (props.mode === DynamicListMode.Multi && (hasOnlyOneItem || state.isDrilledDown))
 
-  const showNewButton = props.mode === DynamicListMode.Multi
+  const showNewButton =
+    props.mode === DynamicListMode.Multi || (props.mode === DynamicListMode.Single && hasNoItems)
 
   useEffect(() => {
     if (isSingleView && state.data?.listItems?.length > 0 && !state.selectedItems?.length) {
@@ -183,10 +185,19 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
     })
   }, [state.data?.fields, props.hiddenColumns])
 
+  const containerStyle = useMemo(() => {
+    if (props.minHeight !== undefined) {
+      const minHeight =
+        typeof props.minHeight === 'number' ? `${props.minHeight}px` : props.minHeight
+      return { minHeight }
+    }
+    return undefined
+  }, [props.minHeight])
+
   return (
-    <div className={styles.dynamicList}>
+    <div className={styles.dynamicList} style={containerStyle}>
       <DynamicListContext.Provider value={context}>
-        <div className={styles.container}>
+        <div className={styles.container} style={containerStyle}>
           <DynamicListContent
             isSingleView={isSingleView}
             showNewButton={showNewButton}

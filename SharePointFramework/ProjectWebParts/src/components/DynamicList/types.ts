@@ -113,6 +113,13 @@ export interface IDynamicListProps extends IBaseWebPartComponentProps {
   nonFilterableColumns?: string[]
 
   /**
+   * Minimum height for the component container.
+   * Overrides the default min-height CSS value.
+   * Can be specified as a number (pixels) or string with units (e.g., '500px', '50vh').
+   */
+  minHeight?: number | string
+
+  /**
    * Show search box
    */
   showSearchBox?: boolean

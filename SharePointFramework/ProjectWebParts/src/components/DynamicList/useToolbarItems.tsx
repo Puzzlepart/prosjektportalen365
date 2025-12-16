@@ -417,16 +417,18 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       items.push(
         new ListMenuItem()
           .setSearchBox({
-        placeholder: `søk i ${
-          context.state.currentView?.title?.toLowerCase() || context.state.data?.listTitle?.toLowerCase() || 'liste'
-        }...`,
-        title: 'søk',
-        'aria-label': 'søk',
-        value: context.state.searchTerm || '',
-        onChange: (_, { value }) => context.setState({ searchTerm: value }),
-        contentAfter: {
-          onClick: () => context.setState({ searchTerm: '' })
-        }
+            placeholder: `Søk i ${
+              context.state.currentView?.title?.toLowerCase() ||
+              context.state.data?.listTitle?.toLowerCase() ||
+              'liste'
+            }...`,
+            title: 'Søk',
+            'aria-label': 'Søk',
+            value: context.state.searchTerm || '',
+            onChange: (_, { value }) => context.setState({ searchTerm: value }),
+            contentAfter: {
+              onClick: () => context.setState({ searchTerm: '' })
+            }
           })
           .setDisabled(context.state.isLoading || _.isEmpty(context.state.data.listItems))
       )
