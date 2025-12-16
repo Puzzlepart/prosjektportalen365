@@ -553,7 +553,7 @@ export async function fetchSingleItem(
           return showInEditForm && !hidden
         })
         .map((field) => {
-          const dataType = mapSharePointTypeToDataType(field.TypeAsString, field.FieldTypeKind)
+          const dataType = mapSharePointTypeToDataType(field.TypeAsString, (field as any).FieldTypeKind)
           const isTaxonomyField =
             field.TypeAsString === 'TaxonomyFieldType' ||
             field.TypeAsString === 'TaxonomyFieldTypeMulti'
@@ -572,7 +572,7 @@ export async function fetchSingleItem(
             data: {
               type: dataType,
               fieldType: field.TypeAsString,
-              fieldTypeKind: field.FieldTypeKind,
+              fieldTypeKind: (field as any).FieldTypeKind,
               ...(isTaxonomyField && termSetId && { termSetId })
             }
           }

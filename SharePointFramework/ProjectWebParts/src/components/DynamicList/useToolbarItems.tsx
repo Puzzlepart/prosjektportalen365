@@ -451,8 +451,14 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       !context.state.isDocumentLibrary &&
       context.props.showExportButton !== false
     ) {
+      const selectedCount = context.state.selectedItems?.length || 0
+      const tooltipText =
+        selectedCount > 0
+          ? `Eksporter ${selectedCount} valgt${selectedCount === 1 ? '' : 'e'} element${selectedCount === 1 ? '' : 'er'} til Excel`
+          : 'Eksporter til Excel'
+
       items.push(
-        new ListMenuItem(null, 'Eksporter til Excel')
+        new ListMenuItem(selectedCount > 0 ? selectedCount.toString() : undefined, tooltipText)
           .setIcon('ExcelLogoInverse')
           .setOnClick(exportToExcel)
           .setDisabled(
@@ -543,7 +549,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
     if (!isSingleView && context.props.showFilters) {
       items.push(
-        new ListMenuItem('Filter', 'Vis/skjul filtre').setIcon(FilterRegular).setOnClick(() => {
+        new ListMenuItem(null, 'Vis/skjul filtre').setIcon(FilterRegular).setOnClick(() => {
           context.setState({ showFilterPanel: !context.state.showFilterPanel })
         })
       )

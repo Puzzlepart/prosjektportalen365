@@ -202,6 +202,7 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
             fieldValues={state.panel.fieldValues}
             dataAdapter={SPDataAdapter}
             targetWeb={targetWeb}
+            targetListId={state.data.listId}
             onDismiss={() => {
               setState({
                 selectedItems: [],
