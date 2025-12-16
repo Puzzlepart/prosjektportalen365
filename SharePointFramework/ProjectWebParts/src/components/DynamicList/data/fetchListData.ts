@@ -202,7 +202,6 @@ export function transformListItem(
     const value = item[key]
     const column = columns.find((col) => col.fieldName === key)
 
-    // Handle taxonomy fields with term store lookup
     if (column?.data?.termSetId && taxonomyTermsMap.has(column.data.termSetId)) {
       const terms = taxonomyTermsMap.get(column.data.termSetId)
 
@@ -234,12 +233,10 @@ export function transformListItem(
       }
     }
 
-    // Handle user/lookup fields
     if (value && typeof value === 'object' && 'Title' in value) {
       transformedItem[key] = value.Title
     }
 
-    // Handle multi-value fields
     if (Array.isArray(value)) {
       transformedItem[key] = value.map((v) => (v.Title ? v.Title : v)).join(', ')
     }
@@ -497,7 +494,6 @@ export async function fetchSingleItem(
     const web = getWeb(props.webUrl, props)
     const list = web.lists.getByTitle(props.listName)
 
-    // Fetch the item with expanded fields
     const itemQuery = list.items
       .getById(itemId)
       .select('*', 'Author/Title', 'Editor/Title')
@@ -524,12 +520,10 @@ export async function fetchSingleItem(
 
     const item = await itemQuery()
 
-    // If columns are provided, use them; otherwise fetch them
     let columns = existingColumns
     let taxonomyTermsMap = new Map<string, TaxonomyTermModel[]>()
 
     if (!columns) {
-      // Fetch columns (simplified version - in real scenario we'd need all the column setup)
       const allFields = await SPDataAdapter.portalDataService.getListFields(
         props.listName,
         undefined,
@@ -553,7 +547,10 @@ export async function fetchSingleItem(
           return showInEditForm && !hidden
         })
         .map((field) => {
-          const dataType = mapSharePointTypeToDataType(field.TypeAsString, (field as any).FieldTypeKind)
+          const dataType = mapSharePointTypeToDataType(
+            field.TypeAsString,
+            (field as any).FieldTypeKind
+          )
           const isTaxonomyField =
             field.TypeAsString === 'TaxonomyFieldType' ||
             field.TypeAsString === 'TaxonomyFieldTypeMulti'
@@ -587,7 +584,6 @@ export async function fetchSingleItem(
       taxonomyTermsMap = await fetchTaxonomyTermsForColumns(columns)
     }
 
-    // Transform the item using the shared transformation logic
     return transformListItem(item, columns, taxonomyTermsMap)
   } catch (error) {
     console.error('[DynamicList] fetchSingleItem error:', error)

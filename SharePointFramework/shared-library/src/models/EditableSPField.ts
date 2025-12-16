@@ -227,7 +227,8 @@ export class EditableSPField extends SPField {
         return this.column ? this.column.isVisible(page) : false
       }
     }
-  }  /**
+  }
+  /**
    * Returns `true` if the value for the field is empty.
    */
   public get isEmpty(): boolean {

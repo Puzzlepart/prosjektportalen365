@@ -10,7 +10,6 @@ import { useColumns } from '../../useColumns'
 import { useFilteredData } from '../../useFilteredData'
 import { ListView, IListViewColumn } from '../ListView'
 import { IFileItem, DocumentLibraryViewMode } from '../../types'
-import { TableCellLayout } from '@fluentui/react-components'
 import { FileUploadZone } from '../../components/FileUpload'
 import { getWeb } from '../../utils'
 import '@pnp/sp/lists'
@@ -119,11 +118,10 @@ export const DocumentLibraryView: FC = () => {
   }, [context.state.currentFolderPath, context.state.data?.listTitle, context.setState])
 
   const columns: IListViewColumn[] = useMemo(() => {
-    return baseColumns
-      .filter((col) => {
-        const columnId = col.columnId
-        return columnId !== 'Title'
-      })
+    return baseColumns.filter((col) => {
+      const columnId = col.columnId
+      return columnId !== 'Title'
+    })
   }, [baseColumns])
 
   /**

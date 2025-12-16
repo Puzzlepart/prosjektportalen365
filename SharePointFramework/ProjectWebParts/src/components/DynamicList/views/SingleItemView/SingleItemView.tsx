@@ -22,7 +22,11 @@ export const SingleItemView: FC = () => {
   if (!item) {
     return (
       <div style={{ padding: '0 32px' }}>
-        <UserMessage title='Ingen element funnet' text='Det finnes ingen elementer å vise' intent='info' />
+        <UserMessage
+          title='Ingen element funnet'
+          text='Det finnes ingen elementer å vise'
+          intent='info'
+        />
       </div>
     )
   }

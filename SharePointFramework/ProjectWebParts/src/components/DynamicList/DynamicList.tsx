@@ -11,7 +11,6 @@ import { useDynamicList } from './useDynamicList'
 import { DynamicListView } from './views/DynamicListView/DynamicListView'
 import { DocumentLibraryView } from './views/DocumentLibraryView'
 import { SingleItemView } from './views/SingleItemView/SingleItemView'
-import { ColumnContextMenu } from './components/ColumnContextMenu'
 import {
   WebPartTitle,
   CustomEditPanel,

@@ -106,7 +106,6 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       context.state.data.listItems.find((_, idx) => idx === id)
     )
 
-    // Delete items from SharePoint
     await Promise.all(
       selectedItems.map(async (item: any) => {
         if (item?.Id) {
@@ -115,7 +114,6 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       })
     )
 
-    // Remove deleted items from state
     const deletedItemIds = new Set(selectedItems.map((item: any) => item?.Id).filter(Boolean))
     const updatedListItems = context.state.data.listItems.filter(
       (item: any) => !deletedItemIds.has(item.Id)
@@ -132,7 +130,6 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
   /**
    * Dismisses the edit panel and triggers a data refetch.
-  /**
    * Clears selected items, closes the panel, and refreshes the list data.
    */
   const dismissPanel = useCallback(() => {
@@ -151,14 +148,12 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
   const dismissPanelWithNewItem = useCallback(
     async (itemId: number) => {
       try {
-        // Fetch and transform the new item using existing columns
         const transformedItem = await fetchSingleItem(
           context.props,
           itemId,
           context.state.data?.listColumns
         )
 
-        // Add the new item to the beginning of the list
         const updatedListItems = [transformedItem, ...(context.state.data?.listItems || [])]
 
         context.setState({
@@ -171,7 +166,6 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
         })
       } catch (error) {
         console.error('[DynamicList] Error fetching new item:', error)
-        // Fallback to full refetch on error
         dismissPanel()
       }
     },
@@ -277,11 +271,9 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
       try {
         if (itemId) {
-          // Update existing item - needs full refetch to update all views
           await list.items.getById(itemId).update(properties)
           dismissPanel()
         } else {
-          // Create new item - fetch and transform it using fetchSingleItem
           const result = await list.items.add(properties)
           const newItemId = result.data.ID
 
@@ -425,16 +417,16 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       items.push(
         new ListMenuItem()
           .setSearchBox({
-            placeholder: `Søk i ${
-              context.state.currentView?.title || context.state.data?.listTitle || 'liste'
-            }...`,
-            title: 'Søk',
-            'aria-label': 'Søk',
-            value: context.state.searchTerm || '',
-            onChange: (_, { value }) => context.setState({ searchTerm: value }),
-            contentAfter: {
-              onClick: () => context.setState({ searchTerm: '' })
-            }
+        placeholder: `søk i ${
+          context.state.currentView?.title?.toLowerCase() || context.state.data?.listTitle?.toLowerCase() || 'liste'
+        }...`,
+        title: 'søk',
+        'aria-label': 'søk',
+        value: context.state.searchTerm || '',
+        onChange: (_, { value }) => context.setState({ searchTerm: value }),
+        contentAfter: {
+          onClick: () => context.setState({ searchTerm: '' })
+        }
           })
           .setDisabled(context.state.isLoading || _.isEmpty(context.state.data.listItems))
       )
@@ -454,7 +446,9 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       const selectedCount = context.state.selectedItems?.length || 0
       const tooltipText =
         selectedCount > 0
-          ? `Eksporter ${selectedCount} valgt${selectedCount === 1 ? '' : 'e'} element${selectedCount === 1 ? '' : 'er'} til Excel`
+          ? `Eksporter ${selectedCount} valgt${selectedCount === 1 ? '' : 'e'} element${
+              selectedCount === 1 ? '' : 'er'
+            } til Excel`
           : 'Eksporter til Excel'
 
       items.push(
