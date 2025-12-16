@@ -23,7 +23,7 @@ export const EditPropertiesPanel: FC = () => {
       dataAdapter={SPDataAdapter}
       hiddenFields={['GtProjectPhase']}
       submit={submit}
-      targetistId={context.state.data.propertiesListId}
+      targetListId={context.state.data.propertiesListId}
       onDismiss={() => context.dispatch(CLOSE_PANEL())}
     />
   )

@@ -61,7 +61,7 @@ export interface ICustomEditPanelProps extends IBasePanelProps {
    * Target list ID used to transform property values
    * before submitting the item.
    */
-  targetistId?: string
+  targetListId?: string
 
   /**
    * The submit button props.

@@ -41,7 +41,7 @@ export function useModel(props: ICustomEditPanelProps) {
    * @returns The transformed value and the internal name of the field (might be different from the field's internal name)
    */
   const transformValue = async (value: any, field: EditableSPField) => {
-    const targetList = props.dataAdapter.sp.web.lists.getById(props.targetistId)
+    const targetList = props.dataAdapter.sp.web.lists.getById(props.targetListId)
     const valueMap = new Map<string, () => Promise<any[]> | any[]>([
       [
         'URL',
