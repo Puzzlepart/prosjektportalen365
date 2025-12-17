@@ -62,7 +62,7 @@ export const DocumentLibraryView: FC = () => {
         libraryRootPath,
         useProjectFolder: context.props.useProjectFolder,
         totalItems: filteredItems.length,
-        sampleItemPaths: filteredItems.slice(0, 3).map(i => i.FileDirRef)
+        sampleItemPaths: filteredItems.slice(0, 3).map((i) => i.FileDirRef)
       })
 
       itemsToDisplay = filteredItems.filter((item: IFileItem) => {
@@ -107,7 +107,13 @@ export const DocumentLibraryView: FC = () => {
     })
 
     return itemsToDisplay
-  }, [filteredItems, viewMode, context.state.currentFolderPath, context.props.useProjectFolder, context.props.webTitle])
+  }, [
+    filteredItems,
+    viewMode,
+    context.state.currentFolderPath,
+    context.props.useProjectFolder,
+    context.props.webTitle
+  ])
 
   const breadcrumbItems = useMemo(() => {
     const currentPath = context.state.currentFolderPath || ''
@@ -141,10 +147,15 @@ export const DocumentLibraryView: FC = () => {
       {
         text: projectFolderName || context.state.data?.listTitle || 'Documents',
         key: 'root',
-        onClick: isAtProjectFolder ? undefined : () => {
-          console.log('[DocumentLibraryView] Root breadcrumb clicked, navigating to:', rootTargetPath)
-          context.setState({ currentFolderPath: rootTargetPath })
-        }
+        onClick: isAtProjectFolder
+          ? undefined
+          : () => {
+              console.log(
+                '[DocumentLibraryView] Root breadcrumb clicked, navigating to:',
+                rootTargetPath
+              )
+              context.setState({ currentFolderPath: rootTargetPath })
+            }
       }
     ]
 
@@ -158,9 +169,10 @@ export const DocumentLibraryView: FC = () => {
 
       accumulatedPath += (accumulatedPath ? '/' : '') + segment
       const isLast = index === pathSegments.length - 1
-      const pathForClick = projectFolderName && !accumulatedPath.startsWith(projectFolderName + '/')
-        ? `${projectFolderName}/${accumulatedPath}`
-        : accumulatedPath
+      const pathForClick =
+        projectFolderName && !accumulatedPath.startsWith(projectFolderName + '/')
+          ? `${projectFolderName}/${accumulatedPath}`
+          : accumulatedPath
 
       items.push({
         text: segment,
@@ -170,7 +182,13 @@ export const DocumentLibraryView: FC = () => {
     })
 
     return items
-  }, [context.state.currentFolderPath, context.state.data?.listTitle, context.props.useProjectFolder, context.props.webTitle, context.setState])
+  }, [
+    context.state.currentFolderPath,
+    context.state.data?.listTitle,
+    context.props.useProjectFolder,
+    context.props.webTitle,
+    context.setState
+  ])
 
   const columns: IListViewColumn[] = useMemo(() => {
     return baseColumns.filter((col) => {
@@ -248,7 +266,10 @@ export const DocumentLibraryView: FC = () => {
             }
             if (!folderPath) {
               folderPath = projectFolderName
-            } else if (!folderPath.startsWith(projectFolderName + '/') && folderPath !== projectFolderName) {
+            } else if (
+              !folderPath.startsWith(projectFolderName + '/') &&
+              folderPath !== projectFolderName
+            ) {
               folderPath = `${projectFolderName}/${folderPath}`
             }
           }

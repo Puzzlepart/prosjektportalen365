@@ -1,5 +1,5 @@
 import { IColumn } from '@fluentui/react'
-import { IDynamicListProps, IDynamicListData, WebContextMode } from '../types'
+import { IDynamicListProps, IDynamicListData } from '../types'
 import SPDataAdapter from '../../../data'
 import { EditableSPField, ProjectContentColumn } from 'pp365-shared-library'
 import type { IWeb } from '@pnp/sp/webs'

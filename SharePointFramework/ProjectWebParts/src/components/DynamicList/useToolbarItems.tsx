@@ -1,7 +1,7 @@
 import { useMemo, useContext, useCallback } from 'react'
 import { DynamicListContext } from './context'
 import { ListMenuItem, ItemFieldValues, ListMenuItemDivider } from 'pp365-shared-library'
-import { DocumentLibraryViewMode, WebContextMode } from './types'
+import { DocumentLibraryViewMode } from './types'
 import {
   FilterRegular,
   AddRegular,
@@ -273,7 +273,10 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
             }
             if (!folderPath) {
               folderPath = projectFolderName
-            } else if (!folderPath.startsWith(projectFolderName + '/') && folderPath !== projectFolderName) {
+            } else if (
+              !folderPath.startsWith(projectFolderName + '/') &&
+              folderPath !== projectFolderName
+            ) {
               folderPath = `${projectFolderName}/${folderPath}`
             }
           }
