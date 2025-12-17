@@ -199,48 +199,39 @@ export const DocumentLibraryView: FC = () => {
 
   /**
    * Handle file/folder click.
-   * Opens folders in the current view, opens files in Office Online.
+   * Only handles folder navigation - files are handled by FileNameColumn's link.
    */
   const handleFileClick = useCallback(
     (item: IFileItem) => {
       const isFolder = item.FSObjType === 1
 
-      if (isFolder) {
-        const fileName = item.FileLeafRef
-        const currentPath = context.state.currentFolderPath || ''
-        const projectFolderName = context.props.useProjectFolder ? context.props.webTitle : null
+      if (!isFolder) return
 
-        let newPath: string
+      const fileName = item.FileLeafRef
+      const currentPath = context.state.currentFolderPath || ''
+      const projectFolderName = context.props.useProjectFolder ? context.props.webTitle : null
 
-        if (!currentPath) {
-          newPath = projectFolderName ? `${projectFolderName}/${fileName}` : fileName
-        } else {
-          newPath = `${currentPath}/${fileName}`
-        }
+      let newPath: string
 
-        console.log('[DocumentLibraryView] handleFileClick - Navigating to folder:', {
-          fileName,
-          currentPath,
-          projectFolderName,
-          useProjectFolder: context.props.useProjectFolder,
-          newPath
-        })
-
-        context.setState({ currentFolderPath: newPath })
+      if (!currentPath) {
+        newPath = projectFolderName ? `${projectFolderName}/${fileName}` : fileName
       } else {
-        if (item.FileRef) {
-          const siteUrl = context.props.webUrl.replace(/\/$/, '')
-          const fileUrl = `${siteUrl}/_layouts/15/Doc.aspx?sourcedoc=${encodeURIComponent(
-            item.FileRef
-          )}&action=default`
-          window.open(fileUrl, '_blank')
-        }
+        newPath = `${currentPath}/${fileName}`
       }
+
+      console.log('[DocumentLibraryView] handleFileClick - Navigating to folder:', {
+        fileName,
+        currentPath,
+        projectFolderName,
+        useProjectFolder: context.props.useProjectFolder,
+        newPath
+      })
+
+      context.setState({ currentFolderPath: newPath })
     },
     [
       context.state.currentFolderPath,
       context.setState,
-      context.props.webUrl,
       context.props.useProjectFolder,
       context.props.webTitle
     ]

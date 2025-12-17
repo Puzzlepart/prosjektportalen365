@@ -9,6 +9,26 @@ import { Link } from '@fluentui/react-components'
 export const FileNameColumn: ColumnRenderComponent<IFileNameColumnProps> = (props) => {
   const isFolder = props.item.FSObjType === 1
 
+  const getFileUrl = () => {
+    if (isFolder || !props.item.FileRef) return null
+
+    if (props.item.ServerRedirectedURL) {
+      return props.item.ServerRedirectedURL
+    }
+
+    const fileRef = props.item.FileRef as string
+    const parts = fileRef.split('/').filter(p => p)
+    let siteUrl = window.location.origin
+
+    if (parts[0] === 'sites' && parts[1]) {
+      siteUrl = `${siteUrl}/sites/${parts[1]}`
+    }
+
+    return `${siteUrl}/_layouts/15/Doc.aspx?sourcedoc=${encodeURIComponent(fileRef)}&action=default`
+  }
+
+  const fileUrl = getFileUrl()
+
   return (
     <span>
       {props.showFileExtensionIcon && (
@@ -24,15 +44,17 @@ export const FileNameColumn: ColumnRenderComponent<IFileNameColumnProps> = (prop
       )}
       {isFolder ? (
         <span style={{ marginLeft: 8 }}>{props.columnValue}</span>
-      ) : (
+      ) : fileUrl ? (
         <Link
-          href={props.item.FileRef || props.item.ServerRedirectedURL}
+          href={fileUrl}
           rel='noopener noreferrer'
           target='_blank'
           style={{ marginLeft: 8 }}
         >
           {props.columnValue}
         </Link>
+      ) : (
+        <span style={{ marginLeft: 8 }}>{props.columnValue}</span>
       )}
     </span>
   )

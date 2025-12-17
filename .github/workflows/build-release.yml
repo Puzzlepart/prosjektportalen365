@@ -3,7 +3,7 @@ name: Build release (main)
 on:
   push:
     branches:
-      - main
+      - feat/dynamic-list-webpart
     paths:
       - 'SharePointFramework/**'
       - 'Install/**'
