@@ -16,8 +16,29 @@ export function useEditStatusPanelSubmit(): ICustomEditPanelSubmitProps {
     error: null,
     saveProgressText: null
   })
-
   const onSubmit = async ({ properties }) => {
+
+    if(context.state.activePanel?.reportProps){
+      try {
+        setState({ error: null })
+        const report = await SPDataAdapter.portalDataService.addStatusReport(
+        { ...context.state.activePanel?.reportProps },
+        context.state.activePanel?.contentId)
+
+        context.dispatch(SELECT_REPORT({ report }))
+        const updatedReport = await SPDataAdapter.portalDataService.updateStatusReport(
+        report,
+        properties
+      )
+      context.dispatch(SELECT_REPORT({ report: updatedReport }))
+      context.dispatch(CLOSE_PANEL())
+
+      } catch (error) {
+        const errorText = parseErrorStack(error.message)
+        setState({ error: errorText, saveProgressText: null })
+      }
+    }
+    else {
     try {
       setState({ error: null })
       const updatedReport = await SPDataAdapter.portalDataService.updateStatusReport(
@@ -30,7 +51,7 @@ export function useEditStatusPanelSubmit(): ICustomEditPanelSubmitProps {
       const errorText = parseErrorStack(error.message)
       setState({ error: errorText, saveProgressText: null })
     }
-  }
+  }}
 
   return {
     ...state,
