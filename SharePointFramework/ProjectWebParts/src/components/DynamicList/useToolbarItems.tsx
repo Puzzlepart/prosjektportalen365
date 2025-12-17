@@ -198,14 +198,19 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
           }
         }
 
+        const listData = await list.select('RootFolder/ServerRelativeUrl').expand('RootFolder')()
+        const listRootPath = listData.RootFolder.ServerRelativeUrl
+
         for (const file of files) {
           let addedFile
           if (folderPath) {
+            const folderServerRelativeUrl = `${listRootPath}/${folderPath}`
             console.log('[useToolbarItems.uploadFiles] Uploading to folder:', {
               listName: context.props.listName,
-              folderPath
+              folderPath,
+              folderServerRelativeUrl
             })
-            const targetFolder = list.rootFolder.folders.getByUrl(folderPath)
+            const targetFolder = context.web.getFolderByServerRelativePath(folderServerRelativeUrl)
             addedFile = await targetFolder.files.addUsingPath(file.name, file, { Overwrite: true })
           } else {
             addedFile = await list.rootFolder.files.addUsingPath(file.name, file, {
@@ -274,6 +279,9 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
           }
         }
 
+        const listData = await list.select('RootFolder/ServerRelativeUrl').expand('RootFolder')()
+        const listRootPath = listData.RootFolder.ServerRelativeUrl
+
         const timestamp = new Date().getTime()
 
         let fileName: string
@@ -298,11 +306,13 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
         const emptyFile = new Blob([], { type: contentType })
         let addedFile
         if (folderPath) {
+          const folderServerRelativeUrl = `${listRootPath}/${folderPath}`
           console.log('[useToolbarItems.createDocument] Creating in folder:', {
             listName: context.props.listName,
-            folderPath
+            folderPath,
+            folderServerRelativeUrl
           })
-          const targetFolder = list.rootFolder.folders.getByUrl(folderPath)
+          const targetFolder = context.web.getFolderByServerRelativePath(folderServerRelativeUrl)
           addedFile = await targetFolder.files.addUsingPath(fileName, emptyFile, {
             Overwrite: true
           })

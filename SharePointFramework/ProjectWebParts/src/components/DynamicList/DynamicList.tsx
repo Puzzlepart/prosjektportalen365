@@ -193,7 +193,6 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
    */
   const dataAdapterForEditPanel = useMemo(() => {
     if (props.webContextMode === WebContextMode.HubSite) {
-      // For hub site mode, create an adapter-like object that uses portalDataService
       return {
         ...SPDataAdapter,
         sp: SPDataAdapter.portalDataService as any

@@ -46,17 +46,11 @@ export const DocumentLibraryView: FC = () => {
       let libraryRootPath = ''
       if (filteredItems.length > 0 && filteredItems[0].FileDirRef) {
         libraryRootPath = filteredItems[0].FileDirRef
-        // Get the root path by removing any folder path from the first item
         const firstItemPath = filteredItems[0].FileDirRef
         const parts = firstItemPath.split('/')
-        // The library root should be everything before the last folder
-        // For document library: /sites/site/LibraryName
-        // For items that might be in folders already, we need to find the library root
         if (filteredItems[0].FSObjType === 1 || filteredItems[0].FSObjType === 0) {
-          // Try to extract library root by looking at the path structure
           const pathSegments = firstItemPath.split('/').filter(Boolean)
           if (pathSegments.length >= 3) {
-            // Typically: ['sites', 'sitename', 'libraryname', ...folders]
             libraryRootPath = '/' + pathSegments.slice(0, 3).join('/')
           }
         }
@@ -74,7 +68,6 @@ export const DocumentLibraryView: FC = () => {
       itemsToDisplay = filteredItems.filter((item: IFileItem) => {
         if (!item.FileDirRef) return false
 
-        // When useProjectFolder is active and no current path, show items in project folder
         if (!currentPath && projectFolderName) {
           const projectFolderPath = `${libraryRootPath}/${projectFolderName}`
           const match = item.FileDirRef === projectFolderPath
@@ -87,10 +80,8 @@ export const DocumentLibraryView: FC = () => {
           }
           return match
         } else if (!currentPath) {
-          // No project folder, show library root
           return item.FileDirRef === libraryRootPath
         } else {
-          // In a subfolder
           const fullCurrentPath = `${libraryRootPath}/${currentPath}`
           return item.FileDirRef === fullCurrentPath
         }
@@ -161,7 +152,6 @@ export const DocumentLibraryView: FC = () => {
     let accumulatedPath = ''
 
     pathSegments.forEach((segment, index) => {
-      // Skip the project folder segment if useProjectFolder is active (it's already the root)
       if (projectFolderName && segment === projectFolderName) {
         return
       }
@@ -204,12 +194,9 @@ export const DocumentLibraryView: FC = () => {
 
         let newPath: string
 
-        // Build the new path
         if (!currentPath) {
-          // At root - if useProjectFolder, go into project folder first
           newPath = projectFolderName ? `${projectFolderName}/${fileName}` : fileName
         } else {
-          // Already in a folder - append the new folder name
           newPath = `${currentPath}/${fileName}`
         }
 
@@ -248,11 +235,9 @@ export const DocumentLibraryView: FC = () => {
   const handleFilesSelected = useCallback(
     async (files: File[]) => {
       try {
-        // Use context.web for file operations
         const list = context.web.lists.getByTitle(context.props.listName)
         let folderPath = context.state.currentFolderPath || ''
 
-        // If useProjectFolder is enabled, ensure project folder exists and adjust folder path
         if (context.props.useProjectFolder) {
           const projectFolderName = context.props.webTitle
           if (projectFolderName) {
@@ -261,7 +246,6 @@ export const DocumentLibraryView: FC = () => {
             } catch {
               await list.rootFolder.folders.addUsingPath(projectFolderName)
             }
-            // If no current folder or current folder doesn't start with project folder, prepend it
             if (!folderPath) {
               folderPath = projectFolderName
             } else if (!folderPath.startsWith(projectFolderName + '/') && folderPath !== projectFolderName) {
@@ -270,15 +254,19 @@ export const DocumentLibraryView: FC = () => {
           }
         }
 
+        const listData = await list.select('RootFolder/ServerRelativeUrl').expand('RootFolder')()
+        const listRootPath = listData.RootFolder.ServerRelativeUrl
+
         for (const file of files) {
           let addedFile
           if (folderPath) {
-            // Use list.rootFolder.folders.getByUrl() for better reliability
+            const folderServerRelativeUrl = `${listRootPath}/${folderPath}`
             console.log('[DocumentLibraryView] Uploading to folder:', {
               listName: context.props.listName,
-              folderPath
+              folderPath,
+              folderServerRelativeUrl
             })
-            const targetFolder = list.rootFolder.folders.getByUrl(folderPath)
+            const targetFolder = context.web.getFolderByServerRelativePath(folderServerRelativeUrl)
             addedFile = await targetFolder.files.addUsingPath(file.name, file, { Overwrite: true })
           } else {
             addedFile = await list.rootFolder.files.addUsingPath(file.name, file, {
@@ -292,7 +280,6 @@ export const DocumentLibraryView: FC = () => {
               const siteTitle = context.props.webTitle
 
               if (siteId || siteTitle) {
-                // Get the list item associated with the file
                 const fileItem = await addedFile.file.getItem()
                 const updateProps: Record<string, any> = {}
                 if (siteId) updateProps.GtSiteId = siteId
