@@ -337,6 +337,15 @@ export interface IDynamicListState extends IBaseWebPartComponentState<IDynamicLi
    * Custom column order (stored in session storage)
    */
   customColumnOrder?: number[]
+
+  /**
+   * User permissions for list operations
+   */
+  permissions?: {
+    canAdd: boolean
+    canEdit: boolean
+    canDelete: boolean
+  }
 }
 
 export interface IDynamicListData {

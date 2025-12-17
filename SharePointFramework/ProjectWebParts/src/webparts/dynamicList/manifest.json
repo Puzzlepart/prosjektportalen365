@@ -25,8 +25,6 @@
       },
       "officeFabricIconFontName": "ProductList",
       "properties": {
-        "webUrl": "",
-        "listName": "",
         "useProjectContentColumnNames": true,
         "showCommandBar": true,
         "showSearchBox": true,
