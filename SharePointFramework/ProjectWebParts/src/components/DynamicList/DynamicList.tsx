@@ -244,21 +244,21 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
 }
 
 DynamicList.defaultProps = {
-  showCommandBar: true,
-  showSearchBox: true,
-  showViewSelector: true,
-  showFilters: false,
-  useProjectContentColumnNames: true,
   mode: DynamicListMode.Multi,
   documentLibraryViewMode: DocumentLibraryViewMode.Folders,
+  useProjectContentColumnNames: true,
+  showCommandBar: true,
+  showSearchBox: true,
+  showViewSelector: false,
+  showFilters: true,
   showNewButton: true,
   showEditButton: true,
-  showDeleteButton: true,
+  showDeleteButton: false,
   showRefreshButton: true,
   showExportButton: true,
   showUploadButton: true,
-  showNewWordButton: true,
-  showNewExcelButton: true,
-  showNewPowerPointButton: true,
+  showNewWordButton: false,
+  showNewExcelButton: false,
+  showNewPowerPointButton: false,
   showViewModeToggle: true
 }

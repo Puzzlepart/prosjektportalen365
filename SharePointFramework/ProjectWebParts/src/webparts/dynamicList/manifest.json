@@ -26,7 +26,22 @@
       "officeFabricIconFontName": "ProductList",
       "properties": {
         "webUrl": "",
-        "listName": ""
+        "listName": "",
+        "useProjectContentColumnNames": true,
+        "showCommandBar": true,
+        "showSearchBox": true,
+        "showViewSelector": false,
+        "showFilters": true,
+        "showNewButton": true,
+        "showEditButton": true,
+        "showDeleteButton": false,
+        "showRefreshButton": true,
+        "showExportButton": true,
+        "showUploadButton": true,
+        "showNewWordButton": false,
+        "showNewExcelButton": false,
+        "showNewPowerPointButton": false,
+        "showViewModeToggle": true
       }
     }
   ]
