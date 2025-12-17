@@ -105,10 +105,10 @@ const DynamicListContent: FC<{
           )}
           {context.state.data && (
             <>
-              {context.state.isDocumentLibrary ? (
-                <DocumentLibraryView />
-              ) : isSingleView ? (
+              {isSingleView ? (
                 <SingleItemView />
+              ) : context.state.isDocumentLibrary ? (
+                <DocumentLibraryView />
               ) : (
                 <DynamicListView />
               )}

@@ -36,7 +36,7 @@ export const SingleItemView: FC = () => {
       <FluentProvider theme={customLightTheme}>
         <div className={styles.singleItemView}>
           <div className={styles.header}>
-            <h1 className={styles.title}>{item.Title || 'Uten tittel'}</h1>
+            <h1 className={styles.title}>{item.Title || item?.FileLeafRef || 'Uten tittel'}</h1>
           </div>
           <div className={styles.fields}>
             {columns.map((column) => {
