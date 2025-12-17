@@ -13,6 +13,7 @@ import '@fluentui/react/dist/css/fabric.min.css'
 import { BaseProjectWebPart } from '../baseProjectWebPart'
 import * as strings from 'ProjectWebPartsStrings'
 import SPDataAdapter from '../../data'
+import { getWeb } from '../../components/DynamicList/utils'
 import '@pnp/sp/webs'
 import '@pnp/sp/lists'
 import '@pnp/sp/views'
@@ -46,15 +47,10 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
     try {
       this._listsLoading = true
 
-      let web = SPDataAdapter.sp.web
-      const webContextMode = this.properties.webContextMode || WebContextMode.CurrentProject
-
-      if (webContextMode === WebContextMode.HubSite) {
-        web = SPDataAdapter.portalDataService.web
-      } else if (webContextMode === WebContextMode.CustomSite && this.properties.webUrl) {
-        const { Web } = await import('@pnp/sp/webs')
-        web = Web([SPDataAdapter.sp.web, this.properties.webUrl])
-      }
+      const web = getWeb(
+        this.properties.webUrl,
+        this.properties.webContextMode || WebContextMode.CurrentProject
+      )
 
       const lists = await web.lists
         .select('Title', 'Id', 'Hidden', 'BaseTemplate', 'ItemCount')
@@ -95,11 +91,10 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
         return
       }
 
-      let web = SPDataAdapter.sp.web
-      if (this.properties.webUrl) {
-        const { Web } = await import('@pnp/sp/webs')
-        web = Web([SPDataAdapter.sp.web, this.properties.webUrl])
-      }
+      const web = getWeb(
+        this.properties.webUrl,
+        this.properties.webContextMode || WebContextMode.CurrentProject
+      )
 
       const list = web.lists.getByTitle(this.properties.listName)
       const views = await list.views
@@ -154,15 +149,10 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
         return
       }
 
-      let web = SPDataAdapter.sp.web
-      const webContextMode = this.properties.webContextMode || WebContextMode.CurrentProject
-
-      if (webContextMode === WebContextMode.HubSite) {
-        web = SPDataAdapter.portalDataService.web
-      } else if (webContextMode === WebContextMode.CustomSite && this.properties.webUrl) {
-        const { Web } = await import('@pnp/sp/webs')
-        web = Web([SPDataAdapter.sp.web, this.properties.webUrl])
-      }
+      const web = getWeb(
+        this.properties.webUrl,
+        this.properties.webContextMode || WebContextMode.CurrentProject
+      )
 
       const allFields = await SPDataAdapter.portalDataService.getListFields(
         this.properties.listName,
@@ -251,15 +241,10 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
     if (!this.properties.listName) return
 
     try {
-      let web = SPDataAdapter.sp.web
-      const webContextMode = this.properties.webContextMode || WebContextMode.CurrentProject
-
-      if (webContextMode === WebContextMode.HubSite) {
-        web = SPDataAdapter.portalDataService.web
-      } else if (webContextMode === WebContextMode.CustomSite && this.properties.webUrl) {
-        const { Web } = await import('@pnp/sp/webs')
-        web = Web([SPDataAdapter.sp.web, this.properties.webUrl])
-      }
+      const web = getWeb(
+        this.properties.webUrl,
+        this.properties.webContextMode || WebContextMode.CurrentProject
+      )
 
       const list = web.lists.getByTitle(this.properties.listName)
 

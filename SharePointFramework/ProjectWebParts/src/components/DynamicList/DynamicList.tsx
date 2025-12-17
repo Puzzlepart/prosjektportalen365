@@ -8,6 +8,7 @@ import {
   WebContextMode
 } from './types'
 import { useDynamicList } from './useDynamicList'
+import { getWeb } from './utils'
 import { DynamicListView } from './views/DynamicListView/DynamicListView'
 import { DocumentLibraryView } from './views/DocumentLibraryView'
 import { SingleItemView } from './views/SingleItemView/SingleItemView'
@@ -19,7 +20,6 @@ import {
   LoadingSkeleton
 } from 'pp365-shared-library'
 import { Spinner, Skeleton, SkeletonItem } from '@fluentui/react-components'
-import { Web } from '@pnp/sp/webs'
 import SPDataAdapter from '../../data'
 import { useToolbarItems } from './useToolbarItems'
 import styles from './DynamicList.module.scss'
@@ -133,15 +133,27 @@ const DynamicListContent: FC<{ isSingleView: boolean; showNewButton: boolean; ta
  * @param props Configuration properties for the DynamicList
  */
 export const DynamicList: FC<IDynamicListProps> = (props) => {
-  const { state, setState } = useDynamicList(props)
+  /**
+   * Determines the target SharePoint web instance based on webContextMode prop.
+   * Computed once and shared via context to avoid repeated getWeb() calls.
+   * - CurrentProject: Uses current site web
+   * - HubSite: Uses portal data service web (hub site)
+   * - CustomSite: Uses custom URL if provided
+   */
+  const targetWeb = useMemo(() => {
+    return getWeb(props.webUrl, props.webContextMode)
+  }, [props.webContextMode, props.webUrl])
+
+  const { state, setState } = useDynamicList(props, targetWeb)
 
   const context = useMemo(
     () => ({
       props,
       state,
-      setState
+      setState,
+      web: targetWeb
     }),
-    [props, state]
+    [props, state, targetWeb]
   )
 
   const hasOnlyOneItem = state.data?.listItems?.length === 1
@@ -158,26 +170,6 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
       setState({ selectedItems: [0] })
     }
   }, [isSingleView, state.data?.listItems?.length, state.selectedItems?.length])
-
-  /**
-   * Determines the target SharePoint web instance based on webContextMode prop.
-   * - CurrentProject: Uses current site web
-   * - HubSite: Uses portal data service web (hub site)
-   * - CustomSite: Uses custom URL if provided
-   */
-  const targetWeb = useMemo(() => {
-    const webContextMode = props.webContextMode || WebContextMode.CurrentProject
-
-    switch (webContextMode) {
-      case WebContextMode.HubSite:
-        return SPDataAdapter.portalDataService.web
-      case WebContextMode.CustomSite:
-        return props.webUrl ? Web([SPDataAdapter.sp.web, props.webUrl]) : SPDataAdapter.sp.web
-      case WebContextMode.CurrentProject:
-      default:
-        return SPDataAdapter.sp.web
-    }
-  }, [props.webContextMode, props.webUrl])
 
   /**
    * Filter fields for edit panel - exclude hidden columns unless they are required

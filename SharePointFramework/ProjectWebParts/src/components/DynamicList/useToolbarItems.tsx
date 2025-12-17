@@ -1,7 +1,7 @@
 import { useMemo, useContext, useCallback } from 'react'
 import { DynamicListContext } from './context'
 import { ListMenuItem, ItemFieldValues, ListMenuItemDivider } from 'pp365-shared-library'
-import { DocumentLibraryViewMode } from './types'
+import { DocumentLibraryViewMode, WebContextMode } from './types'
 import {
   FilterRegular,
   AddRegular,
@@ -20,7 +20,6 @@ import '@pnp/sp/files/folder'
 import _ from 'lodash'
 import { useExcelExport } from './hooks'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
-import { getWeb } from './utils'
 import { fetchSingleItem } from './data/fetchListData'
 
 const Icons = {
@@ -99,12 +98,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
     if (!confirmed) return
 
-    const web = getWeb(
-      context.props.webUrl,
-      context.props.pageContext,
-      context.props.webContextMode
-    )
-    const list = web.lists.getByTitle(context.props.listName)
+    const list = context.web.lists.getByTitle(context.props.listName)
 
     const selectedItems = context.state.selectedItems.map((id) =>
       context.state.data.listItems.find((_, idx) => idx === id)
@@ -154,6 +148,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       try {
         const transformedItem = await fetchSingleItem(
           context.props,
+          context.web,
           itemId,
           context.state.data?.listColumns
         )
@@ -186,16 +181,11 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       if (!context.props.listName) return
 
       try {
-        const web = getWeb(
-          context.props.webUrl,
-          context.props.pageContext,
-          context.props.webContextMode
-        )
-        const list = web.lists.getByTitle(context.props.listName)
+        const list = context.web.lists.getByTitle(context.props.listName)
         let folderPath = context.state.currentFolderPath || ''
 
         if (context.props.useProjectFolder && context.state.isDocumentLibrary) {
-          const projectFolderName = context.props.pageContext?.web?.title
+          const projectFolderName = context.props.webTitle
           if (projectFolderName) {
             try {
               await list.rootFolder.folders.getByUrl(projectFolderName)()
@@ -211,6 +201,10 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
         for (const file of files) {
           let addedFile
           if (folderPath) {
+            console.log('[useToolbarItems.uploadFiles] Uploading to folder:', {
+              listName: context.props.listName,
+              folderPath
+            })
             const targetFolder = list.rootFolder.folders.getByUrl(folderPath)
             addedFile = await targetFolder.files.addUsingPath(file.name, file, { Overwrite: true })
           } else {
@@ -221,8 +215,8 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
           if (context.props.useSiteIdFiltering && addedFile) {
             try {
-              const siteId = context.props.pageContext?.site?.id?.toString()
-              const siteTitle = context.props.pageContext?.web?.title
+              const siteId = context.props.siteId
+              const siteTitle = context.props.webTitle
 
               if (siteId || siteTitle) {
                 const fileItem = await addedFile.file.getItem()
@@ -261,16 +255,11 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       if (!context.props.listName) return
 
       try {
-        const web = getWeb(
-          context.props.webUrl,
-          context.props.pageContext,
-          context.props.webContextMode
-        )
-        const list = web.lists.getByTitle(context.props.listName)
+        const list = context.web.lists.getByTitle(context.props.listName)
         let folderPath = context.state.currentFolderPath || ''
 
         if (context.props.useProjectFolder && context.state.isDocumentLibrary) {
-          const projectFolderName = context.props.pageContext?.web?.title
+          const projectFolderName = context.props.webTitle
           if (projectFolderName) {
             try {
               await list.rootFolder.folders.getByUrl(projectFolderName)()
@@ -279,6 +268,8 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
             }
             if (!folderPath) {
               folderPath = projectFolderName
+            } else if (!folderPath.startsWith(projectFolderName + '/') && folderPath !== projectFolderName) {
+              folderPath = `${projectFolderName}/${folderPath}`
             }
           }
         }
@@ -307,6 +298,10 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
         const emptyFile = new Blob([], { type: contentType })
         let addedFile
         if (folderPath) {
+          console.log('[useToolbarItems.createDocument] Creating in folder:', {
+            listName: context.props.listName,
+            folderPath
+          })
           const targetFolder = list.rootFolder.folders.getByUrl(folderPath)
           addedFile = await targetFolder.files.addUsingPath(fileName, emptyFile, {
             Overwrite: true
@@ -319,8 +314,8 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
         if (context.props.useSiteIdFiltering && addedFile) {
           try {
-            const siteId = context.props.pageContext?.site?.id?.toString()
-            const siteTitle = context.props.pageContext?.web?.title
+            const siteId = context.props.siteId
+            const siteTitle = context.props.webTitle
 
             if (siteId || siteTitle) {
               const fileItem = await addedFile.file.getItem()
@@ -340,12 +335,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
         console.error('Error creating document:', error)
       }
     },
-    [
-      context.props,
-      context.state.currentFolderPath,
-      context.state.isDocumentLibrary,
-      context.setState
-    ]
+    [context.props, context.state.currentFolderPath, context.setState]
   )
 
   /**
@@ -361,12 +351,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
     async (itemId: number | null, properties: Record<string, any>) => {
       if (!context.props.listName) return
 
-      const web = getWeb(
-        context.props.webUrl,
-        context.props.pageContext,
-        context.props.webContextMode
-      )
-      const list = web.lists.getByTitle(context.props.listName)
+      const list = context.web.lists.getByTitle(context.props.listName)
 
       try {
         if (itemId) {
@@ -374,8 +359,8 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
           dismissPanel()
         } else {
           if (context.props.useSiteIdFiltering) {
-            const siteId = context.props.pageContext?.site?.id?.toString()
-            const siteTitle = context.props.pageContext?.web?.title
+            const siteId = context.props.siteId
+            const siteTitle = context.props.webTitle
             if (siteId) {
               properties.GtSiteId = siteId
             }

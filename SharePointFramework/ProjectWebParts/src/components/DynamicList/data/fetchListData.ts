@@ -2,7 +2,7 @@ import { IColumn } from '@fluentui/react'
 import { IDynamicListProps, IDynamicListData, WebContextMode } from '../types'
 import SPDataAdapter from '../../../data'
 import { EditableSPField, ProjectContentColumn } from 'pp365-shared-library'
-import { Web } from '@pnp/sp/webs'
+import type { IWeb } from '@pnp/sp/webs'
 import '@pnp/sp/lists'
 import '@pnp/sp/fields'
 import '@pnp/sp/items'
@@ -10,34 +10,6 @@ import '@pnp/sp/items/get-all'
 import '@pnp/sp/views'
 import '@pnp/sp/taxonomy'
 import { TaxonomyTermModel } from '../models/TaxonomyTermModel'
-
-/**
- * Gets the appropriate Web instance based on the webContextMode parameter.
- *
- * This function determines which SharePoint web instance to use for fetching list data
- * by evaluating the webContextMode:
- *
- * 1. CurrentProject: Returns the standard SP web instance for the current site
- * 2. HubSite: Returns the portal data service web to access hub-level data
- * 3. CustomSite: Creates a new Web instance for the specified URL
- *
- * @param webUrl - Optional web URL. Used only when webContextMode is CustomSite
- * @param props - Component props containing webContextMode
- * @returns A Web instance configured to fetch list data from the appropriate location
- */
-export function getWeb(webUrl?: string, props?: IDynamicListProps) {
-  const webContextMode = props?.webContextMode || WebContextMode.CurrentProject
-
-  switch (webContextMode) {
-    case WebContextMode.HubSite:
-      return SPDataAdapter.portalDataService.web
-    case WebContextMode.CustomSite:
-      return webUrl ? Web([SPDataAdapter.sp.web, webUrl]) : SPDataAdapter.sp.web
-    case WebContextMode.CurrentProject:
-    default:
-      return SPDataAdapter.sp.web
-  }
-}
 
 /**
  * Fetches column configuration from the ProjectContentColumns (Prosjektinnholdskolonner) list.
@@ -292,14 +264,18 @@ async function fetchTaxonomyTermsForColumns(
 
 /**
  * Fetches list data including items, columns, and field metadata
+ * @param props Component properties
+ * @param web The SharePoint web instance to use for operations
  */
-export async function fetchListData(props: IDynamicListProps): Promise<IDynamicListData> {
+export async function fetchListData(
+  props: IDynamicListProps,
+  web: IWeb
+): Promise<IDynamicListData> {
   try {
     if (!props.listName) {
       return { listItems: [], listColumns: [] }
     }
 
-    const web = getWeb(props.webUrl, props)
     const list = web.lists.getByTitle(props.listName)
 
     const allFields = await SPDataAdapter.portalDataService.getListFields(
@@ -468,7 +444,7 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
       if (!hasBothFields) {
         siteIdFieldMissing = true
       } else {
-        const currentSiteId = props.pageContext?.site?.id?.toString()
+        const currentSiteId = props.siteId
 
         if (currentSiteId) {
           filteredListItems = listItems.filter((item) => {
@@ -504,8 +480,16 @@ export async function fetchListData(props: IDynamicListProps): Promise<IDynamicL
  * @param existingColumns Optional existing column definitions to avoid refetching
  * @returns The transformed item ready for display
  */
+/**
+ * Fetches a single item by ID with full field data
+ * @param props Component properties
+ * @param web The SharePoint web instance to use for operations
+ * @param itemId The ID of the item to fetch
+ * @param existingColumns Optional existing columns for field type detection
+ */
 export async function fetchSingleItem(
   props: IDynamicListProps,
+  web: IWeb,
   itemId: number,
   existingColumns?: IColumn[]
 ): Promise<any> {
@@ -514,7 +498,6 @@ export async function fetchSingleItem(
       throw new Error('List name is required')
     }
 
-    const web = getWeb(props.webUrl, props)
     const list = web.lists.getByTitle(props.listName)
 
     const itemQuery = list.items

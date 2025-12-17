@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import type { IWeb } from '@pnp/sp/webs'
 import { IDynamicListProps, IDynamicListState, DocumentLibraryViewMode } from '../types'
 import { fetchListData } from './fetchListData'
 import { generateFilters } from './generateFilters'
@@ -14,11 +15,13 @@ import { generateFilters } from './generateFilters'
  * @param props Component configuration properties
  * @param state Current component state
  * @param setState Function to update component state
+ * @param web The SharePoint web instance to use for data fetching
  */
 export function useDynamicListDataFetch(
   props: IDynamicListProps,
   state: IDynamicListState,
-  setState: (newState: Partial<IDynamicListState>) => void
+  setState: (newState: Partial<IDynamicListState>) => void,
+  web: IWeb
 ): void {
   useEffect(() => {
     if (!props.listName) {
@@ -36,7 +39,7 @@ export function useDynamicListDataFetch(
 
     setState({ isLoading: true })
 
-    fetchListData(propsWithView)
+    fetchListData(propsWithView, web)
       .then((fetchedData) => {
         if (cancelled) return
 
@@ -76,7 +79,7 @@ export function useDynamicListDataFetch(
     return () => {
       cancelled = true
     }
-  }, [props.listName, props.pageContext?.web?.absoluteUrl, state.refetch])
+  }, [props.listName, props.webAbsoluteUrl, state.refetch, web])
 
   useEffect(() => {
     if (state.data && state.data.listItems && state.data.listColumns) {
