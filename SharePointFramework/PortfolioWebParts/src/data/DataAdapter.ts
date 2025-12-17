@@ -666,17 +666,23 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       .join('_')
     const cacheKey = `pp365_fetchenrichedprojects_${siteId}_${fieldsCacheKey || 'default'}`
 
-    const [items, sites, memberOfGroups, users, templates] = await localStore.getOrPut(
+    let templates = []
+    try {
+      templates = await this._sp.web.lists
+        .getByTitle(resource.Lists_TemplateOptions_Title)
+        .items.select('Title', 'TemplateImageUrl')()
+    } catch (error) {
+      console.warn('Could not fetch template images from Maloppsett list. TemplateImageUrl field may not exist.', error)
+    }
+
+    const [items, sites, memberOfGroups, users] = await localStore.getOrPut(
       cacheKey,
       async () =>
         await Promise.all([
           list.items.select(...selectFields).getAll(),
           this._fetchItems(`DepartmentId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId']),
           this.fetchMemberGroups(),
-          this._sp.web.siteUsers.select('Id', 'Title', 'Email')(),
-          this._sp.web.lists
-            .getByTitle(resource.Lists_TemplateOptions_Title)
-            .items.select('Title', 'TemplateImageUrl')()
+          this._sp.web.siteUsers.select('Id', 'Title', 'Email')()
         ]),
       dateAdd(new Date(), 'minute', 30)
     )
@@ -726,7 +732,16 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     const list = spHub.web.lists.getByTitle(resource.Lists_Projects_Title)
     const selectFields = Object.keys(new SPProjectItem())
 
-    const [items, sites, memberOfGroups, users, templates] = await localStore.getOrPut(
+    let templates = []
+    try {
+      templates = await spHub.web.lists
+        .getByTitle(resource.Lists_TemplateOptions_Title)
+        .items.select('Title', 'TemplateImageUrl')()
+    } catch (error) {
+      console.warn('Could not fetch template images from Maloppsett list. TemplateImageUrl field may not exist.', error)
+    }
+
+    const [items, sites, memberOfGroups, users] = await localStore.getOrPut(
       cacheKey,
       async () =>
         await Promise.all([
@@ -736,10 +751,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
             .getAll(),
           this._fetchItems(`SiteId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId']),
           this.fetchMemberGroups(),
-          spHub.web.siteUsers.select('Id', 'Title', 'Email')(),
-          spHub.web.lists
-            .getByTitle(resource.Lists_TemplateOptions_Title)
-            .items.select('Title', 'TemplateImageUrl')()
+          spHub.web.siteUsers.select('Id', 'Title', 'Email')()
         ]),
       dateAdd(new Date(), 'minute', 30)
     )

@@ -11,6 +11,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
   - Brukere kan nå velge mapper i tillegg til filer når de henter dokumentmaler
   - Mapper kopieres rekursivt med all struktur og innhold
   - Systemmapper hoppes automatisk over under kopiering
+- Standard logo per mal i maloppsett [#1679](https://github.com/Puzzlepart/prosjektportalen365/issues/1679)
 
 ### Forbedringer
 
