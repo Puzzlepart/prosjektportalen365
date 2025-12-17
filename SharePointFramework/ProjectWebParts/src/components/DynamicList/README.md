@@ -1,157 +1,151 @@
-# Dynamic List Web Part
+# Dynamisk listewebdel
 
-A flexible, configurable web part for displaying SharePoint list data in a dynamic grid view. This web part is designed to replace the TimelineList component with a more generalized approach.
+NB! Dokumentasjonen under er generert med KI, og kan inneholde feil eller unøyaktigheter. Vennligst dobbeltsjekk informasjonen.
 
-## Features
+En fleksibel og konfigurerbar webdel for visning av data fra SharePoint-lister og dokumentbibliotek.
 
-- **Dynamic List Support**: Display data from any SharePoint list by configuring the list name
-- **Sortable Columns**: All columns are sortable by clicking the column headers
-- **Multi-selection**: Select multiple items with checkboxes
-- **Resizable Columns**: Drag column borders to adjust width
-- **Command Bar**: Optional toolbar with refresh and filter actions
-- **Responsive**: Adapts to container width automatically
+## Funksjoner
 
-## Properties
+- **Fleksibel datakilde**: Vis data fra nåværende prosjekt, hub-område eller egendefinert område
+- **Flere visningsmoduser**: Liste, rutenett, enkeltvisning og dokumentbibliotek
+- **Mappehåndtering**: Full støtte for mapper i dokumentbibliotek med navigering
+- **Prosjektmappe**: Automatisk opprettelse og filtrering av prosjektspesifikke mapper
+- **Sorterbare kolonner**: Alle kolonner kan sorteres ved å klikke på kolonneoverskriftene
+- **Flervalgsmodus**: Velg flere elementer med avkrysningsbokser
+- **Justerbare kolonner**: Dra kolonnekanter for å justere bredde
+- **Kommandolinje**: Valgfri verktøylinje med handlinger som oppdater, filtrer, opprett og slett
+- **Responsiv**: Tilpasser seg automatisk til containerbredde
+- **Redigering**: Opprett, rediger og slett elementer direkte fra webdelen
+- **Filopplasting**: Last opp filer til dokumentbibliotek med dra-og-slipp
+- **Taksonomifelt**: Full støtte for taksonomifelt med automatisk transformering
+- **Office Online**: Filer åpnes alltid i Office Online
 
-### Configuration Properties
+## Egenskaper
 
-| Property | Type | Default | Description |
+## Egenskaper
+
+### Konfigurasjonsegenskaper
+
+| Egenskap | Type | Standard | Beskrivelse |
 |----------|------|---------|-------------|
-| `webContextMode` | 'current' \| 'hub' \| 'custom' | 'current' | Determines which SharePoint site to use: **current** (current project), **hub** (portfolio hub site), or **custom** (custom URL) |
-| `webUrl` | string | - | Custom site URL (only used when webContextMode is 'custom') |
-| `listName` | string | - | The internal name of the SharePoint list to display. **Selected from dropdown** of available lists |
-| `viewName` | string | 'All Fields' | The view title to use for field selection (for backward compatibility) |
-| `defaultViewId` | string | null | **Default view ID** (SharePoint item ID). **Takes precedence over viewName**. Selected from dropdown of available views |
-| `hiddenColumns` | string[] | [] | Array of internal field names to hide. If specified, these columns will be excluded from display (filters at rendering level). Use the multi-select control in property pane to choose columns to hide |
-| `nonFilterableColumns` | string[] | [] | Array of internal field names that should NOT be filterable. By default, Note, Date, and Number type fields are automatically added to this list. Use the multi-select control to add/remove fields from filtering |
-| `title` | string | - | Title to display above the list (defaults to list title) |
-| `showSearchBox` | boolean | `false` | Show/hide the search box for filtering items |
-| `mode` | 'multi' \| 'single' | 'multi' | Display mode: multi-item grid or single-item detail view |
-| `showCommandBar` | boolean | `true` | Show/hide the command bar with actions |
-| `showFilters` | boolean | `false` | Enable filter panel (future feature) |
-| `useProjectContentColumnNames` | boolean | `true` | Use column display names from ProjectContentColumns (Prosjektinnholdskolonner). If false, uses names directly from the list/library |
-| `showNewButton` | boolean | `true` | Show/hide the "Ny" (New) button for creating new list items |
-| `showEditButton` | boolean | `true` | Show/hide the "Rediger" (Edit) button for editing selected items |
-| `showDeleteButton` | boolean | `true` | Show/hide the "Slett" (Delete) button for deleting selected items |
-| `showRefreshButton` | boolean | `true` | Show/hide the "Oppdater" (Refresh) button for reloading data |
-| `showExportButton` | boolean | `true` | Show/hide the "Eksporter til Excel" (Export to Excel) button |
-| `showUploadButton` | boolean | `true` | Show/hide the file upload option in document libraries |
-| `showNewWordButton` | boolean | `true` | Show/hide the "Nytt Word-dokument" option in document libraries |
-| `showNewExcelButton` | boolean | `true` | Show/hide the "Nytt Excel-dokument" option in document libraries |
-| `showNewPowerPointButton` | boolean | `true` | Show/hide the "Nytt PowerPoint-dokument" option in document libraries |
-| `showViewModeToggle` | boolean | `true` | Show/hide the folder/flat view toggle in document libraries |
-| `infoText` | string | - | Additional information text to display |
+| `webContextMode` | 'current' \| 'hub' \| 'custom' | 'current' | Bestemmer hvilket SharePoint-område som skal brukes: **current** (nåværende prosjekt), **hub** (porteføljeområde), eller **custom** (egendefinert URL) |
+| `webUrl` | string | - | Egendefinert område-URL (brukes kun når webContextMode er 'custom') |
+| `listName` | string | - | Det interne navnet på SharePoint-listen som skal vises. **Velges fra nedtrekksliste** med tilgjengelige lister |
+| `viewName` | string | 'All Fields' | Visningstittel som skal brukes for feltvalg (for bakoverkompatibilitet) |
+| `defaultViewId` | string | null | **Standard visnings-ID** (SharePoint element-ID). **Tar presedens over viewName**. Velges fra nedtrekksliste med tilgjengelige visninger |
+| `hiddenColumns` | string[] | [] | Array med interne feltnavn som skal skjules. Hvis spesifisert, vil disse kolonnene ekskluderes fra visning. Bruk flervalgs-kontrollen i egenskapsruten for å velge kolonner som skal skjules |
+| `nonFilterableColumns` | string[] | [] | Array med interne feltnavn som IKKE skal være filtrerbare. Som standard legges Note-, Date- og Number-felt automatisk til denne listen. Bruk flervalgs-kontrollen for å legge til/fjerne felt fra filtrering |
+| `title` | string | - | Tittel som skal vises over listen (standard er listetittel) |
+| `showSearchBox` | boolean | `false` | Vis/skjul søkeboks for filtrering av elementer |
+| `mode` | 'multi' \| 'single' | 'multi' | Visningsmodus: flervalgs-liste eller enkeltvisning |
+| `documentLibraryViewMode` | 'folders' \| 'flat' | 'folders' | Visning for dokumentbibliotek: 'folders' for mappenavigering, 'flat' for alle dokumenter i én liste |
+| `showCommandBar` | boolean | `true` | Vis/skjul kommandolinjen med handlinger |
+| `showFilters` | boolean | `false` | Aktiver filterpanel |
+| `useProjectContentColumnNames` | boolean | `true` | Bruk kolonnenavn fra ProjectContentColumns (Prosjektinnholdskolonner). Hvis false, brukes navn direkte fra listen/biblioteket |
+| `useSiteIdFiltering` | boolean | `false` | Aktiver filtrering basert på GtSiteId-felt. Når aktivert, vises kun elementer som matcher nåværende områdets ID |
+| `useProjectFolder` | boolean | `false` | For dokumentbibliotek: Opprett og bruk prosjektspesifikk mappe. Når aktivert, opprettes en mappe med områdets tittel og brukes som rot ved oppretting/opplasting av filer |
+| `showNewButton` | boolean | `true` | Vis/skjul "Ny"-knappen for å opprette nye listeelementer |
+| `showEditButton` | boolean | `true` | Vis/skjul "Rediger"-knappen for å redigere valgte elementer |
+| `showDeleteButton` | boolean | `true` | Vis/skjul "Slett"-knappen for å slette valgte elementer |
+| `showRefreshButton` | boolean | `true` | Vis/skjul "Oppdater"-knappen for å laste data på nytt |
+| `showExportButton` | boolean | `true` | Vis/skjul "Eksporter til Excel"-knappen |
+| `showUploadButton` | boolean | `true` | Vis/skjul filopplastingsalternativet i dokumentbibliotek |
+| `showNewWordButton` | boolean | `true` | Vis/skjul "Nytt Word-dokument"-alternativet i dokumentbibliotek |
+| `showNewExcelButton` | boolean | `true` | Vis/skjul "Nytt Excel-dokument"-alternativet i dokumentbibliotek |
+| `showNewPowerPointButton` | boolean | `true` | Vis/skjul "Nytt PowerPoint-dokument"-alternativet i dokumentbibliotek |
+| `showViewModeToggle` | boolean | `true` | Vis/skjul veksleknappen for mappe-/flat visning i dokumentbibliotek |
+| `showViewSelector` | boolean | `false` | Vis/skjul visningsvelgeren i verktøylinjen |
+| `infoText` | string | - | Tilleggsinformasjon som skal vises |
+| `minHeight` | number \| string | - | Minimum høyde for komponentbeholderen (f.eks. '500px' eller '50vh') |
 
-### View Selection Behavior
+### Visningsvalg
 
-The webpart supports view selection similar to PortfolioOverview, with **defaultViewId taking precedence** over viewName.
+Webdelen støtter visningsvalg på samme måte som PortfolioOverview, der **defaultViewId tar presedens** over viewName.
 
-#### Column Selection Priority
+#### Prioritet for kolonnevalg
 
-1. **hiddenColumns** (if specified) - Hides selected columns from the view
-2. **defaultViewId** (if specified) - Uses columns from SharePoint view ID
-3. **viewName** (if specified) - Uses columns from view title (backward compatibility)
-4. **"All Fields"** (default) - Shows all list fields
+1. **hiddenColumns** (hvis spesifisert) - Skjuler valgte kolonner fra visningen
+2. **defaultViewId** (hvis spesifisert) - Bruker kolonner fra SharePoint-visning med gitt ID
+3. **viewName** (hvis spesifisert) - Bruker kolonner fra visning med gitt tittel (bakoverkompatibilitet)
+4. **"All Fields"** (standard) - Viser alle listens felt
 
-#### View Selection Priority
+#### Alle felt (standard)
 
-1. **hiddenColumns** (if specified) - Filters columns after view selection
-2. **defaultViewId** (if specified) - Uses SharePoint view ID
-2. **viewName** (if specified) - Uses view title (backward compatibility)
-3. **"All Fields"** (default) - Shows all list fields
+- Henter alle felt direkte fra listens feltsamling
+- Filtrerer: `Hidden eq false and ReadOnlyField eq false`
+- Viser alle redigerbare, ikke-systemfelt
+- Ingen spesifikk rekkefølge (alfabetisk som standard)
 
-#### All Fields (Default)
+#### Spesifikk visning (etter ID eller tittel)
 
-- Fetches all fields directly from the list's field collection
-- Filters: `Hidden eq false and ReadOnlyField eq false`
-- Shows all editable, non-system fields
-- No specific order (alphabetical by default)
+- Henter kun felt inkludert i den valgte visningen
+- Respekterer visningens feltrekkefølge
+- Ideelt for å vise spesifikke delsett av felt
+- Standardvisningen merkes med "(Standard)"-merkelapp
+- Bruker SharePoint visnings-ID for pålitelig identifikasjon
 
-#### Specific View (by ID or Title)
+### Visningsmoduser
 
-- Fetches only fields included in the selected view
-- Respects the view's field order
-- Ideal for displaying specific subsets of fields
-- Default view is marked with "(Default)" label
-- Uses SharePoint view ID for reliable identification
+#### Flervalgs-modus (`mode: 'multi'`)
 
-### Display Modes
+- Standardmodus for visning av flere elementer
+- Viser data i et sorterbart, justerbart rutenett
+- Støtter flervalgsmodus og massehandlinger
+- Paginering for store lister
+- Best for: Oppgaver, problemer, dokumenter, enhver liste med flere elementer
 
-#### Multi-Item Mode (`mode: 'multi'`)
+#### Enkeltvisning (`mode: 'single'`)
 
-- Default mode for displaying multiple items
-- Shows data in a sortable, resizable DataGrid
-- Supports multi-selection and bulk actions
-- Pagination for large lists
-- Best for: Tasks, Issues, Documents, any list with multiple items
+- Viser ett element i en detaljert felt-for-felt-visning
+- Rutenettoppsett med responsive kolonner (450px minimum)
+- Rediger- og slett-handlingsknapper
+- Filtrerer automatisk ut systemfelt
+- Best for: Innstillinger, konfigurasjon, områdeinformasjon, enhver liste med én post
 
-#### Single-Item Mode (`mode: 'single'`)
+**Merk:** Når en liste bare har ett element, bytter modusen automatisk til 'single' selv om den ikke er eksplisitt konfigurert.
 
-- Displays one item in a detailed field-by-field view
-- Grid layout with responsive columns (450px minimum)
-- Edit and Delete action buttons
-- Automatically filters out system fields
-- Best for: Settings, Configuration, Site Information, any list with a single record
+#### Dokumentbibliotek-modus
 
-**Note:** When a list only has one item, the mode automatically switches to 'single' even if not explicitly configured.
+Aktiveres automatisk når den valgte listen er et dokumentbibliotek.
 
-## Usage
+**Visningsmoduser for dokumentbibliotek:**
 
-### Basic Setup
+- **Mappevisning** (`documentLibraryViewMode: 'folders'`): Standard. Viser mapper og filer med full navigering og brødsmuler
+- **Flat visning** (`documentLibraryViewMode: 'flat'`): Viser alle dokumenter i én liste uten mappehierarki
 
-1. Add the web part to a SharePoint page
-2. Edit the web part properties
-3. **Select a site mode** to determine where the list is located:
-   - **Gjeldende prosjekt** (Current Project): Uses the current project site
-   - **Porteføljeområde (hub)** (Hub Site): Uses the portfolio hub site that the project is connected to
-   - **Egendefinert område** (Custom Site): Allows you to specify a custom SharePoint site URL
-4. **(If Custom Site selected)** Enter the full SharePoint site URL
-5. **Select a list** from the dropdown - all available lists from the selected site will be shown with item counts
-5. **Select a view** to determine which fields to display:
-   - **All Fields** (default): Shows all non-hidden, editable fields from the list
-   - **Specific View**: Shows only the fields included in the selected view, in the view's order
-6. Configure display options as needed
+**Funksjoner i dokumentbibliotek:**
 
-The webpart automatically fetches all available lists and views from the selected site and displays them in dropdowns for easy selection.
+- Filopplasting med dra-og-slipp (støtter ubegrenset mappedybde)
+- Opprett nye dokumenter fra maler (Word, Excel, PowerPoint)
+- Mappenavigering med brødsmuler
+- Filer åpnes alltid i Office Online (Word Online, Excel Online, PowerPoint Online)
+- Prosjektmappe-funksjonalitet for prosjektspesifikk filorganisering
 
-## Data Fetching
+## Bruk
 
-The web part automatically:
+### Grunnleggende oppsett
 
-- Fetches all list items
-- Retrieves column metadata
-- Transforms lookup and person fields for display
-- Handles multi-value fields
+1. Legg til webdelen på en SharePoint-side
+2. Rediger webdelens egenskaper
+3. **Velg en områdemodus** for å bestemme hvor listen befinner seg:
+   - **Gjeldende prosjekt** (Current Project): Bruker nåværende prosjektområde
+   - **Porteføljeområde (hub)** (Hub Site): Bruker porteføljens hub-område som prosjektet er tilkoblet til
+   - **Egendefinert område** (Custom Site): Lar deg spesifisere en egendefinert SharePoint-område-URL
+4. **(Hvis Egendefinert område er valgt)** Skriv inn full SharePoint-område-URL
+5. **Velg en liste** fra nedtrekkslisten - alle tilgjengelige lister fra det valgte området vises med elementtall
+6. **Velg en visning** for å bestemme hvilke felt som skal vises:
+   - **All Fields** (standard): Viser alle ikke-skjulte, redigerbare felt fra listen
+   - **Spesifikk visning**: Viser kun feltene inkludert i den valgte visningen, i visningens rekkefølge
+7. Konfigurer visningsalternativer etter behov
 
-## Extensibility
+Webdelen henter automatisk alle tilgjengelige lister og visninger fra det valgte området og viser dem i nedtrekkslister for enkel valg.
 
-The component is designed to be extended with:
+## Datahenting
 
-- Custom filtering logic
-- Custom column renderers
-- Inline editing capabilities
-- Export functionality
-- Bulk actions
+Webdelen håndterer automatisk:
 
-## Technical Details
-
-### State Management
-
-Uses React hooks with context API for state management:
-
-- `DynamicListContext` - Provides state and props to child components
-- `useDynamicList` - Main state management hook
-- `useDynamicListDataFetch` - Data fetching and caching
-
-### Performance Considerations
-
-- Data is fetched once on mount and when dependencies change
-- Column resizing is handled by Fluent UI DataGrid
-- Sorting is performed client-side
-- Re-renders are minimized using React.useMemo
-
-## Future Enhancements
-
-- [ ] Column customization (show/hide, reorder)
-- [ ] Bulk operations
-- [ ] Custom views/templates
+- Henting av alle listeelementer
+- Henting av kolonnemetadata
+- Transformering av oppslags- og personfelt for visning
+- Håndtering av flerverdifelt
+- Taksonomifelt-transformering for korrekt visning og redigering
