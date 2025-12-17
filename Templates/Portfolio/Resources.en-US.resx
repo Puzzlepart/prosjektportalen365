@@ -2551,6 +2551,9 @@
     <data name="Lists_TemplateOptions_Fields_IsAutoConfigurable_DisplayName" xml:space="preserve">
         <value>Configure automatically</value>
     </data>
+    <data name="Lists_TemplateOptions_Fields_ImageUrl_DisplayName" xml:space="preserve">
+        <value>Image URL</value>
+    </data>
     <data name="Lists_TemplateOptions_Fields_IsDefaultExtensionsLocked_Description" xml:space="preserve">
         <value>This makes the selected extensions for this template mandatory.</value>
     </data>
@@ -2613,6 +2616,9 @@
     </data>
     <data name="Lists_TemplateOptions_Url" xml:space="preserve">
         <value>Lists/TemplateOptions</value>
+    </data>
+    <data name="Lists_TemplateOptions_Fields_ImageUrl_Description" xml:space="preserve">
+        <value>URL to the image representing the template. Used as fallback image of the project preview card if the site has not selected a custom site logo</value>
     </data>
     <data name="Lists_TimelineConfiguration_Description" xml:space="preserve">
         <value>Configuration of the timeline elements' color, shape and visibility</value>
