@@ -19,12 +19,14 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Lagt til begrensning av antall karakterer for Alias/navn i Bestillingsportalen-skjema
 - Redusert maksimal bildestørrelse fra 800KB til 512KB for bildeopplasting i Bestillingsportalen-skjema
 - Lagt inn støtte for å bruke SharePoint Managed Path (teams/sites) ved opprettelse av nye områder i Bestillingsportalen
+- Lagt til mulihget for å avbryte opprettelse av statusrapport [#1564](https://github.com/Puzzlepart/prosjektportalen365/issues/1564)
 
 ### Feilrettinger
 
 - Rettet et problem hvor bildeforhåndsvisning forsvant ved navigasjon mellom nivåer i Bestillingsportalen-skjema
 - Rettet et problem hvor nyheter publisert fra prosjekter ikke fikk publiseringsdato
 - Rettet en feil med kalkulering av antall tegn tillatt i Alias/navn felt i Bestillingsportalen-skjema (maks 64 tegn inkludert prefiks/suffiks)
+
 
 ---
 
