@@ -10,7 +10,7 @@ import { useDynamicListDataFetch } from './data/useDynamicListDataFetch'
  * and triggers data fetching through useDynamicListDataFetch.
  *
  * @param props Component configuration properties
- * @param web The SharePoint web instance to use for operations
+ * @param web The SharePoint web instance to use for all operations
  * @returns Object containing state and setState function
  */
 export function useDynamicList(props: IDynamicListProps, web: IWeb) {

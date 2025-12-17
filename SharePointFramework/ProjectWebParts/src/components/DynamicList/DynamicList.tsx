@@ -34,11 +34,11 @@ import styles from './DynamicList.module.scss'
  * @param showNewButton Whether to show the new item button
  * @param targetWeb The SharePoint web instance to use for operations
  */
-const DynamicListContent: FC<{ isSingleView: boolean; showNewButton: boolean; targetWeb: any }> = ({
-  isSingleView,
-  showNewButton,
-  targetWeb
-}) => {
+const DynamicListContent: FC<{
+  isSingleView: boolean
+  showNewButton: boolean
+  targetWeb: any
+}> = ({ isSingleView, showNewButton, targetWeb }) => {
   const context = useContext(DynamicListContext)
   const { menuItems, farMenuItems, filterPanelProps } = useToolbarItems(isSingleView, showNewButton)
 
@@ -135,7 +135,7 @@ const DynamicListContent: FC<{ isSingleView: boolean; showNewButton: boolean; ta
 export const DynamicList: FC<IDynamicListProps> = (props) => {
   /**
    * Determines the target SharePoint web instance based on webContextMode prop.
-   * Computed once and shared via context to avoid repeated getWeb() calls.
+   * This web is used for ALL operations (read and write) and points to where the list exists.
    * - CurrentProject: Uses current site web
    * - HubSite: Uses portal data service web (hub site)
    * - CustomSite: Uses custom URL if provided
@@ -186,6 +186,22 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
     })
   }, [state.data?.fields, props.hiddenColumns])
 
+  /**
+   * Create a data adapter that uses the correct SP instance based on webContextMode.
+   * For HubSite mode, we use portalDataService which points to the hub site.
+   * For other modes, we use the standard SPDataAdapter.
+   */
+  const dataAdapterForEditPanel = useMemo(() => {
+    if (props.webContextMode === WebContextMode.HubSite) {
+      // For hub site mode, create an adapter-like object that uses portalDataService
+      return {
+        ...SPDataAdapter,
+        sp: SPDataAdapter.portalDataService as any
+      } as typeof SPDataAdapter
+    }
+    return SPDataAdapter
+  }, [props.webContextMode])
+
   const containerStyle = useMemo(() => {
     if (props.minHeight !== undefined) {
       const minHeight =
@@ -211,7 +227,7 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
             isOpen={true}
             fields={editPanelFields}
             fieldValues={state.panel.fieldValues}
-            dataAdapter={SPDataAdapter}
+            dataAdapter={dataAdapterForEditPanel}
             targetWeb={targetWeb}
             targetListId={state.data.listId}
             onDismiss={() => {

@@ -168,7 +168,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
         dismissPanel()
       }
     },
-    [context.props, context.state.data, context.setState]
+    [context.props, context.state.data, context.setState, context.web, dismissPanel]
   )
 
   /**

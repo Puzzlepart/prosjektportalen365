@@ -7,7 +7,8 @@ export interface IDynamicListContext {
   state: IDynamicListState
   setState: (newState: Partial<IDynamicListState>, callback?: () => void) => void
   /**
-   * The web instance to use for all operations, computed once based on webContextMode
+   * The web instance to use for all operations, computed once based on webContextMode.
+   * Points to the site where the list exists (current project, hub, or custom site).
    */
   web: IWeb
 }

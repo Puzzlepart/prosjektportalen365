@@ -586,9 +586,9 @@ export async function fetchSingleItem(
         projectContentColumns,
         props.useProjectContentColumnNames ?? true
       )
-
-      taxonomyTermsMap = await fetchTaxonomyTermsForColumns(columns)
     }
+
+    taxonomyTermsMap = await fetchTaxonomyTermsForColumns(columns)
 
     return transformListItem(item, columns, taxonomyTermsMap)
   } catch (error) {
