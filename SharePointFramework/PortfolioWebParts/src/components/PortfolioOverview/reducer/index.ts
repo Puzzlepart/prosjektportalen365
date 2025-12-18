@@ -29,7 +29,8 @@ import {
   TOGGLE_COLUMN_FORM_PANEL,
   TOGGLE_COMPACT,
   TOGGLE_EDIT_VIEW_COLUMNS_PANEL,
-  TOGGLE_FILTER_PANEL
+  TOGGLE_FILTER_PANEL,
+  TOGGLE_MERGED_VIEW
 } from './actions'
 import { IPortfolioOverviewReducerParams } from './types'
 
@@ -216,6 +217,10 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
       })
       .addCase(SET_VIEW_FORM_PANEL, (state, { payload }) => {
         state.viewForm = payload
+      })
+      .addCase(TOGGLE_MERGED_VIEW, (state, { payload }) => {
+        state.isMergedView = payload
+        state.isChangingView = true
       })
   })
 

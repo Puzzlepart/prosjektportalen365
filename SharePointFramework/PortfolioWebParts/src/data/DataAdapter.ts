@@ -251,6 +251,110 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
+  /**
+   * Detects the language of a hub based on its configuration
+   *
+   * @param portfolio Portfolio instance to detect language for
+   * @returns 'no' for Norwegian, 'en' for English
+   */
+  private detectHubLanguage(portfolio: PortfolioInstance): 'no' | 'en' {
+    if (portfolio.language) {
+      return portfolio.language
+    }
+
+    return 'no'
+  }
+
+  /**
+   * Fetches data from multiple portfolio instances and merges them into a single view.
+   * Uses the primary (first) portfolio's configuration for field names and display settings.
+   *
+   * @param view View configuration from primary portfolio
+   * @param portfolios Array of portfolio instances to fetch data from
+   * @param primaryConfiguration Configuration from the primary portfolio
+   * @returns Merged portfolio view data with items from all hubs
+   */
+  public async fetchMergedViewData(
+    view: PortfolioOverviewView,
+    portfolios: PortfolioInstance[],
+    primaryConfiguration: IPortfolioOverviewConfiguration
+  ): Promise<IPortfolioViewData> {
+    try {
+      const includedPortfolios = portfolios.filter(p => p.includeInMergedView !== false)
+
+      const allPortfolioData = await Promise.all(
+        includedPortfolios.map(async (portfolio) => {
+          try {
+            const tempAdapter = new DataAdapter(this._spfxContext, this._sp)
+            await tempAdapter.configure(null, null, portfolio)
+            const tempConfig = await tempAdapter.getPortfolioConfig()
+            const hubSiteId = tempConfig.hubSiteId
+
+            const { items, managedProperties } = await tempAdapter.fetchDataForView(
+              view,
+              primaryConfiguration,
+              hubSiteId
+            )
+
+            const hubLanguage = this.detectHubLanguage(portfolio)
+
+            return {
+              items: items.map(item => ({
+                ...item,
+                _hubId: portfolio.uniqueId,
+                _hubTitle: portfolio.title,
+                _hubUrl: portfolio.url,
+                _hubLanguage: hubLanguage
+              })),
+              managedProperties,
+              portfolio
+            }
+          } catch (error) {
+            console.error(`Failed to fetch data from portfolio ${portfolio.title}:`, error)
+            return {
+              items: [],
+              managedProperties: [],
+              portfolio
+            }
+          }
+        })
+      )
+
+      const mergedItems = allPortfolioData.reduce((acc, data) => {
+        return [...acc, ...data.items]
+      }, [] as IFetchDataForViewItemResult[])
+
+      const mergedManagedProperties = Array.from(
+        new Set(
+          allPortfolioData.reduce((acc, data) => {
+            return [...acc, ...(data.managedProperties || [])]
+          }, [] as string[])
+        )
+      )
+
+      const uniqueItems = mergedItems.reduce((acc, item) => {
+        const existing = acc.find(i => i.SiteId === item.SiteId)
+        if (!existing) {
+          acc.push(item)
+        } else {
+          const isPrimary = item._hubId === includedPortfolios[0].uniqueId
+          if (isPrimary) {
+            const index = acc.indexOf(existing)
+            acc[index] = item
+          }
+        }
+        return acc
+      }, [] as IFetchDataForViewItemResult[])
+
+      return {
+        items: uniqueItems,
+        managedProperties: mergedManagedProperties
+      }
+    } catch (error) {
+      throw error
+    }
+  }
+
   public async fetchDataForRegularView(
     view: PortfolioOverviewView,
     configuration: IPortfolioOverviewConfiguration,

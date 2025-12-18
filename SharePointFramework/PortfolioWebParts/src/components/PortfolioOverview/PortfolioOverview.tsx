@@ -65,5 +65,6 @@ PortfolioOverview.defaultProps = {
   showGroupBy: true,
   showViewSelector: true,
   showSearchBox: true,
-  showFilters: true
+  showFilters: true,
+  showMergedViewInViewSelector: false
 }
