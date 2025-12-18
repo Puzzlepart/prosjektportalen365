@@ -112,7 +112,16 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       activeLogLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
     }
     if (portfolio) {
+      // Detect hub language to provide appropriate default list names
+      const hubLanguage = this.detectHubLanguage(portfolio)
+      const defaultProjects = hubLanguage === 'en' ? 'Projects' : 'Prosjekter'
+      const defaultProjectStatus = hubLanguage === 'en' ? 'Project Status' : 'Prosjektstatus'
+      const defaultProjectContentColumns = hubLanguage === 'en' ? 'Project Content Columns' : 'Prosjektinnholdskolonner'
+
       configuration.listNames = {
+        PROJECTS: portfolio.projectListName || defaultProjects,
+        PROJECT_STATUS: portfolio.projectStatusListName || defaultProjectStatus,
+        PROJECT_CONTENT_COLUMNS: portfolio.projectContentColumnsListName || defaultProjectContentColumns,
         PROJECT_COLUMNS: portfolio.columnsListName,
         PROJECT_COLUMN_CONFIGURATION: portfolio.columnConfigListName,
         PORTFOLIO_VIEWS: portfolio.viewsListName
@@ -290,6 +299,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
             const tempConfig = await tempAdapter.getPortfolioConfig()
             const hubSiteId = tempConfig.hubSiteId
 
+            // Use primary configuration for column definitions (display names, field names)
+            // but fetch data from this hub's site using the hub's properly configured adapter
             const { items, managedProperties } = await tempAdapter.fetchDataForView(
               view,
               primaryConfiguration,
@@ -487,15 +498,22 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         'SiteId'
       ]),
       this._fetchItems(
-        `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:${resource.Choice_GtModerationStatus_Published}`,
-        [...configuration.columns.map((f) => f.fieldName), siteIdProperty, 'ListItemId'],
+        `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5*`,
+        [...configuration.columns.map((f) => f.fieldName), siteIdProperty, 'ListItemId', 'GtModerationStatusOWSCHCS'],
         500,
         { Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',') }
       )
     ])
     projects = projects.map((item) => cleanDeep({ ...item }))
     sites = sites.map((item) => cleanDeep({ ...item }))
+
+    // Filter status reports to only include published ones (language-agnostic check)
+    // Published reports have GtModerationStatusOWSCHCS set to either "Publisert" (Norwegian) or "Published" (English)
     statusReports = statusReports
+      .filter((report) => {
+        const moderationStatus = report['GtModerationStatusOWSCHCS']
+        return moderationStatus === 'Publisert' || moderationStatus === 'Published'
+      })
       .sort((a, b) => b['ListItemId'] - a['ListItemId'])
       .map((item) => cleanDeep({ ...item }))
     sites = sites.filter(

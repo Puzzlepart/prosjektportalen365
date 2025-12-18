@@ -464,12 +464,13 @@ export type PortfolioInstance = {
   url: string
   projectListName: string
   projectStatusListName: string
+  projectContentColumnsListName: string
   columnsListName: string
   columnConfigListName: string
   viewsListName: string
   iconName?: string
-  language?: 'no' | 'en' // Language of the hub (Norwegian or English)
-  includeInMergedView?: boolean // Whether this hub should be included in the merged view (default: true)
+  language?: 'no' | 'en'
+  includeInMergedView?: boolean
 }
 
 /**
