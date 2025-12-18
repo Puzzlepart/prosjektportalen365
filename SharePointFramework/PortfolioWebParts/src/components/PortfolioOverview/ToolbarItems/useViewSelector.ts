@@ -3,7 +3,7 @@ import { ListMenuItem, ListMenuItemDivider, ListMenuItemHeader } from 'pp365-sha
 import { useMemo } from 'react'
 import _ from 'underscore'
 import { IPortfolioOverviewContext } from '../context'
-import { SET_VIEW_FORM_PANEL, TOGGLE_COMPACT } from '../reducer'
+import { SET_VIEW_FORM_PANEL, TOGGLE_COMPACT, TOGGLE_MERGED_VIEW } from '../reducer'
 import { useProgramMenuItems } from './useProgramMenuItems'
 import { useViewsMenuItems } from './useViewsMenuItems'
 import resource from 'SharedResources'
@@ -55,6 +55,23 @@ export function useViewSelector(context: IPortfolioOverviewContext) {
               }),
             ListMenuItemDivider,
             ...sharedViews,
+            context.props.showMergedViewInViewSelector &&
+              context.props.portfolios?.length > 1 &&
+              ListMenuItemDivider,
+            context.props.showMergedViewInViewSelector &&
+              context.props.portfolios?.length > 1 &&
+              new ListMenuItem(strings.MergedViewLabel)
+                .setIcon('BulletedTreeList')
+                .makeCheckable({
+                  name: 'views',
+                  value: 'merged'
+                })
+                .setOnClick(() => {
+                  context.dispatch(TOGGLE_MERGED_VIEW(true))
+                  if (context.props.onSetPortfolio) {
+                    context.props.onSetPortfolio(null)
+                  }
+                }),
             !_.isEmpty(personalViews) && ListMenuItemDivider,
             ListMenuItemHeader(strings.PersonalViewsHeaderText).makeConditional(
               !_.isEmpty(personalViews)
@@ -84,10 +101,18 @@ export function useViewSelector(context: IPortfolioOverviewContext) {
               })
           ],
           {
-            views: [context.state.currentView?.id.toString()],
+            views: context.state.isMergedView
+              ? ['merged']
+              : [context.state.currentView?.id.toString()],
             renderMode: context.state.isCompact ? ['compactList'] : ['list']
           }
         ),
-    [context.state.currentView, context.state.isChangingView, context.state.isCompact, programViews]
+    [
+      context.state.currentView,
+      context.state.isChangingView,
+      context.state.isCompact,
+      context.state.isMergedView,
+      programViews
+    ]
   )
 }

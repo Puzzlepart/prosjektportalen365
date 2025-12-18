@@ -140,6 +140,20 @@ export interface IPortfolioWebPartsDataAdapter {
   getPortfolioConfig?(portfolio?: PortfolioInstance): Promise<IPortfolioOverviewConfiguration>
 
   /**
+   * Fetch merged data from multiple portfolio instances simultaneously.
+   * Uses the primary (first) portfolio's configuration for field names and view settings.
+   *
+   * @param view View configuration
+   * @param portfolios Array of portfolio instances to fetch data from
+   * @param primaryConfiguration Configuration from the primary portfolio
+   */
+  fetchMergedViewData?(
+    view: PortfolioOverviewView,
+    portfolios: PortfolioInstance[],
+    primaryConfiguration: IPortfolioOverviewConfiguration
+  ): Promise<IPortfolioViewData>
+
+  /**
    * Get aggregated list config for the given category.
    *
    * Returns `views`, `viewsUrls`, `columnUrls` and `level`.
@@ -448,10 +462,14 @@ export type PortfolioInstance = {
   uniqueId: string
   title: string
   url: string
+  projectListName: string
+  projectStatusListName: string
   columnsListName: string
   columnConfigListName: string
   viewsListName: string
   iconName?: string
+  language?: 'no' | 'en' // Language of the hub (Norwegian or English)
+  includeInMergedView?: boolean // Whether this hub should be included in the merged view (default: true)
 }
 
 /**

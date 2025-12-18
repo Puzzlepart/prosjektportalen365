@@ -165,11 +165,23 @@ export interface IPortfolioOverviewProps
   showPortfolioSelector?: boolean
 
   /**
+   * Enable merged view to show data from all configured portfolios simultaneously.
+   * When enabled, data from all portfolios is combined using the first portfolio as primary.
+   */
+  showMergedView?: boolean
+
+  /**
+   * Show merged view option in the view selector dropdown.
+   * When enabled, adds a "Merged View" option to the views menu that shows data from all hubs.
+   */
+  showMergedViewInViewSelector?: boolean
+
+  /**
    * Callback to set the selected portfolio.
    *
-   * @param portfolioId The unique ID of the selected portfolio.
+   * @param portfolioId The unique ID of the selected portfolio, or null for merged view.
    */
-  onSetPortfolio?: (portfolioId: string) => void
+  onSetPortfolio?: (portfolioId: string | null) => void
 }
 
 export interface IPortfolioOverviewState
@@ -183,6 +195,11 @@ export interface IPortfolioOverviewState
    * Is exporting
    */
   isExporting?: boolean
+
+  /**
+   * Is merged view active (showing data from all portfolios)
+   */
+  isMergedView?: boolean
 
   /**
    * Is changing view
