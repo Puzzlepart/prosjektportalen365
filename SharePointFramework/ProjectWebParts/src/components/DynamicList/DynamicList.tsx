@@ -71,7 +71,7 @@ const DynamicListContent: FC<{
           </Skeleton>
         ) : (
           <WebPartTitle
-            title={context.props.title || context.state.data?.listTitle}
+            title={(context.props.title?.trim() || context.state.data?.listTitle) ?? 'Dynamisk liste'}
             description={context.props.infoText}
           />
         )}

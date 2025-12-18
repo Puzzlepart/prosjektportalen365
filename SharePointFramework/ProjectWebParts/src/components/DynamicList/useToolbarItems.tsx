@@ -31,7 +31,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
   const exportToExcel = useExcelExport()
 
   ExcelExportService.configure({
-    name: context.props.title || context.state.data?.listTitle || 'Export'
+    name: context.props.title?.trim() || context.state.data?.listTitle || 'Export'
   })
 
   const checkedValues = useMemo(() => {
