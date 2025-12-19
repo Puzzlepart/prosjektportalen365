@@ -9,6 +9,7 @@ declare interface IPortfolioWebPartsStrings {
   ShowPortfolioSelectorDescription: string
   IconNameFieldPlaceholder: string
   IconNameFieldLabel: string
+  LanguageFieldLabel: string
   IncludeInMergedViewFieldLabel: string
   PortfolioSelectorDescription: string
   ShowPortfolioSelectorOnText: string
@@ -23,6 +24,7 @@ declare interface IPortfolioWebPartsStrings {
   UrlFieldLabel: string
   ProjectListNameFieldLabel: string
   ProjectStatusListNameFieldLabel: string
+  ProjectContentColumnsListNameFieldLabel: string
   ViewsListNameFieldLabel: string
   ColumnsListNameFieldLabel: string
   ColumnConfigListNameFieldLabel: string

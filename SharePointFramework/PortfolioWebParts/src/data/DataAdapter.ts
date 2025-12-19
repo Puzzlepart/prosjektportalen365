@@ -253,6 +253,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     const isCurrentUserInManagerGroup = await this.isUserInGroup(
       resource.Security_SiteGroup_PortfolioInsight_Title
     )
+    
     if (isCurrentUserInManagerGroup) {
       return await this.fetchDataForManagerView(view, configuration, siteId)
     } else {
@@ -276,7 +277,10 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
   /**
    * Fetches data from multiple portfolio instances and merges them into a single view.
-   * Uses the primary (first) portfolio's configuration for field names and display settings.
+   *
+   * Approach:
+   * 1. Configure and fetch data from the primary (first) portfolio - this gives us the base configuration
+   * 2. Loop through remaining portfolios and merge their data into the result
    *
    * @param view View configuration from primary portfolio
    * @param portfolios Array of portfolio instances to fetch data from
@@ -288,81 +292,84 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     portfolios: PortfolioInstance[],
     primaryConfiguration: IPortfolioOverviewConfiguration
   ): Promise<IPortfolioViewData> {
-    try {
-      const includedPortfolios = portfolios.filter(p => p.includeInMergedView !== false)
+    const includedPortfolios = portfolios.filter(p => p.includeInMergedView !== false)
 
-      const allPortfolioData = await Promise.all(
-        includedPortfolios.map(async (portfolio) => {
-          try {
-            const tempAdapter = new DataAdapter(this._spfxContext, this._sp)
-            await tempAdapter.configure(null, null, portfolio)
-            const tempConfig = await tempAdapter.getPortfolioConfig()
-            const hubSiteId = tempConfig.hubSiteId
+    if (includedPortfolios.length === 0) {
+      return { items: [], managedProperties: [] }
+    }
 
-            // Use primary configuration for column definitions (display names, field names)
-            // but fetch data from this hub's site using the hub's properly configured adapter
-            const { items, managedProperties } = await tempAdapter.fetchDataForView(
-              view,
-              primaryConfiguration,
-              hubSiteId
-            )
+    // Get data from primary portfolio
+    const primaryPortfolio = includedPortfolios[0]
+    const primaryData = await this.fetchDataForView(view, primaryConfiguration, primaryConfiguration.hubSiteId)
 
-            const hubLanguage = this.detectHubLanguage(portfolio)
+    const mergedResult: IPortfolioViewData = {
+      items: primaryData.items.map(item => ({
+        ...item,
+        _hubId: primaryPortfolio.uniqueId,
+        _hubTitle: primaryPortfolio.title,
+        _hubUrl: primaryPortfolio.url,
+        _hubLanguage: this.detectHubLanguage(primaryPortfolio)
+      })),
+      managedProperties: [...primaryData.managedProperties]
+    }
 
-            return {
-              items: items.map(item => ({
-                ...item,
-                _hubId: portfolio.uniqueId,
-                _hubTitle: portfolio.title,
-                _hubUrl: portfolio.url,
-                _hubLanguage: hubLanguage
-              })),
-              managedProperties,
-              portfolio
-            }
-          } catch (error) {
-            console.error(`Failed to fetch data from portfolio ${portfolio.title}:`, error)
-            return {
-              items: [],
-              managedProperties: [],
-              portfolio
-            }
+    // Fetch and merge data from remaining portfolios
+    for (let i = 1; i < includedPortfolios.length; i++) {
+      const portfolio = includedPortfolios[i]
+
+      try {
+        const tempAdapter = new DataAdapter(this._spfxContext, this._sp)
+        await tempAdapter.configure(null, null, portfolio)
+
+        const portfolioConfig = await tempAdapter.getPortfolioConfig()
+        const portfolioHubSiteId = portfolioConfig.hubSiteId
+
+        // Create view with corrected hub ID in search query
+        const portfolioView = new PortfolioOverviewView()
+        Object.assign(portfolioView, view)
+        portfolioView.searchQuery = view.searchQuery.replace(
+          /DepartmentId:\{[a-f0-9-]+\}/gi,
+          `DepartmentId:{${portfolioHubSiteId}}`
+        )
+
+        const { items, managedProperties } = await tempAdapter.fetchDataForView(
+          portfolioView,
+          portfolioConfig,
+          portfolioHubSiteId
+        )
+
+        // Add items with hub metadata
+        mergedResult.items.push(...items.map(item => ({
+          ...item,
+          _hubId: portfolio.uniqueId,
+          _hubTitle: portfolio.title,
+          _hubUrl: portfolio.url,
+          _hubLanguage: this.detectHubLanguage(portfolio)
+        })))
+
+        // Merge managed properties
+        managedProperties.forEach(prop => {
+          if (!mergedResult.managedProperties.includes(prop)) {
+            mergedResult.managedProperties.push(prop)
           }
         })
-      )
-
-      const mergedItems = allPortfolioData.reduce((acc, data) => {
-        return [...acc, ...data.items]
-      }, [] as IFetchDataForViewItemResult[])
-
-      const mergedManagedProperties = Array.from(
-        new Set(
-          allPortfolioData.reduce((acc, data) => {
-            return [...acc, ...(data.managedProperties || [])]
-          }, [] as string[])
-        )
-      )
-
-      const uniqueItems = mergedItems.reduce((acc, item) => {
-        const existing = acc.find(i => i.SiteId === item.SiteId)
-        if (!existing) {
-          acc.push(item)
-        } else {
-          const isPrimary = item._hubId === includedPortfolios[0].uniqueId
-          if (isPrimary) {
-            const index = acc.indexOf(existing)
-            acc[index] = item
-          }
-        }
-        return acc
-      }, [] as IFetchDataForViewItemResult[])
-
-      return {
-        items: uniqueItems,
-        managedProperties: mergedManagedProperties
+      } catch (error) {
+        console.error(`Failed to fetch data from portfolio ${portfolio.title}:`, error)
       }
-    } catch (error) {
-      throw error
+    }
+
+    // Deduplicate based on SiteId AND hubId
+    const uniqueItems = mergedResult.items.reduce((acc, item) => {
+      const isDuplicate = acc.some(i => i.SiteId === item.SiteId && i._hubId === item._hubId)
+      if (!isDuplicate) {
+        acc.push(item)
+      }
+      return acc
+    }, [] as IFetchDataForViewItemResult[])
+
+    return {
+      items: uniqueItems,
+      managedProperties: mergedResult.managedProperties
     }
   }
 
@@ -372,30 +379,27 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     siteId: string,
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IPortfolioViewData> {
-    try {
-      const { projects, sites, statusReports, managedProperties } = await this._fetchDataForView(
-        view,
-        configuration,
-        siteId,
-        siteIdProperty
-      )
-      const items = sites.map((site) => {
-        const [project] = projects.filter((res) => res[siteIdProperty] === site['SiteId'])
-        const [statusReport] = statusReports.filter((res) => res[siteIdProperty] === site['SiteId'])
-        return {
-          ...statusReport,
-          ...project,
-          Title: site.Title,
-          Path: site?.Path,
-          SPWebUrl: site?.SPWebUrl,
-          SiteId: site['SiteId']
-        }
-      })
+    const { projects, sites, statusReports, managedProperties } = await this._fetchDataForView(
+      view,
+      configuration,
+      siteId,
+      siteIdProperty
+    )
 
-      return { items, managedProperties } as IPortfolioViewData
-    } catch (err) {
-      throw err
-    }
+    const items = sites.map((site) => {
+      const [project] = projects.filter((res) => res[siteIdProperty] === site['SiteId'])
+      const [statusReport] = statusReports.filter((res) => res[siteIdProperty] === site['SiteId'])
+      return {
+        ...statusReport,
+        ...project,
+        Title: site.Title,
+        Path: site?.Path,
+        SPWebUrl: site?.SPWebUrl,
+        SiteId: site['SiteId']
+      }
+    })
+
+    return { items, managedProperties } as IPortfolioViewData
   }
 
   public async fetchDataForManagerView(
