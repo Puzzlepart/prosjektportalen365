@@ -155,6 +155,32 @@ function mapSharePointTypeToDataType(typeAsString: string, fieldTypeKind: number
 }
 
 /**
+ * Identifies user fields and builds select/expand strings for proper data fetching.
+ *
+ * @param fields - Array of SharePoint field definitions
+ * @returns Object containing arrays of field names to select and expand
+ */
+function getUserFieldsForQuery(fields: any[]): { select: string[]; expand: string[] } {
+  const userFields = fields.filter(
+    (field) =>
+      field.TypeAsString === 'User' ||
+      field.TypeAsString === 'UserMulti' ||
+      field.FieldTypeKind === 20
+  )
+
+  const select: string[] = []
+  const expand: string[] = []
+
+  userFields.forEach((field) => {
+    const fieldName = field.InternalName
+    select.push(`${fieldName}/Title`, `${fieldName}/EMail`, `${fieldName}/Id`)
+    expand.push(fieldName)
+  })
+
+  return { select, expand }
+}
+
+/**
  * Transforms a raw SharePoint item into a display-ready format.
  * Applies the same transformation logic as fetchListData for consistency.
  *
@@ -292,9 +318,11 @@ export async function fetchListData(
 
     const isDocumentLibrary = listInfo.BaseTemplate === 101
 
+    const userFieldsQuery = getUserFieldsForQuery(allFields)
+
     const itemsQuery = list.items
-      .select('*', 'Author/Title', 'Editor/Title')
-      .expand('Author', 'Editor')
+      .select('*', 'Author/Title', 'Author/EMail', 'Editor/Title', 'Editor/EMail', ...userFieldsQuery.select)
+      .expand('Author', 'Editor', ...userFieldsQuery.expand)
 
     if (isDocumentLibrary) {
       itemsQuery
@@ -309,9 +337,12 @@ export async function fetchListData(
           'FSObjType',
           'File_x0020_Type',
           'Author/Title',
-          'Editor/Title'
+          'Author/EMail',
+          'Editor/Title',
+          'Editor/EMail',
+          ...userFieldsQuery.select
         )
-        .expand('Author', 'Editor', 'File')
+        .expand('Author', 'Editor', 'File', ...userFieldsQuery.expand)
     }
 
     const items = await itemsQuery.getAll()
@@ -500,10 +531,18 @@ export async function fetchSingleItem(
 
     const list = web.lists.getByTitle(props.listName)
 
+    const allFields = await SPDataAdapter.portalDataService.getListFields(
+      props.listName,
+      undefined,
+      web
+    )
+
+    const userFieldsQuery = getUserFieldsForQuery(allFields)
+
     const itemQuery = list.items
       .getById(itemId)
-      .select('*', 'Author/Title', 'Editor/Title')
-      .expand('Author', 'Editor')
+      .select('*', 'Author/Title', 'Author/EMail', 'Editor/Title', 'Editor/EMail', ...userFieldsQuery.select)
+      .expand('Author', 'Editor', ...userFieldsQuery.expand)
 
     const isDocumentLibrary = existingColumns?.[0]?.data?.fieldType === 'File'
     if (isDocumentLibrary) {
@@ -519,9 +558,12 @@ export async function fetchSingleItem(
           'FSObjType',
           'File_x0020_Type',
           'Author/Title',
-          'Editor/Title'
+          'Author/EMail',
+          'Editor/Title',
+          'Editor/EMail',
+          ...userFieldsQuery.select
         )
-        .expand('Author', 'Editor', 'File')
+        .expand('Author', 'Editor', 'File', ...userFieldsQuery.expand)
     }
 
     const item = await itemQuery()
@@ -530,12 +572,6 @@ export async function fetchSingleItem(
     let taxonomyTermsMap = new Map<string, TaxonomyTermModel[]>()
 
     if (!columns) {
-      const allFields = await SPDataAdapter.portalDataService.getListFields(
-        props.listName,
-        undefined,
-        web
-      )
-
       const projectContentColumns = await fetchProjectContentColumns()
 
       const taxonomyFields = await list.fields
