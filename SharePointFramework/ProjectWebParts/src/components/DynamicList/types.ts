@@ -99,11 +99,19 @@ export interface IDynamicListProps extends IBaseWebPartComponentProps {
   defaultViewId?: string
 
   /**
-   * Array of internal field names to hide.
-   * If specified, these columns will be excluded from display.
-   * If empty or not specified, shows all columns from the selected view or all fields.
+   * Array of internal field names to hide from the edit panel.
+   * If specified, these fields will be excluded when creating or editing items.
+   * Required fields will still be shown even if listed here.
+   * If empty or not specified, shows all fields in the edit panel.
    */
   hiddenColumns?: string[]
+
+  /**
+   * Array of internal field names to hide from the list view.
+   * If specified, these columns will be excluded from the table display.
+   * If empty or not specified, shows all columns from the selected view or all fields.
+   */
+  hiddenViewColumns?: string[]
 
   /**
    * Array of internal field names that should NOT be filterable.

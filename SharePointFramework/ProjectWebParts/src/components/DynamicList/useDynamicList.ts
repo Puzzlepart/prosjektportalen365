@@ -51,7 +51,13 @@ export function useDynamicList(props: IDynamicListProps, web: IWeb) {
         }
       })
     }
-  }, [permissions.canAdd, permissions.canEdit, permissions.canDelete, permissions.isLoading, setState])
+  }, [
+    permissions.canAdd,
+    permissions.canEdit,
+    permissions.canDelete,
+    permissions.isLoading,
+    setState
+  ])
 
   useDynamicListDataFetch(props, state, setState, web)
 

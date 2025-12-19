@@ -37,9 +37,9 @@ export function useColumns(): IListColumn[] {
     }
 
     let columns = context.state.data.listColumns
-    if (context.props.hiddenColumns && context.props.hiddenColumns.length > 0) {
+    if (context.props.hiddenViewColumns && context.props.hiddenViewColumns.length > 0) {
       columns = columns.filter(
-        (column) => !context.props.hiddenColumns.includes(column.fieldName || column.key)
+        (column) => !context.props.hiddenViewColumns.includes(column.fieldName || column.key)
       )
     }
 
@@ -63,5 +63,5 @@ export function useColumns(): IListColumn[] {
         data: column.data
       }
     })
-  }, [context.state.data?.listColumns, context.props.hiddenColumns])
+  }, [context.state.data?.listColumns, context.props.hiddenViewColumns])
 }

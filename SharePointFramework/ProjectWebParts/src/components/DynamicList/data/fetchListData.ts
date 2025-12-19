@@ -321,7 +321,14 @@ export async function fetchListData(
     const userFieldsQuery = getUserFieldsForQuery(allFields)
 
     const itemsQuery = list.items
-      .select('*', 'Author/Title', 'Author/EMail', 'Editor/Title', 'Editor/EMail', ...userFieldsQuery.select)
+      .select(
+        '*',
+        'Author/Title',
+        'Author/EMail',
+        'Editor/Title',
+        'Editor/EMail',
+        ...userFieldsQuery.select
+      )
       .expand('Author', 'Editor', ...userFieldsQuery.expand)
 
     if (isDocumentLibrary) {
@@ -541,7 +548,14 @@ export async function fetchSingleItem(
 
     const itemQuery = list.items
       .getById(itemId)
-      .select('*', 'Author/Title', 'Author/EMail', 'Editor/Title', 'Editor/EMail', ...userFieldsQuery.select)
+      .select(
+        '*',
+        'Author/Title',
+        'Author/EMail',
+        'Editor/Title',
+        'Editor/EMail',
+        ...userFieldsQuery.select
+      )
       .expand('Author', 'Editor', ...userFieldsQuery.expand)
 
     const isDocumentLibrary = existingColumns?.[0]?.data?.fieldType === 'File'

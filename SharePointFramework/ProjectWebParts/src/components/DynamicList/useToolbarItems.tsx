@@ -494,14 +494,15 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       )
     }
 
-    if (
-      !context.state.isDocumentLibrary &&
-      context.props.showEditButton !== false
-    ) {
+    if (!context.state.isDocumentLibrary && context.props.showEditButton !== false) {
       items.push(
         new ListMenuItem('Rediger element', 'Rediger valgt element')
           .setIcon(EditRegular)
-          .setDisabled(!context.state.permissions?.canEdit || !context.state.selectedItems || context.state.selectedItems.length !== 1)
+          .setDisabled(
+            !context.state.permissions?.canEdit ||
+              !context.state.selectedItems ||
+              context.state.selectedItems.length !== 1
+          )
           .setOnClick(() => {
             const selectedItems = context.state.selectedItems.map((id) =>
               context.state.data.listItems.find((_, idx) => idx === id)
@@ -649,7 +650,11 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       items.push(
         new ListMenuItem('Slett', 'Slett valgte elementer')
           .setIcon(DeleteRegular)
-          .setDisabled(!context.state.permissions?.canDelete || !context.state.selectedItems || context.state.selectedItems.length === 0)
+          .setDisabled(
+            !context.state.permissions?.canDelete ||
+              !context.state.selectedItems ||
+              context.state.selectedItems.length === 0
+          )
           .setOnClick(() => {
             deleteItems()
           })

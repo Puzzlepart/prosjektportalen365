@@ -289,6 +289,7 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
       this.properties.viewName = 'All Fields'
       this.properties.defaultViewId = null
       this.properties.hiddenColumns = []
+      this.properties.hiddenViewColumns = []
       this.properties.nonFilterableColumns = []
       await this._loadListOptions()
       this.context.propertyPane.refresh()
@@ -298,6 +299,7 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
       this.properties.viewName = 'All Fields'
       this.properties.defaultViewId = null
       this.properties.hiddenColumns = []
+      this.properties.hiddenViewColumns = []
       this.properties.nonFilterableColumns = []
       this._hasSiteIdFieldCache = null
       this._isDocumentLibraryCache = null
@@ -359,9 +361,17 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                 this.properties.listName &&
                   PropertyFieldMultiSelect('hiddenColumns', {
                     key: 'hiddenColumns',
-                    label: 'Skjul kolonner',
+                    label: 'Skjulte felt (redigeringspanel)',
                     options: this._columnOptions,
                     selectedKeys: this.properties.hiddenColumns || [],
+                    disabled: this._columnsLoading
+                  }),
+                this.properties.listName &&
+                  PropertyFieldMultiSelect('hiddenViewColumns', {
+                    key: 'hiddenViewColumns',
+                    label: 'Skjulte kolonner (listevisning)',
+                    options: this._columnOptions,
+                    selectedKeys: this.properties.hiddenViewColumns || [],
                     disabled: this._columnsLoading
                   }),
                 this.properties.listName &&
