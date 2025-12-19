@@ -35,9 +35,11 @@ export const SingleItemView: FC = () => {
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme}>
         <div className={styles.singleItemView}>
-          <div className={styles.header}>
-            <h1 className={styles.title}>{item.Title || item?.FileLeafRef || 'Uten tittel'}</h1>
-          </div>
+          {(context.props.showItemTitle === undefined || context.props.showItemTitle) && (
+            <div className={styles.header}>
+              <h1 className={styles.title}>{item.Title || item?.FileLeafRef || 'Uten tittel'}</h1>
+            </div>
+          )}
           <div className={styles.fields}>
             {columns.map((column) => {
               const cellContent = column.renderCell

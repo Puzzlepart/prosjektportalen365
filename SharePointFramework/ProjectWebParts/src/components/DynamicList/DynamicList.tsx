@@ -249,6 +249,7 @@ DynamicList.defaultProps = {
   mode: DynamicListMode.Multi,
   documentLibraryViewMode: DocumentLibraryViewMode.Folders,
   useProjectContentColumnNames: true,
+  showItemTitle: true,
   showCommandBar: true,
   showSearchBox: true,
   showViewSelector: false,

@@ -233,6 +233,11 @@ export interface IDynamicListProps extends IBaseWebPartComponentProps {
    * Show/hide the View Mode toggle (Flat/Folder view for document libraries)
    */
   showViewModeToggle?: boolean
+
+  /**
+   * Show/hide the item title in single item view
+   */
+  showItemTitle?: boolean
 }
 
 export interface IDynamicListState extends IBaseWebPartComponentState<IDynamicListData> {

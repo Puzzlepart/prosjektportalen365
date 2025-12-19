@@ -409,6 +409,11 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                   label: 'Bruk kolonnenavn fra Prosjektinnholdskolonner',
                   onText: 'På',
                   offText: 'Av'
+                }),
+                PropertyPaneToggle('showItemTitle', {
+                  label: 'Vis elementtittel (enkeltvisning)',
+                  onText: 'På',
+                  offText: 'Av'
                 })
               ]
             },
