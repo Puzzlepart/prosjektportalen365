@@ -36,6 +36,7 @@ import { UserMulti } from './User'
 import { Guest } from './Guest'
 import { ImageUpload } from './ImageUpload'
 import { DebugModel } from './DebugModel'
+import { ProvisionConfirmation } from '../ProvisionConfirmation'
 import { IProvisionDrawerProps } from './types'
 import { DayOfWeek, format } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/core'
@@ -76,17 +77,15 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
   const justificationInput = useLocalInput('justification')
   const additionalInfoInput = useLocalInput('additionalInfo')
 
-  return (
-    <IdPrefixProvider value={fluentProviderId}>
-      <FluentProvider theme={customLightTheme}>
-        <OverlayDrawer
-          role='panel'
-          position='end'
-          open={context.state.showProvisionDrawer}
-          size='medium'
-          onOpenChange={(_, { open }) => context.setState({ showProvisionDrawer: open })}
-        >
-          <DrawerHeader>
+  const isInlineMode = props.renderMode === 'inline'
+
+  // In inline mode, use a plain div instead of DrawerBody to avoid motion animations
+  const LevelContainer = isInlineMode ? 'div' : DrawerBody
+
+  // Render the form content (shared between drawer and inline modes)
+  const formContent = (
+    <>
+      <DrawerHeader>
             <DrawerHeaderNavigation>
               <Toolbar className={styles.toolbar}>
                 <ToolbarGroup>
@@ -123,27 +122,33 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     title={strings.Aria.Settings}
                     icon={<Settings24Regular />}
                   /> */}
-                  <ToolbarButton
-                    title={strings.Aria.Close}
-                    appearance='subtle'
-                    icon={getFluentIcon('Dismiss')}
-                    onClick={() => context.setState({ showProvisionDrawer: false })}
-                  />
+                  {!isInlineMode && (
+                    <ToolbarButton
+                      title={strings.Aria.Close}
+                      appearance='subtle'
+                      icon={getFluentIcon('Dismiss')}
+                      onClick={() => context.setState({ showProvisionDrawer: false })}
+                    />
+                  )}
                 </ToolbarGroup>
               </Toolbar>
             </DrawerHeaderNavigation>
           </DrawerHeader>
           <div className={styles.body}>
-            {levelMotions[0].canRender && (
-              <DrawerBody
-                ref={levelMotions[0].ref}
-                className={mergeClasses(
-                  styles.level,
-                  motionStyles.level,
-                  motionStyles.level0,
-                  motionStyles.level0,
-                  levelMotions[0].active && motionStyles.levelVisible
-                )}
+            {(isInlineMode || levelMotions[0].canRender) && (
+              <LevelContainer
+                {...(!isInlineMode && { ref: levelMotions[0].ref })}
+                className={
+                  isInlineMode
+                    ? mergeClasses(styles.level, styles.inlineLevel)
+                    : mergeClasses(
+                        styles.level,
+                        motionStyles.level,
+                        motionStyles.level0,
+                        levelMotions[0].active && motionStyles.levelVisible
+                      )
+                }
+                style={isInlineMode && currentLevel !== 0 ? { display: 'none' } : undefined}
               >
                 {!stringIsNullOrEmpty(context.props.level0Header) && (
                   <DrawerHeaderTitle>{levels[0].title}</DrawerHeaderTitle>
@@ -371,17 +376,23 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     />
                   </FieldContainer>
                 </div>
-              </DrawerBody>
+              </LevelContainer>
             )}
-            <DrawerBody
-              ref={levelMotions[1].ref}
-              className={mergeClasses(
-                styles.level,
-                motionStyles.level,
-                currentLevel === 2 ? motionStyles.level1a : motionStyles.level1,
-                levelMotions[1].active && motionStyles.levelVisible
-              )}
-            >
+            {(isInlineMode || levelMotions[1].canRender) && (
+              <LevelContainer
+                {...(!isInlineMode && { ref: levelMotions[1].ref })}
+                className={
+                  isInlineMode
+                    ? mergeClasses(styles.level, styles.inlineLevel)
+                    : mergeClasses(
+                        styles.level,
+                        motionStyles.level,
+                        currentLevel === 2 ? motionStyles.level1a : motionStyles.level1,
+                        levelMotions[1].active && motionStyles.levelVisible
+                      )
+                }
+                style={isInlineMode && currentLevel !== 1 ? { display: 'none' } : undefined}
+              >
               {!stringIsNullOrEmpty(context.props.level1Header) && (
                 <DrawerHeaderTitle>{levels[1].title}</DrawerHeaderTitle>
               )}
@@ -618,16 +629,22 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   )}
                 </FieldContainer>
               </div>
-            </DrawerBody>
-            {levelMotions[2].canRender && (
-              <DrawerBody
-                ref={levelMotions[2].ref}
-                className={mergeClasses(
-                  styles.level,
-                  motionStyles.level,
-                  motionStyles.level2,
-                  levelMotions[2].active && motionStyles.levelVisible
-                )}
+            </LevelContainer>
+            )}
+            {(isInlineMode || levelMotions[2].canRender) && (
+              <LevelContainer
+                {...(!isInlineMode && { ref: levelMotions[2].ref })}
+                className={
+                  isInlineMode
+                    ? mergeClasses(styles.level, styles.inlineLevel)
+                    : mergeClasses(
+                        styles.level,
+                        motionStyles.level,
+                        motionStyles.level2,
+                        levelMotions[2].active && motionStyles.levelVisible
+                      )
+                }
+                style={isInlineMode && currentLevel !== 2 ? { display: 'none' } : undefined}
               >
                 {!stringIsNullOrEmpty(context.props.level2Header) && (
                   <DrawerHeaderTitle>{levels[2].title}</DrawerHeaderTitle>
@@ -636,7 +653,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   <p>{levels[2].description}</p>
                 )}
                 <div className={styles.content}>
-                  {context.props.debugMode || (DEBUG && <DebugModel />)}
+                  {context.props.debugMode && <DebugModel />}
                   <Divider />
                   <FieldContainer
                     iconName='PeopleAudience'
@@ -734,7 +751,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     />
                   )}
                 </div>
-              </DrawerBody>
+              </LevelContainer>
             )}
           </div>
           <DrawerFooter className={styles.footer}>
@@ -753,14 +770,21 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   ? onSave().then((response) => {
                       if (response) {
                         context.reset()
-                        props.toast(
-                          <Toast appearance='inverted'>
-                            <ToastTitle>{strings.Provision.ToastCreatedTitle}</ToastTitle>
-                            <ToastBody>{strings.Provision.ToastCreatedBody}</ToastBody>
-                          </Toast>,
-                          { intent: 'success' }
-                        )
-                        context.setState({ showProvisionDrawer: false, properties: {} })
+                        
+                        if (isInlineMode) {
+                          // In inline mode, show confirmation screen
+                          context.setState({ showProvisionConfirmation: true, properties: {} })
+                        } else {
+                          // In drawer mode, show toast and close drawer
+                          props.toast(
+                            <Toast appearance='inverted'>
+                              <ToastTitle>{strings.Provision.ToastCreatedTitle}</ToastTitle>
+                              <ToastBody>{strings.Provision.ToastCreatedBody}</ToastBody>
+                            </Toast>,
+                            { intent: 'success' }
+                          )
+                          context.setState({ showProvisionDrawer: false, properties: {} })
+                        }
                         setCurrentLevel(0)
                       } else {
                         props.toast(
@@ -780,6 +804,47 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                 : strings.Provision.NextButtonLabel}
             </Button>
           </DrawerFooter>
+    </>
+  )
+
+  // In inline mode, render directly without OverlayDrawer wrapper
+  if (isInlineMode) {
+    return (
+      <IdPrefixProvider value={fluentProviderId}>
+        <FluentProvider theme={customLightTheme}>
+          <div className={mergeClasses(styles.inlineContainer, 'provision-inline')}>
+            {context.state.showProvisionConfirmation ? (
+              <ProvisionConfirmation
+                onNewRequest={() => {
+                  context.setState({ showProvisionConfirmation: false, showProvisionDrawer: true })
+                  setCurrentLevel(0)
+                }}
+                onViewRequests={() => {
+                  // Navigate to provision status view
+                  context.setState({ showProvisionConfirmation: false, showProvisionStatus: true })
+                }}
+              />
+            ) : (
+              formContent
+            )}
+          </div>
+        </FluentProvider>
+      </IdPrefixProvider>
+    )
+  }
+
+  // In button mode, wrap with OverlayDrawer
+  return (
+    <IdPrefixProvider value={fluentProviderId}>
+      <FluentProvider theme={customLightTheme}>
+        <OverlayDrawer
+          role='panel'
+          position='end'
+          open={context.state.showProvisionDrawer}
+          size='medium'
+          onOpenChange={(_, { open }) => context.setState({ showProvisionDrawer: open })}
+        >
+          {formContent}
         </OverlayDrawer>
       </FluentProvider>
     </IdPrefixProvider>

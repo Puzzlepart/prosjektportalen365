@@ -173,6 +173,10 @@ declare interface IPortfolioWebPartsStrings {
     DefaultTeamTemplate: string
     DefaultLanguage: string
     DefaultTimeZone: string
+    ConfirmationTitle: string
+    ConfirmationMessage: string
+    NewRequestButton: string
+    ViewRequestsButton: string
     CommunityNameFieldLabel: string
     CommunityNameFieldDescription: string
     CommunityNameFieldPlaceholder: string
@@ -209,6 +213,9 @@ declare interface IPortfolioWebPartsStrings {
     TeamPrivacyFieldLabel: string
     TeamPrivacyFieldDescription: string
     TeamPrivacyFieldPlaceholder: string
+    RenderModeFieldLabel: string
+    RenderModeButton: string
+    RenderModeInline: string
     ButtonLabelFieldLabel: string
     ButtonLabelFieldDescription: string
     AutoOwnerFieldLabel: string

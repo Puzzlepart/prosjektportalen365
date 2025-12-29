@@ -82,6 +82,12 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
 
   public async onInit(): Promise<void> {
     await super.onInit()
+    
+    // Auto-enable inline mode when running in Microsoft Teams
+    if (this.context.sdks?.microsoftTeams) {
+      this.properties.renderMode = 'inline'
+    }
+    
     this.properties.fields = this.mergeFields(this.properties.fields || [], this._defaultFields)
     this.properties.typeFieldConfigurations = this.mergeTypeConfigurations(
       this.properties.typeFieldConfigurations || [],
@@ -147,10 +153,19 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
             {
               groupName: strings.GeneralGroupName,
               groupFields: [
+                PropertyPaneDropdown('renderMode', {
+                  label: strings.Provision.RenderModeFieldLabel,
+                  options: [
+                    { key: 'button', text: strings.Provision.RenderModeButton },
+                    { key: 'inline', text: strings.Provision.RenderModeInline }
+                  ],
+                  selectedKey: propertiesWithDefaults.renderMode ?? 'button'
+                }),
                 PropertyPaneTextField('buttonLabel', {
                   label: strings.Provision.ButtonLabelFieldLabel,
                   description: strings.Provision.ButtonLabelFieldDescription,
-                  placeholder: strings.Provision.ProvisionButtonLabel
+                  placeholder: strings.Provision.ProvisionButtonLabel,
+                  disabled: propertiesWithDefaults.renderMode === 'inline'
                 }),
                 PropertyPaneToggle('autoOwner', {
                   label: strings.Provision.AutoOwnerFieldLabel,

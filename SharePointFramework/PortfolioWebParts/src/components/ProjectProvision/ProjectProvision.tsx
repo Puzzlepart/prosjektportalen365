@@ -79,50 +79,52 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
     <ProjectProvisionContext.Provider value={{ props, state, setState, column, setColumn, reset }}>
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
-          <ProvisionDrawer toast={dispatchToast} />
-          <Menu positioning='below-end'>
-            <MenuTrigger disableButtonEnhancement>
-              {(triggerProps: MenuButtonProps) => (
-                <SplitButton
-                  menuButton={triggerProps}
-                  primaryActionButton={{
-                    onClick: () => setState({ showProvisionDrawer: true })
-                  }}
-                  icon={props.icon}
-                  appearance={props.appearance}
-                  size={props.size}
-                  disabled={props.disabled}
-                >
-                  {props.buttonLabel}
-                </SplitButton>
-              )}
-            </MenuTrigger>
-            <MenuPopover>
-              <MenuList>
-                {!props.hideStatusMenu && (
-                  <MenuItem
-                    {...restoreFocusTargetAttribute}
-                    onClick={() => {
-                      setState({ showProvisionStatus: true })
+          <ProvisionDrawer toast={dispatchToast} renderMode={props.renderMode} />
+          {props.renderMode !== 'inline' && (
+            <Menu positioning='below-end'>
+              <MenuTrigger disableButtonEnhancement>
+                {(triggerProps: MenuButtonProps) => (
+                  <SplitButton
+                    menuButton={triggerProps}
+                    primaryActionButton={{
+                      onClick: () => setState({ showProvisionDrawer: true })
                     }}
+                    icon={props.icon}
+                    appearance={props.appearance}
+                    size={props.size}
+                    disabled={props.disabled}
                   >
-                    {strings.Provision.StatusMenuLabel}
-                  </MenuItem>
+                    {props.buttonLabel}
+                  </SplitButton>
                 )}
-                {props.pageContext.legacyPageContext.isSiteAdmin ||
-                  (!props.hideSettingsMenu && (
+              </MenuTrigger>
+              <MenuPopover>
+                <MenuList>
+                  {!props.hideStatusMenu && (
                     <MenuItem
                       {...restoreFocusTargetAttribute}
                       onClick={() => {
-                        setState({ showProvisionSettings: true })
+                        setState({ showProvisionStatus: true })
                       }}
                     >
-                      {strings.Provision.SettingsMenuLabel}
+                      {strings.Provision.StatusMenuLabel}
                     </MenuItem>
-                  ))}
-              </MenuList>
-            </MenuPopover>
-          </Menu>
+                  )}
+                  {props.pageContext.legacyPageContext.isSiteAdmin ||
+                    (!props.hideSettingsMenu && (
+                      <MenuItem
+                        {...restoreFocusTargetAttribute}
+                        onClick={() => {
+                          setState({ showProvisionSettings: true })
+                        }}
+                      >
+                        {strings.Provision.SettingsMenuLabel}
+                      </MenuItem>
+                    ))}
+                </MenuList>
+              </MenuPopover>
+            </Menu>
+          )}
           <ProvisionStatus toast={dispatchToast} />
           <ProvisionSettings />
           <Toaster toasterId={toasterId} />
@@ -135,6 +137,7 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
 ProjectProvision.defaultProps = {
   buttonLabel: strings.Provision.ProvisionButtonLabel,
   autoOwner: true,
+  renderMode: 'button',
   expirationDateMode: 'date',
   defaultExpirationDate: '0',
   level0Header: strings.Provision.DrawerLevel0HeaderText,

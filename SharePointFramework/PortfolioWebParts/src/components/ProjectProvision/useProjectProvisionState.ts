@@ -14,6 +14,7 @@ export function useProjectProvisionState() {
     showProvisionDrawer: false,
     showProvisionStatus: false,
     showProvisionSettings: false,
+    showProvisionConfirmation: false,
     settings: [],
     types: {},
     siteTemplates: {},
