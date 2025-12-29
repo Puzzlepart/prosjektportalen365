@@ -136,7 +136,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                       >
                         {strings.Provision.ViewRequestsButton}
                       </ToolbarButton>
-                      {context.state.isProvisionSiteAdmin && (
+                      {context.props.isTeamsContext && context.state.isProvisionSiteAdmin && (
                         <ToolbarButton
                           appearance='subtle'
                           icon={getFluentIcon('Settings')}

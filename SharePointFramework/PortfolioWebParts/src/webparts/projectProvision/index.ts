@@ -86,6 +86,7 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
     // Auto-enable inline mode when running in Microsoft Teams
     if (this.context.sdks?.microsoftTeams) {
       this.properties.renderMode = 'inline'
+      this.properties.isTeamsContext = true
       
       // Load configuration from TeamsAppConfig.json in Teams mode
       try {
