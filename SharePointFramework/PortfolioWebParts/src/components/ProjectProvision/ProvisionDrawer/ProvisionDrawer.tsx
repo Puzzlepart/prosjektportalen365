@@ -122,7 +122,20 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     title={strings.Aria.Settings}
                     icon={<Settings24Regular />}
                   /> */}
-                  {!isInlineMode && (
+                  {isInlineMode ? (
+                    <ToolbarButton
+                      appearance='subtle'
+                      icon={getFluentIcon('ClipboardTask')}
+                      onClick={() => {
+                        context.setState({
+                          showProvisionDrawer: false,
+                          showProvisionStatus: true
+                        })
+                      }}
+                    >
+                      {strings.Provision.ViewRequestsButton}
+                    </ToolbarButton>
+                  ) : (
                     <ToolbarButton
                       title={strings.Aria.Close}
                       appearance='subtle'
@@ -820,8 +833,12 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   setCurrentLevel(0)
                 }}
                 onViewRequests={() => {
-                  // Navigate to provision status view
-                  context.setState({ showProvisionConfirmation: false, showProvisionStatus: true })
+                  // Navigate to provision status view  
+                  context.setState({
+                    showProvisionConfirmation: false,
+                    showProvisionStatus: true,
+                    showProvisionDrawer: false
+                  })
                 }}
               />
             ) : (

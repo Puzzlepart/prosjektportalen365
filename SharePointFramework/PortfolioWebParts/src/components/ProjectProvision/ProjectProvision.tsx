@@ -79,54 +79,70 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
     <ProjectProvisionContext.Provider value={{ props, state, setState, column, setColumn, reset }}>
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
-          <ProvisionDrawer toast={dispatchToast} renderMode={props.renderMode} />
-          {props.renderMode !== 'inline' && (
-            <Menu positioning='below-end'>
-              <MenuTrigger disableButtonEnhancement>
-                {(triggerProps: MenuButtonProps) => (
-                  <SplitButton
-                    menuButton={triggerProps}
-                    primaryActionButton={{
-                      onClick: () => setState({ showProvisionDrawer: true })
-                    }}
-                    icon={props.icon}
-                    appearance={props.appearance}
-                    size={props.size}
-                    disabled={props.disabled}
-                  >
-                    {props.buttonLabel}
-                  </SplitButton>
-                )}
-              </MenuTrigger>
-              <MenuPopover>
-                <MenuList>
-                  {!props.hideStatusMenu && (
-                    <MenuItem
-                      {...restoreFocusTargetAttribute}
-                      onClick={() => {
-                        setState({ showProvisionStatus: true })
+          {/* Inline mode: conditionally show Drawer, Status, or Confirmation */}
+          {props.renderMode === 'inline' ? (
+            <>
+              {state.showProvisionStatus ? (
+                <ProvisionStatus
+                  toast={dispatchToast}
+                  renderMode='inline'
+                  onBack={() => setState({ showProvisionStatus: false, showProvisionDrawer: true })}
+                />
+              ) : (
+                <ProvisionDrawer toast={dispatchToast} renderMode={props.renderMode} />
+              )}
+            </>
+          ) : (
+            <>
+              {/* Button mode: show button and dialogs */}
+              <ProvisionDrawer toast={dispatchToast} renderMode={props.renderMode} />
+              <Menu positioning='below-end'>
+                <MenuTrigger disableButtonEnhancement>
+                  {(triggerProps: MenuButtonProps) => (
+                    <SplitButton
+                      menuButton={triggerProps}
+                      primaryActionButton={{
+                        onClick: () => setState({ showProvisionDrawer: true })
                       }}
+                      icon={props.icon}
+                      appearance={props.appearance}
+                      size={props.size}
+                      disabled={props.disabled}
                     >
-                      {strings.Provision.StatusMenuLabel}
-                    </MenuItem>
+                      {props.buttonLabel}
+                    </SplitButton>
                   )}
-                  {props.pageContext.legacyPageContext.isSiteAdmin ||
-                    (!props.hideSettingsMenu && (
+                </MenuTrigger>
+                <MenuPopover>
+                  <MenuList>
+                    {!props.hideStatusMenu && (
                       <MenuItem
                         {...restoreFocusTargetAttribute}
                         onClick={() => {
-                          setState({ showProvisionSettings: true })
+                          setState({ showProvisionStatus: true })
                         }}
                       >
-                        {strings.Provision.SettingsMenuLabel}
+                        {strings.Provision.StatusMenuLabel}
                       </MenuItem>
-                    ))}
-                </MenuList>
-              </MenuPopover>
-            </Menu>
+                    )}
+                    {props.pageContext.legacyPageContext.isSiteAdmin ||
+                      (!props.hideSettingsMenu && (
+                        <MenuItem
+                          {...restoreFocusTargetAttribute}
+                          onClick={() => {
+                            setState({ showProvisionSettings: true })
+                          }}
+                        >
+                          {strings.Provision.SettingsMenuLabel}
+                        </MenuItem>
+                      ))}
+                  </MenuList>
+                </MenuPopover>
+              </Menu>
+              <ProvisionStatus toast={dispatchToast} />
+              <ProvisionSettings />
+            </>
           )}
-          <ProvisionStatus toast={dispatchToast} />
-          <ProvisionSettings />
           <Toaster toasterId={toasterId} />
         </FluentProvider>
       </IdPrefixProvider>
