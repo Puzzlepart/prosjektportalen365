@@ -86,6 +86,20 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
     // Auto-enable inline mode when running in Microsoft Teams
     if (this.context.sdks?.microsoftTeams) {
       this.properties.renderMode = 'inline'
+      
+      // Load configuration from TeamsAppConfig.json in Teams mode
+      try {
+        const teamsConfig = await this.dataAdapter.loadTeamsConfig(
+          this.properties.provisionUrl || '/sites/bestillingsportalen'
+        )
+        if (teamsConfig) {
+          // Merge loaded config with current properties
+          Object.assign(this.properties, teamsConfig)
+          console.log('Loaded Teams configuration from TeamsAppConfig.json')
+        }
+      } catch (error) {
+        console.warn('Failed to load Teams configuration:', error)
+      }
     }
     
     this.properties.fields = this.mergeFields(this.properties.fields || [], this._defaultFields)

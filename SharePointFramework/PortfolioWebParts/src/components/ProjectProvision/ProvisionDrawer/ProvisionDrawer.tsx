@@ -123,18 +123,34 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     icon={<Settings24Regular />}
                   /> */}
                   {isInlineMode ? (
-                    <ToolbarButton
-                      appearance='subtle'
-                      icon={getFluentIcon('ClipboardTask')}
-                      onClick={() => {
-                        context.setState({
-                          showProvisionDrawer: false,
-                          showProvisionStatus: true
-                        })
-                      }}
-                    >
-                      {strings.Provision.ViewRequestsButton}
-                    </ToolbarButton>
+                    <>
+                      <ToolbarButton
+                        appearance='subtle'
+                        icon={getFluentIcon('ClipboardTask')}
+                        onClick={() => {
+                          context.setState({
+                            showProvisionDrawer: false,
+                            showProvisionStatus: true
+                          })
+                        }}
+                      >
+                        {strings.Provision.ViewRequestsButton}
+                      </ToolbarButton>
+                      {context.state.isProvisionSiteAdmin && (
+                        <ToolbarButton
+                          appearance='subtle'
+                          icon={getFluentIcon('Settings')}
+                          onClick={() => {
+                            context.setState({
+                              showProvisionDrawer: false,
+                              showConfigEditor: true
+                            })
+                          }}
+                        >
+                          {strings.Provision.ConfigEditorButton}
+                        </ToolbarButton>
+                      )}
+                    </>
                   ) : (
                     <ToolbarButton
                       title={strings.Aria.Close}

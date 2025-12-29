@@ -1492,4 +1492,77 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       }
     }
   }
+
+  /**
+   * Load Teams app configuration from TeamsAppConfig.json
+   * 
+   * @param provisionUrl The provision site URL
+   * @returns Configuration object or null if file doesn't exist
+   */
+  public async loadTeamsConfig(provisionUrl: string): Promise<any | null> {
+    try {
+      const provisionSite = Web([this._sp.web, provisionUrl])
+      const file = provisionSite.getFileByServerRelativePath('Shared Documents/TeamsAppConfig.json')
+      const content = await file.getText()
+      return JSON.parse(content)
+    } catch (error) {
+      // File doesn't exist or other error - return null
+      console.log('TeamsAppConfig.json not found or error loading:', error.message)
+      return null
+    }
+  }
+
+  /**
+   * Save Teams app configuration to TeamsAppConfig.json
+   * 
+   * @param provisionUrl The provision site URL
+   * @param config Configuration object to save
+   */
+  public async saveTeamsConfig(provisionUrl: string, config: any): Promise<void> {
+    try {
+      const provisionSite = Web([this._sp.web, provisionUrl])
+      
+      // Check if user has edit permissions on the site
+      const hasPermission = await provisionSite.currentUserHasPermissions(
+        PermissionKind.EditListItems
+      )
+      
+      if (!hasPermission) {
+        throw new Error('You do not have permission to edit configuration. Site administrator access required.')
+      }
+      
+      const folder = provisionSite.getFolderByServerRelativePath('Shared Documents')
+      const jsonContent = JSON.stringify(config, null, 2)
+      
+      // Try to update existing file, or create new one if it doesn't exist
+      try {
+        const file = provisionSite.getFileByServerRelativePath('Shared Documents/TeamsAppConfig.json')
+        await file.setContent(jsonContent)
+      } catch {
+        // File doesn't exist, create it
+        await folder.files.addUsingPath('TeamsAppConfig.json', jsonContent, { Overwrite: true })
+      }
+    } catch (error) {
+      throw new Error(`Failed to save TeamsAppConfig.json: ${error.message || error}`)
+    }
+  }
+
+  /**
+   * Check if current user is admin of the provision site
+   * 
+   * @param provisionUrl The provision site URL
+   * @returns True if user is site admin
+   */
+  public async isProvisionSiteAdmin(provisionUrl: string): Promise<boolean> {
+    try {
+      const provisionSite = Web([this._sp.web, provisionUrl])
+      const hasPermission = await provisionSite.currentUserHasPermissions(
+        PermissionKind.ManageWeb
+      )
+      return hasPermission
+    } catch (error) {
+      console.warn('Failed to check provision site admin status:', error)
+      return false
+    }
+  }
 }

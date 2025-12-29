@@ -177,6 +177,19 @@ declare interface IPortfolioWebPartsStrings {
     ConfirmationMessage: string
     NewRequestButton: string
     ViewRequestsButton: string
+    ConfigEditorButton: string
+    ConfigEditorTitle: string
+    ConfigEditorDescription: string
+    ConfigJsonLabel: string
+    ConfigJsonHint: string
+    ConfigSaveButton: string
+    ConfigSavingButton: string
+    ConfigResetButton: string
+    ConfigSaveSuccess: string
+    ConfigSaveSuccessTitle: string
+    ConfigSaveError: string
+    ConfigInvalidJson: string
+    ConfigEditorAccessDenied: string
     CommunityNameFieldLabel: string
     CommunityNameFieldDescription: string
     CommunityNameFieldPlaceholder: string

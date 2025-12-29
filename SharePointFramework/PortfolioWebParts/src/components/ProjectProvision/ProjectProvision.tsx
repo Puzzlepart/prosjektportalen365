@@ -23,6 +23,7 @@ import { ProjectProvisionContext } from './context'
 import { ProvisionDrawer } from './ProvisionDrawer'
 import strings from 'PortfolioWebPartsStrings'
 import { ProvisionSettings } from './ProvisionSettings'
+import { TeamsConfigEditor } from './TeamsConfigEditor'
 import { stringIsNullOrEmpty } from '@pnp/core'
 
 export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
@@ -79,10 +80,16 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
     <ProjectProvisionContext.Provider value={{ props, state, setState, column, setColumn, reset }}>
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
-          {/* Inline mode: conditionally show Drawer, Status, or Confirmation */}
+          {/* Inline mode: conditionally show Drawer, Status, Config Editor, or Confirmation */}
           {props.renderMode === 'inline' ? (
             <>
-              {state.showProvisionStatus ? (
+              {state.showConfigEditor ? (
+                <TeamsConfigEditor
+                  fluentProviderId={fluentProviderId}
+                  onBack={() => setState({ showConfigEditor: false, showProvisionDrawer: true })}
+                  isAdmin={state.isProvisionSiteAdmin}
+                />
+              ) : state.showProvisionStatus ? (
                 <ProvisionStatus
                   toast={dispatchToast}
                   renderMode='inline'

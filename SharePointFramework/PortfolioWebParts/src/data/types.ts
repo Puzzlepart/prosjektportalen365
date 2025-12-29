@@ -468,6 +468,30 @@ export interface IPortfolioWebPartsDataAdapter {
    * @returns A Promise that resolves to an object containing the data for the ideas.
    */
   getIdeasData?(configuration: IdeaConfigurationModel): Promise<Idea>
+
+  /**
+   * Load Teams app configuration from TeamsAppConfig.json
+   * 
+   * @param provisionUrl The provision site URL
+   * @returns Configuration object or null if file doesn't exist
+   */
+  loadTeamsConfig?(provisionUrl: string): Promise<any | null>
+
+  /**
+   * Save Teams app configuration to TeamsAppConfig.json
+   * 
+   * @param provisionUrl The provision site URL
+   * @param config Configuration object to save
+   */
+  saveTeamsConfig?(provisionUrl: string, config: any): Promise<void>
+
+  /**
+   * Check if current user is admin of the provision site
+   * 
+   * @param provisionUrl The provision site URL
+   * @returns True if user is site admin
+   */
+  isProvisionSiteAdmin?(provisionUrl: string): Promise<boolean>
 }
 
 export type PortfolioInstance = {
