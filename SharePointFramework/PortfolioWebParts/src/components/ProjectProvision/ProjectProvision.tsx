@@ -25,6 +25,7 @@ import strings from 'PortfolioWebPartsStrings'
 import { ProvisionSettings } from './ProvisionSettings'
 import { TeamsConfigEditor } from './TeamsConfigEditor'
 import { stringIsNullOrEmpty } from '@pnp/core'
+import styles from './ProjectProvision.module.scss'
 
 export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
   const {
@@ -79,8 +80,8 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
   return (
     <ProjectProvisionContext.Provider value={{ props, state, setState, column, setColumn, reset }}>
       <IdPrefixProvider value={fluentProviderId}>
-        <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
-          {/* Inline mode: conditionally show Drawer, Status, Config Editor, or Confirmation */}
+        <FluentProvider theme={customLightTheme} className={styles.container}>
+          {/* Inline mode: conditionally show Drawer, Status, Settings, Config Editor, or Confirmation */}
           {props.renderMode === 'inline' ? (
             <>
               {state.showConfigEditor ? (
@@ -88,6 +89,11 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
                   fluentProviderId={fluentProviderId}
                   onBack={() => setState({ showConfigEditor: false, showProvisionDrawer: true })}
                   isAdmin={state.isProvisionSiteAdmin}
+                />
+              ) : state.showProvisionSettings ? (
+                <ProvisionSettings
+                  renderMode='inline'
+                  onBack={() => setState({ showProvisionSettings: false, showProvisionDrawer: true })}
                 />
               ) : state.showProvisionStatus ? (
                 <ProvisionStatus
@@ -132,17 +138,17 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
                         {strings.Provision.StatusMenuLabel}
                       </MenuItem>
                     )}
-                    {props.pageContext.legacyPageContext.isSiteAdmin ||
-                      (!props.hideSettingsMenu && (
-                        <MenuItem
-                          {...restoreFocusTargetAttribute}
-                          onClick={() => {
-                            setState({ showProvisionSettings: true })
-                          }}
-                        >
-                          {strings.Provision.SettingsMenuLabel}
-                        </MenuItem>
-                      ))}
+                    {(props.pageContext.legacyPageContext.isSiteAdmin ||
+                      !props.hideSettingsMenu) && (
+                      <MenuItem
+                        {...restoreFocusTargetAttribute}
+                        onClick={() => {
+                          setState({ showProvisionSettings: true })
+                        }}
+                      >
+                        {strings.Provision.SettingsMenuLabel}
+                      </MenuItem>
+                    )}
                   </MenuList>
                 </MenuPopover>
               </Menu>

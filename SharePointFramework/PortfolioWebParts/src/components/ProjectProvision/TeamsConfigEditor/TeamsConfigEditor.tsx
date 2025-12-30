@@ -3,56 +3,17 @@ import {
   Field,
   FluentProvider,
   IdPrefixProvider,
-  makeStyles,
   MessageBar,
   MessageBarBody,
   MessageBarTitle,
-  shorthands,
-  Textarea,
-  tokens
+  Textarea
 } from '@fluentui/react-components'
 import { customLightTheme, getFluentIcon } from 'pp365-shared-library'
 import * as React from 'react'
 import { useContext, useState } from 'react'
 import { ProjectProvisionContext } from '../context'
 import strings from 'PortfolioWebPartsStrings'
-
-const useStyles = makeStyles({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    ...shorthands.gap('16px'),
-    ...shorthands.padding('20px'),
-    maxWidth: '900px',
-    ...shorthands.margin('0', 'auto')
-  },
-  header: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    ...shorthands.borderBottom('1px', 'solid', tokens.colorNeutralStroke1),
-    paddingBottom: '12px'
-  },
-  title: {
-    fontSize: tokens.fontSizeBase500,
-    fontWeight: tokens.fontWeightSemibold,
-    color: tokens.colorNeutralForeground1
-  },
-  description: {
-    fontSize: tokens.fontSizeBase300,
-    color: tokens.colorNeutralForeground2,
-    lineHeight: '1.5'
-  },
-  actions: {
-    display: 'flex',
-    ...shorthands.gap('8px'),
-    justifyContent: 'flex-end'
-  },
-  textarea: {
-    fontFamily: 'Consolas, Monaco, "Courier New", monospace',
-    fontSize: '12px'
-  }
-})
+import styles from './TeamsConfigEditor.module.scss'
 
 export interface ITeamsConfigEditorProps {
   fluentProviderId: string
@@ -66,12 +27,10 @@ export const TeamsConfigEditor: React.FC<ITeamsConfigEditorProps> = ({
   isAdmin
 }) => {
   const context = useContext(ProjectProvisionContext)
-  const styles = useStyles()
   
-  // Extract only serializable configuration properties
   const getSerializableConfig = () => {
     const props = context.props
-    // Explicitly include only web part configuration properties
+    
     return {
       // General
       buttonLabel: props.buttonLabel,
@@ -117,36 +76,35 @@ export const TeamsConfigEditor: React.FC<ITeamsConfigEditorProps> = ({
     return JSON.stringify(getSerializableConfig(), null, 2)
   })
 
-  // Access denied for non-admins
   if (!isAdmin) {
     return (
       <IdPrefixProvider value={fluentProviderId}>
-        <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
-          <div className={styles.container}>
+        <FluentProvider theme={customLightTheme} className={styles.provisionFPouter}>
+          <div className={styles.inlineContainer}>
             <div className={styles.header}>
-              <div className={styles.title}>
-                {strings.Provision.ConfigEditorTitle || 'Configuration Editor'}
-              </div>
               <Button
                 appearance='subtle'
-                icon={getFluentIcon('ChevronLeft')}
+                icon={getFluentIcon('ArrowLeft')}
                 onClick={onBack}
-                aria-label={strings.Aria.Back}
+                className={styles.backButton}
               >
-                {strings.Aria.Back}
+                {strings.Provision.PreviousButtonLabel}
               </Button>
+              <h2 className={styles.title}>
+                {strings.Provision.ConfigEditorTitle || 'Web Part Configuration'}
+              </h2>
             </div>
             <MessageBar intent='error'>
-              <MessageBarBody>
-                <MessageBarTitle>{strings.AccessTitle || 'Access Denied'}</MessageBarTitle>
-                {strings.Provision.ConfigEditorAccessDenied || 'You must be a site administrator to edit configuration.'}
-              </MessageBarBody>
-            </MessageBar>
-          </div>
-        </FluentProvider>
-      </IdPrefixProvider>
-    )
-  }
+                <MessageBarBody>
+                  <MessageBarTitle>{strings.AccessTitle || 'Access Denied'}</MessageBarTitle>
+                  {strings.Provision.ConfigEditorAccessDenied || 'You must be a site administrator to edit configuration.'}
+                </MessageBarBody>
+              </MessageBar>
+            </div>
+          </FluentProvider>
+        </IdPrefixProvider>
+      )
+    }
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
   const [isSaving, setIsSaving] = useState(false)
@@ -155,7 +113,6 @@ export const TeamsConfigEditor: React.FC<ITeamsConfigEditorProps> = ({
     setError(null)
     setSuccess(null)
 
-    // Validate JSON
     try {
       JSON.parse(jsonValue)
     } catch (e) {
@@ -165,12 +122,10 @@ export const TeamsConfigEditor: React.FC<ITeamsConfigEditorProps> = ({
 
     setIsSaving(true)
     try {
-      // Save to TeamsAppConfig.json in /sites/bestillingsportalen/Shared Documents/
       const config = JSON.parse(jsonValue)
       await context.props.dataAdapter.saveTeamsConfig(context.props.provisionUrl, config)
       setSuccess(strings.Provision.ConfigSaveSuccess || 'Configuration saved successfully')
       
-      // Reload page to apply new config
       setTimeout(() => {
         window.location.reload()
       }, 1500)
@@ -192,28 +147,26 @@ export const TeamsConfigEditor: React.FC<ITeamsConfigEditorProps> = ({
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
-      <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
-        <div className={styles.container}>
+      <FluentProvider theme={customLightTheme} className={styles.provisionFPouter}>
+        <div className={styles.inlineContainer}>
           <div className={styles.header}>
-            <div>
-              <div className={styles.title}>
-                {strings.Provision.ConfigEditorTitle || 'Configuration Editor'}
-              </div>
-            </div>
             <Button
               appearance='subtle'
-              icon={getFluentIcon('ChevronLeft')}
+              icon={getFluentIcon('ArrowLeft')}
               onClick={onBack}
-              aria-label={strings.Aria.Back}
+              className={styles.backButton}
             >
-              {strings.Aria.Back}
+              {strings.Provision.PreviousButtonLabel}
             </Button>
+            <h2 className={styles.title}>
+              {strings.Provision.ConfigEditorTitle || 'Web Part Configuration'}
+            </h2>
           </div>
 
           <div className={styles.description}>
-            {strings.Provision.ConfigEditorDescription ||
-              'Edit the web part configuration in JSON format. Changes will be saved to TeamsAppConfig.json and applied when you reload the app.'}
-          </div>
+              {strings.Provision.ConfigEditorDescription ||
+                'Edit the web part configuration in JSON format. Changes will be saved to TeamsAppConfig.json and applied when you reload the app.'}
+            </div>
 
           {error && (
             <MessageBar intent='error'>

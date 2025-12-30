@@ -31,3 +31,39 @@
     }
   }
 }
+
+.provisionFPouter {
+  padding-top: 10px;
+}
+
+.inlineContainer {
+  max-width: 1200px;
+  margin: 10px auto 0 auto;
+  padding: 24px 24px 48px;
+  background: var(--colorNeutralBackground1);
+  border-radius: var(--borderRadiusMedium);
+  box-shadow: var(--shadow4);
+
+  @media (max-width: 768px) {
+    padding: 16px;
+    max-width: 100%;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+
+    .backButton {
+      min-width: auto;
+    }
+
+    .title {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 600;
+      flex: 1;
+    }
+  }
+}

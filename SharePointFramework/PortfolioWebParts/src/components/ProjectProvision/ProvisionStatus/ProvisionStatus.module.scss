@@ -32,10 +32,14 @@
   }
 }
 
+.provisionFPouter {
+  padding-top: 10px;
+}
+
 .inlineContainer {
   max-width: 1200px;
-  margin: 0 auto;
-  padding: 24px;
+  margin: 10px auto 0 auto;
+  padding: 24px 24px 48px;
   background: var(--colorNeutralBackground1);
   border-radius: var(--borderRadiusMedium);
   box-shadow: var(--shadow4);

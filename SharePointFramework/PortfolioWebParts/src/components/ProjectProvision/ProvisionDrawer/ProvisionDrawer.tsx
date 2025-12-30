@@ -78,11 +78,10 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
   const additionalInfoInput = useLocalInput('additionalInfo')
 
   const isInlineMode = props.renderMode === 'inline'
+  const isTeamsMode = context.props.isTeamsContext
 
-  // In inline mode, use a plain div instead of DrawerBody to avoid motion animations
   const LevelContainer = isInlineMode ? 'div' : DrawerBody
 
-  // Render the form content (shared between drawer and inline modes)
   const formContent = (
     <>
       <DrawerHeader>
@@ -136,10 +135,24 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                       >
                         {strings.Provision.ViewRequestsButton}
                       </ToolbarButton>
-                      {context.props.isTeamsContext && context.state.isProvisionSiteAdmin && (
+                      {context.state.isProvisionSiteAdmin && (
                         <ToolbarButton
                           appearance='subtle'
                           icon={getFluentIcon('Settings')}
+                          onClick={() => {
+                            context.setState({
+                              showProvisionDrawer: false,
+                              showProvisionSettings: true
+                            })
+                          }}
+                        >
+                          {strings.Provision.SettingsMenuLabel}
+                        </ToolbarButton>
+                      )}
+                      {context.props.isTeamsContext && context.state.isProvisionSiteAdmin && (
+                        <ToolbarButton
+                          appearance='subtle'
+                          icon={getFluentIcon('ContentSettings')}
                           onClick={() => {
                             context.setState({
                               showProvisionDrawer: false,
@@ -836,11 +849,10 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
     </>
   )
 
-  // In inline mode, render directly without OverlayDrawer wrapper
   if (isInlineMode) {
     return (
       <IdPrefixProvider value={fluentProviderId}>
-        <FluentProvider theme={customLightTheme}>
+        <FluentProvider theme={customLightTheme} className={mergeClasses(styles.provisionFPouter, isTeamsMode ? 'teams-mode' : 'sp-mode')}>
           <div className={mergeClasses(styles.inlineContainer, 'provision-inline')}>
             {context.state.showProvisionConfirmation ? (
               <ProvisionConfirmation
@@ -849,7 +861,6 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   setCurrentLevel(0)
                 }}
                 onViewRequests={() => {
-                  // Navigate to provision status view  
                   context.setState({
                     showProvisionConfirmation: false,
                     showProvisionStatus: true,
@@ -866,7 +877,6 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
     )
   }
 
-  // In button mode, wrap with OverlayDrawer
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme}>

@@ -15,6 +15,7 @@ import {
   DialogTrigger,
   FluentProvider,
   IdPrefixProvider,
+  mergeClasses,
   Spinner
 } from '@fluentui/react-components'
 import { useProvisionStatus } from './useProvisionStatus'
@@ -41,6 +42,7 @@ export const ProvisionStatus = (props: IProvisionStatusProps) => {
   } = useProvisionStatus(props.toast)
 
   const isInlineMode = props.renderMode === 'inline'
+  const isTeamsMode = context.props.isTeamsContext
 
   const gridContent = (
     <>
@@ -104,7 +106,7 @@ export const ProvisionStatus = (props: IProvisionStatusProps) => {
   if (isInlineMode) {
     return (
       <IdPrefixProvider value={fluentProviderId}>
-        <FluentProvider theme={customLightTheme}>
+        <FluentProvider theme={customLightTheme} className={mergeClasses(styles.provisionFPouter, isTeamsMode ? 'teams-mode' : 'sp-mode')}>
           <div className={styles.inlineContainer}>
             <div className={styles.header}>
               {props.onBack && (
@@ -130,7 +132,7 @@ export const ProvisionStatus = (props: IProvisionStatusProps) => {
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
-      <FluentProvider theme={customLightTheme} className={styles.provisionStatusDialog}>
+      <FluentProvider theme={customLightTheme} className={mergeClasses(styles.provisionFPouter, styles.provisionStatusDialog)}>
         <Dialog
           modalType='modal'
           open={context.state.showProvisionStatus}

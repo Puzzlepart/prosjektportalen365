@@ -1502,7 +1502,12 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   public async loadTeamsConfig(provisionUrl: string): Promise<any | null> {
     try {
       const provisionSite = Web([this._sp.web, provisionUrl])
-      const file = provisionSite.getFileByServerRelativePath('Shared Documents/TeamsAppConfig.json')
+      
+      // Get the file using SiteAssets library (language-independent)
+      const file = await provisionSite
+        .getFolderByServerRelativePath('SiteAssets')
+        .files.getByUrl('TeamsAppConfig.json')
+      
       const content = await file.getText()
       return JSON.parse(content)
     } catch (error) {
@@ -1531,12 +1536,14 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         throw new Error('You do not have permission to edit configuration. Site administrator access required.')
       }
       
-      const folder = provisionSite.getFolderByServerRelativePath('Shared Documents')
+      const folder = provisionSite.getFolderByServerRelativePath('SiteAssets')
       const jsonContent = JSON.stringify(config, null, 2)
       
       // Try to update existing file, or create new one if it doesn't exist
       try {
-        const file = provisionSite.getFileByServerRelativePath('Shared Documents/TeamsAppConfig.json')
+        const file = await provisionSite
+          .getFolderByServerRelativePath('SiteAssets')
+          .files.getByUrl('TeamsAppConfig.json')
         await file.setContent(jsonContent)
       } catch {
         // File doesn't exist, create it
