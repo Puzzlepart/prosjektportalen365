@@ -149,8 +149,8 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   /**
    * Get parent projects from the projects list in the portfolio site.
    *
-   * @note Your model class specified in the constructor param should include a
-   * property `childProjects` (array of strings which is the web/project URLs).
+   * @note Your model class specified in the constructor param should include
+   * properties `childProjects` and `parentProjects` (arrays of strings which are web/project URLs).
    *
    * @param webUrl Web URL
    * @param constructor Constructor / model class
@@ -160,7 +160,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     constructor: new (item: any, web: IWeb) => T
   ): Promise<T[]> {
     try {
-      const projectItems = await this.getItems(
+      const childProjectItems = await this.getItems(
         this._configuration.listNames.PROJECTS,
         constructor,
         {
@@ -180,9 +180,42 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         },
         []
       )
-      return projectItems.filter((p) =>
-        p['childProjects'] ? p['childProjects'].includes(webUrl) : true
-      )
+
+      const list = this._getList('PROJECTS')
+      const [currentProject] = await list.items
+        .filter(`GtSiteUrl eq '${webUrl}'`)
+        .select('Id', 'GtParentProjects')()
+      
+      console.log('Current project raw data:', currentProject);
+
+      const uniqueProjects = new Map<string, T>()
+      
+      childProjectItems
+        .filter((p) => p['childProjects'] ? p['childProjects'].includes(webUrl) : true)
+        .forEach((p) => {
+          if (p['url']) uniqueProjects.set(p['url'], p)
+        })
+
+      if (currentProject?.GtParentProjects) {
+        const parentProjects: any[] = Array.isArray(currentProject.GtParentProjects) 
+          ? currentProject.GtParentProjects 
+          : JSON.parse(currentProject.GtParentProjects || '[]')
+        
+        console.log('Parent projects:', parentProjects);
+        
+        parentProjects.forEach((parentProject) => {
+          const parentUrl = parentProject.SPWebURL || parentProject.url
+          if (parentUrl && !uniqueProjects.has(parentUrl)) {
+            const project = { 
+              url: parentUrl,
+              title: parentProject.Title
+            } as any
+            uniqueProjects.set(parentUrl, project)
+          }
+        })
+      }
+
+      return Array.from(uniqueProjects.values())
     } catch (error) {
       return []
     }

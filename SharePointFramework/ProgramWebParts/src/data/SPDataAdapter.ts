@@ -46,6 +46,12 @@ import { IItem } from '@pnp/sp/items'
 import { PermissionKind, Web } from '@pnp/sp/presets/all'
 import resource from 'SharedResources'
 
+
+enum ParentProjectOperation {
+  Add = 'add',
+  Remove = 'remove'
+}
+
 /**
  * `SPDataAdapter` is a class that extends the `SPDataAdapterBase` class and implements the `IPortfolioWebPartsDataAdapter` interface.
  * It provides methods to configure the SP data adapter with the SPFx context and the configuration, and to get the portfolio configuration and the aggregated list configuration.
@@ -63,6 +69,7 @@ export class SPDataAdapter
   public childProjects: Array<Record<string, string>>
   private _propertyList: IList
   private _propertyItem: IItem
+  private _hubWebs: Map<string, any>
 
   /**
    * Configure the SP data adapter with the SPFx context and the configuration.
@@ -83,6 +90,21 @@ export class SPDataAdapter
       propertiesListName: resource.Lists_ProjectProperties_Title
     } as IProjectDataServiceParams)
     this._propertyList = this.sp.web.lists.getByTitle(resource.Lists_ProjectProperties_Title)
+    this._hubWebs = new Map()
+  }
+
+  /**
+   * Initialize hub web instances.
+   *
+   * @param hubs Program hubs configuration
+   */
+  public initializeHubWebs(hubs: IProgramHub[]): void {
+    this._hubWebs.clear()
+    hubs?.forEach(hub => {
+      if (hub.hubSiteId && hub.url) {
+        this._hubWebs.set(hub.hubSiteId, Web([this.sp.web, hub.url]))
+      }
+    })
   }
 
   public async getPortfolioConfig(): Promise<IPortfolioOverviewConfiguration> {
@@ -830,14 +852,78 @@ export class SPDataAdapter
    * Update project item/entity in hub site (portfolio)
    *
    * @param properties Properties to update
+   * @param hubSiteId Hub site ID to update the project in
    */
-  public async updateProjectInHub(properties: Record<string, any>): Promise<void> {
+  public async updateProjectInHub(properties: Record<string, any>, hubSiteId?: string): Promise<void> {
     try {
       const siteId = this.spfxContext.pageContext.site.id.toString()
-      const list = this.portalDataService.web.lists.getByTitle(resource.Lists_Projects_Title)
+      const web = hubSiteId && this._hubWebs.has(hubSiteId) 
+        ? this._hubWebs.get(hubSiteId)
+        : this.portalDataService.web
+      const list = web.lists.getByTitle(resource.Lists_Projects_Title)
       const [item] = await list.items.filter(`GtSiteId eq '${siteId}'`)()
-      await list.items.getById(item.ID).update(properties)
-    } catch (error) { }
+      if (item) {
+        await list.items.getById(item.ID).update(properties)
+      }
+    } catch (error) {
+      console.warn(`Failed to update project in hub ${hubSiteId || 'default'}:`, error)
+    }
+  }
+
+  /**
+   * Update a child project's GtParentProjects field in its hub's Projects list.
+   * Adds or removes the current program site from the child project's parent projects array.
+   *
+   * @param childSiteId The SiteId of the child project to update
+   * @param hubSiteId The hub site ID where the child project's entry exists
+   * @param operation 'add' to add current site as parent, 'remove' to remove it
+   */
+  private async _updateChildProjectParents(
+    childSiteId: string,
+    hubSiteId: string,
+    operation: ParentProjectOperation
+  ): Promise<void> {
+    try {
+      const currentSiteId = this.spfxContext.pageContext.site.id.toString()
+      const currentSiteTitle = this.spfxContext.pageContext.web.title
+      const currentSiteUrl = this.spfxContext.pageContext.web.absoluteUrl
+      const web = this._hubWebs.get(hubSiteId) || this.portalDataService.web
+      
+      const list = web.lists.getByTitle(resource.Lists_Projects_Title)
+      const [item] = await list.items
+        .select('ID', 'GtParentProjects')
+        .filter(`GtSiteId eq '${childSiteId}'`)()
+      
+      if (item) {
+        let parentProjects: Array<Record<string, string>> = []
+        try {
+          parentProjects = item.GtParentProjects ? JSON.parse(item.GtParentProjects) : []
+        } catch {
+          parentProjects = []
+        }
+
+        switch (operation) {
+          case ParentProjectOperation.Add:
+            if (!parentProjects.some(p => p.SiteId === currentSiteId)) {
+              parentProjects.push({ 
+                SiteId: currentSiteId, 
+                Title: currentSiteTitle,
+                SPWebURL: currentSiteUrl
+              })
+            }
+            break
+          case ParentProjectOperation.Remove:
+            parentProjects = parentProjects.filter(p => p.SiteId !== currentSiteId)
+            break
+        }
+
+        await list.items.getById(item.ID).update({
+          GtParentProjects: JSON.stringify(parentProjects)
+        })
+      }
+    } catch (error) {
+      console.warn(`Failed to update parent projects for child ${childSiteId} in hub ${hubSiteId}:`, error)
+    }
   }
 
   /**
@@ -1063,7 +1149,16 @@ export class SPDataAdapter
     })
     const updateProperties = { GtChildProjects: JSON.stringify(uniqueProjects) }
     await this._propertyItem.update(updateProperties)
-    await this.updateProjectInHub(updateProperties)
+    
+    const uniqueHubIds = new Set(newProjects.map(p => p.HubSiteId).filter(Boolean))
+    await Promise.all([
+      ...Array.from(uniqueHubIds).map(hubSiteId => 
+        this.updateProjectInHub(updateProperties, hubSiteId as string)
+      ),
+      ...newProjects.map(project => 
+        project.HubSiteId ? this._updateChildProjectParents(project.SiteId, project.HubSiteId, ParentProjectOperation.Add) : Promise.resolve()
+      )
+    ])
   }
 
   /**
@@ -1081,7 +1176,17 @@ export class SPDataAdapter
     )
     const updateProperties = { GtChildProjects: JSON.stringify(updatedProjects) }
     await this._propertyItem.update(updateProperties)
-    await this.updateProjectInHub(updateProperties)
+    
+    const uniqueHubIds = new Set(projectToRemove.map(p => p.HubSiteId).filter(Boolean))
+    await Promise.all([
+      ...Array.from(uniqueHubIds).map(hubSiteId => 
+        this.updateProjectInHub(updateProperties, hubSiteId as string)
+      ),
+      ...projectToRemove.map(project => 
+        project.HubSiteId ? this._updateChildProjectParents(project.SiteId, project.HubSiteId, ParentProjectOperation.Remove) : Promise.resolve()
+      )
+    ])
+    
     return updatedProjects
   }
 }

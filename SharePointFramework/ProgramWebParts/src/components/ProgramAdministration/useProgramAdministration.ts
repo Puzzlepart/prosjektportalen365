@@ -39,6 +39,7 @@ export const useProgramAdministration = (props: IProgramAdministrationProps) => 
               return { url: u, hubSiteId: resolved.hubSiteId, title: resolved.title }
             })
           )
+          props.dataAdapter.initializeHubWebs(resolvedHubs)
           setProgramHubs(resolvedHubs)
         } catch {
           setProgramHubs(undefined)
