@@ -877,11 +877,13 @@ export class SPDataAdapter
    * @param childSiteId The SiteId of the child project to update
    * @param hubSiteId The hub site ID where the child project's entry exists
    * @param operation 'add' to add current site as parent, 'remove' to remove it
+   * @param parentHubSiteUrl The hub site URL where the parent program resides
    */
   private async _updateChildProjectParents(
     childSiteId: string,
     hubSiteId: string,
-    operation: ParentProjectOperation
+    operation: ParentProjectOperation,
+    parentHubSiteUrl?: string
   ): Promise<void> {
     try {
       const currentSiteId = this.spfxContext.pageContext.site.id.toString()
@@ -908,7 +910,8 @@ export class SPDataAdapter
               parentProjects.push({ 
                 SiteId: currentSiteId, 
                 Title: currentSiteTitle,
-                SPWebURL: currentSiteUrl
+                SPWebURL: currentSiteUrl,
+                HubSiteUrl: parentHubSiteUrl
               })
             }
             break
@@ -1136,8 +1139,9 @@ export class SPDataAdapter
    * Add child projects.
    *
    * @param newProjects New projects to add
+   * @param parentHubSiteUrl The hub site URL where the parent program resides
    */
-  public async addChildProjects(newProjects: Array<Record<string, string>>) {
+  public async addChildProjects(newProjects: Array<Record<string, string>>, parentHubSiteUrl?: string) {
     const { GtChildProjects } = await this._propertyItem.select('GtChildProjects')()
     const projects = JSON.parse(GtChildProjects)
     const updatedProjects = [...projects, ...newProjects]
@@ -1156,7 +1160,7 @@ export class SPDataAdapter
         this.updateProjectInHub(updateProperties, hubSiteId as string)
       ),
       ...newProjects.map(project => 
-        project.HubSiteId ? this._updateChildProjectParents(project.SiteId, project.HubSiteId, ParentProjectOperation.Add) : Promise.resolve()
+        project.HubSiteId ? this._updateChildProjectParents(project.SiteId, project.HubSiteId, ParentProjectOperation.Add, parentHubSiteUrl) : Promise.resolve()
       )
     ])
   }

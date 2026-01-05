@@ -185,11 +185,9 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       const [currentProject] = await list.items
         .filter(`GtSiteUrl eq '${webUrl}'`)
         .select('Id', 'GtParentProjects')()
-      
-      console.log('Current project raw data:', currentProject);
 
       const uniqueProjects = new Map<string, T>()
-      
+
       childProjectItems
         .filter((p) => p['childProjects'] ? p['childProjects'].includes(webUrl) : true)
         .forEach((p) => {
@@ -197,22 +195,34 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         })
 
       if (currentProject?.GtParentProjects) {
-        const parentProjects: any[] = Array.isArray(currentProject.GtParentProjects) 
-          ? currentProject.GtParentProjects 
+        const parentProjects: any[] = Array.isArray(currentProject.GtParentProjects)
+          ? currentProject.GtParentProjects
           : JSON.parse(currentProject.GtParentProjects || '[]')
-        
-        console.log('Parent projects:', parentProjects);
-        
-        parentProjects.forEach((parentProject) => {
+
+        for (const parentProject of parentProjects) {
           const parentUrl = parentProject.SPWebURL || parentProject.url
-          if (parentUrl && !uniqueProjects.has(parentUrl)) {
-            const project = { 
-              url: parentUrl,
-              title: parentProject.Title
-            } as any
-            uniqueProjects.set(parentUrl, project)
+          const hubSiteUrl = parentProject.HubSiteUrl
+
+          if (parentUrl && hubSiteUrl) {
+            try {
+              const parentHubSp = spfi(hubSiteUrl).using(AssignFrom(this._sp.web))
+              const parentHubWeb = parentHubSp.web
+
+              const parentProjectItems = await parentHubWeb.lists
+                .getByTitle(this._configuration.listNames.PROJECTS)
+                .items.filter(`GtSiteUrl eq '${parentUrl}'`)()
+
+              parentProjectItems.forEach((item) => {
+                const project = new constructor(item, parentHubWeb)
+                if (project['url']) {
+                  uniqueProjects.set(project['url'], project)
+                }
+              })
+            } catch (error) {
+              console.warn(`Failed to fetch parent project from ${hubSiteUrl}:`, error)
+            }
           }
-        })
+        }
       }
 
       return Array.from(uniqueProjects.values())
@@ -437,9 +447,9 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     const urls = await this._getList(list)
       .select('DefaultNewFormUrl', 'DefaultEditFormUrl')
       .expand('DefaultNewFormUrl', 'DefaultEditFormUrl')<{
-      DefaultNewFormUrl: string
-      DefaultEditFormUrl: string
-    }>()
+        DefaultNewFormUrl: string
+        DefaultEditFormUrl: string
+      }>()
     return {
       defaultNewFormUrl: makeUrlAbsolute(urls.DefaultNewFormUrl),
       defaultEditFormUrl: makeUrlAbsolute(urls.DefaultEditFormUrl)
@@ -533,7 +543,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
           fieldsAdded.push(field)
         }
         await executeQuery(jsomContext)
-      } catch (error) {}
+      } catch (error) { }
     }
     try {
       const templateParametersField = spList
@@ -545,7 +555,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         )
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
-    } catch {}
+    } catch { }
     if (ensureList.created && params.properties) {
       ensureList.list.items.add(params.properties)
     }

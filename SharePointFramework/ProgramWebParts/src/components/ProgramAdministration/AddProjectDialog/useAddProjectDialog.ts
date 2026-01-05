@@ -36,7 +36,12 @@ export const useAddProjectDialog = () => {
     const projects = availableProjects.filter(({ SiteId }) =>
       context.state.addProjectDialog?.selectedProjects.includes(SiteId)
     )
-    await context.props.dataAdapter.addChildProjects(projects)
+    
+    const currentHubSiteId = context.props.context.pageContext.legacyPageContext.hubSiteId
+    const parentHub = context.programHubs?.find(h => h.hubSiteId?.toLowerCase() === currentHubSiteId?.toLowerCase())
+    const parentHubSiteUrl = parentHub?.url
+    
+    await context.props.dataAdapter.addChildProjects(projects, parentHubSiteUrl)
     context.dispatch(ADD_CHILD_PROJECTS(projects))
   }
 
