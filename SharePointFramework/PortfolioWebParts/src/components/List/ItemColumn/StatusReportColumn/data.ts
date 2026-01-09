@@ -47,7 +47,7 @@ export const fetchData = async (web: IWeb, column?: ProjectColumn) => {
     obj[key].colors[item.GtPortfolioColumnValue] = item.GtPortfolioColumnColor
     return obj
   }, {})
-  return statusReports.map(
+  return statusReports.reverse().map(
     (item) => new ProjectStatusModel(item, columnConfigurations, statusSections)
   )
 }
