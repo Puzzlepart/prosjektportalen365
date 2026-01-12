@@ -7,6 +7,10 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 ### Ny funksjonalitet
 
 - Lagt til støtte for å legge til underområder fra andre huber i program [#940](https://github.com/Puzzlepart/prosjektportalen365/issues/940)
+- Støtte for å kopiere mapper med innhold fra dokumentmalbibliotek [#1277](https://github.com/Puzzlepart/prosjektportalen365/issues/1277)
+  - Brukere kan nå velge mapper i tillegg til filer når de henter dokumentmaler
+  - Mapper kopieres rekursivt med all struktur og innhold
+  - Systemmapper hoppes automatisk over under kopiering
 
 ### Forbedringer
 
@@ -19,6 +23,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 
 - Rettet et problem hvor bildeforhåndsvisning forsvant ved navigasjon mellom nivåer i Bestillingsportalen-skjema
 - Rettet et problem hvor nyheter publisert fra prosjekter ikke fikk publiseringsdato
+- Rettet en feil med kalkulering av antall tegn tillatt i Alias/navn felt i Bestillingsportalen-skjema (maks 64 tegn inkludert prefiks/suffiks)
 
 ---
 
