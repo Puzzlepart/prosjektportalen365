@@ -6,6 +6,8 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 
 ### Ny funksjonalitet
 
+- Lagt til støtte for å legge til underområder fra andre huber i program [#940](https://github.com/Puzzlepart/prosjektportalen365/issues/940)
+
 ### Forbedringer
 
 - Lagt til karakterteller (maks 255 tegn) for navnefeltet i Bestillingsportalen-skjema som dukker opp dersom bruker overgår 200 tegn
