@@ -6,12 +6,10 @@ import { Toaster } from '@fluentui/react-components'
 
 /**
  * Edit properties panel uses `CustomEditPanel` to render an edit
- * panel for the project information component. If the field values
- * are not set, the panel will render `null`.
+ * panel for the project information component.
  */
 export const EditStatusPanel: FC = () => {
   const { headerText, isOpen, onDismiss, fields, fieldValues, submit } = useEditStatusPanel()
-  if (!fieldValues.id) return null
 
   return (
     <>

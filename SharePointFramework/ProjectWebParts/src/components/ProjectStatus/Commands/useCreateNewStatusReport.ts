@@ -1,9 +1,8 @@
 import { format } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
 import { ItemFieldValue } from 'pp365-shared-library'
-import SPDataAdapter from '../../../data'
 import { useProjectStatusContext } from '../context'
-import { OPEN_PANEL, SELECT_REPORT } from '../reducer'
+import { OPEN_PANEL } from '../reducer'
 import resource from 'SharedResources'
 
 /**
@@ -24,7 +23,7 @@ export function useCreateNewStatusReport() {
   )
 
   /**
-   * Creates a new status report with the given properties and adds it to the portal.
+   * Creates a new status report with the given properties and passes the parameters to the edit status panel.
    * If there is a last report, it will use its field values for the new report.
    */
   const createNewStatusReport = async () => {
@@ -36,16 +35,22 @@ export function useCreateNewStatusReport() {
     if (lastReport?.fieldValues) {
       properties = reportFields.reduce((obj, field) => {
         const fieldValue = lastReport.fieldValues.get<ItemFieldValue>(field.internalName)?.value
-        if (fieldValue && !obj[field.InternalName]) obj[field.internalName] = fieldValue
+        if (fieldValue && !obj[field.internalName]) obj[field.internalName] = fieldValue
         return obj
       }, properties)
     }
-    const report = await SPDataAdapter.portalDataService.addStatusReport(
-      properties,
+
+    const statusContentId: string =
       state.data.properties.templateParameters?.ProjectStatusContentTypeId
+
+    dispatch(
+      OPEN_PANEL({
+        name: 'EditStatusPanel',
+        headerText: strings.NewStatusPanelTitle,
+        reportProps: properties,
+        contentId: statusContentId
+      })
     )
-    dispatch(SELECT_REPORT({ report }))
-    dispatch(OPEN_PANEL({ name: 'EditStatusPanel', headerText: strings.NewStatusPanelTitle }))
   }
 
   return createNewStatusReport
