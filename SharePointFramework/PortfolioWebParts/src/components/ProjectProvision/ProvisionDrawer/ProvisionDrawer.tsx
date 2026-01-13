@@ -260,12 +260,13 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                                 color:
                                   nameInput.value.length > 255
                                     ? 'var(--colorPaletteRedForeground1)'
-                                  : 'var(--colorNeutralForeground3)',
-                              marginLeft: namingConvention?.suffixText ? '8px' : '0'
-                            }}
-                          >
-                            {nameInput.value.length}/255
-                          </span>)}
+                                    : 'var(--colorNeutralForeground3)',
+                                marginLeft: namingConvention?.suffixText ? '8px' : '0'
+                              }}
+                            >
+                              {nameInput.value.length}/255
+                            </span>
+                          )}
                         </>
                       }
                       placeholder={getField('name').placeholder}

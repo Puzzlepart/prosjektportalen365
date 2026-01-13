@@ -30,14 +30,12 @@ export const useInitialTaxonomyValues = () => {
       if (!labels || !labels.length) return []
       const validLabels = labels.filter((label) => label && label.name)
       if (!validLabels.length) return []
-      
+
       const normalized = validLabels.map((label) => ({ ...label }))
       const ensureLabel = (languageTag: string) => {
         if (!languageTag) return
         const toLower = languageTag.toLowerCase()
-        const matches = normalized.filter(
-          (label) => label.languageTag?.toLowerCase() === toLower
-        )
+        const matches = normalized.filter((label) => label.languageTag?.toLowerCase() === toLower)
         if (!matches.length) {
           const base = normalized.find((label) => label.isDefault) ?? normalized[0]
           if (!base || !base.name) return
@@ -59,36 +57,39 @@ export const useInitialTaxonomyValues = () => {
     [currentLocale]
   )
 
-  const mapInitialValues = useCallback((term: Term) => {
-    if (!term) return null
-    
-    if ('id' in term) {
-      if (!term.labels || !Array.isArray(term.labels)) {
-        console.warn('Term has no valid labels array:', term)
-        return null
+  const mapInitialValues = useCallback(
+    (term: Term) => {
+      if (!term) return null
+
+      if ('id' in term) {
+        if (!term.labels || !Array.isArray(term.labels)) {
+          console.warn('Term has no valid labels array:', term)
+          return null
+        }
+
+        const labels = ensureLanguageSupport(term.labels)
+        if (!labels || labels.length === 0 || !labels[0]?.name) {
+          console.warn('Term labels could not be processed:', term)
+          return null
+        }
+        return { labels, id: term.id }
+      } else {
+        if (!term.name) {
+          console.warn('Tag term has no name:', term)
+          return null
+        }
+        const labels = ensureLanguageSupport([
+          { name: term.name, isDefault: true, languageTag: currentLocale }
+        ])
+        if (!labels || labels.length === 0) {
+          console.warn('Could not create labels for tag term:', term)
+          return null
+        }
+        return { labels, id: term.key }
       }
-      
-      const labels = ensureLanguageSupport(term.labels)
-      if (!labels || labels.length === 0 || !labels[0]?.name) {
-        console.warn('Term labels could not be processed:', term)
-        return null
-      }
-      return { labels, id: term.id }
-    } else {
-      if (!term.name) {
-        console.warn('Tag term has no name:', term)
-        return null
-      }
-      const labels = ensureLanguageSupport([
-        { name: term.name, isDefault: true, languageTag: currentLocale }
-      ])
-      if (!labels || labels.length === 0) {
-        console.warn('Could not create labels for tag term:', term)
-        return null
-      }
-      return { labels, id: term.key }
-    }
-  }, [ensureLanguageSupport, currentLocale])
+    },
+    [ensureLanguageSupport, currentLocale]
+  )
 
   return mapInitialValues
 }

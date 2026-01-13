@@ -57,10 +57,7 @@ export const TargetFolderScreen: FC = () => {
         setFolder={setFolder}
       />
       {folders.length === 0 && folder !== null ? (
-        <UserMessage
-          text={strings.NoFoldersAvailableText}
-          intent='info'
-        />
+        <UserMessage text={strings.NoFoldersAvailableText} intent='info' />
       ) : (
         <DetailsList
           items={folders.sort((a, b) => (a.name > b.name ? 1 : -1))}
