@@ -27,7 +27,6 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Rettet et problem hvor nyheter publisert fra prosjekter ikke fikk publiseringsdato
 - Rettet en feil med kalkulering av antall tegn tillatt i Alias/navn felt i Bestillingsportalen-skjema (maks 64 tegn inkludert prefiks/suffiks)
 
-
 ---
 
 ## 1.12.0 - 05.11.2025

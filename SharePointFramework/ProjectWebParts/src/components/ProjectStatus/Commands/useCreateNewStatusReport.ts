@@ -1,9 +1,8 @@
 import { format } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
 import { ItemFieldValue } from 'pp365-shared-library'
-import SPDataAdapter from '../../../data'
 import { useProjectStatusContext } from '../context'
-import { OPEN_PANEL, SELECT_REPORT } from '../reducer'
+import { OPEN_PANEL } from '../reducer'
 import resource from 'SharedResources'
 
 /**
@@ -41,9 +40,17 @@ export function useCreateNewStatusReport() {
       }, properties)
     }
 
-    const statusContentId: string = state.data.properties.templateParameters?.ProjectStatusContentTypeId
+    const statusContentId: string =
+      state.data.properties.templateParameters?.ProjectStatusContentTypeId
 
-    dispatch(OPEN_PANEL({ name: 'EditStatusPanel', headerText: strings.NewStatusPanelTitle, reportProps: properties, contentId: statusContentId }))
+    dispatch(
+      OPEN_PANEL({
+        name: 'EditStatusPanel',
+        headerText: strings.NewStatusPanelTitle,
+        reportProps: properties,
+        contentId: statusContentId
+      })
+    )
   }
 
   return createNewStatusReport

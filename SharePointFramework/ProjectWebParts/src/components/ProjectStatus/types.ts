@@ -89,7 +89,12 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
   /**
    * The active panel name and optional title. Optional properties and contentID for new reports.
    */
-  activePanel?: { name: string; headerText?: string; reportProps?: Record<string, any>, contentId?: any }
+  activePanel?: {
+    name: string
+    headerText?: string
+    reportProps?: Record<string, any>
+    contentId?: any
+  }
 
   /**
    * The status for the report (currently selected)
