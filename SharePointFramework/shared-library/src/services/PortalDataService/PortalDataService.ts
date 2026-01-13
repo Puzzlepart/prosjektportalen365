@@ -189,7 +189,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       const uniqueProjects = new Map<string, T>()
 
       childProjectItems
-        .filter((p) => p['childProjects'] ? p['childProjects'].includes(webUrl) : true)
+        .filter((p) => (p['childProjects'] ? p['childProjects'].includes(webUrl) : true))
         .forEach((p) => {
           if (p['url']) uniqueProjects.set(p['url'], p)
         })
@@ -447,9 +447,9 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     const urls = await this._getList(list)
       .select('DefaultNewFormUrl', 'DefaultEditFormUrl')
       .expand('DefaultNewFormUrl', 'DefaultEditFormUrl')<{
-        DefaultNewFormUrl: string
-        DefaultEditFormUrl: string
-      }>()
+      DefaultNewFormUrl: string
+      DefaultEditFormUrl: string
+    }>()
     return {
       defaultNewFormUrl: makeUrlAbsolute(urls.DefaultNewFormUrl),
       defaultEditFormUrl: makeUrlAbsolute(urls.DefaultEditFormUrl)
@@ -543,7 +543,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
           fieldsAdded.push(field)
         }
         await executeQuery(jsomContext)
-      } catch (error) { }
+      } catch (error) {}
     }
     try {
       const templateParametersField = spList
@@ -555,7 +555,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         )
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
-    } catch { }
+    } catch {}
     if (ensureList.created && params.properties) {
       ensureList.list.items.add(params.properties)
     }

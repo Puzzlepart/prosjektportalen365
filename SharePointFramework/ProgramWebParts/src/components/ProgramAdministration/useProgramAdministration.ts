@@ -8,9 +8,7 @@ import { IProgramHub } from 'data'
 export const useProgramAdministration = (props: IProgramAdministrationProps) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const [programHubs, setProgramHubs] = useState<IProgramHub[] | undefined>(
-    undefined
-  )
+  const [programHubs, setProgramHubs] = useState<IProgramHub[] | undefined>(undefined)
 
   useEffect(() => {
     props.dataAdapter.project.getProjectInformationData().then(async (properties) => {
@@ -66,7 +64,10 @@ export const useProgramAdministration = (props: IProgramAdministrationProps) => 
     })
   }, [])
 
-  const context = useMemo(() => ({ props, state, dispatch, programHubs }), [props, state, programHubs])
+  const context = useMemo(
+    () => ({ props, state, dispatch, programHubs }),
+    [props, state, programHubs]
+  )
 
   /**
    * Callback function for handling selection change in the `ProjectList` component.

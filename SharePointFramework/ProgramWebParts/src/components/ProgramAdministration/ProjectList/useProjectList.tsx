@@ -7,10 +7,8 @@ export function useProjectList(props: IProjectListProps) {
   const [searchTerm, setSearchTerm] = useState('')
 
   const shouldEnableGrouping = useMemo(() => {
-    const uniqueHubs = new Set(
-      props.items.map(item => item.HubSiteId).filter(Boolean)
-    )
-    
+    const uniqueHubs = new Set(props.items.map((item) => item.HubSiteId).filter(Boolean))
+
     return uniqueHubs.size > 1
   }, [props.items])
 
@@ -19,7 +17,7 @@ export function useProjectList(props: IProjectListProps) {
 
     const groups = props.items.reduce((acc, item) => {
       const hubSiteId = item.HubSiteId
-      const hub = props.programHubs?.find(h => h.hubSiteId === hubSiteId)
+      const hub = props.programHubs?.find((h) => h.hubSiteId === hubSiteId)
       const hubKey = hub?.title || hub?.url || item.HubSiteId
       if (!acc[hubKey]) {
         acc[hubKey] = []
@@ -29,8 +27,8 @@ export function useProjectList(props: IProjectListProps) {
     }, {} as Record<string, any[]>)
 
     if (searchTerm) {
-      Object.keys(groups).forEach(hubKey => {
-        groups[hubKey] = groups[hubKey].filter((item) => 
+      Object.keys(groups).forEach((hubKey) => {
+        groups[hubKey] = groups[hubKey].filter((item) =>
           item.Title.toLowerCase().includes(searchTerm)
         )
         if (groups[hubKey].length === 0) {
@@ -65,5 +63,14 @@ export function useProjectList(props: IProjectListProps) {
     setSearchTerm(data?.value?.toLowerCase() ?? '')
   }
 
-  return { items, columns, columnSizingOptions, defaultSortState, onSearch, searchTerm, groupedData, shouldEnableGrouping }
+  return {
+    items,
+    columns,
+    columnSizingOptions,
+    defaultSortState,
+    onSearch,
+    searchTerm,
+    groupedData,
+    shouldEnableGrouping
+  }
 }

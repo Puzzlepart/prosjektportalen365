@@ -54,9 +54,9 @@ const fetchData: DataFetchFunction<
       fetchProjectStatusReportData(context),
       isFrontpage
         ? SPDataAdapter.portalDataService.getParentProjects(
-          context.props.webAbsoluteUrl,
-          ProjectInformationParentProject
-        )
+            context.props.webAbsoluteUrl,
+            ProjectInformationParentProject
+          )
         : Promise.resolve([]),
       shouldFetchArchiveStatus
         ? SPDataAdapter.getArchiveStatus(context.props.webAbsoluteUrl)

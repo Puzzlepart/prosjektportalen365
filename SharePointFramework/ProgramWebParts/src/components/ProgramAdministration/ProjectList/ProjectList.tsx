@@ -20,16 +20,25 @@ import strings from 'ProgramWebPartsStrings'
 
 export const ProjectList: FC<IProjectListProps> = (props) => {
   const context = useContext(ProgramAdministrationContext)
-  const { items, columns, columnSizingOptions, defaultSortState, onSearch, groupedData, shouldEnableGrouping } = useProjectList(props)
-  
-  const initialExpandedGroups = props.defaultGroupsExpanded && shouldEnableGrouping
-    ? new Set(Object.keys(groupedData))
-    : new Set<string>()
-  
+  const {
+    items,
+    columns,
+    columnSizingOptions,
+    defaultSortState,
+    onSearch,
+    groupedData,
+    shouldEnableGrouping
+  } = useProjectList(props)
+
+  const initialExpandedGroups =
+    props.defaultGroupsExpanded && shouldEnableGrouping
+      ? new Set(Object.keys(groupedData))
+      : new Set<string>()
+
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(initialExpandedGroups)
 
   const toggleGroup = (hubName: string) => {
-    setExpandedGroups(prev => {
+    setExpandedGroups((prev) => {
       const next = new Set(prev)
       if (next.has(hubName)) {
         next.delete(hubName)
@@ -64,10 +73,10 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
               const isExpanded = expandedGroups.has(hubName)
               return (
                 <div key={hubName} className={styles.group}>
-                  <div 
-                    className={styles.groupHeader} 
+                  <div
+                    className={styles.groupHeader}
                     onClick={() => toggleGroup(hubName)}
-                    role="button"
+                    role='button'
                     tabIndex={0}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') {
@@ -89,7 +98,9 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
                       resizableColumns
                       columnSizingOptions={columnSizingOptions}
                       containerWidthOffset={0}
-                      selectionMode={context.state.userHasManagePermission ? 'multiselect' : undefined}
+                      selectionMode={
+                        context.state.userHasManagePermission ? 'multiselect' : undefined
+                      }
                       onSelectionChange={props.onSelectionChange}
                       getRowId={({ SiteId }) => SiteId}
                     >
