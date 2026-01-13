@@ -46,8 +46,9 @@ export const Commands: FC = () => {
         const projects = context.state.childProjects.filter(({ SiteId }) =>
           context.state.selectedProjects.includes(SiteId)
         )
-        context.props.dataAdapter.removeChildProjects(projects).then((childProjects) => {
-          context.dispatch(REMOVE_CHILD_PROJECTS({ childProjects }))
+        context.props.dataAdapter.removeChildProjects(projects).then(() => {
+          const siteIdsToRemove = projects.map((p) => p.SiteId)
+          context.dispatch(REMOVE_CHILD_PROJECTS({ siteIdsToRemove }))
           dispatchToast(
             <Toast>
               <ToastTitle>{strings.ChildrenRemoveToastTitle}</ToastTitle>

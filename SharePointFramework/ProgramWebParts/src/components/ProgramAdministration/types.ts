@@ -7,6 +7,9 @@ export interface IProgramAdministrationProject extends Record<string, any> {
   Title: string
   SPWebURL?: string
   Path?: string
+  HubSiteId?: string
+  HubSiteUrl?: string
+  HubSiteTitle?: string
 }
 
 export interface IProgramAdministrationProps {

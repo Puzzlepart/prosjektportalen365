@@ -6,6 +6,40 @@ import { SearchBoxProps, SortDirection, TableColumnSizingOptions } from '@fluent
 export function useProjectList(props: IProjectListProps) {
   const [searchTerm, setSearchTerm] = useState('')
 
+  const shouldEnableGrouping = useMemo(() => {
+    const uniqueHubs = new Set(props.items.map((item) => item.HubSiteId).filter(Boolean))
+
+    return uniqueHubs.size > 1
+  }, [props.items])
+
+  const groupedData = useMemo(() => {
+    if (!shouldEnableGrouping || !props.programHubs) return null
+
+    const groups = props.items.reduce((acc, item) => {
+      const hubSiteId = item.HubSiteId
+      const hub = props.programHubs?.find((h) => h.hubSiteId === hubSiteId)
+      const hubKey = hub?.title || hub?.url || item.HubSiteId
+      if (!acc[hubKey]) {
+        acc[hubKey] = []
+      }
+      acc[hubKey].push(item)
+      return acc
+    }, {} as Record<string, any[]>)
+
+    if (searchTerm) {
+      Object.keys(groups).forEach((hubKey) => {
+        groups[hubKey] = groups[hubKey].filter((item) =>
+          item.Title.toLowerCase().includes(searchTerm)
+        )
+        if (groups[hubKey].length === 0) {
+          delete groups[hubKey]
+        }
+      })
+    }
+
+    return groups
+  }, [props.items, shouldEnableGrouping, props.programHubs, searchTerm])
+
   const items = useMemo(
     () => props.items.filter((item) => item.Title.toLowerCase().includes(searchTerm)),
     [props.items, searchTerm]
@@ -29,5 +63,14 @@ export function useProjectList(props: IProjectListProps) {
     setSearchTerm(data?.value?.toLowerCase() ?? '')
   }
 
-  return { items, columns, columnSizingOptions, defaultSortState, onSearch, searchTerm }
+  return {
+    items,
+    columns,
+    columnSizingOptions,
+    defaultSortState,
+    onSearch,
+    searchTerm,
+    groupedData,
+    shouldEnableGrouping
+  }
 }

@@ -30,3 +30,9 @@ export interface IProjectsData {
   items: SPProjectItem[]
   memberOfGroups: IGraphGroup[]
 }
+
+export interface IProgramHub {
+  url: string
+  hubSiteId?: string
+  title?: string
+}
