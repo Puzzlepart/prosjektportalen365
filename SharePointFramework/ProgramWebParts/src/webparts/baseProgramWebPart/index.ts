@@ -77,6 +77,7 @@ export abstract class BaseProgramWebPart<
     await this._dataAdapter.configure(this.context, {
       siteId: this.context.pageContext.site.id.toString(),
       webUrl: this.context.pageContext.web.absoluteUrl,
+      loadGlobalSettings: true,
       logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
     })
     await this._dataAdapter.initChildProjects()
