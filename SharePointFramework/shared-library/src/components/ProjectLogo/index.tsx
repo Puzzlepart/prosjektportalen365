@@ -6,8 +6,6 @@ import styles from './ProjectLogo.module.scss'
 import { IProjectLogoProps } from './types'
 import { useProjectLogo } from './useProjectLogo'
 
-export * from './types'
-
 /**
  * A component that renders an avatar or a logo for a project. The avatar is rendered if the project does not have a custom logo.
  *
@@ -69,3 +67,5 @@ export const ProjectLogo: FC<IProjectLogoProps> = (props: IProjectLogoProps) => 
 ProjectLogo.defaultProps = {
   size: '100%'
 }
+
+export * from './types'
