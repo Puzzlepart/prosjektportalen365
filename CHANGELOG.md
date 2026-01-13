@@ -2,12 +2,12 @@
 
 Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
 
-## 1.13.0 - TBA
+## 1.12.1 - TBA
 
 ### Ny funksjonalitet
 
-- Lagt til støtte for å legge til underområder fra andre huber i program [#940](https://github.com/Puzzlepart/prosjektportalen365/issues/940)
-- Støtte for å kopiere mapper med innhold fra dokumentmalbibliotek [#1277](https://github.com/Puzzlepart/prosjektportalen365/issues/1277)
+- Lagt til støtte for å legge til underområder fra andre hubber via Administrasjon av underområder [#940](https://github.com/Puzzlepart/prosjektportalen365/issues/940)
+- Lagt til støtte for å kopiere mapper med innhold fra dokumentmalbibliotek [#1277](https://github.com/Puzzlepart/prosjektportalen365/issues/1277)
   - Brukere kan nå velge mapper i tillegg til filer når de henter dokumentmaler
   - Mapper kopieres rekursivt med all struktur og innhold
   - Systemmapper hoppes automatisk over under kopiering
