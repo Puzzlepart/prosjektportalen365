@@ -7,7 +7,6 @@ import {
   DataGridRow,
   SearchBox
 } from '@fluentui/react-components'
-import { ChevronDown20Regular, ChevronRight20Regular } from '@fluentui/react-icons'
 import React, { FC, useContext, useState } from 'react'
 import { ProgramAdministrationContext } from '../context'
 import styles from './ProjectList.module.scss'
@@ -15,7 +14,7 @@ import { IProjectListProps } from './types'
 import { useProjectList } from './useProjectList'
 import { Commands } from '../Commands'
 import { isEmpty } from '@microsoft/sp-lodash-subset'
-import { UserMessage } from 'pp365-shared-library'
+import { getFluentIcon, UserMessage } from 'pp365-shared-library'
 import strings from 'ProgramWebPartsStrings'
 
 export const ProjectList: FC<IProjectListProps> = (props) => {
@@ -85,7 +84,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
                       }
                     }}
                   >
-                    {isExpanded ? <ChevronDown20Regular /> : <ChevronRight20Regular />}
+                    {isExpanded ? getFluentIcon('ChevronDown') : getFluentIcon('ChevronRight')}
                     <h3>{hubName}</h3>
                     <span className={styles.groupCount}>({groupItems.length})</span>
                   </div>
