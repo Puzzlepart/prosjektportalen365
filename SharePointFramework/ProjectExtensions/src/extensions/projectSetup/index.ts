@@ -593,7 +593,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       }
 
       const webInfo = await this.sp.web.select('Language', 'IsMultilingual')()
-      
+
       Logger.write(
         `(ProjectSetup) Current language: ${webInfo.Language}, Is multilingual: ${webInfo.IsMultilingual}`,
         LogLevel.Info
@@ -639,13 +639,12 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         LogLevel.Info
       )
       window.location.reload()
-
     } catch (error) {
       Logger.write(
         `(ProjectSetup) Failed to remove alternative languages: ${error.message}`,
         LogLevel.Warning
       )
-      
+
       const progressDialog = this._getPlaceholder('ProgressDialog')
       this._unmount(progressDialog)
     }

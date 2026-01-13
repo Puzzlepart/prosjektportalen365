@@ -141,7 +141,9 @@ export class TemplateItem {
 
       for (const file of files) {
         try {
-          const content = await this.web.getFileByServerRelativePath(file.ServerRelativeUrl).getBlob()
+          const content = await this.web
+            .getFileByServerRelativePath(file.ServerRelativeUrl)
+            .getBlob()
           const fileAddResult = await newFolder.folder.files.addUsingPath(file.Name, content, {
             Overwrite: shouldOverwrite
           })
@@ -197,7 +199,9 @@ export class TemplateItem {
 
       for (const file of files) {
         try {
-          const content = await this.web.getFileByServerRelativePath(file.ServerRelativeUrl).getBlob()
+          const content = await this.web
+            .getFileByServerRelativePath(file.ServerRelativeUrl)
+            .getBlob()
           const fileAddResult = await newFolder.folder.files.addUsingPath(file.Name, content, {
             Overwrite: shouldOverwrite
           })

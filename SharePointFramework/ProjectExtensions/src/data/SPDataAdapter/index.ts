@@ -38,9 +38,14 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param name File name
    * @param isFolder Whether the item is a folder
    */
-  public async isFilenameValid(folderServerRelativeUrl: string, name: string, isFolder: boolean = false): Promise<string> {
-    if (!validFilename(name)) return isFolder ? strings.FolderNameInValidErrorText : strings.FilenameInValidErrorText
-    
+  public async isFilenameValid(
+    folderServerRelativeUrl: string,
+    name: string,
+    isFolder: boolean = false
+  ): Promise<string> {
+    if (!validFilename(name))
+      return isFolder ? strings.FolderNameInValidErrorText : strings.FilenameInValidErrorText
+
     if (isFolder) {
       const [folder] = await this.sp.web
         .getFolderByServerRelativePath(folderServerRelativeUrl)

@@ -53,15 +53,15 @@ export const ImageUpload: FC<{
         style={{ borderColor: getColor(), color: isDragReject && '#ff1744' }}
       >
         <input {...getInputProps()} />
-        <p>{isDragReject ? strings.Provision.ImageDropZoneErrorText : strings.Provision.ImageDropZoneText}</p>
+        <p>
+          {isDragReject
+            ? strings.Provision.ImageDropZoneErrorText
+            : strings.Provision.ImageDropZoneText}
+        </p>
       </div>
       {imagePreviewSrc && (
         <div className={styles.imagePreview}>
-          <img
-            src={imagePreviewSrc}
-            alt={imagePreviewName}
-            title={imagePreviewName}
-          />
+          <img src={imagePreviewSrc} alt={imagePreviewName} title={imagePreviewName} />
         </div>
       )}
     </div>

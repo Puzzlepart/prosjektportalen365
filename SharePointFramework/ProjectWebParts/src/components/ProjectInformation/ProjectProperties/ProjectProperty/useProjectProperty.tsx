@@ -1,4 +1,4 @@
-import { IPersonaProps, ITag, Link } from '@fluentui/react'
+import { IPersonaProps, Link } from '@fluentui/react'
 import React from 'react'
 import { useProjectInformationContext } from '../../context'
 import { IProjectPropertyProps } from './types'

@@ -13,9 +13,7 @@ export const TaxonomyFieldTypeMulti: FieldElementComponent = ({ field }) => {
 
   const normalizeTerms = useCallback(
     (items?: Term[]) =>
-      (items ?? [])
-        .map(mapInitialValues)
-        .filter((term): term is NormalizedTerm => term !== null),
+      (items ?? []).map(mapInitialValues).filter((term): term is NormalizedTerm => term !== null),
     [mapInitialValues]
   )
 
