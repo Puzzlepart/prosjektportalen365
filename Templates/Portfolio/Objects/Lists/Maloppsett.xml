@@ -25,6 +25,8 @@
     <Field Type="Text" DisplayName="{resource:Lists_TemplateOptions_Fields_IconName_DisplayName}" MaxLength="255" ID="{d953c1a3-9f7a-4cc3-8147-b6ce924a7901}" StaticName="IconName" Name="IconName">
       <Default>Page</Default>
     </Field>
+    <Field Type="Text" DisplayName="{resource:Lists_TemplateOptions_Fields_ImageUrl_DisplayName}" Description="{resource:Lists_TemplateOptions_Fields_ImageUrl_Description}" MaxLength="255" ID="{ffff6227-7adb-4e03-84bd-c4819aa21fe9}" StaticName="TemplateImageUrl" Name="TemplateImageUrl">
+    </Field>
     <Field Type="Lookup" DisplayName="{resource:Lists_TemplateOptions_Fields_GtProjectTemplate_DisplayName}" Required="TRUE" List="{listid:{resource:Lists_ProjectTemplates_Title}}" ShowField="Title" UnlimitedLengthInDocumentLibrary="FALSE" RelationshipDeleteBehavior="None" ID="{8e762956-13a9-4cbd-965b-bbfed0d0d7a0}" StaticName="GtProjectTemplate" Name="GtProjectTemplate" />
     <Field Type="LookupMulti" DisplayName="{resource:Lists_TemplateOptions_Fields_GtProjectExtensions_DisplayName}" List="{listid:{resource:Lists_ProjectExtensions_Title}}" ShowField="Title" Mult="TRUE" Sortable="FALSE" UnlimitedLengthInDocumentLibrary="FALSE" RelationshipDeleteBehavior="None" ID="{5627c98b-c725-44d0-9415-3125b8f61302}" StaticName="GtProjectExtensions" Name="GtProjectExtensions" />
     <Field Type="Boolean" DisplayName="{resource:Lists_TemplateOptions_Fields_IsDefaultExtensionsLocked_DisplayName}" Description="{resource:Lists_TemplateOptions_Fields_IsDefaultExtensionsLocked_Description}" ID="{c5091d4a-9b05-4cd4-96e7-9076d4d66379}" StaticName="IsDefaultExtensionsLocked" Name="IsDefaultExtensionsLocked">

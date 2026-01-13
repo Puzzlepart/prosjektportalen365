@@ -58,6 +58,7 @@ export const useColumns = (): IListColumn[] => {
             url={item.url}
             renderMode='list'
             size={context.size !== 'medium' ? '32px' : '48px'}
+            fallbackImageUrl={item.templateImageUrl}
           />
         )
       }

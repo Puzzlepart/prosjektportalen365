@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { IProjectLogoProps } from './types'
 
 /**
@@ -10,6 +10,10 @@ import { IProjectLogoProps } from './types'
  */
 export function useProjectLogo(props: IProjectLogoProps) {
   const [showCustomImage, setShowCustomImage] = useState(false)
+  const [imageSource, setImageSource] = useState(
+    `${props.url}/_api/siteiconmanager/getsitelogo?type='1'`
+  )
+  const [isLoading, setIsLoading] = useState(true)
 
   /**
    * Checks if the image is a custom image.
@@ -23,6 +27,67 @@ export function useProjectLogo(props: IProjectLogoProps) {
     return height !== 648 && height !== 96 && height !== 1024
   }
 
+  /**
+   * Preload the initial image to determine whether to show custom image or initials
+   */
+  useEffect(() => {
+    setIsLoading(true)
+    const img = new Image()
+    const initialUrl = `${props.url}/_api/siteiconmanager/getsitelogo?type='1'`
+    
+    img.onload = () => {
+      const height = img.naturalHeight
+      const isCustom = height !== 648 && height !== 96 && height !== 1024
+      
+      if (isCustom) {
+        setImageSource(initialUrl)
+        setShowCustomImage(true)
+        setIsLoading(false)
+        if (props.onImageLoad) {
+          props.onImageLoad(true)
+        }
+      } else if (props.fallbackImageUrl) {
+        setImageSource(props.fallbackImageUrl)
+        setShowCustomImage(true)
+        setIsLoading(false)
+        if (props.onImageLoad) {
+          props.onImageLoad(true)
+        }
+      } else {
+        setShowCustomImage(false)
+        setIsLoading(false)
+      }
+    }
+    
+    img.onerror = () => {
+      if (props.fallbackImageUrl) {
+        setImageSource(props.fallbackImageUrl)
+        setShowCustomImage(true)
+      } else {
+        setShowCustomImage(false)
+      }
+      setIsLoading(false)
+    }
+    
+    img.src = initialUrl
+  }, [props.url, props.fallbackImageUrl])
+
+  /**
+   * Handle image load for the visible image element
+   */
+  const handleImageLoad = (image: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    if (props.onImageLoad && showCustomImage) {
+      props.onImageLoad(true)
+    }
+  }
+
+  /**
+   * Handle image error for the visible image element
+   */
+  const handleImageError = () => {
+    setShowCustomImage(false)
+  }
+
   const conditionalStyling = {
     fontSize: props.renderMode === 'card' ? '22px' : '14px',
     height: props.renderMode === 'card' ? '100%' : '80%',
@@ -32,9 +97,11 @@ export function useProjectLogo(props: IProjectLogoProps) {
   }
 
   return {
-    shouldUseCustomImage,
     showCustomImage,
-    setShowCustomImage,
-    conditionalStyling
+    imageSource,
+    handleImageLoad,
+    handleImageError,
+    conditionalStyling,
+    isLoading
   }
 }

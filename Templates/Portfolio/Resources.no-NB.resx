@@ -2641,6 +2641,9 @@
     <data name="Lists_TemplateOptions_Fields_IsDefaultTemplate_DisplayName" xml:space="preserve">
         <value>Standard mal?</value>
     </data>
+    <data name="Lists_TemplateOptions_Fields_ImageUrl_DisplayName" xml:space="preserve">
+        <value>Bilde-URL</value>
+    </data>
     <data name="Lists_TemplateOptions_Fields_IsHiddenTemplate_Description" xml:space="preserve">
         <value>Skjul denne malen fra malvalg</value>
     </data>
@@ -2697,6 +2700,9 @@
     </data>
     <data name="Lists_TemplateOptions_Url" xml:space="preserve">
         <value>Lists/Maloppsett</value>
+    </data>
+    <data name="Lists_TemplateOptions_Fields_ImageUrl_Description" xml:space="preserve">
+        <value>URL til bildet som representerer malen. Benyttes som fallback-bilde for visning av prosjektkortet, dersom området ikke har valgt en egen områdelogo</value>
     </data>
     <data name="Lists_TimelineConfiguration_Description" xml:space="preserve">
         <value>Konfigurasjon av tidslinjeelementenes farge, form og synlighet</value>
