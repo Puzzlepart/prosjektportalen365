@@ -24,4 +24,53 @@
       gap: 16px;
     }
   }
+
+  .groupedList {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    .group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      .groupHeader {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        background-color: var(--colorNeutralBackground3);
+        border-radius: 4px;
+        cursor: pointer;
+        user-select: none;
+        transition: background-color 0.15s ease;
+
+        &:hover {
+          background-color: var(--colorNeutralBackground3Hover);
+        }
+
+        &:active {
+          background-color: var(--colorNeutralBackground3Pressed);
+        }
+
+        &:focus-visible {
+          outline: 2px solid var(--colorStrokeFocus2);
+          outline-offset: 2px;
+        }
+
+        h3 {
+          margin: 0;
+          font-size: 14px;
+          font-weight: 600;
+          color: var(--colorNeutralForeground1);
+        }
+
+        .groupCount {
+          font-size: 12px;
+          color: var(--colorNeutralForeground2);
+        }
+      }
+    }
+  }
 }

@@ -48,6 +48,7 @@ export const AddProjectDialog: FC = () => {
                 }}
                 hideCommands
                 renderLinks={false}
+                programHubs={context.programHubs}
               />
             </DialogContent>
             <DialogActions className={styles.actions}>

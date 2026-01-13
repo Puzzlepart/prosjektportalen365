@@ -28,11 +28,13 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
           ) : (
             <ProjectList
               items={childProjects}
+              defaultGroupsExpanded={true}
               onSelectionChange={onSelectionChange}
               renderLinks
               search={{
                 placeholder: strings.ProgramAdministrationSearchBoxPlaceholder
               }}
+              programHubs={context.programHubs}
             />
           )}
           {context.state.addProjectDialog && <AddProjectDialog />}

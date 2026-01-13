@@ -38,12 +38,18 @@ import {
   TimelineConfigurationModel,
   TimelineContentModel
 } from 'pp365-shared-library'
+import { Site } from '@pnp/sp/sites'
 import _ from 'underscore'
-import { DEFAULT_SEARCH_SETTINGS, IProjectsData } from './types'
+import { DEFAULT_SEARCH_SETTINGS, IProgramHub, IProjectsData } from './types'
 import { IList } from '@pnp/sp/lists'
 import { IItem } from '@pnp/sp/items'
-import { PermissionKind } from '@pnp/sp/presets/all'
+import { PermissionKind, Web } from '@pnp/sp/presets/all'
 import resource from 'SharedResources'
+
+enum ParentProjectOperation {
+  Add = 'add',
+  Remove = 'remove'
+}
 
 /**
  * `SPDataAdapter` is a class that extends the `SPDataAdapterBase` class and implements the `IPortfolioWebPartsDataAdapter` interface.
@@ -63,6 +69,7 @@ export class SPDataAdapter
   public childProjects: Array<Record<string, string>>
   private _propertyList: IList
   private _propertyItem: IItem
+  private _hubWebs: Map<string, any>
 
   /**
    * Configure the SP data adapter with the SPFx context and the configuration.
@@ -83,6 +90,21 @@ export class SPDataAdapter
       propertiesListName: resource.Lists_ProjectProperties_Title
     } as IProjectDataServiceParams)
     this._propertyList = this.sp.web.lists.getByTitle(resource.Lists_ProjectProperties_Title)
+    this._hubWebs = new Map()
+  }
+
+  /**
+   * Initialize hub web instances.
+   *
+   * @param hubs Program hubs configuration
+   */
+  public initializeHubWebs(hubs: IProgramHub[]): void {
+    this._hubWebs.clear()
+    hubs?.forEach((hub) => {
+      if (hub.hubSiteId && hub.url) {
+        this._hubWebs.set(hub.hubSiteId, Web([this.sp.web, hub.url]))
+      }
+    })
   }
 
   public async getPortfolioConfig(): Promise<IPortfolioOverviewConfiguration> {
@@ -830,14 +852,88 @@ export class SPDataAdapter
    * Update project item/entity in hub site (portfolio)
    *
    * @param properties Properties to update
+   * @param hubSiteId Hub site ID to update the project in
    */
-  public async updateProjectInHub(properties: Record<string, any>): Promise<void> {
+  public async updateProjectInHub(
+    properties: Record<string, any>,
+    hubSiteId?: string
+  ): Promise<void> {
     try {
       const siteId = this.spfxContext.pageContext.site.id.toString()
-      const list = this.portalDataService.web.lists.getByTitle(resource.Lists_Projects_Title)
+      const web =
+        hubSiteId && this._hubWebs.has(hubSiteId)
+          ? this._hubWebs.get(hubSiteId)
+          : this.portalDataService.web
+      const list = web.lists.getByTitle(resource.Lists_Projects_Title)
       const [item] = await list.items.filter(`GtSiteId eq '${siteId}'`)()
-      await list.items.getById(item.ID).update(properties)
-    } catch (error) {}
+      if (item) {
+        await list.items.getById(item.ID).update(properties)
+      }
+    } catch (error) {
+      console.warn(`Failed to update project in hub ${hubSiteId || 'default'}:`, error)
+    }
+  }
+
+  /**
+   * Update a child project's GtParentProjects field in its hub's Projects list.
+   * Adds or removes the current program site from the child project's parent projects array.
+   *
+   * @param childSiteId The SiteId of the child project to update
+   * @param hubSiteId The hub site ID where the child project's entry exists
+   * @param operation 'add' to add current site as parent, 'remove' to remove it
+   * @param parentHubSiteUrl The hub site URL where the parent program resides
+   */
+  private async _updateChildProjectParents(
+    childSiteId: string,
+    hubSiteId: string,
+    operation: ParentProjectOperation,
+    parentHubSiteUrl?: string
+  ): Promise<void> {
+    try {
+      const currentSiteId = this.spfxContext.pageContext.site.id.toString()
+      const currentSiteTitle = this.spfxContext.pageContext.web.title
+      const currentSiteUrl = this.spfxContext.pageContext.web.absoluteUrl
+      const web = this._hubWebs.get(hubSiteId) || this.portalDataService.web
+
+      const list = web.lists.getByTitle(resource.Lists_Projects_Title)
+      const [item] = await list.items
+        .select('ID', 'GtParentProjects')
+        .filter(`GtSiteId eq '${childSiteId}'`)()
+
+      if (item) {
+        let parentProjects: Array<Record<string, string>> = []
+        try {
+          parentProjects = item.GtParentProjects ? JSON.parse(item.GtParentProjects) : []
+        } catch {
+          parentProjects = []
+        }
+
+        switch (operation) {
+          case ParentProjectOperation.Add:
+            if (!parentProjects.some((p) => p.SiteId === currentSiteId)) {
+              parentProjects.push({
+                SiteId: currentSiteId,
+                Title: currentSiteTitle,
+                SPWebURL: currentSiteUrl,
+                HubSiteUrl: parentHubSiteUrl
+              })
+            }
+            break
+          case ParentProjectOperation.Remove:
+            parentProjects = parentProjects.filter((p) => p.SiteId !== currentSiteId)
+            break
+        }
+
+        await list.items.getById(item.ID).update({
+          GtParentProjects: JSON.stringify(parentProjects)
+        })
+      }
+    } catch (error) {
+      console.warn(
+        `Failed to update parent projects for child ${childSiteId} in hub ${hubSiteId}:`,
+        error
+      )
+    }
   }
 
   /**
@@ -852,7 +948,15 @@ export class SPDataAdapter
       const projectProperties = await this._propertyItem.select('GtChildProjects')()
       try {
         const childProjects = JSON.parse(projectProperties.GtChildProjects)
-        return !_.isEmpty(childProjects) ? childProjects : []
+        if (_.isEmpty(childProjects)) return []
+
+        const seen = new Set<string>()
+        const uniqueProjects = childProjects.filter((project: Record<string, string>) => {
+          if (seen.has(project.SiteId)) return false
+          seen.add(project.SiteId)
+          return true
+        })
+        return uniqueProjects
       } catch {
         return []
       }
@@ -877,18 +981,44 @@ export class SPDataAdapter
    * search index for all sites with the same DepartmentId as the current hubsite and all project items with
    * the same DepartmentId as the current hubsite. The sites are then matched with the items to
    * retrieve the SiteId and SPWebURL. The result are cached for 5 minutes.
+   *
+   * @param hubs Optional array of program hubs with their URLs and hub site IDs
    */
-  public async getHubSiteProjects() {
-    const { HubSiteId } = await this.sp.site.select('HubSiteId')()
+  public async getHubSiteProjects(hubs: IProgramHub[]) {
+    if (!hubs || hubs.length === 0) {
+      throw new Error('getHubSiteProjects requires at least one hub to be provided')
+    }
+
+    const resolvedHubs = await Promise.all(
+      hubs.map(async (hub) => {
+        if (hub.hubSiteId && hub.title) return hub
+        const resolved = await this.resolveHubSiteFromUrl(hub.url)
+        return {
+          ...hub,
+          hubSiteId: hub.hubSiteId || resolved.hubSiteId,
+          title: hub.title || resolved.title
+        }
+      })
+    )
+
+    const hubSiteIds = resolvedHubs.filter((hub) => hub.hubSiteId).map((hub) => hub.hubSiteId)
+
+    if (hubSiteIds.length === 0) {
+      throw new Error('No valid hub site IDs found in provided hubs')
+    }
+
+    const hubSiteQuery = hubSiteIds.map((id) => `DepartmentId:{${id}}`).join(' OR ')
+    const cacheKey = `HubSiteProjects_${hubSiteIds.sort().join('_')}`
+
     return new PnPClientStorage().local.getOrPut(
-      `HubSiteProjects_${HubSiteId}`,
+      cacheKey,
       async () => {
         const sitesQuery: SearchQueryInit = {
-          Querytext: `DepartmentId:{${HubSiteId}} contentclass:STS_Site NOT WebTemplate:TEAMCHANNEL`,
+          Querytext: `(${hubSiteQuery}) contentclass:STS_Site NOT WebTemplate:TEAMCHANNEL`,
           RowLimit: 500,
           StartRow: 0,
           ClientType: 'ContentSearchRegular',
-          SelectProperties: ['SPWebURL', 'Title', 'SiteId', 'Path'],
+          SelectProperties: ['SPWebURL', 'Title', 'SiteId', 'Path', 'DepartmentId'],
           TrimDuplicates: false
         }
 
@@ -901,7 +1031,7 @@ export class SPDataAdapter
         }
 
         const itemsQuery: SearchQueryInit = {
-          Querytext: `DepartmentId:{${HubSiteId}} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*`,
+          Querytext: `(${hubSiteQuery}) ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*`,
           RowLimit: 500,
           StartRow: 0,
           ClientType: 'ContentSearchRegular',
@@ -927,13 +1057,24 @@ export class SPDataAdapter
           )
           .map<IProgramAdministrationProject>((item) => {
             const site = sts_sites.find((site) => site['SiteId'] === item['GtSiteIdOWSTEXT'])
+            const rawHubSiteId = site?.['DepartmentId']
+            const hubSiteId = rawHubSiteId
+              ? rawHubSiteId.replace(/[{}]/g, '').toLowerCase()
+              : rawHubSiteId
+            const hub = hubs?.find((h) => h.hubSiteId === hubSiteId)
             return {
               SiteId: item['GtSiteIdOWSTEXT'],
               Title: site?.Title ?? item['Title'],
               SPWebURL: site?.SPWebUrl,
-              Path: site?.Path
+              Path: site?.Path,
+              HubSiteId: hubSiteId,
+              HubSiteUrl: hub?.url,
+              HubSiteTitle: hub?.title,
+              _site: site
             }
           })
+          .filter((project) => project._site)
+          .map(({ _site, ...project }) => project)
       },
       dateAdd(new Date(), 'minute', 5)
     )
@@ -949,7 +1090,8 @@ export class SPDataAdapter
       const projectProperties = await this._propertyItem.select('GtChildProjects')()
       try {
         const childProjects = JSON.parse(projectProperties.GtChildProjects)
-        return childProjects.map((p: Record<string, any>) => p.SiteId)
+        const siteIds = childProjects.map((p: Record<string, any>) => p.SiteId)
+        return _.uniq(siteIds)
       } catch {
         return []
       }
@@ -959,14 +1101,43 @@ export class SPDataAdapter
   }
 
   /**
+   * Resolve the HubSiteId and Title for a given site URL.
+   * Uses PnPjs to query the site and return its `HubSiteId` and `Title`.
+   *
+   * @param siteUrl Absolute URL of the site to resolve
+   * @returns Object with hubSiteId and title, or undefined values if resolution failed
+   */
+  public async resolveHubSiteFromUrl(
+    siteUrl: string
+  ): Promise<{ hubSiteId?: string; title?: string }> {
+    if (!siteUrl) return { hubSiteId: undefined, title: undefined }
+    try {
+      const web = Web([this.sp.web, siteUrl])
+      const site = Site([this.sp.site, siteUrl])
+      const [siteInfo, webInfo] = await Promise.all([
+        site.select('HubSiteId')(),
+        web.select('Title')()
+      ])
+      const rawHubSiteId = siteInfo?.HubSiteId
+      return {
+        hubSiteId: rawHubSiteId ? rawHubSiteId.replace(/[{}]/g, '').toLowerCase() : undefined,
+        title: webInfo?.Title ?? undefined
+      }
+    } catch (e) {
+      console.error(e)
+      return { hubSiteId: undefined, title: undefined }
+    }
+  }
+
+  /**
    * Fetches current child projects. Fetches all available projects and filters out the ones that are not
    * in the child projects project property `GtChildProjects`. Also initializes the `propertyItem` property
    * of the class, so that it can be used in other methods.
    */
-  public async fetchChildProjects(): Promise<any[]> {
+  public async fetchChildProjects(hubs: IProgramHub[]): Promise<any[]> {
     this._propertyItem = this._propertyList.items.getById(1)
     const [availableProjects, childProjects] = await Promise.all([
-      this.getHubSiteProjects(),
+      this.getHubSiteProjects(hubs),
       this.getChildProjects()
     ])
     const childProjectsSiteIds = childProjects.map((p: Record<string, any>) => p.SiteId)
@@ -977,14 +1148,40 @@ export class SPDataAdapter
    * Add child projects.
    *
    * @param newProjects New projects to add
+   * @param parentHubSiteUrl The hub site URL where the parent program resides
    */
-  public async addChildProjects(newProjects: Array<Record<string, string>>) {
+  public async addChildProjects(
+    newProjects: Array<Record<string, string>>,
+    parentHubSiteUrl?: string
+  ) {
     const { GtChildProjects } = await this._propertyItem.select('GtChildProjects')()
     const projects = JSON.parse(GtChildProjects)
     const updatedProjects = [...projects, ...newProjects]
-    const updateProperties = { GtChildProjects: JSON.stringify(updatedProjects) }
+    const seen = new Set<string>()
+    const uniqueProjects = updatedProjects.filter((project: Record<string, string>) => {
+      if (seen.has(project.SiteId)) return false
+      seen.add(project.SiteId)
+      return true
+    })
+    const updateProperties = { GtChildProjects: JSON.stringify(uniqueProjects) }
     await this._propertyItem.update(updateProperties)
-    await this.updateProjectInHub(updateProperties)
+
+    const uniqueHubIds = new Set(newProjects.map((p) => p.HubSiteId).filter(Boolean))
+    await Promise.all([
+      ...Array.from(uniqueHubIds).map((hubSiteId) =>
+        this.updateProjectInHub(updateProperties, hubSiteId as string)
+      ),
+      ...newProjects.map((project) =>
+        project.HubSiteId
+          ? this._updateChildProjectParents(
+              project.SiteId,
+              project.HubSiteId,
+              ParentProjectOperation.Add,
+              parentHubSiteUrl
+            )
+          : Promise.resolve()
+      )
+    ])
   }
 
   /**
@@ -1002,7 +1199,23 @@ export class SPDataAdapter
     )
     const updateProperties = { GtChildProjects: JSON.stringify(updatedProjects) }
     await this._propertyItem.update(updateProperties)
-    await this.updateProjectInHub(updateProperties)
+
+    const uniqueHubIds = new Set(projectToRemove.map((p) => p.HubSiteId).filter(Boolean))
+    await Promise.all([
+      ...Array.from(uniqueHubIds).map((hubSiteId) =>
+        this.updateProjectInHub(updateProperties, hubSiteId as string)
+      ),
+      ...projectToRemove.map((project) =>
+        project.HubSiteId
+          ? this._updateChildProjectParents(
+              project.SiteId,
+              project.HubSiteId,
+              ParentProjectOperation.Remove
+            )
+          : Promise.resolve()
+      )
+    ])
+
     return updatedProjects
   }
 }

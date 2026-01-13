@@ -1642,6 +1642,9 @@
     <data name="Lists_Global_Settings_Category_General_ProjectNewsFolderName_Value" xml:space="preserve">
         <value>Prosjektnyheter</value>
     </data>
+    <data name="Lists_Global_Settings_Category_General_AvailableProgramHubs_Title" xml:space="preserve">
+        <value>Tilgjengelige programhubber</value>
+    </data>
     <data name="Lists_Global_Settings_Category_OpportunityMatrix" xml:space="preserve">
         <value>Mulighetsmatrise</value>
     </data>
