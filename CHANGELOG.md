@@ -39,6 +39,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Redusert maksimal bildestørrelse fra 800KB til 512KB for bildeopplasting i Bestillingsportalen-skjema
 - Lagt inn støtte for å bruke SharePoint Managed Path (teams/sites) ved opprettelse av nye områder i Bestillingsportalen
 - Lagt til mulihget for å avbryte opprettelse av statusrapport [#1564](https://github.com/Puzzlepart/prosjektportalen365/issues/1564)
+- Forbedret formatet på eksportert data av "Målinger" og "Måloppnåelse" [#1383](https://github.com/Puzzlepart/prosjektportalen365/issues/1383)
 
 ### Feilrettinger
 
@@ -104,10 +105,10 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Flere nye felter på Prosjektstatus-listen for å tilrettelegge for KI-behandling av Prosjektstatus
 - Tittel angitt i Prosjektnyheter-dialogen brukes nå automatisk som tittel på den opprettede nyhetsartikler
 
+
 ### Feilrettinger
 
 - Eksport av datofelter fra aggregerte oversikter viser nå Excel-vennlig datoformat [#1630](https://github.com/Puzzlepart/prosjektportalen365/issues/1630)
-- Forbedret formatet på eksportert data av "Målinger" og "Måloppnåelse" [#1383](https://github.com/Puzzlepart/prosjektportalen365/issues/1383)
 
 ---
 
