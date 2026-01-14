@@ -3830,7 +3830,7 @@
         <value>Prosjekt OData-spørring</value>
     </data>
     <data name="SiteFields_GtOverallStatus_Description" xml:space="preserve">
-        <value>Oppsummert kort hva som er oppnådd i prosjektet i siste periode, hva som er planlagt for neste periode og aktuelle utfordringer</value>
+        <value>Oppsummer kort hva som er oppnådd i prosjektet i siste periode, hva som er planlagt for neste periode og aktuelle utfordringer</value>
     </data>
     <data name="SiteFields_GtOverallStatus_DisplayName" xml:space="preserve">
         <value>Overordnet status</value>
