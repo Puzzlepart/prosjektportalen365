@@ -1,6 +1,6 @@
 import _ from 'lodash'
-import { IRenderItemColumnProps } from '../types'
 import moment from 'moment'
+import { IRenderItemColumnProps } from 'pp365-shared-library'
 
 export interface IStatusColumnProps extends IRenderItemColumnProps {
   status?: ProjectStatusModel

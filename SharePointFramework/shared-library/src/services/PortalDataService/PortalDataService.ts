@@ -725,23 +725,29 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * `ProjectColumn` objects. The `renderAs` property is set to the `dataType` property in lower case
    * and with spaces replaced with underscores.
    *
-   * If the `dataSourceCategory` is null or empty, an empty array is returned.
+   * If the `dataSourceCategory` is null or empty, all columns are returned.
    *
    * @param _list List
-   * @param category Category for data source
+   * @param category Category for data source (optional - returns all columns if not specified)
    * @param level Level for data source
    */
   public async fetchProjectContentColumns(
     _list: PortalDataServiceList,
-    dataSourceCategory: string,
+    dataSourceCategory?: string,
     level?: string
   ) {
     try {
-      if (stringIsNullOrEmpty(dataSourceCategory)) return []
       const list = this._getList(_list)
       const columnItems = await list.items.select(
         ...Object.keys(new SPProjectContentColumnItem())
       )()
+
+      // If no category specified, return all columns
+      if (stringIsNullOrEmpty(dataSourceCategory)) {
+        return columnItems.map((item) => new ProjectContentColumn(item))
+      }
+
+      // Filter by category and level
       const filteredColumnItems = columnItems.filter(
         (col) =>
           col.GtDataSourceCategory === dataSourceCategory ||

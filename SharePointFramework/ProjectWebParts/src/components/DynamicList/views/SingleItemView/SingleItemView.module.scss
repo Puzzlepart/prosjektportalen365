@@ -1,0 +1,37 @@
+.singleItemView {
+  padding: 0 32px;
+  flex: 1;
+  gap: 16px;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  .header {
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--colorNeutralStroke2);
+
+    .title {
+      font-size: 2rem;
+      font-weight: bold;
+      line-height: normal;
+      min-height: 32px;
+      margin: 0;
+    }
+  }
+
+  .fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    grid-gap: 16px;
+    margin-bottom: 16px;
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      text-wrap-style: balance;
+      gap: 4px;
+    }
+  }
+}

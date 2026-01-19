@@ -1,11 +1,23 @@
 .root {
   display: flex;
   justify-content: space-between;
+  gap: 15px;
 
   .toolbar {
     gap: 15px;
     height: 40px;
     padding: 0 !important;
+
+    .search {
+      flex-grow: 1;
+      max-width: 320px;
+
+      .searchBox {
+        box-shadow: var(--shadow2);
+        width: inherit;
+        max-width: inherit;
+      }
+    }
 
     button {
       height: 40px;

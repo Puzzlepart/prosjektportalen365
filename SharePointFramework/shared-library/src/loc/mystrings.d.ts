@@ -58,6 +58,53 @@ declare interface ISharedLibraryStrings {
   TimelineGroupDescription: string
   TypeLabel: string
   SyncListAddingField: string
+  // ItemColumn strings
+  ColumnPersistRenderGloballyFieldLabel: string
+  ColumnPersistRenderGloballyFieldDescription: string
+  ColumnRenderOptionText: string
+  ColumnRenderOptionNote: string
+  ColumnRenderOptionBoolean: string
+  ColumnRenderOptionBooleanTrue: string
+  ColumnRenderOptionBooleanFalse: string
+  ColumnRenderOptionCurrency: string
+  ColumnRenderOptionCurrencyFallbackValueLabel: string
+  ColumnRenderOptionCurrencyMaximumFractionDigitsLabel: string
+  ColumnRenderOptionCurrencyMinimumFractionDigitsLabel: string
+  ColumnRenderOptionCurrencyPrefixLabel: string
+  ColumnRenderOptionDateIncludeTimeLabel: string
+  ColumnRenderOptionDialog: string
+  ColumnRenderOptionDialogLinkTextLabel: string
+  ColumnRenderOptionDialogShowInfoTextLabel: string
+  ColumnRenderOptionDialogInfoTextTemplateLabel: string
+  ColumnRenderOptionDialogInfoTextTemplateDescription: string
+  ColumnRenderOptionFilename: string
+  ColumnRenderOptionInstrument: string
+  ColumnRenderOptionNumber: string
+  ColumnRenderOptionPercentage: string
+  ColumnRenderOptionProjectInfo: string
+  ColumnRenderOptionStatusReport: string
+  ColumnRenderOptionTags: string
+  ColumnRenderOptionTagsValueSeparatorLabel: string
+  ColumnRenderOptionTagsValueSeparatorDescription: string
+  ColumnRenderOptionTrend: string
+  ColumnRenderOptionTrendShowTrendIconLabel: string
+  ColumnRenderOptionUrl: string
+  ColumnRenderOptionUrlOpenInNewTabLabel: string
+  ColumnRenderOptionUrlDescriptionLabel: string
+  ColumnRenderOptionUrlDescriptionDescription: string
+  ColumnRenderOptionUser: string
+  HideDataTypePropertiesLabel: string
+  ShowDataTypePropertiesLabel: string
+  InstrumentUnitLabel: string
+  MeasurementValueLabel: string
+  MeasurementCommentLabel: string
+  MeasurementAchievementLabel: string
+  MeasurementDateLabel: string
+  ModalColumnEmptyListTitle: string
+  ModalColumnEmptyListMessage: string
+  ShowAllMeasurementsLinkText: string
+  ShowInstrumentLinkText: string
+  ProjectInformationPanelButton: string
 }
 
 declare module 'SharedLibraryStrings' {

@@ -215,15 +215,19 @@ export class EditableSPField extends SPField {
     showFieldExternal?: Record<string, boolean>
   ): boolean {
     switch (displayMode) {
-      case DisplayMode.Edit:
-        return this._field.ShowInEditForm && !this._field.Hidden && !this.isReadOnly
+      case DisplayMode.Edit: {
+        // Default to true if ShowInEditForm is undefined (e.g., when not fetched from SharePoint)
+        const showInEditForm = this._field.ShowInEditForm ?? true
+        const hidden = this._field.Hidden ?? false
+        const isReadOnly = this.isReadOnly
+        return showInEditForm && !hidden && !isReadOnly
+      }
       case DisplayMode.Read: {
         if (this._isExternal) return showFieldExternal[this.internalName]
         return this.column ? this.column.isVisible(page) : false
       }
     }
   }
-
   /**
    * Returns `true` if the value for the field is empty.
    */

@@ -2,7 +2,15 @@
 
 Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
 
-## 1.12.1 - 21.01.2026
+## 1.13.0 - TBA
+
+### Ny funksjonalitet
+
+- Ny webdel `Dynamisk listewebdel` for visning av data fra SharePoint-lister og dokumentbibliotek med fleksible visningsmoduser, filtrering, sortering og tilpassbare kolonner. Opprettelse, redigering og sletting av elementer støttes også direkte fra webdelen.
+
+---
+
+## 1.12.1 - TBA
 
 ### Ny funksjonalitet
 

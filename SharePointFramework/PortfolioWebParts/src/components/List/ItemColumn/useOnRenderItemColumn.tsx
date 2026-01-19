@@ -1,11 +1,17 @@
 import { IColumn } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/core'
-import { ProjectColumnConfigDictionaryItem, getObjectValue as get } from 'pp365-shared-library'
-import React, { ReactNode, createElement, useMemo } from 'react'
+import {
+  ProjectColumnConfigDictionaryItem,
+  getObjectValue as get,
+  ColumnRenderComponentRegistry,
+  IRenderItemColumnProps,
+  useColumnRenderComponentRegistry
+} from 'pp365-shared-library'
+import React, { ReactNode, createElement, useMemo, useEffect } from 'react'
 import { ConfigColumn } from './ConfigColumn'
 import { TitleColumn } from './TitleColumn'
-import { ColumnRenderComponentRegistry, useColumnRenderComponentRegistry } from './registry'
-import { IRenderItemColumnProps } from './types'
+import { StatusReportColumn } from './StatusReportColumn'
+import { ProjectInformationColumn } from './ProjectInformationColumn'
 
 /**
  * On render item column function. First checks if the column has a custom render function,
@@ -28,6 +34,7 @@ function renderItemColumn(item: Record<string, any>, column: IColumn): ReactNode
     return dataTypeProperties.fallbackValue
   }
 
+  // Special handling for Title column
   if (column.fieldName === 'Title' && column['dataType'] === 'text') {
     return <TitleColumn item={item} />
   }
@@ -45,12 +52,14 @@ function renderItemColumn(item: Record<string, any>, column: IColumn): ReactNode
     return createElement(renderFunction, columnRenderProps)
   }
 
+  // Check for config-based column rendering
   const config = get<ProjectColumnConfigDictionaryItem>(column, 'data.config', null)
   const columnConfig = config && config[columnValue]
 
   if (columnConfig) {
     return <ConfigColumn {...columnRenderProps} {...columnConfig} />
   }
+
   return <span>{columnValue}</span>
 }
 
@@ -63,6 +72,10 @@ function renderItemColumn(item: Record<string, any>, column: IColumn): ReactNode
  */
 export const useOnRenderItemColumn = () => {
   useColumnRenderComponentRegistry()
+  useEffect(() => {
+    ColumnRenderComponentRegistry.registerMultiple(StatusReportColumn, ProjectInformationColumn)
+  }, [])
+
   return useMemo(
     () => (item?: any, _index?: number, column?: IColumn) => renderItemColumn(item, column),
     []
