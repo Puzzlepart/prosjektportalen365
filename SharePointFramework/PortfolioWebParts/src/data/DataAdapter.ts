@@ -626,12 +626,12 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         const primaryUser = primaryUserField && getUserFromField(item, primaryUserField)
         const secondaryUser = secondaryUserField && getUserFromField(item, secondaryUserField)
         const group = _.find(memberOfGroups, (grp) => grp.id === item.GtGroupId)
-        
+
         const itemWithTemplate = item as any
         if (templateMap && item.GtProjectTemplate) {
           itemWithTemplate.TemplateImageUrl = templateMap.get(item.GtProjectTemplate)
         }
-        
+
         const model = new ProjectListModel(group?.displayName ?? item.Title, itemWithTemplate)
         model.isUserMember = !!group
         model.hasUserAccess = _.any(sites, (site) => site['SiteId'] === item.GtSiteId)
@@ -672,7 +672,10 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         .getByTitle(resource.Lists_TemplateOptions_Title)
         .items.select('Title', 'TemplateImageUrl')()
     } catch (error) {
-      console.warn('Could not fetch template images from Maloppsett list. TemplateImageUrl field may not exist.', error)
+      console.warn(
+        'Could not fetch template images from Maloppsett list. TemplateImageUrl field may not exist.',
+        error
+      )
     }
 
     const [items, sites, memberOfGroups, users] = await localStore.getOrPut(
@@ -686,14 +689,14 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         ]),
       dateAdd(new Date(), 'minute', 30)
     )
-    
+
     const templateMap = new Map<string, string>()
     templates.forEach((template) => {
       if (template.Title && template.TemplateImageUrl) {
         templateMap.set(template.Title, template.TemplateImageUrl)
       }
     })
-    
+
     const result: IProjectsData = {
       items,
       sites,
@@ -738,7 +741,10 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         .getByTitle(resource.Lists_TemplateOptions_Title)
         .items.select('Title', 'TemplateImageUrl')()
     } catch (error) {
-      console.warn('Could not fetch template images from Maloppsett list. TemplateImageUrl field may not exist.', error)
+      console.warn(
+        'Could not fetch template images from Maloppsett list. TemplateImageUrl field may not exist.',
+        error
+      )
     }
 
     const [items, sites, memberOfGroups, users] = await localStore.getOrPut(
@@ -755,14 +761,14 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         ]),
       dateAdd(new Date(), 'minute', 30)
     )
-    
+
     const templateMap = new Map<string, string>()
     templates.forEach((template) => {
       if (template.Title && template.TemplateImageUrl) {
         templateMap.set(template.Title, template.TemplateImageUrl)
       }
     })
-    
+
     const result: IProjectsData = {
       items,
       sites,
