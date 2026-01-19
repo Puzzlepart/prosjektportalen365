@@ -7,7 +7,7 @@ import { FieldElementComponent } from './types'
 
 export const Percentage: FieldElementComponent = ({ field }) => {
   const context = useCustomEditPanelContext()
-  
+
   const storedValue = context.model.get<number>(field)
   const displayValue = storedValue != null ? Math.round(storedValue * 100).toString() : ''
 
@@ -17,7 +17,7 @@ export const Percentage: FieldElementComponent = ({ field }) => {
       context.model.set(field, null)
       return
     }
-    
+
     const numValue = parseFloat(inputValue)
     if (!isNaN(numValue)) {
       const clampedValue = Math.max(0, Math.min(100, numValue))
@@ -40,7 +40,7 @@ export const Percentage: FieldElementComponent = ({ field }) => {
         value={displayValue}
         onChange={handleChange}
         placeholder={strings.Placeholder.NumberField}
-        contentAfter="%"
+        contentAfter='%'
       />
     </FieldContainer>
   )
