@@ -20,7 +20,8 @@ export const fetchData = async (web: IWeb, column?: ProjectColumn) => {
     web.lists
       .getByTitle(props.statusReportListName)
       .items.top(500)
-      .filter(`GtModerationStatus eq '${resource.Choice_GtModerationStatus_Published}'`)(),
+      .filter(`GtModerationStatus eq '${resource.Choice_GtModerationStatus_Published}'`)
+      .orderBy('Created', false)(),
     web.lists
       .getByTitle(props.statusSectionsListName)
       .items.select('GtSecFieldName', 'GtSecIcon')
