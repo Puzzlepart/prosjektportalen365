@@ -14,6 +14,7 @@ import { User } from './User'
 import { UserMulti } from './UserMulti'
 import { Currency } from './Currency'
 import { Number } from './Number'
+import { Percentage } from './Percentage'
 
 /**
  * Hook for field elements of `CustomEditPanel` component. This hook is used to render field elements
@@ -33,6 +34,7 @@ import { Number } from './Number'
  * - `Lookup`
  * - `Currency`
  * - `Number`
+ * - `Percentage` (Number fields with percentage format)
  */
 export function useFieldElements() {
   const fieldElements: Record<string, (field: EditableSPField) => JSX.Element> = {
@@ -58,6 +60,9 @@ export function useFieldElements() {
    * @param field Field to get element for
    */
   return (field: EditableSPField) => {
+    if (field.type === 'Number' && field.isPercentage) {
+      return <Percentage field={field} />
+    }
     return fieldElements[field.type] && fieldElements[field.type](field)
   }
 }

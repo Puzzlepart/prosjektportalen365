@@ -6,6 +6,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 
 ### Ny funksjonalitet
 
+- Lagt til støtte for felter av type prosent i redigeringsskjemaer [#1685](https://github.com/Puzzlepart/prosjektportalen365/issues/1685)
 - Lagt til støtte for å legge til underområder fra andre hubber via Administrasjon av underområder [#940](https://github.com/Puzzlepart/prosjektportalen365/issues/940)
 - Lagt til støtte for å kopiere mapper med innhold fra dokumentmalbibliotek [#1277](https://github.com/Puzzlepart/prosjektportalen365/issues/1277)
   - Brukere kan nå velge mapper i tillegg til filer når de henter dokumentmaler

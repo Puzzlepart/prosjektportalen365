@@ -12,8 +12,14 @@ import { useProjectLogo } from './useProjectLogo'
  * @category ProjectLogo
  */
 export const ProjectLogo: FC<IProjectLogoProps> = (props: IProjectLogoProps) => {
-  const { showCustomImage, imageSource, handleImageLoad, handleImageError, conditionalStyling, isLoading } =
-    useProjectLogo(props)
+  const {
+    showCustomImage,
+    imageSource,
+    handleImageLoad,
+    handleImageError,
+    conditionalStyling,
+    isLoading
+  } = useProjectLogo(props)
 
   if (isLoading) {
     return (

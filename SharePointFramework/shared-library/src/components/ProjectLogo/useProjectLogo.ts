@@ -34,11 +34,11 @@ export function useProjectLogo(props: IProjectLogoProps) {
     setIsLoading(true)
     const img = new Image()
     const initialUrl = `${props.url}/_api/siteiconmanager/getsitelogo?type='1'`
-    
+
     img.onload = () => {
       const height = img.naturalHeight
       const isCustom = height !== 648 && height !== 96 && height !== 1024
-      
+
       if (isCustom) {
         setImageSource(initialUrl)
         setShowCustomImage(true)
@@ -58,7 +58,7 @@ export function useProjectLogo(props: IProjectLogoProps) {
         setIsLoading(false)
       }
     }
-    
+
     img.onerror = () => {
       if (props.fallbackImageUrl) {
         setImageSource(props.fallbackImageUrl)
@@ -68,7 +68,7 @@ export function useProjectLogo(props: IProjectLogoProps) {
       }
       setIsLoading(false)
     }
-    
+
     img.src = initialUrl
   }, [props.url, props.fallbackImageUrl])
 

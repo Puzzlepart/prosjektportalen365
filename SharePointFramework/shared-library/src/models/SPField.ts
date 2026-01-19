@@ -24,6 +24,7 @@ export class SPField {
   public ShowInNewForm?: boolean
   public ShowInDisplayForm?: boolean
   public NumberOfLines?: number = 3
+  public ShowAsPercentage?: boolean = false
 
   /**
    * Constructs a new `SPField` instance.
