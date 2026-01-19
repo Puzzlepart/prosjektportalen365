@@ -8,7 +8,7 @@ export const DATA_LOADED = createAction<{
 export const TOGGLE_ADD_PROJECT_DIALOG = createAction('TOGGLE_ADD_PROJECT_DIALOG')
 export const ADD_CHILD_PROJECTS =
   createAction<IProgramAdministrationProject[]>('ADD_CHILD_PROJECTS')
-export const REMOVE_CHILD_PROJECTS = createAction<{ childProjects: Record<string, string>[] }>(
+export const REMOVE_CHILD_PROJECTS = createAction<{ siteIdsToRemove: string[] }>(
   'REMOVE_CHILD_PROJECTS'
 )
 export const SET_IS_DELETING = createAction<boolean>('SET_IS_DELETING')
@@ -95,7 +95,9 @@ export default createReducer(initialState, {
     state: IProgramAdministrationState,
     { payload }: ReturnType<typeof REMOVE_CHILD_PROJECTS>
   ) => {
-    state.childProjects = payload.childProjects
+    state.childProjects = state.childProjects.filter(
+      (p) => !payload.siteIdsToRemove.includes(p.SiteId)
+    )
     state.selectedProjects = []
     state.isDeleting = false
   },

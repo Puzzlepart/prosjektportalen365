@@ -1,5 +1,6 @@
-<pnp:ClientSidePage PromoteAsNewsArticle="true" PromoteAsTemplate="true" Overwrite="false" Title="{resource:Templates_ProjectNews_Title}" ThumbnailUrl="" PageName="{resource:ClientSidePages_Templates_ProjectNews_PageName}" xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
-  <pnp:Header Type="Default" LayoutType="FullWidthImage" ShowTopicHeader="false" ShowPublishDate="false" TopicHeader="" AlternativeText="" Authors="" AuthorByLineId="9" />
+<pnp:ClientSidePage PromoteAsNewsArticle="true" PromoteAsTemplate="true" Overwrite="false" Title="{resource:Templates_ProjectNews_Title}" PageName="{resource:ClientSidePages_Templates_ProjectNews_PageName}"
+  xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+  <pnp:Header Type="Default" LayoutType="FullWidthImage" ShowTopicHeader="false" ShowPublishDate="true" />
   <pnp:Sections>
     <pnp:Section Order="1" Type="OneColumnFullWidth">
       <pnp:Controls>
@@ -32,4 +33,7 @@
       </pnp:Controls>
     </pnp:Section>
   </pnp:Sections>
+  <pnp:FieldValues>
+    <pnp:FieldValue Key="PromotedState" Value="1" />
+  </pnp:FieldValues>
 </pnp:ClientSidePage>

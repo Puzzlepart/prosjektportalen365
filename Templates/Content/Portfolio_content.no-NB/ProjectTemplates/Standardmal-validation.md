@@ -488,7 +488,7 @@ _No tokens with missing translations or replacement values found._
             },
             {
                 "Url": "#",
-                "Title": "Notatbok"
+                "Title": "Notatblokk"
             },
             {
                 "Url": "SitePages/Gevinstoversikt.aspx",

@@ -2,6 +2,35 @@
 
 Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
 
+## 1.12.1 - 21.01.2026
+
+### Ny funksjonalitet
+
+- Lagt til støtte for felter av type prosent i redigeringsskjemaer [#1685](https://github.com/Puzzlepart/prosjektportalen365/issues/1685)
+- Lagt til støtte for å legge til underområder fra andre hubber via Administrasjon av underområder [#940](https://github.com/Puzzlepart/prosjektportalen365/issues/940)
+- Lagt til støtte for å kopiere mapper med innhold fra dokumentmalbibliotek [#1277](https://github.com/Puzzlepart/prosjektportalen365/issues/1277)
+  - Brukere kan nå velge mapper i tillegg til filer når de henter dokumentmaler
+  - Mapper kopieres rekursivt med all struktur og innhold
+  - Systemmapper hoppes automatisk over under kopiering
+- Standard logo per mal i maloppsett [#1679](https://github.com/Puzzlepart/prosjektportalen365/issues/1679)
+
+### Forbedringer
+
+- Lagt til karakterteller (maks 255 tegn) for navnefeltet i Bestillingsportalen-skjema som dukker opp dersom bruker overgår 200 tegn
+- Lagt til begrensning av antall karakterer for Alias/navn i Bestillingsportalen-skjema
+- Redusert maksimal bildestørrelse fra 800KB til 512KB for bildeopplasting i Bestillingsportalen-skjema
+- Lagt inn støtte for å bruke SharePoint Managed Path (teams/sites) ved opprettelse av nye områder i Bestillingsportalen
+- Lagt til mulihget for å avbryte opprettelse av statusrapport [#1564](https://github.com/Puzzlepart/prosjektportalen365/issues/1564)
+
+### Feilrettinger
+
+- Rettet et problem hvor bildeforhåndsvisning forsvant ved navigasjon mellom nivåer i Bestillingsportalen-skjema
+- Rettet et problem hvor nyheter publisert fra prosjekter ikke fikk publiseringsdato
+- Rettet en feil med kalkulering av antall tegn tillatt i Alias/navn felt i Bestillingsportalen-skjema (maks 64 tegn inkludert prefiks/suffiks)
+- Rettet en feil hvor popover i porteføljeoversikt viste feil statusrapport [#1666](https://github.com/Puzzlepart/prosjektportalen365/issues/1666)
+
+---
+
 ## 1.12.0 - 05.11.2025
 
 ### Ny funksjonalitet
@@ -55,6 +84,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Mulighet for å tilgangsstyre Prosjektportalen Assistent, slik at den ikke er tilgjengelig for alle brukere. [#1632](https://github.com/Puzzlepart/prosjektportalen365/issues/1632)
 - Mulighet for å tilgangsstyre synligheten av `Bestill område` knappen for å benytte seg av Bestillingsportalen, slik at den ikke er tilgjengelig for alle brukere.
 - Flere nye felter på Prosjektstatus-listen for å tilrettelegge for KI-behandling av Prosjektstatus
+- Tittel angitt i Prosjektnyheter-dialogen brukes nå automatisk som tittel på den opprettede nyhetsartikler
 
 ### Feilrettinger
 

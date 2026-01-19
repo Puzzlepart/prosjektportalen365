@@ -87,9 +87,14 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
   userMessage?: Pick<IUserMessageProps, 'text' | 'intent'>
 
   /**
-   * The active panel name and optional title
+   * The active panel name and optional title. Optional properties and contentID for new reports.
    */
-  activePanel?: { name: string; headerText?: string }
+  activePanel?: {
+    name: string
+    headerText?: string
+    reportProps?: Record<string, any>
+    contentId?: any
+  }
 
   /**
    * The status for the report (currently selected)

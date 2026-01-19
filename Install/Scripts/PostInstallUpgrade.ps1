@@ -186,4 +186,16 @@ if ($null -ne $LastInstall) {
 
         Write-Host "[SUCCESS] Data sources updated"
     }
+
+    if ($PreviousVersion -lt [version]"1.12.1") {
+        Write-Host "[INFO] Fixing issue with Project News Page template"
+        $PageListItem = Get-PnPFile -Url "SitePages/Templates/Prosjektnyhet.aspx" -AsListItem -ErrorAction SilentlyContinue
+        if ($null -eq $PageListItem) {            
+            $PageListItem = Get-PnPFile -Url "SitePages/Maler/Prosjektnyhet.aspx" -AsListItem -ErrorAction SilentlyContinue
+        }
+        if ($null -ne $PageListItem) {
+            $UpdatedItem = Set-PnPListItem -List "SitePages" -Identity $PageListItem.Id -Values @{"PromotedState" = 1} -UpdateType Update -ErrorAction SilentlyContinue
+        }
+        Write-Host "[SUCCESS] Project News Page template fixed" -ForegroundColor Green
+    }
 }

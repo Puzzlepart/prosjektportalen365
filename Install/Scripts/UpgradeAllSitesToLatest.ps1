@@ -18,21 +18,29 @@ Param(
 
 $ErrorActionPreference = "Stop"
 
-$LanguageCodes = @{
-    "Norwegian"    = 'no-NB';
-    "English"      = 'en-US';
-}
-$LanguageCode = $LanguageCodes[$Language]
-
-if ($null -eq (Get-Command Connect-PnPOnline) -or (Get-Command Connect-PnPOnline).Version -lt [version]"3.1.0") {
-    Write-Host "[ERROR] Correct PnP.PowerShell module not found. Please install it from PowerShell Gallery or do not use -SkipLoadingBundle." -ForegroundColor Red
-    exit 0
-}
-
 . $PSScriptRoot\SharedFunctions.ps1
 . $PSScriptRoot\Resources.ps1
 
-$InstallationEntriesList = Get-PnPList -Identity (Get-Resource -Name "Lists_InstallationLog_Title") -ErrorAction Stop
+
+if ($CI.IsPresent -and $null -eq (Get-Module -Name PnP.PowerShell)) {
+    Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
+    Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop
+}
+else {
+    if (-not $SkipLoadingBundle.IsPresent) {
+        $PnPVersion = LoadBundle
+        Write-Host "Loaded module PnP.PowerShell v$($PnPVersion) from bundle"
+    }
+    else {
+        if ($null -eq (Get-Command Connect-PnPOnline -ErrorAction SilentlyContinue)) {
+            Write-Host "[ERROR] PnP.PowerShell is not loaded. Please install the module or use the bundled version." -ForegroundColor Red
+            exit 0
+        }
+        else {
+            Write-Host "Loaded module PnP.PowerShell v$((Get-Command Connect-PnPOnline).Version) from your environment"
+        }     
+    }
+}
 
 $ConnectionInfo = [PSCustomObject]@{
     ClientId                 = $ClientId
@@ -50,25 +58,6 @@ $global:__CurrentChannelConfig = $null
 $InstallStartTime = (Get-Date -Format o)
 
 $ScriptDir = (Split-Path -Path $MyInvocation.MyCommand.Definition -Parent)
-
-if ($CI.IsPresent -and $null -eq (Get-Module -Name PnP.PowerShell)) {
-    Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
-    Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop
-}
-else {
-    if (-not $SkipLoadingBundle.IsPresent) {
-        $PnPVersion = LoadBundle -ScriptPath "$PSScriptRoot\.."
-        Write-Host "Loaded module PnP.PowerShell v$($PnPVersion) from bundle"
-    }
-    else {
-        if ($null -eq (Get-Command Connect-PnPOnline -ErrorAction SilentlyContinue)) {
-            Write-Host "[ERROR] PnP.PowerShell is not loaded. Please install the module or use the bundled version." -ForegroundColor Red
-            exit 0
-        } else {
-            Write-Host "Loaded module PnP.PowerShell v$((Get-Command Connect-PnPOnline).Version) from your environment"
-        }     
-    }
-}
 
 ## Checks if file .current-channel-config.json exists and loads it if it does
 if (Test-Path -Path "$ScriptDir/../.current-channel-config.json") {
@@ -98,9 +87,25 @@ Start-Transcript -Path $LogFilePath
 try {
     Connect-SharePoint -Url $Url -ConnectionInfo $ConnectionInfo
     
+    $Web = Get-PnPWeb -Includes Language
+    $SiteLCID = $Web.Language
+
+    $LanguageCode = switch ($SiteLCID) {
+        1044 { 'no-NB' }  # Norwegian (Bokmål)
+        1033 { 'en-US' }  # English (US)
+        default { 
+            Write-Host "[WARNING] Unsupported site language LCID: $SiteLCID. Defaulting to Norwegian." -ForegroundColor Yellow
+            'no-NB' 
+        }
+    }
+
+    Write-Host "Detected site language: $LanguageCode (LCID: $SiteLCID)"
+    Initialize-Resources -LanguageCode $LanguageCode
+
     $VersionInfo = Get-PPInstallationInfo
     $global:__InstalledVersion = $VersionInfo.Latest
     $global:__PreviousVersion = $VersionInfo.Previous
+    $global:__InstalledChannel = $VersionInfo.Channel
 
     Write-Host "Getting ready to upgrade feature discrepancy between version $global:__PreviousVersion and $global:__InstalledVersion"
 
@@ -108,6 +113,7 @@ try {
     $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
 
     Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
+    $UserName = ""
     $CurrentUser = Get-PnPProperty -Property CurrentUser -ClientObject (Get-PnPContext).Web -ErrorAction SilentlyContinue
     if ($null -ne $CurrentUser -and $CurrentUser.LoginName) {
         Write-Host "Installing with user [$($CurrentUser.LoginName)]"
@@ -127,12 +133,12 @@ try {
     if (-not $CI_MODE) {
         Write-Host "We can grant $UserName admin access to existing projects. This will ensure that all project will be upgraded. If you select no, the script will only upgrade the sites you are already an owner of."
         do {
-            $YesOrNo = Read-Host "Do you want to grant $UserName access to all sites in the hub (listed above)? (y/n)"
+            $GrantAccessConfirm = Read-Host "Do you want to grant $UserName access to all sites in the hub (listed above)? (y/n)"
         } 
-        while ("y", "n" -notcontains $YesOrNo)
+        while ("y", "n" -notcontains $GrantAccessConfirm)
     }
 
-    if ($YesOrNo -eq "y" -or $CI_MODE) {    
+    if ($GrantAccessConfirm -eq "y" -or $CI_MODE) {    
         $ProjectsInHub | ForEach-Object -Begin { $ProgressCount = 0 } {
             [Int16]$PercentComplete = (++$ProgressCount) * 100 / $ProjectsInHub.Count
             Write-Progress -Activity "Granting access to all sites in the hub" -Status "$PercentComplete% Complete" -PercentComplete $PercentComplete -CurrentOperation "Processing site $_"
@@ -155,12 +161,12 @@ try {
     if (-not $CI_MODE) {
         Write-Host "We can remove $UserName's admin access from existing projects."
         do {
-            $YesOrNo = Read-Host "Do you want to remove $UserName's admin access from all sites in the hub? (y/n)"
+            $RemoveAccessConfirm = Read-Host "Do you want to remove $UserName's admin access from all sites in the hub? (y/n)"
         } 
-        while ("y", "n" -notcontains $YesOrNo)
+        while ("y", "n" -notcontains $RemoveAccessConfirm)
     }
 
-    if ($YesOrNo -eq "y" -or $CI_MODE) {
+    if ($RemoveAccessConfirm -eq "y" -or $CI_MODE) {
         $ProjectsInHub | ForEach-Object -Begin { $ProgressCount = 0 } {    
             [Int16]$PercentComplete = (++$ProgressCount) * 100 / $ProjectsInHub.Count
             Write-Progress -Activity "Removing admin access" -Status "$PercentComplete% Complete" -PercentComplete $PercentComplete -CurrentOperation "Processing site $_"
@@ -169,7 +175,8 @@ try {
                 Write-Host "`tRemoving access to $_"
                 Connect-SharePoint -Url $_ -ConnectionInfo $ConnectionInfo
                 Remove-PnPSiteCollectionAdmin -Owners $UserName
-            } catch {
+            }
+            catch {
                 Write-Host "`t`tFailed to remove access to $_" -ForegroundColor Yellow
             }
         }
@@ -190,11 +197,12 @@ finally {
 Connect-SharePoint -Url $Url -ConnectionInfo $ConnectionInfo
 
 $InstallEntry = @{
-    Title            = "PP365 UpgradeAllSitesToLatest $LatestInstallVersion";
+    Title            = "PP365 UpgradeAllSitesToLatest $global:__InstalledVersion";
     InstallStartTime = $InstallStartTime; 
     InstallEndTime   = (Get-Date -Format o); 
-    InstallVersion   = $LatestInstallVersion;
+    InstallVersion   = $global:__InstalledVersion;
     InstallCommand   = $MyInvocation.Line.Substring(2);
+    InstallChannel   = $global:__InstalledChannel
 }
 
 if ($null -ne $UserName) {
@@ -203,10 +211,8 @@ if ($null -ne $UserName) {
 if ($CI.IsPresent) {
     $InstallEntry.InstallCommand = "GitHub CI";
 }
-if ($Channel -ne "main") {
-    $InstallEntry.InstallChannel = $global:__CurrentChannelConfig.Channel
-}
 
+$InstallationEntriesList = Get-PnPList -Identity (Get-Resource -Name "Lists_InstallationLog_Title") -ErrorAction Stop
 $InstallationEntry = Add-PnPListItem -List $InstallationEntriesList.Id -Values $InstallEntry -ErrorAction SilentlyContinue
 
 if ($null -ne $InstallationEntry) {

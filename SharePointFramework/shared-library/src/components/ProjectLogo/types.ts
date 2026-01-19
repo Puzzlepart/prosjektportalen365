@@ -33,4 +33,9 @@ export interface IProjectLogoProps {
    * Hide content
    */
   hidden?: boolean
+
+  /**
+   * Fallback image URL to use when project has no custom logo (e.g., template image)
+   */
+  fallbackImageUrl?: string
 }

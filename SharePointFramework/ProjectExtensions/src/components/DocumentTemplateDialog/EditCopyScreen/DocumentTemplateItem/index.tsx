@@ -32,8 +32,14 @@ export const DocumentTemplateItem: FC<IDocumentTemplateItemProps> = (props) => {
       switch ((event.target as HTMLInputElement).id) {
         case nameId:
           {
-            const newName = `${newValue}.${props.item.fileExtension}`
-            const errorMsg = await SPDataAdapter.isFilenameValid(state.targetFolder, newName)
+            const newName = props.item.isFolder
+              ? newValue
+              : `${newValue}.${props.item.fileExtension}`
+            const errorMsg = await SPDataAdapter.isFilenameValid(
+              state.targetFolder,
+              newName,
+              props.item.isFolder
+            )
             props.onInputChanged(props.item.id, { newName }, errorMsg)
           }
           break
@@ -45,12 +51,14 @@ export const DocumentTemplateItem: FC<IDocumentTemplateItemProps> = (props) => {
   }
 
   useEffect(() => {
-    SPDataAdapter.isFilenameValid(state.targetFolder, props.item.name).then((errorMessage) => {
-      if (errorMessage) {
+    SPDataAdapter.isFilenameValid(state.targetFolder, props.item.name, props.item.isFolder).then(
+      (errorMessage) => {
         props.onInputChanged(props.item.id, {}, errorMessage)
-        setIsExpanded(true)
+        if (errorMessage) {
+          setIsExpanded(true)
+        }
       }
-    })
+    )
   }, [state.targetFolder])
 
   return (
@@ -68,10 +76,10 @@ export const DocumentTemplateItem: FC<IDocumentTemplateItemProps> = (props) => {
         <div className={styles.inputField}>
           <TextField
             id={nameId}
-            label={strings.FileNameLabel}
-            placeholder={strings.FileNameLabel}
-            defaultValue={props.item.nameWithoutExtension}
-            suffix={`.${props.item.fileExtension}`}
+            label={props.item.isFolder ? strings.FolderNameLabel : strings.FileNameLabel}
+            placeholder={props.item.isFolder ? strings.FolderNameLabel : strings.FileNameLabel}
+            defaultValue={props.item.isFolder ? props.item.name : props.item.nameWithoutExtension}
+            suffix={props.item.isFolder ? undefined : `.${props.item.fileExtension}`}
             errorMessage={props.item.errorMessage}
             onChange={onInputChange}
           />

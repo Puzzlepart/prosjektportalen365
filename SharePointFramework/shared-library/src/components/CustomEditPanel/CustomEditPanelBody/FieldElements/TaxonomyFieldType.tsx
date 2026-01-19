@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { FieldContainer } from '../../../FieldContainer'
 import { useCustomEditPanelContext } from '../../context'
 import { FieldElementComponent } from './types'
@@ -9,6 +9,21 @@ export const TaxonomyFieldType: FieldElementComponent = ({ field }) => {
   const context = useCustomEditPanelContext()
   const mapInitialValues = useInitialTaxonomyValues()
   const terms = context.model.get<Term[]>(field)
+  type NormalizedTerm = NonNullable<ReturnType<typeof mapInitialValues>>
+
+  const normalizeTerms = useCallback(
+    (items?: Term[]) =>
+      (items ?? []).map(mapInitialValues).filter((term): term is NormalizedTerm => term !== null),
+    [mapInitialValues]
+  )
+
+  const handleChange = useCallback(
+    (items?: Term[]) => {
+      const normalized = normalizeTerms(items)
+      context.model.set(field, normalized)
+    },
+    [context.model, field, normalizeTerms]
+  )
 
   return (
     <FieldContainer
@@ -20,10 +35,10 @@ export const TaxonomyFieldType: FieldElementComponent = ({ field }) => {
       <ModernTaxonomyPicker
         context={context.props.dataAdapter.spfxContext as any} // Newest version of the control requires this cast for now, as context type is incompatibale with other types of SPFxContext
         panelTitle={field.description || field.displayName}
-        initialValues={terms?.map(mapInitialValues)}
+        initialValues={normalizeTerms(terms)}
         label=''
         termSetId={field.getProperty('TermSetId')}
-        onChange={(items) => context.model.set(field, items)}
+        onChange={handleChange}
       />
     </FieldContainer>
   )

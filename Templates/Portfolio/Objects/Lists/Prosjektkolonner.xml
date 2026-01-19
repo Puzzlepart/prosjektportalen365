@@ -879,7 +879,7 @@
             <pnp:DataValue FieldName="GtColMaxWidth">300</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtShowFieldPortfolio">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataTypeProperties">{

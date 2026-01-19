@@ -179,6 +179,27 @@ export function useEditableColumn(
   )
 
   /**
+   * Calculate alias from name value accounting for prefix/suffix lengths
+   */
+  const calculateAlias = useCallback(
+    (name: string, currentType: string): string => {
+      const typeConfig = state.types?.find((t) => t.title === currentType)
+      const useGlobalNaming = getGlobalSetting('UseNamingConventions') === 'true'
+      const namingConvention = useGlobalNaming
+        ? state.settings?.find((t) => t.title === 'NamingConvention')?.value
+        : typeConfig?.namingConvention
+
+      const prefixLength = namingConvention?.prefixText?.length || 0
+      const suffixLength = namingConvention?.suffixText?.length || 0
+      const maxAliasLength = 64 - prefixLength - suffixLength
+
+      const cleanedValue = name.replace(/ /g, '').replace(/[^a-z-A-Z0-9-]/g, '')
+      return cleanedValue.substring(0, Math.max(1, maxAliasLength))
+    },
+    [state.types, state.settings]
+  )
+
+  /**
    * Sets a property of the column with improved error handling and race condition prevention.
    *
    * @param key Key of the column to update
@@ -193,7 +214,7 @@ export function useEditableColumn(
           const newColumn = new Map(prev)
 
           if (key === 'name' && typeof value === 'string') {
-            const alias = value.replace(/ /g, '').replace(/[^a-z-A-Z0-9-]/g, '')
+            const alias = calculateAlias(value, prev.get('type'))
             newColumn.set('alias', alias)
           }
 
@@ -206,13 +227,12 @@ export function useEditableColumn(
             ...state.properties,
             [key]: transformedValue,
             ...(key === 'name' && typeof value === 'string'
-              ? { alias: value.replace(/ /g, '').replace(/[^a-z-A-Z0-9-]/g, '') }
+              ? { alias: calculateAlias(value, state.properties.type) }
               : {})
           }
         })
       } catch (error) {
         console.error(`Error setting column '${key}':`, error)
-        // Still update the column with the original value to maintain UI consistency
         $setColumn((prev) => {
           const newColumn = new Map(prev)
           newColumn.set(key, value)
@@ -220,7 +240,7 @@ export function useEditableColumn(
         })
       }
     },
-    [transformValue, setState, state.properties]
+    [transformValue, setState, state.properties, calculateAlias]
   )
 
   /**

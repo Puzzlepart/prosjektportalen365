@@ -20,7 +20,7 @@ export const ParentProjectsList: FC = () => {
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme}>
           {projects.map((p, idx) => {
-            const Icon = p.icon
+            const Icon = p?.icon
             const onClick = () => {
               if (typeof p.url === 'string') {
                 window.open(p.url, '_self')
@@ -32,7 +32,7 @@ export const ParentProjectsList: FC = () => {
                 key={idx}
                 className={styles.button}
                 appearance='subtle'
-                icon={<Icon />}
+                icon={Icon ? <Icon /> : undefined}
                 iconPosition='before'
                 onClick={onClick}
               >

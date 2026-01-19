@@ -12,8 +12,24 @@ import { useProjectLogo } from './useProjectLogo'
  * @category ProjectLogo
  */
 export const ProjectLogo: FC<IProjectLogoProps> = (props: IProjectLogoProps) => {
-  const { shouldUseCustomImage, setShowCustomImage, showCustomImage, conditionalStyling } =
-    useProjectLogo(props)
+  const {
+    showCustomImage,
+    imageSource,
+    handleImageLoad,
+    handleImageError,
+    conditionalStyling,
+    isLoading
+  } = useProjectLogo(props)
+
+  if (isLoading) {
+    return (
+      <div
+        className={styles.projectLogo}
+        style={{ width: props.size, height: props.size }}
+        hidden={props.hidden}
+      />
+    )
+  }
 
   return (
     <div
@@ -38,21 +54,17 @@ export const ProjectLogo: FC<IProjectLogoProps> = (props: IProjectLogoProps) => 
       />
       <img
         className={props.renderMode === 'card' ? styles.hover : ''}
-        src={`${props.url}/_api/siteiconmanager/getsitelogo?type='1'`}
+        src={imageSource}
         style={{
           WebkitMask:
             props.renderMode === 'card' ? 'linear-gradient(white 50%, transparent)' : 'none',
-          display: !showCustomImage ? 'none' : 'block',
+          display: showCustomImage ? 'block' : 'none',
           ...conditionalStyling
         }}
         title={format(strings.Aria.ProjectTitle, props.title)}
         alt={format(strings.Aria.ProjectTitle, props.title)}
-        onLoad={(image) => {
-          setShowCustomImage(shouldUseCustomImage(image))
-          if (props.onImageLoad) {
-            props.onImageLoad(shouldUseCustomImage(image))
-          }
-        }}
+        onLoad={handleImageLoad}
+        onError={handleImageError}
       />
     </div>
   )
@@ -61,3 +73,5 @@ export const ProjectLogo: FC<IProjectLogoProps> = (props: IProjectLogoProps) => 
 ProjectLogo.defaultProps = {
   size: '100%'
 }
+
+export * from './types'

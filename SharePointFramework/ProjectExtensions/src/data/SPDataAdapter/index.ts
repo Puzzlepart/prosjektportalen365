@@ -36,14 +36,30 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    *
    * @param folderServerRelativeUrl Folder server relative URL
    * @param name File name
+   * @param isFolder Whether the item is a folder
    */
-  public async isFilenameValid(folderServerRelativeUrl: string, name: string): Promise<string> {
-    if (!validFilename(name)) return strings.FilenameInValidErrorText
-    const [file] = await this.sp.web
-      .getFolderByServerRelativePath(folderServerRelativeUrl)
-      .files.filter(`Name eq '${name}'`)()
-    if (file) {
-      return strings.FilenameAlreadyInUseErrorText
+  public async isFilenameValid(
+    folderServerRelativeUrl: string,
+    name: string,
+    isFolder: boolean = false
+  ): Promise<string> {
+    if (!validFilename(name))
+      return isFolder ? strings.FolderNameInValidErrorText : strings.FilenameInValidErrorText
+
+    if (isFolder) {
+      const [folder] = await this.sp.web
+        .getFolderByServerRelativePath(folderServerRelativeUrl)
+        .folders.filter(`Name eq '${name}'`)()
+      if (folder) {
+        return strings.FolderNameAlreadyInUseErrorText
+      }
+    } else {
+      const [file] = await this.sp.web
+        .getFolderByServerRelativePath(folderServerRelativeUrl)
+        .files.filter(`Name eq '${name}'`)()
+      if (file) {
+        return strings.FilenameAlreadyInUseErrorText
+      }
     }
     return null
   }

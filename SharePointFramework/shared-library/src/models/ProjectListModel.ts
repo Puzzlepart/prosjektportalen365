@@ -99,6 +99,11 @@ export class ProjectListModel {
   public template?: string
 
   /**
+   * Template image URL from Maloppsett (used as fallback when project has no custom logo)
+   */
+  public templateImageUrl?: string
+
+  /**
    * Creates a new instance of ProjectListModel
    *
    * @param title - Title
@@ -117,6 +122,7 @@ export class ProjectListModel {
     this.isParent = item.GtIsParentProject
     this.isProgram = item.GtIsProgram
     this.template = item.GtProjectTemplate
+    this.templateImageUrl = item.TemplateImageUrl
     this.data = item
   }
 }

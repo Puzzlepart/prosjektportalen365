@@ -591,13 +591,15 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
    * @param data - Object containing project items, sites, member groups, and users data
    * @param primaryUserField - Optional field name to extract primary user information from project items
    * @param secondaryUserField - Optional field name to extract secondary user information from project items
+   * @param templateMap - Optional map of template names to template image URLs
    * @returns Array of ProjectListModel instances with combined data including user personas, membership status, and access permissions
    *
    */
   private _combineResultData(
     { items, sites, memberOfGroups, users }: IProjectsData,
     primaryUserField?: string,
-    secondaryUserField?: string
+    secondaryUserField?: string,
+    templateMap?: Map<string, string>
   ): ProjectListModel[] {
     const getUserById = (id?: number) => users.find((user) => user.Id === id)
 
@@ -624,7 +626,13 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         const primaryUser = primaryUserField && getUserFromField(item, primaryUserField)
         const secondaryUser = secondaryUserField && getUserFromField(item, secondaryUserField)
         const group = _.find(memberOfGroups, (grp) => grp.id === item.GtGroupId)
-        const model = new ProjectListModel(group?.displayName ?? item.Title, item)
+        
+        const itemWithTemplate = item as any
+        if (templateMap && item.GtProjectTemplate) {
+          itemWithTemplate.TemplateImageUrl = templateMap.get(item.GtProjectTemplate)
+        }
+        
+        const model = new ProjectListModel(group?.displayName ?? item.Title, itemWithTemplate)
         model.isUserMember = !!group
         model.hasUserAccess = _.any(sites, (site) => site['SiteId'] === item.GtSiteId)
         model.primaryUser = createUserPersona(primaryUser, primaryUserField)
@@ -658,6 +666,15 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       .join('_')
     const cacheKey = `pp365_fetchenrichedprojects_${siteId}_${fieldsCacheKey || 'default'}`
 
+    let templates = []
+    try {
+      templates = await this._sp.web.lists
+        .getByTitle(resource.Lists_TemplateOptions_Title)
+        .items.select('Title', 'TemplateImageUrl')()
+    } catch (error) {
+      console.warn('Could not fetch template images from Maloppsett list. TemplateImageUrl field may not exist.', error)
+    }
+
     const [items, sites, memberOfGroups, users] = await localStore.getOrPut(
       cacheKey,
       async () =>
@@ -669,6 +686,14 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         ]),
       dateAdd(new Date(), 'minute', 30)
     )
+    
+    const templateMap = new Map<string, string>()
+    templates.forEach((template) => {
+      if (template.Title && template.TemplateImageUrl) {
+        templateMap.set(template.Title, template.TemplateImageUrl)
+      }
+    })
+    
     const result: IProjectsData = {
       items,
       sites,
@@ -678,7 +703,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     let projects = this._combineResultData(
       result,
       fields?.primaryUserField,
-      fields?.secondaryUserField
+      fields?.secondaryUserField,
+      templateMap
     )
     projects = projects.filter(
       (m) =>
@@ -706,6 +732,15 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     const list = spHub.web.lists.getByTitle(resource.Lists_Projects_Title)
     const selectFields = Object.keys(new SPProjectItem())
 
+    let templates = []
+    try {
+      templates = await spHub.web.lists
+        .getByTitle(resource.Lists_TemplateOptions_Title)
+        .items.select('Title', 'TemplateImageUrl')()
+    } catch (error) {
+      console.warn('Could not fetch template images from Maloppsett list. TemplateImageUrl field may not exist.', error)
+    }
+
     const [items, sites, memberOfGroups, users] = await localStore.getOrPut(
       cacheKey,
       async () =>
@@ -720,13 +755,21 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         ]),
       dateAdd(new Date(), 'minute', 30)
     )
+    
+    const templateMap = new Map<string, string>()
+    templates.forEach((template) => {
+      if (template.Title && template.TemplateImageUrl) {
+        templateMap.set(template.Title, template.TemplateImageUrl)
+      }
+    })
+    
     const result: IProjectsData = {
       items,
       sites,
       memberOfGroups,
       users
     }
-    const projects = this._combineResultData(result)
+    const projects = this._combineResultData(result, undefined, undefined, templateMap)
     const project = _.first(projects)
     return project
   }

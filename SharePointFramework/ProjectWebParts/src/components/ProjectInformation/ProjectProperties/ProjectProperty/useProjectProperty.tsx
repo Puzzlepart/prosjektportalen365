@@ -1,4 +1,4 @@
-import { IPersonaProps, ITag, Link } from '@fluentui/react'
+import { IPersonaProps, Link } from '@fluentui/react'
 import React from 'react'
 import { useProjectInformationContext } from '../../context'
 import { IProjectPropertyProps } from './types'
@@ -95,23 +95,49 @@ export function useProjectProperty(props: IProjectPropertyProps) {
       ],
       [
         'TaxonomyFieldTypeMulti',
-        (tags: ITag[]) => (
-          <div style={{ marginTop: 6 }}>
-            <OverflowTagMenu
-              text={props.model.displayName}
-              tags={tags.map((tag) => tag && tag.name)}
-              icon={icon}
-            />
-          </div>
-        )
+        (tags: any[]) => {
+          const tagNames = tags
+            ?.filter(Boolean)
+            .map((tag) => {
+              if (tag && typeof tag === 'object') {
+                if ('labels' in tag && Array.isArray(tag.labels) && tag.labels.length > 0) {
+                  return tag.labels[0]?.name
+                }
+                if ('name' in tag) {
+                  return tag.name
+                }
+              }
+              return null
+            })
+            .filter(Boolean)
+          return (
+            <div style={{ marginTop: 6 }}>
+              <OverflowTagMenu text={props.model.displayName} tags={tagNames} icon={icon} />
+            </div>
+          )
+        }
       ],
       [
         'TaxonomyFieldType',
-        ([tag]: ITag[]) => (
-          <div style={{ marginTop: 6 }}>
-            <OverflowTagMenu text={props.model.displayName} tags={[tag.name]} icon={icon} />
-          </div>
-        )
+        ([tag]: any[]) => {
+          let name: string | undefined
+          if (tag && typeof tag === 'object') {
+            if ('labels' in tag && Array.isArray(tag.labels) && tag.labels.length > 0) {
+              name = tag.labels[0]?.name
+            } else if ('name' in tag) {
+              name = tag.name
+            }
+          }
+          return (
+            <div style={{ marginTop: 6 }}>
+              <OverflowTagMenu
+                text={props.model.displayName}
+                tags={name ? [name] : []}
+                icon={icon}
+              />
+            </div>
+          )
+        }
       ],
       [
         'URL',

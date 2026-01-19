@@ -7,8 +7,11 @@ export const useAddProjectDialog = () => {
   const context = useContext(ProgramAdministrationContext)
 
   useEffect(() => {
+    if (!context.programHubs || context.programHubs.length === 0) return
+    if (!context.programHubs.some((h) => h.hubSiteId)) return
+
     context.props.dataAdapter
-      .getHubSiteProjects()
+      .getHubSiteProjects(context.programHubs)
       .then((availableProjects) =>
         context.dispatch(DATA_LOADED({ data: { availableProjects }, scope: 'AddProjectDialog' }))
       )
@@ -17,7 +20,7 @@ export const useAddProjectDialog = () => {
           DATA_LOADED({ data: { availableProjects: [] }, scope: 'AddProjectDialog' })
         )
       )
-  }, [])
+  }, [context.programHubs])
 
   const availableProjects = context.state.availableProjects.filter(
     ({ SiteId }) =>
@@ -33,7 +36,14 @@ export const useAddProjectDialog = () => {
     const projects = availableProjects.filter(({ SiteId }) =>
       context.state.addProjectDialog?.selectedProjects.includes(SiteId)
     )
-    await context.props.dataAdapter.addChildProjects(projects)
+
+    const currentHubSiteId = context.props.context.pageContext.legacyPageContext.hubSiteId
+    const parentHub = context.programHubs?.find(
+      (h) => h.hubSiteId?.toLowerCase() === currentHubSiteId?.toLowerCase()
+    )
+    const parentHubSiteUrl = parentHub?.url
+
+    await context.props.dataAdapter.addChildProjects(projects, parentHubSiteUrl)
     context.dispatch(ADD_CHILD_PROJECTS(projects))
   }
 

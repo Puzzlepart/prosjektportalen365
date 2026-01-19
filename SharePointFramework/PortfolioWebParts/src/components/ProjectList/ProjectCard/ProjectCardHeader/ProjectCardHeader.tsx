@@ -57,6 +57,7 @@ export const ProjectCardHeader: FC<IProjectCardHeaderProps> = (props) => {
                 title={context.project?.title || strings.ProjectNotFound}
                 url={context.project?.url || '#'}
                 renderMode='card'
+                fallbackImageUrl={context.project?.templateImageUrl}
                 onImageLoad={(value) => {
                   props.onImageLoad
                   customImageCallback(value)

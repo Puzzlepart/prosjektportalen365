@@ -187,6 +187,16 @@ export class EditableSPField extends SPField {
   }
 
   /**
+   * Returns `true` if the field is a percentage field.
+   * Checks both the ShowAsPercentage property and SchemaXml for Percentage="TRUE".
+   */
+  public get isPercentage(): boolean {
+    if (this.type !== 'Number') return false
+    if (this._field.ShowAsPercentage) return true
+    return this._field.SchemaXml?.includes('Percentage="TRUE"') ?? false
+  }
+
+  /**
    * Returns `true` if the field should be visible in the
    * specified display mode. When checking for `DisplayMode.Read`
    * the `props.page` property is used to determine which properties to display.
