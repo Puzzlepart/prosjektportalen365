@@ -676,6 +676,9 @@
     <data name="Choice_GtSettingsCategory_General" xml:space="preserve">
         <value>General</value>
     </data>
+    <data name="Choice_GtSettingsCategory_Addon" xml:space="preserve">
+        <value>Addon</value>
+    </data>
     <data name="Choice_GtSettingsCategory_Assistant" xml:space="preserve">
         <value>Assistant</value>
     </data>
