@@ -175,21 +175,6 @@
     <data name="Choice_GtProjectLifecycleStatus_Closed" xml:space="preserve">
         <value>Closed</value>
     </data>
-    <data name="Choice_GtProjectLogActors_OtherStakeholders" xml:space="preserve">
-        <value>Other Stakeholders</value>
-    </data>
-    <data name="Choice_GtProjectLogActors_ProjectBoard" xml:space="preserve">
-        <value>Project Board</value>
-    </data>
-    <data name="Choice_GtProjectLogActors_ProjectGroup" xml:space="preserve">
-        <value>Project Group</value>
-    </data>
-    <data name="Choice_GtProjectLogActors_ReferenceGroup" xml:space="preserve">
-        <value>Reference Group</value>
-    </data>
-    <data name="Choice_GtProjectLogActors_Vendors" xml:space="preserve">
-        <value>Vendors</value>
-    </data>
     <data name="Choice_GtProjectLogResponsible_Organization" xml:space="preserve">
         <value>Line organization</value>
     </data>
@@ -307,9 +292,6 @@
     <data name="Choice_GtStakeholderGroup_Academics" xml:space="preserve">
         <value>Academia</value>
     </data>
-    <data name="Choice_GtStakeholderGroup_Business" xml:space="preserve">
-        <value>Business</value>
-    </data>
     <data name="Choice_GtStakeholderGroup_Colleagues" xml:space="preserve">
         <value>Colleagues</value>
     </data>
@@ -328,23 +310,8 @@
     <data name="Choice_GtStakeholderGroup_Union" xml:space="preserve">
         <value>Union</value>
     </data>
-    <data name="Choice_GtStakeholderGroup_Users" xml:space="preserve">
-        <value>Users</value>
-    </data>
     <data name="Choice_GtStakeholderGroup_Volenteers" xml:space="preserve">
         <value>Volunteering/Organization</value>
-    </data>
-    <data name="Choice_GtStakeholderInfluencePossibilty_Large" xml:space="preserve">
-        <value>Large</value>
-    </data>
-    <data name="Choice_GtStakeholderInfluencePossibilty_Medium" xml:space="preserve">
-        <value>Medium</value>
-    </data>
-    <data name="Choice_GtStakeholderInfluencePossibilty_None" xml:space="preserve">
-        <value>None</value>
-    </data>
-    <data name="Choice_GtStakeholderInfluencePossibilty_Small" xml:space="preserve">
-        <value>Small</value>
     </data>
     <data name="Choice_GtStatusBudget_BelowBudget" xml:space="preserve">
         <value>Below Budget</value>
@@ -643,29 +610,8 @@
     <data name="Choice_GtIdeaStrategicValue_MainAreasEffect" xml:space="preserve">
         <value>5=Measurable effect on main areas or within several strategic areas. Project deliveries and results are directly mentioned in the strategy and/or provide documentable effects on the strategy's main goals</value>
     </data>
-    <data name="Choice_GtRiskStrategy_Reduce" xml:space="preserve">
-        <value>Reduce</value>
-    </data>
-    <data name="Choice_GtRiskStrategy_Monitor" xml:space="preserve">
-        <value>Monitor</value>
-    </data>
-    <data name="Choice_GtRiskStrategy_Avoid" xml:space="preserve">
-        <value>Avoid</value>
-    </data>
-    <data name="Choice_GtRiskStrategy_Transfer" xml:space="preserve">
-        <value>Transfer</value>
-    </data>
-    <data name="Choice_GtRiskStrategy_Share" xml:space="preserve">
-        <value>Share</value>
-    </data>
-    <data name="Choice_GtRiskStrategy_Accept" xml:space="preserve">
-        <value>Accept</value>
-    </data>
     <data name="Choice_GtRiskStrategy_Enhance" xml:space="preserve">
         <value>Enhance</value>
-    </data>
-    <data name="Choice_GtRiskStrategy_Exploit" xml:space="preserve">
-        <value>Exploit</value>
     </data>
     <data name="Choice_GtSettingsCategory_UncertaintyPlanner" xml:space="preserve">
         <value>Uncertainty measures in Planner</value>
@@ -760,11 +706,11 @@
     <data name="Choice_GtProjectLogActors_ReferenceGroup" xml:space="preserve">
         <value>Reference group</value>
     </data>
+    <data name="Choice_GtProjectLogActors_Vendors" xml:space="preserve">
+        <value>Vendors</value>
+    </data>
     <data name="Choice_GtProjectLogActors_OtherStakeholders" xml:space="preserve">
         <value>Other stakeholders</value>
-    </data>
-    <data name="Choice_GtProjectLogResponsible_ProjectOwner" xml:space="preserve">
-        <value>Project owner</value>
     </data>
     <data name="Choice_GtProjectLogResponsible_LineOrganization" xml:space="preserve">
         <value>Line organization</value>
@@ -772,14 +718,8 @@
     <data name="Choice_GtProjectLogResponsible_ProjectManager" xml:space="preserve">
         <value>Project manager</value>
     </data>
-    <data name="Choice_GtProjectLogResponsible_ProjectGroup" xml:space="preserve">
-        <value>Project group</value>
-    </data>
     <data name="Choice_GtProjectLogResponsible_Supplier" xml:space="preserve">
         <value>Supplier</value>
-    </data>
-    <data name="Choice_GtProjectLogResponsible_ReferenceGroups" xml:space="preserve">
-        <value>Reference groups</value>
     </data>
     <data name="Choice_GtProjectLogResponsible_Others" xml:space="preserve">
         <value>Others</value>
@@ -793,9 +733,6 @@
     <data name="Choice_GtProjectLogType_DeviationFromSpec" xml:space="preserve">
         <value>Deviation from specification</value>
     </data>
-    <data name="Choice_GtProjectLogType_Decision" xml:space="preserve">
-        <value>Decision</value>
-    </data>
     <data name="Choice_GtAllocationStatus_Requested" xml:space="preserve">
         <value>Requested</value>
     </data>
@@ -807,18 +744,6 @@
     </data>
     <data name="Choice_GtAllocationStatus_Other" xml:space="preserve">
         <value>Other (describe in comment)</value>
-    </data>
-    <data name="Choice_GtRiskProximity_Immediate" xml:space="preserve">
-        <value>Immediate</value>
-    </data>
-    <data name="Choice_GtRiskProximity_ThisPhase" xml:space="preserve">
-        <value>In this phase</value>
-    </data>
-    <data name="Choice_GtRiskProximity_WithinProject" xml:space="preserve">
-        <value>Within project</value>
-    </data>
-    <data name="Choice_GtRiskProximity_OutsideProject" xml:space="preserve">
-        <value>Outside project</value>
     </data>
     <data name="Choice_GtTag_Superior" xml:space="preserve">
         <value>Superior</value>
@@ -855,9 +780,6 @@
     </data>
     <data name="ClientSidePages_Home_PageName" xml:space="preserve">
         <value>Home.aspx</value>
-    </data>
-    <data name="ClientSidePages_Home_Title" xml:space="preserve">
-        <value>Home</value>
     </data>
     <data name="ClientSidePages_Home_Title" xml:space="preserve">
         <value>Home</value>
@@ -1021,9 +943,6 @@
     <data name="ClientSidePages_ProjectTimeline_Title" xml:space="preserve">
         <value>Project Timeline</value>
     </data>
-    <data name="ClientSidePages_ProjectTimeline_Title" xml:space="preserve">
-        <value>Project Timeline</value>
-    </data>
     <data name="ClientSidePages_ResourceAllocation_PageName" xml:space="preserve">
         <value>ResourceAllocation.aspx</value>
     </data>
@@ -1112,7 +1031,7 @@
         <value>Content Type for idea column (Column configuration)</value>
     </data>
     <data name="ContentTypes_IdeaColumn_Name" xml:space="preserve">
-        <value>Idea Colmn</value>
+        <value>Idea Column</value>
     </data>
     <data name="ContentTypes_IdeaProcessing_Description" xml:space="preserve">
         <value>Content type for idea processing (Idea Processing)</value>
@@ -1727,7 +1646,7 @@
         <value>Benefit Analysis and Realization Plan User Manual</value>
     </data>
     <data name="Lists_HelpContent_BenefitFollowUpUserManual" xml:space="preserve">
-        <value>Benefit Follow-Up User Manual</value>
+        <value>Benefit Followup User Manual</value>
     </data>
     <data name="Lists_HelpContent_BenefitOverviewPortfolioUserManual" xml:space="preserve">
         <value>Benefit Overview Portfolio User Manual</value>
@@ -2033,9 +1952,6 @@
         <value>Measurement indicators</value>
     </data>
     <data name="Lists_Permission_Configuration_Description" xml:space="preserve">
-        <value>Permission configuration for new projects. This list must not be changed.</value>
-    </data>
-    <data name="Lists_Permission_Configuration_Description" xml:space="preserve">
         <value>Set up groups and permissions that are copied to new project sites</value>
     </data>
     <data name="Lists_Permission_Configuration_Fields_GtTemplates_Description" xml:space="preserve">
@@ -2063,9 +1979,6 @@
         <value>Lists/PhaseChecklist_Construction</value>
     </data>
     <data name="Lists_PhaseChecklist_Description" xml:space="preserve">
-        <value/>
-    </data>
-    <data name="Lists_PhaseChecklist_Description" xml:space="preserve">
         <value>Checklist for the projects.</value>
     </data>
     <data name="Lists_PhaseChecklist_Title" xml:space="preserve">
@@ -2085,9 +1998,6 @@
     </data>
     <data name="Lists_PlannerTasksConstruction_Url" xml:space="preserve">
         <value>Lists/PlannerTasks_Construction</value>
-    </data>
-    <data name="Lists_PlannerTasks_Description" xml:space="preserve">
-        <value/>
     </data>
     <data name="Lists_PlannerTasks_Description" xml:space="preserve">
         <value>Planner tasks for the projects.</value>
@@ -2222,7 +2132,7 @@
         <value>Budget status (On budget)</value>
     </data>
     <data name="Lists_ProjectColumnConfiguration_GtStatusBudget_SlightlyBehindBudget_Title" xml:space="preserve">
-        <value>Budget status (Minor exceedings)</value>
+        <value>Budget status (Minor overspending)</value>
     </data>
     <data name="Lists_ProjectColumnConfiguration_GtStatusBudget_UnknownBudget_Title" xml:space="preserve">
         <value>Budget status (Unknown)</value>
@@ -3875,10 +3785,10 @@
         <value>Width (1366px - 1919px)</value>
     </data>
     <data name="SiteFields_GtPiWidthXxxl_Description" xml:space="preserve">
-        <value>Width (1-12) for 1920px and upwards</value>
+        <value>Width (1-12) for 1920px and above</value>
     </data>
     <data name="SiteFields_GtPiWidthXxxl_DisplayName" xml:space="preserve">
-        <value>Width (1920px og oppover)</value>
+        <value>Width (1920px and above)</value>
     </data>
     <data name="SiteFields_GtPiXAxisTitle_Description" xml:space="preserve">
         <value>Title of the X-axis</value>
@@ -3950,7 +3860,7 @@
         <value>Select a column to display the value from when you hover over the chosen column.</value>
     </data>
     <data name="SiteFields_GtPortfolioColumnTooltip_DisplayName" xml:space="preserve">
-        <value>Tooltip-cloumn</value>
+        <value>Tooltip-column</value>
     </data>
     <data name="SiteFields_GtPortfolioColumnValue_Description" xml:space="preserve">
         <value>Value of the portfolio column</value>
@@ -4994,7 +4904,7 @@
         <value>Diamond</value>
     </data>
     <data name="TimelineConfiguration_Triangle_ElementType" xml:space="preserve">
-        <value>Trekant</value>
+        <value>Triangle</value>
     </data>
     <data name="TimelineConfiguration_Management_Category" xml:space="preserve">
         <value>Management</value>

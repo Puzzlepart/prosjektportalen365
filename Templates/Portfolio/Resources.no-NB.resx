@@ -175,21 +175,6 @@
     <data name="Choice_GtProjectLifecycleStatus_Closed" xml:space="preserve">
         <value>Avsluttet</value>
     </data>
-    <data name="Choice_GtProjectLogActors_OtherStakeholders" xml:space="preserve">
-        <value>Andre interessenter</value>
-    </data>
-    <data name="Choice_GtProjectLogActors_ProjectBoard" xml:space="preserve">
-        <value>Prosjektstyre</value>
-    </data>
-    <data name="Choice_GtProjectLogActors_ProjectGroup" xml:space="preserve">
-        <value>Prosjektgruppe</value>
-    </data>
-    <data name="Choice_GtProjectLogActors_ReferenceGroup" xml:space="preserve">
-        <value>Referansegruppe</value>
-    </data>
-    <data name="Choice_GtProjectLogActors_Vendors" xml:space="preserve">
-        <value>Leverandører</value>
-    </data>
     <data name="Choice_GtProjectLogResponsible_Organization" xml:space="preserve">
         <value>Linjeorganisasjon</value>
     </data>
@@ -307,9 +292,6 @@
     <data name="Choice_GtStakeholderGroup_Academics" xml:space="preserve">
         <value>Akademia</value>
     </data>
-    <data name="Choice_GtStakeholderGroup_Business" xml:space="preserve">
-        <value>Næringsliv</value>
-    </data>
     <data name="Choice_GtStakeholderGroup_Colleagues" xml:space="preserve">
         <value>Medarbeidere</value>
     </data>
@@ -328,23 +310,8 @@
     <data name="Choice_GtStakeholderGroup_Union" xml:space="preserve">
         <value>Fagforening</value>
     </data>
-    <data name="Choice_GtStakeholderGroup_Users" xml:space="preserve">
-        <value>Brukere</value>
-    </data>
     <data name="Choice_GtStakeholderGroup_Volenteers" xml:space="preserve">
         <value>Frivillighet/Organisasjon</value>
-    </data>
-    <data name="Choice_GtStakeholderInfluencePossibilty_Large" xml:space="preserve">
-        <value>Stor</value>
-    </data>
-    <data name="Choice_GtStakeholderInfluencePossibilty_Medium" xml:space="preserve">
-        <value>Middels</value>
-    </data>
-    <data name="Choice_GtStakeholderInfluencePossibilty_None" xml:space="preserve">
-        <value>Ingen</value>
-    </data>
-    <data name="Choice_GtStakeholderInfluencePossibilty_Small" xml:space="preserve">
-        <value>Liten</value>
     </data>
     <data name="Choice_GtStatusBudget_BelowBudget" xml:space="preserve">
         <value>Under budsjett</value>
@@ -643,29 +610,8 @@
     <data name="Choice_GtIdeaStrategicValue_MainAreasEffect" xml:space="preserve">
         <value>5=Målbar effekt på hovedområder eller innen flere strategiske områder. Prosjektets leveranser og resultater er direkte nevnt i strategien og/eller gir dokumenterbare effekter på strategiens hovedmål</value>
     </data>
-    <data name="Choice_GtRiskStrategy_Reduce" xml:space="preserve">
-        <value>Redusere</value>
-    </data>
-    <data name="Choice_GtRiskStrategy_Monitor" xml:space="preserve">
-        <value>Overvåke</value>
-    </data>
-    <data name="Choice_GtRiskStrategy_Avoid" xml:space="preserve">
-        <value>Unngå</value>
-    </data>
-    <data name="Choice_GtRiskStrategy_Transfer" xml:space="preserve">
-        <value>Overføre</value>
-    </data>
-    <data name="Choice_GtRiskStrategy_Share" xml:space="preserve">
-        <value>Dele</value>
-    </data>
-    <data name="Choice_GtRiskStrategy_Accept" xml:space="preserve">
-        <value>Akseptere</value>
-    </data>
     <data name="Choice_GtRiskStrategy_Enhance" xml:space="preserve">
         <value>Øke</value>
-    </data>
-    <data name="Choice_GtRiskStrategy_Exploit" xml:space="preserve">
-        <value>Utnytte</value>
     </data>
     <data name="Choice_GtSettingsCategory_UncertaintyPlanner" xml:space="preserve">
         <value>Usikkerhetstiltak i Planner</value>
@@ -760,11 +706,11 @@
     <data name="Choice_GtProjectLogActors_ReferenceGroup" xml:space="preserve">
         <value>Referansegruppe</value>
     </data>
+    <data name="Choice_GtProjectLogActors_Vendors" xml:space="preserve">
+        <value>Leverandører</value>
+    </data>
     <data name="Choice_GtProjectLogActors_OtherStakeholders" xml:space="preserve">
         <value>Andre interessenter</value>
-    </data>
-    <data name="Choice_GtProjectLogResponsible_ProjectOwner" xml:space="preserve">
-        <value>Prosjekteier</value>
     </data>
     <data name="Choice_GtProjectLogResponsible_LineOrganization" xml:space="preserve">
         <value>Linjeorganisasjon</value>
@@ -772,14 +718,8 @@
     <data name="Choice_GtProjectLogResponsible_ProjectManager" xml:space="preserve">
         <value>Prosjektleder</value>
     </data>
-    <data name="Choice_GtProjectLogResponsible_ProjectGroup" xml:space="preserve">
-        <value>Prosjektgruppe</value>
-    </data>
     <data name="Choice_GtProjectLogResponsible_Supplier" xml:space="preserve">
         <value>Leverandør</value>
-    </data>
-    <data name="Choice_GtProjectLogResponsible_ReferenceGroups" xml:space="preserve">
-        <value>Referansegrupper</value>
     </data>
     <data name="Choice_GtProjectLogResponsible_Others" xml:space="preserve">
         <value>Andre</value>
@@ -792,9 +732,6 @@
     </data>
     <data name="Choice_GtProjectLogType_DeviationFromSpec" xml:space="preserve">
         <value>Avvik fra spesifikasjon</value>
-    </data>
-    <data name="Choice_GtProjectLogType_Decision" xml:space="preserve">
-        <value>Beslutning</value>
     </data>
     <data name="Choice_GtAllocationStatus_Requested" xml:space="preserve">
         <value>Forespurt</value>
@@ -811,14 +748,8 @@
     <data name="Choice_GtRiskProximity_Immediate" xml:space="preserve">
         <value>Umiddelbart</value>
     </data>
-    <data name="Choice_GtRiskProximity_ThisPhase" xml:space="preserve">
-        <value>I denne fasen</value>
-    </data>
     <data name="Choice_GtRiskProximity_WithinProject" xml:space="preserve">
         <value>Innenfor prosjektet</value>
-    </data>
-    <data name="Choice_GtRiskProximity_OutsideProject" xml:space="preserve">
-        <value>Utenfor prosjektet</value>
     </data>
     <data name="Choice_GtTag_Superior" xml:space="preserve">
         <value>Overordnet</value>
@@ -855,9 +786,6 @@
     </data>
     <data name="ClientSidePages_Home_PageName" xml:space="preserve">
         <value>Home.aspx</value>
-    </data>
-    <data name="ClientSidePages_Home_Title" xml:space="preserve">
-        <value>Hjem</value>
     </data>
     <data name="ClientSidePages_Home_Title" xml:space="preserve">
         <value>Hjem</value>
@@ -1065,9 +993,6 @@
     </data>
     <data name="ContentTypes_Checkpoint_Description" xml:space="preserve">
         <value>Opprett et nytt sjekkpunkt</value>
-    </data>
-    <data name="ContentTypes_Checkpoint_Name" xml:space="preserve">
-        <value>Sjekkpunkt</value>
     </data>
     <data name="ContentTypes_Checkpoint_Name" xml:space="preserve">
         <value>Sjekkpunkt</value>
@@ -1724,7 +1649,7 @@
         <value>Type</value>
     </data>
     <data name="Lists_HelpContent_BenefitAnalysisUserManual" xml:space="preserve">
-        <value>Gevinstananlyse og gevinstrealiseringsblan Brukermanual</value>
+        <value>Gevinstanalyse og gevinstrealiseringsplan Brukermanual</value>
     </data>
     <data name="Lists_HelpContent_BenefitFollowUpUserManual" xml:space="preserve">
         <value>Gevinstoppfølging Brukermanual</value>
@@ -2034,9 +1959,6 @@
     </data>
     <data name="Lists_Permission_Configuration_Description" xml:space="preserve">
         <value>Tillatelseskonfigurasjon for nye prosjekter. Denne listen må ikke endres på.</value>
-    </data>
-    <data name="Lists_Permission_Configuration_Description" xml:space="preserve">
-        <value>Sett opp grupper og tilganger som kopieres over til nye prosjektområder</value>
     </data>
     <data name="Lists_Permission_Configuration_Fields_GtTemplates_Description" xml:space="preserve">
         <value>Velg hvilke(n) mal(er) tillatelseskonfigurasjonen skal gjelde for. Om du ikke velger noen, vil konfigurasjonen gjelde alle malene.</value>
@@ -2485,12 +2407,6 @@
     <data name="Lists_TemplateOptions_Fields_FieldConfigurationName_Description" xml:space="preserve">
         <value>Velg feltkonfigurasjon for denne malen</value>
     </data>
-    <data name="Lists_TemplateOptions_Fields_FieldConfigurationName_Description" xml:space="preserve">
-        <value>Velg feltkonfigurasjon for denne malen</value>
-    </data>
-    <data name="Lists_TemplateOptions_Fields_FieldConfigurationName_DisplayName" xml:space="preserve">
-        <value>Feltkonfigurasjon</value>
-    </data>
     <data name="Lists_TemplateOptions_Fields_FieldConfigurationName_DisplayName" xml:space="preserve">
         <value>Feltkonfigurasjon</value>
     </data>
@@ -2500,17 +2416,8 @@
     <data name="Lists_TemplateOptions_Fields_GtProjectColumns_Description" xml:space="preserve">
         <value>Velg prosjektkolonner som skal inkluderes i denne malen</value>
     </data>
-    <data name="Lists_TemplateOptions_Fields_GtProjectColumns_Description" xml:space="preserve">
-        <value>Velg prosjektkolonner som skal inkluderes i denne malen</value>
-    </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectColumns_DisplayName" xml:space="preserve">
         <value>Prosjektkolonner</value>
-    </data>
-    <data name="Lists_TemplateOptions_Fields_GtProjectColumns_DisplayName" xml:space="preserve">
-        <value>Prosjektkolonner</value>
-    </data>
-    <data name="Lists_TemplateOptions_Fields_GtProjectContentType_Description" xml:space="preserve">
-        <value>Velg innholdstypen som skal brukes for prosjekter opprettet med denne malen</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectContentType_Description" xml:space="preserve">
         <value>Velg innholdstypen som skal brukes for prosjekter opprettet med denne malen</value>
@@ -2518,17 +2425,8 @@
     <data name="Lists_TemplateOptions_Fields_GtProjectContentType_DisplayName" xml:space="preserve">
         <value>Prosjekt innholdstype</value>
     </data>
-    <data name="Lists_TemplateOptions_Fields_GtProjectContentType_DisplayName" xml:space="preserve">
-        <value>Prosjekt innholdstype</value>
-    </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectCustomColumns_Description" xml:space="preserve">
         <value>Velg kundespesifikke kolonner som skal inkluderes i denne malen</value>
-    </data>
-    <data name="Lists_TemplateOptions_Fields_GtProjectCustomColumns_Description" xml:space="preserve">
-        <value>Velg kundespesifikke kolonner som skal inkluderes i denne malen</value>
-    </data>
-    <data name="Lists_TemplateOptions_Fields_GtProjectCustomColumns_DisplayName" xml:space="preserve">
-        <value>Kundespesifikke kolonner</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectCustomColumns_DisplayName" xml:space="preserve">
         <value>Kundespesifikke kolonner</value>
@@ -2536,17 +2434,8 @@
     <data name="Lists_TemplateOptions_Fields_GtProjectExtensions_Description" xml:space="preserve">
         <value>Velg utvidelser som skal inkluderes i denne malen</value>
     </data>
-    <data name="Lists_TemplateOptions_Fields_GtProjectExtensions_Description" xml:space="preserve">
-        <value>Velg utvidelser som skal inkluderes i denne malen</value>
-    </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectExtensions_DisplayName" xml:space="preserve">
         <value>Utvidelser</value>
-    </data>
-    <data name="Lists_TemplateOptions_Fields_GtProjectExtensions_DisplayName" xml:space="preserve">
-        <value>Utvidelser</value>
-    </data>
-    <data name="Lists_TemplateOptions_Fields_GtProjectPhaseTermId_Description" xml:space="preserve">
-        <value>Angi termsett-ID for prosjektfaser</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectPhaseTermId_Description" xml:space="preserve">
         <value>Angi termsett-ID for prosjektfaser</value>
@@ -2554,17 +2443,8 @@
     <data name="Lists_TemplateOptions_Fields_GtProjectPhaseTermId_DisplayName" xml:space="preserve">
         <value>Prosjektfase Termsett ID</value>
     </data>
-    <data name="Lists_TemplateOptions_Fields_GtProjectPhaseTermId_DisplayName" xml:space="preserve">
-        <value>Prosjektfase Termsett ID</value>
-    </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectStatusContentType_Description" xml:space="preserve">
         <value>Velg innholdstypen som skal brukes for prosjektstatus</value>
-    </data>
-    <data name="Lists_TemplateOptions_Fields_GtProjectStatusContentType_Description" xml:space="preserve">
-        <value>Velg innholdstypen som skal brukes for prosjektstatus</value>
-    </data>
-    <data name="Lists_TemplateOptions_Fields_GtProjectStatusContentType_DisplayName" xml:space="preserve">
-        <value>Prosjektstatus innholdstype</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectStatusContentType_DisplayName" xml:space="preserve">
         <value>Prosjektstatus innholdstype</value>
@@ -2572,17 +2452,8 @@
     <data name="Lists_TemplateOptions_Fields_GtProjectTemplate_Description" xml:space="preserve">
         <value>Velg PnP-malen som skal brukes ved opprettelse av prosjekter</value>
     </data>
-    <data name="Lists_TemplateOptions_Fields_GtProjectTemplate_Description" xml:space="preserve">
-        <value>Velg PnP-malen som skal brukes ved opprettelse av prosjekter</value>
-    </data>
     <data name="Lists_TemplateOptions_Fields_GtProjectTemplate_DisplayName" xml:space="preserve">
         <value>Mal</value>
-    </data>
-    <data name="Lists_TemplateOptions_Fields_GtProjectTemplate_DisplayName" xml:space="preserve">
-        <value>Mal</value>
-    </data>
-    <data name="Lists_TemplateOptions_Fields_IconName_Description" xml:space="preserve">
-        <value>Angi ikonnavnet for denne malen</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_IconName_Description" xml:space="preserve">
         <value>Angi ikonnavnet for denne malen</value>
@@ -2590,17 +2461,8 @@
     <data name="Lists_TemplateOptions_Fields_IconName_DisplayName" xml:space="preserve">
         <value>Ikon</value>
     </data>
-    <data name="Lists_TemplateOptions_Fields_IconName_DisplayName" xml:space="preserve">
-        <value>Ikon</value>
-    </data>
     <data name="Lists_TemplateOptions_Fields_IsAutoConfigurable_Description" xml:space="preserve">
         <value>Konfigurer prosjektet automatisk med denne malen om en eier besøker SharePoint-området. Malen må også være låst.</value>
-    </data>
-    <data name="Lists_TemplateOptions_Fields_IsAutoConfigurable_Description" xml:space="preserve">
-        <value>Konfigurer prosjektet automatisk med denne malen om en eier besøker SharePoint-området. Malen må også være låst.</value>
-    </data>
-    <data name="Lists_TemplateOptions_Fields_IsAutoConfigurable_DisplayName" xml:space="preserve">
-        <value>Konfigurer automatisk</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_IsAutoConfigurable_DisplayName" xml:space="preserve">
         <value>Konfigurer automatisk</value>
@@ -2608,17 +2470,8 @@
     <data name="Lists_TemplateOptions_Fields_IsDefaultExtensionsLocked_Description" xml:space="preserve">
         <value>Dette gjør at valgte utvidelser for denne malen blir satt som obligatorisk.</value>
     </data>
-    <data name="Lists_TemplateOptions_Fields_IsDefaultExtensionsLocked_Description" xml:space="preserve">
-        <value>Dette gjør at valgte utvidelser for denne malen blir satt som obligatorisk.</value>
-    </data>
     <data name="Lists_TemplateOptions_Fields_IsDefaultExtensionsLocked_DisplayName" xml:space="preserve">
         <value>Lås valgte utvidelser?</value>
-    </data>
-    <data name="Lists_TemplateOptions_Fields_IsDefaultExtensionsLocked_DisplayName" xml:space="preserve">
-        <value>Lås valgte utvidelser?</value>
-    </data>
-    <data name="Lists_TemplateOptions_Fields_IsDefaultListContentLocked_Description" xml:space="preserve">
-        <value>Dette gjør at valgt listeinnhold for denne malen blir satt som obligatorisk.</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_IsDefaultListContentLocked_Description" xml:space="preserve">
         <value>Dette gjør at valgt listeinnhold for denne malen blir satt som obligatorisk.</value>
@@ -2626,17 +2479,8 @@
     <data name="Lists_TemplateOptions_Fields_IsDefaultListContentLocked_DisplayName" xml:space="preserve">
         <value>Lås valgte listeinnhold?</value>
     </data>
-    <data name="Lists_TemplateOptions_Fields_IsDefaultListContentLocked_DisplayName" xml:space="preserve">
-        <value>Lås valgte listeinnhold?</value>
-    </data>
     <data name="Lists_TemplateOptions_Fields_IsDefaultTemplate_Description" xml:space="preserve">
         <value>Angi om dette er standardmalen</value>
-    </data>
-    <data name="Lists_TemplateOptions_Fields_IsDefaultTemplate_Description" xml:space="preserve">
-        <value>Angi om dette er standardmalen</value>
-    </data>
-    <data name="Lists_TemplateOptions_Fields_IsDefaultTemplate_DisplayName" xml:space="preserve">
-        <value>Standard mal?</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_IsDefaultTemplate_DisplayName" xml:space="preserve">
         <value>Standard mal?</value>
@@ -2647,23 +2491,11 @@
     <data name="Lists_TemplateOptions_Fields_IsHiddenTemplate_Description" xml:space="preserve">
         <value>Skjul denne malen fra malvalg</value>
     </data>
-    <data name="Lists_TemplateOptions_Fields_IsHiddenTemplate_Description" xml:space="preserve">
-        <value>Skjul denne malen fra malvalg</value>
-    </data>
-    <data name="Lists_TemplateOptions_Fields_IsHiddenTemplate_DisplayName" xml:space="preserve">
-        <value>Skjult</value>
-    </data>
     <data name="Lists_TemplateOptions_Fields_IsHiddenTemplate_DisplayName" xml:space="preserve">
         <value>Skjult</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_ListContentConfigLookup_Description" xml:space="preserve">
         <value>Velg listeinnholdskonfigurasjon for denne malen</value>
-    </data>
-    <data name="Lists_TemplateOptions_Fields_ListContentConfigLookup_Description" xml:space="preserve">
-        <value>Velg listeinnholdskonfigurasjon for denne malen</value>
-    </data>
-    <data name="Lists_TemplateOptions_Fields_ListContentConfigLookup_DisplayName" xml:space="preserve">
-        <value>Listeinnhold</value>
     </data>
     <data name="Lists_TemplateOptions_Fields_ListContentConfigLookup_DisplayName" xml:space="preserve">
         <value>Listeinnhold</value>
@@ -2911,9 +2743,6 @@
     <data name="SiteFields_GtActionDescription_Description" xml:space="preserve">
         <value/>
     </data>
-    <data name="SiteFields_GtActionDescription_Description" xml:space="preserve">
-        <value>Beskriv tiltak for å oppnå støtte hos interessenten eller redusere motstand/ hindringer.</value>
-    </data>
     <data name="SiteFields_GtActionDescription_DisplayName" xml:space="preserve">
         <value>Beskrivelse</value>
     </data>
@@ -3058,9 +2887,6 @@
     <data name="SiteFields_GtCategory_Description" xml:space="preserve">
         <value/>
     </data>
-    <data name="SiteFields_GtCategory_Description" xml:space="preserve">
-        <value>Hvilken kategori tilhører elementet?</value>
-    </data>
     <data name="SiteFields_GtCategory_DisplayName" xml:space="preserve">
         <value>Kategori</value>
     </data>
@@ -3124,9 +2950,6 @@
     <data name="SiteFields_GtDataSourceDefault_Description" xml:space="preserve">
         <value/>
     </data>
-    <data name="SiteFields_GtDataSourceDefault_Description" xml:space="preserve">
-        <value>Om datakilden skal være standard datakilde for kategorien.</value>
-    </data>
     <data name="SiteFields_GtDataSourceDefault_DisplayName" xml:space="preserve">
         <value>Standard for kategori</value>
     </data>
@@ -3145,9 +2968,6 @@
     <data name="SiteFields_GtDataSourceLevel_Description" xml:space="preserve">
         <value/>
     </data>
-    <data name="SiteFields_GtDataSourceLevel_Description" xml:space="preserve">
-        <value>Hvilket nivå i prosjektportalen er datakilden knyttet til?</value>
-    </data>
     <data name="SiteFields_GtDataSourceLevel_DisplayName" xml:space="preserve">
         <value>Nivå</value>
     </data>
@@ -3164,7 +2984,7 @@
         <value>Godkjent dato</value>
     </data>
     <data name="SiteFields_GtDeliveryAcceptanceMethod_Description" xml:space="preserve">
-        <value>Hvordan blir godkjenningen av leveransen bekreftet? Eksempelvis ved testing, brukerundersøkelse, demonstrasjon, muntlig eller skriftlig avtale/overlering.</value>
+        <value>Hvordan blir godkjenningen av leveransen bekreftet? Eksempelvis ved testing, brukerundersøkelse, demonstrasjon, muntlig eller skriftlig avtale/overlevering.</value>
     </data>
     <data name="SiteFields_GtDeliveryAcceptanceMethod_DisplayName" xml:space="preserve">
         <value>Godkjenningsmetode</value>
@@ -4685,7 +4505,7 @@
         <value>Kommentar, kvalitet</value>
     </data>
     <data name="SiteFields_GtStatusQuality_Description" xml:space="preserve">
-        <value>Hva er status på prosjektets kvalitet, har det f. eks oppstått avvik på kravspesifikiasjon?</value>
+        <value>Hva er status på prosjektets kvalitet, har det for eksempel oppstått avvik fra kravspesifikasjonen?</value>
     </data>
     <data name="SiteFields_GtStatusQuality_DisplayName" xml:space="preserve">
         <value>Status kvalitet</value>
@@ -4870,26 +4690,14 @@
     <data name="View_Archived_DisplayName" xml:space="preserve">
         <value>Arkivert</value>
     </data>
-    <data name="View_Archived_DisplayName" xml:space="preserve">
-        <value>Arkivert</value>
-    </data>
     <data name="View_ByBenefitType_DisplayName" xml:space="preserve">
         <value>Etter gevinsttype</value>
-    </data>
-    <data name="View_ByBenefitType_DisplayName" xml:space="preserve">
-        <value>Gevinsttype</value>
     </data>
     <data name="View_ByProcess_DisplayName" xml:space="preserve">
         <value>Etter prosess</value>
     </data>
-    <data name="View_ByProcess_DisplayName" xml:space="preserve">
-        <value>Per prosess</value>
-    </data>
     <data name="View_ByStatus_DisplayName" xml:space="preserve">
         <value>Etter status</value>
-    </data>
-    <data name="View_ByStatus_DisplayName" xml:space="preserve">
-        <value>Per status</value>
     </data>
     <data name="View_Cards_DisplayName" xml:space="preserve">
         <value>Kortvisning</value>
@@ -4905,9 +4713,6 @@
     </data>
     <data name="View_CurrentRisks_DisplayName" xml:space="preserve">
         <value>Aktuelle risikoer</value>
-    </data>
-    <data name="View_Flat_DisplayName" xml:space="preserve">
-        <value>Flat visning</value>
     </data>
     <data name="View_Flat_DisplayName" xml:space="preserve">
         <value>Flat visning</value>
