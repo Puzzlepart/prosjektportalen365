@@ -22,11 +22,11 @@
   .icon {
     margin-bottom: 24px;
     animation: scaleIn 0.3s ease-out;
-  }
 
-  .successIcon {
-    font-size: 64px;
-    color: var(--colorPaletteGreenForeground1);
+    .successIcon {
+        font-size: 64px;
+        color: var(--colorPaletteGreenForeground1);
+      }
   }
 
   .title {
