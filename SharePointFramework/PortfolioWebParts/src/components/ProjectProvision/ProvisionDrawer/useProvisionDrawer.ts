@@ -136,6 +136,7 @@ export const useProvisionDrawer = () => {
       MembersId: context.state.properties.member,
       RequestedById: context.state.properties.requestedBy,
       ConfidentialData: context.column.get('isConfidential'),
+      Metadata: context.column.get('metadata'),
       Visibility: context.state.properties.privacy || 'Private',
       ExternalSharingRequired: context.column.get('externalSharing'),
       Guests: context.column.get('guest')?.join(';'),

@@ -42,6 +42,7 @@ export function useEditableColumn(
         ['requestedSource', ''],
         ['image', ''],
         ['isConfidential', false],
+        ['metadata', ''],
         ['privacy', strings.Provision.PrivacyFieldOptionPrivate],
         ['externalSharing', false],
         ['guest', []],
@@ -319,6 +320,8 @@ export function useEditableColumn(
         const defaultExpirationDate =
           props.expirationDateMode === 'monthDropdown' ? props.defaultExpirationDate || '0' : null
 
+        const defaultMetadata = typeDefaults?.defaultMetadata || ''
+
         let defaultOwner: any[] = []
         let transformedOwner: any[] = []
         let transformedExpirationDate: any = null
@@ -346,6 +349,7 @@ export function useEditableColumn(
         $setColumn((prev) => {
           const newColumns = new Map(prev)
           newColumns.set('isConfidential', defaultConfidentialData)
+          newColumns.set('metadata', defaultMetadata)
           newColumns.set('privacy', defaultVisibility)
           newColumns.set('sensitivityLabel', defaultSensitivityLabel)
           newColumns.set('sensitivityLabelLibrary', defaultSensitivityLabelLibrary)
@@ -361,6 +365,7 @@ export function useEditableColumn(
           properties: {
             ...state.properties,
             isConfidential: defaultConfidentialData,
+            metadata: defaultMetadata,
             sensitivityLabel: defaultSensitivityLabel,
             sensitivityLabelLibrary: defaultSensitivityLabelLibrary,
             retentionLabel: defaultRetentionLabel,

@@ -13,6 +13,7 @@ export interface IProvisionRequestItem {
   MembersId?: any
   RequestedById?: any
   ConfidentialData?: boolean
+  Metadata?: string
   Visibility?: string
   ExternalSharingRequired?: boolean
   Guests?: any
