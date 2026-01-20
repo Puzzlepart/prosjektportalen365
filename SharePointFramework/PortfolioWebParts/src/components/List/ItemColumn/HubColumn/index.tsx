@@ -1,6 +1,6 @@
 import strings from 'PortfolioWebPartsStrings'
 import React from 'react'
-import { ColumnRenderComponent } from '../types'
+import { ColumnRenderComponent } from 'pp365-shared-library'
 import { IHubColumnProps } from './types'
 
 /**
