@@ -45,7 +45,6 @@ if ($null -ne $LastInstall) {
         Add-PnPNavigationNode -Location TopNavigationBar -Title "Erfaringslogg" -Url "$($Uri.LocalPath)/SitePages/Erfaringslogg.aspx"
         Add-PnPNavigationNode -Location TopNavigationBar -Title "Leveranseoversikt" -Url "$($Uri.LocalPath)/SitePages/Leveranseoversikt.aspx"
         Add-PnPNavigationNode -Location TopNavigationBar -Title "Usikkerhetsoversikt" -Url "$($Uri.LocalPath)/SitePages/Usikkerhetsoversikt.aspx"
-        Write-Host "[SUCCESS] Please adjust navigation order manually"
     }
 
     if ($PreviousVersion -lt [version]"1.8.0" -or $PreviousVersion -like "*BA*") {
@@ -108,8 +107,7 @@ if ($null -ne $LastInstall) {
             }
             else {
                 Write-Host "[WARNING] Failed to find Anleggsprosjekt template. Please check the Maloppsett list." -ForegroundColor Yellow
-            }
-            
+            }            
         }
     }
 
@@ -166,7 +164,6 @@ if ($null -ne $LastInstall) {
                 Add-PnPFile -Path $Snapshot.FullName -Folder "$($ProjectStatusAttachmentsFolder.Name)/$Id" -NewFileName $SNAPSHOT_FILENAME -ErrorAction SilentlyContinue | Out-Null
             }
         }
-        Write-Host "[SUCCESS] Project Status items successfully processed"
     }
     
     if ($PreviousVersion -lt [version]"1.9.0") {
@@ -183,8 +180,6 @@ if ($null -ne $LastInstall) {
                 Invoke-PnPQuery
             }
         }
-
-        Write-Host "[SUCCESS] Data sources updated"
     }
 
     if ($PreviousVersion -lt [version]"1.12.1") {
@@ -196,6 +191,5 @@ if ($null -ne $LastInstall) {
         if ($null -ne $PageListItem) {
             $UpdatedItem = Set-PnPListItem -List "SitePages" -Identity $PageListItem.Id -Values @{"PromotedState" = 1} -UpdateType Update -ErrorAction SilentlyContinue
         }
-        Write-Host "[SUCCESS] Project News Page template fixed" -ForegroundColor Green
     }
 }
