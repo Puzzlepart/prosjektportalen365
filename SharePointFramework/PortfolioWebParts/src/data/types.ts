@@ -23,6 +23,9 @@ import strings from 'PortfolioWebPartsStrings'
 
 export interface IFetchDataForViewItemResult extends ISearchResult {
   SiteId: string
+  _hubId?: string
+  _hubTitle?: string
+  _hubUrl?: string
   [key: string]: any
 }
 
@@ -469,7 +472,6 @@ export type PortfolioInstance = {
   columnConfigListName: string
   viewsListName: string
   iconName?: string
-  language?: 'no' | 'en'
   includeInMergedView?: boolean
 }
 
