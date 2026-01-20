@@ -81,7 +81,6 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
     <ProjectProvisionContext.Provider value={{ props, state, setState, column, setColumn, reset }}>
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme} className={styles.container}>
-          {/* Inline mode: conditionally show Drawer, Status, Settings, Config Editor, or Confirmation */}
           {props.renderMode === 'inline' ? (
             <>
               {state.showConfigEditor ? (
@@ -93,7 +92,9 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
               ) : state.showProvisionSettings ? (
                 <ProvisionSettings
                   renderMode='inline'
-                  onBack={() => setState({ showProvisionSettings: false, showProvisionDrawer: true })}
+                  onBack={() =>
+                    setState({ showProvisionSettings: false, showProvisionDrawer: true })
+                  }
                 />
               ) : state.showProvisionStatus ? (
                 <ProvisionStatus
@@ -140,15 +141,15 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
                     )}
                     {(props.pageContext.legacyPageContext.isSiteAdmin ||
                       !props.hideSettingsMenu) && (
-                      <MenuItem
-                        {...restoreFocusTargetAttribute}
-                        onClick={() => {
-                          setState({ showProvisionSettings: true })
-                        }}
-                      >
-                        {strings.Provision.SettingsMenuLabel}
-                      </MenuItem>
-                    )}
+                        <MenuItem
+                          {...restoreFocusTargetAttribute}
+                          onClick={() => {
+                            setState({ showProvisionSettings: true })
+                          }}
+                        >
+                          {strings.Provision.SettingsMenuLabel}
+                        </MenuItem>
+                      )}
                   </MenuList>
                 </MenuPopover>
               </Menu>

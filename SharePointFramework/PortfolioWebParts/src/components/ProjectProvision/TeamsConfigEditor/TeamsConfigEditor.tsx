@@ -95,16 +95,17 @@ export const TeamsConfigEditor: React.FC<ITeamsConfigEditorProps> = ({
               </h2>
             </div>
             <MessageBar intent='error'>
-                <MessageBarBody>
-                  <MessageBarTitle>{strings.AccessTitle || 'Access Denied'}</MessageBarTitle>
-                  {strings.Provision.ConfigEditorAccessDenied || 'You must be a site administrator to edit configuration.'}
-                </MessageBarBody>
-              </MessageBar>
-            </div>
-          </FluentProvider>
-        </IdPrefixProvider>
-      )
-    }
+              <MessageBarBody>
+                <MessageBarTitle>{strings.AccessTitle || 'Access Denied'}</MessageBarTitle>
+                {strings.Provision.ConfigEditorAccessDenied ||
+                  'You must be a site administrator to edit configuration.'}
+              </MessageBarBody>
+            </MessageBar>
+          </div>
+        </FluentProvider>
+      </IdPrefixProvider>
+    )
+  }
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
   const [isSaving, setIsSaving] = useState(false)
@@ -164,9 +165,9 @@ export const TeamsConfigEditor: React.FC<ITeamsConfigEditorProps> = ({
           </div>
 
           <div className={styles.description}>
-              {strings.Provision.ConfigEditorDescription ||
-                'Edit the web part configuration in JSON format. Changes will be saved to TeamsAppConfig.json and applied when you reload the app.'}
-            </div>
+            {strings.Provision.ConfigEditorDescription ||
+              'Edit the web part configuration in JSON format. Changes will be saved to TeamsAppConfig.json and applied when you reload the app.'}
+          </div>
 
           {error && (
             <MessageBar intent='error'>
@@ -180,7 +181,9 @@ export const TeamsConfigEditor: React.FC<ITeamsConfigEditorProps> = ({
           {success && (
             <MessageBar intent='success'>
               <MessageBarBody>
-                <MessageBarTitle>{strings.Provision.ConfigSaveSuccessTitle || 'Success'}</MessageBarTitle>
+                <MessageBarTitle>
+                  {strings.Provision.ConfigSaveSuccessTitle || 'Success'}
+                </MessageBarTitle>
                 {success}
               </MessageBarBody>
             </MessageBar>

@@ -51,8 +51,8 @@ export const useProvisionDrawer = () => {
   const currentTypeConfig = context.state.types?.find((t) => t.title === selectedType)
   const currentTemplate = currentTypeConfig?.templateId
     ? context.state.siteTemplates?.find(
-        (template) => template.id.toString() === currentTypeConfig.templateId
-      )
+      (template) => template.id.toString() === currentTypeConfig.templateId
+    )
     : null
 
   const getField = (fieldName: string) => {
@@ -95,12 +95,10 @@ export const useProvisionDrawer = () => {
   const onSave = async (): Promise<boolean> => {
     const baseUrl = `${context.props.webAbsoluteUrl.split(managedPath)[0]}${managedPath}/`
 
-    const name = `${namingConvention?.prefixText}${context.column.get('name')}${
-      namingConvention?.suffixText
-    }`
-    const alias = `${namingConvention?.prefixText}${context.column.get('alias')}${
-      namingConvention?.suffixText
-    }`
+    const name = `${namingConvention?.prefixText}${context.column.get('name')}${namingConvention?.suffixText
+      }`
+    const alias = `${namingConvention?.prefixText}${context.column.get('alias')}${namingConvention?.suffixText
+      }`
 
     const sensitivityLabelId = context.state.sensitivityLabels?.find(
       (t) => t.labelName === context.column.get('sensitivityLabel')
@@ -223,10 +221,10 @@ export const useProvisionDrawer = () => {
         currentTypeConfig,
         currentTemplate: currentTemplate
           ? {
-              id: currentTemplate.id,
-              title: currentTemplate.title,
-              pnpTemplateUrl: currentTemplate.pnpTemplateUrl
-            }
+            id: currentTemplate.id,
+            title: currentTemplate.title,
+            pnpTemplateUrl: currentTemplate.pnpTemplateUrl
+          }
           : null
       })
     }

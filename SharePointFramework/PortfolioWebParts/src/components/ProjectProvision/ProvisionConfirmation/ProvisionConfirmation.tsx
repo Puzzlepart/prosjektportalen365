@@ -16,25 +16,15 @@ export const ProvisionConfirmation: FC<IProvisionConfirmationProps> = ({
   return (
     <div className={styles.container}>
       <div className={styles.icon}>
-        <span className={styles.successIcon}>
-          {getFluentIcon('CheckmarkCircle')}
-        </span>
+        <span className={styles.successIcon}>{getFluentIcon('CheckmarkCircle')}</span>
       </div>
       <h2 className={styles.title}>{strings.Provision.ConfirmationTitle}</h2>
       <p className={styles.message}>{strings.Provision.ConfirmationMessage}</p>
       <div className={styles.actions}>
-        <Button
-          appearance='primary'
-          icon={getFluentIcon('Add')}
-          onClick={onNewRequest}
-        >
+        <Button appearance='primary' icon={getFluentIcon('Add')} onClick={onNewRequest}>
           {strings.Provision.NewRequestButton}
         </Button>
-        <Button
-          appearance='outline'
-          icon={getFluentIcon('ClipboardTask')}
-          onClick={onViewRequests}
-        >
+        <Button appearance='outline' icon={getFluentIcon('ClipboardTask')} onClick={onViewRequests}>
           {strings.Provision.ViewRequestsButton}
         </Button>
       </div>

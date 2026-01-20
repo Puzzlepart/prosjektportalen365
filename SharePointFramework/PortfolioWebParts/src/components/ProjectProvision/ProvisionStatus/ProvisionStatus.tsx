@@ -81,9 +81,7 @@ export const ProvisionStatus = (props: IProvisionStatusProps) => {
                 {strings.Provision.StatusDialogNoSearchResultsLabel}
               </div>
             ) : (
-              <div className={styles.message}>
-                {strings.Provision.StatusDialogNoResultsLabel}
-              </div>
+              <div className={styles.message}>{strings.Provision.StatusDialogNoResultsLabel}</div>
             )}
           </>
         ) : (
@@ -106,7 +104,10 @@ export const ProvisionStatus = (props: IProvisionStatusProps) => {
   if (isInlineMode) {
     return (
       <IdPrefixProvider value={fluentProviderId}>
-        <FluentProvider theme={customLightTheme} className={mergeClasses(isTeamsMode ? 'teams-mode' : 'sp-mode')}>
+        <FluentProvider
+          theme={customLightTheme}
+          className={mergeClasses(isTeamsMode ? 'teams-mode' : 'sp-mode')}
+        >
           <div className={styles.inlineContainer}>
             <div className={styles.header}>
               {props.onBack && (
@@ -121,9 +122,7 @@ export const ProvisionStatus = (props: IProvisionStatusProps) => {
               )}
               <h2 className={styles.title}>{strings.Provision.StatusDialogTitle}</h2>
             </div>
-            <div className={styles.content}>
-              {gridContent}
-            </div>
+            <div className={styles.content}>{gridContent}</div>
           </div>
         </FluentProvider>
       </IdPrefixProvider>
@@ -155,9 +154,7 @@ export const ProvisionStatus = (props: IProvisionStatusProps) => {
               >
                 {strings.Provision.StatusDialogTitle}
               </DialogTitle>
-              <DialogContent className={styles.content}>
-                {gridContent}
-              </DialogContent>
+              <DialogContent className={styles.content}>{gridContent}</DialogContent>
             </DialogBody>
           </DialogSurface>
         </Dialog>

@@ -471,7 +471,7 @@ export interface IPortfolioWebPartsDataAdapter {
 
   /**
    * Load Teams app configuration from TeamsAppConfig.json
-   * 
+   *
    * @param provisionUrl The provision site URL
    * @returns Configuration object or null if file doesn't exist
    */
@@ -479,7 +479,7 @@ export interface IPortfolioWebPartsDataAdapter {
 
   /**
    * Save Teams app configuration to TeamsAppConfig.json
-   * 
+   *
    * @param provisionUrl The provision site URL
    * @param config Configuration object to save
    */
@@ -487,7 +487,7 @@ export interface IPortfolioWebPartsDataAdapter {
 
   /**
    * Check if current user is admin of the provision site
-   * 
+   *
    * @param provisionUrl The provision site URL
    * @returns True if user is site admin
    */

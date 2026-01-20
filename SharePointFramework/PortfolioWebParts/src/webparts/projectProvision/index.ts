@@ -87,16 +87,16 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
       this.properties.renderMode = 'inline'
       this.properties.isTeamsContext = true
 
-      try {
-        const teamsConfig = await this.dataAdapter.loadTeamsConfig(
-          this.properties.provisionUrl || '/sites/bestillingsportalen'
-        )
-        if (teamsConfig) {
-          Object.assign(this.properties, teamsConfig)
-          console.log('Loaded Teams configuration from TeamsAppConfig.json')
+      if (this.properties.provisionUrl) {
+        try {
+          const teamsConfig = await this.dataAdapter.loadTeamsConfig(this.properties.provisionUrl)
+          if (teamsConfig) {
+            Object.assign(this.properties, teamsConfig)
+            console.log('Loaded Teams configuration from TeamsAppConfig.json')
+          }
+        } catch (error) {
+          console.warn('Failed to load Teams configuration:', error)
         }
-      } catch (error) {
-        console.warn('Failed to load Teams configuration:', error)
       }
     }
 

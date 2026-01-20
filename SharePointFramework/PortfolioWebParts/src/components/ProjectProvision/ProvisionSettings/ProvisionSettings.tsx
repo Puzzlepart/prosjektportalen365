@@ -15,7 +15,6 @@ import {
   DialogTrigger,
   FluentProvider,
   IdPrefixProvider,
-  mergeClasses,
   Spinner
 } from '@fluentui/react-components'
 import { useProvisionSettings } from './useProvisionSettings'
@@ -80,9 +79,7 @@ export const ProvisionSettings = (props: IProvisionSettingsProps) => {
                 {strings.Provision.SettingsDialogNoSearchResultsLabel}
               </div>
             ) : (
-              <div className={styles.message}>
-                {strings.Provision.SettingsDialogNoResultsLabel}
-              </div>
+              <div className={styles.message}>{strings.Provision.SettingsDialogNoResultsLabel}</div>
             )}
           </>
         ) : (
@@ -120,9 +117,7 @@ export const ProvisionSettings = (props: IProvisionSettingsProps) => {
               )}
               <h2 className={styles.title}>{strings.Provision.SettingsDialogTitle}</h2>
             </div>
-            <div className={styles.content}>
-              {gridContent}
-            </div>
+            <div className={styles.content}>{gridContent}</div>
           </div>
         </FluentProvider>
       </IdPrefixProvider>
@@ -154,9 +149,7 @@ export const ProvisionSettings = (props: IProvisionSettingsProps) => {
               >
                 {strings.Provision.SettingsDialogTitle}
               </DialogTitle>
-              <DialogContent className={styles.content}>
-                {gridContent}
-              </DialogContent>
+              <DialogContent className={styles.content}>{gridContent}</DialogContent>
             </DialogBody>
           </DialogSurface>
         </Dialog>
