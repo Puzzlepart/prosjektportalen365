@@ -101,6 +101,10 @@ export function useEditableColumn(
             'owner',
             async () => {
               if (!value || !Array.isArray(value)) return []
+              if (!props.dataAdapter) {
+                console.warn('dataAdapter is not available')
+                return []
+              }
               try {
                 const users = await props.dataAdapter.getProvisionUsers(value, props.provisionUrl)
                 const values = await Promise.all(users)
@@ -115,6 +119,10 @@ export function useEditableColumn(
             'member',
             async () => {
               if (!value || !Array.isArray(value)) return []
+              if (!props.dataAdapter) {
+                console.warn('dataAdapter is not available')
+                return []
+              }
               try {
                 const users = await props.dataAdapter.getProvisionUsers(value, props.provisionUrl)
                 const values = await Promise.all(users)
@@ -129,6 +137,10 @@ export function useEditableColumn(
             'requestedBy',
             async () => {
               if (!value || !Array.isArray(value)) return []
+              if (!props.dataAdapter) {
+                console.warn('dataAdapter is not available')
+                return []
+              }
               try {
                 const users = await props.dataAdapter.getProvisionUsers(value, props.provisionUrl)
                 const values = await Promise.all(users)

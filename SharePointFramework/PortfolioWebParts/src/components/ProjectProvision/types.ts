@@ -19,6 +19,7 @@ export interface IProjectProvisionProps extends IBaseComponentProps {
   // General
   buttonLabel?: string
   autoOwner?: boolean
+  renderMode?: 'button' | 'inline'
 
   // Visuals
   siteTypeRenderMode?: string
@@ -45,6 +46,7 @@ export interface IProjectProvisionProps extends IBaseComponentProps {
   provisionUrl: string
   requireProvisionAccess?: boolean
   hasProjectProvisionAccess?: boolean
+  isTeamsContext?: boolean
   fields?: IProvisionField[]
   typeFieldConfigurations?: ITypeFieldConfiguration[]
   debugMode?: boolean
@@ -63,6 +65,9 @@ export interface IProjectProvisionState {
   showProvisionDrawer: boolean
   showProvisionStatus: boolean
   showProvisionSettings: boolean
+  showProvisionConfirmation?: boolean
+  showConfigEditor?: boolean
+  isProvisionSiteAdmin?: boolean
   settings: any[]
   types?: Record<string, any>
   siteTemplates?: Record<string, any>

@@ -2,6 +2,46 @@
   justify-content: space-between;
 }
 
+.inlineContainer {
+  max-width: 900px;
+  margin: 10px auto 0 auto;
+  padding: 24px 24px 48px;
+  background: var(--colorNeutralBackground1);
+  border-radius: var(--borderRadiusMedium);
+  box-shadow: var(--shadow4);
+
+  @media (max-width: 768px) {
+    padding: 16px;
+    max-width: 100%;
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .footer {
+    padding-top: 24px;
+    border-top: 1px solid var(--colorNeutralStroke2);
+    margin-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+  }
+}
+
+.inlineLevel {
+  opacity: 1 !important;
+  visibility: visible !important;
+  position: static !important;
+  transform: none !important;
+  padding: 0;
+
+  &[style*="display: none"] {
+    display: none !important;
+  }
+}
+
 .body {
   flex: 1;
   width: 100%;

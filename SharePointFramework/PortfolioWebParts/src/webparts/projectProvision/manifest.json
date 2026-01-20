@@ -26,7 +26,8 @@
       "officeFabricIconFontName": "BuildDefinition",
       "properties": {
         "autoOwner": true,
-        "expirationDateMode": "date"
+        "expirationDateMode": "date",
+        "provisionUrl": "/sites/bestillingsportalen"
       }
     }
   ]

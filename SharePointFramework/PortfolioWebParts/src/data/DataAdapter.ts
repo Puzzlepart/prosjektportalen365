@@ -1492,4 +1492,58 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       }
     }
   }
+
+  public async loadTeamsConfig(provisionUrl: string): Promise<any | null> {
+    try {
+      const provisionSite = Web([this._sp.web, provisionUrl])
+
+      const file = await provisionSite
+        .getFolderByServerRelativePath('SiteAssets')
+        .files.getByUrl('TeamsAppConfig.json')
+
+      const content = await file.getText()
+      return JSON.parse(content)
+    } catch (error) {
+      console.log('TeamsAppConfig.json not found or error loading:', error.message)
+      return null
+    }
+  }
+
+  public async saveTeamsConfig(provisionUrl: string, config: any): Promise<void> {
+    try {
+      const provisionSite = Web([this._sp.web, provisionUrl])
+      const hasPermission = await provisionSite.currentUserHasPermissions(PermissionKind.ManageWeb)
+
+      if (!hasPermission) {
+        throw new Error(
+          'You do not have permission to edit configuration. Site administrator access required.'
+        )
+      }
+
+      const folder = provisionSite.getFolderByServerRelativePath('SiteAssets')
+      const jsonContent = JSON.stringify(config, null, 2)
+
+      try {
+        const file = await provisionSite
+          .getFolderByServerRelativePath('SiteAssets')
+          .files.getByUrl('TeamsAppConfig.json')
+        await file.setContent(jsonContent)
+      } catch {
+        await folder.files.addUsingPath('TeamsAppConfig.json', jsonContent, { Overwrite: true })
+      }
+    } catch (error) {
+      throw new Error(`Failed to save TeamsAppConfig.json: ${error.message || error}`)
+    }
+  }
+
+  public async isProvisionSiteAdmin(provisionUrl: string): Promise<boolean> {
+    try {
+      const provisionSite = Web([this._sp.web, provisionUrl])
+      const hasPermission = await provisionSite.currentUserHasPermissions(PermissionKind.ManageWeb)
+      return hasPermission
+    } catch (error) {
+      console.warn('Failed to check provision site admin status:', error)
+      return false
+    }
+  }
 }

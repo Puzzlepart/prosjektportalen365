@@ -82,6 +82,24 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
 
   public async onInit(): Promise<void> {
     await super.onInit()
+
+    if (this.context.sdks?.microsoftTeams) {
+      this.properties.renderMode = 'inline'
+      this.properties.isTeamsContext = true
+
+      if (this.properties.provisionUrl) {
+        try {
+          const teamsConfig = await this.dataAdapter.loadTeamsConfig(this.properties.provisionUrl)
+          if (teamsConfig) {
+            Object.assign(this.properties, teamsConfig)
+            console.log('Loaded Teams configuration from TeamsAppConfig.json')
+          }
+        } catch (error) {
+          console.warn('Failed to load Teams configuration:', error)
+        }
+      }
+    }
+
     this.properties.fields = this.mergeFields(this.properties.fields || [], this._defaultFields)
     this.properties.typeFieldConfigurations = this.mergeTypeConfigurations(
       this.properties.typeFieldConfigurations || [],
@@ -147,10 +165,19 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
             {
               groupName: strings.GeneralGroupName,
               groupFields: [
+                PropertyPaneDropdown('renderMode', {
+                  label: strings.Provision.RenderModeFieldLabel,
+                  options: [
+                    { key: 'button', text: strings.Provision.RenderModeButton },
+                    { key: 'inline', text: strings.Provision.RenderModeInline }
+                  ],
+                  selectedKey: propertiesWithDefaults.renderMode ?? 'button'
+                }),
                 PropertyPaneTextField('buttonLabel', {
                   label: strings.Provision.ButtonLabelFieldLabel,
                   description: strings.Provision.ButtonLabelFieldDescription,
-                  placeholder: strings.Provision.ProvisionButtonLabel
+                  placeholder: strings.Provision.ProvisionButtonLabel,
+                  disabled: propertiesWithDefaults.renderMode === 'inline'
                 }),
                 PropertyPaneToggle('autoOwner', {
                   label: strings.Provision.AutoOwnerFieldLabel,

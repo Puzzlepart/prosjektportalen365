@@ -1,0 +1,59 @@
+.inlineContainer {
+  max-width: 1200px;
+  margin: 10px auto 0 auto;
+  padding: 24px 24px 48px;
+  background: var(--colorNeutralBackground1);
+  border-radius: var(--borderRadiusMedium);
+  box-shadow: var(--shadow4);
+
+  @media (max-width: 768px) {
+    padding: 16px;
+    max-width: 100%;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--colorNeutralStroke1);
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+
+    .backButton {
+      min-width: auto;
+    }
+
+    .title {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0;
+      color: var(--colorNeutralForeground1);
+      flex: 1;
+    }
+  }
+
+  .description {
+    font-size: 14px;
+    color: var(--colorNeutralForeground2);
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  .actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 16px;
+  }
+
+  .textarea {
+    font-family: Consolas, Monaco, "Courier New", monospace;
+    font-size: 12px;
+    height: 450px;
+
+    textarea {
+      height: 100%;
+      max-height: 100%;
+    }
+  }
+}

@@ -1,0 +1,11 @@
+interface CssExports {
+  'actions': string;
+  'backButton': string;
+  'description': string;
+  'header': string;
+  'inlineContainer': string;
+  'textarea': string;
+  'title': string;
+}
+export const cssExports: CssExports;
+export default cssExports;

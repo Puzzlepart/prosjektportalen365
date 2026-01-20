@@ -73,7 +73,6 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
       const hashState = parseUrlHash()
       currentView = getCurrentView(hashState, context, reset)
 
-      // Check if we should fetch merged data from all portfolios
       const shouldFetchMerged =
         context.state.isMergedView &&
         context.props.portfolios &&
@@ -83,7 +82,6 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
       let managedProperties: string[]
 
       if (shouldFetchMerged) {
-        // Fetch merged data from all portfolios
         const result = await context.props.dataAdapter.fetchMergedViewData(
           currentView,
           context.props.portfolios,
@@ -92,7 +90,6 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
         items = result.items
         managedProperties = result.managedProperties
       } else {
-        // Fetch data from single portfolio (existing behavior)
         const result = context.props.isParentProject
           ? await context.props.dataAdapter.fetchDataForViewBatch(
               currentView,

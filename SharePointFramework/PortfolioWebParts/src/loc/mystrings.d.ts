@@ -173,6 +173,23 @@ declare interface IPortfolioWebPartsStrings {
     DefaultTeamTemplate: string
     DefaultLanguage: string
     DefaultTimeZone: string
+    ConfirmationTitle: string
+    ConfirmationMessage: string
+    NewRequestButton: string
+    ViewRequestsButton: string
+    ConfigEditorButton: string
+    ConfigEditorTitle: string
+    ConfigEditorDescription: string
+    ConfigJsonLabel: string
+    ConfigJsonHint: string
+    ConfigSaveButton: string
+    ConfigSavingButton: string
+    ConfigResetButton: string
+    ConfigSaveSuccess: string
+    ConfigSaveSuccessTitle: string
+    ConfigSaveError: string
+    ConfigInvalidJson: string
+    ConfigEditorAccessDenied: string
     CommunityNameFieldLabel: string
     CommunityNameFieldDescription: string
     CommunityNameFieldPlaceholder: string
@@ -209,6 +226,9 @@ declare interface IPortfolioWebPartsStrings {
     TeamPrivacyFieldLabel: string
     TeamPrivacyFieldDescription: string
     TeamPrivacyFieldPlaceholder: string
+    RenderModeFieldLabel: string
+    RenderModeButton: string
+    RenderModeInline: string
     ButtonLabelFieldLabel: string
     ButtonLabelFieldDescription: string
     AutoOwnerFieldLabel: string

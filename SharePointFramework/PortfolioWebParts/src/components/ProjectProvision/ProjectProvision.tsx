@@ -23,7 +23,9 @@ import { ProjectProvisionContext } from './context'
 import { ProvisionDrawer } from './ProvisionDrawer'
 import strings from 'PortfolioWebPartsStrings'
 import { ProvisionSettings } from './ProvisionSettings'
+import { TeamsConfigEditor } from './TeamsConfigEditor'
 import { stringIsNullOrEmpty } from '@pnp/core'
+import styles from './ProjectProvision.module.scss'
 
 export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
   const {
@@ -78,53 +80,83 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
   return (
     <ProjectProvisionContext.Provider value={{ props, state, setState, column, setColumn, reset }}>
       <IdPrefixProvider value={fluentProviderId}>
-        <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
-          <ProvisionDrawer toast={dispatchToast} />
-          <Menu positioning='below-end'>
-            <MenuTrigger disableButtonEnhancement>
-              {(triggerProps: MenuButtonProps) => (
-                <SplitButton
-                  menuButton={triggerProps}
-                  primaryActionButton={{
-                    onClick: () => setState({ showProvisionDrawer: true })
-                  }}
-                  icon={props.icon}
-                  appearance={props.appearance}
-                  size={props.size}
-                  disabled={props.disabled}
-                >
-                  {props.buttonLabel}
-                </SplitButton>
+        <FluentProvider theme={customLightTheme} className={styles.container}>
+          {props.renderMode === 'inline' ? (
+            <>
+              {state.showConfigEditor ? (
+                <TeamsConfigEditor
+                  fluentProviderId={fluentProviderId}
+                  onBack={() => setState({ showConfigEditor: false, showProvisionDrawer: true })}
+                  isAdmin={state.isProvisionSiteAdmin}
+                />
+              ) : state.showProvisionSettings ? (
+                <ProvisionSettings
+                  renderMode='inline'
+                  onBack={() =>
+                    setState({ showProvisionSettings: false, showProvisionDrawer: true })
+                  }
+                />
+              ) : state.showProvisionStatus ? (
+                <ProvisionStatus
+                  toast={dispatchToast}
+                  renderMode='inline'
+                  onBack={() => setState({ showProvisionStatus: false, showProvisionDrawer: true })}
+                />
+              ) : (
+                <ProvisionDrawer toast={dispatchToast} renderMode={props.renderMode} />
               )}
-            </MenuTrigger>
-            <MenuPopover>
-              <MenuList>
-                {!props.hideStatusMenu && (
-                  <MenuItem
-                    {...restoreFocusTargetAttribute}
-                    onClick={() => {
-                      setState({ showProvisionStatus: true })
-                    }}
-                  >
-                    {strings.Provision.StatusMenuLabel}
-                  </MenuItem>
-                )}
-                {props.pageContext.legacyPageContext.isSiteAdmin ||
-                  (!props.hideSettingsMenu && (
-                    <MenuItem
-                      {...restoreFocusTargetAttribute}
-                      onClick={() => {
-                        setState({ showProvisionSettings: true })
+            </>
+          ) : (
+            <>
+              {/* Button mode: show button and dialogs */}
+              <ProvisionDrawer toast={dispatchToast} renderMode={props.renderMode} />
+              <Menu positioning='below-end'>
+                <MenuTrigger disableButtonEnhancement>
+                  {(triggerProps: MenuButtonProps) => (
+                    <SplitButton
+                      menuButton={triggerProps}
+                      primaryActionButton={{
+                        onClick: () => setState({ showProvisionDrawer: true })
                       }}
+                      icon={props.icon}
+                      appearance={props.appearance}
+                      size={props.size}
+                      disabled={props.disabled}
                     >
-                      {strings.Provision.SettingsMenuLabel}
-                    </MenuItem>
-                  ))}
-              </MenuList>
-            </MenuPopover>
-          </Menu>
-          <ProvisionStatus toast={dispatchToast} />
-          <ProvisionSettings />
+                      {props.buttonLabel}
+                    </SplitButton>
+                  )}
+                </MenuTrigger>
+                <MenuPopover>
+                  <MenuList>
+                    {!props.hideStatusMenu && (
+                      <MenuItem
+                        {...restoreFocusTargetAttribute}
+                        onClick={() => {
+                          setState({ showProvisionStatus: true })
+                        }}
+                      >
+                        {strings.Provision.StatusMenuLabel}
+                      </MenuItem>
+                    )}
+                    {(props.pageContext.legacyPageContext.isSiteAdmin ||
+                      !props.hideSettingsMenu) && (
+                      <MenuItem
+                        {...restoreFocusTargetAttribute}
+                        onClick={() => {
+                          setState({ showProvisionSettings: true })
+                        }}
+                      >
+                        {strings.Provision.SettingsMenuLabel}
+                      </MenuItem>
+                    )}
+                  </MenuList>
+                </MenuPopover>
+              </Menu>
+              <ProvisionStatus toast={dispatchToast} />
+              <ProvisionSettings />
+            </>
+          )}
           <Toaster toasterId={toasterId} />
         </FluentProvider>
       </IdPrefixProvider>
@@ -135,6 +167,7 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
 ProjectProvision.defaultProps = {
   buttonLabel: strings.Provision.ProvisionButtonLabel,
   autoOwner: true,
+  renderMode: 'button',
   expirationDateMode: 'date',
   defaultExpirationDate: '0',
   level0Header: strings.Provision.DrawerLevel0HeaderText,
