@@ -812,12 +812,10 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   ? onSave().then((response) => {
                       if (response) {
                         context.reset()
-                        
+
                         if (isInlineMode) {
-                          // In inline mode, show confirmation screen
                           context.setState({ showProvisionConfirmation: true, properties: {} })
                         } else {
-                          // In drawer mode, show toast and close drawer
                           props.toast(
                             <Toast appearance='inverted'>
                               <ToastTitle>{strings.Provision.ToastCreatedTitle}</ToastTitle>

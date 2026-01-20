@@ -34,14 +34,13 @@
   }
 }
 
-// Inline level styles - no motion, just plain visible divs
 .inlineLevel {
   opacity: 1 !important;
   visibility: visible !important;
   position: static !important;
   transform: none !important;
   padding: 0;
-  
+
   &[style*="display: none"] {
     display: none !important;
   }

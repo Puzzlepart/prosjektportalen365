@@ -53,7 +53,6 @@ function renderItemColumn(item: Record<string, any>, column: IColumn): ReactNode
     return createElement(renderFunction, columnRenderProps)
   }
 
-  // Check for config-based column rendering
   const config = get<ProjectColumnConfigDictionaryItem>(column, 'data.config', null)
   const columnConfig = config && config[columnValue]
 
