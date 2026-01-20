@@ -87,7 +87,7 @@ export function usePortfolioSelector(context: IPortfolioOverviewContext) {
         .setWidth('fit-content')
         .setStyle({ minWidth: '145px' })
         .setHidden(!context.props.showPortfolioSelector || _.isEmpty(context.props.portfolios))
-        .setDisabled(context.state.isChangingView || context.props.portfolios?.length <= 1)
+        .setDisabled(context.state.isChangingView)
         .setItems(portfolioMenuItems, {
           portfolios: checkedValues
         }),

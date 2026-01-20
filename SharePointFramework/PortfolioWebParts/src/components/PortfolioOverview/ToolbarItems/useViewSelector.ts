@@ -55,23 +55,23 @@ export function useViewSelector(context: IPortfolioOverviewContext) {
               }),
             ListMenuItemDivider,
             ...sharedViews,
-            context.props.showMergedViewInViewSelector &&
-              context.props.portfolios?.length > 1 &&
-              ListMenuItemDivider,
-            context.props.showMergedViewInViewSelector &&
-              context.props.portfolios?.length > 1 &&
-              new ListMenuItem(strings.MergedViewLabel)
-                .setIcon('BulletedTreeList')
-                .makeCheckable({
-                  name: 'views',
-                  value: 'merged'
-                })
-                .setOnClick(() => {
-                  context.dispatch(TOGGLE_MERGED_VIEW(true))
-                  if (context.props.onSetPortfolio) {
-                    context.props.onSetPortfolio(null)
-                  }
-                }),
+            ...(context.props.showMergedViewInViewSelector && context.props.portfolios?.length > 1
+              ? [
+                  ListMenuItemDivider,
+                  new ListMenuItem(strings.MergedViewLabel)
+                    .setIcon('BulletedTreeList')
+                    .makeCheckable({
+                      name: 'views',
+                      value: 'merged'
+                    })
+                    .setOnClick(() => {
+                      context.dispatch(TOGGLE_MERGED_VIEW(true))
+                      if (context.props.onSetPortfolio) {
+                        context.props.onSetPortfolio(null)
+                      }
+                    })
+                ]
+              : []),
             !_.isEmpty(personalViews) && ListMenuItemDivider,
             ListMenuItemHeader(strings.PersonalViewsHeaderText).makeConditional(
               !_.isEmpty(personalViews)

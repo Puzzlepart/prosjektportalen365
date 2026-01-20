@@ -294,6 +294,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       managedProperties: [...primaryData.managedProperties]
     }
 
+    const tempAdapter = new DataAdapter(this._spfxContext, this._sp)
+
     for (let i = 1; i < includedPortfolios.length; i++) {
       const portfolio = includedPortfolios[i]
       const hubMetadata = {
@@ -303,7 +305,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       }
 
       try {
-        const tempAdapter = new DataAdapter(this._spfxContext, this._sp)
         await tempAdapter.configure(null, null, portfolio)
 
         const portfolioConfig = await tempAdapter.getPortfolioConfig()

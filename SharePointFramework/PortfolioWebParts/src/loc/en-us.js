@@ -291,7 +291,7 @@ define([], function () {
     UrlFieldLabel: 'URL',
     ProjectListNameFieldLabel: 'Projects list name',
     ProjectStatusListNameFieldLabel: 'Project status list name',
-    ProjectContentColumnsListNameFieldLabel: 'Project content columns list name',
+    ProjectContentColumnsListNameFieldLabel: 'Project Content Columns list name',
     ViewsListNameFieldLabel: 'Views list name',
     ColumnsListNameFieldLabel: 'Columns list name',
     ColumnConfigListNameFieldLabel: 'Column configuration list name',
