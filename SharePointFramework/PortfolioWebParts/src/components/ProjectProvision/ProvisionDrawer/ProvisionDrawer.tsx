@@ -850,7 +850,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
   if (isInlineMode) {
     return (
       <IdPrefixProvider value={fluentProviderId}>
-        <FluentProvider theme={customLightTheme} className={mergeClasses(styles.provisionFPouter, isTeamsMode ? 'teams-mode' : 'sp-mode')}>
+        <FluentProvider theme={customLightTheme} className={mergeClasses(isTeamsMode ? 'teams-mode' : 'sp-mode')}>
           <div className={mergeClasses(styles.inlineContainer, 'provision-inline')}>
             {context.state.showProvisionConfirmation ? (
               <ProvisionConfirmation

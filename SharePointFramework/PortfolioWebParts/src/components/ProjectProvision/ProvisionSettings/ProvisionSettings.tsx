@@ -105,7 +105,7 @@ export const ProvisionSettings = (props: IProvisionSettingsProps) => {
   if (isInlineMode) {
     return (
       <IdPrefixProvider value={fluentProviderId}>
-        <FluentProvider theme={customLightTheme} className={mergeClasses(styles.provisionFPouter, styles.provisionSettingsDialog)}>
+        <FluentProvider theme={customLightTheme} className={styles.provisionSettingsDialog}>
           <div className={styles.inlineContainer}>
             <div className={styles.header}>
               {props.onBack && (
@@ -131,7 +131,7 @@ export const ProvisionSettings = (props: IProvisionSettingsProps) => {
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
-      <FluentProvider theme={customLightTheme} className={mergeClasses(styles.provisionFPouter, styles.provisionSettingsDialog)}>
+      <FluentProvider theme={customLightTheme} className={styles.provisionSettingsDialog}>
         <Dialog
           modalType='modal'
           open={context.state.showProvisionSettings}

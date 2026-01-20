@@ -4,7 +4,6 @@ interface CssExports {
   'description': string;
   'header': string;
   'inlineContainer': string;
-  'provisionFPouter': string;
   'textarea': string;
   'title': string;
 }

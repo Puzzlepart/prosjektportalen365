@@ -27,20 +27,20 @@ export const TeamsConfigEditor: React.FC<ITeamsConfigEditorProps> = ({
   isAdmin
 }) => {
   const context = useContext(ProjectProvisionContext)
-  
+
   const getSerializableConfig = () => {
     const props = context.props
-    
+
     return {
       // General
       buttonLabel: props.buttonLabel,
       autoOwner: props.autoOwner,
       renderMode: props.renderMode,
-      
+
       // Visuals
       siteTypeRenderMode: props.siteTypeRenderMode,
       expirationDateMode: props.expirationDateMode,
-      
+
       // Titles and descriptions
       level0Header: props.level0Header,
       level0Description: props.level0Description,
@@ -49,29 +49,29 @@ export const TeamsConfigEditor: React.FC<ITeamsConfigEditorProps> = ({
       level2Header: props.level2Header,
       level2Description: props.level2Description,
       footerDescription: props.footerDescription,
-      
+
       // Hide/show
       hideStatusMenu: props.hideStatusMenu,
       hideSettingsMenu: props.hideSettingsMenu,
-      
+
       // Field logic
       defaultExpirationDate: props.defaultExpirationDate,
       readOnlyGroupLogic: props.readOnlyGroupLogic,
-      
+
       // Advanced
       provisionUrl: props.provisionUrl,
       requireProvisionAccess: props.requireProvisionAccess,
       fields: props.fields,
       typeFieldConfigurations: props.typeFieldConfigurations,
       debugMode: props.debugMode,
-      
+
       // Other
       disabled: props.disabled,
       appearance: props.appearance,
       size: props.size
     }
   }
-  
+
   const [jsonValue, setJsonValue] = useState(() => {
     return JSON.stringify(getSerializableConfig(), null, 2)
   })
@@ -79,7 +79,7 @@ export const TeamsConfigEditor: React.FC<ITeamsConfigEditorProps> = ({
   if (!isAdmin) {
     return (
       <IdPrefixProvider value={fluentProviderId}>
-        <FluentProvider theme={customLightTheme} className={styles.provisionFPouter}>
+        <FluentProvider theme={customLightTheme}>
           <div className={styles.inlineContainer}>
             <div className={styles.header}>
               <Button
@@ -125,7 +125,7 @@ export const TeamsConfigEditor: React.FC<ITeamsConfigEditorProps> = ({
       const config = JSON.parse(jsonValue)
       await context.props.dataAdapter.saveTeamsConfig(context.props.provisionUrl, config)
       setSuccess(strings.Provision.ConfigSaveSuccess || 'Configuration saved successfully')
-      
+
       setTimeout(() => {
         window.location.reload()
       }, 1500)
@@ -147,7 +147,7 @@ export const TeamsConfigEditor: React.FC<ITeamsConfigEditorProps> = ({
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
-      <FluentProvider theme={customLightTheme} className={styles.provisionFPouter}>
+      <FluentProvider theme={customLightTheme}>
         <div className={styles.inlineContainer}>
           <div className={styles.header}>
             <Button
