@@ -36,7 +36,8 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
       render(
         createElement(UserMessage, {
           title: this._error?.name,
-          text: this._error?.message
+          text: this._error?.message,
+          intent: this._error?.intent
         }),
         this.domElement
       )
@@ -291,7 +292,7 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                 PropertyPaneDropdown('selectedPortfolioId', {
                   label: strings.SelectedPortfolioLabel,
                   options: this._getOptions('portfolios'),
-                  disabled: _.isEmpty(this.properties.portfolios)
+                  disabled: !_.isEmpty(this.properties.portfolios)
                 }),
                 PropertyPaneDescription(strings.SelectedPortfolioDescription)
               ]

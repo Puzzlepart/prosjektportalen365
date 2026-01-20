@@ -456,22 +456,15 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         'SiteId'
       ]),
       this._fetchItems(
-        `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5*`,
-        [...configuration.columns.map((f) => f.fieldName), siteIdProperty, 'ListItemId', 'GtModerationStatusOWSCHCS'],
+        `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* (GtModerationStatusOWSCHCS:${config.MODERATION_STATUS_PUBLISHED_NO} OR GtModerationStatusOWSCHCS:${config.MODERATION_STATUS_PUBLISHED_EN})`,
+        [...configuration.columns.map((f) => f.fieldName), siteIdProperty, 'ListItemId'],
         500,
         { Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',') }
       )
     ])
     projects = projects.map((item) => cleanDeep({ ...item }))
     sites = sites.map((item) => cleanDeep({ ...item }))
-
-    // Filter status reports to only include published ones (language-agnostic check)
-    // Published reports have GtModerationStatusOWSCHCS set to either "Publisert" (Norwegian) or "Published" (English)
     statusReports = statusReports
-      .filter((report) => {
-        const moderationStatus = report['GtModerationStatusOWSCHCS']
-        return moderationStatus === 'Publisert' || moderationStatus === 'Published'
-      })
       .sort((a, b) => b['ListItemId'] - a['ListItemId'])
       .map((item) => cleanDeep({ ...item }))
     sites = sites.filter(
