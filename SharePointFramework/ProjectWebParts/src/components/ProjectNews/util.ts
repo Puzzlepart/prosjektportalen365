@@ -329,7 +329,6 @@ export async function setOriginalSourceSiteId(
         updateBody[field] = projectData[field]
       }
     }
-    console.log('Updating site page with project fields:', Object.keys(updateBody))
   } else {
     console.warn(`No project data found for site ID: ${siteId}`)
   }
