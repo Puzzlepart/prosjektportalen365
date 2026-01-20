@@ -109,6 +109,10 @@ try {
 
     Write-Host "Getting ready to upgrade feature discrepancy between version $global:__PreviousVersion and $global:__InstalledVersion"
 
+    if ($global:__InstalledVersion -eq $global:__PreviousVersion) {
+        Write-Host "The newest installed version is the same as the previous. The script might have some issues upgrading projects." -ForegroundColor Yellow
+    }
+
     [System.Uri]$Uri = $Url
     $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
 

@@ -198,10 +198,6 @@ function Get-PPInstallationInfo() {
         }
     }
 
-    if ($LatestInstallVersion -eq $PreviousInstallVersion) {
-        Write-Host "The newest installed version is the same as the previous. The script might have some issues upgrading projects." -ForegroundColor Yellow
-    }
-
     $InstalledVersion = ParseVersionString -VersionString $LatestInstallVersion
     $PreviousVersion = ParseVersionString -VersionString $PreviousInstallVersion
     $Channel = $LatestInstallEntry.FieldValues["InstallChannel"]
