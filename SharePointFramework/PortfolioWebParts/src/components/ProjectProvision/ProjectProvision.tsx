@@ -141,15 +141,15 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
                     )}
                     {(props.pageContext.legacyPageContext.isSiteAdmin ||
                       !props.hideSettingsMenu) && (
-                        <MenuItem
-                          {...restoreFocusTargetAttribute}
-                          onClick={() => {
-                            setState({ showProvisionSettings: true })
-                          }}
-                        >
-                          {strings.Provision.SettingsMenuLabel}
-                        </MenuItem>
-                      )}
+                      <MenuItem
+                        {...restoreFocusTargetAttribute}
+                        onClick={() => {
+                          setState({ showProvisionSettings: true })
+                        }}
+                      >
+                        {strings.Provision.SettingsMenuLabel}
+                      </MenuItem>
+                    )}
                   </MenuList>
                 </MenuPopover>
               </Menu>
