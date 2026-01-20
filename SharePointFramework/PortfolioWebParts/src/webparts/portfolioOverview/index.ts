@@ -242,8 +242,7 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                       id: 'projectListName',
                       title: strings.ProjectListNameFieldLabel,
                       type: CustomCollectionFieldType.string,
-                      defaultValue:
-                        PortalDataServiceDefaultConfiguration?.listNames?.PROJECTS,
+                      defaultValue: PortalDataServiceDefaultConfiguration?.listNames?.PROJECTS,
                       required: true
                     },
                     {
@@ -285,7 +284,7 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                       type: CustomCollectionFieldType.boolean,
                       defaultValue: true,
                       required: false
-                    },
+                    }
                   ]
                 }),
                 PropertyPaneDescription(strings.PortfoliosFieldDescription),

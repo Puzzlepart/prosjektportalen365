@@ -250,14 +250,18 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     portfolios: PortfolioInstance[],
     primaryConfiguration: IPortfolioOverviewConfiguration
   ): Promise<IPortfolioViewData> {
-    const includedPortfolios = portfolios.filter(p => p.includeInMergedView !== false)
+    const includedPortfolios = portfolios.filter((p) => p.includeInMergedView !== false)
 
     if (includedPortfolios.length === 0) {
       return { items: [], managedProperties: [] }
     }
 
     const primaryPortfolio = includedPortfolios[0]
-    const primaryData = await this.fetchDataForView(view, primaryConfiguration, primaryConfiguration.hubSiteId)
+    const primaryData = await this.fetchDataForView(
+      view,
+      primaryConfiguration,
+      primaryConfiguration.hubSiteId
+    )
 
     const primaryHubMetadata = {
       _hubId: primaryPortfolio.uniqueId,
@@ -266,7 +270,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
 
     const mergedResult: IPortfolioViewData = {
-      items: primaryData.items.map(item => ({ ...item, ...primaryHubMetadata })),
+      items: primaryData.items.map((item) => ({ ...item, ...primaryHubMetadata })),
       managedProperties: [...primaryData.managedProperties]
     }
 
@@ -299,9 +303,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           portfolioHubSiteId
         )
 
-        mergedResult.items.push(...items.map(item => ({ ...item, ...hubMetadata })))
+        mergedResult.items.push(...items.map((item) => ({ ...item, ...hubMetadata })))
 
-        managedProperties.forEach(prop => {
+        managedProperties.forEach((prop) => {
           if (!mergedResult.managedProperties.includes(prop)) {
             mergedResult.managedProperties.push(prop)
           }
@@ -312,7 +316,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
 
     const seenKeys = new Set<string>()
-    const uniqueItems = mergedResult.items.filter(item => {
+    const uniqueItems = mergedResult.items.filter((item) => {
       const key = `${item.SiteId}_${item._hubId}`
       if (seenKeys.has(key)) {
         return false

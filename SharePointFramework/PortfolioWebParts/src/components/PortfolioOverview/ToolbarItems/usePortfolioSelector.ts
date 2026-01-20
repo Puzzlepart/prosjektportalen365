@@ -26,7 +26,11 @@ export function usePortfolioSelector(context: IPortfolioOverviewContext) {
     if (isMergedView) {
       return strings.MergedViewLabel
     }
-    return selectedPortfolio?.title ?? _.first(context.props.portfolios)?.title ?? strings.PortfolioSelectorLabel
+    return (
+      selectedPortfolio?.title ??
+      _.first(context.props.portfolios)?.title ??
+      strings.PortfolioSelectorLabel
+    )
   }, [isMergedView, selectedPortfolio, context.props.portfolios])
 
   const portfolioMenuItems = useMemo(() => {
@@ -50,7 +54,11 @@ export function usePortfolioSelector(context: IPortfolioOverviewContext) {
       )
     }
 
-    if (context.props.portfolios && context.props.portfolios.length > 1 && context.props.showMergedView !== false) {
+    if (
+      context.props.portfolios &&
+      context.props.portfolios.length > 1 &&
+      context.props.showMergedView !== false
+    ) {
       items.push(
         ListMenuItemDivider,
         new ListMenuItem(strings.MergedViewLabel)
@@ -74,15 +82,14 @@ export function usePortfolioSelector(context: IPortfolioOverviewContext) {
     if (isMergedView) {
       return ['merged']
     }
-    return [selectedPortfolio?.uniqueId || _.first(context.props.portfolios)?.uniqueId].filter(Boolean)
+    return [selectedPortfolio?.uniqueId || _.first(context.props.portfolios)?.uniqueId].filter(
+      Boolean
+    )
   }, [isMergedView, selectedPortfolio, context.props.portfolios])
 
   return useMemo<ListMenuItem>(
     () =>
-      new ListMenuItem(
-        displayText,
-        strings.PortfolioSelectorDescription
-      )
+      new ListMenuItem(displayText, strings.PortfolioSelectorDescription)
         .setIcon('Collections')
         .setWidth('fit-content')
         .setStyle({ minWidth: '145px' })
@@ -91,6 +98,14 @@ export function usePortfolioSelector(context: IPortfolioOverviewContext) {
         .setItems(portfolioMenuItems, {
           portfolios: checkedValues
         }),
-    [context.props.portfolios, context.state.isChangingView, selectedPortfolioId, isMergedView, displayText, portfolioMenuItems, checkedValues]
+    [
+      context.props.portfolios,
+      context.state.isChangingView,
+      selectedPortfolioId,
+      isMergedView,
+      displayText,
+      portfolioMenuItems,
+      checkedValues
+    ]
   )
 }

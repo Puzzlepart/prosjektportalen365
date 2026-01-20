@@ -74,7 +74,11 @@ function renderItemColumn(item: Record<string, any>, column: IColumn): ReactNode
 export const useOnRenderItemColumn = () => {
   useColumnRenderComponentRegistry()
   useEffect(() => {
-    ColumnRenderComponentRegistry.registerMultiple(StatusReportColumn, ProjectInformationColumn, HubColumn)
+    ColumnRenderComponentRegistry.registerMultiple(
+      StatusReportColumn,
+      ProjectInformationColumn,
+      HubColumn
+    )
   }, [])
 
   return useMemo(
