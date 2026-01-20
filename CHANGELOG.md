@@ -11,6 +11,8 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 
 ### Forbedringer
 
+- Forbedringer på 'multi-hub' støtte i Porteføljeoversikt. Dette inkluderer en ny Prosjektkolonne `Hubnavn` som kan brukes til filtrering og visning av prosjekter basert på hvilket hubområde de tilhører. Det er også støtte for hubområder som har forskjellige språkinnstillinger slik at den samler både norske og engelske prosjekter i en og samme oversikt.
+
 ### Feilrettinger
 
 ---
