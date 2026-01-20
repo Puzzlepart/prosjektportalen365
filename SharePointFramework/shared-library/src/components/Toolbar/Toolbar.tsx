@@ -18,7 +18,7 @@ export const Toolbar: FC<IToolbarProps> = (props) => {
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme} className={styles.root}>
-        <FluentToolbar className={styles.toolbar} style={{ width: '100%'}}>
+        <FluentToolbar className={styles.toolbar} style={{ width: '100%' }}>
           {props.items.map(renderToolbarItem)}
         </FluentToolbar>
         {props.farItems && (

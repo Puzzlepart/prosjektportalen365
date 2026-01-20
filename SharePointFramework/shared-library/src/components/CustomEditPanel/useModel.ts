@@ -109,10 +109,7 @@ export function useModel(props: ICustomEditPanelProps) {
         async () => {
           const values = await Promise.all(
             value.map(
-              async (v: IPersonaProps) =>
-                (
-                  await webContext.ensureUser(v.secondaryText)
-                ).data.Id
+              async (v: IPersonaProps) => (await webContext.ensureUser(v.secondaryText)).data.Id
             )
           )
           return [_.flatten(values), `${field.internalName}Id`]

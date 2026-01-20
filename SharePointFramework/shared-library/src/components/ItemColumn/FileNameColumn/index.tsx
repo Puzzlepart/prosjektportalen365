@@ -17,7 +17,7 @@ export const FileNameColumn: ColumnRenderComponent<IFileNameColumnProps> = (prop
     }
 
     const fileRef = props.item.FileRef as string
-    const parts = fileRef.split('/').filter(p => p)
+    const parts = fileRef.split('/').filter((p) => p)
     let siteUrl = window.location.origin
 
     if (parts[0] === 'sites' && parts[1]) {
@@ -45,12 +45,7 @@ export const FileNameColumn: ColumnRenderComponent<IFileNameColumnProps> = (prop
       {isFolder ? (
         <span style={{ marginLeft: 8 }}>{props.columnValue}</span>
       ) : fileUrl ? (
-        <Link
-          href={fileUrl}
-          rel='noopener noreferrer'
-          target='_blank'
-          style={{ marginLeft: 8 }}
-        >
+        <Link href={fileUrl} rel='noopener noreferrer' target='_blank' style={{ marginLeft: 8 }}>
           {props.columnValue}
         </Link>
       ) : (
