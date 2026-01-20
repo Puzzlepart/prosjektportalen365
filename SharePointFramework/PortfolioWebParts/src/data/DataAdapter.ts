@@ -89,16 +89,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     this.portalDataService = new PortalDataService()
   }
 
-  /**
-   * Configuring the `DataAdapter` enabling use of the `DataSourceService` and `PortalDataService`
-   *
-   * The `dataSourceService` is dependent on the `portalDataService` being configured, as it needs
-   * `portalDataService.web` to be passed as a parameter to its constructor.
-   *
-   * @param _spfxContext SPFx context (not used)
-   * @param _configuration Configuration (not used)
-   * @param portfolio Optionally the portfolio instance to configure the data adapter for
-   */
   public async configure(
     _spfxContext?: WebPartContext,
     _configuration?: any,
@@ -255,21 +245,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
-
-
-  /**
-   * Fetches data from multiple portfolio instances and merges them into a single view.
-   *
-   * Approach:
-   * 1. Configure and fetch data from the primary (first) included portfolio - this gives us the base configuration
-   * 2. Loop through the remaining included portfolios (after filtering by `includeInMergedView`) starting after the primary
-   *    portfolio, and merge their data into the result
-   *
-   * @param view View configuration from the primary (first included) portfolio
-   * @param portfolios Array of portfolio instances to fetch data from; portfolios with includeInMergedView === false are ignored
-   * @param primaryConfiguration Configuration from the primary portfolio
-   * @returns Merged portfolio view data with items from all included hubs
-   */
   public async fetchMergedViewData(
     view: PortfolioOverviewView,
     portfolios: PortfolioInstance[],
@@ -557,14 +532,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     } catch (error) {}
   }
 
-  /**
-   *  Fetches items from timeline content list and maps them to `TimelineContentListModel`.
-   *
-   * * Fetching list items
-   * * Maps the items to `TimelineContentListModel`
-   *
-   * @param timelineConfig Timeline configuration
-   */
   public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationModel[]) {
     const timelineItems = await this._sp.web.lists
       .getByTitle(resource.Lists_TimelineContent_Title)
@@ -918,11 +885,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     return projects
   }
 
-  /**
-   * Checks if the current user is in the specified SharePoint group.
-   *
-   * @param groupName Group name
-   */
   public async isUserInGroup(groupName: string): Promise<boolean> {
     try {
       const [siteGroup] = await this._sp.web.siteGroups

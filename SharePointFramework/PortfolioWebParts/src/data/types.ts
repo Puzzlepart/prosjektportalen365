@@ -72,11 +72,14 @@ export interface IEnrichedProjectsFields {
 
 export interface IPortfolioWebPartsDataAdapter {
   /**
-   * Configure data adapter - returns an configured instance of the data adapter.
+   * Configuring the `DataAdapter` enabling use of the `DataSourceService` and `PortalDataService`
    *
-   * @param spfxContext SPFx context (optional)
-   * @param configuration Configuration for data adapter (optional)
-   * @param portfolio Portfolio instance (optional)
+   * The `dataSourceService` is dependent on the `portalDataService` being configured, as it needs
+   * `portalDataService.web` to be passed as a parameter to its constructor.
+   *
+   * @param _spfxContext SPFx context (not used)
+   * @param _configuration Configuration (not used)
+   * @param portfolio Optionally the portfolio instance to configure the data adapter for
    */
   configure(
     spfxContext?: WebPartContext,
@@ -143,13 +146,18 @@ export interface IPortfolioWebPartsDataAdapter {
   getPortfolioConfig?(portfolio?: PortfolioInstance): Promise<IPortfolioOverviewConfiguration>
 
   /**
-   * Fetch merged data from multiple portfolio instances simultaneously.
-   * Uses the primary (first) portfolio's configuration for field names and view settings.
-   *
-   * @param view View configuration
-   * @param portfolios Array of portfolio instances to fetch data from
-   * @param primaryConfiguration Configuration from the primary portfolio
-   */
+    * Fetches data from multiple portfolio instances and merges them into a single view.
+    *
+    * Approach:
+    * 1. Configure and fetch data from the primary (first) included portfolio - this gives us the base configuration
+    * 2. Loop through the remaining included portfolios (after filtering by `includeInMergedView`) starting after the primary
+    *    portfolio, and merge their data into the result
+    *
+    * @param view View configuration from the primary (first included) portfolio
+    * @param portfolios Array of portfolio instances to fetch data from; portfolios with includeInMergedView === false are ignored
+    * @param primaryConfiguration Configuration from the primary portfolio
+    * @returns Merged portfolio view data with items from all included hubs
+    */
   fetchMergedViewData?(
     view: PortfolioOverviewView,
     portfolios: PortfolioInstance[],
@@ -225,9 +233,9 @@ export interface IPortfolioWebPartsDataAdapter {
   ): Promise<IPortfolioViewData>
 
   /**
-   * Checks if the current is in the specified group.
+   * Checks if the current user is in the specified SharePoint group.
    *
-   * @param groupName
+   * @param groupName Group name
    */
   isUserInGroup?(groupName: string): Promise<boolean>
 
@@ -241,11 +249,12 @@ export interface IPortfolioWebPartsDataAdapter {
   ): Promise<{ reports: any[]; configElement: TimelineConfigurationModel }>
 
   /**
-   *  Fetches items from timeline content list
+   *  Fetches items from timeline content list and maps them to `TimelineContentListModel`.
    *
    * * Fetching list items
-   * * Maps the items to `TimelineContentModel`
+   * * Maps the items to `TimelineContentListModel`
    *
+   * @param timelineConfig Timeline configuration
    * @description Used in `ProjectTimeline`
    */
   fetchTimelineContentItems?(timelineConfig: any[]): Promise<TimelineContentModel[]>
