@@ -334,13 +334,15 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       }
     }
 
-    const uniqueItems = mergedResult.items.reduce((acc, item) => {
-      const isDuplicate = acc.some(i => i.SiteId === item.SiteId && i._hubId === item._hubId)
-      if (!isDuplicate) {
-        acc.push(item)
+    const seenKeys = new Set<string>()
+    const uniqueItems = mergedResult.items.filter(item => {
+      const key = `${item.SiteId}_${item._hubId}`
+      if (seenKeys.has(key)) {
+        return false
       }
-      return acc
-    }, [] as IFetchDataForViewItemResult[])
+      seenKeys.add(key)
+      return true
+    }) as IFetchDataForViewItemResult[]
 
     return {
       items: uniqueItems,
