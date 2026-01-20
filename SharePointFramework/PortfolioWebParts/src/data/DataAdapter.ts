@@ -253,7 +253,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     const isCurrentUserInManagerGroup = await this.isUserInGroup(
       resource.Security_SiteGroup_PortfolioInsight_Title
     )
-    
+
     if (isCurrentUserInManagerGroup) {
       return await this.fetchDataForManagerView(view, configuration, siteId)
     } else {
@@ -298,7 +298,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       return { items: [], managedProperties: [] }
     }
 
-    // Get data from primary portfolio
     const primaryPortfolio = includedPortfolios[0]
     const primaryData = await this.fetchDataForView(view, primaryConfiguration, primaryConfiguration.hubSiteId)
 
@@ -313,7 +312,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       managedProperties: [...primaryData.managedProperties]
     }
 
-    // Fetch and merge data from remaining portfolios
     for (let i = 1; i < includedPortfolios.length; i++) {
       const portfolio = includedPortfolios[i]
 
@@ -324,7 +322,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         const portfolioConfig = await tempAdapter.getPortfolioConfig()
         const portfolioHubSiteId = portfolioConfig.hubSiteId
 
-        // Create view with corrected hub ID in search query
         const portfolioView = new PortfolioOverviewView()
         Object.assign(portfolioView, view)
         portfolioView.searchQuery = view.searchQuery.replace(
@@ -338,7 +335,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           portfolioHubSiteId
         )
 
-        // Add items with hub metadata
         mergedResult.items.push(...items.map(item => ({
           ...item,
           _hubId: portfolio.uniqueId,
@@ -347,7 +343,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           _hubLanguage: this.detectHubLanguage(portfolio)
         })))
 
-        // Merge managed properties
         managedProperties.forEach(prop => {
           if (!mergedResult.managedProperties.includes(prop)) {
             mergedResult.managedProperties.push(prop)
@@ -358,7 +353,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       }
     }
 
-    // Deduplicate based on SiteId AND hubId
     const uniqueItems = mergedResult.items.reduce((acc, item) => {
       const isDuplicate = acc.some(i => i.SiteId === item.SiteId && i._hubId === item._hubId)
       if (!isDuplicate) {
