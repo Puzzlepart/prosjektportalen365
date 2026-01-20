@@ -1,3 +1,15 @@
+@keyframes scaleIn {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -6,46 +18,35 @@
   padding: 48px 24px;
   text-align: center;
   min-height: 400px;
-}
 
-.icon {
-  margin-bottom: 24px;
-  animation: scaleIn 0.3s ease-out;
-}
-
-.successIcon {
-  font-size: 64px;
-  color: var(--colorPaletteGreenForeground1);
-}
-
-@keyframes scaleIn {
-  from {
-    transform: scale(0);
-    opacity: 0;
+  .icon {
+    margin-bottom: 24px;
+    animation: scaleIn 0.3s ease-out;
   }
-  to {
-    transform: scale(1);
-    opacity: 1;
+
+  .successIcon {
+    font-size: 64px;
+    color: var(--colorPaletteGreenForeground1);
   }
-}
 
-.title {
-  font-size: 24px;
-  font-weight: 600;
-  margin: 0 0 12px 0;
-  color: var(--colorNeutralForeground1);
-}
+  .title {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 0 12px 0;
+    color: var(--colorNeutralForeground1);
+  }
 
-.message {
-  font-size: 16px;
-  margin: 0 0 32px 0;
-  color: var(--colorNeutralForeground2);
-  max-width: 500px;
-}
+  .message {
+    font-size: 16px;
+    margin: 0 0 32px 0;
+    color: var(--colorNeutralForeground2);
+    max-width: 500px;
+  }
 
-.actions {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  justify-content: center;
+  .actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }
