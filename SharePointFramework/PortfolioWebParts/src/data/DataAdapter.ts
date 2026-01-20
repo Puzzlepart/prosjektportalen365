@@ -112,16 +112,10 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       activeLogLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
     }
     if (portfolio) {
-      // Detect hub language to provide appropriate default list names
-      const hubLanguage = this.detectHubLanguage(portfolio)
-      const defaultProjects = hubLanguage === 'en' ? 'Projects' : 'Prosjekter'
-      const defaultProjectStatus = hubLanguage === 'en' ? 'Project Status' : 'Prosjektstatus'
-      const defaultProjectContentColumns = hubLanguage === 'en' ? 'Project Content Columns' : 'Prosjektinnholdskolonner'
-
       configuration.listNames = {
-        PROJECTS: portfolio.projectListName || defaultProjects,
-        PROJECT_STATUS: portfolio.projectStatusListName || defaultProjectStatus,
-        PROJECT_CONTENT_COLUMNS: portfolio.projectContentColumnsListName || defaultProjectContentColumns,
+        PROJECTS: portfolio.projectListName || 'Prosjekter',
+        PROJECT_STATUS: portfolio.projectStatusListName || 'Prosjektstatus',
+        PROJECT_CONTENT_COLUMNS: portfolio.projectContentColumnsListName || 'Prosjektinnholdskolonner',
         PROJECT_COLUMNS: portfolio.columnsListName,
         PROJECT_COLUMN_CONFIGURATION: portfolio.columnConfigListName,
         PORTFOLIO_VIEWS: portfolio.viewsListName
@@ -261,19 +255,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
-  /**
-   * Detects the language of a hub based on its configuration
-   *
-   * @param portfolio Portfolio instance to detect language for
-   * @returns 'no' for Norwegian, 'en' for English
-   */
-  private detectHubLanguage(portfolio: PortfolioInstance): 'no' | 'en' {
-    if (portfolio.language) {
-      return portfolio.language
-    }
 
-    return 'no'
-  }
 
   /**
    * Fetches data from multiple portfolio instances and merges them into a single view.
@@ -301,19 +283,24 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     const primaryPortfolio = includedPortfolios[0]
     const primaryData = await this.fetchDataForView(view, primaryConfiguration, primaryConfiguration.hubSiteId)
 
+    const primaryHubMetadata = {
+      _hubId: primaryPortfolio.uniqueId,
+      _hubTitle: primaryPortfolio.title,
+      _hubUrl: primaryPortfolio.url
+    }
+
     const mergedResult: IPortfolioViewData = {
-      items: primaryData.items.map(item => ({
-        ...item,
-        _hubId: primaryPortfolio.uniqueId,
-        _hubTitle: primaryPortfolio.title,
-        _hubUrl: primaryPortfolio.url,
-        _hubLanguage: this.detectHubLanguage(primaryPortfolio)
-      })),
+      items: primaryData.items.map(item => ({ ...item, ...primaryHubMetadata })),
       managedProperties: [...primaryData.managedProperties]
     }
 
     for (let i = 1; i < includedPortfolios.length; i++) {
       const portfolio = includedPortfolios[i]
+      const hubMetadata = {
+        _hubId: portfolio.uniqueId,
+        _hubTitle: portfolio.title,
+        _hubUrl: portfolio.url
+      }
 
       try {
         const tempAdapter = new DataAdapter(this._spfxContext, this._sp)
@@ -335,13 +322,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           portfolioHubSiteId
         )
 
-        mergedResult.items.push(...items.map(item => ({
-          ...item,
-          _hubId: portfolio.uniqueId,
-          _hubTitle: portfolio.title,
-          _hubUrl: portfolio.url,
-          _hubLanguage: this.detectHubLanguage(portfolio)
-        })))
+        mergedResult.items.push(...items.map(item => ({ ...item, ...hubMetadata })))
 
         managedProperties.forEach(prop => {
           if (!mergedResult.managedProperties.includes(prop)) {
