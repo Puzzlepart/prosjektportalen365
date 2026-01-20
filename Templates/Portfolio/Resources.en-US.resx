@@ -244,10 +244,10 @@
     <data name="Choice_GtResourceAbsence_OtherAssignments" xml:space="preserve">
         <value>Other Assignments</value>
     </data>
-    <data name="Choice_GtRiskProximity_Immediately" xml:space="preserve">
+    <data name="Choice_GtRiskProximity_Immediate" xml:space="preserve">
         <value>Immediately</value>
     </data>
-    <data name="Choice_GtRiskProximity_InsideProject" xml:space="preserve">
+    <data name="Choice_GtRiskProximity_WithinProject" xml:space="preserve">
         <value>Inside the project</value>
     </data>
     <data name="Choice_GtRiskProximity_OutsideProject" xml:space="preserve">

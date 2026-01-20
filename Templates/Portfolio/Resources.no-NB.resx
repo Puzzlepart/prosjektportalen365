@@ -244,12 +244,6 @@
     <data name="Choice_GtResourceAbsence_OtherAssignments" xml:space="preserve">
         <value>Andre arbeidsoppgaver</value>
     </data>
-    <data name="Choice_GtRiskProximity_Immediately" xml:space="preserve">
-        <value>Umiddelbart</value>
-    </data>
-    <data name="Choice_GtRiskProximity_InsideProject" xml:space="preserve">
-        <value>Innenfor prosjektet</value>
-    </data>
     <data name="Choice_GtRiskProximity_OutsideProject" xml:space="preserve">
         <value>Utenfor prosjektet</value>
     </data>
