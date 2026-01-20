@@ -24,7 +24,7 @@ export function usePortfolioSelector(context: IPortfolioOverviewContext) {
 
   const displayText = useMemo(() => {
     if (isMergedView) {
-      return strings.MergedViewLabel || 'Vis alle hub-er'
+      return strings.MergedViewLabel
     }
     return selectedPortfolio?.title ?? _.first(context.props.portfolios)?.title ?? strings.PortfolioSelectorLabel
   }, [isMergedView, selectedPortfolio, context.props.portfolios])
@@ -53,7 +53,7 @@ export function usePortfolioSelector(context: IPortfolioOverviewContext) {
     if (context.props.portfolios && context.props.portfolios.length > 1 && context.props.showMergedView !== false) {
       items.push(
         ListMenuItemDivider,
-        new ListMenuItem(strings.MergedViewLabel || 'Vis alle hub-er')
+        new ListMenuItem(strings.MergedViewLabel)
           .setIcon('BulletedTreeList')
           .makeCheckable({
             name: 'portfolios',

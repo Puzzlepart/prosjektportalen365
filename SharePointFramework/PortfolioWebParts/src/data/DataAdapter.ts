@@ -114,7 +114,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     if (portfolio) {
       configuration.listNames = {
         PROJECTS: portfolio.projectListName,
-        PROJECT_STATUS: portfolio.projectStatusListName ,
+        PROJECT_STATUS: portfolio.projectStatusListName,
         PROJECT_CONTENT_COLUMNS: portfolio.projectContentColumnsListName,
         PROJECT_COLUMNS: portfolio.columnsListName,
         PROJECT_COLUMN_CONFIGURATION: portfolio.columnConfigListName,
