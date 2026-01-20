@@ -1,21 +1,30 @@
 declare interface IPortfolioWebPartsStrings {
   ResultsCountLabel: string
   ColumnRenderOptionStatusReport: string
+  ColumnRenderOptionHub: string
   PortfolioSelectorLabel: string
+  MergedViewLabel: string
   PortfoliosFieldDescription: string
   SelectedPortfolioDescription: string
   ShowPortfolioSelectorDescription: string
   IconNameFieldPlaceholder: string
   IconNameFieldLabel: string
+  LanguageFieldLabel: string
+  IncludeInMergedViewFieldLabel: string
   PortfolioSelectorDescription: string
   ShowPortfolioSelectorOnText: string
   ShowPortfolioSelectorOffText: string
   ShowPortfolioSelectorLabel: string
+  ShowMergedViewInViewSelectorLabel: string
+  ShowMergedViewInViewSelectorDescription: string
   SelectedPortfolioLabel: string
   PortfoliosFieldLabel: string
   PortfoliosPanelHeader: string
   PortfoliosManageBtnLabel: string
   UrlFieldLabel: string
+  ProjectListNameFieldLabel: string
+  ProjectStatusListNameFieldLabel: string
+  ProjectContentColumnsListNameFieldLabel: string
   ViewsListNameFieldLabel: string
   ColumnsListNameFieldLabel: string
   ColumnConfigListNameFieldLabel: string

@@ -12,6 +12,7 @@ import { ConfigColumn } from './ConfigColumn'
 import { TitleColumn } from './TitleColumn'
 import { StatusReportColumn } from './StatusReportColumn'
 import { ProjectInformationColumn } from './ProjectInformationColumn'
+import { HubColumn } from './HubColumn'
 
 /**
  * On render item column function. First checks if the column has a custom render function,
@@ -73,7 +74,11 @@ function renderItemColumn(item: Record<string, any>, column: IColumn): ReactNode
 export const useOnRenderItemColumn = () => {
   useColumnRenderComponentRegistry()
   useEffect(() => {
-    ColumnRenderComponentRegistry.registerMultiple(StatusReportColumn, ProjectInformationColumn)
+    ColumnRenderComponentRegistry.registerMultiple(
+      StatusReportColumn,
+      ProjectInformationColumn,
+      HubColumn
+    )
   }, [])
 
   return useMemo(

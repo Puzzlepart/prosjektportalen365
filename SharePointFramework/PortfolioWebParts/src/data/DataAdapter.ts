@@ -89,16 +89,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     this.portalDataService = new PortalDataService()
   }
 
-  /**
-   * Configuring the `DataAdapter` enabling use of the `DataSourceService` and `PortalDataService`
-   *
-   * The `dataSourceService` is dependent on the `portalDataService` being configured, as it needs
-   * `portalDataService.web` to be passed as a parameter to its constructor.
-   *
-   * @param _spfxContext SPFx context (not used)
-   * @param _configuration Configuration (not used)
-   * @param portfolio Optionally the portfolio instance to configure the data adapter for
-   */
   public async configure(
     _spfxContext?: WebPartContext,
     _configuration?: any,
@@ -113,6 +103,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
     if (portfolio) {
       configuration.listNames = {
+        PROJECTS: portfolio.projectListName,
+        PROJECT_STATUS: portfolio.projectStatusListName,
+        PROJECT_CONTENT_COLUMNS: portfolio.projectContentColumnsListName,
         PROJECT_COLUMNS: portfolio.columnsListName,
         PROJECT_COLUMN_CONFIGURATION: portfolio.columnConfigListName,
         PORTFOLIO_VIEWS: portfolio.viewsListName
@@ -244,10 +237,97 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     const isCurrentUserInManagerGroup = await this.isUserInGroup(
       resource.Security_SiteGroup_PortfolioInsight_Title
     )
+
     if (isCurrentUserInManagerGroup) {
       return await this.fetchDataForManagerView(view, configuration, siteId)
     } else {
       return await this.fetchDataForRegularView(view, configuration, siteId)
+    }
+  }
+
+  public async fetchMergedViewData(
+    view: PortfolioOverviewView,
+    portfolios: PortfolioInstance[],
+    primaryConfiguration: IPortfolioOverviewConfiguration
+  ): Promise<IPortfolioViewData> {
+    const includedPortfolios = portfolios.filter((p) => p.includeInMergedView !== false)
+
+    if (includedPortfolios.length === 0) {
+      return { items: [], managedProperties: [] }
+    }
+
+    const primaryPortfolio = includedPortfolios[0]
+    const primaryData = await this.fetchDataForView(
+      view,
+      primaryConfiguration,
+      primaryConfiguration.hubSiteId
+    )
+
+    const primaryHubMetadata = {
+      _hubId: primaryPortfolio.uniqueId,
+      _hubTitle: primaryPortfolio.title,
+      _hubUrl: primaryPortfolio.url
+    }
+
+    const mergedResult: IPortfolioViewData = {
+      items: primaryData.items.map((item) => ({ ...item, ...primaryHubMetadata })),
+      managedProperties: [...primaryData.managedProperties]
+    }
+
+    const tempAdapter = new DataAdapter(this._spfxContext, this._sp)
+
+    for (let i = 1; i < includedPortfolios.length; i++) {
+      const portfolio = includedPortfolios[i]
+      const hubMetadata = {
+        _hubId: portfolio.uniqueId,
+        _hubTitle: portfolio.title,
+        _hubUrl: portfolio.url
+      }
+
+      try {
+        await tempAdapter.configure(null, null, portfolio)
+
+        const portfolioConfig = await tempAdapter.getPortfolioConfig()
+        const portfolioHubSiteId = portfolioConfig.hubSiteId
+
+        const portfolioView = new PortfolioOverviewView()
+        Object.assign(portfolioView, view)
+        portfolioView.searchQuery = view.searchQuery.replace(
+          /DepartmentId:\{[a-f0-9-]+\}/gi,
+          `DepartmentId:{${portfolioHubSiteId}}`
+        )
+
+        const { items, managedProperties } = await tempAdapter.fetchDataForView(
+          portfolioView,
+          portfolioConfig,
+          portfolioHubSiteId
+        )
+
+        mergedResult.items.push(...items.map((item) => ({ ...item, ...hubMetadata })))
+
+        managedProperties.forEach((prop) => {
+          if (!mergedResult.managedProperties.includes(prop)) {
+            mergedResult.managedProperties.push(prop)
+          }
+        })
+      } catch (error) {
+        console.error(`Failed to fetch data from portfolio ${portfolio.title}:`, error)
+      }
+    }
+
+    const seenKeys = new Set<string>()
+    const uniqueItems = mergedResult.items.filter((item) => {
+      const key = `${item.SiteId}_${item._hubId}`
+      if (seenKeys.has(key)) {
+        return false
+      }
+      seenKeys.add(key)
+      return true
+    }) as IFetchDataForViewItemResult[]
+
+    return {
+      items: uniqueItems,
+      managedProperties: mergedResult.managedProperties
     }
   }
 
@@ -257,30 +337,27 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     siteId: string,
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IPortfolioViewData> {
-    try {
-      const { projects, sites, statusReports, managedProperties } = await this._fetchDataForView(
-        view,
-        configuration,
-        siteId,
-        siteIdProperty
-      )
-      const items = sites.map((site) => {
-        const [project] = projects.filter((res) => res[siteIdProperty] === site['SiteId'])
-        const [statusReport] = statusReports.filter((res) => res[siteIdProperty] === site['SiteId'])
-        return {
-          ...statusReport,
-          ...project,
-          Title: site.Title,
-          Path: site?.Path,
-          SPWebUrl: site?.SPWebUrl,
-          SiteId: site['SiteId']
-        }
-      })
+    const { projects, sites, statusReports, managedProperties } = await this._fetchDataForView(
+      view,
+      configuration,
+      siteId,
+      siteIdProperty
+    )
 
-      return { items, managedProperties } as IPortfolioViewData
-    } catch (err) {
-      throw err
-    }
+    const items = sites.map((site) => {
+      const [project] = projects.filter((res) => res[siteIdProperty] === site['SiteId'])
+      const [statusReport] = statusReports.filter((res) => res[siteIdProperty] === site['SiteId'])
+      return {
+        ...statusReport,
+        ...project,
+        Title: site.Title,
+        Path: site?.Path,
+        SPWebUrl: site?.SPWebUrl,
+        SiteId: site['SiteId']
+      }
+    })
+
+    return { items, managedProperties } as IPortfolioViewData
   }
 
   public async fetchDataForManagerView(
@@ -383,7 +460,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         'SiteId'
       ]),
       this._fetchItems(
-        `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:${resource.Choice_GtModerationStatus_Published}`,
+        `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* (GtModerationStatusOWSCHCS:${config.MODERATION_STATUS_PUBLISHED_NO} OR GtModerationStatusOWSCHCS:${config.MODERATION_STATUS_PUBLISHED_EN})`,
         [...configuration.columns.map((f) => f.fieldName), siteIdProperty, 'ListItemId'],
         500,
         { Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',') }
@@ -452,14 +529,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     } catch (error) {}
   }
 
-  /**
-   *  Fetches items from timeline content list and maps them to `TimelineContentListModel`.
-   *
-   * * Fetching list items
-   * * Maps the items to `TimelineContentListModel`
-   *
-   * @param timelineConfig Timeline configuration
-   */
   public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationModel[]) {
     const timelineItems = await this._sp.web.lists
       .getByTitle(resource.Lists_TimelineContent_Title)
@@ -813,11 +882,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     return projects
   }
 
-  /**
-   * Checks if the current user is in the specified SharePoint group.
-   *
-   * @param groupName Group name
-   */
   public async isUserInGroup(groupName: string): Promise<boolean> {
     try {
       const [siteGroup] = await this._sp.web.siteGroups

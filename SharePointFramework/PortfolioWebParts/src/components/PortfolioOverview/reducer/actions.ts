@@ -101,6 +101,11 @@ export const SET_SORT = createAction<{
 export const SELECTION_CHANGED = createAction<Selection<IObjectWithKey>>('SELECTION_CHANGED')
 
 /**
+ * `TOGGLE_MERGED_VIEW`: Action dispatched when user toggles merged view mode
+ */
+export const TOGGLE_MERGED_VIEW = createAction<boolean>('TOGGLE_MERGED_VIEW')
+
+/**
  * `TOGGLE_COLUMN_FORM_PANEL`: Toggling the column form panel.
  */
 export const TOGGLE_COLUMN_FORM_PANEL = createAction<IColumnFormPanel>('TOGGLE_COLUMN_FORM_PANEL')

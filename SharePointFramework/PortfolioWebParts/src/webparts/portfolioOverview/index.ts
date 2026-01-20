@@ -47,26 +47,41 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
       configuration: this._configuration,
       onSetPortfolio: this.setPortfolio.bind(this),
       portfolios: this.properties.portfolios ?? [],
-      selectedPortfolioId: this._selectedPortfolioId
+      selectedPortfolioId: this._selectedPortfolioId,
+      showMergedView: true,
+      showMergedViewInViewSelector: this.properties.showMergedViewInViewSelector ?? false
     })
   }
 
   /**
    * Callback function to set the portfolio to display in the web part.
    *
-   * @param portfolioId Unique ID of the portfolio
+   * @param portfolioId Unique ID of the portfolio, or null for merged view
    */
-  private async setPortfolio(portfolioId: string): Promise<void> {
+  private async setPortfolio(portfolioId: string | null): Promise<void> {
     this._selectedPortfolioId = portfolioId
-    const portfolio = this.properties.portfolios.find(
-      ({ uniqueId }) => uniqueId === this._selectedPortfolioId
-    )
-    this.dataAdapter = await new DataAdapter(this.context, this.sp).configure(
-      this.context,
-      null,
-      portfolio
-    )
-    this._configuration = await this.dataAdapter.getPortfolioConfig()
+
+    if (portfolioId === null) {
+      const primaryPortfolio = this.properties.portfolios?.[0]
+      if (primaryPortfolio) {
+        this.dataAdapter = await new DataAdapter(this.context, this.sp).configure(
+          this.context,
+          null,
+          primaryPortfolio
+        )
+        this._configuration = await this.dataAdapter.getPortfolioConfig()
+      }
+    } else {
+      const portfolio = this.properties.portfolios.find(
+        ({ uniqueId }) => uniqueId === this._selectedPortfolioId
+      )
+      this.dataAdapter = await new DataAdapter(this.context, this.sp).configure(
+        this.context,
+        null,
+        portfolio
+      )
+      this._configuration = await this.dataAdapter.getPortfolioConfig()
+    }
     this.render()
   }
 
@@ -167,7 +182,19 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                 this.properties.showViewSelector &&
                   PropertyPaneToggle('showProgramViews', {
                     label: strings.ShowProgramViewsLabel
-                  })
+                  }),
+                this.properties.showViewSelector &&
+                  !_.isEmpty(this.properties.portfolios) &&
+                  this.properties.portfolios.length > 1 &&
+                  PropertyPaneToggle('showMergedViewInViewSelector', {
+                    label: strings.ShowMergedViewInViewSelectorLabel
+                  }),
+                PropertyPaneDescription(
+                  strings.ShowMergedViewInViewSelectorDescription,
+                  this.properties.showViewSelector &&
+                    !_.isEmpty(this.properties.portfolios) &&
+                    this.properties.portfolios.length > 1
+                )
               ].filter(Boolean)
             },
             {
@@ -184,6 +211,9 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
               groupFields: [
                 PropertyFieldCollectionData('portfolios', {
                   key: 'portfolios',
+                  panelProps: {
+                    type: 6
+                  },
                   label: strings.PortfoliosFieldLabel,
                   panelHeader: strings.PortfoliosPanelHeader,
                   manageBtnLabel: strings.PortfoliosManageBtnLabel,
@@ -209,6 +239,21 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                       required: false
                     },
                     {
+                      id: 'projectListName',
+                      title: strings.ProjectListNameFieldLabel,
+                      type: CustomCollectionFieldType.string,
+                      defaultValue: PortalDataServiceDefaultConfiguration?.listNames?.PROJECTS,
+                      required: true
+                    },
+                    {
+                      id: 'projectStatusListName',
+                      title: strings.ProjectStatusListNameFieldLabel,
+                      type: CustomCollectionFieldType.string,
+                      defaultValue:
+                        PortalDataServiceDefaultConfiguration?.listNames?.PROJECT_STATUS,
+                      required: true
+                    },
+                    {
                       id: 'viewsListName',
                       title: strings.ViewsListNameFieldLabel,
                       type: CustomCollectionFieldType.string,
@@ -232,6 +277,13 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                         PortalDataServiceDefaultConfiguration?.listNames
                           ?.PROJECT_COLUMN_CONFIGURATION,
                       required: true
+                    },
+                    {
+                      id: 'includeInMergedView',
+                      title: strings.IncludeInMergedViewFieldLabel,
+                      type: CustomCollectionFieldType.boolean,
+                      defaultValue: true,
+                      required: false
                     }
                   ]
                 }),
