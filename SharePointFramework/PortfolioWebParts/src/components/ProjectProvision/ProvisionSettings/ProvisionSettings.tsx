@@ -40,7 +40,6 @@ export const ProvisionSettings = (props: IProvisionSettingsProps) => {
   } = useProvisionSettings()
 
   const isInlineMode = props.renderMode === 'inline'
-  const isTeamsMode = context.props.isTeamsContext
 
   const gridContent = (
     <>
