@@ -1493,12 +1493,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
-  /**
-   * Load Teams app configuration from TeamsAppConfig.json
-   *
-   * @param provisionUrl The provision site URL
-   * @returns Configuration object or null if file doesn't exist
-   */
   public async loadTeamsConfig(provisionUrl: string): Promise<any | null> {
     try {
       const provisionSite = Web([this._sp.web, provisionUrl])
@@ -1515,16 +1509,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
-  /**
-   * Save Teams app configuration to TeamsAppConfig.json
-   *
-   * @param provisionUrl The provision site URL
-   * @param config Configuration object to save
-   */
   public async saveTeamsConfig(provisionUrl: string, config: any): Promise<void> {
     try {
       const provisionSite = Web([this._sp.web, provisionUrl])
-
       const hasPermission = await provisionSite.currentUserHasPermissions(PermissionKind.ManageWeb)
 
       if (!hasPermission) {
@@ -1549,12 +1536,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
-  /**
-   * Check if current user is admin of the provision site
-   *
-   * @param provisionUrl The provision site URL
-   * @returns True if user is site admin
-   */
   public async isProvisionSiteAdmin(provisionUrl: string): Promise<boolean> {
     try {
       const provisionSite = Web([this._sp.web, provisionUrl])
