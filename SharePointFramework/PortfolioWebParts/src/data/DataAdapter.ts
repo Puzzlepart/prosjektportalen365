@@ -261,13 +261,14 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
    * Fetches data from multiple portfolio instances and merges them into a single view.
    *
    * Approach:
-   * 1. Configure and fetch data from the primary (first) portfolio - this gives us the base configuration
-   * 2. Loop through remaining portfolios and merge their data into the result
+   * 1. Configure and fetch data from the primary (first) included portfolio - this gives us the base configuration
+   * 2. Loop through the remaining included portfolios (after filtering by `includeInMergedView`) starting after the primary
+   *    portfolio, and merge their data into the result
    *
-   * @param view View configuration from primary portfolio
-   * @param portfolios Array of portfolio instances to fetch data from
+   * @param view View configuration from the primary (first included) portfolio
+   * @param portfolios Array of portfolio instances to fetch data from; portfolios with includeInMergedView === false are ignored
    * @param primaryConfiguration Configuration from the primary portfolio
-   * @returns Merged portfolio view data with items from all hubs
+   * @returns Merged portfolio view data with items from all included hubs
    */
   public async fetchMergedViewData(
     view: PortfolioOverviewView,
