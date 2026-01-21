@@ -169,17 +169,29 @@ export const useProvisionDrawer = () => {
       JoinHub: joinHub,
       HubSiteTitle: joinHub ? context.props.pageContext.web.title : '',
       HubSite: joinHub ? context.props.pageContext.legacyPageContext.hubSiteId : '',
-      ParentSite: context.props.parentMode ? {
-        SiteId: context.props.pageContext.site.id.toString(),
-        Title: context.props.pageContext.web.title,
-        SPWebURL: context.props.pageContext.web.absoluteUrl,
-        HubSiteUrl: context.props.pageContext.legacyPageContext.hubSiteId
-      } : undefined,
+      ParentSite: context.props.parentMode
+        ? {
+            SiteId: context.props.pageContext.site.id.toString(),
+            Title: context.props.pageContext.web.title,
+            SPWebURL: context.props.pageContext.web.absoluteUrl,
+            HubSiteUrl: context.props.pageContext.legacyPageContext.hubSiteId
+          }
+        : undefined,
       Prefix: namingConvention?.prefixText,
       Suffix: namingConvention?.suffixText,
       Status: enableAutoApproval ? 'Approved' : 'Submitted',
       Stage: enableAutoApproval ? 'Approved' : 'Submitted',
       RequestKey: getGUID()
+    }
+
+    if (context.props.parentMode) {
+      const properties: Record<string, any> = {
+        Title: context.column.get('name'),
+        GtSiteUrl: `${baseUrl}${alias}`,
+        GtParentProjects: `[{"SiteId":"${requestItem.ParentSite.SiteId}","Title":"${requestItem.ParentSite.Title}","SPWebURL":"${requestItem.ParentSite.SPWebURL}","HubSiteUrl":"${requestItem.ParentSite.HubSiteUrl}"}]`
+      }
+
+      await context.props.dataAdapter.addProjectData(properties)
     }
 
     return await context.props.dataAdapter.addProvisionRequests(

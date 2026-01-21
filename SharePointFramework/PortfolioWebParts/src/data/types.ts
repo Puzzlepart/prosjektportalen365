@@ -405,6 +405,14 @@ export interface IPortfolioWebPartsDataAdapter {
   addProvisionRequests?(properties: IProvisionRequestItem, provisionUrl: string): Promise<boolean>
 
   /**
+   * Adds project data to the ProjectData list to store project information that
+   * will be used when setting up the project
+   *
+   * @param properties Properties to add to the ProjectData list
+   */
+  addProjectData?(properties: Record<string, any>): Promise<void>
+
+  /**
    * Deletes a provision request item from the provisioning requests list
    *
    * @param requestId Id of the request to delete
