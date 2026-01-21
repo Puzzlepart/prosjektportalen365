@@ -97,10 +97,15 @@ declare interface ISharedLibraryStrings {
   HideDataTypePropertiesLabel: string
   ShowDataTypePropertiesLabel: string
   InstrumentUnitLabel: string
+  MeasurementLabel: string
+  MeasurementTitleLabel: string
   MeasurementValueLabel: string
   MeasurementCommentLabel: string
   MeasurementAchievementLabel: string
   MeasurementDateLabel: string
+  MeasurementsSheetLabel: string
+  MeasurementValueDisplayFieldName: string
+  MeasurementAchievementDisplayFieldName: string
   ModalColumnEmptyListTitle: string
   ModalColumnEmptyListMessage: string
   ShowAllMeasurementsLinkText: string

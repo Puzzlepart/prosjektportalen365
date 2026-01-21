@@ -45,6 +45,7 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
   usePortfolioAggregationDataFetch(context, [context.state.currentView])
 
   context.items = usePortfolioAggregationFilteredItems(context)
+  context.columns = context.state.columns
 
   const searchBox = useMemo<SearchBoxProps>(
     () => ({
