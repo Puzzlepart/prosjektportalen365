@@ -138,4 +138,58 @@ if ($null -ne $LastInstall) {
         Invoke-PnPSiteTemplate -Path "$TemplatesBasePath/1.12.0.pnp" -ErrorAction Stop
         Write-Host "[SUCCESS] Successfully applied PnP template [1.12.0] to [$Url]" -ForegroundColor Green
     }
+
+    if ($PreviousVersion -lt [version]"1.13.0") {
+        Write-Host "[INFO] Checking for RefinableString90-98 conflicts before upgrading to v1.13.0..."
+        try {
+            $SearchConfig = Get-PnPSearchConfiguration -Scope Subscription -ErrorAction Stop
+            $ConflictingRefinableStrings = @()
+            $RequiredRefinableStrings = 90..98
+            foreach ($RefNum in $RequiredRefinableStrings) {
+                $RefString = "RefinableString$RefNum"
+                if ($SearchConfig -match "RefinableString$RefNum" -and 
+                    $SearchConfig -notmatch "GtRiskFactor" -and 
+                    $SearchConfig -notmatch "GtRiskFactorPostAction" -and 
+                    $SearchConfig -notmatch "GtIdeaEconomicNumber" -and 
+                    $SearchConfig -notmatch "GtIdeaPriority" -and 
+                    $SearchConfig -notmatch "GtIdeaQualityNumber" -and 
+                    $SearchConfig -notmatch "GtIdeaRiskNumber" -and 
+                    $SearchConfig -notmatch "GtIdeaScore" -and 
+                    $SearchConfig -notmatch "GtIdeaStrategicNumber" -and 
+                    $SearchConfig -notmatch "GtIdeaOperationalNumber") {
+                    $ConflictingRefinableStrings += $RefString
+                }
+            }
+            if ($ConflictingRefinableStrings.Count -gt 0) {
+                Write-Host ""
+                Write-Host "================================================================" -ForegroundColor Red
+                Write-Host "UPGRADE BLOCKED: RefinableString Conflict Detected" -ForegroundColor Red
+                Write-Host "================================================================" -ForegroundColor Red
+                Write-Host ""
+                Write-Host "Prosjektportalen 365 v1.13.0 requires the following RefinableString" -ForegroundColor Yellow
+                Write-Host "managed properties to be available: RefinableString90 through RefinableString98." -ForegroundColor Yellow
+                Write-Host ""
+                Write-Host "The following RefinableStrings are already in use in your environment:" -ForegroundColor Yellow
+                $ConflictingRefinableStrings | ForEach-Object { Write-Host "  - $_" -ForegroundColor Yellow }
+                Write-Host ""
+                Write-Host "REQUIRED ACTIONS:" -ForegroundColor Cyan
+                Write-Host "1. Review your current search schema configuration" -ForegroundColor White
+                Write-Host "2. Identify which custom properties are using RefinableString90-98" -ForegroundColor White
+                Write-Host "3. Remap those properties to use other available RefinableStrings" -ForegroundColor White
+                Write-Host "4. After remapping, re-run the installation/upgrade process" -ForegroundColor White
+                Write-Host ""
+                Write-Host "================================================================" -ForegroundColor Red
+                Write-Host ""
+                throw "Upgrade to v1.13.0 blocked due to RefinableString conflicts. Please resolve the conflicts and try again."
+            }
+            Write-Host "[SUCCESS] No RefinableString90-98 conflicts detected. Proceeding with upgrade." -ForegroundColor Green
+        }
+        catch {
+            if ($_.Exception.Message -match "Upgrade to v1.13.0 blocked") {
+                throw
+            }
+            Write-Host "[WARNING] Could not verify RefinableString availability. Proceeding with caution..." -ForegroundColor Yellow
+            Write-Host "[WARNING] Error: $($_.Exception.Message)" -ForegroundColor Yellow
+        }
+    }
 }
