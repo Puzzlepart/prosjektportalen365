@@ -185,7 +185,7 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                   onText: strings.Provision.AutoOwnerOnText,
                   offText: strings.Provision.AutoOwnerOffText
                 }),
-                PropertyPaneLabel('propertyEditorLabel', {
+                PropertyPaneLabel('autoOwnerLabel', {
                   text: strings.Provision.AutoOwnerFieldDescription
                 })
               ]
@@ -660,107 +660,6 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                 })
               ]
             },
-            {
-              groupName: strings.Provision.AdvancedGroupName,
-              isCollapsed: true,
-              groupFields: [
-                PropertyFieldCollectionData('fields', {
-                  key: 'fields',
-                  label: strings.Provision.FieldsConfigurationLabel,
-                  panelProps: {
-                    type: 6
-                  },
-                  panelHeader: strings.Provision.FieldsConfigurationPanelHeader,
-                  manageBtnLabel: strings.Provision.FieldsConfigurationManageBtnLabel,
-                  value: this.properties.fields,
-                  disableItemCreation: true,
-                  disableItemDeletion: true,
-                  fields: [
-                    {
-                      id: 'order',
-                      title: strings.Provision.FieldOrderLabel,
-                      type: CustomCollectionFieldType.number,
-                      disableEdit: true
-                    },
-                    {
-                      id: 'fieldName',
-                      title: strings.Provision.FieldNameLabel,
-                      type: CustomCollectionFieldType.string,
-                      required: true
-                    },
-                    {
-                      id: 'displayName',
-                      title: strings.Provision.FieldDisplayNameLabel,
-                      type: CustomCollectionFieldType.string,
-                      required: true
-                    },
-                    {
-                      id: 'description',
-                      title: strings.Provision.FieldDescriptionLabel,
-                      type: CustomCollectionFieldType.string,
-                      required: true
-                    },
-                    {
-                      id: 'placeholder',
-                      title: strings.Provision.FieldPlaceholderLabel,
-                      type: CustomCollectionFieldType.string
-                    },
-                    {
-                      id: 'dataType',
-                      title: strings.Provision.FieldDataTypeLabel,
-                      type: CustomCollectionFieldType.dropdown,
-                      disableEdit: true,
-                      options: [
-                        { key: 'text', text: strings.Provision.FieldDataTypeText },
-                        { key: 'note', text: strings.Provision.FieldDataTypeNote },
-                        { key: 'number', text: strings.Provision.FieldDataTypeNumber },
-                        { key: 'choice', text: strings.Provision.FieldDataTypeChoice },
-                        { key: 'userMulti', text: strings.Provision.FieldDataTypeUserMulti },
-                        { key: 'guest', text: strings.Provision.FieldDataTypeGuest },
-                        { key: 'date', text: strings.Provision.FieldDataTypeDate },
-                        { key: 'tags', text: strings.Provision.FieldDataTypeTags },
-                        { key: 'boolean', text: strings.Provision.FieldDataTypeBoolean },
-                        { key: 'percentage', text: strings.Provision.FieldDataTypePercentage },
-                        { key: 'site', text: strings.Provision.FieldDataTypeSite },
-                        { key: 'image', text: strings.Provision.FieldDataTypeImage }
-                      ],
-                      defaultValue: 'text'
-                    },
-                    {
-                      id: 'required',
-                      title: strings.Provision.FieldRequiredLabel,
-                      type: CustomCollectionFieldType.boolean,
-                      defaultValue: false
-                    },
-                    {
-                      id: 'level',
-                      title: strings.Provision.FieldLevelLabel,
-                      type: CustomCollectionFieldType.number,
-                      disableEdit: true,
-                      defaultValue: 1
-                    }
-                  ]
-                }),
-                PropertyPaneLabel('propertyEditorLabel', {
-                  text: strings.Provision.PropertyEditorLabel
-                }),
-                PropertyPanePropertyEditor({
-                  key: 'propertyEditor',
-                  webpart: this
-                }),
-                PropertyFieldMessage('propertyEditorDescription', {
-                  key: 'propertyEditorDescription',
-                  messageType: 0,
-                  text: strings.Provision.PropertyEditorDescription,
-                  isVisible: true
-                }),
-                PropertyPaneToggle('debugMode', {
-                  label: strings.Provision.DebugModeLabel,
-                  onText: strings.Provision.DebugModeOnText,
-                  offText: strings.Provision.DebugModeOffText
-                })
-              ]
-            }
           ]
         }
       ]
