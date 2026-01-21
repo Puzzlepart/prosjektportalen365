@@ -747,10 +747,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                 description={strings.Provision.ParentSiteFieldDescription}
                 hidden={!context.props.parentMode}
               >
-                <Input
-                  value={context.props.pageContext.web.title}
-                  disabled
-                />
+                <Input value={context.props.pageContext.web.title} disabled />
               </FieldContainer>
               <Divider />
               <FieldContainer

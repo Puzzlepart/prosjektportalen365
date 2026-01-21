@@ -40,7 +40,12 @@ export function useEditableColumn(
       }
     }
     fetchHubSiteTitle()
-  }, [props.parentMode, props.pageContext.web.absoluteUrl, props.pageContext.web.title, props.dataAdapter])
+  }, [
+    props.parentMode,
+    props.pageContext.web.absoluteUrl,
+    props.pageContext.web.title,
+    props.dataAdapter
+  ])
 
   const initialColumn = useMemo(
     () =>

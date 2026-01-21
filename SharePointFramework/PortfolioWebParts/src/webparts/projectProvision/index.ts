@@ -668,7 +668,7 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                   offText: strings.Provision.DebugModeOffText
                 })
               ]
-            },
+            }
           ]
         }
       ]
