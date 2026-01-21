@@ -169,6 +169,12 @@ export const useProvisionDrawer = () => {
       JoinHub: joinHub,
       HubSiteTitle: joinHub ? context.props.pageContext.web.title : '',
       HubSite: joinHub ? context.props.pageContext.legacyPageContext.hubSiteId : '',
+      ParentSite: context.props.parentMode ? {
+        SiteId: context.props.pageContext.site.id.toString(),
+        Title: context.props.pageContext.web.title,
+        SPWebURL: context.props.pageContext.web.absoluteUrl,
+        HubSiteUrl: context.props.pageContext.legacyPageContext.hubSiteId
+      } : undefined,
       Prefix: namingConvention?.prefixText,
       Suffix: namingConvention?.suffixText,
       Status: enableAutoApproval ? 'Approved' : 'Submitted',

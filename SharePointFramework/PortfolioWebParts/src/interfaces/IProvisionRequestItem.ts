@@ -45,6 +45,12 @@ export interface IProvisionRequestItem {
   JoinHub?: boolean
   HubSiteTitle?: string
   HubSite?: string
+  ParentSite?: {
+    SiteId?: string
+    Title?: string
+    SPWebURL?: string
+    HubSiteUrl?: string
+  }
   Status?: string
   Stage?: string
   RequestKey?: string

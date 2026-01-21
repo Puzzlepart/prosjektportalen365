@@ -992,7 +992,7 @@ export class SPDataAdapter
     const resolvedHubs = await Promise.all(
       hubs.map(async (hub) => {
         if (hub.hubSiteId && hub.title) return hub
-        const resolved = await this.resolveHubSiteFromUrl(hub.url)
+        const resolved = await this.portalDataService.resolveHubSiteFromUrl(hub.url)
         return {
           ...hub,
           hubSiteId: hub.hubSiteId || resolved.hubSiteId,
@@ -1097,35 +1097,6 @@ export class SPDataAdapter
       }
     } catch (error) {
       return []
-    }
-  }
-
-  /**
-   * Resolve the HubSiteId and Title for a given site URL.
-   * Uses PnPjs to query the site and return its `HubSiteId` and `Title`.
-   *
-   * @param siteUrl Absolute URL of the site to resolve
-   * @returns Object with hubSiteId and title, or undefined values if resolution failed
-   */
-  public async resolveHubSiteFromUrl(
-    siteUrl: string
-  ): Promise<{ hubSiteId?: string; title?: string }> {
-    if (!siteUrl) return { hubSiteId: undefined, title: undefined }
-    try {
-      const web = Web([this.sp.web, siteUrl])
-      const site = Site([this.sp.site, siteUrl])
-      const [siteInfo, webInfo] = await Promise.all([
-        site.select('HubSiteId')(),
-        web.select('Title')()
-      ])
-      const rawHubSiteId = siteInfo?.HubSiteId
-      return {
-        hubSiteId: rawHubSiteId ? rawHubSiteId.replace(/[{}]/g, '').toLowerCase() : undefined,
-        title: webInfo?.Title ?? undefined
-      }
-    } catch (e) {
-      console.error(e)
-      return { hubSiteId: undefined, title: undefined }
     }
   }
 

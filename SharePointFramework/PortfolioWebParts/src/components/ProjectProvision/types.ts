@@ -20,6 +20,7 @@ export interface IProjectProvisionProps extends IBaseComponentProps {
   buttonLabel?: string
   autoOwner?: boolean
   renderMode?: 'button' | 'inline'
+  parentMode?: boolean
 
   // Visuals
   siteTypeRenderMode?: string

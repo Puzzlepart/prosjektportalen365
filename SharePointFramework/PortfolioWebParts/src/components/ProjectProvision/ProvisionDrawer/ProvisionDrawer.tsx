@@ -741,6 +741,17 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   currentImage={context.column.get('image')}
                 />
               </FieldContainer>
+              <FieldContainer
+                iconName='BoxMultiple'
+                label={strings.Provision.ParentSiteFieldLabel}
+                description={strings.Provision.ParentSiteFieldDescription}
+                hidden={!context.props.parentMode}
+              >
+                <Input
+                  value={context.props.pageContext.web.title}
+                  disabled
+                />
+              </FieldContainer>
               <Divider />
               <FieldContainer
                 iconName='LocalLanguage'

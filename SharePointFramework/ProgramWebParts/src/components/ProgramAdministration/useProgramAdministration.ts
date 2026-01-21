@@ -33,7 +33,7 @@ export const useProgramAdministration = (props: IProgramAdministrationProps) => 
         try {
           resolvedHubs = await Promise.all(
             parsedHubs.map(async (u) => {
-              const resolved = await props.dataAdapter.resolveHubSiteFromUrl(u)
+              const resolved = await props.dataAdapter.portalDataService.resolveHubSiteFromUrl(u)
               return { url: u, hubSiteId: resolved.hubSiteId, title: resolved.title }
             })
           )

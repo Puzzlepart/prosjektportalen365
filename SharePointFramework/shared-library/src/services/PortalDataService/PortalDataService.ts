@@ -5,9 +5,9 @@ import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import { IFolder } from '@pnp/sp/folders'
 import { ICamlQuery, IList } from '@pnp/sp/lists'
 import '@pnp/sp/presets/all'
-import { IItemUpdateResult, IItemUpdateResultData, spfi, SPFI } from '@pnp/sp/presets/all'
+import { IItemUpdateResult, IItemUpdateResultData, Site, spfi, SPFI } from '@pnp/sp/presets/all'
 import { PermissionKind } from '@pnp/sp/security'
-import { IWeb } from '@pnp/sp/webs'
+import { IWeb, Web } from '@pnp/sp/webs'
 import { merge } from 'lodash'
 import strings from 'SharedLibraryStrings'
 import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
@@ -1092,5 +1092,35 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    */
   private _getList(list: PortalDataServiceList): IList {
     return this.web.lists.getByTitle(this._configuration.listNames[list])
+  }
+
+
+  /**
+   * Resolve the HubSiteId and Title for a given site URL.
+   * Uses PnPjs to query the site and return its `HubSiteId` and `Title`.
+   *
+   * @param siteUrl Absolute URL of the site to resolve
+   * @returns Object with hubSiteId and title, or undefined values if resolution failed
+   */
+  public async resolveHubSiteFromUrl(
+    siteUrl: string
+  ): Promise<{ hubSiteId?: string; title?: string }> {
+    if (!siteUrl) return { hubSiteId: undefined, title: undefined }
+    try {
+      const web = Web([this.web, siteUrl])
+      const site = Site([this._sp.site, siteUrl])
+      const [siteInfo, webInfo] = await Promise.all([
+        site.select('HubSiteId')(),
+        web.select('Title')()
+      ])
+      const rawHubSiteId = siteInfo?.HubSiteId
+      return {
+        hubSiteId: rawHubSiteId ? rawHubSiteId.replace(/[{}]/g, '').toLowerCase() : undefined,
+        title: webInfo?.Title ?? undefined
+      }
+    } catch (e) {
+      console.error(e)
+      return { hubSiteId: undefined, title: undefined }
+    }
   }
 }
