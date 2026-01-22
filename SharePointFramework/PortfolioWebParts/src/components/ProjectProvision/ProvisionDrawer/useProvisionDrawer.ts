@@ -119,6 +119,15 @@ export const useProvisionDrawer = () => {
     const pnpTemplateUrl = currentTemplate?.pnpTemplateUrl || null
     const shouldApplyTemplate = !!currentTemplate && !!pnpTemplateUrl
 
+    const parentSite = context.props.parentMode
+      ? {
+          SiteId: context.props.pageContext.site.id.toString(),
+          Title: context.props.pageContext.web.title,
+          SPWebURL: context.props.pageContext.web.absoluteUrl,
+          HubSiteUrl: context.props.dataAdapter.portalDataService.url
+        }
+      : undefined
+
     const requestItem: IProvisionRequestItem = {
       Title: context.column.get('name'),
       SpaceDisplayName: name,
@@ -167,16 +176,13 @@ export const useProvisionDrawer = () => {
       TimeZoneId: 4,
       LCID: 1044,
       JoinHub: joinHub,
-      HubSiteTitle: joinHub ? context.props.pageContext.web.title : '',
+      HubSiteTitle: joinHub
+        ? context.props.parentMode
+          ? context.column.get('hubSiteTitle')
+          : context.props.pageContext.web.title
+        : '',
       HubSite: joinHub ? context.props.pageContext.legacyPageContext.hubSiteId : '',
-      ParentSite: context.props.parentMode
-        ? {
-            SiteId: context.props.pageContext.site.id.toString(),
-            Title: context.props.pageContext.web.title,
-            SPWebURL: context.props.pageContext.web.absoluteUrl,
-            HubSiteUrl: context.props.pageContext.legacyPageContext.hubSiteId
-          }
-        : undefined,
+      ParentSite: context.props.parentMode ? (parentSite ? JSON.stringify(parentSite) : '') : '',
       Prefix: namingConvention?.prefixText,
       Suffix: namingConvention?.suffixText,
       Status: enableAutoApproval ? 'Approved' : 'Submitted',
@@ -188,10 +194,10 @@ export const useProvisionDrawer = () => {
       const properties: Record<string, any> = {
         Title: context.column.get('name'),
         GtSiteUrl: `${baseUrl}${alias}`,
-        GtParentProjects: `[{"SiteId":"${requestItem.ParentSite.SiteId}","Title":"${requestItem.ParentSite.Title}","SPWebURL":"${requestItem.ParentSite.SPWebURL}","HubSiteUrl":"${requestItem.ParentSite.HubSiteUrl}"}]`
+        GtParentProjects: `[{"SiteId":"${parentSite.SiteId}","Title":"${parentSite.Title}","SPWebURL":"${parentSite.SPWebURL}","HubSiteUrl":"${parentSite.HubSiteUrl}"}]`
       }
 
-      await context.props.dataAdapter.addProjectData(properties)
+      await context.props.dataAdapter.addProjectData(properties, parentSite.HubSiteUrl)
     }
 
     return await context.props.dataAdapter.addProvisionRequests(
