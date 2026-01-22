@@ -3059,13 +3059,13 @@
     <value>Approval responsible</value>
   </data>
   <data name="SiteFields_GtDeliveryDescription_Description" xml:space="preserve">
-    <value>Provide a comprehensive description of the project delivery</value>
+    <value>Provide a comprehensive description of the delivery</value>
   </data>
   <data name="SiteFields_GtDeliveryDescription_DisplayName" xml:space="preserve">
     <value>Delivery description</value>
   </data>
   <data name="SiteFields_GtDeliveryEndTime_Description" xml:space="preserve">
-    <value>Specify the (expected) end time for this project delivery</value>
+    <value>Specify the (expected) end time for this delivery</value>
   </data>
   <data name="SiteFields_GtDeliveryEndTime_DisplayName" xml:space="preserve">
     <value>End time</value>
@@ -3089,7 +3089,7 @@
     <value>Quality tolerance</value>
   </data>
   <data name="SiteFields_GtDeliveryStartTime_Description" xml:space="preserve">
-    <value>Specify the (expected) start time for this project delivery</value>
+    <value>Specify the (expected) start time for this delivery</value>
   </data>
   <data name="SiteFields_GtDeliveryStartTime_DisplayName" xml:space="preserve">
     <value>Start time</value>
@@ -3101,7 +3101,7 @@
     <value>Delivery status</value>
   </data>
   <data name="SiteFields_GtDeliveryStatusComment_Description" xml:space="preserve">
-    <value>Add any additional comments to the project delivery status</value>
+    <value>Add any additional comments regarding the status of the delivery</value>
   </data>
   <data name="SiteFields_GtDeliveryStatusComment_DisplayName" xml:space="preserve">
     <value>Comment, delivery status</value>
