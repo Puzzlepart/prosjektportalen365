@@ -2771,7 +2771,7 @@
     <value>Description</value>
   </data>
   <data name="SiteFields_GtActionResponsible_Description" xml:space="preserve">
-    <value>Who is responsible for this communication activity?</value>
+    <value>Who is responsible for follow-up?</value>
   </data>
   <data name="SiteFields_GtActionResponsible_DisplayName" xml:space="preserve">
     <value>Action Responsible</value>
