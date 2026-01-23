@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 import { format, IColumn } from '@fluentui/react'
 import * as FileSaver from 'file-saver'
-import * as strings from 'SharedLibraryStrings'
 import _ from 'underscore'
 import * as XLSX from 'xlsx'
 import { getObjectValue as get, getDateForExcelExport, stringToArrayBuffer } from '../../util'
 import { ExcelExportServiceDefaultConfiguration } from './ExcelExportServiceDefaultConfiguration'
 import { IExcelExportServiceConfiguration } from './IExcelExportServiceConfiguration'
-import { MeasurementColumnConfig } from './types'
 
 class ExcelExportService {
   public configuration: IExcelExportServiceConfiguration
@@ -26,8 +24,8 @@ class ExcelExportService {
   /**
    * Parses a field from an item as a JSON array of objects.
    * - Copies the item's 'Title' to each entry.
-   * - Uses resource strings for column names.
-   * - Skips properties with object values and display-only fields.
+   * - Renames 'Title' in entries to 'Måling'.
+   * - Skips properties with object values.
    * Returns an empty array if parsing fails.
    *
    * @param item The object containing the field.
@@ -40,26 +38,17 @@ class ExcelExportService {
   ): Record<string, any>[] {
     const value = item[column]
     if (typeof value !== 'string' || !value.trim()) return []
-    const renameKeys: MeasurementColumnConfig = {
-      Title: { name: strings.MeasurementLabel },
-      Value: { name: strings.MeasurementValueLabel },
-      Comment: { name: strings.MeasurementCommentLabel },
-      Achievement: { name: strings.MeasurementAchievementLabel },
-      DateDisplay: { name: strings.MeasurementDateLabel, dataType: 'date' }
-    }
+    const skipKeys = this.configuration?.measurementsSheetConfiguration?.skipKeys || []
+    const renameKeys = this.configuration?.measurementsSheetConfiguration?.renameKeys || {}
+    const titleKey = this.configuration?.measurementsSheetConfiguration?.titleKey || 'Title'
     try {
       const parsed = JSON.parse(value)
       if (!Array.isArray(parsed)) return []
       return parsed.map((entry: any) => ({
-        [strings.MeasurementTitleLabel]: item['Title'],
+        [titleKey]: item['Title'],
         ...Object.fromEntries(
           Object.entries(entry)
-            .filter(
-              ([key, val]) =>
-                typeof val !== 'object' &&
-                key !== strings.MeasurementValueDisplayFieldName &&
-                key !== strings.MeasurementAchievementDisplayFieldName
-            )
+            .filter(([key, val]) => typeof val !== 'object' && !skipKeys.includes(key))
             .map(([key, val]) => {
               const columnRenameConfiguration = renameKeys[key]
               const finalColumnName =
@@ -140,7 +129,7 @@ class ExcelExportService {
           const jsonDataSheet = XLSX.utils.sheet_to_json(XLSX.utils.json_to_sheet(combinedJson), {
             header: 1
           })
-          sheets.push({ name: strings.MeasurementsSheetLabel, data: jsonDataSheet })
+          sheets.push({ name: 'Målinger', data: jsonDataSheet })
         }
       }
       const workBook = XLSX.utils.book_new()
