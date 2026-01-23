@@ -121,7 +121,8 @@ export class SetupProjectInformation extends BaseTask {
         resource.Lists_ProjectProperties_Title,
       mapType,
       projectContentTypeId: this._templateParameters.ProjectContentTypeId,
-      customSiteFieldsGroup: this._templateParameters.CustomSiteFields
+      customSiteFieldsGroup: this._templateParameters.CustomSiteFields,
+      projectDataSync: mapType === ProjectPropertiesMapType.FromPortfolioToPortfolio
     })
   }
 

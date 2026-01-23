@@ -119,7 +119,7 @@ define([], function () {
     ProjectAlreadySetupMessage: 'Prosjektet er allerede satt opp',
     ProjectAlreadySetupStack: 'Det ser ut til at prosjektet allerede er satt opp. Vil du legge på mal (ikke anbefalt) eller hoppe over oppsett?',
     ProjectDataFoundTitle: 'Prosjektdata funnet',
-    ProjectDataFoundMessage: 'Det ble funnet en prosjektdata for dette prosjektet. Prosjektdata blir brukt til å fylle ut prosjektinformasjon.',
+    ProjectDataFoundMessage: 'Det ble funnet prosjektdata for dette prosjektet. Prosjektdata blir brukt til å fylle ut prosjektinformasjon.',
     ProjectPropertiesHeader: 'Prosjektinformasjon',
     ProjectProvisioningStartLogText: 'Starter provisjonering av prosjektet {0}.',
     ProjectProvisioningSuccessLogText: 'Prosjektet {0} ble provisjonert uten feil.',

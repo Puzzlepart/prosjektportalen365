@@ -75,4 +75,9 @@ export type GetMappedProjectPropertiesOptions = {
    * with prefix `Gt`.
    */
   customSiteFieldsGroup?: string
+
+  /**
+   * If `true`, project data specific fields will be forced and synced.
+   */
+  projectDataSync?: boolean
 }
