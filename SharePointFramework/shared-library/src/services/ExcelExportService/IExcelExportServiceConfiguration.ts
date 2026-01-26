@@ -8,7 +8,6 @@ export interface IExcelExportServiceConfiguration {
     bookType: any
   }
   measurementsSheetConfiguration?: {
-    skipKeys: string[]
     renameKeys: Record<string, { name: string; dataType?: string }>
     titleKey: string
   }

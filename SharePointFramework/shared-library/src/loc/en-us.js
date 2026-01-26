@@ -56,7 +56,7 @@ define([], function () {
     TagFieldLabel: 'Label',
     TimelineGroupDescription: 'Go to project timeline',
     TypeLabel: 'Type',
-    SyncListAddingField:'Adding field {0} to project properties...',
+    SyncListAddingField: 'Adding field {0} to project properties...',
     BooleanYes: 'Yes',
     BooleanNo: 'No',
     // ItemColumn strings
@@ -107,5 +107,7 @@ define([], function () {
     ShowAllMeasurementsLinkText: 'Show all measurements',
     ShowInstrumentLinkText: 'Show instrument',
     ProjectInformationPanelButton: 'Project information panel',
+    MeasurementSheet_TitleKey: 'Measurement',
+    MeasurementSheet_Name: 'Measurements'
   }
 })

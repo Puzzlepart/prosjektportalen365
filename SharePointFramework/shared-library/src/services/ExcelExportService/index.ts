@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 import { format, IColumn } from '@fluentui/react'
 import * as FileSaver from 'file-saver'
+import strings from 'SharedLibraryStrings'
 import _ from 'underscore'
 import * as XLSX from 'xlsx'
 import { getObjectValue as get, getDateForExcelExport, stringToArrayBuffer } from '../../util'
@@ -38,7 +39,7 @@ class ExcelExportService {
   ): Record<string, any>[] {
     const value = item[column]
     if (typeof value !== 'string' || !value.trim()) return []
-    const skipKeys = this.configuration?.measurementsSheetConfiguration?.skipKeys || []
+    const skipKeys = ['ValueDisplay', 'AchievementDisplay']
     const renameKeys = this.configuration?.measurementsSheetConfiguration?.renameKeys || {}
     const titleKey = this.configuration?.measurementsSheetConfiguration?.titleKey || 'Title'
     try {
@@ -129,7 +130,7 @@ class ExcelExportService {
           const jsonDataSheet = XLSX.utils.sheet_to_json(XLSX.utils.json_to_sheet(combinedJson), {
             header: 1
           })
-          sheets.push({ name: 'Målinger', data: jsonDataSheet })
+          sheets.push({ name: strings.MeasurementSheet_Name, data: jsonDataSheet })
         }
       }
       const workBook = XLSX.utils.book_new()
