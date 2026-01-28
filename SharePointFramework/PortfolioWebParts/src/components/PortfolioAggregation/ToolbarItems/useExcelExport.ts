@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import _ from 'lodash'
-import * as sharedStrings from 'pp365-shared-library/lib/loc/nb-no'
+import strings from 'PortfolioWebPartsStrings'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
 import { useCallback } from 'react'
 import { IPortfolioAggregationContext } from '../context'
@@ -16,7 +16,7 @@ export function useExcelExport(context: IPortfolioAggregationContext) {
   const measurementsSheetConfiguration = context.state.allColumnsForCategory
     ? {
         renameKeys: {
-          Title: { name: sharedStrings.MeasurementSheet_TitleKey },
+          Title: { name: strings.MeasurementSheetTitleKey },
           Value: {
             name: context.state.allColumnsForCategory?.find(
               (col) => col.internalName === 'GtMeasurementValue'

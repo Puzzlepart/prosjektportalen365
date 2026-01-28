@@ -106,7 +106,6 @@ declare interface ISharedLibraryStrings {
   ShowAllMeasurementsLinkText: string
   ShowInstrumentLinkText: string
   ProjectInformationPanelButton: string
-  MeasurementSheetTitleKey: string
   MeasurementSheetName: string
 }
 
