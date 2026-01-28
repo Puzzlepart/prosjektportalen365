@@ -553,7 +553,8 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
             if (context.state.isDrilledDown) {
               context.setState({
                 isDrilledDown: false,
-                selectedItem: undefined
+                selectedItem: undefined,
+                selectedItems: []
               })
             } else if (isInFolder) {
               const currentPath = context.state.currentFolderPath || ''
