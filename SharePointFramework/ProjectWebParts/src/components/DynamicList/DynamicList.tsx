@@ -40,7 +40,8 @@ const DynamicListContent: FC<{
   targetWeb: any
 }> = ({ isSingleView, showNewButton, targetWeb }) => {
   const context = useContext(DynamicListContext)
-  const { menuItems, farMenuItems, filterPanelProps } = useToolbarItems(isSingleView, showNewButton)
+  const { menuItems, farMenuItems, filterPanelProps, customActionDialog, toaster } =
+    useToolbarItems(isSingleView, showNewButton)
 
   if (!context.props.listName) {
     return (
@@ -118,6 +119,8 @@ const DynamicListContent: FC<{
           )}
         </>
       )}
+      {customActionDialog}
+      {toaster}
     </>
   )
 }
