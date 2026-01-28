@@ -1,3 +1,4 @@
+import * as React from 'react'
 import {
   IPropertyPaneConfiguration,
   PropertyPaneTextField,
@@ -7,6 +8,10 @@ import {
   IPropertyPaneDropdownOption
 } from '@microsoft/sp-property-pane'
 import { PropertyFieldMultiSelect } from '@pnp/spfx-property-controls/lib/PropertyFieldMultiSelect'
+import {
+  PropertyFieldCollectionData,
+  CustomCollectionFieldType
+} from '@pnp/spfx-property-controls/lib/PropertyFieldCollectionData'
 import { IDynamicListProps, DynamicListMode, WebContextMode } from 'components/DynamicList'
 import { DynamicList } from 'components/DynamicList/DynamicList'
 import '@fluentui/react/dist/css/fabric.min.css'
@@ -517,6 +522,79 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                   label: 'Vis mappe/flat visning-veksling',
                   onText: 'På',
                   offText: 'Av'
+                })
+              ]
+            },
+            {
+              groupName: 'Egendefinerte handlinger',
+              isCollapsed: true,
+              groupFields: [
+                PropertyFieldCollectionData('customActions', {
+                  key: 'customActionsCollection',
+                  label: 'Egendefinerte handlinger for kommandolinje',
+                  panelProps: {
+                    type: 6
+                  },
+                  panelHeader: 'Konfigurer egendefinerte handlinger',
+                  manageBtnLabel: 'Konfigurer handlinger',
+                  value: this.properties.customActions || [],
+                  fields: [
+                    {
+                      id: 'name',
+                      title: 'Navn',
+                      type: CustomCollectionFieldType.string,
+                      required: true,
+                      placeholder: 'F.eks. Send til godkjenning'
+                    },
+                    {
+                      id: 'icon',
+                      title: 'Ikon',
+                      type: CustomCollectionFieldType.string,
+                      placeholder: 'F.eks. Send, Checkmark, Edit'
+                    },
+                    {
+                      id: 'description',
+                      title: 'Beskrivelse',
+                      type: CustomCollectionFieldType.string,
+                      placeholder: 'Beskrivelse/tooltip for handlingen'
+                    },
+                    {
+                      id: 'actionType',
+                      title: 'Handlingstype',
+                      type: CustomCollectionFieldType.dropdown,
+                      required: true,
+                      options: [
+                        { key: 'Trigger', text: 'Trigger (POST til URL)' },
+                        { key: 'Dialog', text: 'Dialog (iframe)' }
+                      ],
+                      defaultValue: 'Trigger'
+                    },
+                    {
+                      id: 'hookUrl',
+                      title: 'Hook URL (for Trigger)',
+                      type: CustomCollectionFieldType.string,
+                      placeholder: 'https://...'
+                    },
+                    {
+                      id: 'iframeContent',
+                      title: 'iframe-innhold (for Dialog)',
+                      type: CustomCollectionFieldType.custom,
+                      onCustomRender: (field, value, onUpdate) => {
+                        return React.createElement('textarea', {
+                          value: value || '',
+                          onChange: (e: any) => onUpdate(field.id, e.target.value),
+                          placeholder: '<iframe src="https://..." width="100%" height="500px"></iframe>',
+                          rows: 6,
+                          style: {
+                            width: '100%',
+                            fontFamily: 'monospace',
+                            fontSize: '12px',
+                            padding: '8px'
+                          }
+                        })
+                      }
+                    }
+                  ]
                 })
               ]
             }

@@ -1,7 +1,7 @@
-import { useMemo, useContext, useCallback } from 'react'
+import { useMemo, useContext, useCallback, useState } from 'react'
 import { DynamicListContext } from './context'
 import { ListMenuItem, ItemFieldValues, ListMenuItemDivider } from 'pp365-shared-library'
-import { DocumentLibraryViewMode } from './types'
+import { DocumentLibraryViewMode, CustomActionType, ICustomAction } from './types'
 import {
   FilterRegular,
   AddRegular,
@@ -21,6 +21,8 @@ import _ from 'lodash'
 import { useExcelExport } from './hooks'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
 import { fetchSingleItem } from './data/fetchListData'
+import * as React from 'react'
+import { Dialog, DialogSurface, DialogBody, DialogActions, Button } from '@fluentui/react-components'
 
 const Icons = {
   ContentView: bundleIcon(ContentView24Filled, ContentView24Regular)
@@ -29,6 +31,11 @@ const Icons = {
 export function useToolbarItems(isSingleView: boolean = false, showNewButton: boolean = true) {
   const context = useContext(DynamicListContext)
   const exportToExcel = useExcelExport()
+  const [dialogState, setDialogState] = useState<{
+    isOpen: boolean
+    iframeContent: string
+    actionName: string
+  }>({ isOpen: false, iframeContent: '', actionName: '' })
 
   ExcelExportService.configure({
     name: context.props.title?.trim() || context.state.data?.listTitle || 'Export'
@@ -395,6 +402,96 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
     [context.props, dismissPanel, dismissPanelWithNewItem]
   )
 
+  /**
+   * Handle Trigger action type - POST selected items to hookUrl
+   *
+   * @param action The custom action configuration
+   */
+  const handleTriggerAction = useCallback(
+    async (action: ICustomAction) => {
+      if (!action.hookUrl) {
+        alert('Hook URL er ikke konfigurert for denne handlingen.')
+        return
+      }
+
+      const selectedItems = context.state.selectedItems
+        .map((id) => context.state.data.listItems.find((_, idx) => idx === id))
+        .filter(Boolean)
+
+      if (selectedItems.length === 0) {
+        alert('Ingen elementer er valgt.')
+        return
+      }
+
+      try {
+        const payload = {
+          listName: context.props.listName,
+          listId: context.state.data?.listId,
+          listTitle: context.state.data?.listTitle,
+          webUrl: context.props.webUrl || context.props.pageContext?.web?.absoluteUrl,
+          siteId: context.props.siteId,
+          siteTitle: context.props.webTitle,
+          selectedItems: selectedItems,
+          timestamp: new Date().toISOString(),
+          actionName: action.name
+        }
+
+        const response = await fetch(action.hookUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        })
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+
+        const result = await response.json().catch(() => ({ success: true }))
+
+        alert(`Handling "${action.name}" ble utført. Svar: ${result.message || 'OK'}`)
+
+        // Refresh data after successful action
+        context.setState({ refetch: Date.now(), selectedItems: [] })
+      } catch (error) {
+        console.error('Error executing trigger action:', error)
+        alert(`Feil ved utføring av handling: ${error.message}`)
+      }
+    },
+    [context.state, context.props, context.setState]
+  )
+
+  /**
+   * Handle Dialog action type - Open dialog with iframe content
+   *
+   * @param action The custom action configuration
+   */
+  const handleDialogAction = useCallback(
+    (action: ICustomAction) => {
+      if (!action.iframeContent) {
+        alert('iframe-innhold er ikke konfigurert for denne handlingen.')
+        return
+      }
+
+      setDialogState({
+        isOpen: true,
+        iframeContent: action.iframeContent,
+        actionName: action.name
+      })
+    },
+    []
+  )
+
+  /**
+   * Close the custom action dialog
+   */
+  const closeDialog = useCallback(() => {
+    setDialogState({ isOpen: false, iframeContent: '', actionName: '' })
+    // Refresh data when dialog closes in case iframe made changes
+    context.setState({ refetch: Date.now() })
+  }, [context.setState])
+
   const menuItems = useMemo<ListMenuItem[]>(() => {
     const items: ListMenuItem[] = []
 
@@ -553,6 +650,28 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
   const farMenuItems = useMemo<ListMenuItem[]>(() => {
     const items: ListMenuItem[] = []
+
+    // Custom actions from web part configuration
+    if (context.props.customActions && context.props.customActions.length > 0) {
+      context.props.customActions.forEach((action: ICustomAction) => {
+        const actionType = action.actionType as CustomActionType
+        const requiresSelection = actionType === CustomActionType.Trigger
+        const hasSelectedItems = context.state.selectedItems && context.state.selectedItems.length > 0
+
+        items.push(
+          new ListMenuItem(action.name, action.description || action.name)
+            .setIcon(action.icon || 'PageHeaderEdit')
+            .setDisabled(requiresSelection && !hasSelectedItems)
+            .setOnClick(() => {
+              if (actionType === CustomActionType.Trigger) {
+                handleTriggerAction(action)
+              } else if (actionType === CustomActionType.Dialog) {
+                handleDialogAction(action)
+              }
+            })
+        )
+      })
+    }
 
     if (
       !isSingleView &&
@@ -722,6 +841,28 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
   return {
     menuItems,
     farMenuItems,
-    filterPanelProps
+    filterPanelProps,
+    customActionDialog: dialogState.isOpen ? (
+      <Dialog open={dialogState.isOpen} onOpenChange={(_, data) => !data.open && closeDialog()}>
+        <DialogSurface style={{ maxWidth: '90vw', width: '900px', maxHeight: '90vh' }}>
+          <DialogBody>
+            <div style={{ marginBottom: '16px' }}>
+              <h2 style={{ margin: 0, fontSize: '20px', fontWeight: 600 }}>
+                {dialogState.actionName}
+              </h2>
+            </div>
+            <div
+              style={{ minHeight: '500px', border: '1px solid #e1e1e1', borderRadius: '4px' }}
+              dangerouslySetInnerHTML={{ __html: dialogState.iframeContent }}
+            />
+          </DialogBody>
+          <DialogActions>
+            <Button appearance="secondary" onClick={closeDialog}>
+              Avbryt
+            </Button>
+          </DialogActions>
+        </DialogSurface>
+      </Dialog>
+    ) : null
   }
 }

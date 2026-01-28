@@ -45,6 +45,55 @@ export enum WebContextMode {
 }
 
 /**
+ * Custom action types for CommandBar actions
+ */
+export enum CustomActionType {
+  /**
+   * Trigger action - sends POST request to hookUrl with selected item data
+   */
+  Trigger = 'Trigger',
+  /**
+   * Dialog action - opens dialog with iframe content
+   */
+  Dialog = 'Dialog'
+}
+
+/**
+ * Custom action configuration for CommandBar
+ */
+export interface ICustomAction {
+  /**
+   * Name of the action (displayed as button text)
+   */
+  name: string
+
+  /**
+   * Icon name for the action button
+   */
+  icon?: string
+
+  /**
+   * Description/tooltip for the action
+   */
+  description?: string
+
+  /**
+   * Type of action to perform
+   */
+  actionType: CustomActionType | string
+
+  /**
+   * URL to POST to (required for Trigger action type)
+   */
+  hookUrl?: string
+
+  /**
+   * iframe content/snippet (required for Dialog action type)
+   */
+  iframeContent?: string
+}
+
+/**
  * Column context menu configuration.
  */
 export interface IColumnContextMenu {
@@ -238,6 +287,11 @@ export interface IDynamicListProps extends IBaseWebPartComponentProps {
    * Show/hide the item title in single item view
    */
   showItemTitle?: boolean
+
+  /**
+   * Custom actions for the CommandBar
+   */
+  customActions?: ICustomAction[]
 }
 
 export interface IDynamicListState extends IBaseWebPartComponentState<IDynamicListData> {
