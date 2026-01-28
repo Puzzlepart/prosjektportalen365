@@ -13,10 +13,7 @@ import {
   FluentProvider,
   IdPrefixProvider,
   Spinner,
-  Tooltip
-} from '@fluentui/react-components'
-import { customLightTheme, getFluentIcon, setUrlHash, UserMessage } from 'pp365-shared-library'
-import {
+  Tooltip,
   NavCategory,
   NavCategoryItem,
   NavDrawer,
@@ -28,7 +25,8 @@ import {
   NavDivider,
   AppItemStatic,
   NavItem
-} from '@fluentui/react-nav-preview'
+} from '@fluentui/react-components'
+import { customLightTheme, getFluentIcon, setUrlHash, UserMessage } from 'pp365-shared-library'
 import {
   Board20Filled,
   Board20Regular,
