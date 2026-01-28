@@ -294,6 +294,11 @@ export interface IDynamicListProps extends IBaseWebPartComponentProps {
   showItemTitle?: boolean
 
   /**
+   * Show/hide custom actions in the CommandBar
+   */
+  showCustomActions?: boolean
+
+  /**
    * Custom actions for the CommandBar
    */
   customActions?: ICustomAction[]

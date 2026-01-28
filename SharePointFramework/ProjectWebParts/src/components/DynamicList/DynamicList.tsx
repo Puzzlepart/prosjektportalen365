@@ -86,7 +86,10 @@ const DynamicListContent: FC<{
           style={{ padding: 10, minHeight: '20px' }}
         />
       ) : (
-        context.props.showCommandBar && (
+        (context.props.showCommandBar ||
+          (!context.props.showCommandBar &&
+            (context.state.isDrilledDown ||
+              (context.state.isDocumentLibrary && context.state.currentFolderPath)))) && (
           <div className={styles.commandBar}>
             <Toolbar items={menuItems} farItems={farMenuItems} filterPanel={filterPanelProps} />
           </div>
@@ -266,5 +269,6 @@ DynamicList.defaultProps = {
   showNewWordButton: false,
   showNewExcelButton: false,
   showNewPowerPointButton: false,
-  showViewModeToggle: true
+  showViewModeToggle: true,
+  showCustomActions: true
 }

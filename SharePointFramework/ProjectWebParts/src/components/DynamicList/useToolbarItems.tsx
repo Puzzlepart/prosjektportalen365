@@ -537,22 +537,32 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
    */
   const closeDialog = useCallback(() => {
     setDialogState({ isOpen: false, iframeContent: '', actionName: '' })
-    // Refresh data when dialog closes in case iframe made changes
-    // context.setState({ refetch: Date.now() })
   }, [context.setState])
 
   const menuItems = useMemo<ListMenuItem[]>(() => {
     const items: ListMenuItem[] = []
 
-    if (context.state.isDrilledDown) {
+    const isInFolder = context.state.isDocumentLibrary && context.state.currentFolderPath
+    const showBackButton = context.state.isDrilledDown || isInFolder
+
+    if (showBackButton) {
       items.push(
         new ListMenuItem('Tilbake', 'Tilbake til listevisning')
           .setIcon(ArrowLeftRegular)
           .setOnClick(() => {
-            context.setState({
-              isDrilledDown: false,
-              selectedItem: undefined
-            })
+            if (context.state.isDrilledDown) {
+              context.setState({
+                isDrilledDown: false,
+                selectedItem: undefined
+              })
+            } else if (isInFolder) {
+              const currentPath = context.state.currentFolderPath || ''
+              const pathParts = currentPath.split('/')
+              pathParts.pop()
+              const newPath = pathParts.join('/')
+
+              context.setState({ currentFolderPath: newPath })
+            }
           })
       )
     }
@@ -701,7 +711,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
     const items: ListMenuItem[] = []
 
     // Custom actions from web part configuration
-    if (context.props.customActions && context.props.customActions.length > 0) {
+    if (context.props.showCustomActions !== false && context.props.customActions && context.props.customActions.length > 0) {
       // Sort actions by order field (lower numbers first)
       const sortedActions = [...context.props.customActions].sort((a, b) => {
         const orderA = a.order ?? 100

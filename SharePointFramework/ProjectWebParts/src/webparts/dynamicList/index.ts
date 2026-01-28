@@ -522,6 +522,11 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                   label: 'Vis mappe/flat visning-veksling',
                   onText: 'På',
                   offText: 'Av'
+                }),
+                PropertyPaneToggle('showCustomActions', {
+                  label: 'Vis egendefinerte handlinger',
+                  onText: 'På',
+                  offText: 'Av'
                 })
               ]
             },

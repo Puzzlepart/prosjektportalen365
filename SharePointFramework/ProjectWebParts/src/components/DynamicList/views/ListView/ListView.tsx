@@ -246,6 +246,10 @@ export const ListView: FC<IListViewProps> = ({
                       ? column.renderCell(item)
                       : (item as any)[column.columnId]
 
+                    const isFolder = isDocumentLibrary && (item as any).FSObjType === 1
+                    const isFile = isDocumentLibrary && !isFolder
+                    const fileUrl = isFile ? (item as any).FileRef : null
+
                     return (
                       <TableCell
                         key={column.columnId}
@@ -253,14 +257,20 @@ export const ListView: FC<IListViewProps> = ({
                       >
                         {isFirstColumn && onFirstColumnClick ? (
                           <TableCellLayout>
-                            <Link
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                onFirstColumnClick(item)
-                              }}
-                            >
-                              {cellContent}
-                            </Link>
+                            {isFile && fileUrl ? (
+                              <Link href={fileUrl} target="_blank" rel="noopener noreferrer">
+                                {cellContent}
+                              </Link>
+                            ) : (
+                              <Link
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  onFirstColumnClick(item)
+                                }}
+                              >
+                                {cellContent}
+                              </Link>
+                            )}
                           </TableCellLayout>
                         ) : (
                           <TableCellLayout>{cellContent}</TableCellLayout>
