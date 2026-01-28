@@ -9,6 +9,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Ny webdel `Dynamisk listewebdel` for visning av data fra SharePoint-lister og dokumentbibliotek med fleksible visningsmoduser, filtrering, sortering og tilpassbare kolonner. Opprettelse, redigering og sletting av elementer støttes også direkte fra webdelen.
 - Mulighet for å henting av standard metadata for prosjekttyper i Bestillingsportalen-skjema
 - Bestillingsportalen støtte for standalone skjema for bestilling av områder som også støtter Teams. Denne appen erstatter PowerAppen som følger med Bestillingsportalen.
+- Støtte for beregnede kolonner i aggregerte oversikter [#1563](https://github.com/Puzzlepart/prosjektportalen365/issues/1563)
 
 ### Forbedringer
 
@@ -57,7 +58,6 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
   - Webhook-integrasjon for ekstern arkivhåndtering som håndterer arkivering av dokumenter og lister basert på loggføringen
   - Nytt taksonomifelt "dokumenttype" i dokumentbiblioteket på nye prosjekter
 - Ny status for arkivering av prosjekt, viser informasjon om de siste arkiveringsaktivitetene på prosjektet.
-- Ny funksjonalitet som gir støtte for å vise beregnede kolonner i aggregerte oversiktswebdel [#1563](https://github.com/Puzzlepart/prosjektportalen365/issues/1563)
 
 ### Forbedringer
 
