@@ -93,6 +93,7 @@ declare interface ISharedLibraryStrings {
   ColumnRenderOptionUrlDescriptionLabel: string
   ColumnRenderOptionUrlDescriptionDescription: string
   ColumnRenderOptionUser: string
+  ColumnRenderOptionCalculated: string
   HideDataTypePropertiesLabel: string
   ShowDataTypePropertiesLabel: string
   InstrumentUnitLabel: string

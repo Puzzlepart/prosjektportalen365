@@ -2,21 +2,22 @@
 import strings from 'SharedLibraryStrings'
 import _ from 'lodash'
 import { useEffect } from 'react'
-import { GetDataTypeProperties, IColumnDataTypeFieldOption } from './ColumnDataTypeField'
 import { BooleanColumn } from './BooleanColumn'
+import { GetDataTypeProperties, IColumnDataTypeFieldOption } from './ColumnDataTypeField'
 import { CurrencyColumn } from './CurrencyColumn'
-import { NumberColumn } from './NumberColumn'
-import { NoteColumn } from './NoteColumn'
-import { PercentageColumn } from './PercentageColumn'
 import { DateColumn } from './DateColumn'
 import { DialogColumn } from './DialogColumn'
-import { InstrumentColumn } from './InstrumentColumn'
 import { FileNameColumn } from './FileNameColumn'
+import { InstrumentColumn } from './InstrumentColumn'
 import { ListColumn } from './ListColumn'
+import { NoteColumn } from './NoteColumn'
+import { NumberColumn } from './NumberColumn'
+import { PercentageColumn } from './PercentageColumn'
 import { TagsColumn } from './TagsColumn'
 import { TrendColumn } from './TrendColumn'
 import { UrlColumn } from './UrlColumn'
 import { UserColumn } from './UserColumn'
+import { CalculatedColumn } from './CalculatedColumn'
 import { ColumnRenderComponent } from './types'
 
 /**
@@ -244,7 +245,8 @@ export function useColumnRenderComponentRegistry() {
       TagsColumn,
       TrendColumn,
       UrlColumn,
-      UserColumn
+      UserColumn,
+      CalculatedColumn
     )
     ColumnRenderComponentRegistry.registerColumnRenderOption(
       'text',

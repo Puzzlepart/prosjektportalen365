@@ -94,6 +94,7 @@ define([], function () {
     ColumnRenderOptionUrlDescriptionLabel: 'Description',
     ColumnRenderOptionUrlDescriptionDescription: 'Link description. If you do not enter a value, any description from the link is used.',
     ColumnRenderOptionUser: 'Person',
+    ColumnRenderOptionCalculated: 'Calculated column',
     HideDataTypePropertiesLabel: 'Hide properties for display mode',
     ShowDataTypePropertiesLabel: 'Show properties for display mode',
     InstrumentUnitLabel: 'Unit: {0}',

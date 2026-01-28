@@ -94,6 +94,7 @@ define([], function () {
     ColumnRenderOptionUrlDescriptionLabel: 'Beskrivelse',
     ColumnRenderOptionUrlDescriptionDescription: 'Beskrivelse av lenken. Om du ikke angir en verdi, brukes eventuelt beskrivelse fra lenken.',
     ColumnRenderOptionUser: 'Person',
+    ColumnRenderOptionCalculated: 'Beregnet kolonne',
     HideDataTypePropertiesLabel: 'Skjul egenskaper for visningsmodus',
     ShowDataTypePropertiesLabel: 'Vis egenskaper for visningsmodus',
     InstrumentUnitLabel: 'Enhet: {0}',
