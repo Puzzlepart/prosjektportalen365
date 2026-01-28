@@ -1,7 +1,9 @@
 declare interface IPortfolioWebPartsStrings {
   ResultsCountLabel: string
   ColumnRenderOptionStatusReport: string
+  ColumnRenderOptionProjectInfo: string
   ColumnRenderOptionHub: string
+  ColumnRenderOptionCalculated: string
   PortfolioSelectorLabel: string
   MergedViewLabel: string
   PortfoliosFieldDescription: string
@@ -369,7 +371,6 @@ declare interface IPortfolioWebPartsStrings {
   ColumnRenderDataTypePropertiesHeaderText: string
   ColumnRenderDescription: string
   ColumnRenderLabel: string
-  ColumnRenderOptionProjectInfo: string
   ColumnSettingsDisabledTooltip: string
   ColumnSettingsLabel: string
   ColumnVisibilityDescription: string

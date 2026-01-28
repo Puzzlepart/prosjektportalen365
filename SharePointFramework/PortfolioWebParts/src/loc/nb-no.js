@@ -3,6 +3,8 @@ define([], function () {
     ResultsCountLabel: 'Viser {0} av {1} prosjekter',
     ColumnRenderOptionStatusReport: 'Statusrapport',
     ColumnRenderOptionProjectInfo: 'Prosjektinformasjon',
+    ColumnRenderOptionHub: 'Hub',
+    ColumnRenderOptionCalculated: 'Beregnet kolonne',
     PortfolioSelectorLabel: 'Portefølje',
     MergedViewLabel: 'Vis alle hubber',
     IconNameFieldLabel: 'Ikonnavn',

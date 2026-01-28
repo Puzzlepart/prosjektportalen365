@@ -1,12 +1,12 @@
-import strings from 'PortfolioWebPartsStrings'
-import { tryParseCalculated } from 'pp365-shared-library'
 import React, { FC, useMemo } from 'react'
-import { BooleanColumn } from '../BooleanColumn'
-import { CurrencyColumn } from '../CurrencyColumn'
-import { DateColumn } from '../DateColumn'
-import { NumberColumn } from '../NumberColumn'
 import { ColumnRenderComponent } from '../types'
 import { ICalculatedColumnProps, ResultType } from './types'
+import { tryParseCalculated } from '../../../util'
+import { NumberColumn } from '../NumberColumn'
+import { CurrencyColumn } from '../CurrencyColumn'
+import { BooleanColumn } from '../BooleanColumn'
+import { DateColumn } from '../DateColumn'
+import strings from 'SharedLibraryStrings'
 
 const componentRegistry: Record<ResultType, FC<ICalculatedColumnProps>> = {
   currency: CurrencyColumn,

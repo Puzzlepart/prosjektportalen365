@@ -276,6 +276,8 @@ define([], function () {
     ResultsCountLabel: 'Displaying {0} of {1} projects',
     ColumnRenderOptionStatusReport: 'Status report',
     ColumnRenderOptionProjectInfo: 'Project information',
+    ColumnRenderOptionHub: 'Hub',
+    ColumnRenderOptionCalculated: 'Calculated column',
     PortfolioSelectorLabel: 'Portfolio selector',
     MergedViewLabel: 'Show all hubs',
     PortfoliosFieldDescription: 'Select the portfolios to be displayed in the portfolio selector.',

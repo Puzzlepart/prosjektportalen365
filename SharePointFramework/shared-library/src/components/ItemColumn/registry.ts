@@ -3,7 +3,6 @@ import strings from 'SharedLibraryStrings'
 import _ from 'lodash'
 import { useEffect } from 'react'
 import { BooleanColumn } from './BooleanColumn'
-import { CalculatedColumn } from './CalculatedColumn'
 import { GetDataTypeProperties, IColumnDataTypeFieldOption } from './ColumnDataTypeField'
 import { CurrencyColumn } from './CurrencyColumn'
 import { DateColumn } from './DateColumn'
@@ -14,12 +13,11 @@ import { ListColumn } from './ListColumn'
 import { NoteColumn } from './NoteColumn'
 import { NumberColumn } from './NumberColumn'
 import { PercentageColumn } from './PercentageColumn'
-import { ProjectInformationColumn } from './ProjectInformationColumn'
-import { StatusReportColumn } from './StatusReportColumn/StatusReportColumn'
 import { TagsColumn } from './TagsColumn'
 import { TrendColumn } from './TrendColumn'
 import { UrlColumn } from './UrlColumn'
 import { UserColumn } from './UserColumn'
+import { CalculatedColumn } from './CalculatedColumn'
 import { ColumnRenderComponent } from './types'
 
 /**
@@ -235,7 +233,6 @@ export function useColumnRenderComponentRegistry() {
   useEffect(() => {
     ColumnRenderComponentRegistry.registerMultiple(
       BooleanColumn,
-      CalculatedColumn,
       DateColumn,
       FileNameColumn,
       CurrencyColumn,
@@ -248,7 +245,8 @@ export function useColumnRenderComponentRegistry() {
       TagsColumn,
       TrendColumn,
       UrlColumn,
-      UserColumn
+      UserColumn,
+      CalculatedColumn
     )
     ColumnRenderComponentRegistry.registerColumnRenderOption(
       'text',
