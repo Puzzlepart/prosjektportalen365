@@ -322,6 +322,15 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                   onText: strings.BooleanOn,
                   offText: strings.BooleanOff
                 }),
+                PropertyPaneToggle('parentMode', {
+                  label: strings.Provision.ParentModeFieldLabel,
+                  checked: propertiesWithDefaults.parentMode ?? false,
+                  onText: strings.Provision.AutoOwnerOnText,
+                  offText: strings.Provision.AutoOwnerOffText
+                }),
+                PropertyPaneLabel('parentModeLabel', {
+                  text: strings.Provision.ParentModeFieldDescription
+                }),
                 PropertyFieldCollectionData('fields', {
                   key: 'fieldsCollection',
                   label: strings.Provision.FieldsConfigurationLabel,
@@ -659,7 +668,7 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                   offText: strings.Provision.DebugModeOffText
                 })
               ]
-            },
+            }
           ]
         }
       ]

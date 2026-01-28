@@ -12,11 +12,40 @@ export function useEditableColumn(
   state: IProjectProvisionState,
   setState: (newState: Partial<IProjectProvisionState>) => void
 ) {
+  const [hubSiteTitle, setHubSiteTitle] = useState<string>(props.pageContext.web.title)
+
   const defaultType = useMemo(() => {
     return !state.loading && !state.error && state.types && state.types.length > 0
       ? state.types[0]
       : null
   }, [state.loading, state.error, state.types])
+
+  // Fetch hub site title when in parent mode
+  useEffect(() => {
+    const fetchHubSiteTitle = async () => {
+      if (props.parentMode && props.dataAdapter) {
+        try {
+          const hubInfo = await props.dataAdapter.portalDataService.resolveHubSiteFromUrl(
+            props.dataAdapter.portalDataService.url
+          )
+          if (hubInfo?.title) {
+            setHubSiteTitle(hubInfo.title)
+          }
+        } catch (error) {
+          console.warn('Failed to resolve hub site title:', error)
+          setHubSiteTitle(props.pageContext.web.title)
+        }
+      } else {
+        setHubSiteTitle(props.pageContext.web.title)
+      }
+    }
+    fetchHubSiteTitle()
+  }, [
+    props.parentMode,
+    props.pageContext.web.absoluteUrl,
+    props.pageContext.web.title,
+    props.dataAdapter
+  ])
 
   const initialColumn = useMemo(
     () =>
@@ -49,9 +78,9 @@ export function useEditableColumn(
         ['language', strings.Provision.DefaultLanguage],
         ['timeZone', strings.Provision.DefaultTimeZone],
         ['hubSite', props.pageContext.legacyPageContext.hubSiteId],
-        ['hubSiteTitle', props.pageContext.web.title]
+        ['hubSiteTitle', hubSiteTitle]
       ]),
-    [props.pageContext.legacyPageContext.hubSiteId, props.pageContext.web.title]
+    [props.pageContext.legacyPageContext.hubSiteId, hubSiteTitle]
   )
 
   const [column, $setColumn] = useState<Map<string, any>>(initialColumn)
@@ -288,13 +317,15 @@ export function useEditableColumn(
         $setColumn((prev) => {
           const newColumn = new Map(prev)
           newColumn.set('type', defaultType.title)
+          newColumn.set('hubSiteTitle', hubSiteTitle)
           return newColumn
         })
 
         setState({
           properties: {
             ...state.properties,
-            type: defaultType.title
+            type: defaultType.title,
+            hubSiteTitle: hubSiteTitle
           }
         })
       } catch (error) {

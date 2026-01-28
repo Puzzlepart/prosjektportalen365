@@ -3,7 +3,7 @@ import { SPUser } from '@microsoft/sp-page-context'
 import { IPnPClientStore, PnPClientStorage } from '@pnp/core'
 import { SPFI } from '@pnp/sp'
 import '@pnp/sp/presets/all'
-import { IWeb, PermissionKind } from '@pnp/sp/presets/all'
+import { IWeb, PermissionKind, Site, Web } from '@pnp/sp/presets/all'
 import { SpEntityPortalService } from 'sp-entityportal-service'
 import _ from 'underscore'
 import { ItemFieldValue, ItemFieldValues, ProjectAdminRoleType, SPField } from '../../models'
@@ -172,7 +172,7 @@ export class SPDataAdapterBase<
                   const currentUserHasManageWebPermisson =
                     await this.sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
                   if (currentUserHasManageWebPermisson) userPermissions.push(...role.permissions)
-                } catch {}
+                } catch { }
               }
               break
             case ProjectAdminRoleType.ProjectProperty:
@@ -206,7 +206,7 @@ export class SPDataAdapterBase<
                     ).length > 0
                   )
                     userPermissions.push(...role.permissions)
-                } catch {}
+                } catch { }
               }
               break
           }
@@ -296,7 +296,8 @@ export class SPDataAdapterBase<
   private _getFieldsToSync(
     fields: SPField[],
     customSiteFieldsGroupName: string,
-    forcedFields: string[]
+    forcedFields: string[],
+    projectDataSync?: boolean
   ): SPField[] {
     const fieldsToSync = [
       {
@@ -321,6 +322,16 @@ export class SPDataAdapterBase<
         return true
       })
     ]
+
+    if (projectDataSync) {
+      fieldsToSync.push(
+        {
+          InternalName: 'GtParentProjects',
+          TypeAsString: 'Note'
+        } as SPField
+      )
+    }
+
     return fieldsToSync
   }
 
@@ -359,21 +370,22 @@ export class SPDataAdapterBase<
       const [fields, siteUsers, targetListFields] = await Promise.all([
         options.projectContentTypeId
           ? (this.entityService
-              .usingParams({ contentTypeId: options.projectContentTypeId })
-              .getEntityFields() as Promise<SPField[]>)
+            .usingParams({ contentTypeId: options.projectContentTypeId })
+            .getEntityFields() as Promise<SPField[]>)
           : (this.entityService.getEntityFields() as Promise<SPField[]>),
         sourceWeb.siteUsers.select('Id', 'Email', 'LoginName', 'Title').using(DefaultCaching)(),
         options.targetListName
           ? destinationWeb.lists.getByTitle(options?.targetListName).fields.using(DefaultCaching)<
-              SPField[]
-            >()
+            SPField[]
+          >()
           : Promise.resolve<SPField[]>([])
       ])
-      const fieldsToSync = this._getFieldsToSync(fields, options.customSiteFieldsGroup, [
+      const forcedFields = [
         'GtIsParentProject',
         'GtIsProgram',
         'GtCurrentVersion'
-      ])
+      ]
+      const fieldsToSync = this._getFieldsToSync(fields, options.customSiteFieldsGroup, forcedFields, options.projectDataSync)
       return await fieldsToSync.reduce(async ($properties, field) => {
         const properties = await $properties
         const fieldValue = fieldValues.get<ItemFieldValue>(field.InternalName, {

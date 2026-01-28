@@ -80,7 +80,11 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
   return (
     <ProjectProvisionContext.Provider value={{ props, state, setState, column, setColumn, reset }}>
       <IdPrefixProvider value={fluentProviderId}>
-        <FluentProvider theme={customLightTheme} className={styles.container} style={{ background: 'transparent' }}>
+        <FluentProvider
+          theme={customLightTheme}
+          className={styles.container}
+          style={{ background: 'transparent' }}
+        >
           {props.renderMode === 'inline' ? (
             <>
               {state.showConfigEditor ? (

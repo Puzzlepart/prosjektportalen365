@@ -114,6 +114,8 @@ declare interface IPortfolioWebPartsStrings {
     LanguageFieldLabel: string
     TimeZoneFieldLabel: string
     HubSiteFieldLabel: string
+    ParentSiteFieldLabel: string
+    ParentSiteFieldDescription: string
     ImageFieldLabel: string
     ImageFieldDescription: string
     ImageDropZoneText: string
@@ -231,6 +233,8 @@ declare interface IPortfolioWebPartsStrings {
     RenderModeInline: string
     ButtonLabelFieldLabel: string
     ButtonLabelFieldDescription: string
+    ParentModeFieldLabel: string
+    ParentModeFieldDescription: string
     AutoOwnerFieldLabel: string
     AutoOwnerFieldDescription: string
     AutoOwnerOnText: string

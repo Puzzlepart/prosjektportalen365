@@ -45,6 +45,7 @@ export interface IProvisionRequestItem {
   JoinHub?: boolean
   HubSiteTitle?: string
   HubSite?: string
+  ParentSite?: string
   Status?: string
   Stage?: string
   RequestKey?: string

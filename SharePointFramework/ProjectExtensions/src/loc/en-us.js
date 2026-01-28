@@ -39,7 +39,7 @@ define([], function () {
     NotSiteAdminErrorMessage: 'You are not a site admin',
     NotSiteAdminErrorStack: 'You are not a site admin. Check that you are a site admin in the template setup.',
     ProjectDataFoundTitle: 'Project data found',
-    ProjectDataFoundMessage: 'Project data was found in the site. Do you want to apply the template anyway?',
+    ProjectDataFoundMessage: 'Project data was found for the site. The project data will be used when setting up the project.',
     ProjectPropertiesHeader: 'Project properties',
     SummaryTitle: 'Summary',
     ApplyExtensionHooks: 'Running hooks defined in project extension',
