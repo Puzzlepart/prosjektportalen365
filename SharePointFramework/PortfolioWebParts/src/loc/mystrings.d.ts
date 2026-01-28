@@ -576,6 +576,7 @@ declare interface IPortfolioWebPartsStrings {
   ProjectLevel: string
   ColumnRenderOptionText: string
   NoProjectData: string
+  MeasurementSheetTitleKey: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

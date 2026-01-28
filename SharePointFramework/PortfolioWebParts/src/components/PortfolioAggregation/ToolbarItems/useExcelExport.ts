@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import _ from 'lodash'
+import strings from 'PortfolioWebPartsStrings'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
 import { useCallback } from 'react'
 import { IPortfolioAggregationContext } from '../context'
@@ -12,7 +13,41 @@ import { IPortfolioAggregationContext } from '../context'
  * @returns An object containing a contextual menu item for Excel export.
  */
 export function useExcelExport(context: IPortfolioAggregationContext) {
-  ExcelExportService.configure({ name: context.props.title })
+  const measurementsSheetConfiguration = context.state.allColumnsForCategory
+    ? {
+        renameKeys: {
+          Title: { name: strings.MeasurementSheetTitleKey },
+          Value: {
+            name: context.state.allColumnsForCategory?.find(
+              (col) => col.internalName === 'GtMeasurementValue'
+            )?.name
+          },
+          Comment: {
+            name: context.state.allColumnsForCategory?.find(
+              (col) => col.internalName === 'GtMeasurementComment'
+            )?.name
+          },
+          Achievement: {
+            name: context.state.allColumnsForCategory?.find(
+              (col) => col.internalName === 'MeasurementAchievement'
+            )?.name
+          },
+          DateDisplay: {
+            name: context.state.allColumnsForCategory?.find(
+              (col) => col.internalName === 'GtMeasurementDate'
+            )?.name,
+            dataType: 'date'
+          }
+        },
+        titleKey: context.state.allColumnsForCategory.find((col) => col.internalName === 'Title')
+          ?.name
+      }
+    : undefined
+
+  ExcelExportService.configure({
+    name: context.props.title,
+    measurementsSheetConfiguration
+  })
 
   /**
    * Callback function for Excel export. Handles the export to Excel with state updates and
@@ -41,7 +76,7 @@ export function useExcelExport(context: IPortfolioAggregationContext) {
       const filteredItems = items.map((item) => {
         const filteredItem = { ...item }
         Object.keys(filteredItem).forEach((key) => {
-          const column = context.columns.find((c) => c.fieldName === key)
+          const column = context.state.columns.find((c) => c.fieldName === key)
           switch (column?.dataType) {
             case 'percentage':
               filteredItem[key] = Math.floor(filteredItem[key] * 100) + '%'
@@ -50,6 +85,16 @@ export function useExcelExport(context: IPortfolioAggregationContext) {
             case 'number':
               filteredItem[key] = Math.floor(filteredItem[key])
               break
+            case 'trend':
+              const json = filteredItem[key]?.trim()
+              if (!json || json === '{}') {
+                filteredItem[key] = ''
+              } else {
+                const parsed = JSON.parse(json)
+                const achievement = Number(parsed?.Achievement)
+                filteredItem[key] = Math.floor(isNaN(achievement) ? 0 : achievement * 100) / 100
+              }
+              break
             default:
               break
           }
@@ -57,11 +102,10 @@ export function useExcelExport(context: IPortfolioAggregationContext) {
         return filteredItem
       })
 
-      ExcelExportService.export(filteredItems, context.columns)
+      ExcelExportService.export(filteredItems, context.state.columns)
     } catch (error) {
       console.log(error)
     }
-  }, [context.state, context.columns])
-
+  }, [context.state, context.state.columns])
   return { exportToExcel }
 }

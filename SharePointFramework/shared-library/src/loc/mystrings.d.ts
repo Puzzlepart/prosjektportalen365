@@ -106,6 +106,7 @@ declare interface ISharedLibraryStrings {
   ShowAllMeasurementsLinkText: string
   ShowInstrumentLinkText: string
   ProjectInformationPanelButton: string
+  MeasurementSheetName: string
 }
 
 declare module 'SharedLibraryStrings' {

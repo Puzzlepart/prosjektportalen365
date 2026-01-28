@@ -7,4 +7,8 @@ export interface IExcelExportServiceConfiguration {
     type: any
     bookType: any
   }
+  measurementsSheetConfiguration?: {
+    renameKeys: Record<string, { name: string; dataType?: string }>
+    titleKey: string
+  }
 }
