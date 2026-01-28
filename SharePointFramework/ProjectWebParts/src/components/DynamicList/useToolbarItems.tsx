@@ -1,6 +1,6 @@
 import { useMemo, useContext, useCallback, useState } from 'react'
 import { DynamicListContext } from './context'
-import { ListMenuItem, ItemFieldValues, ListMenuItemDivider } from 'pp365-shared-library'
+import { ListMenuItem, ItemFieldValues, ListMenuItemDivider, customLightTheme } from 'pp365-shared-library'
 import { DocumentLibraryViewMode, CustomActionType, ICustomAction } from './types'
 import {
   FilterRegular,
@@ -22,7 +22,23 @@ import { useExcelExport } from './hooks'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
 import { fetchSingleItem } from './data/fetchListData'
 import * as React from 'react'
-import { Dialog, DialogSurface, DialogBody, DialogActions, Button } from '@fluentui/react-components'
+import {
+  Dialog,
+  DialogSurface,
+  DialogBody,
+  DialogActions,
+  Button,
+  Toaster,
+  useToastController,
+  useId,
+  Toast,
+  ToastTitle,
+  ToastBody,
+  FluentProvider,
+  IdPrefixProvider,
+  DialogTitle,
+  DialogContent
+} from '@fluentui/react-components'
 
 const Icons = {
   ContentView: bundleIcon(ContentView24Filled, ContentView24Regular)
@@ -31,6 +47,9 @@ const Icons = {
 export function useToolbarItems(isSingleView: boolean = false, showNewButton: boolean = true) {
   const context = useContext(DynamicListContext)
   const exportToExcel = useExcelExport()
+  const toasterId = useId('toaster')
+  const fluentProviderId = useId('fp-dynamic-list-actions')
+  const { dispatchToast } = useToastController(toasterId)
   const [dialogState, setDialogState] = useState<{
     isOpen: boolean
     iframeContent: string
@@ -410,7 +429,13 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
   const handleTriggerAction = useCallback(
     async (action: ICustomAction) => {
       if (!action.hookUrl) {
-        alert('Hook URL er ikke konfigurert for denne handlingen.')
+        dispatchToast(
+          <Toast appearance='inverted'>
+            <ToastTitle>Feil konfigurering</ToastTitle>
+            <ToastBody>Hook URL er ikke konfigurert for denne handlingen.</ToastBody>
+          </Toast>,
+          { intent: 'error' }
+        )
         return
       }
 
@@ -419,7 +444,13 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
         .filter(Boolean)
 
       if (selectedItems.length === 0) {
-        alert('Ingen elementer er valgt.')
+        dispatchToast(
+          <Toast appearance='inverted'>
+            <ToastTitle>Ingen elementer valgt</ToastTitle>
+            <ToastBody>Vennligst velg minst ett element for å utføre denne handlingen.</ToastBody>
+          </Toast>,
+          { intent: 'warning' }
+        )
         return
       }
 
@@ -450,13 +481,25 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
         const result = await response.json().catch(() => ({ success: true }))
 
-        alert(`Handling "${action.name}" ble utført. Svar: ${result.message || 'OK'}`)
+        dispatchToast(
+          <Toast appearance='inverted'>
+            <ToastTitle>{action.name}</ToastTitle>
+            <ToastBody>Handlingen ble utført. {result.message || 'OK'}</ToastBody>
+          </Toast>,
+          { intent: 'success' }
+        )
 
         // Refresh data after successful action
         context.setState({ refetch: Date.now(), selectedItems: [] })
       } catch (error) {
         console.error('Error executing trigger action:', error)
-        alert(`Feil ved utføring av handling: ${error.message}`)
+        dispatchToast(
+          <Toast appearance='inverted'>
+            <ToastTitle>Feil ved utføring</ToastTitle>
+            <ToastBody>Kunne ikke utføre handlingen: {error.message}</ToastBody>
+          </Toast>,
+          { intent: 'error' }
+        )
       }
     },
     [context.state, context.props, context.setState]
@@ -470,7 +513,13 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
   const handleDialogAction = useCallback(
     (action: ICustomAction) => {
       if (!action.iframeContent) {
-        alert('iframe-innhold er ikke konfigurert for denne handlingen.')
+        dispatchToast(
+          <Toast appearance='inverted'>
+            <ToastTitle>Feil konfigurering</ToastTitle>
+            <ToastBody>iframe-innhold er ikke konfigurert for denne handlingen.</ToastBody>
+          </Toast>,
+          { intent: 'error' }
+        )
         return
       }
 
@@ -489,7 +538,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
   const closeDialog = useCallback(() => {
     setDialogState({ isOpen: false, iframeContent: '', actionName: '' })
     // Refresh data when dialog closes in case iframe made changes
-    context.setState({ refetch: Date.now() })
+    // context.setState({ refetch: Date.now() })
   }, [context.setState])
 
   const menuItems = useMemo<ListMenuItem[]>(() => {
@@ -653,14 +702,21 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
     // Custom actions from web part configuration
     if (context.props.customActions && context.props.customActions.length > 0) {
-      context.props.customActions.forEach((action: ICustomAction) => {
+      // Sort actions by order field (lower numbers first)
+      const sortedActions = [...context.props.customActions].sort((a, b) => {
+        const orderA = a.order ?? 100
+        const orderB = b.order ?? 100
+        return orderA - orderB
+      })
+
+      sortedActions.forEach((action: ICustomAction) => {
         const actionType = action.actionType as CustomActionType
         const requiresSelection = actionType === CustomActionType.Trigger
         const hasSelectedItems = context.state.selectedItems && context.state.selectedItems.length > 0
 
         items.push(
           new ListMenuItem(action.name, action.description || action.name)
-            .setIcon(action.icon || 'PageHeaderEdit')
+            .setIcon(action.icon || 'Robot')
             .setDisabled(requiresSelection && !hasSelectedItems)
             .setOnClick(() => {
               if (actionType === CustomActionType.Trigger) {
@@ -843,26 +899,35 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
     farMenuItems,
     filterPanelProps,
     customActionDialog: dialogState.isOpen ? (
-      <Dialog open={dialogState.isOpen} onOpenChange={(_, data) => !data.open && closeDialog()}>
-        <DialogSurface style={{ maxWidth: '90vw', width: '900px', maxHeight: '90vh' }}>
-          <DialogBody>
-            <div style={{ marginBottom: '16px' }}>
-              <h2 style={{ margin: 0, fontSize: '20px', fontWeight: 600 }}>
-                {dialogState.actionName}
-              </h2>
-            </div>
-            <div
-              style={{ minHeight: '500px', border: '1px solid #e1e1e1', borderRadius: '4px' }}
-              dangerouslySetInnerHTML={{ __html: dialogState.iframeContent }}
-            />
-          </DialogBody>
-          <DialogActions>
-            <Button appearance="secondary" onClick={closeDialog}>
-              Avbryt
-            </Button>
-          </DialogActions>
-        </DialogSurface>
-      </Dialog>
-    ) : null
+      <IdPrefixProvider value={fluentProviderId}>
+        <FluentProvider theme={customLightTheme}>
+          <Dialog open={dialogState.isOpen} onOpenChange={(_, data) => !data.open && closeDialog()}>
+            <DialogSurface style={{ maxWidth: '90vw', width: '900px', maxHeight: '90vh' }}>
+              <DialogBody>
+              <DialogTitle>{dialogState.actionName}</DialogTitle>
+                <DialogContent style={{ marginBottom: '16px' }}>
+                  <div
+                    style={{ minHeight: 'fit-content' }}
+                    dangerouslySetInnerHTML={{ __html: dialogState.iframeContent }}
+                  />
+              </DialogContent>
+              </DialogBody>
+              <DialogActions>
+                <Button appearance="secondary" onClick={closeDialog}>
+                  Avbryt
+                </Button>
+              </DialogActions>
+            </DialogSurface>
+          </Dialog>
+        </FluentProvider>
+      </IdPrefixProvider>
+    ) : null,
+    toaster: (
+      <IdPrefixProvider value={fluentProviderId}>
+        <FluentProvider theme={customLightTheme}>
+          <Toaster toasterId={toasterId} />
+        </FluentProvider>
+      </IdPrefixProvider>
+    )
   }
 }

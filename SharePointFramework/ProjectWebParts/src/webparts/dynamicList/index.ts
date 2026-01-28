@@ -540,6 +540,12 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                   value: this.properties.customActions || [],
                   fields: [
                     {
+                      id: 'order',
+                      title: 'Rekkefølge',
+                      type: CustomCollectionFieldType.number,
+                      defaultValue: 10
+                    },
+                    {
                       id: 'name',
                       title: 'Navn',
                       type: CustomCollectionFieldType.string,

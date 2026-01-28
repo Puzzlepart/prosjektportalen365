@@ -91,6 +91,11 @@ export interface ICustomAction {
    * iframe content/snippet (required for Dialog action type)
    */
   iframeContent?: string
+
+  /**
+   * Sort order for the action (lower numbers appear first)
+   */
+  order?: number
 }
 
 /**
