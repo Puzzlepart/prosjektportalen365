@@ -130,7 +130,7 @@ class ExcelExportService {
           const jsonDataSheet = XLSX.utils.sheet_to_json(XLSX.utils.json_to_sheet(combinedJson), {
             header: 1
           })
-          sheets.push({ name: strings.MeasurementSheet_Name, data: jsonDataSheet })
+          sheets.push({ name: strings.MeasurementSheetName, data: jsonDataSheet })
         }
       }
       const workBook = XLSX.utils.book_new()

@@ -107,7 +107,7 @@ define([], function () {
     ShowAllMeasurementsLinkText: 'Show all measurements',
     ShowInstrumentLinkText: 'Show instrument',
     ProjectInformationPanelButton: 'Project information panel',
-    MeasurementSheet_TitleKey: 'Measurement',
-    MeasurementSheet_Name: 'Measurements'
+    MeasurementSheetTitleKey: 'Measurement',
+    MeasurementSheetName: 'Measurements'
   }
 })

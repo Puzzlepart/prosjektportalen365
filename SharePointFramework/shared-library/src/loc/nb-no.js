@@ -107,7 +107,7 @@ define([], function () {
     ShowAllMeasurementsLinkText: 'Vis alle målinger',
     ShowInstrumentLinkText: '{0} (vis instrument)',
     ProjectInformationPanelButton: 'Åpne prosjektinformasjonspanel',
-    MeasurementSheet_TitleKey: 'Måling',
-    MeasurementSheet_Name: 'Målinger'
+    MeasurementSheetTitleKey: 'Måling',
+    MeasurementSheetName: 'Målinger'
   }
 })
