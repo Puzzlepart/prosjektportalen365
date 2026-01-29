@@ -41,6 +41,8 @@ import { IProvisionDrawerProps } from './types'
 import { DayOfWeek, format } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/core'
 
+// TODO: After merge with teams-app, there is a bug with motion for level 2 navigation to level 1. Fix this
+
 export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
   const {
     levels,

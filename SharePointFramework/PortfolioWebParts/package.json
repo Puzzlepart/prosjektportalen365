@@ -66,7 +66,8 @@
     "react-gauge-component": "~1.2.61",
     "react-fade-in": "~2.0.1",
     "react-dropzone": "~14.3.8",
-    "@fluentui/react-motion": "~9.11.6"
+    "@fluentui/react-motion": "~9.11.6",
+    "@fluentui/react-motion-preview": "~0.5.25"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.17.4",
