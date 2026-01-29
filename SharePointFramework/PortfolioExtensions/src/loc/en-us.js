@@ -46,6 +46,7 @@ define([], function () {
     LatestGitHubReleaseIsSameText: 'The version installed is the latest release from GitHub',
     LatestGitHubReleaseLabel: 'Latest release from GitHub',
     LatestGitHubReleaseLinkTitle: 'See the latest release on GitHub',
+    LatestGitHubReleaseHighlightsLabel: 'What\'s new in this version',
     LinksListText: 'Useful links',
     SeeAllInstallationsLinkText: 'See all installations',
     SetRecommendationSubtitle: 'Select recommendation for: {0}. \n\n{1}',

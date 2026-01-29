@@ -4,8 +4,10 @@ import React, { FC } from 'react'
 import { ILatestGitHubReleaseProps } from './types'
 import styles from './LatestGitHubRelease.module.scss'
 import { useLatestGitHubRelease } from './useLatestGitHubRelease'
-import { Button, Label, Link, Tooltip } from '@fluentui/react-components'
+import { Button, Label, Link, Tooltip, Divider } from '@fluentui/react-components'
 import { getFluentIcon } from 'pp365-shared-library'
+import ReactMarkdown from 'react-markdown'
+import rehypeRaw from 'rehype-raw'
 
 /**
  * Component for displaying the latest GitHub release and a
@@ -37,6 +39,17 @@ export const LatestGitHubRelease: FC<ILatestGitHubReleaseProps> = (props) => {
           </Tooltip>
         </div>
       </div>
+      {latestGitHubRelease.body && (
+        <>
+          <Divider className={styles.divider} />
+          <div className={styles.releaseHighlights}>
+            <Label weight='semibold'>{strings.LatestGitHubReleaseHighlightsLabel}</Label>
+            <div className={styles.releaseBody}>
+              <ReactMarkdown rehypePlugins={[rehypeRaw]}>{latestGitHubRelease.body}</ReactMarkdown>
+            </div>
+          </div>
+        </>
+      )}
       <div hidden={!latestGitHubVersion.greaterThan(installedVersion)}>
         <Button
           className={styles.button}
