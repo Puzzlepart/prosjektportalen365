@@ -11,6 +11,7 @@ import { FooterContext } from './context'
 import { IFooterProps } from './types'
 import { useFooter } from './useFooter'
 import { Assistant } from './Assistant'
+import { FavoriteProjects } from './FavoriteProjects'
 
 export const Footer: FC<IFooterProps> = (props) => {
   const fluentProviderId = useId('fp-footer')
@@ -30,6 +31,7 @@ export const Footer: FC<IFooterProps> = (props) => {
               <SiteSettings />
               <Configuration />
               <PromotedLinks />
+              <FavoriteProjects />
             </section>
             <section className={styles.right}>
               {props.useAssistant && props.hasAssistantAccess && <Assistant />}

@@ -53,6 +53,10 @@ declare interface IPortfolioExtensionsStrings {
   IdeaProcessingLinkTitle: string
   IdeaRegistrationCommandTitle: string
   IdeaProjectDataCommandTitle: string
+  FavoriteProjectsLabel: string
+  FavoriteProjectsDescription: string
+  FavoriteProjectsEmptyMessage: string
+  FavoriteProjectsErrorMessage: string
 }
 
 declare module 'PortfolioExtensionsStrings' {

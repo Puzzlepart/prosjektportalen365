@@ -57,6 +57,10 @@ define([], function () {
     IdeaProcessingCommandTitle: 'Set recommendation',
     IdeaProcessingLinkTitle: 'Go to processing',
     IdeaRegistrationCommandTitle: 'Set recommendation',
-    IdeaProjectDataCommandTitle: 'Create project data'
+    IdeaProjectDataCommandTitle: 'Create project data',
+    FavoriteProjectsLabel: 'My favorite projects',
+    FavoriteProjectsDescription: 'Projects you are following. Click on a project to open it.',
+    FavoriteProjectsEmptyMessage: 'You are not following any projects yet. Use the "Follow" feature on projects to add them here.',
+    FavoriteProjectsErrorMessage: 'Failed to load favorite projects'
   }
 })

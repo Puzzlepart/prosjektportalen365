@@ -53,6 +53,10 @@ define([], function () {
     IdeaProcessingCommandTitle: 'Sett anbefaling',
     IdeaProcessingLinkTitle: 'Gå til behandling',
     IdeaRegistrationCommandTitle: 'Sett anbefaling',
-    IdeaProjectDataCommandTitle: 'Opprett prosjektdata'
+    IdeaProjectDataCommandTitle: 'Opprett prosjektdata',
+    FavoriteProjectsLabel: 'Mine favorittprosjekter',
+    FavoriteProjectsDescription: 'Prosjekter du følger. Klikk på et prosjekt for å åpne det.',
+    FavoriteProjectsEmptyMessage: 'Du følger ingen prosjekter ennå. Bruk "Følg"-funksjonen på prosjekter for å legge dem til her.',
+    FavoriteProjectsErrorMessage: 'Kunne ikke laste favorittprosjekter'
   }
 })
