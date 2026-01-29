@@ -44,8 +44,14 @@ export const LatestGitHubRelease: FC<ILatestGitHubReleaseProps> = (props) => {
           <Divider className={styles.divider} />
           <div className={styles.releaseHighlights}>
             <Label weight='semibold'>{strings.LatestGitHubReleaseHighlightsLabel}</Label>
-            <div className={styles.releaseBody}>
-              <ReactMarkdown linkTarget='_blank' rehypePlugins={[rehypeRaw]} transformImageUri={null}>
+            <div className={styles.releaseBody} tabIndex={0}>
+              <ReactMarkdown
+                linkTarget='_blank'
+                rehypePlugins={[rehypeRaw]}
+                components={{
+                  a: ({ node, ...props }) => <a {...props} rel='noopener noreferrer' />
+                }}
+              >
                 {latestGitHubRelease.body}
               </ReactMarkdown>
             </div>
