@@ -58,6 +58,9 @@ define([], function () {
     IdeaProcessingCommandTitle: 'Set recommendation',
     IdeaProcessingLinkTitle: 'Go to processing',
     IdeaRegistrationCommandTitle: 'Set recommendation',
-    IdeaProjectDataCommandTitle: 'Create project data'
+    IdeaProjectDataCommandTitle: 'Create project data',
+    FavoriteProjectsLabel: 'My favorite projects',
+    FavoriteProjectsDescription: 'Quick access to projects you follow',
+    FavoriteProjectsNoItemsMessage: 'You are not following any projects yet'
   }
 })
