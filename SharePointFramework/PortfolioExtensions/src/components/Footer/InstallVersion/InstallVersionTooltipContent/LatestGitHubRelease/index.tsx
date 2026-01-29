@@ -41,7 +41,12 @@ export const LatestGitHubRelease: FC<ILatestGitHubReleaseProps> = (props) => {
       {latestGitHubRelease.body && (
         <div className={styles.releaseHighlights}>
           <Label weight='semibold'>{strings.LatestGitHubReleaseHighlightsLabel}</Label>
-          <div className={styles.releaseBody}>
+          <div 
+            className={styles.releaseBody}
+            role='region'
+            aria-label={strings.LatestGitHubReleaseHighlightsLabel}
+            tabIndex={0}
+          >
             <ReactMarkdown linkTarget='_blank'>
               {latestGitHubRelease.body}
             </ReactMarkdown>
