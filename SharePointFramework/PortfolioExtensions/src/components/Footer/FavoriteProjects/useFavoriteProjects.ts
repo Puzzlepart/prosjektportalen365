@@ -9,7 +9,7 @@ export function useFavoriteProjects() {
   const context = useContext(FooterContext)
   const [favoriteProjects, setFavoriteProjects] = useState<IFavoriteProject[]>([])
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string>(null)
+  const [error, setError] = useState<string | null>(null)
 
   /**
    * Fetches the list of sites that the current user is following
@@ -37,6 +37,10 @@ export function useFavoriteProjects() {
       const followedSites = data.d?.Followed?.results || []
 
       // Transform the followed sites data to our interface
+      // Note: SharePoint Social Following API returns sites with properties:
+      // - Name: The title of the site
+      // - Uri: The URL of the site
+      // - Id: The site identifier
       const projects: IFavoriteProject[] = followedSites
         .map((site: any) => ({
           title: site.Name,
@@ -49,7 +53,7 @@ export function useFavoriteProjects() {
       setFavoriteProjects(projects)
     } catch (err) {
       console.error('Error fetching favorite projects:', err)
-      setError(err.message)
+      setError(err?.message || String(err))
     } finally {
       setIsLoading(false)
     }

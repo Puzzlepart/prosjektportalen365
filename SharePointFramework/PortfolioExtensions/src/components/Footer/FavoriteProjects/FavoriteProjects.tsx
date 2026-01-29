@@ -21,16 +21,14 @@ export const FavoriteProjects: FC = () => {
   const { favoriteProjects, isLoading, error, fetchFavoriteProjects } = useFavoriteProjects()
 
   const handleMenuOpen = () => {
-    // Fetch favorite projects when menu is opened
-    if (favoriteProjects.length === 0 && !isLoading && !error) {
-      fetchFavoriteProjects()
-    }
+    // Always refetch favorite projects when menu is opened to ensure up-to-date list
+    fetchFavoriteProjects()
   }
 
   const renderMenuItems = () => {
     if (isLoading) {
       return (
-        <MenuItem style={{ maxWidth: 'fit-content', minWidth: '100%' }}>
+        <MenuItem disabled style={{ maxWidth: 'fit-content', minWidth: '100%' }}>
           <Spinner size="tiny" />
         </MenuItem>
       )
@@ -38,7 +36,7 @@ export const FavoriteProjects: FC = () => {
 
     if (error) {
       return (
-        <MenuItem style={{ maxWidth: 'fit-content', minWidth: '100%' }}>
+        <MenuItem disabled style={{ maxWidth: 'fit-content', minWidth: '100%' }}>
           {strings.FavoriteProjectsErrorMessage}
         </MenuItem>
       )
@@ -46,16 +44,16 @@ export const FavoriteProjects: FC = () => {
 
     if (favoriteProjects.length === 0) {
       return (
-        <MenuItem style={{ maxWidth: 'fit-content', minWidth: '100%' }}>
+        <MenuItem disabled style={{ maxWidth: 'fit-content', minWidth: '100%' }}>
           {strings.FavoriteProjectsEmptyMessage}
         </MenuItem>
       )
     }
 
-    return favoriteProjects.map((project, idx) => (
+    return favoriteProjects.map((project) => (
       <MenuItem
         style={{ maxWidth: 'fit-content', minWidth: '100%' }}
-        key={idx}
+        key={project.url}
         onClick={() => window.open(project.url, '_blank')}
       >
         {project.title}
