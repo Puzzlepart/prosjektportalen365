@@ -45,7 +45,9 @@ export const LatestGitHubRelease: FC<ILatestGitHubReleaseProps> = (props) => {
           <div className={styles.releaseHighlights}>
             <Label weight='semibold'>{strings.LatestGitHubReleaseHighlightsLabel}</Label>
             <div className={styles.releaseBody}>
-              <ReactMarkdown rehypePlugins={[rehypeRaw]}>{latestGitHubRelease.body}</ReactMarkdown>
+              <ReactMarkdown linkTarget='_blank' rehypePlugins={[rehypeRaw]} transformImageUri={null}>
+                {latestGitHubRelease.body}
+              </ReactMarkdown>
             </div>
           </div>
         </>
