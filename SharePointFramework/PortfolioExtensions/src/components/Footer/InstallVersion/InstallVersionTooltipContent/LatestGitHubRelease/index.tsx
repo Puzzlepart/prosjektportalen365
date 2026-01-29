@@ -6,6 +6,7 @@ import styles from './LatestGitHubRelease.module.scss'
 import { useLatestGitHubRelease } from './useLatestGitHubRelease'
 import { Button, Label, Link, Tooltip } from '@fluentui/react-components'
 import { getFluentIcon } from 'pp365-shared-library'
+import ReactMarkdown from 'react-markdown'
 
 /**
  * Component for displaying the latest GitHub release and a
@@ -37,6 +38,16 @@ export const LatestGitHubRelease: FC<ILatestGitHubReleaseProps> = (props) => {
           </Tooltip>
         </div>
       </div>
+      {latestGitHubRelease.body && (
+        <div className={styles.releaseHighlights}>
+          <Label weight='semibold'>{strings.LatestGitHubReleaseHighlightsLabel}</Label>
+          <div className={styles.releaseBody}>
+            <ReactMarkdown linkTarget='_blank'>
+              {latestGitHubRelease.body}
+            </ReactMarkdown>
+          </div>
+        </div>
+      )}
       <div hidden={!latestGitHubVersion.greaterThan(installedVersion)}>
         <Button
           className={styles.button}
