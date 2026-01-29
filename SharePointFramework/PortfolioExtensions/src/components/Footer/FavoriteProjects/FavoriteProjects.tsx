@@ -19,7 +19,8 @@ export const FavoriteProjects: FC = () => {
   const context = useContext(FooterContext)
   const fluentProviderId = useId('fp-footer-favorite-projects')
 
-  if (!context.props.favoriteProjects || context.props.favoriteProjects.length === 0) {
+  // Don't render if favoriteProjects is not defined
+  if (!context.props.favoriteProjects) {
     return null
   }
 
@@ -48,7 +49,7 @@ export const FavoriteProjects: FC = () => {
                 context.props.favoriteProjects.map((project, idx) => (
                   <MenuItem
                     style={{ maxWidth: 'fit-content', minWidth: '100%' }}
-                    key={idx}
+                    key={project.url}
                     onClick={() => window.open(project.url, '_self')}
                   >
                     {project.name}
