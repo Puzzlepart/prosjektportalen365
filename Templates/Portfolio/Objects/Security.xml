@@ -1,4 +1,4 @@
-<pnp:Security xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+<pnp:Security xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
     <pnp:SiteGroups>
         <pnp:SiteGroup
             Title="{resource:Security_SiteGroup_ProvisionPortal_Title}"

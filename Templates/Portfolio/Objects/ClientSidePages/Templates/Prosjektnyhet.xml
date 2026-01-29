@@ -1,5 +1,5 @@
 <pnp:ClientSidePage PromoteAsNewsArticle="true" PromoteAsTemplate="true" Overwrite="false" Title="{resource:Templates_ProjectNews_Title}" PageName="{resource:ClientSidePages_Templates_ProjectNews_PageName}"
-  xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+  xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
   <pnp:Header Type="Default" LayoutType="FullWidthImage" ShowTopicHeader="false" ShowPublishDate="true" />
   <pnp:Sections>
     <pnp:Section Order="1" Type="OneColumnFullWidth">
