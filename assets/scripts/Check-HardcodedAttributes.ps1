@@ -12,7 +12,7 @@ function Get-Nodes {
         [xml]$XmlContent
     )
     $NamespaceManager = New-Object System.Xml.XmlNamespaceManager($XmlContent.NameTable)
-    $NamespaceManager.AddNamespace("pnp", "http://schemas.dev.office.com/PnP/2020/05/ProvisioningSchema")
+    $NamespaceManager.AddNamespace("pnp", "http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema")
     $Nodes = $XmlContent.SelectNodes("//$Node", $NamespaceManager)
     if ($Nodes.Count -eq 0) {
         try {
