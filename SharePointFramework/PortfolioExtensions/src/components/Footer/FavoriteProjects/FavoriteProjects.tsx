@@ -46,7 +46,7 @@ export const FavoriteProjects: FC = () => {
                   {strings.FavoriteProjectsNoItemsMessage}
                 </MenuItem>
               ) : (
-                context.props.favoriteProjects.map((project, idx) => (
+                context.props.favoriteProjects.map((project) => (
                   <MenuItem
                     style={{ maxWidth: 'fit-content', minWidth: '100%' }}
                     key={project.url}
