@@ -389,7 +389,7 @@ if (-not $SkipAppPackages.IsPresent) {
             $CurrentApp++
             $PercentComplete = [int](($CurrentApp / $TotalApps) * 100)
             Write-Progress -Activity "Installing SharePoint Framework app packages" -Status "Installing $($AppPkg.Name) ($CurrentApp of $TotalApps)" -PercentComplete $PercentComplete
-            $AppOutput = Add-PnPApp -Path $AppPkg.FullName -Scope Tenant -Publish -Overwrite -SkipFeatureDeployment -ErrorAction Stop
+            $AppOutput = Add-PnPApp -Path $AppPkg.FullName -Scope Tenant -Publish -Overwrite -SkipFeatureDeployment -Force -ErrorAction Stop
         }
         Write-Progress -Activity "Installing SharePoint Framework app packages" -Completed
         EndAction
