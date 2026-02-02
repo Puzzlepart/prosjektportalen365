@@ -21,7 +21,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 
 ---
 
-## 1.12.1 - TBA
+## 1.12.1 - 02.02.2026
 
 ### Ny funksjonalitet
 
