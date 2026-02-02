@@ -2,7 +2,7 @@
 
 Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
 
-## 1.12.1 - 21.01.2026
+## 1.12.1 - 02.02.2026
 
 ### Ny funksjonalitet
 
