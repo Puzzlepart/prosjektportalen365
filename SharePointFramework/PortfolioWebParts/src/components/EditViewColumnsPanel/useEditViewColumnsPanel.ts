@@ -17,6 +17,9 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
   const { selectableColumns, selectedColumns, selectColumn, moveColumn } =
     useSelectableColumns(props)
 
+  /**
+   * On save event handler.
+   */
   const onSave = () => {
     props.onSave(
       selectedColumns,
