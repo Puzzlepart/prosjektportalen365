@@ -2771,7 +2771,7 @@
     <value>Beskrivelse</value>
   </data>
   <data name="SiteFields_GtActionResponsible_Description" xml:space="preserve">
-    <value>Hvem er ansvarlig for denne kommunikasjonsaktiviteten?</value>
+    <value>Hvem er ansvarlig for oppfølging?</value>
   </data>
   <data name="SiteFields_GtActionResponsible_DisplayName" xml:space="preserve">
     <value>Tiltaksansvarlig</value>
@@ -3059,13 +3059,13 @@
     <value>Godkjenningsansvar</value>
   </data>
   <data name="SiteFields_GtDeliveryDescription_Description" xml:space="preserve">
-    <value>Gi en utfyllende beskrivelse for prosjektleveransen</value>
+    <value>Gi en utfyllende beskrivelse for leveransen</value>
   </data>
   <data name="SiteFields_GtDeliveryDescription_DisplayName" xml:space="preserve">
     <value>Leveransebeskrivelse</value>
   </data>
   <data name="SiteFields_GtDeliveryEndTime_Description" xml:space="preserve">
-    <value>Oppgi (forventet) sluttidspunkt for denne prosjektleveransen</value>
+    <value>Oppgi (forventet) sluttidspunkt for denne leveransen</value>
   </data>
   <data name="SiteFields_GtDeliveryEndTime_DisplayName" xml:space="preserve">
     <value>Sluttidspunkt</value>
@@ -3089,7 +3089,7 @@
     <value>Kvalitetstoleranse</value>
   </data>
   <data name="SiteFields_GtDeliveryStartTime_Description" xml:space="preserve">
-    <value>Oppgi (forventet) starttidspunkt for denne prosjektleveransen.</value>
+    <value>Oppgi (forventet) starttidspunkt for denne leveransen.</value>
   </data>
   <data name="SiteFields_GtDeliveryStartTime_DisplayName" xml:space="preserve">
     <value>Starttidspunkt</value>
@@ -3101,7 +3101,7 @@
     <value>Leveransestatus</value>
   </data>
   <data name="SiteFields_GtDeliveryStatusComment_Description" xml:space="preserve">
-    <value>Legg inn eventuelle tilleggs-/utfyllende kommentarer til prosjektleveransens status</value>
+    <value>Legg inn eventuelle tilleggs-/utfyllende kommentarer til leveransens status</value>
   </data>
   <data name="SiteFields_GtDeliveryStatusComment_DisplayName" xml:space="preserve">
     <value>Kommentar, leveransestatus</value>

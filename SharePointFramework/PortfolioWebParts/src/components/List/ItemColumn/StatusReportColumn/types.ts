@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import moment from 'moment'
 import { IRenderItemColumnProps } from 'pp365-shared-library'
+import { formatDate } from 'pp365-shared-library'
 
 export interface IStatusColumnProps extends IRenderItemColumnProps {
   status?: ProjectStatusModel
@@ -53,7 +54,7 @@ export class ProjectStatusModel {
   }
 
   public get created(): string {
-    return moment(this.item.Created).format('LL')
+    return formatDate(this.item.Created)
   }
 
   public get sections(): Array<ProjectStatusSection> {

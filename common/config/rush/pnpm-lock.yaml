@@ -2844,8 +2844,8 @@ packages:
       '@fluentui/keyboard-key': 0.4.23
       '@fluentui/merge-styles': 8.6.14
       '@fluentui/set-version': 8.2.24
-      '@fluentui/style-utilities': 8.12.4_3df41e700a554c2356b362be396a0af4
-      '@fluentui/utilities': 8.15.23_3df41e700a554c2356b362be396a0af4
+      '@fluentui/style-utilities': 8.14.0_3df41e700a554c2356b362be396a0af4
+      '@fluentui/utilities': 8.17.2_3df41e700a554c2356b362be396a0af4
       '@types/react': 17.0.45
       react: 17.0.2
       tslib: 2.8.1
@@ -2860,8 +2860,8 @@ packages:
       '@fluentui/keyboard-key': 0.4.23
       '@fluentui/merge-styles': 8.6.14
       '@fluentui/set-version': 8.2.24
-      '@fluentui/style-utilities': 8.12.4_4865287ef69aa4f3fc3f709d3560286e
-      '@fluentui/utilities': 8.15.23_4865287ef69aa4f3fc3f709d3560286e
+      '@fluentui/style-utilities': 8.14.0_4865287ef69aa4f3fc3f709d3560286e
+      '@fluentui/utilities': 8.17.2_4865287ef69aa4f3fc3f709d3560286e
       '@types/react': 17.0.45
       react: 17.0.1
       tslib: 2.8.1
