@@ -5,6 +5,7 @@ import { fetchTimelineConfiguration } from './fetchTimelineConfiguration'
 import { fetchTimelineData } from './fetchTimelineData'
 import { getSelectedGroups } from './getSelectedGroups'
 import { transformItems } from './transformItems'
+import SPDataAdapter from 'data/SPDataAdapter'
 
 /**
  * Fetch data for ProjectTimeline
@@ -17,9 +18,16 @@ export async function fetchData(
   props: IProjectTimelineProps
 ): Promise<Partial<IProjectTimelineState>> {
   try {
-    const timelineConfig = await fetchTimelineConfiguration()
+    const properties = await SPDataAdapter.project.getProjectInformationData()
+    const timelineConfig = await fetchTimelineConfiguration(
+      properties.templateParameters?.TimelineContentTypeId
+    )
     const [timelineData, { project, projectId }] = await Promise.all([
-      fetchTimelineData(props, timelineConfig),
+      fetchTimelineData(
+        props,
+        timelineConfig,
+        properties.templateParameters?.TimelineContentTypeId
+      ),
       fetchProjectData(props, timelineConfig)
     ])
 

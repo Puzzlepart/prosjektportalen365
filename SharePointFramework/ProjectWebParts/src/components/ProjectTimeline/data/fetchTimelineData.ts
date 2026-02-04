@@ -15,10 +15,12 @@ import resource from 'SharedResources'
  *
  * @param props Component properties for `ProjectTimeline`
  * @param timelineConfig Timeline configuration
+ * @param timelineContentTypeId Optional content type ID for template-specific filtering
  */
 export async function fetchTimelineData(
   props: IProjectTimelineProps,
-  timelineConfig: TimelineConfigurationModel[]
+  timelineConfig: TimelineConfigurationModel[],
+  timelineContentTypeId?: string
 ) {
   try {
     const timelineContentList = SPDataAdapter.portalDataService.web.lists.getByTitle(
@@ -70,10 +72,16 @@ export async function fetchTimelineData(
       .filter((fld) => fld.TypeAsString.indexOf('User') === 0)
       .map((fld) => fld.InternalName)
 
+    let filter = `GtSiteIdLookup/GtSiteId eq '${props.siteId}'`
+    if (timelineContentTypeId) {
+      filter = `${filter} and (startswith(ContentTypeId, '${timelineContentTypeId}'))`
+    }
+
     // eslint-disable-next-line prefer-const
     let timelineContentItems = await timelineContentList.items
       .select(
         'Id',
+        'ContentTypeId',
         'GtTimelineTypeLookup/Title',
         'GtSiteIdLookupId',
         'GtSiteIdLookup/Title',
@@ -84,11 +92,10 @@ export async function fetchTimelineData(
         ...userFields.map((fieldName) => `${fieldName}/EMail`)
       )
       .expand('GtSiteIdLookup', 'GtTimelineTypeLookup', ...userFields)
+      .filter(filter)
       .getAll()
 
-    const timelineListItems = timelineContentItems.filter(
-      (item) => item.GtSiteIdLookup?.GtSiteId === props.siteId
-    )
+    const timelineListItems = timelineContentItems
 
     const columns = defaultViewColumns
       .filter((columnName) => columnName !== 'GtSiteIdLookup')

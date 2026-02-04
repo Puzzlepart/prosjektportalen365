@@ -53,9 +53,14 @@ export function useToolbarItems() {
   const menuItems = useMemo<ListMenuItem[]>(
     () => [
       new ListMenuItem(strings.NewItemLabel, strings.NewItemLabel).setIcon('Add').setOnClick(() => {
+        const allowedTimelineTypes = context.state.timelineConfig?.map((config) => config.title) || []
+
         context.setState({
           panel: {
             headerText: strings.NewTimelineContentText,
+            allowedLookupValues: {
+              GtTimelineTypeLookup: allowedTimelineTypes
+            },
             submit: {
               onSubmit: async ({ properties }) => {
                 await SPDataAdapter.portalDataService.addItemToList('TIMELINE_CONTENT', {
@@ -77,10 +82,15 @@ export function useToolbarItems() {
           )
 
           const fieldValues = new ItemFieldValues(_.first(selectedItems))
+          const allowedTimelineTypes = context.state.timelineConfig?.map((config) => config.title) || []
+
           context.setState({
             panel: {
               headerText: strings.EditTimelineContentText,
               fieldValues,
+              allowedLookupValues: {
+                GtTimelineTypeLookup: allowedTimelineTypes
+              },
               submit: {
                 onSubmit: async ({ properties }) => {
                   await SPDataAdapter.portalDataService.updateItemInList(
@@ -95,7 +105,7 @@ export function useToolbarItems() {
           })
         })
     ],
-    [context.props, context.state.selectedItems]
+    [context.props, context.state.selectedItems, context.state.timelineConfig]
   )
 
   const farMenuItems = useMemo<ListMenuItem[]>(
