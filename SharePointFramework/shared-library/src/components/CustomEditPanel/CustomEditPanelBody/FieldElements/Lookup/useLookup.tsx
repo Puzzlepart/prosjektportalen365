@@ -22,6 +22,11 @@ export function useLookup(field: EditableSPField) {
               text: item[field.LookupField]
             }))
             .filter((item) => {
+              const allowedValues = context.props.allowedLookupValues?.[field.InternalName]
+              if (allowedValues && allowedValues.length > 0) {
+                return allowedValues.includes(item.text)
+              }
+
               if (field.InternalName === 'GtTimelineTypeLookup') {
                 return (
                   item.text !== resource.TimelineConfiguration_Project_Title &&
