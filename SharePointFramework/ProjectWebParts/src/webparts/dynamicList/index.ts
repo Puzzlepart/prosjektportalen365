@@ -8,6 +8,7 @@ import {
   IPropertyPaneDropdownOption
 } from '@microsoft/sp-property-pane'
 import { PropertyFieldMultiSelect } from '@pnp/spfx-property-controls/lib/PropertyFieldMultiSelect'
+import { PropertyFieldOrder } from '@pnp/spfx-property-controls/lib/PropertyFieldOrder'
 import {
   PropertyFieldCollectionData,
   CustomCollectionFieldType
@@ -69,9 +70,8 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
         .sort((a, b) => a.Title.localeCompare(b.Title))
         .map((list) => ({
           key: list.Title,
-          text: `${list.Title} (${list.ItemCount || 0} ${
-            list.BaseTemplate === 101 ? 'dokumenter' : 'elementer'
-          })`
+          text: `${list.Title} (${list.ItemCount || 0} ${list.BaseTemplate === 101 ? 'dokumenter' : 'elementer'
+            })`
         }))
 
       this._listsLoading = false
@@ -201,6 +201,9 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
           text: field.Title
         }))
 
+      // Store available columns in properties for PropertyFieldOrder
+      this.properties.availableColumns = this._columnOptions.map(opt => opt.key as string)
+
       this._columnsLoading = false
     } catch (error) {
       console.error('Error loading columns:', error)
@@ -306,6 +309,8 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
       this.properties.hiddenColumns = []
       this.properties.hiddenViewColumns = []
       this.properties.nonFilterableColumns = []
+      this.properties.availableColumns = []
+      this.properties.columnOrder = []
       this._hasSiteIdFieldCache = null
       this._isDocumentLibraryCache = null
       await this._loadViewOptions()
@@ -345,11 +350,11 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                   selectedKey: this.properties.webContextMode || WebContextMode.CurrentProject
                 }),
                 this.properties.webContextMode === WebContextMode.CustomSite &&
-                  PropertyPaneTextField('webUrl', {
-                    label: 'Nettadresse',
-                    description: 'Angi URL til SharePoint-området',
-                    placeholder: this.context.pageContext.web.absoluteUrl
-                  }),
+                PropertyPaneTextField('webUrl', {
+                  label: 'Nettadresse',
+                  description: 'Angi URL til SharePoint-området',
+                  placeholder: this.context.pageContext.web.absoluteUrl
+                }),
                 PropertyPaneDropdown('listName', {
                   label: strings.ListNameFieldLabel,
                   options: this._listOptions,
@@ -357,41 +362,60 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                   disabled: this._listsLoading
                 }),
                 this.properties.listName &&
-                  PropertyPaneDropdown('defaultViewId', {
-                    label: 'Standardvisning',
-                    options: this._viewOptions,
-                    selectedKey: this._getSelectedViewKey(),
-                    disabled: this._viewsLoading
-                  }),
+                PropertyPaneDropdown('defaultViewId', {
+                  label: 'Standardvisning',
+                  options: this._viewOptions,
+                  selectedKey: this._getSelectedViewKey(),
+                  disabled: true
+                })
+              ]
+            },
+            {
+              groupName: 'Felter og kolonner',
+              isCollapsed: true,
+              groupFields: [
                 this.properties.listName &&
-                  PropertyFieldMultiSelect('hiddenColumns', {
-                    key: 'hiddenColumns',
-                    label: 'Skjulte felt (redigeringspanel)',
-                    options: this._columnOptions,
-                    selectedKeys: this.properties.hiddenColumns || [],
-                    disabled: this._columnsLoading
-                  }),
+                PropertyFieldMultiSelect('hiddenColumns', {
+                  key: 'hiddenColumns',
+                  label: 'Skjulte felt (redigeringspanel)',
+                  options: this._columnOptions,
+                  selectedKeys: this.properties.hiddenColumns || [],
+                  disabled: this._columnsLoading
+                }),
                 this.properties.listName &&
-                  PropertyFieldMultiSelect('hiddenViewColumns', {
-                    key: 'hiddenViewColumns',
-                    label: 'Skjulte kolonner (listevisning)',
-                    options: this._columnOptions,
-                    selectedKeys: this.properties.hiddenViewColumns || [],
-                    disabled: this._columnsLoading
-                  }),
+                PropertyFieldMultiSelect('hiddenViewColumns', {
+                  key: 'hiddenViewColumns',
+                  label: 'Skjulte kolonner (listevisning)',
+                  options: this._columnOptions,
+                  selectedKeys: this.properties.hiddenViewColumns || [],
+                  disabled: this._columnsLoading
+                }),
                 this.properties.listName &&
-                  PropertyFieldMultiSelect('nonFilterableColumns', {
-                    key: 'nonFilterableColumns',
-                    label: 'Ikke-filtrerbare kolonner',
-                    options: this._columnOptions,
-                    selectedKeys: this.properties.nonFilterableColumns || [],
-                    disabled: this._columnsLoading
-                  })
+                PropertyFieldMultiSelect('nonFilterableColumns', {
+                  key: 'nonFilterableColumns',
+                  label: 'Ikke-filtrerbare kolonner',
+                  options: this._columnOptions,
+                  selectedKeys: this.properties.nonFilterableColumns || [],
+                  disabled: this._columnsLoading
+                }),
+                this.properties.listName &&
+                PropertyFieldOrder('columnOrder', {
+                  key: 'columnOrder',
+                  label: 'Kolonnerekkefølge',
+                  items: this.properties.availableColumns || [],
+                  onRenderItem: (fieldName: string) => {
+                    const option = this._columnOptions.find((opt) => opt.key === fieldName)
+                    return React.createElement('span', null, option?.text || fieldName)
+                  },
+                  disabled: this._columnsLoading,
+                  properties: this.properties,
+                  onPropertyChange: this.onPropertyPaneFieldChanged
+                })
               ]
             },
             {
               groupName: 'Utseende',
-              isCollapsed: false,
+              isCollapsed: true,
               groupFields: [
                 PropertyPaneTextField('title', {
                   label: 'Tittel',
@@ -433,20 +457,20 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                   checked: this.properties.useSiteIdFiltering || false
                 }),
                 this.properties.useSiteIdFiltering &&
-                  !this._hasSiteIdField() &&
-                  PropertyPaneButton('addSiteIdColumn', {
-                    text: 'Legg til område-id kolonne',
-                    buttonType: 0,
-                    onClick: () => this._addSiteIdColumn()
-                  }),
+                !this._hasSiteIdField() &&
+                PropertyPaneButton('addSiteIdColumn', {
+                  text: 'Legg til område-id kolonne',
+                  buttonType: 0,
+                  onClick: () => this._addSiteIdColumn()
+                }),
                 this.properties.useSiteIdFiltering &&
-                  this._isDocumentLibrary() &&
-                  PropertyPaneToggle('useProjectFolder', {
-                    label: 'Anvend prosjektmappe i dokumentbibliotek',
-                    onText: 'På',
-                    offText: 'Av',
-                    checked: this.properties.useProjectFolder || false
-                  })
+                this._isDocumentLibrary() &&
+                PropertyPaneToggle('useProjectFolder', {
+                  label: 'Anvend prosjektmappe i dokumentbibliotek',
+                  onText: 'På',
+                  offText: 'Av',
+                  checked: this.properties.useProjectFolder || false
+                })
               ].filter(Boolean)
             },
             {

@@ -175,6 +175,19 @@ export interface IDynamicListProps extends IBaseWebPartComponentProps {
   nonFilterableColumns?: string[]
 
   /**
+   * All available columns from the selected list (internal names).
+   * Populated automatically when a list is selected.
+   */
+  availableColumns?: string[]
+
+  /**
+   * Custom column order configuration. Allows overriding the default column order from the view.
+   * Array of column internal names in the desired display order.
+   * Columns not specified here will appear after the specified ones in their default order.
+   */
+  columnOrder?: string[]
+
+  /**
    * Minimum height for the component container.
    * Overrides the default min-height CSS value.
    * Can be specified as a number (pixels) or string with units (e.g., '500px', '50vh').

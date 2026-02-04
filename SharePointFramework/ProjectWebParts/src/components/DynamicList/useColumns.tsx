@@ -22,6 +22,8 @@ export interface IListColumn extends TableColumnDefinition<any> {
  * with proper sorting, rendering, and sizing configuration. Width values come from
  * ProjectContentColumns configuration enriched in fetchListData.
  *
+ * Respects columnOrder from webpart properties if provided, otherwise uses the default order.
+ *
  * Taxonomy field values are already transformed to semicolon-separated term names
  * by fetchListData, so no additional transformation is needed here.
  *
@@ -41,6 +43,31 @@ export function useColumns(): IListColumn[] {
       columns = columns.filter(
         (column) => !context.props.hiddenViewColumns.includes(column.fieldName || column.key)
       )
+    }
+
+    if (context.props.columnOrder && context.props.columnOrder.length > 0) {
+      const orderMap = new Map<string, number>()
+      context.props.columnOrder.forEach((columnName, index) => {
+        orderMap.set(columnName, index)
+      })
+
+      columns = [...columns].sort((a, b) => {
+        const aFieldName = a.fieldName || a.key
+        const bFieldName = b.fieldName || b.key
+        const aOrder = orderMap.get(aFieldName)
+        const bOrder = orderMap.get(bFieldName)
+
+        if (aOrder !== undefined && bOrder !== undefined) {
+          return aOrder - bOrder
+        }
+        if (aOrder !== undefined) {
+          return -1
+        }
+        if (bOrder !== undefined) {
+          return 1
+        }
+        return 0
+      })
     }
 
     return columns.map((column) => {
@@ -63,5 +90,5 @@ export function useColumns(): IListColumn[] {
         data: column.data
       }
     })
-  }, [context.state.data?.listColumns, context.props.hiddenViewColumns])
+  }, [context.state.data?.listColumns, context.props.hiddenViewColumns, context.props.columnOrder])
 }

@@ -801,6 +801,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
             name: 'views',
             value: view.id
           })
+          .setDisabled(true)
           .setOnClick(() => {
             onViewChange(view.id)
           })
