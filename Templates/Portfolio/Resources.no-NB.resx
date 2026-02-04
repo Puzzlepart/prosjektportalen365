@@ -2443,6 +2443,12 @@
   <data name="Lists_TemplateOptions_Fields_GtProjectStatusContentType_DisplayName" xml:space="preserve">
     <value>Prosjektstatus innholdstype</value>
   </data>
+  <data name="Lists_TemplateOptions_Fields_GtTimelineContentType_Description" xml:space="preserve">
+    <value>Angi innholdstype-ID for tidslinjeinnhold. La stå tom for å bruke standard innholdstype.</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_GtTimelineContentType_DisplayName" xml:space="preserve">
+    <value>Tidslinje innholdstype</value>
+  </data>
   <data name="Lists_TemplateOptions_Fields_GtProjectTemplate_Description" xml:space="preserve">
     <value>Velg PnP-malen som skal brukes ved opprettelse av prosjekter</value>
   </data>
@@ -2535,6 +2541,12 @@
   </data>
   <data name="Lists_TimelineConfiguration_Field_GtSortOrder_Description" xml:space="preserve">
     <value>Angi prioritering av elementet under tilhørende gruppe/prosjekt på tidslinjen, benytt f. eks 31 dersom du vil at elementet skal ligge mellom element 30 og 40.</value>
+  </data>
+  <data name="SiteFields_GtTemplateOptions_Description" xml:space="preserve">
+    <value>Velg hvilke maler denne kategorien skal være tilgjengelig for. La stå tom for å gjøre kategorien tilgjengelig for alle maler.</value>
+  </data>
+  <data name="SiteFields_GtTemplateOptions_DisplayName" xml:space="preserve">
+    <value>Maler</value>
   </data>
   <data name="Lists_TimelineConfiguration_Title" xml:space="preserve">
     <value>Tidslinjekonfigurasjon</value>

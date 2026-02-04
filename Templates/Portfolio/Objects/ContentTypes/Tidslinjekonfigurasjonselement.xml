@@ -10,5 +10,6 @@
         <pnp:FieldRef ID="6ef97f12-3ac3-4ebc-8975-d658eea33571" Name="GtShowElementPortfolio" UpdateChildren="true" />
         <pnp:FieldRef ID="a00b13f6-2761-488d-85d9-37f85879b433" Name="GtShowElementProgram" UpdateChildren="true" />
         <pnp:FieldRef ID="2e70b590-4f03-4292-80a1-766564082f1e" Name="GtTimelineFilter" UpdateChildren="true" />
+        <pnp:FieldRef ID="7f8e9d1a-2b3c-4d5e-6f7a-8b9c0d1e2f3a" Name="GtTemplateOptions" UpdateChildren="true" />
     </pnp:FieldRefs>
 </pnp:ContentType>

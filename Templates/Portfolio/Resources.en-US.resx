@@ -2443,6 +2443,12 @@
   <data name="Lists_TemplateOptions_Fields_GtProjectStatusContentType_DisplayName" xml:space="preserve">
     <value>Content Type for Project Status</value>
   </data>
+  <data name="Lists_TemplateOptions_Fields_GtTimelineContentType_Description" xml:space="preserve">
+    <value>Specify the content type ID for timeline content. Leave empty to use default content type.</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_GtTimelineContentType_DisplayName" xml:space="preserve">
+    <value>Timeline Content Type</value>
+  </data>
   <data name="Lists_TemplateOptions_Fields_GtProjectTemplate_Description" xml:space="preserve">
     <value>Select the PnP template to apply when creating projects</value>
   </data>
@@ -2535,6 +2541,12 @@
   </data>
   <data name="Lists_TimelineConfiguration_Field_GtSortOrder_Description" xml:space="preserve">
     <value>Specify the priority of the item under its group/project on the timeline, use for example 31 if you want the item to be between elements 30 and 40.</value>
+  </data>
+  <data name="SiteFields_GtTemplateOptions_Description" xml:space="preserve">
+    <value>Select which templates this category should be available for. Leave empty to make the category available for all templates.</value>
+  </data>
+  <data name="SiteFields_GtTemplateOptions_DisplayName" xml:space="preserve">
+    <value>Templates</value>
   </data>
   <data name="Lists_TimelineConfiguration_Title" xml:space="preserve">
     <value>Timeline Configuration</value>
