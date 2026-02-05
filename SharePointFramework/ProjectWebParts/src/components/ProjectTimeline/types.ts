@@ -78,6 +78,11 @@ export interface IProjectTimelineState extends IBaseWebPartComponentState<ITimel
    * Panel for editing or creating new timeline content
    */
   panel?: Partial<ICustomEditPanelProps>
+
+  /**
+   * Timeline content type ID from template parameters
+   */
+  timelineContentTypeId?: string
 }
 
 export interface ITimelineData {
@@ -110,6 +115,11 @@ export interface ITimelineData {
    * The current project ID in the Projects list
    */
   projectId?: number
+
+  /**
+   * Timeline content type ID from template parameters
+   */
+  timelineContentTypeId?: string
 }
 
 export enum TimelineGroupType {

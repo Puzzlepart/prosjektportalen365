@@ -46,9 +46,11 @@ export async function fetchData(
         groups: selectedGroups,
         listItems: timelineData?.timelineListItems ?? [],
         listColumns: timelineData?.columns ?? [],
-        fields: timelineData?.timelineContentEditableFields ?? []
+        fields: timelineData?.timelineContentEditableFields ?? [],
+        timelineContentTypeId: properties.templateParameters?.TimelineContentTypeId
       },
       timelineConfig,
+      timelineContentTypeId: properties.templateParameters?.TimelineContentTypeId,
       groups
     }
   } catch (error) {

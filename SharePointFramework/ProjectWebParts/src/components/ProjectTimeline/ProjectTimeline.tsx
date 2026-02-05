@@ -53,7 +53,7 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
         <CustomEditPanel
           isOpen={true}
           fields={state.data?.fields}
-          hiddenFields={['GtSiteIdLookup']}
+          hiddenFields={['GtSiteIdLookup', 'ContentTypeId']}
           fieldValues={new ItemFieldValues()}
           dataAdapter={SPDataAdapter}
           targetWeb={SPDataAdapter.portalDataService.web}

@@ -12,6 +12,10 @@ import resource from 'SharedResources'
 
 /**
  * Fetch timeline items and columns.
+ * 
+ * When timelineContentTypeId is provided, fetches fields from that specific content type
+ * and filters out hidden fields. Otherwise uses all list fields for backward compatibility.
+ * Fields marked with ShowInEditForm="FALSE" or ShowInDisplayForm="FALSE" are excluded.
  *
  * @param props Component properties for `ProjectTimeline`
  * @param timelineConfig Timeline configuration
@@ -55,18 +59,33 @@ export async function fetchTimelineData(
       })
       .filter(Boolean)
 
-    const defaultViewColumns = (
-      await timelineContentList.defaultView.fields.select('Items').top(500)()
-    )['Items'] as string[]
-    const timelineContentFields = await SPDataAdapter.portalDataService.getListFields(
-      'TIMELINE_CONTENT'
-    )
+    let timelineContentFields
+    if (timelineContentTypeId) {
+      timelineContentFields = await SPDataAdapter.portalDataService.getContentTypeFields(
+        timelineContentTypeId
+      )
+      timelineContentFields = timelineContentFields.filter(
+        (fld) => fld.SchemaXml.indexOf('Hidden="TRUE"') === -1
+      )
+    } else {
+      timelineContentFields = await SPDataAdapter.portalDataService.getListFields(
+        'TIMELINE_CONTENT'
+      )
+    }
+
     const timelineContentEditableFields = timelineContentFields.map(
       (fld) => new EditableSPField(fld)
     )
+
     const defaultViewFields = timelineContentFields.filter(
-      (fld) => defaultViewColumns.indexOf(fld.InternalName) > -1
+      (fld) =>
+        fld.InternalName !== 'ContentType' &&
+        fld.InternalName !== 'GtSiteIdLookup' &&
+        fld.SchemaXml.indexOf('ShowInEditForm="FALSE"') === -1 &&
+        fld.SchemaXml.indexOf('ShowInDisplayForm="FALSE"') === -1
     )
+
+    const defaultViewColumns = defaultViewFields.map((fld) => fld.InternalName)
 
     const userFields = defaultViewFields
       .filter((fld) => fld.TypeAsString.indexOf('User') === 0)
@@ -97,9 +116,9 @@ export async function fetchTimelineData(
 
     const timelineListItems = timelineContentItems
 
-    const columns = defaultViewColumns
+    const columns: IColumn[] = defaultViewColumns
       .filter((columnName) => columnName !== 'GtSiteIdLookup')
-      .map<IColumn>((columnName) => {
+      .map((columnName) => {
         const column = defaultViewFields.find((fld) => fld.InternalName === columnName)
         return column
           ? {
