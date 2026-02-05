@@ -8,7 +8,7 @@ import resource from 'SharedResources'
 
 /**
  * Returns an array of menu items for the toolbar in the ProjectTimeline component.
- * 
+ *
  * New items: Sets ContentTypeId from template parameters if available.
  * Edit items: Preserves the original ContentTypeId to prevent accidental changes.
  *
@@ -56,7 +56,8 @@ export function useToolbarItems() {
   const menuItems = useMemo<ListMenuItem[]>(
     () => [
       new ListMenuItem(strings.NewItemLabel, strings.NewItemLabel).setIcon('Add').setOnClick(() => {
-        const allowedTimelineTypes = context.state.timelineConfig?.map((config) => config.title) || []
+        const allowedTimelineTypes =
+          context.state.timelineConfig?.map((config) => config.title) || []
 
         context.setState({
           panel: {
@@ -70,12 +71,15 @@ export function useToolbarItems() {
                   ...properties,
                   GtSiteIdLookupId: context.state.data.projectId
                 }
-                
+
                 if (context.state.data.timelineContentTypeId) {
                   itemProperties.ContentTypeId = context.state.data.timelineContentTypeId
                 }
 
-                await SPDataAdapter.portalDataService.addItemToList('TIMELINE_CONTENT', itemProperties)
+                await SPDataAdapter.portalDataService.addItemToList(
+                  'TIMELINE_CONTENT',
+                  itemProperties
+                )
                 dismissPanel()
               }
             }
@@ -92,7 +96,8 @@ export function useToolbarItems() {
 
           const selectedItem = _.first(selectedItems)
           const fieldValues = new ItemFieldValues(selectedItem)
-          const allowedTimelineTypes = context.state.timelineConfig?.map((config) => config.title) || []
+          const allowedTimelineTypes =
+            context.state.timelineConfig?.map((config) => config.title) || []
 
           context.setState({
             panel: {
@@ -106,7 +111,7 @@ export function useToolbarItems() {
                   const updateProperties: any = {
                     ...properties
                   }
-                  
+
                   if (selectedItem?.ContentTypeId) {
                     updateProperties.ContentTypeId = selectedItem.ContentTypeId
                   }

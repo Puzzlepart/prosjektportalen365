@@ -12,7 +12,7 @@ import resource from 'SharedResources'
 
 /**
  * Fetch timeline items and columns.
- * 
+ *
  * When timelineContentTypeId is provided, fetches fields from that specific content type
  * and filters out hidden fields. Otherwise uses all list fields for backward compatibility.
  * Fields marked with ShowInEditForm="FALSE" or ShowInDisplayForm="FALSE" are excluded.
@@ -81,8 +81,9 @@ export async function fetchTimelineData(
       (fld) =>
         fld.InternalName !== 'ContentType' &&
         fld.InternalName !== 'GtSiteIdLookup' &&
-        fld.SchemaXml.indexOf('ShowInEditForm="FALSE"') === -1 &&
-        fld.SchemaXml.indexOf('ShowInDisplayForm="FALSE"') === -1
+        !fld.InternalName.startsWith('_') &&
+        !fld.ReadOnlyField &&
+        (fld.ShowInEditForm !== false || fld.ShowInDisplayForm !== false)
     )
 
     const defaultViewColumns = defaultViewFields.map((fld) => fld.InternalName)
