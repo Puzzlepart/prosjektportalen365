@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - releases/1.13
+      - feat/template-specific-projecttimeline
     paths:
       - 'SharePointFramework/**'
       - 'Install/**'

@@ -102,6 +102,13 @@ export class ProjectTemplate extends UserSelectableObject {
   }
 
   /**
+   * Gets the timeline content type ID for this template.
+   */
+  public get timelineContentTypeId(): string {
+    return this._timelineContentTypeId
+  }
+
+  /**
    * Get content configurations for the template
    *
    * @param contentConfig Available content configurations
@@ -137,10 +144,8 @@ export class ProjectTemplate extends UserSelectableObject {
     schema.Parameters = {
       ...(schema.Parameters ?? {}),
       ProjectContentTypeId: this._projectContentType ?? schema.Parameters.ProjectContentTypeId,
-      ProjectStatusContentTypeId:
-        this._projectStatusContentType ?? schema.Parameters.ProjectStatusContentTypeId,
-      TimelineContentTypeId:
-        this._timelineContentTypeId ?? schema.Parameters.TimelineContentTypeId,
+      ProjectStatusContentTypeId: this._projectStatusContentType ?? schema.Parameters.ProjectStatusContentTypeId,
+      ...(this._timelineContentTypeId && { TimelineContentTypeId: this._timelineContentTypeId }),
       ProvisionSiteFields: this._projectColumns ?? schema.Parameters.ProvisionSiteFields,
       CustomSiteFields: this._projectCustomColumns ?? schema.Parameters.CustomSiteFields,
       TermSetIds: {

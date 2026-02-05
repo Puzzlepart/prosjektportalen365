@@ -1,7 +1,8 @@
 import SPDataAdapter from 'data/SPDataAdapter'
 import {
   SPTimelineConfigurationItem,
-  TimelineConfigurationModel
+  TimelineConfigurationModel,
+  ProjectTemplate
 } from 'pp365-shared-library/lib/models'
 import resource from 'SharedResources'
 
@@ -16,7 +17,11 @@ import resource from 'SharedResources'
 export async function fetchTimelineConfiguration(timelineContentTypeId?: string) {
   const configItems = await SPDataAdapter.portalDataService.web.lists
     .getByTitle(resource.Lists_TimelineConfiguration_Title)
-    .items.select(...new SPTimelineConfigurationItem().fields, 'GtTemplateOptionsId')
+    .items.select(
+      ...new SPTimelineConfigurationItem().fields,
+      'GtTemplateOptions/Id',
+      'GtTemplateOptions/Title'
+    )
     .expand('GtTemplateOptions')
     .orderBy('GtSortOrder')()
 
@@ -24,21 +29,27 @@ export async function fetchTimelineConfiguration(timelineContentTypeId?: string)
     return configItems.map((item) => new TimelineConfigurationModel(item)).filter(Boolean)
   }
 
-  const templates = await SPDataAdapter.portalDataService.web.lists
-    .getByTitle(resource.Lists_TemplateOptions_Title)
-    .items.select('Id', 'Title', 'GtTimelineContentType')()
+  const templates = await SPDataAdapter.portalDataService.getItems<ProjectTemplate>(
+    resource.Lists_TemplateOptions_Title,
+    ProjectTemplate,
+    {
+      ViewXml: '<View></View>'
+    },
+    ['FieldValuesAsText']
+  )
 
   const currentTemplate = templates.find(
-    (t) => t.GtTimelineContentType === timelineContentTypeId
+    (template) => template.timelineContentTypeId === timelineContentTypeId
   )
 
   return configItems
     .filter((item) => {
-      if (!item.GtTemplateOptionsId || item.GtTemplateOptionsId.length === 0) {
+      if (!item.GtTemplateOptions || item.GtTemplateOptions.length === 0) {
         return true
       }
       if (currentTemplate) {
-        return item.GtTemplateOptionsId.includes(currentTemplate.Id)
+        const templateIds = item.GtTemplateOptions.map((t: any) => t.Id)
+        return templateIds.includes(currentTemplate.id)
       }
       return false
     })
