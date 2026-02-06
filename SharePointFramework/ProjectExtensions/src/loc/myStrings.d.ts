@@ -108,6 +108,9 @@ declare interface IProjectExtensionsStrings {
   PlannerTagsLimitLogText: string
   PlannerTaskAttachmentLimitLogText: string
   PlannerTaskChecklistLimitLogText: string
+  TimelineConfigurationText: string
+  CreatingTimelineItemText: string
+  TimelineConfigurationErrorMessage: string
   PreTaskContentTypeValidationErrorMessage: string
   PreTaskErrorMessage: string
   PreTaskTermSetIdValidationErrorMessage: string

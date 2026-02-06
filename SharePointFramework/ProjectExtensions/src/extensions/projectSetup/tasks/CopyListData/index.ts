@@ -11,6 +11,7 @@ import {
   TaskAttachment,
   TaskPreviewType
 } from '../PlannerConfiguration'
+import { TimelineConfiguration } from '../TimelineConfiguration'
 import _ from 'underscore'
 import { IWeb } from '@pnp/sp/webs'
 import '@pnp/sp/items/get-all'
@@ -90,6 +91,14 @@ export class CopyListData extends BaseTask {
                 this.data,
                 configuration,
                 labels
+              ).execute(params, onProgress)
+            }
+            break
+          case ContentConfigType.Timeline:
+            {
+              await new TimelineConfiguration(
+                this.data,
+                contentConfig
               ).execute(params, onProgress)
             }
             break
