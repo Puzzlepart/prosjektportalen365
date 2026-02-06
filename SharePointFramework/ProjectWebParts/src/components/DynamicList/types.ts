@@ -53,7 +53,7 @@ export enum CustomActionType {
    */
   Trigger = 'Trigger',
   /**
-   * Dialog action - opens dialog with iframe content
+   * Dialog action - sends POST request to hookUrl, polls for result, and displays iframe content
    */
   Dialog = 'Dialog'
 }
@@ -83,12 +83,12 @@ export interface ICustomAction {
   actionType: CustomActionType | string
 
   /**
-   * URL to POST to (required for Trigger action type)
+   * URL to POST to (required for Trigger action type and Dialog action type for polling)
    */
   hookUrl?: string
 
   /**
-   * iframe content/snippet (required for Dialog action type)
+   * iframe content/snippet (optional - can be provided upfront or fetched via polling for Dialog type)
    */
   iframeContent?: string
 

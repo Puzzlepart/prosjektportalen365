@@ -1,4 +1,4 @@
-import { useMemo, useContext, useCallback, useState } from 'react'
+import { useMemo, useContext, useCallback } from 'react'
 import { DynamicListContext } from './context'
 import { ListMenuItem, ItemFieldValues, ListMenuItemDivider, customLightTheme } from 'pp365-shared-library'
 import { DocumentLibraryViewMode, CustomActionType, ICustomAction } from './types'
@@ -18,16 +18,11 @@ import '@pnp/sp/folders'
 import '@pnp/sp/files'
 import '@pnp/sp/files/folder'
 import _ from 'lodash'
-import { useExcelExport } from './hooks'
+import { useExcelExport, useCustomActionDialog } from './hooks'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
 import { fetchSingleItem } from './data/fetchListData'
 import * as React from 'react'
 import {
-  Dialog,
-  DialogSurface,
-  DialogBody,
-  DialogActions,
-  Button,
   Toaster,
   useToastController,
   useId,
@@ -35,9 +30,7 @@ import {
   ToastTitle,
   ToastBody,
   FluentProvider,
-  IdPrefixProvider,
-  DialogTitle,
-  DialogContent
+  IdPrefixProvider
 } from '@fluentui/react-components'
 
 const Icons = {
@@ -50,11 +43,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
   const toasterId = useId('toaster')
   const fluentProviderId = useId('fp-dynamic-list-actions')
   const { dispatchToast } = useToastController(toasterId)
-  const [dialogState, setDialogState] = useState<{
-    isOpen: boolean
-    iframeContent: string
-    actionName: string
-  }>({ isOpen: false, iframeContent: '', actionName: '' })
+  const { openDialog, dialogComponent, toasterId: dialogToasterId } = useCustomActionDialog()
 
   ExcelExportService.configure({
     name: context.props.title?.trim() || context.state.data?.listTitle || 'Export'
@@ -505,40 +494,6 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
     [context.state, context.props, context.setState]
   )
 
-  /**
-   * Handle Dialog action type - Open dialog with iframe content
-   *
-   * @param action The custom action configuration
-   */
-  const handleDialogAction = useCallback(
-    (action: ICustomAction) => {
-      if (!action.iframeContent) {
-        dispatchToast(
-          <Toast appearance='inverted'>
-            <ToastTitle>Feil konfigurering</ToastTitle>
-            <ToastBody>iframe-innhold er ikke konfigurert for denne handlingen.</ToastBody>
-          </Toast>,
-          { intent: 'error' }
-        )
-        return
-      }
-
-      setDialogState({
-        isOpen: true,
-        iframeContent: action.iframeContent,
-        actionName: action.name
-      })
-    },
-    []
-  )
-
-  /**
-   * Close the custom action dialog
-   */
-  const closeDialog = useCallback(() => {
-    setDialogState({ isOpen: false, iframeContent: '', actionName: '' })
-  }, [context.setState])
-
   const menuItems = useMemo<ListMenuItem[]>(() => {
     const items: ListMenuItem[] = []
 
@@ -733,7 +688,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
               if (actionType === CustomActionType.Trigger) {
                 handleTriggerAction(action)
               } else if (actionType === CustomActionType.Dialog) {
-                handleDialogAction(action)
+                openDialog(action)
               }
             })
         )
@@ -910,36 +865,20 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
     menuItems,
     farMenuItems,
     filterPanelProps,
-    customActionDialog: dialogState.isOpen ? (
-      <IdPrefixProvider value={fluentProviderId}>
-        <FluentProvider theme={customLightTheme}>
-          <Dialog open={dialogState.isOpen} onOpenChange={(_, data) => !data.open && closeDialog()}>
-            <DialogSurface style={{ maxWidth: '90vw', width: '900px', maxHeight: '90vh' }}>
-              <DialogBody>
-              <DialogTitle>{dialogState.actionName}</DialogTitle>
-                <DialogContent style={{ marginBottom: '16px' }}>
-                  <div
-                    style={{ minHeight: 'fit-content' }}
-                    dangerouslySetInnerHTML={{ __html: dialogState.iframeContent }}
-                  />
-              </DialogContent>
-              </DialogBody>
-              <DialogActions>
-                <Button appearance="secondary" onClick={closeDialog}>
-                  Avbryt
-                </Button>
-              </DialogActions>
-            </DialogSurface>
-          </Dialog>
-        </FluentProvider>
-      </IdPrefixProvider>
-    ) : null,
+    customActionDialog: dialogComponent,
     toaster: (
-      <IdPrefixProvider value={fluentProviderId}>
-        <FluentProvider theme={customLightTheme}>
-          <Toaster toasterId={toasterId} />
-        </FluentProvider>
-      </IdPrefixProvider>
+      <>
+        <IdPrefixProvider value={fluentProviderId}>
+          <FluentProvider theme={customLightTheme}>
+            <Toaster toasterId={toasterId} />
+          </FluentProvider>
+        </IdPrefixProvider>
+        <IdPrefixProvider value={`${fluentProviderId}-dialog`}>
+          <FluentProvider theme={customLightTheme}>
+            <Toaster toasterId={dialogToasterId} />
+          </FluentProvider>
+        </IdPrefixProvider>
+      </>
     )
   }
 }
