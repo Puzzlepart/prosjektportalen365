@@ -36,7 +36,8 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Planneroppgaver.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Tillatelseskonfigurasjon.xml" /> 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Tidslinjeinnhold.xml" />
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Tidslinjekonfigurasjon.xml" /> 
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Tidslinjeelementer.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Tidslinjekonfigurasjon.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Maloppsett.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Prosjektadministrasjonsroller.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Prosjektadministrasjonstilganger.xml" />

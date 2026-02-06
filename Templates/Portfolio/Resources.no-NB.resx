@@ -1240,6 +1240,12 @@
   <data name="ContentTypes_Timeline_Element_Name" xml:space="preserve">
     <value>Tidslinjeelement</value>
   </data>
+  <data name="ContentTypes_TimelineElements_Description" xml:space="preserve">
+    <value>Konfigurasjon av tidslinjeelementer for prosjektmaler</value>
+  </data>
+  <data name="ContentTypes_TimelineElements_Name" xml:space="preserve">
+    <value>Tidslinjeelementer</value>
+  </data>
   <data name="ContentTypes_TimelineConfiguration_Element_Description" xml:space="preserve">
     <value>Opprett et nytt tidslinjekonfigurasjonelement</value>
   </data>
@@ -1924,6 +1930,12 @@
   <data name="Lists_ListContent_Title" xml:space="preserve">
     <value>Listeinnhold</value>
   </data>
+  <data name="Lists_ListContent_Timeline_Description" xml:space="preserve">
+    <value>Standard tidslinjeelementer for prosjekter</value>
+  </data>
+  <data name="Lists_ListContent_Timeline_Title" xml:space="preserve">
+    <value>Tidslinje</value>
+  </data>
   <data name="Lists_ListContent_Url" xml:space="preserve">
     <value>Lists/Listeinnhold</value>
   </data>
@@ -2580,6 +2592,15 @@
   </data>
   <data name="Lists_TimelineContent_Url" xml:space="preserve">
     <value>Lists/Tidslinjeinnhold</value>
+  </data>
+  <data name="Lists_TimelineElements_Description" xml:space="preserve">
+    <value>Tidslinjeelementer som kan kopieres til prosjekter</value>
+  </data>
+  <data name="Lists_TimelineElements_Title" xml:space="preserve">
+    <value>Tidslinjeelementer</value>
+  </data>
+  <data name="Lists_TimelineElements_Url" xml:space="preserve">
+    <value>Lists/Tidslinjeelementer</value>
   </data>
   <data name="Lists_Uncertainty_Title" xml:space="preserve">
     <value>Usikkerhet</value>
