@@ -1,0 +1,11 @@
+.root {
+  .button {
+    justify-content: flex-start;
+
+    .label {
+      text-align: left;
+      font-weight: var(--fontWeightRegular);
+      margin: 0;
+    }
+  }
+}

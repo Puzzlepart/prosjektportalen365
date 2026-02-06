@@ -17,6 +17,7 @@ import { ProjectStatusReport } from './ProjectStatusReport'
 import { ProjectInformationContextProvider } from './context'
 import { IProjectInformationProps } from './types'
 import { useProjectInformation } from './useProjectInformation'
+import { ChildrenProjects } from './ChildrenProjects'
 import resource from 'SharedResources'
 
 /**
@@ -59,6 +60,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
           )}
           <ProjectProperties />
           <Actions />
+          <ChildrenProjects />
           <ParentProjectsList />
           <ArchiveStatus />
           <ProjectStatusReport />

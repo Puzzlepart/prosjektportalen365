@@ -181,6 +181,8 @@ define([], function () {
     ParentProjectsHeaderDescription:
       'Her listes alle program/overordnede prosjekter som dette prosjektet tilhører.',
     ParentProjectsHeaderText: 'Overordnede prosjekter',
+    ChildProjectsHeaderText: 'Underområder',
+    ChildProjectsHeaderDescription: 'Underområder som administreres av dette prosjektet',
     PhaseChecklistLinkText: 'Gå til fasesjekklisten',
     PhaseFieldFieldLabel: 'Fasefelt',
     PhaseUseStartArrowLabel: 'Bruk startpil',

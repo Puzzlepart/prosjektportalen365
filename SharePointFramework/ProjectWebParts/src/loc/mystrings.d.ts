@@ -137,6 +137,8 @@ declare interface IProjectWebPartsStrings {
   ParentProjectsGroupName: string
   ParentProjectsHeaderDescription: string
   ParentProjectsHeaderText: string
+  ChildProjectsHeaderDescription: string
+  ChildProjectsHeaderText: string
   PhaseChecklistLinkText: string
   PhaseFieldFieldLabel: string
   PhaseSitePageTitle: string

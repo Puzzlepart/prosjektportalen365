@@ -168,6 +168,9 @@ define([], function () {
     HideArchiveStatusLabel: 'Hide archive status',
     ParentProjectsGroupName: 'Parent projects',
     ParentProjectsHeaderText: 'Parent projects',
+    ParentProjectsHeaderDescription: 'Parent projects this project is part of',
+    ChildProjectsHeaderText: 'Child projects',
+    ChildProjectsHeaderDescription: 'Child projects managed by this project',
     PhaseChecklistLinkText: 'Go to the phase checklist',
     PhaseFieldFieldLabel: 'Phase Field',
     PhaseSitePageFoundMessage:
