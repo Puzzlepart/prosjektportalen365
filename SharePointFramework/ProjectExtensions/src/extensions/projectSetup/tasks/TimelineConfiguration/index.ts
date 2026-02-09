@@ -5,6 +5,7 @@ import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../types'
 import { SPDataAdapter } from 'data'
 import { ContentConfig } from 'pp365-shared-library'
+import resource from 'SharedResources'
 import _ from 'underscore'
 
 /**
@@ -67,8 +68,14 @@ export class TimelineConfiguration extends BaseTask {
       }
 
       const timelineList = SPDataAdapter.portalDataService.web.lists.getByTitle(
-        'Tidslinjeinnhold'
+        resource.Lists_TimelineContent_Title
       )
+
+      const [projectItem] = await SPDataAdapter.portalDataService.web.lists
+        .getByTitle(resource.Lists_Projects_Title)
+        .items.filter(
+          `GtSiteId eq '${siteId.replace(/([{}])/g, '')}'`
+        )()
 
       const fieldsToCopy = this._contentConfig.fields || []
 
@@ -83,7 +90,7 @@ export class TimelineConfiguration extends BaseTask {
         try {
           const itemData: any = {
             ContentTypeId: timelineContentTypeId,
-            GtSiteIdLookupId: siteId
+            GtSiteIdLookupId: projectItem.Id
           }
 
           fieldsToCopy.forEach((fieldName) => {
@@ -117,7 +124,8 @@ export class TimelineConfiguration extends BaseTask {
     params: IBaseTaskParams,
     onProgress: OnProgressCallbackFunction
   ): Promise<IBaseTaskParams> {
-    const timelineContentTypeId = params.templateParameters?.TimelineContentTypeId || ''
+    const templateParameters = params.templateSchema.Parameters
+    const timelineContentTypeId = templateParameters?.TimelineContentTypeId || ''
     const siteId = params.context.pageContext.site.id.toString()
 
     if (!timelineContentTypeId) {
