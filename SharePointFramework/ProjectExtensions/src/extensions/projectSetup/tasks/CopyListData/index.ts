@@ -96,10 +96,7 @@ export class CopyListData extends BaseTask {
             break
           case ContentConfigType.Timeline:
             {
-              await new TimelineConfiguration(
-                this.data,
-                contentConfig
-              ).execute(params, onProgress)
+              await new TimelineConfiguration(this.data, contentConfig).execute(params, onProgress)
             }
             break
           case ContentConfigType.List:

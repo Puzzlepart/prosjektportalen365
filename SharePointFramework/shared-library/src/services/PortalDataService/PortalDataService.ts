@@ -1145,7 +1145,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     return this.web.lists.getByTitle(this._configuration.listNames[list])
   }
 
-
   /**
    * Resolve the HubSiteId and Title for a given site URL.
    * Uses PnPjs to query the site and return its `HubSiteId` and `Title`.

@@ -6,7 +6,6 @@ import { OnProgressCallbackFunction } from '../types'
 import { SPDataAdapter } from 'data'
 import { ContentConfig } from 'pp365-shared-library'
 import resource from 'SharedResources'
-import _ from 'underscore'
 
 /**
  * @class TimelineConfiguration
@@ -18,10 +17,7 @@ export class TimelineConfiguration extends BaseTask {
    * @param data Project setup data
    * @param _contentConfig Content configuration with source timeline elements
    */
-  constructor(
-    data: IProjectSetupData,
-    private _contentConfig: ContentConfig
-  ) {
+  constructor(data: IProjectSetupData, private _contentConfig: ContentConfig) {
     super('TimelineConfiguration', data)
   }
 
@@ -36,9 +32,7 @@ export class TimelineConfiguration extends BaseTask {
 
       const items = await this._contentConfig.sourceList.items.getAll()
 
-      this.logInformation(
-        `Found ${items.length} source timeline items`
-      )
+      this.logInformation(`Found ${items.length} source timeline items`)
       return items
     } catch (error) {
       throw new Error(`_fetchSourceItems: ${error.message}`)
@@ -61,9 +55,7 @@ export class TimelineConfiguration extends BaseTask {
       const sourceItems = await this._fetchSourceItems()
 
       if (sourceItems.length === 0) {
-        this.logInformation(
-          `No source timeline items found, skipping timeline configuration`
-        )
+        this.logInformation('No source timeline items found, skipping timeline configuration')
         return
       }
 
@@ -73,9 +65,7 @@ export class TimelineConfiguration extends BaseTask {
 
       const [projectItem] = await SPDataAdapter.portalDataService.web.lists
         .getByTitle(resource.Lists_Projects_Title)
-        .items.filter(
-          `GtSiteId eq '${siteId.replace(/([{}])/g, '')}'`
-        )()
+        .items.filter(`GtSiteId eq '${siteId.replace(/([{}])/g, '')}'`)()
 
       const fieldsToCopy = this._contentConfig.fields || []
 
@@ -103,10 +93,7 @@ export class TimelineConfiguration extends BaseTask {
           await timelineList.items.add(itemData)
           this.logInformation(`Successfully created timeline item: ${item.Title}`)
         } catch (error) {
-          this.logWarning(
-            `Failed to create timeline item: ${item.Title} - ${error.message}`,
-            error
-          )
+          this.logWarning(`Failed to create timeline item: ${item.Title} - ${error.message}`, error)
         }
       }
     } catch (error) {
@@ -129,7 +116,9 @@ export class TimelineConfiguration extends BaseTask {
     const siteId = params.context.pageContext.site.id.toString()
 
     if (!timelineContentTypeId) {
-      this.logWarning('Skipping timeline configuration: Missing TimelineContentTypeId in template parameters')
+      this.logWarning(
+        'Skipping timeline configuration: Missing TimelineContentTypeId in template parameters'
+      )
       return params
     }
 

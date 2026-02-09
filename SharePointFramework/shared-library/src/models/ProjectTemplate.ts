@@ -144,7 +144,8 @@ export class ProjectTemplate extends UserSelectableObject {
     schema.Parameters = {
       ...(schema.Parameters ?? {}),
       ProjectContentTypeId: this._projectContentType ?? schema.Parameters.ProjectContentTypeId,
-      ProjectStatusContentTypeId: this._projectStatusContentType ?? schema.Parameters.ProjectStatusContentTypeId,
+      ProjectStatusContentTypeId:
+        this._projectStatusContentType ?? schema.Parameters.ProjectStatusContentTypeId,
       ...(this._timelineContentTypeId && { TimelineContentTypeId: this._timelineContentTypeId }),
       ProvisionSiteFields: this._projectColumns ?? schema.Parameters.ProvisionSiteFields,
       CustomSiteFields: this._projectCustomColumns ?? schema.Parameters.CustomSiteFields,
