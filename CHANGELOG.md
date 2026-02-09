@@ -12,6 +12,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Støtte for beregnede kolonner i aggregerte oversikter [#1563](https://github.com/Puzzlepart/prosjektportalen365/issues/1563)
 - Støtte for å bestille underområder direkte fra et program/overordnet område via Bestillingsportalen-skjema. Merk! Krever oppgradering av Bestillingsportalen
 - Ny seksjon i `Prosjektinformasjon` som viser underområder tilknyttet området.
+- Mal-spesifikt Prosjekttidslinje oppsett og standard tidslinjeelementer. Støtte for forskjellige tidslinjeoppsett og elementer for ulike maler. [#1664](https://github.com/Puzzlepart/prosjektportalen365/issues/1664)
 
 ### Forbedringer
 
