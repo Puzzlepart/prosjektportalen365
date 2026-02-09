@@ -482,10 +482,18 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
         context.setState({ refetch: Date.now(), selectedItems: [] })
       } catch (error) {
         console.error('Error executing trigger action:', error)
+        const isCorsError = error.message?.includes('Failed to fetch') ||
+                           error.message?.includes('NetworkError') ||
+                           error.message?.includes('CORS')
+
+        const errorMessage = isCorsError
+          ? 'CORS-feil: Serveren tillater ikke forespørsler fra denne domenen. Kontakt administrator for å konfigurere CORS-headere.'
+          : `Kunne ikke utføre handlingen: ${error.message}`
+
         dispatchToast(
           <Toast appearance='inverted'>
             <ToastTitle>Feil ved utføring</ToastTitle>
-            <ToastBody>Kunne ikke utføre handlingen: {error.message}</ToastBody>
+            <ToastBody>{errorMessage}</ToastBody>
           </Toast>,
           { intent: 'error' }
         )
@@ -677,13 +685,12 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
       sortedActions.forEach((action: ICustomAction) => {
         const actionType = action.actionType as CustomActionType
-        const requiresSelection = actionType === CustomActionType.Trigger
         const hasSelectedItems = context.state.selectedItems && context.state.selectedItems.length > 0
 
         items.push(
           new ListMenuItem(action.name, action.description || action.name)
             .setIcon(action.icon || 'Robot')
-            .setDisabled(requiresSelection && !hasSelectedItems)
+            .setDisabled(!hasSelectedItems)
             .setOnClick(() => {
               if (actionType === CustomActionType.Trigger) {
                 handleTriggerAction(action)

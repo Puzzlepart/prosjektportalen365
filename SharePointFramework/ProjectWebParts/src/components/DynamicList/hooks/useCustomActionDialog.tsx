@@ -60,17 +60,18 @@ export function useCustomActionDialog() {
 
   /**
    * Polls the server for iframe content at regular intervals.
-   * 
+   *
    * Attempts up to 30 times with 2-second intervals. Handles three response statuses:
    * - 'completed': Updates dialog with iframe content and shows success toast
    * - 'processing': Continues polling until max attempts reached
    * - 'failed': Throws error with server message
-   * 
+   *
    * @param pollUrl URL endpoint to poll for processing results
    * @param actionName Name of the action being executed, used in notifications
+   * @param payload Request payload to send with each poll request
    */
   const pollForIframeContent = useCallback(
-    async (pollUrl: string, actionName: string) => {
+    async (pollUrl: string, actionName: string, payload: any) => {
       const maxAttempts = 30
       const pollInterval = 2000
       let attempts = 0
@@ -80,10 +81,11 @@ export function useCustomActionDialog() {
           attempts++
 
           const response = await fetch(pollUrl, {
-            method: 'GET',
+            method: 'POST',
             headers: {
               'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify(payload)
           })
 
           if (!response.ok) {
@@ -92,12 +94,13 @@ export function useCustomActionDialog() {
 
           const result = await response.json()
 
-          if (result.status === 'completed' && result.iframeContent) {
+          const content = result.iframeContent || result.html
+          if (result.status === 'completed' && content) {
             setDialogState(prev => ({
               ...prev,
               isLoading: false,
               isPolling: false,
-              iframeContent: result.iframeContent
+              iframeContent: content
             }))
 
             dispatchToast(
@@ -120,17 +123,25 @@ export function useCustomActionDialog() {
           }
         } catch (error) {
           console.error('Error polling for iframe content:', error)
+          const isCorsError = error.message?.includes('Failed to fetch') ||
+                             error.message?.includes('NetworkError') ||
+                             error.message?.includes('CORS')
+
+          const errorMessage = isCorsError
+            ? 'CORS-feil: Serveren tillater ikke forespørsler fra dette domenet. Kontakt administrator for å konfigurere CORS-headere.'
+            : `Kunne ikke hente innhold: ${error.message}`
+
           setDialogState(prev => ({
             ...prev,
             isLoading: false,
             isPolling: false,
-            error: `Polling feilet: ${error.message}`
+            error: `Polling feilet: ${errorMessage}`
           }))
 
           dispatchToast(
             <Toast appearance='inverted'>
               <ToastTitle>Feil ved henting</ToastTitle>
-              <ToastBody>Kunne ikke hente innhold: {error.message}</ToastBody>
+              <ToastBody>{errorMessage}</ToastBody>
             </Toast>,
             { intent: 'error' }
           )
@@ -144,7 +155,7 @@ export function useCustomActionDialog() {
 
   /**
    * Opens dialog and executes a Dialog-type custom action.
-   * 
+   *
    * Workflow:
    * 1. Validates hookUrl configuration
    * 2. Opens dialog with loading indicators
@@ -153,7 +164,7 @@ export function useCustomActionDialog() {
    *    - Immediate: Returns iframe content directly in response
    *    - Async: Returns pollUrl and initiates polling for results
    * 5. Displays iframe content or error messages accordingly
-   * 
+   *
    * @param action Custom action configuration containing hookUrl and action metadata
    */
   const openDialog = useCallback(
@@ -226,14 +237,15 @@ export function useCustomActionDialog() {
           isPolling: true
         }))
 
+        const content = result.iframeContent || result.html
         if (result.pollUrl) {
-          await pollForIframeContent(result.pollUrl, action.name)
-        } else if (result.iframeContent) {
+          await pollForIframeContent(result.pollUrl, action.name, payload)
+        } else if (content) {
           setDialogState(prev => ({
             ...prev,
             isLoading: false,
             isPolling: false,
-            iframeContent: result.iframeContent
+            iframeContent: content
           }))
         } else {
           throw new Error('Ingen iframe-innhold eller poll-URL mottatt')
@@ -241,18 +253,26 @@ export function useCustomActionDialog() {
 
       } catch (error) {
         console.error('Error executing dialog action:', error)
+        const isCorsError = error.message?.includes('Failed to fetch') ||
+                           error.message?.includes('NetworkError') ||
+                           error.message?.includes('CORS')
+
+        const errorMessage = isCorsError
+          ? 'CORS-feil: Serveren tillater ikke forespørsler fra denne domenen. Kontakt administrator for å konfigurere CORS-headere.'
+          : `Feil ved utføring: ${error.message}`
+
         setDialogState(prev => ({
           ...prev,
           isLoading: false,
           isSending: false,
           isPolling: false,
-          error: `Feil ved utføring: ${error.message}`
+          error: errorMessage
         }))
 
         dispatchToast(
           <Toast appearance='inverted'>
             <ToastTitle>Feil ved utføring</ToastTitle>
-            <ToastBody>Kunne ikke utføre handlingen: {error.message}</ToastBody>
+            <ToastBody>{errorMessage}</ToastBody>
           </Toast>,
           { intent: 'error' }
         )
