@@ -10,7 +10,7 @@ import { CubeRegular, ChevronRightFilled, ChevronDownFilled } from '@fluentui/re
 const COLLAPSE_TRESHOLD = 3
 const COLLAPSE_NUMBER = 2
 
-export const ChildrenProjects: FC = () => {
+export const ChildProjectsList: FC = () => {
   const childProjects = useChildrenProjects()
   const fluentProviderId = useId('fp-children-projects-list')
   const shouldCollapse = childProjects.length >= COLLAPSE_TRESHOLD
