@@ -2,12 +2,7 @@ import { useState, useEffect } from 'react'
 import { useProjectInformationContext } from '../context'
 import SPDataAdapter from '../../../data'
 import resource from 'SharedResources'
-
-interface IChildProject {
-  SiteId: string
-  Title: string
-  Path?: string
-}
+import { IChildProject } from './types'
 
 /**
  * Custom hook to fetch child projects from the project properties list
