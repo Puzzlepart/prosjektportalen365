@@ -2,6 +2,7 @@ import { createAction, createReducer } from '@reduxjs/toolkit'
 import { ContentConfig, ProjectExtension, ProjectTemplate } from 'pp365-shared-library'
 import { first, uniq } from 'underscore'
 import { IProjectSetupData } from '../../extensions/projectSetup/types'
+import { NO_TEMPLATE_ID } from '../../extensions/projectSetup/constants'
 import { IProjectSetupDialogState } from './types'
 import strings from 'ProjectExtensionsStrings'
 
@@ -12,7 +13,7 @@ import strings from 'ProjectExtensionsStrings'
 const createNoTemplateOption = (): ProjectTemplate => {
   const noTemplate = new ProjectTemplate(
     {
-      Id: -1,
+      Id: NO_TEMPLATE_ID,
       IsDefaultTemplate: false,
       IsDefaultExtensionsLocked: false,
       IsDefaultListContentLocked: false,
@@ -25,7 +26,7 @@ const createNoTemplateOption = (): ProjectTemplate => {
         Title: strings.NoTemplateLabel,
         GtDescription: strings.NoTemplateDescription
       },
-      GtProjectTemplateId: -1,
+      GtProjectTemplateId: NO_TEMPLATE_ID,
       GtProjectExtensionsId: [],
       GtProjectColumns: null,
       GtProjectCustomColumns: null,
@@ -62,7 +63,7 @@ export default (data: IProjectSetupData) =>
   createReducer(initialState, {
     [INIT.type]: (state: IProjectSetupDialogState) => {
       // Add the "No template" option as the first item if not already present
-      if (!data.templates.some((t) => t.id === -1)) {
+      if (!data.templates.some((t) => t.id === NO_TEMPLATE_ID)) {
         data.templates.unshift(createNoTemplateOption())
       }
       

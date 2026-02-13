@@ -7,6 +7,7 @@ import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import _ from 'underscore'
 import resource from 'SharedResources'
 import SPDataAdapter from 'data/SPDataAdapter'
+import { NO_TEMPLATE_ID } from '../../constants'
 
 export class PreTask extends BaseTask {
   constructor(data: IProjectSetupData) {
@@ -21,8 +22,8 @@ export class PreTask extends BaseTask {
   public async execute(params: IBaseTaskParams): Promise<IBaseTaskParams> {
     super.initExecute(params)
     
-    // Only load template schema if a real template is selected (not "No template" with id -1)
-    if (this.data.selectedTemplate && this.data.selectedTemplate.id !== -1) {
+    // Only load template schema if a real template is selected (not "No template")
+    if (this.data.selectedTemplate && this.data.selectedTemplate.id !== NO_TEMPLATE_ID) {
       params.templateSchema = await this.data.selectedTemplate.getSchema()
       if (!params.properties.forceTemplate) {
         await this.validateParameters(params)

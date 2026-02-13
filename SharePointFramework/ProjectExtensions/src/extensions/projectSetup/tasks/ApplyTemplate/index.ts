@@ -4,6 +4,7 @@ import * as strings from 'ProjectExtensionsStrings'
 import { WebProvisioner } from 'sp-js-provisioning'
 import _ from 'underscore'
 import { IProjectSetupData } from '../../types'
+import { NO_TEMPLATE_ID } from '../../constants'
 import { BaseTask, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../types'
 import { APPLY_TEMPLATE_STATUS_MAP, ApplyTemplateTaskError } from './types'
@@ -35,8 +36,8 @@ export class ApplyTemplate extends BaseTask {
         }
       })
       
-      // Only apply template if a real template is selected (not "No template" with id -1)
-      if (this.data.selectedTemplate && this.data.selectedTemplate.id !== -1) {
+      // Only apply template if a real template is selected (not "No template")
+      if (this.data.selectedTemplate && this.data.selectedTemplate.id !== NO_TEMPLATE_ID) {
         this.logInformation('Applying template to site', { parameters: params.templateParameters })
         const templateSchema = _.omit(params.templateSchema, params.templateExcludeHandlers)
         await provisioner.applyTemplate(templateSchema, null, (handler) => {

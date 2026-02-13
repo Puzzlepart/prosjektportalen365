@@ -69,7 +69,7 @@ export const RunTemplateSelectorDialog: FC = () => {
             text={strings.RedoText}
             onClick={async () => {
               await saveNavigationNodes()
-              applyCustomAction()
+              await applyCustomAction()
             }}
           />
         </DialogFooter>
