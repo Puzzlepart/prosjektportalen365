@@ -9,8 +9,8 @@ import {
   Info24Regular,
   Organization24Filled,
   Organization24Regular,
-  DocumentTemplate24Filled,
-  DocumentTemplate24Regular,
+  Apps24Filled,
+  Apps24Regular,
   bundleIcon
 } from '@fluentui/react-icons'
 import { DisplayMode } from '@microsoft/sp-core-library'
@@ -80,7 +80,7 @@ export const useActions = () => {
     () => {
       context.dispatch(OPEN_DIALOG('RunTemplateSelectorDialog'))
     },
-    bundleIcon(DocumentTemplate24Filled, DocumentTemplate24Regular),
+    bundleIcon(Apps24Filled, Apps24Regular),
     false,
     !context.state.userHasEditPermission
   ]
