@@ -1,7 +1,7 @@
 import strings from 'ProjectWebPartsStrings'
 import React, { FC, useEffect, useState } from 'react'
 import { isEmpty } from 'underscore'
-import { useChildrenProjects } from './useChildrenProjects'
+import { useProjectInformationContext } from '../context'
 import styles from './ChildrenProjects.module.scss'
 import { WebPartTitle, customLightTheme } from 'pp365-shared-library'
 import { Button, FluentProvider, IdPrefixProvider, useId } from '@fluentui/react-components'
@@ -11,12 +11,12 @@ const COLLAPSE_TRESHOLD = 3
 const COLLAPSE_NUMBER = 2
 
 export const ChildProjectsList: FC = () => {
-  const childProjects = useChildrenProjects()
+  const context = useProjectInformationContext()
+  const childProjects = context.state?.data?.childProjects || []
   const fluentProviderId = useId('fp-children-projects-list')
   const shouldCollapse = childProjects.length >= COLLAPSE_TRESHOLD
   const [childProjectsStateArray, setChildProjectsStateArray] = useState(childProjects)
   const chevronIcon = childProjectsStateArray.length > COLLAPSE_NUMBER ? <ChevronDownFilled/> : <ChevronRightFilled/>
-
 
   useEffect(() => {
     setChildProjectsStateArray(childProjects.slice(0,COLLAPSE_NUMBER))
@@ -57,8 +57,8 @@ function Collapse() {
         <FluentProvider theme={customLightTheme}>
           {childProjectsStateArray.map((project, idx) => {
             const onClick = () => {
-              if (project.Path) {
-                window.open(project.Path, '_self')
+              if (project.url) {
+                window.open(project.url, '_self')
               }
             }
             return (
@@ -70,7 +70,7 @@ function Collapse() {
                 iconPosition='before'
                 onClick={onClick}
               >
-                <span className={styles.label}>{project.Title}</span>
+                <span className={styles.label}>{project.title}</span>
               </Button>
             )
           })}

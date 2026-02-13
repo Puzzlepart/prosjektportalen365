@@ -232,6 +232,85 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   }
 
   /**
+   * Get child projects for a project. Gets the GtChildProjects field
+   * from project properties and transforms SharePoint data.
+   *
+   * @param webUrl Web URL of the current project
+   * @param constructor Constructor / model class
+   */
+  public async getChildProjects<T>(
+    webUrl: string,
+    constructor: new (item: any, web: IWeb) => T
+  ): Promise<T[]> {
+    try {
+      // Get the current project's properties to find child projects
+      const list = this._getList('PROJECTS')
+      const [currentProject] = await list.items
+        .filter(`GtSiteUrl eq '${webUrl}'`)
+        .select('Id', 'GtChildProjects')()
+
+      if (!currentProject?.GtChildProjects) {
+        return []
+      }
+
+      const childProjects: Array<{ SiteId: string; Title: string; SPWebURL?: string; Path?: string }> =
+        JSON.parse(currentProject.GtChildProjects)
+
+      if (!Array.isArray(childProjects) || childProjects.length === 0) {
+        return []
+      }
+
+      // Remove duplicates and filter out empty entries
+      const seen = new Set<string>()
+      const uniqueChildProjects = childProjects.filter((project) => {
+        if (!project?.SiteId || seen.has(project.SiteId)) return false
+        seen.add(project.SiteId)
+        return true
+      })
+
+      // Fetch project details for each child project
+      const childProjectsData = await Promise.all(
+        uniqueChildProjects.map(async (childProject) => {
+          try {
+            const [projectItem] = await list.items
+              .filter(`GtSiteId eq '${childProject.SiteId}'`)
+              .select('Title', 'GtSiteUrl', 'GtSiteId')()
+
+            if (projectItem) {
+              return new constructor(
+                {
+                  Title: projectItem.Title,
+                  GtSiteUrl: projectItem.GtSiteUrl || childProject.SPWebURL || childProject.Path,
+                  GtSiteId: projectItem.GtSiteId
+                },
+                this.web
+              )
+            }
+            return null
+          } catch (error) {
+            console.warn(`Failed to fetch child project details for ${childProject.SiteId}:`, error)
+            // Fallback to using data from GtChildProjects field
+            return new constructor(
+              {
+                Title: childProject.Title,
+                GtSiteUrl: childProject.SPWebURL || childProject.Path,
+                GtSiteId: childProject.SiteId
+              },
+              this.web
+            )
+          }
+        })
+      )
+
+      // Filter out null entries and return the child projects
+      return childProjectsData.filter(project => project !== null)
+    } catch (error) {
+      console.warn('Failed to fetch child projects:', error)
+      return []
+    }
+  }
+
+  /**
    * Get programs from the projects list in the portfolio site.
    *
    * @param constructor Constructor / model class

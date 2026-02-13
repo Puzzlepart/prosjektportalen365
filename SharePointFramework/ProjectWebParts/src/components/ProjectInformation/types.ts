@@ -5,6 +5,7 @@ import {
   ProjectColumn,
   EditableSPField,
   ProjectInformationParentProject,
+  ProjectInformationChildProject,
   ProjectTemplate,
   IUserMessageProps
 } from 'pp365-shared-library'
@@ -160,6 +161,11 @@ export interface IProjectInformationData
    * Parent projects
    */
   parentProjects?: ProjectInformationParentProject[]
+
+  /**
+   * Child projects
+   */
+  childProjects?: ProjectInformationChildProject[]
 
   /**
    * The template used for the project

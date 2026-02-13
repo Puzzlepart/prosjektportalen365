@@ -5,7 +5,8 @@ import {
   CustomError,
   ListLogger,
   ProjectAdminPermission,
-  ProjectInformationParentProject
+  ProjectInformationParentProject,
+  ProjectInformationChildProject
 } from 'pp365-shared-library'
 import { useEffect } from 'react'
 import SPDataAdapter from '../../../data'
@@ -24,6 +25,7 @@ import { fetchProjectStatusReportData } from './fetchProjectStatusReportData'
  * - `SPDataAdapter.portalDataService.getProjectColumns` - fetches project columns
  * - `SPDataAdapter.project.getProjectInformationData` - fetches project properties data
  * - `SPDataAdapter.portalDataService.getParentProjects` - fetches parent projects (only on frontpage)
+ * - `SPDataAdapter.portalDataService.getChildProjects` - fetches child projects (only on frontpage)
  * - `SPDataAdapter.getArchiveStatus` - fetches archive status information (only on frontpage)
  * - `fetchProjectStatusReportData` - fetches project status reports, sections and column config
  *
@@ -47,6 +49,7 @@ const fetchData: DataFetchFunction<
       projectInformationData,
       [reports, sections, columnConfig],
       parentProjects,
+      childProjects,
       archiveStatus
     ] = await Promise.all([
       SPDataAdapter.portalDataService.getProjectColumns(),
@@ -56,6 +59,12 @@ const fetchData: DataFetchFunction<
         ? SPDataAdapter.portalDataService.getParentProjects(
             context.props.webAbsoluteUrl,
             ProjectInformationParentProject
+          )
+        : Promise.resolve([]),
+      isFrontpage
+        ? SPDataAdapter.portalDataService.getChildProjects(
+            context.props.webAbsoluteUrl,
+            ProjectInformationChildProject
           )
         : Promise.resolve([]),
       shouldFetchArchiveStatus
@@ -70,6 +79,7 @@ const fetchData: DataFetchFunction<
       data: {
         columns,
         parentProjects,
+        childProjects,
         reports,
         sections,
         columnConfig,
