@@ -39,17 +39,14 @@ export const RunTemplateSelectorDialog: FC = () => {
       const nodes = await getNavigationNodes()
       localStorage.setItem('pp_navigationNodes', JSON.stringify(nodes))
     } catch (error) {
-      throw error
+      // Log error but don't block the flow - navigation nodes are nice-to-have
+      console.error('Failed to save navigation nodes:', error)
     }
   }
 
   async function getNavigationNodes(): Promise<IMenuNode[]> {
-    try {
-      const menuState = await context.props.sp.navigation.getMenuState()
-      return menuState.Nodes
-    } catch (error) {
-      throw error
-    }
+    const menuState = await context.props.sp.navigation.getMenuState()
+    return menuState.Nodes
   }
 
   return (
@@ -70,8 +67,8 @@ export const RunTemplateSelectorDialog: FC = () => {
           />
           <PrimaryButton
             text={strings.RedoText}
-            onClick={() => {
-              saveNavigationNodes()
+            onClick={async () => {
+              await saveNavigationNodes()
               applyCustomAction()
             }}
           />

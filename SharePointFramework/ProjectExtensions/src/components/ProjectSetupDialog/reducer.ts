@@ -61,13 +61,16 @@ export const initialState: IProjectSetupDialogState = {
 export default (data: IProjectSetupData) =>
   createReducer(initialState, {
     [INIT.type]: (state: IProjectSetupDialogState) => {
+      // Add the "No template" option as the first item if not already present
+      if (!data.templates.some((t) => t.id === -1)) {
+        data.templates.unshift(createNoTemplateOption())
+      }
+      
       let [template] = data.templates.filter((t) => t.isDefault)
       if (!template) template = first(data.templates)
       state.selectedTemplate = template
       state.selectedContentConfig = template?.getContentConfig(data.contentConfig) ?? []
       state.selectedExtensions = template?.getExtensions(data.extensions) ?? []
-      // Add the "No template" option as the first item
-      data.templates.unshift(createNoTemplateOption())
     },
 
     [ON_LIST_CONTENT_CONFIG_CHANGED.type]: (
