@@ -89,6 +89,11 @@ define([], function () {
     CreateParentModalTitle: 'Overordnet prosjekt',
     CreateParentProjectLabel: 'Gjør om til overordnet prosjekt',
     CreateParentSetupProgressText: 'Setter opp overordnet prosjekt',
+    RunTemplateSelectorLabel: 'Kjør malvelger',
+    RunTemplateSelectorModalTitle: 'Kjør malvelger på nytt',
+    RunTemplateSelectorModalSubText:
+      'Dette lar deg velge en mal, tillegg eller standardinnhold som skal legges til prosjektet. Dette kan brukes for feilsøking eller for å legge til ny funksjonalitet.',
+    RunTemplateSelectorSetupProgressText: 'Kjører malvelger',
     CurrentPhaseViewNameFieldLabel: 'Visningsnavn for gjeldende fase',
     DataGroupName: 'Data',
     DefaultGroupByLabel: 'Standard gruppering',

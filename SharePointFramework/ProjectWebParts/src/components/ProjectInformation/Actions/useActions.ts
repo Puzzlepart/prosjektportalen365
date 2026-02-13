@@ -9,6 +9,8 @@ import {
   Info24Regular,
   Organization24Filled,
   Organization24Regular,
+  DocumentTemplate24Filled,
+  DocumentTemplate24Regular,
   bundleIcon
 } from '@fluentui/react-icons'
 import { DisplayMode } from '@microsoft/sp-core-library'
@@ -73,13 +75,23 @@ export const useActions = () => {
     false,
     !context.state.userHasEditPermission
   ]
+  const runTemplateSelectorAction: ActionType = [
+    strings.RunTemplateSelectorLabel,
+    () => {
+      context.dispatch(OPEN_DIALOG('RunTemplateSelectorDialog'))
+    },
+    bundleIcon(DocumentTemplate24Filled, DocumentTemplate24Regular),
+    false,
+    !context.state.userHasEditPermission
+  ]
   const actionsMap: Record<string, ActionType> = {
     showAllProjectInformationAction,
     viewVersionHistoryAction,
     editProjectInformationAction,
     editSiteInformationAction,
     administerChildrenAction: context.state.isParentProject ? administerChildrenAction : null,
-    transformToParentProject: !context.state.isParentProject ? transformToParentProject : null
+    transformToParentProject: !context.state.isParentProject ? transformToParentProject : null,
+    runTemplateSelectorAction
   }
   const actions = Object.keys(actionsMap)
     .map((action) => {

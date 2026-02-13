@@ -25,14 +25,14 @@ export function useProjectSetupDialog(props: IProjectSetupDialogProps) {
   /**
    * Checks if the configuration should be disabled. Configuration
    * tab is disabled if there is no configuration available or there is
-   * no selected template.
+   * no selected template (unless it's the special "No template" option with id -1).
    *
    * @param type Type of configuration to check.
    *
    * @returns `true` if the configuration is disabled.
    */
   const isConfigDisabled = (type: 'extensions' | 'contentConfig') =>
-    _.isEmpty(props.data[type]) || !state.selectedTemplate
+    _.isEmpty(props.data[type]) || (!state.selectedTemplate && state.selectedTemplate?.id !== -1)
 
   return { state, dispatch, onSubmit, isConfigDisabled }
 }

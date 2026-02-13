@@ -55,6 +55,10 @@ declare interface IProjectWebPartsStrings {
   CreateParentModalTitle: string
   CreateParentProjectLabel: string
   CreateParentSetupProgressText: string
+  RunTemplateSelectorLabel: string
+  RunTemplateSelectorModalTitle: string
+  RunTemplateSelectorModalSubText: string
+  RunTemplateSelectorSetupProgressText: string
   CurrentPhaseViewNameFieldLabel: string
   DataGroupName: string
   DefaultGroupByLabel: string

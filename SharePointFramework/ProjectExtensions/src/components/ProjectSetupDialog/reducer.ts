@@ -3,6 +3,44 @@ import { ContentConfig, ProjectExtension, ProjectTemplate } from 'pp365-shared-l
 import { first, uniq } from 'underscore'
 import { IProjectSetupData } from '../../extensions/projectSetup/types'
 import { IProjectSetupDialogState } from './types'
+import strings from 'ProjectExtensionsStrings'
+
+/**
+ * Creates a special "No template" option that can be used to run
+ * the setup wizard without applying a template.
+ */
+const createNoTemplateOption = (): ProjectTemplate => {
+  const noTemplate = new ProjectTemplate(
+    {
+      Id: -1,
+      IsDefaultTemplate: false,
+      IsDefaultExtensionsLocked: false,
+      IsDefaultListContentLocked: false,
+      IsAutoConfigurable: false,
+      IconName: 'PageRemove',
+      ListContentConfigLookupId: [],
+      FieldConfigurationName: null,
+      File: null,
+      FieldValuesAsText: {
+        Title: strings.NoTemplateLabel,
+        GtDescription: strings.NoTemplateDescription
+      },
+      GtProjectTemplateId: -1,
+      GtProjectExtensionsId: [],
+      GtProjectColumns: null,
+      GtProjectCustomColumns: null,
+      GtProjectContentType: null,
+      GtProjectStatusContentType: null,
+      GtIsProgram: false,
+      GtIsParentProject: false,
+      IsHiddenTemplate: false,
+      GtProjectPhaseTermId: null,
+      GtDocumentTemplateLibrary: null
+    },
+    null
+  )
+  return noTemplate
+}
 
 export const INIT = createAction('INIT')
 export const ON_LIST_CONTENT_CONFIG_CHANGED = createAction<ContentConfig[]>(
@@ -28,6 +66,8 @@ export default (data: IProjectSetupData) =>
       state.selectedTemplate = template
       state.selectedContentConfig = template?.getContentConfig(data.contentConfig) ?? []
       state.selectedExtensions = template?.getExtensions(data.extensions) ?? []
+      // Add the "No template" option as the first item
+      data.templates.unshift(createNoTemplateOption())
     },
 
     [ON_LIST_CONTENT_CONFIG_CHANGED.type]: (

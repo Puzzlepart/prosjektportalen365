@@ -7,6 +7,7 @@ import { Actions } from './Actions'
 import { AllPropertiesPanel } from './AllPropertiesPanel'
 import { ArchiveStatus } from './ArchiveStatus'
 import { CreateParentDialog } from './CreateParentDialog'
+import { RunTemplateSelectorDialog } from './RunTemplateSelectorDialog'
 import { EditPropertiesPanel } from './EditPropertiesPanel'
 import { LoadingSkeleton } from './LoadingSkeleton'
 import { ParentProjectsList } from './ParentProjectsList'
@@ -27,6 +28,7 @@ import resource from 'SharedResources'
  * - Show all project information/properties in a panel (`AllPropertiesPanel`)
  * - Edit project information/properties in a panel (`EditPropertiesPanel`)
  * - Promote to parent project (`CreateParentDialog`)
+ * - Run template selector on-demand (`RunTemplateSelectorDialog`)
  */
 export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
   const { fluentProviderId, context } = useProjectInformation(props)
@@ -68,6 +70,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
           <AllPropertiesPanel />
           <EditPropertiesPanel />
           <CreateParentDialog />
+          <RunTemplateSelectorDialog />
         </div>
       </Fluent>
       {context.state.confirmActionProps && <ConfirmDialog {...context.state.confirmActionProps} />}

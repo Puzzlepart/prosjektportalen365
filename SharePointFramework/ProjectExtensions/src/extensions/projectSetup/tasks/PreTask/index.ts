@@ -20,9 +20,16 @@ export class PreTask extends BaseTask {
    */
   public async execute(params: IBaseTaskParams): Promise<IBaseTaskParams> {
     super.initExecute(params)
-    params.templateSchema = await this.data.selectedTemplate.getSchema()
-    if (!params.properties.forceTemplate) {
-      await this.validateParameters(params)
+    
+    // Only load template schema if a real template is selected (not "No template" with id -1)
+    if (this.data.selectedTemplate && this.data.selectedTemplate.id !== -1) {
+      params.templateSchema = await this.data.selectedTemplate.getSchema()
+      if (!params.properties.forceTemplate) {
+        await this.validateParameters(params)
+      }
+    } else {
+      // For "No template" option, create an empty schema
+      params.templateSchema = { Parameters: {} }
     }
 
     try {

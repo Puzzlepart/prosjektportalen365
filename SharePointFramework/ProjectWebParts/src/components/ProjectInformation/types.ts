@@ -16,7 +16,7 @@ import { IProgressDialogProps } from './ProgressDialog/types'
 import { IArchiveStatusInfo } from '../../data/SPDataAdapter/types'
 
 export type ProjectInformationPanelType = 'EditPropertiesPanel' | 'AllPropertiesPanel'
-export type ProjectInformationDialogType = 'CreateParentDialog'
+export type ProjectInformationDialogType = 'CreateParentDialog' | 'RunTemplateSelectorDialog'
 export type ProjectInformationPage = 'Frontpage' | 'ProjectStatus' | 'Portfolio'
 
 export interface IProjectInformationProps extends IBaseWebPartComponentProps {
@@ -155,6 +155,7 @@ export interface IProjectInformationState
    *
    * Can be one of the following:
    * - `CreateParentDialog`
+   * - `RunTemplateSelectorDialog`
    */
   activeDialog?: ProjectInformationDialogType
 

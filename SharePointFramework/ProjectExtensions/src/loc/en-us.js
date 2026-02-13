@@ -155,6 +155,8 @@ define([], function () {
     TemplateSelectorSearchPlaceholder: 'Search project templates...',
     TemplateSelectorTitle: 'Project template',
     TemplateSelectorCommandTitle: 'Get document template',
+    NoTemplateLabel: 'No template',
+    NoTemplateDescription: 'Use this option to run the setup wizard without applying a template. You can still add extensions and standard content.',
     TermSetDoesNotExistError: 'Cannot find term set ID. Check that the term set ID is correct in the template setup.',
     TitleLabel: 'Title',
     ProgressLabel: 'Progress',

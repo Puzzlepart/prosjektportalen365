@@ -93,6 +93,11 @@ define([], function () {
     CreateParentModalTitle: 'Parent project',
     CreateParentProjectLabel: 'Convert to parent project',
     CreateParentSetupProgressText: 'Setting up parent project',
+    RunTemplateSelectorLabel: 'Run template selector',
+    RunTemplateSelectorModalTitle: 'Run template selector again',
+    RunTemplateSelectorModalSubText:
+      'This allows you to select a template, extension, or standard content to be added to the project. This can be used for troubleshooting or to add new functionality.',
+    RunTemplateSelectorSetupProgressText: 'Running template selector',
     CurrentPhaseViewNameFieldLabel: 'Display name for current phase',
     DataGroupName: 'Data',
     DefaultGroupByLabel: 'Default grouping',
