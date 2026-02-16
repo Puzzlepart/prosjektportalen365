@@ -3,9 +3,10 @@ import { useId } from '@fluentui/react-components'
 import { useProjectInformationContext } from '../context'
 import { IChildrenProjectsState } from './types'
 
+// Show toggle for collapse/expand if child projects >= this value
 const COLLAPSE_THRESHOLD = 3
+// Number of child projects to show while collapsed.
 const ROW_LIMIT = 2
-
 
 /**
  * Custom React hook for managing children projects state and collapse logic.
