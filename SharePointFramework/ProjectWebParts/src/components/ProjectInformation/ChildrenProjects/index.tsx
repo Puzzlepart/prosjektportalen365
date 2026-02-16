@@ -1,39 +1,16 @@
 import strings from 'ProjectWebPartsStrings'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC } from 'react'
 import { isEmpty } from 'underscore'
-import { useProjectInformationContext } from '../context'
 import styles from './ChildrenProjects.module.scss'
 import { WebPartTitle, customLightTheme } from 'pp365-shared-library'
-import { Button, FluentProvider, IdPrefixProvider, useId } from '@fluentui/react-components'
-import { CubeRegular, ChevronRightFilled, ChevronDownFilled } from '@fluentui/react-icons'
-
-const COLLAPSE_TRESHOLD = 3
-const COLLAPSE_NUMBER = 2
+import { Button, FluentProvider, IdPrefixProvider } from '@fluentui/react-components'
+import { CubeRegular, ChevronUpFilled, ChevronDownFilled } from '@fluentui/react-icons'
+import { useChildrenProjects } from './useChildrenProjects'
 
 export const ChildProjectsList: FC = () => {
-  const context = useProjectInformationContext()
-  const childProjects = context.state?.data?.childProjects || []
-  const fluentProviderId = useId('fp-children-projects-list')
-  const shouldCollapse = childProjects.length >= COLLAPSE_TRESHOLD
-  const [childProjectsStateArray, setChildProjectsStateArray] = useState(childProjects)
-  const chevronIcon = childProjectsStateArray.length > COLLAPSE_NUMBER ? <ChevronDownFilled/> : <ChevronRightFilled/>
+  const { displayedProjects, shouldShowToggle, viewAll, toggleViewAll, fluentProviderId, isEmpty: isProjectsEmpty } = useChildrenProjects()
 
-  useEffect(() => {
-    setChildProjectsStateArray(childProjects.slice(0,COLLAPSE_NUMBER))
-  },
-  [childProjects]
-  )
-
-function Collapse() {
-  const isExpanded = childProjectsStateArray.length === childProjects.length
-  if (isExpanded) {
-    setChildProjectsStateArray(childProjects.slice(0, COLLAPSE_NUMBER))
-  } else {
-    setChildProjectsStateArray(childProjects)
-  }
-}
-
-  if (isEmpty(childProjects)) return null
+  if (isProjectsEmpty) return null
 
   return (
     <div className={styles.root}>
@@ -41,21 +18,9 @@ function Collapse() {
         title={strings.ChildProjectsHeaderText}
         description={strings.ChildProjectsHeaderDescription}
       />
-      {shouldCollapse ? (
-        <Button
-          onClick={() => (Collapse())}
-          className={styles.button}
-          appearance='subtle'
-          iconPosition='before'
-          style={{ marginBottom: '8px' }}
-          icon={chevronIcon}
-        >
-          {childProjectsStateArray.length > COLLAPSE_NUMBER ? "Vis mindre" : "Vis flere"}
-        </Button>
-      ) : null}
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme}>
-          {childProjectsStateArray.map((project, idx) => {
+          {displayedProjects.map((project, idx) => {
             const onClick = () => {
               if (project.url) {
                 window.open(project.url, '_self')
@@ -74,6 +39,18 @@ function Collapse() {
               </Button>
             )
           })}
+          <div hidden={!shouldShowToggle}>
+            <Button
+              appearance='subtle'
+              size='small'
+              icon={viewAll ? <ChevronUpFilled /> : <ChevronDownFilled />}
+              title={viewAll ? 'Vis mindre' : 'Vis flere'}
+              onClick={toggleViewAll}
+              style={{ marginTop: '8px' }}
+            >
+              {viewAll ? 'Vis mindre' : 'Vis flere'}
+            </Button>
+          </div>
         </FluentProvider>
       </IdPrefixProvider>
     </div>
