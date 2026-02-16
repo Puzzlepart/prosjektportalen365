@@ -1,15 +1,11 @@
 import { useState, useMemo, useEffect } from 'react'
 import { useId } from '@fluentui/react-components'
 import { useProjectInformationContext } from '../context'
+import { IChildrenProjectsState } from './types'
 
 const COLLAPSE_THRESHOLD = 3
 const ROW_LIMIT = 2
 
-export interface IChildrenProjectsState {
-  viewAll: boolean
-  projects: any[]
-  shouldShowToggle: boolean
-}
 
 /**
  * Custom React hook for managing children projects state and collapse logic.
