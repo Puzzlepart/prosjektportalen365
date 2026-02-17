@@ -32,12 +32,14 @@ import {
   PortfolioOverviewView,
   ProjectContentColumn,
   ProjectDataService,
+  ProjectInformationChildProject,
   ProjectListModel,
   SPDataAdapterBase,
   SPProjectItem,
   TimelineConfigurationModel,
   TimelineContentModel
 } from 'pp365-shared-library'
+import { Logger, LogLevel } from '@pnp/logging'
 import { Site } from '@pnp/sp/sites'
 import _ from 'underscore'
 import { DEFAULT_SEARCH_SETTINGS, IProgramHub, IProjectsData } from './types'
@@ -66,7 +68,8 @@ export class SPDataAdapter
 {
   public project: ProjectDataService
   public dataSourceService: DataSourceService
-  public childProjects: Array<Record<string, string>>
+  public childProjects: ProjectInformationChildProject[]
+  private _name = 'SPDataAdapter'
   private _propertyList: IList
   private _propertyItem: IItem
   private _hubWebs: Map<string, any>
@@ -259,7 +262,7 @@ export class SPDataAdapter
     let queryString = ''
     if (this.childProjects.length > maxProjects) {
       this.childProjects.forEach((childProject, index) => {
-        queryString += `${queryProperty}:${childProject.SiteId} `
+        queryString += `${queryProperty}:${childProject.siteId} `
         if (queryString.length > maxQueryLength) {
           aggregatedQueries.push(queryString)
           queryString = ''
@@ -270,7 +273,7 @@ export class SPDataAdapter
       })
     } else {
       this.childProjects.forEach((childProject) => {
-        queryString += `${queryProperty}:${childProject.SiteId} `
+        queryString += `${queryProperty}:${childProject.siteId} `
       })
       aggregatedQueries.push(queryString)
     }
@@ -478,7 +481,7 @@ export class SPDataAdapter
           item?.GtSiteIdLookup?.GtSiteId &&
           this.childProjects.find(
             (child) =>
-              child?.SiteId === item?.GtSiteIdLookup?.GtSiteId ||
+              child?.siteId === item?.GtSiteIdLookup?.GtSiteId ||
               item?.GtSiteIdLookup?.GtSiteId ===
                 this?.spfxContext?.pageContext?.site?.id?.toString()
           )
@@ -629,7 +632,7 @@ export class SPDataAdapter
       .map((project) => {
         return this.childProjects.some(
           (child) =>
-            child?.SiteId === project?.siteId ||
+            child?.siteId === project?.siteId ||
             project?.siteId === this.spfxContext.pageContext.site.id.toString()
         )
           ? project
@@ -937,44 +940,25 @@ export class SPDataAdapter
   }
 
   /**
-   * Fetches child projects from the Prosjektegenskaper list item. The note field `GtChildProjects`
-   * contains a JSON string with the child projects, and needs to be parsed. If the retrieve
-   * fails, an empty array is returned.
-   *
-   * @returns An array of child projects, each represented as a record with `SiteId` and `Title` properties.
-   */
-  public async getChildProjects(): Promise<Array<Record<string, string>>> {
-    try {
-      const projectProperties = await this._propertyItem.select('GtChildProjects')()
-      try {
-        const childProjects = JSON.parse(projectProperties.GtChildProjects)
-        if (_.isEmpty(childProjects)) return []
-
-        const seen = new Set<string>()
-        const uniqueProjects = childProjects.filter((project: Record<string, string>) => {
-          if (seen.has(project.SiteId)) return false
-          seen.add(project.SiteId)
-          return true
-        })
-        return uniqueProjects
-      } catch {
-        return []
-      }
-    } catch {
-      return []
-    }
-  }
-
-  /**
-   * Initialize child projects. Runs `getChildProjects` and sets the `childProjects` property
-   * of the class.
+   * Initialize child projects. Fetches child projects using shared-library implementation
+   * and sets the `childProjects` property of the class.
    */
   public async initChildProjects(): Promise<void> {
     try {
-      this._propertyItem = this._propertyList.items.getById(1)
-      this.childProjects = await this.getChildProjects()
-    } catch (error) {}
+      this.childProjects = await this.portalDataService.getChildProjects(
+        this.spfxContext.pageContext.web.absoluteUrl,
+        ProjectInformationChildProject
+      )
+    } catch (error) {
+      Logger.log({
+        message: `(${this._name}) (initChildProjects) Failed to initialize child projects: ${error.message}`,
+        data: { error },
+        level: LogLevel.Error
+      })
+      this.childProjects = []
+    }
   }
+
 
   /**
    * Fetches all projects associated with the current hubsite context. This is done by querying the
@@ -1081,26 +1065,6 @@ export class SPDataAdapter
   }
 
   /**
-   * Get child project site IDs from the Prosjektegenskaper list item. The note field `GtChildProjects`
-   * contains a JSON string with the child projects, and needs to be parsed. If the retrieve
-   * fails, an empty array is returned.
-   */
-  public async getChildProjectIds(): Promise<string[]> {
-    try {
-      const projectProperties = await this._propertyItem.select('GtChildProjects')()
-      try {
-        const childProjects = JSON.parse(projectProperties.GtChildProjects)
-        const siteIds = childProjects.map((p: Record<string, any>) => p.SiteId)
-        return _.uniq(siteIds)
-      } catch {
-        return []
-      }
-    } catch (error) {
-      return []
-    }
-  }
-
-  /**
    * Fetches current child projects. Fetches all available projects and filters out the ones that are not
    * in the child projects project property `GtChildProjects`. Also initializes the `propertyItem` property
    * of the class, so that it can be used in other methods.
@@ -1109,7 +1073,10 @@ export class SPDataAdapter
     this._propertyItem = this._propertyList.items.getById(1)
     const [availableProjects, childProjects] = await Promise.all([
       this.getHubSiteProjects(hubs),
-      this.getChildProjects()
+      this.portalDataService.getChildProjects(
+        this.spfxContext.pageContext.web.absoluteUrl,
+        ProjectInformationChildProject
+      )
     ])
     const childProjectsSiteIds = childProjects.map((p: Record<string, any>) => p.SiteId)
     return availableProjects.filter((p) => childProjectsSiteIds.indexOf(p.SiteId) !== -1)

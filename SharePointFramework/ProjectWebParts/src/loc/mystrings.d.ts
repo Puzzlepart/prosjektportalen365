@@ -83,6 +83,7 @@ declare interface IProjectWebPartsStrings {
   HideActionsLabel: string
   HideAllActionsLabel: string
   HideParentProjectsLabel: string
+  HideChildProjectsLabel: string
   HideStatusReportLabel: string
   HookAuthFieldDescription: string
   HookAuthFieldLabel: string
@@ -137,6 +138,9 @@ declare interface IProjectWebPartsStrings {
   ParentProjectsGroupName: string
   ParentProjectsHeaderDescription: string
   ParentProjectsHeaderText: string
+  ChildProjectsGroupName: string
+  ChildProjectsHeaderDescription: string
+  ChildProjectsHeaderText: string
   PhaseChecklistLinkText: string
   PhaseFieldFieldLabel: string
   PhaseSitePageTitle: string
@@ -171,6 +175,7 @@ declare interface IProjectWebPartsStrings {
   RedoText: string
   RevertDefaultColorConfigurationText: string
   RiskMatrixGroupName: string
+  RowLimitLabel: string
   SaveColorConfigurationText: string
   SettingsGroupName: string
   ShowAllProjectInformationText: string

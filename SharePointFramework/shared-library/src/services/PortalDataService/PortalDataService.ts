@@ -232,6 +232,57 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   }
 
   /**
+   * Get child projects for a project. Gets the GtChildProjects field
+   * from project properties and transforms SharePoint data.
+   *
+   * @param webUrl Web URL of the current project
+   * @param constructor Constructor / model class
+   */
+  public async getChildProjects<T>(
+    webUrl: string,
+    constructor: new (item: any, web: IWeb) => T
+  ): Promise<T[]> {
+    try {
+      const list = this._getList('PROJECTS')
+      const [currentProject] = await list.items
+        .filter(`GtSiteUrl eq '${webUrl}'`)
+        .select('Id', 'GtChildProjects')()
+
+      if (!currentProject?.GtChildProjects) {
+        return []
+      }
+
+      const childProjects: Array<{ SiteId: string; Title: string; SPWebURL?: string; Path?: string }> =
+        JSON.parse(currentProject.GtChildProjects)
+
+      if (!Array.isArray(childProjects) || childProjects.length === 0) {
+        return []
+      }
+
+      const seen = new Set<string>()
+      const uniqueChildProjects = childProjects.filter((project) => {
+        if (!project?.SiteId || seen.has(project.SiteId)) return false
+        seen.add(project.SiteId)
+        return true
+      })
+
+      return uniqueChildProjects.map((project) =>
+        new constructor(
+          {
+            Title: project.Title,
+            GtSiteUrl: project.SPWebURL || project.Path,
+            GtSiteId: project.SiteId
+          },
+          this.web
+        )
+      )
+    } catch (error) {
+      console.warn('Failed to fetch child projects:', error)
+      return []
+    }
+  }
+
+  /**
    * Get programs from the projects list in the portfolio site.
    *
    * @param constructor Constructor / model class
@@ -447,9 +498,9 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     const urls = await this._getList(list)
       .select('DefaultNewFormUrl', 'DefaultEditFormUrl')
       .expand('DefaultNewFormUrl', 'DefaultEditFormUrl')<{
-      DefaultNewFormUrl: string
-      DefaultEditFormUrl: string
-    }>()
+        DefaultNewFormUrl: string
+        DefaultEditFormUrl: string
+      }>()
     return {
       defaultNewFormUrl: makeUrlAbsolute(urls.DefaultNewFormUrl),
       defaultEditFormUrl: makeUrlAbsolute(urls.DefaultEditFormUrl)
@@ -543,7 +594,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
           fieldsAdded.push(field)
         }
         await executeQuery(jsomContext)
-      } catch (error) {}
+      } catch (error) { }
     }
     try {
       const templateParametersField = spList
@@ -555,7 +606,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         )
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
-    } catch {}
+    } catch { }
     if (ensureList.created && params.properties) {
       ensureList.list.items.add(params.properties)
     }

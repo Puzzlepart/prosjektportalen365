@@ -10,6 +10,7 @@ import { CreateParentDialog } from './CreateParentDialog'
 import { EditPropertiesPanel } from './EditPropertiesPanel'
 import { LoadingSkeleton } from './LoadingSkeleton'
 import { ParentProjectsList } from './ParentProjectsList'
+import { ChildProjectsList } from './ChildProjectsList'
 import { ProgressDialog } from './ProgressDialog'
 import styles from './ProjectInformation.module.scss'
 import { ProjectProperties } from './ProjectProperties'
@@ -60,6 +61,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
           <ProjectProperties />
           <Actions />
           <ParentProjectsList />
+          <ChildProjectsList />
           <ArchiveStatus />
           <ProjectStatusReport />
           <ProgressDialog />
@@ -82,5 +84,8 @@ ProjectInformation.defaultProps = {
   showFieldExternal: {},
   hideStatusReport: false,
   hideArchiveStatus: true,
-  statusReportShowOnlyIcons: true
+  statusReportShowOnlyIcons: true,
+  rowLimit: 6,
+  minRowLimit: 4,
+  maxRowLimit: 100
 }

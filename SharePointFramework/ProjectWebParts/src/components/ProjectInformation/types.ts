@@ -5,6 +5,7 @@ import {
   ProjectColumn,
   EditableSPField,
   ProjectInformationParentProject,
+  ProjectInformationChildProject,
   ProjectTemplate,
   IUserMessageProps
 } from 'pp365-shared-library'
@@ -65,6 +66,11 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   hideParentProjects?: boolean
 
   /**
+   * Hide child projects section
+   */
+  hideChildProjects?: boolean
+
+  /**
    * Hide latest status report
    */
   hideStatusReport?: boolean
@@ -83,6 +89,21 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
    * Show only icons for latest status report
    */
   statusReportShowOnlyIcons?: boolean
+
+  /**
+   * Number of projects to show
+   */
+  rowLimit?: number
+
+  /**
+   * Min number of projects to show
+   */
+  minRowLimit?: number
+
+  /**
+   * Max number of projects to show
+   */
+  maxRowLimit?: number
 
   /**
    * Additional class name for the component (in addition to `styles.root`)
@@ -160,6 +181,11 @@ export interface IProjectInformationData
    * Parent projects
    */
   parentProjects?: ProjectInformationParentProject[]
+
+  /**
+   * Child projects
+   */
+  childProjects?: ProjectInformationChildProject[]
 
   /**
    * The template used for the project

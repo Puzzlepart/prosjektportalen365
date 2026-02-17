@@ -606,9 +606,10 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
                     },
                     {
                       id: 'hookUrl',
-                      title: 'Hook URL (for Trigger)',
+                      title: 'Hook URL',
                       type: CustomCollectionFieldType.string,
-                      placeholder: 'https://...'
+                      placeholder: 'https://...',
+                      required: false
                     },
                     {
                       id: 'iframeContent',
