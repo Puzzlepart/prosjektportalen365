@@ -99,6 +99,21 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<IProje
               ]
             },
             {
+              groupName: strings.ChildProjectsGroupName,
+              groupFields: [
+                PropertyPaneToggle('hideChildProjects', {
+                  label: strings.HideChildProjectsLabel,
+                  checked: propertiesWithDefaults.hideChildProjects
+                }),
+                PropertyPaneSlider('rowLimit', {
+                  label: strings.RowLimitLabel,
+                  min: ProjectInformation.defaultProps.minRowLimit,
+                  max: ProjectInformation.defaultProps.maxRowLimit,
+                  step: 1
+                })
+              ]
+            },
+            {
               groupName: strings.ArchiveGroupName,
               groupFields: [
                 PropertyPaneToggle('hideArchiveStatus', {

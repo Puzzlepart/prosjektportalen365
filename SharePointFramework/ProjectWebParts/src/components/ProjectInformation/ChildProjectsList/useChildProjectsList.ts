@@ -2,11 +2,7 @@ import { useState, useMemo, useEffect } from 'react'
 import { useId } from '@fluentui/react-components'
 import { useProjectInformationContext } from '../context'
 import { IChildProjectsListState } from './types'
-
-// Show toggle for collapse/expand if child projects >= this value
-const COLLAPSE_THRESHOLD = 3
-// Number of child projects to show while collapsed.
-const ROW_LIMIT = 2
+import { isEmpty } from 'underscore'
 
 /**
  * Custom React hook for managing children projects state and collapse logic.
@@ -20,44 +16,28 @@ export function useChildProjectsList() {
   const [state, setState] = useState<IChildProjectsListState>({
     viewAll: false,
     projects: childProjects,
-    shouldShowToggle: childProjects.length >= COLLAPSE_THRESHOLD
+    shouldShowToggle: childProjects.length >= context.props.minRowLimit
   })
 
-  /**
-   * The projects to display based on the current view state
-   */
-  const displayedProjects = useMemo(() => {
-    return state.viewAll ? childProjects : childProjects.slice(0, ROW_LIMIT)
+  const projects = useMemo(() => {
+    return state.viewAll ? childProjects : childProjects.slice(0, context.props.rowLimit)
   }, [childProjects, state.viewAll])
 
-  /**
-   * Function to toggle the viewAll state
-   */
-  const toggleViewAll = () => {
-    setState((prev) => ({
-      ...prev,
-      viewAll: !prev.viewAll
-    }))
-  }
-
-  /**
-   * Update state when childProjects data changes
-   */
   useEffect(() => {
     setState((prev) => ({
       ...prev,
       projects: childProjects,
-      shouldShowToggle: childProjects.length >= COLLAPSE_THRESHOLD
+      shouldShowToggle: childProjects.length > context.props.minRowLimit
     }))
   }, [childProjects])
 
-  const fluentProviderId = useId('fp-children-projects-list')
+  const fluentProviderId = useId('fp-child-projects-list')
 
   return {
     ...state,
-    displayedProjects,
-    toggleViewAll,
+    projects,
+    toggleViewAll: () => setState({ ...state, viewAll: !state.viewAll }),
     fluentProviderId,
-    isEmpty: childProjects.length === 0
+    hideChildProjectsList: context.props.hideChildProjects || isEmpty(childProjects)
   }
 }

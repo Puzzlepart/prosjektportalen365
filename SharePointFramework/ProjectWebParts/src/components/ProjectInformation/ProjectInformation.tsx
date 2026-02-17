@@ -84,5 +84,8 @@ ProjectInformation.defaultProps = {
   showFieldExternal: {},
   hideStatusReport: false,
   hideArchiveStatus: true,
-  statusReportShowOnlyIcons: true
+  statusReportShowOnlyIcons: true,
+  rowLimit: 6,
+  minRowLimit: 4,
+  maxRowLimit: 100
 }

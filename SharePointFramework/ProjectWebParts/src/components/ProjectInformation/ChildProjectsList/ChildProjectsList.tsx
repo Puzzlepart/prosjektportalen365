@@ -3,20 +3,20 @@ import React, { FC } from 'react'
 import styles from './ChildProjectsList.module.scss'
 import { WebPartTitle, customLightTheme } from 'pp365-shared-library'
 import { Button, FluentProvider, IdPrefixProvider } from '@fluentui/react-components'
-import { CubeRegular, ChevronUpFilled, ChevronDownFilled } from '@fluentui/react-icons'
+import { ChevronUpFilled, ChevronDownFilled } from '@fluentui/react-icons'
 import { useChildProjectsList } from './useChildProjectsList'
 
 export const ChildProjectsList: FC = () => {
   const {
-    displayedProjects,
+    projects,
     shouldShowToggle,
     viewAll,
     toggleViewAll,
     fluentProviderId,
-    isEmpty
+    hideChildProjectsList
   } = useChildProjectsList()
 
-  if (isEmpty) return null
+  if (hideChildProjectsList) return null
 
   return (
     <div className={styles.root}>
@@ -26,10 +26,11 @@ export const ChildProjectsList: FC = () => {
       />
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme}>
-          {displayedProjects.map((project, idx) => {
+          {projects.map((p, idx) => {
+            const Icon = p?.icon
             const onClick = () => {
-              if (project.url) {
-                window.open(project.url, '_self')
+              if (typeof p.url === 'string') {
+                window.open(p.url, '_self')
               }
             }
             return (
@@ -37,11 +38,11 @@ export const ChildProjectsList: FC = () => {
                 key={idx}
                 className={styles.button}
                 appearance='subtle'
-                icon={<CubeRegular />}
+                icon={Icon ? <Icon /> : undefined}
                 iconPosition='before'
                 onClick={onClick}
               >
-                <span className={styles.label}>{project.title}</span>
+                <span className={styles.label}>{p.title}</span>
               </Button>
             )
           })}
@@ -52,7 +53,6 @@ export const ChildProjectsList: FC = () => {
               icon={viewAll ? <ChevronUpFilled /> : <ChevronDownFilled />}
               title={viewAll ? 'Vis mindre' : 'Vis flere'}
               onClick={toggleViewAll}
-              style={{ marginTop: '8px' }}
             >
               {viewAll ? 'Vis mindre' : 'Vis flere'}
             </Button>
