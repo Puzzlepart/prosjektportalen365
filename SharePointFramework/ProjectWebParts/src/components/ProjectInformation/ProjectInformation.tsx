@@ -10,6 +10,7 @@ import { CreateParentDialog } from './CreateParentDialog'
 import { EditPropertiesPanel } from './EditPropertiesPanel'
 import { LoadingSkeleton } from './LoadingSkeleton'
 import { ParentProjectsList } from './ParentProjectsList'
+import { ChildProjectsList } from './ChildrenProjects'
 import { ProgressDialog } from './ProgressDialog'
 import styles from './ProjectInformation.module.scss'
 import { ProjectProperties } from './ProjectProperties'
@@ -17,7 +18,6 @@ import { ProjectStatusReport } from './ProjectStatusReport'
 import { ProjectInformationContextProvider } from './context'
 import { IProjectInformationProps } from './types'
 import { useProjectInformation } from './useProjectInformation'
-import { ChildProjectsList } from './ChildrenProjects'
 import resource from 'SharedResources'
 
 /**
@@ -60,8 +60,8 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
           )}
           <ProjectProperties />
           <Actions />
-          <ChildProjectsList />
           <ParentProjectsList />
+          <ChildProjectsList />
           <ArchiveStatus />
           <ProjectStatusReport />
           <ProgressDialog />

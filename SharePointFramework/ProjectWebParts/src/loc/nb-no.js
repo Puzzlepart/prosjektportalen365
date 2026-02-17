@@ -178,11 +178,10 @@ define([], function () {
     ArchiveGroupName: 'Arkivering',
     HideArchiveStatusLabel: 'Skjul arkiveringsstatus',
     ParentProjectsGroupName: 'Overordnede prosjekter',
-    ParentProjectsHeaderDescription:
-      'Her listes alle program/overordnede prosjekter som dette prosjektet tilhører.',
+    ParentProjectsHeaderDescription: 'Her listes alle program/overordnede prosjekter som dette prosjektet tilhører.',
     ParentProjectsHeaderText: 'Overordnede prosjekter',
-    ChildProjectsHeaderText: 'Underområder',
     ChildProjectsHeaderDescription: 'Underområder som administreres av dette prosjektet',
+    ChildProjectsHeaderText: 'Underområder',
     PhaseChecklistLinkText: 'Gå til fasesjekklisten',
     PhaseFieldFieldLabel: 'Fasefelt',
     PhaseUseStartArrowLabel: 'Bruk startpil',
