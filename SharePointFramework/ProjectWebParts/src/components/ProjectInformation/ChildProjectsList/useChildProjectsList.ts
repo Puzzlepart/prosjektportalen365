@@ -34,7 +34,7 @@ export function useChildProjectsList() {
    * Function to toggle the viewAll state
    */
   const toggleViewAll = () => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       viewAll: !prev.viewAll
     }))
@@ -44,7 +44,7 @@ export function useChildProjectsList() {
    * Update state when childProjects data changes
    */
   useEffect(() => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       projects: childProjects,
       shouldShowToggle: childProjects.length >= COLLAPSE_THRESHOLD

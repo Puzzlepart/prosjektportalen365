@@ -1,6 +1,5 @@
 import strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
-import { isEmpty } from 'underscore'
 import styles from './ChildProjectsList.module.scss'
 import { WebPartTitle, customLightTheme } from 'pp365-shared-library'
 import { Button, FluentProvider, IdPrefixProvider } from '@fluentui/react-components'
@@ -8,7 +7,14 @@ import { CubeRegular, ChevronUpFilled, ChevronDownFilled } from '@fluentui/react
 import { useChildProjectsList } from './useChildProjectsList'
 
 export const ChildProjectsList: FC = () => {
-  const { displayedProjects, shouldShowToggle, viewAll, toggleViewAll, fluentProviderId, isEmpty: isProjectsEmpty } = useChildProjectsList()
+  const {
+    displayedProjects,
+    shouldShowToggle,
+    viewAll,
+    toggleViewAll,
+    fluentProviderId,
+    isEmpty: isProjectsEmpty
+  } = useChildProjectsList()
 
   if (isProjectsEmpty) return null
 
@@ -56,4 +62,3 @@ export const ChildProjectsList: FC = () => {
     </div>
   )
 }
-
