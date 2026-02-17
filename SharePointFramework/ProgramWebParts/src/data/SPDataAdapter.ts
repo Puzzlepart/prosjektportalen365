@@ -961,29 +961,6 @@ export class SPDataAdapter
 
 
   /**
-   * Fetches child projects using shared-library implementation.
-   * This method delegates to the portalDataService for consistency.
-   *
-   * @returns An array of ProjectInformationChildProject instances
-   */
-  public async getChildProjects(): Promise<ProjectInformationChildProject[]> {
-    try {
-      return []
-/*       return await this.portalDataService.getChildProjects(
-        this.spfxContext.pageContext.web.absoluteUrl,
-        ProjectInformationChildProject */
-
-    } catch (error) {
-      Logger.log({
-        message: `(${this._name}) (getChildProjects) Failed to fetch child projects: ${error.message}`,
-        data: { error },
-        level: LogLevel.Error
-      })
-      return []
-    }
-  }
-
-  /**
    * Fetches all projects associated with the current hubsite context. This is done by querying the
    * search index for all sites with the same DepartmentId as the current hubsite and all project items with
    * the same DepartmentId as the current hubsite. The sites are then matched with the items to
@@ -1088,26 +1065,6 @@ export class SPDataAdapter
   }
 
   /**
-   * Get child project site IDs from the Prosjektegenskaper list item. The note field `GtChildProjects`
-   * contains a JSON string with the child projects, and needs to be parsed. If the retrieve
-   * fails, an empty array is returned.
-   */
-  public async getChildProjectIds(): Promise<string[]> {
-    try {
-      const projectProperties = await this._propertyItem.select('GtChildProjects')()
-      try {
-        const childProjects = JSON.parse(projectProperties.GtChildProjects)
-        const siteIds = childProjects.map((p: Record<string, any>) => p.SiteId)
-        return _.uniq(siteIds)
-      } catch {
-        return []
-      }
-    } catch (error) {
-      return []
-    }
-  }
-
-  /**
    * Fetches current child projects. Fetches all available projects and filters out the ones that are not
    * in the child projects project property `GtChildProjects`. Also initializes the `propertyItem` property
    * of the class, so that it can be used in other methods.
@@ -1116,7 +1073,10 @@ export class SPDataAdapter
     this._propertyItem = this._propertyList.items.getById(1)
     const [availableProjects, childProjects] = await Promise.all([
       this.getHubSiteProjects(hubs),
-      this.getChildProjects()
+      this.portalDataService.getChildProjects(
+        this.spfxContext.pageContext.web.absoluteUrl,
+        ProjectInformationChildProject
+      )
     ])
     const childProjectsSiteIds = childProjects.map((p: Record<string, any>) => p.SiteId)
     return availableProjects.filter((p) => childProjectsSiteIds.indexOf(p.SiteId) !== -1)

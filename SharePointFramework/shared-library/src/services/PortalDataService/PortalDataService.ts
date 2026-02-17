@@ -243,7 +243,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     constructor: new (item: any, web: IWeb) => T
   ): Promise<T[]> {
     try {
-      // Get the current project's properties to find child projects
       const list = this._getList('PROJECTS')
       const [currentProject] = await list.items
         .filter(`GtSiteUrl eq '${webUrl}'`)
@@ -260,7 +259,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         return []
       }
 
-      // Remove duplicates and filter out empty entries
       const seen = new Set<string>()
       const uniqueChildProjects = childProjects.filter((project) => {
         if (!project?.SiteId || seen.has(project.SiteId)) return false
@@ -268,42 +266,16 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         return true
       })
 
-      // Fetch project details for each child project
-      const childProjectsData = await Promise.all(
-        uniqueChildProjects.map(async (childProject) => {
-          try {
-            const [projectItem] = await list.items
-              .filter(`GtSiteId eq '${childProject.SiteId}'`)
-              .select('Title', 'GtSiteUrl', 'GtSiteId')()
-
-            if (projectItem) {
-              return new constructor(
-                {
-                  Title: projectItem.Title,
-                  GtSiteUrl: projectItem.GtSiteUrl || childProject.SPWebURL || childProject.Path,
-                  GtSiteId: projectItem.GtSiteId
-                },
-                this.web
-              )
-            }
-            return null
-          } catch (error) {
-            console.warn(`Failed to fetch child project details for ${childProject.SiteId}:`, error)
-            // Fallback to using data from GtChildProjects field
-            return new constructor(
-              {
-                Title: childProject.Title,
-                GtSiteUrl: childProject.SPWebURL || childProject.Path,
-                GtSiteId: childProject.SiteId
-              },
-              this.web
-            )
-          }
-        })
+      return uniqueChildProjects.map((project) =>
+        new constructor(
+          {
+            Title: project.Title,
+            GtSiteUrl: project.SPWebURL || project.Path,
+            GtSiteId: project.SiteId
+          },
+          this.web
+        )
       )
-
-      // Filter out null entries and return the child projects
-      return childProjectsData.filter(project => project !== null)
     } catch (error) {
       console.warn('Failed to fetch child projects:', error)
       return []
@@ -526,9 +498,9 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     const urls = await this._getList(list)
       .select('DefaultNewFormUrl', 'DefaultEditFormUrl')
       .expand('DefaultNewFormUrl', 'DefaultEditFormUrl')<{
-      DefaultNewFormUrl: string
-      DefaultEditFormUrl: string
-    }>()
+        DefaultNewFormUrl: string
+        DefaultEditFormUrl: string
+      }>()
     return {
       defaultNewFormUrl: makeUrlAbsolute(urls.DefaultNewFormUrl),
       defaultEditFormUrl: makeUrlAbsolute(urls.DefaultEditFormUrl)
@@ -622,7 +594,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
           fieldsAdded.push(field)
         }
         await executeQuery(jsomContext)
-      } catch (error) {}
+      } catch (error) { }
     }
     try {
       const templateParametersField = spList
@@ -634,7 +606,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         )
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
-    } catch {}
+    } catch { }
     if (ensureList.created && params.properties) {
       ensureList.list.items.add(params.properties)
     }
