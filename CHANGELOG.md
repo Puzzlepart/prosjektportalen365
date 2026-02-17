@@ -11,7 +11,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Bestillingsportalen støtte for standalone skjema for bestilling av områder som også støtter Teams. Denne appen erstatter PowerAppen som følger med Bestillingsportalen.
 - Støtte for beregnede kolonner i aggregerte oversikter [#1563](https://github.com/Puzzlepart/prosjektportalen365/issues/1563)
 - Støtte for å bestille underområder direkte fra et program/overordnet område via Bestillingsportalen-skjema. Merk! Krever oppgradering av Bestillingsportalen
-- Ny komponent i prosjektinformasjon webdel som viser underområder for et overordnet prosjekt. 
+- Ny seksjon i `Prosjektinformasjon` som viser underområder tilknyttet området.
 
 ### Forbedringer
 
