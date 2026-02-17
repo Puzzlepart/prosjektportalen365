@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import { useId } from '@fluentui/react-components'
 import { useProjectInformationContext } from '../context'
-import { IChildrenProjectsState } from './types'
+import { IChildProjectsListState } from './types'
 
 // Show toggle for collapse/expand if child projects >= this value
 const COLLAPSE_THRESHOLD = 3
@@ -13,11 +13,11 @@ const ROW_LIMIT = 2
  *
  * @returns An object containing the children projects state, toggle function, and other utilities.
  */
-export function useChildrenProjects() {
+export function useChildProjectsList() {
   const context = useProjectInformationContext()
   const childProjects = context.state?.data?.childProjects || []
 
-  const [state, setState] = useState<IChildrenProjectsState>({
+  const [state, setState] = useState<IChildProjectsListState>({
     viewAll: false,
     projects: childProjects,
     shouldShowToggle: childProjects.length >= COLLAPSE_THRESHOLD

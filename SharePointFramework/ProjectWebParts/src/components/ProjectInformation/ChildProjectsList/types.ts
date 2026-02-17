@@ -1,4 +1,4 @@
-export interface IChildrenProjectsState {
+export interface IChildProjectsListState {
   /**
    * An array of project objects.
    */
