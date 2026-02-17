@@ -13,10 +13,10 @@ export const ChildProjectsList: FC = () => {
     viewAll,
     toggleViewAll,
     fluentProviderId,
-    isEmpty: isProjectsEmpty
+    isEmpty
   } = useChildProjectsList()
 
-  if (isProjectsEmpty) return null
+  if (isEmpty) return null
 
   return (
     <div className={styles.root}>
