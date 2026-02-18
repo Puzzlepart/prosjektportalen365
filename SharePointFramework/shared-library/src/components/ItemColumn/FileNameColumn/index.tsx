@@ -17,6 +17,7 @@ export const FileNameColumn: ColumnRenderComponent<IFileNameColumnProps> = (prop
     }
 
     const fileRef = props.item.FileRef as string
+    const fileType = props.item.File_x0020_Type || props.item.FileExtension
     const parts = fileRef.split('/').filter((p) => p)
     let siteUrl = window.location.origin
 
@@ -24,7 +25,11 @@ export const FileNameColumn: ColumnRenderComponent<IFileNameColumnProps> = (prop
       siteUrl = `${siteUrl}/sites/${parts[1]}`
     }
 
-    return `${siteUrl}/_layouts/15/Doc.aspx?sourcedoc=${encodeURIComponent(fileRef)}&action=default`
+    if (fileType === 'pdf') {
+      return `${siteUrl}/_layouts/15/WopiFrame.aspx?sourcedoc=${encodeURIComponent(fileRef)}?download=1`
+    }
+
+    return `${siteUrl}/_layouts/15/Doc.aspx?sourcedoc=${encodeURIComponent(fileRef)}&action=view`
   }
 
   const fileUrl = getFileUrl()
