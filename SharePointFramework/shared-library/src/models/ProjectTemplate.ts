@@ -23,6 +23,7 @@ export interface IProjectTemplateSPItem {
   GtProjectCustomColumns: string
   GtProjectContentType: string
   GtProjectStatusContentType: string
+  GtTimelineContentType: string
   GtIsProgram: boolean
   GtIsParentProject: boolean
   IsHiddenTemplate: boolean
@@ -50,6 +51,7 @@ export class ProjectTemplate extends UserSelectableObject {
   private _autoConfigurable: boolean = false
   private _projectContentType: string
   private _projectStatusContentType: string
+  private _timelineContentTypeId: string
   private _projectColumns: string
   private _projectCustomColumns: string
   private _projectPhaseTermId: string
@@ -85,6 +87,7 @@ export class ProjectTemplate extends UserSelectableObject {
     this._autoConfigurable = spItem.IsAutoConfigurable
     this._projectContentType = spItem.GtProjectContentType
     this._projectStatusContentType = spItem.GtProjectStatusContentType
+    this._timelineContentTypeId = spItem.GtTimelineContentType
     this._projectColumns = spItem.GtProjectColumns
     this._projectCustomColumns = spItem.GtProjectCustomColumns
     this._projectPhaseTermId = spItem.GtProjectPhaseTermId
@@ -96,6 +99,13 @@ export class ProjectTemplate extends UserSelectableObject {
    */
   public get autoConfigure(): boolean {
     return this._autoConfigurable && this.isLocked
+  }
+
+  /**
+   * Gets the timeline content type ID for this template.
+   */
+  public get timelineContentTypeId(): string {
+    return this._timelineContentTypeId
   }
 
   /**
@@ -136,6 +146,7 @@ export class ProjectTemplate extends UserSelectableObject {
       ProjectContentTypeId: this._projectContentType ?? schema.Parameters.ProjectContentTypeId,
       ProjectStatusContentTypeId:
         this._projectStatusContentType ?? schema.Parameters.ProjectStatusContentTypeId,
+      ...(this._timelineContentTypeId && { TimelineContentTypeId: this._timelineContentTypeId }),
       ProvisionSiteFields: this._projectColumns ?? schema.Parameters.ProvisionSiteFields,
       CustomSiteFields: this._projectCustomColumns ?? schema.Parameters.CustomSiteFields,
       TermSetIds: {

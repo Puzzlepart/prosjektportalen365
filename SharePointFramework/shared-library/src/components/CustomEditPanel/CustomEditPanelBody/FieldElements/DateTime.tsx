@@ -9,7 +9,7 @@ import { DayOfWeek } from '@fluentui/react'
 export const DateTime: FieldElementComponent = ({ field }) => {
   const context = useCustomEditPanelContext()
   const [popupRef, setPopupRef] = useState<HTMLDivElement | null>(null)
-  
+
   return (
     <FieldContainer
       iconName='Calendar'

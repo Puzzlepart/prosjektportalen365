@@ -286,9 +286,12 @@ if (-not $CI.IsPresent) {
 else {
     $StopWatch.Stop()
     Write-Host "Done building release $RELEASE_NAME in $($StopWatch.ElapsedMilliseconds/1000)s" -ForegroundColor Green
+    Set-Location $START_PATH
 }
 
 if ($USE_CHANNEL_CONFIG) {
     Remove-Item -Path "$PSScriptRoot/../.current-channel-config.json" -Force -ErrorAction SilentlyContinue
 }
+
+exit 0
 #endregion

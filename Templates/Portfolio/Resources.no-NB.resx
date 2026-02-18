@@ -902,7 +902,7 @@
     <value>Oversikt</value>
   </data>
   <data name="ClientSidePages_ProgramProjectTimeline_PageName" xml:space="preserve">
-    <value>Timeline.aspx</value>
+    <value>Programtidslinje.aspx</value>
   </data>
   <data name="ClientSidePages_ProgramProjectTimeline_Title" xml:space="preserve">
     <value>Programtidslinje</value>
@@ -1239,6 +1239,12 @@
   </data>
   <data name="ContentTypes_Timeline_Element_Name" xml:space="preserve">
     <value>Tidslinjeelement</value>
+  </data>
+  <data name="ContentTypes_TimelineElements_Description" xml:space="preserve">
+    <value>Konfigurasjon av tidslinjeelementer for prosjektmaler</value>
+  </data>
+  <data name="ContentTypes_TimelineElements_Name" xml:space="preserve">
+    <value>Tidslinjeelementer</value>
   </data>
   <data name="ContentTypes_TimelineConfiguration_Element_Description" xml:space="preserve">
     <value>Opprett et nytt tidslinjekonfigurasjonelement</value>
@@ -1924,6 +1930,12 @@
   <data name="Lists_ListContent_Title" xml:space="preserve">
     <value>Listeinnhold</value>
   </data>
+  <data name="Lists_ListContent_Timeline_Description" xml:space="preserve">
+    <value>Standard tidslinjeelementer for prosjekter</value>
+  </data>
+  <data name="Lists_ListContent_Timeline_Title" xml:space="preserve">
+    <value>Tidslinje</value>
+  </data>
   <data name="Lists_ListContent_Url" xml:space="preserve">
     <value>Lists/Listeinnhold</value>
   </data>
@@ -2443,6 +2455,12 @@
   <data name="Lists_TemplateOptions_Fields_GtProjectStatusContentType_DisplayName" xml:space="preserve">
     <value>Prosjektstatus innholdstype</value>
   </data>
+  <data name="Lists_TemplateOptions_Fields_GtTimelineContentType_Description" xml:space="preserve">
+    <value>Angi innholdstype-ID for tidslinjeinnhold. La stå tom for å bruke standard innholdstype.</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_GtTimelineContentType_DisplayName" xml:space="preserve">
+    <value>Tidslinje innholdstype</value>
+  </data>
   <data name="Lists_TemplateOptions_Fields_GtProjectTemplate_Description" xml:space="preserve">
     <value>Velg PnP-malen som skal brukes ved opprettelse av prosjekter</value>
   </data>
@@ -2536,6 +2554,12 @@
   <data name="Lists_TimelineConfiguration_Field_GtSortOrder_Description" xml:space="preserve">
     <value>Angi prioritering av elementet under tilhørende gruppe/prosjekt på tidslinjen, benytt f. eks 31 dersom du vil at elementet skal ligge mellom element 30 og 40.</value>
   </data>
+  <data name="SiteFields_GtTemplateOptions_Description" xml:space="preserve">
+    <value>Velg hvilke maler denne kategorien skal være tilgjengelig for. La stå tom for å gjøre kategorien tilgjengelig for alle maler.</value>
+  </data>
+  <data name="SiteFields_GtTemplateOptions_DisplayName" xml:space="preserve">
+    <value>Maler</value>
+  </data>
   <data name="Lists_TimelineConfiguration_Title" xml:space="preserve">
     <value>Tidslinjekonfigurasjon</value>
   </data>
@@ -2568,6 +2592,15 @@
   </data>
   <data name="Lists_TimelineContent_Url" xml:space="preserve">
     <value>Lists/Tidslinjeinnhold</value>
+  </data>
+  <data name="Lists_TimelineElements_Description" xml:space="preserve">
+    <value>Tidslinjeelementer som kan kopieres til prosjekter</value>
+  </data>
+  <data name="Lists_TimelineElements_Title" xml:space="preserve">
+    <value>Tidslinjeelementer</value>
+  </data>
+  <data name="Lists_TimelineElements_Url" xml:space="preserve">
+    <value>Lists/Tidslinjeelementer</value>
   </data>
   <data name="Lists_Uncertainty_Title" xml:space="preserve">
     <value>Usikkerhet</value>

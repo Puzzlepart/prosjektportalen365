@@ -1240,6 +1240,12 @@
   <data name="ContentTypes_Timeline_Element_Name" xml:space="preserve">
     <value>Timeline Element</value>
   </data>
+  <data name="ContentTypes_TimelineElements_Description" xml:space="preserve">
+    <value>Configuration of timeline elements for project templates</value>
+  </data>
+  <data name="ContentTypes_TimelineElements_Name" xml:space="preserve">
+    <value>Timeline Elements</value>
+  </data>
   <data name="ContentTypes_TimelineConfiguration_Element_Description" xml:space="preserve">
     <value>Create a new timeline configuration element</value>
   </data>
@@ -1924,6 +1930,12 @@
   <data name="Lists_ListContent_Title" xml:space="preserve">
     <value>List Content</value>
   </data>
+  <data name="Lists_ListContent_Timeline_Description" xml:space="preserve">
+    <value>Standard timeline elements for projects</value>
+  </data>
+  <data name="Lists_ListContent_Timeline_Title" xml:space="preserve">
+    <value>Timeline</value>
+  </data>
   <data name="Lists_ListContent_Url" xml:space="preserve">
     <value>Lists/ListContent</value>
   </data>
@@ -2443,6 +2455,12 @@
   <data name="Lists_TemplateOptions_Fields_GtProjectStatusContentType_DisplayName" xml:space="preserve">
     <value>Content Type for Project Status</value>
   </data>
+  <data name="Lists_TemplateOptions_Fields_GtTimelineContentType_Description" xml:space="preserve">
+    <value>Specify the content type ID for timeline content. Leave empty to use default content type.</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_GtTimelineContentType_DisplayName" xml:space="preserve">
+    <value>Timeline Content Type</value>
+  </data>
   <data name="Lists_TemplateOptions_Fields_GtProjectTemplate_Description" xml:space="preserve">
     <value>Select the PnP template to apply when creating projects</value>
   </data>
@@ -2536,6 +2554,12 @@
   <data name="Lists_TimelineConfiguration_Field_GtSortOrder_Description" xml:space="preserve">
     <value>Specify the priority of the item under its group/project on the timeline, use for example 31 if you want the item to be between elements 30 and 40.</value>
   </data>
+  <data name="SiteFields_GtTemplateOptions_Description" xml:space="preserve">
+    <value>Select which templates this category should be available for. Leave empty to make the category available for all templates.</value>
+  </data>
+  <data name="SiteFields_GtTemplateOptions_DisplayName" xml:space="preserve">
+    <value>Templates</value>
+  </data>
   <data name="Lists_TimelineConfiguration_Title" xml:space="preserve">
     <value>Timeline Configuration</value>
   </data>
@@ -2568,6 +2592,15 @@
   </data>
   <data name="Lists_TimelineContent_Url" xml:space="preserve">
     <value>Lists/TimelineContent</value>
+  </data>
+  <data name="Lists_TimelineElements_Description" xml:space="preserve">
+    <value>Timeline elements that can be copied to projects</value>
+  </data>
+  <data name="Lists_TimelineElements_Title" xml:space="preserve">
+    <value>Timeline Elements</value>
+  </data>
+  <data name="Lists_TimelineElements_Url" xml:space="preserve">
+    <value>Lists/TimelineElements</value>
   </data>
   <data name="Lists_Uncertainty_Title" xml:space="preserve">
     <value>Uncertainty</value>

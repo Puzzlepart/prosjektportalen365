@@ -186,6 +186,20 @@
                 },
                 &quot;altText&quot;: &quot;&quot;,
                 &quot;rawPreviewImageMinCanvasWidth&quot;: 32767
+            },
+            {
+                &quot;sourceItem&quot;: {
+                    &quot;itemType&quot;: 4,
+                    &quot;fileExtension&quot;: &quot;&quot;,
+                    &quot;progId&quot;: &quot;&quot;
+                },
+                &quot;thumbnailType&quot;: 2,
+                &quot;id&quot;: 20,
+                &quot;fabricReactIcon&quot;: {
+                    &quot;iconName&quot;: &quot;TimelineDelivery&quot;
+                },
+                &quot;altText&quot;: &quot;&quot;,
+                &quot;rawPreviewImageMinCanvasWidth&quot;: 32767
             }
         ],
         &quot;isMigrated&quot;: true,
@@ -223,10 +237,12 @@
             &quot;items[1].description&quot;: &quot;{resource:Lists_PlannerTasks_Description}&quot;,
             &quot;items[2].description&quot;: &quot;{resource:Lists_Stakeholders_Description}&quot;,
             &quot;items[3].description&quot;: &quot;{resource:Lists_TemplateLibrary_Description}&quot;,
+            &quot;items[4].description&quot;: &quot;{resource:Lists_TimelineElements_Description}&quot;,
             &quot;items[0].title&quot;: &quot;{resource:Lists_PhaseChecklist_Title}&quot;,
             &quot;items[1].title&quot;: &quot;{resource:Lists_PlannerTasks_Title}&quot;,
             &quot;items[2].title&quot;: &quot;{resource:Lists_Stakeholders_Title}&quot;,
-            &quot;items[3].title&quot;: &quot;{resource:Lists_TemplateLibrary_Title}&quot;
+            &quot;items[3].title&quot;: &quot;{resource:Lists_TemplateLibrary_Title}&quot;,
+            &quot;items[4].title&quot;: &quot;{resource:Lists_TimelineElements_Title}&quot;
         },
         &quot;imageSources&quot;: {},
         &quot;links&quot;: {
@@ -234,7 +250,8 @@
             &quot;items[0].sourceItem.url&quot;: &quot;{site}/{resource:Lists_PhaseChecklist_Url}&quot;,
             &quot;items[1].sourceItem.url&quot;: &quot;{site}/{resource:Lists_PlannerTasks_Url}&quot;,
             &quot;items[2].sourceItem.url&quot;: &quot;{site}/{resource:Lists_Stakeholders_Url}&quot;,
-            &quot;items[3].sourceItem.url&quot;: &quot;{site}/{resource:Lists_TemplateLibrary_Url}&quot;
+            &quot;items[3].sourceItem.url&quot;: &quot;{site}/{resource:Lists_TemplateLibrary_Url}&quot;,
+            &quot;items[4].sourceItem.url&quot;: &quot;{site}/{resource:Lists_TimelineElements_Url}&quot;
         },
         &quot;componentDependencies&quot;: {
             &quot;layoutComponentId&quot;: &quot;706e33c8-af37-4e7b-9d22-6e5694d92a6f&quot;

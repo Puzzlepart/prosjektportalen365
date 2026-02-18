@@ -258,7 +258,7 @@ export const ListView: FC<IListViewProps> = ({
                         {isFirstColumn && onFirstColumnClick ? (
                           <TableCellLayout>
                             {isFile && fileUrl ? (
-                              <Link href={fileUrl} target="_blank" rel="noopener noreferrer">
+                              <Link href={fileUrl} target='_blank' rel='noopener noreferrer'>
                                 {cellContent}
                               </Link>
                             ) : (

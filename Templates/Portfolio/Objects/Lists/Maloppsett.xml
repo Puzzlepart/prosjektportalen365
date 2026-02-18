@@ -45,6 +45,9 @@
     <Field Type="Text" DisplayName="{resource:Lists_TemplateOptions_Fields_GtProjectStatusContentType_DisplayName}" MaxLength="255" ID="{eff52d5b-052b-4ba2-8fdc-ca3ca5c49cb1}" StaticName="GtProjectStatusContentType" Name="GtProjectStatusContentType">
       <Default>0x010022252E35737A413FB56A1BA53862F6D5</Default>
     </Field>
+    <Field Type="Text" DisplayName="{resource:Lists_TemplateOptions_Fields_GtTimelineContentType_DisplayName}" MaxLength="255" ID="{2a5e6c8d-9f4a-4b3c-8d7e-1f2a3b4c5d6e}" StaticName="GtTimelineContentType" Name="GtTimelineContentType">
+      <Default>0x01006EE320A23C8F4A6C83F3E36A19F076B9</Default>
+    </Field>
     <Field Type="Boolean" DisplayName="{resource:Lists_TemplateOptions_Fields_IsHiddenTemplate_DisplayName}" ID="{09735712-3dcd-4158-b661-9dce9f80e4f0}" StaticName="IsHiddenTemplate" Name="IsHiddenTemplate">
       <Default>0</Default>
     </Field>

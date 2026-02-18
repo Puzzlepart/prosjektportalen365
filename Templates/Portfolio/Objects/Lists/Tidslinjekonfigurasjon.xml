@@ -20,6 +20,7 @@
                 <FieldRef Name="GtShowElementPortfolio" />
                 <FieldRef Name="GtShowElementProgram" />
                 <FieldRef Name="GtTimelineFilter" />
+                <FieldRef Name="GtTemplateOptions" />
             </ViewFields>
             <RowLimit Paged="TRUE">30</RowLimit>
             <Aggregations Value="Off" />

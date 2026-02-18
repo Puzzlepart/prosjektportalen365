@@ -7,7 +7,10 @@ import { ProjectTimelineContext } from '../context'
 import resource from 'SharedResources'
 
 /**
- * Returns an array of menu items for the toolbar in the PortfolioOverview component.
+ * Returns an array of menu items for the toolbar in the ProjectTimeline component.
+ *
+ * New items: Sets ContentTypeId from template parameters if available.
+ * Edit items: Preserves the original ContentTypeId to prevent accidental changes.
  *
  * @returns An array of IListMenuItem objects representing the toolbar items.
  */
@@ -53,15 +56,30 @@ export function useToolbarItems() {
   const menuItems = useMemo<ListMenuItem[]>(
     () => [
       new ListMenuItem(strings.NewItemLabel, strings.NewItemLabel).setIcon('Add').setOnClick(() => {
+        const allowedTimelineTypes =
+          context.state.timelineConfig?.map((config) => config.title) || []
+
         context.setState({
           panel: {
             headerText: strings.NewTimelineContentText,
+            allowedLookupValues: {
+              GtTimelineTypeLookup: allowedTimelineTypes
+            },
             submit: {
               onSubmit: async ({ properties }) => {
-                await SPDataAdapter.portalDataService.addItemToList('TIMELINE_CONTENT', {
+                const itemProperties: any = {
                   ...properties,
                   GtSiteIdLookupId: context.state.data.projectId
-                })
+                }
+
+                if (context.state.data.timelineContentTypeId) {
+                  itemProperties.ContentTypeId = context.state.data.timelineContentTypeId
+                }
+
+                await SPDataAdapter.portalDataService.addItemToList(
+                  'TIMELINE_CONTENT',
+                  itemProperties
+                )
                 dismissPanel()
               }
             }
@@ -76,17 +94,32 @@ export function useToolbarItems() {
             context.state.data.listItems.find((_, idx) => idx === id)
           )
 
-          const fieldValues = new ItemFieldValues(_.first(selectedItems))
+          const selectedItem = _.first(selectedItems)
+          const fieldValues = new ItemFieldValues(selectedItem)
+          const allowedTimelineTypes =
+            context.state.timelineConfig?.map((config) => config.title) || []
+
           context.setState({
             panel: {
               headerText: strings.EditTimelineContentText,
               fieldValues,
+              allowedLookupValues: {
+                GtTimelineTypeLookup: allowedTimelineTypes
+              },
               submit: {
                 onSubmit: async ({ properties }) => {
+                  const updateProperties: any = {
+                    ...properties
+                  }
+
+                  if (selectedItem?.ContentTypeId) {
+                    updateProperties.ContentTypeId = selectedItem.ContentTypeId
+                  }
+
                   await SPDataAdapter.portalDataService.updateItemInList(
                     'TIMELINE_CONTENT',
                     fieldValues.id,
-                    properties
+                    updateProperties
                   )
                   dismissPanel()
                 }
@@ -95,7 +128,7 @@ export function useToolbarItems() {
           })
         })
     ],
-    [context.props, context.state.selectedItems]
+    [context.props, context.state.selectedItems, context.state.timelineConfig]
   )
 
   const farMenuItems = useMemo<ListMenuItem[]>(
