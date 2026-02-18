@@ -226,7 +226,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
           let addedFile
           if (folderPath) {
             const folderServerRelativeUrl = `${listRootPath}/${folderPath}`
-            console.log('[useToolbarItems.uploadFiles] Uploading to folder:', {
+            sessionStorage.DEBUG || DEBUG && console.log('[useToolbarItems.uploadFiles] Uploading to folder:', {
               listName: context.props.listName,
               folderPath,
               folderServerRelativeUrl
@@ -331,7 +331,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
         let addedFile
         if (folderPath) {
           const folderServerRelativeUrl = `${listRootPath}/${folderPath}`
-          console.log('[useToolbarItems.createDocument] Creating in folder:', {
+          sessionStorage.DEBUG || DEBUG && console.log('[useToolbarItems.createDocument] Creating in folder:', {
             listName: context.props.listName,
             folderPath,
             folderServerRelativeUrl

@@ -28,7 +28,7 @@ export const FileNameColumn: ColumnRenderComponent<IFileNameColumnProps> = (prop
     }
 
     if (fileType === 'pdf') {
-      return `${siteUrl}/_layouts/15/WopiFrame.aspx?sourcedoc=${encodeURIComponent(fileRef)}?download=1`
+      return `${fileRef}?download=1`
     }
 
     return `${siteUrl}/_layouts/15/Doc.aspx?sourcedoc=${encodeURIComponent(fileRef)}&action=view`

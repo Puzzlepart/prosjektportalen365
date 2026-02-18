@@ -57,7 +57,7 @@ export const DocumentLibraryView: FC = () => {
         }
       }
 
-      console.log('[DocumentLibraryView] Filtering items:', {
+      sessionStorage.DEBUG || DEBUG && console.log('[DocumentLibraryView] Filtering items:', {
         currentPath,
         projectFolderName,
         libraryRootPath,
@@ -73,7 +73,7 @@ export const DocumentLibraryView: FC = () => {
           const projectFolderPath = `${libraryRootPath}/${projectFolderName}`
           const match = item.FileDirRef === projectFolderPath
           if (!match && filteredItems.indexOf(item) < 3) {
-            console.log('[DocumentLibraryView] Item at root with project folder (no match):', {
+            sessionStorage.DEBUG || DEBUG && console.log('[DocumentLibraryView] Item at root with project folder (no match):', {
               itemPath: item.FileDirRef,
               expectedPath: projectFolderPath,
               itemName: item.FileLeafRef
@@ -87,8 +87,6 @@ export const DocumentLibraryView: FC = () => {
           return item.FileDirRef === fullCurrentPath
         }
       })
-
-      console.log('[DocumentLibraryView] Filtered to', itemsToDisplay.length, 'items')
     }
 
     if (viewMode === DocumentLibraryViewMode.Flat) {
@@ -121,22 +119,13 @@ export const DocumentLibraryView: FC = () => {
     const projectFolderName = context.props.useProjectFolder ? context.props.webTitle : null
     const isAtProjectFolder = projectFolderName && currentPath === projectFolderName
 
-    console.log('[DocumentLibraryView] Breadcrumb calculation:', {
-      currentPath,
-      projectFolderName,
-      isAtProjectFolder,
-      useProjectFolder: context.props.useProjectFolder
-    })
-
     if (!currentPath) {
       const targetPath = projectFolderName || ''
-      console.log('[DocumentLibraryView] No current path, root will navigate to:', targetPath)
       return [
         {
           text: projectFolderName || context.state.data?.listTitle || strings.DynamicList.Documents,
           key: 'root',
           onClick: () => {
-            console.log('[DocumentLibraryView] Root clicked, navigating to:', targetPath)
             context.setState({ currentFolderPath: targetPath })
           }
         }
@@ -151,10 +140,6 @@ export const DocumentLibraryView: FC = () => {
         onClick: isAtProjectFolder
           ? undefined
           : () => {
-              console.log(
-                '[DocumentLibraryView] Root breadcrumb clicked, navigating to:',
-                rootTargetPath
-              )
               context.setState({ currentFolderPath: rootTargetPath })
             }
       }
@@ -220,7 +205,7 @@ export const DocumentLibraryView: FC = () => {
         newPath = `${currentPath}/${fileName}`
       }
 
-      console.log('[DocumentLibraryView] handleFileClick - Navigating to folder:', {
+      sessionStorage.DEBUG || DEBUG && console.log('[DocumentLibraryView] handleFileClick - Navigating to folder:', {
         fileName,
         currentPath,
         projectFolderName,
@@ -274,7 +259,7 @@ export const DocumentLibraryView: FC = () => {
           let addedFile
           if (folderPath) {
             const folderServerRelativeUrl = `${listRootPath}/${folderPath}`
-            console.log('[DocumentLibraryView] Uploading to folder:', {
+            sessionStorage.DEBUG || DEBUG && console.log('[DocumentLibraryView] Uploading to folder:', {
               listName: context.props.listName,
               folderPath,
               folderServerRelativeUrl
