@@ -5,6 +5,7 @@ import { DynamicListContext } from '../../context'
 import { useColumns } from '../../useColumns'
 import styles from './SingleItemView.module.scss'
 import { customLightTheme, UserMessage } from 'pp365-shared-library'
+import * as strings from 'ProjectWebPartsStrings'
 
 /**
  * Renders a single list item in a detailed view.
@@ -23,8 +24,8 @@ export const SingleItemView: FC = () => {
     return (
       <div style={{ padding: '0 32px' }}>
         <UserMessage
-          title='Ingen element funnet'
-          text='Det finnes ingen elementer å vise'
+          title={strings.DynamicList.NoItemFound}
+          text={strings.DynamicList.NoItemsMessage}
           intent='info'
         />
       </div>
@@ -37,7 +38,7 @@ export const SingleItemView: FC = () => {
         <div className={styles.singleItemView}>
           {(context.props.showItemTitle === undefined || context.props.showItemTitle) && (
             <div className={styles.header}>
-              <h1 className={styles.title}>{item.Title || item?.FileLeafRef || 'Uten tittel'}</h1>
+              <h1 className={styles.title}>{item.Title || item?.FileLeafRef || strings.DynamicList.Untitled}</h1>
             </div>
           )}
           <div className={styles.fields}>

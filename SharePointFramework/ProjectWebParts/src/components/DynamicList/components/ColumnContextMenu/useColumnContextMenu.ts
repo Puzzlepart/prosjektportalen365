@@ -1,6 +1,7 @@
 import { IContextualMenuItem } from '@fluentui/react'
 import { MenuProps } from '@fluentui/react-components'
 import { useContext, useEffect, useState } from 'react'
+import * as strings from 'ProjectWebPartsStrings'
 import { DynamicListContext } from '../../context'
 
 /**
@@ -43,7 +44,7 @@ export function useColumnContextMenu() {
   const menuItems: IContextualMenuItem[] = [
     {
       key: 'GROUP_BY',
-      text: `Grupper etter ${columnName}`,
+      text: strings.DynamicList.GroupByColumn.replace('{0}', columnName as string),
       iconProps: { iconName: 'GroupList' },
       canCheck: false,
       disabled: !isGroupable,

@@ -37,6 +37,7 @@ import {
   FluentProvider,
   IdPrefixProvider
 } from '@fluentui/react-components'
+import * as strings from 'ProjectWebPartsStrings'
 
 const Icons = {
   ContentView: bundleIcon(ContentView24Filled, ContentView24Regular)
@@ -110,11 +111,11 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
     if (!context.props.listName) return
 
     const selectedCount = context.state.selectedItems.length
-    const confirmed = window.confirm(
-      `Er du sikker på at du vil slette ${selectedCount} ${
-        selectedCount === 1 ? 'element' : 'elementer'
-      }?`
-    )
+    const confirmMessage = selectedCount === 1
+      ? strings.DynamicList.ConfirmDelete.replace('{0}', selectedCount.toString())
+      : strings.DynamicList.ConfirmDeleteMultiple.replace('{0}', selectedCount.toString())
+
+    const confirmed = window.confirm(confirmMessage)
 
     if (!confirmed) return
 
@@ -312,15 +313,15 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
         switch (documentType) {
           case 'word':
-            fileName = `Nytt Word-dokument ${timestamp}.docx`
+            fileName = strings.DynamicList.NewWordDocument.replace('{0}', timestamp.toString())
             contentType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
             break
           case 'excel':
-            fileName = `Ny Excel-arbeidsbok ${timestamp}.xlsx`
+            fileName = strings.DynamicList.NewExcelWorkbook.replace('{0}', timestamp.toString())
             contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             break
           case 'powerpoint':
-            fileName = `Ny PowerPoint-presentasjon ${timestamp}.pptx`
+            fileName = strings.DynamicList.NewPowerPointPresentation.replace('{0}', timestamp.toString())
             contentType =
               'application/vnd.openxmlformats-officedocument.presentationml.presentation'
             break
@@ -425,8 +426,8 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       if (!action.hookUrl) {
         dispatchToast(
           <Toast appearance='inverted'>
-            <ToastTitle>Feil konfigurering</ToastTitle>
-            <ToastBody>Hook URL er ikke konfigurert for denne handlingen.</ToastBody>
+            <ToastTitle>{strings.DynamicList.ConfigurationError}</ToastTitle>
+            <ToastBody>{strings.DynamicList.HookUrlNotConfigured}</ToastBody>
           </Toast>,
           { intent: 'error' }
         )
@@ -440,8 +441,8 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       if (selectedItems.length === 0) {
         dispatchToast(
           <Toast appearance='inverted'>
-            <ToastTitle>Ingen elementer valgt</ToastTitle>
-            <ToastBody>Vennligst velg minst ett element for å utføre denne handlingen.</ToastBody>
+            <ToastTitle>{strings.DynamicList.NoItemsSelected}</ToastTitle>
+            <ToastBody>{strings.DynamicList.NoItemsSelectedMessage}</ToastBody>
           </Toast>,
           { intent: 'warning' }
         )
@@ -478,7 +479,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
         dispatchToast(
           <Toast appearance='inverted'>
             <ToastTitle>{action.name}</ToastTitle>
-            <ToastBody>Handlingen ble utført. {result.message || 'OK'}</ToastBody>
+            <ToastBody>{strings.DynamicList.ActionCompleted.replace('{0}', result.message || 'OK')}</ToastBody>
           </Toast>,
           { intent: 'success' }
         )
@@ -493,12 +494,12 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
           error.message?.includes('CORS')
 
         const errorMessage = isCorsError
-          ? 'CORS-feil: Serveren tillater ikke forespørsler fra denne domenen. Kontakt administrator for å konfigurere CORS-headere.'
-          : `Kunne ikke utføre handlingen: ${error.message}`
+          ? strings.DynamicList.CorsError
+          : strings.DynamicList.CouldNotExecuteAction.replace('{0}', error.message)
 
         dispatchToast(
           <Toast appearance='inverted'>
-            <ToastTitle>Feil ved utføring</ToastTitle>
+            <ToastTitle>{strings.DynamicList.ActionFailed}</ToastTitle>
             <ToastBody>{errorMessage}</ToastBody>
           </Toast>,
           { intent: 'error' }
@@ -516,7 +517,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
     if (showBackButton) {
       items.push(
-        new ListMenuItem('Tilbake', 'Tilbake til listevisning')
+        new ListMenuItem(strings.DynamicList.Back, strings.DynamicList.BackToListView)
           .setIcon(ArrowLeftRegular)
           .setOnClick(() => {
             if (context.state.isDrilledDown) {
@@ -542,7 +543,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
       if (context.props.showNewWordButton !== false) {
         documentMenuItems.push(
-          new ListMenuItem('Word-dokument').setIcon('WordDocument').setOnClick(async () => {
+          new ListMenuItem(strings.DynamicList.WordDocument).setIcon('WordDocument').setOnClick(async () => {
             await createDocument('word')
           })
         )
@@ -550,7 +551,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
       if (context.props.showNewExcelButton !== false) {
         documentMenuItems.push(
-          new ListMenuItem('Excel-arbeidsbok').setIcon('ExcelDocument').setOnClick(async () => {
+          new ListMenuItem(strings.DynamicList.ExcelWorkbook).setIcon('ExcelDocument').setOnClick(async () => {
             await createDocument('excel')
           })
         )
@@ -558,7 +559,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
       if (context.props.showNewPowerPointButton !== false) {
         documentMenuItems.push(
-          new ListMenuItem('PowerPoint-presentasjon')
+          new ListMenuItem(strings.DynamicList.PowerPointPresentation)
             .setIcon('PowerPointDocument')
             .setOnClick(async () => {
               await createDocument('powerpoint')
@@ -568,7 +569,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
       if (context.props.showUploadButton !== false) {
         documentMenuItems.push(
-          new ListMenuItem('Last opp fil').setIcon('Upload').setOnClick(() => {
+          new ListMenuItem(strings.DynamicList.UploadFile).setIcon('Upload').setOnClick(() => {
             const input = document.createElement('input')
             input.type = 'file'
             input.multiple = true
@@ -586,7 +587,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
       if (documentMenuItems.length > 0) {
         items.push(
-          new ListMenuItem('Ny', 'Opprett nytt dokument eller last opp fil')
+          new ListMenuItem(strings.DynamicList.New, strings.DynamicList.NewDocumentOrUpload)
             .setDisabled(!context.state.permissions?.canAdd)
             .setIcon(AddRegular)
             .setItems(documentMenuItems)
@@ -598,7 +599,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       context.props.showNewButton !== false
     ) {
       items.push(
-        new ListMenuItem('Nytt element', 'Opprett et nytt element')
+        new ListMenuItem(strings.DynamicList.NewItem, strings.DynamicList.CreateNewItem)
           .setDisabled(!context.state.permissions?.canAdd)
           .setIcon(AddRegular)
           .setOnClick(() => {
@@ -607,7 +608,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
             context.setState({
               panel: {
-                headerText: 'Nytt element',
+                headerText: strings.DynamicList.NewItem,
                 fieldValues: fieldValues,
                 submit: {
                   onSubmit: async ({ properties }) => {
@@ -622,7 +623,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
     if (!context.state.isDocumentLibrary && context.props.showEditButton !== false) {
       items.push(
-        new ListMenuItem('Rediger element', 'Rediger valgt element')
+        new ListMenuItem(strings.DynamicList.EditItem, strings.DynamicList.EditSelectedItem)
           .setIcon(EditRegular)
           .setDisabled(
             !context.state.permissions?.canEdit ||
@@ -639,7 +640,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
               const fieldValues = new ItemFieldValues(item)
               context.setState({
                 panel: {
-                  headerText: 'Rediger element',
+                  headerText: strings.DynamicList.EditItem,
                   fieldValues,
                   submit: {
                     onSubmit: async ({ properties }) => {
@@ -657,13 +658,13 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       items.push(
         new ListMenuItem()
           .setSearchBox({
-            placeholder: `Søk i ${
+            placeholder: strings.DynamicList.SearchIn.replace('{0}',
               context.state.currentView?.title?.toLowerCase() ||
               context.state.data?.listTitle?.toLowerCase() ||
               'liste'
-            }...`,
-            title: 'Søk',
-            'aria-label': 'Søk',
+            ),
+            title: strings.DynamicList.Search,
+            'aria-label': strings.DynamicList.Search,
             value: context.state.searchTerm || '',
             onChange: (_, { value }) => context.setState({ searchTerm: value }),
             contentAfter: {
@@ -721,10 +722,10 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       const selectedCount = context.state.selectedItems?.length || 0
       const tooltipText =
         selectedCount > 0
-          ? `Eksporter ${selectedCount} valgt${selectedCount === 1 ? '' : 'e'} element${
-              selectedCount === 1 ? '' : 'er'
-            } til Excel`
-          : 'Eksporter til Excel'
+          ? strings.DynamicList.ExportSelected
+              .replace('{0}', selectedCount.toString())
+              .replace('{1}', selectedCount === 1 ? '' : 's')
+          : strings.DynamicList.ExportToExcel
 
       items.push(
         new ListMenuItem(selectedCount > 0 ? selectedCount.toString() : undefined, tooltipText)
@@ -744,7 +745,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
       if (context.state.isDocumentLibrary && context.props.showViewModeToggle !== false) {
         viewMenuItems.push(
-          new ListMenuItem('Mappevisning')
+          new ListMenuItem(strings.DynamicList.FolderView)
             .makeCheckable({
               name: 'documentViewMode',
               value: DocumentLibraryViewMode.Folders
@@ -754,7 +755,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
                 documentLibraryViewMode: DocumentLibraryViewMode.Folders
               })
             }),
-          new ListMenuItem('Flat visning')
+          new ListMenuItem(strings.DynamicList.FlatView)
             .makeCheckable({
               name: 'documentViewMode',
               value: DocumentLibraryViewMode.Flat
@@ -769,7 +770,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       }
 
       const regularViews = context.state.views.map((view) =>
-        new ListMenuItem(view.isDefault ? `${view.title} (Default)` : view.title)
+        new ListMenuItem(view.isDefault ? `${view.title}${strings.DynamicList.Default}` : view.title)
           .makeCheckable({
             name: 'views',
             value: view.id
@@ -784,8 +785,8 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
       items.push(
         new ListMenuItem(
-          context.state.currentView?.title || 'Velg visning',
-          'Velg en visning å vise'
+          context.state.currentView?.title || strings.DynamicList.SelectView,
+          strings.DynamicList.SelectViewTooltip
         )
           .setIcon(Icons.ContentView)
           .setWidth('fit-content')
@@ -797,7 +798,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
     if (context.props.showRefreshButton !== false) {
       items.push(
-        new ListMenuItem(null, 'Oppdater').setIcon('ArrowSync').setOnClick(() => {
+        new ListMenuItem(null, strings.DynamicList.Refresh).setIcon('ArrowSync').setOnClick(() => {
           context.setState({
             isRefetching: true,
             refetch: new Date().getTime()
@@ -808,7 +809,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
     if (context.props.showDeleteButton !== false) {
       items.push(
-        new ListMenuItem('Slett', 'Slett valgte elementer')
+        new ListMenuItem(strings.DynamicList.Delete, strings.DynamicList.DeleteSelectedItems)
           .setIcon(DeleteRegular)
           .setDisabled(
             !context.state.permissions?.canDelete ||
@@ -823,7 +824,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
     if (!isSingleView && context.props.showFilters) {
       items.push(
-        new ListMenuItem(null, 'Vis/skjul filtre').setIcon(FilterRegular).setOnClick(() => {
+        new ListMenuItem(null, strings.DynamicList.ShowHideFilters).setIcon(FilterRegular).setOnClick(() => {
           context.setState({ showFilterPanel: !context.state.showFilterPanel })
         })
       )

@@ -16,6 +16,7 @@ import '@pnp/sp/folders'
 import '@pnp/sp/files'
 import '@pnp/sp/files/folder'
 import styles from './DocumentLibraryView.module.scss'
+import * as strings from 'ProjectWebPartsStrings'
 
 /**
  * DocumentLibraryView displays SharePoint document library items.
@@ -132,7 +133,7 @@ export const DocumentLibraryView: FC = () => {
       console.log('[DocumentLibraryView] No current path, root will navigate to:', targetPath)
       return [
         {
-          text: projectFolderName || context.state.data?.listTitle || 'Documents',
+          text: projectFolderName || context.state.data?.listTitle || strings.DynamicList.Documents,
           key: 'root',
           onClick: () => {
             console.log('[DocumentLibraryView] Root clicked, navigating to:', targetPath)
@@ -145,7 +146,7 @@ export const DocumentLibraryView: FC = () => {
     const rootTargetPath = projectFolderName || ''
     const items = [
       {
-        text: projectFolderName || context.state.data?.listTitle || 'Documents',
+        text: projectFolderName || context.state.data?.listTitle || strings.DynamicList.Documents,
         key: 'root',
         onClick: isAtProjectFolder
           ? undefined
@@ -317,7 +318,7 @@ export const DocumentLibraryView: FC = () => {
     <FileUploadZone onFilesSelected={handleFilesSelected} fullScreen>
       {viewMode === DocumentLibraryViewMode.Folders && breadcrumbItems.length > 1 && (
         <div className={styles.breadcrumb}>
-          <Breadcrumb aria-label='Folder navigation'>
+          <Breadcrumb aria-label={strings.DynamicList.FolderNavigation}>
             {breadcrumbItems.map((item, index) => (
               <React.Fragment key={item.key}>
                 <BreadcrumbItem>
@@ -340,10 +341,10 @@ export const DocumentLibraryView: FC = () => {
         onFirstColumnClick={handleFileClick}
         emptyMessage={
           breadcrumbItems.length > 1
-            ? 'Ingen dokumenter å vise i valgt mappe, gå tilbake ved å navigere i menyen over'
-            : 'Ingen dokumenter å vise'
+            ? strings.DynamicList.NoDocumentsInFolder
+            : strings.DynamicList.NoDocuments
         }
-        noColumnsMessage='Ingen kolonner å vise'
+        noColumnsMessage={strings.DynamicList.NoColumnsToShow}
         className={styles.documentLibraryView}
       />
     </FileUploadZone>
