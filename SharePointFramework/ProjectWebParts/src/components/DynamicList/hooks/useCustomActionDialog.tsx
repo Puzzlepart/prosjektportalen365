@@ -23,6 +23,7 @@ import {
 import { customLightTheme } from 'pp365-shared-library'
 import { DynamicListContext } from '../context'
 import { ICustomAction } from '../types'
+import * as strings from 'ProjectWebPartsStrings'
 
 interface DialogState {
   isOpen: boolean
@@ -106,19 +107,19 @@ export function useCustomActionDialog() {
             dispatchToast(
               <Toast appearance='inverted'>
                 <ToastTitle>{actionName}</ToastTitle>
-                <ToastBody>Innhold lastet vellykket</ToastBody>
+                <ToastBody>{strings.DynamicList.ContentLoadedSuccessfully}</ToastBody>
               </Toast>,
               { intent: 'success' }
             )
 
             return true
           } else if (result.status === 'failed') {
-            throw new Error(result.message || 'Behandling feilet')
+            throw new Error(result.message || strings.DynamicList.ProcessingFailed)
           } else if (result.status === 'processing') {
             if (attempts < maxAttempts) {
               setTimeout(poll, pollInterval)
             } else {
-              throw new Error('Tidsavbrudd - behandlingen tok for lang tid')
+              throw new Error(strings.DynamicList.TimeoutError)
             }
           }
         } catch (error) {
@@ -129,19 +130,19 @@ export function useCustomActionDialog() {
             error.message?.includes('CORS')
 
           const errorMessage = isCorsError
-            ? 'CORS-feil: Serveren tillater ikke forespørsler fra dette domenet. Kontakt administrator for å konfigurere CORS-headere.'
-            : `Kunne ikke hente innhold: ${error.message}`
+            ? strings.DynamicList.CorsError
+            : strings.DynamicList.CouldNotFetchContent.replace('{0}', error.message)
 
           setDialogState((prev) => ({
             ...prev,
             isLoading: false,
             isPolling: false,
-            error: `Polling feilet: ${errorMessage}`
+            error: strings.DynamicList.PollingFailed.replace('{0}', errorMessage)
           }))
 
           dispatchToast(
             <Toast appearance='inverted'>
-              <ToastTitle>Feil ved henting</ToastTitle>
+              <ToastTitle>{strings.DynamicList.FetchError}</ToastTitle>
               <ToastBody>{errorMessage}</ToastBody>
             </Toast>,
             { intent: 'error' }
@@ -173,8 +174,8 @@ export function useCustomActionDialog() {
       if (!action.hookUrl) {
         dispatchToast(
           <Toast appearance='inverted'>
-            <ToastTitle>Feil konfigurering</ToastTitle>
-            <ToastBody>Hook URL er ikke konfigurert for denne handlingen.</ToastBody>
+            <ToastTitle>{strings.DynamicList.ConfigurationError}</ToastTitle>
+            <ToastBody>{strings.DynamicList.HookUrlNotConfigured}</ToastBody>
           </Toast>,
           { intent: 'error' }
         )
@@ -200,7 +201,7 @@ export function useCustomActionDialog() {
           ...prev,
           isLoading: false,
           isSending: false,
-          error: 'Ingen elementer valgt. Vennligst velg minst ett element.'
+          error: strings.DynamicList.NoItemsSelectedError
         }))
         return
       }
@@ -249,7 +250,7 @@ export function useCustomActionDialog() {
             iframeContent: content
           }))
         } else {
-          throw new Error('Ingen iframe-innhold eller poll-URL mottatt')
+          throw new Error(strings.DynamicList.NoIframeContent)
         }
       } catch (error) {
         console.error('Error executing dialog action:', error)
@@ -259,8 +260,8 @@ export function useCustomActionDialog() {
           error.message?.includes('CORS')
 
         const errorMessage = isCorsError
-          ? 'CORS-feil: Serveren tillater ikke forespørsler fra denne domenen. Kontakt administrator for å konfigurere CORS-headere.'
-          : `Feil ved utføring: ${error.message}`
+          ? strings.DynamicList.CorsError
+          : strings.DynamicList.ExecutionError.replace('{0}', error.message)
 
         setDialogState((prev) => ({
           ...prev,
@@ -272,7 +273,7 @@ export function useCustomActionDialog() {
 
         dispatchToast(
           <Toast appearance='inverted'>
-            <ToastTitle>Feil ved utføring</ToastTitle>
+            <ToastTitle>{strings.DynamicList.ActionFailed}</ToastTitle>
             <ToastBody>{errorMessage}</ToastBody>
           </Toast>,
           { intent: 'error' }
@@ -308,7 +309,7 @@ export function useCustomActionDialog() {
                 {dialogState.error && (
                   <MessageBar intent='error' style={{ marginBottom: '16px' }}>
                     <MessageBarBody>
-                      <MessageBarTitle>Feil</MessageBarTitle>
+                      <MessageBarTitle>{strings.DynamicList.Error}</MessageBarTitle>
                       {dialogState.error}
                     </MessageBarBody>
                   </MessageBar>
@@ -327,12 +328,12 @@ export function useCustomActionDialog() {
                     <Spinner size='large' />
                     {dialogState.isSending && (
                       <MessageBar intent='info'>
-                        <MessageBarBody>Sender data for valgt element...</MessageBarBody>
+                        <MessageBarBody>{strings.DynamicList.SendingData}</MessageBarBody>
                       </MessageBar>
                     )}
                     {dialogState.isPolling && (
                       <MessageBar intent='info'>
-                        <MessageBarBody>Henter innhold fra server...</MessageBarBody>
+                        <MessageBarBody>{strings.DynamicList.FetchingContent}</MessageBarBody>
                       </MessageBar>
                     )}
                   </div>
@@ -348,7 +349,7 @@ export function useCustomActionDialog() {
             </DialogBody>
             <DialogActions>
               <Button appearance='secondary' onClick={closeDialog}>
-                {dialogState.isLoading ? 'Avbryt' : 'Lukk'}
+                {dialogState.isLoading ? strings.DynamicList.Cancel : strings.DynamicList.Close}
               </Button>
             </DialogActions>
           </DialogSurface>

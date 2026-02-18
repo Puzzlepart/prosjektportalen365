@@ -24,6 +24,7 @@ import { DynamicListContext } from '../../context'
 import { customLightTheme, UserMessage } from 'pp365-shared-library'
 import styles from './ListView.module.scss'
 import { IListViewProps } from './types'
+import * as strings from 'ProjectWebPartsStrings'
 
 /**
  * Base ListView component that provides common table rendering functionality
@@ -34,8 +35,8 @@ export const ListView: FC<IListViewProps> = ({
   items,
   isDocumentLibrary,
   onFirstColumnClick,
-  emptyMessage = 'Ingen elementer å vise',
-  noColumnsMessage = 'Ingen kolonner å vise',
+  emptyMessage = strings.DynamicList.NoItemsToShow,
+  noColumnsMessage = strings.DynamicList.NoColumnsToShow,
   className
 }) => {
   const context = useContext(DynamicListContext)
@@ -170,7 +171,7 @@ export const ListView: FC<IListViewProps> = ({
   if (!items.length) {
     return (
       <div style={{ padding: '0 32px' }}>
-        <UserMessage title='Ingen elementer funnet' text={emptyMessage} intent='info' />
+        <UserMessage title={strings.DynamicList.NoItemsFound} text={emptyMessage} intent='info' />
       </div>
     )
   }
@@ -178,7 +179,7 @@ export const ListView: FC<IListViewProps> = ({
   if (!columns.length) {
     return (
       <div style={{ padding: '0 32px' }}>
-        <UserMessage title='Ingen kolonner funnet' text={noColumnsMessage} intent='info' />
+        <UserMessage title={strings.DynamicList.NoItemsFound} text={noColumnsMessage} intent='info' />
       </div>
     )
   }
@@ -191,7 +192,7 @@ export const ListView: FC<IListViewProps> = ({
             ref={tableRef}
             {...columnSizingState.getTableProps()}
             sortable
-            aria-label='List table'
+            aria-label={strings.DynamicList.ListTable}
             noNativeElements={true}
           >
             <TableHeader>

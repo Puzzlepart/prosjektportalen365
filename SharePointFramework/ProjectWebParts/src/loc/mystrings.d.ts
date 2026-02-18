@@ -302,6 +302,85 @@ declare interface IProjectWebPartsStrings {
   ArchiveStatusDocumentCount: string
   ArchiveStatusListCount: string
   ArchiveStatusTotalCount: string
+  DynamicList: {
+    DefaultTitle: string
+    NoListSelected: string
+    NoListSelectedMessage: string
+    RefetchingData: string
+    SiteIdFieldsMissing: string
+    SiteIdFieldsMissingMessage: string
+    NoItemsToShow: string
+    NoColumnsToShow: string
+    ConfirmDelete: string
+    ConfirmDeleteMultiple: string
+    ConfigurationError: string
+    HookUrlNotConfigured: string
+    NoItemsSelected: string
+    NoItemsSelectedMessage: string
+    ActionCompleted: string
+    ActionFailed: string
+    CorsError: string
+    CouldNotExecuteAction: string
+    Back: string
+    BackToListView: string
+    New: string
+    NewDocumentOrUpload: string
+    WordDocument: string
+    ExcelWorkbook: string
+    PowerPointPresentation: string
+    UploadFile: string
+    NewItem: string
+    CreateNewItem: string
+    EditItem: string
+    EditSelectedItem: string
+    SearchIn: string
+    Search: string
+    ExportSelected: string
+    ExportToExcel: string
+    FolderView: string
+    FlatView: string
+    Default: string
+    SelectView: string
+    SelectViewTooltip: string
+    Refresh: string
+    Delete: string
+    DeleteSelectedItems: string
+    ShowHideFilters: string
+    NewWordDocument: string
+    NewExcelWorkbook: string
+    NewPowerPointPresentation: string
+    NoItemFound: string
+    NoItemsMessage: string
+    Untitled: string
+    Documents: string
+    NoDocumentsInFolder: string
+    NoDocuments: string
+    DragFilesOrClick: string
+    UploadingFiles: string
+    DropFilesToUpload: string
+    PleaseWait: string
+    FilesWillBeUploaded: string
+    Uploading: string
+    SelectFiles: string
+    ContentLoadedSuccessfully: string
+    ProcessingFailed: string
+    TimeoutError: string
+    CouldNotFetchContent: string
+    PollingFailed: string
+    FetchError: string
+    NoItemsSelectedError: string
+    NoIframeContent: string
+    ExecutionError: string
+    Error: string
+    SendingData: string
+    FetchingContent: string
+    Cancel: string
+    Close: string
+    NoItemsFound: string
+    ListTable: string
+    GroupByColumn: string
+    FolderNavigation: string
+  }
 }
 
 declare module 'ProjectWebPartsStrings' {

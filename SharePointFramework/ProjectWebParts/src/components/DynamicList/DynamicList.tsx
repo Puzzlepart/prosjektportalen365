@@ -23,6 +23,7 @@ import { Spinner, Skeleton, SkeletonItem } from '@fluentui/react-components'
 import SPDataAdapter from '../../data'
 import { useToolbarItems } from './useToolbarItems'
 import styles from './DynamicList.module.scss'
+import * as strings from 'ProjectWebPartsStrings'
 
 /**
  * Internal component that renders the main content of the DynamicList.
@@ -48,14 +49,14 @@ const DynamicListContent: FC<{
       <>
         <div className={styles.header}>
           <WebPartTitle
-            title={context.props.title || 'Dynamisk liste'}
+            title={context.props.title || strings.DynamicList.DefaultTitle}
             description={context.props.infoText}
           />
         </div>
         <div style={{ padding: '0 32px' }}>
           <UserMessage
-            title='Ingen liste valgt'
-            text='Vennligst velg en liste i webdel-egenskapene for å vise innhold.'
+            title={strings.DynamicList.NoListSelected}
+            text={strings.DynamicList.NoListSelectedMessage}
             intent='info'
           />
         </div>
@@ -73,7 +74,7 @@ const DynamicListContent: FC<{
         ) : (
           <WebPartTitle
             title={
-              (context.props.title?.trim() || context.state.data?.listTitle) ?? 'Dynamisk liste'
+              (context.props.title?.trim() || context.state.data?.listTitle) ?? strings.DynamicList.DefaultTitle
             }
             description={context.props.infoText}
           />
@@ -82,7 +83,7 @@ const DynamicListContent: FC<{
       {context.state.isRefetching ? (
         <Spinner
           size='extra-tiny'
-          label='Oppdaterer og henter data på nytt...'
+          label={strings.DynamicList.RefetchingData}
           style={{ padding: 10, minHeight: '20px' }}
         />
       ) : (
@@ -103,8 +104,8 @@ const DynamicListContent: FC<{
           {context.state.data?.siteIdFieldMissing && (
             <div style={{ padding: '0 32px', marginBottom: '16px' }}>
               <UserMessage
-                title='Område-id relaterte felter ikke funnet'
-                text='Område-id (GtSiteId) og Område tittel (GtSiteTitle) feltene må finnes på liste/dokumentbiblioteket for å ta i bruk denne funksjonaliteten. Bruk knappen i webdel-egenskapene for å legge til feltene, eller opprett dette manuelt på listen/dokumentbiblioteket.'
+                title={strings.DynamicList.SiteIdFieldsMissing}
+                text={strings.DynamicList.SiteIdFieldsMissingMessage}
                 intent='warning'
               />
             </div>

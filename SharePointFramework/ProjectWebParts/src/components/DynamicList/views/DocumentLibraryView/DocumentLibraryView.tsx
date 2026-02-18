@@ -16,6 +16,7 @@ import '@pnp/sp/folders'
 import '@pnp/sp/files'
 import '@pnp/sp/files/folder'
 import styles from './DocumentLibraryView.module.scss'
+import * as strings from 'ProjectWebPartsStrings'
 
 /**
  * DocumentLibraryView displays SharePoint document library items.
@@ -56,7 +57,7 @@ export const DocumentLibraryView: FC = () => {
         }
       }
 
-      console.log('[DocumentLibraryView] Filtering items:', {
+      sessionStorage.DEBUG || DEBUG && console.log('[DocumentLibraryView] Filtering items:', {
         currentPath,
         projectFolderName,
         libraryRootPath,
@@ -72,7 +73,7 @@ export const DocumentLibraryView: FC = () => {
           const projectFolderPath = `${libraryRootPath}/${projectFolderName}`
           const match = item.FileDirRef === projectFolderPath
           if (!match && filteredItems.indexOf(item) < 3) {
-            console.log('[DocumentLibraryView] Item at root with project folder (no match):', {
+            sessionStorage.DEBUG || DEBUG && console.log('[DocumentLibraryView] Item at root with project folder (no match):', {
               itemPath: item.FileDirRef,
               expectedPath: projectFolderPath,
               itemName: item.FileLeafRef
@@ -86,8 +87,6 @@ export const DocumentLibraryView: FC = () => {
           return item.FileDirRef === fullCurrentPath
         }
       })
-
-      console.log('[DocumentLibraryView] Filtered to', itemsToDisplay.length, 'items')
     }
 
     if (viewMode === DocumentLibraryViewMode.Flat) {
@@ -120,22 +119,13 @@ export const DocumentLibraryView: FC = () => {
     const projectFolderName = context.props.useProjectFolder ? context.props.webTitle : null
     const isAtProjectFolder = projectFolderName && currentPath === projectFolderName
 
-    console.log('[DocumentLibraryView] Breadcrumb calculation:', {
-      currentPath,
-      projectFolderName,
-      isAtProjectFolder,
-      useProjectFolder: context.props.useProjectFolder
-    })
-
     if (!currentPath) {
       const targetPath = projectFolderName || ''
-      console.log('[DocumentLibraryView] No current path, root will navigate to:', targetPath)
       return [
         {
-          text: projectFolderName || context.state.data?.listTitle || 'Documents',
+          text: projectFolderName || context.state.data?.listTitle || strings.DynamicList.Documents,
           key: 'root',
           onClick: () => {
-            console.log('[DocumentLibraryView] Root clicked, navigating to:', targetPath)
             context.setState({ currentFolderPath: targetPath })
           }
         }
@@ -145,15 +135,11 @@ export const DocumentLibraryView: FC = () => {
     const rootTargetPath = projectFolderName || ''
     const items = [
       {
-        text: projectFolderName || context.state.data?.listTitle || 'Documents',
+        text: projectFolderName || context.state.data?.listTitle || strings.DynamicList.Documents,
         key: 'root',
         onClick: isAtProjectFolder
           ? undefined
           : () => {
-              console.log(
-                '[DocumentLibraryView] Root breadcrumb clicked, navigating to:',
-                rootTargetPath
-              )
               context.setState({ currentFolderPath: rootTargetPath })
             }
       }
@@ -219,7 +205,7 @@ export const DocumentLibraryView: FC = () => {
         newPath = `${currentPath}/${fileName}`
       }
 
-      console.log('[DocumentLibraryView] handleFileClick - Navigating to folder:', {
+      sessionStorage.DEBUG || DEBUG && console.log('[DocumentLibraryView] handleFileClick - Navigating to folder:', {
         fileName,
         currentPath,
         projectFolderName,
@@ -273,7 +259,7 @@ export const DocumentLibraryView: FC = () => {
           let addedFile
           if (folderPath) {
             const folderServerRelativeUrl = `${listRootPath}/${folderPath}`
-            console.log('[DocumentLibraryView] Uploading to folder:', {
+            sessionStorage.DEBUG || DEBUG && console.log('[DocumentLibraryView] Uploading to folder:', {
               listName: context.props.listName,
               folderPath,
               folderServerRelativeUrl
@@ -317,7 +303,7 @@ export const DocumentLibraryView: FC = () => {
     <FileUploadZone onFilesSelected={handleFilesSelected} fullScreen>
       {viewMode === DocumentLibraryViewMode.Folders && breadcrumbItems.length > 1 && (
         <div className={styles.breadcrumb}>
-          <Breadcrumb aria-label='Folder navigation'>
+          <Breadcrumb aria-label={strings.DynamicList.FolderNavigation}>
             {breadcrumbItems.map((item, index) => (
               <React.Fragment key={item.key}>
                 <BreadcrumbItem>
@@ -340,10 +326,10 @@ export const DocumentLibraryView: FC = () => {
         onFirstColumnClick={handleFileClick}
         emptyMessage={
           breadcrumbItems.length > 1
-            ? 'Ingen dokumenter å vise i valgt mappe, gå tilbake ved å navigere i menyen over'
-            : 'Ingen dokumenter å vise'
+            ? strings.DynamicList.NoDocumentsInFolder
+            : strings.DynamicList.NoDocuments
         }
-        noColumnsMessage='Ingen kolonner å vise'
+        noColumnsMessage={strings.DynamicList.NoColumnsToShow}
         className={styles.documentLibraryView}
       />
     </FileUploadZone>

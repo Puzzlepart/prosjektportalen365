@@ -8,6 +8,7 @@ import {
 } from '@fluentui/react-components'
 import { AddRegular, DocumentRegular } from '@fluentui/react-icons'
 import React, { FC } from 'react'
+import * as strings from 'ProjectWebPartsStrings'
 
 /**
  * Props for the NewDocumentMenu component.
@@ -61,18 +62,24 @@ export const NewDocumentMenu: FC<INewDocumentMenuProps> = ({
           disabled={disabled}
           menuIcon={<DocumentRegular />}
         >
-          Ny
+          {strings.DynamicList.New}
         </MenuButton>
       </MenuTrigger>
 
       <MenuPopover>
         <MenuList>
-          <MenuItem onClick={() => onCreateDocument?.('word')}>Word-dokument</MenuItem>
-          <MenuItem onClick={() => onCreateDocument?.('excel')}>Excel-arbeidsbok</MenuItem>
-          <MenuItem onClick={() => onCreateDocument?.('powerpoint')}>
-            PowerPoint-presentasjon
+          <MenuItem onClick={() => onCreateDocument?.('word')}>
+            {strings.DynamicList.WordDocument}
           </MenuItem>
-          <MenuItem onClick={() => onUpload?.()}>Last opp fil</MenuItem>
+          <MenuItem onClick={() => onCreateDocument?.('excel')}>
+            {strings.DynamicList.ExcelWorkbook}
+          </MenuItem>
+          <MenuItem onClick={() => onCreateDocument?.('powerpoint')}>
+            {strings.DynamicList.PowerPointPresentation}
+          </MenuItem>
+          <MenuItem onClick={() => onUpload?.()}>
+            {strings.DynamicList.UploadFile}
+          </MenuItem>
         </MenuList>
       </MenuPopover>
     </Menu>
