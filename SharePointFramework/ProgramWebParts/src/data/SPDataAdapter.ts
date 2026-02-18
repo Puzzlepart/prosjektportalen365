@@ -40,7 +40,6 @@ import {
   TimelineContentModel
 } from 'pp365-shared-library'
 import { Logger, LogLevel } from '@pnp/logging'
-import { Site } from '@pnp/sp/sites'
 import _ from 'underscore'
 import { DEFAULT_SEARCH_SETTINGS, IProgramHub, IProjectsData } from './types'
 import { IList } from '@pnp/sp/lists'
@@ -958,7 +957,6 @@ export class SPDataAdapter
       this.childProjects = []
     }
   }
-
 
   /**
    * Fetches all projects associated with the current hubsite context. This is done by querying the

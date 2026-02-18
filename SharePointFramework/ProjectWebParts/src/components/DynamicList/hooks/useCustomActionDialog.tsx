@@ -96,7 +96,7 @@ export function useCustomActionDialog() {
 
           const content = result.iframeContent || result.html
           if (result.status === 'completed' && content) {
-            setDialogState(prev => ({
+            setDialogState((prev) => ({
               ...prev,
               isLoading: false,
               isPolling: false,
@@ -123,15 +123,16 @@ export function useCustomActionDialog() {
           }
         } catch (error) {
           console.error('Error polling for iframe content:', error)
-          const isCorsError = error.message?.includes('Failed to fetch') ||
-                             error.message?.includes('NetworkError') ||
-                             error.message?.includes('CORS')
+          const isCorsError =
+            error.message?.includes('Failed to fetch') ||
+            error.message?.includes('NetworkError') ||
+            error.message?.includes('CORS')
 
           const errorMessage = isCorsError
             ? 'CORS-feil: Serveren tillater ikke forespørsler fra dette domenet. Kontakt administrator for å konfigurere CORS-headere.'
             : `Kunne ikke hente innhold: ${error.message}`
 
-          setDialogState(prev => ({
+          setDialogState((prev) => ({
             ...prev,
             isLoading: false,
             isPolling: false,
@@ -195,7 +196,7 @@ export function useCustomActionDialog() {
         .filter(Boolean)
 
       if (selectedItems.length === 0) {
-        setDialogState(prev => ({
+        setDialogState((prev) => ({
           ...prev,
           isLoading: false,
           isSending: false,
@@ -231,7 +232,7 @@ export function useCustomActionDialog() {
 
         const result = await response.json()
 
-        setDialogState(prev => ({
+        setDialogState((prev) => ({
           ...prev,
           isSending: false,
           isPolling: true
@@ -241,7 +242,7 @@ export function useCustomActionDialog() {
         if (result.pollUrl) {
           await pollForIframeContent(result.pollUrl, action.name, payload)
         } else if (content) {
-          setDialogState(prev => ({
+          setDialogState((prev) => ({
             ...prev,
             isLoading: false,
             isPolling: false,
@@ -250,18 +251,18 @@ export function useCustomActionDialog() {
         } else {
           throw new Error('Ingen iframe-innhold eller poll-URL mottatt')
         }
-
       } catch (error) {
         console.error('Error executing dialog action:', error)
-        const isCorsError = error.message?.includes('Failed to fetch') ||
-                           error.message?.includes('NetworkError') ||
-                           error.message?.includes('CORS')
+        const isCorsError =
+          error.message?.includes('Failed to fetch') ||
+          error.message?.includes('NetworkError') ||
+          error.message?.includes('CORS')
 
         const errorMessage = isCorsError
           ? 'CORS-feil: Serveren tillater ikke forespørsler fra denne domenen. Kontakt administrator for å konfigurere CORS-headere.'
           : `Feil ved utføring: ${error.message}`
 
-        setDialogState(prev => ({
+        setDialogState((prev) => ({
           ...prev,
           isLoading: false,
           isSending: false,
@@ -305,7 +306,7 @@ export function useCustomActionDialog() {
               <DialogTitle>{dialogState.actionName}</DialogTitle>
               <DialogContent style={{ marginBottom: '16px' }}>
                 {dialogState.error && (
-                  <MessageBar intent="error" style={{ marginBottom: '16px' }}>
+                  <MessageBar intent='error' style={{ marginBottom: '16px' }}>
                     <MessageBarBody>
                       <MessageBarTitle>Feil</MessageBarTitle>
                       {dialogState.error}
@@ -314,26 +315,24 @@ export function useCustomActionDialog() {
                 )}
 
                 {dialogState.isLoading && (
-                  <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '16px',
-                    padding: '32px'
-                  }}>
-                    <Spinner size="large" />
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: '16px',
+                      padding: '32px'
+                    }}
+                  >
+                    <Spinner size='large' />
                     {dialogState.isSending && (
-                      <MessageBar intent="info">
-                        <MessageBarBody>
-                          Sender data for valgt element...
-                        </MessageBarBody>
+                      <MessageBar intent='info'>
+                        <MessageBarBody>Sender data for valgt element...</MessageBarBody>
                       </MessageBar>
                     )}
                     {dialogState.isPolling && (
-                      <MessageBar intent="info">
-                        <MessageBarBody>
-                          Henter innhold fra server...
-                        </MessageBarBody>
+                      <MessageBar intent='info'>
+                        <MessageBarBody>Henter innhold fra server...</MessageBarBody>
                       </MessageBar>
                     )}
                   </div>
@@ -348,7 +347,7 @@ export function useCustomActionDialog() {
               </DialogContent>
             </DialogBody>
             <DialogActions>
-              <Button appearance="secondary" onClick={closeDialog}>
+              <Button appearance='secondary' onClick={closeDialog}>
                 {dialogState.isLoading ? 'Avbryt' : 'Lukk'}
               </Button>
             </DialogActions>

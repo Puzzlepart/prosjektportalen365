@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import moment from 'moment'
 import { IRenderItemColumnProps } from 'pp365-shared-library'
 import { formatDate } from 'pp365-shared-library'
 

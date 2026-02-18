@@ -1,6 +1,11 @@
 import { useMemo, useContext, useCallback } from 'react'
 import { DynamicListContext } from './context'
-import { ListMenuItem, ItemFieldValues, ListMenuItemDivider, customLightTheme } from 'pp365-shared-library'
+import {
+  ListMenuItem,
+  ItemFieldValues,
+  ListMenuItemDivider,
+  customLightTheme
+} from 'pp365-shared-library'
 import { DocumentLibraryViewMode, CustomActionType, ICustomAction } from './types'
 import {
   FilterRegular,
@@ -482,9 +487,10 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
         context.setState({ refetch: Date.now(), selectedItems: [] })
       } catch (error) {
         console.error('Error executing trigger action:', error)
-        const isCorsError = error.message?.includes('Failed to fetch') ||
-                           error.message?.includes('NetworkError') ||
-                           error.message?.includes('CORS')
+        const isCorsError =
+          error.message?.includes('Failed to fetch') ||
+          error.message?.includes('NetworkError') ||
+          error.message?.includes('CORS')
 
         const errorMessage = isCorsError
           ? 'CORS-feil: Serveren tillater ikke forespørsler fra denne domenen. Kontakt administrator for å konfigurere CORS-headere.'
@@ -675,7 +681,11 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
     const items: ListMenuItem[] = []
 
     // Custom actions from web part configuration
-    if (context.props.showCustomActions !== false && context.props.customActions && context.props.customActions.length > 0) {
+    if (
+      context.props.showCustomActions !== false &&
+      context.props.customActions &&
+      context.props.customActions.length > 0
+    ) {
       // Sort actions by order field (lower numbers first)
       const sortedActions = [...context.props.customActions].sort((a, b) => {
         const orderA = a.order ?? 100
@@ -685,7 +695,8 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
       sortedActions.forEach((action: ICustomAction) => {
         const actionType = action.actionType as CustomActionType
-        const hasSelectedItems = context.state.selectedItems && context.state.selectedItems.length > 0
+        const hasSelectedItems =
+          context.state.selectedItems && context.state.selectedItems.length > 0
 
         items.push(
           new ListMenuItem(action.name, action.description || action.name)

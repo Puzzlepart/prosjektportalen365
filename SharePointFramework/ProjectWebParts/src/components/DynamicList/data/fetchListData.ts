@@ -355,7 +355,7 @@ export async function fetchListData(
     const items = await itemsQuery.getAll()
 
     const taxonomyFields = await list.fields
-      .filter('TypeAsString eq \'TaxonomyFieldType\' or TypeAsString eq \'TaxonomyFieldTypeMulti\'')
+      .filter("TypeAsString eq 'TaxonomyFieldType' or TypeAsString eq 'TaxonomyFieldTypeMulti'")
       .select('InternalName', 'TypeAsString', 'TermSetId')()
 
     const taxonomyFieldMap = new Map(
@@ -589,7 +589,7 @@ export async function fetchSingleItem(
       const projectContentColumns = await fetchProjectContentColumns()
 
       const taxonomyFields = await list.fields
-        .filter('TypeAsString eq \'TaxonomyFieldType\' or TypeAsString eq \'TaxonomyFieldTypeMulti\'')
+        .filter("TypeAsString eq 'TaxonomyFieldType' or TypeAsString eq 'TaxonomyFieldTypeMulti'")
         .select('InternalName', 'TypeAsString', 'TermSetId')()
 
       const taxonomyFieldMap = new Map(

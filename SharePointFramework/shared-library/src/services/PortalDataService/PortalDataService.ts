@@ -252,8 +252,12 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         return []
       }
 
-      const childProjects: Array<{ SiteId: string; Title: string; SPWebURL?: string; Path?: string }> =
-        JSON.parse(currentProject.GtChildProjects)
+      const childProjects: Array<{
+        SiteId: string
+        Title: string
+        SPWebURL?: string
+        Path?: string
+      }> = JSON.parse(currentProject.GtChildProjects)
 
       if (!Array.isArray(childProjects) || childProjects.length === 0) {
         return []
@@ -266,15 +270,16 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         return true
       })
 
-      return uniqueChildProjects.map((project) =>
-        new constructor(
-          {
-            Title: project.Title,
-            GtSiteUrl: project.SPWebURL || project.Path,
-            GtSiteId: project.SiteId
-          },
-          this.web
-        )
+      return uniqueChildProjects.map(
+        (project) =>
+          new constructor(
+            {
+              Title: project.Title,
+              GtSiteUrl: project.SPWebURL || project.Path,
+              GtSiteId: project.SiteId
+            },
+            this.web
+          )
       )
     } catch (error) {
       console.warn('Failed to fetch child projects:', error)
@@ -498,9 +503,9 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     const urls = await this._getList(list)
       .select('DefaultNewFormUrl', 'DefaultEditFormUrl')
       .expand('DefaultNewFormUrl', 'DefaultEditFormUrl')<{
-        DefaultNewFormUrl: string
-        DefaultEditFormUrl: string
-      }>()
+      DefaultNewFormUrl: string
+      DefaultEditFormUrl: string
+    }>()
     return {
       defaultNewFormUrl: makeUrlAbsolute(urls.DefaultNewFormUrl),
       defaultEditFormUrl: makeUrlAbsolute(urls.DefaultEditFormUrl)
@@ -594,7 +599,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
           fieldsAdded.push(field)
         }
         await executeQuery(jsomContext)
-      } catch (error) { }
+      } catch (error) {}
     }
     try {
       const templateParametersField = spList
@@ -606,7 +611,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         )
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
-    } catch { }
+    } catch {}
     if (ensureList.created && params.properties) {
       ensureList.list.items.add(params.properties)
     }
