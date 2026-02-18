@@ -185,7 +185,7 @@
             <pnp:DataValue FieldName="Title">{resource:Lists_ListContent_Timeline_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDescription">{resource:Lists_ListContent_Timeline_Description}</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccSourceList">{resource:Lists_TimelineElements_Title}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtLccFields">Title,GtTimelineTypeLookup,GtDescription</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccFields">Title,GtTimelineTypeLookupId,GtDescription</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccDefault">0</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccHidden">0</pnp:DataValue>
         </pnp:DataRow>

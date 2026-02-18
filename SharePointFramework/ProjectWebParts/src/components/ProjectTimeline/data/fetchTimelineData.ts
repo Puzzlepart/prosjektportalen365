@@ -81,8 +81,10 @@ export async function fetchTimelineData(
       (fld) =>
         fld.InternalName !== 'ContentType' &&
         fld.InternalName !== 'GtSiteIdLookup' &&
+        fld.InternalName !== 'MetaInfo' &&
         !fld.InternalName.startsWith('_') &&
         !fld.ReadOnlyField &&
+        !fld.FromBaseType &&
         (fld.ShowInEditForm !== false || fld.ShowInDisplayForm !== false)
     )
 
