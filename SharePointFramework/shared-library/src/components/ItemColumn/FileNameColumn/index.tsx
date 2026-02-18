@@ -4,10 +4,12 @@ import strings from 'SharedLibraryStrings'
 import React from 'react'
 import { ColumnRenderComponent } from '../types'
 import { IFileNameColumnProps } from './types'
-import { Link } from '@fluentui/react-components'
+import { Button } from '@fluentui/react-components'
 
 export const FileNameColumn: ColumnRenderComponent<IFileNameColumnProps> = (props) => {
+  const contentTypeId = props.item.ContentTypeId || ''
   const isFolder = props.item.FSObjType === 1
+  const isDocSet = contentTypeId.indexOf("0x0120D520") === 0
 
   const getFileUrl = () => {
     if (isFolder || !props.item.FileRef) return null
@@ -34,13 +36,17 @@ export const FileNameColumn: ColumnRenderComponent<IFileNameColumnProps> = (prop
 
   const fileUrl = getFileUrl()
 
+  const iconType = isDocSet
+    ? FileIconType.docset
+    : (isFolder ? FileIconType.folder : undefined);
+
   return (
     <span>
       {props.showFileExtensionIcon && (
         <Icon
           {...getFileTypeIconProps({
             extension: props.item.File_x0020_Type || props.item.FileExtension,
-            type: isFolder ? FileIconType.folder : undefined,
+            type: iconType,
             size: 20,
             imageFileType: 'svg'
           })}
@@ -50,9 +56,13 @@ export const FileNameColumn: ColumnRenderComponent<IFileNameColumnProps> = (prop
       {isFolder ? (
         <span style={{ marginLeft: 8 }}>{props.columnValue}</span>
       ) : fileUrl ? (
-        <Link href={fileUrl} rel='noopener noreferrer' target='_blank' style={{ marginLeft: 8 }}>
+        <Button
+          appearance='transparent'
+          onClick={() => window.open(fileUrl, '_blank', 'noopener,noreferrer')}
+          style={{ marginLeft: 8 }}
+        >
           {props.columnValue}
-        </Link>
+        </Button>
       ) : (
         <span style={{ marginLeft: 8 }}>{props.columnValue}</span>
       )}
