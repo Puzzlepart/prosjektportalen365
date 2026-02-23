@@ -1,5 +1,6 @@
 import strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from '../../types'
+import { NO_TEMPLATE_ID } from '../../constants'
 import { BaseTask, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../types'
 
@@ -20,6 +21,10 @@ export class CustomActions extends BaseTask {
   ): Promise<IBaseTaskParams> {
     this.params = params
     onProgress(strings.CustomActionsText, strings.CustomActionsSubText, 'SetAction')
+    if (this.data.selectedTemplate?.id === NO_TEMPLATE_ID) {
+      this.logInformation('Skipping custom action update (no template selected)')
+      return params
+    }
     try {
       await this._updateTemplateSelectorCustomAction()
     } catch (error) {}

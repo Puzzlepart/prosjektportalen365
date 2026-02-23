@@ -3,6 +3,7 @@ import _ from 'lodash'
 import { ProjectPropertiesMapType } from 'pp365-shared-library'
 import * as strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'extensions/projectSetup'
+import { NO_TEMPLATE_ID } from '../../constants'
 import resource from 'SharedResources'
 import { SPDataAdapter } from '../../../../data'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
@@ -74,28 +75,47 @@ export class SetupProjectInformation extends BaseTask {
         strings.SyncLocalProjectPropertiesListText,
         'AlignCenter'
       )
-      const { list } = await this.params.portalDataService.syncList({
-        url: this.params.webAbsoluteUrl,
-        listName: resource.Lists_ProjectProperties_Title,
-        contentTypeId: this._templateParameters.ProjectContentTypeId
-      })
-      this.onProgress(
-        strings.SetupProjectInformationText,
-        strings.CreatingLocalProjectPropertiesListItemText,
-        'AlignCenter'
-      )
-      const projectDataProperties = await this._getProjectDataProperties()
-      let properties = this._createPropertiesItem(this.params, {
-        ...projectDataProperties,
-        TemplateParameters: JSON.stringify(this._templateParameters)
-      })
-      if (this.params.properties.skipUpdateTemplateParameters) {
-        properties = _.omit(properties, 'TemplateParameters')
+      const isNoTemplate = this.data.selectedTemplate?.id === NO_TEMPLATE_ID
+
+      if (isNoTemplate) {
+        // For "no template" we skip syncing content type fields and just update the existing property item
+        this.onProgress(
+          strings.SetupProjectInformationText,
+          strings.CreatingLocalProjectPropertiesListItemText,
+          'AlignCenter'
+        )
+        const list = this.params.web.lists.getByTitle(resource.Lists_ProjectProperties_Title)
+        const properties = this._createPropertiesItem(this.params)
+        const propertyItems = await list.items()
+        if (propertyItems.length > 0) {
+          await list.items.getById(1).update(properties)
+        } else {
+          await list.items.add(properties)
+        }
+      } else {
+        const { list } = await this.params.portalDataService.syncList({
+          url: this.params.webAbsoluteUrl,
+          listName: resource.Lists_ProjectProperties_Title,
+          contentTypeId: this._templateParameters.ProjectContentTypeId
+        })
+        this.onProgress(
+          strings.SetupProjectInformationText,
+          strings.CreatingLocalProjectPropertiesListItemText,
+          'AlignCenter'
+        )
+        const projectDataProperties = await this._getProjectDataProperties()
+        let properties = this._createPropertiesItem(this.params, {
+          ...projectDataProperties,
+          TemplateParameters: JSON.stringify(this._templateParameters)
+        })
+        if (this.params.properties.skipUpdateTemplateParameters) {
+          properties = _.omit(properties, 'TemplateParameters')
+        }
+        const propertyItems = await list.items()
+        const propertyItem = list.items.getById(1)
+        if (propertyItems.length > 0) await propertyItem.update(properties)
+        else await list.items.add(properties)
       }
-      const propertyItems = await list.items()
-      const propertyItem = list.items.getById(1)
-      if (propertyItems.length > 0) await propertyItem.update(properties)
-      else await list.items.add(properties)
     } catch (error) {
       throw error
     }
@@ -142,15 +162,19 @@ export class SetupProjectInformation extends BaseTask {
     params: IBaseTaskParams,
     additionalProperties: Record<string, string | boolean | number> = {}
   ): Record<string, string | boolean | number> {
-    return {
+    const isNoTemplate = this.data.selectedTemplate?.id === NO_TEMPLATE_ID
+    const properties: Record<string, string | boolean | number> = {
       Title: params.context.pageContext.web.title,
       GtIsProgram: this.data.selectedTemplate.isProgram,
       GtIsParentProject: this.data.selectedTemplate.isParentProject,
-      GtInstalledVersion: params.templateSchema.Version,
-      GtCurrentVersion: params.templateSchema.Version,
       GtProjectTemplate: this.data.selectedTemplate.text,
       ...additionalProperties
     }
+    if (!isNoTemplate) {
+      properties.GtInstalledVersion = params.templateSchema.Version
+      properties.GtCurrentVersion = params.templateSchema.Version
+    }
+    return properties
   }
 
   /**
@@ -174,11 +198,14 @@ export class SetupProjectInformation extends BaseTask {
       if (entity) return
       const siteId = pageContext.site.id.toString()
       const webUrl = pageContext.web.absoluteUrl
-      const contentTypeId = this._templateParameters.ProjectContentTypeId
-      const projectDataProperties = await this._getProjectDataProperties(
-        ProjectPropertiesMapType.FromPortfolioToPortfolio,
-        false
-      )
+      const isNoTemplate = this.data.selectedTemplate?.id === NO_TEMPLATE_ID
+      const contentTypeId = isNoTemplate ? undefined : this._templateParameters.ProjectContentTypeId
+      const projectDataProperties = isNoTemplate
+        ? {}
+        : await this._getProjectDataProperties(
+            ProjectPropertiesMapType.FromPortfolioToPortfolio,
+            false
+          )
       const properties = this._createPropertiesItem(this.params, {
         GtSiteId: siteId,
         ...projectDataProperties

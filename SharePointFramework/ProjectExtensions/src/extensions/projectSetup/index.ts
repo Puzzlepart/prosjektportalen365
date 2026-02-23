@@ -102,7 +102,19 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           )
         }
         case ProjectSetupValidation.AlreadySetup: {
-          if (stringIsNullOrEmpty(this.properties.forceTemplate)) {
+          const skipViaSession = sessionStorage.getItem('pp_skipAlreadySetupCheck') === 'true'
+          if (skipViaSession) {
+            sessionStorage.removeItem('pp_skipAlreadySetupCheck')
+          }
+          Logger.write(
+            `(ProjectSetup) AlreadySetup check: forceTemplate='${this.properties.forceTemplate}', skipAlreadySetupCheck=${this.properties.skipAlreadySetupCheck}, skipViaSession=${skipViaSession}`,
+            LogLevel.Warning
+          )
+          if (
+            stringIsNullOrEmpty(this.properties.forceTemplate) &&
+            !this.properties.skipAlreadySetupCheck &&
+            !skipViaSession
+          ) {
             throw new ProjectSetupError(
               'AlreadySetup',
               strings.ProjectAlreadySetupMessage,
@@ -181,7 +193,10 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       })
       await this._startSetup(taskParams, data)
 
-      if (!stringIsNullOrEmpty(this.properties.forceTemplate)) {
+      if (
+        !stringIsNullOrEmpty(this.properties.forceTemplate) &&
+        this.properties.forceTemplate !== '__SELECT_TEMPLATE__'
+      ) {
         await this.initializeQuickLaunchMenu()
         await this.sp.web.lists
           .getByTitle(resource.Lists_ProjectProperties_Title)
@@ -482,13 +497,27 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         tmpl.projectTemplateUrl = tmplFile?.serverRelativeUrl
         return tmpl
       })
+
+      let hasExistingTemplate = false
+      try {
+        const [propertyItem] = await this.sp.web.lists
+          .getByTitle(resource.Lists_ProjectProperties_Title)
+          .items.select('GtProjectTemplate')
+          .top(1)()
+        hasExistingTemplate =
+          !!propertyItem && !stringIsNullOrEmpty(propertyItem.GtProjectTemplate)
+      } catch {
+        // List may not exist for new projects
+      }
+
       return {
         ...data,
         extensions,
         contentConfig,
         templates,
         customActions,
-        projectData
+        projectData,
+        hasExistingTemplate
       } as IProjectSetupData
     } catch (error) {
       throw new ProjectSetupError(

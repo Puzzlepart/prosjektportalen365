@@ -25,6 +25,8 @@ export const createProjectSetupCustomAction = (
     progressDialogContentProps: {
       title: progressTitle
     },
-    skipUpdateTemplateParameters: true
+    skipUpdateTemplateParameters: true,
+    skipAlreadySetupCheck: true,
+    forceTemplate: '__SELECT_TEMPLATE__'
   })
 })

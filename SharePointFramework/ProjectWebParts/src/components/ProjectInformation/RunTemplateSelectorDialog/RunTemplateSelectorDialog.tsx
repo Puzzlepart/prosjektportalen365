@@ -26,6 +26,7 @@ export const RunTemplateSelectorDialog: FC = () => {
       lcid
     )
     await context.props.sp.web.userCustomActions.add(customAction)
+    sessionStorage.setItem('pp_skipAlreadySetupCheck', 'true')
     location.reload()
   }
 

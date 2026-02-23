@@ -2,46 +2,9 @@ import { createAction, createReducer } from '@reduxjs/toolkit'
 import { ContentConfig, ProjectExtension, ProjectTemplate } from 'pp365-shared-library'
 import { first, uniq } from 'underscore'
 import { IProjectSetupData } from '../../extensions/projectSetup/types'
-import { NO_TEMPLATE_ID } from '../../extensions/projectSetup/constants'
+import { createNoTemplateOption } from '../../extensions/projectSetup/noTemplate'
 import { IProjectSetupDialogState } from './types'
 import strings from 'ProjectExtensionsStrings'
-
-/**
- * Creates a special "No template" option that can be used to run
- * the setup wizard without applying a template.
- */
-const createNoTemplateOption = (): ProjectTemplate => {
-  const noTemplate = new ProjectTemplate(
-    {
-      Id: NO_TEMPLATE_ID,
-      IsDefaultTemplate: false,
-      IsDefaultExtensionsLocked: false,
-      IsDefaultListContentLocked: false,
-      IsAutoConfigurable: false,
-      IconName: 'PageRemove',
-      ListContentConfigLookupId: [],
-      FieldConfigurationName: null,
-      File: null,
-      FieldValuesAsText: {
-        Title: strings.NoTemplateLabel,
-        GtDescription: strings.NoTemplateDescription
-      },
-      GtProjectTemplateId: NO_TEMPLATE_ID,
-      GtProjectExtensionsId: [],
-      GtProjectColumns: null,
-      GtProjectCustomColumns: null,
-      GtProjectContentType: null,
-      GtProjectStatusContentType: null,
-      GtIsProgram: false,
-      GtIsParentProject: false,
-      IsHiddenTemplate: false,
-      GtProjectPhaseTermId: null,
-      GtDocumentTemplateLibrary: null
-    },
-    null
-  )
-  return noTemplate
-}
 
 export const INIT = createAction('INIT')
 export const ON_LIST_CONTENT_CONFIG_CHANGED = createAction<ContentConfig[]>(
@@ -62,13 +25,15 @@ export const initialState: IProjectSetupDialogState = {
 export default (data: IProjectSetupData) =>
   createReducer(initialState, {
     [INIT.type]: (state: IProjectSetupDialogState) => {
-      // Add the "No template" option as the first item if not already present
-      if (!data.templates.some((t) => t.id === NO_TEMPLATE_ID)) {
-        data.templates.unshift(createNoTemplateOption())
+      let template: ProjectTemplate
+      if (data.hasExistingTemplate) {
+        // When re-running the template selector, default to "No template"
+        // to avoid accidentally applying a heavy template configuration.
+        template = createNoTemplateOption()
+      } else {
+        ;[template] = data.templates.filter((t) => t.isDefault)
+        if (!template) template = first(data.templates)
       }
-      
-      let [template] = data.templates.filter((t) => t.isDefault)
-      if (!template) template = first(data.templates)
       state.selectedTemplate = template
       state.selectedContentConfig = template?.getContentConfig(data.contentConfig) ?? []
       state.selectedExtensions = template?.getExtensions(data.extensions) ?? []

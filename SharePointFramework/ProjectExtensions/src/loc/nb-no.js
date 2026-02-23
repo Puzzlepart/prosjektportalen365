@@ -157,6 +157,8 @@ define([], function () {
     TemplateSelectorCommandTitle: 'Hent dokumentmal',
     NoTemplateLabel: 'Ingen mal',
     NoTemplateDescription: 'Bruk dette alternativet for å kjøre oppsettveiviseren uten å anvende en mal. Du kan fortsatt legge til tillegg og standardinnhold.',
+    NoTemplateRadioLabel: 'Ikke legg på mal på området',
+    SelectTemplateRadioLabel: 'Velg en prosjektmal',
     TermSetDoesNotExistError: 'Finner ikke termsett ID. Sjekk at termsett ID er korrekt i maloppsettet.',
     TitleLabel: 'Tittel',
     ProgressLabel: 'Fremdrift',
