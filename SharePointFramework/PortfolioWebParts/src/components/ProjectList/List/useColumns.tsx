@@ -12,6 +12,19 @@ export const useColumns = (): IListColumn[] => {
   const context = useContext(ListContext)
 
   const getField = (item: any, field: string) => {
+    if (!item?.data) {
+      console.warn(
+        '[ProjectList] Cannot render field - item.data is undefined.',
+        'Project:',
+        item?.title || '(unknown)',
+        'Field:',
+        field,
+        'Item object:',
+        item
+      )
+      return []
+    }
+    
     const fieldValue = item.data[field]
     let values: string[] = []
     if (typeof fieldValue === 'string') {

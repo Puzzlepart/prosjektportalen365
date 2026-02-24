@@ -110,6 +110,16 @@ export class ProjectListModel {
    * @param item - Item
    */
   constructor(public title?: string, item?: any) {
+    if (!item) {
+      console.warn(
+        '[ProjectListModel] Project created with undefined item data.',
+        'Title:',
+        title || '(no title)'
+      )
+      this.data = {}
+      return
+    }
+    
     this.siteId = item.GtSiteId
     this.groupId = item.GtGroupId
     this.url = item.GtSiteUrl

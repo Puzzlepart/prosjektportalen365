@@ -1,5 +1,6 @@
 /* eslint-disable prefer-spread */
 import { useState } from 'react'
+import { ProjectListModel } from 'pp365-shared-library/lib/models'
 import _ from 'underscore'
 import { ProjectListVerticals } from './ProjectListVerticals'
 import { IProjectListProps, IProjectListState } from './types'
@@ -13,7 +14,9 @@ export function useProjectListState(props: IProjectListProps) {
   const defaultSelectedVertical =
     _.find(props.verticals, (vertical) => vertical.key === props.defaultVertical) ??
     _.first(ProjectListVerticals)
-  const mockProjects = Array.apply(null, Array(Math.floor(Math.random() * 10) + 10)).map(() => 0)
+  const mockProjects = Array.apply(null, Array(Math.floor(Math.random() * 10) + 10)).map(
+    () => new ProjectListModel()
+  )
   const defaultSort = { fieldName: props.sortBy, isSortedDescending: true }
   const [state, $setState] = useState<IProjectListState>({
     searchTerm: '',
