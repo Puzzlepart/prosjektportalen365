@@ -39,9 +39,13 @@ export function useColumns(): IListColumn[] {
     }
 
     let columns = context.state.data.listColumns
-    if (context.props.hiddenViewColumns && context.props.hiddenViewColumns.length > 0) {
+    const manualHiddenColumns = context.props.hiddenViewColumns || []
+    const autoHiddenColumns = context.state.data.autoHiddenViewColumns || []
+    const effectiveHiddenColumns = new Set([...manualHiddenColumns, ...autoHiddenColumns])
+
+    if (effectiveHiddenColumns.size > 0) {
       columns = columns.filter(
-        (column) => !context.props.hiddenViewColumns.includes(column.fieldName || column.key)
+        (column) => !effectiveHiddenColumns.has((column.fieldName || column.key) as string)
       )
     }
 
@@ -90,5 +94,10 @@ export function useColumns(): IListColumn[] {
         data: column.data
       }
     })
-  }, [context.state.data?.listColumns, context.props.hiddenViewColumns, context.props.columnOrder])
+  }, [
+    context.state.data?.listColumns,
+    context.state.data?.autoHiddenViewColumns,
+    context.props.hiddenViewColumns,
+    context.props.columnOrder
+  ])
 }

@@ -229,7 +229,6 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
             targetWeb={targetWeb}
           />
         </div>
-        {/* <ColumnContextMenu /> */}
         {state.panel && (
           <CustomEditPanel
             isOpen={true}

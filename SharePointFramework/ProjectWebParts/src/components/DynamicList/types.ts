@@ -339,11 +339,6 @@ export interface IDynamicListState extends IBaseWebPartComponentState<IDynamicLi
   activeFilters: Record<string, string[]>
 
   /**
-   * Filtered data
-   */
-  filteredData?: IDynamicListData
-
-  /**
    * Selected items (multi-select mode)
    */
   selectedItems?: any[]
@@ -414,19 +409,9 @@ export interface IDynamicListState extends IBaseWebPartComponentState<IDynamicLi
   columnContextMenu?: IColumnContextMenu
 
   /**
-   * Whether edit view columns panel is open
-   */
-  isEditViewColumnsPanelOpen?: boolean
-
-  /**
    * Whether Excel export is in progress
    */
   isExporting?: boolean
-
-  /**
-   * Custom column order (stored in session storage)
-   */
-  customColumnOrder?: number[]
 
   /**
    * User permissions for list operations
@@ -448,6 +433,12 @@ export interface IDynamicListData {
    * Columns configuration for the grid
    */
   listColumns: IColumn[]
+
+  /**
+   * Columns that should be hidden by default because they are not present
+   * in the configured/source SharePoint view (configured view or default view fallback).
+   */
+  autoHiddenViewColumns?: string[]
 
   /**
    * Editable fields metadata

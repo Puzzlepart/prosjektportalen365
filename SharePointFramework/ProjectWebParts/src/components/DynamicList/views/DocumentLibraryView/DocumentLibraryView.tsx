@@ -11,6 +11,7 @@ import { useFilteredData } from '../../useFilteredData'
 import { ListView, IListViewColumn } from '../ListView'
 import { IFileItem, DocumentLibraryViewMode } from '../../types'
 import { FileUploadZone } from '../../components/FileUpload'
+import { stampSiteIdFieldsOnFile } from '../../utils/listOperationUtils'
 import '@pnp/sp/lists'
 import '@pnp/sp/folders'
 import '@pnp/sp/files'
@@ -94,12 +95,6 @@ export const DocumentLibraryView: FC = () => {
     }
 
     itemsToDisplay = [...itemsToDisplay].sort((a: IFileItem, b: IFileItem) => {
-      const aIsFolder = a.FSObjType === 1
-      const bIsFolder = b.FSObjType === 1
-
-      if (aIsFolder && !bIsFolder) return -1
-      if (!aIsFolder && bIsFolder) return 1
-
       const aName = a.FileLeafRef || ''
       const bName = b.FileLeafRef || ''
       return aName.localeCompare(bName, undefined, { numeric: true, sensitivity: 'base' })
@@ -273,21 +268,7 @@ export const DocumentLibraryView: FC = () => {
           }
 
           if (context.props.useSiteIdFiltering && addedFile) {
-            try {
-              const siteId = context.props.siteId
-              const siteTitle = context.props.webTitle
-
-              if (siteId || siteTitle) {
-                const fileItem = await addedFile.file.getItem()
-                const updateProps: Record<string, any> = {}
-                if (siteId) updateProps.GtSiteId = siteId
-                if (siteTitle) updateProps.GtSiteTitle = siteTitle
-
-                await fileItem.update(updateProps)
-              }
-            } catch (err) {
-              console.error('Error setting GtSiteId/GtSiteTitle on file:', err)
-            }
+            await stampSiteIdFieldsOnFile(addedFile, context.props.siteId, context.props.webTitle)
           }
         }
 

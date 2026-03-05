@@ -10,6 +10,7 @@ import '@pnp/sp/items/get-all'
 import '@pnp/sp/views'
 import '@pnp/sp/taxonomy'
 import { TaxonomyTermModel } from '../models/TaxonomyTermModel'
+import { isVisibleListField } from '../utils/fieldUtils'
 
 /**
  * Fetches column configuration from the ProjectContentColumns (Prosjektinnholdskolonner) list.
@@ -364,6 +365,7 @@ export async function fetchListData(
 
     let fields: any[]
     let viewToUse: string | null = null
+    let sourceViewFieldNames: string[] = []
 
     if (props.defaultViewId && props.defaultViewId !== 'All Fields') {
       viewToUse = props.defaultViewId
@@ -381,6 +383,7 @@ export async function fetchListData(
         }
 
         const viewFieldNames = view.ViewFields || []
+        sourceViewFieldNames = viewFieldNames
 
         if (viewFieldNames.length > 0) {
           fields = viewFieldNames
@@ -394,30 +397,37 @@ export async function fetchListData(
         fields = allFields
       }
     } else {
+      const defaultView = views.find((v) => v.DefaultView)
+      if (defaultView) {
+        try {
+          const view: any = await list.views.getById(defaultView.Id)()
+          sourceViewFieldNames = view.ViewFields || []
+        } catch (error) {
+          console.error('[fetchListData] Error fetching default view fields for auto-hidden:', error)
+        }
+      }
+
       fields = allFields
     }
 
+    const visibleAllFields = allFields.filter((field) =>
+      isVisibleListField(field, projectContentColumns)
+    )
+
+    const visibleFieldNameSet = new Set(visibleAllFields.map((field) => field.InternalName))
+    const sourceVisibleFieldSet = new Set(
+      sourceViewFieldNames.filter((fieldName) => visibleFieldNameSet.has(fieldName))
+    )
+
+    const autoHiddenViewColumns =
+      sourceVisibleFieldSet.size > 0
+        ? visibleAllFields
+            .map((field) => field.InternalName)
+            .filter((fieldName) => !sourceVisibleFieldSet.has(fieldName))
+        : []
+
     let columns: IColumn[] = fields
-      .filter((field) => {
-        const showInEditForm = field.ShowInEditForm ?? true
-        const hidden = field.Hidden ?? false
-        const readOnlyField = field.SchemaXml
-          ? field.SchemaXml.indexOf('ReadOnly="TRUE"') !== -1
-          : false
-
-        // Keep ReadOnly fields if they are defined in ProjectContentColumns
-        const isInProjectContentColumns = projectContentColumns.some(
-          (c) => c.internalName === field.InternalName || c.fieldName === field.InternalName
-        )
-
-        return (
-          showInEditForm &&
-          !hidden &&
-          (!readOnlyField || isInProjectContentColumns) &&
-          !field.InternalName.startsWith('_') &&
-          field.InternalName !== 'Attachments'
-        )
-      })
+      .filter((field) => isVisibleListField(field, projectContentColumns))
       .map((field) => {
         const dataType = mapSharePointTypeToDataType(field.TypeAsString, field.FieldTypeKind)
         const isTaxonomyField =
@@ -496,6 +506,7 @@ export async function fetchListData(
     return {
       listItems: filteredListItems,
       listColumns: columns,
+      autoHiddenViewColumns,
       fields: mappedFields,
       views: viewsList,
       listTitle: listInfo.Title,

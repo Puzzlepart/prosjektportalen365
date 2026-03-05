@@ -1,39 +1,10 @@
-import { TableColumnDefinition, TableColumnId } from '@fluentui/react-components'
+import { IListColumn } from '../../useColumns'
 
 /**
- * Extended column definition for ListView that includes custom rendering and sizing.
+ * Re-export IListColumn as IListViewColumn for backward compatibility.
+ * Both represent a Fluent UI table column with sizing metadata.
  */
-export interface IListViewColumn<T = any> extends TableColumnDefinition<T> {
-  /**
-   * Unique identifier for the column.
-   */
-  columnId: TableColumnId
-
-  /**
-   * Minimum width for the column in pixels.
-   */
-  minWidth?: number
-
-  /**
-   * Maximum width for the column in pixels.
-   */
-  maxWidth?: number
-
-  /**
-   * Field name for the column (optional, for compatibility).
-   */
-  fieldName?: string
-
-  /**
-   * Custom render function for the header cell.
-   */
-  renderHeaderCell: () => React.ReactNode
-
-  /**
-   * Custom render function for the data cell.
-   */
-  renderCell: (item: T) => React.ReactNode
-}
+export type IListViewColumn<T = any> = IListColumn
 
 /**
  * Props for the base ListView component.

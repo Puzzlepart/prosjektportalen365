@@ -12,7 +12,7 @@ import resource from 'SharedResources'
  *
  * @param timelineContentTypeId Optional content type ID to determine current template
  *
- * @returns A Promise that resolves to an array of `TimelineConfigurationModel` objects  based on specific template ( based on GtTemplateOptions).
+ * @returns A Promise that resolves to an array of `TimelineConfigurationModel` objects  based on specific template (based on GtTemplateOptions).
  */
 export async function fetchTimelineConfiguration(timelineContentTypeId?: string) {
   const configItems = await SPDataAdapter.portalDataService.web.lists

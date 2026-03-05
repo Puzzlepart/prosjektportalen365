@@ -20,6 +20,7 @@ import { BaseProjectWebPart } from '../baseProjectWebPart'
 import * as strings from 'ProjectWebPartsStrings'
 import SPDataAdapter from '../../data'
 import { getWeb } from '../../components/DynamicList/utils'
+import { isVisibleListField } from '../../components/DynamicList/utils/fieldUtils'
 import '@pnp/sp/webs'
 import '@pnp/sp/lists'
 import '@pnp/sp/views'
@@ -32,8 +33,6 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
   private _viewsLoading: boolean = false
   private _columnOptions: IPropertyPaneDropdownOption[] = []
   private _columnsLoading: boolean = false
-  private _hasSiteIdFieldCache: boolean | null = null
-  private _isDocumentLibraryCache: boolean | null = null
 
   public async onInit() {
     await super.onInit()
@@ -72,7 +71,8 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
           key: list.Title,
           text: `${list.Title} (${list.ItemCount || 0} ${
             list.BaseTemplate === 101 ? 'dokumenter' : 'elementer'
-          })`
+          })`,
+          data: { baseTemplate: list.BaseTemplate }
         }))
 
       this._listsLoading = false
@@ -178,25 +178,7 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
       }
 
       this._columnOptions = allFields
-        .filter((field) => {
-          const showInEditForm = field.ShowInEditForm ?? true
-          const hidden = field.Hidden ?? false
-          const readOnlyField = field.SchemaXml
-            ? field.SchemaXml.indexOf('ReadOnly="TRUE"') !== -1
-            : false
-
-          const isInProjectContentColumns = projectContentColumns.some(
-            (c) => c.internalName === field.InternalName || c.fieldName === field.InternalName
-          )
-
-          return (
-            showInEditForm &&
-            !hidden &&
-            (!readOnlyField || isInProjectContentColumns) &&
-            !field.InternalName.startsWith('_') &&
-            field.InternalName !== 'Attachments'
-          )
-        })
+        .filter((field) => isVisibleListField(field, projectContentColumns))
         .map((field) => ({
           key: field.InternalName,
           text: field.Title
@@ -221,26 +203,17 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
    * Checks if the selected list has a GtSiteId field
    */
   private _hasSiteIdField(): boolean {
-    if (this._hasSiteIdFieldCache !== null) return this._hasSiteIdFieldCache
-
     const hasGtSiteId = this._columnOptions.some((col) => col.key === 'GtSiteId')
     const hasGtSiteTitle = this._columnOptions.some((col) => col.key === 'GtSiteTitle')
-    const hasBothFields = hasGtSiteId && hasGtSiteTitle
-
-    this._hasSiteIdFieldCache = hasBothFields
-    return hasBothFields
+    return hasGtSiteId && hasGtSiteTitle
   }
 
   /**
-   * Checks if the selected list is a document library
+   * Checks if the selected list is a document library using BaseTemplate
    */
   private _isDocumentLibrary(): boolean {
-    if (this._isDocumentLibraryCache !== null) return this._isDocumentLibraryCache
-
     const selectedList = this._listOptions.find((opt) => opt.key === this.properties.listName)
-    const isDocLib = selectedList?.text?.includes('dokumenter') || false
-    this._isDocumentLibraryCache = isDocLib
-    return isDocLib
+    return (selectedList as any)?.data?.baseTemplate === 101
   }
 
   /**
@@ -277,7 +250,6 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
         Description: 'Tittel for området/prosjektet som elementet tilhører'
       })
 
-      this._hasSiteIdFieldCache = null
       await this._loadColumnOptions()
       this.context.propertyPane.refresh()
 
@@ -312,8 +284,6 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
       this.properties.nonFilterableColumns = []
       this.properties.availableColumns = []
       this.properties.columnOrder = []
-      this._hasSiteIdFieldCache = null
-      this._isDocumentLibraryCache = null
       await this._loadViewOptions()
       await this._loadColumnOptions()
       this.context.propertyPane.refresh()
@@ -327,6 +297,10 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
       } else {
         this.properties.viewName = 'All Fields'
       }
+
+      await this._loadColumnOptions()
+      this.context.propertyPane.refresh()
+      this.render()
     }
 
     super.onPropertyPaneFieldChanged(propertyPath, oldValue, newValue)
