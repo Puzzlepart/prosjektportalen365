@@ -162,10 +162,18 @@ export class EditableSPField extends SPField {
    * Get the value for the field.
    */
   public getParsedValue<T>(): T {
-    if (this._fieldValueMap.has(this.type)) {
-      return this._fieldValueMap.get(this.type)(this._fieldValue) as unknown as T
+    try {
+      if (this._fieldValueMap.has(this.type)) {
+        return this._fieldValueMap.get(this.type)(this._fieldValue) as unknown as T
+      }
+      return this._fieldValue.value as unknown as T
+    } catch (error) {
+      console.warn(
+        `[EditableSPField] Failed to parse value for field '${this.internalName}' (type: ${this.type}):`,
+        error
+      )
+      return null as unknown as T
     }
-    return this._fieldValue.value as unknown as T
   }
 
   /**

@@ -205,6 +205,7 @@ define([], function () {
     ProbabilityPostActionFieldNameFieldLabel: 'Feltnavn - Sannsynlighet (etter tiltak)',
     ProjectDeliveriesGroupName: 'Prosjektleveranser (beta)',
     ProjectInformationDataFetchErrorText: 'En feil oppsto under henting av prosjektinformasjon.',
+    PropertyValueRenderError: 'Kunne ikke vise verdi',
     ProjectInformationStatusReportHeaderText: 'Statusrapport',
     ProjectInformationStatusReportHeaderDescription: 'Publisert ({0})',
     ProjectPhasesChangePhaseError:

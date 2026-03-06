@@ -190,6 +190,7 @@ define([], function () {
     ProbabilityPostActionFieldNameFieldLabel: 'Field name - Probability (post action)',
     ProjectDeliveriesGroupName: 'Project deliveries (beta)',
     ProjectInformationDataFetchErrorText: 'An error occurred while retrieving project information.',
+    PropertyValueRenderError: 'Could not display value',
     ProjectInformationStatusReportHeaderText: 'Status report published',
     ProjectPhasesChangePhaseError: 'An error occured while changing the phase. Please try again or contact an administrator',
     ProjectPhasesFetchDataError: 'You do not have access to view this web part.<br/><br/>You must either have access to the portfolio site, or the project must be exempt from the portfolio site.',
