@@ -23,6 +23,7 @@ import {
 import { customLightTheme } from 'pp365-shared-library'
 import { DynamicListContext } from '../context'
 import { ICustomAction } from '../types'
+import { getSelectedItems, buildCustomActionPayload, isCorsError } from '../utils/listOperationUtils'
 import * as strings from 'ProjectWebPartsStrings'
 
 interface DialogState {
@@ -124,12 +125,7 @@ export function useCustomActionDialog() {
           }
         } catch (error) {
           console.error('Error polling for iframe content:', error)
-          const isCorsError =
-            error.message?.includes('Failed to fetch') ||
-            error.message?.includes('NetworkError') ||
-            error.message?.includes('CORS')
-
-          const errorMessage = isCorsError
+          const errorMessage = isCorsError(error)
             ? strings.DynamicList.CorsError
             : strings.DynamicList.CouldNotFetchContent.replace('{0}', error.message)
 
@@ -192,11 +188,9 @@ export function useCustomActionDialog() {
         error: null
       })
 
-      const selectedItems = context.state.selectedItems
-        .map((id) => context.state.data.listItems.find((_, idx) => idx === id))
-        .filter(Boolean)
+      const selected = getSelectedItems(context)
 
-      if (selectedItems.length === 0) {
+      if (selected.length === 0) {
         setDialogState((prev) => ({
           ...prev,
           isLoading: false,
@@ -207,17 +201,7 @@ export function useCustomActionDialog() {
       }
 
       try {
-        const payload = {
-          listName: context.props.listName,
-          listId: context.state.data?.listId,
-          listTitle: context.state.data?.listTitle,
-          webUrl: context.props.webUrl || context.props.pageContext?.web?.absoluteUrl,
-          siteId: context.props.siteId,
-          siteTitle: context.props.webTitle,
-          selectedItems: selectedItems,
-          timestamp: new Date().toISOString(),
-          actionName: action.name
-        }
+        const payload = buildCustomActionPayload(context, action.name, selected)
 
         const response = await fetch(action.hookUrl, {
           method: 'POST',
@@ -254,12 +238,7 @@ export function useCustomActionDialog() {
         }
       } catch (error) {
         console.error('Error executing dialog action:', error)
-        const isCorsError =
-          error.message?.includes('Failed to fetch') ||
-          error.message?.includes('NetworkError') ||
-          error.message?.includes('CORS')
-
-        const errorMessage = isCorsError
+        const errorMessage = isCorsError(error)
           ? strings.DynamicList.CorsError
           : strings.DynamicList.ExecutionError.replace('{0}', error.message)
 

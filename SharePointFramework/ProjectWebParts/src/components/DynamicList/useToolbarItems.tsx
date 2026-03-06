@@ -26,6 +26,7 @@ import _ from 'lodash'
 import { useExcelExport, useCustomActionDialog } from './hooks'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
 import { fetchSingleItem } from './data/fetchListData'
+import { getSelectedItems, stampSiteIdFieldsOnFile, buildCustomActionPayload, isCorsError } from './utils/listOperationUtils'
 import * as React from 'react'
 import {
   Toaster,
@@ -121,19 +122,17 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
     const list = context.web.lists.getByTitle(context.props.listName)
 
-    const selectedItems = context.state.selectedItems.map((id) =>
-      context.state.data.listItems.find((_, idx) => idx === id)
-    )
+    const selected = getSelectedItems(context)
 
     await Promise.all(
-      selectedItems.map(async (item: any) => {
+      selected.map(async (item: any) => {
         if (item?.Id) {
           await list.items.getById(item.Id).delete()
         }
       })
     )
 
-    const deletedItemIds = new Set(selectedItems.map((item: any) => item?.Id).filter(Boolean))
+    const deletedItemIds = new Set(selected.map((item: any) => item?.Id).filter(Boolean))
     const updatedListItems = context.state.data.listItems.filter(
       (item: any) => !deletedItemIds.has(item.Id)
     )
@@ -240,21 +239,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
           }
 
           if (context.props.useSiteIdFiltering && addedFile) {
-            try {
-              const siteId = context.props.siteId
-              const siteTitle = context.props.webTitle
-
-              if (siteId || siteTitle) {
-                const fileItem = await addedFile.file.getItem()
-                const updateProps: Record<string, any> = {}
-                if (siteId) updateProps.GtSiteId = siteId
-                if (siteTitle) updateProps.GtSiteTitle = siteTitle
-
-                await fileItem.update(updateProps)
-              }
-            } catch (err) {
-              console.error('Error setting GtSiteId/GtSiteTitle on file:', err)
-            }
+            await stampSiteIdFieldsOnFile(addedFile, context.props.siteId, context.props.webTitle)
           }
         }
 
@@ -347,21 +332,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
         }
 
         if (context.props.useSiteIdFiltering && addedFile) {
-          try {
-            const siteId = context.props.siteId
-            const siteTitle = context.props.webTitle
-
-            if (siteId || siteTitle) {
-              const fileItem = await addedFile.file.getItem()
-              const updateProps: Record<string, any> = {}
-              if (siteId) updateProps.GtSiteId = siteId
-              if (siteTitle) updateProps.GtSiteTitle = siteTitle
-
-              await fileItem.update(updateProps)
-            }
-          } catch (err) {
-            console.error('Error setting GtSiteId/GtSiteTitle on document:', err)
-          }
+          await stampSiteIdFieldsOnFile(addedFile, context.props.siteId, context.props.webTitle)
         }
 
         context.setState({ refetch: Date.now() })
@@ -434,11 +405,9 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
         return
       }
 
-      const selectedItems = context.state.selectedItems
-        .map((id) => context.state.data.listItems.find((_, idx) => idx === id))
-        .filter(Boolean)
+      const selected = getSelectedItems(context)
 
-      if (selectedItems.length === 0) {
+      if (selected.length === 0) {
         dispatchToast(
           <Toast appearance='inverted'>
             <ToastTitle>{strings.DynamicList.NoItemsSelected}</ToastTitle>
@@ -450,17 +419,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       }
 
       try {
-        const payload = {
-          listName: context.props.listName,
-          listId: context.state.data?.listId,
-          listTitle: context.state.data?.listTitle,
-          webUrl: context.props.webUrl || context.props.pageContext?.web?.absoluteUrl,
-          siteId: context.props.siteId,
-          siteTitle: context.props.webTitle,
-          selectedItems: selectedItems,
-          timestamp: new Date().toISOString(),
-          actionName: action.name
-        }
+        const payload = buildCustomActionPayload(context, action.name, selected)
 
         const response = await fetch(action.hookUrl, {
           method: 'POST',
@@ -484,16 +443,10 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
           { intent: 'success' }
         )
 
-        // Refresh data after successful action
         context.setState({ refetch: Date.now(), selectedItems: [] })
       } catch (error) {
         console.error('Error executing trigger action:', error)
-        const isCorsError =
-          error.message?.includes('Failed to fetch') ||
-          error.message?.includes('NetworkError') ||
-          error.message?.includes('CORS')
-
-        const errorMessage = isCorsError
+        const errorMessage = isCorsError(error)
           ? strings.DynamicList.CorsError
           : strings.DynamicList.CouldNotExecuteAction.replace('{0}', error.message)
 
@@ -631,11 +584,9 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
               context.state.selectedItems.length !== 1
           )
           .setOnClick(() => {
-            const selectedItems = context.state.selectedItems.map((id) =>
-              context.state.data.listItems.find((_, idx) => idx === id)
-            )
+            const selected = getSelectedItems(context)
 
-            const item = _.first(selectedItems)
+            const item = _.first(selected)
             if (item) {
               const fieldValues = new ItemFieldValues(item)
               context.setState({
@@ -681,13 +632,11 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
   const farMenuItems = useMemo<ListMenuItem[]>(() => {
     const items: ListMenuItem[] = []
 
-    // Custom actions from web part configuration
     if (
       context.props.showCustomActions !== false &&
       context.props.customActions &&
       context.props.customActions.length > 0
     ) {
-      // Sort actions by order field (lower numbers first)
       const sortedActions = [...context.props.customActions].sort((a, b) => {
         const orderA = a.order ?? 100
         const orderB = b.order ?? 100
