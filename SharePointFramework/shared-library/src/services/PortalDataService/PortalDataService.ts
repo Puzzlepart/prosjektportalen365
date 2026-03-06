@@ -56,6 +56,12 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   public hubSiteId: string
 
   /**
+   * Whether the portal data service has access to the hub site.
+   * Set to `false` if the hub site is unreachable (e.g. for external users).
+   */
+  public isAvailable: boolean = true
+
+  /**
    * Configure PortalDataService
    *
    * @param configuration Configuration for PortalDataService
@@ -140,7 +146,20 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         )
       }
     } catch (err) {
-      throw err
+      Logger.write(
+        `(PortalDataService) (onInit) Failed to resolve hub site URL. Marking portal as unavailable. Error: ${err.message}`,
+        LogLevel.Warning
+      )
+      this.isAvailable = false
+      return
+    }
+    if (stringIsNullOrEmpty(this.url)) {
+      Logger.write(
+        '(PortalDataService) (onInit) Hub site URL is empty. Marking portal as unavailable.',
+        LogLevel.Warning
+      )
+      this.isAvailable = false
+      return
     }
     this._spPortal = spfi(this.url).using(AssignFrom(this._sp.web))
     this.web = this._spPortal.web

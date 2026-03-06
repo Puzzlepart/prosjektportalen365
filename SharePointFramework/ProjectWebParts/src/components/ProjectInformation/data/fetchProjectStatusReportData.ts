@@ -15,7 +15,7 @@ export const fetchProjectStatusReportData: DataFetchFunction<
   IProjectInformationContext,
   [StatusReport[], SectionModel[], ProjectColumnConfig[]]
 > = async (context) => {
-  if (context.props.hideStatusReport) {
+  if (context.props.hideStatusReport || !SPDataAdapter.portalDataService?.isAvailable) {
     return [[], [], []]
   }
   try {

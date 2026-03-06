@@ -37,6 +37,19 @@ import { fetchProjectStatusReportData } from './fetchProjectStatusReportData'
  * @param context Context for `ProjectInformation`
  * @param transformProperties Function for transforming the properties
  */
+/**
+ * Safely execute a function, returning a fallback value if it throws.
+ * Used to wrap hub-dependent calls so that external users without
+ * hub access can still see local project data.
+ */
+async function safeCall<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
+  try {
+    return await fn()
+  } catch {
+    return fallback
+  }
+}
+
 const fetchData: DataFetchFunction<
   IProjectInformationContext,
   Partial<IProjectInformationState>
@@ -44,37 +57,60 @@ const fetchData: DataFetchFunction<
   try {
     const isFrontpage = context.props.page === 'Frontpage'
     const shouldFetchArchiveStatus = isFrontpage && !context.props.hideArchiveStatus
-    const [
-      columns,
-      projectInformationData,
-      [reports, sections, columnConfig],
-      parentProjects,
-      childProjects,
-      archiveStatus
-    ] = await Promise.all([
-      SPDataAdapter.portalDataService.getProjectColumns(),
+    const hubIsAvailable = SPDataAdapter.portalDataService?.isAvailable ?? false
+
+    const [columns, projectInformationData, [reports, sections, columnConfig]] = await Promise.all([
+      hubIsAvailable
+        ? SPDataAdapter.portalDataService.getProjectColumns()
+        : Promise.resolve([]),
       SPDataAdapter.project.getProjectInformationData(),
-      fetchProjectStatusReportData(context),
-      isFrontpage
-        ? SPDataAdapter.portalDataService.getParentProjects(
-            context.props.webAbsoluteUrl,
-            ProjectInformationParentProject
-          )
-        : Promise.resolve([]),
-      isFrontpage
-        ? SPDataAdapter.portalDataService.getChildProjects(
-            context.props.webAbsoluteUrl,
-            ProjectInformationChildProject
-          )
-        : Promise.resolve([]),
-      shouldFetchArchiveStatus
-        ? SPDataAdapter.getArchiveStatus(context.props.webAbsoluteUrl)
-        : Promise.resolve(null)
+      fetchProjectStatusReportData(context)
     ])
+
+    // Hub-dependent calls are wrapped individually with safe fallbacks
+    // so that external users without hub access can still see local project data.
+    const parentProjects =
+      isFrontpage && hubIsAvailable
+        ? await safeCall(
+            () =>
+              SPDataAdapter.portalDataService.getParentProjects(
+                context.props.webAbsoluteUrl,
+                ProjectInformationParentProject
+              ),
+            []
+          )
+        : []
+
+    const childProjects =
+      isFrontpage && hubIsAvailable
+        ? await safeCall(
+            () =>
+              SPDataAdapter.portalDataService.getChildProjects(
+                context.props.webAbsoluteUrl,
+                ProjectInformationChildProject
+              ),
+            []
+          )
+        : []
+
+    const archiveStatus =
+      shouldFetchArchiveStatus && hubIsAvailable
+        ? await safeCall(
+            () => SPDataAdapter.getArchiveStatus(context.props.webAbsoluteUrl),
+            null
+          )
+        : null
+
     const templateName = projectInformationData.fieldValues.get('GtProjectTemplate', {
       format: 'text'
     })
-    const template = await SPDataAdapter.portalDataService.getProjectTemplate(templateName)
+    const template = hubIsAvailable
+      ? await safeCall(
+          () => SPDataAdapter.portalDataService.getProjectTemplate(templateName),
+          null
+        )
+      : null
+
     const data: Partial<IProjectInformationState> = {
       data: {
         columns,
@@ -90,10 +126,14 @@ const fetchData: DataFetchFunction<
       userHasEditPermission: false,
       userHasRerunSetupPermission: false
     }
-    if (isFrontpage) {
-      data.userHasEditPermission = await SPDataAdapter.checkProjectAdminPermissions(
-        ProjectAdminPermission.EditProjectProperties,
-        projectInformationData.fieldValues
+    if (isFrontpage && hubIsAvailable) {
+      data.userHasEditPermission = await safeCall(
+        () =>
+          SPDataAdapter.checkProjectAdminPermissions(
+            ProjectAdminPermission.EditProjectProperties,
+            projectInformationData.fieldValues
+          ),
+        false
       )
       data.userHasRerunSetupPermission = await SPDataAdapter.checkProjectAdminPermissions(
         ProjectAdminPermission.ReRunSetup,
