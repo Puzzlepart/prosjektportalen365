@@ -20,7 +20,7 @@ import { BaseProjectWebPart } from '../baseProjectWebPart'
 import * as strings from 'ProjectWebPartsStrings'
 import SPDataAdapter from '../../data'
 import { getWeb } from '../../components/DynamicList/utils'
-import { isVisibleListField } from '../../components/DynamicList/utils/fieldUtils'
+import { isVisibleListField, normalizeViewFieldNames } from '../../components/DynamicList/utils/fieldUtils'
 import '@pnp/sp/webs'
 import '@pnp/sp/lists'
 import '@pnp/sp/views'
@@ -144,6 +144,8 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
   /**
    * Load available columns from the selected list.
    * Uses the exact same filtering logic as fetchListData to ensure consistency.
+   * Columns not in the configured/default view are marked as disabled since they
+   * are already auto-hidden at runtime.
    */
   private async _loadColumnOptions(): Promise<void> {
     try {
@@ -159,6 +161,8 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
         this.properties.webUrl,
         this.properties.webContextMode || WebContextMode.CurrentProject
       )
+
+      const list = web.lists.getByTitle(this.properties.listName)
 
       const allFields = await SPDataAdapter.portalDataService.getListFields(
         this.properties.listName,
@@ -177,14 +181,46 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
         console.warn('Could not fetch ProjectContentColumns configuration:', error)
       }
 
+      let viewFieldNames: string[] = []
+      try {
+        const viewId = this.properties.defaultViewId
+        if (viewId && viewId !== 'All Fields') {
+          const view = await list.views
+            .getById(viewId)
+            .select('ViewFields')
+            .expand('ViewFields')()
+          viewFieldNames = (view as any).ViewFields?.Items || []
+        } else {
+          const views = await list.views
+            .select('Id', 'DefaultView')
+            .filter('Hidden eq false')()
+          const defaultView = views.find((v: any) => v.DefaultView)
+          if (defaultView) {
+            const view = await list.views
+              .getById(defaultView.Id)
+              .select('ViewFields')
+              .expand('ViewFields')()
+            viewFieldNames = (view as any).ViewFields?.Items || []
+          }
+        }
+      } catch (error) {
+        console.warn('[DynamicList] Could not fetch view fields for column options:', error)
+      }
+
+      const viewFieldSet = new Set(normalizeViewFieldNames(viewFieldNames))
+      const hasViewFields = viewFieldSet.size > 0
+
       this._columnOptions = allFields
         .filter((field) => isVisibleListField(field, projectContentColumns))
-        .map((field) => ({
-          key: field.InternalName,
-          text: field.Title
-        }))
+        .map((field) => {
+          const isInView = !hasViewFields || viewFieldSet.has(field.InternalName)
+          return {
+            key: field.InternalName,
+            text: isInView ? field.Title : `${field.Title} (${strings.DynamicList.HiddenFromView})`,
+            disabled: !isInView
+          }
+        })
 
-      // Store available columns in properties for PropertyFieldOrder
       this.properties.availableColumns = this._columnOptions.map((opt) => opt.key as string)
 
       this._columnsLoading = false

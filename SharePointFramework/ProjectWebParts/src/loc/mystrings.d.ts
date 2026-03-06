@@ -380,6 +380,7 @@ declare interface IProjectWebPartsStrings {
     ListTable: string
     GroupByColumn: string
     FolderNavigation: string
+    HiddenFromView: string
   }
 }
 

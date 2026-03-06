@@ -405,7 +405,8 @@ define([], function () {
       NoItemsFound: 'No items found',
       ListTable: 'List table',
       GroupByColumn: 'Group by {0}',
-      FolderNavigation: 'Folder navigation'
+      FolderNavigation: 'Folder navigation',
+      HiddenFromView: 'Hidden from view'
     }
   }
 })

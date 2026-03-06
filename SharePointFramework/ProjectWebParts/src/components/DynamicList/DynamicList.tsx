@@ -181,19 +181,24 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
   }, [isSingleView, state.data?.listItems?.length, state.selectedItems?.length])
 
   /**
-   * Filter fields for edit panel - exclude hidden columns unless they are required
+   * Filter fields for edit panel - exclude hidden columns and auto-hidden view columns
+   * unless they are required fields.
    */
   const editPanelFields = useMemo(() => {
     if (!state.data?.fields) return []
 
+    const autoHidden = state.data?.autoHiddenViewColumns || []
+    const manualHidden = props.hiddenColumns || []
+    const effectiveHidden = new Set([...manualHidden, ...autoHidden])
+
     return state.data.fields.filter((field) => {
       const fieldName = field.InternalName || field.displayName
-      const isHidden = props.hiddenColumns?.includes(fieldName)
+      const isHidden = effectiveHidden.has(fieldName)
       const isRequired = field.Required === true
 
       return !isHidden || isRequired
     })
-  }, [state.data?.fields, props.hiddenColumns])
+  }, [state.data?.fields, state.data?.autoHiddenViewColumns, props.hiddenColumns])
 
   /**
    * Create a data adapter that uses the correct SP instance based on webContextMode.

@@ -430,7 +430,8 @@ define([], function () {
       NoItemsFound: 'Ingen elementer funnet',
       ListTable: 'Listetabell',
       GroupByColumn: 'Grupper etter {0}',
-      FolderNavigation: 'Mappenavigasjon'
+      FolderNavigation: 'Mappenavigasjon',
+      HiddenFromView: 'Skjult fra visning'
     }
   }
 })

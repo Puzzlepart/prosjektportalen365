@@ -10,7 +10,7 @@ import '@pnp/sp/items/get-all'
 import '@pnp/sp/views'
 import '@pnp/sp/taxonomy'
 import { TaxonomyTermModel } from '../models/TaxonomyTermModel'
-import { isVisibleListField } from '../utils/fieldUtils'
+import { isVisibleListField, normalizeViewFieldNames } from '../utils/fieldUtils'
 
 /**
  * Fetches column configuration from the ProjectContentColumns (Prosjektinnholdskolonner) list.
@@ -377,12 +377,18 @@ export async function fetchListData(
       try {
         let view: any
         if (props.defaultViewId && props.defaultViewId !== 'All Fields') {
-          view = await list.views.getById(props.defaultViewId)()
+          view = await list.views
+            .getById(props.defaultViewId)
+            .select('ViewFields')
+            .expand('ViewFields')()
         } else {
-          view = await list.views.getByTitle(viewToUse)()
+          view = await list.views
+            .getByTitle(viewToUse)
+            .select('ViewFields')
+            .expand('ViewFields')()
         }
 
-        const viewFieldNames = view.ViewFields || []
+        const viewFieldNames: string[] = normalizeViewFieldNames(view.ViewFields?.Items || [])
         sourceViewFieldNames = viewFieldNames
 
         if (viewFieldNames.length > 0) {
@@ -400,8 +406,11 @@ export async function fetchListData(
       const defaultView = views.find((v) => v.DefaultView)
       if (defaultView) {
         try {
-          const view: any = await list.views.getById(defaultView.Id)()
-          sourceViewFieldNames = view.ViewFields || []
+          const view: any = await list.views
+            .getById(defaultView.Id)
+            .select('ViewFields')
+            .expand('ViewFields')()
+          sourceViewFieldNames = normalizeViewFieldNames(view.ViewFields?.Items || [])
         } catch (error) {
           console.error('[fetchListData] Error fetching default view fields for auto-hidden:', error)
         }

@@ -443,7 +443,6 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
           { intent: 'success' }
         )
 
-        // Refresh data after successful action
         context.setState({ refetch: Date.now(), selectedItems: [] })
       } catch (error) {
         console.error('Error executing trigger action:', error)
@@ -633,13 +632,11 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
   const farMenuItems = useMemo<ListMenuItem[]>(() => {
     const items: ListMenuItem[] = []
 
-    // Custom actions from web part configuration
     if (
       context.props.showCustomActions !== false &&
       context.props.customActions &&
       context.props.customActions.length > 0
     ) {
-      // Sort actions by order field (lower numbers first)
       const sortedActions = [...context.props.customActions].sort((a, b) => {
         const orderA = a.order ?? 100
         const orderB = b.order ?? 100
