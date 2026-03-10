@@ -4,27 +4,7 @@
 
 Prosjektportalen 365 bruker et tilpasset miljøoppsett for å gjøre det enkelt å utvikle mot forskjellige SharePoint-miljøer. Systemet består av flere komponenter som samarbeider:
 
-#### 1. `environments.json`
-
-Denne filen definerer flere SharePoint-miljøer du kan utvikle mot. Hvert miljø angir:
-
-- `name`: Et beskrivende navn for miljøet (f.eks. «Porteføljeoversikt», «Forside»)
-- `siteUrl`: SharePoint-nettadressen der webdelen din skal kjøres
-- `page`: Den spesifikke siden på nettstedet som laster webdelen
-- `bundle`: Hvilken SPFx-webdelpakke som brukes under utvikling
-
-Eksempel:
-
-```json
-{
-    "name": "Porteføljeoversikt",
-    "siteUrl": "https://puzzlepart.sharepoint.com",
-    "page": "SitePages/TestStdAln3.aspx",
-    "bundle": "portfolio-overview-web-part"
-}
-```
-
-#### 2. `.env.template` og `.env`
+#### 1. `.env.template` og `.env`
 
 En delt `.env.template`-fil finnes i `.tasks/`-mappen og definerer standardverdier for alle SPFx-pakker. Når du kjører `npm run watch` for første gang, oppretter `prewatch`-skriptet automatisk en `.env`-fil i pakken.
 
@@ -50,7 +30,7 @@ SERVE_ENVIRONMENT=Porteføljeoversikt
 
 > **Merk:** `.env`-filen er gitignorert og skal ikke committes. Kun `.env.template` committes til repoet.
 
-#### 3. Overvåkingsskript i `package.json`
+#### 2. Overvåkingsskript i `package.json`
 
 Overvåkingsskriptene knytter alt sammen:
 
@@ -88,3 +68,29 @@ Overvåkingsskriptene knytter alt sammen:
 - Ingen behov for å manuelt redigere SPFx-konfigurasjonsfiler
 
 Hvis du trenger å legge til et nytt miljø for utvikling, legg ganske enkelt til en ny oppføring i `environments.json`-filen.
+
+#### 3. `environments.json`
+
+Denne filen definerer flere SharePoint-miljøer du kan utvikle mot. En delt mal finnes i `.tasks/environments.sample.json`. Kopier den til rotmappen til SPFx-pakken du jobber med:
+
+```bash
+cp ../.tasks/environments.sample.json ./environments.json
+```
+
+Hvert miljø angir:
+
+- `name`: Et beskrivende navn for miljøet (f.eks. «Porteføljeoversikt», «Forside»)
+- `siteUrl`: SharePoint-nettadressen der webdelen din skal kjøres
+- `page`: Den spesifikke siden på nettstedet som laster webdelen
+- `bundle`: Hvilken SPFx-webdelpakke som brukes under utvikling
+
+Eksempel:
+
+```json
+{
+    "name": "Porteføljeoversikt",
+    "siteUrl": "https://puzzlepart.sharepoint.com",
+    "page": "SitePages/TestStdAln3.aspx",
+    "bundle": "portfolio-overview-web-part"
+}
+```

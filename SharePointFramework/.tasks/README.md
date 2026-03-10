@@ -47,6 +47,16 @@ Argumenter:
 | `--summary` | Inkluder en oppsummeringstabell |
 | `--filter` | Valgfritt regex for å filtrere nøkler |
 
+## environments.sample.json
+
+Delt mal for `environments.json`. Kopier denne filen til rotmappen til SPFx-pakken du jobber med og gi den nytt navn til `environments.json`:
+
+```bash
+cp ../.tasks/environments.sample.json ./environments.json
+```
+
+`$schema`-referansen peker allerede til `../.tasks/environments.schema.json`, så du får autofullføring i editoren med en gang.
+
 ## environments.schema.json
 
-JSON-schema for `environments.json`/`environments.sample.json` som definerer utviklingsmiljøer for SPFx-pakker. Gir autofullføring i editorer.
+JSON-schema for `environments.json` som definerer utviklingsmiljøer for SPFx-pakker. Gir autofullføring i editorer.
