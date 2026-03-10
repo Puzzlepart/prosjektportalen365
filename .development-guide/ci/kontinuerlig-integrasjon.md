@@ -24,7 +24,7 @@ Den kjører [Build-Release.ps1](../../Install/Build-Release.ps1) med parameteren
 
 Med gjeldende tilnærming, uten hurtigbuffer (da den kjører `npm ci`), tar en full kjøring omtrent 25-35 minutter.
 
-![image](./assets/ci.png)
+![image](./development-guide/assets/ci.png)
 
 ### CI (channels/test)
 
