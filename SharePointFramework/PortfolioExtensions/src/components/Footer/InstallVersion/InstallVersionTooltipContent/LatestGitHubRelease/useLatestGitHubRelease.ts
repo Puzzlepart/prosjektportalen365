@@ -25,40 +25,37 @@ export function useLatestGitHubRelease(props: ILatestGitHubReleaseProps) {
   const getVersionComparisonIconProps = () => {
     if (latestGitHubVersion.greaterThan(installedVersion)) {
       return {
-        iconName: props.latestGitHubReleaseIsNewerIconName,
-        styles: {
-          root: {
-            color: props.latestGitHubReleaseIsNewerIconColor
-          }
-        },
-        title: strings.LatestGitHubReleaseIsNewerText
+        name: props.latestGitHubReleaseIsNewerIconName,
+        options: {
+          color: props.latestGitHubReleaseIsNewerIconColor,
+          title: strings.LatestGitHubReleaseIsNewerText
+        }
       }
     } else if (latestGitHubVersion.lessThan(installedVersion)) {
       return {
-        iconName: props.latestGitHubReleaseIsOlderIconName,
-        styles: {
-          root: {
-            color: props.latestGitHubReleaseIsOlderIconColor
-          }
-        },
-        title: strings.LatestGitHubReleaseIsOlderText
+        name: props.latestGitHubReleaseIsOlderIconName,
+        options: {
+          color: props.latestGitHubReleaseIsOlderIconColor,
+          title: strings.LatestGitHubReleaseIsOlderText
+        }
       }
     }
     return {
-      iconName: props.latestGitHubReleaseIsSameIconName,
-      styles: {
-        root: {
-          color: props.latestGitHubReleaseIsSameIconColor
-        }
-      },
-      title: strings.LatestGitHubReleaseIsSameText
+      name: props.latestGitHubReleaseIsSameIconName,
+      options: {
+        color: props.latestGitHubReleaseIsSameIconColor,
+        title: strings.LatestGitHubReleaseIsSameText
+      }
     }
   }
+
+  const releaseNotesUrl = `https://github.com/Puzzlepart/prosjektportalen365/blob/main/releasenotes/${latestGitHubVersion.major}.${latestGitHubVersion.minor}.0.md`
 
   return {
     latestGitHubRelease,
     latestGitHubVersion,
     installedVersion,
+    releaseNotesUrl,
     versionComparisonIconProps: getVersionComparisonIconProps()
   } as const
 }

@@ -4,15 +4,17 @@ import React, { FC } from 'react'
 import { ILatestGitHubReleaseProps } from './types'
 import styles from './LatestGitHubRelease.module.scss'
 import { useLatestGitHubRelease } from './useLatestGitHubRelease'
-import { Button, Label, Link, Tooltip } from '@fluentui/react-components'
-import { getFluentIcon } from 'pp365-shared-library'
+import { Button, Label, Link, Tooltip, Divider } from '@fluentui/react-components'
+import { FluentIconName, getFluentIcon } from 'pp365-shared-library'
+import ReactMarkdown from 'react-markdown'
+import rehypeRaw from 'rehype-raw'
 
 /**
  * Component for displaying the latest GitHub release and a
  * comparison between the latest GitHub release and the installed version.
  */
 export const LatestGitHubRelease: FC<ILatestGitHubReleaseProps> = (props) => {
-  const { latestGitHubRelease, latestGitHubVersion, installedVersion, versionComparisonIconProps } =
+  const { latestGitHubRelease, latestGitHubVersion, installedVersion, releaseNotesUrl, versionComparisonIconProps } =
     useLatestGitHubRelease(props)
 
   return (
@@ -21,22 +23,50 @@ export const LatestGitHubRelease: FC<ILatestGitHubReleaseProps> = (props) => {
         <span>
           <Label weight='semibold'>{strings.LatestGitHubReleaseLabel}</Label>:
         </span>
-        <div className={styles.version}>
-          <span
-            className={styles.latestGitHubReleaseLink}
-            title={strings.LatestGitHubReleaseLinkTitle}
+        <Tooltip relationship='description' withArrow content={versionComparisonIconProps.options.title}>
+          <Button
+            className={styles.button}
+            size='medium'
+            appearance='subtle'
+            onClick={() =>
+              window.open(latestGitHubRelease.html_url, '_blank')
+            }
+            icon={getFluentIcon(versionComparisonIconProps.name as FluentIconName, versionComparisonIconProps.options)}
+            iconPosition='after'
           >
-            <Link href={latestGitHubRelease.html_url} target='_blank' rel='noopener noreferrer'>
-              <b>{latestGitHubVersion.toString()}</b>
-            </Link>
-          </span>
-          <Tooltip relationship='description' withArrow content={versionComparisonIconProps.title}>
-            <span className={styles.versionComparisonIcon}>
-              <Icon {...versionComparisonIconProps} />
-            </span>
-          </Tooltip>
-        </div>
+            <span className={styles.label}>{latestGitHubVersion.toString()}</span>
+          </Button>
+        </Tooltip>
       </div>
+      <span
+        className={styles.latestGitHubReleaseLink}
+        title={strings.LatestGitHubReleaseLinkTitle}
+      >
+        <Link onClick={() =>
+          window.open(releaseNotesUrl, '_blank')
+        } target='_blank' rel='noopener noreferrer'>
+          <b>{strings.LatestGitHubReleaseLinkTitle}</b>
+        </Link>
+      </span>
+      {latestGitHubRelease.body && (
+        <>
+          <Divider className={styles.divider} />
+          <div className={styles.releaseHighlights}>
+            <Label weight='semibold'>{strings.LatestGitHubReleaseHighlightsLabel}</Label>
+            <div className={styles.releaseBody} tabIndex={0}>
+              <ReactMarkdown
+                linkTarget='_blank'
+                rehypePlugins={[rehypeRaw]}
+                components={{
+                  a: ({ node, ...props }) => <a {...props} rel='noopener noreferrer' />
+                }}
+              >
+                {latestGitHubRelease.body}
+              </ReactMarkdown>
+            </div>
+          </div>
+        </>
+      )}
       <div hidden={!latestGitHubVersion.greaterThan(installedVersion)}>
         <Button
           className={styles.button}
@@ -55,10 +85,10 @@ export const LatestGitHubRelease: FC<ILatestGitHubReleaseProps> = (props) => {
 }
 
 LatestGitHubRelease.defaultProps = {
-  latestGitHubReleaseIsNewerIconName: 'ChevronUp',
+  latestGitHubReleaseIsNewerIconName: 'ArrowCircleUpSparkle',
   latestGitHubReleaseIsNewerIconColor: 'green',
-  latestGitHubReleaseIsOlderIconName: 'ChevronDown',
-  latestGitHubReleaseIsOlderIconColor: 'red',
-  latestGitHubReleaseIsSameIconName: 'ChevronLeft',
+  latestGitHubReleaseIsOlderIconName: 'ArrowCircleDown',
+  latestGitHubReleaseIsOlderIconColor: 'orange',
+  latestGitHubReleaseIsSameIconName: 'CheckmarkCircle',
   latestGitHubReleaseIsSameIconColor: 'black'
 }

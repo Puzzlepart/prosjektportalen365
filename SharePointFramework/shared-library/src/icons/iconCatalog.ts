@@ -156,7 +156,11 @@ import {
   ArchiveFilled,
   ArchiveRegular,
   WarningFilled,
-  WarningRegular
+  WarningRegular,
+  ArrowCircleDownFilled,
+  ArrowCircleDownRegular,
+  ArrowCircleUpSparkleFilled,
+  ArrowCircleUpSparkleRegular
 } from '@fluentui/react-icons'
 
 /**
@@ -282,6 +286,14 @@ export const iconCatalog = {
   Person: {
     regular: PersonRegular,
     filled: PersonFilled
+  },
+  ArrowCircleUpSparkle: {
+    regular: ArrowCircleUpSparkleRegular,
+    filled: ArrowCircleUpSparkleFilled
+  },
+  ArrowCircleDown: {
+    regular: ArrowCircleDownRegular,
+    filled: ArrowCircleDownFilled
   },
   CheckmarkCircle: {
     regular: CheckmarkCircleRegular,
