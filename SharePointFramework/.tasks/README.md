@@ -2,9 +2,9 @@
 
 Ett felles sted for `node`-oppgaver som brukes av våre SPFx-løsninger.
 
-## createEnviromentFile.js
+## createEnvironmentFile.js
 
-Oppretter en `.env`-fil i gjeldende mappe (`process.cwd()`). Dette kjøres som en del av `pre-watch.js`-oppgaven.
+Oppretter en `.env`-fil i gjeldende mappe (`process.cwd()`) basert på den delte `.env.template`-malen. Leser `config/config.json` for å finne tilgjengelige bundlenavn og legger dem til som kommentarer i `.env`-filen. Dette kjøres som en del av `pre-watch.js`-oppgaven.
 
 ## createServeConfig.js
 
@@ -20,7 +20,7 @@ Kjører `modifySolutionFiles.js` og `setBundleConfig.js`.
 
 ## pre-watch.js
 
-Kjører `createEnviromentFile.js` og `modifySolutionFiles.js`. Genererer også en `config/.generated-solution-config.json` hvis kanalets miljøvariabel `SERVE_CHANNEL` er satt og ikke er **main**.
+Kjører `createEnvironmentFile.js` og `modifySolutionFiles.js`. Genererer også en `config/.generated-solution-config.json` hvis kanalets miljøvariabel `SERVE_CHANNEL` er satt og ikke er **main**.
 
 ## setBundleConfig.js
 

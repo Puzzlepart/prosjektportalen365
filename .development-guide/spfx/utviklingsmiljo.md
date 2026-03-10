@@ -24,16 +24,31 @@ Eksempel:
 }
 ```
 
-#### 2. `.env`-filen
+#### 2. `.env.template` og `.env`
+
+En delt `.env.template`-fil finnes i `.tasks/`-mappen og definerer standardverdier for alle SPFx-pakker. Når du kjører `npm run watch` for første gang, oppretter `prewatch`-skriptet automatisk en `.env`-fil i pakken.
+
+**Automatisk oppretting av `.env`:** Skriptet `.tasks/createEnvironmentFile.js` kjøres som en del av `prewatch`. Dersom `.env` ikke finnes, leses malen fra `.tasks/.env.template` og tilgjengelige bundlenavn hentes automatisk fra pakkens `config/config.json`. Resultatet skrives til `.env` med bundlenavnene som kommentarer.
 
 `.env`-filen inneholder konfigurasjonsvariabler for utviklingsmiljøet ditt:
 
+| Variabel | Beskrivelse | Standard |
+|---|---|---|
+| `SERVE_CHANNEL` | Hvilken kanal som brukes for `environments.json`-oppslag. Tilgjengelige kanaler: `main`, `test`, `i18n`. | `main` |
+| `SERVE_BUNDLE_REGEX` | Regulært uttrykk for å filtrere hvilke bundler som bygges under `watch`. Sett til et bundlenavn for raskere bygging. | _(tom – alle bundler bygges)_ |
+| `SERVE_ENVIRONMENT` | Navn på miljøet fra `environments.json` som skal brukes. | _(ikke satt)_ |
+
+Eksempel `.env`:
+
 ```text
+SERVE_CHANNEL=main
+SERVE_BUNDLE_REGEX=portfolio-overview-web-part
 SERVE_ENVIRONMENT=Porteføljeoversikt
-NODE_ENV=development
 ```
 
-Den viktigste innstillingen er `SERVE_ENVIRONMENT`, som angir hvilket miljø fra `environments.json` som skal brukes når du kjører `npm run watch`. Dette lar deg raskt bytte mellom forskjellige SharePoint-miljøer ved å endre kun én verdi.
+> **Tips:** Sett `SERVE_BUNDLE_REGEX` til den spesifikke webdelen eller utvidelsen du jobber med for å redusere byggetiden betydelig. Se kommentarene i pakkens `.env.template` for tilgjengelige bundlenavn.
+
+> **Merk:** `.env`-filen er gitignorert og skal ikke committes. Kun `.env.template` committes til repoet.
 
 #### 3. Overvåkingsskript i `package.json`
 
