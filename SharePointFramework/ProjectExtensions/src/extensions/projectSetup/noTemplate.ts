@@ -32,7 +32,8 @@ export const createNoTemplateOption = (): ProjectTemplate => {
       GtIsParentProject: false,
       IsHiddenTemplate: false,
       GtProjectPhaseTermId: null,
-      GtDocumentTemplateLibrary: null
+      GtDocumentTemplateLibrary: null,
+      GtTimelineContentType: null
     },
     null
   )
