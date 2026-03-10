@@ -165,6 +165,11 @@ export interface IProjectInformationState
   userHasEditPermission?: boolean
 
   /**
+   * Current user has rerun setup permission (`5c2fd32e-0c8b-42be-9e0b-4fa6ff5d4774`)
+   */
+  userHasRerunSetupPermission?: boolean
+
+  /**
    * Properties last updated date/time
    */
   propertiesLastUpdated?: Date

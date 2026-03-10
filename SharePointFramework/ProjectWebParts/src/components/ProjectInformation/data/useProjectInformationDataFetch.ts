@@ -87,11 +87,16 @@ const fetchData: DataFetchFunction<
         archiveStatus,
         ...projectInformationData
       },
-      userHasEditPermission: false
+      userHasEditPermission: false,
+      userHasRerunSetupPermission: false
     }
     if (isFrontpage) {
       data.userHasEditPermission = await SPDataAdapter.checkProjectAdminPermissions(
         ProjectAdminPermission.EditProjectProperties,
+        projectInformationData.fieldValues
+      )
+      data.userHasRerunSetupPermission = await SPDataAdapter.checkProjectAdminPermissions(
+        ProjectAdminPermission.ReRunSetup,
         projectInformationData.fieldValues
       )
     }

@@ -73,7 +73,7 @@ export const useActions = () => {
     },
     bundleIcon(Organization24Filled, Organization24Regular),
     false,
-    !context.state.userHasEditPermission
+    !context.state.userHasRerunSetupPermission
   ]
   const runTemplateSelectorAction: ActionType = [
     strings.RunTemplateSelectorLabel,
@@ -82,7 +82,7 @@ export const useActions = () => {
     },
     bundleIcon(Apps24Filled, Apps24Regular),
     false,
-    !context.state.userHasEditPermission
+    !context.state.userHasRerunSetupPermission
   ]
   const actionsMap: Record<string, ActionType> = {
     showAllProjectInformationAction,

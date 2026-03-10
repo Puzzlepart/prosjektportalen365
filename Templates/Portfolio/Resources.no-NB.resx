@@ -2068,6 +2068,9 @@
   <data name="Lists_ProjectAdminPermissions_ProjectStatusAdmin" xml:space="preserve">
     <value>Administrere prosjektstatus</value>
   </data>
+  <data name="Lists_ProjectAdminPermissions_ReRunSetup" xml:space="preserve">
+    <value>Kjøre oppsettsveiviser på nytt</value>
+  </data>
   <data name="Lists_ProjectAdminPermissions_Title" xml:space="preserve">
     <value>Prosjektadministrasjonstilganger</value>
   </data>
