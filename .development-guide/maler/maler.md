@@ -1,8 +1,8 @@
 ## Maler
 
-### JSON-provisjonmal
+### JSON-provisjoneringsmal
 
-På rotnivået i mappen **Maler** finner du følgende filer:
+På rotnivået i mappen **Templates** finner du følgende filer:
 
 | Fil/Mappe                       | Beskrivelse                                                                                  |
 | ------------------------------- | -------------------------------------------------------------------------------------------- |
@@ -12,14 +12,14 @@ På rotnivået i mappen **Maler** finner du følgende filer:
 | `Encode-JSON.ps1`               | Skript for å ta innholdet av en JSON-fil, kode og minimere det, og lagre det i en `.txt`-fil |
 | `Search-Resx.ps1`               | Skript for å søke etter ubrukte **.resx**-ressurser                                          |
 | `tasks/generateResxJson.js`     | Node-skript for å generere en JSON-representasjon av **.resx**-filene                        |
-| `tasks/generateJsonTemplate.js` | Node-skript for å generere JSON-maler for hver språk                                         |
+| `tasks/generateJsonTemplate.js` | Node-skript for å generere JSON-maler for hvert språk                                        |
 | `_JsonTemplate.json`            | JSON-prosjektmal                                                                             |
 
 #### Bygging av JSON-maler
 
 Ved endringer i JSON-malen kan npm-oppgaven `watch` brukes. Den overvåker `_JsonTemplate.json` og bygger lokalversjon av dette til den tilsvarende innholdsmalen.
 
-Ressurser fra **.resx**-filene i mappen "Portfolio" kan brukes i malen ved å bruke `{{tokens}}`.
+Ressurser fra **.resx**-filene i mappen «Portfolio» kan brukes i malen ved å bruke `{{tokens}}`.
 
 **Eksempel:**
 
@@ -34,12 +34,12 @@ Ressurser fra **.resx**-filene i mappen "Portfolio" kan brukes i malen ved å br
 
 ### PnP-maler
 
-I tillegg har vi to PnP-provisjonsmaler.
+I tillegg har vi to PnP-provisjoneringsmaler.
 
-| Mal                                 | Beskrivelse         |
-| ----------------------------------- | ------------------- |
-| [Portfolio](../Templates/Portfolio) | Porteføljeelementer |
-| [Taxonomy](../Templates/Taxonomy)   | Taksonomi           |
+| Mal                                    | Beskrivelse         |
+| -------------------------------------- | ------------------- |
+| [Portfolio](../../Templates/Portfolio) | Porteføljeelementer |
+| [Taxonomy](../../Templates/Taxonomy)   | Taksonomi           |
 
 #### Portefølje
 
@@ -47,12 +47,12 @@ I tillegg har vi to PnP-provisjonsmaler.
 | ------------------ | ---------------------------------------------------------------- |
 | Objects            | PnP-elementer. Se https://github.com/pnp/PnP-Provisioning-Schema |
 | SiteAssets         | Filer som skal lastes opp til SiteAssets                         |
-| Portfolio.xml      | Hovedmal-fil                                                     |
+| Portfolio.xml      | Hovedmalfil                                                      |
 | `Resources.*.resx` | Ressursfiler                                                     |
 
 #### Innholdsmaler
 
-Innholdsmaler finnes i mappen **Innhold**. Navnet på malen følger følgende mønster:
+Innholdsmaler finnes i mappen **Content**. Navnet på malen følger dette mønsteret:
 
 `Portfolio_content.{language_code}.xml`
 `Portfolio_content_BA.{language_code}.xml`

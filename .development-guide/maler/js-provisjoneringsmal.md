@@ -1,8 +1,8 @@
-## JS Provisjoneringsmal
+## JS-provisjoneringsmal
 
 For å sette opp prosjektområdene bruker vi Prosjektområde `site design` som laster inn en extension for prosjektsetup som bruker [sp-js-provisioning](https://github.com/Puzzlepart/sp-js-provisioning).
 
-Med våre PnP-innholdsmaler (se **3.2.2**) setter vi opp en standardmal. Standardmalene for våre støttede språk er bygget fra kildefilen [_JsonTemplate.json](../Templates/_JsonTemplate.json).
+Med våre PnP-innholdsmaler (se **Maler**-seksjonen) setter vi opp en standardmal. Standardmalene for våre støttede språk er bygget fra kildefilen [_JsonTemplate.json](../../Templates/_JsonTemplate.json).
 
 Vennligst merk **Parameters**-objektet.
 
@@ -22,7 +22,7 @@ Vennligst merk **Parameters**-objektet.
 | ProjectContentTypeId       | Innholdstype-ID for egenskapsinnholdstypen for prosjektet                                   |
 | ProjectStatusContentTypeId | Innholdstype-ID for innholdstypen for prosjektstatus                                        |
 
-I tillegg til parameterne som er spesifisert i [Standardmal.txt](../Templates/Portfolio/Prosjektmaler/Standardmal.txt), er det også følgende parametere:
+I tillegg til parameterne som er spesifisert i [Standardmal.txt](../../Templates/Portfolio/Prosjektmaler/Standardmal.txt), er det også følgende parametere:
 
 | Parameter  | Beskrivelse                                                                               |
 | ---------- | ----------------------------------------------------------------------------------------- |

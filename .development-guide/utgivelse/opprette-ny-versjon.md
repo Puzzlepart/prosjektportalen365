@@ -2,7 +2,7 @@
 
 For å opprette en ny versjon har vi to alternativer: `Minor` og `Patch`. En ny minor-versjon bør opprettes når det er ny funksjonalitet av interesse for brukerne, mens patch-versjoner kan opprettes ofte med feilrettinger, justeringer og minimale funksjonelle forbedringer.
 
-Økningen av versjonsnummeret gjøres ved hjelp av npm-skript. Dette gjøres på `releases/*` branch når funksjonaliteten som for øyeblikket er under utvikling, anses som klar for utgivelse.
+Økningen av versjonsnummeret gjøres ved hjelp av npm-skript. Dette gjøres på `releases/*`-branchen når funksjonaliteten som for øyeblikket er under utvikling, anses som klar for utgivelse.
 
 ### Patch-utgivelse
 
