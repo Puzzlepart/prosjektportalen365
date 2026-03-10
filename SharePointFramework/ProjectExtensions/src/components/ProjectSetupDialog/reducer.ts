@@ -9,7 +9,7 @@ export const INIT = createAction('INIT')
 export const ON_LIST_CONTENT_CONFIG_CHANGED = createAction<ContentConfig[]>(
   'ON_LIST_CONTENT_CONFIG_CHANGED'
 )
-export const ON_EXTENSIONS_CHANGED = createAction<ProjectExtension[]>('ON_EXTENTIONS_CHANGED')
+export const ON_EXTENSIONS_CHANGED = createAction<ProjectExtension[]>('ON_EXTENSIONS_CHANGED')
 export const ON_TEMPLATE_CHANGED = createAction<ProjectTemplate>('ON_TEMPLATE_CHANGED')
 
 export const initialState: IProjectSetupDialogState = {
@@ -19,15 +19,14 @@ export const initialState: IProjectSetupDialogState = {
 }
 
 /**
- * Create reducer for `TemplateSelectDialog`
+ * Create reducer for `ProjectSetupDialog`
  */
 export default (data: IProjectSetupData) =>
   createReducer(initialState, {
     [INIT.type]: (state: IProjectSetupDialogState) => {
       let template: ProjectTemplate
       if (data.hasExistingTemplate) {
-        // When re-running the template selector, default to "No template"
-        // to avoid accidentally applying a heavy template configuration.
+        // When re-running the setup wizard, default to 'No template' to avoid accidentally applying a full template setup.
         template = createNoTemplateOption()
       } else {
         ;[template] = data.templates.filter((t) => t.isDefault)

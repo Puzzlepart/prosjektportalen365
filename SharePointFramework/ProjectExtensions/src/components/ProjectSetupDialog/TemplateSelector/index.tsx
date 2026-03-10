@@ -32,18 +32,18 @@ export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
   const options: IChoiceGroupOption[] = [
     {
       key: 'notemplate',
-      text: strings.NoTemplateRadioLabel,
+      text: strings.ProjectTemplateSelectorNoTemplateRadioLabel,
       disabled: !hasExistingTemplate,
       onRenderLabel: (props) => (
         <span className={styles.radioLabelContainer}>
           <span className={styles.radioLabel}>{props.text}</span>
-          <span className={styles.radioDescription}>{strings.NoTemplateDescription}</span>
+          <span className={styles.radioDescription}>{strings.ProjectTemplateSelectorNoTemplateDescription}</span>
         </span>
       )
     },
     {
       key: 'selecttemplate',
-      text: strings.SelectTemplateRadioLabel
+      text: strings.ProjectTemplateSelectorSelectTemplateRadioLabel
     }
   ]
 
@@ -81,13 +81,13 @@ export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
               )}
               inputProps={{
                 className: styles.searchBox,
-                placeholder: strings.TemplateSelectorSearchPlaceholder
+                placeholder: strings.ProjectTemplateSelectorSearchPlaceholder
               }}
               renderInput={(inputProps) => (
                 <SearchBox
                   {...(inputProps as ISearchBoxProps)}
                   iconProps={context.state.selectedTemplate?.iconProps}
-                  clearButtonProps={{ title: strings.TemplateSelectorSearchClearText }}
+                  clearButtonProps={{ title: strings.ProjectTemplateSelectorSearchClearText }}
                   disabled={context.props.data.templates.length === 1}
                   onClear={(event) => {
                     event.stopPropagation()

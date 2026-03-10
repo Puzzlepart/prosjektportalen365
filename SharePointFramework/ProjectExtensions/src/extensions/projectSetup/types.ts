@@ -77,8 +77,8 @@ export interface IProjectSetupProperties {
   skipUpdateTemplateParameters?: boolean
 
   /**
-   * Skip the "already setup" check when re-running the template selector.
-   * When `true`, the setup will go directly to the template selector dialog
+   * Skip the 'already setup' check when re-running the setup wizard.
+   * When `true`, the setup will go directly to the project setup dialog
    * instead of showing the error dialog asking the user to confirm.
    */
   skipAlreadySetupCheck?: boolean

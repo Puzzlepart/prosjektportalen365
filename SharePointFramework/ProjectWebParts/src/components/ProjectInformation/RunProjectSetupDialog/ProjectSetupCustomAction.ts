@@ -1,7 +1,7 @@
 import resource from 'SharedResources'
 
 /**
- * Creates a custom action for running the template selector.
+ * Creates a custom action for running the setup wizard.
  * Unlike the parent template, this does NOT include forceTemplate,
  * allowing the user to select which template to apply.
  */

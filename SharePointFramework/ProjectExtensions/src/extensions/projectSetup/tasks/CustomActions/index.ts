@@ -32,9 +32,9 @@ export class CustomActions extends BaseTask {
   }
 
   /**
-   * Update custom action for template selector based on value set for the selected template.
+   * Update custom action for library template selector based on value set for the selected template.
    *
-   * @param customActionTitle Custom action title for the template selector.
+   * @param customActionTitle Custom action title for the library template selector.
    */
   private async _updateTemplateSelectorCustomAction(customActionTitle = 'Malvelger') {
     const templateLibraryUrl = this.data.selectedTemplate.templateLibraryUrl

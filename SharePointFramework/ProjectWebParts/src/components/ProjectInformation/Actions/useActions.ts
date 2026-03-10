@@ -75,10 +75,10 @@ export const useActions = () => {
     false,
     !context.state.userHasRerunSetupPermission
   ]
-  const runTemplateSelectorAction: ActionType = [
-    strings.RunTemplateSelectorLabel,
+  const runProjectSetupAction: ActionType = [
+    strings.RunProjectSetupLabel,
     () => {
-      context.dispatch(OPEN_DIALOG('RunTemplateSelectorDialog'))
+      context.dispatch(OPEN_DIALOG('RunProjectSetupDialog'))
     },
     bundleIcon(Apps24Filled, Apps24Regular),
     false,
@@ -91,7 +91,7 @@ export const useActions = () => {
     editSiteInformationAction,
     administerChildrenAction: context.state.isParentProject ? administerChildrenAction : null,
     transformToParentProject: !context.state.isParentProject ? transformToParentProject : null,
-    runTemplateSelectorAction
+    runProjectSetupAction
   }
   const actions = Object.keys(actionsMap)
     .map((action) => {

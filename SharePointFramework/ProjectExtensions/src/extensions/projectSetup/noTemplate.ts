@@ -19,8 +19,8 @@ export const createNoTemplateOption = (): ProjectTemplate => {
       FieldConfigurationName: null,
       File: null,
       FieldValuesAsText: {
-        Title: strings.NoTemplateLabel,
-        GtDescription: strings.NoTemplateDescription
+        Title: strings.ProjectTemplateSelectorNoTemplateLabel,
+        GtDescription: strings.ProjectTemplateSelectorNoTemplateDescription
       },
       GtProjectTemplateId: NO_TEMPLATE_ID,
       GtProjectExtensionsId: [],

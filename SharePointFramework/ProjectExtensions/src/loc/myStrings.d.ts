@@ -149,18 +149,18 @@ declare interface IProjectExtensionsStrings {
   SyncLocalProjectPropertiesListText: string
   TemplateConfigMessage: string
   PlannerMemberWarningMessage: string
+  ProjectSetupDialogInfoText: string
+  ProjectSetupDialogSubmitButtonText: string
+  ProjectSetupDialogTitle: string
+  ProjectTemplateSelectorSearchClearText: string
+  ProjectTemplateSelectorSearchPlaceholder: string
+  ProjectTemplateSelectorTitle: string
+  ProjectTemplateSelectorNoTemplateLabel: string
+  ProjectTemplateSelectorNoTemplateDescription: string
+  ProjectTemplateSelectorNoTemplateRadioLabel: string
+  ProjectTemplateSelectorSelectTemplateRadioLabel: string
   TemplateLibrarySelectModalTitle: string
-  TemplateSelectDialogInfoText: string
-  TemplateSelectDialogSubmitButtonText: string
-  TemplateSelectDialogTitle: string
-  TemplateSelectorSearchClearText: string
-  TemplateSelectorSearchPlaceholder: string
-  TemplateSelectorTitle: string
   TemplateSelectorCommandTitle: string
-  NoTemplateLabel: string
-  NoTemplateDescription: string
-  NoTemplateRadioLabel: string
-  SelectTemplateRadioLabel: string
   TermSetDoesNotExistError: string
   TitleLabel: string
   ProgressLabel: string

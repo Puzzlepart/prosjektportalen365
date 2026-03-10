@@ -14,7 +14,7 @@ import { useProjectInformationContext } from '../context'
 import { CLOSE_DIALOG } from '../reducer'
 import { createProjectSetupCustomAction } from './ProjectSetupCustomAction'
 
-export const RunTemplateSelectorDialog: FC = () => {
+export const RunProjectSetupDialog: FC = () => {
   const context = useProjectInformationContext()
   const [isLoading, setLoading] = useState(false)
 
@@ -22,7 +22,7 @@ export const RunTemplateSelectorDialog: FC = () => {
     setLoading(true)
     const lcid = context.props.pageContext.web.language
     const customAction = createProjectSetupCustomAction(
-      strings.RunTemplateSelectorSetupProgressText,
+      strings.RunProjectSetupDialogProgressText,
       lcid
     )
     await context.props.sp.web.userCustomActions.add(customAction)
@@ -52,12 +52,12 @@ export const RunTemplateSelectorDialog: FC = () => {
 
   return (
     <Dialog
-      hidden={context.state.activeDialog !== 'RunTemplateSelectorDialog'}
+      hidden={context.state.activeDialog !== 'RunProjectSetupDialog'}
       onDismiss={() => context.dispatch(CLOSE_DIALOG())}
       dialogContentProps={{
         type: DialogType.largeHeader,
-        title: strings.RunTemplateSelectorModalTitle,
-        subText: strings.RunTemplateSelectorModalSubText
+        title: strings.RunProjectSetupDialogTitle,
+        subText: strings.RunProjectSetupDialogSubText
       }}
     >
       {!isLoading && (
