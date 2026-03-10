@@ -42,6 +42,7 @@
         <pnp:FieldRef ID="fc8a879d-83bc-4670-b1f6-c9817e333614" Name="GtStatusRisk" DisplayName="{resource:SiteFields_GtStatusRisk_DisplayName}" Required="true" />
         <pnp:FieldRef ID="b1958607-cd56-4ecb-9ad7-65fb7d3c22c7" Name="GtStatusGainAchievement" DisplayName="{resource:SiteFields_GtStatusGainAchievement_DisplayName}" Required="true" />
         <pnp:FieldRef ID="09e5a74f-7ec9-467e-9474-f6870c933143" Name="GtStatusOpportunities" DisplayName="{resource:SiteFields_GtStatusOpportunities_DisplayName}" Required="true" />
+        <pnp:FieldRef ID="ce6c7ed6-39cf-46a1-b238-a1ad51ad8aca" Name="GtStatusOpportunitiesComment" DisplayName="{resource:SiteFields_GtStatusOpportunitiesComment_DisplayName}" />
         <pnp:FieldRef ID="b4f13c2a-897b-4f68-8854-6da3eb2bf184" Name="GtAiStatusComments" DisplayName="{resource:SiteFields_GtAiStatusComments_DisplayName}" />
         <pnp:FieldRef ID="9c90a42d-fc01-4e41-a5ae-5bb8a4433d39" Name="GtAiStatus" DisplayName="{resource:SiteFields_GtAiStatus_DisplayName}" />
         <pnp:FieldRef ID="3cb8e63c-bd94-4793-af08-efa8b2dcdaaf" Name="GtAiRecommendations" DisplayName="{resource:SiteFields_GtAiRecommendations_DisplayName}" />
