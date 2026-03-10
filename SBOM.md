@@ -147,7 +147,7 @@ This section lists all unique dependencies across all projects.
 | xlsx | ^0.16.9 | pp365-shared-library |
 | xmldom | 0.6.0 | pp365-shared-library |
 
-### Development Dependencies (48)
+### Development Dependencies (47)
 
 | Package | Version(s) | Used By |
 |---------|-----------|----------|
@@ -192,7 +192,6 @@ This section lists all unique dependencies across all projects.
 | pp365-portfoliowebparts | 1.12.1 | pp365-programwebparts |
 | pp365-projectwebparts | 1.12.1 | pp365-portfoliowebparts, pp365-programwebparts |
 | prettier | 2.7.1 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| pzl-spfx-tasks | 0.5.15-1 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +4 more |
 | replace | 1.2.2 | pp365, pp365-templates |
 | typescript | 4.5.5 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | uuid | 9.0.0 | pp365 |
@@ -245,7 +244,7 @@ This section provides a detailed view of dependencies for each project.
 | tslib | 2.3.1 |
 | underscore | ~1.13.6 |
 
-#### Development Dependencies (28)
+#### Development Dependencies (27)
 
 | Package | Version |
 |---------|----------|
@@ -274,7 +273,6 @@ This section provides a detailed view of dependencies for each project.
 | gulp | 4.0.2 |
 | livereload | 0.9.3 |
 | prettier | 2.7.1 |
-| pzl-spfx-tasks | 0.5.15-1 |
 | typescript | 4.5.5 |
 | webpack | 5.74.0 |
 
@@ -369,7 +367,6 @@ This section provides a detailed view of dependencies for each project.
 | livereload | 0.9.3 |
 | pp365-projectwebparts | 1.12.1 |
 | prettier | 2.7.1 |
-| pzl-spfx-tasks | 0.5.15-1 |
 | typescript | 4.5.5 |
 | webpack | 5.74.0 |
 
@@ -419,7 +416,7 @@ This section provides a detailed view of dependencies for each project.
 | tslib | 2.3.1 |
 | underscore | ~1.13.6 |
 
-#### Development Dependencies (32)
+#### Development Dependencies (31)
 
 | Package | Version |
 |---------|----------|
@@ -451,7 +448,6 @@ This section provides a detailed view of dependencies for each project.
 | pp365-portfoliowebparts | 1.12.1 |
 | pp365-projectwebparts | 1.12.1 |
 | prettier | 2.7.1 |
-| pzl-spfx-tasks | 0.5.15-1 |
 | typescript | 4.5.5 |
 | webpack | 5.74.0 |
 | yargs | 14.2.0 |
@@ -498,7 +494,7 @@ This section provides a detailed view of dependencies for each project.
 | usehooks-ts | ~2.9.1 |
 | valid-filename | 3.1.0 |
 
-#### Development Dependencies (31)
+#### Development Dependencies (30)
 
 | Package | Version |
 |---------|----------|
@@ -530,7 +526,6 @@ This section provides a detailed view of dependencies for each project.
 | gulp | 4.0.2 |
 | livereload | 0.9.3 |
 | prettier | 2.7.1 |
-| pzl-spfx-tasks | 0.5.15-1 |
 | typescript | 4.5.5 |
 | webpack | 5.74.0 |
 
@@ -589,7 +584,7 @@ This section provides a detailed view of dependencies for each project.
 | underscore | ~1.13.6 |
 | usehooks-ts | ~2.9.1 |
 
-#### Development Dependencies (34)
+#### Development Dependencies (33)
 
 | Package | Version |
 |---------|----------|
@@ -624,7 +619,6 @@ This section provides a detailed view of dependencies for each project.
 | gulp | 4.0.2 |
 | livereload | 0.9.3 |
 | prettier | 2.7.1 |
-| pzl-spfx-tasks | 0.5.15-1 |
 | typescript | 4.5.5 |
 | webpack | 5.74.0 |
 
@@ -673,7 +667,7 @@ This section provides a detailed view of dependencies for each project.
 | xlsx | ^0.16.9 |
 | xmldom | 0.6.0 |
 
-#### Development Dependencies (22)
+#### Development Dependencies (21)
 
 | Package | Version |
 |---------|----------|
@@ -697,7 +691,6 @@ This section provides a detailed view of dependencies for each project.
 | eslint-plugin-unused-imports | 2.0.0 |
 | gulp | 4.0.2 |
 | prettier | 2.7.1 |
-| pzl-spfx-tasks | 0.5.15-1 |
 | typescript | 4.5.5 |
 
 ### pp365-templates
@@ -711,12 +704,11 @@ This section provides a detailed view of dependencies for each project.
 | glob | ~11.0.2 |
 | resx-json-typescript-converter | ^1.0.1 |
 
-#### Development Dependencies (4)
+#### Development Dependencies (3)
 
 | Package | Version |
 |---------|----------|
 | @types/lodash | ~4.14.195 |
-| pzl-spfx-tasks | 0.5.15-1 |
 | replace | 1.2.2 |
 | xml2js | ~0.6.2 |
 

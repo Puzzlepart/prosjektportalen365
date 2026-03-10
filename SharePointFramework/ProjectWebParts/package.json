@@ -9,14 +9,14 @@
   "license": "MIT",
   "scripts": {
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
-    "prewatch": "node node_modules/pzl-spfx-tasks --pre-watch --loglevel silent",
-    "postwatch": "node node_modules/pzl-spfx-tasks --post-watch --loglevel silent",
+    "prewatch": "node ../.tasks/pre-watch.js",
+    "postwatch": "node ../.tasks/post-watch.js",
     "serve": "concurrently \"gulp serve-deprecated --nobrowser NODE --max-old-space-size=8192\"",
     "build": "gulp bundle --ship && gulp package-solution --ship",
     "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color --fix --config ../.eslintrc.yaml && npm run prettier",
     "prettier": "prettier '**/*.ts*' --write --loglevel silent --config ../.prettierrc.yaml",
-    "validate-loc": "node node_modules/pzl-spfx-tasks --validate-loc --loglevel verbose"
+    "validate-loc": "node ../.tasks/validateLoc.js --path ./src/loc --interface IProjectWebPartsStrings --dts mystrings.d.ts --output ./localization-report.md --summary"
   },
   "dependencies": {
     "@fluentui/react": "8.98.1",
@@ -101,33 +101,7 @@
     "webpack": "5.74.0",
     "@types/lodash": "~4.14.195",
     "@types/smoothscroll-polyfill": "~0.3.3",
-    "pzl-spfx-tasks": "0.5.15-1",
     "@types/shade-blend-color": "~1.0.3"
-  },
-  "config": {
-    "pzl-spfx-tasks": {
-      "upgrade": {
-        "types": [
-          "rush"
-        ],
-        "all": true
-      },
-      "modifyconfig": {
-        "backupFilePath": "./config/config.json.bak"
-      },
-      "createlaunchconfig": {
-        "userDataDir": "${workspaceFolder}/../.vscode/chrome-debug-user-data",
-        "preferredBrowser": "chrome",
-        "domainSpecificDataDir": true
-      },
-      "validateloc": {
-        "path": "./src/loc",
-        "interface": "IProjectWebPartsStrings",
-        "dts": "mystrings.d.ts",
-        "output": "./localization-report.md",
-        "summary": true
-      }
-    }
   },
   "gitmoji": {
     "build": [

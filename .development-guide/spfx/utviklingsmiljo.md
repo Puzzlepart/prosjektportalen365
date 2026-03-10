@@ -56,16 +56,16 @@ Overvåkingsskriptene knytter alt sammen:
 
 ```json
 "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
-"prewatch": "node node_modules/pzl-spfx-tasks --pre-watch --loglevel silent",
-"postwatch": "node node_modules/pzl-spfx-tasks --post-watch --loglevel silent",
+"prewatch": "node ../.tasks/pre-watch.js",
+"postwatch": "node ../.tasks/post-watch.js",
 ```
 
-- **prewatch**: Kjøres før hovedovervåkingsskriptet og bruker `pzl-spfx-tasks`-pakken til å:
-  - Lese `SERVE_ENVIRONMENT` fra `.env`
-  - Finne det samsvarende miljøet i `environments.json`
-  - Forberede SPFx-konfigurasjonen basert på det valgte miljøet
-  - Sette opp riktig `serve.json`-konfigurasjon
-  - Konfigurere pakkeoptimalisering for utvikling
+- **prewatch**: Kjøres før hovedovervåkingsskriptet via skript i `.tasks/`-mappen:
+  - Oppretter `.env` fra mal (med bundlenavn fra `config/config.json`)
+  - Oppretter `serve.json` fra `serve.sample.json`
+  - Oppretter `.vscode/launch.json` fra konfigurasjon
+  - Filtrerer bundler i `config/config.json` basert på `SERVE_BUNDLE_REGEX`
+  - Håndterer kanalbytte for ikke-main-kanaler via `modifySolutionFiles`
 
 - **watch**: Kjører utviklingsserveren med miljøkonfigurasjonen
 

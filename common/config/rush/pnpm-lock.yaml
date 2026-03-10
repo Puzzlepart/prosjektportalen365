@@ -40,7 +40,7 @@ dependencies:
   '@rush-temp/pp365-projectextensions': file:projects/pp365-projectextensions.tgz
   '@rush-temp/pp365-projectwebparts': file:projects/pp365-projectwebparts.tgz
   '@rush-temp/pp365-shared-library': file:projects/pp365-shared-library.tgz_interactjs@1.6.2
-  '@rush-temp/pp365-spfx-tasks': file:projects/pp365-spfx-tasks.tgz_9c907a7ccd27a2e2d0ee9de5366482d1
+  '@rush-temp/pp365-spfx-tasks': file:projects/pp365-spfx-tasks.tgz
   '@rush-temp/pp365-templates': file:projects/pp365-templates.tgz
   '@rushstack/eslint-config': 2.5.1_eslint@8.25.0+typescript@4.5.5
   '@types/array-sort': 1.0.0
@@ -82,12 +82,10 @@ dependencies:
   interactjs: 1.6.2
   jsom-ctx: 1.2.0
   livereload: 0.9.3
-  lodash: 4.17.21
   msgraph-helper: 0.8.3_9c907a7ccd27a2e2d0ee9de5366482d1
   object-assign: 4.1.1
   prettier: 2.7.1
   pzl-spfx-components: 0.0.11
-  pzl-spfx-tasks: 0.5.15-1
   react: 17.0.1
   react-autocomplete: 1.8.1_react-dom@17.0.1+react@17.0.1
   react-beautiful-dnd: 13.1.1_react-dom@17.0.1+react@17.0.1
@@ -109,6 +107,7 @@ dependencies:
   smoothscroll-polyfill: 0.4.4
   sp-entityportal-service: 2.3.0
   spfx-jsom: 0.6.6_5bb3879ba087c0ef402ac2f0f80f9922
+  ts-morph: 25.0.1
   tslib: 2.3.1
   typescript: 4.5.5
   underscore: 1.13.7
@@ -19163,6 +19162,7 @@ packages:
       minimatch: 9.0.5
       minipass: 6.0.2
       path-scurry: 1.11.1
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     dev: false
     engines:
       node: '>=16 || 14 >=14.17'
@@ -19177,6 +19177,7 @@ packages:
       minipass: 7.1.2
       package-json-from-dist: 1.0.1
       path-scurry: 2.0.0
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     dev: false
     engines:
       node: 20 || >=22
@@ -30138,7 +30139,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-portfolioextensions'
     resolution:
-      integrity: sha512-4j7NQ5E8uKjlxRNYRUxUUbqVIji7QbFwWC8NfKeyUTH26T50hXcKFL38lV9gZ+QsPDQ4ySf+OEncz+el40tvmA==
+      integrity: sha512-4Utey7NUHylKgJMvadUsbVuxPP52EW6HkNzUzGzR23VWNZ0TGPG9fxkDAeX5oN+B9d7F+TqcRxN64RBsn+PNzg==
       tarball: file:projects/pp365-portfolioextensions.tgz
     version: 0.0.0
   file:projects/pp365-portfoliowebparts.tgz_@pnp+odata@2.15.0:
@@ -30233,7 +30234,7 @@ packages:
     peerDependencies:
       '@pnp/odata': '*'
     resolution:
-      integrity: sha512-5QZw3XmohOQhUc3A2INjhy3nIyYBsipzr2pziWEVMiesOOjRHlP4Y5vwWymgjmLoAyIIh2QZQZItDSCO2MFHOA==
+      integrity: sha512-t3prznN+kjk2tnJceF6pWnoeiNt3P3cI7jdbikQKrPjnqHSGFhvd6awS4aGPHYNwr5aqdF+SZgien3nUI1vdaQ==
       tarball: file:projects/pp365-portfoliowebparts.tgz
     version: 0.0.0
   file:projects/pp365-programwebparts.tgz_@pnp+odata@2.15.0:
@@ -30314,7 +30315,7 @@ packages:
     peerDependencies:
       '@pnp/odata': '*'
     resolution:
-      integrity: sha512-79y4okAUxEoAruBgotBd8aa6cV6kOprzViu50kD+9jmL/rH225P6jFOjzzYm9V7qaCeb3obNgnwTMUEwzcEn4Q==
+      integrity: sha512-7vxLzt4fBX7T1U+URaSCFVyMCDt5DQp6KpXgRqUjwGBFlNikVfco40VJ+1Ht8sKSLU2Rtxkp40ZdPRgK+ppiOw==
       tarball: file:projects/pp365-programwebparts.tgz
     version: 0.0.0
   file:projects/pp365-projectextensions.tgz:
@@ -30387,7 +30388,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectextensions'
     resolution:
-      integrity: sha512-/hpA7WoVqqMFacdVgIar0qOnwlwjdgQ+WkgysLuEXNAW/X3/09lxY+DuNTqwHCDZBVUSpbMSdHKwArOaJVTCng==
+      integrity: sha512-93IiYbT3gEONO2IHnYKFeFyt/ZWmcO+mSVORKk6dV0zhypOLE1Am58HEWqkPBjGM+m2KXRmOA9G5wJ75gccCeA==
       tarball: file:projects/pp365-projectextensions.tgz
     version: 0.0.0
   file:projects/pp365-projectwebparts.tgz:
@@ -30478,7 +30479,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectwebparts'
     resolution:
-      integrity: sha512-NQlZUk3ylCpcka7pv/D3zwDStyWvVZrVhT624K5QXuvl4yuwI71B8RM+Ls04It+wUPNmsQzXLgD45cpqrKqosg==
+      integrity: sha512-VmVxkPernUEYF1LVNVyBqXWwGsXTAiEb8BPv5AyJQlqfjRi7IiiWlfJ+r0dEZijMrG070h9Whlok93wdclx5hQ==
       tarball: file:projects/pp365-projectwebparts.tgz
     version: 0.0.0
   file:projects/pp365-shared-library.tgz_interactjs@1.6.2:
@@ -30550,30 +30551,23 @@ packages:
     peerDependencies:
       interactjs: '*'
     resolution:
-      integrity: sha512-t6Rja88yQg7TGiHLyT2mMG7p406hKhLG7LPzFWnR7EHAp5i3OJRjU64VDNLcQP6xssVYOOgZOcWeHIAxadXuMA==
+      integrity: sha512-CriBTwVGEgq1fGZhBVIOXSegcACNcVi20zNXm2tnMZ/lp3Q0gRc3Pu4isXUDt0gS8HzMXNyOj2ugnk4X7QJmTA==
       tarball: file:projects/pp365-shared-library.tgz
     version: 0.0.0
-  file:projects/pp365-spfx-tasks.tgz_9c907a7ccd27a2e2d0ee9de5366482d1:
+  file:projects/pp365-spfx-tasks.tgz:
     dependencies:
-      '@fluentui/react-components': 9.72.10_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@fluentui/react-icons': 2.0.317_react@17.0.1
       '@types/colors': 1.2.1
       '@types/lodash': 4.14.195
       colors: 1.4.0
       dotenv: 16.1.3
       glob: 10.2.6
-      pzl-spfx-tasks: 0.5.15-1
+      lodash: 4.17.21
+      ts-morph: 25.0.1
       yargs: 17.7.2
     dev: false
-    id: file:projects/pp365-spfx-tasks.tgz
     name: '@rush-temp/pp365-spfx-tasks'
-    peerDependencies:
-      '@types/react': '*'
-      '@types/react-dom': '*'
-      react: '*'
-      react-dom: '*'
     resolution:
-      integrity: sha512-QV/VesGP199fRKAR7zLGGsb4taB8HTC45djmod7axz83sai7MFliEU+6WMzVLXaqzVRllqbPKkNj3hsb9UtbwA==
+      integrity: sha512-1YsRCv2I6wflra+T3uAYYkmvK5UNHwdeJyHtiIRGzHTMcFU9iCytegJk0HxHVh+HAkLaQ2lvuWnF1T7m+kDvMQ==
       tarball: file:projects/pp365-spfx-tasks.tgz
     version: 0.0.0
   file:projects/pp365-templates.tgz:
@@ -30589,7 +30583,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-templates'
     resolution:
-      integrity: sha512-u+vMmTnQS8coF2qCV5wDxbqqXp1mLeBvDNYAvVKsGhO5hk2fZGF+Yd6HwEroZU6Wt8nJv65xTzBeWINOmsqQXg==
+      integrity: sha512-kDlS8cG1ouCf+rpsYi+pfn2SJg3QNiIezyEEel+fk639kQEqqF7Jc//jbFbL2jayz9KImdCU5Pi1yBr9a7IFxg==
       tarball: file:projects/pp365-templates.tgz
     version: 0.0.0
 specifiers:
@@ -30676,12 +30670,10 @@ specifiers:
   interactjs: 1.6.2
   jsom-ctx: 1.2.0
   livereload: 0.9.3
-  lodash: ~4.17.21
   msgraph-helper: 0.8.3
   object-assign: 4.1.1
   prettier: 2.7.1
   pzl-spfx-components: 0.0.11
-  pzl-spfx-tasks: 0.5.15-1
   react: 17.0.1
   react-autocomplete: 1.8.1
   react-beautiful-dnd: ~13.1.1
@@ -30703,6 +30695,7 @@ specifiers:
   smoothscroll-polyfill: ~0.4.4
   sp-entityportal-service: 2.3.0
   spfx-jsom: 0.6.6
+  ts-morph: 25.0.1
   tslib: 2.3.1
   typescript: 4.5.5
   underscore: ~1.13.6
