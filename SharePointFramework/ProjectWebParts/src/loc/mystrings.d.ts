@@ -27,6 +27,7 @@ declare interface IProjectWebPartsStrings {
   ProjectPropertiesTitleLabel: string
   CalloutTemplateFieldLabel: string
   CancelText: string
+  ConfirmText: string
   CategoryFieldLabel: string
   ChangePhaseDialogTitle: string
   ChangePhaseDialogSubtitle: string

@@ -51,6 +51,7 @@ define([], function () {
     AdvancedGroupName: 'Avansert',
     CalloutTemplateFieldLabel: 'Mal for callout',
     CancelText: 'Avbryt',
+    ConfirmText: 'Bekreft',
     CategoryFieldLabel: 'Kategori',
     ChangePhaseDialogTitle: 'Endre til {0} fasen',
     ChangePhaseDialogSubtitle: 'Dette vil medføre endring fra {0} til {1} fasen',

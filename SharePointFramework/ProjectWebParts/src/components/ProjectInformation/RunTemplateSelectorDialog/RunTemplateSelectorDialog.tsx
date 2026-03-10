@@ -67,7 +67,7 @@ export const RunTemplateSelectorDialog: FC = () => {
             onClick={() => context.dispatch(CLOSE_DIALOG())}
           />
           <PrimaryButton
-            text={strings.RedoText}
+            text={strings.ConfirmText}
             onClick={async () => {
               await saveNavigationNodes()
               await applyCustomAction()

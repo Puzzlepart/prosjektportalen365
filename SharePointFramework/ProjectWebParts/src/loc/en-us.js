@@ -60,6 +60,7 @@ define([], function () {
     AdvancedGroupName: 'Advanced',
     CalloutTemplateFieldLabel: 'Callout template',
     CancelText: 'Cancel',
+    ConfirmText: 'Confirm',
     CategoryFieldLabel: 'Category',
     ChangePhaseText: 'Change to this phase',
     ChangingPhaseDescription: 'Changing phase to {0}',
