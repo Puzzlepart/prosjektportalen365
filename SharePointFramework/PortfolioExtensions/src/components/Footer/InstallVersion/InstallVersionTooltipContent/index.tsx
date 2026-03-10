@@ -25,7 +25,7 @@ export const InstallVersionTooltipContent: FC = () => {
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
-      <FluentProvider theme={customLightTheme}>
+      <FluentProvider theme={customLightTheme} style={{ maxWidth: '400px' }}>
         <div className={styles.lastInstall}>
           <WebPartTitle
             title={strings.LastInstallHeaderText}

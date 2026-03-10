@@ -45,7 +45,6 @@ define([], function () {
     LatestGitHubReleaseIsOlderText: 'The version installed is newer than the latest release from GitHub',
     LatestGitHubReleaseIsSameText: 'The version installed is the latest release from GitHub',
     LatestGitHubReleaseLabel: 'Latest release from GitHub',
-    LatestGitHubReleaseLinkTitle: 'See the latest release on GitHub',
     LatestGitHubReleaseHighlightsLabel: 'What\'s new in this version',
     LinksListText: 'Useful links',
     SeeAllInstallationsLinkText: 'See all installations',

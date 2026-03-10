@@ -5,7 +5,7 @@ import { ILatestGitHubReleaseProps } from './types'
 import styles from './LatestGitHubRelease.module.scss'
 import { useLatestGitHubRelease } from './useLatestGitHubRelease'
 import { Button, Label, Link, Tooltip, Divider } from '@fluentui/react-components'
-import { getFluentIcon } from 'pp365-shared-library'
+import { FluentIconName, getFluentIcon } from 'pp365-shared-library'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 
@@ -23,21 +23,20 @@ export const LatestGitHubRelease: FC<ILatestGitHubReleaseProps> = (props) => {
         <span>
           <Label weight='semibold'>{strings.LatestGitHubReleaseLabel}</Label>:
         </span>
-        <div className={styles.version}>
-          <span
-            className={styles.latestGitHubReleaseLink}
-            title={strings.LatestGitHubReleaseLinkTitle}
+        <Tooltip relationship='description' withArrow content={versionComparisonIconProps.options.title}>
+          <Button
+            className={styles.button}
+            size='medium'
+            appearance='subtle'
+            onClick={() =>
+              window.open(latestGitHubRelease.html_url, '_blank')
+            }
+            icon={getFluentIcon(versionComparisonIconProps.name as FluentIconName, versionComparisonIconProps.options)}
+            iconPosition='after'
           >
-            <Link href={latestGitHubRelease.html_url} target='_blank' rel='noopener noreferrer'>
-              <b>{latestGitHubVersion.toString()}</b>
-            </Link>
-          </span>
-          <Tooltip relationship='description' withArrow content={versionComparisonIconProps.title}>
-            <span className={styles.versionComparisonIcon}>
-              <Icon {...versionComparisonIconProps} />
-            </span>
-          </Tooltip>
-        </div>
+            <span className={styles.label}>{latestGitHubVersion.toString()}</span>
+          </Button>
+        </Tooltip>
       </div>
       {latestGitHubRelease.body && (
         <>
@@ -76,10 +75,10 @@ export const LatestGitHubRelease: FC<ILatestGitHubReleaseProps> = (props) => {
 }
 
 LatestGitHubRelease.defaultProps = {
-  latestGitHubReleaseIsNewerIconName: 'ChevronUp',
+  latestGitHubReleaseIsNewerIconName: 'ArrowCircleUpSparkle',
   latestGitHubReleaseIsNewerIconColor: 'green',
-  latestGitHubReleaseIsOlderIconName: 'ChevronDown',
-  latestGitHubReleaseIsOlderIconColor: 'red',
-  latestGitHubReleaseIsSameIconName: 'ChevronLeft',
+  latestGitHubReleaseIsOlderIconName: 'ArrowCircleDown',
+  latestGitHubReleaseIsOlderIconColor: 'orange',
+  latestGitHubReleaseIsSameIconName: 'CheckmarkCircle',
   latestGitHubReleaseIsSameIconColor: 'black'
 }
