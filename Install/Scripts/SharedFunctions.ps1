@@ -159,6 +159,31 @@ function Show-Countdown {
     Write-Host " - Continuing!" -ForegroundColor Green 
 }
 
+<#
+.SYNOPSIS
+Write detailed error information to the host
+
+.DESCRIPTION
+Writes inner exceptions and script stack trace from an ErrorRecord to the host for debugging purposes
+
+.PARAMETER ErrorRecord
+The ErrorRecord to extract details from
+#>
+function Write-ErrorDetails {
+    param([System.Management.Automation.ErrorRecord]$ErrorRecord)
+    $inner = $ErrorRecord.Exception.InnerException
+    $depth = 1
+    while ($null -ne $inner) {
+        Write-Host "`t[INNER EXCEPTION $depth] $($inner.Message)" -ForegroundColor Red
+        $inner = $inner.InnerException
+        $depth++
+    }
+    if ($ErrorRecord.ScriptStackTrace) {
+        Write-Host "`t[SCRIPT STACK TRACE]" -ForegroundColor DarkGray
+        $ErrorRecord.ScriptStackTrace -split "`n" | ForEach-Object { Write-Host "`t  $_" -ForegroundColor DarkGray }
+    }
+}
+
 function Get-PPInstallationInfo() {
     $CurrentWeb = Get-PnPWeb -ErrorAction Stop
     $CurrentLanguage = Get-PnPProperty -ClientObject $CurrentWeb -Property "Language" -ErrorAction Stop
