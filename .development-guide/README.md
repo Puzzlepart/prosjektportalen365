@@ -41,7 +41,7 @@
 * [➤ Konfigurasjon av utviklingsmiljø](#-konfigurasjon-av-utviklingsmilj)
 	* [Oppsett av miljøsystemet](#oppsett-av-miljsystemet)
 		* [1. `environments.json`](#1-environmentsjson)
-		* [2. `.env`-filen](#2-env-filen)
+		* [2. `.env.template` og `.env`](#2-envtemplate-og-env)
 		* [3. Overvåkingsskript i `package.json`](#3-overvkingsskript-i-packagejson)
 	* [Hvordan det fungerer i praksis](#hvordan-det-fungerer-i-praksis)
 	* [Fordeler med denne tilnærmingen](#fordeler-med-denne-tilnrmingen)
@@ -424,16 +424,31 @@ Eksempel:
 }
 ```
 
-#### 2. `.env`-filen
+#### 2. `.env.template` og `.env`
+
+En delt `.env.template`-fil finnes i `.tasks/`-mappen og definerer standardverdier for alle SPFx-pakker. Når du kjører `npm run watch` for første gang, oppretter `prewatch`-skriptet automatisk en `.env`-fil i pakken.
+
+**Automatisk oppretting av `.env`:** Skriptet `.tasks/createEnvironmentFile.js` kjøres som en del av `prewatch`. Dersom `.env` ikke finnes, leses malen fra `.tasks/.env.template` og tilgjengelige bundlenavn hentes automatisk fra pakkens `config/config.json`. Resultatet skrives til `.env` med bundlenavnene som kommentarer.
 
 `.env`-filen inneholder konfigurasjonsvariabler for utviklingsmiljøet ditt:
 
+| Variabel | Beskrivelse | Standard |
+|---|---|---|
+| `SERVE_CHANNEL` | Hvilken kanal som brukes for `environments.json`-oppslag. Tilgjengelige kanaler: `main`, `test`, `i18n`. | `main` |
+| `SERVE_BUNDLE_REGEX` | Regulært uttrykk for å filtrere hvilke bundler som bygges under `watch`. Sett til et bundlenavn for raskere bygging. | _(tom – alle bundler bygges)_ |
+| `SERVE_ENVIRONMENT` | Navn på miljøet fra `environments.json` som skal brukes. | _(ikke satt)_ |
+
+Eksempel `.env`:
+
 ```text
+SERVE_CHANNEL=main
+SERVE_BUNDLE_REGEX=portfolio-overview-web-part
 SERVE_ENVIRONMENT=Porteføljeoversikt
-NODE_ENV=development
 ```
 
-Den viktigste innstillingen er `SERVE_ENVIRONMENT`, som angir hvilket miljø fra `environments.json` som skal brukes når du kjører `npm run watch`. Dette lar deg raskt bytte mellom forskjellige SharePoint-miljøer ved å endre kun én verdi.
+> **Tips:** Sett `SERVE_BUNDLE_REGEX` til den spesifikke webdelen eller utvidelsen du jobber med for å redusere byggetiden betydelig. Se kommentarene i pakkens `.env.template` for tilgjengelige bundlenavn.
+
+> **Merk:** `.env`-filen er gitignorert og skal ikke committes. Kun `.env.template` committes til repoet.
 
 #### 3. Overvåkingsskript i `package.json`
 
@@ -441,16 +456,16 @@ Overvåkingsskriptene knytter alt sammen:
 
 ```json
 "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
-"prewatch": "node node_modules/pzl-spfx-tasks --pre-watch --loglevel silent",
-"postwatch": "node node_modules/pzl-spfx-tasks --post-watch --loglevel silent",
+"prewatch": "node ../.tasks/pre-watch.js",
+"postwatch": "node ../.tasks/post-watch.js",
 ```
 
-- **prewatch**: Kjøres før hovedovervåkingsskriptet og bruker `pzl-spfx-tasks`-pakken til å:
-  - Lese `SERVE_ENVIRONMENT` fra `.env`
-  - Finne det samsvarende miljøet i `environments.json`
-  - Forberede SPFx-konfigurasjonen basert på det valgte miljøet
-  - Sette opp riktig `serve.json`-konfigurasjon
-  - Konfigurere pakkeoptimalisering for utvikling
+- **prewatch**: Kjøres før hovedovervåkingsskriptet via skript i `.tasks/`-mappen:
+  - Oppretter `.env` fra mal (med bundlenavn fra `config/config.json`)
+  - Oppretter `serve.json` fra `serve.sample.json`
+  - Oppretter `.vscode/launch.json` fra konfigurasjon
+  - Filtrerer bundler i `config/config.json` basert på `SERVE_BUNDLE_REGEX`
+  - Håndterer kanalbytte for ikke-main-kanaler via `modifySolutionFiles`
 
 - **watch**: Kjører utviklingsserveren med miljøkonfigurasjonen
 
@@ -575,10 +590,10 @@ Ressurser fra **.resx**-filene i mappen «Portfolio» kan brukes i malen ved å 
 
 I tillegg har vi to PnP-provisjoneringsmaler.
 
-| Mal                                            | Beskrivelse         |
-| ---------------------------------------------- | ------------------- |
-| [Portfolio](../../Templates/Portfolio)          | Porteføljeelementer |
-| [Taxonomy](../../Templates/Taxonomy)            | Taksonomi           |
+| Mal                                    | Beskrivelse         |
+| -------------------------------------- | ------------------- |
+| [Portfolio](../../Templates/Portfolio) | Porteføljeelementer |
+| [Taxonomy](../../Templates/Taxonomy)   | Taksonomi           |
 
 #### Portefølje
 
@@ -739,7 +754,7 @@ Den kjører [Build-Release.ps1](../../Install/Build-Release.ps1) med parameteren
 
 Med gjeldende tilnærming, uten hurtigbuffer (da den kjører `npm ci`), tar en full kjøring omtrent 25-35 minutter.
 
-![image](../assets/ci.png)
+![image](./development-guide/assets/ci.png)
 
 ### CI (channels/test)
 
@@ -751,15 +766,15 @@ Med gjeldende tilnærming, uten hurtigbuffer (da den kjører `npm ci`), tar en f
 
 ### Aktive arbeidsflyter
 
-| Arbeidsflylfil               | Beskrivelse                                              | Utløser                                   |
-| ---------------------------- | -------------------------------------------------------- | ----------------------------------------- |
-| `ci-releases.yml`            | Bygg, oppgrader og installer til utviklingsmiljø         | Push til `main` (stier: SPFx, Install, Templates) |
-| `build-release.yml`          | Bygg utgivelsespakke + test/kurs-kanalpakker             | Push til `main`                           |
-| `ci-channel-test.yml`        | Bygg og distribuer testkanal                             | Push til releases-branch                  |
-| `ci-channel-i18n.yml`        | Bygg og distribuer i18n (engelsk) kanal                  | Push til `main` (krever `i18n:` i commit) |
-| `pr-package-spfx-dev.yml`    | Rush install, lint og rebuild ved pull requests           | PR mot release-branches                   |
-| `automatic_chores.yml`       | Automatisk linting og commit av rettelser                | Push til releases-branch                  |
-| `generate-sbom.yml`          | Generer og commit SBOM.md                                | Tag-push `v*` eller manuell utløsning     |
+| Arbeidsflytfil            | Beskrivelse                                      | Utløser                                           |
+| ------------------------- | ------------------------------------------------ | ------------------------------------------------- |
+| `ci-releases.yml`         | Bygg, oppgrader og installer til utviklingsmiljø | Push til `main` (stier: SPFx, Install, Templates) |
+| `build-release.yml`       | Bygg utgivelsespakke + test/kurs-kanalpakker     | Push til `main`                                   |
+| `ci-channel-test.yml`     | Bygg og distribuer testkanal                     | Push til releases-branch                          |
+| `ci-channel-i18n.yml`     | Bygg og distribuer i18n (engelsk) kanal          | Push til `main` (krever `i18n:` i commit)         |
+| `pr-package-spfx-dev.yml` | Rush install, lint og rebuild ved pull requests  | PR mot release-branches                           |
+| `automatic_chores.yml`    | Automatisk linting og commit av rettelser        | Push til releases-branch                          |
+| `generate-sbom.yml`       | Generer og commit SBOM.md                        | Tag-push `v*` eller manuell utløsning             |
 
 
 
