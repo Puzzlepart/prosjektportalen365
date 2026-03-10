@@ -36,7 +36,6 @@ export class ApplyTemplate extends BaseTask {
         }
       })
 
-      // Only apply template if a real template is selected (not "No template")
       if (this.data.selectedTemplate && this.data.selectedTemplate.id !== NO_TEMPLATE_ID) {
         this.logInformation('Applying template to site', { parameters: params.templateParameters })
         const templateSchema = _.omit(params.templateSchema, params.templateExcludeHandlers)

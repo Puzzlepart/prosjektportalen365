@@ -78,7 +78,7 @@ export class SetupProjectInformation extends BaseTask {
       const isNoTemplate = this.data.selectedTemplate?.id === NO_TEMPLATE_ID
 
       if (isNoTemplate) {
-        // For "no template" we skip syncing content type fields and just update the existing property item
+        // For 'no template', skip syncing content type fields. Only update the existing property item
         this.onProgress(
           strings.SetupProjectInformationText,
           strings.CreatingLocalProjectPropertiesListItemText,

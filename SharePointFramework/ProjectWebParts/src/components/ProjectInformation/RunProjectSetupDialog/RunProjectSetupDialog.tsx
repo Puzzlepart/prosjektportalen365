@@ -40,7 +40,6 @@ export const RunProjectSetupDialog: FC = () => {
       const nodes = await getNavigationNodes()
       localStorage.setItem('pp_navigationNodes', JSON.stringify(nodes))
     } catch (error) {
-      // Log error but don't block the flow - navigation nodes are nice-to-have
       console.error('Failed to save navigation nodes:', error)
     }
   }
