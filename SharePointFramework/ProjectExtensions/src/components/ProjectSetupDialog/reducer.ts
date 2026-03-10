@@ -4,7 +4,6 @@ import { first, uniq } from 'underscore'
 import { IProjectSetupData } from '../../extensions/projectSetup/types'
 import { createNoTemplateOption } from '../../extensions/projectSetup/noTemplate'
 import { IProjectSetupDialogState } from './types'
-import strings from 'ProjectExtensionsStrings'
 
 export const INIT = createAction('INIT')
 export const ON_LIST_CONTENT_CONFIG_CHANGED = createAction<ContentConfig[]>(

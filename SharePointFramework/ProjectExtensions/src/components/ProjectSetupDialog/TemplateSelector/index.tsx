@@ -9,7 +9,6 @@ import { ON_TEMPLATE_CHANGED } from '../reducer'
 import { ProjectSetupDialogSectionComponent } from '../types'
 import styles from './TemplateSelector.module.scss'
 import { TemplateSelectorItem } from './TemplateSelectorItem'
-import { NO_TEMPLATE_ID } from '../../../extensions/projectSetup/constants'
 import { createNoTemplateOption } from '../../../extensions/projectSetup/noTemplate'
 
 type TemplateSelectorMode = 'notemplate' | 'selecttemplate'
@@ -27,7 +26,7 @@ export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
   })()
 
   const [searchValue, setSearchValue] = useState(
-    hasExistingTemplate ? (defaultTemplate?.text ?? '') : (context.state.selectedTemplate?.text ?? '')
+    hasExistingTemplate ? defaultTemplate?.text ?? '' : context.state.selectedTemplate?.text ?? ''
   )
 
   const options: IChoiceGroupOption[] = [
@@ -65,11 +64,7 @@ export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
   return (
     <div className={styles.root}>
       <div className={styles.container}>
-        <ChoiceGroup
-          selectedKey={mode}
-          options={options}
-          onChange={onModeChanged}
-        />
+        <ChoiceGroup selectedKey={mode} options={options} onChange={onModeChanged} />
         {mode === 'selecttemplate' && (
           <>
             <Autocomplete

@@ -504,8 +504,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           .getByTitle(resource.Lists_ProjectProperties_Title)
           .items.select('GtProjectTemplate')
           .top(1)()
-        hasExistingTemplate =
-          !!propertyItem && !stringIsNullOrEmpty(propertyItem.GtProjectTemplate)
+        hasExistingTemplate = !!propertyItem && !stringIsNullOrEmpty(propertyItem.GtProjectTemplate)
       } catch {
         // List may not exist for new projects
       }

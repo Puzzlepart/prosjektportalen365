@@ -82,8 +82,9 @@ export class SitePermissions extends BaseTask {
     )
 
     const query: ICamlQuery = {
-      ViewXml: this.data.selectedTemplate?.id === NO_TEMPLATE_ID
-        ? `<View>
+      ViewXml:
+        this.data.selectedTemplate?.id === NO_TEMPLATE_ID
+          ? `<View>
     <Query>
       <Where>
         <IsNull>
@@ -92,7 +93,7 @@ export class SitePermissions extends BaseTask {
       </Where>
     </Query>
 </View>`
-        : `<View>
+          : `<View>
     <Query>
       <Where>
         <Or>

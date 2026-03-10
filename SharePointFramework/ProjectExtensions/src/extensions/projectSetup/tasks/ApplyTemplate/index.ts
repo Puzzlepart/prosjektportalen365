@@ -35,7 +35,7 @@ export class ApplyTemplate extends BaseTask {
           activeLogLevel: LogLevel.Verbose
         }
       })
-      
+
       // Only apply template if a real template is selected (not "No template")
       if (this.data.selectedTemplate && this.data.selectedTemplate.id !== NO_TEMPLATE_ID) {
         this.logInformation('Applying template to site', { parameters: params.templateParameters })
@@ -53,7 +53,7 @@ export class ApplyTemplate extends BaseTask {
       } else {
         this.logInformation('Skipping template application (no template selected)')
       }
-      
+
       this.logInformation('Applying extensions to site', { parameters: params.templateParameters })
       for (let i = 0; i < this.data.selectedExtensions.length; i++) {
         let extensionSchema = await this.data.selectedExtensions[i].getSchema()
