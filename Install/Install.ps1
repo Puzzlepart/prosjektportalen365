@@ -95,6 +95,21 @@ $Channel = "{CHANNEL_PLACEHOLDER}"
 Initialize-Resources -LanguageCode $LanguageCode
 #endregion
 
+function Write-ErrorDetails {
+    param([System.Management.Automation.ErrorRecord]$ErrorRecord)
+    $inner = $ErrorRecord.Exception.InnerException
+    $depth = 1
+    while ($null -ne $inner) {
+        Write-Host "`t[INNER EXCEPTION $depth] $($inner.Message)" -ForegroundColor Red
+        $inner = $inner.InnerException
+        $depth++
+    }
+    if ($ErrorRecord.ScriptStackTrace) {
+        Write-Host "`t[SCRIPT STACK TRACE]" -ForegroundColor DarkGray
+        $ErrorRecord.ScriptStackTrace -split "`n" | ForEach-Object { Write-Host "`t  $_" -ForegroundColor DarkGray }
+    }
+}
+
 $ErrorActionPreference = "Stop"
 $sw = [Diagnostics.Stopwatch]::StartNew()
 $global:sw_action = $null
@@ -207,6 +222,7 @@ if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
     }
     Catch {
         Write-Host "[ERROR] Failed to create site: $($_.Exception.Message)" -ForegroundColor Red
+        Write-ErrorDetails $_
         exit 1
     }
 }
@@ -222,6 +238,7 @@ if (-not $Upgrade.IsPresent) {
     }
     Catch {
         Write-Host "[ERROR] Failed to promote site to hub site: $($_.Exception.Message)" -ForegroundColor Red
+        Write-ErrorDetails $_
         exit 1
     }
 }
@@ -242,6 +259,7 @@ if (-not $Upgrade.IsPresent) {
     }
     Catch {
         Write-Host "[ERROR] Failed to set permissions for associated member group: $($_.Exception.Message)" -ForegroundColor Red
+        Write-ErrorDetails $_
     }
 }
 #endregion
@@ -288,6 +306,7 @@ if (-not $SkipSiteDesign.IsPresent) {
     }
     Catch {
         Write-Host "[ERROR] Failed to create/update site scripts: $($_.Exception.Message)" -ForegroundColor Red
+        Write-ErrorDetails $_
         exit 1
     }
 
@@ -313,6 +332,7 @@ if (-not $SkipSiteDesign.IsPresent) {
     }
     Catch {
         Write-Host "[ERROR] Failed to create/update site design: $($_.Exception.Message)" -ForegroundColor Red
+        Write-ErrorDetails $_
         exit 1
     }
 }
@@ -326,6 +346,7 @@ if (-not $SkipDefaultSiteDesignAssociation.IsPresent) {
     catch {
         Write-Host ""
         Write-Host "[WARNING] Failed to set default site design: $($_.Exception.Message)" -ForegroundColor Yellow
+        Write-ErrorDetails $_
     }
     EndAction
 }
@@ -342,6 +363,7 @@ try {
 }
 catch {
     Write-Host "[WARNING] Failed to ensure site collection administrator access: $($_.Exception.Message)" -ForegroundColor Yellow
+    Write-ErrorDetails $_
 }
 finally {
     EndAction
@@ -358,6 +380,7 @@ if ($Upgrade.IsPresent) {
     }
     catch {
         Write-Host "[ERROR] Failed to run pre-install upgrade steps: $($_.Exception.Message)" -ForegroundColor Red
+        Write-ErrorDetails $_
         exit 1
     }
 }
@@ -377,6 +400,7 @@ if (-not $SkipAppPackages.IsPresent) {
     }
     Catch {
         Write-Host "[ERROR] Failed to connect to Tenant App Catalog. Do you have a Tenant App Catalog in your tenant?" -ForegroundColor Red
+        Write-ErrorDetails $_
         exit 1 
     }
     Try {
@@ -396,6 +420,7 @@ if (-not $SkipAppPackages.IsPresent) {
     }
     Catch {
         Write-Host "[ERROR] Failed to install app packages to $($TenantAppCatalogUrl): $($_.Exception.Message)" -ForegroundColor Red
+        Write-ErrorDetails $_
         exit 1
     }
 }
@@ -409,6 +434,7 @@ if (-not $Upgrade.IsPresent) {
     }
     Catch {
         Write-Host "[WARNING] Failed to delete page Home.aspx. Please delete it manually." -ForegroundColor Yellow
+        Write-ErrorDetails $_
     }
 }
 #endregion
@@ -446,7 +472,7 @@ if (-not $SkipTemplate.IsPresent) {
         }
 
         # Shared retry configuration
-        $MaxRetries = 5
+        $MaxRetries = 3
 
         if ($Upgrade.IsPresent) {
             StartAction("Applying PnP template Portfolio to $($Uri.AbsoluteUri)")
@@ -461,9 +487,11 @@ if (-not $SkipTemplate.IsPresent) {
                     $RemainingAttempts = $MaxRetries - $Retry
                     if ($Retry -eq $MaxRetries) {
                         Write-Host "[ERROR] Failed to apply PnP Portfolio template after $MaxRetries attempts" -ForegroundColor Red
+                        Write-ErrorDetails $_
                         throw
                     }
                     Write-Host "`t[WARNING] Failed to apply PnP Portfolio template. $RemainingAttempts attempt(s) remaining..." -ForegroundColor Yellow
+                    Write-ErrorDetails $_
                 }
             }
             EndAction
@@ -504,9 +532,11 @@ if (-not $SkipTemplate.IsPresent) {
                     $RemainingAttempts = $MaxRetries - $Retry
                     if ($Retry -eq $MaxRetries) {
                         Write-Host "[ERROR] Failed to apply PnP Portfolio template after $MaxRetries attempts" -ForegroundColor Red
+                        Write-ErrorDetails $_
                         throw
                     }
                     Write-Host "`t[WARNING] Failed to apply PnP Portfolio template. $RemainingAttempts attempt(s) remaining..." -ForegroundColor Yellow
+                    Write-ErrorDetails $_
                 }
             }
             EndAction
@@ -528,6 +558,7 @@ if (-not $SkipTemplate.IsPresent) {
     }
     Catch {
         Write-Host "[ERROR] Failed to apply PnP templates to $($Uri.AbsoluteUri): $($_.Exception.Message)" -ForegroundColor Red
+        Write-ErrorDetails $_
         exit 1
     }
     Finally {
@@ -538,6 +569,7 @@ if (-not $SkipTemplate.IsPresent) {
         }
         Catch {
             Write-Host "[WARNING] Failed to re-enable NoScriptSite protection: $($_.Exception.Message)" -ForegroundColor Yellow
+            Write-ErrorDetails $_
         }
     }
 }
@@ -552,6 +584,7 @@ Try {
 }
 Catch {
     Write-Host "[WARNING] Failed to clear QuickLaunch: $($_.Exception.Message)" -ForegroundColor Yellow
+    Write-ErrorDetails $_
 }
 #endregion
 
@@ -565,6 +598,7 @@ if (-not $SkipSearchConfiguration.IsPresent) {
     }
     Catch {
         Write-Host "[WARNING] Failed to import Search Configuration: $($_.Exception.Message)" -ForegroundColor Yellow
+        Write-ErrorDetails $_
     }
 }
 #endregion
@@ -577,6 +611,7 @@ try {
 }
 catch {
     Write-Host "[WARNING] Failed to run post-install steps: $($_.Exception.Message)" -ForegroundColor Yellow
+    Write-ErrorDetails $_
 }
 
 if ($Upgrade.IsPresent) {
@@ -586,6 +621,7 @@ if ($Upgrade.IsPresent) {
     }
     catch {
         Write-Host "[WARNING] Failed to run post-install upgrade steps: $($_.Exception.Message)" -ForegroundColor Yellow
+        Write-ErrorDetails $_
     }
 }
 
@@ -644,6 +680,7 @@ try {
 }
 catch {
     Write-Host "[WARNING] Installation log list not found. Skipping logging installation entry." -ForegroundColor Yellow
+    Write-ErrorDetails $_
 }
 
 Disconnect-PnPOnline
