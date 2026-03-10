@@ -382,10 +382,7 @@ export async function fetchListData(
             .select('ViewFields')
             .expand('ViewFields')()
         } else {
-          view = await list.views
-            .getByTitle(viewToUse)
-            .select('ViewFields')
-            .expand('ViewFields')()
+          view = await list.views.getByTitle(viewToUse).select('ViewFields').expand('ViewFields')()
         }
 
         const viewFieldNames: string[] = normalizeViewFieldNames(view.ViewFields?.Items || [])
@@ -412,7 +409,10 @@ export async function fetchListData(
             .expand('ViewFields')()
           sourceViewFieldNames = normalizeViewFieldNames(view.ViewFields?.Items || [])
         } catch (error) {
-          console.error('[fetchListData] Error fetching default view fields for auto-hidden:', error)
+          console.error(
+            '[fetchListData] Error fetching default view fields for auto-hidden:',
+            error
+          )
         }
       }
 

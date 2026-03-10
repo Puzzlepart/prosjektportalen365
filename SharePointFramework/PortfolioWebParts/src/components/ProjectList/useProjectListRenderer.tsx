@@ -80,7 +80,7 @@ export function useProjectListRenderer({ props, state, createCardContext }: IPro
             isDataLoaded={state.isDataLoaded}
             customElementsGroup={
               <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', width: '100%' }}>
-                {Array.apply(null, Array(8)).map((_, i) => (
+                {Array.from({ length: 8 }).map((_, i) => (
                   <ShimmerElementsGroup
                     key={i}
                     shimmerElements={[

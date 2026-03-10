@@ -20,7 +20,10 @@ import { BaseProjectWebPart } from '../baseProjectWebPart'
 import * as strings from 'ProjectWebPartsStrings'
 import SPDataAdapter from '../../data'
 import { getWeb } from '../../components/DynamicList/utils'
-import { isVisibleListField, normalizeViewFieldNames } from '../../components/DynamicList/utils/fieldUtils'
+import {
+  isVisibleListField,
+  normalizeViewFieldNames
+} from '../../components/DynamicList/utils/fieldUtils'
 import '@pnp/sp/webs'
 import '@pnp/sp/lists'
 import '@pnp/sp/views'
@@ -185,15 +188,10 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
       try {
         const viewId = this.properties.defaultViewId
         if (viewId && viewId !== 'All Fields') {
-          const view = await list.views
-            .getById(viewId)
-            .select('ViewFields')
-            .expand('ViewFields')()
+          const view = await list.views.getById(viewId).select('ViewFields').expand('ViewFields')()
           viewFieldNames = (view as any).ViewFields?.Items || []
         } else {
-          const views = await list.views
-            .select('Id', 'DefaultView')
-            .filter('Hidden eq false')()
+          const views = await list.views.select('Id', 'DefaultView').filter('Hidden eq false')()
           const defaultView = views.find((v: any) => v.DefaultView)
           if (defaultView) {
             const view = await list.views

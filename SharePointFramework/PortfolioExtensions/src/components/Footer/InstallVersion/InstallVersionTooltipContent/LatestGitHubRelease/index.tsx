@@ -1,4 +1,3 @@
-import { Icon } from '@fluentui/react'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC } from 'react'
 import { ILatestGitHubReleaseProps } from './types'
@@ -14,8 +13,13 @@ import rehypeRaw from 'rehype-raw'
  * comparison between the latest GitHub release and the installed version.
  */
 export const LatestGitHubRelease: FC<ILatestGitHubReleaseProps> = (props) => {
-  const { latestGitHubRelease, latestGitHubVersion, installedVersion, releaseNotesUrl, versionComparisonIconProps } =
-    useLatestGitHubRelease(props)
+  const {
+    latestGitHubRelease,
+    latestGitHubVersion,
+    installedVersion,
+    releaseNotesUrl,
+    versionComparisonIconProps
+  } = useLatestGitHubRelease(props)
 
   return (
     <div className={styles.latestRelease}>
@@ -23,28 +27,32 @@ export const LatestGitHubRelease: FC<ILatestGitHubReleaseProps> = (props) => {
         <span>
           <Label weight='semibold'>{strings.LatestGitHubReleaseLabel}</Label>:
         </span>
-        <Tooltip relationship='description' withArrow content={versionComparisonIconProps.options.title}>
+        <Tooltip
+          relationship='description'
+          withArrow
+          content={versionComparisonIconProps.options.title}
+        >
           <Button
             className={styles.button}
             size='medium'
             appearance='subtle'
-            onClick={() =>
-              window.open(latestGitHubRelease.html_url, '_blank')
-            }
-            icon={getFluentIcon(versionComparisonIconProps.name as FluentIconName, versionComparisonIconProps.options)}
+            onClick={() => window.open(latestGitHubRelease.html_url, '_blank')}
+            icon={getFluentIcon(
+              versionComparisonIconProps.name as FluentIconName,
+              versionComparisonIconProps.options
+            )}
             iconPosition='after'
           >
             <span className={styles.label}>{latestGitHubVersion.toString()}</span>
           </Button>
         </Tooltip>
       </div>
-      <span
-        className={styles.latestGitHubReleaseLink}
-        title={strings.LatestGitHubReleaseLinkTitle}
-      >
-        <Link onClick={() =>
-          window.open(releaseNotesUrl, '_blank')
-        } target='_blank' rel='noopener noreferrer'>
+      <span className={styles.latestGitHubReleaseLink} title={strings.LatestGitHubReleaseLinkTitle}>
+        <Link
+          onClick={() => window.open(releaseNotesUrl, '_blank')}
+          target='_blank'
+          rel='noopener noreferrer'
+        >
           <b>{strings.LatestGitHubReleaseLinkTitle}</b>
         </Link>
       </span>

@@ -38,7 +38,9 @@ export const SingleItemView: FC = () => {
         <div className={styles.singleItemView}>
           {(context.props.showItemTitle === undefined || context.props.showItemTitle) && (
             <div className={styles.header}>
-              <h1 className={styles.title}>{item.Title || item?.FileLeafRef || strings.DynamicList.Untitled}</h1>
+              <h1 className={styles.title}>
+                {item.Title || item?.FileLeafRef || strings.DynamicList.Untitled}
+              </h1>
             </div>
           )}
           <div className={styles.fields}>

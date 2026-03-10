@@ -179,7 +179,11 @@ export const ListView: FC<IListViewProps> = ({
   if (!columns.length) {
     return (
       <div style={{ padding: '0 32px' }}>
-        <UserMessage title={strings.DynamicList.NoItemsFound} text={noColumnsMessage} intent='info' />
+        <UserMessage
+          title={strings.DynamicList.NoItemsFound}
+          text={noColumnsMessage}
+          intent='info'
+        />
       </div>
     )
   }

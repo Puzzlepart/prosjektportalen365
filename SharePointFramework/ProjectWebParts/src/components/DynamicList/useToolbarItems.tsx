@@ -26,7 +26,12 @@ import _ from 'lodash'
 import { useExcelExport, useCustomActionDialog } from './hooks'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
 import { fetchSingleItem } from './data/fetchListData'
-import { getSelectedItems, stampSiteIdFieldsOnFile, buildCustomActionPayload, isCorsError } from './utils/listOperationUtils'
+import {
+  getSelectedItems,
+  stampSiteIdFieldsOnFile,
+  buildCustomActionPayload,
+  isCorsError
+} from './utils/listOperationUtils'
 import * as React from 'react'
 import {
   Toaster,
@@ -112,9 +117,10 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
     if (!context.props.listName) return
 
     const selectedCount = context.state.selectedItems.length
-    const confirmMessage = selectedCount === 1
-      ? strings.DynamicList.ConfirmDelete.replace('{0}', selectedCount.toString())
-      : strings.DynamicList.ConfirmDeleteMultiple.replace('{0}', selectedCount.toString())
+    const confirmMessage =
+      selectedCount === 1
+        ? strings.DynamicList.ConfirmDelete.replace('{0}', selectedCount.toString())
+        : strings.DynamicList.ConfirmDeleteMultiple.replace('{0}', selectedCount.toString())
 
     const confirmed = window.confirm(confirmMessage)
 
@@ -225,11 +231,13 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
           let addedFile
           if (folderPath) {
             const folderServerRelativeUrl = `${listRootPath}/${folderPath}`
-            sessionStorage.DEBUG || DEBUG && console.log('[useToolbarItems.uploadFiles] Uploading to folder:', {
-              listName: context.props.listName,
-              folderPath,
-              folderServerRelativeUrl
-            })
+            sessionStorage.DEBUG ||
+              (DEBUG &&
+                console.log('[useToolbarItems.uploadFiles] Uploading to folder:', {
+                  listName: context.props.listName,
+                  folderPath,
+                  folderServerRelativeUrl
+                }))
             const targetFolder = context.web.getFolderByServerRelativePath(folderServerRelativeUrl)
             addedFile = await targetFolder.files.addUsingPath(file.name, file, { Overwrite: true })
           } else {
@@ -306,7 +314,10 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
             contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             break
           case 'powerpoint':
-            fileName = strings.DynamicList.NewPowerPointPresentation.replace('{0}', timestamp.toString())
+            fileName = strings.DynamicList.NewPowerPointPresentation.replace(
+              '{0}',
+              timestamp.toString()
+            )
             contentType =
               'application/vnd.openxmlformats-officedocument.presentationml.presentation'
             break
@@ -316,11 +327,13 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
         let addedFile
         if (folderPath) {
           const folderServerRelativeUrl = `${listRootPath}/${folderPath}`
-          sessionStorage.DEBUG || DEBUG && console.log('[useToolbarItems.createDocument] Creating in folder:', {
-            listName: context.props.listName,
-            folderPath,
-            folderServerRelativeUrl
-          })
+          sessionStorage.DEBUG ||
+            (DEBUG &&
+              console.log('[useToolbarItems.createDocument] Creating in folder:', {
+                listName: context.props.listName,
+                folderPath,
+                folderServerRelativeUrl
+              }))
           const targetFolder = context.web.getFolderByServerRelativePath(folderServerRelativeUrl)
           addedFile = await targetFolder.files.addUsingPath(fileName, emptyFile, {
             Overwrite: true
@@ -438,7 +451,9 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
         dispatchToast(
           <Toast appearance='inverted'>
             <ToastTitle>{action.name}</ToastTitle>
-            <ToastBody>{strings.DynamicList.ActionCompleted.replace('{0}', result.message || 'OK')}</ToastBody>
+            <ToastBody>
+              {strings.DynamicList.ActionCompleted.replace('{0}', result.message || 'OK')}
+            </ToastBody>
           </Toast>,
           { intent: 'success' }
         )
@@ -496,17 +511,21 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
       if (context.props.showNewWordButton !== false) {
         documentMenuItems.push(
-          new ListMenuItem(strings.DynamicList.WordDocument).setIcon('WordDocument').setOnClick(async () => {
-            await createDocument('word')
-          })
+          new ListMenuItem(strings.DynamicList.WordDocument)
+            .setIcon('WordDocument')
+            .setOnClick(async () => {
+              await createDocument('word')
+            })
         )
       }
 
       if (context.props.showNewExcelButton !== false) {
         documentMenuItems.push(
-          new ListMenuItem(strings.DynamicList.ExcelWorkbook).setIcon('ExcelDocument').setOnClick(async () => {
-            await createDocument('excel')
-          })
+          new ListMenuItem(strings.DynamicList.ExcelWorkbook)
+            .setIcon('ExcelDocument')
+            .setOnClick(async () => {
+              await createDocument('excel')
+            })
         )
       }
 
@@ -609,10 +628,11 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       items.push(
         new ListMenuItem()
           .setSearchBox({
-            placeholder: strings.DynamicList.SearchIn.replace('{0}',
+            placeholder: strings.DynamicList.SearchIn.replace(
+              '{0}',
               context.state.currentView?.title?.toLowerCase() ||
-              context.state.data?.listTitle?.toLowerCase() ||
-              'liste'
+                context.state.data?.listTitle?.toLowerCase() ||
+                'liste'
             ),
             title: strings.DynamicList.Search,
             'aria-label': strings.DynamicList.Search,
@@ -671,9 +691,10 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       const selectedCount = context.state.selectedItems?.length || 0
       const tooltipText =
         selectedCount > 0
-          ? strings.DynamicList.ExportSelected
-              .replace('{0}', selectedCount.toString())
-              .replace('{1}', selectedCount === 1 ? '' : 's')
+          ? strings.DynamicList.ExportSelected.replace('{0}', selectedCount.toString()).replace(
+              '{1}',
+              selectedCount === 1 ? '' : 's'
+            )
           : strings.DynamicList.ExportToExcel
 
       items.push(
@@ -719,7 +740,9 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       }
 
       const regularViews = context.state.views.map((view) =>
-        new ListMenuItem(view.isDefault ? `${view.title}${strings.DynamicList.Default}` : view.title)
+        new ListMenuItem(
+          view.isDefault ? `${view.title}${strings.DynamicList.Default}` : view.title
+        )
           .makeCheckable({
             name: 'views',
             value: view.id
@@ -773,9 +796,11 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
     if (!isSingleView && context.props.showFilters) {
       items.push(
-        new ListMenuItem(null, strings.DynamicList.ShowHideFilters).setIcon(FilterRegular).setOnClick(() => {
-          context.setState({ showFilterPanel: !context.state.showFilterPanel })
-        })
+        new ListMenuItem(null, strings.DynamicList.ShowHideFilters)
+          .setIcon(FilterRegular)
+          .setOnClick(() => {
+            context.setState({ showFilterPanel: !context.state.showFilterPanel })
+          })
       )
     }
 

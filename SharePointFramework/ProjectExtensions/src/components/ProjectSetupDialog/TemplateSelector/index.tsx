@@ -37,7 +37,9 @@ export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
       onRenderLabel: (props) => (
         <span className={styles.radioLabelContainer}>
           <span className={styles.radioLabel}>{props.text}</span>
-          <span className={styles.radioDescription}>{strings.ProjectTemplateSelectorNoTemplateDescription}</span>
+          <span className={styles.radioDescription}>
+            {strings.ProjectTemplateSelectorNoTemplateDescription}
+          </span>
         </span>
       )
     },

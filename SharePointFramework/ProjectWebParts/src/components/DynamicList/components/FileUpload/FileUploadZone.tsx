@@ -81,7 +81,9 @@ export const FileUploadZone: FC<IFileUploadZoneProps> = ({
             <div className={styles.overlayContent}>
               <ArrowUploadRegular className={styles.overlayIcon} />
               <Text className={styles.overlayText}>
-                {isUploading ? strings.DynamicList.UploadingFiles : strings.DynamicList.DropFilesToUpload}
+                {isUploading
+                  ? strings.DynamicList.UploadingFiles
+                  : strings.DynamicList.DropFilesToUpload}
               </Text>
               <Text className={styles.overlaySubtext}>
                 {isUploading
@@ -107,7 +109,9 @@ export const FileUploadZone: FC<IFileUploadZoneProps> = ({
     >
       <div className={styles.content}>
         <ArrowUploadRegular className={styles.icon} />
-        <Text className={styles.text}>{isUploading ? strings.DynamicList.Uploading : uploadText}</Text>
+        <Text className={styles.text}>
+          {isUploading ? strings.DynamicList.Uploading : uploadText}
+        </Text>
         <Button appearance='subtle' disabled={isUploading}>
           {strings.DynamicList.SelectFiles}
         </Button>

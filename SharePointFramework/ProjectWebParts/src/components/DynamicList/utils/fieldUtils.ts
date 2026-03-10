@@ -36,9 +36,7 @@ export function isVisibleListField(
 ): boolean {
   const showInEditForm = field.ShowInEditForm ?? true
   const hidden = field.Hidden ?? false
-  const readOnlyField = field.SchemaXml
-    ? field.SchemaXml.indexOf('ReadOnly="TRUE"') !== -1
-    : false
+  const readOnlyField = field.SchemaXml ? field.SchemaXml.indexOf('ReadOnly="TRUE"') !== -1 : false
 
   const isInProjectContentColumns = projectContentColumns.some(
     (c) => c.internalName === field.InternalName || c.fieldName === field.InternalName

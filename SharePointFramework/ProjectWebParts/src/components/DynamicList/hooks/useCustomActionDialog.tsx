@@ -23,7 +23,11 @@ import {
 import { customLightTheme } from 'pp365-shared-library'
 import { DynamicListContext } from '../context'
 import { ICustomAction } from '../types'
-import { getSelectedItems, buildCustomActionPayload, isCorsError } from '../utils/listOperationUtils'
+import {
+  getSelectedItems,
+  buildCustomActionPayload,
+  isCorsError
+} from '../utils/listOperationUtils'
 import * as strings from 'ProjectWebPartsStrings'
 
 interface DialogState {

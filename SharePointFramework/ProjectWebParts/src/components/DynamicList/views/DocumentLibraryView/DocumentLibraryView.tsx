@@ -58,14 +58,16 @@ export const DocumentLibraryView: FC = () => {
         }
       }
 
-      sessionStorage.DEBUG || DEBUG && console.log('[DocumentLibraryView] Filtering items:', {
-        currentPath,
-        projectFolderName,
-        libraryRootPath,
-        useProjectFolder: context.props.useProjectFolder,
-        totalItems: filteredItems.length,
-        sampleItemPaths: filteredItems.slice(0, 3).map((i) => i.FileDirRef)
-      })
+      sessionStorage.DEBUG ||
+        (DEBUG &&
+          console.log('[DocumentLibraryView] Filtering items:', {
+            currentPath,
+            projectFolderName,
+            libraryRootPath,
+            useProjectFolder: context.props.useProjectFolder,
+            totalItems: filteredItems.length,
+            sampleItemPaths: filteredItems.slice(0, 3).map((i) => i.FileDirRef)
+          }))
 
       itemsToDisplay = filteredItems.filter((item: IFileItem) => {
         if (!item.FileDirRef) return false
@@ -74,11 +76,13 @@ export const DocumentLibraryView: FC = () => {
           const projectFolderPath = `${libraryRootPath}/${projectFolderName}`
           const match = item.FileDirRef === projectFolderPath
           if (!match && filteredItems.indexOf(item) < 3) {
-            sessionStorage.DEBUG || DEBUG && console.log('[DocumentLibraryView] Item at root with project folder (no match):', {
-              itemPath: item.FileDirRef,
-              expectedPath: projectFolderPath,
-              itemName: item.FileLeafRef
-            })
+            sessionStorage.DEBUG ||
+              (DEBUG &&
+                console.log('[DocumentLibraryView] Item at root with project folder (no match):', {
+                  itemPath: item.FileDirRef,
+                  expectedPath: projectFolderPath,
+                  itemName: item.FileLeafRef
+                }))
           }
           return match
         } else if (!currentPath) {
@@ -200,13 +204,15 @@ export const DocumentLibraryView: FC = () => {
         newPath = `${currentPath}/${fileName}`
       }
 
-      sessionStorage.DEBUG || DEBUG && console.log('[DocumentLibraryView] handleFileClick - Navigating to folder:', {
-        fileName,
-        currentPath,
-        projectFolderName,
-        useProjectFolder: context.props.useProjectFolder,
-        newPath
-      })
+      sessionStorage.DEBUG ||
+        (DEBUG &&
+          console.log('[DocumentLibraryView] handleFileClick - Navigating to folder:', {
+            fileName,
+            currentPath,
+            projectFolderName,
+            useProjectFolder: context.props.useProjectFolder,
+            newPath
+          }))
 
       context.setState({ currentFolderPath: newPath })
     },
@@ -254,11 +260,13 @@ export const DocumentLibraryView: FC = () => {
           let addedFile
           if (folderPath) {
             const folderServerRelativeUrl = `${listRootPath}/${folderPath}`
-            sessionStorage.DEBUG || DEBUG && console.log('[DocumentLibraryView] Uploading to folder:', {
-              listName: context.props.listName,
-              folderPath,
-              folderServerRelativeUrl
-            })
+            sessionStorage.DEBUG ||
+              (DEBUG &&
+                console.log('[DocumentLibraryView] Uploading to folder:', {
+                  listName: context.props.listName,
+                  folderPath,
+                  folderServerRelativeUrl
+                }))
             const targetFolder = context.web.getFolderByServerRelativePath(folderServerRelativeUrl)
             addedFile = await targetFolder.files.addUsingPath(file.name, file, { Overwrite: true })
           } else {

@@ -9,7 +9,7 @@ import { Button } from '@fluentui/react-components'
 export const FileNameColumn: ColumnRenderComponent<IFileNameColumnProps> = (props) => {
   const contentTypeId = props.item.ContentTypeId || ''
   const isFolder = props.item.FSObjType === 1
-  const isDocSet = contentTypeId.indexOf("0x0120D520") === 0
+  const isDocSet = contentTypeId.indexOf('0x0120D520') === 0
 
   const getFileUrl = () => {
     if (isFolder || !props.item.FileRef) return null
@@ -36,9 +36,7 @@ export const FileNameColumn: ColumnRenderComponent<IFileNameColumnProps> = (prop
 
   const fileUrl = getFileUrl()
 
-  const iconType = isDocSet
-    ? FileIconType.docset
-    : (isFolder ? FileIconType.folder : undefined);
+  const iconType = isDocSet ? FileIconType.docset : isFolder ? FileIconType.folder : undefined
 
   return (
     <span>
