@@ -7,7 +7,10 @@
     display: flex;
     gap: 12px;
     justify-content: space-between;
-    align-items: center;
+
+    .latestGitHubReleaseLink {
+      color: inherit;
+    }
   }
 
   .divider {
@@ -34,7 +37,12 @@
         outline-offset: 2px;
       }
 
-      h1, h2, h3, h4, h5, h6 {
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
         margin-top: 12px;
         margin-bottom: 8px;
         font-weight: var(--fontWeightSemibold);
@@ -52,7 +60,8 @@
         font-size: 14px;
       }
 
-      ul, ol {
+      ul,
+      ol {
         margin: 8px 0;
         padding-left: 20px;
       }

@@ -14,7 +14,7 @@ import rehypeRaw from 'rehype-raw'
  * comparison between the latest GitHub release and the installed version.
  */
 export const LatestGitHubRelease: FC<ILatestGitHubReleaseProps> = (props) => {
-  const { latestGitHubRelease, latestGitHubVersion, installedVersion, versionComparisonIconProps } =
+  const { latestGitHubRelease, latestGitHubVersion, installedVersion, releaseNotesUrl, versionComparisonIconProps } =
     useLatestGitHubRelease(props)
 
   return (
@@ -38,6 +38,16 @@ export const LatestGitHubRelease: FC<ILatestGitHubReleaseProps> = (props) => {
           </Button>
         </Tooltip>
       </div>
+      <span
+        className={styles.latestGitHubReleaseLink}
+        title={strings.LatestGitHubReleaseLinkTitle}
+      >
+        <Link onClick={() =>
+          window.open(releaseNotesUrl, '_blank')
+        } target='_blank' rel='noopener noreferrer'>
+          <b>{strings.LatestGitHubReleaseLinkTitle}</b>
+        </Link>
+      </span>
       {latestGitHubRelease.body && (
         <>
           <Divider className={styles.divider} />

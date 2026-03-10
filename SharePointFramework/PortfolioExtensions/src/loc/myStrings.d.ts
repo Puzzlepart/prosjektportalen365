@@ -39,6 +39,7 @@ declare interface IPortfolioExtensionsStrings {
   LatestGitHubReleaseIsOlderText: any
   LatestGitHubReleaseIsSameText: any
   LatestGitHubReleaseLabel: string
+  LatestGitHubReleaseLinkTitle: string
   LatestGitHubReleaseHighlightsLabel: string
   LinksListDescription: string
   LinksListLabel: string

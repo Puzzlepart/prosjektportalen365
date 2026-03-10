@@ -49,10 +49,13 @@ export function useLatestGitHubRelease(props: ILatestGitHubReleaseProps) {
     }
   }
 
+  const releaseNotesUrl = `https://github.com/Puzzlepart/prosjektportalen365/blob/main/releasenotes/${latestGitHubVersion.major}.${latestGitHubVersion.minor}.0.md`
+
   return {
     latestGitHubRelease,
     latestGitHubVersion,
     installedVersion,
+    releaseNotesUrl,
     versionComparisonIconProps: getVersionComparisonIconProps()
   } as const
 }

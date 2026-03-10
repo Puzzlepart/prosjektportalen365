@@ -40,6 +40,7 @@ define([], function () {
     LatestGitHubReleaseIsOlderText: 'Versjonen som er installert er nyere enn siste release fra GitHub',
     LatestGitHubReleaseIsSameText: 'Versjonen som er installert er siste release fra GitHub',
     LatestGitHubReleaseLabel: 'Siste release fra GitHub',
+    LatestGitHubReleaseLinkTitle: 'Se siste release-notes på GitHub',
     LatestGitHubReleaseHighlightsLabel: 'Hva er nytt i denne versjonen',
     LinksListDescription: 'Lenker til nyttige sider. Lenkene kan konfigureres her: ',
     LinksListLabel: 'Nyttige lenker',
