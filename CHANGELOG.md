@@ -13,6 +13,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Støtte for å bestille underområder direkte fra et program/overordnet område via Bestillingsportalen-skjema. Merk! Krever oppgradering av Bestillingsportalen
 - Ny seksjon i `Prosjektinformasjon` som viser underområder tilknyttet området.
 - Mal-spesifikt Prosjekttidslinje oppsett og standard tidslinjeelementer. Støtte for forskjellige tidslinjeoppsett og elementer for ulike maler. [#1664](https://github.com/Puzzlepart/prosjektportalen365/issues/1664)
+- Ny funksjonalitet i `Prosjektinformasjon` for å kjøre `oppsettveiviseren` på nytt for et prosjekt. Dette lar deg velge en mal, tillegg eller standardinnhold som skal legges til prosjektet. Dette kan brukes for feilsøking eller for å legge til ny funksjonalitet. [#1702](https://github.com/Puzzlepart/prosjektportalen365/issues/1702)
 
 ### Forbedringer
 

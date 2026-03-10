@@ -26,15 +26,15 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
       <BaseDialog
         version={props.version}
         dialogContentProps={{
-          title: strings.TemplateSelectDialogTitle,
-          subText: strings.TemplateSelectDialogInfoText,
+          title: strings.ProjectSetupDialogTitle,
+          subText: strings.ProjectSetupDialogInfoText,
           className: styles.content
         }}
         modalProps={{ containerClassName: styles.root, isBlocking: true, isDarkOverlay: true }}
         onDismiss={props.onDismiss}
       >
         <Pivot style={{ minHeight: 450 }}>
-          <PivotItem headerText={strings.TemplateSelectorTitle} itemIcon='ViewListGroup'>
+          <PivotItem headerText={strings.ProjectTemplateSelectorTitle} itemIcon='ViewListGroup'>
             <TemplateSelector />
           </PivotItem>
           <PivotItem
@@ -79,7 +79,7 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
           <section className={styles.actions}>
             <PrimaryButton
               disabled={!state.selectedTemplate}
-              text={strings.TemplateSelectDialogSubmitButtonText}
+              text={strings.ProjectSetupDialogSubmitButtonText}
               onClick={onSubmit}
             />
             <DefaultButton

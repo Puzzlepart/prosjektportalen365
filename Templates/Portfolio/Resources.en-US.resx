@@ -2068,6 +2068,9 @@
   <data name="Lists_ProjectAdminPermissions_ProjectStatusAdmin" xml:space="preserve">
     <value>Project status administration</value>
   </data>
+  <data name="Lists_ProjectAdminPermissions_ReRunSetup" xml:space="preserve">
+    <value>Re-run setup wizard</value>
+  </data>
   <data name="Lists_ProjectAdminPermissions_Title" xml:space="preserve">
     <value>Project Admin Permissions</value>
   </data>

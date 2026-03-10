@@ -16,7 +16,7 @@ import { IProgressDialogProps } from './ProgressDialog/types'
 import { IArchiveStatusInfo } from '../../data/SPDataAdapter/types'
 
 export type ProjectInformationPanelType = 'EditPropertiesPanel' | 'AllPropertiesPanel'
-export type ProjectInformationDialogType = 'CreateParentDialog'
+export type ProjectInformationDialogType = 'CreateParentDialog' | 'RunProjectSetupDialog'
 export type ProjectInformationPage = 'Frontpage' | 'ProjectStatus' | 'Portfolio'
 
 export interface IProjectInformationProps extends IBaseWebPartComponentProps {
@@ -155,6 +155,7 @@ export interface IProjectInformationState
    *
    * Can be one of the following:
    * - `CreateParentDialog`
+   * - `RunProjectSetupDialog`
    */
   activeDialog?: ProjectInformationDialogType
 
@@ -162,6 +163,11 @@ export interface IProjectInformationState
    * Current user has edit permission (`edc568a8-9cfc-4547-9af2-d9d3aeb5aa2a`)
    */
   userHasEditPermission?: boolean
+
+  /**
+   * Current user has rerun setup permission (`5c2fd32e-0c8b-42be-9e0b-4fa6ff5d4774`)
+   */
+  userHasRerunSetupPermission?: boolean
 
   /**
    * Properties last updated date/time

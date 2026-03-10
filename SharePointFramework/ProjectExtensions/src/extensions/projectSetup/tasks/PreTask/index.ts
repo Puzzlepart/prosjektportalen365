@@ -7,6 +7,7 @@ import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import _ from 'underscore'
 import resource from 'SharedResources'
 import SPDataAdapter from 'data/SPDataAdapter'
+import { NO_TEMPLATE_ID } from '../../constants'
 
 export class PreTask extends BaseTask {
   constructor(data: IProjectSetupData) {
@@ -20,9 +21,14 @@ export class PreTask extends BaseTask {
    */
   public async execute(params: IBaseTaskParams): Promise<IBaseTaskParams> {
     super.initExecute(params)
-    params.templateSchema = await this.data.selectedTemplate.getSchema()
-    if (!params.properties.forceTemplate) {
-      await this.validateParameters(params)
+
+    if (this.data.selectedTemplate && this.data.selectedTemplate.id !== NO_TEMPLATE_ID) {
+      params.templateSchema = await this.data.selectedTemplate.getSchema()
+      if (!params.properties.forceTemplate) {
+        await this.validateParameters(params)
+      }
+    } else {
+      params.templateSchema = { Parameters: {} }
     }
 
     try {

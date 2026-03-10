@@ -1,6 +1,7 @@
 import SPDataAdapter from 'data/SPDataAdapter'
 import strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'extensions/projectSetup'
+import { NO_TEMPLATE_ID } from '../../constants'
 import { isEmpty } from 'underscore'
 import { BaseTask, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../types'
@@ -81,7 +82,18 @@ export class SitePermissions extends BaseTask {
     )
 
     const query: ICamlQuery = {
-      ViewXml: `<View>
+      ViewXml:
+        this.data.selectedTemplate?.id === NO_TEMPLATE_ID
+          ? `<View>
+    <Query>
+      <Where>
+        <IsNull>
+          <FieldRef Name='GtTemplates' />
+        </IsNull>
+      </Where>
+    </Query>
+</View>`
+          : `<View>
     <Query>
       <Where>
         <Or>

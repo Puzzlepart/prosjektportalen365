@@ -24,7 +24,7 @@ export function useProjectSetupDialog(props: IProjectSetupDialogProps) {
 
   /**
    * Checks if the configuration should be disabled. Configuration
-   * tab is disabled if there is no configuration available or there is
+   * tab is disabled if there is no configuration available or if there is
    * no selected template.
    *
    * @param type Type of configuration to check.

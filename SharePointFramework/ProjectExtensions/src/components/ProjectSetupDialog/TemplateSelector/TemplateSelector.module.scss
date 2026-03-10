@@ -11,5 +11,23 @@
     .searchBox {
       width: 802px;
     }
+
+    .radioLabelContainer {
+      display: inline-block;
+      padding-left: 26px;
+    }
+
+    .radioLabel {
+      display: block;
+      font-weight: 600;
+    }
+
+    .radioDescription {
+      display: block;
+      color: $ms-color-neutralSecondary;
+      font-size: $ms-font-size-s;
+      font-weight: 400;
+      margin-top: 2px;
+    }
   }
 }

@@ -27,6 +27,7 @@ declare interface IProjectWebPartsStrings {
   ProjectPropertiesTitleLabel: string
   CalloutTemplateFieldLabel: string
   CancelText: string
+  ConfirmText: string
   CategoryFieldLabel: string
   ChangePhaseDialogTitle: string
   ChangePhaseDialogSubtitle: string
@@ -55,6 +56,10 @@ declare interface IProjectWebPartsStrings {
   CreateParentModalTitle: string
   CreateParentProjectLabel: string
   CreateParentSetupProgressText: string
+  RunProjectSetupLabel: string
+  RunProjectSetupDialogTitle: string
+  RunProjectSetupDialogSubText: string
+  RunProjectSetupDialogProgressText: string
   CurrentPhaseViewNameFieldLabel: string
   DataGroupName: string
   DefaultGroupByLabel: string

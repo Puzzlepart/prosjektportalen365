@@ -9,6 +9,8 @@ import {
   Info24Regular,
   Organization24Filled,
   Organization24Regular,
+  Apps24Filled,
+  Apps24Regular,
   bundleIcon
 } from '@fluentui/react-icons'
 import { DisplayMode } from '@microsoft/sp-core-library'
@@ -71,7 +73,16 @@ export const useActions = () => {
     },
     bundleIcon(Organization24Filled, Organization24Regular),
     false,
-    !context.state.userHasEditPermission
+    !context.state.userHasRerunSetupPermission
+  ]
+  const runProjectSetupAction: ActionType = [
+    strings.RunProjectSetupLabel,
+    () => {
+      context.dispatch(OPEN_DIALOG('RunProjectSetupDialog'))
+    },
+    bundleIcon(Apps24Filled, Apps24Regular),
+    false,
+    !context.state.userHasRerunSetupPermission
   ]
   const actionsMap: Record<string, ActionType> = {
     showAllProjectInformationAction,
@@ -79,7 +90,8 @@ export const useActions = () => {
     editProjectInformationAction,
     editSiteInformationAction,
     administerChildrenAction: context.state.isParentProject ? administerChildrenAction : null,
-    transformToParentProject: !context.state.isParentProject ? transformToParentProject : null
+    transformToParentProject: !context.state.isParentProject ? transformToParentProject : null,
+    runProjectSetupAction
   }
   const actions = Object.keys(actionsMap)
     .map((action) => {

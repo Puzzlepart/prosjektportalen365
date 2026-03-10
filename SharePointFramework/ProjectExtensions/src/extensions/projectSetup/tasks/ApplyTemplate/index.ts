@@ -4,6 +4,7 @@ import * as strings from 'ProjectExtensionsStrings'
 import { WebProvisioner } from 'sp-js-provisioning'
 import _ from 'underscore'
 import { IProjectSetupData } from '../../types'
+import { NO_TEMPLATE_ID } from '../../constants'
 import { BaseTask, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../types'
 import { APPLY_TEMPLATE_STATUS_MAP, ApplyTemplateTaskError } from './types'
@@ -34,18 +35,24 @@ export class ApplyTemplate extends BaseTask {
           activeLogLevel: LogLevel.Verbose
         }
       })
-      this.logInformation('Applying template to site', { parameters: params.templateParameters })
-      const templateSchema = _.omit(params.templateSchema, params.templateExcludeHandlers)
-      await provisioner.applyTemplate(templateSchema, null, (handler) => {
-        if (APPLY_TEMPLATE_STATUS_MAP.has(handler)) {
-          const { text, iconName } = APPLY_TEMPLATE_STATUS_MAP.get(handler)!
-          onProgress(
-            format(strings.ApplyTemplateText, this.data.selectedTemplate.text),
-            text,
-            iconName
-          )
-        }
-      })
+
+      if (this.data.selectedTemplate && this.data.selectedTemplate.id !== NO_TEMPLATE_ID) {
+        this.logInformation('Applying template to site', { parameters: params.templateParameters })
+        const templateSchema = _.omit(params.templateSchema, params.templateExcludeHandlers)
+        await provisioner.applyTemplate(templateSchema, null, (handler) => {
+          if (APPLY_TEMPLATE_STATUS_MAP.has(handler)) {
+            const { text, iconName } = APPLY_TEMPLATE_STATUS_MAP.get(handler)!
+            onProgress(
+              format(strings.ApplyTemplateText, this.data.selectedTemplate.text),
+              text,
+              iconName
+            )
+          }
+        })
+      } else {
+        this.logInformation('Skipping template application (no template selected)')
+      }
+
       this.logInformation('Applying extensions to site', { parameters: params.templateParameters })
       for (let i = 0; i < this.data.selectedExtensions.length; i++) {
         let extensionSchema = await this.data.selectedExtensions[i].getSchema()

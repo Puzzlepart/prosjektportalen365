@@ -1,6 +1,7 @@
 import { getObjectValue as get } from 'pp365-shared-library/lib/util/getObjectValue'
 import * as strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'extensions/projectSetup'
+import { NO_TEMPLATE_ID } from '../../constants'
 import { ExecuteJsomQuery } from 'spfx-jsom'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 
@@ -17,6 +18,10 @@ export class SetTaxonomyFields extends BaseTask {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async execute(params: IBaseTaskParams): Promise<IBaseTaskParams> {
+    if (this.data.selectedTemplate?.id === NO_TEMPLATE_ID) {
+      this.logInformation('Skipping taxonomy field configuration (no template selected)')
+      return params
+    }
     try {
       const {
         spfxJsomContext: { jsomContext, defaultTermStore }
