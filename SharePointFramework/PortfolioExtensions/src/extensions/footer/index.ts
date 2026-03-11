@@ -218,33 +218,40 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
 
   /**
    * Fetch the favorite/followed projects for the current user using SharePoint Social Following REST API.
-   * Returns an array of project sites that the user is following.
+   * Filters the results to only include projects that exist in the current hub's projects list.
    */
   private async _fetchFavoriteProjects(): Promise<{ name: string; url: string }[]> {
     try {
       const webAbsoluteUrl = this.context.pageContext.web.absoluteUrl
-      const response = await fetch(
-        `${webAbsoluteUrl}/_api/social.following/my/followed(types=4)`,
-        {
-          headers: {
-            Accept: 'application/json;odata=verbose'
-          }
-        }
-      )
 
-      if (!response.ok) {
+      const [followedResponse, hubProjects] = await Promise.all([
+        fetch(`${webAbsoluteUrl}/_api/social.following/my/followed(types=4)`, {
+          headers: { Accept: 'application/json;odata=verbose' }
+        }),
+        this._portalDataService.web.lists
+          .getByTitle(resource.Lists_Projects_Title)
+          .items.select('GtSiteUrl')
+          .top(5000)()
+      ])
+
+      if (!followedResponse.ok) {
         return []
       }
 
-      const data = await response.json()
+      const data = await followedResponse.json()
       const followedSites = data.d?.Followed?.results || []
 
-      // Filter to only include sites that appear to be projects (not the main portal)
+      const hubProjectUrls = new Set(
+        hubProjects
+          .map((p: { GtSiteUrl: string }) => p.GtSiteUrl?.toLowerCase())
+          .filter(Boolean)
+      )
+
+      // Filter followed sites to only those that exist in the hub's projects list
       const projects = followedSites
         .filter((site: any) => {
-          const url = site.Uri || site.Url || ''
-          // Filter out the main portfolio site and keep project sites
-          return url && url !== webAbsoluteUrl && site.Name
+          const url = (site.Uri || site.Url || '').toLowerCase()
+          return url && url !== webAbsoluteUrl.toLowerCase() && site.Name && hubProjectUrls.has(url)
         })
         .map((site: any) => ({
           name: site.Name,
@@ -253,7 +260,6 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
 
       return projects
     } catch (error) {
-      // If the social API fails or is not available, return empty array
       console.warn('Could not fetch favorite projects:', error)
       return []
     }

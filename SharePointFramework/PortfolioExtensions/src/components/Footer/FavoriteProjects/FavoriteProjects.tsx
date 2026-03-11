@@ -19,11 +19,6 @@ export const FavoriteProjects: FC = () => {
   const context = useContext(FooterContext)
   const fluentProviderId = useId('fp-footer-favorite-projects')
 
-  // Don't render if favoriteProjects is not defined
-  if (!context.props.favoriteProjects) {
-    return null
-  }
-
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme}>
