@@ -160,7 +160,9 @@ import {
   ArrowCircleDownFilled,
   ArrowCircleDownRegular,
   ArrowCircleUpSparkleFilled,
-  ArrowCircleUpSparkleRegular
+  ArrowCircleUpSparkleRegular,
+  StarFilled,
+  StarRegular
 } from '@fluentui/react-icons'
 
 /**
@@ -490,5 +492,9 @@ export const iconCatalog = {
   Warning: {
     regular: WarningRegular,
     filled: WarningFilled
+  },
+  FavoriteStar: {
+    regular: StarRegular,
+    filled: StarFilled
   }
 }
