@@ -47,6 +47,7 @@ define([], function () {
     SeeAllInstallationsLinkText: 'Se alle installasjoner',
     SetRecommendationSubtitle: 'Velg anbefaling for: {0}',
     SetRecommendationTitle: 'Sett anbefaling',
+    SiteContentsLabel: 'Områdeinnhold',
     SiteSettingsDescription: 'Vis alle områdeinnstillinger for Porteføljeområdet',
     SiteSettingsLabel: 'Områdeinnstillinger',
     SubmitLabel: 'Send',

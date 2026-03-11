@@ -13,6 +13,7 @@ define([], function () {
     LastInstallDescription: 'Here is an overview of the last installation of Prosjektportalen. At the very bottom you will find information about the latest release from GitHub.',
     LinksListDescription: 'Links to useful pages. The links can be configured here: ',
     LinksListLabel: 'Useful links',
+    SiteContentsLabel: 'Site contents',
     SiteSettingsDescription: 'View all site settings for the Portfolio site',
     SiteSettingsLabel: 'Site settings',
     ActionLabel: 'Action',

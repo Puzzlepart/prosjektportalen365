@@ -21,6 +21,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Forbedringer på 'multi-hub' støtte i Porteføljeoversikt. Dette inkluderer en ny Prosjektkolonne `Hubnavn` som kan brukes til filtrering og visning av prosjekter basert på hvilket hubområde de tilhører. Det er også støtte for hubområder som har forskjellige språkinnstillinger slik at den samler både norske og engelske prosjekter i en og samme oversikt. [#1676](https://github.com/Puzzlepart/prosjektportalen365/issues/1676)
 - Forbedret formatet på eksportert data av "Målinger" og "Måloppnåelse", disse legger seg nå som et ekstra ark ved eksport [#1383](https://github.com/Puzzlepart/prosjektportalen365/issues/1383)
 - Oversikt over siste versjon av Prosjektportalen inkluderer også et sammendrag av hva som er nytt i siste tilgjengelige versjon, i tillegg til lenke til fullstendige release notes [#1696](https://github.com/Puzzlepart/prosjektportalen365/issues/1696)
+- Knapp i `Footer` for `Områdeinnstillinger` gir også mulighet for å gå direkte til `Områdeinnhold`.
 
 ### Feilrettinger
 

@@ -2,7 +2,12 @@ import strings from 'PortfolioExtensionsStrings'
 import React, { FC, useContext } from 'react'
 import { FooterContext } from '../context'
 import {
-  Button,
+  Menu,
+  MenuItem,
+  MenuList,
+  MenuPopover,
+  MenuTrigger,
+  SplitButton,
   Tooltip,
   FluentProvider,
   IdPrefixProvider,
@@ -19,18 +24,45 @@ export const SiteSettings: FC = () => {
     <div style={{ display: isHidden ? 'none' : 'inline-block' }}>
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme}>
-          <Tooltip relationship='description' withArrow content={strings.SiteSettingsDescription}>
-            <Button
-              size='small'
-              appearance='subtle'
-              onClick={() =>
-                window.open(`${context.props.portalUrl}/_layouts/15/settings.aspx`, '_blank')
-              }
-              icon={getFluentIcon('Settings')}
-            >
-              {strings.SiteSettingsLabel}
-            </Button>
-          </Tooltip>
+          <Menu positioning='above'>
+            <MenuTrigger disableButtonEnhancement>
+              <Tooltip
+                relationship='description'
+                withArrow
+                content={strings.SiteSettingsDescription}
+              >
+                <SplitButton
+                  size='small'
+                  appearance='subtle'
+                  icon={getFluentIcon('Settings')}
+                  primaryActionButton={{
+                    onClick: () =>
+                      window.open(
+                        `${context.props.portalUrl}/_layouts/15/settings.aspx`,
+                        '_blank'
+                      )
+                  }}
+                >
+                  {strings.SiteSettingsLabel}
+                </SplitButton>
+              </Tooltip>
+            </MenuTrigger>
+            <MenuPopover>
+              <MenuList>
+                <MenuItem
+                  icon={getFluentIcon('TextBulletList')}
+                  onClick={() =>
+                    window.open(
+                      `${context.props.portalUrl}/_layouts/15/viewlsts.aspx`,
+                      '_blank'
+                    )
+                  }
+                >
+                  {strings.SiteContentsLabel}
+                </MenuItem>
+              </MenuList>
+            </MenuPopover>
+          </Menu>
         </FluentProvider>
       </IdPrefixProvider>
     </div>

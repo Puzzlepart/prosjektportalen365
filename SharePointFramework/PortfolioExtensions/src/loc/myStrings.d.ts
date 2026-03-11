@@ -46,6 +46,7 @@ declare interface IPortfolioExtensionsStrings {
   SeeAllInstallationsLinkText: string
   SetRecommendationSubtitle: string
   SetRecommendationTitle: string
+  SiteContentsLabel: string
   SiteSettingsDescription: string
   SiteSettingsLabel: string
   SubmitLabel: string
