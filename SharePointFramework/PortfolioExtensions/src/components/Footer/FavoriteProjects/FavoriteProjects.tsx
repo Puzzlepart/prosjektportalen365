@@ -2,18 +2,18 @@ import strings from 'PortfolioExtensionsStrings'
 import React, { FC, useContext } from 'react'
 import { FooterContext } from '../context'
 import {
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  MenuPopover,
-  MenuTrigger,
+  Button,
+  Popover,
+  PopoverSurface,
+  PopoverTrigger,
   Tooltip,
   FluentProvider,
   IdPrefixProvider,
-  useId
+  useId,
+  Link,
+  Divider
 } from '@fluentui/react-components'
-import { getFluentIcon, customLightTheme } from 'pp365-shared-library'
+import { getFluentIcon, customLightTheme, WebPartTitle } from 'pp365-shared-library'
 
 export const FavoriteProjects: FC = () => {
   const context = useContext(FooterContext)
@@ -27,38 +27,43 @@ export const FavoriteProjects: FC = () => {
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme}>
-        <Menu>
-          <MenuTrigger disableButtonEnhancement>
+        <Popover withArrow positioning='above-start'>
+          <PopoverTrigger disableButtonEnhancement>
             <Tooltip
               relationship='description'
               withArrow
               content={strings.FavoriteProjectsDescription}
             >
-              <MenuButton size='small' appearance='subtle' icon={getFluentIcon('FavoriteStar')}>
+              <Button size='small' appearance='subtle' icon={getFluentIcon('FavoriteStar')}>
                 {strings.FavoriteProjectsLabel}
-              </MenuButton>
+              </Button>
             </Tooltip>
-          </MenuTrigger>
-          <MenuPopover style={{ minWidth: 'fit-content' }}>
-            <MenuList>
-              {context.props.favoriteProjects.length === 0 ? (
-                <MenuItem disabled style={{ maxWidth: 'fit-content', minWidth: '100%' }}>
-                  {strings.FavoriteProjectsNoItemsMessage}
-                </MenuItem>
-              ) : (
-                context.props.favoriteProjects.map((project) => (
-                  <MenuItem
-                    style={{ maxWidth: 'fit-content', minWidth: '100%' }}
+          </PopoverTrigger>
+          <PopoverSurface style={{ maxHeight: '420px', overflow: 'auto' }}>
+            <WebPartTitle
+              title={strings.FavoriteProjectsLabel}
+              description={strings.FavoriteProjectsDescription}
+            />
+            <Divider style={{ padding: '12px' }}/>
+            {context.props.favoriteProjects.length === 0 ? (
+              <div style={{ padding: '4px 8px' }}>
+                {strings.FavoriteProjectsNoItemsMessage}
+              </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                {context.props.favoriteProjects.map((project) => (
+                  <Link
                     key={project.url}
-                    onClick={() => window.open(project.url, '_self')}
+                    href={project.url}
+                    style={{ padding: '4px 8px', whiteSpace: 'nowrap' }}
                   >
                     {project.name}
-                  </MenuItem>
-                ))
-              )}
-            </MenuList>
-          </MenuPopover>
-        </Menu>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </PopoverSurface>
+        </Popover>
       </FluentProvider>
     </IdPrefixProvider>
   )

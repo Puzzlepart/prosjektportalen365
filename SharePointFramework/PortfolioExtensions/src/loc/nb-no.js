@@ -56,7 +56,7 @@ define([], function () {
     IdeaRegistrationCommandTitle: 'Sett anbefaling',
     IdeaProjectDataCommandTitle: 'Opprett prosjektdata',
     FavoriteProjectsLabel: 'Mine favorittprosjekter',
-    FavoriteProjectsDescription: 'Rask tilgang til prosjekter du følger',
-    FavoriteProjectsNoItemsMessage: 'Du følger ingen prosjekter ennå'
+    FavoriteProjectsDescription: 'Rask tilgang til prosjekter du følger i nåværende portefølje',
+    FavoriteProjectsNoItemsMessage: 'Du følger ingen prosjekter ennå, gå til et prosjekt og klikk på stjernen "følg" for å legge det til i favoritter',
   }
 })

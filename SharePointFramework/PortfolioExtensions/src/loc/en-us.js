@@ -60,7 +60,7 @@ define([], function () {
     IdeaRegistrationCommandTitle: 'Set recommendation',
     IdeaProjectDataCommandTitle: 'Create project data',
     FavoriteProjectsLabel: 'My favorite projects',
-    FavoriteProjectsDescription: 'Quick access to projects you follow',
-    FavoriteProjectsNoItemsMessage: 'You are not following any projects yet'
+    FavoriteProjectsDescription: 'Quick access to projects you follow in current portfolio',
+    FavoriteProjectsNoItemsMessage: 'You are not following any projects yet, go to a project and click the star "follow" to add it to favorites',
   }
 })
