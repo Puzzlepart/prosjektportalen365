@@ -23,6 +23,11 @@ declare interface ISharedLibraryStrings {
     ChoiceField: string
     MultiChoiceField: string
   },
+  Validation: {
+    NumberFieldMin: string
+    NumberFieldMax: string
+    NumberFieldMinMax: string
+  },
   AllocationPercetageLabel: string
   AllocationStatusLabel: string
   BudgetTotalLabel: string

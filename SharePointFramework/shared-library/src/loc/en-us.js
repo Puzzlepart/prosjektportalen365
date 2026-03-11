@@ -22,6 +22,11 @@ define([], function () {
       ChoiceField: 'Select an option',
       MultiChoiceField: 'Select one or more options',
     },
+    Validation: {
+      NumberFieldMin: 'The value must be at least {0}',
+      NumberFieldMax: 'The value must be at most {0}',
+      NumberFieldMinMax: 'The value must be between {0} and {1}',
+    },
     AllocationPercetageLabel: 'Allocation percentage',
     AllocationStatusLabel: 'Allocation status',
     BudgetTotalLabel: 'Total budget',

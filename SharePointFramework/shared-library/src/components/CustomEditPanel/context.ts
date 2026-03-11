@@ -9,6 +9,9 @@ export interface ICustomEditPanelContext {
   getFieldElement: (field: EditableSPField) => JSX.Element
   isSaveDisabled: () => boolean
   props: ICustomEditPanelProps
+  validationErrors: Map<string, string>
+  setValidationError: (fieldInternalName: string, error: string) => void
+  clearValidationError: (fieldInternalName: string) => void
 }
 
 export const CustomEditPanelContext = createContext<ICustomEditPanelContext>(null)

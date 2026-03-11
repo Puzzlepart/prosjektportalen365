@@ -22,6 +22,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Forbedret formatet på eksportert data av "Målinger" og "Måloppnåelse", disse legger seg nå som et ekstra ark ved eksport [#1383](https://github.com/Puzzlepart/prosjektportalen365/issues/1383)
 - Oversikt over siste versjon av Prosjektportalen inkluderer også et sammendrag av hva som er nytt i siste tilgjengelige versjon, i tillegg til lenke til fullstendige release notes [#1696](https://github.com/Puzzlepart/prosjektportalen365/issues/1696)
 - Knapp i `Footer` for `Områdeinnstillinger` gir også mulighet for å gå direkte til `Områdeinnhold`.
+- Støtte for å angi minimum og maksimum verdier for tall og valuta felt i redigeringspaneler for prosjektinformasjon [#1578](https://github.com/Puzzlepart/prosjektportalen365/issues/1578)
 
 ### Feilrettinger
 
