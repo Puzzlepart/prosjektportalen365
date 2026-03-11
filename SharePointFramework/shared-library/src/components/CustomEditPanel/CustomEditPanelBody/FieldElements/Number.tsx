@@ -9,8 +9,6 @@ export const Number: FieldElementComponent = ({ field }) => {
   const context = useCustomEditPanelContext()
   const [validationMessage, setValidationMessage] = useState<string>(null)
   const [validationState, setValidationState] = useState<'error' | 'none'>('none')
-
-  // Extract min and max values from field.column.data.dataTypeProperties
   const minValue = field.column?.data?.dataTypeProperties?.min
   const maxValue = field.column?.data?.dataTypeProperties?.max
 
@@ -66,7 +64,6 @@ export const Number: FieldElementComponent = ({ field }) => {
     context.model.set(field, data.value || null)
   }
 
-  // Validate initial value
   useEffect(() => {
     const initialValue = context.model.get<string>(field)
     if (initialValue) {
