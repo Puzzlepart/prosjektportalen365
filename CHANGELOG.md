@@ -14,6 +14,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Ny seksjon i `Prosjektinformasjon` som viser underområder tilknyttet området.
 - Mal-spesifikt Prosjekttidslinje oppsett og standard tidslinjeelementer. Støtte for forskjellige tidslinjeoppsett og elementer for ulike maler. [#1664](https://github.com/Puzzlepart/prosjektportalen365/issues/1664)
 - Ny funksjonalitet i `Prosjektinformasjon` for å kjøre `oppsettveiviseren` på nytt for et prosjekt. Dette lar deg velge en mal, tillegg eller standardinnhold som skal legges til prosjektet. Dette kan brukes for feilsøking eller for å legge til ny funksjonalitet. [#1702](https://github.com/Puzzlepart/prosjektportalen365/issues/1702)
+- Ny knapp i `Footer` for å vise en liste over favorittprosjekter som brukeren følger i porteføljen. [#1462](https://github.com/Puzzlepart/prosjektportalen365/issues/1462)
 
 ### Forbedringer
 
@@ -22,6 +23,8 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Oversikt over siste versjon av Prosjektportalen inkluderer også et sammendrag av hva som er nytt i siste tilgjengelige versjon, i tillegg til lenke til fullstendige release notes [#1696](https://github.com/Puzzlepart/prosjektportalen365/issues/1696)
 
 ### Feilrettinger
+
+- Fikset feil hvor feltkonfigurasjoner for maloppsett ikke fungerte, custom feltnavn og beskrivelser laster nå inn korrekt. [#1704](https://github.com/Puzzlepart/prosjektportalen365/issues/1704)
 
 ---
 

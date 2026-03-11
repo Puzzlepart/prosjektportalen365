@@ -54,6 +54,9 @@ declare interface IPortfolioExtensionsStrings {
   IdeaProcessingLinkTitle: string
   IdeaRegistrationCommandTitle: string
   IdeaProjectDataCommandTitle: string
+  FavoriteProjectsLabel: string
+  FavoriteProjectsDescription: string
+  FavoriteProjectsNoItemsMessage: string
 }
 
 declare module 'PortfolioExtensionsStrings' {

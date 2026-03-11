@@ -2,6 +2,7 @@ import { FluentProvider, IdPrefixProvider, mergeClasses, useId } from '@fluentui
 import { customLightTheme } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { Configuration } from './Configuration'
+import { FavoriteProjects } from './FavoriteProjects'
 import styles from './Footer.module.scss'
 import { HelpContent } from './HelpContent'
 import { InstallVersion } from './InstallVersion'
@@ -29,6 +30,7 @@ export const Footer: FC<IFooterProps> = (props) => {
             <section className={styles.left}>
               <SiteSettings />
               <Configuration />
+              <FavoriteProjects />
               <PromotedLinks />
             </section>
             <section className={styles.right}>

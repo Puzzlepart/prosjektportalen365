@@ -54,6 +54,9 @@ define([], function () {
     IdeaProcessingCommandTitle: 'Sett anbefaling',
     IdeaProcessingLinkTitle: 'Gå til behandling',
     IdeaRegistrationCommandTitle: 'Sett anbefaling',
-    IdeaProjectDataCommandTitle: 'Opprett prosjektdata'
+    IdeaProjectDataCommandTitle: 'Opprett prosjektdata',
+    FavoriteProjectsLabel: 'Mine favorittprosjekter',
+    FavoriteProjectsDescription: 'Rask tilgang til prosjekter du følger i nåværende portefølje',
+    FavoriteProjectsNoItemsMessage: 'Du følger ingen prosjekter ennå, gå til et prosjekt og klikk på stjernen "følg" for å legge det til i favoritter',
   }
 })

@@ -26,6 +26,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   private _installEntries: InstallationEntry[]
   private _gitHubReleases: IGitHubRelease[]
   private _links: { Url: string; Description: string; Level?: string }[]
+  private _favoriteProjects: { name: string; url: string }[]
   private _useAssistant: boolean
   private _hasAssistantAccess: boolean
   private _assistantEndpointUrl: string
@@ -46,17 +47,19 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     this._globalSettings = await this._portalDataService.getGlobalSettings()
 
     const requireAssistantAccess = this._globalSettings.get('RequireAssistantAccess') === '1'
-    const [installEntries, gitHubReleases, helpContent, links] = await Promise.all([
+    const [installEntries, gitHubReleases, helpContent, links, favoriteProjects] = await Promise.all([
       this._fetchInstallationLogs(),
       this._fetchGitHubReleases(),
       this._fetchHelpContent(),
-      this._fetchLinks()
+      this._fetchLinks(),
+      this._fetchFavoriteProjects()
     ])
 
     this._installEntries = installEntries
     this._gitHubReleases = gitHubReleases
     this._helpContent = helpContent
     this._links = links
+    this._favoriteProjects = favoriteProjects
     this._useAssistant = this._globalSettings.get('UseAssistant') === '1'
     this._showFooter = this._globalSettings.get('ShowFooter') === '1'
     this._minimizeFooter = this._globalSettings.get('MinimizeFooter') === '1'
@@ -84,6 +87,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
       gitHubReleases: this._gitHubReleases,
       helpContent: this._helpContent,
       links: this._links,
+      favoriteProjects: this._favoriteProjects,
       pageContext: this.context.pageContext,
       portalUrl: this._portalDataService.url,
       useAssistant: this._useAssistant,
@@ -210,6 +214,55 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     const response = await fetch(`https://api.github.com/repos/${repoName}/releases`)
     const releases = await response.json()
     return releases
+  }
+
+  /**
+   * Fetch the favorite/followed projects for the current user using SharePoint Social Following REST API.
+   * Filters the results to only include projects that exist in the current hub's projects list.
+   */
+  private async _fetchFavoriteProjects(): Promise<{ name: string; url: string }[]> {
+    try {
+      const webAbsoluteUrl = this.context.pageContext.web.absoluteUrl
+
+      const [followedResponse, hubProjects] = await Promise.all([
+        fetch(`${webAbsoluteUrl}/_api/social.following/my/followed(types=4)`, {
+          headers: { Accept: 'application/json;odata=verbose' }
+        }),
+        this._portalDataService.web.lists
+          .getByTitle(resource.Lists_Projects_Title)
+          .items.select('GtSiteUrl')
+          .top(5000)()
+      ])
+
+      if (!followedResponse.ok) {
+        return []
+      }
+
+      const data = await followedResponse.json()
+      const followedSites = data.d?.Followed?.results || []
+
+      const hubProjectUrls = new Set(
+        hubProjects
+          .map((p: { GtSiteUrl: string }) => p.GtSiteUrl?.toLowerCase())
+          .filter(Boolean)
+      )
+
+      // Filter followed sites to only those that exist in the hub's projects list
+      const projects = followedSites
+        .filter((site: any) => {
+          const url = (site.Uri || site.Url || '').toLowerCase()
+          return url && url !== webAbsoluteUrl.toLowerCase() && site.Name && hubProjectUrls.has(url)
+        })
+        .map((site: any) => ({
+          name: site.Name,
+          url: site.Uri || site.Url
+        }))
+
+      return projects
+    } catch (error) {
+      console.warn('Could not fetch favorite projects:', error)
+      return []
+    }
   }
 
   /**

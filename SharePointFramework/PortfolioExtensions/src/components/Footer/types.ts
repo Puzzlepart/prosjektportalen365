@@ -56,4 +56,9 @@ export interface IFooterProps {
    * Whether or not to minimize the footer automtically
    */
   minimizeFooter: boolean
+
+  /**
+   * Favorite projects (followed sites) for the current user
+   */
+  favoriteProjects: { name: string; url: string }[]
 }
