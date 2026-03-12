@@ -68,6 +68,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
     urlPrefix,
     aliasSuffix,
     joinHub,
+    usesDifferentHub,
     isTeam,
     getField,
     fluentProviderId
@@ -777,6 +778,13 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
               <FieldContainer
                 iconName='Database'
                 label={getField('hubSiteTitle').displayName}
+                description={
+                  usesDifferentHub &&
+                  format(
+                    strings.Provision.DefaultHubInfoMessage,
+                    context.column.get('hubSiteTitle')
+                  )
+                }
                 hidden={getField('hubSiteTitle').hidden || !joinHub}
               >
                 <Dropdown

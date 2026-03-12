@@ -117,6 +117,7 @@ define([], function () {
       LanguageFieldLabel: 'Språk',
       TimeZoneFieldLabel: 'Tidssone',
       HubSiteFieldLabel: 'Hubtilknytning',
+      DefaultHubInfoMessage: 'Dette området blir knyttet til en annen hub: {0}',
       ParentSiteFieldLabel: 'Overordnet område',
       ParentSiteFieldDescription: 'Området du bestiller vil bli koblet til det overordnede området vist her.',
       ImageFieldLabel: 'Angi områdebilde',

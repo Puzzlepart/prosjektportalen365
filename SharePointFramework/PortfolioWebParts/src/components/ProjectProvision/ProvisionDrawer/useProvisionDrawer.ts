@@ -85,6 +85,11 @@ export const useProvisionDrawer = () => {
   const joinHub = !!context.state.types?.find((t) => t.title === context.column.get('type'))
     ?.joinHub
 
+  const usesDifferentHub =
+    joinHub &&
+    !!context.column.get('hubSite') &&
+    context.column.get('hubSite') !== context.props.pageContext.legacyPageContext.hubSiteId
+
   const spaceTypeInternal = context.state.types?.find(
     (t) => t.title === context.column.get('type')
   )?.type
@@ -176,12 +181,8 @@ export const useProvisionDrawer = () => {
       TimeZoneId: 4,
       LCID: 1044,
       JoinHub: joinHub,
-      HubSiteTitle: joinHub
-        ? context.props.parentMode
-          ? context.column.get('hubSiteTitle')
-          : context.props.pageContext.web.title
-        : '',
-      HubSite: joinHub ? context.props.pageContext.legacyPageContext.hubSiteId : '',
+      HubSiteTitle: joinHub ? context.column.get('hubSiteTitle') || '' : '',
+      HubSite: joinHub ? context.column.get('hubSite') || '' : '',
       ParentSite: context.props.parentMode ? parentSite?.SPWebURL : '',
       Prefix: namingConvention?.prefixText,
       Suffix: namingConvention?.suffixText,
@@ -320,6 +321,7 @@ export const useProvisionDrawer = () => {
     aliasSuffix,
     isTeam,
     joinHub,
+    usesDifferentHub,
     getField,
     fluentProviderId,
     currentTemplate,

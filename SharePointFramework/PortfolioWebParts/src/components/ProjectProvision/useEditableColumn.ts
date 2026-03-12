@@ -20,7 +20,6 @@ export function useEditableColumn(
       : null
   }, [state.loading, state.error, state.types])
 
-  // Fetch hub site title when in parent mode
   useEffect(() => {
     const fetchHubSiteTitle = async () => {
       if (props.parentMode && props.dataAdapter) {
@@ -389,6 +388,24 @@ export function useEditableColumn(
           transformedExpirationDate = await transformValue(defaultExpirationDate, 'expirationDate')
         }
 
+        let resolvedHubSite = props.pageContext.legacyPageContext.hubSiteId
+        let resolvedHubSiteTitle = hubSiteTitle
+
+        if (
+          typeDefaults?.defaultHub &&
+          typeDefaults.defaultHub !== props.pageContext.legacyPageContext.hubSiteId
+        ) {
+          try {
+            const hubInfo = await props.dataAdapter.resolveHubSiteById(typeDefaults.defaultHub)
+            if (hubInfo) {
+              resolvedHubSite = hubInfo.hubSiteId
+              resolvedHubSiteTitle = hubInfo.title
+            }
+          } catch (error) {
+            console.warn('Failed to resolve default hub site:', error)
+          }
+        }
+
         $setColumn((prev) => {
           const newColumns = new Map(prev)
           newColumns.set('isConfidential', defaultConfidentialData)
@@ -401,6 +418,8 @@ export function useEditableColumn(
           newColumns.set('teamify', defaultTeamify)
           newColumns.set('owner', defaultOwner)
           newColumns.set('expirationDate', defaultExpirationDate)
+          newColumns.set('hubSite', resolvedHubSite)
+          newColumns.set('hubSiteTitle', resolvedHubSiteTitle)
           return newColumns
         })
 
@@ -415,7 +434,8 @@ export function useEditableColumn(
             externalSharing: enableExternalSharing,
             teamify: defaultTeamify,
             owner: transformedOwner,
-            expirationDate: transformedExpirationDate
+            expirationDate: transformedExpirationDate,
+            hubSiteTitle: resolvedHubSiteTitle
           }
         })
       } catch (error) {

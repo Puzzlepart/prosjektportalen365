@@ -501,6 +501,14 @@ export interface IPortfolioWebPartsDataAdapter {
    * @returns True if user is site admin
    */
   isProvisionSiteAdmin?(provisionUrl: string): Promise<boolean>
+
+  /**
+   * Resolve a hub site by its ID using the HubSites REST API.
+   *
+   * @param hubSiteId The hub site GUID
+   * @returns Hub site info with id and title, or null if not found
+   */
+  resolveHubSiteById?(hubSiteId: string): Promise<{ hubSiteId: string; title: string } | null>
 }
 
 export type PortfolioInstance = {

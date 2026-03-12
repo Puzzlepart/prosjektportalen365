@@ -1554,4 +1554,32 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       return false
     }
   }
+
+  /**
+   * Resolve a hub site by its ID using the SharePoint HubSites REST API.
+   * Returns the hub site title and ID, or null if the hub site could not be resolved.
+   *
+   * @param hubSiteId Hub site ID (GUID)
+   */
+  public async resolveHubSiteById(
+    hubSiteId: string
+  ): Promise<{ hubSiteId: string; title: string } | null> {
+    try {
+      const webAbsoluteUrl = this._spfxContext.pageContext.web.absoluteUrl
+      const response = await fetch(`${webAbsoluteUrl}/_api/HubSites/GetById('${hubSiteId}')`, {
+        method: 'GET',
+        headers: { Accept: 'application/json;odata=nometadata' },
+        credentials: 'include'
+      })
+      if (!response.ok) return null
+      const hubSite = await response.json()
+      return {
+        hubSiteId: hubSiteId,
+        title: hubSite.Title || ''
+      }
+    } catch (error) {
+      console.warn('Failed to resolve hub site by ID:', error)
+      return null
+    }
+  }
 }

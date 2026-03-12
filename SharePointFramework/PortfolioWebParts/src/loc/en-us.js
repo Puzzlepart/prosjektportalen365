@@ -160,6 +160,7 @@ define([], function () {
       DefaultLanguage: "English (United States)",
       DefaultTimeZone: "(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna",
       HubSiteFieldLabel: "Hub association",
+      DefaultHubInfoMessage: "This site will be associated with the hub site: {0}",
       ParentSiteFieldLabel: "Parent site",
       ParentSiteFieldDescription: "This sub-area will be linked to the parent site shown here.",
       ImageFieldLabel: "Set site image",

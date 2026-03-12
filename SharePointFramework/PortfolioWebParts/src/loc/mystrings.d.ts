@@ -116,6 +116,7 @@ declare interface IPortfolioWebPartsStrings {
     LanguageFieldLabel: string
     TimeZoneFieldLabel: string
     HubSiteFieldLabel: string
+    DefaultHubInfoMessage: string
     ParentSiteFieldLabel: string
     ParentSiteFieldDescription: string
     ImageFieldLabel: string
