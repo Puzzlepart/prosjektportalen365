@@ -12,6 +12,7 @@ import {
   TagFilled,
   TagMultipleFilled
 } from '@fluentui/react-icons'
+import { CLOSE_PANEL } from '../../reducer'
 
 /**
  * Component logic hook for the `ProjectProperty` component.
@@ -162,9 +163,22 @@ export function useProjectProperty(props: IProjectPropertyProps) {
       [
         'URL',
         ({ url, description }) => {
+          const handleLinkClick = (event: React.MouseEvent) => {
+            event.preventDefault()
+            context.dispatch(CLOSE_PANEL())
+            if (url) {
+              window.open(url, '_blank', 'noopener,noreferrer')
+            }
+          }
+
           return (
             <div>
-              <Link href={url} target='_blank' title={description}>
+              <Link
+                href={url}
+                target='_blank'
+                title={description}
+                onClick={handleLinkClick}
+              >
                 {description ?? url}
               </Link>
             </div>
