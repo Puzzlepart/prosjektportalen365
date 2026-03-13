@@ -28,6 +28,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 ### Feilrettinger
 
 - Fikset feil hvor feltkonfigurasjoner for maloppsett ikke fungerte, custom feltnavn og beskrivelser laster nå inn korrekt. [#1704](https://github.com/Puzzlepart/prosjektportalen365/issues/1704)
+- Fikset feil hvor URL for siste politiske vedtak ikke lastet inn korrekt. [#1698](https://github.com/Puzzlepart/prosjektportalen365/issues/1698)
 
 ---
 
