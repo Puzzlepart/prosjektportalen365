@@ -1,5 +1,6 @@
 import { MessageBarType } from '@fluentui/react'
 import { LogLevel } from '@pnp/logging'
+import { PermissionKind } from '@pnp/sp/presets/all'
 import strings from 'ProjectWebPartsStrings'
 import {
   CustomError,
@@ -135,10 +136,21 @@ const fetchData: DataFetchFunction<
           ),
         false
       )
-      data.userHasRerunSetupPermission = await SPDataAdapter.checkProjectAdminPermissions(
-        ProjectAdminPermission.ReRunSetup,
-        projectInformationData.fieldValues
+      data.userHasRerunSetupPermission = await safeCall(
+        () =>
+          SPDataAdapter.checkProjectAdminPermissions(
+            ProjectAdminPermission.ReRunSetup,
+            projectInformationData.fieldValues
+          ),
+        false
       )
+    } else if (isFrontpage) {
+      const hasManageWeb = await safeCall(
+        () => SPDataAdapter.sp.web.currentUserHasPermissions(PermissionKind.ManageWeb),
+        false
+      )
+      data.userHasEditPermission = hasManageWeb
+      data.userHasRerunSetupPermission = hasManageWeb
     }
     return data
   } catch (error) {
