@@ -12,6 +12,7 @@ import { EditPropertiesPanel } from './EditPropertiesPanel'
 import { LoadingSkeleton } from './LoadingSkeleton'
 import { ParentProjectsList } from './ParentProjectsList'
 import { ChildProjectsList } from './ChildProjectsList'
+import { UnSustainabilityGoals } from './UnSustainabilityGoals/UnSustainabilityGoals'
 import { ProgressDialog } from './ProgressDialog'
 import styles from './ProjectInformation.module.scss'
 import { ProjectProperties } from './ProjectProperties'
@@ -58,6 +59,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
             />
           )}
           <ProjectProperties />
+          <UnSustainabilityGoals />
           <Actions />
           <ParentProjectsList />
           <ChildProjectsList />
