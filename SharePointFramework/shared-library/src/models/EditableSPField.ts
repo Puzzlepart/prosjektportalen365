@@ -220,7 +220,8 @@ export class EditableSPField extends SPField {
   public isVisible(
     displayMode: DisplayMode,
     page?: 'Frontpage' | 'ProjectStatus' | 'Portfolio',
-    showFieldExternal?: Record<string, boolean>
+    showFieldExternal?: Record<string, boolean>,
+    fallbackVisibleFields?: string[]
   ): boolean {
     switch (displayMode) {
       case DisplayMode.Edit: {
@@ -232,6 +233,9 @@ export class EditableSPField extends SPField {
       }
       case DisplayMode.Read: {
         if (this._isExternal) {
+          if (!_.isEmpty(fallbackVisibleFields)) {
+            return fallbackVisibleFields.includes(this.internalName)
+          }
           if (_.isEmpty(showFieldExternal)) return true
           return !!showFieldExternal[this.internalName]
         }

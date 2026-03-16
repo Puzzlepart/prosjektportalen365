@@ -85,6 +85,7 @@ ProjectInformation.defaultProps = {
   customActions: [],
   hideActions: [],
   showFieldExternal: {},
+  fallbackVisibleFields: [],
   hideStatusReport: false,
   hideArchiveStatus: true,
   statusReportShowOnlyIcons: true,

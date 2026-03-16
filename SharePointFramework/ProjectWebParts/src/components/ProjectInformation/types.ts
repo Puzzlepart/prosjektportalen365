@@ -46,6 +46,12 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   showFieldExternal?: Record<string, boolean>
 
   /**
+   * Internal names of fields to show when hub access is unavailable.
+   * If empty, legacy external configuration or current fallback behavior is used.
+   */
+  fallbackVisibleFields?: string[]
+
+  /**
    * Link to the admin page
    */
   adminPageLink?: string

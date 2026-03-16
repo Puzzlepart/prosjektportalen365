@@ -7,11 +7,15 @@ import { Text } from '@fluentui/react-components'
 
 export const ProjectPropertyEdit: FC<IProjectPropertyProps> = (props) => {
   const context = useProjectInformationContext()
-  const hasExternalConfiguration =
+  const hasFallbackConfiguration =
+    !!context.props.fallbackVisibleFields && context.props.fallbackVisibleFields.length > 0
+  const hasLegacyExternalConfiguration =
     !!context.props.showFieldExternal && Object.keys(context.props.showFieldExternal).length > 0
-  const defaultChecked = hasExternalConfiguration
-    ? !!context.props.showFieldExternal[props.model.internalName]
-    : true
+  const defaultChecked = hasFallbackConfiguration
+    ? context.props.fallbackVisibleFields.includes(props.model.internalName)
+    : hasLegacyExternalConfiguration
+      ? !!context.props.showFieldExternal[props.model.internalName]
+      : true
   return (
     <div title={props.model.description} style={props.style}>
       <Text weight='semibold' block truncate>
