@@ -2,7 +2,16 @@
 
 .root {
   margin: 15px 0 50px 0;
+
   .container {
     margin: 0px auto;
+  }
+}
+
+.messageContainer {
+  margin-left: 32px;
+
+  :global(.ms-WebPartTitle) {
+    margin-bottom: 12px;
   }
 }

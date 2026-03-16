@@ -209,6 +209,8 @@ define([], function () {
     PropertyValueRenderError: 'Kunne ikke vise verdi',
     ProjectInformationStatusReportHeaderText: 'Statusrapport',
     ProjectInformationStatusReportHeaderDescription: 'Publisert ({0})',
+    ProjectStatusNoHubAccessErrorText:
+      'Prosjektstatus kan ikke lastes uten tilgang på hubområdet. Hvis du mener at du skal ha denne tilgangen, kan du be en administrator gi deg tilgang på hubområdet.',
     ProjectPhasesChangePhaseError:
       'En feil oppsto under endring av fase. Vennligst prøv igjen eller kontakt en administrator.',
     ProjectPhasesFetchDataError:
@@ -219,6 +221,8 @@ define([], function () {
     ProjectStatusProjectPropertiesGroupName: 'Prosjektegenskaper (Statusseksjoner)',
     ProjectTimelineErrorFetchText:
       'Feil ved henting av prosjektets data.<br><br>Sjekk at følgende SiteId er riktig med hva som ligger i "Prosjekter" listen. <br><br>- SiteId: {0} <br> - Tittel: {1} <br><br>Feilmelding: {2}',
+    ProjectTimelineNoHubAccessErrorText:
+      'Prosjekttidslinje kan ikke lastes uten tilgang på hubområdet. Hvis du mener at du skal ha denne tilgangen, kan du be en administrator gi deg tilgang på hubområdet.',
     ProjectTimelineErrorTransformItemText:
       'Feil ved knytning av elementer til tidslinje.<br><br>Dette kan være grunnet problem med et element i "Prosjekter" listen (duplikat, slettet prosjekt), eller at et tidslinjeelement ikke har gyldig tilknytning. <br><br>- SiteId: {0} <br> - Tittel: {1} <br><br>Feilmelding: {2}',
     ProjecttimelineGroupName: 'Prosjekttidslinje',

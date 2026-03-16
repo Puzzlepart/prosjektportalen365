@@ -1,3 +1,4 @@
+import { MessageBarType } from '@fluentui/react'
 import { IProjectTimelineProps, IProjectTimelineState } from '../types'
 import { createTimelineGroups } from './createTimelineGroups'
 import { fetchProjectData } from './fetchProjectData'
@@ -6,6 +7,8 @@ import { fetchTimelineData } from './fetchTimelineData'
 import { getSelectedGroups } from './getSelectedGroups'
 import { transformItems } from './transformItems'
 import SPDataAdapter from 'data/SPDataAdapter'
+import strings from 'ProjectWebPartsStrings'
+import { CustomError } from 'pp365-shared-library'
 
 /**
  * Fetch data for ProjectTimeline
@@ -19,6 +22,11 @@ export async function fetchData(
 ): Promise<Partial<IProjectTimelineState>> {
   try {
     const properties = await SPDataAdapter.project.getProjectInformationData()
+
+    if (SPDataAdapter.portalDataService?.isAvailable === false) {
+      throw new Error(strings.ProjectTimelineNoHubAccessErrorText)
+    }
+
     const timelineConfig = await fetchTimelineConfiguration(
       properties.templateParameters?.TimelineContentTypeId
     )
@@ -54,6 +62,11 @@ export async function fetchData(
       groups
     }
   } catch (error) {
-    return { error }
+    return {
+      error: CustomError.createError(
+        error instanceof Error ? error : new Error(String(error)),
+        MessageBarType.warning
+      )
+    }
   }
 }

@@ -77,6 +77,13 @@ export const CLOSE_PANEL = createAction('CLOSE_PANEL')
 export const REFETCH_DATA = createAction('REFETCH_DATA')
 
 /**
+ * `FETCH_DATA_ERROR`: Dispatched when initial data loading fails.
+ */
+export const FETCH_DATA_ERROR = createAction<{ error: IProjectStatusState['error'] }>(
+  'FETCH_DATA_ERROR'
+)
+
+/**
  * The initial state for the project status reducer.
  */
 export const initialState: IProjectStatusState = {
@@ -203,6 +210,13 @@ const createProjectStatusReducer = createReducer(initialState, {
   },
   [REFETCH_DATA.type]: (state: IProjectStatusState) => {
     state.refetch = new Date().getTime()
+  },
+  [FETCH_DATA_ERROR.type]: (
+    state: IProjectStatusState,
+    { payload }: ReturnType<typeof FETCH_DATA_ERROR>
+  ) => {
+    state.error = payload.error
+    state.isDataLoaded = true
   }
 })
 
