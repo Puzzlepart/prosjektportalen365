@@ -32,6 +32,25 @@ export function useProjectProperty(props: IProjectPropertyProps) {
   const renderValueForField = () => {
     let icon = TagMultipleFilled
 
+    if (props.model.internalName === 'GtProjectPhase') {
+      const phaseText = context.state.data.fieldValues?.get<string>('GtProjectPhaseText', {
+        format: 'text',
+        defaultValue: ''
+      })
+
+      if (phaseText) {
+        return (
+          <div style={{ marginTop: 6 }}>
+            <OverflowTagMenu
+              text={props.model.displayName}
+              tags={[phaseText]}
+              icon={ChevronCircleRightFilled}
+            />
+          </div>
+        )
+      }
+    }
+
     switch (props.model.internalName) {
       case 'GtProjectServiceArea':
         icon = GlobeLocationFilled

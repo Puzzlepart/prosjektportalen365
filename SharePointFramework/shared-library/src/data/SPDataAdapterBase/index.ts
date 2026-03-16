@@ -106,6 +106,12 @@ export class SPDataAdapterBase<
     this.portalDataService = await new PortalDataService().configure({
       spfxContext
     })
+    if (this.settings.siteId) {
+      this._initStorage()
+    }
+    if (this.settings.loadGlobalSettings && this.portalDataService.isAvailable) {
+      this.globalSettings = await this.portalDataService.getGlobalSettings()
+    }
     if (this.portalDataService.isAvailable) {
       this.entityService = new SpEntityPortalService(spfxContext, {
         portalUrl: this.portalDataService.url,
@@ -114,12 +120,6 @@ export class SPDataAdapterBase<
         identityFieldName: 'GtSiteId',
         urlFieldName: 'GtSiteUrl'
       })
-    }
-    if (this.settings.siteId) {
-      this._initStorage()
-    }
-    if (this.settings.loadGlobalSettings && this.portalDataService.isAvailable) {
-      this.globalSettings = await this.portalDataService.getGlobalSettings()
     }
     this.isConfigured = true
   }
@@ -151,6 +151,9 @@ export class SPDataAdapterBase<
     try {
       const { pageContext } = this.spfxContext
       if (!pageContext) return false
+      if (!this.portalDataService?.isAvailable) {
+        return await this.sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
+      }
 
       const permissions = await (async () => {
         const userPermissions = []

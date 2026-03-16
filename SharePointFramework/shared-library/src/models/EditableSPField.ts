@@ -231,7 +231,10 @@ export class EditableSPField extends SPField {
         return showInEditForm && !hidden && !isReadOnly
       }
       case DisplayMode.Read: {
-        if (this._isExternal) return showFieldExternal[this.internalName]
+        if (this._isExternal) {
+          if (_.isEmpty(showFieldExternal)) return true
+          return !!showFieldExternal[this.internalName]
+        }
         return this.column ? this.column.isVisible(page) : false
       }
     }

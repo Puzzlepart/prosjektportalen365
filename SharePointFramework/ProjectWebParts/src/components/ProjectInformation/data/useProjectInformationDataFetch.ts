@@ -58,15 +58,18 @@ const fetchData: DataFetchFunction<
   try {
     const isFrontpage = context.props.page === 'Frontpage'
     const shouldFetchArchiveStatus = isFrontpage && !context.props.hideArchiveStatus
-    const hubIsAvailable = SPDataAdapter.portalDataService?.isAvailable ?? false
+    const projectInformationData = await SPDataAdapter.project.getProjectInformationData()
 
-    const [columns, projectInformationData, [reports, sections, columnConfig]] = await Promise.all([
-      hubIsAvailable
-        ? SPDataAdapter.portalDataService.getProjectColumns()
-        : Promise.resolve([]),
-      SPDataAdapter.project.getProjectInformationData(),
-      fetchProjectStatusReportData(context)
-    ])
+    let hubIsAvailable = SPDataAdapter.portalDataService?.isAvailable ?? false
+    const columns = hubIsAvailable
+      ? await SPDataAdapter.portalDataService.getProjectColumns()
+      : []
+
+    hubIsAvailable = SPDataAdapter.portalDataService?.isAvailable ?? false
+
+    const [reports, sections, columnConfig] = hubIsAvailable
+      ? await fetchProjectStatusReportData(context)
+      : [[], [], []]
 
     // Hub-dependent calls are wrapped individually with safe fallbacks
     // so that external users without hub access can still see local project data.

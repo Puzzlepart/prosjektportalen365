@@ -19,13 +19,19 @@ export const fetchProjectStatusReportData: DataFetchFunction<
     return [[], [], []]
   }
   try {
-    const [reports, sections, columnConfig] = await Promise.all([
-      SPDataAdapter.portalDataService.getStatusReports({
-        filter: `(GtSiteId eq '${context.props.siteId}') and GtModerationStatus eq '${resource.Choice_GtModerationStatus_Published}'`
-      }),
-      SPDataAdapter.portalDataService.getProjectStatusSections(),
-      SPDataAdapter.portalDataService.getProjectColumnConfig()
-    ])
+    const reports = await SPDataAdapter.portalDataService.getStatusReports({
+      filter: `(GtSiteId eq '${context.props.siteId}') and GtModerationStatus eq '${resource.Choice_GtModerationStatus_Published}'`
+    })
+    if (!SPDataAdapter.portalDataService?.isAvailable) {
+      return [[], [], []]
+    }
+
+    const sections = await SPDataAdapter.portalDataService.getProjectStatusSections()
+    if (!SPDataAdapter.portalDataService?.isAvailable) {
+      return [[], [], []]
+    }
+
+    const columnConfig = await SPDataAdapter.portalDataService.getProjectColumnConfig()
     return [reports, sections, columnConfig]
   } catch (error) {
     return [[], [], []]

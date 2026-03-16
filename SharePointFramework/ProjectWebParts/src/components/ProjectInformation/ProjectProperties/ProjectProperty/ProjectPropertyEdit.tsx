@@ -7,9 +7,11 @@ import { Text } from '@fluentui/react-components'
 
 export const ProjectPropertyEdit: FC<IProjectPropertyProps> = (props) => {
   const context = useProjectInformationContext()
-  const defaultChecked = context.props.showFieldExternal
-    ? context.props.showFieldExternal[props.model.internalName]
-    : false
+  const hasExternalConfiguration =
+    !!context.props.showFieldExternal && Object.keys(context.props.showFieldExternal).length > 0
+  const defaultChecked = hasExternalConfiguration
+    ? !!context.props.showFieldExternal[props.model.internalName]
+    : true
   return (
     <div title={props.model.description} style={props.style}>
       <Text weight='semibold' block truncate>

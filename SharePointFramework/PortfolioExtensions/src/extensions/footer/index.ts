@@ -46,6 +46,21 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     })
     this._globalSettings = await this._portalDataService.getGlobalSettings()
 
+    if (!this._portalDataService.isAvailable) {
+      this._installEntries = []
+      this._gitHubReleases = []
+      this._helpContent = []
+      this._links = []
+      this._favoriteProjects = []
+      this._useAssistant = false
+      this._hasAssistantAccess = false
+      this._assistantEndpointUrl =
+        'https://pp365-ai-d2dge4fqc2bhbba9.norwayeast-01.azurewebsites.net'
+      this._showFooter = false
+      this._minimizeFooter = false
+      return Promise.resolve()
+    }
+
     const requireAssistantAccess = this._globalSettings.get('RequireAssistantAccess') === '1'
     const [installEntries, gitHubReleases, helpContent, links, favoriteProjects] = await Promise.all([
       this._fetchInstallationLogs(),
@@ -79,6 +94,8 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   }
 
   private async _handleNavigatedEvent(): Promise<void> {
+    if (!this._portalDataService?.isAvailable) return
+
     const helpContent = await this._fetchHelpContent()
     this._helpContent = helpContent
 
@@ -99,6 +116,8 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   }
 
   private async _isUserInGroup(groupName: string): Promise<boolean> {
+    if (!this._portalDataService?.isAvailable) return false
+
     try {
       const [siteGroup] = await this._portalDataService.web.siteGroups
         .select('CanCurrentUserViewMembership', 'Title')
@@ -120,6 +139,8 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     orderBy = 'InstallStartTime',
     orderAscending = false
   ): Promise<InstallationEntry[]> {
+    if (!this._portalDataService?.isAvailable) return []
+
     try {
       const installationLogList = this._portalDataService.web.lists.getByTitle(
         resource.Lists_InstallationLog_Title
@@ -140,6 +161,8 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
    * The content is stored in `sessionStorage` for 4 hours.
    */
   private async _fetchHelpContent(): Promise<HelpContentModel[]> {
+    if (!this._portalDataService?.isAvailable) return []
+
     try {
       return await new PnPClientStorage().session.getOrPut(
         `pp365_help_content_${window.location.pathname}`,
@@ -188,6 +211,8 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
    * Fetch the links from the links list on the hub site.
    */
   private async _fetchLinks(): Promise<{ Url: string; Description: string; Level?: string }[]> {
+    if (!this._portalDataService?.isAvailable) return []
+
     try {
       const linksList = this._portalDataService.web.lists.getByTitle(resource.Lists_Links_Title)
       const linksItems = await linksList.items()
@@ -221,6 +246,8 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
    * Filters the results to only include projects that exist in the current hub's projects list.
    */
   private async _fetchFavoriteProjects(): Promise<{ name: string; url: string }[]> {
+    if (!this._portalDataService?.isAvailable) return []
+
     try {
       const webAbsoluteUrl = this.context.pageContext.web.absoluteUrl
 
