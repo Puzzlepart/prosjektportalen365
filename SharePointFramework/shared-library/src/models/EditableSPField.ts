@@ -7,6 +7,17 @@ import { EditableSPFieldValue } from './EditableSPFieldValue'
 import { SPField } from './SPField'
 import { ProjectContentColumn } from './ProjectContentColumn'
 
+const DEFAULT_EXTERNAL_HIDDEN_FIELDS = new Set([
+  'GtSiteId',
+  'GtProjectPhaseText',
+  'GtProjectAdminRoles',
+  'GtProjectTemplate',
+  'GtParentProjects',
+  'GtChildProjects',
+  'GtInstalledVersion',
+  'GtCurrentVersion'
+])
+
 /**
  * An editable field for the `CustomEditPanel`.
  */
@@ -236,7 +247,9 @@ export class EditableSPField extends SPField {
           if (!_.isEmpty(fallbackVisibleFields)) {
             return fallbackVisibleFields.includes(this.internalName)
           }
-          if (_.isEmpty(showFieldExternal)) return true
+          if (_.isEmpty(showFieldExternal)) {
+            return !DEFAULT_EXTERNAL_HIDDEN_FIELDS.has(this.internalName)
+          }
           return !!showFieldExternal[this.internalName]
         }
         return this.column ? this.column.isVisible(page) : false
