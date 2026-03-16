@@ -54,8 +54,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
       this._favoriteProjects = []
       this._useAssistant = false
       this._hasAssistantAccess = false
-      this._assistantEndpointUrl =
-        'https://pp365-ai-d2dge4fqc2bhbba9.norwayeast-01.azurewebsites.net'
+      this._assistantEndpointUrl = ''
       this._showFooter = false
       this._minimizeFooter = false
       return Promise.resolve()
@@ -85,7 +84,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     this._assistantEndpointUrl =
       useBetaChannel && betaEndpointUrl
         ? betaEndpointUrl
-        : endpointUrl || 'https://pp365-ai-d2dge4fqc2bhbba9.norwayeast-01.azurewebsites.net'
+        : endpointUrl
 
     this._hasAssistantAccess =
       !requireAssistantAccess || (await this._isUserInGroup(strings.AssistantGroupName))
