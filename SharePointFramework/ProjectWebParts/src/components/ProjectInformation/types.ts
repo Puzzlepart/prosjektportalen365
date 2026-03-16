@@ -176,6 +176,11 @@ export interface IProjectInformationState
   userHasRerunSetupPermission?: boolean
 
   /**
+   * Indicates whether the hub site was available while loading the web part.
+   */
+  hubIsAvailable?: boolean
+
+  /**
    * Properties last updated date/time
    */
   propertiesLastUpdated?: Date

@@ -159,6 +159,7 @@ declare interface IProjectWebPartsStrings {
   ProbabilityPostActionFieldNameFieldLabel: string
   ProjectDeliveriesGroupName: string
   ProjectInformationDataFetchErrorText: string
+  ProjectInformationNoHubAccessMessage: string
   PropertyValueRenderError: string
   ProjectInformationStatusReportHeaderText: string
   ProjectInformationStatusReportHeaderDescription: string

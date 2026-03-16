@@ -127,6 +127,7 @@ const fetchData: DataFetchFunction<
         archiveStatus,
         ...projectInformationData
       },
+      hubIsAvailable,
       userHasEditPermission: false,
       userHasRerunSetupPermission: false
     }

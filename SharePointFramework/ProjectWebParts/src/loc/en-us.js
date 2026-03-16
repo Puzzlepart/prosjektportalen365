@@ -190,6 +190,7 @@ define([], function () {
     ProbabilityPostActionFieldNameFieldLabel: 'Field name - Probability (post action)',
     ProjectDeliveriesGroupName: 'Project deliveries (beta)',
     ProjectInformationDataFetchErrorText: 'An error occurred while retrieving project information.',
+    ProjectInformationNoHubAccessMessage: 'The project was loaded without access to the hub site.',
     PropertyValueRenderError: 'Could not display value',
     ProjectInformationStatusReportHeaderText: 'Status report published',
     ProjectPhasesChangePhaseError: 'An error occured while changing the phase. Please try again or contact an administrator',
