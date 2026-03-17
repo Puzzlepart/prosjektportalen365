@@ -24,7 +24,11 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<IProje
   }
 
   private _onFieldExternalChanged(fieldName: string, checked: boolean) {
+    const fallbackVisibleFields = [...(this.properties.fallbackVisibleFields || [])]
     const showFieldExternal = { ...(this.properties.showFieldExternal || {}), [fieldName]: checked }
+    this.properties.fallbackVisibleFields = checked
+      ? Array.from(new Set([...fallbackVisibleFields, fieldName]))
+      : fallbackVisibleFields.filter((field) => field !== fieldName)
     this.properties.showFieldExternal = showFieldExternal
   }
 

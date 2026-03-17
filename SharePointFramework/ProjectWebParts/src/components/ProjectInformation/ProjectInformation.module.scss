@@ -1,9 +1,18 @@
 .root {
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-content: flex-start;
-    flex-wrap: wrap;
-    gap: 15px;
-  }
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-content: flex-start;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.noHubAccessMessage {
+  color: var(--colorNeutralForeground4);
+  font-size: 12px;
+  font-style: italic;
+  line-height: 1.4;
+  margin-top: -4px;
 }

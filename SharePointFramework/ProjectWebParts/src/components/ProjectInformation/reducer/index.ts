@@ -47,6 +47,7 @@ const createProjectInformationReducer = (spfxContext: SPFxContext) =>
           action.payload.state.data.fieldValues.get<ItemFieldValue>('GtIsProgram')?.value
         state.userHasEditPermission = action.payload.state.userHasEditPermission
         state.userHasRerunSetupPermission = action.payload.state.userHasRerunSetupPermission
+        state.hubIsAvailable = action.payload.state.hubIsAvailable
         state.properties = createProperties(current(state) as IProjectInformationState, spfxContext)
         state.isDataLoaded = true
       })

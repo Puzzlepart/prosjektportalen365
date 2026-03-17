@@ -2,8 +2,9 @@ import { IPersonaProps, Link } from '@fluentui/react'
 import React from 'react'
 import { useProjectInformationContext } from '../../context'
 import { IProjectPropertyProps } from './types'
-import { Persona } from '@fluentui/react-components'
+import { Persona, Text } from '@fluentui/react-components'
 import { OverflowTagMenu } from 'pp365-shared-library'
+import * as strings from 'ProjectWebPartsStrings'
 import {
   ChevronCircleRightFilled,
   EarthFilled,
@@ -30,6 +31,25 @@ export function useProjectProperty(props: IProjectPropertyProps) {
    */
   const renderValueForField = () => {
     let icon = TagMultipleFilled
+
+    if (props.model.internalName === 'GtProjectPhase') {
+      const phaseText = context.state.data.fieldValues?.get<string>('GtProjectPhaseText', {
+        format: 'text',
+        defaultValue: ''
+      })
+
+      if (phaseText) {
+        return (
+          <div style={{ marginTop: 6 }}>
+            <OverflowTagMenu
+              text={props.model.displayName}
+              tags={[phaseText]}
+              icon={ChevronCircleRightFilled}
+            />
+          </div>
+        )
+      }
+    }
 
     switch (props.model.internalName) {
       case 'GtProjectServiceArea':
@@ -170,12 +190,40 @@ export function useProjectProperty(props: IProjectPropertyProps) {
       ]
     ])
 
-    const value = props.model.getParsedValue()
+    try {
+      const value = props.model.getParsedValue()
 
-    if (renderMap.has(props.model.type)) {
-      return renderMap.get(props.model.type)(value)
-    } else {
-      return <div title={value.toString()}>{value}</div>
+      if (value === null || value === undefined) {
+        return (
+          <Text
+            italic
+            size={200}
+            style={{ color: 'var(--colorNeutralForeground4)', marginTop: 6 }}
+          >
+            {strings.PropertyValueRenderError}
+          </Text>
+        )
+      }
+
+      if (renderMap.has(props.model.type)) {
+        return renderMap.get(props.model.type)(value)
+      } else {
+        return <div title={value.toString()}>{value}</div>
+      }
+    } catch (error) {
+      console.warn(
+        `[ProjectProperty] Failed to render value for field '${props.model.internalName}':`,
+        error
+      )
+      return (
+        <Text
+          italic
+          size={200}
+          style={{ color: 'var(--colorNeutralForeground4)', marginTop: 6 }}
+        >
+          {strings.PropertyValueRenderError}
+        </Text>
+      )
     }
   }
 

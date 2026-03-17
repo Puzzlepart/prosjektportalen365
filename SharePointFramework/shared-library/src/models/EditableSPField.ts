@@ -7,6 +7,17 @@ import { EditableSPFieldValue } from './EditableSPFieldValue'
 import { SPField } from './SPField'
 import { ProjectContentColumn } from './ProjectContentColumn'
 
+const DEFAULT_EXTERNAL_HIDDEN_FIELDS = new Set([
+  'GtSiteId',
+  'GtProjectPhaseText',
+  'GtProjectAdminRoles',
+  'GtProjectTemplate',
+  'GtParentProjects',
+  'GtChildProjects',
+  'GtInstalledVersion',
+  'GtCurrentVersion'
+])
+
 /**
  * An editable field for the `CustomEditPanel`.
  */
@@ -162,10 +173,18 @@ export class EditableSPField extends SPField {
    * Get the value for the field.
    */
   public getParsedValue<T>(): T {
-    if (this._fieldValueMap.has(this.type)) {
-      return this._fieldValueMap.get(this.type)(this._fieldValue) as unknown as T
+    try {
+      if (this._fieldValueMap.has(this.type)) {
+        return this._fieldValueMap.get(this.type)(this._fieldValue) as unknown as T
+      }
+      return this._fieldValue.value as unknown as T
+    } catch (error) {
+      console.warn(
+        `[EditableSPField] Failed to parse value for field '${this.internalName}' (type: ${this.type}):`,
+        error
+      )
+      return null as unknown as T
     }
-    return this._fieldValue.value as unknown as T
   }
 
   /**
@@ -212,7 +231,8 @@ export class EditableSPField extends SPField {
   public isVisible(
     displayMode: DisplayMode,
     page?: 'Frontpage' | 'ProjectStatus' | 'Portfolio',
-    showFieldExternal?: Record<string, boolean>
+    showFieldExternal?: Record<string, boolean>,
+    fallbackVisibleFields?: string[]
   ): boolean {
     switch (displayMode) {
       case DisplayMode.Edit: {
@@ -223,7 +243,15 @@ export class EditableSPField extends SPField {
         return showInEditForm && !hidden && !isReadOnly
       }
       case DisplayMode.Read: {
-        if (this._isExternal) return showFieldExternal[this.internalName]
+        if (this._isExternal) {
+          if (!_.isEmpty(fallbackVisibleFields)) {
+            return fallbackVisibleFields.includes(this.internalName)
+          }
+          if (_.isEmpty(showFieldExternal)) {
+            return !DEFAULT_EXTERNAL_HIDDEN_FIELDS.has(this.internalName)
+          }
+          return !!showFieldExternal[this.internalName]
+        }
         return this.column ? this.column.isVisible(page) : false
       }
     }

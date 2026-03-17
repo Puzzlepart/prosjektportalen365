@@ -46,6 +46,12 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   showFieldExternal?: Record<string, boolean>
 
   /**
+   * Internal names of fields to show when hub access is unavailable.
+   * If empty, legacy external configuration or current fallback behavior is used.
+   */
+  fallbackVisibleFields?: string[]
+
+  /**
    * Link to the admin page
    */
   adminPageLink?: string
@@ -168,6 +174,11 @@ export interface IProjectInformationState
    * Current user has rerun setup permission (`5c2fd32e-0c8b-42be-9e0b-4fa6ff5d4774`)
    */
   userHasRerunSetupPermission?: boolean
+
+  /**
+   * Indicates whether the hub site was available while loading the web part.
+   */
+  hubIsAvailable?: boolean
 
   /**
    * Properties last updated date/time

@@ -247,7 +247,7 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
         propertiesListId: item.propertiesListId,
         templateParameters
       }
-    } else {
+    } else if (this._params.entityService) {
       this._logInfo(
         'Local property item not found. Retrieving data from portal site.',
         'getPropertiesData'
@@ -262,6 +262,17 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
         propertiesListId: null,
         templateParameters: {},
         ...entity.urls
+      }
+    } else {
+      this._logInfo(
+        'Local property item not found and no entity service available (hub unavailable).',
+        'getPropertiesData'
+      )
+      data = {
+        fieldValues: new ItemFieldValues({}, {}),
+        fields: [],
+        propertiesListId: null,
+        templateParameters: {}
       }
     }
     return data
@@ -298,7 +309,9 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
     try {
       const propertyItemContext = await this._getLocalProjectInformationItemContext()
       if (propertyItemContext) await propertyItemContext.item.update(properties)
-      await this._params.entityService.updateEntityItem(this._params.siteId, properties)
+      if (this._params.entityService) {
+        await this._params.entityService.updateEntityItem(this._params.siteId, properties)
+      }
     } catch (error) {
       throw error
     }

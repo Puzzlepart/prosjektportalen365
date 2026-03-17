@@ -15,17 +15,15 @@ export const fetchProjectStatusReportData: DataFetchFunction<
   IProjectInformationContext,
   [StatusReport[], SectionModel[], ProjectColumnConfig[]]
 > = async (context) => {
-  if (context.props.hideStatusReport) {
+  if (context.props.hideStatusReport || !SPDataAdapter.portalDataService?.isAvailable) {
     return [[], [], []]
   }
   try {
-    const [reports, sections, columnConfig] = await Promise.all([
-      SPDataAdapter.portalDataService.getStatusReports({
-        filter: `(GtSiteId eq '${context.props.siteId}') and GtModerationStatus eq '${resource.Choice_GtModerationStatus_Published}'`
-      }),
-      SPDataAdapter.portalDataService.getProjectStatusSections(),
-      SPDataAdapter.portalDataService.getProjectColumnConfig()
-    ])
+    const reports = await SPDataAdapter.portalDataService.getStatusReports({
+      filter: `(GtSiteId eq '${context.props.siteId}') and GtModerationStatus eq '${resource.Choice_GtModerationStatus_Published}'`
+    })
+    const sections = await SPDataAdapter.portalDataService.getProjectStatusSections()
+    const columnConfig = await SPDataAdapter.portalDataService.getProjectColumnConfig()
     return [reports, sections, columnConfig]
   } catch (error) {
     return [[], [], []]

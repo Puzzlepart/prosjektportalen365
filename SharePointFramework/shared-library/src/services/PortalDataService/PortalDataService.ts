@@ -35,7 +35,7 @@ import {
   StatusReport,
   StatusReportAttachment
 } from '../../models'
-import { getClassProperties, makeUrlAbsolute, transformFieldXml } from '../../util'
+import { getClassProperties, isUnauthorizedError, makeUrlAbsolute, transformFieldXml } from '../../util'
 import { DataService } from '../DataService'
 import {
   GetStatusReportsOptions,
@@ -54,6 +54,25 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   public web: IWeb
   public url: string
   public hubSiteId: string
+
+  /**
+   * Whether the portal data service has access to the hub site.
+   * Set to `false` if the hub site is unreachable (e.g. for external users).
+   */
+  public isAvailable: boolean = true
+
+  /**
+   * Mark portal access as unavailable when the current user cannot read hub resources.
+   */
+  private _handleAvailabilityError(error: any, source: string): void {
+    if (!isUnauthorizedError(error) || !this.isAvailable) return
+
+    Logger.write(
+      `(PortalDataService) (${source}) Hub access denied. Marking portal as unavailable.`,
+      LogLevel.Warning
+    )
+    this.isAvailable = false
+  }
 
   /**
    * Configure PortalDataService
@@ -140,7 +159,20 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         )
       }
     } catch (err) {
-      throw err
+      Logger.write(
+        `(PortalDataService) (onInit) Failed to resolve hub site URL. Marking portal as unavailable. Error: ${err.message}`,
+        LogLevel.Warning
+      )
+      this.isAvailable = false
+      return
+    }
+    if (stringIsNullOrEmpty(this.url)) {
+      Logger.write(
+        '(PortalDataService) (onInit) Hub site URL is empty. Marking portal as unavailable.',
+        LogLevel.Warning
+      )
+      this.isAvailable = false
+      return
     }
     this._spPortal = spfi(this.url).using(AssignFrom(this._sp.web))
     this.web = this._spPortal.web
@@ -159,6 +191,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     webUrl: string,
     constructor: new (item: any, web: IWeb) => T
   ): Promise<T[]> {
+    if (!this.isAvailable) return []
     try {
       const childProjectItems = await this.getItems(
         this._configuration.listNames.PROJECTS,
@@ -325,12 +358,14 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * Optionally override the list name with the `listName` parameter.
    */
   public async getProjectColumns(): Promise<ProjectColumn[]> {
+    if (!this.isAvailable) return []
     try {
       const spItems = await this._getList('PROJECT_COLUMNS').items.select(
         ...getClassProperties(SPProjectColumnItem)
       )<SPProjectColumnItem[]>()
       return spItems.map((item) => new ProjectColumn(item))
     } catch (error) {
+      this._handleAvailabilityError(error, 'getProjectColumns')
       return []
     }
   }
@@ -339,10 +374,12 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * Get project status sections using `DefaultCaching`.
    */
   public async getProjectStatusSections(): Promise<SectionModel[]> {
+    if (!this.isAvailable) return []
     try {
       const items = await this._getList('STATUS_SECTIONS').items.using(DefaultCaching)()
       return items.map((item) => new SectionModel(item))
     } catch (error) {
+      this._handleAvailabilityError(error, 'getProjectStatusSections')
       return []
     }
   }
@@ -442,17 +479,23 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * Get project column configuration using `DefaultCaching`.
    */
   public async getProjectColumnConfig(): Promise<ProjectColumnConfig[]> {
-    const spItems = await this._getList('PROJECT_COLUMN_CONFIGURATION')
-      .items.orderBy('ID', true)
-      .expand('GtPortfolioColumn', 'GtPortfolioColumnTooltip')
-      .select(
-        ...getClassProperties(SPProjectColumnConfigItem),
-        'GtPortfolioColumn/Title',
-        'GtPortfolioColumn/GtInternalName',
-        'GtPortfolioColumnTooltip/GtManagedProperty'
-      )
-      .using(DefaultCaching)<SPProjectColumnConfigItem[]>()
-    return spItems.map((item) => new ProjectColumnConfig(item))
+    if (!this.isAvailable) return []
+    try {
+      const spItems = await this._getList('PROJECT_COLUMN_CONFIGURATION')
+        .items.orderBy('ID', true)
+        .expand('GtPortfolioColumn', 'GtPortfolioColumnTooltip')
+        .select(
+          ...getClassProperties(SPProjectColumnConfigItem),
+          'GtPortfolioColumn/Title',
+          'GtPortfolioColumn/GtInternalName',
+          'GtPortfolioColumnTooltip/GtManagedProperty'
+        )
+        .using(DefaultCaching)<SPProjectColumnConfigItem[]>()
+      return spItems.map((item) => new ProjectColumnConfig(item))
+    } catch (error) {
+      this._handleAvailabilityError(error, 'getProjectColumnConfig')
+      return []
+    }
   }
 
   /**
@@ -906,6 +949,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     select,
     useCaching = true
   }: GetStatusReportsOptions): Promise<StatusReport[]> {
+    if (!this.isAvailable) return []
     if (!this._configuration.spfxContext.pageContext)
       throw 'Property {pageContext} is not the configuration.'
     if (stringIsNullOrEmpty(filter))
@@ -929,7 +973,8 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       })
       return reports
     } catch (error) {
-      throw error
+      this._handleAvailabilityError(error, 'getStatusReports')
+      return []
     }
   }
 
@@ -1020,18 +1065,24 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * Get project admin roles
    */
   public async getProjectAdminRoles(): Promise<ProjectAdminRole[]> {
-    const spItems = await this._getList('PROJECT_ADMIN_ROLES')
-      .items.select(
-        'ContentTypeId',
-        'Id',
-        'Title',
-        'GtGroupName',
-        'GtGroupLevel',
-        'GtProjectFieldName',
-        'GtProjectAdminPermissions/GtProjectAdminPermissionId'
-      )
-      .expand('GtProjectAdminPermissions')<SPProjectAdminRoleItem[]>()
-    return spItems.map((item) => new ProjectAdminRole(item))
+    if (!this.isAvailable) return []
+    try {
+      const spItems = await this._getList('PROJECT_ADMIN_ROLES')
+        .items.select(
+          'ContentTypeId',
+          'Id',
+          'Title',
+          'GtGroupName',
+          'GtGroupLevel',
+          'GtProjectFieldName',
+          'GtProjectAdminPermissions/GtProjectAdminPermissionId'
+        )
+        .expand('GtProjectAdminPermissions')<SPProjectAdminRoleItem[]>()
+      return spItems.map((item) => new ProjectAdminRole(item))
+    } catch (error) {
+      this._handleAvailabilityError(error, 'getProjectAdminRoles')
+      return []
+    }
   }
 
   /**
@@ -1044,8 +1095,8 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     templateName: string,
     cache = DefaultCaching
   ): Promise<ProjectTemplate> {
+    if (!this.isAvailable || stringIsNullOrEmpty(templateName)) return null
     try {
-      if (stringIsNullOrEmpty(templateName)) return null
       const [spItem] = await this._getList('PROJECT_TEMPLATE_CONFIGURATION')
         .items.select('*', 'FieldValuesAsText')
         .expand('FieldValuesAsText')
@@ -1054,6 +1105,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       if (!spItem) return null
       return new ProjectTemplate(spItem)
     } catch (error) {
+      this._handleAvailabilityError(error, 'getProjectTemplate')
       return null
     }
   }
@@ -1110,6 +1162,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    */
   public async getGlobalSettings(): Promise<Map<string, string>> {
     const intialMap = new Map<string, string>()
+    if (!this.isAvailable) return intialMap
     try {
       const settingsList = this._getList('GLOBAL_SETTINGS')
       const spItems = await settingsList.items
@@ -1121,6 +1174,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         return acc
       }, intialMap)
     } catch (error) {
+      this._handleAvailabilityError(error, 'getGlobalSettings')
       return intialMap
     }
   }
@@ -1131,14 +1185,20 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * `null` is returned.
    */
   public async getProjectDetails(): Promise<IProjectDetails> {
-    const siteId = this._configuration.spfxContext.pageContext.site.id
-    const [project] = await this._getList('PROJECTS').items.filter(`GtSiteId eq '${siteId}'`)()
-    if (!project) return null
-    return {
-      id: project.Id,
-      title: project.Title,
-      isParentProject: project.GtIsParentProject || project.GtIsProgram
-    } as IProjectDetails
+    if (!this.isAvailable) return null
+    try {
+      const siteId = this._configuration.spfxContext.pageContext.site.id
+      const [project] = await this._getList('PROJECTS').items.filter(`GtSiteId eq '${siteId}'`)()
+      if (!project) return null
+      return {
+        id: project.Id,
+        title: project.Title,
+        isParentProject: project.GtIsParentProject || project.GtIsProgram
+      } as IProjectDetails
+    } catch (error) {
+      this._handleAvailabilityError(error, 'getProjectDetails')
+      return null
+    }
   }
 
   /**

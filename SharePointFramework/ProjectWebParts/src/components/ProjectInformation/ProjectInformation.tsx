@@ -32,6 +32,7 @@ import resource from 'SharedResources'
  */
 export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
   const { fluentProviderId, context } = useProjectInformation(props)
+  const showNoHubAccessMessage = context.state.hubIsAvailable === false && !context.state.error
   if (context.state.hidden) return null
 
   if (!context.state.isDataLoaded) {
@@ -39,7 +40,6 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider
           theme={customLightTheme}
-          className={styles.root}
           style={{ background: 'transparent' }}
         >
           <LoadingSkeleton />
@@ -66,6 +66,11 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
           <ChildProjectsList />
           <ArchiveStatus />
           <ProjectStatusReport />
+          {showNoHubAccessMessage && (
+            <div className={styles.noHubAccessMessage}>
+              {strings.ProjectInformationNoHubAccessMessage}
+            </div>
+          )}
           <ProgressDialog />
           <AllPropertiesPanel />
           <EditPropertiesPanel />
@@ -85,6 +90,7 @@ ProjectInformation.defaultProps = {
   customActions: [],
   hideActions: [],
   showFieldExternal: {},
+  fallbackVisibleFields: [],
   hideStatusReport: false,
   hideArchiveStatus: true,
   statusReportShowOnlyIcons: true,

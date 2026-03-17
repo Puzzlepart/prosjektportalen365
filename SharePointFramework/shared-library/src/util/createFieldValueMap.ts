@@ -21,14 +21,32 @@ export const createFieldValueMap = (): Map<string, (value: EditableSPFieldValue)
         }
       }
     ],
-    ['TaxonomyFieldType', ({ value }) => value?.split(';')?.map((v) => ({ key: v, name: v }))],
+    [
+      'TaxonomyFieldType',
+      ({ value, $ }) => {
+        if ($ && typeof $ === 'object') {
+          return [{ key: $.TermGuid, name: $.Label }].filter((t) => t.key || t.name)
+        }
+        if (typeof value === 'string') {
+          return value.split(';').map((v) => ({ key: v, name: v }))
+        }
+        return []
+      }
+    ],
     [
       'TaxonomyFieldTypeMulti',
-      ({ $ }) =>
-        ($ as Array<{ TermGuid: string; Label: string }>)?.map((term) => ({
-          key: term.TermGuid,
-          name: term.Label
-        }))
+      ({ $, value }) => {
+        if (Array.isArray($)) {
+          return ($ as Array<{ TermGuid: string; Label: string }>).map((term) => ({
+            key: term.TermGuid,
+            name: term.Label
+          }))
+        }
+        if (typeof value === 'string') {
+          return value.split(';').filter(Boolean).map((v) => ({ key: v, name: v }))
+        }
+        return []
+      }
     ],
     ['Date', ({ $ }) => new Date($)],
     ['DateTime', ({ $ }) => new Date($)],

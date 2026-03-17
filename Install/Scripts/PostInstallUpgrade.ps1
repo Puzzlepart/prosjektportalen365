@@ -192,4 +192,48 @@ if ($null -ne $LastInstall) {
             $UpdatedItem = Set-PnPListItem -List "SitePages" -Identity $PageListItem.Id -Values @{"PromotedState" = 1} -UpdateType Update -ErrorAction SilentlyContinue
         }
     }
+
+    if ($PreviousVersion -lt [version]"1.13.0") {
+        Write-Host "[INFO] Ensuring 'ReRunSetup' permission is assigned to the SP Admin role..."
+
+        $AdminRolesList = Get-Resource -Name "Lists_ProjectAdminRoles_Title"
+        $AdminPermissionsList = Get-Resource -Name "Lists_ProjectAdminPermissions_Title"
+        $SPAdminTitle = Get-Resource -Name "Lists_ProjectAdminRoles_SPAdmin"
+
+        $ReRunSetupPermission = Get-PnPListItem -List $AdminPermissionsList | Where-Object { $_["GtProjectAdminPermissionId"] -eq "5c2fd32e-0c8b-42be-9e0b-4fa6ff5d4774" }
+        if ($null -ne $ReRunSetupPermission) {
+            $SPAdminRole = Get-PnPListItem -List $AdminRolesList | Where-Object { $_["Title"] -eq $SPAdminTitle }
+            if ($null -ne $SPAdminRole) {
+                $CurrentPermissions = $SPAdminRole["GtProjectAdminPermissions"]
+                $HasReRunSetup = $false
+                if ($null -ne $CurrentPermissions) {
+                    foreach ($Perm in $CurrentPermissions) {
+                        if ($Perm.LookupId -eq $ReRunSetupPermission.Id) {
+                            $HasReRunSetup = $true
+                            break
+                        }
+                    }
+                }
+                if (-not $HasReRunSetup) {
+                    $UpdatedPermissions = @()
+                    if ($null -ne $CurrentPermissions) {
+                        foreach ($Perm in $CurrentPermissions) {
+                            $UpdatedPermissions += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $Perm.LookupId }
+                        }
+                    }
+                    $UpdatedPermissions += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $ReRunSetupPermission.Id }
+                    $SPAdminRole["GtProjectAdminPermissions"] = $UpdatedPermissions
+                    $SPAdminRole.SystemUpdate()
+                    $SPAdminRole.Context.ExecuteQuery()
+                    Write-Host "[INFO] Successfully added 'ReRunSetup' permission to SP Admin role" -ForegroundColor Green
+                } else {
+                    Write-Host "[INFO] SP Admin role already has 'ReRunSetup' permission, skipping"
+                }
+            } else {
+                Write-Host "[WARNING] Could not find SP Admin role '$SPAdminTitle' in list '$AdminRolesList'" -ForegroundColor Yellow
+            }
+        } else {
+            Write-Host "[WARNING] Could not find 'ReRunSetup' permission item in list '$AdminPermissionsList'" -ForegroundColor Yellow
+        }
+    }
 }

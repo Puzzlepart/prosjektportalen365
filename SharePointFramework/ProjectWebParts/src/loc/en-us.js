@@ -190,7 +190,11 @@ define([], function () {
     ProbabilityPostActionFieldNameFieldLabel: 'Field name - Probability (post action)',
     ProjectDeliveriesGroupName: 'Project deliveries (beta)',
     ProjectInformationDataFetchErrorText: 'An error occurred while retrieving project information.',
+    ProjectInformationNoHubAccessMessage: 'The project was loaded without access to the hub site.',
+    PropertyValueRenderError: 'Could not display value',
     ProjectInformationStatusReportHeaderText: 'Status report published',
+    ProjectStatusNoHubAccessErrorText:
+      'Project status cannot be loaded without access to the hub site. If you believe you should have this access, ask an administrator to grant you access to the hub site.',
     ProjectPhasesChangePhaseError: 'An error occured while changing the phase. Please try again or contact an administrator',
     ProjectPhasesFetchDataError: 'You do not have access to view this web part.<br/><br/>You must either have access to the portfolio site, or the project must be exempt from the portfolio site.',
     ProjectStatusDataErrorText: 'No access. You are not allowed to view status reports. ',
@@ -198,6 +202,8 @@ define([], function () {
     ProjectStatusProjectPropertiesGroupName: 'Project properties (Status Sections)',
     ProjectTimelineErrorFetchText:
       'Error when retrieving the projects data.<br><br>Check that the following SiteId is correct with what is in the "Projects" list. <br><br>- SiteId: {0} <br> - Title: {1} <br><br>Error message: {2}',
+    ProjectTimelineNoHubAccessErrorText:
+      'Project timeline cannot be loaded without access to the hub site. If you believe you should have this access, ask an administrator to grant you access to the hub site.',
     ProjectTimelineErrorTransformItemText:
       'Error when linking elements to timeline.<br><br>This may be due to a problem with an element in the "Projects" list (duplicate, deleted project), or that a timeline element does not have a valid connection. <br><br>- SiteId: {0} <br> - Title: {1} <br><br>Error message: {2}',
     ProjecttimelineGroupName: 'Project timeline',
