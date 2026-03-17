@@ -974,7 +974,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       return reports
     } catch (error) {
       this._handleAvailabilityError(error, 'getStatusReports')
-      throw error
+      return []
     }
   }
 

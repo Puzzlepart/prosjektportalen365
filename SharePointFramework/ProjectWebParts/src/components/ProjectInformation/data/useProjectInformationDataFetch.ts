@@ -73,9 +73,13 @@ const fetchData: DataFetchFunction<
 
     // Hub-dependent calls are wrapped individually with safe fallbacks
     // so that external users without hub access can still see local project data.
-    const parentProjects =
+    const templateName = projectInformationData.fieldValues.get('GtProjectTemplate', {
+      format: 'text'
+    })
+
+    const [parentProjects, childProjects, archiveStatus, template] = await Promise.all([
       isFrontpage && hubIsAvailable
-        ? await safeCall(
+        ? safeCall(
             () =>
               SPDataAdapter.portalDataService.getParentProjects(
                 context.props.webAbsoluteUrl,
@@ -83,11 +87,9 @@ const fetchData: DataFetchFunction<
               ),
             []
           )
-        : []
-
-    const childProjects =
+        : Promise.resolve([]),
       isFrontpage && hubIsAvailable
-        ? await safeCall(
+        ? safeCall(
             () =>
               SPDataAdapter.portalDataService.getChildProjects(
                 context.props.webAbsoluteUrl,
@@ -95,25 +97,20 @@ const fetchData: DataFetchFunction<
               ),
             []
           )
-        : []
-
-    const archiveStatus =
+        : Promise.resolve([]),
       shouldFetchArchiveStatus && hubIsAvailable
-        ? await safeCall(
+        ? safeCall(
             () => SPDataAdapter.getArchiveStatus(context.props.webAbsoluteUrl),
             null
           )
-        : null
-
-    const templateName = projectInformationData.fieldValues.get('GtProjectTemplate', {
-      format: 'text'
-    })
-    const template = hubIsAvailable
-      ? await safeCall(
-          () => SPDataAdapter.portalDataService.getProjectTemplate(templateName),
-          null
-        )
-      : null
+        : Promise.resolve(null),
+      hubIsAvailable
+        ? safeCall(
+            () => SPDataAdapter.portalDataService.getProjectTemplate(templateName),
+            null
+          )
+        : Promise.resolve(null)
+    ])
 
     const data: Partial<IProjectInformationState> = {
       data: {

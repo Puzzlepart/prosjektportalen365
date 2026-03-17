@@ -309,7 +309,9 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
     try {
       const propertyItemContext = await this._getLocalProjectInformationItemContext()
       if (propertyItemContext) await propertyItemContext.item.update(properties)
-      await this._params.entityService.updateEntityItem(this._params.siteId, properties)
+      if (this._params.entityService) {
+        await this._params.entityService.updateEntityItem(this._params.siteId, properties)
+      }
     } catch (error) {
       throw error
     }

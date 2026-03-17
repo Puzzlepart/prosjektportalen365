@@ -52,7 +52,7 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
           )}
         </div>
       </div>
-      {state.panel && (
+      {state.panel && SPDataAdapter.portalDataService?.web && (
         <CustomEditPanel
           isOpen={true}
           fields={state.data?.fields}
