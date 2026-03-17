@@ -35,7 +35,7 @@ import {
   StatusReport,
   StatusReportAttachment
 } from '../../models'
-import { getClassProperties, makeUrlAbsolute, transformFieldXml } from '../../util'
+import { getClassProperties, isUnauthorizedError, makeUrlAbsolute, transformFieldXml } from '../../util'
 import { DataService } from '../DataService'
 import {
   GetStatusReportsOptions,
@@ -65,19 +65,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * Mark portal access as unavailable when the current user cannot read hub resources.
    */
   private _handleAvailabilityError(error: any, source: string): void {
-    const message = `${error?.message ?? error ?? ''}`.toLowerCase()
-    const status = error?.status ?? error?.data?.status ?? error?.response?.status
-    const isUnauthorized =
-      status === 401 ||
-      status === 403 ||
-      message.indexOf('403') !== -1 ||
-      message.indexOf('401') !== -1 ||
-      message.indexOf('forbidden') !== -1 ||
-      message.indexOf('unauthorized') !== -1 ||
-      message.indexOf('unauthorizedaccessexception') !== -1 ||
-      message.indexOf('attempted to perform an unauthorized operation') !== -1
-
-    if (!isUnauthorized || !this.isAvailable) return
+    if (!isUnauthorizedError(error) || !this.isAvailable) return
 
     Logger.write(
       `(PortalDataService) (${source}) Hub access denied. Marking portal as unavailable.`,

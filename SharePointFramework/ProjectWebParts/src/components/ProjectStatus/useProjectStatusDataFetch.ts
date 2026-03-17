@@ -8,6 +8,7 @@ import {
   EditableSPField,
   ProjectAdminPermission,
   getUrlParam,
+  isUnauthorizedError,
   parseUrlHash
 } from 'pp365-shared-library'
 import resource from 'SharedResources'
@@ -31,17 +32,9 @@ async function getReportFields(contentTypeId = '0x010022252E35737A413FB56A1BA538
 }
 
 function isNoHubError(error: unknown) {
-  const message = `${(error as any)?.message ?? error ?? ''}`.toLowerCase()
-  const status = (error as any)?.status ?? (error as any)?.data?.status ?? (error as any)?.response?.status
-
   return (
     SPDataAdapter.portalDataService?.isAvailable === false ||
-    status === 401 ||
-    status === 403 ||
-    message.indexOf('403') !== -1 ||
-    message.indexOf('401') !== -1 ||
-    message.indexOf('forbidden') !== -1 ||
-    message.indexOf('unauthorized') !== -1
+    isUnauthorizedError(error)
   )
 }
 
@@ -52,11 +45,13 @@ function isNoHubError(error: unknown) {
  */
 const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async (props) => {
   try {
-    await SPDataAdapter.configure(props.spfxContext, {
-      siteId: props.siteId,
-      webUrl: props.webAbsoluteUrl,
-      logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
-    })
+    if (!SPDataAdapter.isConfigured) {
+      await SPDataAdapter.configure(props.spfxContext, {
+        siteId: props.siteId,
+        webUrl: props.webAbsoluteUrl,
+        logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+      })
+    }
 
     const properties = await SPDataAdapter.project.getProjectInformationData()
 
