@@ -192,6 +192,11 @@ export interface IProjectListState extends Pick<IShimmerProps, 'isDataLoaded'> {
   renderMode?: ProjectListRenderMode
 
   /**
+   * Available verticals (loaded from DataSources)
+   */
+  verticals?: IProjectListVertical[]
+
+  /**
    * Current selected vertical
    */
   selectedVertical?: IProjectListVertical

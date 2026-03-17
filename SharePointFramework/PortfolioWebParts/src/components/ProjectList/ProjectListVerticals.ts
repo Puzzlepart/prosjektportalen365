@@ -1,3 +1,10 @@
+/**
+ * @deprecated This file is no longer used. Verticals are now driven dynamically
+ * from DataSource items in the SharePoint "Datakilder" list. See
+ * ProjectListFilterRegistry.ts for the new implementation.
+ *
+ * This file is kept temporarily for reference and can be safely deleted.
+ */
 import strings from 'PortfolioWebPartsStrings'
 import { IProjectListVertical } from './types'
 import {

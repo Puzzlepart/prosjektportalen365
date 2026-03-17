@@ -13,15 +13,20 @@ import { useProjectListState } from './useProjectListState'
  * Component logic hook for `ProjectList`. This hook is responsible for
  * fetching data, sorting, filtering and other logic.
  *
+ * Verticals are loaded dynamically from DataSources in `useProjectListDataFetch`
+ * and stored in `state.verticals`. The `hideVerticals` prop can still be used
+ * to filter out specific verticals by their `dataSourceId` key.
+ *
  * @param props Props
  */
 export const useProjectList = (props: IProjectListProps) => {
   const fluentProviderId = useId('fp-project-list')
-  const verticals = props.verticals.filter(
-    (vertical) => !props.hideVerticals.includes(vertical.key.toString())
-  )
   const { state, setState } = useProjectListState(props)
-  useProjectListDataFetch(props, verticals, setState)
+  useProjectListDataFetch(props, setState)
+
+  const verticals = (state.verticals ?? []).filter(
+    (vertical) => !(props.hideVerticals ?? []).includes(vertical.key.toString())
+  )
 
   /**
    * Get card actions. For now only `showProjectInfo` is handled.
@@ -62,7 +67,11 @@ export const useProjectList = (props: IProjectListProps) => {
    */
   function filterProjects(projects: ProjectListModel[]) {
     return projects
-      .filter((project) => state.selectedVertical.filter(project, state))
+      .filter((project) =>
+        state.selectedVertical?.filter
+          ? state.selectedVertical.filter(project, state)
+          : true
+      )
       .filter((project) =>
         _.any(Object.keys(project), (key) => {
           let value = null

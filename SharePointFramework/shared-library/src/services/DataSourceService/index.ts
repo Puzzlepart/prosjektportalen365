@@ -63,7 +63,6 @@ export class DataSourceService {
     }
     const items = await this._dataSourcesList.items
       .select(...Object.keys(new SPDataSourceItem()))
-      .filter(`GtDataSourceCategory eq '${category}'`)
       .filter(filter)<SPDataSourceItem[]>()
     return items.map((item) => new DataSource(item, columns))
   }

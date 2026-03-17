@@ -11,7 +11,6 @@ import { SiteContext, UserMessage, customLightTheme } from 'pp365-shared-library
 import React, { FC } from 'react'
 import { find, isEmpty } from 'underscore'
 import styles from './ProjectList.module.scss'
-import { ProjectListVerticals } from './ProjectListVerticals'
 import { IProjectListProps } from './types'
 import { useProjectList } from './useProjectList'
 import { useProjectListRenderer } from './useProjectListRenderer'
@@ -66,7 +65,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
                     selectedVertical: find(context.verticals, (v) => v.key === data.value)
                   })
                 }
-                selectedValue={context.state.selectedVertical.key}
+                selectedValue={context.state.selectedVertical?.key}
               >
                 {context.state.isDataLoaded &&
                   context.verticals
@@ -120,8 +119,6 @@ ProjectList.defaultProps = {
   showRenderModeSelector: true,
   showSortBy: true,
   defaultRenderMode: 'tiles',
-  defaultVertical: 'my_projects',
-  verticals: ProjectListVerticals,
   hideVerticals: [],
   useDynamicColors: true,
   showProjectLogo: true,

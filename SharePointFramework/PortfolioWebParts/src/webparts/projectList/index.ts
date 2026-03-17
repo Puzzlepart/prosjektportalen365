@@ -16,14 +16,16 @@ import {
 } from '@pnp/spfx-property-controls/lib/PropertyFieldCollectionData'
 import { CalloutTriggers } from '@pnp/spfx-property-controls/lib/PropertyFieldHeader'
 import * as strings from 'PortfolioWebPartsStrings'
-import { IProjectListProps, ProjectList, ProjectListVerticals } from 'components/ProjectList'
+import { IProjectListProps, ProjectList } from 'components/ProjectList'
 import React from 'react'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
-import { PortalDataService, ProjectColumn } from 'pp365-shared-library'
+import { DataSource, PortalDataService, ProjectColumn } from 'pp365-shared-library'
+import resource from 'SharedResources'
 
 export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectListProps> {
   private _portalDataService: PortalDataService
   private _columns: ProjectColumn[]
+  private _dataSources: DataSource[] = []
   private _columnFieldOptions: { key: string; text: string }[]
   private _columnUserOptions: { key: string; text: string }[]
 
@@ -47,6 +49,15 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
         key: column.internalName,
         text: column.name
       }))
+
+    try {
+      this._dataSources = await this.dataAdapter.fetchDataSources(
+        resource.Lists_DataSources_Category_Projects,
+        resource.Lists_DataSources_Level_Portfolio
+      )
+    } catch {
+      this._dataSources = []
+    }
   }
 
   public render(): void {
@@ -57,10 +68,12 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    const verticalOptions = ProjectListVerticals.map<IPropertyPaneDropdownOption>((vertical) => ({
-      key: vertical.key,
-      text: vertical.text
-    }))
+    const verticalOptions = this._dataSources
+      .sort((a, b) => a.sortOrder - b.sortOrder)
+      .map<IPropertyPaneDropdownOption>((ds) => ({
+        key: ds.dataSourceId,
+        text: ds.title
+      }))
 
     const quickLaunchMenu = {
       ...ProjectList.defaultProps.quickLaunchMenu,

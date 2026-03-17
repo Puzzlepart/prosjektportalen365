@@ -17,6 +17,7 @@
                 </Where>
             </Query>
             <ViewFields>
+                <FieldRef Name="GtSortOrder" />
                 <FieldRef Name="LinkTitle" />
                 <FieldRef Name="GtSearchQuery" />
                 <FieldRef Name="GtDataSourceCategory" />
@@ -33,6 +34,7 @@
         </View>
     </pnp:Views>
     <pnp:FieldRefs>
+        <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" DisplayName="{resource:SiteFields_GtSortOrder_DisplayName}" />
         <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" DisplayName="{resource:SiteFields_Title_DisplayName}" Required="true" />
         <pnp:FieldRef ID="31e405e0-2890-439d-9c9f-42354154feda" Name="GtSearchQuery" DisplayName="{resource:SiteFields_GtSearchQuery_DisplayName}" Required="true" />
         <pnp:FieldRef ID="67a0a4b1-61d7-45c3-9157-7e302450a304" Name="GtDataSourceCategory" DisplayName="{resource:SiteFields_GtDataSourceCategory_DisplayName}" Required="true" />
@@ -42,10 +44,12 @@
         <pnp:FieldRef ID="e0b7c98e-1d80-48d9-b384-2daa795daca8" Name="GtProjectContentRefiners" DisplayName="{resource:SiteFields_GtProjectContentRefiners_DisplayName}" />
         <pnp:FieldRef ID="e4223ef9-c549-4038-8652-9ffd71118cb2" Name="GtProjectContentGroupBy" DisplayName="{resource:SiteFields_GtProjectContentGroupBy_DisplayName}" />
         <pnp:FieldRef ID="40b5cbd9-4d0a-42eb-a790-65d83b9c7035" Name="GtODataQuery" DisplayName="{resource:SiteFields_GtODataQuery_DisplayName}" />
+        <pnp:FieldRef ID="ca3a4161-764c-4920-a884-e043d18c3f04" Name="GtDataSourceConfig" DisplayName="{resource:SiteFields_GtDataSourceConfig_DisplayName}" />
     </pnp:FieldRefs>
-    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
+    <pnp:DataRows KeyColumn="GtDataSourceId" UpdateBehavior="Skip">
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">fc9ff008-36cf-4531-9bce-ba545526834f</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_ProjectDeliveries_All}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100D7B74DE815F946D3B0F99D19F9B36B68* DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_ProjectDeliveries}</pnp:DataValue>
@@ -56,6 +60,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">0d046ccc-e556-435f-9c56-429d7bfef1ff</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">20</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_ProjectDeliveries_Children}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100D7B74DE815F946D3B0F99D19F9B36B68* DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_ProjectDeliveries}</pnp:DataValue>
@@ -66,6 +71,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">d0b101ad-aed6-4ff0-85d1-689f9ded14a1</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">30</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_UncertaintyOverview_AllRisks}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89701* DepartmentId:{{sitecollectionid}} -GtRiskStatusOWSCHCS="{resource:Choice_GtRiskStatus_NoLongerRelevant}"</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_UncertaintyOverview}</pnp:DataValue>
@@ -76,6 +82,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">1825226d-9f93-43e6-95e0-74c13716053c</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">40</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_UncertaintyOverview_RisksPortfolioLevel}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89701* GtShowInPortfolioOWSBOOL:1 DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_UncertaintyOverview}</pnp:DataValue>
@@ -87,6 +94,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">bcca7fa3-8d99-4159-b5c1-1340f18314e1</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">50</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_UncertaintyOverview_AllPossibilities}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89702* DepartmentId:{{sitecollectionid}} -GtRiskStatusOWSCHCS="{resource:Choice_GtRiskStatus_NoLongerRelevant}"</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_UncertaintyOverview}</pnp:DataValue>
@@ -97,6 +105,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">4b1ba958-0c8b-47c2-8c2a-499c230143cf</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">60</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_UncertaintyOverview_PossibilitiesPortfolioLevel}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89702* GtShowInPortfolioOWSBOOL:1 DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_UncertaintyOverview}</pnp:DataValue>
@@ -107,6 +116,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">d0b101ad-aed6-4ff0-85d1-689f9ded14a5</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">70</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_ExperienceLog_All}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x01004EDD18CB92C14EBA97103D909C897810* DepartmentId:{{sitecollectionid}} GtProjectLogExperienceOWSBOOL:1</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_ExperienceLog}</pnp:DataValue>
@@ -117,6 +127,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">fbac5398-13bb-433b-999f-ddd4e8cd59a9</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">80</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_BenefitOverview_All}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">(ContentTypeID:0x010039EAFDC2A1624C1BA1A444FC8FE85DEC* OR ContentTypeID:0x01004F466123309D46BAB9D5C6DE89A6CF67* OR ContentTypeID:0x010073043EFE3E814A2BBEF96B8457623F95*) DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_BenefitOverview}</pnp:DataValue>
@@ -128,6 +139,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">a3b18405-acb6-4c2e-a785-9e98e98df142</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">90</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_BenefitOverview_PortfolioLevel}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">(ContentTypeID:0x010039EAFDC2A1624C1BA1A444FC8FE85DEC* OR (ContentTypeID:0x01004F466123309D46BAB9D5C6DE89A6CF67* AND GtShowInPortfolioOWSBOOL:1) OR ContentTypeID:0x010073043EFE3E814A2BBEF96B8457623F95*) DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_BenefitOverview}</pnp:DataValue>
@@ -138,6 +150,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">31cfd343-383c-47c6-ac97-f253fc9dde6b</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">100</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_BenefitOverview_Project}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">(ContentTypeID:0x010039EAFDC2A1624C1BA1A444FC8FE85DEC* OR ContentTypeID:0x01004F466123309D46BAB9D5C6DE89A6CF67* OR ContentTypeID:0x010073043EFE3E814A2BBEF96B8457623F95*) Path:{SiteCollection.URL}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_BenefitOverview}</pnp:DataValue>
@@ -148,6 +161,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">b0ef3852-230e-4119-8156-5a2ba625e5e1</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">110</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_UncertaintyOverview_RisksChildren}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89701* DepartmentId:{{sitecollectionid}} -GtRiskStatusOWSCHCS="{resource:Choice_GtRiskStatus_NoLongerRelevant}"</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_UncertaintyOverview}</pnp:DataValue>
@@ -158,6 +172,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">dc3a4676-a38a-4fa7-a2b3-790f89046b52</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">120</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_UncertaintyOverview_PossibilitiesChildren}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89702* DepartmentId:{{sitecollectionid}} -GtRiskStatusOWSCHCS="{resource:Choice_GtRiskStatus_NoLongerRelevant}"</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_UncertaintyOverview}</pnp:DataValue>
@@ -168,6 +183,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">efd72d49-736d-47a1-923e-46a133efa299</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">130</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_BenefitOverview_Children}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">(ContentTypeID:0x010039EAFDC2A1624C1BA1A444FC8FE85DEC* OR ContentTypeID:0x01004F466123309D46BAB9D5C6DE89A6CF67* OR ContentTypeID:0x010073043EFE3E814A2BBEF96B8457623F95*) DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_BenefitOverview}</pnp:DataValue>
@@ -178,6 +194,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">425b6680-d6b7-47e6-98e5-91cad73ccc47</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">140</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_CommunicationPlan_Children}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeID:0x010065CE65D51354419EA794C6FACD4FA2EB* DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_CommunicationPlan}</pnp:DataValue>
@@ -188,6 +205,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">22880c29-12a8-484b-b51c-6d3859eb07df</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">150</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_ResourceAllocation_All}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">(ContentTypeId:0x010004EAFF7AFCC94C2680042E6881264120* OR ContentTypeId:0x010029F45E75BA9CE340A83EFFB2927E11F4*) DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_ResourceAllocation}</pnp:DataValue>
@@ -196,6 +214,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">fbe4dcc8-ed4c-4c0a-ad52-4247ca90f9b3</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">160</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_ResourceAllocation_Children}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x010004EAFF7AFCC94C2680042E6881264120* DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_ResourceAllocation}</pnp:DataValue>
@@ -205,15 +224,59 @@
             <pnp:DataValue FieldName="GtDataSourceLevel">{resource:Lists_DataSources_Level_ParentProgram}</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="GtDataSourceId">c6e22e5a-8a04-4e67-b5a3-2f9a4d1b7c3e</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_Projects_AccessTo}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C* DepartmentId:{{sitecollectionid}} NOT GtProjectLifecycleStatusOWSCHCS="{resource:Choice_GtProjectLifecycleStatus_Closed}"</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_Projects}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceConfig">{"clientFilter":{"hasUserAccess":true}}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName">LockOpen</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">170</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceDefault">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">{resource:Lists_DataSources_Level_Portfolio}</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtDataSourceId">a7f3b2c1-5d9e-4f8a-b6c2-1e3d5a7f9b0c</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_Projects_MyProjects}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C* DepartmentId:{{sitecollectionid}} NOT GtProjectLifecycleStatusOWSCHCS="{resource:Choice_GtProjectLifecycleStatus_Closed}"</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_Projects}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceConfig">{"clientFilter":{"isUserMember":true}}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName">PersonCircle</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">180</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">{resource:Lists_DataSources_Level_Portfolio}</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">ba35f65e-a2d2-4853-8f7e-732ac0997e99</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_Projects_All}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C* DepartmentId:{{sitecollectionid}}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C* DepartmentId:{{sitecollectionid}} NOT GtProjectLifecycleStatusOWSCHCS="{resource:Choice_GtProjectLifecycleStatus_Closed}"</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_Projects}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIconName">AllApps</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceConfig">{"visibilityRule":{"isUserInPortfolioManagerGroup":true}}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName">Cube</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">190</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">{resource:Lists_DataSources_Level_Portfolio}</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtDataSourceId">d8e4f2a1-6b3c-4a9d-8e1f-5c7a9b2d4e6f</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_Projects_ParentProjects}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C* DepartmentId:{{sitecollectionid}} NOT GtProjectLifecycleStatusOWSCHCS="{resource:Choice_GtProjectLifecycleStatus_Closed}" GtIsParentProjectOWSBOOL="1"</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_Projects}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceConfig">{"clientFilter":{"isParent":true},"requiresAccess":true}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName">BoxMultiple</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">{resource:Lists_DataSources_Level_Portfolio}</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtDataSourceId">e9f5a3b2-7c4d-4b0e-9f2a-6d8b0c3e5a7f</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_Projects_Program}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C* DepartmentId:{{sitecollectionid}} NOT GtProjectLifecycleStatusOWSCHCS="{resource:Choice_GtProjectLifecycleStatus_Closed}" GtIsProgramOWSBOOL="1"</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_Projects}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceConfig">{"clientFilter":{"isProgram":true},"requiresAccess":true}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName">BoxMultiple</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">210</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceLevel">{resource:Lists_DataSources_Level_Portfolio}</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">d9eb55ac-53c7-49dc-9dc0-bf3ea3166fb3</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">220</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_ProjectStatus_All}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_ProjectStatus}</pnp:DataValue>
@@ -222,6 +285,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">e821a59a-10b6-494f-a3fe-11a4365620f0</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">230</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_ProjectStatus_Last7Days}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* Created&gt;{TODAY-7} DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_ProjectStatus}</pnp:DataValue>
@@ -230,6 +294,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">f99ca828-38a0-42c4-9a3d-4861c38c20c4</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">240</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_ProjectStatus_Last30Days}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* Created&gt;{TODAY-30} DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_ProjectStatus}</pnp:DataValue>
@@ -238,6 +303,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">a85e0567-7120-4d32-8ef3-08dc6a168aeb</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">250</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_IdeaModule_Registered}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100AAE66CFF1A3F488D843FF7CF96E41DD9* DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_IdeaModule}</pnp:DataValue>
@@ -246,6 +312,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">f5d1126f-08f5-406c-a91b-a3576d3b48ea</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">260</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_IdeaModule_Processing}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x01000E7513A76B934F449CDB9B25FC172F44* DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_IdeaModule}</pnp:DataValue>
@@ -254,6 +321,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">d7e226c3-eb6a-4e2a-abf9-6e27d88c18b6</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">270</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_IdeaModule_All}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">(ContentTypeID:0x0100AAE66CFF1A3F488D843FF7CF96E41DD9* OR ContentTypeID:0x01000E7513A76B934F449CDB9B25FC172F44*) DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_IdeaModule}</pnp:DataValue>

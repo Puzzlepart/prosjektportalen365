@@ -1447,8 +1447,20 @@
   <data name="Lists_DataSources_Category_Projects" xml:space="preserve">
     <value>Prosjekter</value>
   </data>
+  <data name="Lists_DataSources_Category_Projects_AccessTo" xml:space="preserve">
+    <value>Tilgang til</value>
+  </data>
   <data name="Lists_DataSources_Category_Projects_All" xml:space="preserve">
-    <value>Alle prosjekter</value>
+    <value>Alle prosjekter/program</value>
+  </data>
+  <data name="Lists_DataSources_Category_Projects_MyProjects" xml:space="preserve">
+    <value>Mine prosjekter</value>
+  </data>
+  <data name="Lists_DataSources_Category_Projects_ParentProjects" xml:space="preserve">
+    <value>Overordnede prosjekter</value>
+  </data>
+  <data name="Lists_DataSources_Category_Projects_Program" xml:space="preserve">
+    <value>Program</value>
   </data>
   <data name="Lists_DataSources_Category_ProjectStatus" xml:space="preserve">
     <value>Prosjektstatus</value>
@@ -3063,6 +3075,12 @@
   </data>
   <data name="SiteFields_GtDataSourceId_DisplayName" xml:space="preserve">
     <value>Unik identifikator</value>
+  </data>
+  <data name="SiteFields_GtDataSourceConfig_Description" xml:space="preserve">
+    <value>JSON-konfigurasjon for klientsidefiltrering og synlighetsregler</value>
+  </data>
+  <data name="SiteFields_GtDataSourceConfig_DisplayName" xml:space="preserve">
+    <value>Datakildekonfigurasjon</value>
   </data>
   <data name="SiteFields_GtDataSourceLevel_Description" xml:space="preserve">
     <value>Angi nivået for datakilden</value>
