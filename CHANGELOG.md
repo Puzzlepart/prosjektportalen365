@@ -27,7 +27,8 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 
 ### Feilrettinger
 
-- Fikset feil hvor feltkonfigurasjoner for maloppsett ikke fungerte, custom feltnavn og beskrivelser laster nå inn korrekt. [#1704](https://github.com/Puzzlepart/prosjektportalen365/issues/1704)
+- Rettet en feil hvor feltkonfigurasjoner for maloppsett ikke fungerte, custom feltnavn og beskrivelser laster nå inn korrekt. [#1704](https://github.com/Puzzlepart/prosjektportalen365/issues/1704)
+- Rettet en feil hvor URL-felter i prosjektinformasjonen ikke dukket som lenker [#1698](https://github.com/Puzzlepart/prosjektportalen365/issues/1698)
 
 ---
 

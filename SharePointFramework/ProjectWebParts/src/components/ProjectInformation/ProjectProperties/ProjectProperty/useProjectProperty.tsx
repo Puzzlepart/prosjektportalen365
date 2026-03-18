@@ -162,9 +162,10 @@ export function useProjectProperty(props: IProjectPropertyProps) {
       [
         'URL',
         ({ url, description }) => {
+          if (!url) return null
           return (
             <div>
-              <Link href={url} target='_blank' title={description}>
+              <Link href={url} target='_blank' rel='noopener noreferrer' title={description}>
                 {description ?? url}
               </Link>
             </div>
