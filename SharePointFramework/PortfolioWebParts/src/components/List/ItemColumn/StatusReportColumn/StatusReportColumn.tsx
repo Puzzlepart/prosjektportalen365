@@ -1,48 +1,56 @@
-import { Icon } from '@fluentui/react/lib/Icon'
-import { TooltipDelay, TooltipHost } from '@fluentui/react/lib/Tooltip'
 import strings from 'PortfolioWebPartsStrings'
 import React from 'react'
-import FadeIn from 'react-fade-in'
 import styles from './StatusColumn.module.scss'
 import { IStatusColumnProps } from './types'
 import { useStatusReportColumn } from './useStatusReportColumn'
 import { fetchData } from './data'
 import resource from 'SharedResources'
-import { ColumnRenderComponent } from 'pp365-shared-library'
+import { ColumnRenderComponent, customLightTheme, getFluentIconWithFallback } from 'pp365-shared-library'
+import {
+  FluentProvider,
+  IdPrefixProvider,
+  Popover,
+  PopoverSurface,
+  PopoverTrigger,
+  useId
+} from '@fluentui/react-components'
+import { TooltipContent } from './TooltipContent'
 
 export const StatusReportColumn: ColumnRenderComponent<IStatusColumnProps> = (
   props
 ): JSX.Element => {
-  const { status, tooltipProps } = useStatusReportColumn(props)
+  const { status } = useStatusReportColumn(props)
+  const fluentProviderId = useId('fp-status-report-column')
+
   return (
-    <TooltipHost
-      tooltipProps={tooltipProps}
-      delay={TooltipDelay.long}
-      closeDelay={TooltipDelay.long}
-      calloutProps={{ gapSpace: 10 }}
-    >
-      <div>
-        <FadeIn
-          className={styles.root}
-          delay={props.animation.delay}
-          transitionDuration={props.animation.transitionDuration}
-        >
-          {status?.sections?.map(({ fieldName, iconName, color }) => (
-            <Icon
-              key={fieldName}
-              iconName={iconName}
-              styles={{
-                root: {
-                  color,
-                  paddingRight: 8,
-                  fontSize: 20
-                }
-              }}
-            />
-          ))}
-        </FadeIn>
-      </div>
-    </TooltipHost>
+    <IdPrefixProvider value={fluentProviderId}>
+      <FluentProvider
+        theme={customLightTheme}
+        style={{ display: 'inline', backgroundColor: 'transparent' }}
+      >
+        <Popover withArrow positioning='below' mouseLeaveDelay={200} openOnHover>
+          <PopoverTrigger disableButtonEnhancement>
+            <div className={styles.root}>
+              {status?.sections?.map(({ fieldName, iconName, color }, idx) => (
+                <span
+                  key={fieldName}
+                  className={styles.icon}
+                  style={{
+                    color,
+                    animationDelay: `${idx * props.animation.delay}ms`
+                  }}
+                >
+                  {getFluentIconWithFallback(iconName, true, color)}
+                </span>
+              ))}
+            </div>
+          </PopoverTrigger>
+          <PopoverSurface className={styles.popoverSurface}>
+            <TooltipContent status={status} animation={props.tooltip.animation} />
+          </PopoverSurface>
+        </Popover>
+      </FluentProvider>
+    </IdPrefixProvider>
   )
 }
 StatusReportColumn.defaultProps = {
@@ -51,12 +59,12 @@ StatusReportColumn.defaultProps = {
   statusSectionsListName: resource.Lists_StatusSections_Title,
   animation: {
     delay: 100,
-    transitionDuration: 400
+    transitionDuration: 250
   },
   tooltip: {
     animation: {
-      delay: 250,
-      transitionDuration: 300
+      delay: 50,
+      transitionDuration: 200
     }
   }
 }

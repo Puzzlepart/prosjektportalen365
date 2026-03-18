@@ -888,12 +888,12 @@
             "statusSectionsListName": "{resource:Lists_StatusSections_Title}",
             "animation": {
                 "delay": 100,
-                "transitionDuration": 400
+                "transitionDuration": 250
             },
             "tooltip": {
                 "animation": {
-                "delay": 250,
-                "transitionDuration": 300
+                "delay": 50,
+                "transitionDuration": 200
                 }
             }}</pnp:DataValue>
         </pnp:DataRow>
