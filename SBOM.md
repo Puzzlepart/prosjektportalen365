@@ -2,7 +2,7 @@
 
 **Project:** Prosjektportalen 365  
 **Version:** 1.12.1  
-**Generated:** 2026-03-10T16:08:14.036Z  
+**Generated:** 2026-03-18T09:56:18.190Z  
 **Format:** CycloneDX-inspired Markdown
 
 ## Overview
@@ -136,7 +136,7 @@ This section lists all unique dependencies across all projects.
 | shade-blend-color | ~1.0.0 | pp365-projectwebparts, pp365-shared-library |
 | smoothscroll-polyfill | ~0.4.4 | pp365-projectwebparts |
 | sp-entityportal-service | 2.3.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| sp-js-provisioning | 1.3.2, ~1.2.5 | pp365-projectextensions, pp365-shared-library |
+| sp-js-provisioning | ~1.3.4 | pp365-projectextensions, pp365-shared-library |
 | spfx-jsom | 0.6.6 | pp365-projectextensions, pp365-projectwebparts, pp365-shared-library |
 | tslib | 2.3.1 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | underscore | ~1.13.6 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
@@ -484,7 +484,7 @@ This section provides a detailed view of dependencies for each project.
 | react-markdown | ^8.0.3 |
 | rehype-raw | ^6.1.1 |
 | sp-entityportal-service | 2.3.0 |
-| sp-js-provisioning | 1.3.2 |
+| sp-js-provisioning | ~1.3.4 |
 | spfx-jsom | 0.6.6 |
 | tslib | 2.3.1 |
 | underscore | ~1.13.6 |
@@ -658,7 +658,7 @@ This section provides a detailed view of dependencies for each project.
 | rehype-raw | ^6.1.1 |
 | shade-blend-color | ~1.0.0 |
 | sp-entityportal-service | 2.3.0 |
-| sp-js-provisioning | ~1.2.5 |
+| sp-js-provisioning | ~1.3.4 |
 | spfx-jsom | 0.6.6 |
 | tslib | 2.3.1 |
 | underscore | ~1.13.6 |

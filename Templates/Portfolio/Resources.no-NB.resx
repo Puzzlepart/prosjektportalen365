@@ -2801,7 +2801,7 @@
     <value>Tiltaksdato</value>
   </data>
   <data name="SiteFields_GtActionDescription_Description" xml:space="preserve">
-    <value />
+    <value>Beskriv tiltaket</value>
   </data>
   <data name="SiteFields_GtActionDescription_DisplayName" xml:space="preserve">
     <value>Beskrivelse</value>
@@ -2984,7 +2984,7 @@
     <value>Totalbudsjett for prosjektet</value>
   </data>
   <data name="SiteFields_GtCategory_Description" xml:space="preserve">
-    <value />
+    <value>Angi kategorien</value>
   </data>
   <data name="SiteFields_GtCategory_DisplayName" xml:space="preserve">
     <value>Kategori</value>
@@ -3047,7 +3047,7 @@
     <value>Kategori</value>
   </data>
   <data name="SiteFields_GtDataSourceDefault_Description" xml:space="preserve">
-    <value />
+    <value>Angi standardverdien for kategorien</value>
   </data>
   <data name="SiteFields_GtDataSourceDefault_DisplayName" xml:space="preserve">
     <value>Standard for kategori</value>
@@ -3065,7 +3065,7 @@
     <value>Unik identifikator</value>
   </data>
   <data name="SiteFields_GtDataSourceLevel_Description" xml:space="preserve">
-    <value />
+    <value>Angi nivået for datakilden</value>
   </data>
   <data name="SiteFields_GtDataSourceLevel_DisplayName" xml:space="preserve">
     <value>Nivå</value>
