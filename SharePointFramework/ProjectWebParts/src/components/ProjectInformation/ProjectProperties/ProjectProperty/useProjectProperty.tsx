@@ -196,11 +196,7 @@ export function useProjectProperty(props: IProjectPropertyProps) {
 
       if (value === null || value === undefined) {
         return (
-          <Text
-            italic
-            size={200}
-            style={{ color: 'var(--colorNeutralForeground4)', marginTop: 6 }}
-          >
+          <Text italic size={200} style={{ color: 'var(--colorNeutralForeground4)', marginTop: 6 }}>
             {strings.PropertyValueRenderError}
           </Text>
         )
@@ -217,11 +213,7 @@ export function useProjectProperty(props: IProjectPropertyProps) {
         error
       )
       return (
-        <Text
-          italic
-          size={200}
-          style={{ color: 'var(--colorNeutralForeground4)', marginTop: 6 }}
-        >
+        <Text italic size={200} style={{ color: 'var(--colorNeutralForeground4)', marginTop: 6 }}>
           {strings.PropertyValueRenderError}
         </Text>
       )

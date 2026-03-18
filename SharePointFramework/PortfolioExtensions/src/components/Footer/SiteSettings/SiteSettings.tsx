@@ -37,10 +37,7 @@ export const SiteSettings: FC = () => {
                   icon={getFluentIcon('Settings')}
                   primaryActionButton={{
                     onClick: () =>
-                      window.open(
-                        `${context.props.portalUrl}/_layouts/15/settings.aspx`,
-                        '_blank'
-                      )
+                      window.open(`${context.props.portalUrl}/_layouts/15/settings.aspx`, '_blank')
                   }}
                 >
                   {strings.SiteSettingsLabel}
@@ -52,10 +49,7 @@ export const SiteSettings: FC = () => {
                 <MenuItem
                   icon={getFluentIcon('TextBulletList')}
                   onClick={() =>
-                    window.open(
-                      `${context.props.portalUrl}/_layouts/15/viewlsts.aspx`,
-                      '_blank'
-                    )
+                    window.open(`${context.props.portalUrl}/_layouts/15/viewlsts.aspx`, '_blank')
                   }
                 >
                   {strings.SiteContentsLabel}

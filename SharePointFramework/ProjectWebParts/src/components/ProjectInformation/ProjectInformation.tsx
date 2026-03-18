@@ -38,10 +38,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
   if (!context.state.isDataLoaded) {
     return (
       <IdPrefixProvider value={fluentProviderId}>
-        <FluentProvider
-          theme={customLightTheme}
-          style={{ background: 'transparent' }}
-        >
+        <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
           <LoadingSkeleton />
         </FluentProvider>
       </IdPrefixProvider>

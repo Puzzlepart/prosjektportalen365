@@ -32,10 +32,7 @@ async function getReportFields(contentTypeId = '0x010022252E35737A413FB56A1BA538
 }
 
 function isNoHubError(error: unknown) {
-  return (
-    SPDataAdapter.portalDataService?.isAvailable === false ||
-    isUnauthorizedError(error)
-  )
+  return SPDataAdapter.portalDataService?.isAvailable === false || isUnauthorizedError(error)
 }
 
 /**

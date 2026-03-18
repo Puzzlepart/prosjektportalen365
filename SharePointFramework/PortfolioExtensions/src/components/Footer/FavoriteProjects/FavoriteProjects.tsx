@@ -39,11 +39,9 @@ export const FavoriteProjects: FC = () => {
               title={strings.FavoriteProjectsLabel}
               description={strings.FavoriteProjectsDescription}
             />
-            <Divider style={{ padding: '12px' }}/>
+            <Divider style={{ padding: '12px' }} />
             {context.props.favoriteProjects.length === 0 ? (
-              <div style={{ padding: '4px 8px' }}>
-                {strings.FavoriteProjectsNoItemsMessage}
-              </div>
+              <div style={{ padding: '4px 8px' }}>{strings.FavoriteProjectsNoItemsMessage}</div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                 {context.props.favoriteProjects.map((project) => (

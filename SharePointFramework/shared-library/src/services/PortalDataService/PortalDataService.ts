@@ -35,7 +35,12 @@ import {
   StatusReport,
   StatusReportAttachment
 } from '../../models'
-import { getClassProperties, isUnauthorizedError, makeUrlAbsolute, transformFieldXml } from '../../util'
+import {
+  getClassProperties,
+  isUnauthorizedError,
+  makeUrlAbsolute,
+  transformFieldXml
+} from '../../util'
 import { DataService } from '../DataService'
 import {
   GetStatusReportsOptions,

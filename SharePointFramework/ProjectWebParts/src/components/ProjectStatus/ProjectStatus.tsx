@@ -35,9 +35,7 @@ export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
               <div className={styles.messageContainer}>
                 <UserMessage
                   title={strings.ErrorTitle}
-                  text={
-                    context.state.error?.message ?? strings.ProjectStatusNoHubAccessErrorText
-                  }
+                  text={context.state.error?.message ?? strings.ProjectStatusNoHubAccessErrorText}
                   intent='warning'
                 />
               </div>

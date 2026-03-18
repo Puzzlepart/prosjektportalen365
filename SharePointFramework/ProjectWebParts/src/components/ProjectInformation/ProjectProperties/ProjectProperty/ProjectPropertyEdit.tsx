@@ -14,8 +14,8 @@ export const ProjectPropertyEdit: FC<IProjectPropertyProps> = (props) => {
   const defaultChecked = hasFallbackConfiguration
     ? context.props.fallbackVisibleFields.includes(props.model.internalName)
     : hasLegacyExternalConfiguration
-      ? !!context.props.showFieldExternal[props.model.internalName]
-      : true
+    ? !!context.props.showFieldExternal[props.model.internalName]
+    : true
   return (
     <div title={props.model.description} style={props.style}>
       <Text weight='semibold' block truncate>

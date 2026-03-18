@@ -61,9 +61,7 @@ const fetchData: DataFetchFunction<
     const projectInformationData = await SPDataAdapter.project.getProjectInformationData()
 
     let hubIsAvailable = SPDataAdapter.portalDataService?.isAvailable ?? false
-    const columns = hubIsAvailable
-      ? await SPDataAdapter.portalDataService.getProjectColumns()
-      : []
+    const columns = hubIsAvailable ? await SPDataAdapter.portalDataService.getProjectColumns() : []
 
     hubIsAvailable = SPDataAdapter.portalDataService?.isAvailable ?? false
 
@@ -99,16 +97,10 @@ const fetchData: DataFetchFunction<
           )
         : Promise.resolve([]),
       shouldFetchArchiveStatus && hubIsAvailable
-        ? safeCall(
-            () => SPDataAdapter.getArchiveStatus(context.props.webAbsoluteUrl),
-            null
-          )
+        ? safeCall(() => SPDataAdapter.getArchiveStatus(context.props.webAbsoluteUrl), null)
         : Promise.resolve(null),
       hubIsAvailable
-        ? safeCall(
-            () => SPDataAdapter.portalDataService.getProjectTemplate(templateName),
-            null
-          )
+        ? safeCall(() => SPDataAdapter.portalDataService.getProjectTemplate(templateName), null)
         : Promise.resolve(null)
     ])
 

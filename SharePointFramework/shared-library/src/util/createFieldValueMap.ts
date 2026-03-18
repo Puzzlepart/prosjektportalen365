@@ -25,7 +25,7 @@ export const createFieldValueMap = (): Map<string, (value: EditableSPFieldValue)
 
           return { url: '', description: '' }
         } catch (error) {
-          console.error(`Error mapping URL field:`, error, { value, $ })
+          console.error('Error mapping URL field:', error, { value, $ })
           return { url: '', description: '' }
         }
       }
@@ -52,7 +52,10 @@ export const createFieldValueMap = (): Map<string, (value: EditableSPFieldValue)
           }))
         }
         if (typeof value === 'string') {
-          return value.split(';').filter(Boolean).map((v) => ({ key: v, name: v }))
+          return value
+            .split(';')
+            .filter(Boolean)
+            .map((v) => ({ key: v, name: v }))
         }
         return []
       }

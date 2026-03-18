@@ -61,13 +61,14 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     }
 
     const requireAssistantAccess = this._globalSettings.get('RequireAssistantAccess') === '1'
-    const [installEntries, gitHubReleases, helpContent, links, favoriteProjects] = await Promise.all([
-      this._fetchInstallationLogs(),
-      this._fetchGitHubReleases(),
-      this._fetchHelpContent(),
-      this._fetchLinks(),
-      this._fetchFavoriteProjects()
-    ])
+    const [installEntries, gitHubReleases, helpContent, links, favoriteProjects] =
+      await Promise.all([
+        this._fetchInstallationLogs(),
+        this._fetchGitHubReleases(),
+        this._fetchHelpContent(),
+        this._fetchLinks(),
+        this._fetchFavoriteProjects()
+      ])
 
     this._installEntries = installEntries
     this._gitHubReleases = gitHubReleases
@@ -81,10 +82,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     const useBetaChannel = this._globalSettings.get('UseBetaChannel') === '1'
     const betaEndpointUrl = this._globalSettings.get('BetaEndpointUrl')
     const endpointUrl = this._globalSettings.get('EndpointUrl')
-    this._assistantEndpointUrl =
-      useBetaChannel && betaEndpointUrl
-        ? betaEndpointUrl
-        : endpointUrl
+    this._assistantEndpointUrl = useBetaChannel && betaEndpointUrl ? betaEndpointUrl : endpointUrl
 
     this._hasAssistantAccess =
       !requireAssistantAccess || (await this._isUserInGroup(strings.AssistantGroupName))
@@ -268,9 +266,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
       const followedSites = data.d?.Followed?.results || []
 
       const hubProjectUrls = new Set(
-        hubProjects
-          .map((p: { GtSiteUrl: string }) => p.GtSiteUrl?.toLowerCase())
-          .filter(Boolean)
+        hubProjects.map((p: { GtSiteUrl: string }) => p.GtSiteUrl?.toLowerCase()).filter(Boolean)
       )
 
       // Filter followed sites to only those that exist in the hub's projects list
