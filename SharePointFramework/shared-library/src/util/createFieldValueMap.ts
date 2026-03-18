@@ -14,8 +14,8 @@ export const createFieldValueMap = (): Map<string, (value: EditableSPFieldValue)
       ({ value, $ }) => {
         try {
           if ($ && typeof $ === 'object') {
-            const url = $['Url'] || $['url'] || ''
-            const description = $['Description'] || $['description'] || url
+            const url = $['Url'] ?? ''
+            const description = $['Description'] ?? url
             return { url, description }
           }
 
@@ -25,7 +25,7 @@ export const createFieldValueMap = (): Map<string, (value: EditableSPFieldValue)
 
           return { url: '', description: '' }
         } catch (error) {
-          console.warn(`Error mapping URL field:`, error, { value, $ })
+          console.error(`Error mapping URL field:`, error, { value, $ })
           return { url: '', description: '' }
         }
       }
