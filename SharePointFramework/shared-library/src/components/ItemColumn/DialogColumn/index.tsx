@@ -19,9 +19,13 @@ import {
   DialogSurface,
   DialogTitle,
   DialogTrigger,
+  FluentProvider,
+  IdPrefixProvider,
   Link,
-  Text
+  Text,
+  useId
 } from '@fluentui/react-components'
+import { customLightTheme } from '../../../util'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import { UserMessage } from '../../UserMessage'
 
@@ -41,8 +45,11 @@ import { UserMessage } from '../../UserMessage'
 export const DialogColumn: ColumnRenderComponent<IDialogColumnProps> = (props) => {
   const { infoText, title, subTitle, items, columns, columnSizingOptions, shouldRenderList } =
     useDialogColumn(props)
+  const fluentProviderId = useId('fp-dialog-column')
 
   return (
+    <IdPrefixProvider value={fluentProviderId}>
+    <FluentProvider theme={customLightTheme} style={{ display: 'inline', backgroundColor: 'transparent' }}>
     <Dialog>
       <DialogTrigger disableButtonEnhancement>
         <Link>{props.linkText}</Link>
@@ -91,6 +98,8 @@ export const DialogColumn: ColumnRenderComponent<IDialogColumnProps> = (props) =
         </DialogBody>
       </DialogSurface>
     </Dialog>
+    </FluentProvider>
+    </IdPrefixProvider>
   )
 }
 

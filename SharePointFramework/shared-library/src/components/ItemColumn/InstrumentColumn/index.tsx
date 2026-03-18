@@ -5,8 +5,18 @@ import styles from './InstrumentColumn.module.scss'
 import { format } from '@fluentui/react'
 import { IInstrumentColumnProps } from './types'
 import { useInstrumentColumn } from './useInstrumentColumn'
-import { Link, Popover, PopoverSurface, PopoverTrigger, Text } from '@fluentui/react-components'
+import {
+  FluentProvider,
+  IdPrefixProvider,
+  Link,
+  Popover,
+  PopoverSurface,
+  PopoverTrigger,
+  Text,
+  useId
+} from '@fluentui/react-components'
 import GaugeComponent from 'react-gauge-component'
+import { customLightTheme } from '../../../util'
 
 /**
  * A column render component that displays a link in the cell. When the link is clicked, a dialog is displayed
@@ -35,8 +45,11 @@ export const InstrumentColumn: ColumnRenderComponent<IInstrumentColumnProps> = (
     minimumValue,
     maximumValue
   } = useInstrumentColumn(props)
+  const fluentProviderId = useId('fp-instrument-column')
 
   return (
+    <IdPrefixProvider value={fluentProviderId}>
+    <FluentProvider theme={customLightTheme} style={{ display: 'inline', backgroundColor: 'transparent' }}>
     <Popover withArrow>
       <PopoverTrigger disableButtonEnhancement>
         <Link>{format(strings.ShowInstrumentLinkText || '{0}', currentValue ?? '')}</Link>
@@ -73,6 +86,8 @@ export const InstrumentColumn: ColumnRenderComponent<IInstrumentColumnProps> = (
         </div>
       </PopoverSurface>
     </Popover>
+    </FluentProvider>
+    </IdPrefixProvider>
   )
 }
 
