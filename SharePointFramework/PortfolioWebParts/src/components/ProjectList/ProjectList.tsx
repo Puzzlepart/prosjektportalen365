@@ -119,7 +119,6 @@ ProjectList.defaultProps = {
   showRenderModeSelector: true,
   showSortBy: true,
   defaultRenderMode: 'tiles',
-  hideVerticals: [],
   useDynamicColors: true,
   showProjectLogo: true,
   primaryField: 'GtProjectServiceAreaText',

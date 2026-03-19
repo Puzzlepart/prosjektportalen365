@@ -1,7 +1,6 @@
 /* eslint-disable quotes */
 import {
   IPropertyPaneConfiguration,
-  IPropertyPaneDropdownOption,
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
@@ -19,13 +18,11 @@ import * as strings from 'PortfolioWebPartsStrings'
 import { IProjectListProps, ProjectList } from 'components/ProjectList'
 import React from 'react'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
-import { DataSource, PortalDataService, ProjectColumn } from 'pp365-shared-library'
-import resource from 'SharedResources'
+import { PortalDataService, ProjectColumn } from 'pp365-shared-library'
 
 export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectListProps> {
   private _portalDataService: PortalDataService
   private _columns: ProjectColumn[]
-  private _dataSources: DataSource[] = []
   private _columnFieldOptions: { key: string; text: string }[]
   private _columnUserOptions: { key: string; text: string }[]
 
@@ -49,15 +46,6 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
         key: column.internalName,
         text: column.name
       }))
-
-    try {
-      this._dataSources = await this.dataAdapter.fetchDataSources(
-        resource.Lists_DataSources_Category_Projects,
-        resource.Lists_DataSources_Level_Portfolio
-      )
-    } catch {
-      this._dataSources = []
-    }
   }
 
   public render(): void {
@@ -68,13 +56,6 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    const verticalOptions = this._dataSources
-      .sort((a, b) => a.sortOrder - b.sortOrder)
-      .map<IPropertyPaneDropdownOption>((ds) => ({
-        key: ds.dataSourceId,
-        text: ds.title
-      }))
-
     const quickLaunchMenu = {
       ...ProjectList.defaultProps.quickLaunchMenu,
       ...this.properties.quickLaunchMenu
@@ -148,20 +129,71 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   calloutWidth: 430,
                   calloutContent: React.createElement('p', {}, strings.DefaultRenderModeDescription)
                 }),
-                PropertyFieldDropdownWithCallout('defaultVertical', {
-                  calloutTrigger: CalloutTriggers.Hover,
-                  key: 'defaultVerticalFieldId',
-                  label: strings.DefaultVerticalLabel,
-                  options: verticalOptions,
-                  selectedKey: this.properties.defaultVertical,
-                  calloutWidth: 430,
-                  calloutContent: React.createElement('p', {}, strings.DefaultVerticalDescription)
-                }),
-                PropertyFieldMultiSelect('hideVerticals', {
-                  key: 'hideVerticalsFieldId',
-                  label: strings.HideVerticalsLabel,
-                  options: verticalOptions,
-                  selectedKeys: this.properties.hideVerticals ?? []
+                PropertyFieldCollectionData('verticalConfigs', {
+                  key: 'verticalConfigsFieldId',
+                  label: strings.VerticalConfigLabel,
+                  panelHeader: strings.VerticalConfigPanelHeader,
+                  manageBtnLabel: strings.VerticalConfigManageBtnLabel,
+                  value: this.properties.verticalConfigs,
+                  fields: [
+                    {
+                      id: 'key',
+                      title: strings.VerticalConfigKeyTitle,
+                      type: CustomCollectionFieldType.string,
+                      required: true
+                    },
+                    {
+                      id: 'title',
+                      title: strings.VerticalConfigTitleTitle,
+                      type: CustomCollectionFieldType.string,
+                      required: true
+                    },
+                    {
+                      id: 'iconName',
+                      title: strings.VerticalConfigIconTitle,
+                      type: CustomCollectionFieldType.dropdown,
+                      options: [
+                        { key: 'LockOpen', text: 'LockOpen' },
+                        { key: 'PersonCircle', text: 'PersonCircle' },
+                        { key: 'Cube', text: 'Cube' },
+                        { key: 'BoxMultiple', text: 'BoxMultiple' }
+                      ],
+                      defaultValue: 'Cube'
+                    },
+                    {
+                      id: 'sortOrder',
+                      title: strings.SortOrderLabel,
+                      type: CustomCollectionFieldType.number,
+                      defaultValue: 100
+                    },
+                    {
+                      id: 'clientFilter',
+                      title: strings.VerticalConfigClientFilterTitle,
+                      type: CustomCollectionFieldType.string
+                    },
+                    {
+                      id: 'fieldFilter',
+                      title: strings.VerticalConfigFieldFilterTitle,
+                      type: CustomCollectionFieldType.string
+                    },
+                    {
+                      id: 'visibilityRule',
+                      title: strings.VerticalConfigVisibilityRuleTitle,
+                      type: CustomCollectionFieldType.string
+                    },
+                    {
+                      id: 'requiresAccess',
+                      title: strings.VerticalConfigRequiresAccessTitle,
+                      type: CustomCollectionFieldType.boolean,
+                      defaultValue: false
+                    },
+                    {
+                      id: 'isDefault',
+                      title: strings.VerticalConfigIsDefaultTitle,
+                      type: CustomCollectionFieldType.boolean,
+                      defaultValue: false
+                    }
+                  ]
                 })
               ]
             },

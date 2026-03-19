@@ -13,9 +13,8 @@ import { useProjectListState } from './useProjectListState'
  * Component logic hook for `ProjectList`. This hook is responsible for
  * fetching data, sorting, filtering and other logic.
  *
- * Verticals are loaded dynamically from DataSources in `useProjectListDataFetch`
- * and stored in `state.verticals`. The `hideVerticals` prop can still be used
- * to filter out specific verticals by their `dataSourceId` key.
+ * Verticals are built from `props.verticalConfigs` (webpart property pane)
+ * in `useProjectListDataFetch` and stored in `state.verticals`.
  *
  * @param props Props
  */
@@ -24,9 +23,7 @@ export const useProjectList = (props: IProjectListProps) => {
   const { state, setState } = useProjectListState(props)
   useProjectListDataFetch(props, setState)
 
-  const verticals = (state.verticals ?? []).filter(
-    (vertical) => !(props.hideVerticals ?? []).includes(vertical.key.toString())
-  )
+  const verticals = state.verticals ?? []
 
   /**
    * Get card actions. For now only `showProjectInfo` is handled.

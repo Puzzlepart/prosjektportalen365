@@ -1,7 +1,6 @@
 import strings from 'PortfolioWebPartsStrings'
-import { DataSource } from 'pp365-shared-library/lib/models'
 import { ProjectListModel } from 'pp365-shared-library/lib/models'
-import { IProjectListVertical, IProjectListState } from './types'
+import { IProjectListVertical, IProjectListState, IVerticalConfig } from './types'
 import {
   bundleIcon,
   CubeFilled,
@@ -16,9 +15,9 @@ import {
 import { FluentIcon } from '@fluentui/react-icons/lib/utils/createFluentIcon'
 
 /**
- * Map of icon names (stored in `DataSource.iconName` / `GtIconName`) to
+ * Map of icon names (stored in vertical config `iconName`) to
  * FluentUI bundled icons. Extend this map when new icon names are introduced
- * in the DataSource list items.
+ * in vertical configurations.
  */
 const iconMap: Record<string, FluentIcon> = {
   LockOpen: bundleIcon(LockOpenFilled, LockOpenRegular),
@@ -31,7 +30,7 @@ const iconMap: Record<string, FluentIcon> = {
 const defaultIcon = iconMap.Cube
 
 /**
- * Shape of the JSON stored in `GtDataSourceConfig`.
+ * Shape of the parsed filter/visibility configuration for a vertical.
  *
  * - `fieldFilter` – AND conditions on raw SharePoint item field values
  *   (e.g. `{"GtIsParentProject": true}`, `{"GtIsProgram": true}`).
@@ -54,14 +53,13 @@ export interface IDataSourceConfig {
 }
 
 /**
- * Safely parses the `DataSource.config` JSON string into an
- * `IDataSourceConfig` object. Returns an empty object on parse errors
- * or when the input is falsy.
+ * Safely parses a JSON string into an object. Returns an empty object
+ * on parse errors or when the input is falsy.
  */
-function parseConfig(configJson: string): IDataSourceConfig {
+function parseConfig(configJson: string): Record<string, any> {
   if (!configJson) return {}
   try {
-    return JSON.parse(configJson) as IDataSourceConfig
+    return JSON.parse(configJson)
   } catch {
     return {}
   }
@@ -155,45 +153,42 @@ function buildIsHiddenFunction(
  * Resolves an icon name string to a FluentUI bundled icon component.
  * Falls back to the default `Cube` icon when the name is not recognized.
  *
- * @param iconName Icon name from `DataSource.iconName`
+ * @param iconName Icon name from vertical config
  */
 function resolveIcon(iconName: string): FluentIcon {
   return iconMap[iconName] ?? defaultIcon
 }
 
 /**
- * Converts an array of `DataSource` objects into `IProjectListVertical[]`
- * for use by the `ProjectList` component tab bar.
+ * Converts an array of `IVerticalConfig` objects (from webpart properties)
+ * into `IProjectListVertical[]` for use by the `ProjectList` component tab bar.
  *
- * Each DataSource's `config` JSON is parsed to derive client-side filter
- * and visibility logic. DataSources are sorted by `sortOrder` (ascending).
+ * Each config's JSON filter strings are parsed to derive client-side filter
+ * and visibility logic. Configs are sorted by `sortOrder` (ascending).
  *
- * Mapping:
- * - `key` / `value` → `DataSource.dataSourceId` (stable GUID across environments)
- * - `text` → `DataSource.title`
- * - `icon` → resolved from `DataSource.iconName`
- * - `searchBoxPlaceholder` → generic search placeholder template
- * - `filter` → built from `GtDataSourceConfig` JSON
- * - `isHidden` → built from visibility rules in `GtDataSourceConfig` (if any)
- *
- * @param dataSources Array of DataSource objects (typically pre-filtered by category/level)
+ * @param configs Array of vertical config objects from webpart properties
  * @returns Array of `IProjectListVertical` sorted by `sortOrder`
  */
-export function convertDataSourcesToVerticals(
-  dataSources: DataSource[]
+export function convertConfigsToVerticals(
+  configs: IVerticalConfig[]
 ): IProjectListVertical[] {
-  return [...dataSources]
+  return [...configs]
     .sort((a, b) => (a.sortOrder ?? 100) - (b.sortOrder ?? 100))
-    .map((ds) => {
-      const config = parseConfig(ds.config)
+    .map((cfg) => {
+      const config: IDataSourceConfig = {
+        clientFilter: parseConfig(cfg.clientFilter) as Record<string, boolean>,
+        fieldFilter: parseConfig(cfg.fieldFilter) as Record<string, any>,
+        visibilityRule: parseConfig(cfg.visibilityRule) as Record<string, boolean>,
+        requiresAccess: cfg.requiresAccess ?? false
+      }
       const filter = buildFilterFunction(config)
       const isHidden = buildIsHiddenFunction(config)
 
       const vertical: IProjectListVertical = {
-        key: ds.dataSourceId || `ds-${ds.id}`,
-        value: ds.dataSourceId || `ds-${ds.id}`,
-        text: ds.title,
-        icon: resolveIcon(ds.iconName),
+        key: cfg.key,
+        value: cfg.key,
+        text: cfg.title,
+        icon: resolveIcon(cfg.iconName),
         searchBoxPlaceholder: strings.SearchBoxPlaceholderText,
         filter
       }
@@ -207,40 +202,29 @@ export function convertDataSourcesToVerticals(
 }
 
 /**
- * Finds the default vertical from converted verticals and their source
- * DataSource objects.
+ * Finds the default vertical from the converted verticals.
  *
  * Priority order:
- * 1. Match by `defaultVerticalId` prop (compared against `dataSourceId`)
- * 2. DataSource with `isDefault === true`
- * 3. First vertical in the sorted list
+ * 1. Vertical config with `isDefault === true`
+ * 2. First vertical in the sorted list
  *
- * @param dataSources Source DataSource array (used to check `isDefault`)
+ * @param configs Source vertical configs (used to check `isDefault`)
  * @param verticals Converted verticals (already sorted by `sortOrder`)
- * @param defaultVerticalId Optional default vertical identifier from WebPart props
  * @returns The default vertical, or `undefined` if no verticals exist
  */
 export function findDefaultVertical(
-  dataSources: DataSource[],
-  verticals: IProjectListVertical[],
-  defaultVerticalId?: string
+  configs: IVerticalConfig[],
+  verticals: IProjectListVertical[]
 ): IProjectListVertical | undefined {
   if (verticals.length === 0) return undefined
 
-  // 1. Match by prop (dataSourceId)
-  if (defaultVerticalId) {
-    const match = verticals.find((v) => v.key === defaultVerticalId)
+  // 1. Match by isDefault flag
+  const defaultCfg = configs.find((cfg) => cfg.isDefault)
+  if (defaultCfg) {
+    const match = verticals.find((v) => v.key === defaultCfg.key)
     if (match) return match
   }
 
-  // 2. Match by DataSource isDefault flag
-  const defaultDs = dataSources.find((ds) => ds.isDefault)
-  if (defaultDs) {
-    const dsKey = defaultDs.dataSourceId || `ds-${defaultDs.id}`
-    const match = verticals.find((v) => v.key === dsKey)
-    if (match) return match
-  }
-
-  // 3. Fall back to first vertical
+  // 2. Fall back to first vertical
   return verticals[0]
 }

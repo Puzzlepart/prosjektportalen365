@@ -2,21 +2,19 @@ import resource from 'SharedResources'
 import { useEffect } from 'react'
 import { IProjectListProps, IProjectListState } from './types'
 import {
-  convertDataSourcesToVerticals,
+  convertConfigsToVerticals,
   findDefaultVertical
 } from './ProjectListFilterRegistry'
 
 /**
  * Component data fetch hook for `ProjectList`. This hook is responsible for
  * fetching data and setting state. It fetches enriched projects using
- * `dataAdapter.fetchEnrichedProjects()`, checks if the current user is in
- * the `PortfolioInsight` group using `dataAdapter.isUserInGroup()`, and
- * fetches DataSource items to build dynamic verticals.
+ * `dataAdapter.fetchEnrichedProjects()` and checks if the current user is in
+ * the `PortfolioInsight` group using `dataAdapter.isUserInGroup()`.
  *
- * The selected vertical is determined by:
- * 1. The `defaultVertical` prop (matched against `dataSourceId`)
- * 2. The DataSource with `isDefault === true`
- * 3. The first vertical (lowest `sortOrder`)
+ * Verticals are built from `props.verticalConfigs` (webpart property pane).
+ * The selected vertical is determined by the config entry with `isDefault`
+ * set to `true`, falling back to the first vertical.
  *
  * @param props Props
  * @param setState Set state callback
@@ -33,18 +31,11 @@ export function useProjectListDataFetch(
         primaryField: props.primaryField,
         secondaryField: props.secondaryField
       }),
-      props.dataAdapter.isUserInGroup(resource.Security_SiteGroup_PortfolioInsight_Title),
-      props.dataAdapter.fetchDataSources(
-        resource.Lists_DataSources_Category_Projects,
-        resource.Lists_DataSources_Level_Portfolio
-      )
-    ]).then(([projects, isUserInPortfolioManagerGroup, dataSources]) => {
-      const verticals = convertDataSourcesToVerticals(dataSources)
-      const selectedVertical = findDefaultVertical(
-        dataSources,
-        verticals,
-        props.defaultVertical
-      )
+      props.dataAdapter.isUserInGroup(resource.Security_SiteGroup_PortfolioInsight_Title)
+    ]).then(([projects, isUserInPortfolioManagerGroup]) => {
+      const configs = props.verticalConfigs ?? []
+      const verticals = convertConfigsToVerticals(configs)
+      const selectedVertical = findDefaultVertical(configs, verticals)
 
       setState({
         projects,

@@ -72,6 +72,31 @@ export interface IQuickLaunch {
 
 export type ProjectListRenderMode = 'tiles' | 'list' | 'compactList'
 
+/**
+ * Configuration for a single ProjectList vertical tab, stored as
+ * a webpart property item in a `PropertyFieldCollectionData` collection.
+ *
+ * Filter logic works as follows:
+ * - `fieldFilter` – JSON object matching raw SP item field values
+ *   (e.g. `{"GtIsParentProject": true}`). Matched against `ProjectListModel.data`.
+ * - `clientFilter` – JSON object matching computed `ProjectListModel`
+ *   properties (e.g. `{"hasUserAccess": true}`, `{"isUserMember": true}`).
+ * - `visibilityRule` – JSON object matching `IProjectListState` properties
+ *   (e.g. `{"isUserInPortfolioManagerGroup": true}`). Hides the tab when unmet.
+ * - `requiresAccess` – project passes if user is portfolio manager OR has access.
+ */
+export interface IVerticalConfig {
+  key: string
+  title: string
+  iconName: string
+  sortOrder: number
+  clientFilter: string
+  fieldFilter: string
+  visibilityRule: string
+  requiresAccess: boolean
+  isDefault: boolean
+}
+
 export interface IProjectListProps extends IBaseComponentProps {
   /**
    * Sort by property
@@ -134,9 +159,10 @@ export interface IProjectListProps extends IBaseComponentProps {
   defaultVertical?: string
 
   /**
-   * Array of verticals to hide
+   * Vertical configurations from webpart property pane.
+   * Each entry defines a tab with optional filter/visibility logic.
    */
-  hideVerticals?: string[]
+  verticalConfigs?: IVerticalConfig[]
 
   /**
    * Vertical to show in the Tab component
@@ -192,7 +218,7 @@ export interface IProjectListState extends Pick<IShimmerProps, 'isDataLoaded'> {
   renderMode?: ProjectListRenderMode
 
   /**
-   * Available verticals (loaded from DataSources)
+   * Available verticals (built from webpart property configurations)
    */
   verticals?: IProjectListVertical[]
 
