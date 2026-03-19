@@ -33,8 +33,13 @@ const defaultIcon = iconMap.Cube
 /**
  * Shape of the JSON stored in `GtDataSourceConfig`.
  *
- * - `clientFilter` – AND conditions on `ProjectListModel` boolean properties
- *   (e.g. `hasUserAccess`, `isUserMember`, `isParent`, `isProgram`).
+ * - `fieldFilter` – AND conditions on raw SharePoint item field values
+ *   (e.g. `{"GtIsParentProject": true}`, `{"GtIsProgram": true}`).
+ *   Matched against `ProjectListModel.data` (the underlying SP item).
+ *   Uses loose equality (`==`) to handle SP boolean variations.
+ * - `clientFilter` – AND conditions on **computed** `ProjectListModel`
+ *   boolean properties that require client-side enrichment
+ *   (e.g. `hasUserAccess`, `isUserMember`).
  * - `visibilityRule` – conditions on `IProjectListState` boolean properties
  *   (e.g. `isUserInPortfolioManagerGroup`). The tab is hidden when any
  *   condition is not met.
@@ -42,6 +47,7 @@ const defaultIcon = iconMap.Cube
  *   portfolio manager **OR** has access to the project.
  */
 export interface IDataSourceConfig {
+  fieldFilter?: Record<string, any>
   clientFilter?: Record<string, boolean>
   visibilityRule?: Record<string, boolean>
   requiresAccess?: boolean
@@ -64,47 +70,54 @@ function parseConfig(configJson: string): IDataSourceConfig {
 /**
  * Builds a client-side filter function from an `IDataSourceConfig`.
  *
- * Logic:
- * - Each key in `clientFilter` is checked against `project[key]` as a boolean.
- *   All conditions are combined with AND logic.
- * - When `requiresAccess` is `true`, an additional check ensures the project
- *   is only shown if `state.isUserInPortfolioManagerGroup || project.hasUserAccess`.
- * - If `visibilityRule` contains keys that match state properties, the filter
- *   also verifies those state conditions (e.g. the "All" tab only shows
- *   projects when `isUserInPortfolioManagerGroup` is true, effectively
- *   acting as a pass-through for all projects).
+ * Evaluation order:
+ * 1. `visibilityRule` – state-level gate (e.g. portfolio-manager-only tabs)
+ * 2. `fieldFilter` – raw SP item field matching (e.g. `GtIsParentProject`)
+ * 3. `clientFilter` – computed model property matching (e.g. `hasUserAccess`)
+ * 4. `requiresAccess` – portfolio manager OR user has access
  *
  * Returns `() => true` when no config is provided.
  */
 function buildFilterFunction(
   config: IDataSourceConfig
 ): (project: ProjectListModel, state: IProjectListState) => boolean {
+  const hasFieldFilter =
+    config.fieldFilter && Object.keys(config.fieldFilter).length > 0
   const hasClientFilter =
     config.clientFilter && Object.keys(config.clientFilter).length > 0
   const hasVisibilityRule =
     config.visibilityRule && Object.keys(config.visibilityRule).length > 0
   const hasRequiresAccess = config.requiresAccess === true
 
-  if (!hasClientFilter && !hasVisibilityRule && !hasRequiresAccess) {
+  if (!hasFieldFilter && !hasClientFilter && !hasVisibilityRule && !hasRequiresAccess) {
     return () => true
   }
 
   return (project: ProjectListModel, state: IProjectListState): boolean => {
-    // Check visibility-rule conditions against state (acts as a gate)
+    // 1. Check visibility-rule conditions against state (acts as a gate)
     if (hasVisibilityRule) {
       for (const [key, expected] of Object.entries(config.visibilityRule)) {
         if ((state as any)[key] !== expected) return false
       }
     }
 
-    // Check client-filter conditions against project model
+    // 2. Check field-filter conditions against raw SP item data.
+    //    Uses loose equality (==) to handle SP boolean variations (true/1/"1").
+    if (hasFieldFilter && project.data) {
+      for (const [key, expected] of Object.entries(config.fieldFilter)) {
+        // eslint-disable-next-line eqeqeq
+        if ((project.data as any)[key] != expected) return false
+      }
+    }
+
+    // 3. Check client-filter conditions against computed model properties
     if (hasClientFilter) {
       for (const [key, expected] of Object.entries(config.clientFilter)) {
         if ((project as any)[key] !== expected) return false
       }
     }
 
-    // requiresAccess: portfolio manager OR user has access
+    // 4. requiresAccess: portfolio manager OR user has access
     if (hasRequiresAccess) {
       if (!state.isUserInPortfolioManagerGroup && !project.hasUserAccess) {
         return false

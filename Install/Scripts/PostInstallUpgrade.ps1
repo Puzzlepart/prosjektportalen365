@@ -193,6 +193,59 @@ if ($null -ne $LastInstall) {
         }
     }
 
+    if ($PreviousVersion -lt [version]"1.14.0") {
+        Write-Host "[INFO] Migrating DataSource clientFilter to fieldFilter for isParent/isProgram..."
+        $DataSourcesList = Get-Resource -Name "Lists_DataSources_Title"
+        Get-PnPListItem -List $DataSourcesList | ForEach-Object {
+            $Item = $_
+            $Config = $Item["GtDataSourceConfig"]
+            if ($null -ne $Config -and $Config -ne "") {
+                $Updated = $false
+                if ($Config -match '"isParent"' -or $Config -match '"isProgram"') {
+                    try {
+                        $ConfigObj = $Config | ConvertFrom-Json
+                        $ClientFilter = $ConfigObj.clientFilter
+                        if ($null -ne $ClientFilter) {
+                            $FieldFilter = @{}
+                            $RemainingClientFilter = @{}
+                            $ClientFilter.PSObject.Properties | ForEach-Object {
+                                if ($_.Name -eq "isParent") {
+                                    $FieldFilter["GtIsParentProject"] = $_.Value
+                                    $Updated = $true
+                                } elseif ($_.Name -eq "isProgram") {
+                                    $FieldFilter["GtIsProgram"] = $_.Value
+                                    $Updated = $true
+                                } else {
+                                    $RemainingClientFilter[$_.Name] = $_.Value
+                                }
+                            }
+                            if ($Updated) {
+                                $NewConfigObj = [ordered]@{}
+                                if ($FieldFilter.Count -gt 0) {
+                                    $NewConfigObj["fieldFilter"] = $FieldFilter
+                                }
+                                if ($RemainingClientFilter.Count -gt 0) {
+                                    $NewConfigObj["clientFilter"] = $RemainingClientFilter
+                                }
+                                if ($null -ne $ConfigObj.visibilityRule) {
+                                    $NewConfigObj["visibilityRule"] = $ConfigObj.visibilityRule
+                                }
+                                if ($null -ne $ConfigObj.requiresAccess) {
+                                    $NewConfigObj["requiresAccess"] = $ConfigObj.requiresAccess
+                                }
+                                $NewConfig = $NewConfigObj | ConvertTo-Json -Compress -Depth 5
+                                Set-PnPListItem -List $DataSourcesList -Identity $Item.Id -Values @{ "GtDataSourceConfig" = $NewConfig } -UpdateType SystemUpdate -ErrorAction SilentlyContinue | Out-Null
+                                Write-Host "[INFO] Migrated DataSource '$($Item['Title'])': $Config -> $NewConfig" -ForegroundColor Green
+                            }
+                        }
+                    } catch {
+                        Write-Host "[WARNING] Failed to migrate DataSource '$($Item['Title'])': $_" -ForegroundColor Yellow
+                    }
+                }
+            }
+        }
+    }
+
     if ($PreviousVersion -lt [version]"1.13.0") {
         Write-Host "[INFO] Ensuring 'ReRunSetup' permission is assigned to the SP Admin role..."
 
