@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" version="1.1" width="1080" height="1080" viewBox="0 0 1080 1080">
+<defs>
+<clipPath id="clip_1">
+<path transform="matrix(1,0,0,-1,0,1080)" d="M0 1080H1080V0H0Z"/>
+</clipPath>
+</defs>
+<g inkscape:groupmode="layer" inkscape:label="Layer 1">
+</g>
+<g inkscape:groupmode="layer" inkscape:label="Layer 3">
+</g>
+<g inkscape:groupmode="layer" inkscape:label="Utrydde fattigdom">
+</g>
+<g inkscape:groupmode="layer" inkscape:label="Layer 4">
+</g>
+<g inkscape:groupmode="layer" inkscape:label="Layer 6">
+</g>
+<g inkscape:groupmode="layer" inkscape:label="Overskrift">
+<path transform="matrix(1,0,0,-1,0,1080)" d="M0 0H1080V1080H0Z" fill="#c5192d"/>
+</g>
+<g inkscape:groupmode="layer" inkscape:label="Layer 7">
+<path transform="matrix(1,0,0,-1,0,1080)" d="M0 .961H1079V1080H0Z" fill="#c5192d"/>
+<path transform="matrix(1,0,0,-1,136.6172,244.14398)" d="M0 0 32.727 89.53H33.054V0ZM32.412-63.843H67.064V-28.549H81.836V0H67.064V153.72H31.115L-32.086-6.089V-28.549H32.412Z" fill="#ffffff"/>
+<path transform="matrix(1,0,0,-1,478.46,578.56497)" d="M0 0-193.519 111.741V-249.739L0-308.127Z" fill="#ffffff"/>
+<path transform="matrix(1,0,0,-1,499.7412,579.3052)" d="M0 0V-307.512L194.775-248.954V112.468Z" fill="#ffffff"/>
+<g clip-path="url(#clip_1)">
+<path transform="matrix(1,0,0,-1,846.4287,457.67628)" d="M0 0C0 12.657-10.254 22.904-22.878 22.904-35.542 22.904-45.783 12.657-45.783 0V-24.68H0Z" fill="#ffffff"/>
+<path transform="matrix(1,0,0,-1,806.3301,821.89456)" d="M0 0H-5.685L17.221-80.022 40.086 0H34.402 40.086V321.61H34.402 28.719 22.694 11.301 5.683 0-5.697V0Z" fill="#ffffff"/>
+<path transform="matrix(1,0,0,-1,736.083,482.34913)" d="M0 0-20.744 16.389V-355.757L-235.766-425.238H-245.719-247.684-257.623L-471.689-365.436V16.389L-492.446 0V-379.992L-258.605-444.725H-247.684-245.719-234.797L-19.055-376.227 0-370.622Z" fill="#ffffff"/>
+</g>
+<text fill="#ffffff" xml:space="preserve" transform="matrix(1 0 -0 1 0 1080)" font-size="93" font-family="Oswald-SemiBold" font-weight="bold"><tspan y="-910.9556" x="311.5195 365.7385 420.3295 474.6415">GOD </tspan><tspan y="-782.80166" x="311.5195 366.2965 408.05354 461.52854 512.5855 565.1305 617.6755 645.5755 698.1205">UTDANNING</tspan></text>
+</g>
+</svg>
