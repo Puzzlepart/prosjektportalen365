@@ -388,6 +388,8 @@ export function useEditableColumn(
           transformedExpirationDate = await transformValue(defaultExpirationDate, 'expirationDate')
         }
 
+        const transformedPrivacy = await transformValue(defaultVisibility, 'privacy')
+
         let resolvedHubSite = props.pageContext.legacyPageContext.hubSiteId
         let resolvedHubSiteTitle = hubSiteTitle
 
@@ -435,7 +437,8 @@ export function useEditableColumn(
             teamify: defaultTeamify,
             owner: transformedOwner,
             expirationDate: transformedExpirationDate,
-            hubSiteTitle: resolvedHubSiteTitle
+            hubSiteTitle: resolvedHubSiteTitle,
+            privacy: transformedPrivacy
           }
         })
       } catch (error) {
