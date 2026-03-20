@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" version="1.1" width="1080" height="1080" viewBox="0 0 1080 1080">
+<defs>
+<clipPath id="clip_1">
+<path transform="matrix(1,0,0,-1,0,1080)" d="M0 1080H1080V0H0Z"/>
+</clipPath>
+</defs>
+<g inkscape:groupmode="layer" inkscape:label="Layer 1">
+</g>
+<g inkscape:groupmode="layer" inkscape:label="Layer 3">
+</g>
+<g inkscape:groupmode="layer" inkscape:label="Utrydde fattigdom">
+</g>
+<g inkscape:groupmode="layer" inkscape:label="Layer 4">
+</g>
+<g inkscape:groupmode="layer" inkscape:label="Layer 6">
+</g>
+<g inkscape:groupmode="layer" inkscape:label="Overskrift">
+<path transform="matrix(1,0,0,-1,0,1080)" d="M0 0H1080V1080H0Z" fill="#dd1367"/>
+</g>
+<g inkscape:groupmode="layer" inkscape:label="Layer 7">
+<path transform="matrix(1,0,0,-1,0,1080)" d="M.02 0H1079.88V1079.995H.02Z" fill="#4c9f38"/>
+<path transform="matrix(1,0,0,-1,0,1080)" d="M.02 0H1079.88V1079.995H.02Z" fill="#dd1367"/>
+<path transform="matrix(1,0,0,-1,104.0806,141.48242)" d="M0 0V-166.859H36.65V51.12H7.387L-26.36 11.573V-26.695H-26.052L-.334 0Z" fill="#ffffff"/>
+<g clip-path="url(#clip_1)">
+<path transform="matrix(1,0,0,-1,274.4722,252.08789)" d="M0 0V105.466C0 139.548-17.034 164.296-54.333 164.296-91.298 164.296-108.357 139.548-108.357 105.466V0C-108.357-33.747-91.298-58.829-54.333-58.829-17.034-58.829 0-33.747 0 0M-71.695-5.788V111.251C-71.695 124.431-66.877 133.757-54.333 133.757-41.474 133.757-36.657 124.431-36.657 111.251V-5.788C-36.657-18.975-41.474-28.277-54.333-28.277-66.877-28.277-71.695-18.975-71.695-5.788" fill="#ffffff"/>
+<path transform="matrix(1,0,0,-1,639.5142,723.6299)" d="M0 0H-199.596C-200.795 0-201.764-1.088-201.764-2.423V-62.407C-201.764-63.768-200.795-64.844-199.596-64.844H0C1.225-64.844 2.193-63.768 2.193-62.407V-2.423C2.193-1.088 1.225 0 0 0" fill="#ffffff"/>
+<path transform="matrix(1,0,0,-1,639.5142,595.9922)" d="M0 0H-199.596C-200.795 0-201.764-1.09-201.764-2.423V-62.408C-201.764-63.769-200.795-64.845-199.596-64.845H0C1.225-64.845 2.193-63.769 2.193-62.408V-2.423C2.193-1.09 1.225 0 0 0" fill="#ffffff"/>
+<path transform="matrix(1,0,0,-1,636.7056,505.31544)" d="M0 0-95.806 95.807C-96.453 96.453-97.5 96.453-98.147 95.807L-193.954 0C-194.996-1.043-194.258-2.825-192.783-2.825H-1.17C.304-2.825 1.042-1.043 0 0" fill="#ffffff"/>
+<path transform="matrix(1,0,0,-1,726.646,789.20999)" d="M0 0 95.806 95.807C96.452 96.452 96.452 97.501 95.806 98.147L0 193.954C-1.043 194.996-2.827 194.258-2.827 192.784V1.171C-2.827-.303-1.043-1.043 0 0" fill="#ffffff"/>
+<path transform="matrix(1,0,0,-1,442.752,879.1504)" d="M0 0 95.807-95.806C96.453-96.452 97.501-96.452 98.147-95.806L193.954 0C194.996 1.043 194.257 2.826 192.783 2.826H1.17C-.305 2.826-1.042 1.043 0 0" fill="#ffffff"/>
+<path transform="matrix(1,0,0,-1,352.8105,595.25588)" d="M0 0-95.805-95.807C-96.452-96.453-96.452-97.502-95.805-98.147L0-193.954C1.043-194.997 2.827-194.257 2.827-192.783V-1.17C2.827 .304 1.043 1.042 0 0" fill="#ffffff"/>
+</g>
+<text fill="#ffffff" xml:space="preserve" transform="matrix(1 0 -0 1 0 1080)" font-size="93" font-family="Oswald-SemiBold" font-weight="bold"><tspan y="-912.292" x="370.4487 436.1067 464.00669 516.5517 570.8637 626.1057 667.9557">MINDRE </tspan><tspan y="-784.138" x="370.4487 425.2257 466.5177 494.4177 546.7767 603.50668 645.3566">ULIKHET</tspan></text>
+</g>
+</svg>
