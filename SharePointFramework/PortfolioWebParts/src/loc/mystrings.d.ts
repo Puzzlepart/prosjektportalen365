@@ -84,6 +84,7 @@ declare interface IPortfolioWebPartsStrings {
     UserFieldNoOptionsText: string
     MemberFieldLabel: string
     MemberFieldDescription: string
+    DuplicateOwnerMemberMessage: string
     RequestedByFieldLabel: string
     RequestedByFieldDescription: string
     TeamifyFieldLabel: string

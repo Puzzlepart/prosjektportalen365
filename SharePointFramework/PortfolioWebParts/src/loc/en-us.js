@@ -26,6 +26,7 @@ define([], function () {
       OwnerFieldDescription: "Owners have full access and can manage members. You can add more owners later.",
       MemberFieldLabel: "Member(s)",
       MemberFieldDescription: "Members have access based on permissions. You can add more members later.",
+      DuplicateOwnerMemberMessage: "A user cannot be both owner and member. Please remove the duplicate(s).",
       RequestedByFieldLabel: "Requested on behalf of",
       RequestedByFieldDescription: "If you're requesting on someone's behalf, enter their name here. Leave blank if it's for yourself.",
       UserFieldNoOptionsText: "No results...",

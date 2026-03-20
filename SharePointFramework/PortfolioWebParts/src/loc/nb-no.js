@@ -84,6 +84,7 @@ define([], function () {
       OwnerFieldDescription: 'Eier(e) har full tilgang til området og kan legge til og fjerne medlemmer. Du kan legge til flere eiere senere.',
       MemberFieldLabel: 'Medlem(mer)',
       MemberFieldDescription: 'Medlem(mer) har tilgang til området basert på tillatelsene som er satt. Du kan legge til flere medlemmer senere.',
+      DuplicateOwnerMemberMessage: 'En bruker kan ikke være både eier og medlem. Vennligst fjern duplikaten(e).',
       RequestedByFieldLabel: 'Bestilt på vegne av',
       RequestedByFieldDescription: 'Dersom du bestiller området på vegne av noen, kan du angi navnet på vedkommende her. Dersom du bestiller området for deg selv, kan du la feltet stå tomt.',
       UserFieldNoOptionsText: 'Ingen treff...',

@@ -209,6 +209,14 @@ export const useProvisionDrawer = () => {
 
   const [siteExists, setSiteExists] = useState(false)
 
+  const duplicateOwnerMembers = useMemo(() => {
+    const owners: any[] = context.column.get('owner') || []
+    const members: any[] = context.column.get('member') || []
+    if (owners.length === 0 || members.length === 0) return []
+    const ownerEmails = new Set(owners.map((u) => u?.secondaryText?.toLowerCase()).filter(Boolean))
+    return members.filter((m) => ownerEmails.has(m?.secondaryText?.toLowerCase()))
+  }, [context.column])
+
   const isSaveDisabled = useMemo(() => {
     const requiredFields = fieldsToUse.filter((field) => field.required && !field.hidden)
 
@@ -256,11 +264,12 @@ export const useProvisionDrawer = () => {
       })
     }
 
-    return missingRequiredFields || siteExists
+    return missingRequiredFields || siteExists || duplicateOwnerMembers.length > 0
   }, [
     fieldsToUse,
     context.column,
     siteExists,
+    duplicateOwnerMembers,
     selectedType,
     context.props.debugMode,
     currentTemplate,
@@ -309,6 +318,7 @@ export const useProvisionDrawer = () => {
     missingFieldsInfo,
     siteExists,
     setSiteExists,
+    duplicateOwnerMembers,
     namingConvention,
     enableSensitivityLabels,
     enableSensitivityLabelsLibrary,
