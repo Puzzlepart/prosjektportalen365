@@ -1,0 +1,269 @@
+name: "🧪 Smoke test: ProjectWebParts"
+description: Smoke test for ProjectWebParts package
+labels: ["smoke-test", "ProjectWebParts"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 📦 Smoke test — ProjectWebParts
+
+        Gå gjennom hver webdel og verifiser at funksjonaliteten er korrekt.
+        Kryss av for hvert testpunkt som er bestått. Ved feil: legg igjen en kommentar med beskrivelse og skjermbilder.
+
+  - type: input
+    id: versjon
+    attributes:
+      label: Versjon
+      description: Hvilken versjon testes?
+      placeholder: "1.13.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: miljø
+    attributes:
+      label: Miljø
+      description: Er dette en ny installasjon eller en oppgradering?
+      options:
+        - Ny installasjon (fresh)
+        - Oppgradering (upgrade)
+    validations:
+      required: true
+
+  - type: input
+    id: tester
+    attributes:
+      label: Tester
+      description: Hvem utfører testen?
+      placeholder: Navn eller GitHub brukernavn
+    validations:
+      required: true
+
+  - type: dropdown
+    id: nettleser
+    attributes:
+      label: Nettleser
+      options:
+        - Microsoft Edge
+        - Chrome
+        - Firefox
+        - Safari
+    validations:
+      required: true
+
+  - type: input
+    id: tenant-url
+    attributes:
+      label: Tenant URL
+      description: URL til prosjektområdet som testes
+      placeholder: "https://contoso.sharepoint.com/sites/pp365-prosjekt"
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 📅 Prosjekttidslinje (Project Timeline)
+
+  - type: checkboxes
+    id: project-timeline
+    attributes:
+      label: Prosjekttidslinje
+      description: Test tidslinje-webdelen for prosjekt
+      options:
+        - label: "Webdelen laster og elementer vises riktig på tidslinjen"
+        - label: "Gå gjennom innstillinger og verifiser at endringer fungerer"
+        - label: "Metadata i popover dukker opp og vises riktig ved klikk på tidslinjeelement"
+        - label: "Filterpanel fungerer som det skal"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## ℹ️ Prosjektinformasjon (Project Information)
+
+  - type: checkboxes
+    id: project-information
+    attributes:
+      label: Prosjektinformasjon
+      description: Test prosjektinformasjon-webdelen
+      options:
+        - label: "Gå gjennom innstillinger og verifiser at endringer fungerer"
+        - label: "Alle knapper fungerer som de skal"
+        - label: "Prosjektstatus dukker opp i bunnen når dette er angitt"
+        - label: "Overordnede prosjekter dukker opp i bunnen når dette er angitt"
+        - label: "Kolonner med angitte verdier vises korrekt"
+
+  - type: checkboxes
+    id: project-information-panel
+    attributes:
+      label: Prosjektinformasjon — Vis all prosjektinformasjon
+      description: Test panelet for full prosjektinformasjon
+      options:
+        - label: "Informasjonen dukker opp korrekt i panelet"
+
+  - type: checkboxes
+    id: project-information-edit
+    attributes:
+      label: Prosjektinformasjon — Rediger prosjektinformasjon
+      description: Test redigeringspanelet
+      options:
+        - label: "Alle felter fungerer som de skal"
+        - label: "Rekkefølgen stemmer med det som vises"
+        - label: "Endringer lagres korrekt"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 🔄 Prosjektfaser (Project Phases)
+
+  - type: checkboxes
+    id: project-phases
+    attributes:
+      label: Prosjektfaser
+      description: Test prosjektfaser-webdelen og fasebytting
+      options:
+        - label: "Fasebytting fungerer som det skal"
+        - label: "Fasepunkter dukker opp og handlinger kan utføres"
+        - label: "Gå gjennom innstillinger og verifiser at endringer fungerer"
+        - label: "Informasjon om fasen ved klikk dukker opp som det skal"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 📈 Prosjektstatus (Project Status)
+
+  - type: checkboxes
+    id: project-status
+    attributes:
+      label: Prosjektstatus
+      description: Test prosjektstatus-webdelen
+      options:
+        - label: "Du kan opprette en ny statusrapport"
+        - label: "Felter ved redigering/opprettelse er korrekt med oppsett"
+        - label: "Du kan redigere en statusrapport"
+        - label: "Du kan åpne øyeblikksbilde av statusrapport"
+        - label: "Du kan hente fram tidligere publiserte rapporter fra nedtrekk"
+        - label: "Du kan slette 'ikke publiserte' rapporter"
+        - label: "Du kan hoppe mellom seksjoner fra navigasjonslinjen"
+        - label: "Statusseksjoner viser data riktig"
+        - label: "Du kan IKKE redigere/slette publiserte rapporter"
+        - label: "Gå gjennom innstillinger og verifiser at endringer fungerer"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 🎯 Mulighetsmatrise (Opportunity Matrix)
+
+  - type: checkboxes
+    id: opportunity-matrix
+    attributes:
+      label: Mulighetsmatrise
+      description: Test mulighetsmatrise-webdelen
+      options:
+        - label: "Usikkerhetselementer dukker opp på matrisen"
+        - label: "Elementene dukker opp i listen under matrisen"
+        - label: "Vis før/etter tiltak fungerer"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## ⚠️ Risikomatrise (Risk Matrix)
+
+  - type: checkboxes
+    id: risk-matrix
+    attributes:
+      label: Risikomatrise
+      description: Test risikomatrise-webdelen
+      options:
+        - label: "Usikkerhetselementer dukker opp på matrisen"
+        - label: "Elementene dukker opp i listen under matrisen"
+        - label: "Vis før/etter tiltak fungerer"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 📊 Gevinstoversikt (Project Aggregation)
+
+  - type: checkboxes
+    id: project-aggregation-list
+    attributes:
+      label: Gevinstoversikt — Liste
+      description: Test listevisningen
+      options:
+        - label: "Listen laster korrekt med data"
+        - label: "Bytting av visning fungerer"
+        - label: "Visnings-ID legger seg i adressefeltet"
+        - label: "Eksport til Excel fungerer"
+        - label: "Eksport til Excel fungerer for valgte prosjekter"
+        - label: "Filterpanel fungerer som det skal"
+
+  - type: checkboxes
+    id: project-aggregation-columns
+    attributes:
+      label: Gevinstoversikt — Vis/skjul kolonner
+      description: Test EditViewColumnsPanel
+      options:
+        - label: "Rekkefølgen stemmer med det som vises"
+        - label: "Du kan endre rekkefølgen på kolonner"
+        - label: "Du kan skjule/vise ulike kolonner"
+
+  - type: checkboxes
+    id: project-aggregation-column-form
+    attributes:
+      label: Gevinstoversikt — Kolonneskjema
+      description: Test ColumnFormPanel (legg til og rediger)
+      options:
+        - label: "Legg til: Alle felter fungerer som de skal"
+        - label: "Legg til: Ny kolonne vises riktig"
+        - label: "Rediger: Alle felter fungerer som de skal"
+        - label: "Rediger: Endret kolonne vises riktig"
+
+  - type: checkboxes
+    id: project-aggregation-view-form
+    attributes:
+      label: Gevinstoversikt — Visningsskjema
+      description: Test ViewFormPanel (legg til og rediger)
+      options:
+        - label: "Legg til: Alle felter fungerer som de skal"
+        - label: "Legg til: Ny visning vises riktig"
+        - label: "Legg til: Visningen blir angitt riktig nivå (Prosjekt)"
+        - label: "Rediger: Alle felter fungerer som de skal"
+        - label: "Rediger: Endret visning vises riktig"
+
+  - type: checkboxes
+    id: project-aggregation-settings
+    attributes:
+      label: Gevinstoversikt — Innstillinger
+      description: Test webdelinnstillinger
+      options:
+        - label: "Gå gjennom innstillinger og verifiser at endringer fungerer"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## ⚠️ Usikkerhetstiltak
+
+  - type: checkboxes
+    id: usikkerhetstiltak
+    attributes:
+      label: Usikkerhetstiltak
+      description: Test usikkerhetstiltak med Planner-integrasjon
+      options:
+        - label: "Opprettelse av tiltak til Planner fungerer"
+        - label: "Oppdatering og synkronisering av tiltak fungerer"
+
+  - type: textarea
+    id: kommentarer
+    attributes:
+      label: Kommentarer og feil
+      description: Beskriv eventuelle feil eller avvik du finner. Legg ved skjermbilder.
+    validations:
+      required: false

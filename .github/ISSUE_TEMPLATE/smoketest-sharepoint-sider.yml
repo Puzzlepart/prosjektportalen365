@@ -1,0 +1,191 @@
+name: "🧪 Smoke test: SharePoint-sider"
+description: Smoke test for SharePoint-sider og konfigurasjon
+labels: ["smoke-test", "SharePoint-sider"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 📃 Smoke test — SharePoint-sider og konfigurasjon
+
+        Gå gjennom konfigurasjons- og innstillingssider og verifiser at funksjonaliteten er korrekt.
+        Kryss av for hvert testpunkt som er bestått. Ved feil: legg igjen en kommentar med beskrivelse og skjermbilder.
+
+  - type: input
+    id: versjon
+    attributes:
+      label: Versjon
+      description: Hvilken versjon testes?
+      placeholder: "1.13.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: miljø
+    attributes:
+      label: Miljø
+      description: Er dette en ny installasjon eller en oppgradering?
+      options:
+        - Ny installasjon (fresh)
+        - Oppgradering (upgrade)
+    validations:
+      required: true
+
+  - type: input
+    id: tester
+    attributes:
+      label: Tester
+      description: Hvem utfører testen?
+      placeholder: Navn eller GitHub brukernavn
+    validations:
+      required: true
+
+  - type: dropdown
+    id: nettleser
+    attributes:
+      label: Nettleser
+      options:
+        - Microsoft Edge
+        - Chrome
+        - Firefox
+        - Safari
+    validations:
+      required: true
+
+  - type: input
+    id: tenant-url
+    attributes:
+      label: Tenant URL
+      description: URL til porteføljeområdet som testes
+      placeholder: "https://contoso.sharepoint.com/sites/pp365"
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## ⚙️ Konfigurasjon av Prosjektportalen
+
+  - type: checkboxes
+    id: konfigurasjon
+    attributes:
+      label: Konfigurasjon av Prosjektportalen
+      description: Test konfigurasjonsiden og alle lenker
+      options:
+        - label: "Alle knapper/lenker fører til riktig side"
+        - label: "Siden er tilgjengelig som admin"
+        - label: "Siden er IKKE tilgjengelig for vanlige brukere"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 🌐 Globale innstillinger
+
+  - type: checkboxes
+    id: globale-innstillinger
+    attributes:
+      label: Globale innstillinger
+      description: Test alle globale innstillinger
+      options:
+        - label: "Alle innstillinger fungerer som de skal"
+        - label: "Endringer i innstillinger reflekteres korrekt i løsningen"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 📅 Tidslinjekonfigurasjon
+
+  - type: checkboxes
+    id: tidslinje-konfigurasjon
+    attributes:
+      label: Tidslinjekonfigurasjon
+      description: Test tidslinjekonfigurasjonen
+      options:
+        - label: "Tidslinjekonfigurasjon-listen er tilgjengelig"
+        - label: "Endringer reflekteres korrekt i tidslinjewebdeler"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 💡 Idékonfigurasjon
+
+  - type: checkboxes
+    id: idé-konfigurasjon
+    attributes:
+      label: Idékonfigurasjon
+      description: Test idékonfigurasjonen
+      options:
+        - label: "Idékonfigurasjon-listen er tilgjengelig"
+        - label: "Endringer reflekteres korrekt i idé-arbeidsflyten"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## ❓ Hjelpeinnhold konfigurasjon
+
+  - type: checkboxes
+    id: hjelpeinnhold-konfigurasjon
+    attributes:
+      label: Hjelpeinnhold konfigurasjon
+      description: Test hjelpeinnhold-konfigurasjonen
+      options:
+        - label: "Hjelpeinnhold-listen er tilgjengelig"
+        - label: "Nytt hjelpeinnhold vises korrekt i footer etter opprettelse"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 🔗 Nyttige lenker
+
+  - type: checkboxes
+    id: nyttige-lenker
+    attributes:
+      label: Nyttige lenker
+      description: Test lenkelisten
+      options:
+        - label: "Lenkelisten er tilgjengelig"
+        - label: "Nye lenker vises korrekt i footer"
+        - label: "Admin-lenker vises kun for administratorer"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 🔐 Tillatelseskonfigurasjon
+
+  - type: checkboxes
+    id: tillatelser
+    attributes:
+      label: Tillatelseskonfigurasjon
+      description: Test tillatelseskonfigurasjon
+      options:
+        - label: "Tillatelseskonfigurasjon er tilgjengelig"
+        - label: "Endringer i tillatelser fungerer korrekt"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 👤 Prosjektadministrasjonsroller
+
+  - type: checkboxes
+    id: admin-roller
+    attributes:
+      label: Prosjektadministrasjonsroller
+      description: Test prosjektadministrasjonsroller
+      options:
+        - label: "Rollekonfigurasjon er tilgjengelig"
+        - label: "Roller tildeles og fungerer korrekt"
+
+  - type: textarea
+    id: kommentarer
+    attributes:
+      label: Kommentarer og feil
+      description: Beskriv eventuelle feil eller avvik du finner. Legg ved skjermbilder.
+    validations:
+      required: false

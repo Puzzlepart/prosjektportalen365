@@ -1,0 +1,149 @@
+name: "🧪 Smoke test: ProjectExtensions"
+description: Smoke test for ProjectExtensions package
+labels: ["smoke-test", "ProjectExtensions"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 📦 Smoke test — ProjectExtensions
+
+        Gå gjennom hver extension og verifiser at funksjonaliteten er korrekt.
+        Kryss av for hvert testpunkt som er bestått. Ved feil: legg igjen en kommentar med beskrivelse og skjermbilder.
+
+  - type: input
+    id: versjon
+    attributes:
+      label: Versjon
+      description: Hvilken versjon testes?
+      placeholder: "1.13.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: miljø
+    attributes:
+      label: Miljø
+      description: Er dette en ny installasjon eller en oppgradering?
+      options:
+        - Ny installasjon (fresh)
+        - Oppgradering (upgrade)
+    validations:
+      required: true
+
+  - type: input
+    id: tester
+    attributes:
+      label: Tester
+      description: Hvem utfører testen?
+      placeholder: Navn eller GitHub brukernavn
+    validations:
+      required: true
+
+  - type: dropdown
+    id: nettleser
+    attributes:
+      label: Nettleser
+      options:
+        - Microsoft Edge
+        - Chrome
+        - Firefox
+        - Safari
+    validations:
+      required: true
+
+  - type: input
+    id: tenant-url
+    attributes:
+      label: Tenant URL
+      description: URL til prosjektområdet som testes
+      placeholder: "https://contoso.sharepoint.com/sites/pp365-prosjekt"
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 📝 Dokumentmalvelger (Template Selector)
+
+  - type: checkboxes
+    id: template-selector
+    attributes:
+      label: Dokumentmalvelger
+      description: Test dokumentmalvelger-kommandoen i dokumentbibliotek
+      options:
+        - label: "Du får opprettet dokumenter fra malvelgeren"
+        - label: "Felter og metadata følger med til opprettet dokument"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 🚀 Prosjektoppsett (Project Setup)
+
+  - type: checkboxes
+    id: project-setup
+    attributes:
+      label: Prosjektoppsett
+      description: Test prosjektoppsett-dialogen som dukker opp ved nytt prosjekt
+      options:
+        - label: "Prosjektoppsett-dialog dukker opp ved første besøk"
+        - label: "Alle faner i dialogen fungerer som de skal"
+        - label: "Maler fungerer som tiltenkt basert på oppsett"
+
+  - type: checkboxes
+    id: project-setup-autocomplete
+    attributes:
+      label: Prosjektoppsett — AutoComplete
+      description: Test søkefunksjonen i prosjektoppsett
+      options:
+        - label: "Søket fungerer og elementer dukker opp som de skal"
+        - label: "Valgt element fyller ut felter korrekt"
+
+  - type: checkboxes
+    id: project-setup-prosjektdata
+    attributes:
+      label: Prosjektoppsett — Prosjektdata fra idé
+      description: Test at prosjektdata fra idémodulen vises i prosjektoppsett
+      options:
+        - label: "Informasjon om prosjektdata funnet dukker opp i prosjektoppsett-dialog"
+        - label: "Prosjektdata følger med inn i prosjektinformasjon etter opprettelse"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## ⬆️ Prosjektoppgradering (Project Upgrade)
+
+  - type: checkboxes
+    id: project-upgrade
+    attributes:
+      label: Prosjektoppgradering
+      description: Test oppgradering til overordnet prosjekt
+      options:
+        - label: "'Gjør om til overordnet prosjekt' fungerer som det skal"
+        - label: "Knappen blir skjult etter oppgradering"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## ⚠️ Usikkerhetstiltak (Risk Action)
+
+  - type: checkboxes
+    id: risk-action
+    attributes:
+      label: Usikkerhetstiltak
+      description: Test usikkerhetstiltak-funksjonaliteten med Planner-integrasjon
+      options:
+        - label: "Opprettelse av tiltak til Planner fungerer"
+        - label: "Oppdatering av tiltak synkroniseres mellom SharePoint og Planner"
+        - label: "Felt-rendering av tiltaksstatus vises korrekt i listen"
+
+  - type: textarea
+    id: kommentarer
+    attributes:
+      label: Kommentarer og feil
+      description: Beskriv eventuelle feil eller avvik du finner. Legg ved skjermbilder.
+    validations:
+      required: false

@@ -1,0 +1,283 @@
+name: "🧪 Smoke test: PortfolioWebParts"
+description: Smoke test for PortfolioWebParts package
+labels: ["smoke-test", "PortfolioWebParts"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 📦 Smoke test — PortfolioWebParts
+
+        Gå gjennom hver webdel og verifiser at funksjonaliteten er korrekt.
+        Kryss av for hvert testpunkt som er bestått. Ved feil: legg igjen en kommentar med beskrivelse og skjermbilder.
+
+  - type: input
+    id: versjon
+    attributes:
+      label: Versjon
+      description: Hvilken versjon testes?
+      placeholder: "1.13.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: miljø
+    attributes:
+      label: Miljø
+      description: Er dette en ny installasjon eller en oppgradering?
+      options:
+        - Ny installasjon (fresh)
+        - Oppgradering (upgrade)
+    validations:
+      required: true
+
+  - type: input
+    id: tester
+    attributes:
+      label: Tester
+      description: Hvem utfører testen?
+      placeholder: Navn eller GitHub brukernavn
+    validations:
+      required: true
+
+  - type: dropdown
+    id: nettleser
+    attributes:
+      label: Nettleser
+      options:
+        - Microsoft Edge
+        - Chrome
+        - Firefox
+        - Safari
+    validations:
+      required: true
+
+  - type: input
+    id: tenant-url
+    attributes:
+      label: Tenant URL
+      description: URL til porteføljeområdet som testes
+      placeholder: "https://contoso.sharepoint.com/sites/pp365"
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 🕐 Siste prosjekter (Latest Projects)
+
+  - type: checkboxes
+    id: latest-projects
+    attributes:
+      label: Siste prosjekter
+      description: Test 'Siste prosjekter'-webdelen
+      options:
+        - label: "Prosjekter listes opp korrekt"
+        - label: "Prosjektlogo kan slås av/på via innstillinger"
+        - label: "'Vis flere' fungerer og laster flere prosjekter"
+        - label: "Justering av antall prosjekter å vise fungerer"
+        - label: "Klikk på prosjekt navigerer til riktig prosjektside"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 📊 Porteføljeaggregering (Portfolio Aggregation)
+
+  - type: checkboxes
+    id: portfolio-aggregation-list
+    attributes:
+      label: Porteføljeaggregering — Liste
+      description: Test listevisningen
+      options:
+        - label: "Listen laster korrekt med data"
+        - label: "Bytting av visning fungerer"
+        - label: "Visnings-ID legger seg i adressefeltet"
+        - label: "Eksport til Excel fungerer"
+        - label: "Eksport til Excel fungerer for valgte prosjekter"
+        - label: "Filterpanel åpnes og filtrering fungerer korrekt"
+
+  - type: checkboxes
+    id: portfolio-aggregation-columns
+    attributes:
+      label: Porteføljeaggregering — Vis/skjul kolonner
+      description: Test EditViewColumnsPanel
+      options:
+        - label: "Rekkefølgen stemmer med det som vises i listen"
+        - label: "Du kan endre rekkefølgen på kolonner (dra og slipp)"
+        - label: "Du kan skjule/vise ulike kolonner"
+
+  - type: checkboxes
+    id: portfolio-aggregation-column-form
+    attributes:
+      label: Porteføljeaggregering — Kolonneskjema
+      description: Test ColumnFormPanel (legg til og rediger)
+      options:
+        - label: "Legg til: Alle felter fungerer som de skal"
+        - label: "Legg til: Ny kolonne vises riktig i listen"
+        - label: "Rediger: Alle felter fungerer som de skal"
+        - label: "Rediger: Endret kolonne vises riktig"
+
+  - type: checkboxes
+    id: portfolio-aggregation-view-form
+    attributes:
+      label: Porteføljeaggregering — Visningsskjema
+      description: Test ViewFormPanel (legg til og rediger)
+      options:
+        - label: "Legg til: Alle felter fungerer som de skal"
+        - label: "Legg til: Ny visning vises riktig"
+        - label: "Rediger: Alle felter fungerer som de skal"
+        - label: "Rediger: Endret visning vises riktig"
+
+  - type: checkboxes
+    id: portfolio-aggregation-settings
+    attributes:
+      label: Porteføljeaggregering — Innstillinger
+      description: Test webdelinnstillinger
+      options:
+        - label: "Gå gjennom innstillinger og verifiser at endringer fungerer"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 🗂️ Porteføljeoversikt (Portfolio Overview)
+
+  - type: checkboxes
+    id: portfolio-overview-list
+    attributes:
+      label: Porteføljeoversikt — Liste
+      description: Test listevisningen
+      options:
+        - label: "Listen laster korrekt med data"
+        - label: "Bytting av visning fungerer"
+        - label: "Visnings-ID legger seg i adressefeltet"
+
+  - type: checkboxes
+    id: portfolio-overview-columns
+    attributes:
+      label: Porteføljeoversikt — Vis/skjul kolonner
+      description: Test EditViewColumnsPanel
+      options:
+        - label: "Rekkefølgen stemmer med det som vises"
+        - label: "Du kan endre rekkefølgen på kolonner"
+        - label: "Du kan skjule/vise ulike kolonner"
+
+  - type: checkboxes
+    id: portfolio-overview-column-form
+    attributes:
+      label: Porteføljeoversikt — Kolonneskjema
+      description: Test ColumnFormPanel (legg til og rediger)
+      options:
+        - label: "Legg til: Alle felter fungerer som de skal"
+        - label: "Legg til: Ny kolonne vises riktig"
+        - label: "Rediger: Alle felter fungerer som de skal"
+        - label: "Rediger: Endret kolonne vises riktig"
+
+  - type: checkboxes
+    id: portfolio-overview-view-form
+    attributes:
+      label: Porteføljeoversikt — Visningsskjema
+      description: Test ViewFormPanel (legg til og rediger)
+      options:
+        - label: "Legg til: Alle felter fungerer som de skal"
+        - label: "Legg til: Ny visning vises riktig"
+        - label: "Legg til: Visningen blir angitt riktig nivå (Portefølje)"
+        - label: "Rediger: Alle felter fungerer som de skal"
+        - label: "Rediger: Endret visning vises riktig"
+
+  - type: checkboxes
+    id: portfolio-overview-settings
+    attributes:
+      label: Porteføljeoversikt — Innstillinger
+      description: Test webdelinnstillinger
+      options:
+        - label: "Gå gjennom innstillinger og verifiser at endringer fungerer"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 📋 Prosjektliste (Project List)
+
+  - type: checkboxes
+    id: project-list
+    attributes:
+      label: Prosjektliste
+      description: Test 'Prosjektliste'-webdelen
+      options:
+        - label: "Prosjekter vises riktig"
+        - label: "Gå gjennom innstillinger og verifiser at endringer fungerer"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 👥 Ressursallokering (Resource Allocation)
+
+  - type: checkboxes
+    id: resource-allocation
+    attributes:
+      label: Ressursallokering
+      description: Test 'Ressursallokering'-webdelen
+      options:
+        - label: "Webdelen laster og elementer vises riktig på tidslinjen"
+        - label: "Gå gjennom innstillinger og verifiser at endringer fungerer"
+        - label: "Metadata i popover dukker opp og vises riktig ved klikk på tidslinjeelement"
+        - label: "Filterpanel fungerer som det skal"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 📅 Porteføljetidslinje (Project Timeline)
+
+  - type: checkboxes
+    id: portfolio-timeline
+    attributes:
+      label: Porteføljetidslinje
+      description: Test 'Porteføljetidslinje'-webdelen
+      options:
+        - label: "Webdelen laster og elementer vises riktig på tidslinjen"
+        - label: "Gå gjennom innstillinger og verifiser at endringer fungerer"
+        - label: "Metadata i popover dukker opp og vises riktig ved klikk på tidslinjeelement"
+        - label: "Filterpanel fungerer som det skal"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 💡 Idémodul (Idea Module)
+
+  - type: checkboxes
+    id: idea-module
+    attributes:
+      label: Idémodul
+      description: Test 'Idémodul'-webdelen
+      options:
+        - label: "Webdelen laster og viser idéer korrekt"
+        - label: "Gå gjennom innstillinger og verifiser at endringer fungerer"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 🚀 Prosjektopprettelse (Project Provision)
+
+  - type: checkboxes
+    id: project-provision
+    attributes:
+      label: Prosjektopprettelse
+      description: Test prosjektopprettelsesportalen
+      options:
+        - label: "Opprettelsesveiviseren laster korrekt"
+        - label: "Klassifisering og tilleggsinformasjon-steg fungerer"
+        - label: "Prosjekt opprettes med riktige metadata"
+
+  - type: textarea
+    id: kommentarer
+    attributes:
+      label: Kommentarer og feil
+      description: Beskriv eventuelle feil eller avvik du finner. Legg ved skjermbilder.
+    validations:
+      required: false

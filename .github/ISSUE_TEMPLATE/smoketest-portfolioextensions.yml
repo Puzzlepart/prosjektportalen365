@@ -1,0 +1,238 @@
+name: "🧪 Smoke test: PortfolioExtensions"
+description: Smoke test for PortfolioExtensions package
+labels: ["smoke-test", "PortfolioExtensions"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 📦 Smoke test — PortfolioExtensions
+
+        Gå gjennom hver komponent og verifiser at funksjonaliteten er korrekt.
+        Kryss av for hvert testpunkt som er bestått. Ved feil: legg igjen en kommentar med beskrivelse og skjermbilder.
+
+  - type: input
+    id: versjon
+    attributes:
+      label: Versjon
+      description: Hvilken versjon testes?
+      placeholder: "1.13.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: miljø
+    attributes:
+      label: Miljø
+      description: Er dette en ny installasjon eller en oppgradering?
+      options:
+        - Ny installasjon (fresh)
+        - Oppgradering (upgrade)
+    validations:
+      required: true
+
+  - type: input
+    id: tester
+    attributes:
+      label: Tester
+      description: Hvem utfører testen?
+      placeholder: Navn eller GitHub brukernavn
+    validations:
+      required: true
+
+  - type: dropdown
+    id: nettleser
+    attributes:
+      label: Nettleser
+      options:
+        - Microsoft Edge
+        - Chrome
+        - Firefox
+        - Safari
+    validations:
+      required: true
+
+  - type: input
+    id: tenant-url
+    attributes:
+      label: Tenant URL
+      description: URL til porteføljeområdet som testes
+      placeholder: "https://contoso.sharepoint.com/sites/pp365"
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 🦶 Footer
+
+  - type: checkboxes
+    id: footer
+    attributes:
+      label: Footer
+      description: Test footer-komponenten på porteføljenivå
+      options:
+        - label: "Footeren vises for medlemmer"
+        - label: "Områdeinnstillinger er klikkbar og navigerer til riktig side (admin, kun på hub)"
+        - label: "Områdeinnstillinger → 'Områdeinnhold' menyvalg fungerer"
+        - label: "Konfigurasjon av Prosjektportalen er klikkbar og fører til konfigurasjonsside (admin)"
+        - label: "Konfigurasjon av Prosjektportalen er SKJULT for ikke-admin brukere"
+        - label: "Nyttige lenker vises korrekt med riktige URL-er"
+        - label: "Admin-lenker vises KUN for administratorer"
+        - label: "Tooltip-lenke til 'Lenker'-listen er klikkbar"
+        - label: "Versjonsnummer vises med kanal og er klikkbart"
+        - label: "Versjonsinfo-popover viser GitHub release-sammenligning"
+        - label: "Hjelp-knappen viser 'Hjelp tilgjengelig' på sider med hjelpeinnhold"
+        - label: "Hjelp-knappen viser 'Hjelp utilgjengelig' på sider uten hjelpeinnhold"
+        - label: "Hjelp-dialog åpnes med riktig innhold for gjeldende side"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## ⭐ Favorittprosjekter
+
+  - type: checkboxes
+    id: favorittprosjekter
+    attributes:
+      label: Favorittprosjekter
+      description: Test favorittprosjekter-komponenten i footer
+      options:
+        - label: "Favorittprosjekter-knappen vises i footer"
+        - label: "Popover åpnes og viser fulgte prosjekter som lenker"
+        - label: "Klikk på prosjekt-lenke navigerer til riktig prosjektside"
+        - label: "Melding vises når ingen prosjekter er fulgt"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 🤖 Assistent
+
+  - type: checkboxes
+    id: assistent
+    attributes:
+      label: Assistent
+      description: Test AI-assistent-funksjonen i footer (krever at UseAssistant er aktivert i globale innstillinger)
+      options:
+        - label: "Assistent-knapp vises når UseAssistant er aktivert og bruker har tilgang"
+        - label: "Assistent-knapp er SKJULT når UseAssistant er deaktivert"
+        - label: "Assistent-knapp er SKJULT når bruker ikke har tilgang (RequireAssistantAccess)"
+        - label: "Klikk på Assistent-knapp åpner drawer med iframe"
+        - label: "Innstillinger-knapp i drawer er synlig for admin og åpner globale innstillinger"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## ❓ Hjelpeinnhold
+
+  - type: checkboxes
+    id: hjelpeinnhold
+    attributes:
+      label: Hjelpeinnhold
+      description: Test hjelpeinnhold-dialogen
+      options:
+        - label: "Innhold for gjeldende side vises korrekt"
+        - label: "Sider med flere hjelpeartikler viser faner som kan navigeres"
+        - label: "Innhold med annet nivå enn gjeldende side vises IKKE"
+        - label: "Innhold med angitt nivå (Portefølje/Prosjekt) vises korrekt"
+        - label: "Markdown-innhold med bilder rendres riktig"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 💡 Idéregistrering
+
+  - type: checkboxes
+    id: idéregistrering
+    attributes:
+      label: Idéregistrering
+      description: Test idéregistrering-kommandoer og dialog
+      options:
+        - label: "'Sett anbefaling'-knapp dukker opp ved markering av listeelement"
+        - label: "'Gå til idébehandling'-knapp dukker opp ved markering av listeelement"
+        - label: "Knapper er SKJULT for brukere som IKKE er i Idébehandlere-gruppen"
+        - label: "Dialog åpnes med handlingsvalg (godkjenn/vurder/avvis) og kommentarfelt"
+        - label: "Dialog krever både valg og kommentar før innsending"
+        - label: "Godkjenning av idé oppretter Idébehandling-element med korrekte feltverdier"
+        - label: "Godkjenning av idé oppretter KUR-side som lenkes til fra Idébehandling-elementet"
+        - label: "Anbefaling og kommentar lagres på idéregistrering-elementet"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 🔄 Idébehandling
+
+  - type: checkboxes
+    id: idébehandling
+    attributes:
+      label: Idébehandling
+      description: Test idébehandling-kommandoer og dialog
+      options:
+        - label: "'Sett anbefaling'-knapp dukker opp ved markering av listeelement"
+        - label: "'Opprett prosjektdata'-knapp dukker opp ved markering av listeelement"
+        - label: "Knapper er SKJULT for brukere som IKKE er i Idébehandlere-gruppen"
+        - label: "Du kommer til KUR-siden fra behandlingslisten"
+        - label: "Dialog åpnes med handlingsvalg og kommentarfelt"
+        - label: "Allerede godkjent idé viser varselmelding"
+        - label: "Beslutning og kommentar lagres korrekt på idébehandling-elementet"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 📊 Idé prosjektdata
+
+  - type: checkboxes
+    id: idé-prosjektdata
+    attributes:
+      label: Idé prosjektdata
+      description: Test opprettelse av prosjektdata fra idébehandling
+      options:
+        - label: "Dialog viser korrekt melding for godkjent idé"
+        - label: "Dialog er DEAKTIVERT for ikke-godkjente idéer"
+        - label: "Dialog er BLOKKERT hvis prosjektdata allerede er opprettet"
+        - label: "Prosjektdata opprettes med riktig tittel og finansnavn"
+        - label: "Etter opprettelse: redirect til redigeringsskjema for prosjektdata"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 📄 Idé KUR-sider
+
+  - type: checkboxes
+    id: idé-kur
+    attributes:
+      label: Idé KUR-sider
+      description: Test KUR-sider opprettet fra idéregistrering
+      options:
+        - label: "KUR-siden inneholder informasjonen fra idéregistreringen"
+        - label: "KUR-siden er tilgjengelig via lenke fra idébehandling-elementet"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 🔗 Prosjektdata → Prosjektoppsett
+
+  - type: checkboxes
+    id: prosjektdata-oppsett
+    attributes:
+      label: Prosjektdata → Prosjektoppsett
+      description: Test at prosjektdata fra idé flyter til prosjektoppsett
+      options:
+        - label: "Fyll ut metadata og angi områdeadresse til reelt prosjekt på prosjektdata-elementet"
+        - label: "Informasjon om prosjektdata funnet dukker opp i prosjektoppsett-dialog"
+        - label: "Prosjektdata følger med inn i prosjektinformasjon etter opprettelse av prosjekt"
+
+  - type: textarea
+    id: kommentarer
+    attributes:
+      label: Kommentarer og feil
+      description: Beskriv eventuelle feil eller avvik du finner. Legg ved skjermbilder.
+    validations:
+      required: false

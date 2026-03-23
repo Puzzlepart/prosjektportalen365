@@ -1,0 +1,238 @@
+name: "🧪 Smoke test: ProgramWebParts"
+description: Smoke test for ProgramWebParts package
+labels: ["smoke-test", "ProgramWebParts"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 📦 Smoke test — ProgramWebParts
+
+        Gå gjennom hver webdel og verifiser at funksjonaliteten er korrekt.
+        Kryss av for hvert testpunkt som er bestått. Ved feil: legg igjen en kommentar med beskrivelse og skjermbilder.
+
+  - type: input
+    id: versjon
+    attributes:
+      label: Versjon
+      description: Hvilken versjon testes?
+      placeholder: "1.13.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: miljø
+    attributes:
+      label: Miljø
+      description: Er dette en ny installasjon eller en oppgradering?
+      options:
+        - Ny installasjon (fresh)
+        - Oppgradering (upgrade)
+    validations:
+      required: true
+
+  - type: input
+    id: tester
+    attributes:
+      label: Tester
+      description: Hvem utfører testen?
+      placeholder: Navn eller GitHub brukernavn
+    validations:
+      required: true
+
+  - type: dropdown
+    id: nettleser
+    attributes:
+      label: Nettleser
+      options:
+        - Microsoft Edge
+        - Chrome
+        - Firefox
+        - Safari
+    validations:
+      required: true
+
+  - type: input
+    id: tenant-url
+    attributes:
+      label: Tenant URL
+      description: URL til programområdet som testes
+      placeholder: "https://contoso.sharepoint.com/sites/pp365-program"
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 🏗️ Programadministrasjon (Program Administration)
+
+  - type: checkboxes
+    id: program-administration
+    attributes:
+      label: Programadministrasjon
+      description: Test webdelen for administrasjon av programunderområder
+      options:
+        - label: "Gå gjennom innstillinger og verifiser at endringer fungerer"
+        - label: "Du kan legge til ett eller flere underområder"
+        - label: "Søk fungerer og treff dukker opp"
+        - label: "Søk fungerer i 'Legg til underområder'-dialogen"
+        - label: "Du kan fjerne ett eller flere underområder"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 📊 Programaggregering (Program Aggregation)
+
+  - type: checkboxes
+    id: program-aggregation-list
+    attributes:
+      label: Programaggregering — Liste
+      description: Test listevisningen
+      options:
+        - label: "Listen laster korrekt med data"
+        - label: "Bytting av visning fungerer"
+        - label: "Visnings-ID legger seg i adressefeltet"
+        - label: "Eksport til Excel fungerer"
+        - label: "Eksport til Excel fungerer for valgte prosjekter"
+        - label: "Filterpanel fungerer som det skal"
+
+  - type: checkboxes
+    id: program-aggregation-columns
+    attributes:
+      label: Programaggregering — Vis/skjul kolonner
+      description: Test EditViewColumnsPanel
+      options:
+        - label: "Rekkefølgen stemmer med det som vises"
+        - label: "Du kan endre rekkefølgen på kolonner"
+        - label: "Du kan skjule/vise ulike kolonner"
+
+  - type: checkboxes
+    id: program-aggregation-column-form
+    attributes:
+      label: Programaggregering — Kolonneskjema
+      description: Test ColumnFormPanel (legg til og rediger)
+      options:
+        - label: "Legg til: Alle felter fungerer som de skal"
+        - label: "Legg til: Ny kolonne vises riktig"
+        - label: "Rediger: Alle felter fungerer som de skal"
+        - label: "Rediger: Endret kolonne vises riktig"
+
+  - type: checkboxes
+    id: program-aggregation-view-form
+    attributes:
+      label: Programaggregering — Visningsskjema
+      description: Test ViewFormPanel (legg til og rediger)
+      options:
+        - label: "Legg til: Alle felter fungerer som de skal"
+        - label: "Legg til: Ny visning vises riktig"
+        - label: "Legg til: Visningen blir angitt riktig nivå (Program)"
+        - label: "Rediger: Alle felter fungerer som de skal"
+        - label: "Rediger: Endret visning vises riktig"
+
+  - type: checkboxes
+    id: program-aggregation-settings
+    attributes:
+      label: Programaggregering — Innstillinger
+      description: Test webdelinnstillinger
+      options:
+        - label: "Gå gjennom innstillinger og verifiser at endringer fungerer"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 🗂️ Programprosjektoversikt (Program Project Overview)
+
+  - type: checkboxes
+    id: program-project-overview-list
+    attributes:
+      label: Programprosjektoversikt — Liste
+      description: Test listevisningen
+      options:
+        - label: "Listen laster korrekt med data"
+        - label: "Bytting av visning fungerer"
+        - label: "Visnings-ID legger seg i adressefeltet"
+        - label: "Eksport til Excel fungerer"
+        - label: "Eksport til Excel fungerer for valgte prosjekter"
+        - label: "Filterpanel fungerer som det skal"
+
+  - type: checkboxes
+    id: program-project-overview-columns
+    attributes:
+      label: Programprosjektoversikt — Vis/skjul kolonner
+      description: Test EditViewColumnsPanel
+      options:
+        - label: "Rekkefølgen stemmer med det som vises"
+        - label: "Du kan endre rekkefølgen på kolonner"
+        - label: "Du kan skjule/vise ulike kolonner"
+
+  - type: checkboxes
+    id: program-project-overview-column-form
+    attributes:
+      label: Programprosjektoversikt — Kolonneskjema
+      description: Test ColumnFormPanel (legg til og rediger)
+      options:
+        - label: "Legg til: Alle felter fungerer som de skal"
+        - label: "Legg til: Ny kolonne vises riktig"
+        - label: "Rediger: Alle felter fungerer som de skal"
+        - label: "Rediger: Endret kolonne vises riktig"
+
+  - type: checkboxes
+    id: program-project-overview-view-form
+    attributes:
+      label: Programprosjektoversikt — Visningsskjema
+      description: Test ViewFormPanel (legg til og rediger)
+      options:
+        - label: "Legg til: Alle felter fungerer som de skal"
+        - label: "Legg til: Ny visning vises riktig"
+        - label: "Legg til: Visningen blir angitt riktig nivå (Program)"
+        - label: "Rediger: Alle felter fungerer som de skal"
+        - label: "Rediger: Endret visning vises riktig"
+
+  - type: checkboxes
+    id: program-project-overview-settings
+    attributes:
+      label: Programprosjektoversikt — Innstillinger
+      description: Test webdelinnstillinger
+      options:
+        - label: "Gå gjennom innstillinger og verifiser at endringer fungerer"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 📅 Programtidslinje (Program Timeline)
+
+  - type: checkboxes
+    id: program-timeline
+    attributes:
+      label: Programtidslinje
+      description: Test tidslinje-webdelen for program
+      options:
+        - label: "Webdelen laster og elementer vises riktig på tidslinjen"
+        - label: "Gå gjennom innstillinger og verifiser at endringer fungerer"
+        - label: "Metadata i popover dukker opp og vises riktig ved klikk på tidslinjeelement"
+        - label: "Filterpanel fungerer som det skal"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 📈 Programstatus (Program Status)
+
+  - type: checkboxes
+    id: program-status
+    attributes:
+      label: Programstatus
+      description: Test programstatus-webdelen
+      options:
+        - label: "Gå gjennom innstillinger og verifiser at endringer fungerer"
+
+  - type: textarea
+    id: kommentarer
+    attributes:
+      label: Kommentarer og feil
+      description: Beskriv eventuelle feil eller avvik du finner. Legg ved skjermbilder.
+    validations:
+      required: false
