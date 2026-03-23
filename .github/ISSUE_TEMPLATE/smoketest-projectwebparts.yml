@@ -1,5 +1,5 @@
 name: "🧪 Smoke test: ProjectWebParts"
-description: Smoke test for ProjectWebParts package
+description: "Smoke test for ProjectWebParts — Prosjektinformasjon, Prosjektfaser, Prosjektstatus, Tidslinje, Matriser, Gevinstoversikt, Dynamisk liste, Prosjektnyheter"
 labels: ["smoke-test", "ProjectWebParts"]
 body:
   - type: markdown
@@ -7,7 +7,11 @@ body:
       value: |
         ## 📦 Smoke test — ProjectWebParts
 
-        Gå gjennom hver webdel og verifiser at funksjonaliteten er korrekt.
+        Denne testen dekker 8 webdeler i ProjectWebParts-pakken:
+        **Prosjektinformasjon**, **Prosjektfaser**, **Prosjektstatus**,
+        **Prosjekttidslinje**, **Risikomatrise**, **Mulighetsmatrise**,
+        **Dynamisk liste** og **Prosjektnyheter**.
+
         Kryss av for hvert testpunkt som er bestått. Ved feil: legg igjen en kommentar med beskrivelse og skjermbilder.
 
   - type: input
@@ -60,205 +64,624 @@ body:
     validations:
       required: true
 
-  - type: markdown
-    attributes:
-      value: |
-        ---
-        ## 📅 Prosjekttidslinje (Project Timeline)
-
-  - type: checkboxes
-    id: project-timeline
-    attributes:
-      label: Prosjekttidslinje
-      description: Test tidslinje-webdelen for prosjekt
-      options:
-        - label: "Webdelen laster og elementer vises riktig på tidslinjen"
-        - label: "Gå gjennom innstillinger og verifiser at endringer fungerer"
-        - label: "Metadata i popover dukker opp og vises riktig ved klikk på tidslinjeelement"
-        - label: "Filterpanel fungerer som det skal"
+  # ──────────────────────────────────────────────────────────────────────
+  #  PROSJEKTINFORMASJON (ProjectInformation)
+  # ──────────────────────────────────────────────────────────────────────
 
   - type: markdown
     attributes:
       value: |
         ---
-        ## ℹ️ Prosjektinformasjon (Project Information)
+        # ℹ️ Prosjektinformasjon (ProjectInformation)
+        Viser prosjektegenskaper med handlingsknapper, overordnede/underordnede prosjekter,
+        arkiveringsstatus og siste statusrapport.
 
   - type: checkboxes
-    id: project-information
+    id: projinfo-visning
     attributes:
-      label: Prosjektinformasjon
-      description: Test prosjektinformasjon-webdelen
+      label: Prosjektinformasjon — Visning
+      description: >
+        Hovedvisningen viser prosjektegenskaper med verdier,
+        og kan inkludere overordnede/underordnede prosjekter og statusrapport.
       options:
-        - label: "Gå gjennom innstillinger og verifiser at endringer fungerer"
-        - label: "Alle knapper fungerer som de skal"
-        - label: "Prosjektstatus dukker opp i bunnen når dette er angitt"
-        - label: "Overordnede prosjekter dukker opp i bunnen når dette er angitt"
-        - label: "Kolonner med angitte verdier vises korrekt"
+        - label: "Webdelen laster og prosjektegenskaper vises korrekt (LoadingSkeleton vises under lasting)"
+        - label: "Kolonner med angitte verdier vises korrekt (tekst, dato, taksonomi, person, URL, tall, valg)"
+        - label: "Seksjonen «Overordnede prosjekter» vises med navn og beskrivelse når prosjektet tilhører et program"
+        - label: "Seksjonen «Underområder» vises for overordnede prosjekter (GtIsParentProject=true) med riktig antall (rowLimit)"
+        - label: "Seksjonen «Arkiveringsstatus» vises dersom aktivert (dokument- og listetellere)"
+        - label: "Seksjonen «Statusrapport» vises nederst med siste publiserte rapport (ikon + dato)"
+        - label: "Melding «Prosjektet er lastet uten tilgang på hub-området» vises for eksterne brukere"
 
   - type: checkboxes
-    id: project-information-panel
+    id: projinfo-handlinger
     attributes:
-      label: Prosjektinformasjon — Vis all prosjektinformasjon
-      description: Test panelet for full prosjektinformasjon
+      label: Prosjektinformasjon — Handlingsknapper
+      description: >
+        Verktøylinje med opptil 7 knapper, kontrollert av brukerrettigheter
+        og webdelinnstillinger (hideActions / hideAllActions).
       options:
-        - label: "Informasjonen dukker opp korrekt i panelet"
+        - label: "«Vis all prosjektinformasjon» (ContentView-ikon) — åpner panel med alle egenskaper"
+        - label: "«Vis versjonshistorikk» (History-ikon) — åpner versjonshistorikk (kun for redigerere)"
+        - label: "«Rediger prosjektinformasjon» (BoxEdit-ikon) — åpner redigeringspanel (kun for redigerere)"
+        - label: "«Rediger områdeinformasjon» (Info-ikon) — åpner SharePoint-sideinformasjon (kun for redigerere)"
+        - label: "«Administrer underområder» (Organization-ikon) — navigerer til adminside (kun for overordnede prosjekter)"
+        - label: "«Gjør om til overordnet prosjekt» (Organization-ikon) — viser bekreftelsesdialog (kun for ikke-overordnede med oppsettrettigheter)"
+        - label: "«Kjør oppsettveiviser» (Apps-ikon) — åpner dialog for å kjøre oppsett på nytt (kun for admins)"
+        - label: "Knapper kan skjules via webdelinnstillinger (hideActions/hideAllActions) — verifiser at skjulte knapper ikke vises"
 
   - type: checkboxes
-    id: project-information-edit
+    id: projinfo-vis-panel
     attributes:
-      label: Prosjektinformasjon — Rediger prosjektinformasjon
-      description: Test redigeringspanelet
+      label: Prosjektinformasjon — Vis all prosjektinformasjon (panel)
+      description: >
+        Panel (medium bredde, light dismiss) som viser alle prosjektegenskaper.
       options:
-        - label: "Alle felter fungerer som de skal"
-        - label: "Rekkefølgen stemmer med det som vises"
-        - label: "Endringer lagres korrekt"
+        - label: "Panelet åpnes med alle prosjektegenskaper inkludert de som ikke vises i hobbyvisning"
+        - label: "Panelet kan lukkes med X eller ved å klikke utenfor"
+
+  - type: checkboxes
+    id: projinfo-rediger-panel
+    attributes:
+      label: Prosjektinformasjon — Rediger prosjektinformasjon (panel)
+      description: >
+        CustomEditPanel for redigering av prosjektegenskaper.
+        Feltet GtProjectPhase (fase) er skjult i redigeringsvisningen.
+      options:
+        - label: "Redigeringspanelet åpnes med alle redigerbare felter"
+        - label: "Felttyper fungerer: tekst, dato (DatePicker), taksonomi (TaxonomyPicker), person (PeoplePicker), tall, valg, flervalg, URL"
+        - label: "Fasefeltet (GtProjectPhase) vises IKKE i redigeringspanelet"
+        - label: "«Lagre»-knappen lagrer endringer og oppdaterer visningen"
+        - label: "«Avbryt»-knappen lukker panelet uten å lagre"
+        - label: "Ved lagring: «Lagrer prosjektegenskaper...» vises, etterfulgt av «Synkroniserer prosjektegenskaper til porteføljeområdet...»"
+        - label: "Feilmelding vises ved lagringsfeil: «Det oppstod en feil under lagring av prosjektegenskaper»"
+
+  - type: checkboxes
+    id: projinfo-overordnet
+    attributes:
+      label: Prosjektinformasjon — Gjør om til overordnet prosjekt
+      description: >
+        Dialog for å konvertere prosjektet til et overordnet prosjekt (ikke reversibelt).
+      options:
+        - label: "Dialogen «Overordnet prosjekt» vises med tekst: «Ønsker du å gjøre om prosjektet til et overordnet prosjekt? Denne handlingen er ikke reversibel.»"
+        - label: "Bekreftelse kjører provisjonering med fremdriftsdialog «Setter opp overordnet prosjekt»"
+        - label: "Etter fullført oppsett lastes siden på nytt og «Gjør om»-knappen forsvinner"
+
+  - type: checkboxes
+    id: projinfo-innstillinger
+    attributes:
+      label: Prosjektinformasjon — Webdelinnstillinger
+      description: >
+        Property pane-innstillinger for webdelen.
+      options:
+        - label: "Innstilling «Skjul alle knapper» skjuler hele verktøylinjen"
+        - label: "Innstilling «Skjul knapper» (flervalg) skjuler spesifikke handlingsknapper"
+        - label: "Innstilling «Skjul overordnede prosjekter» skjuler overordnet-seksjonen"
+        - label: "Innstilling «Skjul underordnede prosjekter» skjuler underordnet-seksjonen"
+        - label: "Innstilling «Antall elementer» (4–100) begrenser antall underområder vist"
+        - label: "Innstilling «Skjul arkiveringsstatus» skjuler arkivseksjonen"
+        - label: "Innstilling «Skjul siste statusrapport» skjuler statusrapport-seksjonen"
+        - label: "Innstilling «Vis kun ikoner» viser statusrapport med bare ikoner (ingen tekst)"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  PROSJEKTFASER (ProjectPhases)
+  # ──────────────────────────────────────────────────────────────────────
 
   - type: markdown
     attributes:
       value: |
         ---
-        ## 🔄 Prosjektfaser (Project Phases)
+        # 🔄 Prosjektfaser (ProjectPhases)
+        Horisontal fasevelger med popover, fasebytte-dialog, sjekkpunkter,
+        arkivering og valgfrie webhooks/dynamisk hjemmeside.
 
   - type: checkboxes
-    id: project-phases
+    id: phases-visning
     attributes:
-      label: Prosjektfaser
-      description: Test prosjektfaser-webdelen og fasebytting
+      label: Prosjektfaser — Visning
+      description: >
+        Horisontal liste med faseknapper. Gjeldende fase er uthevet.
+        Sluttfase er skjult med mindre den er gjeldende eller forrige.
       options:
-        - label: "Fasebytting fungerer som det skal"
-        - label: "Fasepunkter dukker opp og handlinger kan utføres"
-        - label: "Gå gjennom innstillinger og verifiser at endringer fungerer"
-        - label: "Informasjon om fasen ved klikk dukker opp som det skal"
+        - label: "Faselisten vises horisontalt med riktige fasenavn fra taksonomien"
+        - label: "Gjeldende fase er visuelt uthevet (markert)"
+        - label: "Sluttfase (isEndPhase) er skjult med mindre den er gjeldende"
+        - label: "Startpil og avsluttende pil vises dersom konfigurert i innstillinger"
+        - label: "Fasetekst (beskrivelse) vises under fasenavn dersom «Vis fasetekst» er aktivert"
+        - label: "Feilmelding vises ved manglende tilgang: «Du har ikke tilgang til å se denne webdelen»"
+
+  - type: checkboxes
+    id: phases-popover
+    attributes:
+      label: Prosjektfaser — Popover ved klikk
+      description: >
+        Klikk på en fase åpner en popover med faseinfo, sjekkpunktstatus og handlingsknapper.
+      options:
+        - label: "Popover åpnes ved klikk på en fase med fasenavn og beskrivelse"
+        - label: "Sjekkpunktstatus vises: «X sjekkpunkt(er): [status]»"
+        - label: "Lenke «Gå til fasesjekklisten» vises dersom sjekkpunkter finnes"
+        - label: "Knappen «Endre til denne fasen» vises for faser som ikke er gjeldende"
+        - label: "For gjeldende fase vises tekst: «Dette er den gjeldende fasen. Det er derfor ikke mulig å endre til denne fasen.»"
+
+  - type: checkboxes
+    id: phases-endring
+    attributes:
+      label: Prosjektfaser — Fasebytte-dialog
+      description: >
+        Multi-stegs dialog ved fasebytte med sjekkpunkter, arkivvalg og bekreftelse.
+      options:
+        - label: "Dialogen «Endre til [fasenavn] fasen» åpnes med undertittel om hvilken fase man endrer fra/til"
+        - label: "Sjekkpunkter vises med tre statusvalg per punkt: Utført, Ikke relevant, Fortsatt åpen"
+        - label: "Statusene «Ikke relevant» og «Fortsatt åpen» krever obligatorisk kommentar i tekstfelt"
+        - label: "Tooltip visees ved forsøk på å sette status uten kommentar: «Du kan ikke sette sjekkpunktet som 'Ikke relevant' uten å legge inn en kommentar»"
+        - label: "Obligatoriske sjekkpunkter vises med melding: «Sjekkpunkter for endring til denne fasen er obligatoriske og kan ikke hoppes over»"
+        - label: "Knappen «Gå videre» går videre til arkivvisning eller bekreftelse"
+        - label: "Knappen «Hopp over alle» hopper over sjekkpunkter (dersom ikke obligatoriske)"
+
+  - type: checkboxes
+    id: phases-arkivering
+    attributes:
+      label: Prosjektfaser — Arkivering ved fasebytte
+      description: >
+        Arkivvisning vises dersom «Bruk arkivfunksjonalitet» er aktivert.
+        Lar brukeren velge dokumenter og lister som skal arkiveres.
+      options:
+        - label: "Arkivvisningen «Arkivering av dokumenter og lister» vises med to seksjoner: Dokumenter og Lister"
+        - label: "Hvert element har en avkrysningsboks — noen er markert «Ikke arkiverbar»"
+        - label: "Listeelementer uten innhold er markert «Ikke arkiverbar, ingen elementer»"
+        - label: "Teksten «X element(er) valgt for arkivering» vises"
+        - label: "Knappen «Fortsett» går videre til bekreftelsessteget"
+        - label: "Meldingen «Laster arkiveringsalternativer...» vises under lasting"
+
+  - type: checkboxes
+    id: phases-bekreftelse
+    attributes:
+      label: Prosjektfaser — Bekreftelse og gjennomføring
+      description: >
+        Bekreftelsessteg og fremdriftsvisning under fasebytte.
+      options:
+        - label: "Bekreftelsesdialog: «Vil du endre fase til [fasenavn]?» med Ja/Nei-knapper"
+        - label: "Fremdriftsindikator «Endrer fase til [fasenavn]» vises under fasebyttet"
+        - label: "Ved «Bruk dynamisk hjemmeside»: melding vises om sideendring — «Side [sidenavn] for fase funnet. Denne siden vil bli brukt som forside.»"
+        - label: "Etter fullført fasebytte synkroniseres egenskaper (om konfigurert) og siden lastes på nytt"
+        - label: "Feilmelding ved feil: «En feil oppsto under endring av fase. Vennligst prøv igjen eller kontakt en administrator.»"
+
+  - type: checkboxes
+    id: phases-innstillinger
+    attributes:
+      label: Prosjektfaser — Webdelinnstillinger
+      description: >
+        Property pane-innstillinger for fasevelgeren.
+      options:
+        - label: "«Fasefelt» (dropdown) — velg hvilket taksonomifelt som brukes for faser"
+        - label: "«Vis fasetekst» og «Max lengde fasetekst» (10–50) fungerer"
+        - label: "«Synkroniser prosjektegenskaper etter faseendring» fungerer"
+        - label: "«Bruk dynamisk hjemmeside» — bytter forside ved faseendring"
+        - label: "«Bruk fasevelger hooks» — sender webhook ved faseendring med hook URL og autentisering"
+        - label: "«Bruk arkivfunksjonalitet» — aktiverer arkivvisning med arkiv hook URL og autentisering"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  PROSJEKTSTATUS (ProjectStatus)
+  # ──────────────────────────────────────────────────────────────────────
 
   - type: markdown
     attributes:
       value: |
         ---
-        ## 📈 Prosjektstatus (Project Status)
+        # 📈 Prosjektstatus (ProjectStatus)
+        Statusrapportering med seksjoner, publisering, øyeblikksbilder,
+        historikk og matrisevisninger.
 
   - type: checkboxes
-    id: project-status
+    id: status-opprett-rediger
     attributes:
-      label: Prosjektstatus
-      description: Test prosjektstatus-webdelen
+      label: Prosjektstatus — Opprett og rediger
+      description: >
+        Verktøylinje med handlinger for statusrapporter.
       options:
-        - label: "Du kan opprette en ny statusrapport"
-        - label: "Felter ved redigering/opprettelse er korrekt med oppsett"
-        - label: "Du kan redigere en statusrapport"
-        - label: "Du kan åpne øyeblikksbilde av statusrapport"
-        - label: "Du kan hente fram tidligere publiserte rapporter fra nedtrekk"
-        - label: "Du kan slette 'ikke publiserte' rapporter"
-        - label: "Du kan hoppe mellom seksjoner fra navigasjonslinjen"
-        - label: "Statusseksjoner viser data riktig"
-        - label: "Du kan IKKE redigere/slette publiserte rapporter"
-        - label: "Gå gjennom innstillinger og verifiser at endringer fungerer"
+        - label: "Knappen «Opprett» oppretter en ny upublisert statusrapport — deaktivert dersom kladd allerede eksisterer"
+        - label: "Melding vises ved eksisterende kladd: «Det eksisterer upubliserte statusrapporter...»"
+        - label: "Knappen «Rediger» åpner redigeringspanel for gjeldende rapport — deaktivert for publiserte rapporter"
+        - label: "Redigeringspanelet (CustomEditPanel) viser alle redigerbare felter for gjeldende seksjon"
+        - label: "Feilmelding vises ved manglende tilgang: «Du har ikke tilgang til å redigere denne statusrapporten»"
+        - label: "Feilmelding vises ved manglende tilgang til oppretting: «Du har ikke tilgang til å opprette en ny statusrapport»"
+
+  - type: checkboxes
+    id: status-publisering
+    attributes:
+      label: Prosjektstatus — Publisering og øyeblikksbilde
+      description: >
+        Publiseringsflyten tar øyeblikksbilde (dom-to-image) og låser rapporten.
+      options:
+        - label: "Knappen «Publiser» publiserer kladden — deaktivert for allerede publiserte rapporter"
+        - label: "Under publisering vises «Vennligst vent mens statusrapporten publiseres...» og verktøylinjen deaktiveres"
+        - label: "Øyeblikksbilde tas automatisk av statusseksjonene og lagres som vedlegg"
+        - label: "Etter publisering vises «Publisert (dato)» og rapporten kan ikke lenger redigeres/slettes"
+        - label: "Melding for publiserte rapporter: «Statusrapporten er publisert og kan ikke redigeres/slettes»"
+        - label: "Melding for allerede publiserte: «Statusrapporten er allerede publisert»"
+
+  - type: checkboxes
+    id: status-historikk
+    attributes:
+      label: Prosjektstatus — Historikk og øyeblikksbilde
+      description: >
+        Nedtrekksmeny i verktøylinjen for å velge blant alle rapporter.
+      options:
+        - label: "Rapporthistorikk-nedtrekk viser alle rapporter sortert etter dato med ikon for publisert/kladd"
+        - label: "Klikk på en rapport i nedtrekket laster inn rapportens data i alle seksjoner"
+        - label: "Upubliserte rapporter vises med draft-ikon, publiserte med sjekkmerke"
+        - label: "Knappen «Åpne øyeblikksbilde» åpner lagret øyeblikksbilde-bilde for valgt rapport"
+        - label: "Knappen «Slett» sletter kjeldden — deaktivert for publiserte rapporter"
+        - label: "Knappen «Gå tilbake» (navigateToSourceUrl) vises dersom sourceUrl finnes"
+
+  - type: checkboxes
+    id: status-seksjoner
+    attributes:
+      label: Prosjektstatus — Seksjoner
+      description: >
+        Navigasjonsfaner (SectionTabs) mellom rapportseksjoner.
+        5 seksjonstyper: Sammendrag, Status, Prosjektegenskaper, Usikkerhet, Liste.
+      options:
+        - label: "Navigasjonsfaner vises øverst og lar brukeren hoppe mellom seksjoner"
+        - label: "Sammendrag-seksjon (SummarySection): viser statusikoner og verdier (valuta, prosent, tekst)"
+        - label: "Status-seksjon (StatusSection): viser enkelt statusfelt med ikon og verdi"
+        - label: "Prosjektegenskaper-seksjon: viser felt-verdi-par fra prosjektegenskaper"
+        - label: "Usikkerhet-seksjon: viser Risikomatrise eller Mulighetsmatrise basert på innholdstype"
+        - label: "Liste-seksjon: viser tilpasset listedata i tabell"
+        - label: "Feilmelding for listeseksjon: «Det oppsto en feil under uthenting av data for seksjonen. Er den riktig konfigurert?»"
+
+  - type: checkboxes
+    id: status-ingen-rapporter
+    attributes:
+      label: Prosjektstatus — Tomtilstand
+      description: >
+        Visning når det ikke finnes statusrapporter.
+      options:
+        - label: "Meldingen «Ingen rapporter funnet / Det er ennå ikke rapportert status...» vises for prosjekter uten rapporter"
+        - label: "Feilmelding «Prosjektstatus kan ikke lastes uten tilgang på hubområdet» vises for brukere uten hub-tilgang"
+
+  - type: checkboxes
+    id: status-innstillinger
+    attributes:
+      label: Prosjektstatus — Webdelinnstillinger
+      description: >
+        Property pane med grupper for Risikomatrise, Mulighetsmatrise og Prosjektegenskaper.
+      options:
+        - label: "Risikomatrise-gruppe: «Bruk full bredde», «Bredde», «Mal for callout», «Manuell konfigurasjon» fungerer"
+        - label: "Mulighetsmatrise-gruppe: tilsvarende innstillinger som risikomatrise"
+        - label: "Prosjektegenskaper: «Feltbredde» (150–350) justerer bredden på felt i egenskapsseksjonen"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  PROSJEKTTIDSLINJE (ProjectTimeline)
+  # ──────────────────────────────────────────────────────────────────────
 
   - type: markdown
     attributes:
       value: |
         ---
-        ## 🎯 Mulighetsmatrise (Opportunity Matrix)
+        # 📅 Prosjekttidslinje (ProjectTimeline)
+        Tidslinjevisualisering med grupperbar tidslinje, elementliste og
+        valgfri prosjektleveranse-støtte.
 
   - type: checkboxes
-    id: opportunity-matrix
+    id: timeline-visning
     attributes:
-      label: Mulighetsmatrise
-      description: Test mulighetsmatrise-webdelen
+      label: Prosjekttidslinje — Visning
+      description: >
+        Tidslinje med elementer fra TidslinjeInnhold-listen,
+        gruppert etter Prosjekt, Kategori eller Type.
       options:
-        - label: "Usikkerhetselementer dukker opp på matrisen"
-        - label: "Elementene dukker opp i listen under matrisen"
-        - label: "Vis før/etter tiltak fungerer"
+        - label: "Tidslinjen laster og viser elementer korrekt fra konfigurert liste"
+        - label: "Elementer vises med riktig start- og sluttdato på tidslinjen"
+        - label: "Gruppering kan endres mellom Prosjekt, Kategori og Type"
+        - label: "Tidsforløpsmarkør (prosjektets tidsforløp) vises dersom aktivert"
+        - label: "Zoom inn/ut fungerer (ALT + musehjul)"
+        - label: "Popover med metadata vises ved klikk/hover på tidslinjeelement"
+
+  - type: checkboxes
+    id: timeline-liste
+    attributes:
+      label: Prosjekttidslinje — Liste
+      description: >
+        Listvisning under tidslinjen med kommandolinje for elementer.
+      options:
+        - label: "Listen under tidslinjen viser elementdetaljene"
+        - label: "Kommandolinje for liste vises dersom «Vis kommandolinje for liste» er aktivert"
+        - label: "Knappen «Nytt tidslinjeelement» oppretter nytt element"
+        - label: "Knappen «Rediger tidslinjeelement» åpner redigeringsvisning for valgt element"
+        - label: "Infomelding vises: «Her listes listeelementene for prosjektet...»"
+
+  - type: checkboxes
+    id: timeline-innstillinger
+    attributes:
+      label: Prosjekttidslinje — Webdelinnstillinger
+      description: >
+        Property pane-innstillinger for tidslinjewebdelen.
+      options:
+        - label: "«Listenavn» velger kilde for tidslinjedata"
+        - label: "«Vis tidslinje» / «Vis liste» — kan slå av/på begge uavhengig"
+        - label: "«Standard startdato» og «Standard sluttdato» (2–36 måneder) justerer tidsrammen"
+        - label: "«Standard gruppering» (Prosjekt/Kategori/Type) settes som default"
+        - label: "«Vis prosjektleveranser (beta)» inkluderer leveranser i tidslinjen"
+        - label: "Feilmelding ved datafeil: «Feil ved henting av prosjektets data. Sjekk at SiteId er riktig...»"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  RISIKOMATRISE (RiskMatrix)
+  # ──────────────────────────────────────────────────────────────────────
 
   - type: markdown
     attributes:
       value: |
         ---
-        ## ⚠️ Risikomatrise (Risk Matrix)
+        # ⚠️ Risikomatrise (RiskMatrix)
+        6×6 matrise som visualiserer risikoer fra usikkerhetslisten (innholdstype: Risiko).
+        X-akse: Sannsynlighet, Y-akse: Konsekvens.
 
   - type: checkboxes
-    id: risk-matrix
+    id: risk-matrise
     attributes:
-      label: Risikomatrise
-      description: Test risikomatrise-webdelen
+      label: Risikomatrise — Visning
+      description: >
+        DynamicMatrix-komponent med fargekodede celler og klikbare elementer.
       options:
-        - label: "Usikkerhetselementer dukker opp på matrisen"
-        - label: "Elementene dukker opp i listen under matrisen"
-        - label: "Vis før/etter tiltak fungerer"
+        - label: "Matrisen laster og viser risikoer plasert i sannsynlighet × konsekvens-celler"
+        - label: "Overskrifter Y-akse (Konsekvens): Ubetydelig, Liten, Moderat, Alvorlig, Kritisk, Veldig kritisk"
+        - label: "Overskrifter X-akse (Sannsynlighet): Ekstremt lav, Svært lav, Lav, Middels, Høy, Svært høy"
+        - label: "Celler er fargekodet etter risikonivå (grønn → gul → rød)"
+        - label: "Klikk på element i celle viser callout med Title, Risikostrategi, Risikonærhet, Risikostatus"
+        - label: "Toggle «Vis før/etter tiltak»: «Før tiltak» viser GtRiskProbability/GtRiskConsequence, «Etter tiltak» viser PostAction-feltene"
+        - label: "Manuell konfigurasjon fra JSON-fil (SiteAssets/Konfigurasjon/Risikomatrise) fungerer"
+
+  - type: checkboxes
+    id: risk-innstillinger
+    attributes:
+      label: Risikomatrise — Webdelinnstillinger
+      description: >
+        Property pane for datakilder, feltnavn og utseende.
+      options:
+        - label: "«Feltnavn - Sannsynlighet/Konsekvens» og «etter tiltak»-varianter kan endres"
+        - label: "«Bruk full bredde» / «Bredde (piksler)» (400–1000) justerer matrisestørrelse"
+        - label: "«Mal for callout» (HTML med {Feltnavn}) tilpasser callout-innhold"
+        - label: "«Manuell konfigurasjon» peker til JSON-konfigurasjonsfil"
+        - label: "«Fargekonfigurasjon» lar deg tilpasse fargeskala (RGB per sannsynlighetsverdi)"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  MULIGHETSMATRISE (OpportunityMatrix)
+  # ──────────────────────────────────────────────────────────────────────
 
   - type: markdown
     attributes:
       value: |
         ---
-        ## 📊 Gevinstoversikt (Project Aggregation)
+        # 🎯 Mulighetsmatrise (OpportunityMatrix)
+        6×6 matrise for muligheter fra usikkerhetslisten (innholdstype: Mulighet).
+        Y-akse: Sannsynlighet, X-akse: Konsekvens (omvendt av risikomatrise).
 
   - type: checkboxes
-    id: project-aggregation-list
+    id: opportunity-matrise
+    attributes:
+      label: Mulighetsmatrise — Visning
+      description: >
+        Samme DynamicMatrix-komponent som risikomatrisen, men med inverterte akser
+        og andre overskrifter.
+      options:
+        - label: "Matrisen laster og viser muligheter plasert i riktige celler"
+        - label: "Overskrifter Y-akse (Sannsynlighet): Veldig liten, Liten, Lav, Middels, Stor, Veldig stor"
+        - label: "Overskrifter X-akse (Konsekvens): Svært lav, Lav, Moderat, Høy, Svært høy, Ekstremt høy"
+        - label: "Klikk på element viser callout med relevant metadata"
+        - label: "Toggle «Vis før/etter tiltak» fungerer med riktige felt"
+        - label: "Feilmelding vises dersom manuell konfigurasjon ikke finnes: «Manuell konfigurasjon for Risikomatrise ikke funnet eller har ugyldig format»"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  GEVINSTOVERSIKT (PortfolioAggregation — prosjektnivå)
+  # ──────────────────────────────────────────────────────────────────────
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        # 📊 Gevinstoversikt (PortfolioAggregation — prosjektnivå)
+        Aggregert webdel som viser gevinstdata på prosjektnivå (Gevinstoversikt.aspx).
+        Bruker PortfolioAggregation-komponenten fra shared-library med
+        fanebasert datakildevelger, visnings-/kolonnestyring og Excel-eksport.
+
+  - type: checkboxes
+    id: gevinst-liste
     attributes:
       label: Gevinstoversikt — Liste
-      description: Test listevisningen
+      description: >
+        Listevisning med aggregerte data, søk, filtre og Excel-eksport.
       options:
-        - label: "Listen laster korrekt med data"
-        - label: "Bytting av visning fungerer"
-        - label: "Visnings-ID legger seg i adressefeltet"
-        - label: "Eksport til Excel fungerer"
-        - label: "Eksport til Excel fungerer for valgte prosjekter"
-        - label: "Filterpanel fungerer som det skal"
+        - label: "Listen laster korrekt med gevinstdata fra konfigurert datakilde"
+        - label: "Bytting av visning fungerer (dropdown i verktøylinje)"
+        - label: "Visnings-ID legger seg i adressefeltet (URL-hash)"
+        - label: "Eksport til Excel fungerer (alle elementer)"
+        - label: "Eksport til Excel fungerer for valgte elementer"
+        - label: "Filterpanel åpnes/lukkes og filtrerer data korrekt"
+        - label: "Gruppering av data fungerer dersom konfigurert"
 
   - type: checkboxes
-    id: project-aggregation-columns
+    id: gevinst-kolonner
     attributes:
-      label: Gevinstoversikt — Vis/skjul kolonner
-      description: Test EditViewColumnsPanel
+      label: Gevinstoversikt — Vis/skjul kolonner (EditViewColumnsPanel)
+      description: >
+        Panel for å administrere synlige kolonner og rekkefølge.
       options:
-        - label: "Rekkefølgen stemmer med det som vises"
-        - label: "Du kan endre rekkefølgen på kolonner"
+        - label: "Rekkefølgen på kolonner stemmer med det som vises i listen"
+        - label: "Du kan endre rekkefølgen på kolonner (dra-og-slipp)"
         - label: "Du kan skjule/vise ulike kolonner"
 
   - type: checkboxes
-    id: project-aggregation-column-form
+    id: gevinst-kolonneskjema
     attributes:
-      label: Gevinstoversikt — Kolonneskjema
-      description: Test ColumnFormPanel (legg til og rediger)
+      label: Gevinstoversikt — Kolonneskjema (ColumnFormPanel)
+      description: >
+        Legg til eller rediger kolonner i visningen.
       options:
-        - label: "Legg til: Alle felter fungerer som de skal"
-        - label: "Legg til: Ny kolonne vises riktig"
-        - label: "Rediger: Alle felter fungerer som de skal"
-        - label: "Rediger: Endret kolonne vises riktig"
+        - label: "Legg til ny kolonne: alle felter fungerer og kolonnen vises riktig"
+        - label: "Rediger eksisterende kolonne: alle felter fungerer og endringen vises riktig"
 
   - type: checkboxes
-    id: project-aggregation-view-form
+    id: gevinst-visningsskjema
     attributes:
-      label: Gevinstoversikt — Visningsskjema
-      description: Test ViewFormPanel (legg til og rediger)
+      label: Gevinstoversikt — Visningsskjema (ViewFormPanel)
+      description: >
+        Legg til eller rediger visninger. Visningsnivå settes til Prosjekt.
       options:
-        - label: "Legg til: Alle felter fungerer som de skal"
-        - label: "Legg til: Ny visning vises riktig"
-        - label: "Legg til: Visningen blir angitt riktig nivå (Prosjekt)"
-        - label: "Rediger: Alle felter fungerer som de skal"
-        - label: "Rediger: Endret visning vises riktig"
+        - label: "Legg til ny visning: alle felter fungerer og visningen vises i dropdown"
+        - label: "Ny visning får riktig nivå (Prosjekt)"
+        - label: "Rediger eksisterende visning: alle felter fungerer og endringer vises riktig"
 
   - type: checkboxes
-    id: project-aggregation-settings
+    id: gevinst-innstillinger
     attributes:
-      label: Gevinstoversikt — Innstillinger
-      description: Test webdelinnstillinger
+      label: Gevinstoversikt — Webdelinnstillinger
+      description: >
+        Property pane-innstillinger for gevinstoversikt-webdelen.
       options:
-        - label: "Gå gjennom innstillinger og verifiser at endringer fungerer"
+        - label: "Gå gjennom webdelinnstillinger og verifiser at endringer fungerer"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  DYNAMISK LISTE (DynamicList)
+  # ──────────────────────────────────────────────────────────────────────
 
   - type: markdown
     attributes:
       value: |
         ---
-        ## ⚠️ Usikkerhetstiltak
+        # 📋 Dynamisk liste (DynamicList)
+        Fleksibel liste/dokumentbibliotek-webdel med flermodus:
+        Multi (tabell), Single (detalj), Dokumentbibliotek (mapper/flat).
+        Støtter egendefinerte handlinger (webhook + iframe-dialog).
 
   - type: checkboxes
-    id: usikkerhetstiltak
+    id: dynlist-listevisning
     attributes:
-      label: Usikkerhetstiltak
-      description: Test usikkerhetstiltak med Planner-integrasjon
+      label: Dynamisk liste — Listevisning (Multi-modus)
+      description: >
+        Standard flermodus-visning med tabell, søk, sortering og flervalg.
       options:
-        - label: "Opprettelse av tiltak til Planner fungerer"
-        - label: "Oppdatering og synkronisering av tiltak fungerer"
+        - label: "Listen laster med data fra valgt SharePoint-liste"
+        - label: "Kolonner vises basert på valgt visning / kolonnekonfigurasjon"
+        - label: "Sortering fungerer ved klikk på kolonneoverskrifter"
+        - label: "Søkefeltet «Søk i [listenavn]...» filtrerer på tvers av alle kolonner (case-insensitive)"
+        - label: "Flervalg med avkrysningsbokser fungerer i radene"
+        - label: "Klikk på første kolonne driller ned til single-item-visning for elementet"
+        - label: "Visningvelger (dropdown) lar deg bytte mellom visninger"
+        - label: "Knappen «Oppdater» henter data på nytt"
+        - label: "Melding «Ingen elementer å vise» vises for tom liste"
+        - label: "Melding «Ingen kolonner å vise» vises dersom ingen kolonner er konfigurert"
+
+  - type: checkboxes
+    id: dynlist-single
+    attributes:
+      label: Dynamisk liste — Enkelt-element-visning (Single-modus)
+      description: >
+        Fullsidevisning av et enkelt listeelement.
+      options:
+        - label: "Single-visning viser alle felt for elementet"
+        - label: "Breadcrumb/lenken «Tilbake til listevisning» navigerer tilbake til flermodus"
+        - label: "Knappene «Rediger element» og «Slett» vises dersom bruker har rettigheter"
+
+  - type: checkboxes
+    id: dynlist-dokbibliotek
+    attributes:
+      label: Dynamisk liste — Dokumentbibliotek
+      description: >
+        Spesialmodus for dokumentbibliotek med mappevisning og filopplasting.
+      options:
+        - label: "Mappevisning: mapper vises i listen og kan navigeres inn i (breadcrumb oppdateres)"
+        - label: "Flat visning: alle filer vises uten mappehierarki"
+        - label: "Toggle mellom «Mappevisning» og «Flat visning» fungerer"
+        - label: "Opplasting: «Dra filer hit eller klikk for å laste opp» — drag-and-drop fungerer"
+        - label: "Ny-meny: Word-dokument, Excel-arbeidsbok, PowerPoint-presentasjon, Last opp fil"
+        - label: "Meldingen «Ingen dokumenter å vise i valgt mappe» vises for tomme mapper"
+
+  - type: checkboxes
+    id: dynlist-handlinger
+    attributes:
+      label: Dynamisk liste — Kommandolinje og egendefinerte handlinger
+      description: >
+        Verktøylinje med standard- og egendefinerte handlinger (Trigger + Dialog).
+      options:
+        - label: "Knappen «Nytt element» oppretter nytt element i listen"
+        - label: "Knappen «Rediger element» redigerer valgt element i CustomEditPanel"
+        - label: "Knappen «Slett» sletter valgte elementer — bekreftelsesdialog: «Er du sikker på at du vil slette X element(er)?»"
+        - label: "Knappen «Eksporter til Excel» eksporterer data (valgte eller alle) til Excel-fil"
+        - label: "Knappen «Vis/skjul filtre» åpner/lukker filterpanelet"
+        - label: "Egendefinerte handlinger (Trigger-type) sender POST-request til konfigurert URL med elementdata"
+        - label: "Egendefinerte handlinger (Dialog-type) sender POST, poller for resultat og viser iframe-dialog"
+        - label: "Feilmelding «Hook URL er ikke konfigurert for denne handlingen» vises ved manglende URL"
+        - label: "Feilmelding «Ingen elementer valgt» vises ved handling uten valgte elementer"
+
+  - type: checkboxes
+    id: dynlist-innstillinger
+    attributes:
+      label: Dynamisk liste — Webdelinnstillinger
+      description: >
+        Property pane med liste-/visnings-/kolonnevalg og handlingskonfigurasjon.
+      options:
+        - label: "«Listekontekst» (Gjeldende prosjekt / Hub / Tilpasset URL) velger datakilde"
+        - label: "Listevalg-dropdown viser alle lister fra valgt kontekst (skjuler sjulte lister)"
+        - label: "Visningsvalg-dropdown viser tilgjengelige visninger for valgt liste"
+        - label: "Kolonnevalg (flervalg) lar deg velge og sortere synlige kolonner"
+        - label: "Handlingskonfigurasjon: legg til egendefinerte handlinger med navn, ikon, type (Trigger/Dialog) og hook URL"
+        - label: "Advarsel «Område-id relaterte felter ikke funnet» vises dersom GtSiteId/GtSiteTitle mangler"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  PROSJEKTNYHETER (ProjectNews)
+  # ──────────────────────────────────────────────────────────────────────
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        # 📰 Prosjektnyheter (ProjectNews)
+        Viser nyhetsartikler for prosjektet med opprettelsesdialog
+        og malbasert forhåndsvisning.
+
+  - type: checkboxes
+    id: news-visning
+    attributes:
+      label: Prosjektnyheter — Visning
+      description: >
+        Nyhetsartikler vises som kort med bilde, tittel, forfatter og dato.
+      options:
+        - label: "Nyhetsartikler laster og vises som kort (bilde, tittel, forfatter, dato)"
+        - label: "Klikk på en artikkel åpner den i SharePoint"
+        - label: "Forfatter vises som «Av [navn]» under tittelen"
+        - label: "Dato vises med tooltip «Redigert [dato]»"
+        - label: "«Vis flere» / «Vis færre»-knapp vises dersom antall artikler overstiger maxVisibleNews (standard 4)"
+        - label: "Tomtilstand: «Her kan du opprette nyhetsartikler for prosjektet. Det er for øyeblikket ingen nyhetsartikler.»"
+
+  - type: checkboxes
+    id: news-opprett
+    attributes:
+      label: Prosjektnyheter — Opprett nyhetsartikkel
+      description: >
+        Dialog for opprettelse av nyhetsartikkel med malvelger og forhåndsvisning.
+      options:
+        - label: "Knappen «Opprett nyhetsartikkel» åpner opprettelsesdialogen"
+        - label: "Feltet «Tittel» er obligatorisk — feilmelding «Tittel er påkrevd for å opprette en nyhetsartikkel»"
+        - label: "Nedtrekk «Mal» viser tilgjengelige maler — feilmelding «En mal må velges for å opprette en nyhetsartikkel»"
+        - label: "Knappen «Forhåndsvis valgt mal» åpner forhåndsvisningspanel (iframe) på høyre side"
+        - label: "Under opprettelse vises spinner «Oppretter nyhetsartikkel...»"
+        - label: "Suksessmelding: «Nyhetsartikkelen ble opprettet» med sjekkmerke-ikon"
+        - label: "Feilmelding ved duplikat: «En nyhetsartikkel med samme navn finnes allerede. Vennligst velg et annet navn»"
+
+  - type: checkboxes
+    id: news-innstillinger
+    attributes:
+      label: Prosjektnyheter — Webdelinnstillinger
+      description: >
+        Property pane-innstillinger for nyhetswebdelen.
+      options:
+        - label: "«Antall synlige nyheter» (før «Vis mer»-knapp) kan justeres"
+        - label: "«Mappenavn» for nyhetslagring kan endres (standard: «Prosjektnyheter»)"
+        - label: "«URL til området» vises i egenskaper"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  KOMMENTARER
+  # ──────────────────────────────────────────────────────────────────────
 
   - type: textarea
     id: kommentarer
