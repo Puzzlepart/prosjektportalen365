@@ -382,8 +382,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                 validationState={duplicateOwnerMembers.length > 0 ? 'error' : 'none'}
                 validationMessage={
                   duplicateOwnerMembers.length > 0
-                    ? strings.Provision.DuplicateOwnerMemberMessage
-                    : getField('member').description
+                    && strings.Provision.DuplicateOwnerMemberMessage
                 }
               >
                 <UserMulti type='member' />
