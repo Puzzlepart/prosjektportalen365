@@ -1,51 +1,68 @@
 import React, { FC } from 'react'
 import { useUnSustainabilityGoals } from './useUnSustainabilityGoals'
-import UnGoal1Icon from "./svgIcons/UnPovertyGoalIcon.svg";
-import UnGoal2Icon from "./svgIcons/UnHungerGoalIcon.svg";
-import UnGoal3Icon from "./svgIcons/UnHealthGoalIcon.svg";
-import UnGoal4Icon from "./svgIcons/UnEducationGoalIcon.svg";
-import UnGoal5Icon from "./svgIcons/UnGenderGoalIcon.svg";
-import UnGoal6Icon from "./svgIcons/UnSanitaryGoalIcon.svg";
-import UnGoal7Icon from "./svgIcons/UnEnergyGoalIcon.svg";
-import UnGoal8Icon from "./svgIcons/UnWorkGoalIcon.svg";
-import UnGoal9Icon from "./svgIcons/UnIndustryGoalIcon.svg";
-import UnGoal10Icon from "./svgIcons/UnEqualityGoalIcon.svg";
-import UnGoal11Icon from "./svgIcons/UnSustainableGoalIcon.svg";
-import UnGoal12Icon from "./svgIcons/UnConsumptionGoalIcon.svg";
-import UnGoal13Icon from "./svgIcons/UnClimateGoalIcon.svg";
-import UnGoal14Icon from "./svgIcons/UnLifeSeaIcon.svg";
-import UnGoal15Icon from "./svgIcons/UnLifeLandGoalIcon.svg";
-import UnGoal16Icon from "./svgIcons/UnJusticeGoalIcon.svg";
-import UnGoal17Icon from "./svgIcons/UnCooperationGoalIcon.svg";
 
-export const UnSustainabilityGoals: FC = () => {
-  const {
-    UnSustGoals
-  } = useUnSustainabilityGoals()
+export interface UnSustainabilityGoalsProps {
+  showLabels?: boolean
+  layout?: 'grid' | 'list'
+  iconSize?: number
+}
 
-  // Mapping of UN Goal labels to their corresponding SVG icons
-  const goalIconMapping: { [key: string]: string } = {
-    "1. Utrydde fattigdom": UnGoal1Icon,
-    "2. Utrydde sult": UnGoal2Icon,
-    "3. God helse og livskvalitet": UnGoal3Icon,
-    "4. God utdanning": UnGoal4Icon,
-    "5. Likestilling mellom kjønnene": UnGoal5Icon,
-    "6. Rent vann og gode sanitærforhold": UnGoal6Icon,
-    "7. Ren energi til alle": UnGoal7Icon,
-    "8. Anstendig arbeid og økonomisk vekst": UnGoal8Icon,
-    "9. Industri, innovasjon og infrastruktur": UnGoal9Icon,
-    "10. Mindre ulikhet": UnGoal10Icon,
-    "11. Bærekraftige byer og lokalsamfunn": UnGoal11Icon,
-    "12. Ansvarlig forbruk og produksjon": UnGoal12Icon,
-    "13. Stoppe klimaendringene": UnGoal13Icon,
-    "14. Livet i havet": UnGoal14Icon,
-    "15. Livet på land": UnGoal15Icon,
-    "16. Fred, rettferdighet og velfungerende institusjoner": UnGoal16Icon,
-    "17. Samarbeid for å nå målene": UnGoal17Icon
-  }
+// Dynamic imports for UN Goal icons - only imports icons that are actually used
+const iconImports: { [key: string]: () => Promise<{ default: string }> } = {
+  "1. Utrydde fattigdom": () => import("../../../../../../assets/icons/UnPoverty.svg"),
+  "2. Utrydde sult": () => import("../../../../../../assets/icons/UnHunger.svg"),
+  "3. God helse og livskvalitet": () => import("../../../../../../assets/icons/UnHealth.svg"),
+  "4. God utdanning": () => import("../../../../../../assets/icons/UnEducation.svg"),
+  "5. Likestilling mellom kjønnene": () => import("../../../../../../assets/icons/UnGender.svg"),
+  "6. Rent vann og gode sanitærforhold": () => import("../../../../../../assets/icons/UnWater.svg"),
+  "7. Ren energi til alle": () => import("../../../../../../assets/icons/UnEnergy.svg"),
+  "8. Anstendig arbeid og økonomisk vekst": () => import("../../../../../../assets/icons/UnGrowth.svg"),
+  "9. Industri, innovasjon og infrastruktur": () => import("../../../../../../assets/icons/UnInnovation.svg"),
+  "10. Mindre ulikhet": () => import("../../../../../../assets/icons/UnEquality.svg"),
+  "11. Bærekraftige byer og lokalsamfunn": () => import("../../../../../../assets/icons/UnSustainability.svg"),
+  "12. Ansvarlig forbruk og produksjon": () => import("../../../../../../assets/icons/UnConsumption.svg"),
+  "13. Stoppe klimaendringene": () => import("../../../../../../assets/icons/UnClimate.svg"),
+  "14. Livet i havet": () => import("../../../../../../assets/icons/UnSeaLife.svg"),
+  "15. Livet på land": () => import("../../../../../../assets/icons/UnLandLife.svg"),
+  "16. Fred, rettferdighet og velfungerende institusjoner": () => import("../../../../../../assets/icons/UnJustice.svg"),
+  "17. Samarbeid for å nå målene": () => import("../../../../../../assets/icons/UnCooperation.svg")
+}
+
+export const UnSustainabilityGoals: FC<UnSustainabilityGoalsProps> = ({
+  showLabels = false,
+  layout = 'grid',
+  iconSize = 32
+}) => {
+  const { UnSustGoals } = useUnSustainabilityGoals()
+  const [iconUrls, setIconUrls] = React.useState<{ [key: string]: string }>({})
+
+  // Load only the icons that are actually needed
+  React.useEffect(() => {
+    if (UnSustGoals?.value && UnSustGoals.value.length > 0) {
+      const loadIcons = async () => {
+        const loadedIcons: { [key: string]: string } = {}
+
+        // Only import icons that are present in the data
+        const iconsToLoad = UnSustGoals.value.filter(entry => iconImports[entry.Label])
+
+        for (const entry of iconsToLoad) {
+          try {
+            const iconModule = await iconImports[entry.Label]()
+            loadedIcons[entry.Label] = iconModule.default
+          } catch (error) {
+            console.warn(`Failed to load icon for: ${entry.Label}`, error)
+          }
+        }
+
+        setIconUrls(loadedIcons)
+      }
+
+      loadIcons()
+    }
+  }, [UnSustGoals])
 
   const getGoalIcon = (label: string) => {
-    const icon = goalIconMapping[label];
+    const icon = iconUrls[label];
     if (icon) {
       return (
         <img
@@ -53,8 +70,8 @@ export const UnSustainabilityGoals: FC = () => {
           alt={`UN Goal: ${label}`}
           title={label}
           style={{
-            width: '32px',
-            height: '32px',
+            width: `${iconSize}px`,
+            height: `${iconSize}px`,
             margin: '4px',
             flexShrink: 0
           }}
@@ -69,7 +86,8 @@ export const UnSustainabilityGoals: FC = () => {
       {UnSustGoals && UnSustGoals.value && UnSustGoals.value.length > 0 && (
         <div style={{
           display: 'flex',
-          flexWrap: 'wrap',
+          flexDirection: layout === 'list' ? 'column' : 'row',
+          flexWrap: layout === 'grid' ? 'wrap' : 'nowrap',
           alignItems: 'center',
           gap: '8px',
           maxWidth: '100%'
@@ -78,9 +96,15 @@ export const UnSustainabilityGoals: FC = () => {
             <div key={index} style={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              flexDirection: showLabels ? 'column' : 'row'
             }}>
               {getGoalIcon(entry.Label)}
+              {showLabels && (
+                <span style={{ fontSize: '10px', textAlign: 'center', marginTop: '2px' }}>
+                  {entry.Label}
+                </span>
+              )}
             </div>
           ))}
         </div>
