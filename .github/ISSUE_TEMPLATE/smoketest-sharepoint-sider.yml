@@ -1,5 +1,5 @@
 name: "🧪 Smoke test: SharePoint-sider"
-description: Smoke test for SharePoint-sider og konfigurasjon
+description: "Smoke test for SharePoint-sider — Porteføljehjem, Konfigurasjon, navigasjon og konfigurasjons­lister"
 labels: ["smoke-test", "SharePoint-sider"]
 body:
   - type: markdown
@@ -7,7 +7,14 @@ body:
       value: |
         ## 📃 Smoke test — SharePoint-sider og konfigurasjon
 
-        Gå gjennom konfigurasjons- og innstillingssider og verifiser at funksjonaliteten er korrekt.
+        Denne testen dekker porteføljens SharePoint-sider, navigasjonsstruktur,
+        konfigurasjonsside (Konfigurasjon.aspx) med alle Quick Links-grupper,
+        og de underliggende konfigurasjonslistene.
+
+        **Portefølje-sider (10 stk):** Home, Porteføljeoversikt,
+        Gevinstoversikt, Erfaringslogg, Leveranseoversikt, Usikkerhetsoversikt,
+        Ressursallokering, Prosjekttidslinje, Idémodul, Konfigurasjon.
+
         Kryss av for hvert testpunkt som er bestått. Ved feil: legg igjen en kommentar med beskrivelse og skjermbilder.
 
   - type: input
@@ -60,127 +67,437 @@ body:
     validations:
       required: true
 
+  # ──────────────────────────────────────────────────────────────────────
+  #  PORTEFØLJEHJEM (Home.aspx)
+  # ──────────────────────────────────────────────────────────────────────
+
   - type: markdown
     attributes:
       value: |
         ---
-        ## ⚙️ Konfigurasjon av Prosjektportalen
+        # 🏠 Porteføljehjem (Home.aspx)
+        Hjemmesiden for porteføljeområdet med prosjektsøk, siste prosjekter,
+        nyheter og nyttige lenker.
 
   - type: checkboxes
-    id: konfigurasjon
+    id: home-page
     attributes:
-      label: Konfigurasjon av Prosjektportalen
-      description: Test konfigurasjonsiden og alle lenker
+      label: Porteføljehjem — Webdeler og innhold
+      description: >
+        Home.aspx har 4 webdeler: Prosjektsøk/-bla (fliser/liste/kompakt),
+        Siste prosjekter, Nyheter (NewsReel) og Nyttige lenker (QuickLinks).
       options:
-        - label: "Alle knapper/lenker fører til riktig side"
-        - label: "Siden er tilgjengelig som admin"
-        - label: "Siden er IKKE tilgjengelig for vanlige brukere"
+        - label: "Hjemmesiden laster korrekt som velkomstside (WelcomePage)"
+        - label: "Prosjektsøk-webdel: viser prosjekter i flisvisning (standard), med søkeboks og visningsmodus-velger"
+        - label: "Prosjektsøk-webdel: faner «Mine prosjekter» (standard), «Alle prosjekter», «Overordnede prosjekter» fungerer"
+        - label: "Prosjektsøk-webdel: bytting mellom Fliser / Liste / Kompakt liste fungerer"
+        - label: "Prosjektsøk-webdel: Sortering (alfabetisk som standard) fungerer"
+        - label: "Siste prosjekter-webdel: viser de 5 sist opprettede prosjektene"
+        - label: "Nyheter-webdel: viser nyhetsartikler fra hubområdet"
+        - label: "Nyttige lenker-webdel: viser lenker (Prosjektveiviseren, Opplæring, Brukermanual, Teams)"
+        - label: "Nyttige lenker: alle lenker åpnes korrekt"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  PORTEFØLJESIDER — NAVIGASJON
+  # ──────────────────────────────────────────────────────────────────────
 
   - type: markdown
     attributes:
       value: |
         ---
-        ## 🌐 Globale innstillinger
+        # 🧭 Navigasjon (venstremenyen)
+        QuickLaunch-navigasjonen med 9 toppnoder. Alle sider er
+        SingleWebPartAppPage med én webdel.
+
+  - type: checkboxes
+    id: navigasjon
+    attributes:
+      label: Navigasjon — Venstremenyen
+      description: >
+        Verifiser at alle 8 navigasjons­noder i venstremenyen finnes og
+        fører til riktig side.
+      options:
+        - label: "Porteføljeoversikt → Portefoljeoversikt.aspx (PortfolioOverview-webdel)"
+        - label: "Gevinstoversikt → Gevinstoversikt.aspx"
+        - label: "Erfaringslogg → Erfaringslogg.aspx"
+        - label: "Leveranseoversikt → Leveranseoversikt.aspx"
+        - label: "Usikkerhetsoversikt → Usikkerhetsoversikt.aspx"
+        - label: "Ressursallokering → Ressursallokering.aspx"
+        - label: "Prosjekttidslinje → Prosjekttidslinje.aspx"
+        - label: "Idémodul → Idemodul.aspx"
+        - label: "Alle 8 sider laster med riktig webdel og data"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  KONFIGURASJONSSIDE (Konfigurasjon.aspx)
+  # ──────────────────────────────────────────────────────────────────────
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        # ⚙️ Konfigurasjonsside (Konfigurasjon.aspx)
+        Trekolonners layout med 8 Quick Links-grupper som gir tilgang til
+        alle konfigurasjons­lister. Kun tilgjengelig for administratorer.
+
+  - type: checkboxes
+    id: konfig-tilgang
+    attributes:
+      label: Konfigurasjon — Tilgang
+      description: >
+        Siden er kun tilgjengelig for admins (ikke i QuickLaunch).
+      options:
+        - label: "Konfigurasjon.aspx er tilgjengelig for administratorer via direkte URL"
+        - label: "Siden er IKKE synlig i venstremenyen (kun direkte URL eller admin-lenke)"
+        - label: "Vanlige brukere får «Ingen tilgang» ved besøk"
+
+  - type: checkboxes
+    id: konfig-maler-oppsett
+    attributes:
+      label: "Konfigurasjon — Prosjektmaler og oppsett (kolonne 1)"
+      description: >
+        Quick Links-gruppe med 4 knapper for maloppsett.
+      options:
+        - label: "Gruppetittel «Prosjektmaler og oppsett» vises"
+        - label: "«Maloppsett» → åpner listen Maloppsett (maler: Standardmal, Programmal osv.)"
+        - label: "«Malfiler» → åpner biblioteket Prosjektmaler"
+        - label: "«Maltillegg» → åpner biblioteket Prosjekttillegg"
+        - label: "«Listeinnhold» → åpner listen Listeinnhold"
+
+  - type: checkboxes
+    id: konfig-lister-bibliotek
+    attributes:
+      label: "Konfigurasjon — Lister og bibliotek (kolonne 1)"
+      description: >
+        Quick Links-gruppe med 5 knapper for innholdslister.
+      options:
+        - label: "Gruppetittel «Lister og bibliotek» vises"
+        - label: "«Fasesjekkliste» → åpner listen Fasesjekkliste"
+        - label: "«Planneroppgaver» → åpner listen Planneroppgaver"
+        - label: "«Interessentregister» → åpner listen Interessentregister"
+        - label: "«Malbibliotek» → åpner Malbibliotek"
+        - label: "«Tidslinjeelementer» → åpner listen Tidslinjeelementer"
+
+  - type: checkboxes
+    id: konfig-kolonner-visninger
+    attributes:
+      label: "Konfigurasjon — Kolonner og visninger (kolonne 2)"
+      description: >
+        Quick Links-gruppe med 6 knapper for kolonne- og visningskonfigurasjon.
+      options:
+        - label: "Gruppetittel «Kolonner og visninger» vises"
+        - label: "«Datakilder» → åpner listen Datakilder"
+        - label: "«Prosjektinnholdskolonner» → åpner listen Prosjektinnholdskolonner"
+        - label: "«Porteføljevisninger» → åpner listen Porteføljevisninger"
+        - label: "«Prosjektkolonner» → åpner listen Prosjektkolonner"
+        - label: "«Prosjektkolonnekonfigurasjon» → åpner listen Prosjektkolonnekonfigurasjon"
+        - label: "«Statusseksjoner» → åpner listen Statusseksjoner"
+
+  - type: checkboxes
+    id: konfig-konfigurasjon
+    attributes:
+      label: "Konfigurasjon — Konfigurasjon (kolonne 2)"
+      description: >
+        Quick Links-gruppe med 5 knapper for diverse konfigurasjon.
+      options:
+        - label: "Gruppetittel «Konfigurasjon» vises"
+        - label: "«Grafkonfigurasjon» → åpner listen Grafkonfigurasjon (egendefinerte diagrammer)"
+        - label: "«Tidslinjekonfigurasjon» → åpner listen Tidslinjekonfigurasjon"
+        - label: "«Idékonfigurasjon» → åpner listen Idékonfigurasjon"
+        - label: "«Hjelpeinnhold» → åpner listen Hjelpeinnhold"
+        - label: "«Lenker» → åpner listen Lenker (Nyttige lenker)"
+
+  - type: checkboxes
+    id: konfig-tilganger-roller
+    attributes:
+      label: "Konfigurasjon — Tilganger og roller (kolonne 3)"
+      description: >
+        Quick Links-gruppe med 3 knapper for tilgang og rollestyring.
+      options:
+        - label: "Gruppetittel «Tilganger og roller» vises"
+        - label: "«Tillatelseskonfigurasjon» → åpner listen Tillatelseskonfigurasjon"
+        - label: "«Porteføljeinnsyn» → åpner SharePoint-grupper (_layouts/15/groups.aspx)"
+        - label: "«Prosjektadministrasjonsroller» → åpner listen Prosjektadministrasjonsroller"
+
+  - type: checkboxes
+    id: konfig-avansert
+    attributes:
+      label: "Konfigurasjon — Avansert (kolonne 3)"
+      description: >
+        Quick Links-gruppe med 4 knapper for avansert konfigurasjon.
+      options:
+        - label: "Gruppetittel «Avansert» vises"
+        - label: "«Installasjonslogg» → åpner listen Installasjonslogg"
+        - label: "«Konfigurasjonsfiler» → åpner biblioteket Konfigurasjonsfiler"
+        - label: "«Logg» → åpner listen Logg"
+        - label: "«Globale innstillinger» → åpner listen Globale innstillinger"
+
+  - type: checkboxes
+    id: konfig-prosjektdata
+    attributes:
+      label: "Konfigurasjon — Prosjektdata (kolonne 4)"
+      description: >
+        Quick Links-gruppe med 3 knapper for prosjektdata.
+      options:
+        - label: "Gruppetittel «Prosjektdata» vises"
+        - label: "«Prosjekter» → åpner listen Prosjekter"
+        - label: "«Prosjektstatus» → åpner listen Prosjektstatus"
+        - label: "«Tidslinjeinnhold» → åpner listen Tidslinjeinnhold"
+
+  - type: checkboxes
+    id: konfig-idemodul
+    attributes:
+      label: "Konfigurasjon — Idémodul (kolonne 4)"
+      description: >
+        Quick Links-gruppe med 3 knapper for idémodul-administrasjon.
+      options:
+        - label: "Gruppetittel «Idémodul» vises"
+        - label: "«Idéregistrering» → åpner listen Idéregistrering"
+        - label: "«Idébehandling» → åpner listen Idébehandling"
+        - label: "«Prosjektdata» → åpner listen Prosjektdata (idémetadata)"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  GLOBALE INNSTILLINGER
+  # ──────────────────────────────────────────────────────────────────────
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        # 🌐 Globale innstillinger
+        Listen «Globale innstillinger» med kategoriserte nøkkel/verdi-innstillinger.
 
   - type: checkboxes
     id: globale-innstillinger
     attributes:
       label: Globale innstillinger
-      description: Test alle globale innstillinger
+      description: >
+        Innstillinger grupperes etter kategori. Verifiser at listen er tilgjengelig
+        og at endringer reflekteres i løsningen.
       options:
-        - label: "Alle innstillinger fungerer som de skal"
-        - label: "Endringer i innstillinger reflekteres korrekt i løsningen"
+        - label: "Listen er tilgjengelig med kolonner: Tittel, Verdi, Kategori, Aktivert, Id"
+        - label: "Innstillinger er gruppert etter kategori (visning «Gruppert etter kategori»)"
+        - label: "RiskActionsPlanner-innstillinger (RiskActionPlannerEnabled, BucketName osv.) er tilgjengelige"
+        - label: "Endring av en innstilling (f.eks. deaktivere en feature) reflekteres i løsningen"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  TIDSLINJEKONFIGURASJON
+  # ──────────────────────────────────────────────────────────────────────
 
   - type: markdown
     attributes:
       value: |
         ---
-        ## 📅 Tidslinjekonfigurasjon
+        # 📅 Tidslinjekonfigurasjon
+        Listen definerer elementtyper, farger, form og synlighet for tidslinjer.
 
   - type: checkboxes
     id: tidslinje-konfigurasjon
     attributes:
       label: Tidslinjekonfigurasjon
-      description: Test tidslinjekonfigurasjonen
+      description: >
+        Kolonner: Sorteringsrekkefølge, Farge (hex), Tekstfarge, Elementtype,
+        Kategori, Vis i portefølje, Vis i program, Tidslinjefilter.
       options:
-        - label: "Tidslinjekonfigurasjon-listen er tilgjengelig"
-        - label: "Endringer reflekteres korrekt i tidslinjewebdeler"
+        - label: "Listen er tilgjengelig med elementer (f.eks. «Prosjekt» med farge #f35d69, «Beslutningspunkt» med farge #6495ed)"
+        - label: "Kolonner vises: Sorteringsrekkefølge, Farge, Tekstfarge, Elementtype (Bar/Diamond/Triangle), Kategori"
+        - label: "Toggle-kolonner «Vis i portefølje» og «Vis i program» fungerer"
+        - label: "Endringer i farge/form reflekteres i tidslinjewebdeler etter refresh"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  TILLATELSESKONFIGURASJON
+  # ──────────────────────────────────────────────────────────────────────
 
   - type: markdown
     attributes:
       value: |
         ---
-        ## 💡 Idékonfigurasjon
-
-  - type: checkboxes
-    id: idé-konfigurasjon
-    attributes:
-      label: Idékonfigurasjon
-      description: Test idékonfigurasjonen
-      options:
-        - label: "Idékonfigurasjon-listen er tilgjengelig"
-        - label: "Endringer reflekteres korrekt i idé-arbeidsflyten"
-
-  - type: markdown
-    attributes:
-      value: |
-        ---
-        ## ❓ Hjelpeinnhold konfigurasjon
-
-  - type: checkboxes
-    id: hjelpeinnhold-konfigurasjon
-    attributes:
-      label: Hjelpeinnhold konfigurasjon
-      description: Test hjelpeinnhold-konfigurasjonen
-      options:
-        - label: "Hjelpeinnhold-listen er tilgjengelig"
-        - label: "Nytt hjelpeinnhold vises korrekt i footer etter opprettelse"
-
-  - type: markdown
-    attributes:
-      value: |
-        ---
-        ## 🔗 Nyttige lenker
-
-  - type: checkboxes
-    id: nyttige-lenker
-    attributes:
-      label: Nyttige lenker
-      description: Test lenkelisten
-      options:
-        - label: "Lenkelisten er tilgjengelig"
-        - label: "Nye lenker vises korrekt i footer"
-        - label: "Admin-lenker vises kun for administratorer"
-
-  - type: markdown
-    attributes:
-      value: |
-        ---
-        ## 🔐 Tillatelseskonfigurasjon
+        # 🔐 Tillatelseskonfigurasjon
+        Rollematrise som styrer hvilke SharePoint-grupper som gis tilgang til prosjekter.
 
   - type: checkboxes
     id: tillatelser
     attributes:
       label: Tillatelseskonfigurasjon
-      description: Test tillatelseskonfigurasjon
+      description: >
+        Definerer tilgangsmatrisen for prosjektopprettelse.
+        Kolonnen «Gjelder mal(er)» styrer malfiltrering.
       options:
-        - label: "Tillatelseskonfigurasjon er tilgjengelig"
-        - label: "Endringer i tillatelser fungerer korrekt"
+        - label: "Listen er tilgjengelig og viser roller med tilgangsnivåer"
+        - label: "Kolonnen «Gjelder mal(er)» filtrerer hvilke maler konfigurasjonen gjelder for"
+        - label: "Endring av tilgangskonfigurasjon reflekteres ved opprettelse av nytt prosjekt"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  PROSJEKTADMINISTRASJONSROLLER
+  # ──────────────────────────────────────────────────────────────────────
 
   - type: markdown
     attributes:
       value: |
         ---
-        ## 👤 Prosjektadministrasjonsroller
+        # 👤 Prosjektadministrasjonsroller
+        Definerer admin-roller og tilhørende tillatelser.
 
   - type: checkboxes
     id: admin-roller
     attributes:
       label: Prosjektadministrasjonsroller
-      description: Test prosjektadministrasjonsroller
+      description: >
+        Tillatelser: Endre fase, Administrering av underområder,
+        Redigere prosjektegenskaper, Administrere prosjektstatus.
       options:
-        - label: "Rollekonfigurasjon er tilgjengelig"
-        - label: "Roller tildeles og fungerer korrekt"
+        - label: "Listen er tilgjengelig med roller og tillatelsesdefinisjoner"
+        - label: "Tillatelsene «Endre fase», «Administrering av underområder», «Redigere prosjektegenskaper», «Administrere prosjektstatus» kan konfigureres"
+        - label: "Rolleendringer reflekteres i prosjektenes tilgangskontroll"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  IDÉKONFIGURASJON OG IDÉMODUL-LISTER
+  # ──────────────────────────────────────────────────────────────────────
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        # 💡 Idékonfigurasjon og idémodul-lister
+        Tre lister for idémodulen: Idékonfigurasjon, Idéregistrering, Idébehandling.
+
+  - type: checkboxes
+    id: ide-konfigurasjon
+    attributes:
+      label: Idékonfigurasjon og idémodul-lister
+      description: >
+        Verifiser at idémodul-listene er tilgjengelige og samspiller.
+      options:
+        - label: "Listen «Idékonfigurasjon» er tilgjengelig"
+        - label: "Listen «Idéregistrering» er tilgjengelig og viser registrerte idéer"
+        - label: "Listen «Idébehandling» er tilgjengelig og viser behandlede idéer"
+        - label: "Listen «Prosjektdata» (idémetadata) er tilgjengelig"
+        - label: "Endringer i idékonfigurasjon reflekteres i idéarbeidsflyten"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  HJELPEINNHOLD OG LENKER
+  # ──────────────────────────────────────────────────────────────────────
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        # ❓ Hjelpeinnhold og lenker
+        Innhold som vises i footeren — hjelpeartikler og nyttige lenker.
+
+  - type: checkboxes
+    id: hjelpeinnhold-lenker
+    attributes:
+      label: Hjelpeinnhold og lenker
+      description: >
+        Hjelpeinnhold og Lenker (Nyttige lenker) konfigureres fra
+        konfigurasjonslistene og vises i footeren.
+      options:
+        - label: "Listen «Hjelpeinnhold» er tilgjengelig og viser hjelpeartikler"
+        - label: "Nytt hjelpeinnhold vises i footerens hjelpe-seksjon etter opprettelse"
+        - label: "Listen «Lenker» (Nyttige lenker) er tilgjengelig"
+        - label: "Nye lenker vises i footeren og på hjemmesidens «Nyttige lenker»-webdel"
+        - label: "Standard-lenker (Prosjektveiviseren, Opplæring, Brukermanual, Teams) finnes"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  STATUSSEKSJONER OG PROSJEKTKOLONNER
+  # ──────────────────────────────────────────────────────────────────────
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        # 📊 Statusseksjoner, prosjektkolonner og datakilder
+        Konfigurasjons­lister som styrer prosjektstatus, kolonnevisninger og datahenting.
+
+  - type: checkboxes
+    id: statusseksjoner-kolonner
+    attributes:
+      label: Statusseksjoner, prosjektkolonner og datakilder
+      description: >
+        Disse listene styrer hvordan prosjektstatus vises, hvilke kolonner som er
+        tilgjengelige og hvor data hentes fra.
+      options:
+        - label: "«Statusseksjoner» er tilgjengelig (standardseksjoner: Overordnet status, Fremdrift, Økonomi, Kvalitet, Risiko, Muligheter, Gevinstoppnåelse, osv.)"
+        - label: "«Prosjektkolonner» er tilgjengelig med kolonnemetadata (synlighet, sortering)"
+        - label: "«Prosjektinnholdskolonner» er tilgjengelig (Prosjekt, Siste måling, Måloppnåelse, osv.)"
+        - label: "«Prosjektkolonnekonfigurasjon» er tilgjengelig (statusfarger per kolonne)"
+        - label: "«Porteføljevisninger» er tilgjengelig med visninger (Alle prosjekter, Økonomi, Porteføljestatus, Mine prosjekter, osv.)"
+        - label: "«Datakilder» er tilgjengelig med nivå-kolonner (Portefølje, Prosjekt, Overordnet/Program, Ikke i bruk)"
+        - label: "Endring i statusseksjoner reflekteres i Prosjektstatus-webdelen"
+        - label: "Endring i prosjektkolonner reflekteres i porteføljeoversikten"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  GRAFKONFIGURASJON
+  # ──────────────────────────────────────────────────────────────────────
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        # 📈 Grafkonfigurasjon
+        Konfigurasjon for egendefinerte diagrammer.
+
+  - type: checkboxes
+    id: grafkonfigurasjon
+    attributes:
+      label: Grafkonfigurasjon
+      description: >
+        Listen «Grafkonfigurasjon» styrer visualiseringer.
+      options:
+        - label: "Listen «Grafkonfigurasjon» er tilgjengelig"
+        - label: "Endringer i grafkonfigurasjon reflekteres i porteføljevisninger"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  MALOPPSETT OG MALER
+  # ──────────────────────────────────────────────────────────────────────
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        # 📋 Maloppsett og maler
+        Maler, maltillegg og listeinnhold som styrer prosjektopprettelse.
+
+  - type: checkboxes
+    id: maler
+    attributes:
+      label: Maloppsett og maler
+      description: >
+        Maloppsett inneholder maldefinisjoner (Standardmal, Programmal osv.).
+        Malfiler/Maltillegg er JSON-filer. Listeinnhold definerer
+        standardinnhold som kopieres til nye prosjekter.
+      options:
+        - label: "«Maloppsett» inneholder Standardmal og Programmal (med riktig filnavn og beskrivelse)"
+        - label: "«Malfiler» (Prosjektmaler) inneholder JSON-malfiler"
+        - label: "«Maltillegg» (Prosjekttillegg) inneholder JSON-tilleggsfiler"
+        - label: "«Listeinnhold» inneholder innholdskonfigurasjoner (Tidslinje, Fasesjekkliste, Planneroppgaver, osv.)"
+        - label: "Opprettelse av nytt prosjekt med Standardmal fungerer med riktige lister, kolonner og sider"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  AVANSERTE LISTER
+  # ──────────────────────────────────────────────────────────────────────
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        # 🔧 Avanserte lister
+        Installasjonslogg, konfigurasjonsfiler og generell logg.
+
+  - type: checkboxes
+    id: avanserte-lister
+    attributes:
+      label: Avanserte lister
+      description: >
+        Lister under «Avansert»-gruppen på konfigurasjons­siden.
+      options:
+        - label: "«Installasjonslogg» er tilgjengelig og inneholder logg fra siste installasjon/oppgradering"
+        - label: "«Konfigurasjonsfiler» er tilgjengelig"
+        - label: "«Logg» er tilgjengelig med loggoppføringer (visninger: Gruppert etter komponent/funksjon/loggnivå)"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  KOMMENTARER
+  # ──────────────────────────────────────────────────────────────────────
 
   - type: textarea
     id: kommentarer
