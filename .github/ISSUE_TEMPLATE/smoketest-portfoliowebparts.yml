@@ -124,10 +124,17 @@ body:
         - label: "Checkboxer viser/skjuler kolonner i listen"
         - label: "«Tilbakestill rekkefølge»-knapp tilbakestiller til standard (Prosjektkolonner-listen)"
         - label: "«Bruk» lagrer endringer og oppdaterer kolonnevisning"
-        - label: "«Legg til en kolonne»: ColumnFormPanel åpnes med alle felter"
+        - label: "«Legg til en kolonne»: ColumnFormPanel åpnes med felter for Visningsnavn, Internt feltnavn, Søkeegenskap og Visningsmodus"
         - label: "«Legg til en kolonne»: ny kolonne vises riktig etter lagring"
+        - label: "Visningsmodus-dropdown viser alle 15 typer: Tekst, Tall, Dato, Ja/nei, Valuta, Prosent, Etiketter, Trend, URL, Person, Notat, Filnavn, Prosjektinformasjon, Instrument, Modal"
+        - label: "Kolonne med visningsmodus «Dato» rendrer datoer korrekt i listen"
+        - label: "Kolonne med visningsmodus «Prosent» rendrer prosentbar korrekt i listen"
+        - label: "Kolonne med visningsmodus «Etiketter» rendrer tags/etiketter korrekt i listen"
+        - label: "Kolonne med visningsmodus «Trend» rendrer trendindikator (ikon) korrekt i listen"
+        - label: "Kolonne med visningsmodus «Person» rendrer brukernavn korrekt i listen"
         - label: "«Rediger kolonne»: endringer lagres og vises korrekt"
         - label: "Slett-bekreftelse vises ved sletting av kolonne"
+        - label: "Kategori for kolonnen kan settes (kolonnen filtreres inn i visninger med denne kategorien)"
 
   - type: checkboxes
     id: portfolio-overview-viewform

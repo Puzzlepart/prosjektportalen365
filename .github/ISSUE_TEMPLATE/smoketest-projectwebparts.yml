@@ -562,6 +562,7 @@ body:
       options:
         - label: "Listen laster med data fra valgt SharePoint-liste"
         - label: "Kolonner vises basert på valgt visning / kolonnekonfigurasjon"
+        - label: "Kolonnetyper rendres korrekt: Tekst, Tall, Dato, Ja/nei, Valuta, Prosent, Etiketter, Trend, URL, Person, Notat"
         - label: "Sortering fungerer ved klikk på kolonneoverskrifter"
         - label: "Søkefeltet «Søk i [listenavn]...» filtrerer på tvers av alle kolonner (case-insensitive)"
         - label: "Flervalg med avkrysningsbokser fungerer i radene"
