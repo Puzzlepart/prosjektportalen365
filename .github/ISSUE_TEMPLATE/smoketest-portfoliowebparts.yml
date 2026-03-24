@@ -1,0 +1,590 @@
+name: "🧪 Smoke test: PortfolioWebParts"
+description: Smoke test for PortfolioWebParts-pakken (porteføljeoversikt, prosjektliste, idémodul, m.m.)
+labels: ["smoke-test", "PortfolioWebParts"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 📦 Smoke test — PortfolioWebParts
+
+        Denne testen dekker alle webdeler i **PortfolioWebParts**-pakken:
+        Porteføljeoversikt, Porteføljeaggregering, Prosjektliste,
+        Prosjektkort, Prosjektopprettelse, Ressursallokering, Porteføljetidslinje,
+        Idémodul og Siste prosjekter.
+
+        Kryss av for hvert testpunkt som er bestått.
+        Ved feil: legg igjen en kommentar med beskrivelse og skjermbilder.
+
+  - type: input
+    id: versjon
+    attributes:
+      label: Versjon
+      description: Hvilken versjon testes?
+      placeholder: "1.13.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: miljø
+    attributes:
+      label: Miljø
+      description: Er dette en ny installasjon eller en oppgradering?
+      options:
+        - Ny installasjon (fresh)
+        - Oppgradering (upgrade)
+    validations:
+      required: true
+
+  - type: input
+    id: tester
+    attributes:
+      label: Tester
+      description: Hvem utfører testen?
+      placeholder: Navn eller GitHub brukernavn
+    validations:
+      required: true
+
+  - type: dropdown
+    id: nettleser
+    attributes:
+      label: Nettleser
+      options:
+        - Microsoft Edge
+        - Chrome
+        - Firefox
+        - Safari
+    validations:
+      required: true
+
+  - type: input
+    id: tenant-url
+    attributes:
+      label: Tenant URL
+      description: URL til porteføljeområdet som testes
+      placeholder: "https://contoso.sharepoint.com/sites/pp365"
+    validations:
+      required: true
+
+  # ─────────────────────────────────────────────
+  # Porteføljeoversikt (PortfolioOverview)
+  # ─────────────────────────────────────────────
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 🗂️ Porteføljeoversikt
+
+  - type: checkboxes
+    id: portfolio-overview-data
+    attributes:
+      label: Porteføljeoversikt — Datavisning
+      description: >
+        Listevisning med prosjekter fra søkeindeksen. Støtter shimmer-lasting,
+        søk, filtrering, gruppering og Excel-eksport.
+      options:
+        - label: "Webdelen laster og viser prosjekter med shimmer under lasting"
+        - label: "Antall resultater vises korrekt (f.eks. «Viser 15 av 42 prosjekter»)"
+        - label: "Søkeboks filtrerer prosjekter på tvers av kolonner"
+        - label: "«Eksporter til Excel»-knapp (grønn) eksporterer synlige data med visningsnavn i filnavn"
+        - label: "«Filtrer»-knapp åpner/lukker filterpanelet med relevante filtreringsvalg"
+        - label: "Filtrering påvirker listen korrekt"
+        - label: "Kolonneoverskrift-klikk sorterer stigende/synkende"
+        - label: "Høyreklikk på kolonneoverskrift åpner kontekstmeny"
+        - label: "Feilmelding vises ved feil under datahenting"
+
+  - type: checkboxes
+    id: portfolio-overview-views
+    attributes:
+      label: Porteføljeoversikt — Visninger og navigasjon
+      description: >
+        Visningsvelger med delte, personlige og programvisninger.
+        Visnings-ID lagres i URL-hash.
+      options:
+        - label: "Visningsvelger viser gjeldende visningsnavn og kan åpnes"
+        - label: "Bytting av visning oppdaterer data og URL-hash (viewId)"
+        - label: "«Liste»/«Kompakt liste» bytter visningsformat"
+        - label: "«Opprett ny visning» åpner ViewFormPanel (krever rettighet)"
+        - label: "«Rediger gjeldende visning» åpner ViewFormPanel (admin eller forfatter)"
+        - label: "Personlige visninger vises i separat seksjon og kan redigeres av eier"
+        - label: "«Vis alle hubber» (sammenslått visning) fungerer når flere porteføljer er konfigurert"
+        - label: "Programvisninger vises i separart undermeny om aktivert"
+        - label: "Porteføljevelger bytter mellom konfigurerte porteføljer"
+        - label: "Grupperingsvalg grupperer rader etter valgt kolonne"
+
+  - type: checkboxes
+    id: portfolio-overview-columns
+    attributes:
+      label: Porteføljeoversikt — Kolonner
+      description: >
+        Test «Vis eller skjul kolonner»-panelet (EditViewColumnsPanel)
+        og ColumnFormPanel for å legge til / redigere kolonner.
+      options:
+        - label: "«Vis eller skjul kolonner» åpner panelet med gjeldende kolonnerekkefølge"
+        - label: "Dra-og-slipp endrer kolonnerekkefølge"
+        - label: "Checkboxer viser/skjuler kolonner i listen"
+        - label: "«Tilbakestill rekkefølge»-knapp tilbakestiller til standard (Prosjektkolonner-listen)"
+        - label: "«Bruk» lagrer endringer og oppdaterer kolonnevisning"
+        - label: "«Legg til en kolonne»: ColumnFormPanel åpnes med felter for Visningsnavn, Internt feltnavn, Søkeegenskap og Visningsmodus"
+        - label: "«Legg til en kolonne»: ny kolonne vises riktig etter lagring"
+        - label: "Visningsmodus-dropdown viser alle 15 typer: Tekst, Tall, Dato, Ja/nei, Valuta, Prosent, Etiketter, Trend, URL, Person, Notat, Filnavn, Prosjektinformasjon, Instrument, Modal"
+        - label: "Kolonne med visningsmodus «Dato» rendrer datoer korrekt i listen"
+        - label: "Kolonne med visningsmodus «Prosent» rendrer prosentbar korrekt i listen"
+        - label: "Kolonne med visningsmodus «Etiketter» rendrer tags/etiketter korrekt i listen"
+        - label: "Kolonne med visningsmodus «Trend» rendrer trendindikator (ikon) korrekt i listen"
+        - label: "Kolonne med visningsmodus «Person» rendrer brukernavn korrekt i listen"
+        - label: "«Rediger kolonne»: endringer lagres og vises korrekt"
+        - label: "Slett-bekreftelse vises ved sletting av kolonne"
+        - label: "Kategori for kolonnen kan settes (kolonnen filtreres inn i visninger med denne kategorien)"
+
+  - type: checkboxes
+    id: portfolio-overview-viewform
+    attributes:
+      label: Porteføljeoversikt — Visningsskjema (ViewFormPanel)
+      description: >
+        Test opprettelse og redigering av visninger med tittel, søkespørring,
+        sorteringsrekkefølge, ikon, standardvisning-flagg, personlig visning-flagg.
+      options:
+        - label: "Ny visning: alle felter fungerer (tittel, søkespørring, sortering, ikon, standard, personlig)"
+        - label: "Ny visning: vises i visningsvelgeren etter lagring"
+        - label: "Rediger visning: eksisterende verdier fylles ut korrekt"
+        - label: "Rediger visning: endringer vises etter lagring"
+        - label: "Advarsel vises om en annen visning allerede er satt som standard"
+
+  - type: checkboxes
+    id: portfolio-overview-settings
+    attributes:
+      label: Porteføljeoversikt — Webdelinnstillinger
+      description: Test egenskaper i webdelens redigeringspanel.
+      options:
+        - label: "Innstilling «Vis eksport til Excel-knapp» skjuler/viser knappen"
+        - label: "Innstilling «Vis filtre» skjuler/viser filtreringsknappen"
+        - label: "Innstilling «Vis visningsvelger» skjuler/viser velgeren"
+        - label: "Innstilling «Vis porteføljevelger» skjuler/viser porteføljevelger"
+        - label: "Innstilling «Vis grupperingsvalg» skjuler/viser grupper-dropdown"
+        - label: "Innstilling «Vis sammenslått visning i visningsvelger» fungerer"
+        - label: "Avansert: porteføljer kan konfigureres med URL og listenavn"
+        - label: "Feilmelding vises hvis webdelen ikke er konfigurert (utenfor hub)"
+
+  # ─────────────────────────────────────────────
+  # Porteføljeaggregering (PortfolioAggregation)
+  # ─────────────────────────────────────────────
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 📊 Porteføljeaggregering
+
+  - type: checkboxes
+    id: portfolio-aggregation-data
+    attributes:
+      label: Porteføljeaggregering — Datavisning
+      description: >
+        Aggregert listevisning med data fra konfigurerbar datakilde og kategori/nivå.
+        Støtter faner for datakilder, gruppering og filtrering.
+      options:
+        - label: "Webdelen laster og viser data med shimmer under lasting"
+        - label: "Faner for datakildevalg vises korrekt (basert på konfigurasjon)"
+        - label: "Bytting mellom faner oppdaterer data og kolonner"
+        - label: "Søkeboks filtrerer elementer"
+        - label: "«Eksporter til Excel»-knapp eksporterer data"
+        - label: "«Filtrer»-knapp åpner/lukker filterpanelet"
+        - label: "Gruppering: rader grupperes etter konfigurert kolonne"
+        - label: "Gruppering: «Skjul alle» / «Vis alle» fungerer"
+        - label: "Visnings-ID lagres i URL-hash ved bytte"
+
+  - type: checkboxes
+    id: portfolio-aggregation-columns
+    attributes:
+      label: Porteføljeaggregering — Kolonner
+      description: >
+        Test EditViewColumnsPanel og ColumnFormPanel for aggregerte data.
+      options:
+        - label: "«Vis eller skjul kolonner»: panelet åpnes med gjeldende rekkefølge"
+        - label: "Dra-og-slipp endrer kolonnerekkefølge"
+        - label: "Checkboxer viser/skjuler kolonner"
+        - label: "«Legg til en kolonne»: ColumnFormPanel fungerer"
+        - label: "«Rediger kolonne»: endringer lagres korrekt"
+        - label: "Skjulte/låste kolonner respekteres (fra webdelinnstillinger)"
+
+  - type: checkboxes
+    id: portfolio-aggregation-viewform
+    attributes:
+      label: Porteføljeaggregering — Visningsskjema (ViewFormPanel)
+      description: Test opprettelse og redigering av visninger for aggregerte data.
+      options:
+        - label: "Ny visning: alle felter fungerer (tittel, søkespørring, sortering, ikon, datakilde)"
+        - label: "Ny visning: vises riktig etter lagring"
+        - label: "Rediger visning: eksisterende verdier fylles ut korrekt"
+        - label: "Rediger visning: endringer vises etter lagring"
+
+  - type: checkboxes
+    id: portfolio-aggregation-settings
+    attributes:
+      label: Porteføljeaggregering — Webdelinnstillinger
+      description: Test webdelinnstillinger for aggregering.
+      options:
+        - label: "Innstilling «Kategori for datakilder» filtrerer tilgjengelige faner"
+        - label: "Innstilling «Nivå for datakilde» begrenser data korrekt"
+        - label: "Feilmelding vises hvis webdelen ikke er konfigurert med datakilde"
+
+  # ─────────────────────────────────────────────
+  # Prosjektliste (ProjectList)
+  # ─────────────────────────────────────────────
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 📋 Prosjektliste
+
+  - type: checkboxes
+    id: project-list-verticals
+    attributes:
+      label: Prosjektliste — Vertikaler og navigasjon
+      description: >
+        Fanebasert navigasjon med vertikaler: «Tilgang til», «Mine prosjekter»,
+        «Alle prosjekter» (kun porteføljeadmin), «Overordnede prosjekter» og «Program».
+      options:
+        - label: "«Tilgang til»-fanen viser prosjekter brukeren har tilgang til"
+        - label: "«Mine prosjekter»-fanen viser prosjekter brukeren er medlem av"
+        - label: "«Alle prosjekter»-fanen er KUN synlig for porteføljeadministratorer"
+        - label: "«Overordnede prosjekter»-fanen viser overordnede prosjekter"
+        - label: "«Program»-fanen viser programmer"
+        - label: "Bytting av fane oppdaterer prosjektlisten og søkeboks-plassholdertekst"
+
+  - type: checkboxes
+    id: project-list-rendering
+    attributes:
+      label: Prosjektliste — Visning og søk
+      description: >
+        Prosjekter vises som fliser, liste eller kompakt liste.
+        Søkeboks filtrerer prosjekter, sorteringsknapp sorterer.
+      options:
+        - label: "Visningsmodus-velger bytter mellom «Fliser», «Liste» og «Kompakt liste»"
+        - label: "Fliser viser logo, tittel, metadata og prosjektmeny"
+        - label: "Søkeboks filtrerer prosjekter i gjeldende vertikal"
+        - label: "Sorteringsknapp sorterer A-Å / Å-A"
+        - label: "Shimmer-skjelett vises under lasting"
+        - label: "Tom tilstand viser «Ingen prosjekter funnet» melding"
+
+  - type: checkboxes
+    id: project-list-cards
+    attributes:
+      label: Prosjektliste — Prosjektkort og hurtigmeny
+      description: >
+        Hvert prosjektkort viser logo, tittel, primær-/sekundærfelt, brukerfelt
+        og en hurtigmeny (kalenderikon) med konfigurerbare lenker.
+      options:
+        - label: "Prosjektlogo vises korrekt (kan skjules via innstilling)"
+        - label: "Primær- og sekundærfelt viser riktige metadata (f.eks. tjenesteområde, prosjekttype)"
+        - label: "Primær- og sekundær brukerfelt viser riktig bruker (f.eks. prosjekteier, prosjektleder)"
+        - label: "Hurtigmeny (kalenderikon) åpnes og viser konfigurerte lenker fra hurtigmenylisten"
+        - label: "Klikk på hurtigmeny-lenke navigerer til riktig side under prosjektet"
+        - label: "Klikk på prosjekttittel åpner prosjektet (ny fane basert på innstilling)"
+
+  - type: checkboxes
+    id: project-list-settings
+    attributes:
+      label: Prosjektliste — Webdelinnstillinger
+      description: Test egenskaper i redigeringspanelet.
+      options:
+        - label: "Innstilling «Sorteringsegenskap» endrer standard sorteringsfelt"
+        - label: "Innstilling «Vis søkeboks» skjuler/viser søkefelt"
+        - label: "Innstilling «Vis visningsvelger» skjuler/viser visningsmodus"
+        - label: "Innstilling «Vis sorteringsknapp» skjuler/viser sortering"
+        - label: "Innstilling «Vis logo» skjuler/viser prosjektlogo"
+        - label: "Innstilling «Standardvertikal» endrer hvilken fane som vises først"
+        - label: "Innstilling «Hurtigmeny for prosjekt» kan konfigureres (JSON)"
+        - label: "Innstilling «Bruk dynamiske farger» aktiverer farger fra logo"
+
+  # ─────────────────────────────────────────────
+  # Prosjektkort (ProjectCard)
+  # ─────────────────────────────────────────────
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 🃏 Prosjektkort
+
+  - type: checkboxes
+    id: project-card
+    attributes:
+      label: Prosjektkort
+      description: >
+        Enkelt prosjektkort-webdel som viser et spesifikt prosjekt.
+        Konfigureres med Område-ID i webdelinnstillinger.
+      options:
+        - label: "Webdelen laster og viser prosjektkortet med shimmer under lasting"
+        - label: "Logo, tittel, metadata og brukerinfo vises korrekt"
+        - label: "Hurtigmeny (kalenderikon) fungerer"
+        - label: "Innstilling «Område ID» konfigurerer hvilket prosjekt som vises"
+
+  # ─────────────────────────────────────────────
+  # Prosjektopprettelse (ProjectProvision)
+  # ─────────────────────────────────────────────
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 🚀 Prosjektopprettelse (Bestillingsportalen)
+
+  - type: checkboxes
+    id: provision-drawer
+    attributes:
+      label: Bestillingsportalen — Bestillingsskjema
+      description: >
+        Flernivå-skjema (Drawer) for bestilling av nye områder.
+        Nivå 0: Områdetype, Nivå 1: Klassifisering, Nivå 2: Annen informasjon.
+      options:
+        - label: "Knapp «Bestill område» åpner ProvisionDrawer (eller vises inline)"
+        - label: "Nivå 0: Områdetype-valg vises (kort/dropdown basert på innstilling)"
+        - label: "Nivå 0: Valg av type oppdaterer synlige/påkrevde felt"
+        - label: "Nivå 1: Områdenavn med prefiks/suffiks-tooltip og navnevalidering"
+        - label: "Nivå 1: Beskrivelse, forretningsmessig begrunnelse og tilleggsinformasjon"
+        - label: "Nivå 1: Eier(e) og Medlem(mer) med brukersøk (PeoplePicker)"
+        - label: "Nivå 1: Duplikatvarsel hvis bruker er lagt til som både eier og medlem"
+        - label: "Nivå 1: «Aktivere Teams», følsomhetsetikett og oppbevaringsetikett (om tilgjengelig)"
+        - label: "Nivå 2: Dato, områdebilde (drag-drop, maks 512 KB), språk, tidssone, hubtilknytning"
+        - label: "Navigasjon «Forrige»/«Neste» mellom nivåer med animasjon"
+        - label: "Felter som mangler utfylling: melding «Manglende utfylling av følgende påkrevde felter»"
+        - label: "«Bestill område»-knapp sender inn og viser bekreftelse"
+
+  - type: checkboxes
+    id: provision-confirmation
+    attributes:
+      label: Bestillingsportalen — Bekreftelse og tilbakemelding
+      description: Test bekreftelse og toast-varsler etter bestilling.
+      options:
+        - label: "Bekreftelsesside vises med «Bestilling mottatt!» melding"
+        - label: "Knapper «Ny bestilling» og «Se mine bestillinger» vises etter bekreftelse"
+        - label: "Toast «Området er bestilt» vises ved vellykket innsending"
+        - label: "Toast «Feil ved bestilling» vises ved feil"
+
+  - type: checkboxes
+    id: provision-status
+    attributes:
+      label: Bestillingsportalen — Mine bestillinger
+      description: >
+        Statusoversikt over innsendte bestillinger.
+        Menyvalg «Mine bestillinger» i SplitButton.
+      options:
+        - label: "«Mine bestillinger» åpner statusdialog med liste over bestillinger"
+        - label: "Tabell viser tittel, status, områdetype og bestillingsdato"
+        - label: "Statuser vises korrekt (Sendt inn, Godkjent, Avslått, Området opprettes, etc.)"
+        - label: "Søkeboks «Søk i bestillinger» filtrerer listen"
+        - label: "«Slett bestilling»-knapp viser bekreftelse og sletter riktig"
+        - label: "Tom tilstand viser «Du har ingen bestillinger» melding"
+
+  - type: checkboxes
+    id: provision-settings
+    attributes:
+      label: Bestillingsportalen — Innstillinger
+      description: >
+        Admin-innstillinger tilgjengelig via «Innstillinger»-menyvalg.
+      options:
+        - label: "«Innstillinger» åpner dialog med alle innstillinger for Bestillingsportalen"
+        - label: "Søkeboks «Søk i innstillinger» filtrerer innstillinger"
+        - label: "Innstillinger kan redigeres og lagres"
+        - label: "«Webdel innstillinger» (ConfigEditor) åpner JSON-redigering (admin-only)"
+        - label: "Melding «Ikke konfigurert» vises når provisjoneringsurl mangler"
+        - label: "Melding «Du har ikke tilgang» vises for brukere uten rettighet (RequireProvisionAccess)"
+
+  - type: checkboxes
+    id: provision-webpart-settings
+    attributes:
+      label: Bestillingsportalen — Webdelinnstillinger
+      description: Test egenskaper i webdelens redigeringspanel.
+      options:
+        - label: "Innstilling «Visningsmodus» bytter mellom Knapp og Integrert skjema"
+        - label: "Innstilling «Tekst på knapp» endrer knappetekst"
+        - label: "Innstilling «Angi nåværende bruker som eier» forhåndsutfyller eier"
+        - label: "Innstilling «Konfigurer felter» åpner panel for tilpasning av felt (visningsnavn, påkrevd, skjult, side)"
+        - label: "Innstilling «Konfigurer typer» åpner panel for å skjule/kreve felt per områdetype"
+        - label: "Innstilling «Standard utløpsdato» setter forhåndsvalgt utløpstid"
+        - label: "Innstilling «Provisjoneringsområde» (URL) må settes for at webdelen skal fungere"
+
+  # ─────────────────────────────────────────────
+  # Ressursallokering (ResourceAllocation)
+  # ─────────────────────────────────────────────
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 👥 Ressursallokering
+
+  - type: checkboxes
+    id: resource-allocation
+    attributes:
+      label: Ressursallokering — Tidslinje
+      description: >
+        Tidslinje-komponent (fra shared-library) som viser ressursallokeringer.
+        Grønn = prosjektallokering, Blå = sentral allokering/fravær.
+        Lenke til «sentrale ressursallokeringslisten» i infoteksten.
+      options:
+        - label: "Webdelen laster og viser allokeringer på tidslinjen"
+        - label: "Prosjektallokeringer vises med grønn farge"
+        - label: "Sentrale allokeringer/fravær vises med blå farge"
+        - label: "Fargestyrken reflekterer allokeringsprosent"
+        - label: "Popover med metadata vises ved klikk/hover på tidslinjeelement"
+        - label: "Lenke til sentral ressursallokeringsliste i infoteksten fungerer"
+
+  - type: checkboxes
+    id: resource-allocation-filters
+    attributes:
+      label: Ressursallokering — Filtrering og navigasjon
+      description: >
+        Filterpanel med Rolle, Avdeling, Ressurs og Prosjekt.
+        Tidslinjen kan zoomes og navigeres.
+      options:
+        - label: "Filterpanelet viser filtre: Rolle, Avdeling, Ressurs, Prosjekt"
+        - label: "Filtrering begrenser tidslinjedata korrekt"
+        - label: "Zoom (ALT/CTRL+musehjul) fungerer"
+        - label: "Navigasjon i tid (SHIFT+musehjul) fungerer"
+        - label: "Standard tidsramme (4 mnd tilbake / 4 mnd frem) vises korrekt"
+
+  - type: checkboxes
+    id: resource-allocation-settings
+    attributes:
+      label: Ressursallokering — Webdelinnstillinger
+      description: Test egenskaper i redigeringspanelet.
+      options:
+        - label: "Innstilling «Datakilde» endrer hvilke data som vises"
+        - label: "Innstilling «Standard startdato/sluttdato» endrer tidsrammen"
+        - label: "Feilmelding vises ved problemer med datahenting"
+
+  # ─────────────────────────────────────────────
+  # Porteføljetidslinje (ProjectTimeline)
+  # ─────────────────────────────────────────────
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 📅 Porteføljetidslinje
+
+  - type: checkboxes
+    id: portfolio-timeline
+    attributes:
+      label: Porteføljetidslinje
+      description: >
+        Tidslinje-komponent (ProjectTimeline fra shared-library) som viser
+        prosjektleveranser/milepæler. Konfigureres med datakilde og element-tittel.
+      options:
+        - label: "Webdelen laster og viser elementer på tidslinjen"
+        - label: "Popover med metadata vises ved klikk/hover"
+        - label: "Zoom og navigasjon fungerer"
+        - label: "Innstilling «Datakilde» endrer hvilke data som vises"
+        - label: "Innstilling «Element tittel (konfigurasjon)» filtrerer elementer"
+
+  # ─────────────────────────────────────────────
+  # Siste prosjekter (LatestProjects)
+  # ─────────────────────────────────────────────
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 🕐 Siste prosjekter
+
+  - type: checkboxes
+    id: latest-projects
+    attributes:
+      label: Siste prosjekter
+      description: >
+        Viser nylig opprettede prosjekter sortert etter opprettelsesdato (synkende).
+        Med prosjektlogo, tittel (lenke) og opprettelsesdato.
+      options:
+        - label: "Prosjekter listes opp sortert etter opprettelsesdato (nyeste først)"
+        - label: "Prosjektlogo vises (kan skjules via innstilling «Vis logo»)"
+        - label: "Prosjekttittel er klikkbar lenke som åpner prosjektområdet i ny fane"
+        - label: "Opprettelsesdato vises med formatert dato og tooltip «Opprettet <dato>»"
+        - label: "«Vis flere»-knapp vises når antall prosjekter > radgrense, og utvider listen"
+        - label: "«Vis færre»-knapp skjuler ekstra prosjekter"
+        - label: "Melding «Ingen prosjekter funnet» vises ved tom liste"
+        - label: "Innstilling «Antall prosjekter å vise» (radgrense) fungerer korrekt"
+
+  # ─────────────────────────────────────────────
+  # Idémodul (IdeaModule)
+  # ─────────────────────────────────────────────
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 💡 Idémodul
+
+  - type: checkboxes
+    id: idea-module-nav
+    attributes:
+      label: Idémodul — Navigasjon (NavDrawer)
+      description: >
+        Sidepanel med navigasjon mellom oversikt, registrerte idéer
+        og idéer i behandling. Hamburger-meny for toggle.
+      options:
+        - label: "Webdelen laster med spinner «Laster inn idémodulen»"
+        - label: "NavDrawer vises med «Idémodul»-tittel øverst"
+        - label: "«Oversikt»-navigasjon (Dashboard-ikon) viser aggregert idéoversikt"
+        - label: "«Registrering»-seksjon viser «Registrerte idéer» med underelementer"
+        - label: "«Behandling»-seksjon viser «Idéer i behandling» med underelementer"
+        - label: "Klikk på idé i navigasjonen oppdaterer URL-hash (ideaId) og viser idédetaljer"
+        - label: "Hamburger-meny åpner/lukker NavDrawer"
+        - label: "Melding «Det for øyeblikket ingen registrerte idéer» vises ved tom liste"
+        - label: "Melding «Det for øyeblikket ingen idéer i behandling» vises ved tom behandlingsliste"
+
+  - type: checkboxes
+    id: idea-module-detail
+    attributes:
+      label: Idémodul — Idédetaljer og faser
+      description: >
+        Viser detaljer for valgt idé med fasebar (IdeaPhaseBar),
+        registrerings- og behandlingsfelt (IdeaField), og status.
+      options:
+        - label: "Fasebar (IdeaPhaseBar) viser riktig fase: Registrering → Behandling → Godkjent → Bestill område"
+        - label: "Aktiv fase er markert, andre er deaktivert"
+        - label: "Idétittel vises som overskrift"
+        - label: "Registreringsfelt vises korrekt for ikke-behandlede idéer"
+        - label: "Behandlede idéer viser Accordion med seksjonen «Registrert idé» (sammenleggbar)"
+        - label: "Behandlingsfelt vises under Accordion for behandlede idéer"
+        - label: "Status-seksjon vises med fargekodet bakgrunn (grønn=godkjent, gul=til vurdering, rød=avvist)"
+        - label: "Felt GtIdeaRecommendation/GtIdeaDecision skjules fra feltlisten (vises i status-seksjonen)"
+
+  - type: checkboxes
+    id: idea-module-provision
+    attributes:
+      label: Idémodul — Bestill område fra idé
+      description: >
+        Knappen «Bestill område» i fasebaren åpner ProsjektProvision-komponenten
+        når idéen er i fasen «Godkjent» og provisionUrl er konfigurert.
+      options:
+        - label: "«Bestill område»-knapp vises i fasebar når provisionUrl er konfigurert"
+        - label: "Knappen er DEAKTIVERT når idéen IKKE er i «Godkjent»-fase"
+        - label: "Knappen er AKTIV (primærknapp) når idéen ER i «Godkjent»-fase"
+        - label: "Klikk åpner Bestillingsskjemaet (ProjectProvision-komponenten)"
+
+  - type: checkboxes
+    id: idea-module-errors
+    attributes:
+      label: Idémodul — Feilhåndtering
+      description: Test feilsituasjoner og feil-URL.
+      options:
+        - label: "Feilmelding vises når angitt visning (viewId) ikke finnes"
+        - label: "Feilmelding «Ingen idé funnet» vises når angitt ideaId ikke finnes"
+        - label: "URL-hash (viewId og ideaId) oppdateres korrekt ved navigasjon"
+
+  - type: checkboxes
+    id: idea-module-settings
+    attributes:
+      label: Idémodul — Webdelinnstillinger
+      description: Test webdelinnstillinger for idémodulen.
+      options:
+        - label: "Innstilling «Konfigurasjonsliste» og «Konfigurasjonsnavn» konfigurerer datakilde"
+        - label: "Innstilling «Skjulte felter (registrering)» skjuler valgte felter"
+        - label: "Innstilling «Skjulte felter (behandling)» skjuler valgte felter"
+        - label: "Innstilling «Provisjoneringsområde» aktiverer «Bestill område»-knapp"
+
+  # ─────────────────────────────────────────────
+  # Kommentarer
+  # ─────────────────────────────────────────────
+  - type: textarea
+    id: kommentarer
+    attributes:
+      label: Kommentarer og feil
+      description: Beskriv eventuelle feil eller avvik du finner. Legg ved skjermbilder.
+    validations:
+      required: false
