@@ -34,7 +34,6 @@ on:
 permissions:
   contents: read
   issues: write
-  projects: write
 
 jobs:
   create_smoketest_project:
