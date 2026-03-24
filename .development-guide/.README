@@ -28,6 +28,8 @@
 
 [[load:.development-guide/utgivelse/versjonering.md]]
 
+[[load:.development-guide/utgivelse/smoketest.md]]
+
 [[load:.development-guide/utgivelse/opprette-ny-versjon.md]]
 
 [[load:.development-guide/utgivelse/bygge-utgivelse.md]]
