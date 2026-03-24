@@ -6,10 +6,10 @@ name: 🧪 Opprett smoke test-prosjekt
 #   3. A GitHub Projects (v2) board containing all the above issues
 #
 # Required token scopes for full functionality:
-#   • issues:write         – create issues (included in GITHUB_TOKEN)
+#   • issues:write         – create issues (included in GH_TOKEN)
 #   • projects:write       – create/manage org-level Projects v2
 #
-# If project creation fails (e.g. GITHUB_TOKEN lacks the "project" OAuth
+# If project creation fails (e.g. GH_TOKEN lacks the "project" OAuth
 # scope), all issues are still created and the run reports partial success.
 # In that case, set GH_PROJECT_TOKEN to a PAT with the "project" scope and
 # re-run the workflow.
@@ -68,8 +68,8 @@ jobs:
           GH_PROJECT_TOKEN: ${{ secrets.GH_PROJECT_TOKEN }}
         with:
           # Prefer GH_PROJECT_TOKEN (needs "project" scope) so that
-          # org-level project creation works; fall back to GITHUB_TOKEN.
-          github-token: ${{ secrets.GH_PROJECT_TOKEN || secrets.GITHUB_TOKEN }}
+          # org-level project creation works; fall back to GH_TOKEN.
+          github-token: ${{ secrets.GH_PROJECT_TOKEN || secrets.GH_TOKEN }}
           script: |
             const fs    = require("fs");
             const version     = process.env.VERSION;
