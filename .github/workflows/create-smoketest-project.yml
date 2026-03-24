@@ -221,119 +221,11 @@ jobs:
               return;
             }
 
-            // ── 7. Set up "Draft" status option on the project ────────
-            let statusFieldId = null;
-            let draftOptionId = null;
-
-            try {
-              const fieldsResult = await github.graphql(`
-                query($projectId: ID!) {
-                  node(id: $projectId) {
-                    ... on ProjectV2 {
-                      fields(first: 20) {
-                        nodes {
-                          __typename
-                          ... on ProjectV2SingleSelectField {
-                            id
-                            name
-                            options {
-                              id
-                              name
-                              color
-                              description
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              `, { projectId });
-
-              const statusField = fieldsResult.node.fields.nodes.find(
-                f => f.__typename === "ProjectV2SingleSelectField" && f.name === "Status"
-              );
-
-              if (statusField) {
-                statusFieldId = statusField.id;
-                const existingDraft = statusField.options.find(
-                  o => o.name.toLowerCase() === "draft" || o.name.toLowerCase() === "utkast"
-                );
-
-                if (existingDraft) {
-                  draftOptionId = existingDraft.id;
-                  console.log(`✅ Fant eksisterende "Draft" alternativ i Status-feltet`);
-                } else {
-                  // Prepend "Draft" to existing options, preserving their IDs and colors
-                  const updatedOptions = [
-                    { name: "Draft", color: "GRAY", description: "Ikke påbegynt" },
-                    ...statusField.options.map(o => ({
-                      id: o.id,
-                      name: o.name,
-                      color: o.color,
-                      description: o.description || "",
-                    })),
-                  ];
-
-                  const updateResult = await github.graphql(`
-                    mutation($fieldId: ID!, $options: [ProjectV2SingleSelectFieldOptionInput!]!) {
-                      updateProjectV2Field(input: {
-                        fieldId: $fieldId
-                        singleSelectOptions: $options
-                      }) {
-                        projectV2Field {
-                          ... on ProjectV2SingleSelectField {
-                            id
-                            options { id name }
-                          }
-                        }
-                      }
-                    }
-                  `, { fieldId: statusFieldId, options: updatedOptions });
-
-                  const resultOptions = updateResult.updateProjectV2Field.projectV2Field.options;
-                  draftOptionId = resultOptions.find(o => o.name === "Draft").id;
-                  console.log(`✅ La til "Draft" alternativ i Status-feltet`);
-                }
-              } else {
-                // No Status field found — create one with Draft as the first option
-                const createResult = await github.graphql(`
-                  mutation($projectId: ID!) {
-                    createProjectV2Field(input: {
-                      projectId: $projectId
-                      dataType: SINGLE_SELECT
-                      name: "Status"
-                      singleSelectOptions: [
-                        { name: "Draft",       color: GRAY,   description: "Ikke påbegynt" },
-                        { name: "In Progress", color: YELLOW, description: "Under testing" },
-                        { name: "Done",        color: GREEN,  description: "Testing fullført" }
-                      ]
-                    }) {
-                      projectV2Field {
-                        ... on ProjectV2SingleSelectField {
-                          id
-                          options { id name }
-                        }
-                      }
-                    }
-                  }
-                `, { projectId });
-
-                const newField = createResult.createProjectV2Field.projectV2Field;
-                statusFieldId = newField.id;
-                draftOptionId = newField.options.find(o => o.name === "Draft").id;
-                console.log(`✅ Opprettet nytt Status-felt med "Draft" alternativ`);
-              }
-            } catch (err) {
-              console.warn(`⚠️  Kunne ikke konfigurere Status-felt: ${err.message}`);
-              console.warn("ℹ️  Issues vil bli lagt til uten Draft-status");
-            }
-
-            // ── 8. Add all issues to the project, set status to Draft ─
+            // ── 7. Add all issues to the project ──────────────────────
             const allIssues = [...createdIssues, summaryIssue];
             for (const issue of allIssues) {
               try {
-                const addResult = await github.graphql(`
+                await github.graphql(`
                   mutation($projectId: ID!, $contentId: ID!) {
                     addProjectV2ItemById(input: {
                       projectId: $projectId,
@@ -343,36 +235,13 @@ jobs:
                     }
                   }
                 `, { projectId, contentId: issue.node_id });
-
-                const itemId = addResult.addProjectV2ItemById.item.id;
                 console.log(`  ➕ La til #${issue.number} i prosjektet`);
-
-                // Set the item's Status to "Draft"
-                if (statusFieldId && draftOptionId) {
-                  try {
-                    await github.graphql(`
-                      mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
-                        updateProjectV2ItemFieldValue(input: {
-                          projectId: $projectId
-                          itemId: $itemId
-                          fieldId: $fieldId
-                          value: { singleSelectOptionId: $optionId }
-                        }) {
-                          projectV2Item { id }
-                        }
-                      }
-                    `, { projectId, itemId, fieldId: statusFieldId, optionId: draftOptionId });
-                    console.log(`    📝 Satte status til "Draft" for #${issue.number}`);
-                  } catch (setErr) {
-                    console.warn(`    ⚠️  Kunne ikke sette Draft-status for #${issue.number}: ${setErr.message}`);
-                  }
-                }
               } catch (err) {
                 console.error(`  ⚠️  Kunne ikke legge til #${issue.number}: ${err.message}`);
               }
             }
 
-            // ── 9. Set outputs ─────────────────────────────────────────
+            // ── 8. Set outputs ─────────────────────────────────────────
             core.setOutput("project-number",       String(projectNumber));
             core.setOutput("project-url",          projectUrl);
             core.setOutput("summary-issue-number", String(summaryIssue.number));
