@@ -1,0 +1,461 @@
+name: "🧪 Smoke test: ProgramWebParts"
+description: "Smoke test for ProgramWebParts — Programadministrasjon, Programaggregering, Programprosjektoversikt, Programtidslinje, Programstatus"
+labels: ["smoke-test", "ProgramWebParts"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 📦 Smoke test — ProgramWebParts
+
+        Denne testen dekker fem webdeler/sider i ProgramWebParts-pakken:
+        **Programadministrasjon** (administrere underområder),
+        **Programaggregering** (aggregerte datavisninger med PortfolioAggregation),
+        **Programprosjektoversikt** (prosjektliste med PortfolioOverview),
+        **Programtidslinje** (tidslinje med ProjectTimeline) og
+        **Programstatus** (statusrapportering med ProjectStatus).
+
+        Alle webdeler kjøres på overordnede prosjektområder (program) og henter data
+        fra underordnede prosjekter via hub-konfigurasjonen.
+
+        Kryss av for hvert testpunkt som er bestått. Ved feil: legg igjen en kommentar med beskrivelse og skjermbilder.
+
+  - type: input
+    id: versjon
+    attributes:
+      label: Versjon
+      description: Hvilken versjon testes?
+      placeholder: "1.13.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: miljø
+    attributes:
+      label: Miljø
+      description: Er dette en ny installasjon eller en oppgradering?
+      options:
+        - Ny installasjon (fresh)
+        - Oppgradering (upgrade)
+    validations:
+      required: true
+
+  - type: input
+    id: tester
+    attributes:
+      label: Tester
+      description: Hvem utfører testen?
+      placeholder: Navn eller GitHub brukernavn
+    validations:
+      required: true
+
+  - type: dropdown
+    id: nettleser
+    attributes:
+      label: Nettleser
+      options:
+        - Microsoft Edge
+        - Chrome
+        - Firefox
+        - Safari
+    validations:
+      required: true
+
+  - type: input
+    id: tenant-url
+    attributes:
+      label: Tenant URL
+      description: URL til programområdet som testes
+      placeholder: "https://contoso.sharepoint.com/sites/pp365-program"
+    validations:
+      required: true
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  PROGRAMADMINISTRASJON (ProgramAdministration)
+  # ──────────────────────────────────────────────────────────────────────
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        # 🏗️ Programadministrasjon (ProgramAdministration)
+        Webdel for å administrere underordnede prosjekter (underområder) i et program.
+        Viser DataGrid med prosjekter, søk, og knapper for å legge til/fjerne.
+        Krever `ChildProjectsAdmin`-tillatelse for redigering.
+
+  - type: checkboxes
+    id: progadmin-visning
+    attributes:
+      label: Programadministrasjon — Visning og lasting
+      description: >
+        Webdelen laster underordnede prosjekter fra konfigurerte hub-områder
+        (AvailableProgramHubs i globalinnstillinger). DataGrid med Logo og Tittel-kolonner.
+      options:
+        - label: "Webdelen laster med tittel «Administrasjon av underområder» og informasjonsmelding"
+        - label: "Underordnede prosjekter vises i DataGrid med kolonner: Logo (32px) og Tittel"
+        - label: "Prosjekter vises sortert etter tittel (A→Å) som standard"
+        - label: "Dersom prosjekter tilhører 2+ hub-områder, vises de gruppert per hub med kollapserbare grupper og antall-badge"
+        - label: "Tomtilstand: «Ingen områder er koblet til programmet» med instruksjon om å klikke «Legg til prosjekter»"
+        - label: "LoadingSkeleton vises under lasting av data fra hub-områdene"
+
+  - type: checkboxes
+    id: progadmin-sok
+    attributes:
+      label: Programadministrasjon — Søk
+      description: >
+        Søkeboks for filtrering av prosjekter i listen.
+      options:
+        - label: "Søkefeltet «Søk i underområder...» filtrerer prosjekter etter tittel (case-insensitive)"
+        - label: "Søk fungerer både med og uten gruppering"
+        - label: "Sletteknapp i søkefeltet nullstiller filteret"
+        - label: "Resultateteller «Viser X av Y prosjekter» oppdateres ved søk"
+
+  - type: checkboxes
+    id: progadmin-legg-til
+    attributes:
+      label: Programadministrasjon — Legg til underområder
+      description: >
+        Dialog for å legge til nye underordnede prosjekter.
+        Laster tilgjengelige prosjekter fra hub (5-min cache), ekskluderer eksisterende.
+      options:
+        - label: "Knappen «Legg til underområder» (Add-ikon) åpner dialogen"
+        - label: "Knappen er deaktivert for brukere uten ChildProjectsAdmin-tillatelse"
+        - label: "Dialogen viser alle tilgjengelige prosjekter fra konfigurerte hub-områder"
+        - label: "Allerede tilknyttede prosjekter og gjeldende område er filtrert bort fra listen"
+        - label: "Søkefeltet «Søk i prosjekter...» filtrerer tilgjengelige prosjekter i dialogen"
+        - label: "Flere prosjekter kan velges med flervalg i DataGrid"
+        - label: "«Legg til»-knappen er deaktivert inntil minst ett prosjekt er valgt"
+        - label: "«Avbryt»-knappen lukker dialogen uten endringer"
+        - label: "Etter tillegging: prosjektene dukker opp i listen, dialog lukkes, suksessmelding vises"
+        - label: "GtChildProjects-feltet oppdateres med JSON-data, og GtParentProjects oppdateres i barnprosjektene"
+
+  - type: checkboxes
+    id: progadmin-fjern
+    attributes:
+      label: Programadministrasjon — Fjern underområder
+      description: >
+        Fjerne tilknytning mellom program og underordnede prosjekter.
+      options:
+        - label: "Velg ett eller flere prosjekter med flervalg i DataGrid"
+        - label: "Knappen «Fjern underområder» (Delete-ikon) er deaktivert inntil minst ett prosjekt er valgt"
+        - label: "Knappen er deaktivert for brukere uten ChildProjectsAdmin-tillatelse"
+        - label: "Under fjerning vises «Fjerner underområder...» og knappen er deaktivert"
+        - label: "Etter fjerning: suksessmelding «Underområder fjernet» / «Fjerning av underområder er fullført» vises"
+        - label: "Fjernede prosjekter forsvinner fra listen, og GtChildProjects/GtParentProjects oppdateres"
+
+  - type: checkboxes
+    id: progadmin-tilgang
+    attributes:
+      label: Programadministrasjon — Tilgangskontroll
+      description: >
+        Tilgangskontroll basert på ChildProjectsAdmin-tillatelse.
+      options:
+        - label: "Brukere UTEN ChildProjectsAdmin-tillatelse: flervalg er deaktivert i DataGrid"
+        - label: "Brukere UTEN tillatelse: «Legg til» og «Fjern»-knappene er deaktivert"
+        - label: "Feilhåndtering ved hub-oppløsningsfeil: viser feilmelding (UserMessage med error intent)"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  PROGRAMAGGREGERING (ProgramAggregation)
+  # ──────────────────────────────────────────────────────────────────────
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        # 📊 Programaggregering (ProgramAggregation)
+        Aggregert webdel som viser data fra datakilder på programnivå.
+        Bruker PortfolioAggregation-komponenten fra PortfolioWebParts
+        med `isParentProject: true`. Fanebasert datakildevelger, visnings-
+        og kolonnestyring med Excel-eksport.
+
+  - type: checkboxes
+    id: progagg-liste
+    attributes:
+      label: Programaggregering — Liste
+      description: >
+        Listevisning med aggregerte data fra konfigurerte datakilder.
+        Datakildenivå settes til programnivå (Lists_DataSources_Level_ParentProgram).
+      options:
+        - label: "Listen laster med data fra datakilde konfigurert for programnivå"
+        - label: "Faner for datakildekategori vises dersom det er flere datakilder i kategorien"
+        - label: "Bytting av visning fungerer (dropdown i verktøylinje)"
+        - label: "Visnings-ID legger seg i adressefeltet (URL-hash)"
+        - label: "Søk i data med søkeboksen filtrerer elementer"
+        - label: "Eksport til Excel fungerer (alle elementer)"
+        - label: "Eksport til Excel fungerer for valgte elementer"
+        - label: "Filterpanel åpnes/lukkes og filtrerer data korrekt"
+        - label: "Gruppering av data fungerer dersom konfigurert på en kolonne"
+        - label: "Feilmelding ved manglende datakilde: «Finner ingen datakilde med navn [navn]»"
+        - label: "Feilmelding ved feil i datakilde: «Det skjedde en feil under uthenting av data fra datakilde med navn [navn]»"
+
+  - type: checkboxes
+    id: progagg-kolonner
+    attributes:
+      label: Programaggregering — Vis/skjul kolonner (EditViewColumnsPanel)
+      description: >
+        Panel «Rediger visningskolonner» for å administrere synlige kolonner.
+      options:
+        - label: "Panelet åpnes med hjelpetekst: «Velg kolonnene som skal vises for nåværende visning...»"
+        - label: "Rekkefølgen på kolonner stemmer med det som vises i listen"
+        - label: "Du kan endre rekkefølgen på kolonner (dra-og-slipp / piler: «Flytt opp» / «Flytt ned»)"
+        - label: "Du kan skjule/vise ulike kolonner"
+        - label: "Knappen «Bruk» lagrer endringene"
+
+  - type: checkboxes
+    id: progagg-kolonneskjema
+    attributes:
+      label: Programaggregering — Kolonneskjema (ColumnFormPanel)
+      description: >
+        Panel for å legge til eller redigere kolonner.
+        Visningsmoduser: Tekst, Tall, Dato, Ja/nei, Valuta, Prosent, Etiketter,
+        Trend, URL, Person, Notat, Filnavn, Prosjektinformasjon, Instrument, Modal.
+      options:
+        - label: "«Legg til en kolonne» (panel «Ny kolonne»): Visningsnavn, Internt feltnavn, Søkeegenskap, Visningsmodus — ny kolonne vises riktig"
+        - label: "Visningsmodus-dropdown viser alle typer: Tekst, Tall, Dato, Ja/nei, Valuta, Prosent, Etiketter, Trend, URL, Person, Notat, Filnavn, Prosjektinformasjon, Instrument, Modal"
+        - label: "«Rediger» (panel «Rediger visning»): alle felter fungerer og endret kolonne vises riktig"
+        - label: "«Slett»-knapp viser bekreftelse: «Denne kolonnen fjernes fra Prosjektinnholdskolonner-listen og dermed fra alle visninger»"
+        - label: "Kategori for kolonnen kan settes (kolonnen dukker opp i visninger med denne kategorien)"
+
+  - type: checkboxes
+    id: progagg-visningsskjema
+    attributes:
+      label: Programaggregering — Visningsskjema (ViewFormPanel)
+      description: >
+        Panel for å opprette eller redigere visninger.
+      options:
+        - label: "«Opprett ny visning» (panel «Opprett visning»): Tittel, Søkespørring, Sorteringsrekkefølge — ny visning vises i dropdown"
+        - label: "Standardvisning-toggle: kun én visning kan være standard — advarsel vises dersom det allerede finnes en"
+        - label: "Personlig visning-toggle: personlige visninger vises under «Personlige visninger»-overskrift"
+        - label: "«Rediger gjeldende visning» (panel «Rediger visning»): alle felter fungerer og endret visning vises riktig"
+
+  - type: checkboxes
+    id: progagg-innstillinger
+    attributes:
+      label: Programaggregering — Webdelinnstillinger
+      description: >
+        Property pane med datakildegruppe og søkeboksgruppe.
+      options:
+        - label: "«Kategori for datakilder»: tekst-input som filtrerer tilgjengelige datakilder"
+        - label: "«Nivå for datakilde»: tekst-input (forhåndsutfylt med programnivå)"
+        - label: "«Standardvisning (datakilde)»: dropdown som viser visninger fra konfigurasjonen"
+        - label: "«Søkebokstekst»: tekst-input for tilpasset placeholder i søkefeltet"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  PROGRAMPROSJEKTOVERSIKT (ProgramProjectOverview)
+  # ──────────────────────────────────────────────────────────────────────
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        # 🗂️ Programprosjektoversikt (ProgramProjectOverview)
+        Prosjektoversikt for program som bruker PortfolioOverview-komponenten
+        med `isParentProject: true`. Viser underordnede prosjekter med søk,
+        filtre, gruppering, visningsvelger og Excel-eksport.
+
+  - type: checkboxes
+    id: progover-liste
+    attributes:
+      label: Programprosjektoversikt — Liste
+      description: >
+        Prosjektliste med ShimmeredDetailsList fra PortfolioOverview.
+        Henter data for underordnede prosjekter i programmet.
+      options:
+        - label: "Listen laster med underordnede prosjekter fra programmet"
+        - label: "Søkeboks filtrerer prosjekter (dersom «Vis søkeboks» er aktivert)"
+        - label: "Bytting av visning fungerer (dersom «Vis visningsvelger» er aktivert)"
+        - label: "Visnings-ID legger seg i adressefeltet (URL-hash)"
+        - label: "Eksport til Excel fungerer (dersom «Vis eksport til Excel-knapp» er aktivert)"
+        - label: "Filterpanel fungerer (dersom «Vis filtre» er aktivert)"
+        - label: "Gruppering på kolonne fungerer (dersom «Vis grupperingsvalg» er aktivert)"
+
+  - type: checkboxes
+    id: progover-kolonner
+    attributes:
+      label: Programprosjektoversikt — Vis/skjul kolonner (EditViewColumnsPanel)
+      description: >
+        Kolonnehåndtering identisk med Programaggregering.
+      options:
+        - label: "Rekkefølgen på kolonner stemmer med det som vises"
+        - label: "Du kan endre rekkefølgen og skjule/vise kolonner"
+        - label: "Endringer lagres med «Bruk»-knappen"
+
+  - type: checkboxes
+    id: progover-kolonneskjema
+    attributes:
+      label: Programprosjektoversikt — Kolonneskjema (ColumnFormPanel)
+      description: >
+        Legg til eller rediger kolonner i prosjektoversikten.
+      options:
+        - label: "Legg til ny kolonne med alle felter — ny kolonne vises riktig"
+        - label: "Rediger eksisterende kolonne — endringer vises riktig"
+        - label: "Slett kolonne med bekreftelse: «Denne kolonnen fjernes fra Prosjektkolonner-listen og dermed fra alle visninger»"
+
+  - type: checkboxes
+    id: progover-visningsskjema
+    attributes:
+      label: Programprosjektoversikt — Visningsskjema (ViewFormPanel)
+      description: >
+        Opprett og rediger visninger for prosjektoversikten.
+      options:
+        - label: "Opprett ny visning med Tittel og Søkespørring — visningen dukker opp i dropdown"
+        - label: "Visningsnivå settes korrekt til Program"
+        - label: "Personlig visning og Standardvisning-toggle fungerer"
+        - label: "Rediger eksisterende visning — endringer vises riktig"
+
+  - type: checkboxes
+    id: progover-innstillinger
+    attributes:
+      label: Programprosjektoversikt — Webdelinnstillinger
+      description: >
+        Property pane med Generelt-gruppe og Kommandolinje-gruppe.
+      options:
+        - label: "«Vis søkeboks»-toggle viser/skjuler søkefeltet"
+        - label: "«Standardvisning»-dropdown setter hvilken visning som vises ved lasting"
+        - label: "«Vis kommandolinje»-toggle viser/skjuler hele kommandolinjen"
+        - label: "Med kommandolinje aktivert: «Vis grupperingsvalg», «Vis filtre», «Vis eksport til Excel-knapp», «Vis visningsvelger» fungerer individuelt"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  PROGRAMTIDSLINJE (ProgramTimeline)
+  # ──────────────────────────────────────────────────────────────────────
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        # 📅 Programtidslinje (ProgramTimeline)
+        Tidslinje som viser prosjektleveranser for alle underordnede prosjekter.
+        Bruker ProjectTimeline-komponenten fra shared-library med konfigurert
+        datakilde og elementtittel-konfigurasjon.
+
+  - type: checkboxes
+    id: progtimeline-visning
+    attributes:
+      label: Programtidslinje — Visning
+      description: >
+        Tidslinje med prosjektleveranser fra underordnede prosjekter.
+        Informasjonstekst vises over tidslinjen.
+      options:
+        - label: "Tidslinjen laster med prosjektleveranser fra underordnede prosjekter"
+        - label: "Informasjonstekst vises: «Her listes alle prosjektene med start- og sluttdato som er tilknyttet området. For å zoome inn/ut i tidslinje: ALT+Musehjul»"
+        - label: "Elementer vises med riktig start- og sluttdato på tidslinjen"
+        - label: "Gruppering av elementer fungerer (etter prosjekt/kategori/type)"
+        - label: "Zoom inn/ut med ALT + musehjul fungerer"
+        - label: "Popover med metadata vises ved klikk/hover på tidslinjeelement"
+        - label: "Filterpanel fungerer for å filtrere tidslinjedata"
+
+  - type: checkboxes
+    id: progtimeline-innstillinger
+    attributes:
+      label: Programtidslinje — Webdelinnstillinger
+      description: >
+        Property pane med gruppe for Prosjektleveranser.
+      options:
+        - label: "«Datakilde»-feltet angir datakilde for prosjektleveranser (standard: alle prosjektleveranser)"
+        - label: "«Element tittel (konfigurasjon)»-feltet angir tidslinjeconfig-element som styrer visningen"
+        - label: "Endringer i innstillinger reflekteres i tidslinjen etter lagring"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  PROGRAMSTATUS (ProjectStatus on Status.aspx)
+  # ──────────────────────────────────────────────────────────────────────
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        # 📈 Programstatus (ProjectStatus)
+        Statusrapportering for programmet. Bruker ProjectStatus-komponenten
+        fra ProjectWebParts med egne innstillinger for Risikomatrise og
+        Mulighetsmatrise. Plassert på Status.aspx.
+
+  - type: checkboxes
+    id: progstatus-opprett-rediger
+    attributes:
+      label: Programstatus — Opprett og rediger
+      description: >
+        Verktøylinje med handlinger for statusrapporter.
+      options:
+        - label: "Knappen «Opprett» oppretter en ny upublisert statusrapport — deaktivert dersom kladd allerede eksisterer"
+        - label: "Melding vises ved eksisterende kladd: «Det eksisterer upubliserte statusrapporter...»"
+        - label: "Knappen «Rediger» åpner redigeringspanel for gjeldende rapport — deaktivert for publiserte rapporter"
+        - label: "Redigeringspanelet (CustomEditPanel) viser alle redigerbare felter for gjeldende seksjon"
+        - label: "Feilmelding vises ved manglende tilgang: «Du har ikke tilgang til å redigere denne statusrapporten»"
+        - label: "Feilmelding vises ved manglende tilgang til oppretting: «Du har ikke tilgang til å opprette en ny statusrapport»"
+
+  - type: checkboxes
+    id: progstatus-publisering
+    attributes:
+      label: Programstatus — Publisering og øyeblikksbilde
+      description: >
+        Publiseringsflyten tar øyeblikksbilde (dom-to-image) og låser rapporten.
+      options:
+        - label: "Knappen «Publiser» publiserer kladden — deaktivert for allerede publiserte rapporter"
+        - label: "Under publisering vises «Vennligst vent mens statusrapporten publiseres...» og verktøylinjen deaktiveres"
+        - label: "Øyeblikksbilde tas automatisk av statusseksjonene og lagres som vedlegg"
+        - label: "Etter publisering vises «Publisert (dato)» og rapporten kan ikke lenger redigeres/slettes"
+        - label: "Melding for publiserte rapporter: «Statusrapporten er publisert og kan ikke redigeres/slettes»"
+        - label: "Melding for allerede publiserte: «Statusrapporten er allerede publisert»"
+
+  - type: checkboxes
+    id: progstatus-historikk
+    attributes:
+      label: Programstatus — Historikk og øyeblikksbilde
+      description: >
+        Nedtrekksmeny i verktøylinjen for å velge blant alle rapporter.
+      options:
+        - label: "Rapporthistorikk-nedtrekk viser alle rapporter sortert etter dato med ikon for publisert/kladd"
+        - label: "Klikk på en rapport i nedtrekket laster inn rapportens data i alle seksjoner"
+        - label: "Upubliserte rapporter vises med draft-ikon, publiserte med sjekkmerke"
+        - label: "Knappen «Åpne øyeblikksbilde» åpner lagret øyeblikksbilde-bilde for valgt rapport"
+        - label: "Knappen «Slett» sletter kladden — deaktivert for publiserte rapporter"
+        - label: "Knappen «Gå tilbake» (navigateToSourceUrl) vises dersom sourceUrl finnes"
+
+  - type: checkboxes
+    id: progstatus-seksjoner
+    attributes:
+      label: Programstatus — Seksjoner
+      description: >
+        Navigasjonsfaner (SectionTabs) mellom rapportseksjoner.
+        5 seksjonstyper: Sammendrag, Status, Prosjektegenskaper, Usikkerhet, Liste.
+      options:
+        - label: "Navigasjonsfaner vises øverst og lar brukeren hoppe mellom seksjoner"
+        - label: "Sammendrag-seksjon (SummarySection): viser statusikoner og verdier (valuta, prosent, tekst)"
+        - label: "Status-seksjon (StatusSection): viser enkelt statusfelt med ikon og verdi"
+        - label: "Prosjektegenskaper-seksjon: viser felt-verdi-par fra prosjektegenskaper"
+        - label: "Usikkerhet-seksjon: viser Risikomatrise eller Mulighetsmatrise basert på innholdstype"
+        - label: "Liste-seksjon: viser tilpasset listedata i tabell"
+        - label: "Feilmelding for listeseksjon: «Det oppsto en feil under uthenting av data for seksjonen. Er den riktig konfigurert?»"
+
+  - type: checkboxes
+    id: progstatus-ingen-rapporter
+    attributes:
+      label: Programstatus — Tomtilstand
+      description: >
+        Visning når det ikke finnes statusrapporter.
+      options:
+        - label: "Meldingen «Ingen rapporter funnet / Det er ennå ikke rapportert status...» vises for program uten rapporter"
+        - label: "Feilmelding «Prosjektstatus kan ikke lastes uten tilgang på hubområdet» vises for brukere uten hub-tilgang"
+
+  - type: checkboxes
+    id: progstatus-innstillinger
+    attributes:
+      label: Programstatus — Webdelinnstillinger
+      description: >
+        Property pane med grupper for Risikomatrise, Mulighetsmatrise og Prosjektegenskaper.
+        Programmal konfigurerer riskMatrix og opportunityMatrix med calloutTemplate og bredde 800.
+      options:
+        - label: "Risikomatrise-gruppe: «Bruk full bredde», «Bredde», «Mal for callout», «Manuell konfigurasjon» fungerer"
+        - label: "Mulighetsmatrise-gruppe: tilsvarende innstillinger som risikomatrise"
+        - label: "Prosjektegenskaper: «Feltbredde» (150–350) justerer bredden på felt i egenskapsseksjonen"
+        - label: "Callout-mal for risiko/muligheter viser Tittel, Risikostrategi, Risikonærhet og Risikostatus"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  KOMMENTARER
+  # ──────────────────────────────────────────────────────────────────────
+
+  - type: textarea
+    id: kommentarer
+    attributes:
+      label: Kommentarer og feil
+      description: Beskriv eventuelle feil eller avvik du finner. Legg ved skjermbilder.
+    validations:
+      required: false

@@ -1,0 +1,406 @@
+name: "🧪 Smoke test: ProjectExtensions"
+description: "Smoke test for ProjectExtensions — Oppsettveiviser, Dokumentmalvelger, Usikkerhetstiltak (Planner)"
+labels: ["smoke-test", "ProjectExtensions"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 📦 Smoke test — ProjectExtensions
+
+        Denne testen dekker fire SPFx-extensions i ProjectExtensions-pakken:
+        **Oppsettveiviser** (ApplicationCustomizer), **Dokumentmalvelger** (ListViewCommandSet),
+        **Usikkerhetstiltak** (FieldCustomizer) og **Prosjektoppgradering** (ApplicationCustomizer, stub).
+
+        Kryss av for hvert testpunkt som er bestått. Ved feil: legg igjen en kommentar med beskrivelse og skjermbilder.
+
+  - type: input
+    id: versjon
+    attributes:
+      label: Versjon
+      description: Hvilken versjon testes?
+      placeholder: "1.13.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: miljø
+    attributes:
+      label: Miljø
+      description: Er dette en ny installasjon eller en oppgradering?
+      options:
+        - Ny installasjon (fresh)
+        - Oppgradering (upgrade)
+    validations:
+      required: true
+
+  - type: input
+    id: tester
+    attributes:
+      label: Tester
+      description: Hvem utfører testen?
+      placeholder: Navn eller GitHub brukernavn
+    validations:
+      required: true
+
+  - type: dropdown
+    id: nettleser
+    attributes:
+      label: Nettleser
+      options:
+        - Microsoft Edge
+        - Chrome
+        - Firefox
+        - Safari
+    validations:
+      required: true
+
+  - type: input
+    id: tenant-url
+    attributes:
+      label: Tenant URL
+      description: URL til prosjektområdet som testes
+      placeholder: "https://contoso.sharepoint.com/sites/pp365-prosjekt"
+    validations:
+      required: true
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  OPPSETTVEIVISER (ProjectSetup — ApplicationCustomizer)
+  # ──────────────────────────────────────────────────────────────────────
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        # 🚀 Oppsettveiviser (ProjectSetup)
+        ApplicationCustomizer som aktiveres automatisk på nye prosjektområder.
+        Viser «Oppsettveiviser»-dialogen med tre faner og kjører 9 oppsett-steg.
+
+  - type: checkboxes
+    id: setup-validering
+    attributes:
+      label: Validering før oppsett
+      description: >
+        Extensionen kjører valideringskontroller før dialogen vises.
+        Test at feilmeldinger vises korrekt for ugyldige tilstander.
+      options:
+        - label: "Dialogen «Oppsettveiviser» dukker opp automatisk på et nyopprettet prosjektområde som er koblet til hub"
+        - label: "Feilmelding vises dersom bruker ikke er områdeadministrator (NotSiteAdmin): «Ikke tilgang til å sette opp området»"
+        - label: "Feilmelding vises dersom området ikke er koblet til et hubområde (NoHubConnection): «SharePoint-området er ikke koblet til et hubområde»"
+        - label: "Feilmelding vises dersom området har ugyldig språk (InvalidWebLanguage): «Ugyldig språk for området»"
+        - label: "Feilmelding vises dersom områdeet er et hubområde (IsHubSite): «Kan ikke legge prosjektmalen på et hubområde»"
+        - label: "Dersom prosjektet allerede er satt opp (AlreadySetup) vises dialog med knappene «Gå til maloppsett» og «Fortsett til prosjekt»"
+
+  - type: checkboxes
+    id: setup-fane1-prosjektmal
+    attributes:
+      label: "Fane 1: Prosjektmal"
+      description: >
+        Første fane i Oppsettveiviseren (ikon: ViewListGroup).
+        Her velges prosjektmal med radio-knapper og søkefelt.
+      options:
+        - label: "Fane «Prosjektmal» vises som standard ved åpning av dialogen"
+        - label: "Radioknapp «Ikke legg på mal på området» er tilgjengelig og velger «Ingen mal»"
+        - label: "Radioknapp «Velg en prosjektmal» viser liste over tilgjengelige maler"
+        - label: "Søkefeltet «Søk i prosjektmaler...» filtrerer malelisten korrekt"
+        - label: "Valgt mal viser ikon og beskrivelse fra malliste"
+        - label: "«Nullstill valg av prosjektmal» (clear-knapp) nullstiller valget"
+        - label: "Knappen «Sett opp området» er deaktivert når ingen mal er valgt"
+
+  - type: checkboxes
+    id: setup-fane2-prosjekttillegg
+    attributes:
+      label: "Fane 2: Prosjekttillegg"
+      description: >
+        Andre fane (ikon: ArrangeBringForward).
+        Viser prosjekttillegg med flervalg-liste (Title + Description-kolonner).
+      options:
+        - label: "Fanen «Prosjekttillegg» er deaktivert (grået ut) dersom ingen mal er valgt"
+        - label: "Med mal valgt: prosjekttillegg som er konfigurert i malen er forhåndsvalgt"
+        - label: "Obligatoriske tillegg viser låsikon og kan ikke velges bort (tooltip: «Prosjekttilegget er låst og kan ikke velges bort»)"
+        - label: "Søkefeltet «Søk i prosjekttillegg...» vises dersom det er 5 eller flere tillegg"
+        - label: "Meldingen «Den valgte prosjektmalen inneholder konfigurasjon for ...» vises når malen har tillegg"
+
+  - type: checkboxes
+    id: setup-fane3-standardinnhold
+    attributes:
+      label: "Fane 3: Standardinnhold"
+      description: >
+        Tredje fane (ikon: ViewList).
+        Viser standardinnhold (ContentConfig) med flervalg-liste.
+      options:
+        - label: "Fanen «Standardinnhold» er deaktivert (grået ut) dersom ingen mal er valgt"
+        - label: "Med mal valgt: standardinnhold fra malen er forhåndsvalgt"
+        - label: "Obligatorisk standardinnhold viser låsikon og kan ikke velges bort"
+        - label: "Søkefeltet «Søk i standardinnhold...» vises dersom det er 5 eller flere elementer"
+
+  - type: checkboxes
+    id: setup-prosjektdata-ide
+    attributes:
+      label: Prosjektdata fra idémodul
+      description: >
+        Dersom prosjektet er opprettet fra idémodulen, vises en suksessmelding
+        nederst i dialogen om at prosjektdata er funnet.
+      options:
+        - label: "Meldingen «Prosjektdata funnet» (grønn UserMessage) vises nederst i dialogen dersom prosjektet har data fra idémodulen"
+        - label: "Prosjektdata fra idémodulen følger med inn i prosjektinformasjon etter at oppsettet er fullført"
+
+  - type: checkboxes
+    id: setup-provisionering
+    attributes:
+      label: Provisionering (oppsett-steg)
+      description: >
+        Etter at «Sett opp området» er klikket, kjøres 9 steg sekvensielt.
+        Fremdriftsdialogen viser status for hvert steg.
+      options:
+        - label: "Fremdriftsdialogen «Setter opp prosjektområdet» vises med ikon fra valgt mal"
+        - label: "Beskrivelsen «Vennligst vent. Ikke lukk nettleservinduet...» vises"
+        - label: "Steg 1 — PreTask (validering av innholdstyper og termsett) kjøres uten feil"
+        - label: "Steg 2 — Tillatelser: «Setter opp tillatelser for området» — kopierer tillatelseskonfigurasjon fra hub"
+        - label: "Steg 3 — Prosjektegenskaper: «Setter opp prosjektegenskaper» — synkroniserer lokal egenskapsliste"
+        - label: "Steg 4 — Områdekolonner: «Oppretter områdekolonner» — provisjonerer site fields"
+        - label: "Steg 5 — Anvend mal: «Legger på mal» — legger inn lister, innholdstyper, navigasjon, filer, osv."
+        - label: "Steg 6 — Taksonomifelter: konfigurerer taksonomifelter"
+        - label: "Steg 7 — Kopiering av listeinnhold: kopierer listeelementer og filer fra hub, oppretter Planner-oppgaver og tidslinjelementer"
+        - label: "Steg 8 — Egendefinerte handlinger: justerer custom actions"
+        - label: "Steg 9 — Hooks: kjører hooks definert i prosjektmalen og prosjekttillegg"
+        - label: "Etter fullført oppsett: siden lastes automatisk på nytt"
+
+  - type: checkboxes
+    id: setup-planner-tidslinje
+    attributes:
+      label: Planner og tidslinje under oppsett
+      description: >
+        Under steg 7 (CopyListData) opprettes Planner-oppgaver og tidslinjelementer.
+      options:
+        - label: "Planner-plan opprettes med riktige buckets, etiketter og oppgaver fra maldata"
+        - label: "Oppgaver med sjekklister (maks 20 punkter) og vedlegg (maks 10) opprettes korrekt"
+        - label: "Planner-tagger begrenses til 25 per plan (overskytende fjernes)"
+        - label: "Tidslinjelementer opprettes basert på maldefinert konfigurasjon"
+        - label: "Ved feil i Planner-konfigurasjon vises melding: «Det skjedde en feil under opprettelse av standardoppgaver i Planner»"
+
+  - type: checkboxes
+    id: setup-feilhandtering
+    attributes:
+      label: Feilhåndtering under oppsett
+      description: >
+        Feilscenarier som kan oppstå under provisjonering.
+      options:
+        - label: "Ved feil i et steg vises ErrorDialog med relevant feilmelding og steg-nummer"
+        - label: "Feil logges til Logg-listen på hubområdet"
+        - label: "Dersom bruker lukker dialogen uten å kjøre oppsett vises «Installasjon avbrutt av bruker»"
+        - label: "Manglende gruppe-ID gir feilmelding og fjerner customizer"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  DOKUMENTMALVELGER (TemplateSelector — ListViewCommandSet)
+  # ──────────────────────────────────────────────────────────────────────
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        # 📝 Dokumentmalvelger (TemplateSelector)
+        ListViewCommandSet som legger til knappen «Hent dokumentmal» i verktøylinjen
+        i dokumentbibliotek. Åpner en 5-stegs dialog for kopiering av dokumentmaler.
+
+  - type: checkboxes
+    id: doctemplate-kommando
+    attributes:
+      label: Knapp i dokumentbibliotek
+      description: >
+        Kommandoknappen «Hent dokumentmal» vises i bibliotekverktøylinjen.
+      options:
+        - label: "Knappen «Hent dokumentmal» vises i verktøylinjen på dokumentbiblioteket"
+        - label: "Knappen har riktig ikon (dokumentmal-ikon)"
+
+  - type: checkboxes
+    id: doctemplate-steg1-velg
+    attributes:
+      label: "Steg 1: Velg dokumentmaler"
+      description: >
+        Første skjermbilde viser maler fra malbiblioteket med flervalg.
+        Info-tekst forklarer at siste versjon av malene hentes.
+      options:
+        - label: "Dialogen åpnes med tittel «Hent dokumentmal» og info om valg av dokumentmaler"
+        - label: "Maler fra malbiblioteket vises i en liste med kolonnene: Ikon, Navn, Beskrivelse, Fase, Endret"
+        - label: "Mapper i malbiblioteket vises og kan navigeres inn i (breadcrumb oppdateres)"
+        - label: "Flere maler/mapper kan velges samtidig (flervalg med MarqueeSelection)"
+        - label: "Knappen «Velg» er deaktivert inntil minst ett element er valgt"
+
+  - type: checkboxes
+    id: doctemplate-steg2-maal
+    attributes:
+      label: "Steg 2: Velg mål"
+      description: >
+        Andre skjermbilde for å velge målmappe/bibliotek for kopiering.
+      options:
+        - label: "Skjermbildet viser mapper i gjeldende dokumentbibliotek"
+        - label: "Dersom det finnes flere biblioteker kan man bytte med «Bibliotek»-knappen"
+        - label: "Breadcrumb-navigasjon fungerer for å navigere i mapper"
+        - label: "Meldingen «Ingen undermapper tilgjengelig...» vises dersom mappen er tom"
+        - label: "Knappen «Kopier hit» er deaktivert inntil en mappe er valgt"
+
+  - type: checkboxes
+    id: doctemplate-steg3-rediger
+    attributes:
+      label: "Steg 3: Rediger filnavn og tittel"
+      description: >
+        Tredje skjermbilde hvor filnavn og tittel kan redigeres før kopiering.
+        Validering av filnavn skjer med debounce (400ms).
+      options:
+        - label: "Hvert valgt dokument/mappe vises som en ekspanderbar rad"
+        - label: "Feltet «Filnavn» viser gjeldende filnavn med filendelse (suffix)"
+        - label: "Feltet «Tittel» kan redigeres separat fra filnavn"
+        - label: "Ugyldig filnavn gir feilmelding: «Filnavnet er ugyldig»"
+        - label: "Filnavn som allerede er i bruk gir feilmelding: «Filnavnet er allerede i bruk»"
+        - label: "Ugyldige mappenavn gir feilmelding: «Mappenavnet er ugyldig» / «Mappenavnet er allerede i bruk»"
+        - label: "Knappen «Start kopiering» er deaktivert dersom noen elementer har valideringsfeil"
+
+  - type: checkboxes
+    id: doctemplate-steg4-kopiering
+    attributes:
+      label: "Steg 4: Kopiering"
+      description: >
+        Fremdriftsindikator viser status mens filer kopieres.
+      options:
+        - label: "Fremdriftsindikator (ProgressIndicator) vises med filnavn og prosentvis fremgang"
+        - label: "Ikon fra malen vises (48px) under kopiering"
+        - label: "Dialogen er blokkert (kan ikke lukkes) under kopiering"
+
+  - type: checkboxes
+    id: doctemplate-steg5-sammendrag
+    attributes:
+      label: "Steg 5: Sammendrag"
+      description: >
+        Sammendragsskjermbilde etter kopiering.
+      options:
+        - label: "Meldingen «Sammendrag av kopiering: X element(er) ble kopiert til prosjektområdet» vises"
+        - label: "Knappen «Hent flere» tar brukeren tilbake til steg 1 for å kopiere flere maler"
+        - label: "Knappen «Lukk» lukker dialogen og laster siden på nytt"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  USIKKERHETSTILTAK (RiskAction — FieldCustomizer)
+  # ──────────────────────────────────────────────────────────────────────
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        # ⚠️ Usikkerhetstiltak (RiskAction)
+        FieldCustomizer som viser Planner-integrasjon for usikkerhetstiltak
+        i usikkerhetslisten. Aktiveres via globalSettings (`RiskActionPlannerEnabled = 1`).
+
+  - type: checkboxes
+    id: risk-feltrendering
+    attributes:
+      label: Feltvisning i usikkerhetslisten
+      description: >
+        FieldCustomizer rendrer en knapp «Administrer tiltak» i tiltakskolonnen.
+        Ved klikk åpnes en popover med tiltak fra Planner.
+      options:
+        - label: "Knappen «Administrer tiltak» vises i tiltakskolonnen for hvert usikkerhetselement"
+        - label: "Ved klikk på knappen åpnes en popover med tittel «Tiltak for [risikonavn]»"
+        - label: "Popoveren viser informasjonstekst om å legge til tiltak i Planner"
+
+  - type: checkboxes
+    id: risk-popover-handlinger
+    attributes:
+      label: Popover — Handlingsknapper
+      description: >
+        Popoveren inneholder tre knapper som vises basert på tilstand.
+      options:
+        - label: "Knappen «Legg til nytt tiltak» vises alltid og åpner NewRiskActionPanel"
+        - label: "Knappen «Synkroniser endringer» vises kun dersom det finnes Planner-data, og synkroniserer status fra Planner"
+        - label: "Knappen «Migrer tiltakene til Planner» vises kun dersom det finnes manuelt utfylte tiltak (fritekst) men ingen Planner-kobling"
+        - label: "Sist-synkronisert-tidspunkt vises med grønt ArrowSync-ikon dersom Planner-data finnes"
+
+  - type: checkboxes
+    id: risk-nytt-tiltak
+    attributes:
+      label: Legg til nytt tiltak (NewRiskActionPanel)
+      description: >
+        Sidepanel for opprettelse av nye Planner-oppgaver.
+      options:
+        - label: "Panelet åpnes med tittel «Legg til nytt tiltak for [risikonavn]»"
+        - label: "Feltet «Tittel» (obligatorisk, TextNumberFormat-ikon) er tilgjengelig"
+        - label: "Feltet «Beskrivelse» (TextAlignLeft-ikon, 6 rader) er tilgjengelig"
+        - label: "Felt «Startdato» (Calendar-ikon, date input) fungerer"
+        - label: "Felt «Forfallsdato» (Calendar-ikon, date input) fungerer"
+        - label: "Felt «Ansvarlig» (Person-ikon) er en Combobox med personvelger — viser «Fant ingen brukere som matcher søket» ved ingen treff"
+        - label: "Bryteren «Opprett flere» holder panelet åpent etter lagring"
+        - label: "«Lagre»-knappen er deaktivert dersom tittel-feltet er tomt"
+        - label: "Oppgaven opprettes i Planner med riktig bucket (fra RiskActionPlannerBucketName) og tilordnet ansvarlig"
+        - label: "Etter lagring oppdateres tiltakslisten og skjult felt RiskActionData"
+
+  - type: checkboxes
+    id: risk-migrer
+    attributes:
+      label: Migrer tiltak (MigrateRiskActionsDialog)
+      description: >
+        Dialog for å migrere eksisterende fritekst-tiltak til Planner-oppgaver.
+      options:
+        - label: "Dialogen åpnes med tittel «Migrering av tiltak for [risikonavn]»"
+        - label: "Info-tekst forklarer at Planner kan brukes, eller at man kan fortsette med fritekst"
+        - label: "Nedtrekksliste «Hvordan er tiltakene adskilt?» viser tre valg: Linjeskift, Komma, Komma (ingen mellomrom)"
+        - label: "Forhåndsvisning av oppdelte tiltak vises som nummerert liste"
+        - label: "Knappen «Opprett N tiltak i Planner» vises med riktig antall — deaktivert dersom ingen tiltak er funnet"
+        - label: "Fremdriftsindikator (ProgressBar) vises under migrering med tekst «Oppretter tiltakene i Planner...»"
+
+  - type: checkboxes
+    id: risk-oppgavevisning
+    attributes:
+      label: Oppgavevisning (PlannerTaskItem)
+      description: >
+        Forhåndsvisning av Planner-oppgaver i popoveren.
+      options:
+        - label: "Oppgavetittel vises (med gjennomstreking dersom fullført)"
+        - label: "Beskrivelse fra Planner vises (trimmet)"
+        - label: "Datoer (start og forfall) vises som lokaliserte datoer"
+        - label: "Fremdrift vises som: «Ikke startet» (0%), «Påbegynt» (50%), «Fullført» (100%)"
+        - label: "Tilordnede personer vises med profilbilde (Persona-komponent)"
+        - label: "Fullført-merke: grønt CheckmarkCircle-ikon med «Oppgaven er fullført»"
+        - label: "Lenken «Gå til oppgaven i Planner» åpner oppgaven i tasks.office.com"
+
+  - type: checkboxes
+    id: risk-globalinnstillinger
+    attributes:
+      label: Globalinnstillinger for Usikkerhetstiltak
+      description: >
+        Innstillinger fra portalens Globalinnstillinger-liste som styrer oppførselen.
+      options:
+        - label: "RiskActionPlannerEnabled = 1 aktiverer Planner-integrasjon (0 eller manglende deaktiverer)"
+        - label: "RiskActionPlannerBucketName styrer hvilken bucket oppgaver opprettes i"
+        - label: "Layout (horisontal/vertikal) og gap-innstillinger respekteres fra globalinnstillinger"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  PROSJEKTOPPGRADERING (ProjectUpgrade — ApplicationCustomizer)
+  # ──────────────────────────────────────────────────────────────────────
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        # ⬆️ Prosjektoppgradering (ProjectUpgrade)
+        ApplicationCustomizer — per nå en tom stub uten funksjonalitet.
+        Registrert som extension men har ingen effekt.
+
+  - type: checkboxes
+    id: project-upgrade
+    attributes:
+      label: Prosjektoppgradering
+      description: >
+        Extensionen er en tom stub (onInit returnerer Promise.resolve()).
+        Verifiser at den ikke forårsaker feil.
+      options:
+        - label: "Extensionen forårsaker ingen feil eller konsollfeil ved lasting av prosjektområder"
+
+  # ──────────────────────────────────────────────────────────────────────
+  #  KOMMENTARER
+  # ──────────────────────────────────────────────────────────────────────
+
+  - type: textarea
+    id: kommentarer
+    attributes:
+      label: Kommentarer og feil
+      description: Beskriv eventuelle feil eller avvik du finner. Legg ved skjermbilder.
+    validations:
+      required: false
