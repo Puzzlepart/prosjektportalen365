@@ -34,7 +34,6 @@ import {
   PortfolioOverviewView,
   ProjectContentColumn,
   ProjectListModel,
-  SPContentType,
   SPField,
   SPFxContext,
   SPProjectItem,
@@ -50,13 +49,8 @@ import {
   Benefit,
   BenefitMeasurement,
   BenefitMeasurementIndicator,
-  ChartConfiguration,
-  ChartData,
-  ChartDataItem,
-  DataField,
   IdeaConfigurationModel,
   ProgramItem,
-  SPChartConfigurationItem,
   SPIdeaConfigurationItem
 } from '../models'
 import * as config from './config'
@@ -116,45 +110,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       this.dataSourceService = new DataSourceService(this.portalDataService.web)
     }
     return this
-  }
-
-  public async fetchChartData(
-    view: PortfolioOverviewView,
-    configuration: IPortfolioOverviewConfiguration,
-    chartConfigurationListName: string,
-    siteId: string
-  ) {
-    const chartConfigurationList = this._sp.web.lists.getByTitle(chartConfigurationListName)
-    try {
-      const [chartItems, contentTypes] = await Promise.all([
-        chartConfigurationList.items.select(...Object.keys(new SPChartConfigurationItem()))<
-          SPChartConfigurationItem[]
-        >(),
-        chartConfigurationList.contentTypes.select(...Object.keys(new SPContentType()))<
-          SPContentType[]
-        >()
-      ])
-      const charts: ChartConfiguration[] = chartItems.map((item) => {
-        const fields = item.GtPiFieldsId.map((id) => {
-          const fld = _.find(configuration.columns, (f) => f.id === id)
-          return new DataField(fld.name, fld.fieldName, fld.dataType)
-        })
-        const chart = new ChartConfiguration(item, fields)
-        return chart
-      })
-      const items = (await this.fetchDataForView(view, configuration, siteId)).items.map(
-        (i) => new ChartDataItem(i.Title, i)
-      )
-      const chartData = new ChartData(items)
-
-      return {
-        charts,
-        chartData,
-        contentTypes
-      }
-    } catch (error) {
-      throw error
-    }
   }
 
   public async getPortfolioConfig(): Promise<IPortfolioOverviewConfiguration> {
