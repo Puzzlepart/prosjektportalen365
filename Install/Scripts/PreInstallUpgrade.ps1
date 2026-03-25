@@ -191,60 +191,97 @@ if ($null -ne $LastInstall) {
         catch {
             Write-Host "[WARNING] Failed to remove Portfolio Insights navigation: $($_.Exception.Message)" -ForegroundColor Yellow
         }
-    }
 
-    # TODO: Fix this for 1.13.0 release
-    # if ($PreviousVersion -lt [version]"1.13.0") {
-    #     Write-Host "[INFO] Checking for RefinableString90-98 conflicts before upgrading to v1.13.0..."
-    #     try {
-    #         $SearchConfig = Get-PnPSearchConfiguration -Scope Subscription -ErrorAction Stop
-    #         $ConflictingRefinableStrings = @()
-    #         $RequiredRefinableStrings = 90..98
-    #         foreach ($RefNum in $RequiredRefinableStrings) {
-    #             $RefString = "RefinableString$RefNum"
-    #             if ($SearchConfig -match "RefinableString$RefNum" -and 
-    #                 $SearchConfig -notmatch "GtRiskFactor" -and 
-    #                 $SearchConfig -notmatch "GtRiskFactorPostAction" -and 
-    #                 $SearchConfig -notmatch "GtIdeaEconomicNumber" -and 
-    #                 $SearchConfig -notmatch "GtIdeaPriority" -and 
-    #                 $SearchConfig -notmatch "GtIdeaQualityNumber" -and 
-    #                 $SearchConfig -notmatch "GtIdeaRiskNumber" -and 
-    #                 $SearchConfig -notmatch "GtIdeaScore" -and 
-    #                 $SearchConfig -notmatch "GtIdeaStrategicNumber" -and 
-    #                 $SearchConfig -notmatch "GtIdeaOperationalNumber") {
-    #                 $ConflictingRefinableStrings += $RefString
-    #             }
-    #         }
-    #         if ($ConflictingRefinableStrings.Count -gt 0) {
-    #             Write-Host ""
-    #             Write-Host "================================================================" -ForegroundColor Red
-    #             Write-Host "UPGRADE BLOCKED: RefinableString Conflict Detected" -ForegroundColor Red
-    #             Write-Host "================================================================" -ForegroundColor Red
-    #             Write-Host ""
-    #             Write-Host "Prosjektportalen 365 v1.13.0 requires the following RefinableString" -ForegroundColor Yellow
-    #             Write-Host "managed properties to be available: RefinableString90 through RefinableString98." -ForegroundColor Yellow
-    #             Write-Host ""
-    #             Write-Host "The following RefinableStrings are already in use in your environment:" -ForegroundColor Yellow
-    #             $ConflictingRefinableStrings | ForEach-Object { Write-Host "  - $_" -ForegroundColor Yellow }
-    #             Write-Host ""
-    #             Write-Host "REQUIRED ACTIONS:" -ForegroundColor Cyan
-    #             Write-Host "1. Review your current search schema configuration" -ForegroundColor White
-    #             Write-Host "2. Identify which custom properties are using RefinableString90-98" -ForegroundColor White
-    #             Write-Host "3. Remap those properties to use other available RefinableStrings" -ForegroundColor White
-    #             Write-Host "4. After remapping, re-run the installation/upgrade process" -ForegroundColor White
-    #             Write-Host ""
-    #             Write-Host "================================================================" -ForegroundColor Red
-    #             Write-Host ""
-    #             throw "Upgrade to v1.13.0 blocked due to RefinableString conflicts. Please resolve the conflicts and try again."
-    #         }
-    #         Write-Host "[SUCCESS] No RefinableString90-98 conflicts detected. Proceeding with upgrade." -ForegroundColor Green
-    #     }
-    #     catch {
-    #         if ($_.Exception.Message -match "Upgrade to v1.13.0 blocked") {
-    #             throw
-    #         }
-    #         Write-Host "[WARNING] Could not verify RefinableString availability. Proceeding with caution..." -ForegroundColor Yellow
-    #         Write-Host "[WARNING] Error: $($_.Exception.Message)" -ForegroundColor Yellow
-    #     }
-    # }
+        Write-Host "[INFO] Checking for RefinableString90-98 conflicts before upgrading to v1.13.0..."
+        try {
+            Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
+            $SearchConfigXml = Get-PnPSearchConfiguration -Scope Subscription -ErrorAction Stop
+            Connect-SharePoint -Url $Uri.AbsoluteUri -ConnectionInfo $ConnectionInfo
+
+            $ExpectedMappings = @{
+                "1000000090" = "ows_GtRiskFactor"
+                "1000000091" = "ows_GtRiskFactorPostAction"
+                "1000000092" = "ows_GtIdeaEconomicNumber"
+                "1000000093" = "ows_GtIdeaPriority"
+                "1000000094" = "ows_GtIdeaQualityNumber"
+                "1000000095" = "ows_GtIdeaRiskNumber"
+                "1000000096" = "ows_GtIdeaScore"
+                "1000000097" = "ows_GtIdeaStrategicNumber"
+                "1000000098" = "ows_GtIdeaOperationalNumber"
+            }
+
+            $RefinableStringNames = @{
+                "1000000090" = "RefinableString90"
+                "1000000091" = "RefinableString91"
+                "1000000092" = "RefinableString92"
+                "1000000093" = "RefinableString93"
+                "1000000094" = "RefinableString94"
+                "1000000095" = "RefinableString95"
+                "1000000096" = "RefinableString96"
+                "1000000097" = "RefinableString97"
+                "1000000098" = "RefinableString98"
+            }
+
+            [xml]$SearchConfig = $SearchConfigXml
+            $NsMgr = New-Object System.Xml.XmlNamespaceManager($SearchConfig.NameTable)
+            $NsMgr.AddNamespace("d3p1", "http://schemas.datacontract.org/2004/07/Microsoft.Office.Server.Search.Administration")
+            $NsMgr.AddNamespace("d4p1", "http://schemas.microsoft.com/2003/10/Serialization/Arrays")
+
+            $MappingNodes = $SearchConfig.SelectNodes("//d3p1:CrawledPropertyName/..", $NsMgr)
+
+            $ConflictDetails = @()
+            foreach ($MappingNode in $MappingNodes) {
+                $ManagedPid = $MappingNode.SelectSingleNode("d3p1:ManagedPid", $NsMgr).'#text'
+                $CrawledPropertyName = $MappingNode.SelectSingleNode("d3p1:CrawledPropertyName", $NsMgr).'#text'
+
+                if ($ExpectedMappings.ContainsKey($ManagedPid)) {
+                    $ExpectedCrawledProp = $ExpectedMappings[$ManagedPid]
+                    if ($CrawledPropertyName -ne $ExpectedCrawledProp) {
+                        $ConflictDetails += [PSCustomObject]@{
+                            RefinableString    = $RefinableStringNames[$ManagedPid]
+                            CurrentMapping     = $CrawledPropertyName
+                            ExpectedMapping    = $ExpectedCrawledProp
+                        }
+                    }
+                }
+            }
+
+            if ($ConflictDetails.Count -gt 0) {
+                Write-Host ""
+                Write-Host "================================================================" -ForegroundColor Yellow
+                Write-Host "WARNING: RefinableString Conflicts Detected" -ForegroundColor Yellow
+                Write-Host "================================================================" -ForegroundColor Yellow
+                Write-Host ""
+                Write-Host "Prosjektportalen 365 v1.13.0 requires RefinableString90-98." -ForegroundColor Yellow
+                Write-Host "The following RefinableStrings are already mapped to other" -ForegroundColor Yellow
+                Write-Host "crawled properties in your tenant:" -ForegroundColor Yellow
+                Write-Host ""
+                foreach ($Conflict in $ConflictDetails) {
+                    Write-Host "  $($Conflict.RefinableString):" -ForegroundColor Yellow
+                    Write-Host "    Currently mapped to : $($Conflict.CurrentMapping)" -ForegroundColor Yellow
+                    Write-Host "    PP365 expects       : $($Conflict.ExpectedMapping)" -ForegroundColor Yellow
+                }
+                Write-Host ""
+                Write-Host "These conflicts will NOT be resolved automatically." -ForegroundColor Red
+                Write-Host "The installation will continue, but the conflicting managed" -ForegroundColor Yellow
+                Write-Host "properties must be fixed MANUALLY after installation:" -ForegroundColor Yellow
+                Write-Host ""
+                Write-Host "  1. Go to SharePoint Admin Center > Search > Manage Search Schema" -ForegroundColor White
+                Write-Host "  2. Find the conflicting RefinableString properties listed above" -ForegroundColor White
+                Write-Host "  3. Remap your custom crawled properties to other RefinableStrings" -ForegroundColor White
+                Write-Host "  4. Ensure the PP365 crawled properties are correctly mapped" -ForegroundColor White
+                Write-Host ""
+                Write-Host "================================================================" -ForegroundColor Yellow
+                Write-Host ""
+            }
+            else {
+                Write-Host "[SUCCESS] No RefinableString90-98 conflicts detected." -ForegroundColor Green
+            }
+        }
+        catch {
+            Write-Host "[WARNING] Could not verify RefinableString availability: $($_.Exception.Message)" -ForegroundColor Yellow
+            Write-Host "[WARNING] Proceeding with installation. If you experience search issues," -ForegroundColor Yellow
+            Write-Host "[WARNING] please verify RefinableString90-98 mappings manually." -ForegroundColor Yellow
+        }
+    }
 }
