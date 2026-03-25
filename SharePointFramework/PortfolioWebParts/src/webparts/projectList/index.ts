@@ -1,7 +1,6 @@
 /* eslint-disable quotes */
 import {
   IPropertyPaneConfiguration,
-  IPropertyPaneDropdownOption,
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
@@ -16,10 +15,36 @@ import {
 } from '@pnp/spfx-property-controls/lib/PropertyFieldCollectionData'
 import { CalloutTriggers } from '@pnp/spfx-property-controls/lib/PropertyFieldHeader'
 import * as strings from 'PortfolioWebPartsStrings'
-import { IProjectListProps, ProjectList, ProjectListVerticals } from 'components/ProjectList'
+import { IProjectListProps, ProjectList } from 'components/ProjectList'
 import React from 'react'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
 import { PortalDataService, ProjectColumn } from 'pp365-shared-library'
+import { iconCatalog } from 'pp365-shared-library/lib/icons/iconCatalog'
+
+function renderJsonTextarea(field: any, value: string, onUpdate: (fieldId: string, value: string) => void) {
+  return React.createElement(
+    'div',
+    { style: { padding: '0' } },
+    React.createElement('textarea', {
+      style: {
+        width: '100%',
+        minWidth: '160px',
+        height: '32px',
+        fontFamily: 'monospace',
+        fontSize: '12px',
+        border: '1px solid #ccc',
+        borderRadius: '4px',
+        padding: '6px 8px',
+        boxSizing: 'border-box',
+        resize: 'vertical'
+      },
+      defaultValue: value ?? '',
+      onBlur: (event: React.FocusEvent<HTMLTextAreaElement>) => {
+        onUpdate(field.id, event.target.value)
+      }
+    })
+  )
+}
 
 export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectListProps> {
   private _portalDataService: PortalDataService
@@ -57,11 +82,7 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    const verticalOptions = ProjectListVerticals.map<IPropertyPaneDropdownOption>((vertical) => ({
-      key: vertical.key,
-      text: vertical.text
-    }))
-
+    const propertiesWithDefaults = { ...ProjectList.defaultProps, ...this.properties }
     const quickLaunchMenu = {
       ...ProjectList.defaultProps.quickLaunchMenu,
       ...this.properties.quickLaunchMenu
@@ -135,20 +156,72 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   calloutWidth: 430,
                   calloutContent: React.createElement('p', {}, strings.DefaultRenderModeDescription)
                 }),
-                PropertyFieldDropdownWithCallout('defaultVertical', {
-                  calloutTrigger: CalloutTriggers.Hover,
-                  key: 'defaultVerticalFieldId',
-                  label: strings.DefaultVerticalLabel,
-                  options: verticalOptions,
-                  selectedKey: this.properties.defaultVertical,
-                  calloutWidth: 430,
-                  calloutContent: React.createElement('p', {}, strings.DefaultVerticalDescription)
-                }),
-                PropertyFieldMultiSelect('hideVerticals', {
-                  key: 'hideVerticalsFieldId',
-                  label: strings.HideVerticalsLabel,
-                  options: verticalOptions,
-                  selectedKeys: this.properties.hideVerticals ?? []
+                PropertyFieldCollectionData('verticalConfigs', {
+                  key: 'verticalConfigsFieldId',
+                  label: strings.VerticalConfigLabel,
+                  panelProps: {
+                    type: 6
+                  },
+                  panelHeader: strings.VerticalConfigPanelHeader,
+                  manageBtnLabel: strings.VerticalConfigManageBtnLabel,
+                  enableSorting: true,
+                  value: propertiesWithDefaults.verticalConfigs,
+                  fields: [
+                    {
+                      id: 'title',
+                      title: strings.VerticalConfigTitleTitle,
+                      type: CustomCollectionFieldType.string,
+                      required: true
+                    },
+                    {
+                      id: 'iconName',
+                      title: strings.VerticalConfigIconTitle,
+                      type: CustomCollectionFieldType.dropdown,
+                      defaultValue: 'Cube',
+                      options: Object.keys(iconCatalog).map((key) => ({
+                        key,
+                        text: key
+                      }))
+                    },
+                    {
+                      id: 'clientFilter',
+                      title: strings.VerticalConfigClientFilterTitle,
+                      type: CustomCollectionFieldType.custom,
+                      defaultValue: '',
+                      onCustomRender: renderJsonTextarea
+                    },
+                    {
+                      id: 'fieldFilter',
+                      title: strings.VerticalConfigFieldFilterTitle,
+                      type: CustomCollectionFieldType.custom,
+                      defaultValue: '',
+                      onCustomRender: renderJsonTextarea
+                    },
+                    {
+                      id: 'visibilityRule',
+                      title: strings.VerticalConfigVisibilityRuleTitle,
+                      type: CustomCollectionFieldType.custom,
+                      defaultValue: '',
+                      onCustomRender: renderJsonTextarea
+                    },
+                    {
+                      id: 'requiresAccess',
+                      title: strings.VerticalConfigRequiresAccessTitle,
+                      type: CustomCollectionFieldType.boolean,
+                      defaultValue: false
+                    },
+                    {
+                      id: 'isDefault',
+                      title: strings.VerticalConfigIsDefaultTitle,
+                      type: CustomCollectionFieldType.boolean,
+                      defaultValue: false
+                    },
+                    {
+                      id: 'searchBoxPlaceholder',
+                      title: strings.VerticalConfigSearchBoxPlaceholderTitle,
+                      type: CustomCollectionFieldType.string
+                    }
+                  ]
                 })
               ]
             },

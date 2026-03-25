@@ -410,6 +410,19 @@ declare interface IPortfolioWebPartsStrings {
   DefaultTimeframeStartValue: string
   DefaultVerticalDescription: string
   DefaultVerticalLabel: string
+  VerticalConfigLabel: string
+  VerticalConfigPanelHeader: string
+  VerticalConfigManageBtnLabel: string
+  VerticalConfigKeyTitle: string
+  VerticalConfigTitleTitle: string
+  VerticalConfigIconTitle: string
+  VerticalConfigSortOrderTitle: string
+  VerticalConfigClientFilterTitle: string
+  VerticalConfigFieldFilterTitle: string
+  VerticalConfigVisibilityRuleTitle: string
+  VerticalConfigRequiresAccessTitle: string
+  VerticalConfigIsDefaultTitle: string
+  VerticalConfigSearchBoxPlaceholderTitle: string
   DefaultViewDescription: string
   DefaultViewLabel: string
   DefaultViewSetWarningMessage: string
@@ -437,6 +450,7 @@ declare interface IPortfolioWebPartsStrings {
   GeneralGroupName: string
   GroupByColumnLabel: string
   HideVerticalsLabel: string
+  HideVerticalsDescription: string
   IconNameDescription: string
   IconNameLabel: string
   IncludeViewNameInExcelExportFilenameLabel: string

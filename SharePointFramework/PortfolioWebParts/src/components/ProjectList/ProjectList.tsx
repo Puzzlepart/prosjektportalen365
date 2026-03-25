@@ -11,7 +11,6 @@ import { SiteContext, UserMessage, customLightTheme } from 'pp365-shared-library
 import React, { FC } from 'react'
 import { find, isEmpty } from 'underscore'
 import styles from './ProjectList.module.scss'
-import { ProjectListVerticals } from './ProjectListVerticals'
 import { IProjectListProps } from './types'
 import { useProjectList } from './useProjectList'
 import { useProjectListRenderer } from './useProjectListRenderer'
@@ -66,7 +65,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
                     selectedVertical: find(context.verticals, (v) => v.key === data.value)
                   })
                 }
-                selectedValue={context.state.selectedVertical.key}
+                selectedValue={context.state.selectedVertical?.key}
               >
                 {context.state.isDataLoaded &&
                   context.verticals
@@ -120,9 +119,58 @@ ProjectList.defaultProps = {
   showRenderModeSelector: true,
   showSortBy: true,
   defaultRenderMode: 'tiles',
-  defaultVertical: 'my_projects',
-  verticals: ProjectListVerticals,
-  hideVerticals: [],
+  verticalConfigs: [
+    {
+      title: strings.ProjectsAccessHeaderText,
+      iconName: 'LockOpen',
+      clientFilter: '{"hasUserAccess":true}',
+      fieldFilter: '',
+      visibilityRule: '',
+      requiresAccess: false,
+      isDefault: false,
+      searchBoxPlaceholder: strings.ProjectsAccessSearchBoxPlaceholderText
+    },
+    {
+      title: strings.MyProjectsHeaderText,
+      iconName: 'PersonCircle',
+      clientFilter: '{"isUserMember":true}',
+      fieldFilter: '',
+      visibilityRule: '',
+      requiresAccess: false,
+      isDefault: true,
+      searchBoxPlaceholder: strings.MyProjectsSearchBoxPlaceholderText
+    },
+    {
+      title: strings.AllProjectsHeaderText,
+      iconName: 'Cube',
+      clientFilter: '',
+      fieldFilter: '',
+      visibilityRule: '{"isUserInPortfolioManagerGroup":true}',
+      requiresAccess: false,
+      isDefault: false,
+      searchBoxPlaceholder: strings.AllProjectsSearchBoxPlaceholderText
+    },
+    {
+      title: strings.ParentProjectsHeaderText,
+      iconName: 'BoxMultiple',
+      clientFilter: '',
+      fieldFilter: '{"GtIsParentProject":true}',
+      visibilityRule: '',
+      requiresAccess: true,
+      isDefault: false,
+      searchBoxPlaceholder: strings.ParentProjectsSearchBoxPlaceholderText
+    },
+    {
+      title: strings.ProgramsHeaderText,
+      iconName: 'BoxMultiple',
+      clientFilter: '',
+      fieldFilter: '{"GtIsProgram":true}',
+      visibilityRule: '',
+      requiresAccess: true,
+      isDefault: false,
+      searchBoxPlaceholder: strings.ProgramSearchBoxPlaceholderText
+    }
+  ],
   useDynamicColors: true,
   showProjectLogo: true,
   primaryField: 'GtProjectServiceAreaText',

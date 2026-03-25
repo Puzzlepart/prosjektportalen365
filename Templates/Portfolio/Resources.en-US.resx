@@ -1444,24 +1444,6 @@
   <data name="Lists_DataSources_Category_ProjectDocuments" xml:space="preserve">
     <value>Project Documents</value>
   </data>
-  <data name="Lists_DataSources_Category_Projects" xml:space="preserve">
-    <value>Projects</value>
-  </data>
-  <data name="Lists_DataSources_Category_Projects_All" xml:space="preserve">
-    <value>All projects</value>
-  </data>
-  <data name="Lists_DataSources_Category_ProjectStatus" xml:space="preserve">
-    <value>Project Status</value>
-  </data>
-  <data name="Lists_DataSources_Category_ProjectStatus_All" xml:space="preserve">
-    <value>Project Status</value>
-  </data>
-  <data name="Lists_DataSources_Category_ProjectStatus_Last30Days" xml:space="preserve">
-    <value>Project Status (last 30 days)</value>
-  </data>
-  <data name="Lists_DataSources_Category_ProjectStatus_Last7Days" xml:space="preserve">
-    <value>Project Status (last 7 days)</value>
-  </data>
   <data name="Lists_DataSources_Category_ResourceAllocation" xml:space="preserve">
     <value>Resource Allocation</value>
   </data>
@@ -3063,6 +3045,12 @@
   </data>
   <data name="SiteFields_GtDataSourceId_DisplayName" xml:space="preserve">
     <value>Unique ID</value>
+  </data>
+  <data name="SiteFields_GtDataSourceConfig_Description" xml:space="preserve">
+    <value>JSON configuration for client-side filtering and visibility rules</value>
+  </data>
+  <data name="SiteFields_GtDataSourceConfig_DisplayName" xml:space="preserve">
+    <value>Data source config</value>
   </data>
   <data name="SiteFields_GtDataSourceLevel_Description" xml:space="preserve">
     <value>Specify the level of the data source</value>

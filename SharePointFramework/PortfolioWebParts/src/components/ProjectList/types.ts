@@ -72,6 +72,30 @@ export interface IQuickLaunch {
 
 export type ProjectListRenderMode = 'tiles' | 'list' | 'compactList'
 
+/**
+ * Configuration for a single ProjectList vertical tab, stored as
+ * a webpart property item in a `PropertyFieldCollectionData` collection.
+ *
+ * Filter logic works as follows:
+ * - `fieldFilter` – JSON object matching raw SP item field values
+ *   (e.g. `{"GtIsParentProject": true}`). Matched against `ProjectListModel.data`.
+ * - `clientFilter` – JSON object matching computed `ProjectListModel`
+ *   properties (e.g. `{"hasUserAccess": true}`, `{"isUserMember": true}`).
+ * - `visibilityRule` – JSON object matching `IProjectListState` properties
+ *   (e.g. `{"isUserInPortfolioManagerGroup": true}`). Hides the tab when unmet.
+ * - `requiresAccess` – project passes if user is portfolio manager OR has access.
+ */
+export interface IVerticalConfig {
+  title: string
+  iconName: string
+  clientFilter: string
+  fieldFilter: string
+  visibilityRule: string
+  requiresAccess: boolean
+  isDefault: boolean
+  searchBoxPlaceholder: string
+}
+
 export interface IProjectListProps extends IBaseComponentProps {
   /**
    * Sort by property
@@ -129,19 +153,10 @@ export interface IProjectListProps extends IBaseComponentProps {
   projectMetadata?: string[]
 
   /**
-   * Default vertical
+   * Vertical configurations from webpart property pane.
+   * Each entry defines a tab with optional filter/visibility logic.
    */
-  defaultVertical?: string
-
-  /**
-   * Array of verticals to hide
-   */
-  hideVerticals?: string[]
-
-  /**
-   * Vertical to show in the Tab component
-   */
-  verticals?: IProjectListVertical[]
+  verticalConfigs?: IVerticalConfig[]
 
   /**
    * Default render mode
@@ -190,6 +205,11 @@ export interface IProjectListState extends Pick<IShimmerProps, 'isDataLoaded'> {
    * - `compactList`: Render projects as a compact list
    */
   renderMode?: ProjectListRenderMode
+
+  /**
+   * Available verticals (built from webpart property configurations)
+   */
+  verticals?: IProjectListVertical[]
 
   /**
    * Current selected vertical
