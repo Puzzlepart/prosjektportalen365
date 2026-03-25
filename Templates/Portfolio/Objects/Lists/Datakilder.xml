@@ -224,33 +224,6 @@
             <pnp:DataValue FieldName="GtDataSourceLevel">{resource:Lists_DataSources_Level_ParentProgram}</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="GtDataSourceId">d9eb55ac-53c7-49dc-9dc0-bf3ea3166fb3</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSortOrder">220</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_ProjectStatus_All}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* DepartmentId:{{sitecollectionid}}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_ProjectStatus}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIconName">StatusCircleRing</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceLevel">{resource:Lists_DataSources_Level_Portfolio}</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtDataSourceId">e821a59a-10b6-494f-a3fe-11a4365620f0</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSortOrder">230</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_ProjectStatus_Last7Days}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* Created&gt;{TODAY-7} DepartmentId:{{sitecollectionid}}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_ProjectStatus}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIconName">SyncStatus</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceLevel">{resource:Lists_DataSources_Level_Portfolio}</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtDataSourceId">f99ca828-38a0-42c4-9a3d-4861c38c20c4</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSortOrder">240</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_ProjectStatus_Last30Days}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* Created&gt;{TODAY-30} DepartmentId:{{sitecollectionid}}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_ProjectStatus}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIconName">SyncStatus</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceLevel">{resource:Lists_DataSources_Level_Portfolio}</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">a85e0567-7120-4d32-8ef3-08dc6a168aeb</pnp:DataValue>
             <pnp:DataValue FieldName="GtSortOrder">250</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_IdeaModule_Registered}</pnp:DataValue>
