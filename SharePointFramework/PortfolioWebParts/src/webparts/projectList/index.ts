@@ -20,6 +20,31 @@ import React from 'react'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
 import { PortalDataService, ProjectColumn } from 'pp365-shared-library'
 
+function renderJsonTextarea(field: any, value: string, onUpdate: (fieldId: string, value: string) => void) {
+  return React.createElement(
+    'div',
+    { style: { padding: '4px 0' } },
+    React.createElement('textarea', {
+      style: {
+        width: '100%',
+        minWidth: '150px',
+        height: '30px',
+        fontFamily: 'monospace',
+        fontSize: '12px',
+        border: '1px solid #ccc',
+        borderRadius: '4px',
+        padding: '4px 8px',
+        boxSizing: 'border-box',
+        resize: 'vertical'
+      },
+      defaultValue: value ?? '',
+      onBlur: (event: React.FocusEvent<HTMLTextAreaElement>) => {
+        onUpdate(field.id, event.target.value)
+      }
+    })
+  )
+}
+
 export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectListProps> {
   private _portalDataService: PortalDataService
   private _columns: ProjectColumn[]
@@ -158,78 +183,21 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                       title: strings.VerticalConfigClientFilterTitle,
                       type: CustomCollectionFieldType.custom,
                       defaultValue: '',
-                      onCustomRender: (field, value, onUpdate) => {
-                        return React.createElement('textarea', {
-                          style: {
-                            width: '100%',
-                            minWidth: '150px',
-                            minHeight: '40px',
-                            fontFamily: 'monospace',
-                            fontSize: '12px',
-                            border: '1px solid #ccc',
-                            borderRadius: '4px',
-                            padding: '6px 8px',
-                            margin: '4px 0',
-                            resize: 'vertical'
-                          },
-                          defaultValue: value ?? '',
-                          onBlur: (event: React.FocusEvent<HTMLTextAreaElement>) => {
-                            onUpdate(field.id, event.target.value)
-                          }
-                        })
-                      }
+                      onCustomRender: renderJsonTextarea
                     },
                     {
                       id: 'fieldFilter',
                       title: strings.VerticalConfigFieldFilterTitle,
                       type: CustomCollectionFieldType.custom,
                       defaultValue: '',
-                      onCustomRender: (field, value, onUpdate) => {
-                        return React.createElement('textarea', {
-                          style: {
-                            width: '100%',
-                            minWidth: '150px',
-                            minHeight: '40px',
-                            fontFamily: 'monospace',
-                            fontSize: '12px',
-                            border: '1px solid #ccc',
-                            borderRadius: '4px',
-                            padding: '6px 8px',
-                            margin: '4px 0',
-                            resize: 'vertical'
-                          },
-                          defaultValue: value ?? '',
-                          onBlur: (event: React.FocusEvent<HTMLTextAreaElement>) => {
-                            onUpdate(field.id, event.target.value)
-                          }
-                        })
-                      }
+                      onCustomRender: renderJsonTextarea
                     },
                     {
                       id: 'visibilityRule',
                       title: strings.VerticalConfigVisibilityRuleTitle,
                       type: CustomCollectionFieldType.custom,
                       defaultValue: '',
-                      onCustomRender: (field, value, onUpdate) => {
-                        return React.createElement('textarea', {
-                          style: {
-                            width: '100%',
-                            minWidth: '150px',
-                            minHeight: '40px',
-                            fontFamily: 'monospace',
-                            fontSize: '12px',
-                            border: '1px solid #ccc',
-                            borderRadius: '4px',
-                            padding: '6px 8px',
-                            margin: '4px 0',
-                            resize: 'vertical'
-                          },
-                          defaultValue: value ?? '',
-                          onBlur: (event: React.FocusEvent<HTMLTextAreaElement>) => {
-                            onUpdate(field.id, event.target.value)
-                          }
-                        })
-                      }
+                      onCustomRender: renderJsonTextarea
                     },
                     {
                       id: 'requiresAccess',

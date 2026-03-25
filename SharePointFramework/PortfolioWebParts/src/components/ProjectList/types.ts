@@ -153,20 +153,10 @@ export interface IProjectListProps extends IBaseComponentProps {
   projectMetadata?: string[]
 
   /**
-   * Default vertical
-   */
-  defaultVertical?: string
-
-  /**
    * Vertical configurations from webpart property pane.
    * Each entry defines a tab with optional filter/visibility logic.
    */
   verticalConfigs?: IVerticalConfig[]
-
-  /**
-   * Vertical to show in the Tab component
-   */
-  verticals?: IProjectListVertical[]
 
   /**
    * Default render mode

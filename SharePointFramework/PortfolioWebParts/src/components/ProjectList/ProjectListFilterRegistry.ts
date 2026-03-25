@@ -14,11 +14,7 @@ import {
 } from '@fluentui/react-icons'
 import { FluentIcon } from '@fluentui/react-icons/lib/utils/createFluentIcon'
 
-/**
- * Map of icon names (stored in vertical config `iconName`) to
- * FluentUI bundled icons. Extend this map when new icon names are introduced
- * in vertical configurations.
- */
+/** Maps icon name strings to FluentUI bundled icon components. */
 const iconMap: Record<string, FluentIcon> = {
   LockOpen: bundleIcon(LockOpenFilled, LockOpenRegular),
   PersonCircle: bundleIcon(PersonCircleFilled, PersonCircleRegular),
@@ -29,33 +25,15 @@ const iconMap: Record<string, FluentIcon> = {
 /** Default icon used when `iconName` is not found in the icon map. */
 const defaultIcon = iconMap.Cube
 
-/**
- * Shape of the parsed filter/visibility configuration for a vertical.
- *
- * - `fieldFilter` – AND conditions on raw SharePoint item field values
- *   (e.g. `{"GtIsParentProject": true}`, `{"GtIsProgram": true}`).
- *   Matched against `ProjectListModel.data` (the underlying SP item).
- *   Uses loose equality (`==`) to handle SP boolean variations.
- * - `clientFilter` – AND conditions on **computed** `ProjectListModel`
- *   boolean properties that require client-side enrichment
- *   (e.g. `hasUserAccess`, `isUserMember`).
- * - `visibilityRule` – conditions on `IProjectListState` boolean properties
- *   (e.g. `isUserInPortfolioManagerGroup`). The tab is hidden when any
- *   condition is not met.
- * - `requiresAccess` – special flag: project passes if the user is a
- *   portfolio manager **OR** has access to the project.
- */
-export interface IDataSourceConfig {
+/** Parsed filter/visibility configuration for a vertical tab. */
+export interface IVerticalFilterConfig {
   fieldFilter?: Record<string, any>
   clientFilter?: Record<string, boolean>
   visibilityRule?: Record<string, boolean>
   requiresAccess?: boolean
 }
 
-/**
- * Safely parses a JSON string into an object. Returns an empty object
- * on parse errors or when the input is falsy.
- */
+/** Safely parses a JSON string. Returns `{}` on failure. */
 function parseConfig(configJson: string): Record<string, any> {
   if (!configJson) return {}
   try {
@@ -65,19 +43,9 @@ function parseConfig(configJson: string): Record<string, any> {
   }
 }
 
-/**
- * Builds a client-side filter function from an `IDataSourceConfig`.
- *
- * Evaluation order:
- * 1. `visibilityRule` – state-level gate (e.g. portfolio-manager-only tabs)
- * 2. `fieldFilter` – raw SP item field matching (e.g. `GtIsParentProject`)
- * 3. `clientFilter` – computed model property matching (e.g. `hasUserAccess`)
- * 4. `requiresAccess` – portfolio manager OR user has access
- *
- * Returns `() => true` when no config is provided.
- */
+/** Builds a client-side filter function from a vertical filter config. */
 function buildFilterFunction(
-  config: IDataSourceConfig
+  config: IVerticalFilterConfig
 ): (project: ProjectListModel, state: IProjectListState) => boolean {
   const hasFieldFilter =
     config.fieldFilter && Object.keys(config.fieldFilter).length > 0
@@ -126,16 +94,9 @@ function buildFilterFunction(
   }
 }
 
-/**
- * Builds an `isHidden` function from `IDataSourceConfig.visibilityRule`.
- * The tab is hidden when **any** visibility-rule condition is not met
- * in the current component state.
- *
- * Returns `undefined` when no visibility rules are configured (meaning
- * the tab is always visible).
- */
+/** Builds an `isHidden` function from visibility rules. Returns `undefined` if none configured. */
 function buildIsHiddenFunction(
-  config: IDataSourceConfig
+  config: IVerticalFilterConfig
 ): ((state: IProjectListState) => boolean) | undefined {
   if (!config.visibilityRule || Object.keys(config.visibilityRule).length === 0) {
     return undefined
@@ -149,32 +110,17 @@ function buildIsHiddenFunction(
   }
 }
 
-/**
- * Resolves an icon name string to a FluentUI bundled icon component.
- * Falls back to the default `Cube` icon when the name is not recognized.
- *
- * @param iconName Icon name from vertical config
- */
+/** Resolves an icon name to a FluentUI bundled icon. Falls back to `Cube`. */
 function resolveIcon(iconName: string): FluentIcon {
   return iconMap[iconName] ?? defaultIcon
 }
 
-/**
- * Converts an array of `IVerticalConfig` objects (from webpart properties)
- * into `IProjectListVertical[]` for use by the `ProjectList` component tab bar.
- *
- * Each config's JSON filter strings are parsed to derive client-side filter
- * and visibility logic. Order is preserved as-is (sorting is handled by
- * the property pane's drag-to-reorder).
- *
- * @param configs Array of vertical config objects from webpart properties
- * @returns Array of `IProjectListVertical` in the order provided
- */
+/** Converts `IVerticalConfig[]` from webpart properties into `IProjectListVertical[]`. */
 export function convertConfigsToVerticals(
   configs: IVerticalConfig[]
 ): IProjectListVertical[] {
   return configs.map((cfg, index) => {
-      const config: IDataSourceConfig = {
+      const config: IVerticalFilterConfig = {
         clientFilter: parseConfig(cfg.clientFilter) as Record<string, boolean>,
         fieldFilter: parseConfig(cfg.fieldFilter) as Record<string, any>,
         visibilityRule: parseConfig(cfg.visibilityRule) as Record<string, boolean>,
@@ -201,17 +147,7 @@ export function convertConfigsToVerticals(
     })
 }
 
-/**
- * Finds the default vertical from the converted verticals.
- *
- * Priority order:
- * 1. Config with `isDefault === true` (matched by index)
- * 2. First vertical in the list
- *
- * @param configs Source vertical configs (used to check `isDefault`)
- * @param verticals Converted verticals (same order as configs)
- * @returns The default vertical, or `undefined` if no verticals exist
- */
+/** Finds the default vertical (`isDefault === true`), falling back to the first one. */
 export function findDefaultVertical(
   configs: IVerticalConfig[],
   verticals: IProjectListVertical[]

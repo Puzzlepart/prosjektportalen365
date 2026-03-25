@@ -10,13 +10,11 @@ import { useProjectListDataFetch } from './useProjectListDataFetch'
 import { useProjectListState } from './useProjectListState'
 
 /**
- * Component logic hook for `ProjectList`. This hook is responsible for
- * fetching data, sorting, filtering and other logic.
+ * Component logic hook for `ProjectList`. Handles data fetching,
+ * sorting, filtering and card actions.
  *
- * Verticals are built from `props.verticalConfigs` (webpart property pane)
- * in `useProjectListDataFetch` and stored in `state.verticals`.
- *
- * @param props Props
+ * Verticals are built synchronously from `props.verticalConfigs`
+ * in `useProjectListState`.
  */
 export const useProjectList = (props: IProjectListProps) => {
   const fluentProviderId = useId('fp-project-list')
@@ -25,11 +23,6 @@ export const useProjectList = (props: IProjectListProps) => {
 
   const verticals = state.verticals ?? []
 
-  /**
-   * Get card actions. For now only `showProjectInfo` is handled.
-   *
-   * @param project - Project
-   */
   function getCardActions(project: ProjectListModel): ButtonProps[] {
     return [
       {
@@ -40,12 +33,6 @@ export const useProjectList = (props: IProjectListProps) => {
     ]
   }
 
-  /**
-   * On execute card action. For now only `showProjectInfo` is handled.
-   *
-   * @param event - Event
-   * @param project - Project
-   */
   function onExecuteCardAction(event: React.MouseEvent<any>, project: ProjectListModel) {
     event.preventDefault()
     event.stopPropagation()
@@ -56,12 +43,6 @@ export const useProjectList = (props: IProjectListProps) => {
     }
   }
 
-  /**
-   * Filter projects based on the `filter` function from the `selectedVertical`
-   * and the `searchTerm`. Then sort the projects based on the `sort` state.
-   *
-   * @param projects - Projects
-   */
   function filterProjects(projects: ProjectListModel[]) {
     return projects
       .filter((project) =>
@@ -99,11 +80,6 @@ export const useProjectList = (props: IProjectListProps) => {
 
   const projects = state.isDataLoaded ? filterProjects(state.projects) : state.projects
 
-  /**
-   * Create card context for the provided project.
-   *
-   * @param project Project to create context for
-   */
   function createCardContext(project: ProjectListModel): IProjectCardContext {
     const shouldDisplay = (key: string) => _.contains(props.projectMetadata, key)
     return {
