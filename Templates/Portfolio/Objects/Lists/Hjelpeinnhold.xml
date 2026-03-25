@@ -68,7 +68,7 @@
             <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3.4-Gevinstoversikt.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">60</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">50</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_ExperienceLogUserManual}</pnp:DataValue>
             <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Portfolio}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
@@ -78,7 +78,7 @@
             <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3.5-Erfaringslogg.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">70</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">60</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_DeliveryOverviewUserManual}</pnp:DataValue>
             <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Portfolio}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
@@ -88,7 +88,7 @@
             <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3.6-Leveranseoversikt.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">80</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">70</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_UncertaintyOverviewUserManual}</pnp:DataValue>
             <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Portfolio}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
@@ -98,7 +98,7 @@
             <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3.7-Usikkerhetsoversikt.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">90</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">80</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_ResourceAllocationUserManual}</pnp:DataValue>
             <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Portfolio}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
