@@ -39,27 +39,31 @@ export class SitePermissions extends BaseTask {
       ])
 
       for (let i = 0; i < permConfig.length; i++) {
-        const { groupName, permissionLevel } = permConfig[i]
-        const siteGroup = await this._getSiteGroupByName(groupName)
+        try {
+          const { groupName, permissionLevel } = permConfig[i]
+          const siteGroup = await this._getSiteGroupByName(groupName)
 
-        const users = siteGroup || []
-        if (isEmpty(users)) continue
-        const roleDefId = roleDefinitions[permissionLevel]
-        if (roleDefId) {
-          this.logInformation(
-            `Creating group ${groupName} with permission level ${permissionLevel}...`
-          )
-          const { group, data } = await params.web.siteGroups.add({ Title: groupName })
-          await params.web.roleAssignments.add(data.Id, roleDefId)
-          for (let j = 0; j < users.length; j++) {
-            this.logInformation(`Adding user ${users[j]} to group ${groupName}...`)
-            try {
-              await group.users.add(users[j])
-              this.logInformation(`User ${users[j]} successfully added to group ${groupName}.`)
-            } catch (error) {
-              this.logError(`Failed to add user ${users[j]} to group ${groupName}.`)
+          const users = siteGroup || []
+          if (isEmpty(users)) continue
+          const roleDefId = roleDefinitions[permissionLevel]
+          if (roleDefId) {
+            this.logInformation(
+              `Creating group ${groupName} with permission level ${permissionLevel}...`
+            )
+            const { group, data } = await params.web.siteGroups.add({ Title: groupName })
+            await params.web.roleAssignments.add(data.Id, roleDefId)
+            for (let j = 0; j < users.length; j++) {
+              this.logInformation(`Adding user ${users[j]} to group ${groupName}...`)
+              try {
+                await group.users.add(users[j])
+                this.logInformation(`User ${users[j]} successfully added to group ${groupName}.`)
+              } catch (error) {
+                this.logError(`Failed to add user ${users[j]} to group ${groupName}.`)
+              }
             }
           }
+        } catch (error) {
+          this.logError(`Failed to create group ${permConfig[i].groupName}. ${error}`)
         }
       }
       return params
