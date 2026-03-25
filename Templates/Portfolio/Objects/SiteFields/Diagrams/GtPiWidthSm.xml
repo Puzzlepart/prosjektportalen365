@@ -1,3 +1,0 @@
-﻿<Field DisplayName="{resource:SiteFields_GtPiWidthSm_DisplayName}" Description="{resource:SiteFields_GtPiWidthSm_Description}" Type="Number" Min="1" Max="12" Decimals="0" Group="{resource:SiteFields_Portfolio_Group}" ID="{69a75937-35ab-4b35-9081-c8f841460d44}" StaticName="GtPiWidthSm" Name="GtPiWidthSm">
-    <Default>12</Default>
-</Field>

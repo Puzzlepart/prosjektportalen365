@@ -59,16 +59,6 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">40</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_PortfolioInsightUserManual}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Portfolio}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIconName" />
-            <pnp:DataValue FieldName="GtURL">SitePages/{resource:ClientSidePages_PortfolioInsights_PageName}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtTextContent" />
-            <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3.2-Portefoljeinnsikt.md</pnp:DataValue>
-        </pnp:DataRow>
-        <pnp:DataRow>
-            <pnp:DataValue FieldName="GtSortOrder">50</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_BenefitOverviewPortfolioUserManual}</pnp:DataValue>
             <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Portfolio}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
