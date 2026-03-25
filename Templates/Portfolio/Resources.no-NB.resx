@@ -868,12 +868,6 @@
   <data name="ClientSidePages_ParentUncertainties_WebPartTitle" xml:space="preserve">
     <value>Usikkerheter for underområder</value>
   </data>
-  <data name="ClientSidePages_PortfolioInsights_PageName" xml:space="preserve">
-    <value>Porteføljeinnsikt.aspx</value>
-  </data>
-  <data name="ClientSidePages_PortfolioInsights_Title" xml:space="preserve">
-    <value>Porteføljeinnsikt</value>
-  </data>
   <data name="ClientSidePages_PortfolioOverview_PageName" xml:space="preserve">
     <value>Porteføljeoversikt.aspx</value>
   </data>
@@ -973,12 +967,6 @@
   <data name="ContentTypes_ArchiveLogElement_Name" xml:space="preserve">
     <value>Arkiveringsloggelement</value>
   </data>
-  <data name="ContentTypes_BarChart_Description" xml:space="preserve">
-    <value>Opprett et nytt stolpediagram</value>
-  </data>
-  <data name="ContentTypes_BarChart_Name" xml:space="preserve">
-    <value>Stolpediagram</value>
-  </data>
   <data name="ContentTypes_Benefit_Name" xml:space="preserve">
     <value>Gevinst</value>
   </data>
@@ -988,23 +976,11 @@
   <data name="ContentTypes_Change_Name" xml:space="preserve">
     <value>Endring</value>
   </data>
-  <data name="ContentTypes_ChartConfigurationElement_Description" xml:space="preserve">
-    <value>Opprett et nytt grafkonfigurasjonelement</value>
-  </data>
-  <data name="ContentTypes_ChartConfigurationElement_Name" xml:space="preserve">
-    <value>Grafkonfigurasjonelement</value>
-  </data>
   <data name="ContentTypes_Checkpoint_Description" xml:space="preserve">
     <value>Opprett et nytt sjekkpunkt</value>
   </data>
   <data name="ContentTypes_Checkpoint_Name" xml:space="preserve">
     <value>Sjekkpunkt</value>
-  </data>
-  <data name="ContentTypes_ColumnChart_Description" xml:space="preserve">
-    <value>Opprett et nytt kolonnediagram</value>
-  </data>
-  <data name="ContentTypes_ColumnChart_Name" xml:space="preserve">
-    <value>Kolonnediagram</value>
   </data>
   <data name="ContentTypes_CommunicationElement_Name" xml:space="preserve">
     <value>Kommunikasjonselement</value>
@@ -1014,12 +990,6 @@
   </data>
   <data name="ContentTypes_ConfigurationElement_Name" xml:space="preserve">
     <value>Konfigurasjonselement</value>
-  </data>
-  <data name="ContentTypes_CustomChart_Description" xml:space="preserve">
-    <value>Opprett et nytt egendefinert diagram</value>
-  </data>
-  <data name="ContentTypes_CustomChart_Name" xml:space="preserve">
-    <value>Egendefinert diagram</value>
   </data>
   <data name="ContentTypes_DataSource_Description" xml:space="preserve">
     <value>Definér en datakilde for porteføljen</value>
@@ -1219,12 +1189,6 @@
   <data name="ContentTypes_SectionBase_Name" xml:space="preserve">
     <value>Seksjonsbase</value>
   </data>
-  <data name="ContentTypes_SectorDiagram_Description" xml:space="preserve">
-    <value>Opprett et nytt sektordiagram</value>
-  </data>
-  <data name="ContentTypes_SectorDiagram_Name" xml:space="preserve">
-    <value>Sektordiagram</value>
-  </data>
   <data name="ContentTypes_Stakeholder_Description" xml:space="preserve">
     <value>Opprett en ny interessent</value>
   </data>
@@ -1354,24 +1318,6 @@
   <data name="Lists_ChangeAnalysis_Title" xml:space="preserve">
     <value>Endringsanalyse</value>
   </data>
-  <data name="Lists_ChartConfiguration_Description" xml:space="preserve">
-    <value>Administrer grafelementer i Porteføljeinnsikt</value>
-  </data>
-  <data name="Lists_ChartConfiguration_ProjectsInVariousPhases_Title" xml:space="preserve">
-    <value>Prosjekter i ulike faser</value>
-  </data>
-  <data name="Lists_ChartConfiguration_ProjectType_Title" xml:space="preserve">
-    <value>Prosjekttype</value>
-  </data>
-  <data name="Lists_ChartConfiguration_ServiceAreas_Title" xml:space="preserve">
-    <value>Tjenesteområder</value>
-  </data>
-  <data name="Lists_ChartConfiguration_Title" xml:space="preserve">
-    <value>Grafkonfigurasjon</value>
-  </data>
-  <data name="Lists_ChartConfiguration_Url" xml:space="preserve">
-    <value>Lists/Grafkonfigurasjon</value>
-  </data>
   <data name="Lists_CommunicationPlan_Title" xml:space="preserve">
     <value>Kommunikasjonsplan</value>
   </data>
@@ -1389,12 +1335,6 @@
   </data>
   <data name="Lists_ConfigurationFiles_Url" xml:space="preserve">
     <value>Konfigurasjonsfiler</value>
-  </data>
-  <data name="Lists_CustomCharts_Title" xml:space="preserve">
-    <value>Egendefinerte diagrammer</value>
-  </data>
-  <data name="Lists_CustomCharts_Url" xml:space="preserve">
-    <value>CustomCharts</value>
   </data>
   <data name="Lists_DataSources_Category_BenefitOverview" xml:space="preserve">
     <value>Gevinstoversikt</value>
@@ -1683,9 +1623,6 @@
   </data>
   <data name="Lists_HelpContent_PhaseChecklistUserManual" xml:space="preserve">
     <value>Fasesjekkliste Brukermanual</value>
-  </data>
-  <data name="Lists_HelpContent_PortfolioInsightUserManual" xml:space="preserve">
-    <value>Porteføljeinnsikt Brukermanual</value>
   </data>
   <data name="Lists_HelpContent_PortfolioLevelUserManual" xml:space="preserve">
     <value>Porteføljenivå Brukermanual</value>
@@ -3765,168 +3702,6 @@
   </data>
   <data name="SiteFields_GtPermissionLevel_DisplayName" xml:space="preserve">
     <value>Rettighetsnivå</value>
-  </data>
-  <data name="SiteFields_GtPiAutomaticRefreshEnabled_Description" xml:space="preserve">
-    <value>Automatisk oppdatering av data</value>
-  </data>
-  <data name="SiteFields_GtPiAutomaticRefreshEnabled_DisplayName" xml:space="preserve">
-    <value>Automatisk oppdatering</value>
-  </data>
-  <data name="SiteFields_GtPiAutomaticRefreshInterval_Description" xml:space="preserve">
-    <value>Intervallet for automatisk oppdatering av data.</value>
-  </data>
-  <data name="SiteFields_GtPiAutomaticRefreshInterval_DisplayName" xml:space="preserve">
-    <value>Intervall (sekunder) for automatisk oppdatering</value>
-  </data>
-  <data name="SiteFields_GtPiCategoryField_Description" xml:space="preserve">
-    <value>Kolonne for kategorisering. Velges fra listen Prosjektkolonner.</value>
-  </data>
-  <data name="SiteFields_GtPiCategoryField_DisplayName" xml:space="preserve">
-    <value>Kategorikolonne</value>
-  </data>
-  <data name="SiteFields_GtPiColorsMap_Description" xml:space="preserve">
-    <value>Farger for verdien i formatet [VERDI1]:[FARGE1];[VERDI2]:[FARGE2]</value>
-  </data>
-  <data name="SiteFields_GtPiColorsMap_DisplayName" xml:space="preserve">
-    <value>Farger</value>
-  </data>
-  <data name="SiteFields_GtPiCustomConfiguration_Description" xml:space="preserve">
-    <value>Konfigurasjonsfil for egendefinert diagram</value>
-  </data>
-  <data name="SiteFields_GtPiCustomConfiguration_DisplayName" xml:space="preserve">
-    <value>Konfigurasjonsfil</value>
-  </data>
-  <data name="SiteFields_GtPiCustomType_Description" xml:space="preserve">
-    <value>Type diagram</value>
-  </data>
-  <data name="SiteFields_GtPiCustomType_DisplayName" xml:space="preserve">
-    <value>Diagramtype</value>
-  </data>
-  <data name="SiteFields_GtPiExpandProperty_Description" xml:space="preserve">
-    <value>Om feltet er et brukerfelt (e.l.) må du velge en egenskap å ekspandere</value>
-  </data>
-  <data name="SiteFields_GtPiExpandProperty_DisplayName" xml:space="preserve">
-    <value>Ekspander egenskap</value>
-  </data>
-  <data name="SiteFields_GtPiFields_Description" xml:space="preserve">
-    <value>Hvilke felter skal inkluderes i diagrammet/datakilden. Velges fra listen Prosjektkolonner.</value>
-  </data>
-  <data name="SiteFields_GtPiFields_DisplayName" xml:space="preserve">
-    <value>Felter</value>
-  </data>
-  <data name="SiteFields_GtPiFieldX_Description" xml:space="preserve">
-    <value>Hvilken kolonne skal brukes for X. Velges fra listen Prosjektkolonner.</value>
-  </data>
-  <data name="SiteFields_GtPiFieldX_DisplayName" xml:space="preserve">
-    <value>Kolonne(X)</value>
-  </data>
-  <data name="SiteFields_GtPiFieldY_Description" xml:space="preserve">
-    <value>Hvilken kolonne skal brukes for Y. Velges fra listen Prosjektkolonner.</value>
-  </data>
-  <data name="SiteFields_GtPiFieldY_DisplayName" xml:space="preserve">
-    <value>Kolonne(Y)</value>
-  </data>
-  <data name="SiteFields_GtPiFieldZ_Description" xml:space="preserve">
-    <value>Hvilken kolonne skal brukes for Z. Velges fra listen Prosjektkolonner.</value>
-  </data>
-  <data name="SiteFields_GtPiFieldZ_DisplayName" xml:space="preserve">
-    <value>Kolonne(Z)</value>
-  </data>
-  <data name="SiteFields_GtPiShowLegend_Description" xml:space="preserve">
-    <value>Angir om et tegnforklaring (legend) skal vises for diagrammet.</value>
-  </data>
-  <data name="SiteFields_GtPiShowLegend_DisplayName" xml:space="preserve">
-    <value>Vis merkelapp</value>
-  </data>
-  <data name="SiteFields_GtPiStacking_Description" xml:space="preserve">
-    <value>Angir om dataene i diagrammet skal stables.</value>
-  </data>
-  <data name="SiteFields_GtPiStacking_DisplayName" xml:space="preserve">
-    <value>Stabling</value>
-  </data>
-  <data name="SiteFields_GtPiSubTitle_Description" xml:space="preserve">
-    <value>Undertekst for diagrammet.</value>
-  </data>
-  <data name="SiteFields_GtPiSubTitle_DisplayName" xml:space="preserve">
-    <value>Undertekst</value>
-  </data>
-  <data name="SiteFields_GtPiValueOrder_Description" xml:space="preserve">
-    <value>Rekkefølge for verdiene (f.eks. Konsept,Planlegge,Gjennomføre,Avslutte,Realisere)</value>
-  </data>
-  <data name="SiteFields_GtPiValueOrder_DisplayName" xml:space="preserve">
-    <value>Verdirekkefølge</value>
-  </data>
-  <data name="SiteFields_GtPiValueSuffix_Description" xml:space="preserve">
-    <value>Tegn eller streng som skal legges til etter hver verdi i diagrammet.</value>
-  </data>
-  <data name="SiteFields_GtPiValueSuffix_DisplayName" xml:space="preserve">
-    <value>Verdisuffiks</value>
-  </data>
-  <data name="SiteFields_GtPiWidthLg_Description" xml:space="preserve">
-    <value>Bredde (1-12) for 640px til 1023px</value>
-  </data>
-  <data name="SiteFields_GtPiWidthLg_DisplayName" xml:space="preserve">
-    <value>Bredde (640px - 1023px)</value>
-  </data>
-  <data name="SiteFields_GtPiWidthMd_Description" xml:space="preserve">
-    <value>Bredde (1-12) for 480px til 639px</value>
-  </data>
-  <data name="SiteFields_GtPiWidthMd_DisplayName" xml:space="preserve">
-    <value>Bredde (480px - 639px)</value>
-  </data>
-  <data name="SiteFields_GtPiWidthSm_Description" xml:space="preserve">
-    <value>Bredde (1-12) for 320px til 479px</value>
-  </data>
-  <data name="SiteFields_GtPiWidthSm_DisplayName" xml:space="preserve">
-    <value>Bredde (320px - 479px)</value>
-  </data>
-  <data name="SiteFields_GtPiWidthXl_Description" xml:space="preserve">
-    <value>Bredde (1-12) for 1024px til 1365px</value>
-  </data>
-  <data name="SiteFields_GtPiWidthXl_DisplayName" xml:space="preserve">
-    <value>Bredde (1024px - 1365px)</value>
-  </data>
-  <data name="SiteFields_GtPiWidthXxl_Description" xml:space="preserve">
-    <value>Bredde (1-12) for 1366px til 1919px</value>
-  </data>
-  <data name="SiteFields_GtPiWidthXxl_DisplayName" xml:space="preserve">
-    <value>Bredde (1366px - 1919px)</value>
-  </data>
-  <data name="SiteFields_GtPiWidthXxxl_Description" xml:space="preserve">
-    <value>Bredde (1-12) for 1920px til oppover</value>
-  </data>
-  <data name="SiteFields_GtPiWidthXxxl_DisplayName" xml:space="preserve">
-    <value>Bredde (1920px og oppover)</value>
-  </data>
-  <data name="SiteFields_GtPiXAxisTitle_Description" xml:space="preserve">
-    <value>Tittel på X-aksen</value>
-  </data>
-  <data name="SiteFields_GtPiXAxisTitle_DisplayName" xml:space="preserve">
-    <value>Tittel (X-akse)</value>
-  </data>
-  <data name="SiteFields_GtPiYAxisTitle_Description" xml:space="preserve">
-    <value>Tittel på Y-aksen</value>
-  </data>
-  <data name="SiteFields_GtPiYAxisTitle_DisplayName" xml:space="preserve">
-    <value>Tittel (Y-akse)</value>
-  </data>
-  <data name="SiteFields_GtPiYMax_Description" xml:space="preserve">
-    <value>Max verdi for Y-aksen</value>
-  </data>
-  <data name="SiteFields_GtPiYMax_DisplayName" xml:space="preserve">
-    <value>Max (Y-akse)</value>
-  </data>
-  <data name="SiteFields_GtPiYMin_Description" xml:space="preserve">
-    <value>Minimum verdi for Y-aksen</value>
-  </data>
-  <data name="SiteFields_GtPiYMin_DisplayName" xml:space="preserve">
-    <value>Min (Y-akse)</value>
-  </data>
-  <data name="SiteFields_GtPiYTickInterval_Description" xml:space="preserve">
-    <value>Intervall mellom hver markering på Y-aksen</value>
-  </data>
-  <data name="SiteFields_GtPiYTickInterval_DisplayName" xml:space="preserve">
-    <value>Intervall (Y-akse)</value>
   </data>
   <data name="SiteFields_GtPlannerName_Description" xml:space="preserve">
     <value>Velg et eget navn for planen. Brukes om du vil opprette flere planer for samme prosjekt. Det fullstendige plannavnet vil også inneholde navnet på området/prosjektet.</value>

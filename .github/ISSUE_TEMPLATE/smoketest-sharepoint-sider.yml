@@ -197,10 +197,9 @@ body:
     attributes:
       label: "Konfigurasjon — Konfigurasjon (kolonne 2)"
       description: >
-        Quick Links-gruppe med 5 knapper for diverse konfigurasjon.
+        Quick Links-gruppe med 4 knapper for diverse konfigurasjon.
       options:
         - label: "Gruppetittel «Konfigurasjon» vises"
-        - label: "«Grafkonfigurasjon» → åpner listen Grafkonfigurasjon (egendefinerte diagrammer)"
         - label: "«Tidslinjekonfigurasjon» → åpner listen Tidslinjekonfigurasjon"
         - label: "«Idékonfigurasjon» → åpner listen Idékonfigurasjon"
         - label: "«Hjelpeinnhold» → åpner listen Hjelpeinnhold"
@@ -425,27 +424,6 @@ body:
         - label: "«Datakilder» er tilgjengelig med nivå-kolonner (Portefølje, Prosjekt, Overordnet/Program, Ikke i bruk)"
         - label: "Endring i statusseksjoner reflekteres i Prosjektstatus-webdelen"
         - label: "Endring i prosjektkolonner reflekteres i porteføljeoversikten"
-
-  # ──────────────────────────────────────────────────────────────────────
-  #  GRAFKONFIGURASJON
-  # ──────────────────────────────────────────────────────────────────────
-
-  - type: markdown
-    attributes:
-      value: |
-        ---
-        # 📈 Grafkonfigurasjon
-        Konfigurasjon for egendefinerte diagrammer.
-
-  - type: checkboxes
-    id: grafkonfigurasjon
-    attributes:
-      label: Grafkonfigurasjon
-      description: >
-        Listen «Grafkonfigurasjon» styrer visualiseringer.
-      options:
-        - label: "Listen «Grafkonfigurasjon» er tilgjengelig"
-        - label: "Endringer i grafkonfigurasjon reflekteres i porteføljevisninger"
 
   # ──────────────────────────────────────────────────────────────────────
   #  MALOPPSETT OG MALER

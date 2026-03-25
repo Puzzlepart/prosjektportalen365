@@ -116,21 +116,6 @@ export interface IPortfolioWebPartsDataAdapter {
   ): Promise<DataSource[]>
 
   /**
-   * Fetch chart data for a view
-   *
-   * @param view View configuration
-   * @param configuration PortfolioOverviewConfiguration
-   * @param chartConfigurationListName List name for chart configuration
-   * @param siteId Site ID
-   */
-  fetchChartData?(
-    currentView: PortfolioOverviewView,
-    configuration: IPortfolioOverviewConfiguration,
-    chartConfigurationListName: string,
-    siteId: string
-  ): Promise<{ charts: any; chartData: any; contentTypes: any }>
-
-  /**
    * Get portfolio configuration from SharePoint lists. Optionally from
    * a specific portfolio instance.
    *

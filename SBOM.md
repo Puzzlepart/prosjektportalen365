@@ -2,15 +2,15 @@
 
 **Project:** Prosjektportalen 365  
 **Version:** 1.12.1  
-**Generated:** 2026-03-18T09:56:18.190Z  
+**Generated:** 2026-03-25T15:37:20.652Z  
 **Format:** CycloneDX-inspired Markdown
 
 ## Overview
 
 This SBOM documents all software dependencies used in the Prosjektportalen 365 project, including all packages in the monorepo.
 
-**Total Dependencies:** 128  
-**Production Dependencies:** 81  
+**Total Dependencies:** 127  
+**Production Dependencies:** 80  
 **Development Dependencies:** 47  
 **Projects in Monorepo:** 8
 
@@ -28,12 +28,12 @@ This SBOM documents all software dependencies used in the Prosjektportalen 365 p
 
 ### pp365-portfoliowebparts (1.12.1)
 
-- **Production Dependencies:** 49
+- **Production Dependencies:** 48
 - **Development Dependencies:** 31
 
 ### pp365-programwebparts (1.12.1)
 
-- **Production Dependencies:** 39
+- **Production Dependencies:** 38
 - **Development Dependencies:** 31
 
 ### pp365-projectextensions (1.12.1)
@@ -60,7 +60,7 @@ This SBOM documents all software dependencies used in the Prosjektportalen 365 p
 
 This section lists all unique dependencies across all projects.
 
-### Production Dependencies (81)
+### Production Dependencies (80)
 
 | Package | Version(s) | Used By |
 |---------|-----------|----------|
@@ -125,7 +125,6 @@ This section lists all unique dependencies across all projects.
 | react-error-boundary | ~4.0.11, ~4.0.10 | pp365-portfoliowebparts, pp365-projectwebparts |
 | react-fade-in | ~2.0.1 | pp365-portfoliowebparts |
 | react-gauge-component | ~1.2.61 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| react-highcharts | 16.0.2 | pp365-portfoliowebparts, pp365-programwebparts |
 | react-image-fade-in | 1.0.2 | pp365-projectwebparts |
 | react-markdown | ^8.0.3 | pp365-portfolioextensions, pp365-projectextensions, pp365-projectwebparts, +1 more |
 | react-scroll | 1.7.11 | pp365-projectwebparts |
@@ -277,7 +276,7 @@ This section provides a detailed view of dependencies for each project.
 
 ### pp365-portfoliowebparts
 
-#### Production Dependencies (49)
+#### Production Dependencies (48)
 
 | Package | Version |
 |---------|----------|
@@ -323,7 +322,6 @@ This section provides a detailed view of dependencies for each project.
 | react-error-boundary | ~4.0.11 |
 | react-fade-in | ~2.0.1 |
 | react-gauge-component | ~1.2.61 |
-| react-highcharts | 16.0.2 |
 | react-virtualized-auto-sizer | ~1.0.24 |
 | react-window | ~1.8.10 |
 | sp-entityportal-service | 2.3.0 |
@@ -369,7 +367,7 @@ This section provides a detailed view of dependencies for each project.
 
 ### pp365-programwebparts
 
-#### Production Dependencies (39)
+#### Production Dependencies (38)
 
 | Package | Version |
 |---------|----------|
@@ -408,7 +406,6 @@ This section provides a detailed view of dependencies for each project.
 | react | 17.0.1 |
 | react-dom | 17.0.1 |
 | react-gauge-component | ~1.2.61 |
-| react-highcharts | 16.0.2 |
 | sp-entityportal-service | 2.3.0 |
 | tslib | 2.3.1 |
 | underscore | ~1.13.6 |

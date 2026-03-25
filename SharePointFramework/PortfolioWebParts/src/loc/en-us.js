@@ -320,7 +320,6 @@ define([], function () {
     BooleanOff: 'Off',
     BooleanOn: 'On',
     CancelButtonLabel: 'Cancel',
-    ChartErrorText: 'The graph is invalidly configured.',
     ColumnRenderDataTypePropertiesHeaderText: 'Properties for display type',
     ColumnRenderDescription: 'Choose how the column should be displayed. If there are text fields to be displayed over several lines, select Note.',
     ColumnRenderLabel: 'Show as',
