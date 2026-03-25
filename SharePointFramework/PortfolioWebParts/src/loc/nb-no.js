@@ -177,6 +177,7 @@ define([], function () {
       ExpirationDateNoneOption: 'Ingen utløpsdato',
       ExpirationDateMonthOption: '{0} måned(er)',
       NoProvisionAccessMessage: 'Du har ikke tilgang til Bestillingsportalen.',
+      NoHubSiteConnectionMessage: 'Hubtilknytning er ikke tilgjengelig. Området kan bestilles, men vil ikke bli knyttet til en hub.',
       DefaultTeamTemplate: 'Standard',
       DefaultLanguage: 'Norsk (bokmål)',
       DefaultTimeZone: '(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna',

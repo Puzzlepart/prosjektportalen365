@@ -176,6 +176,7 @@ declare interface IPortfolioWebPartsStrings {
     ExpirationDateNoneOption: string
     ExpirationDateMonthOption: string
     NoProvisionAccessMessage: string
+    NoHubSiteConnectionMessage: string
     DefaultTeamTemplate: string
     DefaultLanguage: string
     DefaultTimeZone: string

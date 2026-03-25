@@ -213,6 +213,7 @@ define([], function () {
       DeletedSubmissionToastBody: "The request, {0}, has been deleted.",
       DeletedSubmissionErrorToastTitle: "Deletion error",
       DeletedSubmissionErrorToastBody: "An error occurred while deleting the request. Please try again or contact an administrator.",
+      NoHubSiteConnectionMessage: "Hub site association is not available. The site can be requested, but will not be connected to a hub.",
       RequestedSource: "Project Portal – Request form"
     },
     Aria: {
