@@ -86,10 +86,8 @@ export type ProjectListRenderMode = 'tiles' | 'list' | 'compactList'
  * - `requiresAccess` – project passes if user is portfolio manager OR has access.
  */
 export interface IVerticalConfig {
-  key: string
   title: string
   iconName: string
-  sortOrder: number
   clientFilter: string
   fieldFilter: string
   visibilityRule: string

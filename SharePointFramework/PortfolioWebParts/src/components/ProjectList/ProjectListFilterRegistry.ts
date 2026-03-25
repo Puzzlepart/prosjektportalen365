@@ -164,17 +164,16 @@ function resolveIcon(iconName: string): FluentIcon {
  * into `IProjectListVertical[]` for use by the `ProjectList` component tab bar.
  *
  * Each config's JSON filter strings are parsed to derive client-side filter
- * and visibility logic. Configs are sorted by `sortOrder` (ascending).
+ * and visibility logic. Order is preserved as-is (sorting is handled by
+ * the property pane's drag-to-reorder).
  *
  * @param configs Array of vertical config objects from webpart properties
- * @returns Array of `IProjectListVertical` sorted by `sortOrder`
+ * @returns Array of `IProjectListVertical` in the order provided
  */
 export function convertConfigsToVerticals(
   configs: IVerticalConfig[]
 ): IProjectListVertical[] {
-  return [...configs]
-    .sort((a, b) => (a.sortOrder ?? 100) - (b.sortOrder ?? 100))
-    .map((cfg) => {
+  return configs.map((cfg, index) => {
       const config: IDataSourceConfig = {
         clientFilter: parseConfig(cfg.clientFilter) as Record<string, boolean>,
         fieldFilter: parseConfig(cfg.fieldFilter) as Record<string, any>,
@@ -183,10 +182,11 @@ export function convertConfigsToVerticals(
       }
       const filter = buildFilterFunction(config)
       const isHidden = buildIsHiddenFunction(config)
+      const key = `vertical-${index}`
 
       const vertical: IProjectListVertical = {
-        key: cfg.key,
-        value: cfg.key,
+        key,
+        value: key,
         text: cfg.title,
         icon: resolveIcon(cfg.iconName),
         searchBoxPlaceholder: cfg.searchBoxPlaceholder || strings.SearchBoxPlaceholderText,
@@ -205,11 +205,11 @@ export function convertConfigsToVerticals(
  * Finds the default vertical from the converted verticals.
  *
  * Priority order:
- * 1. Vertical config with `isDefault === true`
- * 2. First vertical in the sorted list
+ * 1. Config with `isDefault === true` (matched by index)
+ * 2. First vertical in the list
  *
  * @param configs Source vertical configs (used to check `isDefault`)
- * @param verticals Converted verticals (already sorted by `sortOrder`)
+ * @param verticals Converted verticals (same order as configs)
  * @returns The default vertical, or `undefined` if no verticals exist
  */
 export function findDefaultVertical(
@@ -218,13 +218,10 @@ export function findDefaultVertical(
 ): IProjectListVertical | undefined {
   if (verticals.length === 0) return undefined
 
-  // 1. Match by isDefault flag
-  const defaultCfg = configs.find((cfg) => cfg.isDefault)
-  if (defaultCfg) {
-    const match = verticals.find((v) => v.key === defaultCfg.key)
-    if (match) return match
+  const defaultIndex = configs.findIndex((cfg) => cfg.isDefault)
+  if (defaultIndex >= 0 && defaultIndex < verticals.length) {
+    return verticals[defaultIndex]
   }
 
-  // 2. Fall back to first vertical
   return verticals[0]
 }

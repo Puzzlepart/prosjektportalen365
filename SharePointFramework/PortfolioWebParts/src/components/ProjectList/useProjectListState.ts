@@ -1,22 +1,32 @@
 /* eslint-disable prefer-spread */
 import { useState } from 'react'
 import { IProjectListProps, IProjectListState } from './types'
+import {
+  convertConfigsToVerticals,
+  findDefaultVertical
+} from './ProjectListFilterRegistry'
 
 /**
  * Component state hook for `ProjectList`. Verticals and selected vertical
- * are initially `undefined` and populated asynchronously by `useProjectListDataFetch`
- * after DataSources have been loaded.
+ * are computed synchronously from `props.verticalConfigs` so they are
+ * available on the initial render. Async data (projects, group membership)
+ * is populated later by `useProjectListDataFetch`.
  *
  * @param props Props
  */
 export function useProjectListState(props: IProjectListProps) {
   const mockProjects = Array.apply(null, Array(Math.floor(Math.random() * 10) + 10)).map(() => 0)
   const defaultSort = { fieldName: props.sortBy, isSortedDescending: true }
+  const configs = props.verticalConfigs ?? []
+  const verticals = convertConfigsToVerticals(configs)
+  const selectedVertical = findDefaultVertical(configs, verticals)
   const [state, $setState] = useState<IProjectListState>({
     searchTerm: '',
     renderMode: props.defaultRenderMode ?? 'tiles',
     projects: mockProjects,
-    sort: defaultSort
+    sort: defaultSort,
+    verticals,
+    selectedVertical
   })
 
   /**

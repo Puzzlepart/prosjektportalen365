@@ -133,16 +133,14 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                 PropertyFieldCollectionData('verticalConfigs', {
                   key: 'verticalConfigsFieldId',
                   label: strings.VerticalConfigLabel,
+                  panelProps: {
+                    type: 6
+                  },
                   panelHeader: strings.VerticalConfigPanelHeader,
                   manageBtnLabel: strings.VerticalConfigManageBtnLabel,
+                  enableSorting: true,
                   value: propertiesWithDefaults.verticalConfigs,
                   fields: [
-                    {
-                      id: 'key',
-                      title: strings.VerticalConfigKeyTitle,
-                      type: CustomCollectionFieldType.string,
-                      required: true
-                    },
                     {
                       id: 'title',
                       title: strings.VerticalConfigTitleTitle,
@@ -152,35 +150,86 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                     {
                       id: 'iconName',
                       title: strings.VerticalConfigIconTitle,
-                      type: CustomCollectionFieldType.dropdown,
-                      options: [
-                        { key: 'LockOpen', text: 'LockOpen' },
-                        { key: 'PersonCircle', text: 'PersonCircle' },
-                        { key: 'Cube', text: 'Cube' },
-                        { key: 'BoxMultiple', text: 'BoxMultiple' }
-                      ],
+                      type: CustomCollectionFieldType.string,
                       defaultValue: 'Cube'
-                    },
-                    {
-                      id: 'sortOrder',
-                      title: strings.SortOrderLabel,
-                      type: CustomCollectionFieldType.number,
-                      defaultValue: 100
                     },
                     {
                       id: 'clientFilter',
                       title: strings.VerticalConfigClientFilterTitle,
-                      type: CustomCollectionFieldType.string
+                      type: CustomCollectionFieldType.custom,
+                      defaultValue: '',
+                      onCustomRender: (field, value, onUpdate) => {
+                        return React.createElement('textarea', {
+                          style: {
+                            width: '100%',
+                            minWidth: '150px',
+                            minHeight: '40px',
+                            fontFamily: 'monospace',
+                            fontSize: '12px',
+                            border: '1px solid #ccc',
+                            borderRadius: '4px',
+                            padding: '6px 8px',
+                            margin: '4px 0',
+                            resize: 'vertical'
+                          },
+                          defaultValue: value ?? '',
+                          onBlur: (event: React.FocusEvent<HTMLTextAreaElement>) => {
+                            onUpdate(field.id, event.target.value)
+                          }
+                        })
+                      }
                     },
                     {
                       id: 'fieldFilter',
                       title: strings.VerticalConfigFieldFilterTitle,
-                      type: CustomCollectionFieldType.string
+                      type: CustomCollectionFieldType.custom,
+                      defaultValue: '',
+                      onCustomRender: (field, value, onUpdate) => {
+                        return React.createElement('textarea', {
+                          style: {
+                            width: '100%',
+                            minWidth: '150px',
+                            minHeight: '40px',
+                            fontFamily: 'monospace',
+                            fontSize: '12px',
+                            border: '1px solid #ccc',
+                            borderRadius: '4px',
+                            padding: '6px 8px',
+                            margin: '4px 0',
+                            resize: 'vertical'
+                          },
+                          defaultValue: value ?? '',
+                          onBlur: (event: React.FocusEvent<HTMLTextAreaElement>) => {
+                            onUpdate(field.id, event.target.value)
+                          }
+                        })
+                      }
                     },
                     {
                       id: 'visibilityRule',
                       title: strings.VerticalConfigVisibilityRuleTitle,
-                      type: CustomCollectionFieldType.string
+                      type: CustomCollectionFieldType.custom,
+                      defaultValue: '',
+                      onCustomRender: (field, value, onUpdate) => {
+                        return React.createElement('textarea', {
+                          style: {
+                            width: '100%',
+                            minWidth: '150px',
+                            minHeight: '40px',
+                            fontFamily: 'monospace',
+                            fontSize: '12px',
+                            border: '1px solid #ccc',
+                            borderRadius: '4px',
+                            padding: '6px 8px',
+                            margin: '4px 0',
+                            resize: 'vertical'
+                          },
+                          defaultValue: value ?? '',
+                          onBlur: (event: React.FocusEvent<HTMLTextAreaElement>) => {
+                            onUpdate(field.id, event.target.value)
+                          }
+                        })
+                      }
                     },
                     {
                       id: 'requiresAccess',
