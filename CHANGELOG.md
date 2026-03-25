@@ -26,6 +26,10 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Støtte for å angi minimum og maksimum verdier for tall og valuta felt i redigeringspaneler for prosjektinformasjon [#1578](https://github.com/Puzzlepart/prosjektportalen365/issues/1578)
 - Støtte for at prosjekter kan lastes inn uten tilgang på hub, der prosjektinformasjon vises fra lokale data og feilmeldinger for prosjektstatus og prosjekttidslinje vises [#1707](https://github.com/Puzzlepart/prosjektportalen365/issues/1707)
 
+### Fjernet
+
+- Fjernet Porteføljeinnsikt-siden og alle tilhørende komponenter, inkludert Grafkonfigurasjon-listen, Egendefinerte diagrammer-biblioteket, tilhørende innholdstyper, områdefelt og navigasjonslenker. Eksisterende installasjoner ryddes opp automatisk ved oppgradering. [#1365](https://github.com/Puzzlepart/prosjektportalen365/issues/1365)
+
 ### Feilrettinger
 
 - Rettet en feil hvor feltkonfigurasjoner for maloppsett ikke fungerte, custom feltnavn og beskrivelser laster nå inn korrekt. [#1704](https://github.com/Puzzlepart/prosjektportalen365/issues/1704)

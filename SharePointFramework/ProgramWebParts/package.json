@@ -49,7 +49,6 @@
     "pzl-react-reusable-components": "^0.0.14",
     "react": "17.0.1",
     "react-dom": "17.0.1",
-    "react-highcharts": "16.0.2",
     "tslib": "2.3.1",
     "lodash": "~4.17.21",
     "underscore": "~1.13.6",

@@ -139,6 +139,60 @@ if ($null -ne $LastInstall) {
         Write-Host "[SUCCESS] Successfully applied PnP template [1.12.0] to [$Url]" -ForegroundColor Green
     }
 
+    if ($PreviousVersion -lt [version]"1.13.0") {
+        Write-Host "[INFO] Removing deprecated Portfolio Insights page, lists and navigation"
+
+        # Remove Porteføljeinnsikt page
+        try {
+            Remove-PnPPage -Identity "Portefoljeinnsikt.aspx" -Force -ErrorAction SilentlyContinue
+            Remove-PnPPage -Identity "PortfolioInsights.aspx" -Force -ErrorAction SilentlyContinue
+            Write-Host "[SUCCESS] Removed Portfolio Insights page" -ForegroundColor Green
+        }
+        catch {
+            Write-Host "[WARNING] Failed to remove Portfolio Insights page: $($_.Exception.Message)" -ForegroundColor Yellow
+        }
+
+        # Remove Grafkonfigurasjon list
+        try {
+            $ChartConfigList = Get-PnPList -Identity "Lists/Grafkonfigurasjon" -ErrorAction SilentlyContinue
+            if ($null -eq $ChartConfigList) {
+                $ChartConfigList = Get-PnPList -Identity "Lists/ChartConfiguration" -ErrorAction SilentlyContinue
+            }
+            if ($null -ne $ChartConfigList) {
+                Remove-PnPList -Identity $ChartConfigList.Id -Force -ErrorAction Stop
+                Write-Host "[SUCCESS] Removed Chart Configuration list" -ForegroundColor Green
+            }
+        }
+        catch {
+            Write-Host "[WARNING] Failed to remove Chart Configuration list: $($_.Exception.Message)" -ForegroundColor Yellow
+        }
+
+        # Remove Egendefinerte diagrammer library
+        try {
+            $CustomChartsList = Get-PnPList -Identity "CustomCharts" -ErrorAction SilentlyContinue
+            if ($null -ne $CustomChartsList) {
+                Remove-PnPList -Identity $CustomChartsList.Id -Force -ErrorAction Stop
+                Write-Host "[SUCCESS] Removed Custom Charts library" -ForegroundColor Green
+            }
+        }
+        catch {
+            Write-Host "[WARNING] Failed to remove Custom Charts library: $($_.Exception.Message)" -ForegroundColor Yellow
+        }
+
+        # Remove navigation node
+        try {
+            $NavNodes = Get-PnPNavigationNode -Location TopNavigationBar -ErrorAction SilentlyContinue
+            $InsightsNode = $NavNodes | Where-Object { $_.Url -like "*Portefoljeinnsikt*" -or $_.Url -like "*PortfolioInsights*" }
+            if ($null -ne $InsightsNode) {
+                Remove-PnPNavigationNode -Identity $InsightsNode.Id -Force -ErrorAction Stop
+                Write-Host "[SUCCESS] Removed Portfolio Insights navigation node" -ForegroundColor Green
+            }
+        }
+        catch {
+            Write-Host "[WARNING] Failed to remove Portfolio Insights navigation: $($_.Exception.Message)" -ForegroundColor Yellow
+        }
+    }
+
     # TODO: Fix this for 1.13.0 release
     # if ($PreviousVersion -lt [version]"1.13.0") {
     #     Write-Host "[INFO] Checking for RefinableString90-98 conflicts before upgrading to v1.13.0..."
