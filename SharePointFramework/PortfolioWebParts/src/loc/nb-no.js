@@ -369,7 +369,6 @@ define([], function () {
     BooleanNo: 'Nei',
     BooleanYes: 'Ja',
     CancelButtonLabel: 'Avbryt',
-    ChartErrorText: 'Grafen er ugyldig konfigurert.',
     ColumnCategoryDescription: 'Angi en kategori for kolonnen. Kolonnen vil dukke opp i alle visninger som bruker denne kategorien. Om du ønsker å endre kategorien for alle webdeler og visninger, kan du endre kategorien i listen Prosjektkolonner.',
     ColumnCategoryLabel: 'Kategori for kolonnen',
     ColumnRenderDataTypePropertiesHeaderText: 'Egenskaper for visningsmodus',

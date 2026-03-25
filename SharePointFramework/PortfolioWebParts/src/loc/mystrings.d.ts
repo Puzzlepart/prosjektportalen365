@@ -368,7 +368,6 @@ declare interface IPortfolioWebPartsStrings {
   BooleanNo: string
   BooleanYes: string
   CancelButtonLabel: string
-  ChartErrorText: string
   ColumnCategoryDescription: string
   ColumnCategoryLabel: string
   ColumnRenderDataTypePropertiesHeaderText: string
