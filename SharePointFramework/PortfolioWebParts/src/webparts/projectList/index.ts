@@ -19,21 +19,22 @@ import { IProjectListProps, ProjectList } from 'components/ProjectList'
 import React from 'react'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
 import { PortalDataService, ProjectColumn } from 'pp365-shared-library'
+import { iconCatalog } from 'pp365-shared-library/lib/icons/iconCatalog'
 
 function renderJsonTextarea(field: any, value: string, onUpdate: (fieldId: string, value: string) => void) {
   return React.createElement(
     'div',
-    { style: { padding: '4px 0' } },
+    { style: { padding: '0' } },
     React.createElement('textarea', {
       style: {
         width: '100%',
-        minWidth: '150px',
-        height: '30px',
+        minWidth: '160px',
+        height: '32px',
         fontFamily: 'monospace',
         fontSize: '12px',
         border: '1px solid #ccc',
         borderRadius: '4px',
-        padding: '4px 8px',
+        padding: '6px 8px',
         boxSizing: 'border-box',
         resize: 'vertical'
       },
@@ -175,8 +176,12 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                     {
                       id: 'iconName',
                       title: strings.VerticalConfigIconTitle,
-                      type: CustomCollectionFieldType.string,
-                      defaultValue: 'Cube'
+                      type: CustomCollectionFieldType.dropdown,
+                      defaultValue: 'Cube',
+                      options: Object.keys(iconCatalog).map((key) => ({
+                        key,
+                        text: key
+                      }))
                     },
                     {
                       id: 'clientFilter',

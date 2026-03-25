@@ -25,6 +25,8 @@ import {
   BotSparkleRegular,
   BoxMultipleFilled,
   BoxMultipleRegular,
+  CubeFilled,
+  CubeRegular,
   BoxToolboxFilled,
   BoxToolboxRegular,
   CalendarFilled,
@@ -96,6 +98,8 @@ import {
   LibraryFilled,
   LibraryRegular,
   LightbulbCircleFilled,
+  LockOpenFilled,
+  LockOpenRegular,
   LightbulbCircleRegular,
   LightbulbFilled,
   LightbulbRegular,
@@ -121,6 +125,8 @@ import {
   PeopleRegular,
   PeopleTeamFilled,
   PeopleTeamRegular,
+  PersonCircleFilled,
+  PersonCircleRegular,
   PersonFilled,
   PersonRegular,
   QuestionCircleFilled,
@@ -192,6 +198,10 @@ export const iconCatalog = {
   BoxMultiple: {
     regular: BoxMultipleRegular,
     filled: BoxMultipleFilled
+  },
+  Cube: {
+    regular: CubeRegular,
+    filled: CubeFilled
   },
   ContentView: {
     regular: ContentViewRegular,
@@ -284,6 +294,10 @@ export const iconCatalog = {
   NumberSymbol: {
     regular: NumberSymbolRegular,
     filled: NumberSymbolFilled
+  },
+  PersonCircle: {
+    regular: PersonCircleRegular,
+    filled: PersonCircleFilled
   },
   Person: {
     regular: PersonRegular,
@@ -420,6 +434,10 @@ export const iconCatalog = {
   DismissCircle: {
     regular: DismissCircleRegular,
     filled: DismissCircleFilled
+  },
+  LockOpen: {
+    regular: LockOpenRegular,
+    filled: LockOpenFilled
   },
   LocalLanguage: {
     regular: LocalLanguageRegular,

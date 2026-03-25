@@ -1,29 +1,11 @@
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectListModel } from 'pp365-shared-library/lib/models'
 import { IProjectListVertical, IProjectListState, IVerticalConfig } from './types'
-import {
-  bundleIcon,
-  CubeFilled,
-  CubeRegular,
-  BoxMultipleFilled,
-  BoxMultipleRegular,
-  LockOpenFilled,
-  LockOpenRegular,
-  PersonCircleFilled,
-  PersonCircleRegular
-} from '@fluentui/react-icons'
+import { bundleIcon, CubeFilled, CubeRegular } from '@fluentui/react-icons'
 import { FluentIcon } from '@fluentui/react-icons/lib/utils/createFluentIcon'
+import { iconCatalog } from 'pp365-shared-library/lib/icons/iconCatalog'
 
-/** Maps icon name strings to FluentUI bundled icon components. */
-const iconMap: Record<string, FluentIcon> = {
-  LockOpen: bundleIcon(LockOpenFilled, LockOpenRegular),
-  PersonCircle: bundleIcon(PersonCircleFilled, PersonCircleRegular),
-  Cube: bundleIcon(CubeFilled, CubeRegular),
-  BoxMultiple: bundleIcon(BoxMultipleFilled, BoxMultipleRegular)
-}
-
-/** Default icon used when `iconName` is not found in the icon map. */
-const defaultIcon = iconMap.Cube
+const defaultIcon = bundleIcon(CubeFilled, CubeRegular)
 
 /** Parsed filter/visibility configuration for a vertical tab. */
 export interface IVerticalFilterConfig {
@@ -112,7 +94,9 @@ function buildIsHiddenFunction(
 
 /** Resolves an icon name to a FluentUI bundled icon. Falls back to `Cube`. */
 function resolveIcon(iconName: string): FluentIcon {
-  return iconMap[iconName] ?? defaultIcon
+  const entry = iconCatalog[iconName]
+  if (entry) return bundleIcon(entry.filled, entry.regular)
+  return defaultIcon
 }
 
 /** Converts `IVerticalConfig[]` from webpart properties into `IProjectListVertical[]`. */
