@@ -868,12 +868,6 @@
   <data name="ClientSidePages_ParentUncertainties_WebPartTitle" xml:space="preserve">
     <value>Uncertainties for child projects</value>
   </data>
-  <data name="ClientSidePages_PortfolioInsights_PageName" xml:space="preserve">
-    <value>PortfolioInsights.aspx</value>
-  </data>
-  <data name="ClientSidePages_PortfolioInsights_Title" xml:space="preserve">
-    <value>Portfolio Insights</value>
-  </data>
   <data name="ClientSidePages_PortfolioOverview_PageName" xml:space="preserve">
     <value>PortfolioOverview.aspx</value>
   </data>
@@ -973,12 +967,6 @@
   <data name="ContentTypes_ArchiveLogElement_Name" xml:space="preserve">
     <value>Archive Log Element</value>
   </data>
-  <data name="ContentTypes_BarChart_Description" xml:space="preserve">
-    <value>Create a new bar chart</value>
-  </data>
-  <data name="ContentTypes_BarChart_Name" xml:space="preserve">
-    <value>Bar Chart</value>
-  </data>
   <data name="ContentTypes_Benefit_Name" xml:space="preserve">
     <value>Benefit</value>
   </data>
@@ -988,23 +976,11 @@
   <data name="ContentTypes_Change_Name" xml:space="preserve">
     <value>Change</value>
   </data>
-  <data name="ContentTypes_ChartConfigurationElement_Description" xml:space="preserve">
-    <value>Create a new chart configuration element</value>
-  </data>
-  <data name="ContentTypes_ChartConfigurationElement_Name" xml:space="preserve">
-    <value>Chart Configuration Element</value>
-  </data>
   <data name="ContentTypes_Checkpoint_Description" xml:space="preserve">
     <value>Checkpoint</value>
   </data>
   <data name="ContentTypes_Checkpoint_Name" xml:space="preserve">
     <value>Checkpoint</value>
-  </data>
-  <data name="ContentTypes_ColumnChart_Description" xml:space="preserve">
-    <value>Create a new column chart</value>
-  </data>
-  <data name="ContentTypes_ColumnChart_Name" xml:space="preserve">
-    <value>Column Chart</value>
   </data>
   <data name="ContentTypes_CommunicationElement_Name" xml:space="preserve">
     <value>Communication Element</value>
@@ -1014,12 +990,6 @@
   </data>
   <data name="ContentTypes_ConfigurationElement_Name" xml:space="preserve">
     <value>Configuration Element</value>
-  </data>
-  <data name="ContentTypes_CustomChart_Description" xml:space="preserve">
-    <value>Create a new custom chart</value>
-  </data>
-  <data name="ContentTypes_CustomChart_Name" xml:space="preserve">
-    <value>Custom chart</value>
   </data>
   <data name="ContentTypes_DataSource_Description" xml:space="preserve">
     <value>Data source</value>
@@ -1354,24 +1324,6 @@
   <data name="Lists_ChangeAnalysis_Title" xml:space="preserve">
     <value>Change analysis</value>
   </data>
-  <data name="Lists_ChartConfiguration_Description" xml:space="preserve">
-    <value>Manage chart elements in Portfolio Insight</value>
-  </data>
-  <data name="Lists_ChartConfiguration_ProjectsInVariousPhases_Title" xml:space="preserve">
-    <value>Projects in various phases</value>
-  </data>
-  <data name="Lists_ChartConfiguration_ProjectType_Title" xml:space="preserve">
-    <value>Project Type</value>
-  </data>
-  <data name="Lists_ChartConfiguration_ServiceAreas_Title" xml:space="preserve">
-    <value>Service Areas</value>
-  </data>
-  <data name="Lists_ChartConfiguration_Title" xml:space="preserve">
-    <value>Chart Configuration</value>
-  </data>
-  <data name="Lists_ChartConfiguration_Url" xml:space="preserve">
-    <value>Lists/ChartConfiguration</value>
-  </data>
   <data name="Lists_CommunicationPlan_Title" xml:space="preserve">
     <value>Communication plan</value>
   </data>
@@ -1389,12 +1341,6 @@
   </data>
   <data name="Lists_ConfigurationFiles_Url" xml:space="preserve">
     <value>Configuration Files</value>
-  </data>
-  <data name="Lists_CustomCharts_Title" xml:space="preserve">
-    <value>Custom Charts</value>
-  </data>
-  <data name="Lists_CustomCharts_Url" xml:space="preserve">
-    <value>CustomCharts</value>
   </data>
   <data name="Lists_DataSources_Category_BenefitOverview" xml:space="preserve">
     <value>Benefit Overview</value>
@@ -1683,9 +1629,6 @@
   </data>
   <data name="Lists_HelpContent_PhaseChecklistUserManual" xml:space="preserve">
     <value>Phase Checklist User Manual</value>
-  </data>
-  <data name="Lists_HelpContent_PortfolioInsightUserManual" xml:space="preserve">
-    <value>Portfolio Insight User Manual</value>
   </data>
   <data name="Lists_HelpContent_PortfolioLevelUserManual" xml:space="preserve">
     <value>Portfolio Level User Manual</value>
@@ -3765,168 +3708,6 @@
   </data>
   <data name="SiteFields_GtPermissionLevel_DisplayName" xml:space="preserve">
     <value>Permission level</value>
-  </data>
-  <data name="SiteFields_GtPiAutomaticRefreshEnabled_Description" xml:space="preserve">
-    <value>Automatic data refresh</value>
-  </data>
-  <data name="SiteFields_GtPiAutomaticRefreshEnabled_DisplayName" xml:space="preserve">
-    <value>Automatic refresh</value>
-  </data>
-  <data name="SiteFields_GtPiAutomaticRefreshInterval_Description" xml:space="preserve">
-    <value>The time interval between automatic data refreshes</value>
-  </data>
-  <data name="SiteFields_GtPiAutomaticRefreshInterval_DisplayName" xml:space="preserve">
-    <value>Interval (seconds) for automatic refresh</value>
-  </data>
-  <data name="SiteFields_GtPiCategoryField_Description" xml:space="preserve">
-    <value>Column for categorization. Selected from the Project Columns list.</value>
-  </data>
-  <data name="SiteFields_GtPiCategoryField_DisplayName" xml:space="preserve">
-    <value>Category column</value>
-  </data>
-  <data name="SiteFields_GtPiColorsMap_Description" xml:space="preserve">
-    <value>Colors for the value in the format [VALUE1]:[COLOR1];[VALUE2]:[COLOR2]</value>
-  </data>
-  <data name="SiteFields_GtPiColorsMap_DisplayName" xml:space="preserve">
-    <value>Colors</value>
-  </data>
-  <data name="SiteFields_GtPiCustomConfiguration_Description" xml:space="preserve">
-    <value>Configuration file for custom diagram</value>
-  </data>
-  <data name="SiteFields_GtPiCustomConfiguration_DisplayName" xml:space="preserve">
-    <value>Configuration file</value>
-  </data>
-  <data name="SiteFields_GtPiCustomType_Description" xml:space="preserve">
-    <value>Diagram type</value>
-  </data>
-  <data name="SiteFields_GtPiCustomType_DisplayName" xml:space="preserve">
-    <value>Chart type</value>
-  </data>
-  <data name="SiteFields_GtPiExpandProperty_Description" xml:space="preserve">
-    <value>If the field is a user field (or similar), you must select a property to expand</value>
-  </data>
-  <data name="SiteFields_GtPiExpandProperty_DisplayName" xml:space="preserve">
-    <value>Expand property</value>
-  </data>
-  <data name="SiteFields_GtPiFields_Description" xml:space="preserve">
-    <value>Which fields should be included in the diagram/data source. Selected from the Project Columns list.</value>
-  </data>
-  <data name="SiteFields_GtPiFields_DisplayName" xml:space="preserve">
-    <value>Fields</value>
-  </data>
-  <data name="SiteFields_GtPiFieldX_Description" xml:space="preserve">
-    <value>Which column should be used for X. Selected from the Project Columns list.</value>
-  </data>
-  <data name="SiteFields_GtPiFieldX_DisplayName" xml:space="preserve">
-    <value>Column(X)</value>
-  </data>
-  <data name="SiteFields_GtPiFieldY_Description" xml:space="preserve">
-    <value>Which column should be used for Y. Selected from the Project Columns list.</value>
-  </data>
-  <data name="SiteFields_GtPiFieldY_DisplayName" xml:space="preserve">
-    <value>Column(Y)</value>
-  </data>
-  <data name="SiteFields_GtPiFieldZ_Description" xml:space="preserve">
-    <value>Which column should be used for Z. Selected from the Project Columns list.</value>
-  </data>
-  <data name="SiteFields_GtPiFieldZ_DisplayName" xml:space="preserve">
-    <value>Column(Z)</value>
-  </data>
-  <data name="SiteFields_GtPiShowLegend_Description" xml:space="preserve">
-    <value>Whether or not to display the legend in the diagram.</value>
-  </data>
-  <data name="SiteFields_GtPiShowLegend_DisplayName" xml:space="preserve">
-    <value>Show legend/label</value>
-  </data>
-  <data name="SiteFields_GtPiStacking_Description" xml:space="preserve">
-    <value>Defines the type of stacking applied to the data in the diagram.</value>
-  </data>
-  <data name="SiteFields_GtPiStacking_DisplayName" xml:space="preserve">
-    <value>Stacking</value>
-  </data>
-  <data name="SiteFields_GtPiSubTitle_Description" xml:space="preserve">
-    <value>Sub-title for the diagram.</value>
-  </data>
-  <data name="SiteFields_GtPiSubTitle_DisplayName" xml:space="preserve">
-    <value>Subtitle</value>
-  </data>
-  <data name="SiteFields_GtPiValueOrder_Description" xml:space="preserve">
-    <value>Order of the values (e.g. Concept,Plan,Execute,Close,Realize)</value>
-  </data>
-  <data name="SiteFields_GtPiValueOrder_DisplayName" xml:space="preserve">
-    <value>Value order</value>
-  </data>
-  <data name="SiteFields_GtPiValueSuffix_Description" xml:space="preserve">
-    <value>Suffix to be added to the values in the diagram.</value>
-  </data>
-  <data name="SiteFields_GtPiValueSuffix_DisplayName" xml:space="preserve">
-    <value>Value suffix</value>
-  </data>
-  <data name="SiteFields_GtPiWidthLg_Description" xml:space="preserve">
-    <value>Width (1-12) for 640px to 1023px</value>
-  </data>
-  <data name="SiteFields_GtPiWidthLg_DisplayName" xml:space="preserve">
-    <value>Width (640px - 1023px)</value>
-  </data>
-  <data name="SiteFields_GtPiWidthMd_Description" xml:space="preserve">
-    <value>Width (1-12) for 480px to 639px</value>
-  </data>
-  <data name="SiteFields_GtPiWidthMd_DisplayName" xml:space="preserve">
-    <value>Width (480px - 639px)</value>
-  </data>
-  <data name="SiteFields_GtPiWidthSm_Description" xml:space="preserve">
-    <value>Width (1-12) for 320px to 479px</value>
-  </data>
-  <data name="SiteFields_GtPiWidthSm_DisplayName" xml:space="preserve">
-    <value>Width (320px - 479px)</value>
-  </data>
-  <data name="SiteFields_GtPiWidthXl_Description" xml:space="preserve">
-    <value>Width (1-12) for 1024px to 1365px</value>
-  </data>
-  <data name="SiteFields_GtPiWidthXl_DisplayName" xml:space="preserve">
-    <value>Width (1024px - 1365px)</value>
-  </data>
-  <data name="SiteFields_GtPiWidthXxl_Description" xml:space="preserve">
-    <value>Width (1-12) for 1366px to 1919px</value>
-  </data>
-  <data name="SiteFields_GtPiWidthXxl_DisplayName" xml:space="preserve">
-    <value>Width (1366px - 1919px)</value>
-  </data>
-  <data name="SiteFields_GtPiWidthXxxl_Description" xml:space="preserve">
-    <value>Width (1-12) for 1920px and above</value>
-  </data>
-  <data name="SiteFields_GtPiWidthXxxl_DisplayName" xml:space="preserve">
-    <value>Width (1920px and above)</value>
-  </data>
-  <data name="SiteFields_GtPiXAxisTitle_Description" xml:space="preserve">
-    <value>Title of the X-axis</value>
-  </data>
-  <data name="SiteFields_GtPiXAxisTitle_DisplayName" xml:space="preserve">
-    <value>Title (X-axis)</value>
-  </data>
-  <data name="SiteFields_GtPiYAxisTitle_Description" xml:space="preserve">
-    <value>Title of the Y-axis</value>
-  </data>
-  <data name="SiteFields_GtPiYAxisTitle_DisplayName" xml:space="preserve">
-    <value>Title (Y-axis)</value>
-  </data>
-  <data name="SiteFields_GtPiYMax_Description" xml:space="preserve">
-    <value>Max value for Y-axis</value>
-  </data>
-  <data name="SiteFields_GtPiYMax_DisplayName" xml:space="preserve">
-    <value>Max (Y-axis)</value>
-  </data>
-  <data name="SiteFields_GtPiYMin_Description" xml:space="preserve">
-    <value>Minimum value for Y-axis</value>
-  </data>
-  <data name="SiteFields_GtPiYMin_DisplayName" xml:space="preserve">
-    <value>Min (Y-axis)</value>
-  </data>
-  <data name="SiteFields_GtPiYTickInterval_Description" xml:space="preserve">
-    <value>Interval of the Y-axis ticks</value>
-  </data>
-  <data name="SiteFields_GtPiYTickInterval_DisplayName" xml:space="preserve">
-    <value>Interval (Y-axis)</value>
   </data>
   <data name="SiteFields_GtPlannerName_Description" xml:space="preserve">
     <value>Choose a custom name for the plan. Used if you want to create multiple plans for the same project. The full plan name will also include the name of the site/project.</value>
