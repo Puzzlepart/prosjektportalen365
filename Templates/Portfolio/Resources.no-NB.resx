@@ -1189,12 +1189,6 @@
   <data name="ContentTypes_SectionBase_Name" xml:space="preserve">
     <value>Seksjonsbase</value>
   </data>
-  <data name="ContentTypes_SectorDiagram_Description" xml:space="preserve">
-    <value>Opprett et nytt sektordiagram</value>
-  </data>
-  <data name="ContentTypes_SectorDiagram_Name" xml:space="preserve">
-    <value>Sektordiagram</value>
-  </data>
   <data name="ContentTypes_Stakeholder_Description" xml:space="preserve">
     <value>Opprett en ny interessent</value>
   </data>

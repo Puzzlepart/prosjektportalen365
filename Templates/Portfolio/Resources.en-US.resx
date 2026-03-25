@@ -1189,12 +1189,6 @@
   <data name="ContentTypes_SectionBase_Name" xml:space="preserve">
     <value>Section Base</value>
   </data>
-  <data name="ContentTypes_SectorDiagram_Description" xml:space="preserve">
-    <value>Create a new sector diagram</value>
-  </data>
-  <data name="ContentTypes_SectorDiagram_Name" xml:space="preserve">
-    <value>Sector Diagram</value>
-  </data>
   <data name="ContentTypes_Stakeholder_Description" xml:space="preserve">
     <value>Representation of a stakeholder, that has a vested interest in the project</value>
   </data>
