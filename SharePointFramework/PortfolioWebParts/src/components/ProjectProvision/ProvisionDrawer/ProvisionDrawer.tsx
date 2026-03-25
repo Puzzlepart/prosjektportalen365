@@ -57,6 +57,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
     missingFieldsInfo,
     siteExists,
     setSiteExists,
+    duplicateOwnerMembers,
     namingConvention,
     enableSensitivityLabels,
     enableSensitivityLabelsLibrary,
@@ -378,8 +379,12 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                 description={getField('member').description}
                 required={getField('member').required}
                 hidden={getField('member').hidden}
+                validationState={duplicateOwnerMembers.length > 0 ? 'error' : 'none'}
+                validationMessage={
+                  duplicateOwnerMembers.length > 0
+                    && strings.Provision.DuplicateOwnerMemberMessage
+                }
               >
-                {/* Members can not be the same as the owner */}
                 <UserMulti type='member' />
               </FieldContainer>
               <FieldContainer

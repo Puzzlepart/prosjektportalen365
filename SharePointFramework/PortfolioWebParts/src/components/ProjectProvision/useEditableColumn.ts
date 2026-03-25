@@ -76,7 +76,7 @@ export function useEditableColumn(
         ['guest', []],
         ['language', strings.Provision.DefaultLanguage],
         ['timeZone', strings.Provision.DefaultTimeZone],
-        ['hubSite', props.pageContext.legacyPageContext.hubSiteId],
+        ['hubSite', props.pageContext.legacyPageContext.hubSiteId || ''],
         ['hubSiteTitle', hubSiteTitle]
       ]),
     [props.pageContext.legacyPageContext.hubSiteId, hubSiteTitle]
@@ -388,12 +388,14 @@ export function useEditableColumn(
           transformedExpirationDate = await transformValue(defaultExpirationDate, 'expirationDate')
         }
 
-        let resolvedHubSite = props.pageContext.legacyPageContext.hubSiteId
+        const transformedPrivacy = await transformValue(defaultVisibility, 'privacy')
+
+        let resolvedHubSite = props.pageContext.legacyPageContext.hubSiteId || ''
         let resolvedHubSiteTitle = hubSiteTitle
 
         if (
           typeDefaults?.defaultHub &&
-          typeDefaults.defaultHub !== props.pageContext.legacyPageContext.hubSiteId
+          (!resolvedHubSite || typeDefaults.defaultHub !== resolvedHubSite)
         ) {
           try {
             const hubInfo = await props.dataAdapter.resolveHubSiteById(typeDefaults.defaultHub)
@@ -435,7 +437,8 @@ export function useEditableColumn(
             teamify: defaultTeamify,
             owner: transformedOwner,
             expirationDate: transformedExpirationDate,
-            hubSiteTitle: resolvedHubSiteTitle
+            hubSiteTitle: resolvedHubSiteTitle,
+            privacy: transformedPrivacy
           }
         })
       } catch (error) {

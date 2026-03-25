@@ -26,6 +26,7 @@ define([], function () {
       OwnerFieldDescription: "Owners have full access and can manage members. You can add more owners later.",
       MemberFieldLabel: "Member(s)",
       MemberFieldDescription: "Members have access based on permissions. You can add more members later.",
+      DuplicateOwnerMemberMessage: "A user cannot be both owner and member. Please remove the duplicate(s).",
       RequestedByFieldLabel: "Requested on behalf of",
       RequestedByFieldDescription: "If you're requesting on someone's behalf, enter their name here. Leave blank if it's for yourself.",
       UserFieldNoOptionsText: "No results...",
@@ -212,6 +213,7 @@ define([], function () {
       DeletedSubmissionToastBody: "The request, {0}, has been deleted.",
       DeletedSubmissionErrorToastTitle: "Deletion error",
       DeletedSubmissionErrorToastBody: "An error occurred while deleting the request. Please try again or contact an administrator.",
+      NoHubSiteConnectionMessage: "Hub site association is not available. The site can be requested, but will not be connected to a hub.",
       RequestedSource: "Project Portal – Request form"
     },
     Aria: {

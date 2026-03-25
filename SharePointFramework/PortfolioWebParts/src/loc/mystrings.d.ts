@@ -84,6 +84,7 @@ declare interface IPortfolioWebPartsStrings {
     UserFieldNoOptionsText: string
     MemberFieldLabel: string
     MemberFieldDescription: string
+    DuplicateOwnerMemberMessage: string
     RequestedByFieldLabel: string
     RequestedByFieldDescription: string
     TeamifyFieldLabel: string
@@ -175,6 +176,7 @@ declare interface IPortfolioWebPartsStrings {
     ExpirationDateNoneOption: string
     ExpirationDateMonthOption: string
     NoProvisionAccessMessage: string
+    NoHubSiteConnectionMessage: string
     DefaultTeamTemplate: string
     DefaultLanguage: string
     DefaultTimeZone: string

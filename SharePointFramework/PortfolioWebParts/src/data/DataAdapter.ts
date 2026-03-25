@@ -112,7 +112,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       }
     }
     this.portalDataService = await this.portalDataService.configure(configuration)
-    this.dataSourceService = new DataSourceService(this.portalDataService.web)
+    if (this.portalDataService.web) {
+      this.dataSourceService = new DataSourceService(this.portalDataService.web)
+    }
     return this
   }
 
@@ -1564,6 +1566,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   public async resolveHubSiteById(
     hubSiteId: string
   ): Promise<{ hubSiteId: string; title: string } | null> {
+    if (!hubSiteId) return null
     try {
       const webAbsoluteUrl = this._spfxContext.pageContext.web.absoluteUrl
       const response = await fetch(`${webAbsoluteUrl}/_api/HubSites/GetById('${hubSiteId}')`, {
