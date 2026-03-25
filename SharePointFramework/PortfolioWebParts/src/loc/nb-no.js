@@ -422,6 +422,7 @@ define([], function () {
     VerticalConfigVisibilityRuleTitle: 'Synlighetsregel (JSON)',
     VerticalConfigRequiresAccessTitle: 'Krever tilgang',
     VerticalConfigIsDefaultTitle: 'Er standard',
+    VerticalConfigSearchBoxPlaceholderTitle: 'Søkeboksplassholder',
     DefaultViewDescription: 'Velg om dette er standardvisningen for Porteføljeoversikten.',
     DefaultViewLabel: 'Standardvisning',
     DefaultViewSetWarningMessage: 'Det er allerede en visning som er satt som standard. Du må først endre denne visningen før du kan sette en ny som standard. Personlige visninger kan ikke settes som standard.',

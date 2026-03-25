@@ -420,6 +420,7 @@ declare interface IPortfolioWebPartsStrings {
   VerticalConfigVisibilityRuleTitle: string
   VerticalConfigRequiresAccessTitle: string
   VerticalConfigIsDefaultTitle: string
+  VerticalConfigSearchBoxPlaceholderTitle: string
   DefaultViewDescription: string
   DefaultViewLabel: string
   DefaultViewSetWarningMessage: string

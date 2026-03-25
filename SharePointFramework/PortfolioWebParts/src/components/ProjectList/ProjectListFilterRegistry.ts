@@ -189,7 +189,7 @@ export function convertConfigsToVerticals(
         value: cfg.key,
         text: cfg.title,
         icon: resolveIcon(cfg.iconName),
-        searchBoxPlaceholder: strings.SearchBoxPlaceholderText,
+        searchBoxPlaceholder: cfg.searchBoxPlaceholder || strings.SearchBoxPlaceholderText,
         filter
       }
 

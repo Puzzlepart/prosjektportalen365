@@ -119,6 +119,68 @@ ProjectList.defaultProps = {
   showRenderModeSelector: true,
   showSortBy: true,
   defaultRenderMode: 'tiles',
+  verticalConfigs: [
+    {
+      key: 'projects_access',
+      title: strings.ProjectsAccessHeaderText,
+      iconName: 'LockOpen',
+      sortOrder: 10,
+      clientFilter: '{"hasUserAccess":true}',
+      fieldFilter: '',
+      visibilityRule: '',
+      requiresAccess: false,
+      isDefault: false,
+      searchBoxPlaceholder: strings.ProjectsAccessSearchBoxPlaceholderText
+    },
+    {
+      key: 'my_projects',
+      title: strings.MyProjectsHeaderText,
+      iconName: 'PersonCircle',
+      sortOrder: 20,
+      clientFilter: '{"isUserMember":true}',
+      fieldFilter: '',
+      visibilityRule: '',
+      requiresAccess: false,
+      isDefault: true,
+      searchBoxPlaceholder: strings.MyProjectsSearchBoxPlaceholderText
+    },
+    {
+      key: 'all_projects',
+      title: strings.AllProjectsHeaderText,
+      iconName: 'Cube',
+      sortOrder: 30,
+      clientFilter: '',
+      fieldFilter: '',
+      visibilityRule: '{"isUserInPortfolioManagerGroup":true}',
+      requiresAccess: false,
+      isDefault: false,
+      searchBoxPlaceholder: strings.AllProjectsSearchBoxPlaceholderText
+    },
+    {
+      key: 'parent_projects',
+      title: strings.ParentProjectsHeaderText,
+      iconName: 'BoxMultiple',
+      sortOrder: 40,
+      clientFilter: '',
+      fieldFilter: '{"GtIsParentProject":true}',
+      visibilityRule: '',
+      requiresAccess: true,
+      isDefault: false,
+      searchBoxPlaceholder: strings.ParentProjectsSearchBoxPlaceholderText
+    },
+    {
+      key: 'program_projects',
+      title: strings.ProgramsHeaderText,
+      iconName: 'BoxMultiple',
+      sortOrder: 50,
+      clientFilter: '',
+      fieldFilter: '{"GtIsProgram":true}',
+      visibilityRule: '',
+      requiresAccess: true,
+      isDefault: false,
+      searchBoxPlaceholder: strings.ProgramSearchBoxPlaceholderText
+    }
+  ],
   useDynamicColors: true,
   showProjectLogo: true,
   primaryField: 'GtProjectServiceAreaText',

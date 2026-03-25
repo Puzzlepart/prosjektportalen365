@@ -95,6 +95,7 @@ export interface IVerticalConfig {
   visibilityRule: string
   requiresAccess: boolean
   isDefault: boolean
+  searchBoxPlaceholder: string
 }
 
 export interface IProjectListProps extends IBaseComponentProps {

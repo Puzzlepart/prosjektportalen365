@@ -40,64 +40,7 @@
         "showSearchBox": true,
         "showRenderModeSelector": true,
         "showSortBy": true,
-        "defaultRenderMode": "tiles",
-        "verticalConfigs": [
-          {
-            "key": "projects_access",
-            "title": "Prosjekter jeg har tilgang til",
-            "iconName": "LockOpen",
-            "sortOrder": 10,
-            "clientFilter": "{\"hasUserAccess\":true}",
-            "fieldFilter": "",
-            "visibilityRule": "",
-            "requiresAccess": false,
-            "isDefault": false
-          },
-          {
-            "key": "my_projects",
-            "title": "Mine prosjekter",
-            "iconName": "PersonCircle",
-            "sortOrder": 20,
-            "clientFilter": "{\"isUserMember\":true}",
-            "fieldFilter": "",
-            "visibilityRule": "",
-            "requiresAccess": false,
-            "isDefault": true
-          },
-          {
-            "key": "all_projects",
-            "title": "Alle prosjekter",
-            "iconName": "Cube",
-            "sortOrder": 30,
-            "clientFilter": "",
-            "fieldFilter": "",
-            "visibilityRule": "{\"isUserInPortfolioManagerGroup\":true}",
-            "requiresAccess": false,
-            "isDefault": false
-          },
-          {
-            "key": "parent_projects",
-            "title": "Overordnede prosjekter",
-            "iconName": "BoxMultiple",
-            "sortOrder": 40,
-            "clientFilter": "",
-            "fieldFilter": "{\"GtIsParentProject\":true}",
-            "visibilityRule": "",
-            "requiresAccess": true,
-            "isDefault": false
-          },
-          {
-            "key": "program_projects",
-            "title": "Programmer",
-            "iconName": "BoxMultiple",
-            "sortOrder": 50,
-            "clientFilter": "",
-            "fieldFilter": "{\"GtIsProgram\":true}",
-            "visibilityRule": "",
-            "requiresAccess": true,
-            "isDefault": false
-          }
-        ]
+        "defaultRenderMode": "tiles"
       }
     }
   ]

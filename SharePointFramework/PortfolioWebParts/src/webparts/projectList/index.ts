@@ -56,6 +56,7 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+    const propertiesWithDefaults = { ...ProjectList.defaultProps, ...this.properties }
     const quickLaunchMenu = {
       ...ProjectList.defaultProps.quickLaunchMenu,
       ...this.properties.quickLaunchMenu
@@ -134,7 +135,7 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   label: strings.VerticalConfigLabel,
                   panelHeader: strings.VerticalConfigPanelHeader,
                   manageBtnLabel: strings.VerticalConfigManageBtnLabel,
-                  value: this.properties.verticalConfigs,
+                  value: propertiesWithDefaults.verticalConfigs,
                   fields: [
                     {
                       id: 'key',
@@ -192,6 +193,11 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                       title: strings.VerticalConfigIsDefaultTitle,
                       type: CustomCollectionFieldType.boolean,
                       defaultValue: false
+                    },
+                    {
+                      id: 'searchBoxPlaceholder',
+                      title: strings.VerticalConfigSearchBoxPlaceholderTitle,
+                      type: CustomCollectionFieldType.string
                     }
                   ]
                 })

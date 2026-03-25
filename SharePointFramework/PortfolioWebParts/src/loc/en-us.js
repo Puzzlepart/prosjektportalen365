@@ -365,6 +365,7 @@ define([], function () {
     VerticalConfigVisibilityRuleTitle: 'Visibility rule (JSON)',
     VerticalConfigRequiresAccessTitle: 'Requires access',
     VerticalConfigIsDefaultTitle: 'Is default',
+    VerticalConfigSearchBoxPlaceholderTitle: 'Search box placeholder',
     DefaultViewDescription: 'Choose whether this is the default view for the Portfolio overview.',
     DefaultViewLabel: 'Default view',
     DefaultViewSetWarningMessage: 'There is already a view set as the default. You must first change this view before you can set a new one as the default. Personal views cannot be set as the default.',
