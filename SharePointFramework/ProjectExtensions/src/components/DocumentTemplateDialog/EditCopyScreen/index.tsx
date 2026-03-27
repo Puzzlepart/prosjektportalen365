@@ -15,22 +15,57 @@ export const EditCopyScreen: FC<IEditCopyScreenProps> = ({ onStartCopy }) => {
   const [templates, setTemplates] = useState([...state.selected])
 
   /**
+   * Check for duplicate names across all templates
+   *
+   * @param newName Name to check
+   * @param currentId ID of current item
+   * @param isFolder Whether it's a folder
+   */
+  function checkForDuplicates(newName: string, currentId: string, isFolder: boolean): string {
+    const duplicate = templates.find(
+      (t) => t.id !== currentId && t.newName.toLowerCase() === newName.toLowerCase()
+    )
+    if (duplicate) {
+      return isFolder
+        ? strings.FolderNameAlreadySelectedErrorText
+        : strings.FilenameAlreadySelectedErrorText
+    }
+    return null
+  }
+
+  /**
    * On input changed
    *
    * @param id Id
    * @param properties Updated properties
-   * @param errorMessage Error message
+   * @param errorMessage Error message from SharePoint validation
    */
   function onInputChanged(id: string, properties: Record<string, string>, errorMessage?: string) {
-    setTemplates(
-      templates.map((t) => {
-        if (t.id === id) {
-          t.update(properties)
+    const updatedTemplates = templates.map((t) => {
+      if (t.id === id) {
+        t.update(properties)
+        if (properties.newName) {
+          const duplicateError = checkForDuplicates(properties.newName, id, t.isFolder)
+          t.errorMessage = duplicateError || errorMessage
+        } else if (errorMessage !== undefined) {
           t.errorMessage = errorMessage
         }
-        return t
+      }
+      return t
+    })
+
+    if (properties.newName) {
+      updatedTemplates.forEach((t) => {
+        const duplicateError = checkForDuplicates(t.newName, t.id, t.isFolder)
+        if (duplicateError) {
+          t.errorMessage = duplicateError
+        } else if (t.id !== id && t.errorMessage === strings.FilenameAlreadySelectedErrorText || t.errorMessage === strings.FolderNameAlreadySelectedErrorText) {
+          t.errorMessage = null
+        }
       })
-    )
+    }
+
+    setTemplates([...updatedTemplates])
   }
 
   /**

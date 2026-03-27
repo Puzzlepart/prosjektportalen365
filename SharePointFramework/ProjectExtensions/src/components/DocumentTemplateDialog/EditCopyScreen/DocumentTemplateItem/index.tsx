@@ -28,13 +28,13 @@ export const DocumentTemplateItem: FC<IDocumentTemplateItemProps> = (props) => {
   ) {
     clearTimeout(changeTimeout)
     changeTimeout = setTimeout(async () => {
-      // eslint-disable-next-line default-case
       switch ((event.target as HTMLInputElement).id) {
         case nameId:
           {
             const newName = props.item.isFolder
               ? newValue
               : `${newValue}.${props.item.fileExtension}`
+            
             const errorMsg = await SPDataAdapter.isFilenameValid(
               state.targetFolder,
               newName,
