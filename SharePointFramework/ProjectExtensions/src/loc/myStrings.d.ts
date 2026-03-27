@@ -74,10 +74,12 @@ declare interface IProjectExtensionsStrings {
   ExtensionsSectionHeaderText: string
   ExtensionsSectionSearchPlaceholder: string
   FilenameAlreadyInUseErrorText: string
+  FilenameAlreadySelectedErrorText: string
   FilenameInValidErrorText: string
   FileNameLabel: string
   FolderNameLabel: string
   FolderNameAlreadyInUseErrorText: string
+  FolderNameAlreadySelectedErrorText: string
   FolderNameInValidErrorText: string
   GetMoreText: string
   GetSetupDataErrorMessage: string
