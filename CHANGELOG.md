@@ -40,6 +40,8 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Rettet en feil hvor gruppeoppretting definert i `Tillatelseskonfigurasjon` kunne feile for alle resterende grupper dersom én gruppe feilet under tilrettelegging av tillatelser [#1716](https://github.com/Puzzlepart/prosjektportalen365/issues/1716)
 - Rettet en visuell feil hvor `Prosjektinformasjon mangler.`-melding overlappet seksjoner på Prosjektstatus-seksjonen `Overordnet status`
 - Rettet en feil hvor sortering ikke fungerte i prosjektoversikten på forsiden av porteføljen
+- Rettet en feil i hent dokumentmal hvor validering av navn på filer og mapper ikke intraff på forskjell i små og store bokstaver [#1727](https://github.com/Puzzlepart/prosjektportalen365/issues/1727)
+- Rettet en feil i hent dokumentmal hvor punktum i filnavn før fil-endingen behandlet filnavnet og endingen feil [#1727](https://github.com/Puzzlepart/prosjektportalen365/issues/1727)
 
 ---
 
