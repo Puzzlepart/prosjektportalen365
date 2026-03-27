@@ -1,10 +1,20 @@
 import {
   FluentProvider,
   IdPrefixProvider,
+  Menu,
+  MenuItem,
+  MenuList,
+  MenuPopover,
+  MenuTrigger,
+  Overflow,
+  OverflowItem,
   SelectTabData,
   Tab,
-  TabList
+  TabList,
+  useIsOverflowItemVisible,
+  useOverflowMenu
 } from '@fluentui/react-components'
+import { MoreHorizontalRegular } from '@fluentui/react-icons'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
 import { SiteContext, UserMessage, customLightTheme } from 'pp365-shared-library'
@@ -17,6 +27,46 @@ import { useProjectListRenderer } from './useProjectListRenderer'
 import { ProjectListContext } from './context'
 import { Commands } from './Commands'
 import resource from 'SharedResources'
+import { IProjectListVertical } from './types'
+
+const OverflowMenuItem: FC<{
+  vertical: IProjectListVertical
+  onClick: (key: string) => void
+}> = ({ vertical, onClick }) => {
+  const isVisible = useIsOverflowItemVisible(String(vertical.key))
+  if (isVisible) return null
+  const Icon = vertical.icon
+  return (
+    <MenuItem key={vertical.key} icon={<Icon />} onClick={() => onClick(String(vertical.key))}>
+      {vertical.text}
+    </MenuItem>
+  )
+}
+
+const OverflowMenu: FC<{
+  verticals: IProjectListVertical[]
+  onSelect: (key: string) => void
+}> = ({ verticals, onSelect }) => {
+  const { ref, isOverflowing, overflowCount } =
+    useOverflowMenu<HTMLButtonElement>()
+  if (!isOverflowing) return null
+  return (
+    <Menu>
+      <MenuTrigger disableButtonEnhancement>
+        <Tab ref={ref} role='tab' value='overflow-menu' icon={<MoreHorizontalRegular />}>
+          +{overflowCount}
+        </Tab>
+      </MenuTrigger>
+      <MenuPopover>
+        <MenuList>
+          {verticals.map((v) => (
+            <OverflowMenuItem key={v.key} vertical={v} onClick={onSelect} />
+          ))}
+        </MenuList>
+      </MenuPopover>
+    </Menu>
+  )
+}
 
 export const ProjectList: FC<IProjectListProps> = (props) => {
   const context = useProjectList(props)
@@ -59,26 +109,44 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
         <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
           <div className={styles.projectList}>
             <div className={styles.tabs}>
-              <TabList
-                onTabSelect={(_, data: SelectTabData) =>
-                  context.setState({
-                    selectedVertical: find(context.verticals, (v) => v.key === data.value)
-                  })
-                }
-                selectedValue={context.state.selectedVertical?.key}
-              >
-                {context.state.isDataLoaded &&
-                  context.verticals
-                    .filter((vertical) => !vertical.isHidden || !vertical.isHidden(context.state))
-                    .map((vertical) => {
-                      const Icon = vertical.icon
-                      return (
-                        <Tab key={vertical.key} value={vertical.value} icon={<Icon />}>
-                          {vertical.text}
-                        </Tab>
+              <Overflow>
+                <TabList
+                  className={styles.tabList}
+                  onTabSelect={(_, data: SelectTabData) => {
+                    if (data.value === 'overflow-menu') return
+                    context.setState({
+                      selectedVertical: find(context.verticals, (v) => v.key === data.value)
+                    })
+                  }}
+                  selectedValue={context.state.selectedVertical?.key}
+                >
+                  {context.state.isDataLoaded &&
+                    context.verticals
+                      .filter(
+                        (vertical) => !vertical.isHidden || !vertical.isHidden(context.state)
                       )
-                    })}
-              </TabList>
+                      .map((vertical) => {
+                        const Icon = vertical.icon
+                        return (
+                          <OverflowItem key={vertical.key} id={String(vertical.key)}>
+                            <Tab key={vertical.key} value={vertical.value} icon={<Icon />}>
+                              {vertical.text}
+                            </Tab>
+                          </OverflowItem>
+                        )
+                      })}
+                  <OverflowMenu
+                    verticals={context.verticals.filter(
+                      (vertical) => !vertical.isHidden || !vertical.isHidden(context.state)
+                    )}
+                    onSelect={(key) =>
+                      context.setState({
+                        selectedVertical: find(context.verticals, (v) => v.key === key)
+                      })
+                    }
+                  />
+                </TabList>
+              </Overflow>
             </div>
             <Commands />
             {context.state.isDataLoaded && isEmpty(context.projects) && (
