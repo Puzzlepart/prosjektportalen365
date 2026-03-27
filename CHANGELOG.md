@@ -37,6 +37,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Rettet en feil i Bestillingsportalen hvor standardverdien for synlighet (`DefaultVisibility`) fra prosjekttypen ikke ble tatt med ved lagring, slik at den alltid falt tilbake til `Private`
 - Rettet en feil i Bestillingsportalen hvor en bruker kunne legges til som både eier og medlem, noe som førte til feil ved opprettelse. Det vises nå en feilmelding på medlemsfeltet dersom en bruker allerede er lagt til som eier
 - Rettet en feil hvor gruppeoppretting definert i `Tillatelseskonfigurasjon` kunne feile for alle resterende grupper dersom én gruppe feilet under tilrettelegging av tillatelser [#1716](https://github.com/Puzzlepart/prosjektportalen365/issues/1716)
+- Rettet en visuell feil hvor `Prosjektinformasjon mangler.`-melding overlappet seksjoner på Prosjektstatus-seksjonen `Overordnet status`
 
 ---
 

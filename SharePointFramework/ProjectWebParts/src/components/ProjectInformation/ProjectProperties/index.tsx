@@ -71,8 +71,13 @@ export const ProjectProperties: FC<IProjectPropertiesProps> = (props) => {
     }
     default: {
       if (isEmpty(properties)) {
-        return <UserMessage title={strings.NoPropertiesTitle} text={strings.NoPropertiesMessage} />
+        return (
+          <div className={styles.root}>
+            <UserMessage title={strings.NoPropertiesTitle} text={strings.NoPropertiesMessage} />
+          </div>
+        )
       }
+
       return (
         <div className={styles.root}>
           {properties.map((model, idx) => (
