@@ -243,14 +243,14 @@ export class TemplateItem {
    * Name without extension
    */
   public get nameWithoutExtension() {
-    return this.name.split('.')[0]
+    return this.name.substring(0, this.name.lastIndexOf('.'))
   }
 
   /**
    * File extension
    */
   public get fileExtension() {
-    return this.name.split('.')[1]
+    return this.name.substring(this.name.lastIndexOf('.') + 1)
   }
 
   /**
