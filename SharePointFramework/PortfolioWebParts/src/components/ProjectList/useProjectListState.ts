@@ -9,7 +9,7 @@ import {
 /** State hook for `ProjectList`. Computes verticals synchronously from `props.verticalConfigs`. */
 export function useProjectListState(props: IProjectListProps) {
   const mockProjects = Array.apply(null, Array(Math.floor(Math.random() * 10) + 10)).map(() => 0)
-  const defaultSort = { fieldName: props.sortBy, isSortedDescending: true }
+  const defaultSort = { fieldName: props.sortBy.toLocaleLowerCase(), isSortedDescending: true }
   const configs = props.verticalConfigs ?? []
   const verticals = convertConfigsToVerticals(configs)
   const selectedVertical = findDefaultVertical(configs, verticals)
