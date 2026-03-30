@@ -32,7 +32,10 @@ export class SitePermissions extends BaseTask {
     onProgress: OnProgressCallbackFunction
   ): Promise<IBaseTaskParams> {
     try {
-      onProgress(strings.SitePermissionsText, strings.SitePermissionsSubText, 'Permissions')
+      onProgress(strings.SitePermissionsText, strings.SitePermissionsSubText, 'Permissions', {
+        message: 'Starting site permissions configuration',
+        level: 'info'
+      })
       const [permConfig, roleDefinitions] = await Promise.all([
         this._getPermissionConfiguration(),
         this._getRoleDefinitions(params.web)

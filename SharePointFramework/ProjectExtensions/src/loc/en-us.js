@@ -166,6 +166,17 @@ define([], function () {
     ProgressLabel: 'Progress',
     AssignedToLabel: 'Assigned to',
     SaveButtonLabel: 'Save',
-    CancelButtonLabel: 'Cancel'
+    CancelButtonLabel: 'Cancel',
+    NoTemplateSelectedText: 'Select a project template to continue.',
+    SelectedCountLabel: '{0} selected',
+    MandatoryItemTooltipText: 'This item is required by the selected project template and cannot be removed.',
+    ProgressAdvancedLogLabel: 'Advanced log',
+    ProgressTaskPendingText: 'Pending',
+    ProgressTaskRunningText: 'Running',
+    ProgressTaskCompletedText: 'Completed',
+    ProgressTaskErrorText: 'Error',
+    ProgressTaskWarningText: 'Warning',
+    ProgressStepCountText: 'Step {0} of {1}',
+    ProgressAdvancedLogDescription: 'Click to view detailed log for each step in the setup.'
   }
 })

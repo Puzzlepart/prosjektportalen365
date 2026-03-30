@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 import { BaseDialog } from '../@BaseDialog'
 import styles from './ErrorDialog.module.scss'
 import { IErrorDialogProps } from './types'
-import { DefaultButton, PrimaryButton, DialogFooter } from '@fluentui/react'
+import { Button } from '@fluentui/react-components'
 import { UserMessage } from 'pp365-shared-library'
 
 export const ErrorDialog: FC<IErrorDialogProps> = ({
@@ -14,36 +14,38 @@ export const ErrorDialog: FC<IErrorDialogProps> = ({
   onSetupClick,
   showStackAsSubText = false
 }) => {
-  const onRenderFooter = () => {
+  const footer = () => {
     if (error.name === 'AlreadySetup') {
       return (
         <>
-          <DefaultButton onClick={onSetupClick} text={strings.ProvisionTemplateText} />
-          <PrimaryButton
-            styles={{ root: { marginLeft: 6 } }}
-            text={strings.ContinueToProjectText}
-            onClick={onDismiss}
-          />
+          <Button appearance='secondary' onClick={onSetupClick}>
+            {strings.ProvisionTemplateText}
+          </Button>
+          <Button appearance='primary' onClick={onDismiss}>
+            {strings.ContinueToProjectText}
+          </Button>
         </>
       )
     }
-    return <PrimaryButton text={strings.CloseModalText} onClick={onDismiss} />
+    return (
+      <Button appearance='primary' onClick={onDismiss}>
+        {strings.CloseModalText}
+      </Button>
+    )
   }
 
   return (
     <BaseDialog
       version={version}
-      dialogContentProps={{
-        title: error.message,
-        subText: showStackAsSubText ? error.stack : undefined
-      }}
-      modalProps={{ containerClassName: styles.root, isBlocking: false, isDarkOverlay: true }}
+      title={error.message}
+      subText={showStackAsSubText ? error.stack : undefined}
+      containerClassName={styles.root}
       onDismiss={onDismiss}
+      footer={footer()}
     >
       <div style={{ marginTop: 15 }} hidden={showStackAsSubText}>
         <UserMessage text={error.stack} intent={intent} />
       </div>
-      <DialogFooter>{onRenderFooter()}</DialogFooter>
     </BaseDialog>
   )
 }

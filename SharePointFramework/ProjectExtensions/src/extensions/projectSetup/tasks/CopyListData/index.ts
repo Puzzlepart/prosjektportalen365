@@ -51,6 +51,15 @@ export class CopyListData extends BaseTask {
       await this.createDefaultPlannerPlan(params)
       for (let i = 0; i < this.data.selectedContentConfig.length; i++) {
         const contentConfig = this.data.selectedContentConfig[i]
+        onProgress(
+          strings.CopyListDataErrorMessage ? strings.CustomActionsText : contentConfig.text,
+          contentConfig.text,
+          'Copy',
+          {
+            message: `Processing content config: ${contentConfig.text} (${contentConfig.type})`,
+            level: 'info'
+          }
+        )
         await contentConfig.load()
         // eslint-disable-next-line default-case
         switch (contentConfig.type) {

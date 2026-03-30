@@ -43,12 +43,25 @@ export class ProvisionSiteFields extends BaseTask {
             0
           ) {
             this.logInformation(`Site field ${siteField.InternalName} already exists in site`)
+            onProgress(
+              strings.ProvisionSiteFieldsText,
+              format(strings.ProvisionSiteFieldText, siteField.Title),
+              'EditCreate',
+              {
+                message: `Skipped ${siteField.Title} (${siteField.InternalName}) - already exists`,
+                level: 'info'
+              }
+            )
             continue
           }
           onProgress(
             strings.ProvisionSiteFieldsText,
             format(strings.ProvisionSiteFieldText, siteField.Title),
-            'EditCreate'
+            'EditCreate',
+            {
+              message: `Creating field: ${siteField.Title} (${siteField.InternalName})`,
+              level: 'info'
+            }
           )
           const fieldXml = transformFieldXml(siteField.SchemaXml)
           this.logInformation(

@@ -9,11 +9,10 @@ import { ITemplateConfigMessageProps } from './types'
 /**
  * Component logic hook for `TemplateConfigMessage`
  *
- * @returns `hidden` and `text`
+ * @returns messages for `ContentConfigSection`
  */
-export function useTemplateConfigMessage({ section }: ITemplateConfigMessageProps) {
+export function useTemplateConfigMessage(_props: ITemplateConfigMessageProps) {
   const context = useProjectSetupDialogContext()
-  const templateHasExtensions = !isEmpty(context.state.selectedTemplate?.extensions)
   const templateHasContentConfig = !isEmpty(context.state.selectedTemplate?.contentConfig)
 
   const messages: IUserMessageProps[] = [
@@ -26,19 +25,9 @@ export function useTemplateConfigMessage({ section }: ITemplateConfigMessageProp
       text: format(
         strings.TemplateConfigMessage,
         context.state.selectedTemplate?.text,
-        [
-          templateHasExtensions && strings.ExtensionsSectionHeaderText,
-          templateHasContentConfig && strings.ContentConfigSectionHeaderText
-        ]
-          .filter(Boolean)
-          .join(' og ')
-          .toLowerCase()
+        strings.ContentConfigSectionHeaderText.toLowerCase()
       ),
-      hidden: !(
-        (section === 'ExtensionsSection' && templateHasExtensions) ||
-        (section === 'ContentConfigSection' && templateHasContentConfig) ||
-        (section === 'TemplateSelector' && (templateHasExtensions || templateHasContentConfig))
-      )
+      hidden: !templateHasContentConfig
     }
   ]
 

@@ -45,7 +45,8 @@ export class ApplyTemplate extends BaseTask {
             onProgress(
               format(strings.ApplyTemplateText, this.data.selectedTemplate.text),
               text,
-              iconName
+              iconName,
+              { message: `Applying handler: ${handler} - ${text}`, level: 'info' }
             )
           }
         })
@@ -60,7 +61,8 @@ export class ApplyTemplate extends BaseTask {
         onProgress(
           strings.ApplyingExtensionsText,
           format(strings.ApplyExtensionText, this.data.selectedExtensions[i].text),
-          'ExternalBuild'
+          'ExternalBuild',
+          { message: `Applying extension: ${this.data.selectedExtensions[i].text}`, level: 'info' }
         )
         await provisioner.applyTemplate(extensionSchema, null)
       }

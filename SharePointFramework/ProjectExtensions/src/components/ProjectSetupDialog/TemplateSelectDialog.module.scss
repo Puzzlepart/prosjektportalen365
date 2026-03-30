@@ -3,11 +3,53 @@
   max-width: 850px !important;
 
   .content {
-    min-height: 450px;
+    min-height: auto;
+  }
+
+  .templateHeader {
+    padding: 0 0 12px 0;
+    border-bottom: 1px solid #edebe9;
+    margin-bottom: 12px;
+  }
+
+  .configPane {
+    display: flex;
+    flex-direction: column;
+    min-height: 300px;
+    max-height: calc(70vh - 200px);
+
+    .tabList {
+      flex-shrink: 0;
+      margin-bottom: 0;
+    }
+
+    .tabLabel {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tabBadge {
+      margin-left: 4px;
+    }
+
+    .tabContent {
+      flex: 1;
+      overflow-y: auto;
+      position: relative;
+      min-height: 250px;
+      max-height: calc(70vh - 300px);
+    }
+
+    .emptyTabMessage {
+      padding: 20px 0;
+    }
   }
 
   .actions {
     margin: 5px 0 0 0;
+    display: flex;
+    gap: 4px;
   }
 
   .projectDataMessage {

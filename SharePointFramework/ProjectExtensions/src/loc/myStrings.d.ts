@@ -169,6 +169,17 @@ declare interface IProjectExtensionsStrings {
   AssignedToLabel: string
   SaveButtonLabel: string
   CancelButtonLabel: string
+  NoTemplateSelectedText: string
+  SelectedCountLabel: string
+  MandatoryItemTooltipText: string
+  ProgressAdvancedLogLabel: string
+  ProgressTaskPendingText: string
+  ProgressTaskRunningText: string
+  ProgressTaskCompletedText: string
+  ProgressTaskErrorText: string
+  ProgressTaskWarningText: string
+  ProgressStepCountText: string
+  ProgressAdvancedLogDescription: string
 }
 
 declare module 'ProjectExtensionsStrings' {

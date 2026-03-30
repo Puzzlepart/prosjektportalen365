@@ -166,6 +166,17 @@ define([], function () {
     ProgressLabel: 'Fremdrift',
     AssignedToLabel: 'Tilordnet til',
     SaveButtonLabel: 'Lagre',
-    CancelButtonLabel: 'Avbryt'
+    CancelButtonLabel: 'Avbryt',
+    NoTemplateSelectedText: 'Velg en prosjektmal for å fortsette.',
+    SelectedCountLabel: '{0} valgt',
+    MandatoryItemTooltipText: 'Dette elementet er påkrevd av den valgte prosjektmalen og kan ikke fjernes.',
+    ProgressAdvancedLogLabel: 'Avansert logg',
+    ProgressTaskPendingText: 'Venter',
+    ProgressTaskRunningText: 'Kjører',
+    ProgressTaskCompletedText: 'Fullført',
+    ProgressTaskErrorText: 'Feil',
+    ProgressTaskWarningText: 'Advarsel',
+    ProgressStepCountText: 'Steg {0} av {1}',
+    ProgressAdvancedLogDescription: 'Klikk for å vise detaljert logg for hvert steg i oppsettet.'
   }
 })

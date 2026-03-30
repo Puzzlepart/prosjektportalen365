@@ -1,14 +1,36 @@
 @import '~@fluentui/react/dist/sass/References.scss';
 
+.headerBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  gap: 12px;
+}
+
 .searchBox {
-  width: 625px;
-  margin: 10px 0 0 0;
+  flex: 1;
+  max-width: 500px;
+  margin: 0;
   box-sizing: border-box;
 }
 
 .selectionCount {
   margin: 0;
   cursor: pointer;
+  flex-shrink: 0;
+}
+
+.selectionCountLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: $ms-font-size-s;
+  color: $ms-color-neutralSecondary;
+}
+
+.selectionBadge {
+  margin-left: 2px;
 }
 
 .selectionCountTooltip {
