@@ -30,19 +30,22 @@ export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
   )
 
   const options: IChoiceGroupOption[] = [
-    {
-      key: 'notemplate',
-      text: strings.ProjectTemplateSelectorNoTemplateRadioLabel,
-      disabled: !hasExistingTemplate,
-      onRenderLabel: (props) => (
-        <span className={styles.radioLabelContainer}>
-          <span className={styles.radioLabel}>{props.text}</span>
-          <span className={styles.radioDescription}>
-            {strings.ProjectTemplateSelectorNoTemplateDescription}
-          </span>
-        </span>
-      )
-    },
+    ...(hasExistingTemplate
+      ? [
+          {
+            key: 'notemplate',
+            text: strings.ProjectTemplateSelectorNoTemplateRadioLabel,
+            onRenderLabel: (props) => (
+              <span className={styles.radioLabelContainer}>
+                <span className={styles.radioLabel}>{props.text}</span>
+                <span className={styles.radioDescription}>
+                  {strings.ProjectTemplateSelectorNoTemplateDescription}
+                </span>
+              </span>
+            )
+          }
+        ]
+      : []),
     {
       key: 'selecttemplate',
       text: strings.ProjectTemplateSelectorSelectTemplateRadioLabel
