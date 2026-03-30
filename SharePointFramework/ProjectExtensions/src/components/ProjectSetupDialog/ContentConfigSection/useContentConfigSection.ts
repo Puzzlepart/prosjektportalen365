@@ -62,8 +62,12 @@ export function useContentConfigSection() {
 
   const toolbarItems = [
     new ListMenuItem(
+      format(strings.SelectedCountLabel, context.state.selectedContentConfig.length),
       format(strings.SelectedCountLabel, context.state.selectedContentConfig.length)
-    ).setDisabled(true)
+    )
+      .setIcon('CheckmarkCircle')
+      .setDisabled(true)
+      .setStyle({ minWidth: '110px' })
   ]
 
   return {

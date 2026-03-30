@@ -11,7 +11,7 @@ import styles from './TemplateSelectDialog.module.scss'
 import { TemplateSelector } from './TemplateSelector'
 import { IProjectSetupDialogProps } from './types'
 import { useProjectSetupDialog } from './useProjectSetupDialog'
-import { UserMessage } from 'pp365-shared-library'
+import { getFluentIcon, UserMessage } from 'pp365-shared-library'
 
 type ConfigTab = 'extensions' | 'contentConfig'
 
@@ -65,7 +65,7 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
             onTabSelect={(_, data) => setActiveTab(data.value as ConfigTab)}
             className={styles.tabList}
           >
-            <Tab value='extensions' disabled={!hasExtensions} icon={<PuzzlePieceRegular />}>
+            <Tab value='extensions' disabled={!hasExtensions} icon={getFluentIcon('PuzzlePiece')}>
               <span className={styles.tabLabel}>
                 {strings.ExtensionsSectionHeaderText}
                 {hasExtensions && extensionsCount > 0 && (
@@ -78,7 +78,7 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
             <Tab
               value='contentConfig'
               disabled={!hasContentConfig}
-              icon={<DocumentBulletListRegular />}
+              icon={getFluentIcon('ListBar')}
             >
               <span className={styles.tabLabel}>
                 {strings.ContentConfigSectionHeaderText}

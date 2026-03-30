@@ -33,9 +33,9 @@ export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
       )}
       {mode === 'selecttemplate' && (
         <FieldContainer
+          iconName='ContentView'
           label={strings.ProjectTemplateSelectorTitle}
-          validationState={validationMessage ? 'none' : undefined}
-          validationMessage={validationMessage}
+          description={selectedTemplate?.subText && `${selectedTemplate?.subText} ${validationMessage}`}
         >
           <Combobox
             placeholder={strings.ProjectTemplateSelectorSearchPlaceholder}

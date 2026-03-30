@@ -7,15 +7,17 @@
   .commands {
     display: flex;
     flex-direction: row;
-    gap: 8px;
-    align-items: center;
+    gap: 16px;
+    margin: 6px 2px;
 
     .search {
-      flex: 1;
+      width: 100%;
+      max-width: 100%;
 
       .searchBox {
-        width: 100%;
-        max-width: 300px;
+        box-shadow: var(--shadow2);
+        width: inherit;
+        max-width: inherit;
       }
     }
   }

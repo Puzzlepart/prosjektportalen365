@@ -39,7 +39,7 @@ export const ExtensionsSection: ProjectSetupDialogSectionComponent = () => {
               placeholder={strings.ExtensionsSectionSearchPlaceholder}
               value={searchTerm}
               onChange={(_, { value }) => onSearch(value)}
-              size='medium'
+              size='large'
               appearance='filled-lighter'
               className={styles.searchBox}
               contentAfter={{ onClick: () => onSearch('') }}
