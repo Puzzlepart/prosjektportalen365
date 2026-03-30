@@ -23,7 +23,7 @@ export function useCommands() {
   )
 
   const toolbarItems = [
-    new ListMenuItem(selectedRenderMode?.text, null)
+    new ListMenuItem(selectedRenderMode?.text, strings.RenderModeLabel)
       .setHidden(!context.props.showRenderModeSelector)
       .setIcon(selectedRenderMode?.icon)
       .setWidth('fit-content')
