@@ -106,7 +106,7 @@ define([], function () {
     PlannerConfigurationErrorMessage: 'Det skjedde en feil under opprettelse av standardoppgaver i Planner. Prøv igjen ved å laste siden på nytt.',
     PlannerConfigurationText: 'Oppretter standardoppgaver i Planner',
     PlannerTagsLimitLogText: 'Kan ikke legge til mer enn 25 etiketter til planneren "{0}", fjerner overskytende etiketter.',
-    PlannerTaskAttachmentLimitLogText: 'Kan ikke legge til mer enn 10 vedlegg til oppgave "{0}", fjerner overskytende vedlegg.',
+    PlannerTaskAttachmentLimitLogText: 'Kan ikke legge til mer enn 8 vedlegg til oppgave "{0}", fjerner overskytende vedlegg.',
     PlannerTaskChecklistLimitLogText: 'Kan ikke legge til mer enn 20 punkter i sjekklisten for oppgave "{0}", fjerner overskytende punkter.',
     TimelineConfigurationText: 'Oppretter standardelementer for tidslinje',
     CreatingTimelineItemText: 'Oppretter tidslinjeelement: {0}',

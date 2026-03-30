@@ -110,7 +110,7 @@ define([], function () {
     PlannerConfigurationErrorMessage: 'An error occurred while creating default tasks in Planner. Try again by reloading the page.',
     PlannerConfigurationText: 'Creating default tasks in planner',
     PlannerTagsLimitLogText: 'Unable to add more than 25 labels to planner "{0}", removing excess labels.',
-    PlannerTaskAttachmentLimitLogText: 'Unable to add more than 10 attachments to task "{0}", removing excess attachments.',
+    PlannerTaskAttachmentLimitLogText: 'Unable to add more than 8 attachments to task "{0}", removing excess attachments.',
     PlannerTaskChecklistLimitLogText: 'Unable to add more than 20 items to checklist for task "{0}", removing excess items.',
     TimelineConfigurationText: 'Creating standard timeline elements',
     CreatingTimelineItemText: 'Creating timeline element: {0}',
