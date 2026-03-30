@@ -154,6 +154,7 @@ define([], function () {
     ProjectSetupDialogTitle: 'Setup wizard for site',
     ProjectTemplateSelectorSearchClearText: 'Reset project template selection',
     ProjectTemplateSelectorSearchPlaceholder: 'Search project templates...',
+    ProjectTemplateSelectorNoMatchText: 'No project templates match your search.',
     ProjectTemplateSelectorTitle: 'Project template',
     ProjectTemplateSelectorNoTemplateLabel: 'No template',
     ProjectTemplateSelectorNoTemplateDescription: 'Use this option to run the setup wizard without applying a template. You can still add extensions and list content.',

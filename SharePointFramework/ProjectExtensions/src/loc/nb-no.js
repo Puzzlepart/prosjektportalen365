@@ -154,6 +154,7 @@ define([], function () {
     ProjectSetupDialogTitle: 'Oppsettveiviser',
     ProjectTemplateSelectorSearchClearText: 'Nullstill valg av prosjektmal',
     ProjectTemplateSelectorSearchPlaceholder: 'Søk i prosjektmaler...',
+    ProjectTemplateSelectorNoMatchText: 'Ingen prosjektmaler samsvarer med søket.',
     ProjectTemplateSelectorTitle: 'Prosjektmal',
     ProjectTemplateSelectorNoTemplateLabel: 'Ingen mal',
     ProjectTemplateSelectorNoTemplateDescription: 'Bruk dette alternativet for å kjøre oppsettveiviseren uten å anvende en mal. Du kan fortsatt legge til tillegg og standardinnhold.',

@@ -1,6 +1,6 @@
-import { Combobox, Option, Radio, RadioGroup } from '@fluentui/react-components'
+import { Combobox, Divider, Option, Radio, RadioGroup, Text } from '@fluentui/react-components'
 import strings from 'ProjectExtensionsStrings'
-import { FieldContainer, UserMessage } from 'pp365-shared-library'
+import { FieldContainer, getFluentIconWithFallback, UserMessage } from 'pp365-shared-library'
 import React from 'react'
 import { ProjectSetupDialogSectionComponent } from '../types'
 import styles from './TemplateSelector.module.scss'
@@ -10,14 +10,16 @@ export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
   const {
     mode,
     hasExistingTemplate,
-    templates,
+    matchingTemplates,
+    query,
     selectedTemplate,
     isSingleTemplate,
     validationMessage,
     showPlannerWarning,
     onModeChanged,
     onTemplateSelect,
-    onClearTemplate
+    onClearTemplate,
+    setQuery
   } = useTemplateSelector()
 
   return (
@@ -35,32 +37,56 @@ export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
         <FieldContainer
           iconName='ContentView'
           label={strings.ProjectTemplateSelectorTitle}
-          description={selectedTemplate?.subText && `${selectedTemplate?.subText} ${validationMessage}`}
+          description={selectedTemplate?.subText}
         >
           <Combobox
+            freeform
             placeholder={strings.ProjectTemplateSelectorSearchPlaceholder}
             disabled={isSingleTemplate}
-            value={selectedTemplate?.text ?? ''}
+            value={query || (selectedTemplate?.text ?? '')}
             selectedOptions={selectedTemplate ? [String(selectedTemplate.id)] : []}
             onOptionSelect={onTemplateSelect}
             clearable
             onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
-              if (e.target.value === '') {
+              const value = e.target.value
+              setQuery(value)
+              if (value === '') {
                 onClearTemplate()
               }
             }}
           >
-            {templates.map((template) => (
-              <Option key={template.id} value={String(template.id)} text={template.text}>
-                {template.text}
+            {matchingTemplates.length > 0 ? (
+              matchingTemplates.map((template) => (
+                <Option key={template.id} value={String(template.id)} text={template.text}>
+                  <div className={styles.option}>
+                    {template.iconProps?.iconName && (
+                      <span className={styles.optionIcon}>
+                        {getFluentIconWithFallback(template.iconProps.iconName, true)}
+                      </span>
+                    )}
+                    <div className={styles.optionContent}>
+                      <Text weight='semibold'>{template.text}</Text>
+                      {template.subText && (
+                        <Text size={200} wrap>
+                          {template.subText}
+                        </Text>
+                      )}
+                    </div>
+                  </div>
+                </Option>
+              ))
+            ) : (
+              <Option key='no-matches' value='' text='' disabled>
+                {strings.ProjectTemplateSelectorNoMatchText}
               </Option>
-            ))}
+            )}
           </Combobox>
         </FieldContainer>
       )}
       {showPlannerWarning && (
         <UserMessage text={strings.PlannerMemberWarningMessage} intent='warning' />
       )}
+      <Divider>{validationMessage}</Divider>
     </div>
   )
 }

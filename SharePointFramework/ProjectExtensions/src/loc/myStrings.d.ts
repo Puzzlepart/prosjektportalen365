@@ -156,6 +156,7 @@ declare interface IProjectExtensionsStrings {
   ProjectSetupDialogTitle: string
   ProjectTemplateSelectorSearchClearText: string
   ProjectTemplateSelectorSearchPlaceholder: string
+  ProjectTemplateSelectorNoMatchText: string
   ProjectTemplateSelectorTitle: string
   ProjectTemplateSelectorNoTemplateLabel: string
   ProjectTemplateSelectorNoTemplateDescription: string

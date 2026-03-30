@@ -3,3 +3,24 @@
   flex-direction: column;
   gap: 8px;
 }
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.optionIcon {
+  display: flex;
+  align-items: center;
+  padding-top: 2px;
+  font-size: 16px;
+}
+
+.optionContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}

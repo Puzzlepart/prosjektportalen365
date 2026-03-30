@@ -65,7 +65,8 @@ export function useExtensionsSection() {
     )
       .setIcon('CheckmarkCircle')
       .setDisabled(true)
-      .setWidth('fit-content')
+      .setStyle({ minWidth: '200px', cursor: 'default' })
+
   ]
 
   return {

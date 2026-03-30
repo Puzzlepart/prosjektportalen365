@@ -1,5 +1,5 @@
 import { format } from '@fluentui/react'
-import { Tab, TabList, Badge, Button } from '@fluentui/react-components'
+import { Tab, TabList, Badge, Button, Divider } from '@fluentui/react-components'
 import { PuzzlePieceRegular, DocumentBulletListRegular } from '@fluentui/react-icons'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { FC, useState } from 'react'
@@ -48,17 +48,14 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
       <BaseDialog
         version={props.version}
         title={strings.ProjectSetupDialogTitle}
-        subText={strings.ProjectSetupDialogInfoText}
         containerClassName={styles.root}
         contentClassName={styles.content}
         isBlocking={true}
         onDismiss={props.onDismiss}
         footer={footer}
       >
-        <div className={styles.templateHeader}>
-          <TemplateSelector />
-        </div>
-
+        <p className={styles.subText}>{strings.ProjectSetupDialogInfoText}</p>
+        <TemplateSelector />
         <div className={styles.configPane}>
           <TabList
             selectedValue={activeTab}

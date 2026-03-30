@@ -1,6 +1,6 @@
 import { format } from '@fluentui/react'
 import strings from 'ProjectExtensionsStrings'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { isEmpty } from 'underscore'
 import { ProjectSetupValidation } from '../../../extensions/projectSetup/types'
 import { useProjectSetupDialogContext } from '../context'
@@ -14,6 +14,7 @@ export function useTemplateSelector() {
 
   const initialMode: TemplateSelectorMode = hasExistingTemplate ? 'notemplate' : 'selecttemplate'
   const [mode, setMode] = useState<TemplateSelectorMode>(initialMode)
+  const [query, setQuery] = useState<string>('')
 
   const defaultTemplate = (() => {
     const [def] = context.props.data.templates.filter((t) => t.isDefault)
@@ -23,6 +24,16 @@ export function useTemplateSelector() {
   const templates = context.props.data.templates.filter((t) => !t.hidden)
   const selectedTemplate = context.state.selectedTemplate
   const isSingleTemplate = templates.length === 1
+
+  const matchingTemplates = useMemo(() => {
+    if (!query) return templates
+    const lowerQuery = query.toLowerCase()
+    return templates.filter(
+      (t) =>
+        t.text.toLowerCase().includes(lowerQuery) ||
+        t.subText?.toLowerCase().includes(lowerQuery)
+    )
+  }, [templates, query])
 
   const onModeChanged = (_: any, data: { value: string }) => {
     const newMode = data.value as TemplateSelectorMode
@@ -42,10 +53,12 @@ export function useTemplateSelector() {
     if (template) {
       context.dispatch(ON_TEMPLATE_CHANGED(template))
     }
+    setQuery('')
   }
 
   const onClearTemplate = () => {
     context.dispatch(ON_TEMPLATE_CHANGED(null))
+    setQuery('')
   }
 
   const templateHasExtensions = !isEmpty(selectedTemplate?.extensions)
@@ -72,12 +85,15 @@ export function useTemplateSelector() {
     mode,
     hasExistingTemplate,
     templates,
+    matchingTemplates,
+    query,
     selectedTemplate,
     isSingleTemplate,
     validationMessage,
     showPlannerWarning,
     onModeChanged,
     onTemplateSelect,
-    onClearTemplate
+    onClearTemplate,
+    setQuery
   }
 }

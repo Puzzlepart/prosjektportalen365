@@ -67,7 +67,7 @@ export function useContentConfigSection() {
     )
       .setIcon('CheckmarkCircle')
       .setDisabled(true)
-      .setStyle({ minWidth: '110px' })
+      .setStyle({ minWidth: '200px', cursor: 'default' })
   ]
 
   return {

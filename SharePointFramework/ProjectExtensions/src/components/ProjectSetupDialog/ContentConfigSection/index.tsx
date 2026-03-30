@@ -46,7 +46,7 @@ export const ContentConfigSection: ProjectSetupDialogSectionComponent = () => {
             />
           </div>
         )}
-        <Toolbar items={toolbarItems} />
+        <Toolbar farItems={toolbarItems} />
       </div>
       <DataGrid
         items={items}
