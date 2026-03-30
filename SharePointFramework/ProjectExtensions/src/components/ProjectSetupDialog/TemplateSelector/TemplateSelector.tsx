@@ -86,7 +86,9 @@ export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
       {showPlannerWarning && (
         <UserMessage text={strings.PlannerMemberWarningMessage} intent='warning' />
       )}
-      <Divider>{validationMessage}</Divider>
+      {validationMessage && (
+        <UserMessage text={validationMessage} intent='info' containerStyle={{ padding: 0 }} />
+      )}
     </div>
   )
 }
