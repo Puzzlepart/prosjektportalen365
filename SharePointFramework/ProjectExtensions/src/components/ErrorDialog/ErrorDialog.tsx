@@ -38,16 +38,14 @@ export const ErrorDialog: FC<IErrorDialogProps> = ({
     <BaseDialog
       version={version}
       title={error.message}
-      subText={showStackAsSubText ? error.stack : undefined}
       containerClassName={styles.root}
       onDismiss={onDismiss}
       footer={footer()}
     >
-      <div style={{ marginTop: 15 }} hidden={showStackAsSubText}>
+      {showStackAsSubText && <p className={styles.subText}>{error.stack}</p>}
+      <div hidden={showStackAsSubText}>
         <UserMessage text={error.stack} intent={intent} />
       </div>
     </BaseDialog>
   )
 }
-
-export * from './types'

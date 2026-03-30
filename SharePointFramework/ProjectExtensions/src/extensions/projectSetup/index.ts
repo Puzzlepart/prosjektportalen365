@@ -212,7 +212,22 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
 
       await deleteCustomizer(this)
       if (!this.properties.skipReload) {
-        window.location.href = this.context.pageContext.web.absoluteUrl
+        this._renderProgressDialog({
+          progressIndicator: {
+            label: strings.ProgressDialogLabel,
+            description: strings.ProgressDialogDescription
+          },
+          iconName: data.selectedTemplate?.iconProps?.iconName ?? 'Page',
+          title: this.properties.progressDialogTitle,
+          subText: this.properties.progressDialogSubText,
+          taskProgress: this._taskProgress,
+          currentStep: this._totalTasks,
+          totalSteps: this._totalTasks,
+          isComplete: true,
+          onDismiss: () => {
+            window.location.href = this.context.pageContext.web.absoluteUrl
+          }
+        })
       }
     } catch (error) {
       this._renderErrorDialog({ error })

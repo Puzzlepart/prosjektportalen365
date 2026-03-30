@@ -41,4 +41,10 @@ export interface IProgressDialogProps extends IBaseDialogProps {
    * Total number of steps
    */
   totalSteps?: number
+
+  /**
+   * Whether to setup is complete. When `true` and the log is expanded,
+   * a close button is shown instead of auto-closing/redirecting.
+   */
+  isComplete?: boolean
 }

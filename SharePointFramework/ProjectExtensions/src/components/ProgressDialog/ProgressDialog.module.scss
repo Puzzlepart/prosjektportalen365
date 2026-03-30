@@ -1,17 +1,25 @@
 @import '~@fluentui/react/dist/sass/References.scss';
 
 .root {
-  min-width: 500px;
+  width: 850px !important;
+  max-width: 850px !important;
 }
 
 .content {
   min-height: 200px;
 }
 
+.subText {
+  margin-bottom: 12px;
+  color: #605e5c;
+  font-size: 14px;
+  font-weight: 400;
+}
+
 .progressSection {
   display: flex;
   gap: 16px;
-  align-items: flex-start;
+  align-items: center;
 
   .icon {
     flex-shrink: 0;

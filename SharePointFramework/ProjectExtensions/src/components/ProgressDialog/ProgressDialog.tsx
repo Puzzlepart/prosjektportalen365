@@ -2,9 +2,9 @@ import { Icon, ProgressIndicator } from '@fluentui/react'
 import { Text, Divider, Button } from '@fluentui/react-components'
 import { ChevronDownRegular, ChevronUpRegular } from '@fluentui/react-icons'
 import * as strings from 'ProjectExtensionsStrings'
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { format } from '@uifabric/utilities'
-import { BaseDialog } from '../@BaseDialog/index'
+import { BaseDialog } from '../@BaseDialog'
 import styles from './ProgressDialog.module.scss'
 import { IProgressDialogProps } from './types'
 import { TaskLogSection } from './TaskLogSection'
@@ -21,6 +21,18 @@ export const ProgressDialog: FC<IProgressDialogProps> = (props) => {
   const title = props.title ?? strings.ProgressDialogTitle
   const subText = props.subText ?? strings.ProgressDialogSubText
 
+  useEffect(() => {
+    if (props.isComplete && !logExpanded) {
+      props.onDismiss?.()
+    }
+  }, [props.isComplete])
+
+  const footer = props.isComplete && logExpanded ? (
+    <Button appearance='primary' onClick={props.onDismiss}>
+      {strings.ContinueToProjectText}
+    </Button>
+  ) : undefined
+
   return (
     <BaseDialog
       version={props.version}
@@ -28,9 +40,10 @@ export const ProgressDialog: FC<IProgressDialogProps> = (props) => {
       containerClassName={styles.root}
       contentClassName={styles.content}
       title={title}
-      subText={subText}
       onDismiss={props.onDismiss}
+      footer={footer}
     >
+      <p className={styles.subText}>{subText}</p>
       <div className={styles.progressSection}>
         <div className={styles.icon}>
           <Icon
@@ -83,5 +96,3 @@ export const ProgressDialog: FC<IProgressDialogProps> = (props) => {
     </BaseDialog>
   )
 }
-
-export * from './types'
