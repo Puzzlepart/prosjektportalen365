@@ -84,6 +84,10 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<IProje
                     {
                       key: 'transformToParentProject',
                       text: strings.CreateParentProjectLabel
+                    },
+                    {
+                      key: 'runProjectSetupAction',
+                      text: strings.RunProjectSetupLabel
                     }
                   ],
                   selectedKeys: this.properties.hideActions ?? []
