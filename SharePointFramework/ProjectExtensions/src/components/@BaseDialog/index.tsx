@@ -9,6 +9,7 @@ import {
   DialogTrigger,
   FluentProvider,
   IdPrefixProvider,
+  Tooltip,
   useId
 } from '@fluentui/react-components'
 import { customLightTheme, getFluentIcon } from 'pp365-shared-library'
@@ -30,7 +31,11 @@ export const BaseDialog: FC<IBaseDialogProps> = (props) => {
           }}
         >
           <DialogSurface className={props.containerClassName}>
-            {props.version && <span className={styles.version}>{props.version}</span>}
+            {props.version && (
+              <Tooltip content={props.versionTooltip ?? props.version} relationship='label'>
+                <span className={styles.version}>{props.version}</span>
+              </Tooltip>
+            )}
             <DialogBody className={styles.body}>
               <DialogTitle
                 action={

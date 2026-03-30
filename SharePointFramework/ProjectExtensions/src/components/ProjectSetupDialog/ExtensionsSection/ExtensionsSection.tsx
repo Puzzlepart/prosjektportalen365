@@ -26,26 +26,23 @@ export const ExtensionsSection: ProjectSetupDialogSectionComponent = () => {
     searchTerm,
     onSearch,
     columnSizingOptions,
-    showSearch,
     toolbarItems
   } = useExtensionsSection()
 
   return (
     <div className={styles.root}>
       <div className={styles.commands}>
-        {showSearch && (
-          <div className={styles.search}>
-            <SearchBox
-              placeholder={strings.ExtensionsSectionSearchPlaceholder}
-              value={searchTerm}
-              onChange={(_, { value }) => onSearch(value)}
-              size='large'
-              appearance='filled-lighter'
-              className={styles.searchBox}
-              contentAfter={{ onClick: () => onSearch('') }}
-            />
-          </div>
-        )}
+        <div className={styles.search}>
+          <SearchBox
+            placeholder={strings.ExtensionsSectionSearchPlaceholder}
+            value={searchTerm}
+            onChange={(_, { value }) => onSearch(value)}
+            size='large'
+            appearance='filled-lighter'
+            className={styles.searchBox}
+            contentAfter={{ onClick: () => onSearch('') }}
+          />
+        </div>
         <Toolbar farItems={toolbarItems} />
       </div>
       <DataGrid

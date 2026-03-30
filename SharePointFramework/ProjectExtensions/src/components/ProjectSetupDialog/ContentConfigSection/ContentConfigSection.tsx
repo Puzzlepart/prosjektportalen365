@@ -26,26 +26,23 @@ export const ContentConfigSection: ProjectSetupDialogSectionComponent = () => {
     searchTerm,
     onSearch,
     columnSizingOptions,
-    showSearch,
     toolbarItems
   } = useContentConfigSection()
 
   return (
     <div className={styles.root}>
       <div className={styles.commands}>
-        {showSearch && (
-          <div className={styles.search}>
-            <SearchBox
-              placeholder={strings.ContentConfigSectionSearchPlaceholder}
-              value={searchTerm}
-              onChange={(_, { value }) => onSearch(value)}
-              size='large'
-              appearance='filled-lighter'
-              className={styles.searchBox}
-              contentAfter={{ onClick: () => onSearch('') }}
-            />
-          </div>
-        )}
+        <div className={styles.search}>
+          <SearchBox
+            placeholder={strings.ContentConfigSectionSearchPlaceholder}
+            value={searchTerm}
+            onChange={(_, { value }) => onSearch(value)}
+            size='large'
+            appearance='filled-lighter'
+            className={styles.searchBox}
+            contentAfter={{ onClick: () => onSearch('') }}
+          />
+        </div>
         <Toolbar farItems={toolbarItems} />
       </div>
       <DataGrid

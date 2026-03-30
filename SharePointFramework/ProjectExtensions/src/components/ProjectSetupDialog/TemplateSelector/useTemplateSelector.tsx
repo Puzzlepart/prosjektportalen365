@@ -30,8 +30,7 @@ export function useTemplateSelector() {
     const lowerQuery = query.toLowerCase()
     return templates.filter(
       (t) =>
-        t.text.toLowerCase().includes(lowerQuery) ||
-        t.subText?.toLowerCase().includes(lowerQuery)
+        t.text.toLowerCase().includes(lowerQuery) || t.subText?.toLowerCase().includes(lowerQuery)
     )
   }, [templates, query])
 

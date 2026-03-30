@@ -56,8 +56,6 @@ export function useExtensionsSection() {
     subText: { minWidth: 250, defaultWidth: 400 }
   }
 
-  const showSearch = allItems.length >= 5
-
   const toolbarItems = [
     new ListMenuItem(
       format(strings.SelectedCountLabel, context.state.selectedExtensions.length),
@@ -66,7 +64,6 @@ export function useExtensionsSection() {
       .setIcon('CheckmarkCircle')
       .setDisabled(true)
       .setStyle({ minWidth: '200px', cursor: 'default' })
-
   ]
 
   return {
@@ -77,7 +74,6 @@ export function useExtensionsSection() {
     searchTerm,
     onSearch: setSearchTerm,
     columnSizingOptions,
-    showSearch,
     toolbarItems
   }
 }

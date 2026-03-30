@@ -8,7 +8,7 @@
   }
 
   .subText {
-    margin: -4px 0 12px 0;
+    margin-bottom: 12px;
     color: #605e5c;
     font-size: 14px;
     font-weight: 400;
@@ -17,6 +17,7 @@
   .configPane {
     display: flex;
     flex-direction: column;
+    gap: 8px;
     min-height: 300px;
     max-height: calc(70vh - 200px);
 

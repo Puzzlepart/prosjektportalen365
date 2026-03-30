@@ -1,4 +1,4 @@
-import { Combobox, Divider, Option, Radio, RadioGroup, Text } from '@fluentui/react-components'
+import { Combobox, Option, Radio, RadioGroup, Text } from '@fluentui/react-components'
 import strings from 'ProjectExtensionsStrings'
 import { FieldContainer, getFluentIconWithFallback, UserMessage } from 'pp365-shared-library'
 import React from 'react'
@@ -86,9 +86,7 @@ export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
       {showPlannerWarning && (
         <UserMessage text={strings.PlannerMemberWarningMessage} intent='warning' />
       )}
-      {validationMessage && (
-        <UserMessage text={validationMessage} intent='info' />
-      )}
+      {validationMessage && <UserMessage text={validationMessage} intent='info' />}
     </div>
   )
 }

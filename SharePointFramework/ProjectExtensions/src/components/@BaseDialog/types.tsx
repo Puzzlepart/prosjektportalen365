@@ -7,6 +7,11 @@ export interface IBaseDialogProps {
   version?: string
 
   /**
+   * Tooltip text for the version badge. Falls back to `version` if not specified.
+   */
+  versionTooltip?: string
+
+  /**
    * Dialog title
    */
   title?: string

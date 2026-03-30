@@ -52,6 +52,8 @@ declare interface IProjectExtensionsStrings {
   ConfiguredSpecifiedTaskMessage: string
   ContentConfigLockedTooltipText: string
   ContentConfigSectionHeaderText: string
+  ContentConfigSectionTooltip: string
+  ContentConfigSectionDisabledTooltip: string
   ContentConfigSectionSearchPlaceholder: string
   ContinueToProjectText: string
   CopyFilesText: string
@@ -72,6 +74,8 @@ declare interface IProjectExtensionsStrings {
   DocumentTemplateDialogScreenTargetFolderInfoMessage: string
   ExtensionLockedTooltipText: string
   ExtensionsSectionHeaderText: string
+  ExtensionsSectionTooltip: string
+  ExtensionsSectionDisabledTooltip: string
   ExtensionsSectionSearchPlaceholder: string
   FilenameAlreadyInUseErrorText: string
   FilenameAlreadySelectedErrorText: string
@@ -154,6 +158,7 @@ declare interface IProjectExtensionsStrings {
   ProjectSetupDialogInfoText: string
   ProjectSetupDialogSubmitButtonText: string
   ProjectSetupDialogTitle: string
+  ProjectSetupDialogVersionTooltip: string
   ProjectTemplateSelectorSearchClearText: string
   ProjectTemplateSelectorSearchPlaceholder: string
   ProjectTemplateSelectorNoMatchText: string

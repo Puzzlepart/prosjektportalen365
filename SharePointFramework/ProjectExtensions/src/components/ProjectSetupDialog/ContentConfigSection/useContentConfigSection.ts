@@ -58,8 +58,6 @@ export function useContentConfigSection() {
     subText: { minWidth: 250, defaultWidth: 400 }
   }
 
-  const showSearch = allItems.length >= 5
-
   const toolbarItems = [
     new ListMenuItem(
       format(strings.SelectedCountLabel, context.state.selectedContentConfig.length),
@@ -78,7 +76,6 @@ export function useContentConfigSection() {
     searchTerm,
     onSearch: setSearchTerm,
     columnSizingOptions,
-    showSearch,
     toolbarItems
   }
 }

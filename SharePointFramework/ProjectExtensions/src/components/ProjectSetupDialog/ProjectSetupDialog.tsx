@@ -1,7 +1,7 @@
 import { format } from '@fluentui/react'
-import { Tab, TabList, Badge, Button } from '@fluentui/react-components'
+import { Tab, TabList, Badge, Button, Tooltip } from '@fluentui/react-components'
 import * as strings from 'ProjectExtensionsStrings'
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { BaseDialog } from '../@BaseDialog'
 import { ContentConfigSection } from './ContentConfigSection'
 import { ProjectSetupDialogContext } from './context'
@@ -16,12 +16,22 @@ type ConfigTab = 'extensions' | 'contentConfig'
 
 export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
   const { state, dispatch, onSubmit, isConfigDisabled } = useProjectSetupDialog(props)
-  const [activeTab, setActiveTab] = useState<ConfigTab>('extensions')
 
   const extensionsCount = state.selectedExtensions?.length ?? 0
   const contentConfigCount = state.selectedContentConfig?.length ?? 0
   const hasExtensions = !isConfigDisabled('extensions')
   const hasContentConfig = !isConfigDisabled('contentConfig')
+
+  const defaultTab: ConfigTab = hasExtensions ? 'extensions' : 'contentConfig'
+  const [activeTab, setActiveTab] = useState<ConfigTab>(defaultTab)
+
+  useEffect(() => {
+    if (hasExtensions) {
+      setActiveTab('extensions')
+    } else if (hasContentConfig) {
+      setActiveTab('contentConfig')
+    }
+  }, [hasExtensions, hasContentConfig])
 
   const footer = (
     <>
@@ -46,6 +56,9 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
     <ProjectSetupDialogContext.Provider value={{ props, state, dispatch }}>
       <BaseDialog
         version={props.version}
+        versionTooltip={
+          DEBUG ? props.version : format(strings.ProjectSetupDialogVersionTooltip, props.version)
+        }
         title={strings.ProjectSetupDialogTitle}
         containerClassName={styles.root}
         contentClassName={styles.content}
@@ -61,45 +74,65 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
             onTabSelect={(_, data) => setActiveTab(data.value as ConfigTab)}
             className={styles.tabList}
           >
-            <Tab value='extensions' disabled={!hasExtensions} icon={getFluentIcon('PuzzlePiece')}>
-              <span className={styles.tabLabel}>
-                {strings.ExtensionsSectionHeaderText}
-                {hasExtensions && extensionsCount > 0 && (
-                  <Badge appearance='filled' color='brand' size='small' className={styles.tabBadge}>
-                    {extensionsCount}
-                  </Badge>
-                )}
-              </span>
-            </Tab>
-            <Tab
-              value='contentConfig'
-              disabled={!hasContentConfig}
-              icon={getFluentIcon('ListBar')}
+            <Tooltip
+              content={
+                hasExtensions
+                  ? strings.ExtensionsSectionTooltip
+                  : strings.ExtensionsSectionDisabledTooltip
+              }
+              relationship='description'
+              positioning='above'
             >
-              <span className={styles.tabLabel}>
-                {strings.ContentConfigSectionHeaderText}
-                {hasContentConfig && contentConfigCount > 0 && (
-                  <Badge appearance='filled' color='brand' size='small' className={styles.tabBadge}>
-                    {contentConfigCount}
-                  </Badge>
-                )}
-              </span>
-            </Tab>
+              <Tab value='extensions' disabled={!hasExtensions} icon={getFluentIcon('PuzzlePiece')}>
+                <span className={styles.tabLabel}>
+                  {strings.ExtensionsSectionHeaderText}
+                  {hasExtensions && extensionsCount > 0 && (
+                    <Badge
+                      appearance='filled'
+                      color='brand'
+                      size='small'
+                      className={styles.tabBadge}
+                    >
+                      {extensionsCount}
+                    </Badge>
+                  )}
+                </span>
+              </Tab>
+            </Tooltip>
+            <Tooltip
+              content={
+                hasContentConfig
+                  ? strings.ContentConfigSectionTooltip
+                  : strings.ContentConfigSectionDisabledTooltip
+              }
+              relationship='description'
+              positioning='above'
+            >
+              <Tab
+                value='contentConfig'
+                disabled={!hasContentConfig}
+                icon={getFluentIcon('ListBar')}
+              >
+                <span className={styles.tabLabel}>
+                  {strings.ContentConfigSectionHeaderText}
+                  {hasContentConfig && contentConfigCount > 0 && (
+                    <Badge
+                      appearance='filled'
+                      color='brand'
+                      size='small'
+                      className={styles.tabBadge}
+                    >
+                      {contentConfigCount}
+                    </Badge>
+                  )}
+                </span>
+              </Tab>
+            </Tooltip>
           </TabList>
 
           <div className={styles.tabContent}>
             {activeTab === 'extensions' && hasExtensions && <ExtensionsSection />}
             {activeTab === 'contentConfig' && hasContentConfig && <ContentConfigSection />}
-            {activeTab === 'extensions' && !hasExtensions && (
-              <div className={styles.emptyTabMessage}>
-                <UserMessage text={strings.NoTemplateSelectedText} intent='info' />
-              </div>
-            )}
-            {activeTab === 'contentConfig' && !hasContentConfig && (
-              <div className={styles.emptyTabMessage}>
-                <UserMessage text={strings.NoTemplateSelectedText} intent='info' />
-              </div>
-            )}
           </div>
         </div>
 
