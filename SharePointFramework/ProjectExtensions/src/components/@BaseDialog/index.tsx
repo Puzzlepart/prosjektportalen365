@@ -30,6 +30,7 @@ export const BaseDialog: FC<IBaseDialogProps> = (props) => {
           }}
         >
           <DialogSurface className={props.containerClassName}>
+            {props.version && <span className={styles.version}>{props.version}</span>}
             <DialogBody className={styles.body}>
               <DialogTitle
                 action={
@@ -41,7 +42,6 @@ export const BaseDialog: FC<IBaseDialogProps> = (props) => {
                 }
               >
                 {props.title}
-                {props.version && <span className={styles.version}>{props.version}</span>}
               </DialogTitle>
               {props.subText && <p className={styles.subText}>{props.subText}</p>}
               <DialogContent className={props.contentClassName}>{props.children}</DialogContent>
