@@ -5,6 +5,7 @@ define([], function () {
     ManualConfigurationPathLabel: 'Sti til manuell konfigurasjon',
     EditTimelineContentText: 'Rediger tidslinjeelement',
     NewTimelineContentText: 'Nytt tidslinjeelement',
+    TimelineEndDateMilestoneDescription: 'Sluttdato er påkrevd for elementtyper som vises som punkt på tidslinjen ({0})',
     NewStatusPanelTitle: 'Ny statusrapport',
     EditStatusPanelText: 'Rediger statusrapport',
     ArchiveLogStatusSuccess: 'Arkivert',

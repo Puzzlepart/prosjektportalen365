@@ -27,7 +27,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Støtte for å angi minimum og maksimum verdier for tall og valuta felt i redigeringspaneler for prosjektinformasjon [#1578](https://github.com/Puzzlepart/prosjektportalen365/issues/1578)
 - Støtte for at prosjekter kan lastes inn uten tilgang på hub, der prosjektinformasjon vises fra lokale data og feilmeldinger for prosjektstatus og prosjekttidslinje vises [#1707](https://github.com/Puzzlepart/prosjektportalen365/issues/1707)
 - Håndtering av 'overflow' i seksjonsmenyen på toppen av Prosjektstatus siden, slik at seksjonene som ikke får plass i bredden vises i en overflytmeny
-- Lagt til tegnbegrensning (255 tegn) med live teller i navn- og tittelfelt i `Hent dokumentmal`-dialogen
+- Lagt til beskrivelse på sluttdato-feltet i redigeringspanelet for `Prosjekttidslinje` som indikerer at sluttdato er påkrevd for elementtyper som vises som punkt (diamant/trekant) på tidslinjen
 - Lagt til tegnbegrensning (255 tegn) for navn- og tittelfelt i `Hent dokumentmal`-dialogen
 
 ### Fjernet

@@ -2,6 +2,7 @@ declare interface IProjectWebPartsStrings {
   OpportunityMatrixConfigurationFolder: string
   EditTimelineContentText: string
   NewTimelineContentText: string
+  TimelineEndDateMilestoneDescription: string
   NewStatusPanelTitle: string
   EditStatusPanelText: string
   Aria: {

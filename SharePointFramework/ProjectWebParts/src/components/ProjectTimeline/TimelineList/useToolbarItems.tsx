@@ -1,3 +1,4 @@
+import { format } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
 import SPDataAdapter from 'data/SPDataAdapter'
 import _ from 'lodash'
@@ -53,6 +54,35 @@ export function useToolbarItems() {
     })
   }
 
+  const milestoneTypeNames = useMemo(() => {
+    return (
+      context.state.timelineConfig
+        ?.filter(
+          (config) =>
+            config.elementType === resource.TimelineConfiguration_Diamond_ElementType ||
+            config.elementType === resource.TimelineConfiguration_Triangle_ElementType
+        )
+        .map((config) => config.title) || []
+    )
+  }, [context.state.timelineConfig])
+
+  const fieldsWithDescriptions = useMemo(() => {
+    if (!context.state.data?.fields || milestoneTypeNames.length === 0) {
+      return context.state.data?.fields
+    }
+    return context.state.data.fields.map((field) => {
+      if (field.internalName === 'GtEndDate') {
+        const clone = Object.create(Object.getPrototypeOf(field), Object.getOwnPropertyDescriptors(field))
+        clone.description = format(
+          strings.TimelineEndDateMilestoneDescription,
+          milestoneTypeNames.join(', ')
+        )
+        return clone
+      }
+      return field
+    })
+  }, [context.state.data?.fields, milestoneTypeNames])
+
   const menuItems = useMemo<ListMenuItem[]>(
     () => [
       new ListMenuItem(strings.NewItemLabel, strings.NewItemLabel).setIcon('Add').setOnClick(() => {
@@ -62,6 +92,7 @@ export function useToolbarItems() {
         context.setState({
           panel: {
             headerText: strings.NewTimelineContentText,
+            fields: fieldsWithDescriptions,
             allowedLookupValues: {
               GtTimelineTypeLookup: allowedTimelineTypes
             },
@@ -102,6 +133,7 @@ export function useToolbarItems() {
           context.setState({
             panel: {
               headerText: strings.EditTimelineContentText,
+              fields: fieldsWithDescriptions,
               fieldValues,
               allowedLookupValues: {
                 GtTimelineTypeLookup: allowedTimelineTypes
@@ -128,7 +160,7 @@ export function useToolbarItems() {
           })
         })
     ],
-    [context.props, context.state.selectedItems, context.state.timelineConfig]
+    [context.props, context.state.selectedItems, context.state.timelineConfig, fieldsWithDescriptions]
   )
 
   const farMenuItems = useMemo<ListMenuItem[]>(
