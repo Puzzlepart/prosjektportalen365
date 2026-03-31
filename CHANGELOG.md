@@ -60,6 +60,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Rettet en feil i `Porteføljeoversikt` hvor nye og redigerte visninger ikke ble oppdatert i visningsvelgeren uten å laste siden på nytt
 - Rettet en feil i `Prosjekttidslinje` (listevisning) hvor kolonner ble kuttet av ved mange kolonner, listevisningen har nå horisontal rulling
 - Rettet en feil ved eksport til Excel hvor numeriske verdier ble eksportert med unødvendige desimaler (f.eks. `12.0000000000000` i stedet for `12`)
+- Rettet en feil i `Risikotiltak` hvor lenken «Gå til oppgaven i Planner» åpnet tasks.office.com i stedet for å navigere direkte til den spesifikke oppgaven i Planner
 
 ---
 

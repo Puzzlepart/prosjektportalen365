@@ -240,6 +240,7 @@ export class RiskActionPlannerTask {
   public dueDateTime: Date
   public assignees: { displayName: string; mail: string }[] = []
   public progress: string
+  public planId: string
 
   /**
    * Parses a value (the value returned from the Graph API) and
@@ -253,6 +254,7 @@ export class RiskActionPlannerTask {
     getUserInfo: DataAdapter['_getUserInfo']
   ): Promise<RiskActionPlannerTask> {
     const task = new RiskActionPlannerTask()
+    task.planId = _.get(value, 'planId', '')
     task.description = _.get(value, 'details.description', '').trim()
     task.startDateTime = _.get(value, 'startDateTime')
       ? new Date(_.get(value, 'startDateTime'))
