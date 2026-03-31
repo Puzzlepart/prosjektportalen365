@@ -16,6 +16,9 @@ import { IExcelExportServiceConfiguration } from './IExcelExportServiceConfigura
  * @param value Raw field value
  */
 function parseDisplayValue(value: any): any {
+  if (typeof value === 'number') {
+    return Number.isInteger(value) ? value : parseFloat(value.toFixed(2))
+  }
   if (typeof value !== 'string') return value
   if (value.includes(' | ')) {
     const match = value.match(/\|([^|]+)\|/)
