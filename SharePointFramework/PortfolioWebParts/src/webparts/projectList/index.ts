@@ -95,11 +95,12 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
             {
               groupName: strings.GeneralGroupName,
               groupFields: [
-                PropertyPaneTextField('sortBy', {
-                  label: strings.SortByFieldLabel,
-                  description: strings.SortByFieldDescription,
-                  disabled: true
-                }),
+                // TODO: Implement sorting configuration in property pane and remove disabled state from sortBy field
+                // PropertyPaneTextField('sortBy', {
+                //   label: strings.SortByFieldLabel,
+                //   description: strings.SortByFieldDescription,
+                //   disabled: true
+                // }),
                 PropertyFieldToggleWithCallout('showSearchBox', {
                   calloutTrigger: CalloutTriggers.Hover,
                   key: 'showSearchBoxFieldId',

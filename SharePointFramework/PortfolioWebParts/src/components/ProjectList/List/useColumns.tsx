@@ -12,17 +12,18 @@ export const useColumns = (): IListColumn[] => {
   const context = useContext(ListContext)
 
   const getField = (item: any, field: string) => {
+    if (!field || !item?.data) return []
     const fieldValue = item.data[field]
     let values: string[] = []
     if (typeof fieldValue === 'string') {
-      values = fieldValue?.split(';')
+      values = fieldValue.split(';')
     } else {
       values = []
     }
 
     if (!values.length || (values.length === 1 && values[0] === '')) {
       const textValue = item.data[`${field}Text`]
-      values = textValue ? textValue?.split(';') : []
+      values = textValue ? textValue.split(';') : []
     }
 
     return values.length ? values : []
@@ -155,7 +156,7 @@ export const useColumns = (): IListColumn[] => {
       columnId: 'primaryUserRole',
       defaultWidth: 180,
       compare: (a, b) => {
-        return a.primaryUser?.name?.localeCompare(b.primaryUser?.name || '')
+        return (a.primaryUser?.name ?? '').localeCompare(b.primaryUser?.name ?? '')
       },
       renderHeaderCell: () => {
         return primaryUserRole
@@ -176,7 +177,7 @@ export const useColumns = (): IListColumn[] => {
       columnId: 'secondaryUserRole',
       defaultWidth: 180,
       compare: (a, b) => {
-        return a.secondaryUser?.name?.localeCompare(b.secondaryUser?.name || '')
+        return (a.secondaryUser?.name ?? '').localeCompare(b.secondaryUser?.name ?? '')
       },
       renderHeaderCell: () => {
         return secondaryUserRole

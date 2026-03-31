@@ -94,7 +94,7 @@ export function useProjectListRenderer({ props, state, createCardContext }: IPro
             <ListContext.Provider
               value={{
                 ...props,
-                projects,
+                projects: state.isDataLoaded ? projects : [],
                 size
               }}
             >
