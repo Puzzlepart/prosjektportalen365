@@ -2627,7 +2627,7 @@
     <value>Oppgaver</value>
   </data>
   <data name="Navigation_Tasks_Url" xml:space="preserve">
-    <value>SitePages/Oppgaver</value>
+    <value>SitePages/Oppgaver.aspx</value>
   </data>
   <data name="Navigation_Uncertainty_Title" xml:space="preserve">
     <value>Usikkerhet</value>
