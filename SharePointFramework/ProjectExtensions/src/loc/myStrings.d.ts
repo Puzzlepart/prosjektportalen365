@@ -52,6 +52,8 @@ declare interface IProjectExtensionsStrings {
   ConfiguredSpecifiedTaskMessage: string
   ContentConfigLockedTooltipText: string
   ContentConfigSectionHeaderText: string
+  ContentConfigSectionTooltip: string
+  ContentConfigSectionDisabledTooltip: string
   ContentConfigSectionSearchPlaceholder: string
   ContinueToProjectText: string
   CopyFilesText: string
@@ -72,6 +74,8 @@ declare interface IProjectExtensionsStrings {
   DocumentTemplateDialogScreenTargetFolderInfoMessage: string
   ExtensionLockedTooltipText: string
   ExtensionsSectionHeaderText: string
+  ExtensionsSectionTooltip: string
+  ExtensionsSectionDisabledTooltip: string
   ExtensionsSectionSearchPlaceholder: string
   FilenameAlreadyInUseErrorText: string
   FilenameAlreadySelectedErrorText: string
@@ -150,12 +154,16 @@ declare interface IProjectExtensionsStrings {
   SummaryMessage: string
   SyncLocalProjectPropertiesListText: string
   TemplateConfigMessage: string
+  TemplateConfigConjunction: string
+  DataGridSelectAllLabel: string
   PlannerMemberWarningMessage: string
   ProjectSetupDialogInfoText: string
   ProjectSetupDialogSubmitButtonText: string
   ProjectSetupDialogTitle: string
+  ProjectSetupDialogVersionTooltip: string
   ProjectTemplateSelectorSearchClearText: string
   ProjectTemplateSelectorSearchPlaceholder: string
+  ProjectTemplateSelectorNoMatchText: string
   ProjectTemplateSelectorTitle: string
   ProjectTemplateSelectorNoTemplateLabel: string
   ProjectTemplateSelectorNoTemplateDescription: string
@@ -169,6 +177,17 @@ declare interface IProjectExtensionsStrings {
   AssignedToLabel: string
   SaveButtonLabel: string
   CancelButtonLabel: string
+  NoTemplateSelectedText: string
+  SelectedCountLabel: string
+  MandatoryItemTooltipText: string
+  ProgressAdvancedLogLabel: string
+  ProgressTaskPendingText: string
+  ProgressTaskRunningText: string
+  ProgressTaskCompletedText: string
+  ProgressTaskErrorText: string
+  ProgressTaskWarningText: string
+  ProgressStepCountText: string
+  ProgressAdvancedLogDescription: string
 }
 
 declare module 'ProjectExtensionsStrings' {

@@ -38,7 +38,10 @@ export class Hooks extends BaseTask {
       })
       const templateHooksSchema = _.pick(params.templateSchema, 'Hooks')
       if (templateHooksSchema.Hooks) {
-        onProgress(strings.RunHooksText, strings.ApplyTemplateHooks, 'ProcessingRun')
+        onProgress(strings.RunHooksText, strings.ApplyTemplateHooks, 'ProcessingRun', {
+          message: 'Applying template hooks',
+          level: 'info'
+        })
         await provisioner.applyTemplate(templateHooksSchema, null)
       }
 
@@ -48,7 +51,10 @@ export class Hooks extends BaseTask {
       for (let i = 0; i < this.data.selectedExtensions.length; i++) {
         const extensionSchema = await this.data.selectedExtensions[i].getSchema()
         const extensionHooksSchema = _.pick(extensionSchema, 'Hooks')
-        onProgress(strings.RunHooksText, strings.ApplyExtensionHooks, 'ProcessingRun')
+        onProgress(strings.RunHooksText, strings.ApplyExtensionHooks, 'ProcessingRun', {
+          message: `Applying hooks for extension: ${this.data.selectedExtensions[i].text}`,
+          level: 'info'
+        })
         await provisioner.applyTemplate(extensionHooksSchema, null)
       }
       return params

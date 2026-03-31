@@ -107,6 +107,8 @@ import {
   LinkMultipleFilled,
   LinkMultipleRegular,
   LinkRegular,
+  ListBarRegular,
+  ListBarFilled,
   LocalLanguageFilled,
   LocalLanguageRegular,
   MoneyFilled,
@@ -168,7 +170,9 @@ import {
   ArrowCircleUpSparkleFilled,
   ArrowCircleUpSparkleRegular,
   StarFilled,
-  StarRegular
+  StarRegular,
+  PuzzlePieceRegular,
+  PuzzlePieceFilled
 } from '@fluentui/react-icons'
 
 /**
@@ -514,5 +518,13 @@ export const iconCatalog = {
   FavoriteStar: {
     regular: StarRegular,
     filled: StarFilled
+  },
+  PuzzlePiece: {
+    regular: PuzzlePieceRegular,
+    filled: PuzzlePieceFilled
+  },
+  ListBar: {
+    regular: ListBarRegular,
+    filled: ListBarFilled
   }
 }

@@ -20,7 +20,10 @@ export class CustomActions extends BaseTask {
     onProgress: OnProgressCallbackFunction
   ): Promise<IBaseTaskParams> {
     this.params = params
-    onProgress(strings.CustomActionsText, strings.CustomActionsSubText, 'SetAction')
+    onProgress(strings.CustomActionsText, strings.CustomActionsSubText, 'SetAction', {
+      message: 'Updating custom actions for the project',
+      level: 'info'
+    })
     if (this.data.selectedTemplate?.id === NO_TEMPLATE_ID) {
       this.logInformation('Skipping custom action update (no template selected)')
       return params

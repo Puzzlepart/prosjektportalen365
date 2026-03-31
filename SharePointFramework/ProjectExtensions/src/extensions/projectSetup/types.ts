@@ -1,4 +1,3 @@
-import { IDialogContentProps } from '@fluentui/react'
 import { IProjectSetupDialogState } from 'components/ProjectSetupDialog'
 import {
   ProjectTemplate,
@@ -66,10 +65,14 @@ export interface IProjectSetupProperties {
   forceTemplate?: string
 
   /**
-   * Progress dialog content props. Override properties like
-   * `title` and `subText`.
+   * Progress dialog title override.
    */
-  progressDialogContentProps?: IDialogContentProps
+  progressDialogTitle?: string
+
+  /**
+   * Progress dialog subtitle override.
+   */
+  progressDialogSubText?: string
 
   /**
    * Skip updating template parameters fields on the project list item.

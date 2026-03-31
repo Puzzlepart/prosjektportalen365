@@ -50,15 +50,13 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       const folders = await this.sp.web
         .getFolderByServerRelativePath(folderServerRelativeUrl)
         .folders()
-      const existingFolder = folders.find(f => f.Name.toLowerCase() === name.toLowerCase())
+      const existingFolder = folders.find((f) => f.Name.toLowerCase() === name.toLowerCase())
       if (existingFolder) {
         return strings.FolderNameAlreadyInUseErrorText
       }
     } else {
-      const files = await this.sp.web
-        .getFolderByServerRelativePath(folderServerRelativeUrl)
-        .files()
-      const existingFile = files.find(f => f.Name.toLowerCase() === name.toLowerCase())
+      const files = await this.sp.web.getFolderByServerRelativePath(folderServerRelativeUrl).files()
+      const existingFile = files.find((f) => f.Name.toLowerCase() === name.toLowerCase())
       if (existingFile) {
         return strings.FilenameAlreadyInUseErrorText
       }

@@ -34,7 +34,7 @@ export const DocumentTemplateItem: FC<IDocumentTemplateItemProps> = (props) => {
             const newName = props.item.isFolder
               ? newValue
               : `${newValue}.${props.item.fileExtension}`
-            
+
             const errorMsg = await SPDataAdapter.isFilenameValid(
               state.targetFolder,
               newName,

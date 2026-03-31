@@ -1,0 +1,67 @@
+.root {
+  width: 850px !important;
+  max-width: 850px !important;
+
+  .content {
+    min-height: auto;
+    overflow: hidden;
+  }
+
+  .subText {
+    margin-bottom: 12px;
+    color: #605e5c;
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  .configPane {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 300px;
+    max-height: calc(70vh - 200px);
+
+    .tabList {
+      flex-shrink: 0;
+      margin-bottom: 0;
+    }
+
+    .tabLabel {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tabBadge {
+      margin-left: 4px;
+    }
+
+    .tabContent {
+      flex: 1;
+      overflow-y: auto;
+      position: relative;
+      min-height: 250px;
+      max-height: calc(70vh - 300px);
+    }
+
+    .emptyTabMessage {
+      padding: 20px 0;
+    }
+  }
+
+  .actions {
+    margin: 5px 0 0 0;
+    display: flex;
+    gap: 4px;
+  }
+
+  .projectDataMessage {
+    margin: 0 0 10px 0;
+  }
+}
+
+// Hide some default SharePoint elements
+div[class*="webTemplatesGalleryFirstRunDialogModal"],
+div[class*="ms-tipsntricks-panel"] {
+  display: none !important;
+}

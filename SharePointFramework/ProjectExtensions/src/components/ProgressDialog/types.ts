@@ -1,6 +1,21 @@
 import { IProgressIndicatorProps } from '@fluentui/react'
 import { IBaseDialogProps } from '../@BaseDialog/types'
 
+export type TaskStatus = 'pending' | 'running' | 'completed' | 'error' | 'warning'
+export type LogLevel = 'info' | 'warning' | 'error'
+
+export interface ILogEntry {
+  timestamp: Date
+  message: string
+  level: LogLevel
+}
+
+export interface ITaskProgress {
+  name: string
+  status: TaskStatus
+  entries: ILogEntry[]
+}
+
 export interface IProgressDialogProps extends IBaseDialogProps {
   /**
    * Icon name
@@ -11,4 +26,25 @@ export interface IProgressDialogProps extends IBaseDialogProps {
    * Progress indicator props
    */
   progressIndicator: IProgressIndicatorProps
+
+  /**
+   * Detailed task progress for the advanced log
+   */
+  taskProgress?: ITaskProgress[]
+
+  /**
+   * Current step index (0-based)
+   */
+  currentStep?: number
+
+  /**
+   * Total number of steps
+   */
+  totalSteps?: number
+
+  /**
+   * Whether to setup is complete. When `true` and the log is expanded,
+   * a close button is shown instead of auto-closing/redirecting.
+   */
+  isComplete?: boolean
 }
