@@ -46,6 +46,26 @@ import { persistSelectedColumnsInWebPartProperties } from './persistSelectedColu
 import resource from 'SharedResources'
 
 /**
+ * Parses a raw SharePoint field value into a display-friendly string.
+ * Handles user fields (pipe-separated), lookup fields (`;#`-separated),
+ * and returns the value as-is for other types.
+ *
+ * @param value Raw field value
+ */
+function parseDisplayValue(value: string): string {
+  if (!value) return value
+  if (value.includes(' | ')) {
+    const match = value.match(/\|([^|]+)\|/)
+    if (match) return match[1].trim()
+    return value.split(' | ')[1]?.trim() || value
+  }
+  if (value.includes(';#')) {
+    return value.split(';#')[1] || value
+  }
+  return value
+}
+
+/**
  * Create reducer for `<PortfolioAggregation />` using `createReducer` from `@reduxjs/toolkit`.
  *
  * @param props Props for `<PortfolioAggregation />` component
@@ -195,7 +215,7 @@ export const createPortfolioAggregationReducer = (
             const count = groupNames.filter((n) => n === name).length
             const group = {
               key: `Group_${idx}`,
-              name: `${state.groupBy.name}: ${name}`,
+              name: `${state.groupBy.name}: ${parseDisplayValue(name)}`,
               startIndex: groupNames.indexOf(name, 0),
               count,
               isShowingAll: count === state.items.length,
