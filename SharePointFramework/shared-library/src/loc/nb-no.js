@@ -26,6 +26,7 @@ define([], function () {
       NumberFieldMin: 'Verdien må være minst {0}',
       NumberFieldMax: 'Verdien må være maksimalt {0}',
       NumberFieldMinMax: 'Verdien må være mellom {0} og {1}',
+      UrlFieldInvalidFormat: 'Nettadressen må starte med http:// eller https://',
     },
     AllocationPercetageLabel: 'Allokeringsprosent',
     AllocationStatusLabel: 'Allokeringsstatus',

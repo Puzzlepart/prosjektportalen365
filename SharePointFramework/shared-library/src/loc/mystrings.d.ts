@@ -27,6 +27,7 @@ declare interface ISharedLibraryStrings {
     NumberFieldMin: string
     NumberFieldMax: string
     NumberFieldMinMax: string
+    UrlFieldInvalidFormat: string
   },
   AllocationPercetageLabel: string
   AllocationStatusLabel: string

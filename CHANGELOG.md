@@ -30,6 +30,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Håndtering av 'overflow' i seksjonsmenyen på toppen av Prosjektstatus siden, slik at seksjonene som ikke får plass i bredden vises i en overflytmeny
 - Lagt til beskrivelse på sluttdato-feltet i redigeringspanelet for `Prosjekttidslinje` som indikerer at sluttdato er påkrevd for elementtyper som vises som punkt (diamant/trekant) på tidslinjen
 - Lagt til tegnbegrensning (255 tegn) for navn- og tittelfelt i `Hent dokumentmal`-dialogen
+- Lagt til validering av URL-felt i redigeringspanelet for prosjektinformasjon, med tydelig feilmelding dersom nettadressen mangler protokoll (http:// eller https://). Forbedret også generelle feilmeldinger ved lagring til å inkludere faktiske feildetaljer fra API-et [#1556](https://github.com/Puzzlepart/prosjektportalen365/issues/1556)
 
 ### Fjernet
 

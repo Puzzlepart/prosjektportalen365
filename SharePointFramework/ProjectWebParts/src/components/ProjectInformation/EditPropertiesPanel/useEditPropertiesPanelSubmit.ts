@@ -41,8 +41,11 @@ export function useEditPropertiesPanelSubmit(): ICustomEditPanelSubmitProps {
         properties.Title = context.props.webTitle
         data = await SPDataAdapter.project.updateProjectProperties(properties, true)
       } catch (e) {
+        const errorDetail = e instanceof Error ? e.message : typeof e === 'string' ? e : null
         setState({
-          error: strings.UpdatingProjectPropertiesErrorText,
+          error: errorDetail
+            ? `${strings.UpdatingProjectPropertiesErrorText}\n\n${errorDetail}`
+            : strings.UpdatingProjectPropertiesErrorText,
           saveProgressText: null
         })
         setTimeout(() => {
@@ -70,8 +73,11 @@ export function useEditPropertiesPanelSubmit(): ICustomEditPanelSubmitProps {
           }
         })
       } catch (e) {
+        const errorDetail = e instanceof Error ? e.message : typeof e === 'string' ? e : null
         setState({
-          error: strings.SynchronizingProjectPropertiesToPortfolioSiteErrorText,
+          error: errorDetail
+            ? `${strings.SynchronizingProjectPropertiesToPortfolioSiteErrorText}\n\n${errorDetail}`
+            : strings.SynchronizingProjectPropertiesToPortfolioSiteErrorText,
           saveProgressText: null
         })
         setTimeout(() => {

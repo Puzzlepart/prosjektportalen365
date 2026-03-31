@@ -26,6 +26,7 @@ define([], function () {
       NumberFieldMin: 'The value must be at least {0}',
       NumberFieldMax: 'The value must be at most {0}',
       NumberFieldMinMax: 'The value must be between {0} and {1}',
+      UrlFieldInvalidFormat: 'The URL must start with http:// or https://',
     },
     AllocationPercetageLabel: 'Allocation percentage',
     AllocationStatusLabel: 'Allocation status',
