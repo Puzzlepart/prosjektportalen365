@@ -18,7 +18,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 
 ### Forbedringer
 
-- Modernisert oppsettveiviseren med nytt grensesnitt og forbedret brukeropplevelse. Fremdriften under oppsettveiviseren gir nå mulighet for å se avansert logg for hvert steg i veiviseren
+- Modernisert oppsettveiviseren med nytt grensesnitt og forbedret brukeropplevelse. Fremdriften under oppsettveiviseren gir nå mulighet for å se avansert logg for hvert steg i veiviseren [#1731](https://github.com/Puzzlepart/prosjektportalen365/pull/1731)
 - Prosjektlistens vertikale faner (tabs) er nå konfigurerbare direkte fra webpartens egenskapspanel. Hver fane kan tilpasses med tittel, ikon, klientfilter, feltfilter, synlighetsregler, tilgangskrav og søkeboks-plassholder. [#1466](https://github.com/Puzzlepart/prosjektportalen365/issues/1466)
 - Forbedringer på 'multi-hub' støtte i Porteføljeoversikt. Dette inkluderer en ny Prosjektkolonne `Hubnavn` som kan brukes til filtrering og visning av prosjekter basert på hvilket hubområde de tilhører. Det er også støtte for hubområder som har forskjellige språkinnstillinger slik at den samler både norske og engelske prosjekter i en og samme oversikt. [#1676](https://github.com/Puzzlepart/prosjektportalen365/issues/1676)
 - Forbedret formatet på eksportert data av "Målinger" og "Måloppnåelse", disse legger seg nå som et ekstra ark ved eksport [#1383](https://github.com/Puzzlepart/prosjektportalen365/issues/1383)
