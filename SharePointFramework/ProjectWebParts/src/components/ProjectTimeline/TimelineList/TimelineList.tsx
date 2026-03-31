@@ -37,34 +37,36 @@ export const TimelineList: FC = () => {
             </div>
           </div>
         )}
-        <DataGrid
-          items={context.state.data.listItems}
-          columns={columns}
-          sortable
-          defaultSortState={defaultSortState}
-          selectionMode='multiselect'
-          resizableColumns
-          columnSizingOptions={columnSizingOptions}
-          containerWidthOffset={0}
-          selectedItems={context.state.selectedItems}
-          onSelectionChange={onSelection}
-          subtleSelection
-        >
-          <DataGridHeader>
-            <DataGridRow>
-              {({ renderHeaderCell }) => (
-                <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-              )}
-            </DataGridRow>
-          </DataGridHeader>
-          <DataGridBody>
-            {({ item, rowId }) => (
-              <DataGridRow key={rowId}>
-                {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
+        <div className={styles.scrollContainer}>
+          <DataGrid
+            items={context.state.data.listItems}
+            columns={columns}
+            sortable
+            defaultSortState={defaultSortState}
+            selectionMode='multiselect'
+            resizableColumns
+            columnSizingOptions={columnSizingOptions}
+            containerWidthOffset={0}
+            selectedItems={context.state.selectedItems}
+            onSelectionChange={onSelection}
+            subtleSelection
+          >
+            <DataGridHeader>
+              <DataGridRow>
+                {({ renderHeaderCell }) => (
+                  <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
+                )}
               </DataGridRow>
-            )}
-          </DataGridBody>
-        </DataGrid>
+            </DataGridHeader>
+            <DataGridBody>
+              {({ item, rowId }) => (
+                <DataGridRow key={rowId}>
+                  {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
+                </DataGridRow>
+              )}
+            </DataGridBody>
+          </DataGrid>
+        </div>
       </FluentProvider>
     </IdPrefixProvider>
   )

@@ -54,6 +54,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Rettet en feil i `Prosjektkort` hvor webdelen krasjet dersom prosjektet manglet data for eier, prosjektleder eller prosjekttype
 - Rettet en feil i `Porteføljeoversikt` hvor valg av standardportefølje i egenskapspanelet var deaktivert når porteføljer var konfigurert, slik at standardportefølje aldri kunne settes
 - Rettet en feil i `Porteføljeoversikt` hvor nye og redigerte visninger ikke ble oppdatert i visningsvelgeren uten å laste siden på nytt
+- Rettet en feil i `Prosjekttidslinje` (listevisning) hvor kolonner ble kuttet av ved mange kolonner, listevisningen har nå horisontal rulling
 
 ---
 
