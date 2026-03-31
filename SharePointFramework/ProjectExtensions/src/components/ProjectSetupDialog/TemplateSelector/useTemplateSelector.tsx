@@ -73,7 +73,7 @@ export function useTemplateSelector() {
             templateHasContentConfig && strings.ContentConfigSectionHeaderText
           ]
             .filter(Boolean)
-            .join(' og ')
+            .join(strings.TemplateConfigConjunction)
             .toLowerCase()
         )
       : undefined

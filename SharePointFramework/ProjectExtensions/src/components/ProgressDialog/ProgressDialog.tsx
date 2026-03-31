@@ -52,7 +52,9 @@ export const ProgressDialog: FC<IProgressDialogProps> = (props) => {
           <ProgressIndicator
             {...props.progressIndicator}
             percentComplete={
-              props.totalSteps > 0 ? (props.currentStep ?? 0) / props.totalSteps : undefined
+              props.totalSteps > 0
+                ? Math.min((props.currentStep ?? 0) + 1, props.totalSteps) / props.totalSteps
+                : undefined
             }
           />
           {props.totalSteps > 0 && (

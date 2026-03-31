@@ -154,6 +154,8 @@ declare interface IProjectExtensionsStrings {
   SummaryMessage: string
   SyncLocalProjectPropertiesListText: string
   TemplateConfigMessage: string
+  TemplateConfigConjunction: string
+  DataGridSelectAllLabel: string
   PlannerMemberWarningMessage: string
   ProjectSetupDialogInfoText: string
   ProjectSetupDialogSubmitButtonText: string

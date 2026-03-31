@@ -60,8 +60,9 @@ export const EditCopyScreen: FC<IEditCopyScreenProps> = ({ onStartCopy }) => {
         if (duplicateError) {
           t.errorMessage = duplicateError
         } else if (
-          (t.id !== id && t.errorMessage === strings.FilenameAlreadySelectedErrorText) ||
-          t.errorMessage === strings.FolderNameAlreadySelectedErrorText
+          t.id !== id &&
+          (t.errorMessage === strings.FilenameAlreadySelectedErrorText ||
+            t.errorMessage === strings.FolderNameAlreadySelectedErrorText)
         ) {
           t.errorMessage = null
         }

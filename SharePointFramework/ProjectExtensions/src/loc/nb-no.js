@@ -152,6 +152,8 @@ define([], function () {
     SummaryMessage: '{0} element(er) ble kopiert til prosjektområdet.',
     SyncLocalProjectPropertiesListText: 'Synkroniserer liste for prosjektegenskaper',
     TemplateConfigMessage: '**{0}** inneholder konfigurasjon for {1}. Dette er valgt som standard.',
+    TemplateConfigConjunction: ' og ',
+    DataGridSelectAllLabel: 'Velg alle',
     PlannerMemberWarningMessage: 'Du må være medlem av Microsoft 365 gruppa for å kunne konfigurere Planner. Vennligst legg deg selv til som medlem eller spør en administrator og prøv deretter igjen.',
     ProjectSetupDialogInfoText: 'Oppsettet av prosjektområdet tar omtrent 5-10 minutter. Ikke lukk nettleservinduet mens området settes opp. Det anbefales ikke å sette opp flere områder samtidig.',
     ProjectSetupDialogSubmitButtonText: 'Sett opp området',

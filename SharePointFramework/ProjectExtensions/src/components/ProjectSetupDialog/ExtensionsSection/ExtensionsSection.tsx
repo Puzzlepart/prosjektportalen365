@@ -58,7 +58,7 @@ export const ExtensionsSection: ProjectSetupDialogSectionComponent = () => {
         resizableColumnsOptions={{ autoFitColumns: false }}
       >
         <DataGridHeader>
-          <DataGridRow selectionCell={{ checkboxIndicator: { 'aria-label': 'Select all' } }}>
+          <DataGridRow selectionCell={{ checkboxIndicator: { 'aria-label': strings.DataGridSelectAllLabel } }}>
             {({ renderHeaderCell }) => (
               <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
             )}

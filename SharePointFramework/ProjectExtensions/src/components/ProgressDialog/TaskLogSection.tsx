@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef } from 'react'
+import React, { FC, useEffect, useMemo, useRef } from 'react'
 import {
   Accordion,
   AccordionItem,
@@ -77,7 +77,7 @@ const TaskLogEntries: FC<{ task: ITaskProgress }> = ({ task }) => {
         <div key={idx} className={styles.logEntry}>
           <span className={styles.logEntryIcon}>{getLogLevelIcon(entry.level)}</span>
           <span className={styles.logEntryTime}>
-            {entry.timestamp.toLocaleTimeString('nb-NO', {
+            {entry.timestamp.toLocaleTimeString(undefined, {
               hour: '2-digit',
               minute: '2-digit',
               second: '2-digit'
@@ -98,13 +98,14 @@ const TaskLogEntries: FC<{ task: ITaskProgress }> = ({ task }) => {
 }
 
 export const TaskLogSection: FC<ITaskLogSectionProps> = ({ tasks }) => {
-  const openItems = tasks
-    .filter((t) => t.status === 'running' || t.status === 'error')
-    .map((t) => t.name)
+  const openItems = useMemo(
+    () => tasks.filter((t) => t.status === 'running' || t.status === 'error').map((t) => t.name),
+    [tasks.map((t) => `${t.name}:${t.status}`).join(',')]
+  )
 
   return (
     <div className={styles.taskLogSection}>
-      <Accordion collapsible multiple defaultOpenItems={openItems}>
+      <Accordion collapsible multiple openItems={openItems}>
         {tasks.map((task) => (
           <AccordionItem key={task.name} value={task.name}>
             <AccordionHeader size='small'>
