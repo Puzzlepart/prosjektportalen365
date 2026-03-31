@@ -46,6 +46,23 @@ export function useViewFormPanel() {
         currentView.id as number,
         properties
       )
+      const updatedView = new PortfolioOverviewView({
+        ...properties,
+        Id: currentView.id as number,
+        GtPortfolioColumnsId: currentView.columnIds,
+        GtPortfolioRefinersId: currentView.refinerIds,
+        GtPortfolioGroupById: currentView.groupById,
+        GtPortfolioColumnOrder: JSON.stringify(currentView.columnOrder)
+      }).configure(currentView.columns)
+
+      const viewIndex = context.props.configuration.views.findIndex(
+        (v) => v.id === currentView.id
+      )
+      if (viewIndex !== -1) {
+        context.props.configuration.views[viewIndex] = updatedView
+      }
+
+      context.dispatch(CHANGE_VIEW(updatedView))
     } else {
       properties = {
         ...properties,
@@ -64,6 +81,7 @@ export function useViewFormPanel() {
         Id: view.Id
       }).configure(currentView.columns)
 
+      context.props.configuration.views.push(newView)
       context.dispatch(CHANGE_VIEW(newView))
     }
     context.dispatch(SET_VIEW_FORM_PANEL({ isOpen: false }))

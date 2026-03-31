@@ -53,6 +53,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Rettet en visuell feil i `Bestillingsportalen` hvor en advarsel/feilmelding blinket kort i skjemaet etter innsending, forårsaket av at skjemadata ble nullstilt før panelet ble lukket
 - Rettet en feil i `Prosjektkort` hvor webdelen krasjet dersom prosjektet manglet data for eier, prosjektleder eller prosjekttype
 - Rettet en feil i `Porteføljeoversikt` hvor valg av standardportefølje i egenskapspanelet var deaktivert når porteføljer var konfigurert, slik at standardportefølje aldri kunne settes
+- Rettet en feil i `Porteføljeoversikt` hvor nye og redigerte visninger ikke ble oppdatert i visningsvelgeren uten å laste siden på nytt
 
 ---
 
