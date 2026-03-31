@@ -60,7 +60,11 @@
   }
 }
 
+.tooltipHost {
+  cursor: pointer;
+}
+
 .tooltipContent {
   padding: 16px;
-  min-width: 300px;
+  max-width: 300px;
 }

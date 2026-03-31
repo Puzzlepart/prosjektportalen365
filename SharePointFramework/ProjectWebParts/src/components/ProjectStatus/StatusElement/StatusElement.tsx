@@ -1,4 +1,4 @@
-import { TooltipHost } from '@fluentui/react'
+import { Tooltip } from '@fluentui/react-components'
 import { ConditionalWrapper } from 'pp365-shared-library/lib/components'
 import { tryParseCurrency, tryParsePercentage } from 'pp365-shared-library'
 import strings from 'ProjectWebPartsStrings'
@@ -16,16 +16,17 @@ export const StatusElement: FC<IStatusElementProps> = (props) => {
     <ConditionalWrapper
       condition={useWrapper}
       wrapper={(children: ReactNode) => (
-        // TODO: Use new Tooltip component here
-        <TooltipHost
+        <Tooltip
+          withArrow
+          relationship='description'
           content={
             <div className={styles.tooltipContent}>
               <StatusElement />
             </div>
           }
         >
-          {children}
-        </TooltipHost>
+          <span className={styles.tooltipHost}>{children}</span>
+        </Tooltip>
       )}
     >
       {props.iconsOnly ? (
