@@ -24,14 +24,12 @@ export function useContentConfigSection() {
 
   const selectedKeys = new Set(context.state.selectedContentConfig.map((e) => String(e.key)))
 
-  // Sort: mandatory first, then selected, then unselected
   const sortedItems = [...allItems].sort((a: ContentConfig, b: ContentConfig) => {
     const aOrder = mandatoryKeys.has(String(a.key)) ? 0 : selectedKeys.has(String(a.key)) ? 1 : 2
     const bOrder = mandatoryKeys.has(String(b.key)) ? 0 : selectedKeys.has(String(b.key)) ? 1 : 2
     return aOrder - bOrder
   })
 
-  // Filter by search (always show selected items)
   const items = searchTerm
     ? sortedItems.filter(
         (item) =>

@@ -14,10 +14,7 @@ export const ProgressDialog: FC<IProgressDialogProps> = (props) => {
 
   const hasTaskProgress = props.taskProgress && props.taskProgress.length > 0
   const hasError = hasTaskProgress && props.taskProgress.some((t) => t.status === 'error')
-
-  // Auto-expand on error
   const isExpanded = logExpanded || hasError
-
   const title = props.title ?? strings.ProgressDialogTitle
   const subText = props.subText ?? strings.ProgressDialogSubText
 
