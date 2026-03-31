@@ -48,6 +48,7 @@ import resource from 'SharedResources'
 /**
  * Parses a raw SharePoint field value into a display-friendly string.
  * Handles user fields (pipe-separated), lookup fields (`;#`-separated),
+ * calculated/number fields (e.g. `#10.0000000000000` or `2.00000000000000`),
  * and returns the value as-is for other types.
  *
  * @param value Raw field value
@@ -61,6 +62,11 @@ function parseDisplayValue(value: string): string {
   }
   if (value.includes(';#')) {
     return value.split(';#')[1] || value
+  }
+  const numericMatch = value.match(/^#?(-?\d+(?:\.\d+)?)$/)
+  if (numericMatch) {
+    const num = parseFloat(numericMatch[1])
+    if (!isNaN(num)) return Number.isInteger(num) ? num.toString() : parseFloat(num.toFixed(2)).toString()
   }
   return value
 }
@@ -351,11 +357,7 @@ export const createPortfolioAggregationReducer = (
         let items: IFilterItemProps[] = uniqueValues
           .filter((value: string) => !stringIsNullOrEmpty(value))
           .map((value: string) => {
-            if (column.fieldName.includes('OWSUSER')) {
-              const match = value.match(/\|([^|]+)\|/)
-              value = match ? match[1].trim() : null
-            }
-            return { name: value, value, selected: false }
+            return { name: parseDisplayValue(value), value, selected: false }
           })
         items = items.sort((a, b) => (a.value > b.value ? 1 : -1))
         return { column, items }
@@ -368,7 +370,7 @@ export const createPortfolioAggregationReducer = (
             if (filter.column.fieldName === key) {
               state.activeFilters[key].forEach((value) => {
                 filter.items.forEach((item) => {
-                  if (value === item.name) {
+                  if (value === item.value) {
                     item.selected = true
                   }
                 })

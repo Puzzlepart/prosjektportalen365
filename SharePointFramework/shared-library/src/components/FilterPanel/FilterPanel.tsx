@@ -10,23 +10,23 @@ import strings from 'SharedLibraryStrings'
 
 export const FilterPanel: FC<IFilterPanelProps> = (props) => {
   const fluentProviderId = useId('fp-filter-panel')
+  const displayableFilters = props.filters?.filter((f) => f.items.length > 1) ?? []
 
   return (
     <Panel {...props} type={PanelType.smallFixedFar}>
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme}>
           <div className={styles.filterPanel}>
-            {(!props.filters || props.filters.length === 0) && (
+            {displayableFilters.length === 0 && (
               <UserMessage
                 title={strings.FilterPanelEmptyTitle}
                 text={strings.FilterPanelEmptyMessage}
                 intent='info'
               />
             )}
-            {props.filters &&
-              props.filters
-                .filter((f) => f.items.length > 1)
-                .map((f, idx) => <Filter {...f} key={idx} onFilterChange={props.onFilterChange} />)}
+            {displayableFilters.map((f, idx) => (
+              <Filter {...f} key={idx} onFilterChange={props.onFilterChange} />
+            ))}
           </div>
         </FluentProvider>
       </IdPrefixProvider>

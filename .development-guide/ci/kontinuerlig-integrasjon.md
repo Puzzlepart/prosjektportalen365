@@ -13,7 +13,7 @@ Nøkkelord kan brukes i commit-meldingen for å unngå (eller tvinge) at CI kjø
 - `[skip-install]` for å unngå at jobben «Installer» starter.
 - `[skip-main-ci]` for å hoppe over hovedbygging (build-release.yml).
 - `[skip-test-ci]` for å hoppe over test-kanal bygging.
-- `[packages-only]` for å bygge kun pakker (appkatalog), hopper over utrulling av maler. Brukes dersom du ikke har gjort noen endringer på .xml-filene i Templates.
+- `[apps-only]` for å bygge kun pakker (appkatalog), hopper over utrulling av maler. Brukes dersom du ikke har gjort noen endringer på .xml-filene i Templates.
 - `[upgrade-all-sites-to-latest]` for å kjøre skriptet `UpgradeAllSitesToLatest.ps1` i CI-modus.
 
 ### Bygg og installer (dev)

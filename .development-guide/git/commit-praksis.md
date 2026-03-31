@@ -60,7 +60,7 @@ Prosjektportalen bruker GitHub Actions for kontinuerlig integrasjon og utrulling
 - `[skip-ci]` - Hopper over alle CI-prosesser
 - `[skip-main-ci]` - Hopper over hovedbygging (build-release.yml)
 - `[skip-test-ci]` - Hopper over test-kanal bygging
-- `[packages-only]` - Bygger kun pakker (appkatalog), hopper over utrulling av maler. Brukes dersom du ikke har gjort noen endringer på .xml-filene i Templates.
+- `[apps-only]` - Bygger kun pakker (appkatalog), hopper over utrulling av maler. Brukes dersom du ikke har gjort noen endringer på .xml-filene i Templates.
 
 **Eksempler på bruk:**
 
@@ -68,7 +68,7 @@ Prosjektportalen bruker GitHub Actions for kontinuerlig integrasjon og utrulling
 docs: update README [skip-ci]
 chore: update package.json [skip-main-ci]
 fix(portfoliowebparts): minor styling fix [skip-test-ci]
-feat(shared): add new utility function [packages-only]
+feat(shared): add new utility function [apps-only]
 ```
 
 **Aktive arbeidsflyter:**
