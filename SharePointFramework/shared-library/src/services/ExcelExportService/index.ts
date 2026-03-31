@@ -8,6 +8,26 @@ import { getObjectValue as get, getDateForExcelExport, stringToArrayBuffer } fro
 import { ExcelExportServiceDefaultConfiguration } from './ExcelExportServiceDefaultConfiguration'
 import { IExcelExportServiceConfiguration } from './IExcelExportServiceConfiguration'
 
+/**
+ * Parses a raw SharePoint field value into a display-friendly string.
+ * Handles user fields (pipe-separated), lookup fields (`;#`-separated),
+ * and returns the value as-is for other types.
+ *
+ * @param value Raw field value
+ */
+function parseDisplayValue(value: any): any {
+  if (typeof value !== 'string') return value
+  if (value.includes(' | ')) {
+    const match = value.match(/\|([^|]+)\|/)
+    if (match) return match[1].trim()
+    return value.split(' | ')[1]?.trim() || value
+  }
+  if (value.includes(';#')) {
+    return value.split(';#')[1] || value
+  }
+  return value
+}
+
 class ExcelExportService {
   public configuration: IExcelExportServiceConfiguration
   public isConfigured = false
@@ -114,7 +134,7 @@ class ExcelExportService {
                   )
                 }
                 default: {
-                  return get(item, column.fieldName, null)
+                  return parseDisplayValue(get(item, column.fieldName, null))
                 }
               }
             })

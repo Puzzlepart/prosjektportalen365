@@ -47,6 +47,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Rettet en feil hvor tooltip for statusrapport-seksjonen i `Prosjektinformasjon` ikke viste infoknapp med publiseringsdato for statusrapporten
 - Rettet en logisk feil i `Prosjekttidslinje` hvor prosjektelementer ikke ble vist dersom `Vis på portefølje` var satt til nei, fordi visningen feilaktig var betinget av portefølje-/programflagg i stedet for kun å sjekke om konfigurasjon eksisterer
 - Rettet en feil i `Porteføljeoversikt` hvor gruppering på brukerfelt viste rå SharePoint-verdier (e-post, claim-streng) i stedet for visningsnavn
+- Rettet en feil ved eksport til Excel hvor brukerfelt og oppslag ble eksportert med rå SharePoint-verdier i stedet for visningsnavn
 
 ---
 
