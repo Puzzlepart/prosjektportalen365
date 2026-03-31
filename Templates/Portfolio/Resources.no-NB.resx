@@ -3985,6 +3985,18 @@
   <data name="SiteFields_GtProjectTemplate_DisplayName" xml:space="preserve">
     <value>Prosjektmal</value>
   </data>
+  <data name="SiteFields_GtProjectExtensions_Description" xml:space="preserve">
+    <value>Prosjekttillegg som ble valgt for prosjektet</value>
+  </data>
+  <data name="SiteFields_GtProjectExtensions_DisplayName" xml:space="preserve">
+    <value>Prosjekttillegg</value>
+  </data>
+  <data name="SiteFields_GtProjectListContent_Description" xml:space="preserve">
+    <value>Listeinnhold som ble valgt for prosjektet</value>
+  </data>
+  <data name="SiteFields_GtProjectListContent_DisplayName" xml:space="preserve">
+    <value>Listeinnhold</value>
+  </data>
   <data name="SiteFields_GtProjectType_Description" xml:space="preserve">
     <value>Hva slags type prosjekt er dette?</value>
   </data>

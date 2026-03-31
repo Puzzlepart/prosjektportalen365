@@ -3985,6 +3985,18 @@
   <data name="SiteFields_GtProjectTemplate_DisplayName" xml:space="preserve">
     <value>Project Template</value>
   </data>
+  <data name="SiteFields_GtProjectExtensions_Description" xml:space="preserve">
+    <value>Extensions selected for the project</value>
+  </data>
+  <data name="SiteFields_GtProjectExtensions_DisplayName" xml:space="preserve">
+    <value>Project Extensions</value>
+  </data>
+  <data name="SiteFields_GtProjectListContent_Description" xml:space="preserve">
+    <value>List content selected for the project</value>
+  </data>
+  <data name="SiteFields_GtProjectListContent_DisplayName" xml:space="preserve">
+    <value>List Content</value>
+  </data>
   <data name="SiteFields_GtProjectType_Description" xml:space="preserve">
     <value>What type of project is this?</value>
   </data>

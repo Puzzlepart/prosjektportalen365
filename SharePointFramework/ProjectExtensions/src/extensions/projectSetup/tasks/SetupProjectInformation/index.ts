@@ -168,6 +168,8 @@ export class SetupProjectInformation extends BaseTask {
       GtIsProgram: this.data.selectedTemplate.isProgram,
       GtIsParentProject: this.data.selectedTemplate.isParentProject,
       GtProjectTemplate: this.data.selectedTemplate.text,
+      GtProjectExtensions: (this.data.selectedExtensions ?? []).map((e) => e.text).join(', '),
+      GtProjectListContent: (this.data.selectedContentConfig ?? []).map((c) => c.text).join(', '),
       ...additionalProperties
     }
     if (!isNoTemplate) {
