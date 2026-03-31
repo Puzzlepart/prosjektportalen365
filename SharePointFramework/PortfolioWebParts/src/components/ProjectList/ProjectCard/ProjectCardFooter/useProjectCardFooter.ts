@@ -31,6 +31,7 @@ export function useProjectCardFooter() {
       name: strings.NotSet,
       color: 'brand'
     }
+    if (!user) return defaultPersonaProps
     const role =
       _.find(context.projectColumns, (col) => col.internalName === user.role)?.name ||
       strings.NotSet
@@ -41,9 +42,9 @@ export function useProjectCardFooter() {
   const secondaryUserPersonaProps = getPersonaProps(context.project?.secondaryUser)
 
   let ProjectTypeIcon = bundleIcon(BoxFilled, BoxRegular)
-  let projectTypeText = context.project.template
+  let projectTypeText = context.project?.template
 
-  switch (context.project.template) {
+  switch (context.project?.template) {
     case resource.Lists_TemplateOptions_BuildingProject_Title:
       ProjectTypeIcon = bundleIcon(BuildingFilled, BuildingRegular)
       projectTypeText = resource.ProjectType_Building_Title
@@ -57,7 +58,7 @@ export function useProjectCardFooter() {
       projectTypeText = resource.ProjectType_Program_Title
       break
     case resource.Lists_TemplateOptions_StandardTemplate_Title:
-      if (context.project.isParent) {
+      if (context.project?.isParent) {
         ProjectTypeIcon = bundleIcon(BoxMultipleFilled, BoxMultipleRegular)
         projectTypeText = resource.ProjectType_Parent_Title
       } else {
