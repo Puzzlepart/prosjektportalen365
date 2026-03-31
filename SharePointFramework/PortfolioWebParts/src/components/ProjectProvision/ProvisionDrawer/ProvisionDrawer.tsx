@@ -832,8 +832,6 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
             currentLevel === levels.length - 1
               ? onSave().then((response) => {
                   if (response) {
-                    context.reset()
-
                     if (isInlineMode) {
                       context.setState({ showProvisionConfirmation: true, properties: {} })
                     } else {
@@ -847,6 +845,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                       context.setState({ showProvisionDrawer: false, properties: {} })
                     }
                     setCurrentLevel(0)
+                    context.reset()
                   } else {
                     props.toast(
                       <Toast appearance='inverted'>
