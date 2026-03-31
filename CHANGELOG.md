@@ -45,6 +45,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Rettet en feil i hent dokumentmal hvor punktum i filnavn før fil-endingen behandlet filnavnet og endingen feil [#1727](https://github.com/Puzzlepart/prosjektportalen365/issues/1727)
 - Rettet en feil i hent dokumentmal hvor brukeren kunne gi flere filer samme filnavn [#1729](https://github.com/Puzzlepart/prosjektportalen365/issues/1729)
 - Rettet en feil hvor tooltip for statusrapport-seksjonen i `Prosjektinformasjon` ikke viste infoknapp med publiseringsdato for statusrapporten
+- Rettet en logisk feil i `Prosjekttidslinje` hvor prosjektelementer ikke ble vist dersom `Vis på portefølje` var satt til nei, fordi visningen feilaktig var betinget av portefølje-/programflagg i stedet for kun å sjekke om konfigurasjon eksisterer
 
 ---
 
