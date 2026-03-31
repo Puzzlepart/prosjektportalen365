@@ -291,7 +291,7 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                 PropertyPaneDropdown('selectedPortfolioId', {
                   label: strings.SelectedPortfolioLabel,
                   options: this._getOptions('portfolios'),
-                  disabled: !_.isEmpty(this.properties.portfolios)
+                  disabled: _.isEmpty(this.properties.portfolios)
                 }),
                 PropertyPaneDescription(strings.SelectedPortfolioDescription)
               ]

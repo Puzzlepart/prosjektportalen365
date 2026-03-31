@@ -51,7 +51,8 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Rettet en feil i filterpanelet hvor beregnede kolonner og brukerfelt viste rå SharePoint-verdier i stedet for visningsnavn.
 - Rettet en feil i `Prosjektlisten` hvor listevisningen krasjet dersom prosjektdata ikke var ferdig lastet
 - Rettet en visuell feil i `Bestillingsportalen` hvor en advarsel/feilmelding blinket kort i skjemaet etter innsending, forårsaket av at skjemadata ble nullstilt før panelet ble lukket
-- Rettet en feil i `Prosjektkort` hvor webdelen krasjet dersom prosjektet manglet data for eier eller prosjektleder
+- Rettet en feil i `Prosjektkort` hvor webdelen krasjet dersom prosjektet manglet data for eier, prosjektleder eller prosjekttype
+- Rettet en feil i `Porteføljeoversikt` hvor valg av standardportefølje i egenskapspanelet var deaktivert når porteføljer var konfigurert, slik at standardportefølje aldri kunne settes
 
 ---
 
