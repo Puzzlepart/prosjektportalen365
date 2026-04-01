@@ -333,6 +333,7 @@ export const useProvisionDrawer = () => {
     joinHub,
     usesDifferentHub,
     getField,
+    fieldsToUse,
     fluentProviderId,
     currentTemplate,
     currentTypeConfig

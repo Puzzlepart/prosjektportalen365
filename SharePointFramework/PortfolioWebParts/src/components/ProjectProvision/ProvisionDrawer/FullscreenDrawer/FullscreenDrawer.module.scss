@@ -1,0 +1,253 @@
+.fullscreenProvider {
+  height: 100%;
+  width: 100%;
+}
+
+.fullscreenContent {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  background:
+    linear-gradient(180deg, #ffffff 0%, #fffffff0 85%, #ffffffcf 90%, #ffffff81 95%, #ffffff1c 100%),
+    linear-gradient(90deg, var(--provision-gradient-start, #5771e4) 0%, var(--provision-gradient-end, #70429e) 100%);
+}
+
+// ---- Header ----
+
+.header {
+  background: linear-gradient(135deg, var(--provision-header-start, #667eea) 0%, var(--provision-header-end, #764ba2) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+}
+
+.headerToolbar {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.headerTitle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: white;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.headerButton {
+  color: white !important;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+  }
+}
+
+.headerButtonText {
+  color: white;
+  font-size: 13px;
+}
+
+// ---- Body ----
+
+.fullscreenBody {
+  flex: 1;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+// ---- SiteType Level ----
+
+.siteTypeLevel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 48px 24px;
+  text-align: center;
+}
+
+.siteTypeHeader {
+  margin-bottom: 48px;
+  max-width: 600px;
+}
+
+.siteTypeTitle {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--colorNeutralForeground1);
+  margin: 0 0 12px 0;
+}
+
+.siteTypeDescription {
+  font-size: 16px;
+  color: var(--colorNeutralForeground3);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.siteTypeContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 900px;
+}
+
+.siteTypeCards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+}
+
+.siteTypeCardWrapper {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+}
+
+.siteTypeDropdownWrapper {
+  width: 100%;
+  max-width: 400px;
+}
+
+// ---- Fields Level ----
+
+.fieldsLevel {
+  flex: 1;
+  padding: 32px;
+  overflow: auto;
+}
+
+.fieldsLayout {
+  display: flex;
+  gap: 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.fieldsSidebar {
+  flex-shrink: 0;
+  width: 220px;
+  padding: 24px;
+  background: var(--colorNeutralBackground2);
+  border-radius: var(--borderRadiusLarge);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-self: flex-start;
+  position: sticky;
+  top: 0;
+}
+
+.sidebarImage {
+  width: 100%;
+  border-radius: var(--borderRadiusMedium);
+  object-fit: cover;
+  max-height: 140px;
+}
+
+.sidebarTitle {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--colorNeutralForeground1);
+}
+
+.sidebarDescription {
+  font-size: 13px;
+  color: var(--colorNeutralForeground3);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.fieldsMain {
+  flex: 1;
+  min-width: 0;
+}
+
+.fieldsColumns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 32px;
+}
+
+.fieldsColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.columnTitle {
+  font-size: 18px !important;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.columnDescription {
+  font-size: 14px;
+  color: var(--colorNeutralForeground3);
+  margin: 0 0 8px 0;
+}
+
+.footerDescription {
+  font-size: 13px;
+  color: var(--colorNeutralForeground3);
+  margin-top: 16px;
+}
+
+.fieldsFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 24px;
+  margin-top: 24px;
+  border-top: 1px solid var(--colorNeutralStroke1);
+}
+
+// ---- Status in drawer ----
+
+.statusContainer {
+  height: 100%;
+  overflow: auto;
+}
+
+// ---- Responsive ----
+
+@media (max-width: 768px) {
+  .fieldsLayout {
+    flex-direction: column;
+  }
+
+  .fieldsSidebar {
+    width: 100%;
+    position: static;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .sidebarImage {
+    width: 60px;
+    height: 60px;
+    max-height: 60px;
+  }
+
+  .fieldsColumns {
+    grid-template-columns: 1fr;
+  }
+
+  .siteTypeTitle {
+    font-size: 24px;
+  }
+}

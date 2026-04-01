@@ -59,6 +59,11 @@ define([], function () {
       DatePicker: 'Velg en dato'
     },
     Provision: {
+      DrawerSizeFieldLabel: 'Skuffestørrelse',
+      DrawerSizeMedium: 'Standard',
+      DrawerSizeFull: 'Fullskjerm',
+      FullscreenHeaderTitle: 'Bestillingsportalen',
+      ChangeTypeButtonLabel: 'Endre type',
       DrawerLevel0HeaderText: 'Bestill område',
       DrawerLevel0DescriptionText: 'Her kan du bestille et nytt område. Velg en av områdetypene under, og fyll ut informasjonen under.',
       DrawerLevel1HeaderText: 'Klassifisering',

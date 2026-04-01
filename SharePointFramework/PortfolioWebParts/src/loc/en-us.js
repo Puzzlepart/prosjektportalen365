@@ -1,6 +1,11 @@
 define([], function () {
   return {
     Provision: {
+      DrawerSizeFieldLabel: "Drawer size",
+      DrawerSizeMedium: "Standard",
+      DrawerSizeFull: "Fullscreen",
+      FullscreenHeaderTitle: "Provisioning Portal",
+      ChangeTypeButtonLabel: "Change type",
       DrawerLevel0HeaderText: "Request site",
       DrawerLevel0DescriptionText: "Here you can request a new site. Choose one of the site types below and fill in the required information.",
       DrawerLevel1HeaderText: "Classification",

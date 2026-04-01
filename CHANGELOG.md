@@ -16,6 +16,9 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Ny funksjonalitet i `Prosjektinformasjon` for å kjøre `oppsettveiviseren` på nytt for et prosjekt. Dette lar deg velge en mal, tillegg eller standardinnhold som skal legges til prosjektet. Dette kan brukes for feilsøking eller for å legge til ny funksjonalitet. [#1702](https://github.com/Puzzlepart/prosjektportalen365/issues/1702)
 - Ny knapp i `Footer` for å vise en liste over favorittprosjekter som brukeren følger i porteføljen. [#1462](https://github.com/Puzzlepart/prosjektportalen365/issues/1462)
 - Lagt til to nye kolonner i `Prosjekter`-listen: `Prosjekttillegg` og `Listeinnhold`, som lagrer navnene på valgte tillegg og listeinnhold (kommaseparert) ved opprettelse av prosjektet. [#1542](https://github.com/Puzzlepart/prosjektportalen365/issues/1542)
+- Ny fullskjerm-modus for `Bestillingsportalen` med gradientbakgrunn, større skriftstørrelser, sentrert områdetypevalg og flerkollonne feltvisning. Fullskjermmodus brukes automatisk i Teams-appen og kan aktiveres via egenskapspanelet.
+- Dynamisk feltrendering i `Bestillingsportalen` som støtter konfigurerbar feltrekkefølge og nivåplassering via `order` og `level` egenskaper
+- Lagt til «Se mine bestillinger»-knapp i verktøylinjen i `Bestillingsportalen`-skuffen for rask tilgang til bestillingsstatus
 
 ### Forbedringer
 

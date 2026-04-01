@@ -1,4 +1,5 @@
 import { Slot } from '@fluentui/react-components'
+import { FluentIconName } from 'pp365-shared-library'
 import { IBaseComponentProps } from 'components/types'
 
 export interface ITypeFieldConfiguration {
@@ -23,6 +24,7 @@ export interface IProjectProvisionProps extends IBaseComponentProps {
   parentMode?: boolean
 
   // Visuals
+  drawerSize?: 'medium' | 'full'
   siteTypeRenderMode?: string
   expirationDateMode?: string
 
@@ -90,6 +92,7 @@ export interface IProvisionField {
   description?: string
   placeholder?: string
   dataType?: string
+  iconName?: FluentIconName
   disabled?: boolean
   required?: boolean
   hidden?: boolean

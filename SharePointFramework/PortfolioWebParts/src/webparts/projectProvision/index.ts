@@ -86,6 +86,7 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
     if (this.context.sdks?.microsoftTeams) {
       this.properties.renderMode = 'inline'
       this.properties.isTeamsContext = true
+      if (!this.properties.drawerSize) this.properties.drawerSize = 'full'
 
       if (this.properties.provisionUrl) {
         try {
@@ -172,6 +173,15 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                     { key: 'inline', text: strings.Provision.RenderModeInline }
                   ],
                   selectedKey: propertiesWithDefaults.renderMode ?? 'button'
+                }),
+                PropertyPaneDropdown('drawerSize', {
+                  label: strings.Provision.DrawerSizeFieldLabel,
+                  options: [
+                    { key: 'medium', text: strings.Provision.DrawerSizeMedium },
+                    { key: 'full', text: strings.Provision.DrawerSizeFull }
+                  ],
+                  selectedKey: propertiesWithDefaults.drawerSize ?? 'medium',
+                  disabled: propertiesWithDefaults.renderMode === 'inline'
                 }),
                 PropertyPaneTextField('buttonLabel', {
                   label: strings.Provision.ButtonLabelFieldLabel,

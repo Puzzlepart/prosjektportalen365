@@ -21,6 +21,7 @@ import { ProvisionStatus } from './ProvisionStatus'
 import { useProjectProvision } from './useProjectProvision'
 import { ProjectProvisionContext } from './context'
 import { ProvisionDrawer } from './ProvisionDrawer'
+import { FullscreenDrawer } from './ProvisionDrawer/FullscreenDrawer'
 import strings from 'PortfolioWebPartsStrings'
 import { ProvisionSettings } from './ProvisionSettings'
 import { TeamsConfigEditor } from './TeamsConfigEditor'
@@ -107,13 +108,17 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
                   onBack={() => setState({ showProvisionStatus: false, showProvisionDrawer: true })}
                 />
               ) : (
-                <ProvisionDrawer toast={dispatchToast} renderMode={props.renderMode} />
+                <FullscreenDrawer toast={dispatchToast} renderMode={props.renderMode} />
               )}
             </>
           ) : (
             <>
-              {/* Button mode: show button and dialogs */}
-              <ProvisionDrawer toast={dispatchToast} renderMode={props.renderMode} />
+              {/* Button mode: show button, drawer, and dialogs */}
+              {props.drawerSize === 'full' ? (
+                <FullscreenDrawer toast={dispatchToast} renderMode={props.renderMode} />
+              ) : (
+                <ProvisionDrawer toast={dispatchToast} renderMode={props.renderMode} />
+              )}
               <Menu positioning='below-end'>
                 <MenuTrigger disableButtonEnhancement>
                   {(triggerProps: MenuButtonProps) => (

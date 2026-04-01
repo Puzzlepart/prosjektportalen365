@@ -58,6 +58,11 @@ declare interface IPortfolioWebPartsStrings {
     DatePicker: string
   },
   Provision: {
+    DrawerSizeFieldLabel: string
+    DrawerSizeMedium: string
+    DrawerSizeFull: string
+    FullscreenHeaderTitle: string
+    ChangeTypeButtonLabel: string
     DrawerLevel0HeaderText: string
     DrawerLevel0DescriptionText: string
     DrawerLevel1HeaderText: string
