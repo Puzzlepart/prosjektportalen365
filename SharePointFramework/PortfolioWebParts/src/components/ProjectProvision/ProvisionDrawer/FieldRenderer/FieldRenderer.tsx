@@ -69,10 +69,13 @@ export const FieldRenderer: FC<IFieldRendererProps> = ({ field, config }) => {
 
       case 'choice': {
         const options = config?.options ?? []
+        const hasDefaultValue = config?.inputProps?.defaultValue !== undefined
         return (
           <Dropdown
-            value={context.column.get(field.fieldName) ?? ''}
-            selectedOptions={[context.column.get(field.fieldName)]}
+            {...(!hasDefaultValue && {
+              value: context.column.get(field.fieldName) ?? '',
+              selectedOptions: [context.column.get(field.fieldName)]
+            })}
             disabled={isDisabled}
             onOptionSelect={(_, data) => context.setColumn(field.fieldName, data.optionValue)}
             {...(config?.inputProps ?? {})}

@@ -1,4 +1,4 @@
-import React, { FC, useContext } from 'react'
+import React, { FC, useContext, useCallback } from 'react'
 import { Dropdown, Option, Tag } from '@fluentui/react-components'
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectProvisionContext } from '../../context'
@@ -16,10 +16,10 @@ export interface IFullscreenSiteTypeProps {
 export const FullscreenSiteType: FC<IFullscreenSiteTypeProps> = ({ onTypeSelected }) => {
   const context = useContext(ProjectProvisionContext)
 
-  const handleTypeSelect = (title: string) => {
+  const handleCardClick = useCallback((title: string) => {
     context.setColumn('type', title)
     onTypeSelected?.()
-  }
+  }, [onTypeSelected])
 
   return (
     <div className={styles.siteTypeLevel}>
@@ -38,7 +38,7 @@ export const FullscreenSiteType: FC<IFullscreenSiteTypeProps> = ({ onTypeSelecte
               <div
                 key={type.title}
                 className={styles.siteTypeCardWrapper}
-                onClick={() => handleTypeSelect(type.title)}
+                onClick={() => handleCardClick(type.title)}
               >
                 <SiteType
                   title={type.title}
@@ -51,7 +51,7 @@ export const FullscreenSiteType: FC<IFullscreenSiteTypeProps> = ({ onTypeSelecte
         ) : (
           <div className={styles.siteTypeDropdownWrapper}>
             <Dropdown
-              value={context.column.get('type')}
+              value={context.column.get('type') ?? ''}
               selectedOptions={[context.column.get('type')]}
               onOptionSelect={(_, data) => {
                 context.setColumn('type', data.optionValue)

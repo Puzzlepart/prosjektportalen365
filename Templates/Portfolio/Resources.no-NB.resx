@@ -775,6 +775,12 @@
   <data name="ClientSidePages_DeliveryOverview_Title" xml:space="preserve">
     <value>Leveranseoversikt</value>
   </data>
+  <data name="ClientSidePages_ProjectProvision_PageName" xml:space="preserve">
+    <value>Bestillingsportalen.aspx</value>
+  </data>
+  <data name="ClientSidePages_ProjectProvision_Title" xml:space="preserve">
+    <value>Bestillingsportalen</value>
+  </data>
   <data name="ClientSidePages_ExperienceLog_PageName" xml:space="preserve">
     <value>Erfaringslogg.aspx</value>
   </data>

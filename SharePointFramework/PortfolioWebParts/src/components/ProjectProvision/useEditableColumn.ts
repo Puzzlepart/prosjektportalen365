@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { IProjectProvisionProps, IProjectProvisionState } from './types'
 import _ from 'lodash'
 import strings from 'PortfolioWebPartsStrings'
@@ -22,7 +22,7 @@ export function useEditableColumn(
 
   useEffect(() => {
     const fetchHubSiteTitle = async () => {
-      if (props.parentMode && props.dataAdapter) {
+      if (props.parentMode && props.dataAdapter?.portalDataService) {
         try {
           const hubInfo = await props.dataAdapter.portalDataService.resolveHubSiteFromUrl(
             props.dataAdapter.portalDataService.url
@@ -129,8 +129,7 @@ export function useEditableColumn(
             'owner',
             async () => {
               if (!value || !Array.isArray(value)) return []
-              if (!props.dataAdapter) {
-                console.warn('dataAdapter is not available')
+              if (!props.dataAdapter?.portalDataService) {
                 return []
               }
               try {
@@ -147,8 +146,7 @@ export function useEditableColumn(
             'member',
             async () => {
               if (!value || !Array.isArray(value)) return []
-              if (!props.dataAdapter) {
-                console.warn('dataAdapter is not available')
+              if (!props.dataAdapter?.portalDataService) {
                 return []
               }
               try {
@@ -165,8 +163,7 @@ export function useEditableColumn(
             'requestedBy',
             async () => {
               if (!value || !Array.isArray(value)) return []
-              if (!props.dataAdapter) {
-                console.warn('dataAdapter is not available')
+              if (!props.dataAdapter?.portalDataService) {
                 return []
               }
               try {
@@ -246,6 +243,10 @@ export function useEditableColumn(
    * @param key Key of the column to update
    * @param value Value to update the column with
    */
+  // Use a ref to access the latest properties without creating a dependency
+  const propertiesRef = useRef(state.properties)
+  propertiesRef.current = state.properties
+
   const setColumn = useCallback(
     async (key: string, value: any): Promise<void> => {
       try {
@@ -265,10 +266,10 @@ export function useEditableColumn(
 
         setState({
           properties: {
-            ...state.properties,
+            ...propertiesRef.current,
             [key]: transformedValue,
             ...(key === 'name' && typeof value === 'string'
-              ? { alias: calculateAlias(value, state.properties.type) }
+              ? { alias: calculateAlias(value, propertiesRef.current.type) }
               : {})
           }
         })
@@ -281,7 +282,7 @@ export function useEditableColumn(
         })
       }
     },
-    [transformValue, setState, state.properties, calculateAlias]
+    [transformValue, setState, calculateAlias]
   )
 
   /**
@@ -333,12 +334,21 @@ export function useEditableColumn(
     }
   }, [state.loading, defaultType])
 
+  // Track which type we last set defaults for, to prevent re-running
+  // when this effect's own setState updates trigger a re-render.
+  const lastDefaultsTypeRef = useRef<string | null>(null)
+
   // Set defaults based on selected type
   useEffect(() => {
+    const currentType = column.get('type')
+    if (lastDefaultsTypeRef.current === currentType) return
+
     const setDefaults = async () => {
       if (state.loading || !state.types || state.types.length === 0 || !defaultType) {
         return
       }
+
+      lastDefaultsTypeRef.current = currentType
 
       try {
         const typeDefaults =
@@ -395,7 +405,8 @@ export function useEditableColumn(
 
         if (
           typeDefaults?.defaultHub &&
-          (!resolvedHubSite || typeDefaults.defaultHub !== resolvedHubSite)
+          (!resolvedHubSite || typeDefaults.defaultHub !== resolvedHubSite) &&
+          props.dataAdapter?.portalDataService
         ) {
           try {
             const hubInfo = await props.dataAdapter.resolveHubSiteById(typeDefaults.defaultHub)
@@ -447,7 +458,7 @@ export function useEditableColumn(
     }
 
     setDefaults()
-  }, [state.loading, state.types, state.properties.type, defaultType])
+  }, [state.loading, state.types, column.get('type'), defaultType])
 
   return {
     column,

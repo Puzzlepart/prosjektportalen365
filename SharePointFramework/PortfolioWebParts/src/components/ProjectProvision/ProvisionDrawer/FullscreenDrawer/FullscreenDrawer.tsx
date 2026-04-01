@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react'
 import {
   OverlayDrawer,
+  Button,
   Toast,
   ToastBody,
   ToastTitle,
@@ -12,6 +13,7 @@ import strings from 'PortfolioWebPartsStrings'
 import { customLightTheme } from 'pp365-shared-library'
 import { useProvisionDrawer } from '../useProvisionDrawer'
 import { useFieldConfigs } from '../FieldRenderer'
+import { useLocalInput } from '../useLocalInput'
 import { FullscreenHeader } from './FullscreenHeader'
 import { FullscreenSiteType } from './FullscreenSiteType'
 import { FullscreenFields } from './FullscreenFields'
@@ -56,6 +58,11 @@ export const FullscreenDrawer: FC<IProvisionDrawerProps> = (props) => {
     fluentProviderId
   } = useProvisionDrawer()
 
+  const nameInput = useLocalInput('name')
+  const descriptionInput = useLocalInput('description')
+  const justificationInput = useLocalInput('justification')
+  const additionalInfoInput = useLocalInput('additionalInfo')
+
   const fieldConfigs = useFieldConfigs({
     siteExists,
     setSiteExists,
@@ -73,7 +80,13 @@ export const FullscreenDrawer: FC<IProvisionDrawerProps> = (props) => {
     enableReadOnlyGroup,
     enableInternalChannel,
     enableExternalSharing,
-    getField
+    getField,
+    localInputs: {
+      name: nameInput,
+      description: descriptionInput,
+      justification: justificationInput,
+      additionalInfo: additionalInfoInput
+    }
   })
 
   const [currentStep, setCurrentStep] = useState<'siteType' | 'fields'>(
@@ -159,8 +172,6 @@ export const FullscreenDrawer: FC<IProvisionDrawerProps> = (props) => {
     return (
       <div className={styles.fullscreenContent}>
         <FullscreenHeader
-          showBack={currentStep === 'fields'}
-          onBack={() => setCurrentStep('siteType')}
           onClose={!isInlineMode ? () => context.setState({ showProvisionDrawer: false }) : undefined}
           onViewSettings={() => setShowSettingsInDrawer(true)}
           onViewRequests={() => setShowStatusInDrawer(true)}
@@ -176,11 +187,25 @@ export const FullscreenDrawer: FC<IProvisionDrawerProps> = (props) => {
               fieldConfigs={fieldConfigs}
               isSaveDisabled={isSaveDisabled}
               missingFieldsInfo={missingFieldsInfo}
-              onSave={handleSave}
               onBack={() => setCurrentStep('siteType')}
             />
           )}
         </div>
+        {currentStep === 'fields' && (
+          <div className={styles.fieldsFooter}>
+            <Button appearance='subtle' onClick={() => setCurrentStep('siteType')}>
+              {strings.Provision.PreviousButtonLabel}
+            </Button>
+            <Button
+              appearance='primary'
+              size='large'
+              disabled={isSaveDisabled}
+              onClick={handleSave}
+            >
+              {strings.Provision.ProvisionButtonLabel}
+            </Button>
+          </div>
+        )}
       </div>
     )
   }

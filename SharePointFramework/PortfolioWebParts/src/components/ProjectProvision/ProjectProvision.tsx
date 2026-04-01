@@ -42,6 +42,8 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
   const restoreFocusTargetAttribute = useRestoreFocusTarget()
   const { dispatchToast } = useToastController(toasterId)
 
+  console.log('ProjectProvision render', { state, column })
+
   if (state.loading) {
     return (
       <Skeleton>

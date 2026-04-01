@@ -25,6 +25,7 @@ import { DebugModel } from './DebugModel'
 import { IProvisionDrawerProps } from './types'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import { FieldRendererList, useFieldConfigs } from './FieldRenderer'
+import { useLocalInput } from './useLocalInput'
 
 declare const DEBUG: boolean
 
@@ -61,6 +62,11 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
     fluentProviderId
   } = useProvisionDrawer()
 
+  const nameInput = useLocalInput('name')
+  const descriptionInput = useLocalInput('description')
+  const justificationInput = useLocalInput('justification')
+  const additionalInfoInput = useLocalInput('additionalInfo')
+
   const fieldConfigs = useFieldConfigs({
     siteExists,
     setSiteExists,
@@ -78,7 +84,13 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
     enableReadOnlyGroup,
     enableInternalChannel,
     enableExternalSharing,
-    getField
+    getField,
+    localInputs: {
+      name: nameInput,
+      description: descriptionInput,
+      justification: justificationInput,
+      additionalInfo: additionalInfoInput
+    }
   })
 
   return (

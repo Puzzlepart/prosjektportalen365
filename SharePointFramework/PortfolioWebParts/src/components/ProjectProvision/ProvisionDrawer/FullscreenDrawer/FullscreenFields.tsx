@@ -1,5 +1,5 @@
 import React, { FC, useContext } from 'react'
-import { DrawerHeaderTitle, Button } from '@fluentui/react-components'
+import { Button, DrawerHeaderTitle } from '@fluentui/react-components'
 import strings from 'PortfolioWebPartsStrings'
 import { getFluentIcon, UserMessage } from 'pp365-shared-library'
 import { ProjectProvisionContext } from '../../context'
@@ -17,7 +17,6 @@ export interface IFullscreenFieldsProps {
   fieldConfigs: Record<string, IFieldConfig>
   isSaveDisabled: boolean
   missingFieldsInfo: { missingFields: { displayName: string }[] }
-  onSave: () => void
   onBack: () => void
 }
 
@@ -31,7 +30,6 @@ export const FullscreenFields: FC<IFullscreenFieldsProps> = ({
   fieldConfigs,
   isSaveDisabled,
   missingFieldsInfo,
-  onSave,
   onBack
 }) => {
   const context = useContext(ProjectProvisionContext)
@@ -122,19 +120,6 @@ export const FullscreenFields: FC<IFullscreenFieldsProps> = ({
               containerStyle={{ marginTop: '16px' }}
             />
           )}
-          <div className={styles.fieldsFooter}>
-            <Button appearance='subtle' onClick={onBack}>
-              {strings.Provision.PreviousButtonLabel}
-            </Button>
-            <Button
-              appearance='primary'
-              size='large'
-              disabled={isSaveDisabled}
-              onClick={onSave}
-            >
-              {strings.Provision.ProvisionButtonLabel}
-            </Button>
-          </div>
         </div>
       </div>
     </div>

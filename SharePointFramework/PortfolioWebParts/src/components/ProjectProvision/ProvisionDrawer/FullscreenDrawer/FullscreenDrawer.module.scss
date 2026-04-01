@@ -8,9 +8,6 @@
   flex-direction: column;
   height: 100%;
   width: 100%;
-  background:
-    linear-gradient(180deg, #ffffff 0%, #fffffff0 85%, #ffffffcf 90%, #ffffff81 95%, #ffffff1c 100%),
-    linear-gradient(90deg, var(--provision-gradient-start, #5771e4) 0%, var(--provision-gradient-end, #70429e) 100%);
 }
 
 // ---- Header ----
@@ -76,7 +73,7 @@
 
 .siteTypeHeader {
   margin-bottom: 48px;
-  max-width: 600px;
+  max-width: 700px;
 }
 
 .siteTypeTitle {
@@ -97,19 +94,37 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  max-width: 900px;
 }
 
 .siteTypeCards {
   display: flex;
   flex-wrap: wrap;
-  gap: 24px;
+  gap: 32px;
   justify-content: center;
 }
 
 .siteTypeCardWrapper {
   cursor: pointer;
   transition: transform 0.2s ease;
+
+  // Double the size of SiteType cards in fullscreen
+  :global(.fui-Card) {
+    width: 336px;
+    max-width: 100%;
+  }
+
+  :global(.fui-CardHeader__header) {
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  :global(.fui-CardHeader__description) {
+    font-size: 14px;
+  }
+
+  :global(.fui-CardPreview) img {
+    max-height: 232px;
+  }
 
   &:hover {
     transform: translateY(-4px);
@@ -207,20 +222,36 @@
   margin-top: 16px;
 }
 
+// Footer always visible at the bottom
 .fieldsFooter {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  padding-top: 24px;
-  margin-top: 24px;
+  padding: 16px 32px;
   border-top: 1px solid var(--colorNeutralStroke1);
+  background: var(--colorNeutralBackground1);
+  flex-shrink: 0;
 }
 
-// ---- Status in drawer ----
+// ---- Status/Settings in drawer (fullwidth, no dialog border) ----
 
 .statusContainer {
-  height: 100%;
+  flex: 1;
   overflow: auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  // Override the inlineContainer styles to remove dialog-like appearance
+  :global(.inlineContainer),
+  > div > div {
+    max-width: 100%;
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+    padding: 24px 32px 48px;
+  }
 }
 
 // ---- Responsive ----
@@ -249,5 +280,15 @@
 
   .siteTypeTitle {
     font-size: 24px;
+  }
+
+  .siteTypeCardWrapper {
+    :global(.fui-Card) {
+      width: 168px;
+    }
+
+    :global(.fui-CardPreview) img {
+      max-height: 116px;
+    }
   }
 }

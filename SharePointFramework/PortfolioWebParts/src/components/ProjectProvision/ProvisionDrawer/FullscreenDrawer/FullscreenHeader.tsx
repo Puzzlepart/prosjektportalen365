@@ -6,16 +6,12 @@ import { ProjectProvisionContext } from '../../context'
 import styles from './FullscreenDrawer.module.scss'
 
 export interface IFullscreenHeaderProps {
-  onBack?: () => void
-  showBack?: boolean
   onClose?: () => void
   onViewRequests?: () => void
   onViewSettings?: () => void
 }
 
 export const FullscreenHeader: FC<IFullscreenHeaderProps> = ({
-  onBack,
-  showBack,
   onClose,
   onViewRequests,
   onViewSettings
@@ -26,16 +22,8 @@ export const FullscreenHeader: FC<IFullscreenHeaderProps> = ({
     <div className={styles.header}>
       <Toolbar className={styles.headerToolbar}>
         <ToolbarGroup>
-          {showBack && (
-            <ToolbarButton
-              appearance='subtle'
-              icon={getFluentIcon('ArrowLeft', { color: 'white' })}
-              onClick={onBack}
-              className={styles.headerButton}
-            />
-          )}
           <span className={styles.headerTitle}>
-            {getFluentIcon('BotSparkle', { filled: true, size: '24px', color: 'white' })}
+            {getFluentIcon('MountainTrail', { filled: true, size: '24px', color: 'white' })}
             <span>{strings.Provision.FullscreenHeaderTitle ?? strings.Provision.WebPartDescription}</span>
           </span>
         </ToolbarGroup>

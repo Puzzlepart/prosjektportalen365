@@ -12,8 +12,12 @@ import strings from 'PortfolioWebPartsStrings'
 import { FieldContainer } from 'pp365-shared-library'
 import { ProjectProvisionContext } from '../../context'
 import { SiteType } from '../SiteType'
-import { useLocalInput } from '../useLocalInput'
 import { IFieldConfig } from './types'
+
+interface LocalInputHandle {
+  value: string
+  onChange: (value: string) => void
+}
 
 interface UseFieldConfigsParams {
   siteExists: boolean
@@ -33,6 +37,12 @@ interface UseFieldConfigsParams {
   enableInternalChannel: any
   enableExternalSharing: any
   getField: (fieldName: string) => any
+  localInputs: {
+    name: LocalInputHandle
+    description: LocalInputHandle
+    justification: LocalInputHandle
+    additionalInfo: LocalInputHandle
+  }
 }
 
 /**
@@ -46,11 +56,7 @@ interface UseFieldConfigsParams {
 export function useFieldConfigs(params: UseFieldConfigsParams): Record<string, IFieldConfig> {
   const context = useContext(ProjectProvisionContext)
 
-  // Local input hooks must be at hook top-level (not inside useMemo/callbacks)
-  const nameInput = useLocalInput('name')
-  const descriptionInput = useLocalInput('description')
-  const justificationInput = useLocalInput('justification')
-  const additionalInfoInput = useLocalInput('additionalInfo')
+  const { name: nameInput, description: descriptionInput, justification: justificationInput, additionalInfo: additionalInfoInput } = params.localInputs
 
   const configs: Record<string, IFieldConfig> = {}
 

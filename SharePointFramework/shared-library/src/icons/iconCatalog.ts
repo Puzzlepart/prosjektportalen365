@@ -172,7 +172,9 @@ import {
   StarFilled,
   StarRegular,
   PuzzlePieceRegular,
-  PuzzlePieceFilled
+  PuzzlePieceFilled,
+  MountainTrailRegular,
+  MountainTrailFilled,
 } from '@fluentui/react-icons'
 
 /**
@@ -526,5 +528,9 @@ export const iconCatalog = {
   ListBar: {
     regular: ListBarRegular,
     filled: ListBarFilled
+  },
+  MountainTrail: {
+    regular: MountainTrailRegular,
+    filled: MountainTrailFilled
   }
 }
