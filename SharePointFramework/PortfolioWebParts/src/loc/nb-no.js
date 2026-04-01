@@ -65,7 +65,7 @@ define([], function () {
       FullscreenHeaderTitle: 'Bestillingsportalen',
       ChangeTypeButtonLabel: 'Endre type',
       DrawerLevel0HeaderText: 'Bestill område',
-      DrawerLevel0DescriptionText: 'Her kan du bestille et nytt område. Velg en av områdetypene under, og fyll ut informasjonen under.',
+      DrawerLevel0DescriptionText: 'Her kan du bestille et nytt område. Velg en av områdetypene under, og fyll ut informasjonen.',
       DrawerLevel1HeaderText: 'Klassifisering',
       DrawerLevel1DescriptionText: 'Her kan du velge klassifisering for området. Aktivere teams, følsomhetsetikett og oppbevaringsetikett.',
       DrawerLevel2HeaderText: 'Annen informasjon',

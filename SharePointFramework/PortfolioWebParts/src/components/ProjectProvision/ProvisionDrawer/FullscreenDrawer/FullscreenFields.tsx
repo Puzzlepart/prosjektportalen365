@@ -65,13 +65,16 @@ export const FullscreenFields: FC<IFullscreenFieldsProps> = ({
             <p className={styles.sidebarDescription}>{selectedTypeData.description}</p>
           )}
           <Button
-            appearance='subtle'
+            appearance='primary'
             icon={getFluentIcon('ArrowLeft')}
             onClick={onBack}
-            size='small'
+            size='medium'
           >
             {strings.Provision.ChangeTypeButtonLabel ?? strings.Provision.PreviousButtonLabel}
           </Button>
+          {(context.props.debugMode ||
+            (typeof sessionStorage !== 'undefined' && sessionStorage.DEBUG) ||
+            (typeof DEBUG !== 'undefined' && DEBUG)) && <DebugModel />}
         </div>
         <div className={styles.fieldsMain}>
           <div className={styles.fieldsColumns}>
@@ -92,10 +95,6 @@ export const FullscreenFields: FC<IFullscreenFieldsProps> = ({
                         {levelHeaders[level].description}
                       </p>
                     )}
-                  {level === 2 &&
-                    (context.props.debugMode ||
-                      (typeof sessionStorage !== 'undefined' && sessionStorage.DEBUG) ||
-                      (typeof DEBUG !== 'undefined' && DEBUG)) && <DebugModel />}
                   <FieldRendererList
                     fields={fieldsWithoutType}
                     level={level}

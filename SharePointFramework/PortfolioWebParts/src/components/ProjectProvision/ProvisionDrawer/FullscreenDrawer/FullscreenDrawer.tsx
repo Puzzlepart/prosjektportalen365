@@ -11,7 +11,9 @@ import {
 } from '@fluentui/react-components'
 import strings from 'PortfolioWebPartsStrings'
 import { customLightTheme } from 'pp365-shared-library'
+import { useMotion } from '@fluentui/react-motion-preview'
 import { useProvisionDrawer } from '../useProvisionDrawer'
+import { useMotionStyles } from '../motionStyles'
 import { useFieldConfigs } from '../FieldRenderer'
 import { useLocalInput } from '../useLocalInput'
 import { FullscreenHeader } from './FullscreenHeader'
@@ -95,6 +97,10 @@ export const FullscreenDrawer: FC<IProvisionDrawerProps> = (props) => {
   const [showStatusInDrawer, setShowStatusInDrawer] = useState(false)
   const [showSettingsInDrawer, setShowSettingsInDrawer] = useState(false)
 
+  const motionStyles = useMotionStyles()
+  const siteTypeMotion = useMotion<HTMLDivElement>(currentStep === 'siteType')
+  const fieldsMotion = useMotion<HTMLDivElement>(currentStep === 'fields')
+
   const isInlineMode = props.renderMode === 'inline'
   const isTeamsMode = context.props.isTeamsContext
 
@@ -148,23 +154,37 @@ export const FullscreenDrawer: FC<IProvisionDrawerProps> = (props) => {
 
     if (showStatusInDrawer) {
       return (
-        <div className={styles.statusContainer}>
-          <ProvisionStatus
-            toast={props.toast}
-            renderMode='inline'
+        <div className={styles.fullscreenContent}>
+          <FullscreenHeader
+            titleOverride={strings.Provision.StatusMenuLabel}
+            iconOverride='ClipboardTask'
             onBack={() => setShowStatusInDrawer(false)}
+            onClose={!isInlineMode ? () => context.setState({ showProvisionDrawer: false }) : undefined}
           />
+          <div className={styles.statusContainer}>
+            <ProvisionStatus
+              toast={props.toast}
+              renderMode='inline'
+            />
+          </div>
         </div>
       )
     }
 
     if (showSettingsInDrawer) {
       return (
-        <div className={styles.statusContainer}>
-          <ProvisionSettings
-            renderMode='inline'
+        <div className={styles.fullscreenContent}>
+          <FullscreenHeader
+            titleOverride={strings.Provision.SettingsMenuLabel}
+            iconOverride='Settings'
             onBack={() => setShowSettingsInDrawer(false)}
+            onClose={!isInlineMode ? () => context.setState({ showProvisionDrawer: false }) : undefined}
           />
+          <div className={styles.statusContainer}>
+            <ProvisionSettings
+              renderMode='inline'
+            />
+          </div>
         </div>
       )
     }
@@ -177,18 +197,39 @@ export const FullscreenDrawer: FC<IProvisionDrawerProps> = (props) => {
           onViewRequests={() => setShowStatusInDrawer(true)}
         />
         <div className={styles.fullscreenBody}>
-          {currentStep === 'siteType' ? (
-            <FullscreenSiteType
-              onTypeSelected={() => setCurrentStep('fields')}
-            />
-          ) : (
-            <FullscreenFields
-              fields={fieldsToUse}
-              fieldConfigs={fieldConfigs}
-              isSaveDisabled={isSaveDisabled}
-              missingFieldsInfo={missingFieldsInfo}
-              onBack={() => setCurrentStep('siteType')}
-            />
+          {siteTypeMotion.canRender && (
+            <div
+              ref={siteTypeMotion.ref}
+              className={mergeClasses(
+                styles.motionLevel,
+                motionStyles.level,
+                motionStyles.level0,
+                siteTypeMotion.active && motionStyles.levelVisible
+              )}
+            >
+              <FullscreenSiteType
+                onTypeSelected={() => setCurrentStep('fields')}
+              />
+            </div>
+          )}
+          {fieldsMotion.canRender && (
+            <div
+              ref={fieldsMotion.ref}
+              className={mergeClasses(
+                styles.motionLevel,
+                motionStyles.level,
+                motionStyles.level1,
+                fieldsMotion.active && motionStyles.levelVisible
+              )}
+            >
+              <FullscreenFields
+                fields={fieldsToUse}
+                fieldConfigs={fieldConfigs}
+                isSaveDisabled={isSaveDisabled}
+                missingFieldsInfo={missingFieldsInfo}
+                onBack={() => setCurrentStep('siteType')}
+              />
+            </div>
           )}
         </div>
         {currentStep === 'fields' && (

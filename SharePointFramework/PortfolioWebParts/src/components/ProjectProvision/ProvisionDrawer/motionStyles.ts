@@ -15,7 +15,7 @@ export const useMotionStyles = makeStyles({
   },
   level: {
     opacity: 0,
-    transitionDuration: tokens.durationNormal,
+    transitionDuration: tokens.durationSlow,
     transitionTimingFunction: tokens.curveEasyEase,
     transitionProperty: 'opacity, transform',
     willChange: 'opacity, transform'

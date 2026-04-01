@@ -9,22 +9,39 @@ export interface IFullscreenHeaderProps {
   onClose?: () => void
   onViewRequests?: () => void
   onViewSettings?: () => void
+  onBack?: () => void
+  titleOverride?: string
+  iconOverride?: string
 }
 
 export const FullscreenHeader: FC<IFullscreenHeaderProps> = ({
   onClose,
   onViewRequests,
-  onViewSettings
+  onViewSettings,
+  onBack,
+  titleOverride,
+  iconOverride
 }) => {
   const context = useContext(ProjectProvisionContext)
+
+  const title = titleOverride || strings.Provision.FullscreenHeaderTitle || strings.Provision.WebPartDescription
+  const icon = iconOverride || 'MountainTrail'
 
   return (
     <div className={styles.header}>
       <Toolbar className={styles.headerToolbar}>
         <ToolbarGroup>
+          {onBack && (
+            <ToolbarButton
+              appearance='subtle'
+              icon={getFluentIcon('ArrowLeft', { color: 'white' })}
+              onClick={onBack}
+              className={styles.headerButton}
+            />
+          )}
           <span className={styles.headerTitle}>
-            {getFluentIcon('MountainTrail', { filled: true, size: '24px', color: 'white' })}
-            <span>{strings.Provision.FullscreenHeaderTitle ?? strings.Provision.WebPartDescription}</span>
+            {getFluentIcon(icon as any, { filled: true, size: '24px', color: 'white' })}
+            <span>{title}</span>
           </span>
         </ToolbarGroup>
         <ToolbarGroup>
