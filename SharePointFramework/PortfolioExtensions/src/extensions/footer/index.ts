@@ -273,7 +273,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
       const projects = followedSites
         .filter((site: any) => {
           const url = (site.Uri || site.Url || '').toLowerCase()
-          return url && url !== webAbsoluteUrl.toLowerCase() && site.Name && hubProjectUrls.has(url)
+          return url && site.Name && hubProjectUrls.has(url)
         })
         .map((site: any) => ({
           name: site.Name,
