@@ -29,12 +29,9 @@ function parseConfig(configJson: string): Record<string, any> {
 function buildFilterFunction(
   config: IVerticalFilterConfig
 ): (project: ProjectListModel, state: IProjectListState) => boolean {
-  const hasFieldFilter =
-    config.fieldFilter && Object.keys(config.fieldFilter).length > 0
-  const hasClientFilter =
-    config.clientFilter && Object.keys(config.clientFilter).length > 0
-  const hasVisibilityRule =
-    config.visibilityRule && Object.keys(config.visibilityRule).length > 0
+  const hasFieldFilter = config.fieldFilter && Object.keys(config.fieldFilter).length > 0
+  const hasClientFilter = config.clientFilter && Object.keys(config.clientFilter).length > 0
+  const hasVisibilityRule = config.visibilityRule && Object.keys(config.visibilityRule).length > 0
   const hasRequiresAccess = config.requiresAccess === true
 
   if (!hasFieldFilter && !hasClientFilter && !hasVisibilityRule && !hasRequiresAccess) {
@@ -100,35 +97,33 @@ function resolveIcon(iconName: string): FluentIcon {
 }
 
 /** Converts `IVerticalConfig[]` from webpart properties into `IProjectListVertical[]`. */
-export function convertConfigsToVerticals(
-  configs: IVerticalConfig[]
-): IProjectListVertical[] {
+export function convertConfigsToVerticals(configs: IVerticalConfig[]): IProjectListVertical[] {
   return configs.map((cfg, index) => {
-      const config: IVerticalFilterConfig = {
-        clientFilter: parseConfig(cfg.clientFilter) as Record<string, boolean>,
-        fieldFilter: parseConfig(cfg.fieldFilter) as Record<string, any>,
-        visibilityRule: parseConfig(cfg.visibilityRule) as Record<string, boolean>,
-        requiresAccess: cfg.requiresAccess ?? false
-      }
-      const filter = buildFilterFunction(config)
-      const isHidden = buildIsHiddenFunction(config)
-      const key = `vertical-${index}`
+    const config: IVerticalFilterConfig = {
+      clientFilter: parseConfig(cfg.clientFilter) as Record<string, boolean>,
+      fieldFilter: parseConfig(cfg.fieldFilter) as Record<string, any>,
+      visibilityRule: parseConfig(cfg.visibilityRule) as Record<string, boolean>,
+      requiresAccess: cfg.requiresAccess ?? false
+    }
+    const filter = buildFilterFunction(config)
+    const isHidden = buildIsHiddenFunction(config)
+    const key = `vertical-${index}`
 
-      const vertical: IProjectListVertical = {
-        key,
-        value: key,
-        text: cfg.title,
-        icon: resolveIcon(cfg.iconName),
-        searchBoxPlaceholder: cfg.searchBoxPlaceholder || strings.SearchBoxPlaceholderText,
-        filter
-      }
+    const vertical: IProjectListVertical = {
+      key,
+      value: key,
+      text: cfg.title,
+      icon: resolveIcon(cfg.iconName),
+      searchBoxPlaceholder: cfg.searchBoxPlaceholder || strings.SearchBoxPlaceholderText,
+      filter
+    }
 
-      if (isHidden) {
-        vertical.isHidden = isHidden
-      }
+    if (isHidden) {
+      vertical.isHidden = isHidden
+    }
 
-      return vertical
-    })
+    return vertical
+  })
 }
 
 /** Finds the default vertical (`isDefault === true`), falling back to the first one. */

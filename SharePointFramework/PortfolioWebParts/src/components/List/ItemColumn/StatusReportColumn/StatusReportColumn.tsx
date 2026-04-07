@@ -5,7 +5,11 @@ import { IStatusColumnProps } from './types'
 import { useStatusReportColumn } from './useStatusReportColumn'
 import { fetchData } from './data'
 import resource from 'SharedResources'
-import { ColumnRenderComponent, customLightTheme, getFluentIconWithFallback } from 'pp365-shared-library'
+import {
+  ColumnRenderComponent,
+  customLightTheme,
+  getFluentIconWithFallback
+} from 'pp365-shared-library'
 import {
   FluentProvider,
   IdPrefixProvider,

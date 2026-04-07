@@ -1,11 +1,5 @@
 import React, { useContext } from 'react'
-import {
-  Input,
-  Dropdown,
-  Option,
-  Tag,
-  Tooltip
-} from '@fluentui/react-components'
+import { Input, Switch, Dropdown, Option, Tag, Tooltip } from '@fluentui/react-components'
 import { DatePicker } from '@fluentui/react-datepicker-compat'
 import { DayOfWeek, format } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
@@ -13,13 +7,14 @@ import { FieldContainer } from 'pp365-shared-library'
 import { ProjectProvisionContext } from '../../context'
 import { SiteType } from '../SiteType'
 import { IFieldConfig } from './types'
+import drawerStyles from '../ProvisionDrawer.module.scss'
 
 interface LocalInputHandle {
   value: string
   onChange: (value: string) => void
 }
 
-interface UseFieldConfigsParams {
+export interface UseFieldConfigsParams {
   siteExists: boolean
   setSiteExists: (exists: boolean) => void
   duplicateOwnerMembers: any[]
@@ -45,24 +40,17 @@ interface UseFieldConfigsParams {
   }
 }
 
-/**
- * Builds a field config map that provides field-specific rendering overrides,
- * visibility logic, validation, and custom renderers for provision fields.
- *
- * Computed fresh each render — no useMemo, because `context.column` (a Map)
- * changes reference on every setColumn call, making memoization ineffective
- * and causing stale closures.
- */
 export function useFieldConfigs(params: UseFieldConfigsParams): Record<string, IFieldConfig> {
   const context = useContext(ProjectProvisionContext)
-
-  const { name: nameInput, description: descriptionInput, justification: justificationInput, additionalInfo: additionalInfoInput } = params.localInputs
+  const {
+    name: nameInput,
+    description: descriptionInput,
+    justification: justificationInput,
+    additionalInfo: additionalInfoInput
+  } = params.localInputs
 
   const configs: Record<string, IFieldConfig> = {}
 
-  // ---- LEVEL 0 FIELDS ----
-
-  // type: SiteType cards or dropdown
   configs.type = {
     onRender: (field) => (
       <FieldContainer
@@ -73,7 +61,7 @@ export function useFieldConfigs(params: UseFieldConfigsParams): Record<string, I
       >
         {context.props.siteTypeRenderMode !== 'dropdown' ? (
           <div style={{ display: 'flex', flexDirection: 'row', gap: '12px', flexWrap: 'wrap' }}>
-            {context.state.types?.map((type) => (
+            {context.state.types?.map((type: any) => (
               <SiteType
                 key={type.title}
                 title={type.title}
@@ -88,9 +76,27 @@ export function useFieldConfigs(params: UseFieldConfigsParams): Record<string, I
             selectedOptions={[context.column.get('type')]}
             onOptionSelect={(_, data) => context.setColumn('type', data.optionValue)}
           >
-            {context.state.types?.map((type) => (
+            {context.state.types?.map((type: any) => (
               <Option key={type.title} text={type.title} title={type.description}>
-                {type.title}
+                <Tag
+                  className={drawerStyles.siteTag}
+                  media={
+                    type.image?.Url && (
+                      <img
+                        className={drawerStyles.siteImage}
+                        src={type.image.Url}
+                        alt={type.title}
+                      />
+                    )
+                  }
+                  appearance='outline'
+                  size='medium'
+                >
+                  <div className={drawerStyles.siteDropdown}>
+                    <span>{type.title}</span>
+                    <div className={drawerStyles.description}>{type.description}</div>
+                  </div>
+                </Tag>
               </Option>
             ))}
           </Dropdown>
@@ -99,7 +105,6 @@ export function useFieldConfigs(params: UseFieldConfigsParams): Record<string, I
     )
   }
 
-  // name: special validation, prefix/suffix, site existence check
   configs.name = {
     onRender: (field) => (
       <FieldContainer
@@ -177,19 +182,20 @@ export function useFieldConfigs(params: UseFieldConfigsParams): Record<string, I
     )
   }
 
-  // description, justification, additionalInfo: use local input hooks
   configs.description = {
     inputProps: {
       value: descriptionInput.value,
       onChange: (_: any, data: any) => descriptionInput.onChange(data.value)
     }
   }
+
   configs.justification = {
     inputProps: {
       value: justificationInput.value,
       onChange: (_: any, data: any) => justificationInput.onChange(data.value)
     }
   }
+
   configs.additionalInfo = {
     inputProps: {
       value: additionalInfoInput.value,
@@ -197,7 +203,6 @@ export function useFieldConfigs(params: UseFieldConfigsParams): Record<string, I
     }
   }
 
-  // member: duplicate owner/member validation
   configs.member = {
     validationState: params.duplicateOwnerMembers.length > 0 ? 'error' : 'none',
     validationMessage:
@@ -206,79 +211,85 @@ export function useFieldConfigs(params: UseFieldConfigsParams): Record<string, I
         : undefined
   }
 
-  // alias: disabled, shows prefix + alias + suffix
   configs.alias = {
     onRender: (field) => (
       <FieldContainer iconName={field.iconName} label={field.displayName} hidden={field.hidden}>
-        <Input
-          disabled
-          value={`${params.namingConvention?.prefixText}${context.column.get('alias')}${params.namingConvention?.suffixText}`}
-          contentAfter={<Tag size='small'>{params.aliasSuffix}</Tag>}
-        />
+        <Tooltip
+          withArrow
+          content={`${params.namingConvention?.prefixText}${context.column.get('alias')}${
+            params.namingConvention?.suffixText
+          }${params.aliasSuffix}`}
+          relationship='label'
+        >
+          <Input
+            disabled
+            value={`${params.namingConvention?.prefixText}${context.column.get('alias')}${
+              params.namingConvention?.suffixText
+            }`}
+            contentAfter={<Tag size='small'>{params.aliasSuffix}</Tag>}
+          />
+        </Tooltip>
       </FieldContainer>
     )
   }
 
-  // url: disabled, shows urlPrefix + alias
   configs.url = {
     onRender: (field) => (
       <FieldContainer iconName={field.iconName} label={field.displayName} hidden={field.hidden}>
-        <Input
-          disabled
-          value={`${params.namingConvention?.prefixText}${context.column.get('alias')}${params.namingConvention?.suffixText}`}
-          contentBefore={<Tag size='small'>{params.urlPrefix}</Tag>}
+        <Tooltip
+          withArrow
+          content={`${params.urlPrefix}${params.namingConvention?.prefixText}${context.column.get(
+            'alias'
+          )}${params.namingConvention?.suffixText}`}
+          relationship='label'
+        >
+          <Input
+            disabled
+            value={`${params.namingConvention?.prefixText}${context.column.get('alias')}${
+              params.namingConvention?.suffixText
+            }`}
+            contentBefore={<Tag size='small'>{params.urlPrefix}</Tag>}
+          />
+        </Tooltip>
+      </FieldContainer>
+    )
+  }
+
+  configs.teamify = {
+    disabled: params.isTeam,
+    inputProps: { checked: context.column.get('teamify') || params.isTeam }
+  }
+
+  configs.teamTemplate = {
+    hidden:
+      !context.props.showTeamTemplateField ||
+      !context.column.get('teamify') ||
+      params.getField('teamTemplate')?.hidden,
+    options: context.state.teamTemplates?.map((t: any) => ({ key: t.title, text: t.title })) ?? []
+  }
+
+  configs.isConfidential = {
+    onRender: (field) => (
+      <FieldContainer
+        iconName={field.iconName}
+        label={field.displayName}
+        description={field.description}
+        required={field.required}
+        hidden={field.hidden}
+      >
+        <Switch
+          checked={!!context.column.get('isConfidential')}
+          onChange={(_, data) => {
+            context.setColumn('isConfidential', data.checked)
+            if (data.checked) {
+              context.setColumn('privacy', strings.Provision.PrivacyFieldOptionPrivate)
+            }
+          }}
         />
       </FieldContainer>
     )
   }
 
-  // ---- LEVEL 1 FIELDS ----
-
-  // teamify: disabled if already a team
-  configs.teamify = {
-    disabled: params.isTeam,
-    inputProps: {
-      checked: context.column.get('teamify') || params.isTeam
-    }
-  }
-
-  // teamTemplate: hidden if teamify is off
-  configs.teamTemplate = {
-    hidden: !context.column.get('teamify') || params.getField('teamTemplate')?.hidden,
-    options: context.state.teamTemplates?.map((t) => ({ key: t.title, text: t.title })) ?? []
-  }
-
-  // isConfidential: when toggled on, forces privacy to Private
-  configs.isConfidential = {
-    onRender: (field) => {
-      const isHidden = field.hidden
-      return (
-        <FieldContainer
-          iconName={field.iconName}
-          label={field.displayName}
-          description={field.description}
-          required={field.required}
-          hidden={isHidden}
-        >
-          <input type='hidden' />
-          {/* Use a controlled Switch that only sets privacy on user interaction */}
-          <span>
-            {React.createElement(require('@fluentui/react-components').Switch, {
-              checked: !!context.column.get('isConfidential'),
-              onChange: (_: any, data: any) => {
-                context.setColumn('isConfidential', data.checked)
-                if (data.checked) {
-                  context.setColumn('privacy', strings.Provision.PrivacyFieldOptionPrivate)
-                }
-              }
-            })}
-          </span>
-        </FieldContainer>
-      )
-    }
-  }
-
-  // privacy: disabled when confidential, options Private/Public
   configs.privacy = {
     disabled: !!context.column.get('isConfidential'),
     options: [
@@ -293,60 +304,50 @@ export function useFieldConfigs(params: UseFieldConfigsParams): Record<string, I
     ]
   }
 
-  // externalSharing: hidden if not enabled for type
   configs.externalSharing = {
     hidden: params.getField('externalSharing')?.hidden || !params.enableExternalSharing,
-    onRender: (field) => {
-      const isHidden = params.getField('externalSharing')?.hidden || !params.enableExternalSharing
-      return (
-        <FieldContainer
-          iconName={field.iconName}
-          label={field.displayName}
-          description={field.description}
-          required={field.required}
-          hidden={isHidden}
-        >
-          {React.createElement(require('@fluentui/react-components').Switch, {
-            checked: !!context.column.get('externalSharing'),
-            onChange: (_: any, data: any) => {
-              context.setColumn('externalSharing', data.checked)
-              if (!data.checked) context.setColumn('guest', [])
-            }
-          })}
-        </FieldContainer>
-      )
-    }
+    onRender: (field) => (
+      <FieldContainer
+        iconName={field.iconName}
+        label={field.displayName}
+        description={field.description}
+        required={field.required}
+        hidden={params.getField('externalSharing')?.hidden || !params.enableExternalSharing}
+      >
+        <Switch
+          checked={!!context.column.get('externalSharing')}
+          onChange={(_, data) => {
+            context.setColumn('externalSharing', data.checked)
+            if (!data.checked) context.setColumn('guest', [])
+          }}
+        />
+      </FieldContainer>
+    )
   }
 
-  // guest: hidden if externalSharing is hidden or off
   configs.guest = {
     hidden: params.getField('externalSharing')?.hidden || !context.column.get('externalSharing')
   }
 
-  // sensitivityLabel
   configs.sensitivityLabel = {
     hidden: params.getField('sensitivityLabel')?.hidden || !params.enableSensitivityLabels,
     options:
-      context.state.sensitivityLabels?.map((l) => ({ key: l.title, text: l.title })) ?? []
+      context.state.sensitivityLabels?.map((l: any) => ({ key: l.title, text: l.title })) ?? []
   }
 
-  // sensitivityLabelLibrary
   configs.sensitivityLabelLibrary = {
     hidden:
-      params.getField('sensitivityLabelLibrary')?.hidden ||
-      !params.enableSensitivityLabelsLibrary,
+      params.getField('sensitivityLabelLibrary')?.hidden || !params.enableSensitivityLabelsLibrary,
     options:
-      context.state.sensitivityLabelsLibrary?.map((l) => ({ key: l.title, text: l.title })) ?? []
+      context.state.sensitivityLabelsLibrary?.map((l: any) => ({ key: l.title, text: l.title })) ??
+      []
   }
 
-  // retentionLabel
   configs.retentionLabel = {
     hidden: params.getField('retentionLabel')?.hidden || !params.enableRetentionLabels,
-    options:
-      context.state.retentionLabels?.map((l) => ({ key: l.title, text: l.title })) ?? []
+    options: context.state.retentionLabels?.map((l: any) => ({ key: l.title, text: l.title })) ?? []
   }
 
-  // expirationDate: date picker or month dropdown
   configs.expirationDate = {
     hidden: params.getField('expirationDate')?.hidden || !params.enableExpirationDate,
     onRender: (field) => (
@@ -355,9 +356,7 @@ export function useFieldConfigs(params: UseFieldConfigsParams): Record<string, I
         label={field.displayName}
         description={field.description}
         required={field.required}
-        hidden={
-          params.getField('expirationDate')?.hidden || !params.enableExpirationDate
-        }
+        hidden={params.getField('expirationDate')?.hidden || !params.enableExpirationDate}
       >
         {context.props.expirationDateMode === 'date' ? (
           <DatePicker
@@ -403,14 +402,10 @@ export function useFieldConfigs(params: UseFieldConfigsParams): Record<string, I
     )
   }
 
-  // ---- LEVEL 2 FIELDS ----
-
-  // readOnlyGroup
   configs.readOnlyGroup = {
     hidden: params.getField('readOnlyGroup')?.hidden || !params.enableReadOnlyGroup
   }
 
-  // internalChannel: hidden unless readOnlyGroup is enabled and checked
   configs.internalChannel = {
     hidden:
       params.getField('internalChannel')?.hidden ||
@@ -418,7 +413,6 @@ export function useFieldConfigs(params: UseFieldConfigsParams): Record<string, I
       (context.props.readOnlyGroupLogic && !context.column.get('readOnlyGroup'))
   }
 
-  // language, timeZone: disabled dropdowns with default values
   configs.language = {
     disabled: true,
     inputProps: {
@@ -435,17 +429,12 @@ export function useFieldConfigs(params: UseFieldConfigsParams): Record<string, I
     }
   }
 
-  // hubSiteTitle: hidden if joinHub is false
   configs.hubSiteTitle = {
     hidden: params.getField('hubSiteTitle')?.hidden || !params.joinHub,
     disabled: true,
-    description:
-      params.usesDifferentHub
-        ? format(
-            strings.Provision.DefaultHubInfoMessage,
-            context.column.get('hubSiteTitle')
-          )
-        : undefined,
+    description: params.usesDifferentHub
+      ? format(strings.Provision.DefaultHubInfoMessage, context.column.get('hubSiteTitle'))
+      : undefined,
     inputProps: {
       defaultValue: context.column.get('hubSiteTitle'),
       defaultSelectedOptions: [context.column.get('hubSiteTitle')]

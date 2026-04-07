@@ -189,6 +189,7 @@ ProjectProvision.defaultProps = {
   level2Description: strings.Provision.DrawerLevel2DescriptionText,
   footerDescription: strings.Provision.DrawerFooterDescriptionText,
   readOnlyGroupLogic: false,
+  showTeamTemplateField: false,
   icon: getFluentIcon('Add'),
   appearance: 'primary',
   size: 'large'

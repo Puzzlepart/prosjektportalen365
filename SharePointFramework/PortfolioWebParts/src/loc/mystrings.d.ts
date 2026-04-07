@@ -324,6 +324,7 @@ declare interface IPortfolioWebPartsStrings {
     StandardTeamTemplate: string
     FieldLogicGroupName: string
     DefaultExpirationDateFieldLabel: string
+    ShowTeamTemplateFieldLabel: string
     ReadOnlyGroupLogicFieldLabel: string
     ProjectAreaType: string
     VivaEngageCommunityType: string

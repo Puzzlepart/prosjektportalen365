@@ -24,7 +24,8 @@ export const FullscreenHeader: FC<IFullscreenHeaderProps> = ({
 }) => {
   const context = useContext(ProjectProvisionContext)
 
-  const title = titleOverride || strings.Provision.FullscreenHeaderTitle || strings.Provision.WebPartDescription
+  const title =
+    titleOverride || strings.Provision.FullscreenHeaderTitle || strings.Provision.WebPartDescription
   const icon = iconOverride || 'MountainTrail'
 
   return (
@@ -40,7 +41,7 @@ export const FullscreenHeader: FC<IFullscreenHeaderProps> = ({
             />
           )}
           <span className={styles.headerTitle}>
-            {getFluentIcon(icon as any, { filled: true, size: '24px', color: 'white' })}
+            {getFluentIcon(icon as any, { filled: true, size: '42px', color: 'white' })}
             <span>{title}</span>
           </span>
         </ToolbarGroup>
@@ -52,7 +53,9 @@ export const FullscreenHeader: FC<IFullscreenHeaderProps> = ({
               onClick={onViewRequests}
               className={styles.headerButton}
             >
-              <span className={styles.headerButtonText}>{strings.Provision.ViewRequestsButton}</span>
+              <span className={styles.headerButtonText}>
+                {strings.Provision.ViewRequestsButton}
+              </span>
             </ToolbarButton>
           )}
           {context.state.isProvisionSiteAdmin && onViewSettings && (
@@ -77,7 +80,9 @@ export const FullscreenHeader: FC<IFullscreenHeaderProps> = ({
               }}
               className={styles.headerButton}
             >
-              <span className={styles.headerButtonText}>{strings.Provision.ConfigEditorButton}</span>
+              <span className={styles.headerButtonText}>
+                {strings.Provision.ConfigEditorButton}
+              </span>
             </ToolbarButton>
           )}
           {onClose && (

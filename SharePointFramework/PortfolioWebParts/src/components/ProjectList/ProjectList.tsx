@@ -47,8 +47,7 @@ const OverflowMenu: FC<{
   verticals: IProjectListVertical[]
   onSelect: (key: string) => void
 }> = ({ verticals, onSelect }) => {
-  const { ref, isOverflowing, overflowCount } =
-    useOverflowMenu<HTMLButtonElement>()
+  const { ref, isOverflowing, overflowCount } = useOverflowMenu<HTMLButtonElement>()
   if (!isOverflowing) return null
   return (
     <Menu>
@@ -122,9 +121,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
                 >
                   {context.state.isDataLoaded &&
                     context.verticals
-                      .filter(
-                        (vertical) => !vertical.isHidden || !vertical.isHidden(context.state)
-                      )
+                      .filter((vertical) => !vertical.isHidden || !vertical.isHidden(context.state))
                       .map((vertical) => {
                         const Icon = vertical.icon
                         return (

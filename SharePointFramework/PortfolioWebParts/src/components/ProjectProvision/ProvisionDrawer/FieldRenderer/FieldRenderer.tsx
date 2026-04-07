@@ -1,11 +1,5 @@
 import React, { FC, useContext } from 'react'
-import {
-  Input,
-  Textarea,
-  Switch,
-  Dropdown,
-  Option
-} from '@fluentui/react-components'
+import { Input, Textarea, Switch, Dropdown, Option } from '@fluentui/react-components'
 import { FieldContainer } from 'pp365-shared-library'
 import { ProjectProvisionContext } from '../../context'
 import { UserMulti } from '../User'
@@ -29,7 +23,8 @@ export const FieldRenderer: FC<IFieldRendererProps> = ({ field, config }) => {
 
   const isHidden = config?.hidden ?? field.hidden
   const isDisabled = config?.disabled ?? field.disabled
-  const description = config?.description !== undefined ? (config.description || undefined) : field.description
+  const description =
+    config?.description !== undefined ? config.description || undefined : field.description
   const validationState = config?.validationState ?? 'none'
   const validationMessage = config?.validationMessage || undefined
 

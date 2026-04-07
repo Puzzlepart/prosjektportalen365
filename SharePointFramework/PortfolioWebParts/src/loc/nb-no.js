@@ -325,6 +325,7 @@ define([], function () {
       StandardTeamTemplate: 'Standard team mal',
       FieldLogicGroupName: 'Feltlogikk',
       DefaultExpirationDateFieldLabel: 'Standard utløpsdato',
+      ShowTeamTemplateFieldLabel: 'Vis Teams mal-felt',
       ReadOnlyGroupLogicFieldLabel: 'Krev lesetilgangsgruppe for intern kanal',
       ProjectAreaType: 'Prosjektområde',
       VivaEngageCommunityType: 'Viva Engage felleskap',

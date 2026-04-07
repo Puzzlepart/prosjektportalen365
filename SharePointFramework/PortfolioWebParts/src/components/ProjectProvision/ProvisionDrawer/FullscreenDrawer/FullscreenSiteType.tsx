@@ -4,6 +4,7 @@ import strings from 'PortfolioWebPartsStrings'
 import { ProjectProvisionContext } from '../../context'
 import { SiteType } from '../SiteType'
 import styles from './FullscreenDrawer.module.scss'
+import drawerStyles from '../ProvisionDrawer.module.scss'
 
 export interface IFullscreenSiteTypeProps {
   onTypeSelected?: () => void
@@ -16,10 +17,13 @@ export interface IFullscreenSiteTypeProps {
 export const FullscreenSiteType: FC<IFullscreenSiteTypeProps> = ({ onTypeSelected }) => {
   const context = useContext(ProjectProvisionContext)
 
-  const handleCardClick = useCallback((title: string) => {
-    context.setColumn('type', title)
-    onTypeSelected?.()
-  }, [onTypeSelected])
+  const handleCardClick = useCallback(
+    (title: string) => {
+      context.setColumn('type', title)
+      onTypeSelected?.()
+    },
+    [onTypeSelected]
+  )
 
   return (
     <div className={styles.siteTypeLevel}>
@@ -59,10 +63,26 @@ export const FullscreenSiteType: FC<IFullscreenSiteTypeProps> = ({ onTypeSelecte
               }}
               size='large'
             >
-              {context.state.types?.map((type) => (
+              {context.state.types?.map((type: any) => (
                 <Option key={type.title} text={type.title} title={type.description}>
-                  <Tag appearance='outline' size='medium'>
-                    <span>{type.title}</span>
+                  <Tag
+                    className={drawerStyles.siteTag}
+                    media={
+                      type.image?.Url && (
+                        <img
+                          className={drawerStyles.siteImage}
+                          src={type.image.Url}
+                          alt={type.title}
+                        />
+                      )
+                    }
+                    appearance='outline'
+                    size='medium'
+                  >
+                    <div className={drawerStyles.siteDropdown}>
+                      <span>{type.title}</span>
+                      <div className={drawerStyles.description}>{type.description}</div>
+                    </div>
                   </Tag>
                 </Option>
               ))}

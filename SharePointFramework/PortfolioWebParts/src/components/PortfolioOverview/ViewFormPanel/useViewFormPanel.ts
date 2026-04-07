@@ -55,9 +55,7 @@ export function useViewFormPanel() {
         GtPortfolioColumnOrder: JSON.stringify(currentView.columnOrder)
       }).configure(currentView.columns)
 
-      const viewIndex = context.props.configuration.views.findIndex(
-        (v) => v.id === currentView.id
-      )
+      const viewIndex = context.props.configuration.views.findIndex((v) => v.id === currentView.id)
       if (viewIndex !== -1) {
         context.props.configuration.views[viewIndex] = updatedView
       }

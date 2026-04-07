@@ -1,10 +1,10 @@
 import React, { FC, useContext } from 'react'
 import { Button, DrawerHeaderTitle } from '@fluentui/react-components'
 import strings from 'PortfolioWebPartsStrings'
-import { getFluentIcon, UserMessage } from 'pp365-shared-library'
+import { getFluentIcon } from 'pp365-shared-library'
 import { ProjectProvisionContext } from '../../context'
 import { IProvisionField } from '../../types'
-import { FieldRendererList } from '../FieldRenderer'
+import { FieldRenderer, FieldRendererList } from '../FieldRenderer'
 import { IFieldConfig } from '../FieldRenderer/types'
 import { DebugModel } from '../DebugModel'
 import { stringIsNullOrEmpty } from '@pnp/core'
@@ -15,8 +15,6 @@ declare const DEBUG: boolean
 export interface IFullscreenFieldsProps {
   fields: IProvisionField[]
   fieldConfigs: Record<string, IFieldConfig>
-  isSaveDisabled: boolean
-  missingFieldsInfo: { missingFields: { displayName: string }[] }
   onBack: () => void
 }
 
@@ -25,13 +23,7 @@ export interface IFullscreenFieldsProps {
  * Left sidebar shows the selected SiteType info.
  * Main area shows fields in columns grouped by level.
  */
-export const FullscreenFields: FC<IFullscreenFieldsProps> = ({
-  fields,
-  fieldConfigs,
-  isSaveDisabled,
-  missingFieldsInfo,
-  onBack
-}) => {
+export const FullscreenFields: FC<IFullscreenFieldsProps> = ({ fields, fieldConfigs, onBack }) => {
   const context = useContext(ProjectProvisionContext)
 
   const selectedType = context.column.get('type')
@@ -42,6 +34,14 @@ export const FullscreenFields: FC<IFullscreenFieldsProps> = ({
 
   // Filter out the 'type' field since it's shown in the sidebar
   const fieldsWithoutType = fields.filter((f) => f.fieldName !== 'type')
+
+  // Split into editable (main columns) and disabled (sidebar)
+  const editableFields = fieldsWithoutType.filter(
+    (f) => !f.disabled && !fieldConfigs[f.fieldName]?.disabled
+  )
+  const disabledFields = fieldsWithoutType
+    .filter((f) => f.disabled || fieldConfigs[f.fieldName]?.disabled)
+    .sort((a, b) => a.order - b.order)
 
   const levelHeaders = [
     { title: context.props.level0Header, description: context.props.level0Description },
@@ -72,6 +72,13 @@ export const FullscreenFields: FC<IFullscreenFieldsProps> = ({
           >
             {strings.Provision.ChangeTypeButtonLabel ?? strings.Provision.PreviousButtonLabel}
           </Button>
+          {disabledFields.map((field) => (
+            <FieldRenderer
+              key={field.fieldName}
+              field={field}
+              config={fieldConfigs[field.fieldName]}
+            />
+          ))}
           {(context.props.debugMode ||
             (typeof sessionStorage !== 'undefined' && sessionStorage.DEBUG) ||
             (typeof DEBUG !== 'undefined' && DEBUG)) && <DebugModel />}
@@ -79,7 +86,7 @@ export const FullscreenFields: FC<IFullscreenFieldsProps> = ({
         <div className={styles.fieldsMain}>
           <div className={styles.fieldsColumns}>
             {fieldLevels.map((level) => {
-              const levelFieldCount = fieldsWithoutType.filter((f) => f.level === level).length
+              const levelFieldCount = editableFields.filter((f) => f.level === level).length
               if (levelFieldCount === 0) return null
 
               return (
@@ -89,35 +96,16 @@ export const FullscreenFields: FC<IFullscreenFieldsProps> = ({
                       {levelHeaders[level].title}
                     </DrawerHeaderTitle>
                   )}
-                  {levelHeaders[level] &&
-                    !stringIsNullOrEmpty(levelHeaders[level].description) && (
-                      <p className={styles.columnDescription}>
-                        {levelHeaders[level].description}
-                      </p>
-                    )}
-                  <FieldRendererList
-                    fields={fieldsWithoutType}
-                    level={level}
-                    configs={fieldConfigs}
-                  />
+                  {levelHeaders[level] && !stringIsNullOrEmpty(levelHeaders[level].description) && (
+                    <p className={styles.columnDescription}>{levelHeaders[level].description}</p>
+                  )}
+                  <FieldRendererList fields={editableFields} level={level} configs={fieldConfigs} />
                 </div>
               )
             })}
           </div>
           {!stringIsNullOrEmpty(context.props.footerDescription) && (
             <p className={styles.footerDescription}>{context.props.footerDescription}</p>
-          )}
-          {isSaveDisabled && missingFieldsInfo.missingFields.length > 0 && (
-            <UserMessage
-              intent='error'
-              title={strings.Provision.MissingFieldsTitle}
-              text={`<ul>
-                ${missingFieldsInfo.missingFields
-                  .map((field) => `<li>${field.displayName}</li>`)
-                  .join('')}
-              </ul>`}
-              containerStyle={{ marginTop: '16px' }}
-            />
           )}
         </div>
       </div>

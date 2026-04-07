@@ -1,10 +1,7 @@
 /* eslint-disable prefer-spread */
 import { useState } from 'react'
 import { IProjectListProps, IProjectListState } from './types'
-import {
-  convertConfigsToVerticals,
-  findDefaultVertical
-} from './ProjectListFilterRegistry'
+import { convertConfigsToVerticals, findDefaultVertical } from './ProjectListFilterRegistry'
 
 /** State hook for `ProjectList`. Computes verticals synchronously from `props.verticalConfigs`. */
 export function useProjectListState(props: IProjectListProps) {

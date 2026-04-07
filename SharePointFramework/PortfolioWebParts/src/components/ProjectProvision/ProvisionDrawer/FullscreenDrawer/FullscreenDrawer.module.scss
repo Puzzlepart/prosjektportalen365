@@ -17,7 +17,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px 20px;
+  padding: 16px 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   flex-shrink: 0;
 }
@@ -32,7 +32,7 @@
   align-items: center;
   gap: 12px;
   color: white;
-  font-size: 20px;
+  font-size: 28px;
   font-weight: 700;
   letter-spacing: 0.5px;
 }
@@ -114,7 +114,7 @@
 
 .siteTypeCardWrapper {
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: transform 0.3s ease;
 
   // Double the size of SiteType cards in fullscreen
   :global(.fui-Card) {
@@ -137,11 +137,12 @@
   }
 
   :global(.fui-CardPreview) img {
-    max-height: 232px;
+    max-height: 251px;
+    overflow-clip-margin: unset;
   }
 
   &:hover {
-    transform: translateY(-4px);
+    transform: translateY(-6px);
   }
 }
 
@@ -167,7 +168,7 @@
 
 .fieldsSidebar {
   flex-shrink: 0;
-  width: 320px;
+  width: 360px;
   padding: 24px;
   background: var(--colorNeutralBackground2);
   border-radius: var(--borderRadiusLarge);
@@ -183,7 +184,7 @@
   width: 100%;
   border-radius: var(--borderRadiusMedium);
   object-fit: cover;
-  max-height: 250px;
+  max-height: 270px;
 }
 
 .sidebarTitle {
@@ -207,14 +208,20 @@
 
 .fieldsColumns {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
   gap: 32px;
+  align-items: start;
 }
 
 .fieldsColumn {
   display: flex;
   flex-direction: column;
   gap: 16px;
+
+  > * {
+    width: 100%;
+    box-sizing: border-box;
+  }
 }
 
 .columnTitle {
@@ -235,7 +242,6 @@
   margin-top: 16px;
 }
 
-// Footer always visible at the bottom
 .fieldsFooter {
   display: flex;
   justify-content: flex-end;
@@ -246,8 +252,6 @@
   flex-shrink: 0;
 }
 
-// ---- Status/Settings in drawer (fullwidth, no dialog border) ----
-
 .statusContainer {
   flex: 1;
   overflow: auto;
@@ -255,7 +259,6 @@
   flex-direction: column;
   width: 100%;
 
-  // Override the inlineContainer styles to remove dialog-like appearance
   :global(.inlineContainer),
   > div > div {
     max-width: 100%;
@@ -267,18 +270,17 @@
   }
 }
 
-// ---- Responsive ----
-
 @media (max-width: 768px) {
   .fieldsLayout {
     flex-direction: column;
   }
 
   .fieldsSidebar {
+    display: flex;
     width: 100%;
     position: static;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .sidebarImage {
@@ -288,7 +290,10 @@
   }
 
   .fieldsColumns {
-    grid-template-columns: 1fr;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    grid-gap: 16px;
+    margin-bottom: 16px;
   }
 
   .siteTypeTitle {

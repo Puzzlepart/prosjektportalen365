@@ -164,11 +164,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   <p>{levels[0].description}</p>
                 )}
                 <div className={styles.content}>
-                  <FieldRendererList
-                    fields={fieldsToUse}
-                    level={0}
-                    configs={fieldConfigs}
-                  />
+                  <FieldRendererList fields={fieldsToUse} level={0} configs={fieldConfigs} />
                 </div>
               </DrawerBody>
             )}
@@ -188,11 +184,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                 <p>{levels[1].description}</p>
               )}
               <div className={styles.content}>
-                <FieldRendererList
-                  fields={fieldsToUse}
-                  level={1}
-                  configs={fieldConfigs}
-                />
+                <FieldRendererList fields={fieldsToUse} level={1} configs={fieldConfigs} />
               </div>
             </DrawerBody>
             {levelMotions[2].canRender && (
@@ -215,11 +207,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                   {(context.props.debugMode ||
                     (typeof sessionStorage !== 'undefined' && sessionStorage.DEBUG) ||
                     (typeof DEBUG !== 'undefined' && DEBUG)) && <DebugModel />}
-                  <FieldRendererList
-                    fields={fieldsToUse}
-                    level={2}
-                    configs={fieldConfigs}
-                  />
+                  <FieldRendererList fields={fieldsToUse} level={2} configs={fieldConfigs} />
                   {!stringIsNullOrEmpty(context.props.footerDescription) && (
                     <p className={styles.ignoreGap}>{context.props.footerDescription}</p>
                   )}

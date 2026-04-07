@@ -8,9 +8,7 @@ import { IFieldRendererListProps } from './types'
  * from the `configs` map.
  */
 export const FieldRendererList: FC<IFieldRendererListProps> = ({ fields, level, configs }) => {
-  const levelFields = fields
-    .filter((f) => f.level === level)
-    .sort((a, b) => a.order - b.order)
+  const levelFields = fields.filter((f) => f.level === level).sort((a, b) => a.order - b.order)
 
   return (
     <>

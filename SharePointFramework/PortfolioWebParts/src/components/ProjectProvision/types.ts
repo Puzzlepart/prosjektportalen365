@@ -44,6 +44,7 @@ export interface IProjectProvisionProps extends IBaseComponentProps {
   // Field logic
   defaultExpirationDate?: string
   readOnlyGroupLogic?: boolean
+  showTeamTemplateField?: boolean
 
   // Advanced
   provisionUrl: string

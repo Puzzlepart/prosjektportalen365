@@ -1,9 +1,5 @@
 /* eslint-disable quotes */
-import {
-  IPropertyPaneConfiguration,
-  PropertyPaneTextField,
-  PropertyPaneToggle
-} from '@microsoft/sp-property-pane'
+import { IPropertyPaneConfiguration, PropertyPaneToggle } from '@microsoft/sp-property-pane'
 import {
   PropertyFieldDropdownWithCallout,
   PropertyFieldMultiSelect,
@@ -21,7 +17,11 @@ import { BasePortfolioWebPart } from '../basePortfolioWebPart'
 import { PortalDataService, ProjectColumn } from 'pp365-shared-library'
 import { iconCatalog } from 'pp365-shared-library/lib/icons/iconCatalog'
 
-function renderJsonTextarea(field: any, value: string, onUpdate: (fieldId: string, value: string) => void) {
+function renderJsonTextarea(
+  field: any,
+  value: string,
+  onUpdate: (fieldId: string, value: string) => void
+) {
   return React.createElement(
     'div',
     { style: { padding: '0' } },

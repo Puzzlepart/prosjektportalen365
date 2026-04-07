@@ -46,9 +46,7 @@ export const useProjectList = (props: IProjectListProps) => {
   function filterProjects(projects: ProjectListModel[]) {
     return projects
       .filter((project) =>
-        state.selectedVertical?.filter
-          ? state.selectedVertical.filter(project, state)
-          : true
+        state.selectedVertical?.filter ? state.selectedVertical.filter(project, state) : true
       )
       .filter((project) =>
         _.any(Object.keys(project), (key) => {

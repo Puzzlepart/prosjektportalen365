@@ -2,6 +2,7 @@ import React, { FC, useState } from 'react'
 import {
   OverlayDrawer,
   Button,
+  Tooltip,
   Toast,
   ToastBody,
   ToastTitle,
@@ -13,7 +14,7 @@ import strings from 'PortfolioWebPartsStrings'
 import { customLightTheme } from 'pp365-shared-library'
 import { useMotion } from '@fluentui/react-motion-preview'
 import { useProvisionDrawer } from '../useProvisionDrawer'
-import { useMotionStyles } from '../motionStyles'
+import { useFullscreenMotionStyles } from './fullscreenMotionStyles'
 import { useFieldConfigs } from '../FieldRenderer'
 import { useLocalInput } from '../useLocalInput'
 import { FullscreenHeader } from './FullscreenHeader'
@@ -97,12 +98,11 @@ export const FullscreenDrawer: FC<IProvisionDrawerProps> = (props) => {
   const [showStatusInDrawer, setShowStatusInDrawer] = useState(false)
   const [showSettingsInDrawer, setShowSettingsInDrawer] = useState(false)
 
-  const motionStyles = useMotionStyles()
+  const motionStyles = useFullscreenMotionStyles()
   const siteTypeMotion = useMotion<HTMLDivElement>(currentStep === 'siteType')
   const fieldsMotion = useMotion<HTMLDivElement>(currentStep === 'fields')
 
   const isInlineMode = props.renderMode === 'inline'
-  const isTeamsMode = context.props.isTeamsContext
 
   const handleSave = () => {
     onSave().then((response) => {
@@ -159,13 +159,12 @@ export const FullscreenDrawer: FC<IProvisionDrawerProps> = (props) => {
             titleOverride={strings.Provision.StatusMenuLabel}
             iconOverride='ClipboardTask'
             onBack={() => setShowStatusInDrawer(false)}
-            onClose={!isInlineMode ? () => context.setState({ showProvisionDrawer: false }) : undefined}
+            onClose={
+              !isInlineMode ? () => context.setState({ showProvisionDrawer: false }) : undefined
+            }
           />
           <div className={styles.statusContainer}>
-            <ProvisionStatus
-              toast={props.toast}
-              renderMode='inline'
-            />
+            <ProvisionStatus toast={props.toast} renderMode='inline' />
           </div>
         </div>
       )
@@ -178,12 +177,12 @@ export const FullscreenDrawer: FC<IProvisionDrawerProps> = (props) => {
             titleOverride={strings.Provision.SettingsMenuLabel}
             iconOverride='Settings'
             onBack={() => setShowSettingsInDrawer(false)}
-            onClose={!isInlineMode ? () => context.setState({ showProvisionDrawer: false }) : undefined}
+            onClose={
+              !isInlineMode ? () => context.setState({ showProvisionDrawer: false }) : undefined
+            }
           />
           <div className={styles.statusContainer}>
-            <ProvisionSettings
-              renderMode='inline'
-            />
+            <ProvisionSettings renderMode='inline' />
           </div>
         </div>
       )
@@ -192,7 +191,9 @@ export const FullscreenDrawer: FC<IProvisionDrawerProps> = (props) => {
     return (
       <div className={styles.fullscreenContent}>
         <FullscreenHeader
-          onClose={!isInlineMode ? () => context.setState({ showProvisionDrawer: false }) : undefined}
+          onClose={
+            !isInlineMode ? () => context.setState({ showProvisionDrawer: false }) : undefined
+          }
           onViewSettings={() => setShowSettingsInDrawer(true)}
           onViewRequests={() => setShowStatusInDrawer(true)}
         />
@@ -203,13 +204,11 @@ export const FullscreenDrawer: FC<IProvisionDrawerProps> = (props) => {
               className={mergeClasses(
                 styles.motionLevel,
                 motionStyles.level,
-                motionStyles.level0,
+                motionStyles.siteTypeLevel,
                 siteTypeMotion.active && motionStyles.levelVisible
               )}
             >
-              <FullscreenSiteType
-                onTypeSelected={() => setCurrentStep('fields')}
-              />
+              <FullscreenSiteType onTypeSelected={() => setCurrentStep('fields')} />
             </div>
           )}
           {fieldsMotion.canRender && (
@@ -218,15 +217,13 @@ export const FullscreenDrawer: FC<IProvisionDrawerProps> = (props) => {
               className={mergeClasses(
                 styles.motionLevel,
                 motionStyles.level,
-                motionStyles.level1,
+                motionStyles.fieldsLevel,
                 fieldsMotion.active && motionStyles.levelVisible
               )}
             >
               <FullscreenFields
                 fields={fieldsToUse}
                 fieldConfigs={fieldConfigs}
-                isSaveDisabled={isSaveDisabled}
-                missingFieldsInfo={missingFieldsInfo}
                 onBack={() => setCurrentStep('siteType')}
               />
             </div>
@@ -237,14 +234,40 @@ export const FullscreenDrawer: FC<IProvisionDrawerProps> = (props) => {
             <Button appearance='subtle' onClick={() => setCurrentStep('siteType')}>
               {strings.Provision.PreviousButtonLabel}
             </Button>
-            <Button
-              appearance='primary'
-              size='large'
-              disabled={isSaveDisabled}
-              onClick={handleSave}
-            >
-              {strings.Provision.ProvisionButtonLabel}
-            </Button>
+            {missingFieldsInfo.missingFields.length > 0 ? (
+              <Tooltip
+                withArrow
+                relationship='description'
+                content={
+                  <div>
+                    <strong>{strings.Provision.MissingFieldsTitle}</strong>
+                    <ul style={{ margin: '4px 0 0', paddingLeft: '16px' }}>
+                      {missingFieldsInfo.missingFields.map((f) => (
+                        <li key={f.fieldName}>{f.displayName}</li>
+                      ))}
+                    </ul>
+                  </div>
+                }
+              >
+                <Button
+                  appearance='primary'
+                  size='large'
+                  disabled={isSaveDisabled}
+                  onClick={handleSave}
+                >
+                  {strings.Provision.ProvisionButtonLabel}
+                </Button>
+              </Tooltip>
+            ) : (
+              <Button
+                appearance='primary'
+                size='large'
+                disabled={isSaveDisabled}
+                onClick={handleSave}
+              >
+                {strings.Provision.ProvisionButtonLabel}
+              </Button>
+            )}
           </div>
         )}
       </div>
@@ -260,7 +283,7 @@ export const FullscreenDrawer: FC<IProvisionDrawerProps> = (props) => {
           theme={customLightTheme}
           className={mergeClasses(
             styles.fullscreenProvider,
-            isTeamsMode ? 'teams-mode' : 'sp-mode'
+            context.props.isTeamsContext ? 'teams-mode' : 'sp-mode'
           )}
         >
           {content}

@@ -66,7 +66,8 @@ function parseDisplayValue(value: string): string {
   const numericMatch = value.match(/^#?(-?\d+(?:\.\d+)?)$/)
   if (numericMatch) {
     const num = parseFloat(numericMatch[1])
-    if (!isNaN(num)) return Number.isInteger(num) ? num.toString() : parseFloat(num.toFixed(2)).toString()
+    if (!isNaN(num))
+      return Number.isInteger(num) ? num.toString() : parseFloat(num.toFixed(2)).toString()
   }
   return value
 }

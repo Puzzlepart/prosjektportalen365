@@ -18,13 +18,19 @@ export const TooltipContent = (props: IStatusColumnProps): JSX.Element => {
             {getFluentIconWithFallback(iconName, true, color)}
           </div>
           <div className={styles.body}>
-            <Text weight='semibold' className={styles.name}>{name}</Text>
-            <Text size={200} className={styles.value}>{value}</Text>
-            {comment && <Text size={200} className={styles.comment}>{comment}</Text>}
+            <Text weight='semibold' className={styles.name}>
+              {name}
+            </Text>
+            <Text size={200} className={styles.value}>
+              {value}
+            </Text>
+            {comment && (
+              <Text size={200} className={styles.comment}>
+                {comment}
+              </Text>
+            )}
           </div>
-          {idx < props.status.sections.length - 1 && (
-            <Divider className={styles.divider} />
-          )}
+          {idx < props.status.sections.length - 1 && <Divider className={styles.divider} />}
         </div>
       ))}
       <div className={styles.footer}>

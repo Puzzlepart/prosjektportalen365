@@ -315,6 +315,12 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                   checked: propertiesWithDefaults.readOnlyGroupLogic,
                   onText: strings.BooleanOn,
                   offText: strings.BooleanOff
+                }),
+                PropertyPaneToggle('showTeamTemplateField', {
+                  label: strings.Provision.ShowTeamTemplateFieldLabel,
+                  checked: propertiesWithDefaults.showTeamTemplateField,
+                  onText: strings.BooleanOn,
+                  offText: strings.BooleanOff
                 })
               ]
             },
