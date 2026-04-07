@@ -25,6 +25,7 @@
       },
       "officeFabricIconFontName": "BuildDefinition",
       "properties": {
+        "drawerSize": "full",
         "autoOwner": true,
         "expirationDateMode": "date",
         "provisionUrl": "/sites/bestillingsportalen"

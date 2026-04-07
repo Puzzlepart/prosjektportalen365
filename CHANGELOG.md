@@ -7,8 +7,10 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 ### Ny funksjonalitet
 
 - Ny webdel `Dynamisk listewebdel` for visning av data fra SharePoint-lister og dokumentbibliotek med fleksible visningsmoduser, filtrering, sortering og tilpassbare kolonner. Opprettelse, redigering og sletting av elementer støttes også direkte fra webdelen.
+- `Bestillingsportalen`-skjema kan nå legges til som en Teams-app, slik at brukere kan bestille nye prosjekter og områder direkte fra Teams. Denne appen erstatter PowerAppen som følger med Bestillingsportalen.
+- Ny fullskjerm-modus for `Bestillingsportalen`-skjema. Fullskjermmodus brukes automatisk i Teams-appen og kan aktiveres via egenskapspanelet. Fullskjermmodus er på som standard.
+- Mulighet for å sortere felter i `Bestillingsportalen`-skjema. Feltene sorteres nå i rekkefølgen de er definert i egenskapspanelet.
 - Mulighet for å henting av standard metadata for prosjekttyper i Bestillingsportalen-skjema
-- Bestillingsportalen støtte for standalone skjema for bestilling av områder som også støtter Teams. Denne appen erstatter PowerAppen som følger med Bestillingsportalen.
 - Støtte for beregnede kolonner i aggregerte oversikter [#1563](https://github.com/Puzzlepart/prosjektportalen365/issues/1563)
 - Støtte for å bestille underområder direkte fra et program/overordnet område via Bestillingsportalen-skjema. Merk! Krever oppgradering av Bestillingsportalen
 - Ny seksjon i `Prosjektinformasjon` som viser underområder tilknyttet området.
@@ -16,7 +18,6 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Ny funksjonalitet i `Prosjektinformasjon` for å kjøre `oppsettveiviseren` på nytt for et prosjekt. Dette lar deg velge en mal, tillegg eller standardinnhold som skal legges til prosjektet. Dette kan brukes for feilsøking eller for å legge til ny funksjonalitet. [#1702](https://github.com/Puzzlepart/prosjektportalen365/issues/1702)
 - Ny knapp i `Footer` for å vise en liste over favorittprosjekter som brukeren følger i porteføljen. [#1462](https://github.com/Puzzlepart/prosjektportalen365/issues/1462)
 - Lagt til to nye kolonner i `Prosjekter`-listen: `Prosjekttillegg` og `Listeinnhold`, som lagrer navnene på valgte tillegg og listeinnhold (kommaseparert) ved opprettelse av prosjektet. [#1542](https://github.com/Puzzlepart/prosjektportalen365/issues/1542)
-- Ny fullskjerm-modus for `Bestillingsportalen` med gradientbakgrunn, større skriftstørrelser, sentrert områdetypevalg og flerkollonne feltvisning. Fullskjermmodus brukes automatisk i Teams-appen og kan aktiveres via egenskapspanelet.
 - Dynamisk feltrendering i `Bestillingsportalen` som støtter konfigurerbar feltrekkefølge og nivåplassering via `order` og `level` egenskaper
 - Lagt til «Se mine bestillinger»-knapp i verktøylinjen i `Bestillingsportalen`-skuffen for rask tilgang til bestillingsstatus
 

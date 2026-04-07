@@ -177,6 +177,7 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
 
 ProjectProvision.defaultProps = {
   buttonLabel: strings.Provision.ProvisionButtonLabel,
+  drawerSize: 'full',
   autoOwner: true,
   renderMode: 'button',
   expirationDateMode: 'date',
