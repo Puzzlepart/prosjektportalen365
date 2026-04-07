@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import { IPersonaProps, IPersonaSharedProps } from '@fluentui/react'
 import { format } from '@fluentui/react/lib/Utilities'
 import { WebPartContext } from '@microsoft/sp-webpart-base'

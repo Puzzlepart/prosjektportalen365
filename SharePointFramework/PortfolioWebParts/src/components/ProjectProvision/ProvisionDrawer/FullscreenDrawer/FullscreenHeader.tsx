@@ -9,6 +9,7 @@ export interface IFullscreenHeaderProps {
   onClose?: () => void
   onViewRequests?: () => void
   onViewSettings?: () => void
+  onViewConfigEditor?: () => void
   onBack?: () => void
   titleOverride?: string
   iconOverride?: string
@@ -18,6 +19,7 @@ export const FullscreenHeader: FC<IFullscreenHeaderProps> = ({
   onClose,
   onViewRequests,
   onViewSettings,
+  onViewConfigEditor,
   onBack,
   titleOverride,
   iconOverride
@@ -68,23 +70,20 @@ export const FullscreenHeader: FC<IFullscreenHeaderProps> = ({
               <span className={styles.headerButtonText}>{strings.Provision.SettingsMenuLabel}</span>
             </ToolbarButton>
           )}
-          {context.props.isTeamsContext && context.state.isProvisionSiteAdmin && (
-            <ToolbarButton
-              appearance='subtle'
-              icon={getFluentIcon('ContentSettings', { color: 'white' })}
-              onClick={() => {
-                context.setState({
-                  showProvisionDrawer: false,
-                  showConfigEditor: true
-                })
-              }}
-              className={styles.headerButton}
-            >
-              <span className={styles.headerButtonText}>
-                {strings.Provision.ConfigEditorButton}
-              </span>
-            </ToolbarButton>
-          )}
+          {context.props.isTeamsContext &&
+            context.state.isProvisionSiteAdmin &&
+            onViewConfigEditor && (
+              <ToolbarButton
+                appearance='subtle'
+                icon={getFluentIcon('ContentSettings', { color: 'white' })}
+                onClick={onViewConfigEditor}
+                className={styles.headerButton}
+              >
+                <span className={styles.headerButtonText}>
+                  {strings.Provision.ConfigEditorButton}
+                </span>
+              </ToolbarButton>
+            )}
           {onClose && (
             <ToolbarButton
               appearance='subtle'

@@ -119,7 +119,7 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
               {props.drawerSize === 'full' ? (
                 <FullscreenDrawer toast={dispatchToast} renderMode={props.renderMode} />
               ) : (
-                <ProvisionDrawer toast={dispatchToast} renderMode={props.renderMode} />
+                <ProvisionDrawer toast={dispatchToast} />
               )}
               <Menu positioning='below-end'>
                 <MenuTrigger disableButtonEnhancement>

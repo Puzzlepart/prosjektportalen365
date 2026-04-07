@@ -23,7 +23,11 @@ import { FullscreenFields } from './FullscreenFields'
 import { ProvisionConfirmation } from '../../ProvisionConfirmation'
 import { ProvisionStatus } from '../../ProvisionStatus'
 import { ProvisionSettings } from '../../ProvisionSettings'
-import { IProvisionDrawerProps } from '../types'
+import { TeamsConfigEditor } from '../../TeamsConfigEditor'
+export interface IFullscreenDrawerProps {
+  toast?: any
+  renderMode?: 'button' | 'inline'
+}
 import styles from './FullscreenDrawer.module.scss'
 
 /**
@@ -34,7 +38,7 @@ import styles from './FullscreenDrawer.module.scss'
  * - Level 1: SiteType selection (centered, large cards)
  * - Level 2: All fields in multi-column layout
  */
-export const FullscreenDrawer: FC<IProvisionDrawerProps> = (props) => {
+export const FullscreenDrawer: FC<IFullscreenDrawerProps> = (props) => {
   const {
     context,
     onSave,
@@ -97,6 +101,7 @@ export const FullscreenDrawer: FC<IProvisionDrawerProps> = (props) => {
   )
   const [showStatusInDrawer, setShowStatusInDrawer] = useState(false)
   const [showSettingsInDrawer, setShowSettingsInDrawer] = useState(false)
+  const [showConfigEditorInDrawer, setShowConfigEditorInDrawer] = useState(false)
 
   const motionStyles = useFullscreenMotionStyles()
   const siteTypeMotion = useMotion<HTMLDivElement>(currentStep === 'siteType')
@@ -188,6 +193,28 @@ export const FullscreenDrawer: FC<IProvisionDrawerProps> = (props) => {
       )
     }
 
+    if (showConfigEditorInDrawer) {
+      return (
+        <div className={styles.fullscreenContent}>
+          <FullscreenHeader
+            titleOverride={strings.Provision.ConfigEditorTitle}
+            iconOverride='ContentSettings'
+            onBack={() => setShowConfigEditorInDrawer(false)}
+            onClose={
+              !isInlineMode ? () => context.setState({ showProvisionDrawer: false }) : undefined
+            }
+          />
+          <div className={styles.statusContainer}>
+            <TeamsConfigEditor
+              fluentProviderId={fluentProviderId}
+              onBack={() => setShowConfigEditorInDrawer(false)}
+              isAdmin={context.state.isProvisionSiteAdmin}
+            />
+          </div>
+        </div>
+      )
+    }
+
     return (
       <div className={styles.fullscreenContent}>
         <FullscreenHeader
@@ -196,6 +223,7 @@ export const FullscreenDrawer: FC<IProvisionDrawerProps> = (props) => {
           }
           onViewSettings={() => setShowSettingsInDrawer(true)}
           onViewRequests={() => setShowStatusInDrawer(true)}
+          onViewConfigEditor={() => setShowConfigEditorInDrawer(true)}
         />
         <div className={styles.fullscreenBody}>
           {siteTypeMotion.canRender && (

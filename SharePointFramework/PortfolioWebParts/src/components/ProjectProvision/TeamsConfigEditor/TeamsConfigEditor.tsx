@@ -28,48 +28,25 @@ export const TeamsConfigEditor: React.FC<ITeamsConfigEditorProps> = ({
 }) => {
   const context = useContext(ProjectProvisionContext)
 
+  const NON_SERIALIZABLE_KEYS = new Set([
+    'dataAdapter',
+    'pageContext',
+    'spfxContext',
+    'webAbsoluteUrl',
+    'icon',
+    'isTeamsContext',
+    'hasProjectProvisionAccess'
+  ])
+
   const getSerializableConfig = () => {
-    const props = context.props
-
-    return {
-      // General
-      buttonLabel: props.buttonLabel,
-      autoOwner: props.autoOwner,
-      renderMode: props.renderMode,
-
-      // Visuals
-      siteTypeRenderMode: props.siteTypeRenderMode,
-      expirationDateMode: props.expirationDateMode,
-
-      // Titles and descriptions
-      level0Header: props.level0Header,
-      level0Description: props.level0Description,
-      level1Header: props.level1Header,
-      level1Description: props.level1Description,
-      level2Header: props.level2Header,
-      level2Description: props.level2Description,
-      footerDescription: props.footerDescription,
-
-      // Hide/show
-      hideStatusMenu: props.hideStatusMenu,
-      hideSettingsMenu: props.hideSettingsMenu,
-
-      // Field logic
-      defaultExpirationDate: props.defaultExpirationDate,
-      readOnlyGroupLogic: props.readOnlyGroupLogic,
-
-      // Advanced
-      provisionUrl: props.provisionUrl,
-      requireProvisionAccess: props.requireProvisionAccess,
-      fields: props.fields,
-      typeFieldConfigurations: props.typeFieldConfigurations,
-      debugMode: props.debugMode,
-
-      // Other
-      disabled: props.disabled,
-      appearance: props.appearance,
-      size: props.size
-    }
+    const config: Record<string, any> = {}
+    Object.keys(context.props).forEach((key) => {
+      const value = (context.props as any)[key]
+      if (!NON_SERIALIZABLE_KEYS.has(key) && typeof value !== 'function') {
+        config[key] = value
+      }
+    })
+    return config
   }
 
   const [jsonValue, setJsonValue] = useState(() => {
@@ -141,7 +118,7 @@ export const TeamsConfigEditor: React.FC<ITeamsConfigEditorProps> = ({
   }
 
   const handleReset = () => {
-    setJsonValue(JSON.stringify(context.props, null, 2))
+    setJsonValue(JSON.stringify(getSerializableConfig(), null, 2))
     setError(null)
     setSuccess(null)
   }
