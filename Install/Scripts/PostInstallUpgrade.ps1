@@ -235,9 +235,7 @@ if ($null -ne $LastInstall) {
         } else {
             Write-Host "[WARNING] Could not find 'ReRunSetup' permission item in list '$AdminPermissionsList'" -ForegroundColor Yellow
         }
-    }
 
-    if ($PreviousVersion -lt [version]"1.14.0") {
         Write-Host "[INFO] Ensuring 'AssistantAccess' permission is assigned to all project admin roles..."
 
         $AdminRolesList = Get-Resource -Name "Lists_ProjectAdminRoles_Title"

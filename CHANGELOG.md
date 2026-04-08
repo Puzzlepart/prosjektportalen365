@@ -20,6 +20,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Lagt til to nye kolonner i `Prosjekter`-listen: `Prosjekttillegg` og `Listeinnhold`, som lagrer navnene på valgte tillegg og listeinnhold (kommaseparert) ved opprettelse av prosjektet. [#1542](https://github.com/Puzzlepart/prosjektportalen365/issues/1542)
 - Dynamisk feltrendering i `Bestillingsportalen` som støtter konfigurerbar feltrekkefølge og nivåplassering via `order` og `level` egenskaper
 - Lagt til «Se mine bestillinger»-knapp i verktøylinjen i `Bestillingsportalen`-skuffen for rask tilgang til bestillingsstatus
+- Ny tilgangsstyring for PP Assistenten basert på prosjektadministrasjonsroller. Ny global innstilling `AssistantAccessMode` med tre moduser: `group` (standard, eksisterende oppførsel), `role` (rollebasert per prosjekt) og `both` (bruker må tilfredsstille både gruppe- og rollesjekk). Ny tilgang `AssistantAccess` som kan tilordnes roller i `Prosjektadministrasjonsroller`-listen.
 
 ### Forbedringer
 
