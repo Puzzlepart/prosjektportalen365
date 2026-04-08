@@ -1,5 +1,4 @@
 .fullscreenProvider {
-  height: 100%;
   width: 100%;
 }
 
@@ -54,18 +53,12 @@
 
 .fullscreenBody {
   flex: 1;
+  display: grid;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  position: relative;
 }
 
 .motionLevel {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  grid-area: 1 / 1;
   overflow: auto;
 }
 
