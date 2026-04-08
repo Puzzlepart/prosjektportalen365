@@ -1,11 +1,14 @@
 /* eslint-disable no-console */
+
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { IProjectProvisionProps, IProjectProvisionState } from './types'
 import _ from 'lodash'
 import strings from 'PortfolioWebPartsStrings'
 
 /**
- * Initial column with default values.
+ * Hook that manages the editable column Map for the provision form.
+ * Handles field values, transformations, alias calculation, and
+ * type-based defaults.
  */
 export function useEditableColumn(
   props: IProjectProvisionProps,

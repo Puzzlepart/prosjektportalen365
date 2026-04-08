@@ -179,25 +179,27 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                 </div>
               </DrawerBody>
             )}
-            {!context.state.showProvisionConfirmation && <DrawerBody
-              ref={levelMotions[1].ref}
-              className={mergeClasses(
-                styles.level,
-                motionStyles.level,
-                currentLevel === 2 ? motionStyles.level1a : motionStyles.level1,
-                levelMotions[1].active && motionStyles.levelVisible
-              )}
-            >
-              {!stringIsNullOrEmpty(context.props.level1Header) && (
-                <DrawerHeaderTitle>{levels[1].title}</DrawerHeaderTitle>
-              )}
-              {!stringIsNullOrEmpty(context.props.level1Description) && (
-                <p>{levels[1].description}</p>
-              )}
-              <div className={styles.content}>
-                <FieldRendererList fields={fieldsToUse} level={1} configs={fieldConfigs} />
-              </div>
-            </DrawerBody>}
+            {!context.state.showProvisionConfirmation && (
+              <DrawerBody
+                ref={levelMotions[1].ref}
+                className={mergeClasses(
+                  styles.level,
+                  motionStyles.level,
+                  currentLevel === 2 ? motionStyles.level1a : motionStyles.level1,
+                  levelMotions[1].active && motionStyles.levelVisible
+                )}
+              >
+                {!stringIsNullOrEmpty(context.props.level1Header) && (
+                  <DrawerHeaderTitle>{levels[1].title}</DrawerHeaderTitle>
+                )}
+                {!stringIsNullOrEmpty(context.props.level1Description) && (
+                  <p>{levels[1].description}</p>
+                )}
+                <div className={styles.content}>
+                  <FieldRendererList fields={fieldsToUse} level={1} configs={fieldConfigs} />
+                </div>
+              </DrawerBody>
+            )}
             {!context.state.showProvisionConfirmation && levelMotions[2].canRender && (
               <DrawerBody
                 ref={levelMotions[2].ref}
@@ -238,49 +240,44 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
               </DrawerBody>
             )}
           </div>
-          {!context.state.showProvisionConfirmation && <DrawerFooter className={styles.footer}>
-            <Button
-              appearance='subtle'
-              disabled={currentLevel === 0}
-              onClick={() => setCurrentLevel(currentLevel - 1)}
-            >
-              {strings.Provision.PreviousButtonLabel}
-            </Button>
-            <Button
-              appearance='primary'
-              disabled={currentLevel === levels.length - 1 && isSaveDisabled}
-              onClick={() => {
-                currentLevel === levels.length - 1
-                  ? onSave().then((response) => {
-                      if (response) {
-                        props.toast(
-                          <Toast appearance='inverted'>
-                            <ToastTitle>{strings.Provision.ToastCreatedTitle}</ToastTitle>
-                            <ToastBody>{strings.Provision.ToastCreatedBody}</ToastBody>
-                          </Toast>,
-                          { intent: 'success' }
-                        )
-                        context.setState({ showProvisionConfirmation: true, properties: {} })
-                        setCurrentLevel(0)
-                        context.reset()
-                      } else {
-                        props.toast(
-                          <Toast appearance='inverted'>
-                            <ToastTitle>{strings.Provision.ToastCreatedErrorTitle}</ToastTitle>
-                            <ToastBody>{strings.Provision.ToastCreatedErrorBody}</ToastBody>
-                          </Toast>,
-                          { intent: 'error' }
-                        )
-                      }
-                    })
-                  : setCurrentLevel(currentLevel + 1)
-              }}
-            >
-              {currentLevel === levels.length - 1
-                ? strings.Provision.ProvisionButtonLabel
-                : strings.Provision.NextButtonLabel}
-            </Button>
-          </DrawerFooter>}
+          {!context.state.showProvisionConfirmation && (
+            <DrawerFooter className={styles.footer}>
+              <Button
+                appearance='subtle'
+                disabled={currentLevel === 0}
+                onClick={() => setCurrentLevel(currentLevel - 1)}
+              >
+                {strings.Provision.PreviousButtonLabel}
+              </Button>
+              <Button
+                appearance='primary'
+                disabled={currentLevel === levels.length - 1 && isSaveDisabled}
+                onClick={() => {
+                  currentLevel === levels.length - 1
+                    ? onSave().then((response) => {
+                        if (response) {
+                          context.setState({ showProvisionConfirmation: true, properties: {} })
+                          setCurrentLevel(0)
+                          context.reset()
+                        } else {
+                          props.toast(
+                            <Toast appearance='inverted'>
+                              <ToastTitle>{strings.Provision.ToastCreatedErrorTitle}</ToastTitle>
+                              <ToastBody>{strings.Provision.ToastCreatedErrorBody}</ToastBody>
+                            </Toast>,
+                            { intent: 'error' }
+                          )
+                        }
+                      })
+                    : setCurrentLevel(currentLevel + 1)
+                }}
+              >
+                {currentLevel === levels.length - 1
+                  ? strings.Provision.ProvisionButtonLabel
+                  : strings.Provision.NextButtonLabel}
+              </Button>
+            </DrawerFooter>
+          )}
         </OverlayDrawer>
       </FluentProvider>
     </IdPrefixProvider>

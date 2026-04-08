@@ -112,13 +112,6 @@ export const FullscreenDrawer: FC<IFullscreenDrawerProps> = (props) => {
   const handleSave = () => {
     onSave().then((response) => {
       if (response) {
-        props.toast(
-          <Toast appearance='inverted'>
-            <ToastTitle>{strings.Provision.ToastCreatedTitle}</ToastTitle>
-            <ToastBody>{strings.Provision.ToastCreatedBody}</ToastBody>
-          </Toast>,
-          { intent: 'success' }
-        )
         context.setState({ showProvisionConfirmation: true, properties: {} })
         setCurrentStep('siteType')
         context.reset()

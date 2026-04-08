@@ -2,11 +2,26 @@ import { useContext, useEffect, useState } from 'react'
 import { ProjectProvisionContext } from '../context'
 
 const NON_SERIALIZABLE_KEYS = new Set([
-  'dataAdapter', 'pageContext', 'spfxContext', 'webAbsoluteUrl',
-  'icon', 'isTeamsContext', 'hasProjectProvisionAccess',
-  'manifestId', 'provisionUrl', 'displayMode', 'sp',
-  'webServerRelativeUrl', 'webTitle', 'siteId', 'isSiteAdmin',
-  'buttonLabel', 'appearance', 'size', 'renderMode', 'drawerSize'
+  'dataAdapter',
+  'pageContext',
+  'spfxContext',
+  'webAbsoluteUrl',
+  'icon',
+  'isTeamsContext',
+  'hasProjectProvisionAccess',
+  'manifestId',
+  'provisionUrl',
+  'displayMode',
+  'sp',
+  'webServerRelativeUrl',
+  'webTitle',
+  'siteId',
+  'isSiteAdmin',
+  'buttonLabel',
+  'appearance',
+  'size',
+  'renderMode',
+  'drawerSize'
 ])
 
 export function useTeamsConfigEditor() {

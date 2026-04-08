@@ -41,8 +41,6 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
   const restoreFocusTargetAttribute = useRestoreFocusTarget()
   const { dispatchToast } = useToastController(toasterId)
 
-  console.log('ProjectProvision render', { state, column })
-
   if (state.loading) {
     return (
       <Skeleton>
@@ -84,28 +82,10 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider
           theme={customLightTheme}
-          className={styles.container}
-          style={{ background: 'transparent' }}
+          className={props.renderMode === 'inline' ? styles.containerInline : styles.container}
         >
           {props.renderMode === 'inline' ? (
-            <>
-              {state.showProvisionSettings ? (
-                <ProvisionSettings
-                  renderMode='inline'
-                  onBack={() =>
-                    setState({ showProvisionSettings: false, showProvisionDrawer: true })
-                  }
-                />
-              ) : state.showProvisionStatus ? (
-                <ProvisionStatus
-                  toast={dispatchToast}
-                  renderMode='inline'
-                  onBack={() => setState({ showProvisionStatus: false, showProvisionDrawer: true })}
-                />
-              ) : (
-                <FullscreenDrawer toast={dispatchToast} renderMode={props.renderMode} />
-              )}
-            </>
+            <FullscreenDrawer toast={dispatchToast} renderMode={props.renderMode} />
           ) : (
             <>
               {/* Button mode: show button, drawer, and dialogs */}

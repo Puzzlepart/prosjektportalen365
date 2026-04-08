@@ -1,5 +1,3 @@
-/* eslint-disable prefer-spread */
-/* eslint-disable no-console */
 import { useContext, useState, useMemo } from 'react'
 import { useMotion } from '@fluentui/react-motion-preview'
 import { useMotionStyles } from './motionStyles'
@@ -37,7 +35,6 @@ export const useProvisionDrawer = () => {
   const motionStyles = useMotionStyles()
 
   const toolbarBackIconMotion = useMotion<HTMLButtonElement>(currentLevel > 0)
-  // const toolbarCalendarIconMotion = useMotion<HTMLButtonElement>(currentLevel === 1)
   const levelMotions = Array.from({ length: levels.length }, (_, i) =>
     useMotion<HTMLDivElement>(i === currentLevel)
   )
@@ -334,8 +331,6 @@ export const useProvisionDrawer = () => {
     usesDifferentHub,
     getField,
     fieldsToUse,
-    fluentProviderId,
-    currentTemplate,
-    currentTypeConfig
+    fluentProviderId
   }
 }

@@ -88,7 +88,14 @@ export const TeamsConfigEditor: FC<ITeamsConfigEditorProps> = ({ isAdmin, onBack
                   </Button>
                 </PopoverTrigger>
                 <PopoverSurface>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxWidth: '200px' }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '8px',
+                      maxWidth: '200px'
+                    }}
+                  >
                     <p style={{ margin: 0 }}>{strings.Provision.ConfigResetConfirmationLabel}</p>
                     <Button appearance='primary' onClick={handleReset}>
                       {strings.BooleanYes}

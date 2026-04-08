@@ -70,7 +70,6 @@ export interface IProjectProvisionState {
   showProvisionStatus: boolean
   showProvisionSettings: boolean
   showProvisionConfirmation?: boolean
-  showConfigEditor?: boolean
   isProvisionSiteAdmin?: boolean
   settings: any[]
   types?: Record<string, any>
