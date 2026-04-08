@@ -1503,6 +1503,18 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
+  public async deleteTeamsConfig(provisionUrl: string): Promise<void> {
+    try {
+      const provisionSite = Web([this._sp.web, provisionUrl])
+      const file = provisionSite
+        .getFolderByServerRelativePath('SiteAssets')
+        .files.getByUrl('TeamsAppConfig.json')
+      await file.recycle()
+    } catch (error: any) {
+      throw new Error(`Failed to delete TeamsAppConfig.json: ${error?.message || error}`)
+    }
+  }
+
   public async isProvisionSiteAdmin(provisionUrl: string): Promise<boolean> {
     try {
       const provisionSite = Web([this._sp.web, provisionUrl])

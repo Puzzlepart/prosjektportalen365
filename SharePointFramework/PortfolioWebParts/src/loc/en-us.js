@@ -239,6 +239,7 @@ define([], function () {
       ConfigSaveButton: "Save configuration",
       ConfigSavingButton: "Saving...",
       ConfigResetButton: "Reset",
+      ConfigResetConfirmationLabel: "Are you sure you want to reset the configuration?",
       ConfigSaveSuccess: "Configuration saved. Refreshing...",
       ConfigSaveSuccessTitle: "Success",
       ConfigSaveError: "Could not save configuration",

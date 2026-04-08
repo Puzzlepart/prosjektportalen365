@@ -197,6 +197,7 @@ declare interface IPortfolioWebPartsStrings {
     ConfigSaveButton: string
     ConfigSavingButton: string
     ConfigResetButton: string
+    ConfigResetConfirmationLabel: string
     ConfigSaveSuccess: string
     ConfigSaveSuccessTitle: string
     ConfigSaveError: string

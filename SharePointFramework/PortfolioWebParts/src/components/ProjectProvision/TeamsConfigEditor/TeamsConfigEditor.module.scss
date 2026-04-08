@@ -23,6 +23,23 @@
   }
 }
 
+.progressContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 16px;
+  padding: 48px 24px;
+}
+
+.progressText {
+  font-size: 14px;
+  color: var(--colorNeutralForeground3);
+  text-align: center;
+  margin: 0;
+}
+
 .footer {
   display: flex;
   justify-content: space-between;

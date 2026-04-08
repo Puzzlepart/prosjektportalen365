@@ -480,6 +480,13 @@ export interface IPortfolioWebPartsDataAdapter {
   saveTeamsConfig?(provisionUrl: string, config: any): Promise<void>
 
   /**
+   * Delete Teams app configuration file (TeamsAppConfig.json)
+   *
+   * @param provisionUrl The provision site URL
+   */
+  deleteTeamsConfig?(provisionUrl: string): Promise<void>
+
+  /**
    * Check if current user is admin of the provision site
    *
    * @param provisionUrl The provision site URL

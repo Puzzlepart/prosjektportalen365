@@ -198,6 +198,7 @@ define([], function () {
       ConfigSaveButton: 'Lagre konfigurasjon',
       ConfigSavingButton: 'Lagrer...',
       ConfigResetButton: 'Tilbakestill',
+      ConfigResetConfirmationLabel: 'Er du sikker på at du vil tilbakestille konfigurasjonen?',
       ConfigSaveSuccess: 'Konfigurasjon lagret. Oppdaterer...',
       ConfigSaveSuccessTitle: 'Suksess',
       ConfigSaveError: 'Kunne ikke lagre konfigurasjon',
