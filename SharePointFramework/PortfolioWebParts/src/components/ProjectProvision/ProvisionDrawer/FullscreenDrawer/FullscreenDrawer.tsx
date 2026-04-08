@@ -35,8 +35,8 @@ import styles from './FullscreenDrawer.module.scss'
  * Used in fullscreen drawer mode and inline/Teams mode.
  *
  * Two-level navigation:
- * - Level 1: SiteType selection (centered, large cards)
- * - Level 2: All fields in multi-column layout
+ * - Level 1: SiteType selection
+ * - Level 2: Fields and details for provisioning
  */
 export const FullscreenDrawer: FC<IFullscreenDrawerProps> = (props) => {
   const {
