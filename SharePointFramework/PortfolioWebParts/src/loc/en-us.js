@@ -228,7 +228,7 @@ define([], function () {
       NoProvisionAccessMessage: "You do not have access to the Provisioning Portal.",
       DefaultTeamTemplate: "Standard",
       ConfirmationTitle: "Request received!",
-      ConfirmationMessage: "Your request has been received and will be processed. You will receive a notification when your workspace is ready.",
+      ConfirmationMessage: "Your request has been received and will be processed. You will receive a notification when your site is ready.",
       NewRequestButton: "New request",
       ViewRequestsButton: "My requests",
       ConfigEditorButton: "Web part settings",

@@ -26,6 +26,7 @@ import { IProvisionDrawerProps } from './types'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import { FieldRendererList, useFieldConfigs } from './FieldRenderer'
 import { useLocalInput } from './useLocalInput'
+import { ProvisionConfirmation } from '../ProvisionConfirmation'
 
 declare const DEBUG: boolean
 
@@ -147,7 +148,17 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
             </DrawerHeaderNavigation>
           </DrawerHeader>
           <div className={styles.body}>
-            {levelMotions[0].canRender && (
+            {context.state.showProvisionConfirmation ? (
+              <DrawerBody>
+                <ProvisionConfirmation
+                  onNewRequest={() => {
+                    context.setState({ showProvisionConfirmation: false })
+                    setCurrentLevel(0)
+                  }}
+                />
+              </DrawerBody>
+            ) : null}
+            {!context.state.showProvisionConfirmation && levelMotions[0].canRender && (
               <DrawerBody
                 ref={levelMotions[0].ref}
                 className={mergeClasses(
@@ -168,7 +179,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                 </div>
               </DrawerBody>
             )}
-            <DrawerBody
+            {!context.state.showProvisionConfirmation && <DrawerBody
               ref={levelMotions[1].ref}
               className={mergeClasses(
                 styles.level,
@@ -186,8 +197,8 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
               <div className={styles.content}>
                 <FieldRendererList fields={fieldsToUse} level={1} configs={fieldConfigs} />
               </div>
-            </DrawerBody>
-            {levelMotions[2].canRender && (
+            </DrawerBody>}
+            {!context.state.showProvisionConfirmation && levelMotions[2].canRender && (
               <DrawerBody
                 ref={levelMotions[2].ref}
                 className={mergeClasses(
@@ -227,7 +238,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
               </DrawerBody>
             )}
           </div>
-          <DrawerFooter className={styles.footer}>
+          {!context.state.showProvisionConfirmation && <DrawerFooter className={styles.footer}>
             <Button
               appearance='subtle'
               disabled={currentLevel === 0}
@@ -242,9 +253,6 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                 currentLevel === levels.length - 1
                   ? onSave().then((response) => {
                       if (response) {
-                        context.setState({ showProvisionDrawer: false, properties: {} })
-                        setCurrentLevel(0)
-                        context.reset()
                         props.toast(
                           <Toast appearance='inverted'>
                             <ToastTitle>{strings.Provision.ToastCreatedTitle}</ToastTitle>
@@ -252,6 +260,9 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                           </Toast>,
                           { intent: 'success' }
                         )
+                        context.setState({ showProvisionConfirmation: true, properties: {} })
+                        setCurrentLevel(0)
+                        context.reset()
                       } else {
                         props.toast(
                           <Toast appearance='inverted'>
@@ -269,7 +280,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                 ? strings.Provision.ProvisionButtonLabel
                 : strings.Provision.NextButtonLabel}
             </Button>
-          </DrawerFooter>
+          </DrawerFooter>}
         </OverlayDrawer>
       </FluentProvider>
     </IdPrefixProvider>

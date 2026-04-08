@@ -187,7 +187,7 @@ define([], function () {
       DefaultLanguage: 'Norsk (bokmål)',
       DefaultTimeZone: '(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna',
       ConfirmationTitle: 'Bestilling mottatt!',
-      ConfirmationMessage: 'Bestillingen din er mottatt og vil bli behandlet. Du vil motta en varsling når arbeidsområdet ditt er klart.',
+      ConfirmationMessage: 'Bestillingen din er mottatt og vil bli behandlet. Du vil motta en varsling når området ditt er klart.',
       NewRequestButton: 'Ny bestilling',
       ViewRequestsButton: 'Se mine bestillinger',
       ConfigEditorButton: 'Webdel innstillinger',

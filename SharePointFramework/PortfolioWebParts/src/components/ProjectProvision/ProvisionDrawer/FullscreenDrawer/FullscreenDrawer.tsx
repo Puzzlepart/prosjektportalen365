@@ -112,18 +112,14 @@ export const FullscreenDrawer: FC<IFullscreenDrawerProps> = (props) => {
   const handleSave = () => {
     onSave().then((response) => {
       if (response) {
-        if (isInlineMode) {
-          context.setState({ showProvisionConfirmation: true, properties: {} })
-        } else {
-          props.toast(
-            <Toast appearance='inverted'>
-              <ToastTitle>{strings.Provision.ToastCreatedTitle}</ToastTitle>
-              <ToastBody>{strings.Provision.ToastCreatedBody}</ToastBody>
-            </Toast>,
-            { intent: 'success' }
-          )
-          context.setState({ showProvisionDrawer: false, properties: {} })
-        }
+        props.toast(
+          <Toast appearance='inverted'>
+            <ToastTitle>{strings.Provision.ToastCreatedTitle}</ToastTitle>
+            <ToastBody>{strings.Provision.ToastCreatedBody}</ToastBody>
+          </Toast>,
+          { intent: 'success' }
+        )
+        context.setState({ showProvisionConfirmation: true, properties: {} })
         setCurrentStep('siteType')
         context.reset()
       } else {
@@ -141,19 +137,25 @@ export const FullscreenDrawer: FC<IFullscreenDrawerProps> = (props) => {
   const renderContent = () => {
     if (context.state.showProvisionConfirmation) {
       return (
-        <ProvisionConfirmation
-          onNewRequest={() => {
-            context.setState({ showProvisionConfirmation: false, showProvisionDrawer: true })
-            setCurrentStep('siteType')
-          }}
-          onViewRequests={() => {
-            context.setState({
-              showProvisionConfirmation: false,
-              showProvisionStatus: true,
-              showProvisionDrawer: false
-            })
-          }}
-        />
+        <div className={styles.fullscreenContent}>
+          <FullscreenHeader
+            onClose={
+              !isInlineMode ? () => context.setState({ showProvisionDrawer: false }) : undefined
+            }
+            onViewSettings={() => setShowSettingsInDrawer(true)}
+            onViewRequests={() => {
+              context.setState({ showProvisionConfirmation: false })
+              setShowStatusInDrawer(true)
+            }}
+            onViewConfigEditor={() => setShowConfigEditorInDrawer(true)}
+          />
+          <ProvisionConfirmation
+            onNewRequest={() => {
+              context.setState({ showProvisionConfirmation: false })
+              setCurrentStep('siteType')
+            }}
+          />
+        </div>
       )
     }
 

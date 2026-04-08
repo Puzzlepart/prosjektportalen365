@@ -6,13 +6,9 @@ import styles from './ProvisionConfirmation.module.scss'
 
 export interface IProvisionConfirmationProps {
   onNewRequest: () => void
-  onViewRequests: () => void
 }
 
-export const ProvisionConfirmation: FC<IProvisionConfirmationProps> = ({
-  onNewRequest,
-  onViewRequests
-}) => {
+export const ProvisionConfirmation: FC<IProvisionConfirmationProps> = ({ onNewRequest }) => {
   return (
     <div className={styles.container}>
       <div className={styles.icon}>
@@ -21,11 +17,8 @@ export const ProvisionConfirmation: FC<IProvisionConfirmationProps> = ({
       <h2 className={styles.title}>{strings.Provision.ConfirmationTitle}</h2>
       <p className={styles.message}>{strings.Provision.ConfirmationMessage}</p>
       <div className={styles.actions}>
-        <Button appearance='primary' icon={getFluentIcon('Add')} onClick={onNewRequest}>
+        <Button appearance='primary' icon={getFluentIcon('ArrowLeft')} onClick={onNewRequest}>
           {strings.Provision.NewRequestButton}
-        </Button>
-        <Button appearance='outline' icon={getFluentIcon('ClipboardTask')} onClick={onViewRequests}>
-          {strings.Provision.ViewRequestsButton}
         </Button>
       </div>
     </div>
