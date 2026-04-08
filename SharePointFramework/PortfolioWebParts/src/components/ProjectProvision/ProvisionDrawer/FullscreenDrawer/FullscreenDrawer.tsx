@@ -206,7 +206,6 @@ export const FullscreenDrawer: FC<IFullscreenDrawerProps> = (props) => {
           />
           <div className={styles.statusContainer}>
             <TeamsConfigEditor
-              fluentProviderId={fluentProviderId}
               onBack={() => setShowConfigEditorInDrawer(false)}
               isAdmin={context.state.isProvisionSiteAdmin}
             />
@@ -226,36 +225,34 @@ export const FullscreenDrawer: FC<IFullscreenDrawerProps> = (props) => {
           onViewConfigEditor={() => setShowConfigEditorInDrawer(true)}
         />
         <div className={styles.fullscreenBody}>
-          {siteTypeMotion.canRender && (
-            <div
-              ref={siteTypeMotion.ref}
-              className={mergeClasses(
-                styles.motionLevel,
-                motionStyles.level,
-                motionStyles.siteTypeLevel,
-                siteTypeMotion.active && motionStyles.levelVisible
-              )}
-            >
-              <FullscreenSiteType onTypeSelected={() => setCurrentStep('fields')} />
-            </div>
-          )}
-          {fieldsMotion.canRender && (
-            <div
-              ref={fieldsMotion.ref}
-              className={mergeClasses(
-                styles.motionLevel,
-                motionStyles.level,
-                motionStyles.fieldsLevel,
-                fieldsMotion.active && motionStyles.levelVisible
-              )}
-            >
-              <FullscreenFields
-                fields={fieldsToUse}
-                fieldConfigs={fieldConfigs}
-                onBack={() => setCurrentStep('siteType')}
-              />
-            </div>
-          )}
+          <div
+            ref={siteTypeMotion.canRender ? siteTypeMotion.ref : undefined}
+            className={mergeClasses(
+              styles.motionLevel,
+              motionStyles.level,
+              motionStyles.siteTypeLevel,
+              currentStep === 'siteType' && motionStyles.levelVisible
+            )}
+            style={currentStep !== 'siteType' ? { pointerEvents: 'none' } : undefined}
+          >
+            <FullscreenSiteType onTypeSelected={() => setCurrentStep('fields')} />
+          </div>
+          <div
+            ref={fieldsMotion.canRender ? fieldsMotion.ref : undefined}
+            className={mergeClasses(
+              styles.motionLevel,
+              motionStyles.level,
+              motionStyles.fieldsLevel,
+              currentStep === 'fields' && motionStyles.levelVisible
+            )}
+            style={currentStep !== 'fields' ? { pointerEvents: 'none' } : undefined}
+          >
+            <FullscreenFields
+              fields={fieldsToUse}
+              fieldConfigs={fieldConfigs}
+              onBack={() => setCurrentStep('siteType')}
+            />
+          </div>
         </div>
         {currentStep === 'fields' && (
           <div className={styles.fieldsFooter}>

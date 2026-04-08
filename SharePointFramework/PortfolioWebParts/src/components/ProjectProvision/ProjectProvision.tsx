@@ -24,7 +24,6 @@ import { ProvisionDrawer } from './ProvisionDrawer'
 import { FullscreenDrawer } from './ProvisionDrawer/FullscreenDrawer'
 import strings from 'PortfolioWebPartsStrings'
 import { ProvisionSettings } from './ProvisionSettings'
-import { TeamsConfigEditor } from './TeamsConfigEditor'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import styles from './ProjectProvision.module.scss'
 
@@ -90,13 +89,7 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
         >
           {props.renderMode === 'inline' ? (
             <>
-              {state.showConfigEditor ? (
-                <TeamsConfigEditor
-                  fluentProviderId={fluentProviderId}
-                  onBack={() => setState({ showConfigEditor: false, showProvisionDrawer: true })}
-                  isAdmin={state.isProvisionSiteAdmin}
-                />
-              ) : state.showProvisionSettings ? (
+              {state.showProvisionSettings ? (
                 <ProvisionSettings
                   renderMode='inline'
                   onBack={() =>
