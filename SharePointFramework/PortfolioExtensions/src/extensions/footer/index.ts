@@ -11,6 +11,11 @@ import '@pnp/sp/webs'
 import resource from 'SharedResources'
 import { Footer, IFooterProps } from 'components/Footer'
 import { PortalDataService } from 'pp365-shared-library/lib/services/PortalDataService'
+import {
+  createSpfiInstance,
+  isHubSite,
+  ProjectAdminPermission
+} from 'pp365-shared-library'
 import { createElement } from 'react'
 import { render } from 'react-dom'
 import {
@@ -60,7 +65,6 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
       return Promise.resolve()
     }
 
-    const requireAssistantAccess = this._globalSettings.get('RequireAssistantAccess') === '1'
     const [installEntries, gitHubReleases, helpContent, links, favoriteProjects] =
       await Promise.all([
         this._fetchInstallationLogs(),
@@ -84,8 +88,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     const endpointUrl = this._globalSettings.get('EndpointUrl')
     this._assistantEndpointUrl = useBetaChannel && betaEndpointUrl ? betaEndpointUrl : endpointUrl
 
-    this._hasAssistantAccess =
-      !requireAssistantAccess || (await this._isUserInGroup(strings.AssistantGroupName))
+    this._hasAssistantAccess = await this._checkAssistantAccess()
     this.context.application.navigatedEvent.add(this, this._handleNavigatedEvent)
     return Promise.resolve()
   }
@@ -93,8 +96,12 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   private async _handleNavigatedEvent(): Promise<void> {
     if (!this._portalDataService?.isAvailable) return
 
-    const helpContent = await this._fetchHelpContent()
+    const [helpContent, hasAssistantAccess] = await Promise.all([
+      this._fetchHelpContent(),
+      this._checkAssistantAccess()
+    ])
     this._helpContent = helpContent
+    this._hasAssistantAccess = hasAssistantAccess
 
     this._renderFooter(PlaceholderName.Bottom, {
       installEntries: this._installEntries,
@@ -123,6 +130,38 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     } catch (error) {
       return false
     }
+  }
+
+  /**
+   * Check if the current user has access to the assistant based on the
+   * configured access mode (`AssistantAccessMode` global setting).
+   *
+   * Modes:
+   * - `group` (default): Check membership in the assistant users group (hub-level)
+   * - `role`: Check project admin roles on project sites, group check on hub
+   * - `both`: User must pass both group AND role check on project sites
+   */
+  private async _checkAssistantAccess(): Promise<boolean> {
+    const requireAccess = this._globalSettings.get('RequireAssistantAccess') === '1'
+    if (!requireAccess) return true
+
+    const accessMode = this._globalSettings.get('AssistantAccessMode') || 'group'
+    const onProjectSite = !isHubSite(this.context.pageContext)
+    const checkGroup = accessMode === 'group' || accessMode === 'both' || !onProjectSite
+    const checkRole = (accessMode === 'role' || accessMode === 'both') && onProjectSite
+
+    const groupResult = checkGroup
+      ? await this._isUserInGroup(strings.AssistantGroupName)
+      : true
+
+    const roleResult = checkRole
+      ? await this._portalDataService.checkProjectAdminPermission(
+          createSpfiInstance(this.context),
+          ProjectAdminPermission.AssistantAccess
+        )
+      : true
+
+    return groupResult && roleResult
   }
 
   /**

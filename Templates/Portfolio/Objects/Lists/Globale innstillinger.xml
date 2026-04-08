@@ -184,6 +184,14 @@
       <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_Assistant}</pnp:DataValue>
     </pnp:DataRow>
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSettingsId">{a2e4f6b8-1c3d-5e7f-9a0b-c4d6e8f0a2b4}</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_Assistant_AssistantAccessMode_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsKey">AssistantAccessMode</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsValue">group</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_Assistant}</pnp:DataValue>
+    </pnp:DataRow>
   </pnp:DataRows>
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>

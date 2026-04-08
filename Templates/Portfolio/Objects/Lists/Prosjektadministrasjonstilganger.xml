@@ -44,7 +44,13 @@
             <pnp:DataValue FieldName="GtProjectAdminPermission">ReRunSetup</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectAdminPermissionId">5c2fd32e-0c8b-42be-9e0b-4fa6ff5d4774</pnp:DataValue>
             <pnp:DataValue FieldName="ContentTypeId">0x010018DB532215EDE34C975F3AC3348948B1</pnp:DataValue>
-        </pnp:DataRow>  
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectAdminPermissions_AssistantAccess}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectAdminPermission">AssistantAccess</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectAdminPermissionId">7f3a8b2c-4d5e-6f70-8192-a3b4c5d6e7f8</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x010018DB532215EDE34C975F3AC3348948B1</pnp:DataValue>
+        </pnp:DataRow>
     </pnp:DataRows>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>

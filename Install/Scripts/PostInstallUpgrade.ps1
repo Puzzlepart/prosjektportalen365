@@ -236,4 +236,77 @@ if ($null -ne $LastInstall) {
             Write-Host "[WARNING] Could not find 'ReRunSetup' permission item in list '$AdminPermissionsList'" -ForegroundColor Yellow
         }
     }
+
+    if ($PreviousVersion -lt [version]"1.14.0") {
+        Write-Host "[INFO] Ensuring 'AssistantAccess' permission is assigned to all project admin roles..."
+
+        $AdminRolesList = Get-Resource -Name "Lists_ProjectAdminRoles_Title"
+        $AdminPermissionsList = Get-Resource -Name "Lists_ProjectAdminPermissions_Title"
+
+        $AssistantAccessPermission = Get-PnPListItem -List $AdminPermissionsList | Where-Object { $_["GtProjectAdminPermissionId"] -eq "7f3a8b2c-4d5e-6f70-8192-a3b4c5d6e7f8" }
+        if ($null -ne $AssistantAccessPermission) {
+            $RoleTitles = @(
+                (Get-Resource -Name "Lists_ProjectAdminRoles_ProjectManager"),
+                (Get-Resource -Name "Lists_ProjectAdminRoles_ProjectOwner"),
+                (Get-Resource -Name "Lists_ProjectAdminRoles_ProjectSupport"),
+                (Get-Resource -Name "Lists_ProjectAdminRoles_ProjectOffice"),
+                (Get-Resource -Name "Lists_ProjectAdminRoles_SPAdmin")
+            )
+
+            foreach ($RoleTitle in $RoleTitles) {
+                $Role = Get-PnPListItem -List $AdminRolesList | Where-Object { $_["Title"] -eq $RoleTitle }
+                if ($null -ne $Role) {
+                    $CurrentPermissions = $Role["GtProjectAdminPermissions"]
+                    $HasPermission = $false
+                    if ($null -ne $CurrentPermissions) {
+                        foreach ($Perm in $CurrentPermissions) {
+                            if ($Perm.LookupId -eq $AssistantAccessPermission.Id) {
+                                $HasPermission = $true
+                                break
+                            }
+                        }
+                    }
+                    if (-not $HasPermission) {
+                        $UpdatedPermissions = @()
+                        if ($null -ne $CurrentPermissions) {
+                            foreach ($Perm in $CurrentPermissions) {
+                                $UpdatedPermissions += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $Perm.LookupId }
+                            }
+                        }
+                        $UpdatedPermissions += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $AssistantAccessPermission.Id }
+                        $Role["GtProjectAdminPermissions"] = $UpdatedPermissions
+                        $Role.SystemUpdate()
+                        $Role.Context.ExecuteQuery()
+                        Write-Host "[INFO] Added 'AssistantAccess' permission to role '$RoleTitle'" -ForegroundColor Green
+                    } else {
+                        Write-Host "[INFO] Role '$RoleTitle' already has 'AssistantAccess' permission, skipping"
+                    }
+                } else {
+                    Write-Host "[WARNING] Could not find role '$RoleTitle' in list '$AdminRolesList'" -ForegroundColor Yellow
+                }
+            }
+        } else {
+            Write-Host "[WARNING] Could not find 'AssistantAccess' permission item in list '$AdminPermissionsList'" -ForegroundColor Yellow
+        }
+
+        Write-Host "[INFO] Ensuring 'AssistantAccessMode' global setting exists..."
+        $GlobalSettingsList = Get-Resource -Name "Lists_Global_Settings_Title"
+        $AssistantAccessModeSettingId = "{a2e4f6b8-1c3d-5e7f-9a0b-c4d6e8f0a2b4}"
+        $ExistingSetting = Get-PnPListItem -List $GlobalSettingsList | Where-Object { $_["GtSettingsId"] -eq $AssistantAccessModeSettingId }
+        if ($null -eq $ExistingSetting) {
+            $AssistantCategory = Get-Resource -Name "Lists_Global_Settings_Category_Assistant"
+            $SettingTitle = Get-Resource -Name "Lists_Global_Settings_Category_Assistant_AssistantAccessMode_Title"
+            Add-PnPListItem -List $GlobalSettingsList -Values @{
+                "GtSettingsId"       = $AssistantAccessModeSettingId
+                "Title"              = $SettingTitle
+                "GtSettingsKey"      = "AssistantAccessMode"
+                "GtSettingsValue"    = "group"
+                "GtSettingsEnabled"  = $true
+                "GtSettingsCategory" = $AssistantCategory
+            } | Out-Null
+            Write-Host "[INFO] Added 'AssistantAccessMode' global setting with default value 'group'" -ForegroundColor Green
+        } else {
+            Write-Host "[INFO] 'AssistantAccessMode' global setting already exists, skipping"
+        }
+    }
 }
