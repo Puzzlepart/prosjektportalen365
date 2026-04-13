@@ -1076,7 +1076,7 @@ export class SPDataAdapter
         ProjectInformationChildProject
       )
     ])
-    const childProjectsSiteIds = childProjects.map((p: Record<string, any>) => p.SiteId)
+    const childProjectsSiteIds = childProjects.map((p: Record<string, any>) => p.siteId)
     return availableProjects.filter((p) => childProjectsSiteIds.indexOf(p.SiteId) !== -1)
   }
 
