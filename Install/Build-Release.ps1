@@ -36,7 +36,7 @@ $global:ACTION_INDEX = 1
 <#
 If running in CI mode, set the number of actions to 11. This is used to display the progress of the script.
 #>
-if($CI.IsPresent) {
+if ($CI.IsPresent) {
     $global:ACTIONS_COUNT = 11
 }
 
@@ -136,7 +136,7 @@ if ($CI.IsPresent) {
     EndAction
 }
 else {
-    if(-not $SkipImportModule.IsPresent) {
+    if (-not $SkipImportModule.IsPresent) {
         Import-Module $PNP_BUNDLE_PATH/$PNP_VERSION/PnP.PowerShell.psd1 -DisableNameChecking -ErrorAction SilentlyContinue
     }
 }
