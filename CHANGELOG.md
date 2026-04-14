@@ -36,6 +36,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Lagt til beskrivelse på sluttdato-feltet i redigeringspanelet for `Prosjekttidslinje` som indikerer at sluttdato er påkrevd for elementtyper som vises som punkt (diamant/trekant) på tidslinjen
 - Lagt til tegnbegrensning (255 tegn) for navn- og tittelfelt i `Hent dokumentmal`-dialogen
 - Lagt til validering av URL-felt i redigeringspanelet for prosjektinformasjon, med tydelig feilmelding dersom nettadressen mangler protokoll (http:// eller https://). Forbedret også generelle feilmeldinger ved lagring til å inkludere faktiske feildetaljer fra API-et [#1556](https://github.com/Puzzlepart/prosjektportalen365/issues/1556)
+- Forbedret stabilitet for Planner-operasjoner med automatisk gjenforsøk ved forbigående feil, samt bedre deduplisering av oppgaver og feillogging [#1733](https://github.com/Puzzlepart/prosjektportalen365/pull/1733)
 
 ### Fjernet
 
