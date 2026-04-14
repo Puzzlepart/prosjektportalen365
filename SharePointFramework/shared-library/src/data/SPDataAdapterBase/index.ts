@@ -142,17 +142,26 @@ export class SPDataAdapterBase<
    * Check project admin permissions.
    *
    * @param permission Permission to check
-   * @param properties Project properties
+   * @param properties Project properties (if not provided, tries to load from the project properties list)
    */
   public async checkProjectAdminPermissions(
     permission: ProjectAdminPermission,
-    properties: ItemFieldValues
+    properties?: ItemFieldValues
   ) {
     try {
       const { pageContext } = this.spfxContext
       if (!pageContext) return false
       if (!this.portalDataService?.isAvailable) {
         return await this.sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
+      }
+
+      if (!properties) {
+        const propertiesList = this.sp.web.lists.getByTitle(
+          resource.Lists_ProjectProperties_Title
+        )
+        const [propertiesItem] = await propertiesList.items.top(1)()
+        if (!propertiesItem) return false
+        properties = new ItemFieldValues(propertiesItem)
       }
 
       const permissions = await (async () => {
