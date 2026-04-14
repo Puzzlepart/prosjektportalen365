@@ -12,10 +12,10 @@ import resource from 'SharedResources'
 import { Footer, IFooterProps } from 'components/Footer'
 import { PortalDataService } from 'pp365-shared-library/lib/services/PortalDataService'
 import {
-  createSpfiInstance,
   isHubSite,
   ProjectAdminPermission
 } from 'pp365-shared-library'
+import SPDataAdapter from '../../data/SPDataAdapter'
 import { createElement } from 'react'
 import { render } from 'react-dom'
 import {
@@ -46,9 +46,8 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
    */
   public async onInit(): Promise<void> {
     await super.onInit()
-    this._portalDataService = await new PortalDataService().configure({
-      spfxContext: this.context
-    })
+    await SPDataAdapter.configure(this.context, {})
+    this._portalDataService = SPDataAdapter.portalDataService
     this._globalSettings = await this._portalDataService.getGlobalSettings()
 
     if (!this._portalDataService.isAvailable) {
@@ -155,8 +154,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
       : true
 
     const roleResult = checkRole
-      ? await this._portalDataService.checkProjectAdminPermission(
-          createSpfiInstance(this.context),
+      ? await SPDataAdapter.checkProjectAdminPermissions(
           ProjectAdminPermission.AssistantAccess
         )
       : true

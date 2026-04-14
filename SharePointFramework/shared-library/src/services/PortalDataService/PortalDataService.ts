@@ -12,7 +12,6 @@ import { merge } from 'lodash'
 import strings from 'SharedLibraryStrings'
 import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
 import _ from 'underscore'
-import resource from 'SharedResources'
 import { createSpfiInstance, DefaultCaching, getItemFieldValues } from '../../data'
 import { ISPContentType } from '../../interfaces'
 import {
@@ -21,7 +20,6 @@ import {
   ItemFieldValues,
   PortfolioOverviewView,
   ProjectAdminRole,
-  ProjectAdminRoleType,
   ProjectColumn,
   ProjectColumnConfig,
   ProjectContentColumn,
@@ -1089,93 +1087,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     } catch (error) {
       this._handleAvailabilityError(error, 'getProjectAdminRoles')
       return []
-    }
-  }
-
-  /**
-   * Check if the current user has a specific project admin permission for the current
-   * project site. This is used by the footer extension to check assistant access
-   * based on project admin roles.
-   *
-   * @param projectSp SPFI instance for the current project site
-   * @param permission Permission GUID to check (e.g. `ProjectAdminPermission.AssistantAccess`)
-   */
-  public async checkProjectAdminPermission(
-    projectSp: SPFI,
-    permission: string
-  ): Promise<boolean> {
-    if (!this.isAvailable) return false
-    try {
-      const propertiesList = projectSp.web.lists.getByTitle(
-        resource.Lists_ProjectProperties_Title
-      )
-      const [propertiesItem] = await propertiesList.items.top(1)()
-      if (!propertiesItem) return false
-
-      const rolesToCheck: string[] = propertiesItem.GtProjectAdminRoles
-      if (!Array.isArray(rolesToCheck) || rolesToCheck.length === 0) {
-        return await projectSp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
-      }
-
-      const { data: currentUser } = await projectSp.web.ensureUser(
-        this._configuration.spfxContext.pageContext.user.loginName ??
-          this._configuration.spfxContext.pageContext.user.email
-      )
-
-      const allRoles = await this.getProjectAdminRoles()
-      const assignedRoles = allRoles.filter(
-        (role) => rolesToCheck.indexOf(role.title) !== -1
-      )
-
-      const userPermissions: string[] = []
-      for (const role of assignedRoles) {
-        switch (role.type) {
-          case ProjectAdminRoleType.SiteAdmin:
-            {
-              try {
-                if (await projectSp.web.currentUserHasPermissions(PermissionKind.ManageWeb))
-                  userPermissions.push(...role.permissions)
-              } catch {}
-            }
-            break
-          case ProjectAdminRoleType.ProjectProperty:
-            {
-              const fieldValue = propertiesItem[role.projectFieldName]
-              if (Array.isArray(fieldValue) && fieldValue.indexOf(currentUser.Id) !== -1)
-                userPermissions.push(...role.permissions)
-              if (fieldValue === currentUser.Id) userPermissions.push(...role.permissions)
-            }
-            break
-          case ProjectAdminRoleType.SharePointGroup:
-            {
-              let web: IWeb = null
-              if (role.groupLevel === resource.Lists_ProjectAdminRoles_GroupLevel_Project) {
-                web = projectSp.web
-              } else if (
-                role.groupLevel === resource.Lists_ProjectAdminRoles_GroupLevel_Portfolio
-              ) {
-                web = this.web
-              }
-              if (web) {
-                try {
-                  if (
-                    (
-                      await web.siteGroups
-                        .getByName(role.groupName)
-                        .users.filter(`Email eq '${currentUser.Email}'`)()
-                    ).length > 0
-                  )
-                    userPermissions.push(...role.permissions)
-                } catch {}
-              }
-            }
-            break
-        }
-      }
-
-      return _.unique(userPermissions).indexOf(permission) !== -1
-    } catch {
-      return false
     }
   }
 
