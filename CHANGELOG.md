@@ -58,6 +58,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Rettet en logisk feil i `Prosjekttidslinje` hvor prosjektelementer ikke ble vist dersom `Vis på portefølje` var satt til nei, fordi visningen feilaktig var betinget av portefølje-/programflagg i stedet for kun å sjekke om konfigurasjon eksisterer
 - Rettet en feil i `Porteføljeoversikt` hvor gruppering på brukerfelt viste rå SharePoint-verdier (e-post, claim-streng) i stedet for visningsnavn
 - Rettet en feil ved eksport til Excel hvor brukerfelt, oppslag og beregnede kolonner ble eksportert med rå SharePoint-verdier i stedet for visningsnavn
+- Rettet en feil hvor installasjon til en ny tenant feilet med 403 ved opprettelse av område fordi MSAL-tokenet ikke inneholdt nylig innvilgede tillatelser. Installasjonsskriptet prøver nå automatisk på nytt med en ny tilkobling
 - Rettet en feil i filterpanelet hvor beregnede kolonner og brukerfelt viste rå SharePoint-verdier i stedet for visningsnavn.
 - Rettet en feil i `Prosjektlisten` hvor listevisningen krasjet dersom prosjektdata ikke var ferdig lastet
 - Rettet en visuell feil i `Bestillingsportalen` hvor en advarsel/feilmelding blinket kort i skjemaet etter innsending, forårsaket av at skjemadata ble nullstilt før panelet ble lukket
