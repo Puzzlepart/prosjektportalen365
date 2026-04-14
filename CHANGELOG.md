@@ -20,6 +20,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Lagt til to nye kolonner i `Prosjekter`-listen: `Prosjekttillegg` og `Listeinnhold`, som lagrer navnene på valgte tillegg og listeinnhold (kommaseparert) ved opprettelse av prosjektet. [#1542](https://github.com/Puzzlepart/prosjektportalen365/issues/1542)
 - Dynamisk feltrendering i `Bestillingsportalen` som støtter konfigurerbar feltrekkefølge og nivåplassering via `order` og `level` egenskaper
 - Lagt til «Se mine bestillinger»-knapp i verktøylinjen i `Bestillingsportalen`-skuffen for rask tilgang til bestillingsstatus
+- Ny tilgangsstyring for Prosjektportalen Assistenten basert på prosjektadministrasjonsroller. Ny global innstilling `AssistantAccessMode` med tre moduser: `group` (standard, eksisterende oppførsel), `role` (rollebasert per prosjekt) og `both` (bruker må tilfredsstille både gruppe- og rollesjekk). Ny tilgang `AssistantAccess` som kan tilordnes roller i `Prosjektadministrasjonsroller`-listen.
 
 ### Forbedringer
 
@@ -31,10 +32,12 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Knapp i `Footer` for `Områdeinnstillinger` gir også mulighet for å gå direkte til `Områdeinnhold`.
 - Støtte for å angi minimum og maksimum verdier for tall og valuta felt i redigeringspaneler for prosjektinformasjon [#1578](https://github.com/Puzzlepart/prosjektportalen365/issues/1578)
 - Støtte for at prosjekter kan lastes inn uten tilgang på hub, der prosjektinformasjon vises fra lokale data og feilmeldinger for prosjektstatus og prosjekttidslinje vises [#1707](https://github.com/Puzzlepart/prosjektportalen365/issues/1707)
+- Seksjoner i `Prosjektstatus` vises nå dersom noen av feltene i seksjonen har verdi, ikke bare statusfeltet. Seksjoner som kun er relevante for enkelte innholdstyper vises fortsatt ikke dersom de er helt tomme
 - Håndtering av 'overflow' i seksjonsmenyen på toppen av Prosjektstatus siden, slik at seksjonene som ikke får plass i bredden vises i en overflytmeny
 - Lagt til beskrivelse på sluttdato-feltet i redigeringspanelet for `Prosjekttidslinje` som indikerer at sluttdato er påkrevd for elementtyper som vises som punkt (diamant/trekant) på tidslinjen
 - Lagt til tegnbegrensning (255 tegn) for navn- og tittelfelt i `Hent dokumentmal`-dialogen
 - Lagt til validering av URL-felt i redigeringspanelet for prosjektinformasjon, med tydelig feilmelding dersom nettadressen mangler protokoll (http:// eller https://). Forbedret også generelle feilmeldinger ved lagring til å inkludere faktiske feildetaljer fra API-et [#1556](https://github.com/Puzzlepart/prosjektportalen365/issues/1556)
+- Forbedret stabilitet for Planner-operasjoner med automatisk gjenforsøk ved forbigående feil, samt bedre deduplisering av oppgaver og feillogging [#1733](https://github.com/Puzzlepart/prosjektportalen365/pull/1733)
 
 ### Fjernet
 
@@ -56,6 +59,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Rettet en logisk feil i `Prosjekttidslinje` hvor prosjektelementer ikke ble vist dersom `Vis på portefølje` var satt til nei, fordi visningen feilaktig var betinget av portefølje-/programflagg i stedet for kun å sjekke om konfigurasjon eksisterer
 - Rettet en feil i `Porteføljeoversikt` hvor gruppering på brukerfelt viste rå SharePoint-verdier (e-post, claim-streng) i stedet for visningsnavn
 - Rettet en feil ved eksport til Excel hvor brukerfelt, oppslag og beregnede kolonner ble eksportert med rå SharePoint-verdier i stedet for visningsnavn
+- Rettet en feil hvor installasjon til en ny tenant feilet med 403 ved opprettelse av område fordi MSAL-tokenet ikke inneholdt nylig innvilgede tillatelser. Installasjonsskriptet prøver nå automatisk på nytt med en ny tilkobling
 - Rettet en feil i filterpanelet hvor beregnede kolonner og brukerfelt viste rå SharePoint-verdier i stedet for visningsnavn.
 - Rettet en feil i `Prosjektlisten` hvor listevisningen krasjet dersom prosjektdata ikke var ferdig lastet
 - Rettet en visuell feil i `Bestillingsportalen` hvor en advarsel/feilmelding blinket kort i skjemaet etter innsending, forårsaket av at skjemadata ble nullstilt før panelet ble lukket
@@ -65,7 +69,6 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Rettet en feil i `Prosjekttidslinje` (listevisning) hvor kolonner ble kuttet av ved mange kolonner, listevisningen har nå horisontal rulling
 - Rettet en feil ved eksport til Excel hvor numeriske verdier ble eksportert med unødvendige desimaler (f.eks. `12.0000000000000` i stedet for `12`)
 - Rettet en feil i `Risikotiltak` hvor lenken «Gå til oppgaven i Planner» åpnet tasks.office.com i stedet for å navigere direkte til den spesifikke oppgaven i Planner
-- Rettet en feil i administrasjon av underområder hvor tilknyttede underområder ikke dukket opp i listen
 
 ---
 
@@ -119,7 +122,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 
 ### Feilrettinger
 
-- Rettet et problem hvor Prosjektstatus-feltene for PP-Assistentens vurdering ikke ble installert (Førte til feil i bruk av PP-assistenten mot prosjektstatus)
+- Rettet et problem hvor Prosjektstatus-feltene for Prosjektportalen Assistentens vurdering ikke ble installert (Førte til feil i bruk av Prosjektportalen Assistenten mot prosjektstatus)
 - Rettet et problem hvor tilpassede malbiblioteket ikke ble valgt når man klikket på "Hent dokumentmal" fra dokumentbiblioteket [#1628](https://github.com/Puzzlepart/prosjektportalen365/issues/1628)
 - Rettet et problem hvor Porteføljeoversiktens egenskapspanel ikke fungerte.
 - Rettet et problem hvor tallet 0 vises som blankt i gevinstoversikten [#1649](https://github.com/Puzzlepart/prosjektportalen365/issues/1649)
@@ -148,7 +151,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Lagt til mulighet for å skjule spesifikke kolonner på et globalt nivå basert på mal (Prosjektkolonner) [#1624](https://github.com/Puzzlepart/prosjektportalen365/issues/1624)
 - Prosjekttidslinje senterer seg nå rundt prosjektets tidsforløp (startdato - sluttdato) [#1625](https://github.com/Puzzlepart/prosjektportalen365/issues/1625)
 - Muligheter for å tilpasse informasjonen i prosjektkortet på forsiden av porteføljen, inkludert valg av hvilke felt som skal vises og i hvilken rekkefølge. [#1548](https://github.com/Puzzlepart/prosjektportalen365/issues/1548)
-- Mulighet for å tilgangsstyre Prosjektportalen Assistent, slik at den ikke er tilgjengelig for alle brukere. [#1632](https://github.com/Puzzlepart/prosjektportalen365/issues/1632)
+- Mulighet for å tilgangsstyre Prosjektportalen Assistenten, slik at den ikke er tilgjengelig for alle brukere. [#1632](https://github.com/Puzzlepart/prosjektportalen365/issues/1632)
 - Mulighet for å tilgangsstyre synligheten av `Bestill område` knappen for å benytte seg av Bestillingsportalen, slik at den ikke er tilgjengelig for alle brukere.
 - Flere nye felter på Prosjektstatus-listen for å tilrettelegge for KI-behandling av Prosjektstatus
 - Tittel angitt i Prosjektnyheter-dialogen brukes nå automatisk som tittel på den opprettede nyhetsartikler
@@ -166,7 +169,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Lagt til instrumentvisning for 'Siste måling' på Gevinstoversikt [#1572](https://github.com/Puzzlepart/prosjektportalen365/issues/1572)
 - Ny webdel `Idémodul` for visning av idéer (registrering/behandling) samt feltkonfigurasjon slik at relevant data fra idéregistreringen kan videreføres til behandling [#1573](https://github.com/Puzzlepart/prosjektportalen365/issues/1573)
 - Lagt til mulighet for egendefinerte farger på fasene i fasevelgeren [#1613](https://github.com/Puzzlepart/prosjektportalen365/issues/1613)
-- Prosjektportalen assistent, forberendende funksjonalitet for kunstig intelligens.
+- Prosjektportalen Assistent, forberendende funksjonalitet for kunstig intelligens.
 
 ### Forbedringer
 

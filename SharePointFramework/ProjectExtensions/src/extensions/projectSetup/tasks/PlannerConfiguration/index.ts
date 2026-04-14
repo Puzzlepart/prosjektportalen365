@@ -2,7 +2,7 @@ import { PageContext } from '@microsoft/sp-page-context'
 import { getGUID } from '@pnp/core'
 import { default as MSGraphHelper } from 'msgraph-helper'
 import { format } from '@fluentui/react/lib/Utilities'
-import { sleep } from 'pp365-shared-library/lib/util'
+import { sleep, retryWithBackoff } from 'pp365-shared-library/lib/util'
 import * as strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'extensions/projectSetup'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
@@ -105,8 +105,18 @@ export class PlannerConfiguration extends BaseTask {
     try {
       const existingGroupPlans = await this._fetchPlans(plan.owner)
       const existingPlan = _.find(existingGroupPlans, (p) => p.title === plan.title)
-      if (!existingPlan) {
-        plan = await MSGraphHelper.Post('planner/plans', JSON.stringify(plan))
+      if (existingPlan) {
+        plan = existingPlan
+      } else {
+        plan = await retryWithBackoff(
+          () => MSGraphHelper.Post('planner/plans', JSON.stringify(plan)),
+          {
+            onRetry: (attempt, error, delay) =>
+              this.logWarning(
+                `Retry ${attempt} creating plan ${plan.title} after ${delay}s (${error.statusCode ?? error.message})`
+              )
+          }
+        )
       }
       if (setupLabels) await this._setupLabels(plan, pageContext)
       return plan
@@ -121,14 +131,13 @@ export class PlannerConfiguration extends BaseTask {
    * @param plan Plan
    * @param delay Delay in seconds before updating the plan to ensure it's created properly
    */
-  private async _setupLabels(plan: IPlannerPlan, pageContext: PageContext, delay: number = 5) {
+  private async _setupLabels(plan: IPlannerPlan, pageContext: PageContext, delay: number = 8) {
     this.logInformation(`Sleeping ${delay} seconds before updating the plan with labels`)
     await sleep(delay)
     if (this._labels.length > 0) {
       this.logInformation(
-        `Sleeping before updating the plan with labels ${JSON.stringify(this._labels)}`
+        `Updating the plan with labels ${JSON.stringify(this._labels)}`
       )
-      const eTag = (await MSGraphHelper.Get(`planner/plans/${plan.id}/details`))['@odata.etag']
 
       if (this._labels.length > 25) {
         ListLogger.init(
@@ -149,10 +158,23 @@ export class PlannerConfiguration extends BaseTask {
         .slice(0, 25)
         .reduce((obj, value, idx) => ({ ...obj, [`category${idx + 1}`]: value }), {})
 
-      await MSGraphHelper.Patch(
-        `planner/plans/${plan.id}/details`,
-        JSON.stringify({ categoryDescriptions: this._categoryDescriptions }),
-        eTag
+      await retryWithBackoff(
+        async () => {
+          const eTag = (await MSGraphHelper.Get(`planner/plans/${plan.id}/details`))[
+            '@odata.etag'
+          ]
+          await MSGraphHelper.Patch(
+            `planner/plans/${plan.id}/details`,
+            JSON.stringify({ categoryDescriptions: this._categoryDescriptions }),
+            eTag
+          )
+        },
+        {
+          onRetry: (attempt, error, delaySec) =>
+            this.logWarning(
+              `Retry ${attempt} updating labels for plan ${plan.title} after ${delaySec}s (${error.statusCode ?? error.message})`
+            )
+        }
       )
     }
   }
@@ -165,22 +187,27 @@ export class PlannerConfiguration extends BaseTask {
    * @param planId Plan Id
    */
   private async _ensureBucket(name: string, existingBuckets: IPlannerBucket[], planId: string) {
-    try {
-      let [bucket] = existingBuckets.filter((p) => p.name === name)
-      if (!bucket) {
-        bucket = await MSGraphHelper.Post(
-          'planner/buckets',
-          JSON.stringify({
-            name,
-            planId,
-            orderHint: ' !'
-          })
-        )
-      }
-      return bucket
-    } catch (error) {
-      throw error
+    let [bucket] = existingBuckets.filter((p) => p.name === name)
+    if (!bucket) {
+      bucket = await retryWithBackoff(
+        () =>
+          MSGraphHelper.Post(
+            'planner/buckets',
+            JSON.stringify({
+              name,
+              planId,
+              orderHint: ' !'
+            })
+          ),
+        {
+          onRetry: (attempt, error, delay) =>
+            this.logWarning(
+              `Retry ${attempt} creating bucket ${name} after ${delay}s (${error.statusCode ?? error.message})`
+            )
+        }
+      )
     }
+    return bucket
   }
 
   /**
@@ -197,13 +224,22 @@ export class PlannerConfiguration extends BaseTask {
     bucket: IPlannerBucket,
     pageContext: PageContext,
     appliedCategories: Record<string, boolean> = {},
-    delay: number = 1
+    delay: number = 2
   ) {
     const tasks = Object.keys(this._configuration[bucket.name])
+    const existingTasks = await this._fetchBucketTasks(bucket.id)
+
     for (let i = 0; i < tasks.length; i++) {
       const name = tasks[i]
       const { checklist } = this._configuration[bucket.name][name]
       const { labels } = this._configuration[bucket.name][name]
+
+      if (existingTasks.some((t) => t.title === name)) {
+        this.logInformation(
+          `Task ${name} already exists in bucket ${bucket.name}, skipping`
+        )
+        continue
+      }
 
       if (labels) {
         Object.keys(this._categoryDescriptions).forEach((key) => {
@@ -219,25 +255,36 @@ export class PlannerConfiguration extends BaseTask {
 
       try {
         this.logInformation(`Creating task ${name} in bucket ${bucket.name}`)
-        const task = await this._createTask({
-          title: name,
-          bucketId: bucket.id,
-          planId,
-          appliedCategories
-        })
+        const task = await retryWithBackoff(
+          () =>
+            this._createTask({
+              title: name,
+              bucketId: bucket.id,
+              planId,
+              appliedCategories
+            }),
+          {
+            onRetry: (attempt, error, delaySec) =>
+              this.logWarning(
+                `Retry ${attempt} creating task ${name} after ${delaySec}s (${error.statusCode ?? error.message})`
+              )
+          }
+        )
         await this._updateTaskDetails(
           task.id,
           this._configuration[bucket.name][name],
           pageContext,
           delay
         )
-        this.logInformation(`Succesfully created task ${name} in bucket ${bucket.name}`, {
+        this.logInformation(`Successfully created task ${name} in bucket ${bucket.name}`, {
           taskId: task.id,
           checklist,
           labels
         })
       } catch (error) {
-        this.logWarning(`Failed to create task ${name} in bucket ${bucket.name}`)
+        this.logWarning(
+          `Failed to create task ${name} in bucket ${bucket.name}: ${error.statusCode ?? ''} ${error.message ?? error}`
+        )
       }
     }
   }
@@ -254,7 +301,7 @@ export class PlannerConfiguration extends BaseTask {
     taskId: any,
     taskDetails: ITaskDetails,
     pageContext: PageContext,
-    delay: number = 1
+    delay: number = 2
   ) {
     if (
       !taskDetails.name &&
@@ -326,11 +373,21 @@ export class PlannerConfiguration extends BaseTask {
       previewType: taskDetails.previewType
     }
 
-    const eTag = (await MSGraphHelper.Get(`planner/tasks/${taskId}/details`))['@odata.etag']
-    await MSGraphHelper.Patch(
-      `planner/tasks/${taskId}/details`,
-      JSON.stringify(taskDetailsJson),
-      eTag
+    await retryWithBackoff(
+      async () => {
+        const eTag = (await MSGraphHelper.Get(`planner/tasks/${taskId}/details`))['@odata.etag']
+        await MSGraphHelper.Patch(
+          `planner/tasks/${taskId}/details`,
+          JSON.stringify(taskDetailsJson),
+          eTag
+        )
+      },
+      {
+        onRetry: (attempt, error, delaySec) =>
+          this.logWarning(
+            `Retry ${attempt} updating task details for ${taskId} after ${delaySec}s (${error.statusCode ?? error.message})`
+          )
+      }
     )
   }
 
@@ -349,7 +406,15 @@ export class PlannerConfiguration extends BaseTask {
    * @param groupId Group identifier
    */
   public _fetchPlans(groupId: string) {
-    return MSGraphHelper.Get<IPlannerPlan[]>(`groups/${groupId}/planner/plans`, ['id', 'title'])
+    return retryWithBackoff(
+      () => MSGraphHelper.Get<IPlannerPlan[]>(`groups/${groupId}/planner/plans`, ['id', 'title']),
+      {
+        onRetry: (attempt, error, delay) =>
+          this.logWarning(
+            `Retry ${attempt} fetching plans for group ${groupId} after ${delay}s (${error.statusCode ?? error.message})`
+          )
+      }
+    )
   }
 
   /**
@@ -358,11 +423,41 @@ export class PlannerConfiguration extends BaseTask {
    * @param planId Plan Id
    */
   private _fetchBuckets(planId: string) {
-    return MSGraphHelper.Get<IPlannerBucket[]>(`planner/plans/${planId}/buckets`, [
-      'id',
-      'name',
-      'planId'
-    ])
+    return retryWithBackoff(
+      () =>
+        MSGraphHelper.Get<IPlannerBucket[]>(`planner/plans/${planId}/buckets`, [
+          'id',
+          'name',
+          'planId'
+        ]),
+      {
+        onRetry: (attempt, error, delay) =>
+          this.logWarning(
+            `Retry ${attempt} fetching buckets for plan ${planId} after ${delay}s (${error.statusCode ?? error.message})`
+          )
+      }
+    )
+  }
+
+  /**
+   * Fetch existing tasks for a specific bucket
+   *
+   * @param bucketId Bucket Id
+   */
+  private _fetchBucketTasks(bucketId: string) {
+    return retryWithBackoff(
+      () =>
+        MSGraphHelper.Get<{ id: string; title: string; bucketId: string }[]>(
+          `planner/buckets/${bucketId}/tasks`,
+          ['id', 'title', 'bucketId']
+        ),
+      {
+        onRetry: (attempt, error, delay) =>
+          this.logWarning(
+            `Retry ${attempt} fetching tasks for bucket ${bucketId} after ${delay}s (${error.statusCode ?? error.message})`
+          )
+      }
+    )
   }
 
   /**

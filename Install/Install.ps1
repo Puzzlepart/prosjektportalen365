@@ -217,7 +217,17 @@ if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
         $PortfolioSite = Get-PnPTenantSite -Url $Uri.AbsoluteUri -ErrorAction SilentlyContinue
         if ($null -eq $PortfolioSite) {
             StartAction("Creating portfolio site at $($Uri.AbsoluteUri)")
-            $PortfolioSite = New-PnPSite -Type TeamSite -Title $Title -Alias $Alias -IsPublic:$true -ErrorAction Stop -Lcid $LanguageId -Wait -HideGroupInOutlook -WelcomeEmailDisabled
+            Try {
+                $PortfolioSite = New-PnPSite -Type TeamSite -Title $Title -Alias $Alias -IsPublic:$true -ErrorAction Stop -Lcid $LanguageId -Wait -HideGroupInOutlook -WelcomeEmailDisabled
+            }
+            Catch {
+                Write-Host "[WARNING] Failed to create site: $($_.Exception.Message)" -ForegroundColor Yellow
+                Write-Host "[INFO] Reconnecting with a fresh session and retrying. This can happen when app permissions were recently granted on a new tenant." -ForegroundColor Yellow
+                Disconnect-PnPOnline -ErrorAction SilentlyContinue
+                Start-Sleep -Seconds 10
+                Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
+                $PortfolioSite = New-PnPSite -Type TeamSite -Title $Title -Alias $Alias -IsPublic:$true -ErrorAction Stop -Lcid $LanguageId -Wait -HideGroupInOutlook -WelcomeEmailDisabled
+            }
             EndAction
         }
     }

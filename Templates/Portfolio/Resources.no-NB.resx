@@ -1474,6 +1474,9 @@
   <data name="Lists_Global_Settings_Category_Assistant_RequireAssistantAccess_Title" xml:space="preserve">
     <value>Krev tilgang for å bruke assistenten</value>
   </data>
+  <data name="Lists_Global_Settings_Category_Assistant_AssistantAccessMode_Title" xml:space="preserve">
+    <value>Tilgangsmodus for assistenten (group, role eller both)</value>
+  </data>
   <data name="Lists_Global_Settings_Category_Assistant_UseAssistant_Title" xml:space="preserve">
     <value>Ta i bruk Prosjektportalen assistenten</value>
   </data>
@@ -1998,6 +2001,9 @@
   </data>
   <data name="Lists_ProjectAdminPermissions_ReRunSetup" xml:space="preserve">
     <value>Kjøre oppsettsveiviser på nytt</value>
+  </data>
+  <data name="Lists_ProjectAdminPermissions_AssistantAccess" xml:space="preserve">
+    <value>Assistenttilgang</value>
   </data>
   <data name="Lists_ProjectAdminPermissions_Title" xml:space="preserve">
     <value>Prosjektadministrasjonstilganger</value>
