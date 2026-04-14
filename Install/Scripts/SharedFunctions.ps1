@@ -59,9 +59,20 @@ Start action, write action name and start stopwatch
 .PARAMETER Action
 Action name to start
 #>
-function StartAction($Action) {
+function StartAction($Action, [switch]$WithHeartbeat, [int]$HeartbeatIntervalSeconds = 30) {
     $global:sw_action = [Diagnostics.Stopwatch]::StartNew()
     Write-Host "[INFO] $Action...  " -NoNewline
+    if ($WithHeartbeat.IsPresent) {
+        # Uses a System.Threading.Timer so dots appear live even while a synchronous
+        # cmdlet (e.g. Invoke-PnPSiteTemplate) is blocking the main thread. The
+        # callback runs on a ThreadPool thread and uses [Console]::Write which is
+        # thread-safe for single writes.
+        $callback = [System.Threading.TimerCallback] {
+            try { [Console]::Write(".") } catch { }
+        }
+        $intervalMs = $HeartbeatIntervalSeconds * 1000
+        $global:sw_heartbeat = [System.Threading.Timer]::new($callback, $null, $intervalMs, $intervalMs)
+    }
 }
 
 <#
@@ -72,6 +83,10 @@ End action
 End action, stop stopwatch and write elapsed time
 #>
 function EndAction() {
+    if ($null -ne $global:sw_heartbeat) {
+        $global:sw_heartbeat.Dispose()
+        $global:sw_heartbeat = $null
+    }
     $global:sw_action.Stop()
     $ElapsedSeconds = [math]::Round(($global:sw_action.ElapsedMilliseconds) / 1000, 2)
     Write-Host "Completed in $($ElapsedSeconds)s" -ForegroundColor Green

@@ -128,9 +128,8 @@ else {
     else {
         Write-Host "[INFO] Loaded PnP.PowerShell v$((Get-Command Connect-PnPOnline).Version) from your environment"
     }
-    Write-Host "[INFO] In version 1.12 of Prosjektportalen we upgraded PnP.PowerShell to version 3.1."
     Write-Host "[INFO] As part of the authentication process with Microsoft 365, this script will open a browser window to authenticate."
-    Write-Host "[INFO] Make sure you have the correct browser active. "
+    Write-Host "[INFO] Make sure you have the correct browser active. You can also copy the URL and open it in the correct browser if needed."
     Show-Countdown -Seconds 15
 }
 
@@ -165,9 +164,26 @@ if ($Alias.Length -lt 2 -or (@("sites/", "teams/") -notcontains $ManagedPath) -o
 }
 #endregion
 
+#region Ensure site collection admin access before upgrade checks
+if ($Upgrade.IsPresent -and $null -ne $CurrentUser -and $CurrentUser.LoginName) {
+    try {
+        Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
+        Set-PnPTenantSite -Url $Url -Owners $CurrentUser.LoginName -ErrorAction SilentlyContinue
+    }
+    catch {
+        Write-Host "[WARNING] Failed to ensure site collection administrator access before upgrade checks: $($_.Exception.Message)" -ForegroundColor Yellow
+        Write-ErrorDetails $_
+    }
+}
+#endregion
+
 #region Check if installing to another installation channel when upgrading
 Connect-SharePoint -Url $Uri.AbsoluteUri -ConnectionInfo $ConnectionInfo
 $ExistingSite = Get-PnPSite -ErrorAction SilentlyContinue
+if ($Upgrade.IsPresent -and $null -eq $ExistingSite) {
+    Write-Host "[ERROR] You specified -Upgrade, but no existing site was found at $($Uri.AbsoluteUri). Cannot upgrade a site that does not exist." -ForegroundColor Red
+    exit 1
+}
 if ($Upgrade.IsPresent -and $null -ne $ExistingSite) {
     $InstallInfo = Get-PPInstallationInfo
     if ($InstallInfo.LanguageId -ne $LanguageId) {
@@ -459,8 +475,11 @@ if (-not $SkipTemplate.IsPresent) {
         # Shared retry configuration
         $MaxRetries = 3
 
+        Write-Host "[INFO] The next step applies the PnP site template. Depending on the target tenant this can take anywhere from a few minutes to over an hour." -ForegroundColor Yellow
+        Write-Host "[INFO] A dot will be printed every 30 seconds while the template is being applied. Please do NOT cancel the installation even if it looks stuck." -ForegroundColor Yellow
+
         if ($Upgrade.IsPresent) {
-            StartAction("Applying PnP template Portfolio to $($Uri.AbsoluteUri)")
+            StartAction -Action "Applying PnP template Portfolio to $($Uri.AbsoluteUri)" -WithHeartbeat
             $Retry = 0
             while ($Retry -lt $MaxRetries) {
                 try {
@@ -482,7 +501,7 @@ if (-not $SkipTemplate.IsPresent) {
             EndAction
 
             if (Test-Path "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp") {
-                StartAction("Applying PnP content template to $($Uri.AbsoluteUri)")
+                StartAction -Action "Applying PnP content template to $($Uri.AbsoluteUri)" -WithHeartbeat
                 Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" -Handlers Files -ErrorAction Stop -WarningAction SilentlyContinue
                 EndAction
             }
@@ -492,7 +511,7 @@ if (-not $SkipTemplate.IsPresent) {
 
             if ($IncludeBAContent.IsPresent) {
                 if (Test-Path "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp") {
-                    StartAction("Applying PnP B&A content template to $($Uri.AbsoluteUri)")
+                    StartAction -Action "Applying PnP B&A content template to $($Uri.AbsoluteUri)" -WithHeartbeat
                     Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
                     EndAction
                 }
@@ -502,7 +521,7 @@ if (-not $SkipTemplate.IsPresent) {
             }
         }
         else {
-            StartAction("Applying PnP template Portfolio to $($Uri.AbsoluteUri)")
+            StartAction -Action "Applying PnP template Portfolio to $($Uri.AbsoluteUri)" -WithHeartbeat
             $Instance = Read-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp"
             $Instance.SupportedUILanguages[0].LCID = $LanguageId
             Invoke-PnPSiteTemplate -InputInstance $Instance -Handlers SupportedUILanguages
@@ -527,14 +546,14 @@ if (-not $SkipTemplate.IsPresent) {
             EndAction
 
             if (Test-Path "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp") {
-                StartAction("Applying PnP content template to $($Uri.AbsoluteUri)")
+                StartAction -Action "Applying PnP content template to $($Uri.AbsoluteUri)" -WithHeartbeat
                 Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
                 EndAction
             }
 
             if ($IncludeBAContent.IsPresent) {
                 if (Test-Path "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp") {
-                    StartAction("Applying PnP B&A content template to $($Uri.AbsoluteUri)")
+                    StartAction -Action "Applying PnP B&A content template to $($Uri.AbsoluteUri)" -WithHeartbeat
                     Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
                     EndAction
                 }
