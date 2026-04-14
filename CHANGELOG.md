@@ -20,7 +20,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Lagt til to nye kolonner i `Prosjekter`-listen: `Prosjekttillegg` og `Listeinnhold`, som lagrer navnene på valgte tillegg og listeinnhold (kommaseparert) ved opprettelse av prosjektet. [#1542](https://github.com/Puzzlepart/prosjektportalen365/issues/1542)
 - Dynamisk feltrendering i `Bestillingsportalen` som støtter konfigurerbar feltrekkefølge og nivåplassering via `order` og `level` egenskaper
 - Lagt til «Se mine bestillinger»-knapp i verktøylinjen i `Bestillingsportalen`-skuffen for rask tilgang til bestillingsstatus
-- Ny tilgangsstyring for PP Assistenten basert på prosjektadministrasjonsroller. Ny global innstilling `AssistantAccessMode` med tre moduser: `group` (standard, eksisterende oppførsel), `role` (rollebasert per prosjekt) og `both` (bruker må tilfredsstille både gruppe- og rollesjekk). Ny tilgang `AssistantAccess` som kan tilordnes roller i `Prosjektadministrasjonsroller`-listen.
+- Ny tilgangsstyring for Prosjektportalen Assistenten basert på prosjektadministrasjonsroller. Ny global innstilling `AssistantAccessMode` med tre moduser: `group` (standard, eksisterende oppførsel), `role` (rollebasert per prosjekt) og `both` (bruker må tilfredsstille både gruppe- og rollesjekk). Ny tilgang `AssistantAccess` som kan tilordnes roller i `Prosjektadministrasjonsroller`-listen.
 
 ### Forbedringer
 
@@ -122,7 +122,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 
 ### Feilrettinger
 
-- Rettet et problem hvor Prosjektstatus-feltene for PP-Assistentens vurdering ikke ble installert (Førte til feil i bruk av PP-assistenten mot prosjektstatus)
+- Rettet et problem hvor Prosjektstatus-feltene for Prosjektportalen Assistentens vurdering ikke ble installert (Førte til feil i bruk av Prosjektportalen Assistenten mot prosjektstatus)
 - Rettet et problem hvor tilpassede malbiblioteket ikke ble valgt når man klikket på "Hent dokumentmal" fra dokumentbiblioteket [#1628](https://github.com/Puzzlepart/prosjektportalen365/issues/1628)
 - Rettet et problem hvor Porteføljeoversiktens egenskapspanel ikke fungerte.
 - Rettet et problem hvor tallet 0 vises som blankt i gevinstoversikten [#1649](https://github.com/Puzzlepart/prosjektportalen365/issues/1649)
@@ -151,7 +151,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Lagt til mulighet for å skjule spesifikke kolonner på et globalt nivå basert på mal (Prosjektkolonner) [#1624](https://github.com/Puzzlepart/prosjektportalen365/issues/1624)
 - Prosjekttidslinje senterer seg nå rundt prosjektets tidsforløp (startdato - sluttdato) [#1625](https://github.com/Puzzlepart/prosjektportalen365/issues/1625)
 - Muligheter for å tilpasse informasjonen i prosjektkortet på forsiden av porteføljen, inkludert valg av hvilke felt som skal vises og i hvilken rekkefølge. [#1548](https://github.com/Puzzlepart/prosjektportalen365/issues/1548)
-- Mulighet for å tilgangsstyre Prosjektportalen Assistent, slik at den ikke er tilgjengelig for alle brukere. [#1632](https://github.com/Puzzlepart/prosjektportalen365/issues/1632)
+- Mulighet for å tilgangsstyre Prosjektportalen Assistenten, slik at den ikke er tilgjengelig for alle brukere. [#1632](https://github.com/Puzzlepart/prosjektportalen365/issues/1632)
 - Mulighet for å tilgangsstyre synligheten av `Bestill område` knappen for å benytte seg av Bestillingsportalen, slik at den ikke er tilgjengelig for alle brukere.
 - Flere nye felter på Prosjektstatus-listen for å tilrettelegge for KI-behandling av Prosjektstatus
 - Tittel angitt i Prosjektnyheter-dialogen brukes nå automatisk som tittel på den opprettede nyhetsartikler
@@ -169,7 +169,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Lagt til instrumentvisning for 'Siste måling' på Gevinstoversikt [#1572](https://github.com/Puzzlepart/prosjektportalen365/issues/1572)
 - Ny webdel `Idémodul` for visning av idéer (registrering/behandling) samt feltkonfigurasjon slik at relevant data fra idéregistreringen kan videreføres til behandling [#1573](https://github.com/Puzzlepart/prosjektportalen365/issues/1573)
 - Lagt til mulighet for egendefinerte farger på fasene i fasevelgeren [#1613](https://github.com/Puzzlepart/prosjektportalen365/issues/1613)
-- Prosjektportalen assistent, forberendende funksjonalitet for kunstig intelligens.
+- Prosjektportalen Assistent, forberendende funksjonalitet for kunstig intelligens.
 
 ### Forbedringer
 
