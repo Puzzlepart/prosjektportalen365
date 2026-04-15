@@ -139,7 +139,9 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
     const timelineConfig = await props.dataAdapter.fetchTimelineConfiguration()
     const [projects, projectData, timelineContentItems, timelineAggregatedContent = []] =
       await Promise.all([
-        props.dataAdapter.fetchEnrichedProjects(),
+        props.dataAdapter.fetchProjects
+          ? props.dataAdapter.fetchProjects()
+          : props.dataAdapter.fetchEnrichedProjects(),
         props.dataAdapter.fetchTimelineProjectData(timelineConfig),
         props.dataAdapter.fetchTimelineContentItems(timelineConfig),
         props.dataAdapter.fetchTimelineAggregatedContent(

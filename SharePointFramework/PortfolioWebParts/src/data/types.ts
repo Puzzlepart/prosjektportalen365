@@ -275,6 +275,17 @@ export interface IPortfolioWebPartsDataAdapter {
   fetchEnrichedProjects?(fields?: IEnrichedProjectsFields): Promise<ProjectListModel[]>
 
   /**
+   * Lightweight projects fetch. Returns `ProjectListModel[]` populated only
+   * from the Projects list items (no site access, membership or persona
+   * lookups). Shares the underlying items cache with `fetchEnrichedProjects`
+   * so the first caller on the page pays the network cost and later callers
+   * reuse the cached data.
+   *
+   * @param fields Additional fields to include in the query
+   */
+  fetchProjects?(fields?: IEnrichedProjectsFields): Promise<ProjectListModel[]>
+
+  /**
    * Fetching enriched project by combining list item from projects list,
    * Graph Groups and site users. The result are cached in `localStorage`
    * for 30 minutes.
@@ -285,14 +296,13 @@ export interface IPortfolioWebPartsDataAdapter {
   fetchEnrichedProject?(siteId: string, hubContext?: IHubContext): Promise<ProjectListModel>
 
   /**
-   * Fetch projects from the projects list. If a data source is specified,
-   * the projects are filtered using the `odataQuery` property from the
-   * specified view.
+   * Fetch projects from the projects list filtered by the `odataQuery`
+   * property from the specified data source view.
    *
    * @param configuration Configuration
    * @param dataSource Data source
    */
-  fetchProjects?(
+  fetchProjectsByDataSource?(
     configuration?: IPortfolioAggregationConfiguration,
     dataSource?: string
   ): Promise<any[]>

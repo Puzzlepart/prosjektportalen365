@@ -28,6 +28,7 @@ import {
   DefaultCaching,
   getClassProperties,
   getItemFieldValues,
+  getOrFetchProjectsCache,
   getUserPhoto,
   IGraphGroup,
   IPortalDataServiceConfiguration,
@@ -670,73 +671,127 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       .filter(Boolean)
   }
 
-  public async fetchEnrichedProjects(
-    fields?: IEnrichedProjectsFields
-  ): Promise<ProjectListModel[]> {
-    const localStore = new PnPClientStorage().local
-    const siteId = this._spfxContext.pageContext.site.id.toString()
-    const list = this._sp.web.lists.getByTitle(resource.Lists_Projects_Title)
-    const baseFields = Object.keys(new SPProjectItem())
-    const selectFields = [...baseFields]
-
+  /**
+   * Builds the list of select fields used when priming the items cache. The
+   * set is a superset of `SPProjectItem` plus any user-configured extra fields
+   * (user persona ids, primary/secondary display fields). The defaults
+   * (GtProjectOwner/GtProjectManager/GtProjectServiceAreaText/GtProjectTypeText)
+   * are already covered by `SPProjectItem`, so typical configurations hit the
+   * shared cache without surprises.
+   */
+  private _buildProjectItemsSelectFields(fields?: IEnrichedProjectsFields): string[] {
+    const selectFields = [...Object.keys(new SPProjectItem())]
     if (fields?.primaryUserField) selectFields.push(`${fields.primaryUserField}Id`)
     if (fields?.secondaryUserField) selectFields.push(`${fields.secondaryUserField}Id`)
     if (fields?.primaryField) selectFields.push(fields.primaryField)
     if (fields?.secondaryField) selectFields.push(fields.secondaryField)
+    return _.uniq(selectFields)
+  }
 
-    const fieldsCacheKey = [
-      fields?.primaryUserField,
-      fields?.secondaryUserField,
-      fields?.primaryField,
-      fields?.secondaryField
-    ]
-      .filter(Boolean)
-      .join('_')
-    const cacheKey = `pp365_fetchenrichedprojects_${siteId}_${fieldsCacheKey || 'default'}`
+  /**
+   * Fetches the raw Projects list items. Shared cache across webparts on the
+   * same page via `getOrFetchProjectsCache`. The first caller wins — its
+   * selected fields are what later callers see. Default field selection covers
+   * the standard ProjectList / ProjectCard configuration.
+   */
+  private async _fetchProjectItems(
+    siteId: string,
+    fields?: IEnrichedProjectsFields
+  ): Promise<any[]> {
+    const list = this._sp.web.lists.getByTitle(resource.Lists_Projects_Title)
+    const selectFields = this._buildProjectItemsSelectFields(fields)
+    return getOrFetchProjectsCache('items', siteId, () =>
+      list.items.select(...selectFields).getAll()
+    )
+  }
 
-    let templates = []
+  private async _fetchProjectSites(siteId: string): Promise<ISearchResult[]> {
+    return getOrFetchProjectsCache('sites', siteId, () =>
+      this._fetchItems(`DepartmentId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId'])
+    )
+  }
+
+  private async _fetchProjectMemberOfGroups(siteId: string): Promise<IGraphGroup[]> {
+    return getOrFetchProjectsCache('memberOf', siteId, () => this.fetchMemberGroups())
+  }
+
+  private async _fetchProjectSiteUsers(siteId: string): Promise<ISiteUserInfo[]> {
+    return getOrFetchProjectsCache('users', siteId, () =>
+      this._sp.web.siteUsers.select('Id', 'Title', 'Email')()
+    )
+  }
+
+  /**
+   * Builds the template map used to decorate items with a `TemplateImageUrl`.
+   * Falls back to an empty map if the Maloppsett list isn't available.
+   */
+  private async _fetchTemplateMap(): Promise<Map<string, string>> {
+    const templateMap = new Map<string, string>()
     try {
-      templates = await this._sp.web.lists
+      const templates = await this._sp.web.lists
         .getByTitle(resource.Lists_TemplateOptions_Title)
         .items.select('Title', 'TemplateImageUrl')()
+      templates.forEach((template) => {
+        if (template.Title && template.TemplateImageUrl) {
+          templateMap.set(template.Title, template.TemplateImageUrl)
+        }
+      })
     } catch (error) {
       console.warn(
         'Could not fetch template images from Maloppsett list. TemplateImageUrl field may not exist.',
         error
       )
     }
+    return templateMap
+  }
 
-    const [items, sites, memberOfGroups, users] = await localStore.getOrPut(
-      cacheKey,
-      async () =>
-        await Promise.all([
-          list.items.select(...selectFields).getAll(),
-          this._fetchItems(`DepartmentId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId']),
-          this.fetchMemberGroups(),
-          this._sp.web.siteUsers.select('Id', 'Title', 'Email')()
-        ]),
-      dateAdd(new Date(), 'minute', 30)
-    )
+  public async fetchEnrichedProjects(
+    fields?: IEnrichedProjectsFields
+  ): Promise<ProjectListModel[]> {
+    const siteId = this._spfxContext.pageContext.site.id.toString()
 
-    const templateMap = new Map<string, string>()
-    templates.forEach((template) => {
-      if (template.Title && template.TemplateImageUrl) {
-        templateMap.set(template.Title, template.TemplateImageUrl)
-      }
-    })
+    const [templateMap, items, sites, memberOfGroups, users] = await Promise.all([
+      this._fetchTemplateMap(),
+      this._fetchProjectItems(siteId, fields),
+      this._fetchProjectSites(siteId),
+      this._fetchProjectMemberOfGroups(siteId),
+      this._fetchProjectSiteUsers(siteId)
+    ])
 
-    const result: IProjectsData = {
-      items,
-      sites,
-      memberOfGroups,
-      users
-    }
+    const result: IProjectsData = { items, sites, memberOfGroups, users }
     let projects = this._combineResultData(
       result,
       fields?.primaryUserField,
       fields?.secondaryUserField,
       templateMap
     )
+    projects = projects.filter(
+      (m) =>
+        m.lifecycleStatus !== strings.LifecycleStatus_Completed &&
+        m.lifecycleStatus !== strings.LifecycleStatus_Closed
+    )
+    projects = projects.sort((a, b) => a.title.localeCompare(b.title))
+    return projects
+  }
+
+  /**
+   * Lightweight projects fetch used by callers that only need Projects list
+   * data (title, siteId, url, phase, dates, project properties) — e.g.
+   * `ProjectTimeline` and `PortfolioAggregation`. Shares the underlying items
+   * cache with {@link fetchEnrichedProjects}, so if any of the three webparts
+   * is already on the page the network call is skipped. Persona, membership
+   * and access fields are left undefined since those datasets aren't fetched.
+   */
+  public async fetchProjects(fields?: IEnrichedProjectsFields): Promise<ProjectListModel[]> {
+    const siteId = this._spfxContext.pageContext.site.id.toString()
+
+    const [templateMap, items] = await Promise.all([
+      this._fetchTemplateMap(),
+      this._fetchProjectItems(siteId, fields)
+    ])
+
+    const result: IProjectsData = { items, sites: [], memberOfGroups: [], users: [] }
+    let projects = this._combineResultData(result, undefined, undefined, templateMap)
     projects = projects.filter(
       (m) =>
         m.lifecycleStatus !== strings.LifecycleStatus_Completed &&
@@ -827,7 +882,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     })
   }
 
-  public async fetchProjects(
+  public async fetchProjectsByDataSource(
     configuration?: IPortfolioAggregationConfiguration,
     dataSource?: string
   ): Promise<any[]> {

@@ -25,7 +25,7 @@ import {
 import {
   DataSource,
   DataSourceService,
-  DefaultCaching,
+  getOrFetchProjectsCache,
   IGraphGroup,
   IProjectDataServiceParams,
   ISPDataAdapterBaseConfiguration,
@@ -642,9 +642,13 @@ export class SPDataAdapter
     return projects
   }
 
-  public async fetchEnrichedProjects(): Promise<ProjectListModel[]> {
-    await MSGraph.Init(this.spfxContext.msGraphClientFactory)
-    const [items, memberOfGroups] = await Promise.all([
+  /**
+   * Fetches the raw Projects list items for the current program site. Shared
+   * across webparts on the same page via `getOrFetchProjectsCache`, keyed by
+   * siteId so program-site data is isolated from the portfolio hub cache.
+   */
+  private async _fetchProjectItems(siteId: string): Promise<SPProjectItem[]> {
+    return getOrFetchProjectsCache('items', siteId, () =>
       this.portalDataService.web.lists
         .getByTitle(resource.Lists_Projects_Title)
         .items.select(...Object.keys(new SPProjectItem()))
@@ -652,24 +656,46 @@ export class SPDataAdapter
           `GtProjectLifecycleStatus ne '${resource.Choice_GtProjectLifecycleStatus_Closed}' and GtProjectLifecycleStatus ne '${strings.LifecycleStatus_Closed}'`
         )
         .orderBy('Title')
-        .using(DefaultCaching)
-        .getAll<SPProjectItem>(),
+        .getAll<SPProjectItem>()
+    )
+  }
+
+  private async _fetchMemberOfGroups(siteId: string): Promise<IGraphGroup[]> {
+    return getOrFetchProjectsCache('memberOf', siteId, () =>
       MSGraph.Get<IGraphGroup[]>(
         '/me/memberOf/$/microsoft.graph.group',
         ['id', 'displayName'],
         // eslint-disable-next-line quotes
         "groupTypes/any(a:a%20eq%20'unified')"
       )
-    ])
-    const result: IProjectsData = {
-      items,
-      memberOfGroups
-    }
-    const projects = this._combineResultData(result)
-    return projects
+    )
   }
 
-  public async fetchProjects(
+  public async fetchEnrichedProjects(): Promise<ProjectListModel[]> {
+    await MSGraph.Init(this.spfxContext.msGraphClientFactory)
+    const siteId = this.spfxContext.pageContext.site.id.toString()
+    const [items, memberOfGroups] = await Promise.all([
+      this._fetchProjectItems(siteId),
+      this._fetchMemberOfGroups(siteId)
+    ])
+    const result: IProjectsData = { items, memberOfGroups }
+    return this._combineResultData(result)
+  }
+
+  /**
+   * Lightweight projects fetch used by callers (ProjectTimeline,
+   * PortfolioAggregation) that only need Projects list data. Shares the
+   * underlying items cache with `fetchEnrichedProjects`, so co-located
+   * webparts reuse the single network call.
+   */
+  public async fetchProjects(): Promise<ProjectListModel[]> {
+    const siteId = this.spfxContext.pageContext.site.id.toString()
+    const items = await this._fetchProjectItems(siteId)
+    const result: IProjectsData = { items, memberOfGroups: [] }
+    return this._combineResultData(result)
+  }
+
+  public async fetchProjectsByDataSource(
     configuration?: IPortfolioAggregationConfiguration,
     dataSource?: string
   ): Promise<any[]> {

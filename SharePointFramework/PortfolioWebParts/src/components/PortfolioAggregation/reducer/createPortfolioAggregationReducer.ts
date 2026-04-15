@@ -346,14 +346,25 @@ export const createPortfolioAggregationReducer = (
       state.searchTerm = payload
     },
     [GET_FILTERS.type]: (state, { payload }: ReturnType<typeof GET_FILTERS>) => {
+      const hasEnrichedProjects = state.items.some((i: any) => i.__project)
       const payloadFilters = payload.filters.map((column) => {
-        const uniqueValues = _.uniq(
-          // eslint-disable-next-line prefer-spread
-          [].concat.apply(
-            [],
-            state.items.map((i) => get(i, column.fieldName, '').split(';'))
-          )
+        // If the column has an `internalName` from Prosjektkolonner-lista and we
+        // have enriched projects joined onto items, read filter values from the
+        // authoritative Projects list data (`project.data[internalName]`). Falls
+        // back to reading from the search item via `fieldName`.
+        const useProjectData = hasEnrichedProjects && !stringIsNullOrEmpty(column.internalName)
+        const rawValues: string[] = _.flatten(
+          state.items.map((i: any) => {
+            if (useProjectData) {
+              const value = i.__project?.data?.[column.internalName]
+              if (value === undefined || value === null) return ['']
+              if (Array.isArray(value)) return value.map((v) => (v == null ? '' : String(v)))
+              return String(value).split(';')
+            }
+            return get(i, column.fieldName, '').split(';')
+          })
         )
+        const uniqueValues = _.uniq(rawValues)
 
         let items: IFilterItemProps[] = uniqueValues
           .filter((value: string) => !stringIsNullOrEmpty(value))

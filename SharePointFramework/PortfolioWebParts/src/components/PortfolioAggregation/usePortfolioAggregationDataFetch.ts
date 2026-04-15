@@ -5,8 +5,14 @@ import { DATA_FETCHED, DATA_FETCH_ERROR, GET_FILTERS, SET_GROUP_BY, START_FETCH 
 
 /**
  * Fetching data for the Portfolio Aggregation component. This includes
- * the data source (if `state.currentView` is not set), the items, the columns
- * and the the projects (if `props.dataAdapter.fetchProjects` is set).
+ * the data source (if `state.currentView` is not set), the items, the columns,
+ * the data-source-filtered projects (if `props.dataAdapter.fetchProjectsByDataSource`
+ * is set), and the enriched projects used to provide project-property-based
+ * filter values via `GtIsRefinable` columns.
+ *
+ * Each search item is joined to its matching `ProjectListModel` via `SiteId`
+ * so that the filter panel and filtering logic can read values directly from
+ * the authoritative Projects list.
  *
  * @param context Context for the Portfolio Aggregation component
  */
@@ -23,16 +29,34 @@ async function fetchData(context: IPortfolioAggregationContext) {
     )
   }
 
-  const [items, projects] = await Promise.all([
+  const [items, projectsByDataSource, projects] = await Promise.all([
     context.props.dataAdapter.fetchItemsWithSource(
       dataSource.title,
       context.props.selectProperties ?? selectProperties
     ),
+    context.props.dataAdapter.fetchProjectsByDataSource
+      ? context.props.dataAdapter.fetchProjectsByDataSource(
+          context.props.configuration,
+          dataSource.title
+        )
+      : Promise.resolve(undefined),
     context.props.dataAdapter.fetchProjects
-      ? context.props.dataAdapter.fetchProjects(context.props.configuration, dataSource.title)
-      : Promise.resolve(undefined)
+      ? context.props.dataAdapter.fetchProjects()
+      : Promise.resolve([])
   ])
-  return { dataSource, items, columns, projects }
+
+  const projectsBySiteId = new Map<string, any>()
+  for (const project of projects ?? []) {
+    if (project?.siteId) projectsBySiteId.set(project.siteId, project)
+  }
+  const enrichedItems = items.map((item: any) => {
+    const siteId = item?.SiteId
+    const project = siteId ? projectsBySiteId.get(siteId) : undefined
+    if (project) item.__project = project
+    return item
+  })
+
+  return { dataSource, items: enrichedItems, columns, projects: projectsByDataSource }
 }
 
 /**
