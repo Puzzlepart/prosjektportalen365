@@ -38,6 +38,8 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Lagt til tegnbegrensning (255 tegn) for navn- og tittelfelt i `Hent dokumentmal`-dialogen
 - Lagt til validering av URL-felt i redigeringspanelet for prosjektinformasjon, med tydelig feilmelding dersom nettadressen mangler protokoll (http:// eller https://). Forbedret også generelle feilmeldinger ved lagring til å inkludere faktiske feildetaljer fra API-et [#1556](https://github.com/Puzzlepart/prosjektportalen365/issues/1556)
 - Forbedret stabilitet for Planner-operasjoner med automatisk gjenforsøk ved forbigående feil, samt bedre deduplisering av oppgaver og feillogging [#1733](https://github.com/Puzzlepart/prosjektportalen365/pull/1733)
+- Prosjektinformasjon (kolonner merket med `GtIsRefinable=true` i `Prosjektkolonner`) vises nå som filtre også i aggregerte oversikter (f.eks. Usikkerhetsoversikt, Gevinstoversikt), på linje med `Prosjekttidslinje`. Filtre fra prosjektinformasjon er gruppert under en egen seksjon `Prosjektinformasjon` i filterpanelet som er kollapset som standard
+- Ytelsesforbedring: `Prosjektutlisting`, `Prosjekttidslinje` og aggregerte oversikter på samme side deler nå en felles cache for prosjekt-data, slik at kall mot `Prosjekter`-lista og tilhørende søk kun gjøres én gang per side.
 
 ### Fjernet
 
