@@ -35,6 +35,7 @@ import {
   ItemFieldValues,
   PortalDataService,
   PortfolioOverviewView,
+  ProjectColumn,
   ProjectContentColumn,
   ProjectListModel,
   SPField,
@@ -462,6 +463,45 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         'GtSiteIdOWSTEXT'
       )
 
+      // eslint-disable-next-line no-console
+      console.log('[ProjectTimeline] fetchTimelineProjectData', {
+        hubSiteId: this._spfxContext.pageContext.legacyPageContext.hubSiteId,
+        viewSelectProperties: configuration.views[0]?.searchQuery,
+        refinerFieldNames: configuration.refiners.map((r) => ({
+          name: r.name,
+          fieldName: r.fieldName,
+          internalName: r.internalName
+        })),
+        projectCount: projects.length,
+        firstThreeProjectsWithValues: (() => {
+          const samples: any[] = []
+          for (const item of projects) {
+            const entries = configuration.refiners.reduce((acc, r) => {
+              const v = (item as any)[r.fieldName]
+              if (v !== undefined && v !== null && v !== '') {
+                acc[`${r.name} (${r.fieldName})`] = v
+              }
+              return acc
+            }, {} as Record<string, any>)
+            if (Object.keys(entries).length > 0) {
+              samples.push({
+                Title: (item as any).Title,
+                SiteId: (item as any).GtSiteIdOWSTEXT,
+                values: entries
+              })
+              if (samples.length >= 3) break
+            }
+          }
+          return samples
+        })(),
+        nonNullCountPerRefiner: configuration.refiners.reduce((acc, r) => {
+          acc[`${r.name} (${r.fieldName})`] = projects.filter(
+            (i) => (i as any)[r.fieldName] !== undefined && (i as any)[r.fieldName] !== null
+          ).length
+          return acc
+        }, {} as Record<string, number>)
+      })
+
       const data = projects.map((item) => {
         const properties = _.reduce(
           item,
@@ -693,6 +733,17 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     if (fields?.secondaryUserField) selectFields.push(`${fields.secondaryUserField}Id`)
     if (fields?.primaryField) selectFields.push(fields.primaryField)
     if (fields?.secondaryField) selectFields.push(fields.secondaryField)
+    if (fields?.additionalFields?.length) {
+      for (const field of fields.additionalFields) {
+        if (field) {
+          // Include the raw field and its `...Text` companion (used by
+          // taxonomy/choice columns) so refinable project columns always
+          // resolve on `ProjectListModel.data`.
+          selectFields.push(field)
+          if (!field.endsWith('Text')) selectFields.push(`${field}Text`)
+        }
+      }
+    }
     return _.uniq(selectFields)
   }
 
@@ -708,15 +759,135 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   ): Promise<any[]> {
     const list = this._sp.web.lists.getByTitle(resource.Lists_Projects_Title)
     const selectFields = this._buildProjectItemsSelectFields(fields)
-    return getOrFetchProjectsCache('items', siteId, () =>
-      list.items.select(...selectFields).getAll()
-    )
+    const baselineFields = Object.keys(new SPProjectItem())
+    return getOrFetchProjectsCache('items', siteId, async () => {
+      try {
+        return await list.items.select(...selectFields).getAll()
+      } catch (error) {
+        // An `additionalFields` entry may reference a column that requires
+        // `$expand` (e.g. user/lookup fields) or doesn't exist on the list,
+        // which makes SharePoint reject the entire request. Retry with only
+        // the baseline SPProjectItem fields so the rest of the UI still
+        // loads. Refinable custom columns that fall out here just won't
+        // populate their filter from Projects list data (search fallback
+        // via `fieldName` in the reducer still applies).
+        console.warn(
+          '[DataAdapter.fetchProjectItems] select with additional fields failed, retrying with baseline only',
+          error
+        )
+        return await list.items.select(...baselineFields).getAll()
+      }
+    })
   }
 
   private async _fetchProjectSites(siteId: string): Promise<ISearchResult[]> {
     return getOrFetchProjectsCache('sites', siteId, () =>
       this._fetchItems(`DepartmentId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId'])
     )
+  }
+
+  /**
+   * Fetches project-level refiner values via search, keyed by siteId. Mirrors
+   * the data path used by `ProjectTimeline` so components that show child
+   * items (PortfolioAggregation risks/benefits/etc.) can join each item to
+   * the parent project's filter values without depending on SP REST quirks
+   * (user fields need `$expand`, taxonomy columns have hidden text
+   * companions, unknown columns reject the whole select).
+   *
+   * The returned map is keyed by `GtSiteIdOWSTEXT` and values are keyed by
+   * the refiner's `internalName` so callers can use a single lookup path:
+   * `map.get(item.SiteId)?.[column.internalName]`.
+   */
+  public async fetchProjectRefinerValues(
+    refiners: ProjectColumn[]
+  ): Promise<Map<string, Record<string, any>>> {
+    // Mirror `ProjectTimeline.fetchTimelineProjectData` exactly — use the
+    // hub site id + the portfolio's first view's searchQuery. That query
+    // targets the project-properties items (ContentTypeId filter) where
+    // `GtProject*` managed properties are populated. A `contentclass:STS_Site`
+    // query returns site-level results which do NOT have these project
+    // managed properties, which is why the earlier attempt returned 0
+    // non-null values across the board.
+    const hubSiteId = this._spfxContext.pageContext.legacyPageContext.hubSiteId
+    // Keep only refiners whose `fieldName` looks like a real managed property
+    // (alphanumeric + underscore). Entries like `"-"` would otherwise end up
+    // in `SelectProperties` and can cause SP search to silently return null
+    // for all other requested properties.
+    const isValidManagedProperty = (name: string | undefined) =>
+      Boolean(name) && /^[A-Za-z_][A-Za-z0-9_]*$/.test(name)
+    const uniqueRefiners = _.uniq(
+      refiners.filter((r) => isValidManagedProperty(r.fieldName) && r.internalName)
+    )
+    if (uniqueRefiners.length === 0 || !hubSiteId) return new Map()
+
+    const siteIdProperty = 'GtSiteIdOWSTEXT'
+    const selectProperties = _.uniq([
+      ...uniqueRefiners.map((r) => r.fieldName),
+      siteIdProperty
+    ])
+
+    const portfolioConfig = await this.getPortfolioConfig()
+    const viewSearchQuery = portfolioConfig?.views?.[0]?.searchQuery
+    const queryTemplate =
+      viewSearchQuery ?? `DepartmentId:{${hubSiteId}} contentclass:STS_Site`
+
+    const results = await getOrFetchProjectsCache('refiners', hubSiteId, () =>
+      this._fetchItems(queryTemplate, selectProperties)
+    )
+
+    // eslint-disable-next-line no-console
+    console.log('[PortfolioAggregation] fetchProjectRefinerValues', {
+      hubSiteId,
+      selectProperties,
+      resultCount: results.length,
+      // Find the first three items that actually have ANY refiner value — the
+      // top of the list is often the hub site or otherwise empty for project
+      // fields, which makes a single-sample log misleading.
+      firstThreeItemsWithValues: (() => {
+        const samples: any[] = []
+        for (const item of results) {
+          const entries = uniqueRefiners.reduce((acc, r) => {
+            const v = (item as any)[r.fieldName]
+            if (v !== undefined && v !== null && v !== '') {
+              acc[`${r.name} (${r.fieldName})`] = v
+            }
+            return acc
+          }, {} as Record<string, any>)
+          if (Object.keys(entries).length > 0) {
+            samples.push({
+              Title: (item as any).Title,
+              SiteId: (item as any).GtSiteIdOWSTEXT,
+              values: entries
+            })
+            if (samples.length >= 3) break
+          }
+        }
+        return samples
+      })(),
+      // Count how many items have a non-null value per refiner, so we see
+      // whether a particular managed property returns data at all.
+      nonNullCountPerRefiner: uniqueRefiners.reduce((acc, r) => {
+        acc[`${r.name} (${r.fieldName})`] = results.filter(
+          (i) => (i as any)[r.fieldName] !== undefined && (i as any)[r.fieldName] !== null
+        ).length
+        return acc
+      }, {} as Record<string, number>)
+    })
+
+    const map = new Map<string, Record<string, any>>()
+    for (const item of results) {
+      const itemSiteId = (item as any)[siteIdProperty]
+      if (!itemSiteId) continue
+      const properties: Record<string, any> = {}
+      for (const refiner of uniqueRefiners) {
+        const value = (item as any)[refiner.fieldName]
+        if (value !== undefined && value !== null && value !== '') {
+          properties[refiner.internalName] = value
+        }
+      }
+      map.set(itemSiteId, properties)
+    }
+    return map
   }
 
   private async _fetchProjectMemberOfGroups(siteId: string): Promise<IGraphGroup[]> {

@@ -1,3 +1,4 @@
+import strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
 import { useEffect } from 'react'
 import { IPortfolioAggregationContext } from './context'
@@ -18,8 +19,16 @@ import { DATA_FETCHED, DATA_FETCH_ERROR, GET_FILTERS, SET_GROUP_BY, START_FETCH 
  */
 async function fetchData(context: IPortfolioAggregationContext) {
   const columns = context.props.configuration.columns ?? []
+  // Include project-column refiners' `fieldName` (managed property) in the
+  // search select properties so their values are available in the returned
+  // items. Without this, any `GtIsRefinable=true` project column that isn't
+  // also listed as a DataSource column would have no values and its filter
+  // would be hidden by the "items.length > 1" guard in FilterPanel.
+  const projectRefiners = context.props.configuration.refiners ?? []
   const selectProperties = _.uniq(
-    [...columns, ...context.state.columns].map((col) => col.fieldName)
+    [...columns, ...context.state.columns, ...projectRefiners]
+      .map((col) => col.fieldName)
+      .filter(Boolean)
   )
 
   let dataSource = context.state.currentView
@@ -29,7 +38,14 @@ async function fetchData(context: IPortfolioAggregationContext) {
     )
   }
 
-  const [items, projectsByDataSource, projects] = await Promise.all([
+  // Fetch project-level refiner values via search, keyed by siteId. This
+  // uses the same data path as `ProjectTimeline` — user, taxonomy and
+  // custom fields all work because search returns pre-rendered managed
+  // property values (no `$expand` needed, no REST column-type quirks).
+  // Each search item (child risk / benefit / etc.) is joined to its parent
+  // project's refiner values so the filter panel can surface all 12+
+  // refinable columns consistently with Timeline.
+  const [items, projectsByDataSource, projectRefinerValues] = await Promise.all([
     context.props.dataAdapter.fetchItemsWithSource(
       dataSource.title,
       context.props.selectProperties ?? selectProperties
@@ -40,19 +56,15 @@ async function fetchData(context: IPortfolioAggregationContext) {
           dataSource.title
         )
       : Promise.resolve(undefined),
-    context.props.dataAdapter.fetchProjects
-      ? context.props.dataAdapter.fetchProjects()
-      : Promise.resolve([])
+    context.props.dataAdapter.fetchProjectRefinerValues
+      ? context.props.dataAdapter.fetchProjectRefinerValues(projectRefiners)
+      : Promise.resolve(new Map<string, Record<string, any>>())
   ])
 
-  const projectsBySiteId = new Map<string, any>()
-  for (const project of projects ?? []) {
-    if (project?.siteId) projectsBySiteId.set(project.siteId, project)
-  }
   const enrichedItems = items.map((item: any) => {
     const siteId = item?.SiteId
-    const project = siteId ? projectsBySiteId.get(siteId) : undefined
-    if (project) item.__project = project
+    const refinerValues = siteId ? projectRefinerValues.get(siteId) : undefined
+    if (refinerValues) item.__projectRefinerValues = refinerValues
     return item
   })
 
@@ -75,21 +87,28 @@ export function usePortfolioAggregationDataFetch(context: IPortfolioAggregationC
     fetchData(context)
       .then((data) => {
         context.dispatch(DATA_FETCHED(data))
-        // Merge DataSource refiners (ProjectContentColumn) with refinable
-        // project columns (ProjectColumn with GtIsRefinable=true), so the
-        // filter panel includes both DataSource-specific refiners and the
-        // universal "Project information" filters. De-duplicated by
-        // internalName so the same field isn't offered twice.
-        const dataSourceRefiners = data.dataSource.refiners ?? []
-        const projectRefiners = context.props.configuration?.refiners ?? []
-        const seenInternalNames = new Set(
-          dataSourceRefiners.map((r) => r.internalName).filter(Boolean)
+        // Combine DataSource refiners (ProjectContentColumn) with refinable
+        // project columns (ProjectColumn with GtIsRefinable=true). Project
+        // refiners are grouped under "Project information" and default to
+        // collapsed, mirroring the ProjectTimeline filter panel. When both
+        // sources reference the same field (matched on internalName), the
+        // project refiner wins so it gets the group + collapsed treatment.
+        const projectRefinerInternalNames = new Set(
+          (context.props.configuration?.refiners ?? [])
+            .map((r) => r.internalName)
+            .filter(Boolean)
         )
-        const extraProjectRefiners = projectRefiners.filter(
-          (r) => r.internalName && !seenInternalNames.has(r.internalName)
+        const dataSourceFilters = (data.dataSource.refiners ?? [])
+          .filter((r) => !r.internalName || !projectRefinerInternalNames.has(r.internalName))
+          .map((column) => ({ column }))
+        const projectFilters = (context.props.configuration?.refiners ?? []).map((column) => ({
+          column,
+          group: strings.FilterPanelGroupProjectInformation,
+          defaultCollapsed: true
+        }))
+        context.dispatch(
+          GET_FILTERS({ filters: [...dataSourceFilters, ...projectFilters] })
         )
-        const mergedRefiners = [...dataSourceRefiners, ...extraProjectRefiners]
-        context.dispatch(GET_FILTERS({ filters: mergedRefiners }))
         context.dispatch(SET_GROUP_BY({ column: data.dataSource.groupBy }))
       })
       .catch((error) => context.dispatch(DATA_FETCH_ERROR({ error })))

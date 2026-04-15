@@ -30,6 +30,7 @@ import {
   IProjectDataServiceParams,
   ISPDataAdapterBaseConfiguration,
   PortfolioOverviewView,
+  ProjectColumn,
   ProjectContentColumn,
   ProjectDataService,
   ProjectInformationChildProject,
@@ -696,6 +697,52 @@ export class SPDataAdapter
     const items = await this._fetchProjectItems(siteId)
     const result: IProjectsData = { items, memberOfGroups: [] }
     return this._combineResultData(result)
+  }
+
+  /**
+   * Fetches project-level refiner values via search, keyed by siteId. See the
+   * PortfolioWebParts `DataAdapter.fetchProjectRefinerValues` for rationale.
+   */
+  public async fetchProjectRefinerValues(
+    refiners: ProjectColumn[]
+  ): Promise<Map<string, Record<string, any>>> {
+    const hubSiteId = this.spfxContext.pageContext.legacyPageContext.hubSiteId
+    const isValidManagedProperty = (name: string | undefined) =>
+      Boolean(name) && /^[A-Za-z_][A-Za-z0-9_]*$/.test(name)
+    const uniqueRefiners = refiners.filter(
+      (r) => isValidManagedProperty(r.fieldName) && r.internalName
+    )
+    if (uniqueRefiners.length === 0 || !hubSiteId) return new Map()
+
+    const siteIdProperty = 'GtSiteIdOWSTEXT'
+    const selectProperties = _.uniq([
+      ...uniqueRefiners.map((r) => r.fieldName),
+      siteIdProperty
+    ])
+
+    const portfolioConfig = await this.getPortfolioConfig()
+    const viewSearchQuery = portfolioConfig?.views?.[0]?.searchQuery
+    const queryTemplate =
+      viewSearchQuery ?? `DepartmentId:{${hubSiteId}} contentclass:STS_Site`
+
+    const results = await getOrFetchProjectsCache('refiners', hubSiteId, () =>
+      this._fetchItems(queryTemplate, selectProperties)
+    )
+
+    const map = new Map<string, Record<string, any>>()
+    for (const item of results) {
+      const itemSiteId = (item as any)[siteIdProperty]
+      if (!itemSiteId) continue
+      const properties: Record<string, any> = {}
+      for (const refiner of uniqueRefiners) {
+        const value = (item as any)[refiner.fieldName]
+        if (value !== undefined && value !== null && value !== '') {
+          properties[refiner.internalName] = value
+        }
+      }
+      map.set(itemSiteId, properties)
+    }
+    return map
   }
 
   public async fetchProjectsByDataSource(

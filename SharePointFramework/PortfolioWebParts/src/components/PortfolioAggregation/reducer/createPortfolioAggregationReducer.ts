@@ -346,18 +346,18 @@ export const createPortfolioAggregationReducer = (
       state.searchTerm = payload
     },
     [GET_FILTERS.type]: (state, { payload }: ReturnType<typeof GET_FILTERS>) => {
-      const hasEnrichedProjects = state.items.some((i: any) => i.__project)
-      const payloadFilters = payload.filters.map((column) => {
-        // Prefer values from the authoritative Projects list (via the joined
-        // `__project.data[internalName]`), but only when that field actually
-        // contains data. If the refiner's `internalName` doesn't map to a real
-        // column on the Projects list (e.g. search-only managed properties),
-        // fall back to the original search-item-based lookup via `fieldName`.
-        const collectFromProjectData = (): string[] => {
-          if (!hasEnrichedProjects || stringIsNullOrEmpty(column.internalName)) return []
+      const payloadFilters = payload.filters.map(({ column, group, defaultCollapsed }) => {
+        // Unified value source — mirrors `ProjectTimeline`. For project
+        // refiners we read the pre-joined `__projectRefinerValues` (keyed by
+        // `internalName`) which is built from a search over project sites
+        // with all refiners' `fieldName` as selectProperties. For DataSource
+        // refiners (no `internalName` match) we fall back to the search-item
+        // value via `column.fieldName`.
+        const collectFromProjectRefiners = (): string[] => {
+          if (stringIsNullOrEmpty(column.internalName)) return []
           return _.flatten(
             state.items.map((i: any) => {
-              const value = i.__project?.data?.[column.internalName]
+              const value = i.__projectRefinerValues?.[column.internalName]
               if (value === undefined || value === null) return []
               if (Array.isArray(value)) return value.map((v) => (v == null ? '' : String(v)))
               return String(value).split(';')
@@ -367,22 +367,31 @@ export const createPortfolioAggregationReducer = (
         const collectFromSearchItems = (): string[] =>
           _.flatten(state.items.map((i: any) => get(i, column.fieldName, '').split(';')))
 
-        const projectDataValues = collectFromProjectData()
-        const useProjectData = projectDataValues.length > 0
-        const rawValues = useProjectData ? projectDataValues : collectFromSearchItems()
+        const refinerValues = collectFromProjectRefiners()
+        const rawValues = refinerValues.length > 0 ? refinerValues : collectFromSearchItems()
         const uniqueValues = _.uniq(rawValues)
+
+        // Boolean SharePoint fields return '1'/'0' in search but SP list data
+        // returns true/false. Normalize both forms to the localized Yes/No,
+        // matching ProjectTimeline for GtIsProgram / GtIsParentProject.
+        const isBooleanField =
+          column.fieldName?.includes('GtIsProgram') ||
+          column.fieldName?.includes('GtIsParentProject') ||
+          column.internalName?.includes('GtIsProgram') ||
+          column.internalName?.includes('GtIsParentProject')
 
         let items: IFilterItemProps[] = uniqueValues
           .filter((value: string) => !stringIsNullOrEmpty(value))
           .map((value: string) => {
-            return { name: parseDisplayValue(value), value, selected: false }
+            let name = parseDisplayValue(value)
+            if (isBooleanField) {
+              if (value === '1' || value.toLowerCase() === 'true') name = strings.BooleanYes
+              else if (value === '0' || value.toLowerCase() === 'false') name = strings.BooleanNo
+            }
+            return { name, value, selected: false }
           })
         items = items.sort((a, b) => (a.value > b.value ? 1 : -1))
-        // Filters whose values come from the Projects list are grouped under
-        // a "Project information" header to visually separate them from
-        // search-result-driven refiners.
-        const group = useProjectData ? strings.FilterPanelGroupProjectInformation : undefined
-        return { column, items, group }
+        return { column, items, group, defaultCollapsed }
       })
 
       if (!_.isEmpty(state.activeFilters)) {

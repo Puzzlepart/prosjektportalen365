@@ -6,22 +6,22 @@ import { searchItem } from './search'
 import _ from 'lodash'
 
 /**
- * Reads the raw value used when matching an active filter against an item.
- * For refinable columns (with `internalName`) we prefer the authoritative
- * Projects list value joined in via `__project.data`, so filter values align
- * with the filter panel entries built from the same source.
+ * Reads the value used when matching an active filter against an item. For
+ * project refiners (resolved via the column's `internalName`) the joined
+ * `__project.data` is checked first — this is the same priority used when the
+ * filter panel's unique values are built. Falls back to the search-result
+ * value via `fieldName` so filters for fields without a managed property
+ * still apply correctly.
  */
 const readFilterValue = (item: any, key: string, filterColumn?: any): string => {
   const internalName: string | undefined = filterColumn?.internalName
-  if (internalName && item?.__project?.data) {
-    const value = item.__project.data[internalName]
+  if (internalName && item?.__projectRefinerValues) {
+    const value = item.__projectRefinerValues[internalName]
     if (value !== undefined && value !== null && value !== '') {
       if (Array.isArray(value)) return value.join(';')
       return String(value)
     }
   }
-  // Fall back to the search-result value when the joined Projects list value
-  // is empty or the column isn't backed by a real Projects list field.
   return get<string>(item, key, '')
 }
 
@@ -30,8 +30,7 @@ const readFilterValue = (item: any, key: string, filterColumn?: any): string => 
  *
  * @param items Items
  * @param activeFilters Active filters
- * @param filters Filter column metadata (used to resolve `internalName` for
- *   project-data-backed refiners)
+ * @param filters Filter column metadata (for `internalName` lookup)
  */
 const filterItems = (
   items: IFilterItemProps[],

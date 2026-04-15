@@ -68,6 +68,13 @@ export interface IEnrichedProjectsFields {
    * Secondary field
    */
   secondaryField?: string
+
+  /**
+   * Additional SharePoint field internal names to include in the Projects
+   * list `select(...)`. Used by callers that need extra columns (e.g.
+   * refinable custom fields) available on `ProjectListModel.data`.
+   */
+  additionalFields?: string[]
 }
 
 export interface IPortfolioWebPartsDataAdapter {
@@ -284,6 +291,16 @@ export interface IPortfolioWebPartsDataAdapter {
    * @param fields Additional fields to include in the query
    */
   fetchProjects?(fields?: IEnrichedProjectsFields): Promise<ProjectListModel[]>
+
+  /**
+   * Fetches project-level refiner values via search, keyed by siteId. Used
+   * by components that show child items (e.g. PortfolioAggregation on risks
+   * or benefits) and need to join each item to the parent project's filter
+   * values. Mirrors the data path used by `ProjectTimeline`.
+   *
+   * @param refiners Project columns whose values should be surfaced
+   */
+  fetchProjectRefinerValues?(refiners: any[]): Promise<Map<string, Record<string, any>>>
 
   /**
    * Fetching enriched project by combining list item from projects list,
