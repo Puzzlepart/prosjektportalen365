@@ -167,14 +167,21 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           .catch(reject)
       })
 
-      const [views, viewsUrls, columnUrls, levels] = await Promise.all([
+      const [views, viewsUrls, columnUrls, levels, projectColumns] = await Promise.all([
         this.fetchDataSources(category, level, columns),
         this.portalDataService.getListFormUrls('DATA_SOURCES'),
         this.portalDataService.getListFormUrls('PROJECT_CONTENT_COLUMNS'),
         this.portalDataService.web.fields
           .getByInternalNameOrTitle('GtDataSourceLevel')
-          .select('Choices')()
+          .select('Choices')(),
+        this.portalDataService.getProjectColumns().catch(() => [])
       ])
+
+      // Project columns marked as refinable in Prosjektkolonner-lista are
+      // surfaced as additional filters in the Aggregation filter panel,
+      // grouped under "Project information". Values are read from the
+      // joined Projects list data via `__project.data[internalName]`.
+      const refiners = (projectColumns ?? []).filter((col) => col.isRefinable)
 
       return {
         columns,
@@ -182,7 +189,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         viewsUrls,
         columnUrls,
         level,
-        levels: levels?.Choices ?? []
+        levels: levels?.Choices ?? [],
+        refiners
       } as IPortfolioAggregationConfiguration
     } catch (error) {
       return null

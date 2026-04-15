@@ -1,5 +1,6 @@
 declare interface IPortfolioWebPartsStrings {
   ResultsCountLabel: string
+  FilterPanelGroupProjectInformation: string
   ColumnRenderOptionStatusReport: string
   ColumnRenderOptionProjectInfo: string
   ColumnRenderOptionHub: string

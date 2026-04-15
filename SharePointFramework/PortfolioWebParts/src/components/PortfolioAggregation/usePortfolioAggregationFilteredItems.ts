@@ -15,10 +15,13 @@ const readFilterValue = (item: any, key: string, filterColumn?: any): string => 
   const internalName: string | undefined = filterColumn?.internalName
   if (internalName && item?.__project?.data) {
     const value = item.__project.data[internalName]
-    if (value === undefined || value === null) return ''
-    if (Array.isArray(value)) return value.join(';')
-    return String(value)
+    if (value !== undefined && value !== null && value !== '') {
+      if (Array.isArray(value)) return value.join(';')
+      return String(value)
+    }
   }
+  // Fall back to the search-result value when the joined Projects list value
+  // is empty or the column isn't backed by a real Projects list field.
   return get<string>(item, key, '')
 }
 

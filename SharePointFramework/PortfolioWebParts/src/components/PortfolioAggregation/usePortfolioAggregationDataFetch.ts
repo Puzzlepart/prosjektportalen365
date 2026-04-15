@@ -75,7 +75,21 @@ export function usePortfolioAggregationDataFetch(context: IPortfolioAggregationC
     fetchData(context)
       .then((data) => {
         context.dispatch(DATA_FETCHED(data))
-        context.dispatch(GET_FILTERS({ filters: data.dataSource.refiners }))
+        // Merge DataSource refiners (ProjectContentColumn) with refinable
+        // project columns (ProjectColumn with GtIsRefinable=true), so the
+        // filter panel includes both DataSource-specific refiners and the
+        // universal "Project information" filters. De-duplicated by
+        // internalName so the same field isn't offered twice.
+        const dataSourceRefiners = data.dataSource.refiners ?? []
+        const projectRefiners = context.props.configuration?.refiners ?? []
+        const seenInternalNames = new Set(
+          dataSourceRefiners.map((r) => r.internalName).filter(Boolean)
+        )
+        const extraProjectRefiners = projectRefiners.filter(
+          (r) => r.internalName && !seenInternalNames.has(r.internalName)
+        )
+        const mergedRefiners = [...dataSourceRefiners, ...extraProjectRefiners]
+        context.dispatch(GET_FILTERS({ filters: mergedRefiners }))
         context.dispatch(SET_GROUP_BY({ column: data.dataSource.groupBy }))
       })
       .catch((error) => context.dispatch(DATA_FETCH_ERROR({ error })))

@@ -147,17 +147,20 @@ export class SPDataAdapter
         category,
         level
       )
-      const [views, viewsUrls, columnUrls] = await Promise.all([
+      const [views, viewsUrls, columnUrls, projectColumns] = await Promise.all([
         this.fetchDataSources(category, level, columns),
         this.portalDataService.getListFormUrls('DATA_SOURCES'),
-        this.portalDataService.getListFormUrls('PROJECT_CONTENT_COLUMNS')
+        this.portalDataService.getListFormUrls('PROJECT_CONTENT_COLUMNS'),
+        this.portalDataService.getProjectColumns().catch(() => [])
       ])
+      const refiners = (projectColumns ?? []).filter((col) => col.isRefinable)
       return {
         columns,
         views,
         viewsUrls,
         columnUrls,
-        level
+        level,
+        refiners
       } as IPortfolioAggregationConfiguration
     } catch (error) {
       return null

@@ -1,6 +1,7 @@
 define([], function () {
   return {
     ResultsCountLabel: 'Viser {0} av {1} prosjekter',
+    FilterPanelGroupProjectInformation: 'Prosjektinformasjon',
     ColumnRenderOptionStatusReport: 'Statusrapport',
     ColumnRenderOptionProjectInfo: 'Prosjektinformasjon',
     ColumnRenderOptionHub: 'Hub',

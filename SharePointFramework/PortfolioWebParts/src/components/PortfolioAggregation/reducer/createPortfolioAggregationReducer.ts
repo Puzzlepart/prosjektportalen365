@@ -348,22 +348,28 @@ export const createPortfolioAggregationReducer = (
     [GET_FILTERS.type]: (state, { payload }: ReturnType<typeof GET_FILTERS>) => {
       const hasEnrichedProjects = state.items.some((i: any) => i.__project)
       const payloadFilters = payload.filters.map((column) => {
-        // If the column has an `internalName` from Prosjektkolonner-lista and we
-        // have enriched projects joined onto items, read filter values from the
-        // authoritative Projects list data (`project.data[internalName]`). Falls
-        // back to reading from the search item via `fieldName`.
-        const useProjectData = hasEnrichedProjects && !stringIsNullOrEmpty(column.internalName)
-        const rawValues: string[] = _.flatten(
-          state.items.map((i: any) => {
-            if (useProjectData) {
+        // Prefer values from the authoritative Projects list (via the joined
+        // `__project.data[internalName]`), but only when that field actually
+        // contains data. If the refiner's `internalName` doesn't map to a real
+        // column on the Projects list (e.g. search-only managed properties),
+        // fall back to the original search-item-based lookup via `fieldName`.
+        const collectFromProjectData = (): string[] => {
+          if (!hasEnrichedProjects || stringIsNullOrEmpty(column.internalName)) return []
+          return _.flatten(
+            state.items.map((i: any) => {
               const value = i.__project?.data?.[column.internalName]
-              if (value === undefined || value === null) return ['']
+              if (value === undefined || value === null) return []
               if (Array.isArray(value)) return value.map((v) => (v == null ? '' : String(v)))
               return String(value).split(';')
-            }
-            return get(i, column.fieldName, '').split(';')
-          })
-        )
+            })
+          ).filter((v: string) => !stringIsNullOrEmpty(v))
+        }
+        const collectFromSearchItems = (): string[] =>
+          _.flatten(state.items.map((i: any) => get(i, column.fieldName, '').split(';')))
+
+        const projectDataValues = collectFromProjectData()
+        const useProjectData = projectDataValues.length > 0
+        const rawValues = useProjectData ? projectDataValues : collectFromSearchItems()
         const uniqueValues = _.uniq(rawValues)
 
         let items: IFilterItemProps[] = uniqueValues
@@ -372,7 +378,11 @@ export const createPortfolioAggregationReducer = (
             return { name: parseDisplayValue(value), value, selected: false }
           })
         items = items.sort((a, b) => (a.value > b.value ? 1 : -1))
-        return { column, items }
+        // Filters whose values come from the Projects list are grouped under
+        // a "Project information" header to visually separate them from
+        // search-result-driven refiners.
+        const group = useProjectData ? strings.FilterPanelGroupProjectInformation : undefined
+        return { column, items, group }
       })
 
       if (!_.isEmpty(state.activeFilters)) {

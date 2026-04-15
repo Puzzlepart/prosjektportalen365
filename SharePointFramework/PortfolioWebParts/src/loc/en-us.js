@@ -334,6 +334,7 @@ define([], function () {
     ViewLessText: 'View less',
     ViewMoreText: 'View more',
     ResultsCountLabel: 'Displaying {0} of {1} projects',
+    FilterPanelGroupProjectInformation: 'Project information',
     ColumnRenderOptionStatusReport: 'Status report',
     ColumnRenderOptionProjectInfo: 'Project information',
     ColumnRenderOptionHub: 'Hub',
