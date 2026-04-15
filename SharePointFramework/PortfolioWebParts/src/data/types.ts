@@ -265,14 +265,33 @@ export interface IPortfolioWebPartsDataAdapter {
   fetchTimelineConfiguration?(): Promise<TimelineConfigurationModel[]>
 
   /**
-   * Fetching enriched projects by combining list items from projects list,
-   * Graph Groups and site users. The result are cached in `localStorage`
-   * for 30 minutes. Projects with lifecycle stage `Avsluttet` are excluded, and
-   * the projects are sorted by Title ascending.
+   * Fetches fully enriched projects (Projects list + site access + group
+   * membership + users). Results go through the tiered projects cache.
+   * Closed/completed projects are excluded and the list is sorted by title.
    *
    * @param fields Additional fields to include in the query
    */
   fetchEnrichedProjects?(fields?: IEnrichedProjectsFields): Promise<ProjectListModel[]>
+
+  /**
+   * Lightweight projects fetch — only reads the Projects list items, skipping
+   * the site / membership / user lookups. Shares the items cache with
+   * {@link fetchEnrichedProjects}, so co-located webparts reuse the network
+   * call. Persona, membership and access fields are left undefined.
+   *
+   * @param fields Additional fields to include in the query
+   */
+  fetchProjects?(fields?: IEnrichedProjectsFields): Promise<ProjectListModel[]>
+
+  /**
+   * Fetches project-level refiner values via search, keyed by siteId. Used by
+   * components that render child items (PortfolioAggregation on risks /
+   * benefits etc.) and need to join each item to its parent project's filter
+   * values. Same data path as `ProjectTimeline`.
+   *
+   * @param refiners Project columns whose values should be returned
+   */
+  fetchProjectRefinerValues?(refiners: any[]): Promise<Map<string, Record<string, any>>>
 
   /**
    * Fetching enriched project by combining list item from projects list,
@@ -285,14 +304,13 @@ export interface IPortfolioWebPartsDataAdapter {
   fetchEnrichedProject?(siteId: string, hubContext?: IHubContext): Promise<ProjectListModel>
 
   /**
-   * Fetch projects from the projects list. If a data source is specified,
-   * the projects are filtered using the `odataQuery` property from the
-   * specified view.
+   * Fetch projects from the projects list filtered by the `odataQuery`
+   * property from the specified data source view.
    *
    * @param configuration Configuration
    * @param dataSource Data source
    */
-  fetchProjects?(
+  fetchProjectsByDataSource?(
     configuration?: IPortfolioAggregationConfiguration,
     dataSource?: string
   ): Promise<any[]>

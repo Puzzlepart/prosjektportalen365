@@ -44,6 +44,7 @@ declare interface ISharedLibraryStrings {
   FilterText: string
   FilterPanelEmptyTitle: string
   FilterPanelEmptyMessage: string
+  FilterPanelGroupProjectInformation: string
   GroupByLabel: string
   LastPublishedStatusreport: string
   LoadingText: string

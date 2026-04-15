@@ -174,7 +174,7 @@ import {
   PuzzlePieceRegular,
   PuzzlePieceFilled,
   MountainTrailRegular,
-  MountainTrailFilled,
+  MountainTrailFilled
 } from '@fluentui/react-icons'
 
 /**

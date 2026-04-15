@@ -25,11 +25,12 @@ import {
 import {
   DataSource,
   DataSourceService,
-  DefaultCaching,
+  getOrFetchProjectsCache,
   IGraphGroup,
   IProjectDataServiceParams,
   ISPDataAdapterBaseConfiguration,
   PortfolioOverviewView,
+  ProjectColumn,
   ProjectContentColumn,
   ProjectDataService,
   ProjectInformationChildProject,
@@ -147,17 +148,20 @@ export class SPDataAdapter
         category,
         level
       )
-      const [views, viewsUrls, columnUrls] = await Promise.all([
+      const [views, viewsUrls, columnUrls, projectColumns] = await Promise.all([
         this.fetchDataSources(category, level, columns),
         this.portalDataService.getListFormUrls('DATA_SOURCES'),
-        this.portalDataService.getListFormUrls('PROJECT_CONTENT_COLUMNS')
+        this.portalDataService.getListFormUrls('PROJECT_CONTENT_COLUMNS'),
+        this.portalDataService.getProjectColumns().catch(() => [])
       ])
+      const refiners = (projectColumns ?? []).filter((col) => col.isRefinable)
       return {
         columns,
         views,
         viewsUrls,
         columnUrls,
-        level
+        level,
+        refiners
       } as IPortfolioAggregationConfiguration
     } catch (error) {
       return null
@@ -642,9 +646,12 @@ export class SPDataAdapter
     return projects
   }
 
-  public async fetchEnrichedProjects(): Promise<ProjectListModel[]> {
-    await MSGraph.Init(this.spfxContext.msGraphClientFactory)
-    const [items, memberOfGroups] = await Promise.all([
+  /**
+   * Fetches the raw Projects list items for the current program site. Shared
+   * via `getOrFetchProjectsCache`, keyed by siteId.
+   */
+  private async _fetchProjectItems(siteId: string): Promise<SPProjectItem[]> {
+    return getOrFetchProjectsCache('items', siteId, () =>
       this.portalDataService.web.lists
         .getByTitle(resource.Lists_Projects_Title)
         .items.select(...Object.keys(new SPProjectItem()))
@@ -652,24 +659,88 @@ export class SPDataAdapter
           `GtProjectLifecycleStatus ne '${resource.Choice_GtProjectLifecycleStatus_Closed}' and GtProjectLifecycleStatus ne '${strings.LifecycleStatus_Closed}'`
         )
         .orderBy('Title')
-        .using(DefaultCaching)
-        .getAll<SPProjectItem>(),
+        .getAll<SPProjectItem>()
+    )
+  }
+
+  private async _fetchMemberOfGroups(siteId: string): Promise<IGraphGroup[]> {
+    return getOrFetchProjectsCache('memberOf', siteId, () =>
       MSGraph.Get<IGraphGroup[]>(
         '/me/memberOf/$/microsoft.graph.group',
         ['id', 'displayName'],
         // eslint-disable-next-line quotes
         "groupTypes/any(a:a%20eq%20'unified')"
       )
-    ])
-    const result: IProjectsData = {
-      items,
-      memberOfGroups
-    }
-    const projects = this._combineResultData(result)
-    return projects
+    )
   }
 
-  public async fetchProjects(
+  public async fetchEnrichedProjects(): Promise<ProjectListModel[]> {
+    await MSGraph.Init(this.spfxContext.msGraphClientFactory)
+    const siteId = this.spfxContext.pageContext.site.id.toString()
+    const [items, memberOfGroups] = await Promise.all([
+      this._fetchProjectItems(siteId),
+      this._fetchMemberOfGroups(siteId)
+    ])
+    const result: IProjectsData = { items, memberOfGroups }
+    return this._combineResultData(result)
+  }
+
+  /**
+   * Lightweight projects fetch for callers that only need Projects list data
+   * (ProjectTimeline). Shares the items cache with {@link fetchEnrichedProjects}.
+   */
+  public async fetchProjects(): Promise<ProjectListModel[]> {
+    const siteId = this.spfxContext.pageContext.site.id.toString()
+    const items = await this._fetchProjectItems(siteId)
+    const result: IProjectsData = { items, memberOfGroups: [] }
+    return this._combineResultData(result)
+  }
+
+  /**
+   * Fetches project-level refiner values via search, keyed by siteId. Program
+   * mirror of `DataAdapter.fetchProjectRefinerValues` in PortfolioWebParts —
+   * see there for rationale.
+   */
+  public async fetchProjectRefinerValues(
+    refiners: ProjectColumn[]
+  ): Promise<Map<string, Record<string, any>>> {
+    const hubSiteId = this.spfxContext.pageContext.legacyPageContext.hubSiteId
+    const isValidManagedProperty = (name: string | undefined) =>
+      Boolean(name) && /^[A-Za-z_][A-Za-z0-9_]*$/.test(name)
+    const uniqueRefiners = refiners.filter(
+      (r) => isValidManagedProperty(r.fieldName) && r.internalName
+    )
+    if (uniqueRefiners.length === 0 || !hubSiteId) return new Map()
+
+    const siteIdProperty = 'GtSiteIdOWSTEXT'
+    const selectProperties = _.uniq([...uniqueRefiners.map((r) => r.fieldName), siteIdProperty])
+
+    const portfolioConfig = await this.getPortfolioConfig()
+    const queryTemplate =
+      portfolioConfig?.views?.[0]?.searchQuery ??
+      `DepartmentId:{${hubSiteId}} contentclass:STS_Site`
+
+    const results = await getOrFetchProjectsCache('refiners', hubSiteId, () =>
+      this._fetchItems(queryTemplate, selectProperties)
+    )
+
+    const map = new Map<string, Record<string, any>>()
+    for (const item of results) {
+      const itemSiteId = (item as any)[siteIdProperty]
+      if (!itemSiteId) continue
+      const properties: Record<string, any> = {}
+      for (const refiner of uniqueRefiners) {
+        const value = (item as any)[refiner.fieldName]
+        if (value !== undefined && value !== null && value !== '') {
+          properties[refiner.internalName] = value
+        }
+      }
+      map.set(itemSiteId, properties)
+    }
+    return map
+  }
+
+  public async fetchProjectsByDataSource(
     configuration?: IPortfolioAggregationConfiguration,
     dataSource?: string
   ): Promise<any[]> {

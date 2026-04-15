@@ -346,22 +346,41 @@ export const createPortfolioAggregationReducer = (
       state.searchTerm = payload
     },
     [GET_FILTERS.type]: (state, { payload }: ReturnType<typeof GET_FILTERS>) => {
-      const payloadFilters = payload.filters.map((column) => {
-        const uniqueValues = _.uniq(
-          // eslint-disable-next-line prefer-spread
-          [].concat.apply(
-            [],
-            state.items.map((i) => get(i, column.fieldName, '').split(';'))
-          )
-        )
+      const payloadFilters = payload.filters.map(({ column, group, defaultCollapsed }) => {
+        const collectFromProjectRefiners = (): string[] => {
+          if (stringIsNullOrEmpty(column.internalName)) return []
+          return _.flatten(
+            state.items.map((i: any) => {
+              const value = i.__projectRefinerValues?.[column.internalName]
+              if (value === undefined || value === null) return []
+              if (Array.isArray(value)) return value.map((v) => (v == null ? '' : String(v)))
+              return String(value).split(';')
+            })
+          ).filter((v: string) => !stringIsNullOrEmpty(v))
+        }
+        const collectFromSearchItems = (): string[] =>
+          _.flatten(state.items.map((i: any) => get(i, column.fieldName, '').split(';')))
+
+        const refinerValues = collectFromProjectRefiners()
+        const rawValues = refinerValues.length > 0 ? refinerValues : collectFromSearchItems()
+        const uniqueValues = _.uniq(rawValues)
+
+        const isBooleanField =
+          column.fieldName?.includes('GtIsProgram') ||
+          column.fieldName?.includes('GtIsParentProject')
 
         let items: IFilterItemProps[] = uniqueValues
           .filter((value: string) => !stringIsNullOrEmpty(value))
           .map((value: string) => {
-            return { name: parseDisplayValue(value), value, selected: false }
+            let name = parseDisplayValue(value)
+            if (isBooleanField) {
+              if (value === '1') name = strings.BooleanYes
+              else if (value === '0') name = strings.BooleanNo
+            }
+            return { name, value, selected: false }
           })
         items = items.sort((a, b) => (a.value > b.value ? 1 : -1))
-        return { column, items }
+        return { column, items, group, defaultCollapsed }
       })
 
       if (!_.isEmpty(state.activeFilters)) {

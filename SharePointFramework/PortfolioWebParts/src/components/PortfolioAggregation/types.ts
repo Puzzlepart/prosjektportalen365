@@ -1,5 +1,5 @@
 import { IGroup, MessageBarType } from '@fluentui/react'
-import { ProjectContentColumn } from 'pp365-shared-library'
+import { ProjectColumn, ProjectContentColumn } from 'pp365-shared-library'
 import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
 import { IListProps, OnColumnContextMenu } from '../List'
@@ -67,15 +67,13 @@ export interface IPortfolioAggregationConfiguration {
    * An array of strings representing the levels of data to display in the web part.
    */
   levels?: string[]
-}
 
-export interface IPortfolioAggregationConfiguration {
-  viewsUrls: { defaultNewFormUrl: string; defaultEditFormUrl: string }
-  columnUrls: { defaultNewFormUrl: string; defaultEditFormUrl: string }
-  columns?: ProjectContentColumn[]
-  views?: DataSource[]
-  level?: string
-  levels?: string[]
+  /**
+   * Refinable project columns from Prosjektkolonner (`GtIsRefinable=true`).
+   * Surfaced as filters under a "Project information" group, independent of
+   * the DataSource's own `refiners`.
+   */
+  refiners?: ProjectColumn[]
 }
 
 export interface IPortfolioAggregationProps<T = any>

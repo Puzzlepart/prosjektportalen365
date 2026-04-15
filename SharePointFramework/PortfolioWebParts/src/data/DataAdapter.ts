@@ -3,7 +3,7 @@
 import { IPersonaProps, IPersonaSharedProps } from '@fluentui/react'
 import { format } from '@fluentui/react/lib/Utilities'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { dateAdd, PnPClientStorage } from '@pnp/core'
+import { dateAdd, getHashCode, PnPClientStorage } from '@pnp/core'
 import { LogLevel } from '@pnp/logging'
 import { spfi, SPFx } from '@pnp/sp'
 import '@pnp/sp/items/get-all'
@@ -28,12 +28,14 @@ import {
   DefaultCaching,
   getClassProperties,
   getItemFieldValues,
+  getOrFetchProjectsCache,
   getUserPhoto,
   IGraphGroup,
   IPortalDataServiceConfiguration,
   ItemFieldValues,
   PortalDataService,
   PortfolioOverviewView,
+  ProjectColumn,
   ProjectContentColumn,
   ProjectListModel,
   SPField,
@@ -166,14 +168,17 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           .catch(reject)
       })
 
-      const [views, viewsUrls, columnUrls, levels] = await Promise.all([
+      const [views, viewsUrls, columnUrls, levels, projectColumns] = await Promise.all([
         this.fetchDataSources(category, level, columns),
         this.portalDataService.getListFormUrls('DATA_SOURCES'),
         this.portalDataService.getListFormUrls('PROJECT_CONTENT_COLUMNS'),
         this.portalDataService.web.fields
           .getByInternalNameOrTitle('GtDataSourceLevel')
-          .select('Choices')()
+          .select('Choices')(),
+        this.portalDataService.getProjectColumns().catch(() => [])
       ])
+
+      const refiners = (projectColumns ?? []).filter((col) => col.isRefinable)
 
       return {
         columns,
@@ -181,7 +186,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         viewsUrls,
         columnUrls,
         level,
-        levels: levels?.Choices ?? []
+        levels: levels?.Choices ?? [],
+        refiners
       } as IPortfolioAggregationConfiguration
     } catch (error) {
       return null
@@ -670,73 +676,181 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       .filter(Boolean)
   }
 
-  public async fetchEnrichedProjects(
-    fields?: IEnrichedProjectsFields
-  ): Promise<ProjectListModel[]> {
-    const localStore = new PnPClientStorage().local
-    const siteId = this._spfxContext.pageContext.site.id.toString()
-    const list = this._sp.web.lists.getByTitle(resource.Lists_Projects_Title)
-    const baseFields = Object.keys(new SPProjectItem())
-    const selectFields = [...baseFields]
-
+  /**
+   * Builds the Projects list `select` field list from `SPProjectItem` plus
+   * any user-configured persona / display field overrides.
+   */
+  private _buildProjectItemsSelectFields(fields?: IEnrichedProjectsFields): string[] {
+    const selectFields = [...Object.keys(new SPProjectItem())]
     if (fields?.primaryUserField) selectFields.push(`${fields.primaryUserField}Id`)
     if (fields?.secondaryUserField) selectFields.push(`${fields.secondaryUserField}Id`)
     if (fields?.primaryField) selectFields.push(fields.primaryField)
     if (fields?.secondaryField) selectFields.push(fields.secondaryField)
+    return _.uniq(selectFields)
+  }
 
-    const fieldsCacheKey = [
-      fields?.primaryUserField,
-      fields?.secondaryUserField,
-      fields?.primaryField,
-      fields?.secondaryField
-    ]
-      .filter(Boolean)
-      .join('_')
-    const cacheKey = `pp365_fetchenrichedprojects_${siteId}_${fieldsCacheKey || 'default'}`
+  /**
+   * Fetches the raw Projects list items. Shared across webparts on the same
+   * page via `getOrFetchProjectsCache`. The cache key includes a hash of the
+   * sorted select fields so callers with different field configurations
+   * don't stomp on each other — e.g. a lightweight caller that primes the
+   * cache with baseline fields wouldn't cause a later `fetchEnrichedProjects`
+   * request with extra user/display fields to receive incomplete items.
+   */
+  private async _fetchProjectItems(
+    siteId: string,
+    fields?: IEnrichedProjectsFields
+  ): Promise<any[]> {
+    const list = this._sp.web.lists.getByTitle(resource.Lists_Projects_Title)
+    const selectFields = this._buildProjectItemsSelectFields(fields)
+    const fieldsHash = getHashCode(selectFields.slice().sort().join(','))
+    return getOrFetchProjectsCache('items', `${siteId}_${fieldsHash}`, () =>
+      list.items.select(...selectFields).getAll()
+    )
+  }
 
-    let templates = []
+  private async _fetchProjectSites(siteId: string): Promise<ISearchResult[]> {
+    return getOrFetchProjectsCache('sites', siteId, () =>
+      this._fetchItems(`DepartmentId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId'])
+    )
+  }
+
+  /**
+   * Fetches project-level refiner values via search, keyed by siteId. Mirrors
+   * `ProjectTimeline.fetchTimelineProjectData` so components showing child
+   * items (risks, benefits) can join each item to its parent project's filter
+   * values. Search sidesteps SP REST quirks (user fields needing `$expand`,
+   * taxonomy columns, unknown-column rejections).
+   *
+   * The query reuses the portfolio's first view — its `ContentTypeId` clause
+   * targets the project-properties items where `GtProject*` managed properties
+   * actually live (site-level results don't have them populated).
+   *
+   * Refiners with non-alphanumeric `fieldName` (e.g. a literal `"-"`) are
+   * dropped — SP search silently returns null for _all_ requested properties
+   * if any `SelectProperties` entry is invalid.
+   *
+   * @param refiners Project columns whose values should be returned
+   * @returns Map from `GtSiteIdOWSTEXT` to a record keyed by `internalName`
+   */
+  public async fetchProjectRefinerValues(
+    refiners: ProjectColumn[]
+  ): Promise<Map<string, Record<string, any>>> {
+    const hubSiteId = this._spfxContext.pageContext.legacyPageContext.hubSiteId
+    const isValidManagedProperty = (name: string | undefined) =>
+      Boolean(name) && /^[A-Za-z_][A-Za-z0-9_]*$/.test(name)
+    const uniqueRefiners = _.uniq(
+      refiners.filter((r) => isValidManagedProperty(r.fieldName) && r.internalName)
+    )
+    if (uniqueRefiners.length === 0 || !hubSiteId) return new Map()
+
+    const siteIdProperty = 'GtSiteIdOWSTEXT'
+    const selectProperties = _.uniq([...uniqueRefiners.map((r) => r.fieldName), siteIdProperty])
+
+    const portfolioConfig = await this.getPortfolioConfig()
+    const queryTemplate =
+      portfolioConfig?.views?.[0]?.searchQuery ??
+      `DepartmentId:{${hubSiteId}} contentclass:STS_Site`
+
+    const results = await getOrFetchProjectsCache('refiners', hubSiteId, () =>
+      this._fetchItems(queryTemplate, selectProperties)
+    )
+
+    const map = new Map<string, Record<string, any>>()
+    for (const item of results) {
+      const itemSiteId = (item as any)[siteIdProperty]
+      if (!itemSiteId) continue
+      const properties: Record<string, any> = {}
+      for (const refiner of uniqueRefiners) {
+        const value = (item as any)[refiner.fieldName]
+        if (value !== undefined && value !== null && value !== '') {
+          properties[refiner.internalName] = value
+        }
+      }
+      map.set(itemSiteId, properties)
+    }
+    return map
+  }
+
+  private async _fetchProjectMemberOfGroups(siteId: string): Promise<IGraphGroup[]> {
+    return getOrFetchProjectsCache('memberOf', siteId, () => this.fetchMemberGroups())
+  }
+
+  private async _fetchProjectSiteUsers(siteId: string): Promise<ISiteUserInfo[]> {
+    return getOrFetchProjectsCache('users', siteId, () =>
+      this._sp.web.siteUsers.select('Id', 'Title', 'Email')()
+    )
+  }
+
+  /**
+   * Builds the template map used to decorate items with a `TemplateImageUrl`.
+   * Falls back to an empty map if the Maloppsett list isn't available.
+   */
+  private async _fetchTemplateMap(): Promise<Map<string, string>> {
+    const templateMap = new Map<string, string>()
     try {
-      templates = await this._sp.web.lists
+      const templates = await this._sp.web.lists
         .getByTitle(resource.Lists_TemplateOptions_Title)
         .items.select('Title', 'TemplateImageUrl')()
+      templates.forEach((template) => {
+        if (template.Title && template.TemplateImageUrl) {
+          templateMap.set(template.Title, template.TemplateImageUrl)
+        }
+      })
     } catch (error) {
       console.warn(
         'Could not fetch template images from Maloppsett list. TemplateImageUrl field may not exist.',
         error
       )
     }
+    return templateMap
+  }
 
-    const [items, sites, memberOfGroups, users] = await localStore.getOrPut(
-      cacheKey,
-      async () =>
-        await Promise.all([
-          list.items.select(...selectFields).getAll(),
-          this._fetchItems(`DepartmentId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId']),
-          this.fetchMemberGroups(),
-          this._sp.web.siteUsers.select('Id', 'Title', 'Email')()
-        ]),
-      dateAdd(new Date(), 'minute', 30)
-    )
+  public async fetchEnrichedProjects(
+    fields?: IEnrichedProjectsFields
+  ): Promise<ProjectListModel[]> {
+    const siteId = this._spfxContext.pageContext.site.id.toString()
 
-    const templateMap = new Map<string, string>()
-    templates.forEach((template) => {
-      if (template.Title && template.TemplateImageUrl) {
-        templateMap.set(template.Title, template.TemplateImageUrl)
-      }
-    })
+    const [templateMap, items, sites, memberOfGroups, users] = await Promise.all([
+      this._fetchTemplateMap(),
+      this._fetchProjectItems(siteId, fields),
+      this._fetchProjectSites(siteId),
+      this._fetchProjectMemberOfGroups(siteId),
+      this._fetchProjectSiteUsers(siteId)
+    ])
 
-    const result: IProjectsData = {
-      items,
-      sites,
-      memberOfGroups,
-      users
-    }
+    const result: IProjectsData = { items, sites, memberOfGroups, users }
     let projects = this._combineResultData(
       result,
       fields?.primaryUserField,
       fields?.secondaryUserField,
       templateMap
     )
+    projects = projects.filter(
+      (m) =>
+        m.lifecycleStatus !== strings.LifecycleStatus_Completed &&
+        m.lifecycleStatus !== strings.LifecycleStatus_Closed
+    )
+    projects = projects.sort((a, b) => a.title.localeCompare(b.title))
+    return projects
+  }
+
+  /**
+   * Lightweight projects fetch for callers that only need Projects list data
+   * (e.g. ProjectTimeline). Shares the items cache with
+   * {@link fetchEnrichedProjects}; persona/membership/access fields are left
+   * undefined since those datasets aren't fetched.
+   */
+  public async fetchProjects(fields?: IEnrichedProjectsFields): Promise<ProjectListModel[]> {
+    const siteId = this._spfxContext.pageContext.site.id.toString()
+
+    const [templateMap, items] = await Promise.all([
+      this._fetchTemplateMap(),
+      this._fetchProjectItems(siteId, fields)
+    ])
+
+    const result: IProjectsData = { items, sites: [], memberOfGroups: [], users: [] }
+    let projects = this._combineResultData(result, undefined, undefined, templateMap)
     projects = projects.filter(
       (m) =>
         m.lifecycleStatus !== strings.LifecycleStatus_Completed &&
@@ -827,7 +941,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     })
   }
 
-  public async fetchProjects(
+  public async fetchProjectsByDataSource(
     configuration?: IPortfolioAggregationConfiguration,
     dataSource?: string
   ): Promise<any[]> {

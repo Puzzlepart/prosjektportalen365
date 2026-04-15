@@ -49,56 +49,59 @@ export const DialogColumn: ColumnRenderComponent<IDialogColumnProps> = (props) =
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
-    <FluentProvider theme={customLightTheme} style={{ display: 'inline', backgroundColor: 'transparent' }}>
-    <Dialog>
-      <DialogTrigger disableButtonEnhancement>
-        <Link>{props.linkText}</Link>
-      </DialogTrigger>
-      <DialogSurface>
-        <DialogBody className={styles.root}>
-          <DialogTitle className={styles.title} hidden={stringIsNullOrEmpty(title)}>
-            {title}
-            <Text size={400}>{subTitle}</Text>
-          </DialogTitle>
-          <DialogContent>
-            {infoText && (
-              <Text size={200} className={styles.infoText}>
-                {infoText}
-              </Text>
-            )}
-            {shouldRenderList ? (
-              <DataGrid
-                items={items}
-                columns={columns}
-                resizableColumns
-                columnSizingOptions={columnSizingOptions}
-              >
-                <DataGridHeader>
-                  <DataGridRow>
-                    {({ renderHeaderCell }) => (
-                      <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-                    )}
-                  </DataGridRow>
-                </DataGridHeader>
-                <DataGridBody>
-                  {({ item, rowId }) => (
-                    <DataGridRow key={rowId}>
-                      {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
-                    </DataGridRow>
-                  )}
-                </DataGridBody>
-              </DataGrid>
-            ) : (
-              <UserMessage
-                title={strings.ModalColumnEmptyListTitle}
-                text={strings.ModalColumnEmptyListMessage}
-              />
-            )}
-          </DialogContent>
-        </DialogBody>
-      </DialogSurface>
-    </Dialog>
-    </FluentProvider>
+      <FluentProvider
+        theme={customLightTheme}
+        style={{ display: 'inline', backgroundColor: 'transparent' }}
+      >
+        <Dialog>
+          <DialogTrigger disableButtonEnhancement>
+            <Link>{props.linkText}</Link>
+          </DialogTrigger>
+          <DialogSurface>
+            <DialogBody className={styles.root}>
+              <DialogTitle className={styles.title} hidden={stringIsNullOrEmpty(title)}>
+                {title}
+                <Text size={400}>{subTitle}</Text>
+              </DialogTitle>
+              <DialogContent>
+                {infoText && (
+                  <Text size={200} className={styles.infoText}>
+                    {infoText}
+                  </Text>
+                )}
+                {shouldRenderList ? (
+                  <DataGrid
+                    items={items}
+                    columns={columns}
+                    resizableColumns
+                    columnSizingOptions={columnSizingOptions}
+                  >
+                    <DataGridHeader>
+                      <DataGridRow>
+                        {({ renderHeaderCell }) => (
+                          <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
+                        )}
+                      </DataGridRow>
+                    </DataGridHeader>
+                    <DataGridBody>
+                      {({ item, rowId }) => (
+                        <DataGridRow key={rowId}>
+                          {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
+                        </DataGridRow>
+                      )}
+                    </DataGridBody>
+                  </DataGrid>
+                ) : (
+                  <UserMessage
+                    title={strings.ModalColumnEmptyListTitle}
+                    text={strings.ModalColumnEmptyListMessage}
+                  />
+                )}
+              </DialogContent>
+            </DialogBody>
+          </DialogSurface>
+        </Dialog>
+      </FluentProvider>
     </IdPrefixProvider>
   )
 }
