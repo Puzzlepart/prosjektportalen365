@@ -103,9 +103,8 @@ export const START_FETCH = createAction('START_FETCH')
 export const EXECUTE_SEARCH = createAction<string>('EXECUTE_SEARCH')
 
 /**
- * `GET_FILTERS`: Get filters. Each entry carries the refiner column plus
- * optional presentation metadata — `group` places the filter under a named
- * section header, and `defaultCollapsed` controls whether it starts collapsed.
+ * `GET_FILTERS`: Build the filter panel from a list of refiner columns.
+ * `group` and `defaultCollapsed` forward straight to the filter panel.
  */
 export const GET_FILTERS = createAction<{
   filters: Array<{ column: any; group?: string; defaultCollapsed?: boolean }>

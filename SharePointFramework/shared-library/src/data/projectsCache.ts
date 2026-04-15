@@ -166,7 +166,7 @@ export function invalidateProjectsCache(source: ProjectsCacheSource, siteId: str
     try {
       sessionStorage.removeItem(key)
     } catch {
-      // ignore
+      /* swallow storage errors */
     }
   }
 }

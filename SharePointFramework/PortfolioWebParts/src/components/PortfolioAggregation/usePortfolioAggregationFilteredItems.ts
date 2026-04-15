@@ -7,11 +7,10 @@ import _ from 'lodash'
 
 /**
  * Reads the value used when matching an active filter against an item. For
- * project refiners (resolved via the column's `internalName`) the joined
- * `__project.data` is checked first — this is the same priority used when the
- * filter panel's unique values are built. Falls back to the search-result
- * value via `fieldName` so filters for fields without a managed property
- * still apply correctly.
+ * project refiners (column with `internalName`) the pre-joined
+ * `__projectRefinerValues` takes priority — mirrors how the filter panel's
+ * unique values are built. Falls back to the search-result value via
+ * `fieldName` for DataSource refiners.
  */
 const readFilterValue = (item: any, key: string, filterColumn?: any): string => {
   const internalName: string | undefined = filterColumn?.internalName
@@ -26,11 +25,8 @@ const readFilterValue = (item: any, key: string, filterColumn?: any): string => 
 }
 
 /**
- * Filter items by active filters.
- *
- * @param items Items
- * @param activeFilters Active filters
- * @param filters Filter column metadata (for `internalName` lookup)
+ * Filter `items` by `activeFilters`. `filters` is used to resolve the filter
+ * column metadata (specifically `internalName`) from the filter key.
  */
 const filterItems = (
   items: IFilterItemProps[],
@@ -38,8 +34,9 @@ const filterItems = (
   filters: IFilterProps[]
 ): Record<string, any>[] => {
   return Object.keys(activeFilters).reduce((arr, key) => {
-    const filterColumn = filters.find((f) => f.column.key === key || f.column.fieldName === key)
-      ?.column
+    const filterColumn = filters.find(
+      (f) => f.column.key === key || f.column.fieldName === key
+    )?.column
     return _.filter(arr, (f) => {
       const colValue = readFilterValue(f, key, filterColumn)
       return _.some(activeFilters[key], (v) => colValue.indexOf(v) !== -1)

@@ -49,44 +49,48 @@ export const InstrumentColumn: ColumnRenderComponent<IInstrumentColumnProps> = (
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
-    <FluentProvider theme={customLightTheme} style={{ display: 'inline', backgroundColor: 'transparent' }}>
-    <Popover withArrow>
-      <PopoverTrigger disableButtonEnhancement>
-        <Link>{format(strings.ShowInstrumentLinkText || '{0}', currentValue ?? '')}</Link>
-      </PopoverTrigger>
-      <PopoverSurface>
-        <div>
-          <div className={styles.gauge} style={{ width: '100%', alignItems: 'center' }}>
-            <GaugeComponent
-              type='semicircle'
-              minValue={minimumValue}
-              maxValue={maximumValue}
-              arc={{
-                colorArray: startValue > endValue ? ['#00FF15', '#FF2121'] : ['#FF2121', '#00FF15'],
-                padding: 0.02,
-                subArcs: subArcs
-              }}
-              labels={{
-                valueLabel: {
-                  style: {
-                    fill: '#222',
-                    color: '#222',
-                    textShadow: 'none',
-                    fontWeight: 'bold',
-                    fontSize: '32px'
-                  }
-                }
-              }}
-              pointer={{ type: 'blob', animationDelay: 0.5 }}
-              value={currentValue}
-            />
-            <Text>{format(strings.InstrumentUnitLabel || '{0}', unit ?? '')}</Text>
-            <div className={styles.description}>{description}</div>
-          </div>
-        </div>
-      </PopoverSurface>
-    </Popover>
-    </FluentProvider>
+      <FluentProvider
+        theme={customLightTheme}
+        style={{ display: 'inline', backgroundColor: 'transparent' }}
+      >
+        <Popover withArrow>
+          <PopoverTrigger disableButtonEnhancement>
+            <Link>{format(strings.ShowInstrumentLinkText || '{0}', currentValue ?? '')}</Link>
+          </PopoverTrigger>
+          <PopoverSurface>
+            <div>
+              <div className={styles.gauge} style={{ width: '100%', alignItems: 'center' }}>
+                <GaugeComponent
+                  type='semicircle'
+                  minValue={minimumValue}
+                  maxValue={maximumValue}
+                  arc={{
+                    colorArray:
+                      startValue > endValue ? ['#00FF15', '#FF2121'] : ['#FF2121', '#00FF15'],
+                    padding: 0.02,
+                    subArcs: subArcs
+                  }}
+                  labels={{
+                    valueLabel: {
+                      style: {
+                        fill: '#222',
+                        color: '#222',
+                        textShadow: 'none',
+                        fontWeight: 'bold',
+                        fontSize: '32px'
+                      }
+                    }
+                  }}
+                  pointer={{ type: 'blob', animationDelay: 0.5 }}
+                  value={currentValue}
+                />
+                <Text>{format(strings.InstrumentUnitLabel || '{0}', unit ?? '')}</Text>
+                <div className={styles.description}>{description}</div>
+              </div>
+            </div>
+          </PopoverSurface>
+        </Popover>
+      </FluentProvider>
     </IdPrefixProvider>
   )
 }

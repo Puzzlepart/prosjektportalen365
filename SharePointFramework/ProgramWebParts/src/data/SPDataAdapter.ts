@@ -648,8 +648,7 @@ export class SPDataAdapter
 
   /**
    * Fetches the raw Projects list items for the current program site. Shared
-   * across webparts on the same page via `getOrFetchProjectsCache`, keyed by
-   * siteId so program-site data is isolated from the portfolio hub cache.
+   * via `getOrFetchProjectsCache`, keyed by siteId.
    */
   private async _fetchProjectItems(siteId: string): Promise<SPProjectItem[]> {
     return getOrFetchProjectsCache('items', siteId, () =>
@@ -687,10 +686,8 @@ export class SPDataAdapter
   }
 
   /**
-   * Lightweight projects fetch used by callers (ProjectTimeline,
-   * PortfolioAggregation) that only need Projects list data. Shares the
-   * underlying items cache with `fetchEnrichedProjects`, so co-located
-   * webparts reuse the single network call.
+   * Lightweight projects fetch for callers that only need Projects list data
+   * (ProjectTimeline). Shares the items cache with {@link fetchEnrichedProjects}.
    */
   public async fetchProjects(): Promise<ProjectListModel[]> {
     const siteId = this.spfxContext.pageContext.site.id.toString()
@@ -700,8 +697,9 @@ export class SPDataAdapter
   }
 
   /**
-   * Fetches project-level refiner values via search, keyed by siteId. See the
-   * PortfolioWebParts `DataAdapter.fetchProjectRefinerValues` for rationale.
+   * Fetches project-level refiner values via search, keyed by siteId. Program
+   * mirror of `DataAdapter.fetchProjectRefinerValues` in PortfolioWebParts —
+   * see there for rationale.
    */
   public async fetchProjectRefinerValues(
     refiners: ProjectColumn[]
@@ -715,15 +713,12 @@ export class SPDataAdapter
     if (uniqueRefiners.length === 0 || !hubSiteId) return new Map()
 
     const siteIdProperty = 'GtSiteIdOWSTEXT'
-    const selectProperties = _.uniq([
-      ...uniqueRefiners.map((r) => r.fieldName),
-      siteIdProperty
-    ])
+    const selectProperties = _.uniq([...uniqueRefiners.map((r) => r.fieldName), siteIdProperty])
 
     const portfolioConfig = await this.getPortfolioConfig()
-    const viewSearchQuery = portfolioConfig?.views?.[0]?.searchQuery
     const queryTemplate =
-      viewSearchQuery ?? `DepartmentId:{${hubSiteId}} contentclass:STS_Site`
+      portfolioConfig?.views?.[0]?.searchQuery ??
+      `DepartmentId:{${hubSiteId}} contentclass:STS_Site`
 
     const results = await getOrFetchProjectsCache('refiners', hubSiteId, () =>
       this._fetchItems(queryTemplate, selectProperties)

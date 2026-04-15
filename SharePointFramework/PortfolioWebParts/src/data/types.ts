@@ -68,13 +68,6 @@ export interface IEnrichedProjectsFields {
    * Secondary field
    */
   secondaryField?: string
-
-  /**
-   * Additional SharePoint field internal names to include in the Projects
-   * list `select(...)`. Used by callers that need extra columns (e.g.
-   * refinable custom fields) available on `ProjectListModel.data`.
-   */
-  additionalFields?: string[]
 }
 
 export interface IPortfolioWebPartsDataAdapter {
@@ -272,33 +265,31 @@ export interface IPortfolioWebPartsDataAdapter {
   fetchTimelineConfiguration?(): Promise<TimelineConfigurationModel[]>
 
   /**
-   * Fetching enriched projects by combining list items from projects list,
-   * Graph Groups and site users. The result are cached in `localStorage`
-   * for 30 minutes. Projects with lifecycle stage `Avsluttet` are excluded, and
-   * the projects are sorted by Title ascending.
+   * Fetches fully enriched projects (Projects list + site access + group
+   * membership + users). Results go through the tiered projects cache.
+   * Closed/completed projects are excluded and the list is sorted by title.
    *
    * @param fields Additional fields to include in the query
    */
   fetchEnrichedProjects?(fields?: IEnrichedProjectsFields): Promise<ProjectListModel[]>
 
   /**
-   * Lightweight projects fetch. Returns `ProjectListModel[]` populated only
-   * from the Projects list items (no site access, membership or persona
-   * lookups). Shares the underlying items cache with `fetchEnrichedProjects`
-   * so the first caller on the page pays the network cost and later callers
-   * reuse the cached data.
+   * Lightweight projects fetch — only reads the Projects list items, skipping
+   * the site / membership / user lookups. Shares the items cache with
+   * {@link fetchEnrichedProjects}, so co-located webparts reuse the network
+   * call. Persona, membership and access fields are left undefined.
    *
    * @param fields Additional fields to include in the query
    */
   fetchProjects?(fields?: IEnrichedProjectsFields): Promise<ProjectListModel[]>
 
   /**
-   * Fetches project-level refiner values via search, keyed by siteId. Used
-   * by components that show child items (e.g. PortfolioAggregation on risks
-   * or benefits) and need to join each item to the parent project's filter
-   * values. Mirrors the data path used by `ProjectTimeline`.
+   * Fetches project-level refiner values via search, keyed by siteId. Used by
+   * components that render child items (PortfolioAggregation on risks /
+   * benefits etc.) and need to join each item to its parent project's filter
+   * values. Same data path as `ProjectTimeline`.
    *
-   * @param refiners Project columns whose values should be surfaced
+   * @param refiners Project columns whose values should be returned
    */
   fetchProjectRefinerValues?(refiners: any[]): Promise<Map<string, Record<string, any>>>
 

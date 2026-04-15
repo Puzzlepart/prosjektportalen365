@@ -156,9 +156,7 @@ export class SPDataAdapterBase<
       }
 
       if (!properties) {
-        const propertiesList = this.sp.web.lists.getByTitle(
-          resource.Lists_ProjectProperties_Title
-        )
+        const propertiesList = this.sp.web.lists.getByTitle(resource.Lists_ProjectProperties_Title)
         const [propertiesItem] = await propertiesList.items.top(1)()
         if (!propertiesItem) return false
         properties = new ItemFieldValues(propertiesItem)

@@ -69,10 +69,9 @@ export interface IPortfolioAggregationConfiguration {
   levels?: string[]
 
   /**
-   * Refinable project columns from Prosjektkolonner-lista (`GtIsRefinable=true`).
-   * These are exposed as additional filters in the filter panel under a
-   * "Project information" group and read values from the joined Projects list
-   * data. Independent of the DataSource's own `refiners` (ProjectContentColumn).
+   * Refinable project columns from Prosjektkolonner (`GtIsRefinable=true`).
+   * Surfaced as filters under a "Project information" group, independent of
+   * the DataSource's own `refiners`.
    */
   refiners?: ProjectColumn[]
 }

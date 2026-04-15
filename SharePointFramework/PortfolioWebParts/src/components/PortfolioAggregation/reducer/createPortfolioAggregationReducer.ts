@@ -347,12 +347,6 @@ export const createPortfolioAggregationReducer = (
     },
     [GET_FILTERS.type]: (state, { payload }: ReturnType<typeof GET_FILTERS>) => {
       const payloadFilters = payload.filters.map(({ column, group, defaultCollapsed }) => {
-        // Unified value source — mirrors `ProjectTimeline`. For project
-        // refiners we read the pre-joined `__projectRefinerValues` (keyed by
-        // `internalName`) which is built from a search over project sites
-        // with all refiners' `fieldName` as selectProperties. For DataSource
-        // refiners (no `internalName` match) we fall back to the search-item
-        // value via `column.fieldName`.
         const collectFromProjectRefiners = (): string[] => {
           if (stringIsNullOrEmpty(column.internalName)) return []
           return _.flatten(
@@ -371,22 +365,17 @@ export const createPortfolioAggregationReducer = (
         const rawValues = refinerValues.length > 0 ? refinerValues : collectFromSearchItems()
         const uniqueValues = _.uniq(rawValues)
 
-        // Boolean SharePoint fields return '1'/'0' in search but SP list data
-        // returns true/false. Normalize both forms to the localized Yes/No,
-        // matching ProjectTimeline for GtIsProgram / GtIsParentProject.
         const isBooleanField =
           column.fieldName?.includes('GtIsProgram') ||
-          column.fieldName?.includes('GtIsParentProject') ||
-          column.internalName?.includes('GtIsProgram') ||
-          column.internalName?.includes('GtIsParentProject')
+          column.fieldName?.includes('GtIsParentProject')
 
         let items: IFilterItemProps[] = uniqueValues
           .filter((value: string) => !stringIsNullOrEmpty(value))
           .map((value: string) => {
             let name = parseDisplayValue(value)
             if (isBooleanField) {
-              if (value === '1' || value.toLowerCase() === 'true') name = strings.BooleanYes
-              else if (value === '0' || value.toLowerCase() === 'false') name = strings.BooleanNo
+              if (value === '1') name = strings.BooleanYes
+              else if (value === '0') name = strings.BooleanNo
             }
             return { name, value, selected: false }
           })

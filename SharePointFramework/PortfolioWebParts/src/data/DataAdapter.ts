@@ -178,10 +178,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         this.portalDataService.getProjectColumns().catch(() => [])
       ])
 
-      // Project columns marked as refinable in Prosjektkolonner-lista are
-      // surfaced as additional filters in the Aggregation filter panel,
-      // grouped under "Project information". Values are read from the
-      // joined Projects list data via `__project.data[internalName]`.
       const refiners = (projectColumns ?? []).filter((col) => col.isRefinable)
 
       return {
@@ -463,45 +459,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         'GtSiteIdOWSTEXT'
       )
 
-      // eslint-disable-next-line no-console
-      console.log('[ProjectTimeline] fetchTimelineProjectData', {
-        hubSiteId: this._spfxContext.pageContext.legacyPageContext.hubSiteId,
-        viewSelectProperties: configuration.views[0]?.searchQuery,
-        refinerFieldNames: configuration.refiners.map((r) => ({
-          name: r.name,
-          fieldName: r.fieldName,
-          internalName: r.internalName
-        })),
-        projectCount: projects.length,
-        firstThreeProjectsWithValues: (() => {
-          const samples: any[] = []
-          for (const item of projects) {
-            const entries = configuration.refiners.reduce((acc, r) => {
-              const v = (item as any)[r.fieldName]
-              if (v !== undefined && v !== null && v !== '') {
-                acc[`${r.name} (${r.fieldName})`] = v
-              }
-              return acc
-            }, {} as Record<string, any>)
-            if (Object.keys(entries).length > 0) {
-              samples.push({
-                Title: (item as any).Title,
-                SiteId: (item as any).GtSiteIdOWSTEXT,
-                values: entries
-              })
-              if (samples.length >= 3) break
-            }
-          }
-          return samples
-        })(),
-        nonNullCountPerRefiner: configuration.refiners.reduce((acc, r) => {
-          acc[`${r.name} (${r.fieldName})`] = projects.filter(
-            (i) => (i as any)[r.fieldName] !== undefined && (i as any)[r.fieldName] !== null
-          ).length
-          return acc
-        }, {} as Record<string, number>)
-      })
-
       const data = projects.map((item) => {
         const properties = _.reduce(
           item,
@@ -720,12 +677,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   }
 
   /**
-   * Builds the list of select fields used when priming the items cache. The
-   * set is a superset of `SPProjectItem` plus any user-configured extra fields
-   * (user persona ids, primary/secondary display fields). The defaults
-   * (GtProjectOwner/GtProjectManager/GtProjectServiceAreaText/GtProjectTypeText)
-   * are already covered by `SPProjectItem`, so typical configurations hit the
-   * shared cache without surprises.
+   * Builds the Projects list `select` field list from `SPProjectItem` plus
+   * any user-configured persona / display field overrides.
    */
   private _buildProjectItemsSelectFields(fields?: IEnrichedProjectsFields): string[] {
     const selectFields = [...Object.keys(new SPProjectItem())]
@@ -733,25 +686,12 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     if (fields?.secondaryUserField) selectFields.push(`${fields.secondaryUserField}Id`)
     if (fields?.primaryField) selectFields.push(fields.primaryField)
     if (fields?.secondaryField) selectFields.push(fields.secondaryField)
-    if (fields?.additionalFields?.length) {
-      for (const field of fields.additionalFields) {
-        if (field) {
-          // Include the raw field and its `...Text` companion (used by
-          // taxonomy/choice columns) so refinable project columns always
-          // resolve on `ProjectListModel.data`.
-          selectFields.push(field)
-          if (!field.endsWith('Text')) selectFields.push(`${field}Text`)
-        }
-      }
-    }
     return _.uniq(selectFields)
   }
 
   /**
-   * Fetches the raw Projects list items. Shared cache across webparts on the
-   * same page via `getOrFetchProjectsCache`. The first caller wins — its
-   * selected fields are what later callers see. Default field selection covers
-   * the standard ProjectList / ProjectCard configuration.
+   * Fetches the raw Projects list items. Shared across webparts on the same
+   * page via `getOrFetchProjectsCache` — first caller's select wins.
    */
   private async _fetchProjectItems(
     siteId: string,
@@ -759,25 +699,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   ): Promise<any[]> {
     const list = this._sp.web.lists.getByTitle(resource.Lists_Projects_Title)
     const selectFields = this._buildProjectItemsSelectFields(fields)
-    const baselineFields = Object.keys(new SPProjectItem())
-    return getOrFetchProjectsCache('items', siteId, async () => {
-      try {
-        return await list.items.select(...selectFields).getAll()
-      } catch (error) {
-        // An `additionalFields` entry may reference a column that requires
-        // `$expand` (e.g. user/lookup fields) or doesn't exist on the list,
-        // which makes SharePoint reject the entire request. Retry with only
-        // the baseline SPProjectItem fields so the rest of the UI still
-        // loads. Refinable custom columns that fall out here just won't
-        // populate their filter from Projects list data (search fallback
-        // via `fieldName` in the reducer still applies).
-        console.warn(
-          '[DataAdapter.fetchProjectItems] select with additional fields failed, retrying with baseline only',
-          error
-        )
-        return await list.items.select(...baselineFields).getAll()
-      }
-    })
+    return getOrFetchProjectsCache('items', siteId, () =>
+      list.items.select(...selectFields).getAll()
+    )
   }
 
   private async _fetchProjectSites(siteId: string): Promise<ISearchResult[]> {
@@ -788,31 +712,26 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
   /**
    * Fetches project-level refiner values via search, keyed by siteId. Mirrors
-   * the data path used by `ProjectTimeline` so components that show child
-   * items (PortfolioAggregation risks/benefits/etc.) can join each item to
-   * the parent project's filter values without depending on SP REST quirks
-   * (user fields need `$expand`, taxonomy columns have hidden text
-   * companions, unknown columns reject the whole select).
+   * `ProjectTimeline.fetchTimelineProjectData` so components showing child
+   * items (risks, benefits) can join each item to its parent project's filter
+   * values. Search sidesteps SP REST quirks (user fields needing `$expand`,
+   * taxonomy columns, unknown-column rejections).
    *
-   * The returned map is keyed by `GtSiteIdOWSTEXT` and values are keyed by
-   * the refiner's `internalName` so callers can use a single lookup path:
-   * `map.get(item.SiteId)?.[column.internalName]`.
+   * The query reuses the portfolio's first view — its `ContentTypeId` clause
+   * targets the project-properties items where `GtProject*` managed properties
+   * actually live (site-level results don't have them populated).
+   *
+   * Refiners with non-alphanumeric `fieldName` (e.g. a literal `"-"`) are
+   * dropped — SP search silently returns null for _all_ requested properties
+   * if any `SelectProperties` entry is invalid.
+   *
+   * @param refiners Project columns whose values should be returned
+   * @returns Map from `GtSiteIdOWSTEXT` to a record keyed by `internalName`
    */
   public async fetchProjectRefinerValues(
     refiners: ProjectColumn[]
   ): Promise<Map<string, Record<string, any>>> {
-    // Mirror `ProjectTimeline.fetchTimelineProjectData` exactly — use the
-    // hub site id + the portfolio's first view's searchQuery. That query
-    // targets the project-properties items (ContentTypeId filter) where
-    // `GtProject*` managed properties are populated. A `contentclass:STS_Site`
-    // query returns site-level results which do NOT have these project
-    // managed properties, which is why the earlier attempt returned 0
-    // non-null values across the board.
     const hubSiteId = this._spfxContext.pageContext.legacyPageContext.hubSiteId
-    // Keep only refiners whose `fieldName` looks like a real managed property
-    // (alphanumeric + underscore). Entries like `"-"` would otherwise end up
-    // in `SelectProperties` and can cause SP search to silently return null
-    // for all other requested properties.
     const isValidManagedProperty = (name: string | undefined) =>
       Boolean(name) && /^[A-Za-z_][A-Za-z0-9_]*$/.test(name)
     const uniqueRefiners = _.uniq(
@@ -821,58 +740,16 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     if (uniqueRefiners.length === 0 || !hubSiteId) return new Map()
 
     const siteIdProperty = 'GtSiteIdOWSTEXT'
-    const selectProperties = _.uniq([
-      ...uniqueRefiners.map((r) => r.fieldName),
-      siteIdProperty
-    ])
+    const selectProperties = _.uniq([...uniqueRefiners.map((r) => r.fieldName), siteIdProperty])
 
     const portfolioConfig = await this.getPortfolioConfig()
-    const viewSearchQuery = portfolioConfig?.views?.[0]?.searchQuery
     const queryTemplate =
-      viewSearchQuery ?? `DepartmentId:{${hubSiteId}} contentclass:STS_Site`
+      portfolioConfig?.views?.[0]?.searchQuery ??
+      `DepartmentId:{${hubSiteId}} contentclass:STS_Site`
 
     const results = await getOrFetchProjectsCache('refiners', hubSiteId, () =>
       this._fetchItems(queryTemplate, selectProperties)
     )
-
-    // eslint-disable-next-line no-console
-    console.log('[PortfolioAggregation] fetchProjectRefinerValues', {
-      hubSiteId,
-      selectProperties,
-      resultCount: results.length,
-      // Find the first three items that actually have ANY refiner value — the
-      // top of the list is often the hub site or otherwise empty for project
-      // fields, which makes a single-sample log misleading.
-      firstThreeItemsWithValues: (() => {
-        const samples: any[] = []
-        for (const item of results) {
-          const entries = uniqueRefiners.reduce((acc, r) => {
-            const v = (item as any)[r.fieldName]
-            if (v !== undefined && v !== null && v !== '') {
-              acc[`${r.name} (${r.fieldName})`] = v
-            }
-            return acc
-          }, {} as Record<string, any>)
-          if (Object.keys(entries).length > 0) {
-            samples.push({
-              Title: (item as any).Title,
-              SiteId: (item as any).GtSiteIdOWSTEXT,
-              values: entries
-            })
-            if (samples.length >= 3) break
-          }
-        }
-        return samples
-      })(),
-      // Count how many items have a non-null value per refiner, so we see
-      // whether a particular managed property returns data at all.
-      nonNullCountPerRefiner: uniqueRefiners.reduce((acc, r) => {
-        acc[`${r.name} (${r.fieldName})`] = results.filter(
-          (i) => (i as any)[r.fieldName] !== undefined && (i as any)[r.fieldName] !== null
-        ).length
-        return acc
-      }, {} as Record<string, number>)
-    })
 
     const map = new Map<string, Record<string, any>>()
     for (const item of results) {
@@ -954,12 +831,10 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   }
 
   /**
-   * Lightweight projects fetch used by callers that only need Projects list
-   * data (title, siteId, url, phase, dates, project properties) — e.g.
-   * `ProjectTimeline` and `PortfolioAggregation`. Shares the underlying items
-   * cache with {@link fetchEnrichedProjects}, so if any of the three webparts
-   * is already on the page the network call is skipped. Persona, membership
-   * and access fields are left undefined since those datasets aren't fetched.
+   * Lightweight projects fetch for callers that only need Projects list data
+   * (e.g. ProjectTimeline). Shares the items cache with
+   * {@link fetchEnrichedProjects}; persona/membership/access fields are left
+   * undefined since those datasets aren't fetched.
    */
   public async fetchProjects(fields?: IEnrichedProjectsFields): Promise<ProjectListModel[]> {
     const siteId = this._spfxContext.pageContext.site.id.toString()
