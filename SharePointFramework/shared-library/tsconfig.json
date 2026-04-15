@@ -17,6 +17,7 @@
     "noImplicitAny": false,
     "allowSyntheticDefaultImports": true,
     "downlevelIteration": true,
+    "suppressImplicitAnyIndexErrors": true,
     "typeRoots": [
       "./node_modules/@types",
       "./node_modules/@microsoft"

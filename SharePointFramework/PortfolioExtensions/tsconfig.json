@@ -17,6 +17,7 @@
     "strictNullChecks": false,
     "noUnusedLocals": false,
     "noImplicitAny": false,
+    "suppressImplicitAnyIndexErrors": true,
     "typeRoots": [
       "./node_modules/@types",
       "./node_modules/@microsoft"
