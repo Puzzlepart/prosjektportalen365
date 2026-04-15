@@ -3,7 +3,7 @@
 import { IPersonaProps, IPersonaSharedProps } from '@fluentui/react'
 import { format } from '@fluentui/react/lib/Utilities'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { dateAdd, PnPClientStorage } from '@pnp/core'
+import { dateAdd, getHashCode, PnPClientStorage } from '@pnp/core'
 import { LogLevel } from '@pnp/logging'
 import { spfi, SPFx } from '@pnp/sp'
 import '@pnp/sp/items/get-all'
@@ -691,7 +691,11 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
   /**
    * Fetches the raw Projects list items. Shared across webparts on the same
-   * page via `getOrFetchProjectsCache` — first caller's select wins.
+   * page via `getOrFetchProjectsCache`. The cache key includes a hash of the
+   * sorted select fields so callers with different field configurations
+   * don't stomp on each other — e.g. a lightweight caller that primes the
+   * cache with baseline fields wouldn't cause a later `fetchEnrichedProjects`
+   * request with extra user/display fields to receive incomplete items.
    */
   private async _fetchProjectItems(
     siteId: string,
@@ -699,7 +703,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   ): Promise<any[]> {
     const list = this._sp.web.lists.getByTitle(resource.Lists_Projects_Title)
     const selectFields = this._buildProjectItemsSelectFields(fields)
-    return getOrFetchProjectsCache('items', siteId, () =>
+    const fieldsHash = getHashCode(selectFields.slice().sort().join(','))
+    return getOrFetchProjectsCache('items', `${siteId}_${fieldsHash}`, () =>
       list.items.select(...selectFields).getAll()
     )
   }

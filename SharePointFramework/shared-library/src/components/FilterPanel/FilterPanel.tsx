@@ -60,18 +60,22 @@ export const FilterPanel: FC<IFilterPanelProps> = (props) => {
                 intent='info'
               />
             )}
-            {ungrouped.map((f, idx) => (
-              <Filter {...f} key={`u-${idx}`} onFilterChange={props.onFilterChange} />
+            {ungrouped.map((f) => (
+              <Filter
+                {...f}
+                key={`u-${f.column.key}`}
+                onFilterChange={props.onFilterChange}
+              />
             ))}
             {groups.map((group) => (
               <Fragment key={`g-${group.name}`}>
                 <div className={styles.groupHeader} role='heading' aria-level={3}>
                   {group.name}
                 </div>
-                {group.filters.map((f, idx) => (
+                {group.filters.map((f) => (
                   <Filter
                     {...f}
-                    key={`g-${group.name}-${idx}`}
+                    key={`g-${group.name}-${f.column.key}`}
                     onFilterChange={props.onFilterChange}
                   />
                 ))}

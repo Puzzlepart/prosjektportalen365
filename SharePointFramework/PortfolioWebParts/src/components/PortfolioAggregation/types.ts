@@ -76,16 +76,6 @@ export interface IPortfolioAggregationConfiguration {
   refiners?: ProjectColumn[]
 }
 
-export interface IPortfolioAggregationConfiguration {
-  viewsUrls: { defaultNewFormUrl: string; defaultEditFormUrl: string }
-  columnUrls: { defaultNewFormUrl: string; defaultEditFormUrl: string }
-  columns?: ProjectContentColumn[]
-  views?: DataSource[]
-  level?: string
-  levels?: string[]
-  refiners?: ProjectColumn[]
-}
-
 export interface IPortfolioAggregationProps<T = any>
   extends IBaseComponentProps,
     Pick<IListProps, 'isListLayoutModeJustified' | 'hiddenColumns'> {

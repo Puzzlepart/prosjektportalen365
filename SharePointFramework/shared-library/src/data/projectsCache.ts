@@ -104,7 +104,9 @@ function writeCache<T>(
 
   try {
     const serialized = JSON.stringify({ data, expiresAt } as CacheEntry<T>)
-    if (serialized.length > SESSION_SIZE_LIMIT_BYTES) return
+    // `.length` is char count; use `Blob.size` so multi-byte UTF-8 is counted
+    // accurately against the byte-based limit.
+    if (new Blob([serialized]).size > SESSION_SIZE_LIMIT_BYTES) return
     sessionStorage.setItem(key, serialized)
   } catch {
     // Quota exceeded or other storage error — leave L1 populated and move on.
