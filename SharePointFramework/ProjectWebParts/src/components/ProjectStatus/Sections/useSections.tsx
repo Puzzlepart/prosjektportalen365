@@ -18,7 +18,6 @@ export function useSections() {
 
     if (section.type === SectionType.ProjectPropertiesSection && section.viewFields?.length > 0) {
       const fieldValuesAsText = {
-        ...data.properties?.fieldValues?.['_fieldValuesAsText'],
         ...selectedReport?.fieldValues?.['_fieldValuesAsText']
       }
       return section.viewFields.some(
