@@ -30,6 +30,11 @@ export const TargetFolderScreen: FC = () => {
     state.targetFolder || context.currentFolderUrl || ''
   )
 
+  function onFolderClick(clickedFolder: SPFolder) {
+    if (clickedFolder.isLibrary) setRoot(clickedFolder)
+    setFolder(clickedFolder.url)
+  }
+
   useEffect(() => {
     if (folder === null) {
       setFolders(context.libraries)
@@ -63,14 +68,11 @@ export const TargetFolderScreen: FC = () => {
       ) : (
         <DetailsList
           items={folders.sort((a, b) => (a.name > b.name ? 1 : -1))}
-          columns={columns()}
+          columns={columns({ onFolderClick })}
           selectionMode={SelectionMode.none}
           layoutMode={DetailsListLayoutMode.justified}
           constrainMode={ConstrainMode.horizontalConstrained}
-          onItemInvoked={(folder: SPFolder) => {
-            if (folder.isLibrary) setRoot(folder)
-            setFolder(folder.url)
-          }}
+          onItemInvoked={onFolderClick}
         />
       )}
       <DialogFooter>
