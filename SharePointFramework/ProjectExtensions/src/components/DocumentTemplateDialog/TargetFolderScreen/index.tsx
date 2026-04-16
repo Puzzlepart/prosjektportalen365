@@ -26,7 +26,9 @@ export const TargetFolderScreen: FC = () => {
   const context = useContext(TemplateSelectorContext)
   const [root, setRoot] = useState(context.currentLibrary)
   const [folders, setFolders] = useState(root.folders)
-  const [folder, setFolder] = useState(state.targetFolder)
+  const [folder, setFolder] = useState(
+    state.targetFolder || context.currentFolderUrl || ''
+  )
 
   useEffect(() => {
     if (folder === null) {
