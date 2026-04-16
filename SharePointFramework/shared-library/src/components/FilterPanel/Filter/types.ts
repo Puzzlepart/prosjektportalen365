@@ -11,6 +11,11 @@ export interface IFilterProps {
    * `group` are rendered above any grouped sections.
    */
   group?: string
+  /**
+   * Search term to filter the items displayed in this filter section.
+   * Items whose `name` does not match (case-insensitive) are hidden.
+   */
+  searchTerm?: string
   onFilterChange?: (column: IColumn, selectedItems: IFilterItemProps[]) => void
 }
 

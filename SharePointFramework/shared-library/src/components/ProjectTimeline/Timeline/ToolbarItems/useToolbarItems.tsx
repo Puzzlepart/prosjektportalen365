@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import React, { useMemo } from 'react'
 import {
   BoxFilled,
   BoxRegular,
@@ -9,6 +9,7 @@ import {
   TagRegular
 } from '@fluentui/react-icons'
 import { ListMenuItem } from '../../../Toolbar'
+import { ActiveFilters } from '../../../FilterPanel'
 import strings from 'SharedLibraryStrings'
 import { ITimelineProps } from '../types'
 import resource from 'SharedResources'
@@ -53,6 +54,15 @@ export function useToolbarItems(
     }
   ]
 
+  const activeFilterCount = useMemo(
+    () =>
+      Object.values(props.activeFilters ?? {}).reduce(
+        (acc, curr) => acc + curr.length,
+        0
+      ),
+    [props.activeFilters]
+  )
+
   const menuItems = useMemo<ListMenuItem[]>(
     () =>
       [
@@ -76,13 +86,30 @@ export function useToolbarItems(
               ),
               { groupBy: [selectedGroupBy] }
             ),
-        new ListMenuItem(null, strings.FilterText).setIcon('Filter').setOnClick((ev) => {
-          ev.preventDefault()
-          ev.stopPropagation()
-          setShowFilterPanel(true)
-        })
+        new ListMenuItem(null, strings.FilterText)
+          .setIcon('Filter')
+          .setBadge(activeFilterCount)
+          .setOnClick((ev) => {
+            ev.preventDefault()
+            ev.stopPropagation()
+            setShowFilterPanel(true)
+          }),
+        activeFilterCount > 0 &&
+          new ListMenuItem(null, strings.ClearFiltersText)
+            .setIcon('FilterDismiss')
+            .setOnClick(() => {
+              props.onClearFilters?.()
+            })
+            .setPopoverContent(
+              React.createElement(ActiveFilters, {
+                filters: props.filters ?? [],
+                onRemoveFilter: props.onRemoveFilter,
+                onClearAll: props.onClearFilters,
+                compact: true
+              })
+            )
       ].filter(Boolean),
-    [props]
+    [props, activeFilterCount]
   )
 
   return menuItems

@@ -454,6 +454,7 @@ declare interface IPortfolioWebPartsStrings {
   ExcelExportButtonLabel: string
   FiltersString: string
   FilterText: string
+  ClearFiltersText: string
   GeneralGroupName: string
   GroupByColumnLabel: string
   HideVerticalsLabel: string

@@ -8,8 +8,10 @@ import { createElement, useMemo, useReducer } from 'react'
 import { OnColumnContextMenu } from '../../List'
 import { IPortfolioOverviewContext } from '../context'
 import createReducer, {
+  CLEAR_FILTERS,
   EXECUTE_SEARCH,
   ON_FILTER_CHANGED,
+  REMOVE_FILTER,
   SELECTION_CHANGED,
   TOGGLE_COLUMN_CONTEXT_MENU,
   TOGGLE_FILTER_PANEL,
@@ -84,14 +86,18 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
   const filterPanelProps: IFilterPanelProps = useMemo(
     () => ({
       isOpen: context.state.isFilterPanelOpen,
-      layerHostId: context.layerHostId,
       onDismiss: () => context.dispatch(TOGGLE_FILTER_PANEL()),
       filters: filters,
+      activeFilters: context.state.activeFilters,
       onFilterChange: (column: ProjectColumn, selectedItems: IFilterItemProps[]) => {
         context.dispatch(ON_FILTER_CHANGED({ column, selectedItems }))
+      },
+      onClearFilters: () => context.dispatch(CLEAR_FILTERS()),
+      onRemoveFilter: (fieldName: string, value: string) => {
+        context.dispatch(REMOVE_FILTER({ fieldName, value }))
       }
     }),
-    [context.state.isFilterPanelOpen, context.layerHostId, filters]
+    [context.state.isFilterPanelOpen, context.state.activeFilters, filters]
   )
 
   return {

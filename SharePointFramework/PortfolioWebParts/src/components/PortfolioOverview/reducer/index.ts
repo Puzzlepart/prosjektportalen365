@@ -11,6 +11,7 @@ import _ from 'underscore'
 import { IPortfolioOverviewHashState, IPortfolioOverviewState } from '../types'
 import {
   CHANGE_VIEW,
+  CLEAR_FILTERS,
   COLUMN_DELETED,
   COLUMN_FORM_PANEL_ON_SAVED,
   DATA_FETCH_ERROR,
@@ -19,6 +20,7 @@ import {
   EXCEL_EXPORT_SUCCESS,
   EXECUTE_SEARCH,
   ON_FILTER_CHANGED,
+  REMOVE_FILTER,
   SELECTION_CHANGED,
   SET_GROUP_BY,
   SET_SORT,
@@ -129,6 +131,21 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
           delete state.activeFilters[column.fieldName]
         } else {
           state.activeFilters[column.fieldName] = selectedItems.map((i) => i.value)
+        }
+      })
+      .addCase(CLEAR_FILTERS, (state) => {
+        state.activeFilters = {}
+        state.isFilterPanelOpen = false
+      })
+      .addCase(REMOVE_FILTER, (state, { payload }) => {
+        const values = state.activeFilters[payload.fieldName]
+        if (values) {
+          const updated = values.filter((v) => v !== payload.value)
+          if (updated.length === 0) {
+            delete state.activeFilters[payload.fieldName]
+          } else {
+            state.activeFilters[payload.fieldName] = updated
+          }
         }
       })
       .addCase(TOGGLE_COLUMN_CONTEXT_MENU, (state, { payload }) => {

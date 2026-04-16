@@ -27,6 +27,8 @@ import {
   EXECUTE_SEARCH,
   GET_FILTERS,
   ON_FILTER_CHANGE,
+  CLEAR_FILTERS,
+  REMOVE_FILTER,
   SELECTION_CHANGED,
   SET_ALL_COLLAPSED,
   SET_COLLAPSED,
@@ -421,6 +423,36 @@ export const createPortfolioAggregationReducer = (
               selected: isSelected
             }
           })
+        }
+        return f
+      })
+    },
+    [CLEAR_FILTERS.type]: (state) => {
+      state.activeFilters = {}
+      state.isFilterPanelOpen = false
+      state.filters = state.filters.map((f) => ({
+        ...f,
+        items: f.items.map((i) => ({ ...i, selected: false }))
+      }))
+    },
+    [REMOVE_FILTER.type]: (
+      state,
+      { payload }: ReturnType<typeof REMOVE_FILTER>
+    ) => {
+      const values = state.activeFilters[payload.fieldName]
+      if (values) {
+        const updated = values.filter((v) => v !== payload.value)
+        if (updated.length === 0) {
+          state.activeFilters = _.omit(state.activeFilters, payload.fieldName)
+        } else {
+          state.activeFilters[payload.fieldName] = updated
+        }
+      }
+      state.filters = state.filters.map((f) => {
+        if (f.column.fieldName === payload.fieldName) {
+          f.items = f.items.map((i) =>
+            i.value === payload.value ? { ...i, selected: false } : i
+          )
         }
         return f
       })

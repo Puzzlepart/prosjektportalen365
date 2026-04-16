@@ -8,6 +8,8 @@ import { OnColumnContextMenu } from '../List'
 import {
   EXECUTE_SEARCH,
   ON_FILTER_CHANGE,
+  CLEAR_FILTERS,
+  REMOVE_FILTER,
   SELECTION_CHANGED,
   SET_CURRENT_VIEW,
   TOGGLE_COLUMN_CONTEXT_MENU,
@@ -66,14 +68,18 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
   const filterPanelProps = useMemo<IFilterPanelProps>(
     () => ({
       isOpen: context.state.isFilterPanelOpen,
-      layerHostId: context.layerHostId,
       onDismiss: () => context.dispatch(TOGGLE_FILTER_PANEL()),
       filters: context.state.filters,
+      activeFilters: context.state.activeFilters,
       onFilterChange: (column: ProjectContentColumn, selectedItems) => {
         context.dispatch(ON_FILTER_CHANGE({ column, selectedItems }))
+      },
+      onClearFilters: () => context.dispatch(CLEAR_FILTERS()),
+      onRemoveFilter: (fieldName: string, value: string) => {
+        context.dispatch(REMOVE_FILTER({ fieldName, value }))
       }
     }),
-    [context.state.isFilterPanelOpen, context.layerHostId, context.state.filters]
+    [context.state.isFilterPanelOpen, context.state.activeFilters, context.state.filters]
   )
 
   const menuItems = useToolbarItems(context)

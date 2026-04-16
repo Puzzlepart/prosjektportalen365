@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { FilterItem } from '../FilterItem/FilterItem'
 import { IFilterItemProps } from '../FilterItem/types'
 import { IFilterProps, IFilterState } from './types'
@@ -36,10 +36,19 @@ export function useFilter(props: IFilterProps) {
   }
 
   /**
+   * Items filtered by search term
+   */
+  const visibleItems = useMemo(() => {
+    if (!props.searchTerm) return state.items
+    const term = props.searchTerm.toLowerCase()
+    return state.items.filter((item) => item.name.toLowerCase().includes(term))
+  }, [state.items, props.searchTerm])
+
+  /**
    * Render filter items
    */
   const renderItems = () => {
-    return state.items.map((item, idx) => (
+    return visibleItems.map((item, idx) => (
       <FilterItem
         key={idx}
         {...item}
@@ -49,5 +58,5 @@ export function useFilter(props: IFilterProps) {
     ))
   }
 
-  return { state, onToggleSectionContent, renderItems }
+  return { state, visibleItems, onToggleSectionContent, renderItems }
 }

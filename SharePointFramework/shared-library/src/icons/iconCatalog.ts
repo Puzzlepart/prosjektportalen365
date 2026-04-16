@@ -79,6 +79,8 @@ import {
   EyeRegular,
   FilterFilled,
   FilterRegular,
+  FilterDismissFilled,
+  FilterDismissRegular,
   FormNewFilled,
   FormNewRegular,
   GridFilled,
@@ -404,6 +406,10 @@ export const iconCatalog = {
   Filter: {
     regular: FilterRegular,
     filled: FilterFilled
+  },
+  FilterDismiss: {
+    regular: FilterDismissRegular,
+    filled: FilterDismissFilled
   },
   Icons: {
     regular: IconsRegular,

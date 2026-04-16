@@ -172,6 +172,42 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     }
   }
 
+  const clearFilters = () => {
+    setState({ activeFilters: {} })
+    if (state?.data?.items) {
+      const emptyFilters = { ...state, activeFilters: {} }
+      const filteredData = getFilteredData(state?.data)
+      const filters = getFilters(state?.timelineConfig, state?.data, state?.columns)
+      setState({
+        activeFilters: {},
+        filteredData: state?.data,
+        filters: filters.map((f) => ({
+          ...f,
+          items: f.items.map((i) => ({ ...i, selected: false }))
+        }))
+      })
+    }
+  }
+
+  const removeFilter = (fieldName: string, value: string) => {
+    const { activeFilters } = state
+    const values = activeFilters[fieldName]
+    if (values) {
+      const updated = values.filter((v) => v !== value)
+      const newActiveFilters = { ...activeFilters }
+      if (updated.length === 0) {
+        delete newActiveFilters[fieldName]
+      } else {
+        newActiveFilters[fieldName] = updated
+      }
+      setState({ activeFilters: newActiveFilters })
+      if (state?.data?.items) {
+        const filters = getFilters(state?.timelineConfig, state?.data, state?.columns)
+        setState({ activeFilters: newActiveFilters, filters })
+      }
+    }
+  }
+
   useProjectTimelineDataFetch(props, ($) => {
     if ($.error) setState({ error: $.error, loading: false })
     else {
@@ -184,6 +220,8 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
   return {
     state,
     setState,
-    onFilterChange
+    onFilterChange,
+    clearFilters,
+    removeFilter
   } as const
 }

@@ -9,7 +9,7 @@ import { LoadingSkeleton } from '../LoadingSkeleton'
 import resource from 'SharedResources'
 
 export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
-  const { state, onFilterChange } = useProjectTimeline(props)
+  const { state, onFilterChange, clearFilters, removeFilter } = useProjectTimeline(props)
   return (
     <div className={styles.root}>
       <div className={styles.container}>
@@ -24,7 +24,10 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
               groups={state.filteredData.groups}
               items={state.filteredData.items}
               filters={state.filters}
+              activeFilters={state.activeFilters}
               onFilterChange={onFilterChange}
+              onClearFilters={clearFilters}
+              onRemoveFilter={removeFilter}
               infoText={props.infoText}
             />
           </>

@@ -12,7 +12,7 @@ import { useProjectTimeline } from './useProjectTimeline'
 import resource from 'SharedResources'
 
 export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
-  const { state, setState, onFilterChange, onGroupByChange, defaultTimeframe, timeLapseCenter } =
+  const { state, setState, onFilterChange, clearFilters, removeFilter, onGroupByChange, defaultTimeframe, timeLapseCenter } =
     useProjectTimeline(props)
 
   return (
@@ -41,7 +41,10 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
                   groups={state.filteredData.groups}
                   items={state.filteredData.items}
                   filters={state.filters}
+                  activeFilters={state.activeFilters}
                   onFilterChange={onFilterChange}
+                  onClearFilters={clearFilters}
+                  onRemoveFilter={removeFilter}
                   onGroupByChange={onGroupByChange}
                   defaultGroupBy={props.defaultGroupBy}
                   isGroupByEnabled

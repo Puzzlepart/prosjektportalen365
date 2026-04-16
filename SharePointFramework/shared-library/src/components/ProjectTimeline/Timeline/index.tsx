@@ -72,8 +72,10 @@ export const Timeline: FC<ITimelineProps> = (props) => {
           isOpen={showFilterPanel}
           headerText={strings.FilterText}
           filters={props.filters}
+          activeFilters={props.activeFilters}
           onFilterChange={props.onFilterChange}
-          isLightDismiss
+          onClearFilters={props.onClearFilters}
+          onRemoveFilter={props.onRemoveFilter}
           onDismiss={() => setShowFilterPanel(false)}
         />
         {showDetails && (

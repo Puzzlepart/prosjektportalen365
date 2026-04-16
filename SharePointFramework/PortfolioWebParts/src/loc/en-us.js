@@ -443,6 +443,7 @@ define([], function () {
     ErrorFetchingProjectsTitle: 'An error occurred while retrieving projects.',
     FiltersString: 'Filters',
     FilterText: 'Filter',
+    ClearFiltersText: 'Clear filters',
     GeneralGroupName: 'General',
     GroupByColumnLabel: 'Group by {0}',
     HideVerticalsLabel: 'Hide verticals',

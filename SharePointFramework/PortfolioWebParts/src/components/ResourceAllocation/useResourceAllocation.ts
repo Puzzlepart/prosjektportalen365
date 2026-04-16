@@ -95,11 +95,31 @@ export const useResourceAllocation = (props: IResourceAllocationProps) => {
 
   const fluentProviderId = useId('fp-resource-allocation')
 
+  const clearFilters = () => {
+    setState({ ...state, activeFilters: {} })
+  }
+
+  const removeFilter = (fieldName: string, value: string) => {
+    const { activeFilters } = { ...state } as IResourceAllocationState
+    const values = activeFilters[fieldName]
+    if (values) {
+      const updated = values.filter((v) => v !== value)
+      if (updated.length === 0) {
+        delete activeFilters[fieldName]
+      } else {
+        activeFilters[fieldName] = updated
+      }
+      setState({ ...state, activeFilters })
+    }
+  }
+
   return {
     state,
     setState,
     filters,
     onFilterChange,
+    clearFilters,
+    removeFilter,
     items,
     groups,
     defaultTimeframe,

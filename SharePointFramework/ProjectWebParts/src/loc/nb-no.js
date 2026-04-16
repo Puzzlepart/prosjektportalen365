@@ -410,6 +410,7 @@ define([], function () {
       Delete: 'Slett',
       DeleteSelectedItems: 'Slett valgte elementer',
       ShowHideFilters: 'Vis/skjul filtre',
+      ClearFiltersText: 'Tøm filter',
       NewWordDocument: 'Nytt Word-dokument {0}.docx',
       NewExcelWorkbook: 'Ny Excel-arbeidsbok {0}.xlsx',
       NewPowerPointPresentation: 'Ny PowerPoint-presentasjon {0}.pptx',

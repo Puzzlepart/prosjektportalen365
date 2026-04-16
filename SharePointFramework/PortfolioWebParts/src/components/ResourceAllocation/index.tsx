@@ -9,7 +9,7 @@ import resource from 'SharedResources'
 import { format } from '@fluentui/react'
 
 export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
-  const { state, filters, onFilterChange, items, groups, defaultTimeframe, fluentProviderId } =
+  const { state, filters, onFilterChange, clearFilters, removeFilter, items, groups, defaultTimeframe, fluentProviderId } =
     useResourceAllocation(props)
 
   if (state.error) {
@@ -38,7 +38,10 @@ export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
             groups={groups}
             items={items}
             filters={filters}
+            activeFilters={state.activeFilters}
             onFilterChange={onFilterChange}
+            onClearFilters={clearFilters}
+            onRemoveFilter={removeFilter}
           />
         )}
       </FluentProvider>

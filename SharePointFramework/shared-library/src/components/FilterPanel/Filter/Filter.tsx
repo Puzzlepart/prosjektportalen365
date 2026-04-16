@@ -5,7 +5,9 @@ import { useFilter } from './useFilter'
 import { getFluentIcon } from '../../../icons'
 
 export const Filter: FC<IFilterProps> = (props) => {
-  const { state, onToggleSectionContent, renderItems } = useFilter(props)
+  const { state, visibleItems, onToggleSectionContent, renderItems } = useFilter(props)
+
+  if (props.searchTerm && visibleItems.length === 0) return null
 
   return (
     <div className={styles.filter}>

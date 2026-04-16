@@ -356,6 +356,7 @@ declare interface IProjectWebPartsStrings {
     Delete: string
     DeleteSelectedItems: string
     ShowHideFilters: string
+    ClearFiltersText: string
     NewWordDocument: string
     NewExcelWorkbook: string
     NewPowerPointPresentation: string

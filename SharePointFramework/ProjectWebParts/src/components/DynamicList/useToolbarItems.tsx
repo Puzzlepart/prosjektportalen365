@@ -1,14 +1,16 @@
-import { useMemo, useContext, useCallback } from 'react'
+import React, { useMemo, useContext, useCallback } from 'react'
 import { DynamicListContext } from './context'
 import {
   ListMenuItem,
   ItemFieldValues,
   ListMenuItemDivider,
-  customLightTheme
+  customLightTheme,
+  ActiveFilters
 } from 'pp365-shared-library'
 import { DocumentLibraryViewMode, CustomActionType, ICustomAction } from './types'
 import {
   FilterRegular,
+  FilterDismissRegular,
   AddRegular,
   EditRegular,
   DeleteRegular,
@@ -32,7 +34,6 @@ import {
   buildCustomActionPayload,
   isCorsError
 } from './utils/listOperationUtils'
-import * as React from 'react'
 import {
   Toaster,
   useToastController,
@@ -795,13 +796,75 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
     }
 
     if (!isSingleView && context.props.showFilters) {
+      const activeFilterCount = Object.values(context.state.activeFilters ?? {}).reduce(
+        (acc: number, curr: string[]) => acc + curr.length,
+        0
+      )
       items.push(
         new ListMenuItem(null, strings.DynamicList.ShowHideFilters)
           .setIcon(FilterRegular)
+          .setBadge(activeFilterCount)
           .setOnClick(() => {
             context.setState({ showFilterPanel: !context.state.showFilterPanel })
           })
       )
+      if (activeFilterCount > 0) {
+        items.push(
+          new ListMenuItem(null, strings.DynamicList.ClearFiltersText)
+            .setIcon(FilterDismissRegular)
+            .setOnClick(() => {
+              context.setState({
+                activeFilters: {},
+                filters: context.state.filters?.map((f) => ({
+                  ...f,
+                  items: f.items.map((i) => ({ ...i, selected: false }))
+                }))
+              })
+            })
+            .setPopoverContent(
+              React.createElement(ActiveFilters, {
+                filters: context.state.filters ?? [],
+                onRemoveFilter: (fieldName: string, value: string) => {
+                  const newActiveFilters = { ...context.state.activeFilters }
+                  const values = newActiveFilters[fieldName]
+                  if (values) {
+                    const updated = values.filter((v: string) => v !== value)
+                    if (updated.length === 0) {
+                      delete newActiveFilters[fieldName]
+                    } else {
+                      newActiveFilters[fieldName] = updated
+                    }
+                  }
+                  const newFilters = context.state.filters?.map((f) => {
+                    if (f.column.fieldName === fieldName) {
+                      return {
+                        ...f,
+                        items: f.items.map((i) =>
+                          i.value === value ? { ...i, selected: false } : i
+                        )
+                      }
+                    }
+                    return f
+                  })
+                  context.setState({
+                    activeFilters: newActiveFilters,
+                    filters: newFilters
+                  })
+                },
+                onClearAll: () => {
+                  context.setState({
+                    activeFilters: {},
+                    filters: context.state.filters?.map((f) => ({
+                      ...f,
+                      items: f.items.map((i) => ({ ...i, selected: false }))
+                    }))
+                  })
+                },
+                compact: true
+              })
+            )
+        )
+      }
     }
 
     return items
@@ -821,6 +884,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
         ? {
             isOpen: context.state.showFilterPanel,
             filters: context.state.filters || [],
+            activeFilters: context.state.activeFilters,
             onDismiss: () => context.setState({ showFilterPanel: false }),
             onFilterChange: (column: any, selectedItems: any[]) => {
               const newActiveFilters = { ...context.state.activeFilters }
@@ -844,6 +908,42 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
                 return f
               })
 
+              context.setState({
+                activeFilters: newActiveFilters,
+                filters: newFilters
+              })
+            },
+            onClearFilters: () => {
+              context.setState({
+                activeFilters: {},
+                filters: context.state.filters?.map((f) => ({
+                  ...f,
+                  items: f.items.map((i) => ({ ...i, selected: false }))
+                }))
+              })
+            },
+            onRemoveFilter: (fieldName: string, value: string) => {
+              const newActiveFilters = { ...context.state.activeFilters }
+              const values = newActiveFilters[fieldName]
+              if (values) {
+                const updated = values.filter((v: string) => v !== value)
+                if (updated.length === 0) {
+                  delete newActiveFilters[fieldName]
+                } else {
+                  newActiveFilters[fieldName] = updated
+                }
+              }
+              const newFilters = context.state.filters?.map((f) => {
+                if (f.column.fieldName === fieldName) {
+                  return {
+                    ...f,
+                    items: f.items.map((i) =>
+                      i.value === value ? { ...i, selected: false } : i
+                    )
+                  }
+                }
+                return f
+              })
               context.setState({
                 activeFilters: newActiveFilters,
                 filters: newFilters

@@ -456,6 +456,7 @@ define([], function () {
     ExcelExportButtonLabel: 'Eksporter til Excel',
     FiltersString: 'Filtre',
     FilterText: 'Filtrer',
+    ClearFiltersText: 'Tøm filtre',
     GeneralGroupName: 'Generelt',
     GroupByColumnLabel: 'Grupper etter {0}',
     HideVerticalsLabel: 'Skjul vertikaler',

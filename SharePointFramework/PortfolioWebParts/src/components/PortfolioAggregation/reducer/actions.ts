@@ -119,6 +119,16 @@ export const ON_FILTER_CHANGE = createAction<{
 }>('ON_FILTER_CHANGE')
 
 /**
+ * `CLEAR_FILTERS`: Clear all active filters.
+ */
+export const CLEAR_FILTERS = createAction('CLEAR_FILTERS')
+
+/**
+ * `REMOVE_FILTER`: Remove a single filter value.
+ */
+export const REMOVE_FILTER = createAction<{ fieldName: string; value: string }>('REMOVE_FILTER')
+
+/**
  * `DATA_FETCH_ERROR`: Error fetching data from the data source.
  */
 export const DATA_FETCH_ERROR = createAction<{ error: Error }>('DATA_FETCH_ERROR')

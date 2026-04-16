@@ -9,7 +9,6 @@ import React, { FC } from 'react'
 import { useToolbarItemRender } from './useToolbarItemRender'
 import styles from './Toolbar.module.scss'
 import { IToolbarProps } from './types'
-import strings from 'SharedLibraryStrings'
 import { customLightTheme } from '../../util'
 
 export const Toolbar: FC<IToolbarProps> = (props) => {
@@ -29,8 +28,6 @@ export const Toolbar: FC<IToolbarProps> = (props) => {
         {props.filterPanel && (
           <FilterPanel
             {...props.filterPanel}
-            headerText={strings.FiltersString}
-            isLightDismiss={true}
           />
         )}
       </FluentProvider>

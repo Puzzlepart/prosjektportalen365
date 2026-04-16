@@ -1,0 +1,80 @@
+.activeFilters {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 6px;
+    cursor: pointer;
+    border-radius: var(--borderRadiusMedium);
+
+    &:hover {
+      background-color: var(--colorSubtleBackgroundHover);
+    }
+
+    .headerLeft {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: var(--fontSizeBase300);
+      font-weight: var(--fontWeightSemibold);
+      color: var(--colorNeutralForeground2);
+    }
+  }
+
+  .filterGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0 6px;
+
+    .filterGroupName {
+      font-size: var(--fontSizeBase200);
+      font-weight: var(--fontWeightSemibold);
+      color: var(--colorNeutralForeground3);
+    }
+
+    .filterValues {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+
+      .filterTag {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 2px 8px;
+        font-size: var(--fontSizeBase200);
+        border-radius: var(--borderRadiusMedium);
+        background-color: var(--colorNeutralBackground3);
+        color: var(--colorNeutralForeground2);
+        cursor: default;
+
+        .removeButton {
+          display: flex;
+          align-items: center;
+          padding: 0;
+          border: none;
+          background: none;
+          cursor: pointer;
+          color: var(--colorNeutralForeground3);
+          border-radius: var(--borderRadiusSmall);
+
+          &:hover {
+            color: var(--colorNeutralForeground1);
+            background-color: var(--colorSubtleBackgroundHover);
+          }
+        }
+      }
+    }
+  }
+}
+
+.compact {
+  max-width: 320px;
+  max-height: 400px;
+  overflow-y: auto;
+}

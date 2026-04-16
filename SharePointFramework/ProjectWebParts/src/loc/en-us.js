@@ -385,6 +385,7 @@ define([], function () {
       Delete: 'Delete',
       DeleteSelectedItems: 'Delete selected items',
       ShowHideFilters: 'Show/hide filters',
+      ClearFiltersText: 'Clear filters',
       NewWordDocument: 'New Word document {0}.docx',
       NewExcelWorkbook: 'New Excel workbook {0}.xlsx',
       NewPowerPointPresentation: 'New PowerPoint presentation {0}.pptx',

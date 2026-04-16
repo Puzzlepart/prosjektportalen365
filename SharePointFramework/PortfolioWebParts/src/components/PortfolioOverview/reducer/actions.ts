@@ -75,6 +75,16 @@ export const ON_FILTER_CHANGED = createAction<{
 }>('ON_FILTER_CHANGED')
 
 /**
+ * `CLEAR_FILTERS`: Action dispatched when user clears all active filters
+ */
+export const CLEAR_FILTERS = createAction('CLEAR_FILTERS')
+
+/**
+ * `REMOVE_FILTER`: Action dispatched when user removes a single filter value
+ */
+export const REMOVE_FILTER = createAction<{ fieldName: string; value: string }>('REMOVE_FILTER')
+
+/**
  * `TOGGLE_COLUMN_CONTEXT_MENU`: Action dispatched when user opens the column context menu
  */
 export const TOGGLE_COLUMN_CONTEXT_MENU = createAction<OnColumnContextMenu>(

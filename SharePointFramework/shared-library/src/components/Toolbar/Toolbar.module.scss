@@ -33,3 +33,15 @@
     }
   }
 }
+
+.badgeWrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  pointer-events: none;
+}

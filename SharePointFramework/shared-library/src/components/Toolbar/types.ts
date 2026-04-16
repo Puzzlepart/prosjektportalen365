@@ -1,5 +1,5 @@
 import { FluentIcon } from '@fluentui/react-icons/lib/utils/createFluentIcon'
-import { CSSProperties, MouseEventHandler } from 'react'
+import { CSSProperties, MouseEventHandler, ReactNode } from 'react'
 import { IFilterPanelProps } from '../FilterPanel'
 import { SearchBoxProps } from '@fluentui/react-components'
 
@@ -102,6 +102,18 @@ export class ListMenuItem {
    * Search box for the toolbar search item.
    */
   searchBox: SearchBoxProps
+
+  /**
+   * Badge count to display on the toolbar button (e.g. active filter count).
+   * Only shown when value is greater than 0.
+   */
+  badge?: number
+
+  /**
+   * Content to display in a popover on hover. If set, the toolbar button
+   * will be wrapped in a Popover that opens on hover.
+   */
+  popoverContent?: ReactNode
 
   /**
    * Creates a new instance of `ListMenuItem`. Use the Fluent API pattern
@@ -237,6 +249,31 @@ export class ListMenuItem {
    */
   public setSearchBox(searchBox: ListMenuItem['searchBox']) {
     this.searchBox = searchBox
+    return this
+  }
+
+  /**
+   * Sets the badge count for the `ListMenuItem`.
+   *
+   * @param badge The badge count to display.
+   *
+   * @returns The updated `ListMenuItem` instance.
+   */
+  public setBadge(badge: number) {
+    this.badge = badge
+    return this
+  }
+
+  /**
+   * Sets the popover content for the `ListMenuItem`. When set, hovering
+   * over the toolbar button will show a popover with this content.
+   *
+   * @param popoverContent The React node to display in the popover.
+   *
+   * @returns The updated `ListMenuItem` instance.
+   */
+  public setPopoverContent(popoverContent: ReactNode) {
+    this.popoverContent = popoverContent
     return this
   }
 

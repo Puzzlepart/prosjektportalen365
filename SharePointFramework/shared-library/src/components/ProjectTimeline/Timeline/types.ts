@@ -43,6 +43,21 @@ export interface ITimelineProps {
   onFilterChange: (column: IColumn, selectedItems: IFilterItemProps[]) => void
 
   /**
+   * Currently active filters
+   */
+  activeFilters?: Record<string, string[]>
+
+  /**
+   * Callback function to clear all active filters
+   */
+  onClearFilters?: () => void
+
+  /**
+   * Callback function to remove a single filter value
+   */
+  onRemoveFilter?: (fieldName: string, value: string) => void
+
+  /**
    * On Group change
    *
    * @param groupBy Group by

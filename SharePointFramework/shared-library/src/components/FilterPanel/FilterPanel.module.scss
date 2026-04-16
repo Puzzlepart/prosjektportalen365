@@ -1,8 +1,18 @@
+.headerNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
 .filterPanel {
   display: flex;
   flex-direction: column;
-  padding: 16px 0;
   gap: 16px;
+}
+
+.searchBox {
+  width: 100%;
 }
 
 .groupHeader {

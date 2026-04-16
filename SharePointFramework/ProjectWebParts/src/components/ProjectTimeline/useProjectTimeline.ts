@@ -199,10 +199,47 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     ]
   }
 
+  const clearFilters = () => {
+    const newActiveFilters = {}
+    setState({ activeFilters: newActiveFilters })
+    if (state?.data?.items) {
+      const filters = getFilters(state?.timelineConfig, state?.data)
+      setState({
+        activeFilters: newActiveFilters,
+        filteredData: state?.data,
+        filters: filters.map((f) => ({
+          ...f,
+          items: f.items.map((i) => ({ ...i, selected: false }))
+        }))
+      })
+    }
+  }
+
+  const removeFilter = (fieldName: string, value: string) => {
+    const { activeFilters } = state
+    const values = activeFilters[fieldName]
+    if (values) {
+      const updated = values.filter((v) => v !== value)
+      const newActiveFilters = { ...activeFilters }
+      if (updated.length === 0) {
+        delete newActiveFilters[fieldName]
+      } else {
+        newActiveFilters[fieldName] = updated
+      }
+      setState({ activeFilters: newActiveFilters })
+      if (state?.data?.items) {
+        const filters = getFilters(state?.timelineConfig, state?.data)
+        setState({ activeFilters: newActiveFilters, filters })
+      }
+    }
+  }
+
   return {
     state,
     setState,
     onFilterChange,
+    clearFilters,
+    removeFilter,
     onGroupByChange,
     defaultTimeframe,
     timeLapseCenter

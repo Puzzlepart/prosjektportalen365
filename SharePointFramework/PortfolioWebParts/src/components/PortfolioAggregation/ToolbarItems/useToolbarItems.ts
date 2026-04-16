@@ -1,9 +1,11 @@
 import { AppsListRegular, TextBulletListLtrRegular } from '@fluentui/react-icons'
 import * as strings from 'PortfolioWebPartsStrings'
-import { ListMenuItem, ListMenuItemDivider } from 'pp365-shared-library'
-import { useMemo } from 'react'
+import { ListMenuItem, ListMenuItemDivider, ActiveFilters } from 'pp365-shared-library'
+import React, { useMemo } from 'react'
 import { IPortfolioAggregationContext } from '../context'
 import {
+  CLEAR_FILTERS,
+  REMOVE_FILTER,
   SET_DATA_SOURCE,
   SET_VIEW_FORM_PANEL,
   TOGGLE_COMPACT,
@@ -40,6 +42,15 @@ export function useToolbarItems(context: IPortfolioAggregationContext) {
       .setOnClick(() => {
         context.dispatch(SET_DATA_SOURCE({ dataSource }))
       })
+  )
+
+  const activeFilterCount = useMemo(
+    () =>
+      Object.values(context.state.activeFilters ?? {}).reduce(
+        (acc, curr) => acc + curr.length,
+        0
+      ),
+    [context.state.activeFilters]
   )
 
   const menuItems = useMemo<ListMenuItem[]>(
@@ -92,13 +103,31 @@ export function useToolbarItems(context: IPortfolioAggregationContext) {
         ),
       new ListMenuItem(null, strings.FilterText)
         .setIcon('Filter')
+        .setBadge(activeFilterCount)
         .setOnClick(() => {
           context.dispatch(TOGGLE_FILTER_PANEL())
         })
         .setDisabled(context.state.isChangingView)
-        .setHidden(!context.props.showFilters)
+        .setHidden(!context.props.showFilters),
+      activeFilterCount > 0 &&
+        context.props.showFilters &&
+        new ListMenuItem(null, strings.ClearFiltersText)
+          .setIcon('FilterDismiss')
+          .setOnClick(() => {
+            context.dispatch(CLEAR_FILTERS())
+          })
+          .setPopoverContent(
+            React.createElement(ActiveFilters, {
+              filters: context.state.filters ?? [],
+              onRemoveFilter: (fieldName: string, value: string) => {
+                context.dispatch(REMOVE_FILTER({ fieldName, value }))
+              },
+              onClearAll: () => context.dispatch(CLEAR_FILTERS()),
+              compact: true
+            })
+          )
     ],
-    [context.state, context.props]
+    [context.state, context.props, activeFilterCount]
   )
 
   return menuItems
