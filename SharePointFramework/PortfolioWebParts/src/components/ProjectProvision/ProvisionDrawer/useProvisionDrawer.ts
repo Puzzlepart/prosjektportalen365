@@ -76,7 +76,7 @@ export const useProvisionDrawer = () => {
     ? context.state.settings?.find((t) => t.title === 'NamingConvention')?.value
     : context.state.types?.find((t) => t.title === context.column.get('type'))?.namingConvention
 
-  const urlPrefix = `${context.props.webAbsoluteUrl.split(managedPath)[0]}${managedPath}/`
+  const urlPrefix = `${context.props.webAbsoluteUrl.split(managedPath)[0]}/${managedPath}/`
   const aliasSuffix = '@' + context.props.pageContext.user.loginName.split('@')[1]
 
   const joinHub = !!context.state.types?.find((t) => t.title === context.column.get('type'))

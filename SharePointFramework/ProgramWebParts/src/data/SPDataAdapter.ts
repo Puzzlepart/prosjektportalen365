@@ -721,7 +721,7 @@ export class SPDataAdapter
       `DepartmentId:{${hubSiteId}} contentclass:STS_Site`
 
     const results = await getOrFetchProjectsCache('refiners', hubSiteId, () =>
-      this._fetchItems(queryTemplate, selectProperties)
+      this._fetchItems(queryTemplate, selectProperties, false, 'GtSiteIdOWSTEXT')
     )
 
     const map = new Map<string, Record<string, any>>()
