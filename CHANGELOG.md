@@ -40,6 +40,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Forbedret stabilitet for Planner-operasjoner med automatisk gjenforsøk ved forbigående feil, samt bedre deduplisering av oppgaver og feillogging [#1733](https://github.com/Puzzlepart/prosjektportalen365/pull/1733)
 - Prosjektinformasjon (kolonner merket med `GtIsRefinable=true` i `Prosjektkolonner`) vises nå som filtre også i aggregerte oversikter (f.eks. Usikkerhetsoversikt, Gevinstoversikt), på linje med `Prosjekttidslinje`. Filtre fra prosjektinformasjon er gruppert under en egen seksjon `Prosjektinformasjon` i filterpanelet som er kollapset som standard
 - Ytelsesforbedring: `Prosjektutlisting`, `Prosjekttidslinje` og aggregerte oversikter på samme side deler nå en felles cache for prosjekt-data, slik at kall mot `Prosjekter`-lista og tilhørende søk kun gjøres én gang per side.
+- `Hent dokumentmal`-dialogen defaulter nå målmappen til den mappen brukeren befinner seg i, i stedet for roten av biblioteket. Mapper i målmappe-steget kan nå også navigeres med enkelt-klikk [#1738](https://github.com/Puzzlepart/prosjektportalen365/pull/1738)
 
 ### Fjernet
 

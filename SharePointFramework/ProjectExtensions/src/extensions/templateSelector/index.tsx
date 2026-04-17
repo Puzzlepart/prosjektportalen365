@@ -90,6 +90,10 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
         )
         if (!this._ctxValue.currentLibrary)
           this._ctxValue.currentLibrary = first(this._ctxValue.libraries)
+        this._ctxValue.currentFolderUrl =
+          new URLSearchParams(window.location.search).get('id') ||
+          new URLSearchParams(window.location.search).get('RootFolder') ||
+          undefined
         this._onOpenTemplateSelector()
         break
     }
