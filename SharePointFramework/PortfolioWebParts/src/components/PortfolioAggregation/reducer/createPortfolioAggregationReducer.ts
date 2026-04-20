@@ -330,6 +330,9 @@ export const createPortfolioAggregationReducer = (
       state.activeFilters = {}
     },
     [SET_DATA_SOURCE.type]: (state, { payload }: ReturnType<typeof SET_DATA_SOURCE>) => {
+      if (state.currentView?.id === payload.dataSource.id) {
+        return
+      }
       state.isChangingView = !!payload
       const obj: IPortfolioAggregationHashState = {}
       if (state.currentView) obj.viewId = payload.dataSource.id.toString()
