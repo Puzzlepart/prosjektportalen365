@@ -179,7 +179,6 @@ define([], function () {
     SearchBoxPlaceholderTextLabel: 'Search box text',
     ShowExcelExportButtonLabel: 'Show export to Excel button',
     ShowFiltersLabel: 'Show filters',
-    ShowGroupByLabel: 'Show grouping options',
     ShowSearchBoxLabel: 'Show search box',
     ShowViewSelectorLabel: 'Show view selector',
     LifecycleStatus_Closed: 'Closed',

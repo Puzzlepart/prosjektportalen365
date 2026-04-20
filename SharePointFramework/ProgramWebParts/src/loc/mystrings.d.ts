@@ -168,7 +168,6 @@ declare interface IProgramWebPartsStrings {
   ShowFieldPortfolioLabel: string
   ShowFieldProjectStatusLabel: string
   ShowFiltersLabel: string
-  ShowGroupByLabel: string
   ShowHideColumnsLabel: string
   ShowSearchBoxLabel: string
   ShowViewSelectorLabel: string

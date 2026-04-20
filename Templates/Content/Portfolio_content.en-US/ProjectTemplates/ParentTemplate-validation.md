@@ -100,7 +100,6 @@ _No tokens with missing translations or replacement values found._
                                         "title": "Overview for child projects",
                                         "showCommandBar": true,
                                         "showFilters": true,
-                                        "showGroupBy": true,
                                         "showSearchBox": true,
                                         "showViewSelector": true,
                                         "showExcelExportButton": true

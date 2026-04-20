@@ -532,7 +532,6 @@ define([], function () {
     ShowFieldPortfolioLabel: 'Portfolio overview',
     ShowFieldProjectStatusLabel: 'Project status',
     ShowFiltersLabel: 'Show filters',
-    ShowGroupByLabel: 'Show grouping options',
     ShowHideColumnsLabel: 'Show/hide columns',
     ShowProgramViewsLabel: 'Show program views',
     ShowProjectLogoFieldLabel: 'Show logo',

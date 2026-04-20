@@ -111,11 +111,6 @@ export interface IPortfolioOverviewProps
   showCommandBar?: boolean
 
   /**
-   * Show group by
-   */
-  showGroupBy?: boolean
-
-  /**
    * Show search box
    */
   showSearchBox?: boolean

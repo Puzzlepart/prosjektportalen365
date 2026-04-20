@@ -62,7 +62,6 @@ PortfolioOverview.defaultProps = {
   statusReportsCount: 0,
   showCommandBar: true,
   showExcelExportButton: true,
-  showGroupBy: true,
   showViewSelector: true,
   showSearchBox: true,
   showFilters: true,

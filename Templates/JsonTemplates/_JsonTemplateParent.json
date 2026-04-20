@@ -89,7 +89,6 @@
                                         "title": "{{ClientSidePages_ParentOverview_WebPartTitle}}",
                                         "showCommandBar": true,
                                         "showFilters": true,
-                                        "showGroupBy": true,
                                         "showSearchBox": true,
                                         "showViewSelector": true,
                                         "showExcelExportButton": true

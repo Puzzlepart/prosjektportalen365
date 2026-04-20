@@ -557,7 +557,6 @@ define([], function () {
     ShowFieldPortfolioLabel: 'Porteføljeoversikt',
     ShowFieldProjectStatusLabel: 'Prosjektstatus',
     ShowFiltersLabel: 'Vis filtre',
-    ShowGroupByLabel: 'Vis grupperingsvalg',
     ShowHideColumnsLabel: 'Vis eller skjul kolonner',
     ShowProgramViewsLabel: 'Vis programvisninger',
     ShowProjectLogoFieldLabel: 'Vis logo',

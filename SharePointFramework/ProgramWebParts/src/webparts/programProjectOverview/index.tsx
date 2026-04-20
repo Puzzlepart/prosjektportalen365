@@ -84,9 +84,6 @@ export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramP
             {
               groupName: strings.CommandBarGroupName,
               groupFields: [
-                PropertyPaneToggle('showGroupBy', {
-                  label: strings.ShowGroupByLabel
-                }),
                 PropertyPaneToggle('showFilters', {
                   label: strings.ShowFiltersLabel
                 }),

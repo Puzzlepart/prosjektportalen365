@@ -4,7 +4,6 @@ export interface IProgramProjectOverviewProps extends IBaseWebPartComponentProps
   title: string
   showFilters: boolean
   showViewSelector: boolean
-  showGroupBy: boolean
   showSearchBox: boolean
   showExcelExportButton: boolean
 }

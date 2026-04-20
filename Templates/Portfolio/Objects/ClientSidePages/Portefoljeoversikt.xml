@@ -2,7 +2,7 @@
     <pnp:Sections>
         <pnp:Section Order="1" Type="OneColumn">
             <pnp:Controls>
-                <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;properties&quot;:{&quot;projectInfoFilterField&quot;:&quot;GtShowFieldPortfolio&quot;,&quot;statusReportsCount&quot;:0,&quot;showCommandBar&quot;:true,&quot;showExcelExportButton&quot;:true,&quot;showGroupBy&quot;:true,&quot;showViewSelector&quot;:true,&quot;showSearchBox&quot;:true,&quot;showFilters&quot;:true}}" ControlId="e58e3d32-057a-4418-97ce-172b92482ba2" Order="1" Column="1" />
+                <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;properties&quot;:{&quot;projectInfoFilterField&quot;:&quot;GtShowFieldPortfolio&quot;,&quot;statusReportsCount&quot;:0,&quot;showCommandBar&quot;:true,&quot;showExcelExportButton&quot;:true,&quot;showViewSelector&quot;:true,&quot;showSearchBox&quot;:true,&quot;showFilters&quot;:true}}" ControlId="e58e3d32-057a-4418-97ce-172b92482ba2" Order="1" Column="1" />
             </pnp:Controls>
         </pnp:Section>
     </pnp:Sections>

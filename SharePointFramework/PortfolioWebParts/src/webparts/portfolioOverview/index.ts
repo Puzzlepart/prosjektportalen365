@@ -95,7 +95,7 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
       await super.onInit(portfolio)
       this._configuration = await this.dataAdapter.getPortfolioConfig()
     } catch (error) {
-      this._error = error
+      this._error = error as ErrorWithIntent
     }
   }
 
@@ -153,9 +153,6 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
             {
               groupName: strings.CommandBarGroupName,
               groupFields: [
-                PropertyPaneToggle('showGroupBy', {
-                  label: strings.ShowGroupByLabel
-                }),
                 PropertyPaneToggle('showFilters', {
                   label: strings.ShowFiltersLabel
                 }),
