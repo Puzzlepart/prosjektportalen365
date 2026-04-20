@@ -87,6 +87,7 @@ export function buildCustomActionPayload(
   actionName: string,
   selectedItems: Record<string, any>[]
 ): Record<string, any> {
+  const user = context.props.pageContext?.user
   return {
     listName: context.props.listName,
     listId: context.state.data?.listId,
@@ -95,6 +96,13 @@ export function buildCustomActionPayload(
     siteId: context.props.siteId,
     siteTitle: context.props.webTitle,
     selectedItems,
+    currentUser: user
+      ? {
+          displayName: user.displayName,
+          email: user.email,
+          loginName: user.loginName
+        }
+      : null,
     timestamp: new Date().toISOString(),
     actionName
   }
