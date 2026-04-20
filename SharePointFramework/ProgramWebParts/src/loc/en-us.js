@@ -177,7 +177,6 @@ define([], function () {
     SearchBoxPlaceholderText: 'Search {0}...',
     SearchBoxPlaceholderTextDescription: 'Text that appears in the search box when it is empty. If no value is set, the text is based on the selected data source.',
     SearchBoxPlaceholderTextLabel: 'Search box text',
-    ShowCommandBarLabel: 'Show commandline',
     ShowExcelExportButtonLabel: 'Show export to Excel button',
     ShowFiltersLabel: 'Show filters',
     ShowGroupByLabel: 'Show grouping options',

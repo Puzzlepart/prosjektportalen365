@@ -23,7 +23,6 @@
       },
       "officeFabricIconFontName": "Page",
       "properties": {
-        "showCommandBar": true,
         "showFilters": true,
         "showGroupBy": true,
         "showSearchBox": true,
