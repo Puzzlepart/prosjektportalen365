@@ -216,6 +216,17 @@ export class EditableSPField extends SPField {
   }
 
   /**
+   * Returns `true` if the field is a system field that should never be rendered
+   * in the ProjectInformation UI — identified by `ShowInEditForm="FALSE"` in the
+   * SchemaXml (e.g. `GtSiteId`, `GtChildProjects`, `GtParentProjects`,
+   * `GtInstalledVersion`, `GtCurrentVersion`, `GtProjectTemplate`). These fields
+   * may still hold synced values but are not for end-user display.
+   */
+  public get isSystemField(): boolean {
+    return this._field.ShowInEditForm === false
+  }
+
+  /**
    * Returns `true` if the field should be visible in the
    * specified display mode. When checking for `DisplayMode.Read`
    * the `props.page` property is used to determine which properties to display.

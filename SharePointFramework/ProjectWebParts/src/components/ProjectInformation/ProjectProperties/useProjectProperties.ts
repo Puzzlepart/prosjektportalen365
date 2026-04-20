@@ -14,6 +14,7 @@ export function useProjectProperties(props: IProjectPropertiesProps) {
   return useMemo(
     () =>
       context.state.properties
+        .filter((p) => !p.isSystemField)
         .filter((p) => {
           if (props.displayAllProperties) return true
           return p.isVisible(
