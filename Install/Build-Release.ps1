@@ -36,7 +36,7 @@ $global:ACTION_INDEX = 1
 <#
 If running in CI mode, set the number of actions to 11. This is used to display the progress of the script.
 #>
-if($CI.IsPresent) {
+if ($CI.IsPresent) {
     $global:ACTIONS_COUNT = 11
 }
 
@@ -136,7 +136,7 @@ if ($CI.IsPresent) {
     EndAction
 }
 else {
-    if(-not $SkipImportModule.IsPresent) {
+    if (-not $SkipImportModule.IsPresent) {
         Import-Module $PNP_BUNDLE_PATH/$PNP_VERSION/PnP.PowerShell.psd1 -DisableNameChecking -ErrorAction SilentlyContinue
     }
 }
@@ -286,9 +286,12 @@ if (-not $CI.IsPresent) {
 else {
     $StopWatch.Stop()
     Write-Host "Done building release $RELEASE_NAME in $($StopWatch.ElapsedMilliseconds/1000)s" -ForegroundColor Green
+    Set-Location $START_PATH
 }
 
 if ($USE_CHANNEL_CONFIG) {
     Remove-Item -Path "$PSScriptRoot/../.current-channel-config.json" -Force -ErrorAction SilentlyContinue
 }
+
+exit 0
 #endregion

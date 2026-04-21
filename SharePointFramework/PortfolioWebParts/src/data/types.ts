@@ -23,6 +23,9 @@ import strings from 'PortfolioWebPartsStrings'
 
 export interface IFetchDataForViewItemResult extends ISearchResult {
   SiteId: string
+  _hubId?: string
+  _hubTitle?: string
+  _hubUrl?: string
   [key: string]: any
 }
 
@@ -69,11 +72,14 @@ export interface IEnrichedProjectsFields {
 
 export interface IPortfolioWebPartsDataAdapter {
   /**
-   * Configure data adapter - returns an configured instance of the data adapter.
+   * Configuring the `DataAdapter` enabling use of the `DataSourceService` and `PortalDataService`
    *
-   * @param spfxContext SPFx context (optional)
-   * @param configuration Configuration for data adapter (optional)
-   * @param portfolio Portfolio instance (optional)
+   * The `dataSourceService` is dependent on the `portalDataService` being configured, as it needs
+   * `portalDataService.web` to be passed as a parameter to its constructor.
+   *
+   * @param _spfxContext SPFx context (not used)
+   * @param _configuration Configuration (not used)
+   * @param portfolio Optionally the portfolio instance to configure the data adapter for
    */
   configure(
     spfxContext?: WebPartContext,
@@ -110,21 +116,6 @@ export interface IPortfolioWebPartsDataAdapter {
   ): Promise<DataSource[]>
 
   /**
-   * Fetch chart data for a view
-   *
-   * @param view View configuration
-   * @param configuration PortfolioOverviewConfiguration
-   * @param chartConfigurationListName List name for chart configuration
-   * @param siteId Site ID
-   */
-  fetchChartData?(
-    currentView: PortfolioOverviewView,
-    configuration: IPortfolioOverviewConfiguration,
-    chartConfigurationListName: string,
-    siteId: string
-  ): Promise<{ charts: any; chartData: any; contentTypes: any }>
-
-  /**
    * Get portfolio configuration from SharePoint lists. Optionally from
    * a specific portfolio instance.
    *
@@ -138,6 +129,25 @@ export interface IPortfolioWebPartsDataAdapter {
    * - `userCanAddViews` - User can add portfolio views
    */
   getPortfolioConfig?(portfolio?: PortfolioInstance): Promise<IPortfolioOverviewConfiguration>
+
+  /**
+   * Fetches data from multiple portfolio instances and merges them into a single view.
+   *
+   * Approach:
+   * 1. Configure and fetch data from the primary (first) included portfolio - this gives us the base configuration
+   * 2. Loop through the remaining included portfolios (after filtering by `includeInMergedView`) starting after the primary
+   *    portfolio, and merge their data into the result
+   *
+   * @param view View configuration from the primary (first included) portfolio
+   * @param portfolios Array of portfolio instances to fetch data from; portfolios with includeInMergedView === false are ignored
+   * @param primaryConfiguration Configuration from the primary portfolio
+   * @returns Merged portfolio view data with items from all included hubs
+   */
+  fetchMergedViewData?(
+    view: PortfolioOverviewView,
+    portfolios: PortfolioInstance[],
+    primaryConfiguration: IPortfolioOverviewConfiguration
+  ): Promise<IPortfolioViewData>
 
   /**
    * Get aggregated list config for the given category.
@@ -208,9 +218,9 @@ export interface IPortfolioWebPartsDataAdapter {
   ): Promise<IPortfolioViewData>
 
   /**
-   * Checks if the current is in the specified group.
+   * Checks if the current user is in the specified SharePoint group.
    *
-   * @param groupName
+   * @param groupName Group name
    */
   isUserInGroup?(groupName: string): Promise<boolean>
 
@@ -224,11 +234,12 @@ export interface IPortfolioWebPartsDataAdapter {
   ): Promise<{ reports: any[]; configElement: TimelineConfigurationModel }>
 
   /**
-   *  Fetches items from timeline content list
+   *  Fetches items from timeline content list and maps them to `TimelineContentListModel`.
    *
    * * Fetching list items
-   * * Maps the items to `TimelineContentModel`
+   * * Maps the items to `TimelineContentListModel`
    *
+   * @param timelineConfig Timeline configuration
    * @description Used in `ProjectTimeline`
    */
   fetchTimelineContentItems?(timelineConfig: any[]): Promise<TimelineContentModel[]>
@@ -254,14 +265,33 @@ export interface IPortfolioWebPartsDataAdapter {
   fetchTimelineConfiguration?(): Promise<TimelineConfigurationModel[]>
 
   /**
-   * Fetching enriched projects by combining list items from projects list,
-   * Graph Groups and site users. The result are cached in `localStorage`
-   * for 30 minutes. Projects with lifecycle stage `Avsluttet` are excluded, and
-   * the projects are sorted by Title ascending.
+   * Fetches fully enriched projects (Projects list + site access + group
+   * membership + users). Results go through the tiered projects cache.
+   * Closed/completed projects are excluded and the list is sorted by title.
    *
    * @param fields Additional fields to include in the query
    */
   fetchEnrichedProjects?(fields?: IEnrichedProjectsFields): Promise<ProjectListModel[]>
+
+  /**
+   * Lightweight projects fetch — only reads the Projects list items, skipping
+   * the site / membership / user lookups. Shares the items cache with
+   * {@link fetchEnrichedProjects}, so co-located webparts reuse the network
+   * call. Persona, membership and access fields are left undefined.
+   *
+   * @param fields Additional fields to include in the query
+   */
+  fetchProjects?(fields?: IEnrichedProjectsFields): Promise<ProjectListModel[]>
+
+  /**
+   * Fetches project-level refiner values via search, keyed by siteId. Used by
+   * components that render child items (PortfolioAggregation on risks /
+   * benefits etc.) and need to join each item to its parent project's filter
+   * values. Same data path as `ProjectTimeline`.
+   *
+   * @param refiners Project columns whose values should be returned
+   */
+  fetchProjectRefinerValues?(refiners: any[]): Promise<Map<string, Record<string, any>>>
 
   /**
    * Fetching enriched project by combining list item from projects list,
@@ -274,14 +304,13 @@ export interface IPortfolioWebPartsDataAdapter {
   fetchEnrichedProject?(siteId: string, hubContext?: IHubContext): Promise<ProjectListModel>
 
   /**
-   * Fetch projects from the projects list. If a data source is specified,
-   * the projects are filtered using the `odataQuery` property from the
-   * specified view.
+   * Fetch projects from the projects list filtered by the `odataQuery`
+   * property from the specified data source view.
    *
    * @param configuration Configuration
    * @param dataSource Data source
    */
-  fetchProjects?(
+  fetchProjectsByDataSource?(
     configuration?: IPortfolioAggregationConfiguration,
     dataSource?: string
   ): Promise<any[]>
@@ -379,6 +408,15 @@ export interface IPortfolioWebPartsDataAdapter {
   addProvisionRequests?(properties: IProvisionRequestItem, provisionUrl: string): Promise<boolean>
 
   /**
+   * Adds project data to the ProjectData list to store project information that
+   * will be used when setting up the project
+   *
+   * @param properties Properties to add to the ProjectData list
+   * @param hubUrl Url for the hub site
+   */
+  addProjectData?(properties: Record<string, any>, hubUrl: string): Promise<void>
+
+  /**
    * Deletes a provision request item from the provisioning requests list
    *
    * @param requestId Id of the request to delete
@@ -442,16 +480,59 @@ export interface IPortfolioWebPartsDataAdapter {
    * @returns A Promise that resolves to an object containing the data for the ideas.
    */
   getIdeasData?(configuration: IdeaConfigurationModel): Promise<Idea>
+
+  /**
+   * Load Teams app configuration from TeamsAppConfig.json
+   *
+   * @param provisionUrl The provision site URL
+   * @returns Configuration object or null if file doesn't exist
+   */
+  loadTeamsConfig?(provisionUrl: string): Promise<any | null>
+
+  /**
+   * Save Teams app configuration to TeamsAppConfig.json
+   *
+   * @param provisionUrl The provision site URL
+   * @param config Configuration object to save
+   */
+  saveTeamsConfig?(provisionUrl: string, config: any): Promise<void>
+
+  /**
+   * Delete Teams app configuration file (TeamsAppConfig.json)
+   *
+   * @param provisionUrl The provision site URL
+   */
+  deleteTeamsConfig?(provisionUrl: string): Promise<void>
+
+  /**
+   * Check if current user is admin of the provision site
+   *
+   * @param provisionUrl The provision site URL
+   * @returns True if user is site admin
+   */
+  isProvisionSiteAdmin?(provisionUrl: string): Promise<boolean>
+
+  /**
+   * Resolve a hub site by its ID using the HubSites REST API.
+   *
+   * @param hubSiteId The hub site GUID
+   * @returns Hub site info with id and title, or null if not found
+   */
+  resolveHubSiteById?(hubSiteId: string): Promise<{ hubSiteId: string; title: string } | null>
 }
 
 export type PortfolioInstance = {
   uniqueId: string
   title: string
   url: string
+  projectListName: string
+  projectStatusListName: string
+  projectContentColumnsListName: string
   columnsListName: string
   columnConfigListName: string
   viewsListName: string
   iconName?: string
+  includeInMergedView?: boolean
 }
 
 /**

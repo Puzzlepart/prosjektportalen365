@@ -1,0 +1,56 @@
+.container {
+  padding: 24px 32px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  .description {
+    font-size: 14px;
+    color: var(--colorNeutralForeground2);
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  .textarea {
+    font-family: Consolas, Monaco, "Courier New", monospace;
+    font-size: 12px;
+    height: 450px;
+
+    textarea {
+      height: 100%;
+      max-height: 100%;
+    }
+  }
+}
+
+.progressContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 16px;
+  padding: 48px 24px;
+}
+
+.progressText {
+  font-size: 14px;
+  color: var(--colorNeutralForeground3);
+  text-align: center;
+  margin: 0;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 32px;
+  border-top: 1px solid var(--colorNeutralStroke1);
+  background: var(--colorNeutralBackground1);
+  flex-shrink: 0;
+}
+
+.footerActions {
+  display: flex;
+  gap: 8px;
+}

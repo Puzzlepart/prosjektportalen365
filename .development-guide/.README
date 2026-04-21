@@ -6,26 +6,38 @@
 [[ template:toc ]]
 </details>
 
-[[load:.development-guide/1-Site_Design_Site_Scripts.md]]
+[[load:.development-guide/git/branching-og-arbeidsflyt.md]]
 
-[[load:.development-guide/2-JS_Provisioning_Template.md]]
+[[load:.development-guide/git/commit-praksis.md]]
 
-[[load:.development-guide/3-Templates.md]]
+[[load:.development-guide/spfx/komponentoversikt.md]]
 
-[[load:.development-guide/4-NPM.md]]
+[[load:.development-guide/spfx/losninger.md]]
 
-[[load:.development-guide/5-Building_New_Release.md]]
+[[load:.development-guide/spfx/rush.md]]
 
-[[load:.development-guide/6-Continuous_Integration.md]]
+[[load:.development-guide/spfx/utviklingsmiljo.md]]
 
-[[load:.development-guide/7-Creating_New_Release.md]]
+[[load:.development-guide/maler/site-design-og-site-scripts.md]]
 
-[[load:.development-guide/8-Versioning.md]]
+[[load:.development-guide/maler/js-provisjoneringsmal.md]]
 
-[[load:.development-guide/9-Channels.md]]
+[[load:.development-guide/maler/maler.md]]
 
-[[load:.development-guide/10-README_Generation.md]]
+[[load:.development-guide/maler/kanaler.md]]
 
-[[load:.development-guide/11-Development-Environment-Configuration.md]]
+[[load:.development-guide/utgivelse/versjonering.md]]
 
-[[load:.development-guide/12-SBOM_Generation.md]]
+[[load:.development-guide/utgivelse/smoketest.md]]
+
+[[load:.development-guide/utgivelse/opprette-ny-versjon.md]]
+
+[[load:.development-guide/utgivelse/bygge-utgivelse.md]]
+
+[[load:.development-guide/utgivelse/npm.md]]
+
+[[load:.development-guide/ci/kontinuerlig-integrasjon.md]]
+
+[[load:.development-guide/ci/readme-generering.md]]
+
+[[load:.development-guide/ci/sbom.md]]

@@ -1,5 +1,5 @@
 import React from 'react'
-import { AccordionToggleEventHandler, Tooltip, useId } from '@fluentui/react-components'
+import { AccordionToggleEventHandler, Tooltip, useId, Hamburger } from '@fluentui/react-components'
 import * as strings from 'PortfolioWebPartsStrings'
 import { IdeaPhase, IIdeaModuleHashState, IIdeaModuleProps } from './types'
 import { useIdeaModuleState } from './useIdeaModuleState'
@@ -13,14 +13,13 @@ import {
 } from 'pp365-shared-library'
 import _ from 'lodash'
 import { useEffect, useState } from 'react'
-import { Hamburger } from '@fluentui/react-nav-preview'
 import styles from './IdeaModule.module.scss'
 import { IdeaField } from './IdeaField'
 
 /**
  * Component logic hook for `IdeaModule` component.
  *
-clear */
+ */
 export function useIdeaModule(props: IIdeaModuleProps) {
   const { state, setState } = useIdeaModuleState(props)
   const fluentProviderId = useId('fp-idea-module')

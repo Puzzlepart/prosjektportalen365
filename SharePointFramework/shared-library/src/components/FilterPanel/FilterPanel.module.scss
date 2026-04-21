@@ -4,3 +4,12 @@
   padding: 16px 0;
   gap: 16px;
 }
+
+.groupHeader {
+  margin-top: 8px;
+  padding: 4px 6px 6px 6px;
+  font-size: var(--fontSizeBase300);
+  font-weight: var(--fontWeightSemibold);
+  color: var(--colorNeutralForeground2);
+  border-bottom: 1px solid var(--colorNeutralStroke2);
+}

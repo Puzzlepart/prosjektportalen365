@@ -12,9 +12,11 @@ export class SPField {
   public Description?: string = ''
   public SchemaXml: string = '<Field></Field>'
   public TypeAsString?: string = 'Text'
+  public FieldTypeKind?: number = 2
   public Group?: string = ''
   public Hidden?: boolean = false
   public Required?: boolean = false
+  public ReadOnlyField?: boolean = false
   public Choices?: string[] = []
   public TermSetId?: string = '00000000-0000-0000-0000-000000000000'
   public LookupList?: string = ''

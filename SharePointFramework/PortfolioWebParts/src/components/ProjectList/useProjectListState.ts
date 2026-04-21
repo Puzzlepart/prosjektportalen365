@@ -1,34 +1,24 @@
 /* eslint-disable prefer-spread */
 import { useState } from 'react'
-import _ from 'underscore'
-import { ProjectListVerticals } from './ProjectListVerticals'
 import { IProjectListProps, IProjectListState } from './types'
+import { convertConfigsToVerticals, findDefaultVertical } from './ProjectListFilterRegistry'
 
-/**
- * Component state hook for `ProjectList`.
- *
- * @param props Props
- */
+/** State hook for `ProjectList`. Computes verticals synchronously from `props.verticalConfigs`. */
 export function useProjectListState(props: IProjectListProps) {
-  const defaultSelectedVertical =
-    _.find(props.verticals, (vertical) => vertical.key === props.defaultVertical) ??
-    _.first(ProjectListVerticals)
   const mockProjects = Array.apply(null, Array(Math.floor(Math.random() * 10) + 10)).map(() => 0)
-  const defaultSort = { fieldName: props.sortBy, isSortedDescending: true }
+  const defaultSort = { fieldName: props.sortBy.toLocaleLowerCase(), isSortedDescending: true }
+  const configs = props.verticalConfigs ?? []
+  const verticals = convertConfigsToVerticals(configs)
+  const selectedVertical = findDefaultVertical(configs, verticals)
   const [state, $setState] = useState<IProjectListState>({
     searchTerm: '',
     renderMode: props.defaultRenderMode ?? 'tiles',
-    selectedVertical: defaultSelectedVertical,
     projects: mockProjects,
-    sort: defaultSort
+    sort: defaultSort,
+    verticals,
+    selectedVertical
   })
 
-  /**
-   * Set state like `setState` in class components where
-   * the new state is merged with the current state.
-   *
-   * @param newState New state
-   */
   const setState = (newState: Partial<IProjectListState>) =>
     $setState((currentState) => ({ ...currentState, ...newState }))
 

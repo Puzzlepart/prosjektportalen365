@@ -4,5 +4,9 @@
   .field {
     display: flex;
     flex-direction: column;
+
+    :global(.fui-Input__input) {
+        text-overflow: ellipsis;
+      }
   }
 }

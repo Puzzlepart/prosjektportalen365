@@ -21,7 +21,6 @@
                 "components": {
                     "LatestProjectsWebPart": "4d374373-9fd8-4ba5-8a03-524651cac3e9",
                     "PortfolioAggregationWebPart": "aad033f7-106e-488e-bad4-9b66d7b26282",
-                    "PortfolioInsightsWebPart": "fb8e6170-c2bf-4026-9953-dc1b72701947",
                     "PortfolioOverviewWebPart": "a09d00a8-c563-4b52-a7a4-1fb5876f9059",
                     "ProjectListWebPart": "497a0947-7d83-4084-871b-d8e0d1edc771",
                     "PortfolioTimelineWebPart": "68446c7e-4a78-49e0-8ae0-2efee199e58e",
@@ -64,7 +63,8 @@
                     "ProjectStatusWebPart": "3231d86b-9b07-45f0-b112-a2f80d31b2f1",
                     "ProjectTimelineWebPart": "3fd903ad-3179-459a-b2b9-8d2963da8af2",
                     "RiskMatrixWebPart": "c1500cba-4eef-437e-92db-7728dcd9502d",
-                    "ProjectNewsWebPart": "1e38c80e-820d-42bd-92a1-fb0d254b21a6"
+                    "ProjectNewsWebPart": "1e38c80e-820d-42bd-92a1-fb0d254b21a6",
+                    "DynamicListWebPart": "c879a33d-c55b-4207-ad47-d3ed24d253ef"
                 }
             },
             "shared-library": {

@@ -47,17 +47,17 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       return isFolder ? strings.FolderNameInValidErrorText : strings.FilenameInValidErrorText
 
     if (isFolder) {
-      const [folder] = await this.sp.web
+      const folders = await this.sp.web
         .getFolderByServerRelativePath(folderServerRelativeUrl)
-        .folders.filter(`Name eq '${name}'`)()
-      if (folder) {
+        .folders()
+      const existingFolder = folders.find((f) => f.Name.toLowerCase() === name.toLowerCase())
+      if (existingFolder) {
         return strings.FolderNameAlreadyInUseErrorText
       }
     } else {
-      const [file] = await this.sp.web
-        .getFolderByServerRelativePath(folderServerRelativeUrl)
-        .files.filter(`Name eq '${name}'`)()
-      if (file) {
+      const files = await this.sp.web.getFolderByServerRelativePath(folderServerRelativeUrl).files()
+      const existingFile = files.find((f) => f.Name.toLowerCase() === name.toLowerCase())
+      if (existingFile) {
         return strings.FilenameAlreadyInUseErrorText
       }
     }
@@ -108,8 +108,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
           // eslint-disable-next-line quotes
           "ListItemEntityTypeFullName ne 'SP.Data.FormServerTemplatesItem'"
         ].join(' and ')
-      )
-      .using(DefaultCaching)()
+      )()
     return libraries.map((lib) => new SPFolder(lib))
   }
 }

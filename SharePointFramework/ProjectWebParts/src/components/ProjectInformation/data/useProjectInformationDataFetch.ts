@@ -1,11 +1,13 @@
 import { MessageBarType } from '@fluentui/react'
 import { LogLevel } from '@pnp/logging'
+import { PermissionKind } from '@pnp/sp/presets/all'
 import strings from 'ProjectWebPartsStrings'
 import {
   CustomError,
   ListLogger,
   ProjectAdminPermission,
-  ProjectInformationParentProject
+  ProjectInformationParentProject,
+  ProjectInformationChildProject
 } from 'pp365-shared-library'
 import { useEffect } from 'react'
 import SPDataAdapter from '../../../data'
@@ -24,6 +26,7 @@ import { fetchProjectStatusReportData } from './fetchProjectStatusReportData'
  * - `SPDataAdapter.portalDataService.getProjectColumns` - fetches project columns
  * - `SPDataAdapter.project.getProjectInformationData` - fetches project properties data
  * - `SPDataAdapter.portalDataService.getParentProjects` - fetches parent projects (only on frontpage)
+ * - `SPDataAdapter.portalDataService.getChildProjects` - fetches child projects (only on frontpage)
  * - `SPDataAdapter.getArchiveStatus` - fetches archive status information (only on frontpage)
  * - `fetchProjectStatusReportData` - fetches project status reports, sections and column config
  *
@@ -35,6 +38,19 @@ import { fetchProjectStatusReportData } from './fetchProjectStatusReportData'
  * @param context Context for `ProjectInformation`
  * @param transformProperties Function for transforming the properties
  */
+/**
+ * Safely execute a function, returning a fallback value if it throws.
+ * Used to wrap hub-dependent calls so that external users without
+ * hub access can still see local project data.
+ */
+async function safeCall<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
+  try {
+    return await fn()
+  } catch {
+    return fallback
+  }
+}
+
 const fetchData: DataFetchFunction<
   IProjectInformationContext,
   Partial<IProjectInformationState>
@@ -42,34 +58,57 @@ const fetchData: DataFetchFunction<
   try {
     const isFrontpage = context.props.page === 'Frontpage'
     const shouldFetchArchiveStatus = isFrontpage && !context.props.hideArchiveStatus
-    const [
-      columns,
-      projectInformationData,
-      [reports, sections, columnConfig],
-      parentProjects,
-      archiveStatus
-    ] = await Promise.all([
-      SPDataAdapter.portalDataService.getProjectColumns(),
-      SPDataAdapter.project.getProjectInformationData(),
-      fetchProjectStatusReportData(context),
-      isFrontpage
-        ? SPDataAdapter.portalDataService.getParentProjects(
-            context.props.webAbsoluteUrl,
-            ProjectInformationParentProject
-          )
-        : Promise.resolve([]),
-      shouldFetchArchiveStatus
-        ? SPDataAdapter.getArchiveStatus(context.props.webAbsoluteUrl)
-        : Promise.resolve(null)
-    ])
+    const projectInformationData = await SPDataAdapter.project.getProjectInformationData()
+
+    let hubIsAvailable = SPDataAdapter.portalDataService?.isAvailable ?? false
+    const columns = hubIsAvailable ? await SPDataAdapter.portalDataService.getProjectColumns() : []
+
+    hubIsAvailable = SPDataAdapter.portalDataService?.isAvailable ?? false
+
+    const [reports, sections, columnConfig] = hubIsAvailable
+      ? await fetchProjectStatusReportData(context)
+      : [[], [], []]
+
+    // Hub-dependent calls are wrapped individually with safe fallbacks
+    // so that external users without hub access can still see local project data.
     const templateName = projectInformationData.fieldValues.get('GtProjectTemplate', {
       format: 'text'
     })
-    const template = await SPDataAdapter.portalDataService.getProjectTemplate(templateName)
+
+    const [parentProjects, childProjects, archiveStatus, template] = await Promise.all([
+      isFrontpage && hubIsAvailable
+        ? safeCall(
+            () =>
+              SPDataAdapter.portalDataService.getParentProjects(
+                context.props.webAbsoluteUrl,
+                ProjectInformationParentProject
+              ),
+            []
+          )
+        : Promise.resolve([]),
+      isFrontpage && hubIsAvailable
+        ? safeCall(
+            () =>
+              SPDataAdapter.portalDataService.getChildProjects(
+                context.props.webAbsoluteUrl,
+                ProjectInformationChildProject
+              ),
+            []
+          )
+        : Promise.resolve([]),
+      shouldFetchArchiveStatus && hubIsAvailable
+        ? safeCall(() => SPDataAdapter.getArchiveStatus(context.props.webAbsoluteUrl), null)
+        : Promise.resolve(null),
+      hubIsAvailable
+        ? safeCall(() => SPDataAdapter.portalDataService.getProjectTemplate(templateName), null)
+        : Promise.resolve(null)
+    ])
+
     const data: Partial<IProjectInformationState> = {
       data: {
         columns,
         parentProjects,
+        childProjects,
         reports,
         sections,
         columnConfig,
@@ -77,13 +116,34 @@ const fetchData: DataFetchFunction<
         archiveStatus,
         ...projectInformationData
       },
-      userHasEditPermission: false
+      hubIsAvailable,
+      userHasEditPermission: false,
+      userHasRerunSetupPermission: false
     }
-    if (isFrontpage) {
-      data.userHasEditPermission = await SPDataAdapter.checkProjectAdminPermissions(
-        ProjectAdminPermission.EditProjectProperties,
-        projectInformationData.fieldValues
+    if (isFrontpage && hubIsAvailable) {
+      data.userHasEditPermission = await safeCall(
+        () =>
+          SPDataAdapter.checkProjectAdminPermissions(
+            ProjectAdminPermission.EditProjectProperties,
+            projectInformationData.fieldValues
+          ),
+        false
       )
+      data.userHasRerunSetupPermission = await safeCall(
+        () =>
+          SPDataAdapter.checkProjectAdminPermissions(
+            ProjectAdminPermission.ReRunSetup,
+            projectInformationData.fieldValues
+          ),
+        false
+      )
+    } else if (isFrontpage) {
+      const hasManageWeb = await safeCall(
+        () => SPDataAdapter.sp.web.currentUserHasPermissions(PermissionKind.ManageWeb),
+        false
+      )
+      data.userHasEditPermission = hasManageWeb
+      data.userHasRerunSetupPermission = hasManageWeb
     }
     return data
   } catch (error) {

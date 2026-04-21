@@ -33,7 +33,8 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
               groupFields: [
                 PropertyPaneTextField('listName', {
                   label: strings.ListNameFieldLabel,
-                  value: resource.Lists_TimelineContent_Title
+                  value: resource.Lists_TimelineContent_Title,
+                  disabled: true
                 }),
                 PropertyPaneToggle('showTimeline', {
                   label: strings.ShowTimelineLabel

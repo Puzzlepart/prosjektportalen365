@@ -1,6 +1,6 @@
-import { TooltipHost } from '@fluentui/react'
+import { FluentProvider, IdPrefixProvider, Tooltip } from '@fluentui/react-components'
 import { ConditionalWrapper } from 'pp365-shared-library/lib/components'
-import { tryParseCurrency, tryParsePercentage } from 'pp365-shared-library'
+import { customLightTheme, tryParseCurrency, tryParsePercentage } from 'pp365-shared-library'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC, ReactNode, useContext } from 'react'
 import { SectionContext } from '../Sections/context'
@@ -11,56 +11,61 @@ import { useStatusElement } from './useStatusElement'
 
 export const StatusElement: FC<IStatusElementProps> = (props) => {
   const { headerProps } = useContext(SectionContext)
-  const { commentProps, iconSize, useWrapper } = useStatusElement(props)
+  const { commentProps, iconSize, useWrapper, fluentProviderId } = useStatusElement(props)
   return (
-    <ConditionalWrapper
-      condition={useWrapper}
-      wrapper={(children: ReactNode) => (
-        // TODO: Use new Tooltip component here
-        <TooltipHost
-          content={
-            <div className={styles.tooltipContent}>
-              <StatusElement />
-            </div>
-          }
+    <IdPrefixProvider value={fluentProviderId}>
+      <FluentProvider theme={customLightTheme}>
+        <ConditionalWrapper
+          condition={useWrapper}
+          wrapper={(children: ReactNode) => (
+            <Tooltip
+              withArrow
+              relationship='description'
+              content={
+                <div className={styles.tooltipContent}>
+                  <StatusElement />
+                </div>
+              }
+            >
+              <span className={styles.tooltipHost}>{children}</span>
+            </Tooltip>
+          )}
         >
-          {children}
-        </TooltipHost>
-      )}
-    >
-      {props.iconsOnly ? (
-        <StatusElementIcon iconSize={iconSize} />
-      ) : (
-        <div className={styles.element}>
-          <div className={styles.header}>
-            <div className={styles.main}>
-              <StatusElementIcon iconSize={iconSize} />
-              <div className={styles.content}>
-                <div className={styles.label}>{headerProps.label}</div>
-                <div
-                  className={styles.value}
-                  title={`${strings.StatusElementText} ${headerProps.label}: ${headerProps.value}`}
-                >
-                  {headerProps.value}
+          {props.iconsOnly ? (
+            <StatusElementIcon iconSize={iconSize} />
+          ) : (
+            <div className={styles.element}>
+              <div className={styles.header}>
+                <div className={styles.main}>
+                  <StatusElementIcon iconSize={iconSize} />
+                  <div className={styles.content}>
+                    <div className={styles.label}>{headerProps.label}</div>
+                    <div
+                      className={styles.value}
+                      title={`${strings.StatusElementText} ${headerProps.label}: ${headerProps.value}`}
+                    >
+                      {headerProps.value}
+                    </div>
+                  </div>
                 </div>
+                {props.summation && props.summation?.result && (
+                  <div className={styles.summation}>
+                    <div className={styles.label}>{props.summation.description}</div>
+                    <div className={styles.value}>
+                      {props.summation.renderAs === 'currency'
+                        ? tryParseCurrency(props.summation.result?.toString())
+                        : props.summation.renderAs === 'percentage'
+                          ? (tryParsePercentage(props.summation.result?.toString(), false, 0) as number)
+                          : props.summation.result}
+                    </div>
+                  </div>
+                )}
               </div>
+              <div {...commentProps}></div>
             </div>
-            {props.summation && props.summation?.result && (
-              <div className={styles.summation}>
-                <div className={styles.label}>{props.summation.description}</div>
-                <div className={styles.value}>
-                  {props.summation.renderAs === 'currency'
-                    ? tryParseCurrency(props.summation.result?.toString())
-                    : props.summation.renderAs === 'percentage'
-                    ? (tryParsePercentage(props.summation.result?.toString(), false, 0) as number)
-                    : props.summation.result}
-                </div>
-              </div>
-            )}
-          </div>
-          <div {...commentProps}></div>
-        </div>
-      )}
-    </ConditionalWrapper>
+          )}
+        </ConditionalWrapper>
+      </FluentProvider>
+    </IdPrefixProvider>
   )
 }

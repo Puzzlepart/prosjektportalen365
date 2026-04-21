@@ -40,11 +40,13 @@ declare interface IPortfolioExtensionsStrings {
   LatestGitHubReleaseIsSameText: any
   LatestGitHubReleaseLabel: string
   LatestGitHubReleaseLinkTitle: string
+  LatestGitHubReleaseHighlightsLabel: string
   LinksListDescription: string
   LinksListLabel: string
   SeeAllInstallationsLinkText: string
   SetRecommendationSubtitle: string
   SetRecommendationTitle: string
+  SiteContentsLabel: string
   SiteSettingsDescription: string
   SiteSettingsLabel: string
   SubmitLabel: string
@@ -53,6 +55,9 @@ declare interface IPortfolioExtensionsStrings {
   IdeaProcessingLinkTitle: string
   IdeaRegistrationCommandTitle: string
   IdeaProjectDataCommandTitle: string
+  FavoriteProjectsLabel: string
+  FavoriteProjectsDescription: string
+  FavoriteProjectsNoItemsMessage: string
 }
 
 declare module 'PortfolioExtensionsStrings' {

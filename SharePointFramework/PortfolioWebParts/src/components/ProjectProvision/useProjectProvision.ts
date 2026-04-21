@@ -45,6 +45,12 @@ export const useProjectProvision = (props: IProjectProvisionProps) => {
     checkProjectProvisionAccess()
   }, [props.hasProjectProvisionAccess, props.dataAdapter])
 
+  useEffect(() => {
+    if (props.renderMode === 'inline' && !state.loading) {
+      setState({ showProvisionDrawer: true })
+    }
+  }, [props.renderMode, state.loading])
+
   return {
     state,
     setState,

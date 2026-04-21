@@ -99,12 +99,14 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
       ...refiners.map((refiner) => ({
         fieldName: `data.properties.${refiner.internalName}`,
         name: refiner.name,
-        isCollapsed: true
+        isCollapsed: true,
+        group: strings.FilterPanelGroupProjectInformation
       }))
     ].filter(Boolean) as {
       fieldName: string
       name: string
       isCollapsed?: boolean
+      group?: string
     }[]
 
     const hiddenItems = config.filter((item) => !item?.timelineFilter).map((item) => item.title)
@@ -141,7 +143,8 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
       return {
         column: { key: col.fieldName, minWidth: 0, ...col },
         items: items,
-        defaultCollapsed: col.isCollapsed
+        defaultCollapsed: col.isCollapsed,
+        group: col.group
       }
     })
   }

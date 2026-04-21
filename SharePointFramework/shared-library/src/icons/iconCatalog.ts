@@ -25,6 +25,8 @@ import {
   BotSparkleRegular,
   BoxMultipleFilled,
   BoxMultipleRegular,
+  CubeFilled,
+  CubeRegular,
   BoxToolboxFilled,
   BoxToolboxRegular,
   CalendarFilled,
@@ -96,6 +98,8 @@ import {
   LibraryFilled,
   LibraryRegular,
   LightbulbCircleFilled,
+  LockOpenFilled,
+  LockOpenRegular,
   LightbulbCircleRegular,
   LightbulbFilled,
   LightbulbRegular,
@@ -103,6 +107,8 @@ import {
   LinkMultipleFilled,
   LinkMultipleRegular,
   LinkRegular,
+  ListBarRegular,
+  ListBarFilled,
   LocalLanguageFilled,
   LocalLanguageRegular,
   MoneyFilled,
@@ -121,6 +127,8 @@ import {
   PeopleRegular,
   PeopleTeamFilled,
   PeopleTeamRegular,
+  PersonCircleFilled,
+  PersonCircleRegular,
   PersonFilled,
   PersonRegular,
   QuestionCircleFilled,
@@ -156,7 +164,17 @@ import {
   ArchiveFilled,
   ArchiveRegular,
   WarningFilled,
-  WarningRegular
+  WarningRegular,
+  ArrowCircleDownFilled,
+  ArrowCircleDownRegular,
+  ArrowCircleUpSparkleFilled,
+  ArrowCircleUpSparkleRegular,
+  StarFilled,
+  StarRegular,
+  PuzzlePieceRegular,
+  PuzzlePieceFilled,
+  MountainTrailRegular,
+  MountainTrailFilled
 } from '@fluentui/react-icons'
 
 /**
@@ -186,6 +204,10 @@ export const iconCatalog = {
   BoxMultiple: {
     regular: BoxMultipleRegular,
     filled: BoxMultipleFilled
+  },
+  Cube: {
+    regular: CubeRegular,
+    filled: CubeFilled
   },
   ContentView: {
     regular: ContentViewRegular,
@@ -279,9 +301,21 @@ export const iconCatalog = {
     regular: NumberSymbolRegular,
     filled: NumberSymbolFilled
   },
+  PersonCircle: {
+    regular: PersonCircleRegular,
+    filled: PersonCircleFilled
+  },
   Person: {
     regular: PersonRegular,
     filled: PersonFilled
+  },
+  ArrowCircleUpSparkle: {
+    regular: ArrowCircleUpSparkleRegular,
+    filled: ArrowCircleUpSparkleFilled
+  },
+  ArrowCircleDown: {
+    regular: ArrowCircleDownRegular,
+    filled: ArrowCircleDownFilled
   },
   CheckmarkCircle: {
     regular: CheckmarkCircleRegular,
@@ -407,6 +441,10 @@ export const iconCatalog = {
     regular: DismissCircleRegular,
     filled: DismissCircleFilled
   },
+  LockOpen: {
+    regular: LockOpenRegular,
+    filled: LockOpenFilled
+  },
   LocalLanguage: {
     regular: LocalLanguageRegular,
     filled: LocalLanguageFilled
@@ -478,5 +516,21 @@ export const iconCatalog = {
   Warning: {
     regular: WarningRegular,
     filled: WarningFilled
+  },
+  FavoriteStar: {
+    regular: StarRegular,
+    filled: StarFilled
+  },
+  PuzzlePiece: {
+    regular: PuzzlePieceRegular,
+    filled: PuzzlePieceFilled
+  },
+  ListBar: {
+    regular: ListBarRegular,
+    filled: ListBarFilled
+  },
+  MountainTrail: {
+    regular: MountainTrailRegular,
+    filled: MountainTrailFilled
   }
 }

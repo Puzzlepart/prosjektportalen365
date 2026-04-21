@@ -1,0 +1,472 @@
+import { IColumn } from '@fluentui/react'
+import {
+  EditableSPField,
+  IBaseWebPartComponentProps,
+  IBaseWebPartComponentState,
+  ICustomEditPanelProps,
+  IFilterProps
+} from 'pp365-shared-library'
+
+export enum DynamicListMode {
+  /**
+   * Display multiple items in a grid
+   */
+  Multi = 'multi',
+  /**
+   * Display a single item with full field view
+   */
+  Single = 'single'
+}
+
+export enum DocumentLibraryViewMode {
+  /**
+   * Display all documents in a flat list
+   */
+  Flat = 'flat',
+  /**
+   * Display documents with folder navigation
+   */
+  Folders = 'folders'
+}
+
+export enum WebContextMode {
+  /**
+   * Use the current project site
+   */
+  CurrentProject = 'current',
+  /**
+   * Use the hub site that the project is connected to
+   */
+  HubSite = 'hub',
+  /**
+   * Use a custom site URL
+   */
+  CustomSite = 'custom'
+}
+
+/**
+ * Custom action types for CommandBar actions
+ */
+export enum CustomActionType {
+  /**
+   * Trigger action - sends POST request to hookUrl with selected item data
+   */
+  Trigger = 'Trigger',
+  /**
+   * Dialog action - sends POST request to hookUrl, polls for result, and displays iframe content
+   */
+  Dialog = 'Dialog'
+}
+
+/**
+ * Custom action configuration for CommandBar
+ */
+export interface ICustomAction {
+  /**
+   * Name of the action (displayed as button text)
+   */
+  name: string
+
+  /**
+   * Icon name for the action button
+   */
+  icon?: string
+
+  /**
+   * Description/tooltip for the action
+   */
+  description?: string
+
+  /**
+   * Type of action to perform
+   */
+  actionType: CustomActionType | string
+
+  /**
+   * URL to POST to (required for Trigger action type and Dialog action type for polling)
+   */
+  hookUrl?: string
+
+  /**
+   * iframe content/snippet (optional - can be provided upfront or fetched via polling for Dialog type)
+   */
+  iframeContent?: string
+
+  /**
+   * Sort order for the action (lower numbers appear first)
+   */
+  order?: number
+}
+
+/**
+ * Column context menu configuration.
+ */
+export interface IColumnContextMenu {
+  column: any
+  target: HTMLElement
+}
+
+export interface IFileItem extends Record<string, any> {
+  Id: number
+  FileRef: string
+  FileLeafRef: string
+  FileDirRef: string
+  File_x0020_Type?: string
+  File?: {
+    Length?: number
+    Name?: string
+    ServerRelativeUrl?: string
+  }
+  Modified: string
+  Editor?: { Title: string }
+  _UIVersionString?: string
+  FSObjType?: number
+}
+
+export interface IDynamicListProps extends IBaseWebPartComponentProps {
+  /**
+   * Mode for determining which site to use
+   */
+  webContextMode?: WebContextMode
+
+  /**
+   * The URL of the site where the list is located.
+   * Only used when webContextMode is 'custom'.
+   */
+  webUrl?: string
+
+  /**
+   * The name of the SharePoint list to display
+   */
+  listName?: string
+
+  /**
+   * The name of the view to use for field selection.
+   * If not specified or set to 'All Fields', uses all list fields.
+   */
+  viewName?: string
+
+  /**
+   * Default view ID (the SharePoint item ID).
+   * Takes precedence over viewName if specified.
+   */
+  defaultViewId?: string
+
+  /**
+   * Array of internal field names to hide from the edit panel.
+   * If specified, these fields will be excluded when creating or editing items.
+   * Required fields will still be shown even if listed here.
+   * If empty or not specified, shows all fields in the edit panel.
+   */
+  hiddenColumns?: string[]
+
+  /**
+   * Array of internal field names to hide from the list view.
+   * If specified, these columns will be excluded from the table display.
+   * If empty or not specified, shows all columns from the selected view or all fields.
+   */
+  hiddenViewColumns?: string[]
+
+  /**
+   * Array of internal field names that should NOT be filterable.
+   * If specified, these columns will be excluded from filter generation.
+   * By default, Note, Date, and Number fields are good candidates to disable.
+   */
+  nonFilterableColumns?: string[]
+
+  /**
+   * All available columns from the selected list (internal names).
+   * Populated automatically when a list is selected.
+   */
+  availableColumns?: string[]
+
+  /**
+   * Custom column order configuration. Allows overriding the default column order from the view.
+   * Array of column internal names in the desired display order.
+   * Columns not specified here will appear after the specified ones in their default order.
+   */
+  columnOrder?: string[]
+
+  /**
+   * Minimum height for the component container.
+   * Overrides the default min-height CSS value.
+   * Can be specified as a number (pixels) or string with units (e.g., '500px', '50vh').
+   */
+  minHeight?: number | string
+
+  /**
+   * Enable filtering based on GtSiteId field.
+   * When enabled, only items matching the current site's ID will be displayed.
+   * Requires GtSiteId field to exist on the list/library.
+   */
+  useSiteIdFiltering?: boolean
+
+  /**
+   * For document libraries: Create and use a project-specific folder.
+   * When enabled, creates a folder named after the site title and uses it as root when creating/uploading a file
+   * if there is not already a project-specific folder at the current location.
+   * All operations (upload, new files) will target this folder.
+   */
+  useProjectFolder?: boolean
+
+  /**
+   * Show search box
+   */
+  showSearchBox?: boolean
+
+  /**
+   * Show view selector in toolbar
+   */
+  showViewSelector?: boolean
+
+  /**
+   * Whether to show the command bar with actions
+   */
+  showCommandBar?: boolean
+
+  /**
+   * Whether to show filter panel
+   */
+  showFilters?: boolean
+
+  /**
+   * Whether to use column display names from ProjectContentColumns configuration.
+   * If true, uses names from Prosjektinnholdskolonner list.
+   * If false, uses names directly from the SharePoint list/library.
+   */
+  useProjectContentColumnNames?: boolean
+
+  /**
+   * Additional info text to display
+   */
+  infoText?: string
+
+  /**
+   * Display mode: 'multi' for grid view, 'single' for detailed single-item view
+   */
+  mode?: DynamicListMode
+
+  /**
+   * Document library view mode: 'folders' for folder navigation, 'flat' for all documents in one list
+   */
+  documentLibraryViewMode?: DocumentLibraryViewMode
+
+  /**
+   * Show/hide the New Item button for regular lists
+   */
+  showNewButton?: boolean
+
+  /**
+   * Show/hide the Edit Item button
+   */
+  showEditButton?: boolean
+
+  /**
+   * Show/hide the Delete Item button
+   */
+  showDeleteButton?: boolean
+
+  /**
+   * Show/hide the Refresh/Reload button
+   */
+  showRefreshButton?: boolean
+
+  /**
+   * Show/hide the Excel Export button
+   */
+  showExportButton?: boolean
+
+  /**
+   * For document libraries: Show/hide the Upload File option
+   */
+  showUploadButton?: boolean
+
+  /**
+   * For document libraries: Show/hide the New Word Document option
+   */
+  showNewWordButton?: boolean
+
+  /**
+   * For document libraries: Show/hide the New Excel Document option
+   */
+  showNewExcelButton?: boolean
+
+  /**
+   * For document libraries: Show/hide the New PowerPoint Document option
+   */
+  showNewPowerPointButton?: boolean
+
+  /**
+   * Show/hide the View Mode toggle (Flat/Folder view for document libraries)
+   */
+  showViewModeToggle?: boolean
+
+  /**
+   * Show/hide the item title in single item view
+   */
+  showItemTitle?: boolean
+
+  /**
+   * Show/hide custom actions in the CommandBar
+   */
+  showCustomActions?: boolean
+
+  /**
+   * Custom actions for the CommandBar
+   */
+  customActions?: ICustomAction[]
+}
+
+export interface IDynamicListState extends IBaseWebPartComponentState<IDynamicListData> {
+  /**
+   * Loading state
+   */
+  isLoading?: boolean
+
+  /**
+   * Show filter panel
+   */
+  showFilterPanel?: boolean
+
+  /**
+   * Filters
+   */
+  filters?: IFilterProps[]
+
+  /**
+   * Active filters
+   */
+  activeFilters: Record<string, string[]>
+
+  /**
+   * Selected items (multi-select mode)
+   */
+  selectedItems?: any[]
+
+  /**
+   * Selected item (single-item view mode)
+   */
+  selectedItem?: Record<string, any>
+
+  /**
+   * Indicates if data is being refetched
+   */
+  isRefetching?: boolean
+
+  /**
+   * Timestamp for refetch. Changing this state variable refetches the data
+   */
+  refetch?: number
+
+  /**
+   * Search term for filtering items
+   */
+  searchTerm?: string
+
+  /**
+   * Current selected view
+   */
+  currentView?: { id: string; title: string; isDefault?: boolean }
+
+  /**
+   * Available views for the list
+   */
+  views?: Array<{ id: string; title: string; isDefault?: boolean }>
+
+  /**
+   * Whether view is currently being changed
+   */
+  isChangingView?: boolean
+
+  /**
+   * Panel for editing or creating new items
+   */
+  panel?: Partial<ICustomEditPanelProps>
+
+  /**
+   * Whether user has drilled down from list view to single item view
+   */
+  isDrilledDown?: boolean
+
+  /**
+   * Whether the list is a document library
+   */
+  isDocumentLibrary?: boolean
+
+  /**
+   * Current folder path for document library navigation
+   */
+  currentFolderPath?: string
+
+  /**
+   * Document library view mode (flat or folders)
+   */
+  documentLibraryViewMode?: DocumentLibraryViewMode
+
+  /**
+   * Column context menu state
+   */
+  columnContextMenu?: IColumnContextMenu
+
+  /**
+   * Whether Excel export is in progress
+   */
+  isExporting?: boolean
+
+  /**
+   * User permissions for list operations
+   */
+  permissions?: {
+    canAdd: boolean
+    canEdit: boolean
+    canDelete: boolean
+  }
+}
+
+export interface IDynamicListData {
+  /**
+   * List items to display in the grid
+   */
+  listItems: Record<string, any>[]
+
+  /**
+   * Columns configuration for the grid
+   */
+  listColumns: IColumn[]
+
+  /**
+   * Columns that should be hidden by default because they are not present
+   * in the configured/source SharePoint view (configured view or default view fallback).
+   */
+  autoHiddenViewColumns?: string[]
+
+  /**
+   * Editable fields metadata
+   */
+  fields?: EditableSPField[]
+
+  /**
+   * List title
+   */
+  listTitle?: string
+
+  /**
+   * List ID
+   */
+  listId?: string
+
+  /**
+   * Available views
+   */
+  views?: Array<{ id: string; title: string; isDefault?: boolean }>
+
+  /**
+   * List base template (101 = Document Library)
+   */
+  baseTemplate?: number
+
+  /**
+   * Warning message if Site ID filtering is enabled but GtSiteId field is missing
+   */
+  siteIdFieldMissing?: boolean
+}

@@ -1,17 +1,21 @@
+import { MessageBarType } from '@fluentui/react'
 import { LogLevel } from '@pnp/logging'
 import { AnyAction } from '@reduxjs/toolkit'
 import strings from 'ProjectWebPartsStrings'
 import _ from 'lodash'
 import {
+  CustomError,
   EditableSPField,
   ProjectAdminPermission,
   getUrlParam,
+  isUnauthorizedError,
   parseUrlHash
 } from 'pp365-shared-library'
+import resource from 'SharedResources'
 import { useEffect } from 'react'
 import SPDataAdapter from '../../data'
 import { DataFetchFunction } from '../../types/DataFetchFunction'
-import { INIT_DATA } from './reducer'
+import { FETCH_DATA_ERROR, INIT_DATA } from './reducer'
 import { FetchDataResult, IProjectStatusProps } from './types'
 
 /**
@@ -27,6 +31,10 @@ async function getReportFields(contentTypeId = '0x010022252E35737A413FB56A1BA538
   return reportFields
 }
 
+function isNoHubError(error: unknown) {
+  return SPDataAdapter.portalDataService?.isAvailable === false || isUnauthorizedError(error)
+}
+
 /**
  * Fetch data for `ProjectStatus`. Fetches project properties, status report list properties,
  * status reports, project status sections, project column config, and project status list fields.
@@ -35,20 +43,33 @@ async function getReportFields(contentTypeId = '0x010022252E35737A413FB56A1BA538
 const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async (props) => {
   try {
     if (!SPDataAdapter.isConfigured) {
-      SPDataAdapter.configure(props.spfxContext, {
+      await SPDataAdapter.configure(props.spfxContext, {
         siteId: props.siteId,
         webUrl: props.webAbsoluteUrl,
         logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
       })
     }
 
-    const [properties, reportList, reports, sections, columnConfig] = await Promise.all([
-      SPDataAdapter.project.getProjectInformationData(),
+    const properties = await SPDataAdapter.project.getProjectInformationData()
+
+    if (SPDataAdapter.portalDataService?.isAvailable === false) {
+      throw new Error(strings.ProjectStatusNoHubAccessErrorText)
+    }
+
+    // Force an explicit hub list access check so no-hub users do not fall through to
+    // the regular "no reports" state when portal calls return empty results.
+    await SPDataAdapter.portalDataService.web.lists
+      .getByTitle(resource.Lists_StatusSections_Title)
+      .items.select('Id')
+      .top(1)()
+
+    const [reportList, reports, sections, columnConfig] = await Promise.all([
       SPDataAdapter.portalDataService.getStatusReportListProps(),
       SPDataAdapter.portalDataService.getStatusReports({ useCaching: false }),
       SPDataAdapter.portalDataService.getProjectStatusSections(),
       SPDataAdapter.portalDataService.getProjectColumnConfig()
     ])
+
     const reportFields = await getReportFields(
       properties.templateParameters?.ProjectStatusContentTypeId
     )
@@ -101,7 +122,11 @@ const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async
       sourceUrl
     }
   } catch (error) {
-    throw strings.ProjectStatusDataErrorText
+    if (isNoHubError(error)) {
+      throw new Error(strings.ProjectStatusNoHubAccessErrorText)
+    }
+
+    throw new Error(strings.ProjectStatusDataErrorText)
   }
 }
 
@@ -119,6 +144,17 @@ export const useProjectStatusDataFetch = (
   dispatch: React.Dispatch<AnyAction>
 ) => {
   useEffect(() => {
-    fetchData(props).then((data) => dispatch(INIT_DATA(data)))
+    fetchData(props)
+      .then((data) => dispatch(INIT_DATA(data)))
+      .catch((error) => {
+        dispatch(
+          FETCH_DATA_ERROR({
+            error: CustomError.createError(
+              error instanceof Error ? error : new Error(String(error)),
+              MessageBarType.warning
+            )
+          })
+        )
+      })
   }, [refetch])
 }

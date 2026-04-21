@@ -73,17 +73,38 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
       const hashState = parseUrlHash()
       currentView = getCurrentView(hashState, context, reset)
 
-      const { items, managedProperties } = context.props.isParentProject
-        ? await context.props.dataAdapter.fetchDataForViewBatch(
-            currentView,
-            context.props.configuration,
-            context.props.configuration.hubSiteId
-          )
-        : await context.props.dataAdapter.fetchDataForView(
-            currentView,
-            context.props.configuration,
-            context.props.configuration.hubSiteId
-          )
+      const shouldFetchMerged =
+        context.state.isMergedView &&
+        context.props.portfolios &&
+        context.props.portfolios.length > 1
+
+      let items: any[]
+      let managedProperties: string[]
+
+      if (shouldFetchMerged) {
+        const result = await context.props.dataAdapter.fetchMergedViewData(
+          currentView,
+          context.props.portfolios,
+          context.props.configuration
+        )
+        items = result.items
+        managedProperties = result.managedProperties
+      } else {
+        const result = context.props.isParentProject
+          ? await context.props.dataAdapter.fetchDataForViewBatch(
+              currentView,
+              context.props.configuration,
+              context.props.configuration.hubSiteId
+            )
+          : await context.props.dataAdapter.fetchDataForView(
+              currentView,
+              context.props.configuration,
+              context.props.configuration.hubSiteId
+            )
+        items = result.items
+        managedProperties = result.managedProperties
+      }
+
       let groupBy = currentView.groupBy
       if (hashState.has('groupBy') && !groupBy) {
         groupBy = _.find(
@@ -118,7 +139,7 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
 
   useEffect(() => {
     fetchInitialData()
-  }, [context.state.currentView])
+  }, [context.state.currentView, context.state.isMergedView])
 
   useEffect(() => {
     fetchInitialData(true)

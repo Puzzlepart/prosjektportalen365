@@ -2,12 +2,12 @@ import { Panel } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ColumnSearchPropertyField, FieldContainer, customLightTheme } from 'pp365-shared-library'
 import React, { FC } from 'react'
-import { ColumnDataTypeField } from '../../List/ItemColumn/ColumnDataTypeField'
 import { usePortfolioAggregationContext } from '../context'
 import styles from './ColumnFormPanel.module.scss'
 import { ColumnFormPanelFooter } from './ColumnFormPanelFooter'
 import { useColumnFormPanel } from './useColumnFormPanel'
 import { FluentProvider, IdPrefixProvider, Input, Switch } from '@fluentui/react-components'
+import { ColumnDataTypeField } from 'pp365-shared-library/lib/components/ItemColumn/ColumnDataTypeField'
 
 export const ColumnFormPanel: FC = () => {
   const context = usePortfolioAggregationContext()

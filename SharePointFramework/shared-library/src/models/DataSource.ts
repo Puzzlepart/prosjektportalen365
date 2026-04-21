@@ -14,6 +14,9 @@ export class SPDataSourceItem {
   public GtProjectContentRefinersId?: number[] | { results: number[] } = []
   public GtProjectContentGroupById?: number = null
   public GtODataQuery?: string = ''
+  public GtSortOrder?: number = 100
+  public GtDataSourceId?: string = ''
+  public GtDataSourceConfig?: string = ''
 }
 
 export class DataSource {
@@ -31,6 +34,9 @@ export class DataSource {
   public columnIds?: number[]
   public refinerIds?: number[]
   public groupById?: number
+  public sortOrder: number
+  public dataSourceId: string
+  public config: string
 
   /**
    * Constructor for DataSource
@@ -50,6 +56,9 @@ export class DataSource {
     this.columnIds = (item.GtProjectContentColumnsId as number[]) ?? []
     this.refinerIds = (item.GtProjectContentRefinersId as number[]) ?? []
     this.groupById = item.GtProjectContentGroupById
+    this.sortOrder = item.GtSortOrder ?? 100
+    this.dataSourceId = item.GtDataSourceId ?? ''
+    this.config = item.GtDataSourceConfig ?? ''
     this.configure(columns)
   }
 

@@ -1,15 +1,23 @@
-@import '~@fluentui/react/dist/sass/References.scss';
-
 .root {
-  @include ms-Grid-col;
-  @include ms-sm12;
-  padding: 10px 0 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
 
-  div[class*="ms-List-cell"] {
-    min-height: 0px;
-  }
+  .commands {
+    display: flex;
+    flex-direction: row;
+    margin: 8px 2px;
 
-  .searchBox {
-    margin: 10px 0 0 0;
+    .search {
+      width: 100%;
+      max-width: 100%;
+
+      .searchBox {
+        box-shadow: var(--shadow2);
+        width: inherit;
+        max-width: inherit;
+      }
+    }
   }
 }

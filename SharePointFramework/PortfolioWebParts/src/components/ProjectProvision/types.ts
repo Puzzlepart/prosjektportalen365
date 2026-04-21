@@ -1,4 +1,5 @@
 import { Slot } from '@fluentui/react-components'
+import { FluentIconName } from 'pp365-shared-library'
 import { IBaseComponentProps } from 'components/types'
 
 export interface ITypeFieldConfiguration {
@@ -19,8 +20,11 @@ export interface IProjectProvisionProps extends IBaseComponentProps {
   // General
   buttonLabel?: string
   autoOwner?: boolean
+  renderMode?: 'button' | 'inline'
+  parentMode?: boolean
 
   // Visuals
+  drawerSize?: 'medium' | 'full'
   siteTypeRenderMode?: string
   expirationDateMode?: string
 
@@ -40,11 +44,13 @@ export interface IProjectProvisionProps extends IBaseComponentProps {
   // Field logic
   defaultExpirationDate?: string
   readOnlyGroupLogic?: boolean
+  showTeamTemplateField?: boolean
 
   // Advanced
   provisionUrl: string
   requireProvisionAccess?: boolean
   hasProjectProvisionAccess?: boolean
+  isTeamsContext?: boolean
   fields?: IProvisionField[]
   typeFieldConfigurations?: ITypeFieldConfiguration[]
   debugMode?: boolean
@@ -63,6 +69,8 @@ export interface IProjectProvisionState {
   showProvisionDrawer: boolean
   showProvisionStatus: boolean
   showProvisionSettings: boolean
+  showProvisionConfirmation?: boolean
+  isProvisionSiteAdmin?: boolean
   settings: any[]
   types?: Record<string, any>
   siteTemplates?: Record<string, any>
@@ -84,6 +92,7 @@ export interface IProvisionField {
   description?: string
   placeholder?: string
   dataType?: string
+  iconName?: FluentIconName
   disabled?: boolean
   required?: boolean
   hidden?: boolean

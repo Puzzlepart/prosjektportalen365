@@ -25,7 +25,8 @@
       "officeFabricIconFontName": "ProjectCollection",
       "properties": {
         "hideAllActions": false,
-        "hideActions": []
+        "hideActions": [],
+        "fallbackVisibleFields": []
       }
     }
   ]

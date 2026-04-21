@@ -1,5 +1,6 @@
 import strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from '../../types'
+import { NO_TEMPLATE_ID } from '../../constants'
 import { BaseTask, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../types'
 
@@ -19,7 +20,14 @@ export class CustomActions extends BaseTask {
     onProgress: OnProgressCallbackFunction
   ): Promise<IBaseTaskParams> {
     this.params = params
-    onProgress(strings.CustomActionsText, strings.CustomActionsSubText, 'SetAction')
+    onProgress(strings.CustomActionsText, strings.CustomActionsSubText, 'SetAction', {
+      message: 'Updating custom actions for the project',
+      level: 'info'
+    })
+    if (this.data.selectedTemplate?.id === NO_TEMPLATE_ID) {
+      this.logInformation('Skipping custom action update (no template selected)')
+      return params
+    }
     try {
       await this._updateTemplateSelectorCustomAction()
     } catch (error) {}
@@ -27,9 +35,9 @@ export class CustomActions extends BaseTask {
   }
 
   /**
-   * Update custom action for template selector based on value set for the selected template.
+   * Update custom action for library template selector based on value set for the selected template.
    *
-   * @param customActionTitle Custom action title for the template selector.
+   * @param customActionTitle Custom action title for the library template selector.
    */
   private async _updateTemplateSelectorCustomAction(customActionTitle = 'Malvelger') {
     const templateLibraryUrl = this.data.selectedTemplate.templateLibraryUrl

@@ -106,18 +106,20 @@ export class SPDataAdapterBase<
     this.portalDataService = await new PortalDataService().configure({
       spfxContext
     })
-    this.entityService = new SpEntityPortalService(spfxContext, {
-      portalUrl: this.portalDataService.url,
-      listName: resource.Lists_Projects_Title,
-      contentTypeId: '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
-      identityFieldName: 'GtSiteId',
-      urlFieldName: 'GtSiteUrl'
-    })
     if (this.settings.siteId) {
       this._initStorage()
     }
-    if (this.settings.loadGlobalSettings) {
+    if (this.settings.loadGlobalSettings && this.portalDataService.isAvailable) {
       this.globalSettings = await this.portalDataService.getGlobalSettings()
+    }
+    if (this.portalDataService.isAvailable) {
+      this.entityService = new SpEntityPortalService(spfxContext, {
+        portalUrl: this.portalDataService.url,
+        listName: resource.Lists_Projects_Title,
+        contentTypeId: '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+        identityFieldName: 'GtSiteId',
+        urlFieldName: 'GtSiteUrl'
+      })
     }
     this.isConfigured = true
   }
@@ -140,15 +142,25 @@ export class SPDataAdapterBase<
    * Check project admin permissions.
    *
    * @param permission Permission to check
-   * @param properties Project properties
+   * @param properties Project properties (if not provided, tries to load from the project properties list)
    */
   public async checkProjectAdminPermissions(
     permission: ProjectAdminPermission,
-    properties: ItemFieldValues
+    properties?: ItemFieldValues
   ) {
     try {
       const { pageContext } = this.spfxContext
       if (!pageContext) return false
+      if (!this.portalDataService?.isAvailable) {
+        return await this.sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
+      }
+
+      if (!properties) {
+        const propertiesList = this.sp.web.lists.getByTitle(resource.Lists_ProjectProperties_Title)
+        const [propertiesItem] = await propertiesList.items.top(1)()
+        if (!propertiesItem) return false
+        properties = new ItemFieldValues(propertiesItem)
+      }
 
       const permissions = await (async () => {
         const userPermissions = []
@@ -296,7 +308,8 @@ export class SPDataAdapterBase<
   private _getFieldsToSync(
     fields: SPField[],
     customSiteFieldsGroupName: string,
-    forcedFields: string[]
+    forcedFields: string[],
+    projectDataSync?: boolean
   ): SPField[] {
     const fieldsToSync = [
       {
@@ -321,6 +334,14 @@ export class SPDataAdapterBase<
         return true
       })
     ]
+
+    if (projectDataSync) {
+      fieldsToSync.push({
+        InternalName: 'GtParentProjects',
+        TypeAsString: 'Note'
+      } as SPField)
+    }
+
     return fieldsToSync
   }
 
@@ -369,11 +390,13 @@ export class SPDataAdapterBase<
             >()
           : Promise.resolve<SPField[]>([])
       ])
-      const fieldsToSync = this._getFieldsToSync(fields, options.customSiteFieldsGroup, [
-        'GtIsParentProject',
-        'GtIsProgram',
-        'GtCurrentVersion'
-      ])
+      const forcedFields = ['GtIsParentProject', 'GtIsProgram', 'GtCurrentVersion']
+      const fieldsToSync = this._getFieldsToSync(
+        fields,
+        options.customSiteFieldsGroup,
+        forcedFields,
+        options.projectDataSync
+      )
       return await fieldsToSync.reduce(async ($properties, field) => {
         const properties = await $properties
         const fieldValue = fieldValues.get<ItemFieldValue>(field.InternalName, {

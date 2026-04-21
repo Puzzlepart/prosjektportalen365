@@ -23,9 +23,7 @@
       },
       "officeFabricIconFontName": "Page",
       "properties": {
-        "showCommandBar": true,
         "showFilters": true,
-        "showGroupBy": true,
         "showSearchBox": true,
         "showViewSelector": true,
         "showExcelExportButton": true

@@ -13,12 +13,18 @@ import resource from 'SharedResources'
 /**
  * Fetch timeline items and columns.
  *
+ * When timelineContentTypeId is provided, fetches fields from that specific content type
+ * and filters out hidden fields. Otherwise uses all list fields for backward compatibility.
+ * Fields marked with ShowInEditForm="FALSE" or ShowInDisplayForm="FALSE" are excluded.
+ *
  * @param props Component properties for `ProjectTimeline`
  * @param timelineConfig Timeline configuration
+ * @param timelineContentTypeId Optional content type ID for template-specific filtering
  */
 export async function fetchTimelineData(
   props: IProjectTimelineProps,
-  timelineConfig: TimelineConfigurationModel[]
+  timelineConfig: TimelineConfigurationModel[],
+  timelineContentTypeId?: string
 ) {
   try {
     const timelineContentList = SPDataAdapter.portalDataService.web.lists.getByTitle(
@@ -53,27 +59,51 @@ export async function fetchTimelineData(
       })
       .filter(Boolean)
 
-    const defaultViewColumns = (
-      await timelineContentList.defaultView.fields.select('Items').top(500)()
-    )['Items'] as string[]
-    const timelineContentFields = await SPDataAdapter.portalDataService.getListFields(
-      'TIMELINE_CONTENT'
-    )
+    let timelineContentFields
+    if (timelineContentTypeId) {
+      timelineContentFields = await SPDataAdapter.portalDataService.getContentTypeFields(
+        timelineContentTypeId
+      )
+      timelineContentFields = timelineContentFields.filter(
+        (fld) => fld.SchemaXml.indexOf('Hidden="TRUE"') === -1
+      )
+    } else {
+      timelineContentFields = await SPDataAdapter.portalDataService.getListFields(
+        'TIMELINE_CONTENT'
+      )
+    }
+
     const timelineContentEditableFields = timelineContentFields.map(
       (fld) => new EditableSPField(fld)
     )
+
     const defaultViewFields = timelineContentFields.filter(
-      (fld) => defaultViewColumns.indexOf(fld.InternalName) > -1
+      (fld) =>
+        fld.InternalName !== 'ContentType' &&
+        fld.InternalName !== 'GtSiteIdLookup' &&
+        fld.InternalName !== 'MetaInfo' &&
+        !fld.InternalName.startsWith('_') &&
+        !fld.ReadOnlyField &&
+        !fld.FromBaseType &&
+        (fld.ShowInEditForm !== false || fld.ShowInDisplayForm !== false)
     )
+
+    const defaultViewColumns = defaultViewFields.map((fld) => fld.InternalName)
 
     const userFields = defaultViewFields
       .filter((fld) => fld.TypeAsString.indexOf('User') === 0)
       .map((fld) => fld.InternalName)
 
+    let filter = `GtSiteIdLookup/GtSiteId eq '${props.siteId}'`
+    if (timelineContentTypeId) {
+      filter = `${filter} and (startswith(ContentTypeId, '${timelineContentTypeId}'))`
+    }
+
     // eslint-disable-next-line prefer-const
     let timelineContentItems = await timelineContentList.items
       .select(
         'Id',
+        'ContentTypeId',
         'GtTimelineTypeLookup/Title',
         'GtSiteIdLookupId',
         'GtSiteIdLookup/Title',
@@ -84,15 +114,14 @@ export async function fetchTimelineData(
         ...userFields.map((fieldName) => `${fieldName}/EMail`)
       )
       .expand('GtSiteIdLookup', 'GtTimelineTypeLookup', ...userFields)
+      .filter(filter)
       .getAll()
 
-    const timelineListItems = timelineContentItems.filter(
-      (item) => item.GtSiteIdLookup?.GtSiteId === props.siteId
-    )
+    const timelineListItems = timelineContentItems
 
-    const columns = defaultViewColumns
+    const columns: IColumn[] = defaultViewColumns
       .filter((columnName) => columnName !== 'GtSiteIdLookup')
-      .map<IColumn>((columnName) => {
+      .map((columnName) => {
         const column = defaultViewFields.find((fld) => fld.InternalName === columnName)
         return column
           ? {

@@ -35,8 +35,11 @@ export function useProjectProvisionDataFetch(
   }
 
   useEffect(() => {
-    checkProvisionSiteAccess(props.provisionUrl)
-      .then((hasAccess) => {
+    Promise.all([
+      checkProvisionSiteAccess(props.provisionUrl),
+      props.dataAdapter.isProvisionSiteAdmin(props.provisionUrl)
+    ])
+      .then(([hasAccess, isAdmin]) => {
         if (!hasAccess) {
           setState({
             accessDenied: true,
@@ -80,6 +83,7 @@ export function useProjectProvisionDataFetch(
                 sensitivityLabelsLibrary: sensitivityLabels.filter((label) => label.isLibrary),
                 retentionLabels,
                 requests,
+                isProvisionSiteAdmin: isAdmin,
                 loading: false,
                 isRefetching: false
               })

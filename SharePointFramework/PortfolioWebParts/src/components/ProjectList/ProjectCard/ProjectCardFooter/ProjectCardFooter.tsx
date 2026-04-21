@@ -62,7 +62,7 @@ export const ProjectCardFooter: FC = () => {
         <Tooltip
           content={
             <>
-              <strong>{projectTypeText}</strong> ({context.project.template})
+              <strong>{projectTypeText}</strong> ({context.project?.template})
             </>
           }
           relationship='description'
@@ -72,7 +72,7 @@ export const ProjectCardFooter: FC = () => {
             className={styles.templateTag}
             appearance='subtle'
             icon={<ProjectTypeIcon />}
-            title={context.project.template}
+            title={context.project?.template}
           />
         </Tooltip>
         <ProjectMenu

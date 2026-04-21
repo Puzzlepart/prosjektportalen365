@@ -11,24 +11,54 @@ export const createFieldValueMap = (): Map<string, (value: EditableSPFieldValue)
   return new Map<string, (value: EditableSPFieldValue) => any>([
     [
       'URL',
-      ({ value }) => {
+      ({ value, $ }) => {
         try {
-          const url = value?.['Url']
-          const description = value?.['Description']
-          return { url, description }
+          if ($ && typeof $ === 'object') {
+            const url = $['Url'] ?? ''
+            const description = $['Description'] ?? url
+            return { url, description }
+          }
+
+          if (value && typeof value === 'string') {
+            return { url: value, description: value }
+          }
+
+          return { url: '', description: '' }
         } catch (error) {
-          throw new Error(`Feil ved mapping av URL felt: ${error}`)
+          console.error('Error mapping URL field:', error, { value, $ })
+          return { url: '', description: '' }
         }
       }
     ],
-    ['TaxonomyFieldType', ({ value }) => value?.split(';')?.map((v) => ({ key: v, name: v }))],
+    [
+      'TaxonomyFieldType',
+      ({ value, $ }) => {
+        if ($ && typeof $ === 'object') {
+          return [{ key: $.TermGuid, name: $.Label }].filter((t) => t.key || t.name)
+        }
+        if (typeof value === 'string') {
+          return value.split(';').map((v) => ({ key: v, name: v }))
+        }
+        return []
+      }
+    ],
     [
       'TaxonomyFieldTypeMulti',
-      ({ $ }) =>
-        ($ as Array<{ TermGuid: string; Label: string }>)?.map((term) => ({
-          key: term.TermGuid,
-          name: term.Label
-        }))
+      ({ $, value }) => {
+        if (Array.isArray($)) {
+          return ($ as Array<{ TermGuid: string; Label: string }>).map((term) => ({
+            key: term.TermGuid,
+            name: term.Label
+          }))
+        }
+        if (typeof value === 'string') {
+          return value
+            .split(';')
+            .filter(Boolean)
+            .map((v) => ({ key: v, name: v }))
+        }
+        return []
+      }
     ],
     ['Date', ({ $ }) => new Date($)],
     ['DateTime', ({ $ }) => new Date($)],

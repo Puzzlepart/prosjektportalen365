@@ -2,6 +2,83 @@
 
 Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
 
+## 1.13.0 - TBA
+
+### Ny funksjonalitet
+
+- Ny webdel `Dynamisk listewebdel` for visning av data fra SharePoint-lister og dokumentbibliotek med fleksible visningsmoduser, filtrering, sortering og tilpassbare kolonner. Opprettelse, redigering og sletting av elementer støttes også direkte fra webdelen.
+- `Bestillingsportalen`-skjema kan nå legges til som en Teams-app, slik at brukere kan bestille nye prosjekter og områder direkte fra Teams. Denne appen erstatter PowerAppen som følger med Bestillingsportalen.
+- Ny fullskjerm-modus for `Bestillingsportalen`-skjema. Fullskjermmodus brukes automatisk i Teams-appen og kan aktiveres via egenskapspanelet. Fullskjermmodus er på som standard.
+- Mulighet for å sortere felter i `Bestillingsportalen`-skjema. Feltene sorteres nå i rekkefølgen de er definert i egenskapspanelet.
+- Mulighet for å henting av standard metadata for prosjekttyper i Bestillingsportalen-skjema
+- Støtte for beregnede kolonner i aggregerte oversikter [#1563](https://github.com/Puzzlepart/prosjektportalen365/issues/1563)
+- Støtte for å bestille underområder direkte fra et program/overordnet område via Bestillingsportalen-skjema. Merk! Krever oppgradering av Bestillingsportalen
+- Ny seksjon i `Prosjektinformasjon` som viser underområder tilknyttet området.
+- Mal-spesifikt Prosjekttidslinje oppsett og standard tidslinjeelementer. Støtte for forskjellige tidslinjeoppsett og elementer for ulike maler. [#1664](https://github.com/Puzzlepart/prosjektportalen365/issues/1664)
+- Ny funksjonalitet i `Prosjektinformasjon` for å kjøre `oppsettveiviseren` på nytt for et prosjekt. Dette lar deg velge en mal, tillegg eller standardinnhold som skal legges til prosjektet. Dette kan brukes for feilsøking eller for å legge til ny funksjonalitet. [#1702](https://github.com/Puzzlepart/prosjektportalen365/issues/1702)
+- Ny knapp i `Footer` for å vise en liste over favorittprosjekter som brukeren følger i porteføljen. [#1462](https://github.com/Puzzlepart/prosjektportalen365/issues/1462)
+- Lagt til to nye kolonner i `Prosjekter`-listen: `Prosjekttillegg` og `Listeinnhold`, som lagrer navnene på valgte tillegg og listeinnhold (kommaseparert) ved opprettelse av prosjektet. [#1542](https://github.com/Puzzlepart/prosjektportalen365/issues/1542)
+- Dynamisk feltrendering i `Bestillingsportalen` som støtter konfigurerbar feltrekkefølge og nivåplassering via `order` og `level` egenskaper
+- Lagt til «Se mine bestillinger»-knapp i verktøylinjen i `Bestillingsportalen`-skuffen for rask tilgang til bestillingsstatus
+- Ny tilgangsstyring for Prosjektportalen Assistenten basert på prosjektadministrasjonsroller. Ny global innstilling `AssistantAccessMode` med tre moduser: `group` (standard, eksisterende oppførsel), `role` (rollebasert per prosjekt) og `both` (bruker må tilfredsstille både gruppe- og rollesjekk). Ny tilgang `AssistantAccess` som kan tilordnes roller i `Prosjektadministrasjonsroller`-listen.
+
+### Forbedringer
+
+- Modernisert oppsettveiviseren med nytt grensesnitt og forbedret brukeropplevelse. Fremdriften under oppsettveiviseren gir nå mulighet for å se avansert logg for hvert steg i veiviseren [#1731](https://github.com/Puzzlepart/prosjektportalen365/pull/1731)
+- Prosjektlistens vertikale faner (tabs) er nå konfigurerbare direkte fra webpartens egenskapspanel. Hver fane kan tilpasses med tittel, ikon, klientfilter, feltfilter, synlighetsregler, tilgangskrav og søkeboks-plassholder. [#1466](https://github.com/Puzzlepart/prosjektportalen365/issues/1466)
+- Forbedringer på 'multi-hub' støtte i Porteføljeoversikt. Dette inkluderer en ny Prosjektkolonne `Hubnavn` som kan brukes til filtrering og visning av prosjekter basert på hvilket hubområde de tilhører. Det er også støtte for hubområder som har forskjellige språkinnstillinger slik at den samler både norske og engelske prosjekter i en og samme oversikt. [#1676](https://github.com/Puzzlepart/prosjektportalen365/issues/1676)
+- Forbedret formatet på eksportert data av "Målinger" og "Måloppnåelse", disse legger seg nå som et ekstra ark ved eksport [#1383](https://github.com/Puzzlepart/prosjektportalen365/issues/1383)
+- Oversikt over siste versjon av Prosjektportalen inkluderer også et sammendrag av hva som er nytt i siste tilgjengelige versjon, i tillegg til lenke til fullstendige release notes [#1696](https://github.com/Puzzlepart/prosjektportalen365/issues/1696)
+- Knapp i `Footer` for `Områdeinnstillinger` gir også mulighet for å gå direkte til `Områdeinnhold`.
+- Støtte for å angi minimum og maksimum verdier for tall og valuta felt i redigeringspaneler for prosjektinformasjon [#1578](https://github.com/Puzzlepart/prosjektportalen365/issues/1578)
+- Støtte for at prosjekter kan lastes inn uten tilgang på hub, der prosjektinformasjon vises fra lokale data og feilmeldinger for prosjektstatus og prosjekttidslinje vises [#1707](https://github.com/Puzzlepart/prosjektportalen365/issues/1707)
+- Seksjoner i `Prosjektstatus` vises nå dersom noen av feltene i seksjonen har verdi, ikke bare statusfeltet. Seksjoner som kun er relevante for enkelte innholdstyper vises fortsatt ikke dersom de er helt tomme
+- Håndtering av 'overflow' i seksjonsmenyen på toppen av Prosjektstatus siden, slik at seksjonene som ikke får plass i bredden vises i en overflytmeny
+- Lagt til beskrivelse på sluttdato-feltet i redigeringspanelet for `Prosjekttidslinje` som indikerer at sluttdato er påkrevd for elementtyper som vises som punkt (diamant/trekant) på tidslinjen
+- Lagt til tegnbegrensning (255 tegn) for navn- og tittelfelt i `Hent dokumentmal`-dialogen
+- Lagt til validering av URL-felt i redigeringspanelet for prosjektinformasjon, med tydelig feilmelding dersom nettadressen mangler protokoll (http:// eller https://). Forbedret også generelle feilmeldinger ved lagring til å inkludere faktiske feildetaljer fra API-et [#1556](https://github.com/Puzzlepart/prosjektportalen365/issues/1556)
+- Forbedret stabilitet for Planner-operasjoner med automatisk gjenforsøk ved forbigående feil, samt bedre deduplisering av oppgaver og feillogging [#1733](https://github.com/Puzzlepart/prosjektportalen365/pull/1733)
+- Prosjektinformasjon (kolonner merket med `GtIsRefinable=true` i `Prosjektkolonner`) vises nå som filtre også i aggregerte oversikter (f.eks. Usikkerhetsoversikt, Gevinstoversikt), på linje med `Prosjekttidslinje`. Filtre fra prosjektinformasjon er gruppert under en egen seksjon `Prosjektinformasjon` i filterpanelet som er kollapset som standard
+- Ytelsesforbedring: `Prosjektutlisting`, `Prosjekttidslinje` og aggregerte oversikter på samme side deler nå en felles cache for prosjekt-data, slik at kall mot `Prosjekter`-lista og tilhørende søk kun gjøres én gang per side.
+- `Hent dokumentmal`-dialogen defaulter nå målmappen til den mappen brukeren befinner seg i, i stedet for roten av biblioteket. Mapper i målmappe-steget kan nå også navigeres med enkelt-klikk [#1738](https://github.com/Puzzlepart/prosjektportalen365/pull/1738)
+- `Hent dokumentmal`-knappen skjules dersom brukeren ikke har tilgang på porteføljenivå, da det ikke vil være mulig å hente dokumentmaler uten tilgang på porteføljen
+
+### Fjernet
+
+- Fjernet Porteføljeinnsikt-siden og alle tilhørende komponenter, inkludert Grafkonfigurasjon-listen, Egendefinerte diagrammer-biblioteket, tilhørende innholdstyper, områdefelt og navigasjonslenker. Eksisterende installasjoner ryddes opp automatisk ved oppgradering. [#1365](https://github.com/Puzzlepart/prosjektportalen365/issues/1365)
+- Fjernet den redundante innstillingen `Vis kommandolinje` fra webdelen for oversikt over underområder i program, da den kunne virke forvirrende. Innstillingen styrte ikke selve visningen av kommandolinjen, men kun visningen av øvrige innstillinger knyttet til kommandolinjen
+- Fjernet innstillingen `Vis grupperingsvalg` fra porteføljeoversikt og oversikt over underområder i program. Innstillingen hører til gammel funksjonalitet som er fjernet og gjør ingenting
+
+### Feilrettinger
+
+- Rettet en feil hvor feltkonfigurasjoner for maloppsett ikke fungerte, custom feltnavn og beskrivelser laster nå inn korrekt. [#1704](https://github.com/Puzzlepart/prosjektportalen365/issues/1704)
+- Rettet en feil hvor URL-felter i prosjektinformasjonen ikke dukket som lenker [#1698](https://github.com/Puzzlepart/prosjektportalen365/issues/1698)
+- Rettet en feil i Bestillingsportalen hvor standardverdien for synlighet (`DefaultVisibility`) fra prosjekttypen ikke ble tatt med ved lagring, slik at den alltid falt tilbake til `Private`
+- Rettet en feil i Bestillingsportalen hvor en bruker kunne legges til som både eier og medlem, noe som førte til feil ved opprettelse. Det vises nå en feilmelding på medlemsfeltet dersom en bruker allerede er lagt til som eier
+- Rettet en feil hvor gruppeoppretting definert i `Tillatelseskonfigurasjon` kunne feile for alle resterende grupper dersom én gruppe feilet under tilrettelegging av tillatelser [#1716](https://github.com/Puzzlepart/prosjektportalen365/issues/1716)
+- Rettet en visuell feil hvor `Prosjektinformasjon mangler.`-melding overlappet seksjoner på Prosjektstatus-seksjonen `Overordnet status`
+- Rettet en feil hvor sortering ikke fungerte i prosjektoversikten på forsiden av porteføljen
+- Rettet en feil i hent dokumentmal hvor validering av navn på filer og mapper ikke intraff på forskjell i små og store bokstaver [#1727](https://github.com/Puzzlepart/prosjektportalen365/issues/1727)
+- Rettet en feil i hent dokumentmal hvor punktum i filnavn før fil-endingen behandlet filnavnet og endingen feil [#1727](https://github.com/Puzzlepart/prosjektportalen365/issues/1727)
+- Rettet en feil i hent dokumentmal hvor brukeren kunne gi flere filer samme filnavn [#1729](https://github.com/Puzzlepart/prosjektportalen365/issues/1729)
+- Rettet en feil hvor tooltip for statusrapport-seksjonen i `Prosjektinformasjon` ikke viste infoknapp med publiseringsdato for statusrapporten
+- Rettet en logisk feil i `Prosjekttidslinje` hvor prosjektelementer ikke ble vist dersom `Vis på portefølje` var satt til nei, fordi visningen feilaktig var betinget av portefølje-/programflagg i stedet for kun å sjekke om konfigurasjon eksisterer
+- Rettet en feil i `Porteføljeoversikt` hvor gruppering på brukerfelt viste rå SharePoint-verdier (e-post, claim-streng) i stedet for visningsnavn
+- Rettet en feil ved eksport til Excel hvor brukerfelt, oppslag og beregnede kolonner ble eksportert med rå SharePoint-verdier i stedet for visningsnavn
+- Rettet en feil hvor installasjon til en ny tenant feilet med 403 ved opprettelse av område fordi MSAL-tokenet ikke inneholdt nylig innvilgede tillatelser. Installasjonsskriptet prøver nå automatisk på nytt med en ny tilkobling
+- Rettet en feil i filterpanelet hvor beregnede kolonner og brukerfelt viste rå SharePoint-verdier i stedet for visningsnavn.
+- Rettet en feil i `Prosjektlisten` hvor listevisningen krasjet dersom prosjektdata ikke var ferdig lastet
+- Rettet en visuell feil i `Bestillingsportalen` hvor en advarsel/feilmelding blinket kort i skjemaet etter innsending, forårsaket av at skjemadata ble nullstilt før panelet ble lukket
+- Rettet en feil i `Prosjektkort` hvor webdelen krasjet dersom prosjektet manglet data for eier, prosjektleder eller prosjekttype
+- Rettet en feil i `Porteføljeoversikt` hvor valg av standardportefølje i egenskapspanelet var deaktivert når porteføljer var konfigurert, slik at standardportefølje aldri kunne settes
+- Rettet en feil i `Porteføljeoversikt` hvor nye og redigerte visninger ikke ble oppdatert i visningsvelgeren uten å laste siden på nytt
+- Rettet en feil i `Prosjekttidslinje` (listevisning) hvor kolonner ble kuttet av ved mange kolonner, listevisningen har nå horisontal rulling
+- Rettet en feil ved eksport til Excel hvor numeriske verdier ble eksportert med unødvendige desimaler (f.eks. `12.0000000000000` i stedet for `12`)
+- Rettet en feil i `Risikotiltak` hvor lenken «Gå til oppgaven i Planner» åpnet tasks.office.com i stedet for å navigere direkte til den spesifikke oppgaven i Planner
+- Rettet en feil i aggregerte visninger hvor listen ville laste uendelig dersom man valgte visningen som allerede var aktiv
+
+---
+
 ## 1.12.1 - 02.02.2026
 
 ### Ny funksjonalitet
@@ -52,7 +129,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 
 ### Feilrettinger
 
-- Rettet et problem hvor Prosjektstatus-feltene for PP-Assistentens vurdering ikke ble installert (Førte til feil i bruk av PP-assistenten mot prosjektstatus)
+- Rettet et problem hvor Prosjektstatus-feltene for Prosjektportalen Assistentens vurdering ikke ble installert (Førte til feil i bruk av Prosjektportalen Assistenten mot prosjektstatus)
 - Rettet et problem hvor tilpassede malbiblioteket ikke ble valgt når man klikket på "Hent dokumentmal" fra dokumentbiblioteket [#1628](https://github.com/Puzzlepart/prosjektportalen365/issues/1628)
 - Rettet et problem hvor Porteføljeoversiktens egenskapspanel ikke fungerte.
 - Rettet et problem hvor tallet 0 vises som blankt i gevinstoversikten [#1649](https://github.com/Puzzlepart/prosjektportalen365/issues/1649)
@@ -81,7 +158,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Lagt til mulighet for å skjule spesifikke kolonner på et globalt nivå basert på mal (Prosjektkolonner) [#1624](https://github.com/Puzzlepart/prosjektportalen365/issues/1624)
 - Prosjekttidslinje senterer seg nå rundt prosjektets tidsforløp (startdato - sluttdato) [#1625](https://github.com/Puzzlepart/prosjektportalen365/issues/1625)
 - Muligheter for å tilpasse informasjonen i prosjektkortet på forsiden av porteføljen, inkludert valg av hvilke felt som skal vises og i hvilken rekkefølge. [#1548](https://github.com/Puzzlepart/prosjektportalen365/issues/1548)
-- Mulighet for å tilgangsstyre Prosjektportalen Assistent, slik at den ikke er tilgjengelig for alle brukere. [#1632](https://github.com/Puzzlepart/prosjektportalen365/issues/1632)
+- Mulighet for å tilgangsstyre Prosjektportalen Assistenten, slik at den ikke er tilgjengelig for alle brukere. [#1632](https://github.com/Puzzlepart/prosjektportalen365/issues/1632)
 - Mulighet for å tilgangsstyre synligheten av `Bestill område` knappen for å benytte seg av Bestillingsportalen, slik at den ikke er tilgjengelig for alle brukere.
 - Flere nye felter på Prosjektstatus-listen for å tilrettelegge for KI-behandling av Prosjektstatus
 - Tittel angitt i Prosjektnyheter-dialogen brukes nå automatisk som tittel på den opprettede nyhetsartikler
@@ -99,7 +176,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Lagt til instrumentvisning for 'Siste måling' på Gevinstoversikt [#1572](https://github.com/Puzzlepart/prosjektportalen365/issues/1572)
 - Ny webdel `Idémodul` for visning av idéer (registrering/behandling) samt feltkonfigurasjon slik at relevant data fra idéregistreringen kan videreføres til behandling [#1573](https://github.com/Puzzlepart/prosjektportalen365/issues/1573)
 - Lagt til mulighet for egendefinerte farger på fasene i fasevelgeren [#1613](https://github.com/Puzzlepart/prosjektportalen365/issues/1613)
-- Prosjektportalen assistent, forberendende funksjonalitet for kunstig intelligens.
+- Prosjektportalen Assistent, forberendende funksjonalitet for kunstig intelligens.
 
 ### Forbedringer
 

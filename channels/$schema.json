@@ -85,9 +85,6 @@
                                         "PortfolioAggregationWebPart": {
                                             "$ref": "#/definitions/guid"
                                         },
-                                        "PortfolioInsightsWebPart": {
-                                            "$ref": "#/definitions/guid"
-                                        },
                                         "PortfolioOverviewWebPart": {
                                             "$ref": "#/definitions/guid"
                                         },
@@ -113,7 +110,6 @@
                                     "required": [
                                         "LatestProjectsWebPart",
                                         "PortfolioAggregationWebPart",
-                                        "PortfolioInsightsWebPart",
                                         "PortfolioOverviewWebPart",
                                         "ProjectListWebPart",
                                         "PortfolioTimelineWebPart",
@@ -248,6 +244,9 @@
                                         },
                                         "ProjectNewsWebPart": {
                                             "$ref": "#/definitions/guid"
+                                        },
+                                        "DynamicListWebPart": {
+                                            "$ref": "#/definitions/guid"
                                         }
                                     },
                                     "required": [
@@ -257,7 +256,8 @@
                                         "ProjectStatusWebPart",
                                         "ProjectTimelineWebPart",
                                         "RiskMatrixWebPart",
-                                        "ProjectNewsWebPart"
+                                        "ProjectNewsWebPart",
+                                        "DynamicListWebPart"
                                     ]
                                 }
                             },

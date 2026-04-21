@@ -1,5 +1,3 @@
-/* eslint-disable prefer-spread */
-/* eslint-disable no-console */
 import { useContext, useState, useMemo } from 'react'
 import { useMotion } from '@fluentui/react-motion-preview'
 import { useMotionStyles } from './motionStyles'
@@ -37,7 +35,6 @@ export const useProvisionDrawer = () => {
   const motionStyles = useMotionStyles()
 
   const toolbarBackIconMotion = useMotion<HTMLButtonElement>(currentLevel > 0)
-  // const toolbarCalendarIconMotion = useMotion<HTMLButtonElement>(currentLevel === 1)
   const levelMotions = Array.from({ length: levels.length }, (_, i) =>
     useMotion<HTMLDivElement>(i === currentLevel)
   )
@@ -79,11 +76,16 @@ export const useProvisionDrawer = () => {
     ? context.state.settings?.find((t) => t.title === 'NamingConvention')?.value
     : context.state.types?.find((t) => t.title === context.column.get('type'))?.namingConvention
 
-  const urlPrefix = `${context.props.webAbsoluteUrl.split(managedPath)[0]}${managedPath}/`
+  const urlPrefix = `${context.props.webAbsoluteUrl.split(managedPath)[0]}/${managedPath}/`
   const aliasSuffix = '@' + context.props.pageContext.user.loginName.split('@')[1]
 
   const joinHub = !!context.state.types?.find((t) => t.title === context.column.get('type'))
     ?.joinHub
+
+  const usesDifferentHub =
+    joinHub &&
+    !!context.column.get('hubSite') &&
+    context.column.get('hubSite') !== context.props.pageContext.legacyPageContext.hubSiteId
 
   const spaceTypeInternal = context.state.types?.find(
     (t) => t.title === context.column.get('type')
@@ -119,6 +121,15 @@ export const useProvisionDrawer = () => {
     const pnpTemplateUrl = currentTemplate?.pnpTemplateUrl || null
     const shouldApplyTemplate = !!currentTemplate && !!pnpTemplateUrl
 
+    const parentSite = context.props.parentMode
+      ? {
+          SiteId: context.props.pageContext.site.id.toString(),
+          Title: context.props.pageContext.web.title,
+          SPWebURL: context.props.pageContext.web.absoluteUrl,
+          HubSiteUrl: context.props.dataAdapter.portalDataService.url
+        }
+      : undefined
+
     const requestItem: IProvisionRequestItem = {
       Title: context.column.get('name'),
       SpaceDisplayName: name,
@@ -136,6 +147,7 @@ export const useProvisionDrawer = () => {
       MembersId: context.state.properties.member,
       RequestedById: context.state.properties.requestedBy,
       ConfidentialData: context.column.get('isConfidential'),
+      Metadata: context.column.get('metadata'),
       Visibility: context.state.properties.privacy || 'Private',
       ExternalSharingRequired: context.column.get('externalSharing'),
       Guests: context.column.get('guest')?.join(';'),
@@ -166,13 +178,24 @@ export const useProvisionDrawer = () => {
       TimeZoneId: 4,
       LCID: 1044,
       JoinHub: joinHub,
-      HubSiteTitle: joinHub ? context.props.pageContext.web.title : '',
-      HubSite: joinHub ? context.props.pageContext.legacyPageContext.hubSiteId : '',
+      HubSiteTitle: joinHub ? context.column.get('hubSiteTitle') || '' : '',
+      HubSite: joinHub ? context.column.get('hubSite') || '' : '',
+      ParentSite: context.props.parentMode ? parentSite?.SPWebURL : '',
       Prefix: namingConvention?.prefixText,
       Suffix: namingConvention?.suffixText,
       Status: enableAutoApproval ? 'Approved' : 'Submitted',
       Stage: enableAutoApproval ? 'Approved' : 'Submitted',
       RequestKey: getGUID()
+    }
+
+    if (context.props.parentMode) {
+      const properties: Record<string, any> = {
+        Title: context.column.get('name'),
+        GtSiteUrl: `${baseUrl}${alias}`,
+        GtParentProjects: `[{"SiteId":"${parentSite.SiteId}","Title":"${parentSite.Title}","SPWebURL":"${parentSite.SPWebURL}","HubSiteUrl":"${parentSite.HubSiteUrl}"}]`
+      }
+
+      await context.props.dataAdapter.addProjectData(properties, parentSite.HubSiteUrl)
     }
 
     return await context.props.dataAdapter.addProvisionRequests(
@@ -182,6 +205,14 @@ export const useProvisionDrawer = () => {
   }
 
   const [siteExists, setSiteExists] = useState(false)
+
+  const duplicateOwnerMembers = useMemo(() => {
+    const owners: any[] = context.column.get('owner') || []
+    const members: any[] = context.column.get('member') || []
+    if (owners.length === 0 || members.length === 0) return []
+    const ownerEmails = new Set(owners.map((u) => u?.secondaryText?.toLowerCase()).filter(Boolean))
+    return members.filter((m) => ownerEmails.has(m?.secondaryText?.toLowerCase()))
+  }, [context.column])
 
   const isSaveDisabled = useMemo(() => {
     const requiredFields = fieldsToUse.filter((field) => field.required && !field.hidden)
@@ -230,11 +261,12 @@ export const useProvisionDrawer = () => {
       })
     }
 
-    return missingRequiredFields || siteExists
+    return missingRequiredFields || siteExists || duplicateOwnerMembers.length > 0
   }, [
     fieldsToUse,
     context.column,
     siteExists,
+    duplicateOwnerMembers,
     selectedType,
     context.props.debugMode,
     currentTemplate,
@@ -283,6 +315,7 @@ export const useProvisionDrawer = () => {
     missingFieldsInfo,
     siteExists,
     setSiteExists,
+    duplicateOwnerMembers,
     namingConvention,
     enableSensitivityLabels,
     enableSensitivityLabelsLibrary,
@@ -295,9 +328,9 @@ export const useProvisionDrawer = () => {
     aliasSuffix,
     isTeam,
     joinHub,
+    usesDifferentHub,
     getField,
-    fluentProviderId,
-    currentTemplate,
-    currentTypeConfig
+    fieldsToUse,
+    fluentProviderId
   }
 }

@@ -1,10 +1,40 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 import { format, IColumn } from '@fluentui/react'
 import * as FileSaver from 'file-saver'
+import strings from 'SharedLibraryStrings'
+import _ from 'underscore'
 import * as XLSX from 'xlsx'
-import { getDateForExcelExport, getObjectValue as get, stringToArrayBuffer } from '../../util'
+import { getObjectValue as get, getDateForExcelExport, stringToArrayBuffer } from '../../util'
 import { ExcelExportServiceDefaultConfiguration } from './ExcelExportServiceDefaultConfiguration'
 import { IExcelExportServiceConfiguration } from './IExcelExportServiceConfiguration'
+
+/**
+ * Parses a raw SharePoint field value into a display-friendly string.
+ * Handles user fields (pipe-separated), lookup fields (`;#`-separated),
+ * and returns the value as-is for other types.
+ *
+ * @param value Raw field value
+ */
+function parseDisplayValue(value: any): any {
+  if (typeof value === 'number') {
+    return Number.isInteger(value) ? value : parseFloat(value.toFixed(2))
+  }
+  if (typeof value !== 'string') return value
+  if (value.includes(' | ')) {
+    const match = value.match(/\|([^|]+)\|/)
+    if (match) return match[1].trim()
+    return value.split(' | ')[1]?.trim() || value
+  }
+  if (value.includes(';#')) {
+    return value.split(';#')[1] || value
+  }
+  const numericMatch = value.match(/^#?(-?\d+(?:\.\d+)?)$/)
+  if (numericMatch) {
+    const num = parseFloat(numericMatch[1])
+    if (!isNaN(num)) return Number.isInteger(num) ? num : parseFloat(num.toFixed(2))
+  }
+  return value
+}
 
 class ExcelExportService {
   public configuration: IExcelExportServiceConfiguration
@@ -18,6 +48,58 @@ class ExcelExportService {
   public configure(configuration: IExcelExportServiceConfiguration) {
     this.configuration = { ...ExcelExportServiceDefaultConfiguration, ...configuration }
     this.isConfigured = true
+  }
+
+  /**
+   * Parses a field from an item as a JSON array of objects.
+   * - Copies the item's 'Title' to each entry.
+   * - Renames 'Title' in entries to 'Måling'.
+   * - Skips properties with object values.
+   * Returns an empty array if parsing fails.
+   *
+   * @param item The object containing the field.
+   * @param column The field name to parse.
+   * @returns Array of transformed objects or empty array.
+   */
+  private parseMeasurementsColumn(
+    item: Record<string, any>,
+    column: string
+  ): Record<string, any>[] {
+    const value = item[column]
+    if (typeof value !== 'string' || !value.trim()) return []
+    const skipKeys = ['ValueDisplay', 'AchievementDisplay']
+    const renameKeys = this.configuration?.measurementsSheetConfiguration?.renameKeys || {}
+    const titleKey = this.configuration?.measurementsSheetConfiguration?.titleKey || 'Title'
+    try {
+      const parsed = JSON.parse(value)
+      if (!Array.isArray(parsed)) return []
+      return parsed.map((entry: any) => ({
+        [titleKey]: item['Title'],
+        ...Object.fromEntries(
+          Object.entries(entry)
+            .filter(([key, val]) => typeof val !== 'object' && !skipKeys.includes(key))
+            .map(([key, val]) => {
+              const columnRenameConfiguration = renameKeys[key]
+              const finalColumnName =
+                typeof columnRenameConfiguration === 'string'
+                  ? columnRenameConfiguration
+                  : columnRenameConfiguration?.name || key
+              let processedValue = val
+              if (
+                typeof columnRenameConfiguration === 'object' &&
+                columnRenameConfiguration?.dataType === 'date'
+              ) {
+                processedValue = getDateForExcelExport(val as string | Date, false)
+              } else if (key === 'Achievement' && typeof val === 'number') {
+                processedValue = Math.floor(val * 100) / 100
+              }
+              return [finalColumnName, processedValue]
+            })
+        )
+      }))
+    } catch (error) {
+      throw new Error(`Error parsing JSON in column "${column}": ${error}`)
+    }
   }
 
   /**
@@ -42,9 +124,12 @@ class ExcelExportService {
     const fileNameFormat = fileNamePart ? '{0}-{1}-{2}.xlsx' : '{0}-{1}.xlsx'
     try {
       const sheets = []
-      const _columns = columns.filter((column) => Boolean(column.name))
+      const measurementsColumn = 'Measurements'
+      const _columns = columns.filter(
+        (column) => column.fieldName !== measurementsColumn && Boolean(column.name)
+      )
       sheets.push({
-        name: this.configuration.sheetName,
+        name: this.configuration.name,
         data: [
           _columns.map(({ name }) => name),
           ...items.map((item) =>
@@ -57,13 +142,25 @@ class ExcelExportService {
                   )
                 }
                 default: {
-                  return get(item, column.fieldName, null)
+                  return parseDisplayValue(get(item, column.fieldName, null))
                 }
               }
             })
           )
         ]
       })
+      const hasMeasurementsColumn = items.some((item) => item[measurementsColumn])
+      if (hasMeasurementsColumn) {
+        const combinedJson = _.flatten(
+          items.map((item) => this.parseMeasurementsColumn(item, measurementsColumn))
+        ).filter(Boolean)
+        if (combinedJson.length) {
+          const jsonDataSheet = XLSX.utils.sheet_to_json(XLSX.utils.json_to_sheet(combinedJson), {
+            header: 1
+          })
+          sheets.push({ name: strings.MeasurementSheetName, data: jsonDataSheet })
+        }
+      }
       const workBook = XLSX.utils.book_new()
       sheets.forEach((s, index) => {
         const sheet = XLSX.utils.aoa_to_sheet(s.data)

@@ -1,7 +1,9 @@
+/* eslint-disable no-console */
+
 import { IPersonaProps, IPersonaSharedProps } from '@fluentui/react'
 import { format } from '@fluentui/react/lib/Utilities'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { dateAdd, PnPClientStorage } from '@pnp/core'
+import { dateAdd, getHashCode, PnPClientStorage } from '@pnp/core'
 import { LogLevel } from '@pnp/logging'
 import { spfi, SPFx } from '@pnp/sp'
 import '@pnp/sp/items/get-all'
@@ -26,15 +28,16 @@ import {
   DefaultCaching,
   getClassProperties,
   getItemFieldValues,
+  getOrFetchProjectsCache,
   getUserPhoto,
   IGraphGroup,
   IPortalDataServiceConfiguration,
   ItemFieldValues,
   PortalDataService,
   PortfolioOverviewView,
+  ProjectColumn,
   ProjectContentColumn,
   ProjectListModel,
-  SPContentType,
   SPField,
   SPFxContext,
   SPProjectItem,
@@ -50,13 +53,8 @@ import {
   Benefit,
   BenefitMeasurement,
   BenefitMeasurementIndicator,
-  ChartConfiguration,
-  ChartData,
-  ChartDataItem,
-  DataField,
   IdeaConfigurationModel,
   ProgramItem,
-  SPChartConfigurationItem,
   SPIdeaConfigurationItem
 } from '../models'
 import * as config from './config'
@@ -89,16 +87,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     this.portalDataService = new PortalDataService()
   }
 
-  /**
-   * Configuring the `DataAdapter` enabling use of the `DataSourceService` and `PortalDataService`
-   *
-   * The `dataSourceService` is dependent on the `portalDataService` being configured, as it needs
-   * `portalDataService.web` to be passed as a parameter to its constructor.
-   *
-   * @param _spfxContext SPFx context (not used)
-   * @param _configuration Configuration (not used)
-   * @param portfolio Optionally the portfolio instance to configure the data adapter for
-   */
   public async configure(
     _spfxContext?: WebPartContext,
     _configuration?: any,
@@ -113,53 +101,19 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
     if (portfolio) {
       configuration.listNames = {
+        PROJECTS: portfolio.projectListName,
+        PROJECT_STATUS: portfolio.projectStatusListName,
+        PROJECT_CONTENT_COLUMNS: portfolio.projectContentColumnsListName,
         PROJECT_COLUMNS: portfolio.columnsListName,
         PROJECT_COLUMN_CONFIGURATION: portfolio.columnConfigListName,
         PORTFOLIO_VIEWS: portfolio.viewsListName
       }
     }
     this.portalDataService = await this.portalDataService.configure(configuration)
-    this.dataSourceService = new DataSourceService(this.portalDataService.web)
-    return this
-  }
-
-  public async fetchChartData(
-    view: PortfolioOverviewView,
-    configuration: IPortfolioOverviewConfiguration,
-    chartConfigurationListName: string,
-    siteId: string
-  ) {
-    const chartConfigurationList = this._sp.web.lists.getByTitle(chartConfigurationListName)
-    try {
-      const [chartItems, contentTypes] = await Promise.all([
-        chartConfigurationList.items.select(...Object.keys(new SPChartConfigurationItem()))<
-          SPChartConfigurationItem[]
-        >(),
-        chartConfigurationList.contentTypes.select(...Object.keys(new SPContentType()))<
-          SPContentType[]
-        >()
-      ])
-      const charts: ChartConfiguration[] = chartItems.map((item) => {
-        const fields = item.GtPiFieldsId.map((id) => {
-          const fld = _.find(configuration.columns, (f) => f.id === id)
-          return new DataField(fld.name, fld.fieldName, fld.dataType)
-        })
-        const chart = new ChartConfiguration(item, fields)
-        return chart
-      })
-      const items = (await this.fetchDataForView(view, configuration, siteId)).items.map(
-        (i) => new ChartDataItem(i.Title, i)
-      )
-      const chartData = new ChartData(items)
-
-      return {
-        charts,
-        chartData,
-        contentTypes
-      }
-    } catch (error) {
-      throw error
+    if (this.portalDataService.web) {
+      this.dataSourceService = new DataSourceService(this.portalDataService.web)
     }
+    return this
   }
 
   public async getPortfolioConfig(): Promise<IPortfolioOverviewConfiguration> {
@@ -214,14 +168,17 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           .catch(reject)
       })
 
-      const [views, viewsUrls, columnUrls, levels] = await Promise.all([
+      const [views, viewsUrls, columnUrls, levels, projectColumns] = await Promise.all([
         this.fetchDataSources(category, level, columns),
         this.portalDataService.getListFormUrls('DATA_SOURCES'),
         this.portalDataService.getListFormUrls('PROJECT_CONTENT_COLUMNS'),
         this.portalDataService.web.fields
           .getByInternalNameOrTitle('GtDataSourceLevel')
-          .select('Choices')()
+          .select('Choices')(),
+        this.portalDataService.getProjectColumns().catch(() => [])
       ])
+
+      const refiners = (projectColumns ?? []).filter((col) => col.isRefinable)
 
       return {
         columns,
@@ -229,7 +186,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         viewsUrls,
         columnUrls,
         level,
-        levels: levels?.Choices ?? []
+        levels: levels?.Choices ?? [],
+        refiners
       } as IPortfolioAggregationConfiguration
     } catch (error) {
       return null
@@ -244,10 +202,97 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     const isCurrentUserInManagerGroup = await this.isUserInGroup(
       resource.Security_SiteGroup_PortfolioInsight_Title
     )
+
     if (isCurrentUserInManagerGroup) {
       return await this.fetchDataForManagerView(view, configuration, siteId)
     } else {
       return await this.fetchDataForRegularView(view, configuration, siteId)
+    }
+  }
+
+  public async fetchMergedViewData(
+    view: PortfolioOverviewView,
+    portfolios: PortfolioInstance[],
+    primaryConfiguration: IPortfolioOverviewConfiguration
+  ): Promise<IPortfolioViewData> {
+    const includedPortfolios = portfolios.filter((p) => p.includeInMergedView !== false)
+
+    if (includedPortfolios.length === 0) {
+      return { items: [], managedProperties: [] }
+    }
+
+    const primaryPortfolio = includedPortfolios[0]
+    const primaryData = await this.fetchDataForView(
+      view,
+      primaryConfiguration,
+      primaryConfiguration.hubSiteId
+    )
+
+    const primaryHubMetadata = {
+      _hubId: primaryPortfolio.uniqueId,
+      _hubTitle: primaryPortfolio.title,
+      _hubUrl: primaryPortfolio.url
+    }
+
+    const mergedResult: IPortfolioViewData = {
+      items: primaryData.items.map((item) => ({ ...item, ...primaryHubMetadata })),
+      managedProperties: [...primaryData.managedProperties]
+    }
+
+    const tempAdapter = new DataAdapter(this._spfxContext, this._sp)
+
+    for (let i = 1; i < includedPortfolios.length; i++) {
+      const portfolio = includedPortfolios[i]
+      const hubMetadata = {
+        _hubId: portfolio.uniqueId,
+        _hubTitle: portfolio.title,
+        _hubUrl: portfolio.url
+      }
+
+      try {
+        await tempAdapter.configure(null, null, portfolio)
+
+        const portfolioConfig = await tempAdapter.getPortfolioConfig()
+        const portfolioHubSiteId = portfolioConfig.hubSiteId
+
+        const portfolioView = new PortfolioOverviewView()
+        Object.assign(portfolioView, view)
+        portfolioView.searchQuery = view.searchQuery.replace(
+          /DepartmentId:\{[a-f0-9-]+\}/gi,
+          `DepartmentId:{${portfolioHubSiteId}}`
+        )
+
+        const { items, managedProperties } = await tempAdapter.fetchDataForView(
+          portfolioView,
+          portfolioConfig,
+          portfolioHubSiteId
+        )
+
+        mergedResult.items.push(...items.map((item) => ({ ...item, ...hubMetadata })))
+
+        managedProperties.forEach((prop) => {
+          if (!mergedResult.managedProperties.includes(prop)) {
+            mergedResult.managedProperties.push(prop)
+          }
+        })
+      } catch (error) {
+        console.error(`Failed to fetch data from portfolio ${portfolio.title}:`, error)
+      }
+    }
+
+    const seenKeys = new Set<string>()
+    const uniqueItems = mergedResult.items.filter((item) => {
+      const key = `${item.SiteId}_${item._hubId}`
+      if (seenKeys.has(key)) {
+        return false
+      }
+      seenKeys.add(key)
+      return true
+    }) as IFetchDataForViewItemResult[]
+
+    return {
+      items: uniqueItems,
+      managedProperties: mergedResult.managedProperties
     }
   }
 
@@ -257,30 +302,27 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     siteId: string,
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IPortfolioViewData> {
-    try {
-      const { projects, sites, statusReports, managedProperties } = await this._fetchDataForView(
-        view,
-        configuration,
-        siteId,
-        siteIdProperty
-      )
-      const items = sites.map((site) => {
-        const [project] = projects.filter((res) => res[siteIdProperty] === site['SiteId'])
-        const [statusReport] = statusReports.filter((res) => res[siteIdProperty] === site['SiteId'])
-        return {
-          ...statusReport,
-          ...project,
-          Title: site.Title,
-          Path: site?.Path,
-          SPWebUrl: site?.SPWebUrl,
-          SiteId: site['SiteId']
-        }
-      })
+    const { projects, sites, statusReports, managedProperties } = await this._fetchDataForView(
+      view,
+      configuration,
+      siteId,
+      siteIdProperty
+    )
 
-      return { items, managedProperties } as IPortfolioViewData
-    } catch (err) {
-      throw err
-    }
+    const items = sites.map((site) => {
+      const [project] = projects.filter((res) => res[siteIdProperty] === site['SiteId'])
+      const [statusReport] = statusReports.filter((res) => res[siteIdProperty] === site['SiteId'])
+      return {
+        ...statusReport,
+        ...project,
+        Title: site.Title,
+        Path: site?.Path,
+        SPWebUrl: site?.SPWebUrl,
+        SiteId: site['SiteId']
+      }
+    })
+
+    return { items, managedProperties } as IPortfolioViewData
   }
 
   public async fetchDataForManagerView(
@@ -383,7 +425,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         'SiteId'
       ]),
       this._fetchItems(
-        `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:${resource.Choice_GtModerationStatus_Published}`,
+        `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* (GtModerationStatusOWSCHCS:${config.MODERATION_STATUS_PUBLISHED_NO} OR GtModerationStatusOWSCHCS:${config.MODERATION_STATUS_PUBLISHED_EN})`,
         [...configuration.columns.map((f) => f.fieldName), siteIdProperty, 'ListItemId'],
         500,
         { Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',') }
@@ -452,14 +494,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     } catch (error) {}
   }
 
-  /**
-   *  Fetches items from timeline content list and maps them to `TimelineContentListModel`.
-   *
-   * * Fetching list items
-   * * Maps the items to `TimelineContentListModel`
-   *
-   * @param timelineConfig Timeline configuration
-   */
   public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationModel[]) {
     const timelineItems = await this._sp.web.lists
       .getByTitle(resource.Lists_TimelineContent_Title)
@@ -642,73 +676,181 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       .filter(Boolean)
   }
 
-  public async fetchEnrichedProjects(
-    fields?: IEnrichedProjectsFields
-  ): Promise<ProjectListModel[]> {
-    const localStore = new PnPClientStorage().local
-    const siteId = this._spfxContext.pageContext.site.id.toString()
-    const list = this._sp.web.lists.getByTitle(resource.Lists_Projects_Title)
-    const baseFields = Object.keys(new SPProjectItem())
-    const selectFields = [...baseFields]
-
+  /**
+   * Builds the Projects list `select` field list from `SPProjectItem` plus
+   * any user-configured persona / display field overrides.
+   */
+  private _buildProjectItemsSelectFields(fields?: IEnrichedProjectsFields): string[] {
+    const selectFields = [...Object.keys(new SPProjectItem())]
     if (fields?.primaryUserField) selectFields.push(`${fields.primaryUserField}Id`)
     if (fields?.secondaryUserField) selectFields.push(`${fields.secondaryUserField}Id`)
     if (fields?.primaryField) selectFields.push(fields.primaryField)
     if (fields?.secondaryField) selectFields.push(fields.secondaryField)
+    return _.uniq(selectFields)
+  }
 
-    const fieldsCacheKey = [
-      fields?.primaryUserField,
-      fields?.secondaryUserField,
-      fields?.primaryField,
-      fields?.secondaryField
-    ]
-      .filter(Boolean)
-      .join('_')
-    const cacheKey = `pp365_fetchenrichedprojects_${siteId}_${fieldsCacheKey || 'default'}`
+  /**
+   * Fetches the raw Projects list items. Shared across webparts on the same
+   * page via `getOrFetchProjectsCache`. The cache key includes a hash of the
+   * sorted select fields so callers with different field configurations
+   * don't stomp on each other — e.g. a lightweight caller that primes the
+   * cache with baseline fields wouldn't cause a later `fetchEnrichedProjects`
+   * request with extra user/display fields to receive incomplete items.
+   */
+  private async _fetchProjectItems(
+    siteId: string,
+    fields?: IEnrichedProjectsFields
+  ): Promise<any[]> {
+    const list = this._sp.web.lists.getByTitle(resource.Lists_Projects_Title)
+    const selectFields = this._buildProjectItemsSelectFields(fields)
+    const fieldsHash = getHashCode(selectFields.slice().sort().join(','))
+    return getOrFetchProjectsCache('items', `${siteId}_${fieldsHash}`, () =>
+      list.items.select(...selectFields).getAll()
+    )
+  }
 
-    let templates = []
+  private async _fetchProjectSites(siteId: string): Promise<ISearchResult[]> {
+    return getOrFetchProjectsCache('sites', siteId, () =>
+      this._fetchItems(`DepartmentId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId'])
+    )
+  }
+
+  /**
+   * Fetches project-level refiner values via search, keyed by siteId. Mirrors
+   * `ProjectTimeline.fetchTimelineProjectData` so components showing child
+   * items (risks, benefits) can join each item to its parent project's filter
+   * values. Search sidesteps SP REST quirks (user fields needing `$expand`,
+   * taxonomy columns, unknown-column rejections).
+   *
+   * The query reuses the portfolio's first view — its `ContentTypeId` clause
+   * targets the project-properties items where `GtProject*` managed properties
+   * actually live (site-level results don't have them populated).
+   *
+   * Refiners with non-alphanumeric `fieldName` (e.g. a literal `"-"`) are
+   * dropped — SP search silently returns null for _all_ requested properties
+   * if any `SelectProperties` entry is invalid.
+   *
+   * @param refiners Project columns whose values should be returned
+   * @returns Map from `GtSiteIdOWSTEXT` to a record keyed by `internalName`
+   */
+  public async fetchProjectRefinerValues(
+    refiners: ProjectColumn[]
+  ): Promise<Map<string, Record<string, any>>> {
+    const hubSiteId = this._spfxContext.pageContext.legacyPageContext.hubSiteId
+    const isValidManagedProperty = (name: string | undefined) =>
+      Boolean(name) && /^[A-Za-z_][A-Za-z0-9_]*$/.test(name)
+    const uniqueRefiners = _.uniq(
+      refiners.filter((r) => isValidManagedProperty(r.fieldName) && r.internalName)
+    )
+    if (uniqueRefiners.length === 0 || !hubSiteId) return new Map()
+
+    const siteIdProperty = 'GtSiteIdOWSTEXT'
+    const selectProperties = _.uniq([...uniqueRefiners.map((r) => r.fieldName), siteIdProperty])
+
+    const portfolioConfig = await this.getPortfolioConfig()
+    const queryTemplate =
+      portfolioConfig?.views?.[0]?.searchQuery ??
+      `DepartmentId:{${hubSiteId}} contentclass:STS_Site`
+
+    const results = await getOrFetchProjectsCache('refiners', hubSiteId, () =>
+      this._fetchItems(queryTemplate, selectProperties)
+    )
+
+    const map = new Map<string, Record<string, any>>()
+    for (const item of results) {
+      const itemSiteId = (item as any)[siteIdProperty]
+      if (!itemSiteId) continue
+      const properties: Record<string, any> = {}
+      for (const refiner of uniqueRefiners) {
+        const value = (item as any)[refiner.fieldName]
+        if (value !== undefined && value !== null && value !== '') {
+          properties[refiner.internalName] = value
+        }
+      }
+      map.set(itemSiteId, properties)
+    }
+    return map
+  }
+
+  private async _fetchProjectMemberOfGroups(siteId: string): Promise<IGraphGroup[]> {
+    return getOrFetchProjectsCache('memberOf', siteId, () => this.fetchMemberGroups())
+  }
+
+  private async _fetchProjectSiteUsers(siteId: string): Promise<ISiteUserInfo[]> {
+    return getOrFetchProjectsCache('users', siteId, () =>
+      this._sp.web.siteUsers.select('Id', 'Title', 'Email')()
+    )
+  }
+
+  /**
+   * Builds the template map used to decorate items with a `TemplateImageUrl`.
+   * Falls back to an empty map if the Maloppsett list isn't available.
+   */
+  private async _fetchTemplateMap(): Promise<Map<string, string>> {
+    const templateMap = new Map<string, string>()
     try {
-      templates = await this._sp.web.lists
+      const templates = await this._sp.web.lists
         .getByTitle(resource.Lists_TemplateOptions_Title)
         .items.select('Title', 'TemplateImageUrl')()
+      templates.forEach((template) => {
+        if (template.Title && template.TemplateImageUrl) {
+          templateMap.set(template.Title, template.TemplateImageUrl)
+        }
+      })
     } catch (error) {
       console.warn(
         'Could not fetch template images from Maloppsett list. TemplateImageUrl field may not exist.',
         error
       )
     }
+    return templateMap
+  }
 
-    const [items, sites, memberOfGroups, users] = await localStore.getOrPut(
-      cacheKey,
-      async () =>
-        await Promise.all([
-          list.items.select(...selectFields).getAll(),
-          this._fetchItems(`DepartmentId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId']),
-          this.fetchMemberGroups(),
-          this._sp.web.siteUsers.select('Id', 'Title', 'Email')()
-        ]),
-      dateAdd(new Date(), 'minute', 30)
-    )
+  public async fetchEnrichedProjects(
+    fields?: IEnrichedProjectsFields
+  ): Promise<ProjectListModel[]> {
+    const siteId = this._spfxContext.pageContext.site.id.toString()
 
-    const templateMap = new Map<string, string>()
-    templates.forEach((template) => {
-      if (template.Title && template.TemplateImageUrl) {
-        templateMap.set(template.Title, template.TemplateImageUrl)
-      }
-    })
+    const [templateMap, items, sites, memberOfGroups, users] = await Promise.all([
+      this._fetchTemplateMap(),
+      this._fetchProjectItems(siteId, fields),
+      this._fetchProjectSites(siteId),
+      this._fetchProjectMemberOfGroups(siteId),
+      this._fetchProjectSiteUsers(siteId)
+    ])
 
-    const result: IProjectsData = {
-      items,
-      sites,
-      memberOfGroups,
-      users
-    }
+    const result: IProjectsData = { items, sites, memberOfGroups, users }
     let projects = this._combineResultData(
       result,
       fields?.primaryUserField,
       fields?.secondaryUserField,
       templateMap
     )
+    projects = projects.filter(
+      (m) =>
+        m.lifecycleStatus !== strings.LifecycleStatus_Completed &&
+        m.lifecycleStatus !== strings.LifecycleStatus_Closed
+    )
+    projects = projects.sort((a, b) => a.title.localeCompare(b.title))
+    return projects
+  }
+
+  /**
+   * Lightweight projects fetch for callers that only need Projects list data
+   * (e.g. ProjectTimeline). Shares the items cache with
+   * {@link fetchEnrichedProjects}; persona/membership/access fields are left
+   * undefined since those datasets aren't fetched.
+   */
+  public async fetchProjects(fields?: IEnrichedProjectsFields): Promise<ProjectListModel[]> {
+    const siteId = this._spfxContext.pageContext.site.id.toString()
+
+    const [templateMap, items] = await Promise.all([
+      this._fetchTemplateMap(),
+      this._fetchProjectItems(siteId, fields)
+    ])
+
+    const result: IProjectsData = { items, sites: [], memberOfGroups: [], users: [] }
+    let projects = this._combineResultData(result, undefined, undefined, templateMap)
     projects = projects.filter(
       (m) =>
         m.lifecycleStatus !== strings.LifecycleStatus_Completed &&
@@ -799,7 +941,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     })
   }
 
-  public async fetchProjects(
+  public async fetchProjectsByDataSource(
     configuration?: IPortfolioAggregationConfiguration,
     dataSource?: string
   ): Promise<any[]> {
@@ -813,11 +955,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     return projects
   }
 
-  /**
-   * Checks if the current user is in the specified SharePoint group.
-   *
-   * @param groupName Group name
-   */
   public async isUserInGroup(groupName: string): Promise<boolean> {
     try {
       const [siteGroup] = await this._sp.web.siteGroups
@@ -943,20 +1080,17 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         throw new Error(format(strings.DataSourceNotFound, dataSourceName))
       }
       const dataSrcProperties = dataSrc.columns.map((col) => col.fieldName) || []
+      const uniqueProperties = _.uniq([...selectProperties, ...dataSrcProperties])
+      const propertiesToSelect = dataSrc.category.startsWith(
+        resource.Lists_DataSources_Category_BenefitOverview
+      )
+        ? uniqueProperties
+        : [...uniqueProperties, 'FileExtension', 'ServerRedirectedURL']
       if (dataSrc.category.startsWith(resource.Lists_DataSources_Category_BenefitOverview)) {
-        items = await this.fetchBenefitItemsWithSource(dataSrc, [
-          ...selectProperties,
-          ...dataSrcProperties
-        ])
+        items = await this.fetchBenefitItemsWithSource(dataSrc, propertiesToSelect)
       } else {
-        items = await this._fetchItems(dataSrc.searchQuery, [
-          ...selectProperties,
-          ...dataSrcProperties,
-          'FileExtension',
-          'ServerRedirectedURL'
-        ])
+        items = await this._fetchItems(dataSrc.searchQuery, propertiesToSelect)
       }
-
       return items
     } catch (error) {
       throw new Error(`${format(strings.DataSourceError, dataSourceName)}  ${error}`)
@@ -1079,6 +1213,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           'VisibleTo/EMail',
           'DefaultVisibility',
           'DefaultConfidentialData',
+          'DefaultMetadata',
           'ExternalSharing',
           'Teamify',
           'JoinHub',
@@ -1111,6 +1246,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
             visibleTo: item.VisibleTo,
             defaultVisibility: item.DefaultVisibility,
             defaultConfidentialData: item.DefaultConfidentialData,
+            defaultMetadata: item.DefaultMetadata,
             externalSharing: item.ExternalSharing,
             templateId: item.TemplateId,
             teamify: item.Teamify,
@@ -1175,6 +1311,17 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       return true
     } catch (error) {
       return false
+    }
+  }
+
+  public async addProjectData(properties: Record<string, any>, hubUrl: string): Promise<void> {
+    try {
+      const hubSite = Web([this._sp.web, hubUrl])
+      const list = hubSite.lists.getByTitle(resource.Lists_ProjectData_Title)
+      const itemAddResult = await list.items.add(properties)
+      return itemAddResult.data
+    } catch (error) {
+      console.warn('Failed to add project data to ProjectData list:', error)
     }
   }
 
@@ -1424,6 +1571,101 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         },
         columns
       }
+    }
+  }
+
+  public async loadTeamsConfig(provisionUrl: string): Promise<any | null> {
+    try {
+      const provisionSite = Web([this._sp.web, provisionUrl])
+
+      const file = await provisionSite
+        .getFolderByServerRelativePath('SiteAssets')
+        .files.getByUrl('TeamsAppConfig.json')
+
+      const content = await file.getText()
+      return JSON.parse(content)
+    } catch (error) {
+      console.log('TeamsAppConfig.json not found or error loading:', error.message)
+      return null
+    }
+  }
+
+  public async saveTeamsConfig(provisionUrl: string, config: any): Promise<void> {
+    try {
+      const provisionSite = Web([this._sp.web, provisionUrl])
+      const hasPermission = await provisionSite.currentUserHasPermissions(PermissionKind.ManageWeb)
+
+      if (!hasPermission) {
+        throw new Error(
+          'You do not have permission to edit configuration. Site administrator access required.'
+        )
+      }
+
+      const folder = provisionSite.getFolderByServerRelativePath('SiteAssets')
+      const jsonContent = JSON.stringify(config, null, 2)
+
+      try {
+        const file = await provisionSite
+          .getFolderByServerRelativePath('SiteAssets')
+          .files.getByUrl('TeamsAppConfig.json')
+        await file.setContent(jsonContent)
+      } catch {
+        await folder.files.addUsingPath('TeamsAppConfig.json', jsonContent, { Overwrite: true })
+      }
+    } catch (error) {
+      throw new Error(`Failed to save TeamsAppConfig.json: ${error.message || error}`)
+    }
+  }
+
+  public async deleteTeamsConfig(provisionUrl: string): Promise<void> {
+    try {
+      const provisionSite = Web([this._sp.web, provisionUrl])
+      const file = provisionSite
+        .getFolderByServerRelativePath('SiteAssets')
+        .files.getByUrl('TeamsAppConfig.json')
+      await file.recycle()
+    } catch (error: any) {
+      throw new Error(`Failed to delete TeamsAppConfig.json: ${error?.message || error}`)
+    }
+  }
+
+  public async isProvisionSiteAdmin(provisionUrl: string): Promise<boolean> {
+    try {
+      const provisionSite = Web([this._sp.web, provisionUrl])
+      const hasPermission = await provisionSite.currentUserHasPermissions(PermissionKind.ManageWeb)
+      return hasPermission
+    } catch (error) {
+      console.warn('Failed to check provision site admin status:', error)
+      return false
+    }
+  }
+
+  /**
+   * Resolve a hub site by its ID using the SharePoint HubSites REST API.
+   * Returns the hub site title and ID, or null if the hub site could not be resolved.
+   *
+   * @param hubSiteId Hub site ID (GUID)
+   */
+  public async resolveHubSiteById(
+    hubSiteId: string
+  ): Promise<{ hubSiteId: string; title: string } | null> {
+    if (!hubSiteId) return null
+    try {
+      const webAbsoluteUrl = this._spfxContext.pageContext.web.absoluteUrl
+      const response = await fetch(`${webAbsoluteUrl}/_api/HubSites/GetById('${hubSiteId}')`, {
+        method: 'GET',
+        headers: { Accept: 'application/json;odata=nometadata' },
+        credentials: 'include'
+      })
+      if (!response.ok) return null
+      const hubSite = await response.json()
+      return {
+        hubSiteId: hubSiteId,
+        title: hubSite.Title || ''
+      }
+    } catch (error) {
+      console.warn('Failed to resolve hub site by ID:', error)
+      return null
     }
   }
 }

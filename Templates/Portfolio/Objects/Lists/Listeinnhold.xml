@@ -1,8 +1,9 @@
 <pnp:ListInstance Title="{resource:Lists_ListContent_Title}" Description="{resource:Lists_ListContent_Description}" DocumentTemplate="" Hidden="true" TemplateType="100" Url="{resource:Lists_ListContent_Url}" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false" ContentTypesEnabled="true" RemoveExistingContentTypes="true" 
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100B8B4EE61A547B247B49CFC21B67D5B7D" Default="true" />
         <pnp:ContentTypeBinding ContentTypeID="0x0100B8B4EE61A547B247B49CFC21B67D5B7D01" />
+        <pnp:ContentTypeBinding ContentTypeID="0x0100B8B4EE61A547B247B49CFC21B67D5B7D02" />
     </pnp:ContentTypeBindings>
     <pnp:Views>
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_ListContent_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
@@ -72,6 +73,31 @@
                 <FieldRef Name="GtLccDefault" />
                 <FieldRef Name="GtLccLocked" />
                 <FieldRef Name="GtPlannerName" />
+                <FieldRef Name="Modified" />
+            </ViewFields>
+            <RowLimit Paged="TRUE">30</RowLimit>
+            <JSLink>clienttemplates.js</JSLink>
+        </View>
+        <View Type="HTML" DisplayName="{resource:ContentTypes_TimelineElements_Name}" Url="{site}/{resource:Lists_ListContent_Url}/TimelineElements.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
+            <Query>
+                <Where>
+                    <Eq>
+                        <FieldRef Name="ContentType" />
+                        <Value Type="Computed">{resource:ContentTypes_TimelineElements_Name}</Value>
+                    </Eq>
+                </Where>
+                <OrderBy>
+                    <FieldRef Name="Title" />
+                </OrderBy>
+            </Query>
+            <ViewFields>
+                <FieldRef Name="Title" />
+                <FieldRef Name="GtDescription" />
+                <FieldRef Name="GtLccSourceList" />
+                <FieldRef Name="GtLccFields" />
+                <FieldRef Name="GtLccHidden" />
+                <FieldRef Name="GtLccDefault" />
+                <FieldRef Name="GtLccLocked" />
                 <FieldRef Name="Modified" />
             </ViewFields>
             <RowLimit Paged="TRUE">30</RowLimit>
@@ -151,6 +177,15 @@
             <pnp:DataValue FieldName="GtLccSourceList">{resource:Lists_PhaseChecklistConstruction_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccDestinationList">{resource:Lists_PhaseChecklist_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccFields">GtSortOrder,Title,GtProjectPhase</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccDefault">0</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccHidden">0</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100B8B4EE61A547B247B49CFC21B67D5B7D02</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ListContent_Timeline_Title}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDescription">{resource:Lists_ListContent_Timeline_Description}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccSourceList">{resource:Lists_TimelineElements_Title}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccFields">Title,GtTimelineTypeLookupId,GtDescription</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccDefault">0</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccHidden">0</pnp:DataValue>
         </pnp:DataRow>

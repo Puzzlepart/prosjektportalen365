@@ -13,6 +13,7 @@ define([], function () {
     LastInstallDescription: 'Here is an overview of the last installation of Prosjektportalen. At the very bottom you will find information about the latest release from GitHub.',
     LinksListDescription: 'Links to useful pages. The links can be configured here: ',
     LinksListLabel: 'Useful links',
+    SiteContentsLabel: 'Site contents',
     SiteSettingsDescription: 'View all site settings for the Portfolio site',
     SiteSettingsLabel: 'Site settings',
     ActionLabel: 'Action',
@@ -45,7 +46,8 @@ define([], function () {
     LatestGitHubReleaseIsOlderText: 'The version installed is newer than the latest release from GitHub',
     LatestGitHubReleaseIsSameText: 'The version installed is the latest release from GitHub',
     LatestGitHubReleaseLabel: 'Latest release from GitHub',
-    LatestGitHubReleaseLinkTitle: 'See the latest release on GitHub',
+    LatestGitHubReleaseLinkTitle: 'See the latest release notes on GitHub',
+    LatestGitHubReleaseHighlightsLabel: 'What\'s new in this version',
     LinksListText: 'Useful links',
     SeeAllInstallationsLinkText: 'See all installations',
     SetRecommendationSubtitle: 'Select recommendation for: {0}. \n\n{1}',
@@ -57,6 +59,9 @@ define([], function () {
     IdeaProcessingCommandTitle: 'Set recommendation',
     IdeaProcessingLinkTitle: 'Go to processing',
     IdeaRegistrationCommandTitle: 'Set recommendation',
-    IdeaProjectDataCommandTitle: 'Create project data'
+    IdeaProjectDataCommandTitle: 'Create project data',
+    FavoriteProjectsLabel: 'My favorite projects',
+    FavoriteProjectsDescription: 'Quick access to projects you follow in current portfolio',
+    FavoriteProjectsNoItemsMessage: 'You are not following any projects yet, go to a project and click the star "follow" to add it to favorites',
   }
 })

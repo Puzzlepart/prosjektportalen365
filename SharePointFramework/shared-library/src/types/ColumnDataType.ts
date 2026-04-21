@@ -16,3 +16,5 @@ export type ColumnDataType =
   | 'list'
   | 'projectinfo'
   | 'statusreport'
+  | 'hub'
+  | 'calculated'

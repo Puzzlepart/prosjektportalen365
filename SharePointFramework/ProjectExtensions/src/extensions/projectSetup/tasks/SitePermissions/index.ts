@@ -1,6 +1,7 @@
 import SPDataAdapter from 'data/SPDataAdapter'
 import strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'extensions/projectSetup'
+import { NO_TEMPLATE_ID } from '../../constants'
 import { isEmpty } from 'underscore'
 import { BaseTask, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../types'
@@ -31,34 +32,41 @@ export class SitePermissions extends BaseTask {
     onProgress: OnProgressCallbackFunction
   ): Promise<IBaseTaskParams> {
     try {
-      onProgress(strings.SitePermissionsText, strings.SitePermissionsSubText, 'Permissions')
+      onProgress(strings.SitePermissionsText, strings.SitePermissionsSubText, 'Permissions', {
+        message: 'Starting site permissions configuration',
+        level: 'info'
+      })
       const [permConfig, roleDefinitions] = await Promise.all([
         this._getPermissionConfiguration(),
         this._getRoleDefinitions(params.web)
       ])
 
       for (let i = 0; i < permConfig.length; i++) {
-        const { groupName, permissionLevel } = permConfig[i]
-        const siteGroup = await this._getSiteGroupByName(groupName)
+        try {
+          const { groupName, permissionLevel } = permConfig[i]
+          const siteGroup = await this._getSiteGroupByName(groupName)
 
-        const users = siteGroup || []
-        if (isEmpty(users)) continue
-        const roleDefId = roleDefinitions[permissionLevel]
-        if (roleDefId) {
-          this.logInformation(
-            `Creating group ${groupName} with permission level ${permissionLevel}...`
-          )
-          const { group, data } = await params.web.siteGroups.add({ Title: groupName })
-          await params.web.roleAssignments.add(data.Id, roleDefId)
-          for (let j = 0; j < users.length; j++) {
-            this.logInformation(`Adding user ${users[j]} to group ${groupName}...`)
-            try {
-              await group.users.add(users[j])
-              this.logInformation(`User ${users[j]} successfully added to group ${groupName}.`)
-            } catch (error) {
-              this.logError(`Failed to add user ${users[j]} to group ${groupName}.`)
+          const users = siteGroup || []
+          if (isEmpty(users)) continue
+          const roleDefId = roleDefinitions[permissionLevel]
+          if (roleDefId) {
+            this.logInformation(
+              `Creating group ${groupName} with permission level ${permissionLevel}...`
+            )
+            const { group, data } = await params.web.siteGroups.add({ Title: groupName })
+            await params.web.roleAssignments.add(data.Id, roleDefId)
+            for (let j = 0; j < users.length; j++) {
+              this.logInformation(`Adding user ${users[j]} to group ${groupName}...`)
+              try {
+                await group.users.add(users[j])
+                this.logInformation(`User ${users[j]} successfully added to group ${groupName}.`)
+              } catch (error) {
+                this.logError(`Failed to add user ${users[j]} to group ${groupName}.`)
+              }
             }
           }
+        } catch (error) {
+          this.logError(`Failed to create group ${permConfig[i].groupName}. ${error}`)
         }
       }
       return params
@@ -81,7 +89,18 @@ export class SitePermissions extends BaseTask {
     )
 
     const query: ICamlQuery = {
-      ViewXml: `<View>
+      ViewXml:
+        this.data.selectedTemplate?.id === NO_TEMPLATE_ID
+          ? `<View>
+    <Query>
+      <Where>
+        <IsNull>
+          <FieldRef Name='GtTemplates' />
+        </IsNull>
+      </Where>
+    </Query>
+</View>`
+          : `<View>
     <Query>
       <Where>
         <Or>

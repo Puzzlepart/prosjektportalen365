@@ -52,6 +52,8 @@ declare interface IProjectExtensionsStrings {
   ConfiguredSpecifiedTaskMessage: string
   ContentConfigLockedTooltipText: string
   ContentConfigSectionHeaderText: string
+  ContentConfigSectionTooltip: string
+  ContentConfigSectionDisabledTooltip: string
   ContentConfigSectionSearchPlaceholder: string
   ContinueToProjectText: string
   CopyFilesText: string
@@ -72,12 +74,16 @@ declare interface IProjectExtensionsStrings {
   DocumentTemplateDialogScreenTargetFolderInfoMessage: string
   ExtensionLockedTooltipText: string
   ExtensionsSectionHeaderText: string
+  ExtensionsSectionTooltip: string
+  ExtensionsSectionDisabledTooltip: string
   ExtensionsSectionSearchPlaceholder: string
   FilenameAlreadyInUseErrorText: string
+  FilenameAlreadySelectedErrorText: string
   FilenameInValidErrorText: string
   FileNameLabel: string
   FolderNameLabel: string
   FolderNameAlreadyInUseErrorText: string
+  FolderNameAlreadySelectedErrorText: string
   FolderNameInValidErrorText: string
   GetMoreText: string
   GetSetupDataErrorMessage: string
@@ -108,6 +114,9 @@ declare interface IProjectExtensionsStrings {
   PlannerTagsLimitLogText: string
   PlannerTaskAttachmentLimitLogText: string
   PlannerTaskChecklistLimitLogText: string
+  TimelineConfigurationText: string
+  CreatingTimelineItemText: string
+  TimelineConfigurationErrorMessage: string
   PreTaskContentTypeValidationErrorMessage: string
   PreTaskErrorMessage: string
   PreTaskTermSetIdValidationErrorMessage: string
@@ -145,21 +154,41 @@ declare interface IProjectExtensionsStrings {
   SummaryMessage: string
   SyncLocalProjectPropertiesListText: string
   TemplateConfigMessage: string
+  TemplateConfigConjunction: string
+  DataGridSelectAllLabel: string
   PlannerMemberWarningMessage: string
+  ProjectSetupDialogInfoText: string
+  ProjectSetupDialogSubmitButtonText: string
+  ProjectSetupDialogTitle: string
+  ProjectSetupDialogVersionTooltip: string
+  ProjectTemplateSelectorSearchClearText: string
+  ProjectTemplateSelectorSearchPlaceholder: string
+  ProjectTemplateSelectorNoMatchText: string
+  ProjectTemplateSelectorTitle: string
+  ProjectTemplateSelectorNoTemplateLabel: string
+  ProjectTemplateSelectorNoTemplateDescription: string
+  ProjectTemplateSelectorNoTemplateRadioLabel: string
+  ProjectTemplateSelectorSelectTemplateRadioLabel: string
   TemplateLibrarySelectModalTitle: string
-  TemplateSelectDialogInfoText: string
-  TemplateSelectDialogSubmitButtonText: string
-  TemplateSelectDialogTitle: string
-  TemplateSelectorSearchClearText: string
-  TemplateSelectorSearchPlaceholder: string
-  TemplateSelectorTitle: string
   TemplateSelectorCommandTitle: string
+  TemplateSelectorCommandDisabledTitle: string
   TermSetDoesNotExistError: string
   TitleLabel: string
   ProgressLabel: string
   AssignedToLabel: string
   SaveButtonLabel: string
   CancelButtonLabel: string
+  NoTemplateSelectedText: string
+  SelectedCountLabel: string
+  MandatoryItemTooltipText: string
+  ProgressAdvancedLogLabel: string
+  ProgressTaskPendingText: string
+  ProgressTaskRunningText: string
+  ProgressTaskCompletedText: string
+  ProgressTaskErrorText: string
+  ProgressTaskWarningText: string
+  ProgressStepCountText: string
+  ProgressAdvancedLogDescription: string
 }
 
 declare module 'ProjectExtensionsStrings' {

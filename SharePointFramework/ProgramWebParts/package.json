@@ -12,14 +12,14 @@
   },
   "scripts": {
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
-    "prewatch": "node node_modules/pzl-spfx-tasks --pre-watch --loglevel silent",
-    "postwatch": "node node_modules/pzl-spfx-tasks --post-watch --loglevel silent",
+    "prewatch": "node ../.tasks/pre-watch.js",
+    "postwatch": "node ../.tasks/post-watch.js",
     "serve": "concurrently \"gulp serve-deprecated --locale=nb-no --nobrowser NODE --max-old-space-size=8192\"",
     "build": "gulp bundle --ship && gulp package-solution --ship",
     "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color --fix --config ../.eslintrc.yaml && npm run prettier",
     "prettier": "prettier '**/*.ts*' --write --loglevel silent --config ../.prettierrc.yaml",
-    "validate-loc": "node node_modules/pzl-spfx-tasks --validate-loc --loglevel verbose"
+    "validate-loc": "node ../.tasks/validateLoc.js --path ./src/loc --interface IProgramWebPartsStrings --dts mystrings.d.ts --output ./localization-report.md --summary"
   },
   "dependencies": {
     "@fluentui/react": "8.98.1",
@@ -49,7 +49,6 @@
     "pzl-react-reusable-components": "^0.0.14",
     "react": "17.0.1",
     "react-dom": "17.0.1",
-    "react-highcharts": "16.0.2",
     "tslib": "2.3.1",
     "lodash": "~4.17.21",
     "underscore": "~1.13.6",
@@ -57,8 +56,8 @@
     "@pnp/core": "3.17.0",
     "@pnp/queryable": "3.17.0",
     "sp-entityportal-service": "2.3.0",
-    "@fluentui/react-components": "~9.52.0",
-    "@fluentui/react-icons": "~2.0.240",
+    "@fluentui/react-components": "~9.72.10",
+    "@fluentui/react-icons": "~2.0.317",
     "react-gauge-component": "~1.2.61",
     "@microsoft/sp-http": "1.17.4"
   },
@@ -96,33 +95,7 @@
     "typescript": "4.5.5",
     "webpack": "5.74.0",
     "yargs": "14.2.0",
-    "@types/lodash": "~4.14.195",
-    "pzl-spfx-tasks": "0.5.15-1"
-  },
-  "config": {
-    "pzl-spfx-tasks": {
-      "upgrade": {
-        "types": [
-          "rush"
-        ],
-        "all": true
-      },
-      "modifyconfig": {
-        "backupFilePath": "./config/config.json.bak"
-      },
-      "createlaunchconfig": {
-        "userDataDir": "${workspaceFolder}/../.vscode/chrome-debug-user-data",
-        "preferredBrowser": "chrome",
-        "domainSpecificDataDir": true
-      },
-      "validateloc": {
-        "path": "./src/loc",
-        "interface": "IProgramWebPartsStrings",
-        "dts": "mystrings.d.ts",
-        "output": "./localization-report.md",
-        "summary": true
-      }
-    }
+    "@types/lodash": "~4.14.195"
   },
   "gitmoji": {
     "build": [

@@ -155,7 +155,7 @@ export const PortalDataServiceDefaultConfiguration: Partial<IPortalDataServiceCo
     PROJECT_CONTENT_COLUMNS: resource.Lists_ProjectContentColumns_Title,
     DATA_SOURCES: resource.Lists_DataSources_Title,
     PROJECT_ADMIN_ROLES: resource.Lists_ProjectAdminRoles_Title,
-    PROJECT_TEMPLATE_CONFIGURATION: resource.Lists_ProjectTemplates_Title,
+    PROJECT_TEMPLATE_CONFIGURATION: resource.Lists_TemplateOptions_Title,
     PROJECT_DATA: resource.Lists_ProjectData_Title,
     IDEA_PROCESSING: resource.Lists_IdeaProcessing_Title,
     GLOBAL_SETTINGS: resource.Lists_Global_Settings_Title,

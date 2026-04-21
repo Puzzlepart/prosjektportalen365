@@ -14,6 +14,7 @@ import { RiskActionItemContext } from './types'
 export default class RiskActionFieldCustomizer extends BaseFieldCustomizer<null> {
   protected _dataAdapter: DataAdapter
   protected _hiddenFieldValues: Map<string, any> = new Map<string, any>()
+  protected _isPlannerEnabled = false
 
   public async onInit(): Promise<void> {
     await super.onInit()
@@ -27,7 +28,9 @@ export default class RiskActionFieldCustomizer extends BaseFieldCustomizer<null>
    * list. Ensures hidden fields and retrieves their values using the data adapter.
    */
   protected async _initializePlannerContext(): Promise<void> {
-    if (this._dataAdapter.globalSettings.get('RiskActionPlannerEnabled') === '1') {
+    this._isPlannerEnabled =
+      this._dataAdapter.globalSettings.get('RiskActionPlannerEnabled') === '1'
+    if (this._isPlannerEnabled) {
       await this._dataAdapter.ensureHiddenFields()
       this._hiddenFieldValues = await this._dataAdapter.getHiddenFieldValues()
     }
@@ -41,6 +44,7 @@ export default class RiskActionFieldCustomizer extends BaseFieldCustomizer<null>
    * @returns void
    */
   public onRenderCell(event: IFieldCustomizerCellEventParameters): void {
+    if (!this._isPlannerEnabled) return
     const currentItemContext = RiskActionItemContext.create(
       event,
       this.context.pageContext,

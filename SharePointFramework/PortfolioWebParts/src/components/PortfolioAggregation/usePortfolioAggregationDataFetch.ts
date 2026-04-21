@@ -1,19 +1,25 @@
+import strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
 import { useEffect } from 'react'
 import { IPortfolioAggregationContext } from './context'
 import { DATA_FETCHED, DATA_FETCH_ERROR, GET_FILTERS, SET_GROUP_BY, START_FETCH } from './reducer'
 
 /**
- * Fetching data for the Portfolio Aggregation component. This includes
- * the data source (if `state.currentView` is not set), the items, the columns
- * and the the projects (if `props.dataAdapter.fetchProjects` is set).
+ * Fetches data for the Portfolio Aggregation component. Resolves the current
+ * data source, runs the item search, loads project-level refiner values, and
+ * joins each item to its parent project's refiner values via `SiteId`.
  *
- * @param context Context for the Portfolio Aggregation component
+ * Project-column `fieldName`s are also added to the item `selectProperties`
+ * so the reducer's search-based fallback works for DataSource refiners that
+ * don't have an `internalName` match in the refiner-values map.
  */
 async function fetchData(context: IPortfolioAggregationContext) {
   const columns = context.props.configuration.columns ?? []
+  const projectRefiners = context.props.configuration.refiners ?? []
   const selectProperties = _.uniq(
-    [...columns, ...context.state.columns].map((col) => col.fieldName)
+    [...columns, ...context.state.columns, ...projectRefiners]
+      .map((col) => col.fieldName)
+      .filter(Boolean)
   )
 
   let dataSource = context.state.currentView
@@ -23,16 +29,29 @@ async function fetchData(context: IPortfolioAggregationContext) {
     )
   }
 
-  const [items, projects] = await Promise.all([
+  const [items, projectsByDataSource, projectRefinerValues] = await Promise.all([
     context.props.dataAdapter.fetchItemsWithSource(
       dataSource.title,
       context.props.selectProperties ?? selectProperties
     ),
-    context.props.dataAdapter.fetchProjects
-      ? context.props.dataAdapter.fetchProjects(context.props.configuration, dataSource.title)
-      : Promise.resolve(undefined)
+    context.props.dataAdapter.fetchProjectsByDataSource
+      ? context.props.dataAdapter.fetchProjectsByDataSource(
+          context.props.configuration,
+          dataSource.title
+        )
+      : Promise.resolve(undefined),
+    context.props.dataAdapter.fetchProjectRefinerValues
+      ? context.props.dataAdapter.fetchProjectRefinerValues(projectRefiners)
+      : Promise.resolve(new Map<string, Record<string, any>>())
   ])
-  return { dataSource, items, columns, projects }
+
+  const enrichedItems = items.map((item: any) => {
+    const refinerValues = item?.SiteId ? projectRefinerValues.get(item.SiteId) : undefined
+    if (refinerValues) item.__projectRefinerValues = refinerValues
+    return item
+  })
+
+  return { dataSource, items: enrichedItems, columns, projects: projectsByDataSource }
 }
 
 /**
@@ -51,7 +70,22 @@ export function usePortfolioAggregationDataFetch(context: IPortfolioAggregationC
     fetchData(context)
       .then((data) => {
         context.dispatch(DATA_FETCHED(data))
-        context.dispatch(GET_FILTERS({ filters: data.dataSource.refiners }))
+        // Project refiners (from Prosjektkolonner, GtIsRefinable=true) win
+        // over DataSource refiners on internalName overlap so they land in
+        // the grouped, collapsed "Project information" section like Timeline.
+        const projectRefiners = context.props.configuration?.refiners ?? []
+        const projectRefinerInternalNames = new Set(
+          projectRefiners.map((r) => r.internalName).filter(Boolean)
+        )
+        const dataSourceFilters = (data.dataSource.refiners ?? [])
+          .filter((r) => !r.internalName || !projectRefinerInternalNames.has(r.internalName))
+          .map((column) => ({ column }))
+        const projectFilters = projectRefiners.map((column) => ({
+          column,
+          group: strings.FilterPanelGroupProjectInformation,
+          defaultCollapsed: true
+        }))
+        context.dispatch(GET_FILTERS({ filters: [...dataSourceFilters, ...projectFilters] }))
         context.dispatch(SET_GROUP_BY({ column: data.dataSource.groupBy }))
       })
       .catch((error) => context.dispatch(DATA_FETCH_ERROR({ error })))

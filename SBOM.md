@@ -2,16 +2,16 @@
 
 **Project:** Prosjektportalen 365  
 **Version:** 1.12.1  
-**Generated:** 2026-01-19T14:35:18.785Z  
+**Generated:** 2026-03-25T15:37:20.652Z  
 **Format:** CycloneDX-inspired Markdown
 
 ## Overview
 
 This SBOM documents all software dependencies used in the Prosjektportalen 365 project, including all packages in the monorepo.
 
-**Total Dependencies:** 130  
-**Production Dependencies:** 82  
-**Development Dependencies:** 48  
+**Total Dependencies:** 127  
+**Production Dependencies:** 80  
+**Development Dependencies:** 47  
 **Projects in Monorepo:** 8
 
 ## Projects in Monorepo
@@ -24,55 +24,54 @@ This SBOM documents all software dependencies used in the Prosjektportalen 365 p
 ### pp365-portfolioextensions (1.12.1)
 
 - **Production Dependencies:** 22
-- **Development Dependencies:** 28
+- **Development Dependencies:** 27
 
 ### pp365-portfoliowebparts (1.12.1)
 
-- **Production Dependencies:** 51
-- **Development Dependencies:** 32
+- **Production Dependencies:** 48
+- **Development Dependencies:** 31
 
 ### pp365-programwebparts (1.12.1)
 
-- **Production Dependencies:** 39
-- **Development Dependencies:** 32
+- **Production Dependencies:** 38
+- **Development Dependencies:** 31
 
 ### pp365-projectextensions (1.12.1)
 
 - **Production Dependencies:** 35
-- **Development Dependencies:** 31
+- **Development Dependencies:** 30
 
 ### pp365-projectwebparts (1.12.1)
 
 - **Production Dependencies:** 48
-- **Development Dependencies:** 34
+- **Development Dependencies:** 33
 
 ### pp365-shared-library (1.12.1)
 
-- **Production Dependencies:** 38
-- **Development Dependencies:** 22
+- **Production Dependencies:** 39
+- **Development Dependencies:** 21
 
 ### pp365-templates (1.12.1)
 
 - **Production Dependencies:** 4
-- **Development Dependencies:** 4
+- **Development Dependencies:** 3
 
 ## All Dependencies
 
 This section lists all unique dependencies across all projects.
 
-### Production Dependencies (82)
+### Production Dependencies (80)
 
 | Package | Version(s) | Used By |
 |---------|-----------|----------|
 | @fluentui/react | 8.98.1 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| @fluentui/react-components | ~9.52.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| @fluentui/react-datepicker-compat | ~0.4.38 | pp365-portfoliowebparts, pp365-projectwebparts, pp365-shared-library |
-| @fluentui/react-file-type-icons | ~8.11.9 | pp365-portfoliowebparts |
+| @fluentui/react-components | ~9.72.10 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| @fluentui/react-datepicker-compat | ~0.6.22 | pp365-portfoliowebparts, pp365-projectwebparts, pp365-shared-library |
+| @fluentui/react-file-type-icons | ~8.16.0 | pp365-shared-library |
 | @fluentui/react-hooks | 8.6.27 | pp365-portfoliowebparts |
-| @fluentui/react-icons | ~2.0.240 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| @fluentui/react-motion-components-preview | ~0.3.0 | pp365-portfoliowebparts |
-| @fluentui/react-motion-preview | ~0.5.20 | pp365-portfoliowebparts |
-| @fluentui/react-nav-preview | ~0.9.1 | pp365-portfoliowebparts |
+| @fluentui/react-icons | ~2.0.317 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| @fluentui/react-motion | ~9.11.6 | pp365-portfoliowebparts |
+| @fluentui/react-motion-preview | ~0.5.25 | pp365-portfoliowebparts |
 | @microsoft/decorators | 1.17.4 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-projectextensions, +1 more |
 | @microsoft/microsoft-graph-types | ~2.38.0 | pp365-projectextensions |
 | @microsoft/sp-adaptive-card-extension-base | 1.17.4 | pp365-programwebparts, pp365-projectwebparts |
@@ -126,7 +125,6 @@ This section lists all unique dependencies across all projects.
 | react-error-boundary | ~4.0.11, ~4.0.10 | pp365-portfoliowebparts, pp365-projectwebparts |
 | react-fade-in | ~2.0.1 | pp365-portfoliowebparts |
 | react-gauge-component | ~1.2.61 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| react-highcharts | 16.0.2 | pp365-portfoliowebparts, pp365-programwebparts |
 | react-image-fade-in | 1.0.2 | pp365-projectwebparts |
 | react-markdown | ^8.0.3 | pp365-portfolioextensions, pp365-projectextensions, pp365-projectwebparts, +1 more |
 | react-scroll | 1.7.11 | pp365-projectwebparts |
@@ -137,7 +135,7 @@ This section lists all unique dependencies across all projects.
 | shade-blend-color | ~1.0.0 | pp365-projectwebparts, pp365-shared-library |
 | smoothscroll-polyfill | ~0.4.4 | pp365-projectwebparts |
 | sp-entityportal-service | 2.3.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| sp-js-provisioning | 1.3.2, ~1.2.5 | pp365-projectextensions, pp365-shared-library |
+| sp-js-provisioning | ~1.3.4 | pp365-projectextensions, pp365-shared-library |
 | spfx-jsom | 0.6.6 | pp365-projectextensions, pp365-projectwebparts, pp365-shared-library |
 | tslib | 2.3.1 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | underscore | ~1.13.6 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
@@ -147,7 +145,7 @@ This section lists all unique dependencies across all projects.
 | xlsx | ^0.16.9 | pp365-shared-library |
 | xmldom | 0.6.0 | pp365-shared-library |
 
-### Development Dependencies (48)
+### Development Dependencies (47)
 
 | Package | Version(s) | Used By |
 |---------|-----------|----------|
@@ -192,7 +190,6 @@ This section lists all unique dependencies across all projects.
 | pp365-portfoliowebparts | 1.12.1 | pp365-programwebparts |
 | pp365-projectwebparts | 1.12.1 | pp365-portfoliowebparts, pp365-programwebparts |
 | prettier | 2.7.1 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| pzl-spfx-tasks | 0.5.15-1 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +4 more |
 | replace | 1.2.2 | pp365, pp365-templates |
 | typescript | 4.5.5 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | uuid | 9.0.0 | pp365 |
@@ -223,8 +220,8 @@ This section provides a detailed view of dependencies for each project.
 | Package | Version |
 |---------|----------|
 | @fluentui/react | 8.98.1 |
-| @fluentui/react-components | ~9.52.0 |
-| @fluentui/react-icons | ~2.0.240 |
+| @fluentui/react-components | ~9.72.10 |
+| @fluentui/react-icons | ~2.0.317 |
 | @microsoft/decorators | 1.17.4 |
 | @microsoft/sp-application-base | 1.17.4 |
 | @microsoft/sp-core-library | 1.17.4 |
@@ -245,7 +242,7 @@ This section provides a detailed view of dependencies for each project.
 | tslib | 2.3.1 |
 | underscore | ~1.13.6 |
 
-#### Development Dependencies (28)
+#### Development Dependencies (27)
 
 | Package | Version |
 |---------|----------|
@@ -274,25 +271,22 @@ This section provides a detailed view of dependencies for each project.
 | gulp | 4.0.2 |
 | livereload | 0.9.3 |
 | prettier | 2.7.1 |
-| pzl-spfx-tasks | 0.5.15-1 |
 | typescript | 4.5.5 |
 | webpack | 5.74.0 |
 
 ### pp365-portfoliowebparts
 
-#### Production Dependencies (51)
+#### Production Dependencies (48)
 
 | Package | Version |
 |---------|----------|
 | @fluentui/react | 8.98.1 |
-| @fluentui/react-components | ~9.52.0 |
-| @fluentui/react-datepicker-compat | ~0.4.38 |
-| @fluentui/react-file-type-icons | ~8.11.9 |
+| @fluentui/react-components | ~9.72.10 |
+| @fluentui/react-datepicker-compat | ~0.6.22 |
 | @fluentui/react-hooks | 8.6.27 |
-| @fluentui/react-icons | ~2.0.240 |
-| @fluentui/react-motion-components-preview | ~0.3.0 |
-| @fluentui/react-motion-preview | ~0.5.20 |
-| @fluentui/react-nav-preview | ~0.9.1 |
+| @fluentui/react-icons | ~2.0.317 |
+| @fluentui/react-motion | ~9.11.6 |
+| @fluentui/react-motion-preview | ~0.5.25 |
 | @microsoft/decorators | 1.17.4 |
 | @microsoft/sp-core-library | 1.17.4 |
 | @microsoft/sp-http | 1.17.4 |
@@ -328,7 +322,6 @@ This section provides a detailed view of dependencies for each project.
 | react-error-boundary | ~4.0.11 |
 | react-fade-in | ~2.0.1 |
 | react-gauge-component | ~1.2.61 |
-| react-highcharts | 16.0.2 |
 | react-virtualized-auto-sizer | ~1.0.24 |
 | react-window | ~1.8.10 |
 | sp-entityportal-service | 2.3.0 |
@@ -336,7 +329,7 @@ This section provides a detailed view of dependencies for each project.
 | underscore | ~1.13.6 |
 | use-image-color | ~0.0.9 |
 
-#### Development Dependencies (32)
+#### Development Dependencies (31)
 
 | Package | Version |
 |---------|----------|
@@ -369,19 +362,18 @@ This section provides a detailed view of dependencies for each project.
 | livereload | 0.9.3 |
 | pp365-projectwebparts | 1.12.1 |
 | prettier | 2.7.1 |
-| pzl-spfx-tasks | 0.5.15-1 |
 | typescript | 4.5.5 |
 | webpack | 5.74.0 |
 
 ### pp365-programwebparts
 
-#### Production Dependencies (39)
+#### Production Dependencies (38)
 
 | Package | Version |
 |---------|----------|
 | @fluentui/react | 8.98.1 |
-| @fluentui/react-components | ~9.52.0 |
-| @fluentui/react-icons | ~2.0.240 |
+| @fluentui/react-components | ~9.72.10 |
+| @fluentui/react-icons | ~2.0.317 |
 | @microsoft/sp-adaptive-card-extension-base | 1.17.4 |
 | @microsoft/sp-core-library | 1.17.4 |
 | @microsoft/sp-http | 1.17.4 |
@@ -414,12 +406,11 @@ This section provides a detailed view of dependencies for each project.
 | react | 17.0.1 |
 | react-dom | 17.0.1 |
 | react-gauge-component | ~1.2.61 |
-| react-highcharts | 16.0.2 |
 | sp-entityportal-service | 2.3.0 |
 | tslib | 2.3.1 |
 | underscore | ~1.13.6 |
 
-#### Development Dependencies (32)
+#### Development Dependencies (31)
 
 | Package | Version |
 |---------|----------|
@@ -451,7 +442,6 @@ This section provides a detailed view of dependencies for each project.
 | pp365-portfoliowebparts | 1.12.1 |
 | pp365-projectwebparts | 1.12.1 |
 | prettier | 2.7.1 |
-| pzl-spfx-tasks | 0.5.15-1 |
 | typescript | 4.5.5 |
 | webpack | 5.74.0 |
 | yargs | 14.2.0 |
@@ -463,8 +453,8 @@ This section provides a detailed view of dependencies for each project.
 | Package | Version |
 |---------|----------|
 | @fluentui/react | 8.98.1 |
-| @fluentui/react-components | ~9.52.0 |
-| @fluentui/react-icons | ~2.0.240 |
+| @fluentui/react-components | ~9.72.10 |
+| @fluentui/react-icons | ~2.0.317 |
 | @microsoft/decorators | 1.17.4 |
 | @microsoft/microsoft-graph-types | ~2.38.0 |
 | @microsoft/sp-application-base | 1.17.4 |
@@ -491,14 +481,14 @@ This section provides a detailed view of dependencies for each project.
 | react-markdown | ^8.0.3 |
 | rehype-raw | ^6.1.1 |
 | sp-entityportal-service | 2.3.0 |
-| sp-js-provisioning | 1.3.2 |
+| sp-js-provisioning | ~1.3.4 |
 | spfx-jsom | 0.6.6 |
 | tslib | 2.3.1 |
 | underscore | ~1.13.6 |
 | usehooks-ts | ~2.9.1 |
 | valid-filename | 3.1.0 |
 
-#### Development Dependencies (31)
+#### Development Dependencies (30)
 
 | Package | Version |
 |---------|----------|
@@ -530,7 +520,6 @@ This section provides a detailed view of dependencies for each project.
 | gulp | 4.0.2 |
 | livereload | 0.9.3 |
 | prettier | 2.7.1 |
-| pzl-spfx-tasks | 0.5.15-1 |
 | typescript | 4.5.5 |
 | webpack | 5.74.0 |
 
@@ -541,9 +530,9 @@ This section provides a detailed view of dependencies for each project.
 | Package | Version |
 |---------|----------|
 | @fluentui/react | 8.98.1 |
-| @fluentui/react-components | ~9.52.0 |
-| @fluentui/react-datepicker-compat | ~0.4.38 |
-| @fluentui/react-icons | ~2.0.240 |
+| @fluentui/react-components | ~9.72.10 |
+| @fluentui/react-datepicker-compat | ~0.6.22 |
+| @fluentui/react-icons | ~2.0.317 |
 | @microsoft/decorators | 1.17.4 |
 | @microsoft/sp-adaptive-card-extension-base | 1.17.4 |
 | @microsoft/sp-core-library | 1.17.4 |
@@ -589,7 +578,7 @@ This section provides a detailed view of dependencies for each project.
 | underscore | ~1.13.6 |
 | usehooks-ts | ~2.9.1 |
 
-#### Development Dependencies (34)
+#### Development Dependencies (33)
 
 | Package | Version |
 |---------|----------|
@@ -624,20 +613,20 @@ This section provides a detailed view of dependencies for each project.
 | gulp | 4.0.2 |
 | livereload | 0.9.3 |
 | prettier | 2.7.1 |
-| pzl-spfx-tasks | 0.5.15-1 |
 | typescript | 4.5.5 |
 | webpack | 5.74.0 |
 
 ### pp365-shared-library
 
-#### Production Dependencies (38)
+#### Production Dependencies (39)
 
 | Package | Version |
 |---------|----------|
 | @fluentui/react | 8.98.1 |
-| @fluentui/react-components | ~9.52.0 |
-| @fluentui/react-datepicker-compat | ~0.4.38 |
-| @fluentui/react-icons | ~2.0.240 |
+| @fluentui/react-components | ~9.72.10 |
+| @fluentui/react-datepicker-compat | ~0.6.22 |
+| @fluentui/react-file-type-icons | ~8.16.0 |
+| @fluentui/react-icons | ~2.0.317 |
 | @microsoft/sp-application-base | 1.17.4 |
 | @microsoft/sp-core-library | 1.17.4 |
 | @microsoft/sp-listview-extensibility | 1.17.4 |
@@ -666,14 +655,14 @@ This section provides a detailed view of dependencies for each project.
 | rehype-raw | ^6.1.1 |
 | shade-blend-color | ~1.0.0 |
 | sp-entityportal-service | 2.3.0 |
-| sp-js-provisioning | ~1.2.5 |
+| sp-js-provisioning | ~1.3.4 |
 | spfx-jsom | 0.6.6 |
 | tslib | 2.3.1 |
 | underscore | ~1.13.6 |
 | xlsx | ^0.16.9 |
 | xmldom | 0.6.0 |
 
-#### Development Dependencies (22)
+#### Development Dependencies (21)
 
 | Package | Version |
 |---------|----------|
@@ -697,7 +686,6 @@ This section provides a detailed view of dependencies for each project.
 | eslint-plugin-unused-imports | 2.0.0 |
 | gulp | 4.0.2 |
 | prettier | 2.7.1 |
-| pzl-spfx-tasks | 0.5.15-1 |
 | typescript | 4.5.5 |
 
 ### pp365-templates
@@ -711,12 +699,11 @@ This section provides a detailed view of dependencies for each project.
 | glob | ~11.0.2 |
 | resx-json-typescript-converter | ^1.0.1 |
 
-#### Development Dependencies (4)
+#### Development Dependencies (3)
 
 | Package | Version |
 |---------|----------|
 | @types/lodash | ~4.14.195 |
-| pzl-spfx-tasks | 0.5.15-1 |
 | replace | 1.2.2 |
 | xml2js | ~0.6.2 |
 

@@ -22,7 +22,8 @@ export interface IContentConfigSPItem {
 
 export enum ContentConfigType {
   List,
-  Planner
+  Planner,
+  Timeline
 }
 
 /**
@@ -76,6 +77,8 @@ export class ContentConfig extends UserSelectableObject {
   public get type(): ContentConfigType {
     if (this._spItem.ContentTypeId.indexOf('0x0100B8B4EE61A547B247B49CFC21B67D5B7D01') !== -1)
       return ContentConfigType.Planner
+    if (this._spItem.ContentTypeId.indexOf('0x0100B8B4EE61A547B247B49CFC21B67D5B7D02') !== -1)
+      return ContentConfigType.Timeline
     return ContentConfigType.List
   }
   public get fields() {

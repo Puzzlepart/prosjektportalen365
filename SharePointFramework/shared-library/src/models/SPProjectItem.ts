@@ -15,4 +15,6 @@ export class SPProjectItem {
   public GtIsProgram?: boolean = false
   public GtIsParentProject?: boolean = false
   public GtProjectTemplate?: string = ''
+  public GtProjectExtensions?: string = ''
+  public GtProjectListContent?: string = ''
 }

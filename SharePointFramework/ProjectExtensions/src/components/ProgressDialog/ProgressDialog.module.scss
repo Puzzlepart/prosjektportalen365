@@ -1,21 +1,119 @@
 @import '~@fluentui/react/dist/sass/References.scss';
 
 .root {
-  .content {
-    min-height: 250px;
-    .icon {
-      @include ms-Grid-col;
-      @include ms-sm2;
-      > i {
-        font-size: 42px;
-        display: block;
-        text-align: center;
-        margin-top: 12px;
-      }
+  width: 850px !important;
+  max-width: 850px !important;
+}
+
+.content {
+  min-height: 200px;
+}
+
+.subText {
+  margin-bottom: 12px;
+  color: #605e5c;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.progressSection {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+
+  .icon {
+    flex-shrink: 0;
+    width: 60px;
+
+    > i {
+      font-size: 42px;
+      display: block;
+      text-align: center;
+      margin-top: 12px;
     }
-    .indicator {
-      @include ms-Grid-col;
-      @include ms-sm10;
+  }
+
+  .indicator {
+    flex: 1;
+  }
+
+  .stepCount {
+    display: block;
+    margin-top: 4px;
+    color: $ms-color-neutralSecondary;
+  }
+}
+
+.logDivider {
+  margin: 16px 0 8px 0;
+}
+
+.logToggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+
+  .logDescription {
+    color: $ms-color-neutralSecondary;
+  }
+}
+
+.logContainer {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid $ms-color-neutralLight;
+  border-radius: 4px;
+  padding: 4px;
+  margin-top: 4px;
+}
+
+.taskLogSection {
+  .taskHeader {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    .taskStatusIcon {
+      display: inline-flex;
+      align-items: center;
+    }
+  }
+
+  .logEntries {
+    max-height: 150px;
+    overflow-y: auto;
+    padding: 4px 0;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 11px;
+    line-height: 1.6;
+  }
+
+  .logEntry {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 1px 4px;
+
+    &:hover {
+      background: $ms-color-neutralLighterAlt;
+    }
+
+    .logEntryIcon {
+      display: inline-flex;
+      align-items: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .logEntryTime {
+      color: $ms-color-neutralTertiary;
+      flex-shrink: 0;
+      font-size: 10px;
+    }
+
+    .logEntryMessage {
+      word-break: break-word;
     }
   }
 }

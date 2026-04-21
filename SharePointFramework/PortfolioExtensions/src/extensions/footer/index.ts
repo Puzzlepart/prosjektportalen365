@@ -11,6 +11,11 @@ import '@pnp/sp/webs'
 import resource from 'SharedResources'
 import { Footer, IFooterProps } from 'components/Footer'
 import { PortalDataService } from 'pp365-shared-library/lib/services/PortalDataService'
+import {
+  isHubSite,
+  ProjectAdminPermission
+} from 'pp365-shared-library'
+import SPDataAdapter from '../../data/SPDataAdapter'
 import { createElement } from 'react'
 import { render } from 'react-dom'
 import {
@@ -26,6 +31,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   private _installEntries: InstallationEntry[]
   private _gitHubReleases: IGitHubRelease[]
   private _links: { Url: string; Description: string; Level?: string }[]
+  private _favoriteProjects: { name: string; url: string }[]
   private _useAssistant: boolean
   private _hasAssistantAccess: boolean
   private _assistantEndpointUrl: string
@@ -40,23 +46,38 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
    */
   public async onInit(): Promise<void> {
     await super.onInit()
-    this._portalDataService = await new PortalDataService().configure({
-      spfxContext: this.context
-    })
+    await SPDataAdapter.configure(this.context, {})
+    this._portalDataService = SPDataAdapter.portalDataService
     this._globalSettings = await this._portalDataService.getGlobalSettings()
 
-    const requireAssistantAccess = this._globalSettings.get('RequireAssistantAccess') === '1'
-    const [installEntries, gitHubReleases, helpContent, links] = await Promise.all([
-      this._fetchInstallationLogs(),
-      this._fetchGitHubReleases(),
-      this._fetchHelpContent(),
-      this._fetchLinks()
-    ])
+    if (!this._portalDataService.isAvailable) {
+      this._installEntries = []
+      this._gitHubReleases = []
+      this._helpContent = []
+      this._links = []
+      this._favoriteProjects = []
+      this._useAssistant = false
+      this._hasAssistantAccess = false
+      this._assistantEndpointUrl = ''
+      this._showFooter = false
+      this._minimizeFooter = false
+      return Promise.resolve()
+    }
+
+    const [installEntries, gitHubReleases, helpContent, links, favoriteProjects] =
+      await Promise.all([
+        this._fetchInstallationLogs(),
+        this._fetchGitHubReleases(),
+        this._fetchHelpContent(),
+        this._fetchLinks(),
+        this._fetchFavoriteProjects()
+      ])
 
     this._installEntries = installEntries
     this._gitHubReleases = gitHubReleases
     this._helpContent = helpContent
     this._links = links
+    this._favoriteProjects = favoriteProjects
     this._useAssistant = this._globalSettings.get('UseAssistant') === '1'
     this._showFooter = this._globalSettings.get('ShowFooter') === '1'
     this._minimizeFooter = this._globalSettings.get('MinimizeFooter') === '1'
@@ -64,26 +85,29 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     const useBetaChannel = this._globalSettings.get('UseBetaChannel') === '1'
     const betaEndpointUrl = this._globalSettings.get('BetaEndpointUrl')
     const endpointUrl = this._globalSettings.get('EndpointUrl')
-    this._assistantEndpointUrl =
-      useBetaChannel && betaEndpointUrl
-        ? betaEndpointUrl
-        : endpointUrl || 'https://pp365-ai-d2dge4fqc2bhbba9.norwayeast-01.azurewebsites.net'
+    this._assistantEndpointUrl = useBetaChannel && betaEndpointUrl ? betaEndpointUrl : endpointUrl
 
-    this._hasAssistantAccess =
-      !requireAssistantAccess || (await this._isUserInGroup(strings.AssistantGroupName))
+    this._hasAssistantAccess = await this._checkAssistantAccess()
     this.context.application.navigatedEvent.add(this, this._handleNavigatedEvent)
     return Promise.resolve()
   }
 
   private async _handleNavigatedEvent(): Promise<void> {
-    const helpContent = await this._fetchHelpContent()
+    if (!this._portalDataService?.isAvailable) return
+
+    const [helpContent, hasAssistantAccess] = await Promise.all([
+      this._fetchHelpContent(),
+      this._checkAssistantAccess()
+    ])
     this._helpContent = helpContent
+    this._hasAssistantAccess = hasAssistantAccess
 
     this._renderFooter(PlaceholderName.Bottom, {
       installEntries: this._installEntries,
       gitHubReleases: this._gitHubReleases,
       helpContent: this._helpContent,
       links: this._links,
+      favoriteProjects: this._favoriteProjects,
       pageContext: this.context.pageContext,
       portalUrl: this._portalDataService.url,
       useAssistant: this._useAssistant,
@@ -95,6 +119,8 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   }
 
   private async _isUserInGroup(groupName: string): Promise<boolean> {
+    if (!this._portalDataService?.isAvailable) return false
+
     try {
       const [siteGroup] = await this._portalDataService.web.siteGroups
         .select('CanCurrentUserViewMembership', 'Title')
@@ -103,6 +129,37 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     } catch (error) {
       return false
     }
+  }
+
+  /**
+   * Check if the current user has access to the assistant based on the
+   * configured access mode (`AssistantAccessMode` global setting).
+   *
+   * Modes:
+   * - `group` (default): Check membership in the assistant users group (hub-level)
+   * - `role`: Check project admin roles on project sites, group check on hub
+   * - `both`: User must pass both group AND role check on project sites
+   */
+  private async _checkAssistantAccess(): Promise<boolean> {
+    const requireAccess = this._globalSettings.get('RequireAssistantAccess') === '1'
+    if (!requireAccess) return true
+
+    const accessMode = this._globalSettings.get('AssistantAccessMode') || 'group'
+    const onProjectSite = !isHubSite(this.context.pageContext)
+    const checkGroup = accessMode === 'group' || accessMode === 'both' || !onProjectSite
+    const checkRole = (accessMode === 'role' || accessMode === 'both') && onProjectSite
+
+    const groupResult = checkGroup
+      ? await this._isUserInGroup(strings.AssistantGroupName)
+      : true
+
+    const roleResult = checkRole
+      ? await SPDataAdapter.checkProjectAdminPermissions(
+          ProjectAdminPermission.AssistantAccess
+        )
+      : true
+
+    return groupResult && roleResult
   }
 
   /**
@@ -116,6 +173,8 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     orderBy = 'InstallStartTime',
     orderAscending = false
   ): Promise<InstallationEntry[]> {
+    if (!this._portalDataService?.isAvailable) return []
+
     try {
       const installationLogList = this._portalDataService.web.lists.getByTitle(
         resource.Lists_InstallationLog_Title
@@ -136,6 +195,8 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
    * The content is stored in `sessionStorage` for 4 hours.
    */
   private async _fetchHelpContent(): Promise<HelpContentModel[]> {
+    if (!this._portalDataService?.isAvailable) return []
+
     try {
       return await new PnPClientStorage().session.getOrPut(
         `pp365_help_content_${window.location.pathname}`,
@@ -184,6 +245,8 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
    * Fetch the links from the links list on the hub site.
    */
   private async _fetchLinks(): Promise<{ Url: string; Description: string; Level?: string }[]> {
+    if (!this._portalDataService?.isAvailable) return []
+
     try {
       const linksList = this._portalDataService.web.lists.getByTitle(resource.Lists_Links_Title)
       const linksItems = await linksList.items()
@@ -210,6 +273,55 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     const response = await fetch(`https://api.github.com/repos/${repoName}/releases`)
     const releases = await response.json()
     return releases
+  }
+
+  /**
+   * Fetch the favorite/followed projects for the current user using SharePoint Social Following REST API.
+   * Filters the results to only include projects that exist in the current hub's projects list.
+   */
+  private async _fetchFavoriteProjects(): Promise<{ name: string; url: string }[]> {
+    if (!this._portalDataService?.isAvailable) return []
+
+    try {
+      const webAbsoluteUrl = this.context.pageContext.web.absoluteUrl
+
+      const [followedResponse, hubProjects] = await Promise.all([
+        fetch(`${webAbsoluteUrl}/_api/social.following/my/followed(types=4)`, {
+          headers: { Accept: 'application/json;odata=verbose' }
+        }),
+        this._portalDataService.web.lists
+          .getByTitle(resource.Lists_Projects_Title)
+          .items.select('GtSiteUrl')
+          .top(5000)()
+      ])
+
+      if (!followedResponse.ok) {
+        return []
+      }
+
+      const data = await followedResponse.json()
+      const followedSites = data.d?.Followed?.results || []
+
+      const hubProjectUrls = new Set(
+        hubProjects.map((p: { GtSiteUrl: string }) => p.GtSiteUrl?.toLowerCase()).filter(Boolean)
+      )
+
+      // Filter followed sites to only those that exist in the hub's projects list
+      const projects = followedSites
+        .filter((site: any) => {
+          const url = (site.Uri || site.Url || '').toLowerCase()
+          return url && site.Name && hubProjectUrls.has(url)
+        })
+        .map((site: any) => ({
+          name: site.Name,
+          url: site.Uri || site.Url
+        }))
+
+      return projects
+    } catch (error) {
+      console.warn('Could not fetch favorite projects:', error)
+      return []
+    }
   }
 
   /**

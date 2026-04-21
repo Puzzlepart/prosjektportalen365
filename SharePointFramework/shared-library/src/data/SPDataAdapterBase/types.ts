@@ -32,7 +32,9 @@ export enum ProjectAdminPermission {
   EditProjectProperties = 'edc568a8-9cfc-4547-9af2-d9d3aeb5aa2a',
   ChangePhase = '75a08ae0-d69a-41b2-adf4-ae233c6bff9f',
   ProjectStatusAdmin = 'f6b875ae-fdb4-4ceb-bc75-ed853c2a2b0e',
-  ChildProjectsAdmin = '2281c92a-f5ff-4d99-8814-e7b2f33d1ac9'
+  ChildProjectsAdmin = '2281c92a-f5ff-4d99-8814-e7b2f33d1ac9',
+  ReRunSetup = '5c2fd32e-0c8b-42be-9e0b-4fa6ff5d4774',
+  AssistantAccess = '7f3a8b2c-4d5e-6f70-8192-a3b4c5d6e7f8'
 }
 
 export enum ProjectPropertiesMapType {
@@ -75,4 +77,9 @@ export type GetMappedProjectPropertiesOptions = {
    * with prefix `Gt`.
    */
   customSiteFieldsGroup?: string
+
+  /**
+   * If `true`, project data specific fields will be forced and synced.
+   */
+  projectDataSync?: boolean
 }

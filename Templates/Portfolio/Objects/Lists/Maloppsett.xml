@@ -1,5 +1,5 @@
 <pnp:ListInstance Title="{resource:Lists_TemplateOptions_Title}" Url="{resource:Lists_TemplateOptions_Url}" Description="{resource:Lists_TemplateOptions_Description}" DocumentTemplate="" TemplateType="100" EnableVersioning="true" Hidden="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" EnableFolderCreation="false"
-  xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+  xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
   <pnp:Views>
     <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_TemplateOptions_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
       <Query />
@@ -44,6 +44,9 @@
     </Field>
     <Field Type="Text" DisplayName="{resource:Lists_TemplateOptions_Fields_GtProjectStatusContentType_DisplayName}" MaxLength="255" ID="{eff52d5b-052b-4ba2-8fdc-ca3ca5c49cb1}" StaticName="GtProjectStatusContentType" Name="GtProjectStatusContentType">
       <Default>0x010022252E35737A413FB56A1BA53862F6D5</Default>
+    </Field>
+    <Field Type="Text" DisplayName="{resource:Lists_TemplateOptions_Fields_GtTimelineContentType_DisplayName}" MaxLength="255" ID="{2a5e6c8d-9f4a-4b3c-8d7e-1f2a3b4c5d6e}" StaticName="GtTimelineContentType" Name="GtTimelineContentType">
+      <Default>0x01006EE320A23C8F4A6C83F3E36A19F076B9</Default>
     </Field>
     <Field Type="Boolean" DisplayName="{resource:Lists_TemplateOptions_Fields_IsHiddenTemplate_DisplayName}" ID="{09735712-3dcd-4158-b661-9dce9f80e4f0}" StaticName="IsHiddenTemplate" Name="IsHiddenTemplate">
       <Default>0</Default>

@@ -1,6 +1,7 @@
 <pnp:ContentType ID="0x0100A0AB42EFAB986D4A8E8038BC2391BEB2" Name="{resource:ContentTypes_DataSource_Name}" Description="{resource:ContentTypes_DataSource_Description}" Group="{resource:ContentTypes_Group}" UpdateChildren="true"
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
     <pnp:FieldRefs>
+        <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" UpdateChildren="true" />
         <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
         <pnp:FieldRef ID="31e405e0-2890-439d-9c9f-42354154feda" Name="GtSearchQuery" Required="true" UpdateChildren="true" />
         <pnp:FieldRef ID="67a0a4b1-61d7-45c3-9157-7e302450a304" Name="GtDataSourceCategory" Required="true" UpdateChildren="true" />
@@ -12,6 +13,7 @@
         <pnp:FieldRef ID="e0b7c98e-1d80-48d9-b384-2daa795daca8" Name="GtProjectContentRefiners" UpdateChildren="true" />
         <pnp:FieldRef ID="e4223ef9-c549-4038-8652-9ffd71118cb2" Name="GtProjectContentGroupBy" UpdateChildren="true" />
         <pnp:FieldRef ID="40b5cbd9-4d0a-42eb-a790-65d83b9c7035" Name="GtODataQuery" UpdateChildren="true" />
+        <pnp:FieldRef ID="ca3a4161-764c-4920-a884-e043d18c3f04" Name="GtDataSourceConfig" UpdateChildren="true" />
         <pnp:FieldRef ID="a71d534e-9eb7-4ef1-9793-6a978cad8ef1" Name="GtIconName" UpdateChildren="true" />
     </pnp:FieldRefs>
 </pnp:ContentType>

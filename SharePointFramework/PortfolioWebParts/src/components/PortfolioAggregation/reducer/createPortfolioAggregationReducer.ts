@@ -46,6 +46,33 @@ import { persistSelectedColumnsInWebPartProperties } from './persistSelectedColu
 import resource from 'SharedResources'
 
 /**
+ * Parses a raw SharePoint field value into a display-friendly string.
+ * Handles user fields (pipe-separated), lookup fields (`;#`-separated),
+ * calculated/number fields (e.g. `#10.0000000000000` or `2.00000000000000`),
+ * and returns the value as-is for other types.
+ *
+ * @param value Raw field value
+ */
+function parseDisplayValue(value: string): string {
+  if (!value) return value
+  if (value.includes(' | ')) {
+    const match = value.match(/\|([^|]+)\|/)
+    if (match) return match[1].trim()
+    return value.split(' | ')[1]?.trim() || value
+  }
+  if (value.includes(';#')) {
+    return value.split(';#')[1] || value
+  }
+  const numericMatch = value.match(/^#?(-?\d+(?:\.\d+)?)$/)
+  if (numericMatch) {
+    const num = parseFloat(numericMatch[1])
+    if (!isNaN(num))
+      return Number.isInteger(num) ? num.toString() : parseFloat(num.toFixed(2)).toString()
+  }
+  return value
+}
+
+/**
  * Create reducer for `<PortfolioAggregation />` using `createReducer` from `@reduxjs/toolkit`.
  *
  * @param props Props for `<PortfolioAggregation />` component
@@ -195,7 +222,7 @@ export const createPortfolioAggregationReducer = (
             const count = groupNames.filter((n) => n === name).length
             const group = {
               key: `Group_${idx}`,
-              name: `${state.groupBy.name}: ${name}`,
+              name: `${state.groupBy.name}: ${parseDisplayValue(name)}`,
               startIndex: groupNames.indexOf(name, 0),
               count,
               isShowingAll: count === state.items.length,
@@ -303,6 +330,9 @@ export const createPortfolioAggregationReducer = (
       state.activeFilters = {}
     },
     [SET_DATA_SOURCE.type]: (state, { payload }: ReturnType<typeof SET_DATA_SOURCE>) => {
+      if (state.currentView?.id === payload.dataSource.id) {
+        return
+      }
       state.isChangingView = !!payload
       const obj: IPortfolioAggregationHashState = {}
       if (state.currentView) obj.viewId = payload.dataSource.id.toString()
@@ -319,26 +349,41 @@ export const createPortfolioAggregationReducer = (
       state.searchTerm = payload
     },
     [GET_FILTERS.type]: (state, { payload }: ReturnType<typeof GET_FILTERS>) => {
-      const payloadFilters = payload.filters.map((column) => {
-        const uniqueValues = _.uniq(
-          // eslint-disable-next-line prefer-spread
-          [].concat.apply(
-            [],
-            state.items.map((i) => get(i, column.fieldName, '').split(';'))
-          )
-        )
+      const payloadFilters = payload.filters.map(({ column, group, defaultCollapsed }) => {
+        const collectFromProjectRefiners = (): string[] => {
+          if (stringIsNullOrEmpty(column.internalName)) return []
+          return _.flatten(
+            state.items.map((i: any) => {
+              const value = i.__projectRefinerValues?.[column.internalName]
+              if (value === undefined || value === null) return []
+              if (Array.isArray(value)) return value.map((v) => (v == null ? '' : String(v)))
+              return String(value).split(';')
+            })
+          ).filter((v: string) => !stringIsNullOrEmpty(v))
+        }
+        const collectFromSearchItems = (): string[] =>
+          _.flatten(state.items.map((i: any) => get(i, column.fieldName, '').split(';')))
+
+        const refinerValues = collectFromProjectRefiners()
+        const rawValues = refinerValues.length > 0 ? refinerValues : collectFromSearchItems()
+        const uniqueValues = _.uniq(rawValues)
+
+        const isBooleanField =
+          column.fieldName?.includes('GtIsProgram') ||
+          column.fieldName?.includes('GtIsParentProject')
 
         let items: IFilterItemProps[] = uniqueValues
           .filter((value: string) => !stringIsNullOrEmpty(value))
           .map((value: string) => {
-            if (column.fieldName.includes('OWSUSER')) {
-              const match = value.match(/\|([^|]+)\|/)
-              value = match ? match[1].trim() : null
+            let name = parseDisplayValue(value)
+            if (isBooleanField) {
+              if (value === '1') name = strings.BooleanYes
+              else if (value === '0') name = strings.BooleanNo
             }
-            return { name: value, value, selected: false }
+            return { name, value, selected: false }
           })
         items = items.sort((a, b) => (a.value > b.value ? 1 : -1))
-        return { column, items }
+        return { column, items, group, defaultCollapsed }
       })
 
       if (!_.isEmpty(state.activeFilters)) {
@@ -348,7 +393,7 @@ export const createPortfolioAggregationReducer = (
             if (filter.column.fieldName === key) {
               state.activeFilters[key].forEach((value) => {
                 filter.items.forEach((item) => {
-                  if (value === item.name) {
+                  if (value === item.value) {
                     item.selected = true
                   }
                 })

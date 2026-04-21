@@ -1,15 +1,27 @@
-@import '~@fluentui/react/dist/sass/References.scss';
-
 .root {
-  @include ms-Grid-col;
-  @include ms-sm12;
-  padding: 10px 0 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 8px;
+}
 
-  .container {
-    margin: 10px 0 5px 0;
+.option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
 
-    .searchBox {
-      width: 802px;
-    }
-  }
+.optionIcon {
+  display: flex;
+  align-items: center;
+  padding-top: 2px;
+  font-size: 16px;
+}
+
+.optionContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
 }

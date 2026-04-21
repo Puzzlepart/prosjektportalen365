@@ -1,0 +1,82 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "environments": {
+            "type": "array",
+            "title": "A list of environments",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "title": "Environment Name, if not provided, it will be auto-generated"
+                    },
+                    "siteUrl": {
+                        "type": "string",
+                        "title": "The site URL"
+                    },
+                    "page": {
+                        "type": "string",
+                        "title": "The page URL relative to the site URL"
+                    },
+                    "bundle": {
+                        "type": "string",
+                        "title": "Bundles to include when running watch"
+                    },
+                    "domainSpecificDataDir": {
+                        "type": "boolean",
+                        "title": "Use domain-specifc user data directory"
+                    },
+                    "queryParameters": {
+                        "type": "object",
+                        "title": "Query Parameters",
+                        "description": "Additional query parameters to be added to the page URL",
+                        "properties": {
+                            "experimentalFeatures": {
+                                "type": "string",
+                                "title": "Experimental Features",
+                                "description": "Set to 1 or 'true' to enable experimental features"
+                            }
+                        },
+                        "additionalProperties": true
+                    },
+                    "componentType": {
+                        "type": "string",
+                        "title": "Component Type",
+                        "description": "The type of the component",
+                        "enum": [
+                            "WebPart",
+                            "ListViewCommandSet",
+                            "FieldCustomizer",
+                            "ApplicationCustomizer"
+                        ]
+                    },
+                    "fieldName": {
+                        "type": "string",
+                        "title": "Field Name",
+                        "description": "Field name if component type is FieldCustomizer"
+                    },
+                    "componentId": {
+                        "type": "string",
+                        "title": "Component ID",
+                        "description": "The ID of the component"
+                    },
+                    "componentProperties": {
+                        "type": "object",
+                        "title": "Component Properties",
+                        "description": "The properties of the component",
+                        "additionalProperties": true
+                    }
+                },
+                "required": [
+                    "siteUrl",
+                    "page"
+                ]
+            }
+        }
+    },
+    "required": [
+        "environments"
+    ]
+}

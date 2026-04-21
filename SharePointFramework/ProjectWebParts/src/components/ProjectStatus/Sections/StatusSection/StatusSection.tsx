@@ -5,7 +5,7 @@ import { SectionContext } from '../context'
 
 export const StatusSection: FC = () => {
   const { headerProps } = useContext(SectionContext)
-  if (!headerProps.value) return null
+  if (!headerProps.value && !headerProps.comment) return null
   return (
     <BaseSection>
       <StatusElement />

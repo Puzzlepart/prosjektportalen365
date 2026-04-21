@@ -1,6 +1,5 @@
 export * from './LatestProjects'
 export * from './PortfolioAggregation'
-export * from './PortfolioInsights'
 export * from './PortfolioOverview'
 export * from './ProjectList'
 export * from './ResourceAllocation'

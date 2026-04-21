@@ -1,4 +1,3 @@
-import { IDialogContentProps } from '@fluentui/react'
 import { IProjectSetupDialogState } from 'components/ProjectSetupDialog'
 import {
   ProjectTemplate,
@@ -66,15 +65,26 @@ export interface IProjectSetupProperties {
   forceTemplate?: string
 
   /**
-   * Progress dialog content props. Override properties like
-   * `title` and `subText`.
+   * Progress dialog title override.
    */
-  progressDialogContentProps?: IDialogContentProps
+  progressDialogTitle?: string
+
+  /**
+   * Progress dialog subtitle override.
+   */
+  progressDialogSubText?: string
 
   /**
    * Skip updating template parameters fields on the project list item.
    */
   skipUpdateTemplateParameters?: boolean
+
+  /**
+   * Skip the 'already setup' check when re-running the setup wizard.
+   * When `true`, the setup will go directly to the project setup dialog
+   * instead of showing the error dialog asking the user to confirm.
+   */
+  skipAlreadySetupCheck?: boolean
 }
 
 export interface IProjectSetupData extends IProjectSetupDialogState {
@@ -102,6 +112,12 @@ export interface IProjectSetupData extends IProjectSetupDialogState {
    * Project data field values
    */
   projectData?: ItemFieldValues
+
+  /**
+   * Whether the project already has a template applied
+   * (i.e. `GtProjectTemplate` has a value in the local project properties list).
+   */
+  hasExistingTemplate?: boolean
 }
 
 export enum ProjectSetupValidation {

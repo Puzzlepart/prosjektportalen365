@@ -1,4 +1,4 @@
-<pnp:ListInstance Title="{resource:Lists_ProjectAdminRoles_Title}" Description="{resource:Lists_ProjectAdminRoles_Description}" Hidden="true" TemplateType="100" Url="{resource:Lists_ProjectAdminRoles_Url}" EnableVersioning="true" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableAttachments="false" EnableFolderCreation="false" xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+<pnp:ListInstance Title="{resource:Lists_ProjectAdminRoles_Title}" Description="{resource:Lists_ProjectAdminRoles_Description}" Hidden="true" TemplateType="100" Url="{resource:Lists_ProjectAdminRoles_Url}" EnableVersioning="true" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableAttachments="false" EnableFolderCreation="false" xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100618197F7C782A0459EB2FA5EBF1BDDF201" Default="true" />
         <pnp:ContentTypeBinding ContentTypeID="0x0100618197F7C782A0459EB2FA5EBF1BDDF202" />
@@ -67,31 +67,31 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">{resource:Lists_ProjectAdminRoles_ProjectManager}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectFieldName">GtProjectManager</pnp:DataValue>
-            <pnp:DataValue FieldName="GtProjectAdminPermissions">1,2,3</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectAdminPermissions">1,2,3,6</pnp:DataValue>
             <pnp:DataValue FieldName="ContentTypeId">0x0100618197F7C782A0459EB2FA5EBF1BDDF201</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">{resource:Lists_ProjectAdminRoles_ProjectOwner}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectFieldName">GtProjectOwner</pnp:DataValue>
-            <pnp:DataValue FieldName="GtProjectAdminPermissions">1,2,3</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectAdminPermissions">1,2,3,6</pnp:DataValue>
             <pnp:DataValue FieldName="ContentTypeId">0x0100618197F7C782A0459EB2FA5EBF1BDDF201</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">{resource:Lists_ProjectAdminRoles_ProjectSupport}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectFieldName">GtProjectSupport</pnp:DataValue>
-            <pnp:DataValue FieldName="GtProjectAdminPermissions">1,2,3</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectAdminPermissions">1,2,3,6</pnp:DataValue>
             <pnp:DataValue FieldName="ContentTypeId">0x0100618197F7C782A0459EB2FA5EBF1BDDF201</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">{resource:Lists_ProjectAdminRoles_ProjectOffice}</pnp:DataValue>
             <pnp:DataValue FieldName="GtGroupName">{resource:Lists_ProjectAdminRoles_ProjectOffice}</pnp:DataValue>
             <pnp:DataValue FieldName="GtGroupLevel">{resource:Lists_ProjectAdminRoles_GroupLevel_Project}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtProjectAdminPermissions">1,2,3</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectAdminPermissions">1,2,3,6</pnp:DataValue>
             <pnp:DataValue FieldName="ContentTypeId">0x0100618197F7C782A0459EB2FA5EBF1BDDF202</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">{resource:Lists_ProjectAdminRoles_SPAdmin}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtProjectAdminPermissions">1,2,3,4</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectAdminPermissions">1,2,3,4,5,6</pnp:DataValue>
             <pnp:DataValue FieldName="ContentTypeId">0x0100618197F7C782A0459EB2FA5EBF1BDDF203</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>

@@ -9,19 +9,18 @@
   "license": "MIT",
   "scripts": {
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
-    "prewatch": "node node_modules/pzl-spfx-tasks --pre-watch --loglevel silent",
-    "postwatch": "node node_modules/pzl-spfx-tasks --post-watch --loglevel silent",
+    "prewatch": "node ../.tasks/pre-watch.js",
+    "postwatch": "node ../.tasks/post-watch.js",
     "serve": "concurrently \"gulp serve-deprecated --nobrowser NODE --max-old-space-size=12288\"",
     "build": "gulp bundle --ship && gulp package-solution --ship",
     "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color --fix --config ../.eslintrc.yaml && npm run prettier",
     "prettier": "prettier '**/*.ts*' --write --loglevel silent --config ../.prettierrc.yaml",
-    "validate-loc": "node node_modules/pzl-spfx-tasks --validate-loc --loglevel verbose"
+    "validate-loc": "node ../.tasks/validateLoc.js --path ./src/loc --interface IPortfolioWebPartsStrings --dts mystrings.d.ts --output ./localization-report.md --summary"
   },
   "dependencies": {
     "@fluentui/react": "8.98.1",
     "@fluentui/react-hooks": "8.6.27",
-    "@fluentui/react-file-type-icons": "~8.16.0",
     "@microsoft/decorators": "1.17.4",
     "@microsoft/sp-core-library": "1.17.4",
     "@microsoft/sp-lodash-subset": "1.17.4",
@@ -47,7 +46,6 @@
     "pp365-shared-library": "1.12.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",
-    "react-highcharts": "16.0.2",
     "tslib": "2.3.1",
     "underscore": "~1.13.6",
     "lodash": "~4.17.21",
@@ -57,19 +55,18 @@
     "@pnp/core": "3.17.0",
     "@pnp/queryable": "3.17.0",
     "sp-entityportal-service": "2.3.0",
-    "@fluentui/react-components": "~9.52.0",
-    "@fluentui/react-icons": "~2.0.240",
+    "@fluentui/react-components": "~9.72.10",
+    "@fluentui/react-icons": "~2.0.317",
     "use-image-color": "~0.0.9",
     "react-error-boundary": "~4.0.11",
     "react-window": "~1.8.10",
     "react-virtualized-auto-sizer": "~1.0.24",
-    "@fluentui/react-datepicker-compat": "~0.4.38",
-    "@fluentui/react-motion-preview": "~0.5.20",
-    "@fluentui/react-nav-preview": "~0.9.1",
+    "@fluentui/react-datepicker-compat": "~0.6.22",
     "react-gauge-component": "~1.2.61",
-    "@fluentui/react-motion-components-preview": "~0.3.0",
     "react-fade-in": "~2.0.1",
-    "react-dropzone": "~14.3.8"
+    "react-dropzone": "~14.3.8",
+    "@fluentui/react-motion": "~9.11.6",
+    "@fluentui/react-motion-preview": "~0.5.25"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.17.4",
@@ -102,32 +99,6 @@
     "webpack": "5.74.0",
     "@types/react-beautiful-dnd": "~13.1.4",
     "@types/lodash": "~4.14.195",
-    "@types/react-window": "~1.8.8",
-    "pzl-spfx-tasks": "0.5.15-1"
-  },
-  "config": {
-    "pzl-spfx-tasks": {
-      "upgrade": {
-        "types": [
-          "rush"
-        ],
-        "all": true
-      },
-      "modifyconfig": {
-        "backupFilePath": "./config/config.json.bak"
-      },
-      "createlaunchconfig": {
-        "userDataDir": "${workspaceFolder}/../.vscode/chrome-debug-user-data",
-        "preferredBrowser": "chrome",
-        "domainSpecificDataDir": true
-      },
-      "validateloc": {
-        "path": "./src/loc",
-        "interface": "IPortfolioWebPartsStrings",
-        "dts": "mystrings.d.ts",
-        "output": "./localization-report.md",
-        "summary": true
-      }
-    }
+    "@types/react-window": "~1.8.8"
   }
 }

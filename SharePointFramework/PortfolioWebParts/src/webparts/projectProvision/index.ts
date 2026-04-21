@@ -82,6 +82,25 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
 
   public async onInit(): Promise<void> {
     await super.onInit()
+
+    if (this.context.sdks?.microsoftTeams) {
+      this.properties.renderMode = 'inline'
+      this.properties.isTeamsContext = true
+      if (!this.properties.drawerSize) this.properties.drawerSize = 'full'
+
+      if (this.properties.provisionUrl) {
+        try {
+          const teamsConfig = await this.dataAdapter.loadTeamsConfig(this.properties.provisionUrl)
+          if (teamsConfig) {
+            Object.assign(this.properties, teamsConfig)
+            console.log('Loaded Teams configuration from TeamsAppConfig.json')
+          }
+        } catch (error) {
+          console.warn('Failed to load Teams configuration:', error)
+        }
+      }
+    }
+
     this.properties.fields = this.mergeFields(this.properties.fields || [], this._defaultFields)
     this.properties.typeFieldConfigurations = this.mergeTypeConfigurations(
       this.properties.typeFieldConfigurations || [],
@@ -147,10 +166,28 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
             {
               groupName: strings.GeneralGroupName,
               groupFields: [
+                PropertyPaneDropdown('renderMode', {
+                  label: strings.Provision.RenderModeFieldLabel,
+                  options: [
+                    { key: 'button', text: strings.Provision.RenderModeButton },
+                    { key: 'inline', text: strings.Provision.RenderModeInline }
+                  ],
+                  selectedKey: propertiesWithDefaults.renderMode ?? 'button'
+                }),
+                PropertyPaneDropdown('drawerSize', {
+                  label: strings.Provision.DrawerSizeFieldLabel,
+                  options: [
+                    { key: 'medium', text: strings.Provision.DrawerSizeMedium },
+                    { key: 'full', text: strings.Provision.DrawerSizeFull }
+                  ],
+                  selectedKey: propertiesWithDefaults.drawerSize ?? 'medium',
+                  disabled: propertiesWithDefaults.renderMode === 'inline'
+                }),
                 PropertyPaneTextField('buttonLabel', {
                   label: strings.Provision.ButtonLabelFieldLabel,
                   description: strings.Provision.ButtonLabelFieldDescription,
-                  placeholder: strings.Provision.ProvisionButtonLabel
+                  placeholder: strings.Provision.ProvisionButtonLabel,
+                  disabled: propertiesWithDefaults.renderMode === 'inline'
                 }),
                 PropertyPaneToggle('autoOwner', {
                   label: strings.Provision.AutoOwnerFieldLabel,
@@ -158,7 +195,7 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                   onText: strings.Provision.AutoOwnerOnText,
                   offText: strings.Provision.AutoOwnerOffText
                 }),
-                PropertyPaneLabel('propertyEditorLabel', {
+                PropertyPaneLabel('autoOwnerLabel', {
                   text: strings.Provision.AutoOwnerFieldDescription
                 })
               ]
@@ -278,6 +315,12 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                   checked: propertiesWithDefaults.readOnlyGroupLogic,
                   onText: strings.BooleanOn,
                   offText: strings.BooleanOff
+                }),
+                PropertyPaneToggle('showTeamTemplateField', {
+                  label: strings.Provision.ShowTeamTemplateFieldLabel,
+                  checked: propertiesWithDefaults.showTeamTemplateField,
+                  onText: strings.BooleanOn,
+                  offText: strings.BooleanOff
                 })
               ]
             },
@@ -294,6 +337,15 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                   checked: propertiesWithDefaults.requireProvisionAccess,
                   onText: strings.BooleanOn,
                   offText: strings.BooleanOff
+                }),
+                PropertyPaneToggle('parentMode', {
+                  label: strings.Provision.ParentModeFieldLabel,
+                  checked: propertiesWithDefaults.parentMode ?? false,
+                  onText: strings.Provision.AutoOwnerOnText,
+                  offText: strings.Provision.AutoOwnerOffText
+                }),
+                PropertyPaneLabel('parentModeLabel', {
+                  text: strings.Provision.ParentModeFieldDescription
                 }),
                 PropertyFieldCollectionData('fields', {
                   key: 'fieldsCollection',
@@ -610,107 +662,6 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                           })()
                         })
                       }
-                    }
-                  ]
-                }),
-                PropertyPaneLabel('propertyEditorLabel', {
-                  text: strings.Provision.PropertyEditorLabel
-                }),
-                PropertyPanePropertyEditor({
-                  key: 'propertyEditor',
-                  webpart: this
-                }),
-                PropertyFieldMessage('propertyEditorDescription', {
-                  key: 'propertyEditorDescription',
-                  messageType: 0,
-                  text: strings.Provision.PropertyEditorDescription,
-                  isVisible: true
-                }),
-                PropertyPaneToggle('debugMode', {
-                  label: strings.Provision.DebugModeLabel,
-                  onText: strings.Provision.DebugModeOnText,
-                  offText: strings.Provision.DebugModeOffText
-                })
-              ]
-            },
-            {
-              groupName: strings.Provision.AdvancedGroupName,
-              isCollapsed: true,
-              groupFields: [
-                PropertyFieldCollectionData('fields', {
-                  key: 'fields',
-                  label: strings.Provision.FieldsConfigurationLabel,
-                  panelProps: {
-                    type: 6
-                  },
-                  panelHeader: strings.Provision.FieldsConfigurationPanelHeader,
-                  manageBtnLabel: strings.Provision.FieldsConfigurationManageBtnLabel,
-                  value: this.properties.fields,
-                  disableItemCreation: true,
-                  disableItemDeletion: true,
-                  fields: [
-                    {
-                      id: 'order',
-                      title: strings.Provision.FieldOrderLabel,
-                      type: CustomCollectionFieldType.number,
-                      disableEdit: true
-                    },
-                    {
-                      id: 'fieldName',
-                      title: strings.Provision.FieldNameLabel,
-                      type: CustomCollectionFieldType.string,
-                      required: true
-                    },
-                    {
-                      id: 'displayName',
-                      title: strings.Provision.FieldDisplayNameLabel,
-                      type: CustomCollectionFieldType.string,
-                      required: true
-                    },
-                    {
-                      id: 'description',
-                      title: strings.Provision.FieldDescriptionLabel,
-                      type: CustomCollectionFieldType.string,
-                      required: true
-                    },
-                    {
-                      id: 'placeholder',
-                      title: strings.Provision.FieldPlaceholderLabel,
-                      type: CustomCollectionFieldType.string
-                    },
-                    {
-                      id: 'dataType',
-                      title: strings.Provision.FieldDataTypeLabel,
-                      type: CustomCollectionFieldType.dropdown,
-                      disableEdit: true,
-                      options: [
-                        { key: 'text', text: strings.Provision.FieldDataTypeText },
-                        { key: 'note', text: strings.Provision.FieldDataTypeNote },
-                        { key: 'number', text: strings.Provision.FieldDataTypeNumber },
-                        { key: 'choice', text: strings.Provision.FieldDataTypeChoice },
-                        { key: 'userMulti', text: strings.Provision.FieldDataTypeUserMulti },
-                        { key: 'guest', text: strings.Provision.FieldDataTypeGuest },
-                        { key: 'date', text: strings.Provision.FieldDataTypeDate },
-                        { key: 'tags', text: strings.Provision.FieldDataTypeTags },
-                        { key: 'boolean', text: strings.Provision.FieldDataTypeBoolean },
-                        { key: 'percentage', text: strings.Provision.FieldDataTypePercentage },
-                        { key: 'site', text: strings.Provision.FieldDataTypeSite },
-                        { key: 'image', text: strings.Provision.FieldDataTypeImage }
-                      ],
-                      defaultValue: 'text'
-                    },
-                    {
-                      id: 'required',
-                      title: strings.Provision.FieldRequiredLabel,
-                      type: CustomCollectionFieldType.boolean,
-                      defaultValue: false
-                    },
-                    {
-                      id: 'level',
-                      title: strings.Provision.FieldLevelLabel,
-                      type: CustomCollectionFieldType.number,
-                      disableEdit: true,
-                      defaultValue: 1
                     }
                   ]
                 }),

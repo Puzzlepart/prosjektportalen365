@@ -1,5 +1,5 @@
 <pnp:ContentType ID="0x01000E7513A76B934F449CDB9B25FC172F44" Name="{resource:ContentTypes_IdeaProcessing_Name}" Description="{resource:ContentTypes_IdeaProcessing_Description}" Group="{resource:ContentTypes_Group}" UpdateChildren="true"
-  xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+  xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
   <pnp:FieldRefs>
     <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
     <pnp:FieldRef ID="724036b3-ff76-40d7-a7df-9613e6f4e8fa" Name="GtIdeaUrl" Required="true" UpdateChildren="true" />

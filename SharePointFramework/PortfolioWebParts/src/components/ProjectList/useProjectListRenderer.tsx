@@ -1,3 +1,4 @@
+import { Shimmer, ShimmerElementsGroup, ShimmerElementType } from '@fluentui/react'
 import { ProjectListModel } from 'pp365-shared-library'
 import React, { FC, useMemo } from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
@@ -73,16 +74,33 @@ export function useProjectListRenderer({ props, state, createCardContext }: IPro
       case 'list':
       case 'compactList': {
         const size = state.renderMode === 'list' ? 'medium' : 'extra-small'
+        const rowHeight = size === 'medium' ? 44 : 32
         return (
-          <ListContext.Provider
-            value={{
-              ...props,
-              projects,
-              size
-            }}
+          <Shimmer
+            isDataLoaded={state.isDataLoaded}
+            customElementsGroup={
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', width: '100%' }}>
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <ShimmerElementsGroup
+                    key={i}
+                    shimmerElements={[
+                      { type: ShimmerElementType.line, width: '100%', height: rowHeight }
+                    ]}
+                  />
+                ))}
+              </div>
+            }
           >
-            <List />
-          </ListContext.Provider>
+            <ListContext.Provider
+              value={{
+                ...props,
+                projects: state.isDataLoaded ? projects : [],
+                size
+              }}
+            >
+              <List />
+            </ListContext.Provider>
+          </Shimmer>
         )
       }
     }

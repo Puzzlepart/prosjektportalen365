@@ -7,12 +7,18 @@ import React, { FormEvent, FC, useContext, useEffect, useState } from 'react'
 import styles from './DocumentTemplateItem.module.scss'
 import { IDocumentTemplateItemProps } from './types'
 
+const MAX_LENGTH = 255
+
 export const DocumentTemplateItem: FC<IDocumentTemplateItemProps> = (props) => {
   const { state } = useContext(DocumentTemplateDialogContext)
   const nameId = getId('name')
   const titleId = getId('title')
   let changeTimeout: any
   const [isExpanded, setIsExpanded] = useState(false)
+  const [nameLength, setNameLength] = useState(
+    (props.item.isFolder ? props.item.name : props.item.nameWithoutExtension)?.length || 0
+  )
+  const [titleLength, setTitleLength] = useState(props.item.title?.length || 0)
 
   /**
    * On input change
@@ -27,14 +33,17 @@ export const DocumentTemplateItem: FC<IDocumentTemplateItemProps> = (props) => {
     resolveDelay: number = 400
   ) {
     clearTimeout(changeTimeout)
+    const targetId = (event.target as HTMLInputElement).id
+    if (targetId === nameId) setNameLength(newValue?.length || 0)
+    if (targetId === titleId) setTitleLength(newValue?.length || 0)
     changeTimeout = setTimeout(async () => {
-      // eslint-disable-next-line default-case
-      switch ((event.target as HTMLInputElement).id) {
+      switch (targetId) {
         case nameId:
           {
             const newName = props.item.isFolder
               ? newValue
               : `${newValue}.${props.item.fileExtension}`
+
             const errorMsg = await SPDataAdapter.isFilenameValid(
               state.targetFolder,
               newName,
@@ -79,7 +88,12 @@ export const DocumentTemplateItem: FC<IDocumentTemplateItemProps> = (props) => {
             label={props.item.isFolder ? strings.FolderNameLabel : strings.FileNameLabel}
             placeholder={props.item.isFolder ? strings.FolderNameLabel : strings.FileNameLabel}
             defaultValue={props.item.isFolder ? props.item.name : props.item.nameWithoutExtension}
-            suffix={props.item.isFolder ? undefined : `.${props.item.fileExtension}`}
+            maxLength={MAX_LENGTH}
+            suffix={
+              props.item.isFolder
+                ? `${nameLength}/${MAX_LENGTH}`
+                : `${nameLength}/${MAX_LENGTH} .${props.item.fileExtension}`
+            }
             errorMessage={props.item.errorMessage}
             onChange={onInputChange}
           />
@@ -90,6 +104,8 @@ export const DocumentTemplateItem: FC<IDocumentTemplateItemProps> = (props) => {
             label={strings.TitleLabel}
             placeholder={strings.TitleLabel}
             defaultValue={props.item.title}
+            maxLength={MAX_LENGTH}
+            suffix={`${titleLength}/${MAX_LENGTH}`}
             onChange={onInputChange}
           />
         </div>

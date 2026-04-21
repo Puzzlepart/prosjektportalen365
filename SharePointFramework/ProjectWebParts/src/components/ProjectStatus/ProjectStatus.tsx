@@ -1,6 +1,8 @@
 import { ScrollablePane } from '@fluentui/react'
-import { Fluent } from 'pp365-shared-library'
+import strings from 'ProjectWebPartsStrings'
+import { Fluent, UserMessage } from 'pp365-shared-library'
 import React, { FC } from 'react'
+import SPDataAdapter from '../../data'
 import { Commands } from './Commands/Commands'
 import { EditStatusPanel } from './EditStatusPanel'
 import { Header } from './Header/Header'
@@ -16,6 +18,8 @@ import resource from 'SharedResources'
 
 export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
   const { context } = useProjectStatus(props)
+  const showNoHubAccessMessage =
+    !context.state.selectedReport && SPDataAdapter.portalDataService?.isAvailable === false
 
   return (
     <ProjectStatusContext.Provider value={context}>
@@ -26,12 +30,24 @@ export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
               <Header />
               <PublishedStatus />
             </div>
-            <Commands />
-            <SectionTabs />
             <UserMessages />
-            <div className={styles.container}>
-              <Sections />
-            </div>
+            {context.state.error || showNoHubAccessMessage ? (
+              <div className={styles.messageContainer}>
+                <UserMessage
+                  title={strings.ErrorTitle}
+                  text={context.state.error?.message ?? strings.ProjectStatusNoHubAccessErrorText}
+                  intent='warning'
+                />
+              </div>
+            ) : (
+              <>
+                <Commands />
+                <SectionTabs />
+                <div className={styles.container}>
+                  <Sections />
+                </div>
+              </>
+            )}
           </ScrollablePane>
         </div>
         <EditStatusPanel />

@@ -11,6 +11,7 @@ import {
   TaskAttachment,
   TaskPreviewType
 } from '../PlannerConfiguration'
+import { TimelineConfiguration } from '../TimelineConfiguration'
 import _ from 'underscore'
 import { IWeb } from '@pnp/sp/webs'
 import '@pnp/sp/items/get-all'
@@ -50,6 +51,15 @@ export class CopyListData extends BaseTask {
       await this.createDefaultPlannerPlan(params)
       for (let i = 0; i < this.data.selectedContentConfig.length; i++) {
         const contentConfig = this.data.selectedContentConfig[i]
+        onProgress(
+          contentConfig.text,
+          contentConfig.text,
+          'Copy',
+          {
+            message: `Processing content config: ${contentConfig.text} (${contentConfig.type})`,
+            level: 'info'
+          }
+        )
         await contentConfig.load()
         // eslint-disable-next-line default-case
         switch (contentConfig.type) {
@@ -91,6 +101,11 @@ export class CopyListData extends BaseTask {
                 configuration,
                 labels
               ).execute(params, onProgress)
+            }
+            break
+          case ContentConfigType.Timeline:
+            {
+              await new TimelineConfiguration(this.data, contentConfig).execute(params, onProgress)
             }
             break
           case ContentConfigType.List:
@@ -160,21 +175,26 @@ export class CopyListData extends BaseTask {
    */
   private async createDefaultPlannerPlan(params: IBaseTaskParams) {
     if (!_.any(this.data.selectedContentConfig, (c) => c.type === ContentConfigType.Planner)) {
-      const plannerConfig = new PlannerConfiguration(null, this.data, {})
-      await plannerConfig
-        ._fetchPlans(params.context.pageContext.legacyPageContext.groupId)
-        .then((plans) => {
-          if (_.isEmpty(plans)) {
-            plannerConfig.ensurePlan(
-              {
-                title: params.context.pageContext.web.title,
-                owner: params.context.pageContext.legacyPageContext.groupId
-              },
-              params.context.pageContext,
-              false
-            )
-          }
-        })
+      try {
+        const plannerConfig = new PlannerConfiguration(null, this.data, {})
+        const plans = await plannerConfig._fetchPlans(
+          params.context.pageContext.legacyPageContext.groupId
+        )
+        if (_.isEmpty(plans)) {
+          await plannerConfig.ensurePlan(
+            {
+              title: params.context.pageContext.web.title,
+              owner: params.context.pageContext.legacyPageContext.groupId
+            },
+            params.context.pageContext,
+            false
+          )
+        }
+      } catch (error) {
+        this.logWarning(
+          `Failed to create default planner plan: ${error.statusCode ?? ''} ${error.message ?? error}`
+        )
+      }
     }
   }
 

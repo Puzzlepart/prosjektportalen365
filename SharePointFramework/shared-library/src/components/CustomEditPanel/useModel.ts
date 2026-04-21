@@ -41,7 +41,8 @@ export function useModel(props: ICustomEditPanelProps) {
    * @returns The transformed value and the internal name of the field (might be different from the field's internal name)
    */
   const transformValue = async (value: any, field: EditableSPField) => {
-    const targetList = props.dataAdapter.sp.web.lists.getById(props.targetistId)
+    const webContext = props.targetWeb || props.dataAdapter.sp.web
+    const targetList = webContext.lists.getById(props.targetListId)
     const valueMap = new Map<string, () => Promise<any[]> | any[]>([
       [
         'URL',
@@ -99,7 +100,7 @@ export function useModel(props: ICustomEditPanelProps) {
         async () => {
           const email = value[0]?.secondaryText
           let val = null
-          if (email) val = (await props.dataAdapter.sp.web.ensureUser(email)).data.Id
+          if (email) val = (await webContext.ensureUser(email)).data.Id
           return [val, `${field.internalName}Id`]
         }
       ],
@@ -108,10 +109,7 @@ export function useModel(props: ICustomEditPanelProps) {
         async () => {
           const values = await Promise.all(
             value.map(
-              async (v: IPersonaProps) =>
-                (
-                  await props.dataAdapter.sp.web.ensureUser(v.secondaryText)
-                ).data.Id
+              async (v: IPersonaProps) => (await webContext.ensureUser(v.secondaryText)).data.Id
             )
           )
           return [_.flatten(values), `${field.internalName}Id`]

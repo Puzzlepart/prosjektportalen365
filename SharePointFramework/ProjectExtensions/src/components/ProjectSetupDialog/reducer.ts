@@ -2,13 +2,14 @@ import { createAction, createReducer } from '@reduxjs/toolkit'
 import { ContentConfig, ProjectExtension, ProjectTemplate } from 'pp365-shared-library'
 import { first, uniq } from 'underscore'
 import { IProjectSetupData } from '../../extensions/projectSetup/types'
+import { createNoTemplateOption } from '../../extensions/projectSetup/noTemplate'
 import { IProjectSetupDialogState } from './types'
 
 export const INIT = createAction('INIT')
 export const ON_LIST_CONTENT_CONFIG_CHANGED = createAction<ContentConfig[]>(
   'ON_LIST_CONTENT_CONFIG_CHANGED'
 )
-export const ON_EXTENSIONS_CHANGED = createAction<ProjectExtension[]>('ON_EXTENTIONS_CHANGED')
+export const ON_EXTENSIONS_CHANGED = createAction<ProjectExtension[]>('ON_EXTENSIONS_CHANGED')
 export const ON_TEMPLATE_CHANGED = createAction<ProjectTemplate>('ON_TEMPLATE_CHANGED')
 
 export const initialState: IProjectSetupDialogState = {
@@ -18,13 +19,19 @@ export const initialState: IProjectSetupDialogState = {
 }
 
 /**
- * Create reducer for `TemplateSelectDialog`
+ * Create reducer for `ProjectSetupDialog`
  */
 export default (data: IProjectSetupData) =>
   createReducer(initialState, {
     [INIT.type]: (state: IProjectSetupDialogState) => {
-      let [template] = data.templates.filter((t) => t.isDefault)
-      if (!template) template = first(data.templates)
+      let template: ProjectTemplate
+      if (data.hasExistingTemplate) {
+        // When re-running the setup wizard, default to 'No template' to avoid accidentally applying a full template setup.
+        template = createNoTemplateOption()
+      } else {
+        ;[template] = data.templates.filter((t) => t.isDefault)
+        if (!template) template = first(data.templates)
+      }
       state.selectedTemplate = template
       state.selectedContentConfig = template?.getContentConfig(data.contentConfig) ?? []
       state.selectedExtensions = template?.getExtensions(data.extensions) ?? []

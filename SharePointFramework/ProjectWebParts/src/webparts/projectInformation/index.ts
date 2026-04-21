@@ -24,7 +24,11 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<IProje
   }
 
   private _onFieldExternalChanged(fieldName: string, checked: boolean) {
+    const fallbackVisibleFields = [...(this.properties.fallbackVisibleFields || [])]
     const showFieldExternal = { ...(this.properties.showFieldExternal || {}), [fieldName]: checked }
+    this.properties.fallbackVisibleFields = checked
+      ? Array.from(new Set([...fallbackVisibleFields, fieldName]))
+      : fallbackVisibleFields.filter((field) => field !== fieldName)
     this.properties.showFieldExternal = showFieldExternal
   }
 
@@ -80,6 +84,10 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<IProje
                     {
                       key: 'transformToParentProject',
                       text: strings.CreateParentProjectLabel
+                    },
+                    {
+                      key: 'runProjectSetupAction',
+                      text: strings.RunProjectSetupLabel
                     }
                   ],
                   selectedKeys: this.properties.hideActions ?? []
@@ -95,6 +103,21 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<IProje
                 PropertyPaneToggle('hideParentProjects', {
                   label: strings.HideParentProjectsLabel,
                   checked: propertiesWithDefaults.hideParentProjects
+                })
+              ]
+            },
+            {
+              groupName: strings.ChildProjectsGroupName,
+              groupFields: [
+                PropertyPaneToggle('hideChildProjects', {
+                  label: strings.HideChildProjectsLabel,
+                  checked: propertiesWithDefaults.hideChildProjects
+                }),
+                PropertyPaneSlider('rowLimit', {
+                  label: strings.RowLimitLabel,
+                  min: ProjectInformation.defaultProps.minRowLimit,
+                  max: ProjectInformation.defaultProps.maxRowLimit,
+                  step: 1
                 })
               ]
             },

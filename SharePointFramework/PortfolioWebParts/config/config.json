@@ -10,14 +10,6 @@
         }
       ]
     },
-    "portfolio-insights-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/portfolioInsights/index.js",
-          "manifest": "./src/webparts/portfolioInsights/manifest.json"
-        }
-      ]
-    },
     "portfolio-overview-web-part": {
       "components": [
         {

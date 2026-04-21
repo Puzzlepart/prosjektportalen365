@@ -22,6 +22,11 @@ export interface ITemplateSelectorContext {
    * Template library
    */
   templateLibrary?: { title: string; url: string }
+
+  /**
+   * Current folder URL (server relative) where the command was triggered
+   */
+  currentFolderUrl?: string
 }
 
 export const TemplateSelectorContext = createContext<ITemplateSelectorContext>(null)

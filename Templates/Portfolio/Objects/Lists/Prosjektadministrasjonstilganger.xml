@@ -1,4 +1,4 @@
-<pnp:ListInstance Title="{resource:Lists_ProjectAdminPermissions_Title}" Description="" Hidden="true" TemplateType="100" Url="{resource:Lists_ProjectAdminPermissions_Url}" EnableVersioning="true" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableAttachments="false" EnableFolderCreation="false" xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+<pnp:ListInstance Title="{resource:Lists_ProjectAdminPermissions_Title}" Description="" Hidden="true" TemplateType="100" Url="{resource:Lists_ProjectAdminPermissions_Url}" EnableVersioning="true" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableAttachments="false" EnableFolderCreation="false" xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x010018DB532215EDE34C975F3AC3348948B1" Default="true" />
     </pnp:ContentTypeBindings>
@@ -37,6 +37,18 @@
             <pnp:DataValue FieldName="Title">{resource:Lists_ProjectAdminPermissions_ChildProjectsAdmin}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectAdminPermission">ChildProjectsAdmin</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectAdminPermissionId">2281c92a-f5ff-4d99-8814-e7b2f33d1ac9</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x010018DB532215EDE34C975F3AC3348948B1</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectAdminPermissions_ReRunSetup}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectAdminPermission">ReRunSetup</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectAdminPermissionId">5c2fd32e-0c8b-42be-9e0b-4fa6ff5d4774</pnp:DataValue>
+            <pnp:DataValue FieldName="ContentTypeId">0x010018DB532215EDE34C975F3AC3348948B1</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectAdminPermissions_AssistantAccess}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectAdminPermission">AssistantAccess</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectAdminPermissionId">7f3a8b2c-4d5e-6f70-8192-a3b4c5d6e7f8</pnp:DataValue>
             <pnp:DataValue FieldName="ContentTypeId">0x010018DB532215EDE34C975F3AC3348948B1</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>

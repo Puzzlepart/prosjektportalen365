@@ -128,9 +128,8 @@ else {
     else {
         Write-Host "[INFO] Loaded PnP.PowerShell v$((Get-Command Connect-PnPOnline).Version) from your environment"
     }
-    Write-Host "[INFO] In version 1.12 of Prosjektportalen we upgraded PnP.PowerShell to version 3.1."
     Write-Host "[INFO] As part of the authentication process with Microsoft 365, this script will open a browser window to authenticate."
-    Write-Host "[INFO] Make sure you have the correct browser active. "
+    Write-Host "[INFO] Make sure you have the correct browser active. You can also copy the URL and open it in the correct browser if needed."
     Show-Countdown -Seconds 15
 }
 
@@ -165,9 +164,26 @@ if ($Alias.Length -lt 2 -or (@("sites/", "teams/") -notcontains $ManagedPath) -o
 }
 #endregion
 
+#region Ensure site collection admin access before upgrade checks
+if ($Upgrade.IsPresent -and $null -ne $CurrentUser -and $CurrentUser.LoginName) {
+    try {
+        Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
+        Set-PnPTenantSite -Url $Url -Owners $CurrentUser.LoginName -ErrorAction SilentlyContinue
+    }
+    catch {
+        Write-Host "[WARNING] Failed to ensure site collection administrator access before upgrade checks: $($_.Exception.Message)" -ForegroundColor Yellow
+        Write-ErrorDetails $_
+    }
+}
+#endregion
+
 #region Check if installing to another installation channel when upgrading
 Connect-SharePoint -Url $Uri.AbsoluteUri -ConnectionInfo $ConnectionInfo
 $ExistingSite = Get-PnPSite -ErrorAction SilentlyContinue
+if ($Upgrade.IsPresent -and $null -eq $ExistingSite) {
+    Write-Host "[ERROR] You specified -Upgrade, but no existing site was found at $($Uri.AbsoluteUri). Cannot upgrade a site that does not exist." -ForegroundColor Red
+    exit 1
+}
 if ($Upgrade.IsPresent -and $null -ne $ExistingSite) {
     $InstallInfo = Get-PPInstallationInfo
     if ($InstallInfo.LanguageId -ne $LanguageId) {
@@ -201,12 +217,23 @@ if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
         $PortfolioSite = Get-PnPTenantSite -Url $Uri.AbsoluteUri -ErrorAction SilentlyContinue
         if ($null -eq $PortfolioSite) {
             StartAction("Creating portfolio site at $($Uri.AbsoluteUri)")
-            $PortfolioSite = New-PnPSite -Type TeamSite -Title $Title -Alias $Alias -IsPublic:$true -ErrorAction Stop -Lcid $LanguageId -Wait -HideGroupInOutlook -WelcomeEmailDisabled
+            Try {
+                $PortfolioSite = New-PnPSite -Type TeamSite -Title $Title -Alias $Alias -IsPublic:$true -ErrorAction Stop -Lcid $LanguageId -Wait -HideGroupInOutlook -WelcomeEmailDisabled
+            }
+            Catch {
+                Write-Host "[WARNING] Failed to create site: $($_.Exception.Message)" -ForegroundColor Yellow
+                Write-Host "[INFO] Reconnecting with a fresh session and retrying. This can happen when app permissions were recently granted on a new tenant." -ForegroundColor Yellow
+                Disconnect-PnPOnline -ErrorAction SilentlyContinue
+                Start-Sleep -Seconds 10
+                Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
+                $PortfolioSite = New-PnPSite -Type TeamSite -Title $Title -Alias $Alias -IsPublic:$true -ErrorAction Stop -Lcid $LanguageId -Wait -HideGroupInOutlook -WelcomeEmailDisabled
+            }
             EndAction
         }
     }
     Catch {
         Write-Host "[ERROR] Failed to create site: $($_.Exception.Message)" -ForegroundColor Red
+        Write-ErrorDetails $_
         exit 1
     }
 }
@@ -222,6 +249,7 @@ if (-not $Upgrade.IsPresent) {
     }
     Catch {
         Write-Host "[ERROR] Failed to promote site to hub site: $($_.Exception.Message)" -ForegroundColor Red
+        Write-ErrorDetails $_
         exit 1
     }
 }
@@ -242,6 +270,7 @@ if (-not $Upgrade.IsPresent) {
     }
     Catch {
         Write-Host "[ERROR] Failed to set permissions for associated member group: $($_.Exception.Message)" -ForegroundColor Red
+        Write-ErrorDetails $_
     }
 }
 #endregion
@@ -288,6 +317,7 @@ if (-not $SkipSiteDesign.IsPresent) {
     }
     Catch {
         Write-Host "[ERROR] Failed to create/update site scripts: $($_.Exception.Message)" -ForegroundColor Red
+        Write-ErrorDetails $_
         exit 1
     }
 
@@ -313,6 +343,7 @@ if (-not $SkipSiteDesign.IsPresent) {
     }
     Catch {
         Write-Host "[ERROR] Failed to create/update site design: $($_.Exception.Message)" -ForegroundColor Red
+        Write-ErrorDetails $_
         exit 1
     }
 }
@@ -326,6 +357,7 @@ if (-not $SkipDefaultSiteDesignAssociation.IsPresent) {
     catch {
         Write-Host ""
         Write-Host "[WARNING] Failed to set default site design: $($_.Exception.Message)" -ForegroundColor Yellow
+        Write-ErrorDetails $_
     }
     EndAction
 }
@@ -342,6 +374,7 @@ try {
 }
 catch {
     Write-Host "[WARNING] Failed to ensure site collection administrator access: $($_.Exception.Message)" -ForegroundColor Yellow
+    Write-ErrorDetails $_
 }
 finally {
     EndAction
@@ -358,6 +391,7 @@ if ($Upgrade.IsPresent) {
     }
     catch {
         Write-Host "[ERROR] Failed to run pre-install upgrade steps: $($_.Exception.Message)" -ForegroundColor Red
+        Write-ErrorDetails $_
         exit 1
     }
 }
@@ -377,6 +411,7 @@ if (-not $SkipAppPackages.IsPresent) {
     }
     Catch {
         Write-Host "[ERROR] Failed to connect to Tenant App Catalog. Do you have a Tenant App Catalog in your tenant?" -ForegroundColor Red
+        Write-ErrorDetails $_
         exit 1 
     }
     Try {
@@ -396,6 +431,7 @@ if (-not $SkipAppPackages.IsPresent) {
     }
     Catch {
         Write-Host "[ERROR] Failed to install app packages to $($TenantAppCatalogUrl): $($_.Exception.Message)" -ForegroundColor Red
+        Write-ErrorDetails $_
         exit 1
     }
 }
@@ -409,6 +445,7 @@ if (-not $Upgrade.IsPresent) {
     }
     Catch {
         Write-Host "[WARNING] Failed to delete page Home.aspx. Please delete it manually." -ForegroundColor Yellow
+        Write-ErrorDetails $_
     }
 }
 #endregion
@@ -446,11 +483,13 @@ if (-not $SkipTemplate.IsPresent) {
         }
 
         # Shared retry configuration
-        $MaxRetries = 5
+        $MaxRetries = 3
+
+        Write-Host "[INFO] The next step applies the PnP site template. Depending on the target tenant this can take anywhere from a few minutes to over an hour." -ForegroundColor Yellow
+        Write-Host "[INFO] Please do NOT cancel the installation even if it looks stuck." -ForegroundColor Yellow
 
         if ($Upgrade.IsPresent) {
-            StartAction("Applying PnP template Portfolio to $($Uri.AbsoluteUri)")
-            $Retry = 0
+            StartAction -Action "Applying PnP template Portfolio to $($Uri.AbsoluteUri)"            $Retry = 0
             while ($Retry -lt $MaxRetries) {
                 try {
                     Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers $UpgradeExcludeHandlers -ErrorAction Stop -WarningAction SilentlyContinue
@@ -461,16 +500,17 @@ if (-not $SkipTemplate.IsPresent) {
                     $RemainingAttempts = $MaxRetries - $Retry
                     if ($Retry -eq $MaxRetries) {
                         Write-Host "[ERROR] Failed to apply PnP Portfolio template after $MaxRetries attempts" -ForegroundColor Red
+                        Write-ErrorDetails $_
                         throw
                     }
                     Write-Host "`t[WARNING] Failed to apply PnP Portfolio template. $RemainingAttempts attempt(s) remaining..." -ForegroundColor Yellow
+                    Write-ErrorDetails $_
                 }
             }
             EndAction
 
             if (Test-Path "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp") {
-                StartAction("Applying PnP content template to $($Uri.AbsoluteUri)")
-                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" -Handlers Files -ErrorAction Stop -WarningAction SilentlyContinue
+                StartAction -Action "Applying PnP content template to $($Uri.AbsoluteUri)"                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" -Handlers Files -ErrorAction Stop -WarningAction SilentlyContinue
                 EndAction
             }
             else {
@@ -479,8 +519,7 @@ if (-not $SkipTemplate.IsPresent) {
 
             if ($IncludeBAContent.IsPresent) {
                 if (Test-Path "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp") {
-                    StartAction("Applying PnP B&A content template to $($Uri.AbsoluteUri)")
-                    Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
+                    StartAction -Action "Applying PnP B&A content template to $($Uri.AbsoluteUri)"                    Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
                     EndAction
                 }
                 else {
@@ -489,8 +528,7 @@ if (-not $SkipTemplate.IsPresent) {
             }
         }
         else {
-            StartAction("Applying PnP template Portfolio to $($Uri.AbsoluteUri)")
-            $Instance = Read-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp"
+            StartAction -Action "Applying PnP template Portfolio to $($Uri.AbsoluteUri)"            $Instance = Read-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp"
             $Instance.SupportedUILanguages[0].LCID = $LanguageId
             Invoke-PnPSiteTemplate -InputInstance $Instance -Handlers SupportedUILanguages
             $Retry = 0
@@ -504,23 +542,23 @@ if (-not $SkipTemplate.IsPresent) {
                     $RemainingAttempts = $MaxRetries - $Retry
                     if ($Retry -eq $MaxRetries) {
                         Write-Host "[ERROR] Failed to apply PnP Portfolio template after $MaxRetries attempts" -ForegroundColor Red
+                        Write-ErrorDetails $_
                         throw
                     }
                     Write-Host "`t[WARNING] Failed to apply PnP Portfolio template. $RemainingAttempts attempt(s) remaining..." -ForegroundColor Yellow
+                    Write-ErrorDetails $_
                 }
             }
             EndAction
 
             if (Test-Path "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp") {
-                StartAction("Applying PnP content template to $($Uri.AbsoluteUri)")
-                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
+                StartAction -Action "Applying PnP content template to $($Uri.AbsoluteUri)"                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
                 EndAction
             }
 
             if ($IncludeBAContent.IsPresent) {
                 if (Test-Path "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp") {
-                    StartAction("Applying PnP B&A content template to $($Uri.AbsoluteUri)")
-                    Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
+                    StartAction -Action "Applying PnP B&A content template to $($Uri.AbsoluteUri)"                    Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
                     EndAction
                 }
             }
@@ -528,6 +566,7 @@ if (-not $SkipTemplate.IsPresent) {
     }
     Catch {
         Write-Host "[ERROR] Failed to apply PnP templates to $($Uri.AbsoluteUri): $($_.Exception.Message)" -ForegroundColor Red
+        Write-ErrorDetails $_
         exit 1
     }
     Finally {
@@ -538,6 +577,7 @@ if (-not $SkipTemplate.IsPresent) {
         }
         Catch {
             Write-Host "[WARNING] Failed to re-enable NoScriptSite protection: $($_.Exception.Message)" -ForegroundColor Yellow
+            Write-ErrorDetails $_
         }
     }
 }
@@ -552,6 +592,7 @@ Try {
 }
 Catch {
     Write-Host "[WARNING] Failed to clear QuickLaunch: $($_.Exception.Message)" -ForegroundColor Yellow
+    Write-ErrorDetails $_
 }
 #endregion
 
@@ -565,6 +606,7 @@ if (-not $SkipSearchConfiguration.IsPresent) {
     }
     Catch {
         Write-Host "[WARNING] Failed to import Search Configuration: $($_.Exception.Message)" -ForegroundColor Yellow
+        Write-ErrorDetails $_
     }
 }
 #endregion
@@ -577,6 +619,7 @@ try {
 }
 catch {
     Write-Host "[WARNING] Failed to run post-install steps: $($_.Exception.Message)" -ForegroundColor Yellow
+    Write-ErrorDetails $_
 }
 
 if ($Upgrade.IsPresent) {
@@ -586,6 +629,7 @@ if ($Upgrade.IsPresent) {
     }
     catch {
         Write-Host "[WARNING] Failed to run post-install upgrade steps: $($_.Exception.Message)" -ForegroundColor Yellow
+        Write-ErrorDetails $_
     }
 }
 
@@ -644,6 +688,7 @@ try {
 }
 catch {
     Write-Host "[WARNING] Installation log list not found. Skipping logging installation entry." -ForegroundColor Yellow
+    Write-ErrorDetails $_
 }
 
 Disconnect-PnPOnline

@@ -61,7 +61,14 @@ export interface ICustomEditPanelProps extends IBasePanelProps {
    * Target list ID used to transform property values
    * before submitting the item.
    */
-  targetistId?: string
+  targetListId?: string
+
+  /**
+   * Allowed lookup values for specific fields. Key is the internal field name,
+   * value is an array of allowed text values for that lookup field.
+   * Used to filter lookup options based on external configuration.
+   */
+  allowedLookupValues?: Record<string, string[]>
 
   /**
    * The submit button props.

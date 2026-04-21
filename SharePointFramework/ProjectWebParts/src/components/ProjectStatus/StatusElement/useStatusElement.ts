@@ -2,6 +2,7 @@ import { useContext } from 'react'
 import { SectionContext } from '../Sections/context'
 import styles from './StatusElement.module.scss'
 import { IStatusElementProps } from './types'
+import { useId } from '@fluentui/react-components'
 
 /**
  * Component logic hook for `StatusElement`. Handles truncating of the comment
@@ -27,5 +28,7 @@ export function useStatusElement(props: IStatusElementProps) {
 
   const useWrapper = !!props.truncateComment || props.iconsOnly
 
-  return { commentProps, iconSize: props.iconSize ?? headerProps.iconSize, useWrapper } as const
+  const fluentProviderId = useId('fp-status-element')
+
+  return { commentProps, iconSize: props.iconSize ?? headerProps.iconSize, useWrapper, fluentProviderId } as const
 }

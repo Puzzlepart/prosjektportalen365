@@ -3,6 +3,7 @@
         <CHOICE>{resource:Choice_GtSettingsCategory_UncertaintyPlanner}</CHOICE>
         <CHOICE>{resource:Choice_GtSettingsCategory_RiskMatrix}</CHOICE>
         <CHOICE>{resource:Choice_GtSettingsCategory_General}</CHOICE>
+        <CHOICE>{resource:Choice_GtSettingsCategory_Addon}</CHOICE>
         <CHOICE>{resource:Choice_GtSettingsCategory_Assistant}</CHOICE>
     </CHOICES>
 </Field>

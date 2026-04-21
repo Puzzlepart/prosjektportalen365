@@ -1,4 +1,4 @@
-_The template was validated 1/19/2026, 3:36:56 PM_
+_The template was validated 3/18/2026, 11:01:38 AM_
 
 The template contains the following tokens that has not been found in the .resx files:
 
@@ -446,7 +446,7 @@ _No tokens with missing translations or replacement values found._
         "<Field ID=\"{62f0454d-1150-4d55-86ef-075f786d6e5c}\" Name=\"GtRiskFactorPostAction\" DisplayName=\"Risk factor post action\" Type=\"Calculated\" Group=\"Project Portal Columns (Project)\" Description=\"Define the factors contributing to the risk after measures have been implemented\" ResultType=\"Number\" StaticName=\"GtRiskFactorPostAction\"><Formula>=GtRiskProbabilityPostAction*GtRiskConsequencePostAction</Formula><FieldRefs><FieldRef Name=\"GtRiskProbabilityPostAction\" ID=\"{f81ebcb7-8791-44b0-9919-08ed5524b11d}\" /><FieldRef Name=\"GtRiskConsequencePostAction\" ID=\"{00f17233-d4c0-49d0-aebd-5004552abb17}\" /></FieldRefs></Field>",
         "<Field ID=\"{88d9b92c-efed-45d0-a586-86d9196b77d0}\" Type=\"User\" Name=\"GtResourceUser\" StaticName=\"GtResourceUser\" DisplayName=\"Name\" Description=\"Provide the name of the person being added\" />",
         "<Field ID=\"{08ac9d56-f8eb-4a2c-868f-d39fc012fcd6}\" Type=\"Number\" Name=\"GtResourceLoad\" StaticName=\"GtResourceLoad\" DisplayName=\"Load\" Description=\"Enter (expected) allocation rate, given in figures indicating percentage\" Percentage=\"TRUE\" />",
-        "<Field ID=\"{2ae541a5-5ecc-481d-afb6-c03a6f1e71b4}\" Type=\"User\" Name=\"GtActionResponsible\" StaticName=\"GtActionResponsible\" DisplayName=\"Action Responsible\" Description=\"Who is responsible for this communication activity?\" />"
+        "<Field ID=\"{2ae541a5-5ecc-481d-afb6-c03a6f1e71b4}\" Type=\"User\" Name=\"GtActionResponsible\" StaticName=\"GtActionResponsible\" DisplayName=\"Action Responsible\" Description=\"Who is responsible for follow-up?\" />"
     ],
     "Navigation": {
         "QuickLaunch": [
@@ -531,7 +531,14 @@ _No tokens with missing translations or replacement values found._
                         "statusReportsCount": 0,
                         "statusReportsHeader": "Project Status Header",
                         "filterField": "GtShowFieldFrontpage",
-                        "adminPageLink": "Admin.aspx"
+                        "adminPageLink": "Admin.aspx",
+                        "fallbackVisibleFields": [
+                            "GtProjectPhase",
+                            "GtProjectOwner",
+                            "GtProjectManager",
+                            "GtProjectType",
+                            "GtProjectServiceArea"
+                        ]
                     }
                 },
                 {
@@ -653,7 +660,6 @@ _No tokens with missing translations or replacement values found._
                                         "title": "Overview for child projects",
                                         "showCommandBar": true,
                                         "showFilters": true,
-                                        "showGroupBy": true,
                                         "showSearchBox": true,
                                         "showViewSelector": true,
                                         "showExcelExportButton": true

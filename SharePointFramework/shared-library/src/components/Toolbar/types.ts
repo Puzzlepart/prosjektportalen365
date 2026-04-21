@@ -1,6 +1,7 @@
 import { FluentIcon } from '@fluentui/react-icons/lib/utils/createFluentIcon'
 import { CSSProperties, MouseEventHandler } from 'react'
 import { IFilterPanelProps } from '../FilterPanel'
+import { SearchBoxProps } from '@fluentui/react-components'
 
 /**
  * Props for the Toolbar component.
@@ -96,6 +97,11 @@ export class ListMenuItem {
    * Items to render in a sub menu.
    */
   items?: ListMenuItem[]
+
+  /**
+   * Search box for the toolbar search item.
+   */
+  searchBox: SearchBoxProps
 
   /**
    * Creates a new instance of `ListMenuItem`. Use the Fluent API pattern
@@ -219,6 +225,18 @@ export class ListMenuItem {
   public setItems(items: ListMenuItem['items'], checkedValues?: ListMenuItem['checkedValues']) {
     this.items = items.filter(Boolean)
     if (checkedValues) this.checkedValues = checkedValues
+    return this
+  }
+
+  /**
+   * Sets the search box for the `ListMenuItem`.
+   *
+   * @param searchBox The search box to set.
+   *
+   * @returns The updated `ListMenuItem` instance.
+   */
+  public setSearchBox(searchBox: ListMenuItem['searchBox']) {
+    this.searchBox = searchBox
     return this
   }
 

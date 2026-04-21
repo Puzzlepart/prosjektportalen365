@@ -1,0 +1,309 @@
+.fullscreenProvider {
+  width: 100%;
+}
+
+.fullscreenContent {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+// ---- Header ----
+
+.header {
+  background: linear-gradient(135deg, var(--provision-header-start, #667eea) 0%, var(--provision-header-end, #764ba2) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+}
+
+.headerToolbar {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.headerTitle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: white;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.headerButton {
+  color: white !important;
+  margin-right: 20px;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+  }
+}
+
+.headerButtonText {
+  color: white;
+  font-size: 13px;
+}
+
+// ---- Body ----
+
+.fullscreenBody {
+  flex: 1;
+  display: grid;
+  overflow: hidden;
+}
+
+.motionLevel {
+  grid-area: 1 / 1;
+  overflow: auto;
+}
+
+// ---- SiteType Level ----
+
+.siteTypeLevel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 48px;
+  text-align: center;
+}
+
+.siteTypeHeader {
+  margin-bottom: 48px;
+  max-width: 700px;
+}
+
+.siteTypeTitle {
+  font-size: 42px;
+  font-weight: 700;
+  color: var(--colorNeutralForeground1);
+}
+
+.siteTypeDescription {
+  font-size: 18px;
+  color: var(--colorNeutralForeground3);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.siteTypeContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.siteTypeCards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  justify-content: center;
+}
+
+.siteTypeCardWrapper {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+
+  // Double the size of SiteType cards in fullscreen
+  :global(.fui-Card) {
+    width: 336px;
+    max-width: 100%;
+  }
+
+  :global(.fui-CardHeader) {
+    padding: 6px;
+    gap: 8px;
+  }
+
+  :global(.fui-CardHeader__header) {
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  :global(.fui-CardHeader__description) {
+    font-size: 14px;
+  }
+
+  :global(.fui-CardPreview) img {
+    max-height: 251px;
+    overflow-clip-margin: unset;
+  }
+
+  &:hover {
+    transform: translateY(-6px);
+  }
+}
+
+.siteTypeDropdownWrapper {
+  width: 100%;
+  max-width: 400px;
+}
+
+// ---- Fields Level ----
+
+.fieldsLevel {
+  flex: 1;
+  padding: 48px;
+  overflow: auto;
+}
+
+.fieldsLayout {
+  display: flex;
+  gap: 32px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.fieldsSidebar {
+  flex-shrink: 0;
+  width: 360px;
+  padding: 24px;
+  background: var(--colorNeutralBackground2);
+  border-radius: var(--borderRadiusLarge);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-self: flex-start;
+  position: sticky;
+  top: 0;
+}
+
+.sidebarImage {
+  width: 100%;
+  border-radius: var(--borderRadiusMedium);
+  object-fit: cover;
+  max-height: 270px;
+}
+
+.sidebarTitle {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--colorNeutralForeground1);
+}
+
+.sidebarDescription {
+  font-size: 13px;
+  color: var(--colorNeutralForeground3);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.fieldsMain {
+  flex: 1;
+  min-width: 0;
+}
+
+.fieldsColumns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: 32px;
+  align-items: start;
+}
+
+.fieldsColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: var(--colorNeutralBackground2);
+  border-radius: var(--borderRadiusLarge);
+  padding: 24px;
+
+  > * {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+.columnTitle {
+  font-size: 18px !important;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.columnDescription {
+  font-size: 14px;
+  color: var(--colorNeutralForeground3);
+  margin: 0 0 8px 0;
+}
+
+.footerDescription {
+  font-size: 13px;
+  color: var(--colorNeutralForeground3);
+  margin-top: 16px;
+}
+
+.fieldsFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 32px;
+  border-top: 1px solid var(--colorNeutralStroke1);
+  background: var(--colorNeutralBackground1);
+  flex-shrink: 0;
+}
+
+.statusContainer {
+  flex: 1;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  :global(.inlineContainer),
+  > div > div {
+    max-width: 100%;
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+    padding: 24px 32px 48px;
+  }
+}
+
+@media (max-width: 768px) {
+  .fieldsLayout {
+    flex-direction: column;
+  }
+
+  .fieldsSidebar {
+    display: flex;
+    width: 100%;
+    position: static;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sidebarImage {
+    width: 60px;
+    height: 60px;
+    max-height: 60px;
+  }
+
+  .fieldsColumns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    grid-gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .siteTypeTitle {
+    font-size: 24px;
+  }
+
+  .siteTypeCardWrapper {
+    :global(.fui-Card) {
+      width: 168px;
+    }
+
+    :global(.fui-CardPreview) img {
+      max-height: 116px;
+    }
+  }
+}

@@ -9,6 +9,10 @@
     padding: 15px 0px;
     row-gap: 20px;
     flex-direction: row;
+
+    .tabList {
+      width: 100%;
+    }
   }
 
   .emptyMessage {

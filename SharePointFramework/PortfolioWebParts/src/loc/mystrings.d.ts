@@ -1,21 +1,33 @@
 declare interface IPortfolioWebPartsStrings {
   ResultsCountLabel: string
+  FilterPanelGroupProjectInformation: string
   ColumnRenderOptionStatusReport: string
+  ColumnRenderOptionProjectInfo: string
+  ColumnRenderOptionHub: string
+  ColumnRenderOptionCalculated: string
   PortfolioSelectorLabel: string
+  MergedViewLabel: string
   PortfoliosFieldDescription: string
   SelectedPortfolioDescription: string
   ShowPortfolioSelectorDescription: string
   IconNameFieldPlaceholder: string
   IconNameFieldLabel: string
+  LanguageFieldLabel: string
+  IncludeInMergedViewFieldLabel: string
   PortfolioSelectorDescription: string
   ShowPortfolioSelectorOnText: string
   ShowPortfolioSelectorOffText: string
   ShowPortfolioSelectorLabel: string
+  ShowMergedViewInViewSelectorLabel: string
+  ShowMergedViewInViewSelectorDescription: string
   SelectedPortfolioLabel: string
   PortfoliosFieldLabel: string
   PortfoliosPanelHeader: string
   PortfoliosManageBtnLabel: string
   UrlFieldLabel: string
+  ProjectListNameFieldLabel: string
+  ProjectStatusListNameFieldLabel: string
+  ProjectContentColumnsListNameFieldLabel: string
   ViewsListNameFieldLabel: string
   ColumnsListNameFieldLabel: string
   ColumnConfigListNameFieldLabel: string
@@ -47,6 +59,11 @@ declare interface IPortfolioWebPartsStrings {
     DatePicker: string
   },
   Provision: {
+    DrawerSizeFieldLabel: string
+    DrawerSizeMedium: string
+    DrawerSizeFull: string
+    FullscreenHeaderTitle: string
+    ChangeTypeButtonLabel: string
     DrawerLevel0HeaderText: string
     DrawerLevel0DescriptionText: string
     DrawerLevel1HeaderText: string
@@ -73,6 +90,7 @@ declare interface IPortfolioWebPartsStrings {
     UserFieldNoOptionsText: string
     MemberFieldLabel: string
     MemberFieldDescription: string
+    DuplicateOwnerMemberMessage: string
     RequestedByFieldLabel: string
     RequestedByFieldDescription: string
     TeamifyFieldLabel: string
@@ -105,6 +123,9 @@ declare interface IPortfolioWebPartsStrings {
     LanguageFieldLabel: string
     TimeZoneFieldLabel: string
     HubSiteFieldLabel: string
+    DefaultHubInfoMessage: string
+    ParentSiteFieldLabel: string
+    ParentSiteFieldDescription: string
     ImageFieldLabel: string
     ImageFieldDescription: string
     ImageDropZoneText: string
@@ -161,9 +182,28 @@ declare interface IPortfolioWebPartsStrings {
     ExpirationDateNoneOption: string
     ExpirationDateMonthOption: string
     NoProvisionAccessMessage: string
+    NoHubSiteConnectionMessage: string
     DefaultTeamTemplate: string
     DefaultLanguage: string
     DefaultTimeZone: string
+    ConfirmationTitle: string
+    ConfirmationMessage: string
+    NewRequestButton: string
+    ViewRequestsButton: string
+    ConfigEditorButton: string
+    ConfigEditorTitle: string
+    ConfigEditorDescription: string
+    ConfigJsonLabel: string
+    ConfigJsonHint: string
+    ConfigSaveButton: string
+    ConfigSavingButton: string
+    ConfigResetButton: string
+    ConfigResetConfirmationLabel: string
+    ConfigSaveSuccess: string
+    ConfigSaveSuccessTitle: string
+    ConfigSaveError: string
+    ConfigInvalidJson: string
+    ConfigEditorAccessDenied: string
     CommunityNameFieldLabel: string
     CommunityNameFieldDescription: string
     CommunityNameFieldPlaceholder: string
@@ -200,8 +240,13 @@ declare interface IPortfolioWebPartsStrings {
     TeamPrivacyFieldLabel: string
     TeamPrivacyFieldDescription: string
     TeamPrivacyFieldPlaceholder: string
+    RenderModeFieldLabel: string
+    RenderModeButton: string
+    RenderModeInline: string
     ButtonLabelFieldLabel: string
     ButtonLabelFieldDescription: string
+    ParentModeFieldLabel: string
+    ParentModeFieldDescription: string
     AutoOwnerFieldLabel: string
     AutoOwnerFieldDescription: string
     AutoOwnerOnText: string
@@ -281,6 +326,7 @@ declare interface IPortfolioWebPartsStrings {
     StandardTeamTemplate: string
     FieldLogicGroupName: string
     DefaultExpirationDateFieldLabel: string
+    ShowTeamTemplateFieldLabel: string
     ReadOnlyGroupLogicFieldLabel: string
     ProjectAreaType: string
     VivaEngageCommunityType: string
@@ -321,8 +367,6 @@ declare interface IPortfolioWebPartsStrings {
     ProvisionUrlFieldLabel: string
     ProvisionUrlFieldDescription: string
   },
-  HideDataTypePropertiesLabel: string
-  ShowDataTypePropertiesLabel: string
   NoViewFoundTitle: string
   AddColumnLabel: string
   AllProjectsHeaderText: string
@@ -332,47 +376,11 @@ declare interface IPortfolioWebPartsStrings {
   BooleanNo: string
   BooleanYes: string
   CancelButtonLabel: string
-  ChartErrorText: string
   ColumnCategoryDescription: string
   ColumnCategoryLabel: string
-  ColumnPersistRenderGloballyFieldDescription: string
-  ColumnPersistRenderGloballyFieldLabel: string
   ColumnRenderDataTypePropertiesHeaderText: string
   ColumnRenderDescription: string
   ColumnRenderLabel: string
-  ColumnRenderOptionBoolean: string
-  ColumnRenderOptionBooleanFalse: string
-  ColumnRenderOptionBooleanTrue: string
-  ColumnRenderOptionCurrency: string
-  ColumnRenderOptionCurrencyFallbackValueLabel: string
-  ColumnRenderOptionCurrencyMaximumFractionDigitsLabel: string
-  ColumnRenderOptionCurrencyMinimumFractionDigitsLabel: string
-  ColumnRenderOptionCurrencyPrefixLabel: string
-  ColumnRenderOptionDate: string
-  ColumnRenderOptionDateIncludeTimeLabel: string
-  ColumnRenderOptionInstrument: string
-  InstrumentUnitLabel: string
-  ColumnRenderOptionDialog: string
-  ColumnRenderOptionDialogInfoTextTemplateDescription: string
-  ColumnRenderOptionDialogInfoTextTemplateLabel: string
-  ColumnRenderOptionDialogLinkTextLabel: string
-  ColumnRenderOptionDialogShowInfoTextLabel: string
-  ColumnRenderOptionFilename: string
-  ColumnRenderOptionNote: string
-  ColumnRenderOptionNumber: string
-  ColumnRenderOptionPercentage: string
-  ColumnRenderOptionProjectInfo: string
-  ColumnRenderOptionTags: string
-  ColumnRenderOptionTagsValueSeparatorDescription: string
-  ColumnRenderOptionTagsValueSeparatorLabel: string
-  ColumnRenderOptionText: string
-  ColumnRenderOptionTrend: string
-  ColumnRenderOptionTrendShowTrendIconLabel: string
-  ColumnRenderOptionUrl: string
-  ColumnRenderOptionUrlDescriptionDescription: string
-  ColumnRenderOptionUrlDescriptionLabel: string
-  ColumnRenderOptionUrlOpenInNewTabLabel: string
-  ColumnRenderOptionUser: string
   ColumnSettingsDisabledTooltip: string
   ColumnSettingsLabel: string
   ColumnVisibilityDescription: string
@@ -409,6 +417,19 @@ declare interface IPortfolioWebPartsStrings {
   DefaultTimeframeStartValue: string
   DefaultVerticalDescription: string
   DefaultVerticalLabel: string
+  VerticalConfigLabel: string
+  VerticalConfigPanelHeader: string
+  VerticalConfigManageBtnLabel: string
+  VerticalConfigKeyTitle: string
+  VerticalConfigTitleTitle: string
+  VerticalConfigIconTitle: string
+  VerticalConfigSortOrderTitle: string
+  VerticalConfigClientFilterTitle: string
+  VerticalConfigFieldFilterTitle: string
+  VerticalConfigVisibilityRuleTitle: string
+  VerticalConfigRequiresAccessTitle: string
+  VerticalConfigIsDefaultTitle: string
+  VerticalConfigSearchBoxPlaceholderTitle: string
   DefaultViewDescription: string
   DefaultViewLabel: string
   DefaultViewSetWarningMessage: string
@@ -436,6 +457,7 @@ declare interface IPortfolioWebPartsStrings {
   GeneralGroupName: string
   GroupByColumnLabel: string
   HideVerticalsLabel: string
+  HideVerticalsDescription: string
   IconNameDescription: string
   IconNameLabel: string
   IncludeViewNameInExcelExportFilenameLabel: string
@@ -452,14 +474,8 @@ declare interface IPortfolioWebPartsStrings {
   LoadingText: string
   MaxWidthDescription: string
   MaxWidthLabel: string
-  MeasurementAchievementLabel: string
-  MeasurementCommentLabel: string
-  MeasurementDateLabel: string
-  MeasurementValueLabel: string
   MinWidthDescription: string
   MinWidthLabel: string
-  ModalColumnEmptyListMessage: string
-  ModalColumnEmptyListTitle: string
   MoveLeftLabel: string
   MoveRightLabel: string
   MyProjectsHeaderText: string
@@ -471,7 +487,6 @@ declare interface IPortfolioWebPartsStrings {
   NewViewText: string
   NoAccessMessage: string
   NoDefaultViewMessage: string
-  NoProjectData: string
   NoProjectsFoundMessage: string
   NoProjectsFoundTitle: string
   NotSet: string
@@ -535,15 +550,12 @@ declare interface IPortfolioWebPartsStrings {
   SearchPropertyPlaceholder: string
   SearchQueryLabel: string
   SelectProgramText: string
-  ShowAllMeasurementsLinkText: string
-  ShowInstrumentLinkText: string
   ShowCommandBarLabel: string
   ShowExcelExportButtonLabel: string
   ShowFieldFrontpageLabel: string
   ShowFieldPortfolioLabel: string
   ShowFieldProjectStatusLabel: string
   ShowFiltersLabel: string
-  ShowGroupByLabel: string
   ShowHideColumnsLabel: string
   ShowProgramViewsLabel: string
   ShowProjectLogoFieldLabel: string
@@ -585,6 +597,9 @@ declare interface IPortfolioWebPartsStrings {
   LifecycleStatus_Completed: string
   LifecycleStatus_Closed: string
   ProjectLevel: string
+  ColumnRenderOptionText: string
+  NoProjectData: string
+  MeasurementSheetTitleKey: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

@@ -15,7 +15,7 @@ export interface IOpportunityMatrixProps
 }
 
 /**
- * Default header labels for consequence for the opportunity matrix (0-6). For the opportunity matrix,
+ * Default header labels for consequence for the opportunity matrix (0-6). For the default opportunity matrix,
  * these headers will be rendered on the x-axis.
  */
 export const OPPORTUNITY_DEFAULT_MATRIX_CONSEQUENCE_HEADERS = [
@@ -28,7 +28,7 @@ export const OPPORTUNITY_DEFAULT_MATRIX_CONSEQUENCE_HEADERS = [
 ]
 
 /**
- * Default header labels for probability for the opportunity matrix (0-6). For the opportunity matrix,
+ * Default header labels for probability for the opportunity matrix (0-6). For the default opportunity matrix,
  * these headers will be rendered on the y-axis.
  */
 export const OPPORTUNITY_DEFAULT_MATRIX_PROBABILITY_HEADERS = [

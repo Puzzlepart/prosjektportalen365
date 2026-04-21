@@ -77,14 +77,22 @@ export abstract class BasePortfolioWebPart<
     this.sp = createSpfiInstance(this.context)
     Logger.subscribe(ConsoleListener())
     Logger.activeLogLevel = sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
-    const sitePagesLibrary = this.sp.web.lists.getById(this.context.pageContext.list.id.toString())
-    try {
-      this._pageTitle = (
-        await sitePagesLibrary.items.getById(this.context.pageContext.listItem.id).select('Title')<{
-          Title: string
-        }>()
-      ).Title
-    } catch (error) {}
+
+    // Only try to get page title if we're in a list context (not in Teams)
+    if (this.context.pageContext.list?.id && this.context.pageContext.listItem?.id) {
+      const sitePagesLibrary = this.sp.web.lists.getById(
+        this.context.pageContext.list.id.toString()
+      )
+      try {
+        this._pageTitle = (
+          await sitePagesLibrary.items
+            .getById(this.context.pageContext.listItem.id)
+            .select('Title')<{
+            Title: string
+          }>()
+        ).Title
+      } catch (error) {}
+    }
   }
 
   /**

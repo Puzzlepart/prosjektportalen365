@@ -11,12 +11,7 @@
   padding: 0 25px;
   background-color: var(--colorNeutralBackground1);
   border-top: 1px solid var(--colorNeutralBackground3);
-  transition: all 0.2s ease-in-out;
   z-index: 9;
-
-  &:hover {
-    padding: 25px;
-  }
 
   .left,
   .right {
@@ -31,19 +26,12 @@
     opacity: 0;
     min-height: 0px;
     height: 12px;
-
-    .footer {
-      height: 100%;
-    }
+    transition: opacity 0.2s ease-in-out, height 0.2s ease-in-out;
 
     &:hover {
-      height: 60px;
+      min-height: 40px;
+      height: auto;
       opacity: 1;
-
-      .footer {
-        display: flex;
-        height: 100%;
-      }
     }
   }
 }

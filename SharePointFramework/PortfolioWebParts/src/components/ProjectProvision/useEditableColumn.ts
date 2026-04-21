@@ -1,22 +1,53 @@
 /* eslint-disable no-console */
-import { useCallback, useEffect, useMemo, useState } from 'react'
+
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { IProjectProvisionProps, IProjectProvisionState } from './types'
 import _ from 'lodash'
 import strings from 'PortfolioWebPartsStrings'
 
 /**
- * Initial column with default values.
+ * Hook that manages the editable column Map for the provision form.
+ * Handles field values, transformations, alias calculation, and
+ * type-based defaults.
  */
 export function useEditableColumn(
   props: IProjectProvisionProps,
   state: IProjectProvisionState,
   setState: (newState: Partial<IProjectProvisionState>) => void
 ) {
+  const [hubSiteTitle, setHubSiteTitle] = useState<string>(props.pageContext.web.title)
+
   const defaultType = useMemo(() => {
     return !state.loading && !state.error && state.types && state.types.length > 0
       ? state.types[0]
       : null
   }, [state.loading, state.error, state.types])
+
+  useEffect(() => {
+    const fetchHubSiteTitle = async () => {
+      if (props.parentMode && props.dataAdapter?.portalDataService) {
+        try {
+          const hubInfo = await props.dataAdapter.portalDataService.resolveHubSiteFromUrl(
+            props.dataAdapter.portalDataService.url
+          )
+          if (hubInfo?.title) {
+            setHubSiteTitle(hubInfo.title)
+          }
+        } catch (error) {
+          console.warn('Failed to resolve hub site title:', error)
+          setHubSiteTitle(props.pageContext.web.title)
+        }
+      } else {
+        setHubSiteTitle(props.pageContext.web.title)
+      }
+    }
+    fetchHubSiteTitle()
+  }, [
+    props.parentMode,
+    props.pageContext.web.absoluteUrl,
+    props.pageContext.web.title,
+    props.dataAdapter
+  ])
 
   const initialColumn = useMemo(
     () =>
@@ -42,15 +73,16 @@ export function useEditableColumn(
         ['requestedSource', ''],
         ['image', ''],
         ['isConfidential', false],
+        ['metadata', ''],
         ['privacy', strings.Provision.PrivacyFieldOptionPrivate],
         ['externalSharing', false],
         ['guest', []],
         ['language', strings.Provision.DefaultLanguage],
         ['timeZone', strings.Provision.DefaultTimeZone],
-        ['hubSite', props.pageContext.legacyPageContext.hubSiteId],
-        ['hubSiteTitle', props.pageContext.web.title]
+        ['hubSite', props.pageContext.legacyPageContext.hubSiteId || ''],
+        ['hubSiteTitle', hubSiteTitle]
       ]),
-    [props.pageContext.legacyPageContext.hubSiteId, props.pageContext.web.title]
+    [props.pageContext.legacyPageContext.hubSiteId, hubSiteTitle]
   )
 
   const [column, $setColumn] = useState<Map<string, any>>(initialColumn)
@@ -100,6 +132,9 @@ export function useEditableColumn(
             'owner',
             async () => {
               if (!value || !Array.isArray(value)) return []
+              if (!props.dataAdapter?.portalDataService) {
+                return []
+              }
               try {
                 const users = await props.dataAdapter.getProvisionUsers(value, props.provisionUrl)
                 const values = await Promise.all(users)
@@ -114,6 +149,9 @@ export function useEditableColumn(
             'member',
             async () => {
               if (!value || !Array.isArray(value)) return []
+              if (!props.dataAdapter?.portalDataService) {
+                return []
+              }
               try {
                 const users = await props.dataAdapter.getProvisionUsers(value, props.provisionUrl)
                 const values = await Promise.all(users)
@@ -128,6 +166,9 @@ export function useEditableColumn(
             'requestedBy',
             async () => {
               if (!value || !Array.isArray(value)) return []
+              if (!props.dataAdapter?.portalDataService) {
+                return []
+              }
               try {
                 const users = await props.dataAdapter.getProvisionUsers(value, props.provisionUrl)
                 const values = await Promise.all(users)
@@ -205,6 +246,10 @@ export function useEditableColumn(
    * @param key Key of the column to update
    * @param value Value to update the column with
    */
+  // Use a ref to access the latest properties without creating a dependency
+  const propertiesRef = useRef(state.properties)
+  propertiesRef.current = state.properties
+
   const setColumn = useCallback(
     async (key: string, value: any): Promise<void> => {
       try {
@@ -224,10 +269,10 @@ export function useEditableColumn(
 
         setState({
           properties: {
-            ...state.properties,
+            ...propertiesRef.current,
             [key]: transformedValue,
             ...(key === 'name' && typeof value === 'string'
-              ? { alias: calculateAlias(value, state.properties.type) }
+              ? { alias: calculateAlias(value, propertiesRef.current.type) }
               : {})
           }
         })
@@ -240,7 +285,7 @@ export function useEditableColumn(
         })
       }
     },
-    [transformValue, setState, state.properties, calculateAlias]
+    [transformValue, setState, calculateAlias]
   )
 
   /**
@@ -275,13 +320,15 @@ export function useEditableColumn(
         $setColumn((prev) => {
           const newColumn = new Map(prev)
           newColumn.set('type', defaultType.title)
+          newColumn.set('hubSiteTitle', hubSiteTitle)
           return newColumn
         })
 
         setState({
           properties: {
             ...state.properties,
-            type: defaultType.title
+            type: defaultType.title,
+            hubSiteTitle: hubSiteTitle
           }
         })
       } catch (error) {
@@ -290,12 +337,21 @@ export function useEditableColumn(
     }
   }, [state.loading, defaultType])
 
+  // Track which type we last set defaults for, to prevent re-running
+  // when this effect's own setState updates trigger a re-render.
+  const lastDefaultsTypeRef = useRef<string | null>(null)
+
   // Set defaults based on selected type
   useEffect(() => {
+    const currentType = column.get('type')
+    if (lastDefaultsTypeRef.current === currentType) return
+
     const setDefaults = async () => {
       if (state.loading || !state.types || state.types.length === 0 || !defaultType) {
         return
       }
+
+      lastDefaultsTypeRef.current = currentType
 
       try {
         const typeDefaults =
@@ -318,6 +374,8 @@ export function useEditableColumn(
 
         const defaultExpirationDate =
           props.expirationDateMode === 'monthDropdown' ? props.defaultExpirationDate || '0' : null
+
+        const defaultMetadata = typeDefaults?.defaultMetadata || ''
 
         let defaultOwner: any[] = []
         let transformedOwner: any[] = []
@@ -343,9 +401,31 @@ export function useEditableColumn(
           transformedExpirationDate = await transformValue(defaultExpirationDate, 'expirationDate')
         }
 
+        const transformedPrivacy = await transformValue(defaultVisibility, 'privacy')
+
+        let resolvedHubSite = props.pageContext.legacyPageContext.hubSiteId || ''
+        let resolvedHubSiteTitle = hubSiteTitle
+
+        if (
+          typeDefaults?.defaultHub &&
+          (!resolvedHubSite || typeDefaults.defaultHub !== resolvedHubSite) &&
+          props.dataAdapter?.portalDataService
+        ) {
+          try {
+            const hubInfo = await props.dataAdapter.resolveHubSiteById(typeDefaults.defaultHub)
+            if (hubInfo) {
+              resolvedHubSite = hubInfo.hubSiteId
+              resolvedHubSiteTitle = hubInfo.title
+            }
+          } catch (error) {
+            console.warn('Failed to resolve default hub site:', error)
+          }
+        }
+
         $setColumn((prev) => {
           const newColumns = new Map(prev)
           newColumns.set('isConfidential', defaultConfidentialData)
+          newColumns.set('metadata', defaultMetadata)
           newColumns.set('privacy', defaultVisibility)
           newColumns.set('sensitivityLabel', defaultSensitivityLabel)
           newColumns.set('sensitivityLabelLibrary', defaultSensitivityLabelLibrary)
@@ -354,6 +434,8 @@ export function useEditableColumn(
           newColumns.set('teamify', defaultTeamify)
           newColumns.set('owner', defaultOwner)
           newColumns.set('expirationDate', defaultExpirationDate)
+          newColumns.set('hubSite', resolvedHubSite)
+          newColumns.set('hubSiteTitle', resolvedHubSiteTitle)
           return newColumns
         })
 
@@ -361,13 +443,16 @@ export function useEditableColumn(
           properties: {
             ...state.properties,
             isConfidential: defaultConfidentialData,
+            metadata: defaultMetadata,
             sensitivityLabel: defaultSensitivityLabel,
             sensitivityLabelLibrary: defaultSensitivityLabelLibrary,
             retentionLabel: defaultRetentionLabel,
             externalSharing: enableExternalSharing,
             teamify: defaultTeamify,
             owner: transformedOwner,
-            expirationDate: transformedExpirationDate
+            expirationDate: transformedExpirationDate,
+            hubSiteTitle: resolvedHubSiteTitle,
+            privacy: transformedPrivacy
           }
         })
       } catch (error) {
@@ -376,7 +461,7 @@ export function useEditableColumn(
     }
 
     setDefaults()
-  }, [state.loading, state.types, state.properties.type, defaultType])
+  }, [state.loading, state.types, column.get('type'), defaultType])
 
   return {
     column,

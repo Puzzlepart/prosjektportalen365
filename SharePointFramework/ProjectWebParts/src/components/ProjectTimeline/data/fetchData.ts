@@ -1,3 +1,4 @@
+import { MessageBarType } from '@fluentui/react'
 import { IProjectTimelineProps, IProjectTimelineState } from '../types'
 import { createTimelineGroups } from './createTimelineGroups'
 import { fetchProjectData } from './fetchProjectData'
@@ -5,6 +6,9 @@ import { fetchTimelineConfiguration } from './fetchTimelineConfiguration'
 import { fetchTimelineData } from './fetchTimelineData'
 import { getSelectedGroups } from './getSelectedGroups'
 import { transformItems } from './transformItems'
+import SPDataAdapter from 'data/SPDataAdapter'
+import strings from 'ProjectWebPartsStrings'
+import { CustomError } from 'pp365-shared-library'
 
 /**
  * Fetch data for ProjectTimeline
@@ -17,9 +21,21 @@ export async function fetchData(
   props: IProjectTimelineProps
 ): Promise<Partial<IProjectTimelineState>> {
   try {
-    const timelineConfig = await fetchTimelineConfiguration()
+    const properties = await SPDataAdapter.project.getProjectInformationData()
+
+    if (SPDataAdapter.portalDataService?.isAvailable === false) {
+      throw new Error(strings.ProjectTimelineNoHubAccessErrorText)
+    }
+
+    const timelineConfig = await fetchTimelineConfiguration(
+      properties.templateParameters?.TimelineContentTypeId
+    )
     const [timelineData, { project, projectId }] = await Promise.all([
-      fetchTimelineData(props, timelineConfig),
+      fetchTimelineData(
+        props,
+        timelineConfig,
+        properties.templateParameters?.TimelineContentTypeId
+      ),
       fetchProjectData(props, timelineConfig)
     ])
 
@@ -38,12 +54,19 @@ export async function fetchData(
         groups: selectedGroups,
         listItems: timelineData?.timelineListItems ?? [],
         listColumns: timelineData?.columns ?? [],
-        fields: timelineData?.timelineContentEditableFields ?? []
+        fields: timelineData?.timelineContentEditableFields ?? [],
+        timelineContentTypeId: properties.templateParameters?.TimelineContentTypeId
       },
       timelineConfig,
+      timelineContentTypeId: properties.templateParameters?.TimelineContentTypeId,
       groups
     }
   } catch (error) {
-    return { error }
+    return {
+      error: CustomError.createError(
+        error instanceof Error ? error : new Error(String(error)),
+        MessageBarType.warning
+      )
+    }
   }
 }

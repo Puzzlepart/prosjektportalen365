@@ -1,4 +1,4 @@
-<pnp:CustomActions xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+<pnp:CustomActions xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
     <pnp:WebCustomActions>
         <pnp:CustomAction Group="Customization" Location="Microsoft.SharePoint.SiteSettings" Name="{resource:ClientSidePages_Configuration_CustomActionTitle}" Title="{resource:ClientSidePages_Configuration_CustomActionTitle}" Url="SitePages/{resource:ClientSidePages_Configuration_PageName}" Rights="ManageWeb" Sequence="2001" />
         <pnp:CustomAction Name="{14a8f599-a359-4914-95c9-74476de792e5}" Location="ClientSideExtension.ApplicationCustomizer" Title="Footer" Sequence="0" Rights="" RegistrationType="None" ClientSideComponentId="84f27cec-ffde-4e00-a4cf-25c69f691054" ClientSideComponentProperties="{}" />

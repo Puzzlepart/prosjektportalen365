@@ -1,5 +1,5 @@
 <pnp:ListInstance Title="{resource:Lists_ProjectColumns_Title}" Description="{resource:Lists_ProjectColumns_Description}" DocumentTemplate="" TemplateType="100" Hidden="true" Url="{resource:Lists_ProjectColumns_Url}" EnableVersioning="true" EnableAttachments="false" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false"
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100248005C277FADD45B7266F9151442472" Default="true" />
     </pnp:ContentTypeBindings>
@@ -31,7 +31,7 @@
             <JSLink>hierarchytaskslist.js</JSLink>
         </View>
     </pnp:Views>
-    <pnp:DataRows KeyColumn="GtInternalName" UpdateBehavior="Overwrite">
+    <pnp:DataRows KeyColumn="GtInternalName" UpdateBehavior="Skip">
         <pnp:DataRow>            <!-- ID: 1 -->
             <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_Title_DisplayName}</pnp:DataValue>
@@ -523,8 +523,8 @@
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsRefinable">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 30 -->
             <pnp:DataValue FieldName="GtSortOrder">300</pnp:DataValue>
@@ -888,14 +888,56 @@
             "statusSectionsListName": "{resource:Lists_StatusSections_Title}",
             "animation": {
                 "delay": 100,
-                "transitionDuration": 400
+                "transitionDuration": 250
             },
             "tooltip": {
                 "animation": {
-                "delay": 250,
-                "transitionDuration": 300
+                "delay": 50,
+                "transitionDuration": 200
                 }
             }}</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 51 -->
+            <pnp:DataValue FieldName="GtSortOrder">510</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Hub</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">_hubTitle</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">-</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Hub</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldProjectStatus">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldFrontpage">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsRefinable">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 52 -->
+            <pnp:DataValue FieldName="GtSortOrder">520</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtProjectExtensions_DisplayName}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtProjectExtensions</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtProjectExtensionsOWSTEXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldProjectStatus">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldFrontpage">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsRefinable">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 53 -->
+            <pnp:DataValue FieldName="GtSortOrder">530</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtProjectListContent_DisplayName}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtProjectListContent</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtProjectListContentOWSTEXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldProjectStatus">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldFrontpage">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsRefinable">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />

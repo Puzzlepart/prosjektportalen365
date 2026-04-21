@@ -1,5 +1,5 @@
 <pnp:ContentType ID="0x0100DAFD9901A59F445EB29B2CE3D663A87D" Name="{resource:ContentTypes_TimelineConfiguration_Element_Name}" Description="{resource:ContentTypes_TimelineConfiguration_Element_Description}" Group="{resource:ContentTypes_Group}" UpdateChildren="true"
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
     <pnp:FieldRefs>
         <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" UpdateChildren="true" />
         <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
@@ -10,5 +10,6 @@
         <pnp:FieldRef ID="6ef97f12-3ac3-4ebc-8975-d658eea33571" Name="GtShowElementPortfolio" UpdateChildren="true" />
         <pnp:FieldRef ID="a00b13f6-2761-488d-85d9-37f85879b433" Name="GtShowElementProgram" UpdateChildren="true" />
         <pnp:FieldRef ID="2e70b590-4f03-4292-80a1-766564082f1e" Name="GtTimelineFilter" UpdateChildren="true" />
+        <pnp:FieldRef ID="7f8e9d1a-2b3c-4d5e-6f7a-8b9c0d1e2f3a" Name="GtTemplateOptions" UpdateChildren="true" />
     </pnp:FieldRefs>
 </pnp:ContentType>

@@ -1,5 +1,5 @@
 import { format, Spinner } from '@fluentui/react'
-import { ItemFieldValues } from 'pp365-shared-library'
+import { ItemFieldValues, WebPartTitle } from 'pp365-shared-library'
 import { CustomEditPanel, Timeline, UserMessage } from 'pp365-shared-library/lib/components'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
@@ -26,7 +26,10 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
               </div>
             </div>
           ) : state.error ? (
-            <UserMessage title={strings.ErrorTitle} text={state.error.message} intent='warning' />
+            <div className={styles.messageContainer}>
+              <WebPartTitle title={props.title} />
+              <UserMessage title={strings.ErrorTitle} text={state.error.message} intent='warning' />
+            </div>
           ) : (
             <div>
               {props.showTimeline && (
@@ -49,11 +52,11 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
           )}
         </div>
       </div>
-      {state.panel && (
+      {state.panel && SPDataAdapter.portalDataService?.web && (
         <CustomEditPanel
           isOpen={true}
           fields={state.data?.fields}
-          hiddenFields={['GtSiteIdLookup']}
+          hiddenFields={['GtSiteIdLookup', 'ContentTypeId']}
           fieldValues={new ItemFieldValues()}
           dataAdapter={SPDataAdapter}
           targetWeb={SPDataAdapter.portalDataService.web}

@@ -31,6 +31,7 @@ import {
   ProgressDialog,
   ProjectSetupDialog
 } from '../../components'
+import { ITaskProgress } from '../../components/ProgressDialog/types'
 import { ProjectSetupError } from './ProjectSetupError'
 import { deleteCustomizer } from './deleteCustomizer'
 import * as Tasks from './tasks'
@@ -52,6 +53,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     TemplateSelectDialog: getId('templateselectdialog')
   }
   private _validation: ProjectSetupValidation
+  private _taskProgress: ITaskProgress[] = []
+  private _currentTaskIndex: number = 0
+  private _totalTasks: number = 0
 
   @override
   public async onInit(): Promise<void> {
@@ -102,7 +106,19 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           )
         }
         case ProjectSetupValidation.AlreadySetup: {
-          if (stringIsNullOrEmpty(this.properties.forceTemplate)) {
+          const skipViaSession = sessionStorage.getItem('pp_skipAlreadySetupCheck') === 'true'
+          if (skipViaSession) {
+            sessionStorage.removeItem('pp_skipAlreadySetupCheck')
+          }
+          Logger.write(
+            `(ProjectSetup) AlreadySetup check: forceTemplate='${this.properties.forceTemplate}', skipAlreadySetupCheck=${this.properties.skipAlreadySetupCheck}, skipViaSession=${skipViaSession}`,
+            LogLevel.Warning
+          )
+          if (
+            stringIsNullOrEmpty(this.properties.forceTemplate) &&
+            !this.properties.skipAlreadySetupCheck &&
+            !skipViaSession
+          ) {
             throw new ProjectSetupError(
               'AlreadySetup',
               strings.ProjectAlreadySetupMessage,
@@ -177,11 +193,15 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           description: strings.ProgressDialogDescription
         },
         iconName: data.selectedTemplate?.iconProps?.iconName ?? 'Page',
-        dialogContentProps: this.properties.progressDialogContentProps
+        title: this.properties.progressDialogTitle,
+        subText: this.properties.progressDialogSubText
       })
       await this._startSetup(taskParams, data)
 
-      if (!stringIsNullOrEmpty(this.properties.forceTemplate)) {
+      if (
+        !stringIsNullOrEmpty(this.properties.forceTemplate) &&
+        this.properties.forceTemplate !== '__SELECT_TEMPLATE__'
+      ) {
         await this.initializeQuickLaunchMenu()
         await this.sp.web.lists
           .getByTitle(resource.Lists_ProjectProperties_Title)
@@ -192,7 +212,22 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
 
       await deleteCustomizer(this)
       if (!this.properties.skipReload) {
-        window.location.href = this.context.pageContext.web.absoluteUrl
+        this._renderProgressDialog({
+          progressIndicator: {
+            label: strings.ProgressDialogLabel,
+            description: strings.ProgressDialogDescription
+          },
+          iconName: data.selectedTemplate?.iconProps?.iconName ?? 'Page',
+          title: this.properties.progressDialogTitle,
+          subText: this.properties.progressDialogSubText,
+          taskProgress: this._taskProgress,
+          currentStep: this._totalTasks,
+          totalSteps: this._totalTasks,
+          isComplete: true,
+          onDismiss: () => {
+            window.location.href = this.context.pageContext.web.absoluteUrl
+          }
+        })
       }
     } catch (error) {
       this._renderErrorDialog({ error })
@@ -345,6 +380,20 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     data: IProjectSetupData
   ): Promise<void> {
     const tasks = Tasks.getTasks(data)
+    const activeTasks = tasks.filter(
+      (task) =>
+        !isArray(this.properties.tasks) ||
+        ['PreTask', ...this.properties.tasks].indexOf(task.taskName) !== -1
+    )
+
+    this._taskProgress = activeTasks.map((task) => ({
+      name: task.taskName,
+      status: 'pending' as const,
+      entries: []
+    }))
+    this._totalTasks = activeTasks.length
+    this._currentTaskIndex = 0
+
     try {
       await ListLogger.log({
         message: format(
@@ -354,14 +403,28 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         functionName: '_startProvision',
         component: 'ProjectSetup'
       })
-      for (let i = 0; i < tasks.length; i++) {
-        const task = tasks[i]
-        if (
-          isArray(this.properties.tasks) &&
-          ['PreTask', ...this.properties.tasks].indexOf(task.taskName) === -1
+      for (let i = 0; i < activeTasks.length; i++) {
+        const task = activeTasks[i]
+        this._currentTaskIndex = i
+        this._taskProgress[i].status = 'running'
+        this._renderCurrentProgress(
+          task.taskName,
+          '',
+          data.selectedTemplate?.iconProps?.iconName ?? 'Page'
         )
-          continue
-        taskParams = await task.execute(taskParams, this._onTaskStatusUpdated.bind(this))
+        try {
+          taskParams = await task.execute(taskParams, this._onTaskStatusUpdated.bind(this, i))
+          this._taskProgress[i].status = 'completed'
+        } catch (error) {
+          this._taskProgress[i].status = 'error'
+          this._taskProgress[i].entries.push({
+            timestamp: new Date(),
+            message: error.message || String(error),
+            level: 'error'
+          })
+          this._renderCurrentProgress(task.taskName, error.message, 'ErrorBadge')
+          throw error
+        }
       }
       await ListLogger.log({
         message: format(
@@ -384,18 +447,50 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   /**
-   * On task status updated
-   *
-   * @param label - Progress label
-   * @param description - Progress description
-   * @param iconName - Icon name
+   * Render the current progress state to the ProgressDialog.
    */
-  private _onTaskStatusUpdated(label: string, description: string, iconName: string) {
+  private _renderCurrentProgress(label: string, description: string, iconName: string) {
     this._renderProgressDialog({
       progressIndicator: { label, description },
       iconName,
-      dialogContentProps: this.properties.progressDialogContentProps
+      title: this.properties.progressDialogTitle,
+      subText: this.properties.progressDialogSubText,
+      taskProgress: this._taskProgress,
+      currentStep: this._currentTaskIndex,
+      totalSteps: this._totalTasks
     })
+  }
+
+  /**
+   * On task status updated. Called by individual tasks to report
+   * progress, including optional granular log entries.
+   *
+   * @param taskIndex - Index of the task in the progress array
+   * @param label - Progress label
+   * @param description - Progress description
+   * @param iconName - Icon name
+   * @param logEntry - Optional log entry for advanced logging
+   */
+  private _onTaskStatusUpdated(
+    taskIndex: number,
+    label: string,
+    description: string,
+    iconName: string,
+    logEntry?: { message: string; level: 'info' | 'warning' | 'error' }
+  ) {
+    if (logEntry && this._taskProgress[taskIndex]) {
+      this._taskProgress[taskIndex].entries.push({
+        timestamp: new Date(),
+        ...logEntry
+      })
+    } else if (description && this._taskProgress[taskIndex]) {
+      this._taskProgress[taskIndex].entries.push({
+        timestamp: new Date(),
+        message: description,
+        level: 'info'
+      })
+    }
+    this._renderCurrentProgress(label, description, iconName)
   }
 
   /**
@@ -482,13 +577,26 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         tmpl.projectTemplateUrl = tmplFile?.serverRelativeUrl
         return tmpl
       })
+
+      let hasExistingTemplate = false
+      try {
+        const [propertyItem] = await this.sp.web.lists
+          .getByTitle(resource.Lists_ProjectProperties_Title)
+          .items.select('GtProjectTemplate')
+          .top(1)()
+        hasExistingTemplate = !!propertyItem && !stringIsNullOrEmpty(propertyItem.GtProjectTemplate)
+      } catch {
+        // List may not exist for new projects
+      }
+
       return {
         ...data,
         extensions,
         contentConfig,
         templates,
         customActions,
-        projectData
+        projectData,
+        hasExistingTemplate
       } as IProjectSetupData
     } catch (error) {
       throw new ProjectSetupError(
@@ -613,7 +721,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           description: strings.RemoveAlternativeLanguagesProgressText
         },
         iconName: 'LocalLanguage',
-        dialogContentProps: this.properties.progressDialogContentProps
+        title: this.properties.progressDialogTitle,
+        subText: this.properties.progressDialogSubText
       })
 
       Logger.write(

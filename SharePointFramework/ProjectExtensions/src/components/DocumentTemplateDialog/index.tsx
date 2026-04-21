@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { DefaultButton, DialogFooter, format, PrimaryButton, Selection } from '@fluentui/react'
+import { format, Selection } from '@fluentui/react'
+import { Button } from '@fluentui/react-components'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { useReducer } from 'react'
 import { isEmpty } from 'underscore'
@@ -98,22 +99,28 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
       {
         [DocumentTemplateDialogScreen.Select]: (
           <>
-            <PrimaryButton
-              text={strings.OnSubmitSelectionText}
+            <Button
+              appearance='primary'
               onClick={() =>
                 dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.TargetFolder }))
               }
               disabled={isEmpty(state.selected)}
-            />
+            >
+              {strings.OnSubmitSelectionText}
+            </Button>
           </>
         ),
         [DocumentTemplateDialogScreen.Summary]: (
           <>
-            <PrimaryButton
-              text={strings.GetMoreText}
+            <Button
+              appearance='primary'
               onClick={() => dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.Select }))}
-            />
-            <DefaultButton text={strings.CloseModalText} onClick={onClose} />
+            >
+              {strings.GetMoreText}
+            </Button>
+            <Button appearance='secondary' onClick={onClose}>
+              {strings.CloseModalText}
+            </Button>
           </>
         )
       }[state.screen] || null
@@ -123,16 +130,13 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
   return (
     <DocumentTemplateDialogContext.Provider value={{ state, dispatch }}>
       <BaseDialog
-        dialogContentProps={{ title: props.title }}
-        modalProps={{
-          isBlocking: state.locked,
-          isDarkOverlay: state.locked
-        }}
-        onDismiss={onClose}
+        title={props.title}
+        isBlocking={state.locked}
         containerClassName={styles.root}
+        onDismiss={onClose}
+        footer={onRenderFooter()}
       >
         <div className={styles.container}>{onRenderContent()}</div>
-        <DialogFooter>{onRenderFooter()}</DialogFooter>
       </BaseDialog>
     </DocumentTemplateDialogContext.Provider>
   )

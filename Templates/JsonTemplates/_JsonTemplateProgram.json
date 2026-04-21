@@ -520,7 +520,14 @@
                         "statusReportsCount": 0,
                         "statusReportsHeader": "{{WebParts_ProjectStatusHeader_Title}}",
                         "filterField": "GtShowFieldFrontpage",
-                        "adminPageLink": "Admin.aspx"
+                        "adminPageLink": "Admin.aspx",
+                        "fallbackVisibleFields": [
+                            "GtProjectPhase",
+                            "GtProjectOwner",
+                            "GtProjectManager",
+                            "GtProjectType",
+                            "GtProjectServiceArea"
+                        ]
                     }
                 },
                 {
@@ -642,7 +649,6 @@
                                         "title": "{{ClientSidePages_ParentOverview_WebPartTitle}}",
                                         "showCommandBar": true,
                                         "showFilters": true,
-                                        "showGroupBy": true,
                                         "showSearchBox": true,
                                         "showViewSelector": true,
                                         "showExcelExportButton": true

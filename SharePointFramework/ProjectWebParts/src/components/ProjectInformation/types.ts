@@ -5,6 +5,7 @@ import {
   ProjectColumn,
   EditableSPField,
   ProjectInformationParentProject,
+  ProjectInformationChildProject,
   ProjectTemplate,
   IUserMessageProps
 } from 'pp365-shared-library'
@@ -15,7 +16,7 @@ import { IProgressDialogProps } from './ProgressDialog/types'
 import { IArchiveStatusInfo } from '../../data/SPDataAdapter/types'
 
 export type ProjectInformationPanelType = 'EditPropertiesPanel' | 'AllPropertiesPanel'
-export type ProjectInformationDialogType = 'CreateParentDialog'
+export type ProjectInformationDialogType = 'CreateParentDialog' | 'RunProjectSetupDialog'
 export type ProjectInformationPage = 'Frontpage' | 'ProjectStatus' | 'Portfolio'
 
 export interface IProjectInformationProps extends IBaseWebPartComponentProps {
@@ -45,6 +46,12 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   showFieldExternal?: Record<string, boolean>
 
   /**
+   * Internal names of fields to show when hub access is unavailable.
+   * If empty, legacy external configuration or current fallback behavior is used.
+   */
+  fallbackVisibleFields?: string[]
+
+  /**
    * Link to the admin page
    */
   adminPageLink?: string
@@ -65,6 +72,11 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   hideParentProjects?: boolean
 
   /**
+   * Hide child projects section
+   */
+  hideChildProjects?: boolean
+
+  /**
    * Hide latest status report
    */
   hideStatusReport?: boolean
@@ -83,6 +95,21 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
    * Show only icons for latest status report
    */
   statusReportShowOnlyIcons?: boolean
+
+  /**
+   * Number of projects to show
+   */
+  rowLimit?: number
+
+  /**
+   * Min number of projects to show
+   */
+  minRowLimit?: number
+
+  /**
+   * Max number of projects to show
+   */
+  maxRowLimit?: number
 
   /**
    * Additional class name for the component (in addition to `styles.root`)
@@ -134,6 +161,7 @@ export interface IProjectInformationState
    *
    * Can be one of the following:
    * - `CreateParentDialog`
+   * - `RunProjectSetupDialog`
    */
   activeDialog?: ProjectInformationDialogType
 
@@ -141,6 +169,16 @@ export interface IProjectInformationState
    * Current user has edit permission (`edc568a8-9cfc-4547-9af2-d9d3aeb5aa2a`)
    */
   userHasEditPermission?: boolean
+
+  /**
+   * Current user has rerun setup permission (`5c2fd32e-0c8b-42be-9e0b-4fa6ff5d4774`)
+   */
+  userHasRerunSetupPermission?: boolean
+
+  /**
+   * Indicates whether the hub site was available while loading the web part.
+   */
+  hubIsAvailable?: boolean
 
   /**
    * Properties last updated date/time
@@ -160,6 +198,11 @@ export interface IProjectInformationData
    * Parent projects
    */
   parentProjects?: ProjectInformationParentProject[]
+
+  /**
+   * Child projects
+   */
+  childProjects?: ProjectInformationChildProject[]
 
   /**
    * The template used for the project

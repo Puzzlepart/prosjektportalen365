@@ -139,7 +139,9 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
     const timelineConfig = await props.dataAdapter.fetchTimelineConfiguration()
     const [projects, projectData, timelineContentItems, timelineAggregatedContent = []] =
       await Promise.all([
-        props.dataAdapter.fetchEnrichedProjects(),
+        props.dataAdapter.fetchProjects
+          ? props.dataAdapter.fetchProjects()
+          : props.dataAdapter.fetchEnrichedProjects(),
         props.dataAdapter.fetchTimelineProjectData(timelineConfig),
         props.dataAdapter.fetchTimelineContentItems(timelineConfig),
         props.dataAdapter.fetchTimelineAggregatedContent(
@@ -163,7 +165,7 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
     const config = projectData.configElement
     let timelineItems = []
 
-    if (config?.showElementPortfolio || config?.showElementProgram) {
+    if (config) {
       timelineItems = filteredProjects.map<TimelineContentModel>((project) => {
         const statusReport = projectData?.reports?.find((statusReport: any) => {
           return statusReport.siteId === project.siteId

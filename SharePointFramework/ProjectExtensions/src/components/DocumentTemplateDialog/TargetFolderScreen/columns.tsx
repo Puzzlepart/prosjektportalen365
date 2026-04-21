@@ -11,7 +11,7 @@ import React from 'react'
 
 initializeFileTypeIcons()
 
-export default () =>
+export default ({ onFolderClick }: { onFolderClick: (folder: SPFolder) => void }) =>
   [
     {
       key: getId('icon'),
@@ -34,7 +34,7 @@ export default () =>
       minWidth: 200,
       onRender: (folder: SPFolder) => {
         return (
-          <Link>
+          <Link onClick={() => onFolderClick(folder)}>
             <span style={{ marginLeft: 4 }}>{folder.name}</span>
           </Link>
         )

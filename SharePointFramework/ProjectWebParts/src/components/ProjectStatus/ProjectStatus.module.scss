@@ -42,8 +42,14 @@
   .sectionTabs {
     display: flex;
     flex-direction: row;
+    width: 100%;
     height: 42px;
     padding: 0 32px;
+  }
+
+  .messageContainer {
+    margin-left: 32px;
+    margin-right: 32px;
   }
 
   .container {

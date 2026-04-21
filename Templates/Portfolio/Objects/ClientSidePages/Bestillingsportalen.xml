@@ -1,0 +1,9 @@
+<pnp:ClientSidePage PageName="{resource:ClientSidePages_ProjectProvision_PageName}" PromoteAsNewsArticle="false" Overwrite="false" Layout="SingleWebPartAppPage" EnableComments="false" Title="{resource:ClientSidePages_ProjectProvision_Title}" xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
+    <pnp:Sections>
+        <pnp:Section Order="1" Type="OneColumn">
+            <pnp:Controls>
+                <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;properties&quot;:{&quot;renderMode&quot;:&quot;inline&quot;,&quot;drawerSize&quot;:&quot;full&quot;}}" ControlId="e88cea29-09a0-4ce4-a38c-e0d74b65f619" Order="1" Column="1" />
+            </pnp:Controls>
+        </pnp:Section>
+    </pnp:Sections>
+</pnp:ClientSidePage>
