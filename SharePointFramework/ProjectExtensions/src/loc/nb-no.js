@@ -169,6 +169,7 @@ define([], function () {
     ProjectTemplateSelectorSelectTemplateRadioLabel: 'Velg en prosjektmal',
     TemplateLibrarySelectModalTitle: 'Hent dokumentmal',
     TemplateSelectorCommandTitle: 'Hent dokumentmal',
+    TemplateSelectorCommandDisabledTitle: 'Denne funksjonaliteten er ikke tilgjengelig',
     TermSetDoesNotExistError: 'Finner ikke termsett ID. Sjekk at termsett ID er korrekt i maloppsett-listen.',
     TitleLabel: 'Tittel',
     ProgressLabel: 'Fremdrift',
