@@ -529,15 +529,7 @@ if (-not $SkipTemplate.IsPresent) {
         }
         else {
             StartAction -Action "Applying PnP template Portfolio to $($Uri.AbsoluteUri)"            $Instance = Read-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp"
-            if ($null -eq $Instance.SupportedUILanguages -or $Instance.SupportedUILanguages.Count -eq 0) {
-                $Instance.SupportedUILanguages = New-Object PnP.Framework.Provisioning.Model.SupportedUILanguageCollection($Instance)
-                $SupportedLanguage = New-Object PnP.Framework.Provisioning.Model.SupportedUILanguage
-                $SupportedLanguage.LCID = $LanguageId
-                $Instance.SupportedUILanguages.Add($SupportedLanguage)
-            }
-            else {
-                $Instance.SupportedUILanguages[0].LCID = $LanguageId
-            }
+            $Instance.SupportedUILanguages[0].LCID = $LanguageId
             Invoke-PnPSiteTemplate -InputInstance $Instance -Handlers SupportedUILanguages
             $Retry = 0
             while ($Retry -lt $MaxRetries) {
