@@ -170,7 +170,7 @@ Writes inner exceptions and script stack trace from an ErrorRecord to the host f
 The ErrorRecord to extract details from
 #>
 function Write-ErrorDetails {
-    param([System.Management.Automation.ErrorRecord]$ErrorRecord)
+    param($ErrorRecord)
     $inner = $ErrorRecord.Exception.InnerException
     $depth = 1
     while ($null -ne $inner) {

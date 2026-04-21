@@ -489,7 +489,8 @@ if (-not $SkipTemplate.IsPresent) {
         Write-Host "[INFO] Please do NOT cancel the installation even if it looks stuck." -ForegroundColor Yellow
 
         if ($Upgrade.IsPresent) {
-            StartAction -Action "Applying PnP template Portfolio to $($Uri.AbsoluteUri)"            $Retry = 0
+            StartAction -Action "Applying PnP template Portfolio to $($Uri.AbsoluteUri)"
+            $Retry = 0
             while ($Retry -lt $MaxRetries) {
                 try {
                     Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers $UpgradeExcludeHandlers -ErrorAction Stop -WarningAction SilentlyContinue
@@ -510,7 +511,8 @@ if (-not $SkipTemplate.IsPresent) {
             EndAction
 
             if (Test-Path "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp") {
-                StartAction -Action "Applying PnP content template to $($Uri.AbsoluteUri)"                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" -Handlers Files -ErrorAction Stop -WarningAction SilentlyContinue
+                StartAction -Action "Applying PnP content template to $($Uri.AbsoluteUri)"
+                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" -Handlers Files -ErrorAction Stop -WarningAction SilentlyContinue
                 EndAction
             }
             else {
@@ -519,7 +521,8 @@ if (-not $SkipTemplate.IsPresent) {
 
             if ($IncludeBAContent.IsPresent) {
                 if (Test-Path "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp") {
-                    StartAction -Action "Applying PnP B&A content template to $($Uri.AbsoluteUri)"                    Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
+                    StartAction -Action "Applying PnP B&A content template to $($Uri.AbsoluteUri)"
+                    Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
                     EndAction
                 }
                 else {
@@ -528,7 +531,8 @@ if (-not $SkipTemplate.IsPresent) {
             }
         }
         else {
-            StartAction -Action "Applying PnP template Portfolio to $($Uri.AbsoluteUri)"            $Instance = Read-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp"
+            StartAction -Action "Applying PnP template Portfolio to $($Uri.AbsoluteUri)"
+            $Instance = Read-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp"
             $Instance.SupportedUILanguages[0].LCID = $LanguageId
             Invoke-PnPSiteTemplate -InputInstance $Instance -Handlers SupportedUILanguages
             $Retry = 0
@@ -552,13 +556,15 @@ if (-not $SkipTemplate.IsPresent) {
             EndAction
 
             if (Test-Path "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp") {
-                StartAction -Action "Applying PnP content template to $($Uri.AbsoluteUri)"                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
+                StartAction -Action "Applying PnP content template to $($Uri.AbsoluteUri)"
+                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
                 EndAction
             }
 
             if ($IncludeBAContent.IsPresent) {
                 if (Test-Path "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp") {
-                    StartAction -Action "Applying PnP B&A content template to $($Uri.AbsoluteUri)"                    Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
+                    StartAction -Action "Applying PnP B&A content template to $($Uri.AbsoluteUri)"
+                    Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
                     EndAction
                 }
             }
