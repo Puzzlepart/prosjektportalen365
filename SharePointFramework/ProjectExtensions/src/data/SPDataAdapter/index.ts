@@ -1,6 +1,5 @@
 import { ApplicationCustomizerContext } from '@microsoft/sp-application-base'
 import { ListViewCommandSetContext } from '@microsoft/sp-listview-extensibility'
-import { PermissionKind } from '@pnp/sp/security'
 import * as strings from 'ProjectExtensionsStrings'
 import { TemplateItem } from 'models/TemplateItem'
 import { SPFolder } from 'pp365-shared-library'
@@ -63,24 +62,6 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       }
     }
     return null
-  }
-
-  /**
-   * Checks whether the current user has read access to the specified template
-   * library on the portal/hub site. Returns `false` if the portal is not
-   * available or if the permission lookup fails for any reason.
-   *
-   * @param libraryName Library name
-   */
-  public async currentUserHasAccessToTemplateLibrary(libraryName: string): Promise<boolean> {
-    try {
-      if (!this.portalDataService?.isAvailable) return false
-      return await this.portalDataService.web.lists
-        .getByTitle(libraryName)
-        .currentUserHasPermissions(PermissionKind.ViewListItems)
-    } catch {
-      return false
-    }
   }
 
   /**
