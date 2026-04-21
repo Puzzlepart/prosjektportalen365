@@ -169,6 +169,7 @@ define([], function () {
     ProjectTemplateSelectorSelectTemplateRadioLabel: 'Select a project template',
     TemplateLibrarySelectModalTitle: 'Get document template',
     TemplateSelectorCommandTitle: 'Get document template',
+    TemplateSelectorCommandDisabledTitle: 'This functionality is not available',
     TermSetDoesNotExistError: 'Cannot find term set ID. Check that the term set ID is correct in the template options-list.',
     TitleLabel: 'Title',
     ProgressLabel: 'Progress',

@@ -24,6 +24,7 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
   private _openCmd: Command
   private _ctxValue: ITemplateSelectorContext = {}
   private _placeholderIds = { DocumentTemplateDialog: getId('documenttemplatedialog') }
+  private _hasAccessToTemplateLibrary: boolean = true
 
   @override
   public async onInit() {
@@ -56,6 +57,15 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
         title: templateLib,
         url: `${SPDataAdapter.portalDataService.url}/${templateLib}`
       }
+      this._hasAccessToTemplateLibrary =
+        await SPDataAdapter.currentUserHasAccessToTemplateLibrary(templateLib)
+      if (!this._hasAccessToTemplateLibrary) {
+        Logger.log({
+          message: `(TemplateSelectorCommand) onInit: Current user does not have access to template library '${templateLib}'. Command will be disabled.`,
+          level: LogLevel.Info
+        })
+        return
+      }
       this._ctxValue.templates = await SPDataAdapter.getDocumentTemplates(
         templateLib,
         '<View Scope="RecursiveAll"></View>'
@@ -75,11 +85,16 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
   @override
   public onListViewUpdated(): void {
     this._openCmd = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR')
-    if (this._openCmd) this._openCmd.visible = true
+    if (!this._openCmd) return
+    this._openCmd.visible = true
+    this._openCmd.title = this._hasAccessToTemplateLibrary
+      ? strings.TemplateSelectorCommandTitle
+      : strings.TemplateSelectorCommandDisabledTitle
   }
 
   @override
   public async onExecute(event: IListViewCommandSetExecuteEventParameters): Promise<void> {
+    if (!this._hasAccessToTemplateLibrary) return
     // eslint-disable-next-line default-case
     switch (event.itemId) {
       case this._openCmd.id:

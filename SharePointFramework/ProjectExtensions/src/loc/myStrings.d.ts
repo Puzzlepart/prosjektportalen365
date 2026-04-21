@@ -171,6 +171,7 @@ declare interface IProjectExtensionsStrings {
   ProjectTemplateSelectorSelectTemplateRadioLabel: string
   TemplateLibrarySelectModalTitle: string
   TemplateSelectorCommandTitle: string
+  TemplateSelectorCommandDisabledTitle: string
   TermSetDoesNotExistError: string
   TitleLabel: string
   ProgressLabel: string
