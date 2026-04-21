@@ -139,6 +139,10 @@ if ($null -eq (Get-Command Connect-PnPOnline) -or (Get-Command Connect-PnPOnline
 }
 #region Setting variables based on input from user
 [System.Uri]$Uri = $Url.TrimEnd('/')
+if ($Uri.Segments.Count -lt 3) {
+    Write-Host "[ERROR] Invalid -Url '$Url'. Expected format: https://tenant.sharepoint.com/sites/<alias>" -ForegroundColor Red
+    exit 1
+}
 $ManagedPath = $Uri.Segments[1]
 $Alias = $Uri.Segments[2]
 $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
@@ -202,7 +206,9 @@ if ($Upgrade.IsPresent -and $null -ne $ExistingSite) {
 else {
     if ($null -ne $ExistingSite) {
         Write-Host "[WARNING] The site you're trying to install to already exists. If you want to upgrade the site, use the -Upgrade switch. If you know what you're doing you can allow the script to continue" -ForegroundColor Yellow
-        Show-Countdown -Seconds 10
+        if (-not $CI.IsPresent) {
+            Show-Countdown -Seconds 10
+        }
     }
 }
 #endregion
@@ -533,8 +539,13 @@ if (-not $SkipTemplate.IsPresent) {
         else {
             StartAction -Action "Applying PnP template Portfolio to $($Uri.AbsoluteUri)"
             $Instance = Read-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp"
-            $Instance.SupportedUILanguages[0].LCID = $LanguageId
-            Invoke-PnPSiteTemplate -InputInstance $Instance -Handlers SupportedUILanguages
+            if ($null -ne $Instance.SupportedUILanguages -and $Instance.SupportedUILanguages.Count -gt 0) {
+                $Instance.SupportedUILanguages[0].LCID = $LanguageId
+                Invoke-PnPSiteTemplate -InputInstance $Instance -Handlers SupportedUILanguages
+            }
+            else {
+                Write-Host "[WARNING] Template has no SupportedUILanguages entries; skipping LCID override." -ForegroundColor Yellow
+            }
             $Retry = 0
             while ($Retry -lt $MaxRetries) {
                 try {                
@@ -660,21 +671,27 @@ Write-Host "[INFO] This is required if upgrading from a version earlier than 1.1
 Write-Host "[INFO] Logging installation entry" 
 $InstallEndTime = (Get-Date -Format o)
 
+$InstallCommand = if ($CI.IsPresent) {
+    "GitHub CI"
+}
+elseif ($null -ne $MyInvocation.Line -and $MyInvocation.Line.Length -gt 2) {
+    $MyInvocation.Line.Substring(2)
+}
+else {
+    $MyInvocation.Line
+}
+
 $InstallEntry = @{
     Title            = "PP365 {VERSION_PLACEHOLDER}"
     InstallStartTime = $InstallStartTime; 
     InstallEndTime   = $InstallEndTime; 
     InstallVersion   = "{VERSION_PLACEHOLDER}";
-    InstallCommand   = $MyInvocation.Line.Substring(2);
+    InstallCommand   = $InstallCommand;
     InstallChannel   = $Channel;
 }
 
 if ($null -ne $CurrentUser -and $CurrentUser.LoginName) {
     $InstallEntry.InstallUser = $CurrentUser.LoginName
-}
-
-if ($CI.IsPresent) {
-    $InstallEntry.InstallCommand = "GitHub CI";
 }
 
 try {
