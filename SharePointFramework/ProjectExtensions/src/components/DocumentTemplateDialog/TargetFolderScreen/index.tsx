@@ -26,9 +26,7 @@ export const TargetFolderScreen: FC = () => {
   const context = useContext(TemplateSelectorContext)
   const [root, setRoot] = useState(context.currentLibrary)
   const [folders, setFolders] = useState(root.folders)
-  const [folder, setFolder] = useState(
-    state.targetFolder || context.currentFolderUrl || ''
-  )
+  const [folder, setFolder] = useState(state.targetFolder || context.currentFolderUrl || '')
 
   function onFolderClick(clickedFolder: SPFolder) {
     if (clickedFolder.isLibrary) setRoot(clickedFolder)

@@ -113,7 +113,9 @@ export class PlannerConfiguration extends BaseTask {
           {
             onRetry: (attempt, error, delay) =>
               this.logWarning(
-                `Retry ${attempt} creating plan ${plan.title} after ${delay}s (${error.statusCode ?? error.message})`
+                `Retry ${attempt} creating plan ${plan.title} after ${delay}s (${
+                  error.statusCode ?? error.message
+                })`
               )
           }
         )
@@ -135,9 +137,7 @@ export class PlannerConfiguration extends BaseTask {
     this.logInformation(`Sleeping ${delay} seconds before updating the plan with labels`)
     await sleep(delay)
     if (this._labels.length > 0) {
-      this.logInformation(
-        `Updating the plan with labels ${JSON.stringify(this._labels)}`
-      )
+      this.logInformation(`Updating the plan with labels ${JSON.stringify(this._labels)}`)
 
       if (this._labels.length > 25) {
         ListLogger.init(
@@ -160,9 +160,7 @@ export class PlannerConfiguration extends BaseTask {
 
       await retryWithBackoff(
         async () => {
-          const eTag = (await MSGraphHelper.Get(`planner/plans/${plan.id}/details`))[
-            '@odata.etag'
-          ]
+          const eTag = (await MSGraphHelper.Get(`planner/plans/${plan.id}/details`))['@odata.etag']
           await MSGraphHelper.Patch(
             `planner/plans/${plan.id}/details`,
             JSON.stringify({ categoryDescriptions: this._categoryDescriptions }),
@@ -172,7 +170,9 @@ export class PlannerConfiguration extends BaseTask {
         {
           onRetry: (attempt, error, delaySec) =>
             this.logWarning(
-              `Retry ${attempt} updating labels for plan ${plan.title} after ${delaySec}s (${error.statusCode ?? error.message})`
+              `Retry ${attempt} updating labels for plan ${plan.title} after ${delaySec}s (${
+                error.statusCode ?? error.message
+              })`
             )
         }
       )
@@ -202,7 +202,9 @@ export class PlannerConfiguration extends BaseTask {
         {
           onRetry: (attempt, error, delay) =>
             this.logWarning(
-              `Retry ${attempt} creating bucket ${name} after ${delay}s (${error.statusCode ?? error.message})`
+              `Retry ${attempt} creating bucket ${name} after ${delay}s (${
+                error.statusCode ?? error.message
+              })`
             )
         }
       )
@@ -235,9 +237,7 @@ export class PlannerConfiguration extends BaseTask {
       const { labels } = this._configuration[bucket.name][name]
 
       if (existingTasks.some((t) => t.title === name)) {
-        this.logInformation(
-          `Task ${name} already exists in bucket ${bucket.name}, skipping`
-        )
+        this.logInformation(`Task ${name} already exists in bucket ${bucket.name}, skipping`)
         continue
       }
 
@@ -266,7 +266,9 @@ export class PlannerConfiguration extends BaseTask {
           {
             onRetry: (attempt, error, delaySec) =>
               this.logWarning(
-                `Retry ${attempt} creating task ${name} after ${delaySec}s (${error.statusCode ?? error.message})`
+                `Retry ${attempt} creating task ${name} after ${delaySec}s (${
+                  error.statusCode ?? error.message
+                })`
               )
           }
         )
@@ -283,7 +285,9 @@ export class PlannerConfiguration extends BaseTask {
         })
       } catch (error) {
         this.logWarning(
-          `Failed to create task ${name} in bucket ${bucket.name}: ${error.statusCode ?? ''} ${error.message ?? error}`
+          `Failed to create task ${name} in bucket ${bucket.name}: ${error.statusCode ?? ''} ${
+            error.message ?? error
+          }`
         )
       }
     }
@@ -385,7 +389,9 @@ export class PlannerConfiguration extends BaseTask {
       {
         onRetry: (attempt, error, delaySec) =>
           this.logWarning(
-            `Retry ${attempt} updating task details for ${taskId} after ${delaySec}s (${error.statusCode ?? error.message})`
+            `Retry ${attempt} updating task details for ${taskId} after ${delaySec}s (${
+              error.statusCode ?? error.message
+            })`
           )
       }
     )
@@ -411,7 +417,9 @@ export class PlannerConfiguration extends BaseTask {
       {
         onRetry: (attempt, error, delay) =>
           this.logWarning(
-            `Retry ${attempt} fetching plans for group ${groupId} after ${delay}s (${error.statusCode ?? error.message})`
+            `Retry ${attempt} fetching plans for group ${groupId} after ${delay}s (${
+              error.statusCode ?? error.message
+            })`
           )
       }
     )
@@ -433,7 +441,9 @@ export class PlannerConfiguration extends BaseTask {
       {
         onRetry: (attempt, error, delay) =>
           this.logWarning(
-            `Retry ${attempt} fetching buckets for plan ${planId} after ${delay}s (${error.statusCode ?? error.message})`
+            `Retry ${attempt} fetching buckets for plan ${planId} after ${delay}s (${
+              error.statusCode ?? error.message
+            })`
           )
       }
     )
@@ -454,7 +464,9 @@ export class PlannerConfiguration extends BaseTask {
       {
         onRetry: (attempt, error, delay) =>
           this.logWarning(
-            `Retry ${attempt} fetching tasks for bucket ${bucketId} after ${delay}s (${error.statusCode ?? error.message})`
+            `Retry ${attempt} fetching tasks for bucket ${bucketId} after ${delay}s (${
+              error.statusCode ?? error.message
+            })`
           )
       }
     )

@@ -30,5 +30,10 @@ export function useStatusElement(props: IStatusElementProps) {
 
   const fluentProviderId = useId('fp-status-element')
 
-  return { commentProps, iconSize: props.iconSize ?? headerProps.iconSize, useWrapper, fluentProviderId } as const
+  return {
+    commentProps,
+    iconSize: props.iconSize ?? headerProps.iconSize,
+    useWrapper,
+    fluentProviderId
+  } as const
 }

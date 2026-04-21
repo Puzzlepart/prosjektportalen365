@@ -61,11 +61,7 @@ export const FilterPanel: FC<IFilterPanelProps> = (props) => {
               />
             )}
             {ungrouped.map((f) => (
-              <Filter
-                {...f}
-                key={`u-${f.column.key}`}
-                onFilterChange={props.onFilterChange}
-              />
+              <Filter {...f} key={`u-${f.column.key}`} onFilterChange={props.onFilterChange} />
             ))}
             {groups.map((group) => (
               <Fragment key={`g-${group.name}`}>

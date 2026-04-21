@@ -55,8 +55,12 @@ export const StatusElement: FC<IStatusElementProps> = (props) => {
                       {props.summation.renderAs === 'currency'
                         ? tryParseCurrency(props.summation.result?.toString())
                         : props.summation.renderAs === 'percentage'
-                          ? (tryParsePercentage(props.summation.result?.toString(), false, 0) as number)
-                          : props.summation.result}
+                        ? (tryParsePercentage(
+                            props.summation.result?.toString(),
+                            false,
+                            0
+                          ) as number)
+                        : props.summation.result}
                     </div>
                   </div>
                 )}

@@ -1,8 +1,8 @@
 # Software Bill of Materials (SBOM)
 
 **Project:** Prosjektportalen 365  
-**Version:** 1.12.1  
-**Generated:** 2026-03-25T15:37:20.652Z  
+**Version:** 1.13.0  
+**Generated:** 2026-04-21T08:16:38.134Z  
 **Format:** CycloneDX-inspired Markdown
 
 ## Overview
@@ -16,37 +16,37 @@ This SBOM documents all software dependencies used in the Prosjektportalen 365 p
 
 ## Projects in Monorepo
 
-### pp365 (1.12.1)
+### pp365 (1.13.0)
 
 - **Production Dependencies:** 0
 - **Development Dependencies:** 5
 
-### pp365-portfolioextensions (1.12.1)
+### pp365-portfolioextensions (1.13.0)
 
 - **Production Dependencies:** 22
 - **Development Dependencies:** 27
 
-### pp365-portfoliowebparts (1.12.1)
+### pp365-portfoliowebparts (1.13.0)
 
 - **Production Dependencies:** 48
 - **Development Dependencies:** 31
 
-### pp365-programwebparts (1.12.1)
+### pp365-programwebparts (1.13.0)
 
 - **Production Dependencies:** 38
 - **Development Dependencies:** 31
 
-### pp365-projectextensions (1.12.1)
+### pp365-projectextensions (1.13.0)
 
 - **Production Dependencies:** 35
 - **Development Dependencies:** 30
 
-### pp365-projectwebparts (1.12.1)
+### pp365-projectwebparts (1.13.0)
 
 - **Production Dependencies:** 48
 - **Development Dependencies:** 33
 
-### pp365-shared-library (1.12.1)
+### pp365-shared-library (1.13.0)
 
 - **Production Dependencies:** 39
 - **Development Dependencies:** 21
@@ -135,7 +135,7 @@ This section lists all unique dependencies across all projects.
 | shade-blend-color | ~1.0.0 | pp365-projectwebparts, pp365-shared-library |
 | smoothscroll-polyfill | ~0.4.4 | pp365-projectwebparts |
 | sp-entityportal-service | 2.3.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| sp-js-provisioning | ~1.3.4 | pp365-projectextensions, pp365-shared-library |
+| sp-js-provisioning | ~1.3.5 | pp365-projectextensions, pp365-shared-library |
 | spfx-jsom | 0.6.6 | pp365-projectextensions, pp365-projectwebparts, pp365-shared-library |
 | tslib | 2.3.1 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | underscore | ~1.13.6 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
@@ -481,7 +481,7 @@ This section provides a detailed view of dependencies for each project.
 | react-markdown | ^8.0.3 |
 | rehype-raw | ^6.1.1 |
 | sp-entityportal-service | 2.3.0 |
-| sp-js-provisioning | ~1.3.4 |
+| sp-js-provisioning | ~1.3.5 |
 | spfx-jsom | 0.6.6 |
 | tslib | 2.3.1 |
 | underscore | ~1.13.6 |
@@ -655,7 +655,7 @@ This section provides a detailed view of dependencies for each project.
 | rehype-raw | ^6.1.1 |
 | shade-blend-color | ~1.0.0 |
 | sp-entityportal-service | 2.3.0 |
-| sp-js-provisioning | ~1.3.4 |
+| sp-js-provisioning | ~1.3.5 |
 | spfx-jsom | 0.6.6 |
 | tslib | 2.3.1 |
 | underscore | ~1.13.6 |

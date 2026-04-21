@@ -60,7 +60,8 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
       this._hasAccessToTemplateLibrary = SPDataAdapter.portalDataService?.isAvailable ?? false
       if (!this._hasAccessToTemplateLibrary) {
         Logger.log({
-          message: `(TemplateSelectorCommand) onInit: Hub is unavailable for current user. Command will be disabled.`,
+          message:
+            '(TemplateSelectorCommand) onInit: Hub is unavailable for current user. Command will be disabled.',
           level: LogLevel.Info
         })
         return

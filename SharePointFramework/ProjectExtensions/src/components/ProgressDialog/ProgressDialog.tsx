@@ -24,11 +24,12 @@ export const ProgressDialog: FC<IProgressDialogProps> = (props) => {
     }
   }, [props.isComplete])
 
-  const footer = props.isComplete && logExpanded ? (
-    <Button appearance='primary' onClick={props.onDismiss}>
-      {strings.ContinueToProjectText}
-    </Button>
-  ) : undefined
+  const footer =
+    props.isComplete && logExpanded ? (
+      <Button appearance='primary' onClick={props.onDismiss}>
+        {strings.ContinueToProjectText}
+      </Button>
+    ) : undefined
 
   return (
     <BaseDialog

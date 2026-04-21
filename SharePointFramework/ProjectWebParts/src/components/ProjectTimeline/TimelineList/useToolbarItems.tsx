@@ -72,7 +72,10 @@ export function useToolbarItems() {
     }
     return context.state.data.fields.map((field) => {
       if (field.internalName === 'GtEndDate') {
-        const clone = Object.create(Object.getPrototypeOf(field), Object.getOwnPropertyDescriptors(field))
+        const clone = Object.create(
+          Object.getPrototypeOf(field),
+          Object.getOwnPropertyDescriptors(field)
+        )
         clone.description = format(
           strings.TimelineEndDateMilestoneDescription,
           milestoneTypeNames.join(', ')
@@ -160,7 +163,12 @@ export function useToolbarItems() {
           })
         })
     ],
-    [context.props, context.state.selectedItems, context.state.timelineConfig, fieldsWithDescriptions]
+    [
+      context.props,
+      context.state.selectedItems,
+      context.state.timelineConfig,
+      fieldsWithDescriptions
+    ]
   )
 
   const farMenuItems = useMemo<ListMenuItem[]>(

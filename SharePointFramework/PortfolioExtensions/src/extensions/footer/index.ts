@@ -11,10 +11,7 @@ import '@pnp/sp/webs'
 import resource from 'SharedResources'
 import { Footer, IFooterProps } from 'components/Footer'
 import { PortalDataService } from 'pp365-shared-library/lib/services/PortalDataService'
-import {
-  isHubSite,
-  ProjectAdminPermission
-} from 'pp365-shared-library'
+import { isHubSite, ProjectAdminPermission } from 'pp365-shared-library'
 import SPDataAdapter from '../../data/SPDataAdapter'
 import { createElement } from 'react'
 import { render } from 'react-dom'
@@ -149,14 +146,10 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     const checkGroup = accessMode === 'group' || accessMode === 'both' || !onProjectSite
     const checkRole = (accessMode === 'role' || accessMode === 'both') && onProjectSite
 
-    const groupResult = checkGroup
-      ? await this._isUserInGroup(strings.AssistantGroupName)
-      : true
+    const groupResult = checkGroup ? await this._isUserInGroup(strings.AssistantGroupName) : true
 
     const roleResult = checkRole
-      ? await SPDataAdapter.checkProjectAdminPermissions(
-          ProjectAdminPermission.AssistantAccess
-        )
+      ? await SPDataAdapter.checkProjectAdminPermissions(ProjectAdminPermission.AssistantAccess)
       : true
 
     return groupResult && roleResult

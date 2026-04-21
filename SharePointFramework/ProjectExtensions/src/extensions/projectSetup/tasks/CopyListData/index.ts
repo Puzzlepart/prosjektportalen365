@@ -51,15 +51,10 @@ export class CopyListData extends BaseTask {
       await this.createDefaultPlannerPlan(params)
       for (let i = 0; i < this.data.selectedContentConfig.length; i++) {
         const contentConfig = this.data.selectedContentConfig[i]
-        onProgress(
-          contentConfig.text,
-          contentConfig.text,
-          'Copy',
-          {
-            message: `Processing content config: ${contentConfig.text} (${contentConfig.type})`,
-            level: 'info'
-          }
-        )
+        onProgress(contentConfig.text, contentConfig.text, 'Copy', {
+          message: `Processing content config: ${contentConfig.text} (${contentConfig.type})`,
+          level: 'info'
+        })
         await contentConfig.load()
         // eslint-disable-next-line default-case
         switch (contentConfig.type) {
@@ -192,7 +187,9 @@ export class CopyListData extends BaseTask {
         }
       } catch (error) {
         this.logWarning(
-          `Failed to create default planner plan: ${error.statusCode ?? ''} ${error.message ?? error}`
+          `Failed to create default planner plan: ${error.statusCode ?? ''} ${
+            error.message ?? error
+          }`
         )
       }
     }

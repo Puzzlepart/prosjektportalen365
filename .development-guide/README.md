@@ -188,7 +188,7 @@ Prosjektportalen bruker GitHub Actions for kontinuerlig integrasjon og utrulling
 - `[skip-ci]` - Hopper over alle CI-prosesser
 - `[skip-main-ci]` - Hopper over hovedbygging (build-release.yml)
 - `[skip-test-ci]` - Hopper over test-kanal bygging
-- `[packages-only]` - Bygger kun pakker (appkatalog), hopper over utrulling av maler. Brukes dersom du ikke har gjort noen endringer på .xml-filene i Templates.
+- `[apps-only]` - Bygger kun pakker (appkatalog), hopper over utrulling av maler. Brukes dersom du ikke har gjort noen endringer på .xml-filene i Templates.
 
 **Eksempler på bruk:**
 
@@ -196,7 +196,7 @@ Prosjektportalen bruker GitHub Actions for kontinuerlig integrasjon og utrulling
 docs: update README [skip-ci]
 chore: update package.json [skip-main-ci]
 fix(portfoliowebparts): minor styling fix [skip-test-ci]
-feat(shared): add new utility function [packages-only]
+feat(shared): add new utility function [apps-only]
 ```
 
 **Aktive arbeidsflyter:**
@@ -807,7 +807,7 @@ Nøkkelord kan brukes i commit-meldingen for å unngå (eller tvinge) at CI kjø
 - `[skip-install]` for å unngå at jobben «Installer» starter.
 - `[skip-main-ci]` for å hoppe over hovedbygging (build-release.yml).
 - `[skip-test-ci]` for å hoppe over test-kanal bygging.
-- `[packages-only]` for å bygge kun pakker (appkatalog), hopper over utrulling av maler. Brukes dersom du ikke har gjort noen endringer på .xml-filene i Templates.
+- `[apps-only]` for å bygge kun pakker (appkatalog), hopper over utrulling av maler. Brukes dersom du ikke har gjort noen endringer på .xml-filene i Templates.
 - `[upgrade-all-sites-to-latest]` for å kjøre skriptet `UpgradeAllSitesToLatest.ps1` i CI-modus.
 
 ### Bygg og installer (dev)

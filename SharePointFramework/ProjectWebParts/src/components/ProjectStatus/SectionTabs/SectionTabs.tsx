@@ -37,8 +37,7 @@ const OverflowMenu: FC<{
   sections: { id: number; name: string }[]
   onSelect: (id: number) => void
 }> = ({ sections, onSelect }) => {
-  const { ref, isOverflowing, overflowCount } =
-    useOverflowMenu<HTMLButtonElement>()
+  const { ref, isOverflowing, overflowCount } = useOverflowMenu<HTMLButtonElement>()
   if (!isOverflowing) return null
   return (
     <Menu>
