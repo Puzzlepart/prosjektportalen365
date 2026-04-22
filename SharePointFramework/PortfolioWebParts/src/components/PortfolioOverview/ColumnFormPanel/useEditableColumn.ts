@@ -40,7 +40,7 @@ const convertToMap = (column: ProjectColumn): EditableColumn => {
 export function useEditableColumn() {
   const context = useContext(PortfolioOverviewContext)
   const [column, $setColumn] = useState<EditableColumn>(initialColumn)
-  const isEditing = !!context.state.columnForm.column
+  const isEditing = !!context?.state.columnForm.column
 
   useEffect(() => {
     if (isEditing) {
@@ -48,7 +48,7 @@ export function useEditableColumn() {
     } else {
       $setColumn(initialColumn)
     }
-  }, [context.state.columnForm])
+  }, [context?.state.columnForm])
 
   /**
    * Sets a property of the column.

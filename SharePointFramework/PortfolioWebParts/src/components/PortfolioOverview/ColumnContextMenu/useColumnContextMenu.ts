@@ -20,24 +20,24 @@ import { MenuProps, useId } from '@fluentui/react-components'
 export function useColumnContextMenu() {
   const context = useContext(PortfolioOverviewContext)
   const [open, setOpen] = useState(false)
-  const userEmail = context.props.pageContext.user.email ?? context.props.pageContext.user.loginName
-  const isViewAuthor = context.state.currentView?.author === userEmail
+  const [checkedValues, setCheckedValues] = useState<MenuProps['checkedValues']>({})
+  const fluentProviderId = useId('fp-column-context-menu')
+  const userEmail =
+    context?.props.pageContext?.user?.email ?? context?.props.pageContext?.user?.loginName
+  const isViewAuthor = context?.state.currentView?.author === userEmail
 
   const { isAddColumn, createContextualMenuItems } = useAddColumn(
     true,
-    context.props.isSiteAdmin || isViewAuthor
+    (context?.props.isSiteAdmin || isViewAuthor) ?? false
   )
   const onOpenChange: MenuProps['onOpenChange'] = (_, data) => setOpen(data.open)
-  const [checkedValues, setCheckedValues] = useState<MenuProps['checkedValues']>({})
   const onCheckedValueChange: MenuProps['onCheckedValueChange'] = (_event, data) => {
     setCheckedValues({ ...checkedValues, [data.name]: [_.last(data.checkedItems)].filter(Boolean) })
   }
 
   useEffect(() => {
-    setOpen(!!context.state.columnContextMenu?.column)
-  }, [context.state.columnContextMenu])
-
-  const fluentProviderId = useId('fp-column-context-menu')
+    setOpen(!!context?.state.columnContextMenu?.column)
+  }, [context?.state.columnContextMenu])
 
   const columnContextMenu = {
     open,
@@ -50,7 +50,7 @@ export function useColumnContextMenu() {
     fluentProviderId
   }
 
-  if (!context.state.columnContextMenu) return columnContextMenu
+  if (!context || !context.state.columnContextMenu) return columnContextMenu
 
   const { column, target } = context.state.columnContextMenu
   columnContextMenu.target = target

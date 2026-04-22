@@ -13,17 +13,21 @@ import { usePortfolioOverviewContext } from '../context'
 export function useEditableView() {
   const context = usePortfolioOverviewContext()
   const [view, $setView] = useState<PortfolioOverviewView['$map']>(
-    new PortfolioOverviewView().createDefault('', context.state.currentView).$map
+    new PortfolioOverviewView().createDefault('', context?.state.currentView).$map
   )
-  const isEditing = useMemo(() => !!context.state.viewForm?.view, [context.state.viewForm?.view])
+  const isEditing = useMemo(
+    () => !!context?.state.viewForm?.view,
+    [context?.state.viewForm?.view]
+  )
 
   useEffect(() => {
+    if (!context) return
     if (isEditing) {
       $setView(context.state.viewForm.view.$map)
     } else {
       $setView(new PortfolioOverviewView().createDefault('', context.state.currentView).$map)
     }
-  }, [context.state.viewForm, context.state.currentView])
+  }, [context?.state.viewForm, context?.state.currentView])
 
   /**
    * Sets a view property.

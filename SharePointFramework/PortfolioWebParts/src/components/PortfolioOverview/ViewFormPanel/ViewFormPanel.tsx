@@ -18,6 +18,7 @@ export const ViewFormPanel: FC = () => {
   const context = useContext(PortfolioOverviewContext)
   const { view, setView, isEditing, onDismiss, isDefaultViewSet, onSave, fluentProviderId } =
     useViewFormPanel()
+  if (!context) return null
   return (
     <Panel
       isOpen={context.state.viewForm.isOpen}

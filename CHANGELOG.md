@@ -76,6 +76,10 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Rettet en feil ved eksport til Excel hvor numeriske verdier ble eksportert med unødvendige desimaler (f.eks. `12.0000000000000` i stedet for `12`)
 - Rettet en feil i `Risikotiltak` hvor lenken «Gå til oppgaven i Planner» åpnet tasks.office.com i stedet for å navigere direkte til den spesifikke oppgaven i Planner
 - Rettet en feil i aggregerte visninger hvor listen ville laste uendelig dersom man valgte visningen som allerede var aktiv
+- Rettet en feil hvor webdeler kunne krasje når brukeren navigerte mellom sider på porteføljenivå (f.eks. fra Porteføljeoversikt til Gevinstoversikt). Komponenter demonteres nå korrekt ved sidenavigasjon, slik at pågående asynkrone callbacks fra den forrige siden ikke lenger kjøres mot en delvis demontert komponent
+- Rettet en datakorrupsjonsfeil i synkronisering av prosjektegenskaper til hub hvor URL-felter kunne overskrives med tallverdi dersom feltet før var av typen `Number` eller `Currency`
+- Rettet en feil hvor `Idémodul` kunne krasje dersom idékonfigurasjonen ikke kunne hentes
+- Rettet en feil hvor `Program`-webdeler kunne krasje for programmer uten underprosjekter eller med ugyldig JSON i `GtChildProjects`-feltet.
 
 ---
 

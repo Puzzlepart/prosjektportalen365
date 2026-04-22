@@ -33,6 +33,8 @@ export const ColumnFormPanel: FC = () => {
     fluentProviderId
   } = useColumnFormPanel()
 
+  if (!context) return null
+
   return (
     <Panel
       isOpen={context.state.columnForm.isOpen}

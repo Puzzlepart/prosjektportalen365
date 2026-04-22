@@ -6,6 +6,7 @@ import { format } from '@fluentui/react'
 
 export const ResultsCount: FC<{ displayCount: number }> = (props) => {
   const context = usePortfolioOverviewContext()
+  if (!context) return null
   return (
     <div className={styles.resultsCount}>
       {format(strings.ResultsCountLabel, props.displayCount, context.state?.items?.length)}
