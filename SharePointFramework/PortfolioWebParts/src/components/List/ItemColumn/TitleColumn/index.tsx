@@ -40,7 +40,7 @@ export const TitleColumn: FC<ITitleColumnProps> = (props) => {
       </span>
     )
   }
-  if (!context.props.renderTitleProjectInformationPanel) {
+  if (!context?.props?.renderTitleProjectInformationPanel) {
     return (
       <Link href={url} target='_blank' rel='noopener noreferrer'>
         {props.item.Title}

@@ -45,8 +45,8 @@ export const ListHeader: FC<IListHeaderProps> = (props) => {
                 />
               </div>
               <Toolbar
-                items={context.props.menuItems}
-                filterPanel={context.props.filterPanelProps}
+                items={context?.props?.menuItems}
+                filterPanel={context?.props?.filterPanelProps}
               />
             </div>
           )}

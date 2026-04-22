@@ -10,7 +10,9 @@ import { DisplayMode } from '@microsoft/sp-core-library'
 import { ISPHttpClientOptions, SPHttpClient } from '@microsoft/sp-http'
 import * as strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
-import React from 'react'
+import React, { createElement } from 'react'
+import { render } from 'react-dom'
+import { ErrorWithIntent, UserMessage } from 'pp365-shared-library'
 import {
   IPortfolioAggregationConfiguration,
   IPortfolioAggregationProps,
@@ -20,19 +22,31 @@ import { BasePortfolioWebPart } from '../basePortfolioWebPart'
 
 export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IPortfolioAggregationProps> {
   private _configuration: IPortfolioAggregationConfiguration
+  private _configurationError: ErrorWithIntent
 
   public render(): void {
     if (!this.properties.dataSource) {
       this.renderComponent<IMessageBarProps>(MessageBar, {
         children: <span>{strings.PortfolioAggregationNotConfiguredMessage}</span>
       })
-    } else {
-      this.renderComponent<IPortfolioAggregationProps>(PortfolioAggregation, {
-        ...this.properties,
-        configuration: this._configuration,
-        onUpdateProperty: this._onUpdateProperty.bind(this)
-      })
+      return
     }
+    if (!this._configuration) {
+      render(
+        createElement(UserMessage, {
+          title: this._configurationError?.name ?? strings.ErrorTitle,
+          text: this._configurationError?.message ?? strings.GetPortfolioConfigErrorText,
+          intent: this._configurationError?.intent ?? 'warning'
+        }),
+        this.domElement
+      )
+      return
+    }
+    this.renderComponent<IPortfolioAggregationProps>(PortfolioAggregation, {
+      ...this.properties,
+      configuration: this._configuration,
+      onUpdateProperty: this._onUpdateProperty.bind(this)
+    })
   }
 
   /**
@@ -75,11 +89,15 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IP
   }
 
   public async onInit(): Promise<void> {
-    await super.onInit()
-    this._configuration = await this.dataAdapter.getAggregatedListConfig(
-      this.properties.dataSourceCategory,
-      this.properties.dataSourceLevel
-    )
+    try {
+      await super.onInit()
+      this._configuration = await this.dataAdapter.getAggregatedListConfig(
+        this.properties.dataSourceCategory,
+        this.properties.dataSourceLevel
+      )
+    } catch (error) {
+      this._configurationError = error as ErrorWithIntent
+    }
   }
 
   /**

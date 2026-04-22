@@ -110,8 +110,12 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       }
     }
     this.portalDataService = await this.portalDataService.configure(configuration)
-    if (this.portalDataService.web) {
+    if (this.portalDataService?.web) {
       this.dataSourceService = new DataSourceService(this.portalDataService.web)
+    } else {
+      console.warn(
+        '(DataAdapter) (configure) Portal data service has no `web` — hub site resolution may have failed. Data source operations will be unavailable.'
+      )
     }
     return this
   }
@@ -153,6 +157,14 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     level?: string
   ): Promise<IPortfolioAggregationConfiguration> {
     try {
+      if (!this.portalDataService?.web) {
+        throw GetPortfolioConfigError(
+          new Error(
+            '(DataAdapter) (getAggregatedListConfig) Portal data service is not initialized (hub site unreachable).'
+          )
+        )
+      }
+
       let calculatedLevel = resource.Lists_DataSources_Level_Portfolio
 
       if (this.portalDataService.url !== this._spfxContext.pageContext.web.absoluteUrl) {
@@ -190,7 +202,11 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         refiners
       } as IPortfolioAggregationConfiguration
     } catch (error) {
-      return null
+      console.error(
+        '(DataAdapter) (getAggregatedListConfig) Failed to load aggregated list config:',
+        error
+      )
+      throw error instanceof Error ? GetPortfolioConfigError(error) : error
     }
   }
 
@@ -1075,6 +1091,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     let items: any[]
 
     try {
+      if (!this.dataSourceService) {
+        throw new Error(format(strings.DataSourceError, dataSourceName))
+      }
       const dataSrc = await this.dataSourceService.getByName(dataSourceName)
       if (!dataSrc) {
         throw new Error(format(strings.DataSourceNotFound, dataSourceName))
@@ -1103,6 +1122,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     columns?: ProjectContentColumn[]
   ): Promise<DataSource[]> {
     try {
+      if (!this.dataSourceService) {
+        throw new Error(format(strings.DataSourceCategoryError, category))
+      }
       return await this.dataSourceService.getByCategory(category, level, columns)
     } catch (error) {
       throw new Error(format(strings.DataSourceCategoryError, category))

@@ -14,8 +14,8 @@ import { DATA_FETCHED, DATA_FETCH_ERROR, GET_FILTERS, SET_GROUP_BY, START_FETCH 
  * don't have an `internalName` match in the refiner-values map.
  */
 async function fetchData(context: IPortfolioAggregationContext) {
-  const columns = context.props.configuration.columns ?? []
-  const projectRefiners = context.props.configuration.refiners ?? []
+  const columns = context.props.configuration?.columns ?? []
+  const projectRefiners = context.props.configuration?.refiners ?? []
   const selectProperties = _.uniq(
     [...columns, ...context.state.columns, ...projectRefiners]
       .map((col) => col.fieldName)
@@ -34,7 +34,7 @@ async function fetchData(context: IPortfolioAggregationContext) {
       dataSource.title,
       context.props.selectProperties ?? selectProperties
     ),
-    context.props.dataAdapter.fetchProjectsByDataSource
+    context.props.dataAdapter.fetchProjectsByDataSource && context.props.configuration
       ? context.props.dataAdapter.fetchProjectsByDataSource(
           context.props.configuration,
           dataSource.title
