@@ -761,11 +761,14 @@ export class SPDataAdapter
     dataSource?: string
   ): Promise<any[]> {
     const odataQuery = (configuration?.views || []).find((v) => v.title === dataSource)?.odataQuery
+    // Returns `undefined` (not `[]`) when there is no OData query on the
+    // data source — the reducer interprets `undefined` as "don't filter
+    // items by the projects list", while `[]` would filter everything out.
     if (!odataQuery || dataSource?.includes(`(${strings.ProjectLevel})`)) {
-      return []
+      return undefined
     }
     if (!this.portalDataService?.web) {
-      return []
+      return undefined
     }
     return await this.portalDataService.web.lists
       .getByTitle(resource.Lists_Projects_Title)
