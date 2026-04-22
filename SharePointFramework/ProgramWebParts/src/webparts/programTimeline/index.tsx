@@ -4,7 +4,6 @@ import {
   IProjectTimelineProps
 } from 'pp365-shared-library/lib/components/ProjectTimeline'
 import strings from 'ProgramWebPartsStrings'
-import { unmountComponentAtNode } from 'react-dom'
 import { BaseProgramWebPart } from '../baseProgramWebPart'
 import resource from 'SharedResources'
 
@@ -16,10 +15,6 @@ export default class ProgramTimelineWebPart extends BaseProgramWebPart<IProjectT
 
   public render(): void {
     this.renderComponent<IProjectTimelineProps>(ProjectTimeline)
-  }
-
-  protected onDispose(): void {
-    unmountComponentAtNode(this.domElement)
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {

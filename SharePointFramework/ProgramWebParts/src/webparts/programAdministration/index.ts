@@ -1,7 +1,6 @@
 import { IPropertyPaneConfiguration } from '@microsoft/sp-property-pane'
 import { ProgramAdministration } from 'components/ProgramAdministration/ProgramAdministration'
 import { IProgramAdministrationProps } from 'components/ProgramAdministration/types'
-import { unmountComponentAtNode } from 'react-dom'
 import { BaseProgramWebPart } from '../baseProgramWebPart'
 
 export default class ProgramAdministrationWebPart extends BaseProgramWebPart<IProgramAdministrationProps> {
@@ -10,10 +9,6 @@ export default class ProgramAdministrationWebPart extends BaseProgramWebPart<IPr
       context: this.context,
       dataAdapter: this._dataAdapter
     })
-  }
-
-  protected onDispose(): void {
-    unmountComponentAtNode(this.domElement)
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {

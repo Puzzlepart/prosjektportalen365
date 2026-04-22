@@ -9,7 +9,6 @@ import {
 import * as strings from 'ProjectWebPartsStrings'
 import { IOpportunityMatrixProps, OpportunityMatrix } from 'components/OpportunityMatrix'
 import _ from 'lodash'
-import ReactDom from 'react-dom'
 import SPDataAdapter from '../../data'
 import { UncertaintyElementModel } from '../../models'
 import { BaseProjectWebPart } from '../baseProjectWebPart'
@@ -79,10 +78,6 @@ export default class OpportunityMatrixWebPart extends BaseProjectWebPart<IOpport
           get(i, consequencePostActionFieldName, { default: '' })
         )
     )
-  }
-
-  protected onDispose(): void {
-    ReactDom.unmountComponentAtNode(this.domElement)
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {

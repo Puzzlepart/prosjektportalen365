@@ -5,7 +5,7 @@ import { SPFI } from '@pnp/sp/presets/all'
 import { IBaseComponentProps } from 'components/types'
 import { SiteContext, createSpfiInstance } from 'pp365-shared-library'
 import React, { ComponentClass, FC, createElement } from 'react'
-import { render } from 'react-dom'
+import { render, unmountComponentAtNode } from 'react-dom'
 import { ErrorBoundary } from 'react-error-boundary'
 import { DataAdapter, PortfolioInstance } from '../../data'
 import { ErrorBoundaryFallback } from './ErrorBoundary'
@@ -119,5 +119,18 @@ export abstract class BasePortfolioWebPart<
    */
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return { pages: [] }
+  }
+
+  /**
+   * Unmount the React tree when the webpart is disposed (e.g. on SPA
+   * navigation). Without this, React keeps the fiber tree alive after
+   * SharePoint has detached the DOM, which lets stale async callbacks
+   * fire on a half-mounted tree and surface as `Cannot read properties
+   * of null (reading 'props')`.
+   */
+  protected onDispose(): void {
+    if (this.domElement) {
+      unmountComponentAtNode(this.domElement)
+    }
   }
 }

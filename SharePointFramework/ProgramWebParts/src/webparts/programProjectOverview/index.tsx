@@ -10,7 +10,7 @@ import {
   PortfolioOverview
 } from 'pp365-portfoliowebparts/lib/components/PortfolioOverview'
 import { createElement } from 'react'
-import { render, unmountComponentAtNode } from 'react-dom'
+import { render } from 'react-dom'
 import { ErrorWithIntent, UserMessage } from 'pp365-shared-library'
 import { BaseProgramWebPart } from '../baseProgramWebPart'
 import { IProgramProjectOverviewProps } from './types'
@@ -52,10 +52,6 @@ export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramP
     } catch (error) {
       this._configurationError = error as ErrorWithIntent
     }
-  }
-
-  protected onDispose(): void {
-    unmountComponentAtNode(this.domElement)
   }
 
   /**

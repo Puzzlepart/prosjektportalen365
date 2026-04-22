@@ -4,7 +4,7 @@ import { SPFI } from '@pnp/sp'
 import { IBaseWebPartComponentProps } from 'pp365-shared-library/lib/components/BaseWebPartComponent'
 import { createSpfiInstance } from 'pp365-shared-library/lib/data'
 import { createElement, FC } from 'react'
-import { render } from 'react-dom'
+import { render, unmountComponentAtNode } from 'react-dom'
 import SPDataAdapter from '../../data'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorBoundaryFallback } from './ErrorBoundary'
@@ -74,5 +74,18 @@ export abstract class BaseProjectWebPart<
   public async onInit(): Promise<void> {
     this.context.statusRenderer.clearLoadingIndicator(this.domElement)
     await this._setup()
+  }
+
+  /**
+   * Unmount the React tree when the webpart is disposed (e.g. on SPA
+   * navigation). Without this, React keeps the fiber tree alive after
+   * SharePoint has detached the DOM, which lets stale async callbacks
+   * fire on a half-mounted tree and surface as `Cannot read properties
+   * of null (reading 'props')`.
+   */
+  protected onDispose(): void {
+    if (this.domElement) {
+      unmountComponentAtNode(this.domElement)
+    }
   }
 }
