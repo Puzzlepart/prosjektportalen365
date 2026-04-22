@@ -8,6 +8,9 @@ import { DisplayMode } from '@microsoft/sp-core-library'
 import { ISPHttpClientOptions, SPHttpClient } from '@microsoft/sp-http'
 import * as strings from 'ProgramWebPartsStrings'
 import _ from 'lodash'
+import React, { createElement } from 'react'
+import { render } from 'react-dom'
+import { ErrorWithIntent, UserMessage } from 'pp365-shared-library'
 import {
   IPortfolioAggregationConfiguration,
   IPortfolioAggregationProps,
@@ -18,8 +21,20 @@ import { BaseProgramWebPart } from '../baseProgramWebPart'
 
 export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgramAggregationWebPartProps> {
   private _configuration: IPortfolioAggregationConfiguration
+  private _configurationError: ErrorWithIntent
 
   public render(): void {
+    if (!this._configuration) {
+      render(
+        createElement(UserMessage, {
+          title: this._configurationError?.name ?? strings.ErrorTitle,
+          text: this._configurationError?.message,
+          intent: this._configurationError?.intent ?? 'warning'
+        }),
+        this.domElement
+      )
+      return
+    }
     this.renderComponent<IPortfolioAggregationProps>(PortfolioAggregation, {
       configuration: this._configuration,
       onUpdateProperty: this._onUpdateProperty.bind(this),
@@ -68,11 +83,15 @@ export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgr
   }
 
   public async onInit(): Promise<void> {
-    await super.onInit()
-    this._configuration = await this._dataAdapter.getAggregatedListConfig(
-      this.properties.dataSourceCategory,
-      this.properties.dataSourceLevel
-    )
+    try {
+      await super.onInit()
+      this._configuration = await this._dataAdapter.getAggregatedListConfig(
+        this.properties.dataSourceCategory,
+        this.properties.dataSourceLevel
+      )
+    } catch (error) {
+      this._configurationError = error as ErrorWithIntent
+    }
   }
 
   /**

@@ -64,11 +64,15 @@ export default class IdeaModuleWebPart extends BasePortfolioWebPart<IIdeaModuleP
   }
 
   public async onInit(): Promise<void> {
-    await super.onInit()
-    this._configuration = await this.dataAdapter.getAggregatedListConfig(
-      this.properties.dataSourceCategory,
-      this.properties.dataSourceLevel
-    )
+    try {
+      await super.onInit()
+      this._configuration = await this.dataAdapter.getAggregatedListConfig(
+        this.properties.dataSourceCategory,
+        this.properties.dataSourceLevel
+      )
+    } catch {
+      this._configuration = null
+    }
   }
 
   /**

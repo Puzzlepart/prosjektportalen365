@@ -9,15 +9,29 @@ import {
   IPortfolioOverviewConfiguration,
   PortfolioOverview
 } from 'pp365-portfoliowebparts/lib/components/PortfolioOverview'
-import { unmountComponentAtNode } from 'react-dom'
+import { createElement } from 'react'
+import { render, unmountComponentAtNode } from 'react-dom'
+import { ErrorWithIntent, UserMessage } from 'pp365-shared-library'
 import { BaseProgramWebPart } from '../baseProgramWebPart'
 import { IProgramProjectOverviewProps } from './types'
 import resource from 'SharedResources'
 
 export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramProjectOverviewProps> {
   private _configuration: IPortfolioOverviewConfiguration
+  private _configurationError: ErrorWithIntent
 
   public render(): void {
+    if (!this._configuration) {
+      render(
+        createElement(UserMessage, {
+          title: this._configurationError?.name ?? strings.ErrorTitle,
+          text: this._configurationError?.message,
+          intent: this._configurationError?.intent ?? 'warning'
+        }),
+        this.domElement
+      )
+      return
+    }
     this.renderComponent(PortfolioOverview, {
       isParentProject: true,
       configuration: this._configuration
@@ -31,9 +45,13 @@ export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramP
    * @returns A promise that resolves when the initialization is complete.
    */
   public async onInit(): Promise<void> {
-    await super.onInit()
-    this._configuration = await this._dataAdapter.getPortfolioConfig()
-    this.properties.title = resource.WebParts_ProgramProjectOverview_Title
+    try {
+      await super.onInit()
+      this._configuration = await this._dataAdapter.getPortfolioConfig()
+      this.properties.title = resource.WebParts_ProgramProjectOverview_Title
+    } catch (error) {
+      this._configurationError = error as ErrorWithIntent
+    }
   }
 
   protected onDispose(): void {

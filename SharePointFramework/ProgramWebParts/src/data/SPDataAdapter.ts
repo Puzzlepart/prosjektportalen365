@@ -85,7 +85,13 @@ export class SPDataAdapter
     configuration: ISPDataAdapterBaseConfiguration
   ) {
     await super.configure(spfxContext, configuration)
-    this.dataSourceService = new DataSourceService(this.portalDataService.web)
+    if (this.portalDataService?.web) {
+      this.dataSourceService = new DataSourceService(this.portalDataService.web)
+    } else {
+      console.warn(
+        '(SPDataAdapter) (configure) Portal data service has no `web` — hub site resolution may have failed. Data source operations will be unavailable.'
+      )
+    }
     this.project = new ProjectDataService({
       ...this.settings,
       spfxContext,
@@ -143,6 +149,11 @@ export class SPDataAdapter
     level: string = resource.Lists_DataSources_Level_ParentProgram
   ): Promise<IPortfolioAggregationConfiguration> {
     try {
+      if (!this.portalDataService?.web) {
+        throw new Error(
+          '(SPDataAdapter) (getAggregatedListConfig) Portal data service is not initialized (hub site unreachable).'
+        )
+      }
       const columns = await this.portalDataService.fetchProjectContentColumns(
         'PROJECT_CONTENT_COLUMNS',
         category,
@@ -164,7 +175,11 @@ export class SPDataAdapter
         refiners
       } as IPortfolioAggregationConfiguration
     } catch (error) {
-      return null
+      console.error(
+        '(SPDataAdapter) (getAggregatedListConfig) Failed to load aggregated list config:',
+        error
+      )
+      throw error
     }
   }
 
@@ -198,11 +213,11 @@ export class SPDataAdapter
         siteIdProperty
       )
       const items = sites.map((site) => {
-        const [project] = projects.filter((res) => res[siteIdProperty] === site['SiteId'])
-        const [statusReport] = statusReports.filter((res) => res[siteIdProperty] === site['SiteId'])
+        const project = projects.find((res) => res[siteIdProperty] === site['SiteId'])
+        const statusReport = statusReports.find((res) => res[siteIdProperty] === site['SiteId'])
         return {
-          ...statusReport,
-          ...project,
+          ...(statusReport ?? {}),
+          ...(project ?? {}),
           Title: site.Title,
           Path: site?.Path,
           SPWebUrl: site?.SPWebUrl,
@@ -230,12 +245,12 @@ export class SPDataAdapter
         siteIdProperty
       )
       const items = projects.map((project) => {
-        const [statusReport] = statusReports.filter(
+        const statusReport = statusReports.find(
           (res) => res[siteIdProperty] === project[siteIdProperty]
         )
-        const [site] = sites.filter((res) => res['SiteId'] === project[siteIdProperty])
+        const site = sites.find((res) => res['SiteId'] === project[siteIdProperty])
         return {
-          ...statusReport,
+          ...(statusReport ?? {}),
           ...project,
           Path: site?.Path,
           SPWebUrl: site?.SPWebUrl,
@@ -261,6 +276,7 @@ export class SPDataAdapter
     maxQueryLength: number = 2500,
     maxProjects: number = 25
   ): string[] {
+    if (!this.childProjects?.length) return []
     const aggregatedQueries = []
     let queryString = ''
     if (this.childProjects.length > maxProjects) {
@@ -299,13 +315,13 @@ export class SPDataAdapter
         query
       )
       return projects.map((project) => {
-        const [statusReport] = statusReports.filter(
+        const statusReport = statusReports.find(
           (res) => res[siteIdProperty] === project[siteIdProperty]
         )
-        const [site] = sites.filter((res) => res['SiteId'] === project[siteIdProperty])
+        const site = sites.find((res) => res['SiteId'] === project[siteIdProperty])
 
         return {
-          ...statusReport,
+          ...(statusReport ?? {}),
           ...project,
           Path: site?.Path,
           SPWebUrl: site?.SPWebUrl,
@@ -332,7 +348,7 @@ export class SPDataAdapter
     siteIdProperty: string = 'GtSiteIdOWSTEXT',
     queryArray?: string
   ) {
-    const searchQuery = `${queryArray} ${view.searchQuery}`
+    const searchQuery = `${queryArray ?? ''} ${view.searchQuery}`.trim()
 
     const fetchAllResults = async (
       queryTemplate: string,
@@ -349,14 +365,14 @@ export class SPDataAdapter
       }
 
       const firstResponse = await this.sp.search(searchInit)
-      const allResults = [...firstResponse.PrimarySearchResults]
+      const allResults = [...(firstResponse?.PrimarySearchResults ?? [])]
 
-      while (allResults.length < firstResponse.TotalRows) {
+      while (allResults.length < (firstResponse?.TotalRows ?? 0)) {
         const response = await this.sp.search({
           ...searchInit,
           StartRow: allResults.length
         })
-        allResults.push(...response?.PrimarySearchResults)
+        allResults.push(...(response?.PrimarySearchResults ?? []))
       }
 
       return allResults
@@ -624,7 +640,7 @@ export class SPDataAdapter
   private _combineResultData({ items, memberOfGroups }: IProjectsData): ProjectListModel[] {
     let projects = items
       .map((item) => {
-        const [group] = memberOfGroups.filter((grp) => grp.id === item.GtGroupId)
+        const group = memberOfGroups.find((grp) => grp.id === item.GtGroupId)
         const model = new ProjectListModel(group?.displayName ?? item.Title, item)
         model.isUserMember = !!group
         return model
@@ -633,7 +649,7 @@ export class SPDataAdapter
 
     projects = projects
       .map((project) => {
-        return this.childProjects.some(
+        return (this.childProjects ?? []).some(
           (child) =>
             child?.siteId === project?.siteId ||
             project?.siteId === this.spfxContext.pageContext.site.id.toString()
@@ -745,13 +761,15 @@ export class SPDataAdapter
     dataSource?: string
   ): Promise<any[]> {
     const odataQuery = (configuration?.views || []).find((v) => v.title === dataSource)?.odataQuery
-    let projects: any[]
-    if (odataQuery && !dataSource.includes(`(${strings.ProjectLevel})`)) {
-      projects = await this.portalDataService.web.lists
-        .getByTitle(resource.Lists_Projects_Title)
-        .items.filter(`${odataQuery}`)<any[]>()
+    if (!odataQuery || dataSource?.includes(`(${strings.ProjectLevel})`)) {
+      return []
     }
-    return projects
+    if (!this.portalDataService?.web) {
+      return []
+    }
+    return await this.portalDataService.web.lists
+      .getByTitle(resource.Lists_Projects_Title)
+      .items.filter(`${odataQuery}`)<any[]>()
   }
 
   public async isUserInGroup(groupName: string): Promise<boolean> {
@@ -777,14 +795,14 @@ export class SPDataAdapter
     const benefits = results
       .filter(
         (res) =>
-          res.ContentTypeID.indexOf(PortfolioWebPartsDataConfig.CONTENT_TYPE_ID_BENEFITS) === 0
+          res?.ContentTypeID?.indexOf(PortfolioWebPartsDataConfig.CONTENT_TYPE_ID_BENEFITS) === 0
       )
       .map((res) => new Benefit(res))
 
     const measurements = results
       .filter(
         (res) =>
-          res.ContentTypeID.indexOf(PortfolioWebPartsDataConfig.CONTENT_TYPE_ID_MEASUREMENTS) === 0
+          res?.ContentTypeID?.indexOf(PortfolioWebPartsDataConfig.CONTENT_TYPE_ID_MEASUREMENTS) === 0
       )
       .map((res) => new BenefitMeasurement(res))
       .sort((a, b) => b.Date.getTime() - a.Date.getTime())
@@ -792,7 +810,7 @@ export class SPDataAdapter
     const indicactors = results
       .filter(
         (res) =>
-          res.ContentTypeID.indexOf(PortfolioWebPartsDataConfig.CONTENT_TYPE_ID_INDICATORS) === 0
+          res?.ContentTypeID?.indexOf(PortfolioWebPartsDataConfig.CONTENT_TYPE_ID_INDICATORS) === 0
       )
       .map((res) => {
         const indicator = new BenefitMeasurementIndicator(res)
@@ -808,11 +826,11 @@ export class SPDataAdapter
       const firstMeasurement = _.first(i.Measurements)
 
       const item = {
-        ..._.pick(firstMeasurement?.Properties, _.identity),
-        ..._.pick(benefit.Properties, _.identity),
-        Title: benefit.Title,
-        GtGainsResponsible: benefit.Responsible,
-        GtGainsOwner: benefit.Owner,
+        ..._.pick(firstMeasurement?.Properties ?? {}, _.identity),
+        ..._.pick(benefit?.Properties ?? {}, _.identity),
+        Title: benefit?.Title,
+        GtGainsResponsible: benefit?.Responsible,
+        GtGainsOwner: benefit?.Owner,
         MeasurementIndicator: i.Title,
         GtMeasurementUnitOWSCHCS: i.Unit,
         GtStartValueOWSNMBR: i.StartValue,
@@ -857,8 +875,11 @@ export class SPDataAdapter
     siteIdManagedProperty: string = 'SiteId'
   ) {
     const siteId = this.spfxContext.pageContext.site.id.toString()
-    const queries = this.childProjects && this.aggregatedQueryBuilder(siteIdManagedProperty)
+    const queries = this.childProjects?.length
+      ? this.aggregatedQueryBuilder(siteIdManagedProperty)
+      : []
     if (includeSelf) queries.unshift(`${siteIdManagedProperty}:${siteId}`)
+    if (queries.length === 0) return []
     const promises = queries.map((q) =>
       this.sp.search({
         QueryTemplate: `${q} ${queryTemplate}`,
@@ -869,7 +890,7 @@ export class SPDataAdapter
       })
     )
     const responses = await Promise.all(promises)
-    return flatten(responses.map((r) => r.PrimarySearchResults))
+    return flatten(responses.map((r) => r?.PrimarySearchResults ?? []))
   }
 
   /**
@@ -887,6 +908,9 @@ export class SPDataAdapter
     includeSelf: boolean = false
   ): Promise<any[]> {
     let items: any[]
+    if (!this.dataSourceService) {
+      throw new Error(format(strings.DataSourceError, dataSourceName))
+    }
     const dataSrc = await this.dataSourceService.getByName(dataSourceName)
     if (!dataSrc) throw new Error(format(strings.DataSourceNotFound, dataSourceName))
     try {
@@ -915,6 +939,9 @@ export class SPDataAdapter
     columns?: ProjectContentColumn[]
   ): Promise<DataSource[]> {
     try {
+      if (!this.dataSourceService) {
+        throw new Error(format(strings.DataSourceCategoryError, category))
+      }
       return this.dataSourceService.getByCategory(category, level, columns)
     } catch (error) {
       throw new Error(format(strings.DataSourceCategoryError, category))
@@ -1093,11 +1120,11 @@ export class SPDataAdapter
         }
 
         const itemQueryResults = await this.sp.search(itemsQuery)
-        const itemResults = [...itemQueryResults.PrimarySearchResults]
+        const itemResults = [...(itemQueryResults?.PrimarySearchResults ?? [])]
 
-        while (itemResults.length < itemQueryResults.TotalRows) {
+        while (itemResults.length < (itemQueryResults?.TotalRows ?? 0)) {
           const response = await this.sp.search({ ...itemsQuery, StartRow: itemResults.length })
-          itemResults.push(...response.PrimarySearchResults)
+          itemResults.push(...(response?.PrimarySearchResults ?? []))
         }
 
         const [sts_sites, items] = await Promise.all([siteResults, itemResults])
@@ -1161,8 +1188,22 @@ export class SPDataAdapter
     newProjects: Array<Record<string, string>>,
     parentHubSiteUrl?: string
   ) {
+    if (!this._propertyItem) {
+      throw new Error(
+        '(SPDataAdapter) (addChildProjects) Property item not initialized. Call fetchChildProjects() first.'
+      )
+    }
     const { GtChildProjects } = await this._propertyItem.select('GtChildProjects')()
-    const projects = JSON.parse(GtChildProjects)
+    let projects: Array<Record<string, string>> = []
+    try {
+      projects = GtChildProjects ? JSON.parse(GtChildProjects) : []
+    } catch (error) {
+      console.warn(
+        '(SPDataAdapter) (addChildProjects) Failed to parse GtChildProjects. Resetting to empty array.',
+        error
+      )
+      projects = []
+    }
     const updatedProjects = [...projects, ...newProjects]
     const seen = new Set<string>()
     const uniqueProjects = updatedProjects.filter((project: Record<string, string>) => {
@@ -1199,8 +1240,22 @@ export class SPDataAdapter
   public async removeChildProjects(
     projectToRemove: Array<Record<string, string>>
   ): Promise<Array<Record<string, string>>> {
+    if (!this._propertyItem) {
+      throw new Error(
+        '(SPDataAdapter) (removeChildProjects) Property item not initialized. Call fetchChildProjects() first.'
+      )
+    }
     const { GtChildProjects } = await this._propertyItem.select('GtChildProjects')()
-    const projects: Array<Record<string, string>> = JSON.parse(GtChildProjects)
+    let projects: Array<Record<string, string>> = []
+    try {
+      projects = GtChildProjects ? JSON.parse(GtChildProjects) : []
+    } catch (error) {
+      console.warn(
+        '(SPDataAdapter) (removeChildProjects) Failed to parse GtChildProjects. Resetting to empty array.',
+        error
+      )
+      projects = []
+    }
     const updatedProjects = projects.filter(
       (p) => !projectToRemove.some((el) => el.SiteId === p.SiteId)
     )

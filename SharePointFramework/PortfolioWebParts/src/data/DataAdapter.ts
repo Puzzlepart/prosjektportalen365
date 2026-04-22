@@ -326,11 +326,11 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     )
 
     const items = sites.map((site) => {
-      const [project] = projects.filter((res) => res[siteIdProperty] === site['SiteId'])
-      const [statusReport] = statusReports.filter((res) => res[siteIdProperty] === site['SiteId'])
+      const project = projects.find((res) => res[siteIdProperty] === site['SiteId'])
+      const statusReport = statusReports.find((res) => res[siteIdProperty] === site['SiteId'])
       return {
-        ...statusReport,
-        ...project,
+        ...(statusReport ?? {}),
+        ...(project ?? {}),
         Title: site.Title,
         Path: site?.Path,
         SPWebUrl: site?.SPWebUrl,
@@ -347,32 +347,28 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     siteId: string,
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IPortfolioViewData> {
-    try {
-      const { projects, sites, statusReports, managedProperties } = await this._fetchDataForView(
-        view,
-        configuration,
-        siteId,
-        siteIdProperty
+    const { projects, sites, statusReports, managedProperties } = await this._fetchDataForView(
+      view,
+      configuration,
+      siteId,
+      siteIdProperty
+    )
+
+    const items: IFetchDataForViewItemResult[] = projects.map((project) => {
+      const statusReport = statusReports.find(
+        (res) => res[siteIdProperty] === project[siteIdProperty]
       )
+      const site = sites.find((res) => res['SiteId'] === project[siteIdProperty])
+      return {
+        ...(statusReport ?? {}),
+        ...project,
+        Path: site?.Path,
+        SPWebUrl: site?.SPWebUrl,
+        SiteId: project[siteIdProperty]
+      }
+    })
 
-      const items: IFetchDataForViewItemResult[] = projects.map((project) => {
-        const [statusReport] = statusReports.filter(
-          (res) => res[siteIdProperty] === project[siteIdProperty]
-        )
-        const [site] = sites.filter((res) => res['SiteId'] === project[siteIdProperty])
-        return {
-          ...statusReport,
-          ...project,
-          Path: site?.Path,
-          SPWebUrl: site?.SPWebUrl,
-          SiteId: project[siteIdProperty]
-        }
-      })
-
-      return { items, managedProperties } as IPortfolioViewData
-    } catch (err) {
-      throw err
-    }
+    return { items, managedProperties } as IPortfolioViewData
   }
 
   /**
@@ -507,7 +503,10 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       })
 
       return { data, reports, configElement, columns: configuration.refiners }
-    } catch (error) {}
+    } catch (error) {
+      console.warn('(DataAdapter) (fetchTimelineProjectData) Failed to load timeline data:', error)
+      return { data: [], reports: [], configElement: undefined, columns: [] }
+    }
   }
 
   public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationModel[]) {
@@ -962,13 +961,12 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     dataSource?: string
   ): Promise<any[]> {
     const odataQuery = (configuration?.views || []).find((v) => v.title === dataSource)?.odataQuery
-    let projects: any[]
-    if (odataQuery && !dataSource.includes(`(${strings.ProjectLevel})`)) {
-      projects = await this._sp.web.lists
-        .getByTitle(resource.Lists_Projects_Title)
-        .items.filter(`${odataQuery}`)<any[]>()
+    if (!odataQuery || dataSource?.includes(`(${strings.ProjectLevel})`)) {
+      return []
     }
-    return projects
+    return await this._sp.web.lists
+      .getByTitle(resource.Lists_Projects_Title)
+      .items.filter(`${odataQuery}`)<any[]>()
   }
 
   public async isUserInGroup(groupName: string): Promise<boolean> {
@@ -1024,16 +1022,16 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     ])
 
     const benefits = results
-      .filter((res) => res.ContentTypeID.indexOf(config.CONTENT_TYPE_ID_BENEFITS) === 0)
+      .filter((res) => res?.ContentTypeID?.indexOf(config.CONTENT_TYPE_ID_BENEFITS) === 0)
       .map((res) => new Benefit(res))
 
     const measurements = results
-      .filter((res) => res.ContentTypeID.indexOf(config.CONTENT_TYPE_ID_MEASUREMENTS) === 0)
+      .filter((res) => res?.ContentTypeID?.indexOf(config.CONTENT_TYPE_ID_MEASUREMENTS) === 0)
       .map((res) => new BenefitMeasurement(res))
       .sort((a, b) => b.Date.getTime() - a.Date.getTime())
 
     const indicators = results
-      .filter((res) => res.ContentTypeID.indexOf(config.CONTENT_TYPE_ID_INDICATORS) === 0)
+      .filter((res) => res?.ContentTypeID?.indexOf(config.CONTENT_TYPE_ID_INDICATORS) === 0)
       .map((res) => {
         const indicator = new BenefitMeasurementIndicator(res)
           .setMeasurements(measurements)
@@ -1048,11 +1046,11 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       const firstMeasurement = _.first(i.Measurements)
 
       const item = {
-        ..._.pick(firstMeasurement?.Properties, _.identity),
-        ..._.pick(benefit.Properties, _.identity),
-        Title: benefit.Title,
-        GtGainsResponsible: benefit.Responsible,
-        GtGainsOwner: benefit.Owner,
+        ..._.pick(firstMeasurement?.Properties ?? {}, _.identity),
+        ..._.pick(benefit?.Properties ?? {}, _.identity),
+        Title: benefit?.Title,
+        GtGainsResponsible: benefit?.Responsible,
+        GtGainsOwner: benefit?.Owner,
         MeasurementIndicator: i.Title,
         GtMeasurementUnitOWSCHCS: i.Unit,
         GtStartValueOWSNMBR: i.StartValue,
@@ -1314,11 +1312,21 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   ): Promise<Promise<number | null>[]> {
     try {
       const provisionSite = Web([this._sp.web, provisionUrl])
-      return users.map(
-        async (val: IPersonaProps) => (await provisionSite.ensureUser(val.secondaryText)).data.Id
-      )
-    } catch {
-      return null
+      return users.map(async (val: IPersonaProps) => {
+        try {
+          const result = await provisionSite.ensureUser(val.secondaryText)
+          return result?.data?.Id ?? null
+        } catch (error) {
+          console.warn(
+            `(DataAdapter) (getProvisionUsers) ensureUser failed for ${val.secondaryText}:`,
+            error
+          )
+          return null
+        }
+      })
+    } catch (error) {
+      console.warn('(DataAdapter) (getProvisionUsers) Failed to resolve provision site:', error)
+      return []
     }
   }
 
@@ -1499,21 +1507,29 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         .select(...new SPIdeaConfigurationItem().fields)
         .items()
 
+      const configurations = config.map((item) => new IdeaConfigurationModel(item))
       return (
-        config
-          .map((item) => new IdeaConfigurationModel(item))
-          .find((item) => item.title === configurationName) || new IdeaConfigurationModel(config[0])
+        configurations.find((item) => item.title === configurationName) ??
+        configurations[0] ??
+        null
       )
     } catch (error) {
-      return error
+      console.error('(DataAdapter) (getIdeaConfiguration) Failed to load idea configuration:', error)
+      return null
     }
   }
 
   public async getIdeasData(configuration: IdeaConfigurationModel): Promise<Idea> {
+    if (!configuration) {
+      throw new Error('(DataAdapter) (getIdeasData) Idea configuration is missing.')
+    }
     const getListData = async (
       listName: string
     ): Promise<{ items: any[]; fieldValues: ItemFieldValues[]; fields: SPField[] }> => {
       const [listInfo] = await this._sp.web.lists.filter(`Title eq '${listName}'`).select('Id')()
+      if (!listInfo) {
+        throw new Error(`(DataAdapter) (getIdeasData) List '${listName}' not found.`)
+      }
       const list = this._sp.web.lists.getById(listInfo.Id)
       const items = await list.items()
 

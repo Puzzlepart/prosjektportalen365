@@ -42,21 +42,24 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     folderServerRelativeUrl: string,
     name: string,
     isFolder: boolean = false
-  ): Promise<string> {
+  ): Promise<string | null> {
     if (!validFilename(name))
       return isFolder ? strings.FolderNameInValidErrorText : strings.FilenameInValidErrorText
 
+    const targetName = name.toLowerCase()
     if (isFolder) {
-      const folders = await this.sp.web
-        .getFolderByServerRelativePath(folderServerRelativeUrl)
-        .folders()
-      const existingFolder = folders.find((f) => f.Name.toLowerCase() === name.toLowerCase())
+      const folders =
+        (await this.sp.web
+          .getFolderByServerRelativePath(folderServerRelativeUrl)
+          .folders()) ?? []
+      const existingFolder = folders.find((f) => f?.Name?.toLowerCase() === targetName)
       if (existingFolder) {
         return strings.FolderNameAlreadyInUseErrorText
       }
     } else {
-      const files = await this.sp.web.getFolderByServerRelativePath(folderServerRelativeUrl).files()
-      const existingFile = files.find((f) => f.Name.toLowerCase() === name.toLowerCase())
+      const files =
+        (await this.sp.web.getFolderByServerRelativePath(folderServerRelativeUrl).files()) ?? []
+      const existingFile = files.find((f) => f?.Name?.toLowerCase() === targetName)
       if (existingFile) {
         return strings.FilenameAlreadyInUseErrorText
       }
@@ -87,9 +90,10 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param folderRelativeUrl Folder URL
    */
   public async getFolders(folderRelativeUrl: string): Promise<any[]> {
-    const folders = await this.sp.web
-      .getFolderByServerRelativePath(folderRelativeUrl)
-      .folders.using(DefaultCaching)()
+    const folders =
+      (await this.sp.web
+        .getFolderByServerRelativePath(folderRelativeUrl)
+        .folders.using(DefaultCaching)()) ?? []
     return folders.map((f) => new SPFolder(f)).filter((f) => !f.isSystemFolder)
   }
 
@@ -97,18 +101,19 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * Get libraries in the current web
    */
   public async getLibraries(): Promise<SPFolder[]> {
-    const libraries = await this.sp.web.lists
-      .select('Id', 'Title', 'BaseTemplate', 'RootFolder/ServerRelativeUrl', 'RootFolder/Folders')
-      .expand('RootFolder', 'RootFolder/Folders')
-      .filter(
-        [
-          'BaseTemplate eq 101',
-          'IsCatalog eq false',
-          'IsApplicationList eq false',
-          // eslint-disable-next-line quotes
-          "ListItemEntityTypeFullName ne 'SP.Data.FormServerTemplatesItem'"
-        ].join(' and ')
-      )()
+    const libraries =
+      (await this.sp.web.lists
+        .select('Id', 'Title', 'BaseTemplate', 'RootFolder/ServerRelativeUrl', 'RootFolder/Folders')
+        .expand('RootFolder', 'RootFolder/Folders')
+        .filter(
+          [
+            'BaseTemplate eq 101',
+            'IsCatalog eq false',
+            'IsApplicationList eq false',
+            // eslint-disable-next-line quotes
+            "ListItemEntityTypeFullName ne 'SP.Data.FormServerTemplatesItem'"
+          ].join(' and ')
+        )()) ?? []
     return libraries.map((lib) => new SPFolder(lib))
   }
 }

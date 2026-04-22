@@ -31,18 +31,26 @@ export class DataSourceService {
    * @returns Data source
    */
   public async getByName(name: string): Promise<DataSource> {
-    const [[item], columns] = await Promise.all([
-      this._dataSourcesList.items
-        .select(...Object.keys(new SPDataSourceItem()))
-        .filter(`Title eq '${name}'`)<SPDataSourceItem[]>(),
-      this._columnsList.items()
-    ])
-    return item
-      ? new DataSource(
-          item,
-          columns.map((item) => new ProjectContentColumn(item))
-        )
-      : null
+    try {
+      const [[item], columns] = await Promise.all([
+        this._dataSourcesList.items
+          .select(...Object.keys(new SPDataSourceItem()))
+          .filter(`Title eq '${name}'`)<SPDataSourceItem[]>(),
+        this._columnsList.items()
+      ])
+      return item
+        ? new DataSource(
+            item,
+            (columns ?? []).map((column) => new ProjectContentColumn(column))
+          )
+        : null
+    } catch (error) {
+      console.warn(
+        `(DataSourceService) (getByName) Failed to fetch data source '${name}':`,
+        error
+      )
+      return null
+    }
   }
 
   /**

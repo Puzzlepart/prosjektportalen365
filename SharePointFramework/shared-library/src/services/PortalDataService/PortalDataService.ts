@@ -114,58 +114,82 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       `(PortalDataService) (onInit) Initializing PortalDataService instance with URL ${url}`,
       LogLevel.Info
     )
+    // Default `web` to the local web so `this.web.lists.getByTitle(...)` never
+    // throws NPE downstream. Consumers that need to distinguish an unreachable
+    // portal must check `isAvailable` — a fallback web means queries against
+    // portfolio-only lists will 404 rather than crash the whole webpart.
+    this.web = this._sp.web
     if (url) {
       this.url = url
-      this._spPortal = spfi(this.url).using(AssignFrom(this._sp.web))
-      this.web = this._spPortal.web
-      this.hubSiteId = await new PnPClientStorage().local.getOrPut(
-        `hubsite_${this.url.replace(/-/g, '')}_id`,
-        async () => {
-          const { PrimarySearchResults } = await this._sp.search({
-            Querytext: `Path=${this.url} contentclass:STS_Site`,
-            SelectProperties: ['SiteId', 'Path']
-          })
-          if (PrimarySearchResults.length === 0) {
-            throw NoAccessToPortfolioError(this.url)
-          }
-          return PrimarySearchResults[0].SiteId
-        },
-        expire
-      )
+      try {
+        this._spPortal = spfi(this.url).using(AssignFrom(this._sp.web))
+        this.web = this._spPortal.web
+        this.hubSiteId = await new PnPClientStorage().local.getOrPut(
+          `hubsite_${this.url.replace(/-/g, '')}_id`,
+          async () => {
+            const { PrimarySearchResults } = await this._sp.search({
+              Querytext: `Path=${this.url} contentclass:STS_Site`,
+              SelectProperties: ['SiteId', 'Path']
+            })
+            if (!PrimarySearchResults?.[0]) {
+              throw NoAccessToPortfolioError(this.url)
+            }
+            return PrimarySearchResults[0].SiteId
+          },
+          expire
+        )
+      } catch (error) {
+        Logger.write(
+          `(PortalDataService) (onInit) Failed to resolve portfolio with URL ${this.url}. Marking portal as unavailable. Error: ${error?.message ?? error}`,
+          LogLevel.Warning
+        )
+        this.isAvailable = false
+      }
       return
     }
     try {
-      this.hubSiteId = this._configuration.spfxContext.pageContext.legacyPageContext.hubSiteId || ''
+      this.hubSiteId =
+        this._configuration.spfxContext.pageContext?.legacyPageContext?.hubSiteId || ''
       try {
-        const hubSite = await (
-          await fetch(
-            `${this._configuration.spfxContext.pageContext.web.absoluteUrl}/_api/HubSites/GetById('${this.hubSiteId}')`,
-            {
-              method: 'GET',
-              headers: {
-                Accept: 'application/json;odata=nometadata'
-              },
-              credentials: 'include'
-            }
-          )
-        ).json()
-        this.url = hubSite.SiteUrl
+        const response = await fetch(
+          `${this._configuration.spfxContext.pageContext.web.absoluteUrl}/_api/HubSites/GetById('${encodeURIComponent(this.hubSiteId)}')`,
+          {
+            method: 'GET',
+            headers: {
+              Accept: 'application/json;odata=nometadata'
+            },
+            credentials: 'include'
+          }
+        )
+        if (!response.ok) {
+          throw new Error(`HubSites/GetById responded with ${response.status} ${response.statusText}`)
+        }
+        const contentType = response.headers.get('content-type') ?? ''
+        if (!contentType.includes('application/json')) {
+          throw new Error(`HubSites/GetById returned non-JSON content-type: ${contentType}`)
+        }
+        const hubSite = await response.json()
+        this.url = hubSite?.SiteUrl ?? ''
       } catch (error) {
+        Logger.write(
+          `(PortalDataService) (onInit) HubSites/GetById failed, falling back to search: ${error?.message ?? error}`,
+          LogLevel.Info
+        )
         this.url = await new PnPClientStorage().local.getOrPut(
-          `hubsite_${this.hubSiteId.replace(/-/g, '')}_url`,
+          `hubsite_${(this.hubSiteId ?? '').replace(/-/g, '')}_url`,
           async () => {
             const { PrimarySearchResults } = await this._sp.search({
               Querytext: `SiteId:${this.hubSiteId} contentclass:STS_Site`,
               SelectProperties: ['Path']
             })
-            return PrimarySearchResults[0] ? PrimarySearchResults[0].Path : ''
+            return PrimarySearchResults?.[0]?.Path ?? ''
           },
           expire
         )
       }
     } catch (err) {
       Logger.write(
-        `(PortalDataService) (onInit) Failed to resolve hub site URL. Marking portal as unavailable. Error: ${err.message}`,
+        `(PortalDataService) (onInit) Failed to resolve hub site URL. Marking portal as unavailable. Error: ${err?.message ?? err}`,
         LogLevel.Warning
       )
       this.isAvailable = false
@@ -233,9 +257,20 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         })
 
       if (currentProject?.GtParentProjects) {
-        const parentProjects: any[] = Array.isArray(currentProject.GtParentProjects)
-          ? currentProject.GtParentProjects
-          : JSON.parse(currentProject.GtParentProjects || '[]')
+        let parentProjects: any[] = []
+        if (Array.isArray(currentProject.GtParentProjects)) {
+          parentProjects = currentProject.GtParentProjects
+        } else {
+          try {
+            parentProjects = JSON.parse(currentProject.GtParentProjects || '[]')
+          } catch (error) {
+            Logger.write(
+              `(PortalDataService) (getParentProjects) Failed to parse GtParentProjects JSON: ${error?.message ?? error}`,
+              LogLevel.Warning
+            )
+            parentProjects = []
+          }
+        }
 
         for (const parentProject of parentProjects) {
           const parentUrl = parentProject.SPWebURL || parentProject.url
@@ -290,12 +325,21 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         return []
       }
 
-      const childProjects: Array<{
+      let childProjects: Array<{
         SiteId: string
         Title: string
         SPWebURL?: string
         Path?: string
-      }> = JSON.parse(currentProject.GtChildProjects)
+      }> = []
+      try {
+        childProjects = JSON.parse(currentProject.GtChildProjects)
+      } catch (error) {
+        Logger.write(
+          `(PortalDataService) (getChildProjects) Failed to parse GtChildProjects JSON: ${error?.message ?? error}`,
+          LogLevel.Warning
+        )
+        return []
+      }
 
       if (!Array.isArray(childProjects) || childProjects.length === 0) {
         return []
@@ -955,8 +999,11 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     useCaching = true
   }: GetStatusReportsOptions): Promise<StatusReport[]> {
     if (!this.isAvailable) return []
-    if (!this._configuration.spfxContext.pageContext)
-      throw 'Property {pageContext} is not the configuration.'
+    if (!this._configuration.spfxContext.pageContext) {
+      throw new Error(
+        '(PortalDataService) (getStatusReports) `pageContext` is missing from the SPFx context.'
+      )
+    }
     if (stringIsNullOrEmpty(filter))
       filter = `GtSiteId eq '${this._configuration.spfxContext.pageContext.site.id.toString()}'`
     try {

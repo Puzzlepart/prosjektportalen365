@@ -57,27 +57,28 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     templateParameters: Record<string, any>,
     progressFunc: (props: IProgressIndicatorProps) => void
   ): Promise<void> {
-    try {
-      progressFunc({
-        label: strings.SyncProjectPropertiesValuesProgressLabel,
-        description: strings.SyncProjectPropertiesValuesProgressDescription
-      })
-      const properties = await this.getMappedProjectProperties(fieldValues, {
-        customSiteFieldsGroup: templateParameters.CustomSiteFields,
-        projectContentTypeId: templateParameters.ProjectContentTypeId
-      })
-      await this.entityService.updateEntityItem(this.settings.siteId, {
-        ...properties,
-        Title: title
-      })
-      Logger.log({
-        message: `(${this._name}) (syncPropertyItemToHub) Successfully synced item to hub entity.`,
-        data: { properties },
-        level: LogLevel.Info
-      })
-    } catch (error) {
-      throw error
+    if (!this.entityService) {
+      throw new Error(
+        `(${this._name}) (syncPropertyItemToHub) entityService is not initialized — portal is unavailable.`
+      )
     }
+    progressFunc({
+      label: strings.SyncProjectPropertiesValuesProgressLabel,
+      description: strings.SyncProjectPropertiesValuesProgressDescription
+    })
+    const properties = await this.getMappedProjectProperties(fieldValues, {
+      customSiteFieldsGroup: templateParameters.CustomSiteFields,
+      projectContentTypeId: templateParameters.ProjectContentTypeId
+    })
+    await this.entityService.updateEntityItem(this.settings.siteId, {
+      ...properties,
+      Title: title
+    })
+    Logger.log({
+      message: `(${this._name}) (syncPropertyItemToHub) Successfully synced item to hub entity.`,
+      data: { properties },
+      level: LogLevel.Info
+    })
   }
 
   /**
@@ -95,6 +96,11 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       TermSetId: string
       TextField: string
     }>()
+    if (!field?.TextField) {
+      throw new Error(
+        `(${this._name}) (getTermFieldContext) Field '${fieldName}' has no TextField — is it a taxonomy field?`
+      )
+    }
     const textField = await this.sp.web.fields
       .getById(field.TextField)
       .select('InternalName')
@@ -110,7 +116,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * Clear cache for the project.
    */
   public clearCache() {
-    this.project.clearCache()
+    this.project?.clearCache()
   }
 
   /**
@@ -120,6 +126,13 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param folderPath Folder path relative to the configuration folder in Site Assets
    */
   public async getConfigurations(folderPath: string): Promise<IConfigurationFile[]> {
+    if (!this.portalDataService?.isAvailable || !this.portalDataService?.web) {
+      Logger.log({
+        message: `(${this._name}) (getConfigurations) Portal data service unavailable — returning empty configuration list.`,
+        level: LogLevel.Warning
+      })
+      return []
+    }
     try {
       const { ServerRelativeUrl } = await this.portalDataService.web.rootFolder
         .select('ServerRelativeUrl')
@@ -135,11 +148,16 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       return files.map((file) => ({
         name: file.Name,
         title:
-          file['ListItemAllFields']['Title'] ??
+          file['ListItemAllFields']?.['Title'] ??
           `${strings.UnknownConfigurationName} (${file.Name})`,
         url: file.ServerRelativeUrl
       }))
-    } catch {
+    } catch (error) {
+      Logger.log({
+        message: `(${this._name}) (getConfigurations) Failed to load configuration files: ${error?.message ?? error}`,
+        data: { folderPath, error },
+        level: LogLevel.Warning
+      })
       return []
     }
   }
@@ -240,6 +258,14 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     webUrl: string,
     reference?: string
   ): Promise<void> {
+    if (!this.portalDataService?.web) {
+      Logger.log({
+        message: `(${this._name}) (writeToArchiveLog) Skipping archive log entry because portal data service is unavailable.`,
+        data: { title, webUrl, operation },
+        level: LogLevel.Warning
+      })
+      return
+    }
     try {
       const archiveLogList = this.portalDataService.web.lists.getByTitle(
         resource.Lists_ArchiveLog_Title
@@ -344,13 +370,21 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @returns Promise<IArchiveStatusInfo | null> Archive information, or null if none found
    */
   public async getArchiveStatus(projectWebUrl: string): Promise<IArchiveStatusInfo | null> {
+    if (!this.portalDataService?.web) {
+      Logger.log({
+        message: `(${this._name}) (getArchiveStatus) Portal data service unavailable — cannot retrieve archive status.`,
+        level: LogLevel.Warning
+      })
+      return null
+    }
     try {
       const archiveLogList = this.portalDataService.web.lists.getByTitle(
         resource.Lists_ArchiveLog_Title
       )
 
+      const sanitizedUrl = (projectWebUrl ?? '').replace(/'/g, "''")
       const items = await archiveLogList.items
-        .filter(`GtLogWebUrl eq '${projectWebUrl}'`)
+        .filter(`GtLogWebUrl eq '${sanitizedUrl}'`)
         .orderBy('Created', false)
         .select('Id', 'Created', 'GtLogOperation', 'GtLogMessage', 'GtLogScope', 'GtLogStatus')()
 
@@ -372,8 +406,9 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         operationGroups.get(groupKey).push(item)
       })
 
-      const operations: IArchiveOperation[] = Array.from(operationGroups.entries()).map(
-        ([groupKey, groupItems]) => {
+      const operations: IArchiveOperation[] = Array.from(operationGroups.entries())
+        .filter(([, groupItems]) => groupItems.length > 0)
+        .map(([groupKey, groupItems]) => {
           const [operation] = groupKey.split('|')
           const date = new Date(groupItems[0].Created)
           const mostRecentMessage = groupItems[0].GtLogMessage || ''
@@ -419,6 +454,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       )
 
       operations.sort((a, b) => b.date.getTime() - a.date.getTime())
+
+      if (operations.length === 0) return null
 
       const result: IArchiveStatusInfo = {
         lastArchiveDate: operations[0].date,

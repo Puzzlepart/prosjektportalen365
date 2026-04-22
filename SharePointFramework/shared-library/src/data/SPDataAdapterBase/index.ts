@@ -133,7 +133,13 @@ export class SPDataAdapterBase<
     try {
       const { data: currentUser } = await this.sp.web.ensureUser(user.loginName ?? user.email)
       return currentUser
-    } catch {
+    } catch (error) {
+      console.warn(
+        `(SPDataAdapterBase) (getCurrentUser) ensureUser failed for ${
+          user?.loginName ?? user?.email ?? '<unknown>'
+        }:`,
+        error
+      )
       return null
     }
   }
@@ -184,11 +190,17 @@ export class SPDataAdapterBase<
                   const currentUserHasManageWebPermisson =
                     await this.sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
                   if (currentUserHasManageWebPermisson) userPermissions.push(...role.permissions)
-                } catch {}
+                } catch (error) {
+                  console.warn(
+                    '(SPDataAdapterBase) (checkProjectAdminPermissions) SiteAdmin permission check failed:',
+                    error
+                  )
+                }
               }
               break
             case ProjectAdminRoleType.ProjectProperty:
               {
+                if (!currentUser) break
                 const projectFieldValue = properties.get(role.projectFieldName).value
                 if (
                   _.isArray(projectFieldValue) &&
@@ -200,15 +212,17 @@ export class SPDataAdapterBase<
               break
             case ProjectAdminRoleType.SharePointGroup:
               {
+                if (!currentUser?.Email) break
                 let web: IWeb = null
                 switch (role.groupLevel) {
                   case resource.Lists_ProjectAdminRoles_GroupLevel_Project:
                     web = this.sp.web
                     break
                   case resource.Lists_ProjectAdminRoles_GroupLevel_Portfolio:
-                    web = this.portalDataService.web
+                    web = this.portalDataService?.web
                     break
                 }
+                if (!web) break
                 try {
                   if (
                     (
@@ -218,7 +232,12 @@ export class SPDataAdapterBase<
                     ).length > 0
                   )
                     userPermissions.push(...role.permissions)
-                } catch {}
+                } catch (error) {
+                  console.warn(
+                    `(SPDataAdapterBase) (checkProjectAdminPermissions) SharePointGroup membership check failed for group '${role.groupName}':`,
+                    error
+                  )
+                }
               }
               break
           }
@@ -376,6 +395,11 @@ export class SPDataAdapterBase<
         break
     }
 
+    if (!this.entityService) {
+      throw new Error(
+        '(SPDataAdapterBase) (getMappedProjectProperties) entityService is not initialized — portal is unavailable.'
+      )
+    }
     try {
       const [fields, siteUsers, targetListFields] = await Promise.all([
         options.projectContentTypeId
@@ -454,11 +478,12 @@ export class SPDataAdapterBase<
                 return properties
               }
               const users = siteUsers.filter(({ Id }) => sourceUserIds.indexOf(Id) !== -1)
-              const destinationUserIds = (
-                await Promise.all(
-                  users.map(({ LoginName }) => destinationWeb.ensureUser(LoginName))
-                )
-              ).map(({ data }) => data.Id)
+              const ensureResults = await Promise.allSettled(
+                users.map(({ LoginName }) => destinationWeb.ensureUser(LoginName))
+              )
+              const destinationUserIds = ensureResults.flatMap((r) =>
+                r.status === 'fulfilled' && r.value?.data?.Id ? [r.value.data.Id] : []
+              )
               properties[userFieldName] = options.wrapMultiValuesInResultsArray
                 ? { results: destinationUserIds }
                 : destinationUserIds
@@ -472,12 +497,12 @@ export class SPDataAdapterBase<
             })
             break
           case 'Number':
-          case 'Currency': {
+          case 'Currency':
             properties[field.InternalName] = fieldValues.get<number>(field.InternalName, {
               format: 'number',
               defaultValue: null
             })
-          }
+            break
           case 'URL':
             properties[field.InternalName] = fieldValue.value ?? null
             break
@@ -500,6 +525,10 @@ export class SPDataAdapterBase<
         return properties
       }, Promise.resolve({}))
     } catch (error) {
+      console.error(
+        '(SPDataAdapterBase) (getMappedProjectProperties) Failed to map project properties:',
+        error
+      )
       throw error
     }
   }
