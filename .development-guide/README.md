@@ -38,6 +38,13 @@
 	* [Overvåk konfigurasjon og kanaler](#overvk-konfigurasjon-og-kanaler)
 	* [Bygg bare spesifikke komponenter](#bygg-bare-spesifikke-komponenter)
 	* [Oppgaver](#oppgaver)
+* [➤ npm-skript](#-npm-skript)
+	* [Skript i roten (`package.json`)](#skript-i-roten-packagejson)
+	* [Skript i SPFx-løsningene](#skript-i-spfx-lsningene)
+	* [Skript i `SharePointFramework/shared-library`](#skript-i-sharepointframeworkshared-library)
+	* [Skript i `SharePointFramework/.tasks`](#skript-i-sharepointframeworktasks)
+	* [Skript i `Templates`](#skript-i-templates)
+	* [Vanlige arbeidsflyter](#vanlige-arbeidsflyter)
 * [➤ Konfigurasjon av utviklingsmiljø](#-konfigurasjon-av-utviklingsmilj)
 	* [Oppsett av miljøsystemet](#oppsett-av-miljsystemet)
 		* [1. `.env.template` og `.env`](#1-envtemplate-og-env)
@@ -398,6 +405,103 @@ Bare komponenten `LatestProject` vil bli bygget. `config.json` vil automatisk bl
 ### Oppgaver
 
 Se [Oppgaver](../../SharePointFramework/.tasks/README.md) for en oversikt over tilgjengelige oppgaveskript.
+
+
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#npm-skript)
+
+## ➤ npm-skript
+
+Prosjektportalen 365 er et monorepo med flere `package.json`-filer. Hver fil eksponerer et sett med npm-skript som brukes i daglig utvikling, bygging, versjonering, lokalisering, generering og utgivelse. Denne oversikten samler alle skriptene på ett sted, gruppert etter pakke.
+
+### Skript i roten (`package.json`)
+
+Skriptene i roten styrer monorepoet som helhet: Rush-operasjoner, generering av maler, kanaler, README og SBOM, samt versjonssynkronisering og bygg av utgivelse.
+
+| Skript                         | Kommando                                                                                                  | Hva det gjør / hvorfor                                                                                                                                                                         |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sync-version`                 | `node ./.tasks/automatic-versioning.js`                                                                   | Synkroniserer versjonsnumrene på tvers av alle `package.json`-filer i monorepoet, slik at alle løsninger følger samme versjon. Kjøres også automatisk etter `npm version patch/minor`.          |
+| `generate-readme`              | `npx @appnest/readme generate && npx @appnest/readme generate --config .development-guide/blueprint.json` | Regenererer hoved-`README.md` og utviklerguiden fra kildefilene i `.README` og `.development-guide/.README`. Se [README-generering](../ci/readme-generering.md).                                 |
+| `generate-channel-config`      | `node ./.tasks/generate-channel-config.js`                                                                | Oppretter en ny installasjonskanal (f.eks. `test`, `i18n`). Bruk flagget `/update` for å oppdatere eksisterende. Se [Installasjonskanaler](../maler/kanaler.md).                                 |
+| `generate-channel-replace-map` | `node ./.tasks/generate-channel-config.js --replace-map`                                                  | Genererer et _replace map_ for kanaler. Brukes av byggeprosessen til å bytte ut verdier (URL-er, feltnavn, m.m.) når en bestemt kanal bygges.                                                    |
+| `generate-pnp-templates`       | `node ./.tasks/generate-pnp-templates.js`                                                                 | Bygger PnP-provisjoneringsmaler (porteføljemaler og taksonomi) fra kildefilene i `Templates/`-mappen. Se [Maler](../maler/maler.md).                                                             |
+| `generate-site-scripts`        | `node ./.tasks/generate-site-scripts.js --silent`                                                         | Genererer site scripts fra kildefilene i `SiteScripts/src`-mappen til klar-til-bruk JSON. Se [Site Design / Site Scripts](../maler/site-design-og-site-scripts.md).                              |
+| `generate-sbom`                | `node ./.tasks/generate-sbom.js`                                                                          | Genererer `SBOM.md` med komplett oversikt over avhengigheter i alle pakker. Se [SBOM-generering](../ci/sbom.md).                                                                                |
+| `postversion`                  | `npm run generate-readme && npm run sync-version && npm run generate-sbom`                                | Kjøres automatisk av npm etter `npm version patch/minor`. Regenererer README, synkroniserer versjoner og oppdaterer SBOM i ett steg.                                                             |
+| `rush:update`                  | `node common/scripts/install-run-rush.js update`                                                          | Kjører `rush update` uten at Rush er installert globalt. Installerer avhengigheter og sikrer konsistente versjoner på tvers av løsningene.                                                       |
+| `rush:build`                   | `node common/scripts/install-run-rush.js rebuild --verbose`                                               | Kjører `rush rebuild` med detaljerte logger. Bygger alle løsningene i monorepoet i riktig avhengighetsrekkefølge.                                                                                |
+| `rush:lint`                    | `node common/scripts/install-run-rush.js lint`                                                            | Kjører `lint`-skriptet i alle SPFx-løsningene via Rush. Brukes også i `automatic_chores.yml` for å rette formateringsfeil automatisk.                                                            |
+| `build-release`                | `pwsh -File ./Install/build-release.ps1`                                                                  | Bygger en komplett utgivelsespakke ved å kjøre PowerShell-skriptet `Install/build-release.ps1`. Se [Bygge en ny utgivelse](../utgivelse/bygge-utgivelse.md).                                     |
+
+### Skript i SPFx-løsningene
+
+Hver SPFx-løsning under `SharePointFramework/` (`PortfolioExtensions`, `PortfolioWebParts`, `ProgramWebParts`, `ProjectExtensions`, `ProjectWebParts`) har samme sett med skript. Disse styrer daglig utvikling, bygging, linting og lokaliseringsvalidering for løsningen.
+
+| Skript          | Kommando                                                                                                                         | Hva det gjør / hvorfor                                                                                                                                                                                            |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `watch`         | `concurrently "npm run serve" "livereload './dist/*.js' -e 'js' -w 250"`                                                         | Starter utviklingsserveren og live-reload parallelt. Dette er hovedkommandoen for lokal utvikling. Nettleseren oppdateres automatisk ved endringer i `dist/`.                                                       |
+| `prewatch`      | `node ../.tasks/pre-watch.js`                                                                                                    | Kjøres automatisk før `watch`. Oppretter `.env`, `serve.json` og `.vscode/launch.json` fra maler, filtrerer bundler basert på `SERVE_BUNDLE_REGEX` og håndterer kanalbytte. Se [Utviklingsmiljø](./utviklingsmiljo.md). |
+| `postwatch`     | `node ../.tasks/post-watch.js`                                                                                                   | Kjøres automatisk etter `watch` avsluttes. Rydder opp i midlertidige filer og tilbakestiller `config.json` til opprinnelig tilstand.                                                                              |
+| `serve`         | `concurrently "gulp serve-deprecated --nobrowser NODE --max-old-space-size=8192"`                                                | Starter `gulp serve` med økt minnegrense. `PortfolioWebParts` bruker `12288` MB i stedet for `8192`, og `ProgramWebParts` bruker `--locale=nb-no` som standardspråk.                                                |
+| `build`         | `gulp bundle --ship && gulp package-solution --ship`                                                                             | Bygger og pakker løsningen som en `.sppkg`-fil klar for distribusjon. `--ship` gir optimalisert produksjonsbygg.                                                                                                   |
+| `postversion`   | `tsc && npm publish`                                                                                                             | Kjøres automatisk etter `npm version`. Kompilerer TypeScript og publiserer pakken til npm (brukes for pakker som publiseres uavhengig).                                                                            |
+| `lint`          | `eslint --ext .ts,.tsx ./src --color --fix --config ../.eslintrc.yaml && npm run prettier`                                       | Kjører ESLint med automatisk feilretting (`--fix`), etterfulgt av Prettier. Felles konfigurasjon ligger i `SharePointFramework/.eslintrc.yaml`.                                                                    |
+| `prettier`      | `prettier '**/*.ts*' --write --loglevel silent --config ../.prettierrc.yaml`                                                     | Formaterer alle `.ts`/`.tsx`-filer i henhold til felles Prettier-konfigurasjon. Kalt automatisk av `lint`.                                                                                                         |
+| `validate-loc`  | `node ../.tasks/validateLoc.js --path ./src/loc --interface I{Pakkenavn}Strings --dts mystrings.d.ts --output ./localization-report.md --summary` | Validerer lokaliseringsfiler (`.js`-ressurser) i `src/loc` mot typeinterfacet og genererer en rapport. Sikrer at alle språk har samme nøkler.                                                                     |
+
+### Skript i `SharePointFramework/shared-library`
+
+`shared-library` er biblioteket som de andre SPFx-løsningene deler kode med. Det bygges og publiseres uavhengig, og har derfor ikke `watch`/`serve`-skript.
+
+| Skript         | Kommando                                                                                                                                  | Hva det gjør / hvorfor                                                                                                                    |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `build`        | `gulp bundle --ship && gulp package-solution --ship`                                                                                      | Bygger biblioteket. Kalles typisk via `rush rebuild -o pp365-shared-library` for å oppdatere biblioteket som andre løsninger avhenger av. |
+| `postversion`  | `tsc && npm publish`                                                                                                                      | Kompilerer TypeScript og publiserer biblioteket til npm som [`pp365-shared-library`](https://www.npmjs.com/package/pp365-shared-library). |
+| `lint`         | `eslint --ext .ts,.tsx ./src --color --fix --config ../.eslintrc.yaml && npm run prettier`                                                | Kjører ESLint med automatisk feilretting og Prettier.                                                                                      |
+| `prettier`     | `prettier '**/*.ts*' --write --loglevel silent --config ../.prettierrc.yaml`                                                              | Formaterer alle `.ts`/`.tsx`-filer etter felles Prettier-regler.                                                                           |
+| `validate-loc` | `node ../.tasks/validateLoc.js --path ./src/loc --interface ISharedLibraryStrings --dts mystrings.d.ts --output ./localization-report.md --summary` | Validerer lokaliseringsfiler i biblioteket mot `ISharedLibraryStrings`-interfacet.                                                         |
+
+### Skript i `SharePointFramework/.tasks`
+
+`.tasks`-pakken inneholder delte byggeoppgaver for alle SPFx-løsningene (pre-watch, post-watch, validate-loc m.m.). Den har bare et minimalt sett med egne skript.
+
+| Skript         | Kommando                                                                                                                | Hva det gjør / hvorfor                                                                                                                                     |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `build`        | `node ./build.js`                                                                                                       | Kjører bygget for `.tasks`-pakken (valideringer, klargjøring av hjelpeskript).                                                                             |
+| `lint`         | `echo "No linting configured"`                                                                                          | Plassholder for linting – eksplisitt deaktivert for denne pakken. Finnes for at `rush lint` skal gå gjennom uten feil.                                     |
+| `validate-loc` | `node ./validateLoc.js --path ./src/loc --interface IStrings --dts mystrings.d.ts --output ./localization-report.md --summary` | Validerer lokaliseringsfilene i selve `.tasks`-pakken.                                                                                                     |
+
+Se [Oppgaver](../../SharePointFramework/.tasks/README.md) for en full oversikt over oppgaveskriptene som ligger i denne mappen.
+
+### Skript i `Templates`
+
+`Templates`-pakken genererer JSON-provisjoneringsmaler og `.resx`-basert lokalisering for malene.
+
+| Skript                       | Kommando                                                                                                                                                                                   | Hva det gjør / hvorfor                                                                                                                                                                                                 |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `build`                      | `npm run generate-project-templates && npm run generate-resx-json`                                                                                                                         | Hovedkommandoen for å bygge alle prosjektmaler og regenerere ressursfiler. Kjøres som del av full utgivelsesbygging.                                                                                                   |
+| `lint`                       | `echo "No linting configured"`                                                                                                                                                             | Plassholder – ingen linting i denne pakken. Finnes for at `rush lint` skal gå gjennom uten feil.                                                                                                                       |
+| `generate-resx-json`         | `node ./.tasks/generate-resx-json.js`                                                                                                                                                      | Leser `.resx`-filene i `Templates/Portfolio` og genererer JSON-representasjon som brukes av `{{token}}`-substitusjon i JSON-malene.                                                                                    |
+| `generate-resx-ts`           | `node ./.tasks/generate-resx-ts.js`                                                                                                                                                        | Genererer TypeScript-typer fra `.resx`-filene slik at oppslag på ressursnøkler typekontrolleres.                                                                                                                       |
+| `generate-project-templates` | `npm run generate-resx-json && npm run generate-resx-ts && node ./.tasks/generate-project-templates.js`                                                                                    | Genererer JSON-prosjektmaler per språkkode (f.eks. `no-NB`, `en-US`) fra kildemalen `_JsonTemplate.json` med `.resx`-ressurser brukt som tokens. Se [JSON-provisjoneringsmal](../maler/js-provisjoneringsmal.md).       |
+| `validate-project-template`  | `node ./.tasks/validate-project-template.js`                                                                                                                                               | Validerer at genererte prosjektmaler er gyldige og at alle refererte felter/tokens finnes.                                                                                                                              |
+| `validate-loc`               | `node ../SharePointFramework/.tasks/validateLoc.js --path ../SharePointFramework/PortfolioWebParts/src/loc/shared --interface ISharedResources --dts shared.d.ts --output ./resx-ts-report.json && npm run validate-project-template` | Validerer at lokaliseringsfilene i `PortfolioWebParts/src/loc/shared` matcher `ISharedResources`-interfacet, og kjører deretter `validate-project-template`. Sørger for at delte ressurser brukt i malene er konsistente. |
+
+### Vanlige arbeidsflyter
+
+Oversikt over hvilke skript som brukes i typiske arbeidsflyter:
+
+| Arbeidsflyt                                 | Skript                                                                          |
+| ------------------------------------------- | ------------------------------------------------------------------------------- |
+| Første gangs oppsett av repoet              | `npm run rush:update && npm run rush:build` i rot                               |
+| Oppdater `shared-library` og bygg på nytt   | `rush rebuild -o pp365-shared-library`                                          |
+| Daglig utvikling på en webdel/utvidelse     | `npm run watch` i den aktuelle SPFx-pakken                                      |
+| Rett opp formatering og linting             | `npm run rush:lint` i rot, eller `npm run lint` i én pakke                      |
+| Generer ny kanal                            | `npm run generate-channel-config <kanalnavn>` i rot                             |
+| Regenerer README-er                         | `npm run generate-readme` i rot                                                 |
+| Ny patch-/minor-versjon                     | `npm version patch` / `npm version minor` i rot (utløser `postversion`-hooken) |
+| Bygg utgivelsespakke lokalt                 | `npm run build-release` i rot                                                   |
+| Oppdater SBOM manuelt                       | `npm run generate-sbom` i rot                                                   |
 
 
 

@@ -16,6 +16,8 @@
 
 [[load:.development-guide/spfx/rush.md]]
 
+[[load:.development-guide/spfx/npm-skript.md]]
+
 [[load:.development-guide/spfx/utviklingsmiljo.md]]
 
 [[load:.development-guide/maler/site-design-og-site-scripts.md]]
