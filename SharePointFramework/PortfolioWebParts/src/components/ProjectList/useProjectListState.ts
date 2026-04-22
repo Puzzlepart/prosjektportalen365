@@ -1,11 +1,9 @@
-/* eslint-disable prefer-spread */
 import { useState } from 'react'
 import { IProjectListProps, IProjectListState } from './types'
 import { convertConfigsToVerticals, findDefaultVertical } from './ProjectListFilterRegistry'
 
 /** State hook for `ProjectList`. Computes verticals synchronously from `props.verticalConfigs`. */
 export function useProjectListState(props: IProjectListProps) {
-  const mockProjects = Array.apply(null, Array(Math.floor(Math.random() * 10) + 10)).map(() => 0)
   const defaultSort = { fieldName: props.sortBy.toLocaleLowerCase(), isSortedDescending: true }
   const configs = props.verticalConfigs ?? []
   const verticals = convertConfigsToVerticals(configs)
@@ -13,7 +11,7 @@ export function useProjectListState(props: IProjectListProps) {
   const [state, $setState] = useState<IProjectListState>({
     searchTerm: '',
     renderMode: props.defaultRenderMode ?? 'tiles',
-    projects: mockProjects,
+    projects: [],
     sort: defaultSort,
     verticals,
     selectedVertical

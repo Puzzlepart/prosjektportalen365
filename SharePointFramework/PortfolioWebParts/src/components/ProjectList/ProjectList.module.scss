@@ -13,6 +13,22 @@
     .tabList {
       width: 100%;
     }
+
+    .tabListSkeleton {
+      display: flex;
+      flex-direction: row;
+      gap: 16px;
+      width: 100%;
+      padding: 0 4px;
+    }
+  }
+
+  .listSkeleton {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    margin: 4px 0;
   }
 
   .emptyMessage {

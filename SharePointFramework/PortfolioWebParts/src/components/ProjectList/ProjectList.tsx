@@ -14,6 +14,7 @@ import {
   useIsOverflowItemVisible,
   useOverflowMenu
 } from '@fluentui/react-components'
+import { Shimmer, ShimmerElementType } from '@fluentui/react'
 import { MoreHorizontalRegular } from '@fluentui/react-icons'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
@@ -71,7 +72,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
   const context = useProjectList(props)
   const renderProjects = useProjectListRenderer(context)
 
-  if (context.state.projects.length === 0) {
+  if (context.state.isDataLoaded && context.state.projects.length === 0) {
     return (
       <IdPrefixProvider value={context.fluentProviderId}>
         <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
@@ -108,19 +109,19 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
         <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
           <div className={styles.projectList}>
             <div className={styles.tabs}>
-              <Overflow>
-                <TabList
-                  className={styles.tabList}
-                  onTabSelect={(_, data: SelectTabData) => {
-                    if (data.value === 'overflow-menu') return
-                    context.setState({
-                      selectedVertical: find(context.verticals, (v) => v.key === data.value)
-                    })
-                  }}
-                  selectedValue={context.state.selectedVertical?.key}
-                >
-                  {context.state.isDataLoaded &&
-                    context.verticals
+              {context.state.isDataLoaded ? (
+                <Overflow>
+                  <TabList
+                    className={styles.tabList}
+                    onTabSelect={(_, data: SelectTabData) => {
+                      if (data.value === 'overflow-menu') return
+                      context.setState({
+                        selectedVertical: find(context.verticals, (v) => v.key === data.value)
+                      })
+                    }}
+                    selectedValue={context.state.selectedVertical?.key}
+                  >
+                    {context.verticals
                       .filter((vertical) => !vertical.isHidden || !vertical.isHidden(context.state))
                       .map((vertical) => {
                         const Icon = vertical.icon
@@ -132,18 +133,33 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
                           </OverflowItem>
                         )
                       })}
-                  <OverflowMenu
-                    verticals={context.verticals.filter(
-                      (vertical) => !vertical.isHidden || !vertical.isHidden(context.state)
-                    )}
-                    onSelect={(key) =>
-                      context.setState({
-                        selectedVertical: find(context.verticals, (v) => v.key === key)
-                      })
-                    }
-                  />
-                </TabList>
-              </Overflow>
+                    <OverflowMenu
+                      verticals={context.verticals.filter(
+                        (vertical) => !vertical.isHidden || !vertical.isHidden(context.state)
+                      )}
+                      onSelect={(key) =>
+                        context.setState({
+                          selectedVertical: find(context.verticals, (v) => v.key === key)
+                        })
+                      }
+                    />
+                  </TabList>
+                </Overflow>
+              ) : (
+                <div className={styles.tabListSkeleton} role='presentation' aria-busy='true'>
+                  {Array.from({
+                    length: Math.max(context.verticals.length, 3)
+                  }).map((_, i) => (
+                    <Shimmer
+                      key={`tab-skeleton-${i}`}
+                      shimmerElements={[
+                        { type: ShimmerElementType.line, width: 140, height: 36 }
+                      ]}
+                      styles={{ root: { width: 140 } }}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
             <Commands />
             {context.state.isDataLoaded && isEmpty(context.projects) && (

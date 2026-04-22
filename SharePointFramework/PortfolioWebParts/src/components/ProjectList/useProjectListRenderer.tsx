@@ -1,4 +1,4 @@
-import { Shimmer, ShimmerElementsGroup, ShimmerElementType } from '@fluentui/react'
+import { Shimmer, ShimmerElementType } from '@fluentui/react'
 import { ProjectListModel } from 'pp365-shared-library'
 import React, { FC, useMemo } from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
@@ -7,6 +7,8 @@ import { List, ListContext } from './List'
 import { ProjectCard, ProjectCardContext } from './ProjectCard'
 import styles from './ProjectList.module.scss'
 import { IProjectListContext } from './context'
+
+const SKELETON_CARD_COUNT = 12
 
 export function useProjectListRenderer({ props, state, createCardContext }: IProjectListContext) {
   /**
@@ -44,14 +46,39 @@ export function useProjectListRenderer({ props, state, createCardContext }: IPro
       )
     }
 
+    const skeletonRow: FC<{
+      index: number
+      style: React.CSSProperties
+      itemsPerRow: number
+    }> = ({ index, style, itemsPerRow }) => {
+      const convertedIndex = index * itemsPerRow
+      const remaining = Math.max(0, SKELETON_CARD_COUNT - convertedIndex)
+      const count = Math.min(itemsPerRow, remaining)
+      const items = Array.from({ length: count }).map((_, idx) => (
+        <ProjectCardContext.Provider
+          key={`skeleton-${convertedIndex + idx}`}
+          value={createCardContext(undefined)}
+        >
+          <ProjectCard />
+        </ProjectCardContext.Provider>
+      ))
+      return (
+        <div className={styles.projectRow} key={`skeleton-row-${index}`} style={style}>
+          {items}
+        </div>
+      )
+    }
+
     switch (state.renderMode) {
       case 'tiles': {
         return (
           <AutoSizer disableHeight style={{ width: '100%' }}>
             {({ width }) => {
               const cardWidth = 242
-              const itemsPerRow = Math.floor(width / cardWidth)
-              const itemCount = Math.ceil(projects.length / itemsPerRow)
+              const itemsPerRow = Math.max(1, Math.floor(width / cardWidth))
+              const isLoading = !state.isDataLoaded
+              const displayCount = isLoading ? SKELETON_CARD_COUNT : projects.length
+              const itemCount = Math.ceil(displayCount / itemsPerRow)
               const listHeight = Math.ceil(itemCount * 300)
 
               return (
@@ -64,7 +91,11 @@ export function useProjectListRenderer({ props, state, createCardContext }: IPro
                   itemSize={290}
                   width={width}
                 >
-                  {({ index, style }) => projectRow({ index, style, itemsPerRow })}
+                  {({ index, style }) =>
+                    isLoading
+                      ? skeletonRow({ index, style, itemsPerRow })
+                      : projectRow({ index, style, itemsPerRow })
+                  }
                 </FixedSizeList>
               )
             }}
@@ -75,32 +106,34 @@ export function useProjectListRenderer({ props, state, createCardContext }: IPro
       case 'compactList': {
         const size = state.renderMode === 'list' ? 'medium' : 'extra-small'
         const rowHeight = size === 'medium' ? 44 : 32
-        return (
-          <Shimmer
-            isDataLoaded={state.isDataLoaded}
-            customElementsGroup={
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', width: '100%' }}>
-                {Array.from({ length: 8 }).map((_, i) => (
-                  <ShimmerElementsGroup
-                    key={i}
-                    shimmerElements={[
-                      { type: ShimmerElementType.line, width: '100%', height: rowHeight }
-                    ]}
-                  />
-                ))}
-              </div>
-            }
-          >
-            <ListContext.Provider
-              value={{
-                ...props,
-                projects: state.isDataLoaded ? projects : [],
-                size
-              }}
+        if (!state.isDataLoaded) {
+          return (
+            <div
+              className={styles.listSkeleton}
+              role='presentation'
+              aria-busy='true'
             >
-              <List />
-            </ListContext.Provider>
-          </Shimmer>
+              {Array.from({ length: 8 }).map((_, i) => (
+                <Shimmer
+                  key={`list-skeleton-${i}`}
+                  shimmerElements={[
+                    { type: ShimmerElementType.line, width: '100%', height: rowHeight }
+                  ]}
+                />
+              ))}
+            </div>
+          )
+        }
+        return (
+          <ListContext.Provider
+            value={{
+              ...props,
+              projects,
+              size
+            }}
+          >
+            <List />
+          </ListContext.Provider>
         )
       }
     }
