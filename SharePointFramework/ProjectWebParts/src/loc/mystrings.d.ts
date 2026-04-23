@@ -260,6 +260,8 @@ declare interface IProjectWebPartsStrings {
   PhaseCheckListItem: string
   DialogTitle: string
   DialogDescription: string
+  NewsHubLevelWarningTitle: string
+  NewsHubLevelWarningText: string
   CreatingNewArticleStatus: string
   NewsCreatedSuccessfully: string
   NewsTitleLabel: string

@@ -296,6 +296,8 @@ define([], function () {
     ProjectNewsWebPartTitle: 'Project News',
     DialogTitle: 'Create a news article',
     DialogDescription: 'Here you can create a news article for the project. The news article will be linked to the project. In the "Template" dropdown menu, you can select a template that will pre-fill the news article. Here, it is possible to get a preview of the content by clicking the "Preview selected template" button.',
+    NewsHubLevelWarningTitle: 'Warning',
+    NewsHubLevelWarningText: 'You are about to create a news article at the portfolio level of Prosjektportalen. The content will be visible to everyone with access to Prosjektportalen in your organization, and SharePoint may send email notifications about the news to colleagues who follow the portfolio site.',
     CreatingNewArticleStatus: 'Creating news article...',
     NewsCreatedSuccessfully: 'News article created successfully.',
     NewsTitleLabel: 'Title',

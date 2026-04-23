@@ -73,6 +73,11 @@ export const NewsDialog: FC<INewsDialogProps> = () => {
                     text={strings.DialogDescription}
                     intent='info'
                   />
+                  <UserMessage
+                    title={strings.NewsHubLevelWarningTitle}
+                    text={strings.NewsHubLevelWarningText}
+                    intent='warning'
+                  />
                   <FieldContainer
                     label={strings.NewsTitleLabel}
                     required

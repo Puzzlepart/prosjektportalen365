@@ -322,6 +322,8 @@ define([], function () {
     ProjectNewsWebPartTitle: 'Prosjektnyheter',
     DialogTitle: 'Opprett nyhetsartikkel',
     DialogDescription: 'Her kan du opprette en nyhetsartikkel for prosjektet. Nyhetsartikkelen vil bli tilknyttet prosjektet. I nedtrekksmenyen for "Mal" kan du velge en mal som vil forhåndsutfylle nyhetsartikkelen, her er det mulig å få en forhåndsvisning av innholdet, ved å trykke på knappen "Forhåndsvis valgt mal".',
+    NewsHubLevelWarningTitle: 'Advarsel',
+    NewsHubLevelWarningText: 'Du oppretter nå en nyhetsartikkel på porteføljenivået til Prosjektportalen. Innholdet blir synlig for alle med tilgang til Prosjektportalen i din virksomhet, og SharePoint kan sende e-postvarslinger om nyheten til kollegaer som følger porteføljeområdet.',
     CreatingNewArticleStatus: 'Oppretter nyhetsartikkel...',
     NewsCreatedSuccessfully: 'Nyhetsartikkelen ble opprettet.',
     NewsTitleLabel: 'Tittel',
