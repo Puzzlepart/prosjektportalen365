@@ -92,8 +92,16 @@ function LoadBundle() {
         [Parameter(Mandatory = $false)]
         [string]$Version = "3.1.0"
     )
-    Import-Module "../PnP.PowerShell/$Version/PnP.PowerShell.psd1" -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
-    return (Get-Command Connect-PnPOnline).Version
+    $BundlePath = Join-Path $PSScriptRoot "../PnP.PowerShell/$Version/PnP.PowerShell.psd1"
+    if (-not (Test-Path $BundlePath)) {
+        return $null
+    }
+    Import-Module $BundlePath -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
+    $Cmd = Get-Command Connect-PnPOnline -ErrorAction SilentlyContinue
+    if ($null -eq $Cmd) {
+        return $null
+    }
+    return $Cmd.Version
 }
 
 <#
