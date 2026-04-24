@@ -10,7 +10,12 @@ import { IProjectListContext } from './context'
 
 const SKELETON_CARD_COUNT = 12
 
-export function useProjectListRenderer({ props, state, createCardContext }: IProjectListContext) {
+export function useProjectListRenderer({
+  props,
+  state,
+  createCardContext,
+  shouldDisplay
+}: IProjectListContext) {
   /**
    * Render projects based on `state.renderMode`.
    *
@@ -129,7 +134,8 @@ export function useProjectListRenderer({ props, state, createCardContext }: IPro
             value={{
               ...props,
               projects,
-              size
+              size,
+              shouldDisplay
             }}
           >
             <List />

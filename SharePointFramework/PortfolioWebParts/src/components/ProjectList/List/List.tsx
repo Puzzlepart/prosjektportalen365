@@ -16,10 +16,12 @@ import { useList } from './useList'
 export const List = () => {
   const context = useContext(ListContext)
   const { columnSizingOptions, columns, defaultSortState } = useList()
+  const columnsKey = columns.map((c) => c.columnId).join('|')
 
   return (
     <div className={styles.list}>
       <DataGrid
+        key={columnsKey}
         items={context.projects}
         columns={columns}
         sortable

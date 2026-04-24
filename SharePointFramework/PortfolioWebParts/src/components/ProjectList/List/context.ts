@@ -15,6 +15,11 @@ export interface IListContext extends IProjectListProps {
    * Size that determines the list appearance.
    */
   size?: 'extra-small' | 'small' | 'medium'
+
+  /**
+   * Checks if the metadata with the given key should be displayed
+   */
+  shouldDisplay?: (key: string) => boolean
 }
 
 export const ListContext = createContext<IListContext>(null)
