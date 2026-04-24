@@ -284,4 +284,14 @@ if ($null -ne $LastInstall) {
             Write-Host "[WARNING] please verify RefinableString90-98 mappings manually." -ForegroundColor Yellow
         }
     }
+
+    if ($PreviousVersion -lt [version]"1.14.0") {
+        Write-Host "[INFO] Removing duplicate 'Konfigurasjon av Prosjektportalen' Site Settings links"
+        Get-PnPCustomAction -Scope Web |
+            Where-Object { $_.Location -eq "Microsoft.SharePoint.SiteSettings" -and
+                           ($_.Title -eq "Konfigurasjon av Prosjektportalen" -or
+                            $_.Title -eq "Configuration of Project Portal") } |
+            ForEach-Object { Remove-PnPCustomAction -Identity $_.Id -Scope Web -Force -ErrorAction SilentlyContinue }
+        Write-Host "[SUCCESS] Duplicate Site Settings links removed" -ForegroundColor Green
+    }
 }
