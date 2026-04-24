@@ -4330,6 +4330,12 @@
   <data name="SiteFields_GtStakeholderGroup_DisplayName" xml:space="preserve">
     <value>Interessentgruppe</value>
   </data>
+  <data name="SiteFields_GtStakeholderGroups_Description" xml:space="preserve">
+    <value>Hvilke interessentgrupper tilhører interessenten? Administreres som termer i termlageret under Prosjektportalen › Interessentgrupper.</value>
+  </data>
+  <data name="SiteFields_GtStakeholderGroups_DisplayName" xml:space="preserve">
+    <value>Interessentgrupper</value>
+  </data>
   <data name="SiteFields_GtStakeholderInfluence_Description" xml:space="preserve">
     <value>I hvilken grad påvirkes interessentgruppen av prosjektet?</value>
   </data>
