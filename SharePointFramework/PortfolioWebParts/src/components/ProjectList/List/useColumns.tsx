@@ -29,23 +29,26 @@ export const useColumns = (): IListColumn[] => {
     return values.length ? values : []
   }
 
+  const findColumn = (field?: string) =>
+    _.find(
+      context.projectColumns,
+      (col) => col.internalName === field || col.fieldName === field
+    )
+
   const primaryUserRole =
-    _.find(context.projectColumns, (col) => col.internalName === context.primaryUserField)?.name ||
-    strings.PrimaryUserFieldLabel
+    findColumn(context.primaryUserField)?.name || strings.PrimaryUserFieldLabel
 
   const secondaryUserRole =
-    _.find(context.projectColumns, (col) => col.internalName === context.secondaryUserField)
-      ?.name || strings.SecondaryUserFieldLabel
+    findColumn(context.secondaryUserField)?.name || strings.SecondaryUserFieldLabel
 
-  const primaryField =
-    _.find(context.projectColumns, (col) => col.internalName === context.primaryField)?.name ||
-    strings.PrimaryFieldLabel
+  const primaryField = findColumn(context.primaryField)?.name || strings.PrimaryFieldLabel
 
-  const secondaryField =
-    _.find(context.projectColumns, (col) => col.internalName === context.secondaryField)?.name ||
-    strings.SecondaryFieldLabel
+  const secondaryField = findColumn(context.secondaryField)?.name || strings.SecondaryFieldLabel
 
-  return [
+  const metadata = context.projectMetadata ?? []
+  const shouldDisplay = (key: string) => _.contains(metadata, key)
+
+  const allColumns: IListColumn[] = [
     {
       columnId: 'logo',
       defaultWidth: 48,
@@ -215,4 +218,17 @@ export const useColumns = (): IListColumn[] => {
       }
     }
   ]
+
+  const metadataKeyByColumnId: Record<string, string> = {
+    phase: 'ProjectPhase',
+    primaryField: 'PrimaryField',
+    secondaryField: 'SecondaryField',
+    primaryUserRole: 'PrimaryUserField',
+    secondaryUserRole: 'SecondaryUserField'
+  }
+
+  return allColumns.filter((col) => {
+    const metadataKey = metadataKeyByColumnId[col.columnId as string]
+    return metadataKey ? shouldDisplay(metadataKey) : true
+  })
 }
