@@ -45,8 +45,7 @@ export const useColumns = (): IListColumn[] => {
 
   const secondaryField = findColumn(context.secondaryField)?.name || strings.SecondaryFieldLabel
 
-  const metadata = context.projectMetadata ?? []
-  const shouldDisplay = (key: string) => _.contains(metadata, key)
+  const shouldDisplay = context.shouldDisplay ?? (() => true)
 
   const allColumns: IListColumn[] = [
     {
@@ -209,11 +208,13 @@ export const useColumns = (): IListColumn[] => {
       },
       renderCell: (item) => {
         return (
-          <ProjectMenu
-            project={item}
-            context={context}
-            size={context.size !== 'medium' ? 'small' : 'medium'}
-          />
+          <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+            <ProjectMenu
+              project={item}
+              context={context}
+              size={context.size !== 'medium' ? 'small' : 'medium'}
+            />
+          </div>
         )
       }
     }

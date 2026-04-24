@@ -78,8 +78,9 @@ export const useProjectList = (props: IProjectListProps) => {
 
   const projects = state.isDataLoaded ? filterProjects(state.projects) : state.projects
 
+  const shouldDisplay = (key: string) => _.contains(props.projectMetadata, key)
+
   function createCardContext(project: ProjectListModel): IProjectCardContext {
-    const shouldDisplay = (key: string) => _.contains(props.projectMetadata, key)
     return {
       ...props,
       project,
@@ -96,6 +97,7 @@ export const useProjectList = (props: IProjectListProps) => {
     projects,
     verticals,
     createCardContext,
+    shouldDisplay,
     fluentProviderId
   }
 }
