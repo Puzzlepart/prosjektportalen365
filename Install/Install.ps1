@@ -546,6 +546,10 @@ if (-not $SkipTemplate.IsPresent) {
             }
         }
         else {
+            StartAction("Applying pre-install skeleton to $($Uri.AbsoluteUri)")
+            . "$PSScriptRoot/Scripts/PreInstallPortfolioSkeleton.ps1"
+            EndAction
+
             StartAction -Action "Applying PnP template Portfolio to $($Uri.AbsoluteUri)"
             $Instance = Read-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp"
             if ($null -ne $Instance.SupportedUILanguages -and $Instance.SupportedUILanguages.Count -gt 0) {
