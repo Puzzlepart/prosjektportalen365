@@ -22,6 +22,16 @@ export const UserMulti = (props: { type: string; disabled?: boolean }) => {
     context.column.get(props.type)?.map((user) => user?.text) || []
   )
 
+  const columnValue = context.column.get(props.type)
+  useEffect(() => {
+    const next = Array.isArray(columnValue)
+      ? columnValue.map((u) => u?.text).filter(Boolean)
+      : []
+    setSelectedUsers((prev) =>
+      prev.length === next.length && prev.every((t, i) => t === next[i]) ? prev : next
+    )
+  }, [columnValue])
+
   const onOptionSelect: TagPickerProps['onOptionSelect'] = (e, data) => {
     if (data.value === 'no-matches') {
       return
