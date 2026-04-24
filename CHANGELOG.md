@@ -6,9 +6,17 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 
 ### Ny funksjonalitet
 
+- `Interessentgruppe` på `Interessentregister` er konvertert til et nytt multi-select taksonomifelt `GtStakeholderGroups`, med verdier vedlikeholdt sentralt i termlageret under `Prosjektportalen › Interessentgrupper`. Dette erstatter de tidligere Choice-feltene `GtStakeholderGroup` og BA-varianten `GtBAStakeholderGroup`, som er slått sammen til ett felles felt. Endringen fjerner behovet for å skripte ut oppdateringer til alle prosjektsider ved endring av gruppevalgene. [#1742](https://github.com/Puzzlepart/prosjektportalen365/issues/1742)
+
 ### Forbedringer
 
+- Ved oppgradering migreres eksisterende verdier fra de gamle Choice-feltene automatisk til det nye taksonomifeltet per prosjektsite. Kundetilpassede choice-verdier opprettes som nye termer i term settet. De gamle feltene skjules (`Hidden=TRUE`), men data bevares.
+
 ### Feilrettinger
+
+### Merk
+
+- Etter oppgradering bør tenant-administrator regenerere `SearchConfiguration.xml` fra sitt miljø dersom `GtStakeholderGroups` skal brukes som refiner eller i aggregerte oversikter. Det nye feltet fungerer uten denne endringen for visning og redigering i listen.
 
 ---
 

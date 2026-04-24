@@ -12,7 +12,7 @@
             </Query>
             <ViewFields>
                 <FieldRef Name="LinkTitle" />
-                <FieldRef Name="GtStakeholderGroup" />
+                <FieldRef Name="GtStakeholderGroups" />
                 <FieldRef Name="GtStakeholderContext" />
                 <FieldRef Name="GtStakeholderStrategy" />
                 <FieldRef Name="GtStakeholderInterest" />

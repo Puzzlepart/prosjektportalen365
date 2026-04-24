@@ -4327,6 +4327,12 @@
   <data name="SiteFields_GtStakeholderGroup_DisplayName" xml:space="preserve">
     <value>Stakeholder Group</value>
   </data>
+  <data name="SiteFields_GtStakeholderGroups_Description" xml:space="preserve">
+    <value>Which stakeholder groups does the stakeholder belong to? Managed as terms in the term store under Prosjektportalen › Interessentgrupper.</value>
+  </data>
+  <data name="SiteFields_GtStakeholderGroups_DisplayName" xml:space="preserve">
+    <value>Stakeholder groups</value>
+  </data>
   <data name="SiteFields_GtStakeholderInfluence_Description" xml:space="preserve">
     <value>To what extent is the stakeholder group influenced by the project?</value>
   </data>

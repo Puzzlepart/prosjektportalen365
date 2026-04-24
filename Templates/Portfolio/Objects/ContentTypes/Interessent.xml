@@ -2,7 +2,7 @@
     xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
     <pnp:FieldRefs>
         <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
-        <pnp:FieldRef ID="2847b3b0-ed22-4c47-b7c0-3ebfc83dae4a" Name="GtStakeholderGroup" UpdateChildren="true" />
+        <pnp:FieldRef ID="ba8e9bcd-d8af-41e2-a24c-d279e07f1b56" Name="GtStakeholderGroups" UpdateChildren="true" />
         <pnp:FieldRef ID="970ed1b2-9e71-45aa-8f8d-c391a15f067f" Name="GtStakeholderContext" UpdateChildren="true" />
         <pnp:FieldRef ID="1150d6bd-c9ba-4014-bd74-7d559110841d" Name="GtStakeholderStrategy" UpdateChildren="true" />
         <pnp:FieldRef ID="748ae9b5-223d-4daa-b8f8-dc14284b59db" Name="GtStakeholderInterest" UpdateChildren="true" />

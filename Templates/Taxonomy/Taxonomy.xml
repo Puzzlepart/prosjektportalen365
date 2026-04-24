@@ -385,6 +385,125 @@
                                 </pnp:Term>
                             </pnp:Terms>
                         </pnp:TermSet>
+                        <pnp:TermSet Name="Interessentgrupper" ID="ada56f97-348e-4ece-86bf-fcb39426bcf4" Description=" ">
+                            <pnp:Terms>
+                                <pnp:Term Name="Akademia" ID="a789dd2c-1fd5-4eee-8c6d-4b1f0eb5d16c" SourceTermId="a789dd2c-1fd5-4eee-8c6d-4b1f0eb5d16c">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Academia" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Andre aktører" ID="9a39f3b2-22d8-45f3-b3f6-03e10a8efee0" SourceTermId="9a39f3b2-22d8-45f3-b3f6-03e10a8efee0">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Other actors" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Andre offentlige aktører" ID="8394d2e7-6a66-4991-9fc1-3af71f45de13" SourceTermId="8394d2e7-6a66-4991-9fc1-3af71f45de13">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Other public actors" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Brukere" ID="d8db2582-549d-4892-a864-bcc8af95dd71" SourceTermId="d8db2582-549d-4892-a864-bcc8af95dd71">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Users" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Fagforening" ID="e4bd9bd5-0cc0-4bf7-b51a-ea57d2f56f6d" SourceTermId="e4bd9bd5-0cc0-4bf7-b51a-ea57d2f56f6d">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Trade union" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Foreninger (eksterne)" ID="5347ce40-db02-47d8-b31d-b33bb01b283d" SourceTermId="5347ce40-db02-47d8-b31d-b33bb01b283d">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="External associations" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Frivillighet/Organisasjon" ID="534f19a1-3d05-41ce-9eb9-5f0d0fe65279" SourceTermId="534f19a1-3d05-41ce-9eb9-5f0d0fe65279">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Voluntary/Organization" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Innbyggere" ID="143fc1df-a2bd-4dc9-a156-ef575876c42a" SourceTermId="143fc1df-a2bd-4dc9-a156-ef575876c42a">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Citizens" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Kommuneadministrasjon" ID="71bf509e-2363-4a52-9934-3e04d3ecf351" SourceTermId="71bf509e-2363-4a52-9934-3e04d3ecf351">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Municipal administration" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Ledelse" ID="925a14ef-7000-4792-884f-7628a5d9b599" SourceTermId="925a14ef-7000-4792-884f-7628a5d9b599">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Management" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Medarbeidere" ID="787834b2-9e9d-45fa-86ac-bdb41d9fc688" SourceTermId="787834b2-9e9d-45fa-86ac-bdb41d9fc688">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Employees" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Naboer" ID="d56a8519-5c4e-4a07-9ae1-c5e4bc3e4e2c" SourceTermId="d56a8519-5c4e-4a07-9ae1-c5e4bc3e4e2c">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Neighbors" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Nettleverandører" ID="a8065402-b025-47ca-b0af-3b9aa7e511cf" SourceTermId="a8065402-b025-47ca-b0af-3b9aa7e511cf">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Utility providers" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Næringsliv" ID="42f114a8-7734-472b-8b74-b9eac47be628" SourceTermId="42f114a8-7734-472b-8b74-b9eac47be628">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Business" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Offentlige myndigheter" ID="edbbb1e3-b9b6-46db-b3e3-bdd55779b778" SourceTermId="edbbb1e3-b9b6-46db-b3e3-bdd55779b778">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Public authorities" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Politisk" ID="6465c464-702a-4f2a-b966-f39f24aaa807" SourceTermId="6465c464-702a-4f2a-b966-f39f24aaa807">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Political" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Råd og utvalg" ID="6c5042f7-dcc9-473e-9368-da115e465eda" SourceTermId="6c5042f7-dcc9-473e-9368-da115e465eda">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Councils and committees" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Samarbeidspartnere" ID="d378fba5-9bf6-434a-a076-4978a25d32e2" SourceTermId="d378fba5-9bf6-434a-a076-4978a25d32e2">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Collaboration partners" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Tillitsvalgte" ID="0f8465a9-f06c-4f4e-a4c6-6444888ccdbd" SourceTermId="0f8465a9-f06c-4f4e-a4c6-6444888ccdbd">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Union representatives" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Tilsyn og vesener" ID="b0ae61e8-21c6-4f91-bc8c-158857b5b9ca" SourceTermId="b0ae61e8-21c6-4f91-bc8c-158857b5b9ca">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Supervision and agencies" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Transport" ID="c8c89107-ec23-4401-8b7d-a9d0644f10cc" SourceTermId="c8c89107-ec23-4401-8b7d-a9d0644f10cc">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Transport" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Virkemiddelapparat" ID="6b70036f-384c-4390-88b4-662b84a37863" SourceTermId="6b70036f-384c-4390-88b4-662b84a37863">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Policy instruments" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Virksomheter" ID="4d35d375-7ca4-425e-9a42-24a4dc930383" SourceTermId="4d35d375-7ca4-425e-9a42-24a4dc930383">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Businesses" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                            </pnp:Terms>
+                        </pnp:TermSet>
                         <pnp:TermSet Name="Dokumenttype" ID="a474bbee-b38f-45e7-869f-d0ce50d49a86" Description=" ">
                             <pnp:Terms>
                                 <pnp:Term Name="Avtaler/Kontrakt" ID="f9d4fee9-17d4-4a18-8108-a0dd41dc3c51" CustomSortOrder="1" SourceTermId="f9d4fee9-17d4-4a18-8108-a0dd41dc3c51">
