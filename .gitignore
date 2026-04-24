@@ -39,3 +39,4 @@ Templates/*-report*.json
 Templates/Portfolio/Objects/ClientSidePages/*.json
 *.env
 .claude/*
+logs/*
