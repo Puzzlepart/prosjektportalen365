@@ -13,7 +13,11 @@ import strings from 'PortfolioWebPartsStrings'
 export function useEditableColumn(
   props: IProjectProvisionProps,
   state: IProjectProvisionState,
-  setState: (newState: Partial<IProjectProvisionState>) => void
+  setState: (
+    newState:
+      | Partial<IProjectProvisionState>
+      | ((current: IProjectProvisionState) => Partial<IProjectProvisionState>)
+  ) => void
 ) {
   const [hubSiteTitle, setHubSiteTitle] = useState<string>(props.pageContext.web.title)
 
@@ -246,10 +250,6 @@ export function useEditableColumn(
    * @param key Key of the column to update
    * @param value Value to update the column with
    */
-  // Use a ref to access the latest properties without creating a dependency
-  const propertiesRef = useRef(state.properties)
-  propertiesRef.current = state.properties
-
   const setColumn = useCallback(
     async (key: string, value: any): Promise<void> => {
       try {
@@ -267,15 +267,15 @@ export function useEditableColumn(
           return newColumn
         })
 
-        setState({
+        setState((currentState) => ({
           properties: {
-            ...propertiesRef.current,
+            ...currentState.properties,
             [key]: transformedValue,
             ...(key === 'name' && typeof value === 'string'
-              ? { alias: calculateAlias(value, propertiesRef.current.type) }
+              ? { alias: calculateAlias(value, currentState.properties.type) }
               : {})
           }
-        })
+        }))
       } catch (error) {
         console.error(`Error setting column '${key}':`, error)
         $setColumn((prev) => {
@@ -324,13 +324,13 @@ export function useEditableColumn(
           return newColumn
         })
 
-        setState({
+        setState((currentState) => ({
           properties: {
-            ...state.properties,
+            ...currentState.properties,
             type: defaultType.title,
             hubSiteTitle: hubSiteTitle
           }
-        })
+        }))
       } catch (error) {
         console.error('Error setting default type:', error)
       }
@@ -355,7 +355,7 @@ export function useEditableColumn(
 
       try {
         const typeDefaults =
-          state.types.find((t) => t.title === state.properties.type) || defaultType
+          state.types.find((t) => t.title === currentType) || defaultType
         const defaultConfidentialData = typeDefaults?.defaultConfidentialData ?? false
         const defaultSensitivityLabel =
           typeDefaults?.defaultSensitivityLabel || getGlobalSetting('DefaultSensitivityLabel') || ''
@@ -439,9 +439,10 @@ export function useEditableColumn(
           return newColumns
         })
 
-        setState({
+        setState((currentState) => ({
           properties: {
-            ...state.properties,
+            ...currentState.properties,
+            type: currentType,
             isConfidential: defaultConfidentialData,
             metadata: defaultMetadata,
             sensitivityLabel: defaultSensitivityLabel,
@@ -454,7 +455,7 @@ export function useEditableColumn(
             hubSiteTitle: resolvedHubSiteTitle,
             privacy: transformedPrivacy
           }
-        })
+        }))
       } catch (error) {
         console.error('Error setting defaults:', error)
       }
