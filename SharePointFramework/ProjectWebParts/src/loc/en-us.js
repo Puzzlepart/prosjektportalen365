@@ -1,7 +1,7 @@
 define([], function () {
   return {
-    EditTimelineContentText: "Edit timeline item",
-    NewTimelineContentText: "New timeline item",
+    EditTimelineContentText: "Edit item",
+    NewTimelineContentText: "New item",
     TimelineEndDateMilestoneDescription: "End date is required for element types displayed as a point on the timeline ({0})",
     NewStatusPanelTitle: "New status report",
     EditStatusPanelText: "Edit status report",
