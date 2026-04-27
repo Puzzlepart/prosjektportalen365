@@ -414,7 +414,10 @@ export interface IPortfolioWebPartsDataAdapter {
    * @param properties Properties to add to the ProjectData list
    * @param hubUrl Url for the hub site
    */
-  addProjectData?(properties: Record<string, any>, hubUrl: string): Promise<void>
+  addProjectData?(
+    properties: Record<string, any>,
+    hubUrl: string
+  ): Promise<Record<string, any> | void>
 
   /**
    * Deletes a provision request item from the provisioning requests list

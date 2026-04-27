@@ -132,6 +132,7 @@ define([], function () {
       ImageDropZoneText: 'Dra og slipp bilde her, eller klikk for å velge bildefil (png, jpeg/jpg) NB! Kan ikke overstige 512 KB.',
       ImageDropZoneErrorText: 'Bildet kunne ikke lastes opp. Vennligst sørg for at filen er et bilde (png, jpeg/jpg) og ikke overstiger 512 KB.',
       DrawerFooterDescriptionText: 'Ditt område vil bli knyttet til en Microsoft 365-gruppe, som gir nettstedet ditt en delt OneNote-notatblokk, gruppe-e-postadresse og delt kalender.',
+      ProjectDataPreviewText: 'Denne informasjonen vil bli angitt i prosjektinformasjonen når oppsettveiviseren kjøres',
       PreviousButtonLabel: 'Forrige',
       NextButtonLabel: 'Neste',
       ProvisionButtonLabel: 'Bestill område',

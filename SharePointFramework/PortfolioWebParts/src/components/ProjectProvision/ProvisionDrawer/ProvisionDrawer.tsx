@@ -22,6 +22,7 @@ import { customLightTheme, getFluentIcon, UserMessage } from 'pp365-shared-libra
 import { useProvisionDrawer } from './useProvisionDrawer'
 import styles from './ProvisionDrawer.module.scss'
 import { DebugModel } from './DebugModel'
+import { ProjectDataPreview } from './ProjectDataPreview'
 import { IProvisionDrawerProps } from './types'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import { FieldRendererList, useFieldConfigs } from './FieldRenderer'
@@ -221,6 +222,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
                     (typeof sessionStorage !== 'undefined' && sessionStorage.DEBUG) ||
                     (typeof DEBUG !== 'undefined' && DEBUG)) && <DebugModel />}
                   <FieldRendererList fields={fieldsToUse} level={2} configs={fieldConfigs} />
+                  <ProjectDataPreview />
                   {!stringIsNullOrEmpty(context.props.footerDescription) && (
                     <p className={styles.ignoreGap}>{context.props.footerDescription}</p>
                   )}

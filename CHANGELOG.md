@@ -6,6 +6,8 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 
 ### Ny funksjonalitet
 
+- `Bestillingsportalen`-skjema bruker nå `DefaultMetadata` fra prosjekttypen til å sette prosjektegenskaper og valgt innholdstype på `Prosjektdata`-elementet som opprettes ved bestilling. En forhåndsvisning av verdiene vises i siste steg av bestillingsprosessen.
+
 ### Forbedringer
 
 ### Feilrettinger

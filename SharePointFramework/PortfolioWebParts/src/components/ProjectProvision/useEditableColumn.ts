@@ -92,13 +92,17 @@ export function useEditableColumn(
   const [column, $setColumn] = useState<Map<string, any>>(initialColumn)
 
   /**
-   * Transform value for the field returning the transformed value.
-   * Now includes proper error handling and type safety.
+   * Per-field value transformer used by `setColumn`. The raw value stays
+   * in the column map (driving the inputs); the transformed value is
+   * mirrored into `state.properties` so the provision request can be
+   * built from it. Fields not listed below pass through unchanged.
    *
-   * @param value Value to be transformed
-   * @param field Field to transform the value for
-   *
-   * @returns The transformed value
+   *  - `owner` / `member` / `requestedBy` — resolves personas to user IDs
+   *  - `privacy` — maps the localized label to `'Private' | 'Public'`
+   *  - `url` — wraps a string into a SharePoint `[{ Url, Description }]` array
+   *  - `teamTemplate` — resolves a template title to its templateId
+   *  - `expirationDate` — converts an "N months" choice to an ISO date
+   *  - `image` — truncates the data-url for display purposes
    */
   const transformValue = useCallback(
     async (value: any, field: string): Promise<any> => {
@@ -245,10 +249,9 @@ export function useEditableColumn(
   )
 
   /**
-   * Sets a property of the column with improved error handling and race condition prevention.
-   *
-   * @param key Key of the column to update
-   * @param value Value to update the column with
+   * Updates a single column entry. The raw value goes into the column
+   * map (used by the form inputs); the transformed value is mirrored
+   * into `state.properties` (used to build the provision request).
    */
   const setColumn = useCallback(
     async (key: string, value: any): Promise<void> => {
@@ -302,10 +305,7 @@ export function useEditableColumn(
     })
   }, [initialColumn, setState])
 
-  /**
-   * Get global setting value with improved type safety.
-   * @param setting Setting to get
-   */
+  /** Reads a value from `state.settings` by title. */
   const getGlobalSetting = useCallback(
     (setting: string): string | undefined => {
       return state.settings?.find((t) => t.title === setting)?.value
@@ -337,11 +337,11 @@ export function useEditableColumn(
     }
   }, [state.loading, defaultType])
 
-  // Track which type we last set defaults for, to prevent re-running
-  // when this effect's own setState updates trigger a re-render.
+  // Tracks the type whose defaults we already applied, so this effect
+  // doesn't loop on its own setState/$setColumn writes.
   const lastDefaultsTypeRef = useRef<string | null>(null)
 
-  // Set defaults based on selected type
+  // Apply per-type defaults whenever the selected type changes.
   useEffect(() => {
     const currentType = column.get('type')
     if (lastDefaultsTypeRef.current === currentType) return

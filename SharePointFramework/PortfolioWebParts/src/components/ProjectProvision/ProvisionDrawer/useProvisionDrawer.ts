@@ -7,6 +7,10 @@ import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
 import { useId } from '@fluentui/react-components'
 import strings from 'PortfolioWebPartsStrings'
 import { getFieldsForType } from '../getFieldsForType'
+import {
+  applyProjectPropertiesFromMetadata,
+  applyTaxonomyUpdatesAfterAdd
+} from '../applyProjectPropertiesFromMetadata'
 
 /**
  * Component logic hook for `ProvisionDrawer`. This hook is responsible for
@@ -188,14 +192,42 @@ export const useProvisionDrawer = () => {
       RequestKey: getGUID()
     }
 
-    if (context.props.parentMode) {
+    const isParentMode = !!context.props.parentMode
+    const hubUrl = isParentMode
+      ? parentSite.HubSiteUrl
+      : context.props.dataAdapter.portalDataService?.url
+    if (hubUrl) {
       const properties: Record<string, any> = {
         Title: context.column.get('name'),
-        GtSiteUrl: `${baseUrl}${alias}`,
-        GtParentProjects: `[{"SiteId":"${parentSite.SiteId}","Title":"${parentSite.Title}","SPWebURL":"${parentSite.SPWebURL}","HubSiteUrl":"${parentSite.HubSiteUrl}"}]`
+        GtSiteUrl: `${baseUrl}${alias}`
       }
+      if (isParentMode) {
+        properties.GtParentProjects = `[{"SiteId":"${parentSite.SiteId}","Title":"${parentSite.Title}","SPWebURL":"${parentSite.SPWebURL}","HubSiteUrl":"${parentSite.HubSiteUrl}"}]`
+      }
+      const baseKeyCount = Object.keys(properties).length
 
-      await context.props.dataAdapter.addProjectData(properties, parentSite.HubSiteUrl)
+      const { taxonomyUpdates } = await applyProjectPropertiesFromMetadata(
+        properties,
+        context.column.get('metadata'),
+        hubUrl,
+        context.props.dataAdapter
+      )
+      const hasMetadata =
+        Object.keys(properties).length > baseKeyCount || taxonomyUpdates.length > 0
+
+      if (isParentMode || hasMetadata) {
+        const added = (await context.props.dataAdapter.addProjectData(properties, hubUrl)) as
+          | { Id?: number }
+          | undefined
+        if (added?.Id && taxonomyUpdates.length > 0) {
+          await applyTaxonomyUpdatesAfterAdd(
+            added.Id,
+            hubUrl,
+            taxonomyUpdates,
+            context.props.dataAdapter
+          )
+        }
+      }
     }
 
     return await context.props.dataAdapter.addProvisionRequests(

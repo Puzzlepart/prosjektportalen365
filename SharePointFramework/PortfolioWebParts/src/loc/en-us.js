@@ -173,6 +173,7 @@ define([], function () {
       ImageFieldDescription: "Upload an image to use as the site image.",
       ImageDropZoneText: "Drag and drop image here, or click to select a file (png, jpeg/jpg)",
       DrawerFooterDescriptionText: "Your site will be linked to a Microsoft 365 Group, which provides a shared OneNote notebook, group email address, and shared calendar.",
+      ProjectDataPreviewText: "This information will be applied to the project properties when the configuration wizard runs",
       PreviousButtonLabel: "Previous",
       NextButtonLabel: "Next",
       ProvisionButtonLabel: "Request site",

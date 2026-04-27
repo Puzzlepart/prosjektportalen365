@@ -1347,7 +1347,10 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
-  public async addProjectData(properties: Record<string, any>, hubUrl: string): Promise<void> {
+  public async addProjectData(
+    properties: Record<string, any>,
+    hubUrl: string
+  ): Promise<Record<string, any> | void> {
     try {
       const hubSite = Web([this._sp.web, hubUrl])
       const list = hubSite.lists.getByTitle(resource.Lists_ProjectData_Title)

@@ -7,6 +7,7 @@ import { IProvisionField } from '../../types'
 import { FieldRenderer, FieldRendererList } from '../FieldRenderer'
 import { IFieldConfig } from '../FieldRenderer/types'
 import { DebugModel } from '../DebugModel'
+import { ProjectDataPreview } from '../ProjectDataPreview'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import styles from './FullscreenDrawer.module.scss'
 
@@ -100,6 +101,7 @@ export const FullscreenFields: FC<IFullscreenFieldsProps> = ({ fields, fieldConf
                     <p className={styles.columnDescription}>{levelHeaders[level].description}</p>
                   )}
                   <FieldRendererList fields={editableFields} level={level} configs={fieldConfigs} />
+                  {level === 2 && <ProjectDataPreview />}
                 </div>
               )
             })}
