@@ -176,16 +176,6 @@ else {
 Copy-Item -Path "$PSScriptRoot/../Templates/Portfolio/*.resx" -Filter *.resx -Destination $RELEASE_PATH -Force
 Copy-Item -Path "$PSScriptRoot/Install.ps1" -Destination $RELEASE_PATH -Force
 Copy-Item -Path "$PSScriptRoot/Scripts/*" -Recurse -Destination $RELEASE_PATH_SCRIPTS -Force
-$RELEASE_PATH_PREINSTALL_FIELDS = (New-Item -Path "$RELEASE_PATH/PreInstallFields" -ItemType Directory -Force).FullName
-@(
-    'GtIdeaStrategicValue.xml',
-    'GtIdeaQualityBenefit.xml',
-    'GtIdeaEconomicBenefit.xml',
-    'GtIdeaOperationalNeed.xml',
-    'GtIdeaRisk.xml'
-) | ForEach-Object {
-    Copy-Item -Path "$PSScriptRoot/../Templates/Portfolio/Objects/SiteFields/Idea/$_" -Destination $RELEASE_PATH_PREINSTALL_FIELDS -Force
-}
 Copy-Item -Path "$PSScriptRoot/SearchConfiguration.xml" -Destination $RELEASE_PATH -Force
 Copy-Item -Path "$PSScriptRoot/../.current-channel-config.json" -Destination $RELEASE_PATH -Force -ErrorAction SilentlyContinue
 EndAction
