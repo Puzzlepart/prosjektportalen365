@@ -502,7 +502,7 @@ if (-not $SkipTemplate.IsPresent) {
         # Shared retry configuration
         $MaxRetries = 3
 
-        Write-Host "[INFO] The next step applies the PnP site template. This takes at several minutes." -ForegroundColor Yellow
+        Write-Host "[INFO] The next step applies the PnP site template. This takes several minutes..." -ForegroundColor Yellow
         if ($Upgrade.IsPresent) {
             StartAction -Action "Applying PnP template Portfolio to $($Uri.AbsoluteUri)"
             $Retry = 0
@@ -546,10 +546,6 @@ if (-not $SkipTemplate.IsPresent) {
             }
         }
         else {
-            StartAction("Applying pre-install skeleton to $($Uri.AbsoluteUri)")
-            . "$PSScriptRoot/Scripts/PreInstallPortfolioSkeleton.ps1"
-            EndAction
-
             StartAction -Action "Applying PnP template Portfolio to $($Uri.AbsoluteUri)"
             $Instance = Read-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp"
             if ($null -ne $Instance.SupportedUILanguages -and $Instance.SupportedUILanguages.Count -gt 0) {
