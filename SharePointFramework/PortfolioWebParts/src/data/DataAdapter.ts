@@ -1500,6 +1500,45 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
+  /**
+   * Probes each project's site URL and returns the set of `listItemId`s whose
+   * site no longer exists. Runs with bounded concurrency to avoid flooding the
+   * tenant with parallel requests.
+   *
+   * Callers are expected to pre-filter to candidates only (typically admin
+   * view: `!isUserMember && !hasUserAccess && url && listItemId`).
+   */
+  public async verifyDeadProjects(projects: ProjectListModel[]): Promise<Set<number>> {
+    const dead = new Set<number>()
+    const candidates = projects.filter((p) => p?.url && typeof p.listItemId === 'number')
+    const concurrency = 5
+    for (let i = 0; i < candidates.length; i += concurrency) {
+      const batch = candidates.slice(i, i + concurrency)
+      const results = await Promise.all(
+        batch.map(async (p) => ({ id: p.listItemId, exists: await this.siteExists(p.url) }))
+      )
+      for (const { id, exists } of results) {
+        if (!exists) dead.add(id)
+      }
+    }
+    return dead
+  }
+
+  /**
+   * Deletes a single item from the central Projects list. The pnp/sp default
+   * sends the item to the site recycle bin, so admins can recover if needed.
+   *
+   * The `items` cache is L1-only (see projectsCache.ts) so it clears on page
+   * refresh; in-session consistency is handled by the caller updating its
+   * local state.
+   */
+  public async deleteProjectListItem(itemId: number): Promise<void> {
+    await this._sp.web.lists
+      .getByTitle(resource.Lists_Projects_Title)
+      .items.getById(itemId)
+      .delete()
+  }
+
   public async getIdeaConfiguration(
     listName: string = resource.Lists_Idea_Configuration_Title,
     configurationName: string = 'Standard'

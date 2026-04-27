@@ -48,6 +48,18 @@ export interface IProjectCardContext extends IProjectListProps {
    * Secondary userfield to show on the project card footer.
    */
   secondaryUserField?: string
+
+  /**
+   * True when the current user is a portfolio admin. Gates admin-only UI
+   * elements like the "remove orphaned entry" button on dead projects.
+   */
+  isUserInPortfolioManagerGroup?: boolean
+
+  /**
+   * Invoked when an admin confirms removal of an orphaned Projects-list entry
+   * (its project site no longer exists). Resolves when the deletion completes.
+   */
+  onDeleteDeadProject?: (project: ProjectListModel) => Promise<void>
 }
 
 export const ProjectCardContext = createContext<IProjectCardContext>(null)

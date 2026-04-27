@@ -10,6 +10,7 @@ import strings from 'PortfolioWebPartsStrings'
 export const ProjectCardHeader: FC<IProjectCardHeaderProps> = (props) => {
   const context = useContext(ProjectCardContext)
   const { showCustomImage, setShowCustomImage, colors, headerProps } = useProjectCardHeader()
+  const isDead = !!context.project?.isDead
 
   /**
    * Callback function to set the showCustomImage state.
@@ -21,49 +22,71 @@ export const ProjectCardHeader: FC<IProjectCardHeaderProps> = (props) => {
     [context.showProjectLogo, showCustomImage]
   )
 
+  const titleEl = (
+    <Text
+      className={styles.projectTitle}
+      title={isDead ? strings.DeadProjectTooltip : context.project?.title || strings.ProjectNotFound}
+      weight='semibold'
+      wrap={false}
+      size={400}
+      truncate
+      block
+    >
+      {context.project?.title || strings.ProjectNotFound}
+    </Text>
+  )
+
+  const logoEl = (
+    <ProjectLogo
+      title={context.project?.title || strings.ProjectNotFound}
+      url={context.project?.url || '#'}
+      renderMode='card'
+      fallbackImageUrl={context.project?.templateImageUrl}
+      onImageLoad={(value) => {
+        props.onImageLoad
+        customImageCallback(value)
+      }}
+    />
+  )
+
+  const logoStyle: React.CSSProperties = {
+    background: `linear-gradient(to right,
+                ${colors && colors[0]},
+                ${colors && colors[0]})`
+  }
+
   return (
     <>
       <CardPreview className={styles.preview}>
         {showCustomImage && (
           <div {...headerProps}>
-            <Link href={context.project?.url || '#'} target='_blank' className={styles.link}>
-              <Text
-                className={styles.projectTitle}
-                title={context.project?.title || strings.ProjectNotFound}
-                weight='semibold'
-                wrap={false}
-                size={400}
-                truncate
-                block
-              >
-                {context.project?.title || strings.ProjectNotFound}
-              </Text>
-            </Link>
+            {isDead ? (
+              <span className={styles.link} title={strings.DeadProjectTooltip}>
+                {titleEl}
+              </span>
+            ) : (
+              <Link href={context.project?.url || '#'} target='_blank' className={styles.link}>
+                {titleEl}
+              </Link>
+            )}
           </div>
         )}
         {context.showProjectLogo && (
           <div className={styles.logo}>
-            <Link
-              href={context.project?.url || '#'}
-              target='_blank'
-              className={styles.link}
-              style={{
-                background: `linear-gradient(to right,
-                ${colors && colors[0]},
-                ${colors && colors[0]})`
-              }}
-            >
-              <ProjectLogo
-                title={context.project?.title || strings.ProjectNotFound}
-                url={context.project?.url || '#'}
-                renderMode='card'
-                fallbackImageUrl={context.project?.templateImageUrl}
-                onImageLoad={(value) => {
-                  props.onImageLoad
-                  customImageCallback(value)
-                }}
-              />
-            </Link>
+            {isDead ? (
+              <span className={styles.link} style={logoStyle} title={strings.DeadProjectTooltip}>
+                {logoEl}
+              </span>
+            ) : (
+              <Link
+                href={context.project?.url || '#'}
+                target='_blank'
+                className={styles.link}
+                style={logoStyle}
+              >
+                {logoEl}
+              </Link>
+            )}
           </div>
         )}
       </CardPreview>

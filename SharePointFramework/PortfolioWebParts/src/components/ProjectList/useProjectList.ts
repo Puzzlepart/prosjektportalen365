@@ -43,6 +43,19 @@ export const useProjectList = (props: IProjectListProps) => {
     }
   }
 
+  async function handleDeleteDeadProject(project: ProjectListModel): Promise<void> {
+    if (!project?.listItemId) return
+    try {
+      await props.dataAdapter.deleteProjectListItem(project.listItemId)
+      setState((prev) => ({
+        projects: (prev.projects ?? []).filter((p) => p.listItemId !== project.listItemId),
+        error: undefined
+      }))
+    } catch (error) {
+      setState({ error: error?.message ?? String(error) })
+    }
+  }
+
   function filterProjects(projects: ProjectListModel[]) {
     return projects
       .filter((project) =>
@@ -86,7 +99,9 @@ export const useProjectList = (props: IProjectListProps) => {
       project,
       actions: getCardActions(project),
       isDataLoaded: state.isDataLoaded,
-      shouldDisplay
+      shouldDisplay,
+      isUserInPortfolioManagerGroup: state.isUserInPortfolioManagerGroup,
+      onDeleteDeadProject: handleDeleteDeadProject
     }
   }
 

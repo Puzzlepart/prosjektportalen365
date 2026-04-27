@@ -465,6 +465,23 @@ export interface IPortfolioWebPartsDataAdapter {
   siteExists?(siteUrl: string): Promise<boolean>
 
   /**
+   * Verifies which of the given projects point to a site that no longer exists.
+   * Probes `siteExists` for every project with a URL, with bounded concurrency.
+   *
+   * @param projects Candidate projects to verify
+   * @returns A set of `listItemId`s whose project site is unreachable.
+   */
+  verifyDeadProjects?(projects: ProjectListModel[]): Promise<Set<number>>
+
+  /**
+   * Deletes a single item from the central Projects list. Used by admins to
+   * clean up orphaned entries whose project site has been removed.
+   *
+   * @param itemId SharePoint list item ID
+   */
+  deleteProjectListItem?(itemId: number): Promise<void>
+
+  /**
    * Retrieves the configuration from the "Idékonfigurasjon" list
    *
    * @returns A Promise that resolves to an array containing the configuration.

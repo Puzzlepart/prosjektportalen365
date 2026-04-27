@@ -104,6 +104,18 @@ export class ProjectListModel {
   public templateImageUrl?: string
 
   /**
+   * Project site has been verified as deleted/unreachable. Only set for portfolio
+   * admins after a lazy site-existence check; undefined means "not verified".
+   */
+  public isDead?: boolean
+
+  /**
+   * SharePoint list item ID for the entry in the central Projects list. Used by
+   * admins to remove orphaned list items whose project site no longer exists.
+   */
+  public listItemId?: number
+
+  /**
    * Creates a new instance of ProjectListModel
    *
    * @param title - Title
@@ -123,6 +135,7 @@ export class ProjectListModel {
     this.isProgram = item.GtIsProgram
     this.template = item.GtProjectTemplate
     this.templateImageUrl = item.TemplateImageUrl
+    this.listItemId = item.Id
     this.data = item
   }
 }

@@ -33,4 +33,13 @@
   .card:hover {
     box-shadow: var(--shadow8);
   }
+
+  .dead {
+    opacity: 0.55;
+    filter: grayscale(60%);
+  }
+
+  .dead:hover {
+    opacity: 0.8;
+  }
 }

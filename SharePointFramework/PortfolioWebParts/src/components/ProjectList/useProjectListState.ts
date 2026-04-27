@@ -17,8 +17,13 @@ export function useProjectListState(props: IProjectListProps) {
     selectedVertical
   })
 
-  const setState = (newState: Partial<IProjectListState>) =>
-    $setState((currentState) => ({ ...currentState, ...newState }))
+  const setState = (
+    update: Partial<IProjectListState> | ((prev: IProjectListState) => Partial<IProjectListState>)
+  ) =>
+    $setState((currentState) => ({
+      ...currentState,
+      ...(typeof update === 'function' ? update(currentState) : update)
+    }))
 
   return { state, setState }
 }

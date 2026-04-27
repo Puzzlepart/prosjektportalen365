@@ -434,6 +434,9 @@ declare interface IPortfolioWebPartsStrings {
   DefaultViewLabel: string
   DefaultViewSetWarningMessage: string
   DeleteButtonLabel: string
+  DeadProjectTooltip: string
+  DeleteDeadProjectConfirmTitle: string
+  DeleteDeadProjectConfirmMessage: string
   DisplayNameDescription: string
   DisplayNameLabel: string
   DisplayNamePortfolioOverviewDescription: string
