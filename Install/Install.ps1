@@ -502,7 +502,7 @@ if (-not $SkipTemplate.IsPresent) {
         # Shared retry configuration
         $MaxRetries = 3
 
-        Write-Host "[INFO] The next step applies the PnP site template. This takes at several minutes." -ForegroundColor Yellow
+        Write-Host "[INFO] The next step applies the PnP site template. This takes several minutes..." -ForegroundColor Yellow
         if ($Upgrade.IsPresent) {
             StartAction -Action "Applying PnP template Portfolio to $($Uri.AbsoluteUri)"
             $Retry = 0

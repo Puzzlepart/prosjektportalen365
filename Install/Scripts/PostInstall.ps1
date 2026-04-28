@@ -1,3 +1,67 @@
+Write-Host "[INFO] Post-install action: Restoring Idea calculated field formulas"
+# The 5 *Number calc fields and GtIdeaScore ship with a placeholder formula =0 because SharePoint
+# rejects formulas that reference list-level columns at FieldRef time on a freshly created list.
+# Now that the list is fully provisioned, restore the real formulas. Source field titles are read
+# at runtime so the same logic works for both no-NB and en-US.
+function Get-IdeaFieldTitle {
+    param([string]$InternalName)
+    $Field = Get-PnPField -Identity $InternalName -ErrorAction SilentlyContinue
+    if ($null -eq $Field) { return $null }
+    return $Field.Title
+}
+
+$IdeaNumberFields = @(
+    @{ Name = 'GtIdeaStrategicNumber';   SourceField = 'GtIdeaStrategicValue' },
+    @{ Name = 'GtIdeaQualityNumber';     SourceField = 'GtIdeaQualityBenefit' },
+    @{ Name = 'GtIdeaEconomicNumber';    SourceField = 'GtIdeaEconomicBenefit' },
+    @{ Name = 'GtIdeaOperationalNumber'; SourceField = 'GtIdeaOperationalNeed' },
+    @{ Name = 'GtIdeaRiskNumber';        SourceField = 'GtIdeaRisk' }
+)
+foreach ($Calc in $IdeaNumberFields) {
+    $SourceTitle = Get-IdeaFieldTitle -InternalName $Calc.SourceField
+    if ($null -eq $SourceTitle) {
+        Write-Host "[WARNING] Source field $($Calc.SourceField) not found; skipping $($Calc.Name)" -ForegroundColor Yellow
+        continue
+    }
+    $Formula = "=IF(ISBLANK([$SourceTitle]),0,LEFT([$SourceTitle],1))"
+    try {
+        Set-PnPField -Identity $Calc.Name -Values @{ Formula = $Formula } -UpdateExistingLists -ErrorAction Stop
+    }
+    catch {
+        Write-Host "[WARNING] Failed to set formula on $($Calc.Name): $($_.Exception.Message)" -ForegroundColor Yellow
+    }
+}
+
+$ScoreOperands = @('GtIdeaQualityNumber', 'GtIdeaOperationalNumber', 'GtIdeaRiskNumber', 'GtIdeaStrategicNumber', 'GtIdeaEconomicNumber', 'GtIdeaManualScore')
+$ScoreOperandTitles = $ScoreOperands | ForEach-Object { Get-IdeaFieldTitle -InternalName $_ }
+if ($ScoreOperandTitles -notcontains $null) {
+    $ScoreFormula = '=' + (($ScoreOperandTitles | ForEach-Object { "[$_]" }) -join '+')
+    try {
+        Set-PnPField -Identity 'GtIdeaScore' -Values @{ Formula = $ScoreFormula } -UpdateExistingLists -ErrorAction Stop
+    }
+    catch {
+        Write-Host "[WARNING] Failed to set formula on GtIdeaScore: $($_.Exception.Message)" -ForegroundColor Yellow
+    }
+}
+else {
+    Write-Host "[WARNING] One or more GtIdeaScore source fields not found; skipping GtIdeaScore" -ForegroundColor Yellow
+}
+
+# GtIdeaPriority labels keep the leading Unicode space character that SharePoint sorts on.
+$ScoreTitle = Get-IdeaFieldTitle -InternalName 'GtIdeaScore'
+if ($null -ne $ScoreTitle) {
+    $PriorityFormula = "=IF([$ScoreTitle]>22,`"$([char]0x2000)Må ha`",IF([$ScoreTitle]>16,`"$([char]0x2001)Bør ha`",IF([$ScoreTitle]>8,`"$([char]0x2002)Kan ha`",IF([$ScoreTitle]=0,`"$([char]0x2006)Ikke satt`",IF([$ScoreTitle]<9,`"$([char]0x2003)Skal ikke ha`")))))"
+    try {
+        Set-PnPField -Identity 'GtIdeaPriority' -Values @{ Formula = $PriorityFormula } -UpdateExistingLists -ErrorAction Stop
+    }
+    catch {
+        Write-Host "[WARNING] Failed to set formula on GtIdeaPriority: $($_.Exception.Message)" -ForegroundColor Yellow
+    }
+}
+else {
+    Write-Host "[WARNING] GtIdeaScore field not found; skipping GtIdeaPriority" -ForegroundColor Yellow
+}
+
 Write-Host "[INFO] Post-install action: Disabling content types for lists"
 Set-PnPList -Identity (Get-Resource -Name "Lists_ProjectColumnConfiguration_Title") -EnableContentTypes:$false >$null 2>&1  
 Set-PnPList -Identity (Get-Resource -Name "Lists_PhaseChecklist_Title") -EnableContentTypes:$false >$null 2>&1  
