@@ -52,7 +52,7 @@ export function usePortfolioOverviewFilters(context: IPortfolioOverviewContext) 
         if (filter.column.fieldName === key) {
           activeFilters[key].forEach((value) => {
             filter.items.forEach((item) => {
-              if (value === item.name) {
+              if (value === item.value) {
                 item.selected = true
               }
             })

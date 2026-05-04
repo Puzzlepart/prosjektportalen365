@@ -11,6 +11,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 ### Forbedringer
 
 ### Feilrettinger
+- Rettet en feil hvor valgte filter for Ja/Nei verdier ikke var krysset av når man åpnet filterpanelet på nytt i porteføljeoversikten, selv om filtrene var lagt på korrekt
 
 ---
 
