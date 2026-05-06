@@ -1,5 +1,6 @@
 import strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
+import { isTaxonomyManagedProperty, parseTaxonomyValue } from 'pp365-shared-library/lib/util'
 import { useEffect } from 'react'
 import { IPortfolioAggregationContext } from './context'
 import { DATA_FETCHED, DATA_FETCH_ERROR, GET_FILTERS, SET_GROUP_BY, START_FETCH } from './reducer'
@@ -45,9 +46,23 @@ async function fetchData(context: IPortfolioAggregationContext) {
       : Promise.resolve(new Map<string, Record<string, any>>())
   ])
 
+  const taxonomyFieldNames = _.uniq(
+    [...columns, ...context.state.columns, ...projectRefiners]
+      .map((col) => col.fieldName)
+      .filter((name) => name && isTaxonomyManagedProperty(name))
+  )
+
   const enrichedItems = items.map((item: any) => {
     const refinerValues = item?.SiteId ? projectRefinerValues.get(item.SiteId) : undefined
     if (refinerValues) item.__projectRefinerValues = refinerValues
+    for (const key of taxonomyFieldNames) {
+      if (item[key] !== undefined && item[key] !== null) {
+        item[key] = parseTaxonomyValue(item[key])
+      }
+      if (item.__projectRefinerValues && item.__projectRefinerValues[key] !== undefined) {
+        item.__projectRefinerValues[key] = parseTaxonomyValue(item.__projectRefinerValues[key])
+      }
+    }
     return item
   })
 

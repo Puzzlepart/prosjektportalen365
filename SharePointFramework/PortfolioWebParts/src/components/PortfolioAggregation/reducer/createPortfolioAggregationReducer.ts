@@ -7,6 +7,8 @@ import _ from 'lodash'
 import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
 import {
+  isTaxonomyManagedProperty,
+  parseTaxonomyValue,
   parseUrlHash,
   setUrlHash,
   sortAlphabetically,
@@ -60,8 +62,12 @@ function parseDisplayValue(value: string): string {
     if (match) return match[1].trim()
     return value.split(' | ')[1]?.trim() || value
   }
+  if (value.includes('L0|#')) {
+    return parseTaxonomyValue(value)
+  }
   if (value.includes(';#')) {
-    return value.split(';#')[1] || value
+    const tail = value.split(';#')[1] || value
+    return tail.includes('|') ? tail.split('|')[0] : tail
   }
   const numericMatch = value.match(/^#?(-?\d+(?:\.\d+)?)$/)
   if (numericMatch) {
@@ -109,11 +115,19 @@ export const createPortfolioAggregationReducer = (
 
       let selectedColumns = props.columns ?? []
 
-      let allColumnsForCategory = payload.columns.map((c) =>
-        c.setData({
+      let allColumnsForCategory = payload.columns.map((c) => {
+        const column = c.setData({
           isSelected: _.some(selectedColumns, ({ key }) => key === c.key) || c.data.isLocked
         })
-      )
+        if (
+          column.fieldName &&
+          isTaxonomyManagedProperty(column.fieldName) &&
+          (!column.dataType || column.dataType === 'text')
+        ) {
+          column.setData({ renderAs: 'tags' })
+        }
+        return column
+      })
 
       if (payload.dataSource.level.includes(resource.Lists_DataSources_Level_Project)) {
         allColumnsForCategory = allColumnsForCategory.filter(
