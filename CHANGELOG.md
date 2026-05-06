@@ -10,7 +10,11 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 
 ### Forbedringer
 
+- Lagt til konfigurerbar standard tidsramme (`Standard startdato` og `Standard sluttdato`) i egenskapspanelet for `Prosjekttidslinje`-webdelen i porteføljen, slik at administrator kan velge hvor langt tilbake og frem i tid tidslinjen skal vises som standard
+- Forbedret visning av termsett-/taksonomifelt i aggregerte oversikter. Verdier fra søke-egenskaper med prefix `owstaxId` (f.eks. `owstaxIdGtProjectPhase`) vises nå som rene etiketter i stedet for rå søkeresultatformat med GUID-er, og flerverdier vises som separate merker (`tags`)
+
 ### Feilrettinger
+
 - Rettet en feil hvor valgte filter for Ja/Nei verdier ikke var krysset av når man åpnet filterpanelet på nytt i porteføljeoversikten, selv om filtrene var lagt på korrekt
 
 ---
