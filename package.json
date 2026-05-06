@@ -11,6 +11,7 @@
     "generate-site-scripts": "node ./.tasks/generate-site-scripts.js --silent",
     "generate-sbom": "node ./.tasks/generate-sbom.js",
     "postversion": "npm run generate-readme && npm run sync-version && npm run generate-sbom",
+    "rush:init": "npm run rush:update && npm run rush:build",
     "rush:update": "node common/scripts/install-run-rush.js update",
     "rush:build": "node common/scripts/install-run-rush.js rebuild --verbose",
     "rush:lint": "node common/scripts/install-run-rush.js lint",

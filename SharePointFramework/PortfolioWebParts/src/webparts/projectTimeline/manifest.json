@@ -28,7 +28,9 @@
           "showTimeline": true,
           "showTimelineListCommands": false,
           "showTimelineList": false,
-          "showProjectDeliveries": false
+          "showProjectDeliveries": false,
+          "defaultTimeframeStart": "1,months",
+          "defaultTimeframeEnd": "12,months"
         }
       }
     }

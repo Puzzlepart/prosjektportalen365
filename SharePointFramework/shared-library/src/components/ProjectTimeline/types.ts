@@ -1,4 +1,3 @@
-import * as moment from 'moment'
 import { IFilterProps } from '../../components/FilterPanel/Filter/types'
 import { ITimelineData, ITimelineItem } from '../../interfaces'
 import { ProjectColumn, ProjectListModel, TimelineConfigurationModel } from '../../models'
@@ -9,14 +8,16 @@ export interface IProjectTimelineProps
   extends IBaseComponentProps<any>,
     Pick<ITimelineProps, 'infoText'> {
   /**
-   * Timeline default start time
+   * Default timeframe start as a comma separated string (e.g. `4,months`).
+   * Interpreted as months back in time from today.
    */
-  defaultTimeStart?: [number, moment.unitOfTime.DurationConstructor]
+  defaultTimeframeStart?: string
 
   /**
-   * Timeline default end time
+   * Default timeframe end as a comma separated string (e.g. `4,months`).
+   * Interpreted as months forward in time from today.
    */
-  defaultTimeEnd?: [number, moment.unitOfTime.DurationConstructor]
+  defaultTimeframeEnd?: string
 
   /**
    * Information text
