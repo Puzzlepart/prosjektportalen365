@@ -16,6 +16,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 ### Feilrettinger
 
 - Rettet en feil hvor valgte filter for Ja/Nei verdier ikke var krysset av når man åpnet filterpanelet på nytt i porteføljeoversikten, selv om filtrene var lagt på korrekt
+- Rettet en feil i `Prosjekttidslinje` hvor skjulte SharePoint-systemfelt (f.eks. `Vedlegg`, `Rekkefølge`, `Navn`) feilaktig dukket opp som kolonner i tidslinjelisten og som felter i redigeringspanelet. Felt som er skjult på den valgte innholdstypen (eller på malens innholdstype) ekskluderes nå fra både kolonner og redigeringspanel
 
 ---
 

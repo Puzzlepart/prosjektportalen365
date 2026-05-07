@@ -2,13 +2,31 @@ import SPDataAdapter from 'data/SPDataAdapter'
 import _ from 'lodash'
 import {
   EditableSPField,
+  SPField,
   TimelineConfigurationModel,
   TimelineContentModel
 } from 'pp365-shared-library/lib/models'
+import { isSystemSPField } from 'pp365-shared-library/lib/util'
 import { IProjectTimelineProps } from '../types'
 import '@pnp/sp/items/get-all'
 import { IColumn } from '@fluentui/react'
 import resource from 'SharedResources'
+
+// Item-list-specific extras on top of the shared `isSystemSPField` denylist.
+// The Tidslinjeinnhold list disables attachments and isn't a document library,
+// so these inherited base fields should never surface as columns or in the
+// edit panel.
+const TIMELINE_LIST_EXTRA_DENYLIST = new Set([
+  'Attachments',
+  'FileLeafRef',
+  'FileDirRef',
+  'FSObjType'
+])
+
+function isVisibleTimelineField(fld: SPField): boolean {
+  if (isSystemSPField(fld)) return false
+  return !TIMELINE_LIST_EXTRA_DENYLIST.has(fld.InternalName)
+}
 
 /**
  * Fetch timeline items and columns.
@@ -59,19 +77,17 @@ export async function fetchTimelineData(
       })
       .filter(Boolean)
 
-    let timelineContentFields
+    let timelineContentFields: SPField[]
     if (timelineContentTypeId) {
       timelineContentFields = await SPDataAdapter.portalDataService.getContentTypeFields(
         timelineContentTypeId
-      )
-      timelineContentFields = timelineContentFields.filter(
-        (fld) => fld.SchemaXml.indexOf('Hidden="TRUE"') === -1
       )
     } else {
       timelineContentFields = await SPDataAdapter.portalDataService.getListFields(
         'TIMELINE_CONTENT'
       )
     }
+    timelineContentFields = timelineContentFields.filter(isVisibleTimelineField)
 
     const timelineContentEditableFields = timelineContentFields.map(
       (fld) => new EditableSPField(fld)
@@ -79,12 +95,8 @@ export async function fetchTimelineData(
 
     const defaultViewFields = timelineContentFields.filter(
       (fld) =>
-        fld.InternalName !== 'ContentType' &&
         fld.InternalName !== 'GtSiteIdLookup' &&
-        fld.InternalName !== 'MetaInfo' &&
-        !fld.InternalName.startsWith('_') &&
         !fld.ReadOnlyField &&
-        !fld.FromBaseType &&
         (fld.ShowInEditForm !== false || fld.ShowInDisplayForm !== false)
     )
 
