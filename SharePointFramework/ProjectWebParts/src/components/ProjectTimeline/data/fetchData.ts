@@ -62,6 +62,7 @@ export async function fetchData(
       groups
     }
   } catch (error) {
+    console.error('[ProjectTimeline][fetchData] failed:', error)
     return {
       error: CustomError.createError(
         error instanceof Error ? error : new Error(String(error)),
