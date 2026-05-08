@@ -3271,6 +3271,12 @@
   <data name="SiteFields_GtLogReference_DisplayName" xml:space="preserve">
     <value>Referanse</value>
   </data>
+  <data name="SiteFields_GtLogItemId_Description" xml:space="preserve">
+    <value>Stabil identifikator (GUID) for det arkiverte elementet, brukes til å koble logg-rader til dokumenter/lister på tvers av rename</value>
+  </data>
+  <data name="SiteFields_GtLogItemId_DisplayName" xml:space="preserve">
+    <value>Element-ID</value>
+  </data>
   <data name="SiteFields_GtLogScope_Description" xml:space="preserve">
     <value>Angir omfanget for loggmeldingen.</value>
   </data>

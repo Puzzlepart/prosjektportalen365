@@ -1,0 +1,1 @@
+<Field Description="{resource:SiteFields_GtLogItemId_Description}" DisplayName="{resource:SiteFields_GtLogItemId_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{6e368e9d-f64b-4212-85a9-ff86c69dce50}" Name="GtLogItemId" StaticName="GtLogItemId" Type="Text" />

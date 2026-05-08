@@ -3271,6 +3271,12 @@
   <data name="SiteFields_GtLogReference_DisplayName" xml:space="preserve">
     <value>Reference</value>
   </data>
+  <data name="SiteFields_GtLogItemId_Description" xml:space="preserve">
+    <value>Stable identifier (GUID) for the archived item, used to link log rows to documents/lists across renames</value>
+  </data>
+  <data name="SiteFields_GtLogItemId_DisplayName" xml:space="preserve">
+    <value>Item ID</value>
+  </data>
   <data name="SiteFields_GtLogScope_Description" xml:space="preserve">
     <value>Indicate the scope or context of the log element</value>
   </data>
