@@ -16,7 +16,10 @@ import { IProgressDialogProps } from './ProgressDialog/types'
 import { IArchiveStatusInfo } from '../../data/SPDataAdapter/types'
 
 export type ProjectInformationPanelType = 'EditPropertiesPanel' | 'AllPropertiesPanel'
-export type ProjectInformationDialogType = 'CreateParentDialog' | 'RunProjectSetupDialog'
+export type ProjectInformationDialogType =
+  | 'CreateParentDialog'
+  | 'RunProjectSetupDialog'
+  | 'ArchiveDialog'
 export type ProjectInformationPage = 'Frontpage' | 'ProjectStatus' | 'Portfolio'
 
 export interface IProjectInformationProps extends IBaseWebPartComponentProps {
@@ -82,9 +85,10 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   hideStatusReport?: boolean
 
   /**
-   * Hide archive status section
+   * Enable archive functionality (manual archiving + status display).
+   * Replaces the legacy `hideArchiveStatus` flag with an enable-style toggle.
    */
-  hideArchiveStatus?: boolean
+  useArchive?: boolean
 
   /**
    * Truncate status report comments to the specified length and add ellipsis (...)

@@ -1,6 +1,6 @@
 import strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
-import { WebPartTitle, customLightTheme, formatDate, getFluentIcon } from 'pp365-shared-library'
+import { customLightTheme, formatDate, getFluentIcon } from 'pp365-shared-library'
 import {
   FluentProvider,
   IdPrefixProvider,
@@ -23,38 +23,28 @@ export const ArchiveStatus: FC = () => {
   }
 
   return (
-    <>
-      <WebPartTitle
-        title={strings.ArchiveStatusHeaderText}
-        description={strings.ArchiveStatusHeaderDescription}
-      />
-      <IdPrefixProvider value={fluentProviderId}>
-        <FluentProvider theme={customLightTheme}>
-          <Popover
-            withArrow
-            positioning='below'
-            mouseLeaveDelay={300}
-            open={open}
-            onOpenChange={handleOpenChange}
-          >
-            <PopoverTrigger disableButtonEnhancement>
-              <MessageBar
-                intent='info'
-                icon={getFluentIcon('Archive')}
-                className={styles.messageBar}
-              >
-                {format(
-                  strings.ArchiveStatusDetailedMessage,
-                  formatDate(archiveInfo.lastArchiveDate)
-                )}
-              </MessageBar>
-            </PopoverTrigger>
-            <PopoverSurface>
-              <ArchiveStatusPopover archiveInfo={archiveInfo} operations={processedOperations} />
-            </PopoverSurface>
-          </Popover>
-        </FluentProvider>
-      </IdPrefixProvider>
-    </>
+    <IdPrefixProvider value={fluentProviderId}>
+      <FluentProvider theme={customLightTheme}>
+        <Popover
+          withArrow
+          positioning='below'
+          mouseLeaveDelay={300}
+          open={open}
+          onOpenChange={handleOpenChange}
+        >
+          <PopoverTrigger disableButtonEnhancement>
+            <MessageBar intent='info' icon={getFluentIcon('Archive')} className={styles.messageBar}>
+              {format(
+                strings.ArchiveStatusDetailedMessage,
+                formatDate(archiveInfo.lastArchiveDate)
+              )}
+            </MessageBar>
+          </PopoverTrigger>
+          <PopoverSurface>
+            <ArchiveStatusPopover archiveInfo={archiveInfo} operations={processedOperations} />
+          </PopoverSurface>
+        </Popover>
+      </FluentProvider>
+    </IdPrefixProvider>
   )
 }

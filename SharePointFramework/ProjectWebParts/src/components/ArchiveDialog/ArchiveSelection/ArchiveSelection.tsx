@@ -58,7 +58,10 @@ const PreviousArchiveLabel: FC<{ item: IArchiveItem }> = ({ item }) => {
   const renamedLabel =
     item.previousArchive.titleAtTimeOfArchive &&
     item.previousArchive.titleAtTimeOfArchive !== item.title
-      ? ` ${format(strings.ArchiveItemPreviouslyArchivedAs, item.previousArchive.titleAtTimeOfArchive)}`
+      ? ` ${format(
+          strings.ArchiveItemPreviouslyArchivedAs,
+          item.previousArchive.titleAtTimeOfArchive
+        )}`
       : ''
   return (
     <Text
