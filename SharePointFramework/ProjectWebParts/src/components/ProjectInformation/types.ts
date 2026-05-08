@@ -18,7 +18,10 @@ import type { SustainabilityGoalIconSize } from './SustainabilityGoals'
 /** Panels available from the project information actions. */
 export type ProjectInformationPanelType = 'EditPropertiesPanel' | 'AllPropertiesPanel'
 /** Setup dialogs available from project information. */
-export type ProjectInformationDialogType = 'CreateParentDialog' | 'RunProjectSetupDialog'
+export type ProjectInformationDialogType =
+  | 'CreateParentDialog'
+  | 'RunProjectSetupDialog'
+  | 'ArchiveDialog'
 /** Host page determining which project information sections are available. */
 export type ProjectInformationPage = 'Frontpage' | 'ProjectStatus' | 'Portfolio'
 
@@ -61,7 +64,11 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
 
   hideStatusReport?: boolean
 
-  hideArchiveStatus?: boolean
+  /**
+   * Enable archive functionality (manual archiving + status display).
+   * Replaces the legacy `hideArchiveStatus` flag with an enable-style toggle.
+   */
+  useArchive?: boolean
 
   showSustainabilityGoalsAsIcons?: boolean
 

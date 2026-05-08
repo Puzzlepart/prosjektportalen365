@@ -10,7 +10,8 @@ import {
 import React, { FC } from 'react'
 import { Actions } from './Actions'
 import { AllPropertiesPanel } from './AllPropertiesPanel'
-import { ArchiveStatus } from './ArchiveStatus'
+import { ArchiveSection } from './ArchiveSection'
+import { ArchiveDialogContainer } from './ArchiveDialogContainer'
 import { CreateParentDialog } from './CreateParentDialog'
 import { RunProjectSetupDialog } from './RunProjectSetupDialog'
 import { EditPropertiesPanel } from './EditPropertiesPanel'
@@ -37,7 +38,7 @@ export const PROJECT_INFORMATION_DEFAULT_PROPS: Partial<IProjectInformationProps
   showFieldExternal: {},
   fallbackVisibleFields: [],
   hideStatusReport: false,
-  hideArchiveStatus: true,
+  useArchive: false,
   showSustainabilityGoalsAsIcons: false,
   sustainabilityGoalIconSize: 48,
   // Icons by default, as in 1.14: each is named by its section and status, and its mark tells
@@ -90,7 +91,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (incomingProps) 
           <Actions />
           <ParentProjectsList />
           <ChildProjectsList />
-          <ArchiveStatus />
+          <ArchiveSection />
           <ProjectStatusReport />
           {context.state.hubSyncWarning && (
             <UserMessage
@@ -109,6 +110,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (incomingProps) 
           <EditPropertiesPanel />
           <CreateParentDialog />
           <RunProjectSetupDialog />
+          <ArchiveDialogContainer />
         </div>
       </Fluent>
     </ProjectInformationContextProvider>
