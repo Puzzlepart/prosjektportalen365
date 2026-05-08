@@ -12,6 +12,17 @@ export interface IArchiveLogEntry {
   GtLogScope: string
   GtLogWebUrl: string
   GtLogReference?: string
+  GtLogItemId?: string
+}
+
+/**
+ * Most recent archive log entry for a single item, used to inform users about previous archiving.
+ */
+export interface IArchiveItemHistory {
+  date: Date
+  status: string
+  operation: string
+  titleAtTimeOfArchive?: string
 }
 
 /** Count of archived items grouped by scope and status. */
@@ -41,6 +52,7 @@ export interface IArchiveStatusInfo {
 /** Document metadata used to choose archive candidates. */
 export interface IArchiveDocumentItem {
   id: number
+  itemId: string
   title: string
   projectPhaseId: string
   documentTypeId: string
@@ -51,6 +63,7 @@ export interface IArchiveDocumentItem {
 /** List metadata used to choose archive candidates. */
 export interface IArchiveListItem {
   id: string
+  itemId: string
   title: string
   url: string
   type: 'list'

@@ -1,7 +1,7 @@
 import * as strings from 'ProjectWebPartsStrings'
 import { format, isUnauthorizedError } from 'pp365-shared-library'
 import SPDataAdapter from '../../../../data'
-import { IArchiveConfiguration } from '../Views/ArchiveView/types'
+import { IArchiveConfiguration } from '../../../ArchiveDialog/ArchiveSelection/types'
 
 /**
  * Logs the archive operations to the hub's archive log (`Arkiveringslogg`), one entry for each
@@ -34,7 +34,10 @@ export async function logArchiveOperations(
           strings.ArchiveLogStatusInProgress,
           phaseTransitionMessage,
           doc.url || '',
-          webUrl
+          webUrl,
+          undefined,
+          doc.itemId,
+          strings.ArchiveLogOperationPhaseTransition
         )
     ),
     ...(archiveConfiguration.lists ?? []).map(
@@ -44,7 +47,10 @@ export async function logArchiveOperations(
           strings.ArchiveLogStatusInProgress,
           phaseTransitionMessage,
           list.url || '',
-          webUrl
+          webUrl,
+          undefined,
+          list.itemId,
+          strings.ArchiveLogOperationPhaseTransition
         )
     )
   ]

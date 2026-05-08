@@ -16,10 +16,11 @@ import {
   List16Regular,
   Folder16Regular
 } from '@fluentui/react-icons'
-import styles from './ArchiveView.module.scss'
-import { useArchiveView } from './useArchiveView'
-import { IArchiveItem } from './types'
-import { getFluentIcon, UserMessage, format } from 'pp365-shared-library'
+import styles from './ArchiveSelection.module.scss'
+import { useArchiveSelection } from './useArchiveSelection'
+import { IArchiveItem, IArchiveSelectionProps } from './types'
+import { format } from '@fluentui/react'
+import { getFluentIcon, UserMessage } from 'pp365-shared-library'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 
@@ -36,21 +37,52 @@ const getItemIcon = (item: IArchiveItem) => {
   }
 }
 
-/** Lets the user select documents and lists to archive during the phase change. */
-export const ArchiveView: FC = () => {
+const getStatusClass = (status: string): string => {
+  switch (status) {
+    case strings.ArchiveLogStatusSuccess:
+      return styles.success
+    case strings.ArchiveLogStatusError:
+      return styles.error
+    case strings.ArchiveLogStatusWarning:
+      return styles.warning
+    case strings.ArchiveLogStatusInProgress:
+      return styles.inProgress
+    default:
+      return ''
+  }
+}
+
+const PreviousArchiveLabel: FC<{ item: IArchiveItem }> = ({ item }) => {
+  if (!item.previousArchive) return null
+  const dateLabel = item.previousArchive.date.toLocaleDateString()
+  const renamedLabel =
+    item.previousArchive.titleAtTimeOfArchive &&
+    item.previousArchive.titleAtTimeOfArchive !== item.title
+      ? ` ${format(strings.ArchiveItemPreviouslyArchivedAs, item.previousArchive.titleAtTimeOfArchive)}`
+      : ''
+  return (
+    <Text
+      size={200}
+      className={`${styles.previousArchive} ${getStatusClass(item.previousArchive.status)}`}
+    >
+      {format(strings.ArchiveItemPreviouslyArchived, dateLabel, item.previousArchive.status)}
+      {renamedLabel}
+    </Text>
+  )
+}
+
+export const ArchiveSelection: FC<IArchiveSelectionProps> = (props) => {
   const {
     sections,
-    isLoading,
     toggleSection,
     toggleItemSelection,
     toggleSectionSelectAll,
-    getSelectedItemsCount,
-    getSectionContentId
-  } = useArchiveView()
+    getSelectedItemsCount
+  } = useArchiveSelection(props)
 
-  if (isLoading) {
+  if (props.isLoading) {
     return (
-      <div className={styles.archiveView}>
+      <div className={styles.archiveSelection}>
         <Spinner label={strings.ArchiveLoadingText} />
       </div>
     )
@@ -59,7 +91,7 @@ export const ArchiveView: FC = () => {
   const selectedCount = getSelectedItemsCount()
 
   return (
-    <div className={styles.archiveView}>
+    <div className={styles.archiveSelection}>
       <UserMessage title={strings.ArchiveInformationTitle}>
         <Accordion collapsible>
           <AccordionItem value='1'>
@@ -76,13 +108,17 @@ export const ArchiveView: FC = () => {
       </UserMessage>
       {sections.map((section) => (
         <div key={section.key} className={styles.section}>
-          {/* A button, where a div took the keys itself, naming the items it folds (WCAG 4.1.2). */}
-          <button
-            type='button'
+          <div
             className={styles.sectionHeader}
             onClick={() => toggleSection(section.key)}
-            aria-expanded={section.expanded}
-            aria-controls={getSectionContentId(section.key)}
+            role='button'
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault()
+                toggleSection(section.key)
+              }
+            }}
           >
             <ChevronRight16Regular
               className={`${styles.icon} ${section.expanded ? styles.expanded : ''}`}
@@ -91,7 +127,7 @@ export const ArchiveView: FC = () => {
               {section.title} ({section.items.filter((item) => item.selected).length}/
               {section.items.length})
             </Text>
-          </button>
+          </div>
 
           {section.expanded && section.items.filter((item) => !item.disabled).length > 1 && (
             <div className={styles.selectAllButton}>
@@ -114,7 +150,7 @@ export const ArchiveView: FC = () => {
           )}
 
           {section.expanded && (
-            <div id={getSectionContentId(section.key)} className={styles.sectionContent}>
+            <div className={styles.sectionContent}>
               {section.items.map((item) => (
                 <div key={item.id} className={styles.item}>
                   <Checkbox
@@ -124,20 +160,23 @@ export const ArchiveView: FC = () => {
                     label={
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         {getItemIcon(item)}
-                        <Text
-                          className={`${styles.itemTitle} ${
-                            item.disabled ? styles.disabledItem : ''
-                          }`}
-                        >
-                          {item.title}
-                          {item.disabled && (
-                            <Text size={200} className={styles.notArchivableText}>
-                              {item.type === 'list' && item.itemCount === 0
-                                ? ` (${strings.ArchiveNotArchivableListText})`
-                                : ` (${strings.ArchiveNotArchivableText})`}
-                            </Text>
-                          )}
-                        </Text>
+                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                          <Text
+                            className={`${styles.itemTitle} ${
+                              item.disabled ? styles.disabledItem : ''
+                            }`}
+                          >
+                            {item.title}
+                            {item.disabled && (
+                              <Text size={200} className={styles.notArchivableText}>
+                                {item.type === 'list' && item.itemCount === 0
+                                  ? ` (${strings.ArchiveNotArchivableListText})`
+                                  : ` (${strings.ArchiveNotArchivableText})`}
+                              </Text>
+                            )}
+                          </Text>
+                          <PreviousArchiveLabel item={item} />
+                        </div>
                       </div>
                     }
                   />

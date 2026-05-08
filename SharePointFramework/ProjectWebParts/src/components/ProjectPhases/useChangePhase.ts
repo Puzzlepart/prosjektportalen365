@@ -47,7 +47,7 @@ function clearSessionCache(): void {
 export function useChangePhase(delayBeforeReload: number = 1000) {
   const context = useContext(ProjectPhasesContext)
   const telemetry = useTelemetry()
-  const [runHook] = usePhaseHooks()
+  const runHook = usePhaseHooks()
   const changeWelcomePage = useChangeWelcomePage()
   const modifyCurrentPhaseView = useModifyCurrentPhaseView()
   return async (archiveLogError: Error | null = null) => {
