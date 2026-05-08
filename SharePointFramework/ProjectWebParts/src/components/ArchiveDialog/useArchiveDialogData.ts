@@ -1,0 +1,63 @@
+import { useEffect, useState } from 'react'
+import SPDataAdapter from '../../data'
+import type { IArchiveItemHistory } from '../../data/SPDataAdapter/types'
+import type { IArchiveItem } from './ArchiveSelection/types'
+
+interface IArchiveDialogData {
+  documents: IArchiveItem[]
+  lists: IArchiveItem[]
+  history: Map<string, IArchiveItemHistory>
+  isLoading: boolean
+}
+
+export function useArchiveDialogData(webUrl: string, enabled: boolean): IArchiveDialogData {
+  const [documents, setDocuments] = useState<IArchiveItem[]>([])
+  const [lists, setLists] = useState<IArchiveItem[]>([])
+  const [history, setHistory] = useState<Map<string, IArchiveItemHistory>>(new Map())
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+
+  useEffect(() => {
+    if (!enabled) return
+    let cancelled = false
+    setIsLoading(true)
+    Promise.all([
+      SPDataAdapter.getDocumentsForArchive(),
+      SPDataAdapter.getListsForArchive(),
+      SPDataAdapter.getArchiveHistoryForItems(webUrl),
+      SPDataAdapter.getTermFieldContext('GtDocumentType')
+        .then((field) => SPDataAdapter.project.getDocumentTypes(field.termSetId))
+        .catch(() => [])
+    ])
+      .then(([docs, listsData, historyData, docTypes]) => {
+        if (cancelled) return
+        const archiveableTypeIds = new Set(
+          (docTypes || []).filter((t: any) => t.isArchiveable).map((t: any) => t.id)
+        )
+        setDocuments(
+          docs.map<IArchiveItem>((doc) => ({
+            ...doc,
+            selected: false,
+            disabled:
+              archiveableTypeIds.size > 0 ? !archiveableTypeIds.has(doc.documentTypeId) : false
+          }))
+        )
+        setLists(
+          listsData.map<IArchiveItem>((list) => ({
+            ...list,
+            selected: false,
+            disabled: list.itemCount === 0
+          }))
+        )
+        setHistory(historyData)
+        setIsLoading(false)
+      })
+      .catch(() => {
+        if (!cancelled) setIsLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [webUrl, enabled])
+
+  return { documents, lists, history, isLoading }
+}

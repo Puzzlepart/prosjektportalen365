@@ -13,6 +13,17 @@ export interface IArchiveLogEntry {
   GtLogScope: string
   GtLogWebUrl: string
   GtLogReference?: string
+  GtLogItemId?: string
+}
+
+/**
+ * Most recent archive log entry for a single item, used to inform users about previous archiving.
+ */
+export interface IArchiveItemHistory {
+  date: Date
+  status: string
+  operation: string
+  titleAtTimeOfArchive?: string
 }
 
 /**
@@ -50,6 +61,7 @@ export interface IArchiveStatusInfo {
  */
 export interface IArchiveDocumentItem {
   id: number
+  itemId: string
   title: string
   projectPhaseId: string
   documentTypeId: string
@@ -62,6 +74,7 @@ export interface IArchiveDocumentItem {
  */
 export interface IArchiveListItem {
   id: string
+  itemId: string
   title: string
   url: string
   type: 'list'

@@ -1,6 +1,6 @@
 @import "~@fluentui/react/dist/sass/References.scss";
 
-.archiveView {
+.archiveSelection {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -76,6 +76,29 @@
           .notArchivableText {
             color: var(--colorNeutralForegroundDisabled);
             font-style: italic;
+          }
+        }
+
+        .previousArchive {
+          display: block;
+          font-size: 12px;
+          color: var(--colorNeutralForeground3);
+          margin-top: 2px;
+
+          &.success {
+            color: #107c10;
+          }
+
+          &.error {
+            color: #d13438;
+          }
+
+          &.warning {
+            color: #b27a00;
+          }
+
+          &.inProgress {
+            color: #0078d4;
           }
         }
       }

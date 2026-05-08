@@ -29,9 +29,7 @@
         "subTextTruncateLength": 50,
         "useDynamicHomepage": false,
         "usePhaseHooks": false,
-        "useArchive": false,
-        "hookArchiveUrl": "",
-        "hookArchiveAuth": ""
+        "useArchive": false
       }
     }
   ]

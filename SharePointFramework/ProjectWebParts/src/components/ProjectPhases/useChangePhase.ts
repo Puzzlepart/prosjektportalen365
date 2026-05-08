@@ -17,7 +17,7 @@ import strings from 'ProjectWebPartsStrings'
  */
 export function useChangePhase(delayBeforeReload: number = 1000) {
   const context = useContext(ProjectPhasesContext)
-  const [runHook] = usePhaseHooks()
+  const runHook = usePhaseHooks()
   const changeWelcomePage = useChangeWelcomePage()
   const modifyCurrentPhaseView = useModifyCurrentPhaseView()
   return async () => {

@@ -12,6 +12,7 @@ import { useEffect } from 'react'
 import SPDataAdapter from '../../data'
 import {
   IArchiveDocumentItem,
+  IArchiveItemHistory,
   IArchiveListItem,
   IArchiveStatusInfo
 } from '../../data/SPDataAdapter/types'
@@ -87,15 +88,19 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
     let archiveLists: (IArchiveListItem & { selected: boolean })[] = []
     let documentTypes: DocumentTypeModel[] = []
     let archiveStatus: IArchiveStatusInfo | null = null
+    let archiveHistory: Map<string, IArchiveItemHistory> = new Map()
     if (props.useArchive) {
-      const [documents, lists, docTypes, archiveStatusData] = await Promise.all([
-        SPDataAdapter.getDocumentsForArchive(),
-        SPDataAdapter.getListsForArchive(),
-        SPDataAdapter.getTermFieldContext('GtDocumentType').then((docTypeField) =>
-          SPDataAdapter.project.getDocumentTypes(docTypeField.termSetId)
-        ),
-        SPDataAdapter.getArchiveStatus(props.webAbsoluteUrl)
-      ])
+      const [documents, lists, docTypes, archiveStatusData, archiveHistoryData] = await Promise.all(
+        [
+          SPDataAdapter.getDocumentsForArchive(),
+          SPDataAdapter.getListsForArchive(),
+          SPDataAdapter.getTermFieldContext('GtDocumentType').then((docTypeField) =>
+            SPDataAdapter.project.getDocumentTypes(docTypeField.termSetId)
+          ),
+          SPDataAdapter.getArchiveStatus(props.webAbsoluteUrl),
+          SPDataAdapter.getArchiveHistoryForItems(props.webAbsoluteUrl)
+        ]
+      )
       documentTypes = docTypes.filter((docType) => docType.isArchiveable)
       archiveDocuments = documents.map((doc) => ({
         ...doc,
@@ -108,6 +113,7 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
         disabled: list.itemCount === 0
       }))
       archiveStatus = archiveStatusData
+      archiveHistory = archiveHistoryData
     }
 
     const [currentPhase] = phases.filter(({ name }) => name === currentPhaseName)
@@ -118,7 +124,13 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
       phaseSitePages,
       welcomePage,
       userHasChangePhasePermission,
-      ...(props.useArchive && { archiveDocuments, archiveLists, documentTypes, archiveStatus })
+      ...(props.useArchive && {
+        archiveDocuments,
+        archiveLists,
+        documentTypes,
+        archiveStatus,
+        archiveHistory
+      })
     } as IProjectPhasesData
   } catch (error) {
     ListLogger.log({
