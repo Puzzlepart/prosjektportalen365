@@ -4,13 +4,12 @@ import { format } from '@fluentui/react'
 import { DISMISS_CHANGE_PHASE_DIALOG } from '../../reducer'
 import { ProjectPhasesContext } from '../../context'
 import { useChangePhase } from '../../useChangePhase'
-import { usePhaseHooks } from '../../usePhaseHooks'
 import { View } from '../Views'
 import { ChangePhaseDialogContext } from '../context'
 import { SET_VIEW } from '../reducer'
 import { Button, DialogActions } from '@fluentui/react-components'
 import SPDataAdapter from '../../../../data'
-import { IArchiveConfiguration } from '../Views/ArchiveView/types'
+import { IArchiveConfiguration } from '../../../ArchiveDialog/ArchiveSelection/types'
 
 /**
  * Log archive operations to the Archive Log list
@@ -34,7 +33,10 @@ const logArchiveOperations = async (
           strings.ArchiveLogStatusInProgress,
           phaseTransitionMessage,
           doc.url || '',
-          webUrl
+          webUrl,
+          undefined,
+          doc.itemId,
+          strings.ArchiveLogOperationPhaseTransition
         )
       }
     }
@@ -46,7 +48,10 @@ const logArchiveOperations = async (
           strings.ArchiveLogStatusInProgress,
           phaseTransitionMessage,
           list.url || '',
-          webUrl
+          webUrl,
+          undefined,
+          list.itemId,
+          strings.ArchiveLogOperationPhaseTransition
         )
       }
     }
@@ -59,7 +64,6 @@ export const Actions: FC = () => {
   const context = useContext(ProjectPhasesContext)
   const { state, dispatch } = useContext(ChangePhaseDialogContext)
   const onChangePhase = useChangePhase()
-  const [runHook, runArchiveHook] = usePhaseHooks()
   const actions = []
 
   const getNextView = () => (context.props.useArchive ? View.Archive : View.Confirm)
@@ -98,8 +102,6 @@ export const Actions: FC = () => {
                 context.state.phase?.name,
                 context.state.confirmPhase.name
               )
-
-              await runArchiveHook(state.archiveConfiguration)
             }
 
             await onChangePhase()
