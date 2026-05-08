@@ -3,7 +3,6 @@ import React, { FC, useContext } from 'react'
 import { DISMISS_CHANGE_PHASE_DIALOG } from '../../reducer'
 import { ProjectPhasesContext } from '../../context'
 import { useChangePhase } from '../../useChangePhase'
-import { usePhaseHooks } from '../../usePhaseHooks'
 import { View } from '../Views'
 import { ChangePhaseDialogContext } from '../context'
 import { SET_VIEW } from '../reducer'
@@ -15,7 +14,6 @@ export const Actions: FC = () => {
   const context = useContext(ProjectPhasesContext)
   const { state, dispatch } = useContext(ChangePhaseDialogContext)
   const onChangePhase = useChangePhase()
-  const [runHook, runArchiveHook] = usePhaseHooks()
   const actions = []
 
   const getNextView = () => (context.props.useArchive ? View.Archive : View.Confirm)
@@ -55,10 +53,6 @@ export const Actions: FC = () => {
                 context.state.phase?.name,
                 context.state.confirmPhase.name
               )
-
-              // The hook gets the archive configuration itself, so it runs also when the log
-              // was not written.
-              await runArchiveHook(state.archiveConfiguration)
             }
 
             await onChangePhase(archiveLogError)

@@ -8,8 +8,8 @@ import {
   IBaseWebPartComponentState
 } from 'pp365-shared-library/lib/components/BaseWebPartComponent'
 import { IProjectPhasePopoverProps } from './ProjectPhase/ProjectPhasePopover'
-import { IArchiveItem } from './ChangePhaseDialog/Views/ArchiveView/types'
-import { IArchiveStatusInfo } from '../../data/SPDataAdapter/types'
+import { IArchiveItem } from '../ArchiveDialog/ArchiveSelection/types'
+import { IArchiveItemHistory, IArchiveStatusInfo } from '../../data/SPDataAdapter/types'
 
 /** Configures phase visibility, checkpoints, archiving and phase-change hooks. */
 export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
@@ -61,16 +61,6 @@ export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
    * Use archive functionality when switching phases
    */
   useArchive: boolean
-
-  /**
-   * Archive hook URL - for running archive hooks when switching phases
-   */
-  hookArchiveUrl: string
-
-  /**
-   * Archive hook auth - for authing archive hooks when switching phases
-   */
-  hookArchiveAuth: string
 
   /**
    * Comment min. length
@@ -146,6 +136,11 @@ export interface IProjectPhasesData {
    * Archive status information for the project
    */
   archiveStatus?: IArchiveStatusInfo
+
+  /**
+   * Per-item archive history used to inform users about previous archiving in the selector
+   */
+  archiveHistory?: Map<string, IArchiveItemHistory>
 }
 
 /** Project page that can become the homepage for a matching phase. */

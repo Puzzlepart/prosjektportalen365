@@ -19,6 +19,7 @@ import { SPFxContext } from 'pp365-shared-library/lib/types'
 import { IConfigurationFile } from 'types'
 import {
   IArchiveDocumentItem,
+  IArchiveItemHistory,
   IArchiveListItem,
   IArchiveLogEntry,
   IArchiveScopeStatus,
@@ -336,12 +337,13 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     try {
       const documents = await this.sp.web.lists
         .getByTitle(resource.Lists_Documents_Title)
-        .items.select('*', 'Id', 'Title', 'FileRef', 'FileLeafRef')
+        .items.select('*', 'Id', 'GUID', 'Title', 'FileRef', 'FileLeafRef')
         .filter('FSObjType eq 0')
         .using(DefaultCaching)()
 
       return documents.map((doc): IArchiveDocumentItem => ({
         id: doc.Id,
+        itemId: doc.GUID,
         title: doc.FileLeafRef || doc.Title,
         projectPhaseId: doc?.GtProjectPhase?.TermGuid,
         documentTypeId: doc?.GtDocumentType?.TermGuid,
@@ -387,6 +389,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
 
       return filteredLists.map((list): IArchiveListItem => ({
         id: list.Id,
+        itemId: list.Id,
         title: list.Title,
         url: list.DefaultViewUrl,
         type: 'list',
@@ -405,6 +408,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * Writes an archive operation to the hub log without throwing write failures.
    *
    * @param reference URL or identifier of the archived document or list
+   * @param itemId Stable GUID of the archived item (UniqueId for documents, list Id for lists), so
+   * the history matches it after a rename
    *
    * @returns The error when the entry was not written (also when the hub is out of reach), or
    * `null` when it was
@@ -416,7 +421,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     message: string,
     scope: string,
     webUrl: string,
-    reference?: string
+    reference?: string,
+    itemId?: string
   ): Promise<Error | null> {
     // `web` is the site's own web when the hub's URL is unknown: ask whether the hub is in reach.
     if (!this.portalDataService?.isAvailable) {
@@ -439,7 +445,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         GtLogMessage: message,
         GtLogScope: scope,
         GtLogWebUrl: webUrl,
-        GtLogReference: reference || ''
+        GtLogReference: reference || '',
+        GtLogItemId: itemId || ''
       }
 
       await archiveLogList.items.add(logItem)
@@ -453,7 +460,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     } catch (error) {
       Logger.log({
         message: `(${this._name}) (writeToArchiveLog) Failed to write archive log entry: ${error.message}`,
-        data: { title, webUrl, message, operation, reference, status, error },
+        data: { title, webUrl, message, operation, reference, itemId, status, error },
         level: LogLevel.Error
       })
       return error
@@ -461,9 +468,11 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   }
 
   /**
-   * Logs a phase-transition document archive request.
+   * Logs a document archive request, as part of a phase transition unless `operation` says otherwise.
    *
    * @param errorMessage Overrides the message when the status is the localized error value
+   * @param itemId Stable GUID (UniqueId) of the document, which survives a rename or move
+   * @param operation Operation type; a phase transition unless given
    *
    * @returns As `writeToArchiveLog`
    */
@@ -473,7 +482,9 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     message: string,
     documentUrl: string,
     projectWebUrl: string,
-    errorMessage?: string
+    errorMessage?: string,
+    itemId?: string,
+    operation: string = strings.ArchiveLogOperationPhaseTransition
   ): Promise<Error | null> {
     const logMessage =
       status === strings.ArchiveLogStatusError && errorMessage ? errorMessage : message || ''
@@ -481,18 +492,21 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     return await this.writeToArchiveLog(
       documentTitle,
       status,
-      strings.ArchiveLogOperationPhaseTransition,
+      operation,
       logMessage,
       strings.ArchiveLogScopeDocument,
       projectWebUrl,
-      documentUrl
+      documentUrl,
+      itemId
     )
   }
 
   /**
-   * Logs a phase-transition list archive request.
+   * Logs a list archive request, as part of a phase transition unless `operation` says otherwise.
    *
    * @param errorMessage Formats the message when the status is the localized error value
+   * @param itemId Stable GUID (list Id) of the list, which survives a rename
+   * @param operation Operation type; a phase transition unless given
    *
    * @returns As `writeToArchiveLog`
    */
@@ -502,7 +516,9 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     message: string,
     listUrl: string,
     projectWebUrl: string,
-    errorMessage?: string
+    errorMessage?: string,
+    itemId?: string,
+    operation: string = strings.ArchiveLogOperationPhaseTransition
   ): Promise<Error | null> {
     const logMessage =
       status === strings.ArchiveLogStatusError && errorMessage
@@ -512,11 +528,12 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     return await this.writeToArchiveLog(
       listTitle,
       status,
-      strings.ArchiveLogOperationPhaseTransition,
+      operation,
       logMessage,
       strings.ArchiveLogScopeList,
       projectWebUrl,
-      listUrl
+      listUrl,
+      itemId
     )
   }
 
@@ -542,7 +559,16 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       const items = await archiveLogList.items
         .filter(`GtLogWebUrl eq '${sanitizedUrl}'`)
         .orderBy('Created', false)
-        .select('Id', 'Created', 'GtLogOperation', 'GtLogMessage', 'GtLogScope', 'GtLogStatus')()
+        .select(
+          'Id',
+          'Created',
+          'GtLogOperation',
+          'GtLogMessage',
+          'GtLogScope',
+          'GtLogStatus',
+          'GtLogReference',
+          'GtLogItemId'
+        )()
 
       if (items.length === 0) {
         return null
@@ -631,6 +657,71 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         level: LogLevel.Error
       })
       return null
+    }
+  }
+
+  /**
+   * Get the most recent archive log entry per archived item, keyed by stable item id when
+   * available, falling back to URL reference and finally title. Used by the archive selector
+   * to inform users about previous archiving without blocking re-archiving.
+   *
+   * @param projectWebUrl URL of the project web
+   * @returns Map of lookup key → most recent archive history for that key
+   */
+  public async getArchiveHistoryForItems(
+    projectWebUrl: string
+  ): Promise<Map<string, IArchiveItemHistory>> {
+    const history = new Map<string, IArchiveItemHistory>()
+    if (!this.portalDataService?.web) {
+      Logger.log({
+        message: `(${this._name}) (getArchiveHistoryForItems) Portal data service unavailable — returning empty history.`,
+        level: LogLevel.Warning
+      })
+      return history
+    }
+    try {
+      const archiveLogList = this.portalDataService.web.lists.getByTitle(
+        resource.Lists_ArchiveLog_Title
+      )
+      const sanitizedUrl = (projectWebUrl ?? '').replace(/'/g, "''")
+      const items = await archiveLogList.items
+        .filter(`GtLogWebUrl eq '${sanitizedUrl}'`)
+        .orderBy('Created', false)
+        .select(
+          'Id',
+          'Title',
+          'Created',
+          'GtLogOperation',
+          'GtLogStatus',
+          'GtLogScope',
+          'GtLogReference',
+          'GtLogItemId'
+        )()
+
+      const recordIfNewest = (key: string, item: any) => {
+        if (!key || history.has(key)) return
+        history.set(key, {
+          date: new Date(item.Created),
+          status: item.GtLogStatus || '',
+          operation: item.GtLogOperation || '',
+          titleAtTimeOfArchive: item.Title || ''
+        })
+      }
+
+      items.forEach((item) => {
+        recordIfNewest(item.GtLogItemId, item)
+        recordIfNewest(item.GtLogReference, item)
+        recordIfNewest(item.Title, item)
+      })
+
+      return history
+    } catch (error) {
+      Logger.log({
+        message: `(${this._name}) (getArchiveHistoryForItems) Failed to load archive history: ${error.message}`,
+        data: { projectWebUrl, error },
+        level: LogLevel.Error
+      })
+      return history
     }
   }
 }

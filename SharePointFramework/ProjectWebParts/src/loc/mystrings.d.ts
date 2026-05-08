@@ -185,7 +185,6 @@ declare interface IProjectWebPartsStrings {
   OpportunityMatrixGroupName: string
   OverrideHeadersLabel: string
   ArchiveGroupName: string
-  HideArchiveStatusLabel: string
   ParentProjectsGroupName: string
   ParentProjectsHeaderDescription: string
   ParentProjectsHeaderText: string
@@ -300,12 +299,13 @@ declare interface IProjectWebPartsStrings {
   ArchiveList: string
   ArchiveDocument: string
   ArchivePhaseTransition: string
+  ArchiveManualMessage: string
+  ArchiveSectionTitle: string
+  ArchiveStartButtonLabel: string
+  ArchiveItemPreviouslyArchived: string
+  ArchiveItemPreviouslyArchivedAs: string
   ErrorArchiving: string
   UseArchiveFieldLabel: string
-  HookArchiveUrlFieldLabel: string
-  HookArchiveUrlFieldDescription: string
-  HookArchiveAuthFieldLabel: string
-  HookArchiveAuthFieldDescription: string
   ViewsGroupName: string
   ViewVersionHistoryText: string
   ViewXmlFieldLabel: string
@@ -371,6 +371,7 @@ declare interface IProjectWebPartsStrings {
   ArchiveLogScopeList: string
   ArchiveLogOperationArchive: string
   ArchiveLogOperationPhaseTransition: string
+  ArchiveLogOperationManual: string
   ArchiveLogOperationEndClosed: string
   ArchiveStatusHeaderText: string
   ArchiveStatusHeaderDescription: string

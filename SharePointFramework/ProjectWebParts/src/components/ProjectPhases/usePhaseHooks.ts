@@ -1,8 +1,7 @@
 import { useContext } from 'react'
 import { ProjectPhasesContext } from './context'
-import { IArchiveConfiguration } from './ChangePhaseDialog/Views/ArchiveView'
 
-/** Provides configured phase-change and archive webhook callbacks. */
+/** Provides the configured phase-change webhook callback. */
 export function usePhaseHooks() {
   const context = useContext(ProjectPhasesContext)
 
@@ -26,33 +25,5 @@ export function usePhaseHooks() {
     } catch (error) {}
   }
 
-  const runArchiveHook = async (
-    archiveConfiguration: IArchiveConfiguration,
-    headers = { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' }
-    // eslint-disable-next-line require-await
-  ) => {
-    try {
-      if (!context.props.useArchive || !context.props.hookArchiveUrl) {
-        return
-      }
-
-      const body = {
-        apiKey: context.props.hookArchiveAuth,
-        webUrl: context.props.webAbsoluteUrl,
-        archiveConfiguration: JSON.stringify(archiveConfiguration)
-      }
-
-      const postRequest = {
-        method: 'POST',
-        body: JSON.stringify(body),
-        headers
-      }
-
-      void fetch(context.props.hookArchiveUrl, postRequest)
-    } catch (error) {
-      console.error('Error running archive hook:', error)
-    }
-  }
-
-  return [runHook, runArchiveHook] as const
+  return runHook
 }
