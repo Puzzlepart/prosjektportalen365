@@ -3,7 +3,7 @@ name: CI (releases/*)
 on:
   push:
     branches:
-      - releases/NA
+      - feat/archive
     paths:
       - 'SharePointFramework/**'
       - 'Install/**'
