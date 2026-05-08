@@ -5,7 +5,8 @@ import { ConfirmDialog } from 'pzl-spfx-components/lib/components/ConfirmDialog'
 import React, { FC } from 'react'
 import { Actions } from './Actions'
 import { AllPropertiesPanel } from './AllPropertiesPanel'
-import { ArchiveStatus } from './ArchiveStatus'
+import { ArchiveSection } from './ArchiveSection'
+import { ArchiveDialogContainer } from './ArchiveDialogContainer'
 import { CreateParentDialog } from './CreateParentDialog'
 import { RunProjectSetupDialog } from './RunProjectSetupDialog'
 import { EditPropertiesPanel } from './EditPropertiesPanel'
@@ -61,7 +62,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
           <Actions />
           <ParentProjectsList />
           <ChildProjectsList />
-          <ArchiveStatus />
+          <ArchiveSection />
           <ProjectStatusReport />
           {showNoHubAccessMessage && (
             <div className={styles.noHubAccessMessage}>
@@ -73,6 +74,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
           <EditPropertiesPanel />
           <CreateParentDialog />
           <RunProjectSetupDialog />
+          <ArchiveDialogContainer />
         </div>
       </Fluent>
       {context.state.confirmActionProps && <ConfirmDialog {...context.state.confirmActionProps} />}
@@ -89,7 +91,7 @@ ProjectInformation.defaultProps = {
   showFieldExternal: {},
   fallbackVisibleFields: [],
   hideStatusReport: false,
-  hideArchiveStatus: true,
+  useArchive: false,
   statusReportShowOnlyIcons: true,
   rowLimit: 6,
   minRowLimit: 4,
