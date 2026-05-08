@@ -67,6 +67,6 @@ export function useArchiveStatus() {
     open,
     fluentProviderId,
     handleOpenChange,
-    shouldHide: context.props.hideArchiveStatus || isLoading || !archiveInfo
+    shouldHide: !context.props.useArchive || isLoading || !archiveInfo
   }
 }
