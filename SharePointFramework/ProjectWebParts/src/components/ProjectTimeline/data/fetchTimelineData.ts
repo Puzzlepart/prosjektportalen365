@@ -105,9 +105,9 @@ export async function fetchTimelineData(
         'FieldLinks/Hidden'
       )
       .expand('Fields', 'FieldLinks')<{
-        Fields: SPField[]
-        FieldLinks: { Name: string; Hidden: boolean }[]
-      }>()
+      Fields: SPField[]
+      FieldLinks: { Name: string; Hidden: boolean }[]
+    }>()
 
     const rawFields = (ctData.Fields ?? []).map((f) => ({
       ...f,
@@ -134,9 +134,7 @@ export async function fetchTimelineData(
 
   timelineContentFields = timelineContentFields.filter(isVisibleTimelineField)
 
-  const timelineContentEditableFields = timelineContentFields.map(
-    (fld) => new EditableSPField(fld)
-  )
+  const timelineContentEditableFields = timelineContentFields.map((fld) => new EditableSPField(fld))
 
   const defaultViewFields = timelineContentFields.filter(
     (fld) =>

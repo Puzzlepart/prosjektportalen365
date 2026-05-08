@@ -57,7 +57,7 @@ const fetchData: DataFetchFunction<
 > = async (context) => {
   try {
     const isFrontpage = context.props.page === 'Frontpage'
-    const shouldFetchArchiveStatus = isFrontpage && !context.props.hideArchiveStatus
+    const shouldFetchArchiveStatus = isFrontpage && context.props.useArchive
     const projectInformationData = await SPDataAdapter.project.getProjectInformationData()
 
     let hubIsAvailable = SPDataAdapter.portalDataService?.isAvailable ?? false
