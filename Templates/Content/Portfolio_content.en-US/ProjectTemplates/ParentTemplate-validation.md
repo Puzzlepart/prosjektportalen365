@@ -1,4 +1,4 @@
-_The template was validated 3/18/2026, 11:01:38 AM_
+_The template was validated 5/11/2026, 10:58:33 AM_
 
 The template contains the following tokens that has not been found in the .resx files:
 
@@ -10,7 +10,7 @@ _No tokens with missing translations or replacement values found._
 
 ```txt
 {
-    "Version": "1.12.1",
+    "Version": "1.13.1",
     "Parameters": {
         "ProvisionSiteFields": "Project Portal Columns (Project)",
         "CustomSiteFields": "Project Portal Columns (Custom)",
@@ -288,6 +288,6 @@ _No tokens with missing translations or replacement values found._
 ## Template Path
 
 ```txt
-/Users/bloom/Code/Prosjektportalen/pp365_110/Templates/Content/Portfolio_content.en-US/ProjectTemplates/ParentTemplate.txt
+/Users/remi.blom-ohlsen/code/Prosjektportalen/prosjektportalen365/Templates/Content/Portfolio_content.en-US/ProjectTemplates/ParentTemplate.txt
 ```
 

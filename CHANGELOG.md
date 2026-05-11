@@ -2,6 +2,12 @@
 
 Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
 
+## 1.13.1 - 11.05.2026
+
+### Feilrettinger
+
+- Rettet en feil i JSON-malene for prosjekt- og programområder hvor `Title`-feltet manglet øverst i `FieldRefs` for flere innholdstyper (bl.a. `Usikkerhet`, `Interessent`, `Kommunikasjonselement`, `Sjekkpunkt`, `Prosjektleveranse`, `Prosjektlogg`, `Prosjektoppgave`, `Gevinstoppfølging`, `Gevinst`, `Endring` og `Måleindikator`). `Title` vises nå som første felt i skjemaer og visninger, i tråd med mønsteret fra XML-baserte innholdstyper
+
 ## 1.13.0 - 23.04.2026
 
 ### Ny funksjonalitet
