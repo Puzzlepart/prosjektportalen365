@@ -47,6 +47,31 @@ rush rebuild -o pp365-shared-library
 
 _Det bør ikke ta mer enn 30 sekunder._
 
+### Full tilbakestilling av Rush-tilstand
+
+Når du støter på rare bygg- eller installasjonsfeil som ikke lar seg løse med `rush update` alene — typisk etter en branch-bytte som endrer mange `package.json`-filer, merge-konflikter i lockfilen, eller når `pp365-shared-library`-symlinker virker utdaterte — kan du gjøre en full tilbakestilling:
+
+```pwsh
+rush unlink && rush purge && rush update && rush rebuild
+```
+
+Hva de fire kommandoene gjør:
+
+- `rush unlink`: Fjerner de lokale symlinkene Rush oppretter i hver løsnings `node_modules` mot andre prosjekter i monorepoet (f.eks. `pp365-shared-library`). Nyttig når symlinker har blitt utdaterte eller ødelagte.
+- `rush purge`: Sletter Rush sin midlertidige tilstand under `common/temp` og alle `node_modules`-mapper i hver løsning. Den tyngste opprydningen.
+- `rush update`: Reinstallerer alle avhengigheter på nytt fra lockfilen og kobler prosjektene sammen igjen.
+- `rush rebuild`: Tvinger en ren bygging av alle løsningene og ignorerer mellomlagret byggetilstand.
+
+Når dette er nyttig:
+
+- Etter å ha byttet til en branch som endrer mange `package.json`-filer eller lockfilen
+- Etter at en merge-konflikt i lockfilen er løst
+- Når du ser «module not found», versjonskonflikter, eller at endringer i `shared-library` ikke slår igjennom selv etter `rush rebuild -o pp365-shared-library`
+- Når du mistenker at mellomlagret tilstand i `common/temp` eller `node_modules` er problemet
+- Etter en større dependency-oppgradering
+
+Merk at hele sekvensen tar flere minutter — bruk den som «nullstilling» når mindre tiltak ikke holder, ikke som førstevalg.
+
 ### Overvåk konfigurasjon og kanaler
 
 Hvis du vil overvåke endringer for en spesifikk kanal, kan du sette `SERVE_CHANNEL` i `.env`-filen til løsningen din.

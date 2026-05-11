@@ -2,7 +2,7 @@
     "name": "pp365-spfx-tasks",
     "version": "1.13.1",
     "scripts": {
-      "build": "node ./build.js",
+      "build": "echo \"No build for pp365-spfx-tasks; build.js is invoked per-solution as 'node ../.tasks/build.js --channel <name>'\"",
       "lint": "echo \"No linting configured\"",
       "validate-loc": "node ./validateLoc.js --path ./src/loc --interface IStrings --dts mystrings.d.ts --output ./localization-report.md --summary"
     },
