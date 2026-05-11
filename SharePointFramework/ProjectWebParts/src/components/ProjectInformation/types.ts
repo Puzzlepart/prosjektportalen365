@@ -97,6 +97,11 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   statusReportShowOnlyIcons?: boolean
 
   /**
+   * Icon size for UN goal icons
+   */
+  iconSize?: number
+
+  /**
    * Number of projects to show
    */
   rowLimit?: number

@@ -1,5 +1,6 @@
 import React, { FC } from 'react'
 import { useUnSustainabilityGoals } from './useUnSustainabilityGoals'
+import { useProjectInformationContext } from '../context'
 
 /* Todo
 Første draft for fetche ikon url fra Termstore.
@@ -11,16 +12,14 @@ Mye, mye rydding.
 export interface UnSustainabilityGoalsProps {
   showLabels?: boolean
   layout?: 'grid' | 'list'
-  iconSize?: number
 }
 
 export const UnSustainabilityGoals: FC<UnSustainabilityGoalsProps> = ({
   showLabels = false,
-  layout = 'grid',
-  iconSize = 32
+  layout = 'grid'
 }) => {
   const { UnSustGoals, customProperties } = useUnSustainabilityGoals()
-
+  const context = useProjectInformationContext()
   const getGoalIcon = (label: string) => {
     const iconUrl = customProperties[label]?.IconUrl || customProperties[label]?.Ikon || customProperties[label]?.ikon || customProperties[label]?.icon;
     if (iconUrl) {
@@ -38,8 +37,8 @@ export const UnSustainabilityGoals: FC<UnSustainabilityGoalsProps> = ({
           alt={`UN Goal: ${label}`}
           title={label}
           style={{
-            width: `${iconSize}px`,
-            height: `${iconSize}px`,
+            width: `${context.props.iconSize}px`,
+            height: `${context.props.iconSize}px`,
             margin: '4px',
             flexShrink: 0
           }}
