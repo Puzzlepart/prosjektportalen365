@@ -113,11 +113,7 @@ export function useProjectListRenderer({
         const rowHeight = size === 'medium' ? 44 : 32
         if (!state.isDataLoaded) {
           return (
-            <div
-              className={styles.listSkeleton}
-              role='presentation'
-              aria-busy='true'
-            >
+            <div className={styles.listSkeleton} role='presentation' aria-busy='true'>
               {Array.from({ length: 8 }).map((_, i) => (
                 <Shimmer
                   key={`list-skeleton-${i}`}

@@ -30,10 +30,7 @@ export const useColumns = (): IListColumn[] => {
   }
 
   const findColumn = (field?: string) =>
-    _.find(
-      context.projectColumns,
-      (col) => col.internalName === field || col.fieldName === field
-    )
+    _.find(context.projectColumns, (col) => col.internalName === field || col.fieldName === field)
 
   const primaryUserRole =
     findColumn(context.primaryUserField)?.name || strings.PrimaryUserFieldLabel

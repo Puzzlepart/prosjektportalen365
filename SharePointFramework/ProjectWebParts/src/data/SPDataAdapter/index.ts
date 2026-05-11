@@ -154,7 +154,9 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       }))
     } catch (error) {
       Logger.log({
-        message: `(${this._name}) (getConfigurations) Failed to load configuration files: ${error?.message ?? error}`,
+        message: `(${this._name}) (getConfigurations) Failed to load configuration files: ${
+          error?.message ?? error
+        }`,
         data: { folderPath, error },
         level: LogLevel.Warning
       })
@@ -450,8 +452,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
             totalItems: groupItems.length,
             scopes
           }
-        }
-      )
+        })
 
       operations.sort((a, b) => b.date.getTime() - a.date.getTime())
 

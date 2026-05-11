@@ -8,7 +8,7 @@ import { DisplayMode } from '@microsoft/sp-core-library'
 import { ISPHttpClientOptions, SPHttpClient } from '@microsoft/sp-http'
 import * as strings from 'ProgramWebPartsStrings'
 import _ from 'lodash'
-import React, { createElement } from 'react'
+import { createElement } from 'react'
 import { render } from 'react-dom'
 import { ErrorWithIntent, UserMessage } from 'pp365-shared-library'
 import {
