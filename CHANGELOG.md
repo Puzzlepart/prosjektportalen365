@@ -19,6 +19,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Rettet en feil i `Prosjekttidslinje` hvor skjulte SharePoint-systemfelt (f.eks. `Vedlegg`, `Rekkefølge`, `Navn`) feilaktig dukket opp som kolonner i tidslinjelisten og som felter i redigeringspanelet. Felt som er skjult på den valgte innholdstypen (eller på malens innholdstype) ekskluderes nå fra både kolonner og redigeringspanel
 - Kolonner i tidslinjelisten følger nå rekkefølgen som er definert på innholdstypen. Felt som er skjult på innholdstypen ekskluderes også fra kolonner og redigeringspanel
 - Kolonner i porteføljeoversikten respekterer nå innstillingen `Vis i porteføljeoversikt` i `Prosjektkolonner` listen og fjerner de fra visningen, selv om kolonnen er definert i visningen i `Porteføljevisninger` listen. Tidligere lå disse kolonnene fortsatt i visningen, selv om kolonnen ikke var tilgjengelig i vis/skjul kolonner panelet, og dermed kunne aldri fjernes
+- Rettet en feil hvor enkeltverdi-taksonomifelt (`TaxonomyFieldType`) på prosjektets forside og i redigeringspanelet kunne vise WssId-tallet (f.eks. `16`) i stedet for termens navn (f.eks. `Bystyrets sekretariat`). Skjer på leietakere hvor SharePoints REST-serializer for enkeltverdi-taksonomikolonner ikke klarer å løse `ShowField`-kolonnen og lar WssId stå igjen i `Label`. Verdier slås nå opp i `TaxonomyHiddenList` på prosjektområdet før de gjengis. Flerverdi-taksonomifelt var ikke påvirket
 
 ---
 
