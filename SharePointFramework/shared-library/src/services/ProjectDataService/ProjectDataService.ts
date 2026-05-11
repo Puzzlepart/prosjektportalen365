@@ -12,7 +12,7 @@ import {
   ProjectPhaseModel,
   SPField
 } from '../../models'
-import { getClassProperties, tryParseJson } from '../../util'
+import { getClassProperties, resolveTaxonomyFieldLabels, tryParseJson } from '../../util'
 import {
   ILocalProjectInformationItemContext,
   IPhaseField,
@@ -202,7 +202,9 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
       const userFields = fields
         .filter((fld) => fld.TypeAsString.indexOf('User') === 0)
         .map((fld) => fld.InternalName)
-      const fieldValues = await getItemFieldValues(ctx.item, userFields)
+      const fieldValues = await getItemFieldValues(ctx.item, userFields, {
+        postProcess: (raw) => resolveTaxonomyFieldLabels(raw, this.web)
+      })
       const propertiesData: IProjectInformationData = {
         fieldValues,
         fields: this._mapFields(fields),

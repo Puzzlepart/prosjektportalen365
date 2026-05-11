@@ -33,10 +33,18 @@ export const createFieldValueMap = (): Map<string, (value: EditableSPFieldValue)
     [
       'TaxonomyFieldType',
       ({ value, $ }) => {
-        if ($ && typeof $ === 'object') {
-          return [{ key: $.TermGuid, name: $.Label }].filter((t) => t.key || t.name)
+        // Guard against SharePoint's REST serializer leaking the WssId into
+        // `Label` for single-value taxonomy fields. The upstream resolver
+        // (resolveTaxonomyFieldLabels) heals the data on the project-info
+        // path; this check is the defense for any caller that bypasses it.
+        const looksLikeLabel = (s: unknown): s is string =>
+          typeof s === 'string' && s.length > 0 && !/^\d+$/.test(s)
+        if ($ && typeof $ === 'object' && $.TermGuid) {
+          const fromObject = looksLikeLabel($.Label) ? $.Label : null
+          const fromText = looksLikeLabel(value) ? value : null
+          return [{ key: $.TermGuid, name: fromObject ?? fromText ?? '' }]
         }
-        if (typeof value === 'string') {
+        if (looksLikeLabel(value)) {
           return value.split(';').map((v) => ({ key: v, name: v }))
         }
         return []
