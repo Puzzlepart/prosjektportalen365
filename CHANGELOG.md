@@ -7,6 +7,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 ### Feilrettinger
 
 - Rettet en feil i JSON-malene for prosjekt- og programområder hvor `Title`-feltet manglet øverst i `FieldRefs` for flere innholdstyper (bl.a. `Usikkerhet`, `Interessent`, `Kommunikasjonselement`, `Sjekkpunkt`, `Prosjektleveranse`, `Prosjektlogg`, `Prosjektoppgave`, `Gevinstoppfølging`, `Gevinst`, `Endring` og `Måleindikator`). `Title` vises nå som første felt i skjemaer og visninger, i tråd med mønsteret fra XML-baserte innholdstyper [#1745](https://github.com/Puzzlepart/prosjektportalen365/issues/1745)
+- Rettet en feil i visning av taksonomi-/termsettfelt i `Prosjektinformasjon` hvor etiketten kunne vises som et tall (WssId) i stedet for den faktiske verdien.
 
 NB! Dersom dere nylig har oppgradert til 1.13.0 og opplever at `Title`-feltet hanver i bunnen i skjemaer og visninger for noen av de nevnte innholdstypene er det anbefalt å oppgradere til 1.13.1. Dersom dere har egne tilpassede maler eller tillegg som påvirker innholdstyper er det viktig at disse blir oppdatert slik at `Title`-feltet er det første feltet i `FieldRefs`-seksjonen, ellers vil det fortsatt vises nederst i skjemaer og visninger.
 
