@@ -21,10 +21,6 @@
                 <FieldRef Name="GtStartDate" />
                 <FieldRef Name="GtEndDate" />
                 <FieldRef Name="GtProjectGoals" />
-                <FieldRef Name="GtBudgetTotal" />
-                <FieldRef Name="GtCostsTotal" />
-                <FieldRef Name="GtProjectForecast" />
-                <FieldRef Name="GtBudgetLastReportDate" />
                 <FieldRef Name="GtProjectLifecycleStatus" />
                 <FieldRef Name="GtSiteUrl" />
             </ViewFields>

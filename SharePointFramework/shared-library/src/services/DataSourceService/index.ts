@@ -45,10 +45,7 @@ export class DataSourceService {
           )
         : null
     } catch (error) {
-      console.warn(
-        `(DataSourceService) (getByName) Failed to fetch data source '${name}':`,
-        error
-      )
+      console.warn(`(DataSourceService) (getByName) Failed to fetch data source '${name}':`, error)
       return null
     }
   }

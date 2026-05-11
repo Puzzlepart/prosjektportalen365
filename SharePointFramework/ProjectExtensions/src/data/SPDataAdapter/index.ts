@@ -49,9 +49,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     const targetName = name.toLowerCase()
     if (isFolder) {
       const folders =
-        (await this.sp.web
-          .getFolderByServerRelativePath(folderServerRelativeUrl)
-          .folders()) ?? []
+        (await this.sp.web.getFolderByServerRelativePath(folderServerRelativeUrl).folders()) ?? []
       const existingFolder = folders.find((f) => f?.Name?.toLowerCase() === targetName)
       if (existingFolder) {
         return strings.FolderNameAlreadyInUseErrorText

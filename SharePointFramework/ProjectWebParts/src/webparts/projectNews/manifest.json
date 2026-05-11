@@ -3,7 +3,7 @@
   "id": "a9097537-6860-4e05-99f3-4ee21782687f",
   "alias": "ProjectNewsWebPart",
   "componentType": "WebPart",
-  "version": "1.13.0",
+  "version": "1.13.1",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "hiddenFromToolbox": false,

@@ -805,7 +805,8 @@ export class SPDataAdapter
     const measurements = results
       .filter(
         (res) =>
-          res?.ContentTypeID?.indexOf(PortfolioWebPartsDataConfig.CONTENT_TYPE_ID_MEASUREMENTS) === 0
+          res?.ContentTypeID?.indexOf(PortfolioWebPartsDataConfig.CONTENT_TYPE_ID_MEASUREMENTS) ===
+          0
       )
       .map((res) => new BenefitMeasurement(res))
       .sort((a, b) => b.Date.getTime() - a.Date.getTime())

@@ -1,8 +1,8 @@
 # Software Bill of Materials (SBOM)
 
 **Project:** Prosjektportalen 365  
-**Version:** 1.13.0  
-**Generated:** 2026-04-21T08:16:38.134Z  
+**Version:** 1.13.1  
+**Generated:** 2026-05-11T08:49:10.468Z  
 **Format:** CycloneDX-inspired Markdown
 
 ## Overview
@@ -16,42 +16,42 @@ This SBOM documents all software dependencies used in the Prosjektportalen 365 p
 
 ## Projects in Monorepo
 
-### pp365 (1.13.0)
+### pp365 (1.13.1)
 
 - **Production Dependencies:** 0
 - **Development Dependencies:** 5
 
-### pp365-portfolioextensions (1.13.0)
+### pp365-portfolioextensions (1.13.1)
 
 - **Production Dependencies:** 22
 - **Development Dependencies:** 27
 
-### pp365-portfoliowebparts (1.13.0)
+### pp365-portfoliowebparts (1.13.1)
 
 - **Production Dependencies:** 48
 - **Development Dependencies:** 31
 
-### pp365-programwebparts (1.13.0)
+### pp365-programwebparts (1.13.1)
 
 - **Production Dependencies:** 38
 - **Development Dependencies:** 31
 
-### pp365-projectextensions (1.13.0)
+### pp365-projectextensions (1.13.1)
 
 - **Production Dependencies:** 35
 - **Development Dependencies:** 30
 
-### pp365-projectwebparts (1.13.0)
+### pp365-projectwebparts (1.13.1)
 
 - **Production Dependencies:** 48
 - **Development Dependencies:** 33
 
-### pp365-shared-library (1.13.0)
+### pp365-shared-library (1.13.1)
 
 - **Production Dependencies:** 39
 - **Development Dependencies:** 21
 
-### pp365-templates (1.12.1)
+### pp365-templates (1.13.1)
 
 - **Production Dependencies:** 4
 - **Development Dependencies:** 3
@@ -113,7 +113,7 @@ This section lists all unique dependencies across all projects.
 | moment | 2.11.1, ~2.29.4 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectwebparts, +1 more |
 | msgraph-helper | 0.8.3 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectextensions, +1 more |
 | object-assign | 4.1.1 | pp365-portfoliowebparts, pp365-programwebparts |
-| pp365-shared-library | 1.12.1 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +2 more |
+| pp365-shared-library | 1.13.1 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +2 more |
 | pzl-react-reusable-components | ~0.3.1, ^0.0.14 | pp365-portfoliowebparts, pp365-programwebparts |
 | pzl-spfx-components | 0.0.11 | pp365-projectwebparts |
 | react | 17.0.1 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
@@ -187,8 +187,8 @@ This section lists all unique dependencies across all projects.
 | glob | 7.2.0, ~11.0.2 | pp365, pp365-templates |
 | gulp | 4.0.2 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | livereload | 0.9.3 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +2 more |
-| pp365-portfoliowebparts | 1.12.1 | pp365-programwebparts |
-| pp365-projectwebparts | 1.12.1 | pp365-portfoliowebparts, pp365-programwebparts |
+| pp365-portfoliowebparts | 1.13.1 | pp365-programwebparts |
+| pp365-projectwebparts | 1.13.1 | pp365-portfoliowebparts, pp365-programwebparts |
 | prettier | 2.7.1 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | replace | 1.2.2 | pp365, pp365-templates |
 | typescript | 4.5.5 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
@@ -232,7 +232,7 @@ This section provides a detailed view of dependencies for each project.
 | @pnp/logging | 3.17.0 |
 | @pnp/queryable | 3.17.0 |
 | @pnp/sp | 3.17.0 |
-| pp365-shared-library | 1.12.1 |
+| pp365-shared-library | 1.13.1 |
 | react | 17.0.1 |
 | react-dom | 17.0.1 |
 | react-gauge-component | ~1.2.61 |
@@ -313,7 +313,7 @@ This section provides a detailed view of dependencies for each project.
 | moment | 2.11.1 |
 | msgraph-helper | 0.8.3 |
 | object-assign | 4.1.1 |
-| pp365-shared-library | 1.12.1 |
+| pp365-shared-library | 1.13.1 |
 | pzl-react-reusable-components | ~0.3.1 |
 | react | 17.0.1 |
 | react-beautiful-dnd | ~13.1.1 |
@@ -360,7 +360,7 @@ This section provides a detailed view of dependencies for each project.
 | find | 0.3.0 |
 | gulp | 4.0.2 |
 | livereload | 0.9.3 |
-| pp365-projectwebparts | 1.12.1 |
+| pp365-projectwebparts | 1.13.1 |
 | prettier | 2.7.1 |
 | typescript | 4.5.5 |
 | webpack | 5.74.0 |
@@ -401,7 +401,7 @@ This section provides a detailed view of dependencies for each project.
 | moment | 2.11.1 |
 | msgraph-helper | 0.8.3 |
 | object-assign | 4.1.1 |
-| pp365-shared-library | 1.12.1 |
+| pp365-shared-library | 1.13.1 |
 | pzl-react-reusable-components | ^0.0.14 |
 | react | 17.0.1 |
 | react-dom | 17.0.1 |
@@ -439,8 +439,8 @@ This section provides a detailed view of dependencies for each project.
 | find | 0.3.0 |
 | gulp | 4.0.2 |
 | livereload | 0.9.3 |
-| pp365-portfoliowebparts | 1.12.1 |
-| pp365-projectwebparts | 1.12.1 |
+| pp365-portfoliowebparts | 1.13.1 |
+| pp365-projectwebparts | 1.13.1 |
 | prettier | 2.7.1 |
 | typescript | 4.5.5 |
 | webpack | 5.74.0 |
@@ -473,7 +473,7 @@ This section provides a detailed view of dependencies for each project.
 | @uifabric/utilities | 6.45.1 |
 | lodash | ~4.17.21 |
 | msgraph-helper | 0.8.3 |
-| pp365-shared-library | 1.12.1 |
+| pp365-shared-library | 1.13.1 |
 | react | 17.0.1 |
 | react-autocomplete | 1.8.1 |
 | react-dom | 17.0.1 |
@@ -560,7 +560,7 @@ This section provides a detailed view of dependencies for each project.
 | lodash | ~4.17.21 |
 | moment | 2.11.1 |
 | msgraph-helper | 0.8.3 |
-| pp365-shared-library | 1.12.1 |
+| pp365-shared-library | 1.13.1 |
 | pzl-spfx-components | 0.0.11 |
 | react | 17.0.1 |
 | react-dom | 17.0.1 |

@@ -152,9 +152,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
                   }).map((_, i) => (
                     <Shimmer
                       key={`tab-skeleton-${i}`}
-                      shimmerElements={[
-                        { type: ShimmerElementType.line, width: 140, height: 36 }
-                      ]}
+                      shimmerElements={[{ type: ShimmerElementType.line, width: 140, height: 36 }]}
                       styles={{ root: { width: 140 } }}
                     />
                   ))}

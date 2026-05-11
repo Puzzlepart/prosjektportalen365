@@ -1515,12 +1515,13 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
       const configurations = config.map((item) => new IdeaConfigurationModel(item))
       return (
-        configurations.find((item) => item.title === configurationName) ??
-        configurations[0] ??
-        null
+        configurations.find((item) => item.title === configurationName) ?? configurations[0] ?? null
       )
     } catch (error) {
-      console.error('(DataAdapter) (getIdeaConfiguration) Failed to load idea configuration:', error)
+      console.error(
+        '(DataAdapter) (getIdeaConfiguration) Failed to load idea configuration:',
+        error
+      )
       return null
     }
   }

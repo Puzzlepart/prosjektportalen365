@@ -15,10 +15,7 @@ export function useEditableView() {
   const [view, $setView] = useState<PortfolioOverviewView['$map']>(
     new PortfolioOverviewView().createDefault('', context?.state.currentView).$map
   )
-  const isEditing = useMemo(
-    () => !!context?.state.viewForm?.view,
-    [context?.state.viewForm?.view]
-  )
+  const isEditing = useMemo(() => !!context?.state.viewForm?.view, [context?.state.viewForm?.view])
 
   useEffect(() => {
     if (!context) return

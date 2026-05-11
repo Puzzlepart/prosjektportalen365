@@ -140,7 +140,9 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         )
       } catch (error) {
         Logger.write(
-          `(PortalDataService) (onInit) Failed to resolve portfolio with URL ${this.url}. Marking portal as unavailable. Error: ${error?.message ?? error}`,
+          `(PortalDataService) (onInit) Failed to resolve portfolio with URL ${
+            this.url
+          }. Marking portal as unavailable. Error: ${error?.message ?? error}`,
           LogLevel.Warning
         )
         this.isAvailable = false
@@ -152,7 +154,9 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         this._configuration.spfxContext.pageContext?.legacyPageContext?.hubSiteId || ''
       try {
         const response = await fetch(
-          `${this._configuration.spfxContext.pageContext.web.absoluteUrl}/_api/HubSites/GetById('${encodeURIComponent(this.hubSiteId)}')`,
+          `${
+            this._configuration.spfxContext.pageContext.web.absoluteUrl
+          }/_api/HubSites/GetById('${encodeURIComponent(this.hubSiteId)}')`,
           {
             method: 'GET',
             headers: {
@@ -162,7 +166,9 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
           }
         )
         if (!response.ok) {
-          throw new Error(`HubSites/GetById responded with ${response.status} ${response.statusText}`)
+          throw new Error(
+            `HubSites/GetById responded with ${response.status} ${response.statusText}`
+          )
         }
         const contentType = response.headers.get('content-type') ?? ''
         if (!contentType.includes('application/json')) {
@@ -172,7 +178,9 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         this.url = hubSite?.SiteUrl ?? ''
       } catch (error) {
         Logger.write(
-          `(PortalDataService) (onInit) HubSites/GetById failed, falling back to search: ${error?.message ?? error}`,
+          `(PortalDataService) (onInit) HubSites/GetById failed, falling back to search: ${
+            error?.message ?? error
+          }`,
           LogLevel.Info
         )
         this.url = await new PnPClientStorage().local.getOrPut(
@@ -189,7 +197,9 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       }
     } catch (err) {
       Logger.write(
-        `(PortalDataService) (onInit) Failed to resolve hub site URL. Marking portal as unavailable. Error: ${err?.message ?? err}`,
+        `(PortalDataService) (onInit) Failed to resolve hub site URL. Marking portal as unavailable. Error: ${
+          err?.message ?? err
+        }`,
         LogLevel.Warning
       )
       this.isAvailable = false
@@ -265,7 +275,9 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
             parentProjects = JSON.parse(currentProject.GtParentProjects || '[]')
           } catch (error) {
             Logger.write(
-              `(PortalDataService) (getParentProjects) Failed to parse GtParentProjects JSON: ${error?.message ?? error}`,
+              `(PortalDataService) (getParentProjects) Failed to parse GtParentProjects JSON: ${
+                error?.message ?? error
+              }`,
               LogLevel.Warning
             )
             parentProjects = []
@@ -335,7 +347,9 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         childProjects = JSON.parse(currentProject.GtChildProjects)
       } catch (error) {
         Logger.write(
-          `(PortalDataService) (getChildProjects) Failed to parse GtChildProjects JSON: ${error?.message ?? error}`,
+          `(PortalDataService) (getChildProjects) Failed to parse GtChildProjects JSON: ${
+            error?.message ?? error
+          }`,
           LogLevel.Warning
         )
         return []

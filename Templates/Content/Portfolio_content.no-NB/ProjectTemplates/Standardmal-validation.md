@@ -1,4 +1,4 @@
-_The template was validated 3/18/2026, 11:01:38 AM_
+_The template was validated 5/11/2026, 10:58:33 AM_
 
 The template contains the following tokens that has not been found in the .resx files:
 
@@ -10,7 +10,7 @@ _No tokens with missing translations or replacement values found._
 
 ```txt
 {
-    "Version": "1.12.1",
+    "Version": "1.13.1",
     "Parameters": {
         "ProvisionSiteFields": "Kolonner for Prosjektportalen (Prosjekt)",
         "CustomSiteFields": "Egendefinerte kolonner for Prosjektportalen",
@@ -24,6 +24,10 @@ _No tokens with missing translations or replacement values found._
             "Description": "",
             "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
+                {
+                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Name": "Title"
+                },
                 {
                     "ID": "e930090a-480e-414a-bd4a-0ef5bca31443",
                     "Name": "GtRiskDescription"
@@ -101,6 +105,10 @@ _No tokens with missing translations or replacement values found._
             "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
+                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Name": "Title"
+                },
+                {
                     "ID": "2847b3b0-ed22-4c47-b7c0-3ebfc83dae4a",
                     "Name": "GtStakeholderGroup"
                 },
@@ -137,6 +145,10 @@ _No tokens with missing translations or replacement values found._
             "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
+                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Name": "Title"
+                },
+                {
                     "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
                     "Name": "GtProjectPhase"
                 },
@@ -169,6 +181,10 @@ _No tokens with missing translations or replacement values found._
             "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
+                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Name": "Title"
+                },
+                {
                     "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
                     "Name": "GtProjectPhase"
                 },
@@ -192,6 +208,10 @@ _No tokens with missing translations or replacement values found._
             "Description": "",
             "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
+                {
+                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Name": "Title"
+                },
                 {
                     "ID": "99430a99-1354-418f-921f-7ddfdb6c0d7f",
                     "Name": "GtDeliveryDescription"
@@ -253,6 +273,10 @@ _No tokens with missing translations or replacement values found._
             "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
+                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Name": "Title"
+                },
+                {
                     "ID": "2391d165-5d13-46b7-87d2-e32040293210",
                     "Name": "GtProjectLogType"
                 },
@@ -299,6 +323,10 @@ _No tokens with missing translations or replacement values found._
             "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
+                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Name": "Title"
+                },
+                {
                     "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
                     "Name": "GtProjectPhase"
                 }
@@ -309,6 +337,10 @@ _No tokens with missing translations or replacement values found._
             "Name": "Gevinstoppfølging",
             "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
+                {
+                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Name": "Title"
+                },
                 {
                     "ID": "5c6fafbb-aee4-4e46-b110-5c798916c2ca",
                     "Name": "GtMeasurementDate"
@@ -328,6 +360,10 @@ _No tokens with missing translations or replacement values found._
             "Name": "Gevinst",
             "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
+                {
+                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Name": "Title"
+                },
                 {
                     "ID": "a1a56abd-5b3d-45d2-8617-32b2f8b195de",
                     "Name": "GtGainsType"
@@ -364,6 +400,10 @@ _No tokens with missing translations or replacement values found._
             "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
+                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Name": "Title"
+                },
+                {
                     "ID": "68a5a2da-048c-4d2d-8ba4-5a8b32b60120",
                     "Name": "GtProcess"
                 },
@@ -378,6 +418,10 @@ _No tokens with missing translations or replacement values found._
             "Name": "Måleindikator",
             "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
+                {
+                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Name": "Title"
+                },
                 {
                     "ID": "c5fc8781-7fbd-43a2-a215-c8c959bbab69",
                     "Name": "GtStartValue",
@@ -1449,6 +1493,6 @@ _No tokens with missing translations or replacement values found._
 ## Template Path
 
 ```txt
-/Users/bloom/Code/Prosjektportalen/pp365_110/Templates/Content/Portfolio_content.no-NB/ProjectTemplates/Standardmal.txt
+/Users/remi.blom-ohlsen/code/Prosjektportalen/prosjektportalen365/Templates/Content/Portfolio_content.no-NB/ProjectTemplates/Standardmal.txt
 ```
 

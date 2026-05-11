@@ -14,6 +14,10 @@
             "Group": "{{ContentTypes_Group}}",
             "FieldRefs": [
                 {
+                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Name": "Title"
+                },
+                {
                     "ID": "e930090a-480e-414a-bd4a-0ef5bca31443",
                     "Name": "GtRiskDescription"
                 },
@@ -90,6 +94,10 @@
             "Group": "{{ContentTypes_Group}}",
             "FieldRefs": [
                 {
+                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Name": "Title"
+                },
+                {
                     "ID": "2847b3b0-ed22-4c47-b7c0-3ebfc83dae4a",
                     "Name": "GtStakeholderGroup"
                 },
@@ -126,6 +134,10 @@
             "Group": "{{ContentTypes_Group}}",
             "FieldRefs": [
                 {
+                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Name": "Title"
+                },
+                {
                     "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
                     "Name": "GtProjectPhase"
                 },
@@ -158,6 +170,10 @@
             "Group": "{{ContentTypes_Group}}",
             "FieldRefs": [
                 {
+                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Name": "Title"
+                },
+                {
                     "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
                     "Name": "GtProjectPhase"
                 },
@@ -181,6 +197,10 @@
             "Description": "",
             "Group": "{{ContentTypes_Group}}",
             "FieldRefs": [
+                {
+                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Name": "Title"
+                },
                 {
                     "ID": "99430a99-1354-418f-921f-7ddfdb6c0d7f",
                     "Name": "GtDeliveryDescription"
@@ -242,6 +262,10 @@
             "Group": "{{ContentTypes_Group}}",
             "FieldRefs": [
                 {
+                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Name": "Title"
+                },
+                {
                     "ID": "2391d165-5d13-46b7-87d2-e32040293210",
                     "Name": "GtProjectLogType"
                 },
@@ -288,6 +312,10 @@
             "Group": "{{ContentTypes_Group}}",
             "FieldRefs": [
                 {
+                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Name": "Title"
+                },
+                {
                     "ID": "325543a5-815d-485d-a9a5-e0773ad762e9",
                     "Name": "GtProjectPhase"
                 }
@@ -298,6 +326,10 @@
             "Name": "{{ContentTypes_BenefitFollowup_Name}}",
             "Group": "{{ContentTypes_Group}}",
             "FieldRefs": [
+                {
+                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Name": "Title"
+                },
                 {
                     "ID": "5c6fafbb-aee4-4e46-b110-5c798916c2ca",
                     "Name": "GtMeasurementDate"
@@ -317,6 +349,10 @@
             "Name": "{{ContentTypes_Benefit_Name}}",
             "Group": "{{ContentTypes_Group}}",
             "FieldRefs": [
+                {
+                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Name": "Title"
+                },
                 {
                     "ID": "a1a56abd-5b3d-45d2-8617-32b2f8b195de",
                     "Name": "GtGainsType"
@@ -353,6 +389,10 @@
             "Group": "{{ContentTypes_Group}}",
             "FieldRefs": [
                 {
+                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Name": "Title"
+                },
+                {
                     "ID": "68a5a2da-048c-4d2d-8ba4-5a8b32b60120",
                     "Name": "GtProcess"
                 },
@@ -367,6 +407,10 @@
             "Name": "{{ContentTypes_MeasureIndicator_Name}}",
             "Group": "{{ContentTypes_Group}}",
             "FieldRefs": [
+                {
+                    "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
+                    "Name": "Title"
+                },
                 {
                     "ID": "c5fc8781-7fbd-43a2-a215-c8c959bbab69",
                     "Name": "GtStartValue",
