@@ -34,7 +34,8 @@ export const createFieldValueMap = (): Map<string, (value: EditableSPFieldValue)
       'TaxonomyFieldType',
       ({ value, $ }) => {
         if ($ && typeof $ === 'object') {
-          return [{ key: $.TermGuid, name: $.Label }].filter((t) => t.key || t.name)
+          const name = typeof value === 'string' && value ? value : $.Label
+          return [{ key: $.TermGuid, name }].filter((t) => t.key || t.name)
         }
         if (typeof value === 'string') {
           return value.split(';').map((v) => ({ key: v, name: v }))
@@ -46,9 +47,16 @@ export const createFieldValueMap = (): Map<string, (value: EditableSPFieldValue)
       'TaxonomyFieldTypeMulti',
       ({ $, value }) => {
         if (Array.isArray($)) {
-          return ($ as Array<{ TermGuid: string; Label: string }>).map((term) => ({
+          const labels =
+            typeof value === 'string'
+              ? value
+                  .split(';')
+                  .map((s) => s.trim())
+                  .filter(Boolean)
+              : []
+          return ($ as Array<{ TermGuid: string; Label: string }>).map((term, i) => ({
             key: term.TermGuid,
-            name: term.Label
+            name: labels[i] ?? term.Label
           }))
         }
         if (typeof value === 'string') {
