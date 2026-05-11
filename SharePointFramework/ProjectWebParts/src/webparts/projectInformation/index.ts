@@ -2,7 +2,8 @@ import {
   IPropertyPaneConfiguration,
   PropertyPaneSlider,
   PropertyPaneTextField,
-  PropertyPaneToggle
+  PropertyPaneToggle,
+  PropertyPaneDropdown
 } from '@microsoft/sp-property-pane'
 import { PropertyFieldMultiSelect } from '@pnp/spfx-property-controls/lib/PropertyFieldMultiSelect'
 import { IProjectInformationProps, ProjectInformation } from 'components/ProjectInformation'
@@ -94,6 +95,15 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<IProje
                 }),
                 PropertyPaneTextField('adminPageLink', {
                   label: strings.AdminPageLinkLabel
+                }),
+                PropertyPaneDropdown('iconSize', {
+                  label: 'Ikonstørrelse',
+                  options: [
+                    { key: 16, text: '16' },
+                    { key: 32, text: '32' },
+                    { key: 64, text: '64' }
+                  ],
+                  selectedKey: propertiesWithDefaults.iconSize
                 })
               ].filter(Boolean)
             },
