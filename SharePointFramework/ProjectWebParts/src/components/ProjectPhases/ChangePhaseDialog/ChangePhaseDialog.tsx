@@ -8,6 +8,7 @@ import {
   Label,
   FluentProvider,
   IdPrefixProvider,
+  Text,
   useId
 } from '@fluentui/react-components'
 import * as strings from 'ProjectWebPartsStrings'
@@ -21,6 +22,7 @@ import { View } from './Views'
 import { ChangePhaseDialogContext } from './context'
 import { useChangePhaseDialog } from './useChangePhaseDialog'
 import { customLightTheme } from 'pp365-shared-library'
+import { SelectionSummary } from '../../ArchiveDialog/ArchiveSelection/ArchiveSelection'
 
 export const ChangePhaseDialog: FC = () => {
   const context = useContext(ProjectPhasesContext)
@@ -32,8 +34,10 @@ export const ChangePhaseDialog: FC = () => {
     <ChangePhaseDialogContext.Provider value={{ state, dispatch, nextChecklistItem }}>
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme}>
-          <Dialog open>
-            <DialogSurface>
+          <Dialog open modalType='alert'>
+            <DialogSurface
+              style={state.view === View.Archive ? { maxWidth: 'min(1210px, 95vw)' } : undefined}
+            >
               <DialogBody className={styles.changePhaseDialog}>
                 <DialogTitle>
                   {state.view === View.Archive
@@ -56,7 +60,29 @@ export const ChangePhaseDialog: FC = () => {
                         )}
                   </Label>
                   {state.view === View.Confirm &&
-                    format(strings.ConfirmChangePhase, context.state.confirmPhase.name)}
+                    context.props.useArchive &&
+                    state.archiveConfiguration &&
+                    state.archiveConfiguration.documents.length +
+                      state.archiveConfiguration.lists.length >
+                      0 && (
+                      <SelectionSummary
+                        total={
+                          state.archiveConfiguration.documents.length +
+                          state.archiveConfiguration.lists.length
+                        }
+                        documentsSelected={state.archiveConfiguration.documents.length}
+                        listsSelected={state.archiveConfiguration.lists.length}
+                        selectedItems={[
+                          ...state.archiveConfiguration.documents,
+                          ...state.archiveConfiguration.lists
+                        ]}
+                      />
+                    )}
+                  {state.view === View.Confirm && (
+                    <Text weight='semibold' style={{ textAlign: 'right' }}>
+                      {format(strings.ConfirmChangePhase, context.state.confirmPhase.name)}
+                    </Text>
+                  )}
                   {state.view === View.Confirm &&
                     context.props.useDynamicHomepage &&
                     context.props.showPhaseSitePageMessage && <DynamicHomepageContent />}

@@ -128,6 +128,11 @@ export const Actions: FC = () => {
       >
         {strings.CancelText}
       </Button>
+      {state.view === View.Confirm && context.props.useArchive && (
+        <Button onClick={() => dispatch(SET_VIEW({ view: View.Archive }))}>
+          {strings.ArchiveBackButton}
+        </Button>
+      )}
       {actions.map((buttonProps, index) => (
         <Button appearance='primary' key={index} {...buttonProps}>
           {buttonProps.text}

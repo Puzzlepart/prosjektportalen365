@@ -10,16 +10,17 @@ import {
   IdPrefixProvider,
   Label,
   Spinner,
+  Text,
   useId
 } from '@fluentui/react-components'
-import { format } from '@fluentui/react'
 import * as strings from 'ProjectWebPartsStrings'
 import { customLightTheme } from 'pp365-shared-library'
 import React, { FC, useState } from 'react'
 import SPDataAdapter from '../../data'
-import { ArchiveSelection } from './ArchiveSelection/ArchiveSelection'
+import { ArchiveSelection, SelectionSummary } from './ArchiveSelection/ArchiveSelection'
 import { IArchiveConfiguration } from './ArchiveSelection/types'
 import { useArchiveDialogData } from './useArchiveDialogData'
+import styles from './ArchiveDialog.module.scss'
 
 interface IArchiveDialogProps {
   open: boolean
@@ -87,17 +88,17 @@ export const ArchiveDialog: FC<IArchiveDialogProps> = ({ open, webUrl, onDismiss
   }
 
   return (
-    <Dialog open={open} onOpenChange={(_, data) => !data.open && handleDismiss()}>
+    <Dialog open={open} modalType='alert' onOpenChange={(_, data) => !data.open && handleDismiss()}>
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme}>
-          <DialogSurface>
+          <DialogSurface style={{ maxWidth: 'min(1210px, 95vw)' }}>
             <DialogBody>
               <DialogTitle>
                 {view === 'archiving' ? strings.ArchiveLoadingText : strings.ArchiveViewTitle}
               </DialogTitle>
               <DialogContent>
                 {view === 'selection' && (
-                  <>
+                  <div className={styles.archiveContent}>
                     <Label weight='semibold'>{strings.ArchiveViewDescription}</Label>
                     <ArchiveSelection
                       documents={documents}
@@ -106,16 +107,29 @@ export const ArchiveDialog: FC<IArchiveDialogProps> = ({ open, webUrl, onDismiss
                       isLoading={isLoading}
                       onConfigurationChange={setConfig}
                     />
-                  </>
+                  </div>
                 )}
                 {view === 'confirm' && (
-                  <Label>{format(strings.ArchiveSelectedItemsInfo, selectedCount)}</Label>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                    <SelectionSummary
+                      total={selectedCount}
+                      documentsSelected={config.documents?.length || 0}
+                      listsSelected={config.lists?.length || 0}
+                      selectedItems={[...(config.documents || []), ...(config.lists || [])]}
+                    />
+                    <Text weight='semibold' style={{ textAlign: 'right' }}>
+                      {strings.ArchiveConfirmQuestion}
+                    </Text>
+                  </div>
                 )}
                 {view === 'archiving' && <Spinner label={strings.ArchiveLoadingText} />}
               </DialogContent>
               <DialogActions>
                 {view !== 'archiving' && (
                   <Button onClick={handleDismiss}>{strings.CancelText}</Button>
+                )}
+                {view === 'confirm' && (
+                  <Button onClick={() => setView('selection')}>{strings.ArchiveBackButton}</Button>
                 )}
                 {view === 'selection' && (
                   <Button
