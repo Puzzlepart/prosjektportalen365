@@ -33,9 +33,13 @@ export function useArchiveDialogData(webUrl: string, enabled: boolean): IArchive
         const archiveableTypeIds = new Set(
           (docTypes || []).filter((t: any) => t.isArchiveable).map((t: any) => t.id)
         )
+        const docTypeNameById = new Map<string, string>(
+          (docTypes || []).map((t: any) => [t.id as string, t.name as string])
+        )
         setDocuments(
           docs.map<IArchiveItem>((doc) => ({
             ...doc,
+            documentTypeName: docTypeNameById.get(doc.documentTypeId),
             selected: false,
             disabled:
               archiveableTypeIds.size > 0 ? !archiveableTypeIds.has(doc.documentTypeId) : false

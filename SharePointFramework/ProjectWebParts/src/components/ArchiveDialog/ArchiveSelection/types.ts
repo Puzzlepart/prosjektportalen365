@@ -10,6 +10,8 @@ export interface IArchiveItem {
   disabled?: boolean
   projectPhaseId?: string
   documentTypeId?: string
+  documentTypeName?: string
+  dateModified?: string
   itemCount?: number
   previousArchive?: IArchiveItemHistory
 }
@@ -17,7 +19,6 @@ export interface IArchiveItem {
 export interface IArchiveSection {
   key: string
   title: string
-  expanded: boolean
   items: IArchiveItem[]
 }
 

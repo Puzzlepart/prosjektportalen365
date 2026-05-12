@@ -102,8 +102,12 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
         ]
       )
       documentTypes = docTypes.filter((docType) => docType.isArchiveable)
+      const docTypeNameById = new Map<string, string>(
+        docTypes.map((t) => [t.id as string, t.name as string])
+      )
       archiveDocuments = documents.map((doc) => ({
         ...doc,
+        documentTypeName: docTypeNameById.get(doc?.documentTypeId),
         selected: false,
         disabled: !documentTypes.find((docType) => docType.id === doc?.documentTypeId)
       }))
@@ -134,7 +138,7 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
     } as IProjectPhasesData
   } catch (error) {
     ListLogger.log({
-      message: error.message,
+      message: (error as Error)?.message,
       level: 'Error',
       functionName: 'fetchData',
       component: ProjectPhases.displayName

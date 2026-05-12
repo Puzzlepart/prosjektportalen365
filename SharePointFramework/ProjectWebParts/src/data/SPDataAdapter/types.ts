@@ -65,6 +65,8 @@ export interface IArchiveDocumentItem {
   title: string
   projectPhaseId: string
   documentTypeId: string
+  documentTypeName?: string
+  dateModified?: string
   url: string
   type: 'file'
 }
