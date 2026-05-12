@@ -26,7 +26,8 @@
       "properties": {
         "hideAllActions": false,
         "hideActions": [],
-        "fallbackVisibleFields": []
+        "fallbackVisibleFields": [],
+        "useArchive": false
       }
     }
   ]
