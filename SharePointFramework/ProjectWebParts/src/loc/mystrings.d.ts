@@ -262,6 +262,10 @@ declare interface IProjectWebPartsStrings {
   ArchiveConfirmQuestion: string
   ArchiveBackButton: string
   ArchiveSummarySelectedItemsHeader: string
+  ArchiveTableColumnName: string
+  ArchiveTableColumnDocumentType: string
+  ArchiveTableColumnModified: string
+  ArchiveTableColumnItemCount: string
   ErrorArchiving: string
   UseArchiveFieldLabel: string
   ViewsGroupName: string
