@@ -8,7 +8,7 @@ Review update: 2026-05-12
 
 The patched `sp-js-provisioning` branch now supports deterministic SharePoint content type IDs by using `SP.ContentTypeCreationInformation.set_id(...)`. This has been tested through a PP365 `Prosjekttillegg` where document-library content types were created with the expected fixed IDs.
 
-PP365 has been moved from the earlier local tarball test dependency to the published `sp-js-provisioning@1.3.7` package.
+PP365 is targeting `sp-js-provisioning@1.3.8` for the JSON-based content type provisioning path.
 
 Planning branch:
 
@@ -20,8 +20,8 @@ Planning branch:
 
 Current state:
 
-- `sp-js-provisioning@1.3.7` is published and includes generated `lib/` output.
-- PP365 now references `sp-js-provisioning: 1.3.7` in:
+- `sp-js-provisioning@1.3.8` includes the deterministic content type ID support from `1.3.7` and the follow-up field link fix from `sp-js-provisioning` PR [#7](https://github.com/Puzzlepart/sp-js-provisioning/pull/7).
+- PP365 now references `sp-js-provisioning: 1.3.8` in:
   - `SharePointFramework/ProjectExtensions/package.json`
   - `SharePointFramework/shared-library/package.json`
 - The fixed branch is `codex/research-content-type-creation-with-configuration-ids`.
@@ -32,16 +32,16 @@ Previous temporary dependency:
 "sp-js-provisioning": "file:/tmp/sp-js-provisioning-pack/sp-js-provisioning-1.3.5.tgz"
 ```
 
-Completed dependency update sequence:
+Target dependency update sequence:
 
-1. Republish `sp-js-provisioning` as `1.3.7` with generated `lib/` output included.
-2. Confirm the republished package contains both:
+1. Publish `sp-js-provisioning` as `1.3.8` with generated `lib/` output included.
+2. Confirm the package contains both:
    - `lib/handlers/contenttypes.js`
    - `ContentTypeCreationInformation.set_id(...)`
 3. In PP365, replace the local tarball dependency with the fixed published version:
 
 ```json
-"sp-js-provisioning": "1.3.7"
+"sp-js-provisioning": "1.3.8"
 ```
 
 4. Run `rush update` in PP365.
@@ -80,6 +80,7 @@ src/models/ProjectTemplate.ts(2,24): error TS2307: Cannot find module 'sp-js-pro
 - `npm pack sp-js-provisioning@1.3.7` includes 70 files, including `lib/index.js`, `lib/index.d.ts`, `lib/handlers/contenttypes.js`, and `lib/handlers/contenttypes.d.ts`.
 - After changing PP365 to `sp-js-provisioning: ~1.3.7`, `rush update` succeeds and installs `sp-js-provisioning 1.3.7`.
 - With npm `1.3.7`, `rush rebuild --to pp365-projectextensions --verbose` succeeds under Node `v16.18.0` for both `pp365-shared-library` and `pp365-projectextensions`.
+- With a local `sp-js-provisioning@1.3.8` tarball, `rush update` and `rush rebuild --to pp365-projectextensions --verbose` succeed under Node `v16.18.0` for both `pp365-shared-library` and `pp365-projectextensions`.
 - The generated ProjectExtensions setup bundle contains both `ContentTypeCreationInformation` and `set_id`.
 
 ## 2. Migrate selected PP365 site scripts into base JSON templates
@@ -131,7 +132,7 @@ The source fix is tracked in `sp-js-provisioning` PR [#7](https://github.com/Puz
 - 12/12 template lists had the expected fields from their bound content types.
 - `Fasesjekkliste` contained `GtProjectPhase`, `GtChecklistStatus`, `GtComment`, and `GtSortOrder`.
 
-Before this PR is merged as the only content type provisioning path, PP365 should consume the published `sp-js-provisioning@1.3.8` package instead of the temporary local tarball used for pzlokms validation.
+Before this PR is merged as the only content type provisioning path, `sp-js-provisioning@1.3.8` must be published to npm so PP365 can resolve the package without the temporary local tarball used for pzlokms validation.
 
 Site scripts that should remain for now:
 
