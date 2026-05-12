@@ -337,7 +337,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     try {
       const documents = await this.sp.web.lists
         .getByTitle(resource.Lists_Documents_Title)
-        .items.select('*', 'Id', 'UniqueId', 'Title', 'FileRef', 'FileLeafRef')
+        .items.select('*', 'Id', 'UniqueId', 'Title', 'FileRef', 'FileLeafRef', 'Modified')
         .filter('FSObjType eq 0')
         .using(DefaultCaching)()
 
@@ -347,6 +347,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         title: doc.FileLeafRef || doc.Title,
         projectPhaseId: doc?.GtProjectPhase?.TermGuid,
         documentTypeId: doc?.GtDocumentType?.TermGuid,
+        dateModified: doc.Modified,
         url: doc.FileRef,
         type: 'file'
       }))
