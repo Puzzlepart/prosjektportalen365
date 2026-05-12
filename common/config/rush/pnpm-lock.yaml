@@ -24067,7 +24067,7 @@ packages:
       '@types/react-dom': '*'
     resolution:
       integrity: sha512-Ko7p5C3G18Muo/xiwK7eXQlImhiwHoUdsE1BSkYdkd4HMFrc4+Wi2J7B3M1raa4PTwsKjf7zB3ERpykuhDkZFA==
-  /sp-js-provisioning/1.3.6_5bb3879ba087c0ef402ac2f0f80f9922:
+  /sp-js-provisioning/1.3.7_5bb3879ba087c0ef402ac2f0f80f9922:
     dependencies:
       '@pnp/core': 3.17.0
       '@pnp/logging': 3.17.0
@@ -24082,7 +24082,7 @@ packages:
       '@types/react': '*'
       '@types/react-dom': '*'
     resolution:
-      integrity: sha512-8YbNSzjuvQ4q2CY8StToMuiA6K0FeFdaOF/8oYJ7IweGEDuo0ZzOXPueYsja1XWAXzPX55kB+85UMoUY37yY7Q==
+      integrity: sha512-XqMzlmcp/J4UJ0m/DkIvM3gtltjmXbgDRWWTe9r0kV+OfLkOSDtcosbRj02EVK7IerkqM9JdqzHhdy3RnRyt7A==
   /space-separated-tokens/2.0.2:
     dev: false
     resolution:
@@ -27108,7 +27108,7 @@ packages:
       react-markdown: 8.0.7_4865287ef69aa4f3fc3f709d3560286e
       rehype-raw: 6.1.1
       sp-entityportal-service: 2.3.0
-      sp-js-provisioning: 1.3.6_5bb3879ba087c0ef402ac2f0f80f9922
+      sp-js-provisioning: 1.3.7_5bb3879ba087c0ef402ac2f0f80f9922
       spfx-jsom: 0.6.6_5bb3879ba087c0ef402ac2f0f80f9922
       tslib: 2.3.1
       typescript: 4.5.5
@@ -27119,7 +27119,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectextensions'
     resolution:
-      integrity: sha512-ol2hzbBRoUTQzbll/gV4rLPFGrCholIfEsT2pCuYeIEjsLqSsfw1Dsxt2LzEMf1Drzo8U4R/nUGXPjXXIw+94w==
+      integrity: sha512-n2gGKEMOiDuIF18VHaZIjIoNAeIboWqRxtF98BfRRtIF7ZApI1Wa9Ywfvg+QvDFHjjtpPCghAhFpVAITUrkGQg==
       tarball: file:projects/pp365-projectextensions.tgz
     version: 0.0.0
   file:projects/pp365-projectwebparts.tgz:
@@ -27265,7 +27265,7 @@ packages:
       rehype-raw: 6.1.1
       shade-blend-color: 1.0.0
       sp-entityportal-service: 2.3.0
-      sp-js-provisioning: 1.3.6_5bb3879ba087c0ef402ac2f0f80f9922
+      sp-js-provisioning: 1.3.7_5bb3879ba087c0ef402ac2f0f80f9922
       spfx-jsom: 0.6.6_5bb3879ba087c0ef402ac2f0f80f9922
       tslib: 2.3.1
       typescript: 4.5.5
@@ -27278,7 +27278,7 @@ packages:
     peerDependencies:
       interactjs: '*'
     resolution:
-      integrity: sha512-S4WYLoUqZTSgyCMk2+DrWPTSiyDagQyn0Wk+Q5B8xWxwZJEkxQL9VByx6Uf/fb7twVl1R3bF7lB5KaEOJuLl3g==
+      integrity: sha512-dejQ8f8OEszwIYqcgnhJ4tiT5YWJ57A0lY/5EvjPpt1xLhxqYl7jMKJLTyHnyaVhzhKpnXKmKm5NQ+3I7YJ8Iw==
       tarball: file:projects/pp365-shared-library.tgz
     version: 0.0.0
   file:projects/pp365-spfx-tasks.tgz:
