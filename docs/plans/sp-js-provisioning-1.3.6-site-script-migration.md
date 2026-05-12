@@ -121,6 +121,18 @@ Repo review notes:
 - Existing tenant site script objects do not need to be removed for correctness. If a site design still references the old content type site scripts, they create bare content types with the same fixed IDs before project setup. The patched `sp-js-provisioning` content type handler initializes existing web content types by ID, reuses an existing content type when the ID is already present, then updates name, description, group, and field refs from the JSON template.
 - The patched handler should not be expected to fix a content type that exists with the same name but a different/random ID. In that case, creating the fixed ID could still conflict with SharePoint's duplicate-name rules. The known site-script workaround creates the expected fixed IDs, so this is mainly a risk for earlier test sites or custom templates created through the broken path.
 
+### Follow-up validation: deterministic content type field refs
+
+After the content type site scripts were removed from the pzlokms `Prosjektområde` site design, a fresh project site exposed a `sp-js-provisioning@1.3.7` edge case: newly created deterministic content types inherited `Title`, but the field ref handler did not reload the actual field links before processing the template refs. Since PP365 templates include `Title` first, the handler attempted to add `Title` again, SharePoint rejected the JSOM batch, and the handler swallowed the error. The result was bare content types and list views that referenced fields missing from the list.
+
+The source fix is tracked in `sp-js-provisioning` PR [#7](https://github.com/Puzzlepart/sp-js-provisioning/pull/7) and versioned as `1.3.8`. A local `sp-js-provisioning-1.3.8.tgz` build was deployed to pzlokms for validation. New project site `https://pzlokms.sharepoint.com/sites/prosjektportalen-rom04/` was created with Norwegian locale `1044` and validated with the standard template:
+
+- 15/15 expected site content types had the expected field refs.
+- 12/12 template lists had the expected fields from their bound content types.
+- `Fasesjekkliste` contained `GtProjectPhase`, `GtChecklistStatus`, `GtComment`, and `GtSortOrder`.
+
+Before this PR is merged as the only content type provisioning path, PP365 should consume the published `sp-js-provisioning@1.3.8` package instead of the temporary local tarball used for pzlokms validation.
+
 Site scripts that should remain for now:
 
 - `SiteScripts/src/001000 - Regionale innstillinger.txt`
