@@ -7,6 +7,7 @@ import {
   Label,
   FluentProvider,
   IdPrefixProvider,
+  Text,
   useId
 } from '@fluentui/react-components'
 import * as strings from 'ProjectWebPartsStrings'
@@ -21,6 +22,7 @@ import { View } from './Views'
 import { ChangePhaseDialogContext } from './context'
 import { useChangePhaseDialog } from './useChangePhaseDialog'
 import { customLightTheme, format } from 'pp365-shared-library'
+import { SelectionSummary } from '../../ArchiveDialog/ArchiveSelection/ArchiveSelection'
 
 /** Guides the user through checkpoints, archiving and phase-change confirmation. */
 export const ChangePhaseDialog: FC = () => {
@@ -51,6 +53,7 @@ export const ChangePhaseDialog: FC = () => {
               aria-describedby={
                 state.view === View.Confirm ? `${subtitleId} ${confirmTextId}` : subtitleId
               }
+              style={state.view === View.Archive ? { maxWidth: 'min(1210px, 95vw)' } : undefined}
             >
               <DialogBody className={styles.changePhaseDialog}>
                 <DialogTitle>
@@ -73,10 +76,29 @@ export const ChangePhaseDialog: FC = () => {
                             context.state.confirmPhase.name
                           )}
                   </Label>
+                  {state.view === View.Confirm &&
+                    context.props.useArchive &&
+                    state.archiveConfiguration &&
+                    state.archiveConfiguration.documents.length +
+                      state.archiveConfiguration.lists.length >
+                      0 && (
+                      <SelectionSummary
+                        total={
+                          state.archiveConfiguration.documents.length +
+                          state.archiveConfiguration.lists.length
+                        }
+                        documentsSelected={state.archiveConfiguration.documents.length}
+                        listsSelected={state.archiveConfiguration.lists.length}
+                        selectedItems={[
+                          ...state.archiveConfiguration.documents,
+                          ...state.archiveConfiguration.lists
+                        ]}
+                      />
+                    )}
                   {state.view === View.Confirm && (
-                    <span id={confirmTextId}>
+                    <Text id={confirmTextId} weight='semibold' style={{ textAlign: 'right' }}>
                       {format(strings.ConfirmChangePhase, context.state.confirmPhase.name)}
-                    </span>
+                    </Text>
                   )}
                   {state.view === View.Confirm &&
                     context.props.useDynamicHomepage &&

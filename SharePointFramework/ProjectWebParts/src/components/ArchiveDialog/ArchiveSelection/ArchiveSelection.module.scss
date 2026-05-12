@@ -3,112 +3,404 @@
 .archiveSelection {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
 
-  .accordionHeader:hover {
-    font-weight: 900;
-    background-color: var(--colorNeutralBackground3Hover);
-  }
-
-  .section {
+  .infoCard {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    background-color: var(--colorNeutralBackground2);
+    border: 1px solid var(--colorNeutralStroke2);
+    border-radius: var(--borderRadiusLarge, 6px);
+    overflow: hidden;
+
+    .infoCardHeader {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 18px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+      color: inherit;
+      font-family: inherit;
+
+      &:hover {
+        background-color: var(--colorNeutralBackground2Hover);
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--colorBrandStroke1);
+        outline-offset: -2px;
+      }
+
+      .infoIcon {
+        color: var(--colorBrandForeground1);
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+
+      .infoHeaderText {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        min-width: 0;
+
+        .infoTitle {
+          font-size: 15px;
+          font-weight: 600;
+          color: var(--colorNeutralForeground1);
+          line-height: 1.3;
+        }
+
+        .infoIntro {
+          font-size: 13px;
+          color: var(--colorNeutralForeground2);
+          line-height: 1.5;
+        }
+      }
+
+      .infoToggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--colorBrandForeground1);
+        flex-shrink: 0;
+        white-space: nowrap;
+        margin-top: 2px;
+
+        .infoChevron {
+          transition: transform 200ms ease;
+
+          &.expanded {
+            transform: rotate(180deg);
+          }
+        }
+      }
+    }
+
+    .infoBody {
+      padding: 0 18px 16px 50px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--colorNeutralForeground2);
+
+      p:first-child {
+        margin-top: 0;
+      }
+
+      p:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .sectionsGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+
+    @media (max-width: 720px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .sectionCard {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background-color: var(--colorNeutralBackground1);
+    border-radius: var(--borderRadiusLarge, 6px);
+    border: 1px solid var(--colorNeutralStroke2);
+    padding: 12px 14px;
 
     .sectionHeader {
       display: flex;
       flex-direction: row;
       align-items: center;
-      gap: 8px;
-      padding: 6px;
+      gap: 10px;
       cursor: pointer;
+      user-select: none;
+      padding: 2px 0;
 
-      &:hover {
-        background-color: var(--colorSubtleBackgroundHover);
-        border-radius: var(--borderRadiusSmall);
-      }
-
-      .icon {
+      .chevron {
         font-size: 16px;
         transition: transform 0.2s ease;
+        color: var(--colorNeutralForeground3);
+        flex-shrink: 0;
 
         &.expanded {
           transform: rotate(90deg);
         }
       }
+
+      .sectionIcon {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+        color: var(--colorNeutralForeground2);
+      }
+
+      .title {
+        flex-grow: 1;
+        font-weight: 600;
+      }
+
+      .countBadge {
+        display: inline-flex;
+        align-items: center;
+        padding: 2px 10px;
+        border-radius: 999px;
+        background-color: var(--colorNeutralBackground3);
+        color: var(--colorNeutralForeground2);
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.4;
+        font-variant-numeric: tabular-nums;
+
+        &.hasSelection {
+          background-color: var(--colorBrandBackground2);
+          color: var(--colorBrandForeground2);
+        }
+      }
     }
 
     .selectAllButton {
-      padding-left: 12px;
-      margin-bottom: 4px;
+      padding-left: 28px;
     }
 
     .sectionContent {
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      padding-left: 12px;
+      gap: 1px;
+      max-height: 340px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
 
-      .item {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        padding: 4px;
-        border-radius: var(--borderRadiusSmall);
+    .item {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      padding: 6px 8px;
+      border-radius: var(--borderRadiusSmall);
+      transition: background-color 120ms ease;
 
-        &:hover {
-          background-color: var(--colorSubtleBackgroundHover);
+      &:hover {
+        background-color: var(--colorSubtleBackgroundHover);
+      }
+
+      &.selected {
+        background-color: var(--colorSubtleBackgroundSelected, var(--colorNeutralBackground2Selected));
+      }
+
+      .itemIcon {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+        color: var(--colorNeutralForeground2);
+      }
+
+      .itemTitle {
+        flex-grow: 1;
+
+        &.disabledItem {
+          color: var(--colorNeutralForegroundDisabled);
         }
 
-        .itemIcon {
+        .notArchivableText {
+          color: var(--colorNeutralForegroundDisabled);
+          font-style: italic;
+        }
+      }
+
+      .previousArchive {
+        display: block;
+        font-size: 12px;
+        color: var(--colorNeutralForeground3);
+        margin-top: 2px;
+
+        &.success {
+          color: #107c10;
+        }
+
+        &.error {
+          color: #d13438;
+        }
+
+        &.warning {
+          color: #b27a00;
+        }
+
+        &.inProgress {
+          color: #0078d4;
+        }
+      }
+    }
+
+    .emptyState {
+      padding: 12px 4px;
+      color: var(--colorNeutralForeground3);
+      font-style: italic;
+      font-size: 13px;
+    }
+  }
+}
+
+// Summary block lives at top level so it works both inside `.archiveSelection`
+// and standalone (e.g., when rendered in a dialog confirm step).
+.summary {
+  display: flex;
+  align-items: stretch;
+  gap: 20px;
+  padding: 16px 20px;
+  border-radius: var(--borderRadiusLarge, 6px);
+  background-color: var(--colorNeutralBackground2);
+  border: 1px solid var(--colorNeutralStroke2);
+
+  &.empty {
+    .summaryNumber {
+      color: var(--colorNeutralForeground3);
+    }
+  }
+
+  .summaryLeft {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .summaryNumber {
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--colorBrandForeground1);
+    font-variant-numeric: tabular-nums;
+    min-width: 56px;
+    text-align: center;
+  }
+
+  .summaryDivider {
+    width: 1px;
+    align-self: stretch;
+    background-color: var(--colorNeutralStroke2);
+  }
+
+  .summaryBody {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex-grow: 1;
+    min-width: 0;
+
+    .summaryLabel {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--colorNeutralForeground1);
+      line-height: 1.2;
+    }
+
+    .summaryBreakdown {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px 0;
+      font-size: 13px;
+      color: var(--colorNeutralForeground2);
+
+      .breakdownItem {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+
+        .breakdownIcon {
           width: 16px;
           height: 16px;
-          flex-shrink: 0;
+          color: var(--colorNeutralForeground2);
         }
 
-        .itemTitle {
-          flex-grow: 1;
-
-          &.disabledItem {
-            color: var(--colorNeutralForegroundDisabled);
-          }
-
-          .notArchivableText {
-            color: var(--colorNeutralForegroundDisabled);
-            font-style: italic;
-          }
+        .breakdownCount {
+          font-weight: 600;
+          font-variant-numeric: tabular-nums;
+          color: var(--colorNeutralForeground1);
         }
+      }
 
-        .previousArchive {
-          display: block;
-          font-size: 12px;
-          color: var(--colorNeutralForeground3);
-          margin-top: 2px;
+      .dot {
+        margin: 0 10px;
+        color: var(--colorNeutralForeground4);
+      }
+    }
 
-          &.success {
-            color: #107c10;
-          }
+    .summaryHelp {
+      font-size: 12px;
+      font-style: italic;
+      color: var(--colorNeutralForeground3);
+      line-height: 1.4;
+    }
+  }
 
-          &.error {
-            color: #d13438;
-          }
+  .summaryRight {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 
-          &.warning {
-            color: #b27a00;
-          }
+    .summaryItemsHeader {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--colorNeutralForeground1);
+    }
 
-          &.inProgress {
-            color: #0078d4;
-          }
-        }
+    .summaryItemsList {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      max-height: 200px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .summaryItem {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      padding: 4px 6px;
+      border-radius: var(--borderRadiusSmall);
+
+      .summaryItemIcon {
+        width: 16px;
+        height: 16px;
+        color: var(--colorNeutralForeground2);
+        flex-shrink: 0;
+      }
+
+      .summaryItemTitle {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: var(--colorNeutralForeground1);
+        min-width: 0;
       }
     }
   }
 
-  .selectedItemsInfo {
-    padding: 8px;
-    background-color: var(--colorNeutralBackground2);
-    border-radius: var(--borderRadiusMedium);
-    border-left: 4px solid var(--colorBrandBackground);
+  // Collapse to single column on narrow viewports
+  @media (max-width: 720px) {
+    flex-direction: column;
+    align-items: stretch;
+
+    .summaryLeft {
+      flex-direction: column;
+      align-items: flex-start;
+    }
   }
 }

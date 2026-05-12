@@ -53,7 +53,7 @@ export function useArchiveSelection(props: IArchiveSelectionProps) {
     {
       key: 'lists',
       title: strings.ArchiveListsSection,
-      expanded: false,
+      expanded: true,
       items: enrichedLists
     }
   ])
