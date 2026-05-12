@@ -172,14 +172,14 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     try {
       const documents = await this.sp.web.lists
         .getByTitle(resource.Lists_Documents_Title)
-        .items.select('*', 'Id', 'GUID', 'Title', 'FileRef', 'FileLeafRef')
+        .items.select('*', 'Id', 'UniqueId', 'Title', 'FileRef', 'FileLeafRef')
         .filter('FSObjType eq 0')
         .using(DefaultCaching)()
 
       return documents.map(
         (doc): IArchiveDocumentItem => ({
           id: doc.Id,
-          itemId: doc.GUID,
+          itemId: doc.UniqueId || doc.GUID,
           title: doc.FileLeafRef || doc.Title,
           projectPhaseId: doc?.GtProjectPhase?.TermGuid,
           documentTypeId: doc?.GtDocumentType?.TermGuid,

@@ -246,9 +246,22 @@ declare interface IProjectWebPartsStrings {
   ArchivePhaseTransition: string
   ArchiveManualMessage: string
   ArchiveSectionTitle: string
+  ArchiveSectionDescription: string
   ArchiveStartButtonLabel: string
   ArchiveItemPreviouslyArchived: string
   ArchiveItemPreviouslyArchivedAs: string
+  ArchiveSummarySelectedLabel: string
+  ArchiveSummaryEmpty: string
+  ArchiveSummaryEmptyHelp: string
+  ArchiveSummaryHelpText: string
+  ArchiveSummaryDocumentCount: string
+  ArchiveSummaryListCount: string
+  ArchiveInformationIntro: string
+  ArchiveInformationShowMore: string
+  ArchiveInformationShowLess: string
+  ArchiveConfirmQuestion: string
+  ArchiveBackButton: string
+  ArchiveSummarySelectedItemsHeader: string
   ErrorArchiving: string
   UseArchiveFieldLabel: string
   ViewsGroupName: string
