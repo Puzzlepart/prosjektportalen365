@@ -6,6 +6,7 @@ import {
   DialogContent,
   DialogSurface,
   DialogTitle,
+  DialogTrigger,
   FluentProvider,
   IdPrefixProvider,
   Label,
@@ -13,6 +14,7 @@ import {
   Text,
   useId
 } from '@fluentui/react-components'
+import { Dismiss24Regular } from '@fluentui/react-icons'
 import * as strings from 'ProjectWebPartsStrings'
 import { customLightTheme } from 'pp365-shared-library'
 import React, { FC, useState } from 'react'
@@ -91,9 +93,26 @@ export const ArchiveDialog: FC<IArchiveDialogProps> = ({ open, webUrl, onDismiss
     <Dialog open={open} modalType='alert' onOpenChange={(_, data) => !data.open && handleDismiss()}>
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme}>
-          <DialogSurface style={{ maxWidth: 'min(1210px, 95vw)' }}>
+          <DialogSurface
+            style={{
+              maxWidth: 'min(1210px, 95vw)',
+              ...(view === 'selection' ? { minHeight: 'min(85vh, 660px)' } : {})
+            }}
+          >
             <DialogBody>
-              <DialogTitle>
+              <DialogTitle
+                action={
+                  view !== 'archiving' && (
+                    <DialogTrigger action='close' disableButtonEnhancement>
+                      <Button
+                        appearance='subtle'
+                        aria-label={strings.CloseText}
+                        icon={<Dismiss24Regular />}
+                      />
+                    </DialogTrigger>
+                  )
+                }
+              >
                 {view === 'archiving' ? strings.ArchiveLoadingText : strings.ArchiveViewTitle}
               </DialogTitle>
               <DialogContent>

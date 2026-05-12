@@ -1,16 +1,19 @@
 import { format } from '@fluentui/react'
 import {
+  Button,
   Dialog,
   DialogBody,
   DialogContent,
   DialogSurface,
   DialogTitle,
+  DialogTrigger,
   Label,
   FluentProvider,
   IdPrefixProvider,
   Text,
   useId
 } from '@fluentui/react-components'
+import { Dismiss24Regular } from '@fluentui/react-icons'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext } from 'react'
 import { ProjectPhasesContext } from '../context'
@@ -23,6 +26,7 @@ import { ChangePhaseDialogContext } from './context'
 import { useChangePhaseDialog } from './useChangePhaseDialog'
 import { customLightTheme } from 'pp365-shared-library'
 import { SelectionSummary } from '../../ArchiveDialog/ArchiveSelection/ArchiveSelection'
+import { DISMISS_CHANGE_PHASE_DIALOG } from '../reducer'
 
 export const ChangePhaseDialog: FC = () => {
   const context = useContext(ProjectPhasesContext)
@@ -36,10 +40,27 @@ export const ChangePhaseDialog: FC = () => {
         <FluentProvider theme={customLightTheme}>
           <Dialog open modalType='alert'>
             <DialogSurface
-              style={state.view === View.Archive ? { maxWidth: 'min(1210px, 95vw)' } : undefined}
+              style={
+                state.view === View.Archive
+                  ? { maxWidth: 'min(1210px, 95vw)', minHeight: 'min(85vh, 660px)' }
+                  : undefined
+              }
             >
               <DialogBody className={styles.changePhaseDialog}>
-                <DialogTitle>
+                <DialogTitle
+                  action={
+                    state.view !== View.ChangingPhase && (
+                      <DialogTrigger action='close' disableButtonEnhancement>
+                        <Button
+                          appearance='subtle'
+                          aria-label={strings.CloseText}
+                          icon={<Dismiss24Regular />}
+                          onClick={() => context.dispatch(DISMISS_CHANGE_PHASE_DIALOG())}
+                        />
+                      </DialogTrigger>
+                    )
+                  }
+                >
                   {state.view === View.Archive
                     ? strings.ArchiveViewTitle
                     : format(strings.ChangePhaseDialogTitle, context.state.confirmPhase.name)}
