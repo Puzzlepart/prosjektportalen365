@@ -1,12 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import * as strings from 'ProjectWebPartsStrings'
 import type { IArchiveItemHistory } from '../../../data/SPDataAdapter/types'
-import {
-  IArchiveConfiguration,
-  IArchiveItem,
-  IArchiveSection,
-  IArchiveSelectionProps
-} from './types'
+import { IArchiveItem, IArchiveSection, IArchiveSelectionProps } from './types'
 
 const enrichWithHistory = (
   items: IArchiveItem[],
@@ -47,13 +42,11 @@ export function useArchiveSelection(props: IArchiveSelectionProps) {
     {
       key: 'documents',
       title: strings.ArchiveDocumentsSection,
-      expanded: true,
       items: enrichedDocuments
     },
     {
       key: 'lists',
       title: strings.ArchiveListsSection,
-      expanded: true,
       items: enrichedLists
     }
   ])
@@ -76,14 +69,6 @@ export function useArchiveSelection(props: IArchiveSelectionProps) {
       lists: listsSection?.items.filter((item) => item.selected) || []
     })
   }, [sections])
-
-  const toggleSection = (sectionKey: string) => {
-    setSections((prevSections) =>
-      prevSections.map((section) =>
-        section.key === sectionKey ? { ...section, expanded: !section.expanded } : section
-      )
-    )
-  }
 
   const toggleItemSelection = (sectionKey: string, itemId: string | number) => {
     setSections((prevSections) =>
@@ -118,27 +103,9 @@ export function useArchiveSelection(props: IArchiveSelectionProps) {
     )
   }
 
-  const getSelectedItemsCount = () =>
-    sections.reduce(
-      (total, section) => total + section.items.filter((item) => item.selected).length,
-      0
-    )
-
-  const getArchiveConfiguration = (): IArchiveConfiguration => {
-    const documentsSection = sections.find((s) => s.key === 'documents')
-    const listsSection = sections.find((s) => s.key === 'lists')
-    return {
-      documents: documentsSection?.items.filter((item) => item.selected) || [],
-      lists: listsSection?.items.filter((item) => item.selected) || []
-    }
-  }
-
   return {
     sections,
-    toggleSection,
     toggleItemSelection,
-    toggleSectionSelectAll,
-    getSelectedItemsCount,
-    getArchiveConfiguration
+    toggleSectionSelectAll
   }
 }
