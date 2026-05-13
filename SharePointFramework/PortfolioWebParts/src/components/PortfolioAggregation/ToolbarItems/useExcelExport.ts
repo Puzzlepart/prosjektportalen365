@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import _ from 'lodash'
 import strings from 'PortfolioWebPartsStrings'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
@@ -104,7 +103,7 @@ export function useExcelExport(context: IPortfolioAggregationContext) {
 
       ExcelExportService.export(filteredItems, context.state.columns)
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }, [context.state, context.state.columns])
   return { exportToExcel }

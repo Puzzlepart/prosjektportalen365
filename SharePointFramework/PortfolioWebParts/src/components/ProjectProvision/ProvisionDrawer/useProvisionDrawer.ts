@@ -272,7 +272,7 @@ export const useProvisionDrawer = () => {
     })
 
     if (context.props.debugMode || (typeof DEBUG !== 'undefined' && DEBUG)) {
-      console.log('sitetype debug menu:', {
+      console.debug('sitetype debug menu:', {
         selectedType: selectedType,
         requiredFields: requiredFields.map((f) => ({
           name: f.fieldName,
