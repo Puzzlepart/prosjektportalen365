@@ -1,7 +1,9 @@
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC, useState } from 'react'
 import {
-  Spinner,
+  Badge,
+  Skeleton,
+  SkeletonItem,
   Table,
   TableBody,
   TableCell,
@@ -68,6 +70,20 @@ const getStatusClass = (status: string): string => {
     default:
       return ''
   }
+}
+
+const wasModifiedAfterArchive = (item: IArchiveItem): boolean => {
+  if (!item.previousArchive || !item.dateModified) return false
+  return new Date(item.dateModified).getTime() > item.previousArchive.date.getTime()
+}
+
+const ModifiedAfterArchiveBadge: FC<{ item: IArchiveItem }> = ({ item }) => {
+  if (!wasModifiedAfterArchive(item)) return null
+  return (
+    <Badge appearance='outline' color='warning' size='small'>
+      {strings.ArchiveItemModifiedAfterArchive}
+    </Badge>
+  )
 }
 
 const PreviousArchiveLabel: FC<{ item: IArchiveItem }> = ({ item }) => {
@@ -244,8 +260,11 @@ const DocumentsTable: FC<IDocumentsTableProps> = ({
               <div className={styles.nameCell}>
                 <FileTypeIcon extension={item.title} size={16} className={styles.itemIcon} />
                 <div className={styles.nameCellText}>
-                  <span className={styles.itemTitle} title={item.title}>
-                    {item.title}
+                  <span className={styles.itemTitleRow}>
+                    <span className={styles.itemTitle} title={item.title}>
+                      {item.title}
+                    </span>
+                    <ModifiedAfterArchiveBadge item={item} />
                   </span>
                   <PreviousArchiveLabel item={item} />
                 </div>
@@ -432,15 +451,47 @@ const SectionCard: FC<ISectionCardProps> = ({
   )
 }
 
+const SectionSkeleton: FC = () => (
+  <div className={styles.sectionCard}>
+    <div className={styles.sectionHeader}>
+      <SkeletonItem shape='square' size={20} style={{ width: 20, flexShrink: 0 }} />
+      <SkeletonItem size={20} style={{ width: '40%' }} />
+      <SkeletonItem size={16} style={{ width: 40, flexShrink: 0 }} />
+    </div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 10, padding: '8px 4px' }}>
+      {Array.from({ length: 5 }).map((_, idx) => (
+        <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 10, paddingLeft: 4 }}>
+          <SkeletonItem shape='square' size={16} style={{ width: 16, flexShrink: 0 }} />
+          <SkeletonItem size={16} style={{ flexGrow: 1, maxWidth: `${85 - idx * 6}%` }} />
+        </div>
+      ))}
+    </div>
+  </div>
+)
+
+const ArchiveSelectionSkeleton: FC = () => (
+  <Skeleton className={styles.archiveSelection} aria-label={strings.ArchiveLoadingText}>
+    <div className={styles.infoCard} style={{ padding: '14px 18px' }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14 }}>
+        <SkeletonItem shape='square' size={20} style={{ width: 20, flexShrink: 0, marginTop: 2 }} />
+        <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <SkeletonItem size={16} style={{ width: '30%' }} />
+          <SkeletonItem size={12} style={{ width: '80%' }} />
+        </div>
+      </div>
+    </div>
+    <div className={styles.sectionsGrid}>
+      <SectionSkeleton />
+      <SectionSkeleton />
+    </div>
+  </Skeleton>
+)
+
 export const ArchiveSelection: FC<IArchiveSelectionProps> = (props) => {
   const { sections, toggleItemSelection, toggleSectionSelectAll } = useArchiveSelection(props)
 
   if (props.isLoading) {
-    return (
-      <div className={styles.archiveSelection}>
-        <Spinner label={strings.ArchiveLoadingText} />
-      </div>
-    )
+    return <ArchiveSelectionSkeleton />
   }
 
   const documentsSection = sections.find((s) => s.key === 'documents')
