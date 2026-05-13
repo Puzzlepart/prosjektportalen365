@@ -526,9 +526,10 @@ if (-not $SkipTemplate.IsPresent) {
             EndAction
 
             if (Test-Path "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp") {
-                StartAction -Action "Applying PnP content template to $($Uri.AbsoluteUri)"
-                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" -Handlers Files -ErrorAction Stop -WarningAction SilentlyContinue
-                EndAction
+                $null = Invoke-SiteTemplateSafely `
+                    -TemplatePath "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" `
+                    -ActionDescription "Applying PnP content template to $($Uri.AbsoluteUri)" `
+                    -Handlers Files
             }
             else {
                 Write-Host "[WARNING] No content template found for language $LanguageCode. Skipping content template." -ForegroundColor Yellow
@@ -536,9 +537,9 @@ if (-not $SkipTemplate.IsPresent) {
 
             if ($IncludeBAContent.IsPresent) {
                 if (Test-Path "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp") {
-                    StartAction -Action "Applying PnP B&A content template to $($Uri.AbsoluteUri)"
-                    Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
-                    EndAction
+                    $null = Invoke-SiteTemplateSafely `
+                        -TemplatePath "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp" `
+                        -ActionDescription "Applying PnP B&A content template to $($Uri.AbsoluteUri)"
                 }
                 else {
                     Write-Host "[WARNING] No B&A content template found for language $LanguageCode. Skipping B&A content template." -ForegroundColor Yellow
@@ -576,16 +577,16 @@ if (-not $SkipTemplate.IsPresent) {
             EndAction
 
             if (Test-Path "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp") {
-                StartAction -Action "Applying PnP content template to $($Uri.AbsoluteUri)"
-                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
-                EndAction
+                $null = Invoke-SiteTemplateSafely `
+                    -TemplatePath "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" `
+                    -ActionDescription "Applying PnP content template to $($Uri.AbsoluteUri)"
             }
 
             if ($IncludeBAContent.IsPresent) {
                 if (Test-Path "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp") {
-                    StartAction -Action "Applying PnP B&A content template to $($Uri.AbsoluteUri)"
-                    Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
-                    EndAction
+                    $null = Invoke-SiteTemplateSafely `
+                        -TemplatePath "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp" `
+                        -ActionDescription "Applying PnP B&A content template to $($Uri.AbsoluteUri)"
                 }
             }
         }

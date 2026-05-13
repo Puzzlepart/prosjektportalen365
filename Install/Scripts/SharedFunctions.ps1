@@ -192,6 +192,76 @@ function Write-ErrorDetails {
     }
 }
 
+<#
+.SYNOPSIS
+Apply a PnP content template with graceful handling of missing-term errors.
+
+.DESCRIPTION
+Content templates (Portfolio_content*.pnp) reference taxonomy terms by GUID
+(e.g. project phases like Planlegge, Idé, Konsept, Avslutte). If those terms
+have been deleted or renamed in the target tenant's term store, the server
+returns a "GetTerm" / "Object reference not set" error that would otherwise
+take down the entire install. This helper catches those errors, emits a clear
+warning explaining the likely cause, and returns $false so the caller can
+continue with the rest of the installation. Non-term errors are re-thrown.
+
+.PARAMETER TemplatePath
+Full path to the .pnp template file.
+
+.PARAMETER ActionDescription
+Friendly description used for StartAction/EndAction logging.
+
+.PARAMETER Handlers
+Optional handlers to pass through to Invoke-PnPSiteTemplate.
+
+.PARAMETER ExcludeHandlers
+Optional exclude handlers to pass through to Invoke-PnPSiteTemplate.
+
+.OUTPUTS
+$true on success, $false on a non-critical taxonomy/term failure.
+#>
+function Invoke-SiteTemplateSafely {
+    Param(
+        [Parameter(Mandatory = $true)]
+        [string]$TemplatePath,
+        [Parameter(Mandatory = $true)]
+        [string]$ActionDescription,
+        [string[]]$Handlers,
+        [string[]]$ExcludeHandlers
+    )
+
+    $invokeParams = @{
+        Path          = $TemplatePath
+        ErrorAction   = "Stop"
+        WarningAction = "SilentlyContinue"
+    }
+    if ($Handlers) { $invokeParams["Handlers"] = $Handlers }
+    if ($ExcludeHandlers) { $invokeParams["ExcludeHandlers"] = $ExcludeHandlers }
+
+    StartAction $ActionDescription
+    try {
+        Invoke-PnPSiteTemplate @invokeParams
+        EndAction
+        return $true
+    }
+    catch {
+        $msg = $_.Exception.Message
+        $isMissingTerm = ($msg -match "GetTerm") -or ($msg -match "Object reference not set") -or ($msg -match "Term .* (not found|does not exist)")
+        # Flush the NoNewline from StartAction so the warning starts on its own line
+        Write-Host ""
+        if ($isMissingTerm) {
+            Write-Host "[WARNING] Failed to apply content template '$([System.IO.Path]::GetFileName($TemplatePath))' because one or more taxonomy terms referenced by the template could not be resolved on the server." -ForegroundColor Yellow
+            Write-Host "          Most likely cause: project phase terms (e.g. Idé, Konsept, Planlegge, Avslutte) have been deleted or renamed in the 'Prosjektportalen' term group." -ForegroundColor Yellow
+            Write-Host "          The installation will continue. To fully restore the bundled content, restore the missing terms in the term store and re-run the install with -Upgrade." -ForegroundColor Yellow
+            Write-Host "          Server message: $msg" -ForegroundColor DarkYellow
+            Write-ErrorDetails $_
+            return $false
+        }
+        # Not term-related: re-throw so the caller's outer Catch can decide whether to fail the install.
+        throw
+    }
+}
+
 function Get-PPInstallationInfo() {
     $CurrentWeb = Get-PnPWeb -ErrorAction Stop
     $CurrentLanguage = Get-PnPProperty -ClientObject $CurrentWeb -Property "Language" -ErrorAction Stop
