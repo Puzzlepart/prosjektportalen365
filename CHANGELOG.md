@@ -15,11 +15,11 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 
 ### Feilrettinger
 
-- Rettet en feil hvor `Hent dokumentmal` gjorde gjentatte kall mot hubområdet og `Malbibliotek` ved innlasting av dokumentbibliotek, selv om brukeren ikke åpnet dialogen [#1749](https://github.com/Puzzlepart/prosjektportalen365/pull/1749)
 - Rettet en feil hvor valgte filter for Ja/Nei verdier ikke var krysset av når man åpnet filterpanelet på nytt i porteføljeoversikten, selv om filtrene var lagt på korrekt
 - Rettet en feil i `Prosjekttidslinje` hvor skjulte SharePoint-systemfelt (f.eks. `Vedlegg`, `Rekkefølge`, `Navn`) feilaktig dukket opp som kolonner i tidslinjelisten og som felter i redigeringspanelet. Felt som er skjult på den valgte innholdstypen (eller på malens innholdstype) ekskluderes nå fra både kolonner og redigeringspanel
 - Kolonner i tidslinjelisten følger nå rekkefølgen som er definert på innholdstypen. Felt som er skjult på innholdstypen ekskluderes også fra kolonner og redigeringspanel
 - Kolonner i porteføljeoversikten respekterer nå innstillingen `Vis i porteføljeoversikt` i `Prosjektkolonner` listen og fjerner de fra visningen, selv om kolonnen er definert i visningen i `Porteføljevisninger` listen. Tidligere lå disse kolonnene fortsatt i visningen, selv om kolonnen ikke var tilgjengelig i vis/skjul kolonner panelet, og dermed kunne aldri fjernes
+- Rettet en feil hvor `Hent dokumentmal` gjorde gjentatte kall mot hubområdet og `Malbibliotek` ved innlasting av dokumentbibliotek, selv om brukeren ikke åpnet dialogen [#1749](https://github.com/Puzzlepart/prosjektportalen365/pull/1749)
 
 ---
 
