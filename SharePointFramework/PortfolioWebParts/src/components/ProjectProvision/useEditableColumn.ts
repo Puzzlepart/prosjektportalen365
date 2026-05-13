@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { IProjectProvisionProps, IProjectProvisionState } from './types'
 import _ from 'lodash'

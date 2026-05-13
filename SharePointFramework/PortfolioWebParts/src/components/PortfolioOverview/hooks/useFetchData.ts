@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { MessageBarType } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import { ColumnRenderComponentRegistry } from '../../List'

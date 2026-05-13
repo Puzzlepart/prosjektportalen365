@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import strings from 'PortfolioWebPartsStrings'
 import styles from './ErrorBoundaryFallback.module.scss'
 import React, { FC } from 'react'

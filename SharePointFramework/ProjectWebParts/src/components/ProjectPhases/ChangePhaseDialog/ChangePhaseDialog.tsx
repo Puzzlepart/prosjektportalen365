@@ -25,7 +25,7 @@ import { View } from './Views'
 import { ChangePhaseDialogContext } from './context'
 import { useChangePhaseDialog } from './useChangePhaseDialog'
 import { customLightTheme } from 'pp365-shared-library'
-import { SelectionSummary } from '../../ArchiveDialog/ArchiveSelection/ArchiveSelection'
+import { SelectionSummary } from '../../ArchiveDialog/ArchiveSelection/SelectionSummary'
 import { DISMISS_CHANGE_PHASE_DIALOG } from '../reducer'
 
 export const ChangePhaseDialog: FC = () => {

@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 import { Web } from '@pnp/sp/presets/all'
 import resource from 'SharedResources'
 import { IPortfolioWebPartsDataAdapter } from '../../data/types'
@@ -231,7 +229,7 @@ const formatUrlValue = (value: any): { Url: string; Description: string } | unde
 /**
  * Applies the taxonomy updates collected by `applyProjectPropertiesFromMetadata`
  * to a freshly-added ProjectData item via `validateUpdateListItem` (the supported
- * REST path for taxonomy fields). Per-field errors are surfaced in the console.
+ * REST path for taxonomy fields).
  *
  * `FieldValue` must be `Label|TermGuid` (or `Label1|guid1;Label2|guid2` for multi).
  */

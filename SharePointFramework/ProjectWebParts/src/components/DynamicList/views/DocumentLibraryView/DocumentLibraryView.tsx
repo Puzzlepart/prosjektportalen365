@@ -60,7 +60,7 @@ export const DocumentLibraryView: FC = () => {
 
       sessionStorage.DEBUG ||
         (DEBUG &&
-          console.log('[DocumentLibraryView] Filtering items:', {
+          console.debug('[DocumentLibraryView] Filtering items:', {
             currentPath,
             projectFolderName,
             libraryRootPath,
@@ -78,11 +78,14 @@ export const DocumentLibraryView: FC = () => {
           if (!match && filteredItems.indexOf(item) < 3) {
             sessionStorage.DEBUG ||
               (DEBUG &&
-                console.log('[DocumentLibraryView] Item at root with project folder (no match):', {
-                  itemPath: item.FileDirRef,
-                  expectedPath: projectFolderPath,
-                  itemName: item.FileLeafRef
-                }))
+                console.debug(
+                  '[DocumentLibraryView] Item at root with project folder (no match):',
+                  {
+                    itemPath: item.FileDirRef,
+                    expectedPath: projectFolderPath,
+                    itemName: item.FileLeafRef
+                  }
+                ))
           }
           return match
         } else if (!currentPath) {
@@ -206,7 +209,7 @@ export const DocumentLibraryView: FC = () => {
 
       sessionStorage.DEBUG ||
         (DEBUG &&
-          console.log('[DocumentLibraryView] handleFileClick - Navigating to folder:', {
+          console.debug('[DocumentLibraryView] handleFileClick - Navigating to folder:', {
             fileName,
             currentPath,
             projectFolderName,
@@ -262,7 +265,7 @@ export const DocumentLibraryView: FC = () => {
             const folderServerRelativeUrl = `${listRootPath}/${folderPath}`
             sessionStorage.DEBUG ||
               (DEBUG &&
-                console.log('[DocumentLibraryView] Uploading to folder:', {
+                console.debug('[DocumentLibraryView] Uploading to folder:', {
                   listName: context.props.listName,
                   folderPath,
                   folderServerRelativeUrl

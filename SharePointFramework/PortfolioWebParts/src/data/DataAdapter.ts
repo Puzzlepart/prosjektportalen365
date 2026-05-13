@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 import { IPersonaProps, IPersonaSharedProps } from '@fluentui/react'
 import { format } from '@fluentui/react/lib/Utilities'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
@@ -1630,7 +1628,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       const content = await file.getText()
       return JSON.parse(content)
     } catch (error) {
-      console.log('TeamsAppConfig.json not found or error loading:', error.message)
+      console.error('TeamsAppConfig.json not found or error loading:', error.message)
       return null
     }
   }

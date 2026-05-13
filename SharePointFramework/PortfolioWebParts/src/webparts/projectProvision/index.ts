@@ -1,5 +1,4 @@
 /* eslint-disable quotes */
-/* eslint-disable no-console */
 
 import {
   IPropertyPaneConfiguration,
@@ -93,7 +92,6 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
           const teamsConfig = await this.dataAdapter.loadTeamsConfig(this.properties.provisionUrl)
           if (teamsConfig) {
             Object.assign(this.properties, teamsConfig)
-            console.log('Loaded Teams configuration from TeamsAppConfig.json')
           }
         } catch (error) {
           console.warn('Failed to load Teams configuration:', error)
