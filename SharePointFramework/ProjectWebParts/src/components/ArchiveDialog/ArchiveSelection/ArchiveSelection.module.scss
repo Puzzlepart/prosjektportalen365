@@ -208,6 +208,13 @@
       color: var(--colorNeutralForeground2);
     }
 
+    .itemTitleRow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+    }
+
     .itemTitle {
       white-space: nowrap;
       overflow: hidden;
