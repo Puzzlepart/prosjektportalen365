@@ -8,6 +8,7 @@ interface IArchiveDialogData {
   lists: IArchiveItem[]
   history: Map<string, IArchiveItemHistory>
   isLoading: boolean
+  refresh: () => void
 }
 
 export function useArchiveDialogData(webUrl: string, enabled: boolean): IArchiveDialogData {
@@ -15,11 +16,13 @@ export function useArchiveDialogData(webUrl: string, enabled: boolean): IArchive
   const [lists, setLists] = useState<IArchiveItem[]>([])
   const [history, setHistory] = useState<Map<string, IArchiveItemHistory>>(new Map())
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [refreshKey, setRefreshKey] = useState(0)
 
   useEffect(() => {
     if (!enabled) return
     let cancelled = false
     setIsLoading(true)
+    SPDataAdapter.clearCache?.()
     Promise.all([
       SPDataAdapter.getDocumentsForArchive(),
       SPDataAdapter.getListsForArchive(),
@@ -61,7 +64,9 @@ export function useArchiveDialogData(webUrl: string, enabled: boolean): IArchive
     return () => {
       cancelled = true
     }
-  }, [webUrl, enabled])
+  }, [webUrl, enabled, refreshKey])
 
-  return { documents, lists, history, isLoading }
+  const refresh = () => setRefreshKey((k) => k + 1)
+
+  return { documents, lists, history, isLoading, refresh }
 }

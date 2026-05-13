@@ -8,3 +8,22 @@
     border-color: var(--colorNeutralStroke1Hover);
   }
 }
+
+.messageBarBody {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.messageBarLine {
+  display: block;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.popoverSurface {
+  width: min(720px, 90vw);
+  max-width: min(720px, 90vw);
+  padding: 0;
+}

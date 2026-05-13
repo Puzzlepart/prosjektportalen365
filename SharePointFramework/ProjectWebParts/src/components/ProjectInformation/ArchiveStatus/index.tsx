@@ -4,44 +4,79 @@ import { customLightTheme, formatDate, getFluentIcon } from 'pp365-shared-librar
 import {
   FluentProvider,
   IdPrefixProvider,
+  MessageBar,
+  MessageBarBody,
   Popover,
-  PopoverTrigger,
   PopoverSurface,
-  MessageBar
+  PopoverTrigger
 } from '@fluentui/react-components'
 import { format } from '@fluentui/react'
-import { ArchiveStatusPopover } from './ArchiveStatusPopover'
+import { ArchiveStatusDetails } from './ArchiveStatusDetails/ArchiveStatusDetails'
 import { useArchiveStatus } from './useArchiveStatus'
 import styles from './ArchiveStatus.module.scss'
 
 export const ArchiveStatus: FC = () => {
-  const { archiveInfo, processedOperations, open, fluentProviderId, handleOpenChange, shouldHide } =
-    useArchiveStatus()
+  const {
+    archiveInfo,
+    processedOperations,
+    aggregateCounts,
+    intent,
+    fluentProviderId,
+    open,
+    handleOpenChange,
+    refresh,
+    shouldHide
+  } = useArchiveStatus()
 
   if (shouldHide) {
     return null
   }
 
+  const totalEntries =
+    aggregateCounts.success +
+    aggregateCounts.pending +
+    aggregateCounts.error +
+    aggregateCounts.warning
+
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme}>
-        <Popover
-          withArrow
-          positioning='below'
-          mouseLeaveDelay={300}
-          open={open}
-          onOpenChange={handleOpenChange}
-        >
+        <Popover withArrow positioning='above' open={open} onOpenChange={handleOpenChange}>
           <PopoverTrigger disableButtonEnhancement>
-            <MessageBar intent='info' icon={getFluentIcon('Archive')} className={styles.messageBar}>
-              {format(
-                strings.ArchiveStatusDetailedMessage,
-                formatDate(archiveInfo.lastArchiveDate)
-              )}
+            <MessageBar
+              intent={intent}
+              layout='multiline'
+              icon={getFluentIcon('Archive')}
+              className={styles.messageBar}
+            >
+              <MessageBarBody className={styles.messageBarBody}>
+                <span className={styles.messageBarLine}>
+                  {format(
+                    strings.ArchiveStatusDetailedMessage,
+                    formatDate(archiveInfo.lastArchiveDate)
+                  )}
+                </span>
+                <span className={styles.messageBarLine}>
+                  {format(
+                    strings.ArchiveStatusAggregateCounts,
+                    aggregateCounts.success,
+                    aggregateCounts.pending,
+                    aggregateCounts.error + aggregateCounts.warning
+                  )}
+                </span>
+              </MessageBarBody>
             </MessageBar>
           </PopoverTrigger>
-          <PopoverSurface>
-            <ArchiveStatusPopover archiveInfo={archiveInfo} operations={processedOperations} />
+          <PopoverSurface className={styles.popoverSurface}>
+            <ArchiveStatusDetails
+              operations={processedOperations}
+              totalEntries={totalEntries}
+              successCount={aggregateCounts.success}
+              pendingCount={aggregateCounts.pending}
+              errorCount={aggregateCounts.error}
+              warningCount={aggregateCounts.warning}
+              onRefresh={refresh}
+            />
           </PopoverSurface>
         </Popover>
       </FluentProvider>

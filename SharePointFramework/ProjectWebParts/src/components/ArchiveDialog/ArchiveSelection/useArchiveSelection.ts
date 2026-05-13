@@ -3,6 +3,8 @@ import * as strings from 'ProjectWebPartsStrings'
 import type { IArchiveItemHistory } from '../../../data/SPDataAdapter/types'
 import { IArchiveItem, IArchiveSection, IArchiveSelectionProps } from './types'
 
+type ItemId = string | number
+
 const enrichWithHistory = (
   items: IArchiveItem[],
   history?: Map<string, IArchiveItemHistory>
@@ -29,83 +31,75 @@ const filterByPhase = (
   return [...withoutPhase, ...matchingPhase]
 }
 
+const applySelection = (items: IArchiveItem[], selectedIds: Set<ItemId>): IArchiveItem[] =>
+  items.map((item) => ({ ...item, selected: selectedIds.has(item.id) }))
+
 export function useArchiveSelection(props: IArchiveSelectionProps) {
   const { documents, lists, history, currentPhaseId, onConfigurationChange } = props
+  const [selectedIds, setSelectedIds] = useState<Set<ItemId>>(new Set())
 
-  const enrichedDocuments = useMemo(
-    () => enrichWithHistory(filterByPhase(documents, currentPhaseId), history),
-    [documents, currentPhaseId, history]
+  const documentsSectionItems = useMemo(
+    () =>
+      applySelection(
+        enrichWithHistory(filterByPhase(documents, currentPhaseId), history),
+        selectedIds
+      ),
+    [documents, currentPhaseId, history, selectedIds]
   )
-  const enrichedLists = useMemo(() => enrichWithHistory(lists, history), [lists, history])
+  const listsSectionItems = useMemo(
+    () => applySelection(enrichWithHistory(lists, history), selectedIds),
+    [lists, history, selectedIds]
+  )
 
-  const [sections, setSections] = useState<IArchiveSection[]>(() => [
-    {
-      key: 'documents',
-      title: strings.ArchiveDocumentsSection,
-      items: enrichedDocuments
-    },
-    {
-      key: 'lists',
-      title: strings.ArchiveListsSection,
-      items: enrichedLists
-    }
-  ])
-
-  useEffect(() => {
-    setSections((prev) =>
-      prev.map((section) => {
-        if (section.key === 'documents') return { ...section, items: enrichedDocuments }
-        if (section.key === 'lists') return { ...section, items: enrichedLists }
-        return section
-      })
-    )
-  }, [enrichedDocuments, enrichedLists])
+  const sections: IArchiveSection[] = useMemo(
+    () => [
+      {
+        key: 'documents',
+        title: strings.ArchiveDocumentsSection,
+        items: documentsSectionItems
+      },
+      {
+        key: 'lists',
+        title: strings.ArchiveListsSection,
+        items: listsSectionItems
+      }
+    ],
+    [documentsSectionItems, listsSectionItems]
+  )
 
   useEffect(() => {
-    const documentsSection = sections.find((s) => s.key === 'documents')
-    const listsSection = sections.find((s) => s.key === 'lists')
     onConfigurationChange({
-      documents: documentsSection?.items.filter((item) => item.selected) || [],
-      lists: listsSection?.items.filter((item) => item.selected) || []
+      documents: documentsSectionItems.filter((item) => item.selected),
+      lists: listsSectionItems.filter((item) => item.selected)
     })
-  }, [sections])
+  }, [documentsSectionItems, listsSectionItems])
 
-  const toggleItemSelection = (sectionKey: string, itemId: string | number) => {
-    setSections((prevSections) =>
-      prevSections.map((section) =>
-        section.key === sectionKey
-          ? {
-              ...section,
-              items: section.items.map((item) =>
-                item.id === itemId && !item.disabled ? { ...item, selected: !item.selected } : item
-              )
-            }
-          : section
-      )
-    )
+  const toggleItemSelection = (sectionKey: string, itemId: ItemId) => {
+    const items = sectionKey === 'documents' ? documentsSectionItems : listsSectionItems
+    const item = items.find((i) => i.id === itemId)
+    if (item?.disabled) return
+    setSelectedIds((prev) => {
+      const next = new Set(prev)
+      if (next.has(itemId)) next.delete(itemId)
+      else next.add(itemId)
+      return next
+    })
   }
 
   const toggleSectionSelectAll = (sectionKey: string) => {
-    setSections((prevSections) =>
-      prevSections.map((section) => {
-        if (section.key === sectionKey) {
-          const enabledItems = section.items.filter((item) => !item.disabled)
-          const allEnabledSelected = enabledItems.every((item) => item.selected)
-          return {
-            ...section,
-            items: section.items.map((item) =>
-              item.disabled ? item : { ...item, selected: !allEnabledSelected }
-            )
-          }
-        }
-        return section
+    const items = sectionKey === 'documents' ? documentsSectionItems : listsSectionItems
+    const enabled = items.filter((i) => !i.disabled)
+    if (enabled.length === 0) return
+    const allSelected = enabled.every((i) => i.selected)
+    setSelectedIds((prev) => {
+      const next = new Set(prev)
+      enabled.forEach((item) => {
+        if (allSelected) next.delete(item.id)
+        else next.add(item.id)
       })
-    )
+      return next
+    })
   }
 
-  return {
-    sections,
-    toggleItemSelection,
-    toggleSectionSelectAll
-  }
+  return { sections, toggleItemSelection, toggleSectionSelectAll }
 }
