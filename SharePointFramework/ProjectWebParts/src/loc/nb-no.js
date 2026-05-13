@@ -324,6 +324,8 @@ define([], function () {
     ArchiveConfirmQuestion: 'Vil du sende disse elementene til arkivering?',
     ArchiveBackButton: 'Tilbake',
     ArchiveSummarySelectedItemsHeader: 'Valgte elementer',
+    ArchiveProgressTitle: 'Sender til arkivering',
+    ArchiveProgressSubText: 'Loggfører valgte elementer til Arkiveringslogg. Selve arkiveringen utføres av en arkivjobb i bakgrunnen.',
     ArchiveTableColumnName: 'Navn',
     ArchiveTableColumnDocumentType: 'Dokumenttype',
     ArchiveTableColumnModified: 'Sist endret',

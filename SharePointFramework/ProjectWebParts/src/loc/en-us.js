@@ -298,6 +298,8 @@ define([], function () {
     ArchiveConfirmQuestion: 'Send these items for archiving?',
     ArchiveBackButton: 'Back',
     ArchiveSummarySelectedItemsHeader: 'Selected items',
+    ArchiveProgressTitle: 'Submitting to archive',
+    ArchiveProgressSubText: 'Logging selected items to the Archive log. The actual archiving is performed by an archive job in the background.',
     ArchiveTableColumnName: 'Name',
     ArchiveTableColumnDocumentType: 'Document type',
     ArchiveTableColumnModified: 'Last modified',
