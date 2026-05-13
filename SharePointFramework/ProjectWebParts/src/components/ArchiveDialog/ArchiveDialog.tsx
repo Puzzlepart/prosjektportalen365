@@ -10,7 +10,6 @@ import {
   FluentProvider,
   IdPrefixProvider,
   Label,
-  Spinner,
   Text,
   useId
 } from '@fluentui/react-components'
@@ -19,6 +18,7 @@ import * as strings from 'ProjectWebPartsStrings'
 import { customLightTheme } from 'pp365-shared-library'
 import React, { FC, useState } from 'react'
 import SPDataAdapter from '../../data'
+import { ArchiveProgress, IArchiveProgressStep } from './ArchiveProgress'
 import { ArchiveSelection, SelectionSummary } from './ArchiveSelection/ArchiveSelection'
 import { IArchiveConfiguration } from './ArchiveSelection/types'
 import { useArchiveDialogData } from './useArchiveDialogData'
@@ -33,13 +33,26 @@ interface IArchiveDialogProps {
 
 type View = 'selection' | 'confirm' | 'archiving'
 
+interface IArchiveProgressState {
+  documents: IArchiveProgressStep
+  lists: IArchiveProgressStep
+}
+
 const writeArchiveLogEntries = async (
   config: IArchiveConfiguration,
-  webUrl: string
+  webUrl: string,
+  onProgress: (next: IArchiveProgressState) => void
 ): Promise<void> => {
   const message = strings.ArchiveManualMessage
   const operation = strings.ArchiveLogOperationManual
-  for (const doc of config.documents || []) {
+  const docs = config.documents || []
+  const lists = config.lists || []
+  const progress: IArchiveProgressState = {
+    documents: { current: 0, total: docs.length },
+    lists: { current: 0, total: lists.length }
+  }
+  onProgress(progress)
+  for (const doc of docs) {
     await SPDataAdapter.logDocumentArchive(
       doc.title,
       strings.ArchiveLogStatusInProgress,
@@ -50,8 +63,10 @@ const writeArchiveLogEntries = async (
       doc.itemId,
       operation
     )
+    progress.documents = { ...progress.documents, current: progress.documents.current + 1 }
+    onProgress({ ...progress })
   }
-  for (const list of config.lists || []) {
+  for (const list of lists) {
     await SPDataAdapter.logListArchive(
       list.title,
       strings.ArchiveLogStatusInProgress,
@@ -62,6 +77,8 @@ const writeArchiveLogEntries = async (
       list.itemId,
       operation
     )
+    progress.lists = { ...progress.lists, current: progress.lists.current + 1 }
+    onProgress({ ...progress })
   }
 }
 
@@ -70,10 +87,15 @@ export const ArchiveDialog: FC<IArchiveDialogProps> = ({ open, webUrl, onDismiss
   const { documents, lists, history, isLoading } = useArchiveDialogData(webUrl, open)
   const [view, setView] = useState<View>('selection')
   const [config, setConfig] = useState<IArchiveConfiguration>({ documents: [], lists: [] })
+  const [progress, setProgress] = useState<IArchiveProgressState>({
+    documents: { current: 0, total: 0 },
+    lists: { current: 0, total: 0 }
+  })
 
   const handleDismiss = () => {
     setView('selection')
     setConfig({ documents: [], lists: [] })
+    setProgress({ documents: { current: 0, total: 0 }, lists: { current: 0, total: 0 } })
     onDismiss()
   }
 
@@ -82,7 +104,7 @@ export const ArchiveDialog: FC<IArchiveDialogProps> = ({ open, webUrl, onDismiss
   const handleConfirm = async () => {
     setView('archiving')
     try {
-      await writeArchiveLogEntries(config, webUrl)
+      await writeArchiveLogEntries(config, webUrl, setProgress)
       onArchived?.()
     } finally {
       handleDismiss()
@@ -113,7 +135,7 @@ export const ArchiveDialog: FC<IArchiveDialogProps> = ({ open, webUrl, onDismiss
                   )
                 }
               >
-                {view === 'archiving' ? strings.ArchiveLoadingText : strings.ArchiveViewTitle}
+                {view === 'archiving' ? strings.ArchiveProgressTitle : strings.ArchiveViewTitle}
               </DialogTitle>
               <DialogContent>
                 {view === 'selection' && (
@@ -141,7 +163,9 @@ export const ArchiveDialog: FC<IArchiveDialogProps> = ({ open, webUrl, onDismiss
                     </Text>
                   </div>
                 )}
-                {view === 'archiving' && <Spinner label={strings.ArchiveLoadingText} />}
+                {view === 'archiving' && (
+                  <ArchiveProgress documents={progress.documents} lists={progress.lists} />
+                )}
               </DialogContent>
               <DialogActions>
                 {view !== 'archiving' && (
