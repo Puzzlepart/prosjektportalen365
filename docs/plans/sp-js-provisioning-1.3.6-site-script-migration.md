@@ -20,7 +20,7 @@ Planning branch:
 
 Current state:
 
-- `sp-js-provisioning@1.3.8` includes the deterministic content type ID support from `1.3.7` and the follow-up field link fix from `sp-js-provisioning` PR [#7](https://github.com/Puzzlepart/sp-js-provisioning/pull/7).
+- `sp-js-provisioning@1.3.8` is published on npm and includes the deterministic content type ID support from `1.3.7` and the follow-up field link fix from `sp-js-provisioning` PR [#7](https://github.com/Puzzlepart/sp-js-provisioning/pull/7).
 - PP365 now references `sp-js-provisioning: 1.3.8` in:
   - `SharePointFramework/ProjectExtensions/package.json`
   - `SharePointFramework/shared-library/package.json`
@@ -32,21 +32,21 @@ Previous temporary dependency:
 "sp-js-provisioning": "file:/tmp/sp-js-provisioning-pack/sp-js-provisioning-1.3.5.tgz"
 ```
 
-Target dependency update sequence:
+Completed dependency update sequence:
 
-1. Publish `sp-js-provisioning` as `1.3.8` with generated `lib/` output included.
-2. Confirm the package contains both:
+1. Published `sp-js-provisioning` as `1.3.8` with generated `lib/` output included.
+2. Confirmed the package contains both:
    - `lib/handlers/contenttypes.js`
    - `ContentTypeCreationInformation.set_id(...)`
-3. In PP365, replace the local tarball dependency with the fixed published version:
+3. In PP365, replaced the local tarball dependency with the fixed published version:
 
 ```json
 "sp-js-provisioning": "1.3.8"
 ```
 
-4. Run `rush update` in PP365.
-5. Rebuild the relevant SPFx packages.
-6. Verify the generated bundle still contains the patched JSOM path:
+4. Ran `rush update` in PP365 against the published package.
+5. Rebuilt all Rush projects under Node `v16.18.0`.
+6. Verified the generated bundle still contains the patched JSOM path:
 
 ```js
 new SP.ContentTypeCreationInformation(...).set_id(...)
@@ -81,6 +81,7 @@ src/models/ProjectTemplate.ts(2,24): error TS2307: Cannot find module 'sp-js-pro
 - After changing PP365 to `sp-js-provisioning: ~1.3.7`, `rush update` succeeds and installs `sp-js-provisioning 1.3.7`.
 - With npm `1.3.7`, `rush rebuild --to pp365-projectextensions --verbose` succeeds under Node `v16.18.0` for both `pp365-shared-library` and `pp365-projectextensions`.
 - With a local `sp-js-provisioning@1.3.8` tarball, `rush update` and `rush rebuild --to pp365-projectextensions --verbose` succeed under Node `v16.18.0` for both `pp365-shared-library` and `pp365-projectextensions`.
+- With published npm `sp-js-provisioning@1.3.8`, `rush update` and full `rush rebuild --verbose` succeed under Node `v16.18.0` for all 8 Rush projects.
 - The generated ProjectExtensions setup bundle contains both `ContentTypeCreationInformation` and `set_id`.
 
 ## 2. Migrate selected PP365 site scripts into base JSON templates
@@ -132,7 +133,7 @@ The source fix is tracked in `sp-js-provisioning` PR [#7](https://github.com/Puz
 - 12/12 template lists had the expected fields from their bound content types.
 - `Fasesjekkliste` contained `GtProjectPhase`, `GtChecklistStatus`, `GtComment`, and `GtSortOrder`.
 
-Before this PR is merged as the only content type provisioning path, `sp-js-provisioning@1.3.8` must be published to npm so PP365 can resolve the package without the temporary local tarball used for pzlokms validation.
+The published `sp-js-provisioning@1.3.8` package has been verified from npm and PP365 now resolves it without the temporary local tarball used for pzlokms validation.
 
 Site scripts that should remain for now:
 
@@ -152,7 +153,7 @@ These still bootstrap regional settings and SPFx extensions before interactive p
 4. Done: delete only the content type site script files listed above.
 5. Done: keep regional settings and extension association site scripts.
 6. Do not require upgrade cleanup for deprecated tenant site script objects. They can remain in old tenants as inert tenant objects, and even if still referenced by an old site design they should be harmless with the patched content type handler.
-7. Build PP365 release.
+7. Done: build PP365 release.
 8. Deploy to `pzlokms` test tenant.
 9. Create a fresh project site through the UI.
 10. Create a fresh program site through the UI.

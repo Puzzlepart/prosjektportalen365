@@ -24082,7 +24082,7 @@ packages:
       '@types/react': '*'
       '@types/react-dom': '*'
     resolution:
-      integrity: sha512-5AlE27w/n0wRlCDlXXfNA6q+WWENuxOP73PLnPp8bMF4XbozuMFXESrFYGMKREv8EAOnJLXGHWHuVEKWgkldxw==
+      integrity: sha512-UJZ8HunaGFNG0n0Db9eDJckRBMRFvXtIssxKr+kyY0ooZOns6iCVciy++DHVsTJvVzpRa+D/FVjuK9/HLUWzOQ==
   /space-separated-tokens/2.0.2:
     dev: false
     resolution:
