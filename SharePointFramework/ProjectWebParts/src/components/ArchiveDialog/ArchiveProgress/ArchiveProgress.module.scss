@@ -1,0 +1,40 @@
+.archiveProgress {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  .subText {
+    color: var(--colorNeutralForeground2);
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .indicator {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--colorNeutralForeground1);
+
+      .icon {
+        width: 18px;
+        height: 18px;
+        color: var(--colorNeutralForeground2);
+        flex-shrink: 0;
+      }
+
+      .count {
+        margin-left: auto;
+        font-variant-numeric: tabular-nums;
+        font-weight: 600;
+        color: var(--colorNeutralForeground2);
+      }
+    }
+  }
+}

@@ -317,6 +317,8 @@ declare interface IProjectWebPartsStrings {
   ArchiveConfirmQuestion: string
   ArchiveBackButton: string
   ArchiveSummarySelectedItemsHeader: string
+  ArchiveProgressTitle: string
+  ArchiveProgressSubText: string
   ArchiveTableColumnName: string
   ArchiveTableColumnDocumentType: string
   ArchiveTableColumnModified: string
