@@ -25,7 +25,7 @@ import { View } from './Views'
 import { ChangePhaseDialogContext } from './context'
 import { useChangePhaseDialog } from './useChangePhaseDialog'
 import { customLightTheme, format } from 'pp365-shared-library'
-import { SelectionSummary } from '../../ArchiveDialog/ArchiveSelection/ArchiveSelection'
+import { SelectionSummary } from '../../ArchiveDialog/ArchiveSelection/SelectionSummary'
 import { DISMISS_CHANGE_PHASE_DIALOG } from '../reducer'
 
 /** Guides the user through checkpoints, archiving and phase-change confirmation. */
