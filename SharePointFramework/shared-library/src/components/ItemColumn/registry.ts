@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import strings from 'SharedLibraryStrings'
 import _ from 'lodash'
 import { useEffect } from 'react'

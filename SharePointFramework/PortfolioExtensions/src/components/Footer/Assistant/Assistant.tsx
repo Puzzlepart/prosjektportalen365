@@ -1,6 +1,4 @@
-/* eslint-disable no-console */
-
-import React, { FC, useContext } from 'react'
+import React, { FC, useContext, useState } from 'react'
 import * as strings from 'PortfolioExtensionsStrings'
 import { FooterContext } from '../context'
 import {
