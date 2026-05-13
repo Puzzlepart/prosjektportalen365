@@ -46,7 +46,11 @@ export const ChangePhaseDialog: FC = () => {
                   : undefined
               }
             >
-              <DialogBody className={styles.changePhaseDialog}>
+              <DialogBody
+                className={`${styles.changePhaseDialog} ${
+                  state.view === View.Archive ? styles.archiveWide : ''
+                }`}
+              >
                 <DialogTitle
                   action={
                     state.view !== View.ChangingPhase && (

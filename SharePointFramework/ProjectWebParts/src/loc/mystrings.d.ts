@@ -260,6 +260,25 @@ declare interface IProjectWebPartsStrings {
   ArchiveSummarySelectedItemsHeader: string
   ArchiveProgressTitle: string
   ArchiveProgressSubText: string
+  ArchiveCompletedTitle: string
+  ArchiveCompletedSubText: string
+  ArchiveCloseConfirmTitle: string
+  ArchiveCloseConfirmMessage: string
+  ArchiveCloseConfirmDiscard: string
+  ArchiveCloseConfirmKeep: string
+  ArchiveItemModifiedAfterArchive: string
+  ArchiveStatusAggregateCounts: string
+  ArchiveStatusShowDetails: string
+  ArchiveStatusHideDetails: string
+  ArchiveStatusFilterAll: string
+  ArchiveStatusColumnTime: string
+  ArchiveStatusColumnOperation: string
+  ArchiveStatusColumnMessage: string
+  ArchiveStatusSummaryLabel: string
+  ArchiveStatusSummaryHelp: string
+  ArchiveStatusEmpty: string
+  ArchiveRefreshLabel: string
+  ArchiveRefreshTooltip: string
   ArchiveTableColumnName: string
   ArchiveTableColumnDocumentType: string
   ArchiveTableColumnModified: string
