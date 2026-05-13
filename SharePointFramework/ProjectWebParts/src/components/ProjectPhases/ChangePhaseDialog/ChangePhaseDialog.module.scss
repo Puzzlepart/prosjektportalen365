@@ -3,6 +3,11 @@
   width: 550px;
   max-width: 100%;
 
+  &.archiveWide {
+    width: auto;
+    max-width: none;
+  }
+
   & > div[role="dialog"] {
     height: calc(100vh - 180px);
   }

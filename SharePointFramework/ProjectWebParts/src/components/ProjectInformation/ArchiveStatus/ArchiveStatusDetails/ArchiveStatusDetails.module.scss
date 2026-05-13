@@ -1,0 +1,185 @@
+.root {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px 24px 20px;
+  background-color: var(--colorNeutralBackground2);
+}
+
+.refreshButton {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1;
+}
+
+.summary {
+  display: flex;
+  align-items: stretch;
+  gap: 20px;
+  min-width: 0;
+  padding-right: 40px;
+
+  .number {
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--colorBrandForeground1);
+    font-variant-numeric: tabular-nums;
+    min-width: 64px;
+    text-align: center;
+    align-self: center;
+  }
+
+  .divider {
+    width: 1px;
+    align-self: stretch;
+    background-color: var(--colorNeutralStroke2);
+  }
+
+  .body {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .label {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--colorNeutralForeground1);
+      line-height: 1.2;
+    }
+
+    .breakdown {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      font-size: 13px;
+      color: var(--colorNeutralForeground2);
+      gap: 6px 0;
+
+      .breakdownItem {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+
+        &.success {
+          color: #107c10;
+        }
+
+        &.pending {
+          color: #0078d4;
+        }
+
+        &.error {
+          color: #d13438;
+        }
+      }
+
+      .dot {
+        margin: 0 12px;
+        color: var(--colorNeutralForeground4);
+      }
+    }
+
+    .help {
+      font-size: 12px;
+      font-style: italic;
+      color: var(--colorNeutralForeground3);
+      line-height: 1.4;
+    }
+  }
+}
+
+.progressTrack {
+  display: flex;
+  height: 6px;
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: var(--colorNeutralBackground3);
+  margin-top: 2px;
+
+  .progressSuccess {
+    background-color: #107c10;
+  }
+
+  .progressPending {
+    background-color: #0078d4;
+  }
+
+  .progressError {
+    background-color: #d13438;
+  }
+
+  .progressWarning {
+    background-color: #b27a00;
+  }
+}
+
+.filterRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tableScroll {
+  max-height: 300px;
+  overflow: auto;
+  border: 1px solid var(--colorNeutralStroke2);
+  border-radius: var(--borderRadiusMedium, 4px);
+  background-color: var(--colorNeutralBackground1);
+}
+
+.statusCell {
+  white-space: nowrap;
+}
+
+.numericCell {
+  width: 44px;
+  min-width: 44px;
+  padding-left: 4px;
+  padding-right: 4px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  color: var(--colorNeutralForeground2);
+}
+
+.statusTag {
+  &.success {
+    color: #107c10;
+    border-color: rgba(16, 124, 16, 0.4);
+  }
+
+  &.pending {
+    color: #0078d4;
+    border-color: rgba(0, 120, 212, 0.4);
+  }
+
+  &.warning {
+    color: #b27a00;
+    border-color: rgba(178, 122, 0, 0.4);
+  }
+
+  &.error {
+    color: #d13438;
+    border-color: rgba(209, 52, 56, 0.4);
+  }
+}
+
+.messageCell {
+  color: var(--colorNeutralForeground2);
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.4;
+  min-width: 280px;
+}
+
+.emptyState {
+  padding: 24px;
+  color: var(--colorNeutralForeground3);
+  font-style: italic;
+  text-align: center;
+}
