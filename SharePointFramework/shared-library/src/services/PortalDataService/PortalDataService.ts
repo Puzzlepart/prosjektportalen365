@@ -153,29 +153,35 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       this.hubSiteId =
         this._configuration.spfxContext.pageContext?.legacyPageContext?.hubSiteId || ''
       try {
-        const response = await fetch(
-          `${
-            this._configuration.spfxContext.pageContext.web.absoluteUrl
-          }/_api/HubSites/GetById('${encodeURIComponent(this.hubSiteId)}')`,
-          {
-            method: 'GET',
-            headers: {
-              Accept: 'application/json;odata=nometadata'
-            },
-            credentials: 'include'
-          }
+        this.url = await new PnPClientStorage().local.getOrPut(
+          `hubsite_${(this.hubSiteId ?? '').replace(/-/g, '')}_url`,
+          async () => {
+            const response = await fetch(
+              `${
+                this._configuration.spfxContext.pageContext.web.absoluteUrl
+              }/_api/HubSites/GetById('${encodeURIComponent(this.hubSiteId)}')`,
+              {
+                method: 'GET',
+                headers: {
+                  Accept: 'application/json;odata=nometadata'
+                },
+                credentials: 'include'
+              }
+            )
+            if (!response.ok) {
+              throw new Error(
+                `HubSites/GetById responded with ${response.status} ${response.statusText}`
+              )
+            }
+            const contentType = response.headers.get('content-type') ?? ''
+            if (!contentType.includes('application/json')) {
+              throw new Error(`HubSites/GetById returned non-JSON content-type: ${contentType}`)
+            }
+            const hubSite = await response.json()
+            return hubSite?.SiteUrl ?? ''
+          },
+          expire
         )
-        if (!response.ok) {
-          throw new Error(
-            `HubSites/GetById responded with ${response.status} ${response.statusText}`
-          )
-        }
-        const contentType = response.headers.get('content-type') ?? ''
-        if (!contentType.includes('application/json')) {
-          throw new Error(`HubSites/GetById returned non-JSON content-type: ${contentType}`)
-        }
-        const hubSite = await response.json()
-        this.url = hubSite?.SiteUrl ?? ''
       } catch (error) {
         Logger.write(
           `(PortalDataService) (onInit) HubSites/GetById failed, falling back to search: ${
