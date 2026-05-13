@@ -12,24 +12,19 @@ import {
   Text,
   Tooltip,
   createTableColumn,
-  useTableColumnSizing_unstable,
-  useTableFeatures,
-  useTableSort,
-  TableColumnId,
   TableColumnDefinition,
   TableColumnSizingOptions
 } from '@fluentui/react-components'
 import {
   ChevronDown16Regular,
   DocumentMultiple20Regular,
-  DocumentMultiple16Regular,
   Info16Regular,
   Info20Regular,
-  ListBar20Regular,
-  ListBar16Regular
+  ListBar20Regular
 } from '@fluentui/react-icons'
 import styles from './ArchiveSelection.module.scss'
 import { useArchiveSelection } from './useArchiveSelection'
+import { useArchiveTable } from './useArchiveTable'
 import { IArchiveItem, IArchiveSection, IArchiveSelectionProps } from './types'
 import { format } from '@fluentui/react'
 import { FileTypeIcon } from 'pp365-shared-library'
@@ -193,20 +188,11 @@ const DocumentsTable: FC<IDocumentsTableProps> = ({
   allSelected,
   someSelected
 }) => {
-  const {
-    getRows,
-    columnSizing_unstable,
-    tableRef,
-    sort: { getSortDirection, toggleColumnSort, sort }
-  } = useTableFeatures({ columns: docColumns, items }, [
-    useTableSort({ defaultSortState: { sortColumn: 'name', sortDirection: 'ascending' } }),
-    useTableColumnSizing_unstable({ columnSizingOptions: docColumnSizing })
-  ])
-  const sortedRows = sort(getRows())
-  const headerSortProps = (columnId: TableColumnId) => ({
-    onClick: (e: React.MouseEvent) => toggleColumnSort(e, columnId),
-    sortDirection: getSortDirection(columnId)
-  })
+  const { sortedRows, headerSortProps, columnSizing_unstable, tableRef } = useArchiveTable(
+    items,
+    docColumns,
+    docColumnSizing
+  )
   return (
     <Table
       ref={tableRef}
@@ -302,20 +288,11 @@ const ListsTable: FC<IListsTableProps> = ({
   allSelected,
   someSelected
 }) => {
-  const {
-    getRows,
-    columnSizing_unstable,
-    tableRef,
-    sort: { getSortDirection, toggleColumnSort, sort }
-  } = useTableFeatures({ columns: listColumns, items }, [
-    useTableSort({ defaultSortState: { sortColumn: 'name', sortDirection: 'ascending' } }),
-    useTableColumnSizing_unstable({ columnSizingOptions: listColumnSizing })
-  ])
-  const sortedRows = sort(getRows())
-  const headerSortProps = (columnId: TableColumnId) => ({
-    onClick: (e: React.MouseEvent) => toggleColumnSort(e, columnId),
-    sortDirection: getSortDirection(columnId)
-  })
+  const { sortedRows, headerSortProps, columnSizing_unstable, tableRef } = useArchiveTable(
+    items,
+    listColumns,
+    listColumnSizing
+  )
   return (
     <Table
       ref={tableRef}
@@ -451,84 +428,6 @@ const SectionCard: FC<ISectionCardProps> = ({
           />
         )}
       </div>
-    </div>
-  )
-}
-
-export interface ISelectionSummaryProps {
-  total: number
-  documentsSelected: number
-  listsSelected: number
-  /**
-   * Items to list on the right side (icon + title). Pass selected documents + lists
-   * when rendering the summary on a confirm step.
-   */
-  selectedItems?: IArchiveItem[]
-}
-
-export const SelectionSummary: FC<ISelectionSummaryProps> = ({
-  total,
-  documentsSelected,
-  listsSelected,
-  selectedItems
-}) => {
-  const isEmpty = total === 0
-  const showItems = !!selectedItems && selectedItems.length > 0
-  return (
-    <div className={`${styles.summary} ${isEmpty ? styles.empty : ''}`}>
-      <div className={styles.summaryLeft}>
-        <Text className={styles.summaryNumber}>{total}</Text>
-        <div className={styles.summaryDivider} />
-        <div className={styles.summaryBody}>
-          <Text className={styles.summaryLabel}>
-            {isEmpty ? strings.ArchiveSummaryEmpty : strings.ArchiveSummarySelectedLabel}
-          </Text>
-          {!isEmpty && (
-            <div className={styles.summaryBreakdown}>
-              <span className={styles.breakdownItem}>
-                <DocumentMultiple16Regular className={styles.breakdownIcon} />
-                <span>{format(strings.ArchiveSummaryDocumentCount, documentsSelected)}</span>
-              </span>
-              <span className={styles.dot}>·</span>
-              <span className={styles.breakdownItem}>
-                <ListBar16Regular className={styles.breakdownIcon} />
-                <span>{format(strings.ArchiveSummaryListCount, listsSelected)}</span>
-              </span>
-            </div>
-          )}
-          <Text className={styles.summaryHelp}>
-            {isEmpty ? strings.ArchiveSummaryEmptyHelp : strings.ArchiveSummaryHelpText}
-          </Text>
-        </div>
-      </div>
-      {showItems && (
-        <>
-          <div className={styles.summaryDivider} />
-          <div className={styles.summaryRight}>
-            <Text className={styles.summaryItemsHeader}>
-              {strings.ArchiveSummarySelectedItemsHeader}
-            </Text>
-            <div className={styles.summaryItemsList}>
-              {selectedItems.map((item) => (
-                <div key={`${item.type}-${item.id}`} className={styles.summaryItem}>
-                  {item.type === 'list' ? (
-                    <ListBar16Regular className={styles.summaryItemIcon} />
-                  ) : (
-                    <FileTypeIcon
-                      extension={item.title}
-                      size={16}
-                      className={styles.summaryItemIcon}
-                    />
-                  )}
-                  <span className={styles.summaryItemTitle} title={item.title}>
-                    {item.title}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </>
-      )}
     </div>
   )
 }
