@@ -97,6 +97,11 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   statusReportShowOnlyIcons?: boolean
 
   /**
+   * Hide UN sustainability goal icons
+   */
+  hideUnSustainabilityGoals?: boolean
+
+  /**
    * Icon size for UN goal icons
    */
   iconSize?: number

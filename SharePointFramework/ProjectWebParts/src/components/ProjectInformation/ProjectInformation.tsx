@@ -59,7 +59,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
             />
           )}
           <ProjectProperties />
-          <UnSustainabilityGoals />
+          {!props.hideUnSustainabilityGoals && <UnSustainabilityGoals />}
           <Actions />
           <ParentProjectsList />
           <ChildProjectsList />
@@ -92,6 +92,7 @@ ProjectInformation.defaultProps = {
   fallbackVisibleFields: [],
   hideStatusReport: false,
   hideArchiveStatus: true,
+  hideUnSustainabilityGoals: false,
   statusReportShowOnlyIcons: true,
   rowLimit: 6,
   minRowLimit: 4,

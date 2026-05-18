@@ -99,11 +99,15 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<IProje
                 PropertyPaneDropdown('iconSize', {
                   label: 'Ikonstørrelse',
                   options: [
-                    { key: 16, text: '16' },
-                    { key: 32, text: '32' },
-                    { key: 64, text: '64' }
+                    { key: 32, text: '24' },
+                    { key: 64, text: '32' },
+                    { key: 96, text: '48' },
                   ],
                   selectedKey: propertiesWithDefaults.iconSize
+                }),
+                PropertyPaneToggle('hideUnSustainabilityGoals', {
+                  label: strings.HideUnSustainabilityGoalsLabel,
+                  checked: propertiesWithDefaults.hideUnSustainabilityGoals
                 })
               ].filter(Boolean)
             },
