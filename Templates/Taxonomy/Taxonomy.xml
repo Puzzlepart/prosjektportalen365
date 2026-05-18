@@ -239,7 +239,7 @@
                                         <pnp:Label Language="1033" Value="1. No poverty" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                     <pnp:LocalCustomProperties>
-                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/2316c9b283a9e78a2d705cee4df3dc1d0d2302e5/assets/icons/UnPoverty.svg" />
+                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/a569f27b8fb2b0ef0366a4725fb626af9a41a57c/assets/icons/Un1Poverty.svg" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="02. Utrydde sult" ID="076fd5e4-41e4-469b-b0a5-47685141c121" SourceTermId="076fd5e4-41e4-469b-b0a5-47685141c121">
@@ -247,7 +247,7 @@
                                         <pnp:Label Language="1033" Value="2. Zero hunger" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                     <pnp:LocalCustomProperties>
-                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/2316c9b283a9e78a2d705cee4df3dc1d0d2302e5/assets/icons/UnHunger.svg" />
+                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/a569f27b8fb2b0ef0366a4725fb626af9a41a57c/assets/icons/Un2Hunger.svg" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="03. God helse og livskvalitet" ID="4702f85b-9771-4f9d-86ea-f2266caa85ff" SourceTermId="4702f85b-9771-4f9d-86ea-f2266caa85ff">
@@ -255,7 +255,7 @@
                                         <pnp:Label Language="1033" Value="3. Good health and well-being" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                     <pnp:LocalCustomProperties>
-                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/2316c9b283a9e78a2d705cee4df3dc1d0d2302e5/assets/icons/UnHealth.svg" />
+                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/a569f27b8fb2b0ef0366a4725fb626af9a41a57c/assets/icons/Un3Health.svg" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="04. God utdanning" ID="2d26b638-cfbc-4e1b-81e7-f3bdce5cd250" SourceTermId="2d26b638-cfbc-4e1b-81e7-f3bdce5cd250">
@@ -263,7 +263,7 @@
                                         <pnp:Label Language="1033" Value="4. Quality education" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                     <pnp:LocalCustomProperties>
-                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/2316c9b283a9e78a2d705cee4df3dc1d0d2302e5/assets/icons/UnEducation.svg" />
+                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/a569f27b8fb2b0ef0366a4725fb626af9a41a57c/assets/icons/Un4Education.svg" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="05. Likestilling mellom kjønnene" ID="93056cee-ab7a-469e-8471-6cb11d1c43bf" SourceTermId="93056cee-ab7a-469e-8471-6cb11d1c43bf">
@@ -271,7 +271,7 @@
                                         <pnp:Label Language="1033" Value="5. Gender equality" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                     <pnp:LocalCustomProperties>
-                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/2316c9b283a9e78a2d705cee4df3dc1d0d2302e5/assets/icons/UnGender.svg" />
+                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/a569f27b8fb2b0ef0366a4725fb626af9a41a57c/assets/icons/Un5Gender.svg" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="06. Rent vann og gode sanitærforhold" ID="98d317a2-87be-4252-990c-a65043545efb" SourceTermId="98d317a2-87be-4252-990c-a65043545efb">
@@ -279,7 +279,7 @@
                                         <pnp:Label Language="1033" Value="6. Clean water and sanitation" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                     <pnp:LocalCustomProperties>
-                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/2316c9b283a9e78a2d705cee4df3dc1d0d2302e5/assets/icons/UnWater.svg" />
+                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/a569f27b8fb2b0ef0366a4725fb626af9a41a57c/assets/icons/Un6Water.svg" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="07. Ren energi til alle" ID="13b4f253-121a-446b-ba52-ad416c1f9a7b" SourceTermId="13b4f253-121a-446b-ba52-ad416c1f9a7b">
@@ -287,7 +287,7 @@
                                         <pnp:Label Language="1033" Value="7. Affordable and clean energy" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                     <pnp:LocalCustomProperties>
-                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/2316c9b283a9e78a2d705cee4df3dc1d0d2302e5/assets/icons/UnEnergy.svg" />
+                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/a569f27b8fb2b0ef0366a4725fb626af9a41a57c/assets/icons/Un7Energy.svg" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="08. Anstendig arbeid og økonomisk vekst" ID="e2d49957-72f3-40b4-8f65-0ee1acd06a42" SourceTermId="e2d49957-72f3-40b4-8f65-0ee1acd06a42">
@@ -295,7 +295,7 @@
                                         <pnp:Label Language="1033" Value="8. Decent work and economic growth" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                     <pnp:LocalCustomProperties>
-                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/2316c9b283a9e78a2d705cee4df3dc1d0d2302e5/assets/icons/UnGrowth.svg" />
+                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/a569f27b8fb2b0ef0366a4725fb626af9a41a57c/assets/icons/Un8Growth.svg" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="09. Industri, innovasjon og infrastruktur" ID="21a4505c-d2d6-4071-8116-f5b1a57903b7" SourceTermId="21a4505c-d2d6-4071-8116-f5b1a57903b7">
@@ -303,7 +303,7 @@
                                         <pnp:Label Language="1033" Value="9. Industry, innovation and infrastructure" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                     <pnp:LocalCustomProperties>
-                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/2316c9b283a9e78a2d705cee4df3dc1d0d2302e5/assets/icons/UnInnovation.svg" />
+                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/a569f27b8fb2b0ef0366a4725fb626af9a41a57c/assets/icons/Un9Innovation.svg" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="10. Mindre ulikhet" ID="393752ef-df63-453c-9525-d713a619f547" SourceTermId="393752ef-df63-453c-9525-d713a619f547">
@@ -311,7 +311,7 @@
                                         <pnp:Label Language="1033" Value="10. Reduced inequalities" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                     <pnp:LocalCustomProperties>
-                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/2316c9b283a9e78a2d705cee4df3dc1d0d2302e5/assets/icons/UnEquality.svg" />
+                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/a569f27b8fb2b0ef0366a4725fb626af9a41a57c/assets/icons/Un10Equality.svg" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="11. Bærekraftige byer og lokalsamfunn" ID="c931c5ee-283f-4dc6-8613-8ff003d13c8c" SourceTermId="c931c5ee-283f-4dc6-8613-8ff003d13c8c">
@@ -319,7 +319,7 @@
                                         <pnp:Label Language="1033" Value="11. Sustainable cities and communities" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                     <pnp:LocalCustomProperties>
-                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/2316c9b283a9e78a2d705cee4df3dc1d0d2302e5/assets/icons/UnSustainability.svg" />
+                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/a569f27b8fb2b0ef0366a4725fb626af9a41a57c/assets/icons/Un11Sustainability.svg" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="12. Ansvarlig forbruk og produksjon" ID="f41654e0-da21-4dc3-b6d5-8bc88890c86d" SourceTermId="f41654e0-da21-4dc3-b6d5-8bc88890c86d">
@@ -327,7 +327,7 @@
                                         <pnp:Label Language="1033" Value="12. Responsible consumption and production" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                     <pnp:LocalCustomProperties>
-                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/2316c9b283a9e78a2d705cee4df3dc1d0d2302e5/assets/icons/UnConsumption.svg" />
+                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/a569f27b8fb2b0ef0366a4725fb626af9a41a57c/assets/icons/Un12Consumption.svg" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="13. Stoppe klimaendringene" ID="70c2f6dc-93e6-4dec-9fe2-72d71d3cf6bf" SourceTermId="70c2f6dc-93e6-4dec-9fe2-72d71d3cf6bf">
@@ -335,7 +335,7 @@
                                         <pnp:Label Language="1033" Value="13. Climate action" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                     <pnp:LocalCustomProperties>
-                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/2316c9b283a9e78a2d705cee4df3dc1d0d2302e5/assets/icons/UnClimate.svg" />
+                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/a569f27b8fb2b0ef0366a4725fb626af9a41a57c/assets/icons/Un13Climate.svg" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="14. Livet i havet" ID="dedfa330-748f-44ab-9f24-dad8ba1db6fe" SourceTermId="dedfa330-748f-44ab-9f24-dad8ba1db6fe">
@@ -343,7 +343,7 @@
                                         <pnp:Label Language="1033" Value="14. Life below water" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                     <pnp:LocalCustomProperties>
-                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/2316c9b283a9e78a2d705cee4df3dc1d0d2302e5/assets/icons/UnSeaLife.svg" />
+                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/a569f27b8fb2b0ef0366a4725fb626af9a41a57c/assets/icons/Un14SeaLife.svg" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="15. Livet på land" ID="c799311e-9e63-46a0-bff7-c1cf237713ce" SourceTermId="c799311e-9e63-46a0-bff7-c1cf237713ce">
@@ -351,7 +351,7 @@
                                         <pnp:Label Language="1033" Value="15. Life on land" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                     <pnp:LocalCustomProperties>
-                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/2316c9b283a9e78a2d705cee4df3dc1d0d2302e5/assets/icons/UnLandLife.svg" />
+                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/a569f27b8fb2b0ef0366a4725fb626af9a41a57c/assets/icons/Un15LandLife.svg" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="16. Fred, rettferdighet og velfungerende institusjoner" ID="e356fd9f-289a-4e40-a0cb-21205f238185" SourceTermId="e356fd9f-289a-4e40-a0cb-21205f238185">
@@ -359,7 +359,7 @@
                                         <pnp:Label Language="1033" Value="16. Peace, justice and strong institutions" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                     <pnp:LocalCustomProperties>
-                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/2316c9b283a9e78a2d705cee4df3dc1d0d2302e5/assets/icons/UnJustice.svg" />
+                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/a569f27b8fb2b0ef0366a4725fb626af9a41a57c/assets/icons/Un16Justice.svg" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="17. Samarbeid for å nå målene" ID="1e8be560-6d63-4d88-ae15-f493fad39347" SourceTermId="1e8be560-6d63-4d88-ae15-f493fad39347">
@@ -367,7 +367,7 @@
                                         <pnp:Label Language="1033" Value="17. Partnership for the goals" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                     <pnp:LocalCustomProperties>
-                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/2316c9b283a9e78a2d705cee4df3dc1d0d2302e5/assets/icons/UnCooperation.svg" />
+                                        <pnp:Property Key="IkonUrl" Value="https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/a569f27b8fb2b0ef0366a4725fb626af9a41a57c/assets/icons/Un17Cooperation.svg" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                             </pnp:Terms>
