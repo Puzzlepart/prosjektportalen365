@@ -1,13 +1,7 @@
 import React, { FC } from 'react'
+import { Tooltip } from '@fluentui/react-components'
 import { useUnSustainabilityGoals } from './useUnSustainabilityGoals'
 import { useProjectInformationContext } from '../context'
-
-/* Todo
-Første draft for fetche ikon url fra Termstore.
-Implementer fetching i andre komponenter.
-Sannsynligvis flyttes til shared.
-Mye, mye rydding.
-*/
 
 export interface UnSustainabilityGoalsProps {
   showLabels?: boolean
@@ -21,31 +15,48 @@ export const UnSustainabilityGoals: FC<UnSustainabilityGoalsProps> = ({
   const { UnSustGoals, customProperties } = useUnSustainabilityGoals()
   const context = useProjectInformationContext()
   const getGoalIcon = (label: string) => {
-    const iconUrl = customProperties[label]?.IconUrl || customProperties[label]?.Ikon || customProperties[label]?.ikon || customProperties[label]?.icon;
-    if (iconUrl) {
-      const normalizedIconUrl = (() => {
-        const githubBlobMatch = iconUrl.match(/^https:\/\/github\.com\/([^\/]+\/[^\/]+)\/blob\/(.+)$/i)
-        if (githubBlobMatch) {
-          return `https://raw.githubusercontent.com/${githubBlobMatch[1]}/refs/heads/${githubBlobMatch[2]}`
-        }
-        return iconUrl.replace(/^https:\/\/github\.com\//i, 'https://raw.githubusercontent.com/')
-      })()
+    const iconUrl = customProperties[label]?.IkonUrl;
+    const iconContent = iconUrl ? (
+      <img
+        src={iconUrl}
+        alt={`UN Goal: ${label}`}
+        style={{
+          width: `${context.props.iconSize}px`,
+          height: `${context.props.iconSize}px`,
+          margin: '4px',
+          flexShrink: 0
+        }}
+      />
+    ) : (
+      <span style={{ margin: '4px', fontSize: '12px', display: 'inline-flex' }}>{label}</span>
+    )
 
-      return (
-        <img
-          src={normalizedIconUrl}
-          alt={`UN Goal: ${label}`}
-          title={label}
-          style={{
-            width: `${context.props.iconSize}px`,
-            height: `${context.props.iconSize}px`,
-            margin: '4px',
-            flexShrink: 0
-          }}
-        />
-      );
-    }
-    return <span style={{margin: '4px', fontSize: '12px'}}>{label}</span>;
+    return (
+      <Tooltip
+        withArrow
+        relationship='description'
+        content={
+          <div
+            style={{
+              padding: '16px',
+              maxWidth: '300px',
+              backgroundColor: 'white',
+              border: '1px solid rgba(0, 0, 0, 0.16)',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.12)',
+              borderRadius: '6px',
+              color: 'rgba(0, 0, 0, 0.87)',
+              fontSize: '14px'
+            }}
+          >
+            {label}
+          </div>
+        }
+      >
+        <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', cursor: 'default' }}>
+          {iconContent}
+        </span>
+      </Tooltip>
+    )
   }
 
   return (
