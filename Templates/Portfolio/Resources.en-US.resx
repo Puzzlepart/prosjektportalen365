@@ -905,7 +905,7 @@
     <value>Overview</value>
   </data>
   <data name="ClientSidePages_ProgramProjectTimeline_PageName" xml:space="preserve">
-    <value>Tidslinje.aspx</value>
+    <value>Timeline.aspx</value>
   </data>
   <data name="ClientSidePages_ProgramProjectTimeline_Title" xml:space="preserve">
     <value>Program Timeline</value>

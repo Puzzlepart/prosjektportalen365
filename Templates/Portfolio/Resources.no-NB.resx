@@ -905,7 +905,7 @@
     <value>Oversikt</value>
   </data>
   <data name="ClientSidePages_ProgramProjectTimeline_PageName" xml:space="preserve">
-    <value>Programtidslinje.aspx</value>
+    <value>Tidslinje.aspx</value>
   </data>
   <data name="ClientSidePages_ProgramProjectTimeline_Title" xml:space="preserve">
     <value>Programtidslinje</value>
