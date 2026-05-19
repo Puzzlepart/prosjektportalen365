@@ -861,6 +861,7 @@
                                 {
                                     "Id": "{{ControlId_ProjectTimelineWebPart}}",
                                     "Properties": {
+                                        "title": "{{ClientSidePages_ProgramProjectTimeline_Title}}",
                                         "listName": "{{Lists_TimelineContent_Title}}",
                                         "showTimeline": true,
                                         "showTimelineListCommands": true,
@@ -1368,7 +1369,7 @@
                     "AdditionalSettings": {
                         "RowLimit": 30,
                         "Paged": true,
-                        "ViewQuery": ""
+                        "ViewQuery": "<OrderBy><FieldRef Name='LinkFilename' /></OrderBy>"
                     }
                 },
                 {
@@ -1383,7 +1384,7 @@
                     "AdditionalSettings": {
                         "RowLimit": 30,
                         "Paged": true,
-                        "ViewQuery": "",
+                        "ViewQuery": "<OrderBy><FieldRef Name='LinkFilename' /></OrderBy>",
                         "Scope": 1
                     }
                 }
