@@ -510,22 +510,32 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   }
 
   public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationModel[]) {
-    const timelineItems = await this._sp.web.lists
-      .getByTitle(resource.Lists_TimelineContent_Title)
-      .items.select(
-        'Title',
-        'GtTimelineTypeLookup/Title',
-        'GtStartDate',
-        'GtEndDate',
-        'GtBudgetTotal',
-        'GtCostsTotal',
-        'GtDescription',
-        'GtTag',
-        'GtSiteIdLookup/Title',
-        'GtSiteIdLookup/GtSiteId'
-      )
-      .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
-      .getAll()
+    const baseFields = [
+      'Title',
+      'GtTimelineTypeLookup/Title',
+      'GtStartDate',
+      'GtEndDate',
+      'GtBudgetTotal',
+      'GtCostsTotal',
+      'GtDescription',
+      'GtSiteIdLookup/Title',
+      'GtSiteIdLookup/GtSiteId'
+    ]
+
+    let timelineItems: any[]
+    try {
+      timelineItems = await this._sp.web.lists
+        .getByTitle(resource.Lists_TimelineContent_Title)
+        .items.select(...baseFields, 'GtTag')
+        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
+        .getAll()
+    } catch {
+      timelineItems = await this._sp.web.lists
+        .getByTitle(resource.Lists_TimelineContent_Title)
+        .items.select(...baseFields)
+        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
+        .getAll()
+    }
 
     return timelineItems
       .map((item) => {

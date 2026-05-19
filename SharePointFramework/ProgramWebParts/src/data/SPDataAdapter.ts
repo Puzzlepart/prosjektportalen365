@@ -472,24 +472,32 @@ export class SPDataAdapter
   }
 
   public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationModel[]) {
-    const [timelineItems] = await Promise.all([
-      this.portalDataService.web.lists
+    const baseFields = [
+      'Title',
+      'GtTimelineTypeLookup/Title',
+      'GtStartDate',
+      'GtEndDate',
+      'GtBudgetTotal',
+      'GtCostsTotal',
+      'GtDescription',
+      'GtSiteIdLookup/Title',
+      'GtSiteIdLookup/GtSiteId'
+    ]
+
+    let timelineItems: any[]
+    try {
+      timelineItems = await this.portalDataService.web.lists
         .getByTitle(resource.Lists_TimelineContent_Title)
-        .items.select(
-          'Title',
-          'GtTimelineTypeLookup/Title',
-          'GtStartDate',
-          'GtEndDate',
-          'GtBudgetTotal',
-          'GtCostsTotal',
-          'GtDescription',
-          'GtTag',
-          'GtSiteIdLookup/Title',
-          'GtSiteIdLookup/GtSiteId'
-        )
+        .items.select(...baseFields, 'GtTag')
         .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
         .getAll()
-    ])
+    } catch {
+      timelineItems = await this.portalDataService.web.lists
+        .getByTitle(resource.Lists_TimelineContent_Title)
+        .items.select(...baseFields)
+        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
+        .getAll()
+    }
 
     return timelineItems
       .map((item) => {
