@@ -1,7 +1,7 @@
 import { sortBy } from "underscore"
 import { useProjectInformationContext } from "../context"
 import React from "react"
-import { ITermStore, ITermSet, ITerm, ITermGroup } from '@pnp/sp/taxonomy'
+import { ITerm } from '@pnp/sp/taxonomy'
 
 
 type ITermWithLocalProperties = ITerm & {
