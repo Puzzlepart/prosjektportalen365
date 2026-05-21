@@ -36,6 +36,8 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Rettet en feil i `Bestillingsportalen`-app hvor `DefaultHub` ble sammenlignet med gjeldende hub uten å ta hensyn til store/små bokstaver og klammeparenteser (`{}`). Dette kunne føre til at meldingen om at området knyttes til en annen hub ble vist selv om det var samme hub, og at hub-ID-en ble lagret i uensartet format
 - Rettet en feil i `Bestillingsportalen`-app hvor hubfeltet fortsatte å vise forrige hub dersom brukeren byttet områdetype etter at appen var åpnet. Verdien som ble lagret var riktig, men visningen var utdatert
 - Rettet en feil i `Bestillingsportalen`-app hvor prosjektinformasjonen som opprettes ved bestilling av underområde ble lagt i gjeldende hub selv om områdetypen peker på en annen hub
+- Rettet en feil i `Dynamisk Liste` hvor Ja/Nei verdier alltid viser som "Nei" [#1747](https://github.com/Puzzlepart/prosjektportalen365/pull/1747)
+- Rettet en feil i `Aggregert oversikt` hvor kolonnene i visningene ikke ble oppdatert ved endring av visning [#1751](https://github.com/Puzzlepart/prosjektportalen365/pull/1751)
 
 ### Merk
 
