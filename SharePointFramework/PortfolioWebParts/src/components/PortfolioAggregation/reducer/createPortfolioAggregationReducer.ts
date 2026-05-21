@@ -113,7 +113,8 @@ export const createPortfolioAggregationReducer = (
         return
       }
 
-      let selectedColumns = props.columns ?? []
+      const viewColumns = payload.dataSource?.columns ?? []
+      let selectedColumns = !_.isEmpty(viewColumns) ? viewColumns : (props.columns ?? [])
 
       let allColumnsForCategory = payload.columns.map((c) => {
         const column = c.setData({
@@ -357,7 +358,6 @@ export const createPortfolioAggregationReducer = (
     },
     [START_FETCH.type]: (state) => {
       state.loading = true
-      state.isChangingView = true
     },
     [EXECUTE_SEARCH.type]: (state, { payload }: ReturnType<typeof EXECUTE_SEARCH>) => {
       state.searchTerm = payload
