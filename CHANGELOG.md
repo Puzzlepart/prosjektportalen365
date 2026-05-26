@@ -11,6 +11,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 ### Forbedringer
 
 - Lagt til konfigurerbar standard tidsramme (`Standard startdato` og `Standard sluttdato`) i egenskapspanelet for `Prosjekttidslinje`-webdelen i porteføljen, slik at administrator kan velge hvor langt tilbake og frem i tid tidslinjen skal vises som standard
+- Lagt til mulighet for å ytterligere ekskludere områdetyper i egenskapspanelet for `Bestillingsportalen`-skjema, slik at administrator kan skjule enkelte områdetyper fra brukerne per instans av bestillingsskjemaet.
 - Forbedret visning av termsett-/taksonomifelt i aggregerte oversikter. Verdier fra søke-egenskaper med prefix `owstaxId` (f.eks. `owstaxIdGtProjectPhase`) vises nå som rene etiketter i stedet for rå søkeresultatformat med GUID-er, og flerverdier vises som separate merker (`tags`)
 - Overgang til `sp-js-provisioning` `1.3.8` for malbasert opprettelse og oppdatering av innholdstyper med faste ID-er. De 15 site script-filene som kun opprettet tomme innholdstyper er fjernet fra releasepakken, slik at innholdstypene forvaltes gjennom JSON-malene. Eksisterende installasjoner med eldre content type-site scripts kan fortsatt oppgraderes uten egen opprydding av disse site scriptene. [#1744](https://github.com/Puzzlepart/prosjektportalen365/issues/1744)
 

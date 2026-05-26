@@ -332,6 +332,8 @@ declare interface IPortfolioWebPartsStrings {
     ProjectAreaType: string
     VivaEngageCommunityType: string
     MicrosoftTeamsTeamType: string
+    ExcludedTypesFieldLabel: string
+    ExcludedTypesFieldDescription: string
   },
   NotSpecifiedText: string
   Idea: {

@@ -272,7 +272,9 @@ define([], function () {
       ReadOnlyGroupLogicFieldLabel: "Require read-only group for internal channel",
       ProjectAreaType: "Project area",
       VivaEngageCommunityType: "Viva Engage Community",
-      MicrosoftTeamsTeamType: "Microsoft Teams Team"
+      MicrosoftTeamsTeamType: "Microsoft Teams Team",
+      ExcludedTypesFieldLabel: "Excluded site types",
+      ExcludedTypesFieldDescription: "Select site types that should be hidden from users in this web part."
     },
     Aria: {
       MenuOverflowCount: '{0} more items',

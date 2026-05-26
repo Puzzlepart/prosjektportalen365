@@ -333,6 +333,8 @@ define([], function () {
       ProjectAreaType: 'Prosjektområde',
       VivaEngageCommunityType: 'Viva Engage felleskap',
       MicrosoftTeamsTeamType: 'Microsoft Teams Team',
+      ExcludedTypesFieldLabel: 'Ekskluderte områdetyper',
+      ExcludedTypesFieldDescription: 'Velg områdetyper som skal skjules for brukere i denne webdelen.',
     },
     NotSpecifiedText: 'Ikke angitt',
     Idea: {

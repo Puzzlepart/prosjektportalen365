@@ -23,6 +23,7 @@ import {
   PropertyFieldCollectionData,
   CustomCollectionFieldType
 } from '@pnp/spfx-property-controls/lib/PropertyFieldCollectionData'
+import { PropertyFieldMultiSelect } from '@pnp/spfx-property-controls/lib/PropertyFieldMultiSelect'
 import { getDefaultFields } from 'components/ProjectProvision/getDefaultFields'
 import { getDefaultTypeFieldConfigurations } from 'components/ProjectProvision/getFieldsForType'
 import * as React from 'react'
@@ -428,6 +429,18 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
                       defaultValue: 1
                     }
                   ]
+                }),
+                PropertyFieldMultiSelect('excludedTypes', {
+                  key: 'excludedTypes',
+                  label: strings.Provision.ExcludedTypesFieldLabel,
+                  options: this._provisionTypes.map((type) => ({
+                    key: type.key,
+                    text: type.text
+                  })),
+                  selectedKeys: this.properties.excludedTypes ?? []
+                }),
+                PropertyPaneLabel('excludedTypesLabel', {
+                  text: strings.Provision.ExcludedTypesFieldDescription
                 }),
                 PropertyFieldCollectionData('typeFieldConfigurations', {
                   key: 'typeFieldConfigurations',

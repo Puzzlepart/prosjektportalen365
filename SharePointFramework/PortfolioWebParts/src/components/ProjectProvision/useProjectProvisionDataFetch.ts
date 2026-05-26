@@ -72,10 +72,11 @@ export function useProjectProvisionDataFetch(
                 settings,
                 types: types.filter(
                   (type) =>
-                    !type.visibleTo ||
-                    type.visibleTo?.some((user) =>
-                      user?.EMail?.includes(props?.pageContext?.user?.loginName)
-                    )
+                    !props.excludedTypes?.includes(type.title) &&
+                    (!type.visibleTo ||
+                      type.visibleTo?.some((user) =>
+                        user?.EMail?.includes(props?.pageContext?.user?.loginName)
+                      ))
                 ),
                 siteTemplates,
                 teamTemplates,

@@ -53,6 +53,7 @@ export interface IProjectProvisionProps extends IBaseComponentProps {
   isTeamsContext?: boolean
   fields?: IProvisionField[]
   typeFieldConfigurations?: ITypeFieldConfiguration[]
+  excludedTypes?: string[]
   debugMode?: boolean
 
   // Other
