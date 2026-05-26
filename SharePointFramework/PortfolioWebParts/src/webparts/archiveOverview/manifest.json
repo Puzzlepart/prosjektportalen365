@@ -1,0 +1,30 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "f4a7e2c1-d8b3-4f5e-9a6b-7c8d0e1f2a3b",
+  "alias": "ArchiveOverviewWebPart",
+  "componentType": "WebPart",
+  "version": "1.13.1",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "hiddenFromToolbox": false,
+  "supportsFullBleed": true,
+  "supportedHosts": [
+    "SharePointWebPart"
+  ],
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": {
+        "default": "Other"
+      },
+      "title": {
+        "default": "Archive"
+      },
+      "description": {
+        "default": " "
+      },
+      "officeFabricIconFontName": "Archive",
+      "properties": {}
+    }
+  ]
+}

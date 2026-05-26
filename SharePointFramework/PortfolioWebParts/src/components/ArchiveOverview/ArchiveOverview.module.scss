@@ -1,0 +1,351 @@
+@import "~@fluentui/react/dist/sass/References.scss";
+
+// ── Root ──────────────────────────────────────────────
+.root {
+  display: flex;
+  flex-direction: row;
+  background: #faf9f8;
+  font-family: var(--fontFamilyBase);
+  min-height: 400px;
+}
+
+// ── Left nav sidebar ──────────────────────────────────
+.navSidebar {
+  width: 160px;
+  flex-shrink: 0;
+ // background: #ffffff;
+ // border-right: 1px solid #edebe9;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+}
+
+.navItem {
+  :global(.fui-NavItem) {
+    background: transparent;
+    border-radius: 8px;
+    color: #333;
+    margin-bottom: 4px;
+  }
+
+  :global(.fui-NavItem:hover) {
+    background: #f3f2f1;
+  }
+
+  :global(.fui-NavItem[data-selected='true']) {
+    background: #a9aaab;
+    font-weight: 600;
+  }
+}
+
+
+.navFooter {
+  margin-top: auto;
+  border-top: 1px solid #edebe9;
+  padding-top: 4px;
+}
+
+// ── Main content area ─────────────────────────────────
+.content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+// ── Header ────────────────────────────────────────────
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+ // background: #ffffff;
+ // border-bottom: 1px solid #edebe9;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #0c0d0c;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+// ── Body grid ─────────────────────────────────────────
+.body {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 20px;
+  padding: 20px 24px;
+  align-items: start;
+}
+
+.mainColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+// ── Generic section card ───────────────────────────────
+.section {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 18px 20px;
+  border: 1px solid #edebe9;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.sideSection {
+  background: #ffffff;
+  padding: 18px 20px;
+  border: 1px solid #edebe9;
+  border-bottom: none;
+
+  &:first-child {
+    border-radius: 8px 8px 0 0;
+  }
+
+  &:last-child {
+    border-bottom: 1px solid #edebe9;
+    border-radius: 0 0 8px 8px;
+  }
+}
+
+// ── Pending cards ─────────────────────────────────────
+.pendingGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+
+.card {
+  border: 1px solid #edebe9;
+  border-radius: 8px;
+  padding: 16px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cardNumber {
+  font-size: 40px;
+  font-weight: 700;
+  color: #e65e00;
+  line-height: 1.1;
+  margin: 2px 0;
+}
+
+.cardMeta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #605e5c;
+  flex-wrap: wrap;
+}
+
+.cardBtn {
+  margin-top: 8px;
+  align-self: flex-start;
+}
+
+// placeholder
+.placeholderCard {
+  border-radius: 8px;
+  min-height: 80px;
+}
+
+// ── Project table ─────────────────────────────────────
+.projectTable {
+  width: 100%;
+  border-collapse: collapse;
+
+  th {
+    text-align: left;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #605e5c;
+    border-bottom: 1px solid #edebe9;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 9px 12px;
+    border-bottom: 1px solid #f3f2f1;
+    vertical-align: middle;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  tbody tr:hover td {
+    background: #faf9f8;
+  }
+}
+
+.projectCell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.projectIcon {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.activityCell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.activityBarsWrap {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 20px;
+  width: 38px;
+}
+
+.activityBar {
+  flex: 1;
+  border-radius: 2px;
+  min-height: 4px;
+}
+
+.tableFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #f3f2f1;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.activityLegend {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px solid #f3f2f1;
+  flex-wrap: wrap;
+  color: #605e5c;
+}
+
+.legendEntry {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  .activityBarsWrap {
+    height: 14px;
+    width: 28px;
+  }
+}
+
+// ── Donut chart ───────────────────────────────────────
+.donutContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.statusLegend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.statusLegendRow {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.legendDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legendLabel {
+  flex: 1;
+  font-size: 13px;
+}
+
+.legendCount {
+  font-size: 13px;
+  font-weight: 600;
+  color: #242424;
+}
+
+.legendPct {
+  font-size: 12px;
+  color: #605e5c;
+  min-width: 52px;
+  text-align: right;
+}
+
+// ── Quick stats ───────────────────────────────────────
+.quickGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 12px 0;
+}
+
+.quickItem {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.quickIcon {
+  color: #605e5c;
+  margin-bottom: 2px;
+}
+
+.quickValue {
+  font-size: 26px;
+  font-weight: 700;
+  color: #242424;
+  line-height: 1;
+}
+
+.deltaGreen {
+  font-size: 12px;
+  color: #107c10;
+}
+
+.deltaRed {
+  font-size: 12px;
+  color: #d13438;
+}
