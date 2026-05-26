@@ -22,6 +22,7 @@ export const DATA_FETCHED = createAction<{
   currentView: PortfolioOverviewView
   groupBy: ProjectColumn
   managedProperties: string[]
+  isUserInPortfolioManagerGroup: boolean
 }>('DATA_FETCHED')
 
 /**

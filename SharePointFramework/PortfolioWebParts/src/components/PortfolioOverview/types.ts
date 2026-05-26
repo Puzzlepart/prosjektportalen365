@@ -285,6 +285,13 @@ export interface IPortfolioOverviewState
    * Available managed properties for the current search query
    */
   managedProperties?: string[]
+
+  /**
+   * Whether the current user is a member of the Portfolio Insight site group.
+   * When true, the project information panel button is shown in `TitleColumn`
+   * even for projects where the user has no site access.
+   */
+  isUserInPortfolioManagerGroup?: boolean
 }
 
 export interface IPortfolioOverviewHashState {

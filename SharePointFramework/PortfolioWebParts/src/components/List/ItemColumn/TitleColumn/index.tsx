@@ -3,6 +3,7 @@ import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/Pr
 import { SiteContext } from 'pp365-shared-library'
 import React, { FC, useContext } from 'react'
 import { ListContext } from '../../context'
+import { usePortfolioOverviewContext } from '../../../PortfolioOverview/context'
 import { ITitleColumnProps } from './types'
 import { Text, Button, Link, Tooltip } from '@fluentui/react-components'
 import {
@@ -23,9 +24,41 @@ const Icons = {
 
 export const TitleColumn: FC<ITitleColumnProps> = (props) => {
   const context = useContext(ListContext)
+  const portfolioOverviewContext = usePortfolioOverviewContext()
   const url = props.item?.Path || props.item?.SPWebUrl
+  const isUserInPortfolioManagerGroup =
+    portfolioOverviewContext?.state?.isUserInPortfolioManagerGroup ?? false
+  const renderProjectInformationPanel = context?.props?.renderTitleProjectInformationPanel
 
   if (!url) {
+    if (renderProjectInformationPanel && isUserInPortfolioManagerGroup) {
+      return (
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <ProjectInformationPanel
+            {...SiteContext.create(context.props.webPartContext, props.item.SiteId, url)}
+            title={props.item.Title}
+            page='Portfolio'
+            hideAllActions={true}
+            onRenderToggleElement={(onToggle) => (
+              <Tooltip
+                content={<>{strings.ProjectInformationPanelButton}</>}
+                relationship='description'
+                withArrow
+              >
+                <Button
+                  appearance='transparent'
+                  size='small'
+                  icon={<Icons.PanelRight />}
+                  onClick={onToggle}
+                />
+              </Tooltip>
+            )}
+          >
+            <Text size={200}>{props.item.Title}</Text>
+          </ProjectInformationPanel>
+        </div>
+      )
+    }
     return (
       <span>
         <Text size={200}>{props.item.Title}</Text>
@@ -40,7 +73,7 @@ export const TitleColumn: FC<ITitleColumnProps> = (props) => {
       </span>
     )
   }
-  if (!context?.props?.renderTitleProjectInformationPanel) {
+  if (!renderProjectInformationPanel) {
     return (
       <Link href={url} target='_blank' rel='noopener noreferrer'>
         {props.item.Title}

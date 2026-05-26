@@ -6,6 +6,7 @@ import _ from 'lodash'
 import { PortfolioOverviewView } from 'pp365-shared-library/lib/models'
 import { parseUrlHash } from 'pp365-shared-library/lib/util/parseUrlHash'
 import { useEffect } from 'react'
+import resource from 'SharedResources'
 import { IPortfolioOverviewContext } from '../context'
 import { DATA_FETCH_ERROR, DATA_FETCHED, STARTING_DATA_FETCH } from '../reducer'
 import { PortfolioOverviewErrorMessage } from '../types'
@@ -78,32 +79,30 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
         context.props.portfolios &&
         context.props.portfolios.length > 1
 
-      let items: any[]
-      let managedProperties: string[]
+      const fetchViewData = shouldFetchMerged
+        ? context.props.dataAdapter.fetchMergedViewData(
+            currentView,
+            context.props.portfolios,
+            context.props.configuration
+          )
+        : context.props.isParentProject
+        ? context.props.dataAdapter.fetchDataForViewBatch(
+            currentView,
+            context.props.configuration,
+            context.props.configuration.hubSiteId
+          )
+        : context.props.dataAdapter.fetchDataForView(
+            currentView,
+            context.props.configuration,
+            context.props.configuration.hubSiteId
+          )
 
-      if (shouldFetchMerged) {
-        const result = await context.props.dataAdapter.fetchMergedViewData(
-          currentView,
-          context.props.portfolios,
-          context.props.configuration
-        )
-        items = result.items
-        managedProperties = result.managedProperties
-      } else {
-        const result = context.props.isParentProject
-          ? await context.props.dataAdapter.fetchDataForViewBatch(
-              currentView,
-              context.props.configuration,
-              context.props.configuration.hubSiteId
-            )
-          : await context.props.dataAdapter.fetchDataForView(
-              currentView,
-              context.props.configuration,
-              context.props.configuration.hubSiteId
-            )
-        items = result.items
-        managedProperties = result.managedProperties
-      }
+      const [{ items, managedProperties }, isUserInPortfolioManagerGroup] = await Promise.all([
+        fetchViewData,
+        context.props.dataAdapter.isUserInGroup?.(
+          resource.Security_SiteGroup_PortfolioInsight_Title
+        ) ?? Promise.resolve(false)
+      ])
 
       let groupBy = currentView.groupBy
       if (hashState.has('groupBy') && !groupBy) {
@@ -129,7 +128,8 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
           items,
           currentView,
           groupBy,
-          managedProperties
+          managedProperties,
+          isUserInPortfolioManagerGroup
         })
       )
     } catch (error) {
