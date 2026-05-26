@@ -2,6 +2,14 @@
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
   "version": "2.0",
   "bundles": {
+    "archive-overview-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/archiveOverview/index.js",
+          "manifest": "./src/webparts/archiveOverview/manifest.json"
+        }
+      ]
+    },
     "latest-projects-web-part": {
       "components": [
         {
