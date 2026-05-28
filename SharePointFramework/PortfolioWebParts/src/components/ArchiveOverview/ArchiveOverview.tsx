@@ -7,6 +7,7 @@ import {
   IdPrefixProvider,
   Nav,
   NavItem,
+  Spinner,
   Subtitle2,
   Text,
   Title3,
@@ -31,108 +32,17 @@ import { customLightTheme } from 'pp365-shared-library'
 import React, { FC, useState } from 'react'
 import styles from './ArchiveOverview.module.scss'
 import { IArchiveOverviewProps } from './types'
+import {
+  ActivityLevel,
+  IArchiveStatusEntry,
+  IProjectSummary,
+  IQuickStat,
+  useArchiveData
+} from './useArchiveData'
 
 // ─────────────────────────────────────────────────────
-// Placeholder data
+// ActivityBars — sparkline-style bar indicator
 // ─────────────────────────────────────────────────────
-
-const PENDING = {
-  toArchive: { count: 11, docs: 7, lists: 4 },
-  failed: { count: 2, docs: 1, lists: 1 }
-}
-
-const ARCHIVE_STATUS = [
-  { label: 'Arkivert', count: 132, percent: 66.7, color: '#107C10' },
-  { label: 'Til arkiv', count: 42, percent: 21.2, color: '#0078D4' },
-  { label: 'Feilet', count: 14, percent: 7.1, color: '#D13438' },
-  { label: 'Advarsel', count: 10, percent: 5.0, color: '#FFB900' }
-]
-const ARCHIVE_TOTAL = 198
-
-const PROJECTS = [
-  {
-    id: 1,
-    name: 'Byutvikling Sentrum',
-    color: '#107C10',
-    lastArchived: 'i dag, 11:15',
-    activity: 'high' as const,
-    status: 'updated' as const,
-    nextArchive: '12. mai 2026'
-  },
-  {
-    id: 2,
-    name: 'Kulturhusprosjektet',
-    color: '#0078D4',
-    lastArchived: 'i går, 14:32',
-    activity: 'medium' as const,
-    status: 'updated' as const,
-    nextArchive: '13. mai 2026'
-  },
-  {
-    id: 3,
-    name: 'Skolebygg Planfase',
-    color: '#7719AA',
-    lastArchived: '9. mai 2026',
-    activity: 'medium' as const,
-    status: 'updated' as const,
-    nextArchive: '16. mai 2026'
-  },
-  {
-    id: 4,
-    name: 'Digitaliseringsprogrammet',
-    color: '#FFB900',
-    lastArchived: '3. mai 2026',
-    activity: 'low' as const,
-    status: 'warning' as const,
-    nextArchive: '20. mai 2026'
-  },
-  {
-    id: 5,
-    name: 'Idrettspark Utvikling',
-    color: '#D13438',
-    lastArchived: 'Aldri arkivert',
-    activity: 'none' as const,
-    status: 'never' as const,
-    nextArchive: '–'
-  }
-]
-
-const QUICK_STATS = [
-  {
-    icon: <DocumentRegular fontSize={18} />,
-    label: 'Dokumenter arkivert',
-    value: 132,
-    delta: '+8 denne uken',
-    positive: true
-  },
-  {
-    icon: <GridRegular fontSize={18} />,
-    label: 'Lister arkivert',
-    value: 66,
-    delta: '+5 denne uken',
-    positive: true
-  },
-  {
-    icon: <WarningRegular fontSize={18} />,
-    label: 'Feilede elementer',
-    value: 14,
-    delta: '-2 denne uken',
-    positive: true
-  },
-  {
-    icon: <WarningRegular fontSize={18} />,
-    label: 'Advarsler',
-    value: 10,
-    delta: '+1 denne uken',
-    positive: false
-  }
-]
-
-// ─────────────────────────────────────────────────────
-// ActivityBars
-// ─────────────────────────────────────────────────────
-
-type ActivityLevel = 'high' | 'medium' | 'low' | 'none'
 
 const BAR_HEIGHTS = [30, 60, 100, 65] // relative heights (%)
 
@@ -157,7 +67,7 @@ const ActivityBars: FC<{ level: ActivityLevel }> = ({ level }) => (
 )
 
 // ─────────────────────────────────────────────────────
-// DonutChartSvg
+// DonutChartSvg — custom SVG donut chart
 // ─────────────────────────────────────────────────────
 
 function polarToCartesian(cx: number, cy: number, r: number, angleDeg: number) {
@@ -187,10 +97,10 @@ function arcPath(
   ].join(' ')
 }
 
-const DonutChartSvg: FC<{
-  segments: typeof ARCHIVE_STATUS
-  total: number
-}> = ({ segments, total }) => {
+const DonutChartSvg: FC<{ segments: IArchiveStatusEntry[]; total: number }> = ({
+  segments,
+  total
+}) => {
   const cx = 85
   const cy = 85
   const outerR = 80
@@ -238,7 +148,7 @@ const DonutChartSvg: FC<{
 // StatusBadge
 // ─────────────────────────────────────────────────────
 
-const StatusBadge: FC<{ status: 'updated' | 'warning' | 'never' }> = ({ status }) => {
+const StatusBadge: FC<{ status: IProjectSummary['status'] }> = ({ status }) => {
   if (status === 'updated')
     return (
       <Badge appearance='filled' color='success' size='small'>
@@ -259,12 +169,26 @@ const StatusBadge: FC<{ status: 'updated' | 'warning' | 'never' }> = ({ status }
 }
 
 // ─────────────────────────────────────────────────────
-// ArchiveOverview
+// Quick stats icon map
 // ─────────────────────────────────────────────────────
 
-export const ArchiveOverview: FC<IArchiveOverviewProps> = () => {
+const QUICK_STAT_ICONS = [
+  <ArchiveRegular key='0' fontSize={18} />,
+  <ArrowClockwiseRegular key='1' fontSize={18} />,
+  <DocumentRegular key='2' fontSize={18} />,
+  <WarningRegular key='3' fontSize={18} />
+]
+
+// ─────────────────────────────────────────────────────
+// ArchiveOverview — main component
+// ─────────────────────────────────────────────────────
+
+export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
   const fluentProviderId = useId('fp-archive-overview')
   const [selectedNav, setSelectedNav] = useState<string>('oversikt')
+
+  const { loading, error, pending, archiveStatus, archiveTotal, projects, quickStats } =
+    useArchiveData(props)
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
@@ -273,7 +197,6 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = () => {
           {/* ── Left nav ── */}
           <nav className={styles.navSidebar}>
             <Nav
-              className={styles.navItem}
               selectedValue={selectedNav}
               onNavItemSelect={(_ev, data) => setSelectedNav(data.value as string)}
             >
@@ -319,7 +242,7 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = () => {
               </div>
               <div className={styles.headerRight}>
                 <Button appearance='subtle' icon={<ArrowClockwiseRegular />} size='small'>
-                  Sist oppdatert: i dag, 11:28
+                  {loading ? 'Laster...' : 'Oppdater'}
                 </Button>
                 <Divider vertical style={{ height: 20, margin: '0 4px' }} />
                 <Button
@@ -328,135 +251,197 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = () => {
                   iconPosition='before'
                   size='small'
                 >
-                  Siste 30 dager
+                  Alle elementer
                 </Button>
               </div>
             </div>
 
-            {/* ── Body ── */}
-            <div className={styles.body}>
-              {/* ══ Left column ══ */}
-              <div className={styles.mainColumn}>
-                {/* Pending */}
-                <div className={styles.section}>
-                  <div className={styles.sectionHeader}>
-                    <Subtitle2>Pending</Subtitle2>
+            {/* ── Loading / Error / Body ── */}
+            {loading ? (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '60px 24px'
+                }}
+              >
+                <Spinner label='Henter arkivdata...' />
+              </div>
+            ) : error ? (
+              <div style={{ padding: '24px', color: '#D13438' }}>
+                <Text weight='semibold'>Kunne ikke hente arkivdata</Text>
+                <br />
+                <Caption1>{error.message}</Caption1>
+              </div>
+            ) : (
+              <div className={styles.body}>
+                {/* ══ Left column ══ */}
+                <div className={styles.mainColumn}>
+                  {/* Pending */}
+                  <div className={styles.section}>
+                    <div className={styles.sectionHeader}>
+                      <Subtitle2>Pending</Subtitle2>
+                    </div>
+
+                    <div className={styles.pendingGrid}>
+                      {/* Til arkivering */}
+                      <div className={styles.card}>
+                        <Text size={300} weight='semibold'>
+                          Til arkivering
+                        </Text>
+                        <div className={styles.cardNumber}>{pending.toArchive.count}</div>
+                        <Caption1 style={{ color: '#605e5c' }}>
+                          Disse elementene er klare for arkivering.
+                        </Caption1>
+                        <Button appearance='outline' size='small' className={styles.cardBtn}>
+                          Se detaljer
+                        </Button>
+                      </div>
+
+                      {/* Feilet arkivering */}
+                      <div className={styles.card}>
+                        <Text size={300} weight='semibold'>
+                          Feilet arkivering
+                        </Text>
+                        <div className={styles.cardNumber}>{pending.failed.count}</div>
+                        <Caption1 style={{ color: '#605e5c' }}>
+                          Disse elementene kunne ikke arkiveres.
+                        </Caption1>
+                        <Button appearance='outline' size='small' className={styles.cardBtn}>
+                          Se detaljer
+                        </Button>
+                      </div>
+
+                      {/* Placeholder */}
+                      <div className={styles.placeholderCard} />
+                    </div>
                   </div>
 
-                  <div className={styles.pendingGrid}>
-                    {/* Til arkivering */}
-                    <div className={styles.card}>
-                      <Text size={300} weight='semibold'>
-                        Til arkivering
-                      </Text>
-                      <div className={styles.cardNumber}>{PENDING.toArchive.count}</div>
-                      <div className={styles.cardMeta}>
-                        <DocumentRegular fontSize={14} />
-                        <Caption1>{PENDING.toArchive.docs} dokumenter</Caption1>
-                        <Caption1>•</Caption1>
-                        <GridRegular fontSize={14} />
-                        <Caption1>{PENDING.toArchive.lists} lister</Caption1>
-                      </div>
-                      <Caption1 style={{ color: '#605e5c' }}>
-                        Disse elementene er klare for arkivering.
-                      </Caption1>
-                      <Button appearance='outline' size='small' className={styles.cardBtn}>
-                        Se detaljer
+                  {/* Project overview */}
+                  <div className={styles.section}>
+                    <div className={styles.sectionHeader}>
+                      <Subtitle2>Prosjektoversikt</Subtitle2>
+                    </div>
+
+                    <table className={styles.projectTable}>
+                      <thead>
+                        <tr>
+                          <th>Prosjektnavn</th>
+                          <th>Sist arkivert</th>
+                          <th>Aktivitetsnivå</th>
+                          <th>Status</th>
+                          <th>Neste arkivering</th>
+                          <th />
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {projects.map((p) => (
+                          <tr key={p.id}>
+                            <td>
+                              <div className={styles.projectCell}>
+                                <div
+                                  className={styles.projectIcon}
+                                  style={{ backgroundColor: p.color }}
+                                />
+                                <Text size={200}>{p.name}</Text>
+                              </div>
+                            </td>
+                            <td>
+                              <Caption1 style={{ color: '#605e5c' }}>{p.lastArchived}</Caption1>
+                            </td>
+                            <td>
+                              <div className={styles.activityCell}>
+                                <ActivityBars level={p.activity} />
+                                <Caption1 style={{ color: '#605e5c' }}>
+                                  {p.activity === 'high'
+                                    ? 'Høy'
+                                    : p.activity === 'medium'
+                                      ? 'Middels'
+                                      : p.activity === 'low'
+                                        ? 'Lav'
+                                        : 'Ingen aktivitet'}
+                                </Caption1>
+                              </div>
+                            </td>
+                            <td>
+                              <StatusBadge status={p.status} />
+                            </td>
+                            <td>
+                              <Caption1 style={{ color: '#605e5c' }}>{p.nextArchive}</Caption1>
+                            </td>
+                            <td>
+                              <Button
+                                appearance='subtle'
+                                icon={<MoreHorizontalRegular />}
+                                size='small'
+                              />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+
+                    {/* Table footer */}
+                    <div className={styles.tableFooter}>
+                      <Button
+                        appearance='transparent'
+                        icon={<ChevronRightRegular />}
+                        iconPosition='after'
+                        size='small'
+                        style={{ color: '#0078D4', padding: 0 }}
+                      >
+                        Se alle prosjekter
                       </Button>
                     </div>
 
-                    {/* Feilet arkivering */}
-                    <div className={styles.card}>
-                      <Text size={300} weight='semibold'>
-                        Feilet arkivering
-                      </Text>
-                      <div className={styles.cardNumber}>{PENDING.failed.count}</div>
-                      <div className={styles.cardMeta}>
-                        <DocumentRegular fontSize={14} />
-                        <Caption1>{PENDING.failed.docs} dokument</Caption1>
-                        <Caption1>•</Caption1>
-                        <GridRegular fontSize={14} />
-                        <Caption1>{PENDING.failed.lists} liste</Caption1>
-                      </div>
-                      <Caption1 style={{ color: '#605e5c' }}>
-                        Disse elementene kunne ikke arkiveres.
-                      </Caption1>
-                      <Button appearance='outline' size='small' className={styles.cardBtn}>
-                        Se detaljer
-                      </Button>
+                    {/* Activity legend */}
+                    <div className={styles.activityLegend}>
+                      <Caption1 style={{ color: '#605e5c' }}>Aktivitetsnivå:</Caption1>
+                      {(
+                        [
+                          { level: 'high', label: 'Høy' },
+                          { level: 'medium', label: 'Middels' },
+                          { level: 'low', label: 'Lav' },
+                          { level: 'none', label: 'Ingen aktivitet' }
+                        ] as { level: ActivityLevel; label: string }[]
+                      ).map((item) => (
+                        <div key={item.level} className={styles.legendEntry}>
+                          <ActivityBars level={item.level} />
+                          <Caption1 style={{ color: '#605e5c' }}>{item.label}</Caption1>
+                        </div>
+                      ))}
                     </div>
-
-                    {/* Empty placeholder */}
-                    <div className={styles.placeholderCard} />
                   </div>
                 </div>
 
-                {/* Project overview */}
-                <div className={styles.section}>
-                  <div className={styles.sectionHeader}>
-                    <Subtitle2>Prosjektoversikt</Subtitle2>
-                  </div>
-
-                  <table className={styles.projectTable}>
-                    <thead>
-                      <tr>
-                        <th>Prosjektnavn</th>
-                        <th>Sist arkivert</th>
-                        <th>Aktivitetsnivå</th>
-                        <th>Status</th>
-                        <th>Neste arkivering</th>
-                        <th />
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {PROJECTS.map((p) => (
-                        <tr key={p.id}>
-                          <td>
-                            <div className={styles.projectCell}>
-                              <div
-                                className={styles.projectIcon}
-                                style={{ backgroundColor: p.color }}
+                {/* ══ Right sidebar ══ */}
+                <div className={styles.sidebar}>
+                  {/* Arkivstatus */}
+                  <div className={styles.sideSection}>
+                    <Subtitle2>Arkivstatus</Subtitle2>
+                    {archiveStatus.length > 0 && archiveTotal > 0 ? (
+                      <div className={styles.donutContainer}>
+                        <DonutChartSvg segments={archiveStatus} total={archiveTotal} />
+                        <div className={styles.statusLegend}>
+                          {archiveStatus.map((s) => (
+                            <div key={s.label} className={styles.statusLegendRow}>
+                              <span
+                                className={styles.legendDot}
+                                style={{ backgroundColor: s.color }}
                               />
-                              <Text size={200}>{p.name}</Text>
+                              <span className={styles.legendLabel}>{s.label}</span>
+                              <span className={styles.legendCount}>{s.count}</span>
+                              <span className={styles.legendPct}>({s.percent}%)</span>
                             </div>
-                          </td>
-                          <td>
-                            <Caption1 style={{ color: '#605e5c' }}>{p.lastArchived}</Caption1>
-                          </td>
-                          <td>
-                            <div className={styles.activityCell}>
-                              <ActivityBars level={p.activity} />
-                              <Caption1 style={{ color: '#605e5c' }}>
-                                {p.activity === 'high'
-                                  ? 'Høy'
-                                  : p.activity === 'medium'
-                                    ? 'Middels'
-                                    : p.activity === 'low'
-                                      ? 'Lav'
-                                      : 'Ingen aktivitet'}
-                              </Caption1>
-                            </div>
-                          </td>
-                          <td>
-                            <StatusBadge status={p.status} />
-                          </td>
-                          <td>
-                            <Caption1 style={{ color: '#605e5c' }}>{p.nextArchive}</Caption1>
-                          </td>
-                          <td>
-                            <Button
-                              appearance='subtle'
-                              icon={<MoreHorizontalRegular />}
-                              size='small'
-                            />
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-
-                  {/* Table footer */}
-                  <div className={styles.tableFooter}>
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                      <Caption1 style={{ color: '#605e5c', display: 'block', marginTop: 12 }}>
+                        Ingen arkivdata funnet.
+                      </Caption1>
+                    )}
                     <Button
                       appearance='transparent'
                       icon={<ChevronRightRegular />}
@@ -464,97 +449,38 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = () => {
                       size='small'
                       style={{ color: '#0078D4', padding: 0 }}
                     >
-                      Se alle prosjekter
+                      Se alle elementer
                     </Button>
                   </div>
 
-                  {/* Activity legend */}
-                  <div className={styles.activityLegend}>
-                    <Caption1 style={{ color: '#605e5c' }}>Aktivitetsnivå:</Caption1>
-                    {(
-                      [
-                        { level: 'high', label: 'Høy' },
-                        { level: 'medium', label: 'Middels' },
-                        { level: 'low', label: 'Lav' },
-                        { level: 'none', label: 'Ingen aktivitet' }
-                      ] as { level: ActivityLevel; label: string }[]
-                    ).map((item) => (
-                      <div key={item.level} className={styles.legendEntry}>
-                        <ActivityBars level={item.level} />
-                        <Caption1 style={{ color: '#605e5c' }}>{item.label}</Caption1>
-                      </div>
-                    ))}
-                    <Caption1
-                      style={{ color: '#0078D4', cursor: 'pointer', marginLeft: 'auto' }}
-                    >
-                      Klikk på aktivitetsnivå for detaljer
-                    </Caption1>
-                  </div>
-                </div>
-              </div>
+                  {/* KL-assistent — reserved, empty for now */}
+                  <div className={styles.sideSection} />
 
-              {/* ══ Right sidebar ══ */}
-              <div className={styles.sidebar}>
-                {/* Arkivstatus */}
-                <div className={styles.sideSection}>
-                  <Subtitle2>Arkivstatus</Subtitle2>
-                  <div className={styles.donutContainer}>
-                    <DonutChartSvg segments={ARCHIVE_STATUS} total={ARCHIVE_TOTAL} />
-                    <div className={styles.statusLegend}>
-                      {ARCHIVE_STATUS.map((s) => (
-                        <div key={s.label} className={styles.statusLegendRow}>
-                          <span
-                            className={styles.legendDot}
-                            style={{ backgroundColor: s.color }}
-                          />
-                          <span className={styles.legendLabel}>{s.label}</span>
-                          <span className={styles.legendCount}>{s.count}</span>
-                          <span className={styles.legendPct}>({s.percent}%)</span>
+                  {/* Hurtigoversikt */}
+                  <div className={styles.sideSection}>
+                    <Subtitle2>Hurtigoversikt</Subtitle2>
+                    <div className={styles.quickGrid}>
+                      {quickStats.map((s: IQuickStat, i: number) => (
+                        <div key={i} className={styles.quickItem}>
+                          <div className={styles.quickIcon}>{QUICK_STAT_ICONS[i]}</div>
+                          <Caption1 style={{ color: '#605e5c' }}>{s.label}</Caption1>
+                          <div className={styles.quickValue}>{s.value}</div>
                         </div>
                       ))}
                     </div>
+                    <Button
+                      appearance='transparent'
+                      icon={<ChevronRightRegular />}
+                      iconPosition='after'
+                      size='small'
+                      style={{ color: '#0078D4', padding: 0 }}
+                    >
+                      Se fullstendig rapport
+                    </Button>
                   </div>
-                  <Button
-                    appearance='transparent'
-                    icon={<ChevronRightRegular />}
-                    iconPosition='after'
-                    size='small'
-                    style={{ color: '#0078D4', padding: 0 }}
-                  >
-                    Se alle elementer
-                  </Button>
-                </div>
-
-                {/* Empty placeholder */}
-                <div className={styles.sideSection} />
-
-                {/* Hurtigoversikt */}
-                <div className={styles.sideSection}>
-                  <Subtitle2>Hurtigoversikt</Subtitle2>
-                  <div className={styles.quickGrid}>
-                    {QUICK_STATS.map((s, i) => (
-                      <div key={i} className={styles.quickItem}>
-                        <div className={styles.quickIcon}>{s.icon}</div>
-                        <Caption1 style={{ color: '#605e5c' }}>{s.label}</Caption1>
-                        <div className={styles.quickValue}>{s.value}</div>
-                        <span className={s.positive ? styles.deltaGreen : styles.deltaRed}>
-                          {s.delta}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                  <Button
-                    appearance='transparent'
-                    icon={<ChevronRightRegular />}
-                    iconPosition='after'
-                    size='small'
-                    style={{ color: '#0078D4', padding: 0 }}
-                  >
-                    Se fullstendig rapport
-                  </Button>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </FluentProvider>
