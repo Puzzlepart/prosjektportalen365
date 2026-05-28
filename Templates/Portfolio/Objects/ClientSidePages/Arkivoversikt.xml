@@ -1,0 +1,9 @@
+<pnp:ClientSidePage PageName="Arkiveringsoversikt" PromoteAsNewsArticle="false" Overwrite="true" Layout="SingleWebPartAppPage" EnableComments="false" Title="Arkiveringsoversikt" xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
+    <pnp:Sections>
+        <pnp:Section Order="1" Type="OneColumn">
+            <pnp:Controls>
+                <pnp:CanvasControl WebPartType="Custom" ControlId="f4a7e2c1-d8b3-4f5e-9a6b-7c8d0e1f2a3b" Order="1" Column="1" />
+            </pnp:Controls>
+        </pnp:Section>
+    </pnp:Sections>
+</pnp:ClientSidePage>
