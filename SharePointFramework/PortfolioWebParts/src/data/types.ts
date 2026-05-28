@@ -225,6 +225,14 @@ export interface IPortfolioWebPartsDataAdapter {
   isUserInGroup?(groupName: string): Promise<boolean>
 
   /**
+   * Global settings loaded from the portal site, indexed by `GtSettingsKey`.
+   * Only populated when the adapter was configured with `loadGlobalSettings: true`
+   * (currently true for `BaseProgramWebPart`, but not for the portfolio-side
+   * `DataAdapter`). Optional so consumers can read it null-safely.
+   */
+  globalSettings?: Map<string, string>
+
+  /**
    * Fetches data for the Projecttimeline project.
    *
    * @param timelineConfig Timeline configuration

@@ -28,10 +28,15 @@ export const TitleColumn: FC<ITitleColumnProps> = (props) => {
   const url = props.item?.Path || props.item?.SPWebUrl
   const isUserInPortfolioManagerGroup =
     portfolioOverviewContext?.state?.isUserInPortfolioManagerGroup ?? false
+  const isParentProject = portfolioOverviewContext?.props?.isParentProject ?? false
+  const showChildProjectInfoInProgram =
+    portfolioOverviewContext?.state?.showChildProjectInfoInProgram ?? false
+  const showPanelButtonWithoutUrl =
+    isUserInPortfolioManagerGroup || (isParentProject && showChildProjectInfoInProgram)
   const renderProjectInformationPanel = context?.props?.renderTitleProjectInformationPanel
 
   if (!url) {
-    if (renderProjectInformationPanel && isUserInPortfolioManagerGroup) {
+    if (renderProjectInformationPanel && showPanelButtonWithoutUrl) {
       return (
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <ProjectInformationPanel

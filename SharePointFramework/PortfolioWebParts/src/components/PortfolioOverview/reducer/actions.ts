@@ -23,6 +23,7 @@ export const DATA_FETCHED = createAction<{
   groupBy: ProjectColumn
   managedProperties: string[]
   isUserInPortfolioManagerGroup: boolean
+  showChildProjectInfoInProgram: boolean
 }>('DATA_FETCHED')
 
 /**

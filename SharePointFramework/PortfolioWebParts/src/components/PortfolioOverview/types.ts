@@ -292,6 +292,14 @@ export interface IPortfolioOverviewState
    * even for projects where the user has no site access.
    */
   isUserInPortfolioManagerGroup?: boolean
+
+  /**
+   * Value of the global setting `ShowChildProjectInfoInProgram`.
+   * When true and `isParentProject` is set, the project information panel
+   * button is shown in `TitleColumn` for all child projects of a program —
+   * including those the user has no site access to.
+   */
+  showChildProjectInfoInProgram?: boolean
 }
 
 export interface IPortfolioOverviewHashState {

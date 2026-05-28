@@ -104,6 +104,12 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
         ) ?? Promise.resolve(false)
       ])
 
+      // Global toggle (default off) — only populated in program/parent context
+      // where `BaseProgramWebPart` configures `loadGlobalSettings: true`. In the
+      // flat portfolio overview `globalSettings` is undefined and this stays false.
+      const showChildProjectInfoInProgram =
+        context.props.dataAdapter.globalSettings?.get('ShowChildProjectInfoInProgram') === '1'
+
       let groupBy = currentView.groupBy
       if (hashState.has('groupBy') && !groupBy) {
         groupBy = _.find(
@@ -129,7 +135,8 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
           currentView,
           groupBy,
           managedProperties,
-          isUserInPortfolioManagerGroup
+          isUserInPortfolioManagerGroup,
+          showChildProjectInfoInProgram
         })
       )
     } catch (error) {
