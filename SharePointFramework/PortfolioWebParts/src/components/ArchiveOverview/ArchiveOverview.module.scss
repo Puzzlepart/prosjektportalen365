@@ -11,28 +11,32 @@
 
 // ── Left nav sidebar ──────────────────────────────────
 .navSidebar {
-  width: 160px;
+  width: 220px;
   flex-shrink: 0;
+  background: transparent;
   display: flex;
   flex-direction: column;
-  padding: 8px 0;
-}
+  padding: 8px 4px 8px 12px;
 
-.navItem {
   :global(.fui-NavItem) {
+    border-radius: 6px;
     background: transparent;
-    border-radius: 8px;
-    color: #333;
-    margin-bottom: 4px;
+    font-size: 14px;
+    width: 80%;
   }
 
-  :global(.fui-NavItem:hover) {
-    background: #f3f2f1;
+  :global(.fui-NavItem[aria-current='page']) {
+    background-color: rgba(0, 0, 0, 0.07) !important;
+    border-radius: 6px;
   }
 
-  :global(.fui-NavItem[data-selected='true']) {
-    background: #a9aaab;
-    font-weight: 600;
+  :global(.fui-NavItem[aria-current='false']:hover) {
+    background-color: rgba(0, 0, 0, 0.04) !important;
+    border-radius: 6px;
+  }
+
+  :global(.fui-NavItem__icon) {
+    font-size: 20px;
   }
 }
 
@@ -49,6 +53,7 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 // ── Header ────────────────────────────────────────────
@@ -75,7 +80,7 @@
 // ── Body grid ─────────────────────────────────────────
 .body {
   display: grid;
-  grid-template-columns: 1fr 360px;
+  grid-template-columns: 1fr 420px;
   gap: 20px;
   padding: 20px 24px;
   align-items: start;
@@ -84,7 +89,7 @@
 .mainColumn {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
 }
 
 .sidebar {
@@ -97,21 +102,23 @@
 .section {
   background: #ffffff;
   border-radius: 8px;
-  padding: 18px 20px;
+  padding: 12px 16px;
   border: 1px solid #edebe9;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .sectionHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 14px;
+  margin-bottom: 8px;
 }
 
 .sideSection {
   background: #ffffff;
-  padding: 18px 20px;
+  padding: 16px 20px;
   border: 1px solid #edebe9;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   border-bottom: none;
 
   &:first-child {
@@ -127,22 +134,22 @@
 // ── Pending cards ─────────────────────────────────────
 .pendingGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
 
 .card {
   border: 1px solid #edebe9;
   border-radius: 8px;
-  padding: 16px;
+  padding: 12px;
   background: #ffffff;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .cardNumber {
-  font-size: 40px;
+  font-size: 34px;
   font-weight: 700;
   color: #e65e00;
   line-height: 1.1;
@@ -162,11 +169,6 @@
   align-self: flex-start;
 }
 
-// placeholder
-.placeholderCard {
-  border-radius: 8px;
-  min-height: 80px;
-}
 
 // ── Project table ─────────────────────────────────────
 .projectTable {
@@ -175,7 +177,7 @@
 
   th {
     text-align: left;
-    padding: 6px 12px;
+    padding: 5px 10px;
     font-size: 12px;
     font-weight: 600;
     color: #605e5c;
@@ -184,7 +186,7 @@
   }
 
   td {
-    padding: 9px 12px;
+    padding: 6px 10px;
     border-bottom: 1px solid #f3f2f1;
     vertical-align: middle;
   }
@@ -242,6 +244,16 @@
   gap: 4px;
 }
 
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #f3f2f1;
+  gap: 8px;
+}
+
 .activityLegend {
   display: flex;
   align-items: center;
@@ -294,54 +306,75 @@
 
 .legendLabel {
   flex: 1;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .legendCount {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: #242424;
 }
 
 .legendPct {
-  font-size: 12px;
+  font-size: 13px;
   color: #605e5c;
-  min-width: 52px;
+  min-width: 54px;
   text-align: right;
 }
 
-// ── Quick stats ───────────────────────────────────────
-.quickGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  margin: 12px 0;
-}
-
-.quickItem {
+// ── Quick stats (row list) ─────────────────────────────
+.quickList {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  margin: 10px 0 2px;
 }
 
-.quickIcon {
+.quickRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f3f2f1;
+  cursor: pointer;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background: #faf9f8;
+    margin: 0 -4px;
+    padding-left: 4px;
+    padding-right: 4px;
+    border-radius: 4px;
+  }
+}
+
+.quickRowIcon {
   color: #605e5c;
-  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  width: 22px;
 }
 
-.quickValue {
-  font-size: 26px;
-  font-weight: 700;
+.quickRowLabel {
+  flex: 1;
+  font-size: 14px;
   color: #242424;
-  line-height: 1;
 }
 
-.deltaGreen {
-  font-size: 12px;
-  color: #107c10;
+.quickRowValue {
+  font-size: 14px;
+  font-weight: 600;
+  color: #242424;
 }
 
-.deltaRed {
-  font-size: 12px;
-  color: #d13438;
+// ── Om arkivstatus ────────────────────────────────────
+.omArkivHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #242424;
+  margin-bottom: 8px;
 }

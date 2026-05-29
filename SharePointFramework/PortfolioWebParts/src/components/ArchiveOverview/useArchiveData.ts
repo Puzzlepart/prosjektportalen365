@@ -2,7 +2,6 @@ import '@pnp/sp/items/get-all'
 import '@pnp/sp/items'
 import '@pnp/sp/lists'
 import '@pnp/sp/webs'
-import { Web } from '@pnp/sp/webs'
 import { useEffect, useState } from 'react'
 import { IArchiveOverviewProps } from './types'
 
@@ -10,8 +9,8 @@ import { IArchiveOverviewProps } from './types'
 // Constants
 // ─────────────────────────────────────────────────────
 
-const ARCHIVE_SITE_URL = 'https://q6nk.sharepoint.com/sites/prosjektportalen'
 const ARCHIVE_LIST_NAME = 'Arkiveringslogg'
+const PROJECTS_LIST_NAME = 'Prosjekter'
 
 const STATUS_MAP: Record<string, { label: string; color: string }> = {
   Arkivert: { label: 'Arkivert', color: '#107C10' },
@@ -46,6 +45,12 @@ interface IArchiveLogItem {
   GtLogStatus: string
 }
 
+interface IProjectItem {
+  Id: number
+  Title: string
+  GtSiteUrl: string
+}
+
 export type ActivityLevel = 'high' | 'medium' | 'low' | 'none'
 export type ProjectStatus = 'updated' | 'warning' | 'never'
 
@@ -54,6 +59,7 @@ export interface IProjectSummary {
   name: string
   color: string
   lastArchived: string
+  lastArchivedMs: number
   activity: ActivityLevel
   status: ProjectStatus
   nextArchive: string
@@ -95,17 +101,16 @@ export interface IArchiveData {
 // ─────────────────────────────────────────────────────
 
 function extractSiteName(url: string): string {
-  if (!url) return '(ukjent)'
+  if (!url) return ''
   const match = url.match(/\/sites\/([^/?#]+)/)
-  return match ? match[1] : url
+  return match ? match[1].toLowerCase() : url.toLowerCase()
 }
 
 function formatArchiveDate(dateStr: string): string {
   if (!dateStr) return 'Aldri arkivert'
   const date = new Date(dateStr)
   const now = new Date()
-  const diffMs = now.getTime() - date.getTime()
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+  const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24))
   const timeStr = `${date.getHours().toString().padStart(2, '0')}:${date
     .getMinutes()
     .toString()
@@ -136,100 +141,92 @@ function getProjectStatus(siteItems: IArchiveLogItem[]): ProjectStatus {
 // Data processing
 // ─────────────────────────────────────────────────────
 
-function processItems(
-  items: IArchiveLogItem[]
+function processData(
+  projectItems: IProjectItem[],
+  archiveItems: IArchiveLogItem[]
 ): Omit<IArchiveData, 'loading' | 'error'> {
-  // ── Status counts (for donut + quick stats) ──
+  // ── Build archive lookup: site name (lowercase) → items ──
+  const archiveMap = new Map<string, IArchiveLogItem[]>()
+  for (const item of archiveItems) {
+    const key = extractSiteName(item.GtLogWebUrl)
+    if (!key) continue
+    if (!archiveMap.has(key)) archiveMap.set(key, [])
+    archiveMap.get(key).push(item)
+  }
+
+  // ── Status counts (donut + quick stats) from ALL archive items ──
   const statusCounts: Record<string, number> = {}
-  for (const item of items) {
+  for (const item of archiveItems) {
     const s = item.GtLogStatus ?? 'Ukjent'
     statusCounts[s] = (statusCounts[s] ?? 0) + 1
   }
 
-  const total = items.length
+  const archiveTotal = archiveItems.length
 
   const archiveStatus: IArchiveStatusEntry[] = STATUS_ORDER.map((key) => ({
     label: STATUS_MAP[key]?.label ?? key,
     count: statusCounts[key] ?? 0,
     percent:
-      total > 0
-        ? Math.round(((statusCounts[key] ?? 0) / total) * 1000) / 10
+      archiveTotal > 0
+        ? Math.round(((statusCounts[key] ?? 0) / archiveTotal) * 1000) / 10
         : 0,
     color: STATUS_MAP[key]?.color ?? '#888'
   })).filter((s) => s.count > 0)
 
-  // ── Pending ──
   const pending: IPendingCounts = {
     toArchive: { count: statusCounts['Til arkiv'] ?? 0 },
     failed: { count: statusCounts['Feil'] ?? 0 }
   }
 
-  // ── Group by site ──
-  const siteMap = new Map<string, IArchiveLogItem[]>()
-  for (const item of items) {
-    const name = extractSiteName(item.GtLogWebUrl)
-    if (!siteMap.has(name)) siteMap.set(name, [])
-    siteMap.get(name).push(item)
-  }
+  // ── Build project summaries — one per project, all projects included ──
+  const projects: IProjectSummary[] = projectItems.map((proj, idx) => {
+    const key = extractSiteName(proj.GtSiteUrl)
+    const siteItems = archiveMap.get(key) ?? []
 
-  // ── Build project summaries ──
-  let colorIdx = 0
-  const projects: IProjectSummary[] = []
+    const latestMs =
+      siteItems.length > 0
+        ? Math.max(...siteItems.map((i) => new Date(i.Created).getTime()))
+        : 0
 
-  for (const [siteName, siteItems] of Array.from(siteMap.entries())) {
-    const sorted = [...siteItems].sort(
-      (a, b) => new Date(b.Created).getTime() - new Date(a.Created).getTime()
-    )
-    const latestDate = sorted[0]?.Created
-    const latestMs = latestDate ? new Date(latestDate).getTime() : 0
+    const latestDate = latestMs > 0 ? new Date(latestMs).toISOString() : ''
 
-    projects.push({
-      id: colorIdx + 1,
-      name: siteName,
-      color: PROJECT_COLORS[colorIdx % PROJECT_COLORS.length],
+    return {
+      id: proj.Id,
+      name: proj.Title || key || '(ukjent)',
+      color: PROJECT_COLORS[idx % PROJECT_COLORS.length],
       lastArchived: latestDate ? formatArchiveDate(latestDate) : 'Aldri arkivert',
+      lastArchivedMs: latestMs,
       activity: getActivityLevel(latestMs),
       status: getProjectStatus(siteItems),
       nextArchive: '–',
       archivedCount: siteItems.filter((i) => i.GtLogStatus === 'Arkivert').length,
       pendingCount: siteItems.filter((i) => i.GtLogStatus === 'Til arkiv').length,
       failedCount: siteItems.filter((i) => i.GtLogStatus === 'Feil').length
-    })
-    colorIdx++
-  }
+    }
+  })
 
-  // Sort: most recently archived first, never-archived last
+  // Sort by latest archive date descending; never-archived go to the bottom, then alphabetical
   projects.sort((a, b) => {
-    if (a.activity === 'none' && b.activity !== 'none') return 1
-    if (a.activity !== 'none' && b.activity === 'none') return -1
-    return 0
+    if (a.lastArchivedMs > 0 && b.lastArchivedMs > 0)
+      return b.lastArchivedMs - a.lastArchivedMs
+    if (a.lastArchivedMs > 0) return -1
+    if (b.lastArchivedMs > 0) return 1
+    return a.name.localeCompare(b.name, 'nb')
   })
 
   // ── Quick stats ──
   const quickStats: IQuickStat[] = [
-    {
-      label: 'Elementer arkivert',
-      value: statusCounts['Arkivert'] ?? 0,
-      positive: true
-    },
-    {
-      label: 'Til arkivering',
-      value: statusCounts['Til arkiv'] ?? 0,
-      positive: true
-    },
+    { label: 'Elementer arkivert', value: statusCounts['Arkivert'] ?? 0, positive: true },
+    { label: 'Til arkivering', value: statusCounts['Til arkiv'] ?? 0, positive: true },
     {
       label: 'Feilede elementer',
       value: statusCounts['Feil'] ?? 0,
       positive: (statusCounts['Feil'] ?? 0) === 0
     },
-    {
-      label: 'Elementer med advarsel',
-      value: statusCounts['Advarsel'] ?? 0,
-      positive: false
-    }
+    { label: 'Elementer med advarsel', value: statusCounts['Advarsel'] ?? 0, positive: false }
   ]
 
-  return { pending, archiveStatus, archiveTotal: total, projects, quickStats }
+  return { pending, archiveStatus, archiveTotal, projects, quickStats }
 }
 
 // ─────────────────────────────────────────────────────
@@ -252,14 +249,18 @@ export function useArchiveData(props: IArchiveOverviewProps): IArchiveData {
   useEffect(() => {
     if (!props.sp) return
 
-    const archiveWeb = Web([props.sp.web, ARCHIVE_SITE_URL])
-
-    archiveWeb.lists
-      .getByTitle(ARCHIVE_LIST_NAME)
-      .items.select('Id', 'Created', 'GtLogWebUrl', 'GtLogStatus')
-      .getAll()
-      .then((items: IArchiveLogItem[]) => {
-        setState({ loading: false, error: null, ...processItems(items) })
+    Promise.all([
+      props.sp.web.lists
+        .getByTitle(ARCHIVE_LIST_NAME)
+        .items.select('Id', 'Created', 'GtLogWebUrl', 'GtLogStatus')
+        .getAll() as Promise<IArchiveLogItem[]>,
+      props.sp.web.lists
+        .getByTitle(PROJECTS_LIST_NAME)
+        .items.select('Id', 'Title', 'GtSiteUrl')
+        .getAll() as Promise<IProjectItem[]>
+    ])
+      .then(([archiveItems, projectItems]) => {
+        setState({ loading: false, error: null, ...processData(projectItems, archiveItems) })
       })
       .catch((error: Error) => {
         setState((prev) => ({ ...prev, loading: false, error }))
