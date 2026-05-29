@@ -23,13 +23,14 @@ import {
   GridRegular,
   HistoryRegular,
   HomeRegular,
+  InfoRegular,
   MoreHorizontalRegular,
   QuestionCircleRegular,
   SettingsRegular,
   WarningRegular
 } from '@fluentui/react-icons'
 import { customLightTheme } from 'pp365-shared-library'
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import styles from './ArchiveOverview.module.scss'
 import { IArchiveOverviewProps } from './types'
 import {
@@ -183,12 +184,23 @@ const QUICK_STAT_ICONS = [
 // ArchiveOverview — main component
 // ─────────────────────────────────────────────────────
 
+const PAGE_SIZE = 5
+
 export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
   const fluentProviderId = useId('fp-archive-overview')
   const [selectedNav, setSelectedNav] = useState<string>('oversikt')
+  const [currentPage, setCurrentPage] = useState(0)
 
   const { loading, error, pending, archiveStatus, archiveTotal, projects, quickStats } =
     useArchiveData(props)
+
+  // Reset to page 1 whenever the project list changes
+  useEffect(() => {
+    setCurrentPage(0)
+  }, [projects.length])
+
+  const pageCount = Math.max(1, Math.ceil(projects.length / PAGE_SIZE))
+  const pagedProjects = projects.slice(currentPage * PAGE_SIZE, (currentPage + 1) * PAGE_SIZE)
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
@@ -220,16 +232,6 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
               </NavItem>
             </Nav>
 
-            <div className={styles.navFooter}>
-              <Nav
-                selectedValue={selectedNav}
-                onNavItemSelect={(_ev, data) => setSelectedNav(data.value as string)}
-              >
-                <NavItem icon={<QuestionCircleRegular />} value='hjelp' href='#'>
-                  Hjelp
-                </NavItem>
-              </Nav>
-            </div>
           </nav>
 
           {/* ── Main content ── */}
@@ -313,8 +315,6 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                         </Button>
                       </div>
 
-                      {/* Placeholder */}
-                      <div className={styles.placeholderCard} />
                     </div>
                   </div>
 
@@ -336,7 +336,7 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {projects.map((p) => (
+                        {pagedProjects.map((p) => (
                           <tr key={p.id}>
                             <td>
                               <div className={styles.projectCell}>
@@ -382,16 +382,27 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                       </tbody>
                     </table>
 
-                    {/* Table footer */}
-                    <div className={styles.tableFooter}>
+                    {/* Pagination */}
+                    <div className={styles.pagination}>
                       <Button
-                        appearance='transparent'
-                        icon={<ChevronRightRegular />}
-                        iconPosition='after'
+                        appearance='subtle'
                         size='small'
-                        style={{ color: '#0078D4', padding: 0 }}
+                        disabled={currentPage === 0}
+                        onClick={() => setCurrentPage((p) => p - 1)}
                       >
-                        Se alle prosjekter
+                        ‹ Forrige
+                      </Button>
+                      <Caption1 style={{ color: '#605e5c' }}>
+                        Side {currentPage + 1} av {pageCount}{' '}
+                        <span style={{ color: '#a0a0a0' }}>({projects.length} prosjekter)</span>
+                      </Caption1>
+                      <Button
+                        appearance='subtle'
+                        size='small'
+                        disabled={currentPage >= pageCount - 1}
+                        onClick={() => setCurrentPage((p) => p + 1)}
+                      >
+                        Neste ›
                       </Button>
                     </div>
 
@@ -459,15 +470,27 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                   {/* Hurtigoversikt */}
                   <div className={styles.sideSection}>
                     <Subtitle2>Hurtigoversikt</Subtitle2>
-                    <div className={styles.quickGrid}>
+                    <div className={styles.quickList}>
                       {quickStats.map((s: IQuickStat, i: number) => (
-                        <div key={i} className={styles.quickItem}>
-                          <div className={styles.quickIcon}>{QUICK_STAT_ICONS[i]}</div>
-                          <Caption1 style={{ color: '#605e5c' }}>{s.label}</Caption1>
-                          <div className={styles.quickValue}>{s.value}</div>
+                        <div key={i} className={styles.quickRow}>
+                          <div className={styles.quickRowIcon}>{QUICK_STAT_ICONS[i]}</div>
+                          <span className={styles.quickRowLabel}>{s.label}</span>
+                          <span className={styles.quickRowValue}>{s.value}</span>
+                          <ChevronRightRegular fontSize={14} style={{ color: '#a0a0a0' }} />
                         </div>
                       ))}
                     </div>
+                  </div>
+
+                  {/* Om arkivstatus */}
+                  <div className={styles.sideSection}>
+                    <div className={styles.omArkivHeader}>
+                      <InfoRegular fontSize={16} />
+                      <Text weight='semibold' size={300}>Om arkivstatus</Text>
+                    </div>
+                    <Caption1 style={{ color: '#605e5c', display: 'block', marginBottom: 10 }}>
+                      Statusene viser hvor elementene befinner seg i arkiveringsprosessen.
+                    </Caption1>
                     <Button
                       appearance='transparent'
                       icon={<ChevronRightRegular />}
@@ -475,7 +498,7 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                       size='small'
                       style={{ color: '#0078D4', padding: 0 }}
                     >
-                      Se fullstendig rapport
+                      Les mer om arkivstatus
                     </Button>
                   </div>
                 </div>
