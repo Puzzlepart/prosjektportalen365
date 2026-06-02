@@ -13,10 +13,10 @@ const ARCHIVE_LIST_NAME = 'Arkiveringslogg'
 const PROJECTS_LIST_NAME = 'Prosjekter'
 
 const STATUS_MAP: Record<string, { label: string; color: string }> = {
-  Arkivert: { label: 'Arkivert', color: '#107C10' },
-  'Til arkiv': { label: 'Til arkiv', color: '#0078D4' },
-  Feil: { label: 'Feilet', color: '#D13438' },
-  Advarsel: { label: 'Advarsel', color: '#FFB900' }
+  Arkivert: { label: 'Arkivert', color: '#75b964' },
+  'Til arkiv': { label: 'Til arkiv', color: '#6b8fba' },
+  Feil: { label: 'Feilet', color: '#de534a' },
+  Advarsel: { label: 'Advarsel', color: '#efc33d' }
 }
 
 const STATUS_ORDER = ['Arkivert', 'Til arkiv', 'Feil', 'Advarsel']
@@ -58,6 +58,7 @@ export interface IProjectSummary {
   id: number
   name: string
   color: string
+  siteUrl: string
   lastArchived: string
   lastArchivedMs: number
   activity: ActivityLevel
@@ -194,6 +195,7 @@ function processData(
       id: proj.Id,
       name: proj.Title || key || '(ukjent)',
       color: PROJECT_COLORS[idx % PROJECT_COLORS.length],
+      siteUrl: proj.GtSiteUrl || '',
       lastArchived: latestDate ? formatArchiveDate(latestDate) : 'Aldri arkivert',
       lastArchivedMs: latestMs,
       activity: getActivityLevel(latestMs),
