@@ -603,6 +603,68 @@ declare interface IPortfolioWebPartsStrings {
   ColumnRenderOptionText: string
   NoProjectData: string
   MeasurementSheetTitleKey: string
+  ArchiveOverview: {
+    // Header
+    DashboardTitle: string
+    RefreshLabel: string
+    LoadingLabel: string
+    AllElementsLabel: string
+    // Nav
+    NavOversikt: string
+    NavProsjekter: string
+    NavDokumenter: string
+    NavLister: string
+    NavArkivlogg: string
+    NavInnstillinger: string
+    NavHjelp: string
+    // Loading / error states
+    LoadingDataLabel: string
+    ErrorTitle: string
+    // Pending section
+    PendingTitle: string
+    ToArchiveCardTitle: string
+    ToArchiveCardDescription: string
+    FailedCardTitle: string
+    FailedCardDescription: string
+    ViewDetailsLabel: string
+    // Project table
+    ProjectOverviewTitle: string
+    ColumnProjectName: string
+    ColumnLastArchived: string
+    ColumnActivityLevel: string
+    ColumnStatus: string
+    ColumnNextArchive: string
+    ActivityHigh: string
+    ActivityMedium: string
+    ActivityLow: string
+    ActivityNone: string
+    StatusUpdated: string
+    StatusWarning: string
+    StatusNeverArchived: string
+    SeeAllProjectsLabel: string
+    // Archive status / donut
+    ArchiveStatusTitle: string
+    NoArchiveDataLabel: string
+    SeeAllElementsLabel: string
+    StatusLabelArchived: string
+    StatusLabelToArchive: string
+    StatusLabelFailed: string
+    StatusLabelWarning: string
+    // Quick stats
+    QuickOverviewTitle: string
+    QuickStatArchivedLabel: string
+    QuickStatToArchiveLabel: string
+    QuickStatFailedLabel: string
+    QuickStatWarningLabel: string
+    // About section
+    AboutArchiveStatusTitle: string
+    AboutArchiveStatusDescription: string
+    ReadMoreLabel: string
+    // Date formatting
+    NeverArchivedLabel: string
+    TodayAtLabel: string
+    YesterdayAtLabel: string
+  }
 }
 
 declare module 'PortfolioWebPartsStrings' {

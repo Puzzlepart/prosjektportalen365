@@ -2,6 +2,8 @@ import '@pnp/sp/items/get-all'
 import '@pnp/sp/items'
 import '@pnp/sp/lists'
 import '@pnp/sp/webs'
+import { format } from '@fluentui/react'
+import strings from 'PortfolioWebPartsStrings'
 import { useEffect, useState } from 'react'
 import { IArchiveOverviewProps } from './types'
 
@@ -12,12 +14,12 @@ import { IArchiveOverviewProps } from './types'
 const ARCHIVE_LIST_NAME = 'Arkiveringslogg'
 const PROJECTS_LIST_NAME = 'Prosjekter'
 
-const STATUS_MAP: Record<string, { label: string; color: string }> = {
-  Arkivert: { label: 'Arkivert', color: '#75b964' },
-  'Til arkiv': { label: 'Til arkiv', color: '#6b8fba' },
-  Feil: { label: 'Feilet', color: '#de534a' },
-  Advarsel: { label: 'Advarsel', color: '#efc33d' }
-}
+const getStatusMap = (): Record<string, { label: string; color: string }> => ({
+  Arkivert: { label: strings.ArchiveOverview.StatusLabelArchived, color: '#75b964' },
+  'Til arkiv': { label: strings.ArchiveOverview.StatusLabelToArchive, color: '#6b8fba' },
+  Feil: { label: strings.ArchiveOverview.StatusLabelFailed, color: '#de534a' },
+  Advarsel: { label: strings.ArchiveOverview.StatusLabelWarning, color: '#efc33d' }
+})
 
 const STATUS_ORDER = ['Arkivert', 'Til arkiv', 'Feil', 'Advarsel']
 
@@ -108,7 +110,7 @@ function extractSiteName(url: string): string {
 }
 
 function formatArchiveDate(dateStr: string): string {
-  if (!dateStr) return 'Aldri arkivert'
+  if (!dateStr) return strings.ArchiveOverview.NeverArchivedLabel
   const date = new Date(dateStr)
   const now = new Date()
   const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24))
@@ -117,8 +119,8 @@ function formatArchiveDate(dateStr: string): string {
     .toString()
     .padStart(2, '0')}`
 
-  if (diffDays === 0) return `i dag, ${timeStr}`
-  if (diffDays === 1) return `i går, ${timeStr}`
+  if (diffDays === 0) return format(strings.ArchiveOverview.TodayAtLabel, timeStr)
+  if (diffDays === 1) return format(strings.ArchiveOverview.YesterdayAtLabel, timeStr)
   return date.toLocaleDateString('nb-NO', { day: 'numeric', month: 'long', year: 'numeric' })
 }
 
@@ -146,7 +148,8 @@ function processData(
   projectItems: IProjectItem[],
   archiveItems: IArchiveLogItem[]
 ): Omit<IArchiveData, 'loading' | 'error'> {
-  // ── Build archive lookup: site name (lowercase) → items ──
+  const statusMap = getStatusMap()
+
   const archiveMap = new Map<string, IArchiveLogItem[]>()
   for (const item of archiveItems) {
     const key = extractSiteName(item.GtLogWebUrl)
@@ -155,7 +158,6 @@ function processData(
     archiveMap.get(key).push(item)
   }
 
-  // ── Status counts (donut + quick stats) from ALL archive items ──
   const statusCounts: Record<string, number> = {}
   for (const item of archiveItems) {
     const s = item.GtLogStatus ?? 'Ukjent'
@@ -165,13 +167,13 @@ function processData(
   const archiveTotal = archiveItems.length
 
   const archiveStatus: IArchiveStatusEntry[] = STATUS_ORDER.map((key) => ({
-    label: STATUS_MAP[key]?.label ?? key,
+    label: statusMap[key]?.label ?? key,
     count: statusCounts[key] ?? 0,
     percent:
       archiveTotal > 0
         ? Math.round(((statusCounts[key] ?? 0) / archiveTotal) * 1000) / 10
         : 0,
-    color: STATUS_MAP[key]?.color ?? '#888'
+    color: statusMap[key]?.color ?? '#888'
   })).filter((s) => s.count > 0)
 
   const pending: IPendingCounts = {
@@ -179,7 +181,6 @@ function processData(
     failed: { count: statusCounts['Feil'] ?? 0 }
   }
 
-  // ── Build project summaries — one per project, all projects included ──
   const projects: IProjectSummary[] = projectItems.map((proj, idx) => {
     const key = extractSiteName(proj.GtSiteUrl)
     const siteItems = archiveMap.get(key) ?? []
@@ -196,7 +197,9 @@ function processData(
       name: proj.Title || key || '(ukjent)',
       color: PROJECT_COLORS[idx % PROJECT_COLORS.length],
       siteUrl: proj.GtSiteUrl || '',
-      lastArchived: latestDate ? formatArchiveDate(latestDate) : 'Aldri arkivert',
+      lastArchived: latestDate
+        ? formatArchiveDate(latestDate)
+        : strings.ArchiveOverview.NeverArchivedLabel,
       lastArchivedMs: latestMs,
       activity: getActivityLevel(latestMs),
       status: getProjectStatus(siteItems),
@@ -207,7 +210,6 @@ function processData(
     }
   })
 
-  // Sort by latest archive date descending; never-archived go to the bottom, then alphabetical
   projects.sort((a, b) => {
     if (a.lastArchivedMs > 0 && b.lastArchivedMs > 0)
       return b.lastArchivedMs - a.lastArchivedMs
@@ -218,14 +220,26 @@ function processData(
 
   // ── Quick stats ──
   const quickStats: IQuickStat[] = [
-    { label: 'Elementer arkivert', value: statusCounts['Arkivert'] ?? 0, positive: true },
-    { label: 'Til arkivering', value: statusCounts['Til arkiv'] ?? 0, positive: true },
     {
-      label: 'Feilede elementer',
+      label: strings.ArchiveOverview.QuickStatArchivedLabel,
+      value: statusCounts['Arkivert'] ?? 0,
+      positive: true
+    },
+    {
+      label: strings.ArchiveOverview.QuickStatToArchiveLabel,
+      value: statusCounts['Til arkiv'] ?? 0,
+      positive: true
+    },
+    {
+      label: strings.ArchiveOverview.QuickStatFailedLabel,
       value: statusCounts['Feil'] ?? 0,
       positive: (statusCounts['Feil'] ?? 0) === 0
     },
-    { label: 'Elementer med advarsel', value: statusCounts['Advarsel'] ?? 0, positive: false }
+    {
+      label: strings.ArchiveOverview.QuickStatWarningLabel,
+      value: statusCounts['Advarsel'] ?? 0,
+      positive: false
+    }
   ]
 
   return { pending, archiveStatus, archiveTotal, projects, quickStats }
