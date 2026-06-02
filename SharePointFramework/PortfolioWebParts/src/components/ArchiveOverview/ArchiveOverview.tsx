@@ -24,18 +24,38 @@ import {
   HistoryRegular,
   HomeRegular,
   InfoRegular,
-  MoreHorizontalRegular,
   QuestionCircleRegular,
   SettingsRegular,
   WarningRegular
 } from '@fluentui/react-icons'
+import { DonutChart, IChartProps } from '@fluentui/react-charting'
 import { customLightTheme } from 'pp365-shared-library'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useState } from 'react'
+
+// ─────────────────────────────────────────────────────
+// Scale all fontSize / lineHeight tokens in a FluentUI theme
+// ─────────────────────────────────────────────────────
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function scaleThemeFonts(theme: any, factor: number): any {
+  const scaled: Record<string, string> = {}
+  for (const key of Object.keys(theme)) {
+    const val: unknown = theme[key]
+    if (
+      (key.startsWith('fontSize') || key.startsWith('lineHeight')) &&
+      typeof val === 'string' &&
+      val.endsWith('px')
+    ) {
+      scaled[key] = `${Math.round(parseFloat(val) * factor)}px`
+    }
+  }
+  return { ...theme, ...scaled }
+}
+
+const scaledTheme = scaleThemeFonts(customLightTheme, 1.3)
 import styles from './ArchiveOverview.module.scss'
 import { IArchiveOverviewProps } from './types'
 import {
   ActivityLevel,
-  IArchiveStatusEntry,
   IProjectSummary,
   IQuickStat,
   useArchiveData
@@ -67,83 +87,6 @@ const ActivityBars: FC<{ level: ActivityLevel }> = ({ level }) => (
   </div>
 )
 
-// ─────────────────────────────────────────────────────
-// DonutChartSvg — custom SVG donut chart
-// ─────────────────────────────────────────────────────
-
-function polarToCartesian(cx: number, cy: number, r: number, angleDeg: number) {
-  const rad = ((angleDeg - 90) * Math.PI) / 180
-  return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) }
-}
-
-function arcPath(
-  cx: number,
-  cy: number,
-  outerR: number,
-  innerR: number,
-  startAngle: number,
-  endAngle: number
-): string {
-  const os = polarToCartesian(cx, cy, outerR, startAngle)
-  const oe = polarToCartesian(cx, cy, outerR, endAngle)
-  const ie = polarToCartesian(cx, cy, innerR, endAngle)
-  const is_ = polarToCartesian(cx, cy, innerR, startAngle)
-  const large = endAngle - startAngle > 180 ? 1 : 0
-  return [
-    `M ${os.x.toFixed(2)} ${os.y.toFixed(2)}`,
-    `A ${outerR} ${outerR} 0 ${large} 1 ${oe.x.toFixed(2)} ${oe.y.toFixed(2)}`,
-    `L ${ie.x.toFixed(2)} ${ie.y.toFixed(2)}`,
-    `A ${innerR} ${innerR} 0 ${large} 0 ${is_.x.toFixed(2)} ${is_.y.toFixed(2)}`,
-    'Z'
-  ].join(' ')
-}
-
-const DonutChartSvg: FC<{ segments: IArchiveStatusEntry[]; total: number }> = ({
-  segments,
-  total
-}) => {
-  const cx = 85
-  const cy = 85
-  const outerR = 80
-  const innerR = 52
-  const gap = 1.5
-  let angle = 0
-
-  return (
-    <svg width={170} height={170} viewBox='0 0 170 170' aria-hidden='true'>
-      {segments.map((seg, i) => {
-        const sweep = (seg.count / total) * 360 - gap
-        const start = angle + gap / 2
-        const end = start + sweep
-        angle += (seg.count / total) * 360
-        return (
-          <path key={i} d={arcPath(cx, cy, outerR, innerR, start, end)} fill={seg.color} />
-        )
-      })}
-      <text
-        x={cx}
-        y={cy - 6}
-        textAnchor='middle'
-        fontSize={26}
-        fontWeight='700'
-        fill='#242424'
-        fontFamily='inherit'
-      >
-        {total}
-      </text>
-      <text
-        x={cx}
-        y={cy + 14}
-        textAnchor='middle'
-        fontSize={11}
-        fill='#605e5c'
-        fontFamily='inherit'
-      >
-        Totalt
-      </text>
-    </svg>
-  )
-}
 
 // ─────────────────────────────────────────────────────
 // StatusBadge
@@ -152,18 +95,18 @@ const DonutChartSvg: FC<{ segments: IArchiveStatusEntry[]; total: number }> = ({
 const StatusBadge: FC<{ status: IProjectSummary['status'] }> = ({ status }) => {
   if (status === 'updated')
     return (
-      <Badge appearance='filled' color='success' size='small'>
+      <Badge appearance='tint' color='success'>
         Oppdatert
       </Badge>
     )
   if (status === 'warning')
     return (
-      <Badge appearance='filled' color='warning' size='small'>
+      <Badge appearance='tint' color='warning'>
         Advarsel
       </Badge>
     )
   return (
-    <Badge appearance='filled' color='danger' size='small'>
+    <Badge appearance='tint' color='danger'>
       Aldri arkivert
     </Badge>
   )
@@ -174,37 +117,26 @@ const StatusBadge: FC<{ status: IProjectSummary['status'] }> = ({ status }) => {
 // ─────────────────────────────────────────────────────
 
 const QUICK_STAT_ICONS = [
-  <ArchiveRegular key='0' fontSize={18} />,
-  <ArrowClockwiseRegular key='1' fontSize={18} />,
-  <DocumentRegular key='2' fontSize={18} />,
-  <WarningRegular key='3' fontSize={18} />
+  <ArchiveRegular key='0' fontSize={23} />,
+  <ArrowClockwiseRegular key='1' fontSize={23} />,
+  <DocumentRegular key='2' fontSize={23} />,
+  <WarningRegular key='3' fontSize={23} />
 ]
 
 // ─────────────────────────────────────────────────────
 // ArchiveOverview — main component
 // ─────────────────────────────────────────────────────
 
-const PAGE_SIZE = 5
-
 export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
   const fluentProviderId = useId('fp-archive-overview')
   const [selectedNav, setSelectedNav] = useState<string>('oversikt')
-  const [currentPage, setCurrentPage] = useState(0)
 
   const { loading, error, pending, archiveStatus, archiveTotal, projects, quickStats } =
     useArchiveData(props)
 
-  // Reset to page 1 whenever the project list changes
-  useEffect(() => {
-    setCurrentPage(0)
-  }, [projects.length])
-
-  const pageCount = Math.max(1, Math.ceil(projects.length / PAGE_SIZE))
-  const pagedProjects = projects.slice(currentPage * PAGE_SIZE, (currentPage + 1) * PAGE_SIZE)
-
   return (
     <IdPrefixProvider value={fluentProviderId}>
-      <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
+      <FluentProvider theme={scaledTheme} style={{ background: 'transparent' }}>
         <div className={styles.root}>
           {/* ── Left nav ── */}
           <nav className={styles.navSidebar}>
@@ -239,7 +171,7 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
             {/* ── Header ── */}
             <div className={styles.header}>
               <div className={styles.headerLeft}>
-                <ArchiveRegular fontSize={28} />
+                <ArchiveRegular fontSize={36} />
                 <Title3>Arkiv-dashboard</Title3>
               </div>
               <div className={styles.headerRight}>
@@ -324,104 +256,81 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                       <Subtitle2>Prosjektoversikt</Subtitle2>
                     </div>
 
-                    <table className={styles.projectTable}>
-                      <thead>
-                        <tr>
-                          <th>Prosjektnavn</th>
-                          <th>Sist arkivert</th>
-                          <th>Aktivitetsnivå</th>
-                          <th>Status</th>
-                          <th>Neste arkivering</th>
-                          <th />
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {pagedProjects.map((p) => (
-                          <tr key={p.id}>
-                            <td>
-                              <div className={styles.projectCell}>
-                                <div
-                                  className={styles.projectIcon}
-                                  style={{ backgroundColor: p.color }}
-                                />
-                                <Text size={200}>{p.name}</Text>
-                              </div>
-                            </td>
-                            <td>
-                              <Caption1 style={{ color: '#605e5c' }}>{p.lastArchived}</Caption1>
-                            </td>
-                            <td>
-                              <div className={styles.activityCell}>
-                                <ActivityBars level={p.activity} />
-                                <Caption1 style={{ color: '#605e5c' }}>
-                                  {p.activity === 'high'
-                                    ? 'Høy'
-                                    : p.activity === 'medium'
-                                      ? 'Middels'
-                                      : p.activity === 'low'
-                                        ? 'Lav'
-                                        : 'Ingen aktivitet'}
-                                </Caption1>
-                              </div>
-                            </td>
-                            <td>
-                              <StatusBadge status={p.status} />
-                            </td>
-                            <td>
-                              <Caption1 style={{ color: '#605e5c' }}>{p.nextArchive}</Caption1>
-                            </td>
-                            <td>
-                              <Button
-                                appearance='subtle'
-                                icon={<MoreHorizontalRegular />}
-                                size='small'
-                              />
-                            </td>
+                    <div className={styles.projectTableWrap}>
+                      <table className={styles.projectTable}>
+                        <thead>
+                          <tr>
+                            <th>Prosjektnavn</th>
+                            <th>
+                              Sist arkivert{' '}
+                              <span style={{ fontSize: 14, verticalAlign: 'middle' }}>↓</span>
+                            </th>
+                            <th>
+                              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                                Aktivitetsnivå
+                                <InfoRegular fontSize={17} style={{ color: '#605e5c', flexShrink: 0 }} />
+                              </span>
+                            </th>
+                            <th>Status</th>
+                            <th>Neste arkivering</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-
-                    {/* Pagination */}
-                    <div className={styles.pagination}>
-                      <Button
-                        appearance='subtle'
-                        size='small'
-                        disabled={currentPage === 0}
-                        onClick={() => setCurrentPage((p) => p - 1)}
-                      >
-                        ‹ Forrige
-                      </Button>
-                      <Caption1 style={{ color: '#605e5c' }}>
-                        Side {currentPage + 1} av {pageCount}{' '}
-                        <span style={{ color: '#a0a0a0' }}>({projects.length} prosjekter)</span>
-                      </Caption1>
-                      <Button
-                        appearance='subtle'
-                        size='small'
-                        disabled={currentPage >= pageCount - 1}
-                        onClick={() => setCurrentPage((p) => p + 1)}
-                      >
-                        Neste ›
-                      </Button>
+                        </thead>
+                        <tbody>
+                          {projects.map((p) => (
+                            <tr
+                              key={p.id}
+                              onClick={() => p.siteUrl && window.open(p.siteUrl, '_blank')}
+                              style={{ cursor: p.siteUrl ? 'pointer' : 'default' }}
+                            >
+                              <td>
+                                <div className={styles.projectCell}>
+                                  <div
+                                    className={styles.projectIcon}
+                                    style={{ backgroundColor: p.color }}
+                                  />
+                                  <Text size={200}>{p.name}</Text>
+                                </div>
+                              </td>
+                              <td>
+                                <Caption1 style={{ color: '#605e5c' }}>{p.lastArchived}</Caption1>
+                              </td>
+                              <td>
+                                <div className={styles.activityCell}>
+                                  <ActivityBars level={p.activity} />
+                                  <Caption1 style={{ color: '#605e5c' }}>
+                                    {p.activity === 'high'
+                                      ? 'Høy'
+                                      : p.activity === 'medium'
+                                        ? 'Middels'
+                                        : p.activity === 'low'
+                                          ? 'Lav'
+                                          : 'Ingen aktivitet'}
+                                  </Caption1>
+                                </div>
+                              </td>
+                              <td>
+                                <StatusBadge status={p.status} />
+                              </td>
+                              <td>
+                                <Caption1 style={{ color: '#605e5c' }}>{p.nextArchive}</Caption1>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
 
-                    {/* Activity legend */}
-                    <div className={styles.activityLegend}>
-                      <Caption1 style={{ color: '#605e5c' }}>Aktivitetsnivå:</Caption1>
-                      {(
-                        [
-                          { level: 'high', label: 'Høy' },
-                          { level: 'medium', label: 'Middels' },
-                          { level: 'low', label: 'Lav' },
-                          { level: 'none', label: 'Ingen aktivitet' }
-                        ] as { level: ActivityLevel; label: string }[]
-                      ).map((item) => (
-                        <div key={item.level} className={styles.legendEntry}>
-                          <ActivityBars level={item.level} />
-                          <Caption1 style={{ color: '#605e5c' }}>{item.label}</Caption1>
-                        </div>
-                      ))}
+                    {/* Footer link */}
+                    <div className={styles.tableFooter}>
+                      <Button
+                        appearance='transparent'
+                        icon={<ChevronRightRegular />}
+                        iconPosition='after'
+                        size='small'
+                        style={{ color: '#0078D4', padding: 0 }}
+                      >
+                        Se alle prosjekter
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -433,7 +342,23 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                     <Subtitle2>Arkivstatus</Subtitle2>
                     {archiveStatus.length > 0 && archiveTotal > 0 ? (
                       <div className={styles.donutContainer}>
-                        <DonutChartSvg segments={archiveStatus} total={archiveTotal} />
+                        <DonutChart
+                          data={
+                            {
+                              chartTitle: 'Arkivstatus',
+                              chartData: archiveStatus.map((s) => ({
+                                legend: s.label,
+                                data: s.count,
+                                color: s.color
+                              }))
+                            } as IChartProps
+                          }
+                          innerRadius={52}
+                          width={220}
+                          height={220}
+                          valueInsideDonut={archiveTotal}
+                          hideLegend={true}
+                        />
                         <div className={styles.statusLegend}>
                           {archiveStatus.map((s) => (
                             <div key={s.label} className={styles.statusLegendRow}>
@@ -464,9 +389,6 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                     </Button>
                   </div>
 
-                  {/* KL-assistent — reserved, empty for now */}
-                  <div className={styles.sideSection} />
-
                   {/* Hurtigoversikt */}
                   <div className={styles.sideSection}>
                     <Subtitle2>Hurtigoversikt</Subtitle2>
@@ -476,7 +398,7 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                           <div className={styles.quickRowIcon}>{QUICK_STAT_ICONS[i]}</div>
                           <span className={styles.quickRowLabel}>{s.label}</span>
                           <span className={styles.quickRowValue}>{s.value}</span>
-                          <ChevronRightRegular fontSize={14} style={{ color: '#a0a0a0' }} />
+                          <ChevronRightRegular fontSize={18} style={{ color: '#a0a0a0' }} />
                         </div>
                       ))}
                     </div>
@@ -485,7 +407,7 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                   {/* Om arkivstatus */}
                   <div className={styles.sideSection}>
                     <div className={styles.omArkivHeader}>
-                      <InfoRegular fontSize={16} />
+                      <InfoRegular fontSize={21} />
                       <Text weight='semibold' size={300}>Om arkivstatus</Text>
                     </div>
                     <Caption1 style={{ color: '#605e5c', display: 'block', marginBottom: 10 }}>
