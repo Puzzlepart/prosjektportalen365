@@ -1,5 +1,4 @@
 import {
-  Badge,
   Button,
   Caption1,
   Divider,
@@ -29,91 +28,17 @@ import {
   WarningRegular
 } from '@fluentui/react-icons'
 import { DonutChart, IChartProps } from '@fluentui/react-charting'
-import { customLightTheme } from 'pp365-shared-library'
-import React, { FC, useState } from 'react'
-
-// ─────────────────────────────────────────────────────
-// Scale all fontSize / lineHeight tokens in a FluentUI theme
-// ─────────────────────────────────────────────────────
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function scaleThemeFonts(theme: any, factor: number): any {
-  const scaled: Record<string, string> = {}
-  for (const key of Object.keys(theme)) {
-    const val: unknown = theme[key]
-    if (
-      (key.startsWith('fontSize') || key.startsWith('lineHeight')) &&
-      typeof val === 'string' &&
-      val.endsWith('px')
-    ) {
-      scaled[key] = `${Math.round(parseFloat(val) * factor)}px`
-    }
-  }
-  return { ...theme, ...scaled }
-}
-
-const scaledTheme = scaleThemeFonts(customLightTheme, 1.3)
+import strings from 'PortfolioWebPartsStrings'
+import React, { FC } from 'react'
+import { ActivityBars } from './ActivityBars'
 import styles from './ArchiveOverview.module.scss'
+import { StatusBadge } from './StatusBadge'
 import { IArchiveOverviewProps } from './types'
-import {
-  ActivityLevel,
-  IProjectSummary,
-  IQuickStat,
-  useArchiveData
-} from './useArchiveData'
+import { IQuickStat } from './useArchiveData'
+import { scaledTheme, useArchiveOverview } from './useArchiveOverview'
 
 // ─────────────────────────────────────────────────────
-// ActivityBars — sparkline-style bar indicator
-// ─────────────────────────────────────────────────────
-
-const BAR_HEIGHTS = [30, 60, 100, 65] // relative heights (%)
-
-function getBarColor(level: ActivityLevel, barIdx: number): string {
-  if (level === 'none') return '#C8C6C4'
-  if (level === 'high') return '#107C10'
-  if (level === 'medium') return barIdx < 3 ? '#107C10' : '#C8C6C4'
-  if (level === 'low') return barIdx < 2 ? '#FFB900' : '#C8C6C4'
-  return '#C8C6C4'
-}
-
-const ActivityBars: FC<{ level: ActivityLevel }> = ({ level }) => (
-  <div className={styles.activityBarsWrap}>
-    {BAR_HEIGHTS.map((h, i) => (
-      <div
-        key={i}
-        className={styles.activityBar}
-        style={{ height: `${h}%`, backgroundColor: getBarColor(level, i) }}
-      />
-    ))}
-  </div>
-)
-
-
-// ─────────────────────────────────────────────────────
-// StatusBadge
-// ─────────────────────────────────────────────────────
-
-const StatusBadge: FC<{ status: IProjectSummary['status'] }> = ({ status }) => {
-  if (status === 'updated')
-    return (
-      <Badge appearance='tint' color='success'>
-        Oppdatert
-      </Badge>
-    )
-  if (status === 'warning')
-    return (
-      <Badge appearance='tint' color='warning'>
-        Advarsel
-      </Badge>
-    )
-  return (
-    <Badge appearance='tint' color='danger'>
-      Aldri arkivert
-    </Badge>
-  )
-}
-
-// ─────────────────────────────────────────────────────
-// Quick stats icon map
+// Static presentation constants
 // ─────────────────────────────────────────────────────
 
 const QUICK_STAT_ICONS = [
@@ -124,15 +49,22 @@ const QUICK_STAT_ICONS = [
 ]
 
 // ─────────────────────────────────────────────────────
-// ArchiveOverview — main component
+// ArchiveOverview
 // ─────────────────────────────────────────────────────
 
 export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
   const fluentProviderId = useId('fp-archive-overview')
-  const [selectedNav, setSelectedNav] = useState<string>('oversikt')
-
-  const { loading, error, pending, archiveStatus, archiveTotal, projects, quickStats } =
-    useArchiveData(props)
+  const {
+    selectedNav,
+    setSelectedNav,
+    loading,
+    error,
+    pending,
+    archiveStatus,
+    archiveTotal,
+    projects,
+    quickStats
+  } = useArchiveOverview(props)
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
@@ -145,38 +77,44 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
               onNavItemSelect={(_ev, data) => setSelectedNav(data.value as string)}
             >
               <NavItem icon={<HomeRegular />} value='oversikt' href='#'>
-                Oversikt
+                {strings.ArchiveOverview.NavOversikt}
               </NavItem>
               <NavItem icon={<FolderRegular />} value='prosjekter' href='#'>
-                Prosjekter
+                {strings.ArchiveOverview.NavProsjekter}
               </NavItem>
               <NavItem icon={<DocumentRegular />} value='dokumenter' href='#'>
-                Dokumenter
+                {strings.ArchiveOverview.NavDokumenter}
               </NavItem>
               <NavItem icon={<GridRegular />} value='lister' href='#'>
-                Lister
+                {strings.ArchiveOverview.NavLister}
               </NavItem>
               <NavItem icon={<HistoryRegular />} value='arkivlogg' href='#'>
-                Arkivlogg
+                {strings.ArchiveOverview.NavArkivlogg}
               </NavItem>
               <NavItem icon={<SettingsRegular />} value='innstillinger' href='#'>
-                Innstillinger
+                {strings.ArchiveOverview.NavInnstillinger}
               </NavItem>
             </Nav>
-
+            <div className={styles.navFooter}>
+              <NavItem icon={<QuestionCircleRegular />} value='hjelp' href='#'>
+                {strings.ArchiveOverview.NavHjelp}
+              </NavItem>
+            </div>
           </nav>
 
           {/* ── Main content ── */}
           <div className={styles.content}>
-            {/* ── Header ── */}
+            {/* Header */}
             <div className={styles.header}>
               <div className={styles.headerLeft}>
                 <ArchiveRegular fontSize={36} />
-                <Title3>Arkiv-dashboard</Title3>
+                <Title3>{strings.ArchiveOverview.DashboardTitle}</Title3>
               </div>
               <div className={styles.headerRight}>
                 <Button appearance='subtle' icon={<ArrowClockwiseRegular />} size='small'>
-                  {loading ? 'Laster...' : 'Oppdater'}
+                  {loading
+                    ? strings.ArchiveOverview.LoadingLabel
+                    : strings.ArchiveOverview.RefreshLabel}
                 </Button>
                 <Divider vertical style={{ height: 20, margin: '0 4px' }} />
                 <Button
@@ -185,12 +123,12 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                   iconPosition='before'
                   size='small'
                 >
-                  Alle elementer
+                  {strings.ArchiveOverview.AllElementsLabel}
                 </Button>
               </div>
             </div>
 
-            {/* ── Loading / Error / Body ── */}
+            {/* Loading / Error / Body */}
             {loading ? (
               <div
                 style={{
@@ -200,79 +138,78 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                   padding: '60px 24px'
                 }}
               >
-                <Spinner label='Henter arkivdata...' />
+                <Spinner label={strings.ArchiveOverview.LoadingDataLabel} />
               </div>
             ) : error ? (
               <div style={{ padding: '24px', color: '#D13438' }}>
-                <Text weight='semibold'>Kunne ikke hente arkivdata</Text>
+                <Text weight='semibold'>{strings.ArchiveOverview.ErrorTitle}</Text>
                 <br />
                 <Caption1>{error.message}</Caption1>
               </div>
             ) : (
               <div className={styles.body}>
-                {/* ══ Left column ══ */}
+                {/* ══ Main column ══ */}
                 <div className={styles.mainColumn}>
                   {/* Pending */}
                   <div className={styles.section}>
                     <div className={styles.sectionHeader}>
-                      <Subtitle2>Pending</Subtitle2>
+                      
                     </div>
-
                     <div className={styles.pendingGrid}>
-                      {/* Til arkivering */}
                       <div className={styles.card}>
                         <Text size={300} weight='semibold'>
-                          Til arkivering
+                          {strings.ArchiveOverview.ToArchiveCardTitle}
                         </Text>
                         <div className={styles.cardNumber}>{pending.toArchive.count}</div>
                         <Caption1 style={{ color: '#605e5c' }}>
-                          Disse elementene er klare for arkivering.
+                          {strings.ArchiveOverview.ToArchiveCardDescription}
                         </Caption1>
                         <Button appearance='outline' size='small' className={styles.cardBtn}>
-                          Se detaljer
+                          {strings.ArchiveOverview.ViewDetailsLabel}
                         </Button>
                       </div>
-
-                      {/* Feilet arkivering */}
                       <div className={styles.card}>
                         <Text size={300} weight='semibold'>
-                          Feilet arkivering
+                          {strings.ArchiveOverview.FailedCardTitle}
                         </Text>
                         <div className={styles.cardNumber}>{pending.failed.count}</div>
                         <Caption1 style={{ color: '#605e5c' }}>
-                          Disse elementene kunne ikke arkiveres.
+                          {strings.ArchiveOverview.FailedCardDescription}
                         </Caption1>
                         <Button appearance='outline' size='small' className={styles.cardBtn}>
-                          Se detaljer
+                          {strings.ArchiveOverview.ViewDetailsLabel}
                         </Button>
                       </div>
-
                     </div>
                   </div>
 
                   {/* Project overview */}
                   <div className={styles.section}>
                     <div className={styles.sectionHeader}>
-                      <Subtitle2>Prosjektoversikt</Subtitle2>
+                      <Subtitle2>{strings.ArchiveOverview.ProjectOverviewTitle}</Subtitle2>
                     </div>
-
                     <div className={styles.projectTableWrap}>
                       <table className={styles.projectTable}>
                         <thead>
                           <tr>
-                            <th>Prosjektnavn</th>
+                            <th>{strings.ArchiveOverview.ColumnProjectName}</th>
                             <th>
-                              Sist arkivert{' '}
+                              {strings.ArchiveOverview.ColumnLastArchived}{' '}
                               <span style={{ fontSize: 14, verticalAlign: 'middle' }}>↓</span>
                             </th>
                             <th>
-                              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-                                Aktivitetsnivå
-                                <InfoRegular fontSize={17} style={{ color: '#605e5c', flexShrink: 0 }} />
+                              <span
+                                style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}
+                              >
+                                {strings.ArchiveOverview.ColumnActivityLevel}
+                                <InfoRegular
+                                  fontSize={17}
+                                  style={{ color: '#605e5c', flexShrink: 0 }}
+                                />
                               </span>
                             </th>
-                            <th>Status</th>
-                            <th>Neste arkivering</th>
+                            <th>{strings.ArchiveOverview.ColumnStatus}</th>
+                            <th>{strings.ArchiveOverview.ColumnNextArchive}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -299,12 +236,12 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                                   <ActivityBars level={p.activity} />
                                   <Caption1 style={{ color: '#605e5c' }}>
                                     {p.activity === 'high'
-                                      ? 'Høy'
+                                      ? strings.ArchiveOverview.ActivityHigh
                                       : p.activity === 'medium'
-                                        ? 'Middels'
+                                        ? strings.ArchiveOverview.ActivityMedium
                                         : p.activity === 'low'
-                                          ? 'Lav'
-                                          : 'Ingen aktivitet'}
+                                          ? strings.ArchiveOverview.ActivityLow
+                                          : strings.ArchiveOverview.ActivityNone}
                                   </Caption1>
                                 </div>
                               </td>
@@ -319,8 +256,6 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                         </tbody>
                       </table>
                     </div>
-
-                    {/* Footer link */}
                     <div className={styles.tableFooter}>
                       <Button
                         appearance='transparent'
@@ -329,7 +264,7 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                         size='small'
                         style={{ color: '#0078D4', padding: 0 }}
                       >
-                        Se alle prosjekter
+                        {strings.ArchiveOverview.SeeAllProjectsLabel}
                       </Button>
                     </div>
                   </div>
@@ -339,13 +274,13 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                 <div className={styles.sidebar}>
                   {/* Arkivstatus */}
                   <div className={styles.sideSection}>
-                    <Subtitle2>Arkivstatus</Subtitle2>
+                    <Subtitle2>{strings.ArchiveOverview.ArchiveStatusTitle}</Subtitle2>
                     {archiveStatus.length > 0 && archiveTotal > 0 ? (
                       <div className={styles.donutContainer}>
                         <DonutChart
                           data={
                             {
-                              chartTitle: 'Arkivstatus',
+                              chartTitle: strings.ArchiveOverview.ArchiveStatusTitle,
                               chartData: archiveStatus.map((s) => ({
                                 legend: s.label,
                                 data: s.count,
@@ -375,7 +310,7 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                       </div>
                     ) : (
                       <Caption1 style={{ color: '#605e5c', display: 'block', marginTop: 12 }}>
-                        Ingen arkivdata funnet.
+                        {strings.ArchiveOverview.NoArchiveDataLabel}
                       </Caption1>
                     )}
                     <Button
@@ -385,13 +320,13 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                       size='small'
                       style={{ color: '#0078D4', padding: 0 }}
                     >
-                      Se alle elementer
+                      {strings.ArchiveOverview.SeeAllElementsLabel}
                     </Button>
                   </div>
 
                   {/* Hurtigoversikt */}
                   <div className={styles.sideSection}>
-                    <Subtitle2>Hurtigoversikt</Subtitle2>
+                    <Subtitle2>{strings.ArchiveOverview.QuickOverviewTitle}</Subtitle2>
                     <div className={styles.quickList}>
                       {quickStats.map((s: IQuickStat, i: number) => (
                         <div key={i} className={styles.quickRow}>
@@ -408,10 +343,12 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                   <div className={styles.sideSection}>
                     <div className={styles.omArkivHeader}>
                       <InfoRegular fontSize={21} />
-                      <Text weight='semibold' size={300}>Om arkivstatus</Text>
+                      <Text weight='semibold' size={300}>
+                        {strings.ArchiveOverview.AboutArchiveStatusTitle}
+                      </Text>
                     </div>
                     <Caption1 style={{ color: '#605e5c', display: 'block', marginBottom: 10 }}>
-                      Statusene viser hvor elementene befinner seg i arkiveringsprosessen.
+                      {strings.ArchiveOverview.AboutArchiveStatusDescription}
                     </Caption1>
                     <Button
                       appearance='transparent'
@@ -420,7 +357,7 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                       size='small'
                       style={{ color: '#0078D4', padding: 0 }}
                     >
-                      Les mer om arkivstatus
+                      {strings.ArchiveOverview.ReadMoreLabel}
                     </Button>
                   </div>
                 </div>
