@@ -58,6 +58,72 @@ declare interface IPortfolioExtensionsStrings {
   FavoriteProjectsLabel: string
   FavoriteProjectsDescription: string
   FavoriteProjectsNoItemsMessage: string
+  TemplatePackageCatalogCommandTitle: string
+  CatalogDrawerTitle: string
+  CatalogNewBadge: string
+  CatalogSubtitle: string
+  CatalogUserGuideLinkText: string
+  CatalogCloseAria: string
+  CatalogLoadingText: string
+  CatalogSearchPlaceholder: string
+  CatalogFilterTypeLabel: string
+  CatalogFilterCategoryLabel: string
+  CatalogFilterStatusLabel: string
+  CatalogFilterAllOption: string
+  CatalogClearFiltersText: string
+  CatalogResultCount: string
+  CatalogSortLabel: string
+  CatalogSortNewest: string
+  CatalogSortName: string
+  CatalogTypeTemplate: string
+  CatalogTypeExtension: string
+  CatalogTypeContent: string
+  CatalogStatusLocal: string
+  CatalogStatusImported: string
+  CatalogStatusCentral: string
+  CatalogStatusUpdate: string
+  CatalogBadgeImported: string
+  CatalogBadgeCentral: string
+  CatalogBadgeUpdate: string
+  CatalogCardByAuthor: string
+  CatalogCardPublished: string
+  CatalogEmptyTitle: string
+  CatalogEmptyDescription: string
+  CatalogPaginationText: string
+  CatalogPaginationPrevious: string
+  CatalogPaginationNext: string
+  CatalogDetailsEmptyText: string
+  CatalogContentSummaryTitle: string
+  CatalogContentSummaryUnavailable: string
+  CatalogHistoryTitle: string
+  CatalogHistoryUnavailable: string
+  CatalogChangelogLinkText: string
+  CatalogBackToListText: string
+  CatalogActionImport: string
+  CatalogActionPublishCentral: string
+  CatalogActionUpdate: string
+  CatalogActionRemove: string
+  CatalogStepDownload: string
+  CatalogStepUnzip: string
+  CatalogStepValidateManifest: string
+  CatalogStepCheckVersion: string
+  CatalogStepProvisionHub: string
+  CatalogStepTaxonomy: string
+  CatalogStepStoreProjectTemplate: string
+  CatalogStepExtensions: string
+  CatalogStepContent: string
+  CatalogStepUpdateMaloppsett: string
+  CatalogStepSkippedFeatureFlag: string
+  CatalogInstallSuccessTitle: string
+  CatalogInstallSuccessText: string
+  CatalogInstallErrorTitle: string
+  CatalogPublishSuccessText: string
+  CatalogRemoveSuccessText: string
+  CatalogLoadErrorTitle: string
+  CatalogLoadErrorText: string
+  CatalogRetryText: string
+  CatalogMinVersionError: string
+  CatalogPermissionError: string
 }
 
 declare module 'PortfolioExtensionsStrings' {

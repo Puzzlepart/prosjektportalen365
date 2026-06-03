@@ -1,0 +1,17 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/command-set-extension-manifest.schema.json",
+  "id": "75f97492-8b9f-4af6-8c0e-6cc6ce354bdd",
+  "alias": "TemplatePackageCatalogCommandSet",
+  "componentType": "Extension",
+  "extensionType": "ListViewCommandSet",
+  "version": "1.13.1",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "items": {
+    "OPEN_TEMPLATE_PACKAGE_CATALOG": {
+      "title": { "default": "Malpakkekatalog" },
+      "iconImageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",
+      "type": "command"
+    }
+  }
+}

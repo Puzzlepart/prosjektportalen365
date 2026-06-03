@@ -1,0 +1,70 @@
+.surface {
+  --fui-Drawer--size: min(1040px, 100vw);
+}
+
+.subtitle {
+  margin: 0 0 var(--spacingVerticalM) 0;
+  color: var(--colorNeutralForeground3);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacingVerticalM);
+  height: 100%;
+  min-height: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: var(--spacingHorizontalL);
+  min-height: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+.master {
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.detail {
+  min-height: 0;
+  overflow-y: auto;
+  border-left: 1px solid var(--colorNeutralStroke2);
+  padding-left: var(--spacingHorizontalL);
+}
+
+.footer {
+  padding-top: var(--spacingVerticalS);
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: var(--spacingVerticalXXL) 0;
+}
+
+.banner {
+  margin-bottom: var(--spacingVerticalM);
+}
+
+@media (max-width: 720px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .detail {
+    border-left: none;
+    padding-left: 0;
+  }
+
+  .collapsedHidden {
+    display: none;
+  }
+
+  .detailCollapsedHidden {
+    display: none;
+  }
+}
