@@ -5,5 +5,6 @@
         <pnp:CustomAction Name="{3d84a0a7-3108-49dd-9c41-365147e3da69}" Location="ClientSideExtension.ListViewCommandSet.CommandBar" Title="IdeaProcessing" RegistrationId="100" Sequence="0" Rights="" RegistrationType="List" ClientSideComponentId="b28cba0d-922c-44e0-a035-e4ea57d80e6d" ClientSideComponentProperties="{}" />
         <pnp:CustomAction Name="{87162d9b-e927-464f-9a76-6f6fa73c3634}" Location="ClientSideExtension.ListViewCommandSet.CommandBar" Title="IdeaProjectData" RegistrationId="100" Sequence="0" Rights="" RegistrationType="List" ClientSideComponentId="69a7f6eb-e7ce-40eb-81e1-6f172a802619" ClientSideComponentProperties="{}" />
         <pnp:CustomAction Name="{be0f2770-91b3-4056-ab7a-1431336a930a}" Location="ClientSideExtension.ListViewCommandSet.CommandBar" Title="IdeaRegistration" RegistrationId="100" Sequence="0" Rights="" RegistrationType="List" ClientSideComponentId="5d26712e-bdad-4ebf-b33f-9c759042bef6" ClientSideComponentProperties="{}" />
+        <pnp:CustomAction Name="{bacfe2c8-77b4-4629-b84a-6d90f013f627}" Location="ClientSideExtension.ListViewCommandSet.CommandBar" Title="TemplatePackageCatalog" RegistrationId="100" Sequence="0" Rights="" RegistrationType="List" ClientSideComponentId="75f97492-8b9f-4af6-8c0e-6cc6ce354bdd" ClientSideComponentProperties="{}" />
     </pnp:WebCustomActions>
 </pnp:CustomActions>

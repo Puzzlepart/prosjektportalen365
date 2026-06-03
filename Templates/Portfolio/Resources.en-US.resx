@@ -2260,6 +2260,27 @@
   <data name="Lists_TemplateOptions_Fields_FieldConfigurationName_DisplayName" xml:space="preserve">
     <value>Field configuration</value>
   </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgType_DisplayName" xml:space="preserve">
+    <value>Template package type</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgId_DisplayName" xml:space="preserve">
+    <value>Template package ID</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgVersion_DisplayName" xml:space="preserve">
+    <value>Template package version</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgSourceUrl_DisplayName" xml:space="preserve">
+    <value>Template package source URL</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgInstalledDate_DisplayName" xml:space="preserve">
+    <value>Template package installed date</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgUpdatedDate_DisplayName" xml:space="preserve">
+    <value>Template package updated date</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgLatestVersion_DisplayName" xml:space="preserve">
+    <value>Template package latest version</value>
+  </data>
   <data name="Lists_TemplateOptions_Fields_GtDocumentTemplateLibrary_Description" xml:space="preserve">
     <value>Pick the template library to be used as a source for templates that can be imported into the project document libraries.</value>
   </data>

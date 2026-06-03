@@ -1,0 +1,15 @@
+.list {
+  display: block;
+}
+
+.empty {
+  padding: var(--spacingVerticalL) 0;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacingHorizontalM);
+  padding: var(--spacingVerticalM) 0;
+}

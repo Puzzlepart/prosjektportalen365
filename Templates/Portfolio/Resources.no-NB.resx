@@ -2260,6 +2260,27 @@
   <data name="Lists_TemplateOptions_Fields_FieldConfigurationName_DisplayName" xml:space="preserve">
     <value>Feltkonfigurasjon</value>
   </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgType_DisplayName" xml:space="preserve">
+    <value>Malpakketype</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgId_DisplayName" xml:space="preserve">
+    <value>Malpakke-ID</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgVersion_DisplayName" xml:space="preserve">
+    <value>Malpakkeversjon</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgSourceUrl_DisplayName" xml:space="preserve">
+    <value>Malpakke kildeadresse</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgInstalledDate_DisplayName" xml:space="preserve">
+    <value>Malpakke installert dato</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgUpdatedDate_DisplayName" xml:space="preserve">
+    <value>Malpakke oppdatert dato</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgLatestVersion_DisplayName" xml:space="preserve">
+    <value>Malpakke siste versjon</value>
+  </data>
   <data name="Lists_TemplateOptions_Fields_GtDocumentTemplateLibrary_Description" xml:space="preserve">
     <value>Velg malbibliotek som skal brukes som kilde for maler som kan hentes inn til dokumentbibliotekene i prosjektet.</value>
   </data>

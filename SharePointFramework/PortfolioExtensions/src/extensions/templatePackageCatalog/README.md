@@ -1,0 +1,72 @@
+# Template Package Catalog (Malpakkekatalog)
+
+A SPFx **ListView Command Set** on the **Maloppsett** (Template Options) list that
+opens a Fluent UI v9 master–detail drawer for browsing template packages from the
+central **`prosjektportalen-hosting`** catalog. A portal administrator can:
+
+- Browse, search, filter (type / category / status) and sort the catalog.
+- View package details, content summary and version history (from `CHANGELOG.md`).
+- **Mode A — "Kopier til min installasjon"** (`Importert`): download the `.pppkg`,
+  unzip it, validate the manifest, provision the hub, store the project-level
+  assets and write a Maloppsett item.
+- **Mode B — "Tilgjengeliggjør som skymal"** (`Sentral`): register a metadata-only
+  Maloppsett item that points at the hosting repo (no local provisioning).
+- Update or remove already-imported / central templates.
+
+## How it is wired
+
+| Concern | Where |
+| --- | --- |
+| Command entry / mount | `index.tsx` (`render` into a `document.body` placeholder) |
+| Visibility | Shown only on the Maloppsett list (`Lists/TemplateOptions` URL) for users with `ManageWeb` |
+| Registration | `Templates/Portfolio/Objects/CustomActions.xml` (ClientSideComponentId `75f97492-…`) |
+| New Maloppsett fields | `Templates/Portfolio/Objects/Lists/Maloppsett.xml` (`PpPkg*`) + `Resources.*.resx` |
+| Data | `services/CatalogService` (catalog + changelog), `services/MaloppsettService` (read/cross-ref/write), `services/PackageInstaller` (Mode A) |
+| Hub web | `SPDataAdapter.portalDataService.web` |
+
+## Configuration (CustomAction `ClientSideComponentProperties`)
+
+```json
+{
+  "catalogUrl": "https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-hosting/main/catalog.json",
+  "userGuideUrl": "https://…",
+  "featureFlagProvisioning": false
+}
+```
+
+- `catalogUrl` — defaults to the hosting `main` `catalog.json`. Falls back to the
+  committed `services/sampleCatalog.ts` fixture on CORS/network failure.
+- `userGuideUrl` — target of the "Se brukerveiledning" footer link.
+- `featureFlagProvisioning` — see below.
+
+## Feature flag — taxonomy provisioning
+
+Hub provisioning (fields, content types, lists, files, …) runs for real via the
+existing `sp-js-provisioning` `WebProvisioner.applyTemplate` flow (the same one the
+project setup template dialog uses), applied to the **hub web**.
+
+The **taxonomy / Term Store** step is **gated** because `sp-js-provisioning` 1.3.7 has
+no Term Store handler — that handler is a separate, out-of-repo deliverable. Until it
+ships, the step shows "Hoppet over (feature flag av)".
+
+Enable the (placeholder) taxonomy step via either:
+
+- `featureFlagProvisioning: true` on the CustomAction properties, or
+- `sessionStorage.setItem('PP_ENABLE_TAXONOMY', '1')` for local testing.
+
+`sessionStorage.setItem('PP_DISABLE_IMPORT', '1')` disables the whole import action
+during a controlled pilot.
+
+## Dev / test
+
+- Point `catalogUrl` at the hosting `dev` branch's raw `catalog.json`, or rely on the
+  committed sample fixture.
+- Build the dummy package (`dummy-prosjektmal-1.0.1.pppkg`) with the hosting repo's
+  `scripts/build-packages.js`, or use its GitHub release, to exercise Mode A. Its
+  `hub-template.json` carries taxonomy, so it exercises the gated path.
+
+## Out of scope (other repos / later phases)
+
+- Real `.pppkg` packaging + `catalog.json` publishing — `prosjektportalen-hosting`.
+- The `sp-js-provisioning` taxonomy/Term Store handler — `sp-js-provisioning` fork.
+- Runtime central-template resolution in the setup wizard + project-site stamping — Phase 3.

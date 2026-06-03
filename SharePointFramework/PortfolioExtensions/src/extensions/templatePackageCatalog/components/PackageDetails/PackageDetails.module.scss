@@ -1,0 +1,95 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacingVerticalM);
+}
+
+.backButton {
+  display: none;
+  align-self: flex-start;
+}
+
+.thumbnail {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: var(--borderRadiusMedium);
+  background-color: var(--colorNeutralBackground3);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacingHorizontalS);
+  flex-wrap: wrap;
+}
+
+.meta {
+  color: var(--colorNeutralForeground3);
+}
+
+.description {
+  color: var(--colorNeutralForeground1);
+  white-space: pre-line;
+}
+
+.tags {
+  margin-top: var(--spacingVerticalXS);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacingVerticalXS);
+}
+
+.sectionTitle {
+  margin: var(--spacingVerticalS) 0 0 0;
+}
+
+.contentItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacingHorizontalS);
+  padding: var(--spacingVerticalXXS) 0;
+}
+
+.muted {
+  color: var(--colorNeutralForeground3);
+}
+
+.history {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacingVerticalS);
+}
+
+.historyEntry {
+  border-left: 2px solid var(--colorNeutralStroke2);
+  padding-left: var(--spacingHorizontalM);
+}
+
+.historyNotes {
+  margin: var(--spacingVerticalXXS) 0 0 var(--spacingHorizontalL);
+  padding: 0;
+  color: var(--colorNeutralForeground2);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacingHorizontalS);
+  margin-top: var(--spacingVerticalM);
+  padding-top: var(--spacingVerticalM);
+  border-top: 1px solid var(--colorNeutralStroke2);
+}
+
+.empty {
+  padding: var(--spacingVerticalXL) 0;
+}
+
+@media (max-width: 720px) {
+  .backButton {
+    display: inline-flex;
+  }
+}

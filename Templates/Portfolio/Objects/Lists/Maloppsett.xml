@@ -67,6 +67,20 @@
       <Default>{resource:Lists_TemplateLibrary_Title}</Default>
     </Field>
     <Field Type="Text" DisplayName="{resource:Lists_TemplateOptions_Fields_FieldConfigurationName_DisplayName}" ID="{b97638c9-7116-4dbc-b0cc-850291e89008}" StaticName="FieldConfigurationName" Name="FieldConfigurationName" />
+    <Field Type="Choice" DisplayName="{resource:Lists_TemplateOptions_Fields_PpPkgType_DisplayName}" Format="Dropdown" ID="{72b05178-5ad2-4db3-b48e-99e4996eb670}" StaticName="PpPkgType" Name="PpPkgType">
+      <Default>Lokal</Default>
+      <CHOICES>
+        <CHOICE>Lokal</CHOICE>
+        <CHOICE>Importert</CHOICE>
+        <CHOICE>Sentral</CHOICE>
+      </CHOICES>
+    </Field>
+    <Field Type="Text" DisplayName="{resource:Lists_TemplateOptions_Fields_PpPkgId_DisplayName}" MaxLength="255" ID="{8d88dd78-55c4-46dc-8214-dd6c13021f61}" StaticName="PpPkgId" Name="PpPkgId" />
+    <Field Type="Text" DisplayName="{resource:Lists_TemplateOptions_Fields_PpPkgVersion_DisplayName}" MaxLength="255" ID="{64c2be55-e283-42b8-b4af-7b651a04c304}" StaticName="PpPkgVersion" Name="PpPkgVersion" />
+    <Field Type="URL" Format="Hyperlink" DisplayName="{resource:Lists_TemplateOptions_Fields_PpPkgSourceUrl_DisplayName}" ID="{1de4fe88-5e0f-4e92-a725-9b75a82ef2e0}" StaticName="PpPkgSourceUrl" Name="PpPkgSourceUrl" />
+    <Field Type="DateTime" Format="DateTime" DisplayName="{resource:Lists_TemplateOptions_Fields_PpPkgInstalledDate_DisplayName}" ID="{42f3550b-ee40-4d7d-ab29-20ee28729a31}" StaticName="PpPkgInstalledDate" Name="PpPkgInstalledDate" />
+    <Field Type="DateTime" Format="DateTime" DisplayName="{resource:Lists_TemplateOptions_Fields_PpPkgUpdatedDate_DisplayName}" ID="{1d688b48-7062-4453-bcc5-33c75e38be1e}" StaticName="PpPkgUpdatedDate" Name="PpPkgUpdatedDate" />
+    <Field Type="Text" DisplayName="{resource:Lists_TemplateOptions_Fields_PpPkgLatestVersion_DisplayName}" MaxLength="255" ID="{05ca20cb-d115-49dd-a53f-cbb0920099fd}" StaticName="PpPkgLatestVersion" Name="PpPkgLatestVersion" />
   </pnp:Fields>
   <pnp:FieldRefs>
     <pnp:FieldRef ID="c3beecea-c0e5-4d18-9b45-3c7d7949bee4" Name="GtDescription" DisplayName="{resource:Lists_GtDescription_DisplayName}" />
@@ -85,6 +99,7 @@
       <pnp:DataValue FieldName="IsDefaultListContentLocked">False</pnp:DataValue>
       <pnp:DataValue FieldName="GtDescription">{resource:Lists_TemplateOptions_StandardTemplate_Description}</pnp:DataValue>
       <pnp:DataValue FieldName="IconName">Page</pnp:DataValue>
+      <pnp:DataValue FieldName="PpPkgType">Lokal</pnp:DataValue>
       <pnp:DataValue FieldName="GtDocumentTemplateLibrary">{resource:Lists_TemplateLibrary_Title}</pnp:DataValue>
     </pnp:DataRow>
     <pnp:DataRow>
@@ -98,6 +113,7 @@
       <pnp:DataValue FieldName="IsHiddenTemplate">True</pnp:DataValue>
       <pnp:DataValue FieldName="GtDescription">{resource:Lists_TemplateOptions_ParentTemplate_Description}</pnp:DataValue>
       <pnp:DataValue FieldName="IconName">ProductVariant</pnp:DataValue>
+      <pnp:DataValue FieldName="PpPkgType">Lokal</pnp:DataValue>
       <pnp:DataValue FieldName="GtDocumentTemplateLibrary">{resource:Lists_TemplateLibrary_Title}</pnp:DataValue>
     </pnp:DataRow>
     <pnp:DataRow>
@@ -112,6 +128,7 @@
       <pnp:DataValue FieldName="GtIsProgram">True</pnp:DataValue>
       <pnp:DataValue FieldName="GtDescription">{resource:Lists_TemplateOptions_ProgramTemplate_Description}</pnp:DataValue>
       <pnp:DataValue FieldName="IconName">ProductList</pnp:DataValue>
+      <pnp:DataValue FieldName="PpPkgType">Lokal</pnp:DataValue>
       <pnp:DataValue FieldName="GtDocumentTemplateLibrary">{resource:Lists_TemplateLibrary_Title}</pnp:DataValue>
       <pnp:DataValue FieldName="FieldConfigurationName">Program</pnp:DataValue>
     </pnp:DataRow>
@@ -126,6 +143,7 @@
       <pnp:DataValue FieldName="GtProjectCustomColumns">{resource:SiteFields_CustomFields_Group}</pnp:DataValue>
       <pnp:DataValue FieldName="GtDescription">{resource:Lists_TemplateOptions_BuildingProject_Description}</pnp:DataValue>
       <pnp:DataValue FieldName="IconName">BuildDefinition</pnp:DataValue>
+      <pnp:DataValue FieldName="PpPkgType">Lokal</pnp:DataValue>
       <pnp:DataValue FieldName="GtDocumentTemplateLibrary">{resource:Lists_TemplateLibrary_Title}</pnp:DataValue>
     </pnp:DataRow>
     <pnp:DataRow>
@@ -139,6 +157,7 @@
       <pnp:DataValue FieldName="GtProjectCustomColumns">{resource:SiteFields_CustomFields_Group}</pnp:DataValue>
       <pnp:DataValue FieldName="GtDescription">{resource:Lists_TemplateOptions_ConstructionProject_Description}</pnp:DataValue>
       <pnp:DataValue FieldName="IconName">DeliveryTruck</pnp:DataValue>
+      <pnp:DataValue FieldName="PpPkgType">Lokal</pnp:DataValue>
       <pnp:DataValue FieldName="GtDocumentTemplateLibrary">{resource:Lists_TemplateLibrary_Title}</pnp:DataValue>
     </pnp:DataRow>
   </pnp:DataRows>

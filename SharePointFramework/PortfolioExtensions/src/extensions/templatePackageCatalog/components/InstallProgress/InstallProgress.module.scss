@@ -1,0 +1,44 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacingVerticalM);
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacingVerticalS);
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacingHorizontalS);
+}
+
+.stepText {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail {
+  color: var(--colorNeutralForeground3);
+}
+
+.successIcon {
+  color: var(--colorPaletteGreenForeground1);
+}
+
+.errorIcon {
+  color: var(--colorPaletteRedForeground1);
+}
+
+.mutedIcon {
+  color: var(--colorNeutralForeground4);
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: var(--spacingVerticalL) 0;
+}
