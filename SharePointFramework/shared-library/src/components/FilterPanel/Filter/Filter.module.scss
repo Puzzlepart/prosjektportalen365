@@ -16,4 +16,42 @@
     display: flex;
     flex-direction: column;
   }
+  .treeNode {
+    display: flex;
+    flex-direction: column;
+  }
+  .treeRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2px;
+  }
+  .expandToggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    color: var(--colorNeutralForeground3);
+    border-radius: var(--borderRadiusSmall);
+
+    &:hover {
+      background-color: var(--colorSubtleBackgroundHover);
+    }
+  }
+  .expandSpacer {
+    display: inline-block;
+    flex-shrink: 0;
+    width: 16px;
+  }
+  .filterItem {
+    border-radius: var(--borderRadiusMedium);
+    color: var(--colorNeutralForeground1) !important;
+
+    &:hover {
+      background-color: var(--colorSubtleBackgroundHover);
+    }
+  }
 }

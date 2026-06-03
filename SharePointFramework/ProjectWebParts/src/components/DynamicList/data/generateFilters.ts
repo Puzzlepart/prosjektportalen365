@@ -1,3 +1,4 @@
+import { IColumn } from '@fluentui/react'
 import { IFilterProps } from 'pp365-shared-library'
 import { IDynamicListData } from '../types'
 import { get } from '@microsoft/sp-lodash-subset'
@@ -105,12 +106,18 @@ export function generateFilters(
       })
 
       filters.push({
+        // Forward only `dataType` (e.g. data type `Tags`) to the FilterPanel so
+        // taxonomy/Tags fields can render as a hierarchy. We intentionally do
+        // NOT forward the full `data` object: it can carry `renderAs: 'boolean'`
+        // from the column configuration, which would route boolean filters
+        // through the boolean label mapping and break them.
         column: {
           key: column.key,
-          fieldName: fieldName,
+          fieldName,
           name: column.name,
-          minWidth: column.minWidth
-        },
+          minWidth: column.minWidth,
+          dataType: (column as any).dataType
+        } as IColumn,
         items: filterItems
       })
     }
