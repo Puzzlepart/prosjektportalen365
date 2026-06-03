@@ -45,7 +45,7 @@ export class CatalogService {
     const url = (catalogUrl && catalogUrl.trim()) || DEFAULT_CATALOG_URL
     const cacheKey = `${CACHE_PREFIX}${getHashCode(url.toLowerCase())}`
     const store = new PnPClientStorage().local
-    const cached = store.get<ICatalog>(cacheKey)
+    const cached = store.get(cacheKey) as ICatalog
     if (cached) {
       return { catalog: cached, degraded: false }
     }

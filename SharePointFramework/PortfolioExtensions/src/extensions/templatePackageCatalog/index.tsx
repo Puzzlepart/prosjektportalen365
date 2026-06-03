@@ -6,7 +6,7 @@ import {
 } from '@microsoft/sp-listview-extensibility'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import { PermissionKind } from '@pnp/sp/security'
-import { getId } from '@uifabric/utilities'
+import { getId } from '@fluentui/react/lib/Utilities'
 import { themeColor } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
 import React from 'react'
