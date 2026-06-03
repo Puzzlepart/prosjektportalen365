@@ -2,7 +2,6 @@ import {
   Badge,
   Button,
   DrawerBody,
-  DrawerFooter,
   DrawerHeader,
   DrawerHeaderTitle,
   FluentProvider,
@@ -42,8 +41,8 @@ export const TemplatePackageCatalog: FC<ITemplatePackageCatalogProps> = (props) 
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme}>
           <OverlayDrawer
-            role="dialog"
-            position="end"
+            role='dialog'
+            position='end'
             open={open}
             className={styles.surface}
             onOpenChange={(_, data) => {
@@ -54,7 +53,7 @@ export const TemplatePackageCatalog: FC<ITemplatePackageCatalogProps> = (props) 
               <DrawerHeaderTitle
                 action={
                   <Button
-                    appearance="subtle"
+                    appearance='subtle'
                     aria-label={strings.CatalogCloseAria}
                     icon={<Dismiss24Regular />}
                     onClick={close}
@@ -62,7 +61,7 @@ export const TemplatePackageCatalog: FC<ITemplatePackageCatalogProps> = (props) 
                 }
               >
                 {strings.CatalogDrawerTitle}{' '}
-                <Badge appearance="filled" color="brand" size="small">
+                <Badge appearance='filled' color='brand' size='small'>
                   {strings.CatalogNewBadge}
                 </Badge>
               </DrawerHeaderTitle>
@@ -78,7 +77,7 @@ export const TemplatePackageCatalog: FC<ITemplatePackageCatalogProps> = (props) 
               {state.degraded && (
                 <div className={styles.banner}>
                   <UserMessage
-                    intent="warning"
+                    intent='warning'
                     title={strings.CatalogLoadErrorTitle}
                     text={strings.CatalogLoadErrorText}
                   />
@@ -117,7 +116,7 @@ export const TemplatePackageCatalog: FC<ITemplatePackageCatalogProps> = (props) 
 
               {props.userGuideUrl && (
                 <div className={styles.footer}>
-                  <Link href={props.userGuideUrl} target="_blank">
+                  <Link href={props.userGuideUrl} target='_blank'>
                     {strings.CatalogUserGuideLinkText}
                   </Link>
                 </div>

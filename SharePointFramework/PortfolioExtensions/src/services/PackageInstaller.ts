@@ -218,10 +218,7 @@ export class PackageInstaller {
    * extensions, content) into a folder under the hub Template Library so the
    * setup wizard can use them later. Non-critical — returns false on failure.
    */
-  private static async _storeProjectFiles(
-    zip: any,
-    manifest: IPackageManifest
-  ): Promise<boolean> {
+  private static async _storeProjectFiles(zip: any, manifest: IPackageManifest): Promise<boolean> {
     try {
       const web = SPDataAdapter.portalDataService.web
       const root = await web.lists

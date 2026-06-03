@@ -32,15 +32,15 @@ export const PackageHistory: FC<IPackageHistoryProps> = ({ changelogUrl }) => {
 
   return (
     <div className={styles.section}>
-      <Text weight="semibold" className={styles.sectionTitle}>
+      <Text weight='semibold' className={styles.sectionTitle}>
         {strings.CatalogHistoryTitle}
       </Text>
-      {loading && <Spinner size="tiny" />}
+      {loading && <Spinner size='tiny' />}
       {!loading && entries.length > 0 && (
         <div className={styles.history}>
           {entries.map((entry) => (
             <div key={entry.version} className={styles.historyEntry}>
-              <Text weight="semibold">
+              <Text weight='semibold'>
                 v{entry.version}
                 {entry.date ? ` — ${entry.date}` : ''}
               </Text>
@@ -60,7 +60,7 @@ export const PackageHistory: FC<IPackageHistoryProps> = ({ changelogUrl }) => {
       {!loading && entries.length === 0 && (
         <Text size={200} className={styles.muted}>
           {changelogUrl ? (
-            <Link href={changelogUrl} target="_blank">
+            <Link href={changelogUrl} target='_blank'>
               {strings.CatalogChangelogLinkText}
             </Link>
           ) : (

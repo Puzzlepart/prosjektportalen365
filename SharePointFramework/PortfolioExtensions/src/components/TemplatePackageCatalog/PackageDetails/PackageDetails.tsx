@@ -17,14 +17,20 @@ import { PackageHistory } from './PackageHistory'
 import styles from './PackageDetails.module.scss'
 
 export const PackageDetails: FC = () => {
-  const { selectedPackage, crossRefFor, importPackage, publishCentral, removePackage, closeDetail } =
-    useCatalogContext()
+  const {
+    selectedPackage,
+    crossRefFor,
+    importPackage,
+    publishCentral,
+    removePackage,
+    closeDetail
+  } = useCatalogContext()
   const [imageError, setImageError] = useState(false)
 
   if (!selectedPackage) {
     return (
       <div className={styles.empty}>
-        <UserMessage intent="info" text={strings.CatalogDetailsEmptyText} />
+        <UserMessage intent='info' text={strings.CatalogDetailsEmptyText} />
       </div>
     )
   }
@@ -46,7 +52,7 @@ export const PackageDetails: FC = () => {
     <div className={styles.root}>
       <Button
         className={styles.backButton}
-        appearance="subtle"
+        appearance='subtle'
         icon={<ArrowLeft24Regular />}
         onClick={closeDetail}
       >
@@ -57,13 +63,13 @@ export const PackageDetails: FC = () => {
         <img
           className={styles.thumbnail}
           src={pkg.thumbnail}
-          alt=""
+          alt=''
           onError={() => setImageError(true)}
         />
       )}
 
       <div className={styles.titleRow}>
-        <Text size={500} weight="semibold">
+        <Text size={500} weight='semibold'>
           {pkg.name}
         </Text>
         <PackageBadges packageId={pkg.id} />
@@ -71,14 +77,12 @@ export const PackageDetails: FC = () => {
 
       <Caption1 className={styles.meta}>{meta}</Caption1>
 
-      {pkg.description && (
-        <Text className={styles.description}>{pkg.description}</Text>
-      )}
+      {pkg.description && <Text className={styles.description}>{pkg.description}</Text>}
 
       {(pkg.tags?.length ?? 0) > 0 && (
         <TagGroup className={styles.tags}>
           {pkg.tags?.map((tag) => (
-            <Tag key={tag} size="small" appearance="outline">
+            <Tag key={tag} size='small' appearance='outline'>
               {tag}
             </Tag>
           ))}
@@ -91,7 +95,7 @@ export const PackageDetails: FC = () => {
 
       <div className={styles.actions}>
         <Button
-          appearance="primary"
+          appearance='primary'
           icon={<ArrowDownload24Regular />}
           onClick={() => importPackage(pkg)}
         >
@@ -101,7 +105,7 @@ export const PackageDetails: FC = () => {
         </Button>
         {!isCentral && (
           <Button
-            appearance="secondary"
+            appearance='secondary'
             icon={<Cloud24Regular />}
             onClick={() => publishCentral(pkg)}
           >
@@ -109,11 +113,7 @@ export const PackageDetails: FC = () => {
           </Button>
         )}
         {ref && (
-          <Button
-            appearance="subtle"
-            icon={<Delete24Regular />}
-            onClick={() => removePackage(pkg)}
-          >
+          <Button appearance='subtle' icon={<Delete24Regular />} onClick={() => removePackage(pkg)}>
             {strings.CatalogActionRemove}
           </Button>
         )}

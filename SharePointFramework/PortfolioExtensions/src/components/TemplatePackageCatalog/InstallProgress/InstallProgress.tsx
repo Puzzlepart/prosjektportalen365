@@ -42,7 +42,7 @@ function stepLabel(key: InstallStepKey): string {
 const StepIcon: FC<{ status: InstallStepStatus }> = ({ status }) => {
   switch (status) {
     case 'running':
-      return <Spinner size="tiny" />
+      return <Spinner size='tiny' />
     case 'done':
       return <CheckmarkCircle24Filled className={styles.successIcon} />
     case 'error':
@@ -94,20 +94,20 @@ export const InstallProgress: FC = () => {
 
       {progress.status === 'success' && (
         <UserMessage
-          intent="success"
+          intent='success'
           title={strings.CatalogInstallSuccessTitle}
           text={strings.CatalogInstallSuccessText}
         />
       )}
       {progress.status === 'error' && (
         <UserMessage
-          intent="error"
+          intent='error'
           title={strings.CatalogInstallErrorTitle}
           text={progress.error}
         />
       )}
       {isTerminal && (
-        <Button appearance="primary" onClick={() => setState({ installProgress: undefined })}>
+        <Button appearance='primary' onClick={() => setState({ installProgress: undefined })}>
           {strings.CloseLabel}
         </Button>
       )}

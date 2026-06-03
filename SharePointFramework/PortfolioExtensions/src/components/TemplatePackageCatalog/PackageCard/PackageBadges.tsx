@@ -16,19 +16,19 @@ export const PackageBadges: FC<{ packageId: string }> = ({ packageId }) => {
   switch (ref.badge) {
     case PackageBadge.Installed:
       return (
-        <Badge appearance="tint" color="informative">
+        <Badge appearance='tint' color='informative'>
           {strings.CatalogBadgeImported}
         </Badge>
       )
     case PackageBadge.Central:
       return (
-        <Badge appearance="tint" color="brand">
+        <Badge appearance='tint' color='brand'>
           {strings.CatalogBadgeCentral}
         </Badge>
       )
     case PackageBadge.UpdateAvailable:
       return (
-        <Badge appearance="tint" color="warning">
+        <Badge appearance='tint' color='warning'>
           {strings.CatalogBadgeUpdate}
         </Badge>
       )

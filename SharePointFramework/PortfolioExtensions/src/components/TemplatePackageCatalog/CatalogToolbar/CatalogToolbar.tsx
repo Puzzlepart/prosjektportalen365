@@ -52,7 +52,7 @@ export const CatalogToolbar: FC = () => {
     options.find((o) => o.value === value)?.text ?? ''
 
   return (
-    <div className={styles.toolbar} role="toolbar" aria-label={strings.CatalogDrawerTitle}>
+    <div className={styles.toolbar} role='toolbar' aria-label={strings.CatalogDrawerTitle}>
       <SearchBox
         className={styles.search}
         placeholder={strings.CatalogSearchPlaceholder}
@@ -79,11 +79,7 @@ export const CatalogToolbar: FC = () => {
         className={styles.dropdown}
         aria-label={strings.CatalogFilterCategoryLabel}
         placeholder={strings.CatalogFilterCategoryLabel}
-        value={
-          filters.category === ALL_FILTER
-            ? strings.CatalogFilterAllOption
-            : filters.category
-        }
+        value={filters.category === ALL_FILTER ? strings.CatalogFilterAllOption : filters.category}
         selectedOptions={[filters.category]}
         onOptionSelect={(_, data) => setFilter('category', data.optionValue ?? ALL_FILTER)}
       >
@@ -113,7 +109,7 @@ export const CatalogToolbar: FC = () => {
 
       <div className={styles.spacer} />
 
-      <Text size={200} className={styles.count} aria-live="polite">
+      <Text size={200} className={styles.count} aria-live='polite'>
         {format(strings.CatalogResultCount, filteredPackages.length)}
       </Text>
 

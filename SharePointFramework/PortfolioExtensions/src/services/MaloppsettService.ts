@@ -79,9 +79,7 @@ export class MaloppsettService {
       if (!item.isLinked) continue
       const pkg = catalog.packages.find((p) => p.id.toLowerCase() === item.normalizedPackageId)
       const latestVersion = pkg?.version ?? item.latestVersion
-      const updateAvailable = latestVersion
-        ? isNewerVersion(latestVersion, item.version)
-        : false
+      const updateAvailable = latestVersion ? isNewerVersion(latestVersion, item.version) : false
       let badge = PackageBadge.None
       if (item.packageType === PpPkgType.Sentral) {
         badge = PackageBadge.Central
@@ -138,7 +136,10 @@ export class MaloppsettService {
       PpPkgId: pkg.id,
       PpPkgVersion: pkg.version,
       PpPkgLatestVersion: pkg.version,
-      PpPkgSourceUrl: { Url: sourceUrl || pkg.changelogUrl || pkg.downloadUrl, Description: pkg.name },
+      PpPkgSourceUrl: {
+        Url: sourceUrl || pkg.changelogUrl || pkg.downloadUrl,
+        Description: pkg.name
+      },
       PpPkgInstalledDate: nowIso()
     })
   }

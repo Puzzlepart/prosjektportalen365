@@ -37,7 +37,7 @@ export const PackageCard: FC<IPackageCardProps> = ({ package: pkg }) => {
   return (
     <Card
       className={mergeClasses(styles.card, isSelected && styles.selected)}
-      role="listitem"
+      role='listitem'
       aria-selected={isSelected}
       tabIndex={0}
       onClick={() => setSelected(pkg.id)}
@@ -53,7 +53,7 @@ export const PackageCard: FC<IPackageCardProps> = ({ package: pkg }) => {
           <img
             className={styles.previewImage}
             src={pkg.thumbnail}
-            alt=""
+            alt=''
             onError={() => setImageError(true)}
           />
         ) : (
@@ -63,7 +63,7 @@ export const PackageCard: FC<IPackageCardProps> = ({ package: pkg }) => {
         )}
       </CardPreview>
       <CardHeader
-        header={<Text weight="semibold">{pkg.name}</Text>}
+        header={<Text weight='semibold'>{pkg.name}</Text>}
         description={
           <div className={styles.badges}>
             <PackageBadges packageId={pkg.id} />
@@ -78,7 +78,7 @@ export const PackageCard: FC<IPackageCardProps> = ({ package: pkg }) => {
       {(pkg.tags?.length ?? 0) > 0 && (
         <TagGroup>
           {pkg.tags?.map((tag) => (
-            <Tag key={tag} size="extra-small" appearance="outline">
+            <Tag key={tag} size='extra-small' appearance='outline'>
               {tag}
             </Tag>
           ))}

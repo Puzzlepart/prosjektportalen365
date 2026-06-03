@@ -16,7 +16,7 @@ export interface IPackageContentSummaryProps {
 export const PackageContentSummary: FC<IPackageContentSummaryProps> = ({ items }) => {
   return (
     <div className={styles.section}>
-      <Text weight="semibold" className={styles.sectionTitle}>
+      <Text weight='semibold' className={styles.sectionTitle}>
         {strings.CatalogContentSummaryTitle}
       </Text>
       {items && items.length > 0 ? (

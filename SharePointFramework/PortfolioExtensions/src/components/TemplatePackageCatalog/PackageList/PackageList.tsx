@@ -16,7 +16,7 @@ export const PackageList: FC = () => {
     return (
       <div className={styles.empty}>
         <UserMessage
-          intent="info"
+          intent='info'
           title={strings.CatalogEmptyTitle}
           text={strings.CatalogEmptyDescription}
         />
@@ -30,7 +30,7 @@ export const PackageList: FC = () => {
 
   return (
     <div className={styles.list}>
-      <div role="list">
+      <div role='list'>
         {pagedPackages.map((pkg) => (
           <PackageCard key={pkg.id} package={pkg} />
         ))}
@@ -38,7 +38,7 @@ export const PackageList: FC = () => {
       {pageCount > 1 && (
         <div className={styles.pagination}>
           <Button
-            appearance="subtle"
+            appearance='subtle'
             icon={<ChevronLeft20Regular />}
             disabled={page <= 1}
             aria-label={strings.CatalogPaginationPrevious}
@@ -48,7 +48,7 @@ export const PackageList: FC = () => {
             {format(strings.CatalogPaginationText, start, end, filteredPackages.length)}
           </Text>
           <Button
-            appearance="subtle"
+            appearance='subtle'
             icon={<ChevronRight20Regular />}
             disabled={page >= pageCount}
             aria-label={strings.CatalogPaginationNext}

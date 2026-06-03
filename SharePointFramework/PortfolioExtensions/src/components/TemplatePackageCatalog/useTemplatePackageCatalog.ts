@@ -39,7 +39,6 @@ export function useTemplatePackageCatalog(
     return () => {
       cancelled = true
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.catalogUrl])
 
   const allPackages = state.catalog?.packages ?? []
