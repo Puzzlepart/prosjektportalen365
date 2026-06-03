@@ -5,7 +5,6 @@ import '@pnp/sp/webs'
 import '@pnp/sp/lists'
 import '@pnp/sp/folders'
 import '@pnp/sp/files'
-import type JSZip from 'jszip'
 import strings from 'PortfolioExtensionsStrings'
 import resource from 'SharedResources'
 import SPDataAdapter from '../../../data/SPDataAdapter'
@@ -90,23 +89,27 @@ export class PackageInstaller {
       const versionDetail = await PackageInstaller._checkVersion(manifest)
       setStatus(InstallStepKey.CheckVersion, 'done', versionDetail)
 
+      // Taxonomy is the only feature-flag-gated part. When enabled, the hub
+      // schema's `Taxonomy` part is provisioned by the sp-js-provisioning
+      // Taxonomy handler as part of `applyTemplate` below; when disabled, it is
+      // stripped from the schema so the handler skips it.
+      const enableTaxonomy = featureFlags.enableTaxonomyProvisioning({
+        featureFlagProvisioning
+      })
+
       setStatus(InstallStepKey.ProvisionHub, 'running')
-      await PackageInstaller._provisionHub(zip, manifest, context)
+      await PackageInstaller._provisionHub(zip, manifest, context, enableTaxonomy)
       setStatus(InstallStepKey.ProvisionHub, 'done')
 
-      // Taxonomy — the only feature-flag-gated step (no handler in 1.3.7).
-      if (featureFlags.enableTaxonomyProvisioning({ featureFlagProvisioning })) {
-        setStatus(InstallStepKey.Taxonomy, 'running')
+      if (!enableTaxonomy) {
+        setStatus(InstallStepKey.Taxonomy, 'skipped', strings.CatalogStepSkippedFeatureFlag)
+      } else {
         const hasPermission = await SPDataAdapter.hasTermStorePermission()
-        // The out-of-repo Term Store handler is not available yet; this is a
-        // no-op placeholder to be replaced once it ships.
         setStatus(
           InstallStepKey.Taxonomy,
           hasPermission ? 'done' : 'skipped',
           hasPermission ? undefined : strings.CatalogPermissionError
         )
-      } else {
-        setStatus(InstallStepKey.Taxonomy, 'skipped', strings.CatalogStepSkippedFeatureFlag)
       }
 
       setStatus(InstallStepKey.StoreProjectTemplate, 'running')
@@ -141,12 +144,12 @@ export class PackageInstaller {
     return response.arrayBuffer()
   }
 
-  private static async _unzip(buffer: ArrayBuffer): Promise<JSZip> {
+  private static async _unzip(buffer: ArrayBuffer): Promise<any> {
     const JSZipModule = (await import('jszip')).default
     return JSZipModule.loadAsync(buffer)
   }
 
-  private static async _readManifest(zip: JSZip): Promise<IPackageManifest> {
+  private static async _readManifest(zip: any): Promise<IPackageManifest> {
     const file = zip.file('manifest.json')
     if (!file) throw new Error('manifest.json not found in package')
     let manifest: IPackageManifest
@@ -179,9 +182,10 @@ export class PackageInstaller {
   }
 
   private static async _provisionHub(
-    zip: JSZip,
+    zip: any,
     manifest: IPackageManifest,
-    context: ListViewCommandSetContext
+    context: ListViewCommandSetContext,
+    includeTaxonomy: boolean
   ): Promise<void> {
     const hubTemplate = manifest.provisioning?.hubTemplate
     if (!hubTemplate) return
@@ -190,6 +194,11 @@ export class PackageInstaller {
       throw new Error(`Hub template ${hubTemplate} not found in package`)
     }
     const schema = JSON.parse(await file.async('string'))
+    // Gate the (sp-js-provisioning) Taxonomy handler: strip the Taxonomy part
+    // when the feature flag is off so term-store provisioning is skipped.
+    if (!includeTaxonomy && schema.Taxonomy) {
+      delete schema.Taxonomy
+    }
     // Lazy import keeps sp-js-provisioning out of the command-set entrypoint.
     const { WebProvisioner } = await import('sp-js-provisioning')
     const provisioner = new WebProvisioner(SPDataAdapter.portalDataService.web).setup({
@@ -210,7 +219,7 @@ export class PackageInstaller {
    * setup wizard can use them later. Non-critical — returns false on failure.
    */
   private static async _storeProjectFiles(
-    zip: JSZip,
+    zip: any,
     manifest: IPackageManifest
   ): Promise<boolean> {
     try {

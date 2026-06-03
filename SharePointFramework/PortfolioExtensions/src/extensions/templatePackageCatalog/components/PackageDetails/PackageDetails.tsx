@@ -77,7 +77,7 @@ export const PackageDetails: FC = () => {
 
       {(pkg.tags?.length ?? 0) > 0 && (
         <TagGroup className={styles.tags}>
-          {pkg.tags.map((tag) => (
+          {pkg.tags?.map((tag) => (
             <Tag key={tag} size="small" appearance="outline">
               {tag}
             </Tag>

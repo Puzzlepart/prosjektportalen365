@@ -16,8 +16,14 @@ export const CatalogToolbar: FC = () => {
   const [searchValue, setSearchValue] = useState(filters.search)
   const timer = useRef<ReturnType<typeof setTimeout>>()
   useEffect(() => {
-    return () => timer.current && clearTimeout(timer.current)
+    return () => {
+      if (timer.current) clearTimeout(timer.current)
+    }
   }, [])
+  // Keep the input in sync when filters are cleared externally ("Tøm filtre").
+  useEffect(() => {
+    if (filters.search === '') setSearchValue('')
+  }, [filters.search])
   const onSearchChange = (value: string) => {
     setSearchValue(value)
     if (timer.current) clearTimeout(timer.current)

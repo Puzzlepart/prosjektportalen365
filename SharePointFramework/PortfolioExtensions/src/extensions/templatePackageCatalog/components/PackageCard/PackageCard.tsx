@@ -77,7 +77,7 @@ export const PackageCard: FC<IPackageCardProps> = ({ package: pkg }) => {
       )}
       {(pkg.tags?.length ?? 0) > 0 && (
         <TagGroup>
-          {pkg.tags.map((tag) => (
+          {pkg.tags?.map((tag) => (
             <Tag key={tag} size="extra-small" appearance="outline">
               {tag}
             </Tag>
