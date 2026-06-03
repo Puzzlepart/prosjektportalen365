@@ -2,8 +2,8 @@ import { format } from '@fluentui/react/lib/Utilities'
 import { Dropdown, Link, Option, SearchBox, Text } from '@fluentui/react-components'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC, useEffect, useRef, useState } from 'react'
-import { useCatalogContext } from '../TemplatePackageCatalog/context'
-import { ALL_FILTER } from '../TemplatePackageCatalog/types'
+import { useCatalogContext } from '../context'
+import { ALL_FILTER } from '../types'
 import styles from './CatalogToolbar.module.scss'
 
 export const CatalogToolbar: FC = () => {

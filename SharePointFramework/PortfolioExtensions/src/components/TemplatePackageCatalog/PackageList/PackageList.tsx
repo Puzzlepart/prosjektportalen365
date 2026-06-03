@@ -5,8 +5,8 @@ import { UserMessage } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC } from 'react'
 import { PackageCard } from '../PackageCard'
-import { useCatalogContext } from '../TemplatePackageCatalog/context'
-import { PAGE_SIZE } from '../TemplatePackageCatalog/types'
+import { useCatalogContext } from '../context'
+import { PAGE_SIZE } from '../types'
 import styles from './PackageList.module.scss'
 
 export const PackageList: FC = () => {

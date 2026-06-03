@@ -1,8 +1,8 @@
 import { Link, Spinner, Text } from '@fluentui/react-components'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC, useEffect, useState } from 'react'
-import { IChangelogEntry } from '../../models'
-import { CatalogService } from '../../services'
+import { IChangelogEntry } from 'models'
+import { CatalogService } from 'services'
 import styles from './PackageDetails.module.scss'
 
 export interface IPackageHistoryProps {

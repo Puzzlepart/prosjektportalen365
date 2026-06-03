@@ -12,8 +12,8 @@ import {
 import { Apps24Regular } from '@fluentui/react-icons'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC, useState } from 'react'
-import { ICatalogPackage } from '../../models'
-import { useCatalogContext } from '../TemplatePackageCatalog/context'
+import { ICatalogPackage } from 'models'
+import { useCatalogContext } from '../context'
 import { PackageBadges } from './PackageBadges'
 import styles from './PackageCard.module.scss'
 

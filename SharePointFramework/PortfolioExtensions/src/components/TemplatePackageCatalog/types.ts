@@ -1,5 +1,5 @@
 import { ListViewCommandSetContext } from '@microsoft/sp-listview-extensibility'
-import { ICatalog, ICatalogPackage, ICrossReference, IInstallProgress } from '../../models'
+import { ICatalog, ICatalogPackage, ICrossReference, IInstallProgress } from 'models'
 
 /**
  * Props for the drawer root, supplied by the command set on mount.

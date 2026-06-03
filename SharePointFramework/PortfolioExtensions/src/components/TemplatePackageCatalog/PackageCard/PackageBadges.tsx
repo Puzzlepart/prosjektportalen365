@@ -1,8 +1,8 @@
 import { Badge } from '@fluentui/react-components'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC } from 'react'
-import { PackageBadge } from '../../models'
-import { useCatalogContext } from '../TemplatePackageCatalog/context'
+import { PackageBadge } from 'models'
+import { useCatalogContext } from '../context'
 
 /**
  * Renders the status badge (Importert / Sentral / Oppdatering tilgjengelig)

@@ -7,7 +7,7 @@ import '@pnp/sp/folders'
 import '@pnp/sp/files'
 import strings from 'PortfolioExtensionsStrings'
 import resource from 'SharedResources'
-import SPDataAdapter from '../../../data/SPDataAdapter'
+import SPDataAdapter from 'data/SPDataAdapter'
 import {
   ICatalogPackage,
   IInstallProgress,
@@ -15,7 +15,7 @@ import {
   InstallStepKey,
   InstallStepStatus,
   IPackageManifest
-} from '../models'
+} from 'models'
 import { featureFlags } from './featureFlags'
 import { MaloppsettService } from './MaloppsettService'
 import { isNewerVersion } from './version'

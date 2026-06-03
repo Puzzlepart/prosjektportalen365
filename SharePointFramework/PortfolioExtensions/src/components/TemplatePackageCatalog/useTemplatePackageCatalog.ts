@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react'
 import strings from 'PortfolioExtensionsStrings'
-import { ICatalogPackage, ICrossReference } from '../../models'
-import { CatalogService, MaloppsettService, PackageInstaller } from '../../services'
+import { ICatalogPackage, ICrossReference } from 'models'
+import { CatalogService, MaloppsettService, PackageInstaller } from 'services'
 import {
   ALL_FILTER,
   ICatalogFilters,

@@ -12,8 +12,8 @@ import strings from 'PortfolioExtensionsStrings'
 import React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
 import resource from 'SharedResources'
+import { TemplatePackageCatalog } from 'components/TemplatePackageCatalog'
 import SPDataAdapter from '../../data/SPDataAdapter'
-import { TemplatePackageCatalog } from './components/TemplatePackageCatalog'
 import { ITemplatePackageCatalogCommandProperties } from './types'
 
 declare const DEBUG: boolean

@@ -1,7 +1,7 @@
 import { Text } from '@fluentui/react-components'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC } from 'react'
-import { IPackageContentItem } from '../../models'
+import { IPackageContentItem } from 'models'
 import styles from './PackageDetails.module.scss'
 
 export interface IPackageContentSummaryProps {

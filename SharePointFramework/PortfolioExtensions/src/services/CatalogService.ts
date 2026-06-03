@@ -1,6 +1,6 @@
 import { dateAdd, getHashCode, PnPClientStorage } from '@pnp/core'
 import { Logger, LogLevel } from '@pnp/logging'
-import { IChangelogEntry, ICatalog } from '../models'
+import { IChangelogEntry, ICatalog } from 'models'
 import { sampleCatalog } from './sampleCatalog'
 
 /**

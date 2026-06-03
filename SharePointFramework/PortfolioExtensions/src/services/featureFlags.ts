@@ -1,5 +1,3 @@
-import { ITemplatePackageCatalogCommandProperties } from '../types'
-
 const SS_ENABLE_TAXONOMY = 'PP_ENABLE_TAXONOMY'
 const SS_DISABLE_IMPORT = 'PP_DISABLE_IMPORT'
 
@@ -23,7 +21,7 @@ export const featureFlags = {
    * Term Store handler. Flip on (via the command-set property or the
    * `PP_ENABLE_TAXONOMY` session flag) once the out-of-repo handler ships.
    */
-  enableTaxonomyProvisioning(props?: ITemplatePackageCatalogCommandProperties): boolean {
+  enableTaxonomyProvisioning(props?: { featureFlagProvisioning?: boolean }): boolean {
     return readSessionFlag(SS_ENABLE_TAXONOMY) || !!props?.featureFlagProvisioning
   },
 

@@ -1,4 +1,4 @@
-import { ICatalog } from '../models'
+import { ICatalog } from 'models'
 
 /**
  * Dev/test fixture — a copy of the real `catalog.json` from the

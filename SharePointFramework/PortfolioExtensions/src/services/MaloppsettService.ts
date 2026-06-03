@@ -3,7 +3,7 @@ import '@pnp/sp/webs'
 import '@pnp/sp/lists'
 import '@pnp/sp/items'
 import resource from 'SharedResources'
-import SPDataAdapter from '../../../data/SPDataAdapter'
+import SPDataAdapter from 'data/SPDataAdapter'
 import {
   ICatalog,
   ICatalogPackage,
@@ -12,7 +12,7 @@ import {
   MaloppsettTemplate,
   PackageBadge,
   PpPkgType
-} from '../models'
+} from 'models'
 import { isNewerVersion } from './version'
 
 /**

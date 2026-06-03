@@ -8,8 +8,8 @@ import {
 import { UserMessage } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC } from 'react'
-import { InstallStepKey, InstallStepStatus } from '../../models'
-import { useCatalogContext } from '../TemplatePackageCatalog/context'
+import { InstallStepKey, InstallStepStatus } from 'models'
+import { useCatalogContext } from '../context'
 import styles from './InstallProgress.module.scss'
 
 function stepLabel(key: InstallStepKey): string {
