@@ -1,4 +1,4 @@
-import { makeStyles, mergeClasses, Tag, tokens } from '@fluentui/react-components'
+import { makeStyles, mergeClasses, Tag, tokens, Tooltip } from '@fluentui/react-components'
 import { ArrowSync16Regular, CheckmarkCircle16Regular, Cloud16Regular } from '@fluentui/react-icons'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC } from 'react'
@@ -26,16 +26,20 @@ export const PackageStatusTag: FC<{ packageId: string }> = ({ packageId }) => {
   if (!ref) return null
   if (ref.packageType === PpPkgType.Sentral) {
     return (
-      <Tag appearance='brand' size='small' media={<Cloud16Regular />}>
-        {strings.CatalogBadgeCentral}
-      </Tag>
+      <Tooltip content={strings.CatalogBadgeCentralTooltip} relationship='description'>
+        <Tag appearance='brand' size='small' media={<Cloud16Regular />}>
+          {strings.CatalogBadgeCentral}
+        </Tag>
+      </Tooltip>
     )
   }
   if (ref.packageType === PpPkgType.Importert) {
     return (
-      <Tag appearance='brand' size='small' media={<CheckmarkCircle16Regular />}>
-        {strings.CatalogBadgeImported}
-      </Tag>
+      <Tooltip content={strings.CatalogBadgeImportedTooltip} relationship='description'>
+        <Tag appearance='brand' size='small' media={<CheckmarkCircle16Regular />}>
+          {strings.CatalogBadgeImported}
+        </Tag>
+      </Tooltip>
     )
   }
   return null
@@ -51,14 +55,16 @@ export const PackageUpdateTag: FC<{ packageId: string }> = ({ packageId }) => {
   const ref = crossRefFor(packageId)
   if (!ref?.updateAvailable) return null
   return (
-    <Tag
-      appearance='filled'
-      size='small'
-      className={mergeClasses(styles.updateTag)}
-      media={<ArrowSync16Regular />}
-    >
-      {strings.CatalogStatusUpdate}
-    </Tag>
+    <Tooltip content={strings.CatalogBadgeUpdateTooltip} relationship='description'>
+      <Tag
+        appearance='filled'
+        size='small'
+        className={mergeClasses(styles.updateTag)}
+        media={<ArrowSync16Regular />}
+      >
+        {strings.CatalogStatusUpdate}
+      </Tag>
+    </Tooltip>
   )
 }
 

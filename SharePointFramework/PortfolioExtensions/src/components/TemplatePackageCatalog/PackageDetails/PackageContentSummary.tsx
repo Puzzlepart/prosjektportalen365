@@ -1,4 +1,14 @@
-import { Badge, Link, Spinner, Text, Tree, TreeItem, TreeItemLayout } from '@fluentui/react-components'
+import { format } from '@fluentui/react/lib/Utilities'
+import {
+  Badge,
+  Link,
+  Spinner,
+  Text,
+  Tooltip,
+  Tree,
+  TreeItem,
+  TreeItemLayout
+} from '@fluentui/react-components'
 import {
   ClipboardTaskListLtr20Regular,
   Column20Regular,
@@ -56,9 +66,11 @@ export const PackageContentSummary: FC<IPackageContentSummaryProps> = ({ package
         {node.icon && <span className={styles.treeIcon}>{ICONS[node.icon]}</span>}
         <span>{node.label}</span>
         {typeof node.count === 'number' && (
-          <Badge appearance='tint' size='small' className={styles.treeCount}>
-            {node.count}
-          </Badge>
+          <Tooltip content={format(strings.CatalogContentCountTooltip, node.count)} relationship='label'>
+            <Badge appearance='tint' size='small' className={styles.treeCount}>
+              {node.count}
+            </Badge>
+          </Tooltip>
         )}
       </span>
     )
@@ -93,9 +105,14 @@ export const PackageContentSummary: FC<IPackageContentSummaryProps> = ({ package
                 <span className={styles.summaryIcon}>{ICONS[entry.icon]}</span>
                 <Text className={styles.summaryLabel}>{entry.label}</Text>
                 {typeof entry.count === 'number' && (
-                  <Badge appearance='tint' color='informative' className={styles.summaryCount}>
-                    {entry.count}
-                  </Badge>
+                  <Tooltip
+                    content={format(strings.CatalogContentCountTooltip, entry.count)}
+                    relationship='label'
+                  >
+                    <Badge appearance='tint' color='informative' className={styles.summaryCount}>
+                      {entry.count}
+                    </Badge>
+                  </Tooltip>
                 )}
               </div>
             ))}

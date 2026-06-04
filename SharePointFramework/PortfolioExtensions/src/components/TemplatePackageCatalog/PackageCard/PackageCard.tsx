@@ -6,7 +6,8 @@ import {
   CardHeader,
   CardPreview,
   mergeClasses,
-  Text
+  Text,
+  Tooltip
 } from '@fluentui/react-components'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC, useState } from 'react'
@@ -70,9 +71,11 @@ export const PackageCard: FC<IPackageCardProps> = ({ package: pkg }) => {
       </CardPreview>
       <CardHeader
         header={
-          <Text weight='semibold' size={400} truncate wrap={false} block title={pkg.name}>
-            {pkg.name}
-          </Text>
+          <Tooltip content={pkg.name} relationship='label'>
+            <Text weight='semibold' size={400} truncate wrap={false} block>
+              {pkg.name}
+            </Text>
+          </Tooltip>
         }
         description={
           <div className={styles.badges}>

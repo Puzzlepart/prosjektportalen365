@@ -1,5 +1,13 @@
 import { format } from '@fluentui/react/lib/Utilities'
-import { Button, Caption1, Tag, TagGroup, Text } from '@fluentui/react-components'
+import {
+  Button,
+  Caption1,
+  InteractionTag,
+  InteractionTagPrimary,
+  TagGroup,
+  Text,
+  Tooltip
+} from '@fluentui/react-components'
 import {
   ArrowDownload24Regular,
   ArrowLeft24Regular,
@@ -23,9 +31,16 @@ export const PackageDetails: FC = () => {
     importPackage,
     publishCentral,
     removePackage,
-    closeDetail
+    closeDetail,
+    setFilter
   } = useCatalogContext()
   const [imageError, setImageError] = useState(false)
+
+  // Clicking a tag filters the catalog by that category and returns to the list.
+  const filterByTag = (tag: string) => {
+    setFilter('category', tag)
+    closeDetail()
+  }
 
   if (!selectedPackage) {
     return (
@@ -82,9 +97,11 @@ export const PackageDetails: FC = () => {
       {(pkg.tags?.length ?? 0) > 0 && (
         <TagGroup className={styles.tags}>
           {pkg.tags?.map((tag) => (
-            <Tag key={tag} size='small' appearance='brand'>
-              {tag}
-            </Tag>
+            <InteractionTag key={tag} value={tag} size='small' appearance='brand'>
+              <Tooltip content={format(strings.CatalogTagFilterTooltip, tag)} relationship='description'>
+                <InteractionTagPrimary onClick={() => filterByTag(tag)}>{tag}</InteractionTagPrimary>
+              </Tooltip>
+            </InteractionTag>
           ))}
         </TagGroup>
       )}
@@ -94,28 +111,43 @@ export const PackageDetails: FC = () => {
       <PackageHistory changelogUrl={pkg.changelogUrl} />
 
       <div className={styles.actions}>
-        <Button
-          appearance='primary'
-          icon={<ArrowDownload24Regular />}
-          onClick={() => importPackage(pkg)}
+        <Tooltip
+          content={
+            updateAvailable ? strings.CatalogActionUpdateTooltip : strings.CatalogActionImportTooltip
+          }
+          relationship='description'
         >
-          {updateAvailable
-            ? format(strings.CatalogActionUpdate, pkg.version)
-            : strings.CatalogActionImport}
-        </Button>
-        {!isCentral && (
           <Button
-            appearance='secondary'
-            icon={<Cloud24Regular />}
-            onClick={() => publishCentral(pkg)}
+            appearance='primary'
+            icon={<ArrowDownload24Regular />}
+            onClick={() => importPackage(pkg)}
           >
-            {strings.CatalogActionPublishCentral}
+            {updateAvailable
+              ? format(strings.CatalogActionUpdate, pkg.version)
+              : strings.CatalogActionImport}
           </Button>
+        </Tooltip>
+        {!isCentral && (
+          <Tooltip content={strings.CatalogActionPublishCentralTooltip} relationship='description'>
+            <Button
+              appearance='secondary'
+              icon={<Cloud24Regular />}
+              onClick={() => publishCentral(pkg)}
+            >
+              {strings.CatalogActionPublishCentral}
+            </Button>
+          </Tooltip>
         )}
         {ref && (
-          <Button appearance='subtle' icon={<Delete24Regular />} onClick={() => removePackage(pkg)}>
-            {strings.CatalogActionRemove}
-          </Button>
+          <Tooltip content={strings.CatalogActionRemoveTooltip} relationship='description'>
+            <Button
+              appearance='subtle'
+              icon={<Delete24Regular />}
+              onClick={() => removePackage(pkg)}
+            >
+              {strings.CatalogActionRemove}
+            </Button>
+          </Tooltip>
         )}
       </div>
     </div>

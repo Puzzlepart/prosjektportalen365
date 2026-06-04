@@ -10,6 +10,7 @@ import {
   OverlayDrawer,
   Spinner,
   Tag,
+  Tooltip,
   useId
 } from '@fluentui/react-components'
 import { Dismiss24Regular } from '@fluentui/react-icons'
@@ -52,18 +53,22 @@ export const TemplatePackageCatalog: FC<ITemplatePackageCatalogProps> = (props) 
             <DrawerHeader>
               <DrawerHeaderTitle
                 action={
-                  <Button
-                    appearance='subtle'
-                    aria-label={strings.CatalogCloseAria}
-                    icon={<Dismiss24Regular />}
-                    onClick={close}
-                  />
+                  <Tooltip content={strings.CatalogCloseTooltip} relationship='label'>
+                    <Button
+                      appearance='subtle'
+                      aria-label={strings.CatalogCloseAria}
+                      icon={<Dismiss24Regular />}
+                      onClick={close}
+                    />
+                  </Tooltip>
                 }
               >
                 {strings.CatalogDrawerTitle}{' '}
-                <Tag appearance='brand' size='small'>
-                  {strings.CatalogNewBadge}
-                </Tag>
+                <Tooltip content={strings.CatalogNewBadgeTooltip} relationship='label'>
+                  <Tag appearance='brand' size='small'>
+                    {strings.CatalogNewBadge}
+                  </Tag>
+                </Tooltip>
               </DrawerHeaderTitle>
             </DrawerHeader>
             <DrawerBody>

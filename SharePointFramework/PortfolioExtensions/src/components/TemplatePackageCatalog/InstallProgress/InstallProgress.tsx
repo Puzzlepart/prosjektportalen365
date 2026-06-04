@@ -1,4 +1,4 @@
-import { Button, ProgressBar, Spinner, Text } from '@fluentui/react-components'
+import { Button, ProgressBar, Spinner, Text, Tooltip } from '@fluentui/react-components'
 import {
   CheckmarkCircle24Filled,
   Circle24Regular,
@@ -36,6 +36,21 @@ function stepLabel(key: InstallStepKey): string {
       return strings.CatalogStepUpdateMaloppsett
     default:
       return key
+  }
+}
+
+function statusLabel(status: InstallStepStatus): string {
+  switch (status) {
+    case 'running':
+      return strings.CatalogStepStatusRunning
+    case 'done':
+      return strings.CatalogStepStatusDone
+    case 'error':
+      return strings.CatalogStepStatusError
+    case 'skipped':
+      return strings.CatalogStepStatusSkipped
+    default:
+      return strings.CatalogStepStatusPending
   }
 }
 
@@ -79,7 +94,11 @@ export const InstallProgress: FC = () => {
       <div className={styles.steps}>
         {progress.steps.map((step) => (
           <div key={step.key} className={styles.step}>
-            <StepIcon status={step.status} />
+            <Tooltip content={statusLabel(step.status)} relationship='label'>
+              <span className={styles.stepIcon}>
+                <StepIcon status={step.status} />
+              </span>
+            </Tooltip>
             <div className={styles.stepText}>
               <Text>{stepLabel(step.key)}</Text>
               {step.detail && (

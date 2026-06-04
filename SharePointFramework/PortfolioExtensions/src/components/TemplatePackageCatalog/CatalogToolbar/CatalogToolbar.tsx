@@ -1,5 +1,13 @@
 import { format } from '@fluentui/react/lib/Utilities'
-import { Dropdown, Link, Option, SearchBox, Text, ToggleButton } from '@fluentui/react-components'
+import {
+  Dropdown,
+  Link,
+  Option,
+  SearchBox,
+  Text,
+  ToggleButton,
+  Tooltip
+} from '@fluentui/react-components'
 import { Grid20Regular, List20Regular } from '@fluentui/react-icons'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC, useEffect, useRef, useState } from 'react'
@@ -62,53 +70,61 @@ export const CatalogToolbar: FC = () => {
         onChange={(_, data) => onSearchChange(data.value)}
       />
 
-      <Dropdown
-        className={styles.dropdown}
-        aria-label={strings.CatalogFilterTypeLabel}
-        value={`${strings.CatalogFilterTypeLabel}: ${textFor(typeOptions, filters.type)}`}
-        selectedOptions={[filters.type]}
-        onOptionSelect={(_, data) => setFilter('type', data.optionValue ?? ALL_FILTER)}
-      >
-        {typeOptions.map((o) => (
-          <Option key={o.value} value={o.value}>
-            {o.text}
-          </Option>
-        ))}
-      </Dropdown>
+      <Tooltip content={strings.CatalogFilterTypeTooltip} relationship='description'>
+        <Dropdown
+          className={styles.dropdown}
+          aria-label={strings.CatalogFilterTypeLabel}
+          value={`${strings.CatalogFilterTypeLabel}: ${textFor(typeOptions, filters.type)}`}
+          selectedOptions={[filters.type]}
+          onOptionSelect={(_, data) => setFilter('type', data.optionValue ?? ALL_FILTER)}
+        >
+          {typeOptions.map((o) => (
+            <Option key={o.value} value={o.value}>
+              {o.text}
+            </Option>
+          ))}
+        </Dropdown>
+      </Tooltip>
 
-      <Dropdown
-        className={styles.dropdown}
-        aria-label={strings.CatalogFilterCategoryLabel}
-        placeholder={strings.CatalogFilterCategoryLabel}
-        value={`${strings.CatalogFilterCategoryLabel}: ${
-          filters.category === ALL_FILTER ? strings.CatalogFilterAllOption : filters.category
-        }`}
-        selectedOptions={[filters.category]}
-        onOptionSelect={(_, data) => setFilter('category', data.optionValue ?? ALL_FILTER)}
-      >
-        <Option value={ALL_FILTER}>{strings.CatalogFilterAllOption}</Option>
-        {categories.map((category) => (
-          <Option key={category} value={category}>
-            {category}
-          </Option>
-        ))}
-      </Dropdown>
+      <Tooltip content={strings.CatalogFilterCategoryTooltip} relationship='description'>
+        <Dropdown
+          className={styles.dropdown}
+          aria-label={strings.CatalogFilterCategoryLabel}
+          placeholder={strings.CatalogFilterCategoryLabel}
+          value={`${strings.CatalogFilterCategoryLabel}: ${
+            filters.category === ALL_FILTER ? strings.CatalogFilterAllOption : filters.category
+          }`}
+          selectedOptions={[filters.category]}
+          onOptionSelect={(_, data) => setFilter('category', data.optionValue ?? ALL_FILTER)}
+        >
+          <Option value={ALL_FILTER}>{strings.CatalogFilterAllOption}</Option>
+          {categories.map((category) => (
+            <Option key={category} value={category}>
+              {category}
+            </Option>
+          ))}
+        </Dropdown>
+      </Tooltip>
 
-      <Dropdown
-        className={styles.dropdown}
-        aria-label={strings.CatalogFilterStatusLabel}
-        value={`${strings.CatalogFilterStatusLabel}: ${textFor(statusOptions, filters.status)}`}
-        selectedOptions={[filters.status]}
-        onOptionSelect={(_, data) => setFilter('status', data.optionValue ?? 'all')}
-      >
-        {statusOptions.map((o) => (
-          <Option key={o.value} value={o.value}>
-            {o.text}
-          </Option>
-        ))}
-      </Dropdown>
+      <Tooltip content={strings.CatalogFilterStatusTooltip} relationship='description'>
+        <Dropdown
+          className={styles.dropdown}
+          aria-label={strings.CatalogFilterStatusLabel}
+          value={`${strings.CatalogFilterStatusLabel}: ${textFor(statusOptions, filters.status)}`}
+          selectedOptions={[filters.status]}
+          onOptionSelect={(_, data) => setFilter('status', data.optionValue ?? 'all')}
+        >
+          {statusOptions.map((o) => (
+            <Option key={o.value} value={o.value}>
+              {o.text}
+            </Option>
+          ))}
+        </Dropdown>
+      </Tooltip>
 
-      <Link onClick={clearFilters}>{strings.CatalogClearFiltersText}</Link>
+      <Tooltip content={strings.CatalogClearFiltersTooltip} relationship='description'>
+        <Link onClick={clearFilters}>{strings.CatalogClearFiltersText}</Link>
+      </Tooltip>
 
       <div className={styles.spacer} />
 
@@ -116,37 +132,41 @@ export const CatalogToolbar: FC = () => {
         {format(strings.CatalogResultCount, filteredPackages.length)}
       </Text>
 
-      <Dropdown
-        className={styles.dropdown}
-        aria-label={strings.CatalogSortLabel}
-        value={`${strings.CatalogSortLabel}: ${textFor(sortOptions, sort)}`}
-        selectedOptions={[sort]}
-        onOptionSelect={(_, data) => setSort((data.optionValue as 'newest' | 'name') ?? 'newest')}
-      >
-        {sortOptions.map((o) => (
-          <Option key={o.value} value={o.value}>
-            {o.text}
-          </Option>
-        ))}
-      </Dropdown>
+      <Tooltip content={strings.CatalogSortTooltip} relationship='description'>
+        <Dropdown
+          className={styles.dropdown}
+          aria-label={strings.CatalogSortLabel}
+          value={`${strings.CatalogSortLabel}: ${textFor(sortOptions, sort)}`}
+          selectedOptions={[sort]}
+          onOptionSelect={(_, data) => setSort((data.optionValue as 'newest' | 'name') ?? 'newest')}
+        >
+          {sortOptions.map((o) => (
+            <Option key={o.value} value={o.value}>
+              {o.text}
+            </Option>
+          ))}
+        </Dropdown>
+      </Tooltip>
 
       <div className={styles.viewToggle} role='group' aria-label={strings.CatalogViewGrid}>
-        <ToggleButton
-          appearance='subtle'
-          checked={renderMode === 'grid'}
-          icon={<Grid20Regular />}
-          title={strings.CatalogViewGrid}
-          aria-label={strings.CatalogViewGrid}
-          onClick={() => setRenderMode('grid')}
-        />
-        <ToggleButton
-          appearance='subtle'
-          checked={renderMode === 'list'}
-          icon={<List20Regular />}
-          title={strings.CatalogViewList}
-          aria-label={strings.CatalogViewList}
-          onClick={() => setRenderMode('list')}
-        />
+        <Tooltip content={strings.CatalogViewGrid} relationship='label'>
+          <ToggleButton
+            appearance='subtle'
+            checked={renderMode === 'grid'}
+            icon={<Grid20Regular />}
+            aria-label={strings.CatalogViewGrid}
+            onClick={() => setRenderMode('grid')}
+          />
+        </Tooltip>
+        <Tooltip content={strings.CatalogViewList} relationship='label'>
+          <ToggleButton
+            appearance='subtle'
+            checked={renderMode === 'list'}
+            icon={<List20Regular />}
+            aria-label={strings.CatalogViewList}
+            onClick={() => setRenderMode('list')}
+          />
+        </Tooltip>
       </div>
     </div>
   )

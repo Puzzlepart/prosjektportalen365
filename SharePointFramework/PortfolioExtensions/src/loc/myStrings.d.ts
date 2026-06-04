@@ -136,6 +136,27 @@ declare interface IPortfolioExtensionsStrings {
   CatalogRetryText: string
   CatalogMinVersionError: string
   CatalogPermissionError: string
+  CatalogCloseTooltip: string
+  CatalogNewBadgeTooltip: string
+  CatalogFilterTypeTooltip: string
+  CatalogFilterCategoryTooltip: string
+  CatalogFilterStatusTooltip: string
+  CatalogSortTooltip: string
+  CatalogClearFiltersTooltip: string
+  CatalogBadgeImportedTooltip: string
+  CatalogBadgeCentralTooltip: string
+  CatalogBadgeUpdateTooltip: string
+  CatalogActionImportTooltip: string
+  CatalogActionUpdateTooltip: string
+  CatalogActionPublishCentralTooltip: string
+  CatalogActionRemoveTooltip: string
+  CatalogTagFilterTooltip: string
+  CatalogContentCountTooltip: string
+  CatalogStepStatusRunning: string
+  CatalogStepStatusDone: string
+  CatalogStepStatusError: string
+  CatalogStepStatusSkipped: string
+  CatalogStepStatusPending: string
 }
 
 declare module 'PortfolioExtensionsStrings' {

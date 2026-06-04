@@ -638,6 +638,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       return ProjectSetupValidation.UserNotGroupMember
     }
     if (!isSiteAdmin) return ProjectSetupValidation.NotSiteAdmin
+    if (!groupId) return ProjectSetupValidation.NoGroupId
     if (this.context.pageContext.web.language !== 1044) {
       const { Language } = await this._portalDataService.web.select('Language')()
       if (Language !== this.context.pageContext.web.language) {

@@ -61,6 +61,13 @@ export default class TemplatePackageCatalogCommandSet extends BaseListViewComman
     }
 
     this.context.listView.listViewStateChangedEvent.add(this, this._onListViewStateChanged)
+
+    // Compute the initial visibility now. `listViewStateChangedEvent` only fires
+    // on later state changes (e.g. selecting a row), not on first load, so
+    // without this the command would stay hidden until the user selects an item.
+    // onInit is awaited by the framework before commands render, so setting it
+    // here makes the command show on its own initially.
+    this._updateVisibility()
   }
 
   /**
@@ -68,14 +75,21 @@ export default class TemplatePackageCatalogCommandSet extends BaseListViewComman
    * list URL (`Lists/TemplateOptions` / `Lists/Maloppsett`) is locale-stable,
    * unlike the display title.
    */
-  private _onListViewStateChanged = (): void => {
+  private _updateVisibility(): void {
     this._openCmd = this.tryGetCommand(OPEN_COMMAND)
     if (!this._openCmd) return
     const listUrl = (this.context.pageContext.list?.serverRelativeUrl ?? '').toLowerCase()
     const templateOptionsUrl = (resource.Lists_TemplateOptions_Url ?? '').toLowerCase()
     const isMaloppsett = templateOptionsUrl.length > 0 && listUrl.endsWith(templateOptionsUrl)
-    this._openCmd.visible = this._isConfigured && this._userAuthorized && isMaloppsett
-    this.raiseOnChange()
+    const visible = this._isConfigured && this._userAuthorized && isMaloppsett
+    if (this._openCmd.visible !== visible) {
+      this._openCmd.visible = visible
+      this.raiseOnChange()
+    }
+  }
+
+  private _onListViewStateChanged = (): void => {
+    this._updateVisibility()
   }
 
   @override

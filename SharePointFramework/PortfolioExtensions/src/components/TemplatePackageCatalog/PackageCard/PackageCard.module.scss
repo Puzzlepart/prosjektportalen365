@@ -2,10 +2,17 @@
   width: 100%;
   height: fit-content;
   cursor: pointer;
+  transition: box-shadow var(--durationNormal) var(--curveEasyEase),
+    transform var(--durationNormal) var(--curveEasyEase);
 }
 
 .card:hover {
   box-shadow: var(--shadow8);
+  transform: translateY(-2px);
+}
+
+.card:active {
+  transform: translateY(0);
 }
 
 .selected {
