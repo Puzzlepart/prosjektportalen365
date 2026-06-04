@@ -1,36 +1,126 @@
-import { Text } from '@fluentui/react-components'
+import { Badge, Link, Spinner, Text, Tree, TreeItem, TreeItemLayout } from '@fluentui/react-components'
+import {
+  ClipboardTaskListLtr20Regular,
+  Column20Regular,
+  Document20Regular,
+  DocumentBulletList20Regular,
+  PuzzlePiece20Regular,
+  Tag20Regular,
+  TextBulletListSquare20Regular
+} from '@fluentui/react-icons'
 import strings from 'PortfolioExtensionsStrings'
-import React, { FC } from 'react'
-import { IPackageContentItem } from 'models'
+import React, { FC, useEffect, useState } from 'react'
+import { ContentIconName, ICatalogPackage, IHierarchyNode, IPackageContents } from 'models'
+import { CatalogService } from 'services'
 import styles from './PackageDetails.module.scss'
 
-export interface IPackageContentSummaryProps {
-  /**
-   * Content items derived from the downloaded manifest. The catalog itself
-   * carries no content summary, so this is empty until a package is
-   * downloaded — in which case a muted "available after download" note shows.
-   */
-  items?: IPackageContentItem[]
+const ICONS: Record<ContentIconName, JSX.Element> = {
+  content: <ClipboardTaskListLtr20Regular />,
+  lists: <TextBulletListSquare20Regular />,
+  contentTypes: <DocumentBulletList20Regular />,
+  siteFields: <Column20Regular />,
+  taxonomy: <Tag20Regular />,
+  termSet: <Tag20Regular />,
+  term: <Tag20Regular />,
+  extensions: <PuzzlePiece20Regular />,
+  files: <Document20Regular />
 }
 
-export const PackageContentSummary: FC<IPackageContentSummaryProps> = ({ items }) => {
+export interface IPackageContentSummaryProps {
+  package: ICatalogPackage
+}
+
+export const PackageContentSummary: FC<IPackageContentSummaryProps> = ({ package: pkg }) => {
+  const [contents, setContents] = useState<IPackageContents | undefined>(undefined)
+  const [loading, setLoading] = useState(false)
+  const [showDetails, setShowDetails] = useState(false)
+
+  useEffect(() => {
+    let cancelled = false
+    setLoading(true)
+    setContents(undefined)
+    setShowDetails(false)
+    void CatalogService.getPackageContents(pkg).then((result) => {
+      if (cancelled) return
+      setContents(result)
+      setLoading(false)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [pkg.id])
+
+  const renderNode = (node: IHierarchyNode): JSX.Element => {
+    const label = (
+      <span className={styles.treeLabel}>
+        {node.icon && <span className={styles.treeIcon}>{ICONS[node.icon]}</span>}
+        <span>{node.label}</span>
+        {typeof node.count === 'number' && (
+          <Badge appearance='tint' size='small' className={styles.treeCount}>
+            {node.count}
+          </Badge>
+        )}
+      </span>
+    )
+    if (node.children && node.children.length > 0) {
+      return (
+        <TreeItem key={node.key} itemType='branch' value={node.key}>
+          <TreeItemLayout>{label}</TreeItemLayout>
+          <Tree>{node.children.map(renderNode)}</Tree>
+        </TreeItem>
+      )
+    }
+    return (
+      <TreeItem key={node.key} itemType='leaf' value={node.key}>
+        <TreeItemLayout>{label}</TreeItemLayout>
+      </TreeItem>
+    )
+  }
+
   return (
     <div className={styles.section}>
       <Text weight='semibold' className={styles.sectionTitle}>
         {strings.CatalogContentSummaryTitle}
       </Text>
-      {items && items.length > 0 ? (
-        items.map((item) => (
-          <div key={item.key} className={styles.contentItem}>
-            <Text>{item.label}</Text>
-            {item.description && (
-              <Text size={200} className={styles.muted}>
-                {item.description}
-              </Text>
-            )}
+
+      {loading && <Spinner size='tiny' />}
+
+      {!loading && contents && contents.summary.length > 0 && (
+        <>
+          <div className={styles.summaryList}>
+            {contents.summary.map((entry) => (
+              <div key={entry.key} className={styles.summaryRow}>
+                <span className={styles.summaryIcon}>{ICONS[entry.icon]}</span>
+                <Text className={styles.summaryLabel}>{entry.label}</Text>
+                {typeof entry.count === 'number' && (
+                  <Badge appearance='tint' color='informative' className={styles.summaryCount}>
+                    {entry.count}
+                  </Badge>
+                )}
+              </div>
+            ))}
           </div>
-        ))
-      ) : (
+
+          {contents.hierarchy.length > 0 && (
+            <>
+              <Link className={styles.detailsToggle} onClick={() => setShowDetails((value) => !value)}>
+                {showDetails ? strings.CatalogHideDetails : strings.CatalogShowDetails}
+              </Link>
+              {showDetails && (
+                <Tree
+                  aria-label={strings.CatalogContentSummaryTitle}
+                  defaultOpenItems={contents.hierarchy.map((node) => node.key)}
+                  className={styles.tree}
+                >
+                  {contents.hierarchy.map(renderNode)}
+                </Tree>
+              )}
+            </>
+          )}
+        </>
+      )}
+
+      {!loading && (!contents || contents.summary.length === 0) && (
         <Text size={200} className={styles.muted}>
           {strings.CatalogContentSummaryUnavailable}
         </Text>

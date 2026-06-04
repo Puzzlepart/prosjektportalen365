@@ -1,5 +1,4 @@
 import {
-  Badge,
   Button,
   DrawerBody,
   DrawerHeader,
@@ -10,6 +9,7 @@ import {
   mergeClasses,
   OverlayDrawer,
   Spinner,
+  Tag,
   useId
 } from '@fluentui/react-components'
 import { Dismiss24Regular } from '@fluentui/react-icons'
@@ -61,9 +61,9 @@ export const TemplatePackageCatalog: FC<ITemplatePackageCatalogProps> = (props) 
                 }
               >
                 {strings.CatalogDrawerTitle}{' '}
-                <Badge appearance='filled' color='brand' size='small'>
+                <Tag appearance='brand' size='small'>
                   {strings.CatalogNewBadge}
-                </Badge>
+                </Tag>
               </DrawerHeaderTitle>
             </DrawerHeader>
             <DrawerBody>

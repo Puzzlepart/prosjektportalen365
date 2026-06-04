@@ -12,7 +12,7 @@ import strings from 'PortfolioExtensionsStrings'
 import React, { FC, useState } from 'react'
 import { ICatalogPackage } from 'models'
 import { useCatalogContext } from '../context'
-import { PackageBadges } from './PackageBadges'
+import { PackageStatusTag, PackageUpdateTag } from './PackageBadges'
 import styles from './PackageCard.module.scss'
 
 export interface IPackageCardProps {
@@ -38,6 +38,7 @@ export const PackageCard: FC<IPackageCardProps> = ({ package: pkg }) => {
       role='listitem'
       aria-selected={isSelected}
       tabIndex={0}
+      floatingAction={<PackageStatusTag packageId={pkg.id} />}
       onClick={() => setSelected(pkg.id)}
       onKeyDown={(event) => {
         if (event.key === 'Enter' || event.key === ' ') {
@@ -75,7 +76,7 @@ export const PackageCard: FC<IPackageCardProps> = ({ package: pkg }) => {
         }
         description={
           <div className={styles.badges}>
-            <PackageBadges packageId={pkg.id} />
+            <PackageUpdateTag packageId={pkg.id} />
           </div>
         }
       />

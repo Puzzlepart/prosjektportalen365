@@ -1,6 +1,15 @@
 import { dateAdd, getHashCode, PnPClientStorage } from '@pnp/core'
 import { Logger, LogLevel } from '@pnp/logging'
-import { IChangelogEntry, ICatalog } from 'models'
+import strings from 'PortfolioExtensionsStrings'
+import {
+  IChangelogEntry,
+  ICatalog,
+  ICatalogPackage,
+  IHierarchyNode,
+  IPackageContents,
+  IPackageContentSummaryEntry,
+  IPackageManifest
+} from 'models'
 import { sampleCatalog } from './sampleCatalog'
 
 /**
@@ -79,6 +88,246 @@ export class CatalogService {
       })
       return []
     }
+  }
+
+  /**
+   * Fetch and parse a package's contents (manifest + provisioning + content
+   * JSON files) from the raw hosting URLs — no `.pppkg` download / install
+   * required. Returns a high-level summary (icon + label + count) and a
+   * drill-down hierarchy (lists, content types, site fields, term sets, …).
+   *
+   * Returns `undefined` if the package base URL can't be derived or the
+   * manifest can't be fetched.
+   */
+  public static async getPackageContents(
+    pkg: ICatalogPackage
+  ): Promise<IPackageContents | undefined> {
+    const baseUrl = CatalogService._derivePackageBaseUrl(pkg)
+    if (!baseUrl) return undefined
+    try {
+      const manifest = await CatalogService._fetchJson<IPackageManifest>(`${baseUrl}manifest.json`)
+      const [hub, template] = await Promise.all([
+        manifest.provisioning?.hubTemplate
+          ? CatalogService._fetchJson<any>(baseUrl + manifest.provisioning.hubTemplate).catch(
+              () => undefined
+            )
+          : Promise.resolve(undefined),
+        manifest.provisioning?.template
+          ? CatalogService._fetchJson<any>(baseUrl + manifest.provisioning.template).catch(
+              () => undefined
+            )
+          : Promise.resolve(undefined)
+      ])
+      const contentItems = manifest.content?.items ?? []
+      const contentData = await Promise.all(
+        contentItems.map((item) =>
+          CatalogService._fetchJson<any>(baseUrl + item.sourceFile).catch(() => undefined)
+        )
+      )
+      return CatalogService._buildContents(manifest, hub, template, contentItems, contentData)
+    } catch (error) {
+      Logger.log({
+        message: `(CatalogService) getPackageContents failed: ${error?.message}`,
+        level: LogLevel.Warning
+      })
+      return undefined
+    }
+  }
+
+  /**
+   * Derive the package's raw base URL (`.../packages/<dir>/`) from its
+   * changelog or thumbnail URL.
+   */
+  private static _derivePackageBaseUrl(pkg: ICatalogPackage): string | undefined {
+    const ref = pkg.changelogUrl || pkg.thumbnail
+    if (!ref) return undefined
+    const idx = ref.lastIndexOf('/')
+    return idx >= 0 ? ref.slice(0, idx + 1) : undefined
+  }
+
+  private static async _fetchJson<T>(url: string): Promise<T> {
+    const response = await fetch(url, { method: 'GET' })
+    if (!response.ok) throw new Error(`HTTP ${response.status} for ${url}`)
+    return (await response.json()) as T
+  }
+
+  private static _asArray(value: any): any[] {
+    return Array.isArray(value) ? value : []
+  }
+
+  private static _entryLabel(entry: any, keys: string[]): string {
+    if (typeof entry === 'string') return entry
+    if (entry && typeof entry === 'object') {
+      for (const key of keys) {
+        if (entry[key]) return String(entry[key])
+      }
+    }
+    return '—'
+  }
+
+  /**
+   * Extract a readable label from a SiteFields entry (an XML string).
+   */
+  private static _fieldLabel(field: any): string {
+    if (typeof field !== 'string') {
+      return CatalogService._entryLabel(field, ['DisplayName', 'Name', 'InternalName'])
+    }
+    const displayName = /DisplayName=["']([^"']+)["']/.exec(field)
+    if (displayName) return displayName[1]
+    const name = /(?:InternalName|StaticName|Name)=["']([^"']+)["']/.exec(field)
+    return name ? name[1] : 'Felt'
+  }
+
+  /**
+   * Build the summary + hierarchy from the parsed manifest/provisioning/content.
+   */
+  private static _buildContents(
+    manifest: IPackageManifest,
+    hub: any,
+    template: any,
+    contentItems: IPackageManifest['content']['items'],
+    contentData: any[]
+  ): IPackageContents {
+    const summary: IPackageContentSummaryEntry[] = []
+    const hierarchy: IHierarchyNode[] = []
+
+    // Standard content (one entry per content item, with element counts).
+    const contentChildren: IHierarchyNode[] = []
+    contentItems.forEach((item, index) => {
+      const data = contentData[index]
+      const count = Array.isArray(data) ? data.length : undefined
+      summary.push({ key: `content-${item.id}`, label: item.name, count, icon: 'content' })
+      contentChildren.push({
+        key: `content-${item.id}`,
+        label: item.name,
+        count,
+        icon: 'content',
+        children: Array.isArray(data)
+          ? data.map((row, rowIndex) => ({
+              key: `content-${item.id}-${rowIndex}`,
+              label: CatalogService._entryLabel(row, ['Title', 'Name'])
+            }))
+          : undefined
+      })
+    })
+    if (contentChildren.length > 0) {
+      hierarchy.push({
+        key: 'standard-content',
+        label: strings.CatalogContentStandardContent,
+        icon: 'content',
+        count: contentChildren.length,
+        children: contentChildren
+      })
+    }
+
+    const sections: Array<{
+      key: string
+      summaryLabel: string
+      hierarchyLabel: string
+      icon: IPackageContentSummaryEntry['icon']
+      entries: any[]
+      labelKeys: string[]
+    }> = [
+      {
+        key: 'lists',
+        summaryLabel: strings.CatalogContentLists,
+        hierarchyLabel: strings.CatalogContentLists,
+        icon: 'lists',
+        entries: [...CatalogService._asArray(hub?.Lists), ...CatalogService._asArray(template?.Lists)],
+        labelKeys: ['Title', 'Name']
+      },
+      {
+        key: 'content-types',
+        summaryLabel: strings.CatalogContentContentTypes,
+        hierarchyLabel: strings.CatalogContentContentTypes,
+        icon: 'contentTypes',
+        entries: [
+          ...CatalogService._asArray(hub?.ContentTypes),
+          ...CatalogService._asArray(template?.ContentTypes)
+        ],
+        labelKeys: ['Name', 'Title']
+      },
+      {
+        key: 'site-fields',
+        summaryLabel: strings.CatalogContentSiteFields,
+        hierarchyLabel: strings.CatalogContentSiteFields,
+        icon: 'siteFields',
+        entries: [
+          ...CatalogService._asArray(hub?.SiteFields),
+          ...CatalogService._asArray(template?.SiteFields)
+        ],
+        labelKeys: []
+      },
+      {
+        key: 'extensions',
+        summaryLabel: strings.CatalogContentExtensions,
+        hierarchyLabel: strings.CatalogContentExtensions,
+        icon: 'extensions',
+        entries: CatalogService._asArray(manifest.provisioning?.extensions),
+        labelKeys: ['name', 'Name']
+      },
+      {
+        key: 'files',
+        summaryLabel: strings.CatalogContentFiles,
+        hierarchyLabel: strings.CatalogContentFiles,
+        icon: 'files',
+        entries: [...CatalogService._asArray(hub?.Files), ...CatalogService._asArray(template?.Files)],
+        labelKeys: ['Dest', 'Url', 'Src', 'Folder']
+      }
+    ]
+
+    for (const section of sections) {
+      if (section.entries.length === 0) continue
+      summary.push({
+        key: section.key,
+        label: section.summaryLabel,
+        count: section.entries.length,
+        icon: section.icon
+      })
+      hierarchy.push({
+        key: section.key,
+        label: section.hierarchyLabel,
+        icon: section.icon,
+        count: section.entries.length,
+        children: section.entries.map((entry, index) => ({
+          key: `${section.key}-${index}`,
+          label:
+            section.key === 'site-fields'
+              ? CatalogService._fieldLabel(entry)
+              : CatalogService._entryLabel(entry, section.labelKeys)
+        }))
+      })
+    }
+
+    // Taxonomy (term sets → terms).
+    const termSets = CatalogService._asArray(hub?.Taxonomy?.TermSets)
+    if (termSets.length > 0) {
+      summary.push({
+        key: 'taxonomy',
+        label: strings.CatalogContentTermSets,
+        count: termSets.length,
+        icon: 'taxonomy'
+      })
+      hierarchy.push({
+        key: 'taxonomy',
+        label: strings.CatalogContentTaxonomy,
+        icon: 'taxonomy',
+        count: termSets.length,
+        children: termSets.map((set, index) => ({
+          key: `termset-${index}`,
+          label: set?.Name ?? '—',
+          icon: 'termSet' as const,
+          count: CatalogService._asArray(set?.Terms).length,
+          children: CatalogService._asArray(set?.Terms).map((term, termIndex) => ({
+            key: `term-${index}-${termIndex}`,
+            label: term?.Name ?? '—',
+            icon: 'term' as const
+          }))
+        }))
+      })
+    }
+
+    return { summary, hierarchy }
   }
 
   private static async _fetchCatalog(url: string): Promise<ICatalog> {

@@ -47,11 +47,53 @@
   margin: var(--spacingVerticalS) 0 0 0;
 }
 
-.contentItem {
+.summaryList {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
+}
+
+.summaryRow {
+  display: flex;
+  align-items: center;
   gap: var(--spacingHorizontalS);
   padding: var(--spacingVerticalXXS) 0;
+}
+
+.summaryIcon {
+  display: flex;
+  color: var(--colorNeutralForeground3);
+}
+
+.summaryLabel {
+  flex: 1 1 auto;
+}
+
+.summaryCount {
+  flex: 0 0 auto;
+}
+
+.detailsToggle {
+  align-self: flex-start;
+  margin-top: var(--spacingVerticalXS);
+}
+
+.tree {
+  margin-top: var(--spacingVerticalXS);
+}
+
+.treeLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacingHorizontalXS);
+}
+
+.treeIcon {
+  display: flex;
+  color: var(--colorNeutralForeground3);
+}
+
+.treeCount {
+  margin-left: var(--spacingHorizontalXS);
 }
 
 .muted {

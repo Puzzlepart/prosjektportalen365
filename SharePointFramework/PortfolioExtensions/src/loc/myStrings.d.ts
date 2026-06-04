@@ -97,6 +97,16 @@ declare interface IPortfolioExtensionsStrings {
   CatalogDetailsEmptyText: string
   CatalogContentSummaryTitle: string
   CatalogContentSummaryUnavailable: string
+  CatalogContentStandardContent: string
+  CatalogContentLists: string
+  CatalogContentContentTypes: string
+  CatalogContentSiteFields: string
+  CatalogContentTaxonomy: string
+  CatalogContentTermSets: string
+  CatalogContentExtensions: string
+  CatalogContentFiles: string
+  CatalogShowDetails: string
+  CatalogHideDetails: string
   CatalogHistoryTitle: string
   CatalogHistoryUnavailable: string
   CatalogChangelogLinkText: string

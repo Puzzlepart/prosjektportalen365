@@ -89,7 +89,7 @@ export const PackageDetails: FC = () => {
         </TagGroup>
       )}
 
-      <PackageContentSummary />
+      <PackageContentSummary package={pkg} />
 
       <PackageHistory changelogUrl={pkg.changelogUrl} />
 
