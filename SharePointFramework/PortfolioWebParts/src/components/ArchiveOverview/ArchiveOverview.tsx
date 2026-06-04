@@ -4,6 +4,7 @@ import {
   Divider,
   FluentProvider,
   IdPrefixProvider,
+  Link,
   Nav,
   NavItem,
   Spinner,
@@ -214,18 +215,20 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                         </thead>
                         <tbody>
                           {projects.map((p) => (
-                            <tr
-                              key={p.id}
-                              onClick={() => p.siteUrl && window.open(p.siteUrl, '_blank')}
-                              style={{ cursor: p.siteUrl ? 'pointer' : 'default' }}
-                            >
+                            <tr key={p.id}>
                               <td>
                                 <div className={styles.projectCell}>
                                   <div
                                     className={styles.projectIcon}
                                     style={{ backgroundColor: p.color }}
                                   />
-                                  <Text size={200}>{p.name}</Text>
+                                  {p.siteUrl ? (
+                                    <Link href={p.siteUrl} target='_blank'>
+                                      <Text size={200}>{p.name}</Text>
+                                    </Link>
+                                  ) : (
+                                    <Text size={200}>{p.name}</Text>
+                                  )}
                                 </div>
                               </td>
                               <td>

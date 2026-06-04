@@ -2,14 +2,17 @@ import React, { FC } from 'react'
 import styles from '../ArchiveOverview.module.scss'
 import { ActivityLevel } from '../useArchiveData'
 
-const BAR_HEIGHTS = [30, 60, 100, 65]
+// All bars at the same height (the former maximum)
+const BAR_HEIGHTS = [100, 100, 100, 100]
 
 function getBarColor(level: ActivityLevel, barIdx: number): string {
-  if (level === 'none') return '#C8C6C4'
-  if (level === 'high') return '#107C10'
-  if (level === 'medium') return barIdx < 3 ? '#107C10' : '#C8C6C4'
-  if (level === 'low') return barIdx < 2 ? '#FFB900' : '#C8C6C4'
-  return '#C8C6C4'
+  if (level === 'none') return 'rgba(200, 198, 196, 0.45)'
+  if (level === 'high') return 'rgba(16, 124, 16, 0.60)'
+  if (level === 'medium')
+    return barIdx < 3 ? 'rgba(16, 124, 16, 0.60)' : 'rgba(200, 198, 196, 0.45)'
+  if (level === 'low')
+    return barIdx < 2 ? 'rgba(255, 185, 0, 0.65)' : 'rgba(200, 198, 196, 0.45)'
+  return 'rgba(200, 198, 196, 0.45)'
 }
 
 export const ActivityBars: FC<{ level: ActivityLevel }> = ({ level }) => (
