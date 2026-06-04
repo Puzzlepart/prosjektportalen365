@@ -24078,6 +24078,22 @@ packages:
       '@types/react-dom': '*'
     resolution:
       integrity: sha512-UJZ8HunaGFNG0n0Db9eDJckRBMRFvXtIssxKr+kyY0ooZOns6iCVciy++DHVsTJvVzpRa+D/FVjuK9/HLUWzOQ==
+  /sp-js-provisioning/1.3.9_5bb3879ba087c0ef402ac2f0f80f9922:
+    dependencies:
+      '@pnp/core': 3.17.0
+      '@pnp/logging': 3.17.0
+      '@pnp/nodejs': 3.17.0
+      '@pnp/queryable': 3.17.0
+      '@pnp/sp': 3.17.0
+      object.omit: 3.0.0
+      spfx-jsom: 0.6.6_5bb3879ba087c0ef402ac2f0f80f9922
+      xml-js: 1.6.11
+    dev: false
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+    resolution:
+      integrity: sha512-38Yflqw/Fs36/sa3JEouZcA54IZzn8/oSYtrTt3hDUQPqR1cFIm0nWXSM07bnPp+f6dj84VlmfSBf8v3NiNNJQ==
   /space-separated-tokens/2.0.2:
     dev: false
     resolution:
@@ -26872,7 +26888,7 @@ packages:
       react-markdown: 8.0.7_4865287ef69aa4f3fc3f709d3560286e
       rehype-raw: 6.1.1
       sp-entityportal-service: 2.3.0
-      sp-js-provisioning: 1.3.8_5bb3879ba087c0ef402ac2f0f80f9922
+      sp-js-provisioning: 1.3.9_5bb3879ba087c0ef402ac2f0f80f9922
       tslib: 2.3.1
       typescript: 4.5.5
       underscore: 1.13.8
@@ -26880,7 +26896,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-portfolioextensions'
     resolution:
-      integrity: sha512-QeTiYUgCKDtFB+zBysQ1va8XMWQvvr137o9j8Lfeu4bfLiychNYDO91JyJY5smtLAe+jwvwdnpkD9kNvWqctew==
+      integrity: sha512-ekp+Mj8o+MiPzwHwmlaVg4CyeZhYYUP+tLkfcmel76PSObLt0GNeMeZ1IatJ6HqAmCPVXCL3kx0Ah0KD8lr4Qg==
       tarball: file:projects/pp365-portfolioextensions.tgz
     version: 0.0.0
   file:projects/pp365-portfoliowebparts.tgz_@pnp+odata@2.15.0:
@@ -27106,7 +27122,7 @@ packages:
       react-markdown: 8.0.7_4865287ef69aa4f3fc3f709d3560286e
       rehype-raw: 6.1.1
       sp-entityportal-service: 2.3.0
-      sp-js-provisioning: 1.3.8_5bb3879ba087c0ef402ac2f0f80f9922
+      sp-js-provisioning: 1.3.9_5bb3879ba087c0ef402ac2f0f80f9922
       spfx-jsom: 0.6.6_5bb3879ba087c0ef402ac2f0f80f9922
       tslib: 2.3.1
       typescript: 4.5.5
@@ -27117,7 +27133,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectextensions'
     resolution:
-      integrity: sha512-RXVOHiGnjLiELbLtO031zdWxP29R/E7xdCq3DXQcm8UTgWOECH7qa/p8vaI7dWAWtjOv4Tjpo9Ahpa/AePX+Yw==
+      integrity: sha512-EvvfzGi7ky7vxd3ur/xtfe1QMjNvwSv33DR47MPI0NyePcD75DPicFUmqxdDzUqmEkvHCSj8Yb5R0HFzT+Cj/A==
       tarball: file:projects/pp365-projectextensions.tgz
     version: 0.0.0
   file:projects/pp365-projectwebparts.tgz:
@@ -27263,7 +27279,7 @@ packages:
       rehype-raw: 6.1.1
       shade-blend-color: 1.0.0
       sp-entityportal-service: 2.3.0
-      sp-js-provisioning: 1.3.8_5bb3879ba087c0ef402ac2f0f80f9922
+      sp-js-provisioning: 1.3.9_5bb3879ba087c0ef402ac2f0f80f9922
       spfx-jsom: 0.6.6_5bb3879ba087c0ef402ac2f0f80f9922
       tslib: 2.3.1
       typescript: 4.5.5
@@ -27276,7 +27292,7 @@ packages:
     peerDependencies:
       interactjs: '*'
     resolution:
-      integrity: sha512-LLHJOXCbFCgoWS+Oe6UGOONfLQfA+XCqGTgO7OhkYW0Nf8L8MTRduAaPYFvhNuHR78Exo0NuY6D9De5C2Jg6hw==
+      integrity: sha512-8/K4Sm/9i2rsxFc/snyKAya64Mg6f8uZpzaLDVo6fyMv0nwarYOFAjlbgB6Fi7CN/inTZLXJVkzt5gxVihxTYQ==
       tarball: file:projects/pp365-shared-library.tgz
     version: 0.0.0
   file:projects/pp365-spfx-tasks.tgz:

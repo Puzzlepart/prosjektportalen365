@@ -61,11 +61,13 @@ during a controlled pilot.
 
 ## Dev / test
 
-- Point `catalogUrl` at the hosting `dev` branch's raw `catalog.json`, or rely on the
-  committed sample fixture.
-- Build the dummy package (`dummy-prosjektmal-1.0.1.pppkg`) with the hosting repo's
-  `scripts/build-packages.js`, or use its GitHub release, to exercise Mode A. Its
-  `hub-template.json` carries taxonomy, so it exercises the gated path.
+- The default `catalogUrl` points at the hosting `main` branch's raw `catalog.json`,
+  which is now published — so browsing works out of the box. The committed
+  `sampleCatalog.ts` fixture mirrors it and is used as an offline fallback.
+- Mode A downloads the `.pppkg` from the package's `downloadUrl` (a GitHub release,
+  `dummy-prosjektmal-1.0.1.pppkg`); ensure that release is published, or build it with
+  the hosting repo's `scripts/build-packages.js`. Its `hub-template.json` carries
+  taxonomy, so it exercises the (feature-flag-gated) taxonomy path.
 
 ## Out of scope (other repos / later phases)
 
