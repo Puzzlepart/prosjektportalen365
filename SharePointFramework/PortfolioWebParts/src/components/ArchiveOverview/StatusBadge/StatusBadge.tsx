@@ -1,27 +1,38 @@
-import { Badge } from '@fluentui/react-components'
+import { Tag, tokens } from '@fluentui/react-components'
+import { getFluentIcon } from 'pp365-shared-library'
 import strings from 'PortfolioWebPartsStrings'
 import React, { FC } from 'react'
 import { ProjectStatus } from '../useArchiveData'
 
 /**
- * Coloured tint badge reflecting a project's archive status.
+ * Status tag for a project's archive status, styled to match the
+ * ProvisionStatus component: icon + semantic background colour via design tokens.
  */
 export const StatusBadge: FC<{ status: ProjectStatus }> = ({ status }) => {
-  if (status === 'updated')
-    return (
-      <Badge appearance='tint' color='success'>
-        {strings.ArchiveOverview.StatusUpdated}
-      </Badge>
-    )
-  if (status === 'warning')
-    return (
-      <Badge appearance='tint' color='warning'>
-        {strings.ArchiveOverview.StatusWarning}
-      </Badge>
-    )
+  let icon: JSX.Element
+  let backgroundColor: string
+  let label: string
+
+  switch (status) {
+    case 'updated':
+      icon = getFluentIcon('CheckmarkCircle')
+      backgroundColor = tokens.colorStatusSuccessBackground2
+      label = strings.ArchiveOverview.StatusUpdated
+      break
+    case 'warning':
+      icon = getFluentIcon('Warning')
+      backgroundColor = tokens.colorStatusWarningBackground2
+      label = strings.ArchiveOverview.StatusWarning
+      break
+    default:
+      icon = getFluentIcon('ErrorCircle')
+      backgroundColor = tokens.colorStatusDangerBackground2
+      label = strings.ArchiveOverview.StatusNeverArchived
+  }
+
   return (
-    <Badge appearance='tint' color='danger'>
-      {strings.ArchiveOverview.StatusNeverArchived}
-    </Badge>
+    <Tag icon={icon} style={{ backgroundColor, width: '140px', justifyContent: 'center' }}>
+      {label}
+    </Tag>
   )
 }
