@@ -75,6 +75,8 @@ declare interface IPortfolioExtensionsStrings {
   CatalogSortLabel: string
   CatalogSortNewest: string
   CatalogSortName: string
+  CatalogViewGrid: string
+  CatalogViewList: string
   CatalogTypeTemplate: string
   CatalogTypeExtension: string
   CatalogTypeContent: string

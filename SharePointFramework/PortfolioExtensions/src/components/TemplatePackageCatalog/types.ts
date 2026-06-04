@@ -14,6 +14,12 @@ export interface ITemplatePackageCatalogProps {
 
 export type SortKey = 'newest' | 'name'
 
+/**
+ * Master-pane layout: `grid` shows compact cards (multiple per row, like the
+ * project list), `list` shows one card per row.
+ */
+export type RenderMode = 'grid' | 'list'
+
 export const ALL_FILTER = 'all'
 
 /**
@@ -41,6 +47,7 @@ export interface ITemplatePackageCatalogState {
   crossRef: Map<string, ICrossReference>
   filters: ICatalogFilters
   sort: SortKey
+  renderMode: RenderMode
   page: number
   selectedPackageId?: string
   installProgress?: IInstallProgress
@@ -76,6 +83,7 @@ export interface ITemplatePackageCatalogContext {
   setFilter: (key: keyof ICatalogFilters, value: string) => void
   clearFilters: () => void
   setSort: (sort: SortKey) => void
+  setRenderMode: (renderMode: RenderMode) => void
   setSelected: (packageId: string) => void
   setPage: (page: number) => void
   closeDetail: () => void

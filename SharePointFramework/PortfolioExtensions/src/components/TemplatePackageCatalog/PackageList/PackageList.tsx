@@ -28,9 +28,11 @@ export const PackageList: FC = () => {
   const start = (page - 1) * PAGE_SIZE + 1
   const end = Math.min(filteredPackages.length, page * PAGE_SIZE)
 
+  const layoutClass = state.renderMode === 'grid' ? styles.grid : styles.column
+
   return (
     <div className={styles.list}>
-      <div role='list'>
+      <div role='list' className={layoutClass}>
         {pagedPackages.map((pkg) => (
           <PackageCard key={pkg.id} package={pkg} />
         ))}

@@ -1,5 +1,6 @@
 import { format } from '@fluentui/react/lib/Utilities'
-import { Dropdown, Link, Option, SearchBox, Text } from '@fluentui/react-components'
+import { Dropdown, Link, Option, SearchBox, Text, ToggleButton } from '@fluentui/react-components'
+import { Grid20Regular, List20Regular } from '@fluentui/react-icons'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC, useEffect, useRef, useState } from 'react'
 import { useCatalogContext } from '../context'
@@ -7,9 +8,9 @@ import { ALL_FILTER } from '../types'
 import styles from './CatalogToolbar.module.scss'
 
 export const CatalogToolbar: FC = () => {
-  const { state, filteredPackages, categories, setFilter, clearFilters, setSort } =
+  const { state, filteredPackages, categories, setFilter, clearFilters, setSort, setRenderMode } =
     useCatalogContext()
-  const { filters, sort } = state
+  const { filters, sort, renderMode } = state
 
   // Debounced search input (~200ms) — keeps the field responsive without
   // re-filtering on every keystroke.
@@ -64,7 +65,7 @@ export const CatalogToolbar: FC = () => {
       <Dropdown
         className={styles.dropdown}
         aria-label={strings.CatalogFilterTypeLabel}
-        value={textFor(typeOptions, filters.type)}
+        value={`${strings.CatalogFilterTypeLabel}: ${textFor(typeOptions, filters.type)}`}
         selectedOptions={[filters.type]}
         onOptionSelect={(_, data) => setFilter('type', data.optionValue ?? ALL_FILTER)}
       >
@@ -79,7 +80,9 @@ export const CatalogToolbar: FC = () => {
         className={styles.dropdown}
         aria-label={strings.CatalogFilterCategoryLabel}
         placeholder={strings.CatalogFilterCategoryLabel}
-        value={filters.category === ALL_FILTER ? strings.CatalogFilterAllOption : filters.category}
+        value={`${strings.CatalogFilterCategoryLabel}: ${
+          filters.category === ALL_FILTER ? strings.CatalogFilterAllOption : filters.category
+        }`}
         selectedOptions={[filters.category]}
         onOptionSelect={(_, data) => setFilter('category', data.optionValue ?? ALL_FILTER)}
       >
@@ -94,7 +97,7 @@ export const CatalogToolbar: FC = () => {
       <Dropdown
         className={styles.dropdown}
         aria-label={strings.CatalogFilterStatusLabel}
-        value={textFor(statusOptions, filters.status)}
+        value={`${strings.CatalogFilterStatusLabel}: ${textFor(statusOptions, filters.status)}`}
         selectedOptions={[filters.status]}
         onOptionSelect={(_, data) => setFilter('status', data.optionValue ?? 'all')}
       >
@@ -116,7 +119,7 @@ export const CatalogToolbar: FC = () => {
       <Dropdown
         className={styles.dropdown}
         aria-label={strings.CatalogSortLabel}
-        value={textFor(sortOptions, sort)}
+        value={`${strings.CatalogSortLabel}: ${textFor(sortOptions, sort)}`}
         selectedOptions={[sort]}
         onOptionSelect={(_, data) => setSort((data.optionValue as 'newest' | 'name') ?? 'newest')}
       >
@@ -126,6 +129,25 @@ export const CatalogToolbar: FC = () => {
           </Option>
         ))}
       </Dropdown>
+
+      <div className={styles.viewToggle} role='group' aria-label={strings.CatalogViewGrid}>
+        <ToggleButton
+          appearance='subtle'
+          checked={renderMode === 'grid'}
+          icon={<Grid20Regular />}
+          title={strings.CatalogViewGrid}
+          aria-label={strings.CatalogViewGrid}
+          onClick={() => setRenderMode('grid')}
+        />
+        <ToggleButton
+          appearance='subtle'
+          checked={renderMode === 'list'}
+          icon={<List20Regular />}
+          title={strings.CatalogViewList}
+          aria-label={strings.CatalogViewList}
+          onClick={() => setRenderMode('list')}
+        />
+      </div>
     </div>
   )
 }

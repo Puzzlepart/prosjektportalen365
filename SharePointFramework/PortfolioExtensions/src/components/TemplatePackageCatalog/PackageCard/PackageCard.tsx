@@ -1,15 +1,13 @@
 import { format } from '@fluentui/react/lib/Utilities'
 import {
+  Avatar,
   Caption1,
   Card,
   CardHeader,
   CardPreview,
   mergeClasses,
-  Tag,
-  TagGroup,
   Text
 } from '@fluentui/react-components'
-import { Apps24Regular } from '@fluentui/react-icons'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC, useState } from 'react'
 import { ICatalogPackage } from 'models'
@@ -25,11 +23,11 @@ export const PackageCard: FC<IPackageCardProps> = ({ package: pkg }) => {
   const { state, setSelected } = useCatalogContext()
   const [imageError, setImageError] = useState(false)
   const isSelected = state.selectedPackageId === pkg.id
+  const showImage = Boolean(pkg.thumbnail) && !imageError
 
   const meta = [
     pkg.version ? `v${pkg.version}` : undefined,
-    pkg.publishedDate ? format(strings.CatalogCardPublished, pkg.publishedDate) : undefined,
-    pkg.author ? format(strings.CatalogCardByAuthor, pkg.author) : undefined
+    pkg.publishedDate ? format(strings.CatalogCardPublished, pkg.publishedDate) : undefined
   ]
     .filter(Boolean)
     .join('  •  ')
@@ -49,7 +47,7 @@ export const PackageCard: FC<IPackageCardProps> = ({ package: pkg }) => {
       }}
     >
       <CardPreview className={styles.preview}>
-        {pkg.thumbnail && !imageError ? (
+        {showImage ? (
           <img
             className={styles.previewImage}
             src={pkg.thumbnail}
@@ -57,13 +55,24 @@ export const PackageCard: FC<IPackageCardProps> = ({ package: pkg }) => {
             onError={() => setImageError(true)}
           />
         ) : (
-          <span className={styles.placeholder}>
-            <Apps24Regular />
-          </span>
+          // Same fallback look as ProjectCard (ProjectLogo): a colorful square
+          // avatar with the template's initials when no image is available.
+          <Avatar
+            className={styles.previewAvatar}
+            color='colorful'
+            shape='square'
+            name={pkg.name}
+            initials={pkg.name?.slice(0, 2).toUpperCase()}
+            aria-hidden
+          />
         )}
       </CardPreview>
       <CardHeader
-        header={<Text weight='semibold'>{pkg.name}</Text>}
+        header={
+          <Text weight='semibold' size={400} truncate wrap={false} block title={pkg.name}>
+            {pkg.name}
+          </Text>
+        }
         description={
           <div className={styles.badges}>
             <PackageBadges packageId={pkg.id} />
@@ -74,15 +83,6 @@ export const PackageCard: FC<IPackageCardProps> = ({ package: pkg }) => {
         <Text size={200} className={styles.description}>
           {pkg.description}
         </Text>
-      )}
-      {(pkg.tags?.length ?? 0) > 0 && (
-        <TagGroup>
-          {pkg.tags?.map((tag) => (
-            <Tag key={tag} size='extra-small' appearance='outline'>
-              {tag}
-            </Tag>
-          ))}
-        </TagGroup>
       )}
       <Caption1 className={styles.footer}>{meta}</Caption1>
     </Card>

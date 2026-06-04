@@ -8,6 +8,7 @@ import {
   ITemplatePackageCatalogContext,
   ITemplatePackageCatalogProps,
   PAGE_SIZE,
+  RenderMode,
   SortKey
 } from './types'
 import { useTemplatePackageCatalogState } from './useTemplatePackageCatalogState'
@@ -100,6 +101,7 @@ export function useTemplatePackageCatalog(
     })
 
   const setSort = (sort: SortKey) => setState({ sort, page: 1 })
+  const setRenderMode = (renderMode: RenderMode) => setState({ renderMode })
   const setSelected = (packageId: string) =>
     setState({ selectedPackageId: packageId, detailOpen: true, installProgress: undefined })
   const setPage = (newPage: number) => setState({ page: newPage })
@@ -171,6 +173,7 @@ export function useTemplatePackageCatalog(
     setFilter,
     clearFilters,
     setSort,
+    setRenderMode,
     setSelected,
     setPage,
     closeDetail,

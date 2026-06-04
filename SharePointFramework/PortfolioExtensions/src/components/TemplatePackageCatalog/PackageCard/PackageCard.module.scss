@@ -1,6 +1,11 @@
 .card {
+  width: 100%;
+  height: fit-content;
   cursor: pointer;
-  margin-bottom: var(--spacingVerticalM);
+}
+
+.card:hover {
+  box-shadow: var(--shadow8);
 }
 
 .selected {
@@ -9,26 +14,23 @@
 }
 
 .preview {
-  height: 140px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--colorNeutralBackground3);
+  height: 150px;
   overflow: hidden;
+  background-color: var(--colorNeutralBackground3);
 }
 
 .previewImage {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
-.placeholder {
-  color: var(--colorNeutralForeground3);
-  font-size: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.previewAvatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  font-size: 28px;
 }
 
 .badges {
@@ -38,13 +40,16 @@
 }
 
 .description {
-  color: var(--colorNeutralForeground2);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  color: var(--colorNeutralForeground2);
+  padding: 0 var(--spacingHorizontalM);
 }
 
 .footer {
+  display: block;
   color: var(--colorNeutralForeground3);
+  padding: 0 var(--spacingHorizontalM) var(--spacingVerticalM);
 }

@@ -80,6 +80,8 @@ define([], function () {
     CatalogSortLabel: 'Sorted by',
     CatalogSortNewest: 'Newest',
     CatalogSortName: 'Name (A-Z)',
+    CatalogViewGrid: 'Grid view',
+    CatalogViewList: 'List view',
     CatalogTypeTemplate: 'Template',
     CatalogTypeExtension: 'Extension',
     CatalogTypeContent: 'Content',

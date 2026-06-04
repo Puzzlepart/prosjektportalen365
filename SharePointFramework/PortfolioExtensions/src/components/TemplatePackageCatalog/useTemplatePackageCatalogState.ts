@@ -13,6 +13,7 @@ export function useTemplatePackageCatalogState() {
     crossRef: new Map(),
     filters: { search: '', type: ALL_FILTER, category: ALL_FILTER, status: 'all' },
     sort: 'newest',
+    renderMode: 'grid',
     page: 1,
     detailOpen: false
   })

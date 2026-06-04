@@ -76,6 +76,8 @@ define([], function () {
     CatalogSortLabel: 'Sortert etter',
     CatalogSortNewest: 'Nyeste',
     CatalogSortName: 'Navn (A-Å)',
+    CatalogViewGrid: 'Rutenett',
+    CatalogViewList: 'Liste',
     CatalogTypeTemplate: 'Mal',
     CatalogTypeExtension: 'Tillegg',
     CatalogTypeContent: 'Innhold',
