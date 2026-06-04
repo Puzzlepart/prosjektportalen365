@@ -57,7 +57,7 @@ export const PackageUpdateTag: FC<{ packageId: string }> = ({ packageId }) => {
       className={mergeClasses(styles.updateTag)}
       media={<ArrowSync16Regular />}
     >
-      {strings.CatalogBadgeUpdate}
+      {strings.CatalogStatusUpdate}
     </Tag>
   )
 }

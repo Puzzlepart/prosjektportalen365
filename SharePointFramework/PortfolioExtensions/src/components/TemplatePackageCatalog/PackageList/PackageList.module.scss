@@ -2,11 +2,11 @@
   display: block;
 }
 
-/* Grid: compact cards, several per row (like the project list). */
+/* Grid: cards fill the row (auto-fit collapses empty tracks so there's no
+   leftover gap on the right); each card gets 4px of space via its cell. */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: var(--spacingHorizontalM);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   align-items: start;
 }
 
@@ -14,7 +14,11 @@
 .column {
   display: flex;
   flex-direction: column;
-  gap: var(--spacingVerticalM);
+}
+
+/* 4px of padding around every card. */
+.cell {
+  padding: 4px;
 }
 
 .empty {

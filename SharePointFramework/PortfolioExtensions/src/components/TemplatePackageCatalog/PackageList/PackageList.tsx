@@ -34,7 +34,9 @@ export const PackageList: FC = () => {
     <div className={styles.list}>
       <div role='list' className={layoutClass}>
         {pagedPackages.map((pkg) => (
-          <PackageCard key={pkg.id} package={pkg} />
+          <div key={pkg.id} role='presentation' className={styles.cell}>
+            <PackageCard package={pkg} />
+          </div>
         ))}
       </div>
       {pageCount > 1 && (
