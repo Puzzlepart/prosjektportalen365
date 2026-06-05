@@ -89,6 +89,11 @@ export interface IPendingCounts {
   failed: { count: number }
 }
 
+export interface IDailyActivity {
+  date: Date
+  count: number
+}
+
 export interface IArchiveData {
   loading: boolean
   error: Error | null
@@ -97,6 +102,7 @@ export interface IArchiveData {
   archiveTotal: number
   projects: IProjectSummary[]
   quickStats: IQuickStat[]
+  dailyActivity: IDailyActivity[]
 }
 
 // ─────────────────────────────────────────────────────
@@ -242,7 +248,24 @@ function processData(
     }
   ]
 
-  return { pending, archiveStatus, archiveTotal, projects, quickStats }
+  // ── Last 7 days of archiving activity ──
+  const countsByDay = new Map<string, number>()
+  for (const item of archiveItems) {
+    const d = new Date(item.Created)
+    d.setHours(0, 0, 0, 0)
+    const key = d.toISOString()
+    countsByDay.set(key, (countsByDay.get(key) ?? 0) + 1)
+  }
+
+  const dailyActivity: IDailyActivity[] = []
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date()
+    d.setHours(0, 0, 0, 0)
+    d.setDate(d.getDate() - i)
+    dailyActivity.push({ date: d, count: countsByDay.get(d.toISOString()) ?? 0 })
+  }
+
+  return { pending, archiveStatus, archiveTotal, projects, quickStats, dailyActivity }
 }
 
 // ─────────────────────────────────────────────────────
@@ -256,7 +279,8 @@ const INITIAL_STATE: IArchiveData = {
   archiveStatus: [],
   archiveTotal: 0,
   projects: [],
-  quickStats: []
+  quickStats: [],
+  dailyActivity: []
 }
 
 export function useArchiveData(props: IArchiveOverviewProps): IArchiveData {

@@ -4,9 +4,9 @@
 .root {
   display: flex;
   flex-direction: row;
-  background: #faf9f8;
+  background: #ffffff;
   font-family: var(--fontFamilyBase);
-  min-height: 400px;
+  min-height: 435px;
 }
 
 // ── Left nav sidebar ──────────────────────────────────
@@ -16,7 +16,7 @@
   background: transparent;
   display: flex;
   flex-direction: column;
-  padding: 8px 4px 8px 2px; // reduced left to nudge items left
+  padding: 8px 4px 8px 2px; 
 
   :global(.fui-NavItem) {
     border-radius: 6px;
@@ -79,7 +79,7 @@
 // ── Body grid ─────────────────────────────────────────
 .body {
   display: grid;
-  grid-template-columns: 1fr 462px; // right sidebar +10%; middle shrinks equally
+  grid-template-columns: 1fr 462px;
   gap: 20px;
   padding: 20px 24px;
   align-items: start;
@@ -134,18 +134,27 @@
 // ── Pending cards ─────────────────────────────────────
 .pendingGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 3fr; // 20% / 20% / 60%
   gap: 12px;
 }
 
 .card {
-  border: 1px solid #edebe9;
-  border-radius: 8px;
+  border-right: 2px solid #edebe9;
   padding: 16px;
   background: #ffffff;
   display: flex;
   flex-direction: column;
   gap: 6px;
+  min-height: 200px; 
+}
+
+.chartCard {
+  padding: 16px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 200px; 
 }
 
 .cardNumber {
@@ -173,7 +182,7 @@
 // ── Project table ─────────────────────────────────────
 .projectTableWrap {
   overflow-y: auto;
-  max-height: 400px;
+  max-height: 435px;
 
   thead th {
     position: sticky;
@@ -197,6 +206,7 @@
     border-bottom: 1px solid #edebe9;
     white-space: nowrap;
   }
+
 
   td {
     padding: 8px 12px;
@@ -224,6 +234,9 @@
   height: 23px;
   border-radius: 4px;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .activityCell {

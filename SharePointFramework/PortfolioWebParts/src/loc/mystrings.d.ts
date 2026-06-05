@@ -664,6 +664,8 @@ declare interface IPortfolioWebPartsStrings {
     NeverArchivedLabel: string
     TodayAtLabel: string
     YesterdayAtLabel: string
+    ActivityChartTitle: string
+    ActivityChartLegend: string
   }
 }
 

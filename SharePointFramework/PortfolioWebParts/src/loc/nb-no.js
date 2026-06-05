@@ -655,7 +655,9 @@ define([], function () {
       ReadMoreLabel: 'Les mer om arkivstatus',
       NeverArchivedLabel: 'Aldri arkivert',
       TodayAtLabel: 'i dag, {0}',
-      YesterdayAtLabel: 'i går, {0}'
+      YesterdayAtLabel: 'i går, {0}',
+      ActivityChartTitle: 'Arkiveringsaktivitet – siste 7 dager',
+      ActivityChartLegend: 'Elementer arkivert'
     }
   }
 })

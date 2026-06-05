@@ -657,7 +657,9 @@ define([], function () {
       ReadMoreLabel: 'Read more about archive status',
       NeverArchivedLabel: 'Never archived',
       TodayAtLabel: 'today, {0}',
-      YesterdayAtLabel: 'yesterday, {0}'
+      YesterdayAtLabel: 'yesterday, {0}',
+      ActivityChartTitle: 'Archiving activity – last 7 days',
+      ActivityChartLegend: 'Elements archived'
     }
   }
 })
