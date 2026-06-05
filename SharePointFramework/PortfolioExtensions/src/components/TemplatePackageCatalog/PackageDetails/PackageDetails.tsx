@@ -25,7 +25,7 @@ import {
 } from '@fluentui/react-icons'
 import { UserMessage } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { PpPkgType } from 'models'
 import { PackageBadges } from '../PackageCard'
 import { useCatalogContext } from '../context'
@@ -47,6 +47,14 @@ export const PackageDetails: FC = () => {
   } = useCatalogContext()
   const [imageError, setImageError] = useState(false)
   const [confirmReplace, setConfirmReplace] = useState(false)
+
+  // PackageDetails is a single reused instance, so reset the broken-image flag
+  // when a different package is selected — otherwise one failed thumbnail would
+  // hide the image for every package selected afterwards. Keyed on `.id` (not
+  // the object) since `selectedPackage` is a fresh find() on every render.
+  useEffect(() => {
+    setImageError(false)
+  }, [selectedPackage?.id])
 
   // Clicking a tag filters the catalog by that category and returns to the list.
   const filterByTag = (tag: string) => {

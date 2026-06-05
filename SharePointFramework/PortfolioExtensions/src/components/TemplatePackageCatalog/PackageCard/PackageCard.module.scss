@@ -2,6 +2,9 @@
   width: 100%;
   height: fit-content;
   cursor: pointer;
+  /* Positioning context for the .selected::before ring (Fluent's Card root is
+     already position:relative; restated for safety). */
+  position: relative;
   transition: box-shadow var(--durationNormal) var(--curveEasyEase),
     transform var(--durationNormal) var(--curveEasyEase);
 }
@@ -15,9 +18,33 @@
   transform: translateY(0);
 }
 
-.selected {
-  outline: 2px solid var(--colorBrandStroke1);
-  outline-offset: -1px;
+/*
+ * Selection ring on ::before (NOT ::after): Fluent UI v9's Card owns the root
+ * ::after for its own border + focus outline. ::before is free here (Fluent
+ * only uses it in the disabled state, which never applies). An inset box-shadow
+ * paints ON TOP of the full-bleed CardPreview image (z-index above the preview),
+ * stays inside the card's overflow:hidden clip, inherits the card radius, and
+ * repaints reliably on toggle — unlike `outline`, which deferred its repaint on
+ * the hover transform layer (the ring then appeared only after clicking away).
+ * NOTE: do not also pass Fluent's `selected` prop to the Card, or two rings stack.
+ */
+.selected::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 2px var(--colorBrandStroke1);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* High-contrast: box-shadow is suppressed, so use a system-colored outline. */
+@media (forced-colors: active) {
+  .selected::before {
+    box-shadow: none;
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
 }
 
 .preview {
