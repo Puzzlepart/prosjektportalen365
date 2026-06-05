@@ -15,23 +15,20 @@ export const StatusBadge: FC<{ status: ProjectStatus }> = ({ status }) => {
 
   switch (status) {
     case 'updated':
-      icon = getFluentIcon('CheckmarkCircle')
       backgroundColor = tokens.colorStatusSuccessBackground2
       label = strings.ArchiveOverview.StatusUpdated
       break
     case 'warning':
-      icon = getFluentIcon('Warning')
       backgroundColor = tokens.colorStatusWarningBackground2
       label = strings.ArchiveOverview.StatusWarning
       break
     default:
-      icon = getFluentIcon('ErrorCircle')
       backgroundColor = tokens.colorStatusDangerBackground2
       label = strings.ArchiveOverview.StatusNeverArchived
   }
 
   return (
-    <Tag icon={icon} style={{ backgroundColor, width: '140px', justifyContent: 'center' }}>
+    <Tag style={{ backgroundColor, width: '140px', justifyContent: 'center' }}>
       {label}
     </Tag>
   )
