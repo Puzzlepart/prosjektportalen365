@@ -8,8 +8,8 @@ import {
   ICatalog,
   ICatalogPackage,
   ICrossReference,
-  ISPMaloppsettItem,
-  MaloppsettTemplate,
+  ISPTemplateOptionsItem,
+  TemplateOptionsItem,
   PackageBadge,
   PpPkgType
 } from 'models'
@@ -44,21 +44,21 @@ function nowIso(): string {
  * Reads and writes Maloppsett items and is the single owner of the
  * catalog↔Maloppsett cross-reference used to derive card/detail badges.
  */
-export class MaloppsettService {
+export class TemplateOptionsService {
   /**
    * Read all Maloppsett items (from the hub web) with the package fields.
    * Returns an empty array if the list/fields are not provisioned yet.
    */
-  public static async getItems(): Promise<MaloppsettTemplate[]> {
+  public static async getItems(): Promise<TemplateOptionsItem[]> {
     try {
-      const items: ISPMaloppsettItem[] = await SPDataAdapter.portalDataService.web.lists
+      const items: ISPTemplateOptionsItem[] = await SPDataAdapter.portalDataService.web.lists
         .getByTitle(resource.Lists_TemplateOptions_Title)
         .items.select(...SELECT_FIELDS)
         .top(500)()
-      return items.map((item) => new MaloppsettTemplate(item))
+      return items.map((item) => new TemplateOptionsItem(item))
     } catch (error) {
       Logger.log({
-        message: `(MaloppsettService) getItems failed (fields not provisioned yet?): ${error?.message}`,
+        message: `(TemplateOptionsService) getItems failed (fields not provisioned yet?): ${error?.message}`,
         level: LogLevel.Warning
       })
       return []
@@ -71,7 +71,7 @@ export class MaloppsettService {
    * Only linked items (with a `PpPkgId`) participate.
    */
   public static buildCrossReference(
-    items: MaloppsettTemplate[],
+    items: TemplateOptionsItem[],
     catalog: ICatalog
   ): Map<string, ICrossReference> {
     const map = new Map<string, ICrossReference>()
@@ -99,17 +99,37 @@ export class MaloppsettService {
 
   /**
    * Create/refresh the Maloppsett item for an imported package (Mode A).
+   *
+   * Sets the package description (`GtDescription` — Beskrivelse) and icon
+   * (`IconName` — Ikon), and, when supplied:
+   * - `projectContentTypeId` → `GtProjectContentType` (the hub content type the
+   *   setup wizard provisions projects with),
+   * - `extensionItemIds` → `GtProjectExtensions` (Utvidelser — the Prosjekttillegg
+   *   items uploaded for this template's bundled extensions).
    */
-  public static async upsertImported(pkg: ICatalogPackage, existingItemId?: number): Promise<void> {
+  public static async upsertImported(
+    pkg: ICatalogPackage,
+    existingItemId?: number,
+    options: { projectContentTypeId?: string; extensionItemIds?: number[]; icon?: string } = {}
+  ): Promise<void> {
     const properties: Record<string, any> = {
       Title: pkg.name,
       GtProjectTemplateId: SENTINEL_PROJECT_TEMPLATE_ID,
+      GtDescription: pkg.description ?? '',
+      IconName: options.icon || 'Page',
       PpPkgType: PpPkgType.Importert,
       PpPkgId: pkg.id,
       PpPkgVersion: pkg.version,
       PpPkgLatestVersion: pkg.version,
       PpPkgSourceUrl: { Url: pkg.downloadUrl, Description: pkg.name },
       PpPkgUpdatedDate: nowIso()
+    }
+    if (options.projectContentTypeId) {
+      properties.GtProjectContentType = options.projectContentTypeId
+    }
+    if (options.extensionItemIds?.length) {
+      // LookupMulti field — set by the `<InternalName>Id` array of item ids.
+      properties.GtProjectExtensionsId = options.extensionItemIds
     }
     if (existingItemId) {
       await SPDataAdapter.portalDataService.updateItemInList(
@@ -132,6 +152,8 @@ export class MaloppsettService {
     await SPDataAdapter.portalDataService.addItemToList('PROJECT_TEMPLATE_CONFIGURATION', {
       Title: pkg.name,
       GtProjectTemplateId: SENTINEL_PROJECT_TEMPLATE_ID,
+      GtDescription: pkg.description ?? '',
+      IconName: 'Cloud',
       PpPkgType: PpPkgType.Sentral,
       PpPkgId: pkg.id,
       PpPkgVersion: pkg.version,

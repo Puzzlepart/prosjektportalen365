@@ -6,7 +6,7 @@ import { PpPkgType } from './enums'
  * Raw SharePoint item shape for a Maloppsett (Template Options) list item,
  * limited to the fields this feature cares about.
  */
-export interface ISPMaloppsettItem {
+export interface ISPTemplateOptionsItem {
   Id: number
   Title: string
   PpPkgType?: string
@@ -21,12 +21,12 @@ export interface ISPMaloppsettItem {
 
 /**
  * Model wrapping a Maloppsett item. Constructed by
- * `PortalDataService.getItems(listTitle, MaloppsettTemplate)`.
+ * `PortalDataService.getItems(listTitle, TemplateOptionsItem)`.
  *
  * Empty/missing `PpPkgType` is coalesced to {@link PpPkgType.Lokal} because a
  * column default does not backfill pre-existing items on upgrade.
  */
-export class MaloppsettTemplate {
+export class TemplateOptionsItem {
   public id: number
   public title: string
   public packageType: PpPkgType
@@ -37,7 +37,7 @@ export class MaloppsettTemplate {
   public updatedDate?: string
   public latestVersion: string
 
-  constructor(item: ISPMaloppsettItem, public web?: IWeb, public sp?: SPFI) {
+  constructor(item: ISPTemplateOptionsItem, public web?: IWeb, public sp?: SPFI) {
     this.id = item.Id
     this.title = item.Title
     this.packageType = (item.PpPkgType as PpPkgType) || PpPkgType.Lokal

@@ -1,7 +1,14 @@
 import { useEffect, useMemo } from 'react'
 import strings from 'PortfolioExtensionsStrings'
 import { ICatalogPackage, ICrossReference } from 'models'
-import { CatalogService, MaloppsettService, PackageInstaller } from 'services'
+import {
+  CatalogService,
+  TemplateOptionsService,
+  PackageInstaller,
+  ProjectExtensionsService
+} from 'services'
+import { isNewerVersion } from 'services/version'
+import SPDataAdapter from 'data/SPDataAdapter'
 import {
   ALL_FILTER,
   ICatalogFilters,
@@ -29,13 +36,25 @@ export function useTemplatePackageCatalog(
       const { catalog, degraded, error } = await CatalogService.getCatalog(props.catalogUrl)
       let crossRef = new Map<string, ICrossReference>()
       try {
-        const items = await MaloppsettService.getItems()
-        crossRef = MaloppsettService.buildCrossReference(items, catalog)
+        const items = await TemplateOptionsService.getItems()
+        crossRef = TemplateOptionsService.buildCrossReference(items, catalog)
       } catch {
         // Cross-reference is optional (fields may not be provisioned yet).
       }
+      try {
+        const extRef = await ProjectExtensionsService.getCrossReference(catalog)
+        extRef.forEach((value, key) => crossRef.set(key, value))
+      } catch {
+        // Extension cross-reference is best-effort.
+      }
+      let installedVersion: string | undefined
+      try {
+        installedVersion = (await SPDataAdapter.getInstalledPPVersion()) ?? undefined
+      } catch {
+        // Installed version is best-effort — packages stay compatible if unknown.
+      }
       if (cancelled) return
-      setState({ loading: false, catalog, degraded, error, crossRef })
+      setState({ loading: false, catalog, degraded, error, crossRef, installedVersion })
     })()
     return () => {
       cancelled = true
@@ -52,6 +71,13 @@ export function useTemplatePackageCatalog(
 
   const crossRefFor = (packageId: string): ICrossReference | undefined =>
     state.crossRef.get(packageId.toLowerCase())
+
+  // A package is supported unless its minPPVersion is newer than the installed
+  // Prosjektportalen version. Unknown installed version → treated as supported.
+  const isSupported = (pkg: ICatalogPackage): boolean =>
+    !pkg.minPPVersion ||
+    !state.installedVersion ||
+    !isNewerVersion(pkg.minPPVersion, state.installedVersion)
 
   const filteredPackages = useMemo(() => {
     const { search, type, category, status } = state.filters
@@ -111,8 +137,15 @@ export function useTemplatePackageCatalog(
   const refreshCrossRef = async (): Promise<void> => {
     if (!state.catalog) return
     try {
-      const items = await MaloppsettService.getItems()
-      setState({ crossRef: MaloppsettService.buildCrossReference(items, state.catalog) })
+      const items = await TemplateOptionsService.getItems()
+      const crossRef = TemplateOptionsService.buildCrossReference(items, state.catalog)
+      try {
+        const extRef = await ProjectExtensionsService.getCrossReference(state.catalog)
+        extRef.forEach((value, key) => crossRef.set(key, value))
+      } catch {
+        // Extension cross-reference is best-effort.
+      }
+      setState({ crossRef })
     } catch {
       // ignore
     }
@@ -149,7 +182,7 @@ export function useTemplatePackageCatalog(
   const publishCentral = async (pkg: ICatalogPackage): Promise<void> => {
     setState({ notification: undefined })
     try {
-      await MaloppsettService.createCentral(pkg)
+      await TemplateOptionsService.createCentral(pkg)
       await refreshCrossRef()
       setState({ notification: { intent: 'success', text: strings.CatalogPublishSuccessText } })
     } catch (error) {
@@ -161,7 +194,7 @@ export function useTemplatePackageCatalog(
     const ref = crossRefFor(pkg.id)
     if (!ref) return
     try {
-      await MaloppsettService.remove(ref.itemId)
+      await TemplateOptionsService.remove(ref.itemId)
       await refreshCrossRef()
       setState({ notification: { intent: 'success', text: strings.CatalogRemoveSuccessText } })
     } catch (error) {
@@ -179,6 +212,7 @@ export function useTemplatePackageCatalog(
     categories,
     selectedPackage,
     crossRefFor,
+    isSupported,
     setFilter,
     clearFilters,
     setSort,

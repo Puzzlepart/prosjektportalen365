@@ -19,8 +19,8 @@ central **`prosjektportalen-hosting`** catalog. A portal administrator can:
 | --- | --- |
 | Command entry / mount | `src/extensions/templatePackageCatalog/index.tsx` (`render` into a `document.body` placeholder) |
 | UI (Fluent v9) | `src/components/TemplatePackageCatalog/` (drawer root + `CatalogToolbar`, `PackageList`, `PackageCard`, `PackageDetails`, `InstallProgress`) |
-| Models | `src/models/` (`ICatalog`, `ICatalogPackage`, `IPackageManifest`, `MaloppsettTemplate`, enums, …) |
-| Services | `src/services/` — `CatalogService` (catalog + changelog), `MaloppsettService` (read/cross-ref/write), `PackageInstaller` (Mode A), `featureFlags` |
+| Models | `src/models/` (`ICatalog`, `ICatalogPackage`, `IPackageManifest`, `TemplateOptionsItem`, enums, …) |
+| Services | `src/services/` — `CatalogService` (catalog + changelog), `TemplateOptionsService` (read/cross-ref/write), `PackageInstaller` (Mode A), `featureFlags` |
 | Visibility | Shown only on the Maloppsett list (`Lists/TemplateOptions` URL) for users with `ManageWeb` |
 | Registration | `Templates/Portfolio/Objects/CustomActions.xml` (ClientSideComponentId `75f97492-…`) + `channels/*.json` (`TemplatePackageCatalog`) |
 | New Maloppsett fields | `Templates/Portfolio/Objects/Lists/Maloppsett.xml` (`PpPkg*`) + `Resources.*.resx` |

@@ -124,7 +124,7 @@ define([], function () {
     CatalogStepStoreProjectTemplate: 'Lagrer prosjektmal',
     CatalogStepExtensions: 'Legger til i Prosjekttillegg',
     CatalogStepContent: 'Standardinnhold',
-    CatalogStepUpdateMaloppsett: 'Oppdaterer Maloppsett',
+    CatalogStepUpdateTemplateOptions: 'Oppdaterer Maloppsett',
     CatalogStepSkippedFeatureFlag: 'Hoppet over (feature flag av)',
     CatalogInstallSuccessTitle: 'Malpakke importert',
     CatalogInstallSuccessText: 'Malen er nå tilgjengelig i oppsettveiviseren.',
@@ -157,6 +157,7 @@ define([], function () {
     CatalogStepStatusSkipped: 'Hoppet over',
     CatalogStepStatusPending: 'Venter',
     CatalogActionAddExtension: 'Legg til som prosjekttillegg',
+    CatalogActionUpdateExtension: 'Oppdater tillegg til v{0}',
     CatalogActionAddExtensionTooltip:
       'Last ned tillegget og legg det i Prosjekttillegg-biblioteket på hub-området',
     CatalogExtensionInfo:
@@ -169,5 +170,17 @@ define([], function () {
     CatalogPreviewError: 'Kunne ikke laste innholdet.',
     CatalogPreviewCopy: 'Kopier',
     CatalogPreviewCopied: 'Kopiert!',
+    CatalogRequiresVersion: 'Krever Prosjektportalen {0}',
+    CatalogIncompatibleTitle: 'Ikke kompatibel med din versjon',
+    CatalogIncompatibleText:
+      'Denne malpakken krever Prosjektportalen {0}, men du har {1}. Oppgrader Prosjektportalen for å ta den i bruk.',
+    CatalogBadgeLocal: 'Finnes lokalt',
+    CatalogBadgeLocalTooltip:
+      'Dette tillegget finnes allerede i installasjonen, men ble ikke installert fra katalogen.',
+    CatalogActionReplaceExtension: 'Erstatt med katalogversjon',
+    CatalogReplaceConfirmTitle: 'Erstatte eksisterende tillegg?',
+    CatalogReplaceConfirmText:
+      'Tillegget «{0}» finnes allerede i Prosjekttillegg-biblioteket og ble ikke installert fra katalogen. Hvis du fortsetter, erstattes det med katalogversjonen (v{1}), og eventuelle lokale tilpasninger går tapt.',
+    CatalogReplaceConfirmButton: 'Erstatt',
   }
 })

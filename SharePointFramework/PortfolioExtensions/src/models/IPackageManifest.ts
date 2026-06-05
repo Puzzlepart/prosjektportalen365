@@ -50,6 +50,11 @@ export interface IPackageManifest {
   license?: string
   minPPVersion?: string
   thumbnail?: string
+  /**
+   * Fluent UI icon name used as the Maloppsett item's icon (`IconName`) when a
+   * template is imported. Falls back to a default when omitted.
+   */
+  icon?: string
   tags?: string[]
   type: PackageType
   provisioning?: {
@@ -63,6 +68,12 @@ export interface IPackageManifest {
      * (e.g. `provisioning/template.json`).
      */
     template?: string
+    /**
+     * Content type ID (defined by the hub template) to record as
+     * `GtProjectContentType` on the imported Maloppsett item, so the setup
+     * wizard provisions projects from this template with that content type.
+     */
+    projectContentTypeId?: string
     extensions?: IManifestExtension[]
   }
   content?: {

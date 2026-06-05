@@ -10,25 +10,26 @@ import { ICatalog } from 'models'
  * dependency on `resolveJsonModule` in the SPFx tsconfig.
  */
 export const sampleCatalog: ICatalog = {
-  lastUpdated: '2026-05-11T09:19:36.921Z',
+  lastUpdated: '2026-06-05T09:00:00.000Z',
   packages: [
     {
-      id: 'pp-standardmal',
-      name: 'Standardmal',
+      id: 'pp-enkel-prosjektmal',
+      name: 'Enkel prosjektmal',
       description:
-        'Komplett prosjektmal med fasesjekkliste, interessentregister, usikkerhetshåndtering, leveransestyring og dokumenthåndtering. Inkluderer integrasjon med Microsoft Planner for oppgavestyring.',
-      version: '1.0.1',
+        'En enkel prosjektmal for oppstart av små prosjekter. Definerer en egen prosjektinnholdstype på hub-området og inkluderer prosjekttilleggene «Enkelt prosjekt» og «Enkel venstremeny».',
+      version: '1.0.0',
       type: 'template',
+      icon: 'Page',
       author: 'Puzzlepart',
-      tags: ['standard', 'prosjektledelse', 'SharePoint'],
+      tags: ['enkel', 'prosjektledelse', 'oppstart'],
       thumbnail:
-        'https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-hosting/main/packages/dummy-prosjektmal/thumbnail.png',
+        'https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-hosting/main/packages/pp-enkel-prosjektmal/thumbnail.png',
       downloadUrl:
-        'https://github.com/Puzzlepart/prosjektportalen-hosting/releases/download/v1.0.1/dummy-prosjektmal-1.0.1.pppkg',
+        'https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-hosting/main/dist/pp-enkel-prosjektmal-1.0.0.pppkg',
       minPPVersion: '1.10.0',
-      publishedDate: '2026-05-11',
+      publishedDate: '2026-06-05',
       changelogUrl:
-        'https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-hosting/main/packages/dummy-prosjektmal/CHANGELOG.md'
+        'https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-hosting/main/packages/pp-enkel-prosjektmal/CHANGELOG.md'
     }
   ]
 }

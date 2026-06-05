@@ -9,11 +9,12 @@ import {
   Text,
   Tooltip
 } from '@fluentui/react-components'
+import { formatDate } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC, useState } from 'react'
 import { ICatalogPackage } from 'models'
 import { useCatalogContext } from '../context'
-import { PackageStatusTag, PackageUpdateTag } from './PackageBadges'
+import { PackageCompatibilityTag, PackageStatusTag, PackageUpdateTag } from './PackageBadges'
 import styles from './PackageCard.module.scss'
 
 export interface IPackageCardProps {
@@ -28,7 +29,7 @@ export const PackageCard: FC<IPackageCardProps> = ({ package: pkg }) => {
 
   const meta = [
     pkg.version ? `v${pkg.version}` : undefined,
-    pkg.publishedDate ? format(strings.CatalogCardPublished, pkg.publishedDate) : undefined
+    pkg.publishedDate ? format(strings.CatalogCardPublished, formatDate(pkg.publishedDate)) : undefined
   ]
     .filter(Boolean)
     .join('  •  ')
@@ -80,6 +81,7 @@ export const PackageCard: FC<IPackageCardProps> = ({ package: pkg }) => {
         description={
           <div className={styles.badges}>
             <PackageUpdateTag packageId={pkg.id} />
+            <PackageCompatibilityTag package={pkg} />
           </div>
         }
       />

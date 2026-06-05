@@ -45,6 +45,12 @@ export interface ITemplatePackageCatalogState {
   error?: string
   catalog?: ICatalog
   crossRef: Map<string, ICrossReference>
+  /**
+   * Installed Prosjektportalen version (from the installation log), used to
+   * flag packages whose `minPPVersion` is newer than what's installed.
+   * `undefined` when it can't be determined (treated as compatible).
+   */
+  installedVersion?: string
   filters: ICatalogFilters
   sort: SortKey
   renderMode: RenderMode
@@ -80,6 +86,11 @@ export interface ITemplatePackageCatalogContext {
   categories: string[]
   selectedPackage?: ICatalogPackage
   crossRefFor: (packageId: string) => ICrossReference | undefined
+  /**
+   * Whether the installed Prosjektportalen version satisfies the package's
+   * `minPPVersion`. Returns `true` when unknown (allow-with-warning).
+   */
+  isSupported: (pkg: ICatalogPackage) => boolean
   setFilter: (key: keyof ICatalogFilters, value: string) => void
   clearFilters: () => void
   setSort: (sort: SortKey) => void

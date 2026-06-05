@@ -123,7 +123,7 @@ declare interface IPortfolioExtensionsStrings {
   CatalogStepStoreProjectTemplate: string
   CatalogStepExtensions: string
   CatalogStepContent: string
-  CatalogStepUpdateMaloppsett: string
+  CatalogStepUpdateTemplateOptions: string
   CatalogStepSkippedFeatureFlag: string
   CatalogInstallSuccessTitle: string
   CatalogInstallSuccessText: string
@@ -156,6 +156,7 @@ declare interface IPortfolioExtensionsStrings {
   CatalogStepStatusSkipped: string
   CatalogStepStatusPending: string
   CatalogActionAddExtension: string
+  CatalogActionUpdateExtension: string
   CatalogActionAddExtensionTooltip: string
   CatalogExtensionInfo: string
   CatalogStepExtensionsDetail: string
@@ -165,6 +166,15 @@ declare interface IPortfolioExtensionsStrings {
   CatalogPreviewError: string
   CatalogPreviewCopy: string
   CatalogPreviewCopied: string
+  CatalogRequiresVersion: string
+  CatalogIncompatibleTitle: string
+  CatalogIncompatibleText: string
+  CatalogBadgeLocal: string
+  CatalogBadgeLocalTooltip: string
+  CatalogActionReplaceExtension: string
+  CatalogReplaceConfirmTitle: string
+  CatalogReplaceConfirmText: string
+  CatalogReplaceConfirmButton: string
 }
 
 declare module 'PortfolioExtensionsStrings' {

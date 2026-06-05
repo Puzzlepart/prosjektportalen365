@@ -1,7 +1,15 @@
 import { format } from '@fluentui/react/lib/Utilities'
+import { Icon } from '@fluentui/react/lib/Icon'
+import { formatDate } from 'pp365-shared-library'
 import {
   Button,
   Caption1,
+  Dialog,
+  DialogActions,
+  DialogBody,
+  DialogContent,
+  DialogSurface,
+  DialogTitle,
   InteractionTag,
   InteractionTagPrimary,
   TagGroup,
@@ -27,8 +35,10 @@ import styles from './PackageDetails.module.scss'
 
 export const PackageDetails: FC = () => {
   const {
+    state,
     selectedPackage,
     crossRefFor,
+    isSupported,
     importPackage,
     publishCentral,
     removePackage,
@@ -36,6 +46,7 @@ export const PackageDetails: FC = () => {
     setFilter
   } = useCatalogContext()
   const [imageError, setImageError] = useState(false)
+  const [confirmReplace, setConfirmReplace] = useState(false)
 
   // Clicking a tag filters the catalog by that category and returns to the list.
   const filterByTag = (tag: string) => {
@@ -59,11 +70,17 @@ export const PackageDetails: FC = () => {
   // cannot be published as a cloud template and get their own action/info copy.
   const isExtension = pkg.type === 'extension'
   const canPublishCentral = !isCentral && !isExtension
+  const supported = isSupported(pkg)
+  // Same-named extension exists locally but wasn't installed from the catalog —
+  // replacing it needs an explicit confirmation.
+  const isUnmanaged = !!ref?.unmanaged
+  const onPrimaryAction = () => (isUnmanaged ? setConfirmReplace(true) : importPackage(pkg))
 
   const meta = [
     pkg.version ? `v${pkg.version}` : undefined,
-    pkg.publishedDate ? format(strings.CatalogCardPublished, pkg.publishedDate) : undefined,
-    pkg.author ? format(strings.CatalogCardByAuthor, pkg.author) : undefined
+    pkg.publishedDate ? format(strings.CatalogCardPublished, formatDate(pkg.publishedDate)) : undefined,
+    pkg.author ? format(strings.CatalogCardByAuthor, pkg.author) : undefined,
+    pkg.minPPVersion ? format(strings.CatalogRequiresVersion, pkg.minPPVersion) : undefined
   ]
     .filter(Boolean)
     .join('  •  ')
@@ -89,6 +106,7 @@ export const PackageDetails: FC = () => {
       )}
 
       <div className={styles.titleRow}>
+        {pkg.icon && <Icon iconName={pkg.icon} className={styles.titleIcon} />}
         <Text size={500} weight='semibold'>
           {pkg.name}
         </Text>
@@ -117,11 +135,27 @@ export const PackageDetails: FC = () => {
 
       {isExtension && <UserMessage intent='info' text={strings.CatalogExtensionInfo} />}
 
+      {!supported && pkg.minPPVersion && (
+        <UserMessage
+          intent='warning'
+          title={strings.CatalogIncompatibleTitle}
+          text={format(
+            strings.CatalogIncompatibleText,
+            pkg.minPPVersion,
+            state.installedVersion ?? '?'
+          )}
+        />
+      )}
+
       <div className={styles.actions}>
         <Tooltip
           content={
             isExtension
-              ? strings.CatalogActionAddExtensionTooltip
+              ? isUnmanaged
+                ? strings.CatalogBadgeLocalTooltip
+                : updateAvailable
+                ? strings.CatalogActionUpdateTooltip
+                : strings.CatalogActionAddExtensionTooltip
               : updateAvailable
               ? strings.CatalogActionUpdateTooltip
               : strings.CatalogActionImportTooltip
@@ -130,11 +164,16 @@ export const PackageDetails: FC = () => {
         >
           <Button
             appearance='primary'
+            disabled={!supported}
             icon={isExtension ? <PuzzlePiece24Regular /> : <ArrowDownload24Regular />}
-            onClick={() => importPackage(pkg)}
+            onClick={onPrimaryAction}
           >
             {isExtension
-              ? strings.CatalogActionAddExtension
+              ? isUnmanaged
+                ? strings.CatalogActionReplaceExtension
+                : updateAvailable
+                ? format(strings.CatalogActionUpdateExtension, pkg.version)
+                : strings.CatalogActionAddExtension
               : updateAvailable
               ? format(strings.CatalogActionUpdate, pkg.version)
               : strings.CatalogActionImport}
@@ -151,7 +190,7 @@ export const PackageDetails: FC = () => {
             </Button>
           </Tooltip>
         )}
-        {ref && (
+        {ref && !isExtension && (
           <Tooltip content={strings.CatalogActionRemoveTooltip} relationship='description'>
             <Button
               appearance='subtle'
@@ -163,6 +202,36 @@ export const PackageDetails: FC = () => {
           </Tooltip>
         )}
       </div>
+
+      <Dialog
+        open={confirmReplace}
+        onOpenChange={(_, data) => {
+          if (!data.open) setConfirmReplace(false)
+        }}
+      >
+        <DialogSurface>
+          <DialogBody>
+            <DialogTitle>{strings.CatalogReplaceConfirmTitle}</DialogTitle>
+            <DialogContent>
+              {format(strings.CatalogReplaceConfirmText, pkg.name, pkg.version)}
+            </DialogContent>
+            <DialogActions>
+              <Button appearance='secondary' onClick={() => setConfirmReplace(false)}>
+                {strings.CancelLabel}
+              </Button>
+              <Button
+                appearance='primary'
+                onClick={() => {
+                  setConfirmReplace(false)
+                  void importPackage(pkg)
+                }}
+              >
+                {strings.CatalogReplaceConfirmButton}
+              </Button>
+            </DialogActions>
+          </DialogBody>
+        </DialogSurface>
+      </Dialog>
     </div>
   )
 }

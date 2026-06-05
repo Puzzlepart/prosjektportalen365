@@ -128,7 +128,7 @@ define([], function () {
     CatalogStepStoreProjectTemplate: 'Storing project template',
     CatalogStepExtensions: 'Adding to Project Extensions',
     CatalogStepContent: 'Standard content',
-    CatalogStepUpdateMaloppsett: 'Updating template options',
+    CatalogStepUpdateTemplateOptions: 'Updating template options',
     CatalogStepSkippedFeatureFlag: 'Skipped (feature flag off)',
     CatalogInstallSuccessTitle: 'Package imported',
     CatalogInstallSuccessText: 'The template is now available in the setup wizard.',
@@ -161,6 +161,7 @@ define([], function () {
     CatalogStepStatusSkipped: 'Skipped',
     CatalogStepStatusPending: 'Pending',
     CatalogActionAddExtension: 'Add as project extension',
+    CatalogActionUpdateExtension: 'Update extension to v{0}',
     CatalogActionAddExtensionTooltip:
       'Download the extension and add it to the Project Extensions library on the hub',
     CatalogExtensionInfo:
@@ -173,5 +174,17 @@ define([], function () {
     CatalogPreviewError: 'Could not load the content.',
     CatalogPreviewCopy: 'Copy',
     CatalogPreviewCopied: 'Copied!',
+    CatalogRequiresVersion: 'Requires Prosjektportalen {0}',
+    CatalogIncompatibleTitle: 'Not compatible with your version',
+    CatalogIncompatibleText:
+      'This template package requires Prosjektportalen {0}, but you have {1}. Upgrade Prosjektportalen to use it.',
+    CatalogBadgeLocal: 'Exists locally',
+    CatalogBadgeLocalTooltip:
+      'This extension already exists in your installation but was not installed from the catalog.',
+    CatalogActionReplaceExtension: 'Replace with catalog version',
+    CatalogReplaceConfirmTitle: 'Replace existing extension?',
+    CatalogReplaceConfirmText:
+      'The extension "{0}" already exists in the Project Extensions library and was not installed from the catalog. If you continue, it will be replaced with the catalog version (v{1}) and any local customizations will be lost.',
+    CatalogReplaceConfirmButton: 'Replace',
   }
 })

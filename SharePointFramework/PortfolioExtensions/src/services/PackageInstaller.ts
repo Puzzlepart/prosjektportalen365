@@ -18,7 +18,7 @@ import {
   IPackageManifest
 } from 'models'
 import { featureFlags } from './featureFlags'
-import { MaloppsettService } from './MaloppsettService'
+import { TemplateOptionsService } from './TemplateOptionsService'
 import { isNewerVersion } from './version'
 
 /**
@@ -72,8 +72,9 @@ export class PackageInstaller {
             InstallStepKey.CheckVersion,
             InstallStepKey.ProvisionHub,
             InstallStepKey.Taxonomy,
+            InstallStepKey.Extensions,
             InstallStepKey.StoreProjectTemplate,
-            InstallStepKey.UpdateMaloppsett
+            InstallStepKey.UpdateTemplateOptions
           ]
     ).map((key) => ({ key, status: 'pending' as InstallStepStatus }))
 
@@ -116,7 +117,7 @@ export class PackageInstaller {
         setStatus(
           InstallStepKey.Extensions,
           'done',
-          format(strings.CatalogStepExtensionsDetail, added)
+          format(strings.CatalogStepExtensionsDetail, added.length)
         )
         progress.status = 'success'
         progress.currentStep = undefined
@@ -147,13 +148,32 @@ export class PackageInstaller {
         )
       }
 
+      // Add the template's bundled project extensions to the Prosjekttillegg
+      // library (if any), so they can be linked from the Maloppsett item below.
+      let extensionItems: Array<{ extensionId: string; itemId: number; name: string }> = []
+      setStatus(InstallStepKey.Extensions, 'running')
+      if ((manifest.provisioning?.extensions?.length ?? 0) > 0) {
+        extensionItems = await PackageInstaller._addProjectExtensions(zip, manifest)
+        setStatus(
+          InstallStepKey.Extensions,
+          'done',
+          format(strings.CatalogStepExtensionsDetail, extensionItems.length)
+        )
+      } else {
+        setStatus(InstallStepKey.Extensions, 'skipped')
+      }
+
       setStatus(InstallStepKey.StoreProjectTemplate, 'running')
       const stored = await PackageInstaller._storeProjectFiles(zip, manifest)
       setStatus(InstallStepKey.StoreProjectTemplate, stored ? 'done' : 'skipped')
 
-      setStatus(InstallStepKey.UpdateMaloppsett, 'running')
-      await MaloppsettService.upsertImported(pkg, existingItemId)
-      setStatus(InstallStepKey.UpdateMaloppsett, 'done')
+      setStatus(InstallStepKey.UpdateTemplateOptions, 'running')
+      await TemplateOptionsService.upsertImported(pkg, existingItemId, {
+        projectContentTypeId: manifest.provisioning?.projectContentTypeId,
+        extensionItemIds: extensionItems.map((e) => e.itemId),
+        icon: manifest.icon
+      })
+      setStatus(InstallStepKey.UpdateTemplateOptions, 'done')
 
       progress.status = 'success'
       progress.currentStep = undefined
@@ -295,12 +315,13 @@ export class PackageInstaller {
    * **Prosjekttillegg** (Project Extensions) document library, setting the
    * `Title` and description (`GtDescription`) on each, plus `GtExtensionDefault`
    * from the manifest's `defaultSelected`. Re-import overwrites the file by name.
-   * Returns the number of extensions added.
+   * Returns the created/updated Prosjekttillegg items so a template's Maloppsett
+   * entry can link them via `GtProjectExtensions` (Utvidelser).
    */
   private static async _addProjectExtensions(
     zip: any,
     manifest: IPackageManifest
-  ): Promise<number> {
+  ): Promise<Array<{ extensionId: string; itemId: number; name: string }>> {
     const extensions = manifest.provisioning?.extensions ?? []
     if (extensions.length === 0) {
       throw new Error('Package contains no project extensions')
@@ -311,24 +332,48 @@ export class PackageInstaller {
       .rootFolder.select('ServerRelativeUrl')()
     const folderUrl = rootFolder.ServerRelativeUrl
 
-    let added = 0
+    const added: Array<{ extensionId: string; itemId: number; name: string }> = []
     for (const ext of extensions) {
       const zipFile = zip.file(ext.file)
       if (!zipFile) throw new Error(`Extension file ${ext.file} not found in package`)
       const content = await zipFile.async('string')
+      // Stamp the source package id/version into the file so the catalog can
+      // later detect that an installed extension is outdated (version-in-file).
+      const stamped = PackageInstaller._stampExtension(content, manifest, ext.id)
       const fileName = ext.file.split('/').pop() as string
       const addResult = await web
         .getFolderByServerRelativePath(folderUrl)
-        .files.addUsingPath(fileName, content, { Overwrite: true })
-      const item = await addResult.file.getItem()
+        .files.addUsingPath(fileName, stamped, { Overwrite: true })
+      const item = await addResult.file.getItem<{ Id: number }>('Id')
       await item.update({
         Title: ext.name,
         GtDescription: ext.description ?? manifest.description ?? '',
         GtExtensionDefault: !!ext.defaultSelected
       })
-      added++
+      added.push({ extensionId: ext.id, itemId: item.Id, name: ext.name })
     }
     return added
+  }
+
+  /**
+   * Embed a `PpPackage` stamp ({ id, version, extensionId }) at the root of the
+   * extension JSON. The sp-js-provisioning handlers ignore unknown keys, so it
+   * is inert at provisioning time but lets the catalog read the installed
+   * version back from the Prosjekttillegg library. Falls back to the raw content
+   * if the file isn't valid JSON.
+   */
+  private static _stampExtension(
+    content: string,
+    manifest: IPackageManifest,
+    extensionId: string
+  ): string {
+    try {
+      const json = JSON.parse(content)
+      json.PpPackage = { id: manifest.id, version: manifest.version, extensionId }
+      return JSON.stringify(json, null, 2)
+    } catch {
+      return content
+    }
   }
 
   private static async _ensureFolder(web: any, parentUrl: string, name: string): Promise<void> {

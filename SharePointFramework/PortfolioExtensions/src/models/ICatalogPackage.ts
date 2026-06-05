@@ -40,6 +40,12 @@ export interface ICatalogPackage {
   type: PackageType
 
   /**
+   * Fluent UI (v8) icon name shown next to the package title and used as the
+   * Maloppsett item icon on import.
+   */
+  icon?: string
+
+  /**
    * Package author/publisher.
    */
   author: string

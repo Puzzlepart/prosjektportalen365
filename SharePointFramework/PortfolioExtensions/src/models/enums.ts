@@ -41,7 +41,7 @@ export enum InstallStepKey {
   StoreProjectTemplate = 'storeProjectTemplate',
   Extensions = 'extensions',
   Content = 'content',
-  UpdateMaloppsett = 'updateMaloppsett'
+  UpdateTemplateOptions = 'updateTemplateOptions'
 }
 
 export type InstallStepStatus = 'pending' | 'running' | 'done' | 'skipped' | 'error'
