@@ -60,7 +60,6 @@ declare interface IPortfolioExtensionsStrings {
   FavoriteProjectsNoItemsMessage: string
   TemplatePackageCatalogCommandTitle: string
   CatalogDrawerTitle: string
-  CatalogNewBadge: string
   CatalogSubtitle: string
   CatalogUserGuideLinkText: string
   CatalogCloseAria: string
@@ -137,7 +136,6 @@ declare interface IPortfolioExtensionsStrings {
   CatalogMinVersionError: string
   CatalogPermissionError: string
   CatalogCloseTooltip: string
-  CatalogNewBadgeTooltip: string
   CatalogFilterTypeTooltip: string
   CatalogFilterCategoryTooltip: string
   CatalogFilterStatusTooltip: string

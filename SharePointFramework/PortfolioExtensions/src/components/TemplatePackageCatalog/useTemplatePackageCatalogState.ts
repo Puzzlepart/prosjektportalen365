@@ -11,8 +11,9 @@ export function useTemplatePackageCatalogState() {
     loading: true,
     degraded: false,
     crossRef: new Map(),
-    filters: { search: '', type: ALL_FILTER, category: ALL_FILTER, status: 'all' },
-    sort: 'newest',
+    // Default to showing templates (Mal) and sorting alphabetically by name.
+    filters: { search: '', type: 'template', category: ALL_FILTER, status: 'all' },
+    sort: 'name',
     renderMode: 'grid',
     page: 1,
     detailOpen: false

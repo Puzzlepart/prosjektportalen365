@@ -96,7 +96,8 @@ export function useTemplatePackageCatalog(
 
   const clearFilters = () =>
     setState({
-      filters: { search: '', type: ALL_FILTER, category: ALL_FILTER, status: 'all' },
+      // Keep Mal (template) as the default type when clearing filters.
+      filters: { search: '', type: 'template', category: ALL_FILTER, status: 'all' },
       page: 1
     })
 

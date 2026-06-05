@@ -9,7 +9,6 @@ import {
   mergeClasses,
   OverlayDrawer,
   Spinner,
-  Tag,
   Tooltip,
   useId
 } from '@fluentui/react-components'
@@ -63,12 +62,7 @@ export const TemplatePackageCatalog: FC<ITemplatePackageCatalogProps> = (props) 
                   </Tooltip>
                 }
               >
-                {strings.CatalogDrawerTitle}{' '}
-                <Tooltip content={strings.CatalogNewBadgeTooltip} relationship='label'>
-                  <Tag appearance='brand' size='small'>
-                    {strings.CatalogNewBadge}
-                  </Tag>
-                </Tooltip>
+                {strings.CatalogDrawerTitle}
               </DrawerHeaderTitle>
             </DrawerHeader>
             <DrawerBody>
