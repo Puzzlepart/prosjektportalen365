@@ -169,5 +169,9 @@ define([], function () {
     CatalogInstallSuccessTitleExtension: 'Extension added',
     CatalogInstallSuccessTextExtension:
       'The extension was added to the Project Extensions library and can be selected in the setup wizard.',
+    CatalogPreviewTooltip: 'Preview content',
+    CatalogPreviewError: 'Could not load the content.',
+    CatalogPreviewCopy: 'Copy',
+    CatalogPreviewCopied: 'Copied!',
   }
 })

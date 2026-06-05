@@ -124,7 +124,14 @@ export class CatalogService {
           CatalogService._fetchJson<any>(baseUrl + item.sourceFile).catch(() => undefined)
         )
       )
-      return CatalogService._buildContents(manifest, hub, template, contentItems, contentData)
+      return CatalogService._buildContents(
+        manifest,
+        hub,
+        template,
+        contentItems,
+        contentData,
+        baseUrl
+      )
     } catch (error) {
       Logger.log({
         message: `(CatalogService) getPackageContents failed: ${error?.message}`,
@@ -149,6 +156,16 @@ export class CatalogService {
     const response = await fetch(url, { method: 'GET' })
     if (!response.ok) throw new Error(`HTTP ${response.status} for ${url}`)
     return (await response.json()) as T
+  }
+
+  /**
+   * Fetch the raw text of a package file (e.g. an extension/content JSON) for
+   * the inline code preview.
+   */
+  public static async getFileText(url: string): Promise<string> {
+    const response = await fetch(url, { method: 'GET' })
+    if (!response.ok) throw new Error(`HTTP ${response.status} for ${url}`)
+    return response.text()
   }
 
   private static _asArray(value: any): any[] {
@@ -186,7 +203,8 @@ export class CatalogService {
     hub: any,
     template: any,
     contentItems: IPackageManifest['content']['items'],
-    contentData: any[]
+    contentData: any[],
+    baseUrl: string
   ): IPackageContents {
     const summary: IPackageContentSummaryEntry[] = []
     const hierarchy: IHierarchyNode[] = []
@@ -202,6 +220,7 @@ export class CatalogService {
         label: item.name,
         count,
         icon: 'content',
+        fileUrl: item.sourceFile ? baseUrl + item.sourceFile : undefined,
         children: Array.isArray(data)
           ? data.map((row, rowIndex) => ({
               key: `content-${item.id}-${rowIndex}`,
@@ -294,7 +313,10 @@ export class CatalogService {
           label:
             section.key === 'site-fields'
               ? CatalogService._fieldLabel(entry)
-              : CatalogService._entryLabel(entry, section.labelKeys)
+              : CatalogService._entryLabel(entry, section.labelKeys),
+          // Extension entries map to a single JSON file — expose it for preview.
+          fileUrl:
+            section.key === 'extensions' && entry?.file ? baseUrl + entry.file : undefined
         }))
       })
     }

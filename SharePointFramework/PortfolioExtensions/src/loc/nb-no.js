@@ -165,5 +165,9 @@ define([], function () {
     CatalogInstallSuccessTitleExtension: 'Tillegg lagt til',
     CatalogInstallSuccessTextExtension:
       'Tillegget er lagt til i Prosjekttillegg-biblioteket og kan velges i oppsettveiviseren.',
+    CatalogPreviewTooltip: 'Forhåndsvis innhold',
+    CatalogPreviewError: 'Kunne ikke laste innholdet.',
+    CatalogPreviewCopy: 'Kopier',
+    CatalogPreviewCopied: 'Kopiert!',
   }
 })

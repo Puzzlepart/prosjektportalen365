@@ -34,6 +34,11 @@ export interface IHierarchyNode {
   count?: number
   icon?: ContentIconName
   children?: IHierarchyNode[]
+  /**
+   * Raw URL of the underlying JSON/text file (extension or content file), when
+   * the node maps to a single file. Enables an inline code preview in the UI.
+   */
+  fileUrl?: string
 }
 
 /**

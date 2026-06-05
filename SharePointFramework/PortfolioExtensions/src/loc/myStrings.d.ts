@@ -161,6 +161,10 @@ declare interface IPortfolioExtensionsStrings {
   CatalogStepExtensionsDetail: string
   CatalogInstallSuccessTitleExtension: string
   CatalogInstallSuccessTextExtension: string
+  CatalogPreviewTooltip: string
+  CatalogPreviewError: string
+  CatalogPreviewCopy: string
+  CatalogPreviewCopied: string
 }
 
 declare module 'PortfolioExtensionsStrings' {
