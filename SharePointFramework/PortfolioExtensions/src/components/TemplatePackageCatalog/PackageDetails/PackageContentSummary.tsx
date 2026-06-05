@@ -70,7 +70,10 @@ export const PackageContentSummary: FC<IPackageContentSummaryProps> = ({ package
         {node.icon && <span className={styles.treeIcon}>{ICONS[node.icon]}</span>}
         <span>{node.label}</span>
         {typeof node.count === 'number' && (
-          <Tooltip content={format(strings.CatalogContentCountTooltip, node.count)} relationship='label'>
+          <Tooltip
+            content={format(strings.CatalogContentCountTooltip, node.count)}
+            relationship='label'
+          >
             <Badge appearance='tint' size='small' className={styles.treeCount}>
               {node.count}
             </Badge>
@@ -139,7 +142,10 @@ export const PackageContentSummary: FC<IPackageContentSummaryProps> = ({ package
 
           {contents.hierarchy.length > 0 && (
             <>
-              <Link className={styles.detailsToggle} onClick={() => setShowDetails((value) => !value)}>
+              <Link
+                className={styles.detailsToggle}
+                onClick={() => setShowDetails((value) => !value)}
+              >
                 {showDetails ? strings.CatalogHideDetails : strings.CatalogShowDetails}
               </Link>
               {showDetails && (
@@ -162,11 +168,7 @@ export const PackageContentSummary: FC<IPackageContentSummaryProps> = ({ package
         </Text>
       )}
 
-      <PackageFilePreview
-        title={preview.title}
-        url={preview.url}
-        onClose={() => setPreview({})}
-      />
+      <PackageFilePreview title={preview.title} url={preview.url} onClose={() => setPreview({})} />
     </div>
   )
 }

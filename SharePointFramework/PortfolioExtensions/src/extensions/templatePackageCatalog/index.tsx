@@ -80,8 +80,9 @@ export default class TemplatePackageCatalogCommandSet extends BaseListViewComman
     if (!this._openCmd) return
     const listUrl = (this.context.pageContext.list?.serverRelativeUrl ?? '').toLowerCase()
     const templateOptionsUrl = (resource.Lists_TemplateOptions_Url ?? '').toLowerCase()
-    const isMaloppsett = templateOptionsUrl.length > 0 && listUrl.endsWith(templateOptionsUrl)
-    const visible = this._isConfigured && this._userAuthorized && isMaloppsett
+    const isTemplateOptionsList =
+      templateOptionsUrl.length > 0 && listUrl.endsWith(templateOptionsUrl)
+    const visible = this._isConfigured && this._userAuthorized && isTemplateOptionsList
     if (this._openCmd.visible !== visible) {
       this._openCmd.visible = visible
       this.raiseOnChange()

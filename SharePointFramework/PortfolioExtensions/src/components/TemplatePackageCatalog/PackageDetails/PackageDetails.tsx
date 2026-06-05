@@ -78,7 +78,9 @@ export const PackageDetails: FC = () => {
 
   const meta = [
     pkg.version ? `v${pkg.version}` : undefined,
-    pkg.publishedDate ? format(strings.CatalogCardPublished, formatDate(pkg.publishedDate)) : undefined,
+    pkg.publishedDate
+      ? format(strings.CatalogCardPublished, formatDate(pkg.publishedDate))
+      : undefined,
     pkg.author ? format(strings.CatalogCardByAuthor, pkg.author) : undefined,
     pkg.minPPVersion ? format(strings.CatalogRequiresVersion, pkg.minPPVersion) : undefined
   ]
@@ -121,8 +123,13 @@ export const PackageDetails: FC = () => {
         <TagGroup className={styles.tags}>
           {pkg.tags?.map((tag) => (
             <InteractionTag key={tag} value={tag} size='small' appearance='brand'>
-              <Tooltip content={format(strings.CatalogTagFilterTooltip, tag)} relationship='description'>
-                <InteractionTagPrimary onClick={() => filterByTag(tag)}>{tag}</InteractionTagPrimary>
+              <Tooltip
+                content={format(strings.CatalogTagFilterTooltip, tag)}
+                relationship='description'
+              >
+                <InteractionTagPrimary onClick={() => filterByTag(tag)}>
+                  {tag}
+                </InteractionTagPrimary>
               </Tooltip>
             </InteractionTag>
           ))}

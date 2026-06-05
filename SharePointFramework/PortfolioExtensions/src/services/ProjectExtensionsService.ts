@@ -58,7 +58,9 @@ export class ProjectExtensionsService {
         items.map(async (item) => {
           let stamp: IPpPackageStamp | undefined
           try {
-            stamp = JSON.parse(await web.getFileByServerRelativePath(item.FileRef).getText())?.PpPackage
+            stamp = JSON.parse(
+              await web.getFileByServerRelativePath(item.FileRef).getText()
+            )?.PpPackage
           } catch {
             // Not JSON / unreadable — treat as unstamped.
           }

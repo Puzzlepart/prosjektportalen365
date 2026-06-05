@@ -29,7 +29,9 @@ export const PackageCard: FC<IPackageCardProps> = ({ package: pkg }) => {
 
   const meta = [
     pkg.version ? `v${pkg.version}` : undefined,
-    pkg.publishedDate ? format(strings.CatalogCardPublished, formatDate(pkg.publishedDate)) : undefined
+    pkg.publishedDate
+      ? format(strings.CatalogCardPublished, formatDate(pkg.publishedDate))
+      : undefined
   ]
     .filter(Boolean)
     .join('  •  ')

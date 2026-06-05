@@ -182,7 +182,9 @@ export const PackageFilePreview: FC<IPackageFilePreviewProps> = ({ title, url, o
               </div>
             )}
             {!loading && error && <Text>{strings.CatalogPreviewError}</Text>}
-            {!loading && !error && rendered !== null && <pre className={styles.code}>{rendered}</pre>}
+            {!loading && !error && rendered !== null && (
+              <pre className={styles.code}>{rendered}</pre>
+            )}
           </DialogContent>
           <DialogActions>
             <Tooltip

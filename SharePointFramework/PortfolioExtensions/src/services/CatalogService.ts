@@ -252,7 +252,10 @@ export class CatalogService {
         summaryLabel: strings.CatalogContentLists,
         hierarchyLabel: strings.CatalogContentLists,
         icon: 'lists',
-        entries: [...CatalogService._asArray(hub?.Lists), ...CatalogService._asArray(template?.Lists)],
+        entries: [
+          ...CatalogService._asArray(hub?.Lists),
+          ...CatalogService._asArray(template?.Lists)
+        ],
         labelKeys: ['Title', 'Name']
       },
       {
@@ -290,7 +293,10 @@ export class CatalogService {
         summaryLabel: strings.CatalogContentFiles,
         hierarchyLabel: strings.CatalogContentFiles,
         icon: 'files',
-        entries: [...CatalogService._asArray(hub?.Files), ...CatalogService._asArray(template?.Files)],
+        entries: [
+          ...CatalogService._asArray(hub?.Files),
+          ...CatalogService._asArray(template?.Files)
+        ],
         labelKeys: ['Dest', 'Url', 'Src', 'Folder']
       }
     ]
@@ -315,8 +321,7 @@ export class CatalogService {
               ? CatalogService._fieldLabel(entry)
               : CatalogService._entryLabel(entry, section.labelKeys),
           // Extension entries map to a single JSON file — expose it for preview.
-          fileUrl:
-            section.key === 'extensions' && entry?.file ? baseUrl + entry.file : undefined
+          fileUrl: section.key === 'extensions' && entry?.file ? baseUrl + entry.file : undefined
         }))
       })
     }
