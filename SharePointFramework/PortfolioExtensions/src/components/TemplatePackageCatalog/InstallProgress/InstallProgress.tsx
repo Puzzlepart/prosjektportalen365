@@ -70,9 +70,11 @@ const StepIcon: FC<{ status: InstallStepStatus }> = ({ status }) => {
 }
 
 export const InstallProgress: FC = () => {
-  const { state, setState } = useCatalogContext()
+  const { state, setState, selectedPackage } = useCatalogContext()
   const progress = state.installProgress
   if (!progress) return null
+
+  const isExtension = selectedPackage?.type === 'extension'
 
   if (progress.steps.length === 0) {
     return (
@@ -114,8 +116,16 @@ export const InstallProgress: FC = () => {
       {progress.status === 'success' && (
         <UserMessage
           intent='success'
-          title={strings.CatalogInstallSuccessTitle}
-          text={strings.CatalogInstallSuccessText}
+          title={
+            isExtension
+              ? strings.CatalogInstallSuccessTitleExtension
+              : strings.CatalogInstallSuccessTitle
+          }
+          text={
+            isExtension
+              ? strings.CatalogInstallSuccessTextExtension
+              : strings.CatalogInstallSuccessText
+          }
         />
       )}
       {progress.status === 'error' && (

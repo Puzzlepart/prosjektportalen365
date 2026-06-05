@@ -155,6 +155,12 @@ declare interface IPortfolioExtensionsStrings {
   CatalogStepStatusError: string
   CatalogStepStatusSkipped: string
   CatalogStepStatusPending: string
+  CatalogActionAddExtension: string
+  CatalogActionAddExtensionTooltip: string
+  CatalogExtensionInfo: string
+  CatalogStepExtensionsDetail: string
+  CatalogInstallSuccessTitleExtension: string
+  CatalogInstallSuccessTextExtension: string
 }
 
 declare module 'PortfolioExtensionsStrings' {

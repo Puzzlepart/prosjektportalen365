@@ -12,7 +12,8 @@ import {
   ArrowDownload24Regular,
   ArrowLeft24Regular,
   Cloud24Regular,
-  Delete24Regular
+  Delete24Regular,
+  PuzzlePiece24Regular
 } from '@fluentui/react-icons'
 import { UserMessage } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
@@ -54,6 +55,10 @@ export const PackageDetails: FC = () => {
   const ref = crossRefFor(pkg.id)
   const isCentral = ref?.packageType === PpPkgType.Sentral
   const updateAvailable = !!ref?.updateAvailable
+  // Extensions go into the Prosjekttillegg library, not Maloppsett, so they
+  // cannot be published as a cloud template and get their own action/info copy.
+  const isExtension = pkg.type === 'extension'
+  const canPublishCentral = !isCentral && !isExtension
 
   const meta = [
     pkg.version ? `v${pkg.version}` : undefined,
@@ -110,24 +115,32 @@ export const PackageDetails: FC = () => {
 
       <PackageHistory changelogUrl={pkg.changelogUrl} />
 
+      {isExtension && <UserMessage intent='info' text={strings.CatalogExtensionInfo} />}
+
       <div className={styles.actions}>
         <Tooltip
           content={
-            updateAvailable ? strings.CatalogActionUpdateTooltip : strings.CatalogActionImportTooltip
+            isExtension
+              ? strings.CatalogActionAddExtensionTooltip
+              : updateAvailable
+              ? strings.CatalogActionUpdateTooltip
+              : strings.CatalogActionImportTooltip
           }
           relationship='description'
         >
           <Button
             appearance='primary'
-            icon={<ArrowDownload24Regular />}
+            icon={isExtension ? <PuzzlePiece24Regular /> : <ArrowDownload24Regular />}
             onClick={() => importPackage(pkg)}
           >
-            {updateAvailable
+            {isExtension
+              ? strings.CatalogActionAddExtension
+              : updateAvailable
               ? format(strings.CatalogActionUpdate, pkg.version)
               : strings.CatalogActionImport}
           </Button>
         </Tooltip>
-        {!isCentral && (
+        {canPublishCentral && (
           <Tooltip content={strings.CatalogActionPublishCentralTooltip} relationship='description'>
             <Button
               appearance='secondary'

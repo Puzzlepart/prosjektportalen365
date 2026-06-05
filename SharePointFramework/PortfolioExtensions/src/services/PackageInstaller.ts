@@ -5,6 +5,7 @@ import '@pnp/sp/webs'
 import '@pnp/sp/lists'
 import '@pnp/sp/folders'
 import '@pnp/sp/files'
+import '@pnp/sp/items'
 import strings from 'PortfolioExtensionsStrings'
 import resource from 'SharedResources'
 import SPDataAdapter from 'data/SPDataAdapter'
@@ -38,26 +39,43 @@ export interface IPackageInstallOptions {
 }
 
 /**
- * Mode A — download a `.pppkg`, validate it, provision the hub via the same
- * `sp-js-provisioning` `WebProvisioner.applyTemplate` flow the template dialog
- * uses, store the project-level assets for the wizard, and write the Maloppsett
- * item. The taxonomy step is feature-flag-gated (no Term Store handler in
- * `sp-js-provisioning` 1.3.7).
+ * Mode A — download a `.pppkg`, validate it, then either:
+ *
+ * - **Extension packages** (`type: extension`): add the extension provisioning
+ *   file(s) to the hub **Prosjekttillegg** (Project Extensions) library with
+ *   their title/description. Nothing is written to Maloppsett — it is up to the
+ *   admin whether to later link the extension to a template there.
+ * - **Template/content packages**: provision the hub via the same
+ *   `sp-js-provisioning` `WebProvisioner.applyTemplate` flow the template dialog
+ *   uses, store the project-level assets for the wizard, and write the Maloppsett
+ *   item. The taxonomy step is feature-flag-gated (no Term Store handler in
+ *   `sp-js-provisioning` 1.3.7).
  */
 export class PackageInstaller {
   public static async runImport(options: IPackageInstallOptions): Promise<void> {
     const { package: pkg, context, featureFlagProvisioning, existingItemId, onProgress } = options
+    const isExtension = pkg.type === 'extension'
 
-    const steps: IInstallStep[] = [
-      InstallStepKey.Download,
-      InstallStepKey.Unzip,
-      InstallStepKey.ValidateManifest,
-      InstallStepKey.CheckVersion,
-      InstallStepKey.ProvisionHub,
-      InstallStepKey.Taxonomy,
-      InstallStepKey.StoreProjectTemplate,
-      InstallStepKey.UpdateMaloppsett
-    ].map((key) => ({ key, status: 'pending' as InstallStepStatus }))
+    const steps: IInstallStep[] = (
+      isExtension
+        ? [
+            InstallStepKey.Download,
+            InstallStepKey.Unzip,
+            InstallStepKey.ValidateManifest,
+            InstallStepKey.CheckVersion,
+            InstallStepKey.Extensions
+          ]
+        : [
+            InstallStepKey.Download,
+            InstallStepKey.Unzip,
+            InstallStepKey.ValidateManifest,
+            InstallStepKey.CheckVersion,
+            InstallStepKey.ProvisionHub,
+            InstallStepKey.Taxonomy,
+            InstallStepKey.StoreProjectTemplate,
+            InstallStepKey.UpdateMaloppsett
+          ]
+    ).map((key) => ({ key, status: 'pending' as InstallStepStatus }))
 
     const progress: IInstallProgress = { steps, status: 'running' }
     const emit = () => onProgress({ ...progress, steps: steps.map((s) => ({ ...s })) })
@@ -88,6 +106,23 @@ export class PackageInstaller {
       setStatus(InstallStepKey.CheckVersion, 'running')
       const versionDetail = await PackageInstaller._checkVersion(manifest)
       setStatus(InstallStepKey.CheckVersion, 'done', versionDetail)
+
+      if (isExtension) {
+        // Extensions are added to the hub Prosjekttillegg library only. Nothing
+        // is written to Maloppsett — linking to a template is a later, manual
+        // admin choice.
+        setStatus(InstallStepKey.Extensions, 'running')
+        const added = await PackageInstaller._addProjectExtensions(zip, manifest)
+        setStatus(
+          InstallStepKey.Extensions,
+          'done',
+          format(strings.CatalogStepExtensionsDetail, added)
+        )
+        progress.status = 'success'
+        progress.currentStep = undefined
+        emit()
+        return
+      }
 
       // Taxonomy is the only feature-flag-gated part. When enabled, the hub
       // schema's `Taxonomy` part is provisioned by the sp-js-provisioning
@@ -253,6 +288,47 @@ export class PackageInstaller {
       })
       return false
     }
+  }
+
+  /**
+   * Upload the package's extension provisioning file(s) into the hub
+   * **Prosjekttillegg** (Project Extensions) document library, setting the
+   * `Title` and description (`GtDescription`) on each, plus `GtExtensionDefault`
+   * from the manifest's `defaultSelected`. Re-import overwrites the file by name.
+   * Returns the number of extensions added.
+   */
+  private static async _addProjectExtensions(
+    zip: any,
+    manifest: IPackageManifest
+  ): Promise<number> {
+    const extensions = manifest.provisioning?.extensions ?? []
+    if (extensions.length === 0) {
+      throw new Error('Package contains no project extensions')
+    }
+    const web = SPDataAdapter.portalDataService.web
+    const rootFolder = await web.lists
+      .getByTitle(resource.Lists_ProjectExtensions_Title)
+      .rootFolder.select('ServerRelativeUrl')()
+    const folderUrl = rootFolder.ServerRelativeUrl
+
+    let added = 0
+    for (const ext of extensions) {
+      const zipFile = zip.file(ext.file)
+      if (!zipFile) throw new Error(`Extension file ${ext.file} not found in package`)
+      const content = await zipFile.async('string')
+      const fileName = ext.file.split('/').pop() as string
+      const addResult = await web
+        .getFolderByServerRelativePath(folderUrl)
+        .files.addUsingPath(fileName, content, { Overwrite: true })
+      const item = await addResult.file.getItem()
+      await item.update({
+        Title: ext.name,
+        GtDescription: ext.description ?? manifest.description ?? '',
+        GtExtensionDefault: !!ext.defaultSelected
+      })
+      added++
+    }
+    return added
   }
 
   private static async _ensureFolder(web: any, parentUrl: string, name: string): Promise<void> {

@@ -130,7 +130,15 @@ export function useTemplatePackageCatalog(
         onProgress: (installProgress) => setState({ installProgress })
       })
       await refreshCrossRef()
-      setState({ notification: { intent: 'success', text: strings.CatalogInstallSuccessText } })
+      setState({
+        notification: {
+          intent: 'success',
+          text:
+            pkg.type === 'extension'
+              ? strings.CatalogInstallSuccessTextExtension
+              : strings.CatalogInstallSuccessText
+        }
+      })
     } catch (error) {
       setState({
         notification: { intent: 'error', text: error?.message || strings.CatalogInstallErrorTitle }

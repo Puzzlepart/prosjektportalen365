@@ -126,7 +126,7 @@ define([], function () {
     CatalogStepProvisionHub: 'Provisioning hub',
     CatalogStepTaxonomy: 'Provisioning taxonomy',
     CatalogStepStoreProjectTemplate: 'Storing project template',
-    CatalogStepExtensions: 'Project extensions',
+    CatalogStepExtensions: 'Adding to Project Extensions',
     CatalogStepContent: 'Standard content',
     CatalogStepUpdateMaloppsett: 'Updating template options',
     CatalogStepSkippedFeatureFlag: 'Skipped (feature flag off)',
@@ -160,5 +160,14 @@ define([], function () {
     CatalogStepStatusError: 'Failed',
     CatalogStepStatusSkipped: 'Skipped',
     CatalogStepStatusPending: 'Pending',
+    CatalogActionAddExtension: 'Add as project extension',
+    CatalogActionAddExtensionTooltip:
+      'Download the extension and add it to the Project Extensions library on the hub',
+    CatalogExtensionInfo:
+      'The extension is added to the Project Extensions library. Nothing is created in Template Options — you can later link the extension to a template there yourself.',
+    CatalogStepExtensionsDetail: '{0} extension(s) added',
+    CatalogInstallSuccessTitleExtension: 'Extension added',
+    CatalogInstallSuccessTextExtension:
+      'The extension was added to the Project Extensions library and can be selected in the setup wizard.',
   }
 })

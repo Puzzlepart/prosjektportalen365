@@ -122,7 +122,7 @@ define([], function () {
     CatalogStepProvisionHub: 'Provisjonerer hub',
     CatalogStepTaxonomy: 'Provisjonerer taksonomi',
     CatalogStepStoreProjectTemplate: 'Lagrer prosjektmal',
-    CatalogStepExtensions: 'Prosjekttillegg',
+    CatalogStepExtensions: 'Legger til i Prosjekttillegg',
     CatalogStepContent: 'Standardinnhold',
     CatalogStepUpdateMaloppsett: 'Oppdaterer Maloppsett',
     CatalogStepSkippedFeatureFlag: 'Hoppet over (feature flag av)',
@@ -156,5 +156,14 @@ define([], function () {
     CatalogStepStatusError: 'Feilet',
     CatalogStepStatusSkipped: 'Hoppet over',
     CatalogStepStatusPending: 'Venter',
+    CatalogActionAddExtension: 'Legg til som prosjekttillegg',
+    CatalogActionAddExtensionTooltip:
+      'Last ned tillegget og legg det i Prosjekttillegg-biblioteket på hub-området',
+    CatalogExtensionInfo:
+      'Tillegget legges i Prosjekttillegg-biblioteket. Det opprettes ingenting i Maloppsett – du kan senere selv knytte tillegget til en mal i Maloppsett.',
+    CatalogStepExtensionsDetail: '{0} tillegg lagt til',
+    CatalogInstallSuccessTitleExtension: 'Tillegg lagt til',
+    CatalogInstallSuccessTextExtension:
+      'Tillegget er lagt til i Prosjekttillegg-biblioteket og kan velges i oppsettveiviseren.',
   }
 })
