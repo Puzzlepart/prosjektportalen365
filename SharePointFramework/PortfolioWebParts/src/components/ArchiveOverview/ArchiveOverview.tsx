@@ -20,6 +20,7 @@ import {
   ChevronRightRegular,
   DocumentRegular,
   FolderRegular,
+  FolderFilled,
   GridRegular,
   HistoryRegular,
   HomeRegular,
@@ -28,15 +29,27 @@ import {
   SettingsRegular,
   WarningRegular
 } from '@fluentui/react-icons'
-import { DonutChart, IChartProps } from '@fluentui/react-charting'
+import { DonutChart, IChartProps, ILineChartPoints, LineChart } from '@fluentui/react-charting'
 import strings from 'PortfolioWebPartsStrings'
 import React, { FC } from 'react'
 import { ActivityBars } from './ActivityBars'
 import styles from './ArchiveOverview.module.scss'
 import { StatusBadge } from './StatusBadge'
 import { IArchiveOverviewProps } from './types'
-import { IQuickStat } from './useArchiveData'
+import { IDailyActivity, IQuickStat } from './useArchiveData'
 import { scaledTheme, useArchiveOverview } from './useArchiveOverview'
+
+// ─────────────────────────────────────────────────────
+// Helpers
+// ─────────────────────────────────────────────────────
+
+/** Converts a 6-digit hex colour to rgba, allowing opacity control for backgrounds. */
+function hexToRgba(hex: string, alpha: number): string {
+  const r = parseInt(hex.slice(1, 3), 16)
+  const g = parseInt(hex.slice(3, 5), 16)
+  const b = parseInt(hex.slice(5, 7), 16)
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`
+}
 
 // ─────────────────────────────────────────────────────
 // Static presentation constants
@@ -64,7 +77,8 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
     archiveStatus,
     archiveTotal,
     projects,
-    quickStats
+    quickStats,
+    dailyActivity
   } = useArchiveOverview(props)
 
   return (
@@ -165,9 +179,6 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                         <Caption1 style={{ color: '#605e5c' }}>
                           {strings.ArchiveOverview.ToArchiveCardDescription}
                         </Caption1>
-                        <Button appearance='outline' size='small' className={styles.cardBtn}>
-                          {strings.ArchiveOverview.ViewDetailsLabel}
-                        </Button>
                       </div>
                       <div className={styles.card}>
                         <Text size={300} weight='semibold'>
@@ -177,9 +188,31 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                         <Caption1 style={{ color: '#605e5c' }}>
                           {strings.ArchiveOverview.FailedCardDescription}
                         </Caption1>
-                        <Button appearance='outline' size='small' className={styles.cardBtn}>
-                          {strings.ArchiveOverview.ViewDetailsLabel}
-                        </Button>
+                      </div>
+                      <div className={styles.chartCard}>
+                        <Text size={300} weight='semibold'>
+                          {strings.ArchiveOverview.ActivityChartTitle}
+                        </Text>
+                        <LineChart
+                          data={{
+                            lineChartData: [
+                              {
+                                legend: strings.ArchiveOverview.ActivityChartLegend,
+                                data: dailyActivity.map((d: IDailyActivity) => ({
+                                  x: d.date,
+                                  y: d.count,
+                                  xAxisCalloutData: d.date.toLocaleDateString('nb-NO', {
+                                    day: 'numeric',
+                                    month: 'short'
+                                  })
+                                })),
+                                color: '#0078D4'
+                              } as ILineChartPoints
+                            ]
+                          } as IChartProps}
+                          height={150}
+                          hideLegend={true}
+                        />
                       </div>
                     </div>
                   </div>
@@ -214,14 +247,16 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                           </tr>
                         </thead>
                         <tbody>
-                          {projects.map((p) => (
+                          {projects.slice(0, 5).map((p) => (
                             <tr key={p.id}>
                               <td>
                                 <div className={styles.projectCell}>
                                   <div
                                     className={styles.projectIcon}
-                                    style={{ backgroundColor: p.color }}
-                                  />
+                                    style={{ backgroundColor: hexToRgba(p.color, 0.18) }}
+                                  >
+                                    <FolderRegular fontSize={14} style={{ color: p.color }} />
+                                  </div>
                                   {p.siteUrl ? (
                                     <Link href={p.siteUrl} target='_blank'>
                                       <Text size={200}>{p.name}</Text>
