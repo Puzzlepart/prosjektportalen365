@@ -152,6 +152,10 @@ define([], function () {
     SummaryMessage: '{0} element(er) ble kopiert til prosjektområdet.',
     SyncLocalProjectPropertiesListText: 'Synkroniserer liste for prosjektegenskaper',
     TemplateConfigMessage: '**{0}** inneholder konfigurasjon for {1}. Dette er valgt som standard.',
+    CloudTemplateInfoMessage:
+      '**{0}** er en skymal. Malpakken lastes ned og settes opp automatisk når du fortsetter – ingenting lagres på hub-området.',
+    CloudTemplateResolvingMessage: 'Laster ned og leser skymal…',
+    CloudTemplateResolveErrorMessage: 'Kunne ikke laste ned skymalen. {0}',
     TemplateConfigConjunction: ' og ',
     DataGridSelectAllLabel: 'Velg alle',
     PlannerMemberWarningMessage: 'Du må være medlem av Microsoft 365 gruppa for å kunne konfigurere Planner. Vennligst legg deg selv til som medlem eller spør en administrator og prøv deretter igjen.',

@@ -42,7 +42,16 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
         />
       )}
       <section className={styles.actions}>
-        <Button appearance='primary' disabled={!state.selectedTemplate} onClick={onSubmit}>
+        <Button
+          appearance='primary'
+          disabled={
+            !state.selectedTemplate ||
+            state.isResolvingCloudTemplate ||
+            // A skymal can only be submitted once its .pppkg has resolved.
+            (state.selectedTemplate.isCloudTemplate && !state.resolvedCloudTemplate)
+          }
+          onClick={onSubmit}
+        >
           {strings.ProjectSetupDialogSubmitButtonText}
         </Button>
         <Button appearance='secondary' onClick={props.onDismiss} style={{ marginLeft: 4 }}>

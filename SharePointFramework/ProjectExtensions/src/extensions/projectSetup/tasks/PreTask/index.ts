@@ -1,6 +1,6 @@
 import { IProjectSetupData } from 'extensions/projectSetup'
 import * as strings from 'ProjectExtensionsStrings'
-import { PortalDataService } from 'pp365-shared-library/lib/services'
+import { CloudTemplatePackage, PortalDataService } from 'pp365-shared-library/lib/services'
 import { SpEntityPortalService } from 'sp-entityportal-service'
 import initSpfxJsom, { ExecuteJsomQuery } from 'spfx-jsom'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
@@ -23,9 +23,20 @@ export class PreTask extends BaseTask {
     super.initExecute(params)
 
     if (this.data.selectedTemplate && this.data.selectedTemplate.id !== NO_TEMPLATE_ID) {
-      params.templateSchema = await this.data.selectedTemplate.getSchema()
-      if (!params.properties.forceTemplate) {
-        await this.validateParameters(params)
+      if (this.data.selectedTemplate.isCloudTemplate) {
+        // Skymal: read the project schema from the bundled .pppkg (nothing on the
+        // hub). Use the already-resolved package; fall back to downloading it for
+        // the forced/auto path that bypasses the dialog. Hub-bound validation
+        // (term sets / content types) is skipped — they aren't provisioned.
+        const cloudPackage =
+          this.data.resolvedCloudTemplate?.package ??
+          (await CloudTemplatePackage.fromUrl(this.data.selectedTemplate.cloudSourceUrl))
+        params.templateSchema = await cloudPackage.getProjectTemplateSchema()
+      } else {
+        params.templateSchema = await this.data.selectedTemplate.getSchema()
+        if (!params.properties.forceTemplate) {
+          await this.validateParameters(params)
+        }
       }
     } else {
       params.templateSchema = { Parameters: {} }

@@ -1,11 +1,17 @@
 import { format } from '@fluentui/react'
 import strings from 'ProjectExtensionsStrings'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { isEmpty } from 'underscore'
 import { ProjectSetupValidation } from '../../../extensions/projectSetup/types'
 import { useProjectSetupDialogContext } from '../context'
-import { ON_TEMPLATE_CHANGED } from '../reducer'
+import {
+  ON_CLOUD_TEMPLATE_ERROR,
+  ON_CLOUD_TEMPLATE_RESOLVED,
+  ON_CLOUD_TEMPLATE_RESOLVING,
+  ON_TEMPLATE_CHANGED
+} from '../reducer'
 import { createNoTemplateOption } from '../../../extensions/projectSetup/noTemplate'
+import { resolveCloudTemplate } from '../resolveCloudTemplate'
 import { TemplateSelectorMode } from './types'
 
 export function useTemplateSelector() {
@@ -60,6 +66,42 @@ export function useTemplateSelector() {
     setQuery('')
   }
 
+  // Skymal: download and resolve the .pppkg once the (cloud) template is
+  // selected, so the Extensions/List-content sections can show its bundled
+  // artifacts and the provisioning tasks can apply them. Nothing touches the hub.
+  const isCloudTemplate = !!selectedTemplate?.isCloudTemplate
+  const isResolvingCloudTemplate = !!context.state.isResolvingCloudTemplate
+  const cloudTemplateError = context.state.cloudTemplateError
+  const cloudTemplateMessage = isCloudTemplate
+    ? format(strings.CloudTemplateInfoMessage, selectedTemplate?.text)
+    : undefined
+
+  useEffect(() => {
+    if (!selectedTemplate?.isCloudTemplate) return
+    if (context.state.resolvedCloudTemplate?.templateId === selectedTemplate.id) return
+    if (context.state.isResolvingCloudTemplate) return
+    let cancelled = false
+    void (async () => {
+      context.dispatch(ON_CLOUD_TEMPLATE_RESOLVING())
+      try {
+        const resolved = await resolveCloudTemplate(selectedTemplate)
+        if (!cancelled) context.dispatch(ON_CLOUD_TEMPLATE_RESOLVED(resolved))
+      } catch (error) {
+        if (!cancelled) {
+          context.dispatch(
+            ON_CLOUD_TEMPLATE_ERROR(
+              format(strings.CloudTemplateResolveErrorMessage, error?.message ?? '')
+            )
+          )
+        }
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedTemplate?.id])
+
   const templateHasExtensions = !isEmpty(selectedTemplate?.extensions)
   const templateHasContentConfig = !isEmpty(selectedTemplate?.contentConfig)
 
@@ -90,6 +132,10 @@ export function useTemplateSelector() {
     isSingleTemplate,
     validationMessage,
     showPlannerWarning,
+    isCloudTemplate,
+    isResolvingCloudTemplate,
+    cloudTemplateError,
+    cloudTemplateMessage,
     onModeChanged,
     onTemplateSelect,
     onClearTemplate,

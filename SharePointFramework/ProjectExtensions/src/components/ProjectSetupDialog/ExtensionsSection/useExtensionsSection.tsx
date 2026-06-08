@@ -14,7 +14,14 @@ export function useExtensionsSection() {
   const context = useProjectSetupDialogContext()
   const [searchTerm, setSearchTerm] = useState('')
 
-  const allItems = context.props.data.extensions.filter((ext) => !ext.hidden)
+  // For a skymal, the available extensions are the ones bundled in the resolved
+  // .pppkg, not the hub `data.extensions`.
+  const cloud = context.state.selectedTemplate?.isCloudTemplate
+    ? context.state.resolvedCloudTemplate
+    : undefined
+  const allItems = (cloud ? cloud.extensions : context.props.data.extensions).filter(
+    (ext) => !ext.hidden
+  )
 
   const mandatoryKeys = new Set(
     allItems

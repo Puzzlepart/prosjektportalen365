@@ -14,7 +14,14 @@ export function useContentConfigSection() {
   const context = useProjectSetupDialogContext()
   const [searchTerm, setSearchTerm] = useState('')
 
-  const allItems = context.props.data.contentConfig.filter((contentConfig) => !contentConfig.hidden)
+  // For a skymal, the available list-content configs are the ones bundled in the
+  // resolved .pppkg, not the hub `data.contentConfig`.
+  const cloud = context.state.selectedTemplate?.isCloudTemplate
+    ? context.state.resolvedCloudTemplate
+    : undefined
+  const allItems = (cloud ? cloud.contentConfig : context.props.data.contentConfig).filter(
+    (contentConfig) => !contentConfig.hidden
+  )
 
   const mandatoryKeys = new Set(
     allItems

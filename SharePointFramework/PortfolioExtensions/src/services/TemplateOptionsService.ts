@@ -158,6 +158,11 @@ export class TemplateOptionsService {
 
   /**
    * Register a central "skymal" (Mode B) — metadata only, no provisioning.
+   *
+   * `PpPkgSourceUrl` stores the resolvable `.pppkg` **download** URL (not the
+   * changelog page): the project-setup wizard reads it to download and resolve
+   * the skymal directly from its package at setup time. `sourceUrl` overrides it
+   * only when explicitly supplied.
    */
   public static async createCentral(pkg: ICatalogPackage, sourceUrl?: string): Promise<void> {
     await SPDataAdapter.portalDataService.addItemToList('PROJECT_TEMPLATE_CONFIGURATION', {
@@ -170,7 +175,7 @@ export class TemplateOptionsService {
       PpPkgVersion: pkg.version,
       PpPkgLatestVersion: pkg.version,
       PpPkgSourceUrl: {
-        Url: sourceUrl || pkg.changelogUrl || pkg.downloadUrl,
+        Url: sourceUrl || pkg.downloadUrl,
         Description: pkg.name
       },
       PpPkgInstalledDate: nowIso()

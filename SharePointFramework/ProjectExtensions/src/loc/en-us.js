@@ -152,6 +152,10 @@ define([], function () {
     SummaryMessage: '{0} item(s) were copied to the project.',
     SyncLocalProjectPropertiesListText: 'Synchronizing list for project properties',
     TemplateConfigMessage: '**{0}** contains configuration for {1}. This is selected by default.',
+    CloudTemplateInfoMessage:
+      '**{0}** is a cloud template. The template package is downloaded and set up automatically when you continue — nothing is stored on the hub.',
+    CloudTemplateResolvingMessage: 'Downloading and reading cloud template…',
+    CloudTemplateResolveErrorMessage: 'Could not download the cloud template. {0}',
     TemplateConfigConjunction: ' and ',
     DataGridSelectAllLabel: 'Select all',
     PlannerMemberWarningMessage: 'You must be a member of the Microsoft 365 group to configure Planner. Please add yourself as a member or ask an administrator and try again.',

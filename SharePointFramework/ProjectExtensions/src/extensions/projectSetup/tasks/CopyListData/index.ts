@@ -20,7 +20,9 @@ import '@pnp/sp/lists'
 import '@pnp/sp/items'
 import '@pnp/sp/batching'
 import { createBatch } from '@pnp/sp/batching'
-import { ContentConfig, ContentConfigType } from 'pp365-shared-library'
+import { CloudContentConfig, ContentConfig, ContentConfigType } from 'pp365-shared-library'
+import { LogLevel } from '@pnp/logging'
+import { WebProvisioner } from 'sp-js-provisioning'
 import { IPlannerTaskSPItem } from './types'
 
 export class CopyListData extends BaseTask {
@@ -55,6 +57,12 @@ export class CopyListData extends BaseTask {
           message: `Processing content config: ${contentConfig.text} (${contentConfig.type})`,
           level: 'info'
         })
+        // Skymal: the rows live in the downloaded .pppkg, not a hub source list.
+        // Apply them straight to the project's destination list via DataRows.
+        if (contentConfig instanceof CloudContentConfig) {
+          await this._applyCloudContentConfig(contentConfig, params)
+          continue
+        }
         await contentConfig.load()
         // eslint-disable-next-line default-case
         switch (contentConfig.type) {
@@ -116,6 +124,60 @@ export class CopyListData extends BaseTask {
     } catch (error) {
       throw new BaseTaskError(this.taskName, strings.CopyListDataErrorMessage, error)
     }
+  }
+
+  /**
+   * Apply a **skymal** (cloud template) list-content config: read the bundled
+   * rows from the `.pppkg`, project them to the config's `fields` subset, and
+   * write them into the project's destination list via the sp-js-provisioning
+   * `DataRows` handler (run on the project web, after `SetTaxonomyFields` so the
+   * `GtProjectPhase` term field is already bound). Nothing is read from the hub.
+   *
+   * @param config Cloud content config
+   * @param params Task parameters
+   */
+  private async _applyCloudContentConfig(
+    config: CloudContentConfig,
+    params: IBaseTaskParams
+  ): Promise<void> {
+    const dataRows = await config.getCloudDataRows()
+    if (!dataRows?.Rows?.length) {
+      this.logInformation(`No bundled rows for cloud content config ${config.text}`)
+      return
+    }
+    const fields = config.fields
+    const rows = dataRows.Rows.map((row) => {
+      if (fields.length === 0) return row
+      return fields.reduce((projected: Record<string, any>, fieldName) => {
+        if (row[fieldName] !== undefined) projected[fieldName] = row[fieldName]
+        return projected
+      }, {})
+    })
+    this.onProgress(
+      format(strings.CopyListItemsText, rows.length, config.sourceListTitle, config.destinationListTitle),
+      '',
+      'List'
+    )
+    const schema = {
+      Lists: [
+        {
+          Title: config.destinationListTitle,
+          Description: '',
+          Template: 100,
+          ContentTypesEnabled: false,
+          DataRows: {
+            KeyColumn: dataRows.KeyColumn ?? 'Title',
+            UpdateBehavior: dataRows.UpdateBehavior ?? 'Overwrite',
+            Rows: rows
+          }
+        }
+      ]
+    }
+    const provisioner = new WebProvisioner(params.web).setup({
+      spfxContext: params.context,
+      logging: { prefix: '(ProjectSetup) (CopyListData) (Cloud)', activeLogLevel: LogLevel.Info }
+    } as any)
+    await provisioner.applyTemplate(schema as any, null)
   }
 
   /**
