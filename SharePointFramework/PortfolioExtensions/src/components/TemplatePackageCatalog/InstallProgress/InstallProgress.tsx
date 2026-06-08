@@ -34,6 +34,8 @@ function stepLabel(key: InstallStepKey): string {
       return strings.CatalogStepExtensions
     case InstallStepKey.Content:
       return strings.CatalogStepContent
+    case InstallStepKey.ListContent:
+      return strings.CatalogStepListContent
     case InstallStepKey.UpdateTemplateOptions:
       return strings.CatalogStepUpdateTemplateOptions
     default:

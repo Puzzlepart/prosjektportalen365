@@ -42,6 +42,7 @@ export enum InstallStepKey {
   StoreProjectTemplate = 'storeProjectTemplate',
   Extensions = 'extensions',
   Content = 'content',
+  ListContent = 'listContent',
   UpdateTemplateOptions = 'updateTemplateOptions'
 }
 

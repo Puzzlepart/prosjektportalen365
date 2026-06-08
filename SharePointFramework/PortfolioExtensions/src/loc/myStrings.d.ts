@@ -123,6 +123,8 @@ declare interface IPortfolioExtensionsStrings {
   CatalogStepStoreProjectTemplate: string
   CatalogStepExtensions: string
   CatalogStepContent: string
+  CatalogStepListContent: string
+  CatalogStepListContentDetail: string
   CatalogStepUpdateTemplateOptions: string
   CatalogStepSkippedFeatureFlag: string
   CatalogInstallSuccessTitle: string

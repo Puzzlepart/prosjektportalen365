@@ -83,6 +83,7 @@ export class PackageInstaller {
             InstallStepKey.ProvisionHub,
             InstallStepKey.Taxonomy,
             InstallStepKey.Extensions,
+            InstallStepKey.ListContent,
             InstallStepKey.StoreProjectTemplate,
             InstallStepKey.UpdateTemplateOptions
           ]
@@ -195,6 +196,23 @@ export class PackageInstaller {
         setStatus(InstallStepKey.Extensions, 'skipped')
       }
 
+      // Create the List Content (Listeinnhold) configs on the hub (if any) and
+      // collect their item ids, so the Maloppsett item below can link them via
+      // ListContentConfigLookup. Requires the source lists to already exist —
+      // they are provisioned by the hub template in ProvisionHub above.
+      let listContentItems: Array<{ title: string; itemId: number }> = []
+      setStatus(InstallStepKey.ListContent, 'running')
+      if ((manifest.provisioning?.listContent?.length ?? 0) > 0) {
+        listContentItems = await PackageInstaller._addListContentConfigs(manifest)
+        setStatus(
+          InstallStepKey.ListContent,
+          'done',
+          format(strings.CatalogStepListContentDetail, listContentItems.length)
+        )
+      } else {
+        setStatus(InstallStepKey.ListContent, 'skipped')
+      }
+
       setStatus(InstallStepKey.StoreProjectTemplate, 'running')
       const stored = await PackageInstaller._storeProjectFiles(zip, manifest)
       setStatus(InstallStepKey.StoreProjectTemplate, stored ? 'done' : 'skipped')
@@ -203,6 +221,7 @@ export class PackageInstaller {
       await TemplateOptionsService.upsertImported(pkg, existingItemId, {
         projectContentTypeId: manifest.provisioning?.projectContentTypeId,
         extensionItemIds: extensionItems.map((e) => e.itemId),
+        listContentItemIds: listContentItems.map((l) => l.itemId),
         icon: manifest.icon
       })
       setStatus(InstallStepKey.UpdateTemplateOptions, 'done')
@@ -393,6 +412,56 @@ export class PackageInstaller {
       added.push({ extensionId: ext.id, itemId: item.Id, name: ext.name })
     }
     return added
+  }
+
+  /**
+   * Create/refresh the package's List Content (Listeinnhold) configs on the hub
+   * and return their item ids. Each config is upserted by `Title` (re-import
+   * updates the existing item instead of duplicating it). These items tell the
+   * setup wizard to copy rows from a hub `GtLccSourceList` into a project's
+   * `GtLccDestinationList`; the source list must already exist on the hub (it is
+   * provisioned by the hub template before this runs). The returned ids are
+   * linked to the Maloppsett item via `ListContentConfigLookup`.
+   */
+  private static async _addListContentConfigs(
+    manifest: IPackageManifest
+  ): Promise<Array<{ title: string; itemId: number }>> {
+    const configs = manifest.provisioning?.listContent ?? []
+    if (configs.length === 0) return []
+    const web = SPDataAdapter.portalDataService.web
+    const list = web.lists.getByTitle(resource.Lists_ListContent_Title)
+
+    const result: Array<{ title: string; itemId: number }> = []
+    for (const cfg of configs) {
+      const properties = {
+        Title: cfg.title,
+        GtDescription: cfg.description ?? manifest.description ?? '',
+        GtLccSourceList: cfg.sourceList,
+        GtLccDestinationList: cfg.destinationList ?? cfg.sourceList,
+        GtLccFields: cfg.fields ?? '-',
+        GtLccDefault: !!cfg.default,
+        GtLccHidden: !!cfg.hidden,
+        GtLccLocked: !!cfg.locked
+      }
+      const existing = await list.items
+        .filter(`Title eq '${PackageInstaller._escapeOData(cfg.title)}'`)
+        .select('Id')
+        .top(1)<Array<{ Id: number }>>()
+      let itemId: number
+      if (existing[0]) {
+        itemId = existing[0].Id
+        await list.items.getById(itemId).update(properties)
+      } else {
+        const addResult = await list.items.add(properties)
+        itemId = addResult.data.Id
+      }
+      result.push({ title: cfg.title, itemId })
+    }
+    return result
+  }
+
+  private static _escapeOData(value: string): string {
+    return value.replace(/'/g, "''")
   }
 
   /**

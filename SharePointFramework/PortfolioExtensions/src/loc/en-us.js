@@ -128,6 +128,8 @@ define([], function () {
     CatalogStepStoreProjectTemplate: 'Storing project template',
     CatalogStepExtensions: 'Adding to Project Extensions',
     CatalogStepContent: 'Standard content',
+    CatalogStepListContent: 'Adding to List Content',
+    CatalogStepListContentDetail: '{0} list content config(s) added',
     CatalogStepUpdateTemplateOptions: 'Updating template options',
     CatalogStepSkippedFeatureFlag: 'Skipped (feature flag off)',
     CatalogInstallSuccessTitle: 'Package imported',

@@ -124,6 +124,8 @@ define([], function () {
     CatalogStepStoreProjectTemplate: 'Lagrer prosjektmal',
     CatalogStepExtensions: 'Legger til i Prosjekttillegg',
     CatalogStepContent: 'Standardinnhold',
+    CatalogStepListContent: 'Legger til i Listeinnhold',
+    CatalogStepListContentDetail: '{0} listeinnhold lagt til',
     CatalogStepUpdateTemplateOptions: 'Oppdaterer Maloppsett',
     CatalogStepSkippedFeatureFlag: 'Hoppet over (feature flag av)',
     CatalogInstallSuccessTitle: 'Malpakke importert',

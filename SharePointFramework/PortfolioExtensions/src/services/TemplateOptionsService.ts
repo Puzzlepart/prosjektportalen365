@@ -106,11 +106,18 @@ export class TemplateOptionsService {
    *   setup wizard provisions projects with),
    * - `extensionItemIds` → `GtProjectExtensions` (Utvidelser — the Prosjekttillegg
    *   items uploaded for this template's bundled extensions).
+   * - `listContentItemIds` → `ListContentConfigLookup` (Listeinnhold — the List
+   *   Content config items created on the hub for this template).
    */
   public static async upsertImported(
     pkg: ICatalogPackage,
     existingItemId?: number,
-    options: { projectContentTypeId?: string; extensionItemIds?: number[]; icon?: string } = {}
+    options: {
+      projectContentTypeId?: string
+      extensionItemIds?: number[]
+      listContentItemIds?: number[]
+      icon?: string
+    } = {}
   ): Promise<void> {
     const properties: Record<string, any> = {
       Title: pkg.name,
@@ -130,6 +137,10 @@ export class TemplateOptionsService {
     if (options.extensionItemIds?.length) {
       // LookupMulti field — set by the `<InternalName>Id` array of item ids.
       properties.GtProjectExtensionsId = options.extensionItemIds
+    }
+    if (options.listContentItemIds?.length) {
+      // LookupMulti to the Listeinnhold list (StaticName `ListContentConfigLookup`).
+      properties.ListContentConfigLookupId = options.listContentItemIds
     }
     if (existingItemId) {
       await SPDataAdapter.portalDataService.updateItemInList(

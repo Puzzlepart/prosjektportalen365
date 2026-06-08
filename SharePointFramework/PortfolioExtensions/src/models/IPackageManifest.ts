@@ -37,6 +37,43 @@ export interface IManifestContentItem {
 }
 
 /**
+ * List-content configuration (Listeinnhold) entry in a package manifest. Each
+ * entry becomes an item in the hub **Listeinnhold** (List Content) list and is
+ * linked to the imported Maloppsett item via `ListContentConfigLookup`, so the
+ * setup wizard can copy rows from a hub `sourceList` into a project's
+ * `destinationList` when the template is used.
+ */
+export interface IManifestListContent {
+  /**
+   * Title of the Listeinnhold item — also the upsert key (re-import updates the
+   * item with the same title instead of duplicating it).
+   */
+  title: string
+  description?: string
+  /**
+   * Hub list the rows are copied **from** (`GtLccSourceList`). Typically a list
+   * provisioned by this package's hub template (e.g. `Enkel Fasesjekkliste`).
+   */
+  sourceList: string
+  /**
+   * Project list the rows are copied **into** (`GtLccDestinationList`). Defaults
+   * to {@link sourceList} when omitted.
+   */
+  destinationList?: string
+  /**
+   * Comma-separated internal names of the columns to copy (`GtLccFields`), or
+   * `-` for none. Example: `GtSortOrder,Title,GtProjectPhase`.
+   */
+  fields?: string
+  /** Selected by default in the setup wizard (`GtLccDefault`). */
+  default?: boolean
+  /** Hidden from the setup wizard (`GtLccHidden`). */
+  hidden?: boolean
+  /** Locked (cannot be deselected) in the setup wizard (`GtLccLocked`). */
+  locked?: boolean
+}
+
+/**
  * `manifest.json` inside a `.pppkg`. Mirrors
  * `schema/pppkg-manifest.schema.json` in the hosting repo.
  */
@@ -75,6 +112,11 @@ export interface IPackageManifest {
      */
     projectContentTypeId?: string
     extensions?: IManifestExtension[]
+    /**
+     * List-content (Listeinnhold) configurations created on the hub and linked
+     * to the imported Maloppsett item.
+     */
+    listContent?: IManifestListContent[]
   }
   content?: {
     items: IManifestContentItem[]
