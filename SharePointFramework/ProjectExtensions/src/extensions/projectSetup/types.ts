@@ -166,5 +166,13 @@ export enum ProjectSetupValidation {
    * 365 group. This will cause issues
    * provisioning Planner resources.
    */
-  UserNotGroupMember
+  UserNotGroupMember,
+
+  /**
+   * The site is a Teams private/shared channel site (web template
+   * `TEAMCHANNEL`). Channel sites are hub-associated and inherit the project
+   * site design, but are not projects and have no M365 group. The wizard is
+   * removed silently without touching the site or involving the user.
+   */
+  IsTeamChannel
 }

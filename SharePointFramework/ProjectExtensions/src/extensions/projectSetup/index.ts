@@ -81,6 +81,14 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             strings.NoGroupIdErrorStack
           )
         }
+        case ProjectSetupValidation.IsTeamChannel: {
+          Logger.write(
+            `(ProjectSetup) Site is a Teams channel (${this.context.pageContext.web.absoluteUrl}); removing setup customizer silently.`,
+            LogLevel.Info
+          )
+          await deleteCustomizer(this)
+          return
+        }
         case ProjectSetupValidation.InvalidWebLanguage: {
           await deleteCustomizer(this)
           throw new ProjectSetupError(
@@ -613,6 +621,16 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   private async _validateProjectSetup(): Promise<ProjectSetupValidation> {
     const { isSiteAdmin, groupId, hubSiteId, siteId } = this.context.pageContext.legacyPageContext
 
+    // Teams private/shared channels create their own hub-associated SharePoint site
+    // (web template `TEAMCHANNEL`) which inherits the project site design but is not
+    // a project and has no M365 group. Detect and skip silently.
+    const { WebTemplate } = await this.sp.web.select('WebTemplate')()
+    if (WebTemplate === 'TEAMCHANNEL') return ProjectSetupValidation.IsTeamChannel
+
+    // Safety net: a site without an M365 group cannot be set up as a project and
+    // must not reach the `groups/{id}/members` call below with a null id.
+    if (!groupId) return ProjectSetupValidation.NoGroupId
+
     this._portalDataService = await new PortalDataService().configure({
       spfxContext: this.context
     })
@@ -622,7 +640,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       return ProjectSetupValidation.UserNotGroupMember
     }
     if (!isSiteAdmin) return ProjectSetupValidation.NotSiteAdmin
-    if (!groupId) return ProjectSetupValidation.NoGroupId
     if (this.context.pageContext.web.language !== 1044) {
       const { Language } = await this._portalDataService.web.select('Language')()
       if (Language !== this.context.pageContext.web.language) {
