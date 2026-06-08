@@ -1,6 +1,6 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import strings from 'PortfolioExtensionsStrings'
-import { ICatalogPackage, ICrossReference } from 'models'
+import { ICatalogPackage, ICompatibilityReport, ICrossReference } from 'models'
 import {
   CatalogService,
   TemplateOptionsService,
@@ -29,6 +29,9 @@ export function useTemplatePackageCatalog(
   props: ITemplatePackageCatalogProps
 ): ITemplatePackageCatalogContext {
   const { state, setState } = useTemplatePackageCatalogState()
+  // Holds the resolver of the in-flight compatibility-conflict prompt, settled
+  // by the CompatibilityDialog via resolveCompatibility().
+  const conflictResolver = useRef<(proceed: boolean) => void>()
 
   useEffect(() => {
     let cancelled = false
@@ -155,13 +158,23 @@ export function useTemplatePackageCatalog(
     setState({ notification: undefined, installProgress: { steps: [], status: 'running' } })
     try {
       const existingItemId = crossRefFor(pkg.id)?.itemId
-      await PackageInstaller.runImport({
+      const completed = await PackageInstaller.runImport({
         package: pkg,
         context: props.context,
         featureFlagProvisioning: props.featureFlagProvisioning,
         existingItemId,
-        onProgress: (installProgress) => setState({ installProgress })
+        onProgress: (installProgress) => setState({ installProgress }),
+        // Surface compatibility conflicts via the dialog and pause on the
+        // awaited promise until the admin chooses Avbryt / Fortsett likevel.
+        onConflicts: (report: ICompatibilityReport) =>
+          new Promise<boolean>((resolve) => {
+            conflictResolver.current = resolve
+            setState({ compatibilityReport: report })
+          })
       })
+      // Cancelled at the compatibility prompt — the progress pane already shows
+      // the cancelled state; don't report success.
+      if (!completed) return
       await refreshCrossRef()
       setState({
         notification: {
@@ -188,6 +201,13 @@ export function useTemplatePackageCatalog(
     } catch (error) {
       setState({ notification: { intent: 'error', text: error?.message } })
     }
+  }
+
+  const resolveCompatibility = (proceed: boolean): void => {
+    setState({ compatibilityReport: undefined })
+    const resolve = conflictResolver.current
+    conflictResolver.current = undefined
+    resolve?.(proceed)
   }
 
   const removePackage = async (pkg: ICatalogPackage): Promise<void> => {
@@ -222,6 +242,7 @@ export function useTemplatePackageCatalog(
     closeDetail,
     importPackage,
     publishCentral,
-    removePackage
+    removePackage,
+    resolveCompatibility
   }
 }

@@ -182,5 +182,32 @@ define([], function () {
     CatalogReplaceConfirmText:
       'Tillegget «{0}» finnes allerede i Prosjekttillegg-biblioteket og ble ikke installert fra katalogen. Hvis du fortsetter, erstattes det med katalogversjonen (v{1}), og eventuelle lokale tilpasninger går tapt.',
     CatalogReplaceConfirmButton: 'Erstatt',
+    CatalogStepCheckCompatibility: 'Sjekker kompatibilitet',
+    CatalogStepCheckCompatibilityDetail: '{0} konflikt(er) funnet',
+    CatalogImportCancelled: 'Importen ble avbrutt',
+    CatalogCompatibilityTitle: 'Kompatibilitetssjekk',
+    CatalogCompatibilityIntro:
+      'Følgende konflikter ble funnet mot det som allerede finnes i installasjonen. Du kan avbryte og rette opp manuelt, eller fortsette – elementer blir overskrevet eller hoppet over (når overskriving ikke er mulig).',
+    CatalogCompatibilityContinue: 'Fortsett likevel',
+    CatalogResolutionOverwrite: 'Overskrives',
+    CatalogResolutionSkip: 'Hoppes over',
+    CatalogResolutionBlocked: 'Blokkert',
+    CatalogConflictContentType:
+      'Innholdstypen «{0}» bruker en ID som allerede tilhører «{1}». Hoppes over slik at den eksisterende ikke endres.',
+    CatalogConflictFieldRef:
+      'Innholdstypen «{0}» refererer til feltet «{1}» som ikke finnes på hub-området. Innholdstypen hoppes over.',
+    CatalogConflictSiteField:
+      'Sitekolonnen «{0}» finnes allerede med en annen ID. Egenskapene oppdateres, men ID-en beholdes.',
+    CatalogConflictSiteFieldType:
+      'Sitekolonnen «{0}» finnes allerede med en annen type ({1}). Oppdatering kan feile.',
+    CatalogConflictSiteFieldReused:
+      'Felt-ID-en til «{0}» er allerede i bruk av kolonnen «{1}». Kolonnen kan ikke legges til og hoppes over.',
+    CatalogConflictListField:
+      'Listekolonnen «{0}» i listen «{1}» har en ID som allerede finnes. Den ville blitt slettet og opprettet på nytt (data kan gå tapt), så den hoppes over.',
+    CatalogConflictListView: 'Visningen «{0}» i listen «{1}» finnes allerede og blir overskrevet.',
+    CatalogConflictList: 'Listen «{0}» får eksisterende innholdstyper fjernet.',
+    CatalogConflictExtension: 'Prosjekttillegget «{0}» finnes allerede og blir overskrevet.',
+    CatalogConflictTaxonomy:
+      'Termsettet «{0}» finnes allerede i termlageret med navnet «{1}». Eksisterende beholdes.',
   }
 })

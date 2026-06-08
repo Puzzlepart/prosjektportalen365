@@ -1,4 +1,5 @@
 export * from './CatalogService'
+export * from './CompatibilityService'
 export * from './TemplateOptionsService'
 export * from './PackageInstaller'
 export * from './ProjectExtensionsService'

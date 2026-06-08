@@ -186,5 +186,32 @@ define([], function () {
     CatalogReplaceConfirmText:
       'The extension "{0}" already exists in the Project Extensions library and was not installed from the catalog. If you continue, it will be replaced with the catalog version (v{1}) and any local customizations will be lost.',
     CatalogReplaceConfirmButton: 'Replace',
+    CatalogStepCheckCompatibility: 'Checking compatibility',
+    CatalogStepCheckCompatibilityDetail: '{0} conflict(s) found',
+    CatalogImportCancelled: 'The import was cancelled',
+    CatalogCompatibilityTitle: 'Compatibility check',
+    CatalogCompatibilityIntro:
+      'The following conflicts were found against what already exists in your installation. You can cancel and fix them manually, or continue — items will be overwritten or skipped (when overwrite is not possible).',
+    CatalogCompatibilityContinue: 'Continue anyway',
+    CatalogResolutionOverwrite: 'Overwritten',
+    CatalogResolutionSkip: 'Skipped',
+    CatalogResolutionBlocked: 'Blocked',
+    CatalogConflictContentType:
+      'The content type "{0}" uses an ID already owned by "{1}". It is skipped so the existing one is left unchanged.',
+    CatalogConflictFieldRef:
+      'The content type "{0}" references the field "{1}" which does not exist on the hub. The content type is skipped.',
+    CatalogConflictSiteField:
+      'The site column "{0}" already exists with a different ID. Its properties are updated, but the ID is kept.',
+    CatalogConflictSiteFieldType:
+      'The site column "{0}" already exists with a different type ({1}). Updating it may fail.',
+    CatalogConflictSiteFieldReused:
+      'The field ID of "{0}" is already used by the column "{1}". The column cannot be added and is skipped.',
+    CatalogConflictListField:
+      'The list column "{0}" in the list "{1}" has an ID that already exists. It would be deleted and recreated (data may be lost), so it is skipped.',
+    CatalogConflictListView: 'The view "{0}" in the list "{1}" already exists and will be overwritten.',
+    CatalogConflictList: 'The list "{0}" will have its existing content types removed.',
+    CatalogConflictExtension: 'The project extension "{0}" already exists and will be overwritten.',
+    CatalogConflictTaxonomy:
+      'The term set "{0}" already exists in the term store with the name "{1}". The existing one is kept.',
   }
 })

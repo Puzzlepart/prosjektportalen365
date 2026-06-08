@@ -17,6 +17,7 @@ import { customLightTheme, UserMessage } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC, useState } from 'react'
 import { CatalogToolbar } from './CatalogToolbar'
+import { CompatibilityDialog } from './CompatibilityDialog'
 import { InstallProgress } from './InstallProgress'
 import { PackageDetails } from './PackageDetails'
 import { PackageList } from './PackageList'
@@ -122,6 +123,7 @@ export const TemplatePackageCatalog: FC<ITemplatePackageCatalogProps> = (props) 
               )}
             </DrawerBody>
           </OverlayDrawer>
+          <CompatibilityDialog />
         </FluentProvider>
       </IdPrefixProvider>
     </TemplatePackageCatalogContext.Provider>

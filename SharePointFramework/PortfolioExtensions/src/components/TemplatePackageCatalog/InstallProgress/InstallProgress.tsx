@@ -22,6 +22,8 @@ function stepLabel(key: InstallStepKey): string {
       return strings.CatalogStepValidateManifest
     case InstallStepKey.CheckVersion:
       return strings.CatalogStepCheckVersion
+    case InstallStepKey.CheckCompatibility:
+      return strings.CatalogStepCheckCompatibility
     case InstallStepKey.ProvisionHub:
       return strings.CatalogStepProvisionHub
     case InstallStepKey.Taxonomy:

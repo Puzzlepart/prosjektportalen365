@@ -11,12 +11,14 @@ import resource from 'SharedResources'
 import SPDataAdapter from 'data/SPDataAdapter'
 import {
   ICatalogPackage,
+  ICompatibilityReport,
   IInstallProgress,
   IInstallStep,
   InstallStepKey,
   InstallStepStatus,
   IPackageManifest
 } from 'models'
+import { CompatibilityService } from './CompatibilityService'
 import { featureFlags } from './featureFlags'
 import { TemplateOptionsService } from './TemplateOptionsService'
 import { isNewerVersion } from './version'
@@ -36,6 +38,13 @@ export interface IPackageInstallOptions {
    */
   existingItemId?: number
   onProgress: (progress: IInstallProgress) => void
+  /**
+   * Invoked when the pre-import compatibility check finds conflicts. Resolve
+   * `true` to continue (conflicting entries are stripped/overwritten per their
+   * resolution) or `false` to cancel the import. When omitted, the import
+   * proceeds as if confirmed.
+   */
+  onConflicts?: (report: ICompatibilityReport) => Promise<boolean>
 }
 
 /**
@@ -52,7 +61,7 @@ export interface IPackageInstallOptions {
  *   `sp-js-provisioning` 1.3.7).
  */
 export class PackageInstaller {
-  public static async runImport(options: IPackageInstallOptions): Promise<void> {
+  public static async runImport(options: IPackageInstallOptions): Promise<boolean> {
     const { package: pkg, context, featureFlagProvisioning, existingItemId, onProgress } = options
     const isExtension = pkg.type === 'extension'
 
@@ -70,6 +79,7 @@ export class PackageInstaller {
             InstallStepKey.Unzip,
             InstallStepKey.ValidateManifest,
             InstallStepKey.CheckVersion,
+            InstallStepKey.CheckCompatibility,
             InstallStepKey.ProvisionHub,
             InstallStepKey.Taxonomy,
             InstallStepKey.Extensions,
@@ -122,7 +132,29 @@ export class PackageInstaller {
         progress.status = 'success'
         progress.currentStep = undefined
         emit()
-        return
+        return true
+      }
+
+      // Pre-import compatibility check: detect conflicts with existing hub
+      // objects (content types, site fields, lists, extensions, taxonomy). On
+      // conflicts, let the caller confirm; if cancelled, abort before any write.
+      setStatus(InstallStepKey.CheckCompatibility, 'running')
+      const report = await CompatibilityService.check(zip, manifest, featureFlagProvisioning)
+      if (report.hasConflicts) {
+        const detail = format(strings.CatalogStepCheckCompatibilityDetail, report.conflicts.length)
+        setStatus(InstallStepKey.CheckCompatibility, 'running', detail)
+        const proceed = options.onConflicts ? await options.onConflicts(report) : true
+        if (!proceed) {
+          setStatus(InstallStepKey.CheckCompatibility, 'error', strings.CatalogImportCancelled)
+          progress.status = 'error'
+          progress.error = strings.CatalogImportCancelled
+          progress.currentStep = undefined
+          emit()
+          return false
+        }
+        setStatus(InstallStepKey.CheckCompatibility, 'done', detail)
+      } else {
+        setStatus(InstallStepKey.CheckCompatibility, 'done')
       }
 
       // Taxonomy is the only feature-flag-gated part. When enabled, the hub
@@ -134,7 +166,7 @@ export class PackageInstaller {
       })
 
       setStatus(InstallStepKey.ProvisionHub, 'running')
-      await PackageInstaller._provisionHub(zip, manifest, context, enableTaxonomy)
+      await PackageInstaller._provisionHub(zip, manifest, context, enableTaxonomy, report)
       setStatus(InstallStepKey.ProvisionHub, 'done')
 
       if (!enableTaxonomy) {
@@ -178,6 +210,7 @@ export class PackageInstaller {
       progress.status = 'success'
       progress.currentStep = undefined
       emit()
+      return true
     } catch (error) {
       const running = steps.find((s) => s.status === 'running')
       if (running) {
@@ -240,7 +273,8 @@ export class PackageInstaller {
     zip: any,
     manifest: IPackageManifest,
     context: ListViewCommandSetContext,
-    includeTaxonomy: boolean
+    includeTaxonomy: boolean,
+    report?: ICompatibilityReport
   ): Promise<void> {
     const hubTemplate = manifest.provisioning?.hubTemplate
     if (!hubTemplate) return
@@ -248,11 +282,17 @@ export class PackageInstaller {
     if (!file) {
       throw new Error(`Hub template ${hubTemplate} not found in package`)
     }
-    const schema = JSON.parse(await file.async('string'))
+    let schema = JSON.parse(await file.async('string'))
     // Gate the (sp-js-provisioning) Taxonomy handler: strip the Taxonomy part
     // when the feature flag is off so term-store provisioning is skipped.
     if (!includeTaxonomy && schema.Taxonomy) {
       delete schema.Taxonomy
+    }
+    // Strip the entries the admin chose to skip (id clashes that would clobber a
+    // different object, or blocked items that would abort applyTemplate), so the
+    // existing hub objects are left untouched and the rest still provisions.
+    if (report?.hasConflicts) {
+      schema = CompatibilityService.stripConflicts(schema, report)
     }
     // Lazy import keeps sp-js-provisioning out of the command-set entrypoint.
     const { WebProvisioner } = await import('sp-js-provisioning')

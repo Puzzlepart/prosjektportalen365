@@ -36,6 +36,7 @@ export enum InstallStepKey {
   Unzip = 'unzip',
   ValidateManifest = 'validateManifest',
   CheckVersion = 'checkVersion',
+  CheckCompatibility = 'checkCompatibility',
   ProvisionHub = 'provisionHub',
   Taxonomy = 'taxonomy',
   StoreProjectTemplate = 'storeProjectTemplate',

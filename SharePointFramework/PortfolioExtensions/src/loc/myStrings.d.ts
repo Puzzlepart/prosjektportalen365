@@ -175,6 +175,25 @@ declare interface IPortfolioExtensionsStrings {
   CatalogReplaceConfirmTitle: string
   CatalogReplaceConfirmText: string
   CatalogReplaceConfirmButton: string
+  CatalogStepCheckCompatibility: string
+  CatalogStepCheckCompatibilityDetail: string
+  CatalogImportCancelled: string
+  CatalogCompatibilityTitle: string
+  CatalogCompatibilityIntro: string
+  CatalogCompatibilityContinue: string
+  CatalogResolutionOverwrite: string
+  CatalogResolutionSkip: string
+  CatalogResolutionBlocked: string
+  CatalogConflictContentType: string
+  CatalogConflictFieldRef: string
+  CatalogConflictSiteField: string
+  CatalogConflictSiteFieldType: string
+  CatalogConflictSiteFieldReused: string
+  CatalogConflictListField: string
+  CatalogConflictListView: string
+  CatalogConflictList: string
+  CatalogConflictExtension: string
+  CatalogConflictTaxonomy: string
 }
 
 declare module 'PortfolioExtensionsStrings' {

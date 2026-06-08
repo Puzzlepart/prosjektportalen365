@@ -1,5 +1,11 @@
 import { ListViewCommandSetContext } from '@microsoft/sp-listview-extensibility'
-import { ICatalog, ICatalogPackage, ICrossReference, IInstallProgress } from 'models'
+import {
+  ICatalog,
+  ICatalogPackage,
+  ICompatibilityReport,
+  ICrossReference,
+  IInstallProgress
+} from 'models'
 
 /**
  * Props for the drawer root, supplied by the command set on mount.
@@ -57,6 +63,11 @@ export interface ITemplatePackageCatalogState {
   page: number
   selectedPackageId?: string
   installProgress?: IInstallProgress
+  /**
+   * Conflicts found by the pre-import compatibility check, awaiting the admin's
+   * "Avbryt" / "Fortsett likevel" decision (see {@link CompatibilityDialog}).
+   */
+  compatibilityReport?: ICompatibilityReport
   notification?: ICatalogNotification
   /**
    * Whether the detail pane is shown in the <720px collapsed layout.
@@ -101,4 +112,9 @@ export interface ITemplatePackageCatalogContext {
   importPackage: (pkg: ICatalogPackage) => Promise<void>
   publishCentral: (pkg: ICatalogPackage) => Promise<void>
   removePackage: (pkg: ICatalogPackage) => Promise<void>
+  /**
+   * Resolve the pending compatibility-conflict prompt: `true` continues the
+   * import (skipping/overwriting per resolution), `false` cancels it.
+   */
+  resolveCompatibility: (proceed: boolean) => void
 }

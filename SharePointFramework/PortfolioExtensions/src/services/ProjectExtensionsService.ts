@@ -45,30 +45,14 @@ export class ProjectExtensionsService {
     if (extensionPackages.length === 0) return map
 
     try {
-      const web = SPDataAdapter.portalDataService.web
-      const items: { Id: number; FileRef: string; FileLeafRef: string; Title: string }[] =
-        await web.lists
-          .getByTitle(resource.Lists_ProjectExtensions_Title)
-          .items.select('Id', 'FileRef', 'FileLeafRef', 'Title')
-          .top(500)()
-
-      // Read each file's stamp in parallel. Stamped files are catalog-managed;
-      // unstamped files are candidates for name-based (unmanaged) matching.
-      const parsed = await Promise.all(
-        items.map(async (item) => {
-          let stamp: IPpPackageStamp | undefined
-          try {
-            stamp = JSON.parse(
-              await web.getFileByServerRelativePath(item.FileRef).getText()
-            )?.PpPackage
-          } catch {
-            // Not JSON / unreadable — treat as unstamped.
-          }
-          const baseName = (item.FileLeafRef ?? '').replace(/\.[^.]+$/, '')
-          const names = [item.Title, baseName].filter(Boolean).map((n) => n.toLowerCase())
-          return { itemId: item.Id, stamp, names }
-        })
-      )
+      const installed = await ProjectExtensionsService.getInstalledFiles()
+      // Stamped files are catalog-managed; unstamped files are candidates for
+      // name-based (unmanaged) matching.
+      const parsed = installed.map((f) => {
+        const baseName = f.fileName.replace(/\.[^.]+$/, '')
+        const names = [f.title, baseName].filter(Boolean).map((n) => n.toLowerCase())
+        return { itemId: f.itemId, stamp: f.stamp, names }
+      })
 
       const managed = new Map<string, { itemId: number; version: string }>()
       const unmanaged: { itemId: number; names: string[] }[] = []
@@ -117,5 +101,38 @@ export class ProjectExtensionsService {
       })
     }
     return map
+  }
+
+  /**
+   * Read all files in the hub Prosjekttillegg library with their `PpPackage`
+   * stamp (when present). Shared by {@link getCrossReference} and the pre-import
+   * compatibility check.
+   */
+  public static async getInstalledFiles(): Promise<
+    Array<{ itemId: number; title: string; fileName: string; fileRef: string; stamp?: IPpPackageStamp }>
+  > {
+    const web = SPDataAdapter.portalDataService.web
+    const items: { Id: number; FileRef: string; FileLeafRef: string; Title: string }[] =
+      await web.lists
+        .getByTitle(resource.Lists_ProjectExtensions_Title)
+        .items.select('Id', 'FileRef', 'FileLeafRef', 'Title')
+        .top(500)()
+    return Promise.all(
+      items.map(async (item) => {
+        let stamp: IPpPackageStamp | undefined
+        try {
+          stamp = JSON.parse(await web.getFileByServerRelativePath(item.FileRef).getText())?.PpPackage
+        } catch {
+          // Not JSON / unreadable — treat as unstamped.
+        }
+        return {
+          itemId: item.Id,
+          title: item.Title ?? '',
+          fileName: item.FileLeafRef ?? '',
+          fileRef: item.FileRef,
+          stamp
+        }
+      })
+    )
   }
 }
