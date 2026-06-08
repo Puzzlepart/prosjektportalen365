@@ -85,90 +85,6 @@
   <data name="Choice_GtAllocationStatus_Requested" xml:space="preserve">
     <value>Requested</value>
   </data>
-  <data name="Choice_GtBAProjectEnv_EventRegistered" xml:space="preserve">
-    <value>Event registered last month</value>
-  </data>
-  <data name="Choice_GtBAProjectEnv_NoEvents" xml:space="preserve">
-    <value>No events registered last month</value>
-  </data>
-  <data name="Choice_GtBAProjectInvestementPhase_F0" xml:space="preserve">
-    <value>F0</value>
-  </data>
-  <data name="Choice_GtBAProjectInvestementPhase_F1" xml:space="preserve">
-    <value>F1</value>
-  </data>
-  <data name="Choice_GtBAProjectInvestementPhase_F2" xml:space="preserve">
-    <value>F2</value>
-  </data>
-  <data name="Choice_GtBAProjectInvestementPhase_F3" xml:space="preserve">
-    <value>F3</value>
-  </data>
-  <data name="Choice_GtBAProjectInvestementPhase_NotRelevant" xml:space="preserve">
-    <value>Not relevant</value>
-  </data>
-  <data name="Choice_GtBAProjectInvestementPhase_SeckePost" xml:space="preserve">
-    <value>S (Contingency)</value>
-  </data>
-  <data name="Choice_GtBAProjectSHA_EventRegistered" xml:space="preserve">
-    <value>Event registered last month</value>
-  </data>
-  <data name="Choice_GtBAProjectSHA_NoEvents" xml:space="preserve">
-    <value>No events registered last month</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_ComplaintUnderReview" xml:space="preserve">
-    <value>Complaint under review</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_FrameworkApplicationInProgress" xml:space="preserve">
-    <value>Framework application in progress</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_FrameworkApplicationSent" xml:space="preserve">
-    <value>Framework application sent</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_FrameworkPermitGranted" xml:space="preserve">
-    <value>Framework permit granted</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_IGGranted" xml:space="preserve">
-    <value>Building permit granted</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_IGSent" xml:space="preserve">
-    <value>Building permit application sent</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_PreConferenceHeld" xml:space="preserve">
-    <value>Pre-conference held</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_RegulationPlanAnnounced" xml:space="preserve">
-    <value>Regulation plan announced</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_RegulationPlanApproved" xml:space="preserve">
-    <value>Regulation plan approved</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_RegulationPlanFirstTreated" xml:space="preserve">
-    <value>Regulation plan first treated</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_AppliedForPayment" xml:space="preserve">
-    <value>Applied for payment</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_DialogWithGrantorEstablished" xml:space="preserve">
-    <value>Dialog with grantor established</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_HasApplied" xml:space="preserve">
-    <value>Has applied</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_HasReceivedApproval" xml:space="preserve">
-    <value>Has received approval</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_HasReceivedPayment" xml:space="preserve">
-    <value>Has received payment</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_HasReceivedRejection" xml:space="preserve">
-    <value>Has received rejection</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_NotApplicable" xml:space="preserve">
-    <value>Not applicable</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_ToBeInvestigated" xml:space="preserve">
-    <value>To be investigated/evaluated</value>
-  </data>
   <data name="Choice_GtChecklistStatus_Archived" xml:space="preserve">
     <value>Archived</value>
   </data>
@@ -1024,12 +940,6 @@
   <data name="ContentTypes_ProjectAdminRoleSiteAdmin_Name" xml:space="preserve">
     <value>Project Administration Role - Site Administrator</value>
   </data>
-  <data name="ContentTypes_ProjectBA_Description" xml:space="preserve">
-    <value>Project content type for construction and building projects</value>
-  </data>
-  <data name="ContentTypes_ProjectBA_Name" xml:space="preserve">
-    <value>Project (CB)</value>
-  </data>
   <data name="ContentTypes_ProjectColumn_Description" xml:space="preserve">
     <value>A project related column</value>
   </data>
@@ -1074,12 +984,6 @@
   </data>
   <data name="ContentTypes_ProjectStatus_Name" xml:space="preserve">
     <value>Project Status</value>
-  </data>
-  <data name="ContentTypes_ProjectStatusBA_Description" xml:space="preserve">
-    <value>Project Status content type for construction and building projects</value>
-  </data>
-  <data name="ContentTypes_ProjectStatusBA_Name" xml:space="preserve">
-    <value>Project Status (CB)</value>
   </data>
   <data name="ContentTypes_ProjectTask_Name" xml:space="preserve">
     <value>Project Task</value>
@@ -1350,18 +1254,6 @@
   </data>
   <data name="Lists_Documents_Title" xml:space="preserve">
     <value>Documents</value>
-  </data>
-  <data name="Lists_DocumentsBuilding_Title" xml:space="preserve">
-    <value>Standard Documents Building</value>
-  </data>
-  <data name="Lists_DocumentsBuilding_Url" xml:space="preserve">
-    <value>StandardDocuments_Building</value>
-  </data>
-  <data name="Lists_DocumentsConstruction_Title" xml:space="preserve">
-    <value>Standard Documents Construction</value>
-  </data>
-  <data name="Lists_DocumentsConstruction_Url" xml:space="preserve">
-    <value>StandardDocuments_Construction</value>
   </data>
   <data name="Lists_Global_Settings_Category_Assistant" xml:space="preserve">
     <value>Assistant</value>
@@ -1708,18 +1600,6 @@
   <data name="Lists_ListContent_Description" xml:space="preserve">
     <value>Setup of list content for new project sites</value>
   </data>
-  <data name="Lists_ListContent_PhaseChecklistBuilding_Description" xml:space="preserve">
-    <value>Phase checklist for building projects.</value>
-  </data>
-  <data name="Lists_ListContent_PhaseChecklistBuilding_Title" xml:space="preserve">
-    <value>Phase Checklist Building</value>
-  </data>
-  <data name="Lists_ListContent_PhaseChecklistConstruction_Description" xml:space="preserve">
-    <value>Phase checklist for construction projects.</value>
-  </data>
-  <data name="Lists_ListContent_PhaseChecklistConstruction_Title" xml:space="preserve">
-    <value>Phase Checklist Construction</value>
-  </data>
   <data name="Lists_ListContent_PhaseCheckpoints_Description" xml:space="preserve">
     <value>Phase checkpoints based on Project Wizard decision points.</value>
   </data>
@@ -1734,36 +1614,6 @@
   </data>
   <data name="Lists_ListContent_PlannerTasks_Title" xml:space="preserve">
     <value>Planner Tasks</value>
-  </data>
-  <data name="Lists_ListContent_PlannerTasksBuilding_Description" xml:space="preserve">
-    <value>Standard Planner tasks for facility projects.</value>
-  </data>
-  <data name="Lists_ListContent_PlannerTasksBuilding_PlanName" xml:space="preserve">
-    <value>Facility Tasks</value>
-  </data>
-  <data name="Lists_ListContent_PlannerTasksBuilding_Title" xml:space="preserve">
-    <value>Planner Tasks Facility</value>
-  </data>
-  <data name="Lists_ListContent_PlannerTasksConstruction_Description" xml:space="preserve">
-    <value>Standard Planner tasks for construction projects.</value>
-  </data>
-  <data name="Lists_ListContent_PlannerTasksConstruction_PlanName" xml:space="preserve">
-    <value>Construction Tasks</value>
-  </data>
-  <data name="Lists_ListContent_PlannerTasksConstruction_Title" xml:space="preserve">
-    <value>Planner Tasks Construction</value>
-  </data>
-  <data name="Lists_ListContent_StandardDocsConstruction_Description" xml:space="preserve">
-    <value>Standard documents for construction projects.</value>
-  </data>
-  <data name="Lists_ListContent_StandardDocsConstruction_Title" xml:space="preserve">
-    <value>Standard Documents Construction</value>
-  </data>
-  <data name="Lists_ListContent_StandardDocumentsBuilding_Description" xml:space="preserve">
-    <value>Standard documents for building projects.</value>
-  </data>
-  <data name="Lists_ListContent_StandardDocumentsBuilding_Title" xml:space="preserve">
-    <value>Standard Documents Building</value>
   </data>
   <data name="Lists_ListContent_Title" xml:space="preserve">
     <value>List Content</value>
@@ -1825,18 +1675,6 @@
   <data name="Lists_PhaseChecklist_Url" xml:space="preserve">
     <value>Lists/Phase Checklist</value>
   </data>
-  <data name="Lists_PhaseChecklistBuilding_Title" xml:space="preserve">
-    <value>Phase Checklist Building</value>
-  </data>
-  <data name="Lists_PhaseChecklistBuilding_Url" xml:space="preserve">
-    <value>Lists/PhaseChecklist_Building</value>
-  </data>
-  <data name="Lists_PhaseChecklistConstruction_Title" xml:space="preserve">
-    <value>Phase Checklist Construction</value>
-  </data>
-  <data name="Lists_PhaseChecklistConstruction_Url" xml:space="preserve">
-    <value>Lists/PhaseChecklist_Construction</value>
-  </data>
   <data name="Lists_PlannerTasks_Description" xml:space="preserve">
     <value>Planner tasks for the projects.</value>
   </data>
@@ -1845,18 +1683,6 @@
   </data>
   <data name="Lists_PlannerTasks_Url" xml:space="preserve">
     <value>Lists/PlannerTasks</value>
-  </data>
-  <data name="Lists_PlannerTasksBuilding_Title" xml:space="preserve">
-    <value>Planner Tasks Building</value>
-  </data>
-  <data name="Lists_PlannerTasksBuilding_Url" xml:space="preserve">
-    <value>Lists/PlannerTasks_Building</value>
-  </data>
-  <data name="Lists_PlannerTasksConstruction_Title" xml:space="preserve">
-    <value>Planner Tasks Construction</value>
-  </data>
-  <data name="Lists_PlannerTasksConstruction_Url" xml:space="preserve">
-    <value>Lists/PlannerTasks_Construction</value>
   </data>
   <data name="Lists_PortfolioViews_AllProjects_Title" xml:space="preserve">
     <value>All projects</value>
@@ -1956,18 +1782,6 @@
   </data>
   <data name="Lists_ProjectColumnConfiguration_Description" xml:space="preserve">
     <value>Administrate project column values (color/icon/name) for status fields</value>
-  </data>
-  <data name="Lists_ProjectColumnConfiguration_GtBAProjectEnv_EventRegistered_Title" xml:space="preserve">
-    <value>Environment status (Event)</value>
-  </data>
-  <data name="Lists_ProjectColumnConfiguration_GtBAProjectEnv_NoEvents_Title" xml:space="preserve">
-    <value>Environment status (None)</value>
-  </data>
-  <data name="Lists_ProjectColumnConfiguration_GtBAProjectSHA_EventRegistered_Title" xml:space="preserve">
-    <value>Health and Safety status (Event)</value>
-  </data>
-  <data name="Lists_ProjectColumnConfiguration_GtBAProjectSHA_NoEvents_Title" xml:space="preserve">
-    <value>Health and Safety status (None)</value>
   </data>
   <data name="Lists_ProjectColumnConfiguration_GtStatusBudget_BelowBudget_Title" xml:space="preserve">
     <value>Budget status (Below budget)</value>
@@ -2191,23 +2005,11 @@
   <data name="Lists_StatusSections_Description" xml:space="preserve">
     <value>Setup of project status report</value>
   </data>
-  <data name="Lists_StatusSections_Environment_Title" xml:space="preserve">
-    <value>Environment</value>
-  </data>
   <data name="Lists_StatusSections_OverallStatus_Title" xml:space="preserve">
     <value>Overall Status</value>
   </data>
-  <data name="Lists_StatusSections_ProjectSupport_Title" xml:space="preserve">
-    <value>Support</value>
-  </data>
-  <data name="Lists_StatusSections_SHA_Title" xml:space="preserve">
-    <value>SHA</value>
-  </data>
   <data name="Lists_StatusSections_StatusBudget_Title" xml:space="preserve">
     <value>Financials</value>
-  </data>
-  <data name="Lists_StatusSections_StatusCase_Title" xml:space="preserve">
-    <value>Planning and Building Case</value>
   </data>
   <data name="Lists_StatusSections_StatusGainAchievement_Title" xml:space="preserve">
     <value>Benefit Achievement</value>
@@ -2238,18 +2040,6 @@
   </data>
   <data name="Lists_TemplateLibrary_Url" xml:space="preserve">
     <value>Template Library</value>
-  </data>
-  <data name="Lists_TemplateOptions_BuildingProject_Description" xml:space="preserve">
-    <value>This is the template for building projects. Building projects have their own phases, project properties and fields in the project status.</value>
-  </data>
-  <data name="Lists_TemplateOptions_BuildingProject_Title" xml:space="preserve">
-    <value>Building Project</value>
-  </data>
-  <data name="Lists_TemplateOptions_ConstructionProject_Description" xml:space="preserve">
-    <value>Construction projects have their own phases, project properties and fields in the project status.</value>
-  </data>
-  <data name="Lists_TemplateOptions_ConstructionProject_Title" xml:space="preserve">
-    <value>Construction Project</value>
   </data>
   <data name="Lists_TemplateOptions_Description" xml:space="preserve">
     <value>Setup of templates for new project sites</value>
@@ -2626,9 +2416,6 @@
   <data name="Security_SiteGroup_ProvisionPortal_Title" xml:space="preserve">
     <value>Provision portal</value>
   </data>
-  <data name="SiteFields_BA_Group" xml:space="preserve">
-    <value>Project Portal Columns (Construction and Building)</value>
-  </data>
   <data name="SiteFields_ContentType_DisplayName" xml:space="preserve">
     <value>Content Type</value>
   </data>
@@ -2826,6 +2613,12 @@
   </data>
   <data name="SiteFields_GtBAProjectSupportComment_DisplayName" xml:space="preserve">
     <value>Comment, grants</value>
+  </data>
+  <data name="SiteFields_GtBAStakeholderGroup_Description" xml:space="preserve">
+    <value>Which stakeholder group does the stakeholder belong to?</value>
+  </data>
+  <data name="SiteFields_GtBAStakeholderGroup_DisplayName" xml:space="preserve">
+    <value>Stakeholder group</value>
   </data>
   <data name="SiteFields_GtBudgetLastReportDate_Description" xml:space="preserve">
     <value>Enter the date when the last cost reporting was done</value>

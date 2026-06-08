@@ -132,33 +132,5 @@
       <pnp:DataValue FieldName="GtDocumentTemplateLibrary">{resource:Lists_TemplateLibrary_Title}</pnp:DataValue>
       <pnp:DataValue FieldName="FieldConfigurationName">Program</pnp:DataValue>
     </pnp:DataRow>
-    <pnp:DataRow>
-      <pnp:DataValue FieldName="Title">{resource:Lists_TemplateOptions_BuildingProject_Title}</pnp:DataValue>
-      <pnp:DataValue FieldName="Order">150</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectTemplate">1</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectContentType">0x0100805E9E4FEAAB4F0EABAB2600D30DB70CBA</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectStatusContentType">0x010022252E35737A413FB56A1BA53862F6D5BA</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectPhaseTermId">ec5ceb95-7259-4282-811f-7c57304be71e</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectColumns">{resource:SiteFields_Project_Group}</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectCustomColumns">{resource:SiteFields_CustomFields_Group}</pnp:DataValue>
-      <pnp:DataValue FieldName="GtDescription">{resource:Lists_TemplateOptions_BuildingProject_Description}</pnp:DataValue>
-      <pnp:DataValue FieldName="IconName">BuildDefinition</pnp:DataValue>
-      <pnp:DataValue FieldName="PpPkgType">Lokal</pnp:DataValue>
-      <pnp:DataValue FieldName="GtDocumentTemplateLibrary">{resource:Lists_TemplateLibrary_Title}</pnp:DataValue>
-    </pnp:DataRow>
-    <pnp:DataRow>
-      <pnp:DataValue FieldName="Title">{resource:Lists_TemplateOptions_ConstructionProject_Title}</pnp:DataValue>
-      <pnp:DataValue FieldName="Order">200</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectTemplate">1</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectContentType">0x0100805E9E4FEAAB4F0EABAB2600D30DB70CBA</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectStatusContentType">0x010022252E35737A413FB56A1BA53862F6D5BA</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectPhaseTermId">cc6cdd18-c7d5-42e1-8d19-a336dd78f3f2</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectColumns">{resource:SiteFields_Project_Group}</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectCustomColumns">{resource:SiteFields_CustomFields_Group}</pnp:DataValue>
-      <pnp:DataValue FieldName="GtDescription">{resource:Lists_TemplateOptions_ConstructionProject_Description}</pnp:DataValue>
-      <pnp:DataValue FieldName="IconName">DeliveryTruck</pnp:DataValue>
-      <pnp:DataValue FieldName="PpPkgType">Lokal</pnp:DataValue>
-      <pnp:DataValue FieldName="GtDocumentTemplateLibrary">{resource:Lists_TemplateLibrary_Title}</pnp:DataValue>
-    </pnp:DataRow>
   </pnp:DataRows>
 </pnp:ListInstance>
