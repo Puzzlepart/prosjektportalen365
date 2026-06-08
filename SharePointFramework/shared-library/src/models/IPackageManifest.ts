@@ -99,6 +99,14 @@ export interface IPackageManifest {
   minPPVersion?: string
   thumbnail?: string
   /**
+   * Relative paths (within the package) to screenshot images bundled in the
+   * `.pppkg` and hosted in the catalog repo, e.g.
+   * `['assets/screenshots/forside.png', 'assets/screenshots/meny.png']`. The
+   * build resolves these to absolute raw URLs in `catalog.json`. Shown as a
+   * navigable carousel (with a full-size lightbox) in the catalog details pane.
+   */
+  screenshots?: string[]
+  /**
    * Fluent UI icon name used as the Maloppsett item's icon (`IconName`) when a
    * template is imported. Falls back to a default when omitted.
    */
@@ -117,6 +125,17 @@ export interface IPackageManifest {
    * risk").
    */
   cloudCompatible?: boolean
+  /**
+   * The package requires **Bestillingsportalen** to be installed for full use
+   * (shown as a dependency tag in the catalog). Absent = not required.
+   */
+  requiresBestillingsportalen?: boolean
+  /**
+   * The package requires **Microsoft Entra** resources (app registrations,
+   * permissions, etc.) to be set up for full use (shown as a dependency tag in
+   * the catalog). Absent = not required.
+   */
+  requiresEntra?: boolean
   provisioning?: {
     /**
      * Relative path to the hub-level sp-js-provisioning schema

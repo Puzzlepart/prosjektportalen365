@@ -96,6 +96,14 @@ declare interface IPortfolioExtensionsStrings {
   CatalogDetailsEmptyText: string
   CatalogContentSummaryTitle: string
   CatalogContentSummaryUnavailable: string
+  CatalogScreenshotsHeading: string
+  CatalogScreenshotCounter: string
+  CatalogScreenshotPrevious: string
+  CatalogScreenshotNext: string
+  CatalogScreenshotZoom: string
+  CatalogScreenshotClose: string
+  CatalogScreenshotAlt: string
+  CatalogScreenshotError: string
   CatalogContentStandardContent: string
   CatalogContentLists: string
   CatalogContentContentTypes: string
@@ -169,6 +177,12 @@ declare interface IPortfolioExtensionsStrings {
   CatalogPreviewCopy: string
   CatalogPreviewCopied: string
   CatalogRequiresVersion: string
+  CatalogRequiresPP: string
+  CatalogRequiresPPTooltip: string
+  CatalogRequiresBestillingsportalen: string
+  CatalogRequiresBestillingsportalenTooltip: string
+  CatalogRequiresEntra: string
+  CatalogRequiresEntraTooltip: string
   CatalogIncompatibleTitle: string
   CatalogIncompatibleText: string
   CatalogBadgeLocal: string

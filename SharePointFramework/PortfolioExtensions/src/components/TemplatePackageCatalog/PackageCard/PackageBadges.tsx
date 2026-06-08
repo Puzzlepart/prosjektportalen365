@@ -2,8 +2,11 @@ import { format } from '@fluentui/react/lib/Utilities'
 import { makeStyles, mergeClasses, Tag, tokens, Tooltip } from '@fluentui/react-components'
 import {
   ArrowSync16Regular,
+  Box16Regular,
   CheckmarkCircle16Regular,
   Cloud16Regular,
+  MountainTrail20Regular,
+  ShieldKeyhole16Regular,
   Warning16Regular
 } from '@fluentui/react-icons'
 import strings from 'PortfolioExtensionsStrings'
@@ -38,6 +41,42 @@ const useStyles = makeStyles({
     borderRightColor: tokens.colorStatusDangerBorder1,
     borderBottomColor: tokens.colorStatusDangerBorder1,
     borderLeftColor: tokens.colorStatusDangerBorder1
+  },
+  // Prosjektportalen brand (logo red #bc3e42), light-tint tag from the brand scale
+  // used by prosjektportalen-web.
+  ppTag: {
+    backgroundColor: '#fbe5e7',
+    color: '#8b1a1f',
+    borderTopColor: '#e57a73',
+    borderRightColor: '#e57a73',
+    borderBottomColor: '#e57a73',
+    borderLeftColor: '#e57a73'
+  },
+  // Bestillingsportalen brand (purple #764ba2), from the brand scale used by
+  // bestillingsportalen-web.
+  bestillingTag: {
+    backgroundColor: '#ebe7f7',
+    color: '#533672',
+    borderTopColor: '#b8a9e0',
+    borderRightColor: '#b8a9e0',
+    borderBottomColor: '#b8a9e0',
+    borderLeftColor: '#b8a9e0'
+  },
+  // Microsoft Entra brand (teal-cyan, ~#00A2AD — close to the Entra ID logo).
+  entraTag: {
+    backgroundColor: '#e2f4f6',
+    color: '#075e66',
+    borderTopColor: '#66c7ce',
+    borderRightColor: '#66c7ce',
+    borderBottomColor: '#66c7ce',
+    borderLeftColor: '#66c7ce'
+  },
+  requirements: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    columnGap: tokens.spacingHorizontalXS,
+    rowGap: tokens.spacingVerticalXS
   }
 })
 
@@ -134,6 +173,70 @@ export const PackageCompatibilityTag: FC<{ package: ICatalogPackage }> = ({ pack
       </Tag>
     </Tooltip>
   )
+}
+
+/**
+ * Brand-colored dependency/compatibility tags for a package: the targeted
+ * Prosjektportalen version (logo red), and whether it needs Bestillingsportalen
+ * (purple) or Microsoft Entra resources (teal) for full use. The PP-version tag
+ * is informational and hidden when the package is incompatible — the red
+ * {@link PackageCompatibilityTag} covers that case to avoid showing the version
+ * twice.
+ */
+export const PackageRequirementTags: FC<{ package: ICatalogPackage }> = ({ package: pkg }) => {
+  const styles = useStyles()
+  const { isSupported } = useCatalogContext()
+  const tags: React.ReactNode[] = []
+
+  if (pkg.minPPVersion && isSupported(pkg)) {
+    tags.push(
+      <Tooltip key='pp' content={strings.CatalogRequiresPPTooltip} relationship='description'>
+        <Tag
+          appearance='filled'
+          size='small'
+          className={mergeClasses(styles.badge, styles.ppTag)}
+          media={<Box16Regular />}
+        >
+          {format(strings.CatalogRequiresPP, pkg.minPPVersion)}
+        </Tag>
+      </Tooltip>
+    )
+  }
+  if (pkg.requiresBestillingsportalen) {
+    tags.push(
+      <Tooltip
+        key='bestilling'
+        content={strings.CatalogRequiresBestillingsportalenTooltip}
+        relationship='description'
+      >
+        <Tag
+          appearance='filled'
+          size='small'
+          className={mergeClasses(styles.badge, styles.bestillingTag)}
+          media={<MountainTrail20Regular />}
+        >
+          {strings.CatalogRequiresBestillingsportalen}
+        </Tag>
+      </Tooltip>
+    )
+  }
+  if (pkg.requiresEntra) {
+    tags.push(
+      <Tooltip key='entra' content={strings.CatalogRequiresEntraTooltip} relationship='description'>
+        <Tag
+          appearance='filled'
+          size='small'
+          className={mergeClasses(styles.badge, styles.entraTag)}
+          media={<ShieldKeyhole16Regular />}
+        >
+          {strings.CatalogRequiresEntra}
+        </Tag>
+      </Tooltip>
+    )
+  }
+
+  if (tags.length === 0) return null
+  return <div className={styles.requirements}>{tags}</div>
 }
 
 /**

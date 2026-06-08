@@ -61,6 +61,13 @@ export interface ICatalogPackage {
   thumbnail?: string
 
   /**
+   * Absolute URLs (GitHub raw) to screenshot images, shown as a navigable
+   * carousel with a full-size lightbox in the details pane. Resolved by the
+   * hosting build from the manifest's relative `screenshots` paths.
+   */
+  screenshots?: string[]
+
+  /**
    * Absolute URL to the `.pppkg` (GitHub release asset).
    */
   downloadUrl: string
@@ -87,4 +94,16 @@ export interface ICatalogPackage {
    * it as a skymal warns "at own risk". Absent = treated as `true`.
    */
   cloudCompatible?: boolean
+
+  /**
+   * The package requires Bestillingsportalen for full use — shown as a
+   * dependency tag in the catalog. Absent = not required.
+   */
+  requiresBestillingsportalen?: boolean
+
+  /**
+   * The package requires Microsoft Entra resources for full use — shown as a
+   * dependency tag in the catalog. Absent = not required.
+   */
+  requiresEntra?: boolean
 }

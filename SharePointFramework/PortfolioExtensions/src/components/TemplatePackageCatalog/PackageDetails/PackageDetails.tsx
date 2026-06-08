@@ -27,10 +27,11 @@ import { UserMessage } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC, useEffect, useState } from 'react'
 import { PpPkgType } from 'models'
-import { PackageBadges } from '../PackageCard'
+import { PackageBadges, PackageRequirementTags } from '../PackageCard'
 import { useCatalogContext } from '../context'
 import { PackageContentSummary } from './PackageContentSummary'
 import { PackageHistory } from './PackageHistory'
+import { PackageScreenshots } from './PackageScreenshots'
 import styles from './PackageDetails.module.scss'
 
 export const PackageDetails: FC = () => {
@@ -144,6 +145,10 @@ export const PackageDetails: FC = () => {
           ))}
         </TagGroup>
       )}
+
+      <PackageRequirementTags package={pkg} />
+
+      <PackageScreenshots screenshots={pkg.screenshots} />
 
       <PackageContentSummary package={pkg} />
 

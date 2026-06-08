@@ -106,7 +106,7 @@ dependencies:
   shade-blend-color: 1.0.0
   smoothscroll-polyfill: 0.4.4
   sp-entityportal-service: 2.3.0
-  sp-js-provisioning: 1.3.9_5bb3879ba087c0ef402ac2f0f80f9922
+  sp-js-provisioning: 1.3.10_5bb3879ba087c0ef402ac2f0f80f9922
   spfx-jsom: 0.6.6_5bb3879ba087c0ef402ac2f0f80f9922
   ts-morph: 25.0.1
   tslib: 2.3.1
@@ -24079,7 +24079,7 @@ packages:
       '@types/react-dom': '*'
     resolution:
       integrity: sha512-wCHVP4teS9KIBAgSl9YubERzQl5ZFScccyVZmMCBkPsOf/zLp9wPe5OU2VMJue0IYbDqtiWLptD59AwItCFhsA==
-  /sp-js-provisioning/1.3.9_5bb3879ba087c0ef402ac2f0f80f9922:
+  /sp-js-provisioning/1.3.11_5bb3879ba087c0ef402ac2f0f80f9922:
     dependencies:
       '@pnp/core': 3.17.0
       '@pnp/logging': 3.17.0
@@ -24094,7 +24094,7 @@ packages:
       '@types/react': '*'
       '@types/react-dom': '*'
     resolution:
-      integrity: sha512-38Yflqw/Fs36/sa3JEouZcA54IZzn8/oSYtrTt3hDUQPqR1cFIm0nWXSM07bnPp+f6dj84VlmfSBf8v3NiNNJQ==
+      integrity: sha512-86Zw1tooUuHb01MVy24yb5cTYs0U1iZE8hm66KdGD3E8wlT5T2myNOhNkierIFkWsnU5GsVa/zyypWGGiiZ3tw==
   /space-separated-tokens/2.0.2:
     dev: false
     resolution:
@@ -26889,7 +26889,7 @@ packages:
       react-markdown: 8.0.7_4865287ef69aa4f3fc3f709d3560286e
       rehype-raw: 6.1.1
       sp-entityportal-service: 2.3.0
-      sp-js-provisioning: 1.3.10_5bb3879ba087c0ef402ac2f0f80f9922
+      sp-js-provisioning: 1.3.11_5bb3879ba087c0ef402ac2f0f80f9922
       tslib: 2.3.1
       typescript: 4.5.5
       underscore: 1.13.8
@@ -26897,7 +26897,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-portfolioextensions'
     resolution:
-      integrity: sha512-eGDluV735ejmSjh/slKxZ/wJMu+QA2siznfpYTrc6AV6BYgaPCXafiR2tS54NP/KdMVj3nHIKY4TPqwkzRIO7g==
+      integrity: sha512-dU69klsuy/Dja90aeGBaI2o3l0ajDxlXnOtkCEZ20dUe3mk+iLa4QDZYdr2OofMVg0pANGH9Qm8bNy4iqiHh3A==
       tarball: file:projects/pp365-portfolioextensions.tgz
     version: 0.0.0
   file:projects/pp365-portfoliowebparts.tgz_@pnp+odata@2.15.0:
@@ -27112,6 +27112,7 @@ packages:
       eslint-plugin-unused-imports: 2.0.0_2fd626d7c0aba593d41fbdd5d99bd644
       find: 0.3.0
       gulp: 4.0.2
+      jszip: 3.10.1
       livereload: 0.9.3
       lodash: 4.17.23
       msgraph-helper: 0.8.3_9c907a7ccd27a2e2d0ee9de5366482d1
@@ -27123,7 +27124,7 @@ packages:
       react-markdown: 8.0.7_4865287ef69aa4f3fc3f709d3560286e
       rehype-raw: 6.1.1
       sp-entityportal-service: 2.3.0
-      sp-js-provisioning: 1.3.10_5bb3879ba087c0ef402ac2f0f80f9922
+      sp-js-provisioning: 1.3.11_5bb3879ba087c0ef402ac2f0f80f9922
       spfx-jsom: 0.6.6_5bb3879ba087c0ef402ac2f0f80f9922
       tslib: 2.3.1
       typescript: 4.5.5
@@ -27134,7 +27135,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectextensions'
     resolution:
-      integrity: sha512-rL9CcBNvuILniGYGy5K3gtJNbM5Xy+Ovji7LIum2ODpjF7FEPGEAerLbbmJUvaT+Gz4d7IiCnwGS1FHFiZc+LQ==
+      integrity: sha512-7gcH1tXi6qxeSmbTyTXLbjXBV5Gt1TaUlxX9HrK2YJCeeN0PXguDXU9k5j933VjYqlPu+bstS9gBZCLfjizAXA==
       tarball: file:projects/pp365-projectextensions.tgz
     version: 0.0.0
   file:projects/pp365-projectwebparts.tgz:
@@ -27269,6 +27270,7 @@ packages:
       eslint-plugin-unused-imports: 2.0.0_2fd626d7c0aba593d41fbdd5d99bd644
       file-saver: 2.0.5
       gulp: 4.0.2
+      jszip: 3.10.1
       lodash: 4.17.23
       moment: 2.29.4
       prettier: 2.7.1
@@ -27280,7 +27282,7 @@ packages:
       rehype-raw: 6.1.1
       shade-blend-color: 1.0.0
       sp-entityportal-service: 2.3.0
-      sp-js-provisioning: 1.3.10_5bb3879ba087c0ef402ac2f0f80f9922
+      sp-js-provisioning: 1.3.11_5bb3879ba087c0ef402ac2f0f80f9922
       spfx-jsom: 0.6.6_5bb3879ba087c0ef402ac2f0f80f9922
       tslib: 2.3.1
       typescript: 4.5.5
@@ -27293,7 +27295,7 @@ packages:
     peerDependencies:
       interactjs: '*'
     resolution:
-      integrity: sha512-1MLa1CQFlz3txdc3pl4UUcAKpbyGp4jRuDDcH9lulvO7YY1YrppAHgTTfbrsvRMlaTZk2xFV30QzlDOFJqUB7A==
+      integrity: sha512-8Tt2xjEhj8fGzpDCKPcWhvxe3p1jcrcuds/YM92nvvAV7i6Ge0Dfg3NoqwrxUaSaf1OtR0ZO8e9x2p4U/h2wWg==
       tarball: file:projects/pp365-shared-library.tgz
     version: 0.0.0
   file:projects/pp365-spfx-tasks.tgz:
@@ -27435,7 +27437,7 @@ specifiers:
   shade-blend-color: ~1.0.0
   smoothscroll-polyfill: ~0.4.4
   sp-entityportal-service: 2.3.0
-  sp-js-provisioning: 1.3.9
+  sp-js-provisioning: 1.3.10
   spfx-jsom: 0.6.6
   ts-morph: 25.0.1
   tslib: 2.3.1
