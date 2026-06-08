@@ -156,6 +156,8 @@ define([], function () {
       '**{0}** er en skymal. Malpakken lastes ned og settes opp automatisk når du fortsetter – ingenting lagres på hub-området.',
     CloudTemplateResolvingMessage: 'Laster ned og leser skymal…',
     CloudTemplateResolveErrorMessage: 'Kunne ikke laste ned skymalen. {0}',
+    CloudTemplateNotCompatibleWarning:
+      '**{0}** krever innhold på hub-området (f.eks. en innholdstype knyttet til Prosjekter-listen) som ikke kan settes opp fra en skymal. Tillegg og listeinnhold blir lagt til, men hub-innholdet hoppes over. Fortsett på eget ansvar.',
     TemplateConfigConjunction: ' og ',
     DataGridSelectAllLabel: 'Velg alle',
     PlannerMemberWarningMessage: 'Du må være medlem av Microsoft 365 gruppa for å kunne konfigurere Planner. Vennligst legg deg selv til som medlem eller spør en administrator og prøv deretter igjen.',

@@ -20,6 +20,7 @@ export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
     isResolvingCloudTemplate,
     cloudTemplateError,
     cloudTemplateMessage,
+    cloudIncompatibleMessage,
     onModeChanged,
     onTemplateSelect,
     onClearTemplate,
@@ -90,9 +91,10 @@ export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
       {showPlannerWarning && (
         <UserMessage text={strings.PlannerMemberWarningMessage} intent='warning' />
       )}
-      {isCloudTemplate && !cloudTemplateError && (
+      {isCloudTemplate && !cloudTemplateError && !cloudIncompatibleMessage && (
         <UserMessage text={cloudTemplateMessage} intent='info' />
       )}
+      {cloudIncompatibleMessage && <UserMessage text={cloudIncompatibleMessage} intent='warning' />}
       {isResolvingCloudTemplate && <Spinner size='tiny' label={strings.CloudTemplateResolvingMessage} />}
       {cloudTemplateError && <UserMessage text={cloudTemplateError} intent='error' />}
       {validationMessage && <UserMessage text={validationMessage} intent='info' />}

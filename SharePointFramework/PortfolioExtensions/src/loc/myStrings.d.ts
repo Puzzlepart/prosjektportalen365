@@ -177,6 +177,9 @@ declare interface IPortfolioExtensionsStrings {
   CatalogReplaceConfirmTitle: string
   CatalogReplaceConfirmText: string
   CatalogReplaceConfirmButton: string
+  CatalogPublishCloudWarningTitle: string
+  CatalogPublishCloudWarningText: string
+  CatalogPublishCloudWarningConfirm: string
   CatalogStepCheckCompatibility: string
   CatalogStepCheckCompatibilityDetail: string
   CatalogImportCancelled: string

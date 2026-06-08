@@ -105,6 +105,18 @@ export interface IPackageManifest {
   icon?: string
   tags?: string[]
   type: PackageType
+  /**
+   * Whether this package can run as a **skymal** (cloud template) — i.e. applied
+   * to a project entirely from its `.pppkg` with nothing provisioned to the hub.
+   *
+   * Set to `false` for packages that require hub-side provisioning the cloud
+   * path cannot reproduce (a content type defined on the hub and bound to the
+   * `Prosjekter` list, hub site columns, taxonomy term sets, etc.). Absent =
+   * treated as `true`. When `false`, the catalog warns before publishing as a
+   * skymal and the setup wizard warns on selection — neither blocks ("at own
+   * risk").
+   */
+  cloudCompatible?: boolean
   provisioning?: {
     /**
      * Relative path to the hub-level sp-js-provisioning schema

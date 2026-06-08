@@ -47,6 +47,7 @@ export const PackageDetails: FC = () => {
   } = useCatalogContext()
   const [imageError, setImageError] = useState(false)
   const [confirmReplace, setConfirmReplace] = useState(false)
+  const [confirmCloud, setConfirmCloud] = useState(false)
 
   // PackageDetails is a single reused instance, so reset the broken-image flag
   // when a different package is selected — otherwise one failed thumbnail would
@@ -199,7 +200,9 @@ export const PackageDetails: FC = () => {
             <Button
               appearance='secondary'
               icon={<Cloud24Regular />}
-              onClick={() => publishCentral(pkg)}
+              onClick={() =>
+                pkg.cloudCompatible === false ? setConfirmCloud(true) : publishCentral(pkg)
+              }
             >
               {strings.CatalogActionPublishCentral}
             </Button>
@@ -242,6 +245,36 @@ export const PackageDetails: FC = () => {
                 }}
               >
                 {strings.CatalogReplaceConfirmButton}
+              </Button>
+            </DialogActions>
+          </DialogBody>
+        </DialogSurface>
+      </Dialog>
+
+      <Dialog
+        open={confirmCloud}
+        onOpenChange={(_, data) => {
+          if (!data.open) setConfirmCloud(false)
+        }}
+      >
+        <DialogSurface>
+          <DialogBody>
+            <DialogTitle>{strings.CatalogPublishCloudWarningTitle}</DialogTitle>
+            <DialogContent>
+              {format(strings.CatalogPublishCloudWarningText, pkg.name)}
+            </DialogContent>
+            <DialogActions>
+              <Button appearance='secondary' onClick={() => setConfirmCloud(false)}>
+                {strings.CancelLabel}
+              </Button>
+              <Button
+                appearance='primary'
+                onClick={() => {
+                  setConfirmCloud(false)
+                  void publishCentral(pkg)
+                }}
+              >
+                {strings.CatalogPublishCloudWarningConfirm}
               </Button>
             </DialogActions>
           </DialogBody>

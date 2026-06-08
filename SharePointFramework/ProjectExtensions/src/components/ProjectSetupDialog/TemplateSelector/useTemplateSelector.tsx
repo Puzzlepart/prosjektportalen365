@@ -75,6 +75,14 @@ export function useTemplateSelector() {
   const cloudTemplateMessage = isCloudTemplate
     ? format(strings.CloudTemplateInfoMessage, selectedTemplate?.text)
     : undefined
+  // "At own risk": the resolved package declares it needs hub-side provisioning
+  // the cloud path can't reproduce. Warn, don't block (extensions + list content
+  // still apply; hub-only parts are skipped).
+  const cloudIncompatibleMessage =
+    isCloudTemplate &&
+    context.state.resolvedCloudTemplate?.package?.manifest?.cloudCompatible === false
+      ? format(strings.CloudTemplateNotCompatibleWarning, selectedTemplate?.text)
+      : undefined
 
   useEffect(() => {
     if (!selectedTemplate?.isCloudTemplate) return
@@ -136,6 +144,7 @@ export function useTemplateSelector() {
     isResolvingCloudTemplate,
     cloudTemplateError,
     cloudTemplateMessage,
+    cloudIncompatibleMessage,
     onModeChanged,
     onTemplateSelect,
     onClearTemplate,

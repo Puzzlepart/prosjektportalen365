@@ -157,6 +157,7 @@ declare interface IProjectExtensionsStrings {
   CloudTemplateInfoMessage: string
   CloudTemplateResolvingMessage: string
   CloudTemplateResolveErrorMessage: string
+  CloudTemplateNotCompatibleWarning: string
   TemplateConfigConjunction: string
   DataGridSelectAllLabel: string
   PlannerMemberWarningMessage: string
