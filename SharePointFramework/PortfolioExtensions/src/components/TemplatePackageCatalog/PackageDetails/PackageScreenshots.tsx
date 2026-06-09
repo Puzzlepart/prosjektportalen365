@@ -227,7 +227,15 @@ export const PackageScreenshots: FC<{ screenshots?: string[] }> = ({ screenshots
       )}
 
       <Dialog open={lightboxOpen} onOpenChange={(_, data) => setLightboxOpen(data.open)}>
-        <DialogSurface className={styles.lightboxSurface}>
+        <DialogSurface
+          className={styles.lightboxSurface}
+          onKeyDown={(e) => {
+            // Arrow-key navigation in the lightbox (Escape closes it via Dialog).
+            if (count < 2) return
+            if (e.key === 'ArrowLeft') go(-1)
+            else if (e.key === 'ArrowRight') go(1)
+          }}
+        >
           <DialogBody className={styles.lightboxBody}>
             <div className={styles.lightboxBar}>
               <Text size={200} className={styles.counter}>

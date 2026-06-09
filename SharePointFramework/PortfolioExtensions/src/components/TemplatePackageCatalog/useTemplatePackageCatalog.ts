@@ -193,7 +193,7 @@ export function useTemplatePackageCatalog(
   }
 
   const publishCentral = async (pkg: ICatalogPackage): Promise<void> => {
-    setState({ notification: undefined })
+    setState({ notification: undefined, busyAction: 'publish' })
     try {
       // A skymal's content types are real hub dependencies: provision them (and
       // their Prosjekter/Prosjektstatus bindings) to the hub now, in this admin
@@ -206,6 +206,8 @@ export function useTemplatePackageCatalog(
       setState({ notification: { intent: 'success', text: strings.CatalogPublishSuccessText } })
     } catch (error) {
       setState({ notification: { intent: 'error', text: error?.message } })
+    } finally {
+      setState({ busyAction: undefined })
     }
   }
 
@@ -219,12 +221,15 @@ export function useTemplatePackageCatalog(
   const removePackage = async (pkg: ICatalogPackage): Promise<void> => {
     const ref = crossRefFor(pkg.id)
     if (!ref) return
+    setState({ notification: undefined, busyAction: 'remove' })
     try {
       await TemplateOptionsService.remove(ref.itemId)
       await refreshCrossRef()
       setState({ notification: { intent: 'success', text: strings.CatalogRemoveSuccessText } })
     } catch (error) {
       setState({ notification: { intent: 'error', text: error?.message } })
+    } finally {
+      setState({ busyAction: undefined })
     }
   }
 

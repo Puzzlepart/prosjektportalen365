@@ -159,6 +159,9 @@ declare interface IPortfolioExtensionsStrings {
   CatalogActionUpdateTooltip: string
   CatalogActionPublishCentralTooltip: string
   CatalogActionRemoveTooltip: string
+  CatalogRemoveConfirmTitle: string
+  CatalogRemoveConfirmText: string
+  CatalogRemoveConfirmButton: string
   CatalogTagFilterTooltip: string
   CatalogContentCountTooltip: string
   CatalogStepStatusRunning: string

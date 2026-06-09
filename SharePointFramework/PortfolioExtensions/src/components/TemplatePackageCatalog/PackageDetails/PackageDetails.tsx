@@ -12,6 +12,7 @@ import {
   DialogTitle,
   InteractionTag,
   InteractionTagPrimary,
+  Spinner,
   TagGroup,
   Text,
   Tooltip
@@ -49,6 +50,7 @@ export const PackageDetails: FC = () => {
   const [imageError, setImageError] = useState(false)
   const [confirmReplace, setConfirmReplace] = useState(false)
   const [confirmCloud, setConfirmCloud] = useState(false)
+  const [confirmRemove, setConfirmRemove] = useState(false)
 
   // PackageDetails is a single reused instance, so reset the broken-image flag
   // when a different package is selected — otherwise one failed thumbnail would
@@ -185,7 +187,7 @@ export const PackageDetails: FC = () => {
         >
           <Button
             appearance='primary'
-            disabled={!supported}
+            disabled={!supported || !!state.busyAction}
             icon={isExtension ? <PuzzlePiece24Regular /> : <ArrowDownload24Regular />}
             onClick={onPrimaryAction}
           >
@@ -204,7 +206,8 @@ export const PackageDetails: FC = () => {
           <Tooltip content={strings.CatalogActionPublishCentralTooltip} relationship='description'>
             <Button
               appearance='secondary'
-              icon={<Cloud24Regular />}
+              disabled={!!state.busyAction}
+              icon={state.busyAction === 'publish' ? <Spinner size='tiny' /> : <Cloud24Regular />}
               onClick={() =>
                 pkg.cloudCompatible === false ? setConfirmCloud(true) : publishCentral(pkg)
               }
@@ -217,8 +220,9 @@ export const PackageDetails: FC = () => {
           <Tooltip content={strings.CatalogActionRemoveTooltip} relationship='description'>
             <Button
               appearance='subtle'
-              icon={<Delete24Regular />}
-              onClick={() => removePackage(pkg)}
+              disabled={!!state.busyAction}
+              icon={state.busyAction === 'remove' ? <Spinner size='tiny' /> : <Delete24Regular />}
+              onClick={() => setConfirmRemove(true)}
             >
               {strings.CatalogActionRemove}
             </Button>
@@ -280,6 +284,34 @@ export const PackageDetails: FC = () => {
                 }}
               >
                 {strings.CatalogPublishCloudWarningConfirm}
+              </Button>
+            </DialogActions>
+          </DialogBody>
+        </DialogSurface>
+      </Dialog>
+
+      <Dialog
+        open={confirmRemove}
+        onOpenChange={(_, data) => {
+          if (!data.open) setConfirmRemove(false)
+        }}
+      >
+        <DialogSurface>
+          <DialogBody>
+            <DialogTitle>{strings.CatalogRemoveConfirmTitle}</DialogTitle>
+            <DialogContent>{format(strings.CatalogRemoveConfirmText, pkg.name)}</DialogContent>
+            <DialogActions>
+              <Button appearance='secondary' onClick={() => setConfirmRemove(false)}>
+                {strings.CancelLabel}
+              </Button>
+              <Button
+                appearance='primary'
+                onClick={() => {
+                  setConfirmRemove(false)
+                  void removePackage(pkg)
+                }}
+              >
+                {strings.CatalogRemoveConfirmButton}
               </Button>
             </DialogActions>
           </DialogBody>

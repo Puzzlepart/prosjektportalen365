@@ -160,6 +160,10 @@ define([], function () {
     CatalogActionUpdateTooltip: 'Hent og installer nyeste versjon',
     CatalogActionPublishCentralTooltip: 'Registrer som skymal uten lokal provisjonering',
     CatalogActionRemoveTooltip: 'Fjern denne malpakken fra Maloppsett',
+    CatalogRemoveConfirmTitle: 'Fjerne malen?',
+    CatalogRemoveConfirmText:
+      'Vil du fjerne «{0}» fra Maloppsett? Malen blir borte fra Oppsettveiviseren. Innhold som allerede er provisjonert på hub-området berøres ikke, og du kan legge malen til igjen fra katalogen senere.',
+    CatalogRemoveConfirmButton: 'Fjern',
     CatalogTagFilterTooltip: 'Vis alle med «{0}»',
     CatalogContentCountTooltip: '{0} element(er)',
     CatalogStepStatusRunning: 'Pågår',

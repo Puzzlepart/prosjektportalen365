@@ -164,6 +164,10 @@ define([], function () {
     CatalogActionUpdateTooltip: 'Fetch and install the latest version',
     CatalogActionPublishCentralTooltip: 'Register as a cloud template without local provisioning',
     CatalogActionRemoveTooltip: 'Remove this template package from Template Options',
+    CatalogRemoveConfirmTitle: 'Remove the template?',
+    CatalogRemoveConfirmText:
+      'Remove "{0}" from Template Options? It will disappear from the setup wizard. Content already provisioned on the hub is left untouched, and you can add the template again from the catalog later.',
+    CatalogRemoveConfirmButton: 'Remove',
     CatalogTagFilterTooltip: 'Show all tagged "{0}"',
     CatalogContentCountTooltip: '{0} item(s)',
     CatalogStepStatusRunning: 'In progress',
