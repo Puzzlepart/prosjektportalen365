@@ -34,6 +34,30 @@
   color: var(--colorNeutralForeground3);
 }
 
+.stats {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacingHorizontalL);
+  margin-top: var(--spacingVerticalXXS);
+}
+
+.stat {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacingHorizontalXS);
+}
+
+.statIcon {
+  display: flex;
+  font-size: 16px;
+  color: var(--colorNeutralForeground3);
+}
+
+.statText {
+  color: var(--colorNeutralForeground2);
+}
+
 .description {
   color: var(--colorNeutralForeground1);
   white-space: pre-line;

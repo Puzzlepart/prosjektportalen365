@@ -240,5 +240,11 @@ define([], function () {
     CatalogConflictExtension: 'The project extension "{0}" already exists and will be overwritten.',
     CatalogConflictTaxonomy:
       'The term set "{0}" already exists in the term store with the name "{1}". The existing one is kept.',
+    CatalogRatingSummary: '{0} of 5 ({1} ratings)',
+    CatalogRatingTooltip: 'Average user rating',
+    CatalogDownloads: '{0} downloads',
+    CatalogDownloadsTooltip: 'Number of downloads',
+    CatalogReviewsHeading: 'Reviews',
+    CatalogReviewsDemoNote: 'Example data',
   }
 })

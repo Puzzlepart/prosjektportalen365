@@ -12,12 +12,14 @@ import {
   DialogTitle,
   InteractionTag,
   InteractionTagPrimary,
+  RatingDisplay,
   Spinner,
   TagGroup,
   Text,
   Tooltip
 } from '@fluentui/react-components'
 import {
+  ArrowDownload16Regular,
   ArrowDownload24Regular,
   ArrowLeft24Regular,
   Cloud24Regular,
@@ -32,7 +34,9 @@ import { PackageBadges, PackageRequirementTags } from '../PackageCard'
 import { useCatalogContext } from '../context'
 import { PackageContentSummary } from './PackageContentSummary'
 import { PackageHistory } from './PackageHistory'
+import { PackageReviews } from './PackageReviews'
 import { PackageScreenshots } from './PackageScreenshots'
+import { getPackageStats } from '../packageStats'
 import styles from './PackageDetails.module.scss'
 
 export const PackageDetails: FC = () => {
@@ -76,6 +80,7 @@ export const PackageDetails: FC = () => {
 
   const pkg = selectedPackage
   const ref = crossRefFor(pkg.id)
+  const stats = getPackageStats(pkg.id)
   const isCentral = ref?.packageType === PpPkgType.Sentral
   const updateAvailable = !!ref?.updateAvailable
   // Extensions go into the Prosjekttillegg library, not Maloppsett, so they
@@ -129,6 +134,25 @@ export const PackageDetails: FC = () => {
 
       <Caption1 className={styles.meta}>{meta}</Caption1>
 
+      <div className={styles.stats}>
+        <Tooltip content={strings.CatalogRatingTooltip} relationship='description'>
+          <span className={styles.stat}>
+            <RatingDisplay value={stats.rating} color='marigold' size='small' />
+            <Text size={200} className={styles.statText}>
+              {format(strings.CatalogRatingSummary, stats.rating.toFixed(1), stats.ratingCount)}
+            </Text>
+          </span>
+        </Tooltip>
+        <Tooltip content={strings.CatalogDownloadsTooltip} relationship='description'>
+          <span className={styles.stat}>
+            <ArrowDownload16Regular className={styles.statIcon} />
+            <Text size={200} className={styles.statText}>
+              {format(strings.CatalogDownloads, stats.downloads.toLocaleString('nb-NO'))}
+            </Text>
+          </span>
+        </Tooltip>
+      </div>
+
       {pkg.description && <Text className={styles.description}>{pkg.description}</Text>}
 
       {(pkg.tags?.length ?? 0) > 0 && (
@@ -155,6 +179,8 @@ export const PackageDetails: FC = () => {
       <PackageContentSummary package={pkg} />
 
       <PackageHistory changelogUrl={pkg.changelogUrl} />
+
+      <PackageReviews packageId={pkg.id} />
 
       {isExtension && <UserMessage intent='info' text={strings.CatalogExtensionInfo} />}
 

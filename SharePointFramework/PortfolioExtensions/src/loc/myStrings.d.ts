@@ -217,6 +217,12 @@ declare interface IPortfolioExtensionsStrings {
   CatalogConflictList: string
   CatalogConflictExtension: string
   CatalogConflictTaxonomy: string
+  CatalogRatingSummary: string
+  CatalogRatingTooltip: string
+  CatalogDownloads: string
+  CatalogDownloadsTooltip: string
+  CatalogReviewsHeading: string
+  CatalogReviewsDemoNote: string
 }
 
 declare module 'PortfolioExtensionsStrings' {

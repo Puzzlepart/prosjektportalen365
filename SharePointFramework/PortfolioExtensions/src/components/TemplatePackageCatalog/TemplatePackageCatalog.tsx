@@ -66,7 +66,7 @@ export const TemplatePackageCatalog: FC<ITemplatePackageCatalogProps> = (props) 
                 {strings.CatalogDrawerTitle}
               </DrawerHeaderTitle>
             </DrawerHeader>
-            <DrawerBody>
+            <DrawerBody className={styles.drawerBody}>
               <p className={styles.subtitle}>{strings.CatalogSubtitle}</p>
 
               {state.notification && (

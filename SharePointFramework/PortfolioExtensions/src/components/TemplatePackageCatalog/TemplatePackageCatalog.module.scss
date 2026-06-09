@@ -2,16 +2,28 @@
   --fui-Drawer--size: min(1040px, 100vw);
 }
 
+// The DrawerBody is the single scroll boundary. It is a flex column that fills
+// the drawer height; only the inner master/detail panes scroll. Without this the
+// DrawerBody's own `overflow-y: auto` produces a second (outer) scrollbar next to
+// the inner ones.
+.drawerBody {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
 .subtitle {
   margin: 0 0 var(--spacingVerticalM) 0;
   color: var(--colorNeutralForeground3);
+  flex-shrink: 0;
 }
 
 .body {
   display: flex;
   flex-direction: column;
   gap: var(--spacingVerticalM);
-  height: 100%;
+  flex: 1;
   min-height: 0;
 }
 
@@ -38,6 +50,7 @@
 
 .footer {
   padding-top: var(--spacingVerticalS);
+  flex-shrink: 0;
 }
 
 .loading {
@@ -48,6 +61,7 @@
 
 .banner {
   margin-bottom: var(--spacingVerticalM);
+  flex-shrink: 0;
 }
 
 @media (max-width: 720px) {

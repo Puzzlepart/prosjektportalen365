@@ -82,8 +82,23 @@
   padding: 0 var(--spacingHorizontalM);
 }
 
+.stats {
+  display: flex;
+  align-items: center;
+  gap: var(--spacingHorizontalM);
+  padding: 0 var(--spacingHorizontalM);
+  margin-top: var(--spacingVerticalXS);
+  color: var(--colorNeutralForeground3);
+}
+
+.stat {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacingHorizontalXXS);
+}
+
 .footer {
   display: block;
   color: var(--colorNeutralForeground3);
-  padding: 0 var(--spacingHorizontalM) var(--spacingVerticalM);
+  padding: var(--spacingVerticalXS) var(--spacingHorizontalM) var(--spacingVerticalM);
 }
