@@ -9,7 +9,9 @@
   "requiresCustomScript": false,
   "items": {
     "OPEN_TEMPLATE_PACKAGE_CATALOG": {
-      "title": { "default": "Malpakkekatalog" },
+      "title": {
+        "default": "Malpakkekatalog"
+      },
       "iconImageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",
       "type": "command"
     }

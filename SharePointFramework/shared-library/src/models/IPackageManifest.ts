@@ -136,6 +136,12 @@ export interface IPackageManifest {
    * the catalog). Absent = not required.
    */
   requiresEntra?: boolean
+  /**
+   * Locales the package is available in, as BCP-47 codes (e.g. `nb-NO`,
+   * `en-US`). Shown as an availability tag in the catalog. Absent = treated as
+   * Norwegian only.
+   */
+  languages?: string[]
   provisioning?: {
     /**
      * Relative path to the hub-level sp-js-provisioning schema

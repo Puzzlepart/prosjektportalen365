@@ -242,5 +242,8 @@ define([], function () {
     CatalogDownloadsTooltip: 'Antall nedlastinger',
     CatalogReviewsHeading: 'Vurderinger',
     CatalogReviewsDemoNote: 'Eksempeldata',
+    CatalogLanguagesTooltip: 'Tilgjengelige språk',
+    CatalogLanguageNorwegian: 'Norsk',
+    CatalogLanguageEnglish: 'Engelsk',
   }
 })

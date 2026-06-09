@@ -106,4 +106,11 @@ export interface ICatalogPackage {
    * dependency tag in the catalog. Absent = not required.
    */
   requiresEntra?: boolean
+
+  /**
+   * Locales the package is available in, as BCP-47 codes (e.g. `nb-NO`,
+   * `en-US`). Shown as an availability tag in the details pane. Absent =
+   * Norwegian only.
+   */
+  languages?: string[]
 }

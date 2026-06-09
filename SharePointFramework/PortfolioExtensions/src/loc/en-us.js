@@ -246,5 +246,8 @@ define([], function () {
     CatalogDownloadsTooltip: 'Number of downloads',
     CatalogReviewsHeading: 'Reviews',
     CatalogReviewsDemoNote: 'Example data',
+    CatalogLanguagesTooltip: 'Available languages',
+    CatalogLanguageNorwegian: 'Norwegian',
+    CatalogLanguageEnglish: 'English',
   }
 })

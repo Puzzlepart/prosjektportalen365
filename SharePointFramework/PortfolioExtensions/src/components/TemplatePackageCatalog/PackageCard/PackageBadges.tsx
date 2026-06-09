@@ -5,6 +5,7 @@ import {
   Box16Regular,
   CheckmarkCircle16Regular,
   Cloud16Regular,
+  LocalLanguage16Regular,
   MountainTrail20Regular,
   ShieldKeyhole16Regular,
   Warning16Regular
@@ -70,6 +71,16 @@ const useStyles = makeStyles({
     borderRightColor: '#66c7ce',
     borderBottomColor: '#66c7ce',
     borderLeftColor: '#66c7ce'
+  },
+  // Language/availability tag — neutral, to sit alongside the colored dependency
+  // tags without competing with them.
+  languageTag: {
+    backgroundColor: tokens.colorNeutralBackground3,
+    color: tokens.colorNeutralForeground2,
+    borderTopColor: tokens.colorNeutralStroke2,
+    borderRightColor: tokens.colorNeutralStroke2,
+    borderBottomColor: tokens.colorNeutralStroke2,
+    borderLeftColor: tokens.colorNeutralStroke2
   },
   requirements: {
     display: 'flex',
@@ -183,6 +194,21 @@ export const PackageCompatibilityTag: FC<{ package: ICatalogPackage }> = ({ pack
  * {@link PackageCompatibilityTag} covers that case to avoid showing the version
  * twice.
  */
+/** Localized display name for a BCP-47 language code (falls back to the code). */
+const languageLabel = (code: string): string => {
+  switch (code.toLowerCase()) {
+    case 'nb-no':
+    case 'nb':
+    case 'no':
+      return strings.CatalogLanguageNorwegian
+    case 'en-us':
+    case 'en':
+      return strings.CatalogLanguageEnglish
+    default:
+      return code
+  }
+}
+
 export const PackageRequirementTags: FC<{ package: ICatalogPackage }> = ({ package: pkg }) => {
   const styles = useStyles()
   const { isSupported } = useCatalogContext()
@@ -230,6 +256,20 @@ export const PackageRequirementTags: FC<{ package: ICatalogPackage }> = ({ packa
           media={<ShieldKeyhole16Regular />}
         >
           {strings.CatalogRequiresEntra}
+        </Tag>
+      </Tooltip>
+    )
+  }
+  if ((pkg.languages?.length ?? 0) > 0) {
+    tags.push(
+      <Tooltip key='lang' content={strings.CatalogLanguagesTooltip} relationship='description'>
+        <Tag
+          appearance='filled'
+          size='small'
+          className={mergeClasses(styles.badge, styles.languageTag)}
+          media={<LocalLanguage16Regular />}
+        >
+          {pkg.languages.map(languageLabel).join(', ')}
         </Tag>
       </Tooltip>
     )

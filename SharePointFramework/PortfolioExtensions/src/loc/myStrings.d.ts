@@ -223,6 +223,9 @@ declare interface IPortfolioExtensionsStrings {
   CatalogDownloadsTooltip: string
   CatalogReviewsHeading: string
   CatalogReviewsDemoNote: string
+  CatalogLanguagesTooltip: string
+  CatalogLanguageNorwegian: string
+  CatalogLanguageEnglish: string
 }
 
 declare module 'PortfolioExtensionsStrings' {
