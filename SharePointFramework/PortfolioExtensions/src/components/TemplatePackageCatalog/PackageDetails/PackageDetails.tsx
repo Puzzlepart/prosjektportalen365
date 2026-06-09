@@ -148,6 +148,14 @@ export const PackageDetails: FC = () => {
         </Tooltip>
       </div>
 
+      {/*
+        TODO: Rating/reviews section is temporarily hidden until real rating data
+        exists (it currently shows mock example data). Re-enable by
+        uncommenting the block below. The Accordion/RatingDisplay/PackageReviews
+        imports are kept for it — note `eslint --fix` would strip them as unused
+        while this stays commented out.
+      */}
+      {/*
       <Accordion collapsible>
         <AccordionItem value='reviews'>
           <AccordionHeader expandIconPosition='end'>
@@ -165,6 +173,7 @@ export const PackageDetails: FC = () => {
           </AccordionPanel>
         </AccordionItem>
       </Accordion>
+      */}
 
       {pkg.description && <Text className={styles.description}>{pkg.description}</Text>}
 
