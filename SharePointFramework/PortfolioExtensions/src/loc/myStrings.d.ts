@@ -145,6 +145,7 @@ declare interface IPortfolioExtensionsStrings {
   CatalogRetryText: string
   CatalogMinVersionError: string
   CatalogPermissionError: string
+  CatalogTaxonomyPermissionBlocked: string
   CatalogCloseTooltip: string
   CatalogFilterTypeTooltip: string
   CatalogFilterCategoryTooltip: string

@@ -146,6 +146,7 @@ define([], function () {
     CatalogRetryText: 'Prøv igjen',
     CatalogMinVersionError: 'Denne malpakken krever Prosjektportalen {0}. Oppgrader Prosjektportalen før du kan hente denne malen.',
     CatalogPermissionError: 'Du har ikke tilgang til å provisjonere til hub-området.',
+    CatalogTaxonomyPermissionBlocked: 'Denne malpakken provisjonerer taksonomi (termsett), som krever skrivetilgang til termlageret. Du har ikke denne tilgangen, så installasjonen ble stoppet for å unngå et delvis resultat.',
     CatalogCloseTooltip: 'Lukk katalogen',
     CatalogFilterTypeTooltip: 'Filtrer på pakketype',
     CatalogFilterCategoryTooltip: 'Filtrer på kategori (utledet fra tagger)',

@@ -150,6 +150,7 @@ define([], function () {
     CatalogRetryText: 'Try again',
     CatalogMinVersionError: 'This template package requires Prosjektportalen {0}. Upgrade Prosjektportalen before importing this template.',
     CatalogPermissionError: 'You do not have permission to provision to the hub site.',
+    CatalogTaxonomyPermissionBlocked: 'This template package provisions taxonomy (term sets), which requires write access to the term store. You do not have that access, so the installation was stopped to avoid a partial result.',
     CatalogCloseTooltip: 'Close the catalog',
     CatalogFilterTypeTooltip: 'Filter by package type',
     CatalogFilterCategoryTooltip: 'Filter by category (derived from tags)',

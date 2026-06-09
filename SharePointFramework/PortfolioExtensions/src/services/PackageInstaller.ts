@@ -166,6 +166,27 @@ export class PackageInstaller {
         featureFlagProvisioning
       })
 
+      // Pre-gate taxonomy: a package that ships taxonomy (term sets) can't be
+      // provisioned without term-store write access. Rather than install a
+      // partial/broken package (its term sets, and anything that depends on
+      // them, would be missing), block the whole import up front when the admin
+      // lacks that access. Packages without taxonomy are unaffected.
+      if (enableTaxonomy && (await PackageInstaller._hasTaxonomy(zip, manifest))) {
+        const hasTermStorePermission = await SPDataAdapter.hasTermStorePermission()
+        if (!hasTermStorePermission) {
+          setStatus(
+            InstallStepKey.ProvisionHub,
+            'error',
+            strings.CatalogTaxonomyPermissionBlocked
+          )
+          progress.status = 'error'
+          progress.error = strings.CatalogTaxonomyPermissionBlocked
+          progress.currentStep = undefined
+          emit()
+          return false
+        }
+      }
+
       setStatus(InstallStepKey.ProvisionHub, 'running')
       await PackageInstaller._provisionHub(zip, manifest, context, enableTaxonomy, report)
       setStatus(InstallStepKey.ProvisionHub, 'done')
@@ -286,6 +307,33 @@ export class PackageInstaller {
       throw new Error(format(strings.CatalogMinVersionError, manifest.minPPVersion))
     }
     return undefined
+  }
+
+  /**
+   * Whether the package's hub template declares taxonomy content (a term group
+   * and/or term sets). Used to pre-gate the import on term-store permission.
+   *
+   * @param zip - The opened package archive
+   * @param manifest - The package manifest
+   */
+  private static async _hasTaxonomy(
+    zip: any,
+    manifest: IPackageManifest
+  ): Promise<boolean> {
+    const hubTemplate = manifest.provisioning?.hubTemplate
+    if (!hubTemplate) return false
+    const file = zip.file(hubTemplate)
+    if (!file) return false
+    try {
+      const schema = JSON.parse(await file.async('string'))
+      const taxonomy = schema?.Taxonomy
+      return !!(
+        taxonomy &&
+        ((taxonomy.TermSets?.length ?? 0) > 0 || taxonomy.TermGroup)
+      )
+    } catch {
+      return false
+    }
   }
 
   private static async _provisionHub(
