@@ -6,18 +6,15 @@ import {
   CardHeader,
   CardPreview,
   mergeClasses,
-  RatingDisplay,
   Text,
   Tooltip
 } from '@fluentui/react-components'
-import { ArrowDownload16Regular } from '@fluentui/react-icons'
 import { formatDate } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC, useState } from 'react'
 import { ICatalogPackage } from 'models'
 import { useCatalogContext } from '../context'
 import { PackageCompatibilityTag, PackageStatusTag, PackageUpdateTag } from './PackageBadges'
-import { getPackageStats } from '../packageStats'
 import styles from './PackageCard.module.scss'
 
 export interface IPackageCardProps {
@@ -29,7 +26,6 @@ export const PackageCard: FC<IPackageCardProps> = ({ package: pkg }) => {
   const [imageError, setImageError] = useState(false)
   const isSelected = state.selectedPackageId === pkg.id
   const showImage = Boolean(pkg.thumbnail) && !imageError
-  const stats = getPackageStats(pkg.id)
 
   const meta = [
     pkg.version ? `v${pkg.version}` : undefined,
@@ -96,15 +92,6 @@ export const PackageCard: FC<IPackageCardProps> = ({ package: pkg }) => {
           {pkg.description}
         </Text>
       )}
-      <div className={styles.stats}>
-        <RatingDisplay compact value={stats.rating} color='marigold' size='small' />
-        <Tooltip content={strings.CatalogDownloadsTooltip} relationship='description'>
-          <span className={styles.stat}>
-            <ArrowDownload16Regular />
-            <Caption1>{stats.downloads.toLocaleString('nb-NO')}</Caption1>
-          </span>
-        </Tooltip>
-      </div>
       <Caption1 className={styles.footer}>{meta}</Caption1>
     </Card>
   )
