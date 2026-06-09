@@ -218,7 +218,7 @@ declare interface IPortfolioExtensionsStrings {
   CatalogConflictExtension: string
   CatalogConflictTaxonomy: string
   CatalogRatingSummary: string
-  CatalogRatingTooltip: string
+  CatalogRatingSummaryOne: string
   CatalogDownloads: string
   CatalogDownloadsTooltip: string
   CatalogReviewsHeading: string

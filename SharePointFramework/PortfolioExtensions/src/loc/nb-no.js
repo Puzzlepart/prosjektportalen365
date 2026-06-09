@@ -237,7 +237,7 @@ define([], function () {
     CatalogConflictTaxonomy:
       'Termsettet «{0}» finnes allerede i termlageret med navnet «{1}». Eksisterende beholdes.',
     CatalogRatingSummary: '{0} av 5 ({1} vurderinger)',
-    CatalogRatingTooltip: 'Gjennomsnittlig vurdering fra brukere',
+    CatalogRatingSummaryOne: '{0} av 5 (1 vurdering)',
     CatalogDownloads: '{0} nedlastinger',
     CatalogDownloadsTooltip: 'Antall nedlastinger',
     CatalogReviewsHeading: 'Vurderinger',

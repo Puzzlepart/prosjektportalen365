@@ -58,6 +58,12 @@
   color: var(--colorNeutralForeground2);
 }
 
+.ratingHeader {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacingHorizontalS);
+}
+
 .description {
   color: var(--colorNeutralForeground1);
   white-space: pre-line;

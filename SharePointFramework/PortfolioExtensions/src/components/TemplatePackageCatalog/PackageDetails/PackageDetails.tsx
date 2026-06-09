@@ -2,6 +2,10 @@ import { format } from '@fluentui/react/lib/Utilities'
 import { Icon } from '@fluentui/react/lib/Icon'
 import { formatDate } from 'pp365-shared-library'
 import {
+  Accordion,
+  AccordionHeader,
+  AccordionItem,
+  AccordionPanel,
   Button,
   Caption1,
   Dialog,
@@ -135,14 +139,6 @@ export const PackageDetails: FC = () => {
       <Caption1 className={styles.meta}>{meta}</Caption1>
 
       <div className={styles.stats}>
-        <Tooltip content={strings.CatalogRatingTooltip} relationship='description'>
-          <span className={styles.stat}>
-            <RatingDisplay value={stats.rating} color='marigold' size='small' />
-            <Text size={200} className={styles.statText}>
-              {format(strings.CatalogRatingSummary, stats.rating.toFixed(1), stats.ratingCount)}
-            </Text>
-          </span>
-        </Tooltip>
         <Tooltip content={strings.CatalogDownloadsTooltip} relationship='description'>
           <span className={styles.stat}>
             <ArrowDownload16Regular className={styles.statIcon} />
@@ -152,6 +148,24 @@ export const PackageDetails: FC = () => {
           </span>
         </Tooltip>
       </div>
+
+      <Accordion collapsible>
+        <AccordionItem value='reviews'>
+          <AccordionHeader expandIconPosition='end'>
+            <span className={styles.ratingHeader}>
+              <RatingDisplay value={stats.rating} color='marigold' size='small' />
+              <Text size={200} className={styles.statText}>
+                {stats.ratingCount === 1
+                  ? format(strings.CatalogRatingSummaryOne, stats.rating.toFixed(1))
+                  : format(strings.CatalogRatingSummary, stats.rating.toFixed(1), stats.ratingCount)}
+              </Text>
+            </span>
+          </AccordionHeader>
+          <AccordionPanel>
+            <PackageReviews packageId={pkg.id} />
+          </AccordionPanel>
+        </AccordionItem>
+      </Accordion>
 
       {pkg.description && <Text className={styles.description}>{pkg.description}</Text>}
 
@@ -179,8 +193,6 @@ export const PackageDetails: FC = () => {
       <PackageContentSummary package={pkg} />
 
       <PackageHistory changelogUrl={pkg.changelogUrl} />
-
-      <PackageReviews packageId={pkg.id} />
 
       {isExtension && <UserMessage intent='info' text={strings.CatalogExtensionInfo} />}
 
