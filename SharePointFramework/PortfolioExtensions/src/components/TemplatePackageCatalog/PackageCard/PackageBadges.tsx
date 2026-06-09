@@ -216,7 +216,11 @@ export const PackageRequirementTags: FC<{ package: ICatalogPackage }> = ({ packa
 
   if (pkg.minPPVersion && isSupported(pkg)) {
     tags.push(
-      <Tooltip key='pp' content={strings.CatalogRequiresPPTooltip} relationship='description'>
+      <Tooltip
+        key='pp'
+        content={format(strings.CatalogRequiresPPTooltip, pkg.minPPVersion)}
+        relationship='description'
+      >
         <Tag
           appearance='filled'
           size='small'

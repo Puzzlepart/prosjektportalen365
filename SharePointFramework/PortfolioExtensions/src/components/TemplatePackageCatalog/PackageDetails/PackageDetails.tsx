@@ -102,8 +102,7 @@ export const PackageDetails: FC = () => {
     pkg.publishedDate
       ? format(strings.CatalogCardPublished, formatDate(pkg.publishedDate))
       : undefined,
-    pkg.author ? format(strings.CatalogCardByAuthor, pkg.author) : undefined,
-    pkg.minPPVersion ? format(strings.CatalogRequiresVersion, pkg.minPPVersion) : undefined
+    pkg.author ? format(strings.CatalogCardByAuthor, pkg.author) : undefined
   ]
     .filter(Boolean)
     .join('  •  ')
