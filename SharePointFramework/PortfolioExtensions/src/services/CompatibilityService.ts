@@ -48,9 +48,10 @@ export class CompatibilityService {
         const existingFields: any[] = needFields
           ? await web.fields.select('Id', 'InternalName', 'StaticName', 'TypeAsString').top(5000)()
           : []
-        const existingCts: any[] = (schema.ContentTypes?.length ?? 0) > 0
-          ? await web.contentTypes.select('StringId', 'Name')()
-          : []
+        const existingCts: any[] =
+          (schema.ContentTypes?.length ?? 0) > 0
+            ? await web.contentTypes.select('StringId', 'Name')()
+            : []
 
         CompatibilityService._checkContentTypes(schema, existingCts, existingFields, conflicts)
         CompatibilityService._checkSiteFields(schema, existingFields, conflicts)
@@ -73,7 +74,10 @@ export class CompatibilityService {
     return { conflicts, hasConflicts: conflicts.length > 0 }
   }
 
-  private static async _readHubSchema(zip: any, manifest: IPackageManifest): Promise<any | undefined> {
+  private static async _readHubSchema(
+    zip: any,
+    manifest: IPackageManifest
+  ): Promise<any | undefined> {
     const hubTemplate = manifest.provisioning?.hubTemplate
     if (!hubTemplate) return undefined
     const file = zip.file(hubTemplate)
@@ -196,9 +200,7 @@ export class CompatibilityService {
     for (const entry of lists) {
       const title: string = entry.Title ?? ''
       const declaredFields = CompatibilityService._listFieldIds(entry)
-      const declaredViews: string[] = (entry.Views ?? [])
-        .map((v: any) => v?.Title)
-        .filter(Boolean)
+      const declaredViews: string[] = (entry.Views ?? []).map((v: any) => v?.Title).filter(Boolean)
       const inspects =
         declaredFields.length > 0 || declaredViews.length > 0 || !!entry.RemoveExistingContentTypes
       if (!inspects || !existingTitles.has(title.toLowerCase())) continue
@@ -261,14 +263,19 @@ export class CompatibilityService {
     return out.filter((f) => f.id)
   }
 
-  private static async _checkTaxonomy(schema: any, conflicts: ICompatibilityConflict[]): Promise<void> {
+  private static async _checkTaxonomy(
+    schema: any,
+    conflicts: ICompatibilityConflict[]
+  ): Promise<void> {
     try {
       const sp: any = SPDataAdapter.sp
       const group = schema.Taxonomy?.TermGroup
       for (const set of schema.Taxonomy?.TermSets ?? []) {
         if (!set?.Id) continue
         try {
-          const existing: any = await sp.termStore.sets.getById(set.Id).select('id', 'localizedNames')()
+          const existing: any = await sp.termStore.sets
+            .getById(set.Id)
+            .select('id', 'localizedNames')()
           const existingName = existing?.localizedNames?.[0]?.name
           if (existingName && set.Name && existingName !== set.Name) {
             conflicts.push({
@@ -333,7 +340,8 @@ export class CompatibilityService {
     )
     if (Array.isArray(next.ContentTypes)) {
       next.ContentTypes = next.ContentTypes.filter(
-        (ct: any) => !ctSkip.has(normCtId(ct.ID)) && !ctFieldRefBlocked.has((ct.Name ?? '').toLowerCase())
+        (ct: any) =>
+          !ctSkip.has(normCtId(ct.ID)) && !ctFieldRefBlocked.has((ct.Name ?? '').toLowerCase())
       )
     }
     const fieldSkipIds = new Set(
@@ -342,7 +350,9 @@ export class CompatibilityService {
         .map((c) => normGuid(c.targetId))
     )
     if (Array.isArray(next.SiteFields)) {
-      next.SiteFields = next.SiteFields.filter((xml: any) => !fieldSkipIds.has(normGuid(attr(String(xml), 'ID'))))
+      next.SiteFields = next.SiteFields.filter(
+        (xml: any) => !fieldSkipIds.has(normGuid(attr(String(xml), 'ID')))
+      )
     }
     const listFieldSkipIds = new Set(
       report.conflicts.filter((c) => c.kind === 'listField').map((c) => normGuid(c.targetId))
@@ -357,7 +367,9 @@ export class CompatibilityService {
           })
         }
         if (Array.isArray(e.FieldRefs)) {
-          e.FieldRefs = e.FieldRefs.filter((r: any) => !listFieldSkipIds.has(normGuid(r?.ID ?? r?.Id)))
+          e.FieldRefs = e.FieldRefs.filter(
+            (r: any) => !listFieldSkipIds.has(normGuid(r?.ID ?? r?.Id))
+          )
         }
         return e
       })

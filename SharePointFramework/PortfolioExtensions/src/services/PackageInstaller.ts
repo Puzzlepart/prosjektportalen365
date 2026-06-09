@@ -328,6 +328,63 @@ export class PackageInstaller {
   }
 
   /**
+   * Provision a skymal's **essential hub dependencies** when it is published as a
+   * cloud template ("Tilgjengeliggjør som skymal", admin context).
+   *
+   * A skymal's content types must exist on the hub and be bound to the Prosjekter
+   * / Prosjektstatus lists so the portfolio recognizes projects created from it.
+   * This applies only that structural subset of the package's `hub-template.json`
+   * to the hub: `SiteFields` + `ContentTypes` + the content-type **bindings** to
+   * existing hub lists. List-content lists (entries carrying `DataRows`) are
+   * project content pulled from the `.pppkg` at setup time, not hub objects, so
+   * they are dropped. Returns the number of content types provisioned.
+   */
+  public static async provisionSkymalHubDependencies(
+    pkg: ICatalogPackage,
+    context: ListViewCommandSetContext
+  ): Promise<number> {
+    const buffer = await PackageInstaller._download(pkg.downloadUrl)
+    const zip = await PackageInstaller._unzip(buffer)
+    const manifest = await PackageInstaller._readManifest(zip)
+    const hubTemplate = manifest.provisioning?.hubTemplate
+    if (!hubTemplate) return 0
+    const file = zip.file(hubTemplate)
+    if (!file) return 0
+    const schema = JSON.parse(await file.async('string'))
+
+    const filtered: Record<string, any> = {}
+    if (schema.SiteFields?.length) filtered.SiteFields = schema.SiteFields
+    if (schema.ContentTypes?.length) filtered.ContentTypes = schema.ContentTypes
+    // Keep only the content-type **binding** entries (the Prosjekter /
+    // Prosjektstatus / Prosjektdata bindings). Drop list-content sources
+    // (`DataRows`) and standalone project lists/document libraries (no bindings) —
+    // those are project content pulled from the .pppkg at setup time, not hub
+    // objects, and must not be created on the hub.
+    const bindingLists = (schema.Lists ?? []).filter(
+      (list: any) =>
+        Array.isArray(list.ContentTypeBindings) &&
+        list.ContentTypeBindings.length > 0 &&
+        !list.DataRows
+    )
+    if (bindingLists.length) filtered.Lists = bindingLists
+
+    if (!filtered.ContentTypes && !filtered.SiteFields) return 0
+
+    const { WebProvisioner } = await import('sp-js-provisioning')
+    const provisioner = new WebProvisioner(SPDataAdapter.portalDataService.web).setup({
+      spfxContext: context,
+      logging: { prefix: '(TemplatePackageCatalog) (Skymal)', activeLogLevel: LogLevel.Info }
+    } as any)
+    await provisioner.applyTemplate(filtered, null, (handler) => {
+      Logger.log({
+        message: `(PackageInstaller) provisionSkymalHubDependencies: applying handler ${handler}`,
+        level: LogLevel.Info
+      })
+    })
+    return (filtered.ContentTypes ?? []).length
+  }
+
+  /**
    * Best-effort: persist the project-level provisioning assets (template,
    * extensions, content) into a folder under the hub Template Library so the
    * setup wizard can use them later. Non-critical — returns false on failure.

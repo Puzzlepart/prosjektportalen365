@@ -57,8 +57,7 @@ export class CopyListData extends BaseTask {
           message: `Processing content config: ${contentConfig.text} (${contentConfig.type})`,
           level: 'info'
         })
-        // Skymal: the rows live in the downloaded .pppkg, not a hub source list.
-        // Apply them straight to the project's destination list via DataRows.
+        // Cloud (skymal) content: rows come from the .pppkg, not a hub list.
         if (contentConfig instanceof CloudContentConfig) {
           await this._applyCloudContentConfig(contentConfig, params)
           continue

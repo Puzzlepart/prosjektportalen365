@@ -109,7 +109,13 @@ export class ProjectExtensionsService {
    * compatibility check.
    */
   public static async getInstalledFiles(): Promise<
-    Array<{ itemId: number; title: string; fileName: string; fileRef: string; stamp?: IPpPackageStamp }>
+    Array<{
+      itemId: number
+      title: string
+      fileName: string
+      fileRef: string
+      stamp?: IPpPackageStamp
+    }>
   > {
     const web = SPDataAdapter.portalDataService.web
     const items: { Id: number; FileRef: string; FileLeafRef: string; Title: string }[] =
@@ -121,7 +127,9 @@ export class ProjectExtensionsService {
       items.map(async (item) => {
         let stamp: IPpPackageStamp | undefined
         try {
-          stamp = JSON.parse(await web.getFileByServerRelativePath(item.FileRef).getText())?.PpPackage
+          stamp = JSON.parse(
+            await web.getFileByServerRelativePath(item.FileRef).getText()
+          )?.PpPackage
         } catch {
           // Not JSON / unreadable — treat as unstamped.
         }

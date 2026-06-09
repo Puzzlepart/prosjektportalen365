@@ -14,8 +14,6 @@ export function useContentConfigSection() {
   const context = useProjectSetupDialogContext()
   const [searchTerm, setSearchTerm] = useState('')
 
-  // For a skymal, the available list-content configs are the ones bundled in the
-  // resolved .pppkg, not the hub `data.contentConfig`.
   const cloud = context.state.selectedTemplate?.isCloudTemplate
     ? context.state.resolvedCloudTemplate
     : undefined

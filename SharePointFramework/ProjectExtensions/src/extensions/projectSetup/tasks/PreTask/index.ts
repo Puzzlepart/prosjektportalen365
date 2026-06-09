@@ -31,7 +31,18 @@ export class PreTask extends BaseTask {
         const cloudPackage =
           this.data.resolvedCloudTemplate?.package ??
           (await CloudTemplatePackage.fromUrl(this.data.selectedTemplate.cloudSourceUrl))
-        params.templateSchema = await cloudPackage.getProjectTemplateSchema()
+        const bundled = await cloudPackage.getProjectTemplateSchema()
+        // A thin package ships an (almost) empty project template.json and relies
+        // on the standard project template for the base structure (content types,
+        // site fields, `Parameters.ProjectContentTypeId` that SetupProjectInformation
+        // needs). When the bundled template carries no Parameters, fall back to the
+        // standard template — a hub READ, nothing is written to the hub — so the
+        // project is still set up; the bundled extensions and list content are
+        // applied on top by the later tasks.
+        params.templateSchema =
+          bundled.Parameters && Object.keys(bundled.Parameters).length > 0
+            ? bundled
+            : await this.data.selectedTemplate.getSchema()
       } else {
         params.templateSchema = await this.data.selectedTemplate.getSchema()
         if (!params.properties.forceTemplate) {

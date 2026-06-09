@@ -33,8 +33,6 @@ export function useProjectSetupDialog(props: IProjectSetupDialogProps) {
    */
   const isConfigDisabled = (type: 'extensions' | 'contentConfig') => {
     if (!state.selectedTemplate) return true
-    // For a skymal, the available items are the bundled (resolved) ones, not the
-    // hub `data`.
     const items = (
       state.selectedTemplate.isCloudTemplate
         ? state.resolvedCloudTemplate?.[type]
