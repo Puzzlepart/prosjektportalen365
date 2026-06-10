@@ -81,6 +81,14 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             strings.NoGroupIdErrorStack
           )
         }
+        case ProjectSetupValidation.IsTeamChannel: {
+          Logger.write(
+            `(ProjectSetup) Site is a Teams channel (${this.context.pageContext.web.absoluteUrl}); removing setup customizer silently.`,
+            LogLevel.Info
+          )
+          await deleteCustomizer(this)
+          return
+        }
         case ProjectSetupValidation.InvalidWebLanguage: {
           await deleteCustomizer(this)
           throw new ProjectSetupError(
@@ -613,6 +621,14 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   private async _validateProjectSetup(): Promise<ProjectSetupValidation> {
     const { isSiteAdmin, groupId, hubSiteId, siteId } = this.context.pageContext.legacyPageContext
 
+    // `WebTemplate` returns the template name without its config number, so this
+    // matches both `TEAMCHANNEL#0` (private) and `TEAMCHANNEL#1` (shared) channels.
+    const { WebTemplate } = await this.sp.web.select('WebTemplate')()
+    if (WebTemplate === 'TEAMCHANNEL') return ProjectSetupValidation.IsTeamChannel
+
+    // Must precede the `groups/{groupId}/members` call below, which fails on a null id.
+    if (!groupId) return ProjectSetupValidation.NoGroupId
+
     this._portalDataService = await new PortalDataService().configure({
       spfxContext: this.context
     })
@@ -622,7 +638,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       return ProjectSetupValidation.UserNotGroupMember
     }
     if (!isSiteAdmin) return ProjectSetupValidation.NotSiteAdmin
-    if (!groupId) return ProjectSetupValidation.NoGroupId
     if (this.context.pageContext.web.language !== 1044) {
       const { Language } = await this._portalDataService.web.select('Language')()
       if (Language !== this.context.pageContext.web.language) {
