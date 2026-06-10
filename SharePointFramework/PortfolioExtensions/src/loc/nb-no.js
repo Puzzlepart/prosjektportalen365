@@ -191,9 +191,9 @@ define([], function () {
     CatalogRequiresBestillingsportalen: 'Bestillingsportalen',
     CatalogRequiresBestillingsportalenTooltip:
       'Krever at Bestillingsportalen er installert for full bruk av malen.',
-    CatalogRequiresEntra: 'Microsoft Entra',
+    CatalogRequiresEntra: 'Microsoft Azure',
     CatalogRequiresEntraTooltip:
-      'Krever oppsett av Microsoft Entra-ressurser (f.eks. appregistreringer og tillatelser) for full bruk av malen.',
+      'Krever oppsett av Microsoft Azure-ressurser (f.eks. appregistreringer og tillatelser) for full bruk av malen.',
     CatalogIncompatibleTitle: 'Ikke kompatibel med din versjon',
     CatalogIncompatibleText:
       'Denne malpakken krever Prosjektportalen {0}, men du har {1}. Oppgrader Prosjektportalen for å ta den i bruk.',

@@ -195,9 +195,9 @@ define([], function () {
     CatalogRequiresBestillingsportalen: 'Bestillingsportalen',
     CatalogRequiresBestillingsportalenTooltip:
       'Requires Bestillingsportalen to be installed for full use of the template.',
-    CatalogRequiresEntra: 'Microsoft Entra',
+    CatalogRequiresEntra: 'Microsoft Azure',
     CatalogRequiresEntraTooltip:
-      'Requires Microsoft Entra resources (e.g. app registrations and permissions) to be set up for full use of the template.',
+      'Requires Microsoft Azure resources (e.g. app registrations and permissions) to be set up for full use of the template.',
     CatalogIncompatibleTitle: 'Not compatible with your version',
     CatalogIncompatibleText:
       'This template package requires Prosjektportalen {0}, but you have {1}. Upgrade Prosjektportalen to use it.',
