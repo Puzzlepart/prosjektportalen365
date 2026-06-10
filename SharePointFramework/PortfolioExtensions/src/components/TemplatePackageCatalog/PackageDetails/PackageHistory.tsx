@@ -1,6 +1,8 @@
 import { Link, Spinner, Text } from '@fluentui/react-components'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC, useEffect, useState } from 'react'
+import ReactMarkdown from 'react-markdown'
+import rehypeRaw from 'rehype-raw'
 import { IChangelogEntry } from 'models'
 import { CatalogService } from 'services'
 import styles from './PackageDetails.module.scss'
@@ -48,7 +50,20 @@ export const PackageHistory: FC<IPackageHistoryProps> = ({ changelogUrl }) => {
                 <ul className={styles.historyNotes}>
                   {entry.notes.map((note, index) => (
                     <li key={index}>
-                      <Text size={200}>{note}</Text>
+                      <ReactMarkdown
+                        linkTarget='_blank'
+                        rehypePlugins={[rehypeRaw]}
+                        components={{
+                          // Render each bullet inline (no block <p> margins inside the <li>).
+                          p: ({ children }) => <Text size={200}>{children}</Text>,
+                          a: ({ node, ...props }) => <a {...props} rel='noopener noreferrer' />,
+                          code: ({ node, inline, ...props }) => (
+                            <code className={styles.inlineCode} {...props} />
+                          )
+                        }}
+                      >
+                        {note}
+                      </ReactMarkdown>
                     </li>
                   ))}
                 </ul>
