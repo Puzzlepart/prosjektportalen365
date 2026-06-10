@@ -59,9 +59,8 @@ const fetchData: DataFetchFunction<
   try {
     const isFrontpage = context.props.page === 'Frontpage'
     const shouldFetchArchiveStatus = isFrontpage && !context.props.hideArchiveStatus
-    // Wrapped in `safeCall` so that users without read access to the project site
-    // (e.g. Portfolio Insight members opening the panel from a portfolio overview)
-    // still get the hub-side data instead of a hard error.
+    // Empty fallback for users without read access to the project site (e.g. the
+    // Portfolio Insight panel opened from a portfolio overview) instead of a hard error.
     const projectInformationData = await safeCall(
       () => SPDataAdapter.project.getProjectInformationData(),
       {

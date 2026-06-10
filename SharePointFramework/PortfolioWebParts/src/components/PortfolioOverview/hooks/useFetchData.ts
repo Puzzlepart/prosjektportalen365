@@ -104,9 +104,7 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
         ) ?? Promise.resolve(false)
       ])
 
-      // Global toggle (default off) — only populated in program/parent context
-      // where `BaseProgramWebPart` configures `loadGlobalSettings: true`. In the
-      // flat portfolio overview `globalSettings` is undefined and this stays false.
+      // `globalSettings` is only populated in program/parent context, so this stays false elsewhere.
       const showChildProjectInfoInProgram =
         context.props.dataAdapter.globalSettings?.get('ShowChildProjectInfoInProgram') === '1'
 

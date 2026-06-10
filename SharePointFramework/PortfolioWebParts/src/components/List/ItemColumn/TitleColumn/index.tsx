@@ -1,7 +1,7 @@
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
 import { SiteContext } from 'pp365-shared-library'
-import React, { FC, useContext } from 'react'
+import React, { FC, ReactNode, useContext } from 'react'
 import { ListContext } from '../../context'
 import { usePortfolioOverviewContext } from '../../../PortfolioOverview/context'
 import { ITitleColumnProps } from './types'
@@ -35,34 +35,44 @@ export const TitleColumn: FC<ITitleColumnProps> = (props) => {
     isUserInPortfolioManagerGroup || (isParentProject && showChildProjectInfoInProgram)
   const renderProjectInformationPanel = context?.props?.renderTitleProjectInformationPanel
 
+  /**
+   * Renders the title wrapped in a `ProjectInformationPanel` with a toggle button.
+   *
+   * @param children Title element shown in the cell and used as the panel trigger label
+   * @param webAbsoluteUrl Project web URL. Omitted for projects the user has no access to,
+   * in which case the panel falls back to the current (hub) web context — so for those
+   * projects it surfaces hub-side data only, not the project's own web data.
+   */
+  const renderPanel = (children: ReactNode, webAbsoluteUrl?: string) => (
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      <ProjectInformationPanel
+        {...SiteContext.create(context.props.webPartContext, props.item.SiteId, webAbsoluteUrl)}
+        title={props.item.Title}
+        page='Portfolio'
+        hideAllActions={true}
+        onRenderToggleElement={(onToggle) => (
+          <Tooltip
+            content={<>{strings.ProjectInformationPanelButton}</>}
+            relationship='description'
+            withArrow
+          >
+            <Button
+              appearance='transparent'
+              size='small'
+              icon={<Icons.PanelRight />}
+              onClick={onToggle}
+            />
+          </Tooltip>
+        )}
+      >
+        {children}
+      </ProjectInformationPanel>
+    </div>
+  )
+
   if (!url) {
     if (renderProjectInformationPanel && showPanelButtonWithoutUrl) {
-      return (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <ProjectInformationPanel
-            {...SiteContext.create(context.props.webPartContext, props.item.SiteId, url)}
-            title={props.item.Title}
-            page='Portfolio'
-            hideAllActions={true}
-            onRenderToggleElement={(onToggle) => (
-              <Tooltip
-                content={<>{strings.ProjectInformationPanelButton}</>}
-                relationship='description'
-                withArrow
-              >
-                <Button
-                  appearance='transparent'
-                  size='small'
-                  icon={<Icons.PanelRight />}
-                  onClick={onToggle}
-                />
-              </Tooltip>
-            )}
-          >
-            <Text size={200}>{props.item.Title}</Text>
-          </ProjectInformationPanel>
-        </div>
-      )
+      return renderPanel(<Text size={200}>{props.item.Title}</Text>)
     }
     return (
       <span>
@@ -84,34 +94,11 @@ export const TitleColumn: FC<ITitleColumnProps> = (props) => {
         {props.item.Title}
       </Link>
     )
-  } else {
-    return (
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <ProjectInformationPanel
-          {...SiteContext.create(context.props.webPartContext, props.item.SiteId, url)}
-          title={props.item.Title}
-          page='Portfolio'
-          hideAllActions={true}
-          onRenderToggleElement={(onToggle) => (
-            <Tooltip
-              content={<>{strings.ProjectInformationPanelButton}</>}
-              relationship='description'
-              withArrow
-            >
-              <Button
-                appearance='transparent'
-                size='small'
-                icon={<Icons.PanelRight />}
-                onClick={onToggle}
-              />
-            </Tooltip>
-          )}
-        >
-          <Link href={url} rel='noopener noreferrer' target='_blank'>
-            {props.item.Title}
-          </Link>
-        </ProjectInformationPanel>
-      </div>
-    )
   }
+  return renderPanel(
+    <Link href={url} rel='noopener noreferrer' target='_blank'>
+      {props.item.Title}
+    </Link>,
+    url
+  )
 }
