@@ -42,9 +42,11 @@ const PROJECT_COLORS = [
 
 interface IArchiveLogItem {
   Id: number
+  Title: string
   Created: string
   GtLogWebUrl: string
   GtLogStatus: string
+  GtLogScope: string
 }
 
 interface IProjectItem {
@@ -94,6 +96,17 @@ export interface IDailyActivity {
   count: number
 }
 
+export interface IDocumentLogItem {
+  id: number
+  projectName: string
+  projectSiteUrl: string
+  title: string
+  dateArchived: string
+  dateArchivedMs: number
+  status: string
+  scope: string
+}
+
 export interface IArchiveData {
   loading: boolean
   error: Error | null
@@ -103,6 +116,9 @@ export interface IArchiveData {
   projects: IProjectSummary[]
   quickStats: IQuickStat[]
   dailyActivity: IDailyActivity[]
+  documentItems: IDocumentLogItem[]
+  listItems: IDocumentLogItem[]
+  logItems: IDocumentLogItem[]
 }
 
 // ─────────────────────────────────────────────────────
@@ -152,7 +168,8 @@ function getProjectStatus(siteItems: IArchiveLogItem[]): ProjectStatus {
 
 function processData(
   projectItems: IProjectItem[],
-  archiveItems: IArchiveLogItem[]
+  archiveItems: IArchiveLogItem[],
+  dayRange: number
 ): Omit<IArchiveData, 'loading' | 'error'> {
   const statusMap = getStatusMap()
 
@@ -164,13 +181,18 @@ function processData(
     archiveMap.get(key).push(item)
   }
 
+  const periodCutoff = new Date()
+  periodCutoff.setHours(0, 0, 0, 0)
+  periodCutoff.setDate(periodCutoff.getDate() - dayRange)
+  const periodItems = archiveItems.filter((item) => new Date(item.Created) >= periodCutoff)
+
   const statusCounts: Record<string, number> = {}
-  for (const item of archiveItems) {
+  for (const item of periodItems) {
     const s = item.GtLogStatus ?? 'Ukjent'
     statusCounts[s] = (statusCounts[s] ?? 0) + 1
   }
 
-  const archiveTotal = archiveItems.length
+  const archiveTotal = periodItems.length
 
   const archiveStatus: IArchiveStatusEntry[] = STATUS_ORDER.map((key) => ({
     label: statusMap[key]?.label ?? key,
@@ -258,14 +280,44 @@ function processData(
   }
 
   const dailyActivity: IDailyActivity[] = []
-  for (let i = 6; i >= 0; i--) {
+  for (let i = dayRange - 1; i >= 0; i--) {
     const d = new Date()
     d.setHours(0, 0, 0, 0)
     d.setDate(d.getDate() - i)
     dailyActivity.push({ date: d, count: countsByDay.get(d.toISOString()) ?? 0 })
   }
 
-  return { pending, archiveStatus, archiveTotal, projects, quickStats, dailyActivity }
+  // ── Document items (GtLogScope === 'Dokument') ──
+  const projectNameMap = new Map<string, { name: string; siteUrl: string }>()
+  for (const proj of projectItems) {
+    const key = extractSiteName(proj.GtSiteUrl)
+    if (key) projectNameMap.set(key, { name: proj.Title, siteUrl: proj.GtSiteUrl })
+  }
+
+  const buildScopeItems = (scope: string): IDocumentLogItem[] =>
+    archiveItems
+      .filter((item) => item.GtLogScope === scope)
+      .map((item) => {
+        const key = extractSiteName(item.GtLogWebUrl)
+        const proj = projectNameMap.get(key)
+        return {
+          id: item.Id,
+          projectName: proj?.name ?? key ?? '(ukjent)',
+          projectSiteUrl: proj?.siteUrl ?? '',
+          title: item.Title ?? '',
+          dateArchived: formatArchiveDate(item.Created),
+          dateArchivedMs: new Date(item.Created).getTime(),
+          status: item.GtLogStatus ?? '',
+          scope
+        }
+      })
+      .sort((a, b) => b.dateArchivedMs - a.dateArchivedMs)
+
+  const documentItems = buildScopeItems('Dokument')
+  const listItems = buildScopeItems('Liste')
+  const logItems = [...documentItems, ...listItems].sort((a, b) => b.dateArchivedMs - a.dateArchivedMs)
+
+  return { pending, archiveStatus, archiveTotal, projects, quickStats, dailyActivity, documentItems, listItems, logItems }
 }
 
 // ─────────────────────────────────────────────────────
@@ -280,11 +332,20 @@ const INITIAL_STATE: IArchiveData = {
   archiveTotal: 0,
   projects: [],
   quickStats: [],
-  dailyActivity: []
+  dailyActivity: [],
+  documentItems: [],
+  listItems: [],
+  logItems: []
 }
 
-export function useArchiveData(props: IArchiveOverviewProps): IArchiveData {
+interface IRawData {
+  archiveItems: IArchiveLogItem[]
+  projectItems: IProjectItem[]
+}
+
+export function useArchiveData(props: IArchiveOverviewProps, dayRange: number): IArchiveData {
   const [state, setState] = useState<IArchiveData>(INITIAL_STATE)
+  const [rawData, setRawData] = useState<IRawData | null>(null)
 
   useEffect(() => {
     if (!props.sp) return
@@ -292,7 +353,7 @@ export function useArchiveData(props: IArchiveOverviewProps): IArchiveData {
     Promise.all([
       props.sp.web.lists
         .getByTitle(ARCHIVE_LIST_NAME)
-        .items.select('Id', 'Created', 'GtLogWebUrl', 'GtLogStatus')
+        .items.select('Id', 'Title', 'Created', 'GtLogWebUrl', 'GtLogStatus', 'GtLogScope')
         .getAll() as Promise<IArchiveLogItem[]>,
       props.sp.web.lists
         .getByTitle(PROJECTS_LIST_NAME)
@@ -300,12 +361,21 @@ export function useArchiveData(props: IArchiveOverviewProps): IArchiveData {
         .getAll() as Promise<IProjectItem[]>
     ])
       .then(([archiveItems, projectItems]) => {
-        setState({ loading: false, error: null, ...processData(projectItems, archiveItems) })
+        setRawData({ archiveItems, projectItems })
       })
       .catch((error: Error) => {
         setState((prev) => ({ ...prev, loading: false, error }))
       })
   }, [])
+
+  useEffect(() => {
+    if (!rawData) return
+    setState({
+      loading: false,
+      error: null,
+      ...processData(rawData.projectItems, rawData.archiveItems, dayRange)
+    })
+  }, [rawData, dayRange])
 
   return state
 }
