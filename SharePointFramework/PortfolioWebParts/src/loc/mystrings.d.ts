@@ -608,7 +608,11 @@ declare interface IPortfolioWebPartsStrings {
     DashboardTitle: string
     RefreshLabel: string
     LoadingLabel: string
-    AllElementsLabel: string
+    DayRange7Label: string
+    DayRange16Label: string
+    DayRange30Label: string
+    DayRange180Label: string
+    DayRange365Label: string
     // Nav
     NavOversikt: string
     NavProsjekter: string
@@ -666,6 +670,26 @@ declare interface IPortfolioWebPartsStrings {
     YesterdayAtLabel: string
     ActivityChartTitle: string
     ActivityChartLegend: string
+    ProsjekterViewTitle: string
+    ColumnDocument: string
+    ColumnDateArchived: string
+    NoDocumentsLabel: string
+    ListerViewTitle: string
+    ColumnList: string
+    NoListsLabel: string
+    StatTotalLabel: string
+    ProsjekterSearchPlaceholder: string
+    FilterButtonLabel: string
+    ExportButtonLabel: string
+    DokumenterSearchPlaceholder: string
+    ListerSearchPlaceholder: string
+    // Arkivlogg view
+    ArkivloggSearchPlaceholder: string
+    ColumnScope: string
+    ColumnElement: string
+    ScopeLabelDocument: string
+    ScopeLabelList: string
+    NoLogItemsLabel: string
   }
 }
 
