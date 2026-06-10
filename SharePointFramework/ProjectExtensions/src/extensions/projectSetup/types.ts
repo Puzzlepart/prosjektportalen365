@@ -171,8 +171,9 @@ export enum ProjectSetupValidation {
   /**
    * The site is a Teams private/shared channel site (web template
    * `TEAMCHANNEL`). Channel sites are hub-associated and inherit the project
-   * site design, but are not projects and have no M365 group. The wizard is
-   * removed silently without touching the site or involving the user.
+   * site design, but are not projects and have no M365 group. The setup
+   * customizer is removed silently (best-effort; see `deleteCustomizer`)
+   * without involving the user.
    */
   IsTeamChannel
 }

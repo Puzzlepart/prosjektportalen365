@@ -621,14 +621,12 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   private async _validateProjectSetup(): Promise<ProjectSetupValidation> {
     const { isSiteAdmin, groupId, hubSiteId, siteId } = this.context.pageContext.legacyPageContext
 
-    // Teams private/shared channels create their own hub-associated SharePoint site
-    // (web template `TEAMCHANNEL`) which inherits the project site design but is not
-    // a project and has no M365 group. Detect and skip silently.
+    // `WebTemplate` returns the template name without its config number, so this
+    // matches both `TEAMCHANNEL#0` (private) and `TEAMCHANNEL#1` (shared) channels.
     const { WebTemplate } = await this.sp.web.select('WebTemplate')()
     if (WebTemplate === 'TEAMCHANNEL') return ProjectSetupValidation.IsTeamChannel
 
-    // Safety net: a site without an M365 group cannot be set up as a project and
-    // must not reach the `groups/{id}/members` call below with a null id.
+    // Must precede the `groups/{groupId}/members` call below, which fails on a null id.
     if (!groupId) return ProjectSetupValidation.NoGroupId
 
     this._portalDataService = await new PortalDataService().configure({
