@@ -159,12 +159,36 @@ export interface IPackageManifest {
      * wizard provisions projects from this template with that content type.
      */
     projectContentTypeId?: string
+    /**
+     * Term set ID (provisioned by the hub template) to record as
+     * `GtProjectPhaseTermId` on the imported Maloppsett item, so projects created
+     * from this template use this template's phase term set instead of the
+     * standard one.
+     */
+    projectPhaseTermSetId?: string
     extensions?: IManifestExtension[]
     /**
      * List-content (Listeinnhold) configurations created on the hub and linked
      * to the imported Maloppsett item.
      */
     listContent?: IManifestListContent[]
+    /**
+     * Per-locale provisioning overrides, keyed by BCP-47 code (e.g. `en-US`).
+     * When the hub's language matches a key, the import applies that locale's
+     * `hubTemplate`/`template`/`listContent` and uses its `name`/`description`
+     * on the Maloppsett item; otherwise the base (top-level) provisioning is
+     * used. See {@link IPackageManifest.languages}.
+     */
+    localized?: Record<
+      string,
+      {
+        name?: string
+        description?: string
+        hubTemplate?: string
+        template?: string
+        listContent?: IManifestListContent[]
+      }
+    >
   }
   content?: {
     items: IManifestContentItem[]

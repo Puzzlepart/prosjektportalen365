@@ -112,7 +112,13 @@ export class PackageInstaller {
       setStatus(InstallStepKey.Unzip, 'done')
 
       setStatus(InstallStepKey.ValidateManifest, 'running')
-      const manifest = await PackageInstaller._readManifest(zip)
+      const baseManifest = await PackageInstaller._readManifest(zip)
+      // Bilingual packages ship per-locale provisioning variants; pick the one
+      // matching the hub language so the right hub template, list content and
+      // Maloppsett name/description are used (falls back to the base/nb-NO).
+      const locale = PackageInstaller._detectLocale(context)
+      const { manifest, localizedName, localizedDescription } =
+        PackageInstaller._applyLocale(baseManifest, locale)
       setStatus(InstallStepKey.ValidateManifest, 'done')
 
       setStatus(InstallStepKey.CheckVersion, 'running')
@@ -241,9 +247,12 @@ export class PackageInstaller {
       setStatus(InstallStepKey.UpdateTemplateOptions, 'running')
       await TemplateOptionsService.upsertImported(pkg, existingItemId, {
         projectContentTypeId: manifest.provisioning?.projectContentTypeId,
+        projectPhaseTermSetId: manifest.provisioning?.projectPhaseTermSetId,
         extensionItemIds: extensionItems.map((e) => e.itemId),
         listContentItemIds: listContentItems.map((l) => l.itemId),
-        icon: manifest.icon
+        icon: manifest.icon,
+        name: localizedName,
+        description: localizedDescription
       })
       setStatus(InstallStepKey.UpdateTemplateOptions, 'done')
 
@@ -290,6 +299,52 @@ export class PackageInstaller {
       throw new Error('manifest.json is missing required fields (id, version, type)')
     }
     return manifest
+  }
+
+  /**
+   * Detect the hub's language as a BCP-47 locale (matching the keys of
+   * `manifest.provisioning.localized`). Uses the site LCID (1044 → `nb-NO`,
+   * 1033 → `en-US`), falling back to the UI culture, then `nb-NO`.
+   */
+  private static _detectLocale(context: ListViewCommandSetContext): string {
+    const lcid = context?.pageContext?.web?.language
+    if (lcid === 1033) return 'en-US'
+    if (lcid === 1044) return 'nb-NO'
+    const ui =
+      context?.pageContext?.cultureInfo?.currentUICultureName ||
+      context?.pageContext?.cultureInfo?.currentCultureName ||
+      ''
+    return /^en/i.test(ui) ? 'en-US' : 'nb-NO'
+  }
+
+  /**
+   * Resolve the effective manifest for a locale. When
+   * `provisioning.localized[locale]` exists, its `hubTemplate`/`template`/
+   * `listContent` override the base provisioning and its `name`/`description`
+   * are returned for the Maloppsett item. Without a match the base manifest is
+   * returned unchanged (so single-language packages are unaffected).
+   */
+  private static _applyLocale(
+    manifest: IPackageManifest,
+    locale: string
+  ): {
+    manifest: IPackageManifest
+    localizedName?: string
+    localizedDescription?: string
+  } {
+    const loc = manifest.provisioning?.localized?.[locale]
+    if (!loc) return { manifest }
+    const provisioning = {
+      ...manifest.provisioning,
+      ...(loc.hubTemplate ? { hubTemplate: loc.hubTemplate } : {}),
+      ...(loc.template ? { template: loc.template } : {}),
+      ...(loc.listContent ? { listContent: loc.listContent } : {})
+    }
+    return {
+      manifest: { ...manifest, provisioning },
+      localizedName: loc.name,
+      localizedDescription: loc.description
+    }
   }
 
   /**

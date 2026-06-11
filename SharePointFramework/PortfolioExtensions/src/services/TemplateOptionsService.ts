@@ -100,10 +100,14 @@ export class TemplateOptionsService {
   /**
    * Create/refresh the Maloppsett item for an imported package (Mode A).
    *
-   * Sets the package description (`GtDescription` — Beskrivelse) and icon
-   * (`IconName` — Ikon), and, when supplied:
+   * Sets the package name (`Title`) and description (`GtDescription` —
+   * Beskrivelse) — overridable via `options.name`/`options.description` for a
+   * language-specific Maloppsett item — and the icon (`IconName` — Ikon), and,
+   * when supplied:
    * - `projectContentTypeId` → `GtProjectContentType` (the hub content type the
    *   setup wizard provisions projects with),
+   * - `projectPhaseTermSetId` → `GtProjectPhaseTermId` (the phase term set
+   *   projects created from this template use instead of the standard one),
    * - `extensionItemIds` → `GtProjectExtensions` (Utvidelser — the Prosjekttillegg
    *   items uploaded for this template's bundled extensions).
    * - `listContentItemIds` → `ListContentConfigLookup` (Listeinnhold — the List
@@ -114,15 +118,18 @@ export class TemplateOptionsService {
     existingItemId?: number,
     options: {
       projectContentTypeId?: string
+      projectPhaseTermSetId?: string
       extensionItemIds?: number[]
       listContentItemIds?: number[]
       icon?: string
+      name?: string
+      description?: string
     } = {}
   ): Promise<void> {
     const properties: Record<string, any> = {
-      Title: pkg.name,
+      Title: options.name ?? pkg.name,
       GtProjectTemplateId: SENTINEL_PROJECT_TEMPLATE_ID,
-      GtDescription: pkg.description ?? '',
+      GtDescription: options.description ?? pkg.description ?? '',
       IconName: options.icon || 'Page',
       PpPkgType: PpPkgType.Importert,
       PpPkgId: pkg.id,
@@ -133,6 +140,9 @@ export class TemplateOptionsService {
     }
     if (options.projectContentTypeId) {
       properties.GtProjectContentType = options.projectContentTypeId
+    }
+    if (options.projectPhaseTermSetId) {
+      properties.GtProjectPhaseTermId = options.projectPhaseTermSetId
     }
     if (options.extensionItemIds?.length) {
       // LookupMulti field — set by the `<InternalName>Id` array of item ids.
