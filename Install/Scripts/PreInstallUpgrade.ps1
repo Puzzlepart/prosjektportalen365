@@ -139,12 +139,6 @@ if ($null -ne $LastInstall) {
         Write-Host "[SUCCESS] Successfully applied PnP template [1.12.0] to [$Url]" -ForegroundColor Green
     }
 
-    if ($PreviousVersion -lt [version]"1.14.0") {
-        Write-Host "[INFO] Applying PnP upgrade template [1.14.0] to [$Url]"
-        Invoke-PnPSiteTemplate -Path "$TemplatesBasePath/1.14.0.pnp" -ErrorAction Stop
-        Write-Host "[SUCCESS] Successfully applied PnP template [1.14.0] to [$Url]" -ForegroundColor Green
-    }
-
     if ($PreviousVersion -lt [version]"1.13.0") {
         Write-Host "[INFO] Removing deprecated Portfolio Insights page, lists and navigation"
 
@@ -292,6 +286,10 @@ if ($null -ne $LastInstall) {
     }
 
     if ($PreviousVersion -lt [version]"1.14.0") {
+        Write-Host "[INFO] Applying PnP upgrade template [1.14.0] to [$Url]"
+        Invoke-PnPSiteTemplate -Path "$TemplatesBasePath/1.14.0.pnp" -ErrorAction Stop
+        Write-Host "[SUCCESS] Successfully applied PnP template [1.14.0] to [$Url]" -ForegroundColor Green
+
         Write-Host "[INFO] Removing duplicate 'Konfigurasjon av Prosjektportalen' Site Settings links"
         Get-PnPCustomAction -Scope Web |
             Where-Object { $_.Location -eq "Microsoft.SharePoint.SiteSettings" -and
