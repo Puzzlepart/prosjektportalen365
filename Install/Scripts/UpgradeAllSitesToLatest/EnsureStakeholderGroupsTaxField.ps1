@@ -77,7 +77,7 @@ if ($hasOldField.Values -contains $true) {
             $labels = $labels | Where-Object { $_ } | Select-Object -Unique
             if ($labels.Count -eq 0) { continue }
 
-            $termRefs = @()
+            $termIds = @()
             foreach ($label in $labels) {
                 if (-not $termCache.ContainsKey($label)) {
                     $term = Get-PnPTerm -TermSet $termSetName -TermGroup $termGroupName -Identity $label -ErrorAction SilentlyContinue
@@ -87,11 +87,10 @@ if ($hasOldField.Values -contains $true) {
                     }
                     $termCache[$label] = $term.Id
                 }
-                $termRefs += "-1;#$label|$($termCache[$label])"
+                $termIds += $termCache[$label].ToString()
             }
 
-            $taxValue = ($termRefs -join ";#")
-            Set-PnPListItem -List $listName -Identity $item.Id -Values @{ "GtStakeholderGroups" = $taxValue } -UpdateType SystemUpdate -ErrorAction Stop | Out-Null
+            Set-PnPListItem -List $listName -Identity $item.Id -Values @{ "GtStakeholderGroups" = [string[]]$termIds } -UpdateType SystemUpdate -ErrorAction Stop | Out-Null
         }
         catch {
             Write-Host "`t`t[WARN] Could not migrate item $($item.Id): $($_.Exception.Message)" -ForegroundColor Yellow
@@ -113,12 +112,12 @@ foreach ($oldName in $oldFieldNames) {
     }
 }
 
-# 4. Swap legacy fields for the new field in the default AllItems view.
+# 4. Swap legacy fields for the new field in all list views referencing them.
 try {
-    $view = Get-PnPView -List $listName -Identity "AllItems" -ErrorAction SilentlyContinue
-    if ($null -ne $view) {
+    $views = Get-PnPView -List $listName -ErrorAction SilentlyContinue
+    foreach ($view in $views) {
         $viewFields = @($view.ViewFields)
-        $updated = $false
+        if (-not ($viewFields | Where-Object { $oldFieldNames -contains $_ })) { continue }
         $newList = New-Object System.Collections.Generic.List[string]
         $alreadyHasNew = $viewFields -contains "GtStakeholderGroups"
         foreach ($vf in $viewFields) {
@@ -127,17 +126,14 @@ try {
                     $newList.Add("GtStakeholderGroups")
                     $alreadyHasNew = $true
                 }
-                $updated = $true
                 continue
             }
             $newList.Add($vf)
         }
-        if ($updated) {
-            Set-PnPView -List $listName -Identity "AllItems" -Fields $newList.ToArray() | Out-Null
-            Write-Host "`t`t`tUpdated AllItems view to use GtStakeholderGroups"
-        }
+        Set-PnPView -List $listName -Identity $view.Id -Fields $newList.ToArray() | Out-Null
+        Write-Host "`t`t`tUpdated view '$($view.Title)' to use GtStakeholderGroups"
     }
 }
 catch {
-    Write-Host "`t`t[WARN] Could not update AllItems view: $($_.Exception.Message)" -ForegroundColor Yellow
+    Write-Host "`t`t[WARN] Could not update list views: $($_.Exception.Message)" -ForegroundColor Yellow
 }

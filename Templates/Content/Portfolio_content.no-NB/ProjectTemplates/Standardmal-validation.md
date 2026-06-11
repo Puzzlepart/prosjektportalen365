@@ -1,4 +1,4 @@
-_The template was validated 5/11/2026, 10:58:33 AM_
+_The template was validated 11.6.2026, 10:50:52_
 
 The template contains the following tokens that has not been found in the .resx files:
 
@@ -109,8 +109,8 @@ _No tokens with missing translations or replacement values found._
                     "Name": "Title"
                 },
                 {
-                    "ID": "2847b3b0-ed22-4c47-b7c0-3ebfc83dae4a",
-                    "Name": "GtStakeholderGroup"
+                    "ID": "ba8e9bcd-d8af-41e2-a24c-d279e07f1b56",
+                    "Name": "GtStakeholderGroups"
                 },
                 {
                     "ID": "970ed1b2-9e71-45aa-8f8d-c391a15f067f",
@@ -859,7 +859,7 @@ _No tokens with missing translations or replacement values found._
                     "Title": "Alle elementer",
                     "ViewFields": [
                         "LinkTitle",
-                        "GtStakeholderGroup",
+                        "GtStakeholderGroups",
                         "GtStakeholderContext",
                         "GtStakeholderStrategy",
                         "GtStakeholderInterest",
@@ -1493,6 +1493,6 @@ _No tokens with missing translations or replacement values found._
 ## Template Path
 
 ```txt
-/Users/remi.blom-ohlsen/code/Prosjektportalen/prosjektportalen365/Templates/Content/Portfolio_content.no-NB/ProjectTemplates/Standardmal.txt
+C:\code\prosjektportalen365\Templates\Content\Portfolio_content.no-NB\ProjectTemplates\Standardmal.txt
 ```
 
