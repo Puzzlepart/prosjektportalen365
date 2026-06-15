@@ -77,10 +77,10 @@ export function useArchiveOverview(props: IArchiveOverviewProps) {
     {
       column: { key: 'status', name: strings.ArchiveOverview.ColumnStatus, fieldName: 'status', minWidth: 0 } as IColumn,
       items: [
-        { name: strings.ArchiveOverview.StatusLabelArchived,  value: 'Arkivert',  selected: dokumenterActiveFilters.status?.includes('Arkivert')  ?? false },
-        { name: strings.ArchiveOverview.StatusLabelToArchive, value: 'Til arkiv', selected: dokumenterActiveFilters.status?.includes('Til arkiv') ?? false },
-        { name: strings.ArchiveOverview.StatusLabelFailed,    value: 'Feil',      selected: dokumenterActiveFilters.status?.includes('Feil')      ?? false },
-        { name: strings.ArchiveOverview.StatusLabelWarning,   value: 'Advarsel',  selected: dokumenterActiveFilters.status?.includes('Advarsel')  ?? false },
+        { name: strings.ArchiveOverview.StatusLabelArchived,  value: strings.ArchiveOverview.StatusValueArchived,  selected: dokumenterActiveFilters.status?.includes(strings.ArchiveOverview.StatusValueArchived)  ?? false },
+        { name: strings.ArchiveOverview.StatusLabelToArchive, value: strings.ArchiveOverview.StatusValueToArchive, selected: dokumenterActiveFilters.status?.includes(strings.ArchiveOverview.StatusValueToArchive) ?? false },
+        { name: strings.ArchiveOverview.StatusLabelFailed,    value: strings.ArchiveOverview.StatusValueFailed,    selected: dokumenterActiveFilters.status?.includes(strings.ArchiveOverview.StatusValueFailed)    ?? false },
+        { name: strings.ArchiveOverview.StatusLabelWarning,   value: strings.ArchiveOverview.StatusValueWarning,   selected: dokumenterActiveFilters.status?.includes(strings.ArchiveOverview.StatusValueWarning)   ?? false },
       ]
     }
   ]
@@ -116,7 +116,7 @@ export function useArchiveOverview(props: IArchiveOverviewProps) {
       placeholder: strings.ArchiveOverview.DokumenterSearchPlaceholder,
       onChange:    (_, data) => setDokumenterSearch(data?.value ?? ''),
       value:       dokumenterSearch,
-    }),
+    })
   ]
 
   const dokumenterFarItems: ListMenuItem[] = [
@@ -145,10 +145,10 @@ export function useArchiveOverview(props: IArchiveOverviewProps) {
     {
       column: { key: 'status', name: strings.ArchiveOverview.ColumnStatus, fieldName: 'status', minWidth: 0 } as IColumn,
       items: [
-        { name: strings.ArchiveOverview.StatusLabelArchived,  value: 'Arkivert',  selected: listerActiveFilters.status?.includes('Arkivert')  ?? false },
-        { name: strings.ArchiveOverview.StatusLabelToArchive, value: 'Til arkiv', selected: listerActiveFilters.status?.includes('Til arkiv') ?? false },
-        { name: strings.ArchiveOverview.StatusLabelFailed,    value: 'Feil',      selected: listerActiveFilters.status?.includes('Feil')      ?? false },
-        { name: strings.ArchiveOverview.StatusLabelWarning,   value: 'Advarsel',  selected: listerActiveFilters.status?.includes('Advarsel')  ?? false },
+        { name: strings.ArchiveOverview.StatusLabelArchived,  value: strings.ArchiveOverview.StatusValueArchived,  selected: listerActiveFilters.status?.includes(strings.ArchiveOverview.StatusValueArchived)  ?? false },
+        { name: strings.ArchiveOverview.StatusLabelToArchive, value: strings.ArchiveOverview.StatusValueToArchive, selected: listerActiveFilters.status?.includes(strings.ArchiveOverview.StatusValueToArchive) ?? false },
+        { name: strings.ArchiveOverview.StatusLabelFailed,    value: strings.ArchiveOverview.StatusValueFailed,    selected: listerActiveFilters.status?.includes(strings.ArchiveOverview.StatusValueFailed)    ?? false },
+        { name: strings.ArchiveOverview.StatusLabelWarning,   value: strings.ArchiveOverview.StatusValueWarning,   selected: listerActiveFilters.status?.includes(strings.ArchiveOverview.StatusValueWarning)   ?? false },
       ]
     }
   ]
@@ -184,7 +184,7 @@ export function useArchiveOverview(props: IArchiveOverviewProps) {
       placeholder: strings.ArchiveOverview.ListerSearchPlaceholder,
       onChange:    (_, data) => setListerSearch(data?.value ?? ''),
       value:       listerSearch,
-    }),
+    })
   ]
 
   const listerFarItems: ListMenuItem[] = [
@@ -255,7 +255,6 @@ export function useArchiveOverview(props: IArchiveOverviewProps) {
       { key: 'lastArchived',  name: strings.ArchiveOverview.ColumnLastArchived,  fieldName: 'lastArchived',  minWidth: 0 },
       { key: 'activityLabel', name: strings.ArchiveOverview.ColumnActivityLevel, fieldName: 'activityLabel', minWidth: 0 },
       { key: 'statusLabel',   name: strings.ArchiveOverview.ColumnStatus,        fieldName: 'statusLabel',   minWidth: 0 },
-      { key: 'nextArchive',   name: strings.ArchiveOverview.ColumnNextArchive,   fieldName: 'nextArchive',   minWidth: 0 },
     ]
     const exportItems = filteredProjects.map((p) => ({
       name:          p.name,
@@ -267,7 +266,6 @@ export function useArchiveOverview(props: IArchiveOverviewProps) {
       statusLabel:   p.status === 'updated' ? strings.ArchiveOverview.StatusUpdated
                    : p.status === 'warning' ? strings.ArchiveOverview.StatusWarning
                                             : strings.ArchiveOverview.StatusNeverArchived,
-      nextArchive:   p.nextArchive,
     }))
     ExcelExportService.export(exportItems, exportCols)
   }
@@ -306,10 +304,10 @@ export function useArchiveOverview(props: IArchiveOverviewProps) {
     {
       column: { key: 'status', name: strings.ArchiveOverview.ColumnStatus, fieldName: 'status', minWidth: 0 } as IColumn,
       items: [
-        { name: strings.ArchiveOverview.StatusLabelArchived,  value: 'Arkivert',  selected: arkivloggActiveFilters.status?.includes('Arkivert')  ?? false },
-        { name: strings.ArchiveOverview.StatusLabelToArchive, value: 'Til arkiv', selected: arkivloggActiveFilters.status?.includes('Til arkiv') ?? false },
-        { name: strings.ArchiveOverview.StatusLabelFailed,    value: 'Feil',      selected: arkivloggActiveFilters.status?.includes('Feil')      ?? false },
-        { name: strings.ArchiveOverview.StatusLabelWarning,   value: 'Advarsel',  selected: arkivloggActiveFilters.status?.includes('Advarsel')  ?? false },
+        { name: strings.ArchiveOverview.StatusLabelArchived,  value: strings.ArchiveOverview.StatusValueArchived,  selected: arkivloggActiveFilters.status?.includes(strings.ArchiveOverview.StatusValueArchived)  ?? false },
+        { name: strings.ArchiveOverview.StatusLabelToArchive, value: strings.ArchiveOverview.StatusValueToArchive, selected: arkivloggActiveFilters.status?.includes(strings.ArchiveOverview.StatusValueToArchive) ?? false },
+        { name: strings.ArchiveOverview.StatusLabelFailed,    value: strings.ArchiveOverview.StatusValueFailed,    selected: arkivloggActiveFilters.status?.includes(strings.ArchiveOverview.StatusValueFailed)    ?? false },
+        { name: strings.ArchiveOverview.StatusLabelWarning,   value: strings.ArchiveOverview.StatusValueWarning,   selected: arkivloggActiveFilters.status?.includes(strings.ArchiveOverview.StatusValueWarning)   ?? false },
       ]
     },
     {
