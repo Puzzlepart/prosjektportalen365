@@ -3,7 +3,8 @@ import { customLightTheme, IFilterPanelProps, ListMenuItem } from 'pp365-shared-
 import { IFilterItemProps, IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
 import strings from 'PortfolioWebPartsStrings'
-import { useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
+import { useColumnResize } from './useColumnResize'
 import { IArchiveOverviewProps } from './types'
 import { useArchiveData } from './useArchiveData'
 
@@ -68,6 +69,25 @@ export function useArchiveOverview(props: IArchiveOverviewProps) {
     [projects, projectSort]
   )
 
+  // ── Column resize ─────────────────────────────────────
+  const { widths: prosjekterColWidths, startResize: prosjekterStartResize } = useColumnResize()
+  const { widths: dokumenterColWidths, startResize: dokumenterStartResize } = useColumnResize()
+  const { widths: listerColWidths,     startResize: listerStartResize }     = useColumnResize()
+  const { widths: arkivloggColWidths,  startResize: arkivloggStartResize }  = useColumnResize()
+
+  // ── Sort state (dokumenter, lister, arkivlogg) ────────
+  type SortState = { col: string; dir: 'asc' | 'desc' }
+  const [dokumenterSort, setDokumenterSort] = useState<SortState>({ col: '', dir: 'asc' })
+  const [listerSort,     setListerSort]     = useState<SortState>({ col: '', dir: 'asc' })
+  const [arkivloggSort,  setArkivloggSort]  = useState<SortState>({ col: '', dir: 'asc' })
+
+  const makeSort = (set: React.Dispatch<React.SetStateAction<SortState>>) =>
+    (col: string) => set(prev => ({ col, dir: prev.col === col && prev.dir === 'desc' ? 'asc' : 'desc' }))
+
+  const handleDokumenterSort = makeSort(setDokumenterSort)
+  const handleListerSort     = makeSort(setListerSort)
+  const handleArkivloggSort  = makeSort(setArkivloggSort)
+
   // ── Dokumenter toolbar ────────────────────────────────
   const [dokumenterSearch, setDokumenterSearch] = useState('')
   const [dokumenterActiveFilters, setDokumenterActiveFilters] = useState<Record<string, string[]>>({})
@@ -92,13 +112,22 @@ export function useArchiveOverview(props: IArchiveOverviewProps) {
     }))
   }
 
-  const filteredDocs = useMemo(
-    () =>
-      documentItems
-        .filter((d) => !dokumenterSearch || d.projectName.toLowerCase().includes(dokumenterSearch.toLowerCase()) || d.title.toLowerCase().includes(dokumenterSearch.toLowerCase()))
-        .filter((d) => !dokumenterActiveFilters.status?.length || dokumenterActiveFilters.status.includes(d.status)),
-    [documentItems, dokumenterSearch, dokumenterActiveFilters]
-  )
+  const filteredDocs = useMemo(() => {
+    const base = documentItems
+      .filter((d) => !dokumenterSearch || d.projectName.toLowerCase().includes(dokumenterSearch.toLowerCase()) || d.title.toLowerCase().includes(dokumenterSearch.toLowerCase()))
+      .filter((d) => !dokumenterActiveFilters.status?.length || dokumenterActiveFilters.status.includes(d.status))
+    if (!dokumenterSort.col) return base
+    const d = dokumenterSort.dir === 'asc' ? 1 : -1
+    return [...base].sort((a, b) => {
+      switch (dokumenterSort.col) {
+        case 'projectName':  return d * a.projectName.localeCompare(b.projectName, 'nb')
+        case 'title':        return d * a.title.localeCompare(b.title, 'nb')
+        case 'dateArchived': return d * ((a.dateArchivedMs ?? 0) - (b.dateArchivedMs ?? 0))
+        case 'status':       return d * a.status.localeCompare(b.status, 'nb')
+        default:             return 0
+      }
+    })
+  }, [documentItems, dokumenterSearch, dokumenterActiveFilters, dokumenterSort])
 
   const handleExportDokumenter = () => {
     ExcelExportService.configure({ name: strings.ArchiveOverview.NavDokumenter })
@@ -120,13 +149,13 @@ export function useArchiveOverview(props: IArchiveOverviewProps) {
   ]
 
   const dokumenterFarItems: ListMenuItem[] = [
-    new ListMenuItem(null, strings.ArchiveOverview.FilterButtonLabel)
-      .setIcon('Filter')
-      .setOnClick(() => setIsDokumenterFilterOpen(true)),
     new ListMenuItem(null, strings.ArchiveOverview.ExportButtonLabel)
       .setIcon('ExcelLogoInverse')
       .setStyle({ color: '#10793F' })
       .setOnClick(handleExportDokumenter),
+    new ListMenuItem(null, strings.ArchiveOverview.FilterButtonLabel)
+      .setIcon('Filter')
+      .setOnClick(() => setIsDokumenterFilterOpen(true)),
   ]
 
   const dokumenterFilterPanelProps: IFilterPanelProps = {
@@ -160,13 +189,22 @@ export function useArchiveOverview(props: IArchiveOverviewProps) {
     }))
   }
 
-  const filteredLists = useMemo(
-    () =>
-      listItems
-        .filter((i) => !listerSearch || i.projectName.toLowerCase().includes(listerSearch.toLowerCase()) || i.title.toLowerCase().includes(listerSearch.toLowerCase()))
-        .filter((i) => !listerActiveFilters.status?.length || listerActiveFilters.status.includes(i.status)),
-    [listItems, listerSearch, listerActiveFilters]
-  )
+  const filteredLists = useMemo(() => {
+    const base = listItems
+      .filter((i) => !listerSearch || i.projectName.toLowerCase().includes(listerSearch.toLowerCase()) || i.title.toLowerCase().includes(listerSearch.toLowerCase()))
+      .filter((i) => !listerActiveFilters.status?.length || listerActiveFilters.status.includes(i.status))
+    if (!listerSort.col) return base
+    const d = listerSort.dir === 'asc' ? 1 : -1
+    return [...base].sort((a, b) => {
+      switch (listerSort.col) {
+        case 'projectName':  return d * a.projectName.localeCompare(b.projectName, 'nb')
+        case 'title':        return d * a.title.localeCompare(b.title, 'nb')
+        case 'dateArchived': return d * (a.dateArchivedMs - b.dateArchivedMs)
+        case 'status':       return d * a.status.localeCompare(b.status, 'nb')
+        default:             return 0
+      }
+    })
+  }, [listItems, listerSearch, listerActiveFilters, listerSort])
 
   const handleExportLister = () => {
     ExcelExportService.configure({ name: strings.ArchiveOverview.NavLister })
@@ -188,13 +226,13 @@ export function useArchiveOverview(props: IArchiveOverviewProps) {
   ]
 
   const listerFarItems: ListMenuItem[] = [
-    new ListMenuItem(null, strings.ArchiveOverview.FilterButtonLabel)
-      .setIcon('Filter')
-      .setOnClick(() => setIsListerFilterOpen(true)),
     new ListMenuItem(null, strings.ArchiveOverview.ExportButtonLabel)
       .setIcon('ExcelLogoInverse')
       .setStyle({ color: '#10793F' })
       .setOnClick(handleExportLister),
+    new ListMenuItem(null, strings.ArchiveOverview.FilterButtonLabel)
+      .setIcon('Filter')
+      .setOnClick(() => setIsListerFilterOpen(true)),
   ]
 
   const listerFilterPanelProps: IFilterPanelProps = {
@@ -279,13 +317,13 @@ export function useArchiveOverview(props: IArchiveOverviewProps) {
   ]
 
   const prosjekterFarItems: ListMenuItem[] = [
-    new ListMenuItem(null, strings.ArchiveOverview.FilterButtonLabel)
-      .setIcon('Filter')
-      .setOnClick(() => setIsProsjekterFilterOpen(true)),
     new ListMenuItem(null, strings.ArchiveOverview.ExportButtonLabel)
       .setIcon('ExcelLogoInverse')
       .setStyle({ color: '#10793F' })
       .setOnClick(handleExportProsjekter),
+    new ListMenuItem(null, strings.ArchiveOverview.FilterButtonLabel)
+      .setIcon('Filter')
+      .setOnClick(() => setIsProsjekterFilterOpen(true)),
   ]
 
   const prosjekterFilterPanelProps: IFilterPanelProps = {
@@ -326,16 +364,26 @@ export function useArchiveOverview(props: IArchiveOverviewProps) {
     }))
   }
 
-  const filteredLog = useMemo(
-    () =>
-      logItems
-        .filter((i) => !arkivloggSearch ||
-          i.projectName.toLowerCase().includes(arkivloggSearch.toLowerCase()) ||
-          i.title.toLowerCase().includes(arkivloggSearch.toLowerCase()))
-        .filter((i) => !arkivloggActiveFilters.status?.length || arkivloggActiveFilters.status.includes(i.status))
-        .filter((i) => !arkivloggActiveFilters.scope?.length  || arkivloggActiveFilters.scope.includes(i.scope)),
-    [logItems, arkivloggSearch, arkivloggActiveFilters]
-  )
+  const filteredLog = useMemo(() => {
+    const base = logItems
+      .filter((i) => !arkivloggSearch ||
+        i.projectName.toLowerCase().includes(arkivloggSearch.toLowerCase()) ||
+        i.title.toLowerCase().includes(arkivloggSearch.toLowerCase()))
+      .filter((i) => !arkivloggActiveFilters.status?.length || arkivloggActiveFilters.status.includes(i.status))
+      .filter((i) => !arkivloggActiveFilters.scope?.length  || arkivloggActiveFilters.scope.includes(i.scope))
+    if (!arkivloggSort.col) return base
+    const d = arkivloggSort.dir === 'asc' ? 1 : -1
+    return [...base].sort((a, b) => {
+      switch (arkivloggSort.col) {
+        case 'projectName':  return d * a.projectName.localeCompare(b.projectName, 'nb')
+        case 'title':        return d * a.title.localeCompare(b.title, 'nb')
+        case 'scope':        return d * a.scope.localeCompare(b.scope, 'nb')
+        case 'dateArchived': return d * (a.dateArchivedMs - b.dateArchivedMs)
+        case 'status':       return d * a.status.localeCompare(b.status, 'nb')
+        default:             return 0
+      }
+    })
+  }, [logItems, arkivloggSearch, arkivloggActiveFilters, arkivloggSort])
 
   const handleExportArkivlogg = () => {
     ExcelExportService.configure({ name: strings.ArchiveOverview.NavArkivlogg })
@@ -358,13 +406,13 @@ export function useArchiveOverview(props: IArchiveOverviewProps) {
   ]
 
   const arkivloggFarItems: ListMenuItem[] = [
-    new ListMenuItem(null, strings.ArchiveOverview.FilterButtonLabel)
-      .setIcon('Filter')
-      .setOnClick(() => setIsArkivloggFilterOpen(true)),
     new ListMenuItem(null, strings.ArchiveOverview.ExportButtonLabel)
       .setIcon('ExcelLogoInverse')
       .setStyle({ color: '#10793F' })
       .setOnClick(handleExportArkivlogg),
+    new ListMenuItem(null, strings.ArchiveOverview.FilterButtonLabel)
+      .setIcon('Filter')
+      .setOnClick(() => setIsArkivloggFilterOpen(true)),
   ]
 
   const arkivloggFilterPanelProps: IFilterPanelProps = {
@@ -389,6 +437,15 @@ export function useArchiveOverview(props: IArchiveOverviewProps) {
     filteredDocs,
     filteredLists,
     filteredLog,
+    // Column resize
+    prosjekterColWidths, prosjekterStartResize,
+    dokumenterColWidths, dokumenterStartResize,
+    listerColWidths,     listerStartResize,
+    arkivloggColWidths,  arkivloggStartResize,
+    // Sort handlers
+    dokumenterSort, handleDokumenterSort,
+    listerSort,     handleListerSort,
+    arkivloggSort,  handleArkivloggSort,
     // Dokumenter toolbar
     dokumenterToolbarItems,
     dokumenterFarItems,
