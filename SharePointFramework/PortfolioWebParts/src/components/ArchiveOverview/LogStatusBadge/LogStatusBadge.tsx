@@ -13,26 +13,27 @@ export const LogStatusBadge: FC<{ status: string }> = ({ status }) => {
   let backgroundColor: string
   let label: string
 
+  const sv = strings.ArchiveOverview
   switch (status) {
-    case 'Arkivert':
+    case sv.StatusValueArchived:
       icon = getFluentIcon('CheckmarkCircle')
       backgroundColor = tokens.colorStatusSuccessBackground2
-      label = strings.ArchiveOverview.StatusLabelArchived
+      label = sv.StatusLabelArchived
       break
-    case 'Til arkiv':
+    case sv.StatusValueToArchive:
       icon = getFluentIcon('ArrowClockwiseDashes')
       backgroundColor = 'rgba(0, 120, 212, 0.12)'
-      label = strings.ArchiveOverview.StatusLabelToArchive
+      label = sv.StatusLabelToArchive
       break
-    case 'Feil':
+    case sv.StatusValueFailed:
       icon = getFluentIcon('ErrorCircle')
       backgroundColor = tokens.colorStatusDangerBackground2
-      label = strings.ArchiveOverview.StatusLabelFailed
+      label = sv.StatusLabelFailed
       break
-    case 'Advarsel':
+    case sv.StatusValueWarning:
       icon = getFluentIcon('Warning')
       backgroundColor = tokens.colorStatusWarningBackground2
-      label = strings.ArchiveOverview.StatusLabelWarning
+      label = sv.StatusLabelWarning
       break
     default:
       icon = getFluentIcon('LightbulbCircle')

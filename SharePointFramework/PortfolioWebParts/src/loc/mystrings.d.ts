@@ -365,6 +365,10 @@ declare interface IPortfolioWebPartsStrings {
     StatusLabelToArchive: string
     StatusLabelFailed: string
     StatusLabelWarning: string
+    StatusValueArchived: string
+    StatusValueToArchive: string
+    StatusValueFailed: string
+    StatusValueWarning: string
     // Quick stats
     QuickOverviewTitle: string
     QuickStatArchivedLabel: string
