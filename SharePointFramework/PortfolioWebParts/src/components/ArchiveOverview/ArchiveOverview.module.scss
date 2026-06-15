@@ -188,7 +188,7 @@
 
 // ── Project table ─────────────────────────────────────
 .projectTableWrap {
-  overflow-y: auto;
+  overflow: auto;
   max-height: 600px;
 
   thead th {
@@ -206,20 +206,29 @@
   margin-top: 8px;
 
   th {
+    position: relative;
     text-align: left;
-    padding: 6px 12px;
+    padding: 6px 28px 6px 12px;
     font-size: 16px;
     font-weight: 600;
     color: #605e5c;
     border-bottom: 1px solid #edebe9;
     white-space: nowrap;
-  }
+    user-select: none;
+    cursor: pointer;
 
+    &:hover {
+      background: #f3f2f1;
+    }
+  }
 
   td {
     padding: 8px 12px;
     border-bottom: 1px solid #f3f2f1;
     vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   tr:last-child td {
@@ -228,6 +237,21 @@
 
   tbody tr:hover td {
     background: #f3f2f1;
+  }
+}
+
+.resizeHandle {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  cursor: col-resize;
+  z-index: 2;
+
+  &:hover,
+  &:active {
+    background: rgba(0, 120, 212, 0.35);
   }
 }
 
@@ -422,6 +446,7 @@
 }
 
 .statGrid4 {
+  width: 70%;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
