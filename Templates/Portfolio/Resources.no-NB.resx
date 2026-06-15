@@ -169,48 +169,6 @@
   <data name="Choice_GtBAProjectSupport_ToBeInvestigated" xml:space="preserve">
     <value>Skal undersøkes/vurderes</value>
   </data>
-  <data name="Choice_GtBAStakeholderGroup_Businesses" xml:space="preserve">
-    <value>Virksomheter</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_CollaborationPartners" xml:space="preserve">
-    <value>Samarbeidspartnere</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_CouncilsAndCommittees" xml:space="preserve">
-    <value>Råd og utvalg</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_ExternalAssociations" xml:space="preserve">
-    <value>Foreninger (eksterne)</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_MunicipalAdministration" xml:space="preserve">
-    <value>Kommuneadministrasjon</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_Neighbors" xml:space="preserve">
-    <value>Naboer</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_OtherActors" xml:space="preserve">
-    <value>Andre aktører</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_Political" xml:space="preserve">
-    <value>Politisk</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_PublicAuthorities" xml:space="preserve">
-    <value>Offentlige myndigheter</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_SupervisionAndAgencies" xml:space="preserve">
-    <value>Tilsyn og vesener</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_Transport" xml:space="preserve">
-    <value>Transport</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_UnionRepresentatives" xml:space="preserve">
-    <value>Tillitsvalgte</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_Users" xml:space="preserve">
-    <value>Brukere</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_UtilityProviders" xml:space="preserve">
-    <value>Nettleverandører</value>
-  </data>
   <data name="Choice_GtChecklistStatus_Archived" xml:space="preserve">
     <value>Arkivert</value>
   </data>
@@ -597,60 +555,6 @@
   </data>
   <data name="Choice_GtSettingsCategory_UncertaintyPlanner" xml:space="preserve">
     <value>Usikkerhetstiltak i Planner</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Academia" xml:space="preserve">
-    <value>Akademia</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Academics" xml:space="preserve">
-    <value>Akademia</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Business" xml:space="preserve">
-    <value>Næringsliv</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Citizens" xml:space="preserve">
-    <value>Innbyggere</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Colleagues" xml:space="preserve">
-    <value>Medarbeidere</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Employees" xml:space="preserve">
-    <value>Medarbeidere</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Inhabitants" xml:space="preserve">
-    <value>Innbyggere</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_InstrumentDevice" xml:space="preserve">
-    <value>Virkemiddelapparat</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Leaders" xml:space="preserve">
-    <value>Ledelse</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Management" xml:space="preserve">
-    <value>Ledelse</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_OtherPublicActors" xml:space="preserve">
-    <value>Andre offentlige aktører</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_OtherPublicStakeholders" xml:space="preserve">
-    <value>Andre offentlige aktører</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_PolicyInstruments" xml:space="preserve">
-    <value>Virkemiddelapparat</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_TradeUnion" xml:space="preserve">
-    <value>Fagforening</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Union" xml:space="preserve">
-    <value>Fagforening</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Users" xml:space="preserve">
-    <value>Brukere</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Volenteers" xml:space="preserve">
-    <value>Frivillighet/Organisasjon</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_VoluntaryOrganization" xml:space="preserve">
-    <value>Frivillighet/Organisasjon</value>
   </data>
   <data name="Choice_GtStakeholderInfluence_Large" xml:space="preserve">
     <value>Stor</value>
@@ -2902,12 +2806,6 @@
   <data name="SiteFields_GtBAProjectSupportComment_DisplayName" xml:space="preserve">
     <value>Kommentar, tilskudd</value>
   </data>
-  <data name="SiteFields_GtBAStakeholderGroup_Description" xml:space="preserve">
-    <value>Hvilken interessentgruppe tilhører interessenten?</value>
-  </data>
-  <data name="SiteFields_GtBAStakeholderGroup_DisplayName" xml:space="preserve">
-    <value>Interessentgruppe</value>
-  </data>
   <data name="SiteFields_GtBudgetLastReportDate_Description" xml:space="preserve">
     <value>Legg inn dato for når siste kostnadsrapportering ble gjort</value>
   </data>
@@ -4324,11 +4222,11 @@
   <data name="SiteFields_GtStakeholderContext_DisplayName" xml:space="preserve">
     <value>Arena/Møteplass/Nettverk</value>
   </data>
-  <data name="SiteFields_GtStakeholderGroup_Description" xml:space="preserve">
-    <value>Hvilken interessentgruppe tilhører interessenten?</value>
+  <data name="SiteFields_GtStakeholderGroups_Description" xml:space="preserve">
+    <value>Hvilke interessentgrupper tilhører interessenten? Administreres som termer i termlageret under Prosjektportalen › Interessentgrupper.</value>
   </data>
-  <data name="SiteFields_GtStakeholderGroup_DisplayName" xml:space="preserve">
-    <value>Interessentgruppe</value>
+  <data name="SiteFields_GtStakeholderGroups_DisplayName" xml:space="preserve">
+    <value>Interessentgrupper</value>
   </data>
   <data name="SiteFields_GtStakeholderInfluence_Description" xml:space="preserve">
     <value>I hvilken grad påvirkes interessentgruppen av prosjektet?</value>

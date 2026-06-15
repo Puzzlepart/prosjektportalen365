@@ -139,7 +139,7 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Delivery/GtDeliveryStatusComment.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Stakeholders/GtStakeholderActions.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Stakeholders/GtStakeholderContext.xml" />
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Stakeholders/GtStakeholderGroup.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Stakeholders/GtStakeholderGroups.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Stakeholders/GtStakeholderInfluence.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Stakeholders/GtStakeholderInfluencePossibilty.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Stakeholders/GtStakeholderInterest.xml" />
@@ -194,7 +194,6 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/BA/GtBAProjectPrognosisThisYear.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/BA/GtBAProjectStatusCase.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/BA/GtBAProjectStatusCaseComment.xml" />
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/BA/GtBAStakeholderGroup.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Planner/GtAttachments.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Planner/GtCategory.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Planner/GtChecklist.xml" />

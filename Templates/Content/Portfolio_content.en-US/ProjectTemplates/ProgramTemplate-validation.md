@@ -1,4 +1,4 @@
-_The template was validated 5/11/2026, 10:58:33 AM_
+_The template was validated 11.6.2026, 10:50:52_
 
 The template contains the following tokens that has not been found in the .resx files:
 
@@ -109,8 +109,8 @@ _No tokens with missing translations or replacement values found._
                     "Name": "Title"
                 },
                 {
-                    "ID": "2847b3b0-ed22-4c47-b7c0-3ebfc83dae4a",
-                    "Name": "GtStakeholderGroup"
+                    "ID": "ba8e9bcd-d8af-41e2-a24c-d279e07f1b56",
+                    "Name": "GtStakeholderGroups"
                 },
                 {
                     "ID": "970ed1b2-9e71-45aa-8f8d-c391a15f067f",
@@ -549,7 +549,7 @@ _No tokens with missing translations or replacement values found._
                 "Title": "Program Deliveries"
             },
             {
-                "Url": "SitePages/Tidslinje.aspx",
+                "Url": "SitePages/Timeline.aspx",
                 "Title": "Program Timeline"
             },
             {
@@ -859,7 +859,7 @@ _No tokens with missing translations or replacement values found._
             ]
         },
         {
-            "Name": "Tidslinje.aspx",
+            "Name": "Timeline.aspx",
             "Title": "Program Timeline",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
@@ -872,6 +872,7 @@ _No tokens with missing translations or replacement values found._
                                 {
                                     "Id": "d156652b-9121-47af-89ae-1fe8427c53da",
                                     "Properties": {
+                                        "title": "Program Timeline",
                                         "listName": "Timeline Content",
                                         "showTimeline": true,
                                         "showTimelineListCommands": true,
@@ -1023,7 +1024,7 @@ _No tokens with missing translations or replacement values found._
                     "Title": "All Items",
                     "ViewFields": [
                         "LinkTitle",
-                        "GtStakeholderGroup",
+                        "GtStakeholderGroups",
                         "GtStakeholderContext",
                         "GtStakeholderStrategy",
                         "GtStakeholderInterest",
@@ -1379,7 +1380,7 @@ _No tokens with missing translations or replacement values found._
                     "AdditionalSettings": {
                         "RowLimit": 30,
                         "Paged": true,
-                        "ViewQuery": ""
+                        "ViewQuery": "<OrderBy><FieldRef Name='LinkFilename' /></OrderBy>"
                     }
                 },
                 {
@@ -1394,7 +1395,7 @@ _No tokens with missing translations or replacement values found._
                     "AdditionalSettings": {
                         "RowLimit": 30,
                         "Paged": true,
-                        "ViewQuery": "",
+                        "ViewQuery": "<OrderBy><FieldRef Name='LinkFilename' /></OrderBy>",
                         "Scope": 1
                     }
                 }
@@ -1657,6 +1658,6 @@ _No tokens with missing translations or replacement values found._
 ## Template Path
 
 ```txt
-/Users/remi.blom-ohlsen/code/Prosjektportalen/prosjektportalen365/Templates/Content/Portfolio_content.en-US/ProjectTemplates/ProgramTemplate.txt
+C:\code\prosjektportalen365\Templates\Content\Portfolio_content.en-US\ProjectTemplates\ProgramTemplate.txt
 ```
 

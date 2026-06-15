@@ -1,4 +1,4 @@
-_The template was validated 5/11/2026, 10:58:33 AM_
+_The template was validated 11.6.2026, 10:50:52_
 
 The template contains the following tokens that has not been found in the .resx files:
 
@@ -288,6 +288,6 @@ _No tokens with missing translations or replacement values found._
 ## Template Path
 
 ```txt
-/Users/remi.blom-ohlsen/code/Prosjektportalen/prosjektportalen365/Templates/Content/Portfolio_content.no-NB/ProjectTemplates/Overordnet.txt
+C:\code\prosjektportalen365\Templates\Content\Portfolio_content.no-NB\ProjectTemplates\Overordnet.txt
 ```
 

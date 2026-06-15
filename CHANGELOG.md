@@ -7,6 +7,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 ### Ny funksjonalitet
 
 - `Bestillingsportalen`-skjema bruker nå `DefaultMetadata` fra prosjekttypen til å sette prosjektegenskaper og valgt innholdstype på `Prosjektdata`-elementet som opprettes ved bestilling. En forhåndsvisning av verdiene vises i siste steg av bestillingsprosessen.
+- `Interessentgruppe` på `Interessentregister` er konvertert til et nytt multi-select taksonomifelt `GtStakeholderGroups`, med verdier vedlikeholdt sentralt i termlageret under `Prosjektportalen › Interessentgrupper`. Dette erstatter de tidligere Choice-feltene `GtStakeholderGroup` og BA-varianten `GtBAStakeholderGroup`, som er slått sammen til ett felles felt. Endringen fjerner behovet for å skripte ut oppdateringer til alle prosjektsider ved endring av gruppevalgene. [#1742](https://github.com/Puzzlepart/prosjektportalen365/issues/1742)
 
 ### Forbedringer
 
@@ -15,6 +16,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Forbedret visning av termsett-/taksonomifelt i aggregerte oversikter. Verdier fra søke-egenskaper med prefix `owstaxId` (f.eks. `owstaxIdGtProjectPhase`) vises nå som rene etiketter i stedet for rå søkeresultatformat med GUID-er, og flerverdier vises som separate merker (`tags`)
 - Felter med datatype `Tags` (typisk taksonomi-felt, f.eks. `Tjenesteområde`) hvor verdiene har overordnede termer vises nå som et innrykket, sammenleggbart hierarki i filterpanelet i stedet for som flate `:`-separerte tekststrenger (`Overordnet:Underordnet`).
 - Overgang til `sp-js-provisioning` `1.3.8` for malbasert opprettelse og oppdatering av innholdstyper med faste ID-er. De 15 site script-filene som kun opprettet tomme innholdstyper er fjernet fra releasepakken, slik at innholdstypene forvaltes gjennom JSON-malene. Eksisterende installasjoner med eldre content type-site scripts kan fortsatt oppgraderes uten egen opprydding av disse site scriptene. [#1744](https://github.com/Puzzlepart/prosjektportalen365/issues/1744)
+- Ved oppgradering migreres eksisterende verdier fra de gamle Choice-feltene automatisk til det nye taksonomifeltet per prosjektsite. Kundetilpassede choice-verdier opprettes som nye termer i term settet. De gamle feltene skjules (`Hidden=TRUE`), men data bevares.
 
 ### Feilrettinger
 
@@ -25,6 +27,10 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Rettet en feil hvor `Hent dokumentmal` gjorde gjentatte kall mot hubområdet og `Malbibliotek` ved innlasting av dokumentbibliotek, selv om brukeren ikke åpnet dialogen [#1749](https://github.com/Puzzlepart/prosjektportalen365/pull/1749)
 - Rettet en feil i `Dynamisk Liste` hvor Ja/Nei verdier alltid viser som "Nei"
 - Rettet en feil i oppsettveiviseren hvor private og delte Teams-kanaler (som oppretter egne SharePoint-områder knyttet til huben) feilaktig trigget oppsettveiviseren. Områdene mangler en Microsoft 365-gruppe, noe som førte til feildialogen «Invalid object identifier 'null'.» ved hver sideinnlasting. Veiviseren oppdager nå kanalområder (`TEAMCHANNEL`) og fjernes stille uten å gjøre endringer på området [#1754](https://github.com/Puzzlepart/prosjektportalen365/issues/1754)
+
+### Merk
+
+- Etter oppgradering bør tenant-administrator regenerere `SearchConfiguration.xml` fra sitt miljø dersom `GtStakeholderGroups` skal brukes som refiner eller i aggregerte oversikter. Det nye feltet fungerer uten denne endringen for visning og redigering i listen.
 
 ---
 

@@ -98,8 +98,8 @@
                     "Name": "Title"
                 },
                 {
-                    "ID": "2847b3b0-ed22-4c47-b7c0-3ebfc83dae4a",
-                    "Name": "GtStakeholderGroup"
+                    "ID": "ba8e9bcd-d8af-41e2-a24c-d279e07f1b56",
+                    "Name": "GtStakeholderGroups"
                 },
                 {
                     "ID": "970ed1b2-9e71-45aa-8f8d-c391a15f067f",
@@ -848,7 +848,7 @@
                     "Title": "{{View_AllItems_DisplayName}}",
                     "ViewFields": [
                         "LinkTitle",
-                        "GtStakeholderGroup",
+                        "GtStakeholderGroups",
                         "GtStakeholderContext",
                         "GtStakeholderStrategy",
                         "GtStakeholderInterest",

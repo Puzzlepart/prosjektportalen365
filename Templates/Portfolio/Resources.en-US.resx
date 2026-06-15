@@ -169,48 +169,6 @@
   <data name="Choice_GtBAProjectSupport_ToBeInvestigated" xml:space="preserve">
     <value>To be investigated/evaluated</value>
   </data>
-  <data name="Choice_GtBAStakeholderGroup_Businesses" xml:space="preserve">
-    <value>Businesses</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_CollaborationPartners" xml:space="preserve">
-    <value>Collaboration partners</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_CouncilsAndCommittees" xml:space="preserve">
-    <value>Councils and committees</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_ExternalAssociations" xml:space="preserve">
-    <value>External associations</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_MunicipalAdministration" xml:space="preserve">
-    <value>Municipal administration</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_Neighbors" xml:space="preserve">
-    <value>Neighbors</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_OtherActors" xml:space="preserve">
-    <value>Other actors</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_Political" xml:space="preserve">
-    <value>Political</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_PublicAuthorities" xml:space="preserve">
-    <value>Public authorities</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_SupervisionAndAgencies" xml:space="preserve">
-    <value>Supervision and agencies</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_Transport" xml:space="preserve">
-    <value>Transport</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_UnionRepresentatives" xml:space="preserve">
-    <value>Union representatives</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_Users" xml:space="preserve">
-    <value>Users</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_UtilityProviders" xml:space="preserve">
-    <value>Utility providers</value>
-  </data>
   <data name="Choice_GtChecklistStatus_Archived" xml:space="preserve">
     <value>Archived</value>
   </data>
@@ -597,60 +555,6 @@
   </data>
   <data name="Choice_GtSettingsCategory_UncertaintyPlanner" xml:space="preserve">
     <value>Uncertainty measures in Planner</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Academia" xml:space="preserve">
-    <value>Academia</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Academics" xml:space="preserve">
-    <value>Academia</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Business" xml:space="preserve">
-    <value>Business</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Citizens" xml:space="preserve">
-    <value>Citizens</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Colleagues" xml:space="preserve">
-    <value>Colleagues</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Employees" xml:space="preserve">
-    <value>Employees</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Inhabitants" xml:space="preserve">
-    <value>Inhabitants</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_InstrumentDevice" xml:space="preserve">
-    <value>Instrument device</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Leaders" xml:space="preserve">
-    <value>Leadership</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Management" xml:space="preserve">
-    <value>Management</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_OtherPublicActors" xml:space="preserve">
-    <value>Other public actors</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_OtherPublicStakeholders" xml:space="preserve">
-    <value>Other public stakeholders</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_PolicyInstruments" xml:space="preserve">
-    <value>Policy instruments</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_TradeUnion" xml:space="preserve">
-    <value>Trade union</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Union" xml:space="preserve">
-    <value>Union</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Users" xml:space="preserve">
-    <value>Users</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Volenteers" xml:space="preserve">
-    <value>Volunteering/Organization</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_VoluntaryOrganization" xml:space="preserve">
-    <value>Voluntary/Organization</value>
   </data>
   <data name="Choice_GtStakeholderInfluence_Large" xml:space="preserve">
     <value>Large</value>
@@ -2902,12 +2806,6 @@
   <data name="SiteFields_GtBAProjectSupportComment_DisplayName" xml:space="preserve">
     <value>Comment, grants</value>
   </data>
-  <data name="SiteFields_GtBAStakeholderGroup_Description" xml:space="preserve">
-    <value>Which stakeholder group does the stakeholder belong to?</value>
-  </data>
-  <data name="SiteFields_GtBAStakeholderGroup_DisplayName" xml:space="preserve">
-    <value>Stakeholder group</value>
-  </data>
   <data name="SiteFields_GtBudgetLastReportDate_Description" xml:space="preserve">
     <value>Enter the date when the last cost reporting was done</value>
   </data>
@@ -4324,11 +4222,11 @@
   <data name="SiteFields_GtStakeholderContext_DisplayName" xml:space="preserve">
     <value>Arena/Meeting Place/Network</value>
   </data>
-  <data name="SiteFields_GtStakeholderGroup_Description" xml:space="preserve">
-    <value>Which stakeholder group does the stakeholder belong to?</value>
+  <data name="SiteFields_GtStakeholderGroups_Description" xml:space="preserve">
+    <value>Which stakeholder groups does the stakeholder belong to? Managed as terms in the term store under Prosjektportalen › Interessentgrupper.</value>
   </data>
-  <data name="SiteFields_GtStakeholderGroup_DisplayName" xml:space="preserve">
-    <value>Stakeholder Group</value>
+  <data name="SiteFields_GtStakeholderGroups_DisplayName" xml:space="preserve">
+    <value>Stakeholder groups</value>
   </data>
   <data name="SiteFields_GtStakeholderInfluence_Description" xml:space="preserve">
     <value>To what extent is the stakeholder group influenced by the project?</value>
