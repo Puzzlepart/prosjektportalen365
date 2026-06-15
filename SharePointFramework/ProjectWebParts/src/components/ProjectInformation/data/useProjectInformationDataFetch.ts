@@ -59,7 +59,6 @@ const fetchData: DataFetchFunction<
   try {
     const isFrontpage = context.props.page === 'Frontpage'
     const shouldFetchArchiveStatus = isFrontpage && context.props.useArchive
-    const shouldFetchArchiveStatus = isFrontpage && !context.props.hideArchiveStatus
     // Empty fallback for users without read access to the project site (e.g. the
     // Portfolio Insight panel opened from a portfolio overview) instead of a hard error.
     const projectInformationData = await safeCall(
