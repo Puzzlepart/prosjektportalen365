@@ -14,14 +14,20 @@ import { IArchiveOverviewProps } from './types'
 const ARCHIVE_LIST_NAME = 'Arkiveringslogg'
 const PROJECTS_LIST_NAME = 'Prosjekter'
 
-const getStatusMap = (): Record<string, { label: string; color: string }> => ({
-  Arkivert: { label: strings.ArchiveOverview.StatusLabelArchived, color: '#75b964' },
-  'Til arkiv': { label: strings.ArchiveOverview.StatusLabelToArchive, color: '#6b8fba' },
-  Feil: { label: strings.ArchiveOverview.StatusLabelFailed, color: '#de534a' },
-  Advarsel: { label: strings.ArchiveOverview.StatusLabelWarning, color: '#efc33d' }
-})
+const getStatusMap = (): Record<string, { label: string; color: string }> => {
+  const sv = strings.ArchiveOverview
+  return {
+    [sv.StatusValueArchived]:  { label: sv.StatusLabelArchived,  color: '#75b964' },
+    [sv.StatusValueToArchive]: { label: sv.StatusLabelToArchive, color: '#6b8fba' },
+    [sv.StatusValueFailed]:    { label: sv.StatusLabelFailed,    color: '#de534a' },
+    [sv.StatusValueWarning]:   { label: sv.StatusLabelWarning,   color: '#efc33d' }
+  }
+}
 
-const STATUS_ORDER = ['Arkivert', 'Til arkiv', 'Feil', 'Advarsel']
+const getStatusOrder = (): string[] => {
+  const sv = strings.ArchiveOverview
+  return [sv.StatusValueArchived, sv.StatusValueToArchive, sv.StatusValueFailed, sv.StatusValueWarning]
+}
 
 const PROJECT_COLORS = [
   '#107C10',
@@ -157,7 +163,7 @@ function getActivityLevel(lastArchivedMs: number): ActivityLevel {
 
 function getProjectStatus(siteItems: IArchiveLogItem[]): ProjectStatus {
   if (!siteItems.length) return 'never'
-  if (siteItems.some((i) => i.GtLogStatus === 'Feil' || i.GtLogStatus === 'Advarsel'))
+  if (siteItems.some((i) => i.GtLogStatus === strings.ArchiveOverview.StatusValueFailed || i.GtLogStatus === strings.ArchiveOverview.StatusValueWarning))
     return 'warning'
   return 'updated'
 }
@@ -194,7 +200,7 @@ function processData(
 
   const archiveTotal = periodItems.length
 
-  const archiveStatus: IArchiveStatusEntry[] = STATUS_ORDER.map((key) => ({
+  const archiveStatus: IArchiveStatusEntry[] = getStatusOrder().map((key) => ({
     label: statusMap[key]?.label ?? key,
     count: statusCounts[key] ?? 0,
     percent:
@@ -204,9 +210,10 @@ function processData(
     color: statusMap[key]?.color ?? '#888'
   })).filter((s) => s.count > 0)
 
+  const sv = strings.ArchiveOverview
   const pending: IPendingCounts = {
-    toArchive: { count: statusCounts['Til arkiv'] ?? 0 },
-    failed: { count: statusCounts['Feil'] ?? 0 }
+    toArchive: { count: statusCounts[sv.StatusValueToArchive] ?? 0 },
+    failed: { count: statusCounts[sv.StatusValueFailed] ?? 0 }
   }
 
   const projects: IProjectSummary[] = projectItems.map((proj, idx) => {
@@ -232,9 +239,9 @@ function processData(
       activity: getActivityLevel(latestMs),
       status: getProjectStatus(siteItems),
       nextArchive: '–',
-      archivedCount: siteItems.filter((i) => i.GtLogStatus === 'Arkivert').length,
-      pendingCount: siteItems.filter((i) => i.GtLogStatus === 'Til arkiv').length,
-      failedCount: siteItems.filter((i) => i.GtLogStatus === 'Feil').length
+      archivedCount: siteItems.filter((i) => i.GtLogStatus === strings.ArchiveOverview.StatusValueArchived).length,
+      pendingCount: siteItems.filter((i) => i.GtLogStatus === strings.ArchiveOverview.StatusValueToArchive).length,
+      failedCount: siteItems.filter((i) => i.GtLogStatus === strings.ArchiveOverview.StatusValueFailed).length
     }
   })
 
@@ -250,22 +257,22 @@ function processData(
   const quickStats: IQuickStat[] = [
     {
       label: strings.ArchiveOverview.QuickStatArchivedLabel,
-      value: statusCounts['Arkivert'] ?? 0,
+      value: statusCounts[sv.StatusValueArchived] ?? 0,
       positive: true
     },
     {
       label: strings.ArchiveOverview.QuickStatToArchiveLabel,
-      value: statusCounts['Til arkiv'] ?? 0,
+      value: statusCounts[sv.StatusValueToArchive] ?? 0,
       positive: true
     },
     {
       label: strings.ArchiveOverview.QuickStatFailedLabel,
-      value: statusCounts['Feil'] ?? 0,
-      positive: (statusCounts['Feil'] ?? 0) === 0
+      value: statusCounts[sv.StatusValueFailed] ?? 0,
+      positive: (statusCounts[sv.StatusValueFailed] ?? 0) === 0
     },
     {
       label: strings.ArchiveOverview.QuickStatWarningLabel,
-      value: statusCounts['Advarsel'] ?? 0,
+      value: statusCounts[sv.StatusValueWarning] ?? 0,
       positive: false
     }
   ]

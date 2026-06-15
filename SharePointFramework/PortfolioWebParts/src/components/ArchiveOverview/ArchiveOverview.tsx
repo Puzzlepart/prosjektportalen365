@@ -61,12 +61,13 @@ function hexToRgba(hex: string, alpha: number): string {
 
 /** Tallies items by each GtLogStatus value. */
 function countByStatus(items: IDocumentLogItem[]) {
+  const sv = strings.ArchiveOverview
   let arkivert = 0, tilArkiv = 0, feil = 0, advarsel = 0
   for (const item of items) {
-    if (item.status === 'Arkivert') arkivert++
-    else if (item.status === 'Til arkiv') tilArkiv++
-    else if (item.status === 'Feil') feil++
-    else if (item.status === 'Advarsel') advarsel++
+    if (item.status === sv.StatusValueArchived)       arkivert++
+    else if (item.status === sv.StatusValueToArchive) tilArkiv++
+    else if (item.status === sv.StatusValueFailed)    feil++
+    else if (item.status === sv.StatusValueWarning)   advarsel++
   }
   return { total: items.length, arkivert, tilArkiv, feil, advarsel }
 }
@@ -92,7 +93,7 @@ const StatCards: FC<{ items: IDocumentLogItem[] }> = ({ items }) => {
         <div className={styles.statCardNumber} style={{ color: '#D13438' }}>{c.feil}</div>
         <Caption1 style={{ color: '#605e5c' }}>{strings.ArchiveOverview.StatusLabelFailed}</Caption1>
       </div>
-      <div className={styles.statCard}>
+      <div className={styles.statCardLastRow}>
         <div className={styles.statCardNumber} style={{ color: '#D86C00' }}>{c.advarsel}</div>
         <Caption1 style={{ color: '#605e5c' }}>{strings.ArchiveOverview.StatusLabelWarning}</Caption1>
       </div>
@@ -122,7 +123,7 @@ const ProsjekterStatCards: FC<{ projects: IProjectSummary[] }> = ({ projects }) 
         <div className={styles.statCardNumber} style={{ color: '#D86C00' }}>{warning}</div>
         <Caption1 style={{ color: '#605e5c' }}>{strings.ArchiveOverview.StatusWarning}</Caption1>
       </div>
-      <div className={styles.statCard}>
+      <div className={styles.statCardLastRow}>
         <div className={styles.statCardNumber} style={{ color: '#D13438' }}>{never}</div>
         <Caption1 style={{ color: '#605e5c' }}>{strings.ArchiveOverview.StatusNeverArchived}</Caption1>
       </div>
@@ -213,11 +214,6 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                 {strings.ArchiveOverview.NavInnstillinger}
               </NavItem>
             </Nav>
-            <div className={styles.navFooter}>
-              <NavItem icon={<QuestionCircleRegular />} value='hjelp' href='#'>
-                {strings.ArchiveOverview.NavHjelp}
-              </NavItem>
-            </div>
           </nav>
 
           {/* ── Main content ── */}
@@ -295,312 +291,292 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                 <Caption1>{error.message}</Caption1>
               </div>
             ) : selectedNav === 'prosjekter' ? (
-              <div className={styles.body}>
-                <div className={styles.mainColumn} style={{ maxWidth: '100%' }}>
-                  <div className={styles.section}>
-                    <div className={styles.sectionHeader}>
-                      <Subtitle2>{strings.ArchiveOverview.NavProsjekter}</Subtitle2>
-                    </div>
-                    <ProsjekterStatCards projects={projects} />
-                    <Toolbar
-                      items={prosjekterToolbarItems}
-                      farItems={prosjekterFarItems}
-                      filterPanel={prosjekterFilterPanelProps}
-                    />
-                    <div className={styles.projectTableWrap}>
-                      <table className={styles.projectTable}>
-                        <thead>
-                          <tr>
-                            <th
-                              onClick={() => handleProjectSort('name')}
-                              style={{ cursor: 'pointer', userSelect: 'none' }}
-                            >
-                              {strings.ArchiveOverview.ColumnProjectName}
-                              {sortArrow('name')}
-                            </th>
-                            <th
-                              onClick={() => handleProjectSort('lastArchived')}
-                              style={{ cursor: 'pointer', userSelect: 'none' }}
-                            >
-                              {strings.ArchiveOverview.ColumnLastArchived}
-                              {sortArrow('lastArchived')}
-                            </th>
-                            <th
-                              onClick={() => handleProjectSort('activity')}
-                              style={{ cursor: 'pointer', userSelect: 'none' }}
-                            >
-                              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-                                {strings.ArchiveOverview.ColumnActivityLevel}
-                                <InfoRegular fontSize={17} style={{ color: '#605e5c', flexShrink: 0 }} />
-                              </span>
-                              {sortArrow('activity')}
-                            </th>
-                            <th
-                              onClick={() => handleProjectSort('status')}
-                              style={{ cursor: 'pointer', userSelect: 'none' }}
-                            >
-                              {strings.ArchiveOverview.ColumnStatus}
-                              {sortArrow('status')}
-                            </th>
-                            <th>{strings.ArchiveOverview.ColumnNextArchive}</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {filteredProjects.map((p) => (
-                            <tr key={p.id}>
-                              <td>
-                                <div className={styles.projectCell}>
-                                  <div
-                                    className={styles.projectIcon}
-                                    style={{ backgroundColor: hexToRgba(p.color, 0.18) }}
-                                  >
-                                    <FolderRegular fontSize={14} style={{ color: p.color }} />
-                                  </div>
-                                  {p.siteUrl ? (
-                                    <Link href={p.siteUrl} target='_blank'>
-                                      <Text size={200}>{p.name}</Text>
-                                    </Link>
-                                  ) : (
-                                    <Text size={200}>{p.name}</Text>
-                                  )}
-                                </div>
-                              </td>
-                              <td>
-                                <Caption1 style={{ color: '#605e5c' }}>{p.lastArchived}</Caption1>
-                              </td>
-                              <td>
-                                <div className={styles.activityCell}>
-                                  <ActivityBars level={p.activity} />
-                                  <Caption1 style={{ color: '#605e5c' }}>
-                                    {p.activity === 'high'
-                                      ? strings.ArchiveOverview.ActivityHigh
-                                      : p.activity === 'medium'
-                                        ? strings.ArchiveOverview.ActivityMedium
-                                        : p.activity === 'low'
-                                          ? strings.ArchiveOverview.ActivityLow
-                                          : strings.ArchiveOverview.ActivityNone}
-                                  </Caption1>
-                                </div>
-                              </td>
-                              <td><StatusBadge status={p.status} /></td>
-                              <td>
-                                <Caption1 style={{ color: '#605e5c' }}>{p.nextArchive}</Caption1>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
+              <div className={styles.tableViewBody}>
+                <div className={styles.sectionHeader}>
+                  <Subtitle2>{strings.ArchiveOverview.NavProsjekter}</Subtitle2>
+                </div>
+                <ProsjekterStatCards projects={projects} />
+                <Toolbar
+                  items={prosjekterToolbarItems}
+                  farItems={prosjekterFarItems}
+                  filterPanel={prosjekterFilterPanelProps}
+                />
+                <div className={styles.projectTableWrap}>
+                  <table className={styles.projectTable}>
+                    <thead>
+                      <tr>
+                        <th
+                          onClick={() => handleProjectSort('name')}
+                          style={{ cursor: 'pointer', userSelect: 'none' }}
+                        >
+                          {strings.ArchiveOverview.ColumnProjectName}
+                          {sortArrow('name')}
+                        </th>
+                        <th
+                          onClick={() => handleProjectSort('lastArchived')}
+                          style={{ cursor: 'pointer', userSelect: 'none' }}
+                        >
+                          {strings.ArchiveOverview.ColumnLastArchived}
+                          {sortArrow('lastArchived')}
+                        </th>
+                        <th
+                          onClick={() => handleProjectSort('activity')}
+                          style={{ cursor: 'pointer', userSelect: 'none' }}
+                        >
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                            {strings.ArchiveOverview.ColumnActivityLevel}
+                            <InfoRegular fontSize={17} style={{ color: '#605e5c', flexShrink: 0 }} />
+                          </span>
+                          {sortArrow('activity')}
+                        </th>
+                        <th
+                          onClick={() => handleProjectSort('status')}
+                          style={{ cursor: 'pointer', userSelect: 'none' }}
+                        >
+                          {strings.ArchiveOverview.ColumnStatus}
+                          {sortArrow('status')}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredProjects.map((p) => (
+                        <tr key={p.id}>
+                          <td>
+                            <div className={styles.projectCell}>
+                              <div
+                                className={styles.projectIcon}
+                                style={{ backgroundColor: hexToRgba(p.color, 0.18) }}
+                              >
+                                <FolderRegular fontSize={14} style={{ color: p.color }} />
+                              </div>
+                              {p.siteUrl ? (
+                                <Link href={p.siteUrl} target='_blank'>
+                                  <Text size={200}>{p.name}</Text>
+                                </Link>
+                              ) : (
+                                <Text size={200}>{p.name}</Text>
+                              )}
+                            </div>
+                          </td>
+                          <td>
+                            <Caption1 style={{ color: '#605e5c' }}>{p.lastArchived}</Caption1>
+                          </td>
+                          <td>
+                            <div className={styles.activityCell}>
+                              <ActivityBars level={p.activity} />
+                              <Caption1 style={{ color: '#605e5c' }}>
+                                {p.activity === 'high'
+                                  ? strings.ArchiveOverview.ActivityHigh
+                                  : p.activity === 'medium'
+                                    ? strings.ArchiveOverview.ActivityMedium
+                                    : p.activity === 'low'
+                                      ? strings.ArchiveOverview.ActivityLow
+                                      : strings.ArchiveOverview.ActivityNone}
+                              </Caption1>
+                            </div>
+                          </td>
+                          <td><StatusBadge status={p.status} /></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             ) : selectedNav === 'dokumenter' ? (
-              <div className={styles.body}>
-                <div className={styles.mainColumn} style={{ maxWidth: '100%' }}>
-                  <div className={styles.section}>
-                    <div className={styles.sectionHeader}>
-                      <Subtitle2>{strings.ArchiveOverview.NavDokumenter}</Subtitle2>
-                    </div>
-                    <StatCards items={documentItems} />
-                    <Toolbar
-                      items={dokumenterToolbarItems}
-                      farItems={dokumenterFarItems}
-                      filterPanel={dokumenterFilterPanelProps}
-                    />
-                    {documentItems.length === 0 ? (
-                      <Caption1 style={{ color: '#605e5c', display: 'block', marginTop: 12 }}>
-                        {strings.ArchiveOverview.NoDocumentsLabel}
-                      </Caption1>
-                    ) : (
-                      <div className={styles.projectTableWrap}>
-                        <table className={styles.projectTable}>
-                          <thead>
-                            <tr>
-                              <th>{strings.ArchiveOverview.ColumnProjectName}</th>
-                              <th>{strings.ArchiveOverview.ColumnDocument}</th>
-                              <th>{strings.ArchiveOverview.ColumnDateArchived}</th>
-                              <th>{strings.ArchiveOverview.ColumnStatus}</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {filteredDocs.map((doc: IDocumentLogItem) => (
-                              <tr key={doc.id}>
-                                <td>
-                                  <div className={styles.projectCell}>
-                                    <div className={styles.projectIcon}>
-                                      <FolderRegular fontSize={14} />
-                                    </div>
-                                    {doc.projectSiteUrl ? (
-                                      <Link href={doc.projectSiteUrl} target='_blank'>
-                                        <Text size={200}>{doc.projectName}</Text>
-                                      </Link>
-                                    ) : (
-                                      <Text size={200}>{doc.projectName}</Text>
-                                    )}
-                                  </div>
-                                </td>
-                                <td>
-                                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                                    <DocumentRegular fontSize={14} style={{ color: '#605e5c', flexShrink: 0 }} />
-                                    <Text size={200}>{doc.title}</Text>
-                                  </div>
-                                </td>
-                                <td>
-                                  <Caption1 style={{ color: '#605e5c' }}>{doc.dateArchived}</Caption1>
-                                </td>
-                                <td>
-                                  <LogStatusBadge status={doc.status} />
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    )}
-                  </div>
+              <div className={styles.tableViewBody}>
+                <div className={styles.sectionHeader}>
+                  <Subtitle2>{strings.ArchiveOverview.NavDokumenter}</Subtitle2>
                 </div>
+                <StatCards items={documentItems} />
+                <Toolbar
+                  items={dokumenterToolbarItems}
+                  farItems={dokumenterFarItems}
+                  filterPanel={dokumenterFilterPanelProps}
+                />
+                {documentItems.length === 0 ? (
+                  <Caption1 style={{ color: '#605e5c', display: 'block', marginTop: 12 }}>
+                    {strings.ArchiveOverview.NoDocumentsLabel}
+                  </Caption1>
+                ) : (
+                  <div className={styles.projectTableWrap}>
+                    <table className={styles.projectTable}>
+                      <thead>
+                        <tr>
+                          <th>{strings.ArchiveOverview.ColumnProjectName}</th>
+                          <th>{strings.ArchiveOverview.ColumnDocument}</th>
+                          <th>{strings.ArchiveOverview.ColumnDateArchived}</th>
+                          <th>{strings.ArchiveOverview.ColumnStatus}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {filteredDocs.map((doc: IDocumentLogItem) => (
+                          <tr key={doc.id}>
+                            <td>
+                              <div className={styles.projectCell}>
+                                <div className={styles.projectIcon}>
+                                  <FolderRegular fontSize={14} />
+                                </div>
+                                {doc.projectSiteUrl ? (
+                                  <Link href={doc.projectSiteUrl} target='_blank'>
+                                    <Text size={200}>{doc.projectName}</Text>
+                                  </Link>
+                                ) : (
+                                  <Text size={200}>{doc.projectName}</Text>
+                                )}
+                              </div>
+                            </td>
+                            <td>
+                              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                                <DocumentRegular fontSize={14} style={{ color: '#605e5c', flexShrink: 0 }} />
+                                <Text size={200}>{doc.title}</Text>
+                              </div>
+                            </td>
+                            <td>
+                              <Caption1 style={{ color: '#605e5c' }}>{doc.dateArchived}</Caption1>
+                            </td>
+                            <td>
+                              <LogStatusBadge status={doc.status} />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               </div>
             ) : selectedNav === 'lister' ? (
-              <div className={styles.body}>
-                <div className={styles.mainColumn} style={{ maxWidth: '100%' }}>
-                  <div className={styles.section}>
-                    <div className={styles.sectionHeader}>
-                      <Subtitle2>{strings.ArchiveOverview.ListerViewTitle}</Subtitle2>
-                    </div>
-                    <StatCards items={listItems} />
-                    <Toolbar
-                      items={listerToolbarItems}
-                      farItems={listerFarItems}
-                      filterPanel={listerFilterPanelProps}
-                    />
-                    {listItems.length === 0 ? (
-                      <Caption1 style={{ color: '#605e5c', display: 'block', marginTop: 12 }}>
-                        {strings.ArchiveOverview.NoListsLabel}
-                      </Caption1>
-                    ) : (
-                      <div className={styles.projectTableWrap}>
-                        <table className={styles.projectTable}>
-                          <thead>
-                            <tr>
-                              <th>{strings.ArchiveOverview.ColumnProjectName}</th>
-                              <th>{strings.ArchiveOverview.ColumnList}</th>
-                              <th>{strings.ArchiveOverview.ColumnDateArchived}</th>
-                              <th>{strings.ArchiveOverview.ColumnStatus}</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {filteredLists.map((item: IDocumentLogItem) => (
-                              <tr key={item.id}>
-                                <td>
-                                  <div className={styles.projectCell}>
-                                    <div className={styles.projectIcon}>
-                                      <FolderRegular fontSize={14} />
-                                    </div>
-                                    {item.projectSiteUrl ? (
-                                      <Link href={item.projectSiteUrl} target='_blank'>
-                                        <Text size={200}>{item.projectName}</Text>
-                                      </Link>
-                                    ) : (
-                                      <Text size={200}>{item.projectName}</Text>
-                                    )}
-                                  </div>
-                                </td>
-                                <td>
-                                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                                    <GridRegular fontSize={14} style={{ color: '#605e5c', flexShrink: 0 }} />
-                                    <Text size={200}>{item.title}</Text>
-                                  </div>
-                                </td>
-                                <td>
-                                  <Caption1 style={{ color: '#605e5c' }}>{item.dateArchived}</Caption1>
-                                </td>
-                                <td>
-                                  <LogStatusBadge status={item.status} />
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    )}
-                  </div>
+              <div className={styles.tableViewBody}>
+                <div className={styles.sectionHeader}>
+                  <Subtitle2>{strings.ArchiveOverview.ListerViewTitle}</Subtitle2>
                 </div>
+                <StatCards items={listItems} />
+                <Toolbar
+                  items={listerToolbarItems}
+                  farItems={listerFarItems}
+                  filterPanel={listerFilterPanelProps}
+                />
+                {listItems.length === 0 ? (
+                  <Caption1 style={{ color: '#605e5c', display: 'block', marginTop: 12 }}>
+                    {strings.ArchiveOverview.NoListsLabel}
+                  </Caption1>
+                ) : (
+                  <div className={styles.projectTableWrap}>
+                    <table className={styles.projectTable}>
+                      <thead>
+                        <tr>
+                          <th>{strings.ArchiveOverview.ColumnProjectName}</th>
+                          <th>{strings.ArchiveOverview.ColumnList}</th>
+                          <th>{strings.ArchiveOverview.ColumnDateArchived}</th>
+                          <th>{strings.ArchiveOverview.ColumnStatus}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {filteredLists.map((item: IDocumentLogItem) => (
+                          <tr key={item.id}>
+                            <td>
+                              <div className={styles.projectCell}>
+                                <div className={styles.projectIcon}>
+                                  <FolderRegular fontSize={14} />
+                                </div>
+                                {item.projectSiteUrl ? (
+                                  <Link href={item.projectSiteUrl} target='_blank'>
+                                    <Text size={200}>{item.projectName}</Text>
+                                  </Link>
+                                ) : (
+                                  <Text size={200}>{item.projectName}</Text>
+                                )}
+                              </div>
+                            </td>
+                            <td>
+                              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                                <GridRegular fontSize={14} style={{ color: '#605e5c', flexShrink: 0 }} />
+                                <Text size={200}>{item.title}</Text>
+                              </div>
+                            </td>
+                            <td>
+                              <Caption1 style={{ color: '#605e5c' }}>{item.dateArchived}</Caption1>
+                            </td>
+                            <td>
+                              <LogStatusBadge status={item.status} />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               </div>
             ) : selectedNav === 'arkivlogg' ? (
-              <div className={styles.body}>
-                <div className={styles.mainColumn} style={{ maxWidth: '100%' }}>
-                  <div className={styles.section}>
-                    <div className={styles.sectionHeader}>
-                      <Subtitle2>{strings.ArchiveOverview.NavArkivlogg}</Subtitle2>
-                    </div>
-                    <StatCards items={logItems} />
-                    <Toolbar
-                      items={arkivloggToolbarItems}
-                      farItems={arkivloggFarItems}
-                      filterPanel={arkivloggFilterPanelProps}
-                    />
-                    {logItems.length === 0 ? (
-                      <Caption1 style={{ color: '#605e5c', display: 'block', marginTop: 12 }}>
-                        {strings.ArchiveOverview.NoLogItemsLabel}
-                      </Caption1>
-                    ) : (
-                      <div className={styles.projectTableWrap}>
-                        <table className={styles.projectTable}>
-                          <thead>
-                            <tr>
-                              <th>{strings.ArchiveOverview.ColumnProjectName}</th>
-                              <th>{strings.ArchiveOverview.ColumnElement}</th>
-                              <th>{strings.ArchiveOverview.ColumnScope}</th>
-                              <th>{strings.ArchiveOverview.ColumnDateArchived}</th>
-                              <th>{strings.ArchiveOverview.ColumnStatus}</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {filteredLog.map((item: IDocumentLogItem) => (
-                              <tr key={item.id}>
-                                <td>
-                                  <div className={styles.projectCell}>
-                                    <div className={styles.projectIcon}>
-                                      <FolderRegular fontSize={14} />
-                                    </div>
-                                    {item.projectSiteUrl ? (
-                                      <Link href={item.projectSiteUrl} target='_blank'>
-                                        <Text size={200}>{item.projectName}</Text>
-                                      </Link>
-                                    ) : (
-                                      <Text size={200}>{item.projectName}</Text>
-                                    )}
-                                  </div>
-                                </td>
-                                <td>
-                                  <Text size={200}>{item.title}</Text>
-                                </td>
-                                <td>
-                                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                                    {item.scope === 'Dokument'
-                                      ? <DocumentRegular fontSize={14} style={{ color: '#605e5c', flexShrink: 0 }} />
-                                      : <GridRegular fontSize={14} style={{ color: '#605e5c', flexShrink: 0 }} />}
-                                    <Caption1 style={{ color: '#605e5c' }}>
-                                      {item.scope === 'Dokument'
-                                        ? strings.ArchiveOverview.ScopeLabelDocument
-                                        : strings.ArchiveOverview.ScopeLabelList}
-                                    </Caption1>
-                                  </div>
-                                </td>
-                                <td>
-                                  <Caption1 style={{ color: '#605e5c' }}>{item.dateArchived}</Caption1>
-                                </td>
-                                <td>
-                                  <LogStatusBadge status={item.status} />
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    )}
-                  </div>
+              <div className={styles.tableViewBody}>
+                <div className={styles.sectionHeader}>
+                  <Subtitle2>{strings.ArchiveOverview.NavArkivlogg}</Subtitle2>
                 </div>
+                <StatCards items={logItems} />
+                <Toolbar
+                  items={arkivloggToolbarItems}
+                  farItems={arkivloggFarItems}
+                  filterPanel={arkivloggFilterPanelProps}
+                />
+                {logItems.length === 0 ? (
+                  <Caption1 style={{ color: '#605e5c', display: 'block', marginTop: 12 }}>
+                    {strings.ArchiveOverview.NoLogItemsLabel}
+                  </Caption1>
+                ) : (
+                  <div className={styles.projectTableWrap}>
+                    <table className={styles.projectTable}>
+                      <thead>
+                        <tr>
+                          <th>{strings.ArchiveOverview.ColumnProjectName}</th>
+                          <th>{strings.ArchiveOverview.ColumnElement}</th>
+                          <th>{strings.ArchiveOverview.ColumnScope}</th>
+                          <th>{strings.ArchiveOverview.ColumnDateArchived}</th>
+                          <th>{strings.ArchiveOverview.ColumnStatus}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {filteredLog.map((item: IDocumentLogItem) => (
+                          <tr key={item.id}>
+                            <td>
+                              <div className={styles.projectCell}>
+                                <div className={styles.projectIcon}>
+                                  <FolderRegular fontSize={14} />
+                                </div>
+                                {item.projectSiteUrl ? (
+                                  <Link href={item.projectSiteUrl} target='_blank'>
+                                    <Text size={200}>{item.projectName}</Text>
+                                  </Link>
+                                ) : (
+                                  <Text size={200}>{item.projectName}</Text>
+                                )}
+                              </div>
+                            </td>
+                            <td>
+                              <Text size={200}>{item.title}</Text>
+                            </td>
+                            <td>
+                              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                                {item.scope === 'Dokument'
+                                  ? <DocumentRegular fontSize={14} style={{ color: '#605e5c', flexShrink: 0 }} />
+                                  : <GridRegular fontSize={14} style={{ color: '#605e5c', flexShrink: 0 }} />}
+                                <Caption1 style={{ color: '#605e5c' }}>
+                                  {item.scope === 'Dokument'
+                                    ? strings.ArchiveOverview.ScopeLabelDocument
+                                    : strings.ArchiveOverview.ScopeLabelList}
+                                </Caption1>
+                              </div>
+                            </td>
+                            <td>
+                              <Caption1 style={{ color: '#605e5c' }}>{item.dateArchived}</Caption1>
+                            </td>
+                            <td>
+                              <LogStatusBadge status={item.status} />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               </div>
             ) : (
               <div className={styles.body}>
@@ -684,7 +660,6 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                               </span>
                             </th>
                             <th>{strings.ArchiveOverview.ColumnStatus}</th>
-                            <th>{strings.ArchiveOverview.ColumnNextArchive}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -726,9 +701,6 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                               </td>
                               <td>
                                 <StatusBadge status={p.status} />
-                              </td>
-                              <td>
-                                <Caption1 style={{ color: '#605e5c' }}>{p.nextArchive}</Caption1>
                               </td>
                             </tr>
                           ))}
