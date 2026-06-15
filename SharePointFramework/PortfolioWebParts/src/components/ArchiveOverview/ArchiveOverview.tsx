@@ -171,6 +171,13 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
     filteredLists,
     filteredLog,
     logItems,
+    prosjekterColWidths, prosjekterStartResize,
+    dokumenterColWidths, dokumenterStartResize,
+    listerColWidths,     listerStartResize,
+    arkivloggColWidths,  arkivloggStartResize,
+    dokumenterSort, handleDokumenterSort,
+    listerSort,     handleListerSort,
+    arkivloggSort,  handleArkivloggSort,
     dokumenterToolbarItems,
     dokumenterFarItems,
     dokumenterFilterPanelProps,
@@ -184,6 +191,9 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
     arkivloggFarItems,
     arkivloggFilterPanelProps,
   } = useArchiveOverview(props)
+
+  const sortArrowFor = (sort: { col: string; dir: 'asc' | 'desc' }, col: string) =>
+    sort.col === col ? (sort.dir === 'asc' ? ' ↑' : ' ↓') : ''
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
@@ -302,39 +312,41 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                   filterPanel={prosjekterFilterPanelProps}
                 />
                 <div className={styles.projectTableWrap}>
-                  <table className={styles.projectTable}>
+                  <table
+                    className={styles.projectTable}
+                    style={Object.keys(prosjekterColWidths).length ? { tableLayout: 'fixed' } : undefined}
+                  >
+                    {Object.keys(prosjekterColWidths).length > 0 && (
+                      <colgroup>
+                        {['name', 'lastArchived', 'activity', 'status'].map(k => (
+                          <col key={k} style={{ width: prosjekterColWidths[k] }} />
+                        ))}
+                      </colgroup>
+                    )}
                     <thead>
                       <tr>
-                        <th
-                          onClick={() => handleProjectSort('name')}
-                          style={{ cursor: 'pointer', userSelect: 'none' }}
-                        >
+                        <th data-col-key='name' onClick={() => handleProjectSort('name')}>
                           {strings.ArchiveOverview.ColumnProjectName}
                           {sortArrow('name')}
+                          <div className={styles.resizeHandle} onMouseDown={(e) => prosjekterStartResize('name', e)} />
                         </th>
-                        <th
-                          onClick={() => handleProjectSort('lastArchived')}
-                          style={{ cursor: 'pointer', userSelect: 'none' }}
-                        >
+                        <th data-col-key='lastArchived' onClick={() => handleProjectSort('lastArchived')}>
                           {strings.ArchiveOverview.ColumnLastArchived}
                           {sortArrow('lastArchived')}
+                          <div className={styles.resizeHandle} onMouseDown={(e) => prosjekterStartResize('lastArchived', e)} />
                         </th>
-                        <th
-                          onClick={() => handleProjectSort('activity')}
-                          style={{ cursor: 'pointer', userSelect: 'none' }}
-                        >
+                        <th data-col-key='activity' onClick={() => handleProjectSort('activity')}>
                           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                             {strings.ArchiveOverview.ColumnActivityLevel}
                             <InfoRegular fontSize={17} style={{ color: '#605e5c', flexShrink: 0 }} />
                           </span>
                           {sortArrow('activity')}
+                          <div className={styles.resizeHandle} onMouseDown={(e) => prosjekterStartResize('activity', e)} />
                         </th>
-                        <th
-                          onClick={() => handleProjectSort('status')}
-                          style={{ cursor: 'pointer', userSelect: 'none' }}
-                        >
+                        <th data-col-key='status' onClick={() => handleProjectSort('status')}>
                           {strings.ArchiveOverview.ColumnStatus}
                           {sortArrow('status')}
+                          <div className={styles.resizeHandle} onMouseDown={(e) => prosjekterStartResize('status', e)} />
                         </th>
                       </tr>
                     </thead>
@@ -399,13 +411,39 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                   </Caption1>
                 ) : (
                   <div className={styles.projectTableWrap}>
-                    <table className={styles.projectTable}>
+                    <table
+                      className={styles.projectTable}
+                      style={Object.keys(dokumenterColWidths).length ? { tableLayout: 'fixed' } : undefined}
+                    >
+                      {Object.keys(dokumenterColWidths).length > 0 && (
+                        <colgroup>
+                          {['projectName', 'title', 'dateArchived', 'status'].map(k => (
+                            <col key={k} style={{ width: dokumenterColWidths[k] }} />
+                          ))}
+                        </colgroup>
+                      )}
                       <thead>
                         <tr>
-                          <th>{strings.ArchiveOverview.ColumnProjectName}</th>
-                          <th>{strings.ArchiveOverview.ColumnDocument}</th>
-                          <th>{strings.ArchiveOverview.ColumnDateArchived}</th>
-                          <th>{strings.ArchiveOverview.ColumnStatus}</th>
+                          <th data-col-key='projectName' onClick={() => handleDokumenterSort('projectName')}>
+                            {strings.ArchiveOverview.ColumnProjectName}
+                            {sortArrowFor(dokumenterSort, 'projectName')}
+                            <div className={styles.resizeHandle} onMouseDown={(e) => dokumenterStartResize('projectName', e)} />
+                          </th>
+                          <th data-col-key='title' onClick={() => handleDokumenterSort('title')}>
+                            {strings.ArchiveOverview.ColumnDocument}
+                            {sortArrowFor(dokumenterSort, 'title')}
+                            <div className={styles.resizeHandle} onMouseDown={(e) => dokumenterStartResize('title', e)} />
+                          </th>
+                          <th data-col-key='dateArchived' onClick={() => handleDokumenterSort('dateArchived')}>
+                            {strings.ArchiveOverview.ColumnDateArchived}
+                            {sortArrowFor(dokumenterSort, 'dateArchived')}
+                            <div className={styles.resizeHandle} onMouseDown={(e) => dokumenterStartResize('dateArchived', e)} />
+                          </th>
+                          <th data-col-key='status' onClick={() => handleDokumenterSort('status')}>
+                            {strings.ArchiveOverview.ColumnStatus}
+                            {sortArrowFor(dokumenterSort, 'status')}
+                            <div className={styles.resizeHandle} onMouseDown={(e) => dokumenterStartResize('status', e)} />
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
@@ -461,13 +499,39 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                   </Caption1>
                 ) : (
                   <div className={styles.projectTableWrap}>
-                    <table className={styles.projectTable}>
+                    <table
+                      className={styles.projectTable}
+                      style={Object.keys(listerColWidths).length ? { tableLayout: 'fixed' } : undefined}
+                    >
+                      {Object.keys(listerColWidths).length > 0 && (
+                        <colgroup>
+                          {['projectName', 'title', 'dateArchived', 'status'].map(k => (
+                            <col key={k} style={{ width: listerColWidths[k] }} />
+                          ))}
+                        </colgroup>
+                      )}
                       <thead>
                         <tr>
-                          <th>{strings.ArchiveOverview.ColumnProjectName}</th>
-                          <th>{strings.ArchiveOverview.ColumnList}</th>
-                          <th>{strings.ArchiveOverview.ColumnDateArchived}</th>
-                          <th>{strings.ArchiveOverview.ColumnStatus}</th>
+                          <th data-col-key='projectName' onClick={() => handleListerSort('projectName')}>
+                            {strings.ArchiveOverview.ColumnProjectName}
+                            {sortArrowFor(listerSort, 'projectName')}
+                            <div className={styles.resizeHandle} onMouseDown={(e) => listerStartResize('projectName', e)} />
+                          </th>
+                          <th data-col-key='title' onClick={() => handleListerSort('title')}>
+                            {strings.ArchiveOverview.ColumnList}
+                            {sortArrowFor(listerSort, 'title')}
+                            <div className={styles.resizeHandle} onMouseDown={(e) => listerStartResize('title', e)} />
+                          </th>
+                          <th data-col-key='dateArchived' onClick={() => handleListerSort('dateArchived')}>
+                            {strings.ArchiveOverview.ColumnDateArchived}
+                            {sortArrowFor(listerSort, 'dateArchived')}
+                            <div className={styles.resizeHandle} onMouseDown={(e) => listerStartResize('dateArchived', e)} />
+                          </th>
+                          <th data-col-key='status' onClick={() => handleListerSort('status')}>
+                            {strings.ArchiveOverview.ColumnStatus}
+                            {sortArrowFor(listerSort, 'status')}
+                            <div className={styles.resizeHandle} onMouseDown={(e) => listerStartResize('status', e)} />
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
@@ -523,14 +587,44 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                   </Caption1>
                 ) : (
                   <div className={styles.projectTableWrap}>
-                    <table className={styles.projectTable}>
+                    <table
+                      className={styles.projectTable}
+                      style={Object.keys(arkivloggColWidths).length ? { tableLayout: 'fixed' } : undefined}
+                    >
+                      {Object.keys(arkivloggColWidths).length > 0 && (
+                        <colgroup>
+                          {['projectName', 'title', 'scope', 'dateArchived', 'status'].map(k => (
+                            <col key={k} style={{ width: arkivloggColWidths[k] }} />
+                          ))}
+                        </colgroup>
+                      )}
                       <thead>
                         <tr>
-                          <th>{strings.ArchiveOverview.ColumnProjectName}</th>
-                          <th>{strings.ArchiveOverview.ColumnElement}</th>
-                          <th>{strings.ArchiveOverview.ColumnScope}</th>
-                          <th>{strings.ArchiveOverview.ColumnDateArchived}</th>
-                          <th>{strings.ArchiveOverview.ColumnStatus}</th>
+                          <th data-col-key='projectName' onClick={() => handleArkivloggSort('projectName')}>
+                            {strings.ArchiveOverview.ColumnProjectName}
+                            {sortArrowFor(arkivloggSort, 'projectName')}
+                            <div className={styles.resizeHandle} onMouseDown={(e) => arkivloggStartResize('projectName', e)} />
+                          </th>
+                          <th data-col-key='title' onClick={() => handleArkivloggSort('title')}>
+                            {strings.ArchiveOverview.ColumnElement}
+                            {sortArrowFor(arkivloggSort, 'title')}
+                            <div className={styles.resizeHandle} onMouseDown={(e) => arkivloggStartResize('title', e)} />
+                          </th>
+                          <th data-col-key='scope' onClick={() => handleArkivloggSort('scope')}>
+                            {strings.ArchiveOverview.ColumnScope}
+                            {sortArrowFor(arkivloggSort, 'scope')}
+                            <div className={styles.resizeHandle} onMouseDown={(e) => arkivloggStartResize('scope', e)} />
+                          </th>
+                          <th data-col-key='dateArchived' onClick={() => handleArkivloggSort('dateArchived')}>
+                            {strings.ArchiveOverview.ColumnDateArchived}
+                            {sortArrowFor(arkivloggSort, 'dateArchived')}
+                            <div className={styles.resizeHandle} onMouseDown={(e) => arkivloggStartResize('dateArchived', e)} />
+                          </th>
+                          <th data-col-key='status' onClick={() => handleArkivloggSort('status')}>
+                            {strings.ArchiveOverview.ColumnStatus}
+                            {sortArrowFor(arkivloggSort, 'status')}
+                            <div className={styles.resizeHandle} onMouseDown={(e) => arkivloggStartResize('status', e)} />
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
