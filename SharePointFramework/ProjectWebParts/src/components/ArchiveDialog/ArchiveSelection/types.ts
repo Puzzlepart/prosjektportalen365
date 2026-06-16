@@ -20,6 +20,12 @@ export interface IArchiveSection {
   key: string
   title: string
   items: IArchiveItem[]
+  /** Number of selected items in the section. */
+  selectedCount: number
+  /** True when every selectable (non-disabled) item is selected. */
+  allSelected: boolean
+  /** True when some — but not all — selectable items are selected. */
+  someSelected: boolean
 }
 
 export interface IArchiveConfiguration {
