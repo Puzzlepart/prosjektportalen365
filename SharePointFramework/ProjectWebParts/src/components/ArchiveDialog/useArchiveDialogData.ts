@@ -11,6 +11,14 @@ interface IArchiveDialogData {
   refresh: () => void
 }
 
+/**
+ * Loads the documents and lists available for archiving, together with their
+ * previous archive history. Fetches lazily — only when `enabled` is true (i.e.
+ * while the dialog is open) — and exposes a `refresh` to re-fetch on demand.
+ *
+ * @param webUrl - URL of the project web the archive history is read from
+ * @param enabled - When false, no fetching happens (dialog closed)
+ */
 export function useArchiveDialogData(webUrl: string, enabled: boolean): IArchiveDialogData {
   const [documents, setDocuments] = useState<IArchiveItem[]>([])
   const [lists, setLists] = useState<IArchiveItem[]>([])
@@ -22,7 +30,7 @@ export function useArchiveDialogData(webUrl: string, enabled: boolean): IArchive
     if (!enabled) return
     let cancelled = false
     setIsLoading(true)
-    SPDataAdapter.clearCache?.()
+    SPDataAdapter.clearCache()
     Promise.all([
       SPDataAdapter.getDocumentsForArchive(),
       SPDataAdapter.getListsForArchive(),

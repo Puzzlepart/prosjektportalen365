@@ -276,7 +276,9 @@ export const ArchiveStatusDetails: FC<IArchiveStatusDetailsProps> = ({
                 <TableHeaderCell {...headerSortProps('operation')}>
                   {strings.ArchiveStatusColumnOperation}
                 </TableHeaderCell>
-                <TableHeaderCell {...headerSortProps('status')}>Status</TableHeaderCell>
+                <TableHeaderCell {...headerSortProps('status')}>
+                  {strings.ArchiveStatusColumnStatus}
+                </TableHeaderCell>
                 <TableHeaderCell {...headerSortProps('documents')} className={styles.numericCell}>
                   <DocumentMultiple16Regular style={{ verticalAlign: 'middle' }} />
                 </TableHeaderCell>
@@ -311,9 +313,9 @@ const FilterChip: FC<{
   active: boolean
   count?: number
   onClick: () => void
-  children: React.ReactNode
+  children: string
 }> = ({ active, count, onClick, children }) => (
-  <Tooltip content={String(children)} relationship='label' withArrow>
+  <Tooltip content={children} relationship='label' withArrow>
     <Button appearance={active ? 'primary' : 'outline'} size='small' onClick={onClick}>
       {children}
       {typeof count === 'number' && <span style={{ marginLeft: 6, opacity: 0.75 }}>({count})</span>}
