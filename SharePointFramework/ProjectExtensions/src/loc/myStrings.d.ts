@@ -42,8 +42,6 @@ declare interface IProjectExtensionsStrings {
   ApplyTemplateSiteFields: string
   ApplyTemplateText: string
   ApplyTemplateWebSettings: string
-  ApplyTemplateHooks: string
-  ApplyExtensionHooks: string
   RunHooksText: string
   CloseModalText: string
   CmdSelectionCountText: string
@@ -143,7 +141,6 @@ declare interface IProjectExtensionsStrings {
   RemoveAlternativeLanguagesSubText: string
   RemoveAlternativeLanguagesErrorMessage: string
   RemoveAlternativeLanguagesProgressText: string
-  RunHooksText: string
   SetTaxonomyFieldsErrorMessage: string
   SetupAbortedText: string
   SetupProjectInformationErrorMessage: string

@@ -156,5 +156,3 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
     </ProjectSetupDialogContext.Provider>
   )
 }
-
-export * from './types'

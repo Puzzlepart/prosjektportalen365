@@ -35,9 +35,9 @@ declare interface IPortfolioExtensionsStrings {
   LastInstallHeaderText: string
   LastInstallDescription: string
   LatestGitHubReleaseDownloadButtonText: string
-  LatestGitHubReleaseIsNewerText: any
-  LatestGitHubReleaseIsOlderText: any
-  LatestGitHubReleaseIsSameText: any
+  LatestGitHubReleaseIsNewerText: string
+  LatestGitHubReleaseIsOlderText: string
+  LatestGitHubReleaseIsSameText: string
   LatestGitHubReleaseLabel: string
   LatestGitHubReleaseLinkTitle: string
   LatestGitHubReleaseHighlightsLabel: string

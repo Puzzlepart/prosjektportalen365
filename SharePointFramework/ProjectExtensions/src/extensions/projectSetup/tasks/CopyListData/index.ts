@@ -79,12 +79,12 @@ export class CopyListData extends BaseTask {
                   'GtPlannerPreviewType'
                 ])
               )
-                .sort((a, b) => a.GtSortOrder - b.GtSortOrder)
-                .sort((a, b) => {
-                  if (a.GtCategory === b.GtCategory) {
-                    return b.GtSortOrder - a.GtSortOrder
-                  }
-                })
+                // Group by category, then ascending GtSortOrder within each category.
+                .sort((a, b) =>
+                  a.GtCategory === b.GtCategory
+                    ? a.GtSortOrder - b.GtSortOrder
+                    : (a.GtCategory ?? '').localeCompare(b.GtCategory ?? '')
+                )
 
               const labels = _.uniq(
                 _.flatten(

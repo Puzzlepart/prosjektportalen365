@@ -2,7 +2,6 @@ define([], function () {
   return {
     ToggleOnText: 'På',
     ToggleOffText: 'Av',
-    ManualConfigurationPathLabel: 'Sti til manuell konfigurasjon',
     EditTimelineContentText: 'Rediger element',
     NewTimelineContentText: 'Nytt element',
     TimelineEndDateMilestoneDescription: 'Sluttdato er påkrevd for elementtyper som vises som punkt på tidslinjen ({0})',
@@ -42,12 +41,8 @@ define([], function () {
     UpdatingProjectPropertiesStatusText: 'Lagrer prosjektegenskaper...',
     SynchronizingProjectPropertiesToPortfolioSiteStatusText:
       'Synkroniserer prosjektegenskaper til porteføljeområdet...',
-    UnknownConfigurationName: 'Konfigurasjon uten navn',
-    ManualConfigurationNotFoundOrInvalid:
-      'Manuell konfigurasjon for Risikomatrise ikke funnet eller har ugyldig format.',
     RiskMatrixConfigurationFolder: 'Risikomatrise',
     SiteAssetsConfigurationFolder: 'SiteAssets/Konfigurasjon',
-    ManualConfigurationPathLabel: 'Manuell konfigurasjon',
     AdminPageLinkLabel: 'Lenke til administrasjonssiden',
     AdvancedGroupName: 'Avansert',
     CalloutTemplateFieldLabel: 'Mal for callout',
@@ -358,7 +353,6 @@ define([], function () {
     NewsCreateDuplicateFileError: 'En nyhetsartikkel med samme navn finnes allerede. Vennligst velg et annet navn.',
     PreviewLabel: 'Forhåndsvis valgt mal',
     NoPreviewAvailable: 'Ingen forhåndsvisning tilgjengelig.',
-    ColorPickerStrings: 'Fargevelgerstrenger',
     NewsCreateSuccess: 'Nyhetsartikkel opprettet',
     ShowCommentText: 'Vis kommentar',
     HideCommentText: 'Skjul kommentar',
@@ -370,6 +364,8 @@ define([], function () {
     ArchiveStatusTotalCount: 'Sendt til arkivering: ',
     DynamicList: {
       DefaultTitle: 'Dynamisk liste',
+      SelectAll: 'Velg alle',
+      SelectRow: 'Velg rad',
       NoListSelected: 'Ingen liste valgt',
       NoListSelectedMessage: 'Vennligst velg en liste i webdel-egenskapene for å vise innhold.',
       RefetchingData: 'Oppdaterer og henter data på nytt...',
