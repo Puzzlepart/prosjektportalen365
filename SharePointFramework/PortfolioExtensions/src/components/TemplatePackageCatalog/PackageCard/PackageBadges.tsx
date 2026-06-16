@@ -186,14 +186,6 @@ export const PackageCompatibilityTag: FC<{ package: ICatalogPackage }> = ({ pack
   )
 }
 
-/**
- * Brand-colored dependency/compatibility tags for a package: the targeted
- * Prosjektportalen version (logo red), and whether it needs Bestillingsportalen
- * (purple) or Microsoft Entra resources (teal) for full use. The PP-version tag
- * is informational and hidden when the package is incompatible — the red
- * {@link PackageCompatibilityTag} covers that case to avoid showing the version
- * twice.
- */
 /** Localized display name for a BCP-47 language code (falls back to the code). */
 const languageLabel = (code: string): string => {
   switch (code.toLowerCase()) {
@@ -209,6 +201,14 @@ const languageLabel = (code: string): string => {
   }
 }
 
+/**
+ * Brand-colored dependency/compatibility tags for a package: the targeted
+ * Prosjektportalen version (logo red), and whether it needs Bestillingsportalen
+ * (purple) or Microsoft Entra resources (teal) for full use. The PP-version tag
+ * is informational and hidden when the package is incompatible — the red
+ * {@link PackageCompatibilityTag} covers that case to avoid showing the version
+ * twice.
+ */
 export const PackageRequirementTags: FC<{ package: ICatalogPackage }> = ({ package: pkg }) => {
   const styles = useStyles()
   const { isSupported } = useCatalogContext()

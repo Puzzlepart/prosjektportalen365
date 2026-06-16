@@ -12,7 +12,7 @@ import { Grid20Regular, List20Regular } from '@fluentui/react-icons'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC, useEffect, useRef, useState } from 'react'
 import { useCatalogContext } from '../context'
-import { ALL_FILTER } from '../types'
+import { ALL_FILTER, SortKey } from '../types'
 import styles from './CatalogToolbar.module.scss'
 
 export const CatalogToolbar: FC = () => {
@@ -138,7 +138,7 @@ export const CatalogToolbar: FC = () => {
           aria-label={strings.CatalogSortLabel}
           value={`${strings.CatalogSortLabel}: ${textFor(sortOptions, sort)}`}
           selectedOptions={[sort]}
-          onOptionSelect={(_, data) => setSort((data.optionValue as 'newest' | 'name') ?? 'newest')}
+          onOptionSelect={(_, data) => setSort((data.optionValue as SortKey) ?? 'newest')}
         >
           {sortOptions.map((o) => (
             <Option key={o.value} value={o.value}>
