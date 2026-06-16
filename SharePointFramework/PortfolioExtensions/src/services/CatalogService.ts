@@ -192,7 +192,7 @@ export class CatalogService {
     const displayName = /DisplayName=["']([^"']+)["']/.exec(field)
     if (displayName) return displayName[1]
     const name = /(?:InternalName|StaticName|Name)=["']([^"']+)["']/.exec(field)
-    return name ? name[1] : 'Felt'
+    return name ? name[1] : strings.CatalogContentFieldFallback
   }
 
   /**

@@ -41,7 +41,11 @@ class SPDataAdapter extends SPDataAdapterBase {
     try {
       await this.sp.termStore()
       return true
-    } catch {
+    } catch (error) {
+      Logger.log({
+        message: `(SPDataAdapter) hasTermStorePermission failed: ${error?.message}`,
+        level: LogLevel.Warning
+      })
       return false
     }
   }

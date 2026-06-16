@@ -108,6 +108,7 @@ declare interface IPortfolioExtensionsStrings {
   CatalogContentLists: string
   CatalogContentContentTypes: string
   CatalogContentSiteFields: string
+  CatalogContentFieldFallback: string
   CatalogContentTaxonomy: string
   CatalogContentTermSets: string
   CatalogContentExtensions: string
@@ -139,7 +140,9 @@ declare interface IPortfolioExtensionsStrings {
   CatalogInstallSuccessText: string
   CatalogInstallErrorTitle: string
   CatalogPublishSuccessText: string
+  CatalogPublishErrorText: string
   CatalogRemoveSuccessText: string
+  CatalogRemoveErrorText: string
   CatalogLoadErrorTitle: string
   CatalogLoadErrorText: string
   CatalogRetryText: string

@@ -205,7 +205,9 @@ export function useTemplatePackageCatalog(
       await refreshCrossRef()
       setState({ notification: { intent: 'success', text: strings.CatalogPublishSuccessText } })
     } catch (error) {
-      setState({ notification: { intent: 'error', text: error?.message } })
+      setState({
+        notification: { intent: 'error', text: error?.message || strings.CatalogPublishErrorText }
+      })
     } finally {
       setState({ busyAction: undefined })
     }
@@ -227,7 +229,9 @@ export function useTemplatePackageCatalog(
       await refreshCrossRef()
       setState({ notification: { intent: 'success', text: strings.CatalogRemoveSuccessText } })
     } catch (error) {
-      setState({ notification: { intent: 'error', text: error?.message } })
+      setState({
+        notification: { intent: 'error', text: error?.message || strings.CatalogRemoveErrorText }
+      })
     } finally {
       setState({ busyAction: undefined })
     }
