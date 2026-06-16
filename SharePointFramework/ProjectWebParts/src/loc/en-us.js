@@ -314,6 +314,8 @@ define([], function () {
     ArchiveStatusColumnTime: 'Time',
     ArchiveStatusColumnOperation: 'Operation',
     ArchiveStatusColumnMessage: 'Message',
+    ArchiveStatusColumnStatus: 'Status',
+    ArchiveSectionSelectedCountAria: '{0} of {1} selected',
     ArchiveStatusSummaryLabel: 'archive entries logged',
     ArchiveStatusSummaryHelp: 'Total archive log rows for this project. Click a row for details.',
     ArchiveStatusEmpty: 'No archive entries match the filter.',

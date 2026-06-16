@@ -274,6 +274,8 @@ declare interface IProjectWebPartsStrings {
   ArchiveStatusColumnTime: string
   ArchiveStatusColumnOperation: string
   ArchiveStatusColumnMessage: string
+  ArchiveStatusColumnStatus: string
+  ArchiveSectionSelectedCountAria: string
   ArchiveStatusSummaryLabel: string
   ArchiveStatusSummaryHelp: string
   ArchiveStatusEmpty: string

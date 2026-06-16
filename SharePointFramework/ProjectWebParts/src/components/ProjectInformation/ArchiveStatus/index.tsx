@@ -18,7 +18,7 @@ import styles from './ArchiveStatus.module.scss'
 export const ArchiveStatus: FC = () => {
   const {
     archiveInfo,
-    processedOperations,
+    operations,
     aggregateCounts,
     intent,
     fluentProviderId,
@@ -69,7 +69,7 @@ export const ArchiveStatus: FC = () => {
           </PopoverTrigger>
           <PopoverSurface className={styles.popoverSurface}>
             <ArchiveStatusDetails
-              operations={processedOperations}
+              operations={operations}
               totalEntries={totalEntries}
               successCount={aggregateCounts.success}
               pendingCount={aggregateCounts.pending}
