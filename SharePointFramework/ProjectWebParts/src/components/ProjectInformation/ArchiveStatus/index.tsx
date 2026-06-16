@@ -10,7 +10,7 @@ import {
   PopoverSurface,
   PopoverTrigger
 } from '@fluentui/react-components'
-import { ArchiveStatusDetails } from './ArchiveStatusDetails/ArchiveStatusDetails'
+import { ArchiveStatusDetails } from './ArchiveStatusDetails'
 import { useArchiveStatus } from './useArchiveStatus'
 import styles from './ArchiveStatus.module.scss'
 

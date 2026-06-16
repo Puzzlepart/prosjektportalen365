@@ -11,143 +11,51 @@ import {
   IdPrefixProvider,
   Label,
   Text,
-  tokens,
-  useId
+  Tooltip,
+  tokens
 } from '@fluentui/react-components'
 import {
   ArrowClockwise24Regular,
   CheckmarkCircle24Filled,
   Dismiss24Regular
 } from '@fluentui/react-icons'
-import { Tooltip } from '@fluentui/react-components'
 import { format } from '@fluentui/react'
 import * as strings from 'ProjectWebPartsStrings'
 import { customLightTheme } from 'pp365-shared-library'
-import React, { FC, useState } from 'react'
-import SPDataAdapter from '../../data'
-import { ArchiveProgress, IArchiveProgressStep } from './ArchiveProgress'
+import React, { FC } from 'react'
+import { ArchiveProgress } from './ArchiveProgress'
 import { ArchiveSelection } from './ArchiveSelection/ArchiveSelection'
 import { SelectionSummary } from './ArchiveSelection/SelectionSummary'
-import { IArchiveConfiguration } from './ArchiveSelection/types'
-import { useArchiveDialogData } from './useArchiveDialogData'
+import { useArchiveDialog } from './useArchiveDialog'
+import { IArchiveDialogProps } from './types'
 import styles from './ArchiveDialog.module.scss'
 
-interface IArchiveDialogProps {
-  open: boolean
-  webUrl: string
-  onDismiss: () => void
-  onArchived?: () => void
-}
-
-type View = 'selection' | 'confirm' | 'archiving' | 'completed'
-
-interface IArchiveProgressState {
-  documents: IArchiveProgressStep
-  lists: IArchiveProgressStep
-}
-
-const writeArchiveLogEntries = async (
-  config: IArchiveConfiguration,
-  webUrl: string,
-  onProgress: (next: IArchiveProgressState) => void
-): Promise<void> => {
-  const message = strings.ArchiveManualMessage
-  const operation = strings.ArchiveLogOperationManual
-  const docs = config.documents || []
-  const lists = config.lists || []
-  const docsTotal = docs.length
-  const listsTotal = lists.length
-  onProgress({
-    documents: { current: 0, total: docsTotal },
-    lists: { current: 0, total: listsTotal }
-  })
-  for (let i = 0; i < docs.length; i++) {
-    const doc = docs[i]
-    await SPDataAdapter.logDocumentArchive(
-      doc.title,
-      strings.ArchiveLogStatusInProgress,
-      message,
-      doc.url || '',
-      webUrl,
-      undefined,
-      doc.itemId,
-      operation
-    )
-    onProgress({
-      documents: { current: i + 1, total: docsTotal },
-      lists: { current: 0, total: listsTotal }
-    })
-  }
-  for (let i = 0; i < lists.length; i++) {
-    const list = lists[i]
-    await SPDataAdapter.logListArchive(
-      list.title,
-      strings.ArchiveLogStatusInProgress,
-      message,
-      list.url || '',
-      webUrl,
-      undefined,
-      list.itemId,
-      operation
-    )
-    onProgress({
-      documents: { current: docsTotal, total: docsTotal },
-      lists: { current: i + 1, total: listsTotal }
-    })
-  }
-}
-
-export const ArchiveDialog: FC<IArchiveDialogProps> = ({ open, webUrl, onDismiss, onArchived }) => {
-  const fluentProviderId = useId('fp-archive-dialog')
-  const { documents, lists, history, isLoading, refresh } = useArchiveDialogData(webUrl, open)
-  const [view, setView] = useState<View>('selection')
-  const [config, setConfig] = useState<IArchiveConfiguration>({ documents: [], lists: [] })
-  const [progress, setProgress] = useState<IArchiveProgressState>({
-    documents: { current: 0, total: 0 },
-    lists: { current: 0, total: 0 }
-  })
-  const [showCloseConfirm, setShowCloseConfirm] = useState(false)
-
-  const selectedCount = (config.documents?.length || 0) + (config.lists?.length || 0)
-  const needsCloseConfirm = selectedCount > 0 && (view === 'selection' || view === 'confirm')
-
-  const resetAndClose = () => {
-    setView('selection')
-    setConfig({ documents: [], lists: [] })
-    setProgress({ documents: { current: 0, total: 0 }, lists: { current: 0, total: 0 } })
-    setShowCloseConfirm(false)
-    onDismiss()
-  }
-
-  const requestClose = () => {
-    if (needsCloseConfirm) {
-      setShowCloseConfirm(true)
-      return
-    }
-    resetAndClose()
-  }
-
-  const handleConfirm = async () => {
-    setView('archiving')
-    try {
-      await writeArchiveLogEntries(config, webUrl, setProgress)
-      onArchived?.()
-    } finally {
-      setView('completed')
-    }
-  }
-
-  const title =
-    view === 'archiving'
-      ? strings.ArchiveProgressTitle
-      : view === 'completed'
-      ? strings.ArchiveCompletedTitle
-      : strings.ArchiveViewTitle
+export const ArchiveDialog: FC<IArchiveDialogProps> = (props) => {
+  const {
+    fluentProviderId,
+    documents,
+    lists,
+    history,
+    isLoading,
+    refresh,
+    view,
+    setView,
+    config,
+    setConfig,
+    progress,
+    showCloseConfirm,
+    setShowCloseConfirm,
+    selectedCount,
+    resetAndClose,
+    requestClose,
+    handleConfirm,
+    title
+  } = useArchiveDialog(props)
 
   return (
     <>
       <Dialog
-        open={open}
+        open={props.open}
         modalType='alert'
         onOpenChange={(_, data) => !data.open && requestClose()}
       >
