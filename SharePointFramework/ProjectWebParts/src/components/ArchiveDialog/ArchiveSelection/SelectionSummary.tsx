@@ -12,8 +12,8 @@ export interface ISelectionSummaryProps {
   documentsSelected: number
   listsSelected: number
   /**
-   * Items to list on the right side (icon + title). Pass selected documents + lists
-   * when rendering the summary on a confirm step.
+   * Optional items to list on the right side (icon + title). Omit to show only
+   * the count summary.
    */
   selectedItems?: IArchiveItem[]
 }
@@ -25,7 +25,7 @@ export const SelectionSummary: FC<ISelectionSummaryProps> = ({
   selectedItems
 }) => {
   const isEmpty = total === 0
-  const showItems = !!selectedItems && selectedItems.length > 0
+  const showItems = (selectedItems?.length ?? 0) > 0
   return (
     <div className={`${styles.summary} ${isEmpty ? styles.empty : ''}`}>
       <div className={styles.summaryLeft}>

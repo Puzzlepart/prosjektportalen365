@@ -420,7 +420,11 @@ const SectionCard: FC<ISectionCardProps> = ({
         </Text>
         <span
           className={`${styles.countBadge} ${selectedCount > 0 ? styles.hasSelection : ''}`}
-          aria-label={`${selectedCount} av ${section.items.length} valgt`}
+          aria-label={format(
+            strings.ArchiveSectionSelectedCountAria,
+            selectedCount,
+            section.items.length
+          )}
         >
           {selectedCount}/{section.items.length}
         </span>

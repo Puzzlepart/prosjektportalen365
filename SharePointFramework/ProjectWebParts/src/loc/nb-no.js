@@ -335,6 +335,8 @@ define([], function () {
     ArchiveStatusColumnTime: 'Tidspunkt',
     ArchiveStatusColumnOperation: 'Operasjon',
     ArchiveStatusColumnMessage: 'Melding',
+    ArchiveStatusColumnStatus: 'Status',
+    ArchiveSectionSelectedCountAria: '{0} av {1} valgt',
     ArchiveStatusSummaryLabel: 'arkiveringer registrert',
     ArchiveStatusSummaryHelp: 'Totalt antall arkiv-loggrader for prosjektet. Klikk på en rad for å se detaljer.',
     ArchiveStatusEmpty: 'Ingen arkiveringer matcher filteret.',

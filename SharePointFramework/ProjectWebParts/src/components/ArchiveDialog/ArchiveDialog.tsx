@@ -11,6 +11,7 @@ import {
   IdPrefixProvider,
   Label,
   Text,
+  tokens,
   useId
 } from '@fluentui/react-components'
 import {
@@ -225,7 +226,9 @@ export const ArchiveDialog: FC<IArchiveDialogProps> = ({ open, webUrl, onDismiss
                           style={{ display: 'flex', alignItems: 'center', gap: 10 }}
                           aria-live='polite'
                         >
-                          <CheckmarkCircle24Filled style={{ color: '#107c10' }} />
+                          <CheckmarkCircle24Filled
+                            style={{ color: tokens.colorStatusSuccessForeground1 }}
+                          />
                           <Text weight='semibold'>{strings.ArchiveCompletedSubText}</Text>
                         </div>
                       )}
