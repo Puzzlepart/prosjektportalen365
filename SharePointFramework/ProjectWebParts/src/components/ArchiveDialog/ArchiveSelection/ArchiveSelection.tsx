@@ -57,6 +57,12 @@ const indicatorCellStyle: React.CSSProperties = {
   textAlign: 'center'
 }
 
+const itemCountCellStyle: React.CSSProperties = {
+  width: 32,
+  minWidth: 32,
+  maxWidth: 32
+}
+
 const getStatusClass = (status: string): string => {
   switch (status) {
     case strings.ArchiveLogStatusSuccess:
@@ -141,80 +147,151 @@ const InfoCard: FC = () => {
   )
 }
 
-interface ISectionCardProps {
-  section: IArchiveSection
-  variant: 'documents' | 'lists'
-  HeaderIcon: FC<{ className?: string }>
-  onToggleItem: (sectionKey: string, itemId: string | number) => void
-  onToggleSelectAll: (sectionKey: string) => void
+/**
+ * Per-variant configuration for {@link ArchiveTable}. Documents and lists share
+ * the same table shape (selection + name + one extra column + a disabled
+ * indicator) and differ only in the values captured here.
+ */
+interface IArchiveTableConfig {
+  ariaLabel: string
+  columns: TableColumnDefinition<IArchiveItem>[]
+  columnSizing: TableColumnSizingOptions
+  /** Show a file-type icon + "modified after archive" badge in the name cell (documents). */
+  showFileMeta: boolean
+  secondColumn: {
+    columnId: string
+    header: string
+    /** When set, the header is wrapped in a tooltip and gets this aria-label. */
+    headerTooltip?: string
+    headerStyle?: React.CSSProperties
+    cellStyle?: React.CSSProperties
+    renderCell: (item: IArchiveItem) => React.ReactNode
+  }
+  getDisabledTooltip: (item: IArchiveItem) => string
 }
 
-const docColumns: TableColumnDefinition<IArchiveItem>[] = [
-  createTableColumn<IArchiveItem>({
-    columnId: 'name',
-    compare: (a, b) => a.title.localeCompare(b.title)
-  }),
-  createTableColumn<IArchiveItem>({
+const DOCUMENTS_TABLE_CONFIG: IArchiveTableConfig = {
+  ariaLabel: strings.ArchiveDocumentsSection,
+  columns: [
+    createTableColumn<IArchiveItem>({
+      columnId: 'name',
+      compare: (a, b) => a.title.localeCompare(b.title)
+    }),
+    createTableColumn<IArchiveItem>({
+      columnId: 'modified',
+      compare: (a, b) => (a.dateModified || '').localeCompare(b.dateModified || '')
+    })
+  ],
+  columnSizing: {
+    name: { defaultWidth: 220, minWidth: 140, idealWidth: 320 },
+    modified: { defaultWidth: 100, minWidth: 90, idealWidth: 100 }
+  },
+  showFileMeta: true,
+  secondColumn: {
     columnId: 'modified',
-    compare: (a, b) => (a.dateModified || '').localeCompare(b.dateModified || '')
-  })
-]
-
-const docColumnSizing: TableColumnSizingOptions = {
-  name: { defaultWidth: 220, minWidth: 140, idealWidth: 320 },
-  modified: { defaultWidth: 100, minWidth: 90, idealWidth: 100 }
+    header: strings.ArchiveTableColumnModified,
+    renderCell: (item) => formatShortDate(item.dateModified)
+  },
+  getDisabledTooltip: () => strings.ArchiveNotArchivableText
 }
 
-const listColumns: TableColumnDefinition<IArchiveItem>[] = [
-  createTableColumn<IArchiveItem>({
-    columnId: 'name',
-    compare: (a, b) => a.title.localeCompare(b.title)
-  }),
-  createTableColumn<IArchiveItem>({
+const LISTS_TABLE_CONFIG: IArchiveTableConfig = {
+  ariaLabel: strings.ArchiveListsSection,
+  columns: [
+    createTableColumn<IArchiveItem>({
+      columnId: 'name',
+      compare: (a, b) => a.title.localeCompare(b.title)
+    }),
+    createTableColumn<IArchiveItem>({
+      columnId: 'itemCount',
+      compare: (a, b) => (a.itemCount ?? 0) - (b.itemCount ?? 0)
+    })
+  ],
+  columnSizing: {
+    name: { defaultWidth: 260, minWidth: 140, idealWidth: 300 },
+    itemCount: { defaultWidth: 32, minWidth: 32, idealWidth: 32 }
+  },
+  showFileMeta: false,
+  secondColumn: {
     columnId: 'itemCount',
-    compare: (a, b) => (a.itemCount ?? 0) - (b.itemCount ?? 0)
-  })
-]
-
-const listColumnSizing: TableColumnSizingOptions = {
-  name: { defaultWidth: 260, minWidth: 140, idealWidth: 300 },
-  itemCount: { defaultWidth: 32, minWidth: 32, idealWidth: 32 }
+    header: '#',
+    headerTooltip: strings.ArchiveTableColumnItemCount,
+    headerStyle: itemCountCellStyle,
+    cellStyle: itemCountCellStyle,
+    renderCell: (item) => item.itemCount ?? 0
+  },
+  getDisabledTooltip: (item) =>
+    item.itemCount === 0 ? strings.ArchiveNotArchivableListText : strings.ArchiveNotArchivableText
 }
 
-const itemCountCellStyle: React.CSSProperties = {
-  width: 32,
-  minWidth: 32,
-  maxWidth: 32
+const NameCell: FC<{ item: IArchiveItem; showFileMeta: boolean }> = ({ item, showFileMeta }) => {
+  const text = (
+    <div className={styles.nameCellText}>
+      <span className={styles.itemTitleRow}>
+        <span className={styles.itemTitle} title={item.title}>
+          {item.title}
+        </span>
+        {showFileMeta && <ModifiedAfterArchiveBadge item={item} />}
+      </span>
+      <PreviousArchiveLabel item={item} />
+    </div>
+  )
+  if (!showFileMeta) return text
+  return (
+    <div className={styles.nameCell}>
+      <FileTypeIcon extension={item.title} size={16} className={styles.itemIcon} />
+      {text}
+    </div>
+  )
 }
 
-interface IDocumentsTableProps {
+interface IArchiveTableProps {
   items: IArchiveItem[]
   sectionKey: string
-  onToggleItem: (sectionKey: string, itemId: string | number) => void
-  onToggleSelectAll: (sectionKey: string) => void
   allSelected: boolean
   someSelected: boolean
+  onToggleItem: (sectionKey: string, itemId: string | number) => void
+  onToggleSelectAll: (sectionKey: string) => void
+  config: IArchiveTableConfig
 }
 
-const DocumentsTable: FC<IDocumentsTableProps> = ({
+/**
+ * Selectable, sortable table of archivable items. Shared by the documents and
+ * lists sections — see {@link IArchiveTableConfig} for the per-variant pieces.
+ */
+const ArchiveTable: FC<IArchiveTableProps> = ({
   items,
   sectionKey,
+  allSelected,
+  someSelected,
   onToggleItem,
   onToggleSelectAll,
-  allSelected,
-  someSelected
+  config
 }) => {
   const { sortedRows, headerSortProps, columnSizing_unstable, tableRef } = useArchiveTable(
     items,
-    docColumns,
-    docColumnSizing
+    config.columns,
+    config.columnSizing
   )
+  const { secondColumn } = config
+
+  const secondHeaderCell = (
+    <TableHeaderCell
+      {...headerSortProps(secondColumn.columnId)}
+      {...columnSizing_unstable.getTableHeaderCellProps(secondColumn.columnId)}
+      style={secondColumn.headerStyle}
+      aria-label={secondColumn.headerTooltip}
+    >
+      {secondColumn.header}
+    </TableHeaderCell>
+  )
+
   return (
     <Table
       ref={tableRef}
       size='small'
       sortable
-      aria-label={strings.ArchiveDocumentsSection}
+      aria-label={config.ariaLabel}
       {...columnSizing_unstable.getTableProps()}
     >
       <TableHeader>
@@ -231,12 +308,13 @@ const DocumentsTable: FC<IDocumentsTableProps> = ({
           >
             {strings.ArchiveTableColumnName}
           </TableHeaderCell>
-          <TableHeaderCell
-            {...headerSortProps('modified')}
-            {...columnSizing_unstable.getTableHeaderCellProps('modified')}
-          >
-            {strings.ArchiveTableColumnModified}
-          </TableHeaderCell>
+          {secondColumn.headerTooltip ? (
+            <Tooltip content={secondColumn.headerTooltip} relationship='label' withArrow>
+              {secondHeaderCell}
+            </Tooltip>
+          ) : (
+            secondHeaderCell
+          )}
           <TableHeaderCell className={styles.indicatorCell} style={indicatorCellStyle} />
         </TableRow>
       </TableHeader>
@@ -257,28 +335,18 @@ const DocumentsTable: FC<IDocumentsTableProps> = ({
               {...columnSizing_unstable.getTableCellProps('name')}
               className={item.disabled ? styles.disabledRow : undefined}
             >
-              <div className={styles.nameCell}>
-                <FileTypeIcon extension={item.title} size={16} className={styles.itemIcon} />
-                <div className={styles.nameCellText}>
-                  <span className={styles.itemTitleRow}>
-                    <span className={styles.itemTitle} title={item.title}>
-                      {item.title}
-                    </span>
-                    <ModifiedAfterArchiveBadge item={item} />
-                  </span>
-                  <PreviousArchiveLabel item={item} />
-                </div>
-              </div>
+              <NameCell item={item} showFileMeta={config.showFileMeta} />
             </TableCell>
             <TableCell
-              {...columnSizing_unstable.getTableCellProps('modified')}
+              {...columnSizing_unstable.getTableCellProps(secondColumn.columnId)}
+              style={secondColumn.cellStyle}
               className={item.disabled ? styles.disabledRow : undefined}
             >
-              {formatShortDate(item.dateModified)}
+              {secondColumn.renderCell(item)}
             </TableCell>
             <TableCell className={styles.indicatorCell} style={indicatorCellStyle}>
               {item.disabled && (
-                <Tooltip content={strings.ArchiveNotArchivableText} relationship='label' withArrow>
+                <Tooltip content={config.getDisabledTooltip(item)} relationship='label' withArrow>
                   <Info16Regular className={styles.indicatorIcon} />
                 </Tooltip>
               )}
@@ -290,170 +358,52 @@ const DocumentsTable: FC<IDocumentsTableProps> = ({
   )
 }
 
-interface IListsTableProps {
-  items: IArchiveItem[]
-  sectionKey: string
+interface ISectionCardProps {
+  section: IArchiveSection
+  config: IArchiveTableConfig
+  HeaderIcon: FC<{ className?: string }>
   onToggleItem: (sectionKey: string, itemId: string | number) => void
   onToggleSelectAll: (sectionKey: string) => void
-  allSelected: boolean
-  someSelected: boolean
-}
-
-const ListsTable: FC<IListsTableProps> = ({
-  items,
-  sectionKey,
-  onToggleItem,
-  onToggleSelectAll,
-  allSelected,
-  someSelected
-}) => {
-  const { sortedRows, headerSortProps, columnSizing_unstable, tableRef } = useArchiveTable(
-    items,
-    listColumns,
-    listColumnSizing
-  )
-  return (
-    <Table
-      ref={tableRef}
-      size='small'
-      sortable
-      aria-label={strings.ArchiveListsSection}
-      {...columnSizing_unstable.getTableProps()}
-    >
-      <TableHeader>
-        <TableRow>
-          <TableSelectionCell
-            type='checkbox'
-            checked={allSelected ? true : someSelected ? 'mixed' : false}
-            onClick={() => onToggleSelectAll(sectionKey)}
-            style={selectCellStyle}
-          />
-          <TableHeaderCell
-            {...headerSortProps('name')}
-            {...columnSizing_unstable.getTableHeaderCellProps('name')}
-          >
-            {strings.ArchiveTableColumnName}
-          </TableHeaderCell>
-          <Tooltip content={strings.ArchiveTableColumnItemCount} relationship='label' withArrow>
-            <TableHeaderCell
-              {...headerSortProps('itemCount')}
-              {...columnSizing_unstable.getTableHeaderCellProps('itemCount')}
-              style={itemCountCellStyle}
-              aria-label={strings.ArchiveTableColumnItemCount}
-            >
-              #
-            </TableHeaderCell>
-          </Tooltip>
-          <TableHeaderCell className={styles.indicatorCell} style={indicatorCellStyle} />
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {sortedRows.map(({ item }) => {
-          const tooltipText =
-            item.itemCount === 0
-              ? strings.ArchiveNotArchivableListText
-              : strings.ArchiveNotArchivableText
-          return (
-            <TableRow
-              key={item.id}
-              className={item.selected ? styles.selectedRow : undefined}
-              aria-disabled={item.disabled}
-            >
-              <TableSelectionCell
-                type='checkbox'
-                checked={item.selected}
-                onClick={() => !item.disabled && onToggleItem(sectionKey, item.id)}
-                style={selectCellStyle}
-              />
-              <TableCell
-                {...columnSizing_unstable.getTableCellProps('name')}
-                className={item.disabled ? styles.disabledRow : undefined}
-              >
-                <div className={styles.nameCellText}>
-                  <span className={styles.itemTitle} title={item.title}>
-                    {item.title}
-                  </span>
-                  <PreviousArchiveLabel item={item} />
-                </div>
-              </TableCell>
-              <TableCell
-                {...columnSizing_unstable.getTableCellProps('itemCount')}
-                style={itemCountCellStyle}
-                className={item.disabled ? styles.disabledRow : undefined}
-              >
-                {item.itemCount ?? 0}
-              </TableCell>
-              <TableCell className={styles.indicatorCell} style={indicatorCellStyle}>
-                {item.disabled && (
-                  <Tooltip content={tooltipText} relationship='label' withArrow>
-                    <Info16Regular className={styles.indicatorIcon} />
-                  </Tooltip>
-                )}
-              </TableCell>
-            </TableRow>
-          )
-        })}
-      </TableBody>
-    </Table>
-  )
 }
 
 const SectionCard: FC<ISectionCardProps> = ({
   section,
-  variant,
+  config,
   HeaderIcon,
   onToggleItem,
   onToggleSelectAll
-}) => {
-  const selectedCount = section.items.filter((item) => item.selected).length
-  const enabledItems = section.items.filter((item) => !item.disabled)
-  const allSelected = enabledItems.length > 0 && enabledItems.every((item) => item.selected)
-  const someSelected = selectedCount > 0 && !allSelected
-  const isDocuments = variant === 'documents'
-
-  return (
-    <div className={styles.sectionCard}>
-      <div className={styles.sectionHeader}>
-        <HeaderIcon className={styles.sectionIcon} />
-        <Text size={400} className={styles.title}>
-          {section.title}
-        </Text>
-        <span
-          className={`${styles.countBadge} ${selectedCount > 0 ? styles.hasSelection : ''}`}
-          aria-label={format(
-            strings.ArchiveSectionSelectedCountAria,
-            selectedCount,
-            section.items.length
-          )}
-        >
-          {selectedCount}/{section.items.length}
-        </span>
-      </div>
-
-      <div className={styles.sectionContent}>
-        {isDocuments ? (
-          <DocumentsTable
-            items={section.items}
-            sectionKey={section.key}
-            onToggleItem={onToggleItem}
-            onToggleSelectAll={onToggleSelectAll}
-            allSelected={allSelected}
-            someSelected={someSelected}
-          />
-        ) : (
-          <ListsTable
-            items={section.items}
-            sectionKey={section.key}
-            onToggleItem={onToggleItem}
-            onToggleSelectAll={onToggleSelectAll}
-            allSelected={allSelected}
-            someSelected={someSelected}
-          />
+}) => (
+  <div className={styles.sectionCard}>
+    <div className={styles.sectionHeader}>
+      <HeaderIcon className={styles.sectionIcon} />
+      <Text size={400} className={styles.title}>
+        {section.title}
+      </Text>
+      <span
+        className={`${styles.countBadge} ${section.selectedCount > 0 ? styles.hasSelection : ''}`}
+        aria-label={format(
+          strings.ArchiveSectionSelectedCountAria,
+          section.selectedCount,
+          section.items.length
         )}
-      </div>
+      >
+        {section.selectedCount}/{section.items.length}
+      </span>
     </div>
-  )
-}
+
+    <div className={styles.sectionContent}>
+      <ArchiveTable
+        items={section.items}
+        sectionKey={section.key}
+        allSelected={section.allSelected}
+        someSelected={section.someSelected}
+        onToggleItem={onToggleItem}
+        onToggleSelectAll={onToggleSelectAll}
+        config={config}
+      />
+    </div>
+  </div>
+)
 
 const SectionSkeleton: FC = () => (
   <div className={styles.sectionCard}>
@@ -509,7 +459,7 @@ export const ArchiveSelection: FC<IArchiveSelectionProps> = (props) => {
         {documentsSection && (
           <SectionCard
             section={documentsSection}
-            variant='documents'
+            config={DOCUMENTS_TABLE_CONFIG}
             HeaderIcon={DocumentMultiple20Regular}
             onToggleItem={toggleItemSelection}
             onToggleSelectAll={toggleSectionSelectAll}
@@ -518,7 +468,7 @@ export const ArchiveSelection: FC<IArchiveSelectionProps> = (props) => {
         {listsSection && (
           <SectionCard
             section={listsSection}
-            variant='lists'
+            config={LISTS_TABLE_CONFIG}
             HeaderIcon={ListBar20Regular}
             onToggleItem={toggleItemSelection}
             onToggleSelectAll={toggleSectionSelectAll}

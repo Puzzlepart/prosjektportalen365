@@ -34,6 +34,20 @@ const filterByPhase = (
 const applySelection = (items: IArchiveItem[], selectedIds: Set<ItemId>): IArchiveItem[] =>
   items.map((item) => ({ ...item, selected: selectedIds.has(item.id) }))
 
+const buildSection = (key: string, title: string, items: IArchiveItem[]): IArchiveSection => {
+  const selectedCount = items.filter((item) => item.selected).length
+  const enabled = items.filter((item) => !item.disabled)
+  const allSelected = enabled.length > 0 && enabled.every((item) => item.selected)
+  return {
+    key,
+    title,
+    items,
+    selectedCount,
+    allSelected,
+    someSelected: selectedCount > 0 && !allSelected
+  }
+}
+
 export function useArchiveSelection(props: IArchiveSelectionProps) {
   const { documents, lists, history, currentPhaseId, onConfigurationChange } = props
   const [selectedIds, setSelectedIds] = useState<Set<ItemId>>(new Set())
@@ -53,16 +67,8 @@ export function useArchiveSelection(props: IArchiveSelectionProps) {
 
   const sections: IArchiveSection[] = useMemo(
     () => [
-      {
-        key: 'documents',
-        title: strings.ArchiveDocumentsSection,
-        items: documentsSectionItems
-      },
-      {
-        key: 'lists',
-        title: strings.ArchiveListsSection,
-        items: listsSectionItems
-      }
+      buildSection('documents', strings.ArchiveDocumentsSection, documentsSectionItems),
+      buildSection('lists', strings.ArchiveListsSection, listsSectionItems)
     ],
     [documentsSectionItems, listsSectionItems]
   )
