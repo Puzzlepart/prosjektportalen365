@@ -92,6 +92,7 @@ declare interface IProjectWebPartsStrings {
   HideChildProjectsLabel: string
   HideStatusReportLabel: string
   HideUnSustainabilityGoalsLabel: string
+  IconSizeLabel: string
   UnSustainabilityGoalsHeader: string
   HookAuthFieldDescription: string
   HookAuthFieldLabel: string

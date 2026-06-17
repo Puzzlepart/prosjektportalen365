@@ -97,7 +97,7 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<IProje
                   label: strings.AdminPageLinkLabel
                 }),
                 PropertyPaneDropdown('iconSize', {
-                  label: 'Ikonstørrelse',
+                  label: strings.IconSizeLabel,
                   options: [
                     { key: 32, text: '24' },
                     { key: 64, text: '32' },

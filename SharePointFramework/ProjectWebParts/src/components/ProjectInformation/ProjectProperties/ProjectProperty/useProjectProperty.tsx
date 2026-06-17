@@ -44,7 +44,7 @@ export function useProjectProperty(props: IProjectPropertyProps) {
           const localProps = term.localProperties?.find(
             (lp: any) => lp.setId === 'abdc8d0f-cf79-4d49-82e2-d94d9122ad65'
           )
-          const iconUrl = localProps?.properties?.find((p: any) => p.key === 'IkonUrl')?.value
+          const iconUrl = localProps?.properties?.find((p: any) => p.key === 'AssetUrl')?.value
           if (iconUrl) urls[entry.Label] = iconUrl
         } catch (e) {
           console.warn(`[useProjectProperty] Failed to fetch icon for term: ${entry.Label}`, e)
