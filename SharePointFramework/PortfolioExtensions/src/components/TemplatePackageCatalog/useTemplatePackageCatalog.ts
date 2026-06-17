@@ -101,7 +101,9 @@ export function useTemplatePackageCatalog(
     }
   }, [props.catalogUrl, reloadToken])
 
-  const allPackages = state.catalog?.packages ?? []
+  // Hidden packages stay in the catalog feed but are never surfaced in the UI
+  // (list, filters, search, selection) — used to stage not-yet-ready packages.
+  const allPackages = (state.catalog?.packages ?? []).filter((pkg) => !pkg.hidden)
 
   const categories = useMemo(() => {
     const set = new Set<string>()

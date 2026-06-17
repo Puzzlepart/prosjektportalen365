@@ -68,7 +68,10 @@ export interface ICatalogPackage {
   screenshots?: string[]
 
   /**
-   * Absolute URL to the `.pppkg` (GitHub release asset).
+   * Absolute URL to the `.pppkg`. Served as a raw file from the hosting repo's
+   * `dist/` folder (`raw.githubusercontent.com/.../dist/<id>-<version>.pppkg`),
+   * which is CORS-enabled — GitHub *release* download URLs are not, and would be
+   * blocked by the browser when the catalog fetches them.
    */
   downloadUrl: string
 
@@ -113,4 +116,11 @@ export interface ICatalogPackage {
    * Norwegian only.
    */
   languages?: string[]
+
+  /**
+   * Hidden from the catalog UI when `true` — the package stays in `catalog.json`
+   * but is filtered out of the list, filters and search (used to stage packages
+   * that aren't ready to publish). Absent = visible.
+   */
+  hidden?: boolean
 }
