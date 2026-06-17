@@ -1,4 +1,4 @@
-const SS_ENABLE_TAXONOMY = 'PP_ENABLE_TAXONOMY'
+const SS_DISABLE_TAXONOMY = 'PP_DISABLE_TAXONOMY'
 const SS_DISABLE_IMPORT = 'PP_DISABLE_IMPORT'
 
 function readSessionFlag(key: string): boolean {
@@ -17,12 +17,15 @@ function readSessionFlag(key: string): boolean {
 export const featureFlags = {
   /**
    * Whether the taxonomy/Term Store provisioning step runs during Mode A
-   * import. Off by default everywhere — `sp-js-provisioning` 1.3.7 has no
-   * Term Store handler. Flip on (via the command-set property or the
-   * `PP_ENABLE_TAXONOMY` session flag) once the out-of-repo handler ships.
+   * import. On by default — `sp-js-provisioning` 1.3.12 ships a Term Store
+   * handler (registered in its `DefaultHandlerMap`), so packages that bundle
+   * term sets provision them as part of `applyTemplate`. Opt out per
+   * environment by setting the command-set property `featureFlagProvisioning`
+   * to `false`, or in-session via the `PP_DISABLE_TAXONOMY` flag.
    */
   enableTaxonomyProvisioning(props?: { featureFlagProvisioning?: boolean }): boolean {
-    return readSessionFlag(SS_ENABLE_TAXONOMY) || !!props?.featureFlagProvisioning
+    if (props?.featureFlagProvisioning === false) return false
+    return !readSessionFlag(SS_DISABLE_TAXONOMY)
   },
 
   /**

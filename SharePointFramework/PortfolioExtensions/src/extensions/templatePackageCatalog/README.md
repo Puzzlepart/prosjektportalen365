@@ -47,14 +47,16 @@ Hub provisioning (fields, content types, lists, files, …) runs for real via th
 existing `sp-js-provisioning` `WebProvisioner.applyTemplate` flow (the same one the
 project setup template dialog uses), applied to the **hub web**.
 
-The **taxonomy / Term Store** step is **gated** because `sp-js-provisioning` 1.3.7 has
-no Term Store handler — that handler is a separate, out-of-repo deliverable. Until it
-ships, the step shows "Hoppet over (feature flag av)".
+The **taxonomy / Term Store** step **runs by default**: `sp-js-provisioning` 1.3.12
+ships a Term Store handler (registered in its `DefaultHandlerMap`), so a package's
+bundled term sets are provisioned as part of `applyTemplate`.
 
-Enable the (placeholder) taxonomy step via either:
+Opt out of the taxonomy step via either:
 
-- `featureFlagProvisioning: true` on the CustomAction properties, or
-- `sessionStorage.setItem('PP_ENABLE_TAXONOMY', '1')` for local testing.
+- `featureFlagProvisioning: false` on the CustomAction properties, or
+- `sessionStorage.setItem('PP_DISABLE_TAXONOMY', '1')` for local testing.
+
+When disabled, the step shows "Hoppet over (feature flag av)".
 
 `sessionStorage.setItem('PP_DISABLE_IMPORT', '1')` disables the whole import action
 during a controlled pilot.

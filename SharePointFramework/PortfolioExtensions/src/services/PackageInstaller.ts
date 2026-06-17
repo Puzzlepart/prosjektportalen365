@@ -57,8 +57,9 @@ export interface IPackageInstallOptions {
  * - **Template/content packages**: provision the hub via the same
  *   `sp-js-provisioning` `WebProvisioner.applyTemplate` flow the template dialog
  *   uses, store the project-level assets for the wizard, and write the Maloppsett
- *   item. The taxonomy step is feature-flag-gated (no Term Store handler in
- *   `sp-js-provisioning` 1.3.7).
+ *   item. The taxonomy step runs by default (sp-js-provisioning 1.3.12 ships a
+ *   Term Store handler) and can be disabled per environment — see
+ *   {@link featureFlags.enableTaxonomyProvisioning}.
  */
 export class PackageInstaller {
   public static async runImport(options: IPackageInstallOptions): Promise<boolean> {
