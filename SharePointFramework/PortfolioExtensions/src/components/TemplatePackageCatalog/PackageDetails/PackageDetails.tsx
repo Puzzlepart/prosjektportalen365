@@ -32,9 +32,9 @@ import {
 } from '@fluentui/react-icons'
 import { UserMessage } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import { PpPkgType } from 'models'
-import { PackageBadges, PackageRequirementTags } from '../PackageCard'
+import { PackageBadges, PackageRequirementTags, packageCardId } from '../PackageCard'
 import { useCatalogContext } from '../context'
 import { PackageContentSummary } from './PackageContentSummary'
 import { PackageHistory } from './PackageHistory'
@@ -45,6 +45,7 @@ import styles from './PackageDetails.module.scss'
 
 export const PackageDetails: FC = () => {
   const {
+    props,
     state,
     selectedPackage,
     crossRefFor,
@@ -59,14 +60,29 @@ export const PackageDetails: FC = () => {
   const [confirmReplace, setConfirmReplace] = useState(false)
   const [confirmCloud, setConfirmCloud] = useState(false)
   const [confirmRemove, setConfirmRemove] = useState(false)
+  // Detail-pane root, focused when a package is selected so keyboard/screen
+  // reader users land in the details rather than staying on the card.
+  const rootRef = useRef<HTMLDivElement>(null)
+  const wasDetailOpen = useRef(state.detailOpen)
 
   // PackageDetails is a single reused instance, so reset the broken-image flag
   // when a different package is selected — otherwise one failed thumbnail would
   // hide the image for every package selected afterwards. Keyed on `.id` (not
   // the object) since `selectedPackage` is a fresh find() on every render.
+  // Selecting a package also moves focus into the pane (a11y).
   useEffect(() => {
     setImageError(false)
+    if (selectedPackage) rootRef.current?.focus()
   }, [selectedPackage?.id])
+
+  // When the detail pane closes (collapsed <720px layout), return focus to the
+  // card it was opened from.
+  useEffect(() => {
+    if (wasDetailOpen.current && !state.detailOpen && selectedPackage) {
+      document.getElementById(packageCardId(selectedPackage.id))?.focus()
+    }
+    wasDetailOpen.current = state.detailOpen
+  }, [state.detailOpen, selectedPackage])
 
   // Clicking a tag filters the catalog by that category and returns to the list.
   const filterByTag = (tag: string) => {
@@ -85,6 +101,8 @@ export const PackageDetails: FC = () => {
   const pkg = selectedPackage
   const ref = crossRefFor(pkg.id)
   const stats = getPackageStats(pkg.id)
+  // Format counts in the user's culture rather than a hardcoded locale.
+  const numberLocale = props.context.pageContext.cultureInfo.currentUICultureName || undefined
   const isCentral = ref?.packageType === PpPkgType.Sentral
   const updateAvailable = !!ref?.updateAvailable
   // Extensions go into the Prosjekttillegg library, not Maloppsett, so they
@@ -108,7 +126,7 @@ export const PackageDetails: FC = () => {
     .join('  •  ')
 
   return (
-    <div className={styles.root}>
+    <div className={styles.root} ref={rootRef} tabIndex={-1}>
       <Button
         className={styles.backButton}
         appearance='subtle'
@@ -142,7 +160,7 @@ export const PackageDetails: FC = () => {
           <span className={styles.stat}>
             <ArrowDownload16Regular className={styles.statIcon} />
             <Text size={200} className={styles.statText}>
-              {format(strings.CatalogDownloads, stats.downloads.toLocaleString('nb-NO'))}
+              {format(strings.CatalogDownloads, stats.downloads.toLocaleString(numberLocale))}
             </Text>
           </span>
         </Tooltip>

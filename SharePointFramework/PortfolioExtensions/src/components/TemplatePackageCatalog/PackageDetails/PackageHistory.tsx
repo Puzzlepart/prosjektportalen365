@@ -14,23 +14,33 @@ export interface IPackageHistoryProps {
 export const PackageHistory: FC<IPackageHistoryProps> = ({ changelogUrl }) => {
   const [entries, setEntries] = useState<IChangelogEntry[]>([])
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(false)
+  const [reloadToken, setReloadToken] = useState(0)
 
   useEffect(() => {
     let cancelled = false
     if (!changelogUrl) {
       setEntries([])
+      setError(false)
       return
     }
     setLoading(true)
-    void CatalogService.getChangelog(changelogUrl).then((result) => {
-      if (cancelled) return
-      setEntries(result)
-      setLoading(false)
-    })
+    setError(false)
+    CatalogService.getChangelog(changelogUrl)
+      .then((result) => {
+        if (cancelled) return
+        setEntries(result)
+        setLoading(false)
+      })
+      .catch(() => {
+        if (cancelled) return
+        setError(true)
+        setLoading(false)
+      })
     return () => {
       cancelled = true
     }
-  }, [changelogUrl])
+  }, [changelogUrl, reloadToken])
 
   return (
     <div className={styles.section}>
@@ -38,7 +48,15 @@ export const PackageHistory: FC<IPackageHistoryProps> = ({ changelogUrl }) => {
         {strings.CatalogHistoryTitle}
       </Text>
       {loading && <Spinner size='tiny' />}
-      {!loading && entries.length > 0 && (
+      {!loading && error && (
+        <Text size={200} className={styles.muted}>
+          {strings.CatalogHistoryError}{' '}
+          <Link onClick={() => setReloadToken((token) => token + 1)}>
+            {strings.CatalogRetryText}
+          </Link>
+        </Text>
+      )}
+      {!loading && !error && entries.length > 0 && (
         <div className={styles.history}>
           {entries.map((entry) => (
             <div key={entry.version} className={styles.historyEntry}>
@@ -72,7 +90,7 @@ export const PackageHistory: FC<IPackageHistoryProps> = ({ changelogUrl }) => {
           ))}
         </div>
       )}
-      {!loading && entries.length === 0 && (
+      {!loading && !error && entries.length === 0 && (
         <Text size={200} className={styles.muted}>
           {changelogUrl ? (
             <Link href={changelogUrl} target='_blank'>

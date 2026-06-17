@@ -38,6 +38,16 @@ export interface ICatalogFilters {
   type: string
   category: string
   status: StatusFilter
+  /**
+   * Available-language filter: {@link ALL_FILTER} or a BCP-47 group code
+   * (`nb`/`en`). Packages without `languages` count as Norwegian.
+   */
+  language: string
+  /**
+   * When true, only packages compatible with the installed Prosjektportalen
+   * version are shown (see {@link ITemplatePackageCatalogContext.isSupported}).
+   */
+  compatibleOnly: boolean
 }
 
 export interface ICatalogNotification {
@@ -102,6 +112,12 @@ export interface ITemplatePackageCatalogContext {
   pageCount: number
   /** Distinct categories derived from package tags. */
   categories: string[]
+  /** Distinct available-language group codes (`nb`/`en`) present in the catalog. */
+  languages: string[]
+  /** Number of filters that differ from the cleared defaults. */
+  activeFilterCount: number
+  /** Whether any filter differs from the cleared defaults (drives "Tøm filtre"). */
+  hasActiveFilters: boolean
   selectedPackage?: ICatalogPackage
   crossRefFor: (packageId: string) => ICrossReference | undefined
   /**
@@ -110,7 +126,11 @@ export interface ITemplatePackageCatalogContext {
    */
   isSupported: (pkg: ICatalogPackage) => boolean
   setFilter: (key: keyof ICatalogFilters, value: string) => void
+  /** Toggle the "compatible only" filter (boolean, so it can't go via setFilter). */
+  setCompatibleOnly: (value: boolean) => void
   clearFilters: () => void
+  /** Re-load the catalog from the network (used by the degraded-state retry). */
+  reloadCatalog: () => void
   setSort: (sort: SortKey) => void
   setRenderMode: (renderMode: RenderMode) => void
   setSelected: (packageId: string) => void

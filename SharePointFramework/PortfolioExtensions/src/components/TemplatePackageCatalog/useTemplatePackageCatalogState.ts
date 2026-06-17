@@ -12,7 +12,14 @@ export function useTemplatePackageCatalogState() {
     degraded: false,
     crossRef: new Map(),
     // Default to showing templates (Mal) and sorting alphabetically by name.
-    filters: { search: '', type: 'template', category: ALL_FILTER, status: 'all' },
+    filters: {
+      search: '',
+      type: 'template',
+      category: ALL_FILTER,
+      status: 'all',
+      language: ALL_FILTER,
+      compatibleOnly: false
+    },
     sort: 'name',
     renderMode: 'grid',
     page: 1,

@@ -10,7 +10,8 @@ import {
   mergeClasses,
   Tag,
   Text,
-  tokens
+  tokens,
+  useId
 } from '@fluentui/react-components'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC } from 'react'
@@ -82,6 +83,7 @@ export const CompatibilityDialog: FC = () => {
   const styles = useStyles()
   const { state, resolveCompatibility } = useCatalogContext()
   const report = state.compatibilityReport
+  const introId = useId('compatibility-intro')
 
   const resolutionLabel = (resolution: ConflictResolution): string =>
     resolution === 'overwrite'
@@ -108,16 +110,16 @@ export const CompatibilityDialog: FC = () => {
         if (!data.open) resolveCompatibility(false)
       }}
     >
-      <DialogSurface className={styles.surface}>
+      <DialogSurface className={styles.surface} aria-describedby={introId}>
         <DialogBody>
           <DialogTitle>{strings.CatalogCompatibilityTitle}</DialogTitle>
           <DialogContent>
-            <Text block className={styles.intro}>
+            <Text block id={introId} className={styles.intro}>
               {strings.CatalogCompatibilityIntro}
             </Text>
-            <div className={styles.list}>
+            <div className={styles.list} role='list'>
               {conflicts.map((conflict, index) => (
-                <div key={index} className={styles.row}>
+                <div key={index} className={styles.row} role='listitem'>
                   <Tag
                     size='small'
                     appearance='filled'

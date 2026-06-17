@@ -8,7 +8,6 @@ import {
   Link,
   mergeClasses,
   OverlayDrawer,
-  Spinner,
   Tooltip,
   useId
 } from '@fluentui/react-components'
@@ -20,7 +19,7 @@ import { CatalogToolbar } from './CatalogToolbar'
 import { CompatibilityDialog } from './CompatibilityDialog'
 import { InstallProgress } from './InstallProgress'
 import { PackageDetails } from './PackageDetails'
-import { PackageList } from './PackageList'
+import { PackageList, PackageListSkeleton } from './PackageList'
 import { TemplatePackageCatalogContext } from './context'
 import styles from './TemplatePackageCatalog.module.scss'
 import { ITemplatePackageCatalogProps } from './types'
@@ -81,12 +80,20 @@ export const TemplatePackageCatalog: FC<ITemplatePackageCatalogProps> = (props) 
                     title={strings.CatalogLoadErrorTitle}
                     text={strings.CatalogLoadErrorText}
                   />
+                  <Button
+                    appearance='secondary'
+                    className={styles.retryButton}
+                    onClick={ctx.reloadCatalog}
+                  >
+                    {strings.CatalogRetryText}
+                  </Button>
                 </div>
               )}
 
               {state.loading ? (
-                <div className={styles.loading}>
-                  <Spinner label={strings.CatalogLoadingText} />
+                <div className={styles.body} role='status' aria-busy={true}>
+                  <span className={styles.srOnly}>{strings.CatalogLoadingText}</span>
+                  <PackageListSkeleton />
                 </div>
               ) : (
                 <div className={styles.body}>

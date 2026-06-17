@@ -46,23 +46,32 @@ export interface IPackageContentSummaryProps {
 export const PackageContentSummary: FC<IPackageContentSummaryProps> = ({ package: pkg }) => {
   const [contents, setContents] = useState<IPackageContents | undefined>(undefined)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(false)
+  const [reloadToken, setReloadToken] = useState(0)
   const [showDetails, setShowDetails] = useState(false)
   const [preview, setPreview] = useState<{ title?: string; url?: string }>({})
 
   useEffect(() => {
     let cancelled = false
     setLoading(true)
+    setError(false)
     setContents(undefined)
     setShowDetails(false)
-    void CatalogService.getPackageContents(pkg).then((result) => {
-      if (cancelled) return
-      setContents(result)
-      setLoading(false)
-    })
+    CatalogService.getPackageContents(pkg)
+      .then((result) => {
+        if (cancelled) return
+        setContents(result)
+        setLoading(false)
+      })
+      .catch(() => {
+        if (cancelled) return
+        setError(true)
+        setLoading(false)
+      })
     return () => {
       cancelled = true
     }
-  }, [pkg.id])
+  }, [pkg.id, reloadToken])
 
   const renderNode = (node: IHierarchyNode): JSX.Element => {
     const label = (
@@ -119,7 +128,16 @@ export const PackageContentSummary: FC<IPackageContentSummaryProps> = ({ package
 
       {loading && <Spinner size='tiny' />}
 
-      {!loading && contents && contents.summary.length > 0 && (
+      {!loading && error && (
+        <Text size={200} className={styles.muted}>
+          {strings.CatalogContentSummaryError}{' '}
+          <Link onClick={() => setReloadToken((token) => token + 1)}>
+            {strings.CatalogRetryText}
+          </Link>
+        </Text>
+      )}
+
+      {!loading && !error && contents && contents.summary.length > 0 && (
         <>
           <div className={styles.summaryList}>
             {contents.summary.map((entry) => (
@@ -162,7 +180,7 @@ export const PackageContentSummary: FC<IPackageContentSummaryProps> = ({ package
         </>
       )}
 
-      {!loading && (!contents || contents.summary.length === 0) && (
+      {!loading && !error && (!contents || contents.summary.length === 0) && (
         <Text size={200} className={styles.muted}>
           {strings.CatalogContentSummaryUnavailable}
         </Text>

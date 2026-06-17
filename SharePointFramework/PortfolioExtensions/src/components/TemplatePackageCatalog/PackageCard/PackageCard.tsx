@@ -21,6 +21,13 @@ export interface IPackageCardProps {
   package: ICatalogPackage
 }
 
+/**
+ * Stable DOM id for a package card. Lets the detail pane return keyboard focus
+ * to the originating card when it closes (see PackageDetails).
+ */
+export const packageCardId = (packageId: string): string =>
+  `pp-pkg-card-${packageId.replace(/[^a-zA-Z0-9_-]/g, '-')}`
+
 export const PackageCard: FC<IPackageCardProps> = ({ package: pkg }) => {
   const { state, setSelected } = useCatalogContext()
   const [imageError, setImageError] = useState(false)
@@ -38,6 +45,7 @@ export const PackageCard: FC<IPackageCardProps> = ({ package: pkg }) => {
 
   return (
     <Card
+      id={packageCardId(pkg.id)}
       className={mergeClasses(styles.card, isSelected && styles.selected)}
       role='listitem'
       aria-selected={isSelected}

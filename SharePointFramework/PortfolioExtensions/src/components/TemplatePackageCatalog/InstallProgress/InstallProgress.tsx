@@ -74,7 +74,7 @@ const StepIcon: FC<{ status: InstallStepStatus }> = ({ status }) => {
 }
 
 export const InstallProgress: FC = () => {
-  const { state, setState, selectedPackage } = useCatalogContext()
+  const { state, setState, selectedPackage, importPackage } = useCatalogContext()
   const progress = state.installProgress
   if (!progress) return null
 
@@ -133,16 +133,31 @@ export const InstallProgress: FC = () => {
         />
       )}
       {progress.status === 'error' && (
-        <UserMessage
-          intent='error'
-          title={strings.CatalogInstallErrorTitle}
-          text={progress.error}
-        />
+        <>
+          <UserMessage
+            intent='error'
+            title={strings.CatalogInstallErrorTitle}
+            text={progress.error}
+          />
+          <Text size={200} className={styles.partialNote}>
+            {strings.CatalogInstallErrorPartialNote}
+          </Text>
+        </>
       )}
       {isTerminal && (
-        <Button appearance='primary' onClick={() => setState({ installProgress: undefined })}>
-          {strings.CloseLabel}
-        </Button>
+        <div className={styles.terminalActions}>
+          {progress.status === 'error' && selectedPackage && (
+            <Button appearance='primary' onClick={() => void importPackage(selectedPackage)}>
+              {strings.CatalogRetryText}
+            </Button>
+          )}
+          <Button
+            appearance={progress.status === 'error' ? 'secondary' : 'primary'}
+            onClick={() => setState({ installProgress: undefined })}
+          >
+            {strings.CloseLabel}
+          </Button>
+        </div>
       )}
     </div>
   )

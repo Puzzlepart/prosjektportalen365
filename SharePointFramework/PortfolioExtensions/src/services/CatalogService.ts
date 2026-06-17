@@ -36,6 +36,12 @@ export interface ICatalogResult {
    * Error message when {@link degraded} is true.
    */
   error?: string
+  /**
+   * True when the catalog was served from the local cache. Lets the caller
+   * revalidate in the background (stale-while-revalidate) via
+   * {@link CatalogService.revalidateCatalog}.
+   */
+  fromCache: boolean
 }
 
 /**
@@ -56,38 +62,57 @@ export class CatalogService {
     const store = new PnPClientStorage().local
     const cached = store.get(cacheKey) as ICatalog
     if (cached) {
-      return { catalog: cached, degraded: false }
+      return { catalog: cached, degraded: false, fromCache: true }
     }
     try {
       const catalog = await CatalogService._fetchCatalog(url)
       store.put(cacheKey, catalog, dateAdd(new Date(), 'hour', CACHE_HOURS))
-      return { catalog, degraded: false }
+      return { catalog, degraded: false, fromCache: false }
     } catch (error) {
       Logger.log({
         message: `(CatalogService) getCatalog: falling back to sample catalog - ${error?.message}`,
         level: LogLevel.Warning
       })
-      return { catalog: sampleCatalog, degraded: true, error: error?.message }
+      return { catalog: sampleCatalog, degraded: true, error: error?.message, fromCache: false }
+    }
+  }
+
+  /**
+   * Re-fetch the catalog from the network and refresh the cache, bypassing the
+   * cached copy. Returns the fresh catalog, or `undefined` if the refresh fails
+   * (the cached copy stays valid). Powers stale-while-revalidate: callers serve
+   * the cached catalog immediately and update once this resolves.
+   */
+  public static async revalidateCatalog(catalogUrl?: string): Promise<ICatalog | undefined> {
+    const url = (catalogUrl && catalogUrl.trim()) || DEFAULT_CATALOG_URL
+    const cacheKey = `${CACHE_PREFIX}${getHashCode(url.toLowerCase())}`
+    try {
+      const catalog = await CatalogService._fetchCatalog(url)
+      new PnPClientStorage().local.put(cacheKey, catalog, dateAdd(new Date(), 'hour', CACHE_HOURS))
+      return catalog
+    } catch (error) {
+      Logger.log({
+        message: `(CatalogService) revalidateCatalog failed: ${error?.message}`,
+        level: LogLevel.Info
+      })
+      return undefined
     }
   }
 
   /**
    * Fetch and parse a package `CHANGELOG.md` into version entries (newest
-   * first, as written). Returns an empty array on any failure.
+   * first, as written).
+   *
+   * Returns an empty array when no `changelogUrl` is given or the file isn't
+   * found (e.g. HTTP 404 — the package simply has no published changelog).
+   * **Throws** on network/timeout failure so the caller can show a retryable
+   * error instead of an indistinguishable "no history" state.
    */
   public static async getChangelog(changelogUrl?: string): Promise<IChangelogEntry[]> {
     if (!changelogUrl) return []
-    try {
-      const response = await fetch(changelogUrl, { method: 'GET' })
-      if (!response.ok) return []
-      return CatalogService._parseChangelog(await response.text())
-    } catch (error) {
-      Logger.log({
-        message: `(CatalogService) getChangelog failed: ${error?.message}`,
-        level: LogLevel.Info
-      })
-      return []
-    }
+    const response = await CatalogService._fetchWithTimeout(changelogUrl)
+    if (!response.ok) return []
+    return CatalogService._parseChangelog(await response.text())
   }
 
   /**
@@ -96,49 +121,37 @@ export class CatalogService {
    * required. Returns a high-level summary (icon + label + count) and a
    * drill-down hierarchy (lists, content types, site fields, term sets, …).
    *
-   * Returns `undefined` if the package base URL can't be derived or the
-   * manifest can't be fetched.
+   * Returns `undefined` if the package base URL can't be derived (the package
+   * genuinely exposes no inspectable content). **Throws** if the manifest can't
+   * be fetched (network/timeout/HTTP error) so the caller can show a retryable
+   * error. Individual provisioning/content files are best-effort — a failure on
+   * one of them leaves a partial but valid result.
    */
   public static async getPackageContents(
     pkg: ICatalogPackage
   ): Promise<IPackageContents | undefined> {
     const baseUrl = CatalogService._derivePackageBaseUrl(pkg)
     if (!baseUrl) return undefined
-    try {
-      const manifest = await CatalogService._fetchJson<IPackageManifest>(`${baseUrl}manifest.json`)
-      const [hub, template] = await Promise.all([
-        manifest.provisioning?.hubTemplate
-          ? CatalogService._fetchJson<any>(baseUrl + manifest.provisioning.hubTemplate).catch(
-              () => undefined
-            )
-          : Promise.resolve(undefined),
-        manifest.provisioning?.template
-          ? CatalogService._fetchJson<any>(baseUrl + manifest.provisioning.template).catch(
-              () => undefined
-            )
-          : Promise.resolve(undefined)
-      ])
-      const contentItems = manifest.content?.items ?? []
-      const contentData = await Promise.all(
-        contentItems.map((item) =>
-          CatalogService._fetchJson<any>(baseUrl + item.sourceFile).catch(() => undefined)
-        )
+    const manifest = await CatalogService._fetchJson<IPackageManifest>(`${baseUrl}manifest.json`)
+    const [hub, template] = await Promise.all([
+      manifest.provisioning?.hubTemplate
+        ? CatalogService._fetchJson<any>(baseUrl + manifest.provisioning.hubTemplate).catch(
+            () => undefined
+          )
+        : Promise.resolve(undefined),
+      manifest.provisioning?.template
+        ? CatalogService._fetchJson<any>(baseUrl + manifest.provisioning.template).catch(
+            () => undefined
+          )
+        : Promise.resolve(undefined)
+    ])
+    const contentItems = manifest.content?.items ?? []
+    const contentData = await Promise.all(
+      contentItems.map((item) =>
+        CatalogService._fetchJson<any>(baseUrl + item.sourceFile).catch(() => undefined)
       )
-      return CatalogService._buildContents(
-        manifest,
-        hub,
-        template,
-        contentItems,
-        contentData,
-        baseUrl
-      )
-    } catch (error) {
-      Logger.log({
-        message: `(CatalogService) getPackageContents failed: ${error?.message}`,
-        level: LogLevel.Warning
-      })
-      return undefined
-    }
+    )
+    return CatalogService._buildContents(manifest, hub, template, contentItems, contentData, baseUrl)
   }
 
   /**
@@ -152,8 +165,33 @@ export class CatalogService {
     return idx >= 0 ? ref.slice(0, idx + 1) : undefined
   }
 
+  /**
+   * `fetch` with an abort-based timeout and one automatic retry on a
+   * network/timeout failure. HTTP error responses (4xx/5xx) are returned as-is
+   * — they're a definitive answer, not a transient failure, so the caller
+   * decides how to treat them.
+   */
+  private static async _fetchWithTimeout(
+    url: string,
+    { timeoutMs = 15000, retries = 1 }: { timeoutMs?: number; retries?: number } = {}
+  ): Promise<Response> {
+    let lastError: Error
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      const controller = new AbortController()
+      const timer = setTimeout(() => controller.abort(), timeoutMs)
+      try {
+        return await fetch(url, { method: 'GET', signal: controller.signal })
+      } catch (error) {
+        lastError = error
+      } finally {
+        clearTimeout(timer)
+      }
+    }
+    throw lastError
+  }
+
   private static async _fetchJson<T>(url: string): Promise<T> {
-    const response = await fetch(url, { method: 'GET' })
+    const response = await CatalogService._fetchWithTimeout(url)
     if (!response.ok) throw new Error(`HTTP ${response.status} for ${url}`)
     return (await response.json()) as T
   }
@@ -163,7 +201,7 @@ export class CatalogService {
    * the inline code preview.
    */
   public static async getFileText(url: string): Promise<string> {
-    const response = await fetch(url, { method: 'GET' })
+    const response = await CatalogService._fetchWithTimeout(url)
     if (!response.ok) throw new Error(`HTTP ${response.status} for ${url}`)
     return response.text()
   }
@@ -358,7 +396,7 @@ export class CatalogService {
   }
 
   private static async _fetchCatalog(url: string): Promise<ICatalog> {
-    const response = await fetch(url, { method: 'GET' })
+    const response = await CatalogService._fetchWithTimeout(url)
     if (!response.ok) {
       throw new Error(`HTTP ${response.status} ${response.statusText}`)
     }

@@ -25,6 +25,35 @@
   padding: var(--spacingVerticalL) 0;
 }
 
+.clearButton {
+  margin-top: var(--spacingVerticalM);
+}
+
+/* Loading skeleton — mirrors the card preview/title/description stack. */
+.skeletonCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacingVerticalS);
+  padding: var(--spacingVerticalM);
+  border: 1px solid var(--colorNeutralStroke2);
+  border-radius: var(--borderRadiusMedium);
+}
+
+.skeletonPreview {
+  height: 96px;
+  border-radius: var(--borderRadiusMedium);
+}
+
+.skeletonTitle {
+  height: 16px;
+  width: 70%;
+}
+
+.skeletonText {
+  height: 12px;
+  width: 90%;
+}
+
 .pagination {
   display: flex;
   align-items: center;

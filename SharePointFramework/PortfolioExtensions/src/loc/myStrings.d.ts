@@ -146,6 +146,16 @@ declare interface IPortfolioExtensionsStrings {
   CatalogLoadErrorTitle: string
   CatalogLoadErrorText: string
   CatalogRetryText: string
+  CatalogHistoryError: string
+  CatalogContentSummaryError: string
+  CatalogInstallErrorPartialNote: string
+  CatalogFilterLanguageLabel: string
+  CatalogFilterLanguageTooltip: string
+  CatalogFilterCompatibleOnly: string
+  CatalogFilterCompatibleOnlyTooltip: string
+  CatalogNoResultsTitle: string
+  CatalogNoResultsDescription: string
+  CatalogClearFiltersCount: string
   CatalogMinVersionError: string
   CatalogPermissionError: string
   CatalogTaxonomyPermissionBlocked: string

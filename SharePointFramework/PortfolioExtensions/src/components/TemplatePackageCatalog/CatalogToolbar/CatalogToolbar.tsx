@@ -4,6 +4,7 @@ import {
   Link,
   Option,
   SearchBox,
+  Switch,
   Text,
   ToggleButton,
   Tooltip
@@ -12,12 +13,24 @@ import { Grid20Regular, List20Regular } from '@fluentui/react-icons'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC, useEffect, useRef, useState } from 'react'
 import { useCatalogContext } from '../context'
+import { languageLabel } from '../language'
 import { ALL_FILTER, SortKey } from '../types'
 import styles from './CatalogToolbar.module.scss'
 
 export const CatalogToolbar: FC = () => {
-  const { state, filteredPackages, categories, setFilter, clearFilters, setSort, setRenderMode } =
-    useCatalogContext()
+  const {
+    state,
+    filteredPackages,
+    categories,
+    languages,
+    activeFilterCount,
+    hasActiveFilters,
+    setFilter,
+    setCompatibleOnly,
+    clearFilters,
+    setSort,
+    setRenderMode
+  } = useCatalogContext()
   const { filters, sort, renderMode } = state
 
   // Debounced search input (~200ms) — keeps the field responsive without
@@ -122,9 +135,45 @@ export const CatalogToolbar: FC = () => {
         </Dropdown>
       </Tooltip>
 
-      <Tooltip content={strings.CatalogClearFiltersTooltip} relationship='description'>
-        <Link onClick={clearFilters}>{strings.CatalogClearFiltersText}</Link>
+      {languages.length > 1 && (
+        <Tooltip content={strings.CatalogFilterLanguageTooltip} relationship='description'>
+          <Dropdown
+            className={styles.dropdown}
+            aria-label={strings.CatalogFilterLanguageLabel}
+            value={`${strings.CatalogFilterLanguageLabel}: ${
+              filters.language === ALL_FILTER
+                ? strings.CatalogFilterAllOption
+                : languageLabel(filters.language)
+            }`}
+            selectedOptions={[filters.language]}
+            onOptionSelect={(_, data) => setFilter('language', data.optionValue ?? ALL_FILTER)}
+          >
+            <Option value={ALL_FILTER}>{strings.CatalogFilterAllOption}</Option>
+            {languages.map((code) => (
+              <Option key={code} value={code}>
+                {languageLabel(code)}
+              </Option>
+            ))}
+          </Dropdown>
+        </Tooltip>
+      )}
+
+      <Tooltip content={strings.CatalogFilterCompatibleOnlyTooltip} relationship='description'>
+        <Switch
+          className={styles.compatibleSwitch}
+          label={strings.CatalogFilterCompatibleOnly}
+          checked={filters.compatibleOnly}
+          onChange={(_, data) => setCompatibleOnly(data.checked)}
+        />
       </Tooltip>
+
+      {hasActiveFilters && (
+        <Tooltip content={strings.CatalogClearFiltersTooltip} relationship='description'>
+          <Link onClick={clearFilters}>
+            {format(strings.CatalogClearFiltersCount, activeFilterCount)}
+          </Link>
+        </Tooltip>
+      )}
 
       <div className={styles.spacer} />
 

@@ -14,6 +14,7 @@ import strings from 'PortfolioExtensionsStrings'
 import React, { FC } from 'react'
 import { ICatalogPackage, PpPkgType } from 'models'
 import { useCatalogContext } from '../context'
+import { languageLabel } from '../language'
 
 const useStyles = makeStyles({
   // Tiny drop shadow so the badges lift off the card image / surface.
@@ -184,21 +185,6 @@ export const PackageCompatibilityTag: FC<{ package: ICatalogPackage }> = ({ pack
       </Tag>
     </Tooltip>
   )
-}
-
-/** Localized display name for a BCP-47 language code (falls back to the code). */
-const languageLabel = (code: string): string => {
-  switch (code.toLowerCase()) {
-    case 'nb-no':
-    case 'nb':
-    case 'no':
-      return strings.CatalogLanguageNorwegian
-    case 'en-us':
-    case 'en':
-      return strings.CatalogLanguageEnglish
-    default:
-      return code
-  }
 }
 
 /**

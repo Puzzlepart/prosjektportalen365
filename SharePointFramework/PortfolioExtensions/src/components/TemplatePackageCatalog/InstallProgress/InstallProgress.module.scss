@@ -48,3 +48,12 @@
   justify-content: center;
   padding: var(--spacingVerticalL) 0;
 }
+
+.partialNote {
+  color: var(--colorNeutralForeground3);
+}
+
+.terminalActions {
+  display: flex;
+  gap: var(--spacingHorizontalS);
+}

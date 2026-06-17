@@ -10,16 +10,36 @@ import { PAGE_SIZE } from '../types'
 import styles from './PackageList.module.scss'
 
 export const PackageList: FC = () => {
-  const { pagedPackages, filteredPackages, state, pageCount, setPage } = useCatalogContext()
+  const { pagedPackages, filteredPackages, state, pageCount, setPage, hasActiveFilters, clearFilters } =
+    useCatalogContext()
 
   if (filteredPackages.length === 0) {
+    // Active filters with no matches → offer a way out; otherwise the catalog
+    // simply has nothing to show.
     return (
       <div className={styles.empty}>
-        <UserMessage
-          intent='info'
-          title={strings.CatalogEmptyTitle}
-          text={strings.CatalogEmptyDescription}
-        />
+        {hasActiveFilters ? (
+          <>
+            <UserMessage
+              intent='info'
+              title={strings.CatalogNoResultsTitle}
+              text={strings.CatalogNoResultsDescription}
+            />
+            <Button
+              appearance='secondary'
+              className={styles.clearButton}
+              onClick={clearFilters}
+            >
+              {strings.CatalogClearFiltersText}
+            </Button>
+          </>
+        ) : (
+          <UserMessage
+            intent='info'
+            title={strings.CatalogEmptyTitle}
+            text={strings.CatalogEmptyDescription}
+          />
+        )}
       </div>
     )
   }
