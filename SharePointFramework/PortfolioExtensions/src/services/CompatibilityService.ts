@@ -269,7 +269,6 @@ export class CompatibilityService {
   ): Promise<void> {
     try {
       const sp: any = SPDataAdapter.sp
-      const group = schema.Taxonomy?.TermGroup
       for (const set of schema.Taxonomy?.TermSets ?? []) {
         if (!set?.Id) continue
         try {
@@ -291,7 +290,6 @@ export class CompatibilityService {
           // Term set not found (will be created) — no conflict.
         }
       }
-      void group
     } catch {
       // No term store permission — taxonomy is feature-flag-gated anyway.
     }

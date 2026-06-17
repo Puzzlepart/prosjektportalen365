@@ -155,7 +155,7 @@ define([], function () {
     CloudTemplateInfoMessage:
       '**{0}** er en skymal. Malpakken lastes ned og settes opp automatisk når du fortsetter – ingenting lagres på hub-området.',
     CloudTemplateResolvingMessage: 'Laster ned og leser skymal…',
-    CloudTemplateResolveErrorMessage: 'Kunne ikke laste ned skymalen. {0}',
+    CloudTemplateResolveErrorMessage: 'Kunne ikke laste ned skymalen. Prøv å velge den på nytt.',
     CloudTemplateNotCompatibleWarning:
       '**{0}** krever innhold på hub-området (f.eks. en innholdstype knyttet til Prosjekter-listen) som ikke kan settes opp fra en skymal. Tillegg og listeinnhold blir lagt til, men hub-innholdet hoppes over. Fortsett på eget ansvar.',
     TemplateConfigConjunction: ' og ',

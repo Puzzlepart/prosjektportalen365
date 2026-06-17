@@ -1,6 +1,5 @@
 import { format } from '@fluentui/react/lib/Utilities'
-import { Icon } from '@fluentui/react/lib/Icon'
-import { formatDate } from 'pp365-shared-library'
+import { formatDate, getFluentIconWithFallback } from 'pp365-shared-library'
 import {
   Accordion,
   AccordionHeader,
@@ -32,20 +31,19 @@ import {
 } from '@fluentui/react-icons'
 import { UserMessage } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { FC } from 'react'
 import { PpPkgType } from 'models'
-import { PackageBadges, PackageRequirementTags, packageCardId } from '../PackageCard'
-import { useCatalogContext } from '../context'
+import { PackageBadges, PackageRequirementTags } from '../PackageCard'
 import { PackageContentSummary } from './PackageContentSummary'
 import { PackageHistory } from './PackageHistory'
 import { PackageReviews } from './PackageReviews'
 import { PackageScreenshots } from './PackageScreenshots'
 import { getPackageStats } from '../packageStats'
 import styles from './PackageDetails.module.scss'
+import { usePackageDetails } from './usePackageDetails'
 
 export const PackageDetails: FC = () => {
   const {
-    props,
     state,
     selectedPackage,
     crossRefFor,
@@ -54,41 +52,18 @@ export const PackageDetails: FC = () => {
     publishCentral,
     removePackage,
     closeDetail,
-    setFilter
-  } = useCatalogContext()
-  const [imageError, setImageError] = useState(false)
-  const [confirmReplace, setConfirmReplace] = useState(false)
-  const [confirmCloud, setConfirmCloud] = useState(false)
-  const [confirmRemove, setConfirmRemove] = useState(false)
-  // Detail-pane root, focused when a package is selected so keyboard/screen
-  // reader users land in the details rather than staying on the card.
-  const rootRef = useRef<HTMLDivElement>(null)
-  const wasDetailOpen = useRef(state.detailOpen)
-
-  // PackageDetails is a single reused instance, so reset the broken-image flag
-  // when a different package is selected — otherwise one failed thumbnail would
-  // hide the image for every package selected afterwards. Keyed on `.id` (not
-  // the object) since `selectedPackage` is a fresh find() on every render.
-  // Selecting a package also moves focus into the pane (a11y).
-  useEffect(() => {
-    setImageError(false)
-    if (selectedPackage) rootRef.current?.focus()
-  }, [selectedPackage?.id])
-
-  // When the detail pane closes (collapsed <720px layout), return focus to the
-  // card it was opened from.
-  useEffect(() => {
-    if (wasDetailOpen.current && !state.detailOpen && selectedPackage) {
-      document.getElementById(packageCardId(selectedPackage.id))?.focus()
-    }
-    wasDetailOpen.current = state.detailOpen
-  }, [state.detailOpen, selectedPackage])
-
-  // Clicking a tag filters the catalog by that category and returns to the list.
-  const filterByTag = (tag: string) => {
-    setFilter('category', tag)
-    closeDetail()
-  }
+    imageError,
+    onImageError,
+    confirmReplace,
+    setConfirmReplace,
+    confirmCloud,
+    setConfirmCloud,
+    confirmRemove,
+    setConfirmRemove,
+    rootRef,
+    filterByTag,
+    numberLocale
+  } = usePackageDetails()
 
   if (!selectedPackage) {
     return (
@@ -101,8 +76,6 @@ export const PackageDetails: FC = () => {
   const pkg = selectedPackage
   const ref = crossRefFor(pkg.id)
   const stats = getPackageStats(pkg.id)
-  // Format counts in the user's culture rather than a hardcoded locale.
-  const numberLocale = props.context.pageContext.cultureInfo.currentUICultureName || undefined
   const isCentral = ref?.packageType === PpPkgType.Sentral
   const updateAvailable = !!ref?.updateAvailable
   // Extensions go into the Prosjekttillegg library, not Maloppsett, so they
@@ -141,12 +114,12 @@ export const PackageDetails: FC = () => {
           className={styles.thumbnail}
           src={pkg.thumbnail}
           alt=''
-          onError={() => setImageError(true)}
+          onError={onImageError}
         />
       )}
 
       <div className={styles.titleRow}>
-        {pkg.icon && <Icon iconName={pkg.icon} className={styles.titleIcon} />}
+        {pkg.icon && <span className={styles.titleIcon}>{getFluentIconWithFallback(pkg.icon)}</span>}
         <Text size={500} weight='semibold'>
           {pkg.name}
         </Text>

@@ -173,41 +173,36 @@ export class PackageInstaller {
         featureFlagProvisioning
       })
 
-      // Pre-gate taxonomy: a package that ships taxonomy (term sets) can't be
-      // provisioned without term-store write access. Rather than install a
-      // partial/broken package (its term sets, and anything that depends on
-      // them, would be missing), block the whole import up front when the admin
-      // lacks that access. Packages without taxonomy are unaffected.
-      if (enableTaxonomy && (await PackageInstaller._hasTaxonomy(zip, manifest))) {
-        const hasTermStorePermission = await SPDataAdapter.hasTermStorePermission()
-        if (!hasTermStorePermission) {
-          setStatus(
-            InstallStepKey.ProvisionHub,
-            'error',
-            strings.CatalogTaxonomyPermissionBlocked
-          )
-          progress.status = 'error'
-          progress.error = strings.CatalogTaxonomyPermissionBlocked
-          progress.currentStep = undefined
-          emit()
-          return false
-        }
+      // A package that ships taxonomy (term sets) can't be provisioned without
+      // term-store write access. Probe it ONCE: pre-gate the whole import up
+      // front (rather than half-install a package whose term sets — and anything
+      // depending on them — would be missing), and reuse the result for the
+      // Taxonomy step status below. Packages without taxonomy don't need it.
+      const packageHasTaxonomy =
+        enableTaxonomy && (await PackageInstaller._hasTaxonomy(zip, manifest))
+      const canWriteTermStore = packageHasTaxonomy
+        ? await SPDataAdapter.hasTermStorePermission()
+        : false
+      if (packageHasTaxonomy && !canWriteTermStore) {
+        setStatus(InstallStepKey.ProvisionHub, 'error', strings.CatalogTaxonomyPermissionBlocked)
+        progress.status = 'error'
+        progress.error = strings.CatalogTaxonomyPermissionBlocked
+        progress.currentStep = undefined
+        emit()
+        return false
       }
 
       setStatus(InstallStepKey.ProvisionHub, 'running')
       await PackageInstaller._provisionHub(zip, manifest, context, enableTaxonomy, report)
       setStatus(InstallStepKey.ProvisionHub, 'done')
 
-      if (!enableTaxonomy) {
-        setStatus(InstallStepKey.Taxonomy, 'skipped', strings.CatalogStepSkippedFeatureFlag)
-      } else {
-        const hasPermission = await SPDataAdapter.hasTermStorePermission()
-        setStatus(
-          InstallStepKey.Taxonomy,
-          hasPermission ? 'done' : 'skipped',
-          hasPermission ? undefined : strings.CatalogPermissionError
-        )
-      }
+      // `packageHasTaxonomy` implies `canWriteTermStore` here (we'd have blocked
+      // above); an enabled-but-no-taxonomy package makes the step a no-op success.
+      setStatus(
+        InstallStepKey.Taxonomy,
+        enableTaxonomy ? 'done' : 'skipped',
+        enableTaxonomy ? undefined : strings.CatalogStepSkippedFeatureFlag
+      )
 
       // Add the template's bundled project extensions to the Prosjekttillegg
       // library (if any), so they can be linked from the Maloppsett item below.
@@ -446,14 +441,14 @@ export class PackageInstaller {
   public static async provisionSkymalHubDependencies(
     pkg: ICatalogPackage,
     context: ListViewCommandSetContext
-  ): Promise<number> {
+  ): Promise<void> {
     const buffer = await PackageInstaller._download(pkg.downloadUrl)
     const zip = await PackageInstaller._unzip(buffer)
     const manifest = await PackageInstaller._readManifest(zip)
     const hubTemplate = manifest.provisioning?.hubTemplate
-    if (!hubTemplate) return 0
+    if (!hubTemplate) return
     const file = zip.file(hubTemplate)
-    if (!file) return 0
+    if (!file) return
     const schema = JSON.parse(await file.async('string'))
 
     const filtered: Record<string, any> = {}
@@ -472,7 +467,7 @@ export class PackageInstaller {
     )
     if (bindingLists.length) filtered.Lists = bindingLists
 
-    if (!filtered.ContentTypes && !filtered.SiteFields) return 0
+    if (!filtered.ContentTypes && !filtered.SiteFields) return
 
     const { WebProvisioner } = await import('sp-js-provisioning')
     const provisioner = new WebProvisioner(SPDataAdapter.portalDataService.web).setup({
@@ -485,7 +480,6 @@ export class PackageInstaller {
         level: LogLevel.Info
       })
     })
-    return (filtered.ContentTypes ?? []).length
   }
 
   /**
@@ -513,6 +507,9 @@ export class PackageInstaller {
       for (const relativePath of relativePaths) {
         const zipFile = zip.file(relativePath)
         if (!zipFile) continue
+        // These entries are provisioning JSON (template/extension/content), so
+        // decoding as text is safe. Binary assets are not expected here and
+        // would be corrupted by the string read.
         const content = await zipFile.async('string')
         const fileName = relativePath.split('/').pop() as string
         await web
@@ -621,6 +618,9 @@ export class PackageInstaller {
     return result
   }
 
+  // Mirrors sp-js-provisioning's own (private, non-exported) OData escaping:
+  // single quotes are doubled. `Title` is package-controlled, so this is
+  // defense-in-depth rather than untrusted-input handling.
   private static _escapeOData(value: string): string {
     return value.replace(/'/g, "''")
   }

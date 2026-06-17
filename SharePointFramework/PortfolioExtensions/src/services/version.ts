@@ -4,12 +4,24 @@
  * the catalog's "update available" and `minPPVersion` checks.
  */
 
+import { Logger, LogLevel } from '@pnp/logging'
+
 function parse(version: string): number[] {
   if (!version) return [0, 0, 0]
   const core = version.trim().replace(/^v/i, '').split(/[-+]/)[0]
   return core.split('.').map((part) => {
     const n = parseInt(part, 10)
-    return isNaN(n) ? 0 : n
+    if (isNaN(n)) {
+      // Surface malformed version data instead of silently treating it as 0 —
+      // a typo'd `minPPVersion` would otherwise compare as 0.0.0 and never
+      // block an install.
+      Logger.log({
+        message: `(version) Ignoring non-numeric version segment "${part}" in "${version}"`,
+        level: LogLevel.Warning
+      })
+      return 0
+    }
+    return n
   })
 }
 

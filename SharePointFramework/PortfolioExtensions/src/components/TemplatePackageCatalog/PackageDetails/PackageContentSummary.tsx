@@ -21,11 +21,11 @@ import {
   TextBulletListSquare20Regular
 } from '@fluentui/react-icons'
 import strings from 'PortfolioExtensionsStrings'
-import React, { FC, useEffect, useState } from 'react'
-import { ContentIconName, ICatalogPackage, IHierarchyNode, IPackageContents } from 'models'
-import { CatalogService } from 'services'
+import React, { FC } from 'react'
+import { ContentIconName, ICatalogPackage, IHierarchyNode } from 'models'
 import { PackageFilePreview } from './PackageFilePreview'
 import styles from './PackageDetails.module.scss'
+import { usePackageContentSummary } from './usePackageContentSummary'
 
 const ICONS: Record<ContentIconName, JSX.Element> = {
   content: <ClipboardTaskListLtr20Regular />,
@@ -44,34 +44,17 @@ export interface IPackageContentSummaryProps {
 }
 
 export const PackageContentSummary: FC<IPackageContentSummaryProps> = ({ package: pkg }) => {
-  const [contents, setContents] = useState<IPackageContents | undefined>(undefined)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(false)
-  const [reloadToken, setReloadToken] = useState(0)
-  const [showDetails, setShowDetails] = useState(false)
-  const [preview, setPreview] = useState<{ title?: string; url?: string }>({})
-
-  useEffect(() => {
-    let cancelled = false
-    setLoading(true)
-    setError(false)
-    setContents(undefined)
-    setShowDetails(false)
-    CatalogService.getPackageContents(pkg)
-      .then((result) => {
-        if (cancelled) return
-        setContents(result)
-        setLoading(false)
-      })
-      .catch(() => {
-        if (cancelled) return
-        setError(true)
-        setLoading(false)
-      })
-    return () => {
-      cancelled = true
-    }
-  }, [pkg.id, reloadToken])
+  const {
+    contents,
+    loading,
+    error,
+    retry,
+    showDetails,
+    toggleDetails,
+    preview,
+    openPreview,
+    closePreview
+  } = usePackageContentSummary(pkg)
 
   const renderNode = (node: IHierarchyNode): JSX.Element => {
     const label = (
@@ -100,7 +83,7 @@ export const PackageContentSummary: FC<IPackageContentSummaryProps> = ({ package
           aria-label={strings.CatalogPreviewTooltip}
           onClick={(event) => {
             event.stopPropagation()
-            setPreview({ title: node.label, url: node.fileUrl })
+            openPreview({ title: node.label, url: node.fileUrl })
           }}
         />
       </Tooltip>
@@ -131,9 +114,7 @@ export const PackageContentSummary: FC<IPackageContentSummaryProps> = ({ package
       {!loading && error && (
         <Text size={200} className={styles.muted}>
           {strings.CatalogContentSummaryError}{' '}
-          <Link onClick={() => setReloadToken((token) => token + 1)}>
-            {strings.CatalogRetryText}
-          </Link>
+          <Link onClick={retry}>{strings.CatalogRetryText}</Link>
         </Text>
       )}
 
@@ -160,10 +141,7 @@ export const PackageContentSummary: FC<IPackageContentSummaryProps> = ({ package
 
           {contents.hierarchy.length > 0 && (
             <>
-              <Link
-                className={styles.detailsToggle}
-                onClick={() => setShowDetails((value) => !value)}
-              >
+              <Link className={styles.detailsToggle} onClick={toggleDetails}>
                 {showDetails ? strings.CatalogHideDetails : strings.CatalogShowDetails}
               </Link>
               {showDetails && (
@@ -186,7 +164,7 @@ export const PackageContentSummary: FC<IPackageContentSummaryProps> = ({ package
         </Text>
       )}
 
-      <PackageFilePreview title={preview.title} url={preview.url} onClose={() => setPreview({})} />
+      <PackageFilePreview title={preview.title} url={preview.url} onClose={closePreview} />
     </div>
   )
 }

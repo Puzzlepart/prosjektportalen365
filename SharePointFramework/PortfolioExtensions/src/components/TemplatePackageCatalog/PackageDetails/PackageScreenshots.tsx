@@ -17,7 +17,8 @@ import {
   ZoomIn24Regular
 } from '@fluentui/react-icons'
 import strings from 'PortfolioExtensionsStrings'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC } from 'react'
+import { usePackageScreenshots } from './usePackageScreenshots'
 
 const useStyles = makeStyles({
   root: {
@@ -128,27 +129,13 @@ const useStyles = makeStyles({
  */
 export const PackageScreenshots: FC<{ screenshots?: string[] }> = ({ screenshots }) => {
   const styles = useStyles()
-  const [index, setIndex] = useState(0)
-  const [lightboxOpen, setLightboxOpen] = useState(false)
-  const [errored, setErrored] = useState<Record<number, boolean>>({})
-
-  const count = screenshots?.length ?? 0
-
-  // Reset to the first image (and clear errors) when the package changes.
-  useEffect(() => {
-    setIndex(0)
-    setErrored({})
-    setLightboxOpen(false)
-  }, [screenshots])
+  const { count, safeIndex, lightboxOpen, isErrored, go, goTo, markErrored, openLightbox, setLightboxOpen } =
+    usePackageScreenshots(screenshots)
 
   if (count === 0) return null
 
-  const safeIndex = Math.min(index, count - 1)
-  const go = (delta: number) => setIndex((current) => (current + delta + count) % count)
-  const markErrored = (i: number) => setErrored((current) => ({ ...current, [i]: true }))
-
   const renderImage = (className: string, onClick?: () => void) =>
-    errored[safeIndex] ? (
+    isErrored(safeIndex) ? (
       <div className={styles.errorBox}>
         <Text size={200}>{strings.CatalogScreenshotError}</Text>
       </div>
@@ -169,9 +156,9 @@ export const PackageScreenshots: FC<{ screenshots?: string[] }> = ({ screenshots
       </Text>
 
       <div className={styles.frame}>
-        {renderImage(styles.image, () => !errored[safeIndex] && setLightboxOpen(true))}
+        {renderImage(styles.image, () => !isErrored(safeIndex) && openLightbox())}
 
-        {!errored[safeIndex] && (
+        {!isErrored(safeIndex) && (
           <Tooltip content={strings.CatalogScreenshotZoom} relationship='label'>
             <Button
               className={styles.zoomButton}
@@ -179,7 +166,7 @@ export const PackageScreenshots: FC<{ screenshots?: string[] }> = ({ screenshots
               size='small'
               icon={<ZoomIn24Regular />}
               aria-label={strings.CatalogScreenshotZoom}
-              onClick={() => setLightboxOpen(true)}
+              onClick={openLightbox}
             />
           </Tooltip>
         )}
@@ -215,8 +202,8 @@ export const PackageScreenshots: FC<{ screenshots?: string[] }> = ({ screenshots
                 type='button'
                 className={mergeClasses(styles.dot, i === safeIndex && styles.dotActive)}
                 aria-label={format(strings.CatalogScreenshotAlt, i + 1, count)}
-                aria-current={i === safeIndex}
-                onClick={() => setIndex(i)}
+                aria-current={i === safeIndex ? 'true' : undefined}
+                onClick={() => goTo(i)}
               />
             ))}
           </div>
@@ -229,11 +216,17 @@ export const PackageScreenshots: FC<{ screenshots?: string[] }> = ({ screenshots
       <Dialog open={lightboxOpen} onOpenChange={(_, data) => setLightboxOpen(data.open)}>
         <DialogSurface
           className={styles.lightboxSurface}
+          aria-label={strings.CatalogScreenshotsHeading}
           onKeyDown={(e) => {
             // Arrow-key navigation in the lightbox (Escape closes it via Dialog).
             if (count < 2) return
-            if (e.key === 'ArrowLeft') go(-1)
-            else if (e.key === 'ArrowRight') go(1)
+            if (e.key === 'ArrowLeft') {
+              e.preventDefault()
+              go(-1)
+            } else if (e.key === 'ArrowRight') {
+              e.preventDefault()
+              go(1)
+            }
           }}
         >
           <DialogBody className={styles.lightboxBody}>

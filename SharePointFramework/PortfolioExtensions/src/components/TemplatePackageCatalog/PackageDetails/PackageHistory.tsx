@@ -1,46 +1,17 @@
 import { Link, Spinner, Text } from '@fluentui/react-components'
 import strings from 'PortfolioExtensionsStrings'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC } from 'react'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
-import { IChangelogEntry } from 'models'
-import { CatalogService } from 'services'
 import styles from './PackageDetails.module.scss'
+import { usePackageHistory } from './usePackageHistory'
 
 export interface IPackageHistoryProps {
   changelogUrl?: string
 }
 
 export const PackageHistory: FC<IPackageHistoryProps> = ({ changelogUrl }) => {
-  const [entries, setEntries] = useState<IChangelogEntry[]>([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(false)
-  const [reloadToken, setReloadToken] = useState(0)
-
-  useEffect(() => {
-    let cancelled = false
-    if (!changelogUrl) {
-      setEntries([])
-      setError(false)
-      return
-    }
-    setLoading(true)
-    setError(false)
-    CatalogService.getChangelog(changelogUrl)
-      .then((result) => {
-        if (cancelled) return
-        setEntries(result)
-        setLoading(false)
-      })
-      .catch(() => {
-        if (cancelled) return
-        setError(true)
-        setLoading(false)
-      })
-    return () => {
-      cancelled = true
-    }
-  }, [changelogUrl, reloadToken])
+  const { entries, loading, error, retry } = usePackageHistory(changelogUrl)
 
   return (
     <div className={styles.section}>
@@ -51,9 +22,7 @@ export const PackageHistory: FC<IPackageHistoryProps> = ({ changelogUrl }) => {
       {!loading && error && (
         <Text size={200} className={styles.muted}>
           {strings.CatalogHistoryError}{' '}
-          <Link onClick={() => setReloadToken((token) => token + 1)}>
-            {strings.CatalogRetryText}
-          </Link>
+          <Link onClick={retry}>{strings.CatalogRetryText}</Link>
         </Text>
       )}
       {!loading && !error && entries.length > 0 && (

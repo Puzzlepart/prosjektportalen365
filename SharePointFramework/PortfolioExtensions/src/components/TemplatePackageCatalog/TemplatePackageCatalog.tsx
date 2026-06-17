@@ -42,6 +42,7 @@ export const TemplatePackageCatalog: FC<ITemplatePackageCatalogProps> = (props) 
         <FluentProvider theme={customLightTheme}>
           <OverlayDrawer
             role='dialog'
+            aria-label={strings.CatalogDrawerTitle}
             position='end'
             open={open}
             className={styles.surface}
@@ -78,7 +79,11 @@ export const TemplatePackageCatalog: FC<ITemplatePackageCatalogProps> = (props) 
                   <UserMessage
                     intent='warning'
                     title={strings.CatalogLoadErrorTitle}
-                    text={strings.CatalogLoadErrorText}
+                    text={
+                      state.error
+                        ? `${strings.CatalogLoadErrorText} (${state.error})`
+                        : strings.CatalogLoadErrorText
+                    }
                   />
                   <Button
                     appearance='secondary'

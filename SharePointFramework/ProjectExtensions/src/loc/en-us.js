@@ -155,7 +155,7 @@ define([], function () {
     CloudTemplateInfoMessage:
       '**{0}** is a cloud template. The template package is downloaded and set up automatically when you continue — nothing is stored on the hub.',
     CloudTemplateResolvingMessage: 'Downloading and reading cloud template…',
-    CloudTemplateResolveErrorMessage: 'Could not download the cloud template. {0}',
+    CloudTemplateResolveErrorMessage: 'Could not download the cloud template. Try selecting it again.',
     CloudTemplateNotCompatibleWarning:
       '**{0}** requires hub content (e.g. a content type bound to the Projects list) that cannot be set up from a cloud template. Extensions and list content are still applied, but the hub content is skipped. Continue at your own risk.',
     TemplateConfigConjunction: ' and ',

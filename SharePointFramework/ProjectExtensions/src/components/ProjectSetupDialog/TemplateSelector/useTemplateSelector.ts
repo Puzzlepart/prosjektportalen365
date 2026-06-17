@@ -1,4 +1,5 @@
 import { format } from '@fluentui/react'
+import { Logger, LogLevel } from '@pnp/logging'
 import strings from 'ProjectExtensionsStrings'
 import { useEffect, useMemo, useState } from 'react'
 import { isEmpty } from 'underscore'
@@ -95,12 +96,14 @@ export function useTemplateSelector() {
         const resolved = await resolveCloudTemplate(selectedTemplate)
         if (!cancelled) context.dispatch(ON_CLOUD_TEMPLATE_RESOLVED(resolved))
       } catch (error) {
+        // Log the raw (often technical/English) error for diagnostics; show the
+        // user a clean, fully-localized message instead of interpolating it.
+        Logger.log({
+          message: `(useTemplateSelector) resolveCloudTemplate failed: ${error?.message}`,
+          level: LogLevel.Error
+        })
         if (!cancelled) {
-          context.dispatch(
-            ON_CLOUD_TEMPLATE_ERROR(
-              format(strings.CloudTemplateResolveErrorMessage, error?.message ?? '')
-            )
-          )
+          context.dispatch(ON_CLOUD_TEMPLATE_ERROR(strings.CloudTemplateResolveErrorMessage))
         }
       }
     })()

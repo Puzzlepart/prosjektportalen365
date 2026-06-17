@@ -14,8 +14,8 @@ import {
 } from '@fluentui/react-components'
 import { Checkmark20Regular, Copy20Regular, Dismiss24Regular } from '@fluentui/react-icons'
 import strings from 'PortfolioExtensionsStrings'
-import React, { FC, useEffect, useMemo, useState } from 'react'
-import { CatalogService } from 'services'
+import React, { FC, useMemo } from 'react'
+import { usePackageFilePreview } from './usePackageFilePreview'
 
 // Readable coding-font stack (falls back through fonts shipped with VS Code,
 // macOS and Windows) instead of the default Consolas/Courier monospace token.
@@ -55,15 +55,6 @@ const useStyles = makeStyles({
 })
 
 type Styles = ReturnType<typeof useStyles>
-
-/** Pretty-print JSON; fall back to the raw text for non-JSON (e.g. .txt). */
-function format(text: string): { value: string; isJson: boolean } {
-  try {
-    return { value: JSON.stringify(JSON.parse(text), null, 2), isJson: true }
-  } catch {
-    return { value: text, isJson: false }
-  }
-}
 
 // Matches, in order: a property key (string + colon), a string value, a
 // boolean, null, or a number. Whitespace/structural chars fall through as text.
@@ -113,46 +104,12 @@ export interface IPackageFilePreviewProps {
  */
 export const PackageFilePreview: FC<IPackageFilePreviewProps> = ({ title, url, onClose }) => {
   const styles = useStyles()
-  const [content, setContent] = useState<{ value: string; isJson: boolean }>()
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(false)
-  const [copied, setCopied] = useState(false)
-
-  useEffect(() => {
-    let cancelled = false
-    if (!url) return undefined
-    setLoading(true)
-    setError(false)
-    setContent(undefined)
-    setCopied(false)
-    void CatalogService.getFileText(url)
-      .then((text) => {
-        if (cancelled) return
-        setContent(format(text))
-        setLoading(false)
-      })
-      .catch(() => {
-        if (cancelled) return
-        setError(true)
-        setLoading(false)
-      })
-    return () => {
-      cancelled = true
-    }
-  }, [url])
+  const { content, loading, error, copied, copy } = usePackageFilePreview(url)
 
   const rendered = useMemo(() => {
     if (!content) return null
     return content.isJson ? highlight(content.value, styles) : content.value
   }, [content, styles])
-
-  const copy = (): void => {
-    if (!content || !navigator.clipboard) return
-    void navigator.clipboard.writeText(content.value).then(() => {
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    })
-  }
 
   return (
     <Dialog
