@@ -189,6 +189,13 @@ export const createPortfolioAggregationReducer = (
         state.columns = payload.columns
         persistSelectedColumnsInWebPartProperties(props, current(state).columns)
 
+        const selectedColumnKeys = new Set(payload.columns.map((c) => c.key))
+        state.allColumnsForCategory = current(state).allColumnsForCategory.map((c) => {
+          const col = Object.assign(new ProjectContentColumn(), c)
+          col.setData({ isSelected: selectedColumnKeys.has(col.key) || c.data?.isLocked })
+          return col
+        })
+
         if (state.currentView) {
           state.currentView.columns = payload.columns
           state.currentView.columnIds = payload.columns.map((c) => c.id)
