@@ -182,6 +182,111 @@ function getUserFieldsForQuery(fields: any[]): { select: string[]; expand: strin
 }
 
 /**
+ * SharePoint's List View Lookup Threshold: the maximum number of lookup/person/
+ * managed-metadata columns (joins) a single query may project. In SharePoint
+ * Online this is fixed at 12 and cannot be raised. Each `$expand` of a person
+ * field is one join, so lists with many person columns (e.g. Prosjekter) throw
+ * `SPQueryThrottledException` if we expand them all at once.
+ *
+ * We keep a safety margin below 12 to leave room for managed-metadata/lookup
+ * columns that `$select=*` projects in the base request.
+ */
+const MAX_USER_FIELD_EXPANDS_PER_QUERY = 8
+
+/** Builds the `Title`/`EMail`/`Id` select projections for a set of user fields. */
+function userFieldSelects(fieldNames: string[]): string[] {
+  const selects: string[] = []
+  fieldNames.forEach((name) => {
+    selects.push(`${name}/Title`, `${name}/EMail`, `${name}/Id`)
+  })
+  return selects
+}
+
+/** Splits an array into chunks of at most `size` elements. */
+function chunk<T>(items: T[], size: number): T[][] {
+  const chunks: T[][] = []
+  for (let i = 0; i < items.length; i += size) {
+    chunks.push(items.slice(i, i + size))
+  }
+  return chunks
+}
+
+/**
+ * Fetches all list items while staying under SharePoint's lookup threshold.
+ *
+ * The base request projects everything (`*`) plus Author/Editor (and File for
+ * document libraries). Remaining person fields are fetched in additional
+ * requests of at most {@link MAX_USER_FIELD_EXPANDS_PER_QUERY} expands each,
+ * selecting only `Id` + that chunk's person fields. Results are merged back onto
+ * the base items by `Id`.
+ *
+ * @param list - The PnPjs list to query
+ * @param userFieldsQuery - User-field select/expand projections from {@link getUserFieldsForQuery}
+ * @param isDocumentLibrary - Whether the list is a document library (BaseTemplate 101)
+ */
+async function fetchAllItemsChunked(
+  list: any,
+  userFieldsQuery: { select: string[]; expand: string[] },
+  isDocumentLibrary: boolean
+): Promise<any[]> {
+  // Author/Editor (and File) are always expanded explicitly below; drop them
+  // from the auto-detected user fields so they aren't expanded twice.
+  const reserved = new Set(['Author', 'Editor', 'File'])
+  const userExpands = userFieldsQuery.expand.filter((name) => !reserved.has(name))
+
+  const baseSelect = isDocumentLibrary
+    ? [
+        '*',
+        'FileRef',
+        'FileLeafRef',
+        'FileDirRef',
+        'File/Name',
+        'File/ServerRelativeUrl',
+        'File/Length',
+        'FSObjType',
+        'File_x0020_Type',
+        'Author/Title',
+        'Author/EMail',
+        'Author/Id',
+        'Editor/Title',
+        'Editor/EMail',
+        'Editor/Id'
+      ]
+    : ['*', 'Author/Title', 'Author/EMail', 'Author/Id', 'Editor/Title', 'Editor/EMail', 'Editor/Id']
+  const baseExpand = isDocumentLibrary ? ['Author', 'Editor', 'File'] : ['Author', 'Editor']
+
+  const baseItems = await list.items.select(...baseSelect).expand(...baseExpand).getAll()
+
+  if (userExpands.length === 0) {
+    return baseItems
+  }
+
+  const itemsById = new Map<number, any>(baseItems.map((item: any) => [item.Id, item]))
+
+  const chunkResults = await Promise.all(
+    chunk(userExpands, MAX_USER_FIELD_EXPANDS_PER_QUERY).map((fieldNames) =>
+      list.items
+        .select('Id', ...userFieldSelects(fieldNames))
+        .expand(...fieldNames)
+        .getAll()
+        .then((rows: any[]) => ({ fieldNames, rows }))
+    )
+  )
+
+  for (const { fieldNames, rows } of chunkResults) {
+    for (const row of rows) {
+      const baseItem = itemsById.get(row.Id)
+      if (!baseItem) continue
+      for (const name of fieldNames) {
+        baseItem[name] = row[name]
+      }
+    }
+  }
+
+  return baseItems
+}
+
+/**
  * Transforms a raw SharePoint item into a display-ready format.
  * Applies the same transformation logic as fetchListData for consistency.
  *
@@ -321,39 +426,7 @@ export async function fetchListData(
 
     const userFieldsQuery = getUserFieldsForQuery(allFields)
 
-    const itemsQuery = list.items
-      .select(
-        '*',
-        'Author/Title',
-        'Author/EMail',
-        'Editor/Title',
-        'Editor/EMail',
-        ...userFieldsQuery.select
-      )
-      .expand('Author', 'Editor', ...userFieldsQuery.expand)
-
-    if (isDocumentLibrary) {
-      itemsQuery
-        .select(
-          '*',
-          'FileRef',
-          'FileLeafRef',
-          'FileDirRef',
-          'File/Name',
-          'File/ServerRelativeUrl',
-          'File/Length',
-          'FSObjType',
-          'File_x0020_Type',
-          'Author/Title',
-          'Author/EMail',
-          'Editor/Title',
-          'Editor/EMail',
-          ...userFieldsQuery.select
-        )
-        .expand('Author', 'Editor', 'File', ...userFieldsQuery.expand)
-    }
-
-    const items = await itemsQuery.getAll()
+    const items = await fetchAllItemsChunked(list, userFieldsQuery, isDocumentLibrary)
 
     const taxonomyFields = await list.fields
       .filter("TypeAsString eq 'TaxonomyFieldType' or TypeAsString eq 'TaxonomyFieldTypeMulti'")
@@ -565,23 +638,13 @@ export async function fetchSingleItem(
     )
 
     const userFieldsQuery = getUserFieldsForQuery(allFields)
-
-    const itemQuery = list.items
-      .getById(itemId)
-      .select(
-        '*',
-        'Author/Title',
-        'Author/EMail',
-        'Editor/Title',
-        'Editor/EMail',
-        ...userFieldsQuery.select
-      )
-      .expand('Author', 'Editor', ...userFieldsQuery.expand)
-
     const isDocumentLibrary = existingColumns?.[0]?.data?.fieldType === 'File'
-    if (isDocumentLibrary) {
-      itemQuery
-        .select(
+
+    const reserved = new Set(['Author', 'Editor', 'File'])
+    const userExpands = userFieldsQuery.expand.filter((name) => !reserved.has(name))
+
+    const baseSelect = isDocumentLibrary
+      ? [
           '*',
           'FileRef',
           'FileLeafRef',
@@ -593,14 +656,44 @@ export async function fetchSingleItem(
           'File_x0020_Type',
           'Author/Title',
           'Author/EMail',
+          'Author/Id',
           'Editor/Title',
           'Editor/EMail',
-          ...userFieldsQuery.select
-        )
-        .expand('Author', 'Editor', 'File', ...userFieldsQuery.expand)
-    }
+          'Editor/Id'
+        ]
+      : [
+          '*',
+          'Author/Title',
+          'Author/EMail',
+          'Author/Id',
+          'Editor/Title',
+          'Editor/EMail',
+          'Editor/Id'
+        ]
+    const baseExpand = isDocumentLibrary ? ['Author', 'Editor', 'File'] : ['Author', 'Editor']
 
-    const item = await itemQuery()
+    const item = await list.items
+      .getById(itemId)
+      .select(...baseSelect)
+      .expand(...baseExpand)()
+
+    if (userExpands.length > 0) {
+      const chunkResults = await Promise.all(
+        chunk(userExpands, MAX_USER_FIELD_EXPANDS_PER_QUERY).map((fieldNames) =>
+          list.items
+            .getById(itemId)
+            .select('Id', ...userFieldSelects(fieldNames))
+            .expand(...fieldNames)()
+            .then((row: any) => ({ fieldNames, row }))
+        )
+      )
+
+      for (const { fieldNames, row } of chunkResults) {
+        for (const name of fieldNames) {
+          item[name] = row[name]
+        }
+      }
+    }
 
     let columns = existingColumns
     let taxonomyTermsMap = new Map<string, TaxonomyTermModel[]>()

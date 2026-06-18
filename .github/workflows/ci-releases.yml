@@ -11,7 +11,7 @@ on:
       - .github/workflows/ci-releases.yml
 
 env:
-  SP_URL: 'https://puzzlepart.sharepoint.com/sites/pp365_e971afe'
+  SP_URL: 'https://puzzlepart.sharepoint.com/sites/pp365'
   CI_CERT_BASE64: ${{ secrets.CI_CERT_BASE64 }}
   CI_TENANT: ${{ secrets.CI_TENANT }}
   CI_CLIENT_ID: ${{ secrets.CI_CLIENT_ID }}
