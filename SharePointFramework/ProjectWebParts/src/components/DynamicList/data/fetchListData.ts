@@ -252,10 +252,21 @@ async function fetchAllItemsChunked(
         'Editor/EMail',
         'Editor/Id'
       ]
-    : ['*', 'Author/Title', 'Author/EMail', 'Author/Id', 'Editor/Title', 'Editor/EMail', 'Editor/Id']
+    : [
+        '*',
+        'Author/Title',
+        'Author/EMail',
+        'Author/Id',
+        'Editor/Title',
+        'Editor/EMail',
+        'Editor/Id'
+      ]
   const baseExpand = isDocumentLibrary ? ['Author', 'Editor', 'File'] : ['Author', 'Editor']
 
-  const baseItems = await list.items.select(...baseSelect).expand(...baseExpand).getAll()
+  const baseItems = await list.items
+    .select(...baseSelect)
+    .expand(...baseExpand)
+    .getAll()
 
   if (userExpands.length === 0) {
     return baseItems

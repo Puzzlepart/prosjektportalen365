@@ -279,7 +279,13 @@ export const ListView: FC<IListViewProps> = ({
                             )}
                           </TableCellLayout>
                         ) : (
-                          <TableCellLayout>{isBoolean ? (item[column.columnId] ? strings.Yes : strings.No) : cellContent}</TableCellLayout>
+                          <TableCellLayout>
+                            {isBoolean
+                              ? item[column.columnId]
+                                ? strings.Yes
+                                : strings.No
+                              : cellContent}
+                          </TableCellLayout>
                         )}
                       </TableCell>
                     )

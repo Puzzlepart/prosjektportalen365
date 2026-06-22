@@ -24,9 +24,7 @@ export const UserMulti = (props: { type: string; disabled?: boolean }) => {
 
   const columnValue = context.column.get(props.type)
   useEffect(() => {
-    const next = Array.isArray(columnValue)
-      ? columnValue.map((u) => u?.text).filter(Boolean)
-      : []
+    const next = Array.isArray(columnValue) ? columnValue.map((u) => u?.text).filter(Boolean) : []
     setSelectedUsers((prev) =>
       prev.length === next.length && prev.every((t, i) => t === next[i]) ? prev : next
     )
