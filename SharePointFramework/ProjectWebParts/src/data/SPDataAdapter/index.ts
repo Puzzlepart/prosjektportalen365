@@ -352,7 +352,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param status Status of the archiving operation
    * @param errorMessage Optional error message if status is ERROR
    * @param message Optional custom message for the log entry
-   * @param itemId Stable GUID (list Id) — survives rename
+   * @param itemId Stable GUID (list Id)
    * @param operation Operation type — defaults to phase-transition for backward compatibility
    */
   public async logListArchive(
