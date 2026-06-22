@@ -22,7 +22,7 @@ Param(
     [Parameter(Mandatory = $false)]
     # main builds the release with the main channel's ids, which are the source's own, so that
     # PP365_BUILD_NUMBER can stamp the run number into the versions (ci-releases.yml).
-    [ValidateSet("main", "test", "kurs", "i18n")]
+    [ValidateSet("main", "test", "kurs", "i18n", "arkiv")]
     [string]$Channel,
     [Parameter(Mandatory = $false, HelpMessage = "Skip import of PnP.PowerShell module")]
     [switch]$SkipImportModule,
