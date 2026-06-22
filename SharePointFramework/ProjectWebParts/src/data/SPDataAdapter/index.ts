@@ -369,7 +369,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * Get information about all archive activity for the current project. The items are grouped by operation and created date.
    *
    * @param projectWebUrl URL of the project web to check
-   * @returns Promise<IArchiveStatusInfo | null> Archive information, or null if none found
+   * @returns Promise<IArchiveStatusInfo | null> Archive information, or null if no archive activity or an error occurs
    */
   public async getArchiveStatus(projectWebUrl: string): Promise<IArchiveStatusInfo | null> {
     if (!this.portalDataService?.web) {
