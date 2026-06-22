@@ -1,0 +1,81 @@
+{
+  "$schema": "./$schema.json",
+  "name": "arkiv",
+  "spfx": {
+    "solutions": {
+      "PortfolioExtensions": {
+        "id": "ed2d1490-f197-409b-8074-64857ae05d8c",
+        "name": "Prosjektportalen 365 - Portfolio Extensions - arkiv",
+        "zippedPackage": "solution/pp-portfolio-extensions-arkiv.sppkg",
+        "components": {
+          "Footer": "3dfa7ce1-1918-4815-8692-6119b1c62c2d",
+          "IdeaProcessing": "65fad2a1-a89e-4082-9921-714c94d87730",
+          "IdeaProjectData": "f22316e7-49ad-4fff-a288-d5c497abfb82",
+          "IdeaRegistration": "89fac44a-0af5-4100-88da-c5c125b42d6b",
+          "TemplatePackageCatalog": "58e302a3-fa4c-45ec-a4f0-ae8b807dcb36"
+        }
+      },
+      "PortfolioWebParts": {
+        "id": "79f033e7-7afa-4721-ad99-58fc8e616897",
+        "name": "Prosjektportalen 365 - Portfolio Web Parts - arkiv",
+        "zippedPackage": "solution/pp-portfolio-web-parts-arkiv.sppkg",
+        "components": {
+          "IdeaModuleWebPart": "d3594742-2728-47b5-88a7-57a6f39a1e7c",
+          "LatestProjectsWebPart": "b6994768-4a84-45b1-9eee-8479b30307f1",
+          "PortfolioAggregationWebPart": "7c9db29e-924c-457d-b525-a6c9912c45ce",
+          "PortfolioOverviewWebPart": "b2cd39e9-6e45-42ab-8de3-943a8c7e8369",
+          "ProjectCardWebPart": "cb514475-8822-471b-aa2b-206bd3ab3091",
+          "ProjectListWebPart": "1e549627-694f-435a-bab0-0b05ff7cfa8d",
+          "ProjectProvisionWebPart": "a8a8c44c-b097-48c6-b5f0-903771f138b6",
+          "PortfolioTimelineWebPart": "8d9bc1cc-216b-4c43-bc96-a8f9876acda1",
+          "ResourceAllocationWebPart": "5fdff4b6-afe7-4731-bb54-fd3ba3494d54"
+        }
+      },
+      "ProgramWebParts": {
+        "id": "0fcac31f-8732-42f8-9b1b-a27c7620b73b",
+        "name": "Prosjektportalen 365 - Program Web Parts - arkiv",
+        "zippedPackage": "solution/pp-program-web-parts-arkiv.sppkg",
+        "components": {
+          "ProgramAdministrationWebpart": "637dc277-8dd9-4f6c-b398-266310c4a41e",
+          "ProgramAggregationWebPart": "67ced80b-4215-4713-92dd-719a51ff16ca",
+          "ProgramProjectOverviewWebPart": "35d86c1f-99cf-4db7-88a6-0386cbf8a61b",
+          "ProgramTimelineWebPart": "c17c4a10-9210-4a5a-b7e4-ed2eac8d7911"
+        }
+      },
+      "ProjectExtensions": {
+        "id": "85790faf-4632-447e-bb94-820ff85a7211",
+        "name": "Prosjektportalen 365 - Project Extensions - arkiv",
+        "zippedPackage": "solution/pp-project-extensions-arkiv.sppkg",
+        "components": {
+          "ProjectSetup": "53fb71b3-4d3a-4f0c-b34a-50bc107b72b5",
+          "ProjectUpgrade": "8d9d7485-9949-41bb-8a7c-4b083e2e26f4",
+          "RiskActionPlanner": "6e2cc7a6-623b-422a-a91f-ce84f3df5070",
+          "TemplateSelectorCommand": "80bd2bf2-9438-4b12-8091-6a93a43b19b1"
+        }
+      },
+      "ProjectWebParts": {
+        "id": "16a5369b-7833-4965-bd39-854792775763",
+        "name": "Prosjektportalen 365 - Project Web Parts - arkiv",
+        "zippedPackage": "solution/pp-project-web-parts-arkiv.sppkg",
+        "components": {
+          "DynamicListWebPart": "c678f8be-b3bc-4328-9779-98ab8d65817d",
+          "OpportunityMatrixWebPart": "38b66d5c-8f6a-4bcc-8106-39daea1f548a",
+          "ProjectInformationWebPart": "dc53419e-e319-44ac-ae62-9b6efe83dcfc",
+          "ProjectNewsWebPart": "e3f44d51-b652-4402-8556-bb3b8779f798",
+          "ProjectPhasesWebPart": "bf897aa3-aecd-44a9-b3df-e7dac8283ea5",
+          "ProjectStatusWebPart": "7d575f03-c154-4db8-a31c-22023110a61e",
+          "ProjectTimelineWebPart": "9b3d305b-247a-4bf5-b62f-7244c9e5d853",
+          "RiskMatrixWebPart": "a8218f94-4a41-42f5-9059-10e7b5126296"
+        }
+      },
+      "shared-library": {
+        "id": "78c0258f-f638-423c-91d7-eaba2ad0116a",
+        "name": "Prosjektportalen 365 - Shared Library - arkiv",
+        "zippedPackage": "solution/pp-shared-library-arkiv.sppkg",
+        "components": {
+          "SharedLibrary": "de08518e-ed86-4265-b5fb-3c3077d15acb"
+        }
+      }
+    }
+  }
+}
