@@ -93,6 +93,10 @@ if ($USE_CHANNEL_CONFIG) {
     $CHANNEL_CONFIG = $CHANNEL_CONFIG_JSON | ConvertFrom-Json
     $CHANNEL_CONFIG_NAME = $CHANNEL_CONFIG.name
     $CHANNEL_CONFIG_JSON | Out-File -Path "$PSScriptRoot/../.current-channel-config.json" -Encoding UTF8 -Force
+    # Make the selected channel authoritative for all child Node tasks (e.g. modifySolutionFiles.js).
+    # dotenv does not override existing environment variables, so this takes precedence over each SPFx
+    # solution's local .env SERVE_CHANNEL and guarantees channel packages are built instead of main.
+    $env:SERVE_CHANNEL = $Channel
     EndAction
     if (-not $VALID_CONFIG_JSON) {
         Write-Host "Channel configuration might not be valid (the JSON does not match the schema). Manually check schema, build continues..." -ForegroundColor Yellow
@@ -119,6 +123,56 @@ if ($USE_CHANNEL_CONFIG) {
     $RELEASE_NAME = "$($RELEASE_NAME)-$($CHANNEL_CONFIG_NAME)"
 }
 $RELEASE_PATH = "$ROOT_PATH/release/$($RELEASE_NAME)"
+#endregion
+
+#region Verify Node version
+<#
+SPFx 1.17.4 build tooling (@microsoft/sp-build-web) only supports Node 16. On a newer Node,
+`rush rebuild` fails silently (its output is suppressed) and the release ends up with stale or
+wrong SharePoint Framework packages. Verify the active Node against .nvmrc and, if it differs,
+switch to the matching nvm-installed version by prepending it to PATH. This is the same effect as
+`nvm use`, which cannot be called directly from PowerShell because nvm is a shell function.
+#>
+$NVMRC_PATH = "$ROOT_PATH/.nvmrc"
+if (Test-Path $NVMRC_PATH) {
+    $REQUIRED_NODE = (Get-Content $NVMRC_PATH -Raw).Trim().TrimStart('v')
+    $REQUIRED_NODE_MAJOR = ($REQUIRED_NODE -split '\.')[0]
+    $CURRENT_NODE = $null
+    if (Get-Command node -ErrorAction SilentlyContinue) { $CURRENT_NODE = (& node -v 2>$null) }
+    $CURRENT_NODE_MAJOR = if ($CURRENT_NODE) { ($CURRENT_NODE.TrimStart('v') -split '\.')[0] } else { $null }
+
+    if ($CURRENT_NODE_MAJOR -eq $REQUIRED_NODE_MAJOR) {
+        Write-Host "[INFO] Node $CURRENT_NODE matches .nvmrc (requires v$REQUIRED_NODE)" -ForegroundColor Green
+    }
+    else {
+        Write-Host "[WARNING] Active Node is '$CURRENT_NODE' but .nvmrc requires v$REQUIRED_NODE. Switching via nvm..." -ForegroundColor Yellow
+        $NVM_DIR = if ($env:NVM_DIR) { $env:NVM_DIR } else { "$HOME/.nvm" }
+        $NODE_VERSIONS_DIR = "$NVM_DIR/versions/node"
+        $NODE_BIN = $null
+        if (Test-Path "$NODE_VERSIONS_DIR/v$REQUIRED_NODE/bin") {
+            # Exact .nvmrc version is installed
+            $NODE_BIN = "$NODE_VERSIONS_DIR/v$REQUIRED_NODE/bin"
+        }
+        elseif (Test-Path $NODE_VERSIONS_DIR) {
+            # Fall back to the newest installed version matching the required major (what `nvm use 16` does)
+            $MATCH = Get-ChildItem -Path $NODE_VERSIONS_DIR -Directory -Filter "v$REQUIRED_NODE_MAJOR.*" -ErrorAction SilentlyContinue |
+                Sort-Object { [version]($_.Name.TrimStart('v')) } -Descending | Select-Object -First 1
+            if ($MATCH) { $NODE_BIN = "$($MATCH.FullName)/bin" }
+        }
+        if ($null -eq $NODE_BIN) {
+            Write-Host "[ERROR] Node v$REQUIRED_NODE (or any v$REQUIRED_NODE_MAJOR.x) is not installed via nvm at '$NODE_VERSIONS_DIR'." -ForegroundColor Red
+            Write-Host "        Install it and re-run, e.g.: nvm install $REQUIRED_NODE" -ForegroundColor Red
+            exit 1
+        }
+        $env:PATH = "$NODE_BIN$([IO.Path]::PathSeparator)$($env:PATH)"
+        $SWITCHED_NODE = (& node -v 2>$null)
+        if (($SWITCHED_NODE.TrimStart('v') -split '\.')[0] -ne $REQUIRED_NODE_MAJOR) {
+            Write-Host "[ERROR] Failed to switch Node (still '$SWITCHED_NODE'). Run 'nvm use' manually and re-run." -ForegroundColor Red
+            exit 1
+        }
+        Write-Host "[INFO] Switched active Node to $SWITCHED_NODE for this build" -ForegroundColor Green
+    }
+}
 #endregion
 
 #region Pre-build
@@ -320,6 +374,7 @@ else {
 
 if ($USE_CHANNEL_CONFIG) {
     Remove-Item -Path "$PSScriptRoot/../.current-channel-config.json" -Force -ErrorAction SilentlyContinue
+    Remove-Item Env:\SERVE_CHANNEL -ErrorAction SilentlyContinue
 }
 
 exit 0
