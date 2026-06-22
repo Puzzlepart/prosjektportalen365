@@ -119,6 +119,10 @@ if ($USE_CHANNEL_CONFIG) {
     $CHANNEL_CONFIG = $CHANNEL_CONFIG_JSON | ConvertFrom-Json
     $CHANNEL_CONFIG_NAME = $CHANNEL_CONFIG.name
     $CHANNEL_CONFIG_JSON | Out-File -Path "$PSScriptRoot/../.current-channel-config.json" -Encoding UTF8 -Force
+    # Make the selected channel authoritative for all child Node tasks (e.g. modifySolutionFiles.js).
+    # dotenv does not override existing environment variables, so this takes precedence over each SPFx
+    # solution's local .env SERVE_CHANNEL and guarantees channel packages are built instead of main.
+    $env:SERVE_CHANNEL = $Channel
     EndAction
     if (-not $VALID_CONFIG_JSON) {
         Write-Host "Channel configuration might not be valid (the JSON does not match the schema: $($CHANNEL_CONFIG_ERRORS | Select-Object -First 1)). Manually check schema, build continues..." -ForegroundColor Yellow
@@ -595,6 +599,7 @@ else {
 
 if ($USE_CHANNEL_CONFIG) {
     Remove-Item -Path "$PSScriptRoot/../.current-channel-config.json" -Force -ErrorAction SilentlyContinue
+    Remove-Item Env:\SERVE_CHANNEL -ErrorAction SilentlyContinue
 }
 
 exit 0
