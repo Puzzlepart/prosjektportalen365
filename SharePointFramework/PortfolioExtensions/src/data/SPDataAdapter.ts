@@ -32,57 +32,30 @@ class SPDataAdapter extends SPDataAdapterBase {
   }
 
   /**
-   * Whether the current user can both **read and write** the tenant Term Store,
-   * used to pre-gate the taxonomy provisioning step in Mode A.
+   * Best-effort Term Store reachability check, used to pre-gate the taxonomy
+   * provisioning step in Mode A. Returns `true` when the tenant Term Store can
+   * be read by the current user.
    *
-   * Reachability (a read) alone doesn't prove a user can provision term
-   * groups/sets — a read-only user would otherwise pass this gate and then fail
-   * mid-provision, leaving a partially installed package. So this also performs
-   * a non-destructive write probe: it creates a uniquely-named throwaway term
-   * group and immediately deletes it. It only runs right before a
-   * taxonomy-bearing import (whose next step writes to the store anyway), so the
-   * transient group is consistent with the operation. A false negative is
-   * recoverable via the `featureFlagProvisioning`/`PP_DISABLE_TAXONOMY` opt-out.
-   *
-   * Returns `false` on any failure (no read access, no write access, or the
-   * probe threw).
+   * This is intentionally a **read** check. A write probe via the REST term
+   * store API (`POST /_api/v2.1/termstore/groups`) is rejected on tenants with
+   * "OAuth only" / app-only enforcement (`403 — OAuth only flow is enabled and
+   * the call has not been issued from an app`) and would give false negatives,
+   * because the actual taxonomy provisioning runs over **JSOM** (a different
+   * auth path that isn't subject to that restriction). True write capability is
+   * therefore enforced by the provisioning step itself: the Taxonomy handler
+   * runs first, so a permission failure fails fast and surfaces as a retryable
+   * install error rather than a partially provisioned package.
    */
   public async hasTermStorePermission(): Promise<boolean> {
     try {
-      // Read check — the store must at least be reachable.
       await this.sp.termStore()
-    } catch (error) {
-      Logger.log({
-        message: `(SPDataAdapter) hasTermStorePermission read check failed: ${error?.message}`,
-        level: LogLevel.Warning
-      })
-      return false
-    }
-
-    // Write check — create then delete a throwaway group.
-    const probeName = `__pp365_writecheck_${Date.now()}_${Math.round(Math.random() * 1e6)}`
-    let createdGroupId: string | undefined
-    try {
-      const group = await this.sp.termStore.groups.add({ name: probeName, scope: 'global' })
-      createdGroupId = group.id
       return true
     } catch (error) {
       Logger.log({
-        message: `(SPDataAdapter) hasTermStorePermission write check failed: ${error?.message}`,
+        message: `(SPDataAdapter) hasTermStorePermission failed: ${error?.message}`,
         level: LogLevel.Warning
       })
       return false
-    } finally {
-      if (createdGroupId) {
-        try {
-          await this.sp.termStore.groups.getById(createdGroupId).delete()
-        } catch (error) {
-          Logger.log({
-            message: `(SPDataAdapter) hasTermStorePermission could not clean up probe group ${createdGroupId}: ${error?.message}`,
-            level: LogLevel.Warning
-          })
-        }
-      }
     }
   }
 }

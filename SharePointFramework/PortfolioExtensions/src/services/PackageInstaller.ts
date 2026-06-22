@@ -173,17 +173,20 @@ export class PackageInstaller {
         featureFlagProvisioning
       })
 
-      // A package that ships taxonomy (term sets) can't be provisioned without
-      // term-store write access. Probe it ONCE: pre-gate the whole import up
-      // front (rather than half-install a package whose term sets — and anything
-      // depending on them — would be missing), and reuse the result for the
-      // Taxonomy step status below. Packages without taxonomy don't need it.
+      // A package that ships taxonomy is provisioned over JSOM by the Taxonomy
+      // handler (which runs first in `applyTemplate` below). Pre-gate only on
+      // Term Store *reachability* here — true write capability can't be probed
+      // up front (the REST term-store write API is blocked on OAuth-only
+      // tenants; see SPDataAdapter.hasTermStorePermission). A genuine permission
+      // failure therefore surfaces fast from the provisioning step itself,
+      // before any other hub objects are created. Packages without taxonomy
+      // don't need the check.
       const packageHasTaxonomy =
         enableTaxonomy && (await PackageInstaller._hasTaxonomy(zip, manifest))
-      const canWriteTermStore = packageHasTaxonomy
+      const termStoreReachable = packageHasTaxonomy
         ? await SPDataAdapter.hasTermStorePermission()
         : false
-      if (packageHasTaxonomy && !canWriteTermStore) {
+      if (packageHasTaxonomy && !termStoreReachable) {
         setStatus(InstallStepKey.ProvisionHub, 'error', strings.CatalogTaxonomyPermissionBlocked)
         progress.status = 'error'
         progress.error = strings.CatalogTaxonomyPermissionBlocked
@@ -196,8 +199,8 @@ export class PackageInstaller {
       await PackageInstaller._provisionHub(zip, manifest, context, enableTaxonomy, report)
       setStatus(InstallStepKey.ProvisionHub, 'done')
 
-      // `packageHasTaxonomy` implies `canWriteTermStore` here (we'd have blocked
-      // above); an enabled-but-no-taxonomy package makes the step a no-op success.
+      // An enabled-but-no-taxonomy package makes the Taxonomy step a no-op
+      // success; a genuine term-store write failure is reported by ProvisionHub.
       setStatus(
         InstallStepKey.Taxonomy,
         enableTaxonomy ? 'done' : 'skipped',
