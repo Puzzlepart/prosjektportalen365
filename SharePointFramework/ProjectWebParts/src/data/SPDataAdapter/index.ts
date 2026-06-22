@@ -506,7 +506,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * Logs a list archive request, as part of a phase transition unless `operation` says otherwise.
    *
    * @param errorMessage Formats the message when the status is the localized error value
-   * @param itemId Stable GUID (list Id) of the list, which survives a rename
+   * @param itemId Stable GUID (list Id) of the list
    * @param operation Operation type; a phase transition unless given
    *
    * @returns As `writeToArchiveLog`
