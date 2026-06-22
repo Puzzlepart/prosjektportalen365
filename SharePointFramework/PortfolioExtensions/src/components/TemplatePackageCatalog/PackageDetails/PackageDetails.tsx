@@ -128,16 +128,24 @@ export const PackageDetails: FC = () => {
 
       <Caption1 className={styles.meta}>{meta}</Caption1>
 
-      <div className={styles.stats}>
-        <Tooltip content={strings.CatalogDownloadsTooltip} relationship='description'>
-          <span className={styles.stat}>
-            <ArrowDownload16Regular className={styles.statIcon} />
-            <Text size={200} className={styles.statText}>
-              {format(strings.CatalogDownloads, stats.downloads.toLocaleString(numberLocale))}
-            </Text>
-          </span>
-        </Tooltip>
-      </div>
+      {/*
+        The download count is fabricated example data (no real telemetry yet —
+        see packageStats.ts), so it is only shown in debug builds to avoid
+        presenting misleading numbers to end users. Remove the DEBUG guard once
+        real download telemetry exists.
+      */}
+      {DEBUG && (
+        <div className={styles.stats}>
+          <Tooltip content={strings.CatalogDownloadsTooltip} relationship='description'>
+            <span className={styles.stat}>
+              <ArrowDownload16Regular className={styles.statIcon} />
+              <Text size={200} className={styles.statText}>
+                {format(strings.CatalogDownloads, stats.downloads.toLocaleString(numberLocale))}
+              </Text>
+            </span>
+          </Tooltip>
+        </div>
+      )}
 
       {/*
         TODO: Rating/reviews section is temporarily hidden until real rating data

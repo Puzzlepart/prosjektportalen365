@@ -13,6 +13,17 @@ import { IManifestListContent } from './IPackageManifest'
 const LIST_CONTENT_BASE_CT = '0x0100B8B4EE61A547B247B49CFC21B67D5B7D'
 
 /**
+ * Normalize the manifest `fields` value for `GtLccFields`. The manifest schema
+ * allows `'-'` to mean "no fields"; treat that (and whitespace-only) as an empty
+ * string so {@link ContentConfig.fields} resolves to `[]` (copy all columns)
+ * instead of the literal `['-']`, which would project empty rows.
+ */
+function normalizeFields(fields?: string): string {
+  const trimmed = (fields ?? '').trim()
+  return trimmed === '-' ? '' : trimmed
+}
+
+/**
  * A list-content configuration (Listeinnhold) that belongs to a **skymal**
  * (cloud template). The rows are read from the bundled `hub-template.json`
  * `Lists[]` entry (via {@link getCloudDataRows}) and applied to the project's
@@ -45,7 +56,7 @@ export class CloudContentConfig extends ContentConfig {
       GtDescription: entry.description ?? '',
       GtLccSourceList: entry.sourceList,
       GtLccDestinationList: destinationList,
-      GtLccFields: entry.fields ?? '',
+      GtLccFields: normalizeFields(entry.fields),
       GtLccDefault: !!entry.default,
       GtLccHidden: !!entry.hidden,
       GtLccLocked: !!entry.locked,

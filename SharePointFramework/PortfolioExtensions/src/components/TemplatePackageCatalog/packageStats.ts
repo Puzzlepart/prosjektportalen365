@@ -47,29 +47,31 @@ export function getPackageStats(packageId: string): IPackageStats {
   return { downloads, rating, ratingCount }
 }
 
+// Anonymized placeholder authors — these reviews are fabricated example data,
+// so no identifiable (real) names are used.
 const REVIEW_AUTHORS: ReadonlyArray<{ author: string; role: string; text: string }> = [
   {
-    author: 'Remi Blom-ohlsen',
+    author: 'Eksempelbruker 1',
     role: 'Prosjektleder',
     text: 'Veldig enkel å ta i bruk – sparte oss for mye manuelt oppsett i oppstarten.'
   },
   {
-    author: 'Tarjei E. Ormestøyl',
+    author: 'Eksempelbruker 2',
     role: 'Porteføljekoordinator',
     text: 'God struktur rett ut av boksen. Fasesjekklisten er spesielt nyttig for oss.'
   },
   {
-    author: 'Jan Lindset',
+    author: 'Eksempelbruker 3',
     role: 'PMO-ansvarlig',
     text: 'Fungerer fint for prosjektene våre. Kunne ønsket noen flere ferdige maler.'
   },
   {
-    author: 'Daniel W. Møller',
+    author: 'Eksempelbruker 4',
     role: 'Systemansvarlig',
     text: 'Smidig oppsett og grei dokumentasjon. Fungerte på første forsøk.'
   },
   {
-    author: 'Ole Kristian Mørch Storstein',
+    author: 'Eksempelbruker 5',
     role: 'Avdelingsleder',
     text: 'Enkelt å rulle ut i hele avdelingen. Brukerne var raskt i gang.'
   }

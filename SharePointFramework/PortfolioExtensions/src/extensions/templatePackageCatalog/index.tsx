@@ -37,7 +37,8 @@ export default class TemplatePackageCatalogCommandSet extends BaseListViewComman
   @override
   public async onInit(): Promise<void> {
     Logger.subscribe(ConsoleListener())
-    Logger.activeLogLevel = sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+    Logger.activeLogLevel =
+      sessionStorage.getItem('DEBUG') === '1' || DEBUG ? LogLevel.Info : LogLevel.Warning
     this._openCmd = this.tryGetCommand(OPEN_COMMAND)
     if (!this._openCmd) return
     this._openCmd.title = strings.TemplatePackageCatalogCommandTitle
