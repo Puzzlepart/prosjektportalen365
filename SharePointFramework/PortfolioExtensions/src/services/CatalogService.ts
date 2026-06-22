@@ -151,7 +151,14 @@ export class CatalogService {
         CatalogService._fetchJson<any>(baseUrl + item.sourceFile).catch(() => undefined)
       )
     )
-    return CatalogService._buildContents(manifest, hub, template, contentItems, contentData, baseUrl)
+    return CatalogService._buildContents(
+      manifest,
+      hub,
+      template,
+      contentItems,
+      contentData,
+      baseUrl
+    )
   }
 
   /**

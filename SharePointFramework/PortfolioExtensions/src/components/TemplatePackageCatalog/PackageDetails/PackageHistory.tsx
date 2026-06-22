@@ -21,8 +21,7 @@ export const PackageHistory: FC<IPackageHistoryProps> = ({ changelogUrl }) => {
       {loading && <Spinner size='tiny' />}
       {!loading && error && (
         <Text size={200} className={styles.muted}>
-          {strings.CatalogHistoryError}{' '}
-          <Link onClick={retry}>{strings.CatalogRetryText}</Link>
+          {strings.CatalogHistoryError} <Link onClick={retry}>{strings.CatalogRetryText}</Link>
         </Text>
       )}
       {!loading && !error && entries.length > 0 && (

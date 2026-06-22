@@ -100,16 +100,13 @@ export const PackageDetails: FC = () => {
       </Button>
 
       {pkg.thumbnail && !imageError && (
-        <img
-          className={styles.thumbnail}
-          src={pkg.thumbnail}
-          alt=''
-          onError={onImageError}
-        />
+        <img className={styles.thumbnail} src={pkg.thumbnail} alt='' onError={onImageError} />
       )}
 
       <div className={styles.titleRow}>
-        {pkg.icon && <span className={styles.titleIcon}>{getFluentIconWithFallback(pkg.icon)}</span>}
+        {pkg.icon && (
+          <span className={styles.titleIcon}>{getFluentIconWithFallback(pkg.icon)}</span>
+        )}
         <Text size={500} weight='semibold'>
           {pkg.name}
         </Text>

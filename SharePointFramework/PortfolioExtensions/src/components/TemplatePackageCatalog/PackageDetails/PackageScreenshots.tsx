@@ -129,8 +129,17 @@ const useStyles = makeStyles({
  */
 export const PackageScreenshots: FC<{ screenshots?: string[] }> = ({ screenshots }) => {
   const styles = useStyles()
-  const { count, safeIndex, lightboxOpen, isErrored, go, goTo, markErrored, openLightbox, setLightboxOpen } =
-    usePackageScreenshots(screenshots)
+  const {
+    count,
+    safeIndex,
+    lightboxOpen,
+    isErrored,
+    go,
+    goTo,
+    markErrored,
+    openLightbox,
+    setLightboxOpen
+  } = usePackageScreenshots(screenshots)
 
   if (count === 0) return null
 

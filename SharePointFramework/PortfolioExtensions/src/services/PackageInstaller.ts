@@ -118,8 +118,10 @@ export class PackageInstaller {
       // matching the hub language so the right hub template, list content and
       // Maloppsett name/description are used (falls back to the base/nb-NO).
       const locale = PackageInstaller._detectLocale(context)
-      const { manifest, localizedName, localizedDescription } =
-        PackageInstaller._applyLocale(baseManifest, locale)
+      const { manifest, localizedName, localizedDescription } = PackageInstaller._applyLocale(
+        baseManifest,
+        locale
+      )
       setStatus(InstallStepKey.ValidateManifest, 'done')
 
       setStatus(InstallStepKey.CheckVersion, 'running')
@@ -370,10 +372,7 @@ export class PackageInstaller {
    * @param zip - The opened package archive
    * @param manifest - The package manifest
    */
-  private static async _hasTaxonomy(
-    zip: any,
-    manifest: IPackageManifest
-  ): Promise<boolean> {
+  private static async _hasTaxonomy(zip: any, manifest: IPackageManifest): Promise<boolean> {
     const hubTemplate = manifest.provisioning?.hubTemplate
     if (!hubTemplate) return false
     const file = zip.file(hubTemplate)
@@ -381,10 +380,7 @@ export class PackageInstaller {
     try {
       const schema = JSON.parse(await file.async('string'))
       const taxonomy = schema?.Taxonomy
-      return !!(
-        taxonomy &&
-        ((taxonomy.TermSets?.length ?? 0) > 0 || taxonomy.TermGroup)
-      )
+      return !!(taxonomy && ((taxonomy.TermSets?.length ?? 0) > 0 || taxonomy.TermGroup))
     } catch {
       return false
     }
