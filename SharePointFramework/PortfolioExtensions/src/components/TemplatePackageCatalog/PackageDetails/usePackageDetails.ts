@@ -10,7 +10,7 @@ import { packageCardId } from '../PackageCard'
  * - the three confirm-dialog flags (reset per package),
  * - focus management: focus the pane when a package is selected, and return
  *   focus to the originating card when the pane closes (collapsed layout),
- * - the tag-filter shortcut and the user's number-formatting locale.
+ * - the tag-filter shortcut.
  *
  * The pure, package-derived render values (badges, meta line, action labels)
  * stay in the component since they're trivial and only valid once a package is
@@ -18,7 +18,7 @@ import { packageCardId } from '../PackageCard'
  */
 export function usePackageDetails() {
   const ctx = useCatalogContext()
-  const { props, state, selectedPackage, closeDetail, setFilter } = ctx
+  const { state, selectedPackage, closeDetail, setFilter } = ctx
   const [imageError, setImageError] = useState(false)
   const [confirmReplace, setConfirmReplace] = useState(false)
   const [confirmCloud, setConfirmCloud] = useState(false)
@@ -67,8 +67,6 @@ export function usePackageDetails() {
     confirmRemove,
     setConfirmRemove,
     rootRef,
-    filterByTag,
-    // Format counts in the user's culture rather than a hardcoded locale.
-    numberLocale: props.context.pageContext.cultureInfo.currentUICultureName || undefined
+    filterByTag
   }
 }

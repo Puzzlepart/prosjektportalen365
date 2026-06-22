@@ -230,12 +230,6 @@ declare interface IPortfolioExtensionsStrings {
   CatalogConflictList: string
   CatalogConflictExtension: string
   CatalogConflictTaxonomy: string
-  CatalogRatingSummary: string
-  CatalogRatingSummaryOne: string
-  CatalogDownloads: string
-  CatalogDownloadsTooltip: string
-  CatalogReviewsHeading: string
-  CatalogReviewsDemoNote: string
   CatalogLanguagesTooltip: string
   CatalogLanguageNorwegian: string
   CatalogLanguageEnglish: string

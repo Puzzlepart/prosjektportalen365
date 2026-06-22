@@ -249,12 +249,6 @@ define([], function () {
     CatalogConflictExtension: 'Prosjekttillegget «{0}» finnes allerede og blir overskrevet.',
     CatalogConflictTaxonomy:
       'Termsettet «{0}» finnes allerede i termlageret med navnet «{1}». Eksisterende beholdes.',
-    CatalogRatingSummary: '{0} av 5 ({1} vurderinger)',
-    CatalogRatingSummaryOne: '{0} av 5 (1 vurdering)',
-    CatalogDownloads: '{0} nedlastinger',
-    CatalogDownloadsTooltip: 'Antall nedlastinger',
-    CatalogReviewsHeading: 'Vurderinger',
-    CatalogReviewsDemoNote: 'Eksempeldata',
     CatalogLanguagesTooltip: 'Tilgjengelige språk',
     CatalogLanguageNorwegian: 'Norsk',
     CatalogLanguageEnglish: 'Engelsk',

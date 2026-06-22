@@ -1,10 +1,6 @@
 import { format } from '@fluentui/react/lib/Utilities'
 import { formatDate, getFluentIconWithFallback } from 'pp365-shared-library'
 import {
-  Accordion,
-  AccordionHeader,
-  AccordionItem,
-  AccordionPanel,
   Button,
   Caption1,
   Dialog,
@@ -15,14 +11,12 @@ import {
   DialogTitle,
   InteractionTag,
   InteractionTagPrimary,
-  RatingDisplay,
   Spinner,
   TagGroup,
   Text,
   Tooltip
 } from '@fluentui/react-components'
 import {
-  ArrowDownload16Regular,
   ArrowDownload24Regular,
   ArrowLeft24Regular,
   Cloud24Regular,
@@ -36,9 +30,7 @@ import { PpPkgType } from 'models'
 import { PackageBadges, PackageRequirementTags } from '../PackageCard'
 import { PackageContentSummary } from './PackageContentSummary'
 import { PackageHistory } from './PackageHistory'
-import { PackageReviews } from './PackageReviews'
 import { PackageScreenshots } from './PackageScreenshots'
-import { getPackageStats } from '../packageStats'
 import styles from './PackageDetails.module.scss'
 import { usePackageDetails } from './usePackageDetails'
 
@@ -61,8 +53,7 @@ export const PackageDetails: FC = () => {
     confirmRemove,
     setConfirmRemove,
     rootRef,
-    filterByTag,
-    numberLocale
+    filterByTag
   } = usePackageDetails()
 
   if (!selectedPackage) {
@@ -75,7 +66,6 @@ export const PackageDetails: FC = () => {
 
   const pkg = selectedPackage
   const ref = crossRefFor(pkg.id)
-  const stats = getPackageStats(pkg.id)
   const isCentral = ref?.packageType === PpPkgType.Sentral
   const updateAvailable = !!ref?.updateAvailable
   // Extensions go into the Prosjekttillegg library, not Maloppsett, so they
@@ -127,52 +117,6 @@ export const PackageDetails: FC = () => {
       </div>
 
       <Caption1 className={styles.meta}>{meta}</Caption1>
-
-      {/*
-        The download count is fabricated example data (no real telemetry yet —
-        see packageStats.ts), so it is only shown in debug builds to avoid
-        presenting misleading numbers to end users. Remove the DEBUG guard once
-        real download telemetry exists.
-      */}
-      {DEBUG && (
-        <div className={styles.stats}>
-          <Tooltip content={strings.CatalogDownloadsTooltip} relationship='description'>
-            <span className={styles.stat}>
-              <ArrowDownload16Regular className={styles.statIcon} />
-              <Text size={200} className={styles.statText}>
-                {format(strings.CatalogDownloads, stats.downloads.toLocaleString(numberLocale))}
-              </Text>
-            </span>
-          </Tooltip>
-        </div>
-      )}
-
-      {/*
-        TODO: Rating/reviews section is temporarily hidden until real rating data
-        exists (it currently shows mock example data). Re-enable by
-        uncommenting the block below. The Accordion/RatingDisplay/PackageReviews
-        imports are kept for it — note `eslint --fix` would strip them as unused
-        while this stays commented out.
-      */}
-      {/*
-      <Accordion collapsible>
-        <AccordionItem value='reviews'>
-          <AccordionHeader expandIconPosition='end'>
-            <span className={styles.ratingHeader}>
-              <RatingDisplay value={stats.rating} color='marigold' size='small' />
-              <Text size={200} className={styles.statText}>
-                {stats.ratingCount === 1
-                  ? format(strings.CatalogRatingSummaryOne, stats.rating.toFixed(1))
-                  : format(strings.CatalogRatingSummary, stats.rating.toFixed(1), stats.ratingCount)}
-              </Text>
-            </span>
-          </AccordionHeader>
-          <AccordionPanel>
-            <PackageReviews packageId={pkg.id} />
-          </AccordionPanel>
-        </AccordionItem>
-      </Accordion>
-      */}
 
       {pkg.description && <Text className={styles.description}>{pkg.description}</Text>}
 
