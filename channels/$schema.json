@@ -83,6 +83,9 @@
                                 "components": {
                                     "type": "object",
                                     "properties": {
+                                        "ArchiveOverviewWebPart": {
+                                            "$ref": "#/definitions/guid"
+                                        },
                                         "LatestProjectsWebPart": {
                                             "$ref": "#/definitions/guid"
                                         },
@@ -109,6 +112,7 @@
                                         }
                                     },
                                     "required": [
+                                        "ArchiveOverviewWebPart",
                                         "LatestProjectsWebPart",
                                         "PortfolioAggregationWebPart",
                                         "PortfolioOverviewWebPart",
