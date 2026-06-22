@@ -20,6 +20,7 @@
         "name": "Prosjektportalen 365 - Portfolio Web Parts",
         "zippedPackage": "solution/pp-portfolio-web-parts.sppkg",
         "components": {
+          "ArchiveOverviewWebPart": "f4a7e2c1-d8b3-4f5e-9a6b-7c8d0e1f2a3b",
           "LatestProjectsWebPart": "941fd73c-b957-41c3-8d4f-082268407f10",
           "PortfolioAggregationWebPart": "6c0e484d-f6da-40d4-81fc-ec1389ef29a8",
           "PortfolioOverviewWebPart": "e58e3d32-057a-4418-97ce-172b92482ba2",

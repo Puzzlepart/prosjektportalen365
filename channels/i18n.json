@@ -20,6 +20,7 @@
                 "name": "Prosjektportalen 365 - Portfolio Web Parts - i18n",
                 "zippedPackage": "solution/pp-portfolio-web-parts-i18n.sppkg",
                 "components": {
+                    "ArchiveOverviewWebPart": "3574b548-940b-40ef-ac4c-f0c276dc48f8",
                     "LatestProjectsWebPart": "4d374373-9fd8-4ba5-8a03-524651cac3e9",
                     "PortfolioAggregationWebPart": "aad033f7-106e-488e-bad4-9b66d7b26282",
                     "PortfolioOverviewWebPart": "a09d00a8-c563-4b52-a7a4-1fb5876f9059",
