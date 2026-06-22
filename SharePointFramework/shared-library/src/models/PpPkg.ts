@@ -16,4 +16,4 @@ export const PP_PKG_TYPE = {
   Sentral: 'Sentral'
 } as const
 
-export type PpPkgTypeValue = (typeof PP_PKG_TYPE)[keyof typeof PP_PKG_TYPE]
+export type PpPkgTypeValue = typeof PP_PKG_TYPE[keyof typeof PP_PKG_TYPE]

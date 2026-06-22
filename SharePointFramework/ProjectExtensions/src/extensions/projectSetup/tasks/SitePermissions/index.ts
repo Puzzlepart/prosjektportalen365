@@ -57,9 +57,9 @@ export class SitePermissions extends BaseTask {
             let group
             let groupId: number
             try {
-              const existing = await params.web.siteGroups
-                .getByName(groupName)
-                .select('Id')<{ Id: number }>()
+              const existing = await params.web.siteGroups.getByName(groupName).select('Id')<{
+                Id: number
+              }>()
               group = params.web.siteGroups.getByName(groupName)
               groupId = existing.Id
               this.logInformation(`Reusing existing group ${groupName} (id ${groupId}).`)

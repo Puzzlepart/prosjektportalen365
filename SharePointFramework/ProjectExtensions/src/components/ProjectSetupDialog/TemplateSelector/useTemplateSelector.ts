@@ -96,8 +96,6 @@ export function useTemplateSelector() {
         const resolved = await resolveCloudTemplate(selectedTemplate)
         if (!cancelled) context.dispatch(ON_CLOUD_TEMPLATE_RESOLVED(resolved))
       } catch (error) {
-        // Log the raw (often technical/English) error for diagnostics; show the
-        // user a clean, fully-localized message instead of interpolating it.
         Logger.log({
           message: `(useTemplateSelector) resolveCloudTemplate failed: ${error?.message}`,
           level: LogLevel.Error
@@ -110,7 +108,6 @@ export function useTemplateSelector() {
     return () => {
       cancelled = true
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTemplate?.id])
 
   const templateHasExtensions = !isEmpty(selectedTemplate?.extensions)

@@ -53,10 +53,7 @@ export const TaxonomyFilterTree: FC<ITaxonomyFilterTreeProps> = (props) => {
         const isIndeterminate = !isSelected && hasSelectedDescendant(node, props.selectedPaths)
         return (
           <div key={node.path} className={styles.treeNode}>
-            <div
-              className={styles.treeRow}
-              style={{ paddingLeft: node.level * INDENT_PER_LEVEL }}
-            >
+            <div className={styles.treeRow} style={{ paddingLeft: node.level * INDENT_PER_LEVEL }}>
               {hasChildren ? (
                 <span
                   className={styles.expandToggle}
@@ -77,12 +74,7 @@ export const TaxonomyFilterTree: FC<ITaxonomyFilterTreeProps> = (props) => {
                 onChange={() => props.onToggleSelect(node)}
               />
             </div>
-            {hasChildren && isExpanded && (
-              <TaxonomyFilterTree
-                {...props}
-                nodes={node.children}
-              />
-            )}
+            {hasChildren && isExpanded && <TaxonomyFilterTree {...props} nodes={node.children} />}
           </div>
         )
       })}

@@ -95,7 +95,9 @@ export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
         <UserMessage text={cloudTemplateMessage} intent='info' />
       )}
       {cloudIncompatibleMessage && <UserMessage text={cloudIncompatibleMessage} intent='warning' />}
-      {isResolvingCloudTemplate && <Spinner size='tiny' label={strings.CloudTemplateResolvingMessage} />}
+      {isResolvingCloudTemplate && (
+        <Spinner size='tiny' label={strings.CloudTemplateResolvingMessage} />
+      )}
       {cloudTemplateError && <UserMessage text={cloudTemplateError} intent='error' />}
       {validationMessage && <UserMessage text={validationMessage} intent='info' />}
     </div>

@@ -47,7 +47,7 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
           disabled={
             !state.selectedTemplate ||
             state.isResolvingCloudTemplate ||
-            // A skymal can only be submitted once its .pppkg has resolved.
+            // A cloud template can only be submitted once its .pppkg has resolved.
             (state.selectedTemplate.isCloudTemplate && !state.resolvedCloudTemplate)
           }
           onClick={onSubmit}

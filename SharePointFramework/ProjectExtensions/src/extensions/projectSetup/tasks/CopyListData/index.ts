@@ -153,7 +153,12 @@ export class CopyListData extends BaseTask {
       }, {})
     })
     this.onProgress(
-      format(strings.CopyListItemsText, rows.length, config.sourceListTitle, config.destinationListTitle),
+      format(
+        strings.CopyListItemsText,
+        rows.length,
+        config.sourceListTitle,
+        config.destinationListTitle
+      ),
       '',
       'List'
     )

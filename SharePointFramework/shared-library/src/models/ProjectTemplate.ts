@@ -112,8 +112,7 @@ export class ProjectTemplate extends UserSelectableObject {
     this._cloudSourceUrl =
       (typeof spItem.PpPkgSourceUrl === 'string'
         ? spItem.PpPkgSourceUrl
-        : spItem.PpPkgSourceUrl?.Url) ??
-      spItem.FieldValuesAsText?.PpPkgSourceUrl
+        : spItem.PpPkgSourceUrl?.Url) ?? spItem.FieldValuesAsText?.PpPkgSourceUrl
   }
 
   /**
