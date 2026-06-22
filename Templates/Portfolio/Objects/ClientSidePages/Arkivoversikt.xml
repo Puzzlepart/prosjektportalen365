@@ -1,4 +1,4 @@
-<pnp:ClientSidePage PageName="Arkiveringsoversikt" PromoteAsNewsArticle="false" Overwrite="true" Layout="SingleWebPartAppPage" EnableComments="false" Title="Arkiveringsoversikt" xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
+<pnp:ClientSidePage PageName="Arkivoversikt" PromoteAsNewsArticle="false" Overwrite="true" Layout="SingleWebPartAppPage" EnableComments="false" Title="Arkivoversikt" xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
     <pnp:Sections>
         <pnp:Section Order="1" Type="OneColumn">
             <pnp:Controls>
