@@ -277,6 +277,8 @@ define([], function () {
     ArchiveSelectAllText: 'Select all',
     ArchiveNotArchivableText: 'Not archivable',
     ArchiveNotArchivableListText: 'Not archivable, no items',
+    ArchiveNotArchivableDocumentText: 'Not archivable: the document type “{0}” is not enabled for archiving',
+    ArchiveNotArchivableNoDocumentTypeText: 'Not archivable: the document has no document type assigned',
     ArchiveList: 'List: {0}',
     ArchiveDocument: 'Document: {0}',
     ArchivePhaseTransition: 'From {0}-phase to {1}-phase',
