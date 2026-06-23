@@ -1,10 +1,6 @@
 .surface {
   --fui-Drawer--size: min(1040px, 100vw);
 
-  // The DrawerBody is the single scroll boundary. It is a flex column that fills
-  // the drawer height; only the inner master/detail panes scroll. Without this the
-  // DrawerBody's own `overflow-y: auto` produces a second (outer) scrollbar next to
-  // the inner ones.
   .drawerBody {
     display: flex;
     flex-direction: column;
@@ -26,16 +22,12 @@
 
       .grid {
         display: grid;
-        // Fluid detail column instead of a fixed 400px, so the master list keeps a
-        // usable width across screen sizes.
         grid-template-columns: 1fr clamp(320px, 32%, 440px);
         gap: var(--spacingHorizontalL);
         min-height: 0;
         flex: 1;
         overflow: hidden;
 
-        // Tablet / narrow desktop: tighten the detail column so the master list isn't
-        // squeezed when both panes share a smaller viewport.
         @media (min-width: 721px) and (max-width: 1024px) {
           grid-template-columns: 1fr clamp(300px, 38%, 360px);
         }

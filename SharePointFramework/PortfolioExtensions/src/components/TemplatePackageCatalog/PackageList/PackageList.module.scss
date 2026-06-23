@@ -1,7 +1,6 @@
 .list {
   display: block;
 
-  /* List: one card per row. */
   .column {
     display: flex;
     flex-direction: column;
@@ -16,15 +15,12 @@
   }
 }
 
-/* Grid: cards fill the row (auto-fit collapses empty tracks so there's no
-   leftover gap on the right); each card gets 4px of space via its cell. */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   align-items: start;
 }
 
-/* 4px of padding around every card. */
 .cell {
   padding: 4px;
 }
@@ -37,7 +33,6 @@
   }
 }
 
-/* Loading skeleton — mirrors the card preview/title/description stack. */
 .skeletonCard {
   display: flex;
   flex-direction: column;
