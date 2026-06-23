@@ -1,5 +1,19 @@
 .list {
   display: block;
+
+  /* List: one card per row. */
+  .column {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacingHorizontalM);
+    padding: var(--spacingVerticalM) 0;
+  }
 }
 
 /* Grid: cards fill the row (auto-fit collapses empty tracks so there's no
@@ -10,12 +24,6 @@
   align-items: start;
 }
 
-/* List: one card per row. */
-.column {
-  display: flex;
-  flex-direction: column;
-}
-
 /* 4px of padding around every card. */
 .cell {
   padding: 4px;
@@ -23,10 +31,10 @@
 
 .empty {
   padding: var(--spacingVerticalL) 0;
-}
 
-.clearButton {
-  margin-top: var(--spacingVerticalM);
+  .clearButton {
+    margin-top: var(--spacingVerticalM);
+  }
 }
 
 /* Loading skeleton — mirrors the card preview/title/description stack. */
@@ -37,27 +45,19 @@
   padding: var(--spacingVerticalM);
   border: 1px solid var(--colorNeutralStroke2);
   border-radius: var(--borderRadiusMedium);
-}
 
-.skeletonPreview {
-  height: 96px;
-  border-radius: var(--borderRadiusMedium);
-}
+  .skeletonPreview {
+    height: 96px;
+    border-radius: var(--borderRadiusMedium);
+  }
 
-.skeletonTitle {
-  height: 16px;
-  width: 70%;
-}
+  .skeletonTitle {
+    height: 16px;
+    width: 70%;
+  }
 
-.skeletonText {
-  height: 12px;
-  width: 90%;
-}
-
-.pagination {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacingHorizontalM);
-  padding: var(--spacingVerticalM) 0;
+  .skeletonText {
+    height: 12px;
+    width: 90%;
+  }
 }

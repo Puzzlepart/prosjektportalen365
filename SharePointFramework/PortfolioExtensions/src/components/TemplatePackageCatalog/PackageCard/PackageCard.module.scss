@@ -7,83 +7,83 @@
   position: relative;
   transition: box-shadow var(--durationNormal) var(--curveEasyEase),
     transform var(--durationNormal) var(--curveEasyEase);
-}
 
-.card:hover {
-  box-shadow: var(--shadow8);
-  transform: translateY(-2px);
-}
-
-.card:active {
-  transform: translateY(0);
-}
-
-/*
- * Selection ring on ::before (NOT ::after): Fluent UI v9's Card owns the root
- * ::after for its own border + focus outline. ::before is free here (Fluent
- * only uses it in the disabled state, which never applies). An inset box-shadow
- * paints ON TOP of the full-bleed CardPreview image (z-index above the preview),
- * stays inside the card's overflow:hidden clip, inherits the card radius, and
- * repaints reliably on toggle — unlike `outline`, which deferred its repaint on
- * the hover transform layer (the ring then appeared only after clicking away).
- * NOTE: do not also pass Fluent's `selected` prop to the Card, or two rings stack.
- */
-.selected::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  box-shadow: inset 0 0 0 2px var(--colorBrandStroke1);
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* High-contrast: box-shadow is suppressed, so use a system-colored outline. */
-@media (forced-colors: active) {
-  .selected::before {
-    box-shadow: none;
-    outline: 2px solid Highlight;
-    outline-offset: -2px;
+  &:hover {
+    box-shadow: var(--shadow8);
+    transform: translateY(-2px);
   }
-}
 
-.preview {
-  height: 120px;
-  overflow: hidden;
-  background-color: var(--colorNeutralBackground3);
-}
+  &:active {
+    transform: translateY(0);
+  }
 
-.previewImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
+  /*
+   * Selection ring on ::before (NOT ::after): Fluent UI v9's Card owns the root
+   * ::after for its own border + focus outline. ::before is free here (Fluent
+   * only uses it in the disabled state, which never applies). An inset box-shadow
+   * paints ON TOP of the full-bleed CardPreview image (z-index above the preview),
+   * stays inside the card's overflow:hidden clip, inherits the card radius, and
+   * repaints reliably on toggle — unlike `outline`, which deferred its repaint on
+   * the hover transform layer (the ring then appeared only after clicking away).
+   * NOTE: do not also pass Fluent's `selected` prop to the Card, or two rings stack.
+   */
+  &.selected::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 2px var(--colorBrandStroke1);
+    pointer-events: none;
+    z-index: 1;
+  }
 
-.previewAvatar {
-  width: 100%;
-  height: 100%;
-  border-radius: 0;
-  font-size: 28px;
-}
+  /* High-contrast: box-shadow is suppressed, so use a system-colored outline. */
+  @media (forced-colors: active) {
+    &.selected::before {
+      box-shadow: none;
+      outline: 2px solid Highlight;
+      outline-offset: -2px;
+    }
+  }
 
-.badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacingHorizontalXS);
-}
+  .preview {
+    height: 120px;
+    overflow: hidden;
+    background-color: var(--colorNeutralBackground3);
 
-.description {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  color: var(--colorNeutralForeground2);
-  padding: 0 var(--spacingHorizontalM);
-}
+    .previewImage {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
 
-.footer {
-  display: block;
-  color: var(--colorNeutralForeground3);
-  padding: 0 var(--spacingHorizontalM) var(--spacingVerticalM);
+    .previewAvatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+      font-size: 28px;
+    }
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacingHorizontalXS);
+  }
+
+  .description {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    color: var(--colorNeutralForeground2);
+    padding: 0 var(--spacingHorizontalM);
+  }
+
+  .footer {
+    display: block;
+    color: var(--colorNeutralForeground3);
+    padding: 0 var(--spacingHorizontalM) var(--spacingVerticalM);
+  }
 }

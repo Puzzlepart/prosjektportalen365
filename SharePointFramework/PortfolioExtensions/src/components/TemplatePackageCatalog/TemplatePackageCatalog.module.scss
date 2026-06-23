@@ -1,95 +1,93 @@
 .surface {
   --fui-Drawer--size: min(1040px, 100vw);
-}
 
-// The DrawerBody is the single scroll boundary. It is a flex column that fills
-// the drawer height; only the inner master/detail panes scroll. Without this the
-// DrawerBody's own `overflow-y: auto` produces a second (outer) scrollbar next to
-// the inner ones.
-.drawerBody {
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  overflow: hidden;
-}
+  // The DrawerBody is the single scroll boundary. It is a flex column that fills
+  // the drawer height; only the inner master/detail panes scroll. Without this the
+  // DrawerBody's own `overflow-y: auto` produces a second (outer) scrollbar next to
+  // the inner ones.
+  .drawerBody {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
 
-.subtitle {
-  margin: 0 0 var(--spacingVerticalM) 0;
-  color: var(--colorNeutralForeground3);
-  flex-shrink: 0;
-}
+    .subtitle {
+      margin: 0 0 var(--spacingVerticalM) 0;
+      color: var(--colorNeutralForeground3);
+      flex-shrink: 0;
+    }
 
-.body {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacingVerticalM);
-  flex: 1;
-  min-height: 0;
-}
+    .body {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacingVerticalM);
+      flex: 1;
+      min-height: 0;
 
-.grid {
-  display: grid;
-  // Fluid detail column instead of a fixed 400px, so the master list keeps a
-  // usable width across screen sizes.
-  grid-template-columns: 1fr clamp(320px, 32%, 440px);
-  gap: var(--spacingHorizontalL);
-  min-height: 0;
-  flex: 1;
-  overflow: hidden;
-}
+      .grid {
+        display: grid;
+        // Fluid detail column instead of a fixed 400px, so the master list keeps a
+        // usable width across screen sizes.
+        grid-template-columns: 1fr clamp(320px, 32%, 440px);
+        gap: var(--spacingHorizontalL);
+        min-height: 0;
+        flex: 1;
+        overflow: hidden;
 
-.master {
-  min-height: 0;
-  overflow-y: auto;
-}
+        // Tablet / narrow desktop: tighten the detail column so the master list isn't
+        // squeezed when both panes share a smaller viewport.
+        @media (min-width: 721px) and (max-width: 1024px) {
+          grid-template-columns: 1fr clamp(300px, 38%, 360px);
+        }
 
-.detail {
-  min-height: 0;
-  overflow-y: auto;
-  border-left: 1px solid var(--colorNeutralStroke2);
-  padding-left: var(--spacingHorizontalL);
-}
+        .master {
+          min-height: 0;
+          overflow-y: auto;
+        }
 
-.footer {
-  padding-top: var(--spacingVerticalS);
-  flex-shrink: 0;
+        .detail {
+          min-height: 0;
+          overflow-y: auto;
+          border-left: 1px solid var(--colorNeutralStroke2);
+          padding-left: var(--spacingHorizontalL);
+        }
+      }
+
+      /* Visually hidden, still announced by screen readers. */
+      .srOnly {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+    }
+
+    .footer {
+      padding-top: var(--spacingVerticalS);
+      flex-shrink: 0;
+    }
+
+    .banner {
+      margin-bottom: var(--spacingVerticalM);
+      flex-shrink: 0;
+
+      .retryButton {
+        margin-top: var(--spacingVerticalS);
+        align-self: flex-start;
+      }
+    }
+  }
 }
 
 .loading {
   display: flex;
   justify-content: center;
   padding: var(--spacingVerticalXXL) 0;
-}
-
-.banner {
-  margin-bottom: var(--spacingVerticalM);
-  flex-shrink: 0;
-}
-
-.retryButton {
-  margin-top: var(--spacingVerticalS);
-  align-self: flex-start;
-}
-
-/* Visually hidden, still announced by screen readers. */
-.srOnly {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-// Tablet / narrow desktop: tighten the detail column so the master list isn't
-// squeezed when both panes share a smaller viewport.
-@media (min-width: 721px) and (max-width: 1024px) {
-  .grid {
-    grid-template-columns: 1fr clamp(300px, 38%, 360px);
-  }
 }
 
 @media (max-width: 720px) {
