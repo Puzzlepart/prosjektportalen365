@@ -72,7 +72,7 @@ export default (data: IProjectSetupData) =>
       )
       state.selectedExtensions = uniq(
         [...mandatoryExtensions, ...payload],
-        (contentConfig) => contentConfig.id
+        (extension) => extension.id
       )
     },
 

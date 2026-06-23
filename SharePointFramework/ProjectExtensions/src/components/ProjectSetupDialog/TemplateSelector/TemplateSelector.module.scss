@@ -5,23 +5,26 @@
   padding-bottom: 8px;
 }
 
+// The Combobox renders its options in a portal (outside .root), so .option is
+// NOT a descendant of .root — keep it top-level. Its own children (.optionIcon
+// / .optionContent) render inside the option, so they nest to mirror the DOM.
 .option {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 4px 0;
-}
 
-.optionIcon {
-  display: flex;
-  align-items: center;
-  padding-top: 2px;
-  font-size: 16px;
-}
+  .optionIcon {
+    display: flex;
+    align-items: center;
+    padding-top: 2px;
+    font-size: 16px;
+  }
 
-.optionContent {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
+  .optionContent {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
 }

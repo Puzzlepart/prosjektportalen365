@@ -162,17 +162,17 @@ export class CopyListData extends BaseTask {
       '',
       'List'
     )
-    // Match the destination list's actual base template (e.g. 100 for a custom
-    // list, 101 for a document library) instead of assuming a generic list, so
-    // the DataRows handler doesn't mismatch an existing library/list. The list
-    // already exists (created by the template), so fall back to 100 only if it
-    // can't be read.
+    // Match the destination list's actual base template (e.g. 100 custom list,
+    // 101 document library) so the DataRows handler doesn't mismatch an existing
+    // library/list. The list already exists (created by the template); fall back
+    // to 100 only if it can't be read.
     let destinationTemplate = 100
     try {
-      const destProps = (await params.web.lists
+      const destinationProps = (await params.web.lists
         .getByTitle(config.destinationListTitle)
         .select('BaseTemplate')()) as { BaseTemplate?: number }
-      if (typeof destProps?.BaseTemplate === 'number') destinationTemplate = destProps.BaseTemplate
+      if (typeof destinationProps?.BaseTemplate === 'number')
+        destinationTemplate = destinationProps.BaseTemplate
     } catch {
       // Destination list not found / unreadable — keep the generic-list default.
     }
