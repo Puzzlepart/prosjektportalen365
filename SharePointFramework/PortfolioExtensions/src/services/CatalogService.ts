@@ -1,3 +1,4 @@
+import { format } from '@fluentui/react/lib/Utilities'
 import { dateAdd, getHashCode, PnPClientStorage } from '@pnp/core'
 import { Logger, LogLevel } from '@pnp/logging'
 import strings from 'PortfolioExtensionsStrings'
@@ -199,7 +200,7 @@ export class CatalogService {
 
   private static async _fetchJson<T>(url: string): Promise<T> {
     const response = await CatalogService._fetchWithTimeout(url)
-    if (!response.ok) throw new Error(`HTTP ${response.status} for ${url}`)
+    if (!response.ok) throw new Error(format(strings.CatalogResourceFetchError, response.status))
     return (await response.json()) as T
   }
 
@@ -209,7 +210,7 @@ export class CatalogService {
    */
   public static async getFileText(url: string): Promise<string> {
     const response = await CatalogService._fetchWithTimeout(url)
-    if (!response.ok) throw new Error(`HTTP ${response.status} for ${url}`)
+    if (!response.ok) throw new Error(format(strings.CatalogResourceFetchError, response.status))
     return response.text()
   }
 
@@ -405,16 +406,16 @@ export class CatalogService {
   private static async _fetchCatalog(url: string): Promise<ICatalog> {
     const response = await CatalogService._fetchWithTimeout(url)
     if (!response.ok) {
-      throw new Error(`HTTP ${response.status} ${response.statusText}`)
+      throw new Error(format(strings.CatalogFetchError, `${response.status} ${response.statusText}`))
     }
     let json: ICatalog
     try {
       json = (await response.json()) as ICatalog
     } catch {
-      throw new Error('Catalog response was not valid JSON')
+      throw new Error(strings.CatalogInvalidJson)
     }
     if (!json || !Array.isArray(json.packages)) {
-      throw new Error('Catalog is missing the packages array')
+      throw new Error(strings.CatalogMissingPackagesArray)
     }
     return json
   }

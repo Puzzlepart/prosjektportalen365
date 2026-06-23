@@ -277,7 +277,7 @@ export class PackageInstaller {
   private static async _download(url: string): Promise<ArrayBuffer> {
     const response = await fetch(url, { method: 'GET' })
     if (!response.ok) {
-      throw new Error(`HTTP ${response.status} ${response.statusText}`)
+      throw new Error(format(strings.CatalogDownloadError, `${response.status} ${response.statusText}`))
     }
     return response.arrayBuffer()
   }
@@ -289,15 +289,15 @@ export class PackageInstaller {
 
   private static async _readManifest(zip: any): Promise<IPackageManifest> {
     const file = zip.file('manifest.json')
-    if (!file) throw new Error('manifest.json not found in package')
+    if (!file) throw new Error(strings.CatalogManifestMissing)
     let manifest: IPackageManifest
     try {
       manifest = JSON.parse(await file.async('string'))
     } catch {
-      throw new Error('manifest.json is not valid JSON')
+      throw new Error(strings.CatalogManifestInvalidJson)
     }
     if (!manifest.id || !manifest.version || !manifest.type) {
-      throw new Error('manifest.json is missing required fields (id, version, type)')
+      throw new Error(strings.CatalogManifestMissingFields)
     }
     return manifest
   }
@@ -397,7 +397,7 @@ export class PackageInstaller {
     if (!hubTemplate) return
     const file = zip.file(hubTemplate)
     if (!file) {
-      throw new Error(`Hub template ${hubTemplate} not found in package`)
+      throw new Error(format(strings.CatalogHubTemplateMissing, hubTemplate))
     }
     let schema = JSON.parse(await file.async('string'))
     // Gate the (sp-js-provisioning) Taxonomy handler: strip the Taxonomy part
@@ -540,7 +540,7 @@ export class PackageInstaller {
   ): Promise<Array<{ extensionId: string; itemId: number; name: string }>> {
     const extensions = manifest.provisioning?.extensions ?? []
     if (extensions.length === 0) {
-      throw new Error('Package contains no project extensions')
+      throw new Error(strings.CatalogNoProjectExtensions)
     }
     const web = SPDataAdapter.portalDataService.web
     const rootFolder = await web.lists
@@ -551,7 +551,7 @@ export class PackageInstaller {
     const added: Array<{ extensionId: string; itemId: number; name: string }> = []
     for (const ext of extensions) {
       const zipFile = zip.file(ext.file)
-      if (!zipFile) throw new Error(`Extension file ${ext.file} not found in package`)
+      if (!zipFile) throw new Error(format(strings.CatalogExtensionFileMissing, ext.file))
       const content = await zipFile.async('string')
       // Stamp the source package id/version into the file so the catalog can
       // later detect that an installed extension is outdated (version-in-file).

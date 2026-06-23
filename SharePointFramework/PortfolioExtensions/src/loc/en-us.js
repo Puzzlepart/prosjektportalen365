@@ -256,5 +256,16 @@ define([], function () {
     CatalogLanguagesTooltip: 'Available languages',
     CatalogLanguageNorwegian: 'Norwegian',
     CatalogLanguageEnglish: 'English',
+    CatalogDownloadError: 'Could not download the template package (HTTP {0}).',
+    CatalogManifestMissing: 'The package is missing manifest.json.',
+    CatalogManifestInvalidJson: 'manifest.json in the package is not valid JSON.',
+    CatalogManifestMissingFields: 'manifest.json is missing required fields (id, version, type).',
+    CatalogHubTemplateMissing: 'Hub template {0} was not found in the package.',
+    CatalogNoProjectExtensions: 'The package contains no project extensions.',
+    CatalogExtensionFileMissing: 'Extension file {0} was not found in the package.',
+    CatalogFetchError: 'Could not fetch the catalog (HTTP {0}).',
+    CatalogInvalidJson: 'The catalog response was not valid JSON.',
+    CatalogMissingPackagesArray: 'The catalog is missing the packages array.',
+    CatalogResourceFetchError: 'Could not fetch the resource (HTTP {0}).',
   }
 })

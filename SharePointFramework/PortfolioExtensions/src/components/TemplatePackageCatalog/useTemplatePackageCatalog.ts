@@ -57,6 +57,13 @@ export function useTemplatePackageCatalog(
   // Bumped by reloadCatalog() to re-run the load effect (degraded-state retry).
   const [reloadToken, setReloadToken] = useState(0)
   const reloadCatalog = () => setReloadToken((token) => token + 1)
+  // Drawer open/close state. close() also notifies the host command set so it
+  // can unmount the catalog.
+  const [open, setOpen] = useState(true)
+  const close = (): void => {
+    setOpen(false)
+    props.onDismiss()
+  }
 
   useEffect(() => {
     let cancelled = false
@@ -314,6 +321,8 @@ export function useTemplatePackageCatalog(
     props,
     state: { ...state, page },
     setState,
+    open,
+    close,
     filteredPackages,
     pagedPackages,
     pageCount,

@@ -233,6 +233,17 @@ declare interface IPortfolioExtensionsStrings {
   CatalogLanguagesTooltip: string
   CatalogLanguageNorwegian: string
   CatalogLanguageEnglish: string
+  CatalogDownloadError: string
+  CatalogManifestMissing: string
+  CatalogManifestInvalidJson: string
+  CatalogManifestMissingFields: string
+  CatalogHubTemplateMissing: string
+  CatalogNoProjectExtensions: string
+  CatalogExtensionFileMissing: string
+  CatalogFetchError: string
+  CatalogInvalidJson: string
+  CatalogMissingPackagesArray: string
+  CatalogResourceFetchError: string
 }
 
 declare module 'PortfolioExtensionsStrings' {

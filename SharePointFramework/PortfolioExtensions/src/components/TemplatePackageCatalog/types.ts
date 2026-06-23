@@ -105,6 +105,10 @@ export interface ITemplatePackageCatalogContext {
       | Partial<ITemplatePackageCatalogState>
       | ((current: ITemplatePackageCatalogState) => Partial<ITemplatePackageCatalogState>)
   ) => void
+  /** Whether the catalog drawer is open. */
+  open: boolean
+  /** Close the catalog drawer and notify the host (`props.onDismiss`). */
+  close: () => void
   /** All packages after search/filter/sort (not paginated). */
   filteredPackages: ICatalogPackage[]
   /** Current page slice of {@link filteredPackages}. */

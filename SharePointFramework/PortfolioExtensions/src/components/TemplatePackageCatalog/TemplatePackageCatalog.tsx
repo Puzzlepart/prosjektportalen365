@@ -14,7 +14,7 @@ import {
 import { Dismiss24Regular } from '@fluentui/react-icons'
 import { customLightTheme, UserMessage } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 import { CatalogToolbar } from './CatalogToolbar'
 import { CompatibilityDialog } from './CompatibilityDialog'
 import { InstallProgress } from './InstallProgress'
@@ -28,13 +28,7 @@ import { useTemplatePackageCatalog } from './useTemplatePackageCatalog'
 export const TemplatePackageCatalog: FC<ITemplatePackageCatalogProps> = (props) => {
   const fluentProviderId = useId('fp-template-package-catalog')
   const ctx = useTemplatePackageCatalog(props)
-  const { state } = ctx
-  const [open, setOpen] = useState(true)
-
-  const close = () => {
-    setOpen(false)
-    props.onDismiss()
-  }
+  const { state, open, close } = ctx
 
   return (
     <TemplatePackageCatalogContext.Provider value={ctx}>

@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react/lib/Utilities'
 import {
   Avatar,
   Caption1,
@@ -9,12 +8,10 @@ import {
   Text,
   Tooltip
 } from '@fluentui/react-components'
-import { formatDate } from 'pp365-shared-library'
-import strings from 'PortfolioExtensionsStrings'
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 import { ICatalogPackage } from 'models'
-import { useCatalogContext } from '../context'
 import { PackageCompatibilityTag, PackageStatusTag, PackageUpdateTag } from './PackageBadges'
+import { usePackageCard } from './usePackageCard'
 import styles from './PackageCard.module.scss'
 
 export interface IPackageCardProps {
@@ -29,19 +26,7 @@ export const packageCardId = (packageId: string): string =>
   `pp-pkg-card-${packageId.replace(/[^a-zA-Z0-9_-]/g, '-')}`
 
 export const PackageCard: FC<IPackageCardProps> = ({ package: pkg }) => {
-  const { state, setSelected } = useCatalogContext()
-  const [imageError, setImageError] = useState(false)
-  const isSelected = state.selectedPackageId === pkg.id
-  const showImage = Boolean(pkg.thumbnail) && !imageError
-
-  const meta = [
-    pkg.version ? `v${pkg.version}` : undefined,
-    pkg.publishedDate
-      ? format(strings.CatalogCardPublished, formatDate(pkg.publishedDate))
-      : undefined
-  ]
-    .filter(Boolean)
-    .join('  •  ')
+  const { isSelected, showImage, meta, select, onCardKeyDown, onImageError } = usePackageCard(pkg)
 
   return (
     <Card
@@ -51,13 +36,8 @@ export const PackageCard: FC<IPackageCardProps> = ({ package: pkg }) => {
       aria-selected={isSelected}
       tabIndex={0}
       floatingAction={<PackageStatusTag packageId={pkg.id} />}
-      onClick={() => setSelected(pkg.id)}
-      onKeyDown={(event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault()
-          setSelected(pkg.id)
-        }
-      }}
+      onClick={select}
+      onKeyDown={onCardKeyDown}
     >
       <CardPreview className={styles.preview}>
         {showImage ? (
@@ -65,7 +45,7 @@ export const PackageCard: FC<IPackageCardProps> = ({ package: pkg }) => {
             className={styles.previewImage}
             src={pkg.thumbnail}
             alt=''
-            onError={() => setImageError(true)}
+            onError={onImageError}
           />
         ) : (
           // Same fallback look as ProjectCard (ProjectLogo): a colorful square

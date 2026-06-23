@@ -252,5 +252,16 @@ define([], function () {
     CatalogLanguagesTooltip: 'Tilgjengelige språk',
     CatalogLanguageNorwegian: 'Norsk',
     CatalogLanguageEnglish: 'Engelsk',
+    CatalogDownloadError: 'Kunne ikke laste ned malpakken (HTTP {0}).',
+    CatalogManifestMissing: 'Pakken mangler manifest.json.',
+    CatalogManifestInvalidJson: 'manifest.json i pakken er ikke gyldig JSON.',
+    CatalogManifestMissingFields: 'manifest.json mangler påkrevde felter (id, version, type).',
+    CatalogHubTemplateMissing: 'Fant ikke hub-malen {0} i pakken.',
+    CatalogNoProjectExtensions: 'Pakken inneholder ingen prosjektutvidelser.',
+    CatalogExtensionFileMissing: 'Fant ikke utvidelsesfilen {0} i pakken.',
+    CatalogFetchError: 'Kunne ikke hente katalogen (HTTP {0}).',
+    CatalogInvalidJson: 'Katalogsvaret er ikke gyldig JSON.',
+    CatalogMissingPackagesArray: 'Katalogen mangler «packages»-listen.',
+    CatalogResourceFetchError: 'Kunne ikke hente ressursen (HTTP {0}).',
   }
 })
