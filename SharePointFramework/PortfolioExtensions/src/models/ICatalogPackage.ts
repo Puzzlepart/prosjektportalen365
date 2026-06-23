@@ -92,9 +92,9 @@ export interface ICatalogPackage {
   changelogUrl?: string
 
   /**
-   * Whether the package can run as a **skymal** (cloud template). `false` means
+   * Whether the package can run as a **cloud template**. `false` means
    * it needs hub-side provisioning the cloud path can't reproduce — publishing
-   * it as a skymal warns "at own risk". Absent = treated as `true`.
+   * it as a cloud template warns "at own risk". Absent = treated as `true`.
    */
   cloudCompatible?: boolean
 

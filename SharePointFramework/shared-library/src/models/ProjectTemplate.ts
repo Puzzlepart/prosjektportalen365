@@ -32,7 +32,7 @@ export interface IProjectTemplateSPItem {
   GtDocumentTemplateLibrary: string
   /**
    * Package type for catalog-managed templates (`Lokal` | `Importert` |
-   * `Sentral`). `Sentral` marks a **skymal** (cloud template) — a metadata-only
+   * `Sentral`). `Sentral` marks a **cloud template** — a metadata-only
    * shadow whose content is resolved from its `.pppkg` at setup time.
    */
   PpPkgType?: string
@@ -116,15 +116,15 @@ export class ProjectTemplate extends UserSelectableObject {
   }
 
   /**
-   * `true` when this template is a **skymal** (cloud template, `PpPkgType` =
-   * `Sentral`) — a metadata-only shadow whose template, extensions and list
+   * `true` when this template is a cloud template, `PpPkgType` =
+   * `Sentral` — a metadata-only shadow whose template, extensions and list
    * content are resolved from its `.pppkg` at setup time (nothing on the hub).
    */
   public get isCloudTemplate(): boolean {
     return this._ppPkgType === PP_PKG_TYPE.Sentral
   }
 
-  /** URL to the skymal's `.pppkg` (from `PpPkgSourceUrl`), used to resolve it. */
+  /** URL to the cloud template's `.pppkg` (from `PpPkgSourceUrl`), used to resolve it. */
   public get cloudSourceUrl(): string {
     return this._cloudSourceUrl
   }

@@ -46,7 +46,7 @@ export interface IManifestContentItem {
  * setup wizard can copy rows from a hub `sourceList` into a project's
  * `destinationList` when the template is used.
  *
- * For a **skymal** (cloud template) nothing is provisioned to the hub — the
+ * For a **cloud template** nothing is provisioned to the hub — the
  * setup wizard reads the rows directly from the bundled `hub-template.json`
  * `Lists[]` entry whose `Title === sourceList` and applies them to the project's
  * `destinationList`.
@@ -86,7 +86,7 @@ export interface IManifestListContent {
  * `schema/pppkg-manifest.schema.json` in the hosting repo.
  *
  * Lives in shared-library so both PortfolioExtensions (catalog import) and
- * ProjectExtensions (skymal resolution in the setup wizard) share one definition.
+ * ProjectExtensions (cloud template resolution in the setup wizard) share one definition.
  */
 export interface IPackageManifest {
   $schema?: string
@@ -114,14 +114,14 @@ export interface IPackageManifest {
   tags?: string[]
   type: PackageType
   /**
-   * Whether this package can run as a **skymal** (cloud template) — i.e. applied
+   * Whether this package can run as a cloud template — i.e. applied
    * to a project entirely from its `.pppkg` with nothing provisioned to the hub.
    *
    * Set to `false` for packages that require hub-side provisioning the cloud
    * path cannot reproduce (a content type defined on the hub and bound to the
    * `Prosjekter` list, hub site columns, taxonomy term sets, etc.). Absent =
    * treated as `true`. When `false`, the catalog warns before publishing as a
-   * skymal and the setup wizard warns on selection — neither blocks ("at own
+   * cloud template and the setup wizard warns on selection — neither blocks ("at own
    * risk").
    */
   cloudCompatible?: boolean

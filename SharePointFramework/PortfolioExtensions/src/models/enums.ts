@@ -8,7 +8,7 @@ export enum PpPkgType {
   Lokal = 'Lokal',
   /** Imported from the catalog (Mode A) — provisioned locally. */
   Importert = 'Importert',
-  /** Central "skymal" (Mode B) — metadata only, resolved at runtime. */
+  /** Central "cloud template" (Mode B) — metadata only, resolved at runtime. */
   Sentral = 'Sentral'
 }
 

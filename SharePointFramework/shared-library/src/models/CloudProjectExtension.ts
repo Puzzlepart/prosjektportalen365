@@ -4,8 +4,8 @@ import { IManifestExtension } from './IPackageManifest'
 import { ProjectExtension, IProjectExtensionSPItem } from './ProjectExtension'
 
 /**
- * A project extension (prosjekttillegg) that belongs to a **skymal** (cloud
- * template). Unlike {@link ProjectExtension}, its schema is read from the
+ * A project extension (prosjekttillegg) that belongs to a cloud template.
+ * Unlike {@link ProjectExtension}, its schema is read from the
  * downloaded `.pppkg` instead of the hub Prosjekttillegg library — so it can be
  * applied to a project without the extension existing on the hub.
  */

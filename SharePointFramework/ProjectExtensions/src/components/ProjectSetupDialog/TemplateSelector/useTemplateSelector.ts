@@ -67,7 +67,7 @@ export function useTemplateSelector() {
     setQuery('')
   }
 
-  // Skymal: download and resolve the .pppkg once the (cloud) template is
+  // Cloud template: download and resolve the .pppkg once the (cloud) template is
   // selected, so the Extensions/List-content sections can show its bundled
   // artifacts and the provisioning tasks can apply them. Nothing touches the hub.
   const isCloudTemplate = !!selectedTemplate?.isCloudTemplate

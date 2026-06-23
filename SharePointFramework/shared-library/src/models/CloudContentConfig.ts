@@ -24,8 +24,8 @@ function normalizeFields(fields?: string): string {
 }
 
 /**
- * A list-content configuration (Listeinnhold) that belongs to a **skymal**
- * (cloud template). The rows are read from the bundled `hub-template.json`
+ * A list-content configuration (Listeinnhold) that belongs to a **cloud template**.
+ * The rows are read from the bundled `hub-template.json`
  * `Lists[]` entry (via {@link getCloudDataRows}) and applied to the project's
  * destination list — nothing is read from the hub.
  */

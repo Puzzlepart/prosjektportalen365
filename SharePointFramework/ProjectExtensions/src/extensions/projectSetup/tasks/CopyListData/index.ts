@@ -57,7 +57,7 @@ export class CopyListData extends BaseTask {
           message: `Processing content config: ${contentConfig.text} (${contentConfig.type})`,
           level: 'info'
         })
-        // Cloud (skymal) content: rows come from the .pppkg, not a hub list.
+        // Cloud template content: rows come from the .pppkg, not a hub list.
         if (contentConfig instanceof CloudContentConfig) {
           await this._applyCloudContentConfig(contentConfig, params)
           continue
@@ -126,7 +126,7 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Apply a **skymal** (cloud template) list-content config: read the bundled
+   * Apply a **cloud template** list-content config: read the bundled
    * rows from the `.pppkg`, project them to the config's `fields` subset, and
    * write them into the project's destination list via the sp-js-provisioning
    * `DataRows` handler (run on the project web, after `SetTaxonomyFields` so the

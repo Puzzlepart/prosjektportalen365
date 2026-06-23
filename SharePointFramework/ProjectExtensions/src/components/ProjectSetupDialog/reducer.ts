@@ -46,7 +46,7 @@ export default (data: IProjectSetupData) =>
       state: IProjectSetupDialogState,
       { payload }: ReturnType<typeof ON_LIST_CONTENT_CONFIG_CHANGED>
     ) => {
-      // For a skymal the available set is the bundled (resolved) list content,
+      // For a cloud template the available set is the bundled (resolved) list content,
       // not the hub `data.contentConfig`.
       const available = state.selectedTemplate?.isCloudTemplate
         ? state.resolvedCloudTemplate?.contentConfig ?? []
@@ -81,7 +81,7 @@ export default (data: IProjectSetupData) =>
       { payload: template }: ReturnType<typeof ON_TEMPLATE_CHANGED>
     ) => {
       state.selectedTemplate = template
-      // Switching templates always clears any prior skymal resolution.
+      // Switching templates always clears any prior cloud template resolution.
       state.resolvedCloudTemplate = undefined
       state.cloudTemplateError = undefined
       state.isResolvingCloudTemplate = false

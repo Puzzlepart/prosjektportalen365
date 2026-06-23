@@ -80,7 +80,7 @@ export interface ITemplatePackageCatalogState {
   compatibilityReport?: ICompatibilityReport
   notification?: ICatalogNotification
   /**
-   * A long-running detail-pane action in progress (publish-as-skymal downloads
+   * A long-running detail-pane action in progress (publish-as-cloud template downloads
    * and provisions to the hub; remove deletes the Maloppsett item). Drives the
    * spinner + disabled state on the action buttons so the user gets feedback and
    * can't double-submit. (Import uses {@link installProgress} instead.)

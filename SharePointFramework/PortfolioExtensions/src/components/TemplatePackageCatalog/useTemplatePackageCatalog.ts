@@ -275,12 +275,12 @@ export function useTemplatePackageCatalog(
   const publishCentral = async (pkg: ICatalogPackage): Promise<void> => {
     setState({ notification: undefined, busyAction: 'publish' })
     try {
-      // A skymal's content types are real hub dependencies: provision them (and
+      // A cloud template's content types are real hub dependencies: provision them (and
       // their Prosjekter/Prosjektstatus bindings) to the hub now, in this admin
-      // context, so projects later created from the skymal are recognized by the
+      // context, so projects later created from the cloud template are recognized by the
       // portfolio. The rest (template, extensions, list content) is still pulled
       // from the .pppkg at project-setup time.
-      await PackageInstaller.provisionSkymalHubDependencies(pkg, props.context)
+      await PackageInstaller.provisionCloudTemplateHubDependencies(pkg, props.context)
       await TemplateOptionsService.createCentral(pkg)
       await refreshCrossRef()
       setState({ notification: { intent: 'success', text: strings.CatalogPublishSuccessText } })

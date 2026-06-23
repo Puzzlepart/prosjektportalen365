@@ -24,7 +24,7 @@ export class PreTask extends BaseTask {
 
     if (this.data.selectedTemplate && this.data.selectedTemplate.id !== NO_TEMPLATE_ID) {
       if (this.data.selectedTemplate.isCloudTemplate) {
-        // Skymal: read the project schema from the bundled .pppkg (nothing on the
+        // Cloud template: read the project schema from the bundled .pppkg (nothing on the
         // hub). Use the already-resolved package; fall back to downloading it for
         // the forced/auto path that bypasses the dialog. Hub-bound validation
         // (term sets / content types) is skipped — they aren't provisioned.

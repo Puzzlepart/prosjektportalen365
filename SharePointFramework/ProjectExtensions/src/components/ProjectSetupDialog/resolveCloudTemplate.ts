@@ -7,12 +7,12 @@ import {
 import { IResolvedCloudTemplate } from './types'
 
 /**
- * Download and resolve a **skymal** (cloud template) from its `.pppkg`: read the
+ * Download and resolve a **cloud template** from its `.pppkg`: read the
  * manifest and build the bundled extension/list-content models that the wizard
  * (Extensions/List-content sections, and the `PreTask`/`CopyListData` tasks) use
- * to apply the skymal to the project — without touching the hub.
+ * to apply the cloud template to the project — without touching the hub.
  *
- * @param template The selected skymal `ProjectTemplate` (must be `isCloudTemplate`)
+ * @param template The selected cloud template `ProjectTemplate` (must be `isCloudTemplate`)
  */
 export async function resolveCloudTemplate(
   template: ProjectTemplate

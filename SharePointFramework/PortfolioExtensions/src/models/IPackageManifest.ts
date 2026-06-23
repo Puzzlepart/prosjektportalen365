@@ -1,6 +1,6 @@
 /**
  * The package manifest interfaces now live in `pp365-shared-library` so both
- * PortfolioExtensions (catalog import) and ProjectExtensions (skymal resolution
+ * PortfolioExtensions (catalog import) and ProjectExtensions (cloud template resolution
  * in the setup wizard) share one definition. Re-exported here for backwards
  * compatibility with existing `from 'models'` imports.
  *

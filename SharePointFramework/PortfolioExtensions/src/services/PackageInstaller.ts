@@ -428,10 +428,10 @@ export class PackageInstaller {
   }
 
   /**
-   * Provision a skymal's **essential hub dependencies** when it is published as a
+   * Provision a cloud template's **essential hub dependencies** when it is published as a
    * cloud template ("Tilgjengeliggjør som skymal", admin context).
    *
-   * A skymal's content types must exist on the hub and be bound to the Prosjekter
+   * A cloud template's content types must exist on the hub and be bound to the Prosjekter
    * / Prosjektstatus lists so the portfolio recognizes projects created from it.
    * This applies only that structural subset of the package's `hub-template.json`
    * to the hub: `SiteFields` + `ContentTypes` + the content-type **bindings** to
@@ -439,7 +439,7 @@ export class PackageInstaller {
    * project content pulled from the `.pppkg` at setup time, not hub objects, so
    * they are dropped. Returns the number of content types provisioned.
    */
-  public static async provisionSkymalHubDependencies(
+  public static async provisionCloudTemplateHubDependencies(
     pkg: ICatalogPackage,
     context: ListViewCommandSetContext
   ): Promise<void> {
@@ -473,11 +473,11 @@ export class PackageInstaller {
     const { WebProvisioner } = await import('sp-js-provisioning')
     const provisioner = new WebProvisioner(SPDataAdapter.portalDataService.web).setup({
       spfxContext: context,
-      logging: { prefix: '(TemplatePackageCatalog) (Skymal)', activeLogLevel: LogLevel.Info }
+      logging: { prefix: '(TemplatePackageCatalog) (Cloud)', activeLogLevel: LogLevel.Info }
     } as any)
     await provisioner.applyTemplate(filtered, null, (handler) => {
       Logger.log({
-        message: `(PackageInstaller) provisionSkymalHubDependencies: applying handler ${handler}`,
+        message: `(PackageInstaller) provisionCloudTemplateHubDependencies: applying handler ${handler}`,
         level: LogLevel.Info
       })
     })

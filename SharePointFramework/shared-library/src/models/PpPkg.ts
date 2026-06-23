@@ -12,7 +12,7 @@ export const PP_PKG_TYPE = {
   Lokal: 'Lokal',
   /** Imported from the catalog (Mode A) — hub content provisioned locally. */
   Importert: 'Importert',
-  /** Central "skymal" (Mode B) — metadata-only shadow, resolved at runtime. */
+  /** Central cloud template (Mode B) — metadata-only shadow, resolved at runtime. */
   Sentral: 'Sentral'
 } as const
 

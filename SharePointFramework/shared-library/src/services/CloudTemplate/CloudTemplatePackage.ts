@@ -14,7 +14,7 @@ export interface IPackageDataRows {
 
 /**
  * In-memory reader for a downloaded `.pppkg` (a ZIP with files at the root),
- * used to resolve a **skymal** (cloud template) entirely from its package — the
+ * used to resolve a cloud template entirely from its package — the
  * project template schema, the bundled extension schemas, and the list-content
  * rows — without touching the hub.
  *
@@ -29,7 +29,7 @@ export class CloudTemplatePackage {
    * Download a `.pppkg` from `url`, unzip it and parse `manifest.json`.
    *
    * @param url Absolute URL to the `.pppkg` (e.g. the GitHub raw download URL
-   * stored in the skymal's `PpPkgSourceUrl`).
+   * stored in the cloud template's `PpPkgSourceUrl`).
    */
   public static async fromUrl(url: string): Promise<CloudTemplatePackage> {
     if (!url) throw new Error('Cloud template package URL is missing')
@@ -80,7 +80,7 @@ export class CloudTemplatePackage {
 
   /**
    * The `DataRows` block of the bundled hub-template `Lists[]` entry whose
-   * `Title` matches `sourceListTitle` — the rows a skymal copies into the
+   * `Title` matches `sourceListTitle` — the rows a cloud template copies into the
    * project's destination list. Returns `undefined` when not found.
    */
   public async getHubListDataRows(sourceListTitle: string): Promise<IPackageDataRows | undefined> {
