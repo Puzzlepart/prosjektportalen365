@@ -25,6 +25,7 @@ This is a thin operational index. The authoritative, detailed conventions live i
 
 - **Component folder + barrel:** `KomponentNavn/` containing `index.ts` (the barrel — **re-export only**, a `.ts` never `.tsx`, no logic/JSX), `KomponentNavn.tsx`, `KomponentNavn.module.scss`, `useKomponentNavn.ts`, `types.ts`, and optional `context.ts` / `reducer.ts`.
 - **Logic in hooks:** all state, effects, handlers and computed values live in a `useXxx` hook; the `.tsx` is JSX/presentation only.
+- **Function style:** named top-level declarations (hooks + pure helpers) use the `function` keyword; components are arrow functions typed `const X: FC<Props> = …`; inline callbacks are arrows.
 - **State sharing:** React **Context** for shared state across sub-components (avoid prop-drilling); **Redux Toolkit + `useReducer`** (in `reducer.ts`) for complex state.
 - **Identifiers in English; user-facing text in Norwegian** via the loc bundle. Use the solution's strings module (`PortfolioExtensionsStrings`, `ProjectExtensionsStrings`, …) and `format(strings.Key, …)` for interpolated values — never hard-code user-facing strings, including thrown `Error()` messages that surface in the UI.
 - **Fluent UI v9** (`@fluentui/react-components`); icons via `getFluentIcon` / `getFluentIconWithFallback` from `pp365-shared-library`. Wrap dialogs/drawers in `IdPrefixProvider` + `FluentProvider` with `customLightTheme`.

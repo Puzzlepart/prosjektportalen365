@@ -23,16 +23,9 @@ export function usePackageDetails() {
   const [confirmReplace, setConfirmReplace] = useState(false)
   const [confirmCloud, setConfirmCloud] = useState(false)
   const [confirmRemove, setConfirmRemove] = useState(false)
-  // Detail-pane root, focused when a package is selected so keyboard/screen
-  // reader users land in the details rather than staying on the card.
   const rootRef = useRef<HTMLDivElement>(null)
   const wasDetailOpen = useRef(state.detailOpen)
 
-  // PackageDetails is a single reused instance, so reset per-package UI flags
-  // when a different package is selected — otherwise a failed thumbnail (or an
-  // open confirm dialog) would carry over to the next package. Keyed on `.id`
-  // since `selectedPackage` is a fresh find() on every render. Selecting a
-  // package also moves focus into the pane (a11y).
   useEffect(() => {
     setImageError(false)
     setConfirmReplace(false)
@@ -41,8 +34,6 @@ export function usePackageDetails() {
     if (selectedPackage) rootRef.current?.focus()
   }, [selectedPackage?.id])
 
-  // When the detail pane closes (collapsed <720px layout), return focus to the
-  // card it was opened from.
   useEffect(() => {
     if (wasDetailOpen.current && !state.detailOpen && selectedPackage) {
       document.getElementById(packageCardId(selectedPackage.id))?.focus()
@@ -50,7 +41,6 @@ export function usePackageDetails() {
     wasDetailOpen.current = state.detailOpen
   }, [state.detailOpen, selectedPackage])
 
-  // Clicking a tag filters the catalog by that category and returns to the list.
   const filterByTag = (tag: string) => {
     setFilter('category', tag)
     closeDetail()

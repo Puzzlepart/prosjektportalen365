@@ -63,11 +63,6 @@ export default class TemplatePackageCatalogCommandSet extends BaseListViewComman
 
     this.context.listView.listViewStateChangedEvent.add(this, this._onListViewStateChanged)
 
-    // Compute the initial visibility now. `listViewStateChangedEvent` only fires
-    // on later state changes (e.g. selecting a row), not on first load, so
-    // without this the command would stay hidden until the user selects an item.
-    // onInit is awaited by the framework before commands render, so setting it
-    // here makes the command show on its own initially.
     this._updateVisibility()
   }
 

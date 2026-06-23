@@ -21,8 +21,6 @@ export const PackageList: FC = () => {
   } = useCatalogContext()
 
   if (filteredPackages.length === 0) {
-    // Active filters with no matches → offer a way out; otherwise the catalog
-    // simply has nothing to show.
     return (
       <div className={styles.empty}>
         {hasActiveFilters ? (

@@ -135,11 +135,8 @@ export const PackageDetails: FC = () => {
       )}
 
       <PackageRequirementTags package={pkg} />
-
       <PackageScreenshots screenshots={pkg.screenshots} />
-
       <PackageContentSummary package={pkg} />
-
       <PackageHistory changelogUrl={pkg.changelogUrl} />
 
       {isExtension && <UserMessage intent='info' text={strings.CatalogExtensionInfo} />}

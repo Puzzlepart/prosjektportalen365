@@ -33,8 +33,6 @@ export const CatalogToolbar: FC = () => {
   } = useCatalogContext()
   const { filters, sort, renderMode } = state
 
-  // Debounced search input (~200ms) — keeps the field responsive without
-  // re-filtering on every keystroke.
   const [searchValue, setSearchValue] = useState(filters.search)
   const timer = useRef<ReturnType<typeof setTimeout>>()
   useEffect(() => {
@@ -42,7 +40,6 @@ export const CatalogToolbar: FC = () => {
       if (timer.current) clearTimeout(timer.current)
     }
   }, [])
-  // Keep the input in sync when filters are cleared externally ("Tøm filtre").
   useEffect(() => {
     if (filters.search === '') setSearchValue('')
   }, [filters.search])

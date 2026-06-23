@@ -43,8 +43,6 @@ export const PackageCard: FC<IPackageCardProps> = ({ package: pkg }) => {
         {showImage ? (
           <img className={styles.previewImage} src={pkg.thumbnail} alt='' onError={onImageError} />
         ) : (
-          // Same fallback look as ProjectCard (ProjectLogo): a colorful square
-          // avatar with the template's initials when no image is available.
           <Avatar
             className={styles.previewAvatar}
             color='colorful'

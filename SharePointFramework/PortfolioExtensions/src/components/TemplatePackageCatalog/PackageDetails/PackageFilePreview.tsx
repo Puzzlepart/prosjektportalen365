@@ -17,13 +17,10 @@ import strings from 'PortfolioExtensionsStrings'
 import React, { FC, useMemo } from 'react'
 import { usePackageFilePreview } from './usePackageFilePreview'
 
-// Readable coding-font stack (falls back through fonts shipped with VS Code,
-// macOS and Windows) instead of the default Consolas/Courier monospace token.
 const CODE_FONT =
   "'Cascadia Code', 'Cascadia Mono', 'JetBrains Mono', 'Fira Code', 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Liberation Mono', 'Courier New', monospace"
 
 const useStyles = makeStyles({
-  // Default modal DialogSurface is max-width 600px — widen it by ~200px.
   surface: {
     maxWidth: '800px'
   },

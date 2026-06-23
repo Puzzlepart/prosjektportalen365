@@ -17,7 +17,6 @@ import { useCatalogContext } from '../context'
 import { languageLabel } from '../language'
 
 const useStyles = makeStyles({
-  // Tiny drop shadow so the badges lift off the card image / surface.
   badge: {
     boxShadow: tokens.shadow2
   },
