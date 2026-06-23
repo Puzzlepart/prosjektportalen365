@@ -192,7 +192,15 @@ const DOCUMENTS_TABLE_CONFIG: IArchiveTableConfig = {
     header: strings.ArchiveTableColumnModified,
     renderCell: (item) => formatShortDate(item.dateModified)
   },
-  getDisabledTooltip: () => strings.ArchiveNotArchivableText
+  getDisabledTooltip: (item) => {
+    if (item.documentTypeName) {
+      return format(strings.ArchiveNotArchivableDocumentText, item.documentTypeName)
+    }
+    if (!item.documentTypeId) {
+      return strings.ArchiveNotArchivableNoDocumentTypeText
+    }
+    return strings.ArchiveNotArchivableText
+  }
 }
 
 const LISTS_TABLE_CONFIG: IArchiveTableConfig = {

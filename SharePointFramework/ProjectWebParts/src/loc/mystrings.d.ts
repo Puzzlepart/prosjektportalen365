@@ -237,6 +237,8 @@ declare interface IProjectWebPartsStrings {
   ArchiveSelectAllText: string
   ArchiveNotArchivableText: string
   ArchiveNotArchivableListText: string
+  ArchiveNotArchivableDocumentText: string
+  ArchiveNotArchivableNoDocumentTypeText: string
   ArchiveList: string
   ArchiveDocument: string
   ArchivePhaseTransition: string

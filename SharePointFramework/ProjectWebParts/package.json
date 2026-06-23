@@ -16,6 +16,7 @@
     "build:test": "node ../.tasks/build.js --channel test",
     "build:i18n": "node ../.tasks/build.js --channel i18n",
     "build:kurs": "node ../.tasks/build.js --channel kurs",
+    "build:arkiv": "node ../.tasks/build.js --channel arkiv",
     "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color --fix --config ../.eslintrc.yaml && npm run prettier",
     "prettier": "prettier '**/*.ts*' --write --loglevel silent --config ../.prettierrc.yaml",

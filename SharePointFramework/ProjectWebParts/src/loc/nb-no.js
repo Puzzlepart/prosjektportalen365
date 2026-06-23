@@ -297,6 +297,8 @@ define([], function () {
     ArchiveSelectAllText: 'Velg alle',
     ArchiveNotArchivableText: 'Ikke arkiverbar',
     ArchiveNotArchivableListText: 'Ikke arkiverbar, ingen elementer',
+    ArchiveNotArchivableDocumentText: 'Ikke arkiverbar: dokumenttypen «{0}» er ikke aktivert for arkivering',
+    ArchiveNotArchivableNoDocumentTypeText: 'Ikke arkiverbar: dokumentet mangler dokumenttype',
     ErrorArchiving: 'Feil ved arkivering: {0}',
     ArchiveList: 'Liste: {0}',
     ArchiveDocument: 'Dokument: {0}',
