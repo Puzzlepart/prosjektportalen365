@@ -277,7 +277,9 @@ export class PackageInstaller {
   private static async _download(url: string): Promise<ArrayBuffer> {
     const response = await fetch(url, { method: 'GET' })
     if (!response.ok) {
-      throw new Error(format(strings.CatalogDownloadError, `${response.status} ${response.statusText}`))
+      throw new Error(
+        format(strings.CatalogDownloadError, `${response.status} ${response.statusText}`)
+      )
     }
     return response.arrayBuffer()
   }
@@ -617,9 +619,11 @@ export class PackageInstaller {
     return result
   }
 
-  // Mirrors sp-js-provisioning's own (private, non-exported) OData escaping:
-  // single quotes are doubled. `Title` is package-controlled, so this is
-  // defense-in-depth rather than untrusted-input handling.
+  /**
+   * Mirrors sp-js-provisioning's own (private, non-exported) OData escaping:
+   * single quotes are doubled. `Title` is package-controlled, so this is
+   * defense-in-depth rather than untrusted-input handling.
+   */
   private static _escapeOData(value: string): string {
     return value.replace(/'/g, "''")
   }

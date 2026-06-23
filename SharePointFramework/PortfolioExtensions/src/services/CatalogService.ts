@@ -406,7 +406,9 @@ export class CatalogService {
   private static async _fetchCatalog(url: string): Promise<ICatalog> {
     const response = await CatalogService._fetchWithTimeout(url)
     if (!response.ok) {
-      throw new Error(format(strings.CatalogFetchError, `${response.status} ${response.statusText}`))
+      throw new Error(
+        format(strings.CatalogFetchError, `${response.status} ${response.statusText}`)
+      )
     }
     let json: ICatalog
     try {

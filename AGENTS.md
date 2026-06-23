@@ -29,6 +29,7 @@ This is a thin operational index. The authoritative, detailed conventions live i
 - **Identifiers in English; user-facing text in Norwegian** via the loc bundle. Use the solution's strings module (`PortfolioExtensionsStrings`, `ProjectExtensionsStrings`, …) and `format(strings.Key, …)` for interpolated values — never hard-code user-facing strings, including thrown `Error()` messages that surface in the UI.
 - **Fluent UI v9** (`@fluentui/react-components`); icons via `getFluentIcon` / `getFluentIconWithFallback` from `pp365-shared-library`. Wrap dialogs/drawers in `IdPrefixProvider` + `FluentProvider` with `customLightTheme`.
 - **Styling:** `.module.scss` CSS modules, imported as `styles`, applied via `className={styles.x}`; nest selectors to mirror the component's DOM hierarchy.
+- **Comments:** document symbols (exported functions, hooks, components, interfaces) with **JSDoc** (`/** */`) — a short purpose line, plus `@param`/`@returns` only when non-obvious. Reserve inline `//` comments for non-obvious **why** (rationale, gotchas, framework quirks), not for restating **what** the next line does; keep them tight.
 
 ## Commands
 
