@@ -172,6 +172,8 @@ define([], function () {
     CatalogActionImportTooltip: 'Last ned, provisjonér til hub-området og legg til i Maloppsett',
     CatalogActionUpdateTooltip: 'Hent og installer nyeste versjon',
     CatalogActionPublishCentralTooltip: 'Registrer som skymal uten lokal provisjonering',
+    CatalogActionPublishCentralIncompatibleTooltip:
+      'Kan ikke tilgjengeliggjøres som skymal. Pakken krever innhold på hub-området som en skymal ikke kan sette opp.',
     CatalogActionRemoveTooltip: 'Fjern denne malpakken fra Maloppsett',
     CatalogRemoveConfirmTitle: 'Fjerne malen?',
     CatalogRemoveConfirmText:
@@ -218,10 +220,6 @@ define([], function () {
     CatalogReplaceConfirmText:
       'Tillegget «{0}» finnes allerede i Prosjekttillegg-biblioteket og ble ikke installert fra katalogen. Hvis du fortsetter, erstattes det med katalogversjonen (v{1}), og eventuelle lokale tilpasninger går tapt.',
     CatalogReplaceConfirmButton: 'Erstatt',
-    CatalogPublishCloudWarningTitle: 'Tilgjengeliggjøre som skymal?',
-    CatalogPublishCloudWarningText:
-      'Malen «{0}» krever innhold på hub-området (f.eks. en innholdstype knyttet til Prosjekter-listen) som ikke kan settes opp fra en skymal. Tillegg og listeinnhold vil fungere, men hub-innholdet hoppes over når malen brukes som skymal. Vil du fortsette likevel?',
-    CatalogPublishCloudWarningConfirm: 'Tilgjengeliggjør likevel',
     CatalogStepCheckCompatibility: 'Sjekker kompatibilitet',
     CatalogStepCheckCompatibilityDetail: '{0} konflikt(er) funnet',
     CatalogImportCancelled: 'Importen ble avbrutt',

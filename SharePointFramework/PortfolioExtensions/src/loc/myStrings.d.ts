@@ -171,6 +171,7 @@ declare interface IPortfolioExtensionsStrings {
   CatalogActionImportTooltip: string
   CatalogActionUpdateTooltip: string
   CatalogActionPublishCentralTooltip: string
+  CatalogActionPublishCentralIncompatibleTooltip: string
   CatalogActionRemoveTooltip: string
   CatalogRemoveConfirmTitle: string
   CatalogRemoveConfirmText: string
@@ -208,9 +209,6 @@ declare interface IPortfolioExtensionsStrings {
   CatalogReplaceConfirmTitle: string
   CatalogReplaceConfirmText: string
   CatalogReplaceConfirmButton: string
-  CatalogPublishCloudWarningTitle: string
-  CatalogPublishCloudWarningText: string
-  CatalogPublishCloudWarningConfirm: string
   CatalogStepCheckCompatibility: string
   CatalogStepCheckCompatibilityDetail: string
   CatalogImportCancelled: string

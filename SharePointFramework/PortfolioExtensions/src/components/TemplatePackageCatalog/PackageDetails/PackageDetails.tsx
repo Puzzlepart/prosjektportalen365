@@ -48,8 +48,6 @@ export const PackageDetails: FC = () => {
     onImageError,
     confirmReplace,
     setConfirmReplace,
-    confirmCloud,
-    setConfirmCloud,
     confirmRemove,
     setConfirmRemove,
     rootRef,
@@ -72,6 +70,9 @@ export const PackageDetails: FC = () => {
   // cannot be published as a cloud template and get their own action/info copy.
   const isExtension = pkg.type === 'extension'
   const canPublishCentral = !isCentral && !isExtension
+  // A non-cloud-compatible package can't be published as a cloud template — the
+  // publish button is shown disabled with the reason in its tooltip.
+  const notCloudCompatible = pkg.cloudCompatible === false
   const supported = isSupported(pkg)
   // Same-named extension exists locally but wasn't installed from the catalog —
   // replacing it needs an explicit confirmation.
@@ -137,7 +138,6 @@ export const PackageDetails: FC = () => {
       <PackageRequirementTags package={pkg} />
       <PackageScreenshots screenshots={pkg.screenshots} />
       <PackageContentSummary package={pkg} />
-      <PackageHistory changelogUrl={pkg.changelogUrl} />
 
       {isExtension && <UserMessage intent='info' text={strings.CatalogExtensionInfo} />}
 
@@ -186,14 +186,20 @@ export const PackageDetails: FC = () => {
           </Button>
         </Tooltip>
         {canPublishCentral && (
-          <Tooltip content={strings.CatalogActionPublishCentralTooltip} relationship='description'>
+          <Tooltip
+            content={
+              notCloudCompatible
+                ? pkg.cloudCompatibleReason ?? strings.CatalogActionPublishCentralIncompatibleTooltip
+                : strings.CatalogActionPublishCentralTooltip
+            }
+            relationship='description'
+          >
             <Button
               appearance='secondary'
               disabled={!!state.busyAction}
+              disabledFocusable={notCloudCompatible}
               icon={state.busyAction === 'publish' ? <Spinner size='tiny' /> : <Cloud24Regular />}
-              onClick={() =>
-                pkg.cloudCompatible === false ? setConfirmCloud(true) : publishCentral(pkg)
-              }
+              onClick={() => publishCentral(pkg)}
             >
               {strings.CatalogActionPublishCentral}
             </Button>
@@ -212,6 +218,8 @@ export const PackageDetails: FC = () => {
           </Tooltip>
         )}
       </div>
+
+      <PackageHistory changelogUrl={pkg.changelogUrl} />
 
       <Dialog
         open={confirmReplace}
@@ -237,38 +245,6 @@ export const PackageDetails: FC = () => {
                 }}
               >
                 {strings.CatalogReplaceConfirmButton}
-              </Button>
-            </DialogActions>
-          </DialogBody>
-        </DialogSurface>
-      </Dialog>
-
-      <Dialog
-        open={confirmCloud}
-        onOpenChange={(_, data) => {
-          if (!data.open) setConfirmCloud(false)
-        }}
-      >
-        <DialogSurface>
-          <DialogBody>
-            <DialogTitle>{strings.CatalogPublishCloudWarningTitle}</DialogTitle>
-            <DialogContent>
-              {/* Prefer the package's specific reason (from the catalog entry); fall
-                  back to the generic warning when the package declares none. */}
-              {pkg.cloudCompatibleReason ?? format(strings.CatalogPublishCloudWarningText, pkg.name)}
-            </DialogContent>
-            <DialogActions>
-              <Button appearance='secondary' onClick={() => setConfirmCloud(false)}>
-                {strings.CancelLabel}
-              </Button>
-              <Button
-                appearance='primary'
-                onClick={() => {
-                  setConfirmCloud(false)
-                  void publishCentral(pkg)
-                }}
-              >
-                {strings.CatalogPublishCloudWarningConfirm}
               </Button>
             </DialogActions>
           </DialogBody>

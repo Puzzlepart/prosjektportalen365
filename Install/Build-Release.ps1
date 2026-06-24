@@ -26,6 +26,26 @@ Param(
     [switch]$SkipImportModule
 )  
 
+#region Normalize selected solutions
+# Canonical SPFx solution folder names. The -Solutions parameter (and the
+# [apps-only:<names>] CI commit tag) is matched case- and dash-insensitively
+# against these, so 'SharedLibrary'/'sharedlibrary' resolves to 'shared-library',
+# 'portfolioextensions' to 'PortfolioExtensions', and so on.
+$ALL_SOLUTIONS = @("shared-library", "PortfolioExtensions", "PortfolioWebParts", "ProgramWebParts", "ProjectExtensions", "ProjectWebParts")
+$Solutions = @($Solutions | ForEach-Object {
+        $Name = $_.Trim()
+        $Match = $ALL_SOLUTIONS | Where-Object { ($_ -replace '-', '') -ieq ($Name -replace '-', '') }
+        if ($Match) { $Match } else { Write-Host "[WARNING] Unknown solution '$Name' - skipping" -ForegroundColor Yellow }
+    })
+if ($Solutions.Count -eq 0) {
+    Write-Host "[ERROR] No valid solutions selected. Aborting build of release." -ForegroundColor Red
+    exit 1
+}
+# When all solutions are selected we keep the fast, cached full `rush rebuild`;
+# a subset is built (and packaged) selectively below.
+$BUILD_ALL_SOLUTIONS = ($Solutions.Count -eq $ALL_SOLUTIONS.Count)
+#endregion
+
 #region Variables and functions
 $USE_CHANNEL_CONFIG = -not ([string]::IsNullOrEmpty($Channel))
 $CHANNEL_CONFIG_NAME = "main"
@@ -258,8 +278,24 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
         }
     }
     Set-Location $SHAREPOINT_FRAMEWORK_BASEPATH
-    rush rebuild >$null 2>&1
-    Get-ChildItem "*/sharepoint/solution/" *.sppkg -Recurse -ErrorAction SilentlyContinue | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$RELEASE_PATH/Apps/$_")) } | Copy-Item -Destination $RELEASE_PATH_APPS -Force
+    if ($BUILD_ALL_SOLUTIONS) {
+        rush rebuild >$null 2>&1
+    }
+    else {
+        # Build only the selected solutions (and their local dependencies, via
+        # --to) so an [apps-only:<solution>] run packages just those apps.
+        $RUSH_ARGS = @("rebuild")
+        foreach ($Solution in $Solutions) {
+            $PackageName = (Get-Content "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution/package.json" -Raw | ConvertFrom-Json).name
+            $RUSH_ARGS += @("--to", $PackageName)
+        }
+        rush @RUSH_ARGS >$null 2>&1
+    }
+    # Copy only the selected solutions' .sppkg into the release. Install.ps1
+    # deploys every .sppkg in the Apps folder, so this scopes the deploy too.
+    foreach ($Solution in $Solutions) {
+        Get-ChildItem "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution/sharepoint/solution/" -Filter *.sppkg -ErrorAction SilentlyContinue | Copy-Item -Destination $RELEASE_PATH_APPS -Force
+    }
     if ($USE_CHANNEL_CONFIG) {
         foreach ($Solution in $Solutions) {
             Set-Location "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution"

@@ -7,7 +7,7 @@ import { packageCardId } from '../PackageCard'
  * pane's stateful logic, kept out of the (presentational) component:
  *
  * - broken-thumbnail tracking (reset per package),
- * - the three confirm-dialog flags (reset per package),
+ * - the two confirm-dialog flags (reset per package),
  * - focus management: focus the pane when a package is selected, and return
  *   focus to the originating card when the pane closes (collapsed layout),
  * - the tag-filter shortcut.
@@ -21,7 +21,6 @@ export function usePackageDetails() {
   const { state, selectedPackage, closeDetail, setFilter } = ctx
   const [imageError, setImageError] = useState(false)
   const [confirmReplace, setConfirmReplace] = useState(false)
-  const [confirmCloud, setConfirmCloud] = useState(false)
   const [confirmRemove, setConfirmRemove] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
   const wasDetailOpen = useRef(state.detailOpen)
@@ -29,7 +28,6 @@ export function usePackageDetails() {
   useEffect(() => {
     setImageError(false)
     setConfirmReplace(false)
-    setConfirmCloud(false)
     setConfirmRemove(false)
     if (selectedPackage) rootRef.current?.focus()
   }, [selectedPackage?.id])
@@ -52,8 +50,6 @@ export function usePackageDetails() {
     onImageError: () => setImageError(true),
     confirmReplace,
     setConfirmReplace,
-    confirmCloud,
-    setConfirmCloud,
     confirmRemove,
     setConfirmRemove,
     rootRef,

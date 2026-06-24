@@ -176,6 +176,8 @@ define([], function () {
     CatalogActionImportTooltip: 'Download, provision to the hub site and add to Template Options',
     CatalogActionUpdateTooltip: 'Fetch and install the latest version',
     CatalogActionPublishCentralTooltip: 'Register as a cloud template without local provisioning',
+    CatalogActionPublishCentralIncompatibleTooltip:
+      'Cannot be made available as a cloud template. It needs hub-side content a cloud template cannot set up.',
     CatalogActionRemoveTooltip: 'Remove this template package from Template Options',
     CatalogRemoveConfirmTitle: 'Remove the template?',
     CatalogRemoveConfirmText:
@@ -222,10 +224,6 @@ define([], function () {
     CatalogReplaceConfirmText:
       'The extension "{0}" already exists in the Project Extensions library and was not installed from the catalog. If you continue, it will be replaced with the catalog version (v{1}) and any local customizations will be lost.',
     CatalogReplaceConfirmButton: 'Replace',
-    CatalogPublishCloudWarningTitle: 'Make available as cloud template?',
-    CatalogPublishCloudWarningText:
-      'The template "{0}" requires hub content (e.g. a content type bound to the Projects list) that cannot be set up from a cloud template. Extensions and list content will work, but the hub content is skipped when the template is used as a cloud template. Continue anyway?',
-    CatalogPublishCloudWarningConfirm: 'Make available anyway',
     CatalogStepCheckCompatibility: 'Checking compatibility',
     CatalogStepCheckCompatibilityDetail: '{0} conflict(s) found',
     CatalogImportCancelled: 'The import was cancelled',
