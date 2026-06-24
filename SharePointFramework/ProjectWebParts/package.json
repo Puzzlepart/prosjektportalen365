@@ -69,7 +69,8 @@
     "react-gauge-component": "~1.2.61",
     "shade-blend-color": "~1.0.0",
     "colors-convert": "~1.4.1",
-    "@microsoft/sp-http": "1.17.4"
+    "@microsoft/sp-http": "1.17.4",
+    "sp-js-provisioning": "1.3.13"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.17.4",
