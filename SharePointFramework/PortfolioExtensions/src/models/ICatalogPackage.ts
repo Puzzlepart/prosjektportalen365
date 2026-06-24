@@ -99,6 +99,13 @@ export interface ICatalogPackage {
   cloudCompatible?: boolean
 
   /**
+   * Optional human-readable reason (Norwegian) shown when {@link cloudCompatible}
+   * is `false` — explains what hub-side content blocks cloud use. The catalog
+   * falls back to a generic warning when this is absent.
+   */
+  cloudCompatibleReason?: string
+
+  /**
    * The package requires Bestillingsportalen for full use — shown as a
    * dependency tag in the catalog. Absent = not required.
    */

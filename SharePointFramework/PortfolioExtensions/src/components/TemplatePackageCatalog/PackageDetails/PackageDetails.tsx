@@ -253,7 +253,9 @@ export const PackageDetails: FC = () => {
           <DialogBody>
             <DialogTitle>{strings.CatalogPublishCloudWarningTitle}</DialogTitle>
             <DialogContent>
-              {format(strings.CatalogPublishCloudWarningText, pkg.name)}
+              {/* Prefer the package's specific reason (from the catalog entry); fall
+                  back to the generic warning when the package declares none. */}
+              {pkg.cloudCompatibleReason ?? format(strings.CatalogPublishCloudWarningText, pkg.name)}
             </DialogContent>
             <DialogActions>
               <Button appearance='secondary' onClick={() => setConfirmCloud(false)}>
