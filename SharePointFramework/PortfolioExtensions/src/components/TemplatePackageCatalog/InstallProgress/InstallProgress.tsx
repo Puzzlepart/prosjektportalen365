@@ -1,16 +1,67 @@
-import { Button, ProgressBar, Spinner, Text, Tooltip } from '@fluentui/react-components'
+import {
+  Accordion,
+  AccordionHeader,
+  AccordionItem,
+  AccordionPanel,
+  Badge,
+  Button,
+  makeStyles,
+  mergeClasses,
+  ProgressBar,
+  Spinner,
+  Text,
+  tokens,
+  Tooltip
+} from '@fluentui/react-components'
 import {
   CheckmarkCircle24Filled,
   Circle24Regular,
+  ErrorCircle16Filled,
   ErrorCircle24Filled,
-  SubtractCircle24Regular
+  Info16Regular,
+  SubtractCircle24Regular,
+  Warning16Filled
 } from '@fluentui/react-icons'
 import { UserMessage } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC } from 'react'
-import { InstallStepKey, InstallStepStatus } from 'models'
+import { IInstallLogEntry, InstallStepKey, InstallStepStatus } from 'models'
 import { useCatalogContext } from '../context'
 import styles from './InstallProgress.module.scss'
+
+const useLogStyles = makeStyles({
+  log: {
+    display: 'flex',
+    flexDirection: 'column',
+    rowGap: tokens.spacingVerticalS,
+    maxHeight: '260px',
+    overflowY: 'auto'
+  },
+  group: {
+    display: 'flex',
+    flexDirection: 'column',
+    rowGap: tokens.spacingVerticalXXS
+  },
+  groupHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    columnGap: tokens.spacingHorizontalXS
+  },
+  entry: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    columnGap: tokens.spacingHorizontalXS,
+    paddingLeft: tokens.spacingHorizontalXL,
+    color: tokens.colorNeutralForeground2
+  },
+  entryIcon: {
+    display: 'flex',
+    flexShrink: 0,
+    marginTop: '2px'
+  },
+  entryWarning: { color: tokens.colorPaletteDarkOrangeForeground1 },
+  entryError: { color: tokens.colorPaletteRedForeground1 }
+})
 
 function stepLabel(key: InstallStepKey): string {
   switch (key) {
@@ -73,8 +124,20 @@ const StepIcon: FC<{ status: InstallStepStatus }> = ({ status }) => {
   }
 }
 
+const logLevelIcon = (level: IInstallLogEntry['level']) => {
+  switch (level) {
+    case 'error':
+      return <ErrorCircle16Filled />
+    case 'warning':
+      return <Warning16Filled />
+    default:
+      return <Info16Regular />
+  }
+}
+
 export const InstallProgress: FC = () => {
   const { state, setState, selectedPackage, importPackage } = useCatalogContext()
+  const cls = useLogStyles()
   const progress = state.installProgress
   if (!progress) return null
 
@@ -93,6 +156,8 @@ export const InstallProgress: FC = () => {
     (s) => s.status === 'done' || s.status === 'skipped'
   ).length
   const isTerminal = progress.status === 'success' || progress.status === 'error'
+  // Steps that produced advanced-log entries (what was applied / skipped / failed).
+  const stepsWithLog = progress.steps.filter((s) => (s.entries?.length ?? 0) > 0)
 
   return (
     <div className={styles.root}>
@@ -116,6 +181,50 @@ export const InstallProgress: FC = () => {
           </div>
         ))}
       </div>
+
+      {stepsWithLog.length > 0 && (
+        <Accordion collapsible defaultOpenItems={['log']}>
+          <AccordionItem value='log'>
+            <AccordionHeader>{strings.CatalogAdvancedLogLabel}</AccordionHeader>
+            <AccordionPanel>
+              <div className={cls.log}>
+                {stepsWithLog.map((step) => (
+                  <div key={step.key} className={cls.group}>
+                    <div className={cls.groupHeader}>
+                      <span className={styles.stepIcon}>
+                        <StepIcon status={step.status} />
+                      </span>
+                      <Text size={200} weight='semibold'>
+                        {stepLabel(step.key)}
+                      </Text>
+                      <Badge
+                        appearance='tint'
+                        color={step.status === 'error' ? 'danger' : 'informative'}
+                        size='small'
+                      >
+                        {step.entries.length}
+                      </Badge>
+                    </div>
+                    {step.entries.map((entry, index) => (
+                      <div
+                        key={index}
+                        className={mergeClasses(
+                          cls.entry,
+                          entry.level === 'warning' && cls.entryWarning,
+                          entry.level === 'error' && cls.entryError
+                        )}
+                      >
+                        <span className={cls.entryIcon}>{logLevelIcon(entry.level)}</span>
+                        <Text size={200}>{entry.message}</Text>
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
+      )}
 
       {progress.status === 'success' && (
         <UserMessage

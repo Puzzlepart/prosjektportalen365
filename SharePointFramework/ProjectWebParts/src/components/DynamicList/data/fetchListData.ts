@@ -304,7 +304,7 @@ async function fetchAllItemsChunked(
  * @param item - Raw SharePoint item
  * @param columns - Column definitions with taxonomy termSetId information
  * @param taxonomyTermsMap - Map of termSetId to taxonomy terms for label resolution
- * @returns Transformed item with human-readable values
+ * @returns Transformed item with values
  */
 export function transformListItem(
   item: any,

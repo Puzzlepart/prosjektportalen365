@@ -88,7 +88,7 @@ export class PackageInstaller {
             InstallStepKey.StoreProjectTemplate,
             InstallStepKey.UpdateTemplateOptions
           ]
-    ).map((key) => ({ key, status: 'pending' as InstallStepStatus }))
+    ).map((key) => ({ key, status: 'pending' as InstallStepStatus, entries: [] }))
 
     const progress: IInstallProgress = { steps, status: 'running' }
     const emit = () => onProgress({ ...progress, steps: steps.map((s) => ({ ...s })) })
@@ -101,12 +101,22 @@ export class PackageInstaller {
       if (status === 'running') progress.currentStep = key
       emit()
     }
+    // Append a granular line to a step's advanced log (what was applied / skipped / failed).
+    const addLog = (
+      key: InstallStepKey,
+      message: string,
+      level: 'info' | 'warning' | 'error' = 'info'
+    ) => {
+      steps.find((s) => s.key === key)?.entries.push({ message, level })
+      emit()
+    }
 
     emit()
     try {
       setStatus(InstallStepKey.Download, 'running')
       const buffer = await PackageInstaller._download(pkg.downloadUrl)
       setStatus(InstallStepKey.Download, 'done')
+      addLog(InstallStepKey.Download, strings.CatalogLogDownloaded)
 
       setStatus(InstallStepKey.Unzip, 'running')
       const zip = await PackageInstaller._unzip(buffer)
@@ -123,6 +133,10 @@ export class PackageInstaller {
         locale
       )
       setStatus(InstallStepKey.ValidateManifest, 'done')
+      addLog(
+        InstallStepKey.ValidateManifest,
+        format(strings.CatalogLogManifestValidated, manifest.name, manifest.version)
+      )
 
       setStatus(InstallStepKey.CheckVersion, 'running')
       const versionDetail = await PackageInstaller._checkVersion(manifest)
@@ -134,6 +148,9 @@ export class PackageInstaller {
         // admin choice.
         setStatus(InstallStepKey.Extensions, 'running')
         const added = await PackageInstaller._addProjectExtensions(zip, manifest)
+        added.forEach((e) =>
+          addLog(InstallStepKey.Extensions, format(strings.CatalogLogExtensionAdded, e.name))
+        )
         setStatus(
           InstallStepKey.Extensions,
           'done',
@@ -153,6 +170,7 @@ export class PackageInstaller {
       if (report.hasConflicts) {
         const detail = format(strings.CatalogStepCheckCompatibilityDetail, report.conflicts.length)
         setStatus(InstallStepKey.CheckCompatibility, 'running', detail)
+        addLog(InstallStepKey.CheckCompatibility, detail, 'warning')
         const proceed = options.onConflicts ? await options.onConflicts(report) : true
         if (!proceed) {
           setStatus(InstallStepKey.CheckCompatibility, 'error', strings.CatalogImportCancelled)
@@ -200,6 +218,7 @@ export class PackageInstaller {
       setStatus(InstallStepKey.ProvisionHub, 'running')
       await PackageInstaller._provisionHub(zip, manifest, context, enableTaxonomy, report)
       setStatus(InstallStepKey.ProvisionHub, 'done')
+      addLog(InstallStepKey.ProvisionHub, strings.CatalogLogHubProvisioned)
 
       // An enabled-but-no-taxonomy package makes the Taxonomy step a no-op
       // success; a genuine term-store write failure is reported by ProvisionHub.
@@ -208,6 +227,9 @@ export class PackageInstaller {
         enableTaxonomy ? 'done' : 'skipped',
         enableTaxonomy ? undefined : strings.CatalogStepSkippedFeatureFlag
       )
+      if (packageHasTaxonomy) addLog(InstallStepKey.Taxonomy, strings.CatalogLogTaxonomyApplied)
+      else if (!enableTaxonomy)
+        addLog(InstallStepKey.Taxonomy, strings.CatalogStepSkippedFeatureFlag)
 
       // Add the template's bundled project extensions to the Prosjekttillegg
       // library (if any), so they can be linked from the Maloppsett item below.
@@ -215,6 +237,9 @@ export class PackageInstaller {
       setStatus(InstallStepKey.Extensions, 'running')
       if ((manifest.provisioning?.extensions?.length ?? 0) > 0) {
         extensionItems = await PackageInstaller._addProjectExtensions(zip, manifest)
+        extensionItems.forEach((e) =>
+          addLog(InstallStepKey.Extensions, format(strings.CatalogLogExtensionAdded, e.name))
+        )
         setStatus(
           InstallStepKey.Extensions,
           'done',
@@ -232,6 +257,9 @@ export class PackageInstaller {
       setStatus(InstallStepKey.ListContent, 'running')
       if ((manifest.provisioning?.listContent?.length ?? 0) > 0) {
         listContentItems = await PackageInstaller._addListContentConfigs(manifest)
+        listContentItems.forEach((l) =>
+          addLog(InstallStepKey.ListContent, format(strings.CatalogLogListContentAdded, l.title))
+        )
         setStatus(
           InstallStepKey.ListContent,
           'done',
@@ -244,6 +272,7 @@ export class PackageInstaller {
       setStatus(InstallStepKey.StoreProjectTemplate, 'running')
       const stored = await PackageInstaller._storeProjectFiles(zip, manifest)
       setStatus(InstallStepKey.StoreProjectTemplate, stored ? 'done' : 'skipped')
+      if (stored) addLog(InstallStepKey.StoreProjectTemplate, strings.CatalogLogStored)
 
       setStatus(InstallStepKey.UpdateTemplateOptions, 'running')
       await TemplateOptionsService.upsertImported(pkg, existingItemId, {
@@ -256,6 +285,7 @@ export class PackageInstaller {
         description: localizedDescription
       })
       setStatus(InstallStepKey.UpdateTemplateOptions, 'done')
+      addLog(InstallStepKey.UpdateTemplateOptions, strings.CatalogLogTemplateOptionsUpdated)
 
       progress.status = 'success'
       progress.currentStep = undefined
@@ -266,6 +296,10 @@ export class PackageInstaller {
       if (running) {
         running.status = 'error'
         running.detail = error?.message
+        running.entries.push({
+          message: error?.message ?? strings.CatalogInstallErrorTitle,
+          level: 'error'
+        })
       }
       progress.status = 'error'
       progress.error = error?.message

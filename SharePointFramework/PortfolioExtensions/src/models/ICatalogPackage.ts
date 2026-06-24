@@ -20,7 +20,7 @@ export interface ICatalogPackage {
   id: string
 
   /**
-   * Human-readable package name.
+   * Package name.
    */
   name: string
 
@@ -99,7 +99,7 @@ export interface ICatalogPackage {
   cloudCompatible?: boolean
 
   /**
-   * Optional human-readable reason (Norwegian) shown when {@link cloudCompatible}
+   * Optional reason (Norwegian) shown when {@link cloudCompatible}
    * is `false` — explains what hub-side content blocks cloud use. The catalog
    * falls back to a generic warning when this is absent.
    */

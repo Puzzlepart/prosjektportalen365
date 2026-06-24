@@ -37,7 +37,7 @@ export interface ICompatibilityConflict {
   /** What currently exists on the hub (the mismatch), when relevant. */
   existingName?: string
   resolution: ConflictResolution
-  /** Localized, human-readable description of the conflict. */
+  /** Localized description of the conflict. */
   detail: string
 }
 

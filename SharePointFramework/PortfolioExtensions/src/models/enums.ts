@@ -49,6 +49,15 @@ export enum InstallStepKey {
 export type InstallStepStatus = 'pending' | 'running' | 'done' | 'skipped' | 'error'
 
 /**
+ * A single granular line in the advanced install log, attributed to an install
+ * step — what was applied, skipped or failed.
+ */
+export interface IInstallLogEntry {
+  message: string
+  level: 'info' | 'warning' | 'error'
+}
+
+/**
  * State of a single install step.
  */
 export interface IInstallStep {
@@ -59,6 +68,11 @@ export interface IInstallStep {
    * taxonomy step, or an error message).
    */
   detail?: string
+  /**
+   * Granular log lines for this step, shown in the advanced log (what was
+   * applied, skipped or failed).
+   */
+  entries: IInstallLogEntry[]
 }
 
 /**

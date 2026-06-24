@@ -41,9 +41,6 @@ if ($Solutions.Count -eq 0) {
     Write-Host "[ERROR] No valid solutions selected. Aborting build of release." -ForegroundColor Red
     exit 1
 }
-# When all solutions are selected we keep the fast, cached full `rush rebuild`;
-# a subset is built (and packaged) selectively below.
-$BUILD_ALL_SOLUTIONS = ($Solutions.Count -eq $ALL_SOLUTIONS.Count)
 #endregion
 
 #region Variables and functions
@@ -278,24 +275,24 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
         }
     }
     Set-Location $SHAREPOINT_FRAMEWORK_BASEPATH
-    if ($BUILD_ALL_SOLUTIONS) {
-        rush rebuild >$null 2>&1
-    }
-    else {
-        # Build only the selected solutions (and their local dependencies, via
-        # --to) so an [apps-only:<solution>] run packages just those apps.
-        $RUSH_ARGS = @("rebuild")
-        foreach ($Solution in $Solutions) {
-            $PackageName = (Get-Content "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution/package.json" -Raw | ConvertFrom-Json).name
-            $RUSH_ARGS += @("--to", $PackageName)
-        }
-        rush @RUSH_ARGS >$null 2>&1
-    }
-    # Copy only the selected solutions' .sppkg into the release. Install.ps1
-    # deploys every .sppkg in the Apps folder, so this scopes the deploy too.
+    # Always run the full, dependency-ordered `rush rebuild`. Building a subset
+    # with `rush --to <project>` did not reliably emit the .sppkg in CI (shared-library
+    # is a workspace-linked dependency), so the scope is applied at the *packaging*
+    # step below instead: only the selected solutions' .sppkg are copied into the
+    # release, and Install.ps1 deploys every .sppkg in the Apps folder — so an
+    # [apps-only:<solution>] run still packages and deploys only those apps.
+    rush rebuild >$null 2>&1
     foreach ($Solution in $Solutions) {
         Get-ChildItem "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution/sharepoint/solution/" -Filter *.sppkg -ErrorAction SilentlyContinue | Copy-Item -Destination $RELEASE_PATH_APPS -Force
     }
+    # Fail loudly rather than ship a release with no apps (e.g. a build failure
+    # hidden by the redirection above, or an unrecognised solution name).
+    $PackagedApps = @(Get-ChildItem "$RELEASE_PATH_APPS" -Filter *.sppkg -ErrorAction SilentlyContinue)
+    if ($PackagedApps.Count -eq 0) {
+        Write-Host "[ERROR] No .sppkg were packaged for solutions: $($Solutions -join ', '). Aborting." -ForegroundColor Red
+        exit 1
+    }
+    Write-Host "Packaged $($PackagedApps.Count) app(s): $(($PackagedApps | ForEach-Object { $_.Name }) -join ', ')" -ForegroundColor Green
     if ($USE_CHANNEL_CONFIG) {
         foreach ($Solution in $Solutions) {
             Set-Location "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution"

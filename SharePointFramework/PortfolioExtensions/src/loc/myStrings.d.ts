@@ -134,6 +134,15 @@ declare interface IPortfolioExtensionsStrings {
   CatalogStepContent: string
   CatalogStepListContent: string
   CatalogStepListContentDetail: string
+  CatalogAdvancedLogLabel: string
+  CatalogLogDownloaded: string
+  CatalogLogManifestValidated: string
+  CatalogLogHubProvisioned: string
+  CatalogLogTaxonomyApplied: string
+  CatalogLogExtensionAdded: string
+  CatalogLogListContentAdded: string
+  CatalogLogStored: string
+  CatalogLogTemplateOptionsUpdated: string
   CatalogStepUpdateTemplateOptions: string
   CatalogStepSkippedFeatureFlag: string
   CatalogInstallSuccessTitle: string

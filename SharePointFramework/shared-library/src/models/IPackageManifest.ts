@@ -126,7 +126,7 @@ export interface IPackageManifest {
    */
   cloudCompatible?: boolean
   /**
-   * Optional human-readable reason (Norwegian) shown when {@link cloudCompatible}
+   * Optional reason (Norwegian) shown when {@link cloudCompatible}
    * is `false` — explains what hub-side content blocks cloud use.
    */
   cloudCompatibleReason?: string
