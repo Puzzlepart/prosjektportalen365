@@ -1,3 +1,19 @@
+<#
+Applies a versioned PnP upgrade template (Templates/<version>.pnp). Skipped when
+template application is turned off via -SkipTemplate — e.g. an [apps-only] release,
+which is built with -SkipBuildPnPTemplates and therefore ships no .pnp templates.
+Mirrors the main template gate in Install.ps1.
+#>
+function ApplyUpgradeTemplate([string]$Version) {
+    if ($SkipTemplate.IsPresent) {
+        Write-Host "[INFO] Skipping PnP upgrade template [$Version] (-SkipTemplate)" -ForegroundColor Yellow
+        return
+    }
+    Write-Host "[INFO] Applying PnP upgrade template [$Version] to [$Url]"
+    Invoke-PnPSiteTemplate -Path "$TemplatesBasePath/$Version.pnp" -ErrorAction Stop
+    Write-Host "[SUCCESS] Successfully applied PnP template [$Version] to [$Url]" -ForegroundColor Green
+}
+
 $InstallationEntriesList = Get-PnPList -Identity (Get-Resource -Name "Lists_InstallationLog_Title") -ErrorAction Stop
 $LastInstall = Get-PnPListItem -List $InstallationEntriesList.Id -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>" | Select-Object -First 1 -Wait
 if ($null -ne $LastInstall) {
@@ -21,9 +37,7 @@ if ($null -ne $LastInstall) {
     }
 
     if ($PreviousVersion -lt [version]"1.5.0") {
-        Write-Host "[INFO] Applying PnP upgrade template [1.5.0] to [$Url]"
-        Invoke-PnPSiteTemplate -Path "$TemplatesBasePath/1.5.0.pnp" -ErrorAction Stop
-        Write-Host "[SUCCESS] Successfully applied PnP template [1.5.0] to [$Url]" -ForegroundColor Green
+        ApplyUpgradeTemplate "1.5.0"
     }
     
     if ($PreviousVersion -lt [version]"1.7.0") {
@@ -43,9 +57,7 @@ if ($null -ne $LastInstall) {
     }
 
     if ($PreviousVersion -lt [version]"1.8.2") {
-        Write-Host "[INFO] Applying PnP upgrade template [$TemplatesBasePath/1.8.1.pnp] to [$Url]"
-        Invoke-PnPSiteTemplate -Path "$TemplatesBasePath/1.8.1.pnp" -ErrorAction Stop
-        Write-Host "[SUCCESS] Successfully applied PnP template [1.8.1] to [$Url]" -ForegroundColor Green
+        ApplyUpgradeTemplate "1.8.1"
     }
 
     if ($PreviousVersion -lt [version]"1.9.1") {
@@ -98,9 +110,7 @@ if ($null -ne $LastInstall) {
     }
 
     if ($PreviousVersion -lt [version]"1.12.0") {
-        Write-Host "[INFO] Applying PnP upgrade template [1.12.0] to [$Url]"
-        Invoke-PnPSiteTemplate -Path "$TemplatesBasePath/1.12.0.pnp" -ErrorAction Stop
-        Write-Host "[SUCCESS] Successfully applied PnP template [1.12.0] to [$Url]" -ForegroundColor Green
+        ApplyUpgradeTemplate "1.12.0"
     }
 
     if ($PreviousVersion -lt [version]"1.13.0") {
@@ -250,9 +260,7 @@ if ($null -ne $LastInstall) {
     }
 
     if ($PreviousVersion -lt [version]"1.14.0") {
-        Write-Host "[INFO] Applying PnP upgrade template [1.14.0] to [$Url]"
-        Invoke-PnPSiteTemplate -Path "$TemplatesBasePath/1.14.0.pnp" -ErrorAction Stop
-        Write-Host "[SUCCESS] Successfully applied PnP template [1.14.0] to [$Url]" -ForegroundColor Green
+        ApplyUpgradeTemplate "1.14.0"
 
         Write-Host "[INFO] Removing duplicate 'Konfigurasjon av Prosjektportalen' Site Settings links"
         Get-PnPCustomAction -Scope Web |
