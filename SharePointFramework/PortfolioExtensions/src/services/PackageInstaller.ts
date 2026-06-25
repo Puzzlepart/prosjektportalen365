@@ -1,6 +1,6 @@
 import { format } from '@fluentui/react/lib/Utilities'
 import { ListViewCommandSetContext } from '@microsoft/sp-listview-extensibility'
-import { Logger, LogLevel } from '@pnp/logging'
+import { FunctionListener, Logger, LogLevel } from '@pnp/logging'
 import '@pnp/sp/webs'
 import '@pnp/sp/lists'
 import '@pnp/sp/folders'
@@ -28,6 +28,32 @@ import { isNewerVersion } from './version'
  * provisioning assets are stored for later use by the setup wizard (Phase 3).
  */
 const PACKAGE_STORE_FOLDER = 'pp-packages'
+
+/**
+ * Routes every PnP `Logger` line (sp-js-provisioning's per-field / per-content-type /
+ * per-list / per-term output, plus our own) into the active install step's advanced
+ * log while an import is running. Subscribed once; a no-op until an import sets
+ * `_logCapture`, and cleared again when the import ends.
+ */
+let _logCapture: ((message: string, level: 'info' | 'warning' | 'error') => void) | undefined
+let _logCaptureSubscribed = false
+function ensureLogCaptureSubscribed(): void {
+  if (_logCaptureSubscribed) return
+  _logCaptureSubscribed = true
+  Logger.subscribe(
+    FunctionListener((entry) => {
+      if (!_logCapture || !entry || !entry.message) return
+      const level =
+        entry.level === LogLevel.Error
+          ? 'error'
+          : entry.level === LogLevel.Warning
+          ? 'warning'
+          : 'info'
+      // Drop the redundant catalog prefix; keep the handler/scope context.
+      _logCapture(`${entry.message}`.replace(/^\(TemplatePackageCatalog\)\s*/, ''), level)
+    })
+  )
+}
 
 export interface IPackageInstallOptions {
   package: ICatalogPackage
@@ -109,6 +135,23 @@ export class PackageInstaller {
     ) => {
       steps.find((s) => s.key === key)?.entries.push({ message, level })
       emit()
+    }
+    // Mirror every provisioning log line (each field, content type, list, view,
+    // term, folder, …) into the running step's advanced log, throttling the
+    // re-render so a chatty template doesn't stall the UI.
+    ensureLogCaptureSubscribed()
+    let emitScheduled = false
+    _logCapture = (message, level) => {
+      const key = progress.currentStep
+      const step = key ? steps.find((s) => s.key === key) : undefined
+      if (!step) return
+      step.entries.push({ message, level })
+      if (emitScheduled) return
+      emitScheduled = true
+      setTimeout(() => {
+        emitScheduled = false
+        emit()
+      }, 150)
     }
 
     emit()
@@ -305,6 +348,8 @@ export class PackageInstaller {
       progress.error = error?.message
       emit()
       throw error
+    } finally {
+      _logCapture = undefined
     }
   }
 

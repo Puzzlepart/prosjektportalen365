@@ -24,7 +24,7 @@ import {
 } from '@fluentui/react-icons'
 import { UserMessage } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
-import React, { FC } from 'react'
+import React, { FC, useEffect, useRef } from 'react'
 import { IInstallLogEntry, InstallStepKey, InstallStepStatus } from 'models'
 import { useCatalogContext } from '../context'
 import styles from './InstallProgress.module.scss'
@@ -139,6 +139,15 @@ export const InstallProgress: FC = () => {
   const { state, setState, selectedPackage, importPackage } = useCatalogContext()
   const cls = useLogStyles()
   const progress = state.installProgress
+  // Keep the advanced log scrolled to the latest line as entries stream in.
+  const logRef = useRef<HTMLDivElement>(null)
+  const totalLogEntries = (progress?.steps ?? []).reduce(
+    (count, step) => count + (step.entries?.length ?? 0),
+    0
+  )
+  useEffect(() => {
+    if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight
+  }, [totalLogEntries])
   if (!progress) return null
 
   const isExtension = selectedPackage?.type === 'extension'
@@ -187,7 +196,7 @@ export const InstallProgress: FC = () => {
           <AccordionItem value='log'>
             <AccordionHeader>{strings.CatalogAdvancedLogLabel}</AccordionHeader>
             <AccordionPanel>
-              <div className={cls.log}>
+              <div ref={logRef} className={cls.log}>
                 {stepsWithLog.map((step) => (
                   <div key={step.key} className={cls.group}>
                     <div className={cls.groupHeader}>
