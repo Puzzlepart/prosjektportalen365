@@ -31,9 +31,9 @@ const PACKAGE_STORE_FOLDER = 'pp-packages'
 
 /**
  * Routes every PnP `Logger` line (sp-js-provisioning's per-field / per-content-type /
- * per-list / per-term output, plus our own) into the active install step's advanced
- * log while an import is running. Subscribed once; a no-op until an import sets
- * `_logCapture`, and cleared again when the import ends.
+ * per-list / per-term output, plus our own) into the grouped advanced log while an
+ * import is running. Subscribed once; a no-op until an import sets `_logCapture`,
+ * and cleared again when the import ends.
  */
 let _logCapture: ((message: string, level: 'info' | 'warning' | 'error') => void) | undefined
 let _logCaptureSubscribed = false
@@ -49,8 +49,12 @@ function ensureLogCaptureSubscribed(): void {
           : entry.level === LogLevel.Warning
           ? 'warning'
           : 'info'
-      // Drop the redundant catalog prefix; keep the handler/scope context.
-      _logCapture(`${entry.message}`.replace(/^\(TemplatePackageCatalog\)\s*/, ''), level)
+      // Drop the redundant catalog prefix (and the optional cloud marker) so the
+      // leading "(Handler):" stays first — that's what the advanced log groups on.
+      _logCapture(
+        `${entry.message}`.replace(/^\(TemplatePackageCatalog\)\s*(\(Cloud\)\s*)?/, ''),
+        level
+      )
     })
   )
 }
@@ -114,9 +118,9 @@ export class PackageInstaller {
             InstallStepKey.StoreProjectTemplate,
             InstallStepKey.UpdateTemplateOptions
           ]
-    ).map((key) => ({ key, status: 'pending' as InstallStepStatus, entries: [] }))
+    ).map((key) => ({ key, status: 'pending' as InstallStepStatus }))
 
-    const progress: IInstallProgress = { steps, status: 'running' }
+    const progress: IInstallProgress = { steps, status: 'running', log: [] }
     const emit = () => onProgress({ ...progress, steps: steps.map((s) => ({ ...s })) })
     const setStatus = (key: InstallStepKey, status: InstallStepStatus, detail?: string) => {
       const step = steps.find((s) => s.key === key)
@@ -127,25 +131,42 @@ export class PackageInstaller {
       if (status === 'running') progress.currentStep = key
       emit()
     }
-    // Append a granular line to a step's advanced log (what was applied / skipped / failed).
+    // Localized advanced-log group name for a curated (non-handler) line.
+    const STEP_GROUP: Partial<Record<InstallStepKey, string>> = {
+      [InstallStepKey.Download]: strings.CatalogStepDownload,
+      [InstallStepKey.ValidateManifest]: strings.CatalogStepValidateManifest,
+      [InstallStepKey.CheckCompatibility]: strings.CatalogStepCheckCompatibility,
+      [InstallStepKey.ProvisionHub]: strings.CatalogStepProvisionHub,
+      [InstallStepKey.Taxonomy]: strings.CatalogStepTaxonomy,
+      [InstallStepKey.Extensions]: strings.CatalogStepExtensions,
+      [InstallStepKey.ListContent]: strings.CatalogStepListContent,
+      [InstallStepKey.StoreProjectTemplate]: strings.CatalogStepStoreProjectTemplate,
+      [InstallStepKey.UpdateTemplateOptions]: strings.CatalogStepUpdateTemplateOptions
+    }
+    // The group of the most recent log line — the group the UI auto-expands.
+    let lastGroup: string | undefined
+    // Append a curated advanced-log line, grouped under its install phase.
     const addLog = (
       key: InstallStepKey,
       message: string,
       level: 'info' | 'warning' | 'error' = 'info'
     ) => {
-      steps.find((s) => s.key === key)?.entries.push({ message, level })
+      const group = STEP_GROUP[key] ?? `${key}`
+      lastGroup = group
+      progress.log.push({ group, message, level })
       emit()
     }
     // Mirror every provisioning log line (each field, content type, list, view,
-    // term, folder, …) into the running step's advanced log, throttling the
-    // re-render so a chatty template doesn't stall the UI.
+    // term, folder, …) into the advanced log, grouped by its handler type (the
+    // leading "(Type):" of the message). Throttle the re-render so a chatty
+    // template doesn't stall the UI.
     ensureLogCaptureSubscribed()
     let emitScheduled = false
     _logCapture = (message, level) => {
-      const key = progress.currentStep
-      const step = key ? steps.find((s) => s.key === key) : undefined
-      if (!step) return
-      step.entries.push({ message, level })
+      const match = /^\(([^)]+)\)\s*:?\s*([\s\S]*)$/.exec(message)
+      const group = match ? match[1] : strings.CatalogStepProvisionHub
+      lastGroup = group
+      progress.log.push({ group, message: (match && match[2]) || message, level })
       if (emitScheduled) return
       emitScheduled = true
       setTimeout(() => {
@@ -339,11 +360,12 @@ export class PackageInstaller {
       if (running) {
         running.status = 'error'
         running.detail = error?.message
-        running.entries.push({
-          message: error?.message ?? strings.CatalogInstallErrorTitle,
-          level: 'error'
-        })
       }
+      progress.log.push({
+        group: lastGroup ?? (STEP_GROUP[InstallStepKey.ProvisionHub] as string),
+        message: error?.message ?? strings.CatalogInstallErrorTitle,
+        level: 'error'
+      })
       progress.status = 'error'
       progress.error = error?.message
       emit()

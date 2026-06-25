@@ -49,10 +49,13 @@ export enum InstallStepKey {
 export type InstallStepStatus = 'pending' | 'running' | 'done' | 'skipped' | 'error'
 
 /**
- * A single granular line in the advanced install log, attributed to an install
- * step — what was applied, skipped or failed.
+ * A single granular line in the advanced install log. `group` is the type it
+ * belongs to (a provisioning handler such as `Lists`, `SiteFields`,
+ * `ContentTypes`, `Taxonomy`, `Files`, or a localized install-phase label),
+ * which the advanced log uses to group and collapse entries like ProjectSetup.
  */
 export interface IInstallLogEntry {
+  group: string
   message: string
   level: 'info' | 'warning' | 'error'
 }
@@ -68,11 +71,6 @@ export interface IInstallStep {
    * taxonomy step, or an error message).
    */
   detail?: string
-  /**
-   * Granular log lines for this step, shown in the advanced log (what was
-   * applied, skipped or failed).
-   */
-  entries: IInstallLogEntry[]
 }
 
 /**
@@ -82,6 +80,11 @@ export interface IInstallProgress {
   steps: IInstallStep[]
   currentStep?: InstallStepKey
   status: 'running' | 'success' | 'error'
+  /**
+   * Flat, ordered advanced-log lines (grouped by {@link IInstallLogEntry.group}
+   * in the UI). Captures every provisioning line plus curated step notes.
+   */
+  log: IInstallLogEntry[]
   /**
    * Terminal error message (when `status === 'error'`).
    */

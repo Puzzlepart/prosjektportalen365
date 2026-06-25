@@ -15,6 +15,8 @@ import {
 } from '@fluentui/react-components'
 import {
   CheckmarkCircle24Filled,
+  ChevronDown16Regular,
+  ChevronUp16Regular,
   Circle24Regular,
   ErrorCircle16Filled,
   ErrorCircle24Filled,
@@ -24,23 +26,20 @@ import {
 } from '@fluentui/react-icons'
 import { UserMessage } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
-import React, { FC, useEffect, useRef } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import { IInstallLogEntry, InstallStepKey, InstallStepStatus } from 'models'
 import { useCatalogContext } from '../context'
 import styles from './InstallProgress.module.scss'
 
 const useLogStyles = makeStyles({
-  log: {
+  logSection: {
     display: 'flex',
     flexDirection: 'column',
-    rowGap: tokens.spacingVerticalS,
+    rowGap: tokens.spacingVerticalXS
+  },
+  log: {
     maxHeight: '260px',
     overflowY: 'auto'
-  },
-  group: {
-    display: 'flex',
-    flexDirection: 'column',
-    rowGap: tokens.spacingVerticalXXS
   },
   groupHeader: {
     display: 'flex',
@@ -51,7 +50,7 @@ const useLogStyles = makeStyles({
     display: 'flex',
     alignItems: 'flex-start',
     columnGap: tokens.spacingHorizontalXS,
-    paddingLeft: tokens.spacingHorizontalXL,
+    paddingLeft: tokens.spacingHorizontalL,
     color: tokens.colorNeutralForeground2
   },
   entryIcon: {
@@ -138,13 +137,11 @@ const logLevelIcon = (level: IInstallLogEntry['level']) => {
 export const InstallProgress: FC = () => {
   const { state, setState, selectedPackage, importPackage } = useCatalogContext()
   const cls = useLogStyles()
-  const progress = state.installProgress
-  // Keep the advanced log scrolled to the latest line as entries stream in.
+  // Advanced log is collapsed by default (like ProjectSetup); auto-expands on error.
+  const [logExpanded, setLogExpanded] = useState(false)
   const logRef = useRef<HTMLDivElement>(null)
-  const totalLogEntries = (progress?.steps ?? []).reduce(
-    (count, step) => count + (step.entries?.length ?? 0),
-    0
-  )
+  const progress = state.installProgress
+  const totalLogEntries = progress?.log?.length ?? 0
   useEffect(() => {
     if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight
   }, [totalLogEntries])
@@ -165,8 +162,36 @@ export const InstallProgress: FC = () => {
     (s) => s.status === 'done' || s.status === 'skipped'
   ).length
   const isTerminal = progress.status === 'success' || progress.status === 'error'
-  // Steps that produced advanced-log entries (what was applied / skipped / failed).
-  const stepsWithLog = progress.steps.filter((s) => (s.entries?.length ?? 0) > 0)
+
+  // Group the advanced-log lines by type (handler / install phase), preserving
+  // first-seen order — like ProjectSetup's advanced log.
+  const logGroups: { name: string; entries: IInstallLogEntry[] }[] = []
+  const groupIndex = new Map<string, number>()
+  for (const entry of progress.log) {
+    let index = groupIndex.get(entry.group)
+    if (index === undefined) {
+      index = logGroups.length
+      groupIndex.set(entry.group, index)
+      logGroups.push({ name: entry.group, entries: [] })
+    }
+    logGroups[index].entries.push(entry)
+  }
+  const activeGroup = progress.log.length
+    ? progress.log[progress.log.length - 1].group
+    : undefined
+  const groupStatus = (group: { name: string; entries: IInstallLogEntry[] }): InstallStepStatus => {
+    if (group.entries.some((e) => e.level === 'error')) return 'error'
+    if (!isTerminal && group.name === activeGroup) return 'running'
+    return 'done'
+  }
+  // While running: only the active (and any errored) group is expanded — so it
+  // expands as provisioning enters it and collapses when the next begins. Once
+  // finished, expand everything for review.
+  const openLogItems = isTerminal
+    ? logGroups.map((g) => g.name)
+    : logGroups.filter((g) => groupStatus(g) !== 'done').map((g) => g.name)
+  const hasLogError = logGroups.some((g) => g.entries.some((e) => e.level === 'error'))
+  const isLogExpanded = logExpanded || hasLogError
 
   return (
     <div className={styles.root}>
@@ -191,48 +216,62 @@ export const InstallProgress: FC = () => {
         ))}
       </div>
 
-      {stepsWithLog.length > 0 && (
-        <Accordion collapsible defaultOpenItems={['log']}>
-          <AccordionItem value='log'>
-            <AccordionHeader>{strings.CatalogAdvancedLogLabel}</AccordionHeader>
-            <AccordionPanel>
-              <div ref={logRef} className={cls.log}>
-                {stepsWithLog.map((step) => (
-                  <div key={step.key} className={cls.group}>
-                    <div className={cls.groupHeader}>
-                      <span className={styles.stepIcon}>
-                        <StepIcon status={step.status} />
-                      </span>
-                      <Text size={200} weight='semibold'>
-                        {stepLabel(step.key)}
-                      </Text>
-                      <Badge
-                        appearance='tint'
-                        color={step.status === 'error' ? 'danger' : 'informative'}
-                        size='small'
-                      >
-                        {step.entries.length}
-                      </Badge>
-                    </div>
-                    {step.entries.map((entry, index) => (
-                      <div
-                        key={index}
-                        className={mergeClasses(
-                          cls.entry,
-                          entry.level === 'warning' && cls.entryWarning,
-                          entry.level === 'error' && cls.entryError
-                        )}
-                      >
-                        <span className={cls.entryIcon}>{logLevelIcon(entry.level)}</span>
-                        <Text size={200}>{entry.message}</Text>
-                      </div>
-                    ))}
-                  </div>
-                ))}
-              </div>
-            </AccordionPanel>
-          </AccordionItem>
-        </Accordion>
+      {logGroups.length > 0 && (
+        <div className={cls.logSection}>
+          <Button
+            appearance='subtle'
+            size='small'
+            icon={isLogExpanded ? <ChevronUp16Regular /> : <ChevronDown16Regular />}
+            onClick={() => setLogExpanded(!logExpanded)}
+          >
+            {strings.CatalogAdvancedLogLabel}
+          </Button>
+          {isLogExpanded && (
+            <div ref={logRef} className={cls.log}>
+              <Accordion multiple collapsible openItems={openLogItems}>
+                {logGroups.map((group) => {
+                  const status = groupStatus(group)
+                  return (
+                    <AccordionItem key={group.name} value={group.name}>
+                      <AccordionHeader>
+                        <span className={cls.groupHeader}>
+                          <span className={styles.stepIcon}>
+                            <StepIcon status={status} />
+                          </span>
+                          <Text size={200} weight='semibold'>
+                            {group.name}
+                          </Text>
+                          <Badge
+                            appearance='tint'
+                            color={status === 'error' ? 'danger' : 'informative'}
+                            size='small'
+                          >
+                            {group.entries.length}
+                          </Badge>
+                        </span>
+                      </AccordionHeader>
+                      <AccordionPanel>
+                        {group.entries.map((entry, index) => (
+                          <div
+                            key={index}
+                            className={mergeClasses(
+                              cls.entry,
+                              entry.level === 'warning' && cls.entryWarning,
+                              entry.level === 'error' && cls.entryError
+                            )}
+                          >
+                            <span className={cls.entryIcon}>{logLevelIcon(entry.level)}</span>
+                            <Text size={200}>{entry.message}</Text>
+                          </div>
+                        ))}
+                      </AccordionPanel>
+                    </AccordionItem>
+                  )
+                })}
+              </Accordion>
+            </div>
+          )}
+        </div>
       )}
 
       {progress.status === 'success' && (
