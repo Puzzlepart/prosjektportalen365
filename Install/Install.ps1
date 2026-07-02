@@ -43,8 +43,6 @@ Param(
     [string]$Tenant,
     [Parameter(Mandatory = $false, HelpMessage = "Base64 encoded certificate")]
     [string]$CertificateBase64Encoded,
-    [Parameter(Mandatory = $false, HelpMessage = "Do you want to include Bygg & Anlegg content (only when upgrading)")]
-    [switch]$IncludeBAContent,
     [Parameter(Mandatory = $false, HelpMessage = "Which handlers to exclude when performing an upgrade")]
     [string[]]$UpgradeExcludeHandlers = @("Navigation", "SupportedUILanguages", "Files")
 )
@@ -486,17 +484,7 @@ if (-not $SkipTemplate.IsPresent) {
         if (-not $SkipTaxonomy.IsPresent -and -not $Upgrade.IsPresent) {
             StartAction("Applying PnP template Taxonomy to $($Uri.AbsoluteUri)")
             Invoke-PnPSiteTemplate "$TemplatesBasePath/Taxonomy.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
-            Invoke-PnPSiteTemplate "$TemplatesBasePath/TaxonomyBA.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
             EndAction
-        }
-        elseif (-not $SkipTaxonomy.IsPresent -and $Upgrade.IsPresent) {
-            $TermSetA = Get-PnPTermSet -Identity "cc6cdd18-c7d5-42e1-8d19-a336dd78f3f2" -TermGroup "Prosjektportalen" -ErrorAction SilentlyContinue
-            $TermSetB = Get-PnPTermSet -Identity "ec5ceb95-7259-4282-811f-7c57304be71e" -TermGroup "Prosjektportalen" -ErrorAction SilentlyContinue
-            if (-not $TermSetA -or -not $TermSetB) {
-                StartAction("Applying PnP template Taxonomy (B&A) to $($Uri.AbsoluteUri)")
-                Invoke-PnPSiteTemplate "$TemplatesBasePath/TaxonomyBA.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
-                EndAction
-            }
         }
 
         # Shared retry configuration
@@ -534,17 +522,6 @@ if (-not $SkipTemplate.IsPresent) {
             else {
                 Write-Host "[WARNING] No content template found for language $LanguageCode. Skipping content template." -ForegroundColor Yellow
             }
-
-            if ($IncludeBAContent.IsPresent) {
-                if (Test-Path "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp") {
-                    $null = Invoke-SiteTemplateSafely `
-                        -TemplatePath "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp" `
-                        -ActionDescription "Applying PnP B&A content template to $($Uri.AbsoluteUri)"
-                }
-                else {
-                    Write-Host "[WARNING] No B&A content template found for language $LanguageCode. Skipping B&A content template." -ForegroundColor Yellow
-                }
-            }
         }
         else {
             StartAction -Action "Applying PnP template Portfolio to $($Uri.AbsoluteUri)"
@@ -580,14 +557,6 @@ if (-not $SkipTemplate.IsPresent) {
                 $null = Invoke-SiteTemplateSafely `
                     -TemplatePath "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" `
                     -ActionDescription "Applying PnP content template to $($Uri.AbsoluteUri)"
-            }
-
-            if ($IncludeBAContent.IsPresent) {
-                if (Test-Path "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp") {
-                    $null = Invoke-SiteTemplateSafely `
-                        -TemplatePath "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp" `
-                        -ActionDescription "Applying PnP B&A content template to $($Uri.AbsoluteUri)"
-                }
             }
         }
     }

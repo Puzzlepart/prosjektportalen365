@@ -1,0 +1,58 @@
+.list {
+  display: block;
+
+  .column {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacingHorizontalM);
+    padding: var(--spacingVerticalM) 0;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  align-items: start;
+}
+
+.cell {
+  padding: 4px;
+}
+
+.empty {
+  padding: var(--spacingVerticalL) 0;
+
+  .clearButton {
+    margin-top: var(--spacingVerticalM);
+  }
+}
+
+.skeletonCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacingVerticalS);
+  padding: var(--spacingVerticalM);
+  border: 1px solid var(--colorNeutralStroke2);
+  border-radius: var(--borderRadiusMedium);
+
+  .skeletonPreview {
+    height: 96px;
+    border-radius: var(--borderRadiusMedium);
+  }
+
+  .skeletonTitle {
+    height: 16px;
+    width: 70%;
+  }
+
+  .skeletonText {
+    height: 12px;
+    width: 90%;
+  }
+}

@@ -147,9 +147,7 @@ export const applyProjectPropertiesFromMetadata = async (
   if (entries.length === 0 && !wantsContentType) return { properties, taxonomyUpdates }
   if (!dataAdapter?.sp?.web) return { properties, taxonomyUpdates }
 
-  const list = Web([dataAdapter.sp.web, hubUrl]).lists.getByTitle(
-    resource.Lists_ProjectData_Title
-  )
+  const list = Web([dataAdapter.sp.web, hubUrl]).lists.getByTitle(resource.Lists_ProjectData_Title)
 
   if (wantsContentType) {
     const contentTypeId = await resolveContentTypeId(list, parsed)
@@ -191,8 +189,7 @@ export const applyProjectPropertiesFromMetadata = async (
         case 'UserMulti': {
           const ids = await ensureUserIds(Web([dataAdapter.sp.web, hubUrl]), value)
           if (ids.length === 0) break
-          properties[`${internalName}Id`] =
-            field.TypeAsString === 'UserMulti' ? ids : ids[0]
+          properties[`${internalName}Id`] = field.TypeAsString === 'UserMulti' ? ids : ids[0]
           break
         }
         case 'URL':

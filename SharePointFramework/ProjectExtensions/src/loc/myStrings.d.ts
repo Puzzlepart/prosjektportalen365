@@ -42,8 +42,6 @@ declare interface IProjectExtensionsStrings {
   ApplyTemplateSiteFields: string
   ApplyTemplateText: string
   ApplyTemplateWebSettings: string
-  ApplyTemplateHooks: string
-  ApplyExtensionHooks: string
   RunHooksText: string
   CloseModalText: string
   CmdSelectionCountText: string
@@ -143,7 +141,6 @@ declare interface IProjectExtensionsStrings {
   RemoveAlternativeLanguagesSubText: string
   RemoveAlternativeLanguagesErrorMessage: string
   RemoveAlternativeLanguagesProgressText: string
-  RunHooksText: string
   SetTaxonomyFieldsErrorMessage: string
   SetupAbortedText: string
   SetupProjectInformationErrorMessage: string
@@ -154,6 +151,10 @@ declare interface IProjectExtensionsStrings {
   SummaryMessage: string
   SyncLocalProjectPropertiesListText: string
   TemplateConfigMessage: string
+  CloudTemplateInfoMessage: string
+  CloudTemplateResolvingMessage: string
+  CloudTemplateResolveErrorMessage: string
+  CloudTemplateNotCompatibleWarning: string
   TemplateConfigConjunction: string
   DataGridSelectAllLabel: string
   PlannerMemberWarningMessage: string

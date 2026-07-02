@@ -4,10 +4,7 @@ import { FieldContainer } from 'pp365-shared-library'
 import strings from 'PortfolioWebPartsStrings'
 import { useProjectProvisionContext } from '../context'
 import { FieldRenderer } from './FieldRenderer'
-import {
-  parseMetadataPreview,
-  IProjectPropertyEntry
-} from '../applyProjectPropertiesFromMetadata'
+import { parseMetadataPreview, IProjectPropertyEntry } from '../applyProjectPropertiesFromMetadata'
 
 const useStyles = makeStyles({
   root: {

@@ -1,0 +1,44 @@
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacingHorizontalM);
+  padding-bottom: var(--spacingVerticalS);
+
+  .search {
+    min-width: 240px;
+    flex: 1 1 240px;
+  }
+
+  .dropdown {
+    min-width: 180px;
+  }
+
+  .compatibleSwitch {
+    white-space: nowrap;
+  }
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+
+  .count {
+    color: var(--colorNeutralForeground3);
+    white-space: nowrap;
+  }
+
+  .viewToggle {
+    display: flex;
+    gap: 2px;
+  }
+
+  @media (max-width: 720px) {
+    .search {
+      flex-basis: 100%;
+    }
+
+    .dropdown {
+      flex: 1 1 45%;
+    }
+  }
+}

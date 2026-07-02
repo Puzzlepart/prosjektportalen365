@@ -354,8 +354,7 @@ export function useEditableColumn(
       lastDefaultsTypeRef.current = currentType
 
       try {
-        const typeDefaults =
-          state.types.find((t) => t.title === currentType) || defaultType
+        const typeDefaults = state.types.find((t) => t.title === currentType) || defaultType
         const defaultConfidentialData = typeDefaults?.defaultConfidentialData ?? false
         const defaultSensitivityLabel =
           typeDefaults?.defaultSensitivityLabel || getGlobalSetting('DefaultSensitivityLabel') || ''

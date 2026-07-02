@@ -252,10 +252,21 @@ async function fetchAllItemsChunked(
         'Editor/EMail',
         'Editor/Id'
       ]
-    : ['*', 'Author/Title', 'Author/EMail', 'Author/Id', 'Editor/Title', 'Editor/EMail', 'Editor/Id']
+    : [
+        '*',
+        'Author/Title',
+        'Author/EMail',
+        'Author/Id',
+        'Editor/Title',
+        'Editor/EMail',
+        'Editor/Id'
+      ]
   const baseExpand = isDocumentLibrary ? ['Author', 'Editor', 'File'] : ['Author', 'Editor']
 
-  const baseItems = await list.items.select(...baseSelect).expand(...baseExpand).getAll()
+  const baseItems = await list.items
+    .select(...baseSelect)
+    .expand(...baseExpand)
+    .getAll()
 
   if (userExpands.length === 0) {
     return baseItems
@@ -293,7 +304,7 @@ async function fetchAllItemsChunked(
  * @param item - Raw SharePoint item
  * @param columns - Column definitions with taxonomy termSetId information
  * @param taxonomyTermsMap - Map of termSetId to taxonomy terms for label resolution
- * @returns Transformed item with human-readable values
+ * @returns Transformed item with values
  */
 export function transformListItem(
   item: any,

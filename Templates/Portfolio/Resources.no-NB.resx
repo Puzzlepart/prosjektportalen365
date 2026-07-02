@@ -85,90 +85,6 @@
   <data name="Choice_GtAllocationStatus_Requested" xml:space="preserve">
     <value>Forespurt</value>
   </data>
-  <data name="Choice_GtBAProjectEnv_EventRegistered" xml:space="preserve">
-    <value>Hendelse registrert siste måned</value>
-  </data>
-  <data name="Choice_GtBAProjectEnv_NoEvents" xml:space="preserve">
-    <value>Ingen hendelser siste måned</value>
-  </data>
-  <data name="Choice_GtBAProjectInvestementPhase_F0" xml:space="preserve">
-    <value>F0</value>
-  </data>
-  <data name="Choice_GtBAProjectInvestementPhase_F1" xml:space="preserve">
-    <value>F1</value>
-  </data>
-  <data name="Choice_GtBAProjectInvestementPhase_F2" xml:space="preserve">
-    <value>F2</value>
-  </data>
-  <data name="Choice_GtBAProjectInvestementPhase_F3" xml:space="preserve">
-    <value>F3</value>
-  </data>
-  <data name="Choice_GtBAProjectInvestementPhase_NotRelevant" xml:space="preserve">
-    <value>Ikke relevant</value>
-  </data>
-  <data name="Choice_GtBAProjectInvestementPhase_SeckePost" xml:space="preserve">
-    <value>S (Sekkepost)</value>
-  </data>
-  <data name="Choice_GtBAProjectSHA_EventRegistered" xml:space="preserve">
-    <value>Hendelse registrert siste måned</value>
-  </data>
-  <data name="Choice_GtBAProjectSHA_NoEvents" xml:space="preserve">
-    <value>Ingen hendelser siste måned</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_ComplaintUnderReview" xml:space="preserve">
-    <value>Klage under behandling</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_FrameworkApplicationInProgress" xml:space="preserve">
-    <value>Rammesøknad under utarbeidelse</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_FrameworkApplicationSent" xml:space="preserve">
-    <value>Rammesøknad sendt</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_FrameworkPermitGranted" xml:space="preserve">
-    <value>Rammetillatelse gitt</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_IGGranted" xml:space="preserve">
-    <value>IG gitt</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_IGSent" xml:space="preserve">
-    <value>IG sendt</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_PreConferenceHeld" xml:space="preserve">
-    <value>Forhåndskonferanse avholdt</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_RegulationPlanAnnounced" xml:space="preserve">
-    <value>Reguleringsplan annonsert</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_RegulationPlanApproved" xml:space="preserve">
-    <value>Reguleringsplan godkjent</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_RegulationPlanFirstTreated" xml:space="preserve">
-    <value>Reguleringsplan 1.gangsbehandlet</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_AppliedForPayment" xml:space="preserve">
-    <value>Søkt utbetaling</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_DialogWithGrantorEstablished" xml:space="preserve">
-    <value>Dialog med tilskuddsyter opprettet</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_HasApplied" xml:space="preserve">
-    <value>Har søkt</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_HasReceivedApproval" xml:space="preserve">
-    <value>Har fått tilsagn</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_HasReceivedPayment" xml:space="preserve">
-    <value>Har fått utbetalt</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_HasReceivedRejection" xml:space="preserve">
-    <value>Har fått avslag</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_NotApplicable" xml:space="preserve">
-    <value>Ikke aktuelt</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_ToBeInvestigated" xml:space="preserve">
-    <value>Skal undersøkes/vurderes</value>
-  </data>
   <data name="Choice_GtChecklistStatus_Archived" xml:space="preserve">
     <value>Arkivert</value>
   </data>
@@ -1024,12 +940,6 @@
   <data name="ContentTypes_ProjectAdminRoleSiteAdmin_Name" xml:space="preserve">
     <value>Prosjektadministrasjonsrolle - Områdeadministrator</value>
   </data>
-  <data name="ContentTypes_ProjectBA_Description" xml:space="preserve">
-    <value>Prosjekt innholdstype for bygg- og anleggsprosjekter</value>
-  </data>
-  <data name="ContentTypes_ProjectBA_Name" xml:space="preserve">
-    <value>Prosjekt (ByggAnlegg)</value>
-  </data>
   <data name="ContentTypes_ProjectColumn_Description" xml:space="preserve">
     <value>Opprett en ny prosjektkolonne</value>
   </data>
@@ -1074,12 +984,6 @@
   </data>
   <data name="ContentTypes_ProjectStatus_Name" xml:space="preserve">
     <value>Prosjektstatus</value>
-  </data>
-  <data name="ContentTypes_ProjectStatusBA_Description" xml:space="preserve">
-    <value>Prosjektstatus innholdstype for bygg- og anleggsprosjekter</value>
-  </data>
-  <data name="ContentTypes_ProjectStatusBA_Name" xml:space="preserve">
-    <value>Prosjektstatus (ByggAnlegg)</value>
   </data>
   <data name="ContentTypes_ProjectTask_Name" xml:space="preserve">
     <value>Prosjektoppgave</value>
@@ -1350,18 +1254,6 @@
   </data>
   <data name="Lists_Documents_Title" xml:space="preserve">
     <value>Dokumenter</value>
-  </data>
-  <data name="Lists_DocumentsBuilding_Title" xml:space="preserve">
-    <value>Standarddokumenter Bygg</value>
-  </data>
-  <data name="Lists_DocumentsBuilding_Url" xml:space="preserve">
-    <value>Standarddokumenter_Bygg</value>
-  </data>
-  <data name="Lists_DocumentsConstruction_Title" xml:space="preserve">
-    <value>Standarddokumenter Anlegg</value>
-  </data>
-  <data name="Lists_DocumentsConstruction_Url" xml:space="preserve">
-    <value>Standarddokumenter_Anlegg</value>
   </data>
   <data name="Lists_Global_Settings_Category_Assistant" xml:space="preserve">
     <value>Assistent</value>
@@ -1708,18 +1600,6 @@
   <data name="Lists_ListContent_Description" xml:space="preserve">
     <value>Oppsett av listeinnhold for nye områder</value>
   </data>
-  <data name="Lists_ListContent_PhaseChecklistBuilding_Description" xml:space="preserve">
-    <value>Fasesjekkpunkter for byggeprosjekter.</value>
-  </data>
-  <data name="Lists_ListContent_PhaseChecklistBuilding_Title" xml:space="preserve">
-    <value>Fasesjekkliste Bygg</value>
-  </data>
-  <data name="Lists_ListContent_PhaseChecklistConstruction_Description" xml:space="preserve">
-    <value>Fasesjekkpunkter for anleggsprosjekter.</value>
-  </data>
-  <data name="Lists_ListContent_PhaseChecklistConstruction_Title" xml:space="preserve">
-    <value>Fasesjekkliste Anlegg</value>
-  </data>
   <data name="Lists_ListContent_PhaseCheckpoints_Description" xml:space="preserve">
     <value>Fasesjekkpunkter basert på Prosjektveiviserens beslutningspunkter.</value>
   </data>
@@ -1734,36 +1614,6 @@
   </data>
   <data name="Lists_ListContent_PlannerTasks_Title" xml:space="preserve">
     <value>Planneroppgaver</value>
-  </data>
-  <data name="Lists_ListContent_PlannerTasksBuilding_Description" xml:space="preserve">
-    <value>Standard Planneroppgaver for byggeprosjekter.</value>
-  </data>
-  <data name="Lists_ListContent_PlannerTasksBuilding_PlanName" xml:space="preserve">
-    <value>Byggeoppgaver</value>
-  </data>
-  <data name="Lists_ListContent_PlannerTasksBuilding_Title" xml:space="preserve">
-    <value>Planneroppgaver Bygg</value>
-  </data>
-  <data name="Lists_ListContent_PlannerTasksConstruction_Description" xml:space="preserve">
-    <value>Standard Planneroppgaver for anleggsprosjekter.</value>
-  </data>
-  <data name="Lists_ListContent_PlannerTasksConstruction_PlanName" xml:space="preserve">
-    <value>Anleggsoppgaver</value>
-  </data>
-  <data name="Lists_ListContent_PlannerTasksConstruction_Title" xml:space="preserve">
-    <value>Planneroppgaver Anlegg</value>
-  </data>
-  <data name="Lists_ListContent_StandardDocsConstruction_Description" xml:space="preserve">
-    <value>Standarddokumenter for anleggsprosjekter.</value>
-  </data>
-  <data name="Lists_ListContent_StandardDocsConstruction_Title" xml:space="preserve">
-    <value>Standarddokumenter Anlegg</value>
-  </data>
-  <data name="Lists_ListContent_StandardDocumentsBuilding_Description" xml:space="preserve">
-    <value>Standarddokumenter for byggeprosjekter.</value>
-  </data>
-  <data name="Lists_ListContent_StandardDocumentsBuilding_Title" xml:space="preserve">
-    <value>Standarddokumenter Bygg</value>
   </data>
   <data name="Lists_ListContent_Title" xml:space="preserve">
     <value>Listeinnhold</value>
@@ -1825,18 +1675,6 @@
   <data name="Lists_PhaseChecklist_Url" xml:space="preserve">
     <value>Lists/Fasesjekkliste</value>
   </data>
-  <data name="Lists_PhaseChecklistBuilding_Title" xml:space="preserve">
-    <value>Fasesjekkliste Bygg</value>
-  </data>
-  <data name="Lists_PhaseChecklistBuilding_Url" xml:space="preserve">
-    <value>Lists/Fasesjekkliste_Bygg</value>
-  </data>
-  <data name="Lists_PhaseChecklistConstruction_Title" xml:space="preserve">
-    <value>Fasesjekkliste Anlegg</value>
-  </data>
-  <data name="Lists_PhaseChecklistConstruction_Url" xml:space="preserve">
-    <value>Lists/Fasesjekkliste_Anlegg</value>
-  </data>
   <data name="Lists_PlannerTasks_Description" xml:space="preserve">
     <value>Standard prosjektoppgaver fra Prosjektveiviseren</value>
   </data>
@@ -1845,18 +1683,6 @@
   </data>
   <data name="Lists_PlannerTasks_Url" xml:space="preserve">
     <value>Lists/Planneroppgaver</value>
-  </data>
-  <data name="Lists_PlannerTasksBuilding_Title" xml:space="preserve">
-    <value>Planneroppgaver Bygg</value>
-  </data>
-  <data name="Lists_PlannerTasksBuilding_Url" xml:space="preserve">
-    <value>Lists/Planneroppgaver_Bygg</value>
-  </data>
-  <data name="Lists_PlannerTasksConstruction_Title" xml:space="preserve">
-    <value>Planneroppgaver Anlegg</value>
-  </data>
-  <data name="Lists_PlannerTasksConstruction_Url" xml:space="preserve">
-    <value>Lists/Planneroppgaver_Anlegg</value>
   </data>
   <data name="Lists_PortfolioViews_AllProjects_Title" xml:space="preserve">
     <value>Alle prosjekter</value>
@@ -1956,18 +1782,6 @@
   </data>
   <data name="Lists_ProjectColumnConfiguration_Description" xml:space="preserve">
     <value>Administrer prosjektkolonneverdier (farge/ikon/navn) for statusfelter</value>
-  </data>
-  <data name="Lists_ProjectColumnConfiguration_GtBAProjectEnv_EventRegistered_Title" xml:space="preserve">
-    <value>Status miljø (Hendelse)</value>
-  </data>
-  <data name="Lists_ProjectColumnConfiguration_GtBAProjectEnv_NoEvents_Title" xml:space="preserve">
-    <value>Status miljø (Ingen)</value>
-  </data>
-  <data name="Lists_ProjectColumnConfiguration_GtBAProjectSHA_EventRegistered_Title" xml:space="preserve">
-    <value>Status SHA (Hendelse)</value>
-  </data>
-  <data name="Lists_ProjectColumnConfiguration_GtBAProjectSHA_NoEvents_Title" xml:space="preserve">
-    <value>Status SHA (Ingen)</value>
   </data>
   <data name="Lists_ProjectColumnConfiguration_GtStatusBudget_BelowBudget_Title" xml:space="preserve">
     <value>Status økonomi (Under budsjett)</value>
@@ -2191,23 +2005,11 @@
   <data name="Lists_StatusSections_Description" xml:space="preserve">
     <value>Oppsett av prosjektstatusrapport</value>
   </data>
-  <data name="Lists_StatusSections_Environment_Title" xml:space="preserve">
-    <value>Miljø</value>
-  </data>
   <data name="Lists_StatusSections_OverallStatus_Title" xml:space="preserve">
     <value>Overordnet status</value>
   </data>
-  <data name="Lists_StatusSections_ProjectSupport_Title" xml:space="preserve">
-    <value>Tilskudd</value>
-  </data>
-  <data name="Lists_StatusSections_SHA_Title" xml:space="preserve">
-    <value>SHA</value>
-  </data>
   <data name="Lists_StatusSections_StatusBudget_Title" xml:space="preserve">
     <value>Økonomi</value>
-  </data>
-  <data name="Lists_StatusSections_StatusCase_Title" xml:space="preserve">
-    <value>Plan- og byggesak</value>
   </data>
   <data name="Lists_StatusSections_StatusGainAchievement_Title" xml:space="preserve">
     <value>Gevinstoppnåelse</value>
@@ -2239,18 +2041,6 @@
   <data name="Lists_TemplateLibrary_Url" xml:space="preserve">
     <value>Malbibliotek</value>
   </data>
-  <data name="Lists_TemplateOptions_BuildingProject_Description" xml:space="preserve">
-    <value>Dette er malen for byggeprosjekter. Byggeprosjekter har egne faser, egne prosjektegenskaper og egne felter i prosjektstatus.</value>
-  </data>
-  <data name="Lists_TemplateOptions_BuildingProject_Title" xml:space="preserve">
-    <value>Byggprosjekt</value>
-  </data>
-  <data name="Lists_TemplateOptions_ConstructionProject_Description" xml:space="preserve">
-    <value>Anleggsprosjekter har egne faser, egne prosjektegenskaper og egne felter i prosjektstatus.</value>
-  </data>
-  <data name="Lists_TemplateOptions_ConstructionProject_Title" xml:space="preserve">
-    <value>Anleggsprosjekt</value>
-  </data>
   <data name="Lists_TemplateOptions_Description" xml:space="preserve">
     <value>Oppsett av maler for nye områder</value>
   </data>
@@ -2259,6 +2049,27 @@
   </data>
   <data name="Lists_TemplateOptions_Fields_FieldConfigurationName_DisplayName" xml:space="preserve">
     <value>Feltkonfigurasjon</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgType_DisplayName" xml:space="preserve">
+    <value>Malpakketype</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgId_DisplayName" xml:space="preserve">
+    <value>Malpakke-ID</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgVersion_DisplayName" xml:space="preserve">
+    <value>Malpakkeversjon</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgSourceUrl_DisplayName" xml:space="preserve">
+    <value>Malpakke kildeadresse</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgInstalledDate_DisplayName" xml:space="preserve">
+    <value>Malpakke installert dato</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgUpdatedDate_DisplayName" xml:space="preserve">
+    <value>Malpakke oppdatert dato</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgLatestVersion_DisplayName" xml:space="preserve">
+    <value>Malpakke siste versjon</value>
   </data>
   <data name="Lists_TemplateOptions_Fields_GtDocumentTemplateLibrary_Description" xml:space="preserve">
     <value>Velg malbibliotek som skal brukes som kilde for maler som kan hentes inn til dokumentbibliotekene i prosjektet.</value>
@@ -2370,6 +2181,12 @@
   </data>
   <data name="Lists_TemplateOptions_ProgramTemplate_Description" xml:space="preserve">
     <value>Dette er standardmalen for program som følger med Prosjektportalen 365.</value>
+  </data>
+  <data name="Lists_TemplateOptions_BuildingProject_Title" xml:space="preserve">
+    <value>Byggprosjekt</value>
+  </data>
+  <data name="Lists_TemplateOptions_ConstructionProject_Title" xml:space="preserve">
+    <value>Anleggsprosjekt</value>
   </data>
   <data name="Lists_TemplateOptions_ProgramTemplate_FileName" xml:space="preserve">
     <value>Programmal.txt</value>
@@ -2605,9 +2422,6 @@
   <data name="Security_SiteGroup_ProvisionPortal_Title" xml:space="preserve">
     <value>Bestillingsportalen</value>
   </data>
-  <data name="SiteFields_BA_Group" xml:space="preserve">
-    <value>Kolonner for Prosjektportalen (Bygg og anlegg)</value>
-  </data>
   <data name="SiteFields_ContentType_DisplayName" xml:space="preserve">
     <value>Innholdstype</value>
   </data>
@@ -2721,90 +2535,6 @@
   </data>
   <data name="SiteFields_GtAttachments_DisplayName" xml:space="preserve">
     <value>Vedlegg</value>
-  </data>
-  <data name="SiteFields_GtBAEndDateOriginal_Description" xml:space="preserve">
-    <value>Hva er (planlagt) overtakelsesdato hvor bestiller overtar prosjektleveransene</value>
-  </data>
-  <data name="SiteFields_GtBAEndDateOriginal_DisplayName" xml:space="preserve">
-    <value>Opprinnelig overtakelsesdato</value>
-  </data>
-  <data name="SiteFields_GtBAProjectEnv_Description" xml:space="preserve">
-    <value>Har det vært hendelser knyttet til miljø i siste periode?</value>
-  </data>
-  <data name="SiteFields_GtBAProjectEnv_DisplayName" xml:space="preserve">
-    <value>Status miljø</value>
-  </data>
-  <data name="SiteFields_GtBAProjectEnvComment_Description" xml:space="preserve">
-    <value>Oppsummer kort det totale miljø-bildet for prosjektet og hvilke tiltak det planlegges for i neste periode</value>
-  </data>
-  <data name="SiteFields_GtBAProjectEnvComment_DisplayName" xml:space="preserve">
-    <value>Kommentar, miljø</value>
-  </data>
-  <data name="SiteFields_GtBAProjectInvestementPhase_Description" xml:space="preserve">
-    <value>Investeringsfasen for prosjektet?</value>
-  </data>
-  <data name="SiteFields_GtBAProjectInvestementPhase_DisplayName" xml:space="preserve">
-    <value>HP-fase</value>
-  </data>
-  <data name="SiteFields_GtBAProjectPolitical_Description" xml:space="preserve">
-    <value>Når ble siste politiske vedtak som påvirker prosjektet fattet?</value>
-  </data>
-  <data name="SiteFields_GtBAProjectPolitical_DisplayName" xml:space="preserve">
-    <value>Siste politiske vedtak</value>
-  </data>
-  <data name="SiteFields_GtBAProjectPoliticalComment_Description" xml:space="preserve">
-    <value>Kommentar til hvordan siste politiske vedtak påvirker prosjektet</value>
-  </data>
-  <data name="SiteFields_GtBAProjectPoliticalComment_DisplayName" xml:space="preserve">
-    <value>Kommentar, siste politiske vedtak</value>
-  </data>
-  <data name="SiteFields_GtBAProjectPoliticalLink_Description" xml:space="preserve">
-    <value>Lenke til f. eks dokument/artikkel om siste politiske vedtak</value>
-  </data>
-  <data name="SiteFields_GtBAProjectPoliticalLink_DisplayName" xml:space="preserve">
-    <value>Lenke til siste politiske vedtak</value>
-  </data>
-  <data name="SiteFields_GtBAProjectPrognosisThisYear_Description" xml:space="preserve">
-    <value>Prognosen for dette året for prosjektet?</value>
-  </data>
-  <data name="SiteFields_GtBAProjectPrognosisThisYear_DisplayName" xml:space="preserve">
-    <value>Prognose i år</value>
-  </data>
-  <data name="SiteFields_GtBAProjectSHA_Description" xml:space="preserve">
-    <value>Har det vært hendelser knyttet til SHA (Sikkerhet, helse, arbeidsmiljø) i siste periode?</value>
-  </data>
-  <data name="SiteFields_GtBAProjectSHA_DisplayName" xml:space="preserve">
-    <value>Status SHA</value>
-  </data>
-  <data name="SiteFields_GtBAProjectSHAComment_Description" xml:space="preserve">
-    <value>Oppsummer kort det totale SHA-bildet for prosjektet og hvilke tiltak det planlegges for i neste periode</value>
-  </data>
-  <data name="SiteFields_GtBAProjectSHAComment_DisplayName" xml:space="preserve">
-    <value>Kommentar, SHA</value>
-  </data>
-  <data name="SiteFields_GtBAProjectStatusCase_Description" xml:space="preserve">
-    <value>Hva er status på plan- og byggsak for prosjektet?</value>
-  </data>
-  <data name="SiteFields_GtBAProjectStatusCase_DisplayName" xml:space="preserve">
-    <value>Status plan- og byggesak</value>
-  </data>
-  <data name="SiteFields_GtBAProjectStatusCaseComment_Description" xml:space="preserve">
-    <value>Beskriv eventuelle utfordringer knyttet til plan- og byggesak, samt planlagte tiltak for neste periode</value>
-  </data>
-  <data name="SiteFields_GtBAProjectStatusCaseComment_DisplayName" xml:space="preserve">
-    <value>Kommentar, plan- og byggesak</value>
-  </data>
-  <data name="SiteFields_GtBAProjectSupport_Description" xml:space="preserve">
-    <value>Hva er status på eventuelle tilskuddsmuligheter for prosjektet?</value>
-  </data>
-  <data name="SiteFields_GtBAProjectSupport_DisplayName" xml:space="preserve">
-    <value>Status tilskudd</value>
-  </data>
-  <data name="SiteFields_GtBAProjectSupportComment_Description" xml:space="preserve">
-    <value>Hvis relevant, beskriv hvor i søknadsprosessen prosjektet er og hva som er planlagt for neste periode</value>
-  </data>
-  <data name="SiteFields_GtBAProjectSupportComment_DisplayName" xml:space="preserve">
-    <value>Kommentar, tilskudd</value>
   </data>
   <data name="SiteFields_GtBudgetLastReportDate_Description" xml:space="preserve">
     <value>Legg inn dato for når siste kostnadsrapportering ble gjort</value>

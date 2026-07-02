@@ -32,8 +32,13 @@ export function useProjectSetupDialog(props: IProjectSetupDialogProps) {
    * @returns `true` if the configuration is disabled.
    */
   const isConfigDisabled = (type: 'extensions' | 'contentConfig') => {
-    const items = props.data[type] as Array<{ hidden: boolean }>
-    if (_.isEmpty(items) || !state.selectedTemplate) return true
+    if (!state.selectedTemplate) return true
+    const items = (
+      state.selectedTemplate.isCloudTemplate
+        ? state.resolvedCloudTemplate?.[type]
+        : props.data[type]
+    ) as Array<{ hidden: boolean }>
+    if (_.isEmpty(items)) return true
     return items.every((item) => item.hidden)
   }
 

@@ -97,19 +97,11 @@ Write-Host "[INFO] Post-install action: Adding default list content to template 
 
 $TemplateSetupMap = @{
     "Standard" = (Get-Resource -Name "Lists_TemplateOptions_StandardTemplate_Title");
-    "Bygg"     = (Get-Resource -Name "Lists_TemplateOptions_BuildingProject_Title");
-    "Anlegg"   = (Get-Resource -Name "Lists_TemplateOptions_ConstructionProject_Title");
 }
 
 $ListContentMap = @{
     "FasesjekkStandard" = (Get-Resource -Name "Lists_ListContent_PhaseCheckpoints_Title");
-    "FasesjekkBygg"     = (Get-Resource -Name "Lists_ListContent_PhaseChecklistBuilding_Title");
-    "FasesjekkAnlegg"   = (Get-Resource -Name "Lists_ListContent_PhaseChecklistConstruction_Title");
     "PlannerStandard"   = (Get-Resource -Name "Lists_ListContent_PlannerTasks_Title");
-    "PlannerBygg"       = (Get-Resource -Name "Lists_ListContent_PlannerTasksBuilding_Title");
-    "PlannerAnlegg"     = (Get-Resource -Name "Lists_ListContent_PlannerTasksConstruction_Title");
-    "DokumentBygg"      = (Get-Resource -Name "Lists_ListContent_StandardDocumentsBuilding_Title");
-    "DokumentAnlegg"    = (Get-Resource -Name "Lists_ListContent_StandardDocsConstruction_Title");
 }
 
 $ListContent = Get-PnPListItem -List (Get-Resource -Name "Lists_ListContent_Title")
@@ -137,36 +129,4 @@ if ($Standard) {
 }
 else {
     Write-Host "[WARNING] Failed to find Standardmal template. Please check the Maloppsett list." -ForegroundColor Yellow
-}
-$Bygg = $TemplateOptions | Where-Object { $_["Title"] -eq $TemplateSetupMap["Bygg"] }
-if ($Bygg) {
-    $ByggPlanner = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["PlannerBygg"] }
-    $ByggPhaseChecklist = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["FasesjekkBygg"] }
-    $ByggDocuments = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["DokumentBygg"] }
-    $ByggItems = @()
-    $ByggItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $ByggPlanner.Id }
-    $ByggItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $ByggPhaseChecklist.Id }
-    $ByggItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $ByggDocuments.Id }
-    $Bygg["ListContentConfigLookup"] = $ByggItems
-    $Bygg.SystemUpdate()
-    $Bygg.Context.ExecuteQuery()
-}
-else {
-    Write-Host "[WARNING] Failed to find Byggprosjekt template. Please check the Maloppsett list." -ForegroundColor Yellow
-}
-$Anlegg = $TemplateOptions | Where-Object { $_["Title"] -eq $TemplateSetupMap["Anlegg"] }
-if ($Anlegg) {
-    $AnleggPlanner = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["PlannerAnlegg"] }
-    $AnleggPhaseChecklist = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["FasesjekkAnlegg"] }
-    $AnleggDocuments = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["DokumentAnlegg"] }     
-    $AnleggItems = @()
-    $AnleggItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $AnleggPlanner.Id }
-    $AnleggItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $AnleggPhaseChecklist.Id }
-    $AnleggItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $AnleggDocuments.Id }
-    $Anlegg["ListContentConfigLookup"] = $AnleggItems
-    $Anlegg.SystemUpdate()
-    $Anlegg.Context.ExecuteQuery()
-}
-else {
-    Write-Host "[WARNING] Failed to find Anleggsprosjekt template. Please check the Maloppsett list." -ForegroundColor Yellow
 }

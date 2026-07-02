@@ -5,6 +5,7 @@ import { ContentConfig } from './ContentConfig'
 import { ProjectExtension } from './ProjectExtension'
 import { UserSelectableObject } from './UserSelectableObject'
 import { IWeb } from '@pnp/sp/webs'
+import { PP_PKG_TYPE } from './PpPkg'
 
 export interface IProjectTemplateSPItem {
   Id?: number
@@ -29,6 +30,16 @@ export interface IProjectTemplateSPItem {
   IsHiddenTemplate: boolean
   GtProjectPhaseTermId: string
   GtDocumentTemplateLibrary: string
+  /**
+   * Package type for catalog-managed templates (`Lokal` | `Importert` |
+   * `Sentral`). `Sentral` marks a **cloud template** — a metadata-only
+   * shadow whose content is resolved from its `.pppkg` at setup time.
+   */
+  PpPkgType?: string
+  PpPkgId?: string
+  PpPkgVersion?: string
+  /** URL to the package `.pppkg` (URL field → `{ Url }`, or flat text). */
+  PpPkgSourceUrl?: { Url: string; Description?: string } | string
 }
 
 /**
@@ -55,6 +66,10 @@ export class ProjectTemplate extends UserSelectableObject {
   private _projectColumns: string
   private _projectCustomColumns: string
   private _projectPhaseTermId: string
+  private _ppPkgType: string
+  private _ppPkgId: string
+  private _ppPkgVersion: string
+  private _cloudSourceUrl: string
 
   /**
    * Constructs a new `ProjectTemplate` instance
@@ -91,6 +106,37 @@ export class ProjectTemplate extends UserSelectableObject {
     this._projectColumns = spItem.GtProjectColumns
     this._projectCustomColumns = spItem.GtProjectCustomColumns
     this._projectPhaseTermId = spItem.GtProjectPhaseTermId
+    this._ppPkgType = spItem.PpPkgType
+    this._ppPkgId = spItem.PpPkgId
+    this._ppPkgVersion = spItem.PpPkgVersion
+    this._cloudSourceUrl =
+      (typeof spItem.PpPkgSourceUrl === 'string'
+        ? spItem.PpPkgSourceUrl
+        : spItem.PpPkgSourceUrl?.Url) ?? spItem.FieldValuesAsText?.PpPkgSourceUrl
+  }
+
+  /**
+   * `true` when this template is a cloud template, `PpPkgType` =
+   * `Sentral` — a metadata-only shadow whose template, extensions and list
+   * content are resolved from its `.pppkg` at setup time (nothing on the hub).
+   */
+  public get isCloudTemplate(): boolean {
+    return this._ppPkgType === PP_PKG_TYPE.Sentral
+  }
+
+  /** URL to the cloud template's `.pppkg` (from `PpPkgSourceUrl`), used to resolve it. */
+  public get cloudSourceUrl(): string {
+    return this._cloudSourceUrl
+  }
+
+  /** Catalog package id (`PpPkgId`), if catalog-managed. */
+  public get packageId(): string {
+    return this._ppPkgId
+  }
+
+  /** Catalog package version (`PpPkgVersion`), if catalog-managed. */
+  public get packageVersion(): string {
+    return this._ppPkgVersion
   }
 
   /**

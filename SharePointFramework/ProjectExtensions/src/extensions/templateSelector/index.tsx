@@ -17,9 +17,6 @@ import { ITemplateSelectorCommandProperties } from './types'
 import { themeColor } from 'pp365-shared-library'
 import resource from 'SharedResources'
 
-Logger.subscribe(ConsoleListener())
-Logger.activeLogLevel = LogLevel.Info
-
 export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITemplateSelectorCommandProperties> {
   private _openCmd: Command
   private _ctxValue: ITemplateSelectorContext = {}
@@ -36,7 +33,7 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
       level: LogLevel.Info
     })
     Logger.subscribe(ConsoleListener())
-    Logger.activeLogLevel = sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+    Logger.activeLogLevel = sessionStorage.DEBUG === '1' || DEBUG ? LogLevel.Info : LogLevel.Warning
     this._openCmd = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR')
     if (!this._openCmd) return
 

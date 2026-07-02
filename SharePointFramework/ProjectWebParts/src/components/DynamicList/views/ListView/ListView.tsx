@@ -205,7 +205,7 @@ export const ListView: FC<IListViewProps> = ({
                   checked={allRowsSelected ? true : someRowsSelected ? 'mixed' : false}
                   onClick={toggleAllRows}
                   onKeyDown={toggleAllKeydown}
-                  checkboxIndicator={{ 'aria-label': 'Velg alle' }}
+                  checkboxIndicator={{ 'aria-label': strings.DynamicList.SelectAll }}
                 />
                 {columns.map((column) => (
                   <TableHeaderCell
@@ -243,7 +243,7 @@ export const ListView: FC<IListViewProps> = ({
                 >
                   <TableSelectionCell
                     checked={selected}
-                    checkboxIndicator={{ 'aria-label': 'Velg rad' }}
+                    checkboxIndicator={{ 'aria-label': strings.DynamicList.SelectRow }}
                   />
                   {columns.map((column, colIndex) => {
                     const isFirstColumn = colIndex === 0
@@ -279,7 +279,13 @@ export const ListView: FC<IListViewProps> = ({
                             )}
                           </TableCellLayout>
                         ) : (
-                          <TableCellLayout>{isBoolean ? (item[column.columnId] ? strings.Yes : strings.No) : cellContent}</TableCellLayout>
+                          <TableCellLayout>
+                            {isBoolean
+                              ? item[column.columnId]
+                                ? strings.Yes
+                                : strings.No
+                              : cellContent}
+                          </TableCellLayout>
                         )}
                       </TableCell>
                     )

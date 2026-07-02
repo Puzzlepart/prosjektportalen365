@@ -1,4 +1,4 @@
-import { Combobox, Option, Radio, RadioGroup, Text } from '@fluentui/react-components'
+import { Combobox, Option, Radio, RadioGroup, Spinner, Text } from '@fluentui/react-components'
 import strings from 'ProjectExtensionsStrings'
 import { FieldContainer, getFluentIconWithFallback, UserMessage } from 'pp365-shared-library'
 import React from 'react'
@@ -16,6 +16,11 @@ export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
     isSingleTemplate,
     validationMessage,
     showPlannerWarning,
+    isCloudTemplate,
+    isResolvingCloudTemplate,
+    cloudTemplateError,
+    cloudTemplateMessage,
+    cloudIncompatibleMessage,
     onModeChanged,
     onTemplateSelect,
     onClearTemplate,
@@ -86,6 +91,14 @@ export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
       {showPlannerWarning && (
         <UserMessage text={strings.PlannerMemberWarningMessage} intent='warning' />
       )}
+      {isCloudTemplate && !cloudTemplateError && !cloudIncompatibleMessage && (
+        <UserMessage text={cloudTemplateMessage} intent='info' />
+      )}
+      {cloudIncompatibleMessage && <UserMessage text={cloudIncompatibleMessage} intent='warning' />}
+      {isResolvingCloudTemplate && (
+        <Spinner size='tiny' label={strings.CloudTemplateResolvingMessage} />
+      )}
+      {cloudTemplateError && <UserMessage text={cloudTemplateError} intent='error' />}
       {validationMessage && <UserMessage text={validationMessage} intent='info' />}
     </div>
   )

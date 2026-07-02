@@ -50,11 +50,34 @@ export class SitePermissions extends BaseTask {
           if (isEmpty(users)) continue
           const roleDefId = roleDefinitions[permissionLevel]
           if (roleDefId) {
-            this.logInformation(
-              `Creating group ${groupName} with permission level ${permissionLevel}...`
-            )
-            const { group, data } = await params.web.siteGroups.add({ Title: groupName })
-            await params.web.roleAssignments.add(data.Id, roleDefId)
+            // Reuse the group if it already exists on the project web (the setup
+            // wizard may be re-run on the same site). Blindly adding a group whose
+            // name is taken returns a 500 ("navn er allerede i bruk"), so
+            // ensure-then-add to keep the task idempotent.
+            let group
+            let groupId: number
+            try {
+              const existing = await params.web.siteGroups.getByName(groupName).select('Id')<{
+                Id: number
+              }>()
+              group = params.web.siteGroups.getByName(groupName)
+              groupId = existing.Id
+              this.logInformation(`Reusing existing group ${groupName} (id ${groupId}).`)
+            } catch {
+              this.logInformation(
+                `Creating group ${groupName} with permission level ${permissionLevel}...`
+              )
+              const added = await params.web.siteGroups.add({ Title: groupName })
+              group = added.group
+              groupId = added.data.Id
+            }
+            // Re-adding an existing role assignment can also fail — guard it so it
+            // doesn't abort the user-add loop below.
+            try {
+              await params.web.roleAssignments.add(groupId, roleDefId)
+            } catch (error) {
+              this.logInformation(`Role assignment for ${groupName} already present. ${error}`)
+            }
             for (let j = 0; j < users.length; j++) {
               this.logInformation(`Adding user ${users[j]} to group ${groupName}...`)
               try {

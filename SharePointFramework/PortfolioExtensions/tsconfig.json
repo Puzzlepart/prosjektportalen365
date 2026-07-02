@@ -37,6 +37,9 @@
       "models": [
         "models"
       ],
+      "services": [
+        "services"
+      ],
       "interfaces": [
         "interfaces"
       ],

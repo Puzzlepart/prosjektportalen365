@@ -20,7 +20,9 @@ import '@pnp/sp/lists'
 import '@pnp/sp/items'
 import '@pnp/sp/batching'
 import { createBatch } from '@pnp/sp/batching'
-import { ContentConfig, ContentConfigType } from 'pp365-shared-library'
+import { CloudContentConfig, ContentConfig, ContentConfigType } from 'pp365-shared-library'
+import { LogLevel } from '@pnp/logging'
+import { WebProvisioner } from 'sp-js-provisioning'
 import { IPlannerTaskSPItem } from './types'
 
 export class CopyListData extends BaseTask {
@@ -55,6 +57,11 @@ export class CopyListData extends BaseTask {
           message: `Processing content config: ${contentConfig.text} (${contentConfig.type})`,
           level: 'info'
         })
+        // Cloud template content: rows come from the .pppkg, not a hub list.
+        if (contentConfig instanceof CloudContentConfig) {
+          await this._applyCloudContentConfig(contentConfig, params)
+          continue
+        }
         await contentConfig.load()
         // eslint-disable-next-line default-case
         switch (contentConfig.type) {
@@ -72,12 +79,12 @@ export class CopyListData extends BaseTask {
                   'GtPlannerPreviewType'
                 ])
               )
-                .sort((a, b) => a.GtSortOrder - b.GtSortOrder)
-                .sort((a, b) => {
-                  if (a.GtCategory === b.GtCategory) {
-                    return b.GtSortOrder - a.GtSortOrder
-                  }
-                })
+                // Group by category, then ascending GtSortOrder within each category.
+                .sort((a, b) =>
+                  a.GtCategory === b.GtCategory
+                    ? a.GtSortOrder - b.GtSortOrder
+                    : (a.GtCategory ?? '').localeCompare(b.GtCategory ?? '')
+                )
 
               const labels = _.uniq(
                 _.flatten(
@@ -116,6 +123,79 @@ export class CopyListData extends BaseTask {
     } catch (error) {
       throw new BaseTaskError(this.taskName, strings.CopyListDataErrorMessage, error)
     }
+  }
+
+  /**
+   * Apply a **cloud template** list-content config: read the bundled
+   * rows from the `.pppkg`, project them to the config's `fields` subset, and
+   * write them into the project's destination list via the sp-js-provisioning
+   * `DataRows` handler (run on the project web, after `SetTaxonomyFields` so the
+   * `GtProjectPhase` term field is already bound). Nothing is read from the hub.
+   *
+   * @param config Cloud content config
+   * @param params Task parameters
+   */
+  private async _applyCloudContentConfig(
+    config: CloudContentConfig,
+    params: IBaseTaskParams
+  ): Promise<void> {
+    const dataRows = await config.getCloudDataRows()
+    if (!dataRows?.Rows?.length) {
+      this.logInformation(`No bundled rows for cloud content config ${config.text}`)
+      return
+    }
+    const fields = config.fields
+    const rows = dataRows.Rows.map((row) => {
+      if (fields.length === 0) return row
+      return fields.reduce((projected: Record<string, any>, fieldName) => {
+        if (row[fieldName] !== undefined) projected[fieldName] = row[fieldName]
+        return projected
+      }, {})
+    })
+    this.onProgress(
+      format(
+        strings.CopyListItemsText,
+        rows.length,
+        config.sourceListTitle,
+        config.destinationListTitle
+      ),
+      '',
+      'List'
+    )
+    // Match the destination list's actual base template (e.g. 100 custom list,
+    // 101 document library) so the DataRows handler doesn't mismatch an existing
+    // library/list. The list already exists (created by the template); fall back
+    // to 100 only if it can't be read.
+    let destinationTemplate = 100
+    try {
+      const destinationProps = (await params.web.lists
+        .getByTitle(config.destinationListTitle)
+        .select('BaseTemplate')()) as { BaseTemplate?: number }
+      if (typeof destinationProps?.BaseTemplate === 'number')
+        destinationTemplate = destinationProps.BaseTemplate
+    } catch {
+      // Destination list not found / unreadable — keep the generic-list default.
+    }
+    const schema = {
+      Lists: [
+        {
+          Title: config.destinationListTitle,
+          Description: '',
+          Template: destinationTemplate,
+          ContentTypesEnabled: false,
+          DataRows: {
+            KeyColumn: dataRows.KeyColumn ?? 'Title',
+            UpdateBehavior: dataRows.UpdateBehavior ?? 'Overwrite',
+            Rows: rows
+          }
+        }
+      ]
+    }
+    const provisioner = new WebProvisioner(params.web).setup({
+      spfxContext: params.context,
+      logging: { prefix: '(ProjectSetup) (CopyListData) (Cloud)', activeLogLevel: LogLevel.Info }
+    } as any)
+    await provisioner.applyTemplate(schema as any, null)
   }
 
   /**

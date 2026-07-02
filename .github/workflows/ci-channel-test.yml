@@ -19,7 +19,7 @@ jobs:
   build_release_package_test:
     name: Build release package (test channel)
     runs-on: macos-latest
-    if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') && !contains(github.event.head_commit.message, '[apps-only]') }}
+    if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') && !contains(github.event.head_commit.message, '[apps-only') }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -77,7 +77,7 @@ jobs:
   build_release_package_test_packages_only:
     name: Build release package - packages only (test channel)
     runs-on: macos-latest
-    if: ${{ contains(github.event.head_commit.message, '[apps-only]')}}
+    if: ${{ contains(github.event.head_commit.message, '[apps-only')}}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -91,8 +91,28 @@ jobs:
         with:
           node-version: ${{ vars.NODE_VERSION }}
 
+      - name: Determine apps-only solutions
+        id: appsonly
+        env:
+          COMMIT_MSG: ${{ github.event.head_commit.message }}
+        run: |
+          $solutions = ''
+          if ($env:COMMIT_MSG -match '\[apps-only:([^\]]+)\]') {
+            $solutions = (($matches[1] -split ',') | ForEach-Object { $_.Trim() } | Where-Object { $_ }) -join ','
+          }
+          "solutions=$solutions" >> $env:GITHUB_OUTPUT
+        shell: pwsh
+
       - name: Run Install/Build-Release.ps1 in CI mode for channel test
-        run: Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel test
+        env:
+          SOLUTIONS: ${{ steps.appsonly.outputs.solutions }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:SOLUTIONS)) {
+            Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel test
+          }
+          else {
+            Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel test -Solutions ($env:SOLUTIONS -split ',')
+          }
         shell: pwsh
 
       - uses: actions/upload-artifact@v4

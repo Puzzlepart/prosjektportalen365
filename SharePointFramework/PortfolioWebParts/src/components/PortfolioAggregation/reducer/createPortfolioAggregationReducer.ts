@@ -248,7 +248,7 @@ export const createPortfolioAggregationReducer = (
       } else {
         state.groups = null
         state.groupBy = null
-        state.items = state.items = sortArray(
+        state.items = sortArray(
           [...state.items],
           [state.sortBy?.fieldName ? state.sortBy.fieldName : 'SiteTitle'],
           {
