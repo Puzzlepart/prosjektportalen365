@@ -4030,6 +4030,24 @@
   <data name="SiteFields_GtStatusOpportunitiesComment_DisplayName" xml:space="preserve">
     <value>Comment, opportunities</value>
   </data>
+  <data name="SiteFields_GtStatusPageId_Description" xml:space="preserve">
+    <value>Unique ID (UniqueId) of the status page the report belongs to. An empty value means the report belongs to the project's default status page.</value>
+  </data>
+  <data name="SiteFields_GtStatusPageId_DisplayName" xml:space="preserve">
+    <value>Status page ID</value>
+  </data>
+  <data name="SiteFields_GtStatusPageTitle_Description" xml:space="preserve">
+    <value>Title of the status page the report belongs to, used as the display name for the report series.</value>
+  </data>
+  <data name="SiteFields_GtStatusPageTitle_DisplayName" xml:space="preserve">
+    <value>Status page title</value>
+  </data>
+  <data name="SiteFields_GtStatusPageUrl_Description" xml:space="preserve">
+    <value>Site-relative URL of the status page the report belongs to, used for links to the report.</value>
+  </data>
+  <data name="SiteFields_GtStatusPageUrl_DisplayName" xml:space="preserve">
+    <value>Status page URL</value>
+  </data>
   <data name="SiteFields_GtStatusQuality_Description" xml:space="preserve">
     <value>What is the status of the project's quality, e.g. have there been deviations from the requirements specification?</value>
   </data>

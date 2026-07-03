@@ -1,0 +1,36 @@
+{
+    "ClientSidePages": [
+        {
+            "Name": "Prosjektstatus-2.aspx",
+            "Title": "Prosjektstatus 2",
+            "PageLayoutType": "SingleWebPartAppPage",
+            "CommentsDisabled": true,
+            "Sections": [
+                {
+                    "Columns": [
+                        {
+                            "Factor": 12,
+                            "Controls": [
+                                {
+                                    "Id": "681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6",
+                                    "Properties": {
+                                        "title": "Prosjektstatus 2",
+                                        "useSeparateReportSeries": true,
+                                        "riskMatrix": {
+                                            "calloutTemplate": "<h3>{Title}</h3>\n<p><strong>Risiko strategi: </strong>{GtRiskStrategy}</p>\n<p><strong>Risiko nærhet: </strong>{GtRiskProximity}</p>\n<p><strong>Risiko status: </strong>{GtRiskStatus}</p>",
+                                            "width": 800
+                                        },
+                                        "opportunityMatrix": {
+                                            "calloutTemplate": "<h3>{Title}</h3>\n<p><strong>Risiko strategi: </strong>{GtRiskStrategy}</p>\n<p><strong>Risiko nærhet: </strong>{GtRiskProximity}</p>\n<p><strong>Risiko status: </strong>{GtRiskStatus}</p>",
+                                            "width": 800
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

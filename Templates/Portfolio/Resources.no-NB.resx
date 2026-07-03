@@ -4030,6 +4030,24 @@
   <data name="SiteFields_GtStatusOpportunitiesComment_DisplayName" xml:space="preserve">
     <value>Kommentar, muligheter</value>
   </data>
+  <data name="SiteFields_GtStatusPageId_Description" xml:space="preserve">
+    <value>Unik ID (UniqueId) for statussiden rapporten tilhører. Tom verdi betyr at rapporten tilhører prosjektets standard statusside.</value>
+  </data>
+  <data name="SiteFields_GtStatusPageId_DisplayName" xml:space="preserve">
+    <value>Statusside-ID</value>
+  </data>
+  <data name="SiteFields_GtStatusPageTitle_Description" xml:space="preserve">
+    <value>Tittelen på statussiden rapporten tilhører, brukt som visningsnavn for rapportserien.</value>
+  </data>
+  <data name="SiteFields_GtStatusPageTitle_DisplayName" xml:space="preserve">
+    <value>Statusside-tittel</value>
+  </data>
+  <data name="SiteFields_GtStatusPageUrl_Description" xml:space="preserve">
+    <value>Områderelativ URL til statussiden rapporten tilhører, brukt for lenker til rapporten.</value>
+  </data>
+  <data name="SiteFields_GtStatusPageUrl_DisplayName" xml:space="preserve">
+    <value>Statusside-URL</value>
+  </data>
   <data name="SiteFields_GtStatusQuality_Description" xml:space="preserve">
     <value>Hva er status på prosjektets kvalitet, har det for eksempel oppstått avvik fra kravspesifikasjonen?</value>
   </data>

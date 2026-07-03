@@ -45,6 +45,12 @@
                         <pnp:Property Key="GtExtensionHidden" Value="1"/>
                     </pnp:Properties>
                 </pnp:File>
+                <pnp:File Src="Prosjekttillegg/EkstraStatusside.json" Folder="Prosjekttillegg" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Ekstra statusside" />
+                        <pnp:Property Key="GtDescription" Value="Legger til en ekstra prosjektstatus-side (Prosjektstatus 2) med egen, uavhengig rapportserie. Lenke til siden må legges til i venstremenyen manuelt." />
+                    </pnp:Properties>
+                </pnp:File>
                 <pnp:File Src="SiteAssets/Konfigurasjon/Risikomatrise/standard-konfigurasjon.json" Folder="SiteAssets/Konfigurasjon/Risikomatrise" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Standard 5x5 matrise" />

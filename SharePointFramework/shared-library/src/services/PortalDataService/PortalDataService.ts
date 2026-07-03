@@ -37,6 +37,7 @@ import {
 } from '../../models'
 import {
   getClassProperties,
+  getStatusPageSeriesFilter,
   isUnauthorizedError,
   makeUrlAbsolute,
   transformFieldXml
@@ -1016,7 +1017,8 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     filter = '',
     top,
     select,
-    useCaching = true
+    useCaching = true,
+    statusPageId
   }: GetStatusReportsOptions): Promise<StatusReport[]> {
     if (!this.isAvailable) return []
     if (!this._configuration.spfxContext.pageContext) {
@@ -1026,6 +1028,8 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     }
     if (stringIsNullOrEmpty(filter))
       filter = `GtSiteId eq '${this._configuration.spfxContext.pageContext.site.id.toString()}'`
+    if (statusPageId !== undefined)
+      filter = `(${filter}) and ${getStatusPageSeriesFilter(statusPageId)}`
     try {
       const list = this._getList('PROJECT_STATUS')
       let items = list.items

@@ -22,5 +22,8 @@
         <pnp:FieldRef ID="9a81b4e1-64ea-40c2-9be1-946f20e78999" Name="GtModerationStatus" UpdateChildren="true" />
         <pnp:FieldRef ID="fba7ced6-9970-4b14-ab9c-7c809310d86d" Name="GtSiteId" UpdateChildren="true" />
         <pnp:FieldRef ID="B3004225-79DE-42CC-A4B7-80968A9AFC58" Name="GtLastReportDate" UpdateChildren="true" />
+        <pnp:FieldRef ID="9a4a0fdb-9644-426d-8ed5-b05384c15661" Name="GtStatusPageId" UpdateChildren="true" />
+        <pnp:FieldRef ID="a619d5ef-5f20-410b-8567-c9aa8642248c" Name="GtStatusPageTitle" UpdateChildren="true" />
+        <pnp:FieldRef ID="bbf3b3a2-05fc-4b54-8be3-b2a4b5c9eae3" Name="GtStatusPageUrl" UpdateChildren="true" />
     </pnp:FieldRefs>
 </pnp:ContentType>

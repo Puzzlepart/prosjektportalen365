@@ -1,5 +1,6 @@
 import { ItemFieldValues } from './ItemFieldValues'
 import resource from 'SharedResources'
+import { getStatusPageSeriesKey } from '../util/statusReportSeries'
 
 export type StatusReportAttachment = {
   name?: string
@@ -69,22 +70,51 @@ export class StatusReport {
   }
 
   /**
-   * Get url for the report page
+   * Get url for the report page. Uses the status page URL stamped on the
+   * report (`GtStatusPageUrl`) when present, falling back to the default
+   * status page for reports belonging to the default series.
    *
    * @param urlSourceParam - URL source param
    */
   public url(urlSourceParam: string) {
-    return `${resource.Navigation_ProjectStatus_Url}?selectedReport=${
-      this.id
-    }&Source=${encodeURIComponent(urlSourceParam)}`
+    const pageUrl = this.statusPageUrl || resource.Navigation_ProjectStatus_Url
+    return `${pageUrl}?selectedReport=${this.id}&Source=${encodeURIComponent(urlSourceParam)}`
   }
 
   /**
-   * Get status values from item. All fields with a field name starting with `Gt` and ending with `Status`
+   * ID (`UniqueId`) of the status page the report belongs to, normalized to
+   * lowercase. An empty string means the report belongs to the project's
+   * default status page.
+   */
+  public get statusPageId(): string {
+    return getStatusPageSeriesKey(
+      this.fieldValues.get('GtStatusPageId', { format: 'text', defaultValue: '' })
+    )
+  }
+
+  /**
+   * Title of the status page the report belongs to. Empty for reports
+   * belonging to the default status page.
+   */
+  public get statusPageTitle(): string {
+    return this.fieldValues.get('GtStatusPageTitle', { format: 'text', defaultValue: '' }) ?? ''
+  }
+
+  /**
+   * Site-relative URL of the status page the report belongs to. Empty for
+   * reports belonging to the default status page.
+   */
+  public get statusPageUrl(): string {
+    return this.fieldValues.get('GtStatusPageUrl', { format: 'text', defaultValue: '' }) ?? ''
+  }
+
+  /**
+   * Get status values from item. All fields with a field name starting with `Gt` and ending with `Status`,
+   * excluding the status page identity fields (`GtStatusPage*`).
    */
   public get statusValues(): Record<string, string> {
     return this.fieldValues.keys
-      .filter((fieldName) => /^Gt.*Status/.test(fieldName))
+      .filter((fieldName) => /^Gt.*Status/.test(fieldName) && !/^GtStatusPage/.test(fieldName))
       .reduce(
         (obj, fieldName) => ({
           ...obj,

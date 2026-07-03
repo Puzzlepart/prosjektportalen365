@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { IRenderItemColumnProps } from 'pp365-shared-library'
-import { formatDate } from 'pp365-shared-library'
+import { formatDate, getStatusPageSeriesKey } from 'pp365-shared-library'
 
 export interface IStatusColumnProps extends IRenderItemColumnProps {
   status?: ProjectStatusModel
@@ -35,6 +35,13 @@ class ProjectStatusSection {
 export class ProjectStatusModel {
   public siteId: string
 
+  /**
+   * Status page series key for the report (`GtStatusPageId` normalized to
+   * lowercase). An empty string means the report belongs to the project's
+   * default status page series.
+   */
+  public statusPageId: string
+
   constructor(
     private item: Record<string, any>,
     private columnConfigurations: {
@@ -43,6 +50,7 @@ export class ProjectStatusModel {
     private statusSections: Array<IStatusSectionItem>
   ) {
     this.siteId = this.item.GtSiteId
+    this.statusPageId = getStatusPageSeriesKey(this.item.GtStatusPageId)
   }
 
   /**
@@ -61,7 +69,8 @@ export class ProjectStatusModel {
       Object.keys(this.item),
       (key) =>
         (_.startsWith(key, 'GtStatus') || _.startsWith(key, 'GtOverallStatus')) &&
-        !_.endsWith(key, 'Comment')
+        !_.endsWith(key, 'Comment') &&
+        !_.startsWith(key, 'GtStatusPage')
     )
     return statusKeys.map((key) => {
       const name = _.capitalize(this.columnConfigurations[key]?.name.split(' ')[1])
