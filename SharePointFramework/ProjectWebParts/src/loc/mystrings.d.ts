@@ -285,6 +285,17 @@ declare interface IProjectWebPartsStrings {
   ArchiveTableColumnName: string
   ArchiveTableColumnModified: string
   ArchiveTableColumnItemCount: string
+  ArchiveTableColumnDocumentType: string
+  ArchiveSearchDocumentsPlaceholder: string
+  ArchiveFilterDocumentTypeTooltip: string
+  ArchiveFilterClearText: string
+  ArchiveArchivableText: string
+  ArchiveMetaPhaseLabel: string
+  ArchiveMetaCreatedByLabel: string
+  ArchiveMetaCreatedLabel: string
+  ArchiveMetaModifiedByLabel: string
+  ArchiveMetaModifiedLabel: string
+  ArchiveNoFilterResultsText: string
   ErrorArchiving: string
   UseArchiveFieldLabel: string
   ViewsGroupName: string

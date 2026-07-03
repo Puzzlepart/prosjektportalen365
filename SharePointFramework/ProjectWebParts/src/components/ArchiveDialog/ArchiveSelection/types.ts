@@ -14,11 +14,28 @@ export interface IArchiveItem {
   selected: boolean
   disabled?: boolean
   projectPhaseId?: string
+  /** Display label of the project phase term (documents). */
+  phaseName?: string
   documentTypeId?: string
   documentTypeName?: string
   dateModified?: string
+  /** Display name of the user who created the document. */
+  author?: string
+  dateCreated?: string
+  /** Display name of the user who last modified the document. */
+  modifiedBy?: string
   itemCount?: number
   previousArchive?: IArchiveItemHistory
+}
+
+/**
+ * View filters for the documents section (search + document type). Filtering
+ * only affects which rows are shown — items selected before filtering stay in
+ * the archive configuration.
+ */
+export interface IArchiveDocumentFilters {
+  searchTerm?: string
+  documentTypeIds?: string[]
 }
 
 export interface IArchiveSection {
@@ -50,6 +67,11 @@ export interface IArchiveSelectionProps {
    * documents without a phase). Used by the phase-change flow. Omit for manual mode.
    */
   currentPhaseId?: string
+  /**
+   * Whether the document library has the document type (`GtDocumentType`) field —
+   * controls the "Dokumenttype" column. Falls back to deriving from the items.
+   */
+  hasDocumentTypes?: boolean
   isLoading?: boolean
   onConfigurationChange: (config: IArchiveConfiguration) => void
 }
