@@ -4,9 +4,12 @@ import * as strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
 import styles from './ArchiveProgress.module.scss'
 
+/** Progress of a single archive scope (documents or lists). */
 export interface IArchiveProgressStep {
   current: number
   total: number
+  /** Number of items in this scope that failed to log. */
+  failed: number
 }
 
 export interface IArchiveProgressProps {
@@ -31,11 +34,17 @@ const Indicator: FC<IIndicatorProps> = ({ label, step, Icon }) => {
           {step.current} / {step.total}
         </span>
       </div>
-      <ProgressBar thickness='medium' value={value} max={1} />
+      <ProgressBar
+        thickness='medium'
+        value={value}
+        max={1}
+        color={step.failed > 0 ? 'error' : undefined}
+      />
     </div>
   )
 }
 
+/** Per-scope progress bars for the archive run (a scope shows only when it has items). */
 export const ArchiveProgress: FC<IArchiveProgressProps> = ({ documents, lists }) => (
   <div className={styles.archiveProgress}>
     <Text className={styles.subText}>{strings.ArchiveProgressSubText}</Text>

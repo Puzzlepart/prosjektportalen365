@@ -4,6 +4,9 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  // Fill the (tall) dialog so the section tables get the extra height.
+  flex: 1;
+  min-height: 0;
 
   .infoCard {
     display: flex;
@@ -103,6 +106,9 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 16px;
+    // Grow to fill the remaining dialog height so the section cards can too.
+    flex: 1;
+    min-height: 0;
 
     @media (max-width: 720px) {
       grid-template-columns: minmax(0, 1fr);
@@ -118,6 +124,7 @@
     border: 1px solid var(--colorNeutralStroke2);
     padding: 12px 14px;
     min-width: 0;
+    min-height: 0;
 
     .sectionHeader {
       display: flex;
@@ -160,7 +167,11 @@
     .sectionContent {
       display: flex;
       flex-direction: column;
-      max-height: 340px;
+      // Fill the section card in the tall dialog; the viewport cap keeps the
+      // shared component bounded where there is no flex parent (phase dialog).
+      flex: 1 1 auto;
+      min-height: 0;
+      max-height: calc(100vh - 360px);
       overflow: auto;
       padding-right: 4px;
       min-width: 0;

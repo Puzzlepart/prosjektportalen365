@@ -5,24 +5,26 @@ import { IArchiveItem, IArchiveSection, IArchiveSelectionProps } from './types'
 
 type ItemId = string | number
 
-const enrichWithHistory = (
+/** Attaches the most recent archive-history entry to each item (matched by stable id, then url, then title). */
+function enrichWithHistory(
   items: IArchiveItem[],
   history?: Map<string, IArchiveItemHistory>
-): IArchiveItem[] => {
+): IArchiveItem[] {
   if (!history || history.size === 0) return items
   return items.map((item) => {
     const previous =
-      (item.itemId && history.get(item.itemId)) ||
+      (item.spItemId && history.get(item.spItemId)) ||
       (item.url && history.get(item.url)) ||
       history.get(item.title)
     return previous ? { ...item, previousArchive: previous } : item
   })
 }
 
-const filterByPhase = (
+/** Restricts documents to the current phase (plus phase-less documents); no-op when no phase is given. */
+function filterByPhase(
   documents: IArchiveItem[],
   currentPhaseId: string | undefined
-): IArchiveItem[] => {
+): IArchiveItem[] {
   if (!currentPhaseId) return documents
   const matchingPhase = documents.filter((doc) => doc.projectPhaseId === currentPhaseId)
   const withoutPhase = documents.filter(
@@ -31,10 +33,13 @@ const filterByPhase = (
   return [...withoutPhase, ...matchingPhase]
 }
 
-const applySelection = (items: IArchiveItem[], selectedIds: Set<ItemId>): IArchiveItem[] =>
-  items.map((item) => ({ ...item, selected: selectedIds.has(item.id) }))
+/** Marks each item selected/unselected from the current selection set. */
+function applySelection(items: IArchiveItem[], selectedIds: Set<ItemId>): IArchiveItem[] {
+  return items.map((item) => ({ ...item, selected: selectedIds.has(item.id) }))
+}
 
-const buildSection = (key: string, title: string, items: IArchiveItem[]): IArchiveSection => {
+/** Builds a section descriptor (counts + all/some-selected flags) from its items. */
+function buildSection(key: string, title: string, items: IArchiveItem[]): IArchiveSection {
   const selectedCount = items.filter((item) => item.selected).length
   const enabled = items.filter((item) => !item.disabled)
   const allSelected = enabled.length > 0 && enabled.every((item) => item.selected)
@@ -48,6 +53,11 @@ const buildSection = (key: string, title: string, items: IArchiveItem[]): IArchi
   }
 }
 
+/**
+ * Selection logic for {@link ArchiveSelection}: tracks which items are selected,
+ * derives the documents/lists sections (history-enriched, phase-filtered), and
+ * reports the chosen configuration up via `onConfigurationChange`.
+ */
 export function useArchiveSelection(props: IArchiveSelectionProps) {
   const { documents, lists, history, currentPhaseId, onConfigurationChange } = props
   const [selectedIds, setSelectedIds] = useState<Set<ItemId>>(new Set())

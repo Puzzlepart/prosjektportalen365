@@ -19,7 +19,7 @@ export type StatusFilter = 'all' | 'success' | 'pending' | 'failed'
  * `writeArchiveLogEntries`), so comparisons here are intentionally against
  * `strings.ArchiveLogStatus*`.
  */
-export const primaryStatusOf = (operation: IArchiveOperation): string => {
+export function primaryStatusOf(operation: IArchiveOperation): string {
   const statuses = (operation.scopes || []).map((s) => s.status)
   if (statuses.includes(strings.ArchiveLogStatusError)) return strings.ArchiveLogStatusError
   if (statuses.includes(strings.ArchiveLogStatusWarning)) return strings.ArchiveLogStatusWarning
@@ -28,7 +28,8 @@ export const primaryStatusOf = (operation: IArchiveOperation): string => {
   return strings.ArchiveLogStatusSuccess
 }
 
-const operationFilter = (operation: IArchiveOperation, filter: StatusFilter): boolean => {
+/** Whether an operation matches the active status filter chip. */
+function operationFilter(operation: IArchiveOperation, filter: StatusFilter): boolean {
   if (filter === 'all') return true
   const statuses = (operation.scopes || []).map((s) => s.status)
   if (filter === 'success') return statuses.includes(strings.ArchiveLogStatusSuccess)

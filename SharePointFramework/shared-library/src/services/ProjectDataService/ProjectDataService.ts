@@ -2,7 +2,12 @@ import { format } from '@fluentui/react'
 import { AssignFrom, IPnPClientStore, PnPClientStorage, dateAdd } from '@pnp/core'
 import { ConsoleListener, Logger } from '@pnp/logging'
 import { IWeb, SPFI, spfi } from '@pnp/sp/presets/all'
-import { DefaultCaching, createSpfiInstance, getItemFieldValues } from '../../data'
+import {
+  DefaultCaching,
+  DefaultCachingRefresh,
+  createSpfiInstance,
+  getItemFieldValues
+} from '../../data'
 import {
   ChecklistItemModel,
   ChecklistSPItem,
@@ -367,13 +372,17 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
    * Get document types for the project.
    *
    * @param termSetId Term set ID
+   * @param refreshCache Bust the cached term set and re-fetch fresh data (for explicit refresh actions)
    */
-  public async getDocumentTypes(termSetId: string): Promise<DocumentTypeModel[]> {
+  public async getDocumentTypes(
+    termSetId: string,
+    refreshCache = false
+  ): Promise<DocumentTypeModel[]> {
     const [terms, web] = await Promise.all([
       this._sp.termStore.sets
         .getById(termSetId)
         .terms.select('*', 'localProperties')
-        .using(DefaultCaching)(),
+        .using(refreshCache ? DefaultCachingRefresh : DefaultCaching)(),
       this._sp.web.select('Language')()
     ])
     return terms.map((term) => new DocumentTypeModel(term, termSetId, web.Language))

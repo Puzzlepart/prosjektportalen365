@@ -226,15 +226,12 @@ declare interface IProjectWebPartsStrings {
   UsePhaseHooksFieldLabel: string
   ArchiveViewTitle: string
   ArchiveViewDescription: string
-  ArchiveMoreInformationText: string
   ArchiveInformationTitle: string
   ArchiveInformationText: string
   ArchiveDocumentsSection: string
   ArchiveListsSection: string
-  ArchiveSelectedItemsInfo: string
   ArchiveLoadingText: string
   ArchiveContinueText: string
-  ArchiveSelectAllText: string
   ArchiveNotArchivableText: string
   ArchiveNotArchivableListText: string
   ArchiveNotArchivableDocumentText: string
@@ -243,6 +240,10 @@ declare interface IProjectWebPartsStrings {
   ArchiveDocument: string
   ArchivePhaseTransition: string
   ArchiveManualMessage: string
+  ArchiveDataErrorText: string
+  ArchiveRetryText: string
+  ArchiveProcessErrorText: string
+  ArchivePartialNote: string
   ArchiveSectionTitle: string
   ArchiveSectionDescription: string
   ArchiveStartButtonLabel: string
@@ -270,8 +271,6 @@ declare interface IProjectWebPartsStrings {
   ArchiveCloseConfirmKeep: string
   ArchiveItemModifiedAfterArchive: string
   ArchiveStatusAggregateCounts: string
-  ArchiveStatusShowDetails: string
-  ArchiveStatusHideDetails: string
   ArchiveStatusFilterAll: string
   ArchiveStatusColumnTime: string
   ArchiveStatusColumnOperation: string
@@ -284,7 +283,6 @@ declare interface IProjectWebPartsStrings {
   ArchiveRefreshLabel: string
   ArchiveRefreshTooltip: string
   ArchiveTableColumnName: string
-  ArchiveTableColumnDocumentType: string
   ArchiveTableColumnModified: string
   ArchiveTableColumnItemCount: string
   ErrorArchiving: string
@@ -348,7 +346,6 @@ declare interface IProjectWebPartsStrings {
   ArchiveLogOperationManual: string
   ArchiveLogOperationEndClosed: string
   ArchiveStatusHeaderText: string
-  ArchiveStatusHeaderDescription: string
   ArchiveStatusDetailedMessage: string
   ArchiveStatusDocumentCount: string
   ArchiveStatusListCount: string

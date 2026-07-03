@@ -61,7 +61,8 @@ export interface IArchiveStatusInfo {
  */
 export interface IArchiveDocumentItem {
   id: number
-  itemId: string
+  /** Stable SharePoint GUID (`UniqueId`) — survives rename/move, used for logging and history matching. */
+  spItemId: string
   title: string
   projectPhaseId: string
   documentTypeId: string
@@ -76,7 +77,8 @@ export interface IArchiveDocumentItem {
  */
 export interface IArchiveListItem {
   id: string
-  itemId: string
+  /** Stable SharePoint list GUID (`Id`), used for logging and history matching. */
+  spItemId: string
   title: string
   url: string
   type: 'list'

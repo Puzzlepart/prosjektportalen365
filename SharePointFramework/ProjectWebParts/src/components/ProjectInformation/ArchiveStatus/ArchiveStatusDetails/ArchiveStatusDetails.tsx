@@ -26,6 +26,10 @@ import { IArchiveOperation } from '../../../../data/SPDataAdapter/types'
 import { primaryStatusOf, useArchiveStatusDetails } from './useArchiveStatusDetails'
 import styles from './ArchiveStatusDetails.module.scss'
 
+/**
+ * Props for {@link ArchiveStatusDetails} — the operations and the aggregate
+ * per-status counts to render.
+ */
 export interface IArchiveStatusDetailsProps {
   operations: IArchiveOperation[]
   totalEntries: number
@@ -92,7 +96,8 @@ const StatusTag: FC<{ status: string }> = ({ status }) => {
   )
 }
 
-const ProgressBar: FC<{
+/** Single stacked bar showing the success/pending/warning/error split of all entries. */
+const SegmentedProgressBar: FC<{
   success: number
   pending: number
   error: number
@@ -116,6 +121,10 @@ const ProgressBar: FC<{
   )
 }
 
+/**
+ * Expanded archive history for a project: a summary strip with a segmented
+ * progress bar, status filter chips, and a sortable table of archive operations.
+ */
 export const ArchiveStatusDetails: FC<IArchiveStatusDetailsProps> = ({
   operations,
   totalEntries,
@@ -162,7 +171,7 @@ export const ArchiveStatusDetails: FC<IArchiveStatusDetailsProps> = ({
               <span>{errorCount + warningCount}</span>
             </span>
           </div>
-          <ProgressBar
+          <SegmentedProgressBar
             success={successCount}
             pending={pendingCount}
             error={errorCount}
