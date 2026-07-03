@@ -29,18 +29,9 @@ import { useArchiveSelection } from './useArchiveSelection'
 import { useArchiveTable } from './useArchiveTable'
 import { IArchiveItem, IArchiveSection, IArchiveSelectionProps } from './types'
 import { format } from '@fluentui/react'
-import { FileTypeIcon } from 'pp365-shared-library'
+import { FileTypeIcon, formatDate } from 'pp365-shared-library'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
-
-const formatShortDate = (value?: string): string => {
-  if (!value) return ''
-  return new Date(value).toLocaleDateString('nb-NO', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
-  })
-}
 
 const selectCellStyle: React.CSSProperties = {
   width: 32,
@@ -50,20 +41,14 @@ const selectCellStyle: React.CSSProperties = {
   paddingRight: 0
 }
 
-const indicatorCellStyle: React.CSSProperties = {
-  width: 36,
-  minWidth: 36,
-  maxWidth: 36,
-  textAlign: 'center'
-}
-
 const itemCountCellStyle: React.CSSProperties = {
   width: 32,
   minWidth: 32,
   maxWidth: 32
 }
 
-const getStatusClass = (status: string): string => {
+/** Maps an archive-log status to its coloured previous-archive style. */
+function getStatusClass(status: string): string {
   switch (status) {
     case strings.ArchiveLogStatusSuccess:
       return styles.success
@@ -78,7 +63,8 @@ const getStatusClass = (status: string): string => {
   }
 }
 
-const wasModifiedAfterArchive = (item: IArchiveItem): boolean => {
+/** True when the item was modified after it was last archived. */
+function wasModifiedAfterArchive(item: IArchiveItem): boolean {
   if (!item.previousArchive || !item.dateModified) return false
   return new Date(item.dateModified).getTime() > item.previousArchive.date.getTime()
 }
@@ -94,7 +80,7 @@ const ModifiedAfterArchiveBadge: FC<{ item: IArchiveItem }> = ({ item }) => {
 
 const PreviousArchiveLabel: FC<{ item: IArchiveItem }> = ({ item }) => {
   if (!item.previousArchive) return null
-  const dateLabel = item.previousArchive.date.toLocaleDateString()
+  const dateLabel = formatDate(item.previousArchive.date)
   const renamedLabel =
     item.previousArchive.titleAtTimeOfArchive &&
     item.previousArchive.titleAtTimeOfArchive !== item.title
@@ -184,13 +170,13 @@ const DOCUMENTS_TABLE_CONFIG: IArchiveTableConfig = {
   ],
   columnSizing: {
     name: { defaultWidth: 220, minWidth: 140, idealWidth: 320 },
-    modified: { defaultWidth: 100, minWidth: 90, idealWidth: 100 }
+    modified: { defaultWidth: 150, minWidth: 120, idealWidth: 170 }
   },
   showFileMeta: true,
   secondColumn: {
     columnId: 'modified',
     header: strings.ArchiveTableColumnModified,
-    renderCell: (item) => formatShortDate(item.dateModified)
+    renderCell: (item) => formatDate(item.dateModified)
   },
   getDisabledTooltip: (item) => {
     if (item.documentTypeName) {
@@ -323,7 +309,7 @@ const ArchiveTable: FC<IArchiveTableProps> = ({
           ) : (
             secondHeaderCell
           )}
-          <TableHeaderCell className={styles.indicatorCell} style={indicatorCellStyle} />
+          <TableHeaderCell className={styles.indicatorCell} />
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -352,7 +338,7 @@ const ArchiveTable: FC<IArchiveTableProps> = ({
             >
               {secondColumn.renderCell(item)}
             </TableCell>
-            <TableCell className={styles.indicatorCell} style={indicatorCellStyle}>
+            <TableCell className={styles.indicatorCell}>
               {item.disabled && (
                 <Tooltip content={config.getDisabledTooltip(item)} relationship='label' withArrow>
                   <Info16Regular className={styles.indicatorIcon} />
@@ -449,6 +435,12 @@ const ArchiveSelectionSkeleton: FC = () => (
   </Skeleton>
 )
 
+/**
+ * The shared documents/lists picker for archiving — used by both the manual
+ * {@link ArchiveDialog} and the phase-change flow. Renders an info card plus one
+ * selectable, sortable table per scope; selection is reported up via
+ * `onConfigurationChange` (see {@link useArchiveSelection}).
+ */
 export const ArchiveSelection: FC<IArchiveSelectionProps> = (props) => {
   const { sections, toggleItemSelection, toggleSectionSelectAll } = useArchiveSelection(props)
 

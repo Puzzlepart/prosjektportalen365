@@ -36,7 +36,7 @@ export async function logArchiveOperations(
           doc.url || '',
           webUrl,
           undefined,
-          doc.itemId,
+          doc.spItemId,
           strings.ArchiveLogOperationPhaseTransition
         )
     ),
@@ -49,7 +49,7 @@ export async function logArchiveOperations(
           list.url || '',
           webUrl,
           undefined,
-          list.itemId,
+          list.spItemId,
           strings.ArchiveLogOperationPhaseTransition
         )
     )

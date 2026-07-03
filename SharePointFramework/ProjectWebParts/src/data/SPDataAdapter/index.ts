@@ -8,7 +8,11 @@ import {
   searchAggregatedItems,
   format
 } from 'pp365-shared-library'
-import { DefaultCaching, SPDataAdapterBase } from 'pp365-shared-library/lib/data'
+import {
+  DefaultCaching,
+  DefaultCachingRefresh,
+  SPDataAdapterBase
+} from 'pp365-shared-library/lib/data'
 import {
   DataSourceService,
   IPhaseField,
@@ -332,18 +336,20 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
 
   /**
    * Lists document archive candidates, returning no candidates if the library cannot be read.
+   *
+   * @param refreshCache Bust the cached response and fetch fresh data (for explicit refresh actions)
    */
-  public async getDocumentsForArchive(): Promise<IArchiveDocumentItem[]> {
+  public async getDocumentsForArchive(refreshCache = false): Promise<IArchiveDocumentItem[]> {
     try {
       const documents = await this.sp.web.lists
         .getByTitle(resource.Lists_Documents_Title)
         .items.select('*', 'Id', 'UniqueId', 'Title', 'FileRef', 'FileLeafRef', 'Modified')
         .filter('FSObjType eq 0')
-        .using(DefaultCaching)()
+        .using(refreshCache ? DefaultCachingRefresh : DefaultCaching)()
 
       return documents.map((doc): IArchiveDocumentItem => ({
         id: doc.Id,
-        itemId: doc.UniqueId || doc.GUID,
+        spItemId: doc.UniqueId || doc.GUID,
         title: doc.FileLeafRef || doc.Title,
         projectPhaseId: doc?.GtProjectPhase?.TermGuid,
         documentTypeId: doc?.GtDocumentType?.TermGuid,
@@ -362,13 +368,15 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
 
   /**
    * Lists visible archive candidates excluding known system lists; returns none on failure.
+   *
+   * @param refreshCache Bust the cached response and fetch fresh data (for explicit refresh actions)
    */
-  public async getListsForArchive(): Promise<IArchiveListItem[]> {
+  public async getListsForArchive(refreshCache = false): Promise<IArchiveListItem[]> {
     try {
       const lists = await this.sp.web.lists
         .select('Id', 'Title', 'DefaultViewUrl', 'Hidden', 'BaseTemplate', 'ItemCount')
         .filter('Hidden eq false and BaseTemplate ne 850')
-        .using(DefaultCaching)()
+        .using(refreshCache ? DefaultCachingRefresh : DefaultCaching)()
 
       const filteredLists = lists.filter(
         (list) =>
@@ -390,7 +398,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
 
       return filteredLists.map((list): IArchiveListItem => ({
         id: list.Id,
-        itemId: list.Id,
+        spItemId: list.Id,
         title: list.Title,
         url: list.DefaultViewUrl,
         type: 'list',

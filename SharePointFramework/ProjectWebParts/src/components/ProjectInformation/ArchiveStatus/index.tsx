@@ -14,7 +14,11 @@ import { ArchiveStatusDetails } from './ArchiveStatusDetails'
 import { useArchiveStatus } from './useArchiveStatus'
 import styles from './ArchiveStatus.module.scss'
 
-/** Shows the latest archive status with details in a popover. */
+/**
+ * Compact archive-status message bar for the project information panel: shows
+ * the last archive date + aggregate counts, and opens a popover with the full
+ * {@link ArchiveStatusDetails}. Hidden when archiving is disabled or empty.
+ */
 export const ArchiveStatus: FC = () => {
   const {
     archiveInfo,

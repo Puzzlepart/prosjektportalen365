@@ -8,57 +8,70 @@ import { ArchiveDialogView, IArchiveDialogProps, IArchiveProgressState } from '.
 
 /**
  * Writes archive-log entries for every selected document and list, reporting
- * incremental progress (per scope) via `onProgress` as it goes.
+ * incremental progress (per scope) via `onProgress`. A failed item is counted
+ * (per scope) rather than aborting the run; the resolved state's `status` is
+ * `error` when anything failed, otherwise `success`.
  */
 async function writeArchiveLogEntries(
   config: IArchiveConfiguration,
   webUrl: string,
   onProgress: (next: IArchiveProgressState) => void
-): Promise<void> {
+): Promise<IArchiveProgressState> {
   const message = strings.ArchiveManualMessage
   const operation = strings.ArchiveLogOperationManual
   const docs = config.documents || []
   const lists = config.lists || []
-  const docsTotal = docs.length
-  const listsTotal = lists.length
-  onProgress({
-    documents: { current: 0, total: docsTotal },
-    lists: { current: 0, total: listsTotal }
-  })
-  for (let i = 0; i < docs.length; i++) {
-    const doc = docs[i]
-    await SPDataAdapter.logDocumentArchive(
-      doc.title,
-      strings.ArchiveLogStatusInProgress,
-      message,
-      doc.url || '',
-      webUrl,
-      undefined,
-      doc.itemId,
-      operation
-    )
-    onProgress({
-      documents: { current: i + 1, total: docsTotal },
-      lists: { current: 0, total: listsTotal }
-    })
+  const state: IArchiveProgressState = {
+    documents: { current: 0, total: docs.length, failed: 0 },
+    lists: { current: 0, total: lists.length, failed: 0 },
+    status: 'running'
   }
-  for (let i = 0; i < lists.length; i++) {
-    const list = lists[i]
-    await SPDataAdapter.logListArchive(
-      list.title,
-      strings.ArchiveLogStatusInProgress,
-      message,
-      list.url || '',
-      webUrl,
-      undefined,
-      list.itemId,
-      operation
-    )
+  const emit = () =>
     onProgress({
-      documents: { current: docsTotal, total: docsTotal },
-      lists: { current: i + 1, total: listsTotal }
+      documents: { ...state.documents },
+      lists: { ...state.lists },
+      status: state.status
     })
+  emit()
+  for (const doc of docs) {
+    try {
+      await SPDataAdapter.logDocumentArchive(
+        doc.title,
+        strings.ArchiveLogStatusInProgress,
+        message,
+        doc.url || '',
+        webUrl,
+        undefined,
+        doc.spItemId,
+        operation
+      )
+    } catch {
+      state.documents.failed++
+    }
+    state.documents.current++
+    emit()
   }
+  for (const list of lists) {
+    try {
+      await SPDataAdapter.logListArchive(
+        list.title,
+        strings.ArchiveLogStatusInProgress,
+        message,
+        list.url || '',
+        webUrl,
+        undefined,
+        list.spItemId,
+        operation
+      )
+    } catch {
+      state.lists.failed++
+    }
+    state.lists.current++
+    emit()
+  }
+  state.status = state.documents.failed + state.lists.failed > 0 ? 'error' : 'success'
+  emit()
+  return state
 }
 
 /**
@@ -69,13 +82,15 @@ async function writeArchiveLogEntries(
  */
 export function useArchiveDialog({ open, webUrl, onDismiss, onArchived }: IArchiveDialogProps) {
   const fluentProviderId = useId('fp-archive-dialog')
-  const { documents, lists, history, isLoading, refresh } = useArchiveDialogData(webUrl, open)
+  const { documents, lists, history, isLoading, error, refresh } = useArchiveDialogData(webUrl, open)
   const [view, setView] = useState<ArchiveDialogView>('selection')
   const [config, setConfig] = useState<IArchiveConfiguration>({ documents: [], lists: [] })
-  const [progress, setProgress] = useState<IArchiveProgressState>({
-    documents: { current: 0, total: 0 },
-    lists: { current: 0, total: 0 }
-  })
+  const emptyProgress: IArchiveProgressState = {
+    documents: { current: 0, total: 0, failed: 0 },
+    lists: { current: 0, total: 0, failed: 0 },
+    status: 'running'
+  }
+  const [progress, setProgress] = useState<IArchiveProgressState>(emptyProgress)
   const [showCloseConfirm, setShowCloseConfirm] = useState(false)
 
   const selectedCount = (config.documents?.length || 0) + (config.lists?.length || 0)
@@ -84,7 +99,7 @@ export function useArchiveDialog({ open, webUrl, onDismiss, onArchived }: IArchi
   const resetAndClose = () => {
     setView('selection')
     setConfig({ documents: [], lists: [] })
-    setProgress({ documents: { current: 0, total: 0 }, lists: { current: 0, total: 0 } })
+    setProgress(emptyProgress)
     setShowCloseConfirm(false)
     onDismiss()
   }
@@ -101,7 +116,10 @@ export function useArchiveDialog({ open, webUrl, onDismiss, onArchived }: IArchi
     setView('archiving')
     try {
       await writeArchiveLogEntries(config, webUrl, setProgress)
+      // Refresh status regardless — a partial run still wrote some rows.
       onArchived?.()
+    } catch {
+      setProgress((prev) => ({ ...prev, status: 'error' }))
     } finally {
       setView('completed')
     }
@@ -120,6 +138,7 @@ export function useArchiveDialog({ open, webUrl, onDismiss, onArchived }: IArchi
     lists,
     history,
     isLoading,
+    error,
     refresh,
     view,
     setView,
