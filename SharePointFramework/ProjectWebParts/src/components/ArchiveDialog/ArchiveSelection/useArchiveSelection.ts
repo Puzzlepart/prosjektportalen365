@@ -72,7 +72,17 @@ export function useArchiveSelection(
   documentFilters?: IArchiveDocumentFilters
 ) {
   const { documents, lists, history, currentPhaseId, onConfigurationChange } = props
-  const [selectedIds, setSelectedIds] = useState<Set<ItemId>>(new Set())
+  // Seeded from `initialSelection` so a remount (navigating back from the
+  // confirm step) restores the selection instead of emitting an empty config.
+  const [selectedIds, setSelectedIds] = useState<Set<ItemId>>(
+    () =>
+      new Set(
+        [
+          ...(props.initialSelection?.documents ?? []),
+          ...(props.initialSelection?.lists ?? [])
+        ].map((item) => item.id)
+      )
+  )
 
   const documentsSectionItems = useMemo(
     () =>
@@ -89,6 +99,7 @@ export function useArchiveSelection(
 
   const searchTerm = (documentFilters?.searchTerm ?? '').trim().toLowerCase()
   const documentTypeIds = documentFilters?.documentTypeIds ?? []
+  const archiveStatuses = documentFilters?.archiveStatuses ?? []
   const visibleDocumentsItems = useMemo(
     () =>
       documentsSectionItems.filter((item) => {
@@ -102,9 +113,13 @@ export function useArchiveSelection(
         if (documentTypeIds.length > 0 && !documentTypeIds.includes(item.documentTypeId)) {
           return false
         }
+        if (archiveStatuses.length > 0) {
+          const archiveStatus = item.disabled ? 'nonArchivable' : 'archivable'
+          if (!archiveStatuses.includes(archiveStatus)) return false
+        }
         return true
       }),
-    [documentsSectionItems, searchTerm, documentTypeIds.join('|')]
+    [documentsSectionItems, searchTerm, documentTypeIds.join('|'), archiveStatuses.join('|')]
   )
 
   const sections: IArchiveSection[] = useMemo(
@@ -114,6 +129,22 @@ export function useArchiveSelection(
     ],
     [visibleDocumentsItems, listsSectionItems]
   )
+
+  // Options for the document type filter menu. Derived from the phase-filtered
+  // (but not search/type-filtered) documents so the menu never offers a type
+  // that can't match any row, and skips types whose term no longer resolves to
+  // a name (a raw GUID makes no usable filter label).
+  const documentTypeOptions = useMemo(() => {
+    const nameById = new Map<string, string>()
+    documentsSectionItems.forEach((doc) => {
+      if (doc.documentTypeId && doc.documentTypeName) {
+        nameById.set(doc.documentTypeId, doc.documentTypeName)
+      }
+    })
+    return Array.from(nameById.entries())
+      .map(([id, name]) => ({ id, name }))
+      .sort((a, b) => a.name.localeCompare(b.name))
+  }, [documentsSectionItems])
 
   useEffect(() => {
     onConfigurationChange({
@@ -150,5 +181,5 @@ export function useArchiveSelection(
     })
   }
 
-  return { sections, toggleItemSelection, toggleSectionSelectAll }
+  return { sections, documentTypeOptions, toggleItemSelection, toggleSectionSelectAll }
 }

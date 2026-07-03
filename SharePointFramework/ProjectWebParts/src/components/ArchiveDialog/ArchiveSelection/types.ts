@@ -36,6 +36,7 @@ export interface IArchiveItem {
 export interface IArchiveDocumentFilters {
   searchTerm?: string
   documentTypeIds?: string[]
+  archiveStatuses?: string[]
 }
 
 export interface IArchiveSection {
@@ -72,6 +73,12 @@ export interface IArchiveSelectionProps {
    * controls the "Dokumenttype" column. Falls back to deriving from the items.
    */
   hasDocumentTypes?: boolean
+  /**
+   * Seeds the selection on mount. Pass the current configuration so navigating
+   * back from the confirm step restores the selection instead of wiping it
+   * (the component unmounts between wizard views).
+   */
+  initialSelection?: IArchiveConfiguration
   isLoading?: boolean
   onConfigurationChange: (config: IArchiveConfiguration) => void
 }

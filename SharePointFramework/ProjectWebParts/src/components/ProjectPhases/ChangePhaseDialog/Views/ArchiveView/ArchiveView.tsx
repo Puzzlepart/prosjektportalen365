@@ -19,6 +19,7 @@ export const ArchiveView: FC = () => {
       lists={data?.archiveLists || []}
       history={data?.archiveHistory}
       currentPhaseId={data?.currentPhase?.id}
+      initialSelection={dialogContext.state?.archiveConfiguration}
       onConfigurationChange={(archiveConfiguration) =>
         dialogContext.dispatch(SET_ARCHIVE_CONFIGURATION({ archiveConfiguration }))
       }
