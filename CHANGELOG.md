@@ -27,6 +27,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Rettet en feil hvor `Hent dokumentmal` gjorde gjentatte kall mot hubområdet og `Malbibliotek` ved innlasting av dokumentbibliotek, selv om brukeren ikke åpnet dialogen [#1749](https://github.com/Puzzlepart/prosjektportalen365/pull/1749)
 - Rettet en feil i `Dynamisk Liste` hvor Ja/Nei verdier alltid viser som "Nei" [#1747](https://github.com/Puzzlepart/prosjektportalen365/pull/1747)
 - Rettet en feil i `Aggregert oversikt` hvor kolonnene i visningene ikke ble oppdatert ved endring av visning [#1751](https://github.com/Puzzlepart/prosjektportalen365/pull/1751)
+- Rettet en feil i oppsettveiviseren hvor private og delte Teams-kanaler (som oppretter egne SharePoint-områder knyttet til huben) feilaktig trigget oppsettveiviseren. Områdene mangler en Microsoft 365-gruppe, noe som førte til feildialogen «Invalid object identifier 'null'.» ved hver sideinnlasting. Veiviseren oppdager nå kanalområder (`TEAMCHANNEL`) og fjernes stille uten å gjøre endringer på området [#1754](https://github.com/Puzzlepart/prosjektportalen365/issues/1754)
 
 ### Merk
 
