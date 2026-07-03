@@ -32,25 +32,37 @@ import { useArchiveDialog } from './useArchiveDialog'
 import { IArchiveDialogProps } from './types'
 
 const useStyles = makeStyles({
-  /** Constrains width; height is added separately so only the selection view is tall. */
+  /**
+   * Constrains width (+120px over the original 1210px to fit the documents
+   * section's document type column); the height cap is added separately for
+   * the selection view.
+   */
   surface: {
-    maxWidth: 'min(1210px, 95vw)'
+    maxWidth: 'min(1330px, 95vw)'
   },
-  /** ~80px breathing room top and bottom of the viewport (selection view only). */
+  /**
+   * Height fits the content, but never closer than ~80px to the top/bottom of
+   * the viewport (selection view only).
+   */
   surfaceTall: {
-    height: 'calc(100vh - 160px)',
     maxHeight: 'calc(100vh - 160px)'
   },
   body: {
-    height: '100%',
+    // Mirror the surface cap minus its 2×24px padding, so the body (which
+    // Fluent otherwise caps at 100vh - 48px) can't push past the surface.
+    maxHeight: 'calc(100vh - 208px)',
     minHeight: 0
   },
-  /** Lets the selection view fill the tall surface so the tables get the height. */
+  /**
+   * Lets the selection view use the capped height; the tables scroll internally
+   * and the content only scrolls as a fallback when the chrome (expanded info
+   * card etc.) exceeds the cap.
+   */
   contentFill: {
     display: 'flex',
     flexDirection: 'column',
     minHeight: 0,
-    overflow: 'hidden'
+    overflowY: 'auto'
   },
   archiveContent: {
     display: 'flex',
@@ -101,6 +113,7 @@ export const ArchiveDialog: FC<IArchiveDialogProps> = (props) => {
     documents,
     lists,
     history,
+    hasDocumentTypes,
     isLoading,
     error,
     refresh,
@@ -195,6 +208,7 @@ export const ArchiveDialog: FC<IArchiveDialogProps> = (props) => {
                           documents={documents}
                           lists={lists}
                           history={history}
+                          hasDocumentTypes={hasDocumentTypes}
                           isLoading={isLoading}
                           onConfigurationChange={setConfig}
                         />

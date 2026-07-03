@@ -65,9 +65,16 @@ export interface IArchiveDocumentItem {
   spItemId: string
   title: string
   projectPhaseId: string
+  /** Display label of the project phase term (if the document has one). */
+  phaseName?: string
   documentTypeId: string
   documentTypeName?: string
   dateModified?: string
+  /** Display name of the user who created the document. */
+  author?: string
+  dateCreated?: string
+  /** Display name of the user who last modified the document. */
+  modifiedBy?: string
   url: string
   type: 'file'
 }

@@ -7,6 +7,8 @@ interface IArchiveDialogData {
   documents: IArchiveItem[]
   lists: IArchiveItem[]
   history: Map<string, IArchiveItemHistory>
+  /** Whether the document type term set resolved with any types (drives the "Dokumenttype" column). */
+  hasDocumentTypes: boolean
   isLoading: boolean
   /** Set when the (re)load failed, so the dialog can show an error + retry instead of an empty list. */
   error?: Error
@@ -29,6 +31,7 @@ export function useArchiveDialogData(webUrl: string, enabled: boolean): IArchive
   const [documents, setDocuments] = useState<IArchiveItem[]>([])
   const [lists, setLists] = useState<IArchiveItem[]>([])
   const [history, setHistory] = useState<Map<string, IArchiveItemHistory>>(new Map())
+  const [hasDocumentTypes, setHasDocumentTypes] = useState(false)
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [error, setError] = useState<Error | undefined>(undefined)
   const [refreshKey, setRefreshKey] = useState(0)
@@ -77,6 +80,7 @@ export function useArchiveDialogData(webUrl: string, enabled: boolean): IArchive
           }))
         )
         setHistory(historyData)
+        setHasDocumentTypes((docTypes || []).length > 0)
         setIsLoading(false)
       })
       .catch((err) => {
@@ -94,5 +98,5 @@ export function useArchiveDialogData(webUrl: string, enabled: boolean): IArchive
     setRefreshKey((k) => k + 1)
   }
 
-  return { documents, lists, history, isLoading, error, refresh }
+  return { documents, lists, history, hasDocumentTypes, isLoading, error, refresh }
 }

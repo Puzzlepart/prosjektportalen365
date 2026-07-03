@@ -104,7 +104,9 @@
 
   .sectionsGrid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    // Documents get the larger share — they carry an extra column
+    // (document type) that the lists section doesn't have.
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
     gap: 16px;
     // Grow to fill the remaining dialog height so the section cards can too.
     flex: 1;
@@ -181,13 +183,6 @@
       width: 36px;
       min-width: 36px;
       text-align: center;
-    }
-
-    .indicatorIcon {
-      color: var(--colorPaletteYellowForeground1, #b27a00);
-      width: 16px;
-      height: 16px;
-      vertical-align: middle;
     }
 
     .selectedRow {
