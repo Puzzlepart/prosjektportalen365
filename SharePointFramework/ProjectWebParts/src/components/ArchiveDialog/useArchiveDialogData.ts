@@ -47,15 +47,21 @@ export function useArchiveDialogData(webUrl: string, enabled: boolean): IArchive
     setIsLoading(true)
     setError(undefined)
     if (refreshCache) SPDataAdapter.clearCache()
+    const documentTypesPromise = SPDataAdapter.getTermFieldContext('GtDocumentType')
+      .then((field) => SPDataAdapter.project.getDocumentTypes(field.termSetId, refreshCache))
+      .catch(() => [])
+    const phasesPromise = SPDataAdapter.getTermFieldContext('GtProjectPhase')
+      .then((field) => SPDataAdapter.project.getPhases(field.termSetId))
+      .catch(() => [])
+
     Promise.all([
       SPDataAdapter.getDocumentsForArchive(refreshCache),
       SPDataAdapter.getListsForArchive(refreshCache),
       SPDataAdapter.getArchiveHistoryForItems(webUrl),
-      SPDataAdapter.getTermFieldContext('GtDocumentType')
-        .then((field) => SPDataAdapter.project.getDocumentTypes(field.termSetId, refreshCache))
-        .catch(() => [])
+      documentTypesPromise,
+      phasesPromise
     ])
-      .then(([docs, listsData, historyData, docTypes]) => {
+      .then(([docs, listsData, historyData, docTypes, phases]) => {
         if (cancelled) return
         const archiveableTypeIds = new Set(
           (docTypes || []).filter((t: any) => t.isArchiveable).map((t: any) => t.id)
@@ -63,13 +69,16 @@ export function useArchiveDialogData(webUrl: string, enabled: boolean): IArchive
         const docTypeNameById = new Map<string, string>(
           (docTypes || []).map((t: any) => [t.id as string, t.name as string])
         )
+        const phaseNameById = new Map<string, string>(
+          (phases || []).map((t: any) => [t.id as string, t.name as string])
+        )
         setDocuments(
           docs.map<IArchiveItem>((doc) => ({
             ...doc,
+            phaseName: phaseNameById.get(doc.projectPhaseId),
             documentTypeName: docTypeNameById.get(doc.documentTypeId),
             selected: false,
-            disabled:
-              archiveableTypeIds.size > 0 ? !archiveableTypeIds.has(doc.documentTypeId) : false
+            disabled: archiveableTypeIds.size > 0 ? !archiveableTypeIds.has(doc.documentTypeId) : false
           }))
         )
         setLists(

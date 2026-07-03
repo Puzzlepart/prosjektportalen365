@@ -1,20 +1,13 @@
 import * as strings from 'ProjectWebPartsStrings'
-import React, { FC, ReactNode, useMemo, useState } from 'react'
+import React, { FC, ReactNode, useState } from 'react'
 import {
   Badge,
-  Button,
   makeStyles,
-  Menu,
-  MenuDivider,
-  MenuItem,
-  MenuItemCheckbox,
-  MenuList,
-  MenuPopover,
-  MenuTrigger,
   mergeClasses,
   SearchBoxProps,
   Skeleton,
   SkeletonItem,
+  Tag,
   Table,
   TableBody,
   TableCell,
@@ -30,10 +23,10 @@ import {
   TableColumnSizingOptions
 } from '@fluentui/react-components'
 import {
+  bundleIcon,
   ChevronDown16Regular,
   DocumentMultiple20Regular,
-  Filter16Regular,
-  Info16Regular,
+  Info20Filled,
   Info20Regular,
   ListBar20Regular
 } from '@fluentui/react-icons'
@@ -42,9 +35,19 @@ import { useArchiveSelection } from './useArchiveSelection'
 import { useArchiveTable } from './useArchiveTable'
 import { IArchiveItem, IArchiveSection, IArchiveSelectionProps } from './types'
 import { format } from '@fluentui/react'
-import { FileTypeIcon, formatDate, ListMenuItem, Toolbar } from 'pp365-shared-library'
+import {
+  FileTypeIcon,
+  formatDate,
+  ListMenuItem,
+  ListMenuItemDivider,
+  ListMenuItemHeader,
+  Toolbar
+} from 'pp365-shared-library'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
+
+const Info = bundleIcon(Info20Filled, Info20Regular)
+
 
 const useSelectionStyles = makeStyles({
   /** Green info indicator for archivable documents. */
@@ -58,15 +61,18 @@ const useSelectionStyles = makeStyles({
   indicatorNotArchivable: {
     color: tokens.colorPaletteDarkOrangeForeground1,
     width: '16px',
-    height: '16px',
     verticalAlign: 'middle'
   },
-  filterButton: {
-    minWidth: 'unset',
-    marginLeft: tokens.spacingHorizontalXS
-  },
-  filterButtonActive: {
-    color: tokens.colorBrandForeground1
+  /** Focusable wrapper so the indicator tooltips are reachable by keyboard/AT. */
+  indicatorTrigger: {
+    display: 'inline-flex',
+    borderRadius: tokens.borderRadiusSmall,
+    ':focus-visible': {
+      outlineWidth: '2px',
+      outlineStyle: 'solid',
+      outlineColor: tokens.colorBrandStroke1,
+      outlineOffset: '1px'
+    }
   },
   metaGrid: {
     display: 'grid',
@@ -77,6 +83,38 @@ const useSelectionStyles = makeStyles({
   },
   metaLabel: {
     fontWeight: tokens.fontWeightSemibold
+  },
+  metaReason: {
+    marginTop: tokens.spacingVerticalS
+  },
+  documentTypeTag: {
+    display: 'inline-flex',
+    minWidth: 0,
+    maxWidth: '100%',
+    cursor: 'default',
+    '& .fui-Tag__primaryText': {
+      display: 'block',
+      minWidth: 0,
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap'
+    }
+  },
+  documentTypeCellContent: {
+    display: 'flex',
+    minWidth: 0,
+    width: '100%',
+    maxWidth: '100%',
+    overflow: 'hidden'
+  },
+  documentTypeTagPrimary: {
+    display: 'block',
+    flex: '1 1 auto',
+    minWidth: 0,
+    maxWidth: '100%',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap'
   },
   emptyFilterText: {
     padding: '16px 4px',
@@ -99,6 +137,12 @@ const itemCountCellStyle: React.CSSProperties = {
   maxWidth: 32
 }
 
+const documentTypeCellStyle: React.CSSProperties = {
+  minWidth: 0,
+  maxWidth: '100%',
+  overflow: 'hidden'
+}
+
 /** Maps an archive-log status to its coloured previous-archive style. */
 function getStatusClass(status: string): string {
   switch (status) {
@@ -112,6 +156,22 @@ function getStatusClass(status: string): string {
       return styles.inProgress
     default:
       return ''
+  }
+}
+
+/** Explains what a previous archive status means. */
+function getArchiveStatusTooltip(status: string): string {
+  switch (status) {
+    case strings.ArchiveLogStatusSuccess:
+      return strings.ArchiveLogStatusSuccessTooltip
+    case strings.ArchiveLogStatusError:
+      return strings.ArchiveLogStatusErrorTooltip
+    case strings.ArchiveLogStatusWarning:
+      return strings.ArchiveLogStatusWarningTooltip
+    case strings.ArchiveLogStatusInProgress:
+      return strings.ArchiveLogStatusInProgressTooltip
+    default:
+      return strings.ArchiveLogStatusInProgressTooltip
   }
 }
 
@@ -142,22 +202,28 @@ const PreviousArchiveLabel: FC<{ item: IArchiveItem }> = ({ item }) => {
         )}`
       : ''
   return (
-    <Text
-      size={200}
-      className={`${styles.previousArchive} ${getStatusClass(item.previousArchive.status)}`}
+    <Tooltip
+      content={getArchiveStatusTooltip(item.previousArchive.status)}
+      relationship='description'
+      withArrow
     >
-      {format(strings.ArchiveItemPreviouslyArchived, dateLabel, item.previousArchive.status)}
-      {renamedLabel}
-    </Text>
+      <Text
+        size={200}
+        className={`${styles.previousArchive} ${getStatusClass(item.previousArchive.status)}`}
+      >
+        {format(strings.ArchiveItemPreviouslyArchived, dateLabel, item.previousArchive.status)}
+        {renamedLabel}
+      </Text>
+    </Tooltip>
   )
 }
 
-/**
- * Tooltip content for the green "archivable" indicator: a heading plus the
- * document metadata rows that have data (phase, author, created, modified by,
- * modified).
- */
-const ArchivableTooltipContent: FC<{ item: IArchiveItem }> = ({ item }) => {
+/** Tooltip content for document indicators: heading, metadata rows, and optional reason. */
+const ArchiveItemTooltipContent: FC<{ item: IArchiveItem; title: string; reason?: string }> = ({
+  item,
+  title,
+  reason
+}) => {
   const cls = useSelectionStyles()
   const rows: [string, string][] = []
   if (item.phaseName) rows.push([strings.ArchiveMetaPhaseLabel, item.phaseName])
@@ -170,7 +236,7 @@ const ArchivableTooltipContent: FC<{ item: IArchiveItem }> = ({ item }) => {
   return (
     <div>
       <Text weight='semibold' block>
-        {strings.ArchiveArchivableText}
+        {title}
       </Text>
       {rows.length > 0 && (
         <div className={cls.metaGrid}>
@@ -181,6 +247,11 @@ const ArchivableTooltipContent: FC<{ item: IArchiveItem }> = ({ item }) => {
             </React.Fragment>
           ))}
         </div>
+      )}
+      {reason && (
+        <Text block className={cls.metaReason}>
+          {reason}
+        </Text>
       )}
     </div>
   )
@@ -196,7 +267,7 @@ const InfoCard: FC = () => {
         onClick={() => setExpanded((v) => !v)}
         aria-expanded={expanded}
       >
-        <Info20Regular className={styles.infoIcon} />
+        <Info className={styles.infoIcon} />
         <span className={styles.infoHeaderText}>
           <Text className={styles.infoTitle}>{strings.ArchiveInformationTitle}</Text>
           <Text className={styles.infoIntro}>{strings.ArchiveInformationIntro}</Text>
@@ -230,8 +301,8 @@ interface IArchiveTableExtraColumn {
   headerStyle?: React.CSSProperties
   cellStyle?: React.CSSProperties
   renderCell: (item: IArchiveItem) => ReactNode
-  /** Extra header content rendered after the label (e.g. the filter kebab). */
-  renderHeaderExtra?: () => ReactNode
+  /** Extra header content rendered after the label. */
+  renderHeaderExtra?: () => JSX.Element
 }
 
 /**
@@ -247,6 +318,8 @@ interface IArchiveTableConfig {
   showFileMeta: boolean
   extraColumns: IArchiveTableExtraColumn[]
   getDisabledTooltip: (item: IArchiveItem) => string
+  /** Optional rich tooltip content for disabled rows. Falls back to `getDisabledTooltip`. */
+  renderDisabledTooltip?: (item: IArchiveItem) => JSX.Element
   /**
    * When provided, archivable (enabled) rows get a green info indicator whose
    * tooltip renders this content (documents only).
@@ -254,15 +327,34 @@ interface IArchiveTableConfig {
   renderArchivableTooltip?: (item: IArchiveItem) => JSX.Element
 }
 
+/** Explains why a document cannot currently be archived. */
+function getDocumentDisabledTooltip(item: IArchiveItem): string {
+  if (item.documentTypeName) {
+    return format(strings.ArchiveNotArchivableDocumentText, item.documentTypeName)
+  }
+  if (!item.documentTypeId) {
+    return strings.ArchiveNotArchivableNoDocumentTypeText
+  }
+  return strings.ArchiveNotArchivableText
+}
+
+const DocumentTypeTag: FC<{ value?: string }> = ({ value }) => {
+  const cls = useSelectionStyles()
+  if (!value) return null
+  return (
+    <div className={cls.documentTypeCellContent}>
+      <Tag appearance='brand' size='small' title={value} className={cls.documentTypeTag}>
+        <span className={cls.documentTypeTagPrimary}>{value}</span>
+      </Tag>
+    </div>
+  )
+}
+
 /**
  * Builds the documents-table config. Dynamic because the "Dokumenttype" column
- * only shows when the library has the field, and its filter kebab needs the
- * current filter state.
+ * only shows when the library has the field.
  */
-function buildDocumentsTableConfig(
-  showDocumentType: boolean,
-  renderDocumentTypeFilter: (() => ReactNode) | undefined
-): IArchiveTableConfig {
+function buildDocumentsTableConfig(showDocumentType: boolean): IArchiveTableConfig {
   const columns = [
     createTableColumn<IArchiveItem>({
       columnId: 'name',
@@ -275,18 +367,13 @@ function buildDocumentsTableConfig(
             compare: (a, b) => (a.documentTypeName || '').localeCompare(b.documentTypeName || '')
           })
         ]
-      : []),
-    createTableColumn<IArchiveItem>({
-      columnId: 'modified',
-      compare: (a, b) => (a.dateModified || '').localeCompare(b.dateModified || '')
-    })
+      : [])
   ]
   const columnSizing: TableColumnSizingOptions = {
     name: { defaultWidth: 220, minWidth: 140, idealWidth: 320 },
     ...(showDocumentType
       ? { documentType: { defaultWidth: 140, minWidth: 100, idealWidth: 160 } }
-      : {}),
-    modified: { defaultWidth: 150, minWidth: 120, idealWidth: 170 }
+      : {})
   }
   const extraColumns: IArchiveTableExtraColumn[] = [
     ...(showDocumentType
@@ -294,16 +381,11 @@ function buildDocumentsTableConfig(
           {
             columnId: 'documentType',
             header: strings.ArchiveTableColumnDocumentType,
-            renderCell: (item: IArchiveItem) => item.documentTypeName || '',
-            renderHeaderExtra: renderDocumentTypeFilter
+            cellStyle: documentTypeCellStyle,
+            renderCell: (item: IArchiveItem) => <DocumentTypeTag value={item.documentTypeName} />
           }
         ]
-      : []),
-    {
-      columnId: 'modified',
-      header: strings.ArchiveTableColumnModified,
-      renderCell: (item: IArchiveItem) => formatDate(item.dateModified)
-    }
+      : [])
   ]
   return {
     ariaLabel: strings.ArchiveDocumentsSection,
@@ -311,16 +393,17 @@ function buildDocumentsTableConfig(
     columnSizing,
     showFileMeta: true,
     extraColumns,
-    getDisabledTooltip: (item) => {
-      if (item.documentTypeName) {
-        return format(strings.ArchiveNotArchivableDocumentText, item.documentTypeName)
-      }
-      if (!item.documentTypeId) {
-        return strings.ArchiveNotArchivableNoDocumentTypeText
-      }
-      return strings.ArchiveNotArchivableText
-    },
-    renderArchivableTooltip: (item) => <ArchivableTooltipContent item={item} />
+    getDisabledTooltip: getDocumentDisabledTooltip,
+    renderDisabledTooltip: (item) => (
+      <ArchiveItemTooltipContent
+        item={item}
+        title={strings.ArchiveNotArchivableText}
+        reason={getDocumentDisabledTooltip(item)}
+      />
+    ),
+    renderArchivableTooltip: (item) => (
+      <ArchiveItemTooltipContent item={item} title={strings.ArchiveArchivableText} />
+    )
   }
 }
 
@@ -476,20 +559,36 @@ const ArchiveTable: FC<IArchiveTableProps> = ({
             >
               <NameCell item={item} showFileMeta={config.showFileMeta} />
             </TableCell>
-            {config.extraColumns.map((column) => (
-              <TableCell
-                key={column.columnId}
-                {...columnSizing_unstable.getTableCellProps(column.columnId)}
-                style={column.cellStyle}
-                className={item.disabled ? styles.disabledRow : undefined}
-              >
-                {column.renderCell(item)}
-              </TableCell>
-            ))}
+            {config.extraColumns.map((column) => {
+              const cellProps = columnSizing_unstable.getTableCellProps(column.columnId)
+              return (
+                <TableCell
+                  key={column.columnId}
+                  {...cellProps}
+                  style={{ ...cellProps.style, ...column.cellStyle }}
+                  className={item.disabled ? styles.disabledRow : undefined}
+                >
+                  {column.renderCell(item)}
+                </TableCell>
+              )
+            })}
             <TableCell className={styles.indicatorCell}>
               {item.disabled ? (
-                <Tooltip content={config.getDisabledTooltip(item)} relationship='label' withArrow>
-                  <Info16Regular className={cls.indicatorNotArchivable} />
+                <Tooltip
+                  content={config.renderDisabledTooltip?.(item) ?? config.getDisabledTooltip(item)}
+                  relationship={config.renderDisabledTooltip ? 'description' : 'label'}
+                  withArrow
+                >
+                  {/* Focusable wrapper — the bare svg can't receive focus, so the
+                      tooltip would otherwise be mouse-only. */}
+                  <span
+                    tabIndex={0}
+                    role='img'
+                    aria-label={strings.ArchiveNotArchivableText}
+                    className={cls.indicatorTrigger}
+                  >
+                    <Info className={cls.indicatorNotArchivable} />
+                  </span>
                 </Tooltip>
               ) : config.renderArchivableTooltip ? (
                 <Tooltip
@@ -497,7 +596,14 @@ const ArchiveTable: FC<IArchiveTableProps> = ({
                   relationship='description'
                   withArrow
                 >
-                  <Info16Regular className={cls.indicatorArchivable} />
+                  <span
+                    tabIndex={0}
+                    role='img'
+                    aria-label={strings.ArchiveArchivableText}
+                    className={cls.indicatorTrigger}
+                  >
+                    <Info className={cls.indicatorArchivable} />
+                  </span>
                 </Tooltip>
               ) : null}
             </TableCell>
@@ -620,27 +726,17 @@ export const ArchiveSelection: FC<IArchiveSelectionProps> = (props) => {
   const cls = useSelectionStyles()
   const [searchTerm, setSearchTerm] = useState('')
   const [documentTypeIds, setDocumentTypeIds] = useState<string[]>([])
-  const { sections, toggleItemSelection, toggleSectionSelectAll } = useArchiveSelection(props, {
-    searchTerm,
-    documentTypeIds
-  })
+  const [archiveStatuses, setArchiveStatuses] = useState<string[]>([])
+  const { sections, documentTypeOptions, toggleItemSelection, toggleSectionSelectAll } =
+    useArchiveSelection(props, {
+      searchTerm,
+      documentTypeIds,
+      archiveStatuses
+    })
 
   const showDocumentType =
     props.hasDocumentTypes ??
     props.documents.some((doc) => !!doc.documentTypeId || !!doc.documentTypeName)
-
-  // Distinct document types present on the documents, for the filter menu.
-  const documentTypeOptions = useMemo(() => {
-    const nameById = new Map<string, string>()
-    props.documents.forEach((doc) => {
-      if (doc.documentTypeId) {
-        nameById.set(doc.documentTypeId, doc.documentTypeName || doc.documentTypeId)
-      }
-    })
-    return Array.from(nameById.entries())
-      .map(([id, name]) => ({ id, name }))
-      .sort((a, b) => a.name.localeCompare(b.name))
-  }, [props.documents])
 
   if (props.isLoading) {
     return <ArchiveSelectionSkeleton />
@@ -648,50 +744,18 @@ export const ArchiveSelection: FC<IArchiveSelectionProps> = (props) => {
 
   const documentsSection = sections.find((s) => s.key === 'documents')
   const listsSection = sections.find((s) => s.key === 'lists')
-  const filtersActive = searchTerm.trim() !== '' || documentTypeIds.length > 0
+  const menuFiltersActive = documentTypeIds.length > 0 || archiveStatuses.length > 0
+  const filtersActive = searchTerm.trim() !== '' || menuFiltersActive
+  const toggleDocumentTypeFilter = (id: string) => {
+    setDocumentTypeIds((prev) => (prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id]))
+  }
+  const toggleArchiveStatusFilter = (status: string) => {
+    setArchiveStatuses((prev) =>
+      prev.includes(status) ? prev.filter((v) => v !== status) : [...prev, status]
+    )
+  }
 
-  const renderDocumentTypeFilter =
-    documentTypeOptions.length > 0
-      ? () => (
-          <Menu
-            checkedValues={{ documentType: documentTypeIds }}
-            onCheckedValueChange={(_, data) => setDocumentTypeIds(data.checkedItems)}
-          >
-            <MenuTrigger disableButtonEnhancement>
-              <Button
-                appearance='transparent'
-                size='small'
-                icon={<Filter16Regular />}
-                aria-label={strings.ArchiveFilterDocumentTypeTooltip}
-                title={strings.ArchiveFilterDocumentTypeTooltip}
-                className={mergeClasses(
-                  cls.filterButton,
-                  documentTypeIds.length > 0 && cls.filterButtonActive
-                )}
-                onClick={(e) => e.stopPropagation()}
-              />
-            </MenuTrigger>
-            <MenuPopover>
-              <MenuList>
-                {documentTypeOptions.map((option) => (
-                  <MenuItemCheckbox key={option.id} name='documentType' value={option.id}>
-                    {option.name}
-                  </MenuItemCheckbox>
-                ))}
-                <MenuDivider />
-                <MenuItem
-                  disabled={documentTypeIds.length === 0}
-                  onClick={() => setDocumentTypeIds([])}
-                >
-                  {strings.ArchiveFilterClearText}
-                </MenuItem>
-              </MenuList>
-            </MenuPopover>
-          </Menu>
-        )
-      : undefined
-
-  const documentsConfig = buildDocumentsTableConfig(showDocumentType, renderDocumentTypeFilter)
+  const documentsConfig = buildDocumentsTableConfig(showDocumentType)
   const documentsToolbar = (
     <Toolbar
       items={[
@@ -701,6 +765,44 @@ export const ArchiveSelection: FC<IArchiveSelectionProps> = (props) => {
           'aria-label': strings.ArchiveSearchDocumentsPlaceholder,
           onChange: (_, data) => setSearchTerm(data.value)
         } as SearchBoxProps)
+      ]}
+      farItems={[
+        new ListMenuItem(strings.ArchiveFilterText, strings.ArchiveFilterText)
+          .setIcon('Filter')
+          .setItems(
+            [
+              ListMenuItemHeader(strings.ArchiveFilterArchiveStatusText),
+              new ListMenuItem(strings.ArchiveArchivableText)
+                .makeCheckable({ name: 'archiveStatus', value: 'archivable' })
+                .setOnClick(() => toggleArchiveStatusFilter('archivable')),
+              new ListMenuItem(strings.ArchiveNotArchivableText)
+                .makeCheckable({ name: 'archiveStatus', value: 'nonArchivable' })
+                .setOnClick(() => toggleArchiveStatusFilter('nonArchivable')),
+              ...(documentTypeOptions.length > 0
+                ? [
+                    ListMenuItemDivider,
+                    ListMenuItemHeader(strings.ArchiveTableColumnDocumentType),
+                    ...documentTypeOptions.map((option) =>
+                      new ListMenuItem(option.name)
+                        .makeCheckable({ name: 'documentType', value: option.id })
+                        .setOnClick(() => toggleDocumentTypeFilter(option.id))
+                    )
+                  ]
+                : []),
+              ListMenuItemDivider,
+              new ListMenuItem(strings.ArchiveFilterClearText)
+                .setDisabled(!menuFiltersActive)
+                .setOnClick(() => {
+                  setArchiveStatuses([])
+                  setDocumentTypeIds([])
+                })
+            ],
+            {
+              archiveStatus: archiveStatuses,
+              documentType: documentTypeIds
+            }
+          )
+          .setStyle(menuFiltersActive ? { color: 'var(--colorBrandForeground1)' } : undefined)
       ]}
     />
   )

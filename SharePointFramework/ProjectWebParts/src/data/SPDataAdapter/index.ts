@@ -200,7 +200,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
           spItemId: doc.UniqueId || doc.GUID,
           title: doc.FileLeafRef || doc.Title,
           projectPhaseId: doc?.GtProjectPhase?.TermGuid,
-          phaseName: doc?.GtProjectPhase?.Label,
+          // Phase labels are resolved via the term store in `useArchiveDialogData`.
+          phaseName: undefined,
           documentTypeId: doc?.GtDocumentType?.TermGuid,
           dateModified: doc.Modified,
           author: doc?.Author?.Title,
