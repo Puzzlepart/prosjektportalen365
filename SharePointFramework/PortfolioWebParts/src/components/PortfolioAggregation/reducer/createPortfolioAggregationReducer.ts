@@ -119,10 +119,7 @@ export const createPortfolioAggregationReducer = (
         (v) => v.id === payload.dataSource?.id
       )
       const availableColumns = props.configuration?.columns ?? payload.columns
-
-      console.log(availableColumns)
       const columnIds = configView?.columnIds ?? payload.dataSource?.columnIds ?? []
-      console.log(columnIds)
       const viewColumns = (configView?.columns ?? payload.dataSource?.columns ?? [])
         .slice()
         .sort((a, b) => {
