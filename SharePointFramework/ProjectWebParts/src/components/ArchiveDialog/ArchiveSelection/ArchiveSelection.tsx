@@ -1,7 +1,18 @@
 import * as strings from 'ProjectWebPartsStrings'
-import React, { FC, useState } from 'react'
+import React, { FC, ReactNode, useMemo, useState } from 'react'
 import {
   Badge,
+  Button,
+  makeStyles,
+  Menu,
+  MenuDivider,
+  MenuItem,
+  MenuItemCheckbox,
+  MenuList,
+  MenuPopover,
+  MenuTrigger,
+  mergeClasses,
+  SearchBoxProps,
   Skeleton,
   SkeletonItem,
   Table,
@@ -12,6 +23,7 @@ import {
   TableRow,
   TableSelectionCell,
   Text,
+  tokens,
   Tooltip,
   createTableColumn,
   TableColumnDefinition,
@@ -20,6 +32,7 @@ import {
 import {
   ChevronDown16Regular,
   DocumentMultiple20Regular,
+  Filter16Regular,
   Info16Regular,
   Info20Regular,
   ListBar20Regular
@@ -29,9 +42,48 @@ import { useArchiveSelection } from './useArchiveSelection'
 import { useArchiveTable } from './useArchiveTable'
 import { IArchiveItem, IArchiveSection, IArchiveSelectionProps } from './types'
 import { format } from '@fluentui/react'
-import { FileTypeIcon, formatDate } from 'pp365-shared-library'
+import { FileTypeIcon, formatDate, ListMenuItem, Toolbar } from 'pp365-shared-library'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
+
+const useSelectionStyles = makeStyles({
+  /** Green info indicator for archivable documents. */
+  indicatorArchivable: {
+    color: tokens.colorStatusSuccessForeground1,
+    width: '16px',
+    height: '16px',
+    verticalAlign: 'middle'
+  },
+  /** Orange (warning) info indicator for non-archivable items. */
+  indicatorNotArchivable: {
+    color: tokens.colorPaletteDarkOrangeForeground1,
+    width: '16px',
+    height: '16px',
+    verticalAlign: 'middle'
+  },
+  filterButton: {
+    minWidth: 'unset',
+    marginLeft: tokens.spacingHorizontalXS
+  },
+  filterButtonActive: {
+    color: tokens.colorBrandForeground1
+  },
+  metaGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'auto 1fr',
+    columnGap: tokens.spacingHorizontalM,
+    rowGap: tokens.spacingVerticalXXS,
+    marginTop: tokens.spacingVerticalXS
+  },
+  metaLabel: {
+    fontWeight: tokens.fontWeightSemibold
+  },
+  emptyFilterText: {
+    padding: '16px 4px',
+    color: tokens.colorNeutralForeground3,
+    fontStyle: 'italic'
+  }
+})
 
 const selectCellStyle: React.CSSProperties = {
   width: 32,
@@ -100,6 +152,40 @@ const PreviousArchiveLabel: FC<{ item: IArchiveItem }> = ({ item }) => {
   )
 }
 
+/**
+ * Tooltip content for the green "archivable" indicator: a heading plus the
+ * document metadata rows that have data (phase, author, created, modified by,
+ * modified).
+ */
+const ArchivableTooltipContent: FC<{ item: IArchiveItem }> = ({ item }) => {
+  const cls = useSelectionStyles()
+  const rows: [string, string][] = []
+  if (item.phaseName) rows.push([strings.ArchiveMetaPhaseLabel, item.phaseName])
+  if (item.author) rows.push([strings.ArchiveMetaCreatedByLabel, item.author])
+  if (item.dateCreated) rows.push([strings.ArchiveMetaCreatedLabel, formatDate(item.dateCreated)])
+  if (item.modifiedBy) rows.push([strings.ArchiveMetaModifiedByLabel, item.modifiedBy])
+  if (item.dateModified) {
+    rows.push([strings.ArchiveMetaModifiedLabel, formatDate(item.dateModified)])
+  }
+  return (
+    <div>
+      <Text weight='semibold' block>
+        {strings.ArchiveArchivableText}
+      </Text>
+      {rows.length > 0 && (
+        <div className={cls.metaGrid}>
+          {rows.map(([label, value]) => (
+            <React.Fragment key={label}>
+              <span className={cls.metaLabel}>{label}</span>
+              <span>{value}</span>
+            </React.Fragment>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 const InfoCard: FC = () => {
   const [expanded, setExpanded] = useState(false)
   return (
@@ -134,9 +220,24 @@ const InfoCard: FC = () => {
 }
 
 /**
+ * An extra (non-name) column in an {@link ArchiveTable}.
+ */
+interface IArchiveTableExtraColumn {
+  columnId: string
+  header: string
+  /** When set, the header is wrapped in a tooltip and gets this aria-label. */
+  headerTooltip?: string
+  headerStyle?: React.CSSProperties
+  cellStyle?: React.CSSProperties
+  renderCell: (item: IArchiveItem) => ReactNode
+  /** Extra header content rendered after the label (e.g. the filter kebab). */
+  renderHeaderExtra?: () => ReactNode
+}
+
+/**
  * Per-variant configuration for {@link ArchiveTable}. Documents and lists share
- * the same table shape (selection + name + one extra column + a disabled
- * indicator) and differ only in the values captured here.
+ * the same table shape (selection + name + extra columns + an indicator) and
+ * differ only in the values captured here.
  */
 interface IArchiveTableConfig {
   ariaLabel: string
@@ -144,48 +245,82 @@ interface IArchiveTableConfig {
   columnSizing: TableColumnSizingOptions
   /** Show a file-type icon + "modified after archive" badge in the name cell (documents). */
   showFileMeta: boolean
-  secondColumn: {
-    columnId: string
-    header: string
-    /** When set, the header is wrapped in a tooltip and gets this aria-label. */
-    headerTooltip?: string
-    headerStyle?: React.CSSProperties
-    cellStyle?: React.CSSProperties
-    renderCell: (item: IArchiveItem) => React.ReactNode
-  }
+  extraColumns: IArchiveTableExtraColumn[]
   getDisabledTooltip: (item: IArchiveItem) => string
+  /**
+   * When provided, archivable (enabled) rows get a green info indicator whose
+   * tooltip renders this content (documents only).
+   */
+  renderArchivableTooltip?: (item: IArchiveItem) => JSX.Element
 }
 
-const DOCUMENTS_TABLE_CONFIG: IArchiveTableConfig = {
-  ariaLabel: strings.ArchiveDocumentsSection,
-  columns: [
+/**
+ * Builds the documents-table config. Dynamic because the "Dokumenttype" column
+ * only shows when the library has the field, and its filter kebab needs the
+ * current filter state.
+ */
+function buildDocumentsTableConfig(
+  showDocumentType: boolean,
+  renderDocumentTypeFilter: (() => ReactNode) | undefined
+): IArchiveTableConfig {
+  const columns = [
     createTableColumn<IArchiveItem>({
       columnId: 'name',
       compare: (a, b) => a.title.localeCompare(b.title)
     }),
+    ...(showDocumentType
+      ? [
+          createTableColumn<IArchiveItem>({
+            columnId: 'documentType',
+            compare: (a, b) => (a.documentTypeName || '').localeCompare(b.documentTypeName || '')
+          })
+        ]
+      : []),
     createTableColumn<IArchiveItem>({
       columnId: 'modified',
       compare: (a, b) => (a.dateModified || '').localeCompare(b.dateModified || '')
     })
-  ],
-  columnSizing: {
+  ]
+  const columnSizing: TableColumnSizingOptions = {
     name: { defaultWidth: 220, minWidth: 140, idealWidth: 320 },
+    ...(showDocumentType
+      ? { documentType: { defaultWidth: 140, minWidth: 100, idealWidth: 160 } }
+      : {}),
     modified: { defaultWidth: 150, minWidth: 120, idealWidth: 170 }
-  },
-  showFileMeta: true,
-  secondColumn: {
-    columnId: 'modified',
-    header: strings.ArchiveTableColumnModified,
-    renderCell: (item) => formatDate(item.dateModified)
-  },
-  getDisabledTooltip: (item) => {
-    if (item.documentTypeName) {
-      return format(strings.ArchiveNotArchivableDocumentText, item.documentTypeName)
+  }
+  const extraColumns: IArchiveTableExtraColumn[] = [
+    ...(showDocumentType
+      ? [
+          {
+            columnId: 'documentType',
+            header: strings.ArchiveTableColumnDocumentType,
+            renderCell: (item: IArchiveItem) => item.documentTypeName || '',
+            renderHeaderExtra: renderDocumentTypeFilter
+          }
+        ]
+      : []),
+    {
+      columnId: 'modified',
+      header: strings.ArchiveTableColumnModified,
+      renderCell: (item: IArchiveItem) => formatDate(item.dateModified)
     }
-    if (!item.documentTypeId) {
-      return strings.ArchiveNotArchivableNoDocumentTypeText
-    }
-    return strings.ArchiveNotArchivableText
+  ]
+  return {
+    ariaLabel: strings.ArchiveDocumentsSection,
+    columns,
+    columnSizing,
+    showFileMeta: true,
+    extraColumns,
+    getDisabledTooltip: (item) => {
+      if (item.documentTypeName) {
+        return format(strings.ArchiveNotArchivableDocumentText, item.documentTypeName)
+      }
+      if (!item.documentTypeId) {
+        return strings.ArchiveNotArchivableNoDocumentTypeText
+      }
+      return strings.ArchiveNotArchivableText
+    },
+    renderArchivableTooltip: (item) => <ArchivableTooltipContent item={item} />
   }
 }
 
@@ -206,14 +341,16 @@ const LISTS_TABLE_CONFIG: IArchiveTableConfig = {
     itemCount: { defaultWidth: 32, minWidth: 32, idealWidth: 32 }
   },
   showFileMeta: false,
-  secondColumn: {
-    columnId: 'itemCount',
-    header: '#',
-    headerTooltip: strings.ArchiveTableColumnItemCount,
-    headerStyle: itemCountCellStyle,
-    cellStyle: itemCountCellStyle,
-    renderCell: (item) => item.itemCount ?? 0
-  },
+  extraColumns: [
+    {
+      columnId: 'itemCount',
+      header: '#',
+      headerTooltip: strings.ArchiveTableColumnItemCount,
+      headerStyle: itemCountCellStyle,
+      cellStyle: itemCountCellStyle,
+      renderCell: (item) => item.itemCount ?? 0
+    }
+  ],
   getDisabledTooltip: (item) =>
     item.itemCount === 0 ? strings.ArchiveNotArchivableListText : strings.ArchiveNotArchivableText
 }
@@ -262,22 +399,11 @@ const ArchiveTable: FC<IArchiveTableProps> = ({
   onToggleSelectAll,
   config
 }) => {
+  const cls = useSelectionStyles()
   const { sortedRows, headerSortProps, columnSizing_unstable, tableRef } = useArchiveTable(
     items,
     config.columns,
     config.columnSizing
-  )
-  const { secondColumn } = config
-
-  const secondHeaderCell = (
-    <TableHeaderCell
-      {...headerSortProps(secondColumn.columnId)}
-      {...columnSizing_unstable.getTableHeaderCellProps(secondColumn.columnId)}
-      style={secondColumn.headerStyle}
-      aria-label={secondColumn.headerTooltip}
-    >
-      {secondColumn.header}
-    </TableHeaderCell>
   )
 
   return (
@@ -302,13 +428,32 @@ const ArchiveTable: FC<IArchiveTableProps> = ({
           >
             {strings.ArchiveTableColumnName}
           </TableHeaderCell>
-          {secondColumn.headerTooltip ? (
-            <Tooltip content={secondColumn.headerTooltip} relationship='label' withArrow>
-              {secondHeaderCell}
-            </Tooltip>
-          ) : (
-            secondHeaderCell
-          )}
+          {config.extraColumns.map((column) => {
+            const cell = (
+              <TableHeaderCell
+                key={column.columnId}
+                {...headerSortProps(column.columnId)}
+                {...columnSizing_unstable.getTableHeaderCellProps(column.columnId)}
+                style={column.headerStyle}
+                aria-label={column.headerTooltip}
+              >
+                {column.header}
+                {column.renderHeaderExtra?.()}
+              </TableHeaderCell>
+            )
+            return column.headerTooltip ? (
+              <Tooltip
+                key={column.columnId}
+                content={column.headerTooltip}
+                relationship='label'
+                withArrow
+              >
+                {cell}
+              </Tooltip>
+            ) : (
+              cell
+            )
+          })}
           <TableHeaderCell className={styles.indicatorCell} />
         </TableRow>
       </TableHeader>
@@ -331,19 +476,30 @@ const ArchiveTable: FC<IArchiveTableProps> = ({
             >
               <NameCell item={item} showFileMeta={config.showFileMeta} />
             </TableCell>
-            <TableCell
-              {...columnSizing_unstable.getTableCellProps(secondColumn.columnId)}
-              style={secondColumn.cellStyle}
-              className={item.disabled ? styles.disabledRow : undefined}
-            >
-              {secondColumn.renderCell(item)}
-            </TableCell>
+            {config.extraColumns.map((column) => (
+              <TableCell
+                key={column.columnId}
+                {...columnSizing_unstable.getTableCellProps(column.columnId)}
+                style={column.cellStyle}
+                className={item.disabled ? styles.disabledRow : undefined}
+              >
+                {column.renderCell(item)}
+              </TableCell>
+            ))}
             <TableCell className={styles.indicatorCell}>
-              {item.disabled && (
+              {item.disabled ? (
                 <Tooltip content={config.getDisabledTooltip(item)} relationship='label' withArrow>
-                  <Info16Regular className={styles.indicatorIcon} />
+                  <Info16Regular className={cls.indicatorNotArchivable} />
                 </Tooltip>
-              )}
+              ) : config.renderArchivableTooltip ? (
+                <Tooltip
+                  content={config.renderArchivableTooltip(item)}
+                  relationship='description'
+                  withArrow
+                >
+                  <Info16Regular className={cls.indicatorArchivable} />
+                </Tooltip>
+              ) : null}
             </TableCell>
           </TableRow>
         ))}
@@ -358,6 +514,10 @@ interface ISectionCardProps {
   HeaderIcon: FC<{ className?: string }>
   onToggleItem: (sectionKey: string, itemId: string | number) => void
   onToggleSelectAll: (sectionKey: string) => void
+  /** Optional toolbar (search/filters) rendered between the header and the table. */
+  toolbar?: ReactNode
+  /** Shown instead of the table when there are no rows (e.g. no filter matches). */
+  emptyText?: string
 }
 
 const SectionCard: FC<ISectionCardProps> = ({
@@ -365,39 +525,52 @@ const SectionCard: FC<ISectionCardProps> = ({
   config,
   HeaderIcon,
   onToggleItem,
-  onToggleSelectAll
-}) => (
-  <div className={styles.sectionCard}>
-    <div className={styles.sectionHeader}>
-      <HeaderIcon className={styles.sectionIcon} />
-      <Text size={400} className={styles.title}>
-        {section.title}
-      </Text>
-      <span
-        className={`${styles.countBadge} ${section.selectedCount > 0 ? styles.hasSelection : ''}`}
-        aria-label={format(
-          strings.ArchiveSectionSelectedCountAria,
-          section.selectedCount,
-          section.items.length
-        )}
-      >
-        {section.selectedCount}/{section.items.length}
-      </span>
-    </div>
+  onToggleSelectAll,
+  toolbar,
+  emptyText
+}) => {
+  const cls = useSelectionStyles()
+  return (
+    <div className={styles.sectionCard}>
+      <div className={styles.sectionHeader}>
+        <HeaderIcon className={styles.sectionIcon} />
+        <Text size={400} className={styles.title}>
+          {section.title}
+        </Text>
+        <span
+          className={`${styles.countBadge} ${section.selectedCount > 0 ? styles.hasSelection : ''}`}
+          aria-label={format(
+            strings.ArchiveSectionSelectedCountAria,
+            section.selectedCount,
+            section.items.length
+          )}
+        >
+          {section.selectedCount}/{section.items.length}
+        </span>
+      </div>
 
-    <div className={styles.sectionContent}>
-      <ArchiveTable
-        items={section.items}
-        sectionKey={section.key}
-        allSelected={section.allSelected}
-        someSelected={section.someSelected}
-        onToggleItem={onToggleItem}
-        onToggleSelectAll={onToggleSelectAll}
-        config={config}
-      />
+      {toolbar}
+
+      <div className={styles.sectionContent}>
+        {section.items.length === 0 && emptyText ? (
+          <Text size={200} className={cls.emptyFilterText}>
+            {emptyText}
+          </Text>
+        ) : (
+          <ArchiveTable
+            items={section.items}
+            sectionKey={section.key}
+            allSelected={section.allSelected}
+            someSelected={section.someSelected}
+            onToggleItem={onToggleItem}
+            onToggleSelectAll={onToggleSelectAll}
+            config={config}
+          />
+        )}
+      </div>
     </div>
-  </div>
-)
+  )
+}
 
 const SectionSkeleton: FC = () => (
   <div className={styles.sectionCard}>
@@ -439,10 +612,35 @@ const ArchiveSelectionSkeleton: FC = () => (
  * The shared documents/lists picker for archiving — used by both the manual
  * {@link ArchiveDialog} and the phase-change flow. Renders an info card plus one
  * selectable, sortable table per scope; selection is reported up via
- * `onConfigurationChange` (see {@link useArchiveSelection}).
+ * `onConfigurationChange` (see {@link useArchiveSelection}). The documents
+ * section has a search toolbar and an optional, filterable "Dokumenttype"
+ * column; filtering only narrows the view, never the emitted selection.
  */
 export const ArchiveSelection: FC<IArchiveSelectionProps> = (props) => {
-  const { sections, toggleItemSelection, toggleSectionSelectAll } = useArchiveSelection(props)
+  const cls = useSelectionStyles()
+  const [searchTerm, setSearchTerm] = useState('')
+  const [documentTypeIds, setDocumentTypeIds] = useState<string[]>([])
+  const { sections, toggleItemSelection, toggleSectionSelectAll } = useArchiveSelection(props, {
+    searchTerm,
+    documentTypeIds
+  })
+
+  const showDocumentType =
+    props.hasDocumentTypes ??
+    props.documents.some((doc) => !!doc.documentTypeId || !!doc.documentTypeName)
+
+  // Distinct document types present on the documents, for the filter menu.
+  const documentTypeOptions = useMemo(() => {
+    const nameById = new Map<string, string>()
+    props.documents.forEach((doc) => {
+      if (doc.documentTypeId) {
+        nameById.set(doc.documentTypeId, doc.documentTypeName || doc.documentTypeId)
+      }
+    })
+    return Array.from(nameById.entries())
+      .map(([id, name]) => ({ id, name }))
+      .sort((a, b) => a.name.localeCompare(b.name))
+  }, [props.documents])
 
   if (props.isLoading) {
     return <ArchiveSelectionSkeleton />
@@ -450,6 +648,62 @@ export const ArchiveSelection: FC<IArchiveSelectionProps> = (props) => {
 
   const documentsSection = sections.find((s) => s.key === 'documents')
   const listsSection = sections.find((s) => s.key === 'lists')
+  const filtersActive = searchTerm.trim() !== '' || documentTypeIds.length > 0
+
+  const renderDocumentTypeFilter =
+    documentTypeOptions.length > 0
+      ? () => (
+          <Menu
+            checkedValues={{ documentType: documentTypeIds }}
+            onCheckedValueChange={(_, data) => setDocumentTypeIds(data.checkedItems)}
+          >
+            <MenuTrigger disableButtonEnhancement>
+              <Button
+                appearance='transparent'
+                size='small'
+                icon={<Filter16Regular />}
+                aria-label={strings.ArchiveFilterDocumentTypeTooltip}
+                title={strings.ArchiveFilterDocumentTypeTooltip}
+                className={mergeClasses(
+                  cls.filterButton,
+                  documentTypeIds.length > 0 && cls.filterButtonActive
+                )}
+                onClick={(e) => e.stopPropagation()}
+              />
+            </MenuTrigger>
+            <MenuPopover>
+              <MenuList>
+                {documentTypeOptions.map((option) => (
+                  <MenuItemCheckbox key={option.id} name='documentType' value={option.id}>
+                    {option.name}
+                  </MenuItemCheckbox>
+                ))}
+                <MenuDivider />
+                <MenuItem
+                  disabled={documentTypeIds.length === 0}
+                  onClick={() => setDocumentTypeIds([])}
+                >
+                  {strings.ArchiveFilterClearText}
+                </MenuItem>
+              </MenuList>
+            </MenuPopover>
+          </Menu>
+        )
+      : undefined
+
+  const documentsConfig = buildDocumentsTableConfig(showDocumentType, renderDocumentTypeFilter)
+  const documentsToolbar = (
+    <Toolbar
+      items={[
+        new ListMenuItem().setSearchBox({
+          value: searchTerm,
+          placeholder: strings.ArchiveSearchDocumentsPlaceholder,
+          'aria-label': strings.ArchiveSearchDocumentsPlaceholder,
+          onChange: (_, data) => setSearchTerm(data.value)
+        } as SearchBoxProps)
+      ]}
+    />
+  )
 
   return (
     <div className={styles.archiveSelection}>
@@ -459,10 +713,12 @@ export const ArchiveSelection: FC<IArchiveSelectionProps> = (props) => {
         {documentsSection && (
           <SectionCard
             section={documentsSection}
-            config={DOCUMENTS_TABLE_CONFIG}
+            config={documentsConfig}
             HeaderIcon={DocumentMultiple20Regular}
             onToggleItem={toggleItemSelection}
             onToggleSelectAll={toggleSectionSelectAll}
+            toolbar={documentsToolbar}
+            emptyText={filtersActive ? strings.ArchiveNoFilterResultsText : undefined}
           />
         )}
         {listsSection && (
