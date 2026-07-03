@@ -1,0 +1,1 @@
+<Field Description="{resource:SiteFields_GtStatusPageUrl_Description}" DisplayName="{resource:SiteFields_GtStatusPageUrl_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{bbf3b3a2-05fc-4b54-8be3-b2a4b5c9eae3}" Name="GtStatusPageUrl" ShowInDisplayForm="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE" StaticName="GtStatusPageUrl" Type="Text" />

@@ -1,10 +1,15 @@
 import { OnOpenChangeData, OpenPopoverEvents } from '@fluentui/react-components'
 import _ from 'lodash'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { getStatusPageSeriesKey } from 'pp365-shared-library'
 import { IStatusColumnProps } from './types'
 
 /**
- * Hook for the status report column.
+ * Hook for the status report column. Matches the report on both site ID and
+ * status page series key, so that a row representing an additional status page
+ * series shows that series' latest report. Rows without a `StatusPageId` (the
+ * default series) match reports without a `GtStatusPageId` — which includes
+ * all reports created before multiple status pages were supported.
  *
  * The popover open state is controlled here to add a show delay
  * (`props.openDelay`), as v9 `Popover` with `openOnHover` opens instantly on
@@ -16,7 +21,9 @@ import { IStatusColumnProps } from './types'
  */
 export function useStatusReportColumn(props: IStatusColumnProps) {
   const status = _.get(props.column, 'data.$', []).find(
-    ({ siteId }) => siteId === props.item.SiteId
+    ({ siteId, statusPageId }) =>
+      siteId === props.item.SiteId &&
+      statusPageId === getStatusPageSeriesKey(props.item.StatusPageId)
   )
 
   const [open, setOpen] = useState(false)

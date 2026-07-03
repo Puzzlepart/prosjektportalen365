@@ -16,7 +16,7 @@ import { useEffect } from 'react'
 import SPDataAdapter from '../../data'
 import { DataFetchFunction } from '../../types/DataFetchFunction'
 import { FETCH_DATA_ERROR, INIT_DATA } from './reducer'
-import { FetchDataResult, IProjectStatusProps } from './types'
+import { FetchDataResult, IProjectStatusProps, IStatusPageInfo } from './types'
 
 /**
  * Get report fields for Project Status. If content type ID is not provided,
@@ -33,6 +33,40 @@ async function getReportFields(contentTypeId = '0x010022252E35737A413FB56A1BA538
 
 function isNoHubError(error: unknown) {
   return SPDataAdapter.portalDataService?.isAvailable === false || isUnauthorizedError(error)
+}
+
+/**
+ * Resolves the identity of the status page the web part is placed on (used
+ * to scope the report series when `useSeparateReportSeries` is enabled). The
+ * page's `UniqueId`, `Title` and site-relative URL are read from the SitePages
+ * item the web part is hosted on. Returns `null` when the page context has no
+ * list item (e.g. in the local workbench), in which case the web part falls
+ * back to the default report series.
+ *
+ * @param props Component properties for `ProjectStatus`
+ */
+async function getStatusPageInfo(props: IProjectStatusProps): Promise<IStatusPageInfo> {
+  const { list, listItem } = props.pageContext ?? {}
+  if (!list || !listItem) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      '(ProjectStatus) `useSeparateReportSeries` is enabled, but the page context has no list item. Falling back to the default report series.'
+    )
+    return null
+  }
+  const pageItem = await props.sp.web.lists
+    .getById(list.id.toString())
+    .items.getById(listItem.id)
+    .select('UniqueId', 'Title', 'FileRef')<{ UniqueId: string; Title: string; FileRef: string }>()
+  const webServerRelativeUrl = (props.webServerRelativeUrl ?? '').replace(/\/$/, '')
+  const pageUrl = pageItem.FileRef?.toLowerCase().startsWith(webServerRelativeUrl.toLowerCase())
+    ? pageItem.FileRef.slice(webServerRelativeUrl.length).replace(/^\//, '')
+    : pageItem.FileRef
+  return {
+    id: pageItem.UniqueId?.toLowerCase(),
+    title: pageItem.Title,
+    url: pageUrl
+  }
 }
 
 /**
@@ -63,9 +97,14 @@ const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async
       .items.select('Id')
       .top(1)()
 
+    const statusPage = props.useSeparateReportSeries ? await getStatusPageInfo(props) : null
+
     const [reportList, reports, sections, columnConfig] = await Promise.all([
       SPDataAdapter.portalDataService.getStatusReportListProps(),
-      SPDataAdapter.portalDataService.getStatusReports({ useCaching: false }),
+      SPDataAdapter.portalDataService.getStatusReports({
+        useCaching: false,
+        statusPageId: statusPage ? statusPage.id : null
+      }),
       SPDataAdapter.portalDataService.getProjectStatusSections(),
       SPDataAdapter.portalDataService.getProjectColumnConfig()
     ])
@@ -116,7 +155,8 @@ const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async
         reports: sortedReports,
         sections: sortedSections,
         columnConfig,
-        userHasAdminPermission
+        userHasAdminPermission,
+        statusPage
       },
       initialSelectedReport,
       sourceUrl

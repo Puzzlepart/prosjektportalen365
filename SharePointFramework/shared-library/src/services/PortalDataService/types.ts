@@ -171,6 +171,14 @@ export type GetStatusReportsOptions = {
   top?: number
   select?: string[]
   useCaching?: boolean
+
+  /**
+   * Scope reports to one status page series:
+   * - `null` scopes to the default status page series (`GtStatusPageId` null or empty)
+   * - a status page ID (`UniqueId`) scopes to that page's series
+   * - omitted (`undefined`) applies no series scoping (all series are returned)
+   */
+  statusPageId?: string | null
 }
 
 export type SyncListParams = {
