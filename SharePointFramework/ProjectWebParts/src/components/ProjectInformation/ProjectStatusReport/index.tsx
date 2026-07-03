@@ -5,21 +5,26 @@ import { useProjectStatusReport } from './useProjectStatusReport'
 
 export const ProjectStatusReport: FC = () => {
   const context = useProjectInformationContext()
-  const projectStatusContext = useProjectStatusReport()
-  if (!projectStatusContext) return null
+  const projectStatusContexts = useProjectStatusReport()
+  if (projectStatusContexts.length === 0) return null
   return (
     <div>
-      <ProjectStatusContext.Provider value={projectStatusContext}>
-        <Header />
-        <SummarySection
-          transparent
-          noPadding
-          noMargin
-          iconsOnly={context.props.statusReportShowOnlyIcons}
-          iconSize={18}
-          truncateComment={context.props.statusReportTruncateComments}
-        />
-      </ProjectStatusContext.Provider>
+      {projectStatusContexts.map((projectStatusContext) => (
+        <ProjectStatusContext.Provider
+          key={projectStatusContext.state.selectedReport.id}
+          value={projectStatusContext}
+        >
+          <Header />
+          <SummarySection
+            transparent
+            noPadding
+            noMargin
+            iconsOnly={context.props.statusReportShowOnlyIcons}
+            iconSize={18}
+            truncateComment={context.props.statusReportTruncateComments}
+          />
+        </ProjectStatusContext.Provider>
+      ))}
     </div>
   )
 }

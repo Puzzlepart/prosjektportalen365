@@ -43,6 +43,37 @@ export interface IProjectStatusProps extends IBaseWebPartComponentProps {
    * File name for the snapshot attachment stored in a separate hidden library.
    */
   snapshotAttachmentFileName?: string
+
+  /**
+   * When `true`, this status page maintains its own report series keyed by the
+   * page's `UniqueId` in the SitePages library (`GtStatusPageId` on the report
+   * items). When `false` or not set, the web part behaves as the project's
+   * default status page and only shows reports without a status page ID. Only
+   * set to `true` through provisioning templates (Prosjekttillegg) — toggling
+   * it on an existing page hides the page's report history.
+   */
+  useSeparateReportSeries?: boolean
+}
+
+/**
+ * Identity of the status page the web part is placed on, used to scope the
+ * report series when `useSeparateReportSeries` is enabled.
+ */
+export interface IStatusPageInfo {
+  /**
+   * Unique ID (`UniqueId`) of the page item in the SitePages library, in lowercase.
+   */
+  id: string
+
+  /**
+   * Title of the status page.
+   */
+  title: string
+
+  /**
+   * Site-relative URL of the status page (e.g. `SitePages/Prosjektstatus-2.aspx`).
+   */
+  url: string
 }
 
 export interface IProjectStatusState extends IBaseWebPartComponentState<IProjectStatusData> {
@@ -143,6 +174,12 @@ export interface IProjectStatusData {
    * Current user has admin permissions
    */
   userHasAdminPermission?: boolean
+
+  /**
+   * Identity of the status page the web part is placed on. Only set when the
+   * web part is configured with `useSeparateReportSeries`.
+   */
+  statusPage?: IStatusPageInfo
 }
 
 /**

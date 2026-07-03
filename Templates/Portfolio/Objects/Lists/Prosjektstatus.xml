@@ -28,6 +28,8 @@
                 <FieldRef Name="GtModerationStatus" />
                 <FieldRef Name="GtSiteId" />
                 <FieldRef Name="GtLastReportDate"/>
+                <FieldRef Name="GtStatusPageId" />
+                <FieldRef Name="GtStatusPageTitle" />
             </ViewFields>
             <RowLimit Paged="TRUE">100</RowLimit>
             <JSLink>clienttemplates.js</JSLink>
@@ -49,5 +51,8 @@
         <pnp:FieldRef ID="7453259d-7960-41f2-944f-fbea5830356d" Name="GtAiStatusScoreNumber" DisplayName="{resource:SiteFields_GtAiStatusScoreNumber_DisplayName}" />
         <pnp:FieldRef ID="1cbd1af8-295b-4040-bd7c-426151e0609a" Name="GtAiChangesSincePrev" DisplayName="{resource:SiteFields_GtAiChangesSincePrev_DisplayName}" />
         <pnp:FieldRef ID="a8f2c5d7-4e8b-4c9a-b1f3-7d6e8c9f2a4b" Name="GtAiProcessedDateTime" DisplayName="{resource:SiteFields_GtAiProcessedDateTime_DisplayName}" />
+        <pnp:FieldRef ID="9a4a0fdb-9644-426d-8ed5-b05384c15661" Name="GtStatusPageId" DisplayName="{resource:SiteFields_GtStatusPageId_DisplayName}" />
+        <pnp:FieldRef ID="a619d5ef-5f20-410b-8567-c9aa8642248c" Name="GtStatusPageTitle" DisplayName="{resource:SiteFields_GtStatusPageTitle_DisplayName}" />
+        <pnp:FieldRef ID="bbf3b3a2-05fc-4b54-8be3-b2a4b5c9eae3" Name="GtStatusPageUrl" DisplayName="{resource:SiteFields_GtStatusPageUrl_DisplayName}" />
     </pnp:FieldRefs>
 </pnp:ListInstance>

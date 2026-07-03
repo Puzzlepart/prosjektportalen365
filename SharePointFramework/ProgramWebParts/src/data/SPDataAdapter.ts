@@ -15,7 +15,11 @@ import { IProgramAdministrationProject } from 'components/ProgramAdministration/
 import MSGraph from 'msgraph-helper'
 import { IPortfolioOverviewConfiguration } from 'pp365-portfoliowebparts/lib/components'
 import { IPortfolioAggregationConfiguration } from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
-import { IPortfolioViewData, IPortfolioWebPartsDataAdapter } from 'pp365-portfoliowebparts/lib/data'
+import {
+  IFetchDataForViewItemResult,
+  IPortfolioViewData,
+  IPortfolioWebPartsDataAdapter
+} from 'pp365-portfoliowebparts/lib/data'
 import * as PortfolioWebPartsDataConfig from 'pp365-portfoliowebparts/lib/data/config'
 import {
   Benefit,
@@ -25,7 +29,10 @@ import {
 import {
   DataSource,
   DataSourceService,
+  expandRowsPerStatusSeries,
   getOrFetchProjectsCache,
+  getStatusPageSeriesKey,
+  groupLatestReportBySeries,
   IGraphGroup,
   IProjectDataServiceParams,
   ISPDataAdapterBaseConfiguration,
@@ -35,6 +42,7 @@ import {
   ProjectDataService,
   ProjectInformationChildProject,
   ProjectListModel,
+  sortStatusReportsLatestFirst,
   SPDataAdapterBase,
   SPProjectItem,
   TimelineConfigurationModel,
@@ -206,24 +214,29 @@ export class SPDataAdapter
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IPortfolioViewData> {
     try {
-      const { projects, sites, statusReports } = await this._fetchDataForView(
+      const { projects, sites, statusReportsBySite } = await this._fetchDataForView(
         view,
         configuration,
         siteId,
         siteIdProperty
       )
-      const items = sites.map((site) => {
+      const items = sites.reduce<IFetchDataForViewItemResult[]>((acc, site) => {
         const project = projects.find((res) => res[siteIdProperty] === site['SiteId'])
-        const statusReport = statusReports.find((res) => res[siteIdProperty] === site['SiteId'])
-        return {
-          ...(statusReport ?? {}),
-          ...(project ?? {}),
-          Title: site.Title,
-          Path: site?.Path,
-          SPWebUrl: site?.SPWebUrl,
-          SiteId: site['SiteId']
-        }
-      })
+        const series = statusReportsBySite.get(site['SiteId'])
+        return acc.concat(
+          expandRowsPerStatusSeries(
+            (statusReport) => ({
+              ...(statusReport ?? {}),
+              ...(project ?? {}),
+              Title: site.Title,
+              Path: site?.Path,
+              SPWebUrl: site?.SPWebUrl,
+              SiteId: site['SiteId']
+            }),
+            series
+          )
+        )
+      }, [])
 
       return { items }
     } catch (err) {
@@ -238,25 +251,28 @@ export class SPDataAdapter
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IPortfolioViewData> {
     try {
-      const { projects, sites, statusReports } = await this._fetchDataForView(
+      const { projects, sites, statusReportsBySite } = await this._fetchDataForView(
         view,
         configuration,
         siteId,
         siteIdProperty
       )
-      const items = projects.map((project) => {
-        const statusReport = statusReports.find(
-          (res) => res[siteIdProperty] === project[siteIdProperty]
-        )
+      const items = projects.reduce<IFetchDataForViewItemResult[]>((acc, project) => {
         const site = sites.find((res) => res['SiteId'] === project[siteIdProperty])
-        return {
-          ...(statusReport ?? {}),
-          ...project,
-          Path: site?.Path,
-          SPWebUrl: site?.SPWebUrl,
-          SiteId: project[siteIdProperty]
-        }
-      })
+        const series = statusReportsBySite.get(project[siteIdProperty])
+        return acc.concat(
+          expandRowsPerStatusSeries(
+            (statusReport) => ({
+              ...(statusReport ?? {}),
+              ...project,
+              Path: site?.Path,
+              SPWebUrl: site?.SPWebUrl,
+              SiteId: project[siteIdProperty]
+            }),
+            series
+          )
+        )
+      }, [])
 
       return { items }
     } catch (err) {
@@ -307,27 +323,29 @@ export class SPDataAdapter
   ): Promise<IPortfolioViewData> {
     const queryArray = this.aggregatedQueryBuilder(siteIdProperty)
     const promises = queryArray.map(async (query) => {
-      const { projects, sites, statusReports } = await this._fetchDataForView(
+      const { projects, sites, statusReportsBySite } = await this._fetchDataForView(
         view,
         configuration,
         siteId,
         siteIdProperty,
         query
       )
-      return projects.map((project) => {
-        const statusReport = statusReports.find(
-          (res) => res[siteIdProperty] === project[siteIdProperty]
-        )
+      return projects.reduce<IFetchDataForViewItemResult[]>((acc, project) => {
         const site = sites.find((res) => res['SiteId'] === project[siteIdProperty])
-
-        return {
-          ...(statusReport ?? {}),
-          ...project,
-          Path: site?.Path,
-          SPWebUrl: site?.SPWebUrl,
-          SiteId: project[siteIdProperty]
-        }
-      })
+        const series = statusReportsBySite.get(project[siteIdProperty])
+        return acc.concat(
+          expandRowsPerStatusSeries(
+            (statusReport) => ({
+              ...(statusReport ?? {}),
+              ...project,
+              Path: site?.Path,
+              SPWebUrl: site?.SPWebUrl,
+              SiteId: project[siteIdProperty]
+            }),
+            series
+          )
+        )
+      }, [])
     })
     const items = await Promise.all(promises).then((results) => _.flatten(results))
     return { items, managedProperties: [] }
@@ -391,22 +409,33 @@ export class SPDataAdapter
       ]),
       fetchAllResults(
         `${queryArray} DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:${resource.Choice_GtModerationStatus_Published}`,
-        [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
+        [
+          ...configuration.columns.map((f) => f.fieldName),
+          siteIdProperty,
+          'ListItemId',
+          'GtStatusPageIdOWSTEXT',
+          'GtStatusPageTitleOWSTEXT',
+          'GtStatusPageUrlOWSTEXT'
+        ],
         configuration.refiners.map((ref) => ref.fieldName).join(',')
       )
     ])
 
     projects = projects.map((item) => cleanDeep({ ...item }))
     sites = sites.map((item) => cleanDeep({ ...item }))
-    statusReports = statusReports.map((item) => cleanDeep({ ...item }))
+    statusReports = sortStatusReportsLatestFirst(statusReports).map((item) =>
+      cleanDeep({ ...item })
+    )
     sites = sites.filter(
       (site) => projects.filter((res) => res[siteIdProperty] === site['SiteId']).length === 1
     )
+    const statusReportsBySite = groupLatestReportBySeries(statusReports, siteIdProperty)
 
     return {
       projects,
       sites,
-      statusReports
+      statusReports,
+      statusReportsBySite
     } as const
   }
 
@@ -426,6 +455,9 @@ export class SPDataAdapter
     )
 
     const data = items
+      // Timeline rows are project-level facts — skip the extra rows a project
+      // gets per additional status page series.
+      .filter((item) => !item.StatusPageId)
       .map((item) => {
         const properties = _.reduce(
           item,
@@ -447,7 +479,12 @@ export class SPDataAdapter
       .filter((item) => item.siteId !== siteId)
 
     const searchQuery = `ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:${resource.Choice_GtModerationStatus_Published}`
-    const selectProperties = ['GtSiteIdOWSTEXT', 'GtCostsTotalOWSCURR', 'GtBudgetTotalOWSCURR']
+    const selectProperties = [
+      'GtSiteIdOWSTEXT',
+      'GtCostsTotalOWSCURR',
+      'GtBudgetTotalOWSCURR',
+      'GtStatusPageIdOWSTEXT'
+    ]
 
     const statusReports = await this._fetchItems(
       searchQuery,
@@ -457,6 +494,7 @@ export class SPDataAdapter
     )
 
     const reports = statusReports
+      .filter((report) => !getStatusPageSeriesKey(report?.['GtStatusPageIdOWSTEXT']))
       .map((report) => ({
         siteId: report?.['GtSiteIdOWSTEXT'],
         costsTotal: report?.['GtCostsTotalOWSCURR'],

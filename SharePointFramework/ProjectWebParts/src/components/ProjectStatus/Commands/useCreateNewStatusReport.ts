@@ -15,22 +15,41 @@ export function useCreateNewStatusReport() {
 
   /**
    * Get the report fields that are not read-only and not the
-   * `GtSectionDataJson` or `GtLastReportDate` fields.
+   * `GtSectionDataJson`, `GtLastReportDate` or status page identity fields.
    */
   const reportFields = state.data.reportFields.filter(
     (field) =>
-      !field.isReadOnly && !['GtSectionDataJson', 'GtLastReportDate'].includes(field.internalName)
+      !field.isReadOnly &&
+      ![
+        'GtSectionDataJson',
+        'GtLastReportDate',
+        'GtStatusPageId',
+        'GtStatusPageTitle',
+        'GtStatusPageUrl'
+      ].includes(field.internalName)
   )
 
   /**
    * Creates a new status report with the given properties and passes the parameters to the edit status panel.
-   * If there is a last report, it will use its field values for the new report.
+   * If there is a last report, it will use its field values for the new report. When the web part is
+   * configured with a separate report series, the status page identity is stamped on the new report
+   * so it can be distinguished from other report series for the same project.
    */
   const createNewStatusReport = async () => {
+    const statusPage = state.data.statusPage
     let properties: Record<string, any> = {
-      Title: format(strings.NewStatusReportTitle, props.webTitle),
+      Title: statusPage
+        ? format(strings.NewStatusReportTitle, `${props.webTitle} – ${statusPage.title}`)
+        : format(strings.NewStatusReportTitle, props.webTitle),
       GtSiteId: props.siteId,
-      GtModerationStatus: resource.Choice_GtModerationStatus_Draft
+      GtModerationStatus: resource.Choice_GtModerationStatus_Draft,
+      ...(statusPage
+        ? {
+            GtStatusPageId: statusPage.id,
+            GtStatusPageTitle: statusPage.title,
+            GtStatusPageUrl: statusPage.url
+          }
+        : {})
     }
     if (lastReport?.fieldValues) {
       properties = reportFields.reduce((obj, field) => {

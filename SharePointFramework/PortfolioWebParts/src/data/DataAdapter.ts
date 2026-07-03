@@ -26,10 +26,13 @@ import {
   DataSource,
   DataSourceService,
   DefaultCaching,
+  expandRowsPerStatusSeries,
   getClassProperties,
   getItemFieldValues,
   getOrFetchProjectsCache,
+  getStatusPageSeriesKey,
   getUserPhoto,
+  groupLatestReportBySeries,
   IGraphGroup,
   IPortalDataServiceConfiguration,
   ItemFieldValues,
@@ -38,6 +41,7 @@ import {
   ProjectColumn,
   ProjectContentColumn,
   ProjectListModel,
+  sortStatusReportsLatestFirst,
   SPField,
   SPFxContext,
   SPProjectItem,
@@ -298,7 +302,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
     const seenKeys = new Set<string>()
     const uniqueItems = mergedResult.items.filter((item) => {
-      const key = `${item.SiteId}_${item._hubId}`
+      const key = `${item.SiteId}_${item.StatusPageId ?? ''}_${item._hubId}`
       if (seenKeys.has(key)) {
         return false
       }
@@ -318,25 +322,26 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     siteId: string,
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IPortfolioViewData> {
-    const { projects, sites, statusReports, managedProperties } = await this._fetchDataForView(
-      view,
-      configuration,
-      siteId,
-      siteIdProperty
-    )
+    const { projects, sites, statusReportsBySite, managedProperties } =
+      await this._fetchDataForView(view, configuration, siteId, siteIdProperty)
 
-    const items = sites.map((site) => {
+    const items = sites.reduce<IFetchDataForViewItemResult[]>((acc, site) => {
       const project = projects.find((res) => res[siteIdProperty] === site['SiteId'])
-      const statusReport = statusReports.find((res) => res[siteIdProperty] === site['SiteId'])
-      return {
-        ...(statusReport ?? {}),
-        ...(project ?? {}),
-        Title: site.Title,
-        Path: site?.Path,
-        SPWebUrl: site?.SPWebUrl,
-        SiteId: site['SiteId']
-      }
-    })
+      const series = statusReportsBySite.get(site['SiteId'])
+      return acc.concat(
+        expandRowsPerStatusSeries(
+          (statusReport) => ({
+            ...(statusReport ?? {}),
+            ...(project ?? {}),
+            Title: site.Title,
+            Path: site?.Path,
+            SPWebUrl: site?.SPWebUrl,
+            SiteId: site['SiteId']
+          }),
+          series
+        )
+      )
+    }, [])
 
     return { items, managedProperties } as IPortfolioViewData
   }
@@ -347,26 +352,25 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     siteId: string,
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IPortfolioViewData> {
-    const { projects, sites, statusReports, managedProperties } = await this._fetchDataForView(
-      view,
-      configuration,
-      siteId,
-      siteIdProperty
-    )
+    const { projects, sites, statusReportsBySite, managedProperties } =
+      await this._fetchDataForView(view, configuration, siteId, siteIdProperty)
 
-    const items: IFetchDataForViewItemResult[] = projects.map((project) => {
-      const statusReport = statusReports.find(
-        (res) => res[siteIdProperty] === project[siteIdProperty]
-      )
+    const items = projects.reduce<IFetchDataForViewItemResult[]>((acc, project) => {
       const site = sites.find((res) => res['SiteId'] === project[siteIdProperty])
-      return {
-        ...(statusReport ?? {}),
-        ...project,
-        Path: site?.Path,
-        SPWebUrl: site?.SPWebUrl,
-        SiteId: project[siteIdProperty]
-      }
-    })
+      const series = statusReportsBySite.get(project[siteIdProperty])
+      return acc.concat(
+        expandRowsPerStatusSeries(
+          (statusReport) => ({
+            ...(statusReport ?? {}),
+            ...project,
+            Path: site?.Path,
+            SPWebUrl: site?.SPWebUrl,
+            SiteId: project[siteIdProperty]
+          }),
+          series
+        )
+      )
+    }, [])
 
     return { items, managedProperties } as IPortfolioViewData
   }
@@ -438,24 +442,33 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       ]),
       this._fetchItems(
         `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* (GtModerationStatusOWSCHCS:${config.MODERATION_STATUS_PUBLISHED_NO} OR GtModerationStatusOWSCHCS:${config.MODERATION_STATUS_PUBLISHED_EN})`,
-        [...configuration.columns.map((f) => f.fieldName), siteIdProperty, 'ListItemId'],
+        [
+          ...configuration.columns.map((f) => f.fieldName),
+          siteIdProperty,
+          'ListItemId',
+          'GtStatusPageIdOWSTEXT',
+          'GtStatusPageTitleOWSTEXT',
+          'GtStatusPageUrlOWSTEXT'
+        ],
         500,
         { Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',') }
       )
     ])
     projects = projects.map((item) => cleanDeep({ ...item }))
     sites = sites.map((item) => cleanDeep({ ...item }))
-    statusReports = statusReports
-      .sort((a, b) => b['ListItemId'] - a['ListItemId'])
-      .map((item) => cleanDeep({ ...item }))
+    statusReports = sortStatusReportsLatestFirst(statusReports).map((item) =>
+      cleanDeep({ ...item })
+    )
     sites = sites.filter(
       (site) => projects.filter((res) => res[siteIdProperty] === site['SiteId']).length === 1
     )
+    const statusReportsBySite = groupLatestReportBySeries(statusReports, siteIdProperty)
 
     return {
       projects,
       sites,
       statusReports,
+      statusReportsBySite,
       managedProperties
     } as const
   }
@@ -491,6 +504,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       })
 
       const reports = statusReports
+        .filter((report) => !getStatusPageSeriesKey(report?.['GtStatusPageIdOWSTEXT']))
         .map((report) => ({
           siteId: report?.['GtSiteIdOWSTEXT'],
           costsTotal: report?.['GtCostsTotalOWSCURR'],
