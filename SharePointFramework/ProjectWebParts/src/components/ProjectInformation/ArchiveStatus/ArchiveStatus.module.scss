@@ -7,19 +7,19 @@
     background-color: var(--colorNeutralBackground3Hover);
     border-color: var(--colorNeutralStroke1Hover);
   }
-}
 
-.messageBarBody {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
+  .messageBarBody {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
 
-.messageBarLine {
-  display: block;
-  white-space: normal;
-  word-break: break-word;
+    .messageBarLine {
+      display: block;
+      white-space: normal;
+      word-break: break-word;
+    }
+  }
 }
 
 .popoverSurface {

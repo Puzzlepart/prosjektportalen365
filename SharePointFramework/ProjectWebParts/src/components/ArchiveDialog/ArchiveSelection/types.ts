@@ -1,10 +1,15 @@
 import type { IArchiveItemHistory } from '../../../data/SPDataAdapter/types'
 
+/**
+ * A single archivable item (document or list) shown in the selection tables.
+ */
 export interface IArchiveItem {
+  /** Row/selection key, unique within its section. */
   id: string | number
-  itemId?: string
+  /** Stable SharePoint GUID (document `UniqueId` / list `Id`) used for logging and rename-stable history matching. */
+  spItemId?: string
   title: string
-  type: 'file' | 'list' | 'folder'
+  type: 'file' | 'list'
   url?: string
   selected: boolean
   disabled?: boolean
@@ -28,6 +33,9 @@ export interface IArchiveSection {
   someSelected: boolean
 }
 
+/**
+ * The set of items the user has chosen to archive, split by scope.
+ */
 export interface IArchiveConfiguration {
   documents: IArchiveItem[]
   lists: IArchiveItem[]

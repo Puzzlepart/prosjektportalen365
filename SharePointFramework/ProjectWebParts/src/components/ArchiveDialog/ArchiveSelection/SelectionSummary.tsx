@@ -18,6 +18,11 @@ export interface ISelectionSummaryProps {
   selectedItems?: IArchiveItem[]
 }
 
+/**
+ * Read-only recap of what the user has selected to archive — a big count plus a
+ * per-scope breakdown and, optionally, the list of selected items. Shown in the
+ * dialog's confirm step and in the phase-change confirm view.
+ */
 export const SelectionSummary: FC<ISelectionSummaryProps> = ({
   total,
   documentsSelected,

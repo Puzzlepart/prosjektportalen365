@@ -8,18 +8,21 @@ import { View } from '../Views'
 import { ChangePhaseDialogContext } from '../context'
 import { SET_VIEW } from '../reducer'
 import { Button, DialogActions } from '@fluentui/react-components'
+import { Logger, LogLevel } from '@pnp/logging'
 import SPDataAdapter from '../../../../data'
 import { IArchiveConfiguration } from '../../../ArchiveDialog/ArchiveSelection/types'
 
 /**
- * Log archive operations to the Archive Log list
+ * Logs the selected documents and lists to the Archive Log as part of a phase
+ * transition. A logging failure is caught and reported (never rethrown) so it
+ * cannot block or abort the phase change itself.
  */
-const logArchiveOperations = async (
+async function logArchiveOperations(
   archiveConfiguration: IArchiveConfiguration,
   webUrl: string,
   currentPhase?: string,
   targetPhase?: string
-): Promise<void> => {
+): Promise<void> {
   try {
     const phaseTransitionMessage =
       currentPhase && targetPhase
@@ -35,7 +38,7 @@ const logArchiveOperations = async (
           doc.url || '',
           webUrl,
           undefined,
-          doc.itemId,
+          doc.spItemId,
           strings.ArchiveLogOperationPhaseTransition
         )
       }
@@ -50,13 +53,18 @@ const logArchiveOperations = async (
           list.url || '',
           webUrl,
           undefined,
-          list.itemId,
+          list.spItemId,
           strings.ArchiveLogOperationPhaseTransition
         )
       }
     }
   } catch (error) {
-    console.error('Error logging archive operations:', error)
+    Logger.log({
+      message: `(Actions) (logArchiveOperations) Failed to log archive operations during phase transition: ${
+        error?.message ?? error
+      }`,
+      level: LogLevel.Warning
+    })
   }
 }
 

@@ -1,13 +1,14 @@
 import React, { FC, useContext } from 'react'
-import { ProjectPhasesContext } from '../../context'
-import { ArchiveSelection } from '../../../ArchiveDialog/ArchiveSelection/ArchiveSelection'
-import { ChangePhaseDialogContext } from '../context'
-import { SET_ARCHIVE_CONFIGURATION } from '../reducer'
+import { ProjectPhasesContext } from '../../../context'
+import { ArchiveSelection } from '../../../../ArchiveDialog/ArchiveSelection/ArchiveSelection'
+import { ChangePhaseDialogContext } from '../../context'
+import { SET_ARCHIVE_CONFIGURATION } from '../../reducer'
 
-export * from './InitialView'
-export * from './SummaryView'
-export * from './ChangingPhaseView'
-
+/**
+ * Change-phase dialog view that lets the user pick which documents and lists to
+ * archive as part of the transition. Wraps the shared {@link ArchiveSelection}
+ * with phase-filtered data and reports the selection to the dialog reducer.
+ */
 export const ArchiveView: FC = () => {
   const context = useContext(ProjectPhasesContext)
   const dialogContext = useContext(ChangePhaseDialogContext)
@@ -23,12 +24,4 @@ export const ArchiveView: FC = () => {
       }
     />
   )
-}
-
-export enum View {
-  Initial,
-  Summary,
-  Archive,
-  Confirm,
-  ChangingPhase
 }
