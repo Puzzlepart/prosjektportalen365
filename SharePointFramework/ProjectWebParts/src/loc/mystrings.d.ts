@@ -295,6 +295,7 @@ declare interface IProjectWebPartsStrings {
   ArchiveNotArchivableListText: string
   ArchiveNotArchivableDocumentText: string
   ArchiveNotArchivableNoDocumentTypeText: string
+  ArchiveNotArchivableReasonLabel: string
   ArchiveList: string
   ArchiveDocument: string
   ArchivePhaseTransition: string
@@ -346,6 +347,8 @@ declare interface IProjectWebPartsStrings {
   ArchiveTableColumnItemCount: string
   ArchiveTableColumnDocumentType: string
   ArchiveSearchDocumentsPlaceholder: string
+  ArchiveFilterText: string
+  ArchiveFilterArchiveStatusText: string
   ArchiveFilterDocumentTypeTooltip: string
   ArchiveFilterClearText: string
   ArchiveArchivableText: string
@@ -418,6 +421,10 @@ declare interface IProjectWebPartsStrings {
   ArchiveLogStatusError: string
   ArchiveLogStatusWarning: string
   ArchiveLogStatusInProgress: string
+  ArchiveLogStatusSuccessTooltip: string
+  ArchiveLogStatusErrorTooltip: string
+  ArchiveLogStatusWarningTooltip: string
+  ArchiveLogStatusInProgressTooltip: string
   ArchiveLogScopeDocument: string
   ArchiveLogScopeList: string
   ArchiveLogOperationArchive: string
