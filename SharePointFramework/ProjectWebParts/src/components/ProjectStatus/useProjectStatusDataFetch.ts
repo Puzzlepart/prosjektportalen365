@@ -64,7 +64,7 @@ async function getStatusPageInfo(props: IProjectStatusProps): Promise<IStatusPag
     : pageItem.FileRef
   return {
     id: pageItem.UniqueId?.toLowerCase(),
-    title: pageItem.Title,
+    title: pageItem.Title || pageUrl?.split('/').pop()?.replace(/\.aspx$/i, ''),
     url: pageUrl
   }
 }
