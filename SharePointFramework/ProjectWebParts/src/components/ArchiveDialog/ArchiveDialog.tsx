@@ -209,6 +209,7 @@ export const ArchiveDialog: FC<IArchiveDialogProps> = (props) => {
                           lists={lists}
                           history={history}
                           hasDocumentTypes={hasDocumentTypes}
+                          initialSelection={config}
                           isLoading={isLoading}
                           onConfigurationChange={setConfig}
                         />
