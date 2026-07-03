@@ -82,7 +82,8 @@ async function writeArchiveLogEntries(
  */
 export function useArchiveDialog({ open, webUrl, onDismiss, onArchived }: IArchiveDialogProps) {
   const fluentProviderId = useId('fp-archive-dialog')
-  const { documents, lists, history, isLoading, error, refresh } = useArchiveDialogData(webUrl, open)
+  const { documents, lists, history, hasDocumentTypes, isLoading, error, refresh } =
+    useArchiveDialogData(webUrl, open)
   const [view, setView] = useState<ArchiveDialogView>('selection')
   const [config, setConfig] = useState<IArchiveConfiguration>({ documents: [], lists: [] })
   const emptyProgress: IArchiveProgressState = {
@@ -137,6 +138,7 @@ export function useArchiveDialog({ open, webUrl, onDismiss, onArchived }: IArchi
     documents,
     lists,
     history,
+    hasDocumentTypes,
     isLoading,
     error,
     refresh,

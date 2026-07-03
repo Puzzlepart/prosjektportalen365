@@ -1,7 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import * as strings from 'ProjectWebPartsStrings'
 import type { IArchiveItemHistory } from '../../../data/SPDataAdapter/types'
-import { IArchiveItem, IArchiveSection, IArchiveSelectionProps } from './types'
+import {
+  IArchiveDocumentFilters,
+  IArchiveItem,
+  IArchiveSection,
+  IArchiveSelectionProps
+} from './types'
 
 type ItemId = string | number
 
@@ -57,8 +62,15 @@ function buildSection(key: string, title: string, items: IArchiveItem[]): IArchi
  * Selection logic for {@link ArchiveSelection}: tracks which items are selected,
  * derives the documents/lists sections (history-enriched, phase-filtered), and
  * reports the chosen configuration up via `onConfigurationChange`.
+ *
+ * `documentFilters` (search + document type) only narrows what the documents
+ * section *shows* — and what its select-all toggles — while the emitted
+ * configuration always includes every selected item, filtered out of view or not.
  */
-export function useArchiveSelection(props: IArchiveSelectionProps) {
+export function useArchiveSelection(
+  props: IArchiveSelectionProps,
+  documentFilters?: IArchiveDocumentFilters
+) {
   const { documents, lists, history, currentPhaseId, onConfigurationChange } = props
   const [selectedIds, setSelectedIds] = useState<Set<ItemId>>(new Set())
 
@@ -75,12 +87,32 @@ export function useArchiveSelection(props: IArchiveSelectionProps) {
     [lists, history, selectedIds]
   )
 
+  const searchTerm = (documentFilters?.searchTerm ?? '').trim().toLowerCase()
+  const documentTypeIds = documentFilters?.documentTypeIds ?? []
+  const visibleDocumentsItems = useMemo(
+    () =>
+      documentsSectionItems.filter((item) => {
+        if (
+          searchTerm &&
+          !item.title.toLowerCase().includes(searchTerm) &&
+          !(item.documentTypeName ?? '').toLowerCase().includes(searchTerm)
+        ) {
+          return false
+        }
+        if (documentTypeIds.length > 0 && !documentTypeIds.includes(item.documentTypeId)) {
+          return false
+        }
+        return true
+      }),
+    [documentsSectionItems, searchTerm, documentTypeIds.join('|')]
+  )
+
   const sections: IArchiveSection[] = useMemo(
     () => [
-      buildSection('documents', strings.ArchiveDocumentsSection, documentsSectionItems),
+      buildSection('documents', strings.ArchiveDocumentsSection, visibleDocumentsItems),
       buildSection('lists', strings.ArchiveListsSection, listsSectionItems)
     ],
-    [documentsSectionItems, listsSectionItems]
+    [visibleDocumentsItems, listsSectionItems]
   )
 
   useEffect(() => {
@@ -103,7 +135,8 @@ export function useArchiveSelection(props: IArchiveSelectionProps) {
   }
 
   const toggleSectionSelectAll = (sectionKey: string) => {
-    const items = sectionKey === 'documents' ? documentsSectionItems : listsSectionItems
+    // Select-all only operates on the rows the user can currently see.
+    const items = sectionKey === 'documents' ? visibleDocumentsItems : listsSectionItems
     const enabled = items.filter((i) => !i.disabled)
     if (enabled.length === 0) return
     const allSelected = enabled.every((i) => i.selected)
