@@ -243,4 +243,39 @@ if ($null -ne $LastInstall) {
             Write-Host "[INFO] 'AssistantAccessMode' global setting already exists, skipping"
         }
     }
+
+    if ($PreviousVersion -lt [version]"1.13.0") {
+        Write-Host "[INFO] Ensuring 'AvailableProgramHubs' global setting exists and has an absolute URL value..."
+        # The Program administration web part resolves this setting to a hub site id. A missing
+        # value, or a server-relative value (e.g. '/sites/...'), fails to resolve and both the
+        # existing programs list and the 'Add subareas' dialog silently render empty. Ensure the
+        # setting exists and holds the absolute URL of this portfolio (hub) site.
+        $GlobalSettingsList = Get-Resource -Name "Lists_Global_Settings_Title"
+        $AvailableProgramHubsSettingId = "{21bcf4a5-1979-44cb-b42e-3209fc95ce90}"
+        $HubUrl = (Get-PnPWeb -Includes Url).Url
+        $ExistingSetting = Get-PnPListItem -List $GlobalSettingsList | Where-Object { $_["GtSettingsKey"] -eq "AvailableProgramHubs" }
+        if ($null -eq $ExistingSetting) {
+            $GeneralCategory = Get-Resource -Name "Lists_Global_Settings_Category_General"
+            $SettingTitle = Get-Resource -Name "Lists_Global_Settings_Category_General_AvailableProgramHubs_Title"
+            Add-PnPListItem -List $GlobalSettingsList -Values @{
+                "GtSettingsId"       = $AvailableProgramHubsSettingId
+                "Title"              = $SettingTitle
+                "GtSettingsKey"      = "AvailableProgramHubs"
+                "GtSettingsValue"    = $HubUrl
+                "GtSettingsEnabled"  = $true
+                "GtSettingsCategory" = $GeneralCategory
+            } | Out-Null
+            Write-Host "[INFO] Added 'AvailableProgramHubs' global setting with value '$HubUrl'" -ForegroundColor Green
+        } else {
+            $CurrentValue = $ExistingSetting["GtSettingsValue"]
+            if ([string]::IsNullOrWhiteSpace($CurrentValue) -or $CurrentValue.StartsWith("/")) {
+                Set-PnPListItem -List $GlobalSettingsList -Identity $ExistingSetting.Id -Values @{
+                    "GtSettingsValue" = $HubUrl
+                } | Out-Null
+                Write-Host "[INFO] Repaired 'AvailableProgramHubs' global setting value from '$CurrentValue' to '$HubUrl'" -ForegroundColor Green
+            } else {
+                Write-Host "[INFO] 'AvailableProgramHubs' global setting already has an absolute value, skipping"
+            }
+        }
+    }
 }
