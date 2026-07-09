@@ -66,6 +66,7 @@ NB! Dersom dere nylig har oppgradert til 1.13.0 og opplever at `Title`-feltet ha
 - Dynamisk feltrendering i `Bestillingsportalen` som støtter konfigurerbar feltrekkefølge og nivåplassering via `order` og `level` egenskaper
 - Lagt til «Se mine bestillinger»-knapp i verktøylinjen i `Bestillingsportalen`-skuffen for rask tilgang til bestillingsstatus
 - Ny tilgangsstyring for Prosjektportalen Assistenten basert på prosjektadministrasjonsroller. Ny global innstilling `AssistantAccessMode` med tre moduser: `group` (standard, eksisterende oppførsel), `role` (rollebasert per prosjekt) og `both` (bruker må tilfredsstille både gruppe- og rollesjekk). Ny tilgang `AssistantAccess` som kan tilordnes roller i `Prosjektadministrasjonsroller`-listen.
+- Ny seksjon i `Prosjektinformasjon` som viser ikoner for FN bærekraftsmål som er valgt for området.
 
 ### Forbedringer
 
