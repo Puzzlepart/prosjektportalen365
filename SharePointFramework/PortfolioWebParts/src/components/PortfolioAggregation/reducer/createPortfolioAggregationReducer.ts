@@ -46,6 +46,7 @@ import {
 } from './actions'
 import { persistSelectedColumnsInWebPartProperties } from './persistSelectedColumnsInWebPartProperties'
 import resource from 'SharedResources'
+import { ProjectContentColumn } from 'pp365-shared-library/lib/models/ProjectContentColumn'
 
 /**
  * Parses a raw SharePoint field value into a display-friendly string.
@@ -113,11 +114,27 @@ export const createPortfolioAggregationReducer = (
         return
       }
 
-      let selectedColumns = props.columns ?? []
+      const configView = _.find(
+        props.configuration?.views ?? [],
+        (v) => v.id === payload.dataSource?.id
+      )
+      const availableColumns = props.configuration?.columns ?? payload.columns
+      const columnIds = configView?.columnIds ?? payload.dataSource?.columnIds ?? []
+      const viewColumns = (configView?.columns ?? payload.dataSource?.columns ?? [])
+        .slice()
+        .sort((a, b) => {
+          const indexA = columnIds.indexOf(a.id)
+          const indexB = columnIds.indexOf(b.id)
+          return (indexA === -1 ? Infinity : indexA) - (indexB === -1 ? Infinity : indexB)
+        })
 
-      let allColumnsForCategory = payload.columns.map((c) => {
-        const column = c.setData({
-          isSelected: _.some(selectedColumns, ({ key }) => key === c.key) || c.data.isLocked
+      let selectedColumns = !_.isEmpty(viewColumns) ? viewColumns : (props.columns ?? [])
+
+      let allColumnsForCategory = availableColumns.map((c) => {
+
+        const col = c instanceof ProjectContentColumn ? c : Object.assign(new ProjectContentColumn(), c)
+        const column = col.setData({
+          isSelected: _.some(selectedColumns, ({ key }) => key === col.key) || col.data?.isLocked
         })
         if (
           column.fieldName &&
@@ -134,6 +151,8 @@ export const createPortfolioAggregationReducer = (
           ({ internalName }) => internalName !== 'SiteTitle'
         )
       }
+
+      console.log('acf', allColumnsForCategory)
 
       selectedColumns = selectedColumns
         .map((c) => {
@@ -166,6 +185,23 @@ export const createPortfolioAggregationReducer = (
       if (payload.columns) {
         state.columns = payload.columns
         persistSelectedColumnsInWebPartProperties(props, current(state).columns)
+
+        const selectedColumnKeys = new Set(payload.columns.map((c) => c.key))
+        state.allColumnsForCategory = current(state).allColumnsForCategory.map((c) => {
+          const col = Object.assign(new ProjectContentColumn(), c)
+          col.setData({ isSelected: selectedColumnKeys.has(col.key) || c.data?.isLocked })
+          return col
+        })
+
+        if (state.currentView) {
+          state.currentView.columns = payload.columns
+          state.currentView.columnIds = payload.columns.map((c) => c.id)
+          const viewIndex = state.views.findIndex((v) => v.id === state.currentView.id)
+          if (viewIndex !== -1) {
+            state.views[viewIndex].columns = payload.columns
+            state.views[viewIndex].columnIds = payload.columns.map((c) => c.id)
+          }
+        }
       }
     },
     [TOGGLE_FILTER_PANEL.type]: (state) => {
@@ -357,7 +393,6 @@ export const createPortfolioAggregationReducer = (
     },
     [START_FETCH.type]: (state) => {
       state.loading = true
-      state.isChangingView = true
     },
     [EXECUTE_SEARCH.type]: (state, { payload }: ReturnType<typeof EXECUTE_SEARCH>) => {
       state.searchTerm = payload
