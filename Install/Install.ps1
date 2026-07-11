@@ -55,6 +55,7 @@ $ConnectionInfo = [PSCustomObject]@{
     Tenant                   = $Tenant
     CertificateBase64Encoded = $CertificateBase64Encoded
 }
+$RequiredPnPVersion = Get-PnPVersion
 
 #region Handling installation language and culture
 $LanguageIds = @{
@@ -114,17 +115,17 @@ Write-Host "########################################################" -Foregroun
 
 if ($CI.IsPresent -and $null -eq (Get-Module -Name PnP.PowerShell)) {
     Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
-    Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop -RequiredVersion 3.1.0
+    Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop -RequiredVersion $RequiredPnPVersion
     $PnPVersion = (Get-Command Connect-PnPOnline -ErrorAction SilentlyContinue).Version
     Write-Host "[INFO] Installed module PnP.PowerShell v$($PnPVersion) from PowerShell Gallery"
 }
 else {
     if (-not $SkipLoadingBundle.IsPresent) {
-        $PnPVersion = LoadBundle -Version 3.1.0
+        $PnPVersion = LoadBundle -Version $RequiredPnPVersion
         if ($null -eq $PnPVersion) {
-            Write-Host "[ERROR] Failed to load bundled PnP.PowerShell v3.1.0 from '$PSScriptRoot/PnP.PowerShell/3.1.0'." -ForegroundColor Red
+            Write-Host "[ERROR] Failed to load bundled PnP.PowerShell v$RequiredPnPVersion from '$PSScriptRoot/PnP.PowerShell/$RequiredPnPVersion'." -ForegroundColor Red
             Write-Host "[ERROR] Make sure the release archive was extracted with the PnP.PowerShell folder intact, or install PnP.PowerShell manually and rerun with -SkipLoadingBundle:" -ForegroundColor Red
-            Write-Host "        Install-Module -Name PnP.PowerShell -Scope CurrentUser -RequiredVersion 3.1.0" -ForegroundColor Red
+            Write-Host "        Install-Module -Name PnP.PowerShell -Scope CurrentUser -RequiredVersion $RequiredPnPVersion" -ForegroundColor Red
             exit 1
         }
         Write-Host "[INFO] Loaded module PnP.PowerShell v$($PnPVersion) from bundle"
@@ -133,18 +134,18 @@ else {
         $PnPVersion = (Get-Command Connect-PnPOnline -ErrorAction SilentlyContinue).Version
         if ($null -eq $PnPVersion) {
             Write-Host "[ERROR] -SkipLoadingBundle was specified but PnP.PowerShell is not available in this session. Install it with:" -ForegroundColor Red
-            Write-Host "        Install-Module -Name PnP.PowerShell -Scope CurrentUser -RequiredVersion 3.1.0" -ForegroundColor Red
+            Write-Host "        Install-Module -Name PnP.PowerShell -Scope CurrentUser -RequiredVersion $RequiredPnPVersion" -ForegroundColor Red
             exit 1
         }
         Write-Host "[INFO] Loaded PnP.PowerShell v$($PnPVersion) from your environment"
     }
-    if ($PnPVersion -lt [version]"3.1.0") {
-        Write-Host "[ERROR] PnP.PowerShell v$PnPVersion is too old. v3.1.0 or newer is required." -ForegroundColor Red
+    if ($PnPVersion -lt $RequiredPnPVersion) {
+        Write-Host "[ERROR] PnP.PowerShell v$PnPVersion is too old. v$RequiredPnPVersion or newer is required." -ForegroundColor Red
         exit 1
     }
     Write-Host "[INFO] As part of the authentication process with Microsoft 365, this script will open a browser window to authenticate."
-    Write-Host "[INFO] Make sure you have the correct browser active. You can also copy the URL and open it in the correct browser if needed."
-    Show-Countdown -Seconds 15
+    Write-Host "[INFO] Make sure you use the correct browser profile. You can copy the authentication URL and open it in the correct browser."
+    Show-Countdown -Seconds 10
 }
 #region Setting variables based on input from user
 [System.Uri]$Uri = $Url.TrimEnd('/')
