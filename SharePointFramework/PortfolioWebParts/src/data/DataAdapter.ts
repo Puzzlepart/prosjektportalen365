@@ -25,9 +25,9 @@ import {
   getClassProperties,
   getItemFieldValues,
   getOrFetchProjectsCache,
-  getStatusPageSeriesKey,
   getUserPhoto,
   groupLatestReportBySeries,
+  parseScopedSiteId,
   IGraphGroup,
   IPortalDataServiceConfiguration,
   ItemFieldValues,
@@ -297,7 +297,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
     const seenKeys = new Set<string>()
     const uniqueItems = mergedResult.items.filter((item) => {
-      const key = `${item.SiteId}_${item.StatusPageId ?? ''}_${item._hubId}`
+      const key = `${item.SiteId}_${item.ScopeKey ?? ''}_${item._hubId}`
       if (seenKeys.has(key)) {
         return false
       }
@@ -437,14 +437,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       ]),
       this._fetchItems(
         `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* (GtModerationStatusOWSCHCS:${config.MODERATION_STATUS_PUBLISHED_NO} OR GtModerationStatusOWSCHCS:${config.MODERATION_STATUS_PUBLISHED_EN})`,
-        [
-          ...configuration.columns.map((f) => f.fieldName),
-          siteIdProperty,
-          'ListItemId',
-          'GtStatusPageIdOWSTEXT',
-          'GtStatusPageTitleOWSTEXT',
-          'GtStatusPageUrlOWSTEXT'
-        ],
+        [...configuration.columns.map((f) => f.fieldName), siteIdProperty, 'ListItemId'],
         500,
         { Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',') }
       )
@@ -499,9 +492,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       })
 
       const reports = statusReports
-        .filter((report) => !getStatusPageSeriesKey(report?.['GtStatusPageIdOWSTEXT']))
+        .filter((report) => !parseScopedSiteId(report?.['GtSiteIdOWSTEXT']).scopeKey)
         .map((report) => ({
-          siteId: report?.['GtSiteIdOWSTEXT'],
+          siteId: parseScopedSiteId(report?.['GtSiteIdOWSTEXT']).siteId,
           costsTotal: report?.['GtCostsTotalOWSCURR'],
           budgetTotal: report?.['GtBudgetTotalOWSCURR']
         }))

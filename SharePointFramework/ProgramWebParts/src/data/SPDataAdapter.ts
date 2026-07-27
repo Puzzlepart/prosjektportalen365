@@ -31,8 +31,8 @@ import {
   DataSourceService,
   expandRowsPerStatusSeries,
   getOrFetchProjectsCache,
-  getStatusPageSeriesKey,
   groupLatestReportBySeries,
+  parseScopedSiteId,
   IGraphGroup,
   IProjectDataServiceParams,
   ISPDataAdapterBaseConfiguration,
@@ -409,14 +409,7 @@ export class SPDataAdapter
       ]),
       fetchAllResults(
         `${queryArray} DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:${resource.Choice_GtModerationStatus_Published}`,
-        [
-          ...configuration.columns.map((f) => f.fieldName),
-          siteIdProperty,
-          'ListItemId',
-          'GtStatusPageIdOWSTEXT',
-          'GtStatusPageTitleOWSTEXT',
-          'GtStatusPageUrlOWSTEXT'
-        ],
+        [...configuration.columns.map((f) => f.fieldName), siteIdProperty, 'ListItemId'],
         configuration.refiners.map((ref) => ref.fieldName).join(',')
       )
     ])
@@ -456,8 +449,8 @@ export class SPDataAdapter
 
     const data = items
       // Timeline rows are project-level facts — skip the extra rows a project
-      // gets per additional status page series.
-      .filter((item) => !item.StatusPageId)
+      // gets per scoped report series.
+      .filter((item) => !item.ScopeKey)
       .map((item) => {
         const properties = _.reduce(
           item,
@@ -479,12 +472,7 @@ export class SPDataAdapter
       .filter((item) => item.siteId !== siteId)
 
     const searchQuery = `ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:${resource.Choice_GtModerationStatus_Published}`
-    const selectProperties = [
-      'GtSiteIdOWSTEXT',
-      'GtCostsTotalOWSCURR',
-      'GtBudgetTotalOWSCURR',
-      'GtStatusPageIdOWSTEXT'
-    ]
+    const selectProperties = ['GtSiteIdOWSTEXT', 'GtCostsTotalOWSCURR', 'GtBudgetTotalOWSCURR']
 
     const statusReports = await this._fetchItems(
       searchQuery,
@@ -494,9 +482,9 @@ export class SPDataAdapter
     )
 
     const reports = statusReports
-      .filter((report) => !getStatusPageSeriesKey(report?.['GtStatusPageIdOWSTEXT']))
+      .filter((report) => !parseScopedSiteId(report?.['GtSiteIdOWSTEXT']).scopeKey)
       .map((report) => ({
-        siteId: report?.['GtSiteIdOWSTEXT'],
+        siteId: parseScopedSiteId(report?.['GtSiteIdOWSTEXT']).siteId,
         costsTotal: report?.['GtCostsTotalOWSCURR'],
         budgetTotal: report?.['GtBudgetTotalOWSCURR']
       }))

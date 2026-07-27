@@ -1,4 +1,9 @@
-import { ProjectColumnConfig, SectionModel, StatusReport } from 'pp365-shared-library/lib'
+import {
+  getAllScopesFilter,
+  ProjectColumnConfig,
+  SectionModel,
+  StatusReport
+} from 'pp365-shared-library/lib'
 import SPDataAdapter from '../../../data'
 import { DataFetchFunction } from '../../../types/DataFetchFunction'
 import { IProjectInformationContext } from '../context'
@@ -20,7 +25,9 @@ export const fetchProjectStatusReportData: DataFetchFunction<
   }
   try {
     const reports = await SPDataAdapter.portalDataService.getStatusReports({
-      filter: `(GtSiteId eq '${context.props.siteId}') and GtModerationStatus eq '${resource.Choice_GtModerationStatus_Published}'`
+      filter: `${getAllScopesFilter(context.props.siteId)} and GtModerationStatus eq '${
+        resource.Choice_GtModerationStatus_Published
+      }'`
     })
     const sections = await SPDataAdapter.portalDataService.getProjectStatusSections()
     const columnConfig = await SPDataAdapter.portalDataService.getProjectColumnConfig()

@@ -45,35 +45,22 @@ export interface IProjectStatusProps extends IBaseWebPartComponentProps {
   snapshotAttachmentFileName?: string
 
   /**
-   * When `true`, this status page maintains its own report series keyed by the
-   * page's `UniqueId` in the SitePages library (`GtStatusPageId` on the report
-   * items). When `false` or not set, the web part behaves as the project's
-   * default status page and only shows reports without a status page ID. Only
-   * set to `true` through provisioning templates (Prosjekttillegg) — toggling
-   * it on an existing page hides the page's report history.
+   * When `true`, the project can maintain multiple report series
+   * ("multirapportering") — one per sub-project ("delprosjekt") defined in
+   * `subProjects` — selected through a scope selector in the toolbar. Each
+   * report series is identified by a scope key suffix on the `GtSiteId`
+   * value (`{siteId}-{scopeKey}`); the default series ("hovedrapportering")
+   * has no suffix and behaves exactly as before.
    */
-  useSeparateReportSeries?: boolean
-}
-
-/**
- * Identity of the status page the web part is placed on, used to scope the
- * report series when `useSeparateReportSeries` is enabled.
- */
-export interface IStatusPageInfo {
-  /**
-   * Unique ID (`UniqueId`) of the page item in the SitePages library, in lowercase.
-   */
-  id: string
+  multiReporting?: boolean
 
   /**
-   * Title of the status page.
+   * Sub-projects ("delprosjekter") available in the scope selector — one per
+   * line on the format `key` or `key|label`. The key becomes part of the
+   * stored `GtSiteId` value and is the identity of the report series; the
+   * label is display-only and can be renamed freely.
    */
-  title: string
-
-  /**
-   * Site-relative URL of the status page (e.g. `SitePages/Prosjektstatus-2.aspx`).
-   */
-  url: string
+  subProjects?: string
 }
 
 export interface IProjectStatusState extends IBaseWebPartComponentState<IProjectStatusData> {
@@ -101,6 +88,12 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
    * `ID` of the most recent report
    */
   mostRecentReportId?: number
+
+  /**
+   * The currently selected report scope key ("delprosjekt"). An empty string
+   * (or `undefined`) means the default report series ("hovedrapportering").
+   */
+  selectedScope?: string
 
   /**
    * Current user has admin permissions
@@ -176,10 +169,11 @@ export interface IProjectStatusData {
   userHasAdminPermission?: boolean
 
   /**
-   * Identity of the status page the web part is placed on. Only set when the
-   * web part is configured with `useSeparateReportSeries`.
+   * Distinct scope keys ("delprosjekter") found among the project's status
+   * reports (display casing, first-seen). Used by the scope selector so that
+   * series whose key is no longer in the configured vocabulary stay reachable.
    */
-  statusPage?: IStatusPageInfo
+  scopeKeysWithReports?: string[]
 }
 
 /**
@@ -189,4 +183,11 @@ export type FetchDataResult = {
   data: IProjectStatusData
   initialSelectedReport: StatusReport
   sourceUrl: string
+
+  /**
+   * The report scope resolved during the fetch (explicitly selected scope,
+   * or derived from the `selectedReport`/`scope` URL parameters on first load).
+   * An empty string means the default report series.
+   */
+  resolvedScope: string
 }

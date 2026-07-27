@@ -35,6 +35,13 @@ define([], function () {
     NewStatusReportDescriptionNoPermission: "You do not have permission to create a new status report.",
     NoPropertiesTitle: "Project information is missing.",
     NoReportsFoundTitle: "No reports found",
+    MultiReportingGroupName: "Multi-reporting",
+    MultiReportingToggleLabel: "Enable multi-reporting",
+    SubProjectsFieldLabel: "Sub-projects",
+    SubProjectsFieldDescription:
+      "One sub-project per line on the format key or key|label (e.g. SP1|Sub-project 1). The key identifies the report series and should not be changed after reporting has started — the label can be renamed freely.",
+    DefaultScopeLabel: "Main reporting",
+    ScopeSelectorDescription: "Select which sub-project to view and report status for",
     PhaseSitePageTitle: "Dynamic homepage is enabled",
     PhaseUseStartArrowLabel: "Use start arrow",
     PhaseUseEndArrowLabel: "Use end arrow",
