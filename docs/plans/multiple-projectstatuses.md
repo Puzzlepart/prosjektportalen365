@@ -1,132 +1,95 @@
-# Multiple Project Status pages per project
+# Multiple report series per project — "Multirapportering" via GtSiteId scope suffix
 
 ## Context
 
-Today every project site is provisioned with exactly one `Prosjektstatus.aspx` page (a `SingleWebPartAppPage` hosting the ProjectStatus SPFx web part). All status reports for all projects are stored in a single hub-site list, **Prosjektstatus**, and a report is tied to its project solely through the text field `GtSiteId` (the project site GUID). Every consumer — the ProjectStatus web part itself, ProjectInformation, Portfolio overview (KQL), the StatusReportColumn (REST), Program web parts and the timeline — assumes **one report series per project** and resolves "the latest report" by taking the newest item for a given `GtSiteId`.
+Today every project has one `Prosjektstatus.aspx` page hosting the ProjectStatus SPFx web part. All status reports for all projects live in a single hub-site list, **Prosjektstatus**, and a report is tied to its project through the text field `GtSiteId` (the project site GUID). Every consumer — the ProjectStatus web part, ProjectInformation, Portfolio overview (KQL), the StatusReportColumn (REST), Program web parts and the timeline — assumed **one report series per project** and resolved "the latest report" by taking the newest item for a given `GtSiteId`.
 
-We want a project to be able to have **multiple Prosjektstatus pages**, each with its own independent report series (own create/edit/publish flow). Items in the hub list must carry enough identity to distinguish each page instance's series from the others.
+We want a project to be able to report status for multiple **sub-projects ("delprosjekter")** — one independent report series per sub-project, published per period per sub-project — from the **same** Prosjektstatus page, with a report scope selector choosing which sub-project you view and report for.
+
+> An earlier iteration of this feature ("one report series per status page", with three new hidden fields `GtStatusPageId/Title/Url` and a Prosjekttillegg provisioning extra pages) was implemented and then replaced by this design. All of it has been reverted.
 
 ## Decisions
 
-1. **Creation**: extra status pages are provisioned as **Prosjekttillegg** (project add-ons) through the existing template system.
-2. **Identity**: auto-derived **page ID** — a new text field stores the page's SitePages item `UniqueId`, plus denormalized page title/URL for display and deep links. Zero configuration; survives rename; a copied page automatically becomes its own series.
-3. **Portfolio behavior**: **one row per status page** — the default series keeps today's row; each additional series adds a row labeled "{Prosjektnavn} – {Sidetittel}" showing that series' latest published report in all status columns.
-4. **Shared setup**: all pages share the same content type (`0x010022252E35737A413FB56A1BA53862F6D5`) and the same Statusseksjoner configuration.
-5. **Backwards compatibility**: the default provisioned page keeps writing reports **without** a page ID (all legacy reports already have it null) — no data migration. Only additional pages stamp their page ID.
+1. **One page + scope selector** — no extra status pages; the ProjectStatus web part gets a "delprosjekt" selector in the toolbar.
+2. **Zero new SiteFields** — the scope is encoded as a **suffix on the existing `GtSiteId` value**:
+   - Default series ("Hovedrapportering"): `GtSiteId = {siteId}` — exactly as before, which also covers all legacy reports.
+   - Scoped series: `GtSiteId = {siteId}-{scopeKey}`, e.g. `d6905d0f-…-4e5f-DP1`.
+   - **The base is always the project's existing site ID** — the suffix is appended to the same `props.siteId` the create flow always stamped; no new GUID is ever generated.
+3. **Vocabulary + activation via web part properties** — property-pane group "Multirapportering" with a `multiReporting` toggle and a `subProjects` multiline list (`key` or `key|label` per line). The page also honors a `?scope=` URL query parameter for navigation/deep links.
+4. **Portfolio behavior**: one row per report series — the default series keeps today's row; each scoped series adds a row labeled "{Prosjektnavn} – {scopeKey}" showing that series' latest published report in all status columns. Timeline budget/costs remain default-series-only (project-level facts).
+5. Future option (not v1): read the vocabulary from project properties (Egenskaper) instead of the web part property.
 
-## Core concept
+## Core concept — suffix encoding
 
-A report series is identified by `(GtSiteId, GtStatusPageId)` where empty/null `GtStatusPageId` ⇔ the default page's series. Three new hub text fields, stamped on every new report from an extra page: `GtStatusPageId` (page UniqueId, lowercase), `GtStatusPageTitle` (row label), `GtStatusPageUrl` (site-relative page path for deep links). Stamping current values on each new report caps rename staleness; consumers read the label/URL from the newest report of a series.
+- Delimiter `-`; parsing is **positional** (a site GUID is always 36 chars, canonical 8-4-4-4-12), so the GUID's internal hyphens are unambiguous. `parseScopedSiteId(value)` returns `{ siteId, scopeKey }`; non-scoped/malformed/legacy zero-GUID values degrade to `{ value, '' }`.
+- Scope keys are compared case-insensitively (`getScopeSeriesKey`); display casing is preserved. Key hygiene enforced by `parseSubProjects`: max 32 chars, no `'`, `|`, `?`, `&`, `#`, `%`, no leading `-`, case-insensitive dedupe. The **key is the identity** of the series — renaming a key starts a new series (the label is freely renameable).
+- OData predicates: default series = `GtSiteId eq '{siteId}'` (byte-identical to before — no null/empty handling needed); scoped = `GtSiteId eq '{siteId}-{key}'`; all series = `startswith(GtSiteId,'{siteId}')` (a full GUID can never be a prefix of a different GUID).
+- Search: KQL queries are `DepartmentId`/`ContentTypeId`-based and `GtSiteIdOWSTEXT` was already selected everywhere — **no new managed properties, no crawl dependency, no upgrade-order risk**.
 
-Default-series OData predicate (legacy items have **null**, form-cleared items may have `''` — must match both):
-`(GtStatusPageId eq null or GtStatusPageId eq '')`; extra page: `GtStatusPageId eq '<pageUniqueId>'`.
+## Implementation
 
-The web part gets a boolean property `useSeparateReportSeries` (default false/absent), set to `true` only in the add-on template. False ⇒ exactly today's behavior + default-series filter; true ⇒ derive own page identity, filter and stamp by it.
+### shared-library
 
----
+- **`src/util/statusReportScope.ts`** (replaces `statusReportSeries.ts`): `parseScopedSiteId`, `getScopeSeriesKey`, `buildScopedSiteId`, `getScopeSeriesFilter`, `getAllScopesFilter`, `sortStatusReportsLatestFirst` (numeric `ListItemId` desc — kept correctness fix), `groupLatestReportBySeries(reports, siteIdProperty)` (map keyed on the parsed **base** siteId, so lookups with the pure GUID keep working; latest per `(siteId, scopeKey)`), `expandRowsPerStatusSeries(buildRow, series)` (base row + one row per scoped series with `Title = "{baseTitle} – {scopeKey}"`, `ScopeKey`, synthetic `key`).
+- **`src/models/StatusReport.ts`**: `scopeKey` and `projectSiteId` getters (parsed from `GtSiteId`); `url()` appends `&scope={key}` for scoped reports.
+- **`PortalDataService.getStatusReports`**: unchanged from its pre-feature shape — callers pass explicit filters built with the utils.
 
-## Part 1 — Templates / provisioning
+### ProjectStatus web part (ProjectWebParts)
 
-1. **New site fields** (model on `GtSiteId.xml`: Type=Text, hidden from all forms via `ShowInDisplayForm/EditForm/NewForm="FALSE"` — this also keeps them out of EditStatusPanel since `EditableSPField` excludes them; **no `<Default>`**, must stay null):
-   - `Templates/Portfolio/Objects/SiteFields/GtStatusPageId.xml`
-   - `Templates/Portfolio/Objects/SiteFields/GtStatusPageTitle.xml`
-   - `Templates/Portfolio/Objects/SiteFields/GtStatusPageUrl.xml` (plain Text, not URL type — simpler REST filtering)
-2. **Register**: add `<xi:include>` entries in `Templates/Portfolio/Objects/SiteFields/@.xml`; add three `<pnp:FieldRef ... UpdateChildren="true">` in `Templates/Portfolio/Objects/ContentTypes/ProjectStatus/Prosjektstatus.xml` (after `GtLastReportDate`); add to `<pnp:FieldRefs>` in `Templates/Portfolio/Objects/Lists/Prosjektstatus.xml` (+ `GtStatusPageId`/`GtStatusPageTitle` in the AllItems view for admins).
-3. **Resources**: 6 new keys (`SiteFields_GtStatusPage{Id,Title,Url}_{DisplayName,Description}`) in `Templates/Portfolio/Resources.no-NB.resx` + `Resources.en-US.resx`; regenerate with `npm run generate-project-templates` in `Templates/`.
-4. **Prosjekttillegg** — new `Templates/Content/Portfolio_content.no-NB/Prosjekttillegg/EkstraStatusside.json`: one `ClientSidePages` entry, `Name: "Prosjektstatus-2.aspx"`, `Title: "Prosjektstatus 2"`, `PageLayoutType: SingleWebPartAppPage`, single Factor-12 column with control id `681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6` (main-channel ProjectStatusWebPart id from `channels/main.json`) and Properties `{ title, useSeparateReportSeries: true, riskMatrix, opportunityMatrix }`.
-   - **No `"Overwrite": true`** — the ClientSidePages handler skips existing pages, so re-applying is idempotent; recreation would mint a new UniqueId and orphan the series.
-   - **No `Navigation` block** — the sp-js-provisioning Navigation handler does a full quick-launch replace and would wipe the project menu. v1: users add the nav link manually. Optional follow-up: add an additive `QuickLaunchAppend` mode to sp-js-provisioning and then ship the nav node in the tillegg.
-   - Register in `Templates/Content/Portfolio_content.no-NB/Portfolio_content.no-NB.xml` as a `<pnp:File>` into the `Prosjekttillegg` folder with `Title`/`GtDescription` properties, **without** `GtExtensionHidden`. Optionally author the en-US twin.
-   - **Applying to an existing project needs no new code**: ProjectInformation → `RunProjectSetupDialog` re-runs the setup wizard; the user picks "No template" (`NO_TEMPLATE_ID`) and checks the tillegg — `ApplyTemplate` then applies only the extension schema.
-5. **Upgrade path**: `Install/Install.ps1 -Upgrade` re-applies `Portfolio.pnp` (Fields/ContentTypes/ListInstances handlers included) → new columns provision automatically; content template re-applies with `Files` handler → tillegg uploads to existing hubs. No PostInstallUpgrade migration needed. Search managed properties (`GtStatusPageIdOWSTEXT`, `GtStatusPageTitleOWSTEXT`, `GtStatusPageUrlOWSTEXT`) auto-generate after the next crawl of stamped items — portfolio rows for new series appear only after crawl.
+- **Properties**: `multiReporting` (toggle) + `subProjects` (multiline `key|label`) in a new property-pane group; parsed/validated by `components/ProjectStatus/parseSubProjects.ts` (+ `getScopeLabel`).
+- **Fetch** (`useProjectStatusDataFetch.ts`): one query fetches **all** series (`getAllScopesFilter`); scope resolution order: explicitly selected scope → `?selectedReport=`/hash match wins (the report's own scope, so deep links always land on the right series) → `?scope=` query param → default. `data.reports` is client-filtered to the resolved scope, so everything downstream (draft gating, carry-forward, report picker, publish/delete) is automatically scope-scoped. `data.scopeKeysWithReports` carries the distinct scope keys found in data.
+- **State**: `state.selectedScope`; `SELECT_SCOPE` reducer action clears the selected report and bumps `refetch` (same contract as publish/delete/close-panel).
+- **Scope selector** (`Commands/useScopeSelector.tsx`, modeled on `usePortfolioSelector`): first item "Hovedrapportering", then the union of the configured vocabulary and scope keys found in reports (so series whose key was removed/renamed stay reachable). Placed first among the toolbar's far items. Hidden unless `multiReporting` is on **or** scoped reports exist (turning the toggle off never hides existing series).
+- **Create flow** (`useCreateNewStatusReport.ts`): `GtSiteId = buildScopedSiteId(props.siteId, state.selectedScope)`; report `Title` = "Ny statusrapport for {webTitle} – {scopeLabel}" when scoped. `GtSiteId` is pre-set before the carry-forward reduce (never overwritten) and hidden from all forms, so the panel cannot alter it. Carry-forward comes from the scoped report list.
+- **Header**: appends " – {scopeLabel}" when a scope is selected.
 
-## Part 2 — shared-library
+### ProjectInformation + StatusReportColumn
 
-1. **`src/models/StatusReport.ts`**: getters `statusPageId` (lowercased text of `GtStatusPageId`, `''` default), `statusPageTitle`, `statusPageUrl`; `url()` uses `statusPageUrl` when non-empty, else the existing `resource.Navigation_ProjectStatus_Url` fallback (legacy → byte-identical URL).
-2. **`src/services/PortalDataService/types.ts`**: `GetStatusReportsOptions` extended with `statusPageId?: string | null` (`null` = default series, GUID = that series, omitted = all series for aggregation callers).
-3. **`src/services/PortalDataService/PortalDataService.ts`** `getStatusReports`: after the default `GtSiteId` filter fallback, when `statusPageId !== undefined` compose `(<filter>) and <seriesFilter>`. `addStatusReport`/`publishStatusReport`/attachments need **no** changes (attachments folder is keyed by report id — series-safe).
-4. **New `src/util/statusReportSeries.ts`** (exported from `util/index.ts`) — shared by Portfolio- and ProgramWebParts:
-   - `getStatusPageSeriesKey(statusPageId?)` → trimmed/lowercased, `''` for null/undefined.
-   - `getStatusPageSeriesFilter(statusPageId?)` → the OData predicates above.
-   - `sortStatusReportsLatestFirst(reports)` → numeric `ListItemId` desc.
-   - `groupLatestReportBySeries(reports, siteIdProperty, statusPageIdProperty)` → `Map<siteId, { defaultReport?, additionalReports[] }>`; keeps first occurrence per `(siteId, pageKey)` from pre-sorted input — degrades to the previous `.find` per site when no extra series exist.
-   - `expandRowsPerStatusSeries(buildRow, series)` → `[baseRow, ...extraRows]`; extra rows get `Title` set to `"{baseTitle} – {pageTitle}"`, plus `StatusPageId`, `StatusPageTitle`, `StatusPageUrl` and a synthetic unique `key` (`"{SiteId}_{statusPageId}"`). `Path`/`SPWebUrl`/`SiteId` are not altered on extra rows (title link/project panel keep pointing at the project).
+- `fetchProjectStatusReportData.ts`: filter = `startswith(GtSiteId,'{siteId}') and GtModerationStatus eq 'Published'` — all series' published reports.
+- `useProjectStatusReport.ts`: renders one `Header` + `SummarySection` block per series (latest published per scope key, default series first; scoped series labeled with the scope key — labels live in the ProjectStatus web part's properties which this widget cannot read, documented v1 limitation).
+- `StatusReportColumn`: `ProjectStatusModel` parses `siteId`/`scopeKey` from the raw `GtSiteId`; the column matches rows on `(SiteId, ScopeKey)` case-insensitively.
 
-## Part 3 — ProjectWebParts
+### Portfolio/Program adapters
 
-1. **`src/components/ProjectStatus/types.ts`**: `useSeparateReportSeries?: boolean` on `IProjectStatusProps`; `statusPage?: IStatusPageInfo` on `IProjectStatusData`. The toggle is **not** exposed in the property pane (template-only — toggling it on an existing page hides history); no manifest change (`hiddenFromToolbox` stays).
-2. **`src/components/ProjectStatus/useProjectStatusDataFetch.ts`**: when `useSeparateReportSeries`, one REST call `sp.web.lists.getById(pageContext.list.id).items.getById(pageContext.listItem.id).select('UniqueId','Title','FileRef')` resolves the page identity (`pageContext.listItem.uniqueId` is internal-only in SPFx typings — public ids + REST also return fresh title/URL, solving rename staleness). Guard: `listItem` undefined (workbench) → default series + console warning. `getStatusReports({ useCaching: false, statusPageId: statusPage?.id ?? null })`. Everything downstream (reducer `mostRecentReportId`, toolbar selector, `hasUnpublishedReports`, carry-forward, publish/delete) is automatically series-scoped.
-3. **`src/components/ProjectStatus/Commands/useCreateNewStatusReport.ts`**: carry-forward exclusion list extended with the three `GtStatusPage*` fields; when `statusPage` is set, Title = `format(NewStatusReportTitle, "{webTitle} – {pageTitle}")` and the three fields are stamped on the new report.
-4. **ProjectInformation**: fetch unchanged (`GtSiteId` + Published, deliberately not page-scoped). `ProjectStatusReport/useProjectStatusReport.ts` returns one context per series (latest published per series, default series first, labeled with `statusPageTitle`); `index.tsx` maps over them rendering the existing `<Header/> + <SummarySection/>` blocks.
+- Matching rule: project/site items always carry the **pure** GUID — only report items are suffixed. All project/site `.find` comparisons stay exact; only status-report grouping parses the base.
+- Regular/manager/batch views expand one row per series via the shared util (`ScopeKey` + synthetic `key` on extra rows); merged multi-portfolio dedup key includes `ScopeKey`; timeline budget/costs filter to the default series (`!parseScopedSiteId(...).scopeKey`) to avoid double counting.
+- Program status reports are sorted by `ListItemId` (kept fix — search `LastModifiedTime` order let an edited old report outrank a newer one).
 
-## Part 4 — PortfolioWebParts / ProgramWebParts (aggregation)
+## Key risks / edge cases
 
-1. **`PortfolioWebParts/src/data/DataAdapter.ts`**:
-   - `_fetchDataForView`: add the three `GtStatusPage*OWSTEXT` managed properties to the status-report select (KQL unchanged); sort via `sortStatusReportsLatestFirst`; also return `statusReportsBySite = groupLatestReportBySeries(statusReports, siteIdProperty)`.
-   - `fetchDataForRegularView` / `fetchDataForManagerView`: replace the `statusReports.find(...)` merge with `flatMap` + `expandRowsPerStatusSeries`, preserving the spread order (report first, project wins collisions).
-   - **`fetchMergedViewData` dedup — required fix**: key was `${item.SiteId}_${item._hubId}` and would silently drop every extra-series row; now includes `StatusPageId`.
-   - `fetchTimelineProjectData`: budget/costs are project-level facts — filter to default series only to avoid double counting.
-   - `src/data/types.ts`: `IFetchDataForViewItemResult` extended with `key?`, `StatusPageId?`, `StatusPageTitle?`, `StatusPageUrl?`. `key` matches what Fluent `DetailsList`/`Selection` use for row identity.
-2. **StatusReportColumn**: `ProjectStatusModel` gets `statusPageId`; `useStatusReportColumn` matches on `(siteId, statusPageId)` — `'' === ''` preserves the old behavior for all legacy pairs; Created-desc order keeps "first match = latest per series".
-3. **`ProgramWebParts/src/data/SPDataAdapter.ts`**: status queries select `ListItemId` + the three new managed properties; the three `.find` sites (regular/manager/batch views) replaced with the shared grouping + `expandRowsPerStatusSeries`; **deliberate minor fix**: `sortStatusReportsLatestFirst` applied after `cleanDeep` (previously relied on search `LastModifiedTime desc`, where an edited old report could outrank a newer one); timeline filtered to default series.
-4. **Unchanged by design**: `ProjectList`/`ProjectCard` quick-launch links and the timeline `DetailsPopover` keep pointing at the default status page; row `Path`/title link keeps opening the project; PortfolioAggregation data sources are a separate pipeline (custom status-report data sources may want to exclude `GtStatusPageIdOWSTEXT:*`).
-5. **Zero-extra-pages safety**: grouping degrades to the previous `.find`; row expansion returns one row built by the same spread; select additions are additive; `url()` falls back. Only the inert `key` prop is new.
+1. **KQL prefix-match in ProgramWebParts** — `aggregatedQueryBuilder` emits `GtSiteIdOWSTEXT:{guid}` terms consumed by the program report query. With `-` word-breaking these should prefix-phrase-match suffixed values, but **verify in tenant**; fallback = trailing wildcard (`{guid}*`) or client-side filtering.
+2. **Renamed scope key = new series** — documented in the property-pane description; the union-based selector keeps old series reachable.
+3. `?scope=` with an unknown key shows an empty series (deliberate); `?selectedReport=` overrides/repairs the scope.
+4. **Per-scope drafts** — the "one unpublished draft" gate is now per series (each delprosjekt can hold its own draft). Intended behavior change.
+5. PortfolioAggregation status-report data sources list scoped reports as items (they are real reports) — verify one such view.
+6. Test tenants that ran the abandoned page-based iteration keep orphaned `GtStatusPage*` columns (template re-apply never deletes fields) — harmless; optional manual cleanup.
 
-## Verification (manual — no test runner exists in the repo)
+## Verification (manual — no test runner in the repo)
 
-1. **Regression pass (zero extra pages)** against a test tenant with existing data: default Prosjektstatus page (reports list, create/publish/delete), ProjectInformation widget, Portfolio overview regular + manager views, StatusReportColumn, merged multi-portfolio view, program project overview, timeline budget overlay, Excel export — all identical to before.
-2. **Feature pass**: apply the tillegg to an existing project via ProjectInformation → RunProjectSetupDialog → "No template" + "Ekstra statusside". Create + publish reports on both pages; verify: each page only shows/carries forward its own series; report Title carries "{webTitle} – {pageTitle}"; hub-list items have `GtStatusPage*` stamped; ProjectInformation shows both series labeled; after a search crawl, portfolio shows an extra row "{Prosjektnavn} – {Sidetittel}" with that series' latest values; StatusReportColumn matches per row; timeline unchanged; drafts don't surface.
-3. **Edge cases**: rename the extra page (series intact, new reports pick up new title/URL); re-apply the tillegg (page not recreated); project whose only published reports are in an extra series (base row shows empty status columns — correct); workbench (no `listItem`) falls back to default series with a warning.
-
-## Key risks
-
-- **Page delete + recreate** (or `Overwrite: true` in tillegg) orphans a series (new UniqueId) — documented; keep Overwrite out.
-- **Managed-property crawl delay** — new series' portfolio rows appear only after search crawl; REST-based surfaces (StatusReportColumn, ProjectInformation, the pages themselves) work immediately.
-- **Non-main channels** — tillegg hard-codes the main-channel web part GUID (existing tillegg convention); on test/kurs channels the control is skipped with a warning. Follow-up: extend `generate-project-templates.js` to token-replace tillegg.
-- **OData null vs `''`** — always use the combined predicate from `getStatusPageSeriesFilter`; never `eq ''` alone.
-- **shared-library version pinning** — Portfolio-/Program-/ProjectWebParts pin exact versions; bump together in the same release.
+1. **Regression (zero scopes)**: default page (list/create/publish/delete/carry-forward — the fetch changed from `eq` to `startswith`, which returns identical rows when no suffixed items exist), ProjectInformation, Portfolio regular/manager/merged views, StatusReportColumn, program overview, timeline. Selector hidden.
+2. **Feature (2 scopes)**: enable Multirapportering with `DP1|…`/`DP2|…`; create + publish in all three series; hub items carry `{guid}-DP1` where **the first 36 chars are byte-identical to the `GtSiteId` on the project's legacy reports**; per-scope isolation and independent drafts; Title/header labels; deep links `?scope=DP1` and bare `?selectedReport=`; ProjectInformation one block per series; portfolio rows "{Prosjektnavn} – DP1/DP2" after crawl; timeline unchanged; **program views show scoped rows (KQL check, risk 1)**.
+3. **Edge**: remove `DP1` from the vocabulary → still selectable from data; unknown `?scope=X` → empty series; toggle off with scoped data → selector still visible.
 
 ---
 
 ## Implementation summary
 
-All parts of the plan are implemented (initial commit: `feat: init unique statusreports`).
+All parts are implemented on `feat/multiple-projectstatuses` (replacing the earlier page-based commits).
 
-### Templates / provisioning
+### Reverted (page-based model)
 
-- Three new hidden text site fields: `Templates/Portfolio/Objects/SiteFields/GtStatusPageId.xml`, `GtStatusPageTitle.xml`, `GtStatusPageUrl.xml` — registered in `SiteFields/@.xml`, the Prosjektstatus content type (with `UpdateChildren="true"`) and the hub list (`FieldRefs` + `GtStatusPageId`/`GtStatusPageTitle` in the AllItems view). No `<Default>` — empty/null marks the default series, so existing data needs no migration.
-- 6 new resx keys (`SiteFields_GtStatusPage{Id,Title,Url}_{DisplayName,Description}`) in both languages; resources regenerated with `npm run generate-project-templates` (the generated loc files are gitignored and rebuilt on demand).
-- New Prosjekttillegg `Templates/Content/Portfolio_content.no-NB/Prosjekttillegg/EkstraStatusside.json`, registered in `Portfolio_content.no-NB.xml` without `GtExtensionHidden`: creates `Prosjektstatus-2.aspx` hosting the ProjectStatus web part with `useSeparateReportSeries: true`. Deliberately **without** `Overwrite` (re-applying does not recreate the page, so the series survives) and **without** a `Navigation` block (the navigation handler replaces the whole quick launch — the nav link must be added manually, stated in the add-on description). Applies to existing projects via RunProjectSetupDialog → "No template" + the add-on.
+- Templates: `GtStatusPage{Id,Title,Url}.xml` site fields, their `@.xml` includes, content-type/list FieldRefs, view fields, 6 resx keys × 2 languages, the `EkstraStatusside.json` Prosjekttillegg and its content-XML registration. Resources regenerated.
+- Code: `useSeparateReportSeries`/`IStatusPageInfo`/page-identity derivation (ProjectStatus), `statusPageId` option + upgrade-retry (`PortalDataService`), `GtStatusPage*` exclusions (create flow, `StatusReportColumn` sections, `StatusReport.statusValues`), `statusPage*` model getters.
 
-### shared-library
+### Added / adapted
 
-- New util `src/util/statusReportSeries.ts`: `getStatusPageSeriesKey`, `getStatusPageSeriesFilter`, `sortStatusReportsLatestFirst` (numeric `ListItemId` desc), `groupLatestReportBySeries` and `expandRowsPerStatusSeries` — shared by Portfolio- and ProgramWebParts.
-- `StatusReport` gained `statusPageId`/`statusPageTitle`/`statusPageUrl` getters; `url()` uses the stamped page URL with fallback to the default page. `statusValues` excludes the `GtStatusPage*` identity fields.
-- `getStatusReports` supports `statusPageId: null | GUID | omitted`, and has an upgrade-safety fallback: if the query fails because the hub list does not have `GtStatusPageId` yet (apps upgraded before the template), it retries without the series predicate — the default page keeps working mid-upgrade.
-
-### ProjectWebParts
-
-- The web part derives its page identity with public APIs only (`pageContext.list`/`listItem` + one REST call returning `UniqueId`, fresh `Title` and `FileRef` — `listItem.uniqueId` is internal-only in SPFx typings). Workbench/no-listItem falls back to the default series with a console warning. Page title falls back to the file name when the page has no title.
-- New reports are stamped with the three fields; report Title becomes "{webTitle} – {pageTitle}" (reusing `NewStatusReportTitle`); carry-forward is automatically series-scoped (the fetch is filtered) with the identity fields excluded.
-- ProjectInformation shows the latest published report **per series**, default series first, additional series labeled with the status page title — reusing the existing `Header`/`SummarySection` components.
-
-### Portfolio-/ProgramWebParts
-
-- One row per status page in regular, manager and batch (program) views; extra rows are labeled "{Prosjektnavn} – {Sidetittel}" and carry a synthetic `key` (`{SiteId}_{statusPageId}`) for row identity.
-- Required fix landed: the `fetchMergedViewData` dedup key now includes `StatusPageId` — without it every extra-series row was silently dropped in merged multi-portfolio views.
-- The timeline budget/costs overlay filters to the default series in both packages (avoids double counting); the Program timeline's project rows skip extra-series rows.
-- StatusReportColumn matches on `(siteId, statusPageId)`, and the `GtStatusPage*` fields are excluded from its section enumeration (a stamped report would otherwise render a bogus GUID "status" in the tooltip).
-- Deliberate minor fix in ProgramWebParts: status reports are now sorted by `ListItemId` instead of relying on search `LastModifiedTime` order (an edited old report could outrank a newer one).
-
-### Deliberately not done (follow-ups)
-
-- **Version bumps** — all packages are versioned in lockstep (1.13.1) and symlinked locally; bumping belongs to the release process.
-- **en-US tillegg twin** — no en-US Prosjekttillegg infrastructure exists; followed the existing no-NB-only convention.
-- **Nav node in the tillegg** — requires an additive `QuickLaunchAppend` mode in sp-js-provisioning (separate npm publish + dependency bumps).
-- **Property pane toggle** for `useSeparateReportSeries` — template-only by design; toggling it on an existing page would hide its report history.
+- `shared-library/src/util/statusReportScope.ts` (new; replaces `statusReportSeries.ts`) + `StatusReport.scopeKey`/`projectSiteId` + scope-aware `url()`.
+- ProjectStatus: `multiReporting`/`subProjects` properties + property-pane group, `parseSubProjects.ts`, all-series fetch with scope resolution, `SELECT_SCOPE` reducer action, `useScopeSelector` toolbar item, scoped create flow (`buildScopedSiteId(props.siteId, scope)` — suffix on the existing site ID), scoped header title. New loc strings in `src/loc/*` (both languages).
+- ProjectInformation: `startswith` fetch + per-series blocks keyed on `scopeKey`.
+- PortfolioWebParts/ProgramWebParts: grouping/expansion re-keyed on parsed `GtSiteIdOWSTEXT` (call sites unchanged), `ScopeKey` row prop, merged-view dedup key with `ScopeKey`, timeline default-series filters with parsed base site ID, `GtStatusPage*OWSTEXT` selects removed (`ListItemId` sort kept).
 
 ### Verification notes
 
 - Build order: shared-library before ProjectWebParts/PortfolioWebParts/ProgramWebParts.
-- Portfolio rows for new series appear only after a search crawl has picked up `GtStatusPageIdOWSTEXT` etc.; REST-based surfaces (the status pages themselves, ProjectInformation, StatusReportColumn) work immediately.
-- Manual test flow: apply the add-on to an existing project (RunProjectSetupDialog → "No template" + "Ekstra statusside"), create + publish reports on both pages, then verify series isolation on the pages, labels in ProjectInformation, the extra portfolio row after crawl, and that the timeline/Excel export behave per the plan.
+- No new fields/managed properties ⇒ the feature works immediately after app deployment; the only crawl dependency is the pre-existing one (a new series' portfolio row appears after its first published report is crawled).
+- The ProgramWebParts KQL prefix-match against suffixed `GtSiteIdOWSTEXT` values (risk 1) must be checked in a real tenant during the feature pass.

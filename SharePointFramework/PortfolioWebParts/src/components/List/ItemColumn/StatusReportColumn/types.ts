@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { IRenderItemColumnProps } from 'pp365-shared-library'
-import { formatDate, getStatusPageSeriesKey } from 'pp365-shared-library'
+import { formatDate, parseScopedSiteId } from 'pp365-shared-library'
 
 export interface IStatusColumnProps extends IRenderItemColumnProps {
   status?: ProjectStatusModel
@@ -33,14 +33,18 @@ class ProjectStatusSection {
 }
 
 export class ProjectStatusModel {
+  /**
+   * The project's site ID (the base GUID), parsed from the potentially
+   * scoped `GtSiteId` value.
+   */
   public siteId: string
 
   /**
-   * Status page series key for the report (`GtStatusPageId` normalized to
-   * lowercase). An empty string means the report belongs to the project's
-   * default status page series.
+   * Scope key ("delprosjekt") for the report series the report belongs to,
+   * parsed from the `GtSiteId` suffix. An empty string means the report
+   * belongs to the project's default report series.
    */
-  public statusPageId: string
+  public scopeKey: string
 
   constructor(
     private item: Record<string, any>,
@@ -49,8 +53,9 @@ export class ProjectStatusModel {
     },
     private statusSections: Array<IStatusSectionItem>
   ) {
-    this.siteId = this.item.GtSiteId
-    this.statusPageId = getStatusPageSeriesKey(this.item.GtStatusPageId)
+    const { siteId, scopeKey } = parseScopedSiteId(this.item.GtSiteId)
+    this.siteId = siteId
+    this.scopeKey = scopeKey
   }
 
   /**
@@ -69,8 +74,7 @@ export class ProjectStatusModel {
       Object.keys(this.item),
       (key) =>
         (_.startsWith(key, 'GtStatus') || _.startsWith(key, 'GtOverallStatus')) &&
-        !_.endsWith(key, 'Comment') &&
-        !_.startsWith(key, 'GtStatusPage')
+        !_.endsWith(key, 'Comment')
     )
     return statusKeys.map((key) => {
       const name = _.capitalize(this.columnConfigurations[key]?.name.split(' ')[1])

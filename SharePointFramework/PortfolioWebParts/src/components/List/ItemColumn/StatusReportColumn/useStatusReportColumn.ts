@@ -1,21 +1,21 @@
 import _ from 'lodash'
-import { getStatusPageSeriesKey } from 'pp365-shared-library'
+import { getScopeSeriesKey } from 'pp365-shared-library'
 import { IStatusColumnProps } from './types'
 
 /**
  * Hook for the status report column. Matches the report on both site ID and
- * status page series key, so that a row representing an additional status page
- * series shows that series' latest report. Rows without a `StatusPageId` (the
- * default series) match reports without a `GtStatusPageId` — which includes
- * all reports created before multiple status pages were supported.
+ * report scope key ("delprosjekt"), so that a row representing a scoped
+ * report series shows that series' latest report. Rows without a `ScopeKey`
+ * (the default series) match reports without a scope suffix on `GtSiteId` —
+ * which includes all reports created before multi-reporting was supported.
  *
  * @param props Props for the status report column
  */
 export function useStatusReportColumn(props: IStatusColumnProps) {
   const status = _.get(props.column, 'data.$', []).find(
-    ({ siteId, statusPageId }) =>
+    ({ siteId, scopeKey }) =>
       siteId === props.item.SiteId &&
-      statusPageId === getStatusPageSeriesKey(props.item.StatusPageId)
+      getScopeSeriesKey(scopeKey) === getScopeSeriesKey(props.item.ScopeKey)
   )
 
   return {

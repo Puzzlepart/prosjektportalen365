@@ -37,7 +37,6 @@ import {
 } from '../../models'
 import {
   getClassProperties,
-  getStatusPageSeriesFilter,
   isUnauthorizedError,
   makeUrlAbsolute,
   transformFieldXml
@@ -1017,8 +1016,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     filter = '',
     top,
     select,
-    useCaching = true,
-    statusPageId
+    useCaching = true
   }: GetStatusReportsOptions): Promise<StatusReport[]> {
     if (!this.isAvailable) return []
     if (!this._configuration.spfxContext.pageContext) {
@@ -1028,9 +1026,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     }
     if (stringIsNullOrEmpty(filter))
       filter = `GtSiteId eq '${this._configuration.spfxContext.pageContext.site.id.toString()}'`
-    const baseFilter = filter
-    if (statusPageId !== undefined)
-      filter = `(${baseFilter}) and ${getStatusPageSeriesFilter(statusPageId)}`
     try {
       const list = this._getList('PROJECT_STATUS')
       let items = list.items
@@ -1050,12 +1045,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       })
       return reports
     } catch (error) {
-      if (statusPageId !== undefined && `${error?.message}`.indexOf('GtStatusPageId') !== -1) {
-        // The hub list does not have the `GtStatusPageId` field yet (template
-        // upgrade not applied). Retry without the series scoping so the default
-        // status page keeps working as before the upgrade.
-        return this.getStatusReports({ filter: baseFilter, top, select, useCaching })
-      }
       this._handleAvailabilityError(error, 'getStatusReports')
       return []
     }

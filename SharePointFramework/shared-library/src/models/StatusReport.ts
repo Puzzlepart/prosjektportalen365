@@ -1,6 +1,6 @@
 import { ItemFieldValues } from './ItemFieldValues'
 import resource from 'SharedResources'
-import { getStatusPageSeriesKey } from '../util/statusReportSeries'
+import { parseScopedSiteId } from '../util/statusReportScope'
 
 export type StatusReportAttachment = {
   name?: string
@@ -70,51 +70,44 @@ export class StatusReport {
   }
 
   /**
-   * Get url for the report page. Uses the status page URL stamped on the
-   * report (`GtStatusPageUrl`) when present, falling back to the default
-   * status page for reports belonging to the default series.
+   * Get url for the report page. Reports in a scoped report series get a
+   * `scope` query parameter so the status page opens with the right series
+   * selected.
    *
    * @param urlSourceParam - URL source param
    */
   public url(urlSourceParam: string) {
-    const pageUrl = this.statusPageUrl || resource.Navigation_ProjectStatus_Url
-    return `${pageUrl}?selectedReport=${this.id}&Source=${encodeURIComponent(urlSourceParam)}`
+    const scopeParam = this.scopeKey ? `&scope=${encodeURIComponent(this.scopeKey)}` : ''
+    return `${resource.Navigation_ProjectStatus_Url}?selectedReport=${
+      this.id
+    }${scopeParam}&Source=${encodeURIComponent(urlSourceParam)}`
   }
 
   /**
-   * ID (`UniqueId`) of the status page the report belongs to, normalized to
-   * lowercase. An empty string means the report belongs to the project's
-   * default status page.
+   * Scope key ("delprosjekt") for the report series the report belongs to,
+   * parsed from the `GtSiteId` suffix. An empty string means the report
+   * belongs to the project's default report series.
    */
-  public get statusPageId(): string {
-    return getStatusPageSeriesKey(
-      this.fieldValues.get('GtStatusPageId', { format: 'text', defaultValue: '' })
-    )
+  public get scopeKey(): string {
+    return parseScopedSiteId(this.fieldValues.get('GtSiteId', { format: 'text', defaultValue: '' }))
+      .scopeKey
   }
 
   /**
-   * Title of the status page the report belongs to. Empty for reports
-   * belonging to the default status page.
+   * The project's site ID (the base GUID), parsed from the potentially
+   * scoped `GtSiteId` value.
    */
-  public get statusPageTitle(): string {
-    return this.fieldValues.get('GtStatusPageTitle', { format: 'text', defaultValue: '' }) ?? ''
+  public get projectSiteId(): string {
+    return parseScopedSiteId(this.fieldValues.get('GtSiteId', { format: 'text', defaultValue: '' }))
+      .siteId
   }
 
   /**
-   * Site-relative URL of the status page the report belongs to. Empty for
-   * reports belonging to the default status page.
-   */
-  public get statusPageUrl(): string {
-    return this.fieldValues.get('GtStatusPageUrl', { format: 'text', defaultValue: '' }) ?? ''
-  }
-
-  /**
-   * Get status values from item. All fields with a field name starting with `Gt` and ending with `Status`,
-   * excluding the status page identity fields (`GtStatusPage*`).
+   * Get status values from item. All fields with a field name starting with `Gt` and ending with `Status`
    */
   public get statusValues(): Record<string, string> {
     return this.fieldValues.keys
-      .filter((fieldName) => /^Gt.*Status/.test(fieldName) && !/^GtStatusPage/.test(fieldName))
+      .filter((fieldName) => /^Gt.*Status/.test(fieldName))
       .reduce(
         (obj, fieldName) => ({
           ...obj,

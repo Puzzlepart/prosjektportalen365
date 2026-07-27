@@ -147,6 +147,22 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                   value: 250
                 })
               ]
+            },
+            {
+              groupName: strings.MultiReportingGroupName,
+              groupFields: [
+                PropertyPaneToggle('multiReporting', {
+                  label: strings.MultiReportingToggleLabel
+                }),
+                PropertyPaneTextField('subProjects', {
+                  label: strings.SubProjectsFieldLabel,
+                  description: strings.SubProjectsFieldDescription,
+                  multiline: true,
+                  resizable: true,
+                  rows: 6,
+                  disabled: !this.properties.multiReporting
+                })
+              ]
             }
           ]
         }

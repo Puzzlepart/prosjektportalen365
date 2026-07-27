@@ -28,28 +28,18 @@ export interface IFetchDataForViewItemResult extends ISearchResult {
   _hubUrl?: string
 
   /**
-   * Synthetic unique row key on the format `${SiteId}_${statusPageId}`. A project
-   * with multiple status pages yields one row per status page series, so `SiteId`
-   * alone is not unique. Matches the `key` property Fluent UI `DetailsList`/
-   * `Selection` use for row identity.
+   * Synthetic unique row key on the format `${SiteId}_${scopeKey}`. A project
+   * with multiple report series ("delprosjekter") yields one row per series,
+   * so `SiteId` alone is not unique. Matches the `key` property Fluent UI
+   * `DetailsList`/`Selection` use for row identity.
    */
   key?: string
 
   /**
-   * Status page ID for the report series the row represents. `undefined` for
-   * the default series row.
+   * Scope key ("delprosjekt") for the report series the row represents.
+   * `undefined` for the default series row.
    */
-  StatusPageId?: string
-
-  /**
-   * Status page title for the report series the row represents.
-   */
-  StatusPageTitle?: string
-
-  /**
-   * Site-relative status page URL for the report series the row represents.
-   */
-  StatusPageUrl?: string
+  ScopeKey?: string
   [key: string]: any
 }
 

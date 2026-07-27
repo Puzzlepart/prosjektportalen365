@@ -1,7 +1,8 @@
 import { format } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
-import { ItemFieldValue } from 'pp365-shared-library'
+import { ItemFieldValue, buildScopedSiteId } from 'pp365-shared-library'
 import { useProjectStatusContext } from '../context'
+import { getScopeLabel, parseSubProjects } from '../parseSubProjects'
 import { OPEN_PANEL } from '../reducer'
 import resource from 'SharedResources'
 
@@ -15,41 +16,29 @@ export function useCreateNewStatusReport() {
 
   /**
    * Get the report fields that are not read-only and not the
-   * `GtSectionDataJson`, `GtLastReportDate` or status page identity fields.
+   * `GtSectionDataJson` or `GtLastReportDate` fields.
    */
   const reportFields = state.data.reportFields.filter(
     (field) =>
-      !field.isReadOnly &&
-      ![
-        'GtSectionDataJson',
-        'GtLastReportDate',
-        'GtStatusPageId',
-        'GtStatusPageTitle',
-        'GtStatusPageUrl'
-      ].includes(field.internalName)
+      !field.isReadOnly && !['GtSectionDataJson', 'GtLastReportDate'].includes(field.internalName)
   )
 
   /**
    * Creates a new status report with the given properties and passes the parameters to the edit status panel.
-   * If there is a last report, it will use its field values for the new report. When the web part is
-   * configured with a separate report series, the status page identity is stamped on the new report
-   * so it can be distinguished from other report series for the same project.
+   * If there is a last report, it will use its field values for the new report (the report list is
+   * already scoped to the selected report series). When a report scope ("delprosjekt") is selected,
+   * the scope key is appended to the project's existing site ID (`GtSiteId = {siteId}-{scopeKey}`)
+   * so the report series can be distinguished from the project's other series.
    */
   const createNewStatusReport = async () => {
-    const statusPage = state.data.statusPage
+    const selectedScope = (state.selectedScope ?? '').trim()
+    const scopeLabel = getScopeLabel(parseSubProjects(props.subProjects), selectedScope)
     let properties: Record<string, any> = {
-      Title: statusPage
-        ? format(strings.NewStatusReportTitle, `${props.webTitle} – ${statusPage.title}`)
+      Title: selectedScope
+        ? format(strings.NewStatusReportTitle, `${props.webTitle} – ${scopeLabel}`)
         : format(strings.NewStatusReportTitle, props.webTitle),
-      GtSiteId: props.siteId,
-      GtModerationStatus: resource.Choice_GtModerationStatus_Draft,
-      ...(statusPage
-        ? {
-            GtStatusPageId: statusPage.id,
-            GtStatusPageTitle: statusPage.title,
-            GtStatusPageUrl: statusPage.url
-          }
-        : {})
+      GtSiteId: buildScopedSiteId(props.siteId, selectedScope),
+      GtModerationStatus: resource.Choice_GtModerationStatus_Draft
     }
     if (lastReport?.fieldValues) {
       properties = reportFields.reduce((obj, field) => {

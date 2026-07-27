@@ -132,6 +132,12 @@ declare interface IProjectWebPartsStrings {
   NoPropertiesMessage: string
   NoReportsFoundTitle: string
   NoStatusReportsMessage: string
+  MultiReportingGroupName: string
+  MultiReportingToggleLabel: string
+  SubProjectsFieldLabel: string
+  SubProjectsFieldDescription: string
+  DefaultScopeLabel: string
+  ScopeSelectorDescription: string
   NotPublishedStatusReport: string
   OpportunityMatrixGroupName: string
   OverrideHeadersLabel: string

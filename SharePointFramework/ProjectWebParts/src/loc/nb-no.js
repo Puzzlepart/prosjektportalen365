@@ -173,6 +173,13 @@ define([], function () {
     NoPropertiesMessage:
       'Det finnes ingen informasjon om prosjektet. Trykk på _Rediger prosjektinformasjon_ for å fortsette.',
     NoReportsFoundTitle: 'Ingen rapporter funnet',
+    MultiReportingGroupName: 'Multirapportering',
+    MultiReportingToggleLabel: 'Aktiver multirapportering',
+    SubProjectsFieldLabel: 'Delprosjekter',
+    SubProjectsFieldDescription:
+      'Ett delprosjekt per linje på formatet nøkkel eller nøkkel|etikett (f.eks. DP1|Delprosjekt 1). Nøkkelen identifiserer rapportserien og bør ikke endres etter at rapportering har startet — etiketten kan endres fritt.',
+    DefaultScopeLabel: 'Hovedrapportering',
+    ScopeSelectorDescription: 'Velg hvilket delprosjekt du vil se og rapportere status for',
     NoStatusReportsMessage:
       'Det er ennå ikke rapportert status for prosjektet. Hvis du er eier av området, kan du rapportere status ved å klikke på _Ny statusrapport_ i menyen over.',
     NotPublishedStatusReport: 'Kladd, sist endret {0}',

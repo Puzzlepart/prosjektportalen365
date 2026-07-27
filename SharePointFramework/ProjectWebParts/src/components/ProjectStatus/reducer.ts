@@ -49,6 +49,13 @@ export const REPORT_DELETE_ERROR = createAction<{ error: any }>('REPORT_DELETE_E
 export const SELECT_REPORT = createAction<{ report: StatusReport }>('SELECT_REPORT')
 
 /**
+ * `SELECT_SCOPE`: Dispatched by `useScopeSelector` when a report scope
+ * ("delprosjekt") is selected. Triggers a refetch scoped to the selected
+ * report series.
+ */
+export const SELECT_SCOPE = createAction<{ scopeKey: string }>('SELECT_SCOPE')
+
+/**
  * `PERSIST_SECTION_DATA`: Dispatched by `usePersistSectionData` when section data is persisted.
  */
 export const PERSIST_SECTION_DATA = createAction<{ section: SectionModel; data: any }>(
@@ -110,6 +117,7 @@ const createProjectStatusReducer = createReducer(initialState, {
     state.sourceUrl = payload.sourceUrl
     state.data = payload.data
     state.selectedReport = payload.initialSelectedReport
+    state.selectedScope = payload.resolvedScope
     state.mostRecentReportId = _.first(payload.data.reports)?.id ?? 0
     state.userHasAdminPermission = payload.data.userHasAdminPermission
     state.isDataLoaded = true
@@ -188,6 +196,17 @@ const createProjectStatusReducer = createReducer(initialState, {
         formatDate(payload.report?.modified)
       )
     }
+  },
+  [SELECT_SCOPE.type]: (
+    state: IProjectStatusState,
+    { payload }: ReturnType<typeof SELECT_SCOPE>
+  ) => {
+    state.selectedScope = payload.scopeKey
+    state.selectedReport = null
+    state.userMessage = null
+    state.mostRecentReportId = 0
+    state.isDataLoaded = false
+    state.refetch = new Date().getTime()
   },
   [PERSIST_SECTION_DATA.type]: (
     state: IProjectStatusState,
