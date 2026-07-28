@@ -1,3 +1,4 @@
+import { stringIsNullOrEmpty } from '@pnp/core'
 import { conditionalClassName as className } from 'pp365-shared-library/lib/util'
 import React, { FC } from 'react'
 import { pick } from 'underscore'
@@ -6,6 +7,7 @@ import { useProjectStatusContext } from '../../../ProjectStatus/context'
 import { StatusElement } from '../../StatusElement'
 import { BaseSection } from '../BaseSection/BaseSection'
 import { SectionContext } from '../context'
+import { sectionContainsScopeTokens } from '../scopeTokens'
 import { useCreateContextValue } from '../useCreateContextValue'
 import styles from './SummarySection.module.scss'
 import { ISummarySectionProps } from './types'
@@ -13,16 +15,19 @@ import { ISummarySectionProps } from './types'
 export const SummarySection: FC<ISummarySectionProps> = (props) => {
   const context = useProjectStatusContext()
   const createContextValue = useCreateContextValue({})
+  const hasSelectedScope = !stringIsNullOrEmpty((context.state.selectedScope ?? '').trim())
 
   /**
    * Render status elements where `ctxValue.headerProps.value` is set,
-   * or the `fieldName` is **GtOverallStatus**.
+   * or the `fieldName` is **GtOverallStatus**. Sections whose configuration
+   * contains scope tokens are hidden for the default report series.
    */
   function renderStatusElements() {
     return context.state.data.sections.map((sec, idx) => {
       const ctxValue = createContextValue(sec)
       const shouldRender =
         sec.showInStatusSection &&
+        (!sectionContainsScopeTokens(sec) || hasSelectedScope) &&
         (ctxValue.headerProps.value || sec.fieldName === 'GtOverallStatus')
       return shouldRender ? (
         <SectionContext.Provider key={idx} value={ctxValue}>

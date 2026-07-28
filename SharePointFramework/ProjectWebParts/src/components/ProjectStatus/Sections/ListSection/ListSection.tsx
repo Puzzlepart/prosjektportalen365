@@ -42,7 +42,7 @@ export const ListSection: FC = () => {
   return (
     <BaseSection>
       <StatusElement summation={summation} />
-      {shouldRenderList && renderList()}
+      {(shouldRenderList || state.error) && renderList()}
     </BaseSection>
   )
 }

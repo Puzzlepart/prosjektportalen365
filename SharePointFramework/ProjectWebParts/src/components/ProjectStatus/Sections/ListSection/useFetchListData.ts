@@ -6,7 +6,9 @@ import _ from 'lodash'
 import { SPField } from 'pp365-shared-library/lib/models'
 import { useContext } from 'react'
 import { useProjectStatusContext } from '../../context'
+import { getScopeLabel, parseSubProjects } from '../../parseSubProjects'
 import { SectionContext } from '../context'
+import { replaceScopeTokens } from '../scopeTokens'
 import { IListSectionData } from './types'
 
 const COLUMN_MAX_WIDTH: Record<string, number> = { Text: 250, Note: 250, Choice: 150, Number: 100 }
@@ -14,7 +16,11 @@ const COLUMN_MAX_WIDTH: Record<string, number> = { Text: 250, Note: 250, Choice:
 type UseFetchListDataView = { ListViewXml: string; ViewFields: { Items: string[] } }
 
 /**
- * Fetch list data hook.
+ * Fetch list data hook. Section configuration values (`listTitle`,
+ * `viewQuery`, `viewName`) support the scope tokens `{scope}` and
+ * `{scopeLabel}`, which are replaced with the selected report scope
+ * ("delprosjekt") key and label — so one section configuration can serve a
+ * different list per report series.
  *
  * @returns A function used to fetch data for `ListSection` and `UncertaintySection`.
  */
@@ -22,17 +28,23 @@ export function useFetchListData() {
   const context = useProjectStatusContext()
   const { section } = useContext(SectionContext)
   return async (): Promise<IListSectionData> => {
+    const scopeKey = (context.state.selectedScope ?? '').trim()
+    const scopeLabel = getScopeLabel(parseSubProjects(context.props.subProjects), scopeKey)
     const web = spfi(context.props.webAbsoluteUrl).using(AssignFrom(context.props.sp.web)).web
-    const list = web.lists.getByTitle(section.listTitle)
+    const list = web.lists.getByTitle(replaceScopeTokens(section.listTitle, scopeKey, scopeLabel))
     try {
       let view: UseFetchListDataView = {
-        ListViewXml: `<View><Query>${section.viewQuery}</Query><RowLimit>${section.rowLimit}</RowLimit></View>`,
+        ListViewXml: `<View><Query>${replaceScopeTokens(
+          section.viewQuery,
+          scopeKey,
+          scopeLabel
+        )}</Query><RowLimit>${section.rowLimit}</RowLimit></View>`,
         ViewFields: { Items: section.viewFields }
       }
       if (section.viewName) {
         try {
           view = await list.views
-            .getByTitle(section.viewName)
+            .getByTitle(replaceScopeTokens(section.viewName, scopeKey, scopeLabel))
             .select('ListViewXml', 'ViewFields')
             .expand('ViewFields')()
         } catch {}
