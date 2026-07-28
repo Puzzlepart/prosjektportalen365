@@ -29,17 +29,21 @@ export function useListSection() {
       const persistedSectionData = selectedReport.persistedSectionData[section.id]
       setState({ data: persistedSectionData, isDataLoaded: true })
     } else {
-      fetchListData().then((_data) => {
-        const data: IListSectionData = {
-          ..._data,
-          summation: calculateValues(section?.sumField, _data?.items)
-        }
+      fetchListData()
+        .then((_data) => {
+          const data: IListSectionData = {
+            ..._data,
+            summation: _data ? calculateValues(section?.sumField, _data.items) : undefined
+          }
 
-        context.dispatch(PERSIST_SECTION_DATA({ section, data }))
-        setState({ data, isDataLoaded: true })
-      })
+          context.dispatch(PERSIST_SECTION_DATA({ section, data }))
+          setState({ data, isDataLoaded: true })
+        })
+        .catch((error) => {
+          setState({ error, isDataLoaded: true })
+        })
     }
-  }, [context.state.selectedReport])
+  }, [context.state.selectedReport, context.state.selectedScope])
 
   return {
     state,

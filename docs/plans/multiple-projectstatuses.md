@@ -43,6 +43,17 @@ We want a project to be able to report status for multiple **sub-projects ("delp
 - **Create flow** (`useCreateNewStatusReport.ts`): `GtSiteId = buildScopedSiteId(props.siteId, state.selectedScope)`; report `Title` = "Ny statusrapport for {webTitle} – {scopeLabel}" when scoped. `GtSiteId` is pre-set before the carry-forward reduce (never overwritten) and hidden from all forms, so the panel cannot alter it. Carry-forward comes from the scoped report list.
 - **Header**: appends " – {scopeLabel}" when a scope is selected.
 
+### Scope-aware sections (scope tokens)
+
+Section configurations in the hub "Statusseksjoner" list support the tokens **`{scope}`** and **`{scopeLabel}`** in `GtSecList`, `GtSecViewQuery` and `GtSecView`. Before a `Listeseksjon`/`Usikkerhetseksjon` resolves its list (by title, on the current project web), the tokens are replaced with the selected report scope key/label — so **one** section row can serve a different list per report series (e.g. `GtSecList = "Prosjektleveranser ({scope} {scopeLabel})"` resolves to "Prosjektleveranser (DP1 Samordning og styring)" in the DP1 series).
+
+- `Sections/scopeTokens.ts` (new): `containsScopeTokens`, `replaceScopeTokens`, `sectionContainsScopeTokens`.
+- `Sections/ListSection/useFetchListData.ts`: token substitution using `state.selectedScope` + the label from `parseSubProjects(props.subProjects)`.
+- `Sections/useSections.tsx` + `Sections/SummarySection/SummarySection.tsx`: sections whose configuration contains tokens are **hidden for the default series** (no scope selected).
+- `useListSection`/`useUncertaintySection`: added `.catch` so a missing list renders the existing error message (`ListSectionDataErrorMessage`) instead of failing silently (the error UI was dead code — render is now also gated on `state.error`); `selectedScope` added to the effect dependencies; summation guarded against empty list data.
+- `reducer.ts` `SELECT_SCOPE`: resets `persistedSectionData` so live section data fetched for one series never leaks into another series' published snapshot (latent bug that becomes real with scope-dependent sections).
+- Published reports are unaffected by later token/config changes — they render the per-report snapshot from `PersistedSectionDataJson.json` as before.
+
 ### ProjectInformation + StatusReportColumn
 
 - `fetchProjectStatusReportData.ts`: filter = `startswith(GtSiteId,'{siteId}') and GtModerationStatus eq 'Published'` — all series' published reports.
@@ -85,6 +96,7 @@ All parts are implemented on `feat/multiple-projectstatuses` (replacing the earl
 
 - `shared-library/src/util/statusReportScope.ts` (new; replaces `statusReportSeries.ts`) + `StatusReport.scopeKey`/`projectSiteId` + scope-aware `url()`.
 - ProjectStatus: `multiReporting`/`subProjects` properties + property-pane group, `parseSubProjects.ts`, all-series fetch with scope resolution, `SELECT_SCOPE` reducer action, `useScopeSelector` toolbar item, scoped create flow (`buildScopedSiteId(props.siteId, scope)` — suffix on the existing site ID), scoped header title. New loc strings in `src/loc/*` (both languages).
+- Scope-aware sections: `{scope}`/`{scopeLabel}` tokens in section config (`Sections/scopeTokens.ts` + token substitution in `useFetchListData`), token sections hidden for the default series (`useSections`/`SummarySection`), error handling wired in `useListSection`/`useUncertaintySection` (missing list → error message instead of silent empty), `persistedSectionData` reset on scope switch.
 - ProjectInformation: `startswith` fetch + per-series blocks keyed on `scopeKey`.
 - PortfolioWebParts/ProgramWebParts: grouping/expansion re-keyed on parsed `GtSiteIdOWSTEXT` (call sites unchanged), `ScopeKey` row prop, merged-view dedup key with `ScopeKey`, timeline default-series filters with parsed base site ID, `GtStatusPage*OWSTEXT` selects removed (`ListItemId` sort kept).
 

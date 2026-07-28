@@ -205,6 +205,9 @@ const createProjectStatusReducer = createReducer(initialState, {
     state.selectedReport = null
     state.userMessage = null
     state.mostRecentReportId = 0
+    // Reset persisted section data so live section data fetched for one
+    // report series never leaks into another series' published snapshot.
+    state.persistedSectionData = {}
     state.isDataLoaded = false
     state.refetch = new Date().getTime()
   },
