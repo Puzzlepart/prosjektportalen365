@@ -38,18 +38,20 @@ export function useProjectProperty(props: IProjectPropertyProps) {
       const termSet = context.props.sp.termStore
         .groups.getById('c56bb677-f782-4cf6-a6d6-17685ee9f19d')
         .sets.getById('abdc8d0f-cf79-4d49-82e2-d94d9122ad65')
-      for (const entry of rawGoals.value) {
-        try {
-          const term = await termSet.getTermById(entry.TermGuid).select('localProperties')() as any
-          const localProps = term.localProperties?.find(
-            (lp: any) => lp.setId === 'abdc8d0f-cf79-4d49-82e2-d94d9122ad65'
-          )
-          const iconUrl = localProps?.properties?.find((p: any) => p.key === 'AssetUrl')?.value
-          if (iconUrl) urls[entry.Label] = iconUrl
-        } catch (e) {
-          console.warn(`[useProjectProperty] Failed to fetch icon for term: ${entry.Label}`, e)
-        }
-      }
+       await Promise.all(
+         rawGoals.value.map(async (entry) => {
+           try {
+             const term = (await termSet.getTermById(entry.TermGuid).select('localProperties')()) as any
+             const localProps = term.localProperties?.find(
+               (lp: any) => lp.setId === 'abdc8d0f-cf79-4d49-82e2-d94d9122ad65'
+             )
+             const iconUrl = localProps?.properties?.find((p: any) => p.key === 'AssetUrl')?.value
+             if (iconUrl) urls[entry.Label] = iconUrl
+           } catch (e) {
+             console.warn(`[useProjectProperty] Failed to fetch icon for term: ${entry.Label}`, e)
+           }
+         })
+       )
       setGoalIconUrls(urls)
     }
     fetchIconUrls()
