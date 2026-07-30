@@ -30,7 +30,7 @@ We want a project to be able to report status for multiple **sub-projects ("delp
 
 ### shared-library
 
-- **`src/util/statusReportScope.ts`** (replaces `statusReportSeries.ts`): `parseScopedSiteId`, `getScopeSeriesKey`, `buildScopedSiteId`, `getScopeSeriesFilter`, `getAllScopesFilter`, `sortStatusReportsLatestFirst` (numeric `ListItemId` desc — kept correctness fix), `groupLatestReportBySeries(reports, siteIdProperty)` (map keyed on the parsed **base** siteId, so lookups with the pure GUID keep working; latest per `(siteId, scopeKey)`), `expandRowsPerStatusSeries(buildRow, series)` (base row + one row per scoped series with `Title = "{baseTitle} – {scopeKey}"`, `ScopeKey`, synthetic `key`).
+- **`src/util/statusReportScope.ts`** (replaces `statusReportSeries.ts`): `parseScopedSiteId`, `getScopeSeriesKey`, `buildScopedSiteId`, `getAllScopesFilter`, `sortStatusReportsLatestFirst` (numeric `ListItemId` desc — kept correctness fix), `groupLatestReportBySeries(reports, siteIdProperty)` (map keyed on the parsed **base** siteId, so lookups with the pure GUID keep working; latest per `(siteId, scopeKey)`), `expandRowsPerStatusSeries(buildRow, series, siteIdProperty)` (base row + one row per scoped series with `Title = "{baseTitle} – {scopeKey}"`, `ScopeKey`, synthetic `key`).
 - **`src/models/StatusReport.ts`**: `scopeKey` and `projectSiteId` getters (parsed from `GtSiteId`); `url()` appends `&scope={key}` for scoped reports.
 - **`PortalDataService.getStatusReports`**: unchanged from its pre-feature shape — callers pass explicit filters built with the utils.
 
@@ -70,7 +70,7 @@ Section configurations in the hub "Statusseksjoner" list support the tokens **`{
 
 1. **KQL prefix-match in ProgramWebParts** — `aggregatedQueryBuilder` emits `GtSiteIdOWSTEXT:{guid}` terms consumed by the program report query. With `-` word-breaking these should prefix-phrase-match suffixed values, but **verify in tenant**; fallback = trailing wildcard (`{guid}*`) or client-side filtering.
 2. **Renamed scope key = new series** — documented in the property-pane description; the union-based selector keeps old series reachable.
-3. `?scope=` with an unknown key shows an empty series (deliberate); `?selectedReport=` overrides/repairs the scope.
+3. `?scope=` is validated with the same rules as configured keys and only accepted when it matches a series with existing reports, or (with multi-reporting enabled) a configured sub-project — unknown/invalid values fall back to the default series; `?selectedReport=` overrides/repairs the scope, and a failed report lookup never clears the default selection.
 4. **Per-scope drafts** — the "one unpublished draft" gate is now per series (each delprosjekt can hold its own draft). Intended behavior change.
 5. PortfolioAggregation status-report data sources list scoped reports as items (they are real reports) — verify one such view.
 6. Test tenants that ran the abandoned page-based iteration keep orphaned `GtStatusPage*` columns (template re-apply never deletes fields) — harmless; optional manual cleanup.
@@ -99,6 +99,16 @@ All parts are implemented on `feat/multiple-projectstatuses` (replacing the earl
 - Scope-aware sections: `{scope}`/`{scopeLabel}` tokens in section config (`Sections/scopeTokens.ts` + token substitution in `useFetchListData`), token sections hidden for the default series (`useSections`/`SummarySection`), error handling wired in `useListSection`/`useUncertaintySection` (missing list → error message instead of silent empty), `persistedSectionData` reset on scope switch.
 - ProjectInformation: `startswith` fetch + per-series blocks keyed on `scopeKey`.
 - PortfolioWebParts/ProgramWebParts: grouping/expansion re-keyed on parsed `GtSiteIdOWSTEXT` (call sites unchanged), `ScopeKey` row prop, merged-view dedup key with `ScopeKey`, timeline default-series filters with parsed base site ID, `GtStatusPage*OWSTEXT` selects removed (`ListItemId` sort kept).
+
+### Code review fixes
+
+A five-agent adversarially-verified review of the branch produced the following fixes, all applied:
+
+1. **URL `selectedReport` no longer clears the selection** (`useProjectStatusDataFetch.ts`): the URL/hash report lookup only overrides the initial selection when the report exists in the current series — switching scope with a `?selectedReport=` deep link in the URL previously produced a false "no reports" state on every refetch (also fixes the pre-existing deleted-report variant).
+2. **ProjectInformation series labels** (`useProjectStatusReport.ts`): the fabricated per-series context now carries `selectedScope: selectedReport.scopeKey`, so `Header` shows "… – {scopeKey}" per block and `SummarySection` keeps scope-token sections visible for scoped blocks (the previous `props.title` suffix was dead code — `Header` never reads it).
+3. **`?scope=` hardening** (`resolveScope` + `parseSubProjects.isValidScopeKey`): the URL scope is validated with the same rules as configured keys and gated against known series/vocabulary; scope key/label are XML-escaped (`escapeXmlValue` in `scopeTokens.ts`) before substitution into the CAML `ListViewXml` (the list/view-title lookups are already URI-encoded by PnPjs); the dead, unescaped `getScopeSeriesFilter` export was removed.
+4. **`siteIdProperty` forwarded** to `expandRowsPerStatusSeries` at all five adapter call sites (latent trap: grouping honored the parameter, expansion silently used the default).
+5. **Convention**: the arrow-const helpers in `statusReportScope.ts` were converted to `function` declarations per AGENTS.md.
 
 ### Verification notes
 

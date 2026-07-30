@@ -41,6 +41,22 @@ export function replaceScopeTokens(value: string, scopeKey: string, scopeLabel: 
 }
 
 /**
+ * Escapes a value for safe interpolation into XML (CAML view queries) —
+ * `&`, `<`, `>`, `"` and `'` are replaced with their entity references, so a
+ * scope key or label can never restructure the query it is substituted into.
+ *
+ * @param value Value to escape
+ */
+export function escapeXmlValue(value: string): string {
+  return (value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
+}
+
+/**
  * Returns `true` if any of the section's configuration values (`listTitle`,
  * `viewQuery`, `viewName`) contain scope tokens. Such sections are scoped to
  * a report series ("delprosjekt") and are hidden for the default series.

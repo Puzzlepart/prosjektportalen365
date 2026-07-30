@@ -233,7 +233,8 @@ export class SPDataAdapter
               SPWebUrl: site?.SPWebUrl,
               SiteId: site['SiteId']
             }),
-            series
+            series,
+            siteIdProperty
           )
         )
       }, [])
@@ -269,7 +270,8 @@ export class SPDataAdapter
               SPWebUrl: site?.SPWebUrl,
               SiteId: project[siteIdProperty]
             }),
-            series
+            series,
+            siteIdProperty
           )
         )
       }, [])
@@ -342,7 +344,8 @@ export class SPDataAdapter
               SPWebUrl: site?.SPWebUrl,
               SiteId: project[siteIdProperty]
             }),
-            series
+            series,
+            siteIdProperty
           )
         )
       }, [])
