@@ -72,8 +72,9 @@ export function parseScopedSiteId(value: string): IScopedSiteId {
  *
  * @param scopeKey Scope key
  */
-export const getScopeSeriesKey = (scopeKey?: string): string =>
-  (scopeKey ?? '').trim().toLowerCase()
+export function getScopeSeriesKey(scopeKey?: string): string {
+  return (scopeKey ?? '').trim().toLowerCase()
+}
 
 /**
  * Builds the `GtSiteId` value for a report in the given scope. With an empty
@@ -84,21 +85,10 @@ export const getScopeSeriesKey = (scopeKey?: string): string =>
  * @param siteId The project's site ID (existing site GUID)
  * @param scopeKey Scope key, or empty/`null` for the default series
  */
-export const buildScopedSiteId = (siteId: string, scopeKey?: string): string => {
+export function buildScopedSiteId(siteId: string, scopeKey?: string): string {
   const trimmedScopeKey = (scopeKey ?? '').trim()
   return trimmedScopeKey ? `${siteId}${SCOPE_DELIMITER}${trimmedScopeKey}` : siteId
 }
-
-/**
- * Returns an OData filter predicate scoping status reports to one report
- * series. The default series predicate is an exact match on the site ID —
- * byte-identical to the pre-multi-reporting filter.
- *
- * @param siteId The project's site ID
- * @param scopeKey Scope key, or empty/`null` for the default series
- */
-export const getScopeSeriesFilter = (siteId: string, scopeKey?: string | null): string =>
-  `GtSiteId eq '${buildScopedSiteId(siteId, scopeKey ?? '')}'`
 
 /**
  * Returns an OData filter predicate matching status reports from ALL of the
@@ -108,8 +98,9 @@ export const getScopeSeriesFilter = (siteId: string, scopeKey?: string | null): 
  *
  * @param siteId The project's site ID
  */
-export const getAllScopesFilter = (siteId: string): string =>
-  `startswith(GtSiteId,'${siteId}')`
+export function getAllScopesFilter(siteId: string): string {
+  return `startswith(GtSiteId,'${siteId}')`
+}
 
 /**
  * The latest report per report series (scope) for a single project site.
@@ -145,7 +136,7 @@ export interface IStatusScopeRowProps {
   ScopeKey?: string
 }
 
-const getListItemId = (report: Record<string, any>): number => {
+function getListItemId(report: Record<string, any>): number {
   const listItemId = Number(report?.ListItemId)
   return isNaN(listItemId) ? 0 : listItemId
 }

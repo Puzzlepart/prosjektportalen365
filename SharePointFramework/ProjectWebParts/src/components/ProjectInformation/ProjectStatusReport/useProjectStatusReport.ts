@@ -33,14 +33,21 @@ export function useProjectStatusReport(): IProjectStatusContext[] {
       ? format(strings.PublishedStatusReport, formatDate(selectedReport.publishedDate))
       : format(strings.NotPublishedStatusReport, formatDate(selectedReport.modified))
 
+    // `Header` derives its title from `state.selectedScope` (the scope key is
+    // used as label since the sub-project vocabulary lives on the ProjectStatus
+    // web part and is not available here), and `SummarySection` uses it to keep
+    // scope-token sections visible for scoped series blocks.
     const projectStatusContext: IProjectStatusContext = {
       props: {
-        title: selectedReport.scopeKey
-          ? `${strings.ProjectInformationStatusReportHeaderText} – ${selectedReport.scopeKey}`
-          : strings.ProjectInformationStatusReportHeaderText,
+        title: strings.ProjectInformationStatusReportHeaderText,
         description: strings.ProjectInformationStatusReportHeaderDescription
       },
-      state: { ..._.omit(context.state, 'activePanel'), selectedReport, reportStatus }
+      state: {
+        ..._.omit(context.state, 'activePanel'),
+        selectedReport,
+        reportStatus,
+        selectedScope: selectedReport.scopeKey
+      }
     }
     return projectStatusContext
   })

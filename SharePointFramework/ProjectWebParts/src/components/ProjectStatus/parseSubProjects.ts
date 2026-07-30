@@ -19,6 +19,24 @@ const FORBIDDEN_CHARACTERS = /['|?&#%]/
 const MAX_KEY_LENGTH = 32
 
 /**
+ * Returns `true` if the value is a valid scope key: non-empty, at most 32
+ * characters, no `'`, `|`, `?`, `&`, `#` or `%`, and not starting with `-`.
+ * Used both for configured sub-project keys and for scope keys supplied
+ * through the `scope` URL parameter.
+ *
+ * @param scopeKey Scope key
+ */
+export function isValidScopeKey(scopeKey: string): boolean {
+  const trimmedKey = (scopeKey ?? '').trim()
+  return (
+    !!trimmedKey &&
+    trimmedKey.length <= MAX_KEY_LENGTH &&
+    !FORBIDDEN_CHARACTERS.test(trimmedKey) &&
+    !trimmedKey.startsWith('-')
+  )
+}
+
+/**
  * Parses the web part's `subProjects` property (one sub-project per line on
  * the format `key` or `key|label`) into a validated list. Invalid lines are
  * dropped: empty keys, keys longer than 32 characters, keys containing
@@ -37,14 +55,7 @@ export function parseSubProjects(subProjects: string): ISubProject[] {
     const key = (separatorIndex === -1 ? trimmedLine : trimmedLine.slice(0, separatorIndex)).trim()
     const label =
       (separatorIndex === -1 ? '' : trimmedLine.slice(separatorIndex + 1)).trim() || key
-    if (
-      !key ||
-      key.length > MAX_KEY_LENGTH ||
-      FORBIDDEN_CHARACTERS.test(key) ||
-      key.startsWith('-')
-    ) {
-      continue
-    }
+    if (!isValidScopeKey(key)) continue
     const normalizedKey = key.toLowerCase()
     if (seenKeys.has(normalizedKey)) continue
     seenKeys.add(normalizedKey)

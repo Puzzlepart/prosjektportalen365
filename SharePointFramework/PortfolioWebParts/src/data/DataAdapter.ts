@@ -338,7 +338,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
             SPWebUrl: site?.SPWebUrl,
             SiteId: site['SiteId']
           }),
-          series
+          series,
+          siteIdProperty
         )
       )
     }, [])
@@ -367,7 +368,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
             SPWebUrl: site?.SPWebUrl,
             SiteId: project[siteIdProperty]
           }),
-          series
+          series,
+          siteIdProperty
         )
       )
     }, [])

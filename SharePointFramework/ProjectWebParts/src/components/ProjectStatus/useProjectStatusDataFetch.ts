@@ -17,6 +17,7 @@ import {
 import resource from 'SharedResources'
 import { useEffect } from 'react'
 import SPDataAdapter from '../../data'
+import { isValidScopeKey, parseSubProjects } from './parseSubProjects'
 import { FETCH_DATA_ERROR, INIT_DATA } from './reducer'
 import { FetchDataResult, IProjectStatusProps } from './types'
 
@@ -38,28 +39,58 @@ function isNoHubError(error: unknown) {
 }
 
 /**
+ * Gets the report ID from the URL hash (`#selectedReport=`) or query
+ * parameter (`?selectedReport=`), hash winning. Returns `null` when neither
+ * is present.
+ */
+function getReportIdFromUrl(): number {
+  const hashState = parseUrlHash()
+  if (hashState.has('selectedReport')) {
+    return hashState.get('selectedReport') as number
+  }
+  const selectedReportUrlParam = getUrlParam('selectedReport')
+  if (selectedReportUrlParam) {
+    return parseInt(selectedReportUrlParam, 10)
+  }
+  return null
+}
+
+/**
  * Resolves which report scope ("delprosjekt") to show. An explicitly selected
  * scope (any refetch after the initial load) wins. On the initial load a
  * `selectedReport` URL parameter/hash takes precedence — the report's own
  * scope is used so deep links always land on the right series — otherwise the
- * `scope` URL query parameter is used. Defaults to the default report series.
+ * `scope` URL query parameter is used. The URL-supplied scope is validated
+ * with the same rules as configured sub-project keys, and is only accepted
+ * when it matches a series with existing reports, or (with multi-reporting
+ * enabled) a configured sub-project — unknown or invalid values fall back to
+ * the default report series, so a crafted URL can never activate an
+ * arbitrary scope key.
  *
  * @param selectedScope Explicitly selected scope from state (undefined on initial load)
  * @param allReports All of the project's status reports (all series)
+ * @param props Component properties for `ProjectStatus`
  */
-function resolveScope(selectedScope: string, allReports: StatusReport[]): string {
+function resolveScope(
+  selectedScope: string,
+  allReports: StatusReport[],
+  props: IProjectStatusProps
+): string {
   if (selectedScope !== undefined) return selectedScope
-  const hashState = parseUrlHash()
-  const selectedReportUrlParam = getUrlParam('selectedReport')
-  let reportIdFromUrl: number = null
-  if (hashState.has('selectedReport')) {
-    reportIdFromUrl = hashState.get('selectedReport') as number
-  } else if (selectedReportUrlParam) {
-    reportIdFromUrl = parseInt(selectedReportUrlParam, 10)
-  }
-  const reportFromUrl = _.find(allReports, (report) => report.id === reportIdFromUrl)
+  const reportIdFromUrl = getReportIdFromUrl()
+  const reportFromUrl =
+    reportIdFromUrl !== null
+      ? _.find(allReports, (report) => report.id === reportIdFromUrl)
+      : undefined
   if (reportFromUrl) return reportFromUrl.scopeKey
-  return (getUrlParam('scope') ?? '').trim()
+  const urlScope = (getUrlParam('scope') ?? '').trim()
+  if (!isValidScopeKey(urlScope)) return ''
+  const matchesUrlScope = (key: string) => getScopeSeriesKey(key) === getScopeSeriesKey(urlScope)
+  if (allReports.some((report) => matchesUrlScope(report.scopeKey))) return urlScope
+  const isConfiguredScope =
+    props.multiReporting &&
+    parseSubProjects(props.subProjects).some(({ key }) => matchesUrlScope(key))
+  return isConfiguredScope ? urlScope : ''
 }
 
 /**
@@ -126,27 +157,25 @@ async function fetchData(
       return keys
     }, [])
 
-    const resolvedScope = resolveScope(selectedScope, allReports)
+    const resolvedScope = resolveScope(selectedScope, allReports, props)
 
     let sortedReports = allReports
       .filter((report) => getScopeSeriesKey(report.scopeKey) === getScopeSeriesKey(resolvedScope))
       .sort((a, b) => b.created.getTime() - a.created.getTime())
     const sortedSections = sections.sort((a, b) => (a.sortOrder < b.sortOrder ? -1 : 1))
     let [initialSelectedReport] = sortedReports
-    const hashState = parseUrlHash()
-    const selectedReportUrlParam = getUrlParam('selectedReport')
     const sourceUrl = decodeURIComponent(getUrlParam('Source') ?? '')
 
-    if (hashState.has('selectedReport')) {
-      initialSelectedReport = _.find(
-        sortedReports,
-        (report) => report.id === (hashState.get('selectedReport') as number)
-      )
-    } else if (selectedReportUrlParam) {
-      initialSelectedReport = _.find(
-        sortedReports,
-        (report) => report.id === parseInt(selectedReportUrlParam, 10)
-      )
+    // Only honor the `selectedReport` URL parameter when the report exists in
+    // the current report series — a failed lookup (report in another series,
+    // or deleted) must not clear the default selection.
+    const reportIdFromUrl = getReportIdFromUrl()
+    const reportFromUrl =
+      reportIdFromUrl !== null
+        ? _.find(sortedReports, (report) => report.id === reportIdFromUrl)
+        : undefined
+    if (reportFromUrl) {
+      initialSelectedReport = reportFromUrl
     }
 
     if (initialSelectedReport?.published) {

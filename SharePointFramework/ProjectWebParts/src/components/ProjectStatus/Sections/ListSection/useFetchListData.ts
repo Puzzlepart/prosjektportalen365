@@ -8,7 +8,7 @@ import { useContext } from 'react'
 import { useProjectStatusContext } from '../../context'
 import { getScopeLabel, parseSubProjects } from '../../parseSubProjects'
 import { SectionContext } from '../context'
-import { replaceScopeTokens } from '../scopeTokens'
+import { escapeXmlValue, replaceScopeTokens } from '../scopeTokens'
 import { IListSectionData } from './types'
 
 const COLUMN_MAX_WIDTH: Record<string, number> = { Text: 250, Note: 250, Choice: 150, Number: 100 }
@@ -33,11 +33,14 @@ export function useFetchListData() {
     const web = spfi(context.props.webAbsoluteUrl).using(AssignFrom(context.props.sp.web)).web
     const list = web.lists.getByTitle(replaceScopeTokens(section.listTitle, scopeKey, scopeLabel))
     try {
+      // The scope key/label are XML-escaped here (and only here — the list/view
+      // title lookups are URI-encoded by PnPjs) so the substituted values can
+      // never restructure the CAML query.
       let view: UseFetchListDataView = {
         ListViewXml: `<View><Query>${replaceScopeTokens(
           section.viewQuery,
-          scopeKey,
-          scopeLabel
+          escapeXmlValue(scopeKey),
+          escapeXmlValue(scopeLabel)
         )}</Query><RowLimit>${section.rowLimit}</RowLimit></View>`,
         ViewFields: { Items: section.viewFields }
       }
