@@ -275,15 +275,42 @@ export function useTemplatePackageCatalog(
   const publishCentral = async (pkg: ICatalogPackage): Promise<void> => {
     setState({ notification: undefined, busyAction: 'publish' })
     try {
-      // A cloud template's content types are real hub dependencies: provision them (and
-      // their Prosjekter/Prosjektstatus bindings) to the hub now, in this admin
-      // context, so projects later created from the cloud template are recognized by the
-      // portfolio. The rest (template, extensions, list content) is still pulled
-      // from the .pppkg at project-setup time.
-      await PackageInstaller.provisionCloudTemplateHubDependencies(pkg, props.context)
-      await TemplateOptionsService.createCentral(pkg)
+      // A cloud template's hub dependencies are provisioned now, in this admin
+      // context — site columns, content types (with their Prosjekter /
+      // Prosjektstatus bindings), hub configuration rows and, feature-flag
+      // gated like the import flow, taxonomy — so projects later created from
+      // the cloud template are recognized by the portfolio. Project-level
+      // content (template, extensions, list content incl. folder structures)
+      // is still pulled from the .pppkg at project-setup time.
+      const result = await PackageInstaller.provisionCloudTemplateHubDependencies(
+        pkg,
+        props.context,
+        {
+          featureFlagProvisioning: props.featureFlagProvisioning,
+          // Surface compatibility conflicts via the dialog and pause on the
+          // awaited promise until the admin chooses Avbryt / Fortsett likevel.
+          onConflicts: (report: ICompatibilityReport) =>
+            new Promise<boolean>((resolve) => {
+              conflictResolver.current = resolve
+              setState({ compatibilityReport: report })
+            })
+        }
+      )
+      // Cancelled at the compatibility prompt — nothing was written.
+      if (!result.completed) {
+        setState({ notification: { intent: 'warning', text: strings.CatalogPublishCancelledText } })
+        return
+      }
+      await TemplateOptionsService.createCentral(pkg, {
+        projectContentTypeId: result.manifest.provisioning?.projectContentTypeId,
+        projectPhaseTermSetId: result.manifest.provisioning?.projectPhaseTermSetId
+      })
       await refreshCrossRef()
-      setState({ notification: { intent: 'success', text: strings.CatalogPublishSuccessText } })
+      setState({
+        notification: result.taxonomySkipped
+          ? { intent: 'warning', text: strings.CatalogPublishTaxonomySkippedText }
+          : { intent: 'success', text: strings.CatalogPublishSuccessText }
+      })
     } catch (error) {
       setState({
         notification: { intent: 'error', text: error?.message || strings.CatalogPublishErrorText }

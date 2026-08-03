@@ -24,10 +24,12 @@ export class PreTask extends BaseTask {
 
     if (this.data.selectedTemplate && this.data.selectedTemplate.id !== NO_TEMPLATE_ID) {
       if (this.data.selectedTemplate.isCloudTemplate) {
-        // Cloud template: read the project schema from the bundled .pppkg (nothing on the
-        // hub). Use the already-resolved package; fall back to downloading it for
-        // the forced/auto path that bypasses the dialog. Hub-bound validation
-        // (term sets / content types) is skipped — they aren't provisioned.
+        // Cloud template: read the project schema from the bundled .pppkg. Use
+        // the already-resolved package; fall back to downloading it for the
+        // forced/auto path that bypasses the dialog. Hub-bound validation
+        // (term sets / content types) is still skipped: the hub dependencies
+        // are provisioned when the template is published as a cloud template,
+        // and thin bundled templates fall back to the standard schema below.
         const cloudPackage =
           this.data.resolvedCloudTemplate?.package ??
           (await CloudTemplatePackage.fromUrl(this.data.selectedTemplate.cloudSourceUrl))

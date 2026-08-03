@@ -17,11 +17,12 @@ function readSessionFlag(key: string): boolean {
 export const featureFlags = {
   /**
    * Whether the taxonomy/Term Store provisioning step runs during Mode A
-   * import. On by default — `sp-js-provisioning` 1.3.12 ships a Term Store
-   * handler (registered in its `DefaultHandlerMap`), so packages that bundle
-   * term sets provision them as part of `applyTemplate`. Opt out per
-   * environment by setting the command-set property `featureFlagProvisioning`
-   * to `false`, or in-session via the `PP_DISABLE_TAXONOMY` flag.
+   * import and Mode B publish-as-cloud-template. On by default —
+   * `sp-js-provisioning` 1.3.12 ships a Term Store handler (registered in its
+   * `DefaultHandlerMap`), so packages that bundle term sets provision them as
+   * part of `applyTemplate`. Opt out per environment by setting the
+   * command-set property `featureFlagProvisioning` to `false`, or in-session
+   * via the `PP_DISABLE_TAXONOMY` flag.
    */
   enableTaxonomyProvisioning(props?: { featureFlagProvisioning?: boolean }): boolean {
     if (props?.featureFlagProvisioning === false) return false

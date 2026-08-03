@@ -155,6 +155,9 @@ define([], function () {
     CatalogInstallErrorTitle: 'Import failed',
     CatalogPublishSuccessText: 'The cloud template is now available in the setup wizard.',
     CatalogPublishErrorText: 'Could not make the cloud template available.',
+    CatalogPublishTaxonomySkippedText:
+      'The cloud template was made available, but taxonomy was skipped (feature flag off).',
+    CatalogPublishCancelledText: 'Publishing as a cloud template was cancelled.',
     CatalogRemoveSuccessText: 'The template was removed.',
     CatalogRemoveErrorText: 'Could not remove the template.',
     CatalogLoadErrorTitle: 'Could not load the catalog',
@@ -172,7 +175,7 @@ define([], function () {
     CatalogClearFiltersCount: 'Clear filters ({0})',
     CatalogMinVersionError: 'This template package requires Prosjektportalen {0}. Upgrade Prosjektportalen before importing this template.',
     CatalogPermissionError: 'You do not have permission to provision to the hub site.',
-    CatalogTaxonomyPermissionBlocked: 'This template package provisions taxonomy (term sets), which requires write access to the term store. You do not have that access, so the installation was stopped to avoid a partial result.',
+    CatalogTaxonomyPermissionBlocked: 'This template package provisions taxonomy (term sets), which requires write access to the term store. You do not have that access, so the operation was stopped to avoid a partial result.',
     CatalogCloseTooltip: 'Close the catalog',
     CatalogFilterTypeTooltip: 'Filter by package type',
     CatalogFilterCategoryTooltip: 'Filter by category (derived from tags)',
@@ -184,9 +187,10 @@ define([], function () {
     CatalogBadgeUpdateTooltip: 'A newer version is available',
     CatalogActionImportTooltip: 'Download, provision to the hub site and add to Template Options',
     CatalogActionUpdateTooltip: 'Fetch and install the latest version',
-    CatalogActionPublishCentralTooltip: 'Register as a cloud template without local provisioning',
+    CatalogActionPublishCentralTooltip:
+      'Register as a cloud template. Hub dependencies (fields, content types, taxonomy) are provisioned now — project content is fetched from the package at setup.',
     CatalogActionPublishCentralIncompatibleTooltip:
-      'Cannot be made available as a cloud template. It needs hub-side content a cloud template cannot set up.',
+      'Cannot be made available as a cloud template. It needs hub-side content that is not set up when publishing as a cloud template.',
     CatalogActionRemoveTooltip: 'Remove this template package from Template Options',
     CatalogRemoveConfirmTitle: 'Remove the template?',
     CatalogRemoveConfirmText:

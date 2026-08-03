@@ -150,6 +150,8 @@ declare interface IPortfolioExtensionsStrings {
   CatalogInstallErrorTitle: string
   CatalogPublishSuccessText: string
   CatalogPublishErrorText: string
+  CatalogPublishTaxonomySkippedText: string
+  CatalogPublishCancelledText: string
   CatalogRemoveSuccessText: string
   CatalogRemoveErrorText: string
   CatalogLoadErrorTitle: string

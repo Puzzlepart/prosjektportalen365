@@ -153,11 +153,11 @@ define([], function () {
     SyncLocalProjectPropertiesListText: 'Synchronizing list for project properties',
     TemplateConfigMessage: '**{0}** contains configuration for {1}. This is selected by default.',
     CloudTemplateInfoMessage:
-      '**{0}** is a cloud template. The template package is downloaded and set up automatically when you continue — nothing is stored on the hub.',
+      '**{0}** is a cloud template. The template package is downloaded and set up automatically when you continue — the project content is fetched straight from the package.',
     CloudTemplateResolvingMessage: 'Downloading and reading cloud template…',
     CloudTemplateResolveErrorMessage: 'Could not download the cloud template. Try selecting it again.',
     CloudTemplateNotCompatibleWarning:
-      '**{0}** requires hub content (e.g. a content type bound to the Projects list) that cannot be set up from a cloud template. Extensions and list content are still applied, but the hub content is skipped. Continue at your own risk.',
+      '**{0}** requires hub content (e.g. files or document libraries on the hub site) that is not set up when the package is published as a cloud template. Extensions and list content are still applied, but that hub content is skipped. Continue at your own risk.',
     TemplateConfigConjunction: ' and ',
     DataGridSelectAllLabel: 'Select all',
     PlannerMemberWarningMessage: 'You must be a member of the Microsoft 365 group to configure Planner. Please add yourself as a member or ask an administrator and try again.',

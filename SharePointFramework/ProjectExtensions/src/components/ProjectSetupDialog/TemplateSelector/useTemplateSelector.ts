@@ -76,9 +76,10 @@ export function useTemplateSelector() {
   const cloudTemplateMessage = isCloudTemplate
     ? format(strings.CloudTemplateInfoMessage, selectedTemplate?.text)
     : undefined
-  // "At own risk": the resolved package declares it needs hub-side provisioning
-  // the cloud path can't reproduce. Warn, don't block (extensions + list content
-  // still apply; hub-only parts are skipped).
+  // "At own risk": the resolved package declares it needs hub-side content the
+  // publish-as-cloud-template flow doesn't set up (e.g. hub files/libraries).
+  // Warn, don't block (extensions + list content still apply; that hub content
+  // is skipped).
   const cloudIncompatibleMessage =
     isCloudTemplate &&
     context.state.resolvedCloudTemplate?.package?.manifest?.cloudCompatible === false

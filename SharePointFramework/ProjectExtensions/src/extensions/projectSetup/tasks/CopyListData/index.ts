@@ -126,11 +126,13 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Apply a **cloud template** list-content config: read the bundled
-   * rows from the `.pppkg`, project them to the config's `fields` subset, and
-   * write them into the project's destination list via the sp-js-provisioning
-   * `DataRows` handler (run on the project web, after `SetTaxonomyFields` so the
-   * `GtProjectPhase` term field is already bound). Nothing is read from the hub.
+   * Apply a **cloud template** list-content config: read the bundled rows and
+   * folder hierarchy from the `.pppkg`, project the rows to the config's
+   * `fields` subset, and write them into the project's destination list via
+   * the sp-js-provisioning `DataRows`/`Folders` handlers (run on the project
+   * web, after `SetTaxonomyFields` so the `GtProjectPhase` term field is
+   * already bound). Folder structures (e.g. «Standarddokumenter») come from
+   * the bundled list's `Folders` block. Nothing is read from the hub.
    *
    * @param config Cloud content config
    * @param params Task parameters
@@ -139,13 +141,18 @@ export class CopyListData extends BaseTask {
     config: CloudContentConfig,
     params: IBaseTaskParams
   ): Promise<void> {
-    const dataRows = await config.getCloudDataRows()
-    if (!dataRows?.Rows?.length) {
-      this.logInformation(`No bundled rows for cloud content config ${config.text}`)
+    const [dataRows, folders] = await Promise.all([
+      config.getCloudDataRows(),
+      config.getCloudFolders()
+    ])
+    const hasRows = (dataRows?.Rows?.length ?? 0) > 0
+    const hasFolders = (folders?.length ?? 0) > 0
+    if (!hasRows && !hasFolders) {
+      this.logInformation(`No bundled rows or folders for cloud content config ${config.text}`)
       return
     }
     const fields = config.fields
-    const rows = dataRows.Rows.map((row) => {
+    const rows = (dataRows?.Rows ?? []).map((row) => {
       if (fields.length === 0) return row
       return fields.reduce((projected: Record<string, any>, fieldName) => {
         if (row[fieldName] !== undefined) projected[fieldName] = row[fieldName]
@@ -155,7 +162,7 @@ export class CopyListData extends BaseTask {
     this.onProgress(
       format(
         strings.CopyListItemsText,
-        rows.length,
+        hasRows ? rows.length : folders.length,
         config.sourceListTitle,
         config.destinationListTitle
       ),
@@ -176,21 +183,23 @@ export class CopyListData extends BaseTask {
     } catch {
       // Destination list not found / unreadable — keep the generic-list default.
     }
-    const schema = {
-      Lists: [
-        {
-          Title: config.destinationListTitle,
-          Description: '',
-          Template: destinationTemplate,
-          ContentTypesEnabled: false,
-          DataRows: {
-            KeyColumn: dataRows.KeyColumn ?? 'Title',
-            UpdateBehavior: dataRows.UpdateBehavior ?? 'Overwrite',
-            Rows: rows
-          }
-        }
-      ]
+    const listSchema: Record<string, any> = {
+      Title: config.destinationListTitle,
+      Description: '',
+      Template: destinationTemplate,
+      ContentTypesEnabled: false
     }
+    if (hasRows) {
+      listSchema.DataRows = {
+        KeyColumn: dataRows.KeyColumn ?? 'Title',
+        UpdateBehavior: dataRows.UpdateBehavior ?? 'Overwrite',
+        Rows: rows
+      }
+    }
+    if (hasFolders) {
+      listSchema.Folders = folders
+    }
+    const schema = { Lists: [listSchema] }
     const provisioner = new WebProvisioner(params.web).setup({
       spfxContext: params.context,
       logging: { prefix: '(ProjectSetup) (CopyListData) (Cloud)', activeLogLevel: LogLevel.Info }

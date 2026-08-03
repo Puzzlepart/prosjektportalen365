@@ -13,10 +13,20 @@ export interface IPackageDataRows {
 }
 
 /**
+ * Shape of a `Lists[].Folders` entry in a (hub) provisioning schema. Mirrors
+ * the `IFolder` interface in sp-js-provisioning: a leaf folder name with
+ * optional nested subfolders.
+ */
+export interface IPackageFolder {
+  Name: string
+  Folders?: IPackageFolder[]
+}
+
+/**
  * In-memory reader for a downloaded `.pppkg` (a ZIP with files at the root),
  * used to resolve a cloud template entirely from its package — the
  * project template schema, the bundled extension schemas, and the list-content
- * rows — without touching the hub.
+ * rows and folder structures — without touching the hub.
  *
  * Download/unzip mirrors `PackageInstaller._download`/`_unzip` in
  * PortfolioExtensions; `jszip` is loaded lazily so it stays out of any
@@ -84,10 +94,30 @@ export class CloudTemplatePackage {
    * project's destination list. Returns `undefined` when not found.
    */
   public async getHubListDataRows(sourceListTitle: string): Promise<IPackageDataRows | undefined> {
+    const list = await this._getHubList(sourceListTitle)
+    return list?.DataRows as IPackageDataRows | undefined
+  }
+
+  /**
+   * The `Folders` block of the bundled hub-template `Lists[]` entry whose
+   * `Title` matches `sourceListTitle` — the folder hierarchy a cloud template
+   * creates in the project's destination list (e.g. the «Standarddokumenter»
+   * structure). Returns `undefined` when not found.
+   */
+  public async getHubListFolders(sourceListTitle: string): Promise<IPackageFolder[] | undefined> {
+    const list = await this._getHubList(sourceListTitle)
+    return list?.Folders as IPackageFolder[] | undefined
+  }
+
+  /**
+   * The bundled hub-template `Lists[]` entry whose `Title` matches
+   * `sourceListTitle`, or `undefined` when the package has no hub template or
+   * no matching list.
+   */
+  private async _getHubList(sourceListTitle: string): Promise<any | undefined> {
     const path = this.manifest.provisioning?.hubTemplate
     if (!path) return undefined
     const schema = await this.readJson<Schema>(path)
-    const list = (schema.Lists ?? []).find((l: any) => l.Title === sourceListTitle)
-    return list?.DataRows as IPackageDataRows | undefined
+    return (schema.Lists ?? []).find((l: any) => l.Title === sourceListTitle)
   }
 }

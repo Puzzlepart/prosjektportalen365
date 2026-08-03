@@ -9,8 +9,12 @@ central **`prosjektportalen-hosting`** catalog. A portal administrator can:
 - **Mode A — "Kopier til min installasjon"** (`Importert`): download the `.pppkg`,
   unzip it, validate the manifest, provision the hub, store the project-level
   assets and write a Maloppsett item.
-- **Mode B — "Tilgjengeliggjør som skymal"** (`Sentral`): register a metadata-only
-  Maloppsett item that points at the hosting repo (no local provisioning).
+- **Mode B — "Tilgjengeliggjør som skymal"** (`Sentral`): provision the package's
+  **hub dependencies** (site fields, content types + their hub-list bindings, hub
+  configuration rows and — feature-flag gated — taxonomy) and register a Maloppsett
+  item that points at the hosting repo. Project-level content (template, extensions,
+  list content incl. folder structures) is pulled straight from the `.pppkg` at
+  project-setup time.
 - Update or remove already-imported / central templates.
 
 ## How it is wired
@@ -49,14 +53,18 @@ project setup template dialog uses), applied to the **hub web**.
 
 The **taxonomy / Term Store** step **runs by default**: `sp-js-provisioning` 1.3.12
 ships a Term Store handler (registered in its `DefaultHandlerMap`), so a package's
-bundled term sets are provisioned as part of `applyTemplate`.
+bundled term sets are provisioned as part of `applyTemplate`. The same flag and the
+`SPDataAdapter.hasTermStorePermission()` pre-check gate the taxonomy step of **both**
+Mode A import and Mode B publish-as-skymal
+(`PackageInstaller.provisionCloudTemplateHubDependencies`).
 
 Opt out of the taxonomy step via either:
 
 - `featureFlagProvisioning: false` on the CustomAction properties, or
 - `sessionStorage.setItem('PP_DISABLE_TAXONOMY', '1')` for local testing.
 
-When disabled, the step shows "Hoppet over (feature flag av)".
+When disabled, the import step shows "Hoppet over (feature flag av)" and publishing
+as skymal reports a warning that taxonomy was skipped.
 
 `sessionStorage.setItem('PP_DISABLE_IMPORT', '1')` disables the whole import action
 during a controlled pilot.

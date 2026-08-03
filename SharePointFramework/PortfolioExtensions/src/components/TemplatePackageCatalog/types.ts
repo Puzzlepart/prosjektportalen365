@@ -51,7 +51,7 @@ export interface ICatalogFilters {
 }
 
 export interface ICatalogNotification {
-  intent: 'success' | 'error'
+  intent: 'success' | 'warning' | 'error'
   text: string
 }
 

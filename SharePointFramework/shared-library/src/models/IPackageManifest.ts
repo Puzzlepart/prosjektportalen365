@@ -114,14 +114,16 @@ export interface IPackageManifest {
   tags?: string[]
   type: PackageType
   /**
-   * Whether this package can run as a cloud template — i.e. applied
-   * to a project entirely from its `.pppkg` with nothing provisioned to the hub.
+   * Whether this package can run as a cloud template. Publishing as a cloud
+   * template provisions the hub dependencies (site fields, content types and
+   * their hub-list bindings, hub configuration rows and — feature-flag gated —
+   * taxonomy term sets); the project-level content is applied straight from
+   * the `.pppkg` at setup time.
    *
-   * Set to `false` for packages that require hub-side provisioning the cloud
-   * path cannot reproduce (a content type defined on the hub and bound to the
-   * `Prosjekter` list, hub site columns, taxonomy term sets, etc.). Absent =
-   * treated as `true`. When `false`, the catalog warns before publishing as a
-   * cloud template and the setup wizard warns on selection — neither blocks ("at own
+   * Set to `false` for packages that require hub-side content beyond that
+   * (e.g. files or property-bag entries on the hub, or standalone hub
+   * libraries). Absent = treated as `true`. When `false`, the catalog disables
+   * the publish action and the setup wizard warns on selection ("at own
    * risk").
    */
   cloudCompatible?: boolean

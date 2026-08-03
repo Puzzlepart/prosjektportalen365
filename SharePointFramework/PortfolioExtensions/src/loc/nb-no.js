@@ -151,6 +151,9 @@ define([], function () {
     CatalogInstallErrorTitle: 'Importen feilet',
     CatalogPublishSuccessText: 'Skymalen er nå tilgjengelig i oppsettveiviseren.',
     CatalogPublishErrorText: 'Kunne ikke tilgjengeliggjøre skymalen.',
+    CatalogPublishTaxonomySkippedText:
+      'Skymalen ble tilgjengeliggjort, men taksonomi ble hoppet over (feature flag av).',
+    CatalogPublishCancelledText: 'Tilgjengeliggjøringen som skymal ble avbrutt.',
     CatalogRemoveSuccessText: 'Malen ble fjernet.',
     CatalogRemoveErrorText: 'Kunne ikke fjerne malen.',
     CatalogLoadErrorTitle: 'Kunne ikke laste katalogen',
@@ -168,7 +171,7 @@ define([], function () {
     CatalogClearFiltersCount: 'Tøm filtre ({0})',
     CatalogMinVersionError: 'Denne malpakken krever Prosjektportalen {0}. Oppgrader Prosjektportalen før du kan hente denne malen.',
     CatalogPermissionError: 'Du har ikke tilgang til å provisjonere til hub-området.',
-    CatalogTaxonomyPermissionBlocked: 'Denne malpakken provisjonerer taksonomi (termsett), som krever skrivetilgang til termlageret. Du har ikke denne tilgangen, så installasjonen ble stoppet for å unngå et delvis resultat.',
+    CatalogTaxonomyPermissionBlocked: 'Denne malpakken provisjonerer taksonomi (termsett), som krever skrivetilgang til termlageret. Du har ikke denne tilgangen, så operasjonen ble stoppet for å unngå et delvis resultat.',
     CatalogCloseTooltip: 'Lukk katalogen',
     CatalogFilterTypeTooltip: 'Filtrer på pakketype',
     CatalogFilterCategoryTooltip: 'Filtrer på kategori (utledet fra tagger)',
@@ -180,9 +183,10 @@ define([], function () {
     CatalogBadgeUpdateTooltip: 'En nyere versjon er tilgjengelig',
     CatalogActionImportTooltip: 'Last ned, provisjonér til hub-området og legg til i Maloppsett',
     CatalogActionUpdateTooltip: 'Hent og installer nyeste versjon',
-    CatalogActionPublishCentralTooltip: 'Registrer som skymal uten lokal provisjonering',
+    CatalogActionPublishCentralTooltip:
+      'Registrer som skymal. Hub-avhengigheter (kolonner, innholdstyper, taksonomi) provisjoneres nå – prosjektinnholdet hentes fra pakken ved oppsett.',
     CatalogActionPublishCentralIncompatibleTooltip:
-      'Kan ikke tilgjengeliggjøres som skymal. Pakken krever innhold på hub-området som en skymal ikke kan sette opp.',
+      'Kan ikke tilgjengeliggjøres som skymal. Pakken krever innhold på hub-området som ikke settes opp ved tilgjengeliggjøring.',
     CatalogActionRemoveTooltip: 'Fjern denne malpakken fra Maloppsett',
     CatalogRemoveConfirmTitle: 'Fjerne malen?',
     CatalogRemoveConfirmText:
