@@ -153,6 +153,7 @@ declare interface IProjectExtensionsStrings {
   TemplateConfigMessage: string
   CloudTemplateInfoMessage: string
   CloudTemplateResolvingMessage: string
+  CloudContentConfigDestinationListMissing: string
   CloudTemplateResolveErrorMessage: string
   CloudTemplateNotCompatibleWarning: string
   TemplateConfigConjunction: string

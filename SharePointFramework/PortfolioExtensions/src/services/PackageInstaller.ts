@@ -105,6 +105,13 @@ export interface ICloudPublishResult {
    * Maloppsett item (e.g. `provisioning.projectPhaseTermSetId`).
    */
   manifest: IPackageManifest
+  /**
+   * Locale-resolved name/description for the Maloppsett item (set when the
+   * manifest carries a `provisioning.localized` variant matching the hub
+   * language) — same source `runImport` feeds to `upsertImported`.
+   */
+  localizedName?: string
+  localizedDescription?: string
 }
 
 /**
@@ -588,12 +595,25 @@ export class PackageInstaller {
     // the hub template (and exclude the list-content sources) matching the hub
     // language.
     const locale = PackageInstaller._detectLocale(context)
-    const { manifest } = PackageInstaller._applyLocale(baseManifest, locale)
-    const result: ICloudPublishResult = { completed: true, taxonomySkipped: false, manifest }
+    const { manifest, localizedName, localizedDescription } = PackageInstaller._applyLocale(
+      baseManifest,
+      locale
+    )
+    const result: ICloudPublishResult = {
+      completed: true,
+      taxonomySkipped: false,
+      manifest,
+      localizedName,
+      localizedDescription
+    }
     const hubTemplate = manifest.provisioning?.hubTemplate
     if (!hubTemplate) return result
     const file = zip.file(hubTemplate)
-    if (!file) return result
+    if (!file) {
+      // A declared-but-missing hub template is a broken package — fail loudly
+      // like the import flow does, instead of "publishing" with zero hub deps.
+      throw new Error(format(strings.CatalogHubTemplateMissing, hubTemplate))
+    }
     const schema = JSON.parse(await file.async('string'))
 
     const filtered: Record<string, any> = {}
@@ -767,9 +787,12 @@ export class PackageInstaller {
    * and return their item ids. Each config is upserted by `Title` (re-import
    * updates the existing item instead of duplicating it). These items tell the
    * setup wizard to copy rows from a hub `GtLccSourceList` into a project's
-   * `GtLccDestinationList`; the source list must already exist on the hub (it is
-   * provisioned by the hub template before this runs). The returned ids are
-   * linked to the Maloppsett item via `ListContentConfigLookup`.
+   * `GtLccDestinationList` — or, when the manifest entry carries a
+   * `plannerTitle`, to turn the source rows into **Planner tasks** (the item
+   * gets the Planner content-type variant + `GtPlannerName`, like the standard
+   * seeded «Planneroppgaver» config). The source list must already exist on the
+   * hub (it is provisioned by the hub template before this runs). The returned
+   * ids are linked to the Maloppsett item via `ListContentConfigLookup`.
    */
   private static async _addListContentConfigs(
     manifest: IPackageManifest
@@ -781,7 +804,7 @@ export class PackageInstaller {
 
     const result: Array<{ title: string; itemId: number }> = []
     for (const cfg of configs) {
-      const properties = {
+      const properties: Record<string, any> = {
         Title: cfg.title,
         GtDescription: cfg.description ?? manifest.description ?? '',
         GtLccSourceList: cfg.sourceList,
@@ -790,6 +813,13 @@ export class PackageInstaller {
         GtLccDefault: !!cfg.default,
         GtLccHidden: !!cfg.hidden,
         GtLccLocked: !!cfg.locked
+      }
+      if (cfg.plannerTitle) {
+        // Planner variant of the Listeinnhold content type (see
+        // Templates/Portfolio/Objects/Lists/Listeinnhold.xml) — makes the
+        // wizard route this config through PlannerConfiguration.
+        properties.ContentTypeId = '0x0100B8B4EE61A547B247B49CFC21B67D5B7D01'
+        properties.GtPlannerName = cfg.plannerTitle
       }
       const existing = await list.items
         .filter(`Title eq '${PackageInstaller._escapeOData(cfg.title)}'`)

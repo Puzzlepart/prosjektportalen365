@@ -14,6 +14,13 @@ import { IManifestListContent } from './IPackageManifest'
 const LIST_CONTENT_BASE_CT = '0x0100B8B4EE61A547B247B49CFC21B67D5B7D'
 
 /**
+ * Planner variant of the Listeinnhold content type — resolves
+ * {@link ContentConfig.type} to `Planner`, so `CopyListData` routes the entry
+ * to `PlannerConfiguration` instead of a list copy.
+ */
+const LIST_CONTENT_PLANNER_CT = `${LIST_CONTENT_BASE_CT}01`
+
+/**
  * Normalize the manifest `fields` value for `GtLccFields`. The manifest schema
  * allows `'-'` to mean "no fields"; treat that (and whitespace-only) as an empty
  * string so {@link ContentConfig.fields} resolves to `[]` (copy all columns)
@@ -51,7 +58,10 @@ export class CloudContentConfig extends ContentConfig {
   ): CloudContentConfig {
     const destinationList = entry.destinationList ?? entry.sourceList
     const spItem: IContentConfigSPItem = {
-      ContentTypeId: LIST_CONTENT_BASE_CT,
+      // `plannerTitle` marks the entry as Planner task content — the Planner
+      // content-type variant makes `type` resolve to `Planner` so the rows
+      // become plan tasks instead of a list copy.
+      ContentTypeId: entry.plannerTitle ? LIST_CONTENT_PLANNER_CT : LIST_CONTENT_BASE_CT,
       Id: id,
       Title: entry.title,
       GtDescription: entry.description ?? '',
@@ -61,7 +71,7 @@ export class CloudContentConfig extends ContentConfig {
       GtLccDefault: !!entry.default,
       GtLccHidden: !!entry.hidden,
       GtLccLocked: !!entry.locked,
-      GtPlannerName: undefined
+      GtPlannerName: entry.plannerTitle
     }
     const instance = new CloudContentConfig(spItem, undefined, undefined)
     instance._package = pkg

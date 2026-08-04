@@ -303,7 +303,9 @@ export function useTemplatePackageCatalog(
       }
       await TemplateOptionsService.createCentral(pkg, {
         projectContentTypeId: result.manifest.provisioning?.projectContentTypeId,
-        projectPhaseTermSetId: result.manifest.provisioning?.projectPhaseTermSetId
+        projectPhaseTermSetId: result.manifest.provisioning?.projectPhaseTermSetId,
+        name: result.localizedName,
+        description: result.localizedDescription
       })
       await refreshCrossRef()
       setState({

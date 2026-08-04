@@ -339,12 +339,28 @@ export class CompatibilityService {
   /**
    * Returns the schema with conflicting entries removed for the resolutions the
    * user accepted (`skip`/`blocked`): whole ContentTypes / SiteFields entries,
-   * and individual fields out of a `Lists[].Fields`/`FieldRefs` array. Mutates a
-   * shallow clone so the existing hub objects are left untouched on provisioning.
+   * individual fields out of a `Lists[].Fields`/`FieldRefs` array, and term sets
+   * out of `Taxonomy.TermSets` (so an existing term set with the same id but a
+   * different name really is left untouched, as the conflict dialog promises).
+   * Mutates a shallow clone so the existing hub objects are left untouched on
+   * provisioning.
    */
   public static stripConflicts(schema: any, report: ICompatibilityReport): any {
     if (!schema || !report?.conflicts?.length) return schema
     const next = { ...schema }
+    const termSetSkipIds = new Set(
+      report.conflicts.filter((c) => c.kind === 'taxonomy').map((c) => normGuid(c.targetId))
+    )
+    if (next.Taxonomy?.TermSets && termSetSkipIds.size > 0) {
+      const termSets = next.Taxonomy.TermSets.filter(
+        (set: any) => !termSetSkipIds.has(normGuid(set?.Id))
+      )
+      if (termSets.length > 0) {
+        next.Taxonomy = { ...next.Taxonomy, TermSets: termSets }
+      } else {
+        delete next.Taxonomy
+      }
+    }
     const ctSkip = new Set(
       report.conflicts.filter((c) => c.kind === 'contentType').map((c) => normCtId(c.targetId))
     )

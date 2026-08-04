@@ -179,7 +179,9 @@ export class TemplateOptionsService {
    * manifest declares them (and the publish step has provisioned the term set /
    * content type to the hub), `projectPhaseTermSetId` → `GtProjectPhaseTermId`
    * and `projectContentTypeId` → `GtProjectContentType` are set like
-   * {@link upsertImported} does.
+   * {@link upsertImported} does. `options.name`/`options.description` override
+   * the catalog values for a language-specific Maloppsett item (bilingual
+   * packages on a matching-language hub).
    */
   public static async createCentral(
     pkg: ICatalogPackage,
@@ -187,12 +189,14 @@ export class TemplateOptionsService {
       projectContentTypeId?: string
       projectPhaseTermSetId?: string
       sourceUrl?: string
+      name?: string
+      description?: string
     } = {}
   ): Promise<void> {
     const properties: Record<string, any> = {
-      Title: pkg.name,
+      Title: options.name ?? pkg.name,
       GtProjectTemplateId: SENTINEL_PROJECT_TEMPLATE_ID,
-      GtDescription: pkg.description ?? '',
+      GtDescription: options.description ?? pkg.description ?? '',
       IconName: 'Cloud',
       PpPkgType: PpPkgType.Sentral,
       PpPkgId: pkg.id,

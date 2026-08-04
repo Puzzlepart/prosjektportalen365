@@ -189,7 +189,8 @@ export const PackageDetails: FC = () => {
           <Tooltip
             content={
               notCloudCompatible
-                ? pkg.cloudCompatibleReason ?? strings.CatalogActionPublishCentralIncompatibleTooltip
+                ? pkg.cloudCompatibleReason ??
+                  strings.CatalogActionPublishCentralIncompatibleTooltip
                 : strings.CatalogActionPublishCentralTooltip
             }
             relationship='description'

@@ -79,6 +79,15 @@ export interface IManifestListContent {
   hidden?: boolean
   /** Locked (cannot be deselected) in the setup wizard (`GtLccLocked`). */
   locked?: boolean
+  /**
+   * Marks the entry as **Planner task content** (`GtPlannerName`): the rows in
+   * {@link sourceList} become tasks in a Planner plan with this title, created
+   * at project setup (buckets from `GtCategory`, checklists from `GtChecklist`,
+   * order from `GtSortOrder`). {@link destinationList} is ignored — nothing is
+   * copied into a project list. Maps to the Planner variant of the Listeinnhold
+   * content type.
+   */
+  plannerTitle?: string
 }
 
 /**

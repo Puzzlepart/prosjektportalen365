@@ -58,8 +58,14 @@ export class CopyListData extends BaseTask {
           level: 'info'
         })
         // Cloud template content: rows come from the .pppkg, not a hub list.
+        // Planner-type entries (manifest `plannerTitle`) become plan tasks via
+        // PlannerConfiguration, exactly like the hub flow's Planner configs.
         if (contentConfig instanceof CloudContentConfig) {
-          await this._applyCloudContentConfig(contentConfig, params)
+          if (contentConfig.type === ContentConfigType.Planner) {
+            await this._applyCloudPlannerConfig(contentConfig, params, onProgress)
+          } else {
+            await this._applyCloudContentConfig(contentConfig, params)
+          }
           continue
         }
         await contentConfig.load()
@@ -126,6 +132,52 @@ export class CopyListData extends BaseTask {
   }
 
   /**
+   * Apply a **cloud template** Planner config: read the bundled task rows from
+   * the `.pppkg` and create the Planner plan/buckets/tasks via
+   * {@link PlannerConfiguration} — the same path the hub flow's Planner-type
+   * Listeinnhold configs take, with the hub list swapped for the bundled
+   * `DataRows`. Nothing is read from the hub.
+   *
+   * @param config Cloud content config (type `Planner`, from a manifest entry
+   * carrying `plannerTitle`)
+   * @param params Task parameters
+   * @param onProgress On progress function
+   */
+  private async _applyCloudPlannerConfig(
+    config: CloudContentConfig,
+    params: IBaseTaskParams,
+    onProgress: OnProgressCallbackFunction
+  ): Promise<void> {
+    const dataRows = await config.getCloudDataRows()
+    const items = ((dataRows?.Rows ?? []) as IPlannerTaskSPItem[])
+      // Group by category, then ascending GtSortOrder within each category —
+      // mirrors the hub flow's sorting of the source items.
+      .sort((a, b) =>
+        a.GtCategory === b.GtCategory
+          ? a.GtSortOrder - b.GtSortOrder
+          : (a.GtCategory ?? '').localeCompare(b.GtCategory ?? '')
+      )
+    if (items.length === 0) {
+      this.logInformation(`No bundled tasks for cloud Planner config ${config.text}`)
+      return
+    }
+    const labels = _.uniq(
+      _.flatten(
+        items.map((item) => {
+          if (!stringIsNullOrEmpty(item.GtPlannerTags)) {
+            return item.GtPlannerTags.split(';')
+          }
+        })
+      )
+    ).filter((label) => label)
+    const configuration = this.parsePlannerConfiguration(items)
+    await new PlannerConfiguration(config.plannerTitle, this.data, configuration, labels).execute(
+      params,
+      onProgress
+    )
+  }
+
+  /**
    * Apply a **cloud template** list-content config: read the bundled rows and
    * folder hierarchy from the `.pppkg`, project the rows to the config's
    * `fields` subset, and write them into the project's destination list via
@@ -159,35 +211,58 @@ export class CopyListData extends BaseTask {
         return projected
       }, {})
     })
+    // Recursive count so a folders-only config reports the whole tree, not just
+    // the top level.
+    const countFolders = (items: Array<{ Folders?: any[] }>): number =>
+      items.reduce((sum, folder) => sum + 1 + countFolders(folder.Folders ?? []), 0)
     this.onProgress(
-      format(
-        strings.CopyListItemsText,
-        hasRows ? rows.length : folders.length,
-        config.sourceListTitle,
-        config.destinationListTitle
-      ),
+      hasRows
+        ? format(
+            strings.CopyListItemsText,
+            rows.length,
+            config.sourceListTitle,
+            config.destinationListTitle
+          )
+        : format(
+            strings.CopyFilesText,
+            countFolders(folders),
+            config.sourceListTitle,
+            config.destinationListTitle
+          ),
       '',
-      'List'
+      hasRows ? 'List' : 'Documentation'
     )
-    // Match the destination list's actual base template (e.g. 100 custom list,
-    // 101 document library) so the DataRows handler doesn't mismatch an existing
-    // library/list. The list already exists (created by the template); fall back
-    // to 100 only if it can't be read.
-    let destinationTemplate = 100
+    // Mirror the destination list's actual settings (base template, description,
+    // content-types toggle): the DataRows/Folders handlers go through PnPjs
+    // `lists.ensure`, which UPDATES an existing list with whatever the schema
+    // says — hard-coded values would reset the real list's settings. A missing
+    // destination is a hard error (like the hub flow, where the config's
+    // destination list lookup throws) — otherwise the provisioner would silently
+    // create a stray generic list and deliver the content there.
+    let destinationProps: {
+      BaseTemplate?: number
+      Description?: string
+      ContentTypesEnabled?: boolean
+    }
     try {
-      const destinationProps = (await params.web.lists
+      destinationProps = await params.web.lists
         .getByTitle(config.destinationListTitle)
-        .select('BaseTemplate')()) as { BaseTemplate?: number }
-      if (typeof destinationProps?.BaseTemplate === 'number')
-        destinationTemplate = destinationProps.BaseTemplate
+        .select('BaseTemplate', 'Description', 'ContentTypesEnabled')()
     } catch {
-      // Destination list not found / unreadable — keep the generic-list default.
+      throw new Error(
+        format(
+          strings.CloudContentConfigDestinationListMissing,
+          config.destinationListTitle,
+          config.sourceListTitle
+        )
+      )
     }
     const listSchema: Record<string, any> = {
       Title: config.destinationListTitle,
-      Description: '',
-      Template: destinationTemplate,
-      ContentTypesEnabled: false
+      Description: destinationProps.Description ?? '',
+      Template:
+        typeof destinationProps.BaseTemplate === 'number' ? destinationProps.BaseTemplate : 100,
+      ContentTypesEnabled: !!destinationProps.ContentTypesEnabled
     }
     if (hasRows) {
       listSchema.DataRows = {
