@@ -72,6 +72,24 @@ export const CatalogToolbar: FC = () => {
 
   const textFor = (options: { value: string; text: string }[], value: string) =>
     options.find((o) => o.value === value)?.text ?? ''
+  const typeValue = `${strings.CatalogFilterTypeLabel}: ${textFor(typeOptions, filters.type)}`
+  const categoryValue = `${strings.CatalogFilterCategoryLabel}: ${
+    filters.categories.length === 0
+      ? strings.CatalogFilterAllOption
+      : filters.categories.length <= 2
+      ? filters.categories.join(', ')
+      : format(strings.CatalogFilterCategorySelectedCount, filters.categories.length)
+  }`
+  const statusValue = `${strings.CatalogFilterStatusLabel}: ${textFor(
+    statusOptions,
+    filters.status
+  )}`
+  const languageValue = `${strings.CatalogFilterLanguageLabel}: ${
+    filters.language === ALL_FILTER
+      ? strings.CatalogFilterAllOption
+      : languageLabel(filters.language)
+  }`
+  const sortValue = `${strings.CatalogSortLabel}: ${textFor(sortOptions, sort)}`
 
   return (
     <div className={styles.toolbar} role='toolbar' aria-label={strings.CatalogDrawerTitle}>
@@ -88,7 +106,8 @@ export const CatalogToolbar: FC = () => {
           <Dropdown
             className={styles.dropdown}
             aria-label={strings.CatalogFilterTypeLabel}
-            value={`${strings.CatalogFilterTypeLabel}: ${textFor(typeOptions, filters.type)}`}
+            value={typeValue}
+            button={{ children: <span>{typeValue}</span> }}
             selectedOptions={[filters.type]}
             onOptionSelect={(_, data) => setFilter('type', data.optionValue ?? ALL_FILTER)}
           >
@@ -106,13 +125,8 @@ export const CatalogToolbar: FC = () => {
             multiselect
             aria-label={strings.CatalogFilterCategoryLabel}
             placeholder={strings.CatalogFilterCategoryLabel}
-            value={`${strings.CatalogFilterCategoryLabel}: ${
-              filters.categories.length === 0
-                ? strings.CatalogFilterAllOption
-                : filters.categories.length <= 2
-                ? filters.categories.join(', ')
-                : format(strings.CatalogFilterCategorySelectedCount, filters.categories.length)
-            }`}
+            value={categoryValue}
+            button={{ children: <span>{categoryValue}</span> }}
             // 'Alle' doubles as the empty selection: it renders checked when no
             // categories are picked, and picking it clears the selection.
             selectedOptions={filters.categories.length === 0 ? [ALL_FILTER] : filters.categories}
@@ -137,7 +151,8 @@ export const CatalogToolbar: FC = () => {
           <Dropdown
             className={styles.dropdown}
             aria-label={strings.CatalogFilterStatusLabel}
-            value={`${strings.CatalogFilterStatusLabel}: ${textFor(statusOptions, filters.status)}`}
+            value={statusValue}
+            button={{ children: <span>{statusValue}</span> }}
             selectedOptions={[filters.status]}
             onOptionSelect={(_, data) => setFilter('status', data.optionValue ?? 'all')}
           >
@@ -154,11 +169,8 @@ export const CatalogToolbar: FC = () => {
             <Dropdown
               className={styles.dropdown}
               aria-label={strings.CatalogFilterLanguageLabel}
-              value={`${strings.CatalogFilterLanguageLabel}: ${
-                filters.language === ALL_FILTER
-                  ? strings.CatalogFilterAllOption
-                  : languageLabel(filters.language)
-              }`}
+              value={languageValue}
+              button={{ children: <span>{languageValue}</span> }}
               selectedOptions={[filters.language]}
               onOptionSelect={(_, data) => setFilter('language', data.optionValue ?? ALL_FILTER)}
             >
@@ -174,42 +186,12 @@ export const CatalogToolbar: FC = () => {
       </div>
 
       <div className={styles.actionsRow}>
-        <Tooltip content={strings.CatalogFilterCompatibleOnlyTooltip} relationship='description'>
-          <Switch
-            className={styles.compatibleSwitch}
-            label={strings.CatalogFilterCompatibleOnly}
-            checked={filters.compatibleOnly}
-            onChange={(_, data) => setCompatibleOnly(data.checked)}
-          />
-        </Tooltip>
-
-        {/* Always mounted (hidden via visibility) so the secondary row stays
-            identical whether or not filters are active. */}
-        <Tooltip content={strings.CatalogClearFiltersTooltip} relationship='description'>
-          <Link
-            className={mergeClasses(
-              styles.clearFilters,
-              !hasActiveFilters && styles.clearFiltersHidden
-            )}
-            tabIndex={hasActiveFilters ? 0 : -1}
-            aria-hidden={!hasActiveFilters}
-            onClick={clearFilters}
-          >
-            {format(strings.CatalogClearFiltersCount, activeFilterCount)}
-          </Link>
-        </Tooltip>
-
-        <div className={styles.spacer} />
-
-        <Text size={200} className={styles.count} aria-live='polite'>
-          {format(strings.CatalogResultCount, filteredPackages.length)}
-        </Text>
-
         <Tooltip content={strings.CatalogSortTooltip} relationship='description'>
           <Dropdown
             className={styles.dropdown}
             aria-label={strings.CatalogSortLabel}
-            value={`${strings.CatalogSortLabel}: ${textFor(sortOptions, sort)}`}
+            value={sortValue}
+            button={{ children: <span>{sortValue}</span> }}
             selectedOptions={[sort]}
             onOptionSelect={(_, data) => setSort((data.optionValue as SortKey) ?? 'newest')}
           >
@@ -241,6 +223,35 @@ export const CatalogToolbar: FC = () => {
             />
           </Tooltip>
         </div>
+
+        <Tooltip content={strings.CatalogFilterCompatibleOnlyTooltip} relationship='description'>
+          <Switch
+            className={styles.compatibleSwitch}
+            label={strings.CatalogFilterCompatibleOnly}
+            checked={filters.compatibleOnly}
+            onChange={(_, data) => setCompatibleOnly(data.checked)}
+          />
+        </Tooltip>
+
+        <Tooltip content={strings.CatalogClearFiltersTooltip} relationship='description'>
+          <Link
+            className={mergeClasses(
+              styles.clearFilters,
+              !hasActiveFilters && styles.clearFiltersHidden
+            )}
+            tabIndex={hasActiveFilters ? 0 : -1}
+            aria-hidden={!hasActiveFilters}
+            onClick={clearFilters}
+          >
+            {format(strings.CatalogClearFiltersCount, activeFilterCount)}
+          </Link>
+        </Tooltip>
+
+        <div className={styles.spacer} />
+
+        <Text size={200} className={styles.count} aria-live='polite'>
+          {format(strings.CatalogResultCount, filteredPackages.length)}
+        </Text>
       </div>
     </div>
   )

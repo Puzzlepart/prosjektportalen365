@@ -13,9 +13,13 @@
     min-width: 0;
   }
 
-  /* Stable preferred widths keep selected values from re-flowing the row
-     (KAT-9). Filter controls may shrink just enough to remain beside search;
-     overflowing values ellipsize and retain their full-label tooltips. */
+  .dropdown > button > span:first-child {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .filterRow {
     .search {
       width: 240px;
@@ -32,6 +36,17 @@
   }
 
   .actionsRow {
+    .dropdown {
+      width: 180px;
+      max-width: 180px;
+      flex: 0 0 180px;
+    }
+
+    .viewToggle {
+      display: flex;
+      gap: 2px;
+    }
+
     .compatibleSwitch {
       white-space: nowrap;
     }
@@ -56,19 +71,11 @@
       white-space: nowrap;
     }
 
-    .dropdown {
-      width: 180px;
-      max-width: 180px;
-      flex: 0 0 180px;
-    }
 
-    .viewToggle {
-      display: flex;
-      gap: 2px;
-    }
   }
 
   @media (max-width: 720px) {
+
     .filterRow,
     .actionsRow {
       flex-wrap: wrap;
