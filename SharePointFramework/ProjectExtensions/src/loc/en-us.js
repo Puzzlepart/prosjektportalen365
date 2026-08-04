@@ -152,8 +152,9 @@ define([], function () {
     SummaryMessage: '{0} item(s) were copied to the project.',
     SyncLocalProjectPropertiesListText: 'Synchronizing list for project properties',
     TemplateConfigMessage: '**{0}** contains configuration for {1}. This is selected by default.',
-    CloudTemplateInfoMessage:
-      '**{0}** is a cloud template. The template package is downloaded and set up automatically when you continue — the project content is fetched straight from the package.',
+    CloudTemplateBadgeText: 'Cloud template',
+    CloudTemplateBannerText:
+      'The template package is downloaded and set up automatically when you continue — the project content is fetched straight from the package.',
     CloudTemplateResolvingMessage: 'Downloading and reading cloud template…',
     CloudContentConfigDestinationListMissing:
       'The list "{0}" was not found in the project. The content from "{1}" cannot be copied.',

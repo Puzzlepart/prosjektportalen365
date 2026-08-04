@@ -151,7 +151,8 @@ declare interface IProjectExtensionsStrings {
   SummaryMessage: string
   SyncLocalProjectPropertiesListText: string
   TemplateConfigMessage: string
-  CloudTemplateInfoMessage: string
+  CloudTemplateBadgeText: string
+  CloudTemplateBannerText: string
   CloudTemplateResolvingMessage: string
   CloudContentConfigDestinationListMissing: string
   CloudTemplateResolveErrorMessage: string

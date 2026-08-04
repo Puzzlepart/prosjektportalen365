@@ -81,13 +81,10 @@ export default (data: IProjectSetupData) =>
       { payload: template }: ReturnType<typeof ON_TEMPLATE_CHANGED>
     ) => {
       state.selectedTemplate = template
-      // Switching templates always clears any prior cloud template resolution.
       state.resolvedCloudTemplate = undefined
       state.cloudTemplateError = undefined
       state.isResolvingCloudTemplate = false
       if (template?.isCloudTemplate) {
-        // Bundled extensions/list content aren't known until the .pppkg is
-        // downloaded — populated by ON_CLOUD_TEMPLATE_RESOLVED.
         state.selectedContentConfig = []
         state.selectedExtensions = []
       } else {
@@ -110,11 +107,10 @@ export default (data: IProjectSetupData) =>
       state.resolvedCloudTemplate = payload
       state.isResolvingCloudTemplate = false
       state.cloudTemplateError = undefined
-      // Pre-select the bundled defaults (CloudProjectExtension/CloudContentConfig
-      // carry `isDefault` from the manifest's `defaultSelected`/`default`).
-      state.selectedExtensions = state.selectedTemplate?.getExtensions(payload.extensions) ?? []
-      state.selectedContentConfig =
-        state.selectedTemplate?.getContentConfig(payload.contentConfig) ?? []
+      state.selectedExtensions = payload.extensions.filter((extension) => !extension.hidden)
+      state.selectedContentConfig = payload.contentConfig.filter(
+        (contentConfig) => !contentConfig.hidden
+      )
     },
 
     [ON_CLOUD_TEMPLATE_ERROR.type]: (
