@@ -32,10 +32,30 @@
     gap: var(--spacingHorizontalS);
     flex-wrap: wrap;
 
-    .titleIcon {
-      font-size: 24px;
-      color: var(--colorBrandForeground1);
-      flex: 0 0 auto;
+    /* Icon + title are grouped so a long title wraps INSIDE its own box next
+       to the icon instead of the whole title dropping below it (the badges can
+       still wrap below the group). */
+    .titleGroup {
+      display: flex;
+      align-items: center;
+      gap: var(--spacingHorizontalS);
+      min-width: 0;
+
+      .titleIcon {
+        /* inline-flex lays the svg out as a flex child; as a baseline-aligned
+           inline box it overflowed the line box upward and got clipped by the
+           pane's overflow-y at the very top. */
+        display: inline-flex;
+        align-items: center;
+        font-size: 24px;
+        color: var(--colorBrandForeground1);
+        flex: 0 0 auto;
+      }
+
+      .titleText {
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
     }
   }
 

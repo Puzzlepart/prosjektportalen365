@@ -77,6 +77,13 @@ export const PackageDetails: FC = () => {
   // Same-named extension exists locally but wasn't installed from the catalog —
   // replacing it needs an explicit confirmation.
   const isUnmanaged = !!ref?.unmanaged
+  // Imported from the catalog at the latest version: the primary action reads
+  // as an explicit reinstall/overwrite instead of a fresh install, so the UI
+  // reflects that the package is already in place. (`Sentral` refs keep the
+  // plain import label — copying locally is a separate action from publishing
+  // as a cloud template.)
+  const isUpToDate =
+    ref?.packageType === PpPkgType.Importert && !isUnmanaged && !updateAvailable
   const onPrimaryAction = () => (isUnmanaged ? setConfirmReplace(true) : importPackage(pkg))
 
   const meta = [
@@ -105,12 +112,14 @@ export const PackageDetails: FC = () => {
       )}
 
       <div className={styles.titleRow}>
-        {pkg.icon && (
-          <span className={styles.titleIcon}>{getFluentIconWithFallback(pkg.icon)}</span>
-        )}
-        <Text size={500} weight='semibold'>
-          {pkg.name}
-        </Text>
+        <div className={styles.titleGroup}>
+          {pkg.icon && (
+            <span className={styles.titleIcon}>{getFluentIconWithFallback(pkg.icon)}</span>
+          )}
+          <Text size={500} weight='semibold' className={styles.titleText}>
+            {pkg.name}
+          </Text>
+        </div>
         <PackageBadges packageId={pkg.id} />
       </div>
 
@@ -161,9 +170,16 @@ export const PackageDetails: FC = () => {
                 ? strings.CatalogBadgeLocalTooltip
                 : updateAvailable
                 ? strings.CatalogActionUpdateTooltip
+                : isUpToDate
+                ? format(
+                    strings.CatalogActionReinstallExtensionTooltip,
+                    ref?.installedVersion || pkg.version
+                  )
                 : strings.CatalogActionAddExtensionTooltip
               : updateAvailable
               ? strings.CatalogActionUpdateTooltip
+              : isUpToDate
+              ? format(strings.CatalogActionReinstallTooltip, ref?.installedVersion || pkg.version)
               : strings.CatalogActionImportTooltip
           }
           relationship='description'
@@ -179,9 +195,13 @@ export const PackageDetails: FC = () => {
                 ? strings.CatalogActionReplaceExtension
                 : updateAvailable
                 ? format(strings.CatalogActionUpdateExtension, pkg.version)
+                : isUpToDate
+                ? strings.CatalogActionReinstallExtension
                 : strings.CatalogActionAddExtension
               : updateAvailable
               ? format(strings.CatalogActionUpdate, pkg.version)
+              : isUpToDate
+              ? strings.CatalogActionReinstall
               : strings.CatalogActionImport}
           </Button>
         </Tooltip>
@@ -206,8 +226,18 @@ export const PackageDetails: FC = () => {
             </Button>
           </Tooltip>
         )}
-        {ref && !isExtension && (
-          <Tooltip content={strings.CatalogActionRemoveTooltip} relationship='description'>
+        {/* Catalog-managed items only — an unmanaged (hand-made) extension must
+            not be deletable from here. Extensions are removed from the
+            Prosjekttillegg library, templates from Maloppsett. */}
+        {ref && !isUnmanaged && (
+          <Tooltip
+            content={
+              isExtension
+                ? strings.CatalogActionRemoveTooltipExtension
+                : strings.CatalogActionRemoveTooltip
+            }
+            relationship='description'
+          >
             <Button
               appearance='subtle'
               disabled={!!state.busyAction}
@@ -260,8 +290,19 @@ export const PackageDetails: FC = () => {
       >
         <DialogSurface>
           <DialogBody>
-            <DialogTitle>{strings.CatalogRemoveConfirmTitle}</DialogTitle>
-            <DialogContent>{format(strings.CatalogRemoveConfirmText, pkg.name)}</DialogContent>
+            <DialogTitle>
+              {isExtension
+                ? strings.CatalogRemoveConfirmTitleExtension
+                : strings.CatalogRemoveConfirmTitle}
+            </DialogTitle>
+            <DialogContent>
+              {format(
+                isExtension
+                  ? strings.CatalogRemoveConfirmTextExtension
+                  : strings.CatalogRemoveConfirmText,
+                pkg.name
+              )}
+            </DialogContent>
             <DialogActions>
               <Button appearance='secondary' onClick={() => setConfirmRemove(false)}>
                 {strings.CancelLabel}

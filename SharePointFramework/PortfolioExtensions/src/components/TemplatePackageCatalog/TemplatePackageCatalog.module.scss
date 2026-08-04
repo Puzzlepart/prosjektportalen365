@@ -76,12 +76,6 @@
   }
 }
 
-.loading {
-  display: flex;
-  justify-content: center;
-  padding: var(--spacingVerticalXXL) 0;
-}
-
 @media (max-width: 720px) {
   .grid {
     grid-template-columns: 1fr;

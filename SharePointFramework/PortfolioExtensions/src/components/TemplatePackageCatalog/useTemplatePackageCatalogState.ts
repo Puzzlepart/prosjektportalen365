@@ -14,7 +14,7 @@ export function useTemplatePackageCatalogState() {
     filters: {
       search: '',
       type: 'template',
-      category: ALL_FILTER,
+      categories: [],
       status: 'all',
       language: ALL_FILTER,
       compatibleOnly: false

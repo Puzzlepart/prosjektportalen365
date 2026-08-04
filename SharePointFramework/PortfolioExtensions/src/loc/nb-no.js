@@ -70,6 +70,7 @@ define([], function () {
     CatalogFilterCategoryLabel: 'Kategori',
     CatalogFilterStatusLabel: 'Status',
     CatalogFilterAllOption: 'Alle',
+    CatalogFilterCategorySelectedCount: '{0} valgt',
     CatalogClearFiltersText: 'Tøm filtre',
     CatalogResultCount: '{0} malpakker',
     CatalogSortLabel: 'Sortert etter',
@@ -80,7 +81,6 @@ define([], function () {
     CatalogTypeTemplate: 'Mal',
     CatalogTypeExtension: 'Tillegg',
     CatalogTypeContent: 'Innhold',
-    CatalogStatusLocal: 'Lokal',
     CatalogStatusImported: 'Importert',
     CatalogStatusCentral: 'Sentral',
     CatalogStatusUpdate: 'Oppdatering tilgjengelig',
@@ -123,6 +123,7 @@ define([], function () {
     CatalogActionImport: 'Kopier til min installasjon',
     CatalogActionPublishCentral: 'Tilgjengeliggjør som skymal',
     CatalogActionUpdate: 'Oppdater til v{0}',
+    CatalogActionReinstall: 'Installer på nytt',
     CatalogActionRemove: 'Fjern',
     CatalogStepDownload: 'Laster ned .pppkg',
     CatalogStepUnzip: 'Pakker ut',
@@ -155,6 +156,7 @@ define([], function () {
       'Skymalen ble tilgjengeliggjort, men taksonomi ble hoppet over (feature flag av).',
     CatalogPublishCancelledText: 'Tilgjengeliggjøringen som skymal ble avbrutt.',
     CatalogRemoveSuccessText: 'Malen ble fjernet.',
+    CatalogRemoveSuccessTextExtension: 'Tillegget ble fjernet.',
     CatalogRemoveErrorText: 'Kunne ikke fjerne malen.',
     CatalogLoadErrorTitle: 'Kunne ikke laste katalogen',
     CatalogLoadErrorText: 'Sjekk nettverksforbindelsen og prøv igjen.',
@@ -183,14 +185,22 @@ define([], function () {
     CatalogBadgeUpdateTooltip: 'En nyere versjon er tilgjengelig',
     CatalogActionImportTooltip: 'Last ned, provisjonér til hub-området og legg til i Maloppsett',
     CatalogActionUpdateTooltip: 'Hent og installer nyeste versjon',
+    CatalogActionReinstallTooltip:
+      'Malen er allerede kopiert til din installasjon (v{0}). Installer på nytt for å overskrive den.',
+    CatalogActionReinstallExtensionTooltip:
+      'Tillegget er allerede lagt til (v{0}). Legg til på nytt for å overskrive det.',
     CatalogActionPublishCentralTooltip:
       'Registrer som skymal. Hub-avhengigheter (kolonner, innholdstyper, taksonomi) provisjoneres nå – prosjektinnholdet hentes fra pakken ved oppsett.',
     CatalogActionPublishCentralIncompatibleTooltip:
       'Kan ikke tilgjengeliggjøres som skymal. Pakken krever innhold på hub-området som ikke settes opp ved tilgjengeliggjøring.',
     CatalogActionRemoveTooltip: 'Fjern denne malpakken fra Maloppsett',
+    CatalogActionRemoveTooltipExtension: 'Fjern dette tillegget fra Prosjekttillegg-biblioteket',
     CatalogRemoveConfirmTitle: 'Fjerne malen?',
     CatalogRemoveConfirmText:
       'Vil du fjerne «{0}» fra Maloppsett? Malen blir borte fra Oppsettveiviseren. Innhold som allerede er provisjonert på hub-området berøres ikke, og du kan legge malen til igjen fra katalogen senere.',
+    CatalogRemoveConfirmTitleExtension: 'Fjerne tillegget?',
+    CatalogRemoveConfirmTextExtension:
+      'Vil du fjerne «{0}» fra Prosjekttillegg-biblioteket? Tillegget blir borte fra oppsettveiviseren, og maler i Maloppsett som peker på det mister koblingen. Du kan legge det til igjen fra katalogen senere.',
     CatalogRemoveConfirmButton: 'Fjern',
     CatalogTagFilterTooltip: 'Vis alle med «{0}»',
     CatalogContentCountTooltip: '{0} element(er)',
@@ -200,6 +210,7 @@ define([], function () {
     CatalogStepStatusSkipped: 'Hoppet over',
     CatalogStepStatusPending: 'Venter',
     CatalogActionAddExtension: 'Legg til som prosjekttillegg',
+    CatalogActionReinstallExtension: 'Legg til på nytt',
     CatalogActionUpdateExtension: 'Oppdater tillegg til v{0}',
     CatalogActionAddExtensionTooltip:
       'Last ned tillegget og legg det i Prosjekttillegg-biblioteket på hub-området',

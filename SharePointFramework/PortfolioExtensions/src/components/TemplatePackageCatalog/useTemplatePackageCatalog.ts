@@ -27,11 +27,24 @@ import { useTemplatePackageCatalogState } from './useTemplatePackageCatalogState
 const COMBINING_MARK_MIN = 0x0300
 const COMBINING_MARK_MAX = 0x036f
 
+// Letters with no NFD canonical decomposition (ø, æ, …) need an explicit
+// transliteration fold. Applied after toLowerCase(), so the lowercase-only map
+// also covers Ø/Æ. (å is NOT needed here — NFD decomposes it to a + U+030A.)
+const LETTER_FOLDS: Record<string, string> = {
+  ø: 'o',
+  æ: 'ae',
+  œ: 'oe',
+  ß: 'ss'
+}
+const LETTER_FOLDS_PATTERN = /[øæœß]/g
+
 /**
  * Fold a string for diacritic-insensitive search: decompose, drop combining
- * marks, lower-case. So "anlegg" matches "Anlégg" and accented names match
- * their plain spelling. Avoids `\p{Diacritic}`/the `u`-flag for a safe SPFx TS
- * target.
+ * marks, lower-case, then transliterate letters NFD can't decompose (ø→o,
+ * æ→ae). So "anlegg" matches "Anlégg" and "leverandor" matches
+ * "Leverandørsamhandling". Applied to both the query and the haystack, so
+ * "leverandør" keeps matching too. Avoids `\p{Diacritic}`/the `u`-flag for a
+ * safe SPFx TS target.
  */
 const normalize = (value: string): string => {
   let folded = ''
@@ -39,7 +52,7 @@ const normalize = (value: string): string => {
     const code = char.charCodeAt(0)
     if (code < COMBINING_MARK_MIN || code > COMBINING_MARK_MAX) folded += char
   }
-  return folded.toLowerCase()
+  return folded.toLowerCase().replace(LETTER_FOLDS_PATTERN, (letter) => LETTER_FOLDS[letter])
 }
 
 /**
@@ -110,7 +123,11 @@ export function useTemplatePackageCatalog(
 
   // Hidden packages stay in the catalog feed but are never surfaced in the UI
   // (list, filters, search, selection) — used to stage not-yet-ready packages.
-  const allPackages = (state.catalog?.packages ?? []).filter((pkg) => !pkg.hidden)
+  // Memoized so the derived useMemos below get a stable dependency.
+  const allPackages = useMemo(
+    () => (state.catalog?.packages ?? []).filter((pkg) => !pkg.hidden),
+    [state.catalog]
+  )
 
   const categories = useMemo(() => {
     const set = new Set<string>()
@@ -141,11 +158,19 @@ export function useTemplatePackageCatalog(
     !isNewerVersion(pkg.minPPVersion, state.installedVersion)
 
   const filteredPackages = useMemo(() => {
-    const { search, type, category, status, language, compatibleOnly } = state.filters
+    const { search, type, categories: selectedCategories, status, language, compatibleOnly } =
+      state.filters
     const term = normalize(search.trim())
     const result = allPackages.filter((pkg) => {
       if (type !== ALL_FILTER && pkg.type !== type) return false
-      if (category !== ALL_FILTER && !(pkg.tags ?? []).includes(category)) return false
+      // Multi-select categories: a package matches if it carries ANY of the
+      // selected tags (OR semantics); empty selection = all.
+      if (
+        selectedCategories.length > 0 &&
+        !(pkg.tags ?? []).some((tag) => selectedCategories.includes(tag))
+      ) {
+        return false
+      }
       if (status !== 'all') {
         const ref = state.crossRef.get(pkg.id.toLowerCase())
         if (status === 'update') {
@@ -187,7 +212,7 @@ export function useTemplatePackageCatalog(
   const defaultFilters: ICatalogFilters = {
     search: '',
     type: 'template',
-    category: ALL_FILTER,
+    categories: [],
     status: 'all',
     language: ALL_FILTER,
     compatibleOnly: false
@@ -196,7 +221,7 @@ export function useTemplatePackageCatalog(
   const activeFilterCount =
     (state.filters.search.trim() !== '' ? 1 : 0) +
     (state.filters.type !== defaultFilters.type ? 1 : 0) +
-    (state.filters.category !== defaultFilters.category ? 1 : 0) +
+    (state.filters.categories.length > 0 ? 1 : 0) +
     (state.filters.status !== defaultFilters.status ? 1 : 0) +
     (state.filters.language !== defaultFilters.language ? 1 : 0) +
     (state.filters.compatibleOnly ? 1 : 0)
@@ -207,6 +232,9 @@ export function useTemplatePackageCatalog(
 
   const setCompatibleOnly = (value: boolean) =>
     setState((current) => ({ filters: { ...current.filters, compatibleOnly: value }, page: 1 }))
+
+  const setCategories = (categories: string[]) =>
+    setState((current) => ({ filters: { ...current.filters, categories }, page: 1 }))
 
   const clearFilters = () => setState({ filters: { ...defaultFilters }, page: 1 })
 
@@ -235,7 +263,10 @@ export function useTemplatePackageCatalog(
   }
 
   const importPackage = async (pkg: ICatalogPackage): Promise<void> => {
-    setState({ notification: undefined, installProgress: { steps: [], status: 'running' } })
+    setState({
+      notification: undefined,
+      installProgress: { steps: [], status: 'running', log: [] }
+    })
     try {
       const existingItemId = crossRefFor(pkg.id)?.itemId
       const completed = await PackageInstaller.runImport({
@@ -334,9 +365,23 @@ export function useTemplatePackageCatalog(
     if (!ref) return
     setState({ notification: undefined, busyAction: 'remove' })
     try {
-      await TemplateOptionsService.remove(ref.itemId)
+      // An extension's cross-ref itemId points at the Prosjekttillegg library,
+      // not Maloppsett — route the delete to the right list.
+      if (pkg.type === 'extension') {
+        await ProjectExtensionsService.remove(ref.itemId)
+      } else {
+        await TemplateOptionsService.remove(ref.itemId)
+      }
       await refreshCrossRef()
-      setState({ notification: { intent: 'success', text: strings.CatalogRemoveSuccessText } })
+      setState({
+        notification: {
+          intent: 'success',
+          text:
+            pkg.type === 'extension'
+              ? strings.CatalogRemoveSuccessTextExtension
+              : strings.CatalogRemoveSuccessText
+        }
+      })
     } catch (error) {
       setState({
         notification: { intent: 'error', text: error?.message || strings.CatalogRemoveErrorText }
@@ -364,6 +409,7 @@ export function useTemplatePackageCatalog(
     isSupported,
     setFilter,
     setCompatibleOnly,
+    setCategories,
     clearFilters,
     reloadCatalog,
     setSort,

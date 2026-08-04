@@ -104,6 +104,20 @@ export class ProjectExtensionsService {
   }
 
   /**
+   * Remove a catalog-installed extension: recycles the Prosjekttillegg library
+   * item (and thereby its file). Recycled — not permanently deleted — so an
+   * accidental removal can be restored from the site recycle bin. Maloppsett
+   * items whose `GtProjectExtensions` lookup pointed at the item simply lose
+   * that reference.
+   */
+  public static async remove(itemId: number): Promise<void> {
+    await SPDataAdapter.portalDataService.web.lists
+      .getByTitle(resource.Lists_ProjectExtensions_Title)
+      .items.getById(itemId)
+      .recycle()
+  }
+
+  /**
    * Read all files in the hub Prosjekttillegg library with their `PpPackage`
    * stamp (when present). Shared by {@link getCrossReference} and the pre-import
    * compatibility check.

@@ -29,14 +29,20 @@ export type RenderMode = 'grid' | 'list'
 export const ALL_FILTER = 'all'
 
 /**
- * Status filter values. `update` = "Oppdatering tilgjengelig".
+ * Status filter values. `update` = "Oppdatering tilgjengelig". (`Lokal` is
+ * deliberately absent: the catalog only lists cloud packages, so no row can
+ * ever match a local-only Maloppsett item.)
  */
-export type StatusFilter = 'all' | 'Lokal' | 'Importert' | 'Sentral' | 'update'
+export type StatusFilter = 'all' | 'Importert' | 'Sentral' | 'update'
 
 export interface ICatalogFilters {
   search: string
   type: string
-  category: string
+  /**
+   * Selected category tags; empty = all. A package matches if it carries ANY
+   * of the selected tags (OR semantics).
+   */
+  categories: string[]
   status: StatusFilter
   /**
    * Available-language filter: {@link ALL_FILTER} or a BCP-47 group code
@@ -132,6 +138,8 @@ export interface ITemplatePackageCatalogContext {
   setFilter: (key: keyof ICatalogFilters, value: string) => void
   /** Toggle the "compatible only" filter (boolean, so it can't go via setFilter). */
   setCompatibleOnly: (value: boolean) => void
+  /** Set the selected category tags (string[], so it can't go via setFilter). */
+  setCategories: (categories: string[]) => void
   clearFilters: () => void
   /** Re-load the catalog from the network (used by the degraded-state retry). */
   reloadCatalog: () => void

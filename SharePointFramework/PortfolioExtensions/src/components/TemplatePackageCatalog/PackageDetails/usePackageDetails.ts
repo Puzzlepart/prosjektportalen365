@@ -18,7 +18,7 @@ import { packageCardId } from '../PackageCard'
  */
 export function usePackageDetails() {
   const ctx = useCatalogContext()
-  const { state, selectedPackage, closeDetail, setFilter } = ctx
+  const { state, selectedPackage, closeDetail, setCategories } = ctx
   const [imageError, setImageError] = useState(false)
   const [confirmReplace, setConfirmReplace] = useState(false)
   const [confirmRemove, setConfirmRemove] = useState(false)
@@ -40,7 +40,8 @@ export function usePackageDetails() {
   }, [state.detailOpen, selectedPackage])
 
   const filterByTag = (tag: string) => {
-    setFilter('category', tag)
+    // Jump-to-category: replaces the current selection with just this tag.
+    setCategories([tag])
     closeDetail()
   }
 

@@ -74,6 +74,7 @@ define([], function () {
     CatalogFilterCategoryLabel: 'Category',
     CatalogFilterStatusLabel: 'Status',
     CatalogFilterAllOption: 'All',
+    CatalogFilterCategorySelectedCount: '{0} selected',
     CatalogClearFiltersText: 'Clear filters',
     CatalogResultCount: '{0} packages',
     CatalogSortLabel: 'Sorted by',
@@ -84,7 +85,6 @@ define([], function () {
     CatalogTypeTemplate: 'Template',
     CatalogTypeExtension: 'Extension',
     CatalogTypeContent: 'Content',
-    CatalogStatusLocal: 'Local',
     CatalogStatusImported: 'Imported',
     CatalogStatusCentral: 'Central',
     CatalogStatusUpdate: 'Update available',
@@ -127,6 +127,7 @@ define([], function () {
     CatalogActionImport: 'Copy to my installation',
     CatalogActionPublishCentral: 'Make available as cloud template',
     CatalogActionUpdate: 'Update to v{0}',
+    CatalogActionReinstall: 'Reinstall',
     CatalogActionRemove: 'Remove',
     CatalogStepDownload: 'Downloading .pppkg',
     CatalogStepUnzip: 'Extracting package',
@@ -159,6 +160,7 @@ define([], function () {
       'The cloud template was made available, but taxonomy was skipped (feature flag off).',
     CatalogPublishCancelledText: 'Publishing as a cloud template was cancelled.',
     CatalogRemoveSuccessText: 'The template was removed.',
+    CatalogRemoveSuccessTextExtension: 'The extension was removed.',
     CatalogRemoveErrorText: 'Could not remove the template.',
     CatalogLoadErrorTitle: 'Could not load the catalog',
     CatalogLoadErrorText: 'Check your network connection and try again.',
@@ -187,14 +189,23 @@ define([], function () {
     CatalogBadgeUpdateTooltip: 'A newer version is available',
     CatalogActionImportTooltip: 'Download, provision to the hub site and add to Template Options',
     CatalogActionUpdateTooltip: 'Fetch and install the latest version',
+    CatalogActionReinstallTooltip:
+      'The template is already copied to your installation (v{0}). Reinstall to overwrite it.',
+    CatalogActionReinstallExtensionTooltip:
+      'The extension is already added (v{0}). Add it again to overwrite it.',
     CatalogActionPublishCentralTooltip:
       'Register as a cloud template. Hub dependencies (fields, content types, taxonomy) are provisioned now — project content is fetched from the package at setup.',
     CatalogActionPublishCentralIncompatibleTooltip:
       'Cannot be made available as a cloud template. It needs hub-side content that is not set up when publishing as a cloud template.',
     CatalogActionRemoveTooltip: 'Remove this template package from Template Options',
+    CatalogActionRemoveTooltipExtension:
+      'Remove this extension from the Project Extensions library',
     CatalogRemoveConfirmTitle: 'Remove the template?',
     CatalogRemoveConfirmText:
       'Remove "{0}" from Template Options? It will disappear from the setup wizard. Content already provisioned on the hub is left untouched, and you can add the template again from the catalog later.',
+    CatalogRemoveConfirmTitleExtension: 'Remove the extension?',
+    CatalogRemoveConfirmTextExtension:
+      'Remove "{0}" from the Project Extensions library? It will disappear from the setup wizard, and Template Options entries pointing at it lose the link. You can add it again from the catalog later.',
     CatalogRemoveConfirmButton: 'Remove',
     CatalogTagFilterTooltip: 'Show all tagged "{0}"',
     CatalogContentCountTooltip: '{0} item(s)',
@@ -204,6 +215,7 @@ define([], function () {
     CatalogStepStatusSkipped: 'Skipped',
     CatalogStepStatusPending: 'Pending',
     CatalogActionAddExtension: 'Add as project extension',
+    CatalogActionReinstallExtension: 'Add again',
     CatalogActionUpdateExtension: 'Update extension to v{0}',
     CatalogActionAddExtensionTooltip:
       'Download the extension and add it to the Project Extensions library on the hub',
