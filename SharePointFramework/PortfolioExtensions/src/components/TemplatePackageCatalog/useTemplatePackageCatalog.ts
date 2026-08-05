@@ -158,8 +158,14 @@ export function useTemplatePackageCatalog(
     !isNewerVersion(pkg.minPPVersion, state.installedVersion)
 
   const filteredPackages = useMemo(() => {
-    const { search, type, categories: selectedCategories, status, language, compatibleOnly } =
-      state.filters
+    const {
+      search,
+      type,
+      categories: selectedCategories,
+      status,
+      language,
+      compatibleOnly
+    } = state.filters
     const term = normalize(search.trim())
     const result = allPackages.filter((pkg) => {
       if (type !== ALL_FILTER && pkg.type !== type) return false
@@ -384,7 +390,14 @@ export function useTemplatePackageCatalog(
       })
     } catch (error) {
       setState({
-        notification: { intent: 'error', text: error?.message || strings.CatalogRemoveErrorText }
+        notification: {
+          intent: 'error',
+          text:
+            error?.message ||
+            (pkg.type === 'extension'
+              ? strings.CatalogRemoveErrorTextExtension
+              : strings.CatalogRemoveErrorText)
+        }
       })
     } finally {
       setState({ busyAction: undefined })

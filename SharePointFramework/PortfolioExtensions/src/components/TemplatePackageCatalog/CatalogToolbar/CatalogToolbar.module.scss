@@ -70,12 +70,9 @@
       color: var(--colorNeutralForeground3);
       white-space: nowrap;
     }
-
-
   }
 
   @media (max-width: 720px) {
-
     .filterRow,
     .actionsRow {
       flex-wrap: wrap;

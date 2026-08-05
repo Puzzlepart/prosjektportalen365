@@ -36,6 +36,7 @@ export const CatalogToolbar: FC = () => {
   const { filters, sort, renderMode } = state
 
   const [searchValue, setSearchValue] = useState(filters.search)
+  const searchBoxRef = useRef<HTMLInputElement>(null)
   const timer = useRef<ReturnType<typeof setTimeout>>()
   useEffect(() => {
     return () => {
@@ -95,6 +96,7 @@ export const CatalogToolbar: FC = () => {
     <div className={styles.toolbar} role='toolbar' aria-label={strings.CatalogDrawerTitle}>
       <div className={styles.filterRow}>
         <SearchBox
+          ref={searchBoxRef}
           className={styles.search}
           placeholder={strings.CatalogSearchPlaceholder}
           aria-label={strings.CatalogSearchPlaceholder}
@@ -241,7 +243,10 @@ export const CatalogToolbar: FC = () => {
             )}
             tabIndex={hasActiveFilters ? 0 : -1}
             aria-hidden={!hasActiveFilters}
-            onClick={clearFilters}
+            onClick={() => {
+              clearFilters()
+              searchBoxRef.current?.focus()
+            }}
           >
             {format(strings.CatalogClearFiltersCount, activeFilterCount)}
           </Link>

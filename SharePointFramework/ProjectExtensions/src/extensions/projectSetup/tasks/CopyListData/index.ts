@@ -57,9 +57,7 @@ export class CopyListData extends BaseTask {
           message: `Processing content config: ${contentConfig.text} (${contentConfig.type})`,
           level: 'info'
         })
-        // Cloud template content: rows come from the .pppkg, not a hub list.
-        // Planner-type entries (manifest `plannerTitle`) become plan tasks via
-        // PlannerConfiguration, exactly like the hub flow's Planner configs.
+        // Cloud rows come from the package; Planner rows still use PlannerConfiguration.
         if (contentConfig instanceof CloudContentConfig) {
           if (contentConfig.type === ContentConfigType.Planner) {
             await this._applyCloudPlannerConfig(contentConfig, params, onProgress)
@@ -232,13 +230,8 @@ export class CopyListData extends BaseTask {
       '',
       hasRows ? 'List' : 'Documentation'
     )
-    // Mirror the destination list's actual settings (base template, description,
-    // content-types toggle): the DataRows/Folders handlers go through PnPjs
-    // `lists.ensure`, which UPDATES an existing list with whatever the schema
-    // says — hard-coded values would reset the real list's settings. A missing
-    // destination is a hard error (like the hub flow, where the config's
-    // destination list lookup throws) — otherwise the provisioner would silently
-    // create a stray generic list and deliver the content there.
+    // DataRows/Folders uses lists.ensure, which updates existing list settings.
+    // Mirror destination metadata and fail when missing to avoid a stray generic list.
     let destinationProps: {
       BaseTemplate?: number
       Description?: string

@@ -15,6 +15,13 @@ import { createNoTemplateOption } from '../../../extensions/projectSetup/noTempl
 import { resolveCloudTemplate } from '../resolveCloudTemplate'
 import { TemplateSelectorMode } from './types'
 
+/**
+ * Manages template selection and resolves selected cloud packages for project setup.
+ *
+ * Cloud resolution exposes bundled artifacts without provisioning hub content.
+ * Unsupported hub content is warned about and skipped instead of blocking
+ * extensions and list content that can still be applied.
+ */
 export function useTemplateSelector() {
   const context = useProjectSetupDialogContext()
   const hasExistingTemplate = context.props.data.hasExistingTemplate
@@ -67,16 +74,9 @@ export function useTemplateSelector() {
     setQuery('')
   }
 
-  // Cloud template: download and resolve the .pppkg once the (cloud) template is
-  // selected, so the Extensions/List-content sections can show its bundled
-  // artifacts and the provisioning tasks can apply them. Nothing touches the hub.
   const isCloudTemplate = !!selectedTemplate?.isCloudTemplate
   const isResolvingCloudTemplate = !!context.state.isResolvingCloudTemplate
   const cloudTemplateError = context.state.cloudTemplateError
-  // "At own risk": the resolved package declares it needs hub-side content the
-  // publish-as-cloud-template flow doesn't set up (e.g. hub files/libraries).
-  // Warn, don't block (extensions + list content still apply; that hub content
-  // is skipped).
   const cloudIncompatibleMessage =
     isCloudTemplate &&
     context.state.resolvedCloudTemplate?.package?.manifest?.cloudCompatible === false

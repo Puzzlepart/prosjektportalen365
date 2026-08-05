@@ -24,23 +24,15 @@ export class PreTask extends BaseTask {
 
     if (this.data.selectedTemplate && this.data.selectedTemplate.id !== NO_TEMPLATE_ID) {
       if (this.data.selectedTemplate.isCloudTemplate) {
-        // Cloud template: read the project schema from the bundled .pppkg. Use
-        // the already-resolved package; fall back to downloading it for the
-        // forced/auto path that bypasses the dialog. Hub-bound validation
-        // (term sets / content types) is still skipped: the hub dependencies
-        // are provisioned when the template is published as a cloud template,
-        // and thin bundled templates fall back to the standard schema below.
+        // Forced/auto setup can bypass dialog resolution, so download on demand.
+        // Hub-bound validation remains disabled because cloud publication provisions
+        // dependencies; thin packages fall back to the standard schema below.
         const cloudPackage =
           this.data.resolvedCloudTemplate?.package ??
           (await CloudTemplatePackage.fromUrl(this.data.selectedTemplate.cloudSourceUrl))
         const bundled = await cloudPackage.getProjectTemplateSchema()
-        // A thin package ships an (almost) empty project template.json and relies
-        // on the standard project template for the base structure (content types,
-        // site fields, `Parameters.ProjectContentTypeId` that SetupProjectInformation
-        // needs). When the bundled template carries no Parameters, fall back to the
-        // standard template — a hub READ, nothing is written to the hub — so the
-        // project is still set up; the bundled extensions and list content are
-        // applied on top by the later tasks.
+        // Thin packages omit Parameters and rely on the standard template for base
+        // schema. This only reads the hub; later tasks apply bundled artifacts.
         params.templateSchema =
           bundled.Parameters && Object.keys(bundled.Parameters).length > 0
             ? bundled

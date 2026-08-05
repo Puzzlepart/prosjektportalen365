@@ -50,10 +50,7 @@ export class SitePermissions extends BaseTask {
           if (isEmpty(users)) continue
           const roleDefId = roleDefinitions[permissionLevel]
           if (roleDefId) {
-            // Reuse the group if it already exists on the project web (the setup
-            // wizard may be re-run on the same site). Blindly adding a group whose
-            // name is taken returns a 500 ("navn er allerede i bruk"), so
-            // ensure-then-add to keep the task idempotent.
+            // Reuse groups on reruns; SharePoint returns 500 for duplicate names.
             let group
             let groupId: number
             try {
@@ -71,8 +68,7 @@ export class SitePermissions extends BaseTask {
               group = added.group
               groupId = added.data.Id
             }
-            // Re-adding an existing role assignment can also fail — guard it so it
-            // doesn't abort the user-add loop below.
+            // An existing role assignment must not abort the user-add loop.
             try {
               await params.web.roleAssignments.add(groupId, roleDefId)
             } catch (error) {

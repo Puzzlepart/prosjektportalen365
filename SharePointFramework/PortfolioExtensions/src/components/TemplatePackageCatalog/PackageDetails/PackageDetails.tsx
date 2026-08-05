@@ -82,8 +82,7 @@ export const PackageDetails: FC = () => {
   // reflects that the package is already in place. (`Sentral` refs keep the
   // plain import label — copying locally is a separate action from publishing
   // as a cloud template.)
-  const isUpToDate =
-    ref?.packageType === PpPkgType.Importert && !isUnmanaged && !updateAvailable
+  const isUpToDate = ref?.packageType === PpPkgType.Importert && !isUnmanaged && !updateAvailable
   const onPrimaryAction = () => (isUnmanaged ? setConfirmReplace(true) : importPackage(pkg))
 
   const meta = [

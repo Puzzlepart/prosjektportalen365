@@ -156,6 +156,7 @@ declare interface IPortfolioExtensionsStrings {
   CatalogRemoveSuccessText: string
   CatalogRemoveSuccessTextExtension: string
   CatalogRemoveErrorText: string
+  CatalogRemoveErrorTextExtension: string
   CatalogLoadErrorTitle: string
   CatalogLoadErrorText: string
   CatalogRetryText: string

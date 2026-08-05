@@ -162,6 +162,7 @@ define([], function () {
     CatalogRemoveSuccessText: 'The template was removed.',
     CatalogRemoveSuccessTextExtension: 'The extension was removed.',
     CatalogRemoveErrorText: 'Could not remove the template.',
+    CatalogRemoveErrorTextExtension: 'Could not remove the extension.',
     CatalogLoadErrorTitle: 'Could not load the catalog',
     CatalogLoadErrorText: 'Check your network connection and try again.',
     CatalogRetryText: 'Try again',

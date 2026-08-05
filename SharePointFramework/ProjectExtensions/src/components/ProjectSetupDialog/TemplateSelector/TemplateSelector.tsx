@@ -15,6 +15,7 @@ import { ProjectSetupDialogSectionComponent } from '../types'
 import styles from './TemplateSelector.module.scss'
 import { useTemplateSelector } from './useTemplateSelector'
 
+/** Renders the template-selection section in the project setup dialog. */
 export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
   const {
     mode,

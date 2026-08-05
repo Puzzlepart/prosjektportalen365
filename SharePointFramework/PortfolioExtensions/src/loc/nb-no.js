@@ -158,6 +158,7 @@ define([], function () {
     CatalogRemoveSuccessText: 'Malen ble fjernet.',
     CatalogRemoveSuccessTextExtension: 'Tillegget ble fjernet.',
     CatalogRemoveErrorText: 'Kunne ikke fjerne malen.',
+    CatalogRemoveErrorTextExtension: 'Kunne ikke fjerne tillegget.',
     CatalogLoadErrorTitle: 'Kunne ikke laste katalogen',
     CatalogLoadErrorText: 'Sjekk nettverksforbindelsen og prøv igjen.',
     CatalogRetryText: 'Prøv igjen',
