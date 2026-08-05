@@ -171,6 +171,13 @@ export type GetStatusReportsOptions = {
   top?: number
   select?: string[]
   useCaching?: boolean
+
+  /**
+   * Internal names of `User`/`UserMulti` fields to select and expand
+   * (`Id`, `Title`, `EMail`) — needed to prefill people pickers and render
+   * person values from the report items.
+   */
+  userFields?: string[]
 }
 
 export type SyncListParams = {

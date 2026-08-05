@@ -1016,7 +1016,8 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     filter = '',
     top,
     select,
-    useCaching = true
+    useCaching = true,
+    userFields = []
   }: GetStatusReportsOptions): Promise<StatusReport[]> {
     if (!this.isAvailable) return []
     if (!this._configuration.spfxContext.pageContext) {
@@ -1030,8 +1031,18 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       const list = this._getList('PROJECT_STATUS')
       let items = list.items
         .filter(filter)
-        .expand('FieldValuesAsText', 'AttachmentFiles')
+        .expand('FieldValuesAsText', 'AttachmentFiles', ...userFields)
         .orderBy('Id', false)
+      if (userFields.length > 0) {
+        items = items.select(
+          '*',
+          'FieldValuesAsText',
+          'AttachmentFiles',
+          ...userFields.map((fieldName) => `${fieldName}/Id`),
+          ...userFields.map((fieldName) => `${fieldName}/Title`),
+          ...userFields.map((fieldName) => `${fieldName}/EMail`)
+        )
+      }
       if (top) items = items.top(top)
       if (select) items = items.select(...select)
       if (useCaching) items = items.using(DefaultCaching)
@@ -1076,15 +1087,17 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   }
 
   /**
-   * Get status report list props
+   * Get status report list props (`Id` and `DefaultEditFormUrl`). The list ID
+   * is used as `targetListId` for the edit panel, so user/taxonomy/lookup
+   * values are resolved against the hub list the reports are stored in.
    *
    * TODO: Use caching with @pnp/sp v3
    */
-  public getStatusReportListProps(): Promise<{ DefaultEditFormUrl: string }> {
+  public getStatusReportListProps(): Promise<{ Id: string; DefaultEditFormUrl: string }> {
     try {
       return this._getList('PROJECT_STATUS')
-        .select('DefaultEditFormUrl')
-        .expand('DefaultEditFormUrl')<{ DefaultEditFormUrl: string }>()
+        .select('Id', 'DefaultEditFormUrl')
+        .expand('DefaultEditFormUrl')<{ Id: string; DefaultEditFormUrl: string }>()
     } catch (error) {
       throw error
     }

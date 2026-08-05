@@ -42,8 +42,12 @@ export function useCreateNewStatusReport() {
     }
     if (lastReport?.fieldValues) {
       properties = reportFields.reduce((obj, field) => {
-        const fieldValue = lastReport.fieldValues.get<ItemFieldValue>(field.internalName)?.value
-        if (fieldValue && !obj[field.internalName]) obj[field.internalName] = fieldValue
+        const valueFieldName =
+          field.type === 'User' || field.type === 'UserMulti'
+            ? `${field.internalName}Id`
+            : field.internalName
+        const fieldValue = lastReport.fieldValues.get<ItemFieldValue>(valueFieldName)?.value
+        if (fieldValue && !obj[valueFieldName]) obj[valueFieldName] = fieldValue
         return obj
       }, properties)
     }

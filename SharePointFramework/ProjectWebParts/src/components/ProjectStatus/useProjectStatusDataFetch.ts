@@ -128,19 +128,24 @@ async function fetchData(
       .items.select('Id')
       .top(1)()
 
+    const reportFields = await getReportFields(
+      properties.templateParameters?.ProjectStatusContentTypeId
+    )
+    const userFieldNames = reportFields
+      .filter((field) => field.type === 'User' || field.type === 'UserMulti')
+      .map((field) => field.internalName)
+
     const [reportList, allReports, sections, columnConfig] = await Promise.all([
       SPDataAdapter.portalDataService.getStatusReportListProps(),
       SPDataAdapter.portalDataService.getStatusReports({
         useCaching: false,
-        filter: getAllScopesFilter(props.siteId)
+        filter: getAllScopesFilter(props.siteId),
+        userFields: userFieldNames
       }),
       SPDataAdapter.portalDataService.getProjectStatusSections(),
       SPDataAdapter.portalDataService.getProjectColumnConfig()
     ])
 
-    const reportFields = await getReportFields(
-      properties.templateParameters?.ProjectStatusContentTypeId
-    )
     const userHasAdminPermission = await SPDataAdapter.checkProjectAdminPermissions(
       ProjectAdminPermission.ProjectStatusAdmin,
       properties.fieldValues
@@ -195,6 +200,7 @@ async function fetchData(
         properties,
         reportFields,
         reportEditFormUrl: reportList.DefaultEditFormUrl,
+        reportListId: reportList.Id,
         reports: sortedReports,
         sections: sortedSections,
         columnConfig,

@@ -74,7 +74,8 @@ export class ProjectStatusModel {
       Object.keys(this.item),
       (key) =>
         (_.startsWith(key, 'GtStatus') || _.startsWith(key, 'GtOverallStatus')) &&
-        !_.endsWith(key, 'Comment')
+        !_.endsWith(key, 'Comment') &&
+        !_.endsWith(key, 'Id')
     )
     return statusKeys.map((key) => {
       const name = _.capitalize(this.columnConfigurations[key]?.name.split(' ')[1])

@@ -9,7 +9,8 @@ import { Toaster } from '@fluentui/react-components'
  * panel for the project information component.
  */
 export const EditStatusPanel: FC = () => {
-  const { headerText, isOpen, onDismiss, fields, fieldValues, submit } = useEditStatusPanel()
+  const { headerText, isOpen, onDismiss, fields, fieldValues, submit, reportListId } =
+    useEditStatusPanel()
 
   return (
     <>
@@ -19,6 +20,8 @@ export const EditStatusPanel: FC = () => {
         fieldValues={fieldValues}
         fields={fields}
         dataAdapter={SPDataAdapter}
+        targetWeb={SPDataAdapter.portalDataService?.web}
+        targetListId={reportListId}
         submit={submit}
         hiddenFields={['Title']}
         onLightDismissClick={onDismiss}
