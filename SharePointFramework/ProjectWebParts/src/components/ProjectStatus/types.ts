@@ -149,6 +149,13 @@ export interface IProjectStatusData {
   reportEditFormUrl?: string
 
   /**
+   * ID of the hub `Prosjektstatus` list the reports are stored in. Used as
+   * `targetListId` for the edit panel so user/taxonomy/lookup values are
+   * resolved against the hub list.
+   */
+  reportListId?: string
+
+  /**
    * Reports
    */
   reports?: StatusReport[]

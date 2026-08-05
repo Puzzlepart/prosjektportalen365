@@ -1,5 +1,4 @@
 import { IPersonaProps } from '@fluentui/react'
-import _ from 'lodash'
 import { ITermInfo } from '@pnp/sp/taxonomy'
 import { useState } from 'react'
 import { EditableSPField } from '../../models'
@@ -100,19 +99,30 @@ export function useModel(props: ICustomEditPanelProps) {
         async () => {
           const email = value[0]?.secondaryText
           let val = null
-          if (email) val = (await webContext.ensureUser(email)).data.Id
+          if (email) {
+            try {
+              val = (await webContext.ensureUser(email)).data.Id
+            } catch {
+              val = null
+            }
+          }
           return [val, `${field.internalName}Id`]
         }
       ],
       [
         'UserMulti',
         async () => {
-          const values = await Promise.all(
+          const results = await Promise.allSettled<number>(
             value.map(
               async (v: IPersonaProps) => (await webContext.ensureUser(v.secondaryText)).data.Id
             )
           )
-          return [_.flatten(values), `${field.internalName}Id`]
+          const values = results
+            .filter(
+              (result): result is PromiseFulfilledResult<number> => result.status === 'fulfilled'
+            )
+            .map((result) => result.value)
+          return [values, `${field.internalName}Id`]
         }
       ],
       [
