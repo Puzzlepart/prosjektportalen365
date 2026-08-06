@@ -5,70 +5,76 @@
 Prosjektportalen 365 (PP365) er tuftet på Prosjektveiviseren, men innholdet stammer fra en
 tidligere versjon: dokumentmalene i `Malbibliotek` er merket v3.0/v4.0, og de 44
 fasesjekkpunktene og 66 prosjektoppgavene er formulert etter den gamle aktivitetsstrukturen.
-Digdir har siden gitt ut versjon 6, som både omformulerer aktiviteter og innfører nye
-konsepter (bærekraft som styringsparameter, smidig/produktorientert gjennomføring,
-endrings- og kommunikasjonsledelse, oppdaterte rollebeskrivelser).
+Digdir har siden gitt ut versjon 6, som både omformulerer aktiviteter, endrer sentral
+terminologi (gevinst → nytte) og innfører nye konsepter (bærekraft som styringsparameter,
+smidig/produktorientert gjennomføring, endrings- og kommunikasjonsledelse, oppdaterte
+rollebeskrivelser).
 
 Dette er allerede erkjent i repoet som [issue #1044 "Oppdater malverk fra Prosjektveiviseren 6"](https://github.com/Puzzlepart/prosjektportalen365/issues/1044)
 (åpen siden mars 2023, milestone 1.14.0), men uten en gjennomføringsplan.
 
-**Avklart omfang for dette arbeidet:**
+**Avklart omfang:**
 
 | Spørsmål | Valg |
 |---|---|
 | Ambisjonsnivå | Innhold **+** nye v6-konsepter (ikke full modellrevisjon) |
 | Leveransemål | PP365 kjerneprodukt, via release — alle virksomheter får det ved oppgradering |
 | Dokumentmaler | Bytt til nye v6-filer fra Digdir |
-| Plandokument | Markdown i repoet, pushet på `claude/prosjektportalen-v6-update-70sbom` |
+| Innføringsstrategi | **Side om side** — v6-innhold i nye lister, eksisterende lister beholdes urørt, virksomheten velger selv |
 
 **Uttrykkelig utenfor omfang:** endring av fasenavn, faserekkefølge, fase-GUID-er eller
-beslutningspunktstrukturen. Se «Hvorfor vi ikke rører fasestrukturen» nedenunder — dette er
-en bevisst risikoreduksjon, ikke en forglemmelse.
+beslutningspunktstrukturen. Se «Hvorfor vi ikke rører fasestrukturen». Endring av
+**interne** feltnavn er også utenfor omfang — se område C.
 
-**Ønsket utfall:** en virksomhet som oppgraderer PP365 får fasesjekkpunkter, prosjektoppgaver,
-dokumentmaler, fasetekster og styringsparametere som samsvarer med Prosjektveiviseren v6,
-uten å miste egne tilpasninger, og uten duplikater i listene sine.
+**Ønsket utfall:** en virksomhet som oppgraderer PP365 får v6-innhold tilgjengelig, kan velge
+det per prosjektmal, og mister ingenting av sine egne tilpasninger. Ingen duplikater oppstår,
+fordi ingen eksisterende rad endres.
 
 **Status:** dette dokumentet er arbeidsdokumentet for oppdateringen og ligger på branchen
 `claude/prosjektportalen-v6-update-70sbom`. Ingen innholdsendringer er gjort ennå — arbeidet
-starter med område A nedenunder.
+starter med område A.
 
 ---
 
 ## Forutsetning som må løses først: tilgang til v6-kildematerialet
 
-Egress-policyen i dette miljøet blokkerer `prosjektveiviseren.digdir.no`,
-`prosjektportalen.no`, `prosjektskole.no` og `prosjektbloggen.no` (bekreftet: proxyen svarer
-403 på CONNECT). Innholdet under er derfor hentet fra søketreff, ikke fra kilden.
+Egress-policyen i utviklingsmiljøet blokkerer `prosjektveiviseren.digdir.no`,
+`prosjektportalen.no`, `prosjektskole.no` og `prosjektbloggen.no` (proxyen svarer 403 på
+CONNECT). v6-oppsummeringen under er derfor bygget på søketreff, **ikke på kilden**, og må
+verifiseres i område A før noe implementeres.
 
-**Konsekvens for planen:** den autoritative v6-fasiten kan ikke hentes maskinelt herfra.
-Steg A nedenunder er derfor et eget, manuelt arbeidssteg der prosjektlederen skaffer
-kildematerialet. Alt annet arbeid avhenger av det.
+### Antatt innhold i v6 — må verifiseres
 
-### Antatt innhold i v6 (må verifiseres i steg A)
+**Terminologi (høyest konsekvens for PP365):**
 
-Fra [Digdirs versjonshistorikk](https://prosjektveiviseren.digdir.no/godt-vite/versjonshistorikk/144)
-og [Puzzleparts egen blogg](https://www.prosjektportalen.no/blogg/ny-prosjektportal-moter-oppdatert-prosjektveiviseren):
+- **«nyttevirkninger» erstatter «gevinster»**
+- **«plan for nyttestyring» erstatter «gevinstrealiseringsplan»**
+- **«nytteansvarlig»** ser ut til å erstatte **«gevinstansvarlig»** — mest usikre punkt, verifiser nøye
+- Ny side [Nyttestyring](https://prosjektveiviseren.digdir.no/god-praksis-og-tilpasning/nyttestyring/273)
+  og ny aktivitet [Oppdatere plan for nyttestyring](https://prosjektveiviseren.digdir.no/prosjektfasene/oppdatere-plan-nyttestyring/60)
+- Endringen samordner Prosjektveiviseren med DFØs
+  [veileder om nyttestyring av statlige tiltak](https://www.dfo.no/veileder-om-nyttestyring-av-statlige-tiltak/6-nyttestyring-ved-prosjektorganisering-og-produktorganisering)
+- URL-strukturen er endret: `god-praksis/` → `god-praksis-og-tilpasning/` — påvirker alle
+  dyplenker i `Hjelpeinnhold.xml` og `Lenker.xml`
 
-- **Smidige faser** — fasestyringen beholdes, men det legges til rette for produktorientert
-  arbeid og kortere iterasjoner i gjennomføringsfasen. Ny side om hvordan smidig påvirker
-  prosjektstyringen i de ulike fasene.
-- **Bærekraft som styringsparameter** — prosjekttrekanten utvides til et sekskant/hexagon.
-  Sju styringsparametere: gevinster, kostnader, tid, kvalitet, omfang, bærekraft, risiko.
-- **Menneskene i sentrum** — endringsledelse og kommunikasjonsledelse løftes til egne
-  faglige temaer.
+**Struktur og innhold:**
+
+- **Bærekraft som styringsparameter** — prosjekttrekanten utvides til sekskant. Sju
+  parametere: gevinster/nytte, kostnader, tid, kvalitet, omfang, bærekraft, risiko.
+- **Smidige faser** — fasestyringen beholdes, men det åpnes for produktorientert arbeid og
+  kortere iterasjoner i gjennomføringsfasen. Ny side om smidig per fase.
+- **Menneskene i sentrum** — endringsledelse og kommunikasjonsledelse som egne faglige temaer.
 - **Teknologi og KI** — veiviseren oppdatert for at KI er del av prosjekthverdagen.
-- **Nye aktiviteter i venstremenyen**, samordnet med de seks obligatoriske spørsmålene i
-  utredningsinstruksen.
+- **Nye aktiviteter** samordnet med de seks obligatoriske spørsmålene i utredningsinstruksen.
 - **Oppdaterte rollebeskrivelser** for Virksomhetsledelsen, Gevinstansvarlig, Prosjekteier og
-  Prosjektleder. Gevinsteiere som lokale eiere av enkeltgevinster er bygget inn i
-  rollebeskrivelsen for Gevinstansvarlig.
-- **Aktivitetsendringer:** «Gjennomføre samfunnsøkonomisk analyse» er avviklet som egen
-  aktivitet; løsningens innhold og utforming skal ikke fastlåses i planleggingsfasen;
-  behovet for endringer i arbeidsprosesser og organisering beskrives, ikke de endrede
-  prosessene; nye aktiviteter i starten av planleggings-, gjennomførings- og avslutningsfasen
-  for gode faseoverganger; avslutningsanbefaling utarbeides sist i gjennomføringsfasen og
-  legges fram i BP4.
+  Prosjektleder. Gevinsteiere som lokale eiere av enkeltgevinster bygget inn i
+  Gevinstansvarlig.
+- **Aktivitetsendringer:** «Gjennomføre samfunnsøkonomisk analyse» avviklet som egen aktivitet;
+  løsningens innhold og utforming skal ikke fastlåses i planleggingsfasen; *behovet* for
+  endringer i arbeidsprosesser og organisering beskrives, ikke de endrede prosessene; nye
+  aktiviteter i starten av planleggings-, gjennomførings- og avslutningsfasen for gode
+  faseoverganger; avslutningsanbefaling utarbeides sist i gjennomføringsfasen og legges fram
+  i BP4.
 
 ---
 
@@ -79,36 +85,44 @@ Fire lag, og det er avgjørende å vite hvilket lag man endrer:
 ```
 1. TAKSONOMI      Templates/Taxonomy/Taxonomy.xml
                   Termsett "Fase" (abcfc9d9-…) med LocalCustomProperties:
-                  PhaseSubText, PhaseDescription (+ _en-us)
+                  PhaseSubText, PhaseDescription (+ _en-us). Også "Rolle", "Tjenesteområde".
                   ⚠ Install.ps1 hopper over Taxonomy ved -Upgrade
 
 2. STRUKTUR (hub) Templates/Portfolio/Objects/{SiteFields,ContentTypes,Lists,ClientSidePages}/
-                  Listedefinisjoner, kolonner, innholdstyper. Strenger via {resource:Key}
-                  → Templates/Portfolio/Resources.{no-NB,en-US}.resx
+                  Strenger via {resource:Key} → Resources.{no-NB,en-US}.resx
 
 3. INNHOLD (hub)  Templates/Content/Portfolio_content.{no-NB,en-US}/…xml
                   ★ Fasesjekkliste: 44 DataRows   ★ Planneroppgaver: 66 DataRows
-                  ★ Malbibliotek: 22 Office-filer som <pnp:File>-oppføringer (kun no-NB)
+                  ★ Malbibliotek: 22 Office-filer som <pnp:File> (kun no-NB)
 
 4. PROSJEKTMAL    Templates/JsonTemplates/_JsonTemplate{Project,Program,Parent}.json
-                  Lager tomme lister på prosjektområdet. Innholdet kopieres fra hub
-                  ved provisjonering via "Listeinnhold" (Listeinnhold.xml →
-                  ProjectExtensions/…/CopyListData) og Planner-plan "Prosjektoppgaver".
+                  Lager listene på prosjektområdet. Innholdet kopieres FRA hub
+                  ved provisjonering (Listeinnhold → CopyListData).
 ```
 
-**Fem koblinger som må respekteres:**
+### Den avgjørende mekanikken: hvordan innhold når et prosjektområde
 
-1. `GtProjectPhase` lagres som `Navn|GUID` (`Konsept|99e85650-…`) i hver DataRow.
+`SharePointFramework/shared-library/src/models/ContentConfig.ts`:
+
+```ts
+get sourceList()      { return this.web.lists.getByTitle(this._sourceListName) }      // HUB
+get destinationList() { return this._sp.web.lists.getByTitle(this._destinationListName) } // PROSJEKT
+```
+
+**Lister slås opp på visningstittel, ikke på URL.** Dette er premisset hele område B hviler på,
+og samtidig den største fellen: gir vi en ny hub-liste tittelen «Fasesjekkliste», vil
+`getByTitle('Fasesjekkliste')` treffe den nye listen for *alle* som ikke er migrert.
+
+### Fem koblinger som må respekteres
+
+1. `GtProjectPhase` lagres som `Navn|GUID` (`Konsept|99e85650-…`).
 2. `GtCategory` på Planneroppgaver lagres som **ren fasenavn-streng** uten GUID.
-3. `ProjectPhaseModel.getFilteredPhaseChecklistViewUrl()`
-   (`SharePointFramework/shared-library/src/models/ProjectPhaseModel.ts`) filtrerer på
-   **fasens visningsnavn**. Punkt 1–3 er tilsammen grunnen til at vi ikke rører fasenavn.
-4. `<pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">` — nøkkelen er *tittelen*. Endrer
-   vi ordlyden på et sjekkpunkt, ser PnP det som en **ny** rad. Eksisterende installasjoner
-   får da både gammel og ny formulering. Dette er den største enkeltrisikoen i hele arbeidet.
-5. `Resources.*.resx` er generert videre til `SharePointFramework/*/src/loc/shared/`
-   (gitignorert) — resx-endringer krever `npm run build` i `Templates/` og rebuild av berørte
-   SPFx-løsninger.
+3. `ProjectPhaseModel.getFilteredPhaseChecklistViewUrl()` filtrerer på fasens **visningsnavn**.
+   Punkt 1–3 er tilsammen grunnen til at vi ikke rører fasenavn.
+4. `<pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">` — nøkkelen er *tittelen*. Endret
+   ordlyd = ny rad. Område B eliminerer dette som risiko, ved at ingen eksisterende rad endres.
+5. `Resources.*.resx` genereres videre til `SharePointFramework/*/src/loc/shared/`
+   (gitignorert) — resx-endringer krever `npm run build` i `Templates/` og rebuild av SPFx.
 
 ---
 
@@ -118,24 +132,25 @@ Fire lag, og det er avgjørende å vite hvilket lag man endrer:
 
 | Rolle | Eier |
 |---|---|
-| **Prosjektleder** | Faglige beslutninger: hvilke sjekkpunkter og oppgaver som skal finnes, ordlyd, fasetilhørighet. Skaffer v6-kildematerialet. Godkjenner mappingtabellen. Tester i testleietaker. |
-| **AI** | Ekstraherer v6-innhold til strukturert form. Foreslår gammel→ny-mapping med begrunnelse. Genererer PnP-XML for begge språk. Oversetter nb→en. Konsistenssjekker (radtall, sorteringshull, duplikate titler). Utkast til releasenotes. |
-| **Teknisk ressurs** | Repo-mekanikk, resx og byggekjede, nye kolonner/innholdstyper, oppgraderingsmal og migreringsskript, release og smoketest. |
+| **Prosjektleder** | Faglige beslutninger: hvilke sjekkpunkter og oppgaver, ordlyd, fasetilhørighet, terminologivalg. Skaffer v6-kildematerialet. Godkjenner mappingtabellen. Tester i testleietaker. |
+| **AI** | Ekstraherer v6-innhold til strukturert form. Foreslår gammel→ny-mapping med begrunnelse. Genererer PnP-XML for begge språk. Oversetter nb→en. Konsistenssjekker. Utkast til releasenotes. |
+| **Teknisk ressurs** | Repo-mekanikk, resx og byggekjede, ny listearkitektur, nye kolonner/innholdstyper, oppgraderingsskript, release og smoketest. |
 
-### Metodisk kjerne: mappingtabellen som mellomprodukt
+### Metodisk kjerne: mappingtabellen
 
 Ikke rediger XML direkte. Innfør et menneskelesbart mellomprodukt som blir arbeidsdokumentet
 og senere revisjonssporet:
 
 ```
 docs/prosjektveiviseren-v6/
-  README.md              Kildehenvisninger, v6-versjonsdato, beslutningslogg
-  kildesett-v6.md        v6-aktiviteter og beslutningspunkter, per fase, ordrett fra Digdir
+  README.md                  Kildehenvisninger, v6-versjonsdato, beslutningslogg
+  kildesett-v6.md            v6-aktiviteter og beslutningspunkter per fase, ordrett fra Digdir
   mapping-sjekkpunkter.csv
   mapping-oppgaver.csv
+  mapping-terminologi.csv    ← gammelt begrep → v6-begrep → berørte resx-nøkler
 ```
 
-CSV-format (samme for begge):
+CSV-format for innhold:
 
 ```csv
 id,fase,gammel_tittel,ny_tittel,handling,sortorder,v6_kilde,begrunnelse
@@ -143,309 +158,458 @@ id,fase,gammel_tittel,ny_tittel,handling,sortorder,v6_kilde,begrunnelse
 
 `handling` ∈ `behold` | `omformuler` | `ny` | `fjern` | `flytt-fase`
 
-Dette gir tre gevinster: prosjektlederen kan godkjenne innhold uten å lese XML; `handling`
-gir teknisk ressurs presis instruks for oppgraderingsskriptet (særlig `omformuler` og
-`fjern`, som er de som skaper duplikater); og CSV-en dokumenterer *hvorfor* for neste
-Prosjektveiviser-versjon.
+Selv om side-om-side-strategien (område B) fjerner duplikatrisikoen, er `handling` fortsatt
+verdifull: den dokumenterer *hva som skjedde med* hvert gammelt punkt, som er det
+prosjektledere trenger når de skal vurdere om de vil bytte.
 
-**Generator:** `assets/scripts/Generate-V6ContentRows.js` — engangsskript som leser de to
-CSV-ene og skriver `<pnp:DataRows>`-blokkene for både `no-NB` og `en-US`. Legges i
-`assets/scripts/` sammen med de øvrige hjelpeskriptene (`Set-ListDataRows.ps1`,
-`Add-ResxEntry.ps1`). Det skal *ikke* inn i byggekjeden — XML-en committes som vanlig.
+**Generator:** `assets/scripts/Generate-V6ContentRows.js` — engangsskript som leser CSV-ene og
+skriver `<pnp:DataRows>`-blokkene for `no-NB` og `en-US`. Ligger sammen med de øvrige
+hjelpeskriptene (`Set-ListDataRows.ps1`, `Add-ResxEntry.ps1`). Ikke del av byggekjeden.
 
 ### Sorteringsnummerering
 
-Dagens `GtSortOrder` går 10–440 i steg på 10. Renummerer i steg på **100** (100, 200, …) med
-`GtCategory`/fase som primær gruppering. Da kan senere versjoner sette inn punkter uten å
-renummerere alt.
+Dagens `GtSortOrder` går 10–440 i steg på 10. I den nye listen: renummerer i steg på **100**,
+gruppert per fase. Da kan v7 sette inn punkter uten å renummerere alt.
 
 ### Hvorfor vi ikke rører fasestrukturen
 
 v6 beholder fasestyringen; det er aktivitetene og temaene som endres. Å endre fasenavn ville
-krevd samtidig oppdatering av: termsett-labels, alle 110 `GtProjectPhase`/`GtCategory`-verdier,
+krevd samtidig oppdatering av termsett-labels, alle 110 `GtProjectPhase`/`GtCategory`-verdier,
 `GtProjectPhaseText`, `Choice_GtProjectPhaseChoice_*` i to resx-filer,
-`getFilteredPhaseChecklistViewUrl()`, `Maloppsett.GtProjectPhaseTermId`, samt et migreringsskript
-for hver eksisterende installasjons termstore og listedata. Kostnad og oppgraderingsrisiko står
-ikke i forhold til gevinsten. Fasetekstene (`PhaseSubText`, `PhaseDescription`) oppdateres
-derimot — de er fritekst og bærer ingen referanser.
+`getFilteredPhaseChecklistViewUrl()`, `Maloppsett.GtProjectPhaseTermId`, samt migrering av
+hver installasjons termstore og listedata. Kostnad og risiko står ikke i forhold til gevinsten.
+Fasetekstene (`PhaseSubText`, `PhaseDescription`) oppdateres derimot — de er fritekst uten
+referanser.
 
 ---
 
 ## Område for område
 
-Rekkefølgen er valgt slik at hvert område kan slås sammen og testes for seg. A er blokkerende
-for alt; B–F kan gå parallelt etter A; G og H avslutter.
+| | Område | Eier | Avhengighet |
+|---|---|---|---|
+| A | v6-baseline og mappingtabell | PL + AI | blokkerer alt |
+| B | Ny listearkitektur (side om side) | Teknisk | A |
+| C | Terminologi og felt: gevinst → nytte | Teknisk + PL | A |
+| D | Fasesjekkpunkter | AI + PL | A, B |
+| E | Prosjektoppgaver | AI + PL | A, B |
+| F | Dokumentmaler | PL + Teknisk | A |
+| G | Bærekraft og omfang som styringsparametere | Teknisk + PL | A |
+| H | Endrings- og kommunikasjonsledelse | PL + AI | D, E |
+| I | Smidig / produktorientert gjennomføring | PL + AI | D, E |
+| J | Fasetekster, roller, tjenesteområder, lenker | PL + AI | A |
+| K | Oppgraderingssti | Teknisk | B–G låst |
+| L | Release | Teknisk | alt |
 
 ---
 
-### A. v6-baseline og mappingtabell  ·  *PL + AI*  ·  blokkerende
+### A. v6-baseline og mappingtabell  ·  *blokkerende*
 
 **Hva:** Etabler fasiten. Prosjektlederen henter fra Digdir: alle aktivitetssider per fase,
-beslutningspunktsidene, siden om styringsparametere, siden om smidig, de oppdaterte
-rollebeskrivelsene, og selve dokumentmalene (.docx/.xlsx, bokmål **og** nynorsk). AI
-strukturerer dette til `kildesett-v6.md` og fyller ut de to CSV-ene mot dagens innhold.
+beslutningspunktsidene, siden om styringsparametere, siden om smidig, siden om nyttestyring,
+begrepssiden, de oppdaterte rollebeskrivelsene, og selve dokumentmalene (.docx/.xlsx, bokmål
+**og** nynorsk). AI strukturerer til `kildesett-v6.md` og fyller ut de tre CSV-ene.
 
-**Nye filer:** `docs/prosjektveiviseren-v6/` (fire filer, som over).
+**Særlig viktig i denne runden:** `mapping-terminologi.csv`. Alle antagelsene om gevinst → nytte
+over er hentet fra søketreff, ikke fra kilden. Verifiser ordrett:
+
+- Heter det «nyttevirkning» (entall/flertall) eller «nytte»?
+- Er «gevinstansvarlig» faktisk omdøpt til «nytteansvarlig», og hva skjedde med «gevinsteier»?
+- Heter malen «Plan for nyttestyring»?
+- Er «gevinstrealisering» som fasenavn/begrep beholdt noe sted? (PP365 har fasen «Realisere»
+  med engelsk label «Benefits realization».)
 
 **Referansepunkter i dag:**
 - 44 sjekkpunkter: `Templates/Content/Portfolio_content.no-NB/Portfolio_content.no-NB.xml`
   linje ~197–420 (Idé 7, Konsept 10, Planlegge 10, Gjennomføre 7, Avslutte 8, Realisere 2)
 - 66 oppgaver: samme fil fra linje ~421 (Idé 10, Konsept 17, Planlegge 12, Gjennomføre 11,
   Avslutte 12, Realisere 4)
+- 76 resx-verdier i `Resources.no-NB.resx` inneholder «gevinst»
 
-**Ferdig når:** hver av de 110 eksisterende radene har en `handling`, alle nye v6-aktiviteter
-er representert, prosjektlederen har godkjent CSV-ene, og v6-versjonsdato er ført i README.
+**Ferdig når:** hver av de 110 radene har en `handling`, alle v6-aktiviteter er representert,
+terminologitabellen er verifisert mot kilden, PL har godkjent, og v6-versjonsdato er i README.
 
 **Merk:** Prosjektveiviseren-innhold gjenbrukes under Digdirs vilkår (NLOD). Dokumentmalene
-skal lastes ned fra Digdir, ikke gjenskrives. Behold kildehenvisning i `!README.md`.
+lastes ned fra Digdir, ikke gjenskrives.
 
 ---
 
-### B. Fasesjekkpunkter  ·  *AI genererer, PL godkjenner, teknisk committer*
+### B. Ny listearkitektur — v6-innhold side om side  ·  *strukturelt fundament*
 
-**Hva:** Erstatt de 44 sjekkpunktene med v6-sett. v6 knytter aktivitetene i konseptfasen til
-de seks obligatoriske spørsmålene i utredningsinstruksen — det bør gjenspeiles i
-konseptfase-punktene. Nye punkter for faseoverganger (start av planleggings-, gjennomførings-
-og avslutningsfasen) og for avslutningsanbefaling i BP4.
+**Hva:** Fremfor å endre eksisterende rader, provisjoneres v6-innholdet i **nye hub-lister**.
+Eksisterende lister beholdes urørt under nytt visningsnavn. Virksomheten velger per prosjektmal
+hvilket sett som skal brukes, via `Listeinnhold` og `Maloppsett`.
+
+**Hvorfor dette løser problemet:** ingen eksisterende rad endres → `KeyColumn="Title"` skaper
+ingen duplikater. Ingen eksisterende rad slettes → egne tilpasninger overlever. Virksomheten
+bytter når *de* er klare, ikke når de oppgraderer.
+
+#### Splittet gjelder kun hub-siden
+
+Prosjektområdets `Fasesjekkliste` er destinasjonen og forblir én liste med uendret navn og URL.
+Det er *kilden* som blir to. Dermed berøres **ikke**: venstremenyen i prosjektmalen,
+`Prosjekttillegg/EnkelVenstremeny.json` og `EnkeltProsjekt.json` (som hardkoder
+`Lists/Fasesjekkliste/AllItems.aspx`), `Hjelpeinnhold.xml`, eller
+`getFilteredPhaseChecklistViewUrl()`.
+
+#### Navnestruktur
+
+| Nivå | Visningstittel | URL | resx-nøkkel |
+|---|---|---|---|
+| Hub, gammel | Fasesjekkliste (tidligere) | `Lists/Fasesjekkliste` *(uendret)* | `Lists_PhaseChecklistLegacy_Title` / `_Url` |
+| Hub, ny | Fasesjekkliste | `Lists/Fasesjekklistev6` | `Lists_PhaseChecklistV6_Title` / `_Url` |
+| Prosjekt | Fasesjekkliste | `Lists/Fasesjekkliste` *(uendret)* | `Lists_PhaseChecklist_Title` / `_Url` *(uendret)* |
+| Hub, gammel | Planneroppgaver (tidligere) | `Lists/Planneroppgaver` *(uendret)* | `Lists_PlannerTasksLegacy_Title` / `_Url` |
+| Hub, ny | Planneroppgaver | `Lists/Planneroppgaverv6` | `Lists_PlannerTasksV6_Title` / `_Url` |
+
+Planneroppgaver har ingen motsvarende liste på prosjektområdet — destinasjonen er
+Planner-planen «Prosjektoppgaver» via `GtPlannerName`. Splittet er derfor enklere der.
+
+#### ⚠ Resx-nøkkelen `Lists_PhaseChecklist_Title` må splittes
+
+Denne nøkkelen brukes i dag av **både** hub-listen
+(`Templates/Portfolio/Objects/Lists/Fasesjekkliste.xml`) **og** prosjektområdets liste
+(`_JsonTemplateProject.json:776`, `_JsonTemplateProgram.json:941`). Endrer man verdien til
+«Fasesjekkliste (tidligere)», omdøpes prosjektområdets liste også. Nøklene må derfor skilles
+først, som vist i tabellen over: `Lists_PhaseChecklist_*` beholdes og betyr heretter
+*prosjektområdets destinasjonsliste*.
+
+#### Listeinnhold — konfigurasjonspunktet
+
+`Templates/Portfolio/Objects/Lists/Listeinnhold.xml` seeder i dag tre rader. Etter splittet:
+
+| Rad | Kilde (hub) | Destinasjon | Merknad |
+|---|---|---|---|
+| Fasesjekkpunkter (tidligere) | Fasesjekkliste (tidligere) | Fasesjekkliste | eksisterende rad, oppdatert i migrering |
+| Fasesjekkpunkter | Fasesjekkliste | Fasesjekkliste | ny |
+| Planneroppgaver (tidligere) | Planneroppgaver (tidligere) | plan «Prosjektoppgaver» | eksisterende rad, oppdatert |
+| Planneroppgaver | Planneroppgaver | plan «Prosjektoppgaver» | ny |
+| Tidslinje | Tidslinjeelementer | – | uendret |
+
+`Maloppsett.ListContentConfigLookup` er en **LookupMulti mot Listeinnhold på ID**. Oppdaterer
+migreringsskriptet den eksisterende raden *på plass* (samme ID), overlever alle
+malkonfigurasjoner uendret. Det er derfor migreringen skal endre raden, ikke erstatte den.
+
+#### ⚠ Rekkefølge i migreringen er kritisk
+
+SharePoint krever unike listetitler innenfor et område. Den gamle listen **må** døpes om før
+PnP-malen oppretter den nye med tittelen «Fasesjekkliste». Rekkefølgen blir:
+
+1. `Install/Scripts/PreInstallUpgrade.ps1` — døp om hub-listene:
+   «Fasesjekkliste» → «Fasesjekkliste (tidligere)», «Planneroppgaver» → «Planneroppgaver (tidligere)».
+   **Kun `Title`. URL-en står.**
+2. `PreInstallUpgrade.ps1` — oppdater de eksisterende `Listeinnhold`-radene på plass:
+   `Title` → «… (tidligere)», `GtLccSourceList` → den nye tittelen.
+3. Portfolio.pnp og innholdsmalen kjører — oppretter de nye listene og de nye Listeinnhold-radene.
+4. `PostInstallUpgrade.ps1` — verifiser at ingen malkonfigurasjon utilsiktet har byttet kilde.
+
+Blir steg 1 hoppet over, treffer `getByTitle('Fasesjekkliste')` den nye v6-listen og alle
+virksomheter bytter innhold uten å ha bedt om det. Dette er det ene stedet i hele planen der
+rekkefølgefeil gir stille datafeil.
+
+#### Standardvalg
+
+- **Ren installasjon:** v6-radene er default (`GtLccDefault`), og `PostInstall.ps1` kobler
+  dem til Standardmal.
+- **Oppgradering:** behold virksomhetens eksisterende valg. v6 blir *tilgjengelig*, ikke
+  påtvunget. `PostInstall.ps1` sitt `$ListContentMap` (som matcher på tittel) må oppdateres
+  til de nye nøklene, og oppgraderingsstien må ikke re-koble `ListContentConfigLookup` på
+  eksisterende Maloppsett-rader.
+
+#### Navnekonvensjon for framtiden
+
+`v6`-suffikset gjentar problemet ved v7. Etabler konvensjonen nå og dokumenter den i
+`docs/prosjektveiviseren-v6/README.md`: ny liste får versjonssuffiks i URL
+(`Lists/Fasesjekklistev6`), forrige generasjon får «(tidligere)» i visningstittelen, og det
+finnes til enhver tid maksimalt to generasjoner. Ved v7 slettes v5-generasjonen.
+
+#### Filer
+
+- `Templates/Portfolio/Objects/Lists/Fasesjekkliste.xml` — bytt til `_Legacy`-nøklene
+- `Templates/Portfolio/Objects/Lists/Fasesjekklistev6.xml` — **ny**, kopi med `_V6`-nøkler
+- `Templates/Portfolio/Objects/Lists/Planneroppgaver.xml` + `Planneroppgaverv6.xml` — tilsvarende
+- `Templates/Portfolio/Objects/Lists/@.xml` — registrer de to nye
+- `Templates/Portfolio/Objects/Lists/Listeinnhold.xml` — to nye `DataRow`s
+- `Templates/Portfolio/Objects/ClientSidePages/Konfigurasjon.xml` — konfigurasjonssiden på hub
+  lenker i dag til `{resource:Lists_PhaseChecklist_Url}` og `Lists_PlannerTasks_Url`; pek på
+  v6-listene og vurder å vise begge generasjoner
+- `Templates/Portfolio/Resources.{no-NB,en-US}.resx` — nye nøkler
+- `Install/Scripts/PreInstallUpgrade.ps1`, `PostInstall.ps1`, `PostInstallUpgrade.ps1`
+
+**Ferdig når:** ren installasjon gir to hub-lister der den nye har v6-innhold; oppgradering av
+en v1.13-installasjon endrer ingen eksisterende rad; et prosjekt opprettet etter oppgradering
+med uendret malkonfigurasjon får nøyaktig samme innhold som før.
+
+#### Samme prinsipp for dokumentmaler
+
+`Malbibliotek` har ingen tilsvarende konfigurasjonsmekanisme — `Maloppsett.GtDocumentTemplateLibrary`
+peker på et *bibliotek*, ikke en mappe. Bruk derfor mappe-nivå: v6-filene provisjoneres til
+`Malbibliotek/Fra Prosjektveiviseren (v6)`, mens `Malbibliotek/Fra Prosjektveiviseren` blir
+stående med dagens innhold. Brukeren ser begge og velger selv. Se område F.
+
+---
+
+### C. Terminologi og felt: gevinst → nytte  ·  *størst tekstflate*
+
+**Hva:** v6 bytter «gevinst» mot «nytte». PP365 har 76 resx-verdier med «gevinst», ni
+`Gt*`-felt med Gain/Benefit i navnet, fire gevinstlister på prosjektområdet, en egen
+`Gevinstoversikt.aspx`, en rolle «Gevinstansvarlig» i taksonomien, og tre dokumentmaler.
+
+#### Det bærende skillet: visningsnavn kan endres, interne navn kan ikke
+
+| | Kan endres trygt | Kan ikke endres |
+|---|---|---|
+| Felt | `DisplayName` (fra resx) | `StaticName`/`Name` (`GtGainsOwner`, `GtStatusGainAchievement`, …), felt-GUID |
+| Liste | `Title` | `Url` |
+| Side | tittel | filnavn (`Gevinstoversikt.aspx`) |
+| Innholdstype | `Name` | `ID` |
+
+Interne feltnavn er referert fra OData-spørringer, visninger, `ViewQuery`-XML,
+`_JsonTemplate*.json`, datakilder (`Lists_DataSources_Category_BenefitOverview*`) og
+webdeler. Å endre dem betyr å slette og gjenopprette felt — datatap på hver eksisterende
+installasjon. **Det gjør vi ikke.** `GtStatusGainAchievement` heter fortsatt
+`GtStatusGainAchievement` i 2030; brukeren ser «Nytteoppnåelse».
+
+Praktisk konsekvens: dette området er i all hovedsak et **resx-arbeid**, ikke et
+strukturarbeid. Det gjør det stort i omfang, men lavt i risiko.
+
+#### Gjennomføring
+
+1. **`mapping-terminologi.csv`** fra område A er fasiten. Én rad per begrepspar med berørte
+   resx-nøkler.
+2. **Resx, begge språk.** Norsk endres reelt; engelsk `Benefit*` er allerede nær «benefit»
+   og trenger sannsynligvis lite. Nøkkelfamilier som berøres:
+   `Lists_Benefits*`, `Navigation_Benefits*`, `ClientSidePages_*BenefitOverview_*`,
+   `ContentTypes_Benefit*`, `Choice_GtStatusGainAchievement_*`, `Choice_GtGainsType_*`,
+   `Choice_GtIdea{Economic,Quality}Benefit_*`, `Lists_StatusSections_StatusGainAchievement_Title`,
+   `ListFields_GainLookup_*`, `Lists_ProjectColumnConfiguration_GtStatusGainAchievement_*`,
+   `Lists_HelpContent_Benefit*`, `Lists_DataSources_Category_BenefitOverview*`.
+   ⚠ `*_Url`- og `*_PageName`-nøkler skal **ikke** endres.
+3. **SPFx-loc:** kun tre treff på «gevinst» i `nb-no.js`-filene — lite arbeid, men nøkkelsettet
+   må forbli identisk i `nb-no.js`, `en-us.js` og `mystrings.d.ts`.
+4. **Taksonomi:** `Rolle`-termsettet i `Templates/Taxonomy/Taxonomy.xml`. Her er `Name`
+   *er* verdien som lagres i listedata, så en omdøping av «Gevinstansvarlig» er en reell
+   datamigrering, ikke bare en visningsendring. **Anbefaling:** behold termnavnet i denne
+   runden og oppdater kun beskrivelsen, med mindre område A viser at v6 entydig har forlatt
+   begrepet. Ta eventuell omdøping som egen sak.
+   Merk [issue #162](https://github.com/Puzzlepart/prosjektportalen365/issues/162): skillet
+   mellom «Gevinstansvarlig» (porteføljenivå) og «Gevinsteier» (enkeltgevinst) er bevisst — v6
+   ser ut til å bygge gevinsteier-rollen inn i gevinstansvarlig, så sjekk at en språkendring
+   ikke utilsiktet visker ut skillet.
+5. **Dokumentmaler:** `Gevinstrealiseringsplan_v4.0.docx` erstattes trolig av «Plan for
+   nyttestyring». Håndteres i område F.
+6. **Fasen «Realisere»** har engelsk label «Benefits realization» og
+   `PhaseSubText` «Realisere mål og gevinster». Fasenavnet (`Realisere`) står; underteksten
+   oppdateres i område J.
+
+#### Nye felt
+
+Terminologiendringen i seg selv krever ingen nye felt. Nye felt kommer fra område G
+(bærekraft, omfang). Skulle område A avdekke at v6 innfører et nytt nyttebegrep som ikke har
+en kolonne i dag — for eksempel et skille mellom nyttevirkning og kostnadsvirkning — følges
+samme mønster som i område G: nytt `Gt*`-felt med ny GUID, registrert i `SiteFields/@.xml`,
+lagt inn i berørte innholdstyper og speilet i `_JsonTemplate*.json`.
+
+**Ferdig når:** ingen brukervendt streng bruker «gevinst» der v6 bruker «nytte»; ingen internt
+feltnavn, liste-URL eller sidefilnavn er endret; `npm run validate-loc` og
+`validate-project-template` er grønne.
+
+---
+
+### D. Fasesjekkpunkter  ·  *inn i den nye listen*
+
+**Hva:** v6-sjekkpunktene provisjoneres til `Fasesjekklistev6`. Konseptfasens punkter knyttes
+til de seks obligatoriske spørsmålene i utredningsinstruksen. Nye punkter for faseoverganger
+(start av planleggings-, gjennomførings- og avslutningsfasen) og for avslutningsanbefaling i BP4.
+Bruk v6-terminologi fra område C.
 
 **Filer:**
-- `Templates/Content/Portfolio_content.no-NB/Portfolio_content.no-NB.xml` — `<pnp:ListInstance Title="Fasesjekkliste">`
-- `Templates/Content/Portfolio_content.en-US/Portfolio_content.en-US.xml` — `<pnp:ListInstance Title="Phase Checklist">`
+- `Templates/Content/Portfolio_content.no-NB/Portfolio_content.no-NB.xml` — **ny**
+  `<pnp:ListInstance Title="Fasesjekkliste" Url="Lists/Fasesjekklistev6">`. Den eksisterende
+  blokken beholdes uendret, men `Title` justeres til «Fasesjekkliste (tidligere)».
+- `Templates/Content/Portfolio_content.en-US/Portfolio_content.en-US.xml` — tilsvarende
 
-**Krav:** Identisk radtall og `GtSortOrder` i de to filene. `GtProjectPhase` må beholde
+**Krav:** Identisk radtall og `GtSortOrder` i de to språkfilene. `GtProjectPhase` beholder
 `Navn|GUID`-formatet med GUID-ene fra `Templates/Taxonomy/Taxonomy.xml`. Ingen duplikate
-`Title` innenfor listen (`KeyColumn="Title"`).
-
-**Ferdig når:** begge språkfiler generert fra CSV, radtall stemmer, ingen duplikate titler,
-fasefordelingen dokumentert i commit-meldingen.
+`Title` innenfor listen.
 
 ---
 
-### C. Prosjektoppgaver (Planneroppgaver)  ·  *AI genererer, PL godkjenner*
+### E. Prosjektoppgaver  ·  *inn i den nye listen*
 
-**Hva:** Oppgavene er «oversettelsen» av sjekkpunktene til handlinger, og må holdes i takt
-med B. Fjern «Gjennomføre samfunnsøkonomisk analyse» som egen oppgave. Legg til oppgaver for
-endrings- og kommunikasjonsledelse (jf. område F) og for smidig/produktorientert gjennomføring
-(jf. område G).
+**Hva:** Oppgavene er «oversettelsen» av sjekkpunktene til handlinger og må holdes i takt med D.
+Fjern «Gjennomføre samfunnsøkonomisk analyse» som egen oppgave. Legg til oppgaver for
+endrings- og kommunikasjonsledelse (område H) og smidig gjennomføring (område I).
 
-**Filer:** samme to XML-filer, `<pnp:ListInstance Title="Planneroppgaver">` /
-`"Planner Tasks"`.
+**Filer:** samme to XML-filer, ny `<pnp:ListInstance Title="Planneroppgaver" Url="Lists/Planneroppgaverv6">`.
 
 **Krav:** `GtCategory` er **ren fasenavn-streng** (`Idé`, `Konsept`, …) — ikke `Navn|GUID`.
-Eksisterende oppgavetitler viser til BP-numre i klartekst («…legge det fram til vedtak i
-Beslutningspunkt 1 (BP1)»); behold denne konvensjonen.
-
-**Ferdig når:** hvert sjekkpunkt i B har minst én tilsvarende oppgave, begge språk i takt.
+Behold konvensjonen med BP-numre i klartekst i oppgavetitlene.
 
 ---
 
-### D. Dokumentmaler  ·  *PL skaffer filer, teknisk provisjonerer*
+### F. Dokumentmaler
 
-**Hva:** Bytt ut de 22 Office-filene med v6-utgaver, og rydd.
+**Hva:** v6-malene provisjoneres til en ny mappe; dagens mappe blir stående.
 
 **Filer:**
-- `Templates/Content/Portfolio_content.no-NB/Malbibliotek/` — .docx/.xlsx (bokmål + `Nynorsk_-_*`)
-- `Templates/Content/Portfolio_content.no-NB/Portfolio_content.no-NB.xml` linje ~6–195 —
-  `<pnp:File>`-oppføringene med `Title` og `GtProjectPhase`
-- `Templates/Content/Portfolio_content.no-NB/Malbibliotek/!README.md` — brukerteksten som
-  følger med biblioteket
+- `Templates/Content/Portfolio_content.no-NB/Malbibliotek/` — nye .docx/.xlsx (bokmål + `Nynorsk_-_*`)
+- `Templates/Content/Portfolio_content.no-NB/Portfolio_content.no-NB.xml` linje ~6–195 — nye
+  `<pnp:File>`-oppføringer med `Folder="Malbibliotek/Fra Prosjektveiviseren (v6)"`
+- `Malbibliotek/!README.md` — forklar de to mappene
 
 **Gjør:**
-1. Legg inn v6-filene med versjonsnummer i filnavnet, som i dag (`Styringsdokument_v6.0.docx`).
-2. **Fjern de utdaterte v3.0/v2.2-parallellene.** I dag ligger både v3.0 og v4.0 av
-   Mandat, Prosjektforslag, Prosjektbegrunnelse, Styringsdokument, Gevinstrealiseringsplan og
-   Sluttrapport side om side. Behold én versjon per mal.
+1. Legg v6-filene i ny mappe med versjon i filnavn (`Styringsdokument_v6.0.docx`).
+2. La `Malbibliotek/Fra Prosjektveiviseren` stå urørt. Rydding av v3.0/v2.2-parallellene der
+   tas som en frivillig opprydding i område K, ikke automatisk.
 3. Fyll hullene i fasemerkingen: **ingen** mal er i dag merket `Gjennomføre` eller `Realisere`.
-   Sjekk om v6 har maler der (avslutningsanbefaling hører til gjennomføringsfasen).
-4. Oppdater `!README.md` med v6-referanse og lenke til Digdirs malside.
-5. Hold nynorskvariantene i takt — én per bokmålsmal som Digdir tilbyr på nynorsk.
+   Avslutningsanbefaling hører til gjennomføringsfasen.
+4. Følg terminologien: «Gevinstrealiseringsplan» blir trolig «Plan for nyttestyring» (verifiser
+   i område A).
+5. Hold nynorskvariantene i takt.
+6. Oppdater `!README.md` med v6-referanse, forklaring av de to mappene og lenke til Digdirs
+   malside.
 
-**Merk:** `Templates/Content/Portfolio_content.en-US/` har **ingen** Malbibliotek-mappe.
+**Merk:** `Templates/Content/Portfolio_content.en-US/` har ingen Malbibliotek-mappe.
 Dokumentmalene er bevisst norskspråklige; ikke innfør en engelsk parallell.
-
-**Merk 2:** `Install.ps1` kjører innholdsmalen med `-Handlers Files` ved oppgradering, så
-filene overskrives hos eksisterende installasjoner — men *slettede* filer fjernes ikke.
-Fjerning av v3.0-filene må gjøres i migreringsskriptet (område I).
-
-**Ferdig når:** hver fil har v6-opphav, ingen doble versjoner, hver fase har relevante maler,
-nynorsk i takt, `!README.md` oppdatert.
 
 ---
 
-### E. Bærekraft (og omfang) som styringsparameter  ·  *teknisk, med PL på ordlyd*
+### G. Bærekraft og omfang som styringsparametere
 
-Den største strukturelle nyheten. v6 opererer med sju styringsparametere; PP365 har i dag
-statusseksjoner for fem av dem pluss muligheter:
+v6 opererer med sju styringsparametere; PP365 har statusseksjoner for fem, pluss muligheter:
 
 | v6-parameter | PP365 i dag |
 |---|---|
-| Gevinster | `GtStatusGainAchievement` ✔ |
+| Gevinster / nytte | `GtStatusGainAchievement` ✔ |
 | Kostnader | `GtStatusBudget` ✔ |
 | Tid | `GtStatusTime` ✔ |
 | Kvalitet | `GtStatusQuality` ✔ |
 | Risiko | `GtStatusRisk` ✔ |
 | **Omfang** | **mangler** |
 | **Bærekraft** | **mangler** |
-| *(i tillegg)* | `GtStatusOpportunities` (muligheter) |
+| *(i tillegg)* | `GtStatusOpportunities` |
 
-Statusseksjoner er datadrevet: `Templates/Portfolio/Objects/Lists/Statusseksjoner.xml`
-har én `DataRow` per seksjon som peker på et `GtStatus*`-felt via `GtSecFieldName`. Å legge
-til en seksjon er derfor godt avgrenset. Følg mønsteret fra `GtStatusQuality` (den enkleste —
-ingen `GtSecList`):
+Statusseksjoner er datadrevet: `Templates/Portfolio/Objects/Lists/Statusseksjoner.xml` har én
+`DataRow` per seksjon som peker på et `GtStatus*`-felt via `GtSecFieldName`. Følg mønsteret fra
+`GtStatusQuality` (enklest — ingen `GtSecList`):
 
 1. Nye kolonner: `Templates/Portfolio/Objects/SiteFields/ProjectStatus/GtStatusSustainability.xml`
-   + `GtStatusSustainabilityComment.xml` (og `GtStatusScope*.xml` hvis omfang tas med).
-   Nye GUID-er. Registrer i `SiteFields/@.xml`.
-2. Legg `FieldRef` inn i innholdstypene under `Templates/Portfolio/Objects/ContentTypes/ProjectStatus/`.
-3. Ny `DataRow` i `Statusseksjoner.xml` med `GtSecFieldName`, `GtSecIcon`, `GtSortOrder`.
-4. resx-oppføringer i **begge** `Templates/Portfolio/Resources.{no-NB,en-US}.resx`
-   (`Lists_StatusSections_StatusSustainability_Title`,
-   `SiteFields_GtStatusSustainability_DisplayName`/`_Description`). Bruk
+   + `GtStatusSustainabilityComment.xml` (og `GtStatusScope*.xml`). Nye GUID-er. Registrer i
+   `SiteFields/@.xml`.
+2. `FieldRef` inn i innholdstypene under `Objects/ContentTypes/ProjectStatus/`.
+3. Nye `DataRow`s i `Statusseksjoner.xml` med `GtSecFieldName`, `GtSecIcon`, `GtSortOrder`.
+4. resx i **begge** språk (`Lists_StatusSections_StatusSustainability_Title`,
+   `SiteFields_GtStatusSustainability_DisplayName`/`_Description`, valgverdier). Bruk
    `assets/scripts/Add-ResxEntry.ps1`.
-5. Speil kolonnene i `Templates/JsonTemplates/_JsonTemplateProject.json`
-   (ProjectStatus-innholdstypen og Prosjektstatus-listen) og i `_JsonTemplateProgram.json`.
+5. Speil i `_JsonTemplateProject.json` og `_JsonTemplateProgram.json`
+   (ProjectStatus-innholdstypen og Prosjektstatus-listen).
 6. `npm run build` i `Templates/` → `npm run validate-project-template`. Rebuild berørte
    SPFx-løsninger.
 
 **Bindeledd som finnes:** termsettet `FNs bærekraftsmål` ligger allerede i
-`Templates/Taxonomy/Taxonomy.xml` med alle 17 målene, og ikonene ligger i `assets/`.
-Bærekraftsseksjonen kan referere til hvilke bærekraftsmål prosjektet påvirker.
+`Templates/Taxonomy/Taxonomy.xml` med alle 17 målene, og ikonene i `assets/`.
 
-**Anbefaling om omfang:** ta med `GtStatusScope` i samme runde. Kostnaden er marginal når
-mønsteret først er etablert, og v6 lister omfang som en av de sju parameterne.
-
-**Ferdig når:** seksjonene vises i statusrapporten, kan settes i et prosjekt, og
-oppgraderingsskriptet legger dem til på eksisterende prosjektområder.
+**Merk:** nye statusseksjoner er en *tilføyelse*, ikke en endring — de kan trygt rulles ut til
+alle uten side-om-side-mekanikk. De må imidlertid legges på eksisterende prosjektområder av
+oppgraderingsskriptet (område K).
 
 ---
 
-### F. Endrings- og kommunikasjonsledelse  ·  *PL + AI*
+### H. Endrings- og kommunikasjonsledelse
 
-**Hva:** v6 løfter disse til egne faglige temaer. PP365 har allerede en kommunikasjonsplan
-(`Navigation_CommunicationPlan_Title`, `SiteFields/Communication/`) og et interessentregister
-— så dette handler primært om innhold, ikke ny struktur.
+v6 løfter disse til egne faglige temaer. PP365 har allerede kommunikasjonsplan
+(`Navigation_CommunicationPlan_Title`, `SiteFields/Communication/`) og interessentregister —
+dette handler primært om innhold, ikke ny struktur.
 
-**Gjør:**
 - Sjekkpunkter og oppgaver for endringsledelse i planleggings-, gjennomførings- og
-  avslutningsfasen (område B og C).
+  avslutningsfasen (område D og E).
 - v6 presiserer at *behovet* for endringer i arbeidsprosesser og organisering skal beskrives,
-  ikke de endrede prosessene. Gå gjennom eksisterende sjekkpunkter om arbeidsprosesser og
-  omformuler.
-- Vurder om kommunikasjonsplanen trenger felt for målgruppe/kanal/frekvens ut over dagens.
-  Hold dette lite; hovedvekten er tekst.
-
-**Filer:** de to innholds-XML-ene, evt. `Templates/Portfolio/Objects/Lists/` +
-`SiteFields/Communication/` hvis felt legges til.
+  ikke de endrede prosessene. Omformuler eksisterende punkter om arbeidsprosesser.
+- Vurder om kommunikasjonsplanen trenger felt for målgruppe/kanal/frekvens. Hold dette lite.
 
 ---
 
-### G. Smidig / produktorientert gjennomføring  ·  *PL + AI*
+### I. Smidig / produktorientert gjennomføring
 
-**Hva:** v6 beholder fasestyring men åpner for produktorientert arbeid og kortere iterasjoner
-i gjennomføringsfasen.
+v6 beholder fasestyring, men åpner for produktorientert arbeid og kortere iterasjoner i
+gjennomføringsfasen.
 
-**Gjør:** Formuler gjennomføringsfasens sjekkpunkter og oppgaver slik at de fungerer for både
-delfaser og iterasjoner. Dagens fasetekst for Gjennomføre er «Gjennomføre leveranser og
-planlegge delfaser» (`PhaseSubText` i `Templates/Taxonomy/Taxonomy.xml`) — vurder ordlyd som
-også dekker iterativt arbeid.
+**Gjør:** formuler gjennomføringsfasens sjekkpunkter og oppgaver slik at de fungerer for både
+delfaser og iterasjoner. Dagens `PhaseSubText` for Gjennomføre er «Gjennomføre leveranser og
+planlegge delfaser» — vurder ordlyd som også dekker iterativt arbeid.
 
-**Ikke gjør:** ikke innfør en ny fase eller en egen «smidig»-prosjektmal i denne runden.
+**Ikke gjør:** ikke innfør ny fase eller egen smidig-prosjektmal i denne runden.
 `Prosjekttillegg/EnkeltProsjekt.json` og `EnkelVenstremeny.json` finnes allerede som
-forenklingsmekanisme hvis behovet melder seg senere.
-
-**Filer:** `Templates/Taxonomy/Taxonomy.xml` (`PhaseSubText`, `PhaseDescription`, + `_en-us`),
-de to innholds-XML-ene.
+forenklingsmekanisme.
 
 ---
 
-### H. Fasetekster, roller og lenker  ·  *PL + AI*
+### J. Fasetekster, roller, tjenesteområder og lenker
 
-**Fasetekster:** `Templates/Taxonomy/Taxonomy.xml` — `PhaseSubText`, `PhaseDescription`
-og `_en-us`-variantene for alle sju termer, mot v6-ordlyden. Navn, GUID og `CustomSortOrder`
-røres ikke.
+**Fasetekster:** `Templates/Taxonomy/Taxonomy.xml` — `PhaseSubText`, `PhaseDescription` og
+`_en-us`-variantene for alle sju termer. Navn, GUID og `CustomSortOrder` røres ikke.
 
-**Roller:** termsettet `Rolle` i samme fil. v6 har oppdatert Virksomhetsledelsen,
-Gevinstansvarlig, Prosjekteier og Prosjektleder, og bygget gevinsteier-begrepet inn i
-Gevinstansvarlig. Merk at [issue #162](https://github.com/Puzzlepart/prosjektportalen365/issues/162)
-i sin tid slo fast at «Gevinstansvarlig» hører på porteføljenivå og «Gevinsteier» i
-gevinstlisten — sjekk at v6-ordlyden ikke bryter dette skillet.
+**Roller:** termsettet `Rolle`. Oppdater beskrivelser for Virksomhetsledelsen, Gevinstansvarlig,
+Prosjekteier og Prosjektleder. Omdøping av termnavn: se område C punkt 4.
 
 **Tjenesteområder:** termsettet `Tjenesteområde` (10 termer, kommunalt orientert). Nevnt i
-issue #1044. Verifiser mot v6 og mot Digdirs egen inndeling; endre bare hvis det finnes et
-faktisk avvik.
+issue #1044. Verifiser mot v6; endre bare ved faktisk avvik.
 
-**Lenker og hjelpeinnhold:** `Templates/Portfolio/Objects/Lists/Lenker.xml` og
-`Hjelpeinnhold.xml` peker til `prosjektveiviseren.digdir.no`. Verifiser at alle dyplenker
-fortsatt løser (jf. [issue #1311](https://github.com/Puzzlepart/prosjektportalen365/issues/1311),
-der Prosjektveiviseren-lenken tidligere måtte oppdateres). Sjekk også
-`Templates/Portfolio/Objects/ClientSidePages/Home.xml` (QuickLinks-webdelen).
-
-**Beskrivelsestekster:** `Templates/Portfolio/Resources.no-NB.resx` inneholder strenger som
-«Fasesjekkpunkter basert på Prosjektveiviserens beslutningspunkter.» og «Standard
-prosjektoppgaver fra Prosjektveiviseren» — legg til versjonsangivelse der det er naturlig.
-Speil i `Resources.en-US.resx`.
+**Lenker og hjelpeinnhold:** `Objects/Lists/Lenker.xml`, `Hjelpeinnhold.xml` og
+`ClientSidePages/Home.xml` peker til `prosjektveiviseren.digdir.no`. v6 har flyttet sider —
+`god-praksis/` → `god-praksis-og-tilpasning/` — så **alle dyplenker må testes**, ikke bare
+inspiseres. Jf. [issue #1311](https://github.com/Puzzlepart/prosjektportalen365/issues/1311),
+der Prosjektveiviseren-lenken tidligere måtte oppdateres.
 
 ---
 
-### I. Oppgraderingssti for eksisterende installasjoner  ·  *teknisk*  ·  kritisk
+### K. Oppgraderingssti  ·  *kritisk, men vesentlig enklere med område B*
 
-Uten dette området får eksisterende kunder duplikater. To mekanismer i repoet, begge med
-etablert presedens:
+Side-om-side-strategien fjerner duplikat- og datatapsrisikoen. Det som gjenstår er
+omdøping, tilføyelser og konfigurasjon.
 
-**1. Versjonert oppgraderingsmal** — `Templates/Upgrade/1.14.0/1.14.0.xml`
+**1. `PreInstallUpgrade.ps1` — må kjøre før PnP-malene** (jf. rekkefølgekravet i område B):
+- døp om hub-listene «Fasesjekkliste» og «Planneroppgaver» (kun `Title`)
+- oppdater de to eksisterende `Listeinnhold`-radene på plass (bevar item-ID)
+
+**2. Versjonert oppgraderingsmal** — `Templates/Upgrade/1.14.0/1.14.0.xml`
 (mønster: `1.5.0`, `1.8.1`, `1.12.0`). Nødvendig fordi `Install/Install.ps1` **hopper over
-Taxonomy-malen ved `-Upgrade`** — endrede fasetekster og rolletermer når derfor ikke ut via
-den ordinære installasjonen. Legg inn oppdaterte `LocalCustomProperties` her.
-`Install/Build-Release.ps1` pakker hver undermappe i `Templates/Upgrade/` som en egen `.pnp`.
+Taxonomy-malen ved `-Upgrade`** — endrede fasetekster og rollebeskrivelser når ellers ikke ut.
+`Install/Build-Release.ps1` pakker hver undermappe som egen `.pnp`.
 
-**2. Migreringsskript** — nytt skript under `Install/Scripts/UpgradeAllSitesToLatest/`,
-modellert på `Install/Scripts/Add-EnglishPhaseProperties.ps1` (som gjør nøyaktig samme type
-retrofit av termegenskaper). Det må, drevet av `handling`-kolonnen i mappingtabellen:
+**3. `UpgradeAllSitesToLatest/` — per prosjektområde:**
+- legg til nye statuskolonner fra område G
+- oppdater feltvisningsnavn fra område C (`Set-PnPField -Values @{Title=…}`; internnavn urørt)
+- ikke rør listedata
 
-- for `omformuler` og `fjern`: **slette de gamle radene** i `Fasesjekkliste` og
-  `Planneroppgaver` på hub og på hvert prosjektområde — dette er det som hindrer duplikater
-- slette de utdaterte v3.0/v2.2-dokumentmalene fra `Malbibliotek`
-- legge de nye statusseksjonskolonnene på eksisterende prosjektområder (område E)
-- **bevare kundetilpasninger:** rader og maler som kunden selv har lagt til skal ikke røres.
-  Bare rader som matcher en kjent gammel tittel fra mappingtabellen slettes.
-
-`assets/scripts/Set-ListDataRows.ps1` finnes som utgangspunkt for listeoperasjonene.
-
-**Alternativ distribusjon å vurdere:** `docs/plans/template-catalog.md` beskriver en
-malpakkekatalog (`.pppkg`, `catalog.json`, `PpPkg*`-feltene i `Maloppsett.xml`) som er under
-arbeid. Et v6-innholdssett kunne distribueres som en malpakke uavhengig av release-syklusen.
-Ta det som en oppfølging, ikke som forutsetning — men unngå designvalg som stenger døren.
+**4. Frivillig opprydding, ikke automatisk:** et separat, dokumentert skript som virksomheten
+*kan* kjøre for å fjerne den gamle generasjonen (legacy-listene, v3.0-dokumentmalene) når de
+har byttet. Skal ikke inngå i den ordinære oppgraderingen.
 
 **Ferdig når:** oppgradering av en testinstallasjon med v1.13-innhold og lokale tilpasninger
-gir v6-innhold, ingen duplikater, og tilpasningene intakt.
+gir uendret oppførsel for eksisterende prosjektmaler, v6-innholdet tilgjengelig som valg, og
+ingen egne rader eller maler rørt.
+
+**Alternativ distribusjon å vurdere:** `docs/plans/template-catalog.md` beskriver en
+malpakkekatalog (`.pppkg`, `catalog.json`, `PpPkg*`-feltene i `Maloppsett.xml`) under arbeid.
+Et v6-innholdssett kunne distribueres som malpakke uavhengig av release-syklusen — samme
+side-om-side-prinsipp, men uten å måtte vente på en produktversjon. Ta det som oppfølging;
+unngå designvalg som stenger døren.
 
 ---
 
-### J. Release  ·  *teknisk*
+### L. Release
 
-- `releasenotes/1.14.0.md` — eget avsnitt om Prosjektveiviseren v6 med v6-versjonsdato,
-  hva som er endret, og hva oppgraderingen gjør med eksisterende data.
+- `releasenotes/1.14.0.md` — eget avsnitt om Prosjektveiviseren v6: v6-versjonsdato, hva som er
+  nytt, **hvordan man tar i bruk v6-innholdet** (Maloppsett → Listeinnhold), og eksplisitt at
+  oppgraderingen ikke endrer eksisterende prosjekter.
 - `CHANGELOG.md`.
 - Lukk [issue #1044](https://github.com/Puzzlepart/prosjektportalen365/issues/1044) med
   henvisning til `docs/prosjektveiviseren-v6/`.
-- Følg `.development-guide/utgivelse/` (`opprette-ny-versjon.md`, `bygge-utgivelse.md`,
-  `smoketest.md`) og commit-konvensjonen i `.development-guide/git/commit-praksis.md`.
-
----
-
-## Rekkefølge
-
-| Bolk | Områder | Avhengighet |
-|---|---|---|
-| 1 | **A** — v6-baseline og mappingtabell | blokkerer alt |
-| 2 | **B**, **C**, **D** parallelt | A godkjent |
-| 3 | **E** (bærekraft/omfang) | uavhengig av B–D, kan starte samtidig med bolk 2 |
-| 4 | **F**, **G**, **H** | bakes inn i B/C-radene; H kan gå parallelt |
-| 5 | **I** — oppgraderingssti | krever at B, C, D, E er låst |
-| 6 | **J** — release | alt over |
-
-Bolk 5 kan ikke komprimeres eller hoppes over. Den er avhengig av at innholdet er endelig,
-fordi migreringsskriptet er generert fra mappingtabellens `handling`-kolonne.
+- Følg `.development-guide/utgivelse/` og commit-konvensjonen i
+  `.development-guide/git/commit-praksis.md`.
+- Brukerdokumentasjon: [prosjektportalen-manual](https://github.com/Puzzlepart/prosjektportalen-manual)
+  må få et avsnitt om valget mellom de to generasjonene — `Hjelpeinnhold.xml` lenker dit.
 
 ---
 
@@ -459,33 +623,38 @@ cd Templates && npm run validate-project-template  # tokens uten oversettelse
 npm run validate-loc                               # loc-nøkler i balanse
 ```
 
-- Radtall og `GtSortOrder` identisk i `Portfolio_content.no-NB.xml` og `.en-US.xml`
-  (i dag 44 + 66 i begge).
+- Radtall og `GtSortOrder` identisk i `Portfolio_content.no-NB.xml` og `.en-US.xml`.
 - Ingen duplikate `Title` innenfor en `<pnp:DataRows>`-blokk.
 - Alle `GtProjectPhase`-GUID-er finnes i `Templates/Taxonomy/Taxonomy.xml`.
 - Alle `GtCategory`-verdier matcher et fasenavn eksakt.
+- **Ingen `*_Url`- eller `*_PageName`-resx-nøkkel er endret** (område C).
+- **Ingen `StaticName`/`Name` på et `Gt*`-felt er endret** — `git diff` på `SiteFields/`
+  skal bare vise nye filer og `DisplayName`-endringer.
 - Hver `<pnp:File Src="Malbibliotek/…">` peker på en fil som finnes.
-- Generert `Standardmal-validation.md` viser ingen manglende tokens.
 - Ved endring i `src/loc/*.js`: nøkkelsettet identisk i `nb-no.js`, `en-us.js`, `mystrings.d.ts`.
 
 **Ende-til-ende i testleietaker:**
 
-1. **Ren installasjon:** `Install/Install.ps1` mot tomt område. Verifiser at hub-listene
-   `Fasesjekkliste` og `Planneroppgaver` har v6-innhold, at `Malbibliotek/Fra
-   Prosjektveiviseren` har v6-filene (med nynorsk-undermappe), og at fasetekstene i
-   fase-webdelen viser v6-ordlyd.
-2. **Nytt prosjekt:** opprett prosjekt fra `Standardmal`. Verifiser at `CopyListData` har
-   kopiert sjekkpunktene til prosjektområdet, at Planner-planen «Prosjektoppgaver» er fylt,
-   og at bærekraft (og omfang) vises i statusrapporten.
-3. **Faseovergang:** bytt fase via `ChangePhaseDialog` og bekreft at
-   sjekkpunktvisningen filtrerer riktig — dette er testen på at
-   `getFilteredPhaseChecklistViewUrl()` fortsatt treffer.
-4. **Oppgraderingstest (viktigst):** installer v1.13.1 først, legg inn to egendefinerte
-   sjekkpunkter og en egen mal i `Malbibliotek`, opprett et prosjekt. Oppgrader til den nye
-   versjonen og kjør `UpgradeAllSitesToLatest.ps1`. Verifiser: v6-innhold på plass,
-   **ingen duplikater**, egendefinerte punkter og egen mal intakt, v3.0-filene borte, nye
-   statuskolonner på det eksisterende prosjektområdet.
-5. Smoketest etter `.development-guide/utgivelse/smoketest.md`.
+1. **Ren installasjon:** `Install/Install.ps1` mot tomt område. Hub har fire lister
+   (`Fasesjekkliste`, `Fasesjekkliste (tidligere)`, `Planneroppgaver`,
+   `Planneroppgaver (tidligere)`). Nytt prosjekt fra Standardmal får v6-innhold. Bærekraft og
+   omfang vises i statusrapporten. Malbibliotek har begge mapper.
+2. **Faseovergang:** bytt fase via `ChangePhaseDialog` og bekreft at sjekkpunktvisningen
+   filtrerer riktig — testen på at `getFilteredPhaseChecklistViewUrl()` fortsatt treffer.
+3. **Oppgraderingstest — «ingenting skal skje»-testen (viktigst):** installer v1.13.1, legg inn
+   to egendefinerte sjekkpunkter, en egen dokumentmal og en egen Maloppsett-rad, opprett et
+   prosjekt. Oppgrader og kjør `UpgradeAllSitesToLatest.ps1`. Verifiser:
+   - et **nytt** prosjekt fra den gamle malkonfigurasjonen får nøyaktig samme innhold som før
+   - de egendefinerte sjekkpunktene ligger fortsatt i legacy-listen
+   - ingen duplikater noe sted
+   - v6-listene finnes og er valgbare i Maloppsett
+   - nye statuskolonner er lagt på det eksisterende prosjektområdet
+   - feltvisningsnavn er oppdatert, interne navn uendret (`Get-PnPField`)
+4. **Bytt-generasjon-testen:** endre Maloppsett til v6-radene, opprett nytt prosjekt, verifiser
+   v6-innhold. Eksisterende prosjekter skal være uberørt.
+5. **Lenketest:** alle Prosjektveiviseren-URL-er i `Lenker.xml`, `Hjelpeinnhold.xml` og
+   `Home.xml` åpnes og gir 200.
+6. Smoketest etter `.development-guide/utgivelse/smoketest.md`.
 
 ---
 
@@ -493,11 +662,14 @@ npm run validate-loc                               # loc-nøkler i balanse
 
 | Risiko | Tiltak |
 |---|---|
-| **Duplikater ved oppgradering** (`KeyColumn="Title"`, `UpdateBehavior="Skip"`) | Område I. Slettelisten genereres fra mappingtabellens `handling`-kolonne. Test 4 er selve kvalitetsporten. |
-| v6-fasiten mangler — egress blokkert herfra | Område A er et eget, manuelt steg med PL som eier. Ingen annet arbeid starter før A er godkjent. |
-| Kundetilpasninger overskrives | Migreringsskriptet sletter bare rader med kjent gammel tittel. `!README.md` sier allerede at mappen overskrives; behold og presiser den teksten. |
+| **Stille kildebytte:** ny hub-liste får tittelen «Fasesjekkliste» før den gamle er omdøpt → `getByTitle` treffer feil liste og alle bytter innhold utilsiktet | Omdøpingen ligger i `PreInstallUpgrade.ps1`, altså **før** PnP-malene. Test 3 er porten. Dette er planens farligste enkeltpunkt. |
+| Endring av internt feltnavn ved uhell under terminologiarbeidet | Eksplisitt statisk sjekk på `git diff` i `SiteFields/`. Regelen står i område C. |
+| v6-fasiten mangler — egress blokkert | Område A er et eget, manuelt steg med PL som eier. Terminologiantagelsene er markert som uverifiserte. |
+| Terminologiendringen er større enn antatt (76 resx-verdier + roller) | `mapping-terminologi.csv` gir full oversikt før arbeidet starter. Interne navn røres ikke, så flaten er stor men risikoen lav. |
+| Omdøping av taksonomitermen «Gevinstansvarlig» endrer lagrede listeverdier | Anbefalingen er å beholde termnavnet i denne runden og bare oppdatere beskrivelsen. |
+| To generasjoner lister forvirrer brukerne | «(tidligere)»-konvensjonen, konfigurasjonssiden viser begge, releasenotes og brukermanual forklarer valget. Maks to generasjoner samtidig. |
+| Døde dyplenker etter v6s URL-omlegging | Lenketest (test 5), ikke bare inspeksjon. |
 | nb og en kommer ut av takt | Statisk sjekk på radtall + `GtSortOrder`. AI genererer begge fra samme CSV. |
-| Nynorsk glemmes | Egen sjekkpost i D: én nynorskvariant per bokmålsmal Digdir tilbyr. |
-| Nye statuskolonner får ikke verdi på eksisterende prosjekter | Del av migreringsskriptet i I, verifisert i test 4. |
+| Nynorsk glemmes | Egen sjekkpost i F. |
 | Regenerert loc/resx sjekkes inn ved uhell | `src/loc/shared/`, `Templates/Resources.json` og `ProjectTemplates/*.txt` er gitignorert — verifiser `git status` før commit. |
-| Omfangskryp mot full modellrevisjon | Fasenavn, fase-GUID-er og BP-struktur er uttrykkelig utenfor omfang. Nye faser eller egen smidig-mal tas som separat sak. |
+| Omfangskryp mot full modellrevisjon | Fasenavn, fase-GUID-er, BP-struktur og interne feltnavn er uttrykkelig utenfor omfang. |
