@@ -613,6 +613,83 @@ unngå designvalg som stenger døren.
 
 ---
 
+## Fremdriftsplan: 6. august – 4. september 2026
+
+Fire uker, fire beslutningsporter. Roller: **PL** (prosjektleder), **AI** (AI-assistent),
+**TR** (teknisk ressurs). Forutsetninger: PL og TR har reell kapasitet ca. 2–3 dager/uke;
+testleietaker er tilgjengelig fra dag én; v6-materialet på Digdir er stabilt i perioden.
+
+Kritisk sti: **A → M1 → D/E → M2 → K → M3 → L**. Område B, C og G ligger *utenfor* kritisk
+sti fram til M2 og fungerer som buffer-arbeid for TR dersom A drar ut.
+
+### Uke 32 (to 6.8 – fr 7.8) — oppstart og kildeinnhenting
+
+| Dato | Aktivitet | Område | Ansvarlig | Støtte |
+|---|---|---|---|---|
+| to 6.8 | Oppstartsmøte: gjennomgå denne planen, bekreft omfang og roller, avtal beslutningsporter | – | PL | TR, AI |
+| to 6.8 – fr 7.8 | Hente v6-kildemateriale fra Digdir: alle aktivitetssider per fase, BP-sidene, styringsparametere, smidig, nyttestyring, begrepssiden, rollebeskrivelser, dokumentmaler (bokmål **og** nynorsk) | A | **PL** | AI strukturerer fortløpende til `kildesett-v6.md` |
+| to 6.8 – fr 7.8 | Rigge testleietaker: installere v1.13.1, legge inn testdata (egne sjekkpunkter, egen dokumentmal, egen Maloppsett-rad, ett prosjekt) — grunnlaget for «ingenting skal skje»-testen | K | **TR** | |
+| fr 7.8 | Opprette `docs/prosjektveiviseren-v6/` med README og beslutningslogg | A | **AI** | PL |
+
+### Uke 33 (ma 10.8 – fr 14.8) — baseline og mapping · *port M1*
+
+| Dato | Aktivitet | Område | Ansvarlig | Støtte |
+|---|---|---|---|---|
+| ma 10.8 – on 12.8 | Fylle ut `mapping-sjekkpunkter.csv` og `mapping-oppgaver.csv`: hver av de 110 eksisterende radene får en `handling`, alle v6-aktiviteter representert | A | **AI** | PL avklarer tvilstilfeller |
+| ma 10.8 – on 12.8 | Verifisere `mapping-terminologi.csv` mot kilden: nyttevirkning/nytte, nytteansvarlig?, «Plan for nyttestyring», hva skjedde med gevinsteier | A/C | **PL** | AI lager tabellutkast |
+| ma 10.8 – fr 14.8 | Starte listearkitektur: splitte resx-nøkler, nye listedefinisjoner (`Fasesjekklistev6.xml`, `Planneroppgaverv6.xml`), `Listeinnhold`-rader, `@.xml` | B | **TR** | |
+| to 13.8 | Gjennomgangsmøte: PL går gjennom mappingtabellene med AI-begrunnelsene | A | PL | AI |
+| **fr 14.8** | **Port M1: PL godkjenner de tre mappingtabellene.** Uten M1 stopper D, E og C. | A | **PL** | |
+
+### Uke 34 (ma 17.8 – fr 21.8) — innholdsproduksjon · *port M2*
+
+| Dato | Aktivitet | Område | Ansvarlig | Støtte |
+|---|---|---|---|---|
+| ma 17.8 – ti 18.8 | Generere `<pnp:DataRows>` for begge språk fra CSV (`Generate-V6ContentRows.js`), inkl. punkter for endringsledelse, kommunikasjon og smidig gjennomføring | D, E, H, I | **AI** | TR committer |
+| ma 17.8 – on 19.8 | Terminologi i resx (begge språk) + de tre SPFx-loc-treffene; statiske sjekker på at ingen `*_Url`/`StaticName` er endret | C | **TR** | AI foreslår ordlyd, PL godkjenner |
+| ma 17.8 – on 19.8 | Bærekraft- og omfangskolonner: SiteFields, innholdstyper, `Statusseksjoner.xml`, resx, speiling i `_JsonTemplate*.json` | G | **TR** | PL bestemmer valgverdier/ordlyd |
+| on 19.8 – to 20.8 | v6-dokumentmaler inn i `Malbibliotek/Fra Prosjektveiviseren (v6)` + nynorsk + `!README.md` | F | **PL** | TR provisjonerer |
+| on 19.8 – to 20.8 | Kvalitetssikre ordlyd på alle nye sjekkpunkter/oppgaver i begge språk | D, E | **PL** | AI retter |
+| fr 21.8 | Fasetekster, rollebeskrivelser (kun beskrivelse, ikke termnavn), tjenesteområder | J | **AI** | PL godkjenner |
+| **fr 21.8** | **Port M2: alt innhold committet, `npm run build` + `validate-project-template` + `validate-loc` grønne.** | – | **TR** | |
+
+### Uke 35 (ma 24.8 – fr 28.8) — oppgraderingssti og test · *port M3*
+
+| Dato | Aktivitet | Område | Ansvarlig | Støtte |
+|---|---|---|---|---|
+| ma 24.8 – ti 25.8 | `PreInstallUpgrade.ps1` (omdøping i riktig rekkefølge), oppgraderingsmal `1.14.0.xml`, `UpgradeAllSitesToLatest`-skript, oppdatert `PostInstall.ps1` | K | **TR** | |
+| ti 25.8 | Frivillig oppryddingsskript (fjerne legacy når virksomheten vil) — dokumentert, ikke i ordinær oppgradering | K | **TR** | |
+| on 26.8 | Test 1–2: ren installasjon + faseovergang i testleietaker | Verif. | **TR** | PL verifiserer innhold |
+| to 27.8 | Test 3: **«ingenting skal skje»-testen** — oppgradere v1.13.1-miljøet fra uke 32, verifisere at eksisterende prosjekter og tilpasninger er urørt | Verif. | **TR** | PL |
+| to 27.8 | Test 4: bytte generasjon i Maloppsett, nytt prosjekt får v6-innhold | Verif. | **PL** | TR |
+| fr 28.8 | Test 5: lenketest av alle Prosjektveiviseren-URL-er (`Lenker.xml`, `Hjelpeinnhold.xml`, `Home.xml`) | J/Verif. | **PL** | AI lager sjekkliste |
+| **fr 28.8** | **Port M3: test 1–5 grønne, funn logget.** | – | **TR** | |
+
+### Uke 36 (ma 31.8 – fr 4.9) — retting og release · *port M4*
+
+| Dato | Aktivitet | Område | Ansvarlig | Støtte |
+|---|---|---|---|---|
+| ma 31.8 – ti 1.9 | Rette funn fra testrunden; re-kjøre berørte tester | – | **TR** | AI, PL |
+| ti 1.9 – on 2.9 | `releasenotes/1.14.0.md` (inkl. «slik tar dere i bruk v6-innholdet»), `CHANGELOG.md`, utkast til brukermanual-avsnitt om generasjonsvalget | L | **AI** | PL godkjenner tekst |
+| on 2.9 – to 3.9 | Bygge releasekandidat (`Build-Release.ps1`), smoketest etter `.development-guide/utgivelse/smoketest.md` | L | **TR** | |
+| to 3.9 | Oppdatere issue #1044 med status og lenke til plan/leveranse | L | **PL** | |
+| **fr 4.9** | **Port M4: releasekandidat godkjent — klar for ordinær releaseprosess.** | L | **PL** | TR |
+
+### Innebygd slakk og varsellamper
+
+- **Buffer:** TR-arbeidet i B, C og G (uke 33–34) kan forskyves ±3 dager uten å flytte M2,
+  siden kritisk sti går gjennom A → D/E.
+- **Varsel 1:** hvis PL ikke har fått hentet komplett v6-materiale innen **ti 11.8**, flyttes
+  M1 — og da flyttes alt. Meld fra første dag det butter (f.eks. manglende nynorskmaler hos
+  Digdir).
+- **Varsel 2:** hvis terminologiverifiseringen viser at «gevinstansvarlig»-termen *må* endres
+  (ikke bare beskrivelsen), er det en omfangsendring som tas som egen beslutning i M1-møtet —
+  den skal ikke smugles inn i uke 34.
+- **Utenfor planen:** selve publiseringen av release 1.14.0 følger produktets ordinære
+  releaseprosess og eies av Puzzlepart; M4 leverer en godkjent kandidat.
+
+---
+
 ## Verifisering
 
 **Statiske sjekker (hver commit):**
