@@ -31,50 +31,47 @@ det per prosjektmal, og mister ingenting av sine egne tilpasninger. Ingen duplik
 fordi ingen eksisterende rad endres.
 
 **Status:** dette dokumentet er arbeidsdokumentet for oppdateringen og ligger på branchen
-`claude/prosjektportalen-v6-update-70sbom`. Ingen innholdsendringer er gjort ennå — arbeidet
-starter med område A.
+`claude/prosjektportalen-v6-update-70sbom`. Område A er i gang: v6-kildematerialet er
+innhentet (2026-08-06) og terminologitabellen er verifisert mot kilden — se
+`docs/prosjektveiviseren-v6/`. Ingen endringer i `Templates/` ennå.
 
 ---
 
-## Forutsetning som må løses først: tilgang til v6-kildematerialet
+## Forutsetning: tilgang til v6-kildematerialet — ✅ LØST 2026-08-06
 
-Egress-policyen i utviklingsmiljøet blokkerer `prosjektveiviseren.digdir.no`,
-`prosjektportalen.no`, `prosjektskole.no` og `prosjektbloggen.no` (proxyen svarer 403 på
-CONNECT). v6-oppsummeringen under er derfor bygget på søketreff, **ikke på kilden**, og må
-verifiseres i område A før noe implementeres.
+Egress-blokkeringen av `prosjektveiviseren.digdir.no` som tidligere lå i utviklingsmiljøet
+er ikke lenger aktiv. Hele nettstedet (74 innholdssider) ble hentet automatisk 2026-08-06 og
+ligger ordrett i `docs/prosjektveiviseren-v6/kilder/`, strukturert i
+`docs/prosjektveiviseren-v6/kildesett-v6.md`. Dokumentmalene (11 filer) er lastet ned og
+filnavnene verifisert. Kildeinnhentingen som fremdriftsplanen la på PL i uke 32 er dermed
+gjort; PLs rolle i område A endres til å **verifisere og godkjenne** mappingtabellene.
 
-### Antatt innhold i v6 — må verifiseres
+### Verifisert mot kilden (v6.0, publisert juni 2026)
 
-**Terminologi (høyest konsekvens for PP365):**
+Terminologifasiten står i `docs/prosjektveiviseren-v6/mapping-terminologi.csv`. Hovedpunkter:
 
-- **«nyttevirkninger» erstatter «gevinster»**
-- **«plan for nyttestyring» erstatter «gevinstrealiseringsplan»**
-- **«nytteansvarlig»** ser ut til å erstatte **«gevinstansvarlig»** — mest usikre punkt, verifiser nøye
-- Ny side [Nyttestyring](https://prosjektveiviseren.digdir.no/god-praksis-og-tilpasning/nyttestyring/273)
-  og ny aktivitet [Oppdatere plan for nyttestyring](https://prosjektveiviseren.digdir.no/prosjektfasene/oppdatere-plan-nyttestyring/60)
-- Endringen samordner Prosjektveiviseren med DFØs
-  [veileder om nyttestyring av statlige tiltak](https://www.dfo.no/veileder-om-nyttestyring-av-statlige-tiltak/6-nyttestyring-ved-prosjektorganisering-og-produktorganisering)
-- URL-strukturen er endret: `god-praksis/` → `god-praksis-og-tilpasning/` — påvirker alle
-  dyplenker i `Hjelpeinnhold.xml` og `Lenker.xml`
-
-**Struktur og innhold:**
-
-- **Bærekraft som styringsparameter** — prosjekttrekanten utvides til sekskant. Sju
-  parametere: gevinster/nytte, kostnader, tid, kvalitet, omfang, bærekraft, risiko.
-- **Smidige faser** — fasestyringen beholdes, men det åpnes for produktorientert arbeid og
-  kortere iterasjoner i gjennomføringsfasen. Ny side om smidig per fase.
-- **Menneskene i sentrum** — endringsledelse og kommunikasjonsledelse som egne faglige temaer.
-- **Teknologi og KI** — veiviseren oppdatert for at KI er del av prosjekthverdagen.
-- **Nye aktiviteter** samordnet med de seks obligatoriske spørsmålene i utredningsinstruksen.
-- **Oppdaterte rollebeskrivelser** for Virksomhetsledelsen, Gevinstansvarlig, Prosjekteier og
-  Prosjektleder. Gevinsteiere som lokale eiere av enkeltgevinster bygget inn i
-  Gevinstansvarlig.
-- **Aktivitetsendringer:** «Gjennomføre samfunnsøkonomisk analyse» avviklet som egen aktivitet;
-  løsningens innhold og utforming skal ikke fastlåses i planleggingsfasen; *behovet* for
-  endringer i arbeidsprosesser og organisering beskrives, ikke de endrede prosessene; nye
-  aktiviteter i starten av planleggings-, gjennomførings- og avslutningsfasen for gode
-  faseoverganger; avslutningsanbefaling utarbeides sist i gjennomføringsfasen og legges fram
-  i BP4.
+- ✅ **«nyttevirkninger» erstatter «gevinster»** — men «gevinster» omtales fortsatt
+  sekundært, ofte i parentes («nyttevirkninger (gevinster)»).
+- ✅ **«plan for nyttestyring»** — malen heter eksakt «Plan for nyttestyring - gevinstrealisering».
+- ❌ **Antagelsen om «nytteansvarlig» var feil vei:** v6 har snudd hierarkiet.
+  **Nytteeier** (tidligere gevinst*eier*) er nå den overordnede rollen; «nytteansvarlig» er
+  en delegert underrolle. PP365s «Gevinstansvarlig» svarer semantisk til v6s «Nytteeier».
+  Egen M1-beslutning (TERM-003/004).
+- ✅ Sju styringsparametere: **nyttevirkninger, kostnader, tid, kvalitet, omfang, bærekraft,
+  risiko**. Ny planleggingsaktivitet «Definere akseptansekriterier for styringsparametrene».
+- ✅ Smidig: tre egne sider + smidige roller (produkteier, produktsjef, smidig coach,
+  tverrfaglig smidig team) og egen begrepsseksjon.
+- ✅ Endringsledelse og kommunikasjon styrket; KI nytt tema med egen side.
+- ⚠ **Flere antatte «v6-nyheter» er gamle:** samfunnsøkonomisk analyse avviklet som aktivitet
+  allerede i v2.6 (2017); faseovergangsaktivitetene kom i v3.1 (2018). Mappingen må
+  sammenligne faktisk tekst, ikke anta at alt er nytt.
+- ⚠ **v6 har bare 25 aktiviteter + 6 BP-er** (mot PP365s 44 sjekkpunkter + 66 oppgaver) —
+  aktivitetene er bredere, med «bør avklare»-lister som brytes ned i mappingen.
+- ⚠ **Ingen nynorskversjoner av v6-malene hos Digdir** — åpen sak til M1 (berører område F).
+- ✅ URL-struktur: `god-praksis-og-tilpasning/`, `godt-vite/`, `ta-i-bruk/`. Gamle
+  `god-praksis/gevinster/116` gir 403. Alle dyplenker må testes (område J).
+- «Ledelsesprodukter» utgått som struktur — erstattet av styringsdokumentasjon /
+  produktdokumentasjon / øvrig prosjektdokumentasjon.
 
 ---
 
@@ -204,19 +201,22 @@ referanser.
 
 ### A. v6-baseline og mappingtabell  ·  *blokkerende*
 
-**Hva:** Etabler fasiten. Prosjektlederen henter fra Digdir: alle aktivitetssider per fase,
-beslutningspunktsidene, siden om styringsparametere, siden om smidig, siden om nyttestyring,
-begrepssiden, de oppdaterte rollebeskrivelsene, og selve dokumentmalene (.docx/.xlsx, bokmål
-**og** nynorsk). AI strukturerer til `kildesett-v6.md` og fyller ut de tre CSV-ene.
+**Hva:** Etabler fasiten. ~~Prosjektlederen henter fra Digdir~~ **Gjort 2026-08-06:** alle
+aktivitetssider per fase, beslutningspunktsidene, styringsparametere, smidig, nyttestyring,
+begrepssiden, rollebeskrivelsene og dokumentmalene er hentet automatisk og strukturert i
+`kildesett-v6.md`. Digdir tilbyr **ikke** nynorskversjoner av v6-malene (åpen sak til M1).
+Gjenstår: AI fyller ut `mapping-sjekkpunkter.csv` og `mapping-oppgaver.csv`; PL verifiserer
+og godkjenner (M1).
 
-**Særlig viktig i denne runden:** `mapping-terminologi.csv`. Alle antagelsene om gevinst → nytte
-over er hentet fra søketreff, ikke fra kilden. Verifiser ordrett:
+**Terminologien er verifisert** (se `mapping-terminologi.csv` for fasit med kildebelegg):
 
-- Heter det «nyttevirkning» (entall/flertall) eller «nytte»?
-- Er «gevinstansvarlig» faktisk omdøpt til «nytteansvarlig», og hva skjedde med «gevinsteier»?
-- Heter malen «Plan for nyttestyring»?
-- Er «gevinstrealisering» som fasenavn/begrep beholdt noe sted? (PP365 har fasen «Realisere»
-  med engelsk label «Benefits realization».)
+- «Nyttevirkning(er)» er hovedbegrepet; «gevinster» omtales fortsatt sekundært.
+- «Gevinstansvarlig» er **ikke** omdøpt til «nytteansvarlig» — v6 har snudd hierarkiet:
+  «Nytteeier» (tidligere gevinsteier) er den overordnede rollen, «nytteansvarlig» en
+  delegert underrolle. TERM-003/004 er M1-beslutninger.
+- Malen heter «Plan for nyttestyring - gevinstrealisering».
+- «Gevinstrealisering» er erstattet av «nyttestyring» som begrep; fasenavnet «Realisere»
+  røres uansett ikke (kun undertekst, område J).
 
 **Referansepunkter i dag:**
 - 44 sjekkpunkter: `Templates/Content/Portfolio_content.no-NB/Portfolio_content.no-NB.xml`
@@ -741,7 +741,7 @@ npm run validate-loc                               # loc-nøkler i balanse
 |---|---|
 | **Stille kildebytte:** ny hub-liste får tittelen «Fasesjekkliste» før den gamle er omdøpt → `getByTitle` treffer feil liste og alle bytter innhold utilsiktet | Omdøpingen ligger i `PreInstallUpgrade.ps1`, altså **før** PnP-malene. Test 3 er porten. Dette er planens farligste enkeltpunkt. |
 | Endring av internt feltnavn ved uhell under terminologiarbeidet | Eksplisitt statisk sjekk på `git diff` i `SiteFields/`. Regelen står i område C. |
-| v6-fasiten mangler — egress blokkert | Område A er et eget, manuelt steg med PL som eier. Terminologiantagelsene er markert som uverifiserte. |
+| ~~v6-fasiten mangler — egress blokkert~~ *(løst 2026-08-06)* | Kildematerialet er innhentet og ligger i `docs/prosjektveiviseren-v6/kilder/`; terminologien er verifisert mot kilden. Restrisiko: Digdir endrer innhold i perioden — diff mot `kilder/` ved behov. |
 | Terminologiendringen er større enn antatt (76 resx-verdier + roller) | `mapping-terminologi.csv` gir full oversikt før arbeidet starter. Interne navn røres ikke, så flaten er stor men risikoen lav. |
 | Omdøping av taksonomitermen «Gevinstansvarlig» endrer lagrede listeverdier | Anbefalingen er å beholde termnavnet i denne runden og bare oppdatere beskrivelsen. |
 | To generasjoner lister forvirrer brukerne | «(tidligere)»-konvensjonen, konfigurasjonssiden viser begge, releasenotes og brukermanual forklarer valget. Maks to generasjoner samtidig. |
