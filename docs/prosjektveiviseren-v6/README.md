@@ -20,8 +20,8 @@ Sporing: [issue #1044](https://github.com/Puzzlepart/prosjektportalen365/issues/
 |---|---|---|
 | `kildesett-v6.md` | Strukturert oversikt over v6: faser, aktiviteter, BP-er, terminologi, roller, maler | **Innhentet 2026-08-06** (automatisk — egress-blokkeringen er borte) |
 | `kilder/` | Alle 74 innholdssider fra prosjektveiviseren.digdir.no, ordrett som markdown med kilde-URL | Innhentet 2026-08-06 |
-| `mapping-sjekkpunkter.csv` | De 44 eksisterende fasesjekkpunktene, klare for mapping mot v6 | Generert fra dagens XML — `handling` ufylt |
-| `mapping-oppgaver.csv` | De 66 eksisterende prosjektoppgavene, klare for mapping mot v6 | Generert fra dagens XML — `handling` ufylt |
+| `mapping-sjekkpunkter.csv` | 44 eksisterende sjekkpunkter mappet + 27 nye v6-punkter | **AI-forslag utfylt 2026-08-06** — venter på PL-gjennomgang (M1) |
+| `mapping-oppgaver.csv` | 66 eksisterende oppgaver mappet + 24 nye v6-oppgaver | **AI-forslag utfylt 2026-08-06** — venter på PL-gjennomgang (M1) |
 | `mapping-terminologi.csv` | Begrepspar gammel → v6 med fasit og kildebelegg | **VERIFISERT 2026-08-06** — TERM-003/004/006/007 trenger M1-beslutning |
 
 ## CSV-format for sjekkpunkter og oppgaver
@@ -31,6 +31,11 @@ id, fase, sortorder, gammel_tittel, gammel_tittel_en, ny_tittel, ny_tittel_en, h
 ```
 
 - `handling` ∈ `behold` | `omformuler` | `ny` | `fjern` | `flytt-fase`
+- `behold` = teksten videreføres uendret (`ny_tittel` står da tom); `omformuler` = ny ordlyd
+  i `ny_tittel`/`ny_tittel_en`; `fjern` = utgår i v6-settet (begrunnelse forklarer hvorfor).
+- **Sammenslåing:** en `flytt-fase`-rad kan peke på samme `ny_tittel` som en annen rad —
+  da slås punktene sammen til én rad i den nye listen (generatoren dedupliserer på
+  `ny_tittel`). Hvilke rader som slås sammen står i `begrunnelse`.
 - Formatet utvider planens format med de to engelske kolonnene, slik at begge språkfiler
   genereres fra én og samme CSV.
 - Nye v6-punkter legges til som nye rader med `handling=ny` og tom `gammel_tittel`.
