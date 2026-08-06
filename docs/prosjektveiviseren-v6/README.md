@@ -23,6 +23,7 @@ Sporing: [issue #1044](https://github.com/Puzzlepart/prosjektportalen365/issues/
 | `mapping-sjekkpunkter.csv` | 44 eksisterende sjekkpunkter mappet + 27 nye v6-punkter | **AI-forslag utfylt 2026-08-06** — venter på PL-gjennomgang (M1) |
 | `mapping-oppgaver.csv` | 66 eksisterende oppgaver mappet + 24 nye v6-oppgaver | **AI-forslag utfylt 2026-08-06** — venter på PL-gjennomgang (M1) |
 | `mapping-terminologi.csv` | Begrepspar gammel → v6 med fasit og kildebelegg | **VERIFISERT 2026-08-06** — TERM-003/004/006/007 trenger M1-beslutning |
+| `oppstartsnotat-marit.md` | Gjennomgangsnotat til PL: hva som skal vurderes før M1, med lenker | Sendt Marit 2026-08-06 |
 
 ## CSV-format for sjekkpunkter og oppgaver
 
