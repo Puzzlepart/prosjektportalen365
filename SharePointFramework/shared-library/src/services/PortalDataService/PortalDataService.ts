@@ -1031,34 +1031,93 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       const list = this._getList('PROJECT_STATUS')
       let items = list.items
         .filter(filter)
-        .expand('FieldValuesAsText', 'AttachmentFiles', ...userFields)
+        .expand('FieldValuesAsText', 'AttachmentFiles')
         .orderBy('Id', false)
-      if (userFields.length > 0) {
-        items = items.select(
-          '*',
-          'FieldValuesAsText',
-          'AttachmentFiles',
-          ...userFields.map((fieldName) => `${fieldName}/Id`),
-          ...userFields.map((fieldName) => `${fieldName}/Title`),
-          ...userFields.map((fieldName) => `${fieldName}/EMail`)
-        )
-      }
       if (top) items = items.top(top)
       if (select) items = items.select(...select)
       if (useCaching) items = items.using(DefaultCaching)
       const reportItems = await items()
+      const userFieldValues = await this._getStatusReportUserFieldValues(
+        filter,
+        userFields,
+        useCaching
+      )
       const reports = reportItems.map((i) => {
         const itemFieldValues = ItemFieldValues.create({
-          fieldValues: i,
+          fieldValues: { ...i, ...(userFieldValues.get(i.Id) ?? {}) },
           fieldValuesAsText: i.FieldValuesAsText
         })
         return new StatusReport(itemFieldValues)
       })
       return reports
     } catch (error) {
+      Logger.write(
+        `(PortalDataService) (getStatusReports) Failed to fetch status reports using filter '${filter}': ${error?.message}`,
+        LogLevel.Error
+      )
+      // eslint-disable-next-line no-console
+      console.error('(PortalDataService) (getStatusReports) Failed to fetch status reports.', {
+        filter,
+        error
+      })
       this._handleAvailabilityError(error, 'getStatusReports')
       return []
     }
+  }
+
+  /**
+   * Get expanded values (`Id`, `Title`, `EMail`) for the specified user fields on
+   * the status reports matching `filter`, keyed by item ID. This is fetched in a
+   * separate query because expanding user fields requires an explicit `$select`,
+   * which does not combine with the `FieldValuesAsText`/`AttachmentFiles` expands
+   * used for the reports themselves. Failures are logged and yield an empty map —
+   * the report list must never fail because person values could not be expanded.
+   *
+   * @param filter Filter for the status reports
+   * @param userFields Internal names of the user fields to expand
+   * @param useCaching Whether to use caching
+   */
+  private async _getStatusReportUserFieldValues(
+    filter: string,
+    userFields: string[],
+    useCaching: boolean
+  ): Promise<Map<number, Record<string, any>>> {
+    const userFieldValues = new Map<number, Record<string, any>>()
+    if (userFields.length === 0) return userFieldValues
+    try {
+      let items = this._getList('PROJECT_STATUS')
+        .items.filter(filter)
+        .select(
+          'Id',
+          ...userFields.map((fieldName) => `${fieldName}/Id`),
+          ...userFields.map((fieldName) => `${fieldName}/Title`),
+          ...userFields.map((fieldName) => `${fieldName}/EMail`)
+        )
+        .expand(...userFields)
+      if (useCaching) items = items.using(DefaultCaching)
+      for (const item of await items()) {
+        userFieldValues.set(
+          item.Id,
+          userFields.reduce((values, fieldName) => {
+            if (item[fieldName]) values[fieldName] = item[fieldName]
+            return values
+          }, {} as Record<string, any>)
+        )
+      }
+    } catch (error) {
+      Logger.write(
+        `(PortalDataService) (getStatusReports) Failed to expand user fields [${userFields.join(
+          ', '
+        )}]: ${error?.message}`,
+        LogLevel.Warning
+      )
+      // eslint-disable-next-line no-console
+      console.warn('(PortalDataService) (getStatusReports) Failed to expand user fields.', {
+        userFields,
+        error
+      })
+    }
+    return userFieldValues
   }
 
   /**

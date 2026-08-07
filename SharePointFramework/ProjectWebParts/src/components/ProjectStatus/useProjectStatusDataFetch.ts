@@ -39,6 +39,12 @@ function isNoHubError(error: unknown) {
 }
 
 /**
+ * System user fields that are never edited through the status report panel and
+ * therefore never expanded.
+ */
+const SYSTEM_USER_FIELDS = ['Author', 'Editor']
+
+/**
  * Gets the report ID from the URL hash (`#selectedReport=`) or query
  * parameter (`?selectedReport=`), hash winning. Returns `null` when neither
  * is present.
@@ -131,8 +137,15 @@ async function fetchData(
     const reportFields = await getReportFields(
       properties.templateParameters?.ProjectStatusContentTypeId
     )
+    // Read-only user fields (Author/Editor and similar system fields) are never
+    // edited, so they are left out of the expand.
     const userFieldNames = reportFields
-      .filter((field) => field.type === 'User' || field.type === 'UserMulti')
+      .filter(
+        (field) =>
+          (field.type === 'User' || field.type === 'UserMulti') &&
+          !field.isReadOnly &&
+          !SYSTEM_USER_FIELDS.includes(field.internalName)
+      )
       .map((field) => field.internalName)
 
     const [reportList, allReports, sections, columnConfig] = await Promise.all([
@@ -212,6 +225,14 @@ async function fetchData(
       resolvedScope
     }
   } catch (error) {
+    // The original error is otherwise lost, since the user-facing message is
+    // generic — log it so failures can be diagnosed from the browser console.
+    // eslint-disable-next-line no-console
+    console.error('(ProjectStatus) (fetchData) Failed to fetch data.', {
+      siteId: props.siteId,
+      selectedScope,
+      error
+    })
     if (isNoHubError(error)) {
       throw new Error(strings.ProjectStatusNoHubAccessErrorText)
     }
