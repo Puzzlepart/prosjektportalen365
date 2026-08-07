@@ -371,6 +371,16 @@ export class SPDataAdapter
   ) {
     const searchQuery = `${queryArray ?? ''} ${view.searchQuery}`.trim()
 
+    // Status reports for a scoped report series store
+    // `GtSiteId` as `{siteId}-{scopeKey}`, so the child project site terms need
+    // a trailing wildcard to match those reports as well. A full site GUID can
+    // never be a prefix of another site GUID, so this cannot widen the result
+    // set to other projects.
+    const statusReportQueryArray = (queryArray ?? '').replace(
+      new RegExp(`${siteIdProperty}:(\\S+)`, 'g'),
+      `${siteIdProperty}:$1*`
+    )
+
     const fetchAllResults = async (
       queryTemplate: string,
       selectProperties: string[],
@@ -411,7 +421,7 @@ export class SPDataAdapter
         'SiteId'
       ]),
       fetchAllResults(
-        `${queryArray} DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:${resource.Choice_GtModerationStatus_Published}`,
+        `${statusReportQueryArray} DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:${resource.Choice_GtModerationStatus_Published}`,
         [...configuration.columns.map((f) => f.fieldName), siteIdProperty, 'ListItemId'],
         configuration.refiners.map((ref) => ref.fieldName).join(',')
       )
