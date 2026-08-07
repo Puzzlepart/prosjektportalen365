@@ -1,6 +1,6 @@
-# Til Marit: gjennomgang av v6-mappingen før M1
+# Oppstartsnotat for prosjektleder: gjennomgang av v6-mappingen før M1
 
-**Fra:** Tarjei / AI-assistenten · **Dato:** 6. august 2026
+**Til:** prosjektleder (PL) · **Fra:** teknisk ressurs / AI-assistenten · **Dato:** 6. august 2026
 **Til møtet:** gjennomgangsmøte torsdag 13.8 · **Beslutningsport M1:** fredag 14.8
 
 ## Kort om status — gode nyheter
