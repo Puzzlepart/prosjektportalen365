@@ -58,7 +58,16 @@ declare interface IProjectWebPartsStrings {
   RunProjectSetupDialogSubText: string
   RunProjectSetupDialogProgressText: string
   CurrentPhaseViewNameFieldLabel: string
+  DataFetchModeAutoText: string
+  DataFetchModeDataSourceText: string
+  DataFetchModeLabel: string
+  DataFetchModeListText: string
   DataGroupName: string
+  DataSourceDescription: string
+  DataSourceError: string
+  DataSourceLabel: string
+  DataSourceNotFound: string
+  FilterByShowInPortfolioLabel: string
   DefaultGroupByLabel: string
   DefaultTimeframeEndLabel: string
   DefaultTimeframeEndValue: string
