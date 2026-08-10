@@ -24,6 +24,8 @@
       },
       "officeFabricIconFontName": "BranchCommit",
       "properties": {
+        "dataFetchMode": "auto",
+        "filterByShowInPortfolio": true,
         "probabilityFieldName": "GtRiskProbability",
         "consequenceFieldName": "GtRiskConsequence",
         "probabilityPostActionFieldName": "GtRiskProbabilityPostAction",

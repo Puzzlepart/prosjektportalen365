@@ -108,7 +108,18 @@ define([], function () {
       'This allows you to select a template, extension, or standard content to be added to the project. This can be used for troubleshooting or to add new functionality.',
     RunProjectSetupDialogProgressText: 'Running setup wizard',
     CurrentPhaseViewNameFieldLabel: 'Display name for current phase',
+    DataFetchModeAutoText: 'Automatic (data source on parent sites)',
+    DataFetchModeDataSourceText: 'Data source',
+    DataFetchModeLabel: 'Data retrieval',
+    DataFetchModeListText: 'Local list',
     DataGroupName: 'Data',
+    DataSourceDescription:
+      'Name of the data source in the Data sources list at the portfolio site. Leave empty to use the default data source for child projects.',
+    DataSourceError:
+      'An error occurred while retrieving data from the data source named **{0}**.',
+    DataSourceLabel: 'Data source',
+    DataSourceNotFound: 'Cannot find any data source with name **{0}**.',
+    FilterByShowInPortfolioLabel: "Only show items flagged with 'Show in portfolio'",
     DefaultGroupByLabel: 'Default grouping',
     DefaultTimeframeEndLabel: 'Default end date',
     DefaultTimeframeEndValue: '{0} months into the future',

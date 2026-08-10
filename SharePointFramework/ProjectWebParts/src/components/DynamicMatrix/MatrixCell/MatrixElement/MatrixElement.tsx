@@ -2,7 +2,7 @@ import { replaceTokens } from 'pp365-shared-library/lib/util'
 import React, { FC, useContext } from 'react'
 import { DynamicMatrixContext } from '../../context'
 import { IMatrixElementProps } from './types'
-import { CounterBadge, Tooltip } from '@fluentui/react-components'
+import { Badge, Tooltip } from '@fluentui/react-components'
 import styles from './MatrixElement.module.scss'
 
 export const MatrixElement: FC<IMatrixElementProps> = (props) => {
@@ -23,15 +23,16 @@ export const MatrixElement: FC<IMatrixElementProps> = (props) => {
         )
       }
     >
-      <CounterBadge
+      <Badge
         className={styles.matrixElement}
         appearance='filled'
         color='informative'
-        count={props.model.id}
         title={props.title}
         style={props.style}
         hidden={props.hidden}
-      />
+      >
+        {props.model.id}
+      </Badge>
     </Tooltip>
   )
 }

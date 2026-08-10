@@ -1,9 +1,18 @@
 import { IProgressIndicatorProps } from '@fluentui/react/lib/ProgressIndicator'
 import { LogLevel, Logger } from '@pnp/logging'
 import * as strings from 'ProjectWebPartsStrings'
-import { ItemFieldValues } from 'pp365-shared-library'
+import {
+  DataSource,
+  ItemFieldValues,
+  ProjectInformationChildProject,
+  searchAggregatedItems
+} from 'pp365-shared-library'
 import { DefaultCaching, SPDataAdapterBase } from 'pp365-shared-library/lib/data'
-import { IProjectDataServiceParams, ProjectDataService } from 'pp365-shared-library/lib/services'
+import {
+  DataSourceService,
+  IProjectDataServiceParams,
+  ProjectDataService
+} from 'pp365-shared-library/lib/services'
 import { SPFxContext } from 'pp365-shared-library/lib/types'
 import { IConfigurationFile } from 'types'
 import {
@@ -20,7 +29,10 @@ import { format } from '@fluentui/react'
 
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public project: ProjectDataService
+  public dataSourceService: DataSourceService
   private _name = 'SPDataAdapter'
+  private _childProjects: Promise<ProjectInformationChildProject[]>
+  private _isParentProject: Promise<boolean>
 
   /**
    * Configure the SP data adapter
@@ -33,12 +45,122 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     configuration: ISPDataAdapterConfiguration
   ): Promise<void> {
     await super.configure(spfxContext, configuration)
+    this._childProjects = null
+    this._isParentProject = null
+    if (this.portalDataService?.web) {
+      this.dataSourceService = new DataSourceService(this.portalDataService.web)
+    }
     this.project = new ProjectDataService({
       ...this.settings,
       spfxContext,
       entityService: this.entityService,
       propertiesListName: resource.Lists_ProjectProperties_Title
     } as IProjectDataServiceParams)
+  }
+
+  /**
+   * Get child projects for the current site from the hub projects list. Lazy and
+   * memoized — the request runs the first time it's needed and is shared between
+   * consumers (e.g. both matrix web parts on the same page). Returns an empty
+   * array when the hub is unavailable.
+   */
+  public getChildProjects(): Promise<ProjectInformationChildProject[]> {
+    if (!this._childProjects) {
+      this._childProjects = this.portalDataService?.isAvailable
+        ? this.portalDataService.getChildProjects(
+            this.spfxContext.pageContext.web.absoluteUrl,
+            ProjectInformationChildProject
+          )
+        : Promise.resolve([])
+    }
+    return this._childProjects
+  }
+
+  /**
+   * Checks whether the current site is a parent project or program by reading the
+   * `GtIsParentProject` and `GtIsProgram` flags from the local properties list.
+   * Lazy and memoized — one request total per page load. Returns `false` on any
+   * failure.
+   */
+  public isParentProject(): Promise<boolean> {
+    if (!this._isParentProject) {
+      this._isParentProject = (async () => {
+        try {
+          const [item] = await this.sp.web.lists
+            .getByTitle(resource.Lists_ProjectProperties_Title)
+            .items.top(1)
+            .select('GtIsParentProject', 'GtIsProgram')()
+          return !!(item?.GtIsParentProject || item?.GtIsProgram)
+        } catch {
+          return false
+        }
+      })()
+    }
+    return this._isParentProject
+  }
+
+  /**
+   * Resolves a data source. If `name` is set the data source is fetched by title,
+   * otherwise the default is resolved by its stable `GtDataSourceId` with a
+   * fallback to the localized default title (for installs where the ID is not set).
+   *
+   * @param name Data source name from web part configuration (optional)
+   * @param defaultDataSourceId `GtDataSourceId` of the default data source
+   * @param defaultName Localized title of the default data source
+   */
+  public async resolveDataSource(
+    name: string,
+    defaultDataSourceId: string,
+    defaultName: string
+  ): Promise<DataSource> {
+    const displayName = name || defaultName
+    if (!this.dataSourceService) {
+      throw new Error(format(strings.DataSourceError, displayName))
+    }
+    const dataSource = name
+      ? await this.dataSourceService.getByName(name)
+      : (await this.dataSourceService.getById(defaultDataSourceId)) ??
+        (await this.dataSourceService.getByName(defaultName))
+    if (!dataSource) {
+      throw new Error(format(strings.DataSourceNotFound, displayName))
+    }
+    return dataSource
+  }
+
+  /**
+   * Fetches items for the specified data source using SharePoint search, aggregated
+   * across the current site's child projects (and the site itself when `includeSelf`
+   * is `true`). The managed properties of the data source's columns are always
+   * included in the select properties.
+   *
+   * @param dataSource Data source to fetch items for
+   * @param selectProperties Additional select properties
+   * @param includeSelf Whether to include items from the current site (default `true`)
+   */
+  public async fetchItemsFromDataSource(
+    dataSource: DataSource,
+    selectProperties: string[] = [],
+    includeSelf: boolean = true
+  ): Promise<Record<string, any>[]> {
+    try {
+      const childProjects = await this.getChildProjects()
+      return await searchAggregatedItems(this.sp, {
+        siteIds: childProjects.map((childProject) => childProject.siteId),
+        queryTemplate: dataSource.searchQuery,
+        selectProperties: [
+          ...selectProperties,
+          ...dataSource.columns.map((column) => column.fieldName)
+        ],
+        includeSelf,
+        selfSiteId: this.spfxContext.pageContext.site.id.toString()
+      })
+    } catch (error) {
+      Logger.log({
+        message: `(${this._name}) (fetchItemsFromDataSource) Failed to fetch items from data source '${dataSource.title}': ${error?.message}`,
+        level: LogLevel.Error
+      })
+      throw new Error(format(strings.DataSourceError, dataSource.title))
+    }
   }
 
   /**

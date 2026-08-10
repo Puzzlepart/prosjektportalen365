@@ -1,5 +1,4 @@
 import { format } from '@fluentui/react/lib/Utilities'
-import { flatten } from '@microsoft/sp-lodash-subset'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { PnPClientStorage, dateAdd } from '@pnp/core'
 import '@pnp/sp/items/get-all'
@@ -27,6 +26,7 @@ import {
   BenefitMeasurementIndicator
 } from 'pp365-portfoliowebparts/lib/models'
 import {
+  buildAggregatedSiteIdQueries,
   DataSource,
   DataSourceService,
   expandRowsPerStatusSeries,
@@ -42,6 +42,7 @@ import {
   ProjectDataService,
   ProjectInformationChildProject,
   ProjectListModel,
+  searchAggregatedItems,
   sortStatusReportsLatestFirst,
   SPDataAdapterBase,
   SPProjectItem,
@@ -294,27 +295,12 @@ export class SPDataAdapter
     maxQueryLength: number = 2500,
     maxProjects: number = 25
   ): string[] {
-    if (!this.childProjects?.length) return []
-    const aggregatedQueries = []
-    let queryString = ''
-    if (this.childProjects.length > maxProjects) {
-      this.childProjects.forEach((childProject, index) => {
-        queryString += `${queryProperty}:${childProject.siteId} `
-        if (queryString.length > maxQueryLength) {
-          aggregatedQueries.push(queryString)
-          queryString = ''
-        }
-        if (index === this.childProjects.length - 1) {
-          aggregatedQueries.push(queryString)
-        }
-      })
-    } else {
-      this.childProjects.forEach((childProject) => {
-        queryString += `${queryProperty}:${childProject.siteId} `
-      })
-      aggregatedQueries.push(queryString)
-    }
-    return aggregatedQueries.filter(Boolean)
+    return buildAggregatedSiteIdQueries(
+      this.childProjects?.map((childProject) => childProject.siteId) ?? [],
+      queryProperty,
+      maxQueryLength,
+      maxProjects
+    )
   }
 
   public async fetchDataForViewBatch(
@@ -925,23 +911,14 @@ export class SPDataAdapter
     includeSelf: boolean = false,
     siteIdManagedProperty: string = 'SiteId'
   ) {
-    const siteId = this.spfxContext.pageContext.site.id.toString()
-    const queries = this.childProjects?.length
-      ? this.aggregatedQueryBuilder(siteIdManagedProperty)
-      : []
-    if (includeSelf) queries.unshift(`${siteIdManagedProperty}:${siteId}`)
-    if (queries.length === 0) return []
-    const promises = queries.map((q) =>
-      this.sp.search({
-        QueryTemplate: `${q} ${queryTemplate}`,
-        Querytext: '*',
-        RowLimit: 500,
-        TrimDuplicates: false,
-        SelectProperties: [...selectProperties, 'Path', 'Title', 'SiteTitle', 'SPWebURL']
-      })
-    )
-    const responses = await Promise.all(promises)
-    return flatten(responses.map((r) => r?.PrimarySearchResults ?? []))
+    return searchAggregatedItems(this.sp, {
+      siteIds: this.childProjects?.map((childProject) => childProject.siteId) ?? [],
+      queryTemplate,
+      selectProperties,
+      includeSelf,
+      selfSiteId: this.spfxContext.pageContext.site.id.toString(),
+      siteIdManagedProperty
+    })
   }
 
   /**
