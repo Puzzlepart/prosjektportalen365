@@ -244,6 +244,8 @@ define([], function () {
     ShowFieldExternalUsers: 'Visible to external users',
     ShowProjectDeliveriesLabel: 'Show project deliveries',
     ShowSubTextFieldLabel: 'Show sub text',
+    ShowTitleLabel: 'Show title',
+    TitleLabel: 'Title',
     ShowTimelineLabel: 'Show timeline',
     ShowTimelineListCommandsLabel: 'Show command line for list',
     ShowTimelineListLabel: 'Show list',

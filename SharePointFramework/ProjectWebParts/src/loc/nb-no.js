@@ -264,6 +264,8 @@ define([], function () {
     ShowPhaseSitePageMessageLabel: 'Vis infomelding (dynamisk hjemmeside)',
     ShowProjectDeliveriesLabel: 'Vis prosjektleveranser',
     ShowSubTextFieldLabel: 'Vis fasetekst',
+    ShowTitleLabel: 'Vis tittel',
+    TitleLabel: 'Tittel',
     ShowTimelineLabel: 'Vis tidslinje',
     ShowTimelineListCommandsLabel: 'Vis kommandolinje for liste',
     ShowTimelineListLabel: 'Vis liste',

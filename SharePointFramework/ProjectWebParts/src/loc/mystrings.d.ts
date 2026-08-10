@@ -207,6 +207,8 @@ declare interface IProjectWebPartsStrings {
   ShowPhaseSitePageMessageLabel: string
   ShowProjectDeliveriesLabel: string
   ShowSubTextFieldLabel: string
+  ShowTitleLabel: string
+  TitleLabel: string
   ShowTimelineLabel: string
   ShowTimelineListCommandsLabel: string
   ShowTimelineListLabel: string

@@ -222,6 +222,15 @@ export abstract class BaseUncertaintyMatrixWebPart<
             {
               groupName: strings.LookAndFeelGroupName,
               groupFields: [
+                PropertyPaneToggle('showTitle', {
+                  label: strings.ShowTitleLabel,
+                  checked: this.properties.showTitle ?? false
+                }),
+                this.properties.showTitle &&
+                  PropertyPaneTextField('title', {
+                    label: strings.TitleLabel,
+                    placeholder: this.title
+                  }),
                 PropertyPaneToggle('fullWidth', {
                   label: strings.MatrixFullWidthLabel,
                   checked:
