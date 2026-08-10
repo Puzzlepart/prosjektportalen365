@@ -34,7 +34,8 @@ This feature ports that behavior, modernized: both the **riskMatrix** and **oppo
 - **`webparts/riskMatrix` / `webparts/opportunityMatrix`** — shrunk to a `config` getter + `render()`; property/data interfaces preserved by name.
 - **`models/UncertaintyElementModel`** — `id` widened to `number | string`; for search items (no `Id`/`ID`) the id is `<site title initials><ListItemID>` (e.g. `BY12`) to disambiguate equal list-item ids across sites; `siteTitle`/`webUrl`/`url` now assigned from `SiteTitle`/`SPWebURL`/`Path`, activating the pre-existing `"<siteTitle>: <title>"` tooltip.
 - **`DynamicMatrix/MatrixElement`** — renders a Fluent `Badge` instead of `CounterBadge` (string ids render as pills; also fixes ids > 99 rendering as "99+").
-- **Loc** — `DataFetchMode*`, `DataSource*`, `FilterByShowInPortfolioLabel` strings (nb + en); `DataSourceNotFound`/`DataSourceError` copied from ProgramWebParts.
+- **Web part title** — new `showTitle` property (default off) on both web parts: when enabled, the shared-library `WebPartTitle` component renders above the matrix with the `title` property (falling back to the web part instance title — "Risikomatrise"/"Mulighetsmatrise" from the manifests), editable via a conditional text field in the property pane. The Prosjekttillegg page enables it on both controls to distinguish the stacked matrices.
+- **Loc** — `DataFetchMode*`, `DataSource*`, `FilterByShowInPortfolioLabel`, `ShowTitleLabel`, `TitleLabel` strings (nb + en); `DataSourceNotFound`/`DataSourceError` copied from ProgramWebParts.
 - **Manifests** — preconfigure `dataFetchMode: "auto"` and `filterByShowInPortfolio: true` (runtime `?? 'auto'` / `?? true` covers existing instances).
 
 ## Edge cases

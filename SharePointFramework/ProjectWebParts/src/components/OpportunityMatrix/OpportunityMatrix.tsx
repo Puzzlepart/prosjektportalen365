@@ -5,7 +5,7 @@ import React, { FC } from 'react'
 import { DynamicMatrix } from '../DynamicMatrix'
 import { IOpportunityMatrixProps } from './types'
 import { useOpportunityMatrix } from './useOpportunityMatrix'
-import { UserMessage, customLightTheme } from 'pp365-shared-library'
+import { UserMessage, WebPartTitle, customLightTheme } from 'pp365-shared-library'
 
 export const OpportunityMatrix: FC<IOpportunityMatrixProps> = (props) => {
   const {
@@ -19,6 +19,7 @@ export const OpportunityMatrix: FC<IOpportunityMatrixProps> = (props) => {
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
+        {props.showTitle && <WebPartTitle title={props.title} />}
         {!!error ? (
           <UserMessage title={strings.ErrorTitle} text={error} intent='error' />
         ) : (

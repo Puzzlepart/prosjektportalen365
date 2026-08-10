@@ -21,6 +21,13 @@ export interface IBaseUncertaintyMatrixWebPartProps
   dataFetchMode?: UncertaintyMatrixDataFetchMode
 
   /**
+   * Whether to render the web part title above the matrix (default `false`). The
+   * title itself is the `title` web part property, falling back to the web part
+   * instance title.
+   */
+  showTitle?: boolean
+
+  /**
    * The name of the data source to retrieve items from in data source mode. When
    * empty, the default data source for the web part is resolved by its stable
    * data source ID.
