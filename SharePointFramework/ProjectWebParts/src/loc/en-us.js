@@ -116,9 +116,9 @@ define([], function () {
     DataSourceDescription:
       'Name of the data source in the Data sources list at the portfolio site. Leave empty to use the default data source for child projects.',
     DataSourceError:
-      'An error occurred while retrieving data from the data source named **{0}**.',
+      'An error occurred while retrieving data from the data source named {0}.',
     DataSourceLabel: 'Data source',
-    DataSourceNotFound: 'Cannot find any data source with name **{0}**.',
+    DataSourceNotFound: 'Cannot find any data source with name {0}.',
     FilterByShowInPortfolioLabel: "Only show items flagged with 'Show in portfolio'",
     DefaultGroupByLabel: 'Default grouping',
     DefaultTimeframeEndLabel: 'Default end date',

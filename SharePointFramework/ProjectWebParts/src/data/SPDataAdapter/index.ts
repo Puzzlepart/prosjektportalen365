@@ -149,7 +149,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         queryTemplate: dataSource.searchQuery,
         selectProperties: [
           ...selectProperties,
-          ...dataSource.columns.map((column) => column.fieldName)
+          ...dataSource.columns.map((column) => column.fieldName).filter(Boolean)
         ],
         includeSelf,
         selfSiteId: this.spfxContext.pageContext.site.id.toString()
