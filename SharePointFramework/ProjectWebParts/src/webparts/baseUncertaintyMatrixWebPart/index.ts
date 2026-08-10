@@ -157,7 +157,9 @@ export abstract class BaseUncertaintyMatrixWebPart<
       true
     )
     if (this.properties.filterByShowInPortfolio ?? true) {
-      items = items.filter((item) => item.GtShowInPortfolioOWSBOOL === '1')
+      items = items.filter((item) =>
+        ['1', 'true'].includes(String(item.GtShowInPortfolioOWSBOOL).toLowerCase())
+      )
     }
     const fieldNameMap = new Map(
       [...(dataSource.columns ?? []), ...(dataSource.refiners ?? [])]

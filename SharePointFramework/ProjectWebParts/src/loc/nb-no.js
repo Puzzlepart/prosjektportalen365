@@ -100,9 +100,9 @@ define([], function () {
     DataSourceDescription:
       'Navn på datakilden i Datakilder-listen på porteføljeområdet. Lar du feltet stå tomt, brukes standard datakilde for underliggende prosjekter.',
     DataSourceError:
-      'Det skjedde en feil under uthenting av data fra datakilde med navn **{0}**. Oppdater siden og prøv igjen.',
+      'Det skjedde en feil under uthenting av data fra datakilde med navn {0}. Oppdater siden og prøv igjen.',
     DataSourceLabel: 'Datakilde',
-    DataSourceNotFound: 'Finner ingen datakilde med navn **{0}**.',
+    DataSourceNotFound: 'Finner ingen datakilde med navn {0}.',
     FilterByShowInPortfolioLabel: "Vis kun elementer flagget med 'Vis i porteføljen'",
     DefaultGroupByLabel: 'Standard gruppering',
     DefaultTimeframeEndLabel: 'Standard sluttdato',
