@@ -112,7 +112,12 @@ $SHAREPOINT_FRAMEWORK_BASEPATH = "$ROOT_PATH/SharePointFramework"
 $PNP_TEMPLATES_BASEPATH = "$ROOT_PATH/Templates"
 $SITE_SCRIPTS_BASEPATH = "$ROOT_PATH/SiteScripts/Src"
 $PNP_BUNDLE_PATH = "$PSScriptRoot/PnP.PowerShell"
-$PNP_VERSION = Get-PnPVersion
+# Get-PnPVersion hentes fra SharedFunctions.ps1 i et isolert scope,
+# slik at StartAction/EndAction definert i denne filen ikke overskrives
+$PNP_VERSION = & {
+    . "$PSScriptRoot/Scripts/SharedFunctions.ps1"
+    Get-PnPVersion
+}
 $GIT_HASH = git log --pretty=format:'%h' -n 1
 $RELEASE_NAME = "$($NPM_PACKAGE_FILE.name)-$($NPM_PACKAGE_FILE.version).$($GIT_HASH)"
 if ($USE_CHANNEL_CONFIG) {
