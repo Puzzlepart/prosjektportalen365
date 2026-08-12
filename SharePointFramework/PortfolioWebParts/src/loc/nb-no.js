@@ -184,6 +184,9 @@ define([], function () {
       ExpirationDateNoneOption: 'Ingen utløpsdato',
       ExpirationDateMonthOption: '{0} måned(er)',
       NoProvisionAccessMessage: 'Du har ikke tilgang til Bestillingsportalen.',
+      SiteNotFoundTitle: 'Fant ikke Bestillingsportalen',
+      SiteNotFoundMessage:
+        'Fant ikke Bestillingsportalen på {0}. Kontroller at URL-en er riktig konfigurert, eller kontakt administrator.',
       NoHubSiteConnectionMessage: 'Hubtilknytning er ikke tilgjengelig. Området kan bestilles, men vil ikke bli knyttet til en hub.',
       DefaultTeamTemplate: 'Standard',
       DefaultLanguage: 'Norsk (bokmål)',

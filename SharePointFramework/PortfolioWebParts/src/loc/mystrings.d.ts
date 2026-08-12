@@ -183,6 +183,8 @@ declare interface IPortfolioWebPartsStrings {
     ExpirationDateNoneOption: string
     ExpirationDateMonthOption: string
     NoProvisionAccessMessage: string
+    SiteNotFoundTitle: string
+    SiteNotFoundMessage: string
     NoHubSiteConnectionMessage: string
     DefaultTeamTemplate: string
     DefaultLanguage: string

@@ -15,6 +15,7 @@ import {
   useToastController
 } from '@fluentui/react-components'
 import React, { FC } from 'react'
+import { format } from '@fluentui/react'
 import { IProjectProvisionProps } from './types'
 import { customLightTheme, getFluentIcon, UserMessage } from 'pp365-shared-library'
 import { ProvisionStatus } from './ProvisionStatus'
@@ -51,6 +52,16 @@ export const ProjectProvision: FC<IProjectProvisionProps> = (props) => {
 
   if (state.error) {
     return <UserMessage title={strings.ErrorTitle} text={state.error.message} intent='error' />
+  }
+
+  if (state.siteNotFound) {
+    return (
+      <UserMessage
+        title={strings.Provision.SiteNotFoundTitle}
+        text={format(strings.Provision.SiteNotFoundMessage, props.provisionUrl)}
+        intent='warning'
+      />
+    )
   }
 
   if (state.accessDenied) {

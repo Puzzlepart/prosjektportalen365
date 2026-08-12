@@ -89,6 +89,14 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
       this.properties.isTeamsContext = true
       if (!this.properties.drawerSize) this.properties.drawerSize = 'full'
 
+      // In Teams there is no property pane, so a tenant-wide configured URL
+      // (storage entity pp365_ProvisionUrl) takes precedence over the
+      // preconfigured default from the web part manifest.
+      const tenantProvisionUrl = await this.dataAdapter.getTenantProvisionUrl()
+      if (tenantProvisionUrl) {
+        this.properties.provisionUrl = tenantProvisionUrl
+      }
+
       if (this.properties.provisionUrl) {
         try {
           const teamsConfig = await this.dataAdapter.loadTeamsConfig(this.properties.provisionUrl)
@@ -99,6 +107,15 @@ export default class ProjectProvisionWebPart extends BasePortfolioWebPart<IProje
         } catch (error) {
           console.warn('Failed to load Teams configuration:', error)
         }
+      }
+    }
+
+    // On SharePoint pages the property pane value wins, but fall back to the
+    // tenant-wide configured URL when the property is empty.
+    if (!this.properties.provisionUrl) {
+      const tenantProvisionUrl = await this.dataAdapter.getTenantProvisionUrl()
+      if (tenantProvisionUrl) {
+        this.properties.provisionUrl = tenantProvisionUrl
       }
     }
 

@@ -34,6 +34,8 @@ Param(
     [string]$SiteDesignSecurityGroupId,
     [Parameter(Mandatory = $false, HelpMessage = "Tenant App Catalog Url")]
     [string]$TenantAppCatalogUrl,
+    [Parameter(Mandatory = $false, HelpMessage = "URL to the provisioning portal site (Bestillingsportalen). Stored as tenant storage entity pp365_ProvisionUrl, used by the Bestillingsportalen Teams app and as fallback for the web part")]
+    [string]$ProvisionUrl,
     [Parameter(Mandatory = $false, HelpMessage = "Language")]
     [ValidateSet('Norwegian', 'English')]
     [string]$Language = "Norwegian",
@@ -448,6 +450,25 @@ if (-not $SkipAppPackages.IsPresent) {
         Write-Host "[ERROR] Failed to install app packages to $($TenantAppCatalogUrl): $($_.Exception.Message)" -ForegroundColor Red
         Write-ErrorDetails $_
         exit 1
+    }
+}
+#endregion
+
+#region Set tenant storage entity for provisioning portal URL
+if ($ProvisionUrl) {
+    Try {
+        StartAction("Setting tenant storage entity pp365_ProvisionUrl to $ProvisionUrl")
+        if (-not $TenantAppCatalogUrl) {
+            Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
+            $TenantAppCatalogUrl = Get-PnPTenantAppCatalogUrl -ErrorAction SilentlyContinue
+        }
+        Connect-SharePoint -Url $TenantAppCatalogUrl -ConnectionInfo $ConnectionInfo
+        Set-PnPStorageEntity -Key "pp365_ProvisionUrl" -Value $ProvisionUrl -Description "URL til Bestillingsportalen. Brukes av Bestillingsportalen Teams-app og som fallback for webdelen." -ErrorAction Stop
+        EndAction
+    }
+    Catch {
+        Write-Host "[WARNING] Failed to set tenant storage entity pp365_ProvisionUrl: $($_.Exception.Message)" -ForegroundColor Yellow
+        Write-ErrorDetails $_
     }
 }
 #endregion

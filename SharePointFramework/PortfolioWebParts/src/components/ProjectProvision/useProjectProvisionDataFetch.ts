@@ -18,19 +18,24 @@ export function useProjectProvisionDataFetch(
   setState: (newState: Partial<IProjectProvisionState>) => void
 ) {
   /**
-   * Check if the user has access to the provision site using PnPjs permissions
+   * Check if the user has access to the provision site using PnPjs permissions.
+   * Distinguishes between the site not being found (e.g. misconfigured URL)
+   * and the user actually lacking access.
    *
    * @param provisionUrl The provision URL to check access for
    */
-  const checkProvisionSiteAccess = async (provisionUrl: string): Promise<boolean> => {
+  const checkProvisionSiteAccess = async (
+    provisionUrl: string
+  ): Promise<'granted' | 'denied' | 'notFound'> => {
     try {
       const provisionSite = Web([props.dataAdapter.sp.web, provisionUrl])
       const hasViewPermission = await provisionSite.currentUserHasPermissions(
         PermissionKind.ViewListItems
       )
-      return hasViewPermission
+      return hasViewPermission ? 'granted' : 'denied'
     } catch (error) {
-      return false
+      if (error?.status === 404) return 'notFound'
+      return 'denied'
     }
   }
 
@@ -39,10 +44,11 @@ export function useProjectProvisionDataFetch(
       checkProvisionSiteAccess(props.provisionUrl),
       props.dataAdapter.isProvisionSiteAdmin(props.provisionUrl)
     ])
-      .then(([hasAccess, isAdmin]) => {
-        if (!hasAccess) {
+      .then(([access, isAdmin]) => {
+        if (access !== 'granted') {
           setState({
-            accessDenied: true,
+            accessDenied: access === 'denied',
+            siteNotFound: access === 'notFound',
             loading: false,
             isRefetching: false
           })
