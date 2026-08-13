@@ -856,7 +856,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         m.lifecycleStatus !== strings.LifecycleStatus_Completed &&
         m.lifecycleStatus !== strings.LifecycleStatus_Closed
     )
-    projects = projects.sort((a, b) => a.title.localeCompare(b.title))
+    projects = projects.sort((a, b) => (a.title ?? '').localeCompare(b.title ?? ''))
     return projects
   }
 
@@ -881,7 +881,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         m.lifecycleStatus !== strings.LifecycleStatus_Completed &&
         m.lifecycleStatus !== strings.LifecycleStatus_Closed
     )
-    projects = projects.sort((a, b) => a.title.localeCompare(b.title))
+    projects = projects.sort((a, b) => (a.title ?? '').localeCompare(b.title ?? ''))
     return projects
   }
 
