@@ -152,6 +152,8 @@ export const createPortfolioAggregationReducer = (
         )
       }
 
+      console.log('acf', allColumnsForCategory)
+
       selectedColumns = selectedColumns
         .map((c) => {
           const col = _.find(allColumnsForCategory, ({ key }) => key === c.key)
