@@ -66,7 +66,8 @@ async function fetchData(context: IPortfolioAggregationContext) {
     return item
   })
 
-  return { dataSource, items: enrichedItems, columns, projects: projectsByDataSource }
+  const viewColumns = !_.isEmpty(dataSource.columns) ? dataSource.columns : columns
+  return { dataSource, items: enrichedItems, columns: viewColumns, projects: projectsByDataSource }
 }
 
 /**
