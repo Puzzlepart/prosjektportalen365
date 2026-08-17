@@ -167,6 +167,7 @@ define([], function () {
       DefaultTimeZone: "(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna",
       HubSiteFieldLabel: "Hub association",
       DefaultHubInfoMessage: "This site will be associated with the hub site: {0}",
+      DefaultHubResolveErrorMessage: "The default hub configured for this site type could not be resolved. The site will be associated with {0} instead.",
       ParentSiteFieldLabel: "Parent site",
       ParentSiteFieldDescription: "This sub-area will be linked to the parent site shown here.",
       ImageFieldLabel: "Set site image",

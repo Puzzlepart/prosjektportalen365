@@ -50,6 +50,9 @@
       ],
       "data": [
         "data"
+      ],
+      "utils": [
+        "utils"
       ]
     }
   },

@@ -79,6 +79,9 @@ export type ProjectListRenderMode = 'tiles' | 'list' | 'compactList'
  * Filter logic works as follows:
  * - `fieldFilter` – JSON object matching raw SP item field values
  *   (e.g. `{"GtIsParentProject": true}`). Matched against `ProjectListModel.data`.
+ *   A value may instead be an operator object to express something other than
+ *   equality: `$ne` (not equal), `$in` (one of), `$nin` (none of) — e.g.
+ *   `{"GtProjectPhaseText": {"$ne": "Avslutte"}}`.
  * - `clientFilter` – JSON object matching computed `ProjectListModel`
  *   properties (e.g. `{"hasUserAccess": true}`, `{"isUserMember": true}`).
  * - `visibilityRule` – JSON object matching `IProjectListState` properties

@@ -124,6 +124,7 @@ declare interface IPortfolioWebPartsStrings {
     TimeZoneFieldLabel: string
     HubSiteFieldLabel: string
     DefaultHubInfoMessage: string
+    DefaultHubResolveErrorMessage: string
     ParentSiteFieldLabel: string
     ParentSiteFieldDescription: string
     ImageFieldLabel: string

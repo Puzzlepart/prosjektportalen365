@@ -7,6 +7,7 @@ import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
 import { useId } from '@fluentui/react-components'
 import strings from 'PortfolioWebPartsStrings'
 import { getFieldsForType } from '../getFieldsForType'
+import { normalizeHubSiteId } from 'utils/normalizeHubSiteId'
 import {
   applyProjectPropertiesFromMetadata,
   applyTaxonomyUpdatesAfterAdd
@@ -83,13 +84,17 @@ export const useProvisionDrawer = () => {
   const urlPrefix = `${context.props.webAbsoluteUrl.split(managedPath)[0]}/${managedPath}/`
   const aliasSuffix = '@' + context.props.pageContext.user.loginName.split('@')[1]
 
-  const joinHub = !!context.state.types?.find((t) => t.title === context.column.get('type'))
-    ?.joinHub
+  // A type that points at a specific `DefaultHub` is always hub associated —
+  // otherwise the configured hub would be silently dropped on save.
+  const joinHub = !!currentTypeConfig?.joinHub || !!currentTypeConfig?.defaultHub
 
   const usesDifferentHub =
     joinHub &&
     !!context.column.get('hubSite') &&
-    context.column.get('hubSite') !== context.props.pageContext.legacyPageContext.hubSiteId
+    normalizeHubSiteId(context.column.get('hubSite')) !==
+      normalizeHubSiteId(context.props.pageContext.legacyPageContext.hubSiteId)
+
+  const hubResolveFailed = joinHub && !!context.column.get('hubSiteResolveFailed')
 
   const spaceTypeInternal = context.state.types?.find(
     (t) => t.title === context.column.get('type')
@@ -193,9 +198,10 @@ export const useProvisionDrawer = () => {
     }
 
     const isParentMode = !!context.props.parentMode
-    const hubUrl = isParentMode
-      ? parentSite.HubSiteUrl
-      : context.props.dataAdapter.portalDataService?.url
+    const targetHubSiteUrl = usesDifferentHub ? context.column.get('hubSiteUrl') : ''
+    const hubUrl =
+      targetHubSiteUrl ||
+      (isParentMode ? parentSite.HubSiteUrl : context.props.dataAdapter.portalDataService?.url)
     if (hubUrl) {
       const properties: Record<string, any> = {
         Title: context.column.get('name'),
@@ -361,6 +367,7 @@ export const useProvisionDrawer = () => {
     isTeam,
     joinHub,
     usesDifferentHub,
+    hubResolveFailed,
     getField,
     fieldsToUse,
     fluentProviderId

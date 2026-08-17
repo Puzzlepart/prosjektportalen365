@@ -59,6 +59,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
     isTeam,
     joinHub,
     usesDifferentHub,
+    hubResolveFailed,
     getField,
     fieldsToUse,
     fluentProviderId
@@ -79,6 +80,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
     isTeam,
     joinHub,
     usesDifferentHub,
+    hubResolveFailed,
     enableSensitivityLabels,
     enableSensitivityLabelsLibrary,
     enableRetentionLabels,

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { IProjectProvisionProps, IProjectProvisionState } from './types'
 import _ from 'lodash'
 import strings from 'PortfolioWebPartsStrings'
+import { normalizeHubSiteId } from 'utils/normalizeHubSiteId'
 
 /**
  * Hook that manages the editable column Map for the provision form.
@@ -83,8 +84,10 @@ export function useEditableColumn(
         ['guest', []],
         ['language', strings.Provision.DefaultLanguage],
         ['timeZone', strings.Provision.DefaultTimeZone],
-        ['hubSite', props.pageContext.legacyPageContext.hubSiteId || ''],
-        ['hubSiteTitle', hubSiteTitle]
+        ['hubSite', normalizeHubSiteId(props.pageContext.legacyPageContext.hubSiteId)],
+        ['hubSiteTitle', hubSiteTitle],
+        ['hubSiteUrl', ''],
+        ['hubSiteResolveFailed', false]
       ]),
     [props.pageContext.legacyPageContext.hubSiteId, hubSiteTitle]
   )
@@ -320,15 +323,13 @@ export function useEditableColumn(
         $setColumn((prev) => {
           const newColumn = new Map(prev)
           newColumn.set('type', defaultType.title)
-          newColumn.set('hubSiteTitle', hubSiteTitle)
           return newColumn
         })
 
         setState((currentState) => ({
           properties: {
             ...currentState.properties,
-            type: defaultType.title,
-            hubSiteTitle: hubSiteTitle
+            type: defaultType.title
           }
         }))
       } catch (error) {
@@ -402,25 +403,6 @@ export function useEditableColumn(
 
         const transformedPrivacy = await transformValue(defaultVisibility, 'privacy')
 
-        let resolvedHubSite = props.pageContext.legacyPageContext.hubSiteId || ''
-        let resolvedHubSiteTitle = hubSiteTitle
-
-        if (
-          typeDefaults?.defaultHub &&
-          (!resolvedHubSite || typeDefaults.defaultHub !== resolvedHubSite) &&
-          props.dataAdapter?.portalDataService
-        ) {
-          try {
-            const hubInfo = await props.dataAdapter.resolveHubSiteById(typeDefaults.defaultHub)
-            if (hubInfo) {
-              resolvedHubSite = hubInfo.hubSiteId
-              resolvedHubSiteTitle = hubInfo.title
-            }
-          } catch (error) {
-            console.warn('Failed to resolve default hub site:', error)
-          }
-        }
-
         $setColumn((prev) => {
           const newColumns = new Map(prev)
           newColumns.set('isConfidential', defaultConfidentialData)
@@ -433,15 +415,12 @@ export function useEditableColumn(
           newColumns.set('teamify', defaultTeamify)
           newColumns.set('owner', defaultOwner)
           newColumns.set('expirationDate', defaultExpirationDate)
-          newColumns.set('hubSite', resolvedHubSite)
-          newColumns.set('hubSiteTitle', resolvedHubSiteTitle)
           return newColumns
         })
 
         setState((currentState) => ({
           properties: {
             ...currentState.properties,
-            type: currentType,
             isConfidential: defaultConfidentialData,
             metadata: defaultMetadata,
             sensitivityLabel: defaultSensitivityLabel,
@@ -451,7 +430,6 @@ export function useEditableColumn(
             teamify: defaultTeamify,
             owner: transformedOwner,
             expirationDate: transformedExpirationDate,
-            hubSiteTitle: resolvedHubSiteTitle,
             privacy: transformedPrivacy
           }
         }))
@@ -462,6 +440,84 @@ export function useEditableColumn(
 
     setDefaults()
   }, [state.loading, state.types, column.get('type'), defaultType])
+
+  // Tracks the (type, fallback hub title) pair whose hub association we already
+  // resolved, so this effect doesn't loop on its own $setColumn writes.
+  const lastHubKeyRef = useRef<string | null>(null)
+
+  // Resolve the hub association for the selected type. Kept separate from the
+  // defaults effect above because `hubSiteTitle` resolves asynchronously in
+  // parent mode: this effect has to re-run when it lands, and re-running the
+  // defaults effect would discard any edits the user has made in the meantime.
+  useEffect(() => {
+    const currentType = column.get('type')
+    const hubKey = `${currentType}|${hubSiteTitle}`
+    if (lastHubKeyRef.current === hubKey) return
+    if (state.loading || !state.types || state.types.length === 0 || !defaultType) return
+
+    lastHubKeyRef.current = hubKey
+
+    const resolveHub = async () => {
+      const typeDefaults = state.types.find((t) => t.title === currentType) || defaultType
+      const currentHubSite = normalizeHubSiteId(props.pageContext.legacyPageContext.hubSiteId)
+      const defaultHub = normalizeHubSiteId(typeDefaults?.defaultHub)
+
+      let resolvedHubSite = currentHubSite
+      let resolvedHubSiteTitle = hubSiteTitle
+      let resolvedHubSiteUrl = ''
+      let resolveFailed = false
+
+      if (defaultHub && defaultHub !== currentHubSite && props.dataAdapter?.resolveHubSiteById) {
+        try {
+          const hubInfo = await props.dataAdapter.resolveHubSiteById(defaultHub)
+          if (hubInfo) {
+            resolvedHubSite = hubInfo.hubSiteId
+            resolvedHubSiteTitle = hubInfo.title
+            resolvedHubSiteUrl = hubInfo.url
+          } else {
+            // The hub could not be looked up (unknown ID, or no access). Fall
+            // back to the current hub, but flag it so the form can say so
+            // instead of silently associating with the wrong hub.
+            resolveFailed = true
+          }
+        } catch (error) {
+          console.warn('Failed to resolve default hub site:', error)
+          resolveFailed = true
+        }
+      }
+
+      $setColumn((prev) => {
+        const newColumns = new Map(prev)
+        newColumns.set('hubSite', resolvedHubSite)
+        newColumns.set('hubSiteTitle', resolvedHubSiteTitle)
+        newColumns.set('hubSiteUrl', resolvedHubSiteUrl)
+        newColumns.set('hubSiteResolveFailed', resolveFailed)
+        return newColumns
+      })
+
+      // Spread from the updater argument, not the closure: this effect and the
+      // defaults effect above both resolve asynchronously off the same render,
+      // so spreading a captured `state.properties` would undo the other's writes.
+      setState((currentState) => ({
+        properties: {
+          ...currentState.properties,
+          hubSite: resolvedHubSite,
+          hubSiteTitle: resolvedHubSiteTitle,
+          hubSiteUrl: resolvedHubSiteUrl
+        }
+      }))
+    }
+
+    resolveHub()
+  }, [
+    state.loading,
+    state.types,
+    column.get('type'),
+    defaultType,
+    hubSiteTitle,
+    props.dataAdapter,
+    props.pageContext.legacyPageContext.hubSiteId
+  ])
 
   return {
     column,

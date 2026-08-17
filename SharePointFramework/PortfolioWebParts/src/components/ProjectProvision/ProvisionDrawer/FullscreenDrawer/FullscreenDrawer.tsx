@@ -60,6 +60,7 @@ export const FullscreenDrawer: FC<IFullscreenDrawerProps> = (props) => {
     isTeam,
     joinHub,
     usesDifferentHub,
+    hubResolveFailed,
     getField,
     fieldsToUse,
     fluentProviderId
@@ -80,6 +81,7 @@ export const FullscreenDrawer: FC<IFullscreenDrawerProps> = (props) => {
     isTeam,
     joinHub,
     usesDifferentHub,
+    hubResolveFailed,
     enableSensitivityLabels,
     enableSensitivityLabelsLibrary,
     enableRetentionLabels,

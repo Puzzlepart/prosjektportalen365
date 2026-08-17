@@ -19,6 +19,8 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Felter med datatype `Tags` (typisk taksonomi-felt, f.eks. `Tjenesteområde`) hvor verdiene har overordnede termer vises nå som et innrykket, sammenleggbart hierarki i filterpanelet i stedet for som flate `:`-separerte tekststrenger (`Overordnet:Underordnet`).
 - Overgang til `sp-js-provisioning` `1.3.8` for malbasert opprettelse og oppdatering av innholdstyper med faste ID-er. De 15 site script-filene som kun opprettet tomme innholdstyper er fjernet fra releasepakken, slik at innholdstypene forvaltes gjennom JSON-malene. Eksisterende installasjoner med eldre content type-site scripts kan fortsatt oppgraderes uten egen opprydding av disse site scriptene. [#1744](https://github.com/Puzzlepart/prosjektportalen365/issues/1744)
 - Ved oppgradering migreres eksisterende verdier fra de gamle Choice-feltene automatisk til det nye taksonomifeltet per prosjektsite. Kundetilpassede choice-verdier opprettes som nye termer i term settet. De gamle feltene skjules (`Hidden=TRUE`), men data bevares.
+- `Feltfilter` for vertikale faner i `Prosjektutlisting` støtter nå operatorer i tillegg til ren likhet: `$ne` (ikke lik), `$in` (én av) og `$nin` (ingen av).
+- `Bestillingsportalen`-app viser nå en advarsel på hubfeltet dersom standardhuben (`DefaultHub`) som er angitt på prosjekttypen ikke kan slås opp, i stedet for å falle tilbake til gjeldende hub uten tilbakemelding
 
 ### Feilrettinger
 
@@ -29,6 +31,10 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Rettet en feil hvor `Hent dokumentmal` gjorde gjentatte kall mot hubområdet og `Malbibliotek` ved innlasting av dokumentbibliotek, selv om brukeren ikke åpnet dialogen [#1749](https://github.com/Puzzlepart/prosjektportalen365/pull/1749)
 - Rettet en feil i `Dynamisk Liste` hvor Ja/Nei verdier alltid viser som "Nei"
 - Rettet en feil i oppsettveiviseren hvor private og delte Teams-kanaler (som oppretter egne SharePoint-områder knyttet til huben) feilaktig trigget oppsettveiviseren. Områdene mangler en Microsoft 365-gruppe, noe som førte til feildialogen «Invalid object identifier 'null'.» ved hver sideinnlasting. Veiviseren oppdager nå kanalområder (`TEAMCHANNEL`) og fjernes stille uten å gjøre endringer på området [#1754](https://github.com/Puzzlepart/prosjektportalen365/issues/1754)
+- Rettet en feil i `Bestillingsportalen`-app hvor standardhuben (`DefaultHub`) fra prosjekttypen ble forkastet ved lagring dersom `JoinHub` ikke var avkrysset. Prosjekttyper med `DefaultHub` angitt behandles nå alltid som hubtilknyttet
+- Rettet en feil i `Bestillingsportalen`-app hvor `DefaultHub` ble sammenlignet med gjeldende hub uten å ta hensyn til store/små bokstaver og klammeparenteser (`{}`). Dette kunne føre til at meldingen om at området knyttes til en annen hub ble vist selv om det var samme hub, og at hub-ID-en ble lagret i uensartet format
+- Rettet en feil i `Bestillingsportalen`-app hvor hubfeltet fortsatte å vise forrige hub dersom brukeren byttet områdetype etter at appen var åpnet. Verdien som ble lagret var riktig, men visningen var utdatert
+- Rettet en feil i `Bestillingsportalen`-app hvor prosjektinformasjonen som opprettes ved bestilling av underområde ble lagt i gjeldende hub selv om områdetypen peker på en annen hub
 
 ### Merk
 

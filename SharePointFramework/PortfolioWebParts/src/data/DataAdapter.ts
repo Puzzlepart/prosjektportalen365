@@ -22,6 +22,7 @@ import { Idea } from 'components/IdeaModule'
 import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
 import msGraph from 'msgraph-helper'
 import * as strings from 'PortfolioWebPartsStrings'
+import { normalizeHubSiteId } from 'utils/normalizeHubSiteId'
 import {
   DataSource,
   DataSourceService,
@@ -1697,17 +1698,23 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
   /**
    * Resolve a hub site by its ID using the SharePoint HubSites REST API.
-   * Returns the hub site title and ID, or null if the hub site could not be resolved.
+   * Returns the hub site title, normalized ID and site URL, or null if the hub
+   * site could not be resolved.
+   *
+   * The returned ID is normalized (lowercase, no braces) so it can be compared
+   * against `legacyPageContext.hubSiteId` regardless of how it was entered in
+   * the `Provisioning Types` list.
    *
    * @param hubSiteId Hub site ID (GUID)
    */
   public async resolveHubSiteById(
     hubSiteId: string
-  ): Promise<{ hubSiteId: string; title: string } | null> {
-    if (!hubSiteId) return null
+  ): Promise<{ hubSiteId: string; title: string; url: string } | null> {
+    const normalizedId = normalizeHubSiteId(hubSiteId)
+    if (!normalizedId) return null
     try {
       const webAbsoluteUrl = this._spfxContext.pageContext.web.absoluteUrl
-      const response = await fetch(`${webAbsoluteUrl}/_api/HubSites/GetById('${hubSiteId}')`, {
+      const response = await fetch(`${webAbsoluteUrl}/_api/HubSites/GetById('${normalizedId}')`, {
         method: 'GET',
         headers: { Accept: 'application/json;odata=nometadata' },
         credentials: 'include'
@@ -1715,8 +1722,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       if (!response.ok) return null
       const hubSite = await response.json()
       return {
-        hubSiteId: hubSiteId,
-        title: hubSite.Title || ''
+        hubSiteId: normalizeHubSiteId(hubSite.ID) || normalizedId,
+        title: hubSite.Title || '',
+        url: hubSite.SiteUrl || ''
       }
     } catch (error) {
       console.warn('Failed to resolve hub site by ID:', error)

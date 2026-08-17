@@ -24,6 +24,7 @@ export interface UseFieldConfigsParams {
   isTeam: boolean
   joinHub: boolean
   usesDifferentHub: boolean
+  hubResolveFailed: boolean
   enableSensitivityLabels: any
   enableSensitivityLabelsLibrary: any
   enableRetentionLabels: any
@@ -429,16 +430,19 @@ export function useFieldConfigs(params: UseFieldConfigsParams): Record<string, I
     }
   }
 
+  // No `inputProps.defaultValue` here on purpose: the hub is resolved
+  // asynchronously and can change while the drawer is open (when the user picks
+  // another site type), so the dropdown has to stay controlled by the column map.
   configs.hubSiteTitle = {
     hidden: params.getField('hubSiteTitle')?.hidden || !params.joinHub,
     disabled: true,
     description: params.usesDifferentHub
       ? format(strings.Provision.DefaultHubInfoMessage, context.column.get('hubSiteTitle'))
       : undefined,
-    inputProps: {
-      defaultValue: context.column.get('hubSiteTitle'),
-      defaultSelectedOptions: [context.column.get('hubSiteTitle')]
-    }
+    validationState: params.hubResolveFailed ? 'warning' : 'none',
+    validationMessage: params.hubResolveFailed
+      ? format(strings.Provision.DefaultHubResolveErrorMessage, context.column.get('hubSiteTitle'))
+      : undefined
   }
 
   return configs
