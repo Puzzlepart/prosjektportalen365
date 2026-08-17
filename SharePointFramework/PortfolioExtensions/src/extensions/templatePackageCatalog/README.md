@@ -36,7 +36,8 @@ central **`prosjektportalen-hosting`** catalog. A portal administrator can:
 {
   "catalogUrl": "https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-hosting/main/catalog.json",
   "userGuideUrl": "https://…",
-  "featureFlagProvisioning": false
+  "featureFlagProvisioning": false,
+  "telemetryUrl": ""
 }
 ```
 
@@ -44,6 +45,10 @@ central **`prosjektportalen-hosting`** catalog. A portal administrator can:
   committed `services/sampleCatalog.ts` fixture on CORS/network failure.
 - `userGuideUrl` — target of the "Se brukerveiledning" footer link.
 - `featureFlagProvisioning` — see below.
+- `telemetryUrl` — install-telemetry ingestion endpoint. Defaults to
+  `https://assist.prosjektportalen.no/api/telemetry/catalog` when omitted; set to
+  an **empty string** to disable telemetry for the installation. See *Telemetry*
+  below.
 
 ## Feature flag — taxonomy provisioning
 
@@ -68,6 +73,27 @@ as skymal reports a warning that taxonomy was skipped.
 
 `sessionStorage.setItem('PP_DISABLE_IMPORT', '1')` disables the whole import action
 during a controlled pilot.
+
+## Telemetry
+
+To give Puzzlepart insight into what is installed and used, the catalog sends one
+fire-and-forget event per completed (or failed) catalog action — install, update,
+remove, publish-as-cloud-template — to the `telemetryUrl` endpoint
+(prosjektportalen-assist by default, admin-login protected storage).
+
+Each event contains: action + success/error (with a truncated error message),
+package id/version/type, previously registered version (updates/removals), the
+installed Prosjektportalen version, the tenant host (`*.sharepoint.com`), the hub
+site URL, the AAD tenant id, and a client timestamp. Nothing about end users or
+project content is sent.
+
+Telemetry never blocks or fails a catalog action — failures are swallowed with an
+Info log entry (`(TelemetryService)`).
+
+Opt out via either:
+
+- `telemetryUrl: ""` on the CustomAction properties (whole installation), or
+- `sessionStorage.setItem('PP_DISABLE_TELEMETRY', '1')` for the current session.
 
 ## Dev / test
 

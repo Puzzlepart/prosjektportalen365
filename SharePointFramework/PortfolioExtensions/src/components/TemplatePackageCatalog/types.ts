@@ -15,6 +15,11 @@ export interface ITemplatePackageCatalogProps {
   catalogUrl?: string
   userGuideUrl?: string
   featureFlagProvisioning?: boolean
+  /**
+   * Install-telemetry ingestion endpoint; defaults to prosjektportalen-assist,
+   * empty string disables (see `services/TelemetryService.ts`).
+   */
+  telemetryUrl?: string
   onDismiss: () => void
 }
 

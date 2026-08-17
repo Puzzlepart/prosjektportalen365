@@ -99,6 +99,7 @@ export default class TemplatePackageCatalogCommandSet extends BaseListViewComman
         catalogUrl: this.properties.catalogUrl,
         userGuideUrl: this.properties.userGuideUrl,
         featureFlagProvisioning: this.properties.featureFlagProvisioning,
+        telemetryUrl: this.properties.telemetryUrl,
         onDismiss: () => this._unmount(placeholder)
       }),
       placeholder

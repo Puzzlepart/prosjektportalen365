@@ -1,5 +1,6 @@
 const SS_DISABLE_TAXONOMY = 'PP_DISABLE_TAXONOMY'
 const SS_DISABLE_IMPORT = 'PP_DISABLE_IMPORT'
+const SS_DISABLE_TELEMETRY = 'PP_DISABLE_TELEMETRY'
 
 function readSessionFlag(key: string): boolean {
   try {
@@ -36,5 +37,15 @@ export const featureFlags = {
    */
   isImportEnabled(): boolean {
     return !readSessionFlag(SS_DISABLE_IMPORT)
+  },
+
+  /**
+   * Whether catalog install-telemetry events are sent (see `TelemetryService`).
+   * On by default; set the `PP_DISABLE_TELEMETRY` session flag to disable
+   * in-session, or set the command-set property `telemetryUrl` to an empty
+   * string to disable for the whole installation.
+   */
+  isTelemetryEnabled(): boolean {
+    return !readSessionFlag(SS_DISABLE_TELEMETRY)
   }
 }

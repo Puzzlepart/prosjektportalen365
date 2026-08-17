@@ -5,7 +5,8 @@ import {
   CatalogService,
   TemplateOptionsService,
   PackageInstaller,
-  ProjectExtensionsService
+  ProjectExtensionsService,
+  TelemetryService
 } from 'services'
 import { isNewerVersion } from 'services/version'
 import SPDataAdapter from 'data/SPDataAdapter'
@@ -273,13 +274,17 @@ export function useTemplatePackageCatalog(
       notification: undefined,
       installProgress: { steps: [], status: 'running', log: [] }
     })
+    // Snapshot BEFORE the install: refreshCrossRef() below overwrites the
+    // cross-reference, and its prior presence is what discriminates a fresh
+    // install from an update (for both the installer and telemetry).
+    const priorRef = crossRefFor(pkg.id)
+    const action = priorRef?.itemId ? ('update' as const) : ('install' as const)
     try {
-      const existingItemId = crossRefFor(pkg.id)?.itemId
       const completed = await PackageInstaller.runImport({
         package: pkg,
         context: props.context,
         featureFlagProvisioning: props.featureFlagProvisioning,
-        existingItemId,
+        existingItemId: priorRef?.itemId,
         onProgress: (installProgress) => setState({ installProgress }),
         // Surface compatibility conflicts via the dialog and pause on the
         // awaited promise until the admin chooses Avbryt / Fortsett likevel.
@@ -290,9 +295,18 @@ export function useTemplatePackageCatalog(
           })
       })
       // Cancelled at the compatibility prompt — the progress pane already shows
-      // the cancelled state; don't report success.
+      // the cancelled state; don't report success (and no telemetry event).
       if (!completed) return
       await refreshCrossRef()
+      void TelemetryService.track(props, {
+        action,
+        status: 'success',
+        packageId: pkg.id,
+        packageVersion: pkg.version,
+        packageType: pkg.type,
+        previousVersion: priorRef?.installedVersion,
+        ppVersion: state.installedVersion
+      })
       setState({
         notification: {
           intent: 'success',
@@ -303,6 +317,16 @@ export function useTemplatePackageCatalog(
         }
       })
     } catch (error) {
+      void TelemetryService.track(props, {
+        action,
+        status: 'error',
+        errorMessage: error?.message,
+        packageId: pkg.id,
+        packageVersion: pkg.version,
+        packageType: pkg.type,
+        previousVersion: priorRef?.installedVersion,
+        ppVersion: state.installedVersion
+      })
       setState({
         notification: { intent: 'error', text: error?.message || strings.CatalogInstallErrorTitle }
       })
@@ -345,12 +369,30 @@ export function useTemplatePackageCatalog(
         description: result.localizedDescription
       })
       await refreshCrossRef()
+      void TelemetryService.track(props, {
+        action: 'publishCentral',
+        status: 'success',
+        packageId: pkg.id,
+        packageVersion: pkg.version,
+        packageType: pkg.type,
+        ppVersion: state.installedVersion,
+        detail: { taxonomySkipped: result.taxonomySkipped }
+      })
       setState({
         notification: result.taxonomySkipped
           ? { intent: 'warning', text: strings.CatalogPublishTaxonomySkippedText }
           : { intent: 'success', text: strings.CatalogPublishSuccessText }
       })
     } catch (error) {
+      void TelemetryService.track(props, {
+        action: 'publishCentral',
+        status: 'error',
+        errorMessage: error?.message,
+        packageId: pkg.id,
+        packageVersion: pkg.version,
+        packageType: pkg.type,
+        ppVersion: state.installedVersion
+      })
       setState({
         notification: { intent: 'error', text: error?.message || strings.CatalogPublishErrorText }
       })
@@ -379,6 +421,17 @@ export function useTemplatePackageCatalog(
         await TemplateOptionsService.remove(ref.itemId)
       }
       await refreshCrossRef()
+      void TelemetryService.track(props, {
+        action: 'remove',
+        status: 'success',
+        packageId: pkg.id,
+        packageVersion: pkg.version,
+        packageType: pkg.type,
+        previousVersion: ref.installedVersion,
+        ppVersion: state.installedVersion,
+        // What kind of registration was removed (Importert vs Sentral).
+        detail: { removedType: ref.packageType }
+      })
       setState({
         notification: {
           intent: 'success',
@@ -389,6 +442,16 @@ export function useTemplatePackageCatalog(
         }
       })
     } catch (error) {
+      void TelemetryService.track(props, {
+        action: 'remove',
+        status: 'error',
+        errorMessage: error?.message,
+        packageId: pkg.id,
+        packageVersion: pkg.version,
+        packageType: pkg.type,
+        previousVersion: ref.installedVersion,
+        ppVersion: state.installedVersion
+      })
       setState({
         notification: {
           intent: 'error',

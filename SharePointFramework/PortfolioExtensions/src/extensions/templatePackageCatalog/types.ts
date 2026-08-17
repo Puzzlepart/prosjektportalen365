@@ -20,4 +20,12 @@ export interface ITemplatePackageCatalogCommandProperties {
    * `false` disables it. See `services/featureFlags.ts`.
    */
   featureFlagProvisioning?: boolean
+
+  /**
+   * Ingestion endpoint for install-telemetry events (see
+   * `services/TelemetryService.ts`). Defaults to the prosjektportalen-assist
+   * endpoint when omitted; an empty string disables telemetry for the
+   * installation.
+   */
+  telemetryUrl?: string
 }
