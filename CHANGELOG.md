@@ -29,12 +29,16 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Kolonner i tidslinjelisten følger nå rekkefølgen som er definert på innholdstypen. Felt som er skjult på innholdstypen ekskluderes også fra kolonner og redigeringspanel
 - Kolonner i porteføljeoversikten respekterer nå innstillingen `Vis i porteføljeoversikt` i `Prosjektkolonner` listen og fjerner de fra visningen, selv om kolonnen er definert i visningen i `Porteføljevisninger` listen. Tidligere lå disse kolonnene fortsatt i visningen, selv om kolonnen ikke var tilgjengelig i vis/skjul kolonner panelet, og dermed kunne aldri fjernes
 - Rettet en feil hvor `Hent dokumentmal` gjorde gjentatte kall mot hubområdet og `Malbibliotek` ved innlasting av dokumentbibliotek, selv om brukeren ikke åpnet dialogen [#1749](https://github.com/Puzzlepart/prosjektportalen365/pull/1749)
+- Rettet en feil i `Aggregert oversikt` hvor kolonnene i visningene ikke ble oppdatert ved endring av visning [#1751](https://github.com/Puzzlepart/prosjektportalen365/pull/1751)
 - Rettet en feil i `Dynamisk Liste` hvor Ja/Nei verdier alltid viser som "Nei"
 - Rettet en feil i oppsettveiviseren hvor private og delte Teams-kanaler (som oppretter egne SharePoint-områder knyttet til huben) feilaktig trigget oppsettveiviseren. Områdene mangler en Microsoft 365-gruppe, noe som førte til feildialogen «Invalid object identifier 'null'.» ved hver sideinnlasting. Veiviseren oppdager nå kanalområder (`TEAMCHANNEL`) og fjernes stille uten å gjøre endringer på området [#1754](https://github.com/Puzzlepart/prosjektportalen365/issues/1754)
 - Rettet en feil i `Bestillingsportalen`-app hvor standardhuben (`DefaultHub`) fra prosjekttypen ble forkastet ved lagring dersom `JoinHub` ikke var avkrysset. Prosjekttyper med `DefaultHub` angitt behandles nå alltid som hubtilknyttet
 - Rettet en feil i `Bestillingsportalen`-app hvor `DefaultHub` ble sammenlignet med gjeldende hub uten å ta hensyn til store/små bokstaver og klammeparenteser (`{}`). Dette kunne føre til at meldingen om at området knyttes til en annen hub ble vist selv om det var samme hub, og at hub-ID-en ble lagret i uensartet format
 - Rettet en feil i `Bestillingsportalen`-app hvor hubfeltet fortsatte å vise forrige hub dersom brukeren byttet områdetype etter at appen var åpnet. Verdien som ble lagret var riktig, men visningen var utdatert
 - Rettet en feil i `Bestillingsportalen`-app hvor prosjektinformasjonen som opprettes ved bestilling av underområde ble lagt i gjeldende hub selv om områdetypen peker på en annen hub
+- Rettet en feil i `Dynamisk Liste` hvor Ja/Nei verdier alltid viser som "Nei" [#1747](https://github.com/Puzzlepart/prosjektportalen365/pull/1747)
+- Rettet en feil i `Aggregert oversikt` hvor kolonnene i visningene ikke ble oppdatert ved endring av visning [#1751](https://github.com/Puzzlepart/prosjektportalen365/pull/1751)
+- Rettet en feil i oppsettveiviseren hvor private og delte Teams-kanaler (som oppretter egne SharePoint-områder knyttet til huben) feilaktig trigget oppsettveiviseren. Områdene mangler en Microsoft 365-gruppe, noe som førte til feildialogen «Invalid object identifier 'null'.» ved hver sideinnlasting. Veiviseren oppdager nå kanalområder (`TEAMCHANNEL`) og fjernes stille uten å gjøre endringer på området [#1754](https://github.com/Puzzlepart/prosjektportalen365/issues/1754)
 
 ### Merk
 
