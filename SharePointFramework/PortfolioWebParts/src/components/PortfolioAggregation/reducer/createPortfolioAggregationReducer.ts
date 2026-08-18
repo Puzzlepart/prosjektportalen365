@@ -131,8 +131,8 @@ export const createPortfolioAggregationReducer = (
       let selectedColumns = !_.isEmpty(viewColumns) ? viewColumns : (props.columns ?? [])
 
       let allColumnsForCategory = availableColumns.map((c) => {
-
-        const col = c instanceof ProjectContentColumn ? c : Object.assign(new ProjectContentColumn(), c)
+        const col =
+          c instanceof ProjectContentColumn ? c : Object.assign(new ProjectContentColumn(), c)
         const column = col.setData({
           isSelected: _.some(selectedColumns, ({ key }) => key === col.key) || col.data?.isLocked
         })
@@ -146,13 +146,11 @@ export const createPortfolioAggregationReducer = (
         return column
       })
 
-      if (payload.dataSource.level.includes(resource.Lists_DataSources_Level_Project)) {
+      if (payload.dataSource.level?.includes(resource.Lists_DataSources_Level_Project)) {
         allColumnsForCategory = allColumnsForCategory.filter(
           ({ internalName }) => internalName !== 'SiteTitle'
         )
       }
-
-      console.log('acf', allColumnsForCategory)
 
       selectedColumns = selectedColumns
         .map((c) => {
