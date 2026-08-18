@@ -576,8 +576,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         spfxContext: this.context
       })
 
-      const [_templates, extensions, contentConfig, templateFiles, projectData] =
-        await Promise.all([
+      const [_templates, extensions, contentConfig, templateFiles, projectData] = await Promise.all(
+        [
           this._getTemplates(),
           this._portalDataService.getItems(
             resource.Lists_ProjectExtensions_Title,
@@ -600,7 +600,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             ['File']
           ),
           this._portalDataService.getProjectData()
-        ])
+        ]
+      )
       const templates = _templates.map((tmpl) => {
         const [tmplFile] = templateFiles.filter((file) => file.id === tmpl.projectTemplateId)
         tmpl.projectTemplateUrl = tmplFile?.serverRelativeUrl
