@@ -90,7 +90,7 @@ The version of PnP.PowerShell to load.
 function LoadBundle() {
     Param(
         [Parameter(Mandatory = $false)]
-        [string]$Version = "3.1.0"
+        [string]$Version = (Get-PnPVersion).ToString()
     )
     $BundlePath = Join-Path $PSScriptRoot "../PnP.PowerShell/$Version/PnP.PowerShell.psd1"
     if (-not (Test-Path $BundlePath)) {
@@ -102,6 +102,10 @@ function LoadBundle() {
         return $null
     }
     return $Cmd.Version
+}
+
+function Get-PnPVersion {
+    return [version]"3.2.0"
 }
 
 <#
