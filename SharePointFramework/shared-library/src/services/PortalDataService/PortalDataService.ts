@@ -429,9 +429,9 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   public async getProjectColumns(): Promise<ProjectColumn[]> {
     if (!this.isAvailable) return []
     try {
-      const spItems = await this._getList('PROJECT_COLUMNS').items.select(
-        ...getClassProperties(SPProjectColumnItem)
-      )<SPProjectColumnItem[]>()
+      const spItems = await this._getList('PROJECT_COLUMNS')
+        .items.select(...getClassProperties(SPProjectColumnItem))
+        .top(500)<SPProjectColumnItem[]>()
       return spItems.map((item) => new ProjectColumn(item))
     } catch (error) {
       this._handleAvailabilityError(error, 'getProjectColumns')
@@ -906,9 +906,9 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   ) {
     try {
       const list = this._getList(_list)
-      const columnItems = await list.items.select(
-        ...Object.keys(new SPProjectContentColumnItem())
-      )()
+      const columnItems = await list.items
+        .select(...Object.keys(new SPProjectContentColumnItem()))
+        .top(500)()
 
       // If no category specified, return all columns
       if (stringIsNullOrEmpty(dataSourceCategory)) {

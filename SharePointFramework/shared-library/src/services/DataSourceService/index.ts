@@ -35,7 +35,7 @@ export class DataSourceService {
         this._dataSourcesList.items
           .select(...Object.keys(new SPDataSourceItem()))
           .filter(filter)<SPDataSourceItem[]>(),
-        this._columnsList.items()
+        this._columnsList.items.top(500)()
       ])
       return item
         ? new DataSource(
@@ -93,7 +93,8 @@ export class DataSourceService {
     }
     const items = await this._dataSourcesList.items
       .select(...Object.keys(new SPDataSourceItem()))
-      .filter(filter)<SPDataSourceItem[]>()
+      .filter(filter)
+      .top(500)<SPDataSourceItem[]>()
     return items.map((item) => new DataSource(item, columns))
   }
 }
