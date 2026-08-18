@@ -4,6 +4,7 @@ import { ChevronDownRegular, ChevronUpRegular } from '@fluentui/react-icons'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { FC, useEffect, useState } from 'react'
 import { format } from '@uifabric/utilities'
+import { UserMessage } from 'pp365-shared-library'
 import { BaseDialog } from '../@BaseDialog'
 import styles from './ProgressDialog.module.scss'
 import { IProgressDialogProps } from './types'
@@ -13,7 +14,8 @@ export const ProgressDialog: FC<IProgressDialogProps> = (props) => {
   const [logExpanded, setLogExpanded] = useState(false)
 
   const hasTaskProgress = props.taskProgress && props.taskProgress.length > 0
-  const hasError = hasTaskProgress && props.taskProgress.some((t) => t.status === 'error')
+  const hasError =
+    !!props.error || (hasTaskProgress && props.taskProgress.some((t) => t.status === 'error'))
   const isExpanded = logExpanded || hasError
   const title = props.title ?? strings.ProgressDialogTitle
   const subText = props.subText ?? strings.ProgressDialogSubText
@@ -24,12 +26,15 @@ export const ProgressDialog: FC<IProgressDialogProps> = (props) => {
     }
   }, [props.isComplete])
 
-  const footer =
-    props.isComplete && logExpanded ? (
-      <Button appearance='primary' onClick={props.onDismiss}>
-        {strings.ContinueToProjectText}
-      </Button>
-    ) : undefined
+  const footer = props.error ? (
+    <Button appearance='primary' onClick={props.onDismiss}>
+      {strings.CloseModalText}
+    </Button>
+  ) : props.isComplete && logExpanded ? (
+    <Button appearance='primary' onClick={props.onDismiss}>
+      {strings.ContinueToProjectText}
+    </Button>
+  ) : undefined
 
   return (
     <BaseDialog
@@ -92,6 +97,14 @@ export const ProgressDialog: FC<IProgressDialogProps> = (props) => {
             </div>
           )}
         </>
+      )}
+      {props.error && (
+        <UserMessage
+          title={props.error.message}
+          text={props.error.stack}
+          intent='error'
+          containerStyle={{ marginTop: 12 }}
+        />
       )}
     </BaseDialog>
   )

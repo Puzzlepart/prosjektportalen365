@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useRef } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import {
   Accordion,
   AccordionItem,
@@ -98,14 +98,39 @@ const TaskLogEntries: FC<{ task: ITaskProgress }> = ({ task }) => {
 }
 
 export const TaskLogSection: FC<ITaskLogSectionProps> = ({ tasks }) => {
-  const openItems = useMemo(
-    () => tasks.filter((t) => t.status === 'running' || t.status === 'error').map((t) => t.name),
-    [tasks.map((t) => `${t.name}:${t.status}`).join(',')]
-  )
+  const [openItems, setOpenItems] = useState<string[]>([])
+  const prevStatuses = useRef<Record<string, TaskStatus>>({})
+
+  useEffect(() => {
+    const autoOpen: string[] = []
+    const autoClose: string[] = []
+    tasks.forEach((task) => {
+      const prevStatus = prevStatuses.current[task.name]
+      if (task.status !== prevStatus) {
+        if (task.status === 'running' || task.status === 'error') {
+          autoOpen.push(task.name)
+        } else if (prevStatus === 'running') {
+          autoClose.push(task.name)
+        }
+      }
+      prevStatuses.current[task.name] = task.status
+    })
+    if (autoOpen.length > 0 || autoClose.length > 0) {
+      setOpenItems((items) => [
+        ...items.filter((item) => !autoClose.includes(item)),
+        ...autoOpen.filter((item) => !items.includes(item))
+      ])
+    }
+  }, [tasks.map((t) => `${t.name}:${t.status}`).join(',')])
 
   return (
     <div className={styles.taskLogSection}>
-      <Accordion collapsible multiple openItems={openItems}>
+      <Accordion
+        collapsible
+        multiple
+        openItems={openItems}
+        onToggle={(_, data) => setOpenItems(data.openItems as string[])}
+      >
         {tasks.map((task) => (
           <AccordionItem key={task.name} value={task.name}>
             <AccordionHeader size='small'>

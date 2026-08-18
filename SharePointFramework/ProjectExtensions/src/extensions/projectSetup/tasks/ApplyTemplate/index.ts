@@ -41,13 +41,21 @@ export class ApplyTemplate extends BaseTask {
         const templateSchema = _.omit(params.templateSchema, params.templateExcludeHandlers)
         await provisioner.applyTemplate(templateSchema, null, (handler) => {
           if (APPLY_TEMPLATE_STATUS_MAP.has(handler)) {
-            const { text, iconName } = APPLY_TEMPLATE_STATUS_MAP.get(handler)!
+            const { text, iconName, getLogMessages } = APPLY_TEMPLATE_STATUS_MAP.get(handler)!
             onProgress(
               format(strings.ApplyTemplateText, this.data.selectedTemplate.text),
               text,
               iconName,
               { message: `Applying handler: ${handler} - ${text}`, level: 'info' }
             )
+            getLogMessages?.(templateSchema).forEach((message) => {
+              onProgress(
+                format(strings.ApplyTemplateText, this.data.selectedTemplate.text),
+                text,
+                iconName,
+                { message, level: 'info' }
+              )
+            })
           }
         })
       } else {

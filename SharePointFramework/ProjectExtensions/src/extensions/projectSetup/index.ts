@@ -238,7 +238,29 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         })
       }
     } catch (error) {
-      this._renderErrorDialog({ error })
+      if (this._taskProgress?.some((task) => task.status === 'error')) {
+        this._renderProgressDialog({
+          progressIndicator: {
+            label: strings.ProgressDialogLabel,
+            description: strings.ProgressDialogDescription
+          },
+          iconName: 'ErrorBadge',
+          title: this.properties.progressDialogTitle,
+          subText: this.properties.progressDialogSubText,
+          taskProgress: this._taskProgress,
+          currentStep: this._currentTaskIndex,
+          totalSteps: this._totalTasks,
+          error,
+          onDismiss: async () => {
+            if (this._isSetup) {
+              await deleteCustomizer(this)
+            }
+            this._unmount(this._getPlaceholder('ProgressDialog'))
+          }
+        })
+      } else {
+        this._renderErrorDialog({ error })
+      }
     }
   }
 
