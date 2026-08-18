@@ -190,6 +190,9 @@ define([], function () {
     SubProjectsFieldDescription:
       'Ett delprosjekt per linje på formatet nøkkel eller nøkkel|etikett (f.eks. DP1|Delprosjekt 1). Nøkkelen identifiserer rapportserien og bør ikke endres etter at rapportering har startet — etiketten kan endres fritt.',
     DefaultScopeLabel: 'Hovedrapportering',
+    ExcludeSectionsFieldLabel: 'Ekskluderte seksjoner',
+    ExcludeSectionsFieldDescription:
+      'Seksjoner som ikke skal vises på statussiden — én seksjonstittel per linje (matcher Tittel i Statusseksjoner-listen). Tom verdi viser alle seksjoner.',
     ScopeSelectorDescription: 'Velg hvilket delprosjekt du vil se og rapportere status for',
     NoStatusReportsMessage:
       'Det er ennå ikke rapportert status for prosjektet. Hvis du er eier av området, kan du rapportere status ved å klikke på _Ny statusrapport_ i menyen over.',
