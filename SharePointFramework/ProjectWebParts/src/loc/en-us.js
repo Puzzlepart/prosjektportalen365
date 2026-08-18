@@ -41,6 +41,9 @@ define([], function () {
     SubProjectsFieldDescription:
       "One sub-project per line on the format key or key|label (e.g. SP1|Sub-project 1). The key identifies the report series and should not be changed after reporting has started — the label can be renamed freely.",
     DefaultScopeLabel: "Main reporting",
+    ExcludeSectionsFieldLabel: "Excluded sections",
+    ExcludeSectionsFieldDescription:
+      "Sections to hide on the status page — one section title per line (matches Title in the Status Sections list). Leave empty to show all sections.",
     ScopeSelectorDescription: "Select which sub-project to view and report status for",
     PhaseSitePageTitle: "Dynamic homepage is enabled",
     PhaseUseStartArrowLabel: "Use start arrow",

@@ -45,6 +45,21 @@ function isNoHubError(error: unknown) {
 const SYSTEM_USER_FIELDS = ['Author', 'Editor']
 
 /**
+ * Parses the web part's `excludeSections` property (one section name per line)
+ * into a set of normalized (trimmed, lowercase) section names.
+ *
+ * @param excludeSections Raw `excludeSections` property value
+ */
+function parseExcludedSections(excludeSections: string): Set<string> {
+  return new Set(
+    (excludeSections ?? '')
+      .split(/\r?\n/)
+      .map((line) => line.trim().toLowerCase())
+      .filter(Boolean)
+  )
+}
+
+/**
  * Gets the report ID from the URL hash (`#selectedReport=`) or query
  * parameter (`?selectedReport=`), hash winning. Returns `null` when neither
  * is present.
@@ -180,7 +195,10 @@ async function fetchData(
     let sortedReports = allReports
       .filter((report) => getScopeSeriesKey(report.scopeKey) === getScopeSeriesKey(resolvedScope))
       .sort((a, b) => b.created.getTime() - a.created.getTime())
-    const sortedSections = sections.sort((a, b) => (a.sortOrder < b.sortOrder ? -1 : 1))
+    const excludedSectionNames = parseExcludedSections(props.excludeSections)
+    const sortedSections = sections
+      .filter((section) => !excludedSectionNames.has((section.name ?? '').trim().toLowerCase()))
+      .sort((a, b) => (a.sortOrder < b.sortOrder ? -1 : 1))
     let [initialSelectedReport] = sortedReports
     const sourceUrl = decodeURIComponent(getUrlParam('Source') ?? '')
 

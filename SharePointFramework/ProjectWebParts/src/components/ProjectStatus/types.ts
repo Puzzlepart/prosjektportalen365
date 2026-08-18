@@ -61,6 +61,13 @@ export interface IProjectStatusProps extends IBaseWebPartComponentProps {
    * label is display-only and can be renamed freely.
    */
   subProjects?: string
+
+  /**
+   * Section names ("Statusseksjoner" item titles) to hide on the status page —
+   * one section title per line. Matching is trimmed and case-insensitive.
+   * An empty value shows all sections.
+   */
+  excludeSections?: string
 }
 
 export interface IProjectStatusState extends IBaseWebPartComponentState<IProjectStatusData> {

@@ -145,6 +145,13 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                   max: 350,
                   step: 10,
                   value: 250
+                }),
+                PropertyPaneTextField('excludeSections', {
+                  label: strings.ExcludeSectionsFieldLabel,
+                  description: strings.ExcludeSectionsFieldDescription,
+                  multiline: true,
+                  resizable: true,
+                  rows: 4
                 })
               ]
             },

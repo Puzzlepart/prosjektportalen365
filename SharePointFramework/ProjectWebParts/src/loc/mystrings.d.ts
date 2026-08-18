@@ -146,6 +146,8 @@ declare interface IProjectWebPartsStrings {
   SubProjectsFieldLabel: string
   SubProjectsFieldDescription: string
   DefaultScopeLabel: string
+  ExcludeSectionsFieldLabel: string
+  ExcludeSectionsFieldDescription: string
   ScopeSelectorDescription: string
   NotPublishedStatusReport: string
   OpportunityMatrixGroupName: string
