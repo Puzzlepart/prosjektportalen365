@@ -37,11 +37,17 @@ export class CustomActions extends BaseTask {
   /**
    * Update custom action for library template selector based on value set for the selected template.
    *
+   * The custom actions are fetched fresh here, as the template selector custom action
+   * may have been added by the `CustomActions` handler during the `ApplyTemplate` task.
+   *
    * @param customActionTitle Custom action title for the library template selector.
    */
   private async _updateTemplateSelectorCustomAction(customActionTitle = 'Malvelger') {
     const templateLibraryUrl = this.data.selectedTemplate.templateLibraryUrl
-    const templateSelectorCustomAction = this.data.customActions.find(
+    const customActions = await this.params.web.userCustomActions<
+      { Id: string; Title: string; ClientSideComponentProperties: string }[]
+    >()
+    const templateSelectorCustomAction = customActions.find(
       ({ Title }) => Title === customActionTitle
     )
     if (!Boolean(templateSelectorCustomAction)) {

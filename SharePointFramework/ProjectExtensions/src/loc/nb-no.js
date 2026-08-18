@@ -35,6 +35,7 @@ define([], function () {
     ApplyTemplateClientSidePages: 'Legger inn filer og webdeler',
     ApplyTemplateComposedLook: 'Legger på farge og fonter',
     ApplyTemplateContentTypes: 'Legger inn innholdstyper',
+    ApplyTemplateCustomActions: 'Legger inn utvidelser',
     ApplyTemplateErrorMessage: 'Det skjedde en feil i steg {0} under konfigurering av området',
     ApplyTemplateFiles: 'Legger inn filer og webdeler',
     ApplyTemplateHooks: 'Kjører hooks definert i prosjektmalen',

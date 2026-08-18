@@ -34,6 +34,7 @@ declare interface IProjectExtensionsStrings {
   ApplyTemplateClientSidePages: string
   ApplyTemplateComposedLook: string
   ApplyTemplateContentTypes: string
+  ApplyTemplateCustomActions: string
   ApplyTemplateErrorMessage: string
   ApplyTemplateFiles: string
   ApplyTemplateHooks: string

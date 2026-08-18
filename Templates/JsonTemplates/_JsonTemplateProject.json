@@ -570,6 +570,31 @@
     "WebSettings": {
         "WelcomePage": "SitePages/ProjectHome.aspx"
     },
+    "CustomActions": [
+        {
+            "Name": "ProjectUpgrade",
+            "Title": "Oppgradering av prosjekter",
+            "Location": "ClientSideExtension.ApplicationCustomizer",
+            "ClientSideComponentId": "{{ControlId_ProjectUpgrade}}",
+            "ClientSideComponentProperties": "{}"
+        },
+        {
+            "Name": "TemplateSelectorCommandSet",
+            "Title": "Malvelger",
+            "Location": "ClientSideExtension.ListViewCommandSet.CommandBar",
+            "ClientSideComponentId": "{{ControlId_TemplateSelectorCommand}}",
+            "ClientSideComponentProperties": "{\"templateLibrary\": \"Malbibliotek\"}",
+            "RegistrationId": "101",
+            "RegistrationType": 1
+        },
+        {
+            "Name": "Footer",
+            "Title": "Footer",
+            "Location": "ClientSideExtension.ApplicationCustomizer",
+            "ClientSideComponentId": "{{ControlId_Footer}}",
+            "ClientSideComponentProperties": "{}"
+        }
+    ],
     "ClientSidePages": [
         {
             "Name": "ProjectHome.aspx",

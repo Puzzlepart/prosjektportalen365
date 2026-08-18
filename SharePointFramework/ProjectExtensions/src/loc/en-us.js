@@ -48,6 +48,7 @@ define([], function () {
     ApplyTemplateClientSidePages: 'Applying files and web parts',
     ApplyTemplateComposedLook: 'Applying color and fonts',
     ApplyTemplateContentTypes: 'Applying content types',
+    ApplyTemplateCustomActions: 'Applying extensions',
     ApplyTemplateErrorMessage: 'An error occurred in step {0} during configuration of the site',
     ApplyTemplateFiles: 'Applying files and web parts',
     ApplyTemplateHooks: 'Running hooks defined in the project template',

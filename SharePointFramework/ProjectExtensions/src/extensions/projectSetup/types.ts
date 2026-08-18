@@ -104,11 +104,6 @@ export interface IProjectSetupData extends IProjectSetupDialogState {
   contentConfig?: ContentConfig[]
 
   /**
-   * Custom actions for the web
-   */
-  customActions?: any[]
-
-  /**
    * Project data field values
    */
   projectData?: ItemFieldValues

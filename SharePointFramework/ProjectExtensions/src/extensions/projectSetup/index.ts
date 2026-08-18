@@ -554,7 +554,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         spfxContext: this.context
       })
 
-      const [_templates, extensions, contentConfig, templateFiles, customActions, projectData] =
+      const [_templates, extensions, contentConfig, templateFiles, projectData] =
         await Promise.all([
           this._getTemplates(),
           this._portalDataService.getItems(
@@ -577,7 +577,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             },
             ['File']
           ),
-          this.sp.web.userCustomActions(),
           this._portalDataService.getProjectData()
         ])
       const templates = _templates.map((tmpl) => {
@@ -602,7 +601,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         extensions,
         contentConfig,
         templates,
-        customActions,
         projectData,
         hasExistingTemplate
       } as IProjectSetupData
