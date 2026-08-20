@@ -852,11 +852,13 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       fields?.secondaryUserField,
       templateMap
     )
-    projects = projects.filter(
-      (m) =>
-        m.lifecycleStatus !== strings.LifecycleStatus_Completed &&
-        m.lifecycleStatus !== strings.LifecycleStatus_Closed
-    )
+    if (!fields?.includeClosed) {
+      projects = projects.filter(
+        (m) =>
+          m.lifecycleStatus !== strings.LifecycleStatus_Completed &&
+          m.lifecycleStatus !== strings.LifecycleStatus_Closed
+      )
+    }
     projects = projects.sort((a, b) => (a.title ?? '').localeCompare(b.title ?? ''))
     return projects
   }
@@ -877,11 +879,13 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
     const result: IProjectsData = { items, sites: [], memberOfGroups: [], users: [] }
     let projects = this._combineResultData(result, undefined, undefined, templateMap)
-    projects = projects.filter(
-      (m) =>
-        m.lifecycleStatus !== strings.LifecycleStatus_Completed &&
-        m.lifecycleStatus !== strings.LifecycleStatus_Closed
-    )
+    if (!fields?.includeClosed) {
+      projects = projects.filter(
+        (m) =>
+          m.lifecycleStatus !== strings.LifecycleStatus_Completed &&
+          m.lifecycleStatus !== strings.LifecycleStatus_Closed
+      )
+    }
     projects = projects.sort((a, b) => (a.title ?? '').localeCompare(b.title ?? ''))
     return projects
   }

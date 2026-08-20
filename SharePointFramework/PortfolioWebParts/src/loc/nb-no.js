@@ -568,6 +568,8 @@ define([], function () {
     ShowRenderModeSelectorLabel: 'Vis visningsvelger',
     ShowSearchBoxDescription: 'Her kan du velge om søkeboksen skal vises eller ikke.',
     ShowSearchBoxLabel: 'Vis søkeboks',
+    ShowClosedProjectsLabel: 'Vis avsluttede prosjekter',
+    ShowClosedProjectsDescription: 'Tar med prosjekter med livssyklusstatus Avsluttet. Disse er utelatt som standard. Når innstillingen er på, avgjør filtrene på hver vertikal om de vises \u2014 legg til {"GtProjectLifecycleStatus": {"$ne": "Avsluttet"}} i feltfilteret på fanene som fortsatt skal holdes fri for dem.',
     ShowSortByDescription: 'Her kan du velge om sorteringsknappen skal vises eller ikke.',
     ShowSortByLabel: 'Vis sorteringsknapp',
     ShowViewSelectorLabel: 'Vis visningsvelger',

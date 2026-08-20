@@ -541,6 +541,8 @@ define([], function () {
     ShowProjectLogoFieldLabel: 'Show logo',
     ShowRenderModeSelectorLabel: 'Show view selector',
     ShowSearchBoxLabel: 'Show search box',
+    ShowClosedProjectsLabel: "Show closed projects",
+    ShowClosedProjectsDescription: "Includes projects with lifecycle status Closed. These are excluded by default. When enabled, each vertical's filters decide whether they are shown \u2014 add {\"GtProjectLifecycleStatus\": {\"$ne\": \"Closed\"}} to the field filter on the tabs that should stay free of them.",
     ShowViewSelectorLabel: 'Show view selector',
     SiteTitleLabel: 'Project',
     SortAscLabel: 'Z to A',

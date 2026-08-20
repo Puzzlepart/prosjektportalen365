@@ -567,6 +567,8 @@ declare interface IPortfolioWebPartsStrings {
   ShowRenderModeSelectorLabel: string
   ShowSearchBoxDescription: string
   ShowSearchBoxLabel: string
+  ShowClosedProjectsLabel: string
+  ShowClosedProjectsDescription: string
   ShowSortByDescription: string
   ShowSortByLabel: string
   ShowViewSelectorLabel: string

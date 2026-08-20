@@ -111,6 +111,16 @@ export interface IProjectListProps extends IBaseComponentProps {
   showSearchBox?: boolean
 
   /**
+   * Include projects whose lifecycle status is the closed choice — `Avsluttet`
+   * on a Norwegian hub, `Closed` on an English one. These are excluded by
+   * default. When enabled they are loaded into state and it is up to each
+   * vertical's filters to decide whether to show them, e.g.
+   * `{"GtProjectLifecycleStatus": {"$nin": ["Avsluttet", "Closed"]}}` to keep a
+   * tab free of them regardless of hub language.
+   */
+  showClosedProjects?: boolean
+
+  /**
    * Show render mode selector
    */
   showRenderModeSelector?: boolean

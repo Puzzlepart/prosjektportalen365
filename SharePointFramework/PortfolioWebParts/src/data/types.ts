@@ -60,6 +60,18 @@ export interface IEnrichedProjectsFields {
   secondaryUserField?: string
 
   /**
+   * Include projects with a closed lifecycle status (`Avsluttet` / `Closed`,
+   * depending on hub language).
+   * Defaults to `false`, which is the long-standing behaviour — closed projects
+   * are dropped after fetching. Opting in leaves them in the result so callers
+   * (e.g. the `ProjectList` verticals) can decide per view whether to show them.
+   *
+   * Note: this does not affect the query or the shared items cache, which have
+   * always contained closed projects; only the post-fetch filter.
+   */
+  includeClosed?: boolean
+
+  /**
    * Primary field
    */
   primaryField?: string

@@ -111,7 +111,47 @@ Synlighetsregel sammenligner mot webdelens tilstand og skjuler hele fanen dersom
 
 #### Datagrunnlaget
 
-Alle vertikaler filtrerer det samme datasettet, som hentes én gang når webdelen lastes. Datagrunnlaget er alle elementer i `Prosjekter`-lista i huben, koblet mot områdene i huben. Prosjekter med livssyklusstatus `Fullført` eller `Avsluttet` er allerede fjernet før vertikalene kjøres — en vertikal kan derfor ikke utvide utvalget, kun snevre det inn.
+Alle vertikaler filtrerer det samme datasettet, som hentes én gang når webdelen lastes. Datagrunnlaget er alle elementer i `Prosjekter`-lista i huben, koblet mot områdene i huben. En vertikal kan derfor ikke utvide utvalget, kun snevre det inn.
+
+Prosjekter med livssyklusstatus `Avsluttet` fjernes som standard før vertikalene kjøres, og kan da ikke vises av noen vertikal. Slå på **Vis avsluttede prosjekter** i egenskapspanelet for å ta dem med i datagrunnlaget — da er det vertikalenes egne filtre som avgjør hvor de vises.
+
+Feltet `GtProjectLifecycleStatus` har tre valg, og verdien er språkavhengig fordi den kommer fra områdekolonnen:
+
+| Valg      | nb-NO       | en-US      |
+| --------- | ----------- | ---------- |
+| Aktivt    | `Aktivt`    | `Active`   |
+| Avventer  | `Avventer`  | `Awaiting` |
+| Avsluttet | `Avsluttet` | `Closed`   |
+
+Merk at feltfilteret bruker listefeltet `GtProjectLifecycleStatus`, ikke den søkbare egenskapen `GtProjectLifecycleStatusOWSCHCS` som brukes i porteføljevisningene.
+
+#### Ekskludere avsluttede prosjekter fra en vertikal
+
+Nøklene i et feltfilter kombineres med `OG`, så en vertikal som allerede har et feltfilter utvides ved å legge til livssyklusstatus i samme objekt:
+
+```json
+{ "GtIsProgram": true, "GtProjectLifecycleStatus": { "$ne": "Avsluttet" } }
+```
+
+En vertikal uten feltfilter fra før (f.eks. `Mine prosjekter`, som kun bruker klientfilter) får feltfilteret satt fra scratch:
+
+```json
+{ "GtProjectLifecycleStatus": { "$ne": "Avsluttet" } }
+```
+
+For en fane som kun skal vise avsluttede prosjekter:
+
+```json
+{ "GtProjectLifecycleStatus": "Avsluttet" }
+```
+
+Bruker du samme oppsett på tvers av hubber med ulikt språk, list opp begge verdiene:
+
+```json
+{ "GtProjectLifecycleStatus": { "$nin": ["Avsluttet", "Closed"] } }
+```
+
+Når innstillingen slås på, får alle vertikaler uten filter på livssyklusstatus også med avsluttede prosjekter. Legg derfor til filteret over på de fanene som fortsatt skal holdes fri for dem.
 
 ## ProjectProvision (Bestillingsportalen)
 

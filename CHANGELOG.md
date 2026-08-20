@@ -21,6 +21,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Overgang til `sp-js-provisioning` `1.3.8` for malbasert opprettelse og oppdatering av innholdstyper med faste ID-er. De 15 site script-filene som kun opprettet tomme innholdstyper er fjernet fra releasepakken, slik at innholdstypene forvaltes gjennom JSON-malene. Eksisterende installasjoner med eldre content type-site scripts kan fortsatt oppgraderes uten egen opprydding av disse site scriptene. [#1744](https://github.com/Puzzlepart/prosjektportalen365/issues/1744)
 - SPFx-utvidelsene `Oppgradering av prosjekter`, `Malvelger` og `Footer` legges nå inn via `CustomActions` i JSON-malene (`Standardmal` og `Programmal`) i stedet for via site scripts, og de tre tilhørende site scriptene er fjernet fra releasepakken - området-designet består nå kun av `Regionale innstillinger` og `Setup extension`.
 - `Feltfilter` for vertikale faner i `Prosjektutlisting` støtter nå operatorer i tillegg til ren likhet: `$ne` (ikke lik), `$in` (én av) og `$nin` (ingen av).
+- Ny innstilling `Vis avsluttede prosjekter` i `Prosjektutlisting`. Prosjekter med Prosjektstatus `Avsluttet` ble tidligere fjernet før vertikalene ble filtrert, og kunne dermed ikke vise avsluttede prosjekter i noen av vertikalene. Innstillingen er av som standard.
 - `Bestillingsportalen`-app viser nå en advarsel på hubfeltet dersom standardhuben (`DefaultHub`) som er angitt på prosjekttypen ikke kan slås opp, i stedet for å falle tilbake til gjeldende hub uten tilbakemelding
 
 ### Feilrettinger
