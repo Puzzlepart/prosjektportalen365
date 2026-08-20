@@ -668,7 +668,7 @@
                                         <pnp:Label Language="1033" Value="Report" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                     <pnp:Terms>
-                                        <pnp:Term Name="Forventede gevinster" ID="d5903a77-5b21-42ef-b361-12fef79a0504" SourceTermId="d5903a77-5b21-42ef-b361-12fef79a0504">
+                                        <pnp:Term Name="Forventede nyttevirkninger" ID="d5903a77-5b21-42ef-b361-12fef79a0504" SourceTermId="d5903a77-5b21-42ef-b361-12fef79a0504">
                                             <pnp:Labels>
                                                 <pnp:Label Language="1033" Value="Expected benefits" IsDefaultForLanguage="true" />
                                             </pnp:Labels>

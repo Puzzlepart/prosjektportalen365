@@ -23,6 +23,7 @@ Sporing: [issue #1044](https://github.com/Puzzlepart/prosjektportalen365/issues/
 | `mapping-sjekkpunkter.csv` | 44 eksisterende sjekkpunkter mappet + 27 nye v6-punkter | **AI-forslag utfylt 2026-08-06** — venter på PL-gjennomgang (M1) |
 | `mapping-oppgaver.csv` | 66 eksisterende oppgaver mappet + 24 nye v6-oppgaver | **AI-forslag utfylt 2026-08-06** — venter på PL-gjennomgang (M1) |
 | `mapping-terminologi.csv` | Begrepspar gammel → v6 med fasit og kildebelegg | **VERIFISERT 2026-08-06** — TERM-003/004/006/007 trenger M1-beslutning |
+| `terminologi-implementasjon.md` | Gjennomført resx-/taksonomi-endring: hva som ble endret, frosne koblingsverdier, krav til område K | Gjennomført 2026-08-20 |
 | `oppstartsnotat-prosjektleder.md` | Gjennomgangsnotat til PL: hva som skal vurderes før M1, med lenker | Sendt PL 2026-08-06 |
 
 ## CSV-format for sjekkpunkter og oppgaver
@@ -68,6 +69,7 @@ id, fase, sortorder, gammel_tittel, gammel_tittel_en, ny_tittel, ny_tittel_en, h
 | 2026-08-06 | Onboarding gjennomført; team etablert (Marit PL, Remi, Ole K, Tarjei TR) | Teamet |
 | 2026-08-06 | Egress-blokkeringen er borte: hele v6-kilden (74 sider + 11 maler) innhentet automatisk; terminologi verifisert. PLs kildeinnhenting utgår — PL verifiserer og godkjenner i stedet | AI/Tarjei |
 | 2026-08-20 | TERM-003 avgjort: «Gevinstansvarlig» (visningsnavnet på `GtGainsResponsible`) omdøpes til «Nytteeier» i malverket. Ingen forsøk på å oppdatere data/termer der gammelt begrep er brukt. Korreksjon: rollen er et personfelt, ikke en taksonomiterm — omdøpingen er datasikker | Tarjei |
+| 2026-08-20 | Område C gjennomført i malverket (64 no-NB + 21 en-US resx-verdier + 1 taksonomiterm). Datakildekategorien og 11 andre koblingsverdier frosset — se terminologi-implementasjon.md | Tarjei/AI |
 | *(M1, fr 14.8)* | *Mappingtabeller godkjent* | *Marit* |
 | *(M1, fr 14.8)* | *TERM-004: bekrefte «Nytteansvarlig» som nytt visningsnavn for `GtGainsOwner` («Gevinsteier»)* | *Marit* |
 | *(M1, fr 14.8)* | *TERM-006/007: visningsnavnene «Nytteoversikt» og «Nytteanalyse» (PP365-konstruksjoner — v6 har ikke egne begreper)* | *Marit* |

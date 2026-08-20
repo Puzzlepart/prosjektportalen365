@@ -158,19 +158,19 @@
     <value>Avvist</value>
   </data>
   <data name="Choice_GtIdeaEconomicBenefit_LargeBenefit" xml:space="preserve">
-    <value>5=Prosjektets leveranser gir stor målbar og realiserbar økonomisk gevinst</value>
+    <value>5=Prosjektets leveranser gir stor målbar og realiserbar økonomisk nyttevirkning</value>
   </data>
   <data name="Choice_GtIdeaEconomicBenefit_LimitedBenefit" xml:space="preserve">
-    <value>2=Prosjektets leveranser gir begrenset målbar og realiserbar gevinst</value>
+    <value>2=Prosjektets leveranser gir begrenset målbar og realiserbar nyttevirkning</value>
   </data>
   <data name="Choice_GtIdeaEconomicBenefit_MeasurableBenefit" xml:space="preserve">
-    <value>4=Prosjektets leveranser forventes å gi både målbar og realiserbar gevinst. Gevinsten kan tas ut i form av redusert kostnader</value>
+    <value>4=Prosjektets leveranser forventes å gi både målbar og realiserbar nyttevirkning. Nyttevirkningen kan tas ut i form av reduserte kostnader</value>
   </data>
   <data name="Choice_GtIdeaEconomicBenefit_NoKnownBenefit" xml:space="preserve">
-    <value>1=Prosjektets leveranser gir ikke noen kjent økonomisk gevinst, eller vil lede til negativ økonomisk gevinst (f.eks. prosjekter som er lovpålagte/må gjennomføres, men som vil medføre kost)</value>
+    <value>1=Prosjektets leveranser gir ingen kjent økonomisk nyttevirkning, eller gir negative økonomiske virkninger (f.eks. prosjekter som er lovpålagte/må gjennomføres, men som vil medføre kost)</value>
   </data>
   <data name="Choice_GtIdeaEconomicBenefit_PotentialBenefit" xml:space="preserve">
-    <value>3=Prosjektets leveranser gir potensielt målbar gevinst, men realiserbarheten er usikker. Det kan være vanskelig å ta ut gevinst</value>
+    <value>3=Prosjektets leveranser gir potensielt målbar nyttevirkning, men realiserbarheten er usikker. Det kan være vanskelig å ta ut nyttevirkningen</value>
   </data>
   <data name="Choice_GtIdeaOperationalNeed_LegallyRequired" xml:space="preserve">
     <value>5=Prosjektet er lovpålagt, juridisk nødvendig og må fullføres senest det tiden det tar å gjennomføre prosjektet. Manglende gjennomføring vil medføre vesentlig pålegg, påpakning fra eier eller tilsynsmyndighet (riksrevisjonen, datatilsynet m.v.)</value>
@@ -194,7 +194,7 @@
     <value>1=Prosjektets leveranser har ikke dokumenterbar kvalitetshevende effekt, men kan ha indirekte påvirkning på kvalitet</value>
   </data>
   <data name="Choice_GtIdeaQualityBenefit_QualitativeGain" xml:space="preserve">
-    <value>2=Prosjektets leveranser gir kvalitativ gevinst som er vanskelig å dokumentere, da også andre faktorer vil ha innvirkning</value>
+    <value>2=Prosjektets leveranser gir kvalitativ nyttevirkning som er vanskelig å dokumentere, da også andre faktorer vil ha innvirkning</value>
   </data>
   <data name="Choice_GtIdeaQualityBenefit_SignificantImprovement" xml:space="preserve">
     <value>5=Prosjektets leveranser gir vesentlig og dokumenterbar kvalitativ forbedring på områder som er strategisk viktige og på parametre det måles på.</value>
@@ -212,16 +212,16 @@
     <value>Avvist</value>
   </data>
   <data name="Choice_GtIdeaRisk_CriticalRisk" xml:space="preserve">
-    <value>1=Kritisk risiko: Prosjektet har svært høy risiko, og det er stor sannsynlighet for ikke å lykkes med de viktigste målene eller med å realisere gevinster. Feil kan medføre store økonomiske tap. Kjernevirksomhet kan stoppe opp</value>
+    <value>1=Kritisk risiko: Prosjektet har svært høy risiko, og det er stor sannsynlighet for ikke å lykkes med de viktigste målene eller med å realisere nyttevirkninger. Feil kan medføre store økonomiske tap. Kjernevirksomhet kan stoppe opp</value>
   </data>
   <data name="Choice_GtIdeaRisk_LowRisk" xml:space="preserve">
-    <value>5=Lav risiko: Prosjektet har lav risiko. Det er god tilgang til ressurser og kompetanse for prosjektgjennomføring, og organisasjonens evne til å realisere gevinster er godt kjent</value>
+    <value>5=Lav risiko: Prosjektet har lav risiko. Det er god tilgang til ressurser og kompetanse for prosjektgjennomføring, og organisasjonens evne til å realisere nyttevirkninger er godt kjent</value>
   </data>
   <data name="Choice_GtIdeaRisk_MediumRisk" xml:space="preserve">
-    <value>3=Middels risiko: Prosjektet har middels høy risiko. Det er risiko knyttet til evner om å realisere gevinster. Prosjektet kan mislykkes i å nå alle sine mål</value>
+    <value>3=Middels risiko: Prosjektet har middels høy risiko. Det er risiko knyttet til evnen til å realisere nyttevirkninger. Prosjektet kan mislykkes i å nå alle sine mål</value>
   </data>
   <data name="Choice_GtIdeaRisk_SignificantRisk" xml:space="preserve">
-    <value>2=Betydelig risiko: Prosjektet har høy risiko i gjennomføring og/eller i muligheten for å realisere gevinst etter at prosjektets leveranser er ferdigstilt</value>
+    <value>2=Betydelig risiko: Prosjektet har høy risiko i gjennomføring og/eller i muligheten for å realisere nyttevirkninger etter at prosjektets leveranser er ferdigstilt</value>
   </data>
   <data name="Choice_GtIdeaRisk_SomeRisk" xml:space="preserve">
     <value>4=Noe risiko: Prosjektet har ordinær risiko knyttet til tilgang på ressurser, beslutningskapasitet, kostnader etc. Risikoen er håndterbar ved å sette inn sannsynlighetsreduserende og konsekvensreduserende tiltak ved behov</value>
@@ -578,7 +578,7 @@
     <value>Gevinstoversikt.aspx</value>
   </data>
   <data name="ClientSidePages_BenefitOverview_Title" xml:space="preserve">
-    <value>Gevinstoversikt</value>
+    <value>Nytteoversikt</value>
   </data>
   <data name="ClientSidePages_Configuration_CustomActionTitle" xml:space="preserve">
     <value>Konfigurasjon av Prosjektportalen</value>
@@ -626,10 +626,10 @@
     <value>OverordnetGevinster.aspx</value>
   </data>
   <data name="ClientSidePages_ParentBenefitOverview_Title" xml:space="preserve">
-    <value>Gevinster</value>
+    <value>Nyttevirkninger</value>
   </data>
   <data name="ClientSidePages_ParentBenefitOverview_WebPartTitle" xml:space="preserve">
-    <value>Gevinster for underområder</value>
+    <value>Nyttevirkninger for underområder</value>
   </data>
   <data name="ClientSidePages_ParentCommunicationPlan_PageName" xml:space="preserve">
     <value>OverordnetKommunikasjon.aspx</value>
@@ -701,7 +701,7 @@
     <value>ProgramGevinster.aspx</value>
   </data>
   <data name="ClientSidePages_ProgramBenefitOverview_Title" xml:space="preserve">
-    <value>Gevinster</value>
+    <value>Nyttevirkninger</value>
   </data>
   <data name="ClientSidePages_ProgramCommunicationPlan_PageName" xml:space="preserve">
     <value>ProgramKommunikasjon.aspx</value>
@@ -788,10 +788,10 @@
     <value>Arkiveringsloggelement</value>
   </data>
   <data name="ContentTypes_Benefit_Name" xml:space="preserve">
-    <value>Gevinst</value>
+    <value>Nyttevirkning</value>
   </data>
   <data name="ContentTypes_BenefitFollowup_Name" xml:space="preserve">
-    <value>Gevinstoppfølging</value>
+    <value>Nytteoppfølging</value>
   </data>
   <data name="ContentTypes_Change_Name" xml:space="preserve">
     <value>Endring</value>
@@ -1052,13 +1052,13 @@
     <value>&lt;10% ekstrainnsats</value>
   </data>
   <data name="ListFields_Benefit_DisplayName" xml:space="preserve">
-    <value>Gevinst</value>
+    <value>Nyttevirkning</value>
   </data>
   <data name="ListFields_Change_DisplayName" xml:space="preserve">
     <value>Endring</value>
   </data>
   <data name="ListFields_ChangeLookup_Description" xml:space="preserve">
-    <value>Hvilken endring fra endringsanalysen skal gevinsten knyttes mot?</value>
+    <value>Hvilken endring fra endringsanalysen skal nyttevirkningen knyttes mot?</value>
   </data>
   <data name="ListFields_ChangeLookup_DisplayName" xml:space="preserve">
     <value>Endring</value>
@@ -1079,10 +1079,10 @@
     <value>Dokumenttype</value>
   </data>
   <data name="ListFields_GainLookup_DisplayName" xml:space="preserve">
-    <value>Gevinst</value>
+    <value>Nyttevirkning</value>
   </data>
   <data name="ListFields_GainLookup_ID_DisplayName" xml:space="preserve">
-    <value>Gevinst-ID</value>
+    <value>Nyttevirknings-ID</value>
   </data>
   <data name="ListFields_MeasureIndicatorLookup_Description" xml:space="preserve">
     <value>Målindikator</value>
@@ -1118,10 +1118,10 @@
     <value>Lists/Arkiveringslogg</value>
   </data>
   <data name="Lists_BenefitsAnalysis_Title" xml:space="preserve">
-    <value>Gevinstanalyse og gevinstrealiseringsplan</value>
+    <value>Nytteanalyse og plan for nyttestyring</value>
   </data>
   <data name="Lists_BenefitsFollowup_Title" xml:space="preserve">
-    <value>Gevinstoppfølging</value>
+    <value>Nytteoppfølging</value>
   </data>
   <data name="Lists_ChangeAnalysis_Title" xml:space="preserve">
     <value>Endringsanalyse</value>
@@ -1379,16 +1379,16 @@
     <value>Type</value>
   </data>
   <data name="Lists_HelpContent_BenefitAnalysisUserManual" xml:space="preserve">
-    <value>Gevinstanalyse og gevinstrealiseringsplan Brukermanual</value>
+    <value>Nytteanalyse og plan for nyttestyring Brukermanual</value>
   </data>
   <data name="Lists_HelpContent_BenefitFollowUpUserManual" xml:space="preserve">
-    <value>Gevinstoppfølging Brukermanual</value>
+    <value>Nytteoppfølging Brukermanual</value>
   </data>
   <data name="Lists_HelpContent_BenefitOverviewPortfolioUserManual" xml:space="preserve">
-    <value>Gevinstoversikt Portefølje Brukermanual</value>
+    <value>Nytteoversikt Portefølje Brukermanual</value>
   </data>
   <data name="Lists_HelpContent_BenefitOverviewUserManual" xml:space="preserve">
-    <value>Gevinstoversikt Brukermanual</value>
+    <value>Nytteoversikt Brukermanual</value>
   </data>
   <data name="Lists_HelpContent_ChangeAnalysisUserManual" xml:space="preserve">
     <value>Endringsanalyse Brukermanual</value>
@@ -1796,19 +1796,19 @@
     <value>Status økonomi (Vet ikke)</value>
   </data>
   <data name="Lists_ProjectColumnConfiguration_GtStatusGainAchievement_AheadOfSchedule_Title" xml:space="preserve">
-    <value>Status gevinstoppnåelse (Foran plan)</value>
+    <value>Status nytteoppnåelse (Foran plan)</value>
   </data>
   <data name="Lists_ProjectColumnConfiguration_GtStatusGainAchievement_BehindSchedule_Title" xml:space="preserve">
-    <value>Status gevinstoppnåelse (Forsinket)</value>
+    <value>Status nytteoppnåelse (Forsinket)</value>
   </data>
   <data name="Lists_ProjectColumnConfiguration_GtStatusGainAchievement_MinorDelays_Title" xml:space="preserve">
-    <value>Status gevinstoppnåelse (Mindre forsinkelser)</value>
+    <value>Status nytteoppnåelse (Mindre forsinkelser)</value>
   </data>
   <data name="Lists_ProjectColumnConfiguration_GtStatusGainAchievement_NotStarted_Title" xml:space="preserve">
-    <value>Status gevinstoppnåelse (Ikke påbegynt)</value>
+    <value>Status nytteoppnåelse (Ikke påbegynt)</value>
   </data>
   <data name="Lists_ProjectColumnConfiguration_GtStatusGainAchievement_OnSchedule_Title" xml:space="preserve">
-    <value>Status gevinstoppnåelse (På plan)</value>
+    <value>Status nytteoppnåelse (På plan)</value>
   </data>
   <data name="Lists_ProjectColumnConfiguration_GtStatusOpportunities_High_Title" xml:space="preserve">
     <value>Status muligheter (Høy)</value>
@@ -2009,7 +2009,7 @@
     <value>Økonomi</value>
   </data>
   <data name="Lists_StatusSections_StatusGainAchievement_Title" xml:space="preserve">
-    <value>Gevinstoppnåelse</value>
+    <value>Nytteoppnåelse</value>
   </data>
   <data name="Lists_StatusSections_StatusOpportunities_Title" xml:space="preserve">
     <value>Muligheter</value>
@@ -2264,19 +2264,19 @@
     <value>Usikkerhet</value>
   </data>
   <data name="Navigation_BenefitsAnalysis_Title" xml:space="preserve">
-    <value>Gevinstanalyse og gevinstrealiseringsplan</value>
+    <value>Nytteanalyse og plan for nyttestyring</value>
   </data>
   <data name="Navigation_BenefitsAnalysis_Url" xml:space="preserve">
     <value>Lists/Gevinstanalyse og gevinstrealiseringsplan/AllItems.aspx</value>
   </data>
   <data name="Navigation_BenefitsFollowup_Title" xml:space="preserve">
-    <value>Gevinstoppfølging</value>
+    <value>Nytteoppfølging</value>
   </data>
   <data name="Navigation_BenefitsFollowup_Url" xml:space="preserve">
     <value>Lists/Gevinstoppflging/AllItems.aspx</value>
   </data>
   <data name="Navigation_BenefitsOverview_Title" xml:space="preserve">
-    <value>Gevinstoversikt</value>
+    <value>Nytteoversikt</value>
   </data>
   <data name="Navigation_ChangeAnalysis_Title" xml:space="preserve">
     <value>Endringsanalyse</value>
@@ -2711,7 +2711,7 @@
     <value>Beskrivelse</value>
   </data>
   <data name="SiteFields_GtDesiredValue_Description" xml:space="preserve">
-    <value>Oppgi verdien når gevinsten anses som realisert</value>
+    <value>Oppgi verdien når nyttevirkningen anses som realisert</value>
   </data>
   <data name="SiteFields_GtDesiredValue_DisplayName" xml:space="preserve">
     <value>Ønsket verdi</value>
@@ -2789,28 +2789,28 @@
     <value>Tilpassede feltinnstillinger</value>
   </data>
   <data name="SiteFields_GtGainsOwner_Description" xml:space="preserve">
-    <value>Dersom gevinstene skal realiseres i ulike deler av organisasjonen (eller i flere virksomheter) anbefales det å oppnevne en gevinsteier i de ulike delene av linjeorganisasjonen (eller virksomhetene) som eier ulike deler av de planlagte gevinstene. Gevinsteiere har da et distribuert ansvar for sin del av gevinstene, og har en viktig rolle som den gevinstansvarliges forlengede arm og lokale støttespiller.</value>
+    <value>Dersom nyttevirkningene skal realiseres i ulike deler av organisasjonen (eller i flere virksomheter), kan nytteeier delegere deler av nyttestyringsansvaret til nytteansvarlige som følger opp hver sin del av nyttevirkningene. Nytteansvarlig har et delegert ansvar for sin del av nyttevirkningene, og er nytteeiers forlengede arm og lokale støttespiller.</value>
   </data>
   <data name="SiteFields_GtGainsOwner_DisplayName" xml:space="preserve">
-    <value>Gevinsteier</value>
+    <value>Nytteansvarlig</value>
   </data>
   <data name="SiteFields_GtGainsResponsible_Description" xml:space="preserve">
-    <value>Hvem er gevinstansvarlig for prosjektet?</value>
+    <value>Hvem er nytteeier for prosjektet? Nytteeier har det overordnede ansvaret for at prosjektets nyttevirkninger blir realisert.</value>
   </data>
   <data name="SiteFields_GtGainsResponsible_DisplayName" xml:space="preserve">
-    <value>Gevinstansvarlig</value>
+    <value>Nytteeier</value>
   </data>
   <data name="SiteFields_GtGainsTurnover_Description" xml:space="preserve">
-    <value>Hvordan skal gevinsten realiseres?</value>
+    <value>Hvordan skal nyttevirkningen realiseres?</value>
   </data>
   <data name="SiteFields_GtGainsTurnover_DisplayName" xml:space="preserve">
-    <value>Gevinstomsetting</value>
+    <value>Realisering av nyttevirkning</value>
   </data>
   <data name="SiteFields_GtGainsType_Description" xml:space="preserve">
     <value>Direkte (økonomiske - NOK), Indirekte (frigjort tid - årsverk), Kvalitative (f.eks. omdømme)</value>
   </data>
   <data name="SiteFields_GtGainsType_DisplayName" xml:space="preserve">
-    <value>Gevinsttype</value>
+    <value>Type nyttevirkning</value>
   </data>
   <data name="SiteFields_GtGroupId_Description" xml:space="preserve">
     <value>ID til gruppen elementet er en del av.</value>
@@ -2897,16 +2897,16 @@
     <value>Kommentar til beslutning</value>
   </data>
   <data name="SiteFields_GtIdeaEconomicBenefit_Description" xml:space="preserve">
-    <value>Den økonomiske gevinsten for idéen</value>
+    <value>Den økonomiske nyttevirkningen for idéen</value>
   </data>
   <data name="SiteFields_GtIdeaEconomicBenefit_DisplayName" xml:space="preserve">
-    <value>Økonomisk gevinst</value>
+    <value>Økonomisk nyttevirkning</value>
   </data>
   <data name="SiteFields_GtIdeaEconomicNumber_Description" xml:space="preserve">
-    <value>Økonomisk gevinst for idéen (tall)</value>
+    <value>Økonomisk nyttevirkning for idéen (tall)</value>
   </data>
   <data name="SiteFields_GtIdeaEconomicNumber_DisplayName" xml:space="preserve">
-    <value>Økonomisk gevinst (tall)</value>
+    <value>Økonomisk nyttevirkning (tall)</value>
   </data>
   <data name="SiteFields_GtIdeaExecutionPlan_Description" xml:space="preserve">
     <value>Overordnet gjennomføringsplan for idéen</value>
@@ -2933,10 +2933,10 @@
     <value>Gjennomføringsplan: Suksessfaktorer</value>
   </data>
   <data name="SiteFields_GtIdeaExpectedGain_Description" xml:space="preserve">
-    <value>Forventede gevinster for idéen</value>
+    <value>Forventede nyttevirkninger for idéen</value>
   </data>
   <data name="SiteFields_GtIdeaExpectedGain_DisplayName" xml:space="preserve">
-    <value>Forventede gevinster</value>
+    <value>Forventede nyttevirkninger</value>
   </data>
   <data name="SiteFields_GtIdeaIssue_Description" xml:space="preserve">
     <value>Problemstilling for idéen</value>
@@ -2981,10 +2981,10 @@
     <value>Idéeier</value>
   </data>
   <data name="SiteFields_GtIdeaPossibleGains_Description" xml:space="preserve">
-    <value>Mulige gevinster for idéen</value>
+    <value>Mulige nyttevirkninger for idéen</value>
   </data>
   <data name="SiteFields_GtIdeaPossibleGains_DisplayName" xml:space="preserve">
-    <value>Mulige gevinster</value>
+    <value>Mulige nyttevirkninger</value>
   </data>
   <data name="SiteFields_GtIdeaPriority_Description" xml:space="preserve">
     <value>Prioritering for idéen</value>
@@ -3011,16 +3011,16 @@
     <value>Prosjektdata-tilknytning</value>
   </data>
   <data name="SiteFields_GtIdeaQualityBenefit_Description" xml:space="preserve">
-    <value>Den kvalitative gevinsten for idéen</value>
+    <value>Den kvalitative nyttevirkningen for idéen</value>
   </data>
   <data name="SiteFields_GtIdeaQualityBenefit_DisplayName" xml:space="preserve">
-    <value>Kvalitativ gevinst</value>
+    <value>Kvalitativ nyttevirkning</value>
   </data>
   <data name="SiteFields_GtIdeaQualityNumber_Description" xml:space="preserve">
-    <value>Kvalitativ gevinst for idéen (tall)</value>
+    <value>Kvalitativ nyttevirkning for idéen (tall)</value>
   </data>
   <data name="SiteFields_GtIdeaQualityNumber_DisplayName" xml:space="preserve">
-    <value>Kvalitativ gevinst (tall)</value>
+    <value>Kvalitativ nyttevirkning (tall)</value>
   </data>
   <data name="SiteFields_GtIdeaRecommendation_Description" xml:space="preserve">
     <value>Anbefaling for idéen</value>
@@ -3428,10 +3428,10 @@
     <value>Filter</value>
   </data>
   <data name="SiteFields_GtPrereqProfitAchievement_Description" xml:space="preserve">
-    <value>Hvilke forutsetninger må ligge til grunn for gevinstoppnåelse?</value>
+    <value>Hvilke forutsetninger må ligge til grunn for nytteoppnåelse?</value>
   </data>
   <data name="SiteFields_GtPrereqProfitAchievement_DisplayName" xml:space="preserve">
-    <value>Forutsetninger for gevinstoppnåelse</value>
+    <value>Forutsetninger for nytteoppnåelse</value>
   </data>
   <data name="SiteFields_GtProcess_Description" xml:space="preserve">
     <value>Dersom endringen påvirker en prosess, oppgi denne her. Eks 'Onboarding'</value>
@@ -3641,7 +3641,7 @@
     <value>Prosjekttype (tekst)</value>
   </data>
   <data name="SiteFields_GtRealizationTime_Description" xml:space="preserve">
-    <value>Forventet tidspunkt for realisering av gevinsten</value>
+    <value>Forventet tidspunkt for realisering av nyttevirkningen</value>
   </data>
   <data name="SiteFields_GtRealizationTime_DisplayName" xml:space="preserve">
     <value>Realiseringstidspunkt</value>
@@ -3998,16 +3998,16 @@
     <value>Kommentar, økonomi</value>
   </data>
   <data name="SiteFields_GtStatusGainAchievement_Description" xml:space="preserve">
-    <value>Hva er status på prosjektets gevinstoppnåelse?</value>
+    <value>Hva er status på prosjektets nytteoppnåelse?</value>
   </data>
   <data name="SiteFields_GtStatusGainAchievement_DisplayName" xml:space="preserve">
-    <value>Status gevinstoppnåelse</value>
+    <value>Status nytteoppnåelse</value>
   </data>
   <data name="SiteFields_GtStatusGainAchievementComment_Description" xml:space="preserve">
-    <value>Legg inn eventuelle tilleggs-/utfyllende kommentarer til gevinstrapporteringen</value>
+    <value>Legg inn eventuelle tilleggs-/utfyllende kommentarer til nytterapporteringen</value>
   </data>
   <data name="SiteFields_GtStatusGainAchievementComment_DisplayName" xml:space="preserve">
-    <value>Kommentar, gevinstoppnåelse</value>
+    <value>Kommentar, nytteoppnåelse</value>
   </data>
   <data name="SiteFields_GtStatusOpportunities_Description" xml:space="preserve">
     <value>Hva er status på prosjektets muligheter?</value>
@@ -4202,7 +4202,7 @@
     <value>Arkivert</value>
   </data>
   <data name="View_ByBenefitType_DisplayName" xml:space="preserve">
-    <value>Etter gevinsttype</value>
+    <value>Etter type nyttevirkning</value>
   </data>
   <data name="View_ByProcess_DisplayName" xml:space="preserve">
     <value>Etter prosess</value>
@@ -4253,7 +4253,7 @@
     <value>Uten ansvarlig</value>
   </data>
   <data name="WebParts_BenefitsOverview_Title" xml:space="preserve">
-    <value>Gevinstoversikt</value>
+    <value>Nytteoversikt</value>
   </data>
   <data name="WebParts_BenefitsOverviewCategory_Title" xml:space="preserve">
     <value>Gevinstoversikt</value>

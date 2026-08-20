@@ -1,4 +1,4 @@
-_The template was validated 11.6.2026, 10:50:52_
+_The template was validated 20.8.2026, 17:08:33_
 
 The template contains the following tokens that has not been found in the .resx files:
 
@@ -544,7 +544,7 @@ _No tokens with missing translations or replacement values found._
                     },
                     {
                         "Url": "Lists/Benefits analysis and realization plan/AllItems.aspx",
-                        "Title": "Benefits Analysis and Realization Plan"
+                        "Title": "Benefit Analysis and Benefit Management Plan"
                     },
                     {
                         "Url": "Lists/Measurement indicators/AllItems.aspx",
@@ -1237,7 +1237,7 @@ _No tokens with missing translations or replacement values found._
             ]
         },
         {
-            "Title": "Benefits analysis and realization plan",
+            "Title": "Benefit analysis and benefit management plan",
             "Description": "",
             "Template": 100,
             "ContentTypesEnabled": true,
@@ -1362,8 +1362,8 @@ _No tokens with missing translations or replacement values found._
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field Type=\"Lookup\" DisplayName=\"Gain\" List=\"{listid:Benefits analysis and realization plan}\" ShowField=\"Title\" ID=\"{8d70fa93-b547-46f1-84e7-4982f8c9c675}\" StaticName=\"GtGainLookup\" Name=\"GtGainLookup\"  />",
-                "<Field Type=\"Lookup\" DisplayName=\"Gain ID\" List=\"{listid:Benefits analysis and realization plan}\" ShowField=\"ID\" FieldRef=\"8d70fa93-b547-46f1-84e7-4982f8c9c675\" ReadOnly=\"TRUE\" UnlimitedLengthInDocumentLibrary=\"FALSE\" ID=\"{c239539c-8672-46cc-be77-fb53322f71ae}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtGainLookup_ID\" Name=\"GtGainLookup_ID\" />"
+                "<Field Type=\"Lookup\" DisplayName=\"Benefit\" List=\"{listid:Benefit analysis and benefit management plan}\" ShowField=\"Title\" ID=\"{8d70fa93-b547-46f1-84e7-4982f8c9c675}\" StaticName=\"GtGainLookup\" Name=\"GtGainLookup\"  />",
+                "<Field Type=\"Lookup\" DisplayName=\"Benefit ID\" List=\"{listid:Benefit analysis and benefit management plan}\" ShowField=\"ID\" FieldRef=\"8d70fa93-b547-46f1-84e7-4982f8c9c675\" ReadOnly=\"TRUE\" UnlimitedLengthInDocumentLibrary=\"FALSE\" ID=\"{c239539c-8672-46cc-be77-fb53322f71ae}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtGainLookup_ID\" Name=\"GtGainLookup_ID\" />"
             ],
             "Views": [
                 {

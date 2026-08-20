@@ -1079,10 +1079,10 @@
     <value>Document type</value>
   </data>
   <data name="ListFields_GainLookup_DisplayName" xml:space="preserve">
-    <value>Gain</value>
+    <value>Benefit</value>
   </data>
   <data name="ListFields_GainLookup_ID_DisplayName" xml:space="preserve">
-    <value>Gain ID</value>
+    <value>Benefit ID</value>
   </data>
   <data name="ListFields_MeasureIndicatorLookup_Description" xml:space="preserve">
     <value>What is the measurement indicator that the benefit is related to?</value>
@@ -1118,7 +1118,7 @@
     <value>Lists/ArchiveLog</value>
   </data>
   <data name="Lists_BenefitsAnalysis_Title" xml:space="preserve">
-    <value>Benefits analysis and realization plan</value>
+    <value>Benefit analysis and benefit management plan</value>
   </data>
   <data name="Lists_BenefitsFollowup_Title" xml:space="preserve">
     <value>Benefits follow-up</value>
@@ -1379,7 +1379,7 @@
     <value>Type</value>
   </data>
   <data name="Lists_HelpContent_BenefitAnalysisUserManual" xml:space="preserve">
-    <value>Benefit Analysis and Realization Plan User Manual</value>
+    <value>Benefit Analysis and Benefit Management Plan User Manual</value>
   </data>
   <data name="Lists_HelpContent_BenefitFollowUpUserManual" xml:space="preserve">
     <value>Benefit Followup User Manual</value>
@@ -2264,7 +2264,7 @@
     <value>Uncertainty</value>
   </data>
   <data name="Navigation_BenefitsAnalysis_Title" xml:space="preserve">
-    <value>Benefits Analysis and Realization Plan</value>
+    <value>Benefit Analysis and Benefit Management Plan</value>
   </data>
   <data name="Navigation_BenefitsAnalysis_Url" xml:space="preserve">
     <value>Lists/Benefits analysis and realization plan/AllItems.aspx</value>
@@ -2711,7 +2711,7 @@
     <value>Description</value>
   </data>
   <data name="SiteFields_GtDesiredValue_Description" xml:space="preserve">
-    <value>Indicate the value when the gain is considered realized</value>
+    <value>Indicate the value when the benefit is considered realized</value>
   </data>
   <data name="SiteFields_GtDesiredValue_DisplayName" xml:space="preserve">
     <value>Desired value</value>
@@ -2789,28 +2789,28 @@
     <value>Field overrides</value>
   </data>
   <data name="SiteFields_GtGainsOwner_Description" xml:space="preserve">
-    <value>If the benefits are to be realized in different parts of the organization (or in several businesses), it is recommended to appoint a benefit owner in the different parts of the line organization (or the businesses) that own different parts of the planned benefits. Benefit owners then have a distributed responsibility for their part of the benefits, and play an important role as the benefit responsible's extended arm and local supporter.</value>
+    <value>If the benefits are to be realized in different parts of the organization (or in several businesses), the benefit owner may delegate parts of the benefit management responsibility to benefit managers who each follow up their part of the benefits. A benefit manager has a delegated responsibility for their part of the benefits, acting as the benefit owner's extended arm and local supporter.</value>
   </data>
   <data name="SiteFields_GtGainsOwner_DisplayName" xml:space="preserve">
-    <value>Gains owner</value>
+    <value>Benefit manager</value>
   </data>
   <data name="SiteFields_GtGainsResponsible_Description" xml:space="preserve">
-    <value>Who is responsible for the project's gains?</value>
+    <value>Who is the benefit owner for the project? The benefit owner has the overall responsibility for realizing the project's benefits.</value>
   </data>
   <data name="SiteFields_GtGainsResponsible_DisplayName" xml:space="preserve">
-    <value>Gains responsible</value>
+    <value>Benefit owner</value>
   </data>
   <data name="SiteFields_GtGainsTurnover_Description" xml:space="preserve">
-    <value>How will the gain be realized?</value>
+    <value>How will the benefit be realized?</value>
   </data>
   <data name="SiteFields_GtGainsTurnover_DisplayName" xml:space="preserve">
-    <value>Gain turnover</value>
+    <value>Benefit realization</value>
   </data>
   <data name="SiteFields_GtGainsType_Description" xml:space="preserve">
     <value>Direct (financial - NOK), Indirect (freed time - man-years), Qualitative (e.g. reputation)</value>
   </data>
   <data name="SiteFields_GtGainsType_DisplayName" xml:space="preserve">
-    <value>Type of gain</value>
+    <value>Type of benefit</value>
   </data>
   <data name="SiteFields_GtGroupId_Description" xml:space="preserve">
     <value>Identifier for this group.</value>
@@ -2933,10 +2933,10 @@
     <value>Execution plan: Success factors</value>
   </data>
   <data name="SiteFields_GtIdeaExpectedGain_Description" xml:space="preserve">
-    <value>Expected gains for the idea</value>
+    <value>Expected benefits for the idea</value>
   </data>
   <data name="SiteFields_GtIdeaExpectedGain_DisplayName" xml:space="preserve">
-    <value>Expected gains</value>
+    <value>Expected benefits</value>
   </data>
   <data name="SiteFields_GtIdeaIssue_Description" xml:space="preserve">
     <value>Problem statement for the idea</value>
@@ -2981,10 +2981,10 @@
     <value>Idea owner</value>
   </data>
   <data name="SiteFields_GtIdeaPossibleGains_Description" xml:space="preserve">
-    <value>Possible gains for the idea</value>
+    <value>Possible benefits for the idea</value>
   </data>
   <data name="SiteFields_GtIdeaPossibleGains_DisplayName" xml:space="preserve">
-    <value>Possible gains</value>
+    <value>Possible benefits</value>
   </data>
   <data name="SiteFields_GtIdeaPriority_Description" xml:space="preserve">
     <value>Priority for the idea</value>
@@ -3998,16 +3998,16 @@
     <value>Comment, budget</value>
   </data>
   <data name="SiteFields_GtStatusGainAchievement_Description" xml:space="preserve">
-    <value>What is the status of the project's gain achievement?</value>
+    <value>What is the status of the project's benefit achievement?</value>
   </data>
   <data name="SiteFields_GtStatusGainAchievement_DisplayName" xml:space="preserve">
-    <value>Status gain achievement</value>
+    <value>Status benefit achievement</value>
   </data>
   <data name="SiteFields_GtStatusGainAchievementComment_Description" xml:space="preserve">
-    <value>Enter any additional/supplementary comments to the gain achievement status reporting</value>
+    <value>Enter any additional/supplementary comments to the benefit achievement status reporting</value>
   </data>
   <data name="SiteFields_GtStatusGainAchievementComment_DisplayName" xml:space="preserve">
-    <value>Comment, gain achievement</value>
+    <value>Comment, benefit achievement</value>
   </data>
   <data name="SiteFields_GtStatusOpportunities_Description" xml:space="preserve">
     <value>What is the status of the project's opportunities?</value>
