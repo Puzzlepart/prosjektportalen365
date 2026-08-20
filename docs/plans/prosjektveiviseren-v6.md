@@ -386,15 +386,20 @@ strukturarbeid. Det gjør det stort i omfang, men lavt i risiko.
    ⚠ `*_Url`- og `*_PageName`-nøkler skal **ikke** endres.
 3. **SPFx-loc:** kun tre treff på «gevinst» i `nb-no.js`-filene — lite arbeid, men nøkkelsettet
    må forbli identisk i `nb-no.js`, `en-us.js` og `mystrings.d.ts`.
-4. **Taksonomi:** `Rolle`-termsettet i `Templates/Taxonomy/Taxonomy.xml`. Her er `Name`
-   *er* verdien som lagres i listedata, så en omdøping av «Gevinstansvarlig» er en reell
-   datamigrering, ikke bare en visningsendring. **Anbefaling:** behold termnavnet i denne
-   runden og oppdater kun beskrivelsen, med mindre område A viser at v6 entydig har forlatt
-   begrepet. Ta eventuell omdøping som egen sak.
+4. **Rollene Gevinstansvarlig/Gevinsteier** *(korrigert 2026-08-20)*: antagelsen om et
+   `Rolle`-termsett i taksonomien var feil — `Taxonomy.xml` har ikke noe slikt termsett.
+   Begge rollene er visningsnavn på **personfelt** (`GtGainsResponsible`/`GtGainsOwner`,
+   `Type="User"`), så omdøping er en ren resx-endring uten datakonsekvens.
+   **Besluttet (TR):** `GtGainsResponsible` («Gevinstansvarlig») → «Nytteeier»; forslag
+   `GtGainsOwner` («Gevinsteier») → «Nytteansvarlig» (bekreftes i M1). Ingen migrering av
+   data eller termer der gamle begreper er brukt. Den eneste reelle taksonomitermen med
+   «gevinst» i navnet er «Forventede gevinster» (dokumentkategori, bygg) — den omdøpes i
+   `Taxonomy.xml` for nyinstallasjoner, men røres ikke av oppgraderingsløpet
+   (`Install.ps1` hopper uansett over Taxonomy ved `-Upgrade`, og oppgraderingsmalen
+   `1.14.0` skal ikke endre termnavn).
    Merk [issue #162](https://github.com/Puzzlepart/prosjektportalen365/issues/162): skillet
-   mellom «Gevinstansvarlig» (porteføljenivå) og «Gevinsteier» (enkeltgevinst) er bevisst — v6
-   ser ut til å bygge gevinsteier-rollen inn i gevinstansvarlig, så sjekk at en språkendring
-   ikke utilsiktet visker ut skillet.
+   mellom overordnet rolle og eier av enkeltgevinst er bevisst, og bevares — v6-navnene
+   krysser bare navnelinjene (se `mapping-terminologi.csv` TERM-003/004).
 5. **Dokumentmaler:** `Gevinstrealiseringsplan_v4.0.docx` erstattes trolig av «Plan for
    nyttestyring». Håndteres i område F.
 6. **Fasen «Realisere»** har engelsk label «Benefits realization» og
@@ -743,7 +748,7 @@ npm run validate-loc                               # loc-nøkler i balanse
 | Endring av internt feltnavn ved uhell under terminologiarbeidet | Eksplisitt statisk sjekk på `git diff` i `SiteFields/`. Regelen står i område C. |
 | ~~v6-fasiten mangler — egress blokkert~~ *(løst 2026-08-06)* | Kildematerialet er innhentet og ligger i `docs/prosjektveiviseren-v6/kilder/`; terminologien er verifisert mot kilden. Restrisiko: Digdir endrer innhold i perioden — diff mot `kilder/` ved behov. |
 | Terminologiendringen er større enn antatt (76 resx-verdier + roller) | `mapping-terminologi.csv` gir full oversikt før arbeidet starter. Interne navn røres ikke, så flaten er stor men risikoen lav. |
-| Omdøping av taksonomitermen «Gevinstansvarlig» endrer lagrede listeverdier | Anbefalingen er å beholde termnavnet i denne runden og bare oppdatere beskrivelsen. |
+| ~~Omdøping av taksonomitermen «Gevinstansvarlig» endrer lagrede listeverdier~~ *(avkreftet 2026-08-20)* | «Gevinstansvarlig» er ikke en taksonomiterm, men visningsnavn på personfeltet `GtGainsResponsible` — omdøping er datasikker. Besluttet omdøpt til «Nytteeier»; ingen migrering av eksisterende data/termer. |
 | To generasjoner lister forvirrer brukerne | «(tidligere)»-konvensjonen, konfigurasjonssiden viser begge, releasenotes og brukermanual forklarer valget. Maks to generasjoner samtidig. |
 | Døde dyplenker etter v6s URL-omlegging | Lenketest (test 5), ikke bare inspeksjon. |
 | nb og en kommer ut av takt | Statisk sjekk på radtall + `GtSortOrder`. AI genererer begge fra samme CSV. |

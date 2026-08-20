@@ -133,15 +133,23 @@ v6 har **snudd rollehierarkiet** i forhold til v5 (og PP365/issue #162):
 - **v6:** *Nytteeier* (tidligere gevinsteier!) = overordnet ansvar; *Nytteansvarlig* =
   delegert ansvar for deler, brukes i større prosjekter.
 
-Semantisk svarer altså PP365s taksonomiterm «Gevinstansvarlig» til v6-rollen **Nytteeier**,
+Semantisk svarer altså PP365s «Gevinstansvarlig» til v6-rollen **Nytteeier**,
 ikke til «Nytteansvarlig». Merk også at rollesiden selv er inkonsistent på ett punkt
 (under Prosjekteier: «ansvar for at det oppnevnes nytteansvarlig», under Nytteeier:
 «Prosjekteier har ansvar for at rollen [nytteeier] oppnevnes»).
 
-**Anbefaling til M1:** behold termnavnet «Gevinstansvarlig» i taksonomien denne runden
-(som planen allerede anbefaler — omdøping er datamigrering), og oppdater beskrivelsen med
-v6-rollens innhold og en henvisning til «Nytteeier»-begrepet. Eventuell omdøping tas som
-egen sak med eget migreringsløp.
+**Korreksjon av planens antagelse (2026-08-20):** «Gevinstansvarlig» er *ikke* en
+taksonomiterm — `Taxonomy.xml` har ikke noe Rolle-termsett. Begge rollene er visningsnavn
+på personfelt (`GtGainsResponsible` = «Gevinstansvarlig», `GtGainsOwner` = «Gevinsteier»,
+begge `Type="User"`), så omdøping av visningsnavnene endrer ingen lagrede data. Den eneste
+taksonomitermen med «gevinst» i navnet er «Forventede gevinster» i
+dokumentkategori-termsettet for byggeprosjekter.
+
+**Besluttet 2026-08-20 (Tarjei/TR):** visningsnavn og default-termnavn omdøpes i
+malverket — `GtGainsResponsible` → «Nytteeier» (forslag for `GtGainsOwner`:
+«Nytteansvarlig», bekreftes i M1). Ingen forsøk på å oppdatere data eller termer der
+gamle begreper er brukt: eksisterende installasjoner får nye visningsnavn via
+oppgraderingsskriptet (kun `DisplayName`), mens termstore og listedata står urørt.
 
 ### Nynorsk
 

@@ -50,12 +50,16 @@ på **fjern**- og **flytt-fase**-radene (12 stk.) og skumles **ny**-radene (51 s
 
 ## Beslutningene som venter på deg (M1)
 
-1. **Rollen «Gevinstansvarlig» — den viktigste.** Vi antok at v6 hadde døpt rollen om
-   til «nytteansvarlig». Det stemmer ikke: v6 har snudd hierarkiet. Den overordnede
-   rollen heter nå **nytteeier** (og bygger på det gamle «gevinsteier»-begrepet), mens
-   «nytteansvarlig» er en underrolle man delegerer til i store prosjekter.
-   *Vårt forslag:* behold navnet «Gevinstansvarlig» i denne runden (å døpe om rollen
-   krever endring av lagrede data hos alle kunder) og oppdater bare beskrivelsen.
+1. **Rollene «Gevinstansvarlig» og «Gevinsteier».** Vi antok at v6 hadde døpt
+   gevinstansvarlig om til «nytteansvarlig». Det stemmer ikke: v6 har snudd hierarkiet.
+   Den overordnede rollen heter nå **nytteeier**, mens «nytteansvarlig» er en underrolle
+   man delegerer til i store prosjekter.
+   *Besluttet (Tarjei, 20.8):* «Gevinstansvarlig» omdøpes til **«Nytteeier»**. Det er
+   trygt — det viste seg at rollen bare er et visningsnavn på et personfelt, så ingen
+   data endres, og eksisterende kunder beholder alt de har.
+   *Til deg å bekrefte:* at «Gevinsteier» (feltet for hvem som eier den enkelte
+   nyttevirkningen) tilsvarende omdøpes til **«Nytteansvarlig»** — det følger v6s
+   rollefordeling, men bytter navnelinje, så si fra hvis du heller vil noe annet.
    Se rad TERM-003 og TERM-004 i terminologitabellen.
 2. **Navnene «Nytteoversikt» og «Nytteanalyse».** v6 har ingen egne begreper for disse
    to sidene/listene i Prosjektportalen — navnene blir våre egne konstruksjoner i

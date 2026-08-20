@@ -67,8 +67,9 @@ id, fase, sortorder, gammel_tittel, gammel_tittel_en, ny_tittel, ny_tittel_en, h
 | 2026-08-05 | Interne feltnavn/URL-er endres aldri; kun visningsnavn følger v6-terminologien | Tarjei |
 | 2026-08-06 | Onboarding gjennomført; team etablert (Marit PL, Remi, Ole K, Tarjei TR) | Teamet |
 | 2026-08-06 | Egress-blokkeringen er borte: hele v6-kilden (74 sider + 11 maler) innhentet automatisk; terminologi verifisert. PLs kildeinnhenting utgår — PL verifiserer og godkjenner i stedet | AI/Tarjei |
+| 2026-08-20 | TERM-003 avgjort: «Gevinstansvarlig» (visningsnavnet på `GtGainsResponsible`) omdøpes til «Nytteeier» i malverket. Ingen forsøk på å oppdatere data/termer der gammelt begrep er brukt. Korreksjon: rollen er et personfelt, ikke en taksonomiterm — omdøpingen er datasikker | Tarjei |
 | *(M1, fr 14.8)* | *Mappingtabeller godkjent* | *Marit* |
-| *(M1, fr 14.8)* | *TERM-003/004: «Gevinstansvarlig»-termen — v6 har snudd hierarkiet (Nytteeier er overordnet, nytteansvarlig delegert). Beskrivelse vs omdøping/datamigrering* | *Marit* |
+| *(M1, fr 14.8)* | *TERM-004: bekrefte «Nytteansvarlig» som nytt visningsnavn for `GtGainsOwner` («Gevinsteier»)* | *Marit* |
 | *(M1, fr 14.8)* | *TERM-006/007: visningsnavnene «Nytteoversikt» og «Nytteanalyse» (PP365-konstruksjoner — v6 har ikke egne begreper)* | *Marit* |
 | *(M1, fr 14.8)* | *Nynorsk: Digdir tilbyr ikke nynorskversjoner av v6-malene — avklar strategi for område F* | *Marit* |
 
