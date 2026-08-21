@@ -33,10 +33,10 @@
                                     <pnp:LocalCustomProperties>
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Portfolio" />
-                                        <pnp:Property Key="PhaseSubText" Value="Avklare behov og velge konsept" />
-                                        <pnp:Property Key="PhaseSubText_en-us" Value="Clarify needs and select concept" />
-                                        <pnp:Property Key="PhaseDescription" Value="Konseptfasen sikrer at et eventuelt prosjekt vil være riktig bruk av virksomhetens ressurser for å tilfredsstille et definert behov. Dette gjøres ved å utrede alternative konsepter og velge det beste." />
-                                        <pnp:Property Key="PhaseDescription_en-us" Value="The concept phase ensures that any project will be the right use of the organization's resources to satisfy a defined need. This is done by investigating alternative concepts and selecting the best one." />
+                                        <pnp:Property Key="PhaseSubText" Value="Utrede konsepter og anbefale veien videre" />
+                                        <pnp:Property Key="PhaseSubText_en-us" Value="Investigate concepts and recommend the way forward" />
+                                        <pnp:Property Key="PhaseDescription" Value="Konseptfasen handler om å forstå problemet, vurdere mulige konsepter og anbefale hvordan virksomheten bør gå videre. Fasen skal også avklare hvilken gjennomføringsform som passer best — ikke alle behov bør løses som et prosjekt." />
+                                        <pnp:Property Key="PhaseDescription_en-us" Value="The concept phase is about understanding the problem, assessing possible concepts and recommending how the organization should proceed. The phase should also clarify which delivery approach fits best — not every need should be solved as a project." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Planlegge" ID="cda4f1e1-3488-4e57-8a04-6973df239689" CustomSortOrder="4" SourceTermId="cda4f1e1-3488-4e57-8a04-6973df239689">
@@ -46,10 +46,10 @@
                                     <pnp:LocalCustomProperties>
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Project" />
-                                        <pnp:Property Key="PhaseSubText" Value="Planlegge overordnet styring" />
-                                        <pnp:Property Key="PhaseSubText_en-us" Value="Plan overall governance" />
-                                        <pnp:Property Key="PhaseDescription" Value="Planleggingsfasen sikrer at virksomheten har en god forståelse for arbeidet som kreves for å gjennomføre prosjektet, før virksomhetsledelsen forplikter seg til en betydelig investering." />
-                                        <pnp:Property Key="PhaseDescription_en-us" Value="The planning phase ensures that the organization has a good understanding of the work required to implement the project, before management commits to a significant investment." />
+                                        <pnp:Property Key="PhaseSubText" Value="Gjøre prosjektet klart for gjennomføring" />
+                                        <pnp:Property Key="PhaseSubText_en-us" Value="Prepare the project for execution" />
+                                        <pnp:Property Key="PhaseDescription" Value="Planleggingsfasen gjør prosjektet klart for gjennomføring. Her beskrives produktene prosjektet skal levere, hvordan arbeidet skal organiseres og styres, hvilke endringer som kreves, og hvordan nyttevirkningene skal følges opp." />
+                                        <pnp:Property Key="PhaseDescription_en-us" Value="The planning phase prepares the project for execution. Here you describe the products the project will deliver, how the work will be organized and managed, which changes are required, and how the benefits will be followed up." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Gjennomføre" ID="99d7765a-c786-4792-a1a1-866ef0f982b9" CustomSortOrder="5" SourceTermId="99d7765a-c786-4792-a1a1-866ef0f982b9">
@@ -59,10 +59,10 @@
                                     <pnp:LocalCustomProperties>
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Project" />
-                                        <pnp:Property Key="PhaseSubText" Value="Gjennomføre leveranser og planlegge delfaser" />
-                                        <pnp:Property Key="PhaseSubText_en-us" Value="Execute deliveries and plan sub-phases" />
-                                        <pnp:Property Key="PhaseDescription" Value="I gjennomføringsfasen leverer dere prosjektets produkter ved å gjennomføre delfaser i henhold til de planer og strategier som fremgår av styringsdokumentet." />
-                                        <pnp:Property Key="PhaseDescription_en-us" Value="In the execution phase, you deliver the project's products by implementing sub-phases according to the plans and strategies outlined in the project directive." />
+                                        <pnp:Property Key="PhaseSubText" Value="Gjennomføre leveranser i delfaser eller iterasjoner" />
+                                        <pnp:Property Key="PhaseSubText_en-us" Value="Execute deliveries in sub-phases or iterations" />
+                                        <pnp:Property Key="PhaseDescription" Value="I gjennomføringsfasen styrer dere prosjektet og fremskaffer produktene som er besluttet i planleggingsfasen. Fasen kan bestå av delfaser, leveranser eller iterasjoner, avhengig av prosjektets størrelse, risiko og gjennomføringsform." />
+                                        <pnp:Property Key="PhaseDescription_en-us" Value="In the execution phase, you manage the project and produce the products decided in the planning phase. The phase may consist of sub-phases, deliveries or iterations, depending on the project's size, risk and delivery approach." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Avslutte" ID="30e03c52-8c3e-4cfe-9b18-ca71593ce130" CustomSortOrder="6" SourceTermId="30e03c52-8c3e-4cfe-9b18-ca71593ce130">
@@ -74,8 +74,8 @@
                                         <pnp:Property Key="PhaseLevel" Value="Project" />
                                         <pnp:Property Key="PhaseSubText" Value="Evaluere og avslutte prosjektet" />
                                         <pnp:Property Key="PhaseSubText_en-us" Value="Evaluate and close the project" />
-                                        <pnp:Property Key="PhaseDescription" Value="Avslutningsfasen sikrer en strukturert og formell avslutning av prosjektet, og en god overlevering til linjen." />
-                                        <pnp:Property Key="PhaseDescription_en-us" Value="The closing phase ensures a structured and formal closure of the project, and a good handover to the line organization." />
+                                        <pnp:Property Key="PhaseDescription" Value="Avslutningsfasen sikrer en strukturert og formell avslutning av prosjektet, læring og en god overlevering til linjen eller til produktteam som skal følge opp videre." />
+                                        <pnp:Property Key="PhaseDescription_en-us" Value="The closing phase ensures a structured and formal closure of the project, lessons learned, and a good handover to the line organization or to product teams that will follow up." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Realisere" ID="b7ba84f0-70b9-45c4-8c50-8f73bf15bbec" CustomSortOrder="7" SourceTermId="b7ba84f0-70b9-45c4-8c50-8f73bf15bbec">
@@ -85,10 +85,10 @@
                                     <pnp:LocalCustomProperties>
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Portfolio" />
-                                        <pnp:Property Key="PhaseSubText" Value="Realisere mål og gevinster" />
-                                        <pnp:Property Key="PhaseSubText_en-us" Value="Realize goals and benefits" />
-                                        <pnp:Property Key="PhaseDescription" Value="Her følger virksomheten opp sin videre realisering av gevinster, og vurderer oppnåelse av effektmål." />
-                                        <pnp:Property Key="PhaseDescription_en-us" Value="Here the organization follows up on its further realization of benefits, and evaluates the achievement of impact goals." />
+                                        <pnp:Property Key="PhaseSubText" Value="Følge opp mål og nyttevirkninger" />
+                                        <pnp:Property Key="PhaseSubText_en-us" Value="Follow up goals and benefits" />
+                                        <pnp:Property Key="PhaseDescription" Value="Her følger virksomheten opp realiseringen av nyttevirkninger, vurderer måloppnåelse og beslutter eventuelle nye tiltak for økt nytte." />
+                                        <pnp:Property Key="PhaseDescription_en-us" Value="Here the organization follows up the realization of benefits, evaluates goal achievement and decides on any new measures for increased benefits." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                             </pnp:Terms>
