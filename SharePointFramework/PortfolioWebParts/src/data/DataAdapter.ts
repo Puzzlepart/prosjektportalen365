@@ -7,6 +7,7 @@ import { dateAdd, getHashCode, PnPClientStorage } from '@pnp/core'
 import { LogLevel } from '@pnp/logging'
 import { spfi, SPFx } from '@pnp/sp'
 import '@pnp/sp/items/get-all'
+import '@pnp/sp/groupsitemanager'
 import {
   ISearchResult,
   ISiteUserInfo,
@@ -1510,10 +1511,60 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   }
 
   public async siteExists(siteUrl: string): Promise<boolean> {
+    const normalizedUrl = siteUrl.replace(/\/+$/, '')
     try {
-      const exists = await this._sp.site.exists(siteUrl)
-      return exists
+      const exists = await this._sp.site.exists(normalizedUrl)
+      if (exists) return true
     } catch (error) {
+      console.warn('(DataAdapter) (siteExists) SP.Site.Exists check failed:', error)
+    }
+    // SP.Site.Exists only reports live site collections. The URL can still be
+    // unavailable — the site may sit in the tenant recycle bin, or the alias
+    // may be taken by an existing Microsoft 365 group. GetValidSiteUrlFromAlias
+    // (used by SharePoint's own site creation form) returns a modified URL in
+    // those cases.
+    try {
+      const pathSegments = new URL(normalizedUrl).pathname.split('/').filter(Boolean)
+      if (pathSegments.length < 2) return false
+      const alias = pathSegments.pop()
+      const managedPath = `/${pathSegments.pop()}`
+      const validUrl = await this._sp.groupSiteManager.getValidSiteUrlFromAlias(
+        alias,
+        managedPath,
+        true
+      )
+      return !!validUrl && validUrl.replace(/\/+$/, '').toLowerCase() !== normalizedUrl.toLowerCase()
+    } catch (error) {
+      console.warn('(DataAdapter) (siteExists) GetValidSiteUrlFromAlias check failed:', error)
+      return false
+    }
+  }
+
+  public async provisionRequestExists(siteAlias: string, provisionUrl: string): Promise<boolean> {
+    try {
+      const provisionSite = Web([this._sp.web, provisionUrl])
+      const provisionRequestsList = provisionSite.lists.getByTitle('Provisioning Requests')
+      const items = await provisionRequestsList.items
+        .select('Id', 'SiteAlias', 'Status')
+        .filter(`SiteAlias eq '${siteAlias.replace(/'/g, "''")}'`)
+        .top(10)()
+      // Only requests that are still in flight block the alias. Rejected and
+      // failed requests may be resubmitted, and created sites are detected by
+      // `siteExists` (blocking on them here would leave stale requests in the
+      // way if the site is later deleted).
+      const blockingStatuses: string[] = [
+        'Submitted',
+        'Pending Approval',
+        'Approved',
+        'Team Requested',
+        'Space Creation'
+      ]
+      return items.some((item) => blockingStatuses.includes(item.Status))
+    } catch (error) {
+      console.warn(
+        '(DataAdapter) (provisionRequestExists) Failed to check provisioning requests:',
+        error
+      )
       return false
     }
   }

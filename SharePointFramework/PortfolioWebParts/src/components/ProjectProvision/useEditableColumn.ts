@@ -5,6 +5,7 @@ import { IProjectProvisionProps, IProjectProvisionState } from './types'
 import _ from 'lodash'
 import strings from 'PortfolioWebPartsStrings'
 import { normalizeHubSiteId } from 'utils/normalizeHubSiteId'
+import { calculateAliasValue } from './calculateAlias'
 
 /**
  * Hook that manages the editable column Map for the provision form.
@@ -241,12 +242,7 @@ export function useEditableColumn(
         ? state.settings?.find((t) => t.title === 'NamingConvention')?.value
         : typeConfig?.namingConvention
 
-      const prefixLength = namingConvention?.prefixText?.length || 0
-      const suffixLength = namingConvention?.suffixText?.length || 0
-      const maxAliasLength = 64 - prefixLength - suffixLength
-
-      const cleanedValue = name.replace(/ /g, '').replace(/[^a-z-A-Z0-9-]/g, '')
-      return cleanedValue.substring(0, Math.max(1, maxAliasLength))
+      return calculateAliasValue(name, namingConvention)
     },
     [state.types, state.settings]
   )

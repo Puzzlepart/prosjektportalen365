@@ -76,6 +76,7 @@ declare interface IPortfolioWebPartsStrings {
     SiteNamePrefixTooltipText: string
     SiteNameSuffixTooltipText: string
     SiteNameValidationErrorMessage: string
+    SiteNameRequestExistsErrorMessage: string
     SiteNameValidationSuccessMessage: string
     SiteDescriptionFieldLabel: string
     SiteDescriptionFieldDescription: string
@@ -140,6 +141,8 @@ declare interface IPortfolioWebPartsStrings {
     ToastCreatedBody: string
     ToastCreatedErrorTitle: string
     ToastCreatedErrorBody: string
+    ToastNameConflictErrorTitle: string
+    ToastNameConflictErrorBody: string
     StatusMenuLabel: string
     SettingsMenuLabel: string
     SettingsSearchLabel: string

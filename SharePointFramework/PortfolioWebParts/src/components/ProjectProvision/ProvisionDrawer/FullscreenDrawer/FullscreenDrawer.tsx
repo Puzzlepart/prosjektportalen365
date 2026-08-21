@@ -46,6 +46,8 @@ export const FullscreenDrawer: FC<IFullscreenDrawerProps> = (props) => {
     missingFieldsInfo,
     siteExists,
     setSiteExists,
+    requestExists,
+    setRequestExists,
     duplicateOwnerMembers,
     namingConvention,
     enableSensitivityLabels,
@@ -74,6 +76,8 @@ export const FullscreenDrawer: FC<IFullscreenDrawerProps> = (props) => {
   const fieldConfigs = useFieldConfigs({
     siteExists,
     setSiteExists,
+    requestExists,
+    setRequestExists,
     duplicateOwnerMembers,
     namingConvention,
     urlPrefix,
@@ -113,15 +117,24 @@ export const FullscreenDrawer: FC<IFullscreenDrawerProps> = (props) => {
 
   const handleSave = () => {
     onSave().then((response) => {
-      if (response) {
+      if (response === true) {
         context.setState({ showProvisionConfirmation: true, properties: {} })
         setCurrentStep('siteType')
         context.reset()
       } else {
+        const isConflict = response === 'conflict'
         props.toast(
           <Toast appearance='inverted'>
-            <ToastTitle>{strings.Provision.ToastCreatedErrorTitle}</ToastTitle>
-            <ToastBody>{strings.Provision.ToastCreatedErrorBody}</ToastBody>
+            <ToastTitle>
+              {isConflict
+                ? strings.Provision.ToastNameConflictErrorTitle
+                : strings.Provision.ToastCreatedErrorTitle}
+            </ToastTitle>
+            <ToastBody>
+              {isConflict
+                ? strings.Provision.ToastNameConflictErrorBody
+                : strings.Provision.ToastCreatedErrorBody}
+            </ToastBody>
           </Toast>,
           { intent: 'error' }
         )

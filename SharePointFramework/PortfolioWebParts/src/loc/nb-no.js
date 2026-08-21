@@ -77,6 +77,8 @@ define([], function () {
       SiteNamePrefixTooltipText: 'Dette er et prefiks som legges til foran områdenavnet.',
       SiteNameSuffixTooltipText: 'Dette er et suffiks som legges til i enden av områdenavnet.',
       SiteNameValidationErrorMessage: 'Navnet oppgitt er ikke ledig. Prøv å endre navnet.',
+      SiteNameRequestExistsErrorMessage:
+        'Det finnes allerede en bestilling med samme adresse. Prøv å endre navnet.',
       SiteNameValidationSuccessMessage: 'Navnet er ledig',
       SiteDescriptionFieldLabel: 'Beskrivelse',
       SiteDescriptionFieldDescription: 'Angi en beskrivelse, dette er nyttig for at folk skal forstå hva området ditt er for.',
@@ -141,6 +143,8 @@ define([], function () {
       ToastCreatedBody: 'Området er nå bestilt og sendt til behandling.',
       ToastCreatedErrorTitle: 'Feil ved bestilling',
       ToastCreatedErrorBody: 'Det oppstod en feil ved bestilling av området. Vennligst prøv igjen, eller kontakt administrator.',
+      ToastNameConflictErrorTitle: 'Adressen er ikke ledig',
+      ToastNameConflictErrorBody: 'Det finnes allerede et område eller en bestilling med samme adresse. Endre navnet og prøv igjen.',
       StatusMenuLabel: 'Mine bestillinger',
       SettingsMenuLabel: 'Innstillinger',
       SettingsSearchLabel: 'Søk i innstillinger',

@@ -488,6 +488,15 @@ export interface IPortfolioWebPartsDataAdapter {
   siteExists?(siteUrl: string): Promise<boolean>
 
   /**
+   * Checks if an in-flight provisioning request with the same site alias
+   * already exists in the "Provisioning Requests" list
+   *
+   * @param siteAlias Full site alias (including naming convention prefix/suffix)
+   * @param provisionUrl URL of the provisioning site
+   */
+  provisionRequestExists?(siteAlias: string, provisionUrl: string): Promise<boolean>
+
+  /**
    * Retrieves the configuration from the "Idékonfigurasjon" list
    *
    * @returns A Promise that resolves to an array containing the configuration.
