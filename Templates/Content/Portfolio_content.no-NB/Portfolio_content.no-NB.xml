@@ -60,157 +60,67 @@
                         <pnp:Property Key="Title" Value="README - Malbibliotek" />
                     </pnp:Properties>
                 </pnp:File>
-                <pnp:File Src="Malbibliotek/Gevinstrealiseringsplan_v4.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Gevinstrealiseringsplan v4.0" />
-                        <pnp:Property Key="GtProjectPhase" Value="Planlegge|cda4f1e1-3488-4e57-8a04-6973df239689" />
-                    </pnp:Properties>
-                </pnp:File>
-                <pnp:File Src="Malbibliotek/Interessentregister_v4.0.xlsx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Interessentregister v4.0" />
-                        <pnp:Property Key="GtProjectPhase" Value="Planlegge|cda4f1e1-3488-4e57-8a04-6973df239689" />
-                    </pnp:Properties>
-                </pnp:File>
-                <pnp:File Src="Malbibliotek/Mandat_for_konseptfasen_v4.0.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Mandat for konseptfasen v4.0" />
-                        <pnp:Property Key="GtProjectPhase" Value="Idé|6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32" />
-                    </pnp:Properties>
-                </pnp:File>
-                <pnp:File Src="Malbibliotek/Prosjektbegrunnelse_v4.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Prosjektbegrunnelse v4.0" />
-                        <pnp:Property Key="GtProjectPhase" Value="Konsept|99e85650-33de-4af4-b8db-edffbc8a310b" />
-                    </pnp:Properties>
-                </pnp:File>
-                <pnp:File Src="Malbibliotek/Prosjektforslag_v4.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Prosjektforslag v4.0" />
-                        <pnp:Property Key="GtProjectPhase" Value="Konsept|99e85650-33de-4af4-b8db-edffbc8a310b" />
-                    </pnp:Properties>
-                </pnp:File>
-                <pnp:File Src="Malbibliotek/Sluttrapport_v5.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Sluttrapport v5.0" />
-                        <pnp:Property Key="GtProjectPhase" Value="Avslutte|30e03c52-8c3e-4cfe-9b18-ca71593ce130" />
-                    </pnp:Properties>
-                </pnp:File>
-                <pnp:File Src="Malbibliotek/Styringsdokument_v4.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Styringsdokument v4.0" />
-                        <pnp:Property Key="GtProjectPhase" Value="Planlegge|cda4f1e1-3488-4e57-8a04-6973df239689" />
-                    </pnp:Properties>
-                </pnp:File>
-                <pnp:File Src="Malbibliotek/Gevinstberegninger.xlsx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Gevinstberegninger" />
-                        <pnp:Property Key="GtProjectPhase" Value="Planlegge|cda4f1e1-3488-4e57-8a04-6973df239689" />
-                    </pnp:Properties>
-                </pnp:File>
-                <pnp:File Src="Malbibliotek/Gevinstrealiseringsplan_v3.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Gevinstrealiseringsplan v3.0" />
-                        <pnp:Property Key="GtProjectPhase" Value="Planlegge|cda4f1e1-3488-4e57-8a04-6973df239689" />
-                    </pnp:Properties>
-                </pnp:File>
-                <pnp:File Src="Malbibliotek/Gevinstverktøy_KommIT.xlsx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Gevinstverktøy KommIT" />
-                        <pnp:Property Key="GtProjectPhase" Value="Planlegge|cda4f1e1-3488-4e57-8a04-6973df239689" />
-                    </pnp:Properties>
-                </pnp:File>
-                <pnp:File Src="Malbibliotek/Mandat for konseptfasen_v3.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Mandat for konseptfasen v3.0" />
-                        <pnp:Property Key="GtProjectPhase" Value="Idé|6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32" />
-                    </pnp:Properties>
-                </pnp:File>
-                <pnp:File Src="Malbibliotek/Prosjektbegrunnelse_v3.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Prosjektbegrunnelse v3.0" />
-                        <pnp:Property Key="GtProjectPhase" Value="Konsept|99e85650-33de-4af4-b8db-edffbc8a310b" />
-                    </pnp:Properties>
-                </pnp:File>
-                <pnp:File Src="Malbibliotek/Prosjektforslag_v3.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Prosjektforslag v3.0" />
-                        <pnp:Property Key="GtProjectPhase" Value="Konsept|99e85650-33de-4af4-b8db-edffbc8a310b" />
-                    </pnp:Properties>
-                </pnp:File>
-                <pnp:File Src="Malbibliotek/Sluttrapport_v2.2.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Sluttrapport v2.2" />
-                        <pnp:Property Key="GtProjectPhase" Value="Avslutte|30e03c52-8c3e-4cfe-9b18-ca71593ce130" />
-                    </pnp:Properties>
-                </pnp:File>
-                <pnp:File Src="Malbibliotek/Styringsdokument_v3.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
-                    <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Styringsdokument v3.0" />
-                        <pnp:Property Key="GtProjectPhase" Value="Planlegge|cda4f1e1-3488-4e57-8a04-6973df239689" />
-                    </pnp:Properties>
-                </pnp:File>
-                <pnp:File Src="Malbibliotek/Mandat_for_konseptfasen_v6.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren (v6)" Level="Published" Overwrite="true">
+                <pnp:File Src="Malbibliotek/Mandat_for_konseptfasen_v6.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Mandat for konseptfasen v6.0" />
                         <pnp:Property Key="GtProjectPhase" Value="Idé|6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32" />
                     </pnp:Properties>
                 </pnp:File>
-                <pnp:File Src="Malbibliotek/Prosjektbegrunnelse_v6.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren (v6)" Level="Published" Overwrite="true">
+                <pnp:File Src="Malbibliotek/Prosjektbegrunnelse_v6.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Prosjektbegrunnelse v6.0" />
                         <pnp:Property Key="GtProjectPhase" Value="Konsept|99e85650-33de-4af4-b8db-edffbc8a310b" />
                     </pnp:Properties>
                 </pnp:File>
-                <pnp:File Src="Malbibliotek/Prosjektforslag_v6.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren (v6)" Level="Published" Overwrite="true">
+                <pnp:File Src="Malbibliotek/Prosjektforslag_v6.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Prosjektforslag v6.0" />
                         <pnp:Property Key="GtProjectPhase" Value="Konsept|99e85650-33de-4af4-b8db-edffbc8a310b" />
                     </pnp:Properties>
                 </pnp:File>
-                <pnp:File Src="Malbibliotek/Interessentanalyse_v6.0.xlsx" Folder="Malbibliotek/Fra Prosjektveiviseren (v6)" Level="Published" Overwrite="true">
+                <pnp:File Src="Malbibliotek/Interessentanalyse_v6.0.xlsx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Interessentanalyse v6.0" />
                         <pnp:Property Key="GtProjectPhase" Value="Konsept|99e85650-33de-4af4-b8db-edffbc8a310b" />
                     </pnp:Properties>
                 </pnp:File>
-                <pnp:File Src="Malbibliotek/Styringsdokument_v6.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren (v6)" Level="Published" Overwrite="true">
+                <pnp:File Src="Malbibliotek/Styringsdokument_v6.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Styringsdokument v6.0" />
                         <pnp:Property Key="GtProjectPhase" Value="Planlegge|cda4f1e1-3488-4e57-8a04-6973df239689" />
                     </pnp:Properties>
                 </pnp:File>
-                <pnp:File Src="Malbibliotek/Forenklet_styringsdokument_prosjektkanvas_v6.0.pptx" Folder="Malbibliotek/Fra Prosjektveiviseren (v6)" Level="Published" Overwrite="true">
+                <pnp:File Src="Malbibliotek/Forenklet_styringsdokument_prosjektkanvas_v6.0.pptx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Forenklet styringsdokument / prosjektkanvas v6.0" />
                         <pnp:Property Key="GtProjectPhase" Value="Planlegge|cda4f1e1-3488-4e57-8a04-6973df239689" />
                     </pnp:Properties>
                 </pnp:File>
-                <pnp:File Src="Malbibliotek/Plan_for_nyttestyring_v6.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren (v6)" Level="Published" Overwrite="true">
+                <pnp:File Src="Malbibliotek/Plan_for_nyttestyring_v6.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Plan for nyttestyring v6.0" />
                         <pnp:Property Key="GtProjectPhase" Value="Planlegge|cda4f1e1-3488-4e57-8a04-6973df239689" />
                     </pnp:Properties>
                 </pnp:File>
-                <pnp:File Src="Malbibliotek/Forenklet_plan_for_nyttestyring_v6.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren (v6)" Level="Published" Overwrite="true">
+                <pnp:File Src="Malbibliotek/Forenklet_plan_for_nyttestyring_v6.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Forenklet plan for nyttestyring v6.0" />
                         <pnp:Property Key="GtProjectPhase" Value="Planlegge|cda4f1e1-3488-4e57-8a04-6973df239689" />
                     </pnp:Properties>
                 </pnp:File>
-                <pnp:File Src="Malbibliotek/Nytteberegninger_v6.0.xlsx" Folder="Malbibliotek/Fra Prosjektveiviseren (v6)" Level="Published" Overwrite="true">
+                <pnp:File Src="Malbibliotek/Nytteberegninger_v6.0.xlsx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Nytteberegninger v6.0" />
                         <pnp:Property Key="GtProjectPhase" Value="Planlegge|cda4f1e1-3488-4e57-8a04-6973df239689" />
                     </pnp:Properties>
                 </pnp:File>
-                <pnp:File Src="Malbibliotek/Sluttrapport_v6.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren (v6)" Level="Published" Overwrite="true">
+                <pnp:File Src="Malbibliotek/Sluttrapport_v6.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Sluttrapport v6.0" />
                         <pnp:Property Key="GtProjectPhase" Value="Avslutte|30e03c52-8c3e-4cfe-9b18-ca71593ce130" />
                     </pnp:Properties>
                 </pnp:File>
-                <pnp:File Src="Malbibliotek/Konseptevalueringsrapport_v6.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren (v6)" Level="Published" Overwrite="true">
+                <pnp:File Src="Malbibliotek/Konseptevalueringsrapport_v6.0.docx" Folder="Malbibliotek/Fra Prosjektveiviseren" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Konseptevalueringsrapport v6.0" />
                         <pnp:Property Key="GtProjectPhase" Value="Realisere|b7ba84f0-70b9-45c4-8c50-8f73bf15bbec" />

@@ -340,12 +340,13 @@ finnes til enhver tid maksimalt to generasjoner. Ved v7 slettes v5-generasjonen.
 en v1.13-installasjon endrer ingen eksisterende rad; et prosjekt opprettet etter oppgradering
 med uendret malkonfigurasjon får nøyaktig samme innhold som før.
 
-#### Samme prinsipp for dokumentmaler
+#### Dokumentmalene følger IKKE side-om-side-prinsippet *(besluttet 2026-08-21)*
 
 `Malbibliotek` har ingen tilsvarende konfigurasjonsmekanisme — `Maloppsett.GtDocumentTemplateLibrary`
-peker på et *bibliotek*, ikke en mappe. Bruk derfor mappe-nivå: v6-filene provisjoneres til
-`Malbibliotek/Fra Prosjektveiviseren (v6)`, mens `Malbibliotek/Fra Prosjektveiviseren` blir
-stående med dagens innhold. Brukeren ser begge og velger selv. Se område F.
+peker på et *bibliotek*, ikke en mappe. **Besluttet:** v6-malene provisjoneres rett i
+`Malbibliotek/Fra Prosjektveiviseren` med `Overwrite="true"`; det gamle malsettet utgår fra
+malverket. Provisjonering sletter aldri filer, så oppgraderte installasjoner beholder de
+gamle filene fysisk til de ryddes (frivillig, område K). Se område F.
 
 ---
 
@@ -466,20 +467,24 @@ domene (D).
 
 ---
 
-### F. Dokumentmaler  ·  ✅ GJENNOMFØRT 2026-08-21 *(nynorsk-avklaring gjenstår — M1)*
+### F. Dokumentmaler  ·  ✅ GJENNOMFØRT 2026-08-21 *(revidert samme dag: én mappe, ikke (v6)-mappe; nynorsk-avklaring gjenstår — M1)*
 
-**Hva:** v6-malene provisjoneres til en ny mappe; dagens mappe blir stående.
+**Hva** *(revidert)*: v6-malene provisjoneres rett i `Malbibliotek/Fra Prosjektveiviseren`
+med `Overwrite="true"`; det gamle malsettet (v2.2–v5.0, 15 filer) er fjernet fra malverket.
+Oppgraderte installasjoner beholder gamle filer fysisk (provisjonering sletter aldri) — de
+ryddes frivillig i område K, og `!README.md` forklarer at de trygt kan slettes.
 
 **Filer:**
-- `Templates/Content/Portfolio_content.no-NB/Malbibliotek/` — nye .docx/.xlsx (bokmål + `Nynorsk_-_*`)
-- `Templates/Content/Portfolio_content.no-NB/Portfolio_content.no-NB.xml` linje ~6–195 — nye
-  `<pnp:File>`-oppføringer med `Folder="Malbibliotek/Fra Prosjektveiviseren (v6)"`
-- `Malbibliotek/!README.md` — forklar de to mappene
+- `Templates/Content/Portfolio_content.no-NB/Malbibliotek/` — 11 v6-filer (bokmål);
+  `Nynorsk_-_*_v4.0`-filene beholdt i undermappen `Nynorsk` i påvente av M1
+- `Templates/Content/Portfolio_content.no-NB/Portfolio_content.no-NB.xml` —
+  `<pnp:File>`-oppføringer med `Folder="Malbibliotek/Fra Prosjektveiviseren"`
+- `Malbibliotek/!README.md` — forklarer v6-settet og restene fra tidligere versjoner
 
 **Gjør:**
-1. Legg v6-filene i ny mappe med versjon i filnavn (`Styringsdokument_v6.0.docx`).
-2. La `Malbibliotek/Fra Prosjektveiviseren` stå urørt. Rydding av v3.0/v2.2-parallellene der
-   tas som en frivillig opprydding i område K, ikke automatisk.
+1. Legg v6-filene i mappen med versjon i filnavn (`Styringsdokument_v6.0.docx`).
+2. ~~La `Malbibliotek/Fra Prosjektveiviseren` stå urørt.~~ *(revidert — det gamle settet
+   utgår fra malverket; rydding hos kundene er fortsatt frivillig i område K.)*
 3. Fyll hullene i fasemerkingen: **ingen** mal er i dag merket `Gjennomføre` eller `Realisere`.
    Avslutningsanbefaling hører til gjennomføringsfasen.
 4. Følg terminologien: «Gevinstrealiseringsplan» blir trolig «Plan for nyttestyring» (verifiser
