@@ -77,6 +77,7 @@ id, fase, sortorder, gammel_tittel, gammel_tittel_en, ny_tittel, ny_tittel_en, h
 | 2026-08-21 | BP-oppgavene utgår fra Planneroppgaver — beslutningspunktene er implisitte i fasesjekklisten | Teamet |
 | 2026-08-21 | Område E gjennomført: PLs regneark (26 oppgaver med sjekklister) konvertert til innhold-oppgaver.csv og generert inn i begge innholdsmalene (Planneroppgaverv6). Generate-V6ContentRows.js etablert | Teamet/AI |
 | 2026-08-21 | Sjekkpunkt-mappingen godkjent som den står. Område D gjennomført: 63 v6-sjekkpunkter avledet til innhold-sjekkpunkter.csv og generert inn i begge innholdsmalene (Fasesjekklistev6) | Teamet/AI |
+| 2026-08-21 | Områdene G, F og J gjennomført i malverket. **Port M2 passert:** alt innhold committet; build, validate-project-template og validate-loc grønne (kun pre-eksisterende loc-hull). Gjenstår før M3: område K (1.14.0-skriptene har alt B/C-stegene; kolonnekonfig for G + UpgradeAllSites gjenstår) og E2E-test i testleietaker | Teamet/AI |
 | *(M1, fr 14.8)* | *TERM-004: bekrefte «Nytteansvarlig» som nytt visningsnavn for `GtGainsOwner` («Gevinsteier»)* | *Marit* |
 | *(M1, fr 14.8)* | *TERM-006/007: visningsnavnene «Nytteoversikt» og «Nytteanalyse» (PP365-konstruksjoner — v6 har ikke egne begreper)* | *Marit* |
 | *(M1, fr 14.8)* | *Nynorsk: Digdir tilbyr ikke nynorskversjoner av v6-malene — avklar strategi for område F* | *Marit* |

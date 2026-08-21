@@ -465,7 +465,7 @@ domene (D).
 
 ---
 
-### F. Dokumentmaler
+### F. Dokumentmaler  ·  ✅ GJENNOMFØRT 2026-08-21 *(nynorsk-avklaring gjenstår — M1)*
 
 **Hva:** v6-malene provisjoneres til en ny mappe; dagens mappe blir stående.
 
@@ -492,7 +492,7 @@ Dokumentmalene er bevisst norskspråklige; ikke innfør en engelsk parallell.
 
 ---
 
-### G. Bærekraft og omfang som styringsparametere
+### G. Bærekraft og omfang som styringsparametere  ·  ✅ GJENNOMFØRT 2026-08-21 *(kolonnekonfig-fargene settes i K-skriptet; se listearkitektur-/commit-notat)*
 
 v6 opererer med sju styringsparametere; PP365 har statusseksjoner for fem, pluss muligheter:
 
@@ -562,7 +562,7 @@ forenklingsmekanisme.
 
 ---
 
-### J. Fasetekster, roller, tjenesteområder og lenker
+### J. Fasetekster, roller, tjenesteområder og lenker  ·  ✅ GJENNOMFØRT 2026-08-21 *(fasetekster i Taxonomy + 1.14.0-malen; ingen dyplenker fantes; tjenesteområder uendret — intet v6-motstykke)*
 
 **Fasetekster:** `Templates/Taxonomy/Taxonomy.xml` — `PhaseSubText`, `PhaseDescription` og
 `_en-us`-variantene for alle sju termer. Navn, GUID og `CustomSortOrder` røres ikke.
