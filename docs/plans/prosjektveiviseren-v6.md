@@ -439,16 +439,22 @@ Bruk v6-terminologi fra område C.
 
 ---
 
-### E. Prosjektoppgaver  ·  *inn i den nye listen*
+### E. Prosjektoppgaver  ·  *inn i den nye listen*  ·  ✅ GJENNOMFØRT 2026-08-21
 
 **Hva:** Oppgavene er «oversettelsen» av sjekkpunktene til handlinger og må holdes i takt med D.
-Fjern «Gjennomføre samfunnsøkonomisk analyse» som egen oppgave. Legg til oppgaver for
-endrings- og kommunikasjonsledelse (område H) og smidig gjennomføring (område I).
 
-**Filer:** samme to XML-filer, ny `<pnp:ListInstance Title="Planneroppgaver" Url="Lists/Planneroppgaverv6">`.
+**Levert:** PL leverte fasiten som regneark (26 oppgaver med beskrivelse og sjekkliste per
+oppgave — bredere oppgaver enn de gamle 66, i tråd med v6s aktivitetsstruktur). Konvertert
+til `docs/prosjektveiviseren-v6/innhold-oppgaver.csv` (begge språk, én kilde) og generert
+inn i begge innholdsmalene med `assets/scripts/Generate-V6ContentRows.js`:
+`<pnp:ListInstance Title="Planneroppgaver" Url="Lists/Planneroppgaverv6">` med feltene
+Title, GtDescription, GtCategory, GtSortOrder og GtChecklist — beskrivelse og sjekkliste
+flyter til Planner-oppgavene via `CopyListData`.
 
 **Krav:** `GtCategory` er **ren fasenavn-streng** (`Idé`, `Konsept`, …) — ikke `Navn|GUID`.
-Behold konvensjonen med BP-numre i klartekst i oppgavetitlene.
+~~Behold konvensjonen med BP-numre i klartekst i oppgavetitlene.~~ **Besluttet 2026-08-21:**
+BP-oppgavene utgår — beslutningspunktene er implisitte i fasesjekklisten, som er sjekkpunktenes
+domene (D).
 
 ---
 

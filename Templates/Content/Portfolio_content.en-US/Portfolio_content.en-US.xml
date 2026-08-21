@@ -601,6 +601,193 @@
                         </pnp:DataRow>
                     </pnp:DataRows>
                 </pnp:ListInstance>
+                <pnp:ListInstance Title="Planner Tasks" TemplateType="100" Url="Lists/PlannerTasksv6" ContentTypesEnabled="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true">
+                    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Document the need and the problem</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtDescription">Establish a clear basis for assessing whether the need should be investigated further.</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Idea</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">100</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtChecklist">Describe the need/problem;Describe who is affected;Document relevant background</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Assess and prioritize the initiative</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtDescription">Clarify whether the initiative is relevant, and which handling is most appropriate.</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Idea</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">200</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtChecklist">Assess against goals and guidelines;Consider line/product team/portfolio/project;Clarify the responsible unit</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Prepare the project proposal for the concept phase</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtDescription">Establish the basis for starting the concept phase.</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Idea</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">300</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtChecklist">Describe purpose and problem statement;Define the scope of the work;Clarify resource needs and organization</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Plan and organize the concept work</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtDescription">Establish the framework, responsibilities and way of working for the concept phase.</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Starting up</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">400</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtChecklist">Clarify roles and responsibilities;Plan involvement;Clarify progress and resource use</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Investigate needs, goals and the desired situation</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtDescription">Establish a shared and documented understanding of the problem, the need and what you want to achieve.</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Starting up</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">500</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtChecklist">Describe goals and desired results;Identify affected users/stakeholders;Document relevant guidelines</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Investigate and describe possible concepts</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtDescription">Identify realistic alternatives, including the zero option, that can meet the need.</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Starting up</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">600</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtChecklist">Identify alternatives;Describe the zero option;Gather relevant experience/knowledge</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Analyze concepts and feasibility</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtDescription">Compare the alternatives and establish a sound basis for a recommendation.</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Starting up</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">700</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtChecklist">Assess benefits;Assess cost;Assess risk;Assess feasibility;Assess relevant questions of principle</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Recommend concept and delivery approach</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtDescription">Document the recommended concept and how it should be realized.</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Starting up</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">800</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtChecklist">Justify the choice of concept;Consider organization and delivery approach;Clarify responsibility for benefits</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Complete the decision basis for the planning phase</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtDescription">Consolidate the results of the concept work into a comprehensive basis for the phase gate.</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Starting up</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">900</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtChecklist">Complete the project brief;Update the business case;Prepare the recommendation and phase plan</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Plan the project execution</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtDescription">Establish a realistic plan for how the project will be carried out.</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Initiating</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">1000</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtChecklist">Define deliverables;Define activities and milestones;Plan resources;Clarify performance targets;Define acceptance criteria</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Define the delivery and procurement strategy</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtDescription">Clarify how the project will be organized, procured and carried out.</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Initiating</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">1100</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtChecklist">Consider the delivery strategy;Clarify the procurement strategy;Clarify the quality strategy;Clarify relevant technical and security constraints</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Plan risk, quality and change</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtDescription">Establish how uncertainty, quality and organizational change will be handled.</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Initiating</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">1200</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtChecklist">Update the risk picture;Define quality follow-up;Plan change management</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Plan benefits, stakeholders and communication</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtDescription">Establish how stakeholders will be involved and how expected benefits will be followed up.</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Initiating</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">1300</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtChecklist">Update the stakeholder analysis;Plan communication;Prepare the benefit management plan;Clarify the line organization's responsibility</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Prepare the governance basis</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtDescription">Consolidate the plans and strategies into a comprehensive governance basis for the execution.</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Initiating</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">1400</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtChecklist">Complete the project initiation document;Ensure coherence between goals, deliverables, time, cost and risk;Update the business case</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Plan and manage the execution</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtDescription">Turn the governance basis into concrete execution and continuous management.</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Directing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">1500</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtChecklist">Update plans when needed;Follow up progress, cost, quality and scope;Follow up risk and dependencies</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Develop and quality assure deliverables</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtDescription">Produce the project's deliverables and ensure they meet the agreed requirements.</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Directing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">1600</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtChecklist">Develop/establish deliverables;Test and quality assure;Handle deviations</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Follow up procurements, contracts and changes</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtDescription">Ensure control of external deliveries and of changes to the project's scope and limits.</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Directing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">1700</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtChecklist">Follow up contracts;Handle change requests;Follow up suppliers</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Follow up stakeholders and change work</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtDescription">Ensure the necessary involvement, communication and organizational anchoring.</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Directing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">1800</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtChecklist">Follow up communication;Involve users;Follow up change management</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Prepare handover and benefit realization</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtDescription">Ensure the organization is ready to start using the deliverables and realize the expected benefits.</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Directing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">1900</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtChecklist">Plan training;Establish operations/maintenance responsibility;Prepare benefit management;Ensure the necessary documentation</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Transfer deliverables and responsibility</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtDescription">Ensure a formal and practical transition from project to line, product or maintenance organization.</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Closing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">2000</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtChecklist">Transfer deliverables;Transfer documentation;Clarify responsibility;Carry out knowledge transfer</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Close the project's finances and contracts</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtDescription">Close the project's financial and contractual matters.</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Closing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">2100</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtChecklist">Close the project accounts;Close/transfer contracts;Clarify remaining work</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Evaluate the project and document lessons learned</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtDescription">Assess the project execution and make the experiences available to the organization.</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Closing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">2200</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtChecklist">Evaluate goal achievement;Document experiences;Update the lessons learned base;Share with the Prosjektportalen network</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Complete the final documentation</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtDescription">Establish a complete and archived project record documenting the result and the closure.</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Closing</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">2300</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtChecklist">Complete the final report;Archive relevant documentation;Document remaining matters</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Follow up and measure benefits</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtDescription">Measure whether the expected benefits are actually achieved.</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Benefits realization</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">2400</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtChecklist">Carry out planned measurements;Follow up indicators;Compare actual and expected benefits</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Initiate measures to realize and increase benefits</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtDescription">Handle deviations and ensure the organization gets the desired effect from the project.</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Benefits realization</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">2500</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtChecklist">Identify causes of deviations;Initiate measures;Follow up the effect of the measures</pnp:DataValue>
+                        </pnp:DataRow>
+                        <pnp:DataRow>
+                            <pnp:DataValue FieldName="Title">Evaluate benefits and further follow-up</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtDescription">Document what has been achieved and what should happen next in the benefit management.</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtCategory">Benefits realization</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">2600</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtChecklist">Evaluate overall benefits;Document lessons learned;Clarify further responsibility and follow-up</pnp:DataValue>
+                        </pnp:DataRow>
+                    </pnp:DataRows>
+                </pnp:ListInstance>
+
             </pnp:Lists>
         </pnp:ProvisioningTemplate>
     </pnp:Templates>
