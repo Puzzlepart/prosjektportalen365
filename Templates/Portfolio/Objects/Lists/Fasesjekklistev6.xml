@@ -1,10 +1,10 @@
-﻿<pnp:ListInstance Title="{resource:Lists_PhaseChecklistLegacy_Title}" Description="{resource:Lists_PhaseChecklistLegacy_Description}" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_PhaseChecklistLegacy_Url}" Hidden="false" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" 
+<pnp:ListInstance Title="{resource:Lists_PhaseChecklistV6_Title}" Description="{resource:Lists_PhaseChecklistV6_Description}" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_PhaseChecklistV6_Url}" Hidden="false" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false"
     xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100486B1F8AEA24486FBA1C1BA9146C360C" Default="true" />
     </pnp:ContentTypeBindings>
     <pnp:Views>
-        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_PhaseChecklistLegacy_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
+        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_PhaseChecklistV6_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
             <Query>
                 <OrderBy>
                     <FieldRef Name="GtSortOrder" />

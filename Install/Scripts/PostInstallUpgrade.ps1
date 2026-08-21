@@ -278,4 +278,28 @@ if ($null -ne $LastInstall) {
             }
         }
     }
+
+    if ($PreviousVersion -lt [version]"1.14.0") {
+        # Prosjektveiviseren v6: verifiser generasjonssplitten. Hvis omdøpingen i
+        # PreInstallUpgrade feilet, heter den GAMLE listen fortsatt «Fasesjekkliste» —
+        # da treffer prosjektprovisjoneringens getByTitle feil liste (stille kildebytte).
+        Write-Host "[INFO] Verifying side-by-side list generations (Prosjektveiviseren v6)"
+        $GenerationChecks = @(
+            @{ LegacyUrl = (Get-Resource -Name "Lists_PhaseChecklistLegacy_Url"); LegacyTitle = (Get-Resource -Name "Lists_PhaseChecklistLegacy_Title"); V6Url = (Get-Resource -Name "Lists_PhaseChecklistV6_Url"); V6Title = (Get-Resource -Name "Lists_PhaseChecklistV6_Title") },
+            @{ LegacyUrl = (Get-Resource -Name "Lists_PlannerTasksLegacy_Url"); LegacyTitle = (Get-Resource -Name "Lists_PlannerTasksLegacy_Title"); V6Url = (Get-Resource -Name "Lists_PlannerTasksV6_Url"); V6Title = (Get-Resource -Name "Lists_PlannerTasksV6_Title") }
+        )
+        $GenerationChecks | ForEach-Object {
+            $LegacyList = Get-PnPList -Identity $_.LegacyUrl -ErrorAction SilentlyContinue
+            $V6List = Get-PnPList -Identity $_.V6Url -ErrorAction SilentlyContinue
+            if ($null -eq $V6List) {
+                Write-Host "[WARNING] v6 list at [$($_.V6Url)] was not provisioned" -ForegroundColor Yellow
+            }
+            if ($null -eq $LegacyList) {
+                Write-Host "[WARNING] Legacy list at [$($_.LegacyUrl)] was not found" -ForegroundColor Yellow
+            }
+            elseif ($LegacyList.Title -eq $_.V6Title) {
+                Write-Host "[WARNING] Legacy list at [$($_.LegacyUrl)] is still titled [$($LegacyList.Title)] - the rename in PreInstallUpgrade did not run. Project provisioning will resolve the WRONG source list until it is renamed to [$($_.LegacyTitle)]." -ForegroundColor Red
+            }
+        }
+    }
 }

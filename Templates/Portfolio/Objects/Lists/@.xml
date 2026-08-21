@@ -12,6 +12,7 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Prosjekttillegg.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Listeinnhold.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Fasesjekkliste.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Fasesjekklistev6.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Statusseksjoner.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Prosjektinnholdskolonner.xml" /> 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Datakilder.xml" />
@@ -26,6 +27,7 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Installasjonslogg.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Interessentregister.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Planneroppgaver.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Planneroppgaverv6.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Tillatelseskonfigurasjon.xml" /> 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Tidslinjeinnhold.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Tidslinjeelementer.xml" />

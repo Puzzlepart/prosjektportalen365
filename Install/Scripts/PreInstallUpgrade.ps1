@@ -260,6 +260,57 @@ if ($null -ne $LastInstall) {
     }
 
     if ($PreviousVersion -lt [version]"1.14.0") {
+        # Prosjektveiviseren v6 (side om side): Hub-listene «Fasesjekkliste» og «Planneroppgaver»
+        # MÅ døpes om til «… (tidligere)» FØR hovedmalen kjører — malen oppretter nye v6-lister
+        # med de opprinnelige visningsnavnene, og prosjektprovisjoneringen slår opp kildelisten
+        # på visningstittel (ContentConfig getByTitle). Kun Title endres; URL-en består.
+        Write-Host "[INFO] Renaming hub lists to '(tidligere)' before provisioning the v6 lists"
+        @(
+            @{ Url = (Get-Resource -Name "Lists_PhaseChecklistLegacy_Url"); LegacyTitle = (Get-Resource -Name "Lists_PhaseChecklistLegacy_Title") },
+            @{ Url = (Get-Resource -Name "Lists_PlannerTasksLegacy_Url"); LegacyTitle = (Get-Resource -Name "Lists_PlannerTasksLegacy_Title") }
+        ) | ForEach-Object {
+            $List = Get-PnPList -Identity $_.Url -ErrorAction SilentlyContinue
+            if ($null -ne $List -and $List.Title -ne $_.LegacyTitle) {
+                Set-PnPList -Identity $List.Id -Title $_.LegacyTitle >$null
+                Write-Host "[SUCCESS] Renamed list at [$($_.Url)] to [$($_.LegacyTitle)]" -ForegroundColor Green
+            }
+        }
+
+        # Oppdater de to eksisterende Listeinnhold-radene PÅ PLASS (samme item-ID), slik at
+        # alle Maloppsett-radenes ListContentConfigLookup (LookupMulti på ID) overlever uendret.
+        # Radene får «(tidligere)»-tittel og peker på den omdøpte kildelisten. Hovedmalen
+        # legger deretter til nye v6-rader med de opprinnelige radtitlene (KeyColumn=Title).
+        Write-Host "[INFO] Retitling existing list content rows to '(tidligere)' (in place, same item id)"
+        $ListContentList = Get-PnPList -Identity (Get-Resource -Name "Lists_ListContent_Title") -ErrorAction SilentlyContinue
+        if ($null -ne $ListContentList) {
+            $ListContentRows = Get-PnPListItem -List $ListContentList.Id
+            @(
+                @{
+                    CurrentTitle = (Get-Resource -Name "Lists_ListContent_PhaseCheckpoints_Title");
+                    LegacyTitle  = (Get-Resource -Name "Lists_ListContent_PhaseCheckpointsLegacy_Title");
+                    LegacyDesc   = (Get-Resource -Name "Lists_ListContent_PhaseCheckpointsLegacy_Description");
+                    LegacySource = (Get-Resource -Name "Lists_PhaseChecklistLegacy_Title")
+                },
+                @{
+                    CurrentTitle = (Get-Resource -Name "Lists_ListContent_PlannerTasks_Title");
+                    LegacyTitle  = (Get-Resource -Name "Lists_ListContent_PlannerTasksLegacy_Title");
+                    LegacyDesc   = (Get-Resource -Name "Lists_ListContent_PlannerTasksLegacy_Description");
+                    LegacySource = (Get-Resource -Name "Lists_PlannerTasksLegacy_Title")
+                }
+            ) | ForEach-Object {
+                $Config = $_
+                $Row = $ListContentRows | Where-Object { $_["Title"] -eq $Config.CurrentTitle } | Select-Object -First 1
+                if ($null -ne $Row) {
+                    Set-PnPListItem -List $ListContentList.Id -Identity $Row.Id -Values @{
+                        "Title"           = $Config.LegacyTitle;
+                        "GtDescription"   = $Config.LegacyDesc;
+                        "GtLccSourceList" = $Config.LegacySource
+                    } -UpdateType SystemUpdate >$null
+                    Write-Host "[SUCCESS] Retitled list content row [$($Config.CurrentTitle)] to [$($Config.LegacyTitle)] (id $($Row.Id))" -ForegroundColor Green
+                }
+            }
+        }
+
         ApplyUpgradeTemplate "1.14.0"
 
         Write-Host "[INFO] Removing duplicate 'Konfigurasjon av Prosjektportalen' Site Settings links"

@@ -1,10 +1,10 @@
-<pnp:ListInstance Title="{resource:Lists_PlannerTasksLegacy_Title}" Description="{resource:Lists_PlannerTasksLegacy_Description}" TemplateType="100" Url="{resource:Lists_PlannerTasksLegacy_Url}" Hidden="false" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000"
+<pnp:ListInstance Title="{resource:Lists_PlannerTasksV6_Title}" Description="{resource:Lists_PlannerTasksV6_Description}" TemplateType="100" Url="{resource:Lists_PlannerTasksV6_Url}" Hidden="false" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000"
     xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x01000F43B5C9E86B4D7D9808100EC27E844A" Default="true" />
     </pnp:ContentTypeBindings>
     <pnp:Views>
-        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_PlannerTasksLegacy_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
+        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_PlannerTasksV6_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
             <Query>
                 <OrderBy>
                     <FieldRef Name="ID" Ascending="TRUE" />

@@ -64,12 +64,14 @@ else {
 
 Write-Host "[INFO] Post-install action: Disabling content types for lists"
 Set-PnPList -Identity (Get-Resource -Name "Lists_ProjectColumnConfiguration_Title") -EnableContentTypes:$false >$null 2>&1  
-Set-PnPList -Identity (Get-Resource -Name "Lists_PhaseChecklist_Title") -EnableContentTypes:$false >$null 2>&1  
+Set-PnPList -Identity (Get-Resource -Name "Lists_PhaseChecklistLegacy_Url") -EnableContentTypes:$false >$null 2>&1
+Set-PnPList -Identity (Get-Resource -Name "Lists_PhaseChecklistV6_Url") -EnableContentTypes:$false >$null 2>&1
 Set-PnPList -Identity (Get-Resource -Name "Lists_Configuration_Title") -EnableContentTypes:$false >$null 2>&1  
 Set-PnPList -Identity (Get-Resource -Name "Lists_PortfolioViews_Title") -EnableContentTypes:$false >$null 2>&1  
 Set-PnPList -Identity (Get-Resource -Name "Lists_ProjectColumns_Title") -EnableContentTypes:$false >$null 2>&1  
 Set-PnPList -Identity (Get-Resource -Name "Lists_ResourceAllocation_Title") -EnableContentTypes:$false >$null 2>&1  
-Set-PnPList -Identity (Get-Resource -Name "Lists_PlannerTasks_Title") -EnableContentTypes:$false >$null 2>&1
+Set-PnPList -Identity (Get-Resource -Name "Lists_PlannerTasksLegacy_Url") -EnableContentTypes:$false >$null 2>&1
+Set-PnPList -Identity (Get-Resource -Name "Lists_PlannerTasksV6_Url") -EnableContentTypes:$false >$null 2>&1
 
 Write-Host "[INFO] Post-install action: Ensuring default project templates"
 $TemplateSetups = Get-PnPListItem -List (Get-Resource -Name "Lists_TemplateOptions_Title")
@@ -123,7 +125,16 @@ if ($Standard) {
     if ($null -eq $DefaultExists) {
         $Standard["IsDefaultTemplate"] = $True
     }
-    $Standard["ListContentConfigLookup"] = $StandardItems
+    # Koble listeinnhold KUN når feltet er tomt (ren installasjon). Ved oppgradering skal
+    # virksomhetens eksisterende valg stå urørt — radtitlene i $ListContentMap peker nå på
+    # v6-generasjonen, og en re-kobling ville stille byttet innholdssett for Standardmal.
+    $ExistingLookup = $Standard["ListContentConfigLookup"]
+    if ($null -eq $ExistingLookup -or $ExistingLookup.Count -eq 0) {
+        $Standard["ListContentConfigLookup"] = $StandardItems
+    }
+    else {
+        Write-Host "[INFO] Standardmal already has list content configured - leaving existing selection untouched"
+    }
     $Standard.SystemUpdate()
     $Standard.Context.ExecuteQuery()
 }
