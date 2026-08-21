@@ -30,10 +30,11 @@ beslutningspunktstrukturen. Se «Hvorfor vi ikke rører fasestrukturen». Endrin
 det per prosjektmal, og mister ingenting av sine egne tilpasninger. Ingen duplikater oppstår,
 fordi ingen eksisterende rad endres.
 
-**Status:** dette dokumentet er arbeidsdokumentet for oppdateringen og ligger på branchen
-`claude/prosjektportalen-v6-update-70sbom`. Område A er i gang: v6-kildematerialet er
-innhentet (2026-08-06) og terminologitabellen er verifisert mot kilden — se
-`docs/prosjektveiviseren-v6/`. Ingen endringer i `Templates/` ennå.
+**Status (per fr 21.8, port M2 passert):** områdene A–G, J og innholdsdelene av H/I er
+gjennomført på branchen `claude/prosjektportalen-v6-update-70sbom` — se beslutningsloggen i
+`docs/prosjektveiviseren-v6/README.md`. Gjenstår: område K (kolonnekonfig for G,
+UpgradeAllSitesToLatest, frivillig opprydding), E2E-test i testleietaker (uke 35) og
+område L (release).
 
 ---
 
