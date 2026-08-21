@@ -141,6 +141,26 @@
       <pnp:DataValue FieldName="GtSecView">{resource:View_CurrentOpportunities_DisplayName}</pnp:DataValue>
       <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82804</pnp:DataValue>
     </pnp:DataRow>
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSortOrder">80</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_StatusSections_StatusScope_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecIcon">BulletedList</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowInNavbar">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecFieldName">GtStatusScope</pnp:DataValue>
+      <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82802</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSortOrder">90</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_StatusSections_StatusSustainability_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecIcon">Globe</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowInNavbar">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecFieldName">GtStatusSustainability</pnp:DataValue>
+      <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82802</pnp:DataValue>
+    </pnp:DataRow>
   </pnp:DataRows>
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>

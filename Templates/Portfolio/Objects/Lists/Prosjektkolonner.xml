@@ -757,6 +757,62 @@
             <pnp:DataValue FieldName="GtIsRefinable">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
         </pnp:DataRow>
+        <pnp:DataRow>            <!-- ny i v6 — item-ID varierer per installasjon; kolonnekonfig-rader settes av oppgraderings-/installasjonsskript (område K) -->
+            <pnp:DataValue FieldName="GtSortOrder">540</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusScope_DisplayName}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtStatusScope</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtStatusScopeOWSCHCS</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldProjectStatus">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldFrontpage">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ny i v6 — item-ID varierer per installasjon; kolonnekonfig-rader settes av oppgraderings-/installasjonsskript (område K) -->
+            <pnp:DataValue FieldName="GtSortOrder">550</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusScopeComment_DisplayName}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtStatusScopeComment</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtStatusScopeCommentOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldProjectStatus">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldFrontpage">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ny i v6 — item-ID varierer per installasjon; kolonnekonfig-rader settes av oppgraderings-/installasjonsskript (område K) -->
+            <pnp:DataValue FieldName="GtSortOrder">560</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusSustainability_DisplayName}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtStatusSustainability</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtStatusSustainabilityOWSCHCS</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldProjectStatus">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldFrontpage">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ny i v6 — item-ID varierer per installasjon; kolonnekonfig-rader settes av oppgraderings-/installasjonsskript (område K) -->
+            <pnp:DataValue FieldName="GtSortOrder">570</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusSustainabilityComment_DisplayName}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtStatusSustainabilityComment</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtStatusSustainabilityCommentOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldProjectStatus">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldFrontpage">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
+        </pnp:DataRow>
     </pnp:DataRows>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>

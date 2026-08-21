@@ -4078,6 +4078,72 @@
   <data name="SiteFields_GtStatusQualityComment_Description" xml:space="preserve">
     <value>Beskriv årsaken til eventuelle kvalitetsavvik og hvilke tiltak prosjektet har planlagt eller allerede implementert</value>
   </data>
+  <data name="SiteFields_GtStatusScope_DisplayName" xml:space="preserve">
+    <value>Status omfang</value>
+  </data>
+  <data name="SiteFields_GtStatusScope_Description" xml:space="preserve">
+    <value>Hva er status på prosjektets omfang, er det for eksempel endringer i hva som inngår og ikke inngår?</value>
+  </data>
+  <data name="SiteFields_GtStatusScopeComment_DisplayName" xml:space="preserve">
+    <value>Kommentar, omfang</value>
+  </data>
+  <data name="SiteFields_GtStatusScopeComment_Description" xml:space="preserve">
+    <value>Beskriv årsaken til eventuelle omfangsendringer og hvilke tiltak prosjektet har planlagt eller allerede implementert</value>
+  </data>
+  <data name="Choice_GtStatusScope_AsPlanned" xml:space="preserve">
+    <value>Iht. planlagt omfang</value>
+  </data>
+  <data name="Choice_GtStatusScope_MinorChanges" xml:space="preserve">
+    <value>Mindre endringer i omfang</value>
+  </data>
+  <data name="Choice_GtStatusScope_MajorChanges" xml:space="preserve">
+    <value>Større endringer i omfang</value>
+  </data>
+  <data name="Lists_StatusSections_StatusScope_Title" xml:space="preserve">
+    <value>Omfang</value>
+  </data>
+  <data name="Lists_ProjectColumnConfiguration_GtStatusScope_AsPlanned_Title" xml:space="preserve">
+    <value>Status omfang (Iht. plan)</value>
+  </data>
+  <data name="Lists_ProjectColumnConfiguration_GtStatusScope_MinorChanges_Title" xml:space="preserve">
+    <value>Status omfang (Mindre endringer)</value>
+  </data>
+  <data name="Lists_ProjectColumnConfiguration_GtStatusScope_MajorChanges_Title" xml:space="preserve">
+    <value>Status omfang (Større endringer)</value>
+  </data>
+  <data name="SiteFields_GtStatusSustainability_DisplayName" xml:space="preserve">
+    <value>Status bærekraft</value>
+  </data>
+  <data name="SiteFields_GtStatusSustainability_Description" xml:space="preserve">
+    <value>Hva er status på prosjektets bærekraftskrav, både for gjennomføringen og for leveransene?</value>
+  </data>
+  <data name="SiteFields_GtStatusSustainabilityComment_DisplayName" xml:space="preserve">
+    <value>Kommentar, bærekraft</value>
+  </data>
+  <data name="SiteFields_GtStatusSustainabilityComment_Description" xml:space="preserve">
+    <value>Beskriv årsaken til eventuelle avvik fra bærekraftskravene og hvilke tiltak prosjektet har planlagt eller allerede implementert</value>
+  </data>
+  <data name="Choice_GtStatusSustainability_AsPlanned" xml:space="preserve">
+    <value>Iht. bærekraftskravene</value>
+  </data>
+  <data name="Choice_GtStatusSustainability_MinorDeviation" xml:space="preserve">
+    <value>Mindre avvik fra bærekraftskravene</value>
+  </data>
+  <data name="Choice_GtStatusSustainability_MajorDeviation" xml:space="preserve">
+    <value>Større avvik fra bærekraftskravene</value>
+  </data>
+  <data name="Lists_StatusSections_StatusSustainability_Title" xml:space="preserve">
+    <value>Bærekraft</value>
+  </data>
+  <data name="Lists_ProjectColumnConfiguration_GtStatusSustainability_AsPlanned_Title" xml:space="preserve">
+    <value>Status bærekraft (Iht. krav)</value>
+  </data>
+  <data name="Lists_ProjectColumnConfiguration_GtStatusSustainability_MinorDeviation_Title" xml:space="preserve">
+    <value>Status bærekraft (Mindre avvik)</value>
+  </data>
+  <data name="Lists_ProjectColumnConfiguration_GtStatusSustainability_MajorDeviation_Title" xml:space="preserve">
+    <value>Status bærekraft (Større avvik)</value>
+  </data>
   <data name="SiteFields_GtStatusQualityComment_DisplayName" xml:space="preserve">
     <value>Kommentar, kvalitet</value>
   </data>

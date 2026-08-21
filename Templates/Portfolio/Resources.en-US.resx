@@ -4078,6 +4078,72 @@
   <data name="SiteFields_GtStatusQualityComment_Description" xml:space="preserve">
     <value>Describe the reason for any quality deviations and what measures the project has planned or already implemented</value>
   </data>
+  <data name="SiteFields_GtStatusScope_DisplayName" xml:space="preserve">
+    <value>Status scope</value>
+  </data>
+  <data name="SiteFields_GtStatusScope_Description" xml:space="preserve">
+    <value>What is the status of the project's scope, e.g. are there changes to what is and is not included?</value>
+  </data>
+  <data name="SiteFields_GtStatusScopeComment_DisplayName" xml:space="preserve">
+    <value>Comment, scope</value>
+  </data>
+  <data name="SiteFields_GtStatusScopeComment_Description" xml:space="preserve">
+    <value>Describe the reason for any scope changes and what measures the project has planned or already implemented</value>
+  </data>
+  <data name="Choice_GtStatusScope_AsPlanned" xml:space="preserve">
+    <value>According to planned scope</value>
+  </data>
+  <data name="Choice_GtStatusScope_MinorChanges" xml:space="preserve">
+    <value>Minor scope changes</value>
+  </data>
+  <data name="Choice_GtStatusScope_MajorChanges" xml:space="preserve">
+    <value>Major scope changes</value>
+  </data>
+  <data name="Lists_StatusSections_StatusScope_Title" xml:space="preserve">
+    <value>Scope</value>
+  </data>
+  <data name="Lists_ProjectColumnConfiguration_GtStatusScope_AsPlanned_Title" xml:space="preserve">
+    <value>Status scope (According to plan)</value>
+  </data>
+  <data name="Lists_ProjectColumnConfiguration_GtStatusScope_MinorChanges_Title" xml:space="preserve">
+    <value>Status scope (Minor changes)</value>
+  </data>
+  <data name="Lists_ProjectColumnConfiguration_GtStatusScope_MajorChanges_Title" xml:space="preserve">
+    <value>Status scope (Major changes)</value>
+  </data>
+  <data name="SiteFields_GtStatusSustainability_DisplayName" xml:space="preserve">
+    <value>Status sustainability</value>
+  </data>
+  <data name="SiteFields_GtStatusSustainability_Description" xml:space="preserve">
+    <value>What is the status of the project's sustainability requirements, for both the execution and the deliverables?</value>
+  </data>
+  <data name="SiteFields_GtStatusSustainabilityComment_DisplayName" xml:space="preserve">
+    <value>Comment, sustainability</value>
+  </data>
+  <data name="SiteFields_GtStatusSustainabilityComment_Description" xml:space="preserve">
+    <value>Describe the reason for any deviations from the sustainability requirements and what measures the project has planned or already implemented</value>
+  </data>
+  <data name="Choice_GtStatusSustainability_AsPlanned" xml:space="preserve">
+    <value>According to the sustainability requirements</value>
+  </data>
+  <data name="Choice_GtStatusSustainability_MinorDeviation" xml:space="preserve">
+    <value>Minor deviation from the sustainability requirements</value>
+  </data>
+  <data name="Choice_GtStatusSustainability_MajorDeviation" xml:space="preserve">
+    <value>Major deviation from the sustainability requirements</value>
+  </data>
+  <data name="Lists_StatusSections_StatusSustainability_Title" xml:space="preserve">
+    <value>Sustainability</value>
+  </data>
+  <data name="Lists_ProjectColumnConfiguration_GtStatusSustainability_AsPlanned_Title" xml:space="preserve">
+    <value>Status sustainability (According to requirements)</value>
+  </data>
+  <data name="Lists_ProjectColumnConfiguration_GtStatusSustainability_MinorDeviation_Title" xml:space="preserve">
+    <value>Status sustainability (Minor deviation)</value>
+  </data>
+  <data name="Lists_ProjectColumnConfiguration_GtStatusSustainability_MajorDeviation_Title" xml:space="preserve">
+    <value>Status sustainability (Major deviation)</value>
+  </data>
   <data name="SiteFields_GtStatusQualityComment_DisplayName" xml:space="preserve">
     <value>Comment, quality</value>
   </data>
