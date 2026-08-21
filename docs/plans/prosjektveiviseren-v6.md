@@ -420,18 +420,25 @@ feltnavn, liste-URL eller sidefilnavn er endret; `npm run validate-loc` og
 
 ---
 
-### D. Fasesjekkpunkter  ·  *inn i den nye listen*
+### D. Fasesjekkpunkter  ·  *inn i den nye listen*  ·  ✅ GJENNOMFØRT 2026-08-21
 
 **Hva:** v6-sjekkpunktene provisjoneres til `Fasesjekklistev6`. Konseptfasens punkter knyttes
 til de seks obligatoriske spørsmålene i utredningsinstruksen. Nye punkter for faseoverganger
 (start av planleggings-, gjennomførings- og avslutningsfasen) og for avslutningsanbefaling i BP4.
 Bruk v6-terminologi fra område C.
 
+**Levert:** den godkjente `mapping-sjekkpunkter.csv` er avledet til fasiten
+`docs/prosjektveiviseren-v6/innhold-sjekkpunkter.csv` — **63 sjekkpunkter**
+(Idé 8, Konsept 9, Planlegge 16, Gjennomføre 12, Avslutte 12, Realisere 6; 5 fjernet,
+3 slått sammen ved faseflytting, 27 nye fra BP-vurderingslistene) — og generert inn i begge
+innholdsmalene med `Generate-V6ContentRows.js`. Global `GtSortOrder` i 100-steg (100–6300);
+innenfor hver fase kommer videreførte punkter først (gammel rekkefølge), deretter de nye.
+
 **Filer:**
-- `Templates/Content/Portfolio_content.no-NB/Portfolio_content.no-NB.xml` — **ny**
-  `<pnp:ListInstance Title="Fasesjekkliste" Url="Lists/Fasesjekklistev6">`. Den eksisterende
-  blokken beholdes uendret, men `Title` justeres til «Fasesjekkliste (tidligere)».
-- `Templates/Content/Portfolio_content.en-US/Portfolio_content.en-US.xml` — tilsvarende
+- `Templates/Content/Portfolio_content.no-NB/Portfolio_content.no-NB.xml` — ny
+  `<pnp:ListInstance Title="Fasesjekkliste" Url="Lists/Fasesjekklistev6">` ✔; den eksisterende
+  blokken uendret med `Title` «Fasesjekkliste (tidligere)» ✔ (gjort i område B).
+- `Templates/Content/Portfolio_content.en-US/Portfolio_content.en-US.xml` — tilsvarende ✔
 
 **Krav:** Identisk radtall og `GtSortOrder` i de to språkfilene. `GtProjectPhase` beholder
 `Navn|GUID`-formatet med GUID-ene fra `Templates/Taxonomy/Taxonomy.xml`. Ingen duplikate

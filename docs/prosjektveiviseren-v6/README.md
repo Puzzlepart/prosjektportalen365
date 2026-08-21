@@ -20,8 +20,9 @@ Sporing: [issue #1044](https://github.com/Puzzlepart/prosjektportalen365/issues/
 |---|---|---|
 | `kildesett-v6.md` | Strukturert oversikt over v6: faser, aktiviteter, BP-er, terminologi, roller, maler | **Innhentet 2026-08-06** (automatisk — egress-blokkeringen er borte) |
 | `kilder/` | Alle 74 innholdssider fra prosjektveiviseren.digdir.no, ordrett som markdown med kilde-URL | Innhentet 2026-08-06 |
-| `mapping-sjekkpunkter.csv` | 44 eksisterende sjekkpunkter mappet + 27 nye v6-punkter | **AI-forslag utfylt 2026-08-06** — venter på PL-gjennomgang (M1) |
+| `mapping-sjekkpunkter.csv` | 44 eksisterende sjekkpunkter mappet + 27 nye v6-punkter | **GODKJENT 2026-08-21** — avledet til `innhold-sjekkpunkter.csv`; beholdes som revisjonsspor |
 | `mapping-oppgaver.csv` | 66 eksisterende oppgaver mappet + 24 nye v6-oppgaver | **ERSTATTET 2026-08-21** av `innhold-oppgaver.csv` som fasit for nytt innhold — beholdes som revisjonsspor for hva som skjedde med de 66 gamle radene |
+| `innhold-sjekkpunkter.csv` | FASIT for Fasesjekklistev6: 63 sjekkpunkter, begge språk (avledet fra godkjent mapping) — kilde for Generate-V6ContentRows.js | **Generert inn i malverket 2026-08-21** |
 | `innhold-oppgaver.csv` | FASIT for Planneroppgaverv6: 26 oppgaver med beskrivelse og sjekkliste, begge språk (fra PLs regneark) — kilden til Generate-V6ContentRows.js | **Levert av PL, generert inn i malverket 2026-08-21** |
 | `mapping-terminologi.csv` | Begrepspar gammel → v6 med fasit og kildebelegg | **VERIFISERT 2026-08-06** — TERM-003/004/006/007 trenger M1-beslutning |
 | `terminologi-implementasjon.md` | Gjennomført resx-/taksonomi-endring: hva som ble endret, frosne koblingsverdier, krav til område K | Gjennomført 2026-08-20 |
@@ -75,7 +76,7 @@ id, fase, sortorder, gammel_tittel, gammel_tittel_en, ny_tittel, ny_tittel_en, h
 | 2026-08-20 | Område B gjennomført i malverket: hub-listene splittet i to generasjoner (Fasesjekklistev6/Planneroppgaverv6), Listeinnhold utvidet til 5 rader, omdøping lagt i PreInstallUpgrade, Standardmal-kobling gatet i PostInstall | Tarjei/AI |
 | 2026-08-21 | BP-oppgavene utgår fra Planneroppgaver — beslutningspunktene er implisitte i fasesjekklisten | Teamet |
 | 2026-08-21 | Område E gjennomført: PLs regneark (26 oppgaver med sjekklister) konvertert til innhold-oppgaver.csv og generert inn i begge innholdsmalene (Planneroppgaverv6). Generate-V6ContentRows.js etablert | Teamet/AI |
-| *(M1, fr 14.8)* | *Mappingtabeller godkjent (gjenstår: sjekkpunktene)* | *Marit* |
+| 2026-08-21 | Sjekkpunkt-mappingen godkjent som den står. Område D gjennomført: 63 v6-sjekkpunkter avledet til innhold-sjekkpunkter.csv og generert inn i begge innholdsmalene (Fasesjekklistev6) | Teamet/AI |
 | *(M1, fr 14.8)* | *TERM-004: bekrefte «Nytteansvarlig» som nytt visningsnavn for `GtGainsOwner` («Gevinsteier»)* | *Marit* |
 | *(M1, fr 14.8)* | *TERM-006/007: visningsnavnene «Nytteoversikt» og «Nytteanalyse» (PP365-konstruksjoner — v6 har ikke egne begreper)* | *Marit* |
 | *(M1, fr 14.8)* | *Nynorsk: Digdir tilbyr ikke nynorskversjoner av v6-malene — avklar strategi for område F* | *Marit* |

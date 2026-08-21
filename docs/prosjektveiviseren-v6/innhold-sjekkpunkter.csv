@@ -1,0 +1,64 @@
+sortorder,fase,fase_en,tittel,tittel_en
+100,Idé,Idea,Er behovet eller problemet tydelig beskrevet?,Is the need or problem clearly described?
+200,Idé,Idea,"Bør saken håndteres i linjen, i porteføljen, i et produktteam eller som mulig prosjekt?","Should the matter be handled in the line organization, the portfolio, a product team or as a possible project?"
+300,Idé,Idea,"Er innspillet vurdert opp mot virksomhetens mål, andre behov og prioriteringer?","Has the input been assessed against the organization's goals, other needs and priorities?"
+400,Idé,Idea,"Er føringer, avhengigheter og kjent usikkerhet beskrevet i mandatet?","Are guidelines, dependencies and known uncertainty described in the mandate?"
+500,Idé,Idea,Er det riktig å bruke ressurser på videre utredning i en konseptfase?,Is it right to spend resources on further investigation in a concept phase?
+600,Idé,Idea,"Er relevante brukere, interessenter og berørte grupper identifisert?","Have relevant users, stakeholders and affected groups been identified?"
+700,Idé,Idea,"Har forslaget til konseptfase et tydelig formål, riktig avgrensning og realistiske rammer?","Does the proposed concept phase have a clear purpose, appropriate scope and realistic limits?"
+800,Idé,Idea,Er ansvarlig enhet pekt ut?,Has a responsible unit been appointed?
+900,Konsept,Starting up,Er forutsetningene for gjennomføring realistiske?,Are the prerequisites for implementation realistic?
+1000,Konsept,Starting up,"Er nytteeier utpekt eller involvert, og er ansvaret for nyttevirkninger avklart?","Has the benefit owner been appointed or involved, and is responsibility for the benefits clarified?"
+1100,Konsept,Starting up,Støtter anbefalt konsept virksomhetens mål og strategier?,Does the recommended concept support the organization's goals and strategies?
+1200,Konsept,Starting up,"Er relevante konsepter vurdert, med nyttevirkninger, kostnadsvirkninger og risiko for hvert alternativ?","Have relevant concepts been assessed, with benefits, cost effects and risk for each alternative?"
+1300,Konsept,Starting up,"Er foreløpig styringsdokumentasjon utarbeidet (prosjektbegrunnelse, prosjektforslag og første interessentanalyse)?","Has preliminary governance documentation been prepared (business case, project brief and initial stakeholder analysis)?"
+1400,Konsept,Starting up,Er problemet og målene tydelige?,Are the problem and the objectives clear?
+1500,Konsept,Starting up,"Bør videre arbeid organiseres som prosjekt, produktteam eller på annen måte?","Should further work be organized as a project, a product team or in another way?"
+1600,Konsept,Starting up,Har planleggingsfasen tydelig mandat og rammer?,Does the planning phase have a clear mandate and limits?
+1700,Konsept,Starting up,"Er prinsipielle spørsmål vurdert (personvern, informasjonssikkerhet, rettssikkerhet, etikk)?","Have questions of principle been considered (privacy, information security, legal protection, ethics)?"
+1800,Planlegge,Initiating,"Er prosjektbegrunnelsen oppdatert, og er prosjektet fortsatt ønskelig og i tråd med virksomhetens mål?","Has the business case been updated, and is the project still desirable and aligned with the organization's goals?"
+1900,Planlegge,Initiating,"Er prosjektets produkter tydelig beskrevet, og bidrar de til forventede nyttevirkninger?","Are the project's products clearly described, and do they contribute to the expected benefits?"
+2000,Planlegge,Initiating,"Er gjennomføringsplanen realistisk, med egnet inndeling i delfaser, leveranser eller iterasjoner?","Is the execution plan realistic, with suitable division into sub-phases, deliveries or iterations?"
+2100,Planlegge,Initiating,"Er nødvendige gjennomføringsstrategier utarbeidet (for eksempel anskaffelses-, kvalitets-, risiko- og bærekraftstrategi)?","Have the necessary implementation strategies been prepared (for example procurement, quality, risk and sustainability strategy)?"
+2200,Planlegge,Initiating,Er interessentanalysen oppdatert?,Has the stakeholder analysis been updated?
+2300,Planlegge,Initiating,"Er team, roller og ansvar avklart, med tilstrekkelig kompetanse og kapasitet?","Are teams, roles and responsibilities clarified, with sufficient competence and capacity?"
+2400,Planlegge,Initiating,"Er usikkerhet, avhengigheter og tiltak vurdert, og er risikonivået akseptabelt?","Have uncertainty, dependencies and measures been assessed, and is the risk level acceptable?"
+2500,Planlegge,Initiating,Er akseptansekriterier med toleranser definert for alle sju styringsparameterne?,Have acceptance criteria with tolerances been defined for all seven performance targets?
+2600,Planlegge,Initiating,Er plan for nyttestyring utarbeidet i samarbeid med nytteeier og linjeorganisasjonen?,Has the benefit management plan been prepared in cooperation with the benefit owner and the line organization?
+2700,Planlegge,Initiating,"Er linjeorganisasjonen og brukerne tilstrekkelig involvert, og er kapasiteten til å realisere nyttevirkningene vurdert?","Are the line organization and users sufficiently involved, and has the capacity to realize the benefits been assessed?"
+2800,Planlegge,Initiating,Er faseplanen fra konseptfasen gjennomgått og oppdatert ved oppstart av fasen?,Has the phase plan from the concept phase been reviewed and updated at the start of the phase?
+2900,Planlegge,Initiating,"Er prosjekteier, prosjektleder og nytteeier oppnevnt med avklart ansvar?","Have the project owner, project manager and benefit owner been appointed with clarified responsibilities?"
+3000,Planlegge,Initiating,"Er behovet for endringer i arbeidsprosesser og organisering beskrevet, med plan for endringsledelse?","Has the need for changes in work processes and organization been described, with a plan for change management?"
+3100,Planlegge,Initiating,"Er tekniske rammer, informasjonssikkerhet og personvern avklart, inkludert behov for DPIA?","Have technical constraints, information security and privacy been clarified, including the need for a DPIA?"
+3200,Planlegge,Initiating,"Er gjennomføringsformen egnet (sekvensiell, smidig eller kombinasjon), og er det smidige handlingsrommet vurdert?","Is the delivery approach suitable (sequential, agile or a combination), and has the agile leeway been assessed?"
+3300,Planlegge,Initiating,Er styringsdokumentasjonen komplett og konsistent til BP3?,Is the governance documentation complete and consistent for DP3?
+3400,Gjennomføre,Directing,Er prosjektets leveranser i overensstemmelse med definerte resultatmål?,Are the project's deliverables in accordance with defined result objectives?
+3500,Gjennomføre,Directing,Er leveranser dokumentert og levert i henhold til plan?,Are deliverables documented and delivered according to plan?
+3600,Gjennomføre,Directing,"Er gjenstående eller uferdig arbeid avklart, og er det bestemt hvem som skal lukke det?","Has remaining or unfinished work been clarified, and has it been decided who will close it?"
+3700,Gjennomføre,Directing,"Er prosjektbegrunnelsen og plan for nyttestyring oppdatert, og er forventede nyttevirkninger fortsatt realistiske?","Have the business case and the benefit management plan been updated, and are the expected benefits still realistic?"
+3800,Gjennomføre,Directing,"Er linjeorganisasjonen klar til å ta produktene i bruk, med nødvendig opplæring, dokumentasjon og driftsrutiner?","Is the line organization ready to start using the products, with the necessary training, documentation and operational routines?"
+3900,Gjennomføre,Directing,"Er det avklart hvem som skal følge opp og rapportere nyttevirkninger etter prosjektet, og til hvem?","Has it been clarified who will follow up and report benefits after the project, and to whom?"
+4000,Gjennomføre,Directing,"Er ansvar for drift, forvaltning og videreutvikling avklart, og nødvendige avtaler inngått?","Have responsibilities for operations, management and further development been clarified, and the necessary agreements entered into?"
+4100,Gjennomføre,Directing,Er faseplanen for gjennomføring gjennomgått ved oppstart av fasen eller delfasen?,Has the phase plan for execution been reviewed at the start of the phase or sub-phase?
+4200,Gjennomføre,Directing,Er avvik mot akseptansekriteriene for styringsparameterne håndtert og eskalert ved behov?,Have deviations from the acceptance criteria for the performance targets been handled and escalated when needed?
+4300,Gjennomføre,Directing,"Er endrings- og kommunikasjonsarbeidet fulgt opp, slik at brukere og ledere er klare for endringen?","Has the change and communication work been followed up, so that users and managers are ready for the change?"
+4400,Gjennomføre,Directing,"Er risikoer knyttet til informasjonssikkerhet og personvern håndtert, og nødvendig testing gjennomført?","Have risks related to information security and privacy been handled, and the necessary testing carried out?"
+4500,Gjennomføre,Directing,Er faseplan for avslutningsfasen utarbeidet til BP4?,Has the phase plan for the closing phase been prepared for DP4?
+4600,Avslutte,Closing,"Er gjenstående arbeid lukket eller dokumentert, akseptert og overført til linjen?","Has remaining work been closed or documented, accepted and transferred to the line organization?"
+4700,Avslutte,Closing,"Er prosjektets resultater dokumentert i sluttrapporten, sammenlignet med mål og akseptansekriterier?","Are the project's results documented in the final report, compared with objectives and acceptance criteria?"
+4800,Avslutte,Closing,"Er positive og negative erfaringer dokumentert, arkivert og tilgjengelige for senere prosjekter?","Have positive and negative experiences been documented, archived and made available for later projects?"
+4900,Avslutte,Closing,Er prosjektdokumentene forsvarlig arkivert?,Are the project documents properly archived?
+5000,Avslutte,Closing,Er alle kontrakter og prosjektøkonomien formelt avsluttet eller overført til linjen?,Have all contracts and the project finances been formally closed or transferred to the line organization?
+5100,Avslutte,Closing,Er plan for nyttestyring oppdatert og klargjort for videre oppfølging i linjen?,Has the benefit management plan been updated and prepared for further follow-up in the line organization?
+5200,Avslutte,Closing,"Er erfaringsloggen oppdatert, avsluttet og arkivert?","Has the lessons log been updated, closed and archived?"
+5300,Avslutte,Closing,Er faseplanen for avslutningsfasen gjennomgått ved oppstart av fasen?,Has the phase plan for the closing phase been reviewed at the start of the phase?
+5400,Avslutte,Closing,"Har linjeorganisasjonen overtatt nødvendig ansvar for produkter, innføring og videre oppfølging?","Has the line organization taken over the necessary responsibility for products, adoption and further follow-up?"
+5500,Avslutte,Closing,"Er produktteam eller forvaltningsmiljø etablert ved behov, med nødvendig grunnlag for videre arbeid?","Has a product team or maintenance organization been established where needed, with the necessary basis for further work?"
+5600,Avslutte,Closing,"Er kunnskap om informasjonssikkerhet og personvern overført til linjen, og sikkerhetstiltak verifisert?","Has knowledge about information security and privacy been transferred to the line organization, and security measures verified?"
+5700,Avslutte,Closing,Er virksomhetsledelsen orientert om måloppnåelse og læring?,Has executive management been informed about goal achievement and lessons learned?
+5800,Realisere,Benefits realization,Er planlagte målinger og tiltak gjennomført?,Have planned measurements and initiatives been implemented?
+5900,Realisere,Benefits realization,"Er forventede nyttevirkninger oppnådd, eller trengs nye eller forsterkede tiltak?","Have the expected benefits been achieved, or are new or strengthened measures needed?"
+6000,Realisere,Benefits realization,"Er evaluering av konseptvalget gjennomført, med anbefalinger for senere konseptvalg?","Has the evaluation of the concept choice been carried out, with recommendations for later concept choices?"
+6100,Realisere,Benefits realization,Fungerer endringsprosessen i organisasjonen?,Is the change process in the organization working?
+6200,Realisere,Benefits realization,Har produktteam eller linjeorganisasjon rammer og prioriteringer som sikrer videre nyttevirkning?,Does the product team or line organization have the framework and priorities to ensure continued benefits?
+6300,Realisere,Benefits realization,"Er plan for nyttestyring oppdatert, og er eventuelle nye BP6-gjennomganger planlagt?","Has the benefit management plan been updated, and have any further DP6 reviews been planned?"
