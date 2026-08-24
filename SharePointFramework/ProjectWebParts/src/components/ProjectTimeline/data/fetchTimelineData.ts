@@ -77,15 +77,19 @@ export async function fetchTimelineData(
     .filter(Boolean)
 
   let timelineContentFields: SPField[]
-  // Resolve the effective content type. When no template-specific CT is
-  // provided, fall back to the list's first Item-derived CT (`StringId`
-  // starting with `0x0100`) so per-CT FieldLink hiding/ordering applies for
-  // the default Tidslinjeinnhold deployment too.
-  let effectiveContentTypeId: string | undefined = timelineContentTypeId
+  // Resolve the effective CT. When no template-specific CT is provided.
+  let effectiveContentTypeId: string | undefined
+  if (timelineContentTypeId) {
+    const matchingCts = await timelineContentList.contentTypes
+      .select('StringId')
+      .filter(`startswith(StringId, '${timelineContentTypeId}')`)()
+    effectiveContentTypeId = matchingCts
+      ?.map((ct) => ct.StringId)
+      .sort((a, b) => a.length - b.length)[0]
+  }
   if (!effectiveContentTypeId) {
-    const listCts = await SPDataAdapter.portalDataService.web.lists
-      .getByTitle(resource.Lists_TimelineContent_Title)
-      .contentTypes.select('StringId', 'Name')
+    const listCts = await timelineContentList.contentTypes
+      .select('StringId', 'Name')
       .filter("startswith(StringId, '0x0100')")()
     effectiveContentTypeId = listCts?.[0]?.StringId
   }
@@ -94,9 +98,7 @@ export async function fetchTimelineData(
     // Query via `list.contentTypes.getById(...)` — the resolved id includes
     // the list-suffix (per-list child CT), which `web.contentTypes` cannot
     // resolve.
-    const listCtRef = SPDataAdapter.portalDataService.web.lists
-      .getByTitle(resource.Lists_TimelineContent_Title)
-      .contentTypes.getById(effectiveContentTypeId)
+    const listCtRef = timelineContentList.contentTypes.getById(effectiveContentTypeId)
 
     const ctData = await listCtRef
       .select(
@@ -109,13 +111,13 @@ export async function fetchTimelineData(
       FieldLinks: { Name: string; Hidden: boolean }[]
     }>()
 
-    const rawFields = (ctData.Fields ?? []).map((f) => ({
+    const rawFields = (ctData?.Fields ?? []).map((f) => ({
       ...f,
       ShowInEditForm: f.SchemaXml?.indexOf('ShowInEditForm="FALSE"') === -1,
       ShowInNewForm: f.SchemaXml?.indexOf('ShowInNewForm="FALSE"') === -1,
       ShowInDisplayForm: f.SchemaXml?.indexOf('ShowInDisplayForm="FALSE"') === -1
     }))
-    const fieldLinks = ctData.FieldLinks ?? []
+    const fieldLinks = ctData?.FieldLinks ?? []
 
     if (fieldLinks.length > 0) {
       const fieldByName = new Map(rawFields.map((f) => [f.InternalName, f]))
@@ -128,7 +130,12 @@ export async function fetchTimelineData(
     } else {
       timelineContentFields = rawFields
     }
-  } else {
+  }
+
+  // A content type that couldn't be resolved (or resolved without fields)
+  // must not blank out the edit panel and columns — degrade to all list
+  // fields instead.
+  if (!timelineContentFields || timelineContentFields.length === 0) {
     timelineContentFields = await SPDataAdapter.portalDataService.getListFields('TIMELINE_CONTENT')
   }
 
