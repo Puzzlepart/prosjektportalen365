@@ -52,7 +52,7 @@ export const TitleColumn: FC<ITitleColumnProps> = (props) => {
         hideAllActions={true}
         onRenderToggleElement={(onToggle) => (
           <Tooltip
-            content={<>{strings.ProjectInformationPanelButton}</>}
+            content={strings.ProjectInformationPanelButton}
             relationship='description'
             withArrow
           >

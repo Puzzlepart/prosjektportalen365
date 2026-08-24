@@ -109,7 +109,7 @@ export const OverflowTagMenu: FC<IOverflowTagMenuProps> = (props) => {
                     }`}
                     appearance='brand'
                     size='small'
-                    title={`${tag.type}: ${tag.value}`}
+                    title={`${tag.value}`}
                     {...tag}
                   >
                     <InteractionTagPrimary
