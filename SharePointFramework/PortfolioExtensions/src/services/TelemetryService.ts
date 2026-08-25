@@ -1,7 +1,16 @@
 import { getGUID } from '@pnp/core'
 import { Logger, LogLevel } from '@pnp/logging'
 import { ListViewCommandSetContext } from '@microsoft/sp-listview-extensibility'
+import SPDataAdapter from 'data/SPDataAdapter'
 import { featureFlags } from './featureFlags'
+
+/**
+ * Global settings (Globale innstillinger) key for the customer-facing
+ * telemetry opt-out. Seeded as `1` (on); an admin sets the value to `0` to
+ * stop all catalog telemetry for the installation. A missing row (installs
+ * provisioned before the setting existed) counts as ON — the seeded default.
+ */
+const GLOBAL_SETTINGS_KEY = 'CatalogTelemetryEnabled'
 
 /**
  * Default ingestion endpoint (prosjektportalen-assist). Override per
@@ -68,6 +77,7 @@ export class TelemetryService {
     try {
       const url = TelemetryService._resolveUrl(props.telemetryUrl)
       if (!url) return
+      if (!(await TelemetryService._isEnabledInGlobalSettings())) return
       const { pageContext } = props.context
       const siteUrl = pageContext.web.absoluteUrl
       const body = JSON.stringify({
@@ -106,6 +116,22 @@ export class TelemetryService {
         message: `(TelemetryService) track failed (ignored): ${error?.message}`,
         level: LogLevel.Info
       })
+    }
+  }
+
+  /**
+   * The installation-wide opt-out: the `CatalogTelemetryEnabled` row in the
+   * hub's Globale innstillinger list. Only an explicit `0` disables — a
+   * missing row or a failed read counts as ON (fail-open matches the seeded
+   * default, and `getGlobalSettings` is session-cached so this costs one
+   * request at most).
+   */
+  private static async _isEnabledInGlobalSettings(): Promise<boolean> {
+    try {
+      const settings = await SPDataAdapter.portalDataService.getGlobalSettings()
+      return settings.get(GLOBAL_SETTINGS_KEY) !== '0'
+    } catch {
+      return true
     }
   }
 

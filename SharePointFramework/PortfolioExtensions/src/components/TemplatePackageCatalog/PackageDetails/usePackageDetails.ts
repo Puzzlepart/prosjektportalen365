@@ -29,8 +29,16 @@ export function usePackageDetails() {
     setImageError(false)
     setConfirmReplace(false)
     setConfirmRemove(false)
-    if (selectedPackage) rootRef.current?.focus()
-  }, [selectedPackage?.id])
+    // Only for EXPLICIT selections (a card click sets detailOpen; the initial
+    // auto-selection doesn't): snap the pane (its parent is the scroll
+    // container) back to the top and move focus into it. Gating on detailOpen
+    // keeps focus where it is when the drawer default-selects the first
+    // package on load.
+    if (selectedPackage && state.detailOpen) {
+      rootRef.current?.parentElement?.scrollTo({ top: 0 })
+      rootRef.current?.focus({ preventScroll: true })
+    }
+  }, [selectedPackage?.id, state.detailOpen])
 
   useEffect(() => {
     if (wasDetailOpen.current && !state.detailOpen && selectedPackage) {
@@ -40,7 +48,6 @@ export function usePackageDetails() {
   }, [state.detailOpen, selectedPackage])
 
   const filterByTag = (tag: string) => {
-    // Jump-to-category: replaces the current selection with just this tag.
     setCategories([tag])
     closeDetail()
   }

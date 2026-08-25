@@ -1,6 +1,8 @@
 const SS_DISABLE_TAXONOMY = 'PP_DISABLE_TAXONOMY'
 const SS_DISABLE_IMPORT = 'PP_DISABLE_IMPORT'
 const SS_DISABLE_TELEMETRY = 'PP_DISABLE_TELEMETRY'
+const SS_SHOW_HIDDEN = 'PP_SHOW_HIDDEN'
+const QS_SHOW_HIDDEN = 'showHidden'
 
 function readSessionFlag(key: string): boolean {
   try {
@@ -47,5 +49,38 @@ export const featureFlags = {
    */
   isTelemetryEnabled(): boolean {
     return !readSessionFlag(SS_DISABLE_TELEMETRY)
+  },
+
+  /**
+   * Debug/QA: surface packages the catalog feed marks `hidden` (staged,
+   * not-yet-released). Off by default. Enable by opening the list with
+   * `?showHidden=true` in the URL — the value is persisted as the
+   * `PP_SHOW_HIDDEN` session flag so it survives SharePoint's SPA navigation
+   * (which drops query params) — or by setting the session flag directly.
+   * `?showHidden=false` turns it off again; otherwise it lasts until the tab
+   * closes.
+   */
+  showHiddenPackages(): boolean {
+    try {
+      // Case-insensitive key lookup — these URLs are hand-typed by testers.
+      // NOTE: the command set calls this in onInit to persist the flag while
+      // the URL still carries the param — modern SharePoint rewrites the
+      // query string during SPA navigation, so reading it only when the
+      // drawer opens would be too late.
+      let value: string | undefined
+      new URLSearchParams(window.location.search).forEach((paramValue, key) => {
+        if (key.toLowerCase() === QS_SHOW_HIDDEN.toLowerCase()) {
+          value = paramValue.toLowerCase()
+        }
+      })
+      if (value === 'true' || value === '1') {
+        sessionStorage.setItem(SS_SHOW_HIDDEN, '1')
+      } else if (value === 'false' || value === '0') {
+        sessionStorage.removeItem(SS_SHOW_HIDDEN)
+      }
+    } catch {
+      // URL/sessionStorage unavailable — fall through to the session flag.
+    }
+    return readSessionFlag(SS_SHOW_HIDDEN)
   }
 }

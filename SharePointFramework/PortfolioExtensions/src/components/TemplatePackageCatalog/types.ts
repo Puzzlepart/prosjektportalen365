@@ -81,7 +81,6 @@ export interface ITemplatePackageCatalogState {
   filters: ICatalogFilters
   sort: SortKey
   renderMode: RenderMode
-  page: number
   selectedPackageId?: string
   installProgress?: IInstallProgress
   /**
@@ -103,11 +102,6 @@ export interface ITemplatePackageCatalogState {
   detailOpen: boolean
 }
 
-/**
- * Number of cards per page (client-side pagination).
- */
-export const PAGE_SIZE = 8
-
 export interface ITemplatePackageCatalogContext {
   props: ITemplatePackageCatalogProps
   state: ITemplatePackageCatalogState
@@ -120,11 +114,8 @@ export interface ITemplatePackageCatalogContext {
   open: boolean
   /** Close the catalog drawer and notify the host (`props.onDismiss`). */
   close: () => void
-  /** All packages after search/filter/sort (not paginated). */
+  /** All packages after search/filter/sort. */
   filteredPackages: ICatalogPackage[]
-  /** Current page slice of {@link filteredPackages}. */
-  pagedPackages: ICatalogPackage[]
-  pageCount: number
   /** Distinct categories derived from package tags. */
   categories: string[]
   /** Distinct available-language group codes (`nb`/`en`) present in the catalog. */
@@ -151,7 +142,6 @@ export interface ITemplatePackageCatalogContext {
   setSort: (sort: SortKey) => void
   setRenderMode: (renderMode: RenderMode) => void
   setSelected: (packageId: string) => void
-  setPage: (page: number) => void
   closeDetail: () => void
   importPackage: (pkg: ICatalogPackage) => Promise<void>
   publishCentral: (pkg: ICatalogPackage) => Promise<void>

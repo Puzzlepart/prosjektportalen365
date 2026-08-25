@@ -90,12 +90,23 @@ project content is sent.
 Telemetry never blocks or fails a catalog action — failures are swallowed with an
 Info log entry (`(TelemetryService)`).
 
-Opt out via either:
+Opt out via any of:
 
+- the **`CatalogTelemetryEnabled`** row in the hub's *Globale innstillinger*
+  list — seeded as `1` (on); a portal admin sets the value to `0` to stop all
+  catalog telemetry for the installation. A missing row (installs provisioned
+  before the setting existed) counts as on, matching the seeded default.
 - `telemetryUrl: ""` on the CustomAction properties (whole installation), or
 - `sessionStorage.setItem('PP_DISABLE_TELEMETRY', '1')` for the current session.
 
 ## Dev / test
+
+- **Hidden packages**: packages marked `hidden` in `catalog.json` are staged and
+  never shown to users. To QA them, open the Maloppsett list with
+  `?showHidden=true` in the URL (persisted as the `PP_SHOW_HIDDEN` session flag,
+  so it survives SharePoint navigation; `?showHidden=false` turns it off, and it
+  resets when the tab closes). Surfaced hidden packages carry a "Skjult" tag on
+  the card and in the details pane.
 
 - The default `catalogUrl` points at the hosting `main` branch's raw `catalog.json`,
   which is now published — so browsing works out of the box. The committed

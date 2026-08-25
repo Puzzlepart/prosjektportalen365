@@ -4,6 +4,7 @@ import {
   Card,
   CardHeader,
   CardPreview,
+  makeStyles,
   mergeClasses,
   Text,
   Tooltip
@@ -13,6 +14,19 @@ import { ICatalogPackage } from 'models'
 import { PackageCompatibilityTag, PackageStatusTag, PackageUpdateTag } from './PackageBadges'
 import { usePackageCard } from './usePackageCard'
 import styles from './PackageCard.module.scss'
+
+const useHiddenOverlayStyles = makeStyles({
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    backgroundColor: 'rgba(128, 128, 128, 0.2)',
+    zIndex: 1,
+    pointerEvents: 'none'
+  }
+})
 
 export interface IPackageCardProps {
   package: ICatalogPackage
@@ -27,6 +41,7 @@ export const packageCardId = (packageId: string): string =>
 
 export const PackageCard: FC<IPackageCardProps> = ({ package: pkg }) => {
   const { isSelected, showImage, meta, select, onCardKeyDown, onImageError } = usePackageCard(pkg)
+  const hiddenOverlayStyles = useHiddenOverlayStyles()
 
   return (
     <Card
@@ -74,6 +89,7 @@ export const PackageCard: FC<IPackageCardProps> = ({ package: pkg }) => {
         </Text>
       )}
       <Caption1 className={styles.footer}>{meta}</Caption1>
+      {pkg.hidden && <div className={hiddenOverlayStyles.overlay} aria-hidden />}
     </Card>
   )
 }

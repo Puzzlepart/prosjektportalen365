@@ -88,6 +88,9 @@ define([], function () {
     CatalogStatusImported: 'Imported',
     CatalogStatusCentral: 'Central',
     CatalogStatusUpdate: 'Update available',
+    CatalogBadgeHidden: 'Hidden',
+    CatalogBadgeHiddenTooltip:
+      'The package is hidden in the catalog and only appears because showing hidden packages is enabled (?showHidden=true)',
     CatalogBadgeImported: 'Imported',
     CatalogBadgeCentral: 'Central',
     CatalogBadgeUpdate: 'Update!',
@@ -95,9 +98,6 @@ define([], function () {
     CatalogCardPublished: 'Published {0}',
     CatalogEmptyTitle: 'No packages found',
     CatalogEmptyDescription: 'Try adjusting your search or filters.',
-    CatalogPaginationText: 'Showing {0}-{1} of {2}',
-    CatalogPaginationPrevious: 'Previous',
-    CatalogPaginationNext: 'Next',
     CatalogDetailsEmptyText: 'Select a package to see details.',
     CatalogContentSummaryTitle: 'Package content',
     CatalogContentSummaryUnavailable: 'No content information is available for this package.',
@@ -129,6 +129,8 @@ define([], function () {
     CatalogActionUpdate: 'Update to v{0}',
     CatalogActionReinstall: 'Reinstall',
     CatalogActionRemove: 'Remove',
+    CatalogActionRemoveImport: 'Remove installation',
+    CatalogActionRemoveCentral: 'Remove cloud template',
     CatalogStepDownload: 'Downloading .pppkg',
     CatalogStepUnzip: 'Extracting package',
     CatalogStepValidateManifest: 'Validating manifest',
@@ -199,6 +201,9 @@ define([], function () {
     CatalogActionPublishCentralIncompatibleTooltip:
       'Cannot be made available as a cloud template. It needs hub-side content that is not set up when publishing as a cloud template.',
     CatalogActionRemoveTooltip: 'Remove this template package from Template Options',
+    CatalogActionRemoveCentralTooltip:
+      'Remove the cloud-template registration from Template Options',
+    CatalogActionPublishCentralAlreadyTooltip: 'Already made available as a cloud template',
     CatalogActionRemoveTooltipExtension:
       'Remove this extension from the Project Extensions library',
     CatalogRemoveConfirmTitle: 'Remove the template?',

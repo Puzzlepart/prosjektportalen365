@@ -3,6 +3,7 @@ import strings from 'PortfolioExtensionsStrings'
 import { ICatalogPackage, ICompatibilityReport, ICrossReference } from 'models'
 import {
   CatalogService,
+  featureFlags,
   TemplateOptionsService,
   PackageInstaller,
   ProjectExtensionsService,
@@ -15,7 +16,6 @@ import {
   ICatalogFilters,
   ITemplatePackageCatalogContext,
   ITemplatePackageCatalogProps,
-  PAGE_SIZE,
   RenderMode,
   SortKey
 } from './types'
@@ -124,10 +124,13 @@ export function useTemplatePackageCatalog(
 
   // Hidden packages stay in the catalog feed but are never surfaced in the UI
   // (list, filters, search, selection) — used to stage not-yet-ready packages.
+  // Debug/QA can surface them via `?showHidden=true` / the PP_SHOW_HIDDEN
+  // session flag (see featureFlags); they then carry a "Skjult" tag.
   // Memoized so the derived useMemos below get a stable dependency.
+  const showHidden = featureFlags.showHiddenPackages()
   const allPackages = useMemo(
-    () => (state.catalog?.packages ?? []).filter((pkg) => !pkg.hidden),
-    [state.catalog]
+    () => (state.catalog?.packages ?? []).filter((pkg) => showHidden || !pkg.hidden),
+    [state.catalog, showHidden]
   )
 
   const categories = useMemo(() => {
@@ -209,10 +212,19 @@ export function useTemplatePackageCatalog(
     // `isSupported` reads `state.installedVersion`, so depend on it explicitly.
   }, [allPackages, state.filters, state.sort, state.crossRef, state.installedVersion])
 
-  const pageCount = Math.max(1, Math.ceil(filteredPackages.length / PAGE_SIZE))
-  const page = Math.min(state.page, pageCount)
-  const pagedPackages = filteredPackages.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
   const selectedPackage = allPackages.find((pkg) => pkg.id === state.selectedPackageId)
+
+  // Default-select the first package (per the current filters/sort) once the
+  // catalog has loaded, so the drawer opens with details showing instead of an
+  // empty pane. Never overrides an existing selection, and deliberately does
+  // NOT set `detailOpen` — the <720px collapsed layout stays on the list, and
+  // the details pane skips its select-focus behavior for this implicit
+  // selection (see usePackageDetails).
+  useEffect(() => {
+    if (state.loading || state.selectedPackageId) return
+    const first = filteredPackages[0]
+    if (first) setState({ selectedPackageId: first.id })
+  }, [state.loading, filteredPackages])
 
   // Cleared/default filter state — `template` stays selected, everything else
   // off. Shared by clearFilters() and the active-filter detection below.
@@ -235,21 +247,20 @@ export function useTemplatePackageCatalog(
   const hasActiveFilters = activeFilterCount > 0
 
   const setFilter = (key: keyof ICatalogFilters, value: string) =>
-    setState((current) => ({ filters: { ...current.filters, [key]: value }, page: 1 }))
+    setState((current) => ({ filters: { ...current.filters, [key]: value } }))
 
   const setCompatibleOnly = (value: boolean) =>
-    setState((current) => ({ filters: { ...current.filters, compatibleOnly: value }, page: 1 }))
+    setState((current) => ({ filters: { ...current.filters, compatibleOnly: value } }))
 
   const setCategories = (categories: string[]) =>
-    setState((current) => ({ filters: { ...current.filters, categories }, page: 1 }))
+    setState((current) => ({ filters: { ...current.filters, categories } }))
 
-  const clearFilters = () => setState({ filters: { ...defaultFilters }, page: 1 })
+  const clearFilters = () => setState({ filters: { ...defaultFilters } })
 
-  const setSort = (sort: SortKey) => setState({ sort, page: 1 })
+  const setSort = (sort: SortKey) => setState({ sort })
   const setRenderMode = (renderMode: RenderMode) => setState({ renderMode })
   const setSelected = (packageId: string) =>
     setState({ selectedPackageId: packageId, detailOpen: true, installProgress: undefined })
-  const setPage = (newPage: number) => setState({ page: newPage })
   const closeDetail = () => setState({ detailOpen: false })
 
   const refreshCrossRef = async (): Promise<void> => {
@@ -469,13 +480,11 @@ export function useTemplatePackageCatalog(
 
   return {
     props,
-    state: { ...state, page },
+    state,
     setState,
     open,
     close,
     filteredPackages,
-    pagedPackages,
-    pageCount,
     categories,
     languages,
     activeFilterCount,
@@ -491,7 +500,6 @@ export function useTemplatePackageCatalog(
     setSort,
     setRenderMode,
     setSelected,
-    setPage,
     closeDetail,
     importPackage,
     publishCentral,

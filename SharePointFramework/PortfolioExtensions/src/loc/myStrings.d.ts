@@ -83,6 +83,8 @@ declare interface IPortfolioExtensionsStrings {
   CatalogStatusImported: string
   CatalogStatusCentral: string
   CatalogStatusUpdate: string
+  CatalogBadgeHidden: string
+  CatalogBadgeHiddenTooltip: string
   CatalogBadgeImported: string
   CatalogBadgeCentral: string
   CatalogBadgeUpdate: string
@@ -90,9 +92,6 @@ declare interface IPortfolioExtensionsStrings {
   CatalogCardPublished: string
   CatalogEmptyTitle: string
   CatalogEmptyDescription: string
-  CatalogPaginationText: string
-  CatalogPaginationPrevious: string
-  CatalogPaginationNext: string
   CatalogDetailsEmptyText: string
   CatalogContentSummaryTitle: string
   CatalogContentSummaryUnavailable: string
@@ -124,6 +123,8 @@ declare interface IPortfolioExtensionsStrings {
   CatalogActionUpdate: string
   CatalogActionReinstall: string
   CatalogActionRemove: string
+  CatalogActionRemoveImport: string
+  CatalogActionRemoveCentral: string
   CatalogStepDownload: string
   CatalogStepUnzip: string
   CatalogStepValidateManifest: string
@@ -189,6 +190,8 @@ declare interface IPortfolioExtensionsStrings {
   CatalogActionPublishCentralTooltip: string
   CatalogActionPublishCentralIncompatibleTooltip: string
   CatalogActionRemoveTooltip: string
+  CatalogActionRemoveCentralTooltip: string
+  CatalogActionPublishCentralAlreadyTooltip: string
   CatalogActionRemoveTooltipExtension: string
   CatalogRemoveConfirmTitle: string
   CatalogRemoveConfirmText: string

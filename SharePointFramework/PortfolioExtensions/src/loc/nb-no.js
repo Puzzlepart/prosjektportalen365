@@ -84,6 +84,9 @@ define([], function () {
     CatalogStatusImported: 'Importert',
     CatalogStatusCentral: 'Sentral',
     CatalogStatusUpdate: 'Oppdatering tilgjengelig',
+    CatalogBadgeHidden: 'Skjult',
+    CatalogBadgeHiddenTooltip:
+      'Pakken er skjult i katalogen og vises kun fordi visning av skjulte pakker er aktivert (?showHidden=true)',
     CatalogBadgeImported: 'Importert',
     CatalogBadgeCentral: 'Sentral',
     CatalogBadgeUpdate: 'Oppdatering!',
@@ -91,9 +94,6 @@ define([], function () {
     CatalogCardPublished: 'Publisert {0}',
     CatalogEmptyTitle: 'Ingen malpakker funnet',
     CatalogEmptyDescription: 'Prøv å justere søk eller filtre.',
-    CatalogPaginationText: 'Viser {0}-{1} av {2}',
-    CatalogPaginationPrevious: 'Forrige',
-    CatalogPaginationNext: 'Neste',
     CatalogDetailsEmptyText: 'Velg en malpakke for å se detaljer.',
     CatalogContentSummaryTitle: 'Innhold i malen',
     CatalogContentSummaryUnavailable: 'Ingen innholdsinformasjon er tilgjengelig for denne malpakken.',
@@ -125,6 +125,8 @@ define([], function () {
     CatalogActionUpdate: 'Oppdater til v{0}',
     CatalogActionReinstall: 'Installer på nytt',
     CatalogActionRemove: 'Fjern',
+    CatalogActionRemoveImport: 'Fjern installasjon',
+    CatalogActionRemoveCentral: 'Fjern skymal',
     CatalogStepDownload: 'Laster ned .pppkg',
     CatalogStepUnzip: 'Pakker ut',
     CatalogStepValidateManifest: 'Validerer manifest',
@@ -195,6 +197,8 @@ define([], function () {
     CatalogActionPublishCentralIncompatibleTooltip:
       'Kan ikke tilgjengeliggjøres som skymal. Pakken krever innhold på hub-området som ikke settes opp ved tilgjengeliggjøring.',
     CatalogActionRemoveTooltip: 'Fjern denne malpakken fra Maloppsett',
+    CatalogActionRemoveCentralTooltip: 'Fjern skymal-registreringen fra Maloppsett',
+    CatalogActionPublishCentralAlreadyTooltip: 'Allerede tilgjengeliggjort som skymal',
     CatalogActionRemoveTooltipExtension: 'Fjern dette tillegget fra Prosjekttillegg-biblioteket',
     CatalogRemoveConfirmTitle: 'Fjerne malen?',
     CatalogRemoveConfirmText:

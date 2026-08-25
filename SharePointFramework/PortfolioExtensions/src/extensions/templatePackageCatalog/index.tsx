@@ -13,6 +13,7 @@ import React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
 import resource from 'SharedResources'
 import { TemplatePackageCatalog } from 'components/TemplatePackageCatalog'
+import { featureFlags } from 'services'
 import SPDataAdapter from '../../data/SPDataAdapter'
 import { ITemplatePackageCatalogCommandProperties } from './types'
 
@@ -39,6 +40,10 @@ export default class TemplatePackageCatalogCommandSet extends BaseListViewComman
     Logger.subscribe(ConsoleListener())
     Logger.activeLogLevel =
       sessionStorage.getItem('DEBUG') === '1' || DEBUG ? LogLevel.Info : LogLevel.Warning
+    // Persist ?showHidden=… into its session flag NOW, while the URL still
+    // carries the param — modern SharePoint rewrites the query string during
+    // SPA navigation, so reading it first when the drawer opens is too late.
+    featureFlags.showHiddenPackages()
     this._openCmd = this.tryGetCommand(OPEN_COMMAND)
     if (!this._openCmd) return
     this._openCmd.title = strings.TemplatePackageCatalogCommandTitle

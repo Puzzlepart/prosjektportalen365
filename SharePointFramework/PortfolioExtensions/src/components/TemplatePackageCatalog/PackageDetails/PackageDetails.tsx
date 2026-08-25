@@ -27,7 +27,7 @@ import { UserMessage } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC } from 'react'
 import { PpPkgType } from 'models'
-import { PackageBadges, PackageRequirementTags } from '../PackageCard'
+import { PackageBadges, PackageHiddenTag, PackageRequirementTags } from '../PackageCard'
 import { PackageContentSummary } from './PackageContentSummary'
 import { PackageHistory } from './PackageHistory'
 import { PackageScreenshots } from './PackageScreenshots'
@@ -69,7 +69,6 @@ export const PackageDetails: FC = () => {
   // Extensions go into the Prosjekttillegg library, not Maloppsett, so they
   // cannot be published as a cloud template and get their own action/info copy.
   const isExtension = pkg.type === 'extension'
-  const canPublishCentral = !isCentral && !isExtension
   // A non-cloud-compatible package can't be published as a cloud template — the
   // publish button is shown disabled with the reason in its tooltip.
   const notCloudCompatible = pkg.cloudCompatible === false
@@ -83,6 +82,13 @@ export const PackageDetails: FC = () => {
   // plain import label — copying locally is a separate action from publishing
   // as a cloud template.)
   const isUpToDate = ref?.packageType === PpPkgType.Importert && !isUnmanaged && !updateAvailable
+  // What the remove buttons can act on: the single cross-referenced
+  // registration is either a local install (Importert) or a cloud registration
+  // (Sentral) — each remove button enables only for its own kind. Unmanaged
+  // (hand-made) extensions must not be deletable from here.
+  const canRemoveInstall = isExtension
+    ? !!ref && !isUnmanaged
+    : ref?.packageType === PpPkgType.Importert
   const onPrimaryAction = () => (isUnmanaged ? setConfirmReplace(true) : importPackage(pkg))
 
   const meta = [
@@ -120,6 +126,7 @@ export const PackageDetails: FC = () => {
           </Text>
         </div>
         <PackageBadges packageId={pkg.id} />
+        <PackageHiddenTag package={pkg} />
       </div>
 
       <Caption1 className={styles.meta}>{meta}</Caption1>
@@ -184,6 +191,7 @@ export const PackageDetails: FC = () => {
           relationship='description'
         >
           <Button
+            className={styles.mainAction}
             appearance='primary'
             disabled={!supported || !!state.busyAction}
             icon={isExtension ? <PuzzlePiece24Regular /> : <ArrowDownload24Regular />}
@@ -204,31 +212,9 @@ export const PackageDetails: FC = () => {
               : strings.CatalogActionImport}
           </Button>
         </Tooltip>
-        {canPublishCentral && (
-          <Tooltip
-            content={
-              notCloudCompatible
-                ? pkg.cloudCompatibleReason ??
-                  strings.CatalogActionPublishCentralIncompatibleTooltip
-                : strings.CatalogActionPublishCentralTooltip
-            }
-            relationship='description'
-          >
-            <Button
-              appearance='secondary'
-              disabled={!!state.busyAction}
-              disabledFocusable={notCloudCompatible}
-              icon={state.busyAction === 'publish' ? <Spinner size='tiny' /> : <Cloud24Regular />}
-              onClick={() => publishCentral(pkg)}
-            >
-              {strings.CatalogActionPublishCentral}
-            </Button>
-          </Tooltip>
-        )}
-        {/* Catalog-managed items only — an unmanaged (hand-made) extension must
-            not be deletable from here. Extensions are removed from the
-            Prosjekttillegg library, templates from Maloppsett. */}
-        {ref && !isUnmanaged && (
+        {/* Row 1's remove: the local install (or the extension file). Only
+            rendered when there is an install to remove. */}
+        {canRemoveInstall && (
           <Tooltip
             content={
               isExtension
@@ -238,14 +224,62 @@ export const PackageDetails: FC = () => {
             relationship='description'
           >
             <Button
+              className={styles.removeAction}
               appearance='subtle'
               disabled={!!state.busyAction}
               icon={state.busyAction === 'remove' ? <Spinner size='tiny' /> : <Delete24Regular />}
               onClick={() => setConfirmRemove(true)}
             >
-              {strings.CatalogActionRemove}
+              {isExtension ? strings.CatalogActionRemove : strings.CatalogActionRemoveImport}
             </Button>
           </Tooltip>
+        )}
+
+        {/* Row 2 — cloud template (templates only): publish + its remove (only
+            when registered as a cloud template). */}
+        {!isExtension && (
+          <>
+            <Tooltip
+              content={
+                isCentral
+                  ? strings.CatalogActionPublishCentralAlreadyTooltip
+                  : notCloudCompatible
+                  ? pkg.cloudCompatibleReason ??
+                    strings.CatalogActionPublishCentralIncompatibleTooltip
+                  : strings.CatalogActionPublishCentralTooltip
+              }
+              relationship='description'
+            >
+              <Button
+                className={styles.mainAction}
+                appearance='secondary'
+                disabled={!!state.busyAction}
+                disabledFocusable={notCloudCompatible || isCentral}
+                icon={state.busyAction === 'publish' ? <Spinner size='tiny' /> : <Cloud24Regular />}
+                onClick={() => publishCentral(pkg)}
+              >
+                {strings.CatalogActionPublishCentral}
+              </Button>
+            </Tooltip>
+            {isCentral && (
+              <Tooltip
+                content={strings.CatalogActionRemoveCentralTooltip}
+                relationship='description'
+              >
+                <Button
+                  className={styles.removeAction}
+                  appearance='subtle'
+                  disabled={!!state.busyAction}
+                  icon={
+                    state.busyAction === 'remove' ? <Spinner size='tiny' /> : <Delete24Regular />
+                  }
+                  onClick={() => setConfirmRemove(true)}
+                >
+                  {strings.CatalogActionRemoveCentral}
+                </Button>
+              </Tooltip>
+            )}
+          </>
         )}
       </div>
 

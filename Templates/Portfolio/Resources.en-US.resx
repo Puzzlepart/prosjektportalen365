@@ -1300,6 +1300,9 @@
   <data name="Lists_Global_Settings_Category_General_ShowChildProjectInfoInProgram_Title" xml:space="preserve">
     <value>Show project information for all projects in programs and parent projects</value>
   </data>
+  <data name="Lists_Global_Settings_Category_General_CatalogTelemetryEnabled_Title" xml:space="preserve">
+    <value>Send usage statistics for the template package catalog</value>
+  </data>
   <data name="Lists_Global_Settings_Category_General_ShowFooter_Title" xml:space="preserve">
     <value>Show/hide footer in Project Portal</value>
   </data>

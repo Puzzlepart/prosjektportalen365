@@ -21,7 +21,6 @@ export function useTemplatePackageCatalogState() {
     },
     sort: 'name',
     renderMode: 'grid',
-    page: 1,
     detailOpen: false
   })
 
