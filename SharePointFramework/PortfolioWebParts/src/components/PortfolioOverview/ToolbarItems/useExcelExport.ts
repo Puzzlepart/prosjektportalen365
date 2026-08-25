@@ -2,6 +2,7 @@ import { useCallback } from 'react'
 import { IPortfolioOverviewContext } from '../context'
 import { EXCEL_EXPORT_ERROR, EXCEL_EXPORT_SUCCESS, START_EXCEL_EXPORT } from '../reducer'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
+import { applyActiveFilters } from '../hooks/applyActiveFilters'
 
 /**
  * Hook that provides functionality for exporting data to Excel.
@@ -24,19 +25,7 @@ export function useExcelExport(context: IPortfolioOverviewContext) {
       const { selectedItems, columns, currentView } = context.state
       const { includeViewNameInExcelExportFilename } = context.props
       const items =
-        selectedItems?.length > 0
-          ? selectedItems
-          : context.state.items.filter((item) => {
-              if (Object.keys(context.state.activeFilters).length === 0) {
-                return true
-              }
-              return Object.keys(context.state.activeFilters).every((key) => {
-                const filterValues = context.state.activeFilters[key]
-                return filterValues.some((filterValue) => {
-                  return item[key] === filterValue || item[key]?.includes(filterValue)
-                })
-              })
-            })
+        selectedItems?.length > 0 ? selectedItems : applyActiveFilters(context.state.items, context)
 
       const filteredItems = items.map((item) => {
         const filteredItem = { ...item }
@@ -58,7 +47,7 @@ export function useExcelExport(context: IPortfolioOverviewContext) {
     } catch (error) {
       context.dispatch(EXCEL_EXPORT_ERROR(error))
     }
-  }, [context.state])
+  }, [context.state, context.props])
 
   return exportToExcel
 }

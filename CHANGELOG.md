@@ -38,6 +38,8 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Rettet en feil i `Bestillingsportalen`-app hvor hubfeltet fortsatte å vise forrige hub dersom brukeren byttet områdetype etter at appen var åpnet. Verdien som ble lagret var riktig, men visningen var utdatert
 - Rettet en feil i `Bestillingsportalen`-app hvor prosjektinformasjonen som opprettes ved bestilling av underområde ble lagt i gjeldende hub selv om områdetypen peker på en annen hub
 - Rettet en feil i `Dynamisk Liste` hvor Ja/Nei verdier alltid viser som "Nei" [#1747](https://github.com/Puzzlepart/prosjektportalen365/pull/1747)
+- Rettet en feil i `Porteføljeoversikt` hvor Ja/Nei-kolonner viste råverdiene `0` og `1` i gruppeoverskriftene ved gruppering.
+- Ja/Nei-kolonner vises nå alltid med begge valgene i filterpanelet i `Porteføljeoversikt`, og valgene får riktig etikett uavhengig av hvilken kolonne det gjelder. `Eksporter til Excel` bruker nå samme filtrering som listen, slik at eksporten alltid inneholder de samme radene som vises
 
 ### Merk
 

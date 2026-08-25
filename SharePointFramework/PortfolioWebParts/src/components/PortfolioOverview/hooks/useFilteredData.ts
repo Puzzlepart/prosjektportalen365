@@ -10,6 +10,8 @@ import {
 import _ from 'underscore'
 import { IPortfolioOverviewContext } from '../context'
 import { IPortfolioOverviewState } from '../types'
+import { applyActiveFilters } from './applyActiveFilters'
+import { getBooleanDisplayValue, isBooleanColumn, normalizeBooleanValue } from './booleanColumn'
 
 /**
  * Generates a display name for a group based on the column and its value.
@@ -25,6 +27,9 @@ import { IPortfolioOverviewState } from '../types'
  */
 function getGroupDisplayName(column: ProjectColumn, value: string) {
   let displayValue = value
+  if (isBooleanColumn(column)) {
+    return `${column.name}: ${getBooleanDisplayValue(column, value)}`
+  }
   switch (column.dataType) {
     case 'number':
       displayValue = tryParseInt(value, strings.NotSet) as string
@@ -46,15 +51,35 @@ function getGroupDisplayName(column: ProjectColumn, value: string) {
  */
 function createGroups(items: any[], state: IPortfolioOverviewState) {
   if (!state.groupBy) return { items, columns: state.columns, groups: null }
-  const itemsSort = { props: [state.groupBy.fieldName], opts: { reverse: false } }
+  const isBooleanGroupBy = isBooleanColumn(state.groupBy)
+  // For boolean columns the raw values can't be used to group by, as items
+  // without a value are rendered as the false label in the grid and have to end
+  // up in the same group as the explicit false values. Those items are sorted
+  // by the sort column only, and then grouped by the normalized value below.
+  const itemsSort: { props: string[]; opts: { reverse: boolean } } = {
+    props: isBooleanGroupBy ? [] : [state.groupBy.fieldName],
+    opts: { reverse: false }
+  }
   if (state.sortBy) {
     itemsSort.props.push(state.sortBy.column.fieldName)
     itemsSort.opts.reverse = !state.sortBy.column.isSortedDescending
   }
-  items = sortArray([...items], itemsSort.props, itemsSort.opts)
-  const groupNames: string[] = items.map((g) =>
-    get<string>(g, state.groupBy.fieldName, strings.NotSet)
-  )
+  items = _.isEmpty(itemsSort.props)
+    ? [...items]
+    : sortArray([...items], itemsSort.props, itemsSort.opts)
+  if (isBooleanGroupBy) {
+    // `_.sortBy` is stable, so sorting on the normalized value after the sort
+    // column keeps the items sorted within each group, while making each group
+    // contiguous - which the `startIndex`/`count` based grouping below depends
+    // on.
+    items = _.sortBy(items, (item) =>
+      normalizeBooleanValue(get<string>(item, state.groupBy.fieldName, ''))
+    )
+  }
+  const groupNames: string[] = items.map((g) => {
+    const value = get<string>(g, state.groupBy.fieldName, strings.NotSet)
+    return isBooleanGroupBy ? normalizeBooleanValue(value) : value
+  })
   const uniqueGroupNames: string[] = _.uniq(groupNames)
   const groups = uniqueGroupNames
     .sort((a, b) => (a > b ? 1 : -1))
@@ -90,16 +115,7 @@ export function useFilteredData(context: IPortfolioOverviewContext) {
     )
   })
 
-  items = Object.keys(context.state.activeFilters).reduce((arr, key) => {
-    return arr.filter((i) => {
-      const colValue = get<string>(i, key, '')
-      return (
-        context.state.activeFilters[key].filter(
-          (filterValue) => colValue.indexOf(filterValue) !== -1
-        ).length > 0
-      )
-    })
-  }, items)
+  items = applyActiveFilters(items, context)
 
   return createGroups(items, context.state)
 }
