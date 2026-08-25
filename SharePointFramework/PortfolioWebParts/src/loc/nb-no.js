@@ -520,6 +520,7 @@ define([], function () {
     ProjectContentColumnItemNotFound: 'Prosjektinnholdskolonne ble ikke funnet',
     ProjectDeliveriesGroupName: 'Prosjektleveranser (beta)',
     ProjectInformationGroupName: 'Instillinger for Prosjektinformasjonspanel',
+    ProjectInformationPanelButton: 'Åpne prosjektinformasjonspanel',
     ProjectListEmptyMessage: 'Søket etter prosjekter ga ingen resultater',
     ProjectListQuickLaunch: 'Hurtigmeny for prosjekt',
     ProjectMetadataFieldLabel: 'Prosjektmetadata',
