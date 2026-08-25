@@ -2,6 +2,7 @@ import React, { FC, useState } from 'react'
 import {
   OverlayDrawer,
   Button,
+  Spinner,
   Tooltip,
   Toast,
   ToastBody,
@@ -42,6 +43,7 @@ export const FullscreenDrawer: FC<IFullscreenDrawerProps> = (props) => {
   const {
     context,
     onSave,
+    isSaving,
     isSaveDisabled,
     missingFieldsInfo,
     siteExists,
@@ -117,6 +119,7 @@ export const FullscreenDrawer: FC<IFullscreenDrawerProps> = (props) => {
 
   const handleSave = () => {
     onSave().then((response) => {
+      if (response === 'busy') return
       if (response === true) {
         context.setState({ showProvisionConfirmation: true, properties: {} })
         setCurrentStep('siteType')
@@ -287,7 +290,8 @@ export const FullscreenDrawer: FC<IFullscreenDrawerProps> = (props) => {
                 <Button
                   appearance='primary'
                   size='large'
-                  disabled={isSaveDisabled}
+                  disabled={isSaveDisabled || isSaving}
+                  icon={isSaving ? <Spinner size='tiny' /> : undefined}
                   onClick={handleSave}
                 >
                   {strings.Provision.ProvisionButtonLabel}
@@ -297,7 +301,8 @@ export const FullscreenDrawer: FC<IFullscreenDrawerProps> = (props) => {
               <Button
                 appearance='primary'
                 size='large'
-                disabled={isSaveDisabled}
+                disabled={isSaveDisabled || isSaving}
+                icon={isSaving ? <Spinner size='tiny' /> : undefined}
                 onClick={handleSave}
               >
                 {strings.Provision.ProvisionButtonLabel}

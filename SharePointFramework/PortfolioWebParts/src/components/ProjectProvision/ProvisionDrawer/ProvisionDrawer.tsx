@@ -11,6 +11,7 @@ import {
   DrawerFooter,
   Toolbar,
   Button,
+  Spinner,
   Toast,
   ToastBody,
   ToastTitle,
@@ -41,6 +42,7 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
     motionStyles,
     context,
     onSave,
+    isSaving,
     isSaveDisabled,
     missingFieldsInfo,
     siteExists,
@@ -259,10 +261,16 @@ export const ProvisionDrawer: FC<IProvisionDrawerProps> = (props) => {
               </Button>
               <Button
                 appearance='primary'
-                disabled={currentLevel === levels.length - 1 && isSaveDisabled}
+                disabled={currentLevel === levels.length - 1 && (isSaveDisabled || isSaving)}
+                icon={
+                  currentLevel === levels.length - 1 && isSaving ? (
+                    <Spinner size='tiny' />
+                  ) : undefined
+                }
                 onClick={() => {
                   currentLevel === levels.length - 1
                     ? onSave().then((response) => {
+                        if (response === 'busy') return
                         if (response === true) {
                           context.setState({ showProvisionConfirmation: true, properties: {} })
                           setCurrentLevel(0)

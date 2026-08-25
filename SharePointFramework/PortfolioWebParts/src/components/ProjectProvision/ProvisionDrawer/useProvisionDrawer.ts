@@ -1,4 +1,4 @@
-import { useContext, useState, useMemo } from 'react'
+import { useContext, useState, useMemo, useRef } from 'react'
 import { useMotion } from '@fluentui/react-motion-preview'
 import { useMotionStyles } from './motionStyles'
 import { ProjectProvisionContext } from '../context'
@@ -111,8 +111,10 @@ export const useProvisionDrawer = () => {
 
   const [siteExists, setSiteExists] = useState(false)
   const [requestExists, setRequestExists] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
+  const isSavingRef = useRef(false)
 
-  const onSave = async (): Promise<boolean | 'conflict'> => {
+  const submitProvisionRequest = async (): Promise<boolean | 'conflict'> => {
     const name = `${namingConvention?.prefixText ?? ''}${context.column.get('name')}${
       namingConvention?.suffixText ?? ''
     }`
@@ -261,6 +263,31 @@ export const useProvisionDrawer = () => {
     )
   }
 
+  /**
+   * Submits the provision request, guarding against double submits. Without
+   * the guard a double click fires two concurrent submits, and the duplicate
+   * check in `submitProvisionRequest` can't catch the second one — neither has
+   * added its request to the list by the time both run their check, so two
+   * requests for the same site end up in the list.
+   *
+   * The ref is what actually blocks the second click: `isSaving` may not have
+   * been committed yet when the two click events arrive back to back.
+   */
+  const onSave = async (): Promise<boolean | 'conflict' | 'busy'> => {
+    if (isSavingRef.current) return 'busy'
+    isSavingRef.current = true
+    setIsSaving(true)
+    try {
+      return await submitProvisionRequest()
+    } catch (error) {
+      console.warn('(useProvisionDrawer) (onSave) Failed to submit provision request:', error)
+      return false
+    } finally {
+      isSavingRef.current = false
+      setIsSaving(false)
+    }
+  }
+
   const duplicateOwnerMembers = useMemo(() => {
     const owners: any[] = context.column.get('owner') || []
     const members: any[] = context.column.get('member') || []
@@ -369,6 +396,7 @@ export const useProvisionDrawer = () => {
     motionStyles,
     context,
     onSave,
+    isSaving,
     isSaveDisabled,
     missingFieldsInfo,
     siteExists,
