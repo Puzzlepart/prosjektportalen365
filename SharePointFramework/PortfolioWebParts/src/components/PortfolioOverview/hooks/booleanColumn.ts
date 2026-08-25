@@ -35,6 +35,9 @@ export function isBooleanColumn(column: ProjectColumn): boolean {
  * @param value Raw value
  */
 export function normalizeBooleanValue(value: any): '1' | '0' {
+  // Kept in sync with `isTrueBooleanValue` in the shared library, which
+  // `BooleanColumn` renders from. Only the `1`/`0` strings that search returns
+  // reach this web part, so parsing the value as a number is enough here.
   return parseInt(value) === 1 ? '1' : '0'
 }
 

@@ -247,7 +247,6 @@ export const ListView: FC<IListViewProps> = ({
                   />
                   {columns.map((column, colIndex) => {
                     const isFirstColumn = colIndex === 0
-                    const isBoolean = typeof (item as any)[column.columnId] === 'boolean'
                     const cellContent = column.renderCell
                       ? column.renderCell(item)
                       : (item as any)[column.columnId]
@@ -279,13 +278,7 @@ export const ListView: FC<IListViewProps> = ({
                             )}
                           </TableCellLayout>
                         ) : (
-                          <TableCellLayout>
-                            {isBoolean
-                              ? item[column.columnId]
-                                ? strings.Yes
-                                : strings.No
-                              : cellContent}
-                          </TableCellLayout>
+                          <TableCellLayout>{cellContent}</TableCellLayout>
                         )}
                       </TableCell>
                     )
