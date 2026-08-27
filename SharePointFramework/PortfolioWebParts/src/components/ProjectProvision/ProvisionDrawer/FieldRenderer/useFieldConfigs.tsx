@@ -21,6 +21,8 @@ export interface UseFieldConfigsParams {
   requestExists: boolean
   setRequestExists: (exists: boolean) => void
   duplicateOwnerMembers: any[]
+  insufficientOwners: boolean
+  minimumOwners: number
   namingConvention: any
   urlPrefix: string
   aliasSuffix: string
@@ -239,6 +241,13 @@ export function useFieldConfigs(params: UseFieldConfigsParams): Record<string, I
       params.duplicateOwnerMembers.length > 0
         ? strings.Provision.DuplicateOwnerMemberMessage
         : undefined
+  }
+
+  configs.owner = {
+    validationState: params.insufficientOwners ? 'error' : 'none',
+    validationMessage: params.insufficientOwners
+      ? format(strings.Provision.MinimumOwnersMessage, params.minimumOwners)
+      : undefined
   }
 
   configs.alias = {
