@@ -85,9 +85,8 @@ torsdag 13.8. Du trenger ikke redigere filene selv — det gjør vi etter møtet
 
 - [Kildesettet](https://github.com/Puzzlepart/prosjektportalen365/blob/claude/prosjektportalen-v6-update-70sbom/docs/prosjektveiviseren-v6/kildesett-v6.md) —
   strukturert oversikt over hele v6: faser, aktiviteter, beslutningspunkter, roller og maler.
-- [kilder/-mappen](https://github.com/Puzzlepart/prosjektportalen365/tree/claude/prosjektportalen-v6-update-70sbom/docs/prosjektveiviseren-v6/kilder) —
-  alle 74 Digdir-sidene ordrett, hvis du vil slå opp originalteksten bak et forslag.
-  (Hver fil har lenke til Digdir-siden øverst, så du kan også lese på prosjektveiviseren.digdir.no.)
+- [Originaltekstene hos Digdir](https://prosjektveiviseren.digdir.no/) — hvert forslag i
+  tabellene har kilde-URL (`v6_kilde`) som peker rett på siden det bygger på.
 - [Fremdriftsplanen](https://github.com/Puzzlepart/prosjektportalen365/blob/claude/prosjektportalen-v6-update-70sbom/docs/plans/prosjektveiviseren-v6.md) —
   hele planen med datoer og roller.
 

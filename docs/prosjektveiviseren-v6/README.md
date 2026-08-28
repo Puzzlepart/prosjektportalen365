@@ -19,7 +19,7 @@ Sporing: [issue #1044](https://github.com/Puzzlepart/prosjektportalen365/issues/
 | Fil | Innhold | Status |
 |---|---|---|
 | `kildesett-v6.md` | Strukturert oversikt over v6: faser, aktiviteter, BP-er, terminologi, roller, maler | **Innhentet 2026-08-06** (automatisk — egress-blokkeringen er borte) |
-| `kilder/` | Alle 74 innholdssider fra prosjektveiviseren.digdir.no, ordrett som markdown med kilde-URL | Innhentet 2026-08-06 |
+| ~~`kilder/`~~ | 74 innholdssider fra prosjektveiviseren.digdir.no (rådata for mapping) | **Fjernet fra branchen 2026-08-25** — finnes i git-historikken; dokumentene lenker nå direkte til Digdir |
 | `mapping-sjekkpunkter.csv` | 44 eksisterende sjekkpunkter mappet + 27 nye v6-punkter | **GODKJENT 2026-08-21** — avledet til `innhold-sjekkpunkter.csv`; beholdes som revisjonsspor |
 | `mapping-oppgaver.csv` | 66 eksisterende oppgaver mappet + 24 nye v6-oppgaver | **ERSTATTET 2026-08-21** av `innhold-oppgaver.csv` som fasit for nytt innhold — beholdes som revisjonsspor for hva som skjedde med de 66 gamle radene |
 | `innhold-sjekkpunkter.csv` | FASIT for Fasesjekklistev6: 63 sjekkpunkter, begge språk (avledet fra godkjent mapping) — kilde for Generate-V6ContentRows.js | **Generert inn i malverket 2026-08-21** |
@@ -52,7 +52,7 @@ id, fase, sortorder, gammel_tittel, gammel_tittel_en, ny_tittel, ny_tittel_en, h
 ## Arbeidsflyt
 
 1. ~~Marit henter materialet~~ **Gjort 2026-08-06** — hele nettstedet er hentet automatisk
-   til `kilder/` og strukturert i `kildesett-v6.md`. Dokumentmalene (11 filer, kun bokmål)
+   og strukturert i `kildesett-v6.md` (rådataene i `kilder/` er senere fjernet fra branchen). Dokumentmalene (11 filer, kun bokmål)
    er lastet ned og verifisert; selve filene committes først i område F.
 2. **AI** fyller `ny_tittel`, `handling`, `v6_kilde` og `begrunnelse` i de to
    mapping-CSV-ene. Terminologitabellen er allerede verifisert med kildebelegg.
@@ -88,10 +88,9 @@ id, fase, sortorder, gammel_tittel, gammel_tittel_en, ny_tittel, ny_tittel_en, h
 
 - Versjonsdato for Prosjektveiviseren v6: **6.0, juni 2026** (fasesider sist endret
   12. juni 2026; begreper/roller 24. juni 2026; dokumentmaler 25. juni 2026). Kilde:
-  [versjonshistorikk](kilder/godt-vite__versjonshistorikk__144.md).
+  [versjonshistorikk](https://prosjektveiviseren.digdir.no/godt-vite/versjonshistorikk/144).
 - v6 bygger på PRINCE2 versjon 7.
-- Innhold gjenbrukes under Digdirs vilkår (NLOD), med kildehenvisning (kilde-URL står
-  øverst i hver fil i `kilder/`).
+- Innhold gjenbrukes under Digdirs vilkår (NLOD), med kildehenvisning (kilde-URL-ene står i `kildesett-v6.md`).
 
 ## Navnekonvensjon for framtidige versjoner
 

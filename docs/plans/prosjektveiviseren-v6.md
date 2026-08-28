@@ -41,7 +41,7 @@ Gjenstår: E2E-testene i testleietaker (M3, kjøres av teamet) og område L (rel
 
 Egress-blokkeringen av `prosjektveiviseren.digdir.no` som tidligere lå i utviklingsmiljøet
 er ikke lenger aktiv. Hele nettstedet (74 innholdssider) ble hentet automatisk 2026-08-06 og
-ligger ordrett i `docs/prosjektveiviseren-v6/kilder/`, strukturert i
+ble hentet ordrett (mappen `kilder/` er senere fjernet fra branchen — finnes i git-historikken), strukturert i
 `docs/prosjektveiviseren-v6/kildesett-v6.md`. Dokumentmalene (11 filer) er lastet ned og
 filnavnene verifisert. Kildeinnhentingen som fremdriftsplanen la på PL i uke 32 er dermed
 gjort; PLs rolle i område A endres til å **verifisere og godkjenne** mappingtabellene.
@@ -762,7 +762,7 @@ npm run validate-loc                               # loc-nøkler i balanse
 |---|---|
 | **Stille kildebytte:** ny hub-liste får tittelen «Fasesjekkliste» før den gamle er omdøpt → `getByTitle` treffer feil liste og alle bytter innhold utilsiktet | Omdøpingen ligger i `PreInstallUpgrade.ps1`, altså **før** PnP-malene. Test 3 er porten. Dette er planens farligste enkeltpunkt. |
 | Endring av internt feltnavn ved uhell under terminologiarbeidet | Eksplisitt statisk sjekk på `git diff` i `SiteFields/`. Regelen står i område C. |
-| ~~v6-fasiten mangler — egress blokkert~~ *(løst 2026-08-06)* | Kildematerialet er innhentet og ligger i `docs/prosjektveiviseren-v6/kilder/`; terminologien er verifisert mot kilden. Restrisiko: Digdir endrer innhold i perioden — diff mot `kilder/` ved behov. |
+| ~~v6-fasiten mangler — egress blokkert~~ *(løst 2026-08-06)* | Kildematerialet er innhentet og strukturert i `docs/prosjektveiviseren-v6/kildesett-v6.md` (rådataene i `kilder/` er fjernet fra branchen, men finnes i git-historikken); terminologien er verifisert mot kilden. Restrisiko: Digdir endrer innhold i perioden — sammenlign mot kilde-URL-ene ved behov. |
 | Terminologiendringen er større enn antatt (76 resx-verdier + roller) | `mapping-terminologi.csv` gir full oversikt før arbeidet starter. Interne navn røres ikke, så flaten er stor men risikoen lav. |
 | ~~Omdøping av taksonomitermen «Gevinstansvarlig» endrer lagrede listeverdier~~ *(avkreftet 2026-08-20)* | «Gevinstansvarlig» er ikke en taksonomiterm, men visningsnavn på personfeltet `GtGainsResponsible` — omdøping er datasikker. Besluttet omdøpt til «Nytteeier»; ingen migrering av eksisterende data/termer. |
 | To generasjoner lister forvirrer brukerne | «(tidligere)»-konvensjonen, konfigurasjonssiden viser begge, releasenotes og brukermanual forklarer valget. Maks to generasjoner samtidig. |

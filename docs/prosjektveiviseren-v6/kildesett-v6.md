@@ -2,8 +2,8 @@
 
 > **Status: INNHENTET.** Hele `prosjektveiviseren.digdir.no` (74 innholdssider) ble hentet
 > automatisk 2026-08-06 — egress-blokkeringen som planen forutsatte er ikke lenger aktiv.
-> Råmaterialet ligger ordrett i [`kilder/`](kilder/) (én markdown-fil per side, med
-> kilde-URL i toppen). Denne filen er den strukturerte oversikten.
+> Råmaterialet lå som markdown i `kilder/` frem til 2026-08-25, da mappen ble fjernet fra
+> branchen (finnes i git-historikken). Lenkene i dette dokumentet peker direkte til Digdir.
 >
 > **Kildeversjon: Prosjektveiviseren 6.0, publisert juni 2026.** Fasesidene er sist endret
 > 12. juni 2026, begreps- og rollesidene 24. juni 2026. Innhold gjenbrukes under Digdirs
@@ -11,12 +11,12 @@
 
 ## Innhentingsstatus (opprinnelig handleliste)
 
-- [x] Versjonshistorikk → [`kilder/godt-vite__versjonshistorikk__144.md`](kilder/godt-vite__versjonshistorikk__144.md)
-- [x] Begreper → [`kilder/godt-vite__begreper__81.md`](kilder/godt-vite__begreper__81.md) — inkluderer **nynorsk ordliste**
-- [x] Beslutningspunkter → [`kilder/prosjektfasene__beslutningspunkter__147.md`](kilder/prosjektfasene__beslutningspunkter__147.md) + BP1–BP6 enkeltvis
-- [x] Roller → [`kilder/godt-vite__roller__80.md`](kilder/godt-vite__roller__80.md) — alle rollebeskrivelser på én side
-- [x] Styringsparametere → [`kilder/god-praksis-og-tilpasning__prosjektets-styringsparamtere__260.md`](kilder/god-praksis-og-tilpasning__prosjektets-styringsparamtere__260.md)
-- [x] Nyttestyring → [`kilder/god-praksis-og-tilpasning__nyttestyring__273.md`](kilder/god-praksis-og-tilpasning__nyttestyring__273.md)
+- [x] Versjonshistorikk → [`https://prosjektveiviseren.digdir.no/godt-vite/versjonshistorikk/144`](https://prosjektveiviseren.digdir.no/godt-vite/versjonshistorikk/144)
+- [x] Begreper → [`https://prosjektveiviseren.digdir.no/godt-vite/begreper/81`](https://prosjektveiviseren.digdir.no/godt-vite/begreper/81) — inkluderer **nynorsk ordliste**
+- [x] Beslutningspunkter → [`https://prosjektveiviseren.digdir.no/prosjektfasene/beslutningspunkter/147`](https://prosjektveiviseren.digdir.no/prosjektfasene/beslutningspunkter/147) + BP1–BP6 enkeltvis
+- [x] Roller → [`https://prosjektveiviseren.digdir.no/godt-vite/roller/80`](https://prosjektveiviseren.digdir.no/godt-vite/roller/80) — alle rollebeskrivelser på én side
+- [x] Styringsparametere → [`https://prosjektveiviseren.digdir.no/god-praksis-og-tilpasning/prosjektets-styringsparamtere/260`](https://prosjektveiviseren.digdir.no/god-praksis-og-tilpasning/prosjektets-styringsparamtere/260)
+- [x] Nyttestyring → [`https://prosjektveiviseren.digdir.no/god-praksis-og-tilpasning/nyttestyring/273`](https://prosjektveiviseren.digdir.no/god-praksis-og-tilpasning/nyttestyring/273)
 - [x] Smidig → tre sider, se «Smidig i prosjekter» nedenfor
 - [x] Alle seks fasene med samtlige aktivitetssider (25 aktiviteter + 6 BP-er)
 - [x] Dokumentasjonssidene (styringsdokumentasjon, produktdokumentasjon, øvrig, dokumentmaler)
@@ -29,7 +29,7 @@
 
 ## v6 fase- og aktivitetsstruktur
 
-Fra [nettstedkartet](kilder/prosjektveiviseren__nettstedkart__145.md) og fasesidene.
+Fra [nettstedkartet](https://prosjektveiviseren.digdir.no/prosjektveiviseren/nettstedkart/145) og fasesidene.
 **25 aktiviteter + 6 beslutningspunkter** — mot PP365s 44 sjekkpunkter / 66 oppgaver fra
 v3/v4-strukturen. Aktivitetssidene har «bør avklare»-lister (→ råstoff for *oppgaver*);
 BP-sidene har «bør vurdere»-lister (→ råstoff for *fasesjekkpunkter*).
@@ -38,20 +38,20 @@ BP-sidene har «bør vurdere»-lister (→ råstoff for *fasesjekkpunkter*).
 
 | # | Side | Kilde |
 |---|---|---|
-| – | Hva er idéfasen? | [`kilder/…hva-er-idefasen__8.md`](kilder/prosjektfasene__hva-er-idefasen__8.md) |
-| 1 | Utarbeide mandat for konseptfasen | [`kilder/…utarbeide-mandat-konseptfasen__11.md`](kilder/prosjektfasene__utarbeide-mandat-konseptfasen__11.md) |
-| BP1 | Beslutte oppstart av en konseptfase | [`kilder/…bp1…__12.md`](kilder/prosjektfasene__bp1-beslutte-oppstart-av-en-konseptfase__12.md) |
+| – | Hva er idéfasen? | [`prosjektfasene/hva-er-idefasen/8`](https://prosjektveiviseren.digdir.no/prosjektfasene/hva-er-idefasen/8) |
+| 1 | Utarbeide mandat for konseptfasen | [`prosjektfasene/utarbeide-mandat-konseptfasen/11`](https://prosjektveiviseren.digdir.no/prosjektfasene/utarbeide-mandat-konseptfasen/11) |
+| BP1 | Beslutte oppstart av en konseptfase | [`prosjektfasene/bp1-beslutte-oppstart-av-en-konseptfase/12`](https://prosjektveiviseren.digdir.no/prosjektfasene/bp1-beslutte-oppstart-av-en-konseptfase/12) |
 
 ### Konseptfasen (BP1 → BP2)
 
 | # | Side | Kilde |
 |---|---|---|
-| – | Hva er konseptfasen? | [`kilder/…hva-er-konseptfasen__14.md`](kilder/prosjektfasene__hva-er-konseptfasen__14.md) |
-| 1 | Planlegge konseptarbeidet og avklare problem, mål og mulige konsepter | [`kilder/…__15.md`](kilder/prosjektfasene__planlegge-konseptarbeidet-og-avklare-problem-mal-og-mulige-konsepter__15.md) |
-| 2 | Vurdere virkninger og anbefale konsept | [`kilder/…__16.md`](kilder/prosjektfasene__vurdere-virkninger-og-anbefale-konsept__16.md) |
-| 3 | Foreløpig styringsdokumentasjon | [`kilder/…__18.md`](kilder/prosjektfasene__forelopig-styringsdokumentasjon__18.md) |
-| 4 | Til hjelp i konseptarbeidet | [`kilder/…__17.md`](kilder/prosjektfasene__til-hjelp-i-konseptarbeidet__17.md) |
-| BP2 | Beslutte oppstart av planleggingsfasen | [`kilder/…bp2…__25.md`](kilder/prosjektfasene__bp2-beslutte-oppstart-av-planleggingsfasen__25.md) ⚠ sist endret jan. 2023 — eneste faseside som ikke er v6-datert |
+| – | Hva er konseptfasen? | [`prosjektfasene/hva-er-konseptfasen/14`](https://prosjektveiviseren.digdir.no/prosjektfasene/hva-er-konseptfasen/14) |
+| 1 | Planlegge konseptarbeidet og avklare problem, mål og mulige konsepter | [`prosjektfasene/planlegge-konseptarbeidet-og-avklare-problem-mal-og-mulige-konsepter/15`](https://prosjektveiviseren.digdir.no/prosjektfasene/planlegge-konseptarbeidet-og-avklare-problem-mal-og-mulige-konsepter/15) |
+| 2 | Vurdere virkninger og anbefale konsept | [`prosjektfasene/vurdere-virkninger-og-anbefale-konsept/16`](https://prosjektveiviseren.digdir.no/prosjektfasene/vurdere-virkninger-og-anbefale-konsept/16) |
+| 3 | Foreløpig styringsdokumentasjon | [`prosjektfasene/forelopig-styringsdokumentasjon/18`](https://prosjektveiviseren.digdir.no/prosjektfasene/forelopig-styringsdokumentasjon/18) |
+| 4 | Til hjelp i konseptarbeidet | [`prosjektfasene/til-hjelp-i-konseptarbeidet/17`](https://prosjektveiviseren.digdir.no/prosjektfasene/til-hjelp-i-konseptarbeidet/17) |
+| BP2 | Beslutte oppstart av planleggingsfasen | [`prosjektfasene/bp2-beslutte-oppstart-av-planleggingsfasen/25`](https://prosjektveiviseren.digdir.no/prosjektfasene/bp2-beslutte-oppstart-av-planleggingsfasen/25) ⚠ sist endret jan. 2023 — eneste faseside som ikke er v6-datert |
 
 Merk: v6 har slått sammen konseptfasens tidligere mange aktiviteter (de seks
 utredningsspørsmålene fra v2.6-strukturen) til fire bredere aktiviteter. Spørsmålene fra
@@ -61,56 +61,56 @@ utredningsinstruksen lever videre *inne i* aktivitet 1 og 2.
 
 | # | Side | Kilde |
 |---|---|---|
-| – | Hva er planleggingsfasen? | [`kilder/…hva-er-planleggingsfasen__26.md`](kilder/prosjektfasene__hva-er-planleggingsfasen__26.md) |
-| 1 | Gjennomgå faseplanen for planleggingsfasen | [`kilder/…__27.md`](kilder/prosjektfasene__gjennomga-faseplanen-planleggingsfasen__27.md) |
-| 2 | Beskrive behovet for endringer i virksomhetens arbeidsprosesser og organisering | [`kilder/…__28.md`](kilder/prosjektfasene__beskrive-behovet-endringer-i-virksomhetens-arbeidsprosesser-og-organisering__28.md) |
-| 3 | Beskrive tekniske rammer for prosjektet | [`kilder/…__32.md`](kilder/prosjektfasene__beskrive-tekniske-rammer-prosjektet__32.md) |
-| 4 | Etablere prosjektorganisasjonen | [`kilder/…__33.md`](kilder/prosjektfasene__etablere-prosjektorganisasjonen__33.md) |
-| 5 | Planlegge prosjektgjennomføringen | [`kilder/…__34.md`](kilder/prosjektfasene__planlegge-prosjektgjennomforingen__34.md) |
-| 6 | Definere akseptansekriterier for styringsparametrene | [`kilder/…__36.md`](kilder/prosjektfasene__definere-akseptansekriterier-styringsparametere__36.md) — **ny i v6** |
-| 7 | Ferdigstille styringsdokumentasjon | [`kilder/…__39.md`](kilder/prosjektfasene__ferdigstille-styringsdokumentasjon__39.md) |
-| BP3 | Beslutte overgang til gjennomføringsfasen | [`kilder/…bp3…__41.md`](kilder/prosjektfasene__bp3-beslutte-overgang-til-gjennomforingsfasen__41.md) |
+| – | Hva er planleggingsfasen? | [`prosjektfasene/hva-er-planleggingsfasen/26`](https://prosjektveiviseren.digdir.no/prosjektfasene/hva-er-planleggingsfasen/26) |
+| 1 | Gjennomgå faseplanen for planleggingsfasen | [`prosjektfasene/gjennomga-faseplanen-planleggingsfasen/27`](https://prosjektveiviseren.digdir.no/prosjektfasene/gjennomga-faseplanen-planleggingsfasen/27) |
+| 2 | Beskrive behovet for endringer i virksomhetens arbeidsprosesser og organisering | [`prosjektfasene/beskrive-behovet-endringer-i-virksomhetens-arbeidsprosesser-og-organisering/28`](https://prosjektveiviseren.digdir.no/prosjektfasene/beskrive-behovet-endringer-i-virksomhetens-arbeidsprosesser-og-organisering/28) |
+| 3 | Beskrive tekniske rammer for prosjektet | [`prosjektfasene/beskrive-tekniske-rammer-prosjektet/32`](https://prosjektveiviseren.digdir.no/prosjektfasene/beskrive-tekniske-rammer-prosjektet/32) |
+| 4 | Etablere prosjektorganisasjonen | [`prosjektfasene/etablere-prosjektorganisasjonen/33`](https://prosjektveiviseren.digdir.no/prosjektfasene/etablere-prosjektorganisasjonen/33) |
+| 5 | Planlegge prosjektgjennomføringen | [`prosjektfasene/planlegge-prosjektgjennomforingen/34`](https://prosjektveiviseren.digdir.no/prosjektfasene/planlegge-prosjektgjennomforingen/34) |
+| 6 | Definere akseptansekriterier for styringsparametrene | [`prosjektfasene/definere-akseptansekriterier-styringsparametere/36`](https://prosjektveiviseren.digdir.no/prosjektfasene/definere-akseptansekriterier-styringsparametere/36) — **ny i v6** |
+| 7 | Ferdigstille styringsdokumentasjon | [`prosjektfasene/ferdigstille-styringsdokumentasjon/39`](https://prosjektveiviseren.digdir.no/prosjektfasene/ferdigstille-styringsdokumentasjon/39) |
+| BP3 | Beslutte overgang til gjennomføringsfasen | [`prosjektfasene/bp3-beslutte-overgang-til-gjennomforingsfasen/41`](https://prosjektveiviseren.digdir.no/prosjektfasene/bp3-beslutte-overgang-til-gjennomforingsfasen/41) |
 
 ### Gjennomføringsfasen (BP3 → BP4)
 
 | # | Side | Kilde |
 |---|---|---|
-| – | Hva er gjennomføringsfasen? | [`kilder/…hva-er-gjennomforingsfasen__42.md`](kilder/prosjektfasene__hva-er-gjennomforingsfasen__42.md) |
-| 1 | Gjennomgå faseplanen for gjennomføring | [`kilder/…__43.md`](kilder/prosjektfasene__gjennomga-faseplanen-gjennomforing__43.md) |
-| 2 | Styre prosjektet | [`kilder/…__44.md`](kilder/prosjektfasene__styre-prosjektet__44.md) |
-| 3 | Utvikle fasens produkter | [`kilder/…__46.md`](kilder/prosjektfasene__utvikle-fasens-produkter__46.md) |
-| 4 | Gjennomføre anskaffelser og inngå kontrakter | [`kilder/…__47.md`](kilder/prosjektfasene__gjennomfore-anskaffelser-og-innga-kontrakter__47.md) |
-| 5 | Overlevere produkter til linjen | [`kilder/…__49.md`](kilder/prosjektfasene__overlevere-produkter-til-linjen__49.md) |
-| 6 | Oppdatere prosjektbegrunnelse og plan for nyttestyring | [`kilder/…__50.md`](kilder/prosjektfasene__oppdatere-prosjektbegrunnelse-og-plan-nyttestyring__50.md) |
-| BP4 | Beslutte overgang til avslutningsfasen | [`kilder/…bp4…__53.md`](kilder/prosjektfasene__bp4-beslutte-overgang-til-avslutningsfasen__53.md) |
+| – | Hva er gjennomføringsfasen? | [`prosjektfasene/hva-er-gjennomforingsfasen/42`](https://prosjektveiviseren.digdir.no/prosjektfasene/hva-er-gjennomforingsfasen/42) |
+| 1 | Gjennomgå faseplanen for gjennomføring | [`prosjektfasene/gjennomga-faseplanen-gjennomforing/43`](https://prosjektveiviseren.digdir.no/prosjektfasene/gjennomga-faseplanen-gjennomforing/43) |
+| 2 | Styre prosjektet | [`prosjektfasene/styre-prosjektet/44`](https://prosjektveiviseren.digdir.no/prosjektfasene/styre-prosjektet/44) |
+| 3 | Utvikle fasens produkter | [`prosjektfasene/utvikle-fasens-produkter/46`](https://prosjektveiviseren.digdir.no/prosjektfasene/utvikle-fasens-produkter/46) |
+| 4 | Gjennomføre anskaffelser og inngå kontrakter | [`prosjektfasene/gjennomfore-anskaffelser-og-innga-kontrakter/47`](https://prosjektveiviseren.digdir.no/prosjektfasene/gjennomfore-anskaffelser-og-innga-kontrakter/47) |
+| 5 | Overlevere produkter til linjen | [`prosjektfasene/overlevere-produkter-til-linjen/49`](https://prosjektveiviseren.digdir.no/prosjektfasene/overlevere-produkter-til-linjen/49) |
+| 6 | Oppdatere prosjektbegrunnelse og plan for nyttestyring | [`prosjektfasene/oppdatere-prosjektbegrunnelse-og-plan-nyttestyring/50`](https://prosjektveiviseren.digdir.no/prosjektfasene/oppdatere-prosjektbegrunnelse-og-plan-nyttestyring/50) |
+| BP4 | Beslutte overgang til avslutningsfasen | [`prosjektfasene/bp4-beslutte-overgang-til-avslutningsfasen/53`](https://prosjektveiviseren.digdir.no/prosjektfasene/bp4-beslutte-overgang-til-avslutningsfasen/53) |
 
 ### Avslutningsfasen (BP4 → BP5)
 
 | # | Side | Kilde |
 |---|---|---|
-| – | Hva er avslutningsfasen? | [`kilder/…hva-er-avslutningsfasen__54.md`](kilder/prosjektfasene__hva-er-avslutningsfasen__54.md) |
-| 1 | Gjennomgå faseplanen for avslutningsfasen | [`kilder/…__55.md`](kilder/prosjektfasene__gjennomga-faseplanen-avslutningsfasen__55.md) |
-| 2 | Lukke kontrakter og økonomi | [`kilder/…__58.md`](kilder/prosjektfasene__lukke-kontrakter-og-okonomi__58.md) |
-| 3 | Oppdatere plan for nyttestyring | [`kilder/…__60.md`](kilder/prosjektfasene__oppdatere-plan-nyttestyring__60.md) |
-| 4 | Sluttdokumentasjon, arkivering og læring | [`kilder/…__61.md`](kilder/prosjektfasene__sluttdokumentasjon-arkivering-og-laering__61.md) |
-| 5 | Overlevere til linjen og støtte innføring | [`kilder/…__62.md`](kilder/prosjektfasene__overlevere-til-linjen-og-stotte-innforing__62.md) |
-| BP5 | Beslutte avslutning av prosjektet | [`kilder/…bp5…__63.md`](kilder/prosjektfasene__bp5-beslutte-avslutning-av-prosjektet__63.md) |
+| – | Hva er avslutningsfasen? | [`prosjektfasene/hva-er-avslutningsfasen/54`](https://prosjektveiviseren.digdir.no/prosjektfasene/hva-er-avslutningsfasen/54) |
+| 1 | Gjennomgå faseplanen for avslutningsfasen | [`prosjektfasene/gjennomga-faseplanen-avslutningsfasen/55`](https://prosjektveiviseren.digdir.no/prosjektfasene/gjennomga-faseplanen-avslutningsfasen/55) |
+| 2 | Lukke kontrakter og økonomi | [`prosjektfasene/lukke-kontrakter-og-okonomi/58`](https://prosjektveiviseren.digdir.no/prosjektfasene/lukke-kontrakter-og-okonomi/58) |
+| 3 | Oppdatere plan for nyttestyring | [`prosjektfasene/oppdatere-plan-nyttestyring/60`](https://prosjektveiviseren.digdir.no/prosjektfasene/oppdatere-plan-nyttestyring/60) |
+| 4 | Sluttdokumentasjon, arkivering og læring | [`prosjektfasene/sluttdokumentasjon-arkivering-og-laering/61`](https://prosjektveiviseren.digdir.no/prosjektfasene/sluttdokumentasjon-arkivering-og-laering/61) |
+| 5 | Overlevere til linjen og støtte innføring | [`prosjektfasene/overlevere-til-linjen-og-stotte-innforing/62`](https://prosjektveiviseren.digdir.no/prosjektfasene/overlevere-til-linjen-og-stotte-innforing/62) |
+| BP5 | Beslutte avslutning av prosjektet | [`prosjektfasene/bp5-beslutte-avslutning-av-prosjektet/63`](https://prosjektveiviseren.digdir.no/prosjektfasene/bp5-beslutte-avslutning-av-prosjektet/63) |
 
 ### Realiseringsfasen (BP5 → BP6)
 
 | # | Side | Kilde |
 |---|---|---|
-| – | Hva er realiseringsfasen? | [`kilder/…hva-er-realiseringsfasen__64.md`](kilder/prosjektfasene__hva-er-realiseringsfasen__64.md) |
-| 1 | Følge opp nyttevirkninger og iverksette tiltak | [`kilder/…__65.md`](kilder/prosjektfasene__folge-opp-nyttevirkninger-og-iverksette-tiltak__65.md) |
-| 2 | Evaluering av konseptvalget | [`kilder/…__66.md`](kilder/prosjektfasene__evaluering-av-konseptvalget__66.md) |
-| BP6 | Beslutte videre tiltak for økt nyttevirkning | [`kilder/…bp6…__68.md`](kilder/prosjektfasene__bp6-beslutte-videre-tiltak-okt-nyttevirkning__68.md) |
+| – | Hva er realiseringsfasen? | [`prosjektfasene/hva-er-realiseringsfasen/64`](https://prosjektveiviseren.digdir.no/prosjektfasene/hva-er-realiseringsfasen/64) |
+| 1 | Følge opp nyttevirkninger og iverksette tiltak | [`prosjektfasene/folge-opp-nyttevirkninger-og-iverksette-tiltak/65`](https://prosjektveiviseren.digdir.no/prosjektfasene/folge-opp-nyttevirkninger-og-iverksette-tiltak/65) |
+| 2 | Evaluering av konseptvalget | [`prosjektfasene/evaluering-av-konseptvalget/66`](https://prosjektveiviseren.digdir.no/prosjektfasene/evaluering-av-konseptvalget/66) |
+| BP6 | Beslutte videre tiltak for økt nyttevirkning | [`prosjektfasene/bp6-beslutte-videre-tiltak-okt-nyttevirkning/68`](https://prosjektveiviseren.digdir.no/prosjektfasene/bp6-beslutte-videre-tiltak-okt-nyttevirkning/68) |
 
 ---
 
 ## Terminologifasit (ordrett fra kilden)
 
-Fra [Begreper](kilder/godt-vite__begreper__81.md) (sist endret 24. juni 2026),
-[Roller](kilder/godt-vite__roller__80.md) og [versjonshistorikken](kilder/godt-vite__versjonshistorikk__144.md).
+Fra [Begreper](https://prosjektveiviseren.digdir.no/godt-vite/begreper/81) (sist endret 24. juni 2026),
+[Roller](https://prosjektveiviseren.digdir.no/godt-vite/roller/80) og [versjonshistorikken](https://prosjektveiviseren.digdir.no/godt-vite/versjonshistorikk/144).
 Detaljert mapping mot PP365-flater: [`mapping-terminologi.csv`](mapping-terminologi.csv).
 
 | v5-begrep | v6-begrep | Kildebelegg |
@@ -156,13 +156,13 @@ oppgraderingsskriptet (kun `DisplayName`), mens termstore og listedata står ur�
 Begreper-siden har en **komplett nynorsk ordliste** (begreper, prinsipper, praksiser,
 styringsparametere) og rollesiden en egen for rollene. Nøkkeloppslag:
 nyttevirkning → *nytteverknad*, bærekraft → *berekraft*, nytteansvarlig → *nytteansvarleg*,
-beslutningspunkt → *avgjerdspunkt*. Se [`kilder/godt-vite__begreper__81.md`](kilder/godt-vite__begreper__81.md).
+beslutningspunkt → *avgjerdspunkt*. Se [`https://prosjektveiviseren.digdir.no/godt-vite/begreper/81`](https://prosjektveiviseren.digdir.no/godt-vite/begreper/81).
 
 ---
 
 ## Styringsparametere (område G)
 
-Fra [Prosjektets styringsparamtere](kilder/god-praksis-og-tilpasning__prosjektets-styringsparamtere__260.md)
+Fra [Prosjektets styringsparamtere](https://prosjektveiviseren.digdir.no/god-praksis-og-tilpasning/prosjektets-styringsparamtere/260)
 (side opprettet 15. juni 2026 — merk skrivefeilen «styringsparamtere» i Digdirs URL):
 
 1. **Tid**
@@ -180,7 +180,7 @@ parameterne til akseptansekriterier og toleranser — relevant for både område
 
 ## Roller (område J)
 
-v6-rollene, gruppert som på [rollesiden](kilder/godt-vite__roller__80.md):
+v6-rollene, gruppert som på [rollesiden](https://prosjektveiviseren.digdir.no/godt-vite/roller/80):
 
 - **Styring:** Virksomhetsledelsen · Prosjekteier · Prosjektstyre ·
   Brukerrepresentant/seniorbruker · Leverandørrepresentant/seniorleverandør
@@ -195,16 +195,16 @@ PP365s `Rolle`-termsett må sammenlignes term for term i område J; de smidige r
 
 ## Smidig i prosjekter (område I)
 
-- [Hvordan jobbe smidig med Prosjektveiviseren?](kilder/god-praksis-og-tilpasning__hvordan-jobbe-smidig-med-prosjektveiviseren__69.md)
-- [Kontroll med smidig tilnærming](kilder/god-praksis-og-tilpasning__kontroll-med-smidig-tilnaerming__77.md)
-- [Smidige metoder og teknikker](kilder/god-praksis-og-tilpasning__smidige-metoder-og-teknikker__267.md)
+- [Hvordan jobbe smidig med Prosjektveiviseren?](https://prosjektveiviseren.digdir.no/god-praksis-og-tilpasning/hvordan-jobbe-smidig-med-prosjektveiviseren/69)
+- [Kontroll med smidig tilnærming](https://prosjektveiviseren.digdir.no/god-praksis-og-tilpasning/kontroll-med-smidig-tilnaerming/77)
+- [Smidige metoder og teknikker](https://prosjektveiviseren.digdir.no/god-praksis-og-tilpasning/smidige-metoder-og-teknikker/267)
 
 Begreper-siden har i tillegg en egen seksjon «Smidige begreper» (brukerhistorie, iterasjon/
 inkrement, MVP, produktkø, tidsboks m.fl.).
 
 ## Dokumentmaler (område F)
 
-Fra [Dokumentmaler](kilder/dokumentasjon__dokumentmaler__94.md) (sist endret 25. juni 2026).
+Fra [Dokumentmaler](https://prosjektveiviseren.digdir.no/dokumentasjon/dokumentmaler/94) (sist endret 25. juni 2026).
 **Alle filer er lastet ned og filnavnene verifisert** (faktiske filnavn fra nedlasting):
 
 ### Ordinær malpakke
@@ -262,7 +262,7 @@ Fire av filene over (mandat, prosjektforslag, forenklet styringsdokument, sluttr
    prosjektstandarder) svarer fortsatt på gamle URL-er. Alle dyplenker i `Lenker.xml`,
    `Hjelpeinnhold.xml` og `Home.xml` må sjekkes mot nettstedkartet (område J).
 5. **KI** er nytt tema med egen side — kandidat til nytt sjekkpunkt/hjelpeinnhold
-   ([`kilder/god-praksis-og-tilpasning__kunstig-intelligens__272.md`](kilder/god-praksis-og-tilpasning__kunstig-intelligens__272.md)).
+   ([`https://prosjektveiviseren.digdir.no/god-praksis-og-tilpasning/kunstig-intelligens/272`](https://prosjektveiviseren.digdir.no/god-praksis-og-tilpasning/kunstig-intelligens/272)).
 6. **Dokumentasjonstredelingen** (styrings-/produkt-/øvrig) berører PP365s
    `Hjelpeinnhold.xml` og eventuelle tekster som bruker «ledelsesprodukter».
 
@@ -271,4 +271,5 @@ Fire av filene over (mandat, prosjektforslag, forenklet styringsdokument, sluttr
 Innhentingen ble gjort med et engangs crawlerskript (curl + Node) som fulgte alle interne
 lenker fra forsiden og kjente seksjonssider, og konverterte `<main>`-innholdet til markdown.
 Feedback-skjemaet nederst på sidene er fjernet; alt annet innhold er beholdt ordrett.
-For å oppdatere: kjør på nytt mot samme URL-sett og diff `kilder/`.
+For å oppdatere: kjør på nytt mot samme URL-sett og sammenlign mot dette dokumentet
+(rådataene i `kilder/` er fjernet fra branchen, men finnes i git-historikken).
